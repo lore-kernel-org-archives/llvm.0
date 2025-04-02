@@ -1,134 +1,123 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726805BAF0
-	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 12:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB371F03E0
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 13:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743598175; cv=none; b=QCPTyMB5YvZ2FSvViF0UcRWCyiKVsbzVO5wW/wKPuw+QVGZQHuiv7k9OeYI4SVpZn0IiPsHdAUEKR5YjSMx/Ou8tuREyMYNrK57svh5GNe0R5XT7t9/ClTxL9GYH+jKdID+dZ90RRS1H0co6koHUUs985EWyKa6egGAvxhuRJks=
+	t=1743598974; cv=none; b=cDW2FeQ5akZT/AV5Q1AN3dJiNci/H3yNOtfsCu2oqg9pBlCCQihUg6LROwnl+6+u+muXD4h9EPEhkidNPnaAVwEQX9HPBkYbhkDpB3HN0bKsc4zUm7v1EqHeLgXYIU6jCLRs03Auzo+OBCfDtz2xMfzbMAYTI6VquNxSXB0JZB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743598175; c=relaxed/simple;
-	bh=iy8gPSknBpYANxR3oDbou+tV9uyY16PAcTCT3p0TVTQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=SVk+zediXD1eByOAxUAqhc+ak9E6kKuy5QG2fTonJ3e0znSL6Q8H3jfumMRuIgFfHH3cE6EuC1wjsxGuilr7CTRrgDLH3cVqbWRZWLPddMPygoX0QyuFx2goJtTmGjiEi8oygL5mH0L8UfMAgm+dmb6Q5AkqjIfcxWMrjJnjHLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jgBgNtpr; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1743598974; c=relaxed/simple;
+	bh=DCEPhaPz/eGeoDWdb6Wt6RXEe9b9SHkk/0lHMFgtrJw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=GwHZGIyehlHMq0ix3o7baKN8lBMEmoxoOyJl5ud0CuaNYc5gkDHhG1IfSmQgPRUMfCLXSDswGgTt9f5mcBjexeNvOO4jjV3EGmGyGBvIPtdcg71Wv9meeLXqLPrAy2F7GvREIsQv/xwdKmZLeXmSg9kN/zf6/7k+cr36m3+qyjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gg6RUPXX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=n78nMbbP; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jgBgNtpr"
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-52403e39a23so6009474e0c.2
-        for <llvm@lists.linux.dev>; Wed, 02 Apr 2025 05:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743598172; x=1744202972; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y+3sJL5+WsmkUHEYm1BzR/GyrjVHVNtLDIyVC85cNdI=;
-        b=jgBgNtpr323qAty5eIoA6dwbvarRiiIPY2MDol319x7UScNC6lN0qyZjbPJRD2Pb/y
-         LQ/DFIgZdfhapthEYkxRCzrUARYb+UyBu3KCE5fF5yjqYFD250JeZpLBzEQ4PxbgWkNW
-         g4J679PNC+f6d8KAsybdefEBbdMR3UHNZCjlTyjWWCmHcda4FsVY3WXom/RSRVoMlUe6
-         ohqfWswm5F47SRX10I2J5iRovWDuGOKNXZypaOBGlAs4H6ohx0HUYWEdmIWMY4mpknwZ
-         V2V0Ph2uyxU5/dtefv2+oOLGCtLosD8xVuKKFCeggPEsusma4a81k7hypLs5uL2Lja5L
-         UIYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743598172; x=1744202972;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y+3sJL5+WsmkUHEYm1BzR/GyrjVHVNtLDIyVC85cNdI=;
-        b=GPNSRDUoe13PGqlaN784Mg1MsbqdDZKuycwxhB9Pxy3rLxTHj4VyrfhB8Gks6rojv7
-         N3O2WaVN+VtefYo6DdRiTN59WnMJBOglWlrSbUl5dxZXtA5bSIzB+IZ8PZMbDnNxOIX6
-         TwJrm7fAn3wQp8CnPMy2N9HxXMS/E1fP2wJ3MN18+9ebGDXZrWN8nSFCchAqVIcqKA/c
-         pzfu0oNT9CqRWLkCk0WXgbnr9a9B3IchKj2pT8yPx4AHObM+fFxgTV2msT0PErZkGjXd
-         B/FZ+NnDojtB99QRIWfLiLaBwFvr1wwT7zkTI2EgM/UzpdC7JHfRUkuBVjk/zvywH1jj
-         TWNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBJW0z46oHU5c9em7/Zv0CbgRFpDm5ms2zXaOXLrM8Ld8s32kDvnvczvamPjSO2BT8Pi/C@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw5vWUbpDXQjcq1lNA0P3KskmYD8X8Uc/U++I8RhchGfalXanwF
-	QvysWEZPBWD3P2VvTVSE1SOLpSxn9ipdN6lu2ttJIeg0GfxIe1i8X9nq/OIhlz8MMkS8+/8EqCn
-	RWURceudVVvHmcQYqaaTxYu8O6ITgoxLBADqxZg==
-X-Gm-Gg: ASbGncss7yXukjmj5Zl6eXIwJri9CfcT0aNXWypvKlGXQvywkbKdQsxiCTvE5ceDwIf
-	fO9Wq2LN9avHz/MtbjK9NFoKmSrg1aaLxuV6p5nkqyJPdqYGeZ/9EKjMytSDLuD9Ew8IMw2hkS7
-	AS5xGwRKbL5gdqhXcwVja8igrjClehFmABGwxPs0rd7S7Nc41zBWGIt+76WUk=
-X-Google-Smtp-Source: AGHT+IEZPV71xCZFRaiMP7CnHUqII0vri11WJXA0JOvFvWq6jg//KmbiEFno6N5n8nVLL7zZFwNgKtdEbJvUoV78150=
-X-Received: by 2002:a05:6102:f8f:b0:4c1:9bdb:6188 with SMTP id
- ada2fe7eead31-4c839e38348mr1583448137.13.1743598172341; Wed, 02 Apr 2025
- 05:49:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gg6RUPXX";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="n78nMbbP"
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 092981140120;
+	Wed,  2 Apr 2025 09:02:52 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Wed, 02 Apr 2025 09:02:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743598972;
+	 x=1743685372; bh=fpqFrssur8XwzaX61qKCU1rsBl9PXbyHjQbc2KbZiY0=; b=
+	gg6RUPXXt3H3z8L8cmXCPtMBoyEnxaJFzuHjASmOTUQ+M9GlyUQru0hXh41oFKP2
+	dFxqjRfR4GsCU3hTndh3uV8MV9gj+uavPPv+EjXQNt6xHA8090cbxGLODU2L2v05
+	+3+GnpqEsBzm67jNpHUD1G1kcMyKMLobRwcG0p9B6u6OpxF648pAnXvDEpk2zeKZ
+	nEcJExcz/6PClokw8X49JtMMioNymK3ICVBD4WliTeWQ4qpPr06v45lSQUh0yUH9
+	oYs9GWq49tB9dnfLdRvQcE4dk0eiNtzdNOlr3RcZg4QeRP71t39ww8R8ZW2jdYsE
+	kHxOOLocuzu2Clp4ZpFsCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743598972; x=
+	1743685372; bh=fpqFrssur8XwzaX61qKCU1rsBl9PXbyHjQbc2KbZiY0=; b=n
+	78nMbbPtE46JMldQeHEXrxRqA+SmvqqlDOlSWSZuaEKGZSoIfmz3WDIV74UvXqjg
+	7o6qANRtJ4E/mGd535EW5krWHEj+S/nHHb0h2cRAqcp47UcbjkLFC19lx3sT5Q/o
+	ziSt59wqjxlvhB7ggLxScg5bTjDHubrtKSTOIcEhLzvsverk2BKjFVdZm/3ejboU
+	5F9elXkDNLiTTpe87NYPKK6mV2rt5SECFE27nHGyDb7eEe3SN4Jsgb5wwc4nLyky
+	VwfnGpgJSKVwhXnH/ttlPrG78uN5fDJ0RCOMOJ7ipntXP/ZGiTyz5vBw/Wod87wr
+	bVrFrt/VHgJ2M6Rp3iYIA==
+X-ME-Sender: <xms:ezXtZ6sDCpW9FyCUSQTXNandTpb9tgG3W3mja7hq1S554mwWeC8lyQ>
+    <xme:ezXtZ_dNKWh-_EfibN9NxlOcJTeaKAcr6vrNE54sTxChc3LmCMu4E5LOvvvNH6-bs
+    OF0I8YvrkeKxKxDcAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeehjeehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeej
+    feekkeelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeduiedpmhhouggvpehsmhhtphhouhhtpd
+    hrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgu
+    vghrshdrrhhogigvlhhlsehlihhnrghrohdrohhrghdprhgtphhtthhopegurghnrdgtrg
+    hrphgvnhhtvghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehnrghrvghshhdrkhgr
+    mhgsohhjuheslhhinhgrrhhordhorhhgpdhrtghpthhtohepthhorhhvrghlughssehlih
+    hnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhi
+    nhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqd
+    hkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehl
+    khhfthdqthhrihgrghgvsehlihhsthhsrdhlihhnrghrohdrohhrghdprhgtphhtthhope
+    hllhhvmheslhhishhtshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:ezXtZ1x0tn7ltpGTDYGifQyNGRwv05HQhp7VrRtfOYJERIsYFU5jDA>
+    <xmx:ezXtZ1Of7TE_gxWrJ9c7KR2LYhhzet4wNAtbTSz6jf4tXfLOFRPmbw>
+    <xmx:ezXtZ68sGdYz2vnEQ6TnUK9X4QGhn2liLK4occMVE2styVeDxOwdsA>
+    <xmx:ezXtZ9XcFzt4U54KRH7UKrG6STA-h_Ug_wweIkJej96LpAu49GYE5A>
+    <xmx:ezXtZzN6BS9dQtVWxt3yAmWJ7-RuOF4CsSi15WszlIkVW3qMZzB9w9x6>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4E1562220072; Wed,  2 Apr 2025 09:02:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 2 Apr 2025 18:19:19 +0530
-X-Gm-Features: AQ5f1JrYBDqdwedr2g0EeIuRXqX4Zi5GT7DMBhpK7McR8fimUhQCIrzEPDNgmhA
-Message-ID: <CA+G9fYve7+nXJNoV48TksXoMeVjgJuP8Gs=+1br+Qur1DPWV4A@mail.gmail.com>
-Subject: v6.14-12245-g91e5bfe317d8: Boot regression: rk3399-rock-pi-4b
- dragonboard-410c dragonboard-845c no console output
-To: open list <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>
-Cc: Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-ThreadId: T1e4eead9af4a5be9
+Date: Wed, 02 Apr 2025 15:02:29 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ clang-built-linux <llvm@lists.linux.dev>,
+ "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+ linux-s390@vger.kernel.org, "open list" <linux-kernel@vger.kernel.org>,
+ lkft-triage@lists.linaro.org, samba-technical@lists.samba.org,
+ linux-cifs@vger.kernel.org, "Nathan Chancellor" <nathan@kernel.org>
+Cc: "Steve French" <sfrench@samba.org>, bharathsm@microsoft.com,
+ "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Dan Carpenter" <dan.carpenter@linaro.org>,
+ "Anders Roxell" <anders.roxell@linaro.org>,
+ "Shyam Prasad N" <sprasad@microsoft.com>
+Message-Id: <3ad96ab5-72a3-48ee-8ab3-e68d066169a4@app.fastmail.com>
+In-Reply-To: 
+ <CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com>
+References: 
+ <CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com>
+Subject: Re: clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Regressions on rk3399-rock-pi-4b, dragonboard-410c and dragonboard-845c
-the lto-thing, hardening and lto-full config boot failed with toolchain
-clang-nightly on the mainline master branch with no console output.
+On Wed, Apr 2, 2025, at 14:21, Naresh Kamboju wrote:
+> Build regression: arm powerpc s390 modpost "wcslen" fs smb client
+> cifs.ko undefined
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> ## Build log
+>
+> ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
 
-First seen on the v6.14-12245-g91e5bfe317d8
- Good: v6.14-11270-g08733088b566
- Bad: v6.14-12245-g91e5bfe317d8
+This is from the latest clang release, and Nathan already sent a fix:
 
-Regressions found on rk3399-rock-pi-4b:
-  - boot/clang-nightly-lkftconfig-kselftest
-  - boot/clang-nightly-lkftconfig-lto-thing
-  - boot/clang-nightly-lkftconfig-hardening
-  - boot/clang-nightly-lkftconfig-lto-full
+https://lore.kernel.org/lkml/20250328-string-add-wcslen-for-llvm-opt-v3-1-a180b4c0c1c4@kernel.org/
 
-Regressions found on dragonboard-410c:
-  - boot/clang-nightly-lkftconfig-lto-thing
-  - boot/clang-nightly-lkftconfig-lto-full
-  - boot/clang-nightly-lkftconfig-hardening
-
-Regressions found on dragonboard-845c:
-  - boot/clang-nightly-lkftconfig-hardening
-  - boot/clang-nightly-lkftconfig-lto-thing
-
-Regression Analysis:
- - New regression? Yes
- - Reproducibility? Yes
-
-Boot regression: rk3399-rock-pi-4b dragonboard-410c dragonboard-845c
-no console output
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Boot log
-Starting kernel
-...
-<No console output>
-
-
-## Source
-* Kernel version: 6.14.0
-* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-* Git sha: 91e5bfe317d8f8471fbaa3e70cf66cae1314a516
-* Git describe: v6.14-12245-g91e5bfe317d8
-* Project details:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/
-* Architectures: arm64 (rk3399-rock-pi-4b, dragonboard-410c, dragonboard-845c)
-* Toolchains: clang-nightly (Debian clang version 21.0.0 )
-* Kconfigs: lto-thing, hardening, lto-full
-
-## Build
-* Build log: https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27859063/suite/boot/test/clang-nightly-lkftconfig-lto-thing/log
-* Build history:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27859063/suite/boot/test/clang-nightly-lkftconfig-lto-thing/history/
-* Build details:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27859063/suite/boot/test/clang-nightly-lkftconfig-lto-thing/details/
-* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdkI9AGWWvuT5OzYdgSgXEeH/
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdkI9AGWWvuT5OzYdgSgXEeH/config
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+     Arnd
