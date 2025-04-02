@@ -1,59 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC2D2356DF;
-	Wed,  2 Apr 2025 10:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDC8233D92
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 11:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743588875; cv=none; b=jJ6Gfn7VhCpnZOoEjnZ5l62NtJMB1QDAwwgBkKDh7zXOWot1KvDJ3TzdUedv6Qr2r07CW58pucp//unRxryqaPCP7TWgxlG3WBOh3ehbFzRG3GEx4J9+SIiana80rW2rf7HQNxNVFrAQqBEoFWcO3RNADocEOXSabjdB9O5/dFQ=
+	t=1743592263; cv=none; b=KmfLJHHDrJ5mGdhPnYSwuFPLuRwIn+tIbqWWZcmdzJ1E2Ih9a8P/2Kk6b+tcPMZ/FO/9HWZ1/0R/TFiOm0R2aA8aKNY5LgtlDsMXBZWItw3aa357FD9EW+EZFkoxuE/mX/Q3XgPzTl5/rMySfLrk7KAKsP58+Y+Hq/EhZrMfBRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743588875; c=relaxed/simple;
-	bh=spwZgUUW68l601UPwfZqsDc3aNAf9mIku+yRkw6rcKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cnIi5HuIGQdrTyn+Y8AGlB1de2l9S+DbgAai/j5Zs28s2VrJ/rIE5bsrn5QdAj8aKU5OBfsUBoYlm9kjQAIhan0ujg7EFSbyPOZH9QRKSwwC0iwA4odYGPUBsUAvEuYYQXC8KQY00SVROIefoq2KIXpDGQ07+qLMRsAw8WV1QaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTlJeqrD; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743592263; c=relaxed/simple;
+	bh=EWrgD18r2nfU1tBqbRK5IiJug7+Vse8FsJKY0eEvPCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V4KNHAa2keb6SM1NCWeAosR6b0P+P3WqrFFkATsemNuw9Lk4oJl4QmM9ml7J6v98W+donGolyV5IW+L32BZ0wY9FEUjyotba4ObQEklOBDcSwGMjX3x6pjfNBsuMwSxyKb5ND6IszQ5TuZEBYqg9jyucIzaKQsIVF3+vuHPQ4Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GS1uUr7H; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTlJeqrD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743588873; x=1775124873;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=spwZgUUW68l601UPwfZqsDc3aNAf9mIku+yRkw6rcKs=;
-  b=eTlJeqrDehr4z0SZ+H/EEd6kC8Ru2OzJG7PTOaAkuj0aO0joFiTeQpcC
-   xbz3Itt47J3Gtt/ze4NQhUftEP75QzJUfUTtBFkju6Y5qQ1nN2Tt+8PGx
-   B6eueV18Y/asdtmOmNX2T+80mQHI6x/HRjXkrl5u6KeDLs9Fil7yo47MQ
-   uBsh+o6Wl6X5Yye3+fRfihIWN85YPl4f18b0mr0SVAPgJzeeiajVtf5np
-   mODfpVInSs4zXkG1yvxL2CqSLuMplZQbiH85BwxFy6CyRcZAdDe2KNusS
-   liqmwcc5waa1mtxDKr4ICAhmzRY95jh4IsWiMHvOOUH18uxEWdRszOROZ
-   Q==;
-X-CSE-ConnectionGUID: ni8UiQt2R9W+WTfC7Po8Tg==
-X-CSE-MsgGUID: u3d+zhy/S6Cg+ykys3PdmQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11391"; a="32547259"
-X-IronPort-AV: E=Sophos;i="6.14,182,1736841600"; 
-   d="scan'208";a="32547259"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2025 03:14:31 -0700
-X-CSE-ConnectionGUID: kty9moIYRn6UHGcMOBnQxw==
-X-CSE-MsgGUID: PYImLbUjSKS5laH9rhiK1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,181,1736841600"; 
-   d="scan'208";a="149842400"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Apr 2025 03:14:29 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tzv74-000Ac0-2m;
-	Wed, 02 Apr 2025 10:14:26 +0000
-Date: Wed, 2 Apr 2025 18:13:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/stale_mmio_cleanup 70/72]
- arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in
- 'struct kvm_arch'
-Message-ID: <202504021847.1a4Hp0Cp-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GS1uUr7H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743592260;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VgTSlcWUxY8a6JwJYyv7GJqNtqyp4QlKElc3qaVOgZs=;
+	b=GS1uUr7H4TU6LpQn/C4w9cKojGWTbQsjdv7rd/tb0IaZnzrUTl5vmTQKiDXducvbl7i6Dv
+	QYphBxaokTlR6+OoRB+NdhNnKHuOLW7XvlK1IMgq7y25f13xSv2hEajdxCHc7KbWLLqYcu
+	yiUJqrTn6WK2bByUeOFZ7161LIhTmq8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-457-xDKcHiZ4NxqXSrHBPqvjqA-1; Wed,
+ 02 Apr 2025 07:10:56 -0400
+X-MC-Unique: xDKcHiZ4NxqXSrHBPqvjqA-1
+X-Mimecast-MFC-AGG-ID: xDKcHiZ4NxqXSrHBPqvjqA_1743592253
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70F521809CA6;
+	Wed,  2 Apr 2025 11:10:51 +0000 (UTC)
+Received: from f39 (unknown [10.45.225.130])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 738421828A80;
+	Wed,  2 Apr 2025 11:10:25 +0000 (UTC)
+Date: Wed, 2 Apr 2025 13:10:22 +0200
+From: Eder Zulian <ezulian@redhat.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
+	Ben Gainey <ben.gainey@arm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
+	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Howard Chu <howardchu95@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Jann Horn <jannh@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Graham Woodward <graham.woodward@arm.com>,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
+	Tengda Wu <wutengda@huaweicloud.com>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	Chun-Tse Shao <ctshao@google.com>,
+	Casey Chen <cachen@purestorage.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Li Huafei <lihuafei1@huawei.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Andrew Kreimer <algonell@gmail.com>,
+	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
+	Junhao He <hejunhao3@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	Steve Clevenger <scclevenger@os.amperecomputing.com>,
+	Zixian Cai <fzczx123@gmail.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 04/48] x86/insn: Silence -Wshorten-64-to-32 warnings
+Message-ID: <Z-0bHg4aX5uX33CU@f39>
+References: <20250401182347.3422199-1-irogers@google.com>
+ <20250401182347.3422199-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,220 +125,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250401182347.3422199-5-irogers@google.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-tree:   https://github.com/sean-jc/linux x86/stale_mmio_cleanup
-head:   1f284ca401d9620d6f0e4aea289cc2a50c4403e9
-commit: 7df9be2ef92ca4407a365455e0670f4f07af7e25 [70/72] KVM: VMX: Apply MMIO mitigation if KVM maps MMIO into the guest
-config: i386-buildonly-randconfig-006-20250402 (https://download.01.org/0day-ci/archive/20250402/202504021847.1a4Hp0Cp-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250402/202504021847.1a4Hp0Cp-lkp@intel.com/reproduce)
+Hello, apologies if I'm missing something, but
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504021847.1a4Hp0Cp-lkp@intel.com/
+On Tue, Apr 01, 2025 at 11:23:02AM -0700, Ian Rogers wrote:
+> The clang warning -Wshorten-64-to-32 can be useful to catch
+> inadvertent truncation. In some instances this truncation can lead to
+> changing the sign of a result, for example, truncation to return an
+> int to fit a sort routine. Silence the warning by making the implicit
+> truncation explicit.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/arch/x86/lib/insn.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/arch/x86/lib/insn.c b/tools/arch/x86/lib/insn.c
+> index e91d4c4e1c16..5fa8697498fe 100644
+> --- a/tools/arch/x86/lib/insn.c
+> +++ b/tools/arch/x86/lib/insn.c
+> @@ -92,7 +92,7 @@ static int __insn_get_emulate_prefix(struct insn *insn,
+>  			goto err_out;
+>  	}
+>  
+> -	insn->emulate_prefix_size = len;
+> +	insn->emulate_prefix_size = (int)len;
 
-All errors (new ones prefixed by >>):
+wouldn't something like 
++ insn->emulate_prefix_size = !!len;
+be preferable in this case?
 
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:509:10: note: expanded from macro '__native_word'
-     509 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                 ^
-   include/linux/compiler_types.h:542:22: note: expanded from macro 'compiletime_assert'
-     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:530:23: note: expanded from macro '_compiletime_assert'
-     530 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:522:9: note: expanded from macro '__compiletime_assert'
-     522 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:509:39: note: expanded from macro '__native_word'
-     509 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                                              ^
-   include/linux/compiler_types.h:542:22: note: expanded from macro 'compiletime_assert'
-     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:530:23: note: expanded from macro '_compiletime_assert'
-     530 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:522:9: note: expanded from macro '__compiletime_assert'
-     522 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:510:10: note: expanded from macro '__native_word'
-     510 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                 ^
-   include/linux/compiler_types.h:542:22: note: expanded from macro 'compiletime_assert'
-     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:530:23: note: expanded from macro '_compiletime_assert'
-     530 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:522:9: note: expanded from macro '__compiletime_assert'
-     522 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:510:38: note: expanded from macro '__native_word'
-     510 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                                             ^
-   include/linux/compiler_types.h:542:22: note: expanded from macro 'compiletime_assert'
-     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:530:23: note: expanded from macro '_compiletime_assert'
-     530 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:522:9: note: expanded from macro '__compiletime_assert'
-     522 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                                       ^
-   include/linux/compiler_types.h:542:22: note: expanded from macro 'compiletime_assert'
-     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:530:23: note: expanded from macro '_compiletime_assert'
-     530 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:522:9: note: expanded from macro '__compiletime_assert'
-     522 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |                     ^
-   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                  ^
-   include/linux/compiler_types.h:498:13: note: expanded from macro '__unqual_scalar_typeof'
-     498 |                 _Generic((x),                                           \
-         |                           ^
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |                     ^
-   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                  ^
-   include/linux/compiler_types.h:505:15: note: expanded from macro '__unqual_scalar_typeof'
-     505 |                          default: (x)))
-         |                                    ^
->> arch/x86/kvm/vmx/vmx.c:7364:30: error: no member named 'mapped_host_mmio' in 'struct kvm_arch'
-    7364 |                  READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-         |                            ~~~~~~~~~~~~~~~ ^
-   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |                     ^
-   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                         ^
-   8 errors generated.
+Apparently the 'insn->emulate_prefix_size' is only used in
+'insn_has_emulate_prefix()'. Perhaps both the flag 'emulate_prefix_size'
+(currently an 'int') and the 'insn_has_emulate_prefix()' function return
+type could be changed to boolean?
 
+>  	insn->next_byte += len;
 
-vim +7364 arch/x86/kvm/vmx/vmx.c
+My knowledge of this part of the code is limited, however IMO it seems
+strange to have the 'emulate_prefix_size' flag affected implictly or
+explicitly by truncation and the pointer 'insn->next_byte' advanced
+regardless.
 
-  7347	
-  7348	static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
-  7349						unsigned int flags)
-  7350	{
-  7351		struct vcpu_vmx *vmx = to_vmx(vcpu);
-  7352	
-  7353		guest_state_enter_irqoff();
-  7354	
-  7355		/*
-  7356		 * L1D Flush includes CPU buffer clear to mitigate MDS, but VERW
-  7357		 * mitigation for MDS is done late in VMentry and is still
-  7358		 * executed in spite of L1D Flush. This is because an extra VERW
-  7359		 * should not matter much after the big hammer L1D Flush.
-  7360		 */
-  7361		if (static_branch_unlikely(&vmx_l1d_should_flush))
-  7362			vmx_l1d_flush(vcpu);
-  7363		else if (static_branch_unlikely(&mmio_stale_data_clear) &&
-> 7364			 READ_ONCE(vcpu->kvm->arch.mapped_host_mmio))
-  7365			mds_clear_cpu_buffers();
-  7366	
-  7367		vmx_disable_fb_clear(vmx);
-  7368	
-  7369		if (vcpu->arch.cr2 != native_read_cr2())
-  7370			native_write_cr2(vcpu->arch.cr2);
-  7371	
-  7372		vmx->fail = __vmx_vcpu_run(vmx, (unsigned long *)&vcpu->arch.regs,
-  7373					   flags);
-  7374	
-  7375		vcpu->arch.cr2 = native_read_cr2();
-  7376		vcpu->arch.regs_avail &= ~VMX_REGS_LAZY_LOAD_SET;
-  7377	
-  7378		vmx->idt_vectoring_info = 0;
-  7379	
-  7380		vmx_enable_fb_clear(vmx);
-  7381	
-  7382		if (unlikely(vmx->fail)) {
-  7383			vmx->exit_reason.full = 0xdead;
-  7384			goto out;
-  7385		}
-  7386	
-  7387		vmx->exit_reason.full = vmcs_read32(VM_EXIT_REASON);
-  7388		if (likely(!vmx->exit_reason.failed_vmentry))
-  7389			vmx->idt_vectoring_info = vmcs_read32(IDT_VECTORING_INFO_FIELD);
-  7390	
-  7391		if ((u16)vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI &&
-  7392		    is_nmi(vmx_get_intr_info(vcpu))) {
-  7393			kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
-  7394			if (cpu_feature_enabled(X86_FEATURE_FRED))
-  7395				fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR);
-  7396			else
-  7397				vmx_do_nmi_irqoff();
-  7398			kvm_after_interrupt(vcpu);
-  7399		}
-  7400	
-  7401	out:
-  7402		guest_state_exit_irqoff();
-  7403	}
-  7404	
+>  
+>  	return 1;
+> -- 
+> 2.49.0.504.g3bcea36a83-goog
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
