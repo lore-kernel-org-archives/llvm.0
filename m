@@ -1,149 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F062AEFB;
-	Wed,  2 Apr 2025 15:38:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D952E3372;
+	Wed,  2 Apr 2025 15:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743608310; cv=none; b=hEh/Mkavy3f+qjsnExm0Tos7uYd/ape4H3N03PIGXSoFVs4afhjeskT2OjP6kCxvmOgB+vPLrT87CfJizW1BIYg4eouELBTSH4n7kd4B6/kyDEM6vBO+ub6bxAKB7xbZoXNXmaHLSUCloKVWtm6nLJubINYPO0R+aaBM2TNPFhI=
+	t=1743608473; cv=none; b=abwqRQsURhbToiNsc72J4n9A/mA+MjScdEcDoAiiUgoOzQAn+sPvJxtBFTe5rPNSatdFQtjzEhC3WNrBn5ca9JPXT4Sovx1Yq2Y1LZvvkCPxvhOedHmVUdn0z4HP91bCYCrJD6tr5w9FIaxS2PzcRpDsiUWouu6afrCj8bT6UMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743608310; c=relaxed/simple;
-	bh=gNOxd76U+ipgsM9PZmHHPd/dSCkiX38U0TsaA6LkgHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=peqPQg46eIi8JHQdka4hVMexurYN86ucCGWa059DxQ8P+vQ7sb1GwxxTnanyIitT+nzvFJW+Qh00OLhttITrgcKdgj5mn26jbVw5Ofzdf4qVD47L6z4p9FmB4nYS/lnSi+V5bUkBCSesgM7QIM91EbBlNBcsGRAUBs07J/1xVDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mDSOnyKY; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1743608473; c=relaxed/simple;
+	bh=Y/O2DK5Lf6ey6Pfej1vFZZLi5jn02o1oRvHXFQ36iCQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L/arm2DgjM30bbyQYWCaSpjjyl8peJM5t+/HCItFfBv+toAn6fxA2dh1XG56cxZBMJ0FL1ZOHOEDJnlvcYTuo+D9KRgaQVXL/pIUUNS+F5SfsVuz8gCy6HzyP2B4I7atLLKfOCiJtCtQ3NmdEyOveBcW48SQeXiYO1lWT2bE/Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OH1LsY4q; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mDSOnyKY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OH1LsY4q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743608309; x=1775144309;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gNOxd76U+ipgsM9PZmHHPd/dSCkiX38U0TsaA6LkgHg=;
-  b=mDSOnyKYDijjnQus8VkqykxH0GNTPXQd7jeVz5X1++ATyHoPZ+dFLmPL
-   XdM3BS7OtVEtdUuC7MMVCwKJQDvoHMpahbQkuYAbxYFe3V45kP2P51be8
-   8vcF+q+1bSrTjeGmAqI2Z9I4lx/U4N+nci9abacSfE4E+I6mlsFGIClKh
-   GXvZt+3FKdqgerxJq+7T2hvpQL6FFTFPx82SyvpppFWrMTGEOfAPY8SF/
-   65j41JS9XTJr7Bvf0FStrYSzsPNGQXvVJAcin24+Vgn+0nMTIBzhJMRF7
-   fl0eCBGbAIkBPesnMjGA3O+hXV7mT6Au83yORVKrhWo/OCpbqWwERkMwI
-   A==;
-X-CSE-ConnectionGUID: xj+RbhJYScas8vRYvKhHeA==
-X-CSE-MsgGUID: IQOk7BY3RIGDtgUOblA7og==
-X-IronPort-AV: E=McAfee;i="6700,10204,11392"; a="44865471"
+  t=1743608472; x=1775144472;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y/O2DK5Lf6ey6Pfej1vFZZLi5jn02o1oRvHXFQ36iCQ=;
+  b=OH1LsY4qizQgV0jbTK7Uekah+5OqsBFcRTO2M19ErtZGnF1hgWR+hnUw
+   ntdbTz9l2LCxStga+Tm1fEJjJ3ttHzwSGJvlDqnC60bJt7eDNAPogAx90
+   Kw571iZ/seT2Ys8zPnV/mAG3p+vj7hTjOy7aKnnM5HgqZfK0REhLmsy6e
+   hLGwd8kawgbJ3ajjJzr3Y0txPSXvO7I/n7WLXa7OsbDFxTblXIo0jNNLI
+   w70Ng5w2WkQDz+2a5xPimzlWXea0tZYMeeqjQlrgJMeLa52DEULEBgeEv
+   i/TG3mdySNB5PqWXArlK8psyr5Mnz2yI7VtvTND0Y7sb/bJz2fSMT6s9+
+   Q==;
+X-CSE-ConnectionGUID: LF1dijstTZmaFwiYpFfAUQ==
+X-CSE-MsgGUID: 4fDJtL3oSSmHpD9RAzRwPg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11392"; a="45106882"
 X-IronPort-AV: E=Sophos;i="6.15,182,1739865600"; 
-   d="scan'208";a="44865471"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2025 08:38:28 -0700
-X-CSE-ConnectionGUID: e/D1AUI4SbeM0QiK8R/NPQ==
-X-CSE-MsgGUID: 3ygaJ+kMRXq12BGreIgYSw==
+   d="scan'208";a="45106882"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2025 08:41:11 -0700
+X-CSE-ConnectionGUID: zHDjNtvDTouroy5OyapFag==
+X-CSE-MsgGUID: S3MiKWOZRGuvNqyyZyUeaQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,182,1739865600"; 
-   d="scan'208";a="126696129"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 02 Apr 2025 08:38:27 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u00Aa-000Aqo-2V;
-	Wed, 02 Apr 2025 15:38:24 +0000
-Date: Wed, 2 Apr 2025 23:37:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Machado <luis.machado@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC] sched: Improving scheduler debugging/tracing interfaces
-Message-ID: <202504022329.cc8TsKhN-lkp@intel.com>
-References: <20250402122607.2982523-1-luis.machado@arm.com>
+   d="scan'208";a="131603092"
+Received: from johunt-mobl9.ger.corp.intel.com (HELO [10.124.222.41]) ([10.124.222.41])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2025 08:41:08 -0700
+Message-ID: <e5770add-9d18-40e1-929d-df7c40f3c7d1@intel.com>
+Date: Wed, 2 Apr 2025 08:41:07 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250402122607.2982523-1-luis.machado@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
+ native_wrmsrl()
+To: Xin Li <xin@zytor.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+ linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+ andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+ namhyung@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
+ ajay.kaher@broadcom.com, alexey.amakhalov@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+ pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+ luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+ haiyangz@microsoft.com, decui@microsoft.com
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-2-xin@zytor.com> <Z-pruogreCuU66wm@gmail.com>
+ <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com>
+ <a0254e73-bf7c-4876-b64e-b08e96044666@zytor.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <a0254e73-bf7c-4876-b64e-b08e96044666@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Luis,
+On 3/31/25 22:53, Xin Li wrote:
+> Per "struct msr" defined in arch/x86/include/asm/shared/msr.h:
+> 
+> struct msr {
+>         union {
+>                 struct {
+>                         u32 l;
+>                         u32 h;
+>                 };
+>                 u64 q;
+>         };
+> };
+> 
+> Probably *msrq() is what we want?
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 328802738e1cd091d04076317f3c2174125c5916]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Machado/sched-Improving-scheduler-debugging-tracing-interfaces/20250402-203041
-base:   328802738e1cd091d04076317f3c2174125c5916
-patch link:    https://lore.kernel.org/r/20250402122607.2982523-1-luis.machado%40arm.com
-patch subject: [RFC] sched: Improving scheduler debugging/tracing interfaces
-config: hexagon-randconfig-001-20250402 (https://download.01.org/0day-ci/archive/20250402/202504022329.cc8TsKhN-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250402/202504022329.cc8TsKhN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504022329.cc8TsKhN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/sched/core.c:104:26: error: no member named 'avg' in 'struct cfs_rq'
-     104 |         return cfs_rq ? cfs_rq->avg.util_est: 0;
-         |                         ~~~~~~  ^
-   kernel/sched/core.c:110:18: error: no member named 'avg' in 'struct sched_entity'
-     110 |         return se ? se->avg.util_est & ~UTIL_AVG_UNCHANGED : 0;
-         |                     ~~  ^
->> kernel/sched/core.c:118:55: error: no member named 'cpu' in 'struct rq'
-     118 |         unsigned long capacity_orig = per_cpu(cpu_scale, rq->cpu);
-         |                                                          ~~  ^
-   include/linux/percpu-defs.h:272:49: note: expanded from macro 'per_cpu'
-     272 | #define per_cpu(var, cpu)       (*per_cpu_ptr(&(var), cpu))
-         |                                                       ^~~
-   include/linux/percpu-defs.h:262:9: note: expanded from macro 'per_cpu_ptr'
-     262 |         (void)(cpu);                                                    \
-         |                ^~~
-   kernel/sched/core.c:119:58: error: no member named 'cpu' in 'struct rq'
-     119 |         unsigned long scale_freq = per_cpu(arch_freq_scale, rq->cpu);
-         |                                                             ~~  ^
-   include/linux/percpu-defs.h:272:49: note: expanded from macro 'per_cpu'
-     272 | #define per_cpu(var, cpu)       (*per_cpu_ptr(&(var), cpu))
-         |                                                       ^~~
-   include/linux/percpu-defs.h:262:9: note: expanded from macro 'per_cpu_ptr'
-     262 |         (void)(cpu);                                                    \
-         |                ^~~
-   kernel/sched/core.c:7707:12: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-    7707 |                                        preempt_modes[preempt_dynamic_mode] : "undef",
-         |                                        ^             ~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:7682:1: note: array 'preempt_modes' declared here
-    7682 | const char *preempt_modes[] = {
-         | ^
-   1 warning and 4 errors generated.
-
-
-vim +104 kernel/sched/core.c
-
-   101	
-   102	static unsigned int cfs_rq_util_est(struct cfs_rq *cfs_rq)
-   103	{
- > 104		return cfs_rq ? cfs_rq->avg.util_est: 0;
-   105	}
-   106	
-   107	static unsigned int se_util_est(struct sched_entity *se)
-   108	{
-   109	
-   110		return se ? se->avg.util_est & ~UTIL_AVG_UNCHANGED : 0;
-   111	}
-   112	
-   113	static unsigned long rq_cpu_current_capacity(struct rq *rq)
-   114	{
-   115		if (rq == NULL)
-   116			return 0;
-   117	
- > 118		unsigned long capacity_orig = per_cpu(cpu_scale, rq->cpu);
-   119		unsigned long scale_freq = per_cpu(arch_freq_scale, rq->cpu);
-   120		return cap_scale(capacity_orig, scale_freq);
-   121	}
-   122	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+What would folks think about "wrmsr64()"? It's writing a 64-bit value to
+an MSR and there are a lot of functions in the kernel that are named
+with the argument width in bits.
