@@ -1,177 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDC8233D92
-	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 11:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF28236421
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 12:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743592263; cv=none; b=KmfLJHHDrJ5mGdhPnYSwuFPLuRwIn+tIbqWWZcmdzJ1E2Ih9a8P/2Kk6b+tcPMZ/FO/9HWZ1/0R/TFiOm0R2aA8aKNY5LgtlDsMXBZWItw3aa357FD9EW+EZFkoxuE/mX/Q3XgPzTl5/rMySfLrk7KAKsP58+Y+Hq/EhZrMfBRM=
+	t=1743596524; cv=none; b=UhKRjNShSI6qpZ++KXv9+hcRlVAEKJE1kMO0DCmk5THMW5Iu3f2FR1NHo/nk/aWrgIufX15EqVVeqRwAjF0Y/5+11WhdLRLCuAiGfpdeALkSfgoZgT4wDsaRQGj7tEeBj4FF4SCOSRiyX5NEOrodGAW7qGrsYLPgs7WRwDgNagY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743592263; c=relaxed/simple;
-	bh=EWrgD18r2nfU1tBqbRK5IiJug7+Vse8FsJKY0eEvPCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V4KNHAa2keb6SM1NCWeAosR6b0P+P3WqrFFkATsemNuw9Lk4oJl4QmM9ml7J6v98W+donGolyV5IW+L32BZ0wY9FEUjyotba4ObQEklOBDcSwGMjX3x6pjfNBsuMwSxyKb5ND6IszQ5TuZEBYqg9jyucIzaKQsIVF3+vuHPQ4Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GS1uUr7H; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743596524; c=relaxed/simple;
+	bh=hFmt9tVTbnzz6IMTCrEPKn6NiL3yOalLnxXBtm1hJ0I=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ue638SB++qt6MrKykURhggeI6/xg9GNBQ9NWCeQ6mE8ewtBH/l6Qw1/NRMyQHUNiQfJPiwROWVCpBcdGHAIOe+/tZ9ciUn5SX94URbfpGejkwjZ7GbP8bO8v+jKtubE9Iq0P4O+t1Xzqa8Zf0Ow7FBi0jdj03vc96uWKDz3rG3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nghd1IzB; arc=none smtp.client-ip=209.85.221.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GS1uUr7H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743592260;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VgTSlcWUxY8a6JwJYyv7GJqNtqyp4QlKElc3qaVOgZs=;
-	b=GS1uUr7H4TU6LpQn/C4w9cKojGWTbQsjdv7rd/tb0IaZnzrUTl5vmTQKiDXducvbl7i6Dv
-	QYphBxaokTlR6+OoRB+NdhNnKHuOLW7XvlK1IMgq7y25f13xSv2hEajdxCHc7KbWLLqYcu
-	yiUJqrTn6WK2bByUeOFZ7161LIhTmq8=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-457-xDKcHiZ4NxqXSrHBPqvjqA-1; Wed,
- 02 Apr 2025 07:10:56 -0400
-X-MC-Unique: xDKcHiZ4NxqXSrHBPqvjqA-1
-X-Mimecast-MFC-AGG-ID: xDKcHiZ4NxqXSrHBPqvjqA_1743592253
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70F521809CA6;
-	Wed,  2 Apr 2025 11:10:51 +0000 (UTC)
-Received: from f39 (unknown [10.45.225.130])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 738421828A80;
-	Wed,  2 Apr 2025 11:10:25 +0000 (UTC)
-Date: Wed, 2 Apr 2025 13:10:22 +0200
-From: Eder Zulian <ezulian@redhat.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Yicong Yang <yangyicong@hisilicon.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
-	Ben Gainey <ben.gainey@arm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
-	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Howard Chu <howardchu95@gmail.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Jann Horn <jannh@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Yang Jihong <yangjihong@bytedance.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Graham Woodward <graham.woodward@arm.com>,
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
-	Tengda Wu <wutengda@huaweicloud.com>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Chun-Tse Shao <ctshao@google.com>,
-	Casey Chen <cachen@purestorage.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Li Huafei <lihuafei1@huawei.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
-	Thomas Falcon <thomas.falcon@intel.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Andrew Kreimer <algonell@gmail.com>,
-	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
-	Junhao He <hejunhao3@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Xu Yang <xu.yang_2@nxp.com>,
-	Steve Clevenger <scclevenger@os.amperecomputing.com>,
-	Zixian Cai <fzczx123@gmail.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>,
-	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 04/48] x86/insn: Silence -Wshorten-64-to-32 warnings
-Message-ID: <Z-0bHg4aX5uX33CU@f39>
-References: <20250401182347.3422199-1-irogers@google.com>
- <20250401182347.3422199-5-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nghd1IzB"
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-525da75d902so2857966e0c.3
+        for <llvm@lists.linux.dev>; Wed, 02 Apr 2025 05:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1743596521; x=1744201321; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qD/PMOyx9XK9R1d/xQ4M0XKWGpm4ZEHxb/f9TzxVDzc=;
+        b=nghd1IzBS1qkvsznbM7M2t2OkBPQiyN/dybjkRZ9PnMU/W5xh6phSNGEQTrv25w4j3
+         v5HSu0si9LOJ/xybQ4msX+/QZPSUQMbLwxeBRXG+W0Jjqn4CR1gy2wLT1XnYhc+5FsKt
+         oBxOXccX3EbUdbGvBourY9uPBtFDiZm0ppcTS/+hYSlDp3Mv37FkzbVk6dKDIMiJw6ap
+         K6bpr9DhBpnw59CXREvjShHVvAUufodJGQE6w8AuW+BdVUOWhw5MmHRYDWO87nmgIPVX
+         dOOn++wZXSfn5AbfaKE9I0SeVPML4fhdILyiKeJC9rR3QrMGhr13rb+c4Zq7tyMx+fML
+         n+/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743596521; x=1744201321;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qD/PMOyx9XK9R1d/xQ4M0XKWGpm4ZEHxb/f9TzxVDzc=;
+        b=d0ZFyozbr2T3P9fUJCO7HhJBh/CfoLdREY1oLBOG+UpXKaGsEvy97NfIOnFxJJq9h2
+         2JEIXAkG1CFYkxX/94YCMGJ9fAvqoWyL94xpoRihEgQYQmGuHW1nbJC0nvz8hDVujKAM
+         5PlxvhYi31Mo12VZuh6grWRrEDRigMgWurYYdEdeCEUt9+4/D5zZMEQoxxuS6rc3RdYV
+         hBsQZ/UtdB5CLLh9aeHGAOX1ZnxSyFjYE0HS6XZM1t2zt9fjF1mfGUMGEvlQ7ADyyMni
+         JyBLfyE9Zs3dbE1lCBXDGO+dCJLkgj0ihaYQMjzHiLBmGsyGDSGE/iuJ9NKg2Idyz7RM
+         5svw==
+X-Gm-Message-State: AOJu0YxKf9kVT2kyg/YRQ7F1dLpCqhTzG+JvsP73XBrzg/Nk4OxHTj3C
+	EqWyDBs8Zfa5FcIPrQFoaj7cnZWxomctY39A1vA4mSXe1q5qVcPLkPvTB6ZzAqJEZWThB2bMch5
+	Fdp3jJDpctfA5Cn0TkAWie9Rh6s4y4Gc59N8JZZyugvaqCl8/MeM=
+X-Gm-Gg: ASbGncs2eejHALl2Gf9mrTsck+sFhtNBL0OoqTeqp8/yuM7ClEjZp1+F+IK26Qeyuc0
+	iEZqKPyhjvdUO/b6wXeGqpYQdnAR0gfNNx3ARQ2YUjy+OzErXcSAIQX3dbWwDxH9ohk5CLnv6RW
+	nveDk9WrznNmW5Bj7G/W9eSA/VZDxSC5SRPPKxr2W8lYx/g5YiV8sGXa3ztq4=
+X-Google-Smtp-Source: AGHT+IGZd1b5fqfa6pHXvxexGDlAKss+FYCovowlkAi3Xj1GtUKyZmc4loNHv1qXkrx3HBYz8r1MbDuMAFYoP6L8Qfw=
+X-Received: by 2002:a05:6122:1ad0:b0:525:9440:243c with SMTP id
+ 71dfb90a1353d-5274cfb95a2mr1043348e0c.11.1743596521224; Wed, 02 Apr 2025
+ 05:22:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250401182347.3422199-5-irogers@google.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 2 Apr 2025 17:51:48 +0530
+X-Gm-Features: AQ5f1JqYWbXD84vj9qiHXH7fpaSiEYXFSjnm4-yFz-CnOCSphgOZJOvkdDjcXGE
+Message-ID: <CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com>
+Subject: clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
+To: clang-built-linux <llvm@lists.linux.dev>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	linux-s390@vger.kernel.org, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org, samba-technical@lists.samba.org, 
+	linux-cifs@vger.kernel.org
+Cc: Steve French <sfrench@samba.org>, bharathsm@microsoft.com, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Shyam Prasad N <sprasad@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello, apologies if I'm missing something, but
+Regressions on arm, powerpc, s390 defconfig builds failed with
+toolchain clang-nightly on the mainline master branch.
 
-On Tue, Apr 01, 2025 at 11:23:02AM -0700, Ian Rogers wrote:
-> The clang warning -Wshorten-64-to-32 can be useful to catch
-> inadvertent truncation. In some instances this truncation can lead to
-> changing the sign of a result, for example, truncation to return an
-> int to fit a sort routine. Silence the warning by making the implicit
-> truncation explicit.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/arch/x86/lib/insn.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/arch/x86/lib/insn.c b/tools/arch/x86/lib/insn.c
-> index e91d4c4e1c16..5fa8697498fe 100644
-> --- a/tools/arch/x86/lib/insn.c
-> +++ b/tools/arch/x86/lib/insn.c
-> @@ -92,7 +92,7 @@ static int __insn_get_emulate_prefix(struct insn *insn,
->  			goto err_out;
->  	}
->  
-> -	insn->emulate_prefix_size = len;
-> +	insn->emulate_prefix_size = (int)len;
+First seen on the v6.14-12245-g91e5bfe317d8
+ Good: v6.14-11270-g08733088b566
+ Bad: v6.14-12245-g91e5bfe317d8
 
-wouldn't something like 
-+ insn->emulate_prefix_size = !!len;
-be preferable in this case?
+Regressions found on arm:
+  - build/clang-nightly-nhk8815_defconfig
 
-Apparently the 'insn->emulate_prefix_size' is only used in
-'insn_has_emulate_prefix()'. Perhaps both the flag 'emulate_prefix_size'
-(currently an 'int') and the 'insn_has_emulate_prefix()' function return
-type could be changed to boolean?
+Regressions found on powerpc:
+  - build/clang-nightly-lkftconfig-lto-full
+  - build/clang-nightly-ppc64e_defconfig
+  - build/clang-nightly-lkftconfig-lto-thing
+  - build/clang-nightly-defconfig
+  - build/clang-nightly-lkftconfig-hardening
 
->  	insn->next_byte += len;
+Regressions found on s390:
+  - build/clang-nightly-lkftconfig-lto-thing
+  - build/clang-nightly-lkftconfig-lto-full
+  - build/clang-nightly-defconfig
+  - build/clang-nightly-lkftconfig-hardening
 
-My knowledge of this part of the code is limited, however IMO it seems
-strange to have the 'emulate_prefix_size' flag affected implictly or
-explicitly by truncation and the pointer 'insn->next_byte' advanced
-regardless.
 
->  
->  	return 1;
-> -- 
-> 2.49.0.504.g3bcea36a83-goog
-> 
+Regression Analysis:
+ - New regression? Yes
+ - Reproducibility? Yes
 
+Build regression: arm powerpc s390 modpost "wcslen" fs smb client
+cifs.ko undefined
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build log
+
+ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
+
+## Source
+* Kernel version: 6.14.0
+* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+* Git sha: 91e5bfe317d8f8471fbaa3e70cf66cae1314a516
+* Git describe: v6.14-12245-g91e5bfe317d8
+* Project details:
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/
+* Arcitures: arm, powerpc, s390
+* Toolchains: clang-nightly
+
+## Build
+* Build log: https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27856145/suite/build/test/clang-nightly-nhk8815_defconfig/log
+* Build history:
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27856145/suite/build/test/clang-nightly-nhk8815_defconfig/history/
+* Build details:
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27856145/suite/build/test/clang-nightly-nhk8815_defconfig/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdO7KHQCCZBICM0MvpaTUbLm/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdO7KHQCCZBICM0MvpaTUbLm/config
+
+## Steps to reproduce
+ - tuxmake --runtime podman --target-arch arm --toolchain
+clang-nightly --kconfig nhk8815_defconfig LLVM=1 LLVM_IAS=1
+ - tuxmake --runtime podman --target-arch powerpc --toolchain
+clang-nightly --kconfig defconfig LLVM=1 LLVM_IAS=0
+LD=powerpc64le-linux-gnu-ld
+ - tuxmake --runtime podman --target-arch s390 --toolchain
+clang-nightly --kconfig defconfig LLVM_IAS=1
+
+--
+Linaro LKFT
+https://lkft.linaro.org
