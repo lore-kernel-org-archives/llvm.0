@@ -1,54 +1,55 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF28236421
-	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 12:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726805BAF0
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 12:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743596524; cv=none; b=UhKRjNShSI6qpZ++KXv9+hcRlVAEKJE1kMO0DCmk5THMW5Iu3f2FR1NHo/nk/aWrgIufX15EqVVeqRwAjF0Y/5+11WhdLRLCuAiGfpdeALkSfgoZgT4wDsaRQGj7tEeBj4FF4SCOSRiyX5NEOrodGAW7qGrsYLPgs7WRwDgNagY=
+	t=1743598175; cv=none; b=QCPTyMB5YvZ2FSvViF0UcRWCyiKVsbzVO5wW/wKPuw+QVGZQHuiv7k9OeYI4SVpZn0IiPsHdAUEKR5YjSMx/Ou8tuREyMYNrK57svh5GNe0R5XT7t9/ClTxL9GYH+jKdID+dZ90RRS1H0co6koHUUs985EWyKa6egGAvxhuRJks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743596524; c=relaxed/simple;
-	bh=hFmt9tVTbnzz6IMTCrEPKn6NiL3yOalLnxXBtm1hJ0I=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ue638SB++qt6MrKykURhggeI6/xg9GNBQ9NWCeQ6mE8ewtBH/l6Qw1/NRMyQHUNiQfJPiwROWVCpBcdGHAIOe+/tZ9ciUn5SX94URbfpGejkwjZ7GbP8bO8v+jKtubE9Iq0P4O+t1Xzqa8Zf0Ow7FBi0jdj03vc96uWKDz3rG3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nghd1IzB; arc=none smtp.client-ip=209.85.221.176
+	s=arc-20240116; t=1743598175; c=relaxed/simple;
+	bh=iy8gPSknBpYANxR3oDbou+tV9uyY16PAcTCT3p0TVTQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=SVk+zediXD1eByOAxUAqhc+ak9E6kKuy5QG2fTonJ3e0znSL6Q8H3jfumMRuIgFfHH3cE6EuC1wjsxGuilr7CTRrgDLH3cVqbWRZWLPddMPygoX0QyuFx2goJtTmGjiEi8oygL5mH0L8UfMAgm+dmb6Q5AkqjIfcxWMrjJnjHLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jgBgNtpr; arc=none smtp.client-ip=209.85.221.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nghd1IzB"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-525da75d902so2857966e0c.3
-        for <llvm@lists.linux.dev>; Wed, 02 Apr 2025 05:22:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jgBgNtpr"
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-52403e39a23so6009474e0c.2
+        for <llvm@lists.linux.dev>; Wed, 02 Apr 2025 05:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743596521; x=1744201321; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1743598172; x=1744202972; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=qD/PMOyx9XK9R1d/xQ4M0XKWGpm4ZEHxb/f9TzxVDzc=;
-        b=nghd1IzBS1qkvsznbM7M2t2OkBPQiyN/dybjkRZ9PnMU/W5xh6phSNGEQTrv25w4j3
-         v5HSu0si9LOJ/xybQ4msX+/QZPSUQMbLwxeBRXG+W0Jjqn4CR1gy2wLT1XnYhc+5FsKt
-         oBxOXccX3EbUdbGvBourY9uPBtFDiZm0ppcTS/+hYSlDp3Mv37FkzbVk6dKDIMiJw6ap
-         K6bpr9DhBpnw59CXREvjShHVvAUufodJGQE6w8AuW+BdVUOWhw5MmHRYDWO87nmgIPVX
-         dOOn++wZXSfn5AbfaKE9I0SeVPML4fhdILyiKeJC9rR3QrMGhr13rb+c4Zq7tyMx+fML
-         n+/A==
+        bh=y+3sJL5+WsmkUHEYm1BzR/GyrjVHVNtLDIyVC85cNdI=;
+        b=jgBgNtpr323qAty5eIoA6dwbvarRiiIPY2MDol319x7UScNC6lN0qyZjbPJRD2Pb/y
+         LQ/DFIgZdfhapthEYkxRCzrUARYb+UyBu3KCE5fF5yjqYFD250JeZpLBzEQ4PxbgWkNW
+         g4J679PNC+f6d8KAsybdefEBbdMR3UHNZCjlTyjWWCmHcda4FsVY3WXom/RSRVoMlUe6
+         ohqfWswm5F47SRX10I2J5iRovWDuGOKNXZypaOBGlAs4H6ohx0HUYWEdmIWMY4mpknwZ
+         V2V0Ph2uyxU5/dtefv2+oOLGCtLosD8xVuKKFCeggPEsusma4a81k7hypLs5uL2Lja5L
+         UIYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743596521; x=1744201321;
+        d=1e100.net; s=20230601; t=1743598172; x=1744202972;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qD/PMOyx9XK9R1d/xQ4M0XKWGpm4ZEHxb/f9TzxVDzc=;
-        b=d0ZFyozbr2T3P9fUJCO7HhJBh/CfoLdREY1oLBOG+UpXKaGsEvy97NfIOnFxJJq9h2
-         2JEIXAkG1CFYkxX/94YCMGJ9fAvqoWyL94xpoRihEgQYQmGuHW1nbJC0nvz8hDVujKAM
-         5PlxvhYi31Mo12VZuh6grWRrEDRigMgWurYYdEdeCEUt9+4/D5zZMEQoxxuS6rc3RdYV
-         hBsQZ/UtdB5CLLh9aeHGAOX1ZnxSyFjYE0HS6XZM1t2zt9fjF1mfGUMGEvlQ7ADyyMni
-         JyBLfyE9Zs3dbE1lCBXDGO+dCJLkgj0ihaYQMjzHiLBmGsyGDSGE/iuJ9NKg2Idyz7RM
-         5svw==
-X-Gm-Message-State: AOJu0YxKf9kVT2kyg/YRQ7F1dLpCqhTzG+JvsP73XBrzg/Nk4OxHTj3C
-	EqWyDBs8Zfa5FcIPrQFoaj7cnZWxomctY39A1vA4mSXe1q5qVcPLkPvTB6ZzAqJEZWThB2bMch5
-	Fdp3jJDpctfA5Cn0TkAWie9Rh6s4y4Gc59N8JZZyugvaqCl8/MeM=
-X-Gm-Gg: ASbGncs2eejHALl2Gf9mrTsck+sFhtNBL0OoqTeqp8/yuM7ClEjZp1+F+IK26Qeyuc0
-	iEZqKPyhjvdUO/b6wXeGqpYQdnAR0gfNNx3ARQ2YUjy+OzErXcSAIQX3dbWwDxH9ohk5CLnv6RW
-	nveDk9WrznNmW5Bj7G/W9eSA/VZDxSC5SRPPKxr2W8lYx/g5YiV8sGXa3ztq4=
-X-Google-Smtp-Source: AGHT+IGZd1b5fqfa6pHXvxexGDlAKss+FYCovowlkAi3Xj1GtUKyZmc4loNHv1qXkrx3HBYz8r1MbDuMAFYoP6L8Qfw=
-X-Received: by 2002:a05:6122:1ad0:b0:525:9440:243c with SMTP id
- 71dfb90a1353d-5274cfb95a2mr1043348e0c.11.1743596521224; Wed, 02 Apr 2025
- 05:22:01 -0700 (PDT)
+        bh=y+3sJL5+WsmkUHEYm1BzR/GyrjVHVNtLDIyVC85cNdI=;
+        b=GPNSRDUoe13PGqlaN784Mg1MsbqdDZKuycwxhB9Pxy3rLxTHj4VyrfhB8Gks6rojv7
+         N3O2WaVN+VtefYo6DdRiTN59WnMJBOglWlrSbUl5dxZXtA5bSIzB+IZ8PZMbDnNxOIX6
+         TwJrm7fAn3wQp8CnPMy2N9HxXMS/E1fP2wJ3MN18+9ebGDXZrWN8nSFCchAqVIcqKA/c
+         pzfu0oNT9CqRWLkCk0WXgbnr9a9B3IchKj2pT8yPx4AHObM+fFxgTV2msT0PErZkGjXd
+         B/FZ+NnDojtB99QRIWfLiLaBwFvr1wwT7zkTI2EgM/UzpdC7JHfRUkuBVjk/zvywH1jj
+         TWNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWBJW0z46oHU5c9em7/Zv0CbgRFpDm5ms2zXaOXLrM8Ld8s32kDvnvczvamPjSO2BT8Pi/C@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw5vWUbpDXQjcq1lNA0P3KskmYD8X8Uc/U++I8RhchGfalXanwF
+	QvysWEZPBWD3P2VvTVSE1SOLpSxn9ipdN6lu2ttJIeg0GfxIe1i8X9nq/OIhlz8MMkS8+/8EqCn
+	RWURceudVVvHmcQYqaaTxYu8O6ITgoxLBADqxZg==
+X-Gm-Gg: ASbGncss7yXukjmj5Zl6eXIwJri9CfcT0aNXWypvKlGXQvywkbKdQsxiCTvE5ceDwIf
+	fO9Wq2LN9avHz/MtbjK9NFoKmSrg1aaLxuV6p5nkqyJPdqYGeZ/9EKjMytSDLuD9Ew8IMw2hkS7
+	AS5xGwRKbL5gdqhXcwVja8igrjClehFmABGwxPs0rd7S7Nc41zBWGIt+76WUk=
+X-Google-Smtp-Source: AGHT+IEZPV71xCZFRaiMP7CnHUqII0vri11WJXA0JOvFvWq6jg//KmbiEFno6N5n8nVLL7zZFwNgKtdEbJvUoV78150=
+X-Received: by 2002:a05:6102:f8f:b0:4c1:9bdb:6188 with SMTP id
+ ada2fe7eead31-4c839e38348mr1583448137.13.1743598172341; Wed, 02 Apr 2025
+ 05:49:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,57 +57,55 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 2 Apr 2025 17:51:48 +0530
-X-Gm-Features: AQ5f1JqYWbXD84vj9qiHXH7fpaSiEYXFSjnm4-yFz-CnOCSphgOZJOvkdDjcXGE
-Message-ID: <CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com>
-Subject: clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
-To: clang-built-linux <llvm@lists.linux.dev>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-s390@vger.kernel.org, open list <linux-kernel@vger.kernel.org>, 
-	lkft-triage@lists.linaro.org, samba-technical@lists.samba.org, 
-	linux-cifs@vger.kernel.org
-Cc: Steve French <sfrench@samba.org>, bharathsm@microsoft.com, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Shyam Prasad N <sprasad@microsoft.com>
+Date: Wed, 2 Apr 2025 18:19:19 +0530
+X-Gm-Features: AQ5f1JrYBDqdwedr2g0EeIuRXqX4Zi5GT7DMBhpK7McR8fimUhQCIrzEPDNgmhA
+Message-ID: <CA+G9fYve7+nXJNoV48TksXoMeVjgJuP8Gs=+1br+Qur1DPWV4A@mail.gmail.com>
+Subject: v6.14-12245-g91e5bfe317d8: Boot regression: rk3399-rock-pi-4b
+ dragonboard-410c dragonboard-845c no console output
+To: open list <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>
+Cc: Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Regressions on arm, powerpc, s390 defconfig builds failed with
-toolchain clang-nightly on the mainline master branch.
+Regressions on rk3399-rock-pi-4b, dragonboard-410c and dragonboard-845c
+the lto-thing, hardening and lto-full config boot failed with toolchain
+clang-nightly on the mainline master branch with no console output.
 
 First seen on the v6.14-12245-g91e5bfe317d8
  Good: v6.14-11270-g08733088b566
  Bad: v6.14-12245-g91e5bfe317d8
 
-Regressions found on arm:
-  - build/clang-nightly-nhk8815_defconfig
+Regressions found on rk3399-rock-pi-4b:
+  - boot/clang-nightly-lkftconfig-kselftest
+  - boot/clang-nightly-lkftconfig-lto-thing
+  - boot/clang-nightly-lkftconfig-hardening
+  - boot/clang-nightly-lkftconfig-lto-full
 
-Regressions found on powerpc:
-  - build/clang-nightly-lkftconfig-lto-full
-  - build/clang-nightly-ppc64e_defconfig
-  - build/clang-nightly-lkftconfig-lto-thing
-  - build/clang-nightly-defconfig
-  - build/clang-nightly-lkftconfig-hardening
+Regressions found on dragonboard-410c:
+  - boot/clang-nightly-lkftconfig-lto-thing
+  - boot/clang-nightly-lkftconfig-lto-full
+  - boot/clang-nightly-lkftconfig-hardening
 
-Regressions found on s390:
-  - build/clang-nightly-lkftconfig-lto-thing
-  - build/clang-nightly-lkftconfig-lto-full
-  - build/clang-nightly-defconfig
-  - build/clang-nightly-lkftconfig-hardening
-
+Regressions found on dragonboard-845c:
+  - boot/clang-nightly-lkftconfig-hardening
+  - boot/clang-nightly-lkftconfig-lto-thing
 
 Regression Analysis:
  - New regression? Yes
  - Reproducibility? Yes
 
-Build regression: arm powerpc s390 modpost "wcslen" fs smb client
-cifs.ko undefined
+Boot regression: rk3399-rock-pi-4b dragonboard-410c dragonboard-845c
+no console output
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-## Build log
+## Boot log
+Starting kernel
+...
+<No console output>
 
-ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
 
 ## Source
 * Kernel version: 6.14.0
@@ -115,27 +114,20 @@ ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
 * Git describe: v6.14-12245-g91e5bfe317d8
 * Project details:
 https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/
-* Arcitures: arm, powerpc, s390
-* Toolchains: clang-nightly
+* Architectures: arm64 (rk3399-rock-pi-4b, dragonboard-410c, dragonboard-845c)
+* Toolchains: clang-nightly (Debian clang version 21.0.0 )
+* Kconfigs: lto-thing, hardening, lto-full
 
 ## Build
-* Build log: https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27856145/suite/build/test/clang-nightly-nhk8815_defconfig/log
+* Build log: https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27859063/suite/boot/test/clang-nightly-lkftconfig-lto-thing/log
 * Build history:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27856145/suite/build/test/clang-nightly-nhk8815_defconfig/history/
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27859063/suite/boot/test/clang-nightly-lkftconfig-lto-thing/history/
 * Build details:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27856145/suite/build/test/clang-nightly-nhk8815_defconfig/
-* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdO7KHQCCZBICM0MvpaTUbLm/
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.14-12245-g91e5bfe317d8/testrun/27859063/suite/boot/test/clang-nightly-lkftconfig-lto-thing/details/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdkI9AGWWvuT5OzYdgSgXEeH/
 * Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdO7KHQCCZBICM0MvpaTUbLm/config
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2v9EdkI9AGWWvuT5OzYdgSgXEeH/config
 
-## Steps to reproduce
- - tuxmake --runtime podman --target-arch arm --toolchain
-clang-nightly --kconfig nhk8815_defconfig LLVM=1 LLVM_IAS=1
- - tuxmake --runtime podman --target-arch powerpc --toolchain
-clang-nightly --kconfig defconfig LLVM=1 LLVM_IAS=0
-LD=powerpc64le-linux-gnu-ld
- - tuxmake --runtime podman --target-arch s390 --toolchain
-clang-nightly --kconfig defconfig LLVM_IAS=1
 
 --
 Linaro LKFT
