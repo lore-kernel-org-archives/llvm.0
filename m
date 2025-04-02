@@ -1,188 +1,114 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7BE17A586
-	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 16:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273D673176
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 17:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743612852; cv=none; b=tSg3H2eYGQ+GlwCUUClYP/1ZupABF7Y1Ly4khRojQaQt1pjdpHyaGuemdMnMAuFfyhNPp+1hIItAb8kb7i++TkbUenQEt0Fqelw6v/QEGDL1tGLht8sXwJF7HdkTxLdDpQK0WRq0Ehph3upvybfANYWXOiE8zU0iBpf2kOTUEjY=
+	t=1743615068; cv=none; b=R3+nf8L8zOy3eR2PrPGCrJGYe7mM1FGkkLCP/Q3mqCO0xBUn53eA6QHOpPwh8AWc9s9jqvrZGzPd1cgOVZ48mdtSgD+ZjtvbK0IBlT7sXXePOPCf6Gn84snDZgw1NyVlvLB27irwduVanmF9mS0Xer31eztNMJ+SJ4h6Vi5N6rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743612852; c=relaxed/simple;
-	bh=tle6duRwPEEC/Ha2cZUoR+2UZyDqi9zAHSt0TfUBxHA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SxZk3LFuH2s//zbtOsSprkFletzn0Wo3+cAyspXLSsQnrFuQPVCAuvsoK871bUsYKKSxuZFT1m1IUBQTSchtASwu6HgaOeL3L9ZJCpGdkk87slcHmrmtetYQYbGim8px879PXwKa1cfpvVnDzV+Swbc0mhqLUDBkzo+U2pG1lGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4NvsfgR0; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4NvsfgR0"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2263428c8baso223865ad.1
-        for <llvm@lists.linux.dev>; Wed, 02 Apr 2025 09:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743612849; x=1744217649; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mqjKQl11kZjyZ0aXwFqo8Ho/IO+qXomdqflXA7OMXxs=;
-        b=4NvsfgR07/vIcLFJMiPvvfGpc2JzNAM7UaiWWvBcl1eiXsEnOQ31frYNqDRbLlsPjT
-         /irUStoo94VE1e0DuQdRn9eMox2KJq9c+dcX71o4aqlDFx3SWKz0iJoG3jHsRg8tqcOw
-         5tKdAGNN4rAj6rB3r2SUKXFDPHt6ZpnCfot0RzZI20WcCQaemiUV5XuqgU9fkCsh6U8B
-         E/0SaUa3gC3YBWJfZWPEQYBKchsCUao6XIw/bo6+rLe/b16XnKP3TpXwzMLX2DGZWTMX
-         aqrU0K7VePEr7F0aeZU5BOq0ImBSJ6e98qzznKmJx2q9gU4iQDG8X4jaqy7vm5AQcINO
-         jqRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743612849; x=1744217649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mqjKQl11kZjyZ0aXwFqo8Ho/IO+qXomdqflXA7OMXxs=;
-        b=JIRxcsE0tQWhefeFO9VKp5U0GENiwiuCr4ZKHk5+4Pb9ku13x6NhO4Gvo+ZcJkwSVh
-         /yDOD1mF0oiJNdWxOmjFl5SlbQialaRLwj0ApJ0v20rj74OS6FPExz5xWeiStXSIY6Qk
-         iJ8I/KLf/7ImsJqckjD+e6TuEm9/ssS5RCybkLEn+4kotfqimryuCNYzsPewYGk3dkwb
-         2aIeBBZRWHcx2mCRIOiBL7Jh3Cv50O77AusEAcX9Wqsxj9yjtPV2yOkeR1htVlNhX4xn
-         307ftpKLjPkMKq9OTF6sITtFMRX5arnUoRPj5XVB0Bne1sLPtwdhGB+JXBRTEgJAG7Yh
-         jR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCXdO2kJdIgN2NyGvTaKq8l3qziEeTaaJl91sA/yF2aSGENod18GN8HIEw1vcJxJCGv0oGty@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy49mH/sgVEzUysMktbEuf4EDCmr8EuX8hayjI3OeODLJgi/b0g
-	EHzYFFMHE7J7Ezrhce+eNjca912F8Xbq+xYTY9GzSzI5X2LzDaXZrSaJQSLxHij1FtlCDz7ErNz
-	kA07tCP3oncgqqeSSlZovwg109G6U32mkAz8Z
-X-Gm-Gg: ASbGnctrcnmPrFLjjMwHcXoOoK5Qyy0AbhBx/6wHwa3YNFJuPIEpOzC2PJHzgroLuUp
-	wYeHbrtgu4coLPzKSwmGXa972mWJ83yMrbj7ZG5GXDwKKYXFLQXu7pjeQKwH96tqPEyyidCelL2
-	+UW0l2ruJdPMCjA04VT2Q68qhzvgNT0u3pkRIaWbDocQ/pVyzFC2y1Ag==
-X-Google-Smtp-Source: AGHT+IHMGTEKbDZlRb6V2dq3HbsnXrTWGUpjKL9SDibSI62p5nEhvEuTU3gR331+Azc4os47D0y4V10nwFQkKnpcJc4=
-X-Received: by 2002:a17:903:244a:b0:215:8723:42d1 with SMTP id
- d9443c01a7336-22969dca593mr3833475ad.10.1743612848273; Wed, 02 Apr 2025
- 09:54:08 -0700 (PDT)
+	s=arc-20240116; t=1743615068; c=relaxed/simple;
+	bh=OLR/HRHJE/+kxAiYbmu99nXKOfk9ruZKhS2Q+yM/8Vs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cqG3l9hoLz7ieN3PW5R2yRl4aS/A0t4NnJdodD6yv94qiMoDgYHotqjtYLTeVcxaW5cugi+DrrHi0Kg6LL4SSS8QMzUo6wWST+BfbTTHEDfCRBeL0oZuzsO93RKBXFRz54iiTbNjzIZjV7XBxH1JJzUjqlt8KyU/Uy+q1VcC194=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5733C106F;
+	Wed,  2 Apr 2025 10:31:08 -0700 (PDT)
+Received: from e132581.cambridge.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8AAE03F694;
+	Wed,  2 Apr 2025 10:31:03 -0700 (PDT)
+From: Leo Yan <leo.yan@arm.com>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH v2] tools build: Use -fzero-init-padding-bits=all
+Date: Wed,  2 Apr 2025 18:30:56 +0100
+Message-Id: <20250402173056.829400-1-leo.yan@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250401182347.3422199-1-irogers@google.com> <20250401182347.3422199-10-irogers@google.com>
- <20250402143541.GM115840@e132581.arm.com> <CAP-5=fVqax8cxdZ4HLBP4AMxL6jADfYNrORC97T6F23mjf3N1w@mail.gmail.com>
- <20250402163807.GP115840@e132581.arm.com>
-In-Reply-To: <20250402163807.GP115840@e132581.arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 2 Apr 2025 09:53:57 -0700
-X-Gm-Features: AQ5f1Jrx_PpgbdF0w_CjiN8USfw20TRsMymiExqPxSfc7wkhTf_DN_Bd6IZx4Mo
-Message-ID: <CAP-5=fVJkJ39_qx2T9ZHn-fdxjECP_2G+cyfRRAjLvZZt5vz2A@mail.gmail.com>
-Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
-To: Leo Yan <leo.yan@arm.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Kyle Meyer <kyle.meyer@hpe.com>, Ben Gainey <ben.gainey@arm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kajol Jain <kjain@linux.ibm.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, Eder Zulian <ezulian@redhat.com>, 
-	Dapeng Mi <dapeng1.mi@linux.intel.com>, Kuan-Wei Chiu <visitorckw@gmail.com>, 
-	He Zhe <zhe.he@windriver.com>, Dirk Gouders <dirk@gouders.net>, 
-	Brian Geffon <bgeffon@google.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Howard Chu <howardchu95@gmail.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Colin Ian King <colin.i.king@gmail.com>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Jann Horn <jannh@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Yang Jihong <yangjihong@bytedance.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Graham Woodward <graham.woodward@arm.com>, 
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>, 
-	Anshuman Khandual <anshuman.khandual@arm.com>, Zhongqiu Han <quic_zhonhan@quicinc.com>, 
-	Hao Ge <gehao@kylinos.cn>, Tengda Wu <wutengda@huaweicloud.com>, 
-	Gabriele Monaco <gmonaco@redhat.com>, Chun-Tse Shao <ctshao@google.com>, 
-	Casey Chen <cachen@purestorage.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
-	Li Huafei <lihuafei1@huawei.com>, "Steinar H. Gunderson" <sesse@google.com>, Levi Yun <yeoreum.yun@arm.com>, 
-	Weilin Wang <weilin.wang@intel.com>, Thomas Falcon <thomas.falcon@intel.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Andrew Kreimer <algonell@gmail.com>, 
-	=?UTF-8?Q?Krzysztof_=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>, Junhao He <hejunhao3@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
-	Steve Clevenger <scclevenger@os.amperecomputing.com>, Zixian Cai <fzczx123@gmail.com>, 
-	Stephen Brennan <stephen.s.brennan@oracle.com>, Yujie Liu <yujie.liu@intel.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 2, 2025 at 9:38=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> Hi Ian,
->
-> On Wed, Apr 02, 2025 at 08:42:58AM -0700, Ian Rogers wrote:
->
-> [...]
->
-> > On Wed, Apr 2, 2025 at 7:35=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
-> > >
-> > > On Tue, Apr 01, 2025 at 11:23:07AM -0700, Ian Rogers wrote:
-> > >
-> > > [...]
-> > >
-> > > > @@ -478,13 +478,14 @@ static int __cmd_test(struct test_suite **sui=
-tes, int argc, const char *argv[],
-> > > >       int err =3D 0;
-> > > >
-> > > >       for (struct test_suite **t =3D suites; *t; t++) {
-> > > > -             int i, len =3D strlen(test_description(*t, -1));
-> > > > +             int i;
-> > > > +             int len =3D (int)strlen(test_description(*t, -1));
-> > >
-> > > Thanks for huge polish.
-> > >
-> > > Just a concern from me.  Throughout this patch, the methodology is no=
-t
-> > > consistent.  Some changes update variable types which is fine for me.
-> > >
-> > > But the case above it simply cast size_t to int.  Should we update th=
-e
-> > > variable type as 'size_t' at here?
-> >
-> > Thanks Leo, I played around with it, but don't mind if someone wants
-> > to do it a different way. I was trying to make the changes minimal.
-> > The problem typically with size_t is we then use the value, for
-> > example, as a printf size modifier and need to introduce lots of casts
-> > back to being an int.
->
-> This conclusion is not quite right, see:
-> https://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-va=
-riable-portably-using-the-printf-family
->
-> > When this isn't too great I've done it, but in
-> > this case I think keeping the int, the lack of casts but a cast here
-> > to capture that we expect test descriptions to fit in the size of an
-> > int is the least worst option.
->
-> I would say in another way.  After we enabled a compiler warning
-> option, this will give us a chance to improve code by dismissing
-> the warnings (and avoid potential bugs).
->
-> If we use casts just to silence warnings, we also lose the opportunity
-> to improve code quality.  The changes in this series that fix type
-> mismatches are good, but I think the use of casts is not particularly
-> helpful - we're simply switching from implicit compiler casts to
-> explicit ones.
+GCC-15 release claims [1]:
 
-Right, but I think changing function parameters, return types would
-turn into an epic refactor and the patch series is already unwieldy.
-With the casts we can see the behavior is deliberate but that's not to
-say it couldn't be better. With the warnings gone it allows
--Wshorten-64-to-32 to find the truly errant 64 to 32 bit implicit
-casts. Anyway, I don't have time to do such a larger refactor so
-somebody else is going to need to pick that up. I did refactor the
-cases where I thought it mattered more, but as you say that does lead
-to a feeling of inconsistency in the series.
+  {0} initializer in C or C++ for unions no longer guarantees clearing
+  of the whole union (except for static storage duration initialization),
+  it just initializes the first union member to zero. If initialization
+  of the whole union including padding bits is desirable, use {} (valid
+  in C23 or C++) or use -fzero-init-padding-bits=unions option to
+  restore old GCC behavior.
 
-Thanks,
-Ian
+As a result, this new behaviour might cause unexpected data when we
+initialize a union with using the '{ 0 }' initializer.
 
-> Thanks,
-> Leo
+Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+in unions and structures.  This commit applies the same option for tools
+building.
+
+The option is not supported neither by any version older than GCC 15 and
+is also not supported by LLVM, this patch adds the cc-option function to
+dynamically detect the compiler option.
+
+[1] https://gcc.gnu.org/gcc-15/changes.html
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+
+Changes from v1:
+Sync comments and code with scripts/Makefile.compiler. (Ian)
+
+ tools/scripts/Makefile.include | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+index 0aa4005017c7..51036d5fbce0 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -40,6 +40,30 @@ EXTRA_WARNINGS += -Wwrite-strings
+ EXTRA_WARNINGS += -Wformat
+ EXTRA_WARNINGS += -Wno-type-limits
+ 
++# output directory for tests below
++TMPOUT = .tmp_$$$$
++
++# try-run
++# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
++# Exit code chooses option. "$$TMP" serves as a temporary file and is
++# automatically cleaned up.
++try-run = $(shell set -e;		\
++	TMP=$(TMPOUT)/tmp;		\
++	trap "rm -rf $(TMPOUT)" EXIT;	\
++	mkdir -p $(TMPOUT);		\
++	if ($(1)) >/dev/null 2>&1;	\
++	then echo "$(2)";		\
++	else echo "$(3)";		\
++	fi)
++
++# cc-option
++# Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
++cc-option = $(call try-run, \
++	$(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
++
++# Explicitly clear padding bits with the initializer '{ 0 }'
++CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
++
+ # Makefiles suck: This macro sets a default value of $(2) for the
+ # variable named by $(1), unless the variable has been set by
+ # environment or command line. This is necessary for CC and AR
+-- 
+2.34.1
+
