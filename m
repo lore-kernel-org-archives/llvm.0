@@ -1,59 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F9F24C069;
-	Thu,  3 Apr 2025 11:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C4024EAAC
+	for <llvm@lists.linux.dev>; Thu,  3 Apr 2025 14:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743681425; cv=none; b=ONUsWSkOtAWfBIS6lwIi6nvd5B4NsxLPsHx73YnJcXtsm5KIkSSKTKEW5ltfx0xNC2ba/LjUY+dkJITlscpBdvfr+XOlTRKCNoxDXVI/h/cfHb2kxs+SXEMBxyg0+Rk8UlbxP03zt0VhIpZo1Vy0g4k1bjvOl0QJI4WCC9J1jtA=
+	t=1743689321; cv=none; b=lH0SpgfBCh0LBMoo4vH4ncB2KQcNWA8s+oUDqksvYd5diEI+n0APfPnT2gO55wLa+uZ1aRUrDFozmJLQajRj6w4WYwKciO16+ouOIpntf768X2iiVunWWLkF5Z5/5YKdU3Yt4y26H+SzH0NOR0mruZIvN0zKNB14UYilAKRpD70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743681425; c=relaxed/simple;
-	bh=3xAbHHEtXwaAcKDDn8UKzE7pzlhaQnsG6WV7c/CiHw8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UXeI8tqnRJ/HcuZyxVQJsRw4ArJMx5O3BRx934xNIjnH4pW8kEjc+QtnXBOoM6zFLg2ahLaWJNBcL03zfTHPD42q3r6KbSoqVsgTkXZ37eWgarYEu99DnUfRKevis4L8CA4y/CO22R8Wtae321l0mbMa9rbVghxLnVu3WESwsv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gV2/WkNT; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743689321; c=relaxed/simple;
+	bh=9dcfeCeE1zJuHl+VAQhSUpd8FuaX6Q5GQC5LBKig2kM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MRej8GHKDsS+eIkiozyUkJ1DaWeQPOkw7nWJ+cWIngwIOzR5xFfimB7OevKOUFysuV503ewljqFK2COzpOeMGko3ICxJTIiPTlt7tlXjmmvyqVwmCF0fJqdEhzxLz3FN1+GjJjV8rIQLCLVUzfFoTjDQycq4xAd/bTpLuW9i97Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GmRCr+P4; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gV2/WkNT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743681424; x=1775217424;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3xAbHHEtXwaAcKDDn8UKzE7pzlhaQnsG6WV7c/CiHw8=;
-  b=gV2/WkNTic6F5VYbq8dujlReTsWxBC6ZETsG50cXWVf+xhde0o40y8YY
-   Ny5X3quqE+/ENxZl570lC5amZ61hyBM+qqH/ANVOlnJaap9I5+5XGwIRf
-   KKehIKoc430ddajYkzhK5Sd80+badD87C+tmqiww0uLtRpWbNHAbxZWES
-   0UgfKIuqhNHwH/jhkxKeTnMkPsoNAw1GFPMATvFtDNPl6Kp6/zxzp438b
-   Ge2j14xJaqYvI5AsKJolqdXOBYi9n01ruDKojfrx++s5Wgm4BxdD1sUGK
-   wUspaM+Hxq+7LWWC24UwWtzs5NVVamyS7Mo/GvvQGNhy/+1aevFJGq1xD
-   A==;
-X-CSE-ConnectionGUID: BijTIMZgRpSo0skEWwkayQ==
-X-CSE-MsgGUID: HmvSfdj8QzWBIIvqA0dDtg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11392"; a="48949346"
-X-IronPort-AV: E=Sophos;i="6.15,184,1739865600"; 
-   d="scan'208";a="48949346"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2025 04:57:03 -0700
-X-CSE-ConnectionGUID: yXyHgw9JQ2u19SiD2ddG/A==
-X-CSE-MsgGUID: p1FTsHZkTDqfCRIUu9qZrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,184,1739865600"; 
-   d="scan'208";a="127837337"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 03 Apr 2025 04:57:02 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u0JBr-0000Nb-1x;
-	Thu, 03 Apr 2025 11:56:59 +0000
-Date: Thu, 3 Apr 2025 19:55:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 14246/14442] drivers/pwm/pwm-rcar.c:114:12:
- error: call to undeclared function 'FIELD_MAX'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202504032210.lrHoeR64-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GmRCr+P4"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7399838db7fso907051b3a.0
+        for <llvm@lists.linux.dev>; Thu, 03 Apr 2025 07:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743689319; x=1744294119; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfGO2uEq0sNbHAyaLZMcu3eXezuzk8aNgQwqdy8WsyA=;
+        b=GmRCr+P48iRS/m8fNvXsqoDEoMT9+RK6TGUtKASoAg/e/F3R5bGJpEBMOaw4L9VL9L
+         G+4+EOO9ixLwmt1X6MmQtdcugbixgChPMfAjtFIZs11433LONwZrSz23r9DEhFHqOQbf
+         9Dl9rmx56vV+b5Yb5ckRY8Su91KN5Q1nvzyYrH2HJE/tBRifNRlMPatwjZPAQqnJiNhT
+         oj9mekueTp5RHh9kPL244azRKUD4TIJcvozJO+hRp/FbvET9USI5t6HV3SScsvpR1pSI
+         yDZAB8lt3fNcO3fZVztW5ANRd9WsMP/Mrp77fMdnv7Fga29lTW99SvRBweoY3Y53pPvm
+         6eUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743689319; x=1744294119;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BfGO2uEq0sNbHAyaLZMcu3eXezuzk8aNgQwqdy8WsyA=;
+        b=mElQXpd+nyodxEmeRFzPTNBT6mjNm9GpwBu/TmnmH6iEJWLC0cxEEPBvdrhBMgj/R2
+         oTywPiordHqmD0mbUwpPGXERD46vkHBsBpSLMuavK0zKCgWSSGGs15O9QjkIPf7bGj/8
+         3m4yaGJHW+rBcUh4jiBQ9SSqPaQfsI2bU11SZcSFQcoOFuZg4zHzuRPtHAgAWPWJW9wq
+         uaTqv0iRbBkMAH+Eg6UpMY2mKQvXOIk5Yxg/LGj9d8VAjGotL8YaRUJOkEyDhXNUQ0sO
+         O/WVilSnqNcaNbyqwrzsMqHutOxJUP0JsPc+BYlU3fAEiRd435JiOBcLMmCfvoEYNkza
+         M87g==
+X-Forwarded-Encrypted: i=1; AJvYcCVDEEi2ArfpqZcoeLun67+7WCcopTE9B/uXS9hUdTypgfHhxFgZtHHi9WXgA8Qu+cYcpMjV@lists.linux.dev
+X-Gm-Message-State: AOJu0YzkngXBACz5DwNvT9OlFVmEsfvpJ7RNfRi7iuHJ3f35OZMXMvT+
+	R9YSbjSs4wP38NHoXBeb4ej/zsvXIpt8kEijA5lvuBy+um21VkET
+X-Gm-Gg: ASbGncvF7Ns05mw7Je1cOSPzjRYTyUr/AdEbKgZpkpfjCwEYAuHtzfcaY7ExIvxiBLj
+	mgkKCNNqnjkQexaSOC0r71CGrV2oPReNKylhOmnrOWi5o7XSEGFcgkmmmk0zDJpbo63mUOOjmSO
+	ixsfwJY5E1M0CvsGXG4NasoqJBUOUmFDEzootTpc9dJoq3MSc5P/3vB6UyTAsj2y9W3gvANLJ/3
+	9QCVcS6vESwq0r9fFc1GiEEhzzSrFghjAPJvD0r66Zl/zy5uAhxsNfDHitXFNQIBSavfQNZ3/Gl
+	fE7NzulCVksh6wBIkmX4xiXp6UlGAJZTdxrE26JbjWV1
+X-Google-Smtp-Source: AGHT+IESFH2BfJradcXyDEA6WsbY4YNZaHB7XbGRtTQE3cZsPLyZsGet5PS6i5piNyf/zmEAFWMv1g==
+X-Received: by 2002:a05:6a00:179e:b0:725:41c4:dbc7 with SMTP id d2e1a72fcca58-739d636e2bamr5120001b3a.4.1743689319132;
+        Thu, 03 Apr 2025 07:08:39 -0700 (PDT)
+Received: from localhost ([216.228.125.129])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d97d1a83sm1556086b3a.13.2025.04.03.07.08.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Apr 2025 07:08:38 -0700 (PDT)
+Date: Thu, 3 Apr 2025 10:08:35 -0400
+From: Yury Norov <yury.norov@gmail.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
+	Ben Gainey <ben.gainey@arm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Eder Zulian <ezulian@redhat.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
+	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Howard Chu <howardchu95@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Jann Horn <jannh@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Graham Woodward <graham.woodward@arm.com>,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
+	Tengda Wu <wutengda@huaweicloud.com>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	Chun-Tse Shao <ctshao@google.com>,
+	Casey Chen <cachen@purestorage.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Li Huafei <lihuafei1@huawei.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Andrew Kreimer <algonell@gmail.com>,
+	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
+	Junhao He <hejunhao3@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	Steve Clevenger <scclevenger@os.amperecomputing.com>,
+	Zixian Cai <fzczx123@gmail.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 02/48] tools headers: Silence -Wshorten-64-to-32
+ warnings
+Message-ID: <Z-6WY4a6RV1bEbNU@thinkpad>
+References: <20250401182347.3422199-1-irogers@google.com>
+ <20250401182347.3422199-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,62 +141,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250401182347.3422199-3-irogers@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f0a16f5363325cc8d9382471cdc7b654c53254c9
-commit: edd549f4956be84ebd6a3900975544adeb0f3b50 [14246/14442] pwm: rcar: Improve register calculation
-config: powerpc64-randconfig-003-20250403 (https://download.01.org/0day-ci/archive/20250403/202504032210.lrHoeR64-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250403/202504032210.lrHoeR64-lkp@intel.com/reproduce)
+On Tue, Apr 01, 2025 at 11:23:00AM -0700, Ian Rogers wrote:
+> The clang warning -Wshorten-64-to-32 can be useful to catch
+> inadvertent truncation. In some instances this truncation can lead to
+> changing the sign of a result, for example, truncation to return an
+> int to fit a sort routine. Silence the warning by making the implicit
+> truncation explicit.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/include/asm-generic/bitops/fls64.h | 2 +-
+>  tools/include/linux/bitfield.h           | 2 +-
+>  tools/include/linux/bitmap.h             | 2 +-
+>  tools/include/linux/err.h                | 2 +-
+>  tools/include/linux/hash.h               | 2 +-
+>  tools/include/linux/math64.h             | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/include/asm-generic/bitops/fls64.h b/tools/include/asm-generic/bitops/fls64.h
+> index 866f2b2304ff..9ad3ff12f454 100644
+> --- a/tools/include/asm-generic/bitops/fls64.h
+> +++ b/tools/include/asm-generic/bitops/fls64.h
+> @@ -21,7 +21,7 @@ static __always_inline int fls64(__u64 x)
+>  	__u32 h = x >> 32;
+>  	if (h)
+>  		return fls(h) + 32;
+> -	return fls(x);
+> +	return fls((__u32)x);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504032210.lrHoeR64-lkp@intel.com/
+Can you keep kernel and tools sources synchronized?
 
-All errors (new ones prefixed by >>):
+>  }
+>  #elif BITS_PER_LONG == 64
+>  static __always_inline int fls64(__u64 x)
+> diff --git a/tools/include/linux/bitfield.h b/tools/include/linux/bitfield.h
+> index 6093fa6db260..aa0b8e52214f 100644
+> --- a/tools/include/linux/bitfield.h
+> +++ b/tools/include/linux/bitfield.h
+> @@ -146,7 +146,7 @@ static __always_inline __##type type##_encode_bits(base v, base field)	\
+>  {									\
+>  	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
+>  		__field_overflow();					\
+> -	return to((v & field_mask(field)) * field_multiplier(field));	\
+> +	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
+>  }									\
+>  static __always_inline __##type type##_replace_bits(__##type old,	\
+>  					base val, base field)		\
+> diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
+> index 2a7f260ef9dc..b7a7c752e4f2 100644
+> --- a/tools/include/linux/bitmap.h
+> +++ b/tools/include/linux/bitmap.h
+> @@ -63,7 +63,7 @@ static inline bool bitmap_full(const unsigned long *src, unsigned int nbits)
+>  	return find_first_zero_bit(src, nbits) == nbits;
+>  }
+>  
+> -static inline unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
+> +static inline unsigned long bitmap_weight(const unsigned long *src, unsigned int nbits)
+>  {
+>  	if (small_const_nbits(nbits))
+>  		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
 
->> drivers/pwm/pwm-rcar.c:114:12: error: call to undeclared function 'FIELD_MAX'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     114 |         if (tmp > FIELD_MAX(RCAR_PWMCNT_CYC0_MASK))
-         |                   ^
->> drivers/pwm/pwm-rcar.c:117:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     117 |         cyc = FIELD_PREP(RCAR_PWMCNT_CYC0_MASK, tmp);
-         |               ^
-   2 errors generated.
+Oh no... bitmap_weight() is used in printk(), and you'll get tons of
+warnings because, say %x should be replaced with %lx. 
 
+> diff --git a/tools/include/linux/err.h b/tools/include/linux/err.h
+> index 332b983ead1e..9c1746e3696d 100644
+> --- a/tools/include/linux/err.h
+> +++ b/tools/include/linux/err.h
 
-vim +/FIELD_MAX +114 drivers/pwm/pwm-rcar.c
+I don't maintain the this and the following subsystems. Can you make
+it a separate patch?
 
-   104	
-   105	static int rcar_pwm_set_counter(struct rcar_pwm_chip *rp, int div, u64 duty_ns,
-   106					u64 period_ns)
-   107	{
-   108		unsigned long long tmp;
-   109		unsigned long clk_rate = clk_get_rate(rp->clk);
-   110		u32 cyc, ph;
-   111	
-   112		/* div <= 24 == RCAR_PWM_MAX_DIVISION, so the shift doesn't overflow. */
-   113		tmp = mul_u64_u64_div_u64(period_ns, clk_rate, (u64)NSEC_PER_SEC << div);
- > 114		if (tmp > FIELD_MAX(RCAR_PWMCNT_CYC0_MASK))
-   115			tmp = FIELD_MAX(RCAR_PWMCNT_CYC0_MASK);
-   116	
- > 117		cyc = FIELD_PREP(RCAR_PWMCNT_CYC0_MASK, tmp);
-   118	
-   119		tmp = mul_u64_u64_div_u64(duty_ns, clk_rate, (u64)NSEC_PER_SEC << div);
-   120		if (tmp > FIELD_MAX(RCAR_PWMCNT_PH0_MASK))
-   121			tmp = FIELD_MAX(RCAR_PWMCNT_PH0_MASK);
-   122		ph = FIELD_PREP(RCAR_PWMCNT_PH0_MASK, tmp);
-   123	
-   124		/* Avoid prohibited setting */
-   125		if (cyc == 0 || ph == 0)
-   126			return -EINVAL;
-   127	
-   128		rcar_pwm_write(rp, cyc | ph, RCAR_PWMCNT);
-   129	
-   130		return 0;
-   131	}
-   132	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> @@ -55,7 +55,7 @@ static inline bool __must_check IS_ERR_OR_NULL(__force const void *ptr)
+>  static inline int __must_check PTR_ERR_OR_ZERO(__force const void *ptr)
+>  {
+>  	if (IS_ERR(ptr))
+> -		return PTR_ERR(ptr);
+> +		return (int)PTR_ERR(ptr);
+>  	else
+>  		return 0;
+>  }
+> diff --git a/tools/include/linux/hash.h b/tools/include/linux/hash.h
+> index 38edaa08f862..ecc8296cb397 100644
+> --- a/tools/include/linux/hash.h
+> +++ b/tools/include/linux/hash.h
+> @@ -75,7 +75,7 @@ static __always_inline u32 hash_64_generic(u64 val, unsigned int bits)
+>  {
+>  #if BITS_PER_LONG == 64
+>  	/* 64x64-bit multiply is efficient on all 64-bit processors */
+> -	return val * GOLDEN_RATIO_64 >> (64 - bits);
+> +	return (u32)(val * GOLDEN_RATIO_64 >> (64 - bits));
+>  #else
+>  	/* Hash 64 bits using only 32x32-bit multiply. */
+>  	return hash_32((u32)val ^ __hash_32(val >> 32), bits);
+> diff --git a/tools/include/linux/math64.h b/tools/include/linux/math64.h
+> index 4ad45d5943dc..03d6c5220957 100644
+> --- a/tools/include/linux/math64.h
+> +++ b/tools/include/linux/math64.h
+> @@ -48,7 +48,7 @@ static inline u64 mul_u64_u32_shr(u64 a, u32 b, unsigned int shift)
+>  	u32 ah, al;
+>  	u64 ret;
+>  
+> -	al = a;
+> +	al = (u32)a;
+>  	ah = a >> 32;
+>  
+>  	ret = mul_u32_u32(al, b) >> shift;
+> -- 
+> 2.49.0.504.g3bcea36a83-goog
