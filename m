@@ -1,62 +1,62 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F52724BC06
-	for <llvm@lists.linux.dev>; Thu,  3 Apr 2025 14:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2F024EF71
+	for <llvm@lists.linux.dev>; Thu,  3 Apr 2025 14:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743689959; cv=none; b=NleIvV8nhmMk9Ire6vfn2F9g2U7h+D95S84fB/AenRG2AKXGNVjqn9xHzW9S4EvmnwahdvNK50Fqf7Wc1EJHPy3YROYUBDzlO3dmWvSn9h239UVNv6iH61oHzZlto32t+yUXhaw/pDfWkb/2HHCgHWe3/CEyQUm84gtvrmrYAcg=
+	t=1743690405; cv=none; b=V5854eAYIAF5ElPXmdgR0N6CGoRRmPYSe49HSG0nf/XazrqSy4GdT/VpGOUd0duI1It3mUJq5DP5MGw+oMjvysWXSohm4aoshbCfXnIhZkB9pBJ9hskKzyDUSJOXqdtu7z0gMHPwfxyqffx0pbuzS2mCpoxOS//lWebhzkQ82KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743689959; c=relaxed/simple;
-	bh=2r3U8ewcuEhS2Jqw1TNGNFLFh3bbW+ULJZIAPbc7h8g=;
+	s=arc-20240116; t=1743690405; c=relaxed/simple;
+	bh=udWx3sXynBeCKyH2cn9MPdye1p1GgTvwWlCqpxIZr1k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PqW2latxvvemyHoD7QaN7ke2RqsSbzXQOiicPBDKOVYTlqEKYiH79i9tHyNTlNyAzl7j9nQ4VEGRBZ46+HpZaZDTocV5HBSLy7ogA4707hS3dt0eo5WsD21Z1k5WriBuzH0QNf6FBn/fIUkqhQxBbSwkmjrk2kjO4srVccz7VFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=egU/1Ba4; arc=none smtp.client-ip=209.85.215.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=d8y6/4YInZdFgSzPx9YCjjsms4S6UMO6XZF1hR4k6NV/aAogM45iEn9eVXmT/vsvd41Kddq05lO6u+mEPvudrpNnbHaVtol7Tu9G+Mn8QTdQnyn3UM3hxG6GmWZ7F7s384/227K8fZv/oQGgnpoHrqSeocLiuBW1uAR1Z6XiJQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTXhTuHD; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="egU/1Ba4"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-af579e46b5dso674884a12.3
-        for <llvm@lists.linux.dev>; Thu, 03 Apr 2025 07:19:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTXhTuHD"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-303a66af07eso761663a91.2
+        for <llvm@lists.linux.dev>; Thu, 03 Apr 2025 07:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743689957; x=1744294757; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1743690403; x=1744295203; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=khXp6kOEsTlpiucdkkgdxNh1P5TojGz8UwRxJaqxnCw=;
-        b=egU/1Ba41bLKZazB5MNkNfRefZ73QjMCpxbN1d+tqk1rXREnicCd5qkichn0W7d4r0
-         EdxQhS5bMNxAHn24LlwuG/pOCiRuHbBGde1lUAOuJumeu+I+LeiNdNpJi390bAcZA7la
-         6ctigscqj89ckqyf7+yYUF1Qo6uaRr71xDeBa+YYyFdGjlUdjruUAx7SsY60J5Ge81yP
-         TvolGnRdNJfCLiqLkYmAy1nbBydbDgnrBqUzDSU1SCQBMTP4eoxM6KGTwvOvg2kWMUNh
-         TbdiUzlUygcwacTDWJjYbxF1WRGGVQ5uPqXyvoAO9wjB1gWtUHPOuG8NUc8miLehNmQI
-         oswQ==
+        bh=dAqtWD0ADgEG56estGUMwFFZOWZtTFqA2jD3PNCtf2o=;
+        b=NTXhTuHDSoyEW8kBaZF9xqzMtWEkP7HRPk9BPTQtjvuSe4bGXg2BtXzfQMBEuxeUiQ
+         Kx27wyxXri3icsYFY+bg//GS0pSVE0MdGwTyEig6q9U5N15PmrgBecdEh5ZRjFIuNkFo
+         Gy2sUQyuMkcKOXT4DEWyTvrcPnX+3rLWOlHEbNOp2XX8h0Rmf2iP1LB6C6vrAIhcOSzs
+         /3tCrw8A2YxSqRdwYN2Sz7I80HjrBsv+P4D/goIO6gnWgnLtuBRkLhR4ZLq3l8RjbaxM
+         F1fclTR56KFkaObdnHXoX2ftC5KvtGxFINhb/wD0u7Mu/rUcleRlIpynDfovWxhdvEKe
+         C45w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743689957; x=1744294757;
+        d=1e100.net; s=20230601; t=1743690403; x=1744295203;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=khXp6kOEsTlpiucdkkgdxNh1P5TojGz8UwRxJaqxnCw=;
-        b=EZ9SflznY+rOPaMzoSyp9EmBoa4SsqjQA0wCaMxs80ad37upz2jz1KiirEKxWI5bBU
-         QQ5niwFS4NCvp2mtQCLRCl+7d9av16AkHxGoYlcQmA7kQPSeACxHItCEqArFcjU93kyZ
-         9X9h/UR6s1qkifYj8r4B6wx2/BwR5FuHpgqse54VCn3oMsju+2aas56Mn7VYki+BYil1
-         I3bClTJowkyMi2Xo8yFFtT9o3echqRKFtnSZyqeZB8cvcSCTEIjlQqgGIbh2+CG9NJrd
-         afoe0QhECnjUqBEeVzCmHGcMudchWLVJoOQ4eNykBiuwvSybPFrPfG8oUKG3kry3xnQ/
-         9aRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXF+uBbYJyeily/gcbwuFyFK7LICO9uTlFXlZ376VEIF+8S71Ui77qIpEQdrHENndYJFjmW@lists.linux.dev
-X-Gm-Message-State: AOJu0YziEfhFaU6/25+BwfOXqR3Be7MnXKNrwzgo88eJ0dISBYW+vPd+
-	YnWbJz8wdL1jxwE/HWe7Kq2nYY/UnT6U3t7+hQ/CE1MMRty1TFKh
-X-Gm-Gg: ASbGncteF02HEwtD0MeTDqYXyDssZDydfpRvKZPn14AwCDz5Pv4IvSlQ4i9OiZjOjuP
-	EnFZMmD88dRcbrKSEPG1Eztqn95dEPY2CxOPm+gksZfBS0SYjGMGkGG55/j2hU5449vxVxWnLz9
-	O4ipWsczKYyK5k6lgkwl2XoP0LHiXdwHrBsO+A/xYiDTntiawUqh6Fahgjbl7iCWp3mdP6Zq0OT
-	X2oiEGAu1SHj0RvB5SCBZWquRAVNuVWGXxXXS1gKMNvomiaOnkxUS2FGyMqim3jKOJ/s9haxomC
-	i++COtwZ7oLfqokBFrMqFisMNg7I4o4AXS17HyBAUIAx
-X-Google-Smtp-Source: AGHT+IFsE/53OqOyMfyP3T9KIucSDYD9e9PKK/5G+B7y8ncBc+uPWVYiOMM6K5nKTFIC+KJNWKGDsg==
-X-Received: by 2002:a05:6a20:9f4e:b0:1f5:8126:8a5d with SMTP id adf61e73a8af0-2009f5fdf88mr29869754637.17.1743689956462;
-        Thu, 03 Apr 2025 07:19:16 -0700 (PDT)
+        bh=dAqtWD0ADgEG56estGUMwFFZOWZtTFqA2jD3PNCtf2o=;
+        b=IlAylN+A0vdxfAhMOsOISHDDqJtSiD+4L3HEHAJZCvZWmNWjvEum0axBX6CtT0UTwf
+         66BLc1ZQek5YHSvhTuSKh/y/D3OWprJyPxX8i/GUtrG/p7eF59xqR7XFCj0k+cGY3jbJ
+         SDyh4rbfC5d7IYMdKZF3psxBxkeVDC+db9R1B0XPEGL3Zszs+eQ9a0jgwvnBkUxFQEg9
+         J9qzKbnPf0Q5OLKyH2oMB5shIRT7Y97odDmSTR0rs+iFTKzh6E/x5gkewv55sW96OtQ8
+         yLnhf5iVNyso6i2SHQ9kM3wJ0IMVaOqH2pXGU/AjD7P5CQyNXet4S5pM3Qcv+nDV6OvJ
+         kFIA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0uR+YrTuAs9aMWWOmfXQtYKPpCvzmCPrmCNLGbd9D2KzenzjWvIEb/QKnOoR6Ol7oaXUI@lists.linux.dev
+X-Gm-Message-State: AOJu0YxwkpZN6FoQFG0L6T7R+d0bgpqglh2N/Qns6KAfaeMDtS5RWYVm
+	C/mDC0pHg5024NJIv+ZwcGIroeP5Wx013D5cfSHEbHKEpoCVuF7B
+X-Gm-Gg: ASbGncv20OKOKcKInmwQeD0fll5wbv71hIdViHZ+1USHLgzWvhGMQp6xKvmqS5l+Md2
+	6fD3WADrQ/XKx2Q1wN1w8+Z1mUx1iFw6WUfd5m84Ws8YYbJuCQLTjmMSZkIJCgoiYnmgYdPQHiK
+	fgdMwjnOXxD0esQk5zmpkO5H1t2r02Dx1JM317MGwpjvw6A498YEudJi6BPNHYFGDPDE01u/Mx4
+	EwIKOm6o4sIthWYdZULA1QLFnBI0GtuoQvbjLzDVvlJvdyaMb+ZmpSamM5zRmrnR6wRKuD3Axck
+	xgivKXl7Od2TPMvm/d2KZBaHHKMVGdGBDap05fazjMmCrRmmW4cFXlg=
+X-Google-Smtp-Source: AGHT+IFj+34X21Ko9H2G+bwo7MdL+I8gIE9fAmN87oglS5pPqEZNB1wO4Hk8sbSK66cTHRHvmK8RIg==
+X-Received: by 2002:a17:90a:d003:b0:2ee:edae:780 with SMTP id 98e67ed59e1d1-3056ee4868dmr9516913a91.15.1743690403134;
+        Thu, 03 Apr 2025 07:26:43 -0700 (PDT)
 Received: from localhost ([216.228.125.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af9bc2d331csm1252459a12.12.2025.04.03.07.19.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305827d70b1sm1548261a91.4.2025.04.03.07.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Apr 2025 07:19:15 -0700 (PDT)
-Date: Thu, 3 Apr 2025 10:19:13 -0400
+        Thu, 03 Apr 2025 07:26:42 -0700 (PDT)
+Date: Thu, 3 Apr 2025 10:26:40 -0400
 From: Yury Norov <yury.norov@gmail.com>
 To: Ian Rogers <irogers@google.com>
 Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
@@ -128,10 +128,12 @@ Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 05/48] tools lib: Silence -Wshorten-64-to-32 warnings
-Message-ID: <Z-6Y4dH0bhs6VXmj@thinkpad>
+Subject: Re: [PATCH v1 02/48] tools headers: Silence -Wshorten-64-to-32
+ warnings
+Message-ID: <Z-6aoJ3ohVHPsF0A@thinkpad>
 References: <20250401182347.3422199-1-irogers@google.com>
- <20250401182347.3422199-6-irogers@google.com>
+ <20250401182347.3422199-3-irogers@google.com>
+ <Z-6WY4a6RV1bEbNU@thinkpad>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -140,35 +142,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250401182347.3422199-6-irogers@google.com>
+In-Reply-To: <Z-6WY4a6RV1bEbNU@thinkpad>
 
-On Tue, Apr 01, 2025 at 11:23:03AM -0700, Ian Rogers wrote:
-> The clang warning -Wshorten-64-to-32 can be useful to catch
-> inadvertent truncation. In some instances this truncation can lead to
-> changing the sign of a result, for example, truncation to return an
-> int to fit a sort routine. Silence the warning by making the implicit
-> truncation explicit.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
+On Thu, Apr 03, 2025 at 10:08:39AM -0400, Yury Norov wrote:
+> On Tue, Apr 01, 2025 at 11:23:00AM -0700, Ian Rogers wrote:
+> > The clang warning -Wshorten-64-to-32 can be useful to catch
+> > inadvertent truncation. In some instances this truncation can lead to
+> > changing the sign of a result, for example, truncation to return an
+> > int to fit a sort routine. Silence the warning by making the implicit
+> > truncation explicit.
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 
-...
-
-> diff --git a/tools/lib/bitmap.c b/tools/lib/bitmap.c
-> index 2178862bb114..87bd15e3968e 100644
-> --- a/tools/lib/bitmap.c
-> +++ b/tools/lib/bitmap.c
-> @@ -32,7 +32,7 @@ size_t bitmap_scnprintf(unsigned long *bitmap, unsigned int nbits,
->  			char *buf, size_t size)
->  {
->  	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
-> -	unsigned int cur, rbot, rtop;
-> +	size_t cur, rbot, rtop;
->  	bool first = true;
->  	size_t ret = 0;
-
-Maybe instead typecast find_next_bit()? We don't expect any of those
-to overflow the 'unsigned int'.
+I'm the first person in the To list, but only a couple patches in the
+series are related to my area. If you want to move it with me, can you
+send bitmaps, bitfields etc. separately?
 
 Thanks,
 Yury
