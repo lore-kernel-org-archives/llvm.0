@@ -1,64 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87F11A5BB7;
-	Thu,  3 Apr 2025 19:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E5A19F419
+	for <llvm@lists.linux.dev>; Thu,  3 Apr 2025 20:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743710280; cv=none; b=daHqKke84dd2RZmGu7ADlMNuOGG2wedgwL0hO4jz410LsrjYNof8inm6N5XVyMsEJIbPC6gBLGLesUslpEHm7LnLwIgCFwk+grOe75UUlDlyTtFS9Jl1On55tzXxUSy3gwwHJTWTEtjAVaRs3Q7DseR7H4FDFXGOl419Tl4zovk=
+	t=1743711343; cv=none; b=q92tbj+JBZBZlglDX1M93Ttm5Rnx4V0pY0+zhwut/I6JGki1hPJS7KCTC58EilHYOA+TZjHb8Ap4Dh9BTAPl+NprBRZOT0b/WzxAhIfpfvTxTSvF/rn7MmuMQwypJns2HxbDAnU+PwRM3vF9fdYaf+ygzhxTfaCx9RnN+QGed+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743710280; c=relaxed/simple;
-	bh=IjAcaogJEfwe1QULvS0sPgg/YGtkzTNEh+GLxUY+kf4=;
+	s=arc-20240116; t=1743711343; c=relaxed/simple;
+	bh=7wlIWTYBu6l85jVG/NNzbm3gZW4+E1mdp1ATovPRdlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PbKXqQAzWFbGKKDEW2HA7HzmpIZBHXQ8vH0+dNJ68e0SzMDzWLMVCho6z5JGNy9OqF9Xg8bGesQv1f+ghfzc57MfmiJgrMZFCO9QMCBgiMVxmkhneXQGgzjZYqcteHbPoK0uOwIvEkqdz+2ZyEILkKEMjbiNf5BbJOSIUxRSfg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I1WItLgw; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=DJoTgPGhvDIp6czQNIS6Tx7vU2qFA+gPMIhNviNd+AWdhed0Cd1tiTg8mCfUACJVDnhiY/C0eeEsYK5keb24FcSBQ6C2Ol0WIgIcthGl9bxX+GIfkKp/buN+UA1IwDX0TI2+FxfCkF7/JE6doo0OombEJNATM7dxhoFK71fq/0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I1JHOH7R; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1WItLgw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743710278; x=1775246278;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IjAcaogJEfwe1QULvS0sPgg/YGtkzTNEh+GLxUY+kf4=;
-  b=I1WItLgwrCPu8b25xFTGU1GiRZ2VbL4Y6X8iEgz5Msd+43D810rC3BQb
-   MHqSWm1W+DKZhS4bKRM63H8+QZX+c09OFIdSCj27vUIxg3ykal7/H/DJU
-   jzgOH5T2YHTf++bO1n1KSNmoW6CWgNEvzGcyx9KIqlR9AJ8BLBBxGrxD8
-   0XCIuebqF5MpIXVbmgTOKTA0WhgF+czP+s7n3mBXS+DJrLK1RjlZzoCXK
-   kf4GEBSG9ncMzilp9wWQlvPkrDY0RmS8CW+89cF0o5tcg7qDyx/CsLAzy
-   FMoqV1dv7QK0xe0Y4MlQXYCkTUTq4QL2aQBYmGrvJ5BaNntrHWzhl5pig
-   A==;
-X-CSE-ConnectionGUID: CqFqcI7sQ22GiGv/cPjA3A==
-X-CSE-MsgGUID: TDJZ6IDqTYGRAMHmcQcHLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11393"; a="67611718"
-X-IronPort-AV: E=Sophos;i="6.15,186,1739865600"; 
-   d="scan'208";a="67611718"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2025 12:57:58 -0700
-X-CSE-ConnectionGUID: mRRrpAwESFaktxFDiOsS0Q==
-X-CSE-MsgGUID: 61Ht4NWSTWCHq56j/Ob+og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,186,1739865600"; 
-   d="scan'208";a="158085692"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 03 Apr 2025 12:57:54 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u0QhD-0000lb-0S;
-	Thu, 03 Apr 2025 19:57:51 +0000
-Date: Fri, 4 Apr 2025 03:57:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: shao.mingyin@zte.com.cn, jonnyc@amazon.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	lpieralisi@kernel.org, kw@linux.com,
-	manivannan.sadhasivam@linaro.org, robh@kernel.org,
-	bhelgaas@google.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn,
-	xu.xin16@zte.com.cn, ye.xingchen@zte.com.cn
-Subject: Re: [PATCH] PCI: al: Use devm_platform_ioremap_resource_byname
-Message-ID: <202504040353.k5kLpniy-lkp@intel.com>
-References: <20250403154833001aNpIIRBQWEw67Oo8nChch@zte.com.cn>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I1JHOH7R"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2263428c8baso10025ad.1
+        for <llvm@lists.linux.dev>; Thu, 03 Apr 2025 13:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1743711341; x=1744316141; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+9FiIG9VAdbY9vvhPrckluTadBWrK7mI9etYkWzR0uM=;
+        b=I1JHOH7RImL8jpBuxxkBve5NDA4TJKnlTFc2FnidbSCyoXAkgFI7SwmUXGU07L5kyT
+         TCsrJgNXaHeS6BGuN4ZkNiMZ9y7+FRd8HTxRo/Y+KZxnzyyb00BJejkOErwF7W3ekt0n
+         jzSDCKAnJ3ww6lgQZgUv9CwI0iUgNQsjUWuDcVx2kMyDG1236pjF37D+nKAAoa4ubq+b
+         hN6cntU0p3Jn06D0Hed1QtgE0H7kxCLaSRV7LgN9tyg0GuAR4axNWOR9FPaMEdNZSqWU
+         nWb6ATwh5NXE67sZlJAeKkvUgoW8TOxOLRdcsGbg6LWVnRfM8COGQ/iGyC/uwk0nx8HV
+         B6Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743711341; x=1744316141;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+9FiIG9VAdbY9vvhPrckluTadBWrK7mI9etYkWzR0uM=;
+        b=HfG7dAc98DFmvvMNb+vX1LxLbRoAaW4KyHzNFPnyP7N5Fp6hIGDP715SCIQgbN41Ya
+         XtMLDggEdhzUsNBEObvMrI/5R+eFb2lSHJD1+J2hByYlGlSxD2rBV6bsH8cGFCeikDq9
+         vlfI3s5kUEH1tPkxySz8iEqhHbDLRHpCdemOnu9AAf63pUR7dafMS+13jtsL8zpztADk
+         nbXGbVK2Tj0PbUrNqDEm7DFHnXEEHZdbYpPzvArG8eQWWxKqvTsSF3MbNfnwWGWbuUu2
+         cCvvBNIJ5s6jqmjsHnK5m7gKpQ1sri1bF5yEN3GPzC27mcEIk8fRZd13VcDzrxMgY/o8
+         MEKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVa0rsfjLW34pL6iJ+SARa8Lz2Ll/a1JG9xD2mB6PfF/lFYSWdnPvmrQAn4O2mdoQlengl5@lists.linux.dev
+X-Gm-Message-State: AOJu0YyQKCpefBs7iIboZyZOl9zWUe5qLW0KEs2xfmoGJFMIFb3V2h6o
+	/CaqAd+nY+CI+2GI3k2YHIpfZg7kCP4R52uyE4ESQyuakMTHMWaMO3XqIzCxwF77feHhhVdG0UE
+	AsQ==
+X-Gm-Gg: ASbGncsA17cQoiyjRQaWag0lHBw8UaQ/avQwVZilHihFM6szCuY3il13eBB/rW/tMu/
+	MM/A4Q+WzvCw7GH7Ckp61WltH5Dl9vYSf+geiZNeo9KhTMQKEGeV9KQCf3oLFXqlP40mxcXa/dM
+	ZAV4iVafWUGsA55t6HSrtShuZwL3DgEJmB1eMJXtm1V8FmJXFyzrh8oJSceIrR8OXFftNUEsvCh
+	BhppmICDB1yJttC2HvtA/1hvlTThuTGwppJGD/vtqayCsMNJXcF5nFFh9EEXQ63tYxEV4Jai04W
+	yBQwwdU0xQLdglICuo7L049oyk2bUUYvOTfMV6NR/tIQRbImjqO3OipKXMOArOoj1ppRyp5h50o
+	ooq3/NoY=
+X-Google-Smtp-Source: AGHT+IHjSj+UBbEWgXjBxDtxoLUefEdWlIf+aTvXEvObr0AnxhKwZTfr4leY27mrWcr7YIZG65soJw==
+X-Received: by 2002:a17:902:d487:b0:216:7aaa:4c5f with SMTP id d9443c01a7336-22a8b6b2832mr11915ad.3.1743711340284;
+        Thu, 03 Apr 2025 13:15:40 -0700 (PDT)
+Received: from google.com (69.8.247.35.bc.googleusercontent.com. [35.247.8.69])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739da0b41f1sm1978828b3a.147.2025.04.03.13.15.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Apr 2025 13:15:39 -0700 (PDT)
+Date: Thu, 3 Apr 2025 20:15:34 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Fangrui Song <i@maskray.me>, Joao Moreira <joao@overdrivepizza.com>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Subject: Re: kCFI && patchable-function-entry=M,N
+Message-ID: <20250403201534.GA197065@google.com>
+References: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N>
+ <Y1QEzk/A41PKLEPe@hirez.programming.kicks-ass.net>
+ <Y1Z12xuY9fDaHuCm@FVFF77S0Q05N>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,96 +81,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250403154833001aNpIIRBQWEw67Oo8nChch@zte.com.cn>
+In-Reply-To: <Y1Z12xuY9fDaHuCm@FVFF77S0Q05N>
 
-Hi,
+Hi folks,
 
-kernel test robot noticed the following build warnings:
+On Mon, Oct 24, 2022 at 12:24:11PM +0100, Mark Rutland wrote:
+> On Sat, Oct 22, 2022 at 04:57:18PM +0200, Peter Zijlstra wrote:
+> > On Fri, Oct 21, 2022 at 04:56:20PM +0100, Mark Rutland wrote:
+> > > Hi,
+> > > 
+> > > For arm64, I'd like to use -fatchable-function-entry=M,N (where N > 0), for our
+> > > ftrace implementation, which instruments *some* but not all functions.
+> > > Unfortuntately, this doesn't play nicely with -fsanitize=kcfi, as instrumented
+> > > and non-instrumented functions don't agree on where the type hash should live
+> > > relative to the function entry point, making them incompatible with one another.
+> > > AFAICT, there's no mechanism today to get them to agree.
+> > > 
+> > > Today we use -fatchable-function-entry=2, which happens to avoid this.
+> > 
+> > > ... but I understand that for x86, folk want the pre-function NOPs to
+> > > fall-through into the body of the function.
+> > 
+> > Yep.
+> > 
+> > > Is there any mechanism today that we could use to solve this, or could we
+> > > extend clang to have some options to control this behaviour?
+> > 
+> > So the main pain-point for you is differentiating between function with
+> > notrace and those without it, right?
+> > 
+> > That is; suppose you (like x86) globally do:
+> > -fpatchable-function-entry=4,2 to get a consistent function signature,
+> > you're up a creek because you use the __patchable_function_entries
+> > section to drive ftrace and now every function will have it.
+> > 
+> > So perhaps something like:
+> > 
+> >  -fpatchable-function-entry=N,M,sectionname
+> > 
+> > would help, then you can have notrace be the same layout, except a
+> > different section. Eg. something like:
+> > 
+> >  #define notrace __attribute__((patchable_function_entry(4,2,__notrace_function_entries)))
+> 
+> FWIW, I think that'd work for me, and that was roughly my original proposal on
+> IRC. My only concern with this approach is code size, since all uninstrumented
+> functions gain some point less prefix NOPs.
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.14 next-20250403]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It took me a couple of years to find the time to look into this,
+but here's a Clang patch I committed yesterday that adds support
+for a section parameter:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/shao-mingyin-zte-com-cn/PCI-al-Use-devm_platform_ioremap_resource_byname/20250403-155111
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20250403154833001aNpIIRBQWEw67Oo8nChch%40zte.com.cn
-patch subject: [PATCH] PCI: al: Use devm_platform_ioremap_resource_byname
-config: s390-randconfig-002-20250404 (https://download.01.org/0day-ci/archive/20250404/202504040353.k5kLpniy-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504040353.k5kLpniy-lkp@intel.com/reproduce)
+https://github.com/llvm/llvm-project/commit/acc6bcdc504ad2e8c09a628dc18de0067f7344b8
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504040353.k5kLpniy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pci/controller/dwc/pcie-al.c:359:4: warning: variable 'controller_res' is uninitialized when used here [-Wuninitialized]
-     359 |                         controller_res);
-         |                         ^~~~~~~~~~~~~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-al.c:330:33: note: initialize the variable 'controller_res' to silence this warning
-     330 |         struct resource *controller_res;
-         |                                        ^
-         |                                         = NULL
-   1 warning generated.
-
-
-vim +/controller_res +359 drivers/pci/controller/dwc/pcie-al.c
-
-a8daea94754989 Jonathan Chocron 2019-09-12  326  
-a8daea94754989 Jonathan Chocron 2019-09-12  327  static int al_pcie_probe(struct platform_device *pdev)
-a8daea94754989 Jonathan Chocron 2019-09-12  328  {
-a8daea94754989 Jonathan Chocron 2019-09-12  329  	struct device *dev = &pdev->dev;
-a8daea94754989 Jonathan Chocron 2019-09-12  330  	struct resource *controller_res;
-a8daea94754989 Jonathan Chocron 2019-09-12  331  	struct resource *ecam_res;
-a8daea94754989 Jonathan Chocron 2019-09-12  332  	struct al_pcie *al_pcie;
-a8daea94754989 Jonathan Chocron 2019-09-12  333  	struct dw_pcie *pci;
-a8daea94754989 Jonathan Chocron 2019-09-12  334  
-a8daea94754989 Jonathan Chocron 2019-09-12  335  	al_pcie = devm_kzalloc(dev, sizeof(*al_pcie), GFP_KERNEL);
-a8daea94754989 Jonathan Chocron 2019-09-12  336  	if (!al_pcie)
-a8daea94754989 Jonathan Chocron 2019-09-12  337  		return -ENOMEM;
-a8daea94754989 Jonathan Chocron 2019-09-12  338  
-a8daea94754989 Jonathan Chocron 2019-09-12  339  	pci = devm_kzalloc(dev, sizeof(*pci), GFP_KERNEL);
-a8daea94754989 Jonathan Chocron 2019-09-12  340  	if (!pci)
-a8daea94754989 Jonathan Chocron 2019-09-12  341  		return -ENOMEM;
-a8daea94754989 Jonathan Chocron 2019-09-12  342  
-a8daea94754989 Jonathan Chocron 2019-09-12  343  	pci->dev = dev;
-60f5b73fa0f298 Rob Herring      2020-11-05  344  	pci->pp.ops = &al_pcie_host_ops;
-a8daea94754989 Jonathan Chocron 2019-09-12  345  
-a8daea94754989 Jonathan Chocron 2019-09-12  346  	al_pcie->pci = pci;
-a8daea94754989 Jonathan Chocron 2019-09-12  347  	al_pcie->dev = dev;
-a8daea94754989 Jonathan Chocron 2019-09-12  348  
-a8daea94754989 Jonathan Chocron 2019-09-12  349  	ecam_res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "config");
-a8daea94754989 Jonathan Chocron 2019-09-12  350  	if (!ecam_res) {
-a8daea94754989 Jonathan Chocron 2019-09-12  351  		dev_err(dev, "couldn't find 'config' reg in DT\n");
-a8daea94754989 Jonathan Chocron 2019-09-12  352  		return -ENOENT;
-a8daea94754989 Jonathan Chocron 2019-09-12  353  	}
-a8daea94754989 Jonathan Chocron 2019-09-12  354  	al_pcie->ecam_size = resource_size(ecam_res);
-a8daea94754989 Jonathan Chocron 2019-09-12  355  
-99f4e0afd9fbe4 Xie Ludan        2025-04-03  356  	al_pcie->controller_base = devm_platform_ioremap_resource_byname(pdev, "controller");
-a8daea94754989 Jonathan Chocron 2019-09-12  357  	if (IS_ERR(al_pcie->controller_base)) {
-a8daea94754989 Jonathan Chocron 2019-09-12  358  		dev_err(dev, "couldn't remap controller base %pR\n",
-a8daea94754989 Jonathan Chocron 2019-09-12 @359  			controller_res);
-a8daea94754989 Jonathan Chocron 2019-09-12  360  		return PTR_ERR(al_pcie->controller_base);
-a8daea94754989 Jonathan Chocron 2019-09-12  361  	}
-a8daea94754989 Jonathan Chocron 2019-09-12  362  
-a0fd361db8e508 Rob Herring      2020-11-05  363  	dev_dbg(dev, "From DT: controller_base: %pR\n", controller_res);
-a8daea94754989 Jonathan Chocron 2019-09-12  364  
-a8daea94754989 Jonathan Chocron 2019-09-12  365  	platform_set_drvdata(pdev, al_pcie);
-a8daea94754989 Jonathan Chocron 2019-09-12  366  
-60f5b73fa0f298 Rob Herring      2020-11-05  367  	return dw_pcie_host_init(&pci->pp);
-a8daea94754989 Jonathan Chocron 2019-09-12  368  }
-a8daea94754989 Jonathan Chocron 2019-09-12  369  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sami
