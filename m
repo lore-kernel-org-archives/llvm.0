@@ -1,139 +1,59 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2F024EF71
-	for <llvm@lists.linux.dev>; Thu,  3 Apr 2025 14:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A3124CEF1;
+	Thu,  3 Apr 2025 14:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743690405; cv=none; b=V5854eAYIAF5ElPXmdgR0N6CGoRRmPYSe49HSG0nf/XazrqSy4GdT/VpGOUd0duI1It3mUJq5DP5MGw+oMjvysWXSohm4aoshbCfXnIhZkB9pBJ9hskKzyDUSJOXqdtu7z0gMHPwfxyqffx0pbuzS2mCpoxOS//lWebhzkQ82KQ=
+	t=1743691822; cv=none; b=r61g/uqA5BbF5Hn6D0eLVKi7LHzK7c+2g/5LSCxqy0AqEUeG7lxOYlbWizPNg/OracPovJtavHteXOLYVKSakLDQMRY+Fh4EMUh9p7jweKGmbg+8JRFG6G6HBqugdBsTObq8w9tt1pp/hlzE1piKgqCkMLNRbuBWiegwgCWr57E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743690405; c=relaxed/simple;
-	bh=udWx3sXynBeCKyH2cn9MPdye1p1GgTvwWlCqpxIZr1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d8y6/4YInZdFgSzPx9YCjjsms4S6UMO6XZF1hR4k6NV/aAogM45iEn9eVXmT/vsvd41Kddq05lO6u+mEPvudrpNnbHaVtol7Tu9G+Mn8QTdQnyn3UM3hxG6GmWZ7F7s384/227K8fZv/oQGgnpoHrqSeocLiuBW1uAR1Z6XiJQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTXhTuHD; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743691822; c=relaxed/simple;
+	bh=0cSuYs4eWbwP+NTo25/5BrDTr04nrpKylOwXwDlBZ2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=b7CjsDumlqN8ue9e4wJD6xkFStv5jmMo5W6jE9pMKmtVGTIEVOJvE1/P6Bc5CCW2BP+yjA+Nmiaob83e5lqVfJIXuh4SAsEvzaHQGrVuI+q2p6bYHE0HoMqcQNql8t71KGCerJsskvMzyaqmSFJXuti+M9nOd70wGcN5sDiXXaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=akONfE6F; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTXhTuHD"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-303a66af07eso761663a91.2
-        for <llvm@lists.linux.dev>; Thu, 03 Apr 2025 07:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743690403; x=1744295203; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAqtWD0ADgEG56estGUMwFFZOWZtTFqA2jD3PNCtf2o=;
-        b=NTXhTuHDSoyEW8kBaZF9xqzMtWEkP7HRPk9BPTQtjvuSe4bGXg2BtXzfQMBEuxeUiQ
-         Kx27wyxXri3icsYFY+bg//GS0pSVE0MdGwTyEig6q9U5N15PmrgBecdEh5ZRjFIuNkFo
-         Gy2sUQyuMkcKOXT4DEWyTvrcPnX+3rLWOlHEbNOp2XX8h0Rmf2iP1LB6C6vrAIhcOSzs
-         /3tCrw8A2YxSqRdwYN2Sz7I80HjrBsv+P4D/goIO6gnWgnLtuBRkLhR4ZLq3l8RjbaxM
-         F1fclTR56KFkaObdnHXoX2ftC5KvtGxFINhb/wD0u7Mu/rUcleRlIpynDfovWxhdvEKe
-         C45w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743690403; x=1744295203;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dAqtWD0ADgEG56estGUMwFFZOWZtTFqA2jD3PNCtf2o=;
-        b=IlAylN+A0vdxfAhMOsOISHDDqJtSiD+4L3HEHAJZCvZWmNWjvEum0axBX6CtT0UTwf
-         66BLc1ZQek5YHSvhTuSKh/y/D3OWprJyPxX8i/GUtrG/p7eF59xqR7XFCj0k+cGY3jbJ
-         SDyh4rbfC5d7IYMdKZF3psxBxkeVDC+db9R1B0XPEGL3Zszs+eQ9a0jgwvnBkUxFQEg9
-         J9qzKbnPf0Q5OLKyH2oMB5shIRT7Y97odDmSTR0rs+iFTKzh6E/x5gkewv55sW96OtQ8
-         yLnhf5iVNyso6i2SHQ9kM3wJ0IMVaOqH2pXGU/AjD7P5CQyNXet4S5pM3Qcv+nDV6OvJ
-         kFIA==
-X-Forwarded-Encrypted: i=1; AJvYcCV0uR+YrTuAs9aMWWOmfXQtYKPpCvzmCPrmCNLGbd9D2KzenzjWvIEb/QKnOoR6Ol7oaXUI@lists.linux.dev
-X-Gm-Message-State: AOJu0YxwkpZN6FoQFG0L6T7R+d0bgpqglh2N/Qns6KAfaeMDtS5RWYVm
-	C/mDC0pHg5024NJIv+ZwcGIroeP5Wx013D5cfSHEbHKEpoCVuF7B
-X-Gm-Gg: ASbGncv20OKOKcKInmwQeD0fll5wbv71hIdViHZ+1USHLgzWvhGMQp6xKvmqS5l+Md2
-	6fD3WADrQ/XKx2Q1wN1w8+Z1mUx1iFw6WUfd5m84Ws8YYbJuCQLTjmMSZkIJCgoiYnmgYdPQHiK
-	fgdMwjnOXxD0esQk5zmpkO5H1t2r02Dx1JM317MGwpjvw6A498YEudJi6BPNHYFGDPDE01u/Mx4
-	EwIKOm6o4sIthWYdZULA1QLFnBI0GtuoQvbjLzDVvlJvdyaMb+ZmpSamM5zRmrnR6wRKuD3Axck
-	xgivKXl7Od2TPMvm/d2KZBaHHKMVGdGBDap05fazjMmCrRmmW4cFXlg=
-X-Google-Smtp-Source: AGHT+IFj+34X21Ko9H2G+bwo7MdL+I8gIE9fAmN87oglS5pPqEZNB1wO4Hk8sbSK66cTHRHvmK8RIg==
-X-Received: by 2002:a17:90a:d003:b0:2ee:edae:780 with SMTP id 98e67ed59e1d1-3056ee4868dmr9516913a91.15.1743690403134;
-        Thu, 03 Apr 2025 07:26:43 -0700 (PDT)
-Received: from localhost ([216.228.125.129])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305827d70b1sm1548261a91.4.2025.04.03.07.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Apr 2025 07:26:42 -0700 (PDT)
-Date: Thu, 3 Apr 2025 10:26:40 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Yicong Yang <yangyicong@hisilicon.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
-	Ben Gainey <ben.gainey@arm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	Eder Zulian <ezulian@redhat.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
-	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Howard Chu <howardchu95@gmail.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Jann Horn <jannh@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Yang Jihong <yangjihong@bytedance.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Graham Woodward <graham.woodward@arm.com>,
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
-	Tengda Wu <wutengda@huaweicloud.com>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Chun-Tse Shao <ctshao@google.com>,
-	Casey Chen <cachen@purestorage.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Li Huafei <lihuafei1@huawei.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
-	Thomas Falcon <thomas.falcon@intel.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Andrew Kreimer <algonell@gmail.com>,
-	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
-	Junhao He <hejunhao3@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Xu Yang <xu.yang_2@nxp.com>,
-	Steve Clevenger <scclevenger@os.amperecomputing.com>,
-	Zixian Cai <fzczx123@gmail.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>,
-	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 02/48] tools headers: Silence -Wshorten-64-to-32
- warnings
-Message-ID: <Z-6aoJ3ohVHPsF0A@thinkpad>
-References: <20250401182347.3422199-1-irogers@google.com>
- <20250401182347.3422199-3-irogers@google.com>
- <Z-6WY4a6RV1bEbNU@thinkpad>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="akONfE6F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743691821; x=1775227821;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0cSuYs4eWbwP+NTo25/5BrDTr04nrpKylOwXwDlBZ2Q=;
+  b=akONfE6FXc7HVs5TLu2AIvfJfrxrwhnnf7nXrVDiyAtqG/aytVyYh+h4
+   tNPbCBYIIrwKGy4PDRUqY7mOTM6G6yuyxAJ+Lja5aOQesaK3YNDdysRCf
+   CjmVvh1rZMOc5d7HwIX76BkEeXC5BOcpg0yoQJEI6Eu497idnGEO0yn1v
+   dLaAyUfRye1PMQ/wrrwTlRk99kOtc9KWP6/uhM6+t8fWQrtYiv19yVigI
+   eSIgHPVCQZf82wHwGQ92iD1y4fyfl/fXBcJBMTGQZcGWEJZJHIN7MSf3Q
+   i7q5N9AP2tz2EtNjoZY+BfJVgz9rqzLHpYUVAvb8Ys+VieeLNxY+WldPn
+   g==;
+X-CSE-ConnectionGUID: +mGnLQuOTeSPiORSj0k7QQ==
+X-CSE-MsgGUID: avj3ImVhSfieayRJ4ZrZ+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11393"; a="45121290"
+X-IronPort-AV: E=Sophos;i="6.15,184,1739865600"; 
+   d="scan'208";a="45121290"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2025 07:50:21 -0700
+X-CSE-ConnectionGUID: XpeamoVUTEmc3IFLOtzJ3A==
+X-CSE-MsgGUID: /mPo2hJTTGGji6z+42vTUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,184,1739865600"; 
+   d="scan'208";a="132009557"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 03 Apr 2025 07:50:18 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0LtY-0000Ti-23;
+	Thu, 03 Apr 2025 14:50:16 +0000
+Date: Thu, 3 Apr 2025 22:50:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:sched/hrtick 1/6] kernel/sched/fair.c:6813:10: error:
+ call to undeclared function 'cpu_util_dl'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202504032231.tANMXCtr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -142,21 +62,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z-6WY4a6RV1bEbNU@thinkpad>
 
-On Thu, Apr 03, 2025 at 10:08:39AM -0400, Yury Norov wrote:
-> On Tue, Apr 01, 2025 at 11:23:00AM -0700, Ian Rogers wrote:
-> > The clang warning -Wshorten-64-to-32 can be useful to catch
-> > inadvertent truncation. In some instances this truncation can lead to
-> > changing the sign of a result, for example, truncation to return an
-> > int to fit a sort routine. Silence the warning by making the implicit
-> > truncation explicit.
-> > 
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/hrtick
+head:   7ca06092f4a1b8dfd501b5cb1749854a13d5a898
+commit: deebcd729d011e54806d9026965fcb0c18111129 [1/6] sched/eevdf: Fix HRTICK duration
+config: hexagon-randconfig-002-20250403 (https://download.01.org/0day-ci/archive/20250403/202504032231.tANMXCtr-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250403/202504032231.tANMXCtr-lkp@intel.com/reproduce)
 
-I'm the first person in the To list, but only a couple patches in the
-series are related to my area. If you want to move it with me, can you
-send bitmaps, bitfields etc. separately?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504032231.tANMXCtr-lkp@intel.com/
 
-Thanks,
-Yury
+All errors (new ones prefixed by >>):
+
+>> kernel/sched/fair.c:6813:10: error: call to undeclared function 'cpu_util_dl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    6813 |         util += cpu_util_dl(rq);
+         |                 ^
+   kernel/sched/fair.c:6813:10: note: did you mean 'cpu_util_irq'?
+   kernel/sched/sched.h:3486:29: note: 'cpu_util_irq' declared here
+    3486 | static inline unsigned long cpu_util_irq(struct rq *rq)
+         |                             ^
+>> kernel/sched/fair.c:6814:10: error: call to undeclared function 'cpu_util_rt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    6814 |         util += cpu_util_rt(rq);
+         |                 ^
+   2 errors generated.
+
+
+vim +/cpu_util_dl +6813 kernel/sched/fair.c
+
+  6780	
+  6781	/**************************************************
+  6782	 * CFS operations on tasks:
+  6783	 */
+  6784	
+  6785	#ifdef CONFIG_SCHED_HRTICK
+  6786	static void hrtick_start_fair(struct rq *rq, struct task_struct *p)
+  6787	{
+  6788		struct sched_entity *se = &p->se;
+  6789		unsigned long scale = 1024;
+  6790		unsigned long util = 0;
+  6791		u64 vdelta;
+  6792		u64 delta;
+  6793	
+  6794		WARN_ON_ONCE(task_rq(p) != rq);
+  6795	
+  6796		if (rq->cfs.h_nr_queued <= 1)
+  6797			return;
+  6798	
+  6799		/*
+  6800		 * Compute time until virtual deadline
+  6801		 */
+  6802		vdelta = se->deadline - se->vruntime;
+  6803		if ((s64)vdelta < 0) {
+  6804			if (task_current_donor(rq, p))
+  6805				resched_curr(rq);
+  6806			return;
+  6807		}
+  6808		delta = (se->load.weight * vdelta) / NICE_0_LOAD;
+  6809	
+  6810		/*
+  6811		 * Correct for instantaneous load of other classes.
+  6812		 */
+> 6813		util += cpu_util_dl(rq);
+> 6814		util += cpu_util_rt(rq);
+  6815		util += cpu_util_irq(rq);
+  6816		if (util && util < 1024) {
+  6817			scale *= 1024;
+  6818			scale /= (1024 - util);
+  6819		}
+  6820	
+  6821		hrtick_start(rq, (scale * delta) / 1024);
+  6822	}
+  6823	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
