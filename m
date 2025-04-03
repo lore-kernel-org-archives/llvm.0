@@ -1,43 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA00230985
-	for <llvm@lists.linux.dev>; Thu,  3 Apr 2025 19:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87F11A5BB7;
+	Thu,  3 Apr 2025 19:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743707954; cv=none; b=NaAQYY1VrvtemNYVvXOw2R+lpt+vZh5jogbxNP8zdElzn6qh1tZZo9wABp3O4SYHe5Ls8DypTFrM3sO3t7nP4OYveX4mr3CWxMaMs6Y92i/tGjE/CqSGTBdqoSGHGml7zdG/lkeGRORwFFj2Qqv107ySeX3iMH/k0Ew1b04BUnA=
+	t=1743710280; cv=none; b=daHqKke84dd2RZmGu7ADlMNuOGG2wedgwL0hO4jz410LsrjYNof8inm6N5XVyMsEJIbPC6gBLGLesUslpEHm7LnLwIgCFwk+grOe75UUlDlyTtFS9Jl1On55tzXxUSy3gwwHJTWTEtjAVaRs3Q7DseR7H4FDFXGOl419Tl4zovk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743707954; c=relaxed/simple;
-	bh=IbyUkp6kCh6S6vBIK5UVHOSIuVr1OBes+HRbtrN9NoU=;
+	s=arc-20240116; t=1743710280; c=relaxed/simple;
+	bh=IjAcaogJEfwe1QULvS0sPgg/YGtkzTNEh+GLxUY+kf4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JVeBdaE02uzV+/prmswTtPTn/kE1wQKbdAuVcUYchv8EGKotifYfSyWPZzPpGnNxhzqYS+3AuhlhFfvklUZAmqGJZn3hFZ+Z4lOoOitcpcs9gJns7rrkemf5gi9f7M0tdJBJoS4RNMlcJVVMT6paIs5fijDMgxjvwehTbHxVegY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lo09+bro; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=PbKXqQAzWFbGKKDEW2HA7HzmpIZBHXQ8vH0+dNJ68e0SzMDzWLMVCho6z5JGNy9OqF9Xg8bGesQv1f+ghfzc57MfmiJgrMZFCO9QMCBgiMVxmkhneXQGgzjZYqcteHbPoK0uOwIvEkqdz+2ZyEILkKEMjbiNf5BbJOSIUxRSfg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I1WItLgw; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lo09+bro"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2558C4CEED;
-	Thu,  3 Apr 2025 19:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743707953;
-	bh=IbyUkp6kCh6S6vBIK5UVHOSIuVr1OBes+HRbtrN9NoU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lo09+bro5SDyBXuu7a6KK2nZ8bB4QBIM/NG9DYp0YzZNEgTxpn6B9y+lWx3zbPQ+9
-	 5cXiE/FyIozkiigZGUAb15G+QsaKlrrHCnlHu+UN3k1AYN3TcIYDPEskSMgmsCe6v1
-	 cdhJQvalFIyAnNHZYP9c4Z04ybblyH+bGh+Pn2rMh9Zc3C5Bpa8TGRC65/P4yodFNH
-	 nQMSNsTd92xXdLUHpuPzBKh8fHFV2Ha8jSg+JXlrr8n65SbhoeaCxUSq8HtNNCzy6b
-	 XHvMAGeQy1SdozdIhynAgfcaEkXYqZ8XC1z16L7BHUZz7z/Ge3eBuQZObb0H2icrIh
-	 8MI+UVl1SghBg==
-Date: Thu, 3 Apr 2025 12:19:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: linux-um@lists.infradead.org, Johannes Berg <johannes.berg@intel.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] um: mark rodata read-only and implement _nofault
- accesses
-Message-ID: <20250403191910.GA3085607@ax162>
-References: <20250210160926.420133-1-benjamin@sipsolutions.net>
- <20250210160926.420133-2-benjamin@sipsolutions.net>
- <20250402221254.GA384@ax162>
- <413669a192e65d67059245d38c03828f85d20717.camel@sipsolutions.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1WItLgw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743710278; x=1775246278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IjAcaogJEfwe1QULvS0sPgg/YGtkzTNEh+GLxUY+kf4=;
+  b=I1WItLgwrCPu8b25xFTGU1GiRZ2VbL4Y6X8iEgz5Msd+43D810rC3BQb
+   MHqSWm1W+DKZhS4bKRM63H8+QZX+c09OFIdSCj27vUIxg3ykal7/H/DJU
+   jzgOH5T2YHTf++bO1n1KSNmoW6CWgNEvzGcyx9KIqlR9AJ8BLBBxGrxD8
+   0XCIuebqF5MpIXVbmgTOKTA0WhgF+czP+s7n3mBXS+DJrLK1RjlZzoCXK
+   kf4GEBSG9ncMzilp9wWQlvPkrDY0RmS8CW+89cF0o5tcg7qDyx/CsLAzy
+   FMoqV1dv7QK0xe0Y4MlQXYCkTUTq4QL2aQBYmGrvJ5BaNntrHWzhl5pig
+   A==;
+X-CSE-ConnectionGUID: CqFqcI7sQ22GiGv/cPjA3A==
+X-CSE-MsgGUID: TDJZ6IDqTYGRAMHmcQcHLg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11393"; a="67611718"
+X-IronPort-AV: E=Sophos;i="6.15,186,1739865600"; 
+   d="scan'208";a="67611718"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2025 12:57:58 -0700
+X-CSE-ConnectionGUID: mRRrpAwESFaktxFDiOsS0Q==
+X-CSE-MsgGUID: 61Ht4NWSTWCHq56j/Ob+og==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,186,1739865600"; 
+   d="scan'208";a="158085692"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 03 Apr 2025 12:57:54 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0QhD-0000lb-0S;
+	Thu, 03 Apr 2025 19:57:51 +0000
+Date: Fri, 4 Apr 2025 03:57:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: shao.mingyin@zte.com.cn, jonnyc@amazon.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	lpieralisi@kernel.org, kw@linux.com,
+	manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	bhelgaas@google.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn,
+	xu.xin16@zte.com.cn, ye.xingchen@zte.com.cn
+Subject: Re: [PATCH] PCI: al: Use devm_platform_ioremap_resource_byname
+Message-ID: <202504040353.k5kLpniy-lkp@intel.com>
+References: <20250403154833001aNpIIRBQWEw67Oo8nChch@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,95 +67,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <413669a192e65d67059245d38c03828f85d20717.camel@sipsolutions.net>
+In-Reply-To: <20250403154833001aNpIIRBQWEw67Oo8nChch@zte.com.cn>
 
-On Thu, Apr 03, 2025 at 08:20:23AM +0200, Benjamin Berg wrote:
-> Hi Nathan,
-> 
-> oops, that is a little logic bug in the code. When we are coming from
-> userspace, we may be running as part of a user task and have an mm. And
-> then the new "current->pagefault_disabled" logic is skipped. So when
-> prepend_copy is doing its nofault copy to evade a lock it is crashing
-> instead of failing gracefully and retrying.
-> 
-> In segv_handler, can you try moving that into a separate "else if"
-> block just above the "current->mm == NULL" check?
-> 
-> Something like the patch I copied below.
+Hi,
 
-Thanks, I applied that change, which shows a slightly different crash
-message now:
+kernel test robot noticed the following build warnings:
 
-Modules linked in:
-Pid: 24, comm: mount Not tainted 6.14.0-rc5-00002-gd1d7f01f7cd3-dirty
-RIP: 0033:_end_0+0x38/0x45
-RSP: 00000000648bfca0  EFLAGS: 00010206
-RAX: 0000000000000000 RBX: 00000000609c7ff8 RCX: 00000000606350b8
-RDX: 00000000648bfc5e RSI: 0000000000001000 RDI: 0000000060c0c000
-RBP: 00000000648bfcc0 R08: 0000000000000000 R09: 0000000060c0c780
-R10: 0000000000000000 R11: 0000000000000206 R12: 00000000648bfd60
-R13: 0000000060c0c900 R14: 0000000060c0c9f8 R15: 0000000000000007
-Kernel panic - not syncing: Segfault without recovery target
-CPU: 0 UID: 0 PID: 24 Comm: mount Not tainted 6.14.0-rc5-00002-gd1d7f01f7cd3-dirty #1
-Stack:
- 600c25f9 00000007 609c7ff8 608c4780
- 648bfcf0 601533da 601533bb 648bfd60
- 648bfdb0 608c4780 648bfd10 60152ece
-Call Trace:
- [<600c25f9>] ? copy_from_kernel_nofault+0x0/0x64
- [<601533da>] prepend_copy+0x1f/0x51
- [<601533bb>] ? prepend_copy+0x0/0x51
- [<60152ece>] prepend+0x60/0x67
- [<60153389>] prepend_name+0x1f/0x51
- [<6015336a>] ? prepend_name+0x0/0x51
- [<60152bbd>] prepend_path+0xb9/0x1d8
- [<6003cb91>] ? um_set_signals+0x0/0x3b
- [<60152e27>] d_path+0xce/0x115
- [<60186805>] proc_pid_readlink+0xa1/0x17d
- [<6012b192>] vfs_readlink+0xec/0xee
- [<60138930>] ? touch_atime+0x0/0x162
- [<60120351>] do_readlinkat+0xbe/0x13a
- [<6011f92b>] sys_readlinkat+0x10/0x14
- [<6002cabb>] handle_syscall+0x7b/0xaa
- [<6002ca40>] ? handle_syscall+0x0/0xaa
- [<6003f695>] userspace+0x289/0x4a5
- [<6002a8e3>] fork_handler+0x56/0x5d
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus linus/master v6.14 next-20250403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
-> index cbe924a0fa87..8a2e68d07de6 100644
-> --- a/arch/um/kernel/trap.c
-> +++ b/arch/um/kernel/trap.c
-> @@ -330,20 +330,20 @@ unsigned long segv(struct faultinfo fi, unsigned long ip, int is_user,
->  			panic("Failed to sync kernel TLBs: %d", err);
->  		goto out;
->  	}
-> -	else if (current->mm == NULL) {
-> -		if (current->pagefault_disabled) {
-> -			if (!mc) {
-> -				show_regs(container_of(regs, struct pt_regs, regs));
-> -				panic("Segfault with pagefaults disabled but no mcontext");
-> -			}
-> -			if (!current->thread.segv_continue) {
-> -				show_regs(container_of(regs, struct pt_regs, regs));
-> -				panic("Segfault without recovery target");
-> -			}
-> -			mc_set_rip(mc, current->thread.segv_continue);
-> -			current->thread.segv_continue = NULL;
-> -			goto out;
-> +	else if (current->pagefault_disabled) {
-> +		if (!mc) {
-> +			show_regs(container_of(regs, struct pt_regs, regs));
-> +			panic("Segfault with pagefaults disabled but no mcontext");
->  		}
-> +		if (!current->thread.segv_continue) {
-> +			show_regs(container_of(regs, struct pt_regs, regs));
-> +			panic("Segfault without recovery target");
-> +		}
-> +		mc_set_rip(mc, current->thread.segv_continue);
-> +		current->thread.segv_continue = NULL;
-> +		goto out;
-> +	}
-> +	else if (current->mm == NULL) {
->  		show_regs(container_of(regs, struct pt_regs, regs));
->  		panic("Segfault with no mm");
->  	}
+url:    https://github.com/intel-lab-lkp/linux/commits/shao-mingyin-zte-com-cn/PCI-al-Use-devm_platform_ioremap_resource_byname/20250403-155111
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250403154833001aNpIIRBQWEw67Oo8nChch%40zte.com.cn
+patch subject: [PATCH] PCI: al: Use devm_platform_ioremap_resource_byname
+config: s390-randconfig-002-20250404 (https://download.01.org/0day-ci/archive/20250404/202504040353.k5kLpniy-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504040353.k5kLpniy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504040353.k5kLpniy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pci/controller/dwc/pcie-al.c:359:4: warning: variable 'controller_res' is uninitialized when used here [-Wuninitialized]
+     359 |                         controller_res);
+         |                         ^~~~~~~~~~~~~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-al.c:330:33: note: initialize the variable 'controller_res' to silence this warning
+     330 |         struct resource *controller_res;
+         |                                        ^
+         |                                         = NULL
+   1 warning generated.
+
+
+vim +/controller_res +359 drivers/pci/controller/dwc/pcie-al.c
+
+a8daea94754989 Jonathan Chocron 2019-09-12  326  
+a8daea94754989 Jonathan Chocron 2019-09-12  327  static int al_pcie_probe(struct platform_device *pdev)
+a8daea94754989 Jonathan Chocron 2019-09-12  328  {
+a8daea94754989 Jonathan Chocron 2019-09-12  329  	struct device *dev = &pdev->dev;
+a8daea94754989 Jonathan Chocron 2019-09-12  330  	struct resource *controller_res;
+a8daea94754989 Jonathan Chocron 2019-09-12  331  	struct resource *ecam_res;
+a8daea94754989 Jonathan Chocron 2019-09-12  332  	struct al_pcie *al_pcie;
+a8daea94754989 Jonathan Chocron 2019-09-12  333  	struct dw_pcie *pci;
+a8daea94754989 Jonathan Chocron 2019-09-12  334  
+a8daea94754989 Jonathan Chocron 2019-09-12  335  	al_pcie = devm_kzalloc(dev, sizeof(*al_pcie), GFP_KERNEL);
+a8daea94754989 Jonathan Chocron 2019-09-12  336  	if (!al_pcie)
+a8daea94754989 Jonathan Chocron 2019-09-12  337  		return -ENOMEM;
+a8daea94754989 Jonathan Chocron 2019-09-12  338  
+a8daea94754989 Jonathan Chocron 2019-09-12  339  	pci = devm_kzalloc(dev, sizeof(*pci), GFP_KERNEL);
+a8daea94754989 Jonathan Chocron 2019-09-12  340  	if (!pci)
+a8daea94754989 Jonathan Chocron 2019-09-12  341  		return -ENOMEM;
+a8daea94754989 Jonathan Chocron 2019-09-12  342  
+a8daea94754989 Jonathan Chocron 2019-09-12  343  	pci->dev = dev;
+60f5b73fa0f298 Rob Herring      2020-11-05  344  	pci->pp.ops = &al_pcie_host_ops;
+a8daea94754989 Jonathan Chocron 2019-09-12  345  
+a8daea94754989 Jonathan Chocron 2019-09-12  346  	al_pcie->pci = pci;
+a8daea94754989 Jonathan Chocron 2019-09-12  347  	al_pcie->dev = dev;
+a8daea94754989 Jonathan Chocron 2019-09-12  348  
+a8daea94754989 Jonathan Chocron 2019-09-12  349  	ecam_res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "config");
+a8daea94754989 Jonathan Chocron 2019-09-12  350  	if (!ecam_res) {
+a8daea94754989 Jonathan Chocron 2019-09-12  351  		dev_err(dev, "couldn't find 'config' reg in DT\n");
+a8daea94754989 Jonathan Chocron 2019-09-12  352  		return -ENOENT;
+a8daea94754989 Jonathan Chocron 2019-09-12  353  	}
+a8daea94754989 Jonathan Chocron 2019-09-12  354  	al_pcie->ecam_size = resource_size(ecam_res);
+a8daea94754989 Jonathan Chocron 2019-09-12  355  
+99f4e0afd9fbe4 Xie Ludan        2025-04-03  356  	al_pcie->controller_base = devm_platform_ioremap_resource_byname(pdev, "controller");
+a8daea94754989 Jonathan Chocron 2019-09-12  357  	if (IS_ERR(al_pcie->controller_base)) {
+a8daea94754989 Jonathan Chocron 2019-09-12  358  		dev_err(dev, "couldn't remap controller base %pR\n",
+a8daea94754989 Jonathan Chocron 2019-09-12 @359  			controller_res);
+a8daea94754989 Jonathan Chocron 2019-09-12  360  		return PTR_ERR(al_pcie->controller_base);
+a8daea94754989 Jonathan Chocron 2019-09-12  361  	}
+a8daea94754989 Jonathan Chocron 2019-09-12  362  
+a0fd361db8e508 Rob Herring      2020-11-05  363  	dev_dbg(dev, "From DT: controller_base: %pR\n", controller_res);
+a8daea94754989 Jonathan Chocron 2019-09-12  364  
+a8daea94754989 Jonathan Chocron 2019-09-12  365  	platform_set_drvdata(pdev, al_pcie);
+a8daea94754989 Jonathan Chocron 2019-09-12  366  
+60f5b73fa0f298 Rob Herring      2020-11-05  367  	return dw_pcie_host_init(&pci->pp);
+a8daea94754989 Jonathan Chocron 2019-09-12  368  }
+a8daea94754989 Jonathan Chocron 2019-09-12  369  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
