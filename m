@@ -1,161 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C311F709E;
-	Fri,  4 Apr 2025 15:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6601C207A0B
+	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 16:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743781962; cv=none; b=gwYqE+RH3psIdUSqpysIGHLhZIARYfAFMrIawsx02m665w25qTWGj05d9daOYzaj8b6SNVLt7X5mlhp8YykWnphMy+jAsEiPSTDCMkUKHqTfYSLaaj4ApY0z9967WDXXroS9czwP2g3x7sksoKnPrxA+zsOV+KHKXPfbFMZLC6k=
+	t=1743782819; cv=none; b=q6DezYM2ugFddDIJRv3h9WzhJt2BXzJPxPcAV2Tlj/Q5CyFmVIhK0D7wKkCi0YAGTHHe+zH1qRd6YFbQwNCEb9pnJK0+bDFIh3RcICE9JDuA/GyKe0w6RhoyQYJeTVqfCmEN22e1eu298ONRCxUjniBB5tFvUJfI6Bn89YTU4F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743781962; c=relaxed/simple;
-	bh=tLRjeNm3Sp+VIbaFEFA1cn56qdH8vBzWktqZzoueS18=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=piPFi2/ULrqxo9PFshyTeDKeN+ujrUL4oV4HYuASN6qp6ZI96jYRwhKhzid1v9FxiX/U0C53TMAXPritWazZcVNa1SynIIip055YvEQ/v5tYoGfsEx2SFJBw2tnipHfOtoKbVfhzfLzR2TyQj7SFjmfHs2h9ZaKsX0++UN0/9W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QE46X89S; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1743782819; c=relaxed/simple;
+	bh=iXVoP3wKEH70qKx98Hhc6Wogu3HSHe/ZVCwkUx8UtjI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vlo1hvTxPC8BHRBLkXIlTfsYYbZis6U6pZEEBSP8bbNQ4JokpF0tYveWqDwnWoBT7C3bW9NCwhm+abPf0RhR3/wDOIkW0mO/uvkVW1/sUAGGfJN3VxdNiniRAmDx81pNJ40dzzs56sYVEAbJSPS0V0KI117qiIfnELlVahMwp3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E7OT17KM; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QE46X89S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7OT17KM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743781960; x=1775317960;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tLRjeNm3Sp+VIbaFEFA1cn56qdH8vBzWktqZzoueS18=;
-  b=QE46X89Sf8KGR+OluQyng+CN/fUgO/ZZZjurkoJ8jOWxzf4HFxUJ+DC8
-   jntYXgVnGBfAnKGIGNPgVrEWKGOFN9oppcILCaf7jRRvONJEKwhhH4gIw
-   qA+EoC2f9vz0cNDfaFytLLjygdQfqEkcKTXR/qKTxuZPqjvQGBte/FgYf
-   x+fimd0twuvL/AYgKR6d4KBrH+5A24PnBMcfKo/2G8emaPPjwPgDXqtGj
-   4ZoCy4iP4mZaHgQ2uM1y16KnQGGr/r9F8iRB26kn+k534c1xrD9pAOfQP
-   PPNEW9II8nouaDRlxH99vuCVFhurNG4Ckd9QkH3kgVf/yNlQw0He70zNZ
+  t=1743782818; x=1775318818;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iXVoP3wKEH70qKx98Hhc6Wogu3HSHe/ZVCwkUx8UtjI=;
+  b=E7OT17KMCacw7nK9NnU+dHudIPOHltMbLEaGJxiuSFdYxw07MPTRja8A
+   KHUZFOXAs98V0CR4zrLux8oX6IDzuTB1CU0uvYcsyACC41gGMBaMwRmrF
+   zKlAJurRTsGbCwCnOfo1LKIsEWgkjrYnOK4FlZQjyNG1tD8r9lMmz0NtQ
+   DGVm0u1md23CbUAWPZvWJjSHZfFHXybkwgl6z+7z9CexxKgD+LTluRNYu
+   SE8A37+vgagqCGGzgyXZ5iUcDszWXJmTcgQ4tVlzlq0p0R1J8GA6QA36O
+   5E233rgl+4JGKkQ0vMfcn5mgtiKb8RryyPt3ICcC5dzAADex0FBvUieoQ
    g==;
-X-CSE-ConnectionGUID: BE6NE+UIRyqZnQNU8Rruag==
-X-CSE-MsgGUID: tRhslTjXS52nFEu4w04/Pg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="67698345"
+X-CSE-ConnectionGUID: WR0+b7CkR5u67BQ8zb3aKQ==
+X-CSE-MsgGUID: rEIRjzh3SXu0IZMqHuoQOw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="49022875"
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="67698345"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 08:52:39 -0700
-X-CSE-ConnectionGUID: PyTGTkVYRLWjV/GY60lRDw==
-X-CSE-MsgGUID: tRT3smCcTLGfe0LW12bUYg==
+   d="scan'208";a="49022875"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:06:57 -0700
+X-CSE-ConnectionGUID: cO+Z9NzfR/u/1zgGGwdspw==
+X-CSE-MsgGUID: 96Ikxg4US7+bKvi55n+CVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="127860931"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 04 Apr 2025 08:52:37 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u0jLO-0001Lv-0v;
-	Fri, 04 Apr 2025 15:52:34 +0000
-Date: Fri, 4 Apr 2025 23:52:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, gregkh@linuxfoundation.org,
-	philipp.g.hortmann@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH] staging: rtl8723bs: Add error handling for sd_read().
-Message-ID: <202504042334.1pXFeKzN-lkp@intel.com>
-References: <20250403093741.2372-1-vulab@iscas.ac.cn>
+   d="scan'208";a="164554384"
+Received: from daliomra-mobl3.amr.corp.intel.com (HELO [10.124.223.29]) ([10.124.223.29])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:06:54 -0700
+Message-ID: <3fd46452-fc96-4d50-9c40-a8a453d58f40@intel.com>
+Date: Fri, 4 Apr 2025 09:06:51 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250403093741.2372-1-vulab@iscas.ac.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/14] x86: Add arch specific kasan functions
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, hpa@zytor.com,
+ hch@infradead.org, nick.desaulniers+lkml@gmail.com,
+ kuan-ying.lee@canonical.com, masahiroy@kernel.org,
+ samuel.holland@sifive.com, mingo@redhat.com, corbet@lwn.net,
+ ryabinin.a.a@gmail.com, guoweikang.kernel@gmail.com, jpoimboe@kernel.org,
+ ardb@kernel.org, vincenzo.frascino@arm.com, glider@google.com,
+ kirill.shutemov@linux.intel.com, apopple@nvidia.com,
+ samitolvanen@google.com, kaleshsingh@google.com, jgross@suse.com,
+ andreyknvl@gmail.com, scott@os.amperecomputing.com, tony.luck@intel.com,
+ dvyukov@google.com, pasha.tatashin@soleen.com, ziy@nvidia.com,
+ broonie@kernel.org, gatlin.newhouse@gmail.com, jackmanb@google.com,
+ wangkefeng.wang@huawei.com, thiago.bauermann@linaro.org, tglx@linutronix.de,
+ kees@kernel.org, akpm@linux-foundation.org, jason.andryuk@amd.com,
+ snovitoll@gmail.com, xin@zytor.com, jan.kiszka@siemens.com, bp@alien8.de,
+ rppt@kernel.org, peterz@infradead.org, pankaj.gupta@amd.com,
+ thuth@redhat.com, andriy.shevchenko@linux.intel.com,
+ joel.granados@kernel.org, kbingham@kernel.org, nicolas@fjasle.eu,
+ mark.rutland@arm.com, surenb@google.com, catalin.marinas@arm.com,
+ morbo@google.com, justinstitt@google.com, ubizjak@gmail.com,
+ jhubbard@nvidia.com, urezki@gmail.com, dave.hansen@linux.intel.com,
+ bhe@redhat.com, luto@kernel.org, baohua@kernel.org, nathan@kernel.org,
+ will@kernel.org, brgerst@gmail.com
+Cc: llvm@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
+References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
+ <e06c7c0fdbad7044f150891d827393665c5742fd.1743772053.git.maciej.wieczor-retman@intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <e06c7c0fdbad7044f150891d827393665c5742fd.1743772053.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Wentao,
+On 4/4/25 06:14, Maciej Wieczor-Retman wrote:
+> +static inline const void *__tag_set(const void *addr, u8 tag)
+> +{
+> +	u64 __addr = (u64)addr & ~__tag_shifted(KASAN_TAG_KERNEL);
+> +	return (const void *)(__addr | __tag_shifted(tag));
+> +}
 
-kernel test robot noticed the following build warnings:
+This becomes a lot clearer to read if you separate out the casting from
+the logical bit manipulation. For instance:
 
-[auto build test WARNING on staging/staging-testing]
+static inline const void *__tag_set(const void *__addr, u8 tag)
+{
+	u64 addr = (u64)__addr;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/staging-rtl8723bs-Add-error-handling-for-sd_read/20250403-174101
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250403093741.2372-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] staging: rtl8723bs: Add error handling for sd_read().
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250404/202504042334.1pXFeKzN-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504042334.1pXFeKzN-lkp@intel.com/reproduce)
+	addr &= ~__tag_shifted(KASAN_TAG_KERNEL);
+	addr |= __tag_shifted(tag);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504042334.1pXFeKzN-lkp@intel.com/
+	return (const void *)addr;
+}
 
-All warnings (new ones prefixed by >>):
+Also, unless there's a good reason for it, you might as well limit the
+places you need to use "__".
 
->> drivers/staging/rtl8723bs/hal/sdio_ops.c:189:7: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     189 |                 if (!err) {
-         |                     ^~~~
-   drivers/staging/rtl8723bs/hal/sdio_ops.c:196:9: note: uninitialized use occurs here
-     196 |         return val;
-         |                ^~~
-   drivers/staging/rtl8723bs/hal/sdio_ops.c:189:3: note: remove the 'if' if its condition is always true
-     189 |                 if (!err) {
-         |                 ^~~~~~~~~
-   drivers/staging/rtl8723bs/hal/sdio_ops.c:159:9: note: initialize the variable 'val' to silence this warning
-     159 |         u32 val;
-         |                ^
-         |                 = 0
-   1 warning generated.
+Now that we can read this, I think it's potentially buggy. If someone
+went and changed:
 
+#define KASAN_TAG_KERNEL	0xFF
 
-vim +189 drivers/staging/rtl8723bs/hal/sdio_ops.c
+to, say:
 
-   150	
-   151	static u32 sdio_read32(struct intf_hdl *intfhdl, u32 addr)
-   152	{
-   153		struct adapter *adapter;
-   154		u8 mac_pwr_ctrl_on;
-   155		u8 device_id;
-   156		u16 offset;
-   157		u32 ftaddr;
-   158		u8 shift;
-   159		u32 val;
-   160		s32 __maybe_unused err;
-   161		__le32 le_tmp;
-   162	
-   163		adapter = intfhdl->padapter;
-   164		ftaddr = _cvrt2ftaddr(addr, &device_id, &offset);
-   165	
-   166		rtw_hal_get_hwreg(adapter, HW_VAR_APFM_ON_MAC, &mac_pwr_ctrl_on);
-   167		if (
-   168			((device_id == WLAN_IOREG_DEVICE_ID) && (offset < 0x100)) ||
-   169			(!mac_pwr_ctrl_on) ||
-   170			(adapter_to_pwrctl(adapter)->fw_current_in_ps_mode)
-   171		) {
-   172			err = sd_cmd52_read(intfhdl, ftaddr, 4, (u8 *)&le_tmp);
-   173			return le32_to_cpu(le_tmp);
-   174		}
-   175	
-   176		/*  4 bytes alignment */
-   177		shift = ftaddr & 0x3;
-   178		if (shift == 0) {
-   179			val = sd_read32(intfhdl, ftaddr, NULL);
-   180		} else {
-   181			u8 *tmpbuf;
-   182	
-   183			tmpbuf = rtw_malloc(8);
-   184			if (!tmpbuf)
-   185				return SDIO_ERR_VAL32;
-   186	
-   187			ftaddr &= ~(u16)0x3;
-   188			err = sd_read(intfhdl, ftaddr, 8, tmpbuf);
- > 189			if (!err) {
-   190				memcpy(&le_tmp, tmpbuf + shift, 4);
-   191				val = le32_to_cpu(le_tmp);
-   192			}
-   193	
-   194			kfree(tmpbuf);
-   195		}
-   196		return val;
-   197	}
-   198	
+#define KASAN_TAG_KERNEL	0xAB
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+the '&' would miss clearing bits. It works fine in the arm64 implementation:
+
+	u64 __addr = (u64)addr & ~__tag_shifted(0xff);
+
+because they've hard-coded 0xff. I _think_ that's what you actually want
+here. You don't want to mask out KASAN_TAG_KERNEL, you actually want to
+mask out *ANYTHING* in those bits.
+
+So the best thing is probably to define a KASAN_TAG_MASK that makes it
+clear which are the tag bits.
