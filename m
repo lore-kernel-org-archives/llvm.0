@@ -1,140 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D14210184
-	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 16:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7971D20B7E1;
+	Fri,  4 Apr 2025 17:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743785997; cv=none; b=KdR7MNxbZWRb1h9j/vI5tgE8rKPPN3P/LurWBK0TR+w2qZ6DWhSKW5E3sK6jU6mkJ/ettNe7m+NHbkO+JSLkLCwD5og6M1+fLY+d7ooeINzc10NV+OAjKtb8uVEVGyK/qFcDEhsc0owvR28LNjxjk4Uec19UMSSVk0kwnkRwHkQ=
+	t=1743786290; cv=none; b=jOWZALa31BMMW2xlBs7TTAIVBQ0+Axyw9AaoyzrryjGQ6B6e/8QSRciZc2t0J185Hjt8ugN4ZyDyIp1alMi7gbobB/279/9hecbd3hKbelQ1XE+uIgFzm9B/daJIcLShMSE9QP2s5D0IRY3tUbawHCQ78WlmwIQGYs3GCMpydJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743785997; c=relaxed/simple;
-	bh=16EO5gHAYM3HfAoKbUWH4VAGtB0baKyya/lFzoHjEKQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qNiXkcJ9pKSWgYweiZncH4cKu5a94Hidf6w/IoCi6AHW9880bKePFa6u6+V9J1sb4aK72gP0rzlLteqZCUi2F2SAdfpcNY0EEmA2wqwmTBCcWAepa32UUu+OfG+d308OAbYM8n7qICATf+gfqcuupP0d4AeioPCnwoLNrmP2j5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kfPOXemb; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1743786290; c=relaxed/simple;
+	bh=PQ6GEgfzTsDd4LfloGZIp4yubtkGdlsZsPlhKlMxjt0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kK9VUvqLo2Eqp1LBiEDfxDmTz+d9rmVorVy8KskN4Qr5snkd1kpMx8CduGVBXPb8gf7lo3YtqngkxtRkUK9slgBezW2yfdhVrGNJ8iBLqqijAlUDTI1IVyF8FmW/RcgNgwJow21TU3i6gWQR363JzHmisvtkYerT/96sUHnB2Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kwgUf7GO; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kfPOXemb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kwgUf7GO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743785996; x=1775321996;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=16EO5gHAYM3HfAoKbUWH4VAGtB0baKyya/lFzoHjEKQ=;
-  b=kfPOXembZyt0uV9SfmV6g32/J/GKnd3E73DLGXcz0hG5utrYY97QO+bv
-   zIkf6fzMyWGgo2P0rXKzW57dEFxRYhxs5waJwezdBuN7N7WNlMpN3p2jf
-   G5nmz27+09ZbAxdePP9iOYVXwZf7mHxp2/BqC0ipIVizmBbs25+9DBViJ
-   WczpqiVK/j9UWRqpz2njhl9wN+rxMyTe7Vn3eb8djA+Y1ewNxqghb+F7x
-   yAY09Jbg8b3PyzQKc1J41zGLJ07K7FpfN1br4BlQ1rioe46vd3jsTUzOb
-   5vRanaVPt3VZmMtYbwuseymMogypLXxIrLCdblwcCjjtJhzJR1Z02cvHn
-   A==;
-X-CSE-ConnectionGUID: PoMxxlJbS/+gG5OfpE3wqg==
-X-CSE-MsgGUID: pkAxE9d1Q7OB/mbInpE91A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="45323562"
+  t=1743786289; x=1775322289;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PQ6GEgfzTsDd4LfloGZIp4yubtkGdlsZsPlhKlMxjt0=;
+  b=kwgUf7GOStDgG5qxGDFyHYeGcGJtz3CzJGoRR0a/+DRqoC5sh1BQg7hK
+   Aqsfg3qLLQo99ydqGy4ZoHUFlvHNjWjV1YPqZo4fCno8eDqg24QLhNyPu
+   G0GXOgLR/dwfPVKRKnWZWbChO4MMl4CD+Iy+TO+qNZRX2q/aGVttRvUk5
+   QT1YqTP64ShLtLk39S4EqBDUEWN1sVCktaK8ZaCMgMM/rpnROIKPzlqsW
+   PW+UzN4HhU79RwIBGx0gbXkrwtc716CzyPtx83uMhkOqfnFPGyUlik7yD
+   retD+g1v/f+6Svzjd4N7cYeims/okRg0PG/t/RYiKJscRAJtjUEAaXvTt
+   g==;
+X-CSE-ConnectionGUID: MPxUeMPYTr+BFmkXzFeUuQ==
+X-CSE-MsgGUID: NtnnbzqQRnemu9h1JI015w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="49027887"
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="45323562"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:59:55 -0700
-X-CSE-ConnectionGUID: nVEgby4lRBOEOo0i/NiK6Q==
-X-CSE-MsgGUID: CnVOypTjRUKrXxLXzYnmog==
+   d="scan'208";a="49027887"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 10:04:46 -0700
+X-CSE-ConnectionGUID: v3LFnNyOSYSbfGh5wqXLTg==
+X-CSE-MsgGUID: etzyF26PQNCgTOf30FaNag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="127875646"
-Received: from daliomra-mobl3.amr.corp.intel.com (HELO [10.124.223.29]) ([10.124.223.29])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:59:51 -0700
-Message-ID: <ceade208-c585-48e7-aafe-4599b1a06b81@intel.com>
-Date: Fri, 4 Apr 2025 09:59:49 -0700
+   d="scan'208";a="132564002"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 04 Apr 2025 10:04:43 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0kTB-0001PV-1d;
+	Fri, 04 Apr 2025 17:04:41 +0000
+Date: Sat, 5 Apr 2025 01:04:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nam Cao <namcao@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:timers/cleanups 5/10] kernel/time/timer_list.c:49:77: error:
+ too few arguments provided to function-like macro invocation
+Message-ID: <202504050045.fyyfMGEQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/14] x86: Minimal SLAB alignment
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, hpa@zytor.com,
- hch@infradead.org, nick.desaulniers+lkml@gmail.com,
- kuan-ying.lee@canonical.com, masahiroy@kernel.org,
- samuel.holland@sifive.com, mingo@redhat.com, corbet@lwn.net,
- ryabinin.a.a@gmail.com, guoweikang.kernel@gmail.com, jpoimboe@kernel.org,
- ardb@kernel.org, vincenzo.frascino@arm.com, glider@google.com,
- kirill.shutemov@linux.intel.com, apopple@nvidia.com,
- samitolvanen@google.com, kaleshsingh@google.com, jgross@suse.com,
- andreyknvl@gmail.com, scott@os.amperecomputing.com, tony.luck@intel.com,
- dvyukov@google.com, pasha.tatashin@soleen.com, ziy@nvidia.com,
- broonie@kernel.org, gatlin.newhouse@gmail.com, jackmanb@google.com,
- wangkefeng.wang@huawei.com, thiago.bauermann@linaro.org, tglx@linutronix.de,
- kees@kernel.org, akpm@linux-foundation.org, jason.andryuk@amd.com,
- snovitoll@gmail.com, xin@zytor.com, jan.kiszka@siemens.com, bp@alien8.de,
- rppt@kernel.org, peterz@infradead.org, pankaj.gupta@amd.com,
- thuth@redhat.com, andriy.shevchenko@linux.intel.com,
- joel.granados@kernel.org, kbingham@kernel.org, nicolas@fjasle.eu,
- mark.rutland@arm.com, surenb@google.com, catalin.marinas@arm.com,
- morbo@google.com, justinstitt@google.com, ubizjak@gmail.com,
- jhubbard@nvidia.com, urezki@gmail.com, dave.hansen@linux.intel.com,
- bhe@redhat.com, luto@kernel.org, baohua@kernel.org, nathan@kernel.org,
- will@kernel.org, brgerst@gmail.com
-Cc: llvm@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
-References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
- <173d99afea37321e76e9380b49bd5966be8db849.1743772053.git.maciej.wieczor-retman@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <173d99afea37321e76e9380b49bd5966be8db849.1743772053.git.maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4/4/25 06:14, Maciej Wieczor-Retman wrote:
-> Adjust x86 minimal SLAB alignment to match KASAN granularity size. In
-> tag-based mode the size changes to 16 bytes so the value needs to be 16.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/cleanups
+head:   5c4da3a96bf484f965057c281f1ef48ac46987bc
+commit: 9453228aa82f20c07670d22c3d54f1be6c4244b4 [5/10] hrtimers: Make callback function pointer private
+config: hexagon-randconfig-002-20250404 (https://download.01.org/0day-ci/archive/20250405/202504050045.fyyfMGEQ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504050045.fyyfMGEQ-lkp@intel.com/reproduce)
 
-I feel like we need a _bit_ of a discussion of the impact here. We are,
-after all, trying to get this feature into shape so that it can be used
-more widely outside of just debugging environments.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504050045.fyyfMGEQ-lkp@intel.com/
 
-What's the impact of this in a production environment?
+All errors (new ones prefixed by >>):
+
+>> kernel/time/timer_list.c:49:77: error: too few arguments provided to function-like macro invocation
+      49 |         SEQ_printf(m, " #%d: <%p>, %ps", idx, taddr, ACCESS_PRIVATE(timer->function));
+         |                                                                                    ^
+   include/linux/compiler_types.h:78:10: note: macro 'ACCESS_PRIVATE' defined here
+      78 | # define ACCESS_PRIVATE(p, member) ((p)->member)
+         |          ^
+>> kernel/time/timer_list.c:49:47: error: use of undeclared identifier 'ACCESS_PRIVATE'
+      49 |         SEQ_printf(m, " #%d: <%p>, %ps", idx, taddr, ACCESS_PRIVATE(timer->function));
+         |                                                      ^
+   2 errors generated.
+
+
+vim +49 kernel/time/timer_list.c
+
+    44	
+    45	static void
+    46	print_timer(struct seq_file *m, struct hrtimer *taddr, struct hrtimer *timer,
+    47		    int idx, u64 now)
+    48	{
+  > 49		SEQ_printf(m, " #%d: <%p>, %ps", idx, taddr, ACCESS_PRIVATE(timer->function));
+    50		SEQ_printf(m, ", S:%02x", timer->state);
+    51		SEQ_printf(m, "\n");
+    52		SEQ_printf(m, " # expires at %Lu-%Lu nsecs [in %Ld to %Ld nsecs]\n",
+    53			(unsigned long long)ktime_to_ns(hrtimer_get_softexpires(timer)),
+    54			(unsigned long long)ktime_to_ns(hrtimer_get_expires(timer)),
+    55			(long long)(ktime_to_ns(hrtimer_get_softexpires(timer)) - now),
+    56			(long long)(ktime_to_ns(hrtimer_get_expires(timer)) - now));
+    57	}
+    58	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
