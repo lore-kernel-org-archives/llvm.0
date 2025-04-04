@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6601C207A0B
-	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 16:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D134D1F4E47
+	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 16:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743782819; cv=none; b=q6DezYM2ugFddDIJRv3h9WzhJt2BXzJPxPcAV2Tlj/Q5CyFmVIhK0D7wKkCi0YAGTHHe+zH1qRd6YFbQwNCEb9pnJK0+bDFIh3RcICE9JDuA/GyKe0w6RhoyQYJeTVqfCmEN22e1eu298ONRCxUjniBB5tFvUJfI6Bn89YTU4F4=
+	t=1743784986; cv=none; b=Pt1TC4dvAC670M6KG6cb4kfivRdOJX/Exo1bjvXc+z4t3ZoHtHBXaHaUqxZwKcCWzk5WWg2pdQFi6HfdG5K42qtrevWIWzZzqndo+jIsG5xm3V3gJI1oov8F4nVQIsBa/nz5Z8A2Qq58czUpEXNoo/Kj8F4vO8ebQL0cBc5gWdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743782819; c=relaxed/simple;
-	bh=iXVoP3wKEH70qKx98Hhc6Wogu3HSHe/ZVCwkUx8UtjI=;
+	s=arc-20240116; t=1743784986; c=relaxed/simple;
+	bh=ayFfjprWbAEYcS3LTd7+T5khf0vhzbC7c/TA3bU+bmo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vlo1hvTxPC8BHRBLkXIlTfsYYbZis6U6pZEEBSP8bbNQ4JokpF0tYveWqDwnWoBT7C3bW9NCwhm+abPf0RhR3/wDOIkW0mO/uvkVW1/sUAGGfJN3VxdNiniRAmDx81pNJ40dzzs56sYVEAbJSPS0V0KI117qiIfnELlVahMwp3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E7OT17KM; arc=none smtp.client-ip=198.175.65.14
+	 In-Reply-To:Content-Type; b=UQrOxaDdGy6kjK9re3MbsO3pZeh/qEYy7fK7A75flG0EKpX0l1dcJimqXbtDU5ifPbkr1AYzhuVoi25H/5opmxlkyR+eliqVV0vxQtkt7Pje/sbLK9ojRKJ6am6boUYWSML72XbwRdX4rylX1L33mq8gbC1cLy7kDolGuHADIfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lxatC83k; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7OT17KM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lxatC83k"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743782818; x=1775318818;
+  t=1743784985; x=1775320985;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=iXVoP3wKEH70qKx98Hhc6Wogu3HSHe/ZVCwkUx8UtjI=;
-  b=E7OT17KMCacw7nK9NnU+dHudIPOHltMbLEaGJxiuSFdYxw07MPTRja8A
-   KHUZFOXAs98V0CR4zrLux8oX6IDzuTB1CU0uvYcsyACC41gGMBaMwRmrF
-   zKlAJurRTsGbCwCnOfo1LKIsEWgkjrYnOK4FlZQjyNG1tD8r9lMmz0NtQ
-   DGVm0u1md23CbUAWPZvWJjSHZfFHXybkwgl6z+7z9CexxKgD+LTluRNYu
-   SE8A37+vgagqCGGzgyXZ5iUcDszWXJmTcgQ4tVlzlq0p0R1J8GA6QA36O
-   5E233rgl+4JGKkQ0vMfcn5mgtiKb8RryyPt3ICcC5dzAADex0FBvUieoQ
-   g==;
-X-CSE-ConnectionGUID: WR0+b7CkR5u67BQ8zb3aKQ==
-X-CSE-MsgGUID: rEIRjzh3SXu0IZMqHuoQOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="49022875"
+  bh=ayFfjprWbAEYcS3LTd7+T5khf0vhzbC7c/TA3bU+bmo=;
+  b=lxatC83kcd6Ob7PcGlbGvmpI44y75SAjgZ+vsH4c7P3Iarb08F0DwjxQ
+   zdzKoJF9XTHedlmQsoO3bl7J7Re9yRsS2ptvT80wH0Ft2INjrib4dFRft
+   ZbpjYNsT6U0L/ktXWIEQQmwywr8drQEKWOtf8KSIhhkoDVfG/3Z5S9fGW
+   iXr8xnBgBKUeRxpyDm0qrl9KgEMiQGMcVswLzXrjh1V41Iu11agJmFUVT
+   E49IWLtAfUzKKoiuK05k8DoS3A1wgErGipGTUOzXvnTZR+Si/mVPHo361
+   lSl9surpw2V/S0vxBem4zKbpXlI/uznmPrGcJIjDgK3ZOmFopDmdSHYoV
+   Q==;
+X-CSE-ConnectionGUID: FSSIdywnR4Om5k7+GgLJbQ==
+X-CSE-MsgGUID: tOjk44SBRvy/TBYqP9Df8Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="62631328"
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="49022875"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:06:57 -0700
-X-CSE-ConnectionGUID: cO+Z9NzfR/u/1zgGGwdspw==
-X-CSE-MsgGUID: 96Ikxg4US7+bKvi55n+CVw==
+   d="scan'208";a="62631328"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:43:04 -0700
+X-CSE-ConnectionGUID: PNDCImh2SwmUq/OXMReN8A==
+X-CSE-MsgGUID: 2z30JdBbQJeAh01BitZsnQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="164554384"
+   d="scan'208";a="127247176"
 Received: from daliomra-mobl3.amr.corp.intel.com (HELO [10.124.223.29]) ([10.124.223.29])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:06:54 -0700
-Message-ID: <3fd46452-fc96-4d50-9c40-a8a453d58f40@intel.com>
-Date: Fri, 4 Apr 2025 09:06:51 -0700
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 09:42:57 -0700
+Message-ID: <257b39a5-69bf-4e6d-844b-576e9c9d2e7d@intel.com>
+Date: Fri, 4 Apr 2025 09:42:55 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,7 +52,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/14] x86: Add arch specific kasan functions
+Subject: Re: [PATCH v3 05/14] x86: Reset tag for virtual to physical address
+ conversions
 To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, hpa@zytor.com,
  hch@infradead.org, nick.desaulniers+lkml@gmail.com,
  kuan-ying.lee@canonical.com, masahiroy@kernel.org,
@@ -79,7 +80,7 @@ Cc: llvm@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
  linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
 References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
- <e06c7c0fdbad7044f150891d827393665c5742fd.1743772053.git.maciej.wieczor-retman@intel.com>
+ <a8332a2dc5b21bd8533ea38da258c093fb9f2fe2.1743772053.git.maciej.wieczor-retman@intel.com>
 From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -125,49 +126,58 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <e06c7c0fdbad7044f150891d827393665c5742fd.1743772053.git.maciej.wieczor-retman@intel.com>
+In-Reply-To: <a8332a2dc5b21bd8533ea38da258c093fb9f2fe2.1743772053.git.maciej.wieczor-retman@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 4/4/25 06:14, Maciej Wieczor-Retman wrote:
-> +static inline const void *__tag_set(const void *addr, u8 tag)
-> +{
-> +	u64 __addr = (u64)addr & ~__tag_shifted(KASAN_TAG_KERNEL);
-> +	return (const void *)(__addr | __tag_shifted(tag));
-> +}
+> +#ifdef CONFIG_KASAN_SW_TAGS
+> +#define page_to_virt(x)	({									\
+> +	__typeof__(x) __page = x;								\
+> +	void *__addr = __va(page_to_pfn((__typeof__(x))__tag_reset(__page)) << PAGE_SHIFT);	\
+> +	(void *)__tag_set((const void *)__addr, page_kasan_tag(__page));			\
+> +})
+> +#endif
 
-This becomes a lot clearer to read if you separate out the casting from
-the logical bit manipulation. For instance:
+Is this #ifdef needed?
 
-static inline const void *__tag_set(const void *__addr, u8 tag)
-{
-	u64 addr = (u64)__addr;
+I thought there were stub versions of all of those tag functions. So it
+should be harmless to use this page_to_virt() implementation with or
+without KASAN. Right?
 
-	addr &= ~__tag_shifted(KASAN_TAG_KERNEL);
-	addr |= __tag_shifted(tag);
+I'm also confused by the implementation. This is one reason why I rather
+dislike macros. Why does this act like the type of 'x' is variable?
+Isn't it always a 'struct page *'? If so, then why all of the
+__typeof__()'s?
 
-	return (const void *)addr;
-}
+Are struct page pointers _ever_ tagged? If they are, then doesn't
+page_to_pfn() need to handle untagging as well? If they aren't, then
+there's no reason to __tag_reset() in here.
 
-Also, unless there's a good reason for it, you might as well limit the
-places you need to use "__".
+What was the thinking behind this cast:
 
-Now that we can read this, I think it's potentially buggy. If someone
-went and changed:
+	(const void *)__addr
 
-#define KASAN_TAG_KERNEL	0xFF
+?
 
-to, say:
+Are any of these casts _doing_ anything? I'm struggling to find anything
+wrong with:
 
-#define KASAN_TAG_KERNEL	0xAB
+#define page_to_virt(x)	({													
+	void *__addr = __va(page_to_pfn(__page) << PAGE_SHIFT);
+	__tag_set(__addr, page_kasan_tag(x))
+})
 
-the '&' would miss clearing bits. It works fine in the arm64 implementation:
+... which made me look back at:
 
-	u64 __addr = (u64)addr & ~__tag_shifted(0xff);
+	static inline const void *__tag_set(const void *addr, u8 tag)
 
-because they've hard-coded 0xff. I _think_ that's what you actually want
-here. You don't want to mask out KASAN_TAG_KERNEL, you actually want to
-mask out *ANYTHING* in those bits.
+from patch 3. I don't think the 'const' makes any sense on the return
+value here. Surely the memory pointed at by a tagged pointer doesn't
+need to be const. Why should the tag setting function be returning a
+const pointer?
 
-So the best thing is probably to define a KASAN_TAG_MASK that makes it
-clear which are the tag bits.
+I can see why it would *take* a const pointer since it's not modifying
+the memory, but I don't see why it is returning one.
+
+
