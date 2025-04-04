@@ -1,242 +1,282 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DC2214A66
-	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 18:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2B818BC3B;
+	Fri,  4 Apr 2025 21:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743790101; cv=none; b=E0M1F4azYJ8bc5AoSaNKAG0BhpoAavnr2eqkwbrKMAaOWkS6MLaIbwAcwtwBY4W7JNCGqCUaokIAnv5CoGuw1wnPiJU9s6qAVQMM16sH2RsIsqItR2VfnkxtKl/QLmz95MYECKP2KRcmymwe0mSHW3KNAqaoQj7mOtHYBsbeTYg=
+	t=1743802991; cv=none; b=D8X/Y8j2mQxD/vNeJH0B7dcnYtpYvJQ8DF9+s6yOm4V3P/WCzGkFK9ORfRywsYRpj6cywdBNzwoxi+JAFw065UvK+3JLPW4DfISZs4OwdykmeG9MeGWuwYPxXCOP+VOOmpcvRlkam3EuQeno2jO048t2DUoJGCpYb05lJBldDKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743790101; c=relaxed/simple;
-	bh=6cHkeL6FETpmpby8P+Sxg8uzoqLOjkiDsJMX9VjwYsE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s6NC7d8JGyuBPTkDvpw985wHqt8eFlFg40fOKXiJ6RgRI6HvJaQGfCw0EbUaYefJBEp90+3KFFl+Hhx5i4kSOIEr8MGSwDUI+8KywJoJKxaIKelur8JBN0nhCPl1vgQPwgx+27/F5TH60Px5hvU3v3y9s1pZqjnRoZFvxP40o2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jLmSVK0m; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1743802991; c=relaxed/simple;
+	bh=e4pH7urb+e8HJNmGmYJuHzxYUIb5p0jUr75dyQlsqHE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Y3mjmvrBca0l7rzrvbUJh1BecDPl70ji1yT3F8nDuS5X7lkN8uuwwNAA0jfXzmAQUDGws9a6hUOhzeMCEtjKhWjI1Us8AF7v1aDWiTLxPB2USF8DZYQa23oIXx/Xu8EUMil4cCwjlvEwfGwE4VP1HCUvoPHHJQIy8bPZwOCmFJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XOWkqzTh; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jLmSVK0m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XOWkqzTh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743790100; x=1775326100;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6cHkeL6FETpmpby8P+Sxg8uzoqLOjkiDsJMX9VjwYsE=;
-  b=jLmSVK0mn0Cams6JBU9m7gcD/jMx9HYetIX0DQyW5YgDP2NenAaoNBt6
-   vToNxWyjcPTtMCSQqY1CqzIU7NJV6d6GzbNRviexXdWn9WvlFjJmBNebo
-   U1JYLVw2wiSl8eW/HAkQ8bmK5U+8DITmCpt9M0/EkFvFo0F4ebOO3afdt
-   H2bu1MAsYjgiRTtL9rRUSsbGlJXjWqaUHYT0Rj90SyOfT3bqoI3Lebirn
-   VSzybuz4X9P4R8GRZfceIMxC635c5du2DkQoTJp+5vYDtpTZ/V+dIOHly
-   MbMUfvUvmq93u77ifoopyrHWCzgwdKqbEpwEkFCrQhtKoiD5j8nrVrAOr
+  t=1743802988; x=1775338988;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e4pH7urb+e8HJNmGmYJuHzxYUIb5p0jUr75dyQlsqHE=;
+  b=XOWkqzThwiY2xkBjw0bsa8q56j+VICvDT/E8sG2jPgLWXmNSXTCB5Jl0
+   Tlsz7GeiQ+AYJud1R2TYp2dnOCfxpgc0u12TlPP+85To19u/FhE1Mdoca
+   W3o7VoeCJfCrhUbzPmhiHp3WY18X1QNKFIv4GHNSZyw+VzM2nPWYhnhsZ
+   H/UdNBvKYGi0kY5LbDFTvUw80PVTp+HxQVgSA2LGXF7/EmQRrdeHEBfKH
+   Znb/i7LhhacKK8b/4xNTduFAfE67RA7nwN15JicsiqE7rpNylBLwzIi4N
+   Gy1vo2RIeMRBckoYZhAieNnU2HBGT/qmlwILPlvnxY6wAcNKBfvkrD6VK
    w==;
-X-CSE-ConnectionGUID: raEX8IZ9Sc+gh34pGOwzYQ==
-X-CSE-MsgGUID: VPGMhZHtSHu5WUPs2PMsaQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="55871725"
+X-CSE-ConnectionGUID: 4UH1onr8RbOaftVGKeOuAw==
+X-CSE-MsgGUID: n63+I8+yQAWZPYjOf2HHgw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="45145274"
 X-IronPort-AV: E=Sophos;i="6.15,189,1739865600"; 
-   d="scan'208";a="55871725"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 11:08:18 -0700
-X-CSE-ConnectionGUID: 2p8hjetBSImgAuDysM4x7Q==
-X-CSE-MsgGUID: RysEYU0yQnqd7KpAb9OCrg==
+   d="scan'208";a="45145274"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 14:43:08 -0700
+X-CSE-ConnectionGUID: tRgMSssgQQ6mtfOWbjELGw==
+X-CSE-MsgGUID: r+Ga5SsNQf6G7UEcwNE9fg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,189,1739865600"; 
-   d="scan'208";a="158354509"
-Received: from daliomra-mobl3.amr.corp.intel.com (HELO [10.124.223.29]) ([10.124.223.29])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 11:08:14 -0700
-Message-ID: <fb0d5f33-4636-4de0-82f4-93a9def63a26@intel.com>
-Date: Fri, 4 Apr 2025 11:08:12 -0700
+   d="scan'208";a="131555141"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 04 Apr 2025 14:43:06 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0ooa-0001ZF-23;
+	Fri, 04 Apr 2025 21:43:04 +0000
+Date: Sat, 5 Apr 2025 05:42:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:timers/cleanups 1/11] drivers/usb/host/xhci.c:5360:23: warning:
+ shift count >= width of type
+Message-ID: <202504050549.Y7oahYox-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 13/14] mm: Unpoison pcpu chunks with base address tag
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, hpa@zytor.com,
- hch@infradead.org, nick.desaulniers+lkml@gmail.com,
- kuan-ying.lee@canonical.com, masahiroy@kernel.org,
- samuel.holland@sifive.com, mingo@redhat.com, corbet@lwn.net,
- ryabinin.a.a@gmail.com, guoweikang.kernel@gmail.com, jpoimboe@kernel.org,
- ardb@kernel.org, vincenzo.frascino@arm.com, glider@google.com,
- kirill.shutemov@linux.intel.com, apopple@nvidia.com,
- samitolvanen@google.com, kaleshsingh@google.com, jgross@suse.com,
- andreyknvl@gmail.com, scott@os.amperecomputing.com, tony.luck@intel.com,
- dvyukov@google.com, pasha.tatashin@soleen.com, ziy@nvidia.com,
- broonie@kernel.org, gatlin.newhouse@gmail.com, jackmanb@google.com,
- wangkefeng.wang@huawei.com, thiago.bauermann@linaro.org, tglx@linutronix.de,
- kees@kernel.org, akpm@linux-foundation.org, jason.andryuk@amd.com,
- snovitoll@gmail.com, xin@zytor.com, jan.kiszka@siemens.com, bp@alien8.de,
- rppt@kernel.org, peterz@infradead.org, pankaj.gupta@amd.com,
- thuth@redhat.com, andriy.shevchenko@linux.intel.com,
- joel.granados@kernel.org, kbingham@kernel.org, nicolas@fjasle.eu,
- mark.rutland@arm.com, surenb@google.com, catalin.marinas@arm.com,
- morbo@google.com, justinstitt@google.com, ubizjak@gmail.com,
- jhubbard@nvidia.com, urezki@gmail.com, dave.hansen@linux.intel.com,
- bhe@redhat.com, luto@kernel.org, baohua@kernel.org, nathan@kernel.org,
- will@kernel.org, brgerst@gmail.com
-Cc: llvm@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
-References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
- <61033ef5b70277039ceeb8f6173e8b3fbc271c08.1743772053.git.maciej.wieczor-retman@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <61033ef5b70277039ceeb8f6173e8b3fbc271c08.1743772053.git.maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4/4/25 06:14, Maciej Wieczor-Retman wrote:
-> The problem presented here is related to NUMA systems and tag-based
-> KASAN mode. Getting to it can be explained in the following points:
-> 
-> 	1. A new chunk is created with pcpu_create_chunk() and
-> 	   vm_structs are allocated. On systems with one NUMA node only
-> 	   one is allocated, but with more NUMA nodes at least a second
-> 	   one will be allocated too.
-> 
-> 	2. chunk->base_addr is assigned the modified value of
-> 	   vms[0]->addr and thus inherits the tag of this allocated
-> 	   structure.
-> 
-> 	3. In pcpu_alloc() for each possible cpu pcpu_chunk_addr() is
-> 	   executed which calculates per cpu pointers that correspond to
-> 	   the vms structure addresses. The calculations are based on
-> 	   adding an offset from a table to chunk->base_addr.
-> 
-> Here the problem presents itself since for addresses based on vms[1] and
-> up, the tag will be different than the ones based on vms[0] (base_addr).
-> The tag mismatch happens and an error is reported.
-> 
-> Unpoison all the vms[]->addr with the same tag to resolve the mismatch.
+Hi Thomas,
 
-I think there's a bit too much superfluous information in there. For
-instance, it's not important to talk about how or why there can be more
-than one chunk, just say there _can_ be more than one.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-	1. There can be more than one chunk
-	2. The chunks are virtually contiguous
-	3. Since they are virtually contiguous, the chunks are all
-	   addressed from a single base address
-	4. The base address has a tag
-	5. The base address points at the first chunk and thus inherits
-	   the tag of the first chunk
-	6. The subsequent chunks will be accessed with the tag from the
-	   first chunk
-	7. Thus, the subsequent chunks need to have their tag set to
-	   match that of the first chunk.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/cleanups
+head:   b33f0e454c28ce1fd504367575accecdf4c64dc3
+commit: 6bcfaeda89efec08e5fb2010927a1cf4e89f0f4d [1/11] treewide: Switch to timer_delete[_sync]()
+config: i386-buildonly-randconfig-002-20250405 (https://download.01.org/0day-ci/archive/20250405/202504050549.Y7oahYox-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504050549.Y7oahYox-lkp@intel.com/reproduce)
 
-Right?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504050549.Y7oahYox-lkp@intel.com/
 
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index 54481f8c30c5..bd033b2ba383 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -613,6 +613,13 @@ static __always_inline void kasan_poison_vmalloc(const void *start,
->  		__kasan_poison_vmalloc(start, size);
->  }
->  
-> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms);
-> +static __always_inline void kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{
-> +	if (kasan_enabled())
-> +		__kasan_unpoison_vmap_areas(vms, nr_vms);
-> +}
-> +
->  #else /* CONFIG_KASAN_VMALLOC */
->  
->  static inline void kasan_populate_early_vm_area_shadow(void *start,
-> @@ -637,6 +644,9 @@ static inline void *kasan_unpoison_vmalloc(const void *start,
->  static inline void kasan_poison_vmalloc(const void *start, unsigned long size)
->  { }
->  
-> +static inline void kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{ }
-> +
->  #endif /* CONFIG_KASAN_VMALLOC */
->  
->  #if (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)) && \
-> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-> index 88d1c9dcb507..9496f256bc0f 100644
-> --- a/mm/kasan/shadow.c
-> +++ b/mm/kasan/shadow.c
-> @@ -582,6 +582,17 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
->  	kasan_poison(start, size, KASAN_VMALLOC_INVALID, false);
->  }
->  
-> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{
-> +	int area;
-> +
-> +	for (area = 0 ; area < nr_vms ; area++) {
-> +		kasan_poison(vms[area]->addr, vms[area]->size,
-> +			     arch_kasan_get_tag(vms[0]->addr), false);
-> +		arch_kasan_set_tag(vms[area]->addr, arch_kasan_get_tag(vms[0]->addr));
-> +	}
-> +}
+All warnings (new ones prefixed by >>):
 
--ENOCOMMENTS
+   drivers/usb/host/xhci.c:1074:4: error: call to undeclared function 'timer_delele_sync'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1074 |                         timer_delele_sync(&xhci->comp_mode_recovery_timer);
+         |                         ^
+   drivers/usb/host/xhci.c:1074:4: note: did you mean 'timer_delete_sync'?
+   include/linux/timer.h:166:12: note: 'timer_delete_sync' declared here
+     166 | extern int timer_delete_sync(struct timer_list *timer);
+         |            ^
+>> drivers/usb/host/xhci.c:5360:23: warning: shift count >= width of type [-Wshift-count-overflow]
+    5359 |         if (HCC_64BIT_ADDR(xhci->hcc_params) &&
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    5360 |                         !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+         |                         ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+>> drivers/usb/host/xhci.c:5360:23: warning: shift count >= width of type [-Wshift-count-overflow]
+    5359 |         if (HCC_64BIT_ADDR(xhci->hcc_params) &&
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    5360 |                         !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+         |                         ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+>> drivers/usb/host/xhci.c:5360:23: warning: shift count >= width of type [-Wshift-count-overflow]
+    5359 |         if (HCC_64BIT_ADDR(xhci->hcc_params) &&
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    5360 |                         !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+         |                         ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   drivers/usb/host/xhci.c:5362:30: warning: shift count >= width of type [-Wshift-count-overflow]
+    5362 |                 dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
+         |                                            ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   4 warnings and 1 error generated.
 
->  #else /* CONFIG_KASAN_VMALLOC */
->  
->  int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 61981ee1c9d2..fbd56bf8aeb2 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -4783,8 +4783,7 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
->  	 * non-VM_ALLOC mappings, see __kasan_unpoison_vmalloc().
->  	 */
->  	for (area = 0; area < nr_vms; area++)
-> -		vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
-> -				vms[area]->size, KASAN_VMALLOC_PROT_NORMAL);
-> +		kasan_unpoison_vmap_areas(vms, nr_vms);
->  
->  	kfree(vas);
->  	return vms;
 
-So, the right way to do this is refactor, first, then add your changes
-after. This really wants to be two patches.
+vim +5360 drivers/usb/host/xhci.c
+
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5268  
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5269  int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5270  {
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5271  	struct xhci_hcd		*xhci;
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5272  	/*
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5273  	 * TODO: Check with DWC3 clients for sysdev according to
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5274  	 * quirks
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5275  	 */
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5276  	struct device		*dev = hcd->self.sysdev;
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5277  	int			retval;
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5278  
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5279  	/* Accept arbitrarily long scatter-gather lists */
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5280  	hcd->self.sg_tablesize = ~0;
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5281  
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5282  	/* support to build packet from discontinuous buffers */
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5283  	hcd->self.no_sg_constraint = 1;
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5284  
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5285  	/* XHCI controllers don't stop the ep queue on short packets :| */
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5286  	hcd->self.no_stop_on_short = 1;
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5287  
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5288  	xhci = hcd_to_xhci(hcd);
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5289  
+873f323618c202 Heiner Kallweit           2022-05-12  5290  	if (!usb_hcd_is_primary_hcd(hcd)) {
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5291  		xhci_hcd_init_usb3_data(xhci, hcd);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5292  		return 0;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5293  	}
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5294  
+a00918d0521df1 Chris Bainbridge          2015-05-19  5295  	mutex_init(&xhci->mutex);
+57f23cd0bf2f56 Heiner Kallweit           2022-05-12  5296  	xhci->main_hcd = hcd;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5297  	xhci->cap_regs = hcd->regs;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5298  	xhci->op_regs = hcd->regs +
+b0ba9720846c98 Xenia Ragiadakou          2013-11-15  5299  		HC_LENGTH(readl(&xhci->cap_regs->hc_capbase));
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5300  	xhci->run_regs = hcd->regs +
+b0ba9720846c98 Xenia Ragiadakou          2013-11-15  5301  		(readl(&xhci->cap_regs->run_regs_off) & RTSOFF_MASK);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5302  	/* Cache read-only capability registers */
+b0ba9720846c98 Xenia Ragiadakou          2013-11-15  5303  	xhci->hcs_params1 = readl(&xhci->cap_regs->hcs_params1);
+b0ba9720846c98 Xenia Ragiadakou          2013-11-15  5304  	xhci->hcs_params2 = readl(&xhci->cap_regs->hcs_params2);
+b0ba9720846c98 Xenia Ragiadakou          2013-11-15  5305  	xhci->hcs_params3 = readl(&xhci->cap_regs->hcs_params3);
+c63d5757d0fcbc Linyu Yuan                2022-03-03  5306  	xhci->hci_version = HC_VERSION(readl(&xhci->cap_regs->hc_capbase));
+b0ba9720846c98 Xenia Ragiadakou          2013-11-15  5307  	xhci->hcc_params = readl(&xhci->cap_regs->hcc_params);
+04abb6de28250d Lu Baolu                  2015-10-01  5308  	if (xhci->hci_version > 0x100)
+04abb6de28250d Lu Baolu                  2015-10-01  5309  		xhci->hcc_params2 = readl(&xhci->cap_regs->hcc_params2);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5310  
+b17a57f89f6906 Mathias Nyman             2023-02-02  5311  	/* xhci-plat or xhci-pci might have set max_interrupters already */
+b17a57f89f6906 Mathias Nyman             2023-02-02  5312  	if ((!xhci->max_interrupters) ||
+b17a57f89f6906 Mathias Nyman             2023-02-02  5313  	    xhci->max_interrupters > HCS_MAX_INTRS(xhci->hcs_params1))
+b17a57f89f6906 Mathias Nyman             2023-02-02  5314  		xhci->max_interrupters = HCS_MAX_INTRS(xhci->hcs_params1);
+b17a57f89f6906 Mathias Nyman             2023-02-02  5315  
+757de492f2d571 Mathias Nyman             2016-06-01  5316  	xhci->quirks |= quirks;
+4e6a1ee72b74ce Takashi Iwai              2013-12-09  5317  
+9b907c91aa9452 Mathias Nyman             2023-06-02  5318  	if (get_quirks)
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5319  		get_quirks(dev, xhci);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5320  
+07f3cb7c28bf3f George Cherian            2013-07-01  5321  	/* In xhci controllers which follow xhci 1.0 spec gives a spurious
+07f3cb7c28bf3f George Cherian            2013-07-01  5322  	 * success event after a short transfer. This quirk will ignore such
+07f3cb7c28bf3f George Cherian            2013-07-01  5323  	 * spurious event.
+07f3cb7c28bf3f George Cherian            2013-07-01  5324  	 */
+07f3cb7c28bf3f George Cherian            2013-07-01  5325  	if (xhci->hci_version > 0x96)
+07f3cb7c28bf3f George Cherian            2013-07-01  5326  		xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+07f3cb7c28bf3f George Cherian            2013-07-01  5327  
+083ba4c46a1cdb Niklas Neronin            2024-11-06  5328  	if (xhci->hci_version == 0x95 && link_quirk) {
+083ba4c46a1cdb Niklas Neronin            2024-11-06  5329  		xhci_dbg(xhci, "QUIRK: Not clearing Link TRB chain bits");
+083ba4c46a1cdb Niklas Neronin            2024-11-06  5330  		xhci->quirks |= XHCI_LINK_TRB_QUIRK;
+083ba4c46a1cdb Niklas Neronin            2024-11-06  5331  	}
+083ba4c46a1cdb Niklas Neronin            2024-11-06  5332  
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5333  	/* Make sure the HC is halted. */
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5334  	retval = xhci_halt(xhci);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5335  	if (retval)
+cd33a32157e424 Roger Quadros             2015-05-29  5336  		return retval;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5337  
+12de0a35c996c3 Marc Zyngier              2018-05-23  5338  	xhci_zero_64b_regs(xhci);
+12de0a35c996c3 Marc Zyngier              2018-05-23  5339  
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5340  	xhci_dbg(xhci, "Resetting HCD\n");
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5341  	/* Reset the internal HC memory state and registers. */
+14073ce951b591 Mathias Nyman             2022-03-03  5342  	retval = xhci_reset(xhci, XHCI_RESET_LONG_USEC);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5343  	if (retval)
+cd33a32157e424 Roger Quadros             2015-05-29  5344  		return retval;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5345  	xhci_dbg(xhci, "Reset complete\n");
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5346  
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5347  	/*
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5348  	 * On some xHCI controllers (e.g. R-Car SoCs), the AC64 bit (bit 0)
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5349  	 * of HCCPARAMS1 is set to 1. However, the xHCs don't support 64-bit
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5350  	 * address memory pointers actually. So, this driver clears the AC64
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5351  	 * bit of xhci->hcc_params to call dma_set_coherent_mask(dev,
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5352  	 * DMA_BIT_MASK(32)) in this xhci_gen_setup().
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5353  	 */
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5354  	if (xhci->quirks & XHCI_NO_64BIT_SUPPORT)
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5355  		xhci->hcc_params &= ~BIT(0);
+0a380be8233dbf Yoshihiro Shimoda         2016-04-08  5356  
+c10cf1189d7659 Xenia Ragiadakou          2013-08-14  5357  	/* Set dma_mask and coherent_dma_mask to 64-bits,
+c10cf1189d7659 Xenia Ragiadakou          2013-08-14  5358  	 * if xHC supports 64-bit addressing */
+c10cf1189d7659 Xenia Ragiadakou          2013-08-14  5359  	if (HCC_64BIT_ADDR(xhci->hcc_params) &&
+c10cf1189d7659 Xenia Ragiadakou          2013-08-14 @5360  			!dma_set_mask(dev, DMA_BIT_MASK(64))) {
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5361  		xhci_dbg(xhci, "Enabling 64-bit DMA addresses.\n");
+c10cf1189d7659 Xenia Ragiadakou          2013-08-14  5362  		dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
+fda182d80a0bf3 Duc Dang                  2015-10-09  5363  	} else {
+fda182d80a0bf3 Duc Dang                  2015-10-09  5364  		/*
+fda182d80a0bf3 Duc Dang                  2015-10-09  5365  		 * This is to avoid error in cases where a 32-bit USB
+fda182d80a0bf3 Duc Dang                  2015-10-09  5366  		 * controller is used on a 64-bit capable system.
+fda182d80a0bf3 Duc Dang                  2015-10-09  5367  		 */
+fda182d80a0bf3 Duc Dang                  2015-10-09  5368  		retval = dma_set_mask(dev, DMA_BIT_MASK(32));
+fda182d80a0bf3 Duc Dang                  2015-10-09  5369  		if (retval)
+fda182d80a0bf3 Duc Dang                  2015-10-09  5370  			return retval;
+fda182d80a0bf3 Duc Dang                  2015-10-09  5371  		xhci_dbg(xhci, "Enabling 32-bit DMA addresses.\n");
+fda182d80a0bf3 Duc Dang                  2015-10-09  5372  		dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5373  	}
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5374  
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5375  	xhci_dbg(xhci, "Calling HCD init\n");
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5376  	/* Initialize HCD and host controller data structures. */
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5377  	retval = xhci_init(hcd);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5378  	if (retval)
+cd33a32157e424 Roger Quadros             2015-05-29  5379  		return retval;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5380  	xhci_dbg(xhci, "Called HCD init\n");
+99705092a83f02 Hans de Goede             2015-01-16  5381  
+873f323618c202 Heiner Kallweit           2022-05-12  5382  	if (xhci_hcd_is_usb3(hcd))
+873f323618c202 Heiner Kallweit           2022-05-12  5383  		xhci_hcd_init_usb3_data(xhci, hcd);
+873f323618c202 Heiner Kallweit           2022-05-12  5384  	else
+873f323618c202 Heiner Kallweit           2022-05-12  5385  		xhci_hcd_init_usb2_data(xhci, hcd);
+873f323618c202 Heiner Kallweit           2022-05-12  5386  
+36b6857932f380 Marc Zyngier              2018-05-23  5387  	xhci_info(xhci, "hcc params 0x%08x hci version 0x%x quirks 0x%016llx\n",
+99705092a83f02 Hans de Goede             2015-01-16  5388  		  xhci->hcc_params, xhci->hci_version, xhci->quirks);
+99705092a83f02 Hans de Goede             2015-01-16  5389  
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5390  	return 0;
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5391  }
+436e8c7d457ff4 Andrew Bresticker         2014-10-03  5392  EXPORT_SYMBOL_GPL(xhci_gen_setup);
+552e0c4f12fef0 Sebastian Andrzej Siewior 2011-09-23  5393  
+
+:::::: The code at line 5360 was first introduced by commit
+:::::: c10cf1189d7659ffd7dbe488a4cee7ec0dcdd9c6 xhci: fix dma mask setup in xhci.c
+
+:::::: TO: Xenia Ragiadakou <burzalodowa@gmail.com>
+:::::: CC: Sarah Sharp <sarah.a.sharp@linux.intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
