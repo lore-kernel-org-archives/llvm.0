@@ -1,290 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15151EDA0F
-	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 13:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C1F1E51EC;
+	Fri,  4 Apr 2025 13:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743772700; cv=none; b=phHHsfqJE3UcHHZvS/x7f6gsv5nD8C0ZfAA1QM20r08CKdL1p+EtQAeKVB1YSsnF4VsSHOZBLkd3595Pprobcj6UbdHK34iAJaX/j4YTNHGGU2gQZ662vg8I/79Fz4k8FsUcr0rLnnpZZh3jH/RRQzd461DQB5Uouja+e7eBPrs=
+	t=1743775116; cv=none; b=ADTCWqySMJkA16zH+VjRde/5PFXXlgudkeMMZscy10JoTQ4kL3YUJUW4gUt+ybUggKapNCTo9p+kSOKyZQxZn7lpL2oTcags6SMwmQLTxJoMsBWRv8fEzkzKuBWRaAgMl8hcreUZmOI6IMEth7DH9jCzPnOlvs5aj2aYqHukq18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743772700; c=relaxed/simple;
-	bh=LXNzuXLeRTm8jG3p+pKkuZRDyf0+LkHmCSi04lxWu3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BKGJMgUGnbMxqiLqIoFYIgqh0KgbkyHdhV2RLumnyNA/hqS3pk8vWYaDO4vX1wUb7cpaxT/NzFhZmRn8Xo3DMVUkdyEn9ueAjZ6QvsGPhbVUKWRu7p04ccoTeRoyB4zhQM92ArM+ZrI2QMtkwi8MdXejCAo9gHz/1AYYevqUFEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EVIbzUbd; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1743775116; c=relaxed/simple;
+	bh=NG7H7hLS4WQavrvWJPizCU0NvDUAAmaYN/JZ7/I5PN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hG4ugxz+M1WxXlEZM7Bm0W4QA44FdNSg+knnn5R1NtZSuJ4ED2aB1nqiDCZWCOnnG/phV2bc1/n6jXXEb7zkHELIUxQPvX4gsix9294eClnYsF40mj8mHadjmjF/B3W/YZNpk9yItx9ZCkJCczR/dUrolnIl475ra4YJv3Wn8Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hTn0bPkJ; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EVIbzUbd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hTn0bPkJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743772699; x=1775308699;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LXNzuXLeRTm8jG3p+pKkuZRDyf0+LkHmCSi04lxWu3Q=;
-  b=EVIbzUbdY/UndfgA3hoqoL5CuhyK0GtkajI5PqUKyFIOp8iFa9hOJgw9
-   WYo+3p9P2fG0ZdgHW6jzI4zR9UNxVQuUf6n5PCBeLI0WiV6svrVGyFGZh
-   6z4xWb6mOwavQYSVaw1+GxdIujhszSn4hf8D6Efe7IvN8EWilt+TgN9cZ
-   M+3bsAyqdIBRiSToPpcnAm/TaSJGy7FKotwV6tBztmXIFjgNhMHcuslsH
-   mykNIyqHb15y2d5V5Ksb292LfFUcfdMLbcFsCM0Xi1MyVVCX0ZovKmdrw
-   6UDB2c+vlSKnGzUGSWrqzUsasZR8xggXeD6Fen/XqqAPC9P7jtSndF29t
-   A==;
-X-CSE-ConnectionGUID: C+sKK4kBSeWWrT2yHyESRQ==
-X-CSE-MsgGUID: Xu7XRFZYSsmZXjhFlI3i5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="55402102"
+  t=1743775114; x=1775311114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NG7H7hLS4WQavrvWJPizCU0NvDUAAmaYN/JZ7/I5PN4=;
+  b=hTn0bPkJyAeMWAx4OFS+4Xd5yFNYpb/1tuXfCW4OTCgP/xeMOehSpu5L
+   0lfbFouU/6BFkOW0U/y8VhYoEha2UygdWF6ao/DIorbgyP4GrPYFa5yYJ
+   k56D646P6axwYRRIniRyDI599CIdsb9X6ZDsnDgaaqHdjLFFji4oExLHk
+   sS+uR+yFaIfJtIpfrdQcWD3+bgM/Jo0aw3hRZ3G6FbvUcBI262yA7h5iA
+   hT877O6AXKFr3k2y+EAA1jgAp/ZLx7WpjIYIN5fJ2SWaSjOqdMml67yEt
+   MJJDu3sFlHGFdfJUoTIivz+wJ7fS1xXnHRCDCfhwcH8tZGR+rtxn01sX9
+   Q==;
+X-CSE-ConnectionGUID: GBa1niXmQ9iT0IQubOEyUg==
+X-CSE-MsgGUID: R412YvvdT6eQUr/jmYTfWw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="45232316"
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="55402102"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:18:18 -0700
-X-CSE-ConnectionGUID: JIG12BvgSLmwXeiVgXuG4w==
-X-CSE-MsgGUID: 6Y3E6zPDSmCFZvSwlS/caA==
+   d="scan'208";a="45232316"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:58:34 -0700
+X-CSE-ConnectionGUID: XOMIdkoDTHShP7SLQujMJA==
+X-CSE-MsgGUID: +7NvfFxGQFSbrm+JYdjdRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="128157431"
-Received: from opintica-mobl1 (HELO wieczorr-mobl1.intel.com) ([10.245.245.50])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:18:03 -0700
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: hpa@zytor.com,
-	hch@infradead.org,
-	nick.desaulniers+lkml@gmail.com,
-	kuan-ying.lee@canonical.com,
-	masahiroy@kernel.org,
-	samuel.holland@sifive.com,
-	mingo@redhat.com,
-	corbet@lwn.net,
-	ryabinin.a.a@gmail.com,
-	guoweikang.kernel@gmail.com,
-	jpoimboe@kernel.org,
-	ardb@kernel.org,
-	vincenzo.frascino@arm.com,
-	glider@google.com,
-	kirill.shutemov@linux.intel.com,
-	apopple@nvidia.com,
-	samitolvanen@google.com,
-	maciej.wieczor-retman@intel.com,
-	kaleshsingh@google.com,
-	jgross@suse.com,
-	andreyknvl@gmail.com,
-	scott@os.amperecomputing.com,
-	tony.luck@intel.com,
-	dvyukov@google.com,
-	pasha.tatashin@soleen.com,
-	ziy@nvidia.com,
-	broonie@kernel.org,
-	gatlin.newhouse@gmail.com,
-	jackmanb@google.com,
-	wangkefeng.wang@huawei.com,
-	thiago.bauermann@linaro.org,
-	tglx@linutronix.de,
-	kees@kernel.org,
-	akpm@linux-foundation.org,
-	jason.andryuk@amd.com,
-	snovitoll@gmail.com,
-	xin@zytor.com,
-	jan.kiszka@siemens.com,
-	bp@alien8.de,
-	rppt@kernel.org,
-	peterz@infradead.org,
-	pankaj.gupta@amd.com,
-	thuth@redhat.com,
-	andriy.shevchenko@linux.intel.com,
-	joel.granados@kernel.org,
-	kbingham@kernel.org,
-	nicolas@fjasle.eu,
-	mark.rutland@arm.com,
-	surenb@google.com,
-	catalin.marinas@arm.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	ubizjak@gmail.com,
-	jhubbard@nvidia.com,
-	urezki@gmail.com,
-	dave.hansen@linux.intel.com,
-	bhe@redhat.com,
-	luto@kernel.org,
-	baohua@kernel.org,
-	nathan@kernel.org,
-	will@kernel.org,
-	brgerst@gmail.com
-Cc: llvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	x86@kernel.org
-Subject: [PATCH v3 14/14] x86: Make software tag-based kasan available
-Date: Fri,  4 Apr 2025 15:14:18 +0200
-Message-ID: <3ed2c4baaf9b182c9d9716db95387ee14d98c99c.1743772053.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
-References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
+   d="scan'208";a="127256509"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 04 Apr 2025 06:58:27 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0hYu-0001H5-2T;
+	Fri, 04 Apr 2025 13:58:24 +0000
+Date: Fri, 4 Apr 2025 21:58:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Terry Bowman <terry.bowman@amd.com>, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, dan.j.williams@intel.com, willy@infradead.org,
+	jack@suse.cz, rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+	ming.li@zohomail.com, nathan.fontenot@amd.com,
+	Smita.KoralahalliChannabasappa@amd.com,
+	huang.ying.caritas@gmail.com, yaoxt.fnst@fujitsu.com,
+	peterz@infradead.org, gregkh@linuxfoundation.org,
+	quic_jjohnson@quicinc.com, ilpo.jarvinen@linux.intel.com,
+	bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
+	mika.westerberg@linux.intel.com, akpm@linux-foundation.org,
+	gourry@gourry.net, linux-cxl@vger.kernel.org,
+	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 2/4] cxl: Update Soft Reserved resources upon region
+ creation
+Message-ID: <202504042103.wFCRBR7K-lkp@intel.com>
+References: <20250403183315.286710-3-terry.bowman@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250403183315.286710-3-terry.bowman@amd.com>
 
-Make CONFIG_KASAN_SW_TAGS available for x86 machines if they have
-ADDRESS_MASKING enabled (LAM) as that works similarly to Top-Byte Ignore
-(TBI) that allows the software tag-based mode on arm64 platform.
+Hi Terry,
 
-Set scale macro based on KASAN mode: in software tag-based mode 16 bytes
-of memory map to one shadow byte and 8 in generic mode.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v3:
-- Remove runtime_const from previous patch and merge the rest here.
-- Move scale shift definition back to header file.
-- Add new kasan offset for software tag based mode.
-- Fix patch message typo 32 -> 16, and 16 -> 8.
-- Update lib/Kconfig.kasan with x86 now having software tag-based
-  support.
+[auto build test ERROR on aae0594a7053c60b82621136257c8b648c67b512]
 
-Changelog v2:
-- Remove KASAN dense code.
+url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/kernel-resource-Provide-mem-region-release-for-SOFT-RESERVES/20250404-023601
+base:   aae0594a7053c60b82621136257c8b648c67b512
+patch link:    https://lore.kernel.org/r/20250403183315.286710-3-terry.bowman%40amd.com
+patch subject: [PATCH v3 2/4] cxl: Update Soft Reserved resources upon region creation
+config: hexagon-randconfig-001-20250404 (https://download.01.org/0day-ci/archive/20250404/202504042103.wFCRBR7K-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504042103.wFCRBR7K-lkp@intel.com/reproduce)
 
- Documentation/arch/x86/x86_64/mm.rst | 6 ++++--
- arch/x86/Kconfig                     | 5 +++--
- arch/x86/boot/compressed/misc.h      | 1 +
- arch/x86/include/asm/kasan.h         | 9 +++++++++
- arch/x86/kernel/setup.c              | 2 ++
- arch/x86/mm/kasan_init_64.c          | 2 +-
- lib/Kconfig.kasan                    | 3 ++-
- 7 files changed, 22 insertions(+), 6 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504042103.wFCRBR7K-lkp@intel.com/
 
-diff --git a/Documentation/arch/x86/x86_64/mm.rst b/Documentation/arch/x86/x86_64/mm.rst
-index f2db178b353f..1e2d6b3ae231 100644
---- a/Documentation/arch/x86/x86_64/mm.rst
-+++ b/Documentation/arch/x86/x86_64/mm.rst
-@@ -60,7 +60,8 @@ Complete virtual memory map with 4-level page tables
-    ffffe90000000000 |  -23    TB | ffffe9ffffffffff |    1 TB | ... unused hole
-    ffffea0000000000 |  -22    TB | ffffeaffffffffff |    1 TB | virtual memory map (vmemmap_base)
-    ffffeb0000000000 |  -21    TB | ffffebffffffffff |    1 TB | ... unused hole
--   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN shadow memory
-+   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN shadow memory (generic mode)
-+   fffff40000000000 |   -8    TB | fffffc0000000000 |    8 TB | KASAN shadow memory (software tag-based mode)
-   __________________|____________|__________________|_________|____________________________________________________________
-                                                               |
-                                                               | Identical layout to the 56-bit one from here on:
-@@ -130,7 +131,8 @@ Complete virtual memory map with 5-level page tables
-    ffd2000000000000 |  -11.5  PB | ffd3ffffffffffff |  0.5 PB | ... unused hole
-    ffd4000000000000 |  -11    PB | ffd5ffffffffffff |  0.5 PB | virtual memory map (vmemmap_base)
-    ffd6000000000000 |  -10.5  PB | ffdeffffffffffff | 2.25 PB | ... unused hole
--   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN shadow memory
-+   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN shadow memory (generic mode)
-+   ffdffc0000000000 |   -6    PB | ffeffc0000000000 |    4 PB | KASAN shadow memory (software tag-based mode)
-   __________________|____________|__________________|_________|____________________________________________________________
-                                                               |
-                                                               | Identical layout to the 47-bit one from here on:
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 15f346f02af0..cfe1cb15950e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -197,6 +197,7 @@ config X86
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
-+	select HAVE_ARCH_KASAN_SW_TAGS		if ADDRESS_MASKING
- 	select HAVE_ARCH_KFENCE
- 	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
-@@ -402,8 +403,8 @@ config AUDIT_ARCH
- 
- config KASAN_SHADOW_OFFSET
- 	hex
--	depends on KASAN
--	default 0xdffffc0000000000
-+	default 0xdffffc0000000000 if KASAN_GENERIC
-+	default 0xffeffc0000000000 if KASAN_SW_TAGS
- 
- config HAVE_INTEL_TXT
- 	def_bool y
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index dd8d1a85f671..f6a87e9ad200 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -13,6 +13,7 @@
- #undef CONFIG_PARAVIRT_SPINLOCKS
- #undef CONFIG_KASAN
- #undef CONFIG_KASAN_GENERIC
-+#undef CONFIG_KASAN_SW_TAGS
- 
- #define __NO_FORTIFY
- 
-diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-index 212218622963..d2eedaa092d5 100644
---- a/arch/x86/include/asm/kasan.h
-+++ b/arch/x86/include/asm/kasan.h
-@@ -6,8 +6,16 @@
- #include <linux/kasan-tags.h>
- #include <linux/types.h>
- #define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
-+#ifdef CONFIG_KASAN_SW_TAGS
-+#define KASAN_SHADOW_SCALE_SHIFT 4
-+#else
- #define KASAN_SHADOW_SCALE_SHIFT 3
-+#endif
- 
-+#ifdef CONFIG_KASAN_SW_TAGS
-+#define KASAN_SHADOW_END	KASAN_SHADOW_OFFSET
-+#define KASAN_SHADOW_START	(KASAN_SHADOW_END - ((UL(1)) << (__VIRTUAL_MASK_SHIFT - KASAN_SHADOW_SCALE_SHIFT)))
-+#else
- /*
-  * Compiler uses shadow offset assuming that addresses start
-  * from 0. Kernel addresses don't start from 0, so shadow
-@@ -24,6 +32,7 @@
- #define KASAN_SHADOW_END        (KASAN_SHADOW_START + \
- 					(1ULL << (__VIRTUAL_MASK_SHIFT - \
- 						  KASAN_SHADOW_SCALE_SHIFT)))
-+#endif
- 
- #ifndef __ASSEMBLER__
- #include <linux/bitops.h>
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index c7164a8de983..a40d66da69f4 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1182,6 +1182,8 @@ void __init setup_arch(char **cmdline_p)
- 
- 	kasan_init();
- 
-+	kasan_init_sw_tags();
-+
- 	/*
- 	 * Sync back kernel address range.
- 	 *
-diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
-index e8a451cafc8c..b5cf3dca6954 100644
---- a/arch/x86/mm/kasan_init_64.c
-+++ b/arch/x86/mm/kasan_init_64.c
-@@ -371,7 +371,7 @@ void __init kasan_init(void)
- 	 * bunch of things like kernel code, modules, EFI mapping, etc.
- 	 * We need to take extra steps to not overwrite them.
- 	 */
--	if (pgtable_l5_enabled()) {
-+	if (pgtable_l5_enabled() && !IS_ENABLED(CONFIG_KASAN_SW_TAGS)) {
- 		void *ptr;
- 
- 		ptr = (void *)pgd_page_vaddr(*pgd_offset_k(KASAN_SHADOW_END));
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index f82889a830fa..9ddbc6aeb5d5 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -100,7 +100,8 @@ config KASAN_SW_TAGS
- 
- 	  Requires GCC 11+ or Clang.
- 
--	  Supported only on arm64 CPUs and relies on Top Byte Ignore.
-+	  Supported on arm64 CPUs that support Top Byte Ignore and on x86 CPUs
-+	  that support Linear Address Masking.
- 
- 	  Consumes about 1/16th of available memory at kernel start and
- 	  add an overhead of ~20% for dynamic allocations.
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/cxl/core/suspend.c:7:
+>> drivers/cxl/cxlpci.h:126:2: error: call to undeclared function 'pcie_capability_read_word'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           pcie_capability_read_word(pdev, PCI_EXP_LNKSTA2, &lnksta2);
+           ^
+   1 error generated.
+
+
+vim +/pcie_capability_read_word +126 drivers/cxl/cxlpci.h
+
+e0c818e00443ce Robert Richter 2024-02-16  116  
+4d07a05397c8c1 Dave Jiang     2023-12-21  117  /*
+4d07a05397c8c1 Dave Jiang     2023-12-21  118   * CXL v3.0 6.2.3 Table 6-4
+4d07a05397c8c1 Dave Jiang     2023-12-21  119   * The table indicates that if PCIe Flit Mode is set, then CXL is in 256B flits
+4d07a05397c8c1 Dave Jiang     2023-12-21  120   * mode, otherwise it's 68B flits mode.
+4d07a05397c8c1 Dave Jiang     2023-12-21  121   */
+4d07a05397c8c1 Dave Jiang     2023-12-21  122  static inline bool cxl_pci_flit_256(struct pci_dev *pdev)
+4d07a05397c8c1 Dave Jiang     2023-12-21  123  {
+4d07a05397c8c1 Dave Jiang     2023-12-21  124  	u16 lnksta2;
+4d07a05397c8c1 Dave Jiang     2023-12-21  125  
+4d07a05397c8c1 Dave Jiang     2023-12-21 @126  	pcie_capability_read_word(pdev, PCI_EXP_LNKSTA2, &lnksta2);
+4d07a05397c8c1 Dave Jiang     2023-12-21  127  	return lnksta2 & PCI_EXP_LNKSTA2_FLIT;
+4d07a05397c8c1 Dave Jiang     2023-12-21  128  }
+4d07a05397c8c1 Dave Jiang     2023-12-21  129  
+
 -- 
-2.49.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
