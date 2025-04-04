@@ -1,168 +1,122 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DCD28F4;
-	Fri,  4 Apr 2025 09:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D313D74059
+	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 11:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743758728; cv=none; b=iw3d7xOVeYmq7iSWH9HGqkyah8++PQwLmnQEmAzNu72tEgkvn/VyZVp/dJ+3sqFZW542j4snGP1TulbNcUkWVNoO9ORvl3YT0SRmTpa/my5tDZrwYhJkeVm/wUycdVilOFPX56VQPix+bx2q0k2dNrOQHCDXWT8AXVbN1FX1ZsQ=
+	t=1743766328; cv=none; b=PMJleJqgSXko96JDXwfgkgWbHawF+tx2/CQwyvm6x2qujSKhnia9rPTrsShDOoIo0iq51yE1TKzLE07OI9Lu6vrrTUzSjosTc36xZURnN79NaR/e1G965XobUVr8v1yli3JqVXcEYtKGp0YTZjVIzo9ooLEveI5rcC/EwLAq1kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743758728; c=relaxed/simple;
-	bh=S82FIYVXxQTeUPIObIIX9CBz9xH8k+Y+dxS9y3ek140=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iksptaj7C9/IJ0+qetDwmryfA5xO63uOmymHbVtWvkD+w9ygmEMLMB2cU4BTl81sQ3NGFlzWf3LKGS7sP3ziY1Q5ShyDIasV33B32Ip3uKipGhhXdsl1EKD9yAEd+9R9BMNAtMi4+I5Ur2E2X1ptsnZMQPIWWjBaCylHyo9Xjrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aXHlhnBH; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1743766328; c=relaxed/simple;
+	bh=iV79T4TIS7cOv4/u7k4BmVbPmDbodUmpjPt2TauwF2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=boaQZ4j46j20xe+UdsP+wHDVV0Q1fT2jhe83lb3ZYFpMYMpelUsZYqnLz+AUX9Ei4szP1GeaRc5kmlBZCbedyatiudCsSdZ5wq6NhUIJUEZ4DXzRR+UxAfI0ALeG03O+EMG1u8+XIlS23dz9IF4yXTsRCokdW+weD/fFt2hfviw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ULqQRFLX; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aXHlhnBH"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5341i1HC000742;
-	Fri, 4 Apr 2025 09:25:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=nAl3D6
-	DoNreLZxVkM1eM7RisqvDGvIwT8MfvsLhwtLM=; b=aXHlhnBHJHhHauEW/ks741
-	T+T/kZfsYEcizMAWlayDrwOMvUy1MyXzpbGr8KeNWWD1qnylwF6w28oFeq6vGsBM
-	G0DD0+tuZrAvB/E+SkS4heJ8XNeP955eWXpA3hhMZ6pbJH6YcNpvavSrVqQNACM8
-	jMH5SGGNeunNCMiVo5h2TEySne2q8a/UaQzq5V5VP8IRFQ61NDJV5r3mUyYUlSme
-	rHOX4aIU/hi5Gz+ZuT0+kekOSjvOiNlIvx7cYc0Pj8FEwaztPzScPnbULN/0uYU/
-	4nU+dz3cZjg64vQaS72L59PZveDtvBJmjxyYJs19Qz10WQTHwpj5SJnNi8rays3Q
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45t2qajd6y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Apr 2025 09:25:23 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5346gUw1019416;
-	Fri, 4 Apr 2025 09:25:23 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45t2cc2a69-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Apr 2025 09:25:23 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5349PMwR33882732
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 4 Apr 2025 09:25:22 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 740E058061;
-	Fri,  4 Apr 2025 09:25:22 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 201DC58057;
-	Fri,  4 Apr 2025 09:25:21 +0000 (GMT)
-Received: from [9.124.220.248] (unknown [9.124.220.248])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  4 Apr 2025 09:25:20 +0000 (GMT)
-Message-ID: <8b1cc90a-5096-4f17-93d4-215611f69841@linux.ibm.com>
-Date: Fri, 4 Apr 2025 14:55:18 +0530
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ULqQRFLX"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2263428c8baso130905ad.1
+        for <llvm@lists.linux.dev>; Fri, 04 Apr 2025 04:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1743766326; x=1744371126; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RijjZDsaeeNTq2WmlBYu7uyZvjnvz4x85cSTWjzFszM=;
+        b=ULqQRFLXtA9xSNRVPIhu43PfmHOsEYZFNix0tXypvm8HIxIvJwH95bElvhU2hEoNxy
+         7wJG6vMTEYUDc3ROZtE3XJr/Zo2rsx5p1P2yDwL3vuf41vkM4iqbuvo0EMq0KqRXRZFp
+         lq59rKBVfkwu9fq5Ke2/uksusLsS+k3m5bHscTYupsxpyETTpzkL9kV+6A7+AvrEcq8J
+         fQnpOsmTM0HBcY+uy603FLukAXdeRGaDH0US/lByhICigNDmOonuE9OKfG6b4NvO62zM
+         3lj0el54BK7qXONfA8ZjiP8eWXNH+4HoL2cNGORYM01D7Mt22WWqucGonQEMjq6WAnkh
+         0PHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743766326; x=1744371126;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RijjZDsaeeNTq2WmlBYu7uyZvjnvz4x85cSTWjzFszM=;
+        b=iK2UZNnrjVl+SJqRjfFAwiVA4fikn7OlVUripMgB+fAHnu52LS6945ThXJBQVFgTnZ
+         fn2S+wew209Uj/LgvExbXH1C4jkqwh6gj1m4zMzEhlzIr8Ya1z6v+DJiKwEdejtuh3Bv
+         X04bjlNFRNLqqVEqF6EpTaQjyQmimXgkw9Cg6bVRQyrpG1YFdo4oaw9t/YOt381fAcI8
+         cSgYpzqQ1Ecb2/j2GgUWl2V2Y12CFwawcWmIFuF6Y0dLqgvQSckyjm+sNTO0dtbaew5L
+         nuG2+lKvqDpmHUnm7y/ZQQgJX23PCXp06Q0CQ7N18/VIRB/iXIoHQloDkESqnu5wqAzE
+         bE4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWnzWITOX4K+5ggbXZkw6tvx2Rtwbp86wcJ5RQ7X5p7cnebhtGPtXvrOSuya1a27cIDKGqe@lists.linux.dev
+X-Gm-Message-State: AOJu0YzOFSh9a1rgijRhpFNl32EXZmrcg7bWAucLvB3fUNi7x0o37T6Y
+	csOvfo32Z1kTrbhGftYYV4kZIBddlGK/PgzFoqo6hh2YM+dROgx+qdKCSphO7kBRDqs7HvwPsLY
+	gx3917L8RQLpDO0aZsa8WjZOaaqxQ98cFi6ru
+X-Gm-Gg: ASbGncvG9gaECN6t7MpuVIAQwRCmsyhSIHDp+BM7tfarIGtvA2Olx2DIuOWBcRjISbd
+	pM0JcM89mt3fGJKiJgf9Vz1tQvc4ACsyspqEwP+ygIDH3ZfHO7cl0usAPMzPdnfA19AkvHdNQM5
+	D/rEZJv5CtcOYbIALT6gcShNWi0mI=
+X-Google-Smtp-Source: AGHT+IGtSJ5SCCsYoTUAusjQhkTtvCXxx/icdtTSnyDn15jZiHl4dIt2xptyi2fH7qclCUKpPalNWXHp8B5uMQxIc1Q=
+X-Received: by 2002:a17:903:41cf:b0:215:f0c6:4dbf with SMTP id
+ d9443c01a7336-22a89ec5649mr2603845ad.14.1743766325853; Fri, 04 Apr 2025
+ 04:32:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2] mm/swap.c: Enable promotion of unmapped MGLRU page
- cache pages
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <20250403141032.22743-1-donettom@linux.ibm.com>
- <202504041529.Z00E8TJC-lkp@intel.com>
-Content-Language: en-US
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <202504041529.Z00E8TJC-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3w93ka7dz9gWbAKgBPrFYIsl6ya-tFyS
-X-Proofpoint-GUID: 3w93ka7dz9gWbAKgBPrFYIsl6ya-tFyS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-04_03,2025-04-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 suspectscore=0 impostorscore=0 adultscore=0 mlxscore=0
- bulkscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504040060
+References: <20250403165702.396388-1-irogers@google.com> <20250403165702.396388-3-irogers@google.com>
+ <dbba94f1-27ee-4344-b4b2-d8dffe6b7d33@app.fastmail.com>
+In-Reply-To: <dbba94f1-27ee-4344-b4b2-d8dffe6b7d33@app.fastmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 4 Apr 2025 04:31:54 -0700
+X-Gm-Features: AQ5f1JqEV-6ruf3kqDyuUQ7sb3lFX7gx5YYcyalfhzJL9r3U6Z0Ij2NtKCDx8-c
+Message-ID: <CAP-5=fWAiLe8=zXvh2vtyhSAh+R-E89fYkdsVbb6PDALurW97A@mail.gmail.com>
+Subject: Re: [PATCH v1 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Jakub Kicinski <kuba@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, 
+	Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 3, 2025 at 10:49=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Thu, Apr 3, 2025, at 18:56, Ian Rogers wrote:
+> > The clang warning -Wshorten-64-to-32 can be useful to catch
+> > inadvertent truncation. In some instances this truncation can lead to
+> > changing the sign of a result, for example, truncation to return an
+> > int to fit a sort routine. Silence the warning by making the implicit
+> > truncation explicit.
+>
+>
+> >  unsigned int bitmap_weight(const unsigned long *src, unsigned int nbit=
+s)
+> >  {
+> >       if (small_const_nbits(nbits))
+> > -             return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
+> > +             return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbi=
+ts));
+> >       return __bitmap_weight(src, nbits);
+> >  }
+>
+> I don't understand this one. hweight_long() and bitmap_weight()
+> both return unsigned value, so why do you need to cast this to
+> a signed value to avoid a signedness problem?
+>
+> hweight_long() should never return anything larger than 64ul
+> anyway, which is way outside of the range where it would get
+> sign-extended.
+>
+> A more logical change to me would be to make hweight_long()
+> and bitmap_weight() have the same return type, either
+> 'unsigned long' or 'unsigned int'.
 
-On 4/4/25 1:34 PM, kernel test robot wrote:
-> Hi Donet,
->
-> [This is a private test report for your RFC patch.]
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on linus/master v6.14 next-20250404]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Donet-Tom/mm-swap-c-Enable-promotion-of-unmapped-MGLRU-page-cache-pages/20250403-221222
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20250403141032.22743-1-donettom%40linux.ibm.com
-> patch subject: [RFC PATCH v2]  mm/swap.c: Enable promotion of unmapped MGLRU page cache pages
-> config: hexagon-randconfig-002-20250404 (https://download.01.org/0day-ci/archive/20250404/202504041529.Z00E8TJC-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504041529.Z00E8TJC-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202504041529.Z00E8TJC-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->>> mm/swap.c:401:8: error: use of undeclared identifier 'sysctl_numa_balancing_mode'
->       401 |                                   (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
->           |                                    ^
->>> mm/swap.c:401:37: error: use of undeclared identifier 'NUMA_BALANCING_MEMORY_TIERING'
->       401 |                                   (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
->           |                                                                 ^
->>> mm/swap.c:402:8: error: use of undeclared identifier 'numa_pagecache_promotion_enabled'
->       402 |                                    numa_pagecache_promotion_enabled) {
->           |                                    ^
->>> mm/swap.c:403:5: error: call to undeclared function 'promotion_candidate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->       403 |                                 promotion_candidate(folio);
->           |                                 ^
->     4 errors generated.
->
->
-> vim +/sysctl_numa_balancing_mode +401 mm/swap.c
->
->     382	
->     383	static void lru_gen_inc_refs(struct folio *folio)
->     384	{
->     385		unsigned long new_flags, old_flags = READ_ONCE(folio->flags);
->     386	
->     387		if (folio_test_unevictable(folio))
->     388			return;
->     389	
->     390		/* see the comment on LRU_REFS_FLAGS */
->     391		if (!folio_test_referenced(folio)) {
->     392			set_mask_bits(&folio->flags, LRU_REFS_MASK, BIT(PG_referenced));
->     393			return;
->     394		}
->     395	
->     396		do {
->     397			if ((old_flags & LRU_REFS_MASK) == LRU_REFS_MASK) {
->     398				if (!folio_test_workingset(folio)) {
->     399					folio_set_workingset(folio);
->     400				} else if (!folio_test_isolated(folio) &&
->   > 401					  (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
->   > 402					   numa_pagecache_promotion_enabled) {
->   > 403					promotion_candidate(folio);
->     404				}
->     405				return;
->     406			}
->     407	
->     408			new_flags = old_flags + BIT(LRU_REFS_PGOFF);
->     409		} while (!try_cmpxchg(&folio->flags, &old_flags, new_flags));
->     410	}
->     411	
+I don't disagree but the scope of that change would be much larger.
+Yury has expressed concern over needing to update printf modifiers. I
+was aiming for the minimal change that silences clang's
+-Wshorten-64-to-32 warning.
 
+Thanks,
+Ian
 
-Thanks for the report. I will fix this and send a V3.
-
-- Donet
-
+>       Arnd
