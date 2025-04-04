@@ -1,133 +1,254 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211B121C160;
-	Fri,  4 Apr 2025 17:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E3321B185
+	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 17:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743788823; cv=none; b=hhi7QUSALRhPaMdz0yziIQdriK2zhUr1Ab1yeYp2GBLIqbc/JQltSllB52z3/nVBkmc+k0Au+FR7t8/O+R6OYPIyclwLQoZ3kO1LLuKXNbErqishYRWijWL7UVHMFmLv8Ex68z6ptqTy/IwDtiSRuliUKn1wW4hGhvj3DO2pavk=
+	t=1743789317; cv=none; b=SUXFwKfOj5AAwShGlTAkfcSYy0G6w8oqmRjOnZG0nBbNRjJMM0KEGUUdZLnlLLO+Am4LeFIJyKuRvWbA2IO6xPm4fthO0qq1VlJNat17qDyh9srpWXoCSaUMk7tOLvkGaiIro+4AaT9ftgNgqz0tdP5wDToCea9+z+48+ImYKHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743788823; c=relaxed/simple;
-	bh=DqN5pxAfN0evYrsHyPi6fbUjjlY9CZ+NWI+PLEjkqtw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ELYVKts0g7Uik5ZkZiM+Bg1gH+GJxAkLwq41ahcxYNdLXECXYy+pr3ekT8/ul5tHy1fCT6pCOELcoVqtRmlsqKJiBv9RecSeYWVUZWf9teCWlo8/606n//3BEqU1u+L4ECBr1rRZLQnBfwdEueC6O+1p4ul5qDPxIvyRPpkP4cI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SNb5Ao3m; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1743789317; c=relaxed/simple;
+	bh=pIENLeWzTVJaaXaUldVebDEO8Uq2auKXJ/zTuKpRGc0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c2VU/7AZR0zctPcXM65kesR369bik6ffmobTmvJ3ImFTrCE76yMFjtA/SP6hyIHRZKyV+EJfqCXhtpt5PBFv3KnCyUU4xzKTCz8bplh6Bkc6XxBfoT2DxHQsLL842LK61x5AnQp5BZKqc24ime2BvosDvqawSKjaFiwG/aWPRKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cS5RBcX8; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SNb5Ao3m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cS5RBcX8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743788822; x=1775324822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DqN5pxAfN0evYrsHyPi6fbUjjlY9CZ+NWI+PLEjkqtw=;
-  b=SNb5Ao3m/5Cv1HrCZkTvycl6vigejnOFqzly0SsqP+4WcCTmJnoPI1k+
-   ZUDgSJmcV/193ikllRQ/6z06Kb7u4YnEAGN7wE7vORW1Ie/Gmb3Cow1rX
-   Wk3/YQ+K3mB/4POOYRO6hEY1JidIbK0AaQL2qw3d6nDhKNCZKVWNDzRw0
-   XnexKJWmClLJz7eDSRZydtpXxxckNNab420zaPUQZm9+/34SoNpr42j32
-   GqE58URaNsxX42Y4jd+X3sMLRxHhT6+0GSlzfO8Dhi78iLVghYnW9hRDb
-   Vud+qQ7nIb7vNVzZua6su6qedf8xhg0CpJvUlwnyM24UtSdD9vRJWw8PB
-   g==;
-X-CSE-ConnectionGUID: ckkefdDbQiqctIDwtEylsw==
-X-CSE-MsgGUID: wtX+d4nrTfqSkkqxFex7IA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="49094801"
-X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="49094801"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 10:46:50 -0700
-X-CSE-ConnectionGUID: mYSbDg/qT2irREuKI9oL2w==
-X-CSE-MsgGUID: H+Qol/ZkRHOhB/+PniIPHw==
+  t=1743789315; x=1775325315;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pIENLeWzTVJaaXaUldVebDEO8Uq2auKXJ/zTuKpRGc0=;
+  b=cS5RBcX8WVQOf/JI3BbiZgxYeiEAgULmmu2NSzvq4yZ312VY93PDul9S
+   GWAo6FN2Tz1iF84duz1eS7C2kLL0Ne4wAb/4w5iUyNN7iFnCR3GewTOpC
+   JUrv0DGH4ffj2RY62mk+lQa4mQrf+PMQidr3FiuS947599PDdP8AfbHOD
+   FzID3hJpPW5/Ok3nwqXADYU9PKj39eRD8b1wwp/x+dLipq3abhOHt5fh0
+   mhxdLY2tnXPMpCwUEXUBk/wge3nOyTz5mXi74R9d7qUEPag5XWdClGDHh
+   E4Njzr3W9CgNayo3fI1FC2STBQ6k8SjHqzneYrAJ8WQmPN45O3T/Z2kU9
+   w==;
+X-CSE-ConnectionGUID: PkcArjOzR963o+BvMFe1nA==
+X-CSE-MsgGUID: NWiXvb/UQsCCXh5PfxxOaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="45379459"
+X-IronPort-AV: E=Sophos;i="6.15,189,1739865600"; 
+   d="scan'208";a="45379459"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 10:55:14 -0700
+X-CSE-ConnectionGUID: XcFkPhxZTJWIrLqhXG8wPg==
+X-CSE-MsgGUID: DQH8Q7APT5qgIEL6nrV9GQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="132088790"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Apr 2025 10:46:47 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u0l7s-0001Qp-2u;
-	Fri, 04 Apr 2025 17:46:44 +0000
-Date: Sat, 5 Apr 2025 01:46:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, sgoutham@marvell.com,
-	gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH] octeontx2-pf:  Add error handling for
- cn10k_map_unmap_rq_policer().
-Message-ID: <202504050116.6a4iOEA7-lkp@intel.com>
-References: <20250403151303.2280-1-vulab@iscas.ac.cn>
+X-IronPort-AV: E=Sophos;i="6.15,189,1739865600"; 
+   d="scan'208";a="131512363"
+Received: from daliomra-mobl3.amr.corp.intel.com (HELO [10.124.223.29]) ([10.124.223.29])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 10:55:10 -0700
+Message-ID: <c797714b-4180-4439-8a02-3cfacd42dafe@intel.com>
+Date: Fri, 4 Apr 2025 10:55:09 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250403151303.2280-1-vulab@iscas.ac.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 11/14] x86: Handle int3 for inline KASAN reports
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, hpa@zytor.com,
+ hch@infradead.org, nick.desaulniers+lkml@gmail.com,
+ kuan-ying.lee@canonical.com, masahiroy@kernel.org,
+ samuel.holland@sifive.com, mingo@redhat.com, corbet@lwn.net,
+ ryabinin.a.a@gmail.com, guoweikang.kernel@gmail.com, jpoimboe@kernel.org,
+ ardb@kernel.org, vincenzo.frascino@arm.com, glider@google.com,
+ kirill.shutemov@linux.intel.com, apopple@nvidia.com,
+ samitolvanen@google.com, kaleshsingh@google.com, jgross@suse.com,
+ andreyknvl@gmail.com, scott@os.amperecomputing.com, tony.luck@intel.com,
+ dvyukov@google.com, pasha.tatashin@soleen.com, ziy@nvidia.com,
+ broonie@kernel.org, gatlin.newhouse@gmail.com, jackmanb@google.com,
+ wangkefeng.wang@huawei.com, thiago.bauermann@linaro.org, tglx@linutronix.de,
+ kees@kernel.org, akpm@linux-foundation.org, jason.andryuk@amd.com,
+ snovitoll@gmail.com, xin@zytor.com, jan.kiszka@siemens.com, bp@alien8.de,
+ rppt@kernel.org, peterz@infradead.org, pankaj.gupta@amd.com,
+ thuth@redhat.com, andriy.shevchenko@linux.intel.com,
+ joel.granados@kernel.org, kbingham@kernel.org, nicolas@fjasle.eu,
+ mark.rutland@arm.com, surenb@google.com, catalin.marinas@arm.com,
+ morbo@google.com, justinstitt@google.com, ubizjak@gmail.com,
+ jhubbard@nvidia.com, urezki@gmail.com, dave.hansen@linux.intel.com,
+ bhe@redhat.com, luto@kernel.org, baohua@kernel.org, nathan@kernel.org,
+ will@kernel.org, brgerst@gmail.com
+Cc: llvm@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
+References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
+ <012c84049b853d6853a7d6c887ce0c2323bcd80a.1743772053.git.maciej.wieczor-retman@intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <012c84049b853d6853a7d6c887ce0c2323bcd80a.1743772053.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Wentao,
+On 4/4/25 06:14, Maciej Wieczor-Retman wrote:
+> When a tag mismatch happens in inline software tag-based KASAN on x86 an
+> int3 instruction is executed and needs proper handling.
 
-kernel test robot noticed the following build warnings:
+Does this mean "inline software"? Or "inline" functions? I'm not quite
+parsing that. I think it needs some more background.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.14 next-20250404]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Call kasan_report() from the int3 handler and pass down the proper
+> information from registers - RDI should contain the problematic address
+> and RAX other metadata.
+> 
+> Also early return from the int3 selftest if inline KASAN is enabled
+> since it will cause a kernel panic otherwise.
+...
+> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> index bf82c6f7d690..ba277a25b57f 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -1979,6 +1979,9 @@ static noinline void __init int3_selftest(void)
+>  	};
+>  	unsigned int val = 0;
+>  
+> +	if (IS_ENABLED(CONFIG_KASAN_INLINE))
+> +		return;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/octeontx2-pf-Add-error-handling-for-cn10k_map_unmap_rq_policer/20250403-231435
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250403151303.2280-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] octeontx2-pf:  Add error handling for cn10k_map_unmap_rq_policer().
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250405/202504050116.6a4iOEA7-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504050116.6a4iOEA7-lkp@intel.com/reproduce)
+Comments, please. This is a total non sequitur otherwise.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504050116.6a4iOEA7-lkp@intel.com/
+>  	BUG_ON(register_die_notifier(&int3_exception_nb));
+>  
+>  	/*
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index 9f88b8a78e50..32c81fc2d439 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+...
+> @@ -849,6 +850,51 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+>  	cond_local_irq_disable(regs);
+>  }
+>  
+> +#ifdef CONFIG_KASAN_SW_TAGS
+> +
+> +#define KASAN_RAX_RECOVER	0x20
+> +#define KASAN_RAX_WRITE	0x10
+> +#define KASAN_RAX_SIZE_MASK	0x0f
+> +#define KASAN_RAX_SIZE(rax)	(1 << ((rax) & KASAN_RAX_SIZE_MASK))
 
-All warnings (new ones prefixed by >>):
+This ABI _looks_ like it was conjured out out of thin air. I assume it's
+coming from the compiler. Any pointers to that ABI definition in or out
+of the kernel would be appreciated.
 
->> drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c:362:3: warning: misleading indentation; statement is not part of the previous 'for' [-Wmisleading-indentation]
-     362 |                 if (rc)
-         |                 ^
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c:360:2: note: previous statement is here
-     360 |         for (qidx = 0; qidx < hw->rx_queues; qidx++)
-         |         ^
-   1 warning generated.
+> +static bool kasan_handler(struct pt_regs *regs)
+> +{
+> +	int metadata = regs->ax;
+> +	u64 addr = regs->di;
+> +	u64 pc = regs->ip;
+> +	bool recover = metadata & KASAN_RAX_RECOVER;
+> +	bool write = metadata & KASAN_RAX_WRITE;
+> +	size_t size = KASAN_RAX_SIZE(metadata);
 
+"metadata" is exactly the same length as "regs->ax", so it seems a
+little silly. Also, please use vertical alignment as a tool to make code
+more readable. Isn't this much more readable?
 
-vim +/for +362 drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c
+	bool recover = regs->ax & KASAN_RAX_RECOVER;
+	bool write   = regs->ax & KASAN_RAX_WRITE;
+	size_t size  = KASAN_RAX_SIZE(regs->ax);
+	u64 addr     = regs->di;
+	u64 pc       = regs->ip;
 
-   351	
-   352	int cn10k_free_matchall_ipolicer(struct otx2_nic *pfvf)
-   353	{
-   354		struct otx2_hw *hw = &pfvf->hw;
-   355		int qidx, rc;
-   356	
-   357		mutex_lock(&pfvf->mbox.lock);
-   358	
-   359		/* Remove RQ's policer mapping */
-   360		for (qidx = 0; qidx < hw->rx_queues; qidx++)
-   361			rc = cn10k_map_unmap_rq_policer(pfvf, qidx, hw->matchall_ipolicer, false);
- > 362			if (rc)
-   363				goto out;
-   364	
-   365		rc = cn10k_free_leaf_profile(pfvf, hw->matchall_ipolicer);
-   366	
-   367	out:
-   368		mutex_unlock(&pfvf->mbox.lock);
-   369		return rc;
-   370	}
-   371	
+> +	if (!IS_ENABLED(CONFIG_KASAN_INLINE))
+> +		return false;
+> +
+> +	if (user_mode(regs))
+> +		return false;
+> +
+> +	kasan_report((void *)addr, size, write, pc);
+> +
+> +	/*
+> +	 * The instrumentation allows to control whether we can proceed after
+> +	 * a crash was detected. This is done by passing the -recover flag to
+> +	 * the compiler. Disabling recovery allows to generate more compact
+> +	 * code.
+> +	 *
+> +	 * Unfortunately disabling recovery doesn't work for the kernel right
+> +	 * now. KASAN reporting is disabled in some contexts (for example when
+> +	 * the allocator accesses slab object metadata; this is controlled by
+> +	 * current->kasan_depth). All these accesses are detected by the tool,
+> +	 * even though the reports for them are not printed.
+> +	 *
+> +	 * This is something that might be fixed at some point in the future.
+> +	 */
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Can we please find a way to do this that doesn't copy and paste a rather
+verbose comment?
+
+What if we passed 'recover' into kasan_report() and had it do the die()?
+
+> +	if (!recover)
+> +		die("Oops - KASAN", regs, 0);
+> +	return true;
+> +}
+> +
+> +#endif
+> +
+>  static bool do_int3(struct pt_regs *regs)
+>  {
+>  	int res;
+> @@ -863,6 +909,12 @@ static bool do_int3(struct pt_regs *regs)
+>  	if (kprobe_int3_handler(regs))
+>  		return true;
+>  #endif
+> +
+> +#ifdef CONFIG_KASAN_SW_TAGS
+> +	if (kasan_handler(regs))
+> +		return true;
+> +#endif
+I won't get _too_ grumbly about ti since there's another culprit right
+above, but the "no #fidefs in .c files" rule still applies. The right
+way to do this is with a stub kasan_handler() in a header with the
+#ifdef in the header.
+
+Actually, ditto on the kasan_handler() #ifdef. I suspect it can go away
+too and be replaced with a IS_ENABLED(CONFIG_KASAN_SW_TAGS) check.
