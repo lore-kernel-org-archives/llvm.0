@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1EB1F12F3
-	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 13:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3263E136E37
+	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 13:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743772609; cv=none; b=gon1daddz/0lxUX76g7hKM5wKg7JSgaQtHhU6YwukH/m2U3vSTvvjtfxTwyoGLACuEw6139dCp0LzuviaqG4IVAZvpE8WU1eigaXrwDsbBlmK0ebFQ2Np/E5H67AZ3cTJectWTlDt4lecCCB7XcDjO7DZaUaRCxQekrCAOh1ADE=
+	t=1743772624; cv=none; b=vCuebRrIZrEdrjA/GDV2Id7/3WYojcDOyRyuvp8fbovAyHR9TYhrZuupO1mTWfZXh6SKlyW3N07BGH+NjkiJf7WHjuaMPlyiCzXVYMrY/wsmt+gI50HTivEFlJTKav84TZTZqo71TLNy6R31askOUmqbhvpCZn+1/xY0AUvgpyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743772609; c=relaxed/simple;
-	bh=FDp9HRqNQ0oDD3Qx3RyJgwftrUUBuyFmC51wrtuHP28=;
+	s=arc-20240116; t=1743772624; c=relaxed/simple;
+	bh=WLJPoxzJ+9icJR/wXoKCRX4w/xjfsl8E7YkLYgEJBpY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DYd9l+TPQfLagn0bPYIE9Ytmlrye9YLNKW6t3MB/wViFjgLlr+KdoJnoA1hHKowMTc81XSGRaNjCyYtJpccvcTArL5VnbVYckSnirKtWSoXYs4rVWiVQqVMNuYDXM6EHqHwb0Xv6dCKtRuiBYc0kgpAXzKoLt3yyGVt8mR54+MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CAA7eZSN; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=jjaxpSRicPLtTi0Op/vVAY4M1z3/fNj4bgpXHaFS/VVrnQUlmKcE9JN06eLRK+kKzzAUqIZBuEolj5GfSqzKCEfCBXf7sw6xZNAYfh/HCC2Lx0fIySCEY+RtsMxsjUVYk6mR1IgKkcO6OgkjPHyp9iEas0DwtZCLxomWr9WkT6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jr7lay4X; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CAA7eZSN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jr7lay4X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743772608; x=1775308608;
+  t=1743772623; x=1775308623;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FDp9HRqNQ0oDD3Qx3RyJgwftrUUBuyFmC51wrtuHP28=;
-  b=CAA7eZSNMNAj2UwcK7q1J6AkThrVZ2dzsV37gT5tR6e+67b4gPffqph5
-   WzTA+388f7XyYu4T28NgKxSvuekB0Vzsp2734YLLiMq3M7QSkopvG/LNd
-   H7aWelhTjJYB2/78L2mFojF8PPfS0umPy/CjSGmMlANczUtFXB8ovltrV
-   Moudbw5ID1a1RVo8JfW2bgW1zsosY8Y6+PkhSB4yi/GBNqjhUe+NF8MoN
-   KN2gNg6rpeyezf0e0lpznBncCvbcw3TYJAc31XYaSMR96em9D2O3mPr1+
-   6pw2I5tZP7k9IcUOU/KgQ+Hjt2EHJlQxDkYjMErZk9K4dGaRD7XvD2fLV
-   A==;
-X-CSE-ConnectionGUID: YDmOrgPgTX6wPCxs60Oy7Q==
-X-CSE-MsgGUID: NB7L32CJSuSoRAJ3xm3ghA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="55401843"
+  bh=WLJPoxzJ+9icJR/wXoKCRX4w/xjfsl8E7YkLYgEJBpY=;
+  b=Jr7lay4Xg5lhu3LR2Y67DOvxwZpTrJiyYASAf7lD+S6eaGPmzbK3YWXE
+   tnNkoZs9WEtEmW56Yw00A35w8SJ1kmSBsO0cnXPZMJrSysUK9hVeQ882b
+   S+fdmFAEpdanotT2vCgfAZbOaA0gbA6UvuMHdhqmge/IG4brQwZUndpeJ
+   PCfv1Nh1hVR6qEjVOfCOEEFZpNHSpWbto9+w8iwtX8dXYCBX/uqnzx1U4
+   h7b6tEWL5gVfRq6kW6ceuOm6jk7vbsgO7Z44IHRkDcT1pqKIuKfKD9/OZ
+   md/0e0j4LDy0ajESLITJjtpGy2L3DnYa8hBbPMNHbG13dpZocBwjD62W0
+   Q==;
+X-CSE-ConnectionGUID: Ky1+o4Z0RB2Ur6cykB5zdA==
+X-CSE-MsgGUID: Z30wVlwVQOiCoH52MDzQAg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="55401901"
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="55401843"
+   d="scan'208";a="55401901"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:16:48 -0700
-X-CSE-ConnectionGUID: KRVPdSrrQwCsFMKOJCYkCg==
-X-CSE-MsgGUID: BkRczVO7Rcyr+7Hf/uQO/g==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:17:03 -0700
+X-CSE-ConnectionGUID: 3+mynkr+SXqFVcdE3tJihA==
+X-CSE-MsgGUID: ZzPu2O3cTHCCuwduFbu/7A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
-   d="scan'208";a="128157245"
+   d="scan'208";a="128157271"
 Received: from opintica-mobl1 (HELO wieczorr-mobl1.intel.com) ([10.245.245.50])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:16:32 -0700
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 06:16:47 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: hpa@zytor.com,
 	hch@infradead.org,
@@ -114,9 +114,9 @@ Cc: llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	kasan-dev@googlegroups.com,
 	x86@kernel.org
-Subject: [PATCH v3 08/14] x86: LAM initialization
-Date: Fri,  4 Apr 2025 15:14:12 +0200
-Message-ID: <43b4db5c872bfaa4881cf45103b8fd3a826c1a9e.1743772053.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v3 09/14] x86: Minimal SLAB alignment
+Date: Fri,  4 Apr 2025 15:14:13 +0200
+Message-ID: <173d99afea37321e76e9380b49bd5966be8db849.1743772053.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
 References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
@@ -128,51 +128,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To make use of KASAN's tag based mode on x86 Linear Address Masking
-(LAM) needs to be enabled. To do that the 28th bit in CR4 needs to be
-set.
-
-Set the bit in early memory initialization.
-
-When launching secondary CPUs the LAM bit gets lost. To avoid this it
-needs to get added in a mask in head_64.S. The bit mask permits some
-bits of CR4 to pass from the primary CPU to the secondary CPUs without
-being cleared.
+Adjust x86 minimal SLAB alignment to match KASAN granularity size. In
+tag-based mode the size changes to 16 bytes so the value needs to be 16.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
- arch/x86/kernel/head_64.S | 3 +++
- arch/x86/mm/init.c        | 3 +++
- 2 files changed, 6 insertions(+)
+Changelog v3:
+- Fix typo in patch message 4 -> 16.
+- Change define location to arch/x86/include/asm/cache.c.
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index fefe2a25cf02..95b897b8bbd2 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -209,6 +209,9 @@ SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
- 	 *  there will be no global TLB entries after the execution."
- 	 */
- 	movl	$(X86_CR4_PAE | X86_CR4_LA57), %edx
-+#ifdef CONFIG_ADDRESS_MASKING
-+	orl	$X86_CR4_LAM_SUP, %edx
-+#endif
- #ifdef CONFIG_X86_MCE
- 	/*
- 	 * Preserve CR4.MCE if the kernel will enable #MC support.
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index bfa444a7dbb0..84cefc5dd69b 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -766,6 +766,9 @@ void __init init_mem_mapping(void)
- 	probe_page_size_mask();
- 	setup_pcid();
+ arch/x86/include/asm/cache.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/x86/include/asm/cache.h b/arch/x86/include/asm/cache.h
+index 69404eae9983..3232583b5487 100644
+--- a/arch/x86/include/asm/cache.h
++++ b/arch/x86/include/asm/cache.h
+@@ -21,4 +21,8 @@
+ #endif
+ #endif
  
-+	if (boot_cpu_has(X86_FEATURE_LAM) && IS_ENABLED(CONFIG_KASAN_SW_TAGS))
-+		cr4_set_bits_and_update_boot(X86_CR4_LAM_SUP);
++#ifdef CONFIG_KASAN_SW_TAGS
++#define ARCH_SLAB_MINALIGN (1ULL << KASAN_SHADOW_SCALE_SHIFT)
++#endif
 +
- #ifdef CONFIG_X86_64
- 	end = max_pfn << PAGE_SHIFT;
- #else
+ #endif /* _ASM_X86_CACHE_H */
 -- 
 2.49.0
 
