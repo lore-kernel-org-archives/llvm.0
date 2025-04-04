@@ -1,132 +1,144 @@
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED0933FD
-	for <llvm@lists.linux.dev>; Fri,  4 Apr 2025 05:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F29715C15F;
+	Fri,  4 Apr 2025 08:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743745800; cv=none; b=GC6U9EKjxYDrlKAXit3kgVvdh48rbc2MJ6qpxyTK1BBJ84yLGfzikaZyXQc1gb09LXWCwYmDLCjT9c7pk2cY00+Yxiqr+99Fi9GZkuJ5FkmiHCB7KhtRsPu05Hy1VeiJDG59IM3GJ7VnGxkl6Lr6YaeU2expL2ASCuaH0QOT3Jw=
+	t=1743753963; cv=none; b=ZlTpSpawDP7B2QX3rN3W+SzaZOsTjKpnZZfuM/Yel0AQePuE8rYP1Kofmm51HpIxaKgbwRS6aZbWYIPl69CawHGf5REc3aWoINukU05TZ4tlZIcIuvdpEs6VZX2rzrBnbJAmXUf4Qh2QLmo0N7cK49dSpopGnBwPNc71l7tvdyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743745800; c=relaxed/simple;
-	bh=qkTHqjl83pLG/+D8Skug3u0Mx3mxlwN9CoNV7VolM9o=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=gT0iOtfgyzgG7mMXjp3y4N9OoWIGMUGfC+hMwbfk3FasvMb6HoYjdLJOm4wzngc/3fONjwMzwQiV4FVyUURj4pabw/tvyrKgFEhyGnAaFtE/ac9cFErqOz0bESlNYtr3PRTLL9z0qz3n6U1RL8PpdNN26RO+3tgAWOBHiks1GJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cREzHxhO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=c7DHAjdH; arc=none smtp.client-ip=202.12.124.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1743753963; c=relaxed/simple;
+	bh=Tfa/yybm5CsqfeEOMUp9kIWHth41E2TgjvduwZq36R8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DyxblP4DKbllHAPT02MERZl2DK8dQ9RMcsN+eD+FHVNZFBA85u9mQ1M5gbWihf4YXcjWp+iab98lV7lEg4Sf3F1F9nQAlGcfrte923k1uP/rsdZy3wTvp1eFEd3m7E7DG8eTI5bLLsojv827g1A/RHFCqbaLV+w2RKljyX6HFCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mWS6TFpR; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cREzHxhO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c7DHAjdH"
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id C69A92540208;
-	Fri,  4 Apr 2025 01:49:57 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-12.internal (MEProxy); Fri, 04 Apr 2025 01:49:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1743745797;
-	 x=1743832197; bh=jiFFNkuCIH7ZG6pqQ+AbUtFKAmY8bCOOF0MhNJ0ccxk=; b=
-	cREzHxhOLd5iw3lJUyZ1sf6YboO163DBvMqtwijXmO4lmnoacGSPuqlMob1TnYmM
-	EjMU6X5YAW9aQ09Ah2mT9mvvdhkJPLq2q1Epz/rj4KohQRcsos0TpLmYsKT063qj
-	YCrBgtjRvsQS9EHMV593u2riSDxRbjysuPrD0upNA2LO9ZBPd0uYjX4qWnBfMnj6
-	eu4xEov0C9k2TMhXbj46vp7mTXuPhAqrNCmS4jehSScUEgAO+fd2I+dtPLSA3cEI
-	dZv0NMCuro4DOLn82nGXZZ6UoimbIs0iO1lq19nJDr4CRH2SMm2c3KToCAG2mJNe
-	yJhd6VIW0bG/WAH+xyk17Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1743745797; x=1743832197; bh=j
-	iFFNkuCIH7ZG6pqQ+AbUtFKAmY8bCOOF0MhNJ0ccxk=; b=c7DHAjdHlCs3c171T
-	FgJDkeEPXP0aJlvKNt8vzX9KU3eVOmGbYhugcn0TPh3sqJfoiPvKiM4cswWhVz9F
-	PVV3Pn6FXGW6G9yvMnAuOnFJo7zrWRZcmKIJ/hFrVTLIX3MF8ggWKsDHCyt3M+EV
-	ac/YXaLhY/qZ3YIg1g4F3Uxt0tq2B3s518lxj0R6UY4FiJ7vSrcedi1NA4B6weBn
-	p6ZMa2R91kNFoMnlHmuQB9an+1+jUZRwCtCiaKcmdkUWN4YvyBQMyynilQrvjnLB
-	cz+guR4Xl3iGnOjGgH79kEWrBj0O3wlfqH4Omy1OvFUtErMAWd7Et+xy8QMIpYmy
-	7TSLg==
-X-ME-Sender: <xms:BXPvZ9nrG31ueBFogNnTDWcbR6J8RNsw7X0OLEV-lSFzqvjM0g5ppw>
-    <xme:BXPvZ419yjwzmgHqGnMFn1DOo1fy9CHJKqMNehqhAeUnkhUfmvBupKUXdYkuQtddS
-    TFjohemrgGunKQjvGY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduledtieegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvffkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhkeeltdfffefhgffhteetheeuhffgteeghfdt
-    ueefudeuleetgfehtdejieffhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    gedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnih
-    gvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopeihuhhrhidrnhhorhho
-    vhesghhmrghilhdrtghomhdprhgtphhtthhopehirhhoghgvrhhssehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgt
-    phhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopegrughrihgrnh
-    drhhhunhhtvghrsehinhhtvghlrdgtohhmpdhrtghpthhtohepjhgrtghosgdrvgdrkhgv
-    lhhlvghrsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:BXPvZzp7YMrawrFKcXI2LMRtjebMbG3rtCjrP35MqaiZsxrBppNatQ>
-    <xmx:BXPvZ9n_JQQFZg8tVnlWAofPSEpckD26vuBabjRQayQDt-6RUDbbVQ>
-    <xmx:BXPvZ72pWi6ev2M6fgLT9fI2b7yhZg7icuL5NQ3qnBlNfBnAN1TfYg>
-    <xmx:BXPvZ8uvPBJ21iyQrb4G_4yFxp6KdiitPQ4TQfx-YgFk-UgQU0zM4Q>
-    <xmx:BXPvZzruerDU4_YF2_WRKMkMbfqdBC8fp3mIjafEbcgtGLzAcKxjwi0Z>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 17A782220073; Fri,  4 Apr 2025 01:49:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mWS6TFpR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743753961; x=1775289961;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tfa/yybm5CsqfeEOMUp9kIWHth41E2TgjvduwZq36R8=;
+  b=mWS6TFpRaGLPOolEjQxKjw6eJ46un4975dwwDaD/H+E5nxWxTMpUuQ+C
+   zQShQLNgalRrt6Gvr7rq0/fFBZVk0WzAr5HnqDyywyyRXgzOgOGTzd/HE
+   JYIsNebn8IKMdFKsdLIKvOeKRtR5wvI2kQFlk+k0VWOQN1m9Gi1GqEQ8e
+   DOpyP0rr2aQmCIm863E7u26KL+Jqg64WdaIqPTjEfMntrJPrSM4Oyi+0p
+   /aTMozW1zjk+Yds8MNo0z8i76nsTSxMGJa+vqZoYvt70Jq+qU1r4N64tG
+   sjS1d1UFpQm4b5/AzoYLKmJ8RjCVrRhBpB+an9dS3/2/OWu+Ze0Y26+Sb
+   Q==;
+X-CSE-ConnectionGUID: C8PRV6PvTgCNJ0JE/n/E4w==
+X-CSE-MsgGUID: 3w/tuehBQwaaP+dIyNCVIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11393"; a="45071901"
+X-IronPort-AV: E=Sophos;i="6.15,187,1739865600"; 
+   d="scan'208";a="45071901"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 01:06:00 -0700
+X-CSE-ConnectionGUID: UsxmuIBoSTG5iI2LOfkssQ==
+X-CSE-MsgGUID: 1IMoFxbxTOCJW4BpgdX77A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,187,1739865600"; 
+   d="scan'208";a="158233880"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Apr 2025 01:05:59 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0c3o-00014x-2k;
+	Fri, 04 Apr 2025 08:05:56 +0000
+Date: Fri, 4 Apr 2025 16:04:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Donet Tom <donettom@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2]  mm/swap.c: Enable promotion of unmapped MGLRU
+ page cache pages
+Message-ID: <202504041529.Z00E8TJC-lkp@intel.com>
+References: <20250403141032.22743-1-donettom@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Tbabee1c6d5c86beb
-Date: Fri, 04 Apr 2025 07:49:33 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ian Rogers" <irogers@google.com>, "Yury Norov" <yury.norov@gmail.com>,
- "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Adrian Hunter" <adrian.hunter@intel.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Jakub Kicinski" <kuba@kernel.org>,
- "Jacob Keller" <jacob.e.keller@intel.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <dbba94f1-27ee-4344-b4b2-d8dffe6b7d33@app.fastmail.com>
-In-Reply-To: <20250403165702.396388-3-irogers@google.com>
-References: <20250403165702.396388-1-irogers@google.com>
- <20250403165702.396388-3-irogers@google.com>
-Subject: Re: [PATCH v1 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250403141032.22743-1-donettom@linux.ibm.com>
 
-On Thu, Apr 3, 2025, at 18:56, Ian Rogers wrote:
-> The clang warning -Wshorten-64-to-32 can be useful to catch
-> inadvertent truncation. In some instances this truncation can lead to
-> changing the sign of a result, for example, truncation to return an
-> int to fit a sort routine. Silence the warning by making the implicit
-> truncation explicit.
+Hi Donet,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.14 next-20250404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Donet-Tom/mm-swap-c-Enable-promotion-of-unmapped-MGLRU-page-cache-pages/20250403-221222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250403141032.22743-1-donettom%40linux.ibm.com
+patch subject: [RFC PATCH v2]  mm/swap.c: Enable promotion of unmapped MGLRU page cache pages
+config: hexagon-randconfig-002-20250404 (https://download.01.org/0day-ci/archive/20250404/202504041529.Z00E8TJC-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504041529.Z00E8TJC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504041529.Z00E8TJC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/swap.c:401:8: error: use of undeclared identifier 'sysctl_numa_balancing_mode'
+     401 |                                   (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+         |                                    ^
+>> mm/swap.c:401:37: error: use of undeclared identifier 'NUMA_BALANCING_MEMORY_TIERING'
+     401 |                                   (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+         |                                                                 ^
+>> mm/swap.c:402:8: error: use of undeclared identifier 'numa_pagecache_promotion_enabled'
+     402 |                                    numa_pagecache_promotion_enabled) {
+         |                                    ^
+>> mm/swap.c:403:5: error: call to undeclared function 'promotion_candidate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     403 |                                 promotion_candidate(folio);
+         |                                 ^
+   4 errors generated.
 
 
->  unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
->  {
->  	if (small_const_nbits(nbits))
-> -		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
-> +		return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
->  	return __bitmap_weight(src, nbits);
->  }
+vim +/sysctl_numa_balancing_mode +401 mm/swap.c
 
-I don't understand this one. hweight_long() and bitmap_weight()
-both return unsigned value, so why do you need to cast this to
-a signed value to avoid a signedness problem?
+   382	
+   383	static void lru_gen_inc_refs(struct folio *folio)
+   384	{
+   385		unsigned long new_flags, old_flags = READ_ONCE(folio->flags);
+   386	
+   387		if (folio_test_unevictable(folio))
+   388			return;
+   389	
+   390		/* see the comment on LRU_REFS_FLAGS */
+   391		if (!folio_test_referenced(folio)) {
+   392			set_mask_bits(&folio->flags, LRU_REFS_MASK, BIT(PG_referenced));
+   393			return;
+   394		}
+   395	
+   396		do {
+   397			if ((old_flags & LRU_REFS_MASK) == LRU_REFS_MASK) {
+   398				if (!folio_test_workingset(folio)) {
+   399					folio_set_workingset(folio);
+   400				} else if (!folio_test_isolated(folio) &&
+ > 401					  (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+ > 402					   numa_pagecache_promotion_enabled) {
+ > 403					promotion_candidate(folio);
+   404				}
+   405				return;
+   406			}
+   407	
+   408			new_flags = old_flags + BIT(LRU_REFS_PGOFF);
+   409		} while (!try_cmpxchg(&folio->flags, &old_flags, new_flags));
+   410	}
+   411	
 
-hweight_long() should never return anything larger than 64ul
-anyway, which is way outside of the range where it would get
-sign-extended.
-
-A more logical change to me would be to make hweight_long()
-and bitmap_weight() have the same return type, either
-'unsigned long' or 'unsigned int'.
-
-      Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
