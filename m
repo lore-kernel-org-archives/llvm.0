@@ -1,48 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680B4182BC;
-	Sat,  5 Apr 2025 10:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7192F1DE3C4;
+	Sat,  5 Apr 2025 11:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743848742; cv=none; b=sg56/QEMH1kxEwgNYoZJBzF3JCD1kepd+l/JxEZ2/FNIM4UDmBb8gnxXx6u+4n7Nm6vtuqhmazrSHHqCfaaLp/YQdYrUDYEccKr6CurEpfLGRHnwsR4SoTdYQXozl6y1EPeCvUlgX8jaLpvOJ2l4P9HQUW9HpZnQ+gzugjTt2xY=
+	t=1743852257; cv=none; b=SL4tcLkXxKSOkf6ToFRyfqRMP+qb6qA27/nLUCu0AlOVKBngFZQbAFUDLdk2FwjiKwma4JHcCbPDMVU2jbTCdWMQ6IMgJ/sLcATL2awnk1QwsoObJJVbNRN9sLrbdccxGB6wOHoC18B3amNGCi9zOrfktENh6NFdAurzMhC85xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743848742; c=relaxed/simple;
-	bh=vE5HlGqFMPRiEApGfruZPXTVG1TFF/lORB022UJd2+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mSjobpu6ulbzo/y/7cOFTX6RdMR9QHPexfEl0xls9HKe3lnbwJm/b9MXk2gyDpFpvvGXIK55isoGSXrVVx0tp71iYgcMcGq5jHnd9J5ssBAsqJPW3tjy8J2Z+ffbSFadGtBd0g+/3r+1rXKP3XLdtMQgcSxHVkuELFAmL9kQSfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D9x15F/T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743852257; c=relaxed/simple;
+	bh=lilis19xdS8KNBjda/h19MTnamAgEeBENX+0LKQWGMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eEadJjJ353H9a9x10BK0qGpcXleGuUCycAdTWcheAw+yRgQLy3o9sY2Fz5YSnyQRJ7/vwdTmnBtyz7hvXR2Ua/TSXE5RZpK79WQcfiMHBNWteAfMaeSHoJAkTxKdvrfuv/4C4l0Q/8kDcFW8T3l/YQqt42xBAUw9ETlfTpJgQY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mjjiO78U; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D9x15F/T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F18C4CEE4;
-	Sat,  5 Apr 2025 10:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1743848741;
-	bh=vE5HlGqFMPRiEApGfruZPXTVG1TFF/lORB022UJd2+o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D9x15F/TYNWiEI75UcJrX8YPtugDm+WaUhtn6Lb0l0B9RjaeEzQa8gSaTqN9JOLPw
-	 N9U9Q8OLIV5X9gX4sY7uzAYJCqW7r+muYhi1Vs9VdHxlnWEKXEKpsOxYSR1R1Uc55V
-	 S2IdIaNAnTVyE8Ef2zAU0NCEK5fGUZ4aKB2jYZoI=
-Date: Sat, 5 Apr 2025 11:24:13 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-	conor@kernel.org, hargar@microsoft.com, broonie@kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 6.13 00/23] 6.13.10-rc1 review
-Message-ID: <2025040527-harmonics-bath-946e@gregkh>
-References: <20250403151622.273788569@linuxfoundation.org>
- <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mjjiO78U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743852256; x=1775388256;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lilis19xdS8KNBjda/h19MTnamAgEeBENX+0LKQWGMs=;
+  b=mjjiO78Up7f+XaB5DUX8Ky5ql/PLiJUPLs8kATaoLNt5BlH5C3QO8ug8
+   ou/36YaH5uzqEz8oWNasth1EWm5iOpocz7DywlCRF8WAq+lKTaGqkIuJn
+   ZqAEmC1QEG+2kcW4g6NKr8BXhxhB2vgr6AfCd8j9Ek4Gke3ZsA8be7+oG
+   luwxeG1AK11rnj81PKasiIPVUcyK2JpLyziG5mjIGczRG98p2NyLwi5Pz
+   FDXtOGup0UkWnH1c4X2DLP+yDLpi2DAeR0WpMa8uhwWB1rWbUU4MoBKhy
+   IchVO/h7h2xGkOQw7oD52mfxb+iU8utYHFOsPmw8BNHGGhwlKYqeBKQ7b
+   Q==;
+X-CSE-ConnectionGUID: iZp324aURh6EqAOtM13FAA==
+X-CSE-MsgGUID: /tRKtS46QZyWKE4ekLElVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="45007182"
+X-IronPort-AV: E=Sophos;i="6.15,191,1739865600"; 
+   d="scan'208";a="45007182"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 04:24:15 -0700
+X-CSE-ConnectionGUID: k5qFWzUqSzCLOPQkI1SWwg==
+X-CSE-MsgGUID: P65w8FF/TY2UzZMX9rOX2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,191,1739865600"; 
+   d="scan'208";a="128374252"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 05 Apr 2025 04:24:13 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u11dD-0001zp-0R;
+	Sat, 05 Apr 2025 11:24:11 +0000
+Date: Sat, 5 Apr 2025 19:23:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ast-bpf:trylock 11/11] mm/slub.c:4115:33: error: too few arguments
+ to function call, expected 4, have 3
+Message-ID: <202504051934.OowaTgnm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,70 +61,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
 
-On Sat, Apr 05, 2025 at 11:50:59AM +0530, Naresh Kamboju wrote:
-> On Thu, 3 Apr 2025 at 20:56, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.13.10 release.
-> > There are 23 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Sat, 05 Apr 2025 15:16:11 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.13.10-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.13.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> 
-> Regressions on arm, arm64 and x86_64.
-> 
-> 1)
-> The selftests rseq failed across the boards and virtual environments.
-> These test failures were also noticed on Linux mainline and next.
-> 
-> We will bisect these lists of regressions and get back to you.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git trylock
+head:   a8b51ec33155e2a633ff561d09e3ac44faaa3117
+commit: a8b51ec33155e2a633ff561d09e3ac44faaa3117 [11/11] kmalloc
+config: i386-buildonly-randconfig-004-20250405 (https://download.01.org/0day-ci/archive/20250405/202504051934.OowaTgnm-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504051934.OowaTgnm-lkp@intel.com/reproduce)
 
-Thanks, this I'll care about, but:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504051934.OowaTgnm-lkp@intel.com/
 
-> * kselftest-rseq
->   - rseq_basic_percpu_ops_mm_cid_test
->   - rseq_basic_percpu_ops_test
->   - rseq_basic_test
->   - rseq_param_test
->   - rseq_param_test_benchmark
->   - rseq_param_test_compare_twice
->   - rseq_param_test_mm_cid
->   - rseq_param_test_mm_cid_benchmark
->   - rseq_param_test_mm_cid_compare_twice
-> 
-> 2)
->  The clang-nightly build issues reported on mainline and next.
-> 
-> * S390, powerpc, build
->   - clang-nightly-defconfig
->   - clang-nightly-lkftconfig-hardening
->   - clang-nightly-lkftconfig-lto-full
->   - clang-nightly-lkftconfig-lto-thing
-> 
->  clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
->   - https://lore.kernel.org/all/CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com/
-> 
-> 3)
->  The clang-nightly boot regressions with no console output have been
->  reported on mainline and next.
+All errors (new ones prefixed by >>):
 
-These 2 I don't, as that's a mainline issue first.
+>> mm/slub.c:4115:33: error: too few arguments to function call, expected 4, have 3
+    4115 |         slab = get_partial(s, node, &pc);
+         |                ~~~~~~~~~~~             ^
+   mm/slub.c:3000:21: note: 'get_partial' declared here
+    3000 | static struct slab *get_partial(struct kmem_cache *s, int node,
+         |                     ^           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    3001 |                                 struct partial_context *pc,
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    3002 |                                 gfp_t gfpflags)
+         |                                 ~~~~~~~~~~~~~~
+   1 error generated.
 
-thanks,
 
-greg k-h
+vim +4115 mm/slub.c
+
+f7c80fad6c2b64 Christoph Lameter   2024-10-01  4074  
+1f04b07d976da0 Thomas Gleixner     2022-08-25  4075  	if (!USE_LOCKLESS_FAST_PATH() ||
+bb192ed9aa7191 Vlastimil Babka     2021-11-03  4076  	    unlikely(!object || !slab || !node_match(slab, node))) {
+6edf2576a6cc46 Feng Tang           2022-09-13  4077  		object = __slab_alloc(s, gfpflags, node, addr, c, orig_size);
+8eae1492675d0f Dave Hansen         2014-06-04  4078  	} else {
+0ad9500e16fe24 Eric Dumazet        2011-12-16  4079  		void *next_object = get_freepointer_safe(s, object);
+0ad9500e16fe24 Eric Dumazet        2011-12-16  4080  
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4081  		/*
+25985edcedea63 Lucas De Marchi     2011-03-30  4082  		 * The cmpxchg will only match if there was no additional
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4083  		 * operation and if we are on the right processor.
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4084  		 *
+d0e0ac9772f8ec Chen Gang           2013-07-15  4085  		 * The cmpxchg does the following atomically (without lock
+d0e0ac9772f8ec Chen Gang           2013-07-15  4086  		 * semantics!)
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4087  		 * 1. Relocate first pointer to the current per cpu area.
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4088  		 * 2. Verify that tid and freelist have not been changed
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4089  		 * 3. If they were not changed replace tid and freelist
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4090  		 *
+d0e0ac9772f8ec Chen Gang           2013-07-15  4091  		 * Since this is without lock semantics the protection is only
+d0e0ac9772f8ec Chen Gang           2013-07-15  4092  		 * against code executing on this cpu *not* from access by
+d0e0ac9772f8ec Chen Gang           2013-07-15  4093  		 * other cpus.
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4094  		 */
+6801be4f2653e5 Peter Zijlstra      2023-05-31  4095  		if (unlikely(!__update_cpu_freelist_fast(s, object, next_object, tid))) {
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4096  			note_cmpxchg_failure("slab_alloc", s, tid);
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4097  			goto redo;
+8a5ec0ba42c491 Christoph Lameter   2011-02-25  4098  		}
+0ad9500e16fe24 Eric Dumazet        2011-12-16  4099  		prefetch_freepointer(s, next_object);
+84e554e6865c4f Christoph Lameter   2009-12-18  4100  		stat(s, ALLOC_FASTPATH);
+894b8788d7f265 Christoph Lameter   2007-05-10  4101  	}
+0f181f9fbea8bc Alexander Potapenko 2019-10-14  4102  
+56d5a2b9ba85a3 Vlastimil Babka     2022-11-21  4103  	return object;
+56d5a2b9ba85a3 Vlastimil Babka     2022-11-21  4104  }
+0af8489b0216fa Vlastimil Babka     2022-11-15  4105  #else /* CONFIG_SLUB_TINY */
+0af8489b0216fa Vlastimil Babka     2022-11-15  4106  static void *__slab_alloc_node(struct kmem_cache *s,
+0af8489b0216fa Vlastimil Babka     2022-11-15  4107  		gfp_t gfpflags, int node, unsigned long addr, size_t orig_size)
+0af8489b0216fa Vlastimil Babka     2022-11-15  4108  {
+0af8489b0216fa Vlastimil Babka     2022-11-15  4109  	struct partial_context pc;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4110  	struct slab *slab;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4111  	void *object;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4112  
+0af8489b0216fa Vlastimil Babka     2022-11-15  4113  	pc.flags = gfpflags;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4114  	pc.orig_size = orig_size;
+43c4c349149c77 Chengming Zhou      2023-11-02 @4115  	slab = get_partial(s, node, &pc);
+0af8489b0216fa Vlastimil Babka     2022-11-15  4116  
+43c4c349149c77 Chengming Zhou      2023-11-02  4117  	if (slab)
+43c4c349149c77 Chengming Zhou      2023-11-02  4118  		return pc.object;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4119  
+0af8489b0216fa Vlastimil Babka     2022-11-15  4120  	slab = new_slab(s, gfpflags, node);
+0af8489b0216fa Vlastimil Babka     2022-11-15  4121  	if (unlikely(!slab)) {
+0af8489b0216fa Vlastimil Babka     2022-11-15  4122  		slab_out_of_memory(s, gfpflags, node);
+0af8489b0216fa Vlastimil Babka     2022-11-15  4123  		return NULL;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4124  	}
+0af8489b0216fa Vlastimil Babka     2022-11-15  4125  
+0af8489b0216fa Vlastimil Babka     2022-11-15  4126  	object = alloc_single_from_new_slab(s, slab, orig_size);
+0af8489b0216fa Vlastimil Babka     2022-11-15  4127  
+0af8489b0216fa Vlastimil Babka     2022-11-15  4128  	return object;
+0af8489b0216fa Vlastimil Babka     2022-11-15  4129  }
+0af8489b0216fa Vlastimil Babka     2022-11-15  4130  #endif /* CONFIG_SLUB_TINY */
+56d5a2b9ba85a3 Vlastimil Babka     2022-11-21  4131  
+
+:::::: The code at line 4115 was first introduced by commit
+:::::: 43c4c349149c77f27c8e5801755a7b8883a70ebe slub: Change get_partial() interfaces to return slab
+
+:::::: TO: Chengming Zhou <zhouchengming@bytedance.com>
+:::::: CC: Vlastimil Babka <vbabka@suse.cz>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
