@@ -1,156 +1,146 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A7F19D8A2
-	for <llvm@lists.linux.dev>; Sat,  5 Apr 2025 18:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A581C07DA;
+	Sat,  5 Apr 2025 19:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743879294; cv=none; b=XmGKca1a0KrVZ6exYtd+NJHHsele0Ui4O81qtjkoHOH5GJIuHWWhPR6Kf3CQcbOy4kuQFJQaiY5NdZw4ia/iKmrfIuwj0cnGTHY2RefMXaw/dXwbf503iARCQJJiO10npqw3ID31CHgwkgGQBjGpGo+Wqg7FhSzewp/DTr4VDnM=
+	t=1743882779; cv=none; b=PLxpLyTxZApqCnOBHfvlDtGrChsIUz2GZOWvLohQ01MTQnwRTgtEEGK5PfYyNPPhM8JFYr4aaKh4r64+KY7Oj8jUw4YkLP/YT0M73zrMmXGpAq/IQyAMihGTx6igP5HLPVdwnncSdjDbS5JhE+qUL7A2lamds+g2BFpQFkMZA8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743879294; c=relaxed/simple;
-	bh=6Mb2qj22ju/TDAFHM2TV5BLsDIQBt4HcLZIzG4z141A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JmgUG+/OsMaHaA5v91lRnhBcowaS+pbBOtmTrIC3C5e8fJGPlTlP9Y5qAOYyiykbHqsq3k3RJbuMI3FIhOU/69qJvgMbuNV3M1iWS8ot68/uOeMvu3XmphnRIlgpNtsw6DsYV9lYRWUFFJVFWs0bP/zEdRjTrhbucwesloTzvZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZdWy+SoE; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743882779; c=relaxed/simple;
+	bh=jn/p89ha/vy1d7n/p4tRQPO7YsnGC14s2bcrEYgJhMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B2Fi9PaKKjHsCkT+FbrDr3lvSVHv6wzjEiG5XzWVTf3mGViHmuS1VT+SHwJl5pmk6/lTnIePE1seMXRcfLo8F9sOocDoXTrdmq6GlIZozLFrJmxRjoeAKrTySZepThmvyuiyVEohmxOPb7+Sc8i7YGd/cfZWsET5FMN7P3yv/Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aMg2ih6O; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZdWy+SoE"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ac2963dc379so502865366b.2
-        for <llvm@lists.linux.dev>; Sat, 05 Apr 2025 11:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743879291; x=1744484091; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bzXeIk7ElKBWwVWnXfaB/AJuQSkAU8XCLvd5Y9hQzuE=;
-        b=ZdWy+SoEc+ZJaqc3GeREdL0GW8HwB7oIwl+Snggxi55rkza4Ji7jmR/ix6Hue6yZ1v
-         NalTDnmqpqUqIw9fikTPbVMgGooDnvJHxqPRCmxxo7xpbfrRhRYuA2gF8BF0ZgTTDpsO
-         m5ujbFqY4bMo1HmGG1/4WWcfJcs9YxHnzE6pNOI5EPjz97cP0QqV2lhkDeEephzBQjQI
-         DLF+4QbaTMMrUAqRjanlUIguNEri8CLlEZPAPOMKYBW39ed6DeltuOqub/IGm40P+V/q
-         1aboxkdqbxtpEwMJSaUGNurpMMYd7OAcbwIGCgnBnnb6DYw3T+yiDUhvI1XAb5bZXWEX
-         ZZSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743879291; x=1744484091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bzXeIk7ElKBWwVWnXfaB/AJuQSkAU8XCLvd5Y9hQzuE=;
-        b=jFIzBUEz4ws2Uyb9rgBb4lPEdmmISJY67cLOBi8OO11kGvkvJxjkrbXhyeI8dvYn9C
-         RcUm3AhMZShOuecDeBAHhF/e+NhhN/0Dr+pSVbQ2o4OBG7mbjgErxI+6cMXNKUGYMhi+
-         9asMRNeampqAf324T57js/QI20ol1Ff+cd4RUUab1JBKgTdpuzT3aCdy7J0yktEKBx/w
-         pYV8ud6vzyeUcESP2pvYEh1vckdqxCIWTQ8ZeQ6NObyBtVP/a8U7T1C/j+c5cbmdy9Ug
-         RpQ8vWTM01ucfG4JiocqoOzVu2YGdBbK1olAXw9F8KK7yh/GQ3wqITJ7MnGKBvIUrNgQ
-         TsfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQre0HjWoEcgKJ841aetjUJVGDpC9HqWaq9Gx5Ub2sCSsgKfxQc4yXN5dTLyAUVwzwh9GG@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxsr1hykB2h+Ephdcpb4FLvI2UzuWagIc72mOVZEkbXuRogffBo
-	vbo/AunEu+Jk6+Pp9JZSCdEiRAoNEFkf2kx0kDWNzGTBt2OjseVrXSu7NQUAGFnE87sBMlKMAun
-	bR1z3Vi7nkGeN1uvVdF0DSKvBMsU=
-X-Gm-Gg: ASbGnctHQOcuUNBxLEXI2JnZo77AG9IyfQl9C41+baNKM6LR1MmE0pbjA6ve5RACJAO
-	uSFu7AKxOZMUhOvdFcsd0GQ8VUzZViCBfdG+C+2VWSbEoaqfNHey2EsvzSoFR5FYwNk9RkenJs4
-	LHxl+sHjkLLdk6AyWqN/EhSSGwIw==
-X-Google-Smtp-Source: AGHT+IGh4QYB9HG8JaGAgqO45pIjnJVznH2U2vpOA2BZJVPQNImXQrlLswvmVbleUqXYD2XgtS7+iaFAHhu3GbyY0Qk=
-X-Received: by 2002:a17:906:c153:b0:ac7:c73a:be40 with SMTP id
- a640c23a62f3a-ac7d1751be6mr637457766b.14.1743879290514; Sat, 05 Apr 2025
- 11:54:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aMg2ih6O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743882777; x=1775418777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jn/p89ha/vy1d7n/p4tRQPO7YsnGC14s2bcrEYgJhMU=;
+  b=aMg2ih6OuQtyO8bckvsHuF8Wp1v/r6pNyXtvI68Pt3jtNTnWFBxkfCt1
+   DIjX77Ud+W3iMTrcF2N3+HCrzuG8t5/QF9OvIplGbuVJYKzCH9eqe4tXd
+   UKnsB80ijlT0Qat+Jeb4cjxwAUYlybR3t6hJuuxrK+C+FfDrBjJvn7y37
+   mj0zUMYILQCjG/anE/viy4LcjDppKV4R37mMC4AYxF12BdbhyzagvbMGY
+   BSoDqjCKjgZj6lXjFXnxBRh1VW64hEl9RlZLjWCRw7tovmbkRXKkfi480
+   stQO27nHacJpwRBrvQzcqQelRprbUYBIoxJHvTrvxBVgJyNstDcwnUrqT
+   Q==;
+X-CSE-ConnectionGUID: f9SEdwRCSwC3MPBCC7+4eg==
+X-CSE-MsgGUID: IiQ3FvyxTsGg5j1COj8nuA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11395"; a="44446131"
+X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
+   d="scan'208";a="44446131"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 12:52:55 -0700
+X-CSE-ConnectionGUID: eaO0fSw8TtKF5UD9usjfOg==
+X-CSE-MsgGUID: q2JICPZjQEKdis34xrADSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
+   d="scan'208";a="132304280"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Apr 2025 12:52:54 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u19ZT-0002F1-0i;
+	Sat, 05 Apr 2025 19:52:51 +0000
+Date: Sun, 6 Apr 2025 03:52:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 06/10] ASoC: tas2764: Crop SDOUT zero-out mask based
+ on BCLK ratio
+Message-ID: <202504060330.IuaPg3uQ-lkp@intel.com>
+References: <20250405-apple-codec-changes-v4-6-d007e46ce4a2@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
- <20250405101126.7a2627a6@pumpkin> <CAHk-=whC15F9=fQqr-5moPA0SXFc-fAx_15=jzbYELg1TCWsqg@mail.gmail.com>
-In-Reply-To: <CAHk-=whC15F9=fQqr-5moPA0SXFc-fAx_15=jzbYELg1TCWsqg@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sat, 5 Apr 2025 21:54:14 +0300
-X-Gm-Features: ATxdqUEo0hrg8ukK2hpNQ5RM0ZzHx5jt9wGQ5J2fW60Ta7UWxTJouhXn4H-Yuhw
-Message-ID: <CAHp75Vd--N0QjGrAW3TJRVCN0-LG31rVeHTGyb0awgO0sc_aXA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] vsprintf: Use __diag macros to disable '-Wsuggest-attribute=format'
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Laight <david.laight.linux@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250405-apple-codec-changes-v4-6-d007e46ce4a2@gmail.com>
 
-On Sat, Apr 5, 2025 at 8:27=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Sat, 5 Apr 2025 at 02:11, David Laight <david.laight.linux@gmail.com> =
-wrote:
-> >
-> > Perhaps the compilers ought to support __attribute__((format(none)))
-> > to disable the warning.
->
-> D'oh, that's a good idea.
->
-> And gcc already supports it, even if we have to hack it up.
->
-> So let's remove this whole horrible garbage entirely, and replace it
-> with __printf(1,0) which should do exactly that.
->
-> The 1 is for the format string argument number, and we're just *lying*
-> about it. But there is not format string argument, and gcc just checks
-> for 'is it a char pointer).
->
-> The real format string argument is va_fmt->fmt, but there's no way to
-> tell gcc that.
->
-> And the 0 is is to tell gcc that there's nothing to verify.
->
-> Then, if you do that, gcc will say "oh, maybe you need to do the same
-> for the 'pointer()' function". That one has a real 'fmt' thing, but
-> again nothing to be checked, so we do the same '__printf(1,0)' there
-> too.
->
-> There it makes more sense, because argument 1 _is_ actually a format
-> string, so we're not lying about it.
->
-> IOW, something like this:
->
->   --- a/lib/vsprintf.c
->   +++ b/lib/vsprintf.c
->   @@ -1700,9 +1700,10 @@ char *escaped_string(...
->    }
->
->   -#pragma GCC diagnostic push
->   -#ifndef __clang__
->   -#pragma GCC diagnostic ignored "-Wsuggest-attribute=3Dformat"
->   -#endif
->   -static char *va_format(char *buf, char *end, struct va_format *va_fmt,
->   +/*
->   + * The '__printf(1,0)' thing is a hack make gcc not ask us to use a
->   + * a format attribute. 'buf' is *not* the format, 'va_fmt->fmt' is.
->   + */
->   +static __printf(1,0)
->   +char *va_format(char *buf, char *end, struct va_format *va_fmt,
->                        struct printf_spec spec)
->    {
->   @@ -1718,5 +1719,4 @@ static char *va_format(...
->         return buf;
->    }
->   -#pragma GCC diagnostic pop
->
->    static noinline_for_stack
->   @@ -2429,5 +2429,5 @@ early_param(...
->     * See rust/kernel/print.rs for details.
->     */
->   -static noinline_for_stack
->   +static noinline_for_stack __printf(1,0)
->    char *pointer(const char *fmt, char *buf, char *end, void *ptr,
->               struct printf_spec spec)
->
-> Does that work for people who see this warning?
+Hi James,
 
-This is quite similar to my initial approach [1] which Rasmus was
-against (okay, I did the nasty castings on top of the printf() there,
-but still). TL;DR: I assume it will work, but let others comment on
-this.
+kernel test robot noticed the following build errors:
 
-[1]: https://lore.kernel.org/lkml/20250320180926.4002817-7-andriy.shevchenk=
-o@linux.intel.com/
+[auto build test ERROR on 3a0f0a4355df0240485ed62b6bd6afa5b3e689c5]
 
---=20
-With Best Regards,
-Andy Shevchenko
+url:    https://github.com/intel-lab-lkp/linux/commits/James-Calligeros/ASoC-tas2770-Power-cycle-amp-on-ISENSE-VSENSE-change/20250405-081800
+base:   3a0f0a4355df0240485ed62b6bd6afa5b3e689c5
+patch link:    https://lore.kernel.org/r/20250405-apple-codec-changes-v4-6-d007e46ce4a2%40gmail.com
+patch subject: [PATCH v4 06/10] ASoC: tas2764: Crop SDOUT zero-out mask based on BCLK ratio
+config: arm-randconfig-001-20250406 (https://download.01.org/0day-ci/archive/20250406/202504060330.IuaPg3uQ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250406/202504060330.IuaPg3uQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504060330.IuaPg3uQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> sound/soc/codecs/tas2764.c:377:16: error: no member named 'sdout_zero_mask' in 'struct tas2764_priv'
+     377 |         if (!tas2764->sdout_zero_mask)
+         |              ~~~~~~~  ^
+   sound/soc/codecs/tas2764.c:380:26: error: no member named 'sdout_zero_mask' in 'struct tas2764_priv'
+     380 |         cropped_mask = tas2764->sdout_zero_mask & GENMASK(nsense_slots - 1, 0);
+         |                        ~~~~~~~  ^
+>> sound/soc/codecs/tas2764.c:383:44: error: use of undeclared identifier 'TAS2764_SDOUT_HIZ_1'
+     383 |                 ret = snd_soc_component_write(component, TAS2764_SDOUT_HIZ_1 + i,
+         |                                                          ^
+>> sound/soc/codecs/tas2764.c:390:49: error: use of undeclared identifier 'TAS2764_SDOUT_HIZ_9'
+     390 |         ret = snd_soc_component_update_bits(component, TAS2764_SDOUT_HIZ_9,
+         |                                                        ^
+>> sound/soc/codecs/tas2764.c:391:10: error: use of undeclared identifier 'TAS2764_SDOUT_HIZ_9_FORCE_0_EN'
+     391 |                                             TAS2764_SDOUT_HIZ_9_FORCE_0_EN,
+         |                                             ^
+   sound/soc/codecs/tas2764.c:392:10: error: use of undeclared identifier 'TAS2764_SDOUT_HIZ_9_FORCE_0_EN'
+     392 |                                             TAS2764_SDOUT_HIZ_9_FORCE_0_EN);
+         |                                             ^
+   6 errors generated.
+
+
+vim +377 sound/soc/codecs/tas2764.c
+
+   369	
+   370	static int tas2764_write_sdout_zero_mask(struct tas2764_priv *tas2764, int bclk_ratio)
+   371	{
+   372		struct snd_soc_component *component = tas2764->component;
+   373		int nsense_slots = bclk_ratio / 8;
+   374		u32 cropped_mask;
+   375		int i, ret;
+   376	
+ > 377		if (!tas2764->sdout_zero_mask)
+   378			return 0;
+   379	
+ > 380		cropped_mask = tas2764->sdout_zero_mask & GENMASK(nsense_slots - 1, 0);
+   381	
+   382		for (i = 0; i < 4; i++) {
+ > 383			ret = snd_soc_component_write(component, TAS2764_SDOUT_HIZ_1 + i,
+   384						      (cropped_mask >> (i * 8)) & 0xff);
+   385	
+   386			if (ret < 0)
+   387				return ret;
+   388		}
+   389	
+ > 390		ret = snd_soc_component_update_bits(component, TAS2764_SDOUT_HIZ_9,
+ > 391						    TAS2764_SDOUT_HIZ_9_FORCE_0_EN,
+   392						    TAS2764_SDOUT_HIZ_9_FORCE_0_EN);
+   393	
+   394		if (ret < 0)
+   395			return ret;
+   396	
+   397		return 0;
+   398	}
+   399	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
