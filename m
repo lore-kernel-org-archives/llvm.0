@@ -1,110 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510D4220689;
-	Fri,  4 Apr 2025 22:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AA0625;
+	Sat,  5 Apr 2025 00:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743804621; cv=none; b=pztQGlxVoAQPCfYr7sBg7KXLNv8iKOCHbBr/1bsFl4VrKEd1R5fjXS3rEaXLF9wweWvZ4ATXqQNu9+7RGZi+m+1C0m9ZLl0jgYrAc3fJUsL+UDRv2+OACJAw+4uyxSzzHBqSrCaqzHE5+u/XNb9CSboiEoIBtGDt5nxW/8BuxvQ=
+	t=1743812894; cv=none; b=XQXyz9Q2NxSEO994IjECWlnkfKwdZwFLRFWSUiJwBQFHDsiGQyWOAivR5pl4DnUsgPtVqRIdNVeKYn3VjzyrQb/oDh7v1uqp/ZueMfFHV+1Ctm/TfhlEx3cx4VNlLYLFKLDdsA6/uj1wZZSPQIEVUTg2KCqU1eH4vJvxaSKqNvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743804621; c=relaxed/simple;
-	bh=SZv8bDAjaPEtH77UYmR1l1sX7V/ZI3yF756TC3/s5Ao=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O3cG7ymQROy0q+QdVv5gayp2Alkuxm7sKCqVg80FyrT6iGs1wbt1c4a1Ou1+jX3KAyvvy1KVb6ikEASTt3Jl1WduJs+IrxyG5DpZJk+LN6jqT63XrrNhushHUipFJptGLx1tid6nCJunOGv+NXloZeHGp1+/alNu91ND+f8MOJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0TJbaSW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743812894; c=relaxed/simple;
+	bh=52hIKm/EcVzVGzamHJCHAV9kvjOFBdWT2MrAaflINn8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cd0UCW3iGTP6HP0N8VmgBMJgfxm5JZCKVAKTs7+70bsg9CwUJiwE+w//PA0JKomoGN0iMrBolJYSzGyULCAD85k+JgGrb2W9Rn17H7U3we81vqLnY8ctWtNkW2dktCev40ZR/VE71zLgxeka4s/lb6IrjiaISixP0HlhIqgaAc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mx/9IGX0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0TJbaSW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84506C4CEDD;
-	Fri,  4 Apr 2025 22:10:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mx/9IGX0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32630C4CEDD;
+	Sat,  5 Apr 2025 00:28:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743804621;
-	bh=SZv8bDAjaPEtH77UYmR1l1sX7V/ZI3yF756TC3/s5Ao=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=i0TJbaSWVkXRnwwQsbsIZFuBVRoqm8B59GfrjOn/pdwjPFrvT1YXSp3HVcC2Jkl/L
-	 oHKNHwaNsSPKDNhTbhPGE2f87VKMqRmOUpRTq9wqfOFBafkPGd+hdNqJqOjMhpFCd6
-	 ZZvtoFJZGy3lvL00rcJB8EI7YiBzOPTHWuaO2qtWoZP+NdtSDY8Bce/yuGy6oUK1Q1
-	 c09p1AY7KC6joBWkmcBqb/F8LXs6gIml+BgvuF6M9jNnJaBCd2Lj+zDuX9LbspZcE1
-	 ll6ggZrH6aMrTtZdKBH/gX5Nbbv03qpWOIOatLlPauTfargzr8B+cLC9//CLglc/Tu
-	 qgDnIhghR4oBA==
+	s=k20201202; t=1743812893;
+	bh=52hIKm/EcVzVGzamHJCHAV9kvjOFBdWT2MrAaflINn8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Mx/9IGX0EyzAZ8DYWIGiIPqsEb3ZehO/Qex5lKxqbdyjPov96p61yngnyEByTZj4l
+	 GCKmmlzVwjTpJmjJX3UGbOEAwab1rKTdlQ42D3Be6IZQ6+HVErKO3dufk/2mQgvxvm
+	 p4nllFE2uHZWkKibUvmY9b/m2z1NAQuqJcGRQ1dsCE76FSmY+wHPUYKPYzFgAkjKgh
+	 zrskcVjTd3PtkCNNCaHQ6/bzXin0OqEHo50xi92jwVT7h1620UsurYsZoCG1YAKX5H
+	 hVR8ZShg7+dv4VqagRZC5bzbR/liHOHab6ysOMKv3XFeu1rv0+AzelpwlgJBzt2W0D
+	 u2U5pk9fETtAQ==
+Date: Fri, 4 Apr 2025 17:27:57 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 04 Apr 2025 15:10:03 -0700
-Subject: [PATCH 2/2] vsprintf: Use __diag macros to disable
- '-Wsuggest-attribute=format'
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	lkft-triage@lists.linaro.org,
+	Linux Regressions <regressions@lists.linux.dev>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: v6.14-12245-g91e5bfe317d8: Boot regression: rk3399-rock-pi-4b
+ dragonboard-410c dragonboard-845c no console output
+Message-ID: <20250405002757.GA836042@ax162>
+References: <CA+G9fYve7+nXJNoV48TksXoMeVjgJuP8Gs=+1br+Qur1DPWV4A@mail.gmail.com>
+ <20250403011849.GA3138383@ax162>
+ <CA+G9fYtrsLHvMH=ofmdS3MMsMTEj3k0PD7=qsRsA4WkSqLkCzQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250404-vsprintf-convert-pragmas-to-__diag-v1-2-5d6c5c55b2bd@kernel.org>
-References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
-In-Reply-To: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
- Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1865; i=nathan@kernel.org;
- h=from:subject:message-id; bh=SZv8bDAjaPEtH77UYmR1l1sX7V/ZI3yF756TC3/s5Ao=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOkfIo5tnct/NsBR8dya6uq6I9Lq29+f5GJ9IXtz3/q/v
- S8+sk9e0FHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmckqQkeHWhlb/J59/Tyjv
- ETzt6/SlmVU/fkrIDeOU//eV2VLs1psxMvy9Ixrx+rDs2yXPu98kXXo/XUePw7lXOCpsadkJ2aO
- PKxgB
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+G9fYtrsLHvMH=ofmdS3MMsMTEj3k0PD7=qsRsA4WkSqLkCzQ@mail.gmail.com>
 
-The GCC specific warning '-Wsuggest-attribute=format' is disabled around
-va_format() using raw #pragma statements, which includes an
-'#ifndef __clang__' to avoid a warning about an unknown warning option
-from clang (which recognizes '#pragma GCC' for compatibility reasons):
+On Thu, Apr 03, 2025 at 04:17:44PM +0530, Naresh Kamboju wrote:
+> I’ve re-run the tests to validate the boot behavior on the Rock Pi 4 board
+> with different Clang nightly versions and the latest mainline kernel.
+> 
+> The combination using clang-nightly:20250319 successfully booted the
+> Rock Pi 4 board.
+> However, the combination using clang-nightly:20250401 failed to boot
+> the same board.
+> 
+> "name": "clang",
+> "version": "21.0.0",
+> "version_full": "Debian clang version 21.0.0
+> (++20250401112529+290d7b82cb5d-1~exp1~20250401112547.1360)"
+> 
+> Reference:
+>  - https://lkft.validation.linaro.org/scheduler/job/8196258
+>  - https://lkft.validation.linaro.org/scheduler/job/8196275
 
-  lib/vsprintf.c:1703:32: error: unknown warning group '-Wsuggest-attribute=format', ignored [-Werror,-Wunknown-warning-option]
-   1703 | #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-        |                                ^
+Thank you for verifying. Do you test with clang-20 and if so, are tests
+at that same revision passing? I want to make sure this is an LLVM
+regression before trying to get into figuring out how to bisect with
+your setup. Another way to do that is to see if clang-nightly boots are
+failing on the stable branches, which would point to Linux not being at
+fault.
 
-While the current solution works, it is not visually appealing. The
-kernel already has some infrastructure that wraps these #pragma
-statements to give more specific control over diagnostics without
-needing #ifdef blocks for different compilers. Convert the existing
-statements over to the __diag macros.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- lib/vsprintf.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index a2195bc81723..8a6cdee0d4ad 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1699,10 +1699,9 @@ char *escaped_string(char *buf, char *end, u8 *addr, struct printf_spec spec,
- 	return buf;
- }
- 
--#pragma GCC diagnostic push
--#ifndef __clang__
--#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
--#endif
-+__diag_push();
-+__diag_ignore(GCC, all, "-Wsuggest-attribute=format",
-+	      "Not a valid __printf() conversion candidate.");
- static char *va_format(char *buf, char *end, struct va_format *va_fmt,
- 		       struct printf_spec spec)
- {
-@@ -1717,7 +1716,7 @@ static char *va_format(char *buf, char *end, struct va_format *va_fmt,
- 
- 	return buf;
- }
--#pragma GCC diagnostic pop
-+__diag_pop();
- 
- static noinline_for_stack
- char *uuid_string(char *buf, char *end, const u8 *addr,
-
--- 
-2.49.0
-
+Cheers,
+Nathan
