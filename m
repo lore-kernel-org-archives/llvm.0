@@ -1,118 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9821B042E;
-	Sat,  5 Apr 2025 07:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63347E110
+	for <llvm@lists.linux.dev>; Sat,  5 Apr 2025 09:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743836773; cv=none; b=NTvR2gK6I/tPheTQTqCp1GkD8hgYwAkJ6/biKhf98oxf8up8went51gyrvDbvJGP+Hh/RLx0fFg95gIO3ubGCZ0iD/jOmqkOIMVIiCs474S/G42WHGZQSIGKqDDLTYk8bksFFizagTiFv+v3/tZwxjlNqxTu9pQH4YFpeaE0KaI=
+	t=1743844291; cv=none; b=t0jMVKtRr+eMYgmPsv9GILmkQGt/BP/9b2zF+zYneN+omYunW44XrURxKGJqkl4WhsQKwqK83BHS6D1gUdff6XboSdLWJTxswejVGaUmnjpxqlJMxdI1b2T7WLKNUzI9YE1laXrq68ZMel3YKkRmEUmRUQvuTF3uifpoIW67SPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743836773; c=relaxed/simple;
-	bh=c6pVeoNRFL0+YVb4Jo8fBY1tS3Gnyl5Tlg2+CQkLYkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e6gwe3efLOXYSyV7Xf53DwqJmh9LAF40K3D+K40llk4THxb3lAIQyTvhCVeBRwY8BNT87LLTVas/xsVA1X/dwSfE3FJN3x6I0GTidMs7lGdZjVVAHOPPy1IlS5KuUeorntKRy2RpRwf28u1WXIbC7vZHG0QYwYIhpEP3nxJSYU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PCSAIY7v; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743844291; c=relaxed/simple;
+	bh=SLwH0eFw3b9k9qJaHyDs8HghjeBOT4plEWyldDnfHAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uQEMLd+lEEqb1TwLGa9lFGlKsb9umKcZrJYrGTylFe52sWUxXA7/0oZcdjR7TqT3w5wGctmDnIqonL4UPTH48NqmVSuP2/kem21/nZDRVW5sLyouEO1qd+Hl13urMUmov33WcM4wnwvHupyENpcZQvuAE4EsI0cHekXjLWNy3GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DwPghL3S; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PCSAIY7v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743836772; x=1775372772;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c6pVeoNRFL0+YVb4Jo8fBY1tS3Gnyl5Tlg2+CQkLYkI=;
-  b=PCSAIY7vkz4YMMHlD8H/2W513+60eolcXmKvJaWbcB0x/hh04vr5WJ9E
-   bWLIQbTabAj5lsHwsMYVKro+s0rOj0MPF/qUzhjlqMLSDTzi1R8msvHDZ
-   yP8WO4XAWehSNs4PWsqCjZ/bYh0uvJygkpoedytY+O55nRpNR3xP7+rU2
-   +lmFjhSUdkyCGH7DTzZ9AQit94vWoDZCsg3PksH9D1VVPrQ03Uow1lJLn
-   5G1HJEBMo6a5wGVABamZooa0Zo6zBXlBTP/fKYmBm+qOynDWy9xsXdBXP
-   Rs15826WEtZDLG2UGYWm1K3FWpaCj2BhdeRkpCnf9eT4gVe4xv212oRoF
-   A==;
-X-CSE-ConnectionGUID: 7CX3l2GERw6KNBCuDhz45A==
-X-CSE-MsgGUID: akPDMciRQoCIMZGJcTWLJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="49072309"
-X-IronPort-AV: E=Sophos;i="6.15,190,1739865600"; 
-   d="scan'208";a="49072309"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 00:06:09 -0700
-X-CSE-ConnectionGUID: gAUA3IfzRCe9ESoQV2bv5Q==
-X-CSE-MsgGUID: +NpNIIZ+TPOZvAzfnJgRgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,190,1739865600"; 
-   d="scan'208";a="132472871"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 05 Apr 2025 00:06:02 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u0xbC-0001sB-2q;
-	Sat, 05 Apr 2025 07:05:50 +0000
-Date: Sat, 5 Apr 2025 15:04:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ahmed Salem <x0rw3ll@gmail.com>, robert.moore@intel.com,
-	rafael.j.wysocki@intel.com, lenb@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ACPI: sysfs: apply ACPI_NONSTRING annotation
-Message-ID: <202504051453.3rcptolF-lkp@intel.com>
-References: <dcc3a018fb28899b277df2e154740d59d4e404af.1743754416.git.x0rw3ll@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DwPghL3S"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43ce71582e9so17937315e9.1
+        for <llvm@lists.linux.dev>; Sat, 05 Apr 2025 02:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743844288; x=1744449088; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jppA3+zjUadzb/dB3vJ3OKtgaoopfwZTi9MWUSVD6mw=;
+        b=DwPghL3SjQIkKpa9iDPiMw98Xxas6FcxniXfbhFaxBP+4RO36wMBfnwygkgOdir4e0
+         N1dJ2CF9amBc4ZUrCE6RUu26rT7tl+hXr+PVAoY4tSIaEZMFgX/slb4mXYpIiX9RP/NC
+         XFDW5Ig2q4rI9VrIo1lywotSqK9D7N6g++ENB5ABFLIOCyceGxeyJz8W43gnxz+U9N0q
+         z66zZEg5Uh3IIbZ5KjIUNPsQXcJjLNJWGRnLtWj+Xne/oZzEOm8GeZDxunolA4S9ure4
+         XR6sDDiJeYtMPRZvZrdYX7Lkyeo4wmLADbJIsrL5bZ3rLYsLHEiwqn+G4/LyQmtIoUHP
+         Npyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743844288; x=1744449088;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jppA3+zjUadzb/dB3vJ3OKtgaoopfwZTi9MWUSVD6mw=;
+        b=Amai+n2OjY/g+qw89VHdmC1IOp3jZxWEuajxWveBv3EXUTN+GUzAkKyoPdWbfHXglZ
+         oMWb+ueh6rO05AY88ZllON2zZxrQhEY9MHzUMYNaCOoMEuUB9fbRgsQBxKXgCBhbrGOa
+         d1PboAxbQIRqxmrqv1liNKZjNipKHczPfun596/anx3n+TIA6gALmI4wP6OK/CdJ0Wwk
+         VGR1xhaHC5vt6zkQ1z4KxTj9AV8SlOjLKkt76xqe5tlILcpb4NFjShyPkQLhAJh7fm/l
+         hcW1NDe+8wfWqK0jdWJDplu4wJYcB2S7iyRAfH4l4frMF859nGcXYiMBKn/gMKBJvdTi
+         dGcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVosqN43X4HjqDxKbOvnmZ/JcD3wH6kZx2CxFj2YjTDh/NmN7tQP0B8D46J5FrDz1o7sQY1@lists.linux.dev
+X-Gm-Message-State: AOJu0YzkmiAvk1d9fG2Aq/kznDpGk9UrooQsumxTeEwyeBo0++tGV71d
+	y8XoPOQQBlWYoD/VldfvN87J8S7Mzv/jBvZmu17l5VXLVqeT+/0n
+X-Gm-Gg: ASbGncu9Rz4Gl3lzVXxCsjRmc2/258+2auZLlx70qIBvI+KkYAhCqCFvWoQcqznt8qq
+	3RRh8iwr1yoVpUVRnCRpfiD/jqbBrGDQS0KLOjPI/lyfG/hxsvFmrydOrgI/YD39jXfAhqAIopK
+	WHMBwW+UJLmAdw75vNSc2HXwGxWEziKKJqyZWBhdYWEcUQqAW2/MUtPzq9gfv/zOhw1Mh1all42
+	rGnqgWDLAO3P5ZuF03uW8zkiQOaEubeZEElkW8ZT9QyTxC/EuTO1uk+blRsJ4k7/oWo+4L7Nb3V
+	c5AjVjSobM0Q5kqPxiRYC3+btnap1fRgmFVDLEVTeVi0FBlcumCc5NPvXpShZPf513W5AlBQM5T
+	Znd/zQ1V4AAKaONGeiA==
+X-Google-Smtp-Source: AGHT+IHU9XxLHRCNlj4Zxv1RQb+K7/LfcwCdYPa0pjMEmX2mnC17XmsfYcuLgQgqGwTFioGIQTPllA==
+X-Received: by 2002:a05:600c:3484:b0:43e:afca:808f with SMTP id 5b1f17b1804b1-43ed0db4006mr60136395e9.31.1743844287884;
+        Sat, 05 Apr 2025 02:11:27 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c301b69a8sm6316776f8f.49.2025.04.05.02.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Apr 2025 02:11:27 -0700 (PDT)
+Date: Sat, 5 Apr 2025 10:11:26 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Petr Mladek
+ <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] vsprintf: Use __diag macros to disable
+ '-Wsuggest-attribute=format'
+Message-ID: <20250405101126.7a2627a6@pumpkin>
+In-Reply-To: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
+References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dcc3a018fb28899b277df2e154740d59d4e404af.1743754416.git.x0rw3ll@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Ahmed,
+On Fri, 04 Apr 2025 15:10:01 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> Hi all,
+> 
+> This is a follow up to the complaint that Linus made at [1] about how
+> the #pragma and #ifdef to disable -Wsuggest-attribute=format is
+> currently ugly. Convert the #pragma and #ifdef to the existing __diag()
+> infrastructure in the kernel to hide some of the ugliness.
 
-[auto build test ERROR on b3c623b9a94f7f798715c87e7a75ceeecf15292f]
+It's still horribly ugly.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ahmed-Salem/ACPI-PRM-apply-ACPI_NONSTRING-annotation/20250404-162651
-base:   b3c623b9a94f7f798715c87e7a75ceeecf15292f
-patch link:    https://lore.kernel.org/r/dcc3a018fb28899b277df2e154740d59d4e404af.1743754416.git.x0rw3ll%40gmail.com
-patch subject: [PATCH 2/2] ACPI: sysfs: apply ACPI_NONSTRING annotation
-config: i386-buildonly-randconfig-004-20250405 (https://download.01.org/0day-ci/archive/20250405/202504051453.3rcptolF-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504051453.3rcptolF-lkp@intel.com/reproduce)
+Perhaps the compilers ought to support __attribute__((format(none)))
+to disable the warning.
+And then disable it for older compilers.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504051453.3rcptolF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/acpi/sysfs.c:310:30: error: expected ';' at end of declaration list
-     310 |         char name[ACPI_NAMESEG_SIZE] ACPI_NONSTRING;
-         |                                     ^
-         |                                     ;
-   drivers/acpi/sysfs.c:312:49: error: expected ';' at end of declaration list
-     312 |         char filename[ACPI_NAMESEG_SIZE+ACPI_INST_SIZE] ACPI_NONSTRING;
-         |                                                        ^
-         |                                                        ;
-   2 errors generated.
-
-
-vim +310 drivers/acpi/sysfs.c
-
-   307	
-   308	struct acpi_table_attr {
-   309		struct bin_attribute attr;
- > 310		char name[ACPI_NAMESEG_SIZE] ACPI_NONSTRING;
-   311		int instance;
-   312		char filename[ACPI_NAMESEG_SIZE+ACPI_INST_SIZE] ACPI_NONSTRING;
-   313		struct list_head node;
-   314	};
-   315	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	David
