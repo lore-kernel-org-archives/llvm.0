@@ -1,100 +1,120 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63347E110
-	for <llvm@lists.linux.dev>; Sat,  5 Apr 2025 09:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680B4182BC;
+	Sat,  5 Apr 2025 10:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743844291; cv=none; b=t0jMVKtRr+eMYgmPsv9GILmkQGt/BP/9b2zF+zYneN+omYunW44XrURxKGJqkl4WhsQKwqK83BHS6D1gUdff6XboSdLWJTxswejVGaUmnjpxqlJMxdI1b2T7WLKNUzI9YE1laXrq68ZMel3YKkRmEUmRUQvuTF3uifpoIW67SPE=
+	t=1743848742; cv=none; b=sg56/QEMH1kxEwgNYoZJBzF3JCD1kepd+l/JxEZ2/FNIM4UDmBb8gnxXx6u+4n7Nm6vtuqhmazrSHHqCfaaLp/YQdYrUDYEccKr6CurEpfLGRHnwsR4SoTdYQXozl6y1EPeCvUlgX8jaLpvOJ2l4P9HQUW9HpZnQ+gzugjTt2xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743844291; c=relaxed/simple;
-	bh=SLwH0eFw3b9k9qJaHyDs8HghjeBOT4plEWyldDnfHAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uQEMLd+lEEqb1TwLGa9lFGlKsb9umKcZrJYrGTylFe52sWUxXA7/0oZcdjR7TqT3w5wGctmDnIqonL4UPTH48NqmVSuP2/kem21/nZDRVW5sLyouEO1qd+Hl13urMUmov33WcM4wnwvHupyENpcZQvuAE4EsI0cHekXjLWNy3GI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DwPghL3S; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743848742; c=relaxed/simple;
+	bh=vE5HlGqFMPRiEApGfruZPXTVG1TFF/lORB022UJd2+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mSjobpu6ulbzo/y/7cOFTX6RdMR9QHPexfEl0xls9HKe3lnbwJm/b9MXk2gyDpFpvvGXIK55isoGSXrVVx0tp71iYgcMcGq5jHnd9J5ssBAsqJPW3tjy8J2Z+ffbSFadGtBd0g+/3r+1rXKP3XLdtMQgcSxHVkuELFAmL9kQSfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D9x15F/T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DwPghL3S"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43ce71582e9so17937315e9.1
-        for <llvm@lists.linux.dev>; Sat, 05 Apr 2025 02:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743844288; x=1744449088; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jppA3+zjUadzb/dB3vJ3OKtgaoopfwZTi9MWUSVD6mw=;
-        b=DwPghL3SjQIkKpa9iDPiMw98Xxas6FcxniXfbhFaxBP+4RO36wMBfnwygkgOdir4e0
-         N1dJ2CF9amBc4ZUrCE6RUu26rT7tl+hXr+PVAoY4tSIaEZMFgX/slb4mXYpIiX9RP/NC
-         XFDW5Ig2q4rI9VrIo1lywotSqK9D7N6g++ENB5ABFLIOCyceGxeyJz8W43gnxz+U9N0q
-         z66zZEg5Uh3IIbZ5KjIUNPsQXcJjLNJWGRnLtWj+Xne/oZzEOm8GeZDxunolA4S9ure4
-         XR6sDDiJeYtMPRZvZrdYX7Lkyeo4wmLADbJIsrL5bZ3rLYsLHEiwqn+G4/LyQmtIoUHP
-         Npyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743844288; x=1744449088;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jppA3+zjUadzb/dB3vJ3OKtgaoopfwZTi9MWUSVD6mw=;
-        b=Amai+n2OjY/g+qw89VHdmC1IOp3jZxWEuajxWveBv3EXUTN+GUzAkKyoPdWbfHXglZ
-         oMWb+ueh6rO05AY88ZllON2zZxrQhEY9MHzUMYNaCOoMEuUB9fbRgsQBxKXgCBhbrGOa
-         d1PboAxbQIRqxmrqv1liNKZjNipKHczPfun596/anx3n+TIA6gALmI4wP6OK/CdJ0Wwk
-         VGR1xhaHC5vt6zkQ1z4KxTj9AV8SlOjLKkt76xqe5tlILcpb4NFjShyPkQLhAJh7fm/l
-         hcW1NDe+8wfWqK0jdWJDplu4wJYcB2S7iyRAfH4l4frMF859nGcXYiMBKn/gMKBJvdTi
-         dGcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVosqN43X4HjqDxKbOvnmZ/JcD3wH6kZx2CxFj2YjTDh/NmN7tQP0B8D46J5FrDz1o7sQY1@lists.linux.dev
-X-Gm-Message-State: AOJu0YzkmiAvk1d9fG2Aq/kznDpGk9UrooQsumxTeEwyeBo0++tGV71d
-	y8XoPOQQBlWYoD/VldfvN87J8S7Mzv/jBvZmu17l5VXLVqeT+/0n
-X-Gm-Gg: ASbGncu9Rz4Gl3lzVXxCsjRmc2/258+2auZLlx70qIBvI+KkYAhCqCFvWoQcqznt8qq
-	3RRh8iwr1yoVpUVRnCRpfiD/jqbBrGDQS0KLOjPI/lyfG/hxsvFmrydOrgI/YD39jXfAhqAIopK
-	WHMBwW+UJLmAdw75vNSc2HXwGxWEziKKJqyZWBhdYWEcUQqAW2/MUtPzq9gfv/zOhw1Mh1all42
-	rGnqgWDLAO3P5ZuF03uW8zkiQOaEubeZEElkW8ZT9QyTxC/EuTO1uk+blRsJ4k7/oWo+4L7Nb3V
-	c5AjVjSobM0Q5kqPxiRYC3+btnap1fRgmFVDLEVTeVi0FBlcumCc5NPvXpShZPf513W5AlBQM5T
-	Znd/zQ1V4AAKaONGeiA==
-X-Google-Smtp-Source: AGHT+IHU9XxLHRCNlj4Zxv1RQb+K7/LfcwCdYPa0pjMEmX2mnC17XmsfYcuLgQgqGwTFioGIQTPllA==
-X-Received: by 2002:a05:600c:3484:b0:43e:afca:808f with SMTP id 5b1f17b1804b1-43ed0db4006mr60136395e9.31.1743844287884;
-        Sat, 05 Apr 2025 02:11:27 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c301b69a8sm6316776f8f.49.2025.04.05.02.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Apr 2025 02:11:27 -0700 (PDT)
-Date: Sat, 5 Apr 2025 10:11:26 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Petr Mladek
- <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] vsprintf: Use __diag macros to disable
- '-Wsuggest-attribute=format'
-Message-ID: <20250405101126.7a2627a6@pumpkin>
-In-Reply-To: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
-References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D9x15F/T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F18C4CEE4;
+	Sat,  5 Apr 2025 10:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1743848741;
+	bh=vE5HlGqFMPRiEApGfruZPXTVG1TFF/lORB022UJd2+o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D9x15F/TYNWiEI75UcJrX8YPtugDm+WaUhtn6Lb0l0B9RjaeEzQa8gSaTqN9JOLPw
+	 N9U9Q8OLIV5X9gX4sY7uzAYJCqW7r+muYhi1Vs9VdHxlnWEKXEKpsOxYSR1R1Uc55V
+	 S2IdIaNAnTVyE8Ef2zAU0NCEK5fGUZ4aKB2jYZoI=
+Date: Sat, 5 Apr 2025 11:24:13 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+	jonathanh@nvidia.com, f.fainelli@gmail.com,
+	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+	conor@kernel.org, hargar@microsoft.com, broonie@kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 6.13 00/23] 6.13.10-rc1 review
+Message-ID: <2025040527-harmonics-bath-946e@gregkh>
+References: <20250403151622.273788569@linuxfoundation.org>
+ <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
 
-On Fri, 04 Apr 2025 15:10:01 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
-
-> Hi all,
+On Sat, Apr 05, 2025 at 11:50:59AM +0530, Naresh Kamboju wrote:
+> On Thu, 3 Apr 2025 at 20:56, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 6.13.10 release.
+> > There are 23 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Sat, 05 Apr 2025 15:16:11 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.13.10-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.13.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> This is a follow up to the complaint that Linus made at [1] about how
-> the #pragma and #ifdef to disable -Wsuggest-attribute=format is
-> currently ugly. Convert the #pragma and #ifdef to the existing __diag()
-> infrastructure in the kernel to hide some of the ugliness.
+> 
+> Regressions on arm, arm64 and x86_64.
+> 
+> 1)
+> The selftests rseq failed across the boards and virtual environments.
+> These test failures were also noticed on Linux mainline and next.
+> 
+> We will bisect these lists of regressions and get back to you.
 
-It's still horribly ugly.
+Thanks, this I'll care about, but:
 
-Perhaps the compilers ought to support __attribute__((format(none)))
-to disable the warning.
-And then disable it for older compilers.
+> * kselftest-rseq
+>   - rseq_basic_percpu_ops_mm_cid_test
+>   - rseq_basic_percpu_ops_test
+>   - rseq_basic_test
+>   - rseq_param_test
+>   - rseq_param_test_benchmark
+>   - rseq_param_test_compare_twice
+>   - rseq_param_test_mm_cid
+>   - rseq_param_test_mm_cid_benchmark
+>   - rseq_param_test_mm_cid_compare_twice
+> 
+> 2)
+>  The clang-nightly build issues reported on mainline and next.
+> 
+> * S390, powerpc, build
+>   - clang-nightly-defconfig
+>   - clang-nightly-lkftconfig-hardening
+>   - clang-nightly-lkftconfig-lto-full
+>   - clang-nightly-lkftconfig-lto-thing
+> 
+>  clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
+>   - https://lore.kernel.org/all/CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com/
+> 
+> 3)
+>  The clang-nightly boot regressions with no console output have been
+>  reported on mainline and next.
 
-	David
+These 2 I don't, as that's a mainline issue first.
+
+thanks,
+
+greg k-h
