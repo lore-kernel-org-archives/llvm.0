@@ -1,387 +1,118 @@
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50261DDC1
-	for <llvm@lists.linux.dev>; Sat,  5 Apr 2025 06:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9821B042E;
+	Sat,  5 Apr 2025 07:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743834075; cv=none; b=kKBkkzRzNTXoAFCzJZSHHcVoYRlwitLTRLIIjLnuJA1n+ZV2hdO5RdcPIYh2ji3yKL/aOjOwBmB83+qeEkmBhC35gDijpfD6/Rm7IZmP93Zn1w+GsY8zfY3ONdLgppsVBvdQOy9IwfZmwSRMPqkZTfHy8LQe/4V5tVGzNyi7/qk=
+	t=1743836773; cv=none; b=NTvR2gK6I/tPheTQTqCp1GkD8hgYwAkJ6/biKhf98oxf8up8went51gyrvDbvJGP+Hh/RLx0fFg95gIO3ubGCZ0iD/jOmqkOIMVIiCs474S/G42WHGZQSIGKqDDLTYk8bksFFizagTiFv+v3/tZwxjlNqxTu9pQH4YFpeaE0KaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743834075; c=relaxed/simple;
-	bh=7ogc9KoTqihDm0BSPWxVNdwPASqfsI9zHNcq7KvFYk8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IRdXPr0dsSgSCVB4ab2o/M+piotbRGtnaG58KQWlLOZjbR9219u0YhQSw7pb6njQXNLbuXrguCe83eC2BkBwKCsYY5IDvTOeVZrp0YONx0ynpg1Tds+5+/d9Wk4jZfBEMcbKP+l0hYHOHB5gQ3wJDceY9YwjipYsbuX36ItM+QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Oo+LvzKZ; arc=none smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1743836773; c=relaxed/simple;
+	bh=c6pVeoNRFL0+YVb4Jo8fBY1tS3Gnyl5Tlg2+CQkLYkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e6gwe3efLOXYSyV7Xf53DwqJmh9LAF40K3D+K40llk4THxb3lAIQyTvhCVeBRwY8BNT87LLTVas/xsVA1X/dwSfE3FJN3x6I0GTidMs7lGdZjVVAHOPPy1IlS5KuUeorntKRy2RpRwf28u1WXIbC7vZHG0QYwYIhpEP3nxJSYU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PCSAIY7v; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Oo+LvzKZ"
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-525b44b7720so1267589e0c.0
-        for <llvm@lists.linux.dev>; Fri, 04 Apr 2025 23:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743834072; x=1744438872; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=25wsr6cWnXWcVgGRjI/IcnvMayo89bRxfKsHC6L0fgU=;
-        b=Oo+LvzKZ6xO4npB+IpvK69mua9rUVuD5sOzISl/+6Jwl8aGoyDNIHvsbfWb90SvHP6
-         Orv+bX7hcWZ/QrN+vuIlzX2OnvR8meORvmxAEGEKKNWOf2bVtXYj1uUgX4asHO5lB2WU
-         lJhk8/bnu1rq+bNg1WXSClnf50MBSGPdTmGtfQ2116QCOgJNQ8BFHDiGq3utMx4CnG12
-         HkMD2w+XQy3t6e1pjcRkd+fQ82VuuK8RSbBznTRZCP9WhPTQiTdSmnEAe83A2lubaL5H
-         R3FxD9lSjIOPUVC/rYH+lFJkrCy+0dWaShuxVDOloKXg9ay4lZ8IXoE4p/bFF9UZjlvz
-         01zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743834072; x=1744438872;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=25wsr6cWnXWcVgGRjI/IcnvMayo89bRxfKsHC6L0fgU=;
-        b=wmaUY+ALs5jv5qVxjx2sIrv8gBBAvHhMi9J1gh6+1xknjJEJneautFOHdZVvOIh0zH
-         m09zxoRP6/hFunvhTwhi3uleHSXLNR2GCIAm0g3p4GPyTm33gUB6TX4iUKyXOC8MYpiN
-         1WJ8pfxF4Y/ubjCQX0rB+lRDH+6kcpXCaAeNp2BlA7RTdDcilHe+hR3vjpQFEMZjZYY6
-         pAec+joxl/Ke2SdFByiFNH6EvjH5U5LXwin6oJQwZjwF1vl1pLbRrwiKkOUEg/nBTbM/
-         gaVl/2LnsAaKrCmqtNDVxCeT5uPo2hV+RSfpYFNHfcnblP7b8JGIS1Mj6d7h4Fwxxmxu
-         +7DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVaU677LPuNUNHBm3jicrBTBGZxNOta1i3/B0y+DvGzlww44r87z50rai1kyS5LWZwb/Xwg@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx8lcIFfjyeOtnGD646AKpEW1/O+tsshbZxbb7IWtOMfHYpvKAR
-	G2EuCZA8tsBzWl97sA3/lA+i3n7YC2+IEiaX9tAQXBfJ6FzJ8+0q9HLzYe/R3ETjYdr8ORS4P+v
-	d1YGoe5CHL/F5dgQkZzpKQulvAJt0Irzr64ZdZQ==
-X-Gm-Gg: ASbGncvc8ROGy8HjdVyCFc3qveZeV/3yck5IEQ/kMqmUYt096H/ANkHx1lH261RRuqj
-	vjdvXMNNLtjDSohrKE3dY3cZHTs2VairyEqnI+Y2duMbHUaCs/KGyTTw776bFs3euCzxGbu8eBw
-	YxVVtbR7bphpEHq3+CehHtqTCCYJuhn+/+LkNvHeh4Nmvm+nlISIluyeyhuD+Pf3+jlMuCczw=
-X-Google-Smtp-Source: AGHT+IEv9iWYa+WC0bcktoDP+5vlokhZ9KA314M4SO+JtnfF49cPfNgs9Auth64ZNoxOmETRSkIwFtyc5YfVDr+m+sE=
-X-Received: by 2002:a05:6122:17a7:b0:526:19e6:fa34 with SMTP id
- 71dfb90a1353d-5276443fbf8mr3881721e0c.1.1743834072078; Fri, 04 Apr 2025
- 23:21:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PCSAIY7v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743836772; x=1775372772;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c6pVeoNRFL0+YVb4Jo8fBY1tS3Gnyl5Tlg2+CQkLYkI=;
+  b=PCSAIY7vkz4YMMHlD8H/2W513+60eolcXmKvJaWbcB0x/hh04vr5WJ9E
+   bWLIQbTabAj5lsHwsMYVKro+s0rOj0MPF/qUzhjlqMLSDTzi1R8msvHDZ
+   yP8WO4XAWehSNs4PWsqCjZ/bYh0uvJygkpoedytY+O55nRpNR3xP7+rU2
+   +lmFjhSUdkyCGH7DTzZ9AQit94vWoDZCsg3PksH9D1VVPrQ03Uow1lJLn
+   5G1HJEBMo6a5wGVABamZooa0Zo6zBXlBTP/fKYmBm+qOynDWy9xsXdBXP
+   Rs15826WEtZDLG2UGYWm1K3FWpaCj2BhdeRkpCnf9eT4gVe4xv212oRoF
+   A==;
+X-CSE-ConnectionGUID: 7CX3l2GERw6KNBCuDhz45A==
+X-CSE-MsgGUID: akPDMciRQoCIMZGJcTWLJA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="49072309"
+X-IronPort-AV: E=Sophos;i="6.15,190,1739865600"; 
+   d="scan'208";a="49072309"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 00:06:09 -0700
+X-CSE-ConnectionGUID: gAUA3IfzRCe9ESoQV2bv5Q==
+X-CSE-MsgGUID: +NpNIIZ+TPOZvAzfnJgRgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,190,1739865600"; 
+   d="scan'208";a="132472871"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 05 Apr 2025 00:06:02 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0xbC-0001sB-2q;
+	Sat, 05 Apr 2025 07:05:50 +0000
+Date: Sat, 5 Apr 2025 15:04:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ahmed Salem <x0rw3ll@gmail.com>, robert.moore@intel.com,
+	rafael.j.wysocki@intel.com, lenb@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] ACPI: sysfs: apply ACPI_NONSTRING annotation
+Message-ID: <202504051453.3rcptolF-lkp@intel.com>
+References: <dcc3a018fb28899b277df2e154740d59d4e404af.1743754416.git.x0rw3ll@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250403151622.273788569@linuxfoundation.org>
-In-Reply-To: <20250403151622.273788569@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Sat, 5 Apr 2025 11:50:59 +0530
-X-Gm-Features: ATxdqUFa79ZEOWI_jWtdqZsuM0-WuEEPMkgxAHV30cmqug45NOw5y4qIqAXuxtc
-Message-ID: <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
-Subject: Re: [PATCH 6.13 00/23] 6.13.10-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
-	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcc3a018fb28899b277df2e154740d59d4e404af.1743754416.git.x0rw3ll@gmail.com>
 
-On Thu, 3 Apr 2025 at 20:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.13.10 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 05 Apr 2025 15:16:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.13.10-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.13.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Ahmed,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on b3c623b9a94f7f798715c87e7a75ceeecf15292f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ahmed-Salem/ACPI-PRM-apply-ACPI_NONSTRING-annotation/20250404-162651
+base:   b3c623b9a94f7f798715c87e7a75ceeecf15292f
+patch link:    https://lore.kernel.org/r/dcc3a018fb28899b277df2e154740d59d4e404af.1743754416.git.x0rw3ll%40gmail.com
+patch subject: [PATCH 2/2] ACPI: sysfs: apply ACPI_NONSTRING annotation
+config: i386-buildonly-randconfig-004-20250405 (https://download.01.org/0day-ci/archive/20250405/202504051453.3rcptolF-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504051453.3rcptolF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504051453.3rcptolF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/sysfs.c:310:30: error: expected ';' at end of declaration list
+     310 |         char name[ACPI_NAMESEG_SIZE] ACPI_NONSTRING;
+         |                                     ^
+         |                                     ;
+   drivers/acpi/sysfs.c:312:49: error: expected ';' at end of declaration list
+     312 |         char filename[ACPI_NAMESEG_SIZE+ACPI_INST_SIZE] ACPI_NONSTRING;
+         |                                                        ^
+         |                                                        ;
+   2 errors generated.
 
 
-Regressions on arm, arm64 and x86_64.
+vim +310 drivers/acpi/sysfs.c
 
-1)
-The selftests rseq failed across the boards and virtual environments.
-These test failures were also noticed on Linux mainline and next.
+   307	
+   308	struct acpi_table_attr {
+   309		struct bin_attribute attr;
+ > 310		char name[ACPI_NAMESEG_SIZE] ACPI_NONSTRING;
+   311		int instance;
+   312		char filename[ACPI_NAMESEG_SIZE+ACPI_INST_SIZE] ACPI_NONSTRING;
+   313		struct list_head node;
+   314	};
+   315	
 
-We will bisect these lists of regressions and get back to you.
-
-* kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-2)
- The clang-nightly build issues reported on mainline and next.
-
-* S390, powerpc, build
-  - clang-nightly-defconfig
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-
- clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
-  - https://lore.kernel.org/all/CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com/
-
-3)
- The clang-nightly boot regressions with no console output have been
- reported on mainline and next.
-
-* boot
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-kselftest
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-  - gcc-13-lkftconfig-debug
-
-  v6.14-12245-g91e5bfe317d8: Boot regression: rk3399-rock-pi-4b
-dragonboard-410c dragonboard-845c no console output
-  - https://lore.kernel.org/all/CA+G9fYve7+nXJNoV48TksXoMeVjgJuP8Gs=+1br+Qur1DPWV4A@mail.gmail.com/
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.13.10-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-* git commit: 8cbfaadfa0ec371208123554d6ad9994433929bb
-* git describe: v6.13.7-385-g8cbfaadfa0ec
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.13.y/build/v6.13.7-385-g8cbfaadfa0ec
-
-## Test Regressions (compared to v6.13.7-362-g3d21aad34dfa)
-* arm, build
-  - clang-nightly-nhk8815_defconfig
-
-* arm64, build
-  - clang-nightly-allyesconfig
-
-* dragonboard-410c, boot
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-kselftest
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-
-* dragonboard-845c, boot
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-kselftest
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-  - gcc-13-lkftconfig-debug
-
-* e850-96, boot
-  - clang-nightly-lkftconfig-kselftest
-
-* fvp-aemva, boot
-  - clang-nightly-lkftconfig-kselftest
-
-* juno-r2, boot
-  - clang-nightly-lkftconfig-kselftest
-
-* dragonboard-410c, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-* dragonboard-845c, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-* e850-96, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-* powerpc, build
-  - clang-nightly-defconfig
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-  - clang-nightly-ppc64e_defconfig
-
-* qemu-arm64, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-* qemu-i386, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-  - shardfile-rseq
-
-* qemu-x86_64, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-* rk3399-rock-pi-4b, boot
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-kselftest
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-
-* s390, build
-  - clang-nightly-defconfig
-  - clang-nightly-lkftconfig-hardening
-  - clang-nightly-lkftconfig-lto-full
-  - clang-nightly-lkftconfig-lto-thing
-
-* x86, kselftest-rseq
-  - rseq_basic_percpu_ops_mm_cid_test
-  - rseq_basic_percpu_ops_test
-  - rseq_basic_test
-  - rseq_param_test
-  - rseq_param_test_benchmark
-  - rseq_param_test_compare_twice
-  - rseq_param_test_mm_cid
-  - rseq_param_test_mm_cid_benchmark
-  - rseq_param_test_mm_cid_compare_twice
-
-* x86_64, build
-  - clang-nightly-allyesconfig
-
-## Metric Regressions (compared to v6.13.7-362-g3d21aad34dfa)
-
-## Test Fixes (compared to v6.13.7-362-g3d21aad34dfa)
-
-## Metric Fixes (compared to v6.13.7-362-g3d21aad34dfa)
-
-## Test result summary
-total: 125983, pass: 99795, fail: 7289, skip: 18899, xfail: 0
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 139 total, 136 passed, 3 failed
-* arm64: 57 total, 56 passed, 1 failed
-* i386: 18 total, 18 passed, 0 failed
-* mips: 34 total, 33 passed, 1 failed
-* parisc: 4 total, 3 passed, 1 failed
-* powerpc: 40 total, 35 passed, 5 failed
-* riscv: 25 total, 23 passed, 2 failed
-* s390: 22 total, 18 passed, 4 failed
-* sh: 5 total, 5 passed, 0 failed
-* sparc: 4 total, 3 passed, 1 failed
-* x86_64: 49 total, 48 passed, 1 failed
-
-## Test suites summary
-* boot
-* commands
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-mincore
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-mptcp
-* kselftest-openat2
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-rust
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-tc-testing
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-x86
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-build-clang
-* log-parser-build-gcc
-* log-parser-test
-* ltp-capability
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-hugetlb
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* perf
-* rcutorture
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
