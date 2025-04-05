@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02F119E992;
-	Sat,  5 Apr 2025 03:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4676C1B043F;
+	Sat,  5 Apr 2025 04:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743823540; cv=none; b=PIXlrIpx0/U63TulaEqtrnaXQ3hLrVVvotzV8IM+A+WtuB9jk2FKbZ5jPs8HCwQJ5gMT0BaiB9/owskpqFUraPxMFJiNIobV0EPmVJk1kG0NNT57ZmK1lEGLKigD6CF8xDMXcQx3Wq4j/R7va3pFtxZjuUyuOmQdd/Ikw3+9LXg=
+	t=1743826066; cv=none; b=gdqApucIRbIhP5nPezlw0vSbu+FMreixF4uIW0vA0stLvm8PzUbQUidaRAUlb4fieKE58cixOQV1iFspfes00270TDAI8O1iECl7hOvuioh+yksYlkl/hxrtEA+8GALMrDXHvDSqlvIbsegPcvC2ew7wJEy1iGto0yI2EPOB4rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743823540; c=relaxed/simple;
-	bh=f5bCoWNtpRBvun2ExG/cKN8//HwVZaQxbYFP3iQZfYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KnPxq8QEXnb+8iN4n62tFohb/w86pskHYI15A2P7u1YpT1moqK0LyoED36YUAl0cmXKgJgQyUnBav/9dSrLsXsS9fHDjHqJsF4QoqI3pXTfNphP9G8O5DLFdSvHKU7OUxuOWf0g28irjDSITp8pML+gT8JZS0e7R4Psp9sa9sBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XsXCA4DR; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1743826066; c=relaxed/simple;
+	bh=YTgPK8emZtOkOuQahPeALEYS0BLiS6UwaCEe75EbPK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qu6vOOtXg1MoBb+wy/OkJmYopoZmyyYf/lmbQJtVA4RG2rGZApw4zVvwgKcaRWfy2PhxWAgoF8gidNhVY4LDZlW7gQUaztDVs02t6uE6f1K2bdHxS757uhMMxCLWL6rZhkvfuq3G/ay6vs6SkttzpLIul4ErnWbsxtpFi9tDRJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BKBVtjm+; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XsXCA4DR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BKBVtjm+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743823539; x=1775359539;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f5bCoWNtpRBvun2ExG/cKN8//HwVZaQxbYFP3iQZfYk=;
-  b=XsXCA4DRUGy9EgKUSajnVMn/App6bzPYUGJaeN90KOP8xQ635Yb+jKWp
-   efZc7v7mm0LDrpCtrPwLoIkDWRY04sYc67U8SjRphwVm2f1aW9bAPFj3L
-   ncTNvoAwmR+ePWrSuKiXlyE4de9AUcWOJfAVpC+/P/ojC6qoS/08utupt
-   fGRqgmxUqsUncMH2orcrcXH6GElN3441m7ap+hzll4AtZF0KIScIy2T5K
-   LJSKOQEuMbBR7MjqO1hN0oJkixZL+fRkEFXV8gLPNmulptB0rv8AsI6mY
-   J2RJC/zDJzYYdtlza7kYhwlftfJ5QJaOVRLQvNqDR23frYMZQ2bTm3KnD
+  t=1743826064; x=1775362064;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YTgPK8emZtOkOuQahPeALEYS0BLiS6UwaCEe75EbPK0=;
+  b=BKBVtjm+X+5+d6RuKLtTIPBiWvS4C5cPcLf+jJyYTxcJYKShzSIEwKH4
+   dzHiqxD/IJByScTB7IjxJ3JVs1QULXFmv7mig0fKMToEdHEdHaFFUviCa
+   5CwaGPJ/RxwwVyKTHuVWakJrRtqVw1FZrRablkI1zgeB7CFYJbRhSfqPo
+   8TDuulK9CNrWLFuYFcTSK0FwLo/FA4j+uxFmIAvmdplGHjRWt4fA5cK7X
+   URyD011wTXDpHz/szYAVD3cEWDpQ1WqN0AGaJ//vNsnnT57i9B0Ir3bXk
+   EFnMoQUFFMf3CUUy23qA9K2L4ueRI9lsGTvRm3iYWFTSTh9M9+FQa5PdV
    Q==;
-X-CSE-ConnectionGUID: TGnVPUBJSpSE0MjEQTC5Mw==
-X-CSE-MsgGUID: SLU1KoOPQSWI7/zOxt7Z+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="67750619"
+X-CSE-ConnectionGUID: a/lX4vO3T+i+vyFbppVzpA==
+X-CSE-MsgGUID: E/IJjY8PSkSNRWSp00KMRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="70651855"
 X-IronPort-AV: E=Sophos;i="6.15,190,1739865600"; 
-   d="scan'208";a="67750619"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 20:25:36 -0700
-X-CSE-ConnectionGUID: 6eXt6FOSTaqAXRu1OkdjkA==
-X-CSE-MsgGUID: 6mQjgL0NTYCTb8wRUciyNA==
+   d="scan'208";a="70651855"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 21:07:40 -0700
+X-CSE-ConnectionGUID: iNaVNRY5TVW8Kghk0LVIvQ==
+X-CSE-MsgGUID: mIUMiF3lTca2CfKc99cGFA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,190,1739865600"; 
-   d="scan'208";a="128317344"
+   d="scan'208";a="131620026"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Apr 2025 20:25:35 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 04 Apr 2025 21:07:38 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u0uA0-0001mN-2p;
-	Sat, 05 Apr 2025 03:25:32 +0000
-Date: Sat, 5 Apr 2025 11:25:12 +0800
+	id 1u0uoi-0001nv-21;
+	Sat, 05 Apr 2025 04:07:36 +0000
+Date: Sat, 5 Apr 2025 12:07:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gabriele Monaco <gmonaco@redhat.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 5/9] sched: Add sched tracepoints for RV task model
-Message-ID: <202504051122.dzVIM0US-lkp@intel.com>
-References: <20250404084512.98552-16-gmonaco@redhat.com>
+Subject: [jpoimboe:objtool-werror 6/7]
+ arch/x86/include/asm/uaccess_64.h:128:3: error: unknown directive
+Message-ID: <202504051253.2t0cOwDF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,35 +61,608 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250404084512.98552-16-gmonaco@redhat.com>
 
-Hi Gabriele,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on e48e99b6edf41c69c5528aa7ffb2daf3c59ee105]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gabriele-Monaco/tools-rv-Do-not-skip-idle-in-trace/20250404-165047
-base:   e48e99b6edf41c69c5528aa7ffb2daf3c59ee105
-patch link:    https://lore.kernel.org/r/20250404084512.98552-16-gmonaco%40redhat.com
-patch subject: [RFC PATCH 5/9] sched: Add sched tracepoints for RV task model
-config: arm-randconfig-001-20250405 (https://download.01.org/0day-ci/archive/20250405/202504051122.dzVIM0US-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504051122.dzVIM0US-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-werror
+head:   d9200f830505ef0415720e0bd90fe183e62222c5
+commit: 31eabb43d04f7a788da11c3c06cb00ace7e6bd2e [6/7] x86/alternative: Improve code generation readability
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250405/202504051253.2t0cOwDF-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250405/202504051253.2t0cOwDF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504051122.dzVIM0US-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504051253.2t0cOwDF-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __trace_set_need_resched
-   >>> referenced by sched.h:2071 (include/linux/sched.h:2071)
-   >>>               kernel/sched/build_policy.o:(idle_inject_timer_fn) in archive vmlinux.a
-   >>> referenced by sched.h:2071 (include/linux/sched.h:2071)
-   >>>               kernel/rcu/tiny.o:(rcu_sched_clock_irq) in archive vmlinux.a
+   In file included from mm/maccess.c:6:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:35:2: error: unknown directive
+      35 |         alternative("", "stac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/maccess.c:6:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:22:
+>> arch/x86/include/asm/uaccess_64.h:128:3: error: unknown directive
+     128 |                 ALTERNATIVE("rep movsb",
+         |                 ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:154: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte (((1 << 0) << 16) | ((18*32+ 4)));  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                                          ^
+   In file included from mm/maccess.c:6:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:29:2: error: unknown directive
+      29 |         alternative("", "clac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/maccess.c:6:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:35:2: error: unknown directive
+      35 |         alternative("", "stac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/maccess.c:6:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:22:
+>> arch/x86/include/asm/uaccess_64.h:128:3: error: unknown directive
+     128 |                 ALTERNATIVE("rep movsb",
+         |                 ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:154: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte (((1 << 0) << 16) | ((18*32+ 4)));  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                                          ^
+   In file included from mm/maccess.c:6:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:29:2: error: unknown directive
+      29 |         alternative("", "clac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   6 errors generated.
+--
+   mm/shmem.c:1689:20: warning: unused function 'shmem_show_mpol' [-Wunused-function]
+    1689 | static inline void shmem_show_mpol(struct seq_file *seq, struct mempolicy *mpol)
+         |                    ^~~~~~~~~~~~~~~
+   In file included from mm/shmem.c:24:
+   In file included from include/linux/fs.h:7:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:60:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:12:
+   In file included from arch/x86/include/asm/page.h:12:
+>> arch/x86/include/asm/page_64.h:54:2: error: unknown directive
+      54 |         alternative_call_2(clear_page_orig,
+         |         ^
+   arch/x86/include/asm/alternative.h:275:22: note: expanded from macro 'alternative_call_2'
+     275 |         asm_inline volatile(ALTERNATIVE_2("call %c[old]", "call %c[new1]", ft_flags1,   \
+         |                             ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:16: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |                       ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:131: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 3*32+16);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/shmem.c:24:
+   In file included from include/linux/fs.h:7:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:60:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:12:
+   In file included from arch/x86/include/asm/page.h:12:
+>> arch/x86/include/asm/page_64.h:54:2: error: unknown directive
+      54 |         alternative_call_2(clear_page_orig,
+         |         ^
+   arch/x86/include/asm/alternative.h:275:22: note: expanded from macro 'alternative_call_2'
+     275 |         asm_inline volatile(ALTERNATIVE_2("call %c[old]", "call %c[new1]", ft_flags1,   \
+         |                             ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:2: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:12:131: note: instantiated into assembly here
+      12 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+ 9);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   1 warning and 2 errors generated.
+--
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:2: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:12:124: note: instantiated into assembly here
+      12 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte 519;  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                            ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:14:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   arch/x86/include/asm/cpufeature.h:101:11: error: unknown directive
+     101 |         asm goto(ALTERNATIVE_TERNARY("jmp 6f", %c[feature], "", "jmp %l[t_no]")
+         |                  ^
+   arch/x86/include/asm/alternative.h:213:2: note: expanded from macro 'ALTERNATIVE_TERNARY'
+     213 |         ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS, newinstr_yes, ft_flags)
+         |         ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:16: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |                       ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:131: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 3*32+21);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:14:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   arch/x86/include/asm/cpufeature.h:101:11: error: unknown directive
+     101 |         asm goto(ALTERNATIVE_TERNARY("jmp 6f", %c[feature], "", "jmp %l[t_no]")
+         |                  ^
+   arch/x86/include/asm/alternative.h:213:2: note: expanded from macro 'ALTERNATIVE_TERNARY'
+     213 |         ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS, newinstr_yes, ft_flags)
+         |         ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:2: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:12:124: note: instantiated into assembly here
+      12 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte 519;  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                            ^
+   In file included from mm/memory.c:43:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:35:2: error: unknown directive
+      35 |         alternative("", "stac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:43:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:22:
+>> arch/x86/include/asm/uaccess_64.h:128:3: error: unknown directive
+     128 |                 ALTERNATIVE("rep movsb",
+         |                 ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:154: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte (((1 << 0) << 16) | ((18*32+ 4)));  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                                          ^
+   In file included from mm/memory.c:43:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:29:2: error: unknown directive
+      29 |         alternative("", "clac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:43:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:35:2: error: unknown directive
+      35 |         alternative("", "stac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:43:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:22:
+>> arch/x86/include/asm/uaccess_64.h:128:3: error: unknown directive
+     128 |                 ALTERNATIVE("rep movsb",
+         |                 ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:154: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte (((1 << 0) << 16) | ((18*32+ 4)));  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                                          ^
+   In file included from mm/memory.c:43:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:15:
+   arch/x86/include/asm/smap.h:29:2: error: unknown directive
+      29 |         alternative("", "clac", X86_FEATURE_SMAP);
+         |         ^
+   arch/x86/include/asm/alternative.h:228:22: note: expanded from macro 'alternative'
+     228 |         asm_inline volatile(ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
+         |                             ^
+   arch/x86/include/asm/alternative.h:193:2: note: expanded from macro 'ALTERNATIVE'
+     193 |         __ALTERNATIVE("\t" oldinstr, newinstr, ft_flags) "\n"
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:6:131: note: instantiated into assembly here
+       6 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+20);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:13:
+   In file included from arch/x86/include/asm/processor.h:20:
+   In file included from arch/x86/include/asm/page.h:12:
+>> arch/x86/include/asm/page_64.h:54:2: error: unknown directive
+      54 |         alternative_call_2(clear_page_orig,
+         |         ^
+   arch/x86/include/asm/alternative.h:275:22: note: expanded from macro 'alternative_call_2'
+     275 |         asm_inline volatile(ALTERNATIVE_2("call %c[old]", "call %c[new1]", ft_flags1,   \
+         |                             ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:16: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |                       ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:131: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 3*32+16);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:13:
+   In file included from arch/x86/include/asm/processor.h:20:
+   In file included from arch/x86/include/asm/page.h:12:
+>> arch/x86/include/asm/page_64.h:54:2: error: unknown directive
+      54 |         alternative_call_2(clear_page_orig,
+         |         ^
+   arch/x86/include/asm/alternative.h:275:22: note: expanded from macro 'alternative_call_2'
+     275 |         asm_inline volatile(ALTERNATIVE_2("call %c[old]", "call %c[new1]", ft_flags1,   \
+         |                             ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:2: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:12:131: note: instantiated into assembly here
+      12 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 9*32+ 9);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:14:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   arch/x86/include/asm/cpufeature.h:101:11: error: unknown directive
+     101 |         asm goto(ALTERNATIVE_TERNARY("jmp 6f", %c[feature], "", "jmp %l[t_no]")
+         |                  ^
+   arch/x86/include/asm/alternative.h:213:2: note: expanded from macro 'ALTERNATIVE_TERNARY'
+     213 |         ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS, newinstr_yes, ft_flags)
+         |         ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:16: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |                       ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:131: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 3*32+21);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                                   ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:14:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   arch/x86/include/asm/cpufeature.h:101:11: error: unknown directive
+     101 |         asm goto(ALTERNATIVE_TERNARY("jmp 6f", %c[feature], "", "jmp %l[t_no]")
+         |                  ^
+   arch/x86/include/asm/alternative.h:213:2: note: expanded from macro 'ALTERNATIVE_TERNARY'
+     213 |         ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS, newinstr_yes, ft_flags)
+         |         ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:2: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |         ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:12:124: note: instantiated into assembly here
+      12 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte 519;  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+         |                                                                                                                            ^
+   In file included from mm/memory.c:42:
+   In file included from include/linux/kernel_stat.h:7:
+   In file included from include/linux/percpu.h:12:
+   In file included from include/linux/sched.h:14:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   arch/x86/include/asm/cpufeature.h:101:11: error: unknown directive
+     101 |         asm goto(ALTERNATIVE_TERNARY("jmp 6f", %c[feature], "", "jmp %l[t_no]")
+         |                  ^
+   arch/x86/include/asm/alternative.h:213:2: note: expanded from macro 'ALTERNATIVE_TERNARY'
+     213 |         ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS, newinstr_yes, ft_flags)
+         |         ^
+   arch/x86/include/asm/alternative.h:199:2: note: expanded from macro 'ALTERNATIVE_2'
+     199 |         __ALTERNATIVE_2("\n\t" oldinstr, newinstr1, ft_flags1,          \
+         |         ^
+   arch/x86/include/asm/alternative.h:181:16: note: expanded from macro '__ALTERNATIVE_2'
+     181 |         __ALTERNATIVE(__ALTERNATIVE(oldinstr, newinstr1, ft_flags1),\
+         |                       ^
+   arch/x86/include/asm/alternative.h:175:2: note: expanded from macro '__ALTERNATIVE'
+     175 |         OLDINSTR(oldinstr)                                              \
+         |         ^
+   arch/x86/include/asm/alternative.h:157:3: note: expanded from macro 'OLDINSTR'
+     157 |         "773: "
+         |          ^
+   <inline asm>:7:131: note: instantiated into assembly here
+       7 | 773: .pushsection .altinstructions,"a";  .long 771b - .;  .long 774f - .;  .4byte ( 3*32+21);  .byte 773b-771b;  .byte 775f-774f; .popsection.pushsection .altinstr_replacement, "ax"
+..
+
+
+vim +128 arch/x86/include/asm/uaccess_64.h
+
+1b1d9258181bae arch/x86/include/asm/uaccess_64.h Jan Beulich    2009-12-18  117  
+1b1d9258181bae arch/x86/include/asm/uaccess_64.h Jan Beulich    2009-12-18  118  static __always_inline __must_check unsigned long
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  119  copy_user_generic(void *to, const void *from, unsigned long len)
+1b1d9258181bae arch/x86/include/asm/uaccess_64.h Jan Beulich    2009-12-18  120  {
+3639a535587d7a arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  121  	stac();
+954e482bde20b0 arch/x86/include/asm/uaccess_64.h Fenghua Yu     2012-05-24  122  	/*
+adfcf4231b8cbc arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  123  	 * If CPU has FSRM feature, use 'rep movs'.
+427fda2c8a4977 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-16  124  	 * Otherwise, use rep_movs_alternative.
+954e482bde20b0 arch/x86/include/asm/uaccess_64.h Fenghua Yu     2012-05-24  125  	 */
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  126  	asm volatile(
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  127  		"1:\n\t"
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15 @128  		ALTERNATIVE("rep movsb",
+427fda2c8a4977 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-16  129  			    "call rep_movs_alternative", ALT_NOT(X86_FEATURE_FSRM))
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  130  		"2:\n"
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  131  		_ASM_EXTABLE_UA(1b, 2b)
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  132  		:"+c" (len), "+D" (to), "+S" (from), ASM_CALL_CONSTRAINT
+ca96b162bfd21a arch/x86/include/asm/uaccess_64.h Mateusz Guzik  2023-08-30  133  		: : "memory", "rax");
+3639a535587d7a arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  134  	clac();
+577e6a7fd50d51 arch/x86/include/asm/uaccess_64.h Linus Torvalds 2023-04-15  135  	return len;
+1b1d9258181bae arch/x86/include/asm/uaccess_64.h Jan Beulich    2009-12-18  136  }
+95912008ba1fb9 include/asm-x86_64/uaccess.h      Andi Kleen     2006-09-26  137  
+
+:::::: The code at line 128 was first introduced by commit
+:::::: 577e6a7fd50d519c201d20968b6a027a6563dc4c x86: inline the 'rep movs' in user copies for the FSRM case
+
+:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
