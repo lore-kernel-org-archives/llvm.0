@@ -1,107 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E34A199FA4
-	for <llvm@lists.linux.dev>; Sun,  6 Apr 2025 18:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015081487F6;
+	Sun,  6 Apr 2025 20:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743963730; cv=none; b=EgNgyTbABriM0AEKQxtvoxw6ntTYv7SMSEPfSIVOwscIxzxsxqXCJn+MJHrvNt/N3mqDxijYwnm4KgNnKPYVwOymBD/VEi9ra45C40daDN3M+MPANr5POCzxGBEQqkk6i7MRS9uKfRqEV9/iwWMOkJEc1FRbeLYb6/bzb+lMML0=
+	t=1743972181; cv=none; b=bgm0eekQ3B+hIjs8lpyo+G++2io0x4o1U/st52vf4WJ4nJgLyjVfh1MrQTnB2PdRcJ4flcLTedVf1DUeMkebYVPb5phnypBtESyLBu6TV9/6BPRXZj2ax8frItA5SmDC9nTBOBSsePavWAktw+5yp+zTsraNbbgOjk5gmNHSULo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743963730; c=relaxed/simple;
-	bh=Wcj0vKs+HJu4Ul6JJsuSx/rp5jT1QoTG+LKdRv1esPQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZOA9PtBPd759Y52r6+2o6hnrPpAjpyjfeVxHuRee7cO/clBajEYp+7PxOS/0SOQs+WcZHBc9z1/qFPgQ+0xRBsoCU+ohKfg2KYEDHiPsSVwoI/uYT0uhIMifnPwgW0KoCVojgE8RNpS31IF+ENeIawCcfwH+nFdp4o2YRZTY9rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QBeb/kqW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743972181; c=relaxed/simple;
+	bh=ucTOR97qFqJDSGh++Oi8YunL4fytJwroFSyVVKXhxw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OrL0VgCytP82HWBSkFiJYod98afnPmiRXB/pJDRR+OTFkRZBPnmZhqWwVuCbtZuRF+b70V7hVAE4FTvFkOT3yHROQDHH0NfcTDewmJ8Xg9cvkeqDOErbzvTK91axo7p+FLhB6+VOX98b/FRs1b4L4wjbc8zcnmGeOa5a40t2U4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RCfRAANi; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QBeb/kqW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743963727;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dj19jb2KId2an1AwU/F92QEMao1DJPZt4o/Zx36atzo=;
-	b=QBeb/kqWQiibiqAscdrK1r8FhOEawOoipcDYjyl33pK+s6rvgn4AXJ8xLPSOHWD37kMfa2
-	9NEYGVv7OySWWMORSgYOcNU7BbhpGW2G509rlYbeQTWYZ5MWjyfFoNPPMiHmfOdiw2nQhI
-	nKFv1WSsbtJTAyYorTXMn/0fNPHWspA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-569-A4Orla1JOgGyfHxuxwDwpg-1; Sun,
- 06 Apr 2025 14:22:06 -0400
-X-MC-Unique: A4Orla1JOgGyfHxuxwDwpg-1
-X-Mimecast-MFC-AGG-ID: A4Orla1JOgGyfHxuxwDwpg_1743963725
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 37B371800257
-	for <llvm@lists.linux.dev>; Sun,  6 Apr 2025 18:22:05 +0000 (UTC)
-Received: from [172.20.219.140] (unknown [10.30.44.44])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C2CFA180B488;
-	Sun,  6 Apr 2025 18:22:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, 16cd1c26)
-Date: Sun, 06 Apr 2025 18:22:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RCfRAANi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743972180; x=1775508180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ucTOR97qFqJDSGh++Oi8YunL4fytJwroFSyVVKXhxw8=;
+  b=RCfRAANiFlsffxsLkeOrf3D2ZxEdUtpkJ7iUEcGjAYGGPvkwsIydz1Fl
+   4Fcdra37AWaAzXnc7mtm8SV0gjrTuOcaOQ3NvmykOBiJo71gtMg2NhanK
+   0YY9JmBAcZSmDiUlg9e6lpAaaZbmNRnsez8C9syFOQ9Y+f9fhNDG82/Lt
+   cE0amL0ZwPPLmALE0ts9ebCRM9R3V4yiOKac6HszOgbG1m2aZLVMNlb/v
+   Ay6V/fkQy9bVdgBpWVE1HbkcI/IJBq+xIF6XgHxQexJb3u9UKwsUomWhG
+   HCzyuKbowCSBZxBxWXct4hGXQJnwoKm0Fq2zKP3meO6/1KTmgT9wAnnWX
+   w==;
+X-CSE-ConnectionGUID: FsTNiKbLQ8CORUCsT4EAgQ==
+X-CSE-MsgGUID: QnM53cZfTV2RVbhXIYct7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="62893346"
+X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
+   d="scan'208";a="62893346"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2025 13:42:59 -0700
+X-CSE-ConnectionGUID: 7A1SZ+9HQaeEOp+zSzOO2A==
+X-CSE-MsgGUID: 1Mu686fJRWm6vbVCtSdAXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
+   d="scan'208";a="128624589"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 06 Apr 2025 13:42:53 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u1WpO-0002lj-2N;
+	Sun, 06 Apr 2025 20:42:50 +0000
+Date: Mon, 7 Apr 2025 04:42:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+Message-ID: <202504070413.eDHSjWGP-lkp@intel.com>
+References: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <31422.125040614220600447@us-mta-569.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 5Adiha_vWs3uXfM1SpAB2BUQ7WKafqEEw0yhOT_mtFk_1743963725
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Blaise,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on shuah-kselftest/next]
+[also build test ERROR on shuah-kselftest/fixes herbert-cryptodev-2.6/master herbert-crypto-2.6/master masahiroy-kbuild/for-next masahiroy-kbuild/fixes v6.14]
+[cannot apply to linus/master next-20250404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Blaise-Boscaccy/security-Hornet-LSM/20250405-055741
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20250404215527.1563146-2-bboscaccy%40linux.microsoft.com
+patch subject: [PATCH v2 security-next 1/4] security: Hornet LSM
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250407/202504070413.eDHSjWGP-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250407/202504070413.eDHSjWGP-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504070413.eDHSjWGP-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> security/hornet/hornet_lsm.c:221:31: error: incompatible function pointer types initializing 'int (*)(struct bpf_prog *, union bpf_attr *, struct bpf_token *)' with an expression of type 'int (struct bpf_prog *, union bpf_attr *, struct bpf_token *, bool)' (aka 'int (struct bpf_prog *, union bpf_attr *, struct bpf_token *, _Bool)') [-Wincompatible-function-pointer-types]
+     221 |         LSM_HOOK_INIT(bpf_prog_load, hornet_bpf_prog_load),
+         |                                      ^~~~~~~~~~~~~~~~~~~~
+   include/linux/lsm_hooks.h:136:21: note: expanded from macro 'LSM_HOOK_INIT'
+     136 |                 .hook = { .NAME = HOOK }                \
+         |                                   ^~~~
+   1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'timers-cleanups-2025-04-06' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/tip/tip
+vim +221 security/hornet/hornet_lsm.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1754603968
+   219	
+   220	static struct security_hook_list hornet_hooks[] __ro_after_init = {
+ > 221		LSM_HOOK_INIT(bpf_prog_load, hornet_bpf_prog_load),
+   222	};
+   223	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1754603968-aarch64-kernel
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1754603968-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1754603968-s390x-kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1754603968-x86_64-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1754603968-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
