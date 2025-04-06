@@ -1,131 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3163A1A840D;
-	Sat,  5 Apr 2025 20:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A9510FD
+	for <llvm@lists.linux.dev>; Sun,  6 Apr 2025 00:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743883441; cv=none; b=Q3FHZyExe+kJjvjYCqXSRRTlwW3oBu1XnZmjoXoBT3MUh6289MhNagm8o9XefFv02bR1W3jDWWkpt8WKKrA8XVmoiKkKTJrWfmJXd5W9FCzH7OyUXkV0zqzSP4kVmIZk3UdMsxX++BFbch8DWHfzsFJCHKdLkfvSlWun2Glh76o=
+	t=1743899590; cv=none; b=Z9+7fu+ZX/fDs1H99dLpNuTZBbZSKChMSaMPaBRnNzwnn/nnNRFaWFg1hF5J4hnDlQvNsVsHs6KSF3CbB+AxkEijq1WY7jLISaMEPYbuDCNoeLtwZLxlEqXjHKBnb0ey1wbDNep9XO2bAMoc/8HvkGlQMhKxasyiof/QbXzGQAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743883441; c=relaxed/simple;
-	bh=FWBwk0Cr/rThQ6vVS3vU5yEyW68sRp7Z4RBTakOBlAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tSXpmPWyYkSIFe7nId/HEQkdT4khPpxIjmBCSeqPYbKPu7d3fNQgBzUJuAci5qIccSX4xzwJ9uZJCSQ2GF+uRUcDk4ZcyM7QA2Axr48CscXBhSJvwqjYzWkh895FLT4TxM6IQ/wkTnPr+X4AbBTsZr5TJwC1pnb22BwoQ6NxENU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apQqujuK; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743899590; c=relaxed/simple;
+	bh=72qApDyqSasvnxRDt4El6IZoq5s8oCsrhoCPUtBzg+o=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=dwkhHd4R+0lldk2A78h4k41eiLm+rchEsG2GmucwgRc4PcutpxSKD0Q6dWkCjxmUAzrc5c/MRmTdzbkSQFH/SjhTxt/UdQKf79KrpIthLN4Iy9BoaSeaG2Hkm8ffdvjazvuO3IsXWb3cFn6cL29PKVBWf/VbmXtU3ZmEJSKuEnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jz5oHLiK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apQqujuK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743883439; x=1775419439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FWBwk0Cr/rThQ6vVS3vU5yEyW68sRp7Z4RBTakOBlAc=;
-  b=apQqujuKAtKyfPrPAJQ/fspgMZEMdZP80CUQjgS5C0Z/WkDmZNL3Phsw
-   IiKsEQdNPaB+Ou/PhQFSXM8SLgwRulH0Px8VgYp3HbFFkvcUSXj/94zVm
-   p+bw6e+lfvPHbcpRha2sQFFQZfdVnOWokterp5/1rCX5937lt8JUFd9qx
-   nqRSwibpXO8fnwnGNS8uJXs/jbXXvnCM2bUffQwW+tS7vJs6QYfyz5laX
-   sxMsTwy1VHK3OJGDJ/AdIGD0Y9Yoimxgv3AKNEL19rxobmA/TcEv6rG0/
-   JUMz8YFVmbol/CAkwQ/Bpl4Y8+oxlkTD6kUeVbKyU51/LBhL+twSLDNSd
-   Q==;
-X-CSE-ConnectionGUID: l0GdMqSqTvGG/fLC45kptg==
-X-CSE-MsgGUID: BW8iEZhuT2Ko1MdOKBI68g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11395"; a="45191873"
-X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
-   d="scan'208";a="45191873"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 13:03:58 -0700
-X-CSE-ConnectionGUID: uZExyyHDSgOxAu6cWrxDvw==
-X-CSE-MsgGUID: AAqF7o+hRF2OuKRfTw9AfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
-   d="scan'208";a="128081559"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 05 Apr 2025 13:03:54 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u19k7-0002FD-2q;
-	Sat, 05 Apr 2025 20:03:51 +0000
-Date: Sun, 6 Apr 2025 04:02:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>,
-	Allen Hubbe <allenbh@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marek Vasut <marek.vasut+renesas@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Yuya Hamamachi <yuya.hamamachi.sx@renesas.com>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ntb@lists.linux.dev, Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: [PATCH v2 1/3] PCI: endpoint: add epc_feature argument for
- pci_epf_free_space()
-Message-ID: <202504060315.dkEQSXkB-lkp@intel.com>
-References: <20250404-pci-ep-size-alignment-v2-1-c3a0db4cfc57@baylibre.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jz5oHLiK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743899587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2596NNH+09qI+jGiIuytsLT5VEugL83aK7804FQxC40=;
+	b=Jz5oHLiKz+c5Y5G8egD+S5TmnG2wWmZ0uDB3aOhuDj1OtJGMfM032VseDEGAjNukw6Xrqu
+	OfdPIPIyHLME2wTbmBaMSqY03NXRIAlfylzW/gaZovzRw7txDI5YfC/qc7ctAlYBHXbow2
+	HoGuHqR0m7sgwIqWAbpHP3EsFVs0fMU=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-35-4smshD1aOqmZ4WQvdewEmw-1; Sat,
+ 05 Apr 2025 20:33:05 -0400
+X-MC-Unique: 4smshD1aOqmZ4WQvdewEmw-1
+X-Mimecast-MFC-AGG-ID: 4smshD1aOqmZ4WQvdewEmw_1743899584
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7CB32195609F
+	for <llvm@lists.linux.dev>; Sun,  6 Apr 2025 00:33:04 +0000 (UTC)
+Received: from [172.20.219.140] (unknown [10.30.44.44])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 89C04180B488;
+	Sun,  6 Apr 2025 00:33:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, f4d2ef48)
+Date: Sun, 06 Apr 2025 00:33:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250404-pci-ep-size-alignment-v2-1-c3a0db4cfc57@baylibre.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <07713.125040520330500165@us-mta-35.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 3Ri-Mt8EvsD3FDLAvKAzlOH_xWfe7UrYqjGIXnLwwes_1743899584
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jerome,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on dea140198b846f7432d78566b7b0b83979c72c2b]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/PCI-endpoint-add-epc_feature-argument-for-pci_epf_free_space/20250405-014733
-base:   dea140198b846f7432d78566b7b0b83979c72c2b
-patch link:    https://lore.kernel.org/r/20250404-pci-ep-size-alignment-v2-1-c3a0db4cfc57%40baylibre.com
-patch subject: [PATCH v2 1/3] PCI: endpoint: add epc_feature argument for pci_epf_free_space()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250406/202504060315.dkEQSXkB-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250406/202504060315.dkEQSXkB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504060315.dkEQSXkB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/nvme/target/pci-epf.c:2165:69: error: too few arguments to function call, expected 5, have 4
-    2165 |         pci_epf_free_space(epf, nvme_epf->reg_bar, BAR_0, PRIMARY_INTERFACE);
-         |         ~~~~~~~~~~~~~~~~~~                                                 ^
-   include/linux/pci-epf.h:224:6: note: 'pci_epf_free_space' declared here
-     224 | void pci_epf_free_space(struct pci_epf *epf, void *addr, enum pci_barno bar,
-         |      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     225 |                         const struct pci_epc_features *epc_features,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     226 |                         enum pci_epc_interface_type type);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +2165 drivers/nvme/target/pci-epf.c
+Kernel information:
+    Commit message: Merge tag 'kbuild-v6.15' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/masahiroy/linux-kbuild
 
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2157  
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2158  static void nvmet_pci_epf_free_bar(struct nvmet_pci_epf *nvme_epf)
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2159  {
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2160  	struct pci_epf *epf = nvme_epf->epf;
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2161  
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2162  	if (!nvme_epf->reg_bar)
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2163  		return;
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2164  
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04 @2165  	pci_epf_free_space(epf, nvme_epf->reg_bar, BAR_0, PRIMARY_INTERFACE);
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2166  	nvme_epf->reg_bar = NULL;
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2167  }
-0faa0fe6f90ea5 Damien Le Moal 2025-01-04  2168  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1754082520
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1754082520-aarch64-kernel
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1754082520-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1754082520-s390x-kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1754082520-x86_64-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1754082520-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
