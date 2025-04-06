@@ -1,64 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0C3839F4;
-	Sun,  6 Apr 2025 02:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F6F35964;
+	Sun,  6 Apr 2025 04:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743905430; cv=none; b=lWBvzWepjAS7ibW/OGX1vQ6PcYYoVT4+HArnwwJQQ7I/+EFLey1Xaofjb4OdKdb0xvjeO5qm1KQs3ONe1XphjVFVIfAhhfDQfYgRGrqQt+nkR/LXlStb1mFgEbHC+OCP7I5HmdCEacakEq9fMS6X2xkUxena7dbuLSLyARXrE2I=
+	t=1743913720; cv=none; b=MvB3RrCi/MmlIzovRY0nU4TNaEdGuuqXylNgxCF0MlBMwW+AF2SAhW2/h0r9vQXd1Q7LcJ3vP77ZzQu0sYZfKtOyKKXsziBYaLs6kphlptJTPM4RYX+4tDYjFT1P+CBkvU9rMgzmFvY+jeamX9QnWanrZfN5UN2m61F1RonJcC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743905430; c=relaxed/simple;
-	bh=s2ePmLJebTBif3adtwwn4EZ0Sw4QTnrxCeWLYtQTVF0=;
+	s=arc-20240116; t=1743913720; c=relaxed/simple;
+	bh=4BH94r9eFHWd7jK1gh/ArWcfPCsUQZMfgHuoqE5hS94=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BkNxcC/W6OZdGvkdlNimFMIWN+WEExmorA18jHOGeNjhWMzBYigu12Q1NRfP5cs6AOn3ll2sLJZ6BKty4Wxp/DnAMz9fIHXkCpDRFsI9N6PqBzDV9WoRpGhmOM2u4ucWKkrlYckCAwcKGldlXEPBf0IdEhxM+G++JnkyEGRnwCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuH6QwFQ; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=LjZk9JjR4Yvbs0FKr831KTBps7VKG19zARsDUXwdhxm1eyKjsliPhlkJsKBU8Mo5j4NS05reIsy0aP/nKEvX57s8VRXmSNLF6WTW7Wre6gpM02vN7dqer5Gom/tdJ9ZmvAM+2UE20cRhvbW0OBDsV/L2wHUgM5SqHVCY9Q2d9Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R4equr5S; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuH6QwFQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R4equr5S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743905428; x=1775441428;
+  t=1743913719; x=1775449719;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=s2ePmLJebTBif3adtwwn4EZ0Sw4QTnrxCeWLYtQTVF0=;
-  b=BuH6QwFQkTTIw8Hq7WfaUyd+eBPrE7RGZJVhf118Akef3UsDc8a3fhp8
-   dIHTvHFzJkNt6KM+N2utR+pVc2RN9c7sYXLOeotNJUVW8NngyE78AawGC
-   D5Zt+qOR+mvwhQIifOgOBuWnVtO9SJEGP4bCHSmQUTBIjtCrpTEOreF77
-   26V1OmeUKzYbBZ5RhkEnLcOXWYgQ7C18pLWmbdn4VGxX6qD/kHzhclEI5
-   dJhyS1Tv4RWr8RVVwdwp02iil22WAy/3saU7v05I3loaVaeYL+H3uLrq6
-   FQvPBH5Zwi4RjOJluUjZ8t0R29TNAJbBFw1I+75ZN4X0JiNJVQkiR5uZP
-   A==;
-X-CSE-ConnectionGUID: BZqabqeJTQenjjTi3fvyIg==
-X-CSE-MsgGUID: jwfFSk41QEGPrs/WvR83Gw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11395"; a="44556418"
+  bh=4BH94r9eFHWd7jK1gh/ArWcfPCsUQZMfgHuoqE5hS94=;
+  b=R4equr5SQ1KHsLtMq8WXDlmeyZiPX3MpxZ4xVwRpd3AHN8sYJTO4uVS7
+   58vYOnaP5i5fEz2OaopowPQDE+fSXqCOn2qZrI8k+LyBlcF7S44FLT8y+
+   Ur+J/Q7FxkjyknrUkQLZ6tv2DRsPy9Nd4KGfasaG7zsWUI1p26iMLUKyd
+   B2qQT84TFRlGnC6thAFYoqIjrhT6Vn4vmxjOLLdSgXN0Wr+o+Omx0DRuP
+   YhBl+WFq8bNbhqIEt1uBm7LivzUiTAMnPi6k313EFl28jmZiJ51LSsn+c
+   /Z+w2i84eMX/40RAFG1A7QG14JeLHvjq0c1rGFdoUjD4nHbcA7eBlQWHd
+   Q==;
+X-CSE-ConnectionGUID: kxXILy1HSUiuUk8ayxbTuQ==
+X-CSE-MsgGUID: xZOvyzMNRP6W7wIp+jB+MQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11395"; a="56681022"
 X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
-   d="scan'208";a="44556418"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 19:10:24 -0700
-X-CSE-ConnectionGUID: /pKw8fHHRiSxJUvBFH73yg==
-X-CSE-MsgGUID: UqF+u6gbTWOzwmzSK+PRxQ==
+   d="scan'208";a="56681022"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 21:28:38 -0700
+X-CSE-ConnectionGUID: 1bedKDMXRJKqCrYs7nazqw==
+X-CSE-MsgGUID: acvAGZQMQzmFa8Oa3eIpPg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
-   d="scan'208";a="127611308"
+   d="scan'208";a="158617337"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 05 Apr 2025 19:10:21 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 05 Apr 2025 21:28:31 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u1FSk-0002OV-33;
-	Sun, 06 Apr 2025 02:10:18 +0000
-Date: Sun, 6 Apr 2025 10:10:06 +0800
+	id 1u1HcT-0002RH-1k;
+	Sun, 06 Apr 2025 04:28:29 +0000
+Date: Sun, 6 Apr 2025 12:27:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	manivannan.sadhasivam@linaro.org, thierry.reding@gmail.com,
-	kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-	jonathanh@nvidia.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	Hans Zhang <18255117159@163.com>
-Subject: Re: [PATCH] pci: tegra194: Fix debugfs cleanup for !CONFIG_PCIEASPM
-Message-ID: <202504060938.xa7VrE6O-lkp@intel.com>
-References: <20250405145459.26800-1-18255117159@163.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+Message-ID: <202504061441.FMnrO665-lkp@intel.com>
+References: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,69 +84,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250405145459.26800-1-18255117159@163.com>
+In-Reply-To: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 
-Hi Hans,
+Hi Blaise,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on a8662bcd2ff152bfbc751cab20f33053d74d0963]
+[auto build test ERROR on shuah-kselftest/next]
+[also build test ERROR on shuah-kselftest/fixes herbert-cryptodev-2.6/master herbert-crypto-2.6/master masahiroy-kbuild/for-next masahiroy-kbuild/fixes v6.14]
+[cannot apply to linus/master next-20250404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/pci-tegra194-Fix-debugfs-cleanup-for-CONFIG_PCIEASPM/20250405-230047
-base:   a8662bcd2ff152bfbc751cab20f33053d74d0963
-patch link:    https://lore.kernel.org/r/20250405145459.26800-1-18255117159%40163.com
-patch subject: [PATCH] pci: tegra194: Fix debugfs cleanup for !CONFIG_PCIEASPM
-config: arm-randconfig-001-20250406 (https://download.01.org/0day-ci/archive/20250406/202504060938.xa7VrE6O-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250406/202504060938.xa7VrE6O-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Blaise-Boscaccy/security-Hornet-LSM/20250405-055741
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20250404215527.1563146-2-bboscaccy%40linux.microsoft.com
+patch subject: [PATCH v2 security-next 1/4] security: Hornet LSM
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250406/202504061441.FMnrO665-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250406/202504061441.FMnrO665-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504060938.xa7VrE6O-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504061441.FMnrO665-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pcie-tegra194.c:2301:18: error: incompatible pointer types passing 'struct dentry *' to parameter of type 'struct tegra_pcie_dw *' [-Werror,-Wincompatible-pointer-types]
-    2301 |                 deinit_debugfs(pcie->debugfs);
-         |                                ^~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-tegra194.c:732:57: note: passing argument to parameter 'pcie' here
-     732 | static inline void deinit_debugfs(struct tegra_pcie_dw *pcie) { return; }
-         |                                                         ^
-   drivers/pci/controller/dwc/pcie-tegra194.c:2420:18: error: incompatible pointer types passing 'struct dentry *' to parameter of type 'struct tegra_pcie_dw *' [-Werror,-Wincompatible-pointer-types]
-    2420 |                 deinit_debugfs(pcie->debugfs);
-         |                                ^~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-tegra194.c:732:57: note: passing argument to parameter 'pcie' here
-     732 | static inline void deinit_debugfs(struct tegra_pcie_dw *pcie) { return; }
-         |                                                         ^
-   2 errors generated.
+   In file included from security/hornet/hornet_lsm.c:10:
+>> security/hornet/hornet_lsm.c:221:38: error: initialization of 'int (*)(struct bpf_prog *, union bpf_attr *, struct bpf_token *)' from incompatible pointer type 'int (*)(struct bpf_prog *, union bpf_attr *, struct bpf_token *, bool)' {aka 'int (*)(struct bpf_prog *, union bpf_attr *, struct bpf_token *, _Bool)'} [-Wincompatible-pointer-types]
+     221 |         LSM_HOOK_INIT(bpf_prog_load, hornet_bpf_prog_load),
+         |                                      ^~~~~~~~~~~~~~~~~~~~
+   include/linux/lsm_hooks.h:136:35: note: in definition of macro 'LSM_HOOK_INIT'
+     136 |                 .hook = { .NAME = HOOK }                \
+         |                                   ^~~~
+   security/hornet/hornet_lsm.c:221:38: note: (near initialization for 'hornet_hooks[0].hook.bpf_prog_load')
+     221 |         LSM_HOOK_INIT(bpf_prog_load, hornet_bpf_prog_load),
+         |                                      ^~~~~~~~~~~~~~~~~~~~
+   include/linux/lsm_hooks.h:136:35: note: in definition of macro 'LSM_HOOK_INIT'
+     136 |                 .hook = { .NAME = HOOK }                \
+         |                                   ^~~~
 
 
-vim +2301 drivers/pci/controller/dwc/pcie-tegra194.c
+vim +221 security/hornet/hornet_lsm.c
 
-  2292	
-  2293	static void tegra_pcie_dw_remove(struct platform_device *pdev)
-  2294	{
-  2295		struct tegra_pcie_dw *pcie = platform_get_drvdata(pdev);
-  2296	
-  2297		if (pcie->of_data->mode == DW_PCIE_RC_TYPE) {
-  2298			if (!pcie->link_state)
-  2299				return;
-  2300	
-> 2301			deinit_debugfs(pcie->debugfs);
-  2302			tegra_pcie_deinit_controller(pcie);
-  2303			pm_runtime_put_sync(pcie->dev);
-  2304		} else {
-  2305			disable_irq(pcie->pex_rst_irq);
-  2306			pex_ep_event_pex_rst_assert(pcie);
-  2307		}
-  2308	
-  2309		pm_runtime_disable(pcie->dev);
-  2310		tegra_bpmp_put(pcie->bpmp);
-  2311		if (pcie->pex_refclk_sel_gpiod)
-  2312			gpiod_set_value(pcie->pex_refclk_sel_gpiod, 0);
-  2313	}
-  2314	
+   219	
+   220	static struct security_hook_list hornet_hooks[] __ro_after_init = {
+ > 221		LSM_HOOK_INIT(bpf_prog_load, hornet_bpf_prog_load),
+   222	};
+   223	
 
 -- 
 0-DAY CI Kernel Test Service
