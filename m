@@ -1,47 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2C021931E;
-	Mon,  7 Apr 2025 17:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD2A20FA8F;
+	Mon,  7 Apr 2025 17:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744047466; cv=none; b=GO3prsPI1xVZRwE79ShYHWagGfhknZqAnig6ZUZ3uS07Pdr22YQFb5hQNoALnmG3oVRTdjfG+xxubpMk5W5XNiiO6H6xUvNmkBrDxo8rxlNQ/QuZTfXRHV5l7X23CcjwcMOfZ8COW5nB3aK6mJBh1aQKbfQiSw5tUmRAMihvuRw=
+	t=1744048062; cv=none; b=N7YOplXjeG5dho+fGEPDt71qWuCt5AUnYy7XatJq8i/ANX0PE9m3DZdvu9HRvL8qgVAY3bHHxs3++exlQo/KaIZuDVJKOw6r70CJ2ZuBKe77kZ1FEjDGt9Cmw1K4J3YunEkCtHvydalu6eIaDDTZUffZu0zz6PsmkAwxjoErEzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744047466; c=relaxed/simple;
-	bh=vlvFb/36oExWywUwQghjphG5IpOqvKyJI4kJxsL/qAw=;
+	s=arc-20240116; t=1744048062; c=relaxed/simple;
+	bh=LCOtNNrpVZmriqn/2j8arDSoQ5pjQNWL+FUtw55KIT4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TNpCbAPnn2RLKIp94wwPgBDTmeXXgp5vBEcWpmUvqeVzre/qXWVU9mj0f4T17oOMtGIkwdVr/S5pqtUe7Z696h6kkgBrX0E9eQSbS26AJ3M5ozcIFGgrOO6PMo3oyzBu5nxkCM5aw5gFCHddJoqMlpJVQ/7/gIip1OUzpqdlMN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=phjk4y44; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=D02Ogeh/jzwub94S+5GVVK83ip3h130uJN+CVZnSuIon/fFy7KaaNDAsKx22IAruzzzfQ6Gj8ru1P0T1MLvHRBzdSEGodF46yCGiSo4RBEmVk9027AS8kDT02DZlLLyCHfm8O31ISbSWoLDaVQZ6Ji86sq7C2Xkyp6orSxUKfYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TR5yGXWA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="phjk4y44"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13887C4CEDD;
-	Mon,  7 Apr 2025 17:37:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TR5yGXWA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC93C4CEDD;
+	Mon,  7 Apr 2025 17:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744047466;
-	bh=vlvFb/36oExWywUwQghjphG5IpOqvKyJI4kJxsL/qAw=;
+	s=k20201202; t=1744048062;
+	bh=LCOtNNrpVZmriqn/2j8arDSoQ5pjQNWL+FUtw55KIT4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=phjk4y44/S3pC0ppeoSDuHloy4mP5gTsYgNF+pyCSjTUQ4hoF7JE1378SzC3LF2e2
-	 HdrHwGz5BAoql38JXNXTJmFXpWyMI1Fp/l3DboG/AlJ63vQ4nJXfvuXZ2nrg0nO5/R
-	 Lo6WQlQ3b+Jsi+/LjGunsk231kkKi2Pjy/7/7O3PxPLtPuHMDx0v/rUPtY7Nk1GZ+4
-	 bRHRPM0qnafJvljnWyWcL3ULy44tGxkb0ShfRcYldrv/Vag8uvsO2Tun6k0M5zpPvE
-	 8n+xvVoe3NbVCX0y2KOpT6UELCvSWO2LNV0KTsL7+XL6G6EVgxMSOqiMyAU9G2aqdE
-	 JdtPrnvO9MLIA==
-Date: Mon, 7 Apr 2025 10:37:41 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Peter Collingbourne <pcc@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Will Deacon <will@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [GIT PULL] string fixes for v6.15-rc1
-Message-ID: <20250407173741.GA3847400@ax162>
-References: <202504061053.F27227CA@keescook>
- <CAHk-=whVfxi4KRu-H=tsgSdoGdDz1bvu0_miJT0BTgAf4igpdg@mail.gmail.com>
- <FFE5FB0B-CC92-4A25-8014-E7548AD1C469@kernel.org>
- <CAHk-=wijG2dSOOFr8CCYygwxZQxdTUj73rfB8=tyZP-3G-8-og@mail.gmail.com>
+	b=TR5yGXWAMDPR4Zf8/5QuBIhPyonpjHH8ZXYaqFPJEoRCZDMXVUzK+qOOp/kOuS0ou
+	 G+VRvM6rIiom5ygtQDI3uafnbnbXMTdzT30PJidg2AfHJmADqI5Q9BM5x5IOwBFYF0
+	 otvFwv8NKhHT9+9GUJqvtj/SrvKVn9ZMYxa8GrF/qjhdeDJ4TeQfic7wdtmLzTwMAI
+	 wZ3Kr76mUTwsUhxRHUeYSoLUm3xnPwSwICDQmlJB0Vrf87fnuM2aub+uXf/jj/8TME
+	 xuNr+Toh44plbtcmBGQS1H2Ko2y/nfiP955FIEAfcLcIa9VmhujO/iKl+/2gAZWwgo
+	 t4yiAI45WX4+g==
+Date: Mon, 7 Apr 2025 19:47:36 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	lkft-triage@lists.linaro.org, Nathan Chancellor <nathan@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>, dwmw@amazon.co.uk,
+	"H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: next-20250407: qemu_x86_64 clang-20, clang-nightly no console
+ log but gcc-13 boot pass
+Message-ID: <Z_QPuPmtrFOnhjeP@gmail.com>
+References: <CA+G9fYt4VVa3kUDR+ze05xM+fRmMBVfbBTsypUq5oOpAfuzjfg@mail.gmail.com>
+ <CA+G9fYtNcnAEVs70eH2yP5UxRBsfrN2B1nKNcggGQ7FNMAJMmg@mail.gmail.com>
+ <CAMj1kXH+z4zAhxMucg5NeaOpfp2p69=sqL78JiwvEsWNjFaJOQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,75 +53,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wijG2dSOOFr8CCYygwxZQxdTUj73rfB8=tyZP-3G-8-og@mail.gmail.com>
+In-Reply-To: <CAMj1kXH+z4zAhxMucg5NeaOpfp2p69=sqL78JiwvEsWNjFaJOQ@mail.gmail.com>
 
-Hi Linus,
 
-On Sun, Apr 06, 2025 at 07:04:29PM -0700, Linus Torvalds wrote:
-> On Sun, 6 Apr 2025 at 18:33, Kees Cook <kees@kernel.org> wrote:
+* Ard Biesheuvel <ardb@kernel.org> wrote:
+
+> On Mon, 7 Apr 2025 at 18:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > >
-> > I should have said "libcall optimizations". It's not just blindly constructing calls.
+> > On Mon, 7 Apr 2025 at 17:15, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > Regressions on qemu-x86_64 with clang-20 and clang-nightly on the
+> > > Linux next-20250407 and no console output.
+> > >
+> > > The gcc-13 builds boot pass on qemu-x86_64.
+> > >
+> > > First seen on the next-20250407.
+> > > Bad: next-20250407
+> > > Good:next-20250404
+> > >
+> > > * qemu-x86_64, boot
+> > >  - boot/clang-20-lkftconfig
+> > >  - boot/clang-20-lkftconfig-compat
+> > >  - boot/clang-nightly-lkftconfig
+> > >
+> > > Regression Analysis:
+> > > - New regression? Yes
+> > > - Reproducibility? Yes
+> > >
+> > > Boot regression: qemu_x86_64 clang-20, clang-nightly no console log
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Anders bisected this and found,
+> > # first bad commit:
+> >    [cc34e658c6db493c1524077e95b42d478de58f2b]
+> >    x86/boot: Move the early GDT/IDT setup code into startup/
+> >
+> > Lore report link,
+> >  - https://lore.kernel.org/all/CA+G9fYt4VVa3kUDR+ze05xM+fRmMBVfbBTsypUq5oOpAfuzjfg@mail.gmail.com/
+> >
 > 
-> But it's *WRONG*.
-> 
-> It's stupid. It's not an optimization, it makes things worse.
-> 
-> > This is the same kind of thing that has been heavily discussed before for bcmp() and stpcpy()
-> 
-> And it makes a bit more sense at least for stpcpy(), because the
-> implementation there is basically "strlen+memcpy". Both of which we
-> want the compiler to work on - even if we're not interested in it ever
-> using stpcpy().
-> 
-> IOF, for stpcpy, there's at least a *reason* for the compiler to do it.
-> 
-> For something like wcslen() the answer is "DON'T DO THIS". Because
-> there is absolutely zero upside to trying to recognize this pattern,
-> and there is real downside.
-> 
-> See?
-> 
-> Don't work around the compiler doing stupid things. Fix the compiler
-> options to tell the compiler to "Don'tDoThatThen(tm)".
+> Thanks for the report. I'll look into this.
 
-So I do not necessarily disagree with you in the general sense for these
-types of optimizations but I figured that in this case, where this
-optimization only gets applied twice in a single translation unit
-throughout the entire kernel from what I can tell, the overhead was
-unlikely to matter much and it felt less problematic to just add the
-function. If this is still genuinely unacceptable in your eyes in spite
-of that, so be it.
+I've zapped cc34e658c6db from tip:x86/boot for the time being.
 
-I will admit I did not actually test if '-fno-builtin-wcslen' would not
-work with LTO when I wrote the commit message (I merely drew on the
-experience for bcmp() several years ago). Now that I have, it appears
-to, at least for the simple arm64 allmodconfig case that I tested.
-Looking into it, it looks like '-fno-builtin-*' started being honored
-properly for LTO with [1] in LLVM 10 and fixed/adjusted for inlining in
-[2] in LLVM 11.
+I have the same request as for the other patches applies, please split 
+it up into ~3 patches for better bisectability and ease of review:
 
-So would the following change be acceptable? I can draft up a commit
-message and send it along today if so.
+ - first the mechanic movement of code, with very few changes (if the 
+   result builds & boots),
 
-diff --git a/Makefile b/Makefile
-index 38689a0c3605..a137de124897 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1057,6 +1057,10 @@ KBUILD_CFLAGS += $(call cc-option, -fstrict-flex-arrays=3)
- KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-option, -Wno-stringop-overflow)
- KBUILD_CFLAGS-$(CONFIG_CC_STRINGOP_OVERFLOW) += $(call cc-option, -Wstringop-overflow)
- 
-+# Ensure clang does not transform certain loops into calls to wcslen() after
-+# https://github.com/llvm/llvm-project/commit/9694844d7e36fd5e01011ab56b64f27b867aa72d
-+KBUILD_CFLAGS-$(call clang-min-version, 210000) += -fno-builtin-wcslen
-+
- # disable invalid "can't wrap" optimizations for signed / pointers
- KBUILD_CFLAGS	+= -fno-strict-overflow
- 
----
+ - then drop the RIP_REL_REF() uses in the second patch,
 
-[1]: https://github.com/llvm/llvm-project/commit/878ab6df033d44430939c02075ee00800995dc3b
-[2]: https://github.com/llvm/llvm-project/commit/f9ca75f19bab639988ebbe68c81d07babd952afb
+ - and drop __head annotations in the third patch.
 
-Cheers,
-Nathan
+Thanks,
+
+	Ingo
