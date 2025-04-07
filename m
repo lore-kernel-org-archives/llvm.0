@@ -1,206 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A210224B0E;
-	Mon,  7 Apr 2025 04:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD2722D78F;
+	Mon,  7 Apr 2025 07:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744001202; cv=none; b=nCPWQtUAtSh7YyPwETOR4+tzJne8tjcPybd9oiaeuR5LCJ8AikjCTKSNWZ/Xp2mCBnDq8BWaKaw0eiJeDrROn+CHzwPaDWODq1OXWtaTrnlApYFVnhlxYN5pMZv5TTbARVNT/z5KI/9ht5FgZHblHklzTrwwaku5HEnwHo3ftEw=
+	t=1744010494; cv=none; b=IeE6HBg3yUre83iQXDqOrPgvPPCaI+GQp579WtwUMM+/6wXpvC9RKiMcgTS9ljhZrHCVfhK6JoSmtfYs4F4yIGsagve9TXBBr+k2I8egzbEN78zC91A9f82khWbM5NFjL5FVwRUeMLqOjO3jbeKAKKJ6w1Qdtar+X3/aLPPmgn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744001202; c=relaxed/simple;
-	bh=cDebycVq9pZjSWmtfxT+24dkoAq4Mrn9Etuxjp80A74=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pks+xUt/s6jbj0o8l5oxIpKu7rdqjTZCZePltmorNOLMdkNvmx1ghnJuILSNWo82H69EX8+t1wQzK46SE8E0DLzprB2dwJ18Tlv0PlnbiGs+qu66o32ea72NIztP5hcLAfeS8y5hov/CNO+zeFsaEGRCVjl5OT31RnL3/TJd7DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z7788rDd; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744010494; c=relaxed/simple;
+	bh=4qx9srvVw5/073OAlAi2thUlYG31LR/V0K21OZO/4rI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nvqMukQTDGhk1D0MC0DmiUJoxZQMaO96o9yif0WXcWXVBDMear14QECzBgDE5OJLGOu/VcvbjjTsZlfwmmhvOCoogQiG1KWUo694kVQpuXkXSyJL+ftUbARK5wuzmRkVVAWMWP6Wre4Bt/WcJ2T0VTalAG+xRcKM3Cu/8NgQXDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XPCSjXZ6; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z7788rDd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XPCSjXZ6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744001200; x=1775537200;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cDebycVq9pZjSWmtfxT+24dkoAq4Mrn9Etuxjp80A74=;
-  b=Z7788rDdvOTL0lQQTsqOxMLXC9C1IRXISyKwarHCZalej+Ea+rMU4cBd
-   /09ifUnxH2T23n7//ntX3PrfzrTeFPTZECEOjHQE9pW6CjT4kmOd/Yk+q
-   FFelFo6Y1nLVG2ATS52LcdcWJRg6CQi8erQGUG8iuspjola2Vj+ZlC0+K
-   DDm6N/cgZNNzsTXnQ/vLFK3rLfYEf3pzJsHAd6aTNBf/QL2OysYaEuXpn
-   ncBJUAw/0i9SIIrdXahBKFASbfJFbnjY0N9xL0McpYrV22p8Y2jQQX9aL
-   XtKiMltZlC48qKvvhjoPWJBnP8UyT8n0n+rS3TBa5vpRRP4zSNnj2y5WN
-   Q==;
-X-CSE-ConnectionGUID: DhbeTqIiTzuKoihZI0IgUg==
-X-CSE-MsgGUID: 1fFhPEYDTs22O2wrVH6jsQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="45082031"
+  t=1744010493; x=1775546493;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4qx9srvVw5/073OAlAi2thUlYG31LR/V0K21OZO/4rI=;
+  b=XPCSjXZ6FyFd5WkmLwBI3gls9ttYBikGsXT7J6CW2yur9b5AAcMVH0Bf
+   eh4S7qjgJzVdwH8/+JS3eFHmiU9DZkta75+mWxDaTlBY5vx0HwX53PUi4
+   tpCbZwXBaLOgz9/8C4Chu4pC0laA4VzEH7hOTiPKHTtYn8zpGEHrVmau9
+   uThgevH3G2oXd3tQUfMuo9O2X1f8Ova2KBJjsN4JwCUnoNL12uAyWMr/K
+   gHVhnLh4Ia51uZHRVw66qUMUJCxVgZESTqXdYk2uCHISEKw808JfD9Xkx
+   +FRCZtriFkEzFhU5xbCB8hWY4M+otgoo7iMMgIJ01f4Be+q1dfgrclAm/
+   g==;
+X-CSE-ConnectionGUID: iVHBWgV1RGud27aKBgOQBQ==
+X-CSE-MsgGUID: U6xBOKQ7Q9mSfqsOwSu8bw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="62776511"
 X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
-   d="scan'208";a="45082031"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2025 21:46:39 -0700
-X-CSE-ConnectionGUID: TiNzR/hbRMuCM2b0J0C9Kw==
-X-CSE-MsgGUID: DIZn/0IFR/aeyqsIXFmV3w==
+   d="scan'208";a="62776511"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 00:21:32 -0700
+X-CSE-ConnectionGUID: FalYELIfTy28RPnuAw+9nA==
+X-CSE-MsgGUID: 0V7vV61KQVaaXUii0bRFFA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,193,1739865600"; 
-   d="scan'208";a="128356380"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 06 Apr 2025 21:46:37 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u1eNW-0002zz-2D;
-	Mon, 07 Apr 2025 04:46:34 +0000
-Date: Mon, 7 Apr 2025 12:46:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, miquel.raynal@bootlin.com,
-	richard@nod.at, vigneshr@ti.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH] mtd: nand: Add error log for marvell_nfc_end_cmd()
-Message-ID: <202504071221.XxGT6EaS-lkp@intel.com>
-References: <20250407020917.1242-1-vulab@iscas.ac.cn>
+   d="scan'208";a="127862657"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 07 Apr 2025 00:21:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 596EC340; Mon, 07 Apr 2025 10:21:28 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	dm-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] dm table: Fix W=1 build warning when mempool_needs_integrity is unused
+Date: Mon,  7 Apr 2025 10:21:26 +0300
+Message-ID: <20250407072126.3879086-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250407020917.1242-1-vulab@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 
-Hi Wentao,
+The mempool_needs_integrity is unused. This, in particular, prevents
+kernel builds with Clang, `make W=1` and CONFIG_WERROR=y:
 
-kernel test robot noticed the following build errors:
+drivers/md/dm-table.c:1052:7: error: variable 'mempool_needs_integrity' set but not used [-Werror,-Wunused-but-set-variable]
+ 1052 |         bool mempool_needs_integrity = t->integrity_supported;
+      |              ^
 
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on linus/master v6.15-rc1 next-20250404]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fix this by removing the leftover.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/mtd-nand-Add-error-log-for-marvell_nfc_end_cmd/20250407-101213
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20250407020917.1242-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] mtd: nand: Add error log for marvell_nfc_end_cmd()
-config: arm64-randconfig-001-20250407 (https://download.01.org/0day-ci/archive/20250407/202504071221.XxGT6EaS-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250407/202504071221.XxGT6EaS-lkp@intel.com/reproduce)
+Fixes: 105ca2a2c2ff ("block: split struct bio_integrity_payload")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/md/dm-table.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504071221.XxGT6EaS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/mtd/nand/raw/marvell_nand.c:89:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mtd/nand/raw/marvell_nand.c:1354:3: error: use of undeclared identifier 'err'
-    1354 |                 err = marvell_nfc_end_cmd(chip, NDSR_RDDREQ,
-         |                 ^
-   drivers/mtd/nand/raw/marvell_nand.c:1356:7: error: use of undeclared identifier 'err'
-    1356 |                 if (err)
-         |                     ^
-   drivers/mtd/nand/raw/marvell_nand.c:1364:3: error: use of undeclared identifier 'err'
-    1364 |                 err = marvell_nfc_end_cmd(chip, NDSR_RDDREQ,
-         |                 ^
-   drivers/mtd/nand/raw/marvell_nand.c:1366:7: error: use of undeclared identifier 'err'
-    1366 |                 if (err)
-         |                     ^
-   3 warnings and 4 errors generated.
-
-
-vim +/err +1354 drivers/mtd/nand/raw/marvell_nand.c
-
-  1302	
-  1303	static void marvell_nfc_hw_ecc_bch_read_chunk(struct nand_chip *chip, int chunk,
-  1304						      u8 *data, unsigned int data_len,
-  1305						      u8 *spare, unsigned int spare_len,
-  1306						      int page)
-  1307	{
-  1308		struct marvell_nand_chip *marvell_nand = to_marvell_nand(chip);
-  1309		struct marvell_nfc *nfc = to_marvell_nfc(chip->controller);
-  1310		const struct marvell_hw_ecc_layout *lt = to_marvell_nand(chip)->layout;
-  1311		int i, ret;
-  1312		struct marvell_nfc_op nfc_op = {
-  1313			.ndcb[0] = NDCB0_CMD_TYPE(TYPE_READ) |
-  1314				   NDCB0_ADDR_CYC(marvell_nand->addr_cyc) |
-  1315				   NDCB0_LEN_OVRD,
-  1316			.ndcb[1] = NDCB1_ADDRS_PAGE(page),
-  1317			.ndcb[2] = NDCB2_ADDR5_PAGE(page),
-  1318			.ndcb[3] = data_len + spare_len,
-  1319		};
-  1320	
-  1321		ret = marvell_nfc_prepare_cmd(chip);
-  1322		if (ret)
-  1323			return;
-  1324	
-  1325		if (chunk == 0)
-  1326			nfc_op.ndcb[0] |= NDCB0_DBC |
-  1327					  NDCB0_CMD1(NAND_CMD_READ0) |
-  1328					  NDCB0_CMD2(NAND_CMD_READSTART);
-  1329	
-  1330		/*
-  1331		 * Trigger the monolithic read on the first chunk, then naked read on
-  1332		 * intermediate chunks and finally a last naked read on the last chunk.
-  1333		 */
-  1334		if (chunk == 0)
-  1335			nfc_op.ndcb[0] |= NDCB0_CMD_XTYPE(XTYPE_MONOLITHIC_RW);
-  1336		else if (chunk < lt->nchunks - 1)
-  1337			nfc_op.ndcb[0] |= NDCB0_CMD_XTYPE(XTYPE_NAKED_RW);
-  1338		else
-  1339			nfc_op.ndcb[0] |= NDCB0_CMD_XTYPE(XTYPE_LAST_NAKED_RW);
-  1340	
-  1341		marvell_nfc_send_cmd(chip, &nfc_op);
-  1342	
-  1343		/*
-  1344		 * According to the datasheet, when reading from NDDB
-  1345		 * with BCH enabled, after each 32 bytes reads, we
-  1346		 * have to make sure that the NDSR.RDDREQ bit is set.
-  1347		 *
-  1348		 * Drain the FIFO, 8 32-bit reads at a time, and skip
-  1349		 * the polling on the last read.
-  1350		 *
-  1351		 * Length is a multiple of 32 bytes, hence it is a multiple of 8 too.
-  1352		 */
-  1353		for (i = 0; i < data_len; i += FIFO_DEPTH * BCH_SEQ_READS) {
-> 1354			err = marvell_nfc_end_cmd(chip, NDSR_RDDREQ,
-  1355						  "RDDREQ while draining FIFO (data)");
-  1356			if (err)
-  1357				dev_err(nfc->dev, "Fail to confirm the NDSR.RDDREQ");
-  1358			marvell_nfc_xfer_data_in_pio(nfc, data,
-  1359						     FIFO_DEPTH * BCH_SEQ_READS);
-  1360			data += FIFO_DEPTH * BCH_SEQ_READS;
-  1361		}
-  1362	
-  1363		for (i = 0; i < spare_len; i += FIFO_DEPTH * BCH_SEQ_READS) {
-  1364			err = marvell_nfc_end_cmd(chip, NDSR_RDDREQ,
-  1365						  "RDDREQ while draining FIFO (OOB)");
-  1366			if (err)
-  1367				dev_err(nfc->dev, "Fail to confirm the NDSR.RDDREQ");
-  1368			marvell_nfc_xfer_data_in_pio(nfc, spare,
-  1369						     FIFO_DEPTH * BCH_SEQ_READS);
-  1370			spare += FIFO_DEPTH * BCH_SEQ_READS;
-  1371		}
-  1372	}
-  1373	
-
+diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+index 35100a435c88..53759dbbe9d6 100644
+--- a/drivers/md/dm-table.c
++++ b/drivers/md/dm-table.c
+@@ -1049,7 +1049,6 @@ static int dm_table_alloc_md_mempools(struct dm_table *t, struct mapped_device *
+ 	unsigned int min_pool_size = 0, pool_size;
+ 	struct dm_md_mempools *pools;
+ 	unsigned int bioset_flags = 0;
+-	bool mempool_needs_integrity = t->integrity_supported;
+ 
+ 	if (unlikely(type == DM_TYPE_NONE)) {
+ 		DMERR("no table type is set, can't allocate mempools");
+@@ -1074,8 +1073,6 @@ static int dm_table_alloc_md_mempools(struct dm_table *t, struct mapped_device *
+ 
+ 		per_io_data_size = max(per_io_data_size, ti->per_io_data_size);
+ 		min_pool_size = max(min_pool_size, ti->num_flush_bios);
+-
+-		mempool_needs_integrity |= ti->mempool_needs_integrity;
+ 	}
+ 	pool_size = max(dm_get_reserved_bio_based_ios(), min_pool_size);
+ 	front_pad = roundup(per_io_data_size,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.2
+
