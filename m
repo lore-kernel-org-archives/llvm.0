@@ -1,114 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6339826B2A7;
-	Mon,  7 Apr 2025 18:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B699254841
+	for <llvm@lists.linux.dev>; Mon,  7 Apr 2025 19:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049748; cv=none; b=rMjtrf14mk0kLOWCqrw5MyLTamWTzWvpNrwhjTCs+qML86CW6H52SB02KZ0wgWwVgLLL5Cofa1QzYHLGKzhB6r6Idx/36KnQcPKOQC4Knw6g5K8bpmL6TqIFP+m6Tr/RYebdwCUWwC5/hpOjFqg6tKIUDwbsN8YyRWft6zTgEd0=
+	t=1744052546; cv=none; b=Jlld0il79F/2/stw85z6Rp6arGITZ6zQK5HP20tg7S7wl2U5PXc8oj8eosl1+X1X+emX3EZOgCwLI4C6WbsZrIbEhkAWAQQlBq4FEAkQJTdyIpXW2TqAaRlZmCwzbE0ut259xKNxM5076+ct5rXfGOY9LV5Wwht9F8cL8IJ2FfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049748; c=relaxed/simple;
-	bh=KvsblyEdz/xv8NtFgoINqBC7vkrPSEfGskC7X0xnG48=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ytwrr55rydl8D+w6JSRGv+O0f1+V+7F9ojRyLEGf8Hnk/CY58JFWcPN1yd1azIuMHqzEuT/jzHizrz05XahwDQ+fYP7FrJxy59vWH/XC4vLI2KCkHZMVB0pXhIZBuvBE7zt+V09PxZDSPMZfTvYJJCcFmsYy93S7uV/t/VG6rpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3p+gBZl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744052546; c=relaxed/simple;
+	bh=tpFwO288Tb8nOdpntE32gaJlCk1gAnYqdxjp9nQSYPY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hnyca7N0/hvg0nkymgJtTIr2Xn9pbh/nosR7KwawGS2iKtaTWPt87uDfBB6pgMGW9UhK6SD4bX0Aez/FqJndbLbU3SZVY6bR2CDGZUUPEEyp3YiiHPD5GjL8Cp11oX/r9LdvsQZkZQZGovYYxBPQqFDa0G0A9YK+oVs1WBJNQF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YNORKGg0; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3p+gBZl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DCFC4CEE9;
-	Mon,  7 Apr 2025 18:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049747;
-	bh=KvsblyEdz/xv8NtFgoINqBC7vkrPSEfGskC7X0xnG48=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=h3p+gBZlcxl/OIXSo1+Vn3TDZ7X8mtXP3fAzBINmWCGvHj07Zt8Tnv8iyFU8m1pLM
-	 pL8QHF7jA5Qc2R4GZJ9IsBkiz3rtD9PST5q3Yk/87akOhPEUKa2spNMvobPRg1aHCx
-	 zhUwL7ORxUu1gqJNS3lKwT/7wXQJzK0jAbCrGGborQvwSMACwnLdu/VayeD2lIQXzz
-	 PlvE1S5qgPt509Z3bV90Ik3lXxdT4aB2WoT3trlKCxDBSPCCoDq/oqK+2+ecpRgj1w
-	 hcZoFSJAXXrpoDLWrgqkvTTufhVALZxB9DRJIFuvClZPKcasNAi8foCsQ3rJadjoww
-	 GtRJesPubtV9Q==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 4/4] objtool, ASoC: codecs: wcd934x: Remove potential undefined behavior in wcd934x_slim_irq_handler()
-Date: Mon,  7 Apr 2025 14:15:34 -0400
-Message-Id: <20250407181536.3183979-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407181536.3183979-1-sashal@kernel.org>
-References: <20250407181536.3183979-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YNORKGg0"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ac3eb3fdd2eso554855666b.0
+        for <llvm@lists.linux.dev>; Mon, 07 Apr 2025 12:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1744052542; x=1744657342; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KKDCjSJ25xQvHRgBvdt+RYZW/uH0S48oMFdtUEyp/oc=;
+        b=YNORKGg0y36/0tFoNfZUhfZ9oYFva5Qymb+3OXOhI5wK/JwF5C83c1dphOLYOLhE8e
+         khCSyVvrNRCS7s3+aRPNJAyPahR61IDLC5kDKOVRNgZBX0WyBiQpcTIcRQaUZ/p/mek1
+         wJz75e4teC4NkgaDW6Ge6YaLN4Xqq/BDK6MhE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744052542; x=1744657342;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KKDCjSJ25xQvHRgBvdt+RYZW/uH0S48oMFdtUEyp/oc=;
+        b=AGeMo6ZKXBQ9sr/EPqL8NzS/yJprpLt+WMWOjusFxE7H8giRzCbgBqy16Eq2Sxn7Lt
+         gARu3keS5ilaBl+1zt7VjsYTZa2tN78UOm8JFzopyQNUs0JDLzdc8qkWufOUqcaJ23RT
+         iAOkkVtl2N7z+t6oHlFkOlA6j7/CxpsXPmLsx1TmE35VVL8g/9nAH0W2F51CTO6ffnNg
+         1geKf4/+duMErLf5TT1kGXkUakG9phWTV62QnEukNU041PbBbFfuw6ncwQG5d8+5uSps
+         YAl2070+fG+27b0f6dAElgp/T1qGRIAo1hRLqngQJgTcBPqEYKKeQLtMZv0wzCgzp2rm
+         74Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCUr2nUu+Ewb6XOFs3g5/U8HPXUXP/143HmBQbKlq5Zbe1fGHaLE6+l/SLBbNEOwQM+mtLrg@lists.linux.dev
+X-Gm-Message-State: AOJu0YyK1adrMxxKDVwIkQv7Q2PXewhBBlVuZlGUEezkHyCaAj39htHE
+	dbvlFXuRKjrnl0K1FLSBJ/m7Z9/FbWQb7YshS9b4sspHRNRd0sCur5XvPq/watWUPnDUi2jNP73
+	OO1Y=
+X-Gm-Gg: ASbGncuNAxFpXrCWd62yjJ9T/vzLdX/MuxB9/s6cmtmbWkdpgVmJ4ApuwL12Z3cx3Lb
+	1hsAq+IE/K7V6hERVyQspvegdW7xLiVrnb1KPug6xGLx6F89j//JWpvd4adV1o5jIaTDdGOSIg2
+	jz8COpvOoEDcodelRYIY5JiS1gcuc06pUiW60VnV1RXM3WlRiTCJO7JN11q/flh2v4HV1cXor3Q
+	Yy/1kBuPlmA9RBkHpBmRMbHJdw0IqnPToY62O95k0vv/9uExLUUI2g7RZty/On1oNqR4qPdTynC
+	NyR+aCSJaiUrnlmqBk0hvtD5FMD65i49NlGWc2go0M0ugtdGDUXZITjr0/5ovBNGc61BaHgE1/E
+	UEpPEXiUog+C7MsdT7jU=
+X-Google-Smtp-Source: AGHT+IEPpc+o9biNH+88t+DmBJwM1BSJXiD3ZjjcnaHkwRaskF6/cKVWBqB4m2UKXEBhG2u6SaR0sQ==
+X-Received: by 2002:a17:907:1c92:b0:ac3:afb1:dee7 with SMTP id a640c23a62f3a-ac7d18c050bmr1372756866b.28.1744052542254;
+        Mon, 07 Apr 2025 12:02:22 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7c01c2c3asm797966466b.176.2025.04.07.12.02.21
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Apr 2025 12:02:21 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac2bb7ca40bso487001466b.3
+        for <llvm@lists.linux.dev>; Mon, 07 Apr 2025 12:02:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV1Dp6JZIsu2OgYrPJC//H22nT2CnniLS8rrrbms18V3IftTk2Ey8evJecQsmjvut6N1heX@lists.linux.dev
+X-Received: by 2002:a17:906:7149:b0:ac7:ec31:deb0 with SMTP id
+ a640c23a62f3a-ac7ec31df15mr624002466b.9.1744052541214; Mon, 07 Apr 2025
+ 12:02:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.235
-Content-Transfer-Encoding: 8bit
+References: <202504061053.F27227CA@keescook> <CAHk-=whVfxi4KRu-H=tsgSdoGdDz1bvu0_miJT0BTgAf4igpdg@mail.gmail.com>
+ <FFE5FB0B-CC92-4A25-8014-E7548AD1C469@kernel.org> <CAHk-=wijG2dSOOFr8CCYygwxZQxdTUj73rfB8=tyZP-3G-8-og@mail.gmail.com>
+ <20250407173741.GA3847400@ax162>
+In-Reply-To: <20250407173741.GA3847400@ax162>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 7 Apr 2025 12:02:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi89ogViEN5oTBmcNQXnMEB5_Qse9G401pSNzocP_dqQQ@mail.gmail.com>
+X-Gm-Features: ATxdqUE0ltJpng-EBWeE1UKan15wl_Wwyop6M2frZ8rfpKkAr90nfs4qcjQcUm4
+Message-ID: <CAHk-=wi89ogViEN5oTBmcNQXnMEB5_Qse9G401pSNzocP_dqQQ@mail.gmail.com>
+Subject: Re: [GIT PULL] string fixes for v6.15-rc1
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andy Shevchenko <andy@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Peter Collingbourne <pcc@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Will Deacon <will@kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+On Mon, 7 Apr 2025 at 10:37, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> So would the following change be acceptable? I can draft up a commit
+> message and send it along today if so.
 
-[ Upstream commit 060aed9c0093b341480770457093449771cf1496 ]
+Absoluterly. That's the right thing to do.
 
-If 'port_id' is negative, the shift counts in wcd934x_slim_irq_handler()
-also become negative, resulting in undefined behavior due to shift out
-of bounds.
+> +# Ensure clang does not transform certain loops into calls to wcslen() after
+> +# https://github.com/llvm/llvm-project/commit/9694844d7e36fd5e01011ab56b64f27b867aa72d
+> +KBUILD_CFLAGS-$(call clang-min-version, 210000) += -fno-builtin-wcslen
 
-If I'm reading the code correctly, that appears to be not possible, but
-with KCOV enabled, Clang's range analysis isn't always able to determine
-that and generates undefined behavior.
+I think you could just use
 
-As a result the code generation isn't optimal, and undefined behavior
-should be avoided regardless.  Improve code generation and remove the
-undefined behavior by converting the signed variables to unsigned.
+     KBUILD_CFLAGS += $(call cc-option, -fno-builtin-wcslen)
 
-Fixes the following warning with UBSAN:
+instead, and not use some version check?
 
-  sound/soc/codecs/snd-soc-wcd934x.o: warning: objtool: .text.wcd934x_slim_irq_handler: unexpected end of section
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Mark Brown <broonie@kernel.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/r/7e863839ec7301bf9c0f429a03873d44e484c31c.1742852847.git.jpoimboe@kernel.org
-Closes: https://lore.kernel.org/oe-kbuild-all/202503180044.oH9gyPeg-lkp@intel.com/
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- sound/soc/codecs/wcd934x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-index 104751ac6cd14..8580f5e95ccf6 100644
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -2188,7 +2188,7 @@ static irqreturn_t wcd934x_slim_irq_handler(int irq, void *data)
- {
- 	struct wcd934x_codec *wcd = data;
- 	unsigned long status = 0;
--	int i, j, port_id;
-+	unsigned int i, j, port_id;
- 	unsigned int val, int_val = 0;
- 	irqreturn_t ret = IRQ_NONE;
- 	bool tx;
--- 
-2.39.5
-
+          Linus
