@@ -1,174 +1,132 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860D9224B0F
-	for <llvm@lists.linux.dev>; Mon,  7 Apr 2025 07:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4BA747F
+	for <llvm@lists.linux.dev>; Mon,  7 Apr 2025 11:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744011095; cv=none; b=VZD/cpi79SqZPZd4Mf3VebkQ9uEdI4cvgKwVk91t2yX4F8mqD5ewJ8e3ckBWhFcsHHOIEmCmlEDYOid2zmPAU/Xr1xNWYjbAKQr12bESu5u9/YUtbX7jBzyH841uZ39CvUWzVuJIoxgff7Uy3A8isoGTwXb3MIXghdESbX78i+8=
+	t=1744026369; cv=none; b=fgDKlY7WhixG13GjKcbLpKvAkZQuwom9UsFvhkx4JxBrYBvR6aXCuResa4Kxo5tUrOmzfSG6g25oD7iJqLRwZ0Sdwut3LkNzJfXwBCHSYVCceuCdb4F9GO+LHxpIgsUcGZ99fnnRJu1L3QXz4UBnQRY/4aF4Nim785rtI2YN4UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744011095; c=relaxed/simple;
-	bh=P79AB40idj6Dfczhk1WELPjg31facOxkbCuN+/gQ1AI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=O56reAHeLuSCvUNN/tustyJzuK40BQwclRi4Cdc33KsyMZFHNiwhKKNKCPCBCDcykqM66bDxnPmYmNb7ZYmzvmD1Wi4M5mNwzyIOyOm83Y44o6s12CMClzTjYJFLvzgrRmXxV5/1LQWfuKcJug9Opyz6xUMsO96HmsX12qK45rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk; spf=pass smtp.mailfrom=rasmusvillemoes.dk; dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b=fks90IPC; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rasmusvillemoes.dk
+	s=arc-20240116; t=1744026369; c=relaxed/simple;
+	bh=A8kTu4vOxFAwnxbMPk7okErIzXN4OhpFsl+LBPki/7k=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=mSISLIKUhTGf8JCDzm9R3utJdf3GO0jCDAOdX7kv2mQlnz0KvJT/jlAVV+6FsUrd/Iu8ozHabHBwcEn9O47S9Q98v2/KBuje8d3ORHHt3mswWQD+DNR/qEAh0JaoDPPxjrWoN/5+iDkkqykQ0ZKlbTyEwG0oapAMlJ0EWWVP+6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Zo02hwxe; arc=none smtp.client-ip=209.85.222.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="fks90IPC"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30613802a6bso42502691fa.1
-        for <llvm@lists.linux.dev>; Mon, 07 Apr 2025 00:31:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zo02hwxe"
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86b9d9b02cbso1783270241.1
+        for <llvm@lists.linux.dev>; Mon, 07 Apr 2025 04:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1744011090; x=1744615890; darn=lists.linux.dev;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+FsyiVxgrsALzOGSoH1DnqIv36lge3vR/AnQvANcFA=;
-        b=fks90IPClUDpvu3fLb9i062uxuoCcBywN+MAXA/WfFgOJFmVQTqNo6cfgWmkh9lTCy
-         ScB+tCOJXlzW4TmTAyBWQRmLPdrm1L5RY5KyKK+v0kNcqBG6av7/EUP9+L9mYMzm7CUD
-         p4jGl/xyQ+pwJgl9c6z8YgwY/IezdLeYCg2gA=
+        d=linaro.org; s=google; t=1744026366; x=1744631166; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=l179qXw5nBePyI4JZkgntWVpX80YAW06xOczRVR02ZM=;
+        b=Zo02hwxeo9cIXP0SCWqnRLF9zh+egH1+cNL7zknUN6SSv72zSDV6xn0/YdipS6GS35
+         3FrcZtjQjDDH8gELxiBy481q7NAJt5rQ3YzUUr+opnhYgHg6EoSigJE0CHptIMu5tIUf
+         GS4Iqx8u1fwlCzN0cPVxREcm+MuX7BXmJpvsm/WQMWgGyMSVzJDRn7unLwAIs93NktCi
+         SMHgiv295gNbn9tfVnF/hixovu636UNaD8ZV5TVwX3Y9hqalPrMY78jsvRfIOOW0s/BW
+         YZnUCJOr+naycY7z22f5zH3jAiGAqBJFuX5ySZgwhju31a7oLIefks5hwqfIAKCKkJPp
+         P3Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744011090; x=1744615890;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e+FsyiVxgrsALzOGSoH1DnqIv36lge3vR/AnQvANcFA=;
-        b=fRIImP52n+x1jO4i6i6gjC/zz0NFPhVP2ojNYvz8yaObbi3WJDJ4zxXvOVN4zYsx7d
-         A+Cm164UPaUYugqvNLdyWXXXu5+x8jFFiB3cVcVmWqtwZeViENw5NsS1qsHKYx0f3DBD
-         +/00M8Vcjgl/pvg0bY/fBVeANpvjNefXgt7J9rQENug8hoi/7/njd3Ns5NrCjQNblZEM
-         /bebncZ1sabtmEwV4x+/W5sU2KsuznV5Pi/NJ/tlwm1ZxI2DJ7ZtUaltZ71Y1D+t2vi5
-         Hrv0OygVVl/VZzypn4rgfSKx6jXJvo8UowjzFXRa2ytAlWOnMzLVCUTMx8mJTRck8JxJ
-         jrqg==
-X-Forwarded-Encrypted: i=1; AJvYcCX6bQRiOUHQ5ELHhsu5wBXq1toTAvjF7eo3+DYjqdESPqwmyafNL0tCMihxwbjlSnzf0cu2@lists.linux.dev
-X-Gm-Message-State: AOJu0YxdQlE5+ltDia2nFw7VMo8MsbaZr0xmLj2W5DeO5DjZqUUdW11s
-	M0EZ9NfDF0s68H8xwZLGKDKbDbaIX6XpRZ7KzkbABX/N8JBEyMyBz4gGCKm+Yp4=
-X-Gm-Gg: ASbGncuhvC0YNhZc2LLFoz9lSQomxy6zTbnZj9znEhTwQqYO6Q1uPDBve4uune04kEL
-	5qiwA/DdJ7uH9HCk+5KMJd21NT19LfnFIZSpa5DuKMRVzs3va1xzEROLXnQkUfmN+cTANs5Y0d5
-	tMshFLXHynz3gx7/nXbayFWob7S29mvn+dKu+TZykTtxiBKJcuF/BcL60rzXMhPSjiaHKqZERFl
-	y6umNlRZpRKl5ETX3KXUh5/9ORDIlC/xmOoNe6CBixZ/vPqiLqsU2rwEbxSVHvOFRLJQhvA4sXZ
-	hdChEp5rqihUFu9GCiTd+jdTry9R4GEg3pxZfl861fW2IA==
-X-Google-Smtp-Source: AGHT+IGvfCDZmH37Rku3/6brkNRCFnNVTT4+L3+viZzCFFTWFfGF0W6PoQouzKsU9D+T5t6fCyWK/g==
-X-Received: by 2002:a05:651c:b23:b0:30c:16cd:8818 with SMTP id 38308e7fff4ca-30f0a109f5emr34850011fa.16.1744011090190;
-        Mon, 07 Apr 2025 00:31:30 -0700 (PDT)
-Received: from localhost ([81.216.59.226])
-        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-30f031ce889sm14676201fa.98.2025.04.07.00.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 00:31:29 -0700 (PDT)
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Laight <david.laight.linux@gmail.com>,  Andy Shevchenko
- <andy.shevchenko@gmail.com>,  Nathan Chancellor <nathan@kernel.org>,  Petr
- Mladek <pmladek@suse.com>,  Steven Rostedt <rostedt@goodmis.org>,  Sergey
- Senozhatsky <senozhatsky@chromium.org>,  linux-kernel@vger.kernel.org,
-  llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] vsprintf: Use __diag macros to disable
- '-Wsuggest-attribute=format'
-In-Reply-To: <CAHk-=whC15F9=fQqr-5moPA0SXFc-fAx_15=jzbYELg1TCWsqg@mail.gmail.com>
-	(Linus Torvalds's message of "Sat, 5 Apr 2025 10:26:53 -0700")
-References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
-	<20250405101126.7a2627a6@pumpkin>
-	<CAHk-=whC15F9=fQqr-5moPA0SXFc-fAx_15=jzbYELg1TCWsqg@mail.gmail.com>
-Date: Mon, 07 Apr 2025 09:31:28 +0200
-Message-ID: <87zfgs5sxb.fsf@prevas.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        d=1e100.net; s=20230601; t=1744026366; x=1744631166;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l179qXw5nBePyI4JZkgntWVpX80YAW06xOczRVR02ZM=;
+        b=XzoCBwajfoiKNUlrqYQVdO3CQf+0SPjv0fgqM+6ZpN180yQ5KtD7XMgM+PYzP9if/5
+         2cvzqC5SG8wOGMMttwrMmoopbH630keGeM1DRzr0v4UFOFMGnyWMPZVy7usiaNe2gGup
+         /U71ksHFi8PYeyn4zK3V/J61D82lojgeIiqFoNE/G1he0gi+y5Fl3iHW2vwZi6yme1AJ
+         RT7ZG4vV1wwmiv09HUfUrM7Y5SKtAYP0CRLP07RP91wMkMfJZa5gOm++FpjGIKHSqLrX
+         e+oVeEYie5/xeVk4csDc6mpkv2OQxV8snpcMMRxxj4/WQu3yAZiAqUIT3zkywtqSCtQr
+         1IIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkAR/dcbbbT+23vR9aY0yu88nIf87a1OljMUGDUkrMerj6Bgn7XPtO26wy+kcXzQqmx+vd@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxv1ZkF33Fv5VkaDx/vsPStwXOGAAXmWLyrvLdDga3Yp+w5noWd
+	WN238RI04ly7XXrdEtPpdleFwqqMoDTfr8VCCasCcas0jnscLfd1oqt50hcWeD6iK7TxEo05jh9
+	xfQDDfisaZcufYDsZUYV1suTRR/rBpVgA3MLSQg==
+X-Gm-Gg: ASbGnctmdsLnfjouRqcVk5hwXh1cmnQWCTvtBYpnNPQ8f9apWP9r3IJKVqsjiLcpUHL
+	6VuNxFHlbuQBWwM+Fcite11GGyST5yzcOgKCIiKVwo69KBkmJvPICvqjC5s0f8M3uYj7AFqj84u
+	FJVe8S++0Sd9R1HTKgBjUlddwWUbYHSAJ76zIN3KcUdpL0zMGaDvUMoYlTm1c=
+X-Google-Smtp-Source: AGHT+IE9MxO7qQqlLmViUipY97IXRe0HOeQE88hqfb3Q8OgiFR34X0CHQfKfsgfdHN0p4DcAQoZhNv1HOhhMCdAhmoM=
+X-Received: by 2002:a05:6102:292b:b0:4bb:e8c5:b149 with SMTP id
+ ada2fe7eead31-4c85539e126mr8042397137.7.1744026366667; Mon, 07 Apr 2025
+ 04:46:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 7 Apr 2025 17:15:55 +0530
+X-Gm-Features: ATxdqUHUzOVzZWX9xHaaGdI7CQeUYcGWMEQ1NQQGH41E_gk9k9xrAq8CaQ9neOQ
+Message-ID: <CA+G9fYt4VVa3kUDR+ze05xM+fRmMBVfbBTsypUq5oOpAfuzjfg@mail.gmail.com>
+Subject: next-20250407: qemu_x86_64 clang-20, clang-nightly no console log but
+ gcc-13 boot pass
+To: open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 05 2025, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Regressions on qemu-x86_64 with clang-20 and clang-nightly on the
+Linux next-20250407 and no console output.
 
-> On Sat, 5 Apr 2025 at 02:11, David Laight <david.laight.linux@gmail.com> wrote:
->>
->> Perhaps the compilers ought to support __attribute__((format(none)))
->> to disable the warning.
->
-> D'oh, that's a good idea.
->
-> And gcc already supports it, even if we have to hack it up.
->
-> So let's remove this whole horrible garbage entirely, and replace it
-> with __printf(1,0) which should do exactly that.
->
-> The 1 is for the format string argument number, and we're just *lying*
-> about it. But there is not format string argument, and gcc just checks
-> for 'is it a char pointer).
->
-> The real format string argument is va_fmt->fmt, but there's no way to
-> tell gcc that.
->
-> And the 0 is is to tell gcc that there's nothing to verify.
->
-> Then, if you do that, gcc will say "oh, maybe you need to do the same
-> for the 'pointer()' function". That one has a real 'fmt' thing, but
-> again nothing to be checked, so we do the same '__printf(1,0)' there
-> too.
->
-> There it makes more sense, because argument 1 _is_ actually a format
-> string, so we're not lying about it.
->
-> IOW, something like this:
->
->   --- a/lib/vsprintf.c
->   +++ b/lib/vsprintf.c
->   @@ -1700,9 +1700,10 @@ char *escaped_string(...
->    }
->
->   -#pragma GCC diagnostic push
->   -#ifndef __clang__
->   -#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
->   -#endif
->   -static char *va_format(char *buf, char *end, struct va_format *va_fmt,
->   +/*
->   + * The '__printf(1,0)' thing is a hack make gcc not ask us to use a
->   + * a format attribute. 'buf' is *not* the format, 'va_fmt->fmt' is.
->   + */
->   +static __printf(1,0)
->   +char *va_format(char *buf, char *end, struct va_format *va_fmt,
->                        struct printf_spec spec)
->    {
->   @@ -1718,5 +1719,4 @@ static char *va_format(...
->         return buf;
->    }
->   -#pragma GCC diagnostic pop
->
->    static noinline_for_stack
->   @@ -2429,5 +2429,5 @@ early_param(...
->     * See rust/kernel/print.rs for details.
->     */
->   -static noinline_for_stack
->   +static noinline_for_stack __printf(1,0)
->    char *pointer(const char *fmt, char *buf, char *end, void *ptr,
->               struct printf_spec spec)
->
-> Does that work for people who see this warning?
+The gcc-13 builds boot pass on qemu-x86_64.
 
-IMHO, this is much worse.
+First seen on the next-20250407.
+Bad: next-20250407
+Good:next-20250404
 
-Yes, as I also said in the previous thread, I consider the
-warning/suggestion here a gcc bug, as it shouldn't make that suggestion
-when one doesn't pass any of the function's arguments as the fmt
-argument to another __format__(()) annotated-function.
+* qemu-x86_64, boot
+ - boot/clang-20-lkftconfig
+ - boot/clang-20-lkftconfig-compat
+ - boot/clang-nightly-lkftconfig
 
-But we have this __diag infrastructure exactly to silence special cases
-(and sorry I forgot about that when suggesting the #pragma approach to
-Andy), and this is very much a special case: It's the only place in the
-whole codebase that has any reason to dereference that va_fmt, and any
-other function anywhere calling a vsprintf()-like really should have
-gotten the format string that goes along with the varargs from its
-caller.
+Regression Analysis:
+- New regression? Yes
+- Reproducibility? Yes
 
-As this is apparently some newer gcc that has started doing this, you
-just risk the next version turning the wrongness to 11 and complaining
-that "buf" or "fmt" is not passed to a vsprintf-like function. Let's not
-do "a hack make gcc not ask us to use a format attribute" when we have
-a proper way to selectively silence such false-positives. If this was
-something happening all over, we'd do -Wno-suggest-attribute=format, not
-spread these annotations. But this really is a special case in the guts
-of our printf implementation.
+Boot regression: qemu_x86_64 clang-20, clang-nightly no console log
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-So, FWIW, ack on Nathan's fixups, nak on this one.
+## Boot log
+<no console output>
 
-Rasmus
+Clang-20 versions:
+  "name": "clang",
+  "version": "20.1.2",
+  "version_full": "Debian clang version 20.1.2
+(++20250330123306+5ba194972878-1~exp1~20250330003423.94)"
+
+Clang-nightly versions:
+  "name": "clang",
+  "version": "21.0.0",
+  "version_full": "Debian clang version 21.0.0
+(++20250402105505+c57b9c233a87-1~exp1~20250402225526.1363)"
+
+qemu-system-x86:
+   installed at version: 9.2.2+ds-1+b2
+
+## Source
+* Kernel version: 6.15.0-rc1-next-20250407
+* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+* Git sha: 2bdde620f7f2bff2ff1cb7dc166859eaa0c78a7c
+* Git describe: 6.15.0-rc1-next-20250407
+* Project details:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250407/
+
+## Test
+* Test log: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250407/testrun/27930289/suite/boot/test/clang-20-lkftconfig/log
+* Test details:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250407/testrun/27930289/suite/boot/test/clang-20-lkftconfig/details/
+* Test history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250407/testrun/27930289/suite/boot/test/clang-20-lkftconfig/history/
+* Test history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250407/testrun/27930138/suite/boot/test/clang-nightly-lkftconfig/history/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2vNpFdnHoEolEu77VmTYD8bmuBd/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2vNpFdnHoEolEu77VmTYD8bmuBd/config
+
+--
+Linaro LKFT
+https://lkft.linaro.org
