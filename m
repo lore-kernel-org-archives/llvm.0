@@ -1,109 +1,92 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E14C25D535
-	for <llvm@lists.linux.dev>; Mon,  7 Apr 2025 19:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D02211A33;
+	Mon,  7 Apr 2025 19:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744052563; cv=none; b=aW5mfdmpp/frp3+kn9HwptO/oe5yAhEpwazeYvRpUgdlxL2TcV7y9nBGc6oqxQJ6hGRjp963dqdN70GZTs/cCtQY/E0ACR9yAMEC2eeOBSjJVpIWzZQet1ol0Sx0HGXu/zmMmlEOM9gblBaQES03HIImPwetrD4lGsOTQFL6YMs=
+	t=1744053942; cv=none; b=E40YkPY5PXzYAcOlywaio8DMTc0QaZwzznVlHhPaillWTUZunPjjLrckqOxO3ueVBwmu5hbOLoeEExIDK3hklhwF5nkZZkGxn5Nfts4EKj4WxsXZqdxPI2rJ757gcSp/ndO2tEXj2RYXq3XAeVZcSnOIeEXoMerClg4kP522ghY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744052563; c=relaxed/simple;
-	bh=3w3CD5q6GRJnXHz6VCgaFnqsMOkdzmCYyco+Rqyxsb4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SVumXChBH3Q9/xlW+U9IQTLA0iBzoNFMwomN+mYleRPrtS/RXtZwfAOuFnK4j2eGzCJOSnGQ6zcoR6STDvTNY/Lzor2YbmKkqdtxrJD1WzAN7UP8/qFb+7CN1MsAQ78yZDHwI7JY3EstGdB2P0jPwBpwmpoRL06Y/WOPGaGoPwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=UPP7RpKW; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1744053942; c=relaxed/simple;
+	bh=H3owC1whrKb5S/aPGKDUvcnbX+ziVBy77gaPeStv/28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CbKllm5xiCVHVbzUBE6EzJX6T4UeBOB9ErpBVm8KqMngVzqIwBOGherI3FxYgjdhNX/l/LTpYdoY4uL54BWPz2HqA8cRJZaOxi4rZYThf1tGo0XeCrnTLdz8ao+PGv3wJyyvPNHxGiRBsZDZl37PN1KB+/WIcE56Ml2VzS96VwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y768k/EC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="UPP7RpKW"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-af54a4d9e9eso541023a12.0
-        for <llvm@lists.linux.dev>; Mon, 07 Apr 2025 12:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1744052560; x=1744657360; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dffV1L61lSKvHP+naQW229RneaojE7BGB9VPXZP7TKc=;
-        b=UPP7RpKWc9UxftllU/4JysZ6P0cUc6LDYlff4t/hercnxe8CpQ0ucz0BzkeWUlgjaZ
-         VRWa6LDUJisFxVlKNRqDddTN0ODdcNxqkz9On9unv5j8vXlXmribZ5YuumMdpBab2ofU
-         TH0oElFw41yHmLGm2akLIC6HXxmV2wscpS6sDVRPctV6hamHHv4R+jt+oRVVMH25z5pk
-         pHLtUwl6aIqSaegVAe2+jtzmRhHMwj8wLcEe/dw0uHp33yKXvBX4wJ+PVQjPoI4GxLcT
-         EjkavWAfAZvvBAJc+r4Bg7ANIwiW794zcL6gRD/Zc3PhkI1e3rctD6svkf4zFl8KQbvR
-         3/OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744052560; x=1744657360;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dffV1L61lSKvHP+naQW229RneaojE7BGB9VPXZP7TKc=;
-        b=XDjM8Pvxj8aKPrnfLizKDXhPXHyFepd9D12NwEv+Dy40vpxet7R+GBgUTMLKu83Pgf
-         QLrwGIc/7iTFusLkMHsjo6cBhcyEWGY83w35o+X6eH0ukensl8kLhSJXUCx7VV31i2t1
-         +smp+WoUwBsTT6WaD9r5xE8HulW/p1i0SBVAznywJa95nFIkfW28VijMj6qpkE1Dq6Wl
-         4kWpFelODlVvpbOzdQPwS0+XntJvoxmmi4dqrpQ7iFr8UdFERFdhvmKUgA9+eXdEjJTr
-         36omWmZGuc8/coLRnZWn8RGCzp+3YZXE0A7FfqlV/BDrdjr5azx4Qg5xFUUf4472CinU
-         Elpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNdrkJ8nzMXyKS9RhAdzMLrQMvmLYRS3JsRpcnstQVY1HDsi2UVBkawPaEYYLUtMSrCJMN@lists.linux.dev
-X-Gm-Message-State: AOJu0YxKg8hGcyuQLHF/gHCjYyPwxQRblEIUIul1i5TCkV37BKoIffvP
-	6zCjh36bYcJEBtMkqEUk0wAirUA47H1S7q9RxObCGoCkmOHEZNnTzI8Jnv0MGLTmWwMIEyGA1oI
-	CKQj9lZJq88YAebX+OPFNGlUvxbv/BKRTYCiG1w==
-X-Gm-Gg: ASbGnctvGDUGWSjoutKBbQ4qYptG5UYpABFtmheqMpjYP4WqovoIE5NB8xFqniail5v
-	uLr7A7nVVkmAiNIg63kReopNShryHIbkJDqE0orTYI/cLSNnU3Jwn5ZadncJj28vSb5PQeuZ4ob
-	ImS1BrKO9D8EF+3WspoX1Tfk3zHydL1biomXSB
-X-Google-Smtp-Source: AGHT+IHxiMtBLuE7HFtmvkPpSsjkuRidn3zZS30dHJvwFFeUSCiUjfZOrL88kgkuADRqoBm6z6E9g2rmSll++4dbQAI=
-X-Received: by 2002:a17:90b:4f89:b0:2ff:4b7a:f0a4 with SMTP id
- 98e67ed59e1d1-306a4865251mr6629267a91.3.1744052560223; Mon, 07 Apr 2025
- 12:02:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y768k/EC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0048BC4CEDD;
+	Mon,  7 Apr 2025 19:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744053942;
+	bh=H3owC1whrKb5S/aPGKDUvcnbX+ziVBy77gaPeStv/28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y768k/ECp1+3x8hKqM6K/wcX/RWu/fgweR+EJrt4Q9faTILw2P0EZxVVjRCk7bwkn
+	 rnYMLfUjTwfeUQVpMa2zy2JyZavUj2wI4iTzW0C4EDcPXCfSL94XD/9h5mLNDJOjcw
+	 H4Yqt9BaykSh0HEZYlPYTleQJ2EQh25TU6iSJdQgXLfKg0t0Bx/3i1cnrZ7GJj5NVI
+	 viToO+HYuV8p18x8Bhi/WOeUGqq2lxZL7NGJHnkl9PDeE4IFXxfsnmUFkYKdhEQWAr
+	 sReju9pdN8JVMv4kjFTiTOT6YVNiRF6pA/1CEOMd1nznQARQNaTq/gkVM8jK3sf+u6
+	 VG3k8q30kVn4w==
+Date: Mon, 7 Apr 2025 12:25:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Peter Collingbourne <pcc@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Will Deacon <will@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [GIT PULL] string fixes for v6.15-rc1
+Message-ID: <20250407192537.GA518371@ax162>
+References: <202504061053.F27227CA@keescook>
+ <CAHk-=whVfxi4KRu-H=tsgSdoGdDz1bvu0_miJT0BTgAf4igpdg@mail.gmail.com>
+ <FFE5FB0B-CC92-4A25-8014-E7548AD1C469@kernel.org>
+ <CAHk-=wijG2dSOOFr8CCYygwxZQxdTUj73rfB8=tyZP-3G-8-og@mail.gmail.com>
+ <20250407173741.GA3847400@ax162>
+ <CAHk-=wi89ogViEN5oTBmcNQXnMEB5_Qse9G401pSNzocP_dqQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202504080139.KuphZ8ZZ-lkp@intel.com>
-In-Reply-To: <202504080139.KuphZ8ZZ-lkp@intel.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Mon, 7 Apr 2025 12:02:27 -0700
-X-Gm-Features: ATxdqUH-84qMH5h1xUTAKjO-bNIGNmH02qZY_0CIgwd8upVXFURnSidMpvgLrhU
-Message-ID: <CADUfDZpvMAGheJ-k7jTa3pfjuTXCCZPt-iprnfd_HHAfS5+ghA@mail.gmail.com>
-Subject: Re: [linux-nvme:nvme-6.15 3/4] drivers/nvme/host/core.c:4302:5:
- warning: 'CONFIG_NVME_MULTIPATH' is not defined, evaluates to 0
-To: kernel test robot <lkp@intel.com>
-Cc: Hannes Reinecke <hare@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>, 
-	Keith Busch <kbusch@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi89ogViEN5oTBmcNQXnMEB5_Qse9G401pSNzocP_dqQQ@mail.gmail.com>
 
-On Mon, Apr 7, 2025 at 11:54=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   git://git.infradead.org/nvme.git nvme-6.15
-> head:   9e270930d683ff0207fed7f303988a7ad63ddfcb
-> commit: a98aa32696a1a19814a2f97853400b28622c6a8f [3/4] nvme: re-read ANA =
-log page after ns scan completes
-> config: riscv-randconfig-002-20250408 (https://download.01.org/0day-ci/ar=
-chive/20250408/202504080139.KuphZ8ZZ-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 9=
-2c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250408/202504080139.KuphZ8ZZ-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202504080139.KuphZ8ZZ-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/nvme/host/core.c:4302:5: warning: 'CONFIG_NVME_MULTIPATH' is n=
-ot defined, evaluates to 0 [-Wundef]
->     4302 | #if CONFIG_NVME_MULTIPATH
->          |     ^
->    1 warning generated.
+On Mon, Apr 07, 2025 at 12:02:04PM -0700, Linus Torvalds wrote:
+> On Mon, 7 Apr 2025 at 10:37, Nathan Chancellor <nathan@kernel.org> wrote:
+> > +# Ensure clang does not transform certain loops into calls to wcslen() after
+> > +# https://github.com/llvm/llvm-project/commit/9694844d7e36fd5e01011ab56b64f27b867aa72d
+> > +KBUILD_CFLAGS-$(call clang-min-version, 210000) += -fno-builtin-wcslen
+> 
+> I think you could just use
+> 
+>      KBUILD_CFLAGS += $(call cc-option, -fno-builtin-wcslen)
+> 
+> instead, and not use some version check?
 
-Looks like it should be #ifdef instead?
+Sure, I just figured this has not been a problem up until this point so
+applying it for older versions of clang should not be necessary (since
+the optimization that introduces it does not exist) but also not be
+harmful. However, I would rather not call out to the compiler since we
+know it is supported with all versions of clang (and GCC but it
+obviously does not need it) so maybe just
 
-Best,
-Caleb
+    KBUILD_CFLAGS-$(CONFIG_CC_IS_CLANG) += -fno-builtin-wcslen
+
+or
+
+    ifdef CONFIG_CC_IS_CLANG
+    KBUILD_CFLAGS += -fno-builtin-wcslen
+    endif
+
+or if you do want this for GCC too, unconditionally adding it should be
+fine too.
+
+    KBUILD_CFLAGS += -fno-builtin-wcslen
+
+No strong opinion, let me know your preference and I will make it so.
+
+Cheers,
+Nathan
