@@ -1,68 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1963120B213;
-	Tue,  8 Apr 2025 05:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80CE21ADC3;
+	Tue,  8 Apr 2025 09:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744089636; cv=none; b=coT2uW8Wtp73kZyQW4WHelF39H8m5sXXk/ChXU9cio9fT4y/qB5oGkBrDOPg1XAEWeWlVXDzIag9CQ9WiQy9pwQiy8sPdV9DNnsKa2Rm77Jb+Sy3FarTjouTLNtSTF0WkkUWHKwA6ygmpzCe7BQLimpJwwyooYRbizT6qChXq68=
+	t=1744103778; cv=none; b=q/1gb+og7SP1JXXChdy59YJj5IYh0B/og9tB7qVJ1psj3vhSzmX2sk/Bzft3OMP9KvF2fzbTv9GBlQOZJVkm0aXGqQCTmV+jKPIZivHUhLm+04dXOWRbJ22iBTXWlAHkHJFpqD3pZIqT2ILv5yKLutvBqWT7bFLPIljmqlhUsak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744089636; c=relaxed/simple;
-	bh=/0DCSkYs9FK7HPj8e3N5ePHpwmEPO47Lc4S2mr9GGEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lbX27jdIMod2Ofg748lu6aCUpCb8UdH1vmEjQexbUVN6n75LloYWUBRtHP+Lbf6ImawB4MdQvBVzh5yDU+g+evbXNVq4W0NlYoAXsXdvYMLQuT3mNKlStlVnpxoCNsaLCg98HaHLDqCOLhE4NZ866kTVPalQtAoyBhpg4UBKhU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LdfJGqAB; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1744103778; c=relaxed/simple;
+	bh=5y9ZaIpfhpkEthXHbwVNrs4IpTsNUoJUKgaFWJKOroI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DI8r7G0RXA0WwWSPV2lP/jEfl0gdp7nov6Koy4KGliiwE28QmaS5w7hOdqWDihuCWEOSu/8n4qqFMjq397xgvLvBIm/YmyfGdwvPmOHBOfMi/otlT2BZehjiwXmDIpVtCcnLp28xhgClAsofzqplnUEXz67obIGa/oi/EjLDxC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bc7E13TX; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LdfJGqAB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bc7E13TX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744089634; x=1775625634;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/0DCSkYs9FK7HPj8e3N5ePHpwmEPO47Lc4S2mr9GGEg=;
-  b=LdfJGqABURF1NHFqUtmvkBFnjiqpOUdX27uWW1O0JQ+bQCtGWX3T8Dsk
-   4Uj0zrQB+fgET80wFyELEUEGMO+2rYACa5pR+YJnBFb2ozbg2YFoa+Cvl
-   J0aLxg/qnEIdDbFZGcKJ8prkSJhRMJaHAmbhaR1yyKmLdz3fTELfz+7Og
-   MpGISKQ9QqSbRapIb5p2cpa2EFtsOjv7f3vMdmdES8UKoAWkLtMaExhfE
-   bkME6HyYuF8tebDgWYC59RltMYKp3fLlAu4NR3LAd/bNG0TLax26FodRu
-   PGZS9Nrf1UxW3x60ffYCM9+AxGeKS3hE4ml6ILzV000XkThZwtnn3Xs1+
+  t=1744103777; x=1775639777;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5y9ZaIpfhpkEthXHbwVNrs4IpTsNUoJUKgaFWJKOroI=;
+  b=Bc7E13TXva6k14Ql/jxTYtBL7/WwL1mRf/ICH/i0vZKWINCP2YZ0Qsnv
+   Ulu8/E49095gqx6TDjktbuYo/5t7K0JKST4mc18mHoPwEWEVFW3UK0Y4H
+   y0peQes0zjx400awiDlttiBvTHy7Rx2tMOrlEvAMBpB+scXr52wFA+GaW
+   E7P7zwX2eRG4KHGfGbkMX7gFSfz2WpfN6fx6bYG6y+z6h8U6+qWApdW8H
+   hz3kLoWNHp4sFm188kUHdreBv6o1UYzWuu6RPTtvIXATmORec1mPFYyrE
+   3uANAOoCVQ11SxCwVLnds5SEodq4o8RVuJiri4oCK9WlPwNUxNAJJNNUd
    g==;
-X-CSE-ConnectionGUID: wuAISHkjTACwv1qYwMNcBQ==
-X-CSE-MsgGUID: K0MgoY+fQmaXDmtM/S1beg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45390089"
+X-CSE-ConnectionGUID: +UZjVSyeRlGdKRcdELOiyg==
+X-CSE-MsgGUID: 7R18LvTnSPmTnIwpxSkvXw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45240294"
 X-IronPort-AV: E=Sophos;i="6.15,197,1739865600"; 
-   d="scan'208";a="45390089"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 22:20:34 -0700
-X-CSE-ConnectionGUID: z7YBI9LvRBmLdFYHNnA0RA==
-X-CSE-MsgGUID: oDg5vx6gTu2Rw5dbJx4vng==
+   d="scan'208";a="45240294"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 02:16:13 -0700
+X-CSE-ConnectionGUID: LQH3vnWBT5et0s5O24ouyA==
+X-CSE-MsgGUID: fjYef4KtSfK6bs9dEB4pew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,197,1739865600"; 
-   d="scan'208";a="151343970"
+   d="scan'208";a="159201563"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 07 Apr 2025 22:20:30 -0700
+  by orviesa002.jf.intel.com with ESMTP; 08 Apr 2025 02:16:09 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u21Ns-00048Z-0a;
-	Tue, 08 Apr 2025 05:20:28 +0000
-Date: Tue, 8 Apr 2025 13:19:40 +0800
+	id 1u253s-0004NM-30;
+	Tue, 08 Apr 2025 09:16:04 +0000
+Date: Tue, 8 Apr 2025 17:15:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pengyu Luo <mitltlatltl@gmail.com>, Jianhua Lu <lujianhua000@gmail.com>,
-	Lee Jones <lee@kernel.org>, Daniel Thompson <danielt@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Helge Deller <deller@gmx.de>
+To: Pei Xiao <xiaopei01@kylinos.cn>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, Pengyu Luo <mitltlatltl@gmail.com>
-Subject: Re: [PATCH 4/4] backlight: ktz8866: add definitions to make it more
- readable
-Message-ID: <202504081215.rL4DExNA-lkp@intel.com>
-References: <20250407095119.588920-5-mitltlatltl@gmail.com>
+	Takashi Iwai <tiwai@suse.de>
+Subject: [linux-next:master 1423/1936] sound/core/sound_kunit.c:271:31:
+ warning: address of array 'card->id' will always evaluate to 'true'
+Message-ID: <202504081707.R7V62K13-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,87 +62,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250407095119.588920-5-mitltlatltl@gmail.com>
 
-Hi Pengyu,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on lee-backlight/for-backlight-next]
-[also build test ERROR on lee-leds/for-leds-next lee-backlight/for-backlight-fixes linus/master v6.15-rc1 next-20250407]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pengyu-Luo/dt-bindings-backlight-kinetic-ktz8866-add-ktz8866-slave-compatible/20250407-175635
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
-patch link:    https://lore.kernel.org/r/20250407095119.588920-5-mitltlatltl%40gmail.com
-patch subject: [PATCH 4/4] backlight: ktz8866: add definitions to make it more readable
-config: riscv-randconfig-002-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081215.rL4DExNA-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081215.rL4DExNA-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
+commit: 5108e5eb9e15fce3087555c3b4b7198d41f94575 [1423/1936] ALSA: kunit: fix build warning in test_card_set_id
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250408/202504081707.R7V62K13-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081707.R7V62K13-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504081215.rL4DExNA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504081707.R7V62K13-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/video/backlight/ktz8866.c:77:32: error: incompatible pointer types passing 'unsigned int **' to parameter of type 'unsigned int *'; remove & [-Werror,-Wincompatible-pointer-types]
-      77 |         regmap_read(ktz->regmap, reg, &val);
-         |                                       ^~~~
-   include/linux/regmap.h:1297:69: note: passing argument to parameter 'val' here
-    1297 | int regmap_read(struct regmap *map, unsigned int reg, unsigned int *val);
-         |                                                                     ^
->> drivers/video/backlight/ktz8866.c:112:66: error: expected ')'
-     112 |         ktz8866_write(ktz, BL_BRT_LSB, FIELD_GET(LOWER_BYTE, brightness);
-         |                                                                         ^
-   drivers/video/backlight/ktz8866.c:112:15: note: to match this '('
-     112 |         ktz8866_write(ktz, BL_BRT_LSB, FIELD_GET(LOWER_BYTE, brightness);
-         |                      ^
-   drivers/video/backlight/ktz8866.c:113:67: error: expected ')'
-     113 |         ktz8866_write(ktz, BL_BRT_MSB, FIELD_GET(HIGHER_BYTE, brightness);
-         |                                                                          ^
-   drivers/video/backlight/ktz8866.c:113:15: note: to match this '('
-     113 |         ktz8866_write(ktz, BL_BRT_MSB, FIELD_GET(HIGHER_BYTE, brightness);
-         |                      ^
-   drivers/video/backlight/ktz8866.c:136:13: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-     136 |                 if (!(val && CURRENT_SINKS_MASK))
-         |                           ^  ~~~~~~~~~~~~~~~~~~
-   drivers/video/backlight/ktz8866.c:136:13: note: use '&' for a bitwise operation
-     136 |                 if (!(val && CURRENT_SINKS_MASK))
-         |                           ^~
-         |                           &
-   drivers/video/backlight/ktz8866.c:136:13: note: remove constant to silence this warning
-     136 |                 if (!(val && CURRENT_SINKS_MASK))
-         |                           ^~~~~~~~~~~~~~~~~~~~~
-   1 warning and 3 errors generated.
+>> sound/core/sound_kunit.c:271:31: warning: address of array 'card->id' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     271 |         kunit_info(test, "%s", card->id ? card->id : "(null)");
+         |                                ~~~~~~^~ ~
+   include/kunit/test.h:616:39: note: expanded from macro 'kunit_info'
+     616 |         kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/kunit/test.h:604:21: note: expanded from macro 'kunit_printk'
+     604 |                   (test)->name, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/kunit/test.h:597:21: note: expanded from macro 'kunit_log'
+     597 |                 printk(lvl fmt, ##__VA_ARGS__);                         \
+         |                                   ^~~~~~~~~~~
+   include/linux/printk.h:507:60: note: expanded from macro 'printk'
+     507 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:479:19: note: expanded from macro 'printk_index_wrap'
+     479 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+>> sound/core/sound_kunit.c:271:31: warning: address of array 'card->id' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     271 |         kunit_info(test, "%s", card->id ? card->id : "(null)");
+         |                                ~~~~~~^~ ~
+   include/kunit/test.h:616:39: note: expanded from macro 'kunit_info'
+     616 |         kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/kunit/test.h:604:21: note: expanded from macro 'kunit_printk'
+     604 |                   (test)->name, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/kunit/test.h:599:8: note: expanded from macro 'kunit_log'
+     599 |                                  ##__VA_ARGS__);                        \
+         |                                    ^~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +112 drivers/video/backlight/ktz8866.c
+vim +271 sound/core/sound_kunit.c
 
-    97	
-    98	static int ktz8866_backlight_update_status(struct backlight_device *backlight_dev)
-    99	{
-   100		struct ktz8866 *ktz = bl_get_data(backlight_dev);
-   101		unsigned int brightness = backlight_get_brightness(backlight_dev);
-   102	
-   103		if (!ktz->led_on && brightness > 0) {
-   104			ktz8866_update_bits(ktz, BL_EN, BL_EN_BIT, BL_EN_BIT);
-   105			ktz->led_on = true;
-   106		} else if (brightness == 0) {
-   107			ktz8866_update_bits(ktz, BL_EN, BL_EN_BIT, 0);
-   108			ktz->led_on = false;
-   109		}
-   110	
-   111		/* Set brightness */
- > 112		ktz8866_write(ktz, BL_BRT_LSB, FIELD_GET(LOWER_BYTE, brightness);
-   113		ktz8866_write(ktz, BL_BRT_MSB, FIELD_GET(HIGHER_BYTE, brightness);
-   114	
-   115		return 0;
-   116	}
-   117	
+   255	
+   256	static void test_card_set_id(struct kunit *test)
+   257	{
+   258		struct snd_card *card = kunit_kzalloc(test, sizeof(*card), GFP_KERNEL);
+   259		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, card);
+   260	
+   261		snd_card_set_id(card, VALID_NAME);
+   262		KUNIT_EXPECT_STREQ(test, card->id, VALID_NAME);
+   263	
+   264		/* clear the first id character so we can set it again */
+   265		card->id[0] = '\0';
+   266		snd_card_set_id(card, NAME_W_SPEC_CHARS);
+   267		KUNIT_EXPECT_STRNEQ(test, card->id, NAME_W_SPEC_CHARS);
+   268	
+   269		card->id[0] = '\0';
+   270		snd_card_set_id(card, NAME_W_SPACE);
+ > 271		kunit_info(test, "%s", card->id ? card->id : "(null)");
+   272		KUNIT_EXPECT_STREQ(test, card->id, NAME_W_SPACE_REMOVED);
+   273	}
+   274	
 
 -- 
 0-DAY CI Kernel Test Service
