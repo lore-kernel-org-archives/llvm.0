@@ -1,61 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7298120CCD8;
-	Tue,  8 Apr 2025 10:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8C026E142
+	for <llvm@lists.linux.dev>; Tue,  8 Apr 2025 12:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744106781; cv=none; b=jLkC7YtXUA5HdfL3WskiWEWajftADcSVGZCsK8X/NarmJ4swNR9rj0RGspdm2zgETqD3AxHlpDqIMaoSH4aiHitAG9TiIk28gZzfmIQRzHh8bP9mYarvnno0uTvcXyAl8hc1fS1doFLFcsBe+W0s0SmRKLaK5KU7yuyUAM5Gyro=
+	t=1744114789; cv=none; b=FiUsCIcpHv7YK6OFVoQ/KMRNMfnuSrWSe1tVPtvbO4EKu5DGDXgUrU5TETSHT+JlPrUjzjaW70+VB4zzwcFLpmOKvw2LWi+p1SA2x86wtkZk53JeQqesZM/3hR1da+sm8pg6AZFyOZ72wFbmx03PJM1Pn/yzsPfnioUCO27SiS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744106781; c=relaxed/simple;
-	bh=s3ewf70GUtyRkVUZxjwHUTDIHL5XEAWZvrDiWPV2Byc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fFVMYGRVZqMtZ5vaTVGdXBgnk61L/2Xet2LbTVAQxlPwO+td62RoPqewcw7rw/ojlm9mhJRY8V7o1iQYBCe2UZcdCeYa9NdeYoO8+ihjBxwTo3mMuEBP2Jn5VK2Liqwaz7GURbCwYmpE9pvAV64H4LIuTqeSqPkMC2Zmb/XWFSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OO/AQn6j; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744114789; c=relaxed/simple;
+	bh=mYi6TNfCAYQIFjLQeQklUG5RWG2hPyCT2z+XbGTLTxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ad7K+kF4L7VSI8JbXo5uo7em9Ydwy+OLDZI2RbU5wZETextNgbdh3Qoqy9pZcPR5Zce5P27nDUhEt591s5gK2IWq3ghWFBXiRbW2wQSpdfmYiW/g06hesOo3B2UiXKyQCfamhyy++O+nTzqAKTUtgmsl63+gZiTRRvadguvX/L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cah5uqqG; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OO/AQn6j"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cah5uqqG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744106780; x=1775642780;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s3ewf70GUtyRkVUZxjwHUTDIHL5XEAWZvrDiWPV2Byc=;
-  b=OO/AQn6j0U5S0YygzTa8fIxhU8yaBE4s306v1ZHGyQ5PtRPlwc8TNtm9
-   EmVQ69drbkdIXn76+ThZoLX+HifE0eR3a3Wptz3I1RjIYiBVvDvzJjMpn
-   WQcjyuGMK3R9WthygchE9v44/3Jgk7+KRBOfk8nEr/MFGfhmOK3Xn5/ld
-   V9/Pj/Ic58279qjr0kM+Jj73sJsiWU6Mg9vBbH/wTBdFXxrnKTRBs15/K
-   VSwT6gZgj2Qtv8gvSAv4hDz7XMxx9/l6B/yJzAtM2v/4RhrfMetUVLbb/
-   5EahKsb9+7UozTHaBCGS8waZBQhja+dSJ1L/jV+xz5aA+vCkl6jBSuc17
+  t=1744114788; x=1775650788;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mYi6TNfCAYQIFjLQeQklUG5RWG2hPyCT2z+XbGTLTxw=;
+  b=cah5uqqG75x9pw23VX5KT4VqKgdkRSeVvcLZx2FrI9rV65CehvvdvXcp
+   X4DTMplx3tBstSSddb3O7SXHjSDQukwaTRLrEmjV3QWA9MBhfTm0oLFQh
+   ln4WVmSOJovNZeYdNnN2noq7F6djIewb6DcrzZCU8sE2WtKTVmoyHVMRi
+   2hQj/9QghIbzXg545zoyrPf+zvIg+hmmAbzP2p6CCbYP1UJfUQ4I0HNTh
+   uz31KaL0nxCXbGSEZs5M2CGlzPDsDQb74RPNQ69mNod72Sox4qXnLhFGz
+   kJOjSgJAvP4/6Vj0Q1UypGgiKs6CJyfE6HDYHAMeFMAOFyZS3DyyuZbJo
    A==;
-X-CSE-ConnectionGUID: i8V15KAUQmKvMs4dsGPPrQ==
-X-CSE-MsgGUID: V+YoohKLTlarJ/pvXqRvUw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="56900217"
-X-IronPort-AV: E=Sophos;i="6.15,197,1739865600"; 
-   d="scan'208";a="56900217"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 03:06:17 -0700
-X-CSE-ConnectionGUID: MQU1NfxCQwOYawB8aI4fxg==
-X-CSE-MsgGUID: qwngGTGaSRChjQM16XR/mQ==
+X-CSE-ConnectionGUID: uOvimJfeTNCJ8RY2u0sEUg==
+X-CSE-MsgGUID: 9nCSUIiHRC2ikKWhquDnIQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="62945435"
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="62945435"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 05:19:47 -0700
+X-CSE-ConnectionGUID: TFCQi75JSbuclTRh8tn3yQ==
+X-CSE-MsgGUID: D2GU++D2T9KYgmeNmmP5dQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,197,1739865600"; 
-   d="scan'208";a="127963960"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Apr 2025 03:06:15 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u25qO-0004Qd-1w;
-	Tue, 08 Apr 2025 10:06:12 +0000
-Date: Tue, 8 Apr 2025 18:06:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kemeng Shi <shikemeng@huaweicloud.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Tim Chen <tim.c.chen@linux.intel.com>, Baoquan He <bhe@redhat.com>
-Subject: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning:
- function 'swap_is_last_ref' is not needed and will not be emitted
-Message-ID: <202504081841.jbL7yL0r-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="128774927"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 05:19:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u27vZ-0000000AOfV-0eao;
+	Tue, 08 Apr 2025 15:19:41 +0300
+Date: Tue, 8 Apr 2025 15:19:40 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v2 1/1] x86/reboot: KVM: Guard
+ nmi_shootdown_cpus_on_restart() with ifdeffery
+Message-ID: <Z_UUXOe61BwVkGob@smile.fi.intel.com>
+References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
+ <ZwbazZpTSAn9aAC7@google.com>
+ <ZwcT149jx-iOmEfl@surfacebook.localdomain>
+ <ZykbvVZ32FKCRT_q@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,41 +74,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZykbvVZ32FKCRT_q@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
-commit: 6bb001b6b64ec20d900d0d81294a0f031af59c3e [1753/1936] mm: swap: enable swap_entry_range_free() to drop any kind of last ref
-config: hexagon-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/reproduce)
+On Mon, Nov 04, 2024 at 09:08:45PM +0200, Andy Shevchenko wrote:
+> On Thu, Oct 10, 2024 at 02:37:59AM +0300, Andy Shevchenko wrote:
+> > Wed, Oct 09, 2024 at 12:34:37PM -0700, Sean Christopherson kirjoitti:
+> > > On Tue, Oct 08, 2024, Andy Shevchenko wrote:
+> > > > The nmi_shootdown_cpus_on_restart() in some cases may be not used.
+> > > > This, in particular, prevents kernel builds with clang, `make W=1`
+> > > > and CONFIG_WERROR=y:
+> > > > 
+> > > > arch/x86/kernel/reboot.c:957:20: error: unused function 'nmi_shootdown_cpus_on_restart' [-Werror,-Wunused-function]
+> > > >   957 | static inline void nmi_shootdown_cpus_on_restart(void)
+> > > >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > 
+> > > > Fix this by guarging the definitions with the respective KVM ifdeffery.
+> > > > 
+> > > > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > > > inline functions for W=1 build").
+> > 
+> > > Heh, I tried fixing this too, and have patches to clean things up, but I ended up
+> > > not posting them because I decided the W=1 warning was less ugly than the resulting
+> > > code in nmi_shootdown_cpus().
+> > 
+> > CONFIG_WERROR=y is the default (at least in the current defconfigs for x86).
+> > My goal is to match what ARM builds survive (to some extend?), i.e. W=1, so
+> > may one apply either version I provided or yours?
+> > 
+> > > If we're willing to take on a bit of weirdness in nmi_shootdown_cpus(), then much
+> > > of the #ifdeffery can go away.  Patches attached (lightly tested).
+> 
+> So, what's the status either with the proposed change or with what Sean shared?
+> Can we somehow move forward to fix the issue?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504081841.jbL7yL0r-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-    1517 | static inline bool swap_is_last_ref(unsigned char count)
-         |                    ^~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/swap_is_last_ref +1517 mm/swapfile.c
-
-  1512	
-  1513	/*
-  1514	 * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
-  1515	 * caller have to ensure all entries belong to the same cgroup and cluster.
-  1516	 */
-> 1517	static inline bool swap_is_last_ref(unsigned char count)
-  1518	{
-  1519		return (count == SWAP_HAS_CACHE) || (count == 1) ||
-  1520		       (count == SWAP_MAP_SHMEM);
-  1521	}
-  1522	
+Any news here? Build error is still reproducible.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
