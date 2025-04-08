@@ -1,64 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5181288CC;
-	Tue,  8 Apr 2025 02:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4357822DF86;
+	Tue,  8 Apr 2025 02:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744080555; cv=none; b=NhIHM6arJWOqd2NsR7SWiUE9JBIyHwuvUjRZ82sG+r7XTAoHfKyocN4TTI/fqmpzz24QZdKKb0iGni6qSGc2NK4s8xVJOXRBAJt9bzY2TTPVoiP7qwGc0I0lXIHZSXSh7G0klWlpdzniCh7OOSTGjG1YcSMTIvl3767p0wocnwA=
+	t=1744081161; cv=none; b=arlv2u/VgInmgw5tq9h35fbPrS4F1OPNmhcEjwNLqfPOR1zCwR5i951rZXMwj+O04JQgF5nMJa2QOSFHnDHvg4c7aiL3QIEjm8ceJ2hpmUO33ostv/+6zMD3H8gryV7xZIHmNAc3Zh9k4vj4bIVMKpMKqwgs/kQ4/HrA1QhA3gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744080555; c=relaxed/simple;
-	bh=L/v7CecpC6BTmGaF7wHdxMqFWHXkCPsXe5K4czaw6IY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UAaexQM0056XaN+oGDnnaHfsS6APTMZ1dJCqpaafoOfPTuZIDFxzPhzDh45a1hOJmjll7YwkE8yardqwK8TsKY7TXCl8FrpFWnpWGX1lMdv57A9TN8WMoH80tgR/c+vP19DzM/kzGG3+xKeFDjJqJuRcZz7zUXBwGrhCvKFqC6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pzd29ZU1; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1744081161; c=relaxed/simple;
+	bh=s5UvaaQU++0RLXjgEI2GKm/wDBAYbl0mU881Km1qpJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uYtX3hOp6j3+ddW6iUQk37qmKYbFAt551CSWzAVERTMMnL3aMPdniGZ5RHkgy13xCAhr9iRFHDouqaNuKG2K4b+IDsPAiISBEOuOMGDzogpR6zb7FXJlcXc0CbSC+kGuF+u/i1X4zBmn2ilpA7YSM9kzmeN25jNeBzoaSWporbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNf3kdCg; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pzd29ZU1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNf3kdCg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744080553; x=1775616553;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L/v7CecpC6BTmGaF7wHdxMqFWHXkCPsXe5K4czaw6IY=;
-  b=Pzd29ZU1j+xldlp2+WTJbkyH4SMsJNe8kbj6zymnCV6CxV/QbgJFyFqT
-   AKr5naQU18je7LU++00sqWyyZI9La41Jl9feVwaIFxBrhwOwTXnOxCDXQ
-   Qr9rYgVxTHNz93DF8IpxJ+1n5NANtphp9sUStoyAXTy41Ulz/peFPHxEU
-   cnzA8Jyh4TI9kwGc9SMFVE/b8Q9it4laQluN+Iiu8ibPqL8ETYJ7wMgBF
-   ya5jdSdH5pjg5GbtU3ebeZlSszojd6RfTXa3PEwNnWfMhcaPaSW9xw1B7
-   NpduC//Y7Ju9/SkNqRHPeYRoSnyiG5TK4x7Ak0HNBB46pgIpK0zgeiuG/
+  t=1744081158; x=1775617158;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s5UvaaQU++0RLXjgEI2GKm/wDBAYbl0mU881Km1qpJA=;
+  b=GNf3kdCga9/3Zcz8ZK1EJa0gi3YLfZdad1pzNwBceJX2DsYLt26WFtAV
+   HaKsPb642fC6b8UOiFFVU2sb0+LTRryHvUQN2sYZqlnxC+KkWTjM4NHT5
+   dUiwt96Y0WrTkicEjf3OaBF2uFvatPFXO80ciu99aqJOg5rJ03Yi3Ibif
+   NpO/I4BIi1FEGPO2oARmVJocx783Fp2Kf5JAnQFbOAvAOVzR7J5VyytKQ
+   oCaDbn/VXGRAuqGiJm6fFwMbgDxHY1q95itO9QGRTCjIRJuoXMtmwgoQ8
+   iSX9uIhynUy7mqrVCRaIz5tKTxqRUmFARLEYhydZil7MULX+fmp4G3iBE
    g==;
-X-CSE-ConnectionGUID: KBCJiVrFRrGmbgcv+0Owag==
-X-CSE-MsgGUID: Zhf1au/iSRK6Qh2x+96N5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="67967873"
+X-CSE-ConnectionGUID: ORPFI5AyQQuOraw71CBpgw==
+X-CSE-MsgGUID: yM4qJkLtS9KylOLMN9FUiQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="56158594"
 X-IronPort-AV: E=Sophos;i="6.15,196,1739865600"; 
-   d="scan'208";a="67967873"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 19:49:13 -0700
-X-CSE-ConnectionGUID: Zt6bYxM7R4yHZPedmvcmEQ==
-X-CSE-MsgGUID: tedNJ8sHT0WQ4JQCmThVJQ==
+   d="scan'208";a="56158594"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 19:59:17 -0700
+X-CSE-ConnectionGUID: +drIKI8YSFGqj37RFQiu4Q==
+X-CSE-MsgGUID: AgtK3GGeSzKSgWJxFNcOYg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,196,1739865600"; 
-   d="scan'208";a="127886676"
+   d="scan'208";a="133104686"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 07 Apr 2025 19:49:10 -0700
+  by orviesa004.jf.intel.com with ESMTP; 07 Apr 2025 19:59:13 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u1z1P-00042Z-21;
-	Tue, 08 Apr 2025 02:49:07 +0000
-Date: Tue, 8 Apr 2025 10:48:30 +0800
+	id 1u1zB9-00043T-0Y;
+	Tue, 08 Apr 2025 02:59:11 +0000
+Date: Tue, 8 Apr 2025 10:58:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aditya Kumar Singh <aditya.kumar.singh@oss.qualcomm.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jeff Johnson <jjohnson@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-	ath12k@lists.infradead.org,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Rajat Soni <quic_rajson@quicinc.com>,
-	Raj Kumar Bhagat <quic_rajkbhag@quicinc.com>
-Subject: [ath:ath12k-split-phy 63/169]
- drivers/net/wireless/ath/ath12k/reg.c:245:13: warning: variable 'freq_low'
- is used uninitialized whenever 'if' condition is false
-Message-ID: <202504081054.5RQgJOIZ-lkp@intel.com>
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 2/7] iio: dac: ad5592r: use lock guards
+Message-ID: <202504081058.aukPDkTg-lkp@intel.com>
+References: <20250407-gpiochip-set-rv-iio-v1-2-8431b003a145@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,235 +69,167 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250407-gpiochip-set-rv-iio-v1-2-8431b003a145@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ath/ath.git ath12k-split-phy
-head:   31d82c3b3b8782ff326a188f2ae78d3d9f333448
-commit: 6ca04f359a7046dac7b96fc29808568513406aea [63/169] wifi: ath12k: Update frequency range if reg rules changes
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250408/202504081054.5RQgJOIZ-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081054.5RQgJOIZ-lkp@intel.com/reproduce)
+Hi Bartosz,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 0af2f6be1b4281385b618cb86ad946eded089ac8]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/iio-dac-ad5592r-destroy-mutexes-in-detach-paths/20250407-152721
+base:   0af2f6be1b4281385b618cb86ad946eded089ac8
+patch link:    https://lore.kernel.org/r/20250407-gpiochip-set-rv-iio-v1-2-8431b003a145%40linaro.org
+patch subject: [PATCH 2/7] iio: dac: ad5592r: use lock guards
+config: arm-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081058.aukPDkTg-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081058.aukPDkTg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504081054.5RQgJOIZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504081058.aukPDkTg-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/ath/ath12k/reg.c:6:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/ath/ath12k/reg.c:245:13: warning: variable 'freq_low' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:250:35: note: uninitialized use occurs here
-     250 |         ath12k_mac_update_freq_range(ar, freq_low, freq_high);
-         |                                          ^~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:245:9: note: remove the 'if' if its condition is always true
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/ath/ath12k/reg.c:245:13: warning: variable 'freq_low' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:250:35: note: uninitialized use occurs here
-     250 |         ath12k_mac_update_freq_range(ar, freq_low, freq_high);
-         |                                          ^~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:245:13: note: remove the '&&' if its condition is always true
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:211:22: note: initialize the variable 'freq_low' to silence this warning
-     211 |         u32 phy_id, freq_low, freq_high, supported_bands, band;
+>> drivers/iio/dac/ad5592r-base.c:350:2: error: cannot jump from switch statement to this case label
+     350 |         default:
+         |         ^
+   drivers/iio/dac/ad5592r-base.c:303:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     303 |                 guard(mutex)(&st->lock);
+         |                 ^
+   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
+     319 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
          |                             ^
-         |                              = 0
->> drivers/net/wireless/ath/ath12k/reg.c:245:13: warning: variable 'freq_high' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:250:45: note: uninitialized use occurs here
-     250 |         ath12k_mac_update_freq_range(ar, freq_low, freq_high);
-         |                                                    ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:245:9: note: remove the 'if' if its condition is always true
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/ath/ath12k/reg.c:245:13: warning: variable 'freq_high' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:250:45: note: uninitialized use occurs here
-     250 |         ath12k_mac_update_freq_range(ar, freq_low, freq_high);
-         |                                                    ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:245:13: note: remove the '&&' if its condition is always true
-     245 |         } else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/reg.c:211:33: note: initialize the variable 'freq_high' to silence this warning
-     211 |         u32 phy_id, freq_low, freq_high, supported_bands, band;
-         |                                        ^
-         |                                         = 0
-   7 warnings generated.
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:104:1: note: expanded from here
+     104 | __UNIQUE_ID_guard492
+         | ^
+   drivers/iio/dac/ad5592r-base.c:308:2: error: cannot jump from switch statement to this case label
+     308 |         case IIO_CHAN_INFO_SCALE:
+         |         ^
+   drivers/iio/dac/ad5592r-base.c:303:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     303 |                 guard(mutex)(&st->lock);
+         |                 ^
+   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
+     319 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:104:1: note: expanded from here
+     104 | __UNIQUE_ID_guard492
+         | ^
+   drivers/iio/dac/ad5592r-base.c:427:2: error: cannot jump from switch statement to this case label
+     427 |         default:
+         |         ^
+   drivers/iio/dac/ad5592r-base.c:419:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     419 |                 guard(mutex)(&st->lock);
+         |                 ^
+   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
+     319 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:169:1: note: expanded from here
+     169 | __UNIQUE_ID_guard497
+         | ^
+   3 errors generated.
 
 
-vim +245 drivers/net/wireless/ath/ath12k/reg.c
+vim +350 drivers/iio/dac/ad5592r-base.c
 
-   207	
-   208	int ath12k_regd_update(struct ath12k *ar, bool init)
-   209	{
-   210		struct ath12k_wmi_hal_reg_capabilities_ext_arg *reg_cap;
-   211		u32 phy_id, freq_low, freq_high, supported_bands, band;
-   212		struct ath12k_hw *ah = ath12k_ar_to_ah(ar);
-   213		struct ieee80211_hw *hw = ah->hw;
-   214		struct ieee80211_regdomain *regd, *regd_copy = NULL;
-   215		int ret, regd_len, pdev_id;
-   216		struct ath12k_base *ab;
-   217		int i;
-   218	
-   219		ab = ar->ab;
-   220	
-   221		supported_bands = ar->pdev->cap.supported_bands;
-   222		if (supported_bands & WMI_HOST_WLAN_2GHZ_CAP)
-   223			band = NL80211_BAND_2GHZ;
-   224		else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && !ar->supports_6ghz)
-   225			band = NL80211_BAND_5GHZ;
-   226		else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz)
-   227			band = NL80211_BAND_6GHZ;
-   228	
-   229		reg_cap = &ab->hal_reg_cap[ar->pdev_idx];
-   230	
-   231		if (ab->hw_params->single_pdev_only && !ar->supports_6ghz) {
-   232			phy_id = ar->pdev->cap.band[band].phy_id;
-   233			reg_cap = &ab->hal_reg_cap[phy_id];
-   234		}
-   235	
-   236		/* Possible that due to reg change, current limits for supported
-   237		 * frequency changed. Update that
-   238		 */
-   239		if (supported_bands & WMI_HOST_WLAN_2GHZ_CAP) {
-   240			freq_low = max(reg_cap->low_2ghz_chan, ab->reg_freq_2ghz.start_freq);
-   241			freq_high = min(reg_cap->high_2ghz_chan, ab->reg_freq_2ghz.end_freq);
-   242		} else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && !ar->supports_6ghz) {
-   243			freq_low = max(reg_cap->low_5ghz_chan, ab->reg_freq_5ghz.start_freq);
-   244			freq_high = min(reg_cap->high_5ghz_chan, ab->reg_freq_5ghz.end_freq);
- > 245		} else if (supported_bands & WMI_HOST_WLAN_5GHZ_CAP && ar->supports_6ghz) {
-   246			freq_low = max(reg_cap->low_5ghz_chan, ab->reg_freq_6ghz.start_freq);
-   247			freq_high = min(reg_cap->high_5ghz_chan, ab->reg_freq_6ghz.end_freq);
-   248		}
-   249	
-   250		ath12k_mac_update_freq_range(ar, freq_low, freq_high);
-   251	
-   252		ath12k_dbg(ab, ATH12K_DBG_REG, "pdev %u reg updated freq limits %u->%u MHz\n",
-   253			   ar->pdev->pdev_id, freq_low,
-   254			   freq_high);
-   255	
-   256		/* If one of the radios within ah has already updated the regd for
-   257		 * the wiphy, then avoid setting regd again
-   258		 */
-   259		if (ah->regd_updated)
-   260			return 0;
-   261	
-   262		/* firmware provides reg rules which are similar for 2 GHz and 5 GHz
-   263		 * pdev but 6 GHz pdev has superset of all rules including rules for
-   264		 * all bands, we prefer 6 GHz pdev's rules to be used for setup of
-   265		 * the wiphy regd.
-   266		 * If 6 GHz pdev was part of the ath12k_hw, wait for the 6 GHz pdev,
-   267		 * else pick the first pdev which calls this function and use its
-   268		 * regd to update global hw regd.
-   269		 * The regd_updated flag set at the end will not allow any further
-   270		 * updates.
-   271		 */
-   272		if (ah->use_6ghz_regd && !ar->supports_6ghz)
-   273			return 0;
-   274	
-   275		pdev_id = ar->pdev_idx;
-   276	
-   277		spin_lock_bh(&ab->base_lock);
-   278	
-   279		if (init) {
-   280			/* Apply the regd received during init through
-   281			 * WMI_REG_CHAN_LIST_CC event. In case of failure to
-   282			 * receive the regd, initialize with a default world
-   283			 * regulatory.
-   284			 */
-   285			if (ab->default_regd[pdev_id]) {
-   286				regd = ab->default_regd[pdev_id];
-   287			} else {
-   288				ath12k_warn(ab,
-   289					    "failed to receive default regd during init\n");
-   290				regd = (struct ieee80211_regdomain *)&ath12k_world_regd;
-   291			}
-   292		} else {
-   293			regd = ab->new_regd[pdev_id];
-   294		}
-   295	
-   296		if (!regd) {
-   297			ret = -EINVAL;
-   298			spin_unlock_bh(&ab->base_lock);
-   299			goto err;
-   300		}
-   301	
-   302		regd_len = sizeof(*regd) + (regd->n_reg_rules *
-   303			sizeof(struct ieee80211_reg_rule));
-   304	
-   305		regd_copy = kzalloc(regd_len, GFP_ATOMIC);
-   306		if (regd_copy)
-   307			ath12k_copy_regd(regd, regd_copy);
-   308	
-   309		spin_unlock_bh(&ab->base_lock);
-   310	
-   311		if (!regd_copy) {
-   312			ret = -ENOMEM;
-   313			goto err;
-   314		}
-   315	
-   316		rtnl_lock();
-   317		wiphy_lock(hw->wiphy);
-   318		ret = regulatory_set_wiphy_regd_sync(hw->wiphy, regd_copy);
-   319		wiphy_unlock(hw->wiphy);
-   320		rtnl_unlock();
-   321	
-   322		kfree(regd_copy);
-   323	
-   324		if (ret)
-   325			goto err;
-   326	
-   327		if (ah->state != ATH12K_HW_STATE_ON)
-   328			goto skip;
-   329	
-   330		ah->regd_updated = true;
-   331		/* Apply the new regd to all the radios, this is expected to be received only once
-   332		 * since we check for ah->regd_updated and allow here only once.
-   333		 */
-   334		for_each_ar(ah, ar, i) {
-   335			ab = ar->ab;
-   336			ret = ath12k_reg_update_chan_list(ar);
-   337			if (ret)
-   338				goto err;
-   339		}
-   340	skip:
-   341		return 0;
-   342	err:
-   343		ath12k_warn(ab, "failed to perform regd update : %d\n", ret);
-   344		return ret;
-   345	}
-   346	
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  287  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  288  static int ad5592r_write_raw(struct iio_dev *iio_dev,
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  289  	struct iio_chan_spec const *chan, int val, int val2, long mask)
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  290  {
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  291  	struct ad5592r_state *st = iio_priv(iio_dev);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  292  	int ret;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  293  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  294  	switch (mask) {
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  295  	case IIO_CHAN_INFO_RAW:
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  296  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  297  		if (val >= (1 << chan->scan_type.realbits) || val < 0)
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  298  			return -EINVAL;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  299  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  300  		if (!chan->output)
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  301  			return -EINVAL;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  302  
+299c6ede9f0343c Bartosz Golaszewski 2025-04-07  303  		guard(mutex)(&st->lock);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  304  		ret = st->ops->write_dac(st, chan->channel, val);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  305  		if (!ret)
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  306  			st->cached_dac[chan->channel] = val;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  307  		return ret;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  308  	case IIO_CHAN_INFO_SCALE:
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  309  		if (chan->type == IIO_VOLTAGE) {
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  310  			bool gain;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  311  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  312  			if (val == st->scale_avail[0][0] &&
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  313  				val2 == st->scale_avail[0][1])
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  314  				gain = false;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  315  			else if (val == st->scale_avail[1][0] &&
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  316  				 val2 == st->scale_avail[1][1])
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  317  				gain = true;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  318  			else
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  319  				return -EINVAL;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  320  
+299c6ede9f0343c Bartosz Golaszewski 2025-04-07  321  			guard(mutex)(&st->lock);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  322  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  323  			ret = st->ops->reg_read(st, AD5592R_REG_CTRL,
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  324  						&st->cached_gp_ctrl);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  325  			if (ret < 0) {
+33c53cbf8f7bc8d Sergiu Cuciurean    2020-05-20  326  				mutex_unlock(&st->lock);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  327  				return ret;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  328  			}
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  329  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  330  			if (chan->output) {
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  331  				if (gain)
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  332  					st->cached_gp_ctrl |=
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  333  						AD5592R_REG_CTRL_DAC_RANGE;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  334  				else
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  335  					st->cached_gp_ctrl &=
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  336  						~AD5592R_REG_CTRL_DAC_RANGE;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  337  			} else {
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  338  				if (gain)
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  339  					st->cached_gp_ctrl |=
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  340  						AD5592R_REG_CTRL_ADC_RANGE;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  341  				else
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  342  					st->cached_gp_ctrl &=
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  343  						~AD5592R_REG_CTRL_ADC_RANGE;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  344  			}
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  345  
+299c6ede9f0343c Bartosz Golaszewski 2025-04-07  346  			return st->ops->reg_write(st, AD5592R_REG_CTRL,
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  347  						  st->cached_gp_ctrl);
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  348  		}
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  349  		break;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05 @350  	default:
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  351  		return -EINVAL;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  352  	}
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  353  
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  354  	return 0;
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  355  }
+56ca9db862bf3d7 Paul Cercueil       2016-04-05  356  
 
 -- 
 0-DAY CI Kernel Test Service
