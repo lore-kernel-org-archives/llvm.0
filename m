@@ -1,117 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8C026E142
-	for <llvm@lists.linux.dev>; Tue,  8 Apr 2025 12:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0E626A088
+	for <llvm@lists.linux.dev>; Tue,  8 Apr 2025 12:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744114789; cv=none; b=FiUsCIcpHv7YK6OFVoQ/KMRNMfnuSrWSe1tVPtvbO4EKu5DGDXgUrU5TETSHT+JlPrUjzjaW70+VB4zzwcFLpmOKvw2LWi+p1SA2x86wtkZk53JeQqesZM/3hR1da+sm8pg6AZFyOZ72wFbmx03PJM1Pn/yzsPfnioUCO27SiS0=
+	t=1744115736; cv=none; b=qnfTMFDsgorVvv3FoSkPPGec1U//v5JE1w8e5jHQIlas7X3AQ9tRBPY5hfrE4r1DiswR1awbUoZWpPVQjgj4+kkTWYmfpdA/XXV0OD+Bg38tb4mJHlg3LhCi2YYntBc1nYu56wPzPGR4hV25z/QVIrUwINXjsamff15xW3qnOJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744114789; c=relaxed/simple;
-	bh=mYi6TNfCAYQIFjLQeQklUG5RWG2hPyCT2z+XbGTLTxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ad7K+kF4L7VSI8JbXo5uo7em9Ydwy+OLDZI2RbU5wZETextNgbdh3Qoqy9pZcPR5Zce5P27nDUhEt591s5gK2IWq3ghWFBXiRbW2wQSpdfmYiW/g06hesOo3B2UiXKyQCfamhyy++O+nTzqAKTUtgmsl63+gZiTRRvadguvX/L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cah5uqqG; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1744115736; c=relaxed/simple;
+	bh=fo/D7Vy/bHCJLwja2xD/bb/2rXotbdfX/H7Zo3+wDT8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=gxxbxFqhPA2pFwX5ivjYLu2307izUgsdGUcL0/NgzzE2daetJtO1jnPjG6seS9HBEhtsrbtMrmZlHSbY+jJQP0wv702OWc13nJbWe33L30pEiPdUukqbTE5qdiZJyAhKEP4/RfE1PT5ofCgMMyNcbQ07wDa//5tFNpHDcvA7g5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A3EW4pW8; arc=none smtp.client-ip=209.85.222.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cah5uqqG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744114788; x=1775650788;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mYi6TNfCAYQIFjLQeQklUG5RWG2hPyCT2z+XbGTLTxw=;
-  b=cah5uqqG75x9pw23VX5KT4VqKgdkRSeVvcLZx2FrI9rV65CehvvdvXcp
-   X4DTMplx3tBstSSddb3O7SXHjSDQukwaTRLrEmjV3QWA9MBhfTm0oLFQh
-   ln4WVmSOJovNZeYdNnN2noq7F6djIewb6DcrzZCU8sE2WtKTVmoyHVMRi
-   2hQj/9QghIbzXg545zoyrPf+zvIg+hmmAbzP2p6CCbYP1UJfUQ4I0HNTh
-   uz31KaL0nxCXbGSEZs5M2CGlzPDsDQb74RPNQ69mNod72Sox4qXnLhFGz
-   kJOjSgJAvP4/6Vj0Q1UypGgiKs6CJyfE6HDYHAMeFMAOFyZS3DyyuZbJo
-   A==;
-X-CSE-ConnectionGUID: uOvimJfeTNCJ8RY2u0sEUg==
-X-CSE-MsgGUID: 9nCSUIiHRC2ikKWhquDnIQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="62945435"
-X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
-   d="scan'208";a="62945435"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 05:19:47 -0700
-X-CSE-ConnectionGUID: TFCQi75JSbuclTRh8tn3yQ==
-X-CSE-MsgGUID: D2GU++D2T9KYgmeNmmP5dQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
-   d="scan'208";a="128774927"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 05:19:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u27vZ-0000000AOfV-0eao;
-	Tue, 08 Apr 2025 15:19:41 +0300
-Date: Tue, 8 Apr 2025 15:19:40 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v2 1/1] x86/reboot: KVM: Guard
- nmi_shootdown_cpus_on_restart() with ifdeffery
-Message-ID: <Z_UUXOe61BwVkGob@smile.fi.intel.com>
-References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
- <ZwbazZpTSAn9aAC7@google.com>
- <ZwcT149jx-iOmEfl@surfacebook.localdomain>
- <ZykbvVZ32FKCRT_q@smile.fi.intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A3EW4pW8"
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-873a2ba6f7cso1355019241.3
+        for <llvm@lists.linux.dev>; Tue, 08 Apr 2025 05:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744115733; x=1744720533; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/U112c3eNoEpdOFrvh7CcjezylBSmoKAUzWeh1M4C48=;
+        b=A3EW4pW8KAjePqKSsqEm48ORR6wC3uYCposhDejstj1+cSiMim5I2Yx/FBqoJ/0/lt
+         1DYN2qNXTvnE61cwb6WP2HxUR9ZsBlMnQ//1qs9xxJVD2vr5uHDUb4955J7p/7xsSD66
+         0WahokzkbeeOo/AvdpwugLotM5wQ65EQM6qYiy5q3VvJOKtEZ7/9hqJBcQ5rD5g1OGtH
+         rFvwP7ZXzHTsz9NxPnVh/gLGru6WEoAeqSUVzmEYx6QA39XdN57vli5ktKnDiEcBXkMi
+         Xy5zW5aecNck+22WyxUtsw2PgB1EZcM6LqVX2XtWzznjbKgQp6Pu+u8GfbrsTti6AXrn
+         fyAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744115733; x=1744720533;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/U112c3eNoEpdOFrvh7CcjezylBSmoKAUzWeh1M4C48=;
+        b=RP3RY7FXAyZDjLwry27gOEJ+G+vXCutH6JXdxy/I+sjG5ot7XWV4R3VyAFWSeQokk4
+         l7lRF2ExHkWqaIMyjagbOiJnhlVr+V9bWptAhI8wcrdAhhqc7B0SO1FHNn7J8adWAcQd
+         r4asLzMoP1yLtJnhRKof/ijsWRWf6TzoaFoUdqxTi+NKY9RNu2us+5sBuJv8XsDPzI/n
+         LsJoEQZRCQwlPsJ+2F0BhEIwTkVA8Xi7xgeh9lDD4JZ6cC2vPDnWJ+gUYHQGOih8n7/5
+         byyTOPB5pMoOZpRfdV0ILc0qb1qHX+lz+QRiV34DFzjBY1gxlGlF1IM5P6Fvhf+bXMin
+         gxVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUf2uyGVmlibwKnqjmB4DsEwS3tS8McEY8iAcI3j4EFpXMvUJVTUAK64XrzA5fbKI2cK0Jr@lists.linux.dev
+X-Gm-Message-State: AOJu0YzGwnWX+vJNLiP79E7caW7gzL+RKgg/cwa3zbPHHBqVsTredKHz
+	xuPYaYQtlkhbO1BnbFfZhqXIDI4wnUxJH3Zv0CV3liCOpvH+Sm7ApMDefEg0kxHRW5mXXvo2s3i
+	q9PnTYlHT6CmekWQCa66zsNxm7RHaxN8X7Jc8ZQ==
+X-Gm-Gg: ASbGncvC9NYIfDL3QuRxlkxOLsaHx/lDxgv8UNLAATfXl6nHZnzcQUMvq7UkGB0CLUz
+	qKwiL2Qajv1E1Qflo8JKwQ/Vch4yBVTDhPjG/aopsoosmkCuaYrKwIsw8uKEVd9lI/nJpM9mCMc
+	3RfNh07kcjoRytY7fgqJAqNl1UFQH+VWGFvo/pf41WrBgImseK4/nZBm/1J/Y3knYDuNg=
+X-Google-Smtp-Source: AGHT+IFfrUZA9P0FlfVvDGw+QCkUVYYIjMI5wcSJPSzAp7n+zPY08mgfTxQqvgd8poJltS31C52pfXlDC6xYxKM2j78=
+X-Received: by 2002:a05:6102:504b:b0:4c1:9738:820d with SMTP id
+ ada2fe7eead31-4c8568c0b92mr10407478137.6.1744115733375; Tue, 08 Apr 2025
+ 05:35:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZykbvVZ32FKCRT_q@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 8 Apr 2025 18:05:21 +0530
+X-Gm-Features: ATxdqUEWaftFPwcDydUZjRrXkKZePynV0fvjVXPcjzvBxMxN2KkMbyUQeWe8Fe4
+Message-ID: <CA+G9fYsNUbN0PsDQBqVAoUSjSXa5igOjntBFh_TF6m8A4FNDsw@mail.gmail.com>
+Subject: sound_kunit.c: error: address of array 'card->id' will always
+ evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+To: open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, linux-sound@vger.kernel.org, 
+	kunit-dev@googlegroups.com, clang-built-linux <llvm@lists.linux.dev>
+Cc: Pei Xiao <xiaopei01@kylinos.cn>, Takashi Iwai <tiwai@suse.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 04, 2024 at 09:08:45PM +0200, Andy Shevchenko wrote:
-> On Thu, Oct 10, 2024 at 02:37:59AM +0300, Andy Shevchenko wrote:
-> > Wed, Oct 09, 2024 at 12:34:37PM -0700, Sean Christopherson kirjoitti:
-> > > On Tue, Oct 08, 2024, Andy Shevchenko wrote:
-> > > > The nmi_shootdown_cpus_on_restart() in some cases may be not used.
-> > > > This, in particular, prevents kernel builds with clang, `make W=1`
-> > > > and CONFIG_WERROR=y:
-> > > > 
-> > > > arch/x86/kernel/reboot.c:957:20: error: unused function 'nmi_shootdown_cpus_on_restart' [-Werror,-Wunused-function]
-> > > >   957 | static inline void nmi_shootdown_cpus_on_restart(void)
-> > > >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > 
-> > > > Fix this by guarging the definitions with the respective KVM ifdeffery.
-> > > > 
-> > > > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> > > > inline functions for W=1 build").
-> > 
-> > > Heh, I tried fixing this too, and have patches to clean things up, but I ended up
-> > > not posting them because I decided the W=1 warning was less ugly than the resulting
-> > > code in nmi_shootdown_cpus().
-> > 
-> > CONFIG_WERROR=y is the default (at least in the current defconfigs for x86).
-> > My goal is to match what ARM builds survive (to some extend?), i.e. W=1, so
-> > may one apply either version I provided or yours?
-> > 
-> > > If we're willing to take on a bit of weirdness in nmi_shootdown_cpus(), then much
-> > > of the #ifdeffery can go away.  Patches attached (lightly tested).
-> 
-> So, what's the status either with the proposed change or with what Sean shared?
-> Can we somehow move forward to fix the issue?
+Regressions on x86_64 build allyesconfig with clang-20 failed on the
+Linux next-20250408 tag.
 
-Any news here? Build error is still reproducible.
+First seen on the next-20250408.
+Bad: next-20250408
+Good: next-20250407
 
--- 
-With Best Regards,
-Andy Shevchenko
+* x86, build
+ - build/clang-20-allyesconfig
+
+Regression Analysis:
+- New regression? Yes
+- Reproducibility? Yes
+
+Boot regression: x86_64 allyesconfig address of array 'card->id' will
+always evaluate to 'true'
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Boot log
+sound/core/sound_kunit.c:271:31: error: address of array 'card->id'
+will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+  271 |         kunit_info(test, "%s", card->id ? card->id : "(null)");
+      |                                ~~~~~~^~ ~
 
 
+## Source
+* Kernel version: 6.15.0-rc1
+* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+* Git sha: 7702d0130dc002bab2c3571ddb6ff68f82d99aea
+* Git describe: next-20250408
+* Project details:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250408/
+
+## Test
+* Test log: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250408/testrun/27937063/suite/build/test/clang-20-allyesconfig/log
+* Test details:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250408/testrun/27937063/suite/build/test/clang-20-allyesconfig/details/
+* Test history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250408/testrun/27937063/suite/build/test/clang-20-allyesconfig/history/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2vQpM7f8SQvntzGG0Tdgxj2amGb/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2vQpM7f8SQvntzGG0Tdgxj2amGb/config
+* compiler: clang Debian clang version 20.1.2
+(++20250330123306+5ba194972878-1~exp1~20250330003423.94)
+
+## Steps to reproduce
+ - tuxmake --runtime podman --target-arch x86_64 --toolchain clang-20
+--kconfig allyesconfig LLVM=1 LLVM_IAS=1
+
+--
+Linaro LKFT
+https://lkft.linaro.org
