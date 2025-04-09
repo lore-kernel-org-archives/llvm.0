@@ -1,165 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E2C1DFFC;
-	Wed,  9 Apr 2025 16:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C301326FD91
+	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 16:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744217696; cv=none; b=r4cwvGPLS7zcJPXgyTBoLj7p/SD0qjhEn9Vxe4XrBmJP7SNFjf8LhZm05zbI71QG1b8wWJ+UcxyxD0FMQ/LPc4vqWqzRIqwzxWlGCRkGr0rI7s1/VNOGLWdZPg7SVaA/eEVhdHC8cJm0wNKUrTFOvSPLI/RzcHV9tOXAGyzgmaM=
+	t=1744217898; cv=none; b=p6THD7k/65opRrn6gmSBhaNOGuQOQ2RmplJRrz5UzdrOxRlyVRqRxavb6BpfFBsvxZfSTGPAWUW9nWBB+nVje4XA/WdwWTbGVPKotTgAyxgwhAWlMwE2tONXnNU0Qsd7qb0n04rqO13AwmaQtHYMndV4hI2auUa/Q5ei1ii31Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744217696; c=relaxed/simple;
-	bh=bn99SfcJAYqnAykVhl5TJzlvHLeMgsMboKs4HfISh8U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dofzZpbKK96k371Fz8VoryMUcZuvmmU9wZbWw7fiSMJKIeSdJVWapKBpPVdXQvsZyskOxZ9PHPYF3Wb+8miM8vKmZ0fl94pn7XwOlqmgpRUbqhTt6B1lbcT4CqfqP0vaH2cx+Ie5+swH8CuNunr5GAQHBn1rUybzkUSV/LRRS4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6+i0Hqb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744217898; c=relaxed/simple;
+	bh=mnW2GFg4IqkS6SgY7SxVfv2bb9ReIjviHkGL/NPqNjw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R+3L/okgLMonwuipDH4kLPsrFbsN0GBrNUW8921BHE2sm1fgq/2bvRj67RnbrfjuWtcNr56CZ8DGdTTqNi18JaPFcckevwLJ/OeMVCSFXxqjzqj5+LdGta4rMqYmNw8g5vUWSjvrU55iaSMzTX/h7qPnV2LXw86A1iv4vB66GYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nG/KNcwD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VryLfxF4; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nG/KNcwD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VryLfxF4; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6+i0Hqb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5C9C4CEE9;
-	Wed,  9 Apr 2025 16:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744217695;
-	bh=bn99SfcJAYqnAykVhl5TJzlvHLeMgsMboKs4HfISh8U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D6+i0HqbWhsp0jdV6uYv+1WdMNxt5e7/3fsO8gn1cw48xntVqhFmlWTw+O+6GwdFK
-	 4QZUJgzUNH9kMblti6zwtkj0CVuaDiez4U2WDeUvovgt0DfYMgQwpG5jWkRcT1nj/Q
-	 ydyS/S0Zkq7HkyxHPDLvb6Rl+LR/631lhmnReQy4LxjKMK10V/q0bVyjfjcGJSscAZ
-	 WwVRL1iv3l3cx8ZrHXUp4SBqGat3Y80J9UF7jgNqaNdlo5ybuYmvnyzg1q0HADx7dA
-	 FlDZmPGv2J0QAeye1pNIAYCYJHFGDcPvKFh7CzNIyPgxLAVs6z5m2dmf/ZrnFzTvjr
-	 03KxELUtEkIlg==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	llvm@lists.linux.dev,
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nG/KNcwD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VryLfxF4";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nG/KNcwD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VryLfxF4"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B38D31F38D;
+	Wed,  9 Apr 2025 16:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1744217894; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
+	b=nG/KNcwDcIsW/uK7FgBg9uFMxMMbMdgKZGFJqQD7g3wxCWGMXFZwgwtXesBnup+RsqLqjh
+	+FRG1uXjzuimm+0liQYvoojNFFIlZIhM5CCcAkay3Uy8mKpTc2m0Xqef4ONihrRIASiy1X
+	WUddoKC3bIXYV2Cf4/3E38RbkMLK8IM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1744217894;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
+	b=VryLfxF4k3vzxpwJSDcYomsatCSdfnOM2r12zx8StboxFOFWYF5/aLUivSLmH8VjfTuPrH
+	PIRVX/TDQI4iRkBw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="nG/KNcwD";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=VryLfxF4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1744217894; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
+	b=nG/KNcwDcIsW/uK7FgBg9uFMxMMbMdgKZGFJqQD7g3wxCWGMXFZwgwtXesBnup+RsqLqjh
+	+FRG1uXjzuimm+0liQYvoojNFFIlZIhM5CCcAkay3Uy8mKpTc2m0Xqef4ONihrRIASiy1X
+	WUddoKC3bIXYV2Cf4/3E38RbkMLK8IM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1744217894;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
+	b=VryLfxF4k3vzxpwJSDcYomsatCSdfnOM2r12zx8StboxFOFWYF5/aLUivSLmH8VjfTuPrH
+	PIRVX/TDQI4iRkBw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 15B9013691;
+	Wed,  9 Apr 2025 16:58:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ot2VAian9mfLAwAAD6G6ig
+	(envelope-from <osalvador@suse.de>); Wed, 09 Apr 2025 16:58:14 +0000
+Date: Wed, 9 Apr 2025 18:58:04 +0200
+From: Oscar Salvador <osalvador@suse.de>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
 	oe-kbuild-all@lists.linux.dev,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Tim Chen <tim.c.chen@linux.intel.com>,
-	Baoquan He <bhe@redhat.com>
-Subject: Re: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted
-Date: Wed,  9 Apr 2025 09:54:52 -0700
-Message-Id: <20250409165452.305371-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
-References: 
+	David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+	Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-cxl@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] mm,memory_hotplug: Implement numa node notifier
+Message-ID: <Z_anHMHgQQM3y-w2@localhost.localdomain>
+References: <20250408084153.255762-3-osalvador@suse.de>
+ <202504092104.MyHeSV43-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202504092104.MyHeSV43-lkp@intel.com>
+X-Rspamd-Queue-Id: B38D31F38D
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.51
+X-Spam-Flag: NO
 
-Hello,
-
-On Tue, 8 Apr 2025 17:39:59 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
-
-> On Tue, 8 Apr 2025 18:06:11 +0800 kernel test robot <lkp@intel.com> wrote:
+On Wed, Apr 09, 2025 at 09:44:52PM +0800, kernel test robot wrote:
+> Hi Oscar,
 > 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
-> > commit: 6bb001b6b64ec20d900d0d81294a0f031af59c3e [1753/1936] mm: swap: enable swap_entry_range_free() to drop any kind of last ref
-> > config: hexagon-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/config)
-> > compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202504081841.jbL7yL0r-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-> 
-> It's annoying that gcc warns about this.
-> 
-> >     1517 | static inline bool swap_is_last_ref(unsigned char count)
-> >          |                    ^~~~~~~~~~~~~~~~
-> >    1 warning generated.
-> > 
-> > 
-> > vim +/swap_is_last_ref +1517 mm/swapfile.c
-> > 
-> >   1512	
-> >   1513	/*
-> >   1514	 * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
-> >   1515	 * caller have to ensure all entries belong to the same cgroup and cluster.
-> >   1516	 */
-> > > 1517	static inline bool swap_is_last_ref(unsigned char count)
-> >   1518	{
-> >   1519		return (count == SWAP_HAS_CACHE) || (count == 1) ||
-> >   1520		       (count == SWAP_MAP_SHMEM);
-> >   1521	}
-> >   1522	
-> 
-> : static inline bool swap_is_last_ref(unsigned char count)
-> : {
-> : 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
-> : 	       (count == SWAP_MAP_SHMEM);
-> : }
-> : 
-> : static void swap_entries_free(struct swap_info_struct *si,
-> : 			      struct swap_cluster_info *ci,
-> : 			      swp_entry_t entry, unsigned int nr_pages)
-> : {
-> : 	unsigned long offset = swp_offset(entry);
-> : 	unsigned char *map = si->swap_map + offset;
-> : 	unsigned char *map_end = map + nr_pages;
-> : 
-> : 	/* It should never free entries across different clusters */
-> : 	VM_BUG_ON(ci != offset_to_cluster(si, offset + nr_pages - 1));
-> : 	VM_BUG_ON(cluster_is_empty(ci));
-> : 	VM_BUG_ON(ci->count < nr_pages);
-> : 
-> : 	ci->count -= nr_pages;
-> : 	do {
-> : 		VM_BUG_ON(!swap_is_last_ref(*map));
-> 
-> 
-> And it's annoying that VM_BUG_ON() doesn't reference its arg when
-> CONFIG_DEBUG_VM=n.
-> 
-> I'll add this:
-> 
-> --- a/mm/swapfile.c~mm-swap-enable-swap_entry_range_free-to-drop-any-kind-of-last-ref-fix
-> +++ a/mm/swapfile.c
-> @@ -1514,11 +1514,13 @@ fallback:
->   * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
->   * caller have to ensure all entries belong to the same cgroup and cluster.
->   */
-> +#ifdef CONFIG_DEBUG_VM
->  static inline bool swap_is_last_ref(unsigned char count)
->  {
->  	return (count == SWAP_HAS_CACHE) || (count == 1) ||
->  	       (count == SWAP_MAP_SHMEM);
->  }
-> +#endif
->  
->  static void swap_entries_free(struct swap_info_struct *si,
->  			      struct swap_cluster_info *ci,
-> _
+> kernel test robot noticed the following build errors:
+... 
+> >> drivers/base/node.c:115:5: error: redefinition of 'register_node_notifier'
+>      115 | int register_node_notifier(struct notifier_block *nb)
+>          |     ^
+>    include/linux/memory.h:172:19: note: previous definition is here
+>      172 | static inline int register_node_notifier(struct notifier_block *nb)
+>          |                   ^
+> >> drivers/base/node.c:121:6: error: redefinition of 'unregister_node_notifier'
+>      121 | void unregister_node_notifier(struct notifier_block *nb)
+>          |      ^
+>    include/linux/memory.h:176:20: note: previous definition is here
+>      176 | static inline void unregister_node_notifier(struct notifier_block *nb)
+>          |                    ^
+> >> drivers/base/node.c:127:5: error: redefinition of 'node_notify'
+>      127 | int node_notify(unsigned long val, void *v)
+>          |     ^
+>    include/linux/memory.h:179:19: note: previous definition is here
+>      179 | static inline int node_notify(unsigned long val, void *v)
+>          |                   ^
+>    3 errors generated.
 
-This makes my build fails when CONFIG_DEBUG_VM is unset as below.
+Ah, I see. When CONFIG_MEMORY_HOTPLUG=n those come into play.
+That is not a problem for the memory-notify thing because drivers/base/memory.c
+gets compiled IFF CONFIG_MEMORY_HOTPLUG=y.
+I am thinking two ways to fix this:
 
-    linux/mm/swapfile.c: In function ‘swap_entries_free’:
-    linux/mm/swapfile.c:1565:28: error: implicit declaration of function ‘swap_is_last_ref’; did you mean ‘swap_is_last_map’? [-Werror=implicit-function-declaration]
-     1565 |                 VM_BUG_ON(!swap_is_last_ref(*map));
-          |                            ^~~~~~~~~~~~~~~~
-    linux/include/linux/build_bug.h:30:63: note: in definition of macro ‘BUILD_BUG_ON_INVALID’
-       30 | #define BUILD_BUG_ON_INVALID(e) ((void)(sizeof((__force long)(e))))
-          |                                                               ^
-    linux/mm/swapfile.c:1565:17: note: in expansion of macro ‘VM_BUG_ON’
-     1565 |                 VM_BUG_ON(!swap_is_last_ref(*map));
-          |                 ^~~~~~~~~
-    cc1: some warnings being treated as errors
+ 1) Move the code for node-notify to drivers/base/memory.c
+ 2) Surround those functions within a
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ ...
+ #endif
 
-Maybe we can open-code the condition, or add a macro implementation of
-swap_is_last_ref() for !CONFIG_DEBUG_VM case?
+Thoughts? I lean towards option #2 as it looks cleaner to me:
+
+ diff --git a/drivers/base/node.c b/drivers/base/node.c
+ index 182c71dfb5b8..3b084d71888a 100644
+ --- a/drivers/base/node.c
+ +++ b/drivers/base/node.c
+ @@ -110,6 +110,7 @@ static const struct attribute_group *node_access_node_groups[] = {
+         NULL,
+  };
+  
+ +#ifdef CONFIG_MEMORY_HOTPLUG
+  static BLOCKING_NOTIFIER_HEAD(node_chain);
+  
+  int register_node_notifier(struct notifier_block *nb)
+ @@ -128,6 +129,7 @@ int node_notify(unsigned long val, void *v)
+  {
+         return blocking_notifier_call_chain(&node_chain, val, v);
+  }
+ +#endif
+  
+  static void node_remove_accesses(struct node *node)
+  {
 
 
-Thanks,
-SJ
 
-[...]
+-- 
+Oscar Salvador
+SUSE Labs
