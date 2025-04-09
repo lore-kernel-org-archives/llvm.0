@@ -1,50 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2841D1E1E13;
-	Wed,  9 Apr 2025 20:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353D121ABAB;
+	Wed,  9 Apr 2025 20:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744230154; cv=none; b=nJozpLyQGprHZP0YTCanNGRPx/ilK3LqRuBGaLMD1GiDdIuHkvpF1eioQUprQgKUUFt0T+etMNHDzZI+vxMonx4Gireqryeobuiu9jnqElCqEJqomLfgdkHghGa6vj0R8t6J88TjTwXDcPM+3qLEjIdqXByLOFT7jMVGs3ty0lk=
+	t=1744231080; cv=none; b=PFY6kKMh9amb4/yFdg3oGeRA4ZyK9wG1yGcBpHGoHPnQLv1yf166wR6tUoaA9gQmeFR84UcEy+0nGuECsM1PE/0wB0UcJDOguc2sfFIW+XsbIu3kOwc2UuenhY9uXOHlVjww6do14DF771aYynKXiMlZMMmqHCsRCZBHtqBtg/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744230154; c=relaxed/simple;
-	bh=OW/xgC8e9ub8XpLbqZUYjYmRTQcN1mckVDqHGAKK35E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WobBbLA4zUabhL2xH3rkmplom3b5z5k5tTfyKzxTefQxcx6Q6DbwK4QMAiv9ohSuwXXxmmD0WAYPXPiRSbfdyCU0XJ1e+++auD3xXfMZCSMoKWM6bXnV+w2w0ezOKh4TaP0ipMaS/W2tWI66ctVuEwW/fwIq+zGsPZr8W0YuSiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOnDX4dL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744231080; c=relaxed/simple;
+	bh=CAXSpAZiU5+MxLAENDKgnjCho9fYHTnR7g++cHgS9+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NPI2pB/bkg9CFeYn1UKcp20L1l1a8D+LMdCe3XmDEyVNmcrTM5CMFc/J7kFejqPNRc5PdetS3Kp45Z58RD5TaGGWLVvNqqlv0F6s2gao28pxzHhNBscyh+q7k0i6jiqp/tM/b5g/8IsDXSRrmfrRvPpBTnVdNZNYLcO0LtaH8qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nen5rwmR; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOnDX4dL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9ABEC4CEE2;
-	Wed,  9 Apr 2025 20:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744230154;
-	bh=OW/xgC8e9ub8XpLbqZUYjYmRTQcN1mckVDqHGAKK35E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dOnDX4dL4SGLCjmmI5inCI3tky45vog+GW7BluujDFAGcIzuLliJeKM9oA+gETqCj
-	 xevYQkZCw4EQXDdGCXJmii80h4myJYR6Zqfo1x3MIRxXWW/Ik8gfQaj2yYvlpNY5/h
-	 E7bf+8AmbVtJQPEhzvrbTFwB7oTwhM+AGvnQo1LGeo1gUqY82R89jO2rvNJxeYGAk1
-	 KwVRAa/fiyE9akNpveePfCzwQEysT3hEmNJO80bpNxfDCMeYX4tqwjzi84Bv4SUsPC
-	 jsnImVEqcdy451PBjJPJF5P4BfsRsbizhnr5ll8bzyVFx/3Jc2PXipTHGYcqP8rUnJ
-	 KwfCxpBPV52eQ==
-Date: Wed, 9 Apr 2025 13:22:28 -0700
-From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
-	kasan-dev@googlegroups.com, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] gcc-plugins: Remove SANCOV plugin
-Message-ID: <202504091322.A6EBAC8B@keescook>
-References: <20250409160251.work.914-kees@kernel.org>
- <32bb421a-1a9e-40eb-9318-d8ca1a0f407f@app.fastmail.com>
- <202504090919.6DE21CFA7A@keescook>
- <6f7e3436-8ae8-473d-be64-c962366ca5c8@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nen5rwmR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744231076; x=1775767076;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CAXSpAZiU5+MxLAENDKgnjCho9fYHTnR7g++cHgS9+8=;
+  b=Nen5rwmRJtbq+0g20VUUia7XoQ2CquEKHqF4Y1FJyFxna8I9+LWB+m45
+   nZ9oD2e0/CdqhXTB3vcEuJVOPf7zumEOY0QKwh641U9mM/YdXDQtHR7hJ
+   yB/EiNyxSqLt4hL6mOsD4L87r1B2osqX7QVQgPdTbOQHVeXPDn5FAExmQ
+   bUicv2Lzom35d1QcXRDMttu8kJGKaTvUYDFCIkPxuPkNfXf0lNwESAfs7
+   hlVuDmbhkoRTkChuvBaG9Px948RbtSdHPhP3txSGzwO6s6IiDl+IEyho1
+   HkZJasNlDsWkDWOSDZAtR1oL8sLNFXuGyM0hDeCwKFNDD89AvI0KSoEwt
+   A==;
+X-CSE-ConnectionGUID: qJxGxOc8QF6CS2moacWACw==
+X-CSE-MsgGUID: M7MbqDUqRNub0sXrI9OzuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45440842"
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="45440842"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 13:37:53 -0700
+X-CSE-ConnectionGUID: fFAD0BZaRO2bCpUgFFRSjQ==
+X-CSE-MsgGUID: tiNd9zcCTiO9agSiYdASag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="132829360"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 09 Apr 2025 13:37:51 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2cBB-0009I7-0X;
+	Wed, 09 Apr 2025 20:37:49 +0000
+Date: Thu, 10 Apr 2025 04:36:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 46/52]
+ drivers/pinctrl/pinctrl-amd.c:1213:26: error: use of undeclared identifier
+ 'pinctrl_amd_s2idle_dev_ops'
+Message-ID: <202504100420.88UPkUTU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,33 +64,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6f7e3436-8ae8-473d-be64-c962366ca5c8@app.fastmail.com>
 
-On Wed, Apr 09, 2025 at 09:28:22PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 9, 2025, at 18:19, Kees Cook wrote:
-> > On Wed, Apr 09, 2025 at 06:16:58PM +0200, Arnd Bergmann wrote:
-> >> On Wed, Apr 9, 2025, at 18:02, Kees Cook wrote:
-> >> 
-> >> >  config KCOV
-> >> >  	bool "Code coverage for fuzzing"
-> >> >  	depends on ARCH_HAS_KCOV
-> >> > -	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
-> >> > +	depends on CC_HAS_SANCOV_TRACE_PC
-> >> 
-> >> So this dependency would also disappear. I think either way is fine.
-> >> 
-> >> The rest of the patch is again identical to my version.
-> >
-> > Ah! How about you keep the patch as part of your gcc-8.1 clean up, then?
-> > That seems more clear, etc.
-> 
-> Sure, I can probably keep that all in a branch of the asm-generic
-> tree, or alternatively send it through the kbuild tree.
-> 
-> Shall I include the patch to remove the structleak plugin as well?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   089d4e79e2c932faef79e0061cb874000f755009
+commit: 179db1909c5c4b5300cce626507b0f843f7d2cc2 [46/52] pinctrl: amd: Add an LPS0 check() callback
+config: x86_64-buildonly-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250410/202504100420.88UPkUTU-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504100420.88UPkUTU-lkp@intel.com/reproduce)
 
-Sorry, I misread, *stackleak* needs to stay. structleak can go. I'll
-carry that.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504100420.88UPkUTU-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pinctrl/pinctrl-amd.c:1213:26: error: use of undeclared identifier 'pinctrl_amd_s2idle_dev_ops'
+    1213 |         acpi_register_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
+         |                                 ^
+   drivers/pinctrl/pinctrl-amd.c:1234:28: error: use of undeclared identifier 'pinctrl_amd_s2idle_dev_ops'
+    1234 |         acpi_unregister_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
+         |                                   ^
+   2 errors generated.
+
+
+vim +/pinctrl_amd_s2idle_dev_ops +1213 drivers/pinctrl/pinctrl-amd.c
+
+  1153	
+  1154		gpio_dev->pdev = pdev;
+  1155		gpio_dev->gc.get_direction	= amd_gpio_get_direction;
+  1156		gpio_dev->gc.direction_input	= amd_gpio_direction_input;
+  1157		gpio_dev->gc.direction_output	= amd_gpio_direction_output;
+  1158		gpio_dev->gc.get			= amd_gpio_get_value;
+  1159		gpio_dev->gc.set			= amd_gpio_set_value;
+  1160		gpio_dev->gc.set_config		= amd_gpio_set_config;
+  1161		gpio_dev->gc.dbg_show		= amd_gpio_dbg_show;
+  1162	
+  1163		gpio_dev->gc.base		= -1;
+  1164		gpio_dev->gc.label			= pdev->name;
+  1165		gpio_dev->gc.owner			= THIS_MODULE;
+  1166		gpio_dev->gc.parent			= &pdev->dev;
+  1167		gpio_dev->gc.ngpio			= resource_size(res) / 4;
+  1168	
+  1169		gpio_dev->hwbank_num = gpio_dev->gc.ngpio / 64;
+  1170		gpio_dev->groups = kerncz_groups;
+  1171		gpio_dev->ngroups = ARRAY_SIZE(kerncz_groups);
+  1172	
+  1173		amd_pinctrl_desc.name = dev_name(&pdev->dev);
+  1174		amd_get_iomux_res(gpio_dev);
+  1175		gpio_dev->pctrl = devm_pinctrl_register(&pdev->dev, &amd_pinctrl_desc,
+  1176							gpio_dev);
+  1177		if (IS_ERR(gpio_dev->pctrl)) {
+  1178			dev_err(&pdev->dev, "Couldn't register pinctrl driver\n");
+  1179			return PTR_ERR(gpio_dev->pctrl);
+  1180		}
+  1181	
+  1182		/* Disable and mask interrupts */
+  1183		amd_gpio_irq_init(gpio_dev);
+  1184	
+  1185		girq = &gpio_dev->gc.irq;
+  1186		gpio_irq_chip_set_chip(girq, &amd_gpio_irqchip);
+  1187		/* This will let us handle the parent IRQ in the driver */
+  1188		girq->parent_handler = NULL;
+  1189		girq->num_parents = 0;
+  1190		girq->parents = NULL;
+  1191		girq->default_type = IRQ_TYPE_NONE;
+  1192		girq->handler = handle_simple_irq;
+  1193	
+  1194		ret = gpiochip_add_data(&gpio_dev->gc, gpio_dev);
+  1195		if (ret)
+  1196			return ret;
+  1197	
+  1198		ret = gpiochip_add_pin_range(&gpio_dev->gc, dev_name(&pdev->dev),
+  1199					0, 0, gpio_dev->gc.ngpio);
+  1200		if (ret) {
+  1201			dev_err(&pdev->dev, "Failed to add pin range\n");
+  1202			goto out2;
+  1203		}
+  1204	
+  1205		ret = devm_request_irq(&pdev->dev, gpio_dev->irq, amd_gpio_irq_handler,
+  1206				       IRQF_SHARED | IRQF_COND_ONESHOT, KBUILD_MODNAME, gpio_dev);
+  1207		if (ret)
+  1208			goto out2;
+  1209	
+  1210		platform_set_drvdata(pdev, gpio_dev);
+  1211		acpi_register_wakeup_handler(gpio_dev->irq, amd_gpio_check_wake, gpio_dev);
+  1212	#ifdef CONFIG_ACPI
+> 1213		acpi_register_lps0_dev(&pinctrl_amd_s2idle_dev_ops);
+  1214	#endif
+  1215	
+  1216		dev_dbg(&pdev->dev, "amd gpio driver loaded\n");
+  1217		return ret;
+  1218	
+  1219	out2:
+  1220		gpiochip_remove(&gpio_dev->gc);
+  1221	
+  1222		return ret;
+  1223	}
+  1224	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
