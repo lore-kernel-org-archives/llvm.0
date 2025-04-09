@@ -1,92 +1,137 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E842905
-	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 00:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C66E29A0;
+	Wed,  9 Apr 2025 00:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744157716; cv=none; b=QbxPhRO1m8lkgDGExlDhAKP7fS4hmci4Buy/HbfmdPFCJ9HMwm2H38HK9U/oGrWQGxv95wv7DXN3UpWYFk0LC1YdMqecwS/uvOXagVdc384ymjqR+H/N7kDwjqPbIeYuUbFea8g+alr8hKvrb9LksseSsoxwFxDD9hEWAFPfskY=
+	t=1744159201; cv=none; b=C157Olr9MpFryc9TT8tEehnsjwlxbqG927KLfNCkMtngsgKGmTFR1r03ii7UcjKUNk+8/pJBip6a9mt5gFcGv52V1UnLZJwX2Y1T5vCki85XLiD0BhzCQv3JxtsYMWyYak2Dy/RnPum0oYn25h45I7/jxMqLxb1nKX8jvAE4hUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744157716; c=relaxed/simple;
-	bh=kzUr1f5PApCyyaQsNWZA+8T6s6ncUwpR5rXya9vt64M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gbsHWin7Oy8pc99+F2PeR6BmzcByF/HyaTYtpkfbEZmVBcw5oFOrl0iaTLK1tZ+3zsbrVXKyGq9wM72af5cC0PayEwc+rccoCVRN3u5lY7kNwLYVvNQ4OehFhwU+Q+w3qtj1HlnD90UD4XmsHjwKSjHzM8oQ9pNiSQnIyCsV1T0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=FcCqmNNs; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1744159201; c=relaxed/simple;
+	bh=ePBmpq2a4DMQiWyTZzEf6l0GwjldfvvKxuZRaNZTn0o=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Ntn5M+/Hb2/epvvT7MoXVuCajbs3Xxjx0I4oOoNjkLL+iVkOc2l2tJFPN6cmOG0pMaI5y/VqPvkV5ZtKkEI9b5yTXL9RHL1uxf4Oe0oc3vqbll66BCKgCRsQW9THqt7vIPw56tyKFipvGfOiNQ+RQBuYn9GWfco44BH0TKpyc6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QjYyByEc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="FcCqmNNs"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso381560a12.1
-        for <llvm@lists.linux.dev>; Tue, 08 Apr 2025 17:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1744157712; x=1744762512; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7RB+y2EUGP8TtBqM/TIRDMB8wrdZCpt37v8TqudoNA=;
-        b=FcCqmNNsCUz8Ji+DYIgj/Am7IBwO2Dayml2aQkG68Xgk38YPbS5PGpbEEe3hxQRUYq
-         KnWUOmDHiHNxOkSzdB/W4u6HMcvvjsrmxMqKZo2YaWmU/xA+uKrnxB7UadUNpyZOE4VJ
-         hJrvb2pgjxAsyh6LeGKUFnokylpYqzZ/h5Wko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744157712; x=1744762512;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y7RB+y2EUGP8TtBqM/TIRDMB8wrdZCpt37v8TqudoNA=;
-        b=nU6PUrMl/UXV9dskKZw4LHSVQ5oKmSHcOCw1luJoUwuMiJ/IYAAusghz8lEpBh8nhS
-         hYhAmfJ4j1iHQiTbciuCrjSQffcI+yQoPuWC1byNT1N7ZL23cPNrniJp61x6fjspzqyu
-         7yJVLmMY/KB0mvOQd3BhNdiGXD4/6SfRyRicMZmGYuXJPFzq6Aohq1v5gLkwjbzGiGZE
-         l2/QymqUWW/FbHxtOGkzpHgjCTtJUDJfx0vc7B2f+jjpRGL3FjnKw7y/7JroiU2VGSS0
-         i6fytbJLO4hHcToomGKWf5IDoDXzGfrE2RfGLmIpF6ftBFVlfyA/Gye21fc/y6BP8UzM
-         jNlg==
-X-Forwarded-Encrypted: i=1; AJvYcCUsl+K6sJh/P/uv6T9fwObLaj+ZvmUY8iWkCq7XqEZqAi0ka6hfwwYxd3mp52hLT1gtGqg2@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz70B2DNBBDyb59+y4r+0t3vU+hLVTesXJ5XqxnAG4yNoduKCdD
-	4FIC11tYRtVAY/paQjaS5bvjMhzddjXVJru9rINA/1xf6FcjJrP1pciTP4w7cAk14RrJKMavqWR
-	TDho=
-X-Gm-Gg: ASbGnctSedX1fzUJvZj24i4byJJ7n5kklLvbV3R/MjYyqiEUCyUAZo2oxvqu1YYw/jZ
-	uNNOaAOQGeqRl9zPs8k19Gjpu/8H5huW+1Z2Sj6CZAd9pQt6Q813srQaEDN8M2YPVq4Z7AcGjdo
-	ClrY8yFKaCQJfiyx7lxfjScWHdnR2BXYjjoxG9PbO9GXR9fgyS/boOjaJocZQxWqLU1fA48Z21G
-	tesYA0JhGSSWHZs35WQWNf5P/dvHKUJKi+ZNvcJjymYc14A+r/I5CBgwxgIgejFFeMUVDEoY4pZ
-	S7lpznECsG+b8u4Hfnji3v86wkGt8rozIdqAqKfsKZhKXiV67OGDKWDftGnCmXX85fjc5jNzCXd
-	h9Sr3apYPcZEcwDBJ+c8=
-X-Google-Smtp-Source: AGHT+IFJvKFBwqcUefkyawjXaeGWado30Cy5uKyb5l0yEiR8UT0zeo2lAx1lCJO+eCit9UhxI6ZkWw==
-X-Received: by 2002:a17:907:7e95:b0:ac8:1bb3:894 with SMTP id a640c23a62f3a-aca9c0175a1mr77478066b.7.1744157712367;
-        Tue, 08 Apr 2025 17:15:12 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7c013f358sm987738866b.110.2025.04.08.17.15.11
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 17:15:11 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac2a089fbbdso36352466b.1
-        for <llvm@lists.linux.dev>; Tue, 08 Apr 2025 17:15:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW2Q7NkaNa9uYreALq4+bsUZKWN6QIRiYgsCfMw1iMpjDSgOkEXJHc43sgdlk/VK049S1IC@lists.linux.dev
-X-Received: by 2002:a17:907:97ca:b0:ac3:ef17:f6f0 with SMTP id
- a640c23a62f3a-aca9bfb0d37mr81837666b.5.1744157710814; Tue, 08 Apr 2025
- 17:15:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QjYyByEc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7727BC4CEE5;
+	Wed,  9 Apr 2025 00:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1744159200;
+	bh=ePBmpq2a4DMQiWyTZzEf6l0GwjldfvvKxuZRaNZTn0o=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=QjYyByEc3E3N6AkWFipwvkl3ysx8PP88WA19yKHQ3uCvmPIHVE9v8I4X7XILpSQ17
+	 5puxONq23M0m5yAKXPRkXTudz++lyihLCuT61Oyk1olPZKGBlUlG9jryQAWz1saNcr
+	 cngyuLl06Qgx4WelEHGYQewj8nH9XHRxiqiT7f0I=
+Date: Tue, 8 Apr 2025 17:39:59 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Kemeng Shi <shikemeng@huaweicloud.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Linux Memory Management List
+ <linux-mm@kvack.org>, Tim Chen <tim.c.chen@linux.intel.com>, Baoquan He
+ <bhe@redhat.com>
+Subject: Re: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning:
+ function 'swap_is_last_ref' is not needed and will not be emitted
+Message-Id: <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
+In-Reply-To: <202504081841.jbL7yL0r-lkp@intel.com>
+References: <202504081841.jbL7yL0r-lkp@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20250407-fno-builtin-wcslen-v1-1-6775ce759b15@kernel.org> <202504081632.00837E7921@keescook>
-In-Reply-To: <202504081632.00837E7921@keescook>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 8 Apr 2025 17:14:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiN62aoWPkgRutvjKpxbXJdvgNNY0DqDc=9_r5FGUjfNA@mail.gmail.com>
-X-Gm-Features: ATxdqUEzxdv_c924M2x5edBsLVmXTsnFzfYKX1p8a7EiZ3toGIQu_4WxIx108FY
-Message-ID: <CAHk-=wiN62aoWPkgRutvjKpxbXJdvgNNY0DqDc=9_r5FGUjfNA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Add '-fno-builtin-wcslen'
-To: Kees Cook <kees@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 8 Apr 2025 at 16:33, Kees Cook <kees@kernel.org> wrote:
-> Since I have stuff queued for -rc2, do you want me to snag this too?
+On Tue, 8 Apr 2025 18:06:11 +0800 kernel test robot <lkp@intel.com> wrote:
 
-Well, since I felt so strongly about this one, I already took it...
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
+> commit: 6bb001b6b64ec20d900d0d81294a0f031af59c3e [1753/1936] mm: swap: enable swap_entry_range_free() to drop any kind of last ref
+> config: hexagon-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504081841.jbL7yL0r-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted [-Wunneeded-internal-declaration]
 
-           Linus
+It's annoying that gcc warns about this.
+
+>     1517 | static inline bool swap_is_last_ref(unsigned char count)
+>          |                    ^~~~~~~~~~~~~~~~
+>    1 warning generated.
+> 
+> 
+> vim +/swap_is_last_ref +1517 mm/swapfile.c
+> 
+>   1512	
+>   1513	/*
+>   1514	 * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
+>   1515	 * caller have to ensure all entries belong to the same cgroup and cluster.
+>   1516	 */
+> > 1517	static inline bool swap_is_last_ref(unsigned char count)
+>   1518	{
+>   1519		return (count == SWAP_HAS_CACHE) || (count == 1) ||
+>   1520		       (count == SWAP_MAP_SHMEM);
+>   1521	}
+>   1522	
+
+: static inline bool swap_is_last_ref(unsigned char count)
+: {
+: 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
+: 	       (count == SWAP_MAP_SHMEM);
+: }
+: 
+: static void swap_entries_free(struct swap_info_struct *si,
+: 			      struct swap_cluster_info *ci,
+: 			      swp_entry_t entry, unsigned int nr_pages)
+: {
+: 	unsigned long offset = swp_offset(entry);
+: 	unsigned char *map = si->swap_map + offset;
+: 	unsigned char *map_end = map + nr_pages;
+: 
+: 	/* It should never free entries across different clusters */
+: 	VM_BUG_ON(ci != offset_to_cluster(si, offset + nr_pages - 1));
+: 	VM_BUG_ON(cluster_is_empty(ci));
+: 	VM_BUG_ON(ci->count < nr_pages);
+: 
+: 	ci->count -= nr_pages;
+: 	do {
+: 		VM_BUG_ON(!swap_is_last_ref(*map));
+
+
+And it's annoying that VM_BUG_ON() doesn't reference its arg when
+CONFIG_DEBUG_VM=n.
+
+I'll add this:
+
+--- a/mm/swapfile.c~mm-swap-enable-swap_entry_range_free-to-drop-any-kind-of-last-ref-fix
++++ a/mm/swapfile.c
+@@ -1514,11 +1514,13 @@ fallback:
+  * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
+  * caller have to ensure all entries belong to the same cgroup and cluster.
+  */
++#ifdef CONFIG_DEBUG_VM
+ static inline bool swap_is_last_ref(unsigned char count)
+ {
+ 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
+ 	       (count == SWAP_MAP_SHMEM);
+ }
++#endif
+ 
+ static void swap_entries_free(struct swap_info_struct *si,
+ 			      struct swap_cluster_info *ci,
+_
+
+Kemeng, can you please review that comment "Drop the last ref...". 
+From its positioning it appears to be describing swap_is_last_ref(),
+but swap_is_last_ref() doesn't do those things.
+
