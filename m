@@ -1,179 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D5B2AE8C
-	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 02:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B913E7462;
+	Wed,  9 Apr 2025 02:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744165507; cv=none; b=Ht8PPA9FMF7REY6er3VRTULeTXbapgjAKcIVPwOi/cwFMiSPue1NHWpVelcmdQEV8sWqEnUAHHxdVyaUqVszdR6b9Fb5HH4GEwUJyKP8qMrVfTRr3f+0ZlQnSLHwBX3uCKoIs8ZT1LnHhAFH/LMuSZCHg+zio6n31+Ww6hyDIIU=
+	t=1744165959; cv=none; b=fUqdlENEyQHwOX1AdZTPgfnRLwNNDTSaD9AdcFhUJ2/pIyL+aNA57WndMDOoa+bbW1/YFAkVduqpHmlQO390yJAjlzXBDhY+EEl4QYpWxlSh7ZGDQoAIhPmGh8vNPKJ12R+qXM0rFj+ZHUiypGafYPP4uFLrWnqTifXp/8tUx0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744165507; c=relaxed/simple;
-	bh=3ToDU4qL2+ls7eBfZ00BuUUCVMF5z4UWw3lNs7pFcPw=;
+	s=arc-20240116; t=1744165959; c=relaxed/simple;
+	bh=HNQzH55xdd7zva6/lSq1EPnsmjcbuOwMgbzKhT9mwwI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=gzoES4sOLc6X7bwlQnJX+Ebh8bXB3J8LuheoyqADgTphARX/zWnAjGAfLX0j2fXhEwQhrBstuUunt63d7w4FaUKss0YkeY12Pz+IKaCo3odMFZxu36cqAUf5QNtqUdi8y2cje+4yO06W2bpHedQUZ+IGjbcbbYFBK21JnsRAmp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XG80HE1N; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=s/l/zaRjcw7t7yhP+DTvaKxNvah+qe1AYl/QMpuEDA4zjKIu6z49MGgZITAzFLlDWHTZSAK7aWxbsWdoysh9+QIpOHwFMXupqmuaZjT1Nb0e5/5VgUrMpr14JHhFprLOCxJQT6zfyGdRdxW6x9mbmsnNoC3WO2YB8podwTYdIkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BLXJYGO6; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XG80HE1N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744165503;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=viubT93gH39g0FQkvdGZnqOQNHK3ZEdHNZSdQRbLEBE=;
-	b=XG80HE1NGEk2mECVsZNsdoLity/PVdDeRaVW8afpalAM5qG0hxI6rGdJMtSKgkvCgjBM1G
-	L5wwE1VRqs9eH1wZzdkPDrzIgnE26yAfm22ygJsJbdzvk0e6huhMYPPFiCWJg38P2aOy+T
-	shyDgD7DpmX9y0ABbuXg37485U8skJ4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-543-2UVoF_rkM--J4w6KkhOSBw-1; Tue,
- 08 Apr 2025 22:24:59 -0400
-X-MC-Unique: 2UVoF_rkM--J4w6KkhOSBw-1
-X-Mimecast-MFC-AGG-ID: 2UVoF_rkM--J4w6KkhOSBw_1744165498
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CDEDD180049D;
-	Wed,  9 Apr 2025 02:24:57 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.61])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 15C963001D0E;
-	Wed,  9 Apr 2025 02:24:55 +0000 (UTC)
-Date: Wed, 9 Apr 2025 10:24:51 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Kemeng Shi <shikemeng@huaweicloud.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Tim Chen <tim.c.chen@linux.intel.com>
-Subject: Re: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning:
- function 'swap_is_last_ref' is not needed and will not be emitted
-Message-ID: <Z/Xac9o6acRutAvr@MiWiFi-R3L-srv>
-References: <202504081841.jbL7yL0r-lkp@intel.com>
- <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BLXJYGO6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744165958; x=1775701958;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HNQzH55xdd7zva6/lSq1EPnsmjcbuOwMgbzKhT9mwwI=;
+  b=BLXJYGO6KVxg8cpvYnFldfiVcG6S6FoncCdVsiXl9fqq/6sBkHqyynzc
+   kKEi+lRERMmM+M8gfKKvf4May57bmreOQREhHnvgJQbRyq1JsWDWAAtyL
+   Ckmw3WgrZO4nESx8ckpga0s1R+RQdKwzVG4KNgl4f8rADyUM00gNAJ20K
+   BBxJgOhb7xb9b4YdNExO8HuBP8kDQSMOaeWeOEs2qPwmKvxPjBYyffisq
+   3vUc//5e+pIs36fAN/WR3MsILP+vyR3BrBuNtzElMZ4NA8MxHsuxU0w8m
+   hzkFclgEj900Qm+p+rv8E6Cu7BhdYL0huJdG4QVngKdyQ6n/NpokGjxpy
+   g==;
+X-CSE-ConnectionGUID: 2oy5NhYKSmiBUokikUTKeg==
+X-CSE-MsgGUID: EhVd8t/ZR0WKJ0fWGJ95QA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="49465346"
+X-IronPort-AV: E=Sophos;i="6.15,199,1739865600"; 
+   d="scan'208";a="49465346"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 19:32:37 -0700
+X-CSE-ConnectionGUID: HxVzNHyGRLaAliAU/QAp8g==
+X-CSE-MsgGUID: Vwg69OLpTfmO4uwh4VNWDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,199,1739865600"; 
+   d="scan'208";a="151634019"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Apr 2025 19:32:33 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2LEt-0008CR-03;
+	Wed, 09 Apr 2025 02:32:31 +0000
+Date: Wed, 9 Apr 2025 10:32:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Anderson <sean.anderson@linux.dev>, netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, upstream@airoha.com,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Sean Anderson <sean.anderson@linux.dev>
+Subject: Re: [net-next PATCH v2 02/14] device property: Add optional
+ nargs_prop for get_reference_args
+Message-ID: <202504091059.k4s8cs0e-lkp@intel.com>
+References: <20250407231746.2316518-3-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 2c_sFSKki68lj7Tze3DAhne3V_8JrXOCWdZlD-KRpBo_1744165498
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250407231746.2316518-3-sean.anderson@linux.dev>
 
-On 04/08/25 at 05:39pm, Andrew Morton wrote:
-> On Tue, 8 Apr 2025 18:06:11 +0800 kernel test robot <lkp@intel.com> wrote:
-> 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
-> > commit: 6bb001b6b64ec20d900d0d81294a0f031af59c3e [1753/1936] mm: swap: enable swap_entry_range_free() to drop any kind of last ref
-> > config: hexagon-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/config)
-> > compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202504081841.jbL7yL0r-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-> 
-> It's annoying that gcc warns about this.
-> 
-> >     1517 | static inline bool swap_is_last_ref(unsigned char count)
-> >          |                    ^~~~~~~~~~~~~~~~
-> >    1 warning generated.
-> > 
-> > 
-> > vim +/swap_is_last_ref +1517 mm/swapfile.c
-> > 
-> >   1512	
-> >   1513	/*
-> >   1514	 * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
-> >   1515	 * caller have to ensure all entries belong to the same cgroup and cluster.
-> >   1516	 */
-> > > 1517	static inline bool swap_is_last_ref(unsigned char count)
-> >   1518	{
-> >   1519		return (count == SWAP_HAS_CACHE) || (count == 1) ||
-> >   1520		       (count == SWAP_MAP_SHMEM);
-> >   1521	}
-> >   1522	
-> 
-> : static inline bool swap_is_last_ref(unsigned char count)
-> : {
-> : 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
-> : 	       (count == SWAP_MAP_SHMEM);
-> : }
-> : 
-> : static void swap_entries_free(struct swap_info_struct *si,
-> : 			      struct swap_cluster_info *ci,
-> : 			      swp_entry_t entry, unsigned int nr_pages)
-> : {
-> : 	unsigned long offset = swp_offset(entry);
-> : 	unsigned char *map = si->swap_map + offset;
-> : 	unsigned char *map_end = map + nr_pages;
-> : 
-> : 	/* It should never free entries across different clusters */
-> : 	VM_BUG_ON(ci != offset_to_cluster(si, offset + nr_pages - 1));
-> : 	VM_BUG_ON(cluster_is_empty(ci));
-> : 	VM_BUG_ON(ci->count < nr_pages);
-> : 
-> : 	ci->count -= nr_pages;
-> : 	do {
-> : 		VM_BUG_ON(!swap_is_last_ref(*map));
-> 
-> 
-> And it's annoying that VM_BUG_ON() doesn't reference its arg when
-> CONFIG_DEBUG_VM=n.
-> 
-> I'll add this:
-> 
-> --- a/mm/swapfile.c~mm-swap-enable-swap_entry_range_free-to-drop-any-kind-of-last-ref-fix
-> +++ a/mm/swapfile.c
-> @@ -1514,11 +1514,13 @@ fallback:
->   * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
->   * caller have to ensure all entries belong to the same cgroup and cluster.
->   */
-> +#ifdef CONFIG_DEBUG_VM
->  static inline bool swap_is_last_ref(unsigned char count)
->  {
->  	return (count == SWAP_HAS_CACHE) || (count == 1) ||
->  	       (count == SWAP_MAP_SHMEM);
->  }
-> +#endif
->  
->  static void swap_entries_free(struct swap_info_struct *si,
->  			      struct swap_cluster_info *ci,
-> _
-> 
-> Kemeng, can you please review that comment "Drop the last ref...". 
-> From its positioning it appears to be describing swap_is_last_ref(),
-> but swap_is_last_ref() doesn't do those things.
+Hi Sean,
 
-Indeed, maybe below change can be squashed into above patch from Andrew.
+kernel test robot noticed the following build errors:
 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 2887ed5d34cc..baaf8ad29a6b 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1536,8 +1536,8 @@ static bool swap_entries_put_map_nr(struct swap_info_struct *si,
- }
- 
- /*
-- * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
-- * caller have to ensure all entries belong to the same cgroup and cluster.
-+ * Check if it's the last ref of swap entry in the freeing path.
-+ * Qualified vlaue includes 1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM.
-  */
- static inline bool swap_is_last_ref(unsigned char count)
- {
+[auto build test ERROR on net-next/main]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/dt-bindings-net-Add-Xilinx-PCS/20250408-072650
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250407231746.2316518-3-sean.anderson%40linux.dev
+patch subject: [net-next PATCH v2 02/14] device property: Add optional nargs_prop for get_reference_args
+config: riscv-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250409/202504091059.k4s8cs0e-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250409/202504091059.k4s8cs0e-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504091059.k4s8cs0e-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/property.c:1680:1: error: incompatible function pointer types initializing 'int (*)(const struct fwnode_handle *, const char *, const char *, int, unsigned int, struct fwnode_reference_args *)' with an expression of type 'int (const struct fwnode_handle *, const char *, const char *, unsigned int, unsigned int, struct fwnode_reference_args *)' [-Wincompatible-function-pointer-types]
+    1680 | DECLARE_ACPI_FWNODE_OPS(acpi_device_fwnode_ops);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/acpi/property.c:1669:25: note: expanded from macro 'DECLARE_ACPI_FWNODE_OPS'
+    1669 |                 .get_reference_args = acpi_fwnode_get_reference_args,   \
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/acpi/property.c:1681:1: error: incompatible function pointer types initializing 'int (*)(const struct fwnode_handle *, const char *, const char *, int, unsigned int, struct fwnode_reference_args *)' with an expression of type 'int (const struct fwnode_handle *, const char *, const char *, unsigned int, unsigned int, struct fwnode_reference_args *)' [-Wincompatible-function-pointer-types]
+    1681 | DECLARE_ACPI_FWNODE_OPS(acpi_data_fwnode_ops);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/acpi/property.c:1669:25: note: expanded from macro 'DECLARE_ACPI_FWNODE_OPS'
+    1669 |                 .get_reference_args = acpi_fwnode_get_reference_args,   \
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +1680 drivers/acpi/property.c
+
+99c63707bafd15 Sakari Ailus      2022-03-31  1650  
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1651  #define DECLARE_ACPI_FWNODE_OPS(ops) \
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1652  	const struct fwnode_operations ops = {				\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1653  		.device_is_available = acpi_fwnode_device_is_available, \
+146b4dbb0eef36 Sinan Kaya        2017-12-13  1654  		.device_get_match_data = acpi_fwnode_device_get_match_data, \
+8c756a0a2de17f Sakari Ailus      2022-03-31  1655  		.device_dma_supported =				\
+8c756a0a2de17f Sakari Ailus      2022-03-31  1656  			acpi_fwnode_device_dma_supported,		\
+8c756a0a2de17f Sakari Ailus      2022-03-31  1657  		.device_get_dma_attr = acpi_fwnode_device_get_dma_attr,	\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1658  		.property_present = acpi_fwnode_property_present,	\
+bb3914101f704a Rob Herring (Arm  2025-01-09  1659) 		.property_read_bool = acpi_fwnode_property_present,	\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1660  		.property_read_int_array =				\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1661  			acpi_fwnode_property_read_int_array,		\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1662  		.property_read_string_array =				\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1663  			acpi_fwnode_property_read_string_array,		\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1664  		.get_parent = acpi_node_get_parent,			\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1665  		.get_next_child_node = acpi_get_next_subnode,		\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1666  		.get_named_child_node = acpi_fwnode_get_named_child_node, \
+bc0500c1e43d95 Sakari Ailus      2019-10-03  1667  		.get_name = acpi_fwnode_get_name,			\
+e7e242bccb209b Sakari Ailus      2019-10-03  1668  		.get_name_prefix = acpi_fwnode_get_name_prefix,		\
+3e3119d3088f41 Sakari Ailus      2017-07-21  1669  		.get_reference_args = acpi_fwnode_get_reference_args,	\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1670  		.graph_get_next_endpoint =				\
+0ef7478639c516 Sakari Ailus      2018-07-17  1671  			acpi_graph_get_next_endpoint,			\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1672  		.graph_get_remote_endpoint =				\
+0ef7478639c516 Sakari Ailus      2018-07-17  1673  			acpi_graph_get_remote_endpoint,			\
+37ba983cfb47cc Sakari Ailus      2017-07-21  1674  		.graph_get_port_parent = acpi_fwnode_get_parent,	\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1675  		.graph_parse_endpoint = acpi_fwnode_graph_parse_endpoint, \
+99c63707bafd15 Sakari Ailus      2022-03-31  1676  		.irq_get = acpi_fwnode_irq_get,				\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1677  	};								\
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1678  	EXPORT_SYMBOL_GPL(ops)
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1679  
+db3e50f3234ba1 Sakari Ailus      2017-07-21 @1680  DECLARE_ACPI_FWNODE_OPS(acpi_device_fwnode_ops);
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1681  DECLARE_ACPI_FWNODE_OPS(acpi_data_fwnode_ops);
+db3e50f3234ba1 Sakari Ailus      2017-07-21  1682  const struct fwnode_operations acpi_static_fwnode_ops;
+9e987b70ada275 John Hubbard      2017-09-15  1683  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
