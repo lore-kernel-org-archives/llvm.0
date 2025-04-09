@@ -1,201 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CDD261581;
-	Wed,  9 Apr 2025 12:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686AF2566EA;
+	Wed,  9 Apr 2025 13:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744203241; cv=none; b=Fn9DFjiQHvhovJuqB1hUft95Qt1ytQgl3pzyoC4g2K0MCAF9eG9yFoVLqGgkV/ixtYAtF2IY4vRKR9t5mXrHnhXDONLSFha7vSHi712gzzOxbmnqQchhlOykLKAE422HuvdGVkxRgroX6gi+r/gkKowh7VrIkjMy8xKtHUy9Orw=
+	t=1744203840; cv=none; b=cp/mD3fYvGYmjskcKSqqVb2mR1AE0AdZJvWpX7yd5oxT7wmZ+tHyAfu9OAxdgkOsnDn3yzJueAq2qUomKaw6O15KBnmJHSDRDLYn1QwAirP4msvbdwW0+fhOC4a/K6MAETlweSWgaV/UJZgQ/9dshWUSZVMp0C6vPSxXMzmxitE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744203241; c=relaxed/simple;
-	bh=ypksjqm+QzQfj7CuKb6/FMj77al+HdwGkfKJTOLPGTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Yte6+7gTNH1Xrlf9nI/1MhdyNNY5z39V307iKu1pjNe31z6zs4TKydJDPCSIgRgXXvhaG5yprboOPfXDauq5wT9UEQKSpe1F5DKBSlZwu5YlG5OLic9cdE5Y0As3G/CjHQI+rJ1g9bwNmkmydfkFlChd7kMzxmspA8bdDc0Q7X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9kV88W1; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1744203840; c=relaxed/simple;
+	bh=G99UARn16SMWc5vbkOT1x7AFPIP6fcqJcrFL2Pj3SrI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DtrNZILrcUofke6PSTBz0w3d6E5+a9Bu9N3OBnGyWVnmXmiLXuF0IPJ4PWXC9A625udZQcDsVK8iwaf8r+hb1fln8CjVCOAFP+oldZ2f1jhaoOXjTMMKrbWvlAKUlPk4dU0iGdrv5tfQcjLyDBbbXf8K9SvIMQvxGT6w/J4sZFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pidj+epS; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9kV88W1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pidj+epS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744203240; x=1775739240;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ypksjqm+QzQfj7CuKb6/FMj77al+HdwGkfKJTOLPGTU=;
-  b=d9kV88W1D4uOddKMCd+QWq/rFWASVAcdB+EmrPDm80dK5FLlElLf/D0H
-   dX+nrQ3nSAurNL+pP9ZErLWhQxPVo9fzQpuP3XFl5SbqdIjMpDvF4p2pF
-   4BqSAEa0ZZwkDZBs+dPIUSpbAszlVj4tcspniLgdvNDLJnSocBxYwSKFj
-   lMx3tzsiebHppYGmWKlp5Cp+z6OLJ1efhno00VhtMjhe5JqBya7nFeGAv
-   Hd8Xtv1ZuPVwHdN7JWSwPXfTLPcGhoCPTbv0SyMZbHpK4BPQ7JiVYpweB
-   NFc6JkKAHEb1LoWV2EcptHPLTliab4YAdJ0aG6rVbJK78HSIk8p8yFfpG
+  t=1744203838; x=1775739838;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=G99UARn16SMWc5vbkOT1x7AFPIP6fcqJcrFL2Pj3SrI=;
+  b=Pidj+epSROsbPTGbFCqzgMXjjjWqMe9SP/o3IRavJ/awWcMD3FntycWO
+   FY/CS0afANkvfrUygK+TwruuqTbtW+1f4X9/AsW52niWXYJLPqEPaaXwX
+   TAUZf8LRGZp0A++hgSC8c+oQJGeOIpXw0n15Mg083trc190BZ8TuE3qfO
+   h6sh9fwf6BTovsGwBSTs/ga+awayKpF2L4DLnNTVTKXnkuBhHwk1VzvV0
+   AQRyUiFHPr7anW3gx3TgxTF+s8LDu8mCMCW5ddf4/efL/Gw6ChP9xv0au
+   y+HxKmfR2rv6b1YvJUZgj9M8nv0c5avostfBAuz2xIIwx0Z9UjLaxUy5r
    w==;
-X-CSE-ConnectionGUID: p8+Bh1IeTrK00BYM3E6UJQ==
-X-CSE-MsgGUID: WMbVwIL4RkSf8lYY0hxZHQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="57046448"
+X-CSE-ConnectionGUID: s/YopYNoS+q14awkzzrukA==
+X-CSE-MsgGUID: CWhp8SunR0yizsLyOEccmg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45392320"
 X-IronPort-AV: E=Sophos;i="6.15,200,1739865600"; 
-   d="scan'208";a="57046448"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 05:53:56 -0700
-X-CSE-ConnectionGUID: 0PBpHnfPQRKtM5VnI5Uajw==
-X-CSE-MsgGUID: BXJCWsa+QAaLVGHXMEkeBA==
+   d="scan'208";a="45392320"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 06:03:58 -0700
+X-CSE-ConnectionGUID: wbfpDgBSTvmvdwDxAU5QVw==
+X-CSE-MsgGUID: jwQekO8HQeKzMrwhI7j+ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,200,1739865600"; 
-   d="scan'208";a="129095068"
+   d="scan'208";a="133716331"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Apr 2025 05:53:55 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 09 Apr 2025 06:03:56 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u2UwD-0008rJ-1n;
-	Wed, 09 Apr 2025 12:53:53 +0000
-Date: Wed, 9 Apr 2025 20:53:10 +0800
+	id 1u2V5u-0008rr-1X;
+	Wed, 09 Apr 2025 13:03:54 +0000
+Date: Wed, 9 Apr 2025 21:03:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ast-bpf:trylock 7/7] mm/slub.c:4678:7: warning: variable 'cnt' set
- but not used
-Message-ID: <202504092003.65HDGAwY-lkp@intel.com>
+Subject: Re: [PATCH RFC RFT] usb: hcd: Add a usb_device argument to
+ hc_driver.endpoint_reset()
+Message-ID: <202504092028.5gUc0LTS-lkp@intel.com>
+References: <20250408121817.6ae8defd@foxbook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250408121817.6ae8defd@foxbook>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git trylock
-head:   b334401991656ee5bb5bc3c042e35cef5820252f
-commit: b334401991656ee5bb5bc3c042e35cef5820252f [7/7] slab: Introduce try_kmalloc() and kfree_nolock().
-config: riscv-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250409/202504092003.65HDGAwY-lkp@intel.com/config)
+Hi Michał,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.15-rc1 next-20250409]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Pecio/usb-hcd-Add-a-usb_device-argument-to-hc_driver-endpoint_reset/20250408-182312
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250408121817.6ae8defd%40foxbook
+patch subject: [PATCH RFC RFT] usb: hcd: Add a usb_device argument to hc_driver.endpoint_reset()
+config: arm64-randconfig-002-20250409 (https://download.01.org/0day-ci/archive/20250409/202504092028.5gUc0LTS-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250409/202504092003.65HDGAwY-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250409/202504092028.5gUc0LTS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504092003.65HDGAwY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504092028.5gUc0LTS-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/slub.c:4678:7: warning: variable 'cnt' set but not used [-Wunused-but-set-variable]
-    4678 |         long cnt = 0;
-         |              ^
-   1 warning generated.
+>> drivers/usb/dwc2/hcd.c:5004:20: error: incompatible function pointer types initializing 'void (*)(struct usb_hcd *, struct usb_device *, struct usb_host_endpoint *)' with an expression of type 'void (struct usb_hcd *, struct usb_host_endpoint *)' [-Wincompatible-function-pointer-types]
+    5004 |         .endpoint_reset = _dwc2_hcd_endpoint_reset,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/cnt +4678 mm/slub.c
+vim +5004 drivers/usb/dwc2/hcd.c
 
-  4673	
-  4674	#ifndef CONFIG_SLUB_TINY
-  4675	static void free_deferred_objects(struct llist_head *llhead)
-  4676	{
-  4677		struct llist_node *llnode, *pos, *t;
-> 4678		long cnt = 0;
-  4679	
-  4680		if (likely(llist_empty(llhead)))
-  4681			return;
-  4682	
-  4683		llnode = llist_del_all(llhead);
-  4684		llist_for_each_safe(pos, t, llnode) {
-  4685			kfree(pos);
-  4686			cnt++;
-  4687		}
-  4688	}
-  4689	/*
-  4690	 * Fastpath with forced inlining to produce a kfree and kmem_cache_free that
-  4691	 * can perform fastpath freeing without additional function calls.
-  4692	 *
-  4693	 * The fastpath is only possible if we are freeing to the current cpu slab
-  4694	 * of this processor. This typically the case if we have just allocated
-  4695	 * the item before.
-  4696	 *
-  4697	 * If fastpath is not possible then fall back to __slab_free where we deal
-  4698	 * with all sorts of special processing.
-  4699	 *
-  4700	 * Bulk free of a freelist with several objects (all pointing to the
-  4701	 * same slab) possible by specifying head and tail ptr, plus objects
-  4702	 * count (cnt). Bulk free indicated by tail pointer being set.
-  4703	 */
-  4704	static __always_inline void do_slab_free(struct kmem_cache *s,
-  4705					struct slab *slab, void *head, void *tail,
-  4706					int cnt, unsigned long addr)
-  4707	{
-  4708		struct kmem_cache_cpu *c;
-  4709		unsigned long tid;
-  4710		void **freelist;
-  4711	
-  4712	redo:
-  4713		/*
-  4714		 * Determine the currently cpus per cpu slab.
-  4715		 * The cpu may change afterward. However that does not matter since
-  4716		 * data is retrieved via this pointer. If we are on the same cpu
-  4717		 * during the cmpxchg then the free will succeed.
-  4718		 */
-  4719		c = raw_cpu_ptr(s->cpu_slab);
-  4720		tid = READ_ONCE(c->tid);
-  4721	
-  4722		/* Same with comment on barrier() in __slab_alloc_node() */
-  4723		barrier();
-  4724	
-  4725		if (unlikely(slab != c->slab)) {
-  4726			/* cnt == 0 signals that it's called from kfree_nolock() */
-  4727			if (unlikely(!cnt)) {
-  4728				/*
-  4729				 * Use llist in cache_node ?
-  4730				 * struct kmem_cache_node *n = get_node(s, slab_nid(slab));
-  4731				 */
-  4732				/*
-  4733				 * __slab_free() can locklessly cmpxchg16 into a slab,
-  4734				 * but then it might need to take spin_lock or local_lock
-  4735				 * in put_cpu_partial() for further processing.
-  4736				 * Avoid the complexity and simply add to a deferred list.
-  4737				 */
-  4738				llist_add(head, &s->defer_free_objects);
-  4739			} else {
-  4740				free_deferred_objects(&s->defer_free_objects);
-  4741				__slab_free(s, slab, head, tail, cnt, addr);
-  4742			}
-  4743			return;
-  4744		}
-  4745	
-  4746		if (USE_LOCKLESS_FAST_PATH()) {
-  4747			freelist = READ_ONCE(c->freelist);
-  4748	
-  4749			set_freepointer(s, tail, freelist);
-  4750	
-  4751			if (unlikely(!__update_cpu_freelist_fast(s, freelist, head, tid))) {
-  4752				note_cmpxchg_failure("slab_free", s, tid);
-  4753				goto redo;
-  4754			}
-  4755		} else {
-  4756			/* Update the free list under the local lock */
-  4757			local_lock(&s->cpu_slab->lock);
-  4758			c = this_cpu_ptr(s->cpu_slab);
-  4759			if (unlikely(slab != c->slab)) {
-  4760				local_unlock(&s->cpu_slab->lock);
-  4761				goto redo;
-  4762			}
-  4763			tid = c->tid;
-  4764			freelist = c->freelist;
-  4765	
-  4766			set_freepointer(s, tail, freelist);
-  4767			c->freelist = head;
-  4768			c->tid = next_tid(tid);
-  4769	
-  4770			local_unlock(&s->cpu_slab->lock);
-  4771		}
-  4772		if (unlikely(!cnt))
-  4773			cnt = 1;
-  4774		stat_add(s, FREE_FASTPATH, cnt);
-  4775	}
-  4776	#else /* CONFIG_SLUB_TINY */
-  4777	static void do_slab_free(struct kmem_cache *s,
-  4778					struct slab *slab, void *head, void *tail,
-  4779					int cnt, unsigned long addr)
-  4780	{
-  4781		__slab_free(s, slab, head, tail, cnt, addr);
-  4782	}
-  4783	#endif /* CONFIG_SLUB_TINY */
-  4784	
+ca8b03324877e1 drivers/usb/dwc2/hcd.c     Chen Yu          2017-01-23  4990  
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4991  static struct hc_driver dwc2_hc_driver = {
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4992  	.description = "dwc2_hsotg",
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4993  	.product_desc = "DWC OTG Controller",
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4994  	.hcd_priv_size = sizeof(struct wrapper_priv_data),
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4995  
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4996  	.irq = _dwc2_hcd_irq,
+8add17cf8e4c55 drivers/usb/dwc2/hcd.c     Douglas Anderson 2016-01-28  4997  	.flags = HCD_MEMORY | HCD_USB2 | HCD_BH,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4998  
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  4999  	.start = _dwc2_hcd_start,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5000  	.stop = _dwc2_hcd_stop,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5001  	.urb_enqueue = _dwc2_hcd_urb_enqueue,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5002  	.urb_dequeue = _dwc2_hcd_urb_dequeue,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5003  	.endpoint_disable = _dwc2_hcd_endpoint_disable,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11 @5004  	.endpoint_reset = _dwc2_hcd_endpoint_reset,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5005  	.get_frame_number = _dwc2_hcd_get_frame_number,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5006  
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5007  	.hub_status_data = _dwc2_hcd_hub_status_data,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5008  	.hub_control = _dwc2_hcd_hub_control,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5009  	.clear_tt_buffer_complete = _dwc2_hcd_clear_tt_buffer_complete,
+99a657983a1e03 drivers/usb/dwc2/hcd.c     Gregory Herrero  2015-04-29  5010  
+99a657983a1e03 drivers/usb/dwc2/hcd.c     Gregory Herrero  2015-04-29  5011  	.bus_suspend = _dwc2_hcd_suspend,
+99a657983a1e03 drivers/usb/dwc2/hcd.c     Gregory Herrero  2015-04-29  5012  	.bus_resume = _dwc2_hcd_resume,
+3bc04e28a030a8 drivers/usb/dwc2/hcd.c     Douglas Anderson 2016-01-28  5013  
+3bc04e28a030a8 drivers/usb/dwc2/hcd.c     Douglas Anderson 2016-01-28  5014  	.map_urb_for_dma	= dwc2_map_urb_for_dma,
+3bc04e28a030a8 drivers/usb/dwc2/hcd.c     Douglas Anderson 2016-01-28  5015  	.unmap_urb_for_dma	= dwc2_unmap_urb_for_dma,
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5016  };
+7359d482eb4d39 drivers/staging/dwc2/hcd.c Paul Zimmerman   2013-03-11  5017  
 
 -- 
 0-DAY CI Kernel Test Service
