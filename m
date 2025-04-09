@@ -1,98 +1,126 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759081E25F2;
-	Wed,  9 Apr 2025 19:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490871E47B7
+	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 19:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744226739; cv=none; b=KDtObWnR10rQC9u5LbNcaGlqPl/g9s55NFcpzvpXqWeYsSaJ97A8gVkcyr8RPEi6C88NLiYuwKYiJorQ7HhK9EuHy/ZnyNseintzGMSPNqmBFcWxKtR06kQ0/INGLtjlAmOduy7Jd/tb83sQ/ZNycfgyBDyEZ8a1xOQ1zuCRJe0=
+	t=1744226975; cv=none; b=M3l8BNst1MO8jmcWrcbcm/PlQoaqUFcmdeBC4FEi/5XlyAhG4gL1WoY/Hm4Zj/EhWq+lhaD/xBBL2cBEq4PXfVRSgcQY+TndYWRQL7GzEPlDHUYcsON2T1GlVS4LuxE40K7QPUyjG4naDda3nGF0X0A5N9xWp4A4JlQPIqaYfcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744226739; c=relaxed/simple;
-	bh=Ysj3nuOh7CwY62QEP9McBgLiwll5Fv8qypJTov/oVpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WkUQqIjLJxuBEiH1XdCz9Dbb10uunhTGXSh/x3kiPCpFHbXolQtZD5Xy7hp8vAHQVVMz11PcMdJ8RRszV320ULQm/9QcJFZjd0l4OCstMA1DlsRUanWZNvwyQUcYDnyIj4H0t+OTia6b3HmkeK0V685B7cAlXiCjIQqO121lX7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19F3E15A1;
-	Wed,  9 Apr 2025 12:25:37 -0700 (PDT)
-Received: from bogus (unknown [10.57.41.33])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B72F83F694;
-	Wed,  9 Apr 2025 12:25:34 -0700 (PDT)
-Date: Wed, 9 Apr 2025 20:25:31 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [rafael-pm:bleeding-edge 39/52]
- drivers/acpi/apei/einj-core.c:877:43: error: expected identifier
-Message-ID: <20250409-wine-swift-of-tempest-eae2cb@sudeepholla>
-References: <202504100128.AjbVDQgK-lkp@intel.com>
+	s=arc-20240116; t=1744226975; c=relaxed/simple;
+	bh=/33JDmW+PxsRyF3vd7Wh4tmmtBi36TC/ft8P/UrztgY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=dzIaFyqz1uAMXTvqpMAzqQgjuI9LQr1rrQ3JMtylYmcVooDAmEfUBMDeZHF4Ly5O/pkMLInG0em+73+EcmVOtCar4XymB3P8tVZlK6hhZGYEpCeFAJ6S96LvL0bllaCiRx/mf+yyjKxxxwVFK/6xDa1HK8IhyfJuGWeB5TgIbxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SZVS2X+S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MGt2wZC/; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SZVS2X+S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MGt2wZC/"
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 54F9D11401DF;
+	Wed,  9 Apr 2025 15:29:32 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-12.internal (MEProxy); Wed, 09 Apr 2025 15:29:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1744226972;
+	 x=1744313372; bh=7LeM8fTejAmZLunIFrf51zCFnY/PxkuNIPidaV8t9E8=; b=
+	SZVS2X+SXF/xI6ETW3YUrp1+nOPW3P3YCOXZsI99XSr4Oq0Bx+9o7wOiPyN9BUf5
+	QTTHK6Q5a30QD2kDE1P5bPi7NwKIepgeEyVeIlW7EaXedIJtXBITlVxx/88PHYH1
+	/pxoUji0xkGcF1viRLTQr3Wx7O8rRFgr7iup/SYaSgjn+8UWE6HpivjnTcbg57Bd
+	309apBy/Tzg/R5lJ/dxRZikefqgcx13YFwERlPRWVu0F+sCxAHM3QlynzVpj3K3a
+	UjCRcOD2FplJBSsDIVmz6RiTzqadQJcUf3XyqXWPSQjZZ0+sArIIflMj0+OqO10F
+	bBG9mB82FLJx72sGPDKVcA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1744226972; x=
+	1744313372; bh=7LeM8fTejAmZLunIFrf51zCFnY/PxkuNIPidaV8t9E8=; b=M
+	Gt2wZC/Vedbg9H8OvDlh2J9HdQS9iF+dB5FYV520GjIY5bCcUKhBIejDGcL3YPwN
+	g0cPxl8uOwJaQ9OXZj1dep4PSZ2TZIJRJfPsIlSwwK7J7PkIR0EsTfZggMJDLaVb
+	5vvqLlchL5Mdqk1BNazl0+hXk25oyc8wtXkzFJ2lusR+jtKgryNfRyZiJL63q1Ah
+	A5K461r4GiDKHIYmaeg0e86RTU8lpnbt4Pwjiri0xRIYkrzj2PcXp1Qeh2uCDhrq
+	tIbYZsoCqrFLZV6zSZFU4OBx6muOKrCDkv9BeoLhIyJDFuggQtsXpQmj7PgvNLmr
+	V4E7gVKSY5tXEd8K5wykQ==
+X-ME-Sender: <xms:m8r2Z4IDKxBcEDfYGDYslx0jUkXueEdDQvXueMqzKLgGxpukJDjZLA>
+    <xme:m8r2Z4JmRcd0bWpheClZBW7M-qrnMDGY_tTENCYN2lm3Ttlyo4W2PVq_dGT2jclFj
+    M34ezDpy7nx5I609no>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeikeegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    udegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnihgtohhlrghssehfjhgrsh
+    hlvgdrvghupdhrtghpthhtoheprghnughrvgihkhhnvhhlsehgmhgrihhlrdgtohhmpdhr
+    tghpthhtohepughvhihukhhovhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhush
+    htihhnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepkhgrshgrnhdquggvvhesghhoohhglhgvghhroh
+    huphhsrdgtohhmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehmrghsrghhihhrohihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthh
+    grnheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:m8r2Z4vJ3WXAHXrvKXd5B3xKv4UAtE2V-BrbJEZAyq1B4dzTfpijvA>
+    <xmx:m8r2Z1YeiT1XCtilSnIsx6V2-MzbggW-b6mGOWfQy9AEZpRDFmlT5A>
+    <xmx:m8r2Z_byLixda4QM1ei16kxOQ2Y7JUi5RRFxBC3Vzf0ThsHM5YccDg>
+    <xmx:m8r2ZxAT9c3e6CGKtCSEv5jY1K8fvNyLiQKw-tehgk1U77NzNctBFg>
+    <xmx:nMr2Z5lFihtWtcgwl8O9IIHMPAftIujBP4HeUpKPp9ywwLH-kGjpPnka>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7B78D2220073; Wed,  9 Apr 2025 15:29:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202504100128.AjbVDQgK-lkp@intel.com>
+X-ThreadId: T654dc7563e4388c4
+Date: Wed, 09 Apr 2025 21:28:22 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Kees Cook" <kees@kernel.org>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>, "Dmitry Vyukov" <dvyukov@google.com>,
+ "Andrey Konovalov" <andreyknvl@gmail.com>, linux-kbuild@vger.kernel.org,
+ linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <6f7e3436-8ae8-473d-be64-c962366ca5c8@app.fastmail.com>
+In-Reply-To: <202504090919.6DE21CFA7A@keescook>
+References: <20250409160251.work.914-kees@kernel.org>
+ <32bb421a-1a9e-40eb-9318-d8ca1a0f407f@app.fastmail.com>
+ <202504090919.6DE21CFA7A@keescook>
+Subject: Re: [PATCH] gcc-plugins: Remove SANCOV plugin
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 10, 2025 at 02:10:04AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> head:   089d4e79e2c932faef79e0061cb874000f755009
-> commit: 4ec052af63c58a62a896508cc5f8a0a2f516a590 [39/52] ACPI: APEI: EINJ: Transition to the faux device interface
-> config: x86_64-buildonly-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250410/202504100128.AjbVDQgK-lkp@intel.com/config)
-> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504100128.AjbVDQgK-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202504100128.AjbVDQgK-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/acpi/apei/einj-core.c:877:43: error: expected identifier
->      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
->          |                                           ^
->    include/linux/init.h:397:21: note: expanded from macro '__exit_p'
->      397 | #define __exit_p(x) NULL
->          |                     ^
->    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
->        8 | #define NULL ((void *)0)
->          |              ^
-> >> drivers/acpi/apei/einj-core.c:877:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
->      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
->          | ^
->          | int
-> >> drivers/acpi/apei/einj-core.c:877:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
->      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
->          |                   ^                                                  
->          |                                                                      void
->    3 errors generated.
-> 
-> 
-> vim +877 drivers/acpi/apei/einj-core.c
-> 
->    876	
->  > 877	module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remove), true);
->    878	
+On Wed, Apr 9, 2025, at 18:19, Kees Cook wrote:
+> On Wed, Apr 09, 2025 at 06:16:58PM +0200, Arnd Bergmann wrote:
+>> On Wed, Apr 9, 2025, at 18:02, Kees Cook wrote:
+>> 
+>> >  config KCOV
+>> >  	bool "Code coverage for fuzzing"
+>> >  	depends on ARCH_HAS_KCOV
+>> > -	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
+>> > +	depends on CC_HAS_SANCOV_TRACE_PC
+>> 
+>> So this dependency would also disappear. I think either way is fine.
+>> 
+>> The rest of the patch is again identical to my version.
 >
+> Ah! How about you keep the patch as part of your gcc-8.1 clean up, then?
+> That seems more clear, etc.
 
-The macro module_faux_driver() was not merged as most of the users I
-posted in v2 of the series depend on modprobe and modalias and that
-doesn't work with faux devices.
+Sure, I can probably keep that all in a branch of the asm-generic
+tree, or alternatively send it through the kbuild tree.
 
-If this ACPI APEI EINJ also needs that support we can't use faux device.
-But I think this doesn't have modalias, so v1 of this change[1] which
-doesn't  introduce/use the macro module_faux_driver() can be used instead.
+Shall I include the patch to remove the structleak plugin as well?
 
-Sorry for the noise with v2.
-
--- 
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/all/20250317-plat2faux_dev-v1-8-5fe67c085ad5@arm.com/
+       Arnd
