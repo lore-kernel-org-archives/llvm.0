@@ -1,148 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE3C27701E
-	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 18:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB66E25DD0E;
+	Wed,  9 Apr 2025 19:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744223378; cv=none; b=t6V/hfB7/vc0Ztx+4JYcPgRSDga/2HaEEEy4kjjFP1yHNMD391oE/BXMtDkEJEOLwB/2b02h2gqPm13oCRU1y1jIPvroBd0KYYtgul4hUBdarbC0HToOzeA+87/QsM4HsIny+Nl1hnvcMdnqHt8wKSIKjC2Cx18SZYlRR62Zd6M=
+	t=1744225424; cv=none; b=mNMdvB2ovA1GsQeFwB7uVJFo1vc5Qcd8aY4ZHtCF7WdxZY7s0nXW6wx17zLgzFU5WKpqFcNVAkQdivgMmBBGw2ciyeIAHDuVnrrFhBpZRFdSHahDfa4wKGXAez9H31u0y0cZZNscC16TEFmz97nIhi47tasDaoXQmvktJY9Mmw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744223378; c=relaxed/simple;
-	bh=XjMuS67xjDtuXFVkxS/Yl4HEwhfGPgBq+HWzq93mKC0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=stw8Mf7XGDhYD+tdtJL9vhJPI1HRX5Qnqeffb6mwNPrCSNHnPfcPdP0rCUWlnk5f0kLStehsjEon2ta3z3ff+kfZkC5ej1FU5XqiQqoLi8uH8ILfZyjlUJb6AaVY7Rxwr3Ce249ApZXSDBMRmJgB4YhJWDOcXuTec8kQ6jPkDvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vde3W33F; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744225424; c=relaxed/simple;
+	bh=5RI7XzZpLuIxdNbstAilg7SNq3t9eP/hJt/0NSSzUkc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C3dHpa2XcpDK45aP6+HynD52JGG+zTm47OyePv5eg+/hULmOWo+P9sbwXj32BtwgQ8CpZxPWiXORNBKS6g+G/yXulKbN91ZIw/XV/pyr0CLhs/eEY42NTy+bkCBniUztmIzV/5R7dppXmG6kYKhzHMPbhpe5VDp/gRjsTp111TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmMb65BZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vde3W33F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744223377; x=1775759377;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XjMuS67xjDtuXFVkxS/Yl4HEwhfGPgBq+HWzq93mKC0=;
-  b=Vde3W33FEI7qtxiGQs9NXFo2njzVF/jygrPG1oi+sHEU3JOu5nxd/gxj
-   BffomcyMH0s6e6OgaGKn4UlE+WBxQXP731af9/L1tTlGtcQXPbgp2qftH
-   e5xTB29Eu0o1vhxuf6tllOUdQOIQKsewPBHKxF9q0txIy7feMlZ51/3Ak
-   8bFUFscSy0+ynDpr3xG7kSXMo7De19LKYXtCoPreGFIDHUk1lIw/yKIoR
-   +G2Mf295K20/zIhfIoMyuollbSWlroGyxSxSTjRvf5jUcOch187QAby62
-   hs+rL84VeqXjbh8EpkjRNmgSjJVVSLKiVvk1+SHoJ6X2X9wA/bTAu1UDX
-   w==;
-X-CSE-ConnectionGUID: SREvcCFfReCKftDCqwx3LQ==
-X-CSE-MsgGUID: HE+ryTQ5QEO40U/qawF6VQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45429970"
-X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
-   d="scan'208";a="45429970"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 11:29:36 -0700
-X-CSE-ConnectionGUID: OYu0cAbzScCswQ/sr0tt1w==
-X-CSE-MsgGUID: Wx9F5wsaQd2PJHrJj+iwYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
-   d="scan'208";a="159629133"
-Received: from sramkris-mobl1.amr.corp.intel.com (HELO [10.124.220.195]) ([10.124.220.195])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 11:29:32 -0700
-Message-ID: <fe8192a9-02ba-40c9-9ba9-8582547cd3f4@intel.com>
-Date: Wed, 9 Apr 2025 11:29:30 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmMb65BZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA325C4CEE2;
+	Wed,  9 Apr 2025 19:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744225422;
+	bh=5RI7XzZpLuIxdNbstAilg7SNq3t9eP/hJt/0NSSzUkc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=HmMb65BZ9IQWL5MGSXXOF+OlAaMo1yfG1cAdxW+Er8MeO4RZPFuOZIwljgkyaxmA+
+	 9JmhqCdNLUHq+UpVtoEm4CX0Hzji6iimpH/Ije9PKRlpLLUelricX6ynQbHAJ1RVc4
+	 uxY0mKd9BKY9J79IPgD2SnZNo7NxUmx3b2B0jK835O4Di1MnpnJ5ptIs2wezlLnnUk
+	 BzlFLsxhewuQor8ziukwQzMSGlQnrtvqQsWXS06gmHLQCLJjqGGA36GbYAqmuzjqhW
+	 YlYa1+dYO/nDHt/XpnALJAN5XyRQREeUH5gxB4EfiE9QQVQVbhodTj1uNkVN8zXAol
+	 eMQ5PnCFDSoTg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 09 Apr 2025 12:03:17 -0700
+Subject: [PATCH] drm/sysfb: efidrm: Avoid clang -Wsometimes-uninitialized
+ in efidrm_device_create()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/14] x86: Update the KASAN non-canonical hook
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: hpa@zytor.com, hch@infradead.org, nick.desaulniers+lkml@gmail.com,
- kuan-ying.lee@canonical.com, masahiroy@kernel.org,
- samuel.holland@sifive.com, mingo@redhat.com, corbet@lwn.net,
- ryabinin.a.a@gmail.com, guoweikang.kernel@gmail.com, jpoimboe@kernel.org,
- ardb@kernel.org, vincenzo.frascino@arm.com, glider@google.com,
- kirill.shutemov@linux.intel.com, apopple@nvidia.com,
- samitolvanen@google.com, kaleshsingh@google.com, jgross@suse.com,
- andreyknvl@gmail.com, scott@os.amperecomputing.com, tony.luck@intel.com,
- dvyukov@google.com, pasha.tatashin@soleen.com, ziy@nvidia.com,
- broonie@kernel.org, gatlin.newhouse@gmail.com, jackmanb@google.com,
- wangkefeng.wang@huawei.com, thiago.bauermann@linaro.org, tglx@linutronix.de,
- kees@kernel.org, akpm@linux-foundation.org, jason.andryuk@amd.com,
- snovitoll@gmail.com, xin@zytor.com, jan.kiszka@siemens.com, bp@alien8.de,
- rppt@kernel.org, peterz@infradead.org, pankaj.gupta@amd.com,
- thuth@redhat.com, andriy.shevchenko@linux.intel.com,
- joel.granados@kernel.org, kbingham@kernel.org, nicolas@fjasle.eu,
- mark.rutland@arm.com, surenb@google.com, catalin.marinas@arm.com,
- morbo@google.com, justinstitt@google.com, ubizjak@gmail.com,
- jhubbard@nvidia.com, urezki@gmail.com, dave.hansen@linux.intel.com,
- bhe@redhat.com, luto@kernel.org, baohua@kernel.org, nathan@kernel.org,
- will@kernel.org, brgerst@gmail.com, llvm@lists.linux.dev,
- linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
-References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
- <c37c89e71ed5a8e404b24b31e23457af12f872f2.1743772053.git.maciej.wieczor-retman@intel.com>
- <8416848c-700a-4ff0-8a22-aa62579d60cd@intel.com>
- <ycsp2mypsnnwcvmogvbxgpmw7hia4y5rvywa2xbam7lbuhnbx6@adg6uaasx6ci>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <ycsp2mypsnnwcvmogvbxgpmw7hia4y5rvywa2xbam7lbuhnbx6@adg6uaasx6ci>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHTE9mcC/x2N0QqDMAxFf0XyvEDt1OF+ZcgoberysHSk6gbiv
+ xv2eC6ce3aopEwV7s0OShtXLmLQXhqIryAzISdj8M73rnMjUuakbwxb4YSrsPCCNSqRPFlywW9
+ QG2dMg6c83CJdYw/29lEzf//SYzqOE2GYieJ5AAAA
+X-Change-ID: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
+To: Thomas Zimmermann <tzimmermann@suse.de>, 
+ Javier Martinez Canillas <javierm@redhat.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2743; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=5RI7XzZpLuIxdNbstAilg7SNq3t9eP/hJt/0NSSzUkc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOnfjvR4imzmZP15/NzDLVcc+dcqGkSsVnLVfXOj9PsUM
+ 9vsRwmiHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAik+QYGT6s0XGSv3ZG6m62
+ uCQzY9z06apSVu6zK8+3xC17+3N3czrDPyvhVdniVma/bN2a57/rVni5+mqO7mdva233hMXFWU2
+ T2QE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 4/9/25 07:34, Maciej Wieczor-Retman wrote:
-> Yes, I like it more than just generating the addresses in the parenthesis. What
-> do you think about this naming? KASAN prefix and [k/u]addr since it's not really
-> the lowest/highest address in the whole LA, just in this KASAN compiler scheme.
-> And I changed 1<<56 to 2<<56 so it generates 0xFE00000000000000 instead of
-> 0xFF00000000000000.
-> 
-> 	#define KASAN_HIGHEST_KADDR (void *)0xFFFFFFFFFFFFFFFF
-> 	#define KASAN_LOWEST_KADDR (void *)(KASAN_HIGHEST_KADDR - \
-> 						(2<<56) + 1)
-> 	#define KASAN_HIGHEST_UADDR (void *)0x7FFFFFFFFFFFFFFF
-> 	#define KASAN_LOWEST_UADDR (void *)(KASAN_HIGHEST_UADDR - \
-> 						(2<<56) + 1)
+Clang warns (or errors with CONFIG_WERROR=y):
 
-Yes, that is much better.
+  drivers/gpu/drm/sysfb/efidrm.c:353:11: error: variable 'screen_base' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    353 |         else if (mem_flags & EFI_MEMORY_WB)
+        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/gpu/drm/sysfb/efidrm.c:356:7: note: uninitialized use occurs here
+    356 |         if (!screen_base)
+        |              ^~~~~~~~~~~
+  drivers/gpu/drm/sysfb/efidrm.c:353:7: note: remove the 'if' if its condition is always true
+    353 |         else if (mem_flags & EFI_MEMORY_WB)
+        |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    354 |                 screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
+  drivers/gpu/drm/sysfb/efidrm.c:261:27: note: initialize the variable 'screen_base' to silence this warning
+    261 |         void __iomem *screen_base;
+        |                                  ^
+        |                                   = NULL
+
+efidrm_get_mem_flags() can only return a mask that has at least one of
+the tested values set so the else case is impossible but clang's static
+analysis runs before inlining so it cannot know that.
+
+Initialize screen_base to NULL and add a defensive print in case
+mem_flags were ever returned without one of the four valid values.
+
+Fixes: 32ae90c66fb6 ("drm/sysfb: Add efidrm for EFI displays")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/sysfb/efidrm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/sysfb/efidrm.c b/drivers/gpu/drm/sysfb/efidrm.c
+index af90064a4c04..7d820f42956b 100644
+--- a/drivers/gpu/drm/sysfb/efidrm.c
++++ b/drivers/gpu/drm/sysfb/efidrm.c
+@@ -258,7 +258,7 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
+ 	struct drm_sysfb_device *sysfb;
+ 	struct drm_device *dev;
+ 	struct resource *mem = NULL;
+-	void __iomem *screen_base;
++	void __iomem *screen_base = NULL;
+ 	struct drm_plane *primary_plane;
+ 	struct drm_crtc *crtc;
+ 	struct drm_encoder *encoder;
+@@ -353,6 +353,8 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
+ 	else if (mem_flags & EFI_MEMORY_WB)
+ 		screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
+ 					    MEMREMAP_WB);
++	else
++		drm_warn(dev, "unhandled mem_flags: 0x%llx\n", mem_flags);
+ 	if (!screen_base)
+ 		return ERR_PTR(-ENOMEM);
+ 	iosys_map_set_vaddr_iomem(&sysfb->fb_addr, screen_base);
+
+---
+base-commit: e8bf4a1bdaeadb28d13b9a2bcfd5910fda06eede
+change-id: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
