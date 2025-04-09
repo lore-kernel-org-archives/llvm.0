@@ -1,80 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3C123FC4B;
-	Tue,  8 Apr 2025 23:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E842905
+	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 00:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744155225; cv=none; b=jWVoE+AeIKwg/NG7NZPMmfHVrIgYUGHXxOHRyBlNM1X1tnKiCz73PQG9TgtHTAvDqYyhXf6SZfOj3W9ewQO4EjVPvLUQLjfqBCISnG2qMWfHPeaKZYWN0SFe86Uxh+ghg6gk79/+VuN7VzkIytIa8c1+BEqlEYdA+zimkvtOez8=
+	t=1744157716; cv=none; b=QbxPhRO1m8lkgDGExlDhAKP7fS4hmci4Buy/HbfmdPFCJ9HMwm2H38HK9U/oGrWQGxv95wv7DXN3UpWYFk0LC1YdMqecwS/uvOXagVdc384ymjqR+H/N7kDwjqPbIeYuUbFea8g+alr8hKvrb9LksseSsoxwFxDD9hEWAFPfskY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744155225; c=relaxed/simple;
-	bh=/ch1wD6o2Vl0FXPYL+F9372/FrXWZmbfesdlSP688wE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XjGjvG/zf1BnGTuFlSntdRIfPDYN3Ggg7rehXmzcLQ73ot9U0W05Yk1Dpsurx1ckNFGOeRYSS3+iFK0cBqHIBTrrVJp0YI3gP3E3Ln1DVEIfDxtW/w5gymD8daBrAEOiTytjHGSwo7ocOsNnrfuETrROqBpuCtGaQtPitRpAtQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULrhmzZ8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744157716; c=relaxed/simple;
+	bh=kzUr1f5PApCyyaQsNWZA+8T6s6ncUwpR5rXya9vt64M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gbsHWin7Oy8pc99+F2PeR6BmzcByF/HyaTYtpkfbEZmVBcw5oFOrl0iaTLK1tZ+3zsbrVXKyGq9wM72af5cC0PayEwc+rccoCVRN3u5lY7kNwLYVvNQ4OehFhwU+Q+w3qtj1HlnD90UD4XmsHjwKSjHzM8oQ9pNiSQnIyCsV1T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=FcCqmNNs; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULrhmzZ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5C6C4CEE5;
-	Tue,  8 Apr 2025 23:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744155225;
-	bh=/ch1wD6o2Vl0FXPYL+F9372/FrXWZmbfesdlSP688wE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ULrhmzZ8tFu65Uf/S9eYFLeouWcrXOr3pHX1lkdpfLcET3XCdrIBqGXcPDGkIKD8A
-	 rUpKpnf/RCcHKUk1thFwNtW/ZamTngoGZZjAWyTX0kEmib2nhT1zwLco+tskHfAVBo
-	 /0QcGtrXTFeoJyqYFAx87uH5XGcsfs4ov9E+BU5bRJ8de0LnGazmHZ58VFXYaLFOom
-	 Kc3tE/6xRPg4aHPc4OrJ68KMkjC/Fo3BTYqcPEf81GDPryt0Z+vquFjb3Wki/OvHUY
-	 RHN2erKiiiyBwZiUhW5BzrfZQUzIzsIUYbv9ty6D71AkfIRs9dRueP6KI2hGYA/eC5
-	 3htlonFoMaG2w==
-Date: Tue, 8 Apr 2025 16:33:42 -0700
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Add '-fno-builtin-wcslen'
-Message-ID: <202504081632.00837E7921@keescook>
-References: <20250407-fno-builtin-wcslen-v1-1-6775ce759b15@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="FcCqmNNs"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso381560a12.1
+        for <llvm@lists.linux.dev>; Tue, 08 Apr 2025 17:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1744157712; x=1744762512; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y7RB+y2EUGP8TtBqM/TIRDMB8wrdZCpt37v8TqudoNA=;
+        b=FcCqmNNsCUz8Ji+DYIgj/Am7IBwO2Dayml2aQkG68Xgk38YPbS5PGpbEEe3hxQRUYq
+         KnWUOmDHiHNxOkSzdB/W4u6HMcvvjsrmxMqKZo2YaWmU/xA+uKrnxB7UadUNpyZOE4VJ
+         hJrvb2pgjxAsyh6LeGKUFnokylpYqzZ/h5Wko=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744157712; x=1744762512;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y7RB+y2EUGP8TtBqM/TIRDMB8wrdZCpt37v8TqudoNA=;
+        b=nU6PUrMl/UXV9dskKZw4LHSVQ5oKmSHcOCw1luJoUwuMiJ/IYAAusghz8lEpBh8nhS
+         hYhAmfJ4j1iHQiTbciuCrjSQffcI+yQoPuWC1byNT1N7ZL23cPNrniJp61x6fjspzqyu
+         7yJVLmMY/KB0mvOQd3BhNdiGXD4/6SfRyRicMZmGYuXJPFzq6Aohq1v5gLkwjbzGiGZE
+         l2/QymqUWW/FbHxtOGkzpHgjCTtJUDJfx0vc7B2f+jjpRGL3FjnKw7y/7JroiU2VGSS0
+         i6fytbJLO4hHcToomGKWf5IDoDXzGfrE2RfGLmIpF6ftBFVlfyA/Gye21fc/y6BP8UzM
+         jNlg==
+X-Forwarded-Encrypted: i=1; AJvYcCUsl+K6sJh/P/uv6T9fwObLaj+ZvmUY8iWkCq7XqEZqAi0ka6hfwwYxd3mp52hLT1gtGqg2@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz70B2DNBBDyb59+y4r+0t3vU+hLVTesXJ5XqxnAG4yNoduKCdD
+	4FIC11tYRtVAY/paQjaS5bvjMhzddjXVJru9rINA/1xf6FcjJrP1pciTP4w7cAk14RrJKMavqWR
+	TDho=
+X-Gm-Gg: ASbGnctSedX1fzUJvZj24i4byJJ7n5kklLvbV3R/MjYyqiEUCyUAZo2oxvqu1YYw/jZ
+	uNNOaAOQGeqRl9zPs8k19Gjpu/8H5huW+1Z2Sj6CZAd9pQt6Q813srQaEDN8M2YPVq4Z7AcGjdo
+	ClrY8yFKaCQJfiyx7lxfjScWHdnR2BXYjjoxG9PbO9GXR9fgyS/boOjaJocZQxWqLU1fA48Z21G
+	tesYA0JhGSSWHZs35WQWNf5P/dvHKUJKi+ZNvcJjymYc14A+r/I5CBgwxgIgejFFeMUVDEoY4pZ
+	S7lpznECsG+b8u4Hfnji3v86wkGt8rozIdqAqKfsKZhKXiV67OGDKWDftGnCmXX85fjc5jNzCXd
+	h9Sr3apYPcZEcwDBJ+c8=
+X-Google-Smtp-Source: AGHT+IFJvKFBwqcUefkyawjXaeGWado30Cy5uKyb5l0yEiR8UT0zeo2lAx1lCJO+eCit9UhxI6ZkWw==
+X-Received: by 2002:a17:907:7e95:b0:ac8:1bb3:894 with SMTP id a640c23a62f3a-aca9c0175a1mr77478066b.7.1744157712367;
+        Tue, 08 Apr 2025 17:15:12 -0700 (PDT)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7c013f358sm987738866b.110.2025.04.08.17.15.11
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Apr 2025 17:15:11 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac2a089fbbdso36352466b.1
+        for <llvm@lists.linux.dev>; Tue, 08 Apr 2025 17:15:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW2Q7NkaNa9uYreALq4+bsUZKWN6QIRiYgsCfMw1iMpjDSgOkEXJHc43sgdlk/VK049S1IC@lists.linux.dev
+X-Received: by 2002:a17:907:97ca:b0:ac3:ef17:f6f0 with SMTP id
+ a640c23a62f3a-aca9bfb0d37mr81837666b.5.1744157710814; Tue, 08 Apr 2025
+ 17:15:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250407-fno-builtin-wcslen-v1-1-6775ce759b15@kernel.org>
+References: <20250407-fno-builtin-wcslen-v1-1-6775ce759b15@kernel.org> <202504081632.00837E7921@keescook>
+In-Reply-To: <202504081632.00837E7921@keescook>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 8 Apr 2025 17:14:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiN62aoWPkgRutvjKpxbXJdvgNNY0DqDc=9_r5FGUjfNA@mail.gmail.com>
+X-Gm-Features: ATxdqUEzxdv_c924M2x5edBsLVmXTsnFzfYKX1p8a7EiZ3toGIQu_4WxIx108FY
+Message-ID: <CAHk-=wiN62aoWPkgRutvjKpxbXJdvgNNY0DqDc=9_r5FGUjfNA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Add '-fno-builtin-wcslen'
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Apr 07, 2025 at 04:22:12PM -0700, Nathan Chancellor wrote:
-> A recent optimization change in LLVM [1] aims to transform certain loop
-> idioms into calls to strlen() or wcslen(). This change transforms the
-> first while loop in UniStrcat() into a call to wcslen(), breaking the
-> build when UniStrcat() gets inlined into alloc_path_with_tree_prefix():
-> 
->   ld.lld: error: undefined symbol: wcslen
->   >>> referenced by nls_ucs2_utils.h:54 (fs/smb/client/../../nls/nls_ucs2_utils.h:54)
->   >>>               vmlinux.o:(alloc_path_with_tree_prefix)
->   >>> referenced by nls_ucs2_utils.h:54 (fs/smb/client/../../nls/nls_ucs2_utils.h:54)
->   >>>               vmlinux.o:(alloc_path_with_tree_prefix)
-> 
-> Disable this optimization with '-fno-builtin-wcslen', which prevents the
-> compiler from assuming that wcslen() is available in the kernel's C
-> library
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://github.com/llvm/llvm-project/commit/9694844d7e36fd5e01011ab56b64f27b867aa72d [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, 8 Apr 2025 at 16:33, Kees Cook <kees@kernel.org> wrote:
+> Since I have stuff queued for -rc2, do you want me to snag this too?
 
-Thanks for chasing this down. :)
+Well, since I felt so strongly about this one, I already took it...
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-
-Since I have stuff queued for -rc2, do you want me to snag this too?
-
--- 
-Kees Cook
+           Linus
