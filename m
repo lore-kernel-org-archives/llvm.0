@@ -1,137 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C66E29A0;
-	Wed,  9 Apr 2025 00:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE6E78F3E;
+	Wed,  9 Apr 2025 02:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744159201; cv=none; b=C157Olr9MpFryc9TT8tEehnsjwlxbqG927KLfNCkMtngsgKGmTFR1r03ii7UcjKUNk+8/pJBip6a9mt5gFcGv52V1UnLZJwX2Y1T5vCki85XLiD0BhzCQv3JxtsYMWyYak2Dy/RnPum0oYn25h45I7/jxMqLxb1nKX8jvAE4hUo=
+	t=1744164695; cv=none; b=PEql0yqFyr2o1OpQw7BH2tFw4EYU9vWjRkpfPc40AqBIDdcW/lo2MtSWtdPa9TXbKIaOA/nBNkYOHqbY4brNrD5/HrEH6o/6QSJNRtbawkulKDzQhoIMoyPXKicsxTyjPeBirKcKnM2BgpbpHuGE+00fMRp71IYbEMwSJQzs4uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744159201; c=relaxed/simple;
-	bh=ePBmpq2a4DMQiWyTZzEf6l0GwjldfvvKxuZRaNZTn0o=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Ntn5M+/Hb2/epvvT7MoXVuCajbs3Xxjx0I4oOoNjkLL+iVkOc2l2tJFPN6cmOG0pMaI5y/VqPvkV5ZtKkEI9b5yTXL9RHL1uxf4Oe0oc3vqbll66BCKgCRsQW9THqt7vIPw56tyKFipvGfOiNQ+RQBuYn9GWfco44BH0TKpyc6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QjYyByEc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744164695; c=relaxed/simple;
+	bh=L2eVHkfCLc1/A4tul3Dfz6ru9KwKZpj+eTP/WKi8yYM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=vEzEYqfbLkTKfxy7KjKZeB7SrXWDJy5blFnFFTOfx1uH1SVGIXFvNQKFjm5XsPYw06B8cQLFF/H2QGgi5iue4aY8601c3rlvsaJqoFhKpaBagRn97lifwaTj+mw1/X3s6iwEDU0VY22eT2zkAuSqDbnG2oQdg/S0gA9Of0DYI8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HljgzyEy; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QjYyByEc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7727BC4CEE5;
-	Wed,  9 Apr 2025 00:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1744159200;
-	bh=ePBmpq2a4DMQiWyTZzEf6l0GwjldfvvKxuZRaNZTn0o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QjYyByEc3E3N6AkWFipwvkl3ysx8PP88WA19yKHQ3uCvmPIHVE9v8I4X7XILpSQ17
-	 5puxONq23M0m5yAKXPRkXTudz++lyihLCuT61Oyk1olPZKGBlUlG9jryQAWz1saNcr
-	 cngyuLl06Qgx4WelEHGYQewj8nH9XHRxiqiT7f0I=
-Date: Tue, 8 Apr 2025 17:39:59 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Kemeng Shi <shikemeng@huaweicloud.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>, Tim Chen <tim.c.chen@linux.intel.com>, Baoquan He
- <bhe@redhat.com>
-Subject: Re: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning:
- function 'swap_is_last_ref' is not needed and will not be emitted
-Message-Id: <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
-In-Reply-To: <202504081841.jbL7yL0r-lkp@intel.com>
-References: <202504081841.jbL7yL0r-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HljgzyEy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744164693; x=1775700693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=L2eVHkfCLc1/A4tul3Dfz6ru9KwKZpj+eTP/WKi8yYM=;
+  b=HljgzyEyEelUA/wA1S0NObtW2N1Zrm02rYXf4TeuUeULv08ZVBrPogUe
+   V+V1iohYnoEACikTTSCLgvsml5xxL0wBPUw28y0Mao9WjlzX4OPqmVEda
+   yFmJYp8T5BuNZc02Za+YlsRjMXiku/zKdYesEZba4LJ9LI+0nb1RAht+1
+   DhbGx7t1icCYl6vND+McmQzuPFUx8lozqTFFeDRD4EEUOgjXbu/1IRqVf
+   m4qOhQVNHtZuWj5MZfUDYqAT3hC3/6ht26Cs5cU/WMUydHrcftfRQK98J
+   ml8MLhvFMH/IpdCMI/rX4s2H3krNb0b1vScZEesQHarx8ssbjbYw3RUUC
+   A==;
+X-CSE-ConnectionGUID: JCi4oGTeT8apIuo8/zZiig==
+X-CSE-MsgGUID: iPyPknaiSOKaOLiHTqneeg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="56992185"
+X-IronPort-AV: E=Sophos;i="6.15,199,1739865600"; 
+   d="scan'208";a="56992185"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 19:11:33 -0700
+X-CSE-ConnectionGUID: ZHjEc6voQ16MhtrZxIMSBQ==
+X-CSE-MsgGUID: Zx/82DlzRN+WaYtWREC4Xg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,199,1739865600"; 
+   d="scan'208";a="128298423"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Apr 2025 19:11:31 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2KuX-0008BG-04;
+	Wed, 09 Apr 2025 02:11:29 +0000
+Date: Wed, 9 Apr 2025 10:11:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 13/13] drivers/hwmon/gpio-fan.c:250:6:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202504091047.biuX8Kl2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 8 Apr 2025 18:06:11 +0800 kernel test robot <lkp@intel.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   d6b1492c9c2e7f2659b63a165ea45ab556c0df0c
+commit: d6b1492c9c2e7f2659b63a165ea45ab556c0df0c [13/13] hwmon: (gpio-fan) Add regulator support
+config: riscv-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250409/202504091047.biuX8Kl2-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250409/202504091047.biuX8Kl2-lkp@intel.com/reproduce)
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
-> commit: 6bb001b6b64ec20d900d0d81294a0f031af59c3e [1753/1936] mm: swap: enable swap_entry_range_free() to drop any kind of last ref
-> config: hexagon-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202504081841.jbL7yL0r-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504091047.biuX8Kl2-lkp@intel.com/
 
-It's annoying that gcc warns about this.
+All warnings (new ones prefixed by >>):
 
->     1517 | static inline bool swap_is_last_ref(unsigned char count)
->          |                    ^~~~~~~~~~~~~~~~
->    1 warning generated.
-> 
-> 
-> vim +/swap_is_last_ref +1517 mm/swapfile.c
-> 
->   1512	
->   1513	/*
->   1514	 * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
->   1515	 * caller have to ensure all entries belong to the same cgroup and cluster.
->   1516	 */
-> > 1517	static inline bool swap_is_last_ref(unsigned char count)
->   1518	{
->   1519		return (count == SWAP_HAS_CACHE) || (count == 1) ||
->   1520		       (count == SWAP_MAP_SHMEM);
->   1521	}
->   1522	
-
-: static inline bool swap_is_last_ref(unsigned char count)
-: {
-: 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
-: 	       (count == SWAP_MAP_SHMEM);
-: }
-: 
-: static void swap_entries_free(struct swap_info_struct *si,
-: 			      struct swap_cluster_info *ci,
-: 			      swp_entry_t entry, unsigned int nr_pages)
-: {
-: 	unsigned long offset = swp_offset(entry);
-: 	unsigned char *map = si->swap_map + offset;
-: 	unsigned char *map_end = map + nr_pages;
-: 
-: 	/* It should never free entries across different clusters */
-: 	VM_BUG_ON(ci != offset_to_cluster(si, offset + nr_pages - 1));
-: 	VM_BUG_ON(cluster_is_empty(ci));
-: 	VM_BUG_ON(ci->count < nr_pages);
-: 
-: 	ci->count -= nr_pages;
-: 	do {
-: 		VM_BUG_ON(!swap_is_last_ref(*map));
+>> drivers/hwmon/gpio-fan.c:250:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     250 |         if (val == 0)
+         |             ^~~~~~~~
+   drivers/hwmon/gpio-fan.c:255:9: note: uninitialized use occurs here
+     255 |         return ret ? ret : count;
+         |                ^~~
+   drivers/hwmon/gpio-fan.c:250:2: note: remove the 'if' if its condition is always true
+     250 |         if (val == 0)
+         |         ^~~~~~~~~~~~~
+     251 |                 ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
+   drivers/hwmon/gpio-fan.c:237:9: note: initialize the variable 'ret' to silence this warning
+     237 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-And it's annoying that VM_BUG_ON() doesn't reference its arg when
-CONFIG_DEBUG_VM=n.
+vim +250 drivers/hwmon/gpio-fan.c
 
-I'll add this:
+d6fe1360f42e86 Simon Guinot       2010-10-22  230  
+c490c63e9505a3 Julia Lawall       2016-12-22  231  static ssize_t pwm1_enable_store(struct device *dev,
+c490c63e9505a3 Julia Lawall       2016-12-22  232  				 struct device_attribute *attr,
+d6fe1360f42e86 Simon Guinot       2010-10-22  233  				 const char *buf, size_t count)
+d6fe1360f42e86 Simon Guinot       2010-10-22  234  {
+d6fe1360f42e86 Simon Guinot       2010-10-22  235  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+d6fe1360f42e86 Simon Guinot       2010-10-22  236  	unsigned long val;
+d6b1492c9c2e7f Alexander Stein    2025-04-08  237  	int ret;
+d6fe1360f42e86 Simon Guinot       2010-10-22  238  
+179c4fdb565dd2 Frans Meulenbroeks 2012-01-04  239  	if (kstrtoul(buf, 10, &val) || val > 1)
+d6fe1360f42e86 Simon Guinot       2010-10-22  240  		return -EINVAL;
+d6fe1360f42e86 Simon Guinot       2010-10-22  241  
+d6fe1360f42e86 Simon Guinot       2010-10-22  242  	if (fan_data->pwm_enable == val)
+d6fe1360f42e86 Simon Guinot       2010-10-22  243  		return count;
+d6fe1360f42e86 Simon Guinot       2010-10-22  244  
+d6fe1360f42e86 Simon Guinot       2010-10-22  245  	mutex_lock(&fan_data->lock);
+d6fe1360f42e86 Simon Guinot       2010-10-22  246  
+d6fe1360f42e86 Simon Guinot       2010-10-22  247  	fan_data->pwm_enable = val;
+d6fe1360f42e86 Simon Guinot       2010-10-22  248  
+d6fe1360f42e86 Simon Guinot       2010-10-22  249  	/* Disable manual control mode: set fan at full speed. */
+d6fe1360f42e86 Simon Guinot       2010-10-22 @250  	if (val == 0)
+d6b1492c9c2e7f Alexander Stein    2025-04-08  251  		ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
+d6fe1360f42e86 Simon Guinot       2010-10-22  252  
+d6fe1360f42e86 Simon Guinot       2010-10-22  253  	mutex_unlock(&fan_data->lock);
+d6fe1360f42e86 Simon Guinot       2010-10-22  254  
+d6b1492c9c2e7f Alexander Stein    2025-04-08  255  	return ret ? ret : count;
+d6fe1360f42e86 Simon Guinot       2010-10-22  256  }
+d6fe1360f42e86 Simon Guinot       2010-10-22  257  
 
---- a/mm/swapfile.c~mm-swap-enable-swap_entry_range_free-to-drop-any-kind-of-last-ref-fix
-+++ a/mm/swapfile.c
-@@ -1514,11 +1514,13 @@ fallback:
-  * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
-  * caller have to ensure all entries belong to the same cgroup and cluster.
-  */
-+#ifdef CONFIG_DEBUG_VM
- static inline bool swap_is_last_ref(unsigned char count)
- {
- 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
- 	       (count == SWAP_MAP_SHMEM);
- }
-+#endif
- 
- static void swap_entries_free(struct swap_info_struct *si,
- 			      struct swap_cluster_info *ci,
-_
+:::::: The code at line 250 was first introduced by commit
+:::::: d6fe1360f42e86262153927986dea6502daff703 hwmon: add generic GPIO fan driver
 
-Kemeng, can you please review that comment "Drop the last ref...". 
-From its positioning it appears to be describing swap_is_last_ref(),
-but swap_is_last_ref() doesn't do those things.
+:::::: TO: Simon Guinot <sguinot@lacie.com>
+:::::: CC: Guenter Roeck <guenter.roeck@ericsson.com>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
