@@ -1,192 +1,140 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C301326FD91
-	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 16:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876AD276032
+	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 17:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744217898; cv=none; b=p6THD7k/65opRrn6gmSBhaNOGuQOQ2RmplJRrz5UzdrOxRlyVRqRxavb6BpfFBsvxZfSTGPAWUW9nWBB+nVje4XA/WdwWTbGVPKotTgAyxgwhAWlMwE2tONXnNU0Qsd7qb0n04rqO13AwmaQtHYMndV4hI2auUa/Q5ei1ii31Rw=
+	t=1744218740; cv=none; b=kFu6L+m8bdWs4WOUFS8HqPYU00p0SiXnlxbZGV+y3jagHJ0ftjS69ftOKRd8pBo6rjpdVWdVaD/1VrMRCRd1jvXSe0CvsVpuODz0ciuARC2aXL49m2WmYowB6Z86eTZYlrMimcq8Ia0Y5YAojn2eIwrOMBdzPxnYQGfkyAG4kn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744217898; c=relaxed/simple;
-	bh=mnW2GFg4IqkS6SgY7SxVfv2bb9ReIjviHkGL/NPqNjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R+3L/okgLMonwuipDH4kLPsrFbsN0GBrNUW8921BHE2sm1fgq/2bvRj67RnbrfjuWtcNr56CZ8DGdTTqNi18JaPFcckevwLJ/OeMVCSFXxqjzqj5+LdGta4rMqYmNw8g5vUWSjvrU55iaSMzTX/h7qPnV2LXw86A1iv4vB66GYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nG/KNcwD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VryLfxF4; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nG/KNcwD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VryLfxF4; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1744218740; c=relaxed/simple;
+	bh=rMaFchJcz6j9TxgZxUNyUBffmSIxcvFjaUkyyQVtObU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bgxqwSm5Vl5XIHTzeLNIx8t2Z40ahTxpbqyBTkQAnooLExDpacAar0U+M3SuarOjghH+Fr6JSGbAdOv3oaMa2Kr31y57uTHqnwQuAuMVhiiy89quGn0WTwr95kOJbJZ91vbiJfx/J/RnkJDCx/89fm2UKjYqe3bU14cFINbeTvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bPvbKghH; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nG/KNcwD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VryLfxF4";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nG/KNcwD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VryLfxF4"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B38D31F38D;
-	Wed,  9 Apr 2025 16:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1744217894; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
-	b=nG/KNcwDcIsW/uK7FgBg9uFMxMMbMdgKZGFJqQD7g3wxCWGMXFZwgwtXesBnup+RsqLqjh
-	+FRG1uXjzuimm+0liQYvoojNFFIlZIhM5CCcAkay3Uy8mKpTc2m0Xqef4ONihrRIASiy1X
-	WUddoKC3bIXYV2Cf4/3E38RbkMLK8IM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1744217894;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
-	b=VryLfxF4k3vzxpwJSDcYomsatCSdfnOM2r12zx8StboxFOFWYF5/aLUivSLmH8VjfTuPrH
-	PIRVX/TDQI4iRkBw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="nG/KNcwD";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=VryLfxF4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1744217894; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
-	b=nG/KNcwDcIsW/uK7FgBg9uFMxMMbMdgKZGFJqQD7g3wxCWGMXFZwgwtXesBnup+RsqLqjh
-	+FRG1uXjzuimm+0liQYvoojNFFIlZIhM5CCcAkay3Uy8mKpTc2m0Xqef4ONihrRIASiy1X
-	WUddoKC3bIXYV2Cf4/3E38RbkMLK8IM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1744217894;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+/yNPsqF0kJWQivUHk1FCQy7nHAfxv9twVK6iPfPrdA=;
-	b=VryLfxF4k3vzxpwJSDcYomsatCSdfnOM2r12zx8StboxFOFWYF5/aLUivSLmH8VjfTuPrH
-	PIRVX/TDQI4iRkBw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 15B9013691;
-	Wed,  9 Apr 2025 16:58:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ot2VAian9mfLAwAAD6G6ig
-	(envelope-from <osalvador@suse.de>); Wed, 09 Apr 2025 16:58:14 +0000
-Date: Wed, 9 Apr 2025 18:58:04 +0200
-From: Oscar Salvador <osalvador@suse.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-	Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-cxl@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] mm,memory_hotplug: Implement numa node notifier
-Message-ID: <Z_anHMHgQQM3y-w2@localhost.localdomain>
-References: <20250408084153.255762-3-osalvador@suse.de>
- <202504092104.MyHeSV43-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPvbKghH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744218738; x=1775754738;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rMaFchJcz6j9TxgZxUNyUBffmSIxcvFjaUkyyQVtObU=;
+  b=bPvbKghHabBHc4+L6dn8WW7Y1uDNgBwiLS7MAevtK8uNT9WfRF6jME9S
+   hwT1tCVEvV2UGOi44ws88NVe+byxd2StEu6xcEWr5lelMLfdvOTwRQKVf
+   YS09i7nBgZmJ6imkH6p9OXKOdP+5rnaI0ZZhBjbzFKPs05+SPXm5QIwxT
+   Y2XxmWOi1qf3T6EVb5DxQ1ZIaajtM0bq4hkwc3Kd7OGfSmzbeyuVVtEF1
+   uygjCOaujdINW3+NGH3WPoNV12gBO7B74T0cXVPsYhGNj+ZeOv/6W4Hz0
+   OhsLf0e61URxHNQc0AumnN0ZElTIk2/E7oaE3L6+sgJreQkFjAx6/ypcH
+   w==;
+X-CSE-ConnectionGUID: z4ks+u31TY60KLp9zI+eUw==
+X-CSE-MsgGUID: qvkNezICQdmoxIWee05CDA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="44952537"
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="44952537"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 10:12:17 -0700
+X-CSE-ConnectionGUID: mi8o2LJPTq2WEbMiBYvzQQ==
+X-CSE-MsgGUID: i54YUDKXRgOeQ4aHOdozlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="129170078"
+Received: from sramkris-mobl1.amr.corp.intel.com (HELO [10.124.220.195]) ([10.124.220.195])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 10:12:14 -0700
+Message-ID: <a7713487-cbbc-430d-8028-ce9ab1f6f3e1@intel.com>
+Date: Wed, 9 Apr 2025 10:12:12 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202504092104.MyHeSV43-lkp@intel.com>
-X-Rspamd-Queue-Id: B38D31F38D
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -4.51
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 13/14] mm: Unpoison pcpu chunks with base address tag
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: hpa@zytor.com, hch@infradead.org, nick.desaulniers+lkml@gmail.com,
+ kuan-ying.lee@canonical.com, masahiroy@kernel.org,
+ samuel.holland@sifive.com, mingo@redhat.com, corbet@lwn.net,
+ ryabinin.a.a@gmail.com, guoweikang.kernel@gmail.com, jpoimboe@kernel.org,
+ ardb@kernel.org, vincenzo.frascino@arm.com, glider@google.com,
+ kirill.shutemov@linux.intel.com, apopple@nvidia.com,
+ samitolvanen@google.com, kaleshsingh@google.com, jgross@suse.com,
+ andreyknvl@gmail.com, scott@os.amperecomputing.com, tony.luck@intel.com,
+ dvyukov@google.com, pasha.tatashin@soleen.com, ziy@nvidia.com,
+ broonie@kernel.org, gatlin.newhouse@gmail.com, jackmanb@google.com,
+ wangkefeng.wang@huawei.com, thiago.bauermann@linaro.org, tglx@linutronix.de,
+ kees@kernel.org, akpm@linux-foundation.org, jason.andryuk@amd.com,
+ snovitoll@gmail.com, xin@zytor.com, jan.kiszka@siemens.com, bp@alien8.de,
+ rppt@kernel.org, peterz@infradead.org, pankaj.gupta@amd.com,
+ thuth@redhat.com, andriy.shevchenko@linux.intel.com,
+ joel.granados@kernel.org, kbingham@kernel.org, nicolas@fjasle.eu,
+ mark.rutland@arm.com, surenb@google.com, catalin.marinas@arm.com,
+ morbo@google.com, justinstitt@google.com, ubizjak@gmail.com,
+ jhubbard@nvidia.com, urezki@gmail.com, dave.hansen@linux.intel.com,
+ bhe@redhat.com, luto@kernel.org, baohua@kernel.org, nathan@kernel.org,
+ will@kernel.org, brgerst@gmail.com, llvm@lists.linux.dev,
+ linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, x86@kernel.org
+References: <cover.1743772053.git.maciej.wieczor-retman@intel.com>
+ <61033ef5b70277039ceeb8f6173e8b3fbc271c08.1743772053.git.maciej.wieczor-retman@intel.com>
+ <fb0d5f33-4636-4de0-82f4-93a9def63a26@intel.com>
+ <ynl7b325d5jo52n7cpy64v6bvqhzlbkphqsbs3jrgtji4v4yoz@cjpytwlwc6kt>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <ynl7b325d5jo52n7cpy64v6bvqhzlbkphqsbs3jrgtji4v4yoz@cjpytwlwc6kt>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 09, 2025 at 09:44:52PM +0800, kernel test robot wrote:
-> Hi Oscar,
-> 
-> kernel test robot noticed the following build errors:
-... 
-> >> drivers/base/node.c:115:5: error: redefinition of 'register_node_notifier'
->      115 | int register_node_notifier(struct notifier_block *nb)
->          |     ^
->    include/linux/memory.h:172:19: note: previous definition is here
->      172 | static inline int register_node_notifier(struct notifier_block *nb)
->          |                   ^
-> >> drivers/base/node.c:121:6: error: redefinition of 'unregister_node_notifier'
->      121 | void unregister_node_notifier(struct notifier_block *nb)
->          |      ^
->    include/linux/memory.h:176:20: note: previous definition is here
->      176 | static inline void unregister_node_notifier(struct notifier_block *nb)
->          |                    ^
-> >> drivers/base/node.c:127:5: error: redefinition of 'node_notify'
->      127 | int node_notify(unsigned long val, void *v)
->          |     ^
->    include/linux/memory.h:179:19: note: previous definition is here
->      179 | static inline int node_notify(unsigned long val, void *v)
->          |                   ^
->    3 errors generated.
+On 4/9/25 09:32, Maciej Wieczor-Retman wrote:
+> They don't seem to be virtuall contiguous. At least from testing on a live
+> system, QEMU and Simics I never saw any be contiguous. And I double checked
+> today too. But your version is nice, I'll just drop 2 and 3 and I think it still
+> will make sense, right?
 
-Ah, I see. When CONFIG_MEMORY_HOTPLUG=n those come into play.
-That is not a problem for the memory-notify thing because drivers/base/memory.c
-gets compiled IFF CONFIG_MEMORY_HOTPLUG=y.
-I am thinking two ways to fix this:
-
- 1) Move the code for node-notify to drivers/base/memory.c
- 2) Surround those functions within a
- #ifdef CONFIG_MEMORY_HOTPLUG
- ...
- #endif
-
-Thoughts? I lean towards option #2 as it looks cleaner to me:
-
- diff --git a/drivers/base/node.c b/drivers/base/node.c
- index 182c71dfb5b8..3b084d71888a 100644
- --- a/drivers/base/node.c
- +++ b/drivers/base/node.c
- @@ -110,6 +110,7 @@ static const struct attribute_group *node_access_node_groups[] = {
-         NULL,
-  };
-  
- +#ifdef CONFIG_MEMORY_HOTPLUG
-  static BLOCKING_NOTIFIER_HEAD(node_chain);
-  
-  int register_node_notifier(struct notifier_block *nb)
- @@ -128,6 +129,7 @@ int node_notify(unsigned long val, void *v)
-  {
-         return blocking_notifier_call_chain(&node_chain, val, v);
-  }
- +#endif
-  
-  static void node_remove_accesses(struct node *node)
-  {
-
-
-
--- 
-Oscar Salvador
-SUSE Labs
+Yep, it still makes sense.
