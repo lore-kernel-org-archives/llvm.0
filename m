@@ -1,123 +1,187 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DAA1D5ADE
-	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 21:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4371E0B66;
+	Wed,  9 Apr 2025 21:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744232773; cv=none; b=Z3b6qdXFcy2v0iXPpKUJ90kqv5q3AkuXLGUgAJXJx2bXEofye0wgbBEhY4j/1h+S8GubPxhzyBRDCOf/Hnuvaolmwx4g7qZNF1J80eelXopA3o4vvAI4+UEeWgIvRVUxl3qXyWlZPB7E8hel4PfJyBbJtX8JSiBfPPKn7eA4tZo=
+	t=1744232943; cv=none; b=Qq/4yGJBhWRpV63m88IC/X+lPfuqyY2mLU8vMIB7bKUMGNcQN1c6YVMgnx8GykY9ZGN4ETBlgjVU6+hG59pr0cE+G7zBN6aI4qb+9DUOgPBmOYXLA0KDZPt6R/WIo4+MePQxJEP8Fgj4JWvcHVRHlxbcOl3jUw8pzrAwVofhP2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744232773; c=relaxed/simple;
-	bh=pkDCmCK9naL6Vl+XyjNyUFQmEvtkQBSbpV648xlXr0I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jKMr0zAfsQBk0PqAn0x6HLQ7WqtO9GRbfROCwrxtcoA6s3671IhpuJsLdDJJIvCs5hx6mWXxpogAZ2IFgMM2NydpHElF6xsfH7cndzzUaPzxHaCaa/Q4n8OqY/izbYYdxr0V0nAxBo9AsqFOP4Ankp9CYrtRqH7Yb/0TfctRLVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K48nN4d9; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744232943; c=relaxed/simple;
+	bh=9FwTOr+ksva7BcWKrWAypW1bPBx+E92LgMFk7X5OZQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qwu/XYOLwIEqhO4fBVSjl221NKBpzrHGfdpZNOmAvT8LFx2+VrjRJLIUbbHBEe8PHz/HX0XTTJJH6y+z6CsCEzmakketPsUlVuI32ArY7E23l4xAEKJne+CvRRucXb1gYXFN1d++rsbwTebMqMwoOR1abftSsZVoiPh8eCTI9qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=baw1qUL+; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K48nN4d9"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2ff6ce72844so16573a91.2
-        for <llvm@lists.linux.dev>; Wed, 09 Apr 2025 14:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744232771; x=1744837571; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=baX+5Zv78I8HcbkYxjdZe3p8ly9kiBXGfznkMkDjWzg=;
-        b=K48nN4d9JeLeXe1NhFOfd3bzcXXsDLKLXjJLcrRJ9sDJ9zXCCXyIlaeNSiyzmx+zWn
-         BDkm4Yr3SKCLAxMhRCHOV4DnKdkzxxW1XE+uG3ch7NibIhXIaWcJDerMfoyEUOuaD2oM
-         N9pi0y2fXE2Gb/gZ8QKXTtt3GONLuw3yx787lVf5aIlWAz31subW9BTvPIM4xYwr+vFJ
-         ovm8eZ3UGCJHcKIzcfBe85UYmxEGhnd1gGjfwaugtqkSFRwMihbaayDkdKjxTz0/lhBb
-         BKCsX2NRq9VQOvvcUkjqhr0lI9QHxaNA+AQx6RYc2giuTFIoq4ppINfyivz/0nooztyb
-         zV9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744232771; x=1744837571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=baX+5Zv78I8HcbkYxjdZe3p8ly9kiBXGfznkMkDjWzg=;
-        b=rHOy+xaIDKicVTdFvfmZoOsYhvw4JScJDjgB0shp2m97/aDrV8bXsGlonQhVAny8d5
-         zqtgjguGez5V9CEL0JuJY5M3AlV16+mF7Yez7yv9X8XQmMRo+mtw+y2qBnopBOV02TtG
-         7XytjvH/SmQygrbeztmcnQcP0D+Z9ut1UtP/TznWJ6XUZ4uWr7I5P3vsBge8VbQevMxl
-         7gaFSdh4hQHfzSeMx18MLQd9EC41z8V/Rx90tYLGED5Pkgr8O04HnzBZUo0j1DaUa9X8
-         AkiVpRHn1tAeBv+s/+nn1jECQ7QB2b/vU4XWbuOKJ2+Qm/YtPE1JZOkzsyaY0u3DYzlS
-         BS4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXF0Eya/AnnT6K9CVJ7OEi2qEEsUzM7yvUyz9PIva7/rzrOvfvJUa0q0qAli4i5TMGxBgpA@lists.linux.dev
-X-Gm-Message-State: AOJu0YxgW7/dscP1kKfih1PlvakCsFxnN0vygfBuxTwePRP1oLAvyp/U
-	fbBUB7YHSa+uoKWpr6Mh8m4sFl3hsta4LodB4Rsmrv8dsSou+XBLEAtKyLEE4RcqRqaczbEXt9b
-	xZHdpr9LOt/zyF7sXyC9VCG52V8c=
-X-Gm-Gg: ASbGncvhpLlB/qj0ePPTETUa9KQxrdZK7XuiJiR+k5lbj5MXRoJus+aowugave62o32
-	0n7wwJyp59LMOOMiNy/dJw8MGYhJKBB0r/vIEGaSH2GyH/MHutPS2FuQCvnfF40Xx5jto7zTC81
-	RidlznI3Bl+RBuRZAEI2FFlg==
-X-Google-Smtp-Source: AGHT+IEcwDh/QwcSZtRQOzKah6xPPVYt/1iFh55+JUvOEm1cvdiPe9fW6FPzdzfP2biO4dCnvITs8MuazzC6KAo/zjk=
-X-Received: by 2002:a17:90b:1652:b0:2ff:7970:d2b6 with SMTP id
- 98e67ed59e1d1-306dd581f05mr2145032a91.5.1744232770925; Wed, 09 Apr 2025
- 14:06:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="baw1qUL+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744232941; x=1775768941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9FwTOr+ksva7BcWKrWAypW1bPBx+E92LgMFk7X5OZQw=;
+  b=baw1qUL+iKw3QVkMa3yHvG9nBCX17LWKrW7MjjL4SDtfiEdvPcbXHZ6N
+   pkhY+KHVbbWx0yuumbXZZS9dUdtTbJ/sVyYp99y6c0dnMiOhO28Tc9Gns
+   C0R9iWlwZUPa47WaIaNTomWcZDQtOCyPoUO+ttpZKYyq1Ntu7pAdV6XlW
+   dlb5+UN1ZMq4xaRBpY7qf+a15iosxOCP+yJ2Upm1X4rzr+/WrjkshuMau
+   l2fmhjaUh5C9ydDd8GpR09krh8onoeeOMLugYjB+Fqs+DVz2UiNcKB8Tx
+   U0Py6Q9KWFhT7ixJWjW/xeAyQnz6gvn0b10XPj/GjEumWb5hl5bZ6y+rw
+   g==;
+X-CSE-ConnectionGUID: 4tgoFjMFSOiGf32Ywlp4aQ==
+X-CSE-MsgGUID: hmFaCOq/Qp+kCMtUWeKiUg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="45820536"
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="45820536"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 14:09:00 -0700
+X-CSE-ConnectionGUID: dRISYAzsS+uR+D60TYeNVA==
+X-CSE-MsgGUID: PYadYmTTQIqQqMRejQ+j1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="133816955"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 09 Apr 2025 14:08:57 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2cfG-0009KJ-14;
+	Wed, 09 Apr 2025 21:08:54 +0000
+Date: Thu, 10 Apr 2025 05:08:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Fitzgerald <rf@opensource.cirrus.com>, broonie@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stuart Henderson <stuarth@opensource.cirrus.com>,
+	Qi Zhou <qi.zhou@cirrus.com>,
+	Piotr Stankiewicz <piotrs@opensource.cirrus.com>
+Subject: Re: [PATCH 2/2] ASoC: cs48l32: Add driver for Cirrus Logic CS48L32
+ audio DSP
+Message-ID: <202504100405.7znimLX7-lkp@intel.com>
+References: <20250408162310.670041-3-rf@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250319205141.3528424-1-gary@garyguo.net> <20250319205141.3528424-3-gary@garyguo.net>
- <CAH5fLgifMPxer5TcWUBUYKtGsPFryqPVwXT8-5qmmY6F3=nuBw@mail.gmail.com> <CANiq72nc-A2WZn4xgfKyqr3GbgenhXjZztHqnf=12xY16ggHkg@mail.gmail.com>
-In-Reply-To: <CANiq72nc-A2WZn4xgfKyqr3GbgenhXjZztHqnf=12xY16ggHkg@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 9 Apr 2025 23:05:58 +0200
-X-Gm-Features: ATxdqUGFPJhGsGn_8xddyJe62tWSPbE-L2b1BLMkL1zCms_O0XOzjnRwcZGO-U4
-Message-ID: <CANiq72mMJLNq8PctLwXX=QM6EtoqV7EOgwv62W9tgkWv1A=quw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] kbuild: rust: provide an option to inline C
- helpers into Rust
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Tamir Duberstein <tamird@gmail.com>, Christian Brauner <brauner@kernel.org>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dirk Behme <dirk.behme@de.bosch.com>, Daniel Xu <dxu@dxuuu.xyz>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	"Rob Herring (Arm)" <robh@kernel.org>, Matt Gilbride <mattgilbride@google.com>, 
-	Paul Moore <paul@paul-moore.com>, Kees Cook <kees@kernel.org>, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250408162310.670041-3-rf@opensource.cirrus.com>
 
-On Wed, Apr 9, 2025 at 10:41=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> In addition, from what we discussed in the call, it would be nice to
-> have some performance numbers compared to not enabling it, as well as
-> compared to cross-language LTO.
->
-> It would also help to know which users out there need/want to have this.
+Hi Richard,
 
-A couple more points, if we end up landing this:
+kernel test robot noticed the following build warnings:
 
-  - We discussed that we may want this behind `EXPERT`.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on tiwai-sound/for-next tiwai-sound/for-linus robh/for-next linus/master v6.15-rc1 next-20250409]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  - We should probably mention in the config description that using an
-exact LLVM version is recommended even if matching just the major
-"should" work.
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald/ASoC-dt-bindings-Add-Cirrus-Logic-CS48L32-audio-DSP/20250409-002905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20250408162310.670041-3-rf%40opensource.cirrus.com
+patch subject: [PATCH 2/2] ASoC: cs48l32: Add driver for Cirrus Logic CS48L32 audio DSP
+config: powerpc64-randconfig-003-20250410 (https://download.01.org/0day-ci/archive/20250410/202504100405.7znimLX7-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504100405.7znimLX7-lkp@intel.com/reproduce)
 
-    By the way, here is the link that we sometimes mentioned in the
-past: https://doc.rust-lang.org/rustc/linker-plugin-lto.html#toolchain-comp=
-atibility
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504100405.7znimLX7-lkp@intel.com/
 
-  - We may want to mention that one needs `llvm-link` and `llvm-as` in
-the config description.
+All warnings (new ones prefixed by >>):
 
-    It should not be a big deal, since they typically are available in
-the usual `llvm` package of distributions (e.g. Fedora and Ubuntu),
-and the kernel.org combined Rust+LLVM toolchains have them already
-since June thanks to Nathan.
+>> sound/soc/codecs/cs48l32.c:3435:3: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+    3435 |                 i + 1, ana_mode_l, ana_mode_r);
+         |                 ^
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   sound/soc/codecs/cs48l32.c:3408:7: note: initialize the variable 'i' to silence this warning
+    3408 |         int i;
+         |              ^
+         |               = 0
+   1 warning generated.
 
-Cheers,
-Miguel
+
+vim +/i +3435 sound/soc/codecs/cs48l32.c
+
+  3402	
+  3403	static int cs48l32_init_inputs(struct snd_soc_component *component)
+  3404	{
+  3405		struct cs48l32_codec *cs48l32_codec = snd_soc_component_get_drvdata(component);
+  3406		struct regmap *regmap = cs48l32_codec->core.regmap;
+  3407		unsigned int ana_mode_l, ana_mode_r, dig_mode;
+  3408		int i;
+  3409	
+  3410		/*
+  3411		 * Initialize input modes from the A settings. For muxed inputs the
+  3412		 * B settings will be applied if the mux is changed
+  3413		 */
+  3414		switch (cs48l32_codec->in_type[0][0]) {
+  3415		default:
+  3416		case CS48L32_IN_TYPE_DIFF:
+  3417			ana_mode_l = 0;
+  3418			break;
+  3419		case CS48L32_IN_TYPE_SE:
+  3420			ana_mode_l = 1 << CS48L32_INx_SRC_SHIFT;
+  3421			break;
+  3422		}
+  3423	
+  3424		switch (cs48l32_codec->in_type[1][0]) {
+  3425		default:
+  3426		case CS48L32_IN_TYPE_DIFF:
+  3427			ana_mode_r = 0;
+  3428			break;
+  3429		case CS48L32_IN_TYPE_SE:
+  3430			ana_mode_r = 1 << CS48L32_INx_SRC_SHIFT;
+  3431			break;
+  3432		}
+  3433	
+  3434		dev_dbg(cs48l32_codec->core.dev, "IN%d_1 Analogue mode=#%x,#%x\n",
+> 3435			i + 1, ana_mode_l, ana_mode_r);
+  3436	
+  3437		regmap_update_bits(regmap,
+  3438				   CS48L32_IN1L_CONTROL1,
+  3439				   CS48L32_INx_SRC_MASK,
+  3440				   ana_mode_l);
+  3441	
+  3442		regmap_update_bits(regmap,
+  3443				   CS48L32_IN1R_CONTROL1,
+  3444				   CS48L32_INx_SRC_MASK,
+  3445				   ana_mode_r);
+  3446	
+  3447		for (i = 0; i < ARRAY_SIZE(cs48l32_codec->pdm_sup); i++) {
+  3448			dig_mode = cs48l32_codec->pdm_sup[i] << CS48L32_IN1_PDM_SUP_SHIFT;
+  3449	
+  3450			dev_dbg(cs48l32_codec->core.dev, "IN%d PDM_SUP=#%x\n", i + 1, dig_mode);
+  3451	
+  3452			regmap_update_bits(regmap,
+  3453					   CS48L32_INPUT1_CONTROL1 + (i * 0x40),
+  3454					   CS48L32_IN1_PDM_SUP_MASK, dig_mode);
+  3455		}
+  3456	
+  3457		return 0;
+  3458	}
+  3459	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
