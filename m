@@ -1,126 +1,138 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490871E47B7
-	for <llvm@lists.linux.dev>; Wed,  9 Apr 2025 19:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DFB1E32D6;
+	Wed,  9 Apr 2025 19:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744226975; cv=none; b=M3l8BNst1MO8jmcWrcbcm/PlQoaqUFcmdeBC4FEi/5XlyAhG4gL1WoY/Hm4Zj/EhWq+lhaD/xBBL2cBEq4PXfVRSgcQY+TndYWRQL7GzEPlDHUYcsON2T1GlVS4LuxE40K7QPUyjG4naDda3nGF0X0A5N9xWp4A4JlQPIqaYfcY=
+	t=1744227265; cv=none; b=VAQlniUQ4EDCDTsRYHEWKzMGmxECLd2VeBKsA+jv41RZ3byLiIFL4d9iLSD3+r/QY/DIJpEg2XU33El+tOvwlBofBVRzJMhFh07K9zbygKCqKZS/8kOPGG08ur2rmAImvnpwWghv+LnlFo+Cs0Zuc8uaCnTHaD2npxfhOd5CK4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744226975; c=relaxed/simple;
-	bh=/33JDmW+PxsRyF3vd7Wh4tmmtBi36TC/ft8P/UrztgY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=dzIaFyqz1uAMXTvqpMAzqQgjuI9LQr1rrQ3JMtylYmcVooDAmEfUBMDeZHF4Ly5O/pkMLInG0em+73+EcmVOtCar4XymB3P8tVZlK6hhZGYEpCeFAJ6S96LvL0bllaCiRx/mf+yyjKxxxwVFK/6xDa1HK8IhyfJuGWeB5TgIbxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SZVS2X+S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MGt2wZC/; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1744227265; c=relaxed/simple;
+	bh=2vOJoxdNP20mQK3UiS0RfjI+E8Wm/mByxTHPEUjCAOs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Tz/GyG1b9QyvCZFWO4H+HME+epkiTI8qvogCfrBa0pm+Z7LfwXiSum9Lp27/3Dse9FSc7+l+B165HxBf/16Yof5sACyj9vIQsQRUCCJ9tPHdtmYCc9HEaB3HguwoUTVmL4SQzb84ymp75RFe94Se/1gfAvHClY2gVuF115MhHQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a+S20Ogz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SZVS2X+S";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MGt2wZC/"
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 54F9D11401DF;
-	Wed,  9 Apr 2025 15:29:32 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-12.internal (MEProxy); Wed, 09 Apr 2025 15:29:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1744226972;
-	 x=1744313372; bh=7LeM8fTejAmZLunIFrf51zCFnY/PxkuNIPidaV8t9E8=; b=
-	SZVS2X+SXF/xI6ETW3YUrp1+nOPW3P3YCOXZsI99XSr4Oq0Bx+9o7wOiPyN9BUf5
-	QTTHK6Q5a30QD2kDE1P5bPi7NwKIepgeEyVeIlW7EaXedIJtXBITlVxx/88PHYH1
-	/pxoUji0xkGcF1viRLTQr3Wx7O8rRFgr7iup/SYaSgjn+8UWE6HpivjnTcbg57Bd
-	309apBy/Tzg/R5lJ/dxRZikefqgcx13YFwERlPRWVu0F+sCxAHM3QlynzVpj3K3a
-	UjCRcOD2FplJBSsDIVmz6RiTzqadQJcUf3XyqXWPSQjZZ0+sArIIflMj0+OqO10F
-	bBG9mB82FLJx72sGPDKVcA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1744226972; x=
-	1744313372; bh=7LeM8fTejAmZLunIFrf51zCFnY/PxkuNIPidaV8t9E8=; b=M
-	Gt2wZC/Vedbg9H8OvDlh2J9HdQS9iF+dB5FYV520GjIY5bCcUKhBIejDGcL3YPwN
-	g0cPxl8uOwJaQ9OXZj1dep4PSZ2TZIJRJfPsIlSwwK7J7PkIR0EsTfZggMJDLaVb
-	5vvqLlchL5Mdqk1BNazl0+hXk25oyc8wtXkzFJ2lusR+jtKgryNfRyZiJL63q1Ah
-	A5K461r4GiDKHIYmaeg0e86RTU8lpnbt4Pwjiri0xRIYkrzj2PcXp1Qeh2uCDhrq
-	tIbYZsoCqrFLZV6zSZFU4OBx6muOKrCDkv9BeoLhIyJDFuggQtsXpQmj7PgvNLmr
-	V4E7gVKSY5tXEd8K5wykQ==
-X-ME-Sender: <xms:m8r2Z4IDKxBcEDfYGDYslx0jUkXueEdDQvXueMqzKLgGxpukJDjZLA>
-    <xme:m8r2Z4JmRcd0bWpheClZBW7M-qrnMDGY_tTENCYN2lm3Ttlyo4W2PVq_dGT2jclFj
-    M34ezDpy7nx5I609no>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeikeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    udegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnihgtohhlrghssehfjhgrsh
-    hlvgdrvghupdhrtghpthhtoheprghnughrvgihkhhnvhhlsehgmhgrihhlrdgtohhmpdhr
-    tghpthhtohepughvhihukhhovhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhush
-    htihhnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepkhgrshgrnhdquggvvhesghhoohhglhgvghhroh
-    huphhsrdgtohhmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehmrghsrghhihhrohihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthh
-    grnheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:m8r2Z4vJ3WXAHXrvKXd5B3xKv4UAtE2V-BrbJEZAyq1B4dzTfpijvA>
-    <xmx:m8r2Z1YeiT1XCtilSnIsx6V2-MzbggW-b6mGOWfQy9AEZpRDFmlT5A>
-    <xmx:m8r2Z_byLixda4QM1ei16kxOQ2Y7JUi5RRFxBC3Vzf0ThsHM5YccDg>
-    <xmx:m8r2ZxAT9c3e6CGKtCSEv5jY1K8fvNyLiQKw-tehgk1U77NzNctBFg>
-    <xmx:nMr2Z5lFihtWtcgwl8O9IIHMPAftIujBP4HeUpKPp9ywwLH-kGjpPnka>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 7B78D2220073; Wed,  9 Apr 2025 15:29:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a+S20Ogz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2D7C4AF09;
+	Wed,  9 Apr 2025 19:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744227265;
+	bh=2vOJoxdNP20mQK3UiS0RfjI+E8Wm/mByxTHPEUjCAOs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=a+S20Ogz2aBgFaushLkB5eVBNyZIgUSX4KMnHqk+g7Ec4GeJWIdSdhuNiorMwTW49
+	 FQ+wxLaq7NOAe8qKD+sV4ApTiICjCssaVX33XA8+XmqoOGTBVMwqEXhJyybgtn3FbM
+	 YcGmv9OJmrp0B0gg2m/dehIMUYpIsDxfTrLupo7nslm9fIqMMQyopuzGR1OoiHz6eP
+	 QfIwE2UPlJZRqhfjsp8PwfXgZX6P5aXfuZfJ6SOoN5j9rRrLtu2V25gC0vTJKhSpUU
+	 xpSXYBDkAfYFOhpd4ujWxHaj23lCHcsTEenxg5j53OpDM+EtdhDAvZfwRhW7aW7tNh
+	 EXec9K/yJr+fw==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2a01bcd0143so9188075fac.2;
+        Wed, 09 Apr 2025 12:34:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVb42CLJ5luG2UGnVZt6ZB2S3Zyo0P9ofPI11B7NGD+44AZ71rQpvMAafxJyuCF4bCM3n9H6Lh65yCZmw967w==@lists.linux.dev, AJvYcCWCRbw6r2HvO8yq+ejJfWATwiJjQqy2GK8SkLmT1qpKma+Gp8oK1TyYOvIq6uKvPwEglg7B@lists.linux.dev
+X-Gm-Message-State: AOJu0YzvhwlUCVvUaGjssricHGzoxbacf/+e+0dYdf2eDvgoop6GsH4J
+	xH8RKFiwzWIdBmXZS3QBHHsveSwrF8Gz7WeGMHnxL3dTWri7xkXX8W2Ji9DLi1Sm0uPtMHj8hE0
+	NIv0Cp+QHlBX8Zj1+QquCNTHqpls=
+X-Google-Smtp-Source: AGHT+IF1EOTSsHu6PwO7CQca/F8ZGj5qwdWoncQouS6lp4WoUO8bFBjNu283luRGQSJDHNAzpoZaPGEr9HneQ1apEeM=
+X-Received: by 2002:a05:6871:e418:b0:2c2:260:d77b with SMTP id
+ 586e51a60fabf-2d08dcdf089mr2503514fac.5.1744227264335; Wed, 09 Apr 2025
+ 12:34:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T654dc7563e4388c4
-Date: Wed, 09 Apr 2025 21:28:22 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kees Cook" <kees@kernel.org>
-Cc: "Andrew Morton" <akpm@linux-foundation.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nicolas@fjasle.eu>, "Dmitry Vyukov" <dvyukov@google.com>,
- "Andrey Konovalov" <andreyknvl@gmail.com>, linux-kbuild@vger.kernel.org,
- linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <6f7e3436-8ae8-473d-be64-c962366ca5c8@app.fastmail.com>
-In-Reply-To: <202504090919.6DE21CFA7A@keescook>
-References: <20250409160251.work.914-kees@kernel.org>
- <32bb421a-1a9e-40eb-9318-d8ca1a0f407f@app.fastmail.com>
- <202504090919.6DE21CFA7A@keescook>
-Subject: Re: [PATCH] gcc-plugins: Remove SANCOV plugin
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <202504100128.AjbVDQgK-lkp@intel.com> <20250409-wine-swift-of-tempest-eae2cb@sudeepholla>
+In-Reply-To: <20250409-wine-swift-of-tempest-eae2cb@sudeepholla>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 9 Apr 2025 21:34:13 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iaxP9wz14WSi4saEJTiQau5vDBxWi0t_e5UzGrJAHe_g@mail.gmail.com>
+X-Gm-Features: ATxdqUFGJglX_EWRCO_-dcl4UqyApcv4Gv2qoxdxwy54YWSlW7CBu3F3gBCHGzI
+Message-ID: <CAJZ5v0iaxP9wz14WSi4saEJTiQau5vDBxWi0t_e5UzGrJAHe_g@mail.gmail.com>
+Subject: Re: [rafael-pm:bleeding-edge 39/52] drivers/acpi/apei/einj-core.c:877:43:
+ error: expected identifier
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, devel@acpica.org, linux-pm@vger.kernel.org, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 9, 2025, at 18:19, Kees Cook wrote:
-> On Wed, Apr 09, 2025 at 06:16:58PM +0200, Arnd Bergmann wrote:
->> On Wed, Apr 9, 2025, at 18:02, Kees Cook wrote:
->> 
->> >  config KCOV
->> >  	bool "Code coverage for fuzzing"
->> >  	depends on ARCH_HAS_KCOV
->> > -	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
->> > +	depends on CC_HAS_SANCOV_TRACE_PC
->> 
->> So this dependency would also disappear. I think either way is fine.
->> 
->> The rest of the patch is again identical to my version.
+On Wed, Apr 9, 2025 at 9:25=E2=80=AFPM Sudeep Holla <sudeep.holla@arm.com> =
+wrote:
 >
-> Ah! How about you keep the patch as part of your gcc-8.1 clean up, then?
-> That seems more clear, etc.
+> On Thu, Apr 10, 2025 at 02:10:04AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git bleeding-edge
+> > head:   089d4e79e2c932faef79e0061cb874000f755009
+> > commit: 4ec052af63c58a62a896508cc5f8a0a2f516a590 [39/52] ACPI: APEI: EI=
+NJ: Transition to the faux device interface
+> > config: x86_64-buildonly-randconfig-001-20250409 (https://download.01.o=
+rg/0day-ci/archive/20250410/202504100128.AjbVDQgK-lkp@intel.com/config)
+> > compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58=
+df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20250410/202504100128.AjbVDQgK-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202504100128.AjbVDQgK-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> drivers/acpi/apei/einj-core.c:877:43: error: expected identifier
+> >      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remo=
+ve), true);
+> >          |                                           ^
+> >    include/linux/init.h:397:21: note: expanded from macro '__exit_p'
+> >      397 | #define __exit_p(x) NULL
+> >          |                     ^
+> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+> >        8 | #define NULL ((void *)0)
+> >          |              ^
+> > >> drivers/acpi/apei/einj-core.c:877:1: error: type specifier missing, =
+defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplici=
+t-int]
+> >      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remo=
+ve), true);
+> >          | ^
+> >          | int
+> > >> drivers/acpi/apei/einj-core.c:877:19: error: a function declaration =
+without a prototype is deprecated in all versions of C [-Werror,-Wstrict-pr=
+ototypes]
+> >      877 | module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_remo=
+ve), true);
+> >          |                   ^
+> >          |                                                             =
+         void
+> >    3 errors generated.
+> >
+> >
+> > vim +877 drivers/acpi/apei/einj-core.c
+> >
+> >    876
+> >  > 877        module_faux_driver(acpi_einj, einj_probe, __exit_p(einj_r=
+emove), true);
+> >    878
+> >
+>
+> The macro module_faux_driver() was not merged as most of the users I
+> posted in v2 of the series depend on modprobe and modalias and that
+> doesn't work with faux devices.
+>
+> If this ACPI APEI EINJ also needs that support we can't use faux device.
+> But I think this doesn't have modalias, so v1 of this change[1] which
+> doesn't  introduce/use the macro module_faux_driver() can be used instead=
+.
+>
+> Sorry for the noise with v2.
 
-Sure, I can probably keep that all in a branch of the asm-generic
-tree, or alternatively send it through the kbuild tree.
+No worries.
 
-Shall I include the patch to remove the structleak plugin as well?
+I've picked up the v1 instead, let's see how it goes.
 
-       Arnd
+> [1] https://lore.kernel.org/all/20250317-plat2faux_dev-v1-8-5fe67c085ad5@=
+arm.com/
