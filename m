@@ -1,248 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2B2259C;
-	Wed,  9 Apr 2025 06:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149191D63E8;
+	Wed,  9 Apr 2025 06:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744178620; cv=none; b=WMk4vu3ecjbIXlzXB0PjlmmIMjyWx7IQyhj5rBfogO8xlrb9gIZWyv3h0+iA8AXdH17y9UNtsAhEqdJUAdTguZLLbFZsECqwP2M5Z1F3dOzb2APzFL3tkaO/e56arUQoDCWesHUSjC4XTyP2mXkhGGc2T0AnvCu/toGMJwXpxzs=
+	t=1744179945; cv=none; b=Fe9HejQbGsEsVBKnaMktH3ol7jiInoGwWi8w9FHEPB6e0cHPhVcOff7XHX1aqWvSyJmAZgdQE4XJ4jnLVF539WZUQ0VkpHE/sx3IZ/FjOOg0Vn1M7RKQDWLDJmCIfi9tRNOjkb7vpXgYCmU4RmAYtg5Hfk5/zBTfEkJZ0PZF+/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744178620; c=relaxed/simple;
-	bh=4xHqhPgdW8TYcTqscponCgob90BA2s/YzsyIWQJriDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cAEVDHEX60M0zi6H60La/1foObtPKspi5MpyU/qbj4pCdTaU2RGfR2JLFTdyNEeriygmvpQhMcGZLT4udF6p2SpvaL2HdBn3mdB+9uUMzT8yXl3SKJUEwdZja56N6GvhdlbS2bqIpDnhKQsB57nfgEE0pUsWKkNklv8ZdG8cCAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dbe0x5TW; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dbe0x5TW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744178618; x=1775714618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4xHqhPgdW8TYcTqscponCgob90BA2s/YzsyIWQJriDY=;
-  b=dbe0x5TWHyna646FJ7kEsfPWxIQp6alhgQCrgZ3rHQNoxE2Ic9y0mcrY
-   145TTWH5kufa6z4jx7vuYuSwHEtzPu937OdLTMgLs0x6/T4F0f9uYRPF6
-   ie4w9ChvzAU9hJSL0kwfUlO5lm60Xzc1xCzdUcF2whqbCqD1vcaMRI8hL
-   SegPhEyVToIOMcmiJDGtj5EJ+9uVtmZ3/4bM+rhfq1P5rpijNFDOi8bDw
-   pQ7vMcZQta0I4v2vOJy2HEqKewK4FDmdQLvyp3gvTBoBGp92xuZ/C/4u7
-   uzIN9Or8u/Yo8v0wspQkO/kx9jw9yv/r/J4LMXOSwbA5MEUfqfE0DvomZ
-   A==;
-X-CSE-ConnectionGUID: IG6nTDw3SR67mG2qAPjlFA==
-X-CSE-MsgGUID: I3YkzelNTX64pHjXcK/WIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45756774"
-X-IronPort-AV: E=Sophos;i="6.15,199,1739865600"; 
-   d="scan'208";a="45756774"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 23:03:04 -0700
-X-CSE-ConnectionGUID: 6NCazJJkS4CXXx6fTKPOhg==
-X-CSE-MsgGUID: F1VGdALsRbGwrqJ8DRVZ1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,199,1739865600"; 
-   d="scan'208";a="159463384"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Apr 2025 23:02:55 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u2OWT-0008Md-0p;
-	Wed, 09 Apr 2025 06:02:53 +0000
-Date: Wed, 9 Apr 2025 14:01:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, harry.wentland@amd.com,
-	sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-	alexander.deucher@amd.com, christian.koenig@amd.com,
-	Xinhui.Pan@amd.com, airlied@gmail.com, simona@ffwll.ch
+	s=arc-20240116; t=1744179945; c=relaxed/simple;
+	bh=yArbNZeBDimqLdfvP/PeizsT9PWQf15IAXIy4fxbdmA=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=akfqDo7YaZVmmru0OzL2/posVxy+Zd8L5MczcjgT26iKP9K01asthtnaW6YhWgLgZ9sM8B2xtrvjbfE/dJl8Mz6LAWuJp5iVObkrSLBBYxmlitpSOpRuQLKtmPEnI1EoiLHlwj2tHwYdVDhAwjJEBTP88d1BavK23QaerVcVMB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ZXXxJ1pJgz4f3jM1;
+	Wed,  9 Apr 2025 14:25:08 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id AE6101A0AD9;
+	Wed,  9 Apr 2025 14:25:31 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+	by APP4 (Coremail) with SMTP id gCh0CgDnR1zCEvZndqnLIw--.31042S2;
+	Wed, 09 Apr 2025 14:25:27 +0800 (CST)
+Subject: Re: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning:
+ function 'swap_is_last_ref' is not needed and will not be emitted
+To: Andrew Morton <akpm@linux-foundation.org>,
+ kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	hamza.mahfooz@amd.com, chiahsuan.chung@amd.com,
-	sunil.khatri@amd.com, alex.hung@amd.com, aurabindo.pillai@amd.com,
-	hersenxs.wu@amd.com, mario.limonciello@amd.com, mwen@igalia.com,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, Wentao Liang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH v2] drm/amd/display: Add error check for avi and vendor
- infoframe setup function
-Message-ID: <202504091350.V54m3vD1-lkp@intel.com>
-References: <20250408022018.2786-1-vulab@iscas.ac.cn>
+ Linux Memory Management List <linux-mm@kvack.org>,
+ Tim Chen <tim.c.chen@linux.intel.com>, Baoquan He <bhe@redhat.com>
+References: <202504081841.jbL7yL0r-lkp@intel.com>
+ <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
+From: Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <5560cc75-c219-2f8b-7296-0bfb904172e7@huaweicloud.com>
+Date: Wed, 9 Apr 2025 14:25:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250408022018.2786-1-vulab@iscas.ac.cn>
-
-Hi Wentao,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-exynos/exynos-drm-next]
-[also build test ERROR on linus/master v6.15-rc1 next-20250408]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/drm-amd-display-Add-error-check-for-avi-and-vendor-infoframe-setup-function/20250408-102113
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20250408022018.2786-1-vulab%40iscas.ac.cn
-patch subject: [PATCH v2] drm/amd/display: Add error check for avi and vendor infoframe setup function
-config: arm64-randconfig-003-20250409 (https://download.01.org/0day-ci/archive/20250409/202504091350.V54m3vD1-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250409/202504091350.V54m3vD1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504091350.V54m3vD1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6221:12: error: incompatible pointer types passing 'struct drm_device *const' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
-                           dev_err(connector->dev, "Failed to setup avi infoframe: %zd\n", err);
-                                   ^~~~~~~~~~~~~~
-   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                     ^~~
-   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                           ^~~
-   include/linux/dev_printk.h:86:36: note: passing argument to parameter 'dev' here
-   void _dev_err(const struct device *dev, const char *fmt, ...)
-                                      ^
-   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6227:12: error: incompatible pointer types passing 'struct drm_device *const' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
-                           dev_err(connector->dev, "Failed to setup vendor infoframe: %zd\n", err);
-                                   ^~~~~~~~~~~~~~
-   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                     ^~~
-   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                           ^~~
-   include/linux/dev_printk.h:86:36: note: passing argument to parameter 'dev' here
-   void _dev_err(const struct device *dev, const char *fmt, ...)
-                                      ^
-   2 errors generated.
+In-Reply-To: <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgDnR1zCEvZndqnLIw--.31042S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF45WFyDAF13Jr47Gr1rJFb_yoWrWF4xpF
+	W8Wwn8GF48JryxKa9rW3Z8XrySgws3Gw15JFyDKry8ZasrJrWagF9a9rWYkFnrAw1v9FWY
+	vFsFga13ua1qvF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
+	wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UK2N
+	tUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 
 
-vim +6221 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
 
-  6156	
-  6157	static void fill_stream_properties_from_drm_display_mode(
-  6158		struct dc_stream_state *stream,
-  6159		const struct drm_display_mode *mode_in,
-  6160		const struct drm_connector *connector,
-  6161		const struct drm_connector_state *connector_state,
-  6162		const struct dc_stream_state *old_stream,
-  6163		int requested_bpc)
-  6164	{
-  6165		struct dc_crtc_timing *timing_out = &stream->timing;
-  6166		const struct drm_display_info *info = &connector->display_info;
-  6167		struct amdgpu_dm_connector *aconnector = NULL;
-  6168		struct hdmi_vendor_infoframe hv_frame;
-  6169		struct hdmi_avi_infoframe avi_frame;
-  6170		ssize_t err;
-  6171	
-  6172		if (connector->connector_type != DRM_MODE_CONNECTOR_WRITEBACK)
-  6173			aconnector = to_amdgpu_dm_connector(connector);
-  6174	
-  6175		memset(&hv_frame, 0, sizeof(hv_frame));
-  6176		memset(&avi_frame, 0, sizeof(avi_frame));
-  6177	
-  6178		timing_out->h_border_left = 0;
-  6179		timing_out->h_border_right = 0;
-  6180		timing_out->v_border_top = 0;
-  6181		timing_out->v_border_bottom = 0;
-  6182		/* TODO: un-hardcode */
-  6183		if (drm_mode_is_420_only(info, mode_in)
-  6184				&& stream->signal == SIGNAL_TYPE_HDMI_TYPE_A)
-  6185			timing_out->pixel_encoding = PIXEL_ENCODING_YCBCR420;
-  6186		else if (drm_mode_is_420_also(info, mode_in)
-  6187				&& aconnector
-  6188				&& aconnector->force_yuv420_output)
-  6189			timing_out->pixel_encoding = PIXEL_ENCODING_YCBCR420;
-  6190		else if ((connector->display_info.color_formats & DRM_COLOR_FORMAT_YCBCR444)
-  6191				&& stream->signal == SIGNAL_TYPE_HDMI_TYPE_A)
-  6192			timing_out->pixel_encoding = PIXEL_ENCODING_YCBCR444;
-  6193		else
-  6194			timing_out->pixel_encoding = PIXEL_ENCODING_RGB;
-  6195	
-  6196		timing_out->timing_3d_format = TIMING_3D_FORMAT_NONE;
-  6197		timing_out->display_color_depth = convert_color_depth_from_display_info(
-  6198			connector,
-  6199			(timing_out->pixel_encoding == PIXEL_ENCODING_YCBCR420),
-  6200			requested_bpc);
-  6201		timing_out->scan_type = SCANNING_TYPE_NODATA;
-  6202		timing_out->hdmi_vic = 0;
-  6203	
-  6204		if (old_stream) {
-  6205			timing_out->vic = old_stream->timing.vic;
-  6206			timing_out->flags.HSYNC_POSITIVE_POLARITY = old_stream->timing.flags.HSYNC_POSITIVE_POLARITY;
-  6207			timing_out->flags.VSYNC_POSITIVE_POLARITY = old_stream->timing.flags.VSYNC_POSITIVE_POLARITY;
-  6208		} else {
-  6209			timing_out->vic = drm_match_cea_mode(mode_in);
-  6210			if (mode_in->flags & DRM_MODE_FLAG_PHSYNC)
-  6211				timing_out->flags.HSYNC_POSITIVE_POLARITY = 1;
-  6212			if (mode_in->flags & DRM_MODE_FLAG_PVSYNC)
-  6213				timing_out->flags.VSYNC_POSITIVE_POLARITY = 1;
-  6214		}
-  6215	
-  6216		if (stream->signal == SIGNAL_TYPE_HDMI_TYPE_A) {
-  6217			err = drm_hdmi_avi_infoframe_from_display_mode(&avi_frame,
-  6218								       (struct drm_connector *)connector,
-  6219								       mode_in);
-  6220			if (err < 0)
-> 6221				dev_err(connector->dev, "Failed to setup avi infoframe: %zd\n", err);
-  6222			timing_out->vic = avi_frame.video_code;
-  6223			err = drm_hdmi_vendor_infoframe_from_display_mode(&hv_frame,
-  6224									  (struct drm_connector *)connector,
-  6225									  mode_in);
-  6226			if (err < 0)
-  6227				dev_err(connector->dev, "Failed to setup vendor infoframe: %zd\n", err);
-  6228			timing_out->hdmi_vic = hv_frame.vic;
-  6229		}
-  6230	
-  6231		if (aconnector && is_freesync_video_mode(mode_in, aconnector)) {
-  6232			timing_out->h_addressable = mode_in->hdisplay;
-  6233			timing_out->h_total = mode_in->htotal;
-  6234			timing_out->h_sync_width = mode_in->hsync_end - mode_in->hsync_start;
-  6235			timing_out->h_front_porch = mode_in->hsync_start - mode_in->hdisplay;
-  6236			timing_out->v_total = mode_in->vtotal;
-  6237			timing_out->v_addressable = mode_in->vdisplay;
-  6238			timing_out->v_front_porch = mode_in->vsync_start - mode_in->vdisplay;
-  6239			timing_out->v_sync_width = mode_in->vsync_end - mode_in->vsync_start;
-  6240			timing_out->pix_clk_100hz = mode_in->clock * 10;
-  6241		} else {
-  6242			timing_out->h_addressable = mode_in->crtc_hdisplay;
-  6243			timing_out->h_total = mode_in->crtc_htotal;
-  6244			timing_out->h_sync_width = mode_in->crtc_hsync_end - mode_in->crtc_hsync_start;
-  6245			timing_out->h_front_porch = mode_in->crtc_hsync_start - mode_in->crtc_hdisplay;
-  6246			timing_out->v_total = mode_in->crtc_vtotal;
-  6247			timing_out->v_addressable = mode_in->crtc_vdisplay;
-  6248			timing_out->v_front_porch = mode_in->crtc_vsync_start - mode_in->crtc_vdisplay;
-  6249			timing_out->v_sync_width = mode_in->crtc_vsync_end - mode_in->crtc_vsync_start;
-  6250			timing_out->pix_clk_100hz = mode_in->crtc_clock * 10;
-  6251		}
-  6252	
-  6253		timing_out->aspect_ratio = get_aspect_ratio(mode_in);
-  6254	
-  6255		stream->out_transfer_func.type = TF_TYPE_PREDEFINED;
-  6256		stream->out_transfer_func.tf = TRANSFER_FUNCTION_SRGB;
-  6257		if (stream->signal == SIGNAL_TYPE_HDMI_TYPE_A) {
-  6258			if (!adjust_colour_depth_from_display_info(timing_out, info) &&
-  6259			    drm_mode_is_420_also(info, mode_in) &&
-  6260			    timing_out->pixel_encoding != PIXEL_ENCODING_YCBCR420) {
-  6261				timing_out->pixel_encoding = PIXEL_ENCODING_YCBCR420;
-  6262				adjust_colour_depth_from_display_info(timing_out, info);
-  6263			}
-  6264		}
-  6265	
-  6266		stream->output_color_space = get_output_color_space(timing_out, connector_state);
-  6267		stream->content_type = get_output_content_type(connector_state);
-  6268	}
-  6269	
+on 4/9/2025 8:39 AM, Andrew Morton wrote:
+> On Tue, 8 Apr 2025 18:06:11 +0800 kernel test robot <lkp@intel.com> wrote:
+> 
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+>> head:   7702d0130dc002bab2c3571ddb6ff68f82d99aea
+>> commit: 6bb001b6b64ec20d900d0d81294a0f031af59c3e [1753/1936] mm: swap: enable swap_entry_range_free() to drop any kind of last ref
+>> config: hexagon-randconfig-001-20250408 (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/config)
+>> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250408/202504081841.jbL7yL0r-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202504081841.jbL7yL0r-lkp@intel.com/
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> mm/swapfile.c:1517:20: warning: function 'swap_is_last_ref' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+> 
+> It's annoying that gcc warns about this.
+> 
+>>     1517 | static inline bool swap_is_last_ref(unsigned char count)
+>>          |                    ^~~~~~~~~~~~~~~~
+>>    1 warning generated.
+>>
+>>
+>> vim +/swap_is_last_ref +1517 mm/swapfile.c
+>>
+>>   1512	
+>>   1513	/*
+>>   1514	 * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
+>>   1515	 * caller have to ensure all entries belong to the same cgroup and cluster.
+>>   1516	 */
+>>> 1517	static inline bool swap_is_last_ref(unsigned char count)
+>>   1518	{
+>>   1519		return (count == SWAP_HAS_CACHE) || (count == 1) ||
+>>   1520		       (count == SWAP_MAP_SHMEM);
+>>   1521	}
+>>   1522	
+> 
+> : static inline bool swap_is_last_ref(unsigned char count)
+> : {
+> : 	return (count == SWAP_HAS_CACHE) || (count == 1) ||
+> : 	       (count == SWAP_MAP_SHMEM);
+> : }
+> : 
+> : static void swap_entries_free(struct swap_info_struct *si,
+> : 			      struct swap_cluster_info *ci,
+> : 			      swp_entry_t entry, unsigned int nr_pages)
+> : {
+> : 	unsigned long offset = swp_offset(entry);
+> : 	unsigned char *map = si->swap_map + offset;
+> : 	unsigned char *map_end = map + nr_pages;
+> : 
+> : 	/* It should never free entries across different clusters */
+> : 	VM_BUG_ON(ci != offset_to_cluster(si, offset + nr_pages - 1));
+> : 	VM_BUG_ON(cluster_is_empty(ci));
+> : 	VM_BUG_ON(ci->count < nr_pages);
+> : 
+> : 	ci->count -= nr_pages;
+> : 	do {
+> : 		VM_BUG_ON(!swap_is_last_ref(*map));
+> 
+> 
+> And it's annoying that VM_BUG_ON() doesn't reference its arg when
+> CONFIG_DEBUG_VM=n.
+> 
+> I'll add this:
+Thanks for fixing this.
+> 
+> --- a/mm/swapfile.c~mm-swap-enable-swap_entry_range_free-to-drop-any-kind-of-last-ref-fix
+> +++ a/mm/swapfile.c
+> @@ -1514,11 +1514,13 @@ fallback:
+>   * Drop the last ref(1, SWAP_HAS_CACHE or SWAP_MAP_SHMEM) of swap entries,
+>   * caller have to ensure all entries belong to the same cgroup and cluster.
+>   */
+> +#ifdef CONFIG_DEBUG_VM
+>  static inline bool swap_is_last_ref(unsigned char count)
+>  {
+>  	return (count == SWAP_HAS_CACHE) || (count == 1) ||
+>  	       (count == SWAP_MAP_SHMEM);
+>  }
+> +#endif
+>  
+>  static void swap_entries_free(struct swap_info_struct *si,
+>  			      struct swap_cluster_info *ci,
+> _
+> 
+> Kemeng, can you please review that comment "Drop the last ref...". 
+>>From its positioning it appears to be describing swap_is_last_ref(),
+> but swap_is_last_ref() doesn't do those things.
+> 
+The comment was originally for swap_entries_free() where swap_is_last_ref()
+is factored out from. The swap_is_last_ref() is only used in swap_entries_free(),
+so I treat these two functions as a single unit and placed the comment in front
+of swap_is_last_ref().
+If this introduces confusion, I think we can simply move this comment to front of
+swap_entries_free() to address this.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Kemeng
+
