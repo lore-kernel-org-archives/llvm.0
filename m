@@ -1,121 +1,243 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB66E25DD0E;
-	Wed,  9 Apr 2025 19:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5891C6BE;
+	Wed,  9 Apr 2025 19:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744225424; cv=none; b=mNMdvB2ovA1GsQeFwB7uVJFo1vc5Qcd8aY4ZHtCF7WdxZY7s0nXW6wx17zLgzFU5WKpqFcNVAkQdivgMmBBGw2ciyeIAHDuVnrrFhBpZRFdSHahDfa4wKGXAez9H31u0y0cZZNscC16TEFmz97nIhi47tasDaoXQmvktJY9Mmw4=
+	t=1744226234; cv=none; b=WlclO+1eE9cJsdyU3MIJTMniEy+CzW/vgTZBz8bsHSqAHwT08dsKofOj9whlC72tmHSy/+p9IKEoRC/q9JZuTSvvNvcKfMzHJ3XPGj/wMw3yXslCIeqgfQDjBuHGBwOqG/JjETXsT5T7/3/lW9B+MWk2Tq+zmb0zS3Uov/66R+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744225424; c=relaxed/simple;
-	bh=5RI7XzZpLuIxdNbstAilg7SNq3t9eP/hJt/0NSSzUkc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C3dHpa2XcpDK45aP6+HynD52JGG+zTm47OyePv5eg+/hULmOWo+P9sbwXj32BtwgQ8CpZxPWiXORNBKS6g+G/yXulKbN91ZIw/XV/pyr0CLhs/eEY42NTy+bkCBniUztmIzV/5R7dppXmG6kYKhzHMPbhpe5VDp/gRjsTp111TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmMb65BZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744226234; c=relaxed/simple;
+	bh=bF03VxvTsU+BqmHsQq0q+S9ppRrCc1/KlnD8PJitqk8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ROzE8dUwHA2d2YtFV8hBxnZ3kqekwy9ziKop/gM1fL8/EsljRzVzABCUuiCVmBV+Bfo2Kwc6mJNZCq4ZtEG7mJhVw+Hgvhu+b2vP4XPb4r5YVxNrxKcDmevQRYWMpt4i8Oim0xoCwqnlfcJwUIxyuOiYY0oxGQ5nXnJY5ilBBhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qJI2/Xoi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmMb65BZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA325C4CEE2;
-	Wed,  9 Apr 2025 19:03:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qJI2/Xoi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2B7C4CEE2;
+	Wed,  9 Apr 2025 19:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744225422;
-	bh=5RI7XzZpLuIxdNbstAilg7SNq3t9eP/hJt/0NSSzUkc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=HmMb65BZ9IQWL5MGSXXOF+OlAaMo1yfG1cAdxW+Er8MeO4RZPFuOZIwljgkyaxmA+
-	 9JmhqCdNLUHq+UpVtoEm4CX0Hzji6iimpH/Ije9PKRlpLLUelricX6ynQbHAJ1RVc4
-	 uxY0mKd9BKY9J79IPgD2SnZNo7NxUmx3b2B0jK835O4Di1MnpnJ5ptIs2wezlLnnUk
-	 BzlFLsxhewuQor8ziukwQzMSGlQnrtvqQsWXS06gmHLQCLJjqGGA36GbYAqmuzjqhW
-	 YlYa1+dYO/nDHt/XpnALJAN5XyRQREeUH5gxB4EfiE9QQVQVbhodTj1uNkVN8zXAol
-	 eMQ5PnCFDSoTg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 09 Apr 2025 12:03:17 -0700
-Subject: [PATCH] drm/sysfb: efidrm: Avoid clang -Wsometimes-uninitialized
- in efidrm_device_create()
+	s=k20201202; t=1744226234;
+	bh=bF03VxvTsU+BqmHsQq0q+S9ppRrCc1/KlnD8PJitqk8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qJI2/XoironzsJaz+i80e/WQ5Qp9VcugyrJtl/YBj3oj0+B7CR2sHsGtWpizK6yO4
+	 VBHn2aUCKN25vPTBjtUJ5ErBpW2uZ0Nr7njrQYPiJXVIm5JOFP/Aa8E5gmKRCoJxm0
+	 2vFvQqbHpIzkDxqkRul6nNrkQNGD3XqtCFeaHlXiWlZ71xy8f9NAVNkpTbM33mpsn2
+	 gk6Zv+IScY5WaKqKDsrRvA4EyHwyJNofhELmFBXXaSUa90cRftnriGKZcCivNb5MT/
+	 7CNvC3GIEekiFTO9pLOuthuuJFylF+HSeUIxKp18BpylKcbyjrBpuCpkk/cUVDn0Ei
+	 6TKBITTbXPjew==
+Date: Wed, 9 Apr 2025 21:17:02 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Xin Li <xin@zytor.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-edac@vger.kernel.org,
+	kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+	linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+	peterz@infradead.org, acme@kernel.org, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] x86/msr: Standardize on 'u32' MSR indices in <asm/msr.h>
+Message-ID: <Z_bHrjUKKWN28TX9@gmail.com>
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-2-xin@zytor.com>
+ <Z-pruogreCuU66wm@gmail.com>
+ <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com>
+ <Z-ubVFyoOzwKhI53@gmail.com>
+ <c316a6c6-b97c-48b2-9598-d44e2ec72fbc@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAHTE9mcC/x2N0QqDMAxFf0XyvEDt1OF+ZcgoberysHSk6gbiv
- xv2eC6ce3aopEwV7s0OShtXLmLQXhqIryAzISdj8M73rnMjUuakbwxb4YSrsPCCNSqRPFlywW9
- QG2dMg6c83CJdYw/29lEzf//SYzqOE2GYieJ5AAAA
-X-Change-ID: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
-To: Thomas Zimmermann <tzimmermann@suse.de>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2743; i=nathan@kernel.org;
- h=from:subject:message-id; bh=5RI7XzZpLuIxdNbstAilg7SNq3t9eP/hJt/0NSSzUkc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOnfjvR4imzmZP15/NzDLVcc+dcqGkSsVnLVfXOj9PsUM
- 9vsRwmiHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAik+QYGT6s0XGSv3ZG6m62
- uCQzY9z06apSVu6zK8+3xC17+3N3czrDPyvhVdniVma/bN2a57/rVni5+mqO7mdva233hMXFWU2
- T2QE=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c316a6c6-b97c-48b2-9598-d44e2ec72fbc@zytor.com>
 
-Clang warns (or errors with CONFIG_WERROR=y):
 
-  drivers/gpu/drm/sysfb/efidrm.c:353:11: error: variable 'screen_base' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-    353 |         else if (mem_flags & EFI_MEMORY_WB)
-        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/gpu/drm/sysfb/efidrm.c:356:7: note: uninitialized use occurs here
-    356 |         if (!screen_base)
-        |              ^~~~~~~~~~~
-  drivers/gpu/drm/sysfb/efidrm.c:353:7: note: remove the 'if' if its condition is always true
-    353 |         else if (mem_flags & EFI_MEMORY_WB)
-        |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    354 |                 screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
-  drivers/gpu/drm/sysfb/efidrm.c:261:27: note: initialize the variable 'screen_base' to silence this warning
-    261 |         void __iomem *screen_base;
-        |                                  ^
-        |                                   = NULL
+* Xin Li <xin@zytor.com> wrote:
 
-efidrm_get_mem_flags() can only return a mask that has at least one of
-the tested values set so the else case is impossible but clang's static
-analysis runs before inlining so it cannot know that.
+> On 4/1/2025 12:52 AM, Ingo Molnar wrote:
+> > > Should we rename the *msrl() functions to *msrq() as part of this
+> > > overhaul?
+> > Yeah, that's a good idea, and because talk is cheap I just implemented
+> > this in the tip:WIP.x86/msr branch with a couple of other cleanups in
+> > this area (see the shortlog & diffstat below), but the churn is high:
+> > 
+> >    144 files changed, 1034 insertions(+), 1034 deletions(-)
+> 
+> Hi Ingo,
+> 
+> I noticed that you keep the type of MSR index in these patches as
+> "unsigned int".
+> 
+> I'm thinking would it be better to standardize it as "u32"?
+> 
+> Because:
+> 1) MSR index is placed in ECX to execute MSR instructions, and the
+>    high-order 32 bits of RCX are ignored on 64-bit.
+> 2) MSR index is encoded as a 32-bit immediate in the new immediate form
+>    MSR instructions.
 
-Initialize screen_base to NULL and add a defensive print in case
-mem_flags were ever returned without one of the four valid values.
+Makes sense - something like the attached patch?
 
-Fixes: 32ae90c66fb6 ("drm/sysfb: Add efidrm for EFI displays")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Thanks,
+
+	Ingo
+
+=====================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Wed, 9 Apr 2025 21:12:39 +0200
+Subject: [PATCH] x86/msr: Standardize on 'u32' MSR indices in <asm/msr.h>
+
+This is the customary type used for hardware ABIs.
+
+Suggested-by: Xin Li <xin@zytor.com>
+Suggested-by: "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 ---
- drivers/gpu/drm/sysfb/efidrm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/msr.h | 29 ++++++++++++++---------------
+ arch/x86/lib/msr.c         |  4 ++--
+ 2 files changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/gpu/drm/sysfb/efidrm.c b/drivers/gpu/drm/sysfb/efidrm.c
-index af90064a4c04..7d820f42956b 100644
---- a/drivers/gpu/drm/sysfb/efidrm.c
-+++ b/drivers/gpu/drm/sysfb/efidrm.c
-@@ -258,7 +258,7 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
- 	struct drm_sysfb_device *sysfb;
- 	struct drm_device *dev;
- 	struct resource *mem = NULL;
--	void __iomem *screen_base;
-+	void __iomem *screen_base = NULL;
- 	struct drm_plane *primary_plane;
- 	struct drm_crtc *crtc;
- 	struct drm_encoder *encoder;
-@@ -353,6 +353,8 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
- 	else if (mem_flags & EFI_MEMORY_WB)
- 		screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
- 					    MEMREMAP_WB);
-+	else
-+		drm_warn(dev, "unhandled mem_flags: 0x%llx\n", mem_flags);
- 	if (!screen_base)
- 		return ERR_PTR(-ENOMEM);
- 	iosys_map_set_vaddr_iomem(&sysfb->fb_addr, screen_base);
-
----
-base-commit: e8bf4a1bdaeadb28d13b9a2bcfd5910fda06eede
-change-id: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
+index 4ee9ae734c08..20deb58308e5 100644
+--- a/arch/x86/include/asm/msr.h
++++ b/arch/x86/include/asm/msr.h
+@@ -63,12 +63,12 @@ struct saved_msrs {
+ DECLARE_TRACEPOINT(read_msr);
+ DECLARE_TRACEPOINT(write_msr);
+ DECLARE_TRACEPOINT(rdpmc);
+-extern void do_trace_write_msr(unsigned int msr, u64 val, int failed);
+-extern void do_trace_read_msr(unsigned int msr, u64 val, int failed);
++extern void do_trace_write_msr(u32 msr, u64 val, int failed);
++extern void do_trace_read_msr(u32 msr, u64 val, int failed);
+ extern void do_trace_rdpmc(u32 msr, u64 val, int failed);
+ #else
+-static inline void do_trace_write_msr(unsigned int msr, u64 val, int failed) {}
+-static inline void do_trace_read_msr(unsigned int msr, u64 val, int failed) {}
++static inline void do_trace_write_msr(u32 msr, u64 val, int failed) {}
++static inline void do_trace_read_msr(u32 msr, u64 val, int failed) {}
+ static inline void do_trace_rdpmc(u32 msr, u64 val, int failed) {}
+ #endif
+ 
+@@ -79,7 +79,7 @@ static inline void do_trace_rdpmc(u32 msr, u64 val, int failed) {}
+  * think of extending them - you will be slapped with a stinking trout or a frozen
+  * shark will reach you, wherever you are! You've been warned.
+  */
+-static __always_inline u64 __rdmsr(unsigned int msr)
++static __always_inline u64 __rdmsr(u32 msr)
+ {
+ 	DECLARE_ARGS(val, low, high);
+ 
+@@ -91,7 +91,7 @@ static __always_inline u64 __rdmsr(unsigned int msr)
+ 	return EAX_EDX_VAL(val, low, high);
+ }
+ 
+-static __always_inline void __wrmsr(unsigned int msr, u32 low, u32 high)
++static __always_inline void __wrmsr(u32 msr, u32 low, u32 high)
+ {
+ 	asm volatile("1: wrmsr\n"
+ 		     "2:\n"
+@@ -113,7 +113,7 @@ do {							\
+ 	__wrmsr((msr), (u32)((u64)(val)),		\
+ 		       (u32)((u64)(val) >> 32))
+ 
+-static inline u64 native_read_msr(unsigned int msr)
++static inline u64 native_read_msr(u32 msr)
+ {
+ 	u64 val;
+ 
+@@ -125,8 +125,7 @@ static inline u64 native_read_msr(unsigned int msr)
+ 	return val;
+ }
+ 
+-static inline u64 native_read_msr_safe(unsigned int msr,
+-						      int *err)
++static inline u64 native_read_msr_safe(u32 msr, int *err)
+ {
+ 	DECLARE_ARGS(val, low, high);
+ 
+@@ -142,7 +141,7 @@ static inline u64 native_read_msr_safe(unsigned int msr,
+ 
+ /* Can be uninlined because referenced by paravirt */
+ static inline void notrace
+-native_write_msr(unsigned int msr, u32 low, u32 high)
++native_write_msr(u32 msr, u32 low, u32 high)
+ {
+ 	__wrmsr(msr, low, high);
+ 
+@@ -152,7 +151,7 @@ native_write_msr(unsigned int msr, u32 low, u32 high)
+ 
+ /* Can be uninlined because referenced by paravirt */
+ static inline int notrace
+-native_write_msr_safe(unsigned int msr, u32 low, u32 high)
++native_write_msr_safe(u32 msr, u32 low, u32 high)
+ {
+ 	int err;
+ 
+@@ -251,7 +250,7 @@ do {								\
+ 	(void)((high) = (u32)(__val >> 32));			\
+ } while (0)
+ 
+-static inline void wrmsr(unsigned int msr, u32 low, u32 high)
++static inline void wrmsr(u32 msr, u32 low, u32 high)
+ {
+ 	native_write_msr(msr, low, high);
+ }
+@@ -259,13 +258,13 @@ static inline void wrmsr(unsigned int msr, u32 low, u32 high)
+ #define rdmsrq(msr, val)			\
+ 	((val) = native_read_msr((msr)))
+ 
+-static inline void wrmsrq(unsigned int msr, u64 val)
++static inline void wrmsrq(u32 msr, u64 val)
+ {
+ 	native_write_msr(msr, (u32)(val & 0xffffffffULL), (u32)(val >> 32));
+ }
+ 
+ /* wrmsr with exception handling */
+-static inline int wrmsr_safe(unsigned int msr, u32 low, u32 high)
++static inline int wrmsr_safe(u32 msr, u32 low, u32 high)
+ {
+ 	return native_write_msr_safe(msr, low, high);
+ }
+@@ -280,7 +279,7 @@ static inline int wrmsr_safe(unsigned int msr, u32 low, u32 high)
+ 	__err;							\
+ })
+ 
+-static inline int rdmsrq_safe(unsigned int msr, u64 *p)
++static inline int rdmsrq_safe(u32 msr, u64 *p)
+ {
+ 	int err;
+ 
+diff --git a/arch/x86/lib/msr.c b/arch/x86/lib/msr.c
+index e18925899f13..4ef7c6dcbea6 100644
+--- a/arch/x86/lib/msr.c
++++ b/arch/x86/lib/msr.c
+@@ -122,14 +122,14 @@ int msr_clear_bit(u32 msr, u8 bit)
+ EXPORT_SYMBOL_GPL(msr_clear_bit);
+ 
+ #ifdef CONFIG_TRACEPOINTS
+-void do_trace_write_msr(unsigned int msr, u64 val, int failed)
++void do_trace_write_msr(u32 msr, u64 val, int failed)
+ {
+ 	trace_write_msr(msr, val, failed);
+ }
+ EXPORT_SYMBOL(do_trace_write_msr);
+ EXPORT_TRACEPOINT_SYMBOL(write_msr);
+ 
+-void do_trace_read_msr(unsigned int msr, u64 val, int failed)
++void do_trace_read_msr(u32 msr, u64 val, int failed)
+ {
+ 	trace_read_msr(msr, val, failed);
+ }
