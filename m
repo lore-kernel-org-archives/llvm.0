@@ -1,140 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395672857D7;
-	Thu, 10 Apr 2025 12:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03F1284B3D
+	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 14:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744288628; cv=none; b=g51UzfiIMvINLZu/ZgZGlbLGmc1wihNPfr++d4HQry0QA9iYrFB22ghVqVeHRwnWDmJP9i2uWGWms1LVPs6R1hHuWjkC7h6RTmrkpb73ZXqWvqdvcYU5NM8ULQ/AjIPssBWHAMVT14L3fvmsPUWJyEi85G9p8XeE3nCsxggyqWc=
+	t=1744294720; cv=none; b=YfNl0wYXYGi5yizJDHwpN5EHw6S8YFG9pgcnerRzh4jbX7gIj0oCJUz4KYdhtoOu1xoAYsYxr7HVJ+pzP3X7WT70Jr4iEHjkwtKKT2WCqaw8FnHJxPU2930BLmmGDxLIzZTmjJ2bVrODTKV9KxrI5NCa4fVCWLpaJMWxZAeixg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744288628; c=relaxed/simple;
-	bh=siix8QxAUFHF9p1TCm1b1aqn9CeLG9tsCd6VcEJcBh0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=mNmxatlsaX97sG1ye07uEacHdqexLy8fiB9eFd/Noz7jkPvdBh0xwyLOGkd5vrUZY4quc76sGU1Wi2jWlURRyAuErjV1yN8xaB2oqjtXm4tawivxBt/u3whnqSveb6c+ScOfuiVKkyMu7bOOL01egN/FgCVtUxMOYBqatBDZXg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SySSy58/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744294720; c=relaxed/simple;
+	bh=ZTPniWk+gwHlOqC+nHi4v/Fyne8jH72MKBN0kwML94s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aZ4BES+QZ83JrjGafPsBcyu3Py/knX8P/Ta5hcFEBNTIkxnfGhAiIJ9m5tbTqx40oTjuJYcoEMDBa6UnGIPDec8nTSiQ7TE33BI33NcnSvoaiPFwTqVes2wT0Y07JXADsNq4D1CvJHGyptE33sgioGM1Iy7d6y33SD2VlgLKSDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gp7kdodQ; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SySSy58/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4922C4CEF2;
-	Thu, 10 Apr 2025 12:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744288627;
-	bh=siix8QxAUFHF9p1TCm1b1aqn9CeLG9tsCd6VcEJcBh0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=SySSy58/Eav1gMkPXW1S/wgI2Y22A2E5Hgn4LbjiVcp5TQESnRgdcxlpbr8nactGG
-	 1XbzKgBbeGWfWKZ5lvme8/20HzFVyD709txXtKfPdlAe/4WcxYrxEiAF6KFMGnlAia
-	 G3KImgwA9/05b8dLA0QtLSW/HbRIuCoxrs4fFs7wlM1sxqbW4sskrT7F5eO4W3DxmQ
-	 +aZM2McNuKOO9xCCj51jUjsYWDxKdybe8rEGmrrSg9brhWQ1lNdb+0idsMuviJcPLb
-	 T1GKrt0JIU3JslAF/tgJC8Fwq/hoWrY2CMs6UV8kp0uMhfqzufzvBdv/iJVHXee65o
-	 n3uJRgwSUMeXQ==
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id AB04F1200043;
-	Thu, 10 Apr 2025 08:37:05 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-05.internal (MEProxy); Thu, 10 Apr 2025 08:37:05 -0400
-X-ME-Sender: <xms:cbv3Z5s9-gGAG3dDSWX3VomfzKKEubmWVa7mSbgVScgwNG2ybcxyKw>
-    <xme:cbv3ZyeZvyecKTSujrReceM3Mn_sWrM--7k8w-pP_7rTHb9Pz4opP2nM0k31qxSoT
-    SebmWxlrVZ7cptrDBI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdekleefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnh
-    gvlhdrohhrgheqnecuggftrfgrthhtvghrnhepjeejffetteefteekieejudeguedvgfef
-    feeitdduieekgeegfeekhfduhfelhfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgr
-    lhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvg
-    hlrdhorhhgsegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdefpdhmohguvgepshhm
-    thhpohhuthdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohephh
-    gvihhkohdrshhtuhgvsghnvghrsegthhgvrhhrhidruggvpdhrtghpthhtohepughirghn
-    uggvrhhssegthhhrohhmihhumhdrohhrghdprhgtphhtthhopehsihhmohhnrgesfhhffi
-    hllhdrtghhpdhrtghpthhtoheprghirhhlihgvugesghhmrghilhdrtghomhdprhgtphht
-    thhopehjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdprhgtphhtthhope
-    hnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghp
-    thhtohepjhhushhtihhnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmh
-    horhgsohesghhoohhglhgvrdgtohhm
-X-ME-Proxy: <xmx:cbv3Z8yXgQnxLe6zI6FSbEhMDhg7qo02kR0rGIHDoIV4cs-GOcmEYA>
-    <xmx:cbv3ZwNWgpeJJB32nMRE8jW4wrRNCrSdTloRJ26XBnbFQbpXUnOcYQ>
-    <xmx:cbv3Z58VzbxJbvLlmYhmKrIm31t7guCvrDThcDyR3T-JVZ6jnsnUXA>
-    <xmx:cbv3ZwWrOfavbBv_5zQw8c4RtSzPeof7iMRuwaPfuCE_ZyB2ws8lfg>
-    <xmx:cbv3Z6fgbReSz6Dtcquvnp-KhRSvf8u1B7_cDeAq0UTPSrznMl7CKjAR>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 71F202220073; Thu, 10 Apr 2025 08:37:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gp7kdodQ"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-39ac9aea656so789232f8f.3
+        for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 07:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1744294716; x=1744899516; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lA8ugxNApKDVruUHOGb/dr7HV4XJd1QLO6iDDRxI14M=;
+        b=gp7kdodQStnInEjWIGDmKYyNswpAWWrCK6MbqWysXtI4DCDLL1pjaeEWejXObOEHYR
+         o4h+1tcNFkM5c9iyPaoVqj+4DEhypTzLoZUUlolc5FJr6dlgq35NccV67iZZGoOMmZe9
+         G50Z9pqX5ihpKt0Q+42jV/NFWNM6thMDSjPFfzbnkKDydlERfdbFAKal2sThTlpdaOLr
+         yY0NeyE60LM0FGLgvExsDjLmJ21aeabteZWvEcYmudtA6Kxea/2OaS6sCmaqxKGCpAZ2
+         rdDVny9QS6S+JH5drT7bDRp8j5861VCmah8qzyNwGIGB0e3QEaZ7kkG2btPrBVO9nJ7a
+         V5gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744294716; x=1744899516;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lA8ugxNApKDVruUHOGb/dr7HV4XJd1QLO6iDDRxI14M=;
+        b=JFzlE/PjeX1ygiwocnKifcKkk59pqfT5BQhEMFHmV7tQd3Pgw1o7aXR6r+HcgHUifE
+         SFDq9JsqzsUkC/YXpbMjysAjFw9zaijAoCUbOUvCRLgRnrvxHkuds0kcYvMBiLXBnLhx
+         pfFyEj1uDYxmUdVa+ZBKFf6Pn+UIJjGkoBYLXfUrbEGdfN5vB4+0dYFFskBBz9vAazxD
+         RNmnGW2Kj0DiDjul/f+K/gBgMvKkoYNTE1RNUN5o7Jay5p5917fhBVvlvVkK9sUgYPG6
+         LRj3X8qNbBsOs8TwEkiUNEnKW9gRBGMchQYGHW4kQAuycim86GLzxlserY9Lly4Yf+o1
+         Sh0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU+XV3Tqi9t4O0XTpIhTX3EC/GFUdwFhxHj64hpYZp6kP/S9tiXl8NtEgPhsWEcQUc8aGDO@lists.linux.dev
+X-Gm-Message-State: AOJu0YzQTVp3V7D3pcgyO0Z6KPuGePk94PVPt9xcMnljSpSL2Dwgcbyq
+	67icaVr9VBhaQTVh6nJPi7AZE2tFtBAnhceSO44MCEDpcV8e7xjW1teS6nBqGu0=
+X-Gm-Gg: ASbGnctAgKkbkmS6MSA5UX1wixqixBkQqWSUXRB/X89+HxFZo7wN21cIz1Sx5G/UNlP
+	zSLVBke4P58GaulGwvTuyPGBtdwuVOYkQT1RJxmvZGdbn/gTWyqIBmtS+EXIDDpB8EI6jIutVKn
+	SQVKa8xc5r3eNGA1Uih+Yia/FYFLZWPP8M7m6ZnkgJzNkeLLhTj3UrpLeBfyKIaej9ZLYwzAWKK
+	z8Yl5XkJWmqR+k8SJxhlEPXYM89J0ZFhhvG5xAEOC0XvX70irEWbFhPOutjljrf/WFpUD3+TTFM
+	uI7VhkqvjGpQVfeRpwQpd2ai0AtiJLKJIJZeyMO/eIE=
+X-Google-Smtp-Source: AGHT+IHQQrG+kDpStKXf079iI3yW+7NAkiLStcY+KtjJrS94ufdEEtnyLK2CdGP9zz29xIylIoX3zQ==
+X-Received: by 2002:a05:6000:2ab:b0:391:2d61:4561 with SMTP id ffacd0b85a97d-39d8fd3d2d7mr2247711f8f.6.1744294716074;
+        Thu, 10 Apr 2025 07:18:36 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d8938b5e7sm5040832f8f.55.2025.04.10.07.18.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 07:18:35 -0700 (PDT)
+Date: Thu, 10 Apr 2025 16:18:33 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] vsprintf: Use __diag macros to disable
+ '-Wsuggest-attribute=format'
+Message-ID: <Z_fTOc5JCTcDzzv4@pathway.suse.cz>
+References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
+ <20250405101126.7a2627a6@pumpkin>
+ <CAHk-=whC15F9=fQqr-5moPA0SXFc-fAx_15=jzbYELg1TCWsqg@mail.gmail.com>
+ <87zfgs5sxb.fsf@prevas.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T2c1dd8538360b27d
-Date: Thu, 10 Apr 2025 14:36:45 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Arnd Bergmann" <arnd@arndb.de>,
- "Andrzej Hajda" <andrzej.hajda@intel.com>,
- "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Robert Foss" <rfoss@kernel.org>,
- "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>, "Dave Airlie" <airlied@gmail.com>,
- "Simona Vetter" <simona@ffwll.ch>, "Nathan Chancellor" <nathan@kernel.org>,
- "Heiko Stuebner" <heiko.stuebner@cherry.de>,
- "Andy Yan" <andy.yan@rock-chips.com>
-Cc: "laurent.pinchart" <Laurent.pinchart@ideasonboard.com>,
- "Jonas Karlman" <jonas@kwiboo.se>,
- "Jernej Skrabec" <jernej.skrabec@gmail.com>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Dmitry Baryshkov" <lumag@kernel.org>,
- "Doug Anderson" <dianders@chromium.org>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <220ed0fb-1ccb-4371-9b5a-a99dfdc84984@app.fastmail.com>
-In-Reply-To: <30e22523-216f-41a9-b931-e90136a45378@app.fastmail.com>
-References: <20250408175116.1770876-1-arnd@kernel.org>
- <30e22523-216f-41a9-b931-e90136a45378@app.fastmail.com>
-Subject: Re: [PATCH] drm/bridge/synopsys: avoid field overflow warning
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zfgs5sxb.fsf@prevas.dk>
 
-On Wed, Apr 9, 2025, at 09:07, Arnd Bergmann wrote:
-> On Tue, Apr 8, 2025, at 19:51, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> clang-16 and earlier complain about what it thinks might be an out of
->> range number:
->>
->> drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:348:8: error: call to 
->> __compiletime_assert_579 declared with 'error' attribute: FIELD_PREP: 
->> value too large for the field
->>                      PHY_SYS_RATIO(tmp));
->>                      ^
->> drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:90:27: note: expanded 
->> from macro 'PHY_SYS_RATIO'
->>  #define PHY_SYS_RATIO(x)                FIELD_PREP(GENMASK(16, 0), x)
->>
->
-> I still see the same build failure in some other configurations even
-> with this patch. Please disregard this version, I'll try to come
-> up with a better one.
+On Mon 2025-04-07 09:31:28, Rasmus Villemoes wrote:
+> On Sat, Apr 05 2025, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> 
+> > On Sat, 5 Apr 2025 at 02:11, David Laight <david.laight.linux@gmail.com> wrote:
+> >>
+> >> Perhaps the compilers ought to support __attribute__((format(none)))
+> >> to disable the warning.
+> >
+> > D'oh, that's a good idea.
+> >
+> > And gcc already supports it, even if we have to hack it up.
+> >
+> > So let's remove this whole horrible garbage entirely, and replace it
+> > with __printf(1,0) which should do exactly that.
+> >
+> > The 1 is for the format string argument number, and we're just *lying*
+> > about it. But there is not format string argument, and gcc just checks
+> > for 'is it a char pointer).
+> >
+> > The real format string argument is va_fmt->fmt, but there's no way to
+> > tell gcc that.
+> >
+> > And the 0 is is to tell gcc that there's nothing to verify.
+> >
+> > Then, if you do that, gcc will say "oh, maybe you need to do the same
+> > for the 'pointer()' function". That one has a real 'fmt' thing, but
+> > again nothing to be checked, so we do the same '__printf(1,0)' there
+> > too.
+> >
+> > There it makes more sense, because argument 1 _is_ actually a format
+> > string, so we're not lying about it.
+> >
+> > IOW, something like this:
+> >
+> >   --- a/lib/vsprintf.c
+> >   +++ b/lib/vsprintf.c
+> >   @@ -1700,9 +1700,10 @@ char *escaped_string(...
+> >    }
+> >
+> >   -#pragma GCC diagnostic push
+> >   -#ifndef __clang__
+> >   -#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+> >   -#endif
+> >   -static char *va_format(char *buf, char *end, struct va_format *va_fmt,
+> >   +/*
+> >   + * The '__printf(1,0)' thing is a hack make gcc not ask us to use a
+> >   + * a format attribute. 'buf' is *not* the format, 'va_fmt->fmt' is.
+> >   + */
+> >   +static __printf(1,0)
+> >   +char *va_format(char *buf, char *end, struct va_format *va_fmt,
+> >                        struct printf_spec spec)
+> >    {
+> >   @@ -1718,5 +1719,4 @@ static char *va_format(...
+> >         return buf;
+> >    }
+> >   -#pragma GCC diagnostic pop
+> >
+> >    static noinline_for_stack
+> >   @@ -2429,5 +2429,5 @@ early_param(...
+> >     * See rust/kernel/print.rs for details.
+> >     */
+> >   -static noinline_for_stack
+> >   +static noinline_for_stack __printf(1,0)
+> >    char *pointer(const char *fmt, char *buf, char *end, void *ptr,
+> >               struct printf_spec spec)
+> >
+> > Does that work for people who see this warning?
+> 
+> IMHO, this is much worse.
+> 
+> Yes, as I also said in the previous thread, I consider the
+> warning/suggestion here a gcc bug, as it shouldn't make that suggestion
+> when one doesn't pass any of the function's arguments as the fmt
+> argument to another __format__(()) annotated-function.
+> 
+> But we have this __diag infrastructure exactly to silence special cases
+> (and sorry I forgot about that when suggesting the #pragma approach to
+> Andy), and this is very much a special case: It's the only place in the
+> whole codebase that has any reason to dereference that va_fmt, and any
+> other function anywhere calling a vsprintf()-like really should have
+> gotten the format string that goes along with the varargs from its
+> caller.
+> 
+> As this is apparently some newer gcc that has started doing this, you
+> just risk the next version turning the wrongness to 11 and complaining
+> that "buf" or "fmt" is not passed to a vsprintf-like function. Let's not
+> do "a hack make gcc not ask us to use a format attribute" when we have
+> a proper way to selectively silence such false-positives. If this was
+> something happening all over, we'd do -Wno-suggest-attribute=format, not
+> spread these annotations. But this really is a special case in the guts
+> of our printf implementation.
+> 
+> So, FWIW, ack on Nathan's fixups, nak on this one.
 
-I couldn't come up with anything that actually worked, other than
-the hack below, which just works around the compiletime error
-in FIELD_PREP(), but doesn't look like a proper fix.
+I think that we all agree that this patchset is better than the
+current state.
 
-If anyone else has any ideas, I can test their patch.
+I have added Andy's Tested-by from
+https://lore.kernel.org/r/Z-557YrwVr8bONq4@smile.fi.intel.com
 
-       Arnd
+Link to the previous thread, see
+https://lore.kernel.org/r/CAHk-=wgfX9nBGE0Ap9GjhOy7Mn=RSy=rx0MvqfYFFDx31KJXqQ@mail.gmail.com
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
-index c76f5f2e74d1..8ba528462ede 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
-@@ -344,7 +344,7 @@ static void dw_mipi_dsi2_phy_ratio_cfg(struct dw_mipi_dsi2 *dsi2)
-         */
-        tmp = DIV_ROUND_CLOSEST_ULL(phy_hsclk << 16, sys_clk);
-        regmap_write(dsi2->regmap, DSI2_PHY_SYS_RATIO_MAN_CFG,
--                    PHY_SYS_RATIO(tmp));
-+                    PHY_SYS_RATIO(tmp & GENMASK(16, 0)));
- }
- 
- static void dw_mipi_dsi2_lp2hs_or_hs2lp_cfg(struct dw_mipi_dsi2 *dsi2)
+and pushed this into printk/linux.git, branch for-6.15-printf-attribute.
+It was the branch with the already pulled code, see
+https://web.git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/log/?h=for-6.15-printf-attribute
+
+I am going to give it few days in linux-next and create another
+pull request to have this sorted in 6.15 where it stated.
+
+Best Regards,
+Petr
