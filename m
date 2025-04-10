@@ -1,76 +1,69 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFD220AF9A
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 08:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC65C256C71;
+	Thu, 10 Apr 2025 09:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744274135; cv=none; b=GLw+srJa34yzBX6l/g9owBKVovIVzrMfKV2ttlGanAN/JyFk3EklYgkWjnYOxyqkHB0ljNUZE1FaIMHarjTZGm0koW2woUVoLI81KnvJNnjAcEI9+sh48UR4+LByB4+GFNuFMZ26tnDIkGgb+yvhu9mC+3AOzce1cL8IgexwGKw=
+	t=1744277315; cv=none; b=qO2lagQZ7XdBcyxF7/YbyYZOrmhnqIp/jSfbo6TUNdAexDaXc7qW7Xoe3c5jbiPGX8fa/WBQAMTLHQoLodtcmXLjaMHP4afvqxHUvD80S7WAxfX+s2k9ra9HFlDYgMkuK2tF9ktZtjOHj93KqKneg/xcSz/iNFSH5z2mnfuhcDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744274135; c=relaxed/simple;
-	bh=JdYcK6fAGQtlodFRUy0bhtgD36qMwbdQO7D7iUkLixc=;
+	s=arc-20240116; t=1744277315; c=relaxed/simple;
+	bh=grsUTpdnhqvjd0Hm7iEVppv5u0om2yQPbXAfzbCduKs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zt3B8mkHMj9FGdf9KztqeQHwhiXFAy/O4zrrIFSajmK4Vu9oprh8ijdQOXMmMsDSsW27UycUwm3+iD5yTX3aK2bOm/9icNUe3FslDY41pGpODbIUCGiGZCLJ1eLU0gYHL1oFIkNRco+PdbPgmBMBgCp3xC64w0f8daZapiog83o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wfdGVXG5; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=DGbyuc0rmMY4Yal8IHeOTA5+qOihBm8MZRJLQ0AdyNtMAC0tAgkHCx9VOoKY9GrTbUkSHxIKDSNNAH21mL5L54VtbYh5GBDTJk0iUEPMWg9okBX+WpZQc3HgD/Vbi6jjsJ0l3FjSrie7YvpU0GTReM3LM1eEk67pN51vTFBEMQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HaFe9/qx; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wfdGVXG5"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39c1efbefc6so249072f8f.1
-        for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 01:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744274131; x=1744878931; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1+ytBosE9KKYfsxuSA5vHZYEINNgxVHBZaHGuzR0zM=;
-        b=wfdGVXG5XQxrio+G2xo59q5pNUTNwrebLMM0WEWJ/RFmEywTJ699cA1tzHPNabVX6y
-         b0ntJa+8y2b5IDC/KYv6dKTZFtBqzNzgHCPcmojdi9dru1/XLoINAVmiAZ8U9H8Srh13
-         3d9qqihZPH+qF/0X7BJdg4GpDx2GJ8eshwWgeTgUhJQwHhaLUxD4nMCw69MdNSb4D4mT
-         3q7UbEZdD7I4+uikrj3V6jPYzvmy9DatKyI+f0JWyA28c8EPsXpnas5awziOR5pM4Kc8
-         bfKsuTIF0Fl/Yu7hj9saD//xqPa5u7peFerEfHKggREyNTJwKYHsQOPxYV73GQAxhKtT
-         U40Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744274131; x=1744878931;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z1+ytBosE9KKYfsxuSA5vHZYEINNgxVHBZaHGuzR0zM=;
-        b=MBmw8ZlG0Io+rAlICxZnJNfF9aDIaO1kOTp4kgKIKJE6I1kKoGdd4hMdmx2jgBpTKx
-         pUoVQJ+vfbRWr3HUAnhBUPsoKHai/v4LlxzFNNqUQSeq1dACdFM83OFcQnbY67Vltj4m
-         PFfKsXQ9tS/cMjaCqgyL2Oo+g8NEz0N75OyjFUujXGiZEmZxFGp3GLZYwcBviWFtE+/K
-         FcH5L3ht7rmri/ZEj7n4SlXz1ZM58L0EBFw31JcQ5i9GoP4WcowS5rstbELUfO0yC/Cu
-         1EgZM0kTzUYsIQkV6XNhLh2nosniF3j+XNP1aODOhoKkiSAja6xKz1AFjJ+n6T/Mbe3s
-         DSEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJztRbKtKAFsW93/64rq9CQpHq1htV1PsJV7sEIflsJ+0FJqmbbLk13G/2c0qMA5sr3fAx@lists.linux.dev
-X-Gm-Message-State: AOJu0YzEwXvyYY3cITHXTwpPYHZ856rm19Z7hdkt2Fe1aaySvoyQcoCe
-	Z55bVwMwyff/ID5H/7wugfd1uYK2f/uARsKy3iMNQX3KKshOakZGiLGlUj24O3c=
-X-Gm-Gg: ASbGncuipiKtvsv+LkRx2H2TMueBlbAY5v1s1isZs46oZcj67lPSOJflDbBMdgMMroU
-	MGmH1vb6+mw/815g66Mi+NVxpmuzsWgR7Mk5ZqzeP3bu0iZfiE3f4I19OTe/S134KuQEZKe49OA
-	6O8ErCC6/fYdBiC8IyS6QSh80MQ1pkIn1AgfNx2XCuV0qPImqADd1WimZofDjv3umpsd+TRskC4
-	vdh/+hvgh33DufeaveMv66qZWiL+j+GEOvio9S8/glhbJ2aL5vn6ePu8IqAsRsBgI3+6ywo11GQ
-	dpBbhw/VNzrACS8FrLYHWzQPNUQzA2oUFHNEGgBsN3vVxQ==
-X-Google-Smtp-Source: AGHT+IG4hFp0SZ/GX5y1K3OD+w9YXQH3jCqLKyFID+cibmYCTQbSECvA/Q29TPvpdqbyjEyE/E8lrw==
-X-Received: by 2002:a05:6000:4203:b0:39c:1f02:449f with SMTP id ffacd0b85a97d-39d8f272aa3mr1264796f8f.2.1744274131466;
-        Thu, 10 Apr 2025 01:35:31 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39d893fe28fsm4078162f8f.96.2025.04.10.01.35.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 01:35:31 -0700 (PDT)
-Date: Thu, 10 Apr 2025 11:35:28 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	kernel test robot <lkp@intel.com>,
-	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [groeck-staging:hwmon-next 13/13]
- drivers/hwmon/gpio-fan.c:250:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <d80689a3-6055-449d-9475-5e8e4f1ddabf@stanley.mountain>
-References: <202504091047.biuX8Kl2-lkp@intel.com>
- <82d98804-e9b6-458e-bb39-3a48c10e9f70@roeck-us.net>
- <2368483.ElGaqSPkdT@steina-w>
- <20250409160250.GB1506425@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HaFe9/qx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744277314; x=1775813314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=grsUTpdnhqvjd0Hm7iEVppv5u0om2yQPbXAfzbCduKs=;
+  b=HaFe9/qxFVU9UVC2VWYrscgm76FBVLkZyfL11MeXy8qabdPVoc1PU2A7
+   aX8w3Dd9+WK5xmaFAfy1tfRS6uQzJw33kEXGmlkVSAExj+GlnOVZhhDAb
+   UhSFaNaO+dsdlNic7zZUlD9TtDH/+awXOre4y7gvhwj+BAqH6CPXJ1n4v
+   293uliQPkkOjznuzZoz0o0K9zW/sps9PTJVceKNAOk5RcWEmrjOXfSSGw
+   K90F5iYu6K3ZmogkG6r1jc2badY6oQGXBfW4enFzvaOrnl3BgVe8DClT3
+   sN7Gg0mhtTjCfElVfiwr93jbSGkIy7HS8KSH2+cF7JDBj5tqgsX2NHr9V
+   A==;
+X-CSE-ConnectionGUID: 7hkzTqtdRzmGq0k/fU4dLg==
+X-CSE-MsgGUID: 0DS6SYgYR+Cwfm5gE6I3TA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="57154699"
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="57154699"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 02:28:33 -0700
+X-CSE-ConnectionGUID: HTOMgKl7QMKOdgpykKC3QQ==
+X-CSE-MsgGUID: aWnZQ6t4QfuhR77cbVIRBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="133968976"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 10 Apr 2025 02:28:30 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2oCy-0009s3-03;
+	Thu, 10 Apr 2025 09:28:28 +0000
+Date: Thu, 10 Apr 2025 17:28:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: yiru zhang <yiru.zhang@mediatek.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	yiru zhang <yiru.zhang@mediatek.com>
+Subject: Re: [PATCH] [Patch v2]Add ETE devarch condition in
+ etm4_init_iomem_access
+Message-ID: <202504101759.7Ls0Uy4o-lkp@intel.com>
+References: <20250409032917.7580-1-yiru.zhang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,25 +72,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250409160250.GB1506425@ax162>
+In-Reply-To: <20250409032917.7580-1-yiru.zhang@mediatek.com>
 
-Another option is Smatch.
+Hi yiru,
 
-https://github.com/error27/smatch
+kernel test robot noticed the following build warnings:
 
-:! ~/progs/smatch/release/smatch_scripts/kchecker drivers/hwmon/gpio-fan.c
-  CHECK   scripts/mod/empty.c
-  CALL    scripts/checksyscalls.sh
-  DESCEND objtool
-  INSTALL libsubcmd_headers
-  CC      drivers/hwmon/gpio-fan.o
-  CHECK   drivers/hwmon/gpio-fan.c
-drivers/hwmon/gpio-fan.c:145 set_fan_speed() warn: potential spectre issue 'fan_data->speed' [w] (local cap)
-drivers/hwmon/gpio-fan.c:255 pwm1_enable_store() error: uninitialized symbol 'ret'.
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.15-rc1 next-20250410]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't think the spectre v1 issue is real but I don't know very much
-about spectre.
+url:    https://github.com/intel-lab-lkp/linux/commits/yiru-zhang/Add-ETE-devarch-condition-in-etm4_init_iomem_access/20250409-113037
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20250409032917.7580-1-yiru.zhang%40mediatek.com
+patch subject: [PATCH] [Patch v2]Add ETE devarch condition in etm4_init_iomem_access
+config: arm64-randconfig-002-20250410 (https://download.01.org/0day-ci/archive/20250410/202504101759.7Ls0Uy4o-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504101759.7Ls0Uy4o-lkp@intel.com/reproduce)
 
-regards,
-dan carpenter
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504101759.7Ls0Uy4o-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:1144:9: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+    1143 |                 pr_warn_once("Unknown ETM architecture: %x\n",
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                         %lx
+    1144 |                              devarch & ETM_DEVARCH_ID_MASK);
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:659:42: note: expanded from macro 'pr_warn_once'
+     659 |         printk_once(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:640:30: note: expanded from macro 'printk_once'
+     640 |         DO_ONCE_LITE(printk, fmt, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/once_lite.h:11:32: note: expanded from macro 'DO_ONCE_LITE'
+      11 |         DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/once_lite.h:31:9: note: expanded from macro 'DO_ONCE_LITE_IF'
+      31 |                         func(__VA_ARGS__);                              \
+         |                         ~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:501:60: note: expanded from macro 'printk'
+     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
+     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +1144 drivers/hwtracing/coresight/coresight-etm4x-core.c
+
+  1121	
+  1122	static bool etm4_init_iomem_access(struct etmv4_drvdata *drvdata,
+  1123					   struct csdev_access *csa)
+  1124	{
+  1125		u32 devarch = readl_relaxed(drvdata->base + TRCDEVARCH);
+  1126	
+  1127		if (!is_coresight_device(drvdata->base) || !is_devtype_cpu_trace(drvdata->base))
+  1128			return false;
+  1129	
+  1130		/*
+  1131		 * All ETMs must implement TRCDEVARCH to indicate that
+  1132		 * the component is an ETMv4. Even though TRCIDR1 also
+  1133		 * contains the information, it is part of the "Trace"
+  1134		 * register and must be accessed with the OSLK cleared,
+  1135		 * with MMIO. But we cannot touch the OSLK until we are
+  1136		 * sure this is an ETM. So rely only on the TRCDEVARCH.
+  1137		 */
+  1138		switch (devarch & ETM_DEVARCH_ID_MASK) {
+  1139		case ETM_DEVARCH_ETMv4x_ARCH:
+  1140		case ETM_DEVARCH_ETE_ARCH:
+  1141			break;
+  1142		default:
+  1143			pr_warn_once("Unknown ETM architecture: %x\n",
+> 1144				     devarch & ETM_DEVARCH_ID_MASK);
+  1145			return false;
+  1146		}
+  1147		drvdata->arch = etm_devarch_to_arch(devarch);
+  1148		*csa = CSDEV_ACCESS_IOMEM(drvdata->base);
+  1149		return true;
+  1150	}
+  1151	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
