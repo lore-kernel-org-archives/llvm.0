@@ -1,157 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2603928FFED;
-	Thu, 10 Apr 2025 19:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54AF28EA5C;
+	Thu, 10 Apr 2025 21:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744314260; cv=none; b=Nhqg5YRlgOzY0qFz8XEn+NjZ2AgatTGxx0wdaJm5TP9Uy6U2ohSovGBw7rdvzTR/g+F07uYgE2ARskQIIiHX7teqKuXpDzFCllvHhSC+uEZy7c0ZyRSDbPrJ8COpWGLVHFW0/dyDw1+WabIUMTOm0IvHxl7izefglBNx1EO/ZLU=
+	t=1744319425; cv=none; b=pu29E3fhZUvG/oMikZXviObj2ZqfsLr4FKNTZ8QyCRc6nrcfOK5zApYOhbgHc1l/wrVxMnINqkk4WjaQ9RgBoPCcHM1JQlLyzdqVdmNOvn1w/x/+KyXXxKPvXLUed91XheCxZvag7m0xJ9etEGEMpI9iRKF5OtlXz08KNqopo4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744314260; c=relaxed/simple;
-	bh=bm3/8PF4xnmSSQgO/SPKCn9ZQH9WFMWfGuG8LCM47eI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kfz7aB04HnZE0RQo+G7Qnrc9gHo/4cifseWtXPmizeRwU06TOzkUdd61G3L+FzNfKYZplw87wN+vCxLQlnzu+Wm8EekOE7j6A0zwLMZn9+t/lZH2Bp1jn6XIn496iJQohV1DifDKzS9bLcoMuwkIltIwlEFLG+4lydNkqbAns4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=km2+W3BR; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744319425; c=relaxed/simple;
+	bh=nQlZdTU+lS/Y/JHfgCk5WHjlwHAdkn/xnnQCVl6khHM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=KBLb5kgZyhTudAIphSdy0Q7gpOGF9MSclK2wuemFIBKnlRWwW0Y3U9XMNpf3cixXznk/VQ/SkrMS+drbURmeG9apXwNnvH+TrKvYuS1dDVqnyqmMXA2zRV22ucnoi3ek7iEsnsfO5C1jgHAvxDF+7JDU3T7hqiMuA0JQjfcFut4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0t5e1Qh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="km2+W3BR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744314259; x=1775850259;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=bm3/8PF4xnmSSQgO/SPKCn9ZQH9WFMWfGuG8LCM47eI=;
-  b=km2+W3BRfj7eb6W/dOhhdnPUwZ/qV5tmNi2EXUrwNACrAn8WBJ7W8aCt
-   aBZlFuvufQQxurIeooGWLZdbJ3vwSs1kDUksMbx/jDF2k1OfxW9bnxSMQ
-   9L4Z85S0kC0DXttjTus8iEbG/FNC93U1yqhkiKInHBHYyBA6DSuMnQywV
-   yqYHEfgqqkLM+Ro7FLTO1mAgQQ/Wd8xih1ldNdR/sIAKDIJUSeXd6afY/
-   g5uURzrI/d2dDgVsyxqrV23W7Mi4S+y2I9pHOkuhOZIxQQtnh1qTlOQMg
-   nnP5vK+Xz4kkLNkaVdcndCnAHgvIRMoiGlOOLl159MghBabO00a44PvF8
-   Q==;
-X-CSE-ConnectionGUID: xAxudwyURjubEezNx+PNlw==
-X-CSE-MsgGUID: Zt+GUPWnTCeEeeDz8jF0mA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="68341423"
-X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
-   d="scan'208";a="68341423"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 12:44:19 -0700
-X-CSE-ConnectionGUID: ZJEymzmWQ+eyCd/EYrTOwQ==
-X-CSE-MsgGUID: G9cjUPyTRoyBY9bje9kCOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
-   d="scan'208";a="129960821"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 10 Apr 2025 12:44:11 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u2xon-000ATj-0b;
-	Thu, 10 Apr 2025 19:44:09 +0000
-Date: Fri, 11 Apr 2025 03:43:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ville Syrjala <ville.syrjala@linux.intel.com>,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Inki Dae <inki.dae@samsung.com>,
-	Seung-Woo Kim <sw0312.kim@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <lumag@kernel.org>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-	Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org
-Subject: Re: [PATCH 02/19] drm: Pass pixel_format+modifier directly to
- drm_get_format_info()
-Message-ID: <202504110343.FEc4bNDr-lkp@intel.com>
-References: <20250410163218.15130-3-ville.syrjala@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0t5e1Qh"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32426C4CEEA;
+	Thu, 10 Apr 2025 21:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744319425;
+	bh=nQlZdTU+lS/Y/JHfgCk5WHjlwHAdkn/xnnQCVl6khHM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=W0t5e1QhLQu/pFuBZ3cngf7c3cuqKpcQ9FABlAuzqwrJnWZ/f9fbElrMgD0O0SRTW
+	 7YAkeXAhf0Z7/TfLX03tSuiQLkwoRJKH/NzdlkrO7rF13iwo4FFLfYXruULuG9qokw
+	 QMLm38S/jYCJL08i6Eq7VLc9fQ7hKiTw5gAwwfAmflS1KnODHbTBhzKb8pGPcEmFVN
+	 01tHx/gwz20jrws9i6e0l77ag0ZuvB3ZVly8qn7Fobr74aSCsq5UPzvKCtcE2TI1rQ
+	 CpKThSDd10+oJvObwfO17XhvTXdnEYhg7dkZVdF0v/b9FAglZRNxJVq+vxyu53EeET
+	 +LD/ccLhYjewg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C0E4C369AA;
+	Thu, 10 Apr 2025 21:10:24 +0000 (UTC)
+From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
+Date: Thu, 10 Apr 2025 22:58:54 +0200
+Subject: [PATCH v2 2/2] clang-format: align consecutive macros
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250410163218.15130-3-ville.syrjala@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250210-clang-format-fixes-v2-2-37894413bbee@collabora.com>
+References: <20250210-clang-format-fixes-v2-0-37894413bbee@collabora.com>
+In-Reply-To: <20250210-clang-format-fixes-v2-0-37894413bbee@collabora.com>
+To: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Collabora Kernel Team <kernel@collabora.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Michael Riesch <michael.riesch@wolfvision.net>, 
+ Michael Riesch <michael.riesch@collabora.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744318740; l=1371;
+ i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
+ bh=GCAcQLFrMA5v4a8RQ+v4hX/83CyGkOIzdbZt9W/iAMo=;
+ b=eQYqQ3YfPADGuVnklkfGZ8zn5fc1Ke7BHBl6FyFpdefybbJRw2NKRRgfdiT6BGn/jlXU6U0L/
+ 32RqDjGfhLxDmqi61M2ZhSnT4keDU3L/iW3teyy6fMOiOL7q/ex73wB
+X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
+ pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
+X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
+ with auth_id=371
+X-Original-From: Michael Riesch <michael.riesch@collabora.com>
+Reply-To: michael.riesch@collabora.com
 
-Hi Ville,
+From: Michael Riesch <michael.riesch@wolfvision.net>
 
-kernel test robot noticed the following build warnings:
+clang-format 9 introduced the option "AlignConsecutiveMacros".
+Set it to "AcrossEmptyLinesAndComments" in order to avoid macro
+definitions of the form:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.15-rc1 next-20250410]
-[cannot apply to drm-exynos/exynos-drm-next tegra/for-next rmk-arm/drm-armada-devel rmk-arm/drm-armada-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    #define MAGIC_REGISTER_1 0x42
+    #define MAGIC_REGISTER_BIT_FLIP BIT(2)
+    /* important comment */
+    #define MAGIC_REGISTER_BIT_ENABLE BIT(12)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-Pass-pixel_format-modifier-to-get_format_info/20250411-005845
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250410163218.15130-3-ville.syrjala%40linux.intel.com
-patch subject: [PATCH 02/19] drm: Pass pixel_format+modifier directly to drm_get_format_info()
-config: hexagon-randconfig-001-20250411 (https://download.01.org/0day-ci/archive/20250411/202504110343.FEc4bNDr-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250411/202504110343.FEc4bNDr-lkp@intel.com/reproduce)
+    #define MAGIC_REGISTER_2 0x43
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504110343.FEc4bNDr-lkp@intel.com/
+With the option set to "AcrossEmptyLinesAndComments", they will
+be converted to
 
-All warnings (new ones prefixed by >>):
+    #define MAGIC_REGISTER_1	      0x42
+    #define MAGIC_REGISTER_BIT_FLIP   BIT(2)
+    /* important comment */
+    #define MAGIC_REGISTER_BIT_ENABLE BIT(12)
 
->> drivers/gpu/drm/drm_fourcc.c:394: warning: Function parameter or struct member 'pixel_format' not described in 'drm_get_format_info'
->> drivers/gpu/drm/drm_fourcc.c:394: warning: Function parameter or struct member 'modifier' not described in 'drm_get_format_info'
->> drivers/gpu/drm/drm_fourcc.c:394: warning: Excess function parameter 'mode_cmd' description in 'drm_get_format_info'
+    #define MAGIC_REGISTER_2	      0x43
 
+which seems to be the convention in the kernel code base.
 
-vim +394 drivers/gpu/drm/drm_fourcc.c
+Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
+---
+ .clang-format | 1 +
+ 1 file changed, 1 insertion(+)
 
-84770cc24f3a51 Laurent Pinchart 2016-10-18  381  
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  382  /**
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  383   * drm_get_format_info - query information for a given framebuffer configuration
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  384   * @dev: DRM device
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  385   * @mode_cmd: metadata from the userspace fb creation request
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  386   *
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  387   * Returns:
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  388   * The instance of struct drm_format_info that describes the pixel format, or
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  389   * NULL if the format is unsupported.
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  390   */
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  391  const struct drm_format_info *
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  392  drm_get_format_info(struct drm_device *dev,
-9a77ad08811ab1 Ville Syrjälä    2025-04-10  393  		    u32 pixel_format, u64 modifier)
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21 @394  {
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  395  	const struct drm_format_info *info = NULL;
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  396  
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  397  	if (dev->mode_config.funcs->get_format_info)
-9a77ad08811ab1 Ville Syrjälä    2025-04-10  398  		info = dev->mode_config.funcs->get_format_info(pixel_format,
-9a77ad08811ab1 Ville Syrjälä    2025-04-10  399  							       modifier);
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  400  
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  401  	if (!info)
-9a77ad08811ab1 Ville Syrjälä    2025-04-10  402  		info = drm_format_info(pixel_format);
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  403  
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  404  	return info;
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  405  }
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  406  EXPORT_SYMBOL(drm_get_format_info);
-6a0f9ebfc5e753 Ville Syrjälä    2017-03-21  407  
+diff --git a/.clang-format b/.clang-format
+index 8040b516185b..30d09cb88170 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -13,6 +13,7 @@ AccessModifierOffset: -4
+ AlignAfterOpenBracket: Align
+ AlignConsecutiveAssignments: false
+ AlignConsecutiveDeclarations: false
++AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+ AlignEscapedNewlines: Left
+ AlignOperands: true
+ AlignTrailingComments: false
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
+
