@@ -1,142 +1,236 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C63E204594
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 06:38:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E308207A1F
+	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 07:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744267111; cv=none; b=X7D1w7noCU0M9Jlo5RwpnuBZQD1+QVn/LtxBEMrx74JQM61f8sKHVfI0EPfcbXxZeIaJLStiBIKW+kSPu+Sejhrcr+7XSPkiD1JVMI3spGxtP3lbuHoTXApepeH1+Fwo8Szi8H8uCP4vrx2+Shta/rlQ0hUCdDOZ+fdKAS8c6Xk=
+	t=1744269405; cv=none; b=a0sXnhfri0rjlfpqrLwiBZRtzT1ZfZT7wYK4ulKVoDQX51Tawt2zDvqNPvKyJuarux6ZgZfkM/TMJpfncCMLm/zDKNED3SYKbjIzmyHA1Qe9tQ7mPBgKi8106+2TrxQIITufbFuDPkqnE7DEVGqEWHreEy2ooaHEZ1uoS95j2nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744267111; c=relaxed/simple;
-	bh=dSHRhmk880+LUvoNTvzX98ByhUndNuKtjnVonbl/qlY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q2Uqdx/VSR7XYhYIRU2d2Py8Anyp3ZukodBW/vTDYvrB7LUJ/IX6o9GpjD0zmWxmua3MbckrpGFzuqKRMiIU8lKPuEIBI2KwZ4oh5vxVvVl/fwCCaqOD/Ba4tHq7mKz1+lgxb7VaXxuJHQfiAA2v3dl5qIPTdYOsoWpcEYd9Tqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WUJ2Kih4; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744269405; c=relaxed/simple;
+	bh=wiuYLirMg1o0IKagjr7NLFCXUdr18Y29MBcmipow8ug=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h3kH+/jbv8xMy9+IIThbwkg8xJ3ldQ80lbqsm0qN/oUQZDHIAkOZThFr2uiKSrxkVocavQs+tuTMPSXwIPajvyJ6CpcGaYD6ey10GEQ83CGIEFePUJayjQxSfYNw0y0B2uuJ9vfMqJ9Pl5mtQsSkQJ5aPTpLxN0PzzddGJEK2SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zAesnMe/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hTT9CyR2; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=G0D60ttC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rn4to1af; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WUJ2Kih4"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2ff69365e1dso363942a91.3
-        for <llvm@lists.linux.dev>; Wed, 09 Apr 2025 23:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744267110; x=1744871910; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pwBWVtKLvZUX90IaL1GXJa6X4Osy8NtQPUZg6YVkZI8=;
-        b=WUJ2Kih4JgxVLMQlkC5c6nFMRlQdy/nrmB8SQx7IRmlHbRyp7XZgjdDZhp51qUCcMR
-         2tr42pCsS7TC4k6Qur1V/e7uZr847BCj31SlCAM0jJtzq4BW6Ma7vxIV34iXlxfyQ6V2
-         RlpKVbFCLQahvNO4SHtawZhp89toXszOXbeuXSmrCTxsIR32lsKGAPi39vFqe0PHsxaR
-         +qtAO+0MDzRehuOY/LMGFJHUaDFwgP30Q+3oW4HIKudexnCOyaEoYpNnETRpBgYOHyLE
-         hcg1J1hJ6QgpZCqVs3V/ObwB5dm8Dz2PmRkB36Zg/cBbjBvrpPrEugQay5198fxNHju8
-         1Vhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744267110; x=1744871910;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pwBWVtKLvZUX90IaL1GXJa6X4Osy8NtQPUZg6YVkZI8=;
-        b=MjHSh+O3uxoc27XErpu5la3ciHaxuhgVbNSDB2n26cRHPFC9Ot7Q6KepM1tcNLoqRq
-         DCw0y+B2+HgzK61bKP+d3qnJALjHFdpqwsCERMLtLsmo4tQCi6twNpFcOmL1H0hlWBdl
-         c2l8YgHCovfVkvQjl4U9vqzaAWt0A3exHO1w5ly+CYv5vKAVR/ys/mBBm9WQyyg+EINh
-         gNBdaW65QPptj7hiLc56cszTDjyvxiqZDMHVv3jp6hHtgMPIBsFA73ePhXtjoieG6zdK
-         DXCrjMJNSVzwQasf7RtT+C/Vf5wEd7izFavIaDsZ2YXPn68ZMolsrySfEz8o4vx0WPAo
-         xM2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUdu7oYQ/axUgxcB5ZGQcPAdFQJ0y2PZboVEWp5utODr5WHnkWEJyMf+u0vVMJc8IC5YBPY@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzm3pfqbG7IupefqXIs7SSdbmWvrJzXzSEJfjMlonkLaTJTkgF4
-	JB37be4x57Cl10QRLIPqavMxP5ODt/ECSAgAlUgRSuuEehCMk0Tp
-X-Gm-Gg: ASbGnctuvXXyp0GEF46TEKkeBobLIDu9cSTmMvz27ortbFNNqtNi5ztcIwXSEizY5mj
-	Y15hSVWy4GteKRF2p78nPzBwhQuPmTZCcIUA4+rQBWNT2xf5XwP9xbSHKsuI/UrIxmW7/O6LQST
-	XJd/mzHQMhtH2muxdyU7kwjMqjnoVC0N8dQMh5hhzeaW3w99IMlZCU49owU0+oQHNpXG+u6LDRy
-	j80H2tfAZI3mpD05zjf5z5u7ixB6AM8/CVNRKCTMcbzfFLocLOOjB+vAmKCWpA/HtUZY7Uo4w/V
-	pixYkpAFFGzzYe/eVK/4ATZdCCx/EmAKNRwOn0+p2YqADmGkqw0uUv4=
-X-Google-Smtp-Source: AGHT+IHqaItgHXzm5GD1OOSPTM/mlSU8yR/6mCWuApDW+XD5J+FRkiOjtHdGHPDLxBBGTZ1nuFcFiw==
-X-Received: by 2002:a17:90b:56c3:b0:305:5f25:fd30 with SMTP id 98e67ed59e1d1-30718b5408dmr2785207a91.4.1744267109577;
-        Wed, 09 Apr 2025 23:38:29 -0700 (PDT)
-Received: from localhost.localdomain ([103.221.69.50])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-306dd57865csm973145a91.2.2025.04.09.23.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 23:38:28 -0700 (PDT)
-From: Anand Moon <linux.amoon@gmail.com>
-To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-pm@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Cc: Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCH v5 3/3] drivers/thermal/exymos: Fixed the efuse min max value for exynos5422
-Date: Thu, 10 Apr 2025 12:07:50 +0530
-Message-ID: <20250410063754.5483-4-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250410063754.5483-1-linux.amoon@gmail.com>
-References: <20250410063754.5483-1-linux.amoon@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zAesnMe/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hTT9CyR2";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="G0D60ttC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rn4to1af"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 6648E1F385;
+	Thu, 10 Apr 2025 07:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1744269401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
+	b=zAesnMe/GnnBPNlS4hwrWtwsh1oO5frG3jDcT+hOCKE6TXLWnhR/+XqXf5fvVuC87ixgZs
+	5402w8ek88FX0+inzJ+00Rk0z/Tt0CvvATfGBGXD3A+uMA/cmy7l5aEYSPLuSE88SFiFOM
+	7Rf+FE+pYSt50sqcfpGpq48NLhJmdxQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1744269401;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
+	b=hTT9CyR2yuuETmZlZOlFotpXGnkdm6T0N3W5BL2TrVFFmmZFwTl9RQV/vpW0BdHjOdg5w2
+	T8gFTghCseEF+KBg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1744269400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
+	b=G0D60ttCwOobF2K+UJlRauNoRXLH2TMd9dKcr3dqCgk9u/GumRw6y8tKGb7uJGOpdW3NIj
+	Db3VYcBd9Tm/Hqv/MOfizyWxihpU2a/LCuUdEC2pEFERWVNl5neAQ4YHSxlyQVADO6pydM
+	HdybA5xPww9WRvT6DvX7or0U4scuEwc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1744269400;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
+	b=rn4to1afrCreBkGYli9/M9NP71JqcvpIhtDbvc0Vdcl/pmtuz4mOkLY2ydEDZ31d8GARZB
+	qENU9F1FY0EGpAAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 32FBC13886;
+	Thu, 10 Apr 2025 07:16:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BH8XC1hw92ejdgAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Thu, 10 Apr 2025 07:16:40 +0000
+Message-ID: <38b8ad74-584c-4d43-b062-4b52ab98bf8d@suse.de>
+Date: Thu, 10 Apr 2025 09:16:39 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/sysfb: efidrm: Avoid clang -Wsometimes-uninitialized
+ in efidrm_device_create()
+To: Nathan Chancellor <nathan@kernel.org>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev
+References: <20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org>
+Content-Language: en-US
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.30
+X-Spam-Flag: NO
 
-As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
-if e-Fuse value is out of this range, then thermal sensor may not
-sense thermal data properly. Refactors the efuse value
-initialization logic within exynos_map_dt_data function by
-replacing the nested if-else statements with a switch statement.
-Ensures proper initialization of efuse values based on the SOC type.
+Hi
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v5: None
-v4: None
-v3: Improve the logic to convert if/else to switch
----
- drivers/thermal/samsung/exynos_tmu.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+thanks for the fix.
 
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index ac3b9d2c900c..a71cde0a4b17 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -899,12 +899,23 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->gain = 8;
- 		data->reference_voltage = 16;
- 		data->efuse_value = 55;
--		if (data->soc != SOC_ARCH_EXYNOS5420 &&
--		    data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
-+		data->max_efuse_value = 100;
-+		switch (data->soc) {
-+		case SOC_ARCH_EXYNOS3250:
-+		case SOC_ARCH_EXYNOS4412:
-+		case SOC_ARCH_EXYNOS5250:
-+		case SOC_ARCH_EXYNOS5260:
- 			data->min_efuse_value = 40;
--		else
-+			break;
-+		case SOC_ARCH_EXYNOS5420:
-+		case SOC_ARCH_EXYNOS5420_TRIMINFO:
-+			data->min_efuse_value = 16;
-+			data->max_efuse_value = 76;
-+			break;
-+		default:
- 			data->min_efuse_value = 0;
--		data->max_efuse_value = 100;
-+			break;
-+		}
- 		break;
- 	case SOC_ARCH_EXYNOS5433:
- 		data->tmu_set_low_temp = exynos5433_tmu_set_low_temp;
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+
+with a remark below.
+
+Am 09.04.25 um 21:03 schrieb Nathan Chancellor:
+> Clang warns (or errors with CONFIG_WERROR=y):
+>
+>    drivers/gpu/drm/sysfb/efidrm.c:353:11: error: variable 'screen_base' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>      353 |         else if (mem_flags & EFI_MEMORY_WB)
+>          |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/gpu/drm/sysfb/efidrm.c:356:7: note: uninitialized use occurs here
+>      356 |         if (!screen_base)
+>          |              ^~~~~~~~~~~
+>    drivers/gpu/drm/sysfb/efidrm.c:353:7: note: remove the 'if' if its condition is always true
+>      353 |         else if (mem_flags & EFI_MEMORY_WB)
+>          |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      354 |                 screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
+>    drivers/gpu/drm/sysfb/efidrm.c:261:27: note: initialize the variable 'screen_base' to silence this warning
+>      261 |         void __iomem *screen_base;
+>          |                                  ^
+>          |                                   = NULL
+>
+> efidrm_get_mem_flags() can only return a mask that has at least one of
+> the tested values set so the else case is impossible but clang's static
+> analysis runs before inlining so it cannot know that.
+
+Right, the variable mem_flags should always be set and thus screen_info 
+should be mapped. I never got this error with gcc.
+
+>
+> Initialize screen_base to NULL and add a defensive print in case
+> mem_flags were ever returned without one of the four valid values.
+>
+> Fixes: 32ae90c66fb6 ("drm/sysfb: Add efidrm for EFI displays")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   drivers/gpu/drm/sysfb/efidrm.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/sysfb/efidrm.c b/drivers/gpu/drm/sysfb/efidrm.c
+> index af90064a4c04..7d820f42956b 100644
+> --- a/drivers/gpu/drm/sysfb/efidrm.c
+> +++ b/drivers/gpu/drm/sysfb/efidrm.c
+> @@ -258,7 +258,7 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
+>   	struct drm_sysfb_device *sysfb;
+>   	struct drm_device *dev;
+>   	struct resource *mem = NULL;
+> -	void __iomem *screen_base;
+> +	void __iomem *screen_base = NULL;
+>   	struct drm_plane *primary_plane;
+>   	struct drm_crtc *crtc;
+>   	struct drm_encoder *encoder;
+> @@ -353,6 +353,8 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
+>   	else if (mem_flags & EFI_MEMORY_WB)
+>   		screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
+>   					    MEMREMAP_WB);
+> +	else
+> +		drm_warn(dev, "unhandled mem_flags: 0x%llx\n", mem_flags);
+
+
+This message should be  something like drm_err("invalid mem_flags ..."). 
+It's really a driver bug.
+
+Would you send an update?
+
+Best regards
+Thomas
+
+>   	if (!screen_base)
+>   		return ERR_PTR(-ENOMEM);
+>   	iosys_map_set_vaddr_iomem(&sysfb->fb_addr, screen_base);
+>
+> ---
+> base-commit: e8bf4a1bdaeadb28d13b9a2bcfd5910fda06eede
+> change-id: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
+>
+> Best regards,
+
 -- 
-2.49.0
+--
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Frankenstrasse 146, 90461 Nuernberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+HRB 36809 (AG Nuernberg)
 
