@@ -1,88 +1,124 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD611D5AC2;
-	Thu, 10 Apr 2025 06:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7041372
+	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 06:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744266893; cv=none; b=t4MTr7vdwzH1UoFIfA20SYhJc1VqojfQE4GDQHAelyRET+yUHK+OId9WLC82n56R3oBKTsF2JkGMcQn8Zn1RVxyhycwTiAc5Vpi6Dn/a2EyD/jDuPrrdc57YW+ozGIu8WsymBjl9i9x838emMXh7+MOgVJapQ8rAoQoJHAmtqEk=
+	t=1744267092; cv=none; b=UayteRtkVsfT/PGoDqxfmmEvAUW/8Tvz9Hrprz7WLgiW3imfVc2TAGwOXzC/cWrWBNOvMfoaI96iEM8iJa5PsontdNm4aVAkO4kYNapMoS5PCJjYQObGEAVkS8Zni6VxmalT9v1ngUb+r+t4lDHdi3l9g95kYdKAZxlLiyv5KCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744266893; c=relaxed/simple;
-	bh=My3z+0t3joOxDMV4JLHvK8HA30dSj487+eYcSeIpeLA=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=go/HHRsw+LhNyYv7IkpsbLryvPC/BVVkM1PSyb7+wEt8c/w3ahObXh0zBlkocihgc0AP273ptohK8RIrOqQ+MQ5Mmn/+X6rw6w8FC9G9rmNxvfkUbyU2qbuA4hQD6NImXrjaDuFbEJBx5cqCSLU5/NcBHfLMRg9PZE6xrxmhi10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ZY95M056rz4f3jXp;
-	Thu, 10 Apr 2025 14:34:15 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7C3B31A0DAD;
-	Thu, 10 Apr 2025 14:34:38 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-	by APP4 (Coremail) with SMTP id gCh0CgA3nGBwZvdn20kuJA--.36687S2;
-	Thu, 10 Apr 2025 14:34:38 +0800 (CST)
-Subject: Re: [linux-next:master 1753/1936] mm/swapfile.c:1517:20: warning:
- function 'swap_is_last_ref' is not needed and will not be emitted
-To: Andrew Morton <akpm@linux-foundation.org>, SeongJae Park <sj@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>,
- Tim Chen <tim.c.chen@linux.intel.com>, Baoquan He <bhe@redhat.com>
-References: <20250408173959.f501f65ec5d5e52cefe6b129@linux-foundation.org>
- <20250409165452.305371-1-sj@kernel.org>
- <20250409174233.b3703db45767fbe5b9cd3b5b@linux-foundation.org>
-From: Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <8d237c70-5aac-924f-a8a3-31c6ef11a25e@huaweicloud.com>
-Date: Thu, 10 Apr 2025 14:34:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+	s=arc-20240116; t=1744267092; c=relaxed/simple;
+	bh=a78mvXEsQdf24KaSM7lb9nFxXXcB7yhjPlrvNEIwFrI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HV7UvEk6zLgAFKkXyr7PWEp2goScuXaILpkLrKdcXytyP/FrwhSN4APVm8BoZzIjz1R99egVsju1dYGt9DmmOAxvsatYKWoGbPP07fr793NOoz0maw4vSm3au7Ci88GYpSEiD0fRbMznobzJurh5c1B5dBr9gSgv1O0BKmklHHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gGl3C1Q2; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gGl3C1Q2"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-af5139ad9a2so373877a12.1
+        for <llvm@lists.linux.dev>; Wed, 09 Apr 2025 23:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744267091; x=1744871891; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NcMLg0bVur6QOZIc0MU6CnnrjgCDYQKJccLlapmx/J0=;
+        b=gGl3C1Q2nK9iWiMgk5AL1NT8z3TpnBXsQQ5mXKIRCVV42bvkoc4EzUOfi3BWXpMzFK
+         eJ33sOd5o/0/hCIwgDLDVOq5HsKPbqbzX/Vei5MnOE+qv52FbOcmP0zbGKZ10RShh0yZ
+         bQn5FpG7hPey1rz5q0+xFwxL4d2BXvtLpAjrj+O+ZuljFSWibWvHXYDeKSTNtmEHlS9z
+         W3upTuigjO8wxgEoXuVZw7arUJKgBKwF4b81WjmxQ7PEnVOIr+PyoEhKyrOdwKk4RMGW
+         8gN+LHk1M6Tb2gQfHRmnqoSkSvgniKmPKg6TRq08i0LMnjTJHpeWGIPs2CnzGn88ZXbG
+         BDcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744267091; x=1744871891;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NcMLg0bVur6QOZIc0MU6CnnrjgCDYQKJccLlapmx/J0=;
+        b=tWenbj/rbs0TDj2nwo2HbmlWGxCqDeaJKTiwckjtF5DHNPUJaVlFWO1PoGl6sCBOKB
+         B/c5YlLjQMX9i5GIXTY54IXujt5TjiARBVUIRYN0zGeaPykKs/YrPtpiOjRV4CF3ekJQ
+         wVuLWWUX9zA4NcA7IDfS+JtE6Ige7M7oQbETXLS6zjX+i+FyL5z81KWPZHLLnNhGhrk6
+         oJs6ADdjxanqFMYTvnd6J2S0vqWxjN2adv2zyykENI0nEDvAAqCzkdW/QP5u5eCqRk4d
+         1h+kfjtp2WQpgjjlGbUFm4Ni/XnLDA5aZwneBz5Z8I1Zk+H/B++GwdtCBUoOxxtGERB8
+         UTIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNTtF4zHYzixplYtLhFQQxW1o9+gRKprF9KVfnscqVSdMag3Yp0mbyaGU7bMj0aQjbjRkq@lists.linux.dev
+X-Gm-Message-State: AOJu0YxWuQnU0aMIh/E2Mu5ykIQSfPW3VuJpgdUFfxB2lTifCYETWKWz
+	+e5c9I9KbWmsRPY8B1vNhGVYgBu9RDtTO5Bm0buUHuV8T9w2fmty
+X-Gm-Gg: ASbGnctsKF+5kd6gZ0YPhs5jLDSUI0Oyvc7S7OLlRJ3QrTYTPjbQfyDijSLd8cKHsS7
+	KuZa1CGU6bQj6q1F8JbukuPmPY3uyQgDZU8RdFHh/meK3Wcb4OoJo12KOQr1pjDsrclkcGul/7x
+	FIeLvuLqpuvrbP8D3G8FmX5alMXRYlcVufw0U+SwpnG9fIRCs1ysDa5NQSZRWhQS231NEJb3vMc
+	cE+RiwHewGsHwRNcAPJC75W/wWL7Dl4kxysvWA1d3lrVH90SkbNV3iENQztMUA0RQxPtlz0wGRR
+	8tZGMPsTrdu6iRrQ7IC81xervepeapQYgyC42YwlTIEaELZxWtVFnmVbzfyn2y0jtA==
+X-Google-Smtp-Source: AGHT+IEzlFiw9oXOTTn6w00Ry1p9p+Q6HRePqSFZX9x05obeKymI4HDix9H1LmUQm0dEJKoBbpGD3Q==
+X-Received: by 2002:a17:90b:37c4:b0:2ff:618c:a1e0 with SMTP id 98e67ed59e1d1-307e9b3cffcmr1923630a91.29.1744267090551;
+        Wed, 09 Apr 2025 23:38:10 -0700 (PDT)
+Received: from localhost.localdomain ([103.221.69.50])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-306dd57865csm973145a91.2.2025.04.09.23.38.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 23:38:09 -0700 (PDT)
+From: Anand Moon <linux.amoon@gmail.com>
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-pm@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
+	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Cc: Anand Moon <linux.amoon@gmail.com>
+Subject: [PATCH v5 0/3] Exynos Thermal code improvement
+Date: Thu, 10 Apr 2025 12:07:47 +0530
+Message-ID: <20250410063754.5483-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250409174233.b3703db45767fbe5b9cd3b5b@linux-foundation.org>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgA3nGBwZvdn20kuJA--.36687S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYx7kC6x804xWl14x267AKxVW8JVW5JwAF
-	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
-	wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
-	xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-	r21l42xK82IYc2Ij64vIr41l4c8EcI0Ec7CjxVAaw2AFwI0_JF0_Jw1l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
-	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
-	VFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+Content-Transfer-Encoding: 8bit
+
+Hi All,
+
+This patch series is a rework of my previous patch series [1],
+where the code changes were not adequately justified.
+
+In this new series, I have improved the commit subject
+and commit message to better explain the changes.
+
+v5: Drop the guard mutex patch
+v4: Tried to address Lukasz review comments.
+
+Tested on Odroid U3 amd XU4 SoC boards.
+Build with clang with W=1 enable.
+
+[3] https://lore.kernel.org/all/20250310143450.8276-2-linux.amoon@gmail.com/
+[2] https://lore.kernel.org/all/20250216195850.5352-2-linux.amoon@gmail.com/
+[1] https://lore.kernel.org/all/20220515064126.1424-1-linux.amoon@gmail.com/
+[0] https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#m77e57120d230d57f34c29e1422d7fc5f5587ac30
+
+Thanks
+-Anand
+
+Anand Moon (3):
+  drivers/thermal/exynos: Refactor clk_sec initialization inside
+    SOC-specific case
+  drivers/thermal/exymos: Remove redundant IS_ERR() checks for clk_sec
+    clock
+  drivers/thermal/exymos: Fixed the efuse min max value for exynos5422
+
+ drivers/thermal/samsung/exynos_tmu.c | 62 ++++++++++++++++------------
+ 1 file changed, 35 insertions(+), 27 deletions(-)
 
 
-
-on 4/10/2025 8:42 AM, Andrew Morton wrote:
-> On Wed,  9 Apr 2025 09:54:52 -0700 SeongJae Park <sj@kernel.org> wrote:
-> 
->>> I'll add this:
->>>
->>
->> ...
->>
->> This makes my build fails when CONFIG_DEBUG_VM is unset as below.
-> 
-> Uh, OK.  I'll leave this to Kemeng to address, please.
-> 
-Sure. Thanks to Baoquan and SeongJae for providing the solution and
-testing it. I will address build warning by adding __maybe_unused
-as Baoquan menthioned and update confusion comment before
-swap_is_last_ref().
-
-Thanks,
-Kemeng
+base-commit: 3b07108ada81a8ebcebf1fe61367b4e436c895bd
+-- 
+2.49.0
 
