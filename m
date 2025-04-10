@@ -1,99 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80914BA33
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 01:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D061D6DDC;
+	Thu, 10 Apr 2025 03:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744249329; cv=none; b=ICVkyGVtx13C/C3dZ6RPUpNJt0kwClz/I2RzHRIV3wQh6d2lZ6wdHko8uym6s4z/6fDIVIpexvk8wLRBREiujg4LSlOMuyZFUwlSk+OEqty5jBZoZLo64yGLVOZeMn/XNugvFzFLUMfUtdAdmjzfImjczAjEe7SOebSgDhs4hf4=
+	t=1744255844; cv=none; b=hdBWfA5nRGvCdPB6YbQfeLcW5uFntyMPr7dPvMh5N5cikcXFz5dxZ3X5cro1FePgwkPlMgO3HwiCUT5xrDfWS1S48jZsq6EWdaJckIX4MSjr9V04jPvWGVlATlJgypre7CbdDnbow3v/YpQMF0//AnY1F5xvNr+nfSlpkH0cyEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744249329; c=relaxed/simple;
-	bh=1KsaHV21Xe6xiXGbJ19Z46o7gh7AdTdYtIPDPSSY7A0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=pbMMluqOlykqu/Lr+PLDO8Zk8ujAsP5VbbRU72tUtnk9qYT+AQjdVmzvGepmoMY0PYESa3jS6SFvNzCEkhCX8E9Lc7rg1tfpX6RlYZ5ckNuLSAW00M1qLMhUQO/+3DTNbK0HY76AfCJfMFsZcAfB2JlJ3opgovW21serEDljAuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LrhCz2G0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744255844; c=relaxed/simple;
+	bh=2YIPx1SJM4r8eWGjcyhznHKS7pOdoMuJI3TkU33XceI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IYBrYOU+7ivu5XWHgB9PI2EaVexbdVD0pkp/ISDdmAmqW9pdJaR/mPk0TrJQHAYtbZqM3KjhJgiWbohumqiIGZKguqjAgPQFZJaUe4Vp7trzYYondx5b+vFBpG8p0yOPe3DpVrPrs/7TgFu5YCUn7aj6W6eemRO4LIdGeUXqPzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDVj5EZQ; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LrhCz2G0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744249326;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TLmYIsZrYmUq/4cVOEg59542dSFrxgMfQx8wETfmRJw=;
-	b=LrhCz2G0QoD7pH5f/oA+pPrXwdDMhr+HLbai1FMyBab1BfYJT0Lz/fVvxeuzx0B+pchFHV
-	Tbw3N//+lmSul6a1IrDKKoSRq1mHXOdIBOqWXzTBv8WosLy7UP6X6xmzhWC+ngdL0D+/IA
-	bQPVGLL5alie+qQgaGi0fSc21zjiUAE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-417-_X3MIGxWObOQItKttn1e_Q-1; Wed,
- 09 Apr 2025 21:42:04 -0400
-X-MC-Unique: _X3MIGxWObOQItKttn1e_Q-1
-X-Mimecast-MFC-AGG-ID: _X3MIGxWObOQItKttn1e_Q_1744249324
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D65A4180034D
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 01:42:03 +0000 (UTC)
-Received: from [172.20.65.13] (unknown [10.30.44.73])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 770861956094;
-	Thu, 10 Apr 2025 01:42:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc1,
- upstream-mainline, 3b07108a)
-Date: Thu, 10 Apr 2025 01:42:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDVj5EZQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744255842; x=1775791842;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2YIPx1SJM4r8eWGjcyhznHKS7pOdoMuJI3TkU33XceI=;
+  b=MDVj5EZQ+C4ykuLmZX/mTe9A7dfLp2ibPbZUu5a3FOBFs02NnNH8Fiti
+   +DlMYrgIg1Y6m34Ww2+7mcbvUFVt9OWUBQd+QDq+tiYK5hhSx3zkGAG+j
+   qBxIuUcws/D3R9exMVusgJw6aQplClFuf2NkGk45dj884qs0Nc5ikzpx7
+   6rAkSnT2QOIkndur+MIcLACgaaUw/qryV6pHGxZexkrUSGri6R80pYljY
+   oJTaN+jfe0/rRF3EZMWlIrP4dEyRsSP0H3UhYB8MJ7SBiybz7wCdkH8G9
+   2Vk9okZ5FFlu8mxETEHwth6mQOOgnE/cubt/Io5qv9RElyBnbS40jM0Pc
+   g==;
+X-CSE-ConnectionGUID: C3YXkLUvSCayyRABW7+x+g==
+X-CSE-MsgGUID: UK/ale9TT/6AD541vi4p9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="56422486"
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="56422486"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 20:30:42 -0700
+X-CSE-ConnectionGUID: aFtXxdgxRYKD9W0AG9Fo6A==
+X-CSE-MsgGUID: TK85AeiwTnWbEFdL+WbvNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,201,1739865600"; 
+   d="scan'208";a="128750250"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 09 Apr 2025 20:30:40 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2icg-0009Yp-00;
+	Thu, 10 Apr 2025 03:30:38 +0000
+Date: Thu, 10 Apr 2025 11:30:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 42/56] drivers/pinctrl/pinctrl-amd.c:40:25:
+ warning: unused variable 'pinctrl_dev'
+Message-ID: <202504101106.hPCEcoHr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <93503.125040921420400985@us-mta-417.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 5ZV2rIhRTIP319_wGp_APg5R9GBtf2Mmv7YZu3iDMN4_1744249324
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   655d33f14d6cebcf46e422bcb9d225d791bba42f
+commit: 179db1909c5c4b5300cce626507b0f843f7d2cc2 [42/56] pinctrl: amd: Add an LPS0 check() callback
+config: hexagon-randconfig-001-20250410 (https://download.01.org/0day-ci/archive/20250410/202504101106.hPCEcoHr-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504101106.hPCEcoHr-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504101106.hPCEcoHr-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'linux_kselftest-fixes-6.15-rc2' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1761360461
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1761360461-x86_64-kernel-debug
+>> drivers/pinctrl/pinctrl-amd.c:40:25: warning: unused variable 'pinctrl_dev' [-Wunused-variable]
+      40 | static struct amd_gpio *pinctrl_dev;
+         |                         ^~~~~~~~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +/pinctrl_dev +40 drivers/pinctrl/pinctrl-amd.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+    39	
+  > 40	static struct amd_gpio *pinctrl_dev;
+    41	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
