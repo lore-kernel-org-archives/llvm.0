@@ -1,171 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EA020B804;
-	Thu, 10 Apr 2025 07:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16C31F7092
+	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 07:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744269920; cv=none; b=HdAyVLRVtEp5+wBlLqmd42Xh4Bz7VRMP/X12h+Vbx1nYtcy7/GoCRV77LNNs8SeKRqPnYR8yqhD+M8my1xUT9xpRR/i0t4VJ4nZLxwA9Py44NQCsWiXDtRTer74K8kxdvy+9U2xq+dSVhZGT9QqNlZx6fV0vxiivZ86QZOr7QyQ=
+	t=1744270864; cv=none; b=qtD5n6nBogRtNa7yzWnGX4J6jMjp44lmA8jvi7OFezA+sfPkT9JlvVlvE7hD8v6VkkjS8ttSZ6ei85lQ4FQuwsKgcD2C7gjvCJXvD4yIvi7vWx1PDxS4avlHvgGvmxlg7YlKJZabDuRpamL0v7YeNQYZKvMGSwrKCpvui0XfG1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744269920; c=relaxed/simple;
-	bh=RquuGCXJiJWK/Yhqhh0t6vGlUvFzJIPOR1vaSOnu1MA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q7P615ZQOpD/MdhGlriAoi2PQ1mm7ktXj6nHEoKxDRnbd3gdx5K07T4LCFFMLG5o4LsPGcPD/pBFU0FVSh3Ic7ntkx9fenCYDY9MqkCjya8HeMsLEknQgMxRvBvX3T7XgFt7cJ6gJ59TgEl4Hg31XyAeDLUj5fQG+QxEnSbkK0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VppDNfsd; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744270864; c=relaxed/simple;
+	bh=ni0oIAGGnEHzUbLGkPF1Eh2YJyK+eXQpqb0to3WEHlU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hDBgO3bxDpw3j0j3v3jIqU564m4eyHSqF137GZOenPJDK2b3qOKOr5d8llCGPTeDPRiqtm6VfV8xknXKOJTEVRjz9H3M7CGUuBwWnEXdO2pgroipoKkSyBud02LkIlkmbjua2/rno2LI8oUaAS3Vk05jAUMjV8o1r7DBrHhMdaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=rpnFQaW+; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VppDNfsd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744269919; x=1775805919;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RquuGCXJiJWK/Yhqhh0t6vGlUvFzJIPOR1vaSOnu1MA=;
-  b=VppDNfsdYaiXnUk6Ap8giF0os52051s8jAiA1KIfeoPKurUE/o0cSeSe
-   vRGJWda5QYCTVbTwnCBZ9H9SV0E/4km4h7x9EA7nY+U0mLF4pbrDqaBYy
-   NvhOs/byiK77VdWQZU5fkkUbYfJY8hvNY0JEMvMR7z8PiT8iIvxMz1rCJ
-   wqcNk4xLoGXU7hwXw47kqmVVC1tWOFSRrq4RcPYCLDJK0Gend2kUuQeS+
-   4FDmQxtxELeVFxOyZB81VW6hv6BC9KKK4eqVZ09EDLl6aLA4a89ZBhBWh
-   gti9OIaE8Iy9I4svcEEG9hs/rnVty9veXfcwfmh1VladMQ5jxr5n4zHRK
-   A==;
-X-CSE-ConnectionGUID: ij27EFOATHW9pkoq1p3paQ==
-X-CSE-MsgGUID: 7PWEie9ySsu3lhIoETUqlg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="71150929"
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="71150929"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 00:25:18 -0700
-X-CSE-ConnectionGUID: iVzjJqHaQ2qDlUwLquZzvw==
-X-CSE-MsgGUID: ZTrkxYVbQce+/ps+3EyEeQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="129759647"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 10 Apr 2025 00:25:15 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u2mHg-0009lP-2A;
-	Thu, 10 Apr 2025 07:25:12 +0000
-Date: Thu, 10 Apr 2025 15:25:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Donet Tom <donettom@linux.ibm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ritesh Harjani <ritesh.list@gmail.com>, rafael@kernel.org,
-	Danilo Krummrich <dakr@kernel.org>,
-	Donet Tom <donettom@linux.ibm.com>
-Subject: Re: [PATCH 1/2] mm/memblock: Added a New Memblock Function to Check
- if the Current Node's Memblock Region Intersects with a Memory Block
-Message-ID: <202504101431.ovUiydUd-lkp@intel.com>
-References: <50142a29010463f436dc5c4feb540e5de3bb09df.1744175097.git.donettom@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="rpnFQaW+"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30c091b54aaso4246731fa.3
+        for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 00:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1744270861; x=1744875661; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=abln28vSs00yPYpNqKbQexZ2vOfOVw8mIqaX3hbLzPg=;
+        b=rpnFQaW+RgfeAY9JgoFgSHx5gqaTIUYBT0MUhoyIftpFJPERNWQTWWTqOxf6TfF6CT
+         yt5Trd9xx0GfDSKofdziEkt5iZFzKYcpRStdy+yH2/s6Z7j1cvAkXPoQVzwCUTsW7Agp
+         A6NdDn7kILeu4/4PTtctZ8qYMsDzJMpZPX3v5m8RsGrZMDOzflo/lZtz5WTMtPT2LCKc
+         xbUt7DnOQBLg38+jnXd6irQvg2pSh+sAySGNp4tkU5cp54DQOh5zBGY4gfc2BhbEAZe/
+         k/c1hpTiHjrLXvTSLipWsg6SLLhfhWrjKEs0Ewry7KEQf6cIGzAfRWbk+oAp57kTsQ1x
+         4UHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744270861; x=1744875661;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=abln28vSs00yPYpNqKbQexZ2vOfOVw8mIqaX3hbLzPg=;
+        b=cdJ8MZFp4Z6MiHMlwu4iGy6OF8K6tFBLg1i0fXhMUDYgDpk3IzWtUxoEv7HG/uq0Q3
+         ow28g2PErRt91YC4LKN27ESMXDUIOzegPIUEOCVyGE3jCbAJZq3TSZ4BR1khxuA2HyoP
+         2YhpXtQuaa7+MHBATue8NrltU0fELinsSDcZPs2b9C6vQLQ92bdXMjsiHa2dUg4HA2br
+         Obh2s0tdy0VQxhaeXz/sZ+DHyRzR0WAMmI35Xd0Bd2kadGxFDkThS1Es/fCMYOAU4izf
+         s3SaUynjotctNtDddrHSrazAcfBXiTAyo9HuE1JnQmNteuHm85Bas6e9P8nUNmBGVo7q
+         GTLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXElEIPnSYfdh5RV0IBQodR/Pi7uzRG3dvEGTuVQFCQm/Mu3B8r86M/YJv5Gd0MOTC5gXyi@lists.linux.dev
+X-Gm-Message-State: AOJu0YyxXPnb02WVL3qL0BIZ8IafKDFNV/S0SMS//nw1HpDWGYU1gBA0
+	Z29IU50qQVQlUQm41UKUVJEgoQm6nTPTKCZktYaVhD/yPyQlSYzfMToxrebOm/zOb89FeZcojcP
+	zKJzW08o0ODVOM6vzFpTpQHxyR5YcSrxb4JtOQQ==
+X-Gm-Gg: ASbGnct5XzFGpzOyz6tsL7fJA/kW806dQ27PbbA3EBAZ7rnjR7SkD40zB4RtQE0HJiE
+	kuVco4smNXXQcXRLGrUiF4CI+06LfPzSC1woiwpfExVQR1Q16xt3v0XyP/R2aKUYo4ZSPVIviUt
+	4HC0Dlr9ShyxWrL2hAI0rJ6rf2YxLHcAEfK/0s434TlQ+Wf0WDtuACnUihTc2Vrv7q
+X-Google-Smtp-Source: AGHT+IH5PI8f41X0hvTGTHZxcCz8ZXmi2rZvmUlakPAmNIx0w+gDOySuYq2drttiG7+Ajp3CrQ4F8hOHk0BBGH+SMNY=
+X-Received: by 2002:a05:651c:12ca:b0:30c:2da3:1493 with SMTP id
+ 38308e7fff4ca-30facc1fb07mr6678671fa.19.1744270860523; Thu, 10 Apr 2025
+ 00:41:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50142a29010463f436dc5c4feb540e5de3bb09df.1744175097.git.donettom@linux.ibm.com>
+References: <202504100718.3Ftgs2zL-lkp@intel.com>
+In-Reply-To: <202504100718.3Ftgs2zL-lkp@intel.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 10 Apr 2025 09:40:49 +0200
+X-Gm-Features: ATxdqUGumQROsZI_kX3-lMz2QpKRez23K5HAhR7PptUCEYb8cq0EtZgnCw4lEHc
+Message-ID: <CAMRc=McmkAXSb3HDYFRHOakF_b8dN0ym1kacLz2Kj8B0FezBcw@mail.gmail.com>
+Subject: Re: [brgl:gpio/for-next 13/18] ld.lld: error: relocation
+ R_PPC_ADDR16_HA cannot be used against symbol 'vdso32_start'; recompile with -fPIC
+To: kernel test robot <lkp@intel.com>
+Cc: Koichiro Den <koichiro.den@canonical.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Donet,
+On Thu, Apr 10, 2025 at 2:02=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gp=
+io/for-next
+> head:   6d7f0c1103ef3935eb3f302d09af4ef9e85212a3
+> commit: 86f162e73d2d81ef6d819c06a3b6c2fda77a79b8 [13/18] gpio: aggregator=
+: introduce basic configfs interface
+> config: powerpc-randconfig-003-20250410 (https://download.01.org/0day-ci/=
+archive/20250410/202504100718.3Ftgs2zL-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 9=
+2c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250410/202504100718.3Ftgs2zL-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504100718.3Ftgs2zL-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: relocation R_PPC_ADDR16_HA cannot be used against symbo=
+l 'vdso32_start'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/powerpc/kernel/vdso32_wrapper.o)
+>    >>> referenced by vdso.c
+>    >>>               arch/powerpc/kernel/vdso.o:(arch_setup_additional_pa=
+ges) in archive vmlinux.a
+>
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+>    Depends on [n]: SMP [=3Dy] && (PPC_PSERIES [=3Dn] || PPC_PMAC [=3Dn] |=
+| PPC_POWERNV [=3Dn] || FSL_SOC_BOOKE [=3Dn])
+>    Selected by [y]:
+>    - PM_SLEEP_SMP [=3Dy] && SMP [=3Dy] && (ARCH_SUSPEND_POSSIBLE [=3Dy] |=
+| ARCH_HIBERNATION_POSSIBLE [=3Dy]) && PM_SLEEP [=3Dy]
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>
 
-kernel test robot noticed the following build errors:
+This looks like a false-positive, it doesn't make sense for it to be
+caused by the aggregator change.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Donet-Tom/base-node-Use-curr_node_memblock_intersect_memory_block-to-Get-Memory-Block-NID-if-CONFIG_DEFERRED_STRUCT_PAGE_INIT-is-S/20250409-132924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/50142a29010463f436dc5c4feb540e5de3bb09df.1744175097.git.donettom%40linux.ibm.com
-patch subject: [PATCH 1/2] mm/memblock: Added a New Memblock Function to Check if the Current Node's Memblock Region Intersects with a Memory Block
-config: hexagon-randconfig-002-20250410 (https://download.01.org/0day-ci/archive/20250410/202504101431.ovUiydUd-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504101431.ovUiydUd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504101431.ovUiydUd-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/memblock.c:1943:10: error: no member named 'nid' in 'struct memblock_region'
-    1943 |                 if (r->nid == curr_nid) {
-         |                     ~  ^
-   1 error generated.
-
-
-vim +1943 mm/memblock.c
-
-  1913	
-  1914	/**
-  1915	 * curr_node_memblock_intersect_memory_block:  checks if the current node's memblock
-  1916	 * region intersects with the memory block.
-  1917	 * @start_pfn: memory block start pfn
-  1918	 * @end_pfn: memory block end_pfn
-  1919	 * @curr_nid: Current node
-  1920	 *
-  1921	 * This function takes the start and end PFN of a memory block, as well as the node ID
-  1922	 * that is being registered. It then finds the memblock region of the current node and
-  1923	 * checks if the passed memory block intersects with the memblock. If there is an
-  1924	 * intersection, the function returns true; otherwise, it returns false.
-  1925	 *
-  1926	 * Return:
-  1927	 * If the current node's memblock region intersects with the memory block, it returns
-  1928	 * true; otherwise, it returns false.
-  1929	 */
-  1930	bool __init_memblock curr_node_memblock_intersect_memory_block(unsigned long start_pfn,
-  1931							unsigned long end_pfn, int curr_nid)
-  1932	{
-  1933		struct memblock_region *r;
-  1934		unsigned long r_start, r_end;
-  1935		unsigned long size = end_pfn - start_pfn;
-  1936		unsigned long r_size = 0;
-  1937	
-  1938		for_each_mem_region(r) {
-  1939			r_start = PFN_DOWN(r->base);
-  1940			r_end = PFN_DOWN(r->base + r->size);
-  1941			r_size = r_end - r_start;
-  1942	
-> 1943			if (r->nid == curr_nid) {
-  1944				if (size > r_size) {
-  1945					/*
-  1946					 * The memory block size is greater than the memblock
-  1947					 * region size, meaning multiple memblocks can be present
-  1948					 * within a single memory block. If the memblock's start
-  1949					 * or end is within the memory block's start and end, It
-  1950					 * indicates that the memblock is part of this memory block.
-  1951					 * Therefore, the memory block can be added to the node
-  1952					 * where the memblock resides.
-  1953					 */
-  1954					if (in_range(r_start, start_pfn, size) ||
-  1955							in_range(r_end, start_pfn, size))
-  1956						return true;
-  1957				} else {
-  1958					/*
-  1959					 * The memory block size is less than or equal to the
-  1960					 * memblock size, meaning multiple memory blocks can
-  1961					 * be part of a single memblock region. If the memory
-  1962					 * block's start or end is within the memblock's start
-  1963					 * and end, it indicates that the memory block is part of
-  1964					 * the memblock. Therefore, the memory block can be added
-  1965					 * to the node where the memblock resides.
-  1966					 */
-  1967					if (in_range(start_pfn, r_start, r_size) ||
-  1968							in_range(end_pfn, r_start, r_size))
-  1969						return true;
-  1970				}
-  1971			}
-  1972		}
-  1973		return false;
-  1974	}
-  1975	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bart
