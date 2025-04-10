@@ -1,78 +1,63 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03F1284B3D
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 14:18:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549AA28EA72;
+	Thu, 10 Apr 2025 14:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744294720; cv=none; b=YfNl0wYXYGi5yizJDHwpN5EHw6S8YFG9pgcnerRzh4jbX7gIj0oCJUz4KYdhtoOu1xoAYsYxr7HVJ+pzP3X7WT70Jr4iEHjkwtKKT2WCqaw8FnHJxPU2930BLmmGDxLIzZTmjJ2bVrODTKV9KxrI5NCa4fVCWLpaJMWxZAeixg4=
+	t=1744296318; cv=none; b=SIBx+l2g5EYrqAn1h6FiTZolFZkradm+XX1O0nGsdsfNYNivo6pdcki8jCpTE+CdXaBaO6AOoGnzCWQZbVjHmxi2m0/V2OULg6dPwn6KoZIuBfz5e8sfy9p0dQBABRk0wWaROc7v+KoNbFJXZcm9TF7yVDbYOljvlnsmnFzOTAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744294720; c=relaxed/simple;
-	bh=ZTPniWk+gwHlOqC+nHi4v/Fyne8jH72MKBN0kwML94s=;
+	s=arc-20240116; t=1744296318; c=relaxed/simple;
+	bh=Rd0GdhKleD8jAQfmJsnk5dtpLd/M+3nzHuU2sLt272Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aZ4BES+QZ83JrjGafPsBcyu3Py/knX8P/Ta5hcFEBNTIkxnfGhAiIJ9m5tbTqx40oTjuJYcoEMDBa6UnGIPDec8nTSiQ7TE33BI33NcnSvoaiPFwTqVes2wT0Y07JXADsNq4D1CvJHGyptE33sgioGM1Iy7d6y33SD2VlgLKSDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gp7kdodQ; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQ2bC94RrV7upY6MwsUeN1anEYJR99B8xQrdpVDAHdHHACGQ3R5i4Yo5juInbC0NlzMJ9M9pq8NV0DuEO9LWMkGSSuHsPTtPvZ4UcF9NDZJvhA9jm0UIFDrn4skYw1WOgRqGI5K9yddHvQKCsXJe0nf1x+xkphnoke+1uXKhKxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XfpNn7y+; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gp7kdodQ"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-39ac9aea656so789232f8f.3
-        for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 07:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1744294716; x=1744899516; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lA8ugxNApKDVruUHOGb/dr7HV4XJd1QLO6iDDRxI14M=;
-        b=gp7kdodQStnInEjWIGDmKYyNswpAWWrCK6MbqWysXtI4DCDLL1pjaeEWejXObOEHYR
-         o4h+1tcNFkM5c9iyPaoVqj+4DEhypTzLoZUUlolc5FJr6dlgq35NccV67iZZGoOMmZe9
-         G50Z9pqX5ihpKt0Q+42jV/NFWNM6thMDSjPFfzbnkKDydlERfdbFAKal2sThTlpdaOLr
-         yY0NeyE60LM0FGLgvExsDjLmJ21aeabteZWvEcYmudtA6Kxea/2OaS6sCmaqxKGCpAZ2
-         rdDVny9QS6S+JH5drT7bDRp8j5861VCmah8qzyNwGIGB0e3QEaZ7kkG2btPrBVO9nJ7a
-         V5gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744294716; x=1744899516;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lA8ugxNApKDVruUHOGb/dr7HV4XJd1QLO6iDDRxI14M=;
-        b=JFzlE/PjeX1ygiwocnKifcKkk59pqfT5BQhEMFHmV7tQd3Pgw1o7aXR6r+HcgHUifE
-         SFDq9JsqzsUkC/YXpbMjysAjFw9zaijAoCUbOUvCRLgRnrvxHkuds0kcYvMBiLXBnLhx
-         pfFyEj1uDYxmUdVa+ZBKFf6Pn+UIJjGkoBYLXfUrbEGdfN5vB4+0dYFFskBBz9vAazxD
-         RNmnGW2Kj0DiDjul/f+K/gBgMvKkoYNTE1RNUN5o7Jay5p5917fhBVvlvVkK9sUgYPG6
-         LRj3X8qNbBsOs8TwEkiUNEnKW9gRBGMchQYGHW4kQAuycim86GLzxlserY9Lly4Yf+o1
-         Sh0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU+XV3Tqi9t4O0XTpIhTX3EC/GFUdwFhxHj64hpYZp6kP/S9tiXl8NtEgPhsWEcQUc8aGDO@lists.linux.dev
-X-Gm-Message-State: AOJu0YzQTVp3V7D3pcgyO0Z6KPuGePk94PVPt9xcMnljSpSL2Dwgcbyq
-	67icaVr9VBhaQTVh6nJPi7AZE2tFtBAnhceSO44MCEDpcV8e7xjW1teS6nBqGu0=
-X-Gm-Gg: ASbGnctAgKkbkmS6MSA5UX1wixqixBkQqWSUXRB/X89+HxFZo7wN21cIz1Sx5G/UNlP
-	zSLVBke4P58GaulGwvTuyPGBtdwuVOYkQT1RJxmvZGdbn/gTWyqIBmtS+EXIDDpB8EI6jIutVKn
-	SQVKa8xc5r3eNGA1Uih+Yia/FYFLZWPP8M7m6ZnkgJzNkeLLhTj3UrpLeBfyKIaej9ZLYwzAWKK
-	z8Yl5XkJWmqR+k8SJxhlEPXYM89J0ZFhhvG5xAEOC0XvX70irEWbFhPOutjljrf/WFpUD3+TTFM
-	uI7VhkqvjGpQVfeRpwQpd2ai0AtiJLKJIJZeyMO/eIE=
-X-Google-Smtp-Source: AGHT+IHQQrG+kDpStKXf079iI3yW+7NAkiLStcY+KtjJrS94ufdEEtnyLK2CdGP9zz29xIylIoX3zQ==
-X-Received: by 2002:a05:6000:2ab:b0:391:2d61:4561 with SMTP id ffacd0b85a97d-39d8fd3d2d7mr2247711f8f.6.1744294716074;
-        Thu, 10 Apr 2025 07:18:36 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d8938b5e7sm5040832f8f.55.2025.04.10.07.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 07:18:35 -0700 (PDT)
-Date: Thu, 10 Apr 2025 16:18:33 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] vsprintf: Use __diag macros to disable
- '-Wsuggest-attribute=format'
-Message-ID: <Z_fTOc5JCTcDzzv4@pathway.suse.cz>
-References: <20250404-vsprintf-convert-pragmas-to-__diag-v1-0-5d6c5c55b2bd@kernel.org>
- <20250405101126.7a2627a6@pumpkin>
- <CAHk-=whC15F9=fQqr-5moPA0SXFc-fAx_15=jzbYELg1TCWsqg@mail.gmail.com>
- <87zfgs5sxb.fsf@prevas.dk>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XfpNn7y+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744296317; x=1775832317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rd0GdhKleD8jAQfmJsnk5dtpLd/M+3nzHuU2sLt272Y=;
+  b=XfpNn7y+4gen2/R8hSTsDzE241rnxAfuuDbw8pBf/U3socI1FyeovBGm
+   SiXnViCxWMXe6A1c+Pcr3MG5HwCqKTRNxZfBd8PkfS4kqDRzE21nODczc
+   vuYCMKQii58jmjwP78YiOROQnx8T0R2ZF6B9wJlZ8zhutPz67m4cZU7Zr
+   wbvxhjllrdYzJs+L6I/8FaWh9E7DLh4TX9Blwkmu1+okNGXCNatMRz12E
+   Cxq5Zt7PKWDxdSvKqkVyhMXVrmjTqQRQDAsdjaQLxti8U1Fpo/sYibf0X
+   LvoF2Yo6Ph3siccD4rn39gwWjUbxxGttbdQI5onA+ApFqpA2Wetwe0XDc
+   A==;
+X-CSE-ConnectionGUID: k6BxNg2DTgegxrBuBSm6AA==
+X-CSE-MsgGUID: kdSPbpbeTzWQm+3q3ePBnQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="45835436"
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="45835436"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 07:45:16 -0700
+X-CSE-ConnectionGUID: XK/RRletSjyDVCwKAe+WiQ==
+X-CSE-MsgGUID: k0vqAbm6TsyiMBHeZkytrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="133041348"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 10 Apr 2025 07:45:13 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2t9T-000ABL-0a;
+	Thu, 10 Apr 2025 14:45:11 +0000
+Date: Thu, 10 Apr 2025 22:45:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yangtao Li <frank.li@vivo.com>, clm@fb.com, josef@toxicpanda.com,
+	dsterba@suse.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Yangtao Li <frank.li@vivo.com>
+Subject: Re: [PATCH 2/2] btrfs: convert to mutex guard in
+ btrfs_ioctl_balance_progress()
+Message-ID: <202504102206.gpAU9chA-lkp@intel.com>
+References: <20250409125724.145597-2-frank.li@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,117 +66,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87zfgs5sxb.fsf@prevas.dk>
+In-Reply-To: <20250409125724.145597-2-frank.li@vivo.com>
 
-On Mon 2025-04-07 09:31:28, Rasmus Villemoes wrote:
-> On Sat, Apr 05 2025, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> 
-> > On Sat, 5 Apr 2025 at 02:11, David Laight <david.laight.linux@gmail.com> wrote:
-> >>
-> >> Perhaps the compilers ought to support __attribute__((format(none)))
-> >> to disable the warning.
-> >
-> > D'oh, that's a good idea.
-> >
-> > And gcc already supports it, even if we have to hack it up.
-> >
-> > So let's remove this whole horrible garbage entirely, and replace it
-> > with __printf(1,0) which should do exactly that.
-> >
-> > The 1 is for the format string argument number, and we're just *lying*
-> > about it. But there is not format string argument, and gcc just checks
-> > for 'is it a char pointer).
-> >
-> > The real format string argument is va_fmt->fmt, but there's no way to
-> > tell gcc that.
-> >
-> > And the 0 is is to tell gcc that there's nothing to verify.
-> >
-> > Then, if you do that, gcc will say "oh, maybe you need to do the same
-> > for the 'pointer()' function". That one has a real 'fmt' thing, but
-> > again nothing to be checked, so we do the same '__printf(1,0)' there
-> > too.
-> >
-> > There it makes more sense, because argument 1 _is_ actually a format
-> > string, so we're not lying about it.
-> >
-> > IOW, something like this:
-> >
-> >   --- a/lib/vsprintf.c
-> >   +++ b/lib/vsprintf.c
-> >   @@ -1700,9 +1700,10 @@ char *escaped_string(...
-> >    }
-> >
-> >   -#pragma GCC diagnostic push
-> >   -#ifndef __clang__
-> >   -#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-> >   -#endif
-> >   -static char *va_format(char *buf, char *end, struct va_format *va_fmt,
-> >   +/*
-> >   + * The '__printf(1,0)' thing is a hack make gcc not ask us to use a
-> >   + * a format attribute. 'buf' is *not* the format, 'va_fmt->fmt' is.
-> >   + */
-> >   +static __printf(1,0)
-> >   +char *va_format(char *buf, char *end, struct va_format *va_fmt,
-> >                        struct printf_spec spec)
-> >    {
-> >   @@ -1718,5 +1719,4 @@ static char *va_format(...
-> >         return buf;
-> >    }
-> >   -#pragma GCC diagnostic pop
-> >
-> >    static noinline_for_stack
-> >   @@ -2429,5 +2429,5 @@ early_param(...
-> >     * See rust/kernel/print.rs for details.
-> >     */
-> >   -static noinline_for_stack
-> >   +static noinline_for_stack __printf(1,0)
-> >    char *pointer(const char *fmt, char *buf, char *end, void *ptr,
-> >               struct printf_spec spec)
-> >
-> > Does that work for people who see this warning?
-> 
-> IMHO, this is much worse.
-> 
-> Yes, as I also said in the previous thread, I consider the
-> warning/suggestion here a gcc bug, as it shouldn't make that suggestion
-> when one doesn't pass any of the function's arguments as the fmt
-> argument to another __format__(()) annotated-function.
-> 
-> But we have this __diag infrastructure exactly to silence special cases
-> (and sorry I forgot about that when suggesting the #pragma approach to
-> Andy), and this is very much a special case: It's the only place in the
-> whole codebase that has any reason to dereference that va_fmt, and any
-> other function anywhere calling a vsprintf()-like really should have
-> gotten the format string that goes along with the varargs from its
-> caller.
-> 
-> As this is apparently some newer gcc that has started doing this, you
-> just risk the next version turning the wrongness to 11 and complaining
-> that "buf" or "fmt" is not passed to a vsprintf-like function. Let's not
-> do "a hack make gcc not ask us to use a format attribute" when we have
-> a proper way to selectively silence such false-positives. If this was
-> something happening all over, we'd do -Wno-suggest-attribute=format, not
-> spread these annotations. But this really is a special case in the guts
-> of our printf implementation.
-> 
-> So, FWIW, ack on Nathan's fixups, nak on this one.
+Hi Yangtao,
 
-I think that we all agree that this patchset is better than the
-current state.
+kernel test robot noticed the following build warnings:
 
-I have added Andy's Tested-by from
-https://lore.kernel.org/r/Z-557YrwVr8bONq4@smile.fi.intel.com
+[auto build test WARNING on kdave/for-next]
+[also build test WARNING on linus/master v6.15-rc1 next-20250410]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link to the previous thread, see
-https://lore.kernel.org/r/CAHk-=wgfX9nBGE0Ap9GjhOy7Mn=RSy=rx0MvqfYFFDx31KJXqQ@mail.gmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Yangtao-Li/btrfs-convert-to-mutex-guard-in-btrfs_ioctl_balance_progress/20250409-204204
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250409125724.145597-2-frank.li%40vivo.com
+patch subject: [PATCH 2/2] btrfs: convert to mutex guard in btrfs_ioctl_balance_progress()
+config: arm-randconfig-001-20250410 (https://download.01.org/0day-ci/archive/20250410/202504102206.gpAU9chA-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504102206.gpAU9chA-lkp@intel.com/reproduce)
 
-and pushed this into printk/linux.git, branch for-6.15-printf-attribute.
-It was the branch with the already pulled code, see
-https://web.git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/log/?h=for-6.15-printf-attribute
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504102206.gpAU9chA-lkp@intel.com/
 
-I am going to give it few days in linux-next and create another
-pull request to have this sorted in 6.15 where it stated.
+All warnings (new ones prefixed by >>):
 
-Best Regards,
-Petr
+>> fs/btrfs/ioctl.c:3639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    3639 |         if (copy_to_user(arg, bargs, sizeof(*bargs)))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/btrfs/ioctl.c:3644:9: note: uninitialized use occurs here
+    3644 |         return ret;
+         |                ^~~
+   fs/btrfs/ioctl.c:3639:2: note: remove the 'if' if its condition is always true
+    3639 |         if (copy_to_user(arg, bargs, sizeof(*bargs)))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    3640 |                 ret = -EFAULT;
+   fs/btrfs/ioctl.c:3623:9: note: initialize the variable 'ret' to silence this warning
+    3623 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +3639 fs/btrfs/ioctl.c
+
+837d5b6e46d1a4 Ilya Dryomov 2012-01-16  3618  
+2ff7e61e0d30ff Jeff Mahoney 2016-06-22  3619  static long btrfs_ioctl_balance_progress(struct btrfs_fs_info *fs_info,
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3620  					 void __user *arg)
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3621  {
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3622  	struct btrfs_ioctl_balance_args *bargs;
+68395a7bf00486 Yangtao Li   2025-04-09  3623  	int ret;
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3624  
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3625  	if (!capable(CAP_SYS_ADMIN))
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3626  		return -EPERM;
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3627  
+68395a7bf00486 Yangtao Li   2025-04-09  3628  	guard(mutex)(&fs_info->balance_mutex);
+68395a7bf00486 Yangtao Li   2025-04-09  3629  
+68395a7bf00486 Yangtao Li   2025-04-09  3630  	if (!fs_info->balance_ctl)
+68395a7bf00486 Yangtao Li   2025-04-09  3631  		return -ENOTCONN;
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3632  
+8d2db7855e7b65 David Sterba 2015-11-04  3633  	bargs = kzalloc(sizeof(*bargs), GFP_KERNEL);
+68395a7bf00486 Yangtao Li   2025-04-09  3634  	if (!bargs)
+68395a7bf00486 Yangtao Li   2025-04-09  3635  		return -ENOMEM;
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3636  
+008ef0969dd966 David Sterba 2018-03-21  3637  	btrfs_update_ioctl_balance_args(fs_info, bargs);
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3638  
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16 @3639  	if (copy_to_user(arg, bargs, sizeof(*bargs)))
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3640  		ret = -EFAULT;
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3641  
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3642  	kfree(bargs);
+68395a7bf00486 Yangtao Li   2025-04-09  3643  
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3644  	return ret;
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3645  }
+19a39dce3b9bf0 Ilya Dryomov 2012-01-16  3646  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
