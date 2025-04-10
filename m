@@ -1,99 +1,128 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02FE1EFF9F
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 16:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D911A1E9B38;
+	Thu, 10 Apr 2025 17:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744303930; cv=none; b=dJ35nhKx2BkbhsiP22//apGKESLpS8lk2qkB/KVBBibBFBev19SmvKifjhwhaNapJsCbmOw2RV6wlYExWNbRaq23J5xdSZedSG6REazq3BGCpXIQAlcnTs1afrE5IUz8hG+w4ni22udKQcMXMY4OYUty/g/fmjq2TK3l5NGyVhI=
+	t=1744306999; cv=none; b=ImrMCqHefCboDQCX0A9+hmqBMlgFxvEW6gvcfLlxpk0GnpR1Q4xHH8uDaiWq6B46DTJMfBuBPmKtLpP3ZUmgjc3LFGuaPShYnnCyIcf7ZzP7kbsAzqiS0h9g6/to38CZm8eo79fYs5deQenbqp4stgp2AZQJOi/W3PqJhEVNGFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744303930; c=relaxed/simple;
-	bh=wtAsRY1Eot2z5cj6jtmEvASBRTt4Wkx+RDaU+zfk8kI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=O+VMUNWmZFcZ8WAPSrpV1LQi0BLel4TtyvftNFCsxxz9tfq7efPML6ZEDPPmyCU6qpxd8S1Ib0bV3e+QYzs+NgNnyKoW3SJW3mK99TPNT0a4s3uuVxaEtex1Tpqo4cZ4hNhsVnm3XFSqXXdU1tGIA8WPgUNf0YF68JJCjdoGdZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hXHjsTUT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744306999; c=relaxed/simple;
+	bh=sGm9E2uANzIVYfSNuEofrKAgkyeSsVX70Z/Yzq8fawg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jjzaiEIzoYZoKCPl6Jb3i1GaVAaAlP0U3hHQmOoITQUDMFQhjqCO1B6Y2NFI/Fa6CMPSe1YsjcoZ35/zSdNOkmggnEI9lr3nBp+vLhNwMjqaLZeXe6lt2PjSR3M3YmsGDbPV4cNPu8fPyuv7PJ3ygU+PV/3YoKDrjgfBfTb9W1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWJpmd8y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hXHjsTUT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744303927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zx7SSI4heg7bFydDNDcOiweplZCRvx3WGhnV1Png1/Q=;
-	b=hXHjsTUT52eIlRqKBoCaZlvHyBMUZOhC9p4geK1qFxI9Kg9w2abbaU0XiLNSMuEaJI4W5i
-	RHG+8SEsfBzvN/YzW5TOOLW3zAr6Hs7ULV9ovmIxk/3X9slmmCItSlFqZLNc4NtAoycVsA
-	uNYddVVJ3/4FOVEpupWz8XdcyEO65yE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-77QA6QWjO1yiE_WDgzY4SA-1; Thu,
- 10 Apr 2025 12:52:06 -0400
-X-MC-Unique: 77QA6QWjO1yiE_WDgzY4SA-1
-X-Mimecast-MFC-AGG-ID: 77QA6QWjO1yiE_WDgzY4SA_1744303925
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 51F5E1800266
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 16:52:05 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E6B713001D0E;
-	Thu, 10 Apr 2025 16:52:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc1,
- upstream-mainline, 2eb959ee)
-Date: Thu, 10 Apr 2025 16:52:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWJpmd8y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD85C4CEDD;
+	Thu, 10 Apr 2025 17:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744306999;
+	bh=sGm9E2uANzIVYfSNuEofrKAgkyeSsVX70Z/Yzq8fawg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=hWJpmd8ycdtss7keQQ7nQyfRR4acb1VZPz1jeabgTUbYxvu37294IhtdmOZ0j4Vjf
+	 onNFVthijSJnXXFV+RUcPfCA0iQJJKOeiLkpWPFT6cmouqG5n6fJ1z9FXMMTWOSz/C
+	 cfi2jRElinkKNOc6WoTEIx/jogGeoUQ77HQmJ9rzQdM6lk5G4ppLwCcAtp+AvJU2Sh
+	 +BrsaCFU5eAhpsck4OhIAiJ6pbOfhgjHQXTFuRm0Bac5PAzNaUxWVj6JwUlku4wL+I
+	 rLkPxsMFMoxEWSynnjSRjv9tNyY+WW0PNMuQNjEDiYcqjqeeGgHyZQ9E6gCIfievX7
+	 mI7WhTSgVHydg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 10 Apr 2025 10:43:08 -0700
+Subject: [PATCH v2] drm/sysfb: efidrm: Avoid clang
+ -Wsometimes-uninitialized in efidrm_device_create()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <59549.125041012520600550@us-mta-650.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 6uwdqJixGLErx57XZdExVOtdVHIxwR9-ubMRIWJGLhs_1744303925
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250410-efidrm-avoid-uninit-screen_info-warning-v2-1-b79646f58c24@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACsD+GcC/5WNQQ6CMBBFr0K6dgwtAuLKexhiSjvARGnNFKuGc
+ HcrN3D5XvL/W0RAJgzilC2CMVIg7xKoXSbMqN2AQDaxULkq80PeAPZkeQIdPVl4OnI0QzCM6K7
+ keg8vzUkOYCuFfVUbLEwp0tuD0/K9lS5t4pHC7PmzhaP82f8bUYKEqu5018nGHgt5viE7vO89D
+ 6Jd1/ULSySM5d8AAAA=
+X-Change-ID: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
+To: Thomas Zimmermann <tzimmermann@suse.de>, 
+ Javier Martinez Canillas <javierm@redhat.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3045; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=sGm9E2uANzIVYfSNuEofrKAgkyeSsVX70Z/Yzq8fawg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOk/mE1fNZs3syYt5Jy168jMFdu8mb6taGnfoVLOZnPhr
+ JuRI9/qjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRfe8Y/hfdf9h1ZObWZ2EN
+ tWbB7MVbWgXPdS3fwycndGXXiQouw/eMDIs1LHbqSudM70nr1tgtrOrhVruMac0yBzXJqtBlXJM
+ n8QIA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Clang warns (or errors with CONFIG_WERROR=y):
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+  drivers/gpu/drm/sysfb/efidrm.c:353:11: error: variable 'screen_base' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    353 |         else if (mem_flags & EFI_MEMORY_WB)
+        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/gpu/drm/sysfb/efidrm.c:356:7: note: uninitialized use occurs here
+    356 |         if (!screen_base)
+        |              ^~~~~~~~~~~
+  drivers/gpu/drm/sysfb/efidrm.c:353:7: note: remove the 'if' if its condition is always true
+    353 |         else if (mem_flags & EFI_MEMORY_WB)
+        |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    354 |                 screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
+  drivers/gpu/drm/sysfb/efidrm.c:261:27: note: initialize the variable 'screen_base' to silence this warning
+    261 |         void __iomem *screen_base;
+        |                                  ^
+        |                                   = NULL
 
+efidrm_get_mem_flags() can only return a mask that has at least one of
+the tested values set so the else case is impossible but clang's static
+analysis runs before inlining so it cannot know that.
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-6.15a-rc2-tag' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/xen/tip
+Initialize screen_base to NULL and add a defensive error message in case
+mem_flags were ever returned without one of the four valid values.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1762709322
+Fixes: 32ae90c66fb6 ("drm/sysfb: Add efidrm for EFI displays")
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v2:
+- Upgrade drm_warn() to drm_err() and adjust message (Thomas).
+- Carry forward Thomas's reviewed-by.
+- Link to v1: https://lore.kernel.org/r/20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org
+---
+ drivers/gpu/drm/sysfb/efidrm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1762709322-x86_64-kernel-debug
+diff --git a/drivers/gpu/drm/sysfb/efidrm.c b/drivers/gpu/drm/sysfb/efidrm.c
+index af90064a4c04..3cfd5d2cbf48 100644
+--- a/drivers/gpu/drm/sysfb/efidrm.c
++++ b/drivers/gpu/drm/sysfb/efidrm.c
+@@ -258,7 +258,7 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
+ 	struct drm_sysfb_device *sysfb;
+ 	struct drm_device *dev;
+ 	struct resource *mem = NULL;
+-	void __iomem *screen_base;
++	void __iomem *screen_base = NULL;
+ 	struct drm_plane *primary_plane;
+ 	struct drm_crtc *crtc;
+ 	struct drm_encoder *encoder;
+@@ -353,6 +353,8 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
+ 	else if (mem_flags & EFI_MEMORY_WB)
+ 		screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
+ 					    MEMREMAP_WB);
++	else
++		drm_err(dev, "invalid mem_flags: 0x%llx\n", mem_flags);
+ 	if (!screen_base)
+ 		return ERR_PTR(-ENOMEM);
+ 	iosys_map_set_vaddr_iomem(&sysfb->fb_addr, screen_base);
 
+---
+base-commit: e8bf4a1bdaeadb28d13b9a2bcfd5910fda06eede
+change-id: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
