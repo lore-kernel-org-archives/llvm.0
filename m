@@ -1,154 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545101EB1BD;
-	Thu, 10 Apr 2025 15:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02FE1EFF9F
+	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 16:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744300598; cv=none; b=tBV2S0i88vR5LtnJy7CgfBTRml/ory3wblElIgNlQ8LoKwxt+/DEboW82IEeZ5mqkrRsiggs1z1NdDbQTXEjHMVzYpr8p337E6ngReFrm6ee52unSmPG+lgSHtfgynlsyVqWey7ln48CbNabEqC8Hd5MlaqlFS0lsnZPp7Qm1Lo=
+	t=1744303930; cv=none; b=dJ35nhKx2BkbhsiP22//apGKESLpS8lk2qkB/KVBBibBFBev19SmvKifjhwhaNapJsCbmOw2RV6wlYExWNbRaq23J5xdSZedSG6REazq3BGCpXIQAlcnTs1afrE5IUz8hG+w4ni22udKQcMXMY4OYUty/g/fmjq2TK3l5NGyVhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744300598; c=relaxed/simple;
-	bh=kQXYAVIwetUyVwvHQAZ8MBfV2JpMeqQiDyjEkLidttY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lwUBu4beOGM91+P2/zNnwXyTeknSXciLNewIWr2BZpvPCszg43NxZk/8XiIRln2m8P9apLXkw0D+x1D/Fn7voMs1tSG4gk9raGnc9Z0N8iVjvxd6AlFNdsA6rdynIyxkpRa5xh9TVCykroOadCcggigTs16aQG9eEyaaBmGEelM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anm+iImp; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744303930; c=relaxed/simple;
+	bh=wtAsRY1Eot2z5cj6jtmEvASBRTt4Wkx+RDaU+zfk8kI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=O+VMUNWmZFcZ8WAPSrpV1LQi0BLel4TtyvftNFCsxxz9tfq7efPML6ZEDPPmyCU6qpxd8S1Ib0bV3e+QYzs+NgNnyKoW3SJW3mK99TPNT0a4s3uuVxaEtex1Tpqo4cZ4hNhsVnm3XFSqXXdU1tGIA8WPgUNf0YF68JJCjdoGdZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hXHjsTUT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anm+iImp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744300596; x=1775836596;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kQXYAVIwetUyVwvHQAZ8MBfV2JpMeqQiDyjEkLidttY=;
-  b=anm+iImpKq7xk/5wnOYCQtoqmOQnj1pTyPBt81H8QDJqNPjdNX9RSUkl
-   +pyeyHx2Gn5RD7jdfGqdz7nPbE++LAliFg9pi4S8ZK8BOrVFwk6KnOJIF
-   18GECcG/FhI0n3k1LcQ/dKli+B9FhuKPO1hLkx+UBr/BGpsvr4rFbHKQD
-   T4q3SfIn3WGXt6OUVbOlmGktXcClXmPVK64df61LEu+2FFmAlJ0vgWi/D
-   zsCV85ovBsXXt+98sslHlbTwU+kmjRn1J0/FtpM5FiCAW94PWnnxTrx17
-   oASdI+TumTE74e3bB61Ibtto1kdwnouXYMPYNWw3q29crZawrokJQN8WX
-   Q==;
-X-CSE-ConnectionGUID: KZIrs58aRIClekdKWMaBlQ==
-X-CSE-MsgGUID: VMpGpROxSB+/ntMUefkniA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="56010823"
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="56010823"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 08:56:35 -0700
-X-CSE-ConnectionGUID: cYuTcStpSoexM0h44TRRmg==
-X-CSE-MsgGUID: GXm97F4OR8+Hd6GdEbBnOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
-   d="scan'208";a="133671636"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 10 Apr 2025 08:56:31 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u2uGT-000AFT-27;
-	Thu, 10 Apr 2025 15:56:29 +0000
-Date: Thu, 10 Apr 2025 23:55:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 3/3] hwrng: npcm - Add a local variable for struct device
- pointer
-Message-ID: <202504102028.H0evWtkl-lkp@intel.com>
-References: <20250410070623.3676647-4-sakari.ailus@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hXHjsTUT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744303927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zx7SSI4heg7bFydDNDcOiweplZCRvx3WGhnV1Png1/Q=;
+	b=hXHjsTUT52eIlRqKBoCaZlvHyBMUZOhC9p4geK1qFxI9Kg9w2abbaU0XiLNSMuEaJI4W5i
+	RHG+8SEsfBzvN/YzW5TOOLW3zAr6Hs7ULV9ovmIxk/3X9slmmCItSlFqZLNc4NtAoycVsA
+	uNYddVVJ3/4FOVEpupWz8XdcyEO65yE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-77QA6QWjO1yiE_WDgzY4SA-1; Thu,
+ 10 Apr 2025 12:52:06 -0400
+X-MC-Unique: 77QA6QWjO1yiE_WDgzY4SA-1
+X-Mimecast-MFC-AGG-ID: 77QA6QWjO1yiE_WDgzY4SA_1744303925
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 51F5E1800266
+	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 16:52:05 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E6B713001D0E;
+	Thu, 10 Apr 2025 16:52:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc1,
+ upstream-mainline, 2eb959ee)
+Date: Thu, 10 Apr 2025 16:52:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250410070623.3676647-4-sakari.ailus@linux.intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <59549.125041012520600550@us-mta-650.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 6uwdqJixGLErx57XZdExVOtdVHIxwR9-ubMRIWJGLhs_1744303925
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sakari,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master linus/master v6.15-rc1 next-20250410]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/hwrng-atmel-Add-a-local-variable-for-struct-device-pointer/20250410-151223
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20250410070623.3676647-4-sakari.ailus%40linux.intel.com
-patch subject: [PATCH 3/3] hwrng: npcm - Add a local variable for struct device pointer
-config: arm-randconfig-001-20250410 (https://download.01.org/0day-ci/archive/20250410/202504102028.H0evWtkl-lkp@intel.com/config)
-compiler: clang version 19.1.1 (https://github.com/llvm/llvm-project d401987fe349a87c53fe25829215b080b70c0c1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504102028.H0evWtkl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504102028.H0evWtkl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/char/hw_random/npcm-rng.c:57:54: error: expected ';' at end of declaration
-      57 |         struct device *dev = (struct device *)priv->rng.priv
-         |                                                             ^
-         |                                                             ;
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +57 drivers/char/hw_random/npcm-rng.c
+Kernel information:
+    Commit message: Merge tag 'for-linus-6.15a-rc2-tag' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/xen/tip
 
-    53	
-    54	static int npcm_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
-    55	{
-    56		struct npcm_rng *priv = to_npcm_rng(rng);
-  > 57		struct device *dev = (struct device *)priv->rng.priv
-    58		int retval = 0;
-    59		int ready;
-    60	
-    61		pm_runtime_get_sync(dev);
-    62	
-    63		while (max) {
-    64			if (wait) {
-    65				if (readb_poll_timeout(priv->base + NPCM_RNGCS_REG,
-    66						       ready,
-    67						       ready & NPCM_RNG_DATA_VALID,
-    68						       NPCM_RNG_POLL_USEC,
-    69						       NPCM_RNG_TIMEOUT_USEC))
-    70					break;
-    71			} else {
-    72				if ((readb(priv->base + NPCM_RNGCS_REG) &
-    73				    NPCM_RNG_DATA_VALID) == 0)
-    74					break;
-    75			}
-    76	
-    77			*(u8 *)buf = readb(priv->base + NPCM_RNGD_REG);
-    78			retval++;
-    79			buf++;
-    80			max--;
-    81		}
-    82	
-    83		pm_runtime_mark_last_busy(dev);
-    84		pm_runtime_put_sync_autosuspend(dev);
-    85	
-    86		return retval || !wait ? retval : -EIO;
-    87	}
-    88	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1762709322
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1762709322-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
