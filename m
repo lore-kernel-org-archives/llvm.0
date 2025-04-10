@@ -1,236 +1,171 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E308207A1F
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 07:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EA020B804;
+	Thu, 10 Apr 2025 07:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744269405; cv=none; b=a0sXnhfri0rjlfpqrLwiBZRtzT1ZfZT7wYK4ulKVoDQX51Tawt2zDvqNPvKyJuarux6ZgZfkM/TMJpfncCMLm/zDKNED3SYKbjIzmyHA1Qe9tQ7mPBgKi8106+2TrxQIITufbFuDPkqnE7DEVGqEWHreEy2ooaHEZ1uoS95j2nA=
+	t=1744269920; cv=none; b=HdAyVLRVtEp5+wBlLqmd42Xh4Bz7VRMP/X12h+Vbx1nYtcy7/GoCRV77LNNs8SeKRqPnYR8yqhD+M8my1xUT9xpRR/i0t4VJ4nZLxwA9Py44NQCsWiXDtRTer74K8kxdvy+9U2xq+dSVhZGT9QqNlZx6fV0vxiivZ86QZOr7QyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744269405; c=relaxed/simple;
-	bh=wiuYLirMg1o0IKagjr7NLFCXUdr18Y29MBcmipow8ug=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h3kH+/jbv8xMy9+IIThbwkg8xJ3ldQ80lbqsm0qN/oUQZDHIAkOZThFr2uiKSrxkVocavQs+tuTMPSXwIPajvyJ6CpcGaYD6ey10GEQ83CGIEFePUJayjQxSfYNw0y0B2uuJ9vfMqJ9Pl5mtQsSkQJ5aPTpLxN0PzzddGJEK2SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zAesnMe/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hTT9CyR2; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=G0D60ttC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rn4to1af; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1744269920; c=relaxed/simple;
+	bh=RquuGCXJiJWK/Yhqhh0t6vGlUvFzJIPOR1vaSOnu1MA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q7P615ZQOpD/MdhGlriAoi2PQ1mm7ktXj6nHEoKxDRnbd3gdx5K07T4LCFFMLG5o4LsPGcPD/pBFU0FVSh3Ic7ntkx9fenCYDY9MqkCjya8HeMsLEknQgMxRvBvX3T7XgFt7cJ6gJ59TgEl4Hg31XyAeDLUj5fQG+QxEnSbkK0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VppDNfsd; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zAesnMe/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hTT9CyR2";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="G0D60ttC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rn4to1af"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 6648E1F385;
-	Thu, 10 Apr 2025 07:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1744269401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
-	b=zAesnMe/GnnBPNlS4hwrWtwsh1oO5frG3jDcT+hOCKE6TXLWnhR/+XqXf5fvVuC87ixgZs
-	5402w8ek88FX0+inzJ+00Rk0z/Tt0CvvATfGBGXD3A+uMA/cmy7l5aEYSPLuSE88SFiFOM
-	7Rf+FE+pYSt50sqcfpGpq48NLhJmdxQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1744269401;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
-	b=hTT9CyR2yuuETmZlZOlFotpXGnkdm6T0N3W5BL2TrVFFmmZFwTl9RQV/vpW0BdHjOdg5w2
-	T8gFTghCseEF+KBg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1744269400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
-	b=G0D60ttCwOobF2K+UJlRauNoRXLH2TMd9dKcr3dqCgk9u/GumRw6y8tKGb7uJGOpdW3NIj
-	Db3VYcBd9Tm/Hqv/MOfizyWxihpU2a/LCuUdEC2pEFERWVNl5neAQ4YHSxlyQVADO6pydM
-	HdybA5xPww9WRvT6DvX7or0U4scuEwc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1744269400;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Ry6hvSUeSNi6nna2kXuGgO6wVOEKFUoNiIQx2xE48z8=;
-	b=rn4to1afrCreBkGYli9/M9NP71JqcvpIhtDbvc0Vdcl/pmtuz4mOkLY2ydEDZ31d8GARZB
-	qENU9F1FY0EGpAAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 32FBC13886;
-	Thu, 10 Apr 2025 07:16:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id BH8XC1hw92ejdgAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Thu, 10 Apr 2025 07:16:40 +0000
-Message-ID: <38b8ad74-584c-4d43-b062-4b52ab98bf8d@suse.de>
-Date: Thu, 10 Apr 2025 09:16:39 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VppDNfsd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744269919; x=1775805919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RquuGCXJiJWK/Yhqhh0t6vGlUvFzJIPOR1vaSOnu1MA=;
+  b=VppDNfsdYaiXnUk6Ap8giF0os52051s8jAiA1KIfeoPKurUE/o0cSeSe
+   vRGJWda5QYCTVbTwnCBZ9H9SV0E/4km4h7x9EA7nY+U0mLF4pbrDqaBYy
+   NvhOs/byiK77VdWQZU5fkkUbYfJY8hvNY0JEMvMR7z8PiT8iIvxMz1rCJ
+   wqcNk4xLoGXU7hwXw47kqmVVC1tWOFSRrq4RcPYCLDJK0Gend2kUuQeS+
+   4FDmQxtxELeVFxOyZB81VW6hv6BC9KKK4eqVZ09EDLl6aLA4a89ZBhBWh
+   gti9OIaE8Iy9I4svcEEG9hs/rnVty9veXfcwfmh1VladMQ5jxr5n4zHRK
+   A==;
+X-CSE-ConnectionGUID: ij27EFOATHW9pkoq1p3paQ==
+X-CSE-MsgGUID: 7PWEie9ySsu3lhIoETUqlg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="71150929"
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="71150929"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 00:25:18 -0700
+X-CSE-ConnectionGUID: iVzjJqHaQ2qDlUwLquZzvw==
+X-CSE-MsgGUID: ZTrkxYVbQce+/ps+3EyEeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="129759647"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 10 Apr 2025 00:25:15 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2mHg-0009lP-2A;
+	Thu, 10 Apr 2025 07:25:12 +0000
+Date: Thu, 10 Apr 2025 15:25:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Donet Tom <donettom@linux.ibm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ritesh Harjani <ritesh.list@gmail.com>, rafael@kernel.org,
+	Danilo Krummrich <dakr@kernel.org>,
+	Donet Tom <donettom@linux.ibm.com>
+Subject: Re: [PATCH 1/2] mm/memblock: Added a New Memblock Function to Check
+ if the Current Node's Memblock Region Intersects with a Memory Block
+Message-ID: <202504101431.ovUiydUd-lkp@intel.com>
+References: <50142a29010463f436dc5c4feb540e5de3bb09df.1744175097.git.donettom@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/sysfb: efidrm: Avoid clang -Wsometimes-uninitialized
- in efidrm_device_create()
-To: Nathan Chancellor <nathan@kernel.org>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
-References: <20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <20250409-efidrm-avoid-uninit-screen_info-warning-v1-1-67babb19d831@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -4.30
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50142a29010463f436dc5c4feb540e5de3bb09df.1744175097.git.donettom@linux.ibm.com>
 
-Hi
+Hi Donet,
 
-thanks for the fix.
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+[auto build test ERROR on akpm-mm/mm-everything]
 
-with a remark below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Donet-Tom/base-node-Use-curr_node_memblock_intersect_memory_block-to-Get-Memory-Block-NID-if-CONFIG_DEFERRED_STRUCT_PAGE_INIT-is-S/20250409-132924
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/50142a29010463f436dc5c4feb540e5de3bb09df.1744175097.git.donettom%40linux.ibm.com
+patch subject: [PATCH 1/2] mm/memblock: Added a New Memblock Function to Check if the Current Node's Memblock Region Intersects with a Memory Block
+config: hexagon-randconfig-002-20250410 (https://download.01.org/0day-ci/archive/20250410/202504101431.ovUiydUd-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250410/202504101431.ovUiydUd-lkp@intel.com/reproduce)
 
-Am 09.04.25 um 21:03 schrieb Nathan Chancellor:
-> Clang warns (or errors with CONFIG_WERROR=y):
->
->    drivers/gpu/drm/sysfb/efidrm.c:353:11: error: variable 'screen_base' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->      353 |         else if (mem_flags & EFI_MEMORY_WB)
->          |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/gpu/drm/sysfb/efidrm.c:356:7: note: uninitialized use occurs here
->      356 |         if (!screen_base)
->          |              ^~~~~~~~~~~
->    drivers/gpu/drm/sysfb/efidrm.c:353:7: note: remove the 'if' if its condition is always true
->      353 |         else if (mem_flags & EFI_MEMORY_WB)
->          |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->      354 |                 screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
->    drivers/gpu/drm/sysfb/efidrm.c:261:27: note: initialize the variable 'screen_base' to silence this warning
->      261 |         void __iomem *screen_base;
->          |                                  ^
->          |                                   = NULL
->
-> efidrm_get_mem_flags() can only return a mask that has at least one of
-> the tested values set so the else case is impossible but clang's static
-> analysis runs before inlining so it cannot know that.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504101431.ovUiydUd-lkp@intel.com/
 
-Right, the variable mem_flags should always be set and thus screen_info 
-should be mapped. I never got this error with gcc.
+All errors (new ones prefixed by >>):
 
->
-> Initialize screen_base to NULL and add a defensive print in case
-> mem_flags were ever returned without one of the four valid values.
->
-> Fixes: 32ae90c66fb6 ("drm/sysfb: Add efidrm for EFI displays")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/gpu/drm/sysfb/efidrm.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/sysfb/efidrm.c b/drivers/gpu/drm/sysfb/efidrm.c
-> index af90064a4c04..7d820f42956b 100644
-> --- a/drivers/gpu/drm/sysfb/efidrm.c
-> +++ b/drivers/gpu/drm/sysfb/efidrm.c
-> @@ -258,7 +258,7 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
->   	struct drm_sysfb_device *sysfb;
->   	struct drm_device *dev;
->   	struct resource *mem = NULL;
-> -	void __iomem *screen_base;
-> +	void __iomem *screen_base = NULL;
->   	struct drm_plane *primary_plane;
->   	struct drm_crtc *crtc;
->   	struct drm_encoder *encoder;
-> @@ -353,6 +353,8 @@ static struct efidrm_device *efidrm_device_create(struct drm_driver *drv,
->   	else if (mem_flags & EFI_MEMORY_WB)
->   		screen_base = devm_memremap(&pdev->dev, mem->start, resource_size(mem),
->   					    MEMREMAP_WB);
-> +	else
-> +		drm_warn(dev, "unhandled mem_flags: 0x%llx\n", mem_flags);
+>> mm/memblock.c:1943:10: error: no member named 'nid' in 'struct memblock_region'
+    1943 |                 if (r->nid == curr_nid) {
+         |                     ~  ^
+   1 error generated.
 
 
-This message should be  something like drm_err("invalid mem_flags ..."). 
-It's really a driver bug.
+vim +1943 mm/memblock.c
 
-Would you send an update?
-
-Best regards
-Thomas
-
->   	if (!screen_base)
->   		return ERR_PTR(-ENOMEM);
->   	iosys_map_set_vaddr_iomem(&sysfb->fb_addr, screen_base);
->
-> ---
-> base-commit: e8bf4a1bdaeadb28d13b9a2bcfd5910fda06eede
-> change-id: 20250409-efidrm-avoid-uninit-screen_info-warning-d62ef67ce3c5
->
-> Best regards,
+  1913	
+  1914	/**
+  1915	 * curr_node_memblock_intersect_memory_block:  checks if the current node's memblock
+  1916	 * region intersects with the memory block.
+  1917	 * @start_pfn: memory block start pfn
+  1918	 * @end_pfn: memory block end_pfn
+  1919	 * @curr_nid: Current node
+  1920	 *
+  1921	 * This function takes the start and end PFN of a memory block, as well as the node ID
+  1922	 * that is being registered. It then finds the memblock region of the current node and
+  1923	 * checks if the passed memory block intersects with the memblock. If there is an
+  1924	 * intersection, the function returns true; otherwise, it returns false.
+  1925	 *
+  1926	 * Return:
+  1927	 * If the current node's memblock region intersects with the memory block, it returns
+  1928	 * true; otherwise, it returns false.
+  1929	 */
+  1930	bool __init_memblock curr_node_memblock_intersect_memory_block(unsigned long start_pfn,
+  1931							unsigned long end_pfn, int curr_nid)
+  1932	{
+  1933		struct memblock_region *r;
+  1934		unsigned long r_start, r_end;
+  1935		unsigned long size = end_pfn - start_pfn;
+  1936		unsigned long r_size = 0;
+  1937	
+  1938		for_each_mem_region(r) {
+  1939			r_start = PFN_DOWN(r->base);
+  1940			r_end = PFN_DOWN(r->base + r->size);
+  1941			r_size = r_end - r_start;
+  1942	
+> 1943			if (r->nid == curr_nid) {
+  1944				if (size > r_size) {
+  1945					/*
+  1946					 * The memory block size is greater than the memblock
+  1947					 * region size, meaning multiple memblocks can be present
+  1948					 * within a single memory block. If the memblock's start
+  1949					 * or end is within the memory block's start and end, It
+  1950					 * indicates that the memblock is part of this memory block.
+  1951					 * Therefore, the memory block can be added to the node
+  1952					 * where the memblock resides.
+  1953					 */
+  1954					if (in_range(r_start, start_pfn, size) ||
+  1955							in_range(r_end, start_pfn, size))
+  1956						return true;
+  1957				} else {
+  1958					/*
+  1959					 * The memory block size is less than or equal to the
+  1960					 * memblock size, meaning multiple memory blocks can
+  1961					 * be part of a single memblock region. If the memory
+  1962					 * block's start or end is within the memblock's start
+  1963					 * and end, it indicates that the memory block is part of
+  1964					 * the memblock. Therefore, the memory block can be added
+  1965					 * to the node where the memblock resides.
+  1966					 */
+  1967					if (in_range(start_pfn, r_start, r_size) ||
+  1968							in_range(end_pfn, r_start, r_size))
+  1969						return true;
+  1970				}
+  1971			}
+  1972		}
+  1973		return false;
+  1974	}
+  1975	
 
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
