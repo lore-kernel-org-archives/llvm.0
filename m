@@ -1,99 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E222367D0
-	for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 17:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C19269891;
+	Fri, 11 Apr 2025 18:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744392191; cv=none; b=IZ3jsF10qrU6KuAINYv0PBw0l3MkLlzo83cF+zEPY8f3ziyLD5JEAVm+rrQ1mXd+qr/Q0n2qhjcRozQk1PX+88qFelgD+mq8K/pv65Jj7AMl9iYWNoJbF74EAgY0MNQOLQibuzcCDjyaE4/qjmo7kpyWNAlxhfozpWhL/pRJcO0=
+	t=1744396912; cv=none; b=LK6bjNvvQbtF8hbOhszaBegGJgYZWFU0v3uZNA/5UW2v1Bn7pSugZ7Don3KFCkZartr6pviRRu6oFE885DmGemUHn93l8GxodxmA/2pV1/ssOWogCt/ctdekGf4dkZO2xul05ghA7ojrWAXWI5G1aplLW/UpMey1ojPoGhx1cW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744392191; c=relaxed/simple;
-	bh=Qip8NnGwc5qBGNe/87vrQShX+G+7k7uhl4ssXUxxx48=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ldqkLigFyregTZaiWClp3iiQHFZ3ytr9lbhlLLYaHLk1FdaWzjT0OM8wvjZ1ZT9lObXYjvySjspOuZV8nltDE+nK23I7sSeuGtbgLfaka2xBnGvlrkFfpZiv2BLwg5kBvBLhPyNYhcyPEq9O63Kxl/AnyFCxxsuCxHix8ukRuFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c6rPUHpz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744396912; c=relaxed/simple;
+	bh=NY8+7+ZEmdWqqx0zQOF9aAujJPW4CRyp6FmkPwIcd+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ww/m5dzcrqphGqu0I9YAzYxPJW36jWW9uszNctuXQCqCx55yWWo0NACFX+nstXTaEbxbB5b/52/mdUPgUtESfvMnZxuj+FVfRuePva2QJtGir2eLYqc2nqDaL7hTu9wb/08vJiqz6iqh7lPoqdJ0r0f3U259mEa93ndRImkeA2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9Lq+nM/; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c6rPUHpz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744392188;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ICVGkJesJJahruFdeXveeUsMjwq7LMa32yLHexYWOg4=;
-	b=c6rPUHpzQJ0s+qowIsQeRYEj/tjqZgo2p27wvXqUZtfpaaHKhQo3kK48EOaMshOdP6n9qU
-	kckRfA+diNXeD+5hm6z1WDq7guGg5phqt36V3fsUSoXq9UCwUaGbDCmY+JprFWPfljqnqV
-	EDK3ZOMN9W2I16OZ97MayNBGxk05Qsc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-85-jSG6XcOlNNOOkaXoCYf7kQ-1; Fri,
- 11 Apr 2025 13:23:06 -0400
-X-MC-Unique: jSG6XcOlNNOOkaXoCYf7kQ-1
-X-Mimecast-MFC-AGG-ID: jSG6XcOlNNOOkaXoCYf7kQ_1744392185
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A82301800260
-	for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 17:23:05 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 253B11808882;
-	Fri, 11 Apr 2025 17:23:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc1,
- upstream-mainline, e618ee89)
-Date: Fri, 11 Apr 2025 17:23:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9Lq+nM/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744396911; x=1775932911;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NY8+7+ZEmdWqqx0zQOF9aAujJPW4CRyp6FmkPwIcd+w=;
+  b=d9Lq+nM/2lV5ChjjnQ/zGREVg7pP3vjW11ZIFfd4SEd6pb5Os7uEyySQ
+   Kb0V/rnnpuaEomBjr2ZjfvuWI0Ya2NkEKYgnpZSKvcI0S7NL0RUrRGqUL
+   G5puANSFUtBwqgQ5g/HgOl1YbdqAfBLnmnBAfXX7k/6NFcecqLSJPIbeF
+   cfysNlryKFaoPJ3lCZH2umQQ4X62Ybn/OeaOisEORL3A7F3vdLegaWo7/
+   mMIRTEHIJootX7LO2jQAOjJ6hr9KRoxTfa08gdjCyicZobvcq5ndSBIdN
+   xISSme44mctcWE8vPAWKhraV0it29da9AFwvgxteVwE/2/pXKQ0EbfNBT
+   g==;
+X-CSE-ConnectionGUID: YoNSGiWoQfOK13HD3WHgOg==
+X-CSE-MsgGUID: nONbzELdTUq4BxQSUSJRFg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="63500553"
+X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
+   d="scan'208";a="63500553"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 11:41:48 -0700
+X-CSE-ConnectionGUID: e3q01x+CRf6UfIA1beGItA==
+X-CSE-MsgGUID: 8a1ba08VQkKVcgN2zvTF2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
+   d="scan'208";a="129124558"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 11 Apr 2025 11:41:43 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u3JJt-000BJa-0o;
+	Fri, 11 Apr 2025 18:41:41 +0000
+Date: Sat, 12 Apr 2025 02:40:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Praveen Talari <quic_ptalari@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
+	quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
+	quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p
+ Qualcomm platforms
+Message-ID: <202504120226.2XbpK0yU-lkp@intel.com>
+References: <20250410174010.31588-5-quic_ptalari@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <99937.125041113230601481@us-mta-85.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: v7uCBTAoXESuez71-hfBskqI1QGp3OGJkTCSAbr3kR0_1744392185
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250410174010.31588-5-quic_ptalari@quicinc.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Praveen,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.15-rc1 next-20250411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-new-helper-API-dev_pm_opp_set_level/20250411-015310
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20250410174010.31588-5-quic_ptalari%40quicinc.com
+patch subject: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p Qualcomm platforms
+config: arm-randconfig-001-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120226.2XbpK0yU-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120226.2XbpK0yU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504120226.2XbpK0yU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/soc/qcom/qcom-geni-se.c:953:1: warning: unused label 'out' [-Wunused-label]
+     953 | out:
+         | ^~~~
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6.15-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/broonie/spi
+vim +/out +953 drivers/soc/qcom/qcom-geni-se.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1764632593
+   928	
+   929	static int geni_se_probe(struct platform_device *pdev)
+   930	{
+   931		struct device *dev = &pdev->dev;
+   932		struct geni_wrapper *wrapper;
+   933		const struct geni_se_desc *desc;
+   934		int ret;
+   935	
+   936		wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
+   937		if (!wrapper)
+   938			return -ENOMEM;
+   939	
+   940		wrapper->dev = dev;
+   941		wrapper->base = devm_platform_ioremap_resource(pdev, 0);
+   942		if (IS_ERR(wrapper->base))
+   943			return PTR_ERR(wrapper->base);
+   944	
+   945		desc = device_get_match_data(&pdev->dev);
+   946	
+   947		if (!has_acpi_companion(&pdev->dev) && desc->geni_se_rsc_init) {
+   948			ret = desc->geni_se_rsc_init(wrapper, desc);
+   949			if (ret)
+   950				return -EINVAL;
+   951		}
+   952	
+ > 953	out:
+   954		dev_set_drvdata(dev, wrapper);
+   955		dev_dbg(dev, "GENI SE Driver probed\n");
+   956		return devm_of_platform_populate(dev);
+   957	}
+   958	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1764632593-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
