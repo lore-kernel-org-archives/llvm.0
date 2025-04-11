@@ -1,225 +1,354 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955F023A9AC
-	for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 23:16:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BD829C327;
+	Fri, 11 Apr 2025 23:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744413378; cv=none; b=jOyWDArBTMcEP5aEg17k/s8rPGX2pGXps2OkhvJp/83w2SglDtqNXLIOhUMbGyjySp38Lovtg8KWvI2qZGojXf2mj+jE6pt85OYH8Zrl17gWZPdjBE7lbeMGNLE9FLagN3feeAcLZNJvWZPbvgfBW5DKS7/xNPGlB85k62UOluQ=
+	t=1744413550; cv=none; b=hkUnKb4M67UTYhiP6PZWSLm+srVjKRaT/OLAoPyemgUIYQW5QJ7cxry5IuT/V4/X7cS+sseRfKOdVn7uAmSoGg8hR96T7Hozre5dQd30nXCzoo9ZysP0LvqBEz0g1J6YH6YUSNuBkdcPcHXhxEm2V2SiP9LyyqUs7KIwuDMYFMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744413378; c=relaxed/simple;
-	bh=y/67TUX3SKsxvpdITZXAWtpG9m+MFwkW0ufwvWD8ZvE=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Subject:
-	 References:In-Reply-To; b=mDjvqSaaplIF7niGxwGb/uB37GUg2LX93JSXsGTl0WqFbQU3/S/knxZTJ4wbF63PvaVFuC/BkvJ+iaGAsGYsVolQOiNeN8tAYIkHxFqU7H4paAzHwf+AdovT6tNeUwvekeRcpjFPMXlyb2zt/Bi4WS3ggGkZkpFE7pjzyCebPaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KjxoW0yZ; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1744413550; c=relaxed/simple;
+	bh=264yTgqYFYsTnayIvZxA9PowdaySNc+1/BvGa+X4k3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G4Mw5OoLpob74mieYAI6qleBYDTuZH3/Ia8Kh1rskWmESXD7TdVns5OPns38Wl8wqmsp9j3De1UZxuqtIcIqpLWnvhlpYm7MNAyDioEpxeWBonF8Us50edP0EQJbiXdwbbIDxrypCSt/UkozSvRy8HEwOelIY0B4nI0PeAYZBso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j6ryFknR; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KjxoW0yZ"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6ecf99dd567so29488726d6.0
-        for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 16:16:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1744413375; x=1745018175; darn=lists.linux.dev;
-        h=in-reply-to:references:subject:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tuGybtALY1nU6Xel+qCGNU6dttZXpp155m7wcuPBHmI=;
-        b=KjxoW0yZ1tVeHDw+MrE3ou4OywM2WPpc5uo+e3FO0OsTrbaZGFASbCn/6w91Op1Wmq
-         nEF49QrR6X1OFA3shrponql710YD+OjTyUBF1Q2OkP9K7tpFuH6UhUCcpFULLFrJ2bt9
-         d8VNhOqh0HyHXLbkB4dTIEdYV0SKJVZbMvqwpdbmTLT17kXB+rJG8SSNI6l+kaE2o3Rb
-         xfOEMGXexwfyBWlyEPzK9T+8+3J3RDS1rFqPmclLozC35W3bItTXw+HBsEy823AGo1VO
-         tA6Ku5vUhtB/06Yy+n6uY8Kzl1FAWH5fWvqtzMlvJeIpVLdGSoHgxDzExnn222GQmUAD
-         TA6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744413375; x=1745018175;
-        h=in-reply-to:references:subject:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tuGybtALY1nU6Xel+qCGNU6dttZXpp155m7wcuPBHmI=;
-        b=Lw1vE8zx033zHJMuuaOatgegaYtjRyGOcfEvHni93f697DW7wS7E1qvryC2/f08t/m
-         LL5DNaUUdAUNI6aHmHrZieOwJNBuLXEKPTVa8owWrDb1XR+gA+qyu7VdelSps2OoQXR4
-         DfN1jgpBPtmWpdRzKSSAs3ZZO2jfE/eThsqHdJr+Mye8HNtxwHZIlvytPWvcMF+bvCVE
-         Eki8lJ5yXwOKi2CDT1Il+tKCbvmOMMbx6KGizRzk0cKrBDS9sJWBsRZ1cRaQImrBagN8
-         iTWgIAFWqrexfTqB/y7yAKGc8TwMg7P+qztr2Vnjb9Tnt3g+V4uXto9EIJIDdJWg1Atp
-         atfA==
-X-Forwarded-Encrypted: i=1; AJvYcCXxlX8SccCNbAaHWRrk8Br61yFIqQJzCzJWKy5d/AMOHPmCdH6zaw06HNoWjJ55ptSsoC5A@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw+ngH1gxHoC4jEqpQo179MNDZN0lC6xXfjrbHdWbuMvLo68faA
-	KSpP198GFJHZiCRwTS5+BXlMomI1LwiklWNpkxUrqMLecrGw38VF3md9qkEpyQ==
-X-Gm-Gg: ASbGncuD9sZIpADOYMdO9fGhrGI3Mnvq9oJ7tH8z88Vue3Z6BJXBXpQXh5+Bnpdjyf4
-	2IO5EYvdTyxt7fRF2/hDHKldC6yUeKuPhCkJdz6hJI1OtBeKdAn6ZkQP644cH4TBixGkSW8a89c
-	dtEv3TPcxQNpyjrxqLGSRMUQua/wwuZC9eHDvp58n7EurWXbrJqdd9whBN75Vl9/B20/ayc7qXo
-	wHjV8TcmrKw5i4W4IzSsA3JM0j3/PM1wiJ7batY+UpVN19ekALCWz8rseqi9ujZj+gTtOb4ywJ2
-	97pNoacU7BF9sqae95tQ4rg2i9P7B3BNHbPDHLjAw5OoVTiWa8sSj0KR6FeQAmGtVcEk/SYyQyA
-	9UVrMt88zUw==
-X-Google-Smtp-Source: AGHT+IGjduBmlSpWU0mlp+40mGyjda74cdL2upZ68BYIBvIaRlX1u4yCfExf6wZG67mqfhzmsnsAMA==
-X-Received: by 2002:a05:6214:4015:b0:6e6:6c10:76fb with SMTP id 6a1803df08f44-6f230db4864mr77277436d6.25.1744413375163;
-        Fri, 11 Apr 2025 16:16:15 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f0dea10697sm42931066d6.108.2025.04.11.16.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 16:16:14 -0700 (PDT)
-Date: Fri, 11 Apr 2025 19:16:14 -0400
-Message-ID: <d3ad9a7bb9eb68a3ae5dd18bf091825d@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j6ryFknR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744413549; x=1775949549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=264yTgqYFYsTnayIvZxA9PowdaySNc+1/BvGa+X4k3w=;
+  b=j6ryFknRTyQTJRkdP0Tt+eSSuNieE3ypefLnI1s1e3QQxsMSm5cxYp8G
+   efY2AiO5cMoot2o66rcOb5hLrx86X+sOWzVybxwn5jdzOtkmdqFttAnKg
+   xovdpwpQBZUlKt3VAOOZeS4D+IU5prHUguAySBFsHyc1rw1sPckmPqa3g
+   fh415WzPVD39PleUI4XamvbJcBd96ZhvvoDgpBkNEFMQEQ/Yd9foFvRqw
+   DETrwJ62RGAoKpQgIjqrVnvwoZpSEtX18/1Gi/rSHiiwwzqyVz/e26w6v
+   o7uCzv/xr1ZPrSzExaeg7OskKEunsScAzEfOxXLMd/FxZSOucKvUALn/w
+   w==;
+X-CSE-ConnectionGUID: 8G9xfyhkTbOgUvmR7Xs7PA==
+X-CSE-MsgGUID: 152zOlfXSBuZ0znDiY4v5Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="56637697"
+X-IronPort-AV: E=Sophos;i="6.15,206,1739865600"; 
+   d="scan'208";a="56637697"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 16:19:06 -0700
+X-CSE-ConnectionGUID: GZ8M3ct3Ty6f5W5gdC2YRQ==
+X-CSE-MsgGUID: nmGWPGKURMGiMlubngQ82w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,206,1739865600"; 
+   d="scan'208";a="134408412"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 11 Apr 2025 16:19:05 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u3NeI-000BQq-2h;
+	Fri, 11 Apr 2025 23:19:02 +0000
+Date: Sat, 12 Apr 2025 07:18:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] memcg: decouple memcg_hotplug_cpu_dead from stock_lock
+Message-ID: <202504120759.hMxys5DQ-lkp@intel.com>
+References: <20250410210623.1016767-1-shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20250411_1406/pstg-lib:20250411_1552/pstg-pwork:20250411_1406
-From: Paul Moore <paul@paul-moore.com>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
-	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, nkapron@google.com, 
-	teknoraver@meta.com, roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
-Subject: Re: [PATCH v2 1/4] security: Hornet LSM
-References: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
-In-Reply-To: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250410210623.1016767-1-shakeel.butt@linux.dev>
 
-On Apr  4, 2025 Blaise Boscaccy <bboscaccy@linux.microsoft.com> wrote:
-> 
-> This adds the Hornet Linux Security Module which provides signature
-> verification of eBPF programs. This allows users to continue to
-> maintain an invariant that all code running inside of the kernel has
-> been signed.
-> 
-> The primary target for signature verification is light-skeleton based
-> eBPF programs which was introduced here:
-> https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@gmail.com/
-> 
-> eBPF programs, before loading, undergo a complex set of operations
-> which transform pseudo-values within the immediate operands of
-> instructions into concrete values based on the running
-> system. Typically, this is done by libbpf in
-> userspace. Light-skeletons were introduced in order to support
-> preloading of bpf programs and user-mode-drivers by removing the
-> dependency on libbpf and userspace-based operations.
-> 
-> Userpace modifications, which may change every time a program gets
-> loaded or runs on a slightly different kernel, break known signature
-> verification algorithms. A method is needed for passing unadulterated
-> binary buffers into the kernel in-order to use existing signature
-> verification algorithms. Light-skeleton loaders with their support of
-> only in-kernel relocations fit that constraint.
-> 
-> Hornet employs a signature verification scheme similar to that of
-> kernel modules. A signature is appended to the end of an
-> executable file. During an invocation of the BPF_PROG_LOAD subcommand,
-> a signature is extracted from the current task's executable file. That
-> signature is used to verify the integrity of the bpf instructions and
-> maps which were passed into the kernel. Additionally, Hornet
-> implicitly trusts any programs which were loaded from inside kernel
-> rather than userspace, which allows BPF_PRELOAD programs along with
-> outputs for BPF_SYSCALL programs to run.
-> 
-> The validation check consists of checking a PKCS#7 formatted signature
-> against a data buffer containing the raw instructions of an eBPF
-> program, followed by the initial values of any maps used by the
-> program. Maps are frozen before signature verification checking to
-> stop TOCTOU attacks.
-> 
-> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> ---
->  Documentation/admin-guide/LSM/Hornet.rst |  55 ++++++
->  Documentation/admin-guide/LSM/index.rst  |   1 +
->  MAINTAINERS                              |   9 +
->  crypto/asymmetric_keys/pkcs7_verify.c    |  10 +
->  include/linux/kernel_read_file.h         |   1 +
->  include/linux/verification.h             |   1 +
->  include/uapi/linux/lsm.h                 |   1 +
->  security/Kconfig                         |   3 +-
->  security/Makefile                        |   1 +
->  security/hornet/Kconfig                  |  11 ++
->  security/hornet/Makefile                 |   4 +
->  security/hornet/hornet_lsm.c             | 239 +++++++++++++++++++++++
->  12 files changed, 335 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
->  create mode 100644 security/hornet/Kconfig
->  create mode 100644 security/hornet/Makefile
->  create mode 100644 security/hornet/hornet_lsm.c
+Hi Shakeel,
 
-...
+kernel test robot noticed the following build errors:
 
-> diff --git a/security/hornet/hornet_lsm.c b/security/hornet/hornet_lsm.c
-> new file mode 100644
-> index 000000000000..d9e36764f968
-> --- /dev/null
-> +++ b/security/hornet/hornet_lsm.c
+[auto build test ERROR on akpm-mm/mm-everything]
+[cannot apply to linus/master v6.15-rc1 next-20250411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-...
+url:    https://github.com/intel-lab-lkp/linux/commits/Shakeel-Butt/memcg-decouple-memcg_hotplug_cpu_dead-from-stock_lock/20250411-050829
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250410210623.1016767-1-shakeel.butt%40linux.dev
+patch subject: [PATCH] memcg: decouple memcg_hotplug_cpu_dead from stock_lock
+config: i386-buildonly-randconfig-002-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120759.hMxys5DQ-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120759.hMxys5DQ-lkp@intel.com/reproduce)
 
-> +/* kern_sys_bpf is declared as an EXPORT_SYMBOL in kernel/bpf/syscall.c, however no definition is
-> + * provided in any bpf header files. If/when this function has a proper definition provided
-> + * somewhere this declaration should be removed
-> + */
-> +int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504120759.hMxys5DQ-lkp@intel.com/
 
-I believe the maximum generally accepted line length is now up to 100
-characters, but I remain a big fan of the ol' 80 character terminal
-width and would encourage you to stick to that if possible.  However,
-you're the one who is signing on for maintenence of Hornet, not me, so
-if you love those >80 char lines, you do you :)
+All errors (new ones prefixed by >>):
 
-I also understand why you are doing the kern_sys_bpf() declaration here,
-but once this lands in Linus' tree I would encourage you to try moving
-the declaration into a kernel-wide BPF header where it really belongs.
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:216:22: note: expanded from macro 'local_irq_save'
+     216 |                 raw_local_irq_save(flags);              \
+         |                                    ^
+   include/linux/irqflags.h:172:28: note: expanded from macro 'raw_local_irq_save'
+     172 |                 typecheck(unsigned long, flags);        \
+         |                                          ^
+   include/linux/typecheck.h:11:9: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:216:22: note: expanded from macro 'local_irq_save'
+     216 |                 raw_local_irq_save(flags);              \
+         |                                    ^
+   include/linux/irqflags.h:173:3: note: expanded from macro 'raw_local_irq_save'
+     173 |                 flags = arch_local_irq_save();          \
+         |                 ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:217:32: note: expanded from macro 'local_irq_save'
+     217 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:188:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     188 |                 typecheck(unsigned long, flags);        \
+         |                                          ^
+   include/linux/typecheck.h:11:9: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:217:32: note: expanded from macro 'local_irq_save'
+     217 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:189:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     189 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:217:32: note: expanded from macro 'local_irq_save'
+     217 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:188:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     188 |                 typecheck(unsigned long, flags);        \
+         |                                          ^
+   include/linux/typecheck.h:11:9: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:217:32: note: expanded from macro 'local_irq_save'
+     217 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:189:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     189 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:217:32: note: expanded from macro 'local_irq_save'
+     217 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:188:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     188 |                 typecheck(unsigned long, flags);        \
+         |                                          ^
+   include/linux/typecheck.h:11:9: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                                      ^
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+>> mm/memcontrol.c:1967:17: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1967 |         local_irq_save(flag);
+         |                        ^~~~
+         |                        flags
+   include/linux/irqflags.h:217:32: note: expanded from macro 'local_irq_save'
+     217 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:189:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     189 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                                      ^
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+   mm/memcontrol.c:1970:20: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1970 |         local_irq_restore(flag);
+         |                           ^~~~
+         |                           flags
+   include/linux/irqflags.h:223:32: note: expanded from macro 'local_irq_restore'
+     223 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:188:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     188 |                 typecheck(unsigned long, flags);        \
+         |                                          ^
+   include/linux/typecheck.h:11:9: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+   mm/memcontrol.c:1970:20: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1970 |         local_irq_restore(flag);
+         |                           ^~~~
+         |                           flags
+   include/linux/irqflags.h:223:32: note: expanded from macro 'local_irq_restore'
+     223 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:189:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     189 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+   mm/memcontrol.c:1970:20: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1970 |         local_irq_restore(flag);
+         |                           ^~~~
+         |                           flags
+   include/linux/irqflags.h:223:32: note: expanded from macro 'local_irq_restore'
+     223 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:188:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     188 |                 typecheck(unsigned long, flags);        \
+         |                                          ^
+   include/linux/typecheck.h:11:9: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^
+   mm/memcontrol.c:1963:16: note: 'flags' declared here
+    1963 |         unsigned long flags;
+         |                       ^
+   mm/memcontrol.c:1970:20: error: use of undeclared identifier 'flag'; did you mean 'flags'?
+    1970 |         local_irq_restore(flag);
+         |                           ^~~~
+         |                           flags
+   include/linux/irqflags.h:223:32: note: expanded from macro 'local_irq_restore'
+     223 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                                              ^
+   include/linux/irqflags.h:189:28: note: expanded from macro 'raw_irqs_disabled_flags'
+     189 |                 arch_irqs_disabled_flags(flags);        \
+         |                                          ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^
 
-> +static int hornet_check_binary(struct bpf_prog *prog, union bpf_attr *attr,
-> +			       struct hornet_maps *maps)
-> +{
-> +	struct file *file = get_task_exe_file(current);
-> +	const unsigned long markerlen = sizeof(EBPF_SIG_STRING) - 1;
-> +	void *buf = NULL;
-> +	size_t sz = 0, sig_len, prog_len, buf_sz;
-> +	int err = 0;
-> +	struct module_signature sig;
-> +
-> +	buf_sz = kernel_read_file(file, 0, &buf, INT_MAX, &sz, READING_EBPF);
-> +	fput(file);
-> +	if (!buf_sz)
-> +		return -1;
 
-I'm pretty sure I asked you about this already off-list, but I can't
-remember the answer so I'm going to bring this up again :)
+vim +1967 mm/memcontrol.c
 
-This file read makes me a bit nervous about a mismatch between the
-program copy operation done in the main BPF code and the copy we do
-here in kernel_read_file().  Is there not some way to build up the
-buffer with the BPF program from the attr passed into this function
-(e.g. attr.insns?)?
+  1959	
+  1960	static int memcg_hotplug_cpu_dead(unsigned int cpu)
+  1961	{
+  1962		struct memcg_stock_pcp *stock;
+  1963		unsigned long flags;
+  1964	
+  1965		stock = &per_cpu(memcg_stock, cpu);
+  1966	
+> 1967		local_irq_save(flag);
+  1968		/* stock of a remote dead cpu, no need for stock_lock. */
+  1969		__drain_obj_stock(stock);
+  1970		local_irq_restore(flag);
+  1971	
+  1972		drain_stock(stock);
+  1973	
+  1974		return 0;
+  1975	}
+  1976	
 
-If there is some clever reason why all of this isn't an issue, it might
-be a good idea to put a small comment above the kernel_read_file()
-explaining why it is both safe and good.
-
-> +	prog_len = buf_sz;
-> +
-> +	if (prog_len > markerlen &&
-> +	    memcmp(buf + prog_len - markerlen, EBPF_SIG_STRING, markerlen) == 0)
-> +		prog_len -= markerlen;
-> +
-> +	memcpy(&sig, buf + (prog_len - sizeof(sig)), sizeof(sig));
-> +	sig_len = be32_to_cpu(sig.sig_len);
-> +	prog_len -= sig_len + sizeof(sig);
-> +
-> +	err = mod_check_sig(&sig, prog->len * sizeof(struct bpf_insn), "ebpf");
-> +	if (err)
-> +		return err;
-> +	return hornet_verify_lskel(prog, maps, buf + prog_len, sig_len);
-> +}
-
---
-paul-moore.com
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
