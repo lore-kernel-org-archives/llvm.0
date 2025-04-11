@@ -1,80 +1,39 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012BD1DE3AD
-	for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 13:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E081096F;
+	Fri, 11 Apr 2025 16:18:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744379553; cv=none; b=BTyeizzEDx+SBorez4SEcMjRK7N/01bP4HrfhQ98wfsTw6fDvbJUYI29771neGm1ctn2JqsoOxKRIU5NzgDXu3biYOI0YuKHStj7jkJprM2e9i7S555fGLqYb7WPiftRNSEr0A0rcG8GZdplYi47GenFQl1tzAG8rJ+E4qXbjzA=
+	t=1744388327; cv=none; b=KZm/rD/nP0+NOwefcTbn93Mv7z62ysYcRVlI3EV0pYy/z1Y7J2ovoBs/fFfKSiuDmC2vMpL8O7529gJTzmL6mYizc8gHniajjruGSmuhv/BmscoTQIvHQ3stzJ5gQAgCDgUp1NaEr3CLem26l/VYWHCzcVDZLCqs4mI7Fxxa210=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744379553; c=relaxed/simple;
-	bh=szzDNYi10SZeGHWmUnxazURY4qRgxQ93N4avMNpODMQ=;
+	s=arc-20240116; t=1744388327; c=relaxed/simple;
+	bh=FwB0GwMAz/Jk/IzQsALinleh/WbxSkWUJOqn3edRflE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UugSb2dFMSBwnrCXYv2Y/20bDdT4Z6mn76ARGH4aAfUDrdnFotX+8/rEYb6/TfgewjSmbFckMDdXJrf3hsOOI3Vmvm8ESG/jVQhabvqp82gJ26zM671z08/6tc7lunDHtGMje1mtafW0IGfGG9huLt6o1vvZeq92fN+qrlwYQ1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Cbbo/L4N; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7vnG/ak7; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=e9nshYrh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HbDhCzK7; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	 In-Reply-To:Content-Type; b=X8cgubLcWCTMoAvl+iLFYjSA8sIOolDVfMuhXJQYXMhvDcbpfxAemuyUuAh05vBg9V7OE3UlXkA7bhjYXjdABvYYhAyAYrq4PV2JV9KtRckSMaRzNYwOWs3qBu8eEeza++QzqS2JKuF7LvgYYI1zTntdD2jHpP6sm1ZXM+Q2V4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=HCMVPE3V; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Cbbo/L4N";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7vnG/ak7";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="e9nshYrh";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HbDhCzK7"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E8DFE1F457;
-	Fri, 11 Apr 2025 13:52:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1744379548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bn4vEdF7BMMX6U/j8Vn/KS84WNVVfGH2V+Zaq+K+Ek0=;
-	b=Cbbo/L4N1VXWJr1Dzw8LiAPuOKSos9kURIN1aiZ/74aStqjsHYBMISn9Azq19Tb4d0WMkB
-	4kJYeJbxjhyUfjkheX7pn1QMhlPA3A3qUc62slwlpXBUOCEhMY/k0ZdoV81BksCv6nRjrJ
-	zB3VDCq0MIW2aQxdqVEyaDHIdTG/8mI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1744379548;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bn4vEdF7BMMX6U/j8Vn/KS84WNVVfGH2V+Zaq+K+Ek0=;
-	b=7vnG/ak7/3Rrc3uWUSYH32fTThIuHTnHkd5/hl6udGLyUlkQTbwkjW/C42QALuxB9PHHio
-	iF2xWSLpzNX4+hCQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1744379547; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bn4vEdF7BMMX6U/j8Vn/KS84WNVVfGH2V+Zaq+K+Ek0=;
-	b=e9nshYrhpApkfcZ0wX7eDzXN5ykgD6XNdquem1rKe7T5GjkM0r1WAX0qk1Vs6o4BvOzgC3
-	hVdNUMa6TLmkRusZWBgZ1SQfs6xf7Jmy27k3X+X1/QBAp2chP1JPBqp+/GBsGNmPi09zX3
-	3ZW23c1OmVdjod6FFAeXIREmrcQ5qdU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1744379547;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bn4vEdF7BMMX6U/j8Vn/KS84WNVVfGH2V+Zaq+K+Ek0=;
-	b=HbDhCzK7/5/yDt1WArz2pENtbzWSMMAh60B68pU+lFEGRQX9suf5rVZy75yNS3fpNZ87NV
-	uSZbfbHUJcOQZhBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 86C2613886;
-	Fri, 11 Apr 2025 13:52:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id OuMKH5se+WfHfQAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Fri, 11 Apr 2025 13:52:27 +0000
-Message-ID: <f455789b-c0bb-469d-b6bf-35774d0323c1@suse.de>
-Date: Fri, 11 Apr 2025 15:52:27 +0200
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="HCMVPE3V"
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53BGI8eE556627
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 11 Apr 2025 09:18:09 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53BGI8eE556627
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744388294;
+	bh=Ko0DVDPZk1lmFb0ezN24lfEVEQfJNexfOA0BljZTyTI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HCMVPE3VUrByMrInwuaCfKprmguQQdiEPaKMoCCTWK2LUmCWRi9fEDI7gTCEM9ZJh
+	 877M78JwB16h8FPAsWwuVFC0wKwAGh+MrTEDORzFRNDjA6ntRXVp9X6/6lOIl59oJ3
+	 uYFB51IHSPgzXhXFMAWKx/iQZ3ZaaS6/JA9hM9lNT+/4EPW4tgiUwYY8Rkz/Hbuozo
+	 ILeAs4jjcfjHKvDa1+szOGPBgVbNz2Y4TlEr9lsDpHVkczAbTCSntN3pgBgz6Bt+Fw
+	 g2OEgqh6D59YEkxvIXk6+Up3koKlMZT9PzSktqzu1CxwA4/XsBT06O8aEnafCL/t1D
+	 mD+w4YrYz7V2w==
+Message-ID: <41eb2d08-1b2d-4ca8-bcb7-f5f4611f91a9@zytor.com>
+Date: Fri, 11 Apr 2025 09:18:08 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,116 +41,93 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/efidrm: ensure screen_base is initialized
-To: Javier Martinez Canillas <javierm@redhat.com>,
- Arnd Bergmann <arnd@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20250411125554.1453825-1-arnd@kernel.org>
- <8734ee3ksz.fsf@minerva.mail-host-address-is-not-set>
+Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
+ when available
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+        acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
 Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <8734ee3ksz.fsf@minerva.mail-host-address-is-not-set>
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <Z_hTI8ywa3rTxFaz@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[lkml];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_TO(0.00)[redhat.com,kernel.org,linux.intel.com,gmail.com,ffwll.ch];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[arndb.de,gmail.com,google.com,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Level: 
 
-Hi Arnd
+On 4/10/2025 4:24 PM, Sean Christopherson wrote:
+>> +/*
+>> + * Write EAX to MSR_IA32_SPEC_CTRL.
+>> + *
+>> + * Choose the best WRMSR instruction based on availability.
+>> + *
+>> + * Replace with 'wrmsrns' and 'wrmsrns %rax, $MSR_IA32_SPEC_CTRL' once binutils support them.
+>> + */
+>> +.macro WRITE_EAX_TO_MSR_IA32_SPEC_CTRL
+>> +	ALTERNATIVE_2 __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
+>> +				  xor %edx, %edx;				\
+>> +				  mov %edi, %eax;				\
+>> +				  ds wrmsr),					\
+>> +		      __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
+>> +				  xor %edx, %edx;				\
+>> +				  mov %edi, %eax;				\
+>> +				  ASM_WRMSRNS),					\
+>> +		      X86_FEATURE_WRMSRNS,					\
+>> +		      __stringify(xor %_ASM_AX, %_ASM_AX;			\
+>> +				  mov %edi, %eax;				\
+>> +				  ASM_WRMSRNS_RAX; .long MSR_IA32_SPEC_CTRL),	\
+>> +		      X86_FEATURE_MSR_IMM
+>> +.endm
+> This is quite hideous.  I have no objection to optimizing __vmx_vcpu_run(), but
+> I would much prefer that a macro like this live in generic code, and that it be
+> generic.  It should be easy enough to provide an assembly friendly equivalent to
+> __native_wrmsr_constant().
 
-Am 11.04.25 um 15:11 schrieb Javier Martinez Canillas:
-> Arnd Bergmann <arnd@kernel.org> writes:
->
-> Hello Arnd,
->
->> From: Arnd Bergmann <arnd@arndb.de>
-
-Thanks for the fix.
-
->>
->> clang points out that there is a code path that leads to undefined behavior:
->>
->> drivers/gpu/drm/sysfb/efidrm.c:353:11: error: variable 'screen_base' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->>    353 |         else if (mem_flags & EFI_MEMORY_WB)
->>        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> Add the missing initialization.
->>
->> Fixes: 32ae90c66fb6 ("drm/sysfb: Add efidrm for EFI displays")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
-> A similar patch has been proposed by Nathan already and acked by Thomas:
->
-> https://lists.freedesktop.org/archives/dri-devel/2025-April/500539.html
-
-I've meanwhile merged this patch into drm-misc-next.
-
-Best regards
-Thomas
-
->
-
--- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
-
+Will do.
