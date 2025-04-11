@@ -1,160 +1,121 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6AD211466
-	for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 23:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA33D1E7C11;
+	Fri, 11 Apr 2025 04:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744327463; cv=none; b=hWhpEmJQnBQ+/sC+6fFkevGr3R47sMaW8h/Kz2gKAl6LjV4z1UCbD4Dd9qyblmbpFSczXxRxmrmG1do58F0BgbKSaOGGiSj9YfhBMlfA63A+Iwy/RLIJcnRESD6kAXRxwPCP6s5+RKqhK6zHvRdvZ4obhunmJHVblbKuiNr5dFI=
+	t=1744346311; cv=none; b=UP6LDLirRabvqsb/7sJPB3y58g0yEkdwhdiUlxrsTnE25f26h7Bsq9q9MxQyqQyr+uvMW+t/jPgffLuP21FB8tA7wqsqvowuc9TNH/vZJ1/B8ppIiO7qubL4lvOlO/+DivmpLQ74Ee5/GclU2QV7UqYbWGQtkwf1vXwYmhajn8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744327463; c=relaxed/simple;
-	bh=fRu1wIpBkqC/PAC+6Z3ide0GL77+kwaEESC4lKY2HQM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PQU6pZsWA+CPsfvlwZ5Fus+6LFJEsk5ixy5S05G4JC89m+OLE1jh0LM4GMvbgb3xCapr52LFkqICg4zCdPch39euEu+MdGFbcHda8GwvBlgH5Tuq8xdYhGYHbyfdAVAUaHhm1Tu7kLksxLqdfTH2Oqkd9E44vcQ68rceaed57/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fGaM/Z7l; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1744346311; c=relaxed/simple;
+	bh=4ZW7Q5ISlJJYXO5OejRTMXU+a79AtOia+NS+Kw9SGdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qFj9ZnpZIOndML7DonSUk4+WTdD1/Bx+YPuL42COQSmuNxaNdUl8YPqG3+y8TeELOuX9OMIUzGfgVRi64AuzpKQ/ofnIBn8WRGtdkCh09gWVpijH5OR0dfQogEtnE7JktYxqhSUgP6m+5FLLp5TeXPkiKWw5i9OmC2x7fYQSG90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XSxQ82Kw; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fGaM/Z7l"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-736c0306242so1617183b3a.1
-        for <llvm@lists.linux.dev>; Thu, 10 Apr 2025 16:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744327461; x=1744932261; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8Hj0FhxYq298MEgk+A50ezX9To9apyasGONCk8/EIY=;
-        b=fGaM/Z7lj70R8kUXsqcMVsokWFyLSzAJ7WAIfqnd30WbDIBXw7X9UUcP1YRgZZv2PS
-         27NIwmWmCQ7NvYapCrwSFgfhQW/axF2LirtnQt1i2JRZweDZsofox/9zzYB+uVSu6364
-         7M6aUOc3hxzlxyXyAAaWTwS/hCbB7+X3C+WynIbqIsp8cfNKsWSSqYkj+jXIo7eL2pIy
-         Z8fr8mZEf1TWAnT+l3IwTSI98dPps+cQqjUdUfw5QMWJlSgJsVJIZq7v1JiGDX7cwDWt
-         Ao+HtK83aJFugAOcQ1fMCEVA5b6jlytBfyE6KQ69SaT96M1OhsZQSi8C+w4h9x/kKMJK
-         vWqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744327461; x=1744932261;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8Hj0FhxYq298MEgk+A50ezX9To9apyasGONCk8/EIY=;
-        b=wXVti6AsjXemYHGMsrxzbxhX6+DXY2bZmUwFtEqJos1iTa2xCF4fxMXJjQ+FdrUER9
-         hWixX50XlBSerh05y2jmamlEVWxyDvMGNG80TKSEyPcU/673K0YDJVFQU9FalknX9QZc
-         cYPw/PgPg74/67nZNPS0WZYDf/S3Hf4TRf90w+2ZxY+TsGaqer/FHo2w83xvgYpyd5+i
-         Tp5ylOffmDMQnZ+ZqvFc6YMboCSFq7n4Bk+gnOUl3EJ7G1Ia3y3DdYdH8R0w2sEnjcMF
-         +E8QTRzd1YH+3raT4BfXyCZLuNp3EBnJeqvDEx1QDX/QRN0nF2W0TWnfRYACl/b0TwxE
-         RW8g==
-X-Forwarded-Encrypted: i=1; AJvYcCX6oVzNP+4zw2Dp3YB6cabhPA0GtQHvlCDNzc8c5uZPVXpq06KyDEWJYkQxScplYRxa+O/2@lists.linux.dev
-X-Gm-Message-State: AOJu0YxgHi6H1vzhTzOHJgMHu9Q8CrYVs4kAd/s8ZLhGZd+yHW5GqkoC
-	+SYm7CRbnmCpnIxZoBZ6dGw9fFiwVBQo0UUuVezJuhIzo3hldKNq62fFwl81eMGy8xRHNYq2VpI
-	CFg==
-X-Google-Smtp-Source: AGHT+IHWYnK2BwFW7Mr5VmhaaxwX1jXjykj9i9MFxC3vV2mlnL+NePMyv0dJBUjVtFSac3MvKiuBJyLqfxA=
-X-Received: from pfbfj37.prod.google.com ([2002:a05:6a00:3a25:b0:730:8b4c:546c])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:21c7:b0:736:5c8e:baaa
- with SMTP id d2e1a72fcca58-73bd119427emr706022b3a.2.1744327460939; Thu, 10
- Apr 2025 16:24:20 -0700 (PDT)
-Date: Thu, 10 Apr 2025 16:24:19 -0700
-In-Reply-To: <20250331082251.3171276-11-xin@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XSxQ82Kw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744346310; x=1775882310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4ZW7Q5ISlJJYXO5OejRTMXU+a79AtOia+NS+Kw9SGdQ=;
+  b=XSxQ82Kw84q58wNmRBt6ThLDA3p92VrIQvJ/5JDG5AzrtWc7A05qQiRr
+   wlJvVJMOAcVDSC+yAXj5E04Uo4wsXjcIYnFN3jkXtvnTL0aUAKuPf2A5w
+   Xrao4rlkVISHXjN1un+WSDpRK+sbGbRWhFCMK1Cd96uhGiFtX5a3ToWJ7
+   ccbXHy4pFaO+s6o231Bz1mtlXpPMBInWZB1Wn85nL+1OUH6Rgw75JfOm7
+   Xi63Wvhm0gvLGCzOlo6oHI6bLVF89XhBzZ1MPrazg9PWIpZEb5jzEAinX
+   ZgE/+/a9dqWHoyITJqRcBnrp+YE2MOd3OstkEi/aI/r8BKn+YK4+hHC+b
+   w==;
+X-CSE-ConnectionGUID: OdZpOl52R0uFrj8hMYIy2Q==
+X-CSE-MsgGUID: wXkVo3bjTMOMTIQFUk0krg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="45129017"
+X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
+   d="scan'208";a="45129017"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 21:38:27 -0700
+X-CSE-ConnectionGUID: T5yb7r00TYWOtOV5noFO+g==
+X-CSE-MsgGUID: 1X4UObc3Sz6X1TC+4y9XqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
+   d="scan'208";a="133958160"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 10 Apr 2025 21:38:25 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u369m-000ApP-1g;
+	Fri, 11 Apr 2025 04:38:22 +0000
+Date: Fri, 11 Apr 2025 12:37:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: [PATCH v1 net-next 02/14] net: Add ops_undo_single for module
+ load/unload.
+Message-ID: <202504111226.iQKPbEOI-lkp@intel.com>
+References: <20250410022004.8668-3-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250331082251.3171276-1-xin@zytor.com> <20250331082251.3171276-11-xin@zytor.com>
-Message-ID: <Z_hTI8ywa3rTxFaz@google.com>
-Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
- when available
-From: Sean Christopherson <seanjc@google.com>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev, 
-	linux-edac@vger.kernel.org, kvm@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org, 
-	linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, jgross@suse.com, 
-	andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
-	kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com, 
-	alexey.amakhalov@broadcom.com, bcm-kernel-feedback-list@broadcom.com, 
-	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com, 
-	luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com, 
-	haiyangz@microsoft.com, decui@microsoft.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250410022004.8668-3-kuniyu@amazon.com>
 
-On Mon, Mar 31, 2025, Xin Li (Intel) wrote:
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> ---
->  arch/x86/include/asm/msr-index.h |  6 ++++++
->  arch/x86/kvm/vmx/vmenter.S       | 28 ++++++++++++++++++++++++----
->  2 files changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index e6134ef2263d..04244c3ba374 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -1226,4 +1226,10 @@
->  						* a #GP
->  						*/
->  
-> +/* Instruction opcode for WRMSRNS supported in binutils >= 2.40 */
-> +#define ASM_WRMSRNS		_ASM_BYTES(0x0f,0x01,0xc6)
-> +
-> +/* Instruction opcode for the immediate form RDMSR/WRMSRNS */
-> +#define ASM_WRMSRNS_RAX		_ASM_BYTES(0xc4,0xe7,0x7a,0xf6,0xc0)
-> +
->  #endif /* _ASM_X86_MSR_INDEX_H */
-> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-> index f6986dee6f8c..9fae43723c44 100644
-> --- a/arch/x86/kvm/vmx/vmenter.S
-> +++ b/arch/x86/kvm/vmx/vmenter.S
-> @@ -64,6 +64,29 @@
->  	RET
->  .endm
->  
-> +/*
-> + * Write EAX to MSR_IA32_SPEC_CTRL.
-> + *
-> + * Choose the best WRMSR instruction based on availability.
-> + *
-> + * Replace with 'wrmsrns' and 'wrmsrns %rax, $MSR_IA32_SPEC_CTRL' once binutils support them.
-> + */
-> +.macro WRITE_EAX_TO_MSR_IA32_SPEC_CTRL
-> +	ALTERNATIVE_2 __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
-> +				  xor %edx, %edx;				\
-> +				  mov %edi, %eax;				\
-> +				  ds wrmsr),					\
-> +		      __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
-> +				  xor %edx, %edx;				\
-> +				  mov %edi, %eax;				\
-> +				  ASM_WRMSRNS),					\
-> +		      X86_FEATURE_WRMSRNS,					\
-> +		      __stringify(xor %_ASM_AX, %_ASM_AX;			\
-> +				  mov %edi, %eax;				\
-> +				  ASM_WRMSRNS_RAX; .long MSR_IA32_SPEC_CTRL),	\
-> +		      X86_FEATURE_MSR_IMM
-> +.endm
+Hi Kuniyuki,
 
-This is quite hideous.  I have no objection to optimizing __vmx_vcpu_run(), but
-I would much prefer that a macro like this live in generic code, and that it be
-generic.  It should be easy enough to provide an assembly friendly equivalent to
-__native_wrmsr_constant().
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/net-Factorise-setup_net-and-cleanup_net/20250410-102752
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250410022004.8668-3-kuniyu%40amazon.com
+patch subject: [PATCH v1 net-next 02/14] net: Add ops_undo_single for module load/unload.
+config: arm-randconfig-001-20250411 (https://download.01.org/0day-ci/archive/20250411/202504111226.iQKPbEOI-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250411/202504111226.iQKPbEOI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504111226.iQKPbEOI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/core/net_namespace.c:1311:3: error: call to undeclared function 'free_exit_list'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1311 |                 free_exit_list(ops, &net_exit_list);
+         |                 ^
+   net/core/net_namespace.c:1311:3: note: did you mean 'ops_exit_list'?
+   net/core/net_namespace.c:166:13: note: 'ops_exit_list' declared here
+     166 | static void ops_exit_list(const struct pernet_operations *ops,
+         |             ^
+   1 error generated.
 
 
-> +
->  .section .noinstr.text, "ax"
->  
->  /**
-> @@ -123,10 +146,7 @@ SYM_FUNC_START(__vmx_vcpu_run)
->  	movl PER_CPU_VAR(x86_spec_ctrl_current), %esi
->  	cmp %edi, %esi
->  	je .Lspec_ctrl_done
-> -	mov $MSR_IA32_SPEC_CTRL, %ecx
-> -	xor %edx, %edx
-> -	mov %edi, %eax
-> -	wrmsr
-> +	WRITE_EAX_TO_MSR_IA32_SPEC_CTRL
->  
->  .Lspec_ctrl_done:
->  
-> -- 
-> 2.49.0
-> 
+vim +/free_exit_list +1311 net/core/net_namespace.c
+
+ed160e839d2e11 Denis V. Lunev    2007-11-13  1303  
+f875bae0653349 Eric W. Biederman 2009-11-29  1304  static void __unregister_pernet_operations(struct pernet_operations *ops)
+ed160e839d2e11 Denis V. Lunev    2007-11-13  1305  {
+f8c46cb39079b7 Dmitry Torokhov   2016-08-10  1306  	if (!init_net_initialized) {
+f8c46cb39079b7 Dmitry Torokhov   2016-08-10  1307  		list_del(&ops->list);
+f8c46cb39079b7 Dmitry Torokhov   2016-08-10  1308  	} else {
+72ad937abd0a43 Eric W. Biederman 2009-12-03  1309  		LIST_HEAD(net_exit_list);
+72ad937abd0a43 Eric W. Biederman 2009-12-03  1310  		list_add(&init_net.exit_list, &net_exit_list);
+41467d2ff4dfe1 Yajun Deng        2021-08-17 @1311  		free_exit_list(ops, &net_exit_list);
+ed160e839d2e11 Denis V. Lunev    2007-11-13  1312  	}
+f8c46cb39079b7 Dmitry Torokhov   2016-08-10  1313  }
+f875bae0653349 Eric W. Biederman 2009-11-29  1314  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
