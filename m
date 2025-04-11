@@ -1,75 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C19269891;
-	Fri, 11 Apr 2025 18:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BEA23A9A7
+	for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 19:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744396912; cv=none; b=LK6bjNvvQbtF8hbOhszaBegGJgYZWFU0v3uZNA/5UW2v1Bn7pSugZ7Don3KFCkZartr6pviRRu6oFE885DmGemUHn93l8GxodxmA/2pV1/ssOWogCt/ctdekGf4dkZO2xul05ghA7ojrWAXWI5G1aplLW/UpMey1ojPoGhx1cW4=
+	t=1744398569; cv=none; b=Ki4+YBagt1zfKX7Vv7Y0vRCMNxMHIx75zxmD93+zlCz2Smxv6VURqaLZwdTgs0fnRAw3MWEN+/kDNlIOIXZTy0LpVp1fNoXXxIDcjAeB2ubdtAjXykIruH2eutjwAnB0dwGHZMqnPC9hzOXNMNUS4XIS6kShn8FQFnZ0rcOzclU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744396912; c=relaxed/simple;
-	bh=NY8+7+ZEmdWqqx0zQOF9aAujJPW4CRyp6FmkPwIcd+w=;
+	s=arc-20240116; t=1744398569; c=relaxed/simple;
+	bh=YzmETj4gJTJQ6pFl7e7yHSipZeZaUJUdZAH7jETNB5I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ww/m5dzcrqphGqu0I9YAzYxPJW36jWW9uszNctuXQCqCx55yWWo0NACFX+nstXTaEbxbB5b/52/mdUPgUtESfvMnZxuj+FVfRuePva2QJtGir2eLYqc2nqDaL7hTu9wb/08vJiqz6iqh7lPoqdJ0r0f3U259mEa93ndRImkeA2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9Lq+nM/; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=LxmfbCDWqfiMbiY6zB3Myeonem9XiUVKQexBG6DUgmTLcssXBjtgKqVF78+T9KjXQK7kJj3quX8BZM3M2nucfrevCZ44dv9HdWEw5D57bm7Y7IotNLK7lexR/VKYyy8abv7lLBBLzQTVB99tYbmugnEXlw3sXIThrOz7OcXLJL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com; spf=pass smtp.mailfrom=tyhicks.com; dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b=OEKBxOfh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mIXVbHzX; arc=none smtp.client-ip=202.12.124.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tyhicks.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9Lq+nM/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744396911; x=1775932911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NY8+7+ZEmdWqqx0zQOF9aAujJPW4CRyp6FmkPwIcd+w=;
-  b=d9Lq+nM/2lV5ChjjnQ/zGREVg7pP3vjW11ZIFfd4SEd6pb5Os7uEyySQ
-   Kb0V/rnnpuaEomBjr2ZjfvuWI0Ya2NkEKYgnpZSKvcI0S7NL0RUrRGqUL
-   G5puANSFUtBwqgQ5g/HgOl1YbdqAfBLnmnBAfXX7k/6NFcecqLSJPIbeF
-   cfysNlryKFaoPJ3lCZH2umQQ4X62Ybn/OeaOisEORL3A7F3vdLegaWo7/
-   mMIRTEHIJootX7LO2jQAOjJ6hr9KRoxTfa08gdjCyicZobvcq5ndSBIdN
-   xISSme44mctcWE8vPAWKhraV0it29da9AFwvgxteVwE/2/pXKQ0EbfNBT
-   g==;
-X-CSE-ConnectionGUID: YoNSGiWoQfOK13HD3WHgOg==
-X-CSE-MsgGUID: nONbzELdTUq4BxQSUSJRFg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="63500553"
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="63500553"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 11:41:48 -0700
-X-CSE-ConnectionGUID: e3q01x+CRf6UfIA1beGItA==
-X-CSE-MsgGUID: 8a1ba08VQkKVcgN2zvTF2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="129124558"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Apr 2025 11:41:43 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3JJt-000BJa-0o;
-	Fri, 11 Apr 2025 18:41:41 +0000
-Date: Sat, 12 Apr 2025 02:40:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Praveen Talari <quic_ptalari@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
-	quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
-	quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p
- Qualcomm platforms
-Message-ID: <202504120226.2XbpK0yU-lkp@intel.com>
-References: <20250410174010.31588-5-quic_ptalari@quicinc.com>
+	dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b="OEKBxOfh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mIXVbHzX"
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id 1EDB21D403EA;
+	Fri, 11 Apr 2025 15:09:25 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Fri, 11 Apr 2025 15:09:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
+	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1744398564; x=1744405764; bh=zT7wTOVk8+
+	9f0EyASrcxR34TnzymyvwavXCScDdNtGQ=; b=OEKBxOfhTA83r+bsxPbWqdpw9U
+	nLcEeCma0le3Lm5xT8bnqIkyKQbWhdGhpj/RZrSB+v9mqkVARJFmp6FuFXjY6U94
+	S2bCbWHfkNLO8diB0yOdfjd9aTg0igtkBP//zylmt2I+oCmyddOqb5RZaux3h6Cj
+	mdnwB92uO827wGKXvcGSqpFHSUcemYF9PUeqhDDtNQSUQDayri0LYZGGRUJ++Ec1
+	6XoEKADvEDp4JPbbo1uHsrYgdm+FjP1UTxVuP48cX9d2aqa/FxLF+csdffEkRcG8
+	I3n8O4dOFAYWxV6DzmqaDf345GVF/DvXNsis4kKo4ZZgoCgqV3qKDvO1W3dg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1744398564; x=1744405764; bh=zT7wTOVk8+9f0EyASrcxR34TnzymyvwavXC
+	ScDdNtGQ=; b=mIXVbHzXibxhFT1+Ei7XAEheOCw/kfIvYM3fAb2lRdQwQtC/gMk
+	wN9Ngq74lvblJ5D7+kCSZD3MDsHvLbwtlvjlbzts1UpAulsd1BgWPXP2k5fAZuCL
+	xDajxm+RXx2kO0HXbBgblPtME78wXQO2B27HCqN4yjy6JTEaVMHUIfNsLgpCq30C
+	EvLlokiT9g+dRU2B1ieRCmcHEXGAUmFNuFRdzn8MjoTReye5m5DM+2pYqP1XtsiS
+	dyM+PyJ1yZGrCSmdOvJows4NHoZd4H3REI0oyJdINDdM3/nyQUSk3pl5KIRyHPhu
+	1A2XWhjEJTIk6vVPuKtcjcgu59Jyug68CpA==
+X-ME-Sender: <xms:4mj5Z-VTurReWdkgQp2drxL418ZMK20OLx6-LBxTLS24MGu1nJD1wg>
+    <xme:4mj5Z6mSx4-fzrQbSpQDdP0CVTtI2N-F1l7tq2lPn5R3tR5o_hdOa4DoTcSwPNZO0
+    lv96kVLt-1Yt-6Gh3A>
+X-ME-Received: <xmr:4mj5Zyag6T7QtQ7ud_4Xuo43cdMKW8sxXfYW3KQ5D5XXq1CnrTtVSa5Txw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddvieduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepvfihlhgvrhcujfhitghkshcuoegtohguvgesthihhhhitghkshdrtg
+    homheqnecuggftrfgrthhtvghrnhepvdehvddttdfhfefhtdfgleehfeeggfdujeeuveek
+    udevkedvgeejtddtfefgleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheptghouggvsehthihhihgtkhhsrdgtohhmpdhnsggprhgtphhtthho
+    peeffedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsggsohhstggrtggthieslh
+    hinhhugidrmhhitghrohhsohhfthdrtghomhdprhgtphhtthhopegtohhrsggvtheslhif
+    nhdrnhgvthdprhgtphhtthhopeguhhhofigvlhhlshesrhgvughhrghtrdgtohhmpdhrtg
+    hpthhtohephhgvrhgsvghrthesghhonhguohhrrdgrphgrnhgrrdhorhhgrdgruhdprhgt
+    phhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepphgruh
+    hlsehprghulhdqmhhoohhrvgdrtghomhdprhgtphhtthhopehjmhhorhhrihhssehnrghm
+    vghirdhorhhgpdhrtghpthhtohepshgvrhhgvgeshhgrlhhlhihnrdgtohhmpdhrtghpth
+    htohepmhgrshgrhhhirhhohieskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:4mj5Z1XARotXXsdFd7dEaTUm9A8IaYAdA0p0Y0WAWNYr1oESSvXi5A>
+    <xmx:4mj5Z4kGjB7oqxU6HrWxsAd-JOrxu6k0sDsNIYtkfjtALqLPK-JHmQ>
+    <xmx:4mj5Z6d6sCR0wqFSsLc7MByuhZIzpz9brk2RODR-vuhuoRs9NhbSTA>
+    <xmx:4mj5Z6HU54PrxoVD6A-oqWG_mDPYxEZ7Ld_pevD2CWooHvOt_L4Fog>
+    <xmx:5Gj5Z6vL0n8qq1K8OGPHcSRlyAV7nIDedTJ9JqFsP3GOgjm9j7yskkfA>
+Feedback-ID: i78e14604:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 11 Apr 2025 15:09:20 -0400 (EDT)
+Date: Fri, 11 Apr 2025 14:09:18 -0500
+From: Tyler Hicks <code@tyhicks.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,	Jan Stancek <jstancek@redhat.com>,
+ Neal Gompa <neal@gompa.dev>,	linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,	keyrings@vger.kernel.org,
+ linux-crypto@vger.kernel.org,	linux-security-module@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,	linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org,	llvm@lists.linux.dev, nkapron@google.com,
+ teknoraver@meta.com,	roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+Message-ID: <Z/lo3iVcJgB2pfQX@redbud>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,73 +106,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250410174010.31588-5-quic_ptalari@quicinc.com>
+In-Reply-To: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 
-Hi Praveen,
+On 2025-04-04 14:54:50, Blaise Boscaccy wrote:
+> +static int hornet_verify_lskel(struct bpf_prog *prog, struct hornet_maps *maps,
+> +			       void *sig, size_t sig_len)
+> +{
+> +	int fd;
+> +	u32 i;
+> +	void *buf;
+> +	void *new;
+> +	size_t buf_sz;
+> +	struct bpf_map *map;
+> +	int err = 0;
+> +	int key = 0;
+> +	union bpf_attr attr = {0};
+> +
+> +	buf = kmalloc_array(prog->len, sizeof(struct bpf_insn), GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +	buf_sz = prog->len * sizeof(struct bpf_insn);
+> +	memcpy(buf, prog->insnsi, buf_sz);
+> +
+> +	for (i = 0; i < maps->used_map_cnt; i++) {
+> +		err = copy_from_bpfptr_offset(&fd, maps->fd_array,
+> +					      maps->used_idx[i] * sizeof(fd),
+> +					      sizeof(fd));
+> +		if (err < 0)
+> +			continue;
+> +		if (fd < 1)
+> +			continue;
+> +
+> +		map = bpf_map_get(fd);
 
-kernel test robot noticed the following build warnings:
+I'm not very familiar with BPF map lifetimes but I'd assume we need to have a
+corresponding bpf_map_put(map) before returning.
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.15-rc1 next-20250411]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +		if (IS_ERR(map))
+> +			continue;
+> +
+> +		/* don't allow userspace to change map data used for signature verification */
+> +		if (!map->frozen) {
+> +			attr.map_fd = fd;
+> +			err = kern_sys_bpf(BPF_MAP_FREEZE, &attr, sizeof(attr));
+> +			if (err < 0)
+> +				goto out;
+> +		}
+> +
+> +		new = krealloc(buf, buf_sz + map->value_size, GFP_KERNEL);
+> +		if (!new) {
+> +			err = -ENOMEM;
+> +			goto out;
+> +		}
+> +		buf = new;
+> +		new = map->ops->map_lookup_elem(map, &key);
+> +		if (!new) {
+> +			err = -ENOENT;
+> +			goto out;
+> +		}
+> +		memcpy(buf + buf_sz, new, map->value_size);
+> +		buf_sz += map->value_size;
+> +	}
+> +
+> +	err = verify_pkcs7_signature(buf, buf_sz, sig, sig_len,
+> +				     VERIFY_USE_SECONDARY_KEYRING,
+> +				     VERIFYING_EBPF_SIGNATURE,
+> +				     NULL, NULL);
+> +out:
+> +	kfree(buf);
+> +	return err;
+> +}
+> +
+> +static int hornet_check_binary(struct bpf_prog *prog, union bpf_attr *attr,
+> +			       struct hornet_maps *maps)
+> +{
+> +	struct file *file = get_task_exe_file(current);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-new-helper-API-dev_pm_opp_set_level/20250411-015310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20250410174010.31588-5-quic_ptalari%40quicinc.com
-patch subject: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p Qualcomm platforms
-config: arm-randconfig-001-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120226.2XbpK0yU-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120226.2XbpK0yU-lkp@intel.com/reproduce)
+We should handle get_task_exe_file() returning NULL. I don't think it is likely
+to happen when passing `current` but kernel_read_file() doesn't protect against
+it and we'll have a NULL pointer dereference when it calls file_inode(NULL).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504120226.2XbpK0yU-lkp@intel.com/
+> +	const unsigned long markerlen = sizeof(EBPF_SIG_STRING) - 1;
+> +	void *buf = NULL;
+> +	size_t sz = 0, sig_len, prog_len, buf_sz;
+> +	int err = 0;
+> +	struct module_signature sig;
+> +
+> +	buf_sz = kernel_read_file(file, 0, &buf, INT_MAX, &sz, READING_EBPF);
 
-All warnings (new ones prefixed by >>):
+We are leaking buf in this function. kernel_read_file() allocates the memory
+for us but we never kfree(buf).
 
->> drivers/soc/qcom/qcom-geni-se.c:953:1: warning: unused label 'out' [-Wunused-label]
-     953 | out:
-         | ^~~~
-   1 warning generated.
+> +	fput(file);
+> +	if (!buf_sz)
+> +		return -1;
+> +
+> +	prog_len = buf_sz;
+> +
+> +	if (prog_len > markerlen &&
+> +	    memcmp(buf + prog_len - markerlen, EBPF_SIG_STRING, markerlen) == 0)
+> +		prog_len -= markerlen;
 
+Why is the marker optional? Looking at module_sig_check(), which verifies the
+signature on kernel modules, I see that it refuses to proceed if the marker is
+not found. Should we do the same and refuse to operate on any unexpected input?
 
-vim +/out +953 drivers/soc/qcom/qcom-geni-se.c
+> +
+> +	memcpy(&sig, buf + (prog_len - sizeof(sig)), sizeof(sig));
 
-   928	
-   929	static int geni_se_probe(struct platform_device *pdev)
-   930	{
-   931		struct device *dev = &pdev->dev;
-   932		struct geni_wrapper *wrapper;
-   933		const struct geni_se_desc *desc;
-   934		int ret;
-   935	
-   936		wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
-   937		if (!wrapper)
-   938			return -ENOMEM;
-   939	
-   940		wrapper->dev = dev;
-   941		wrapper->base = devm_platform_ioremap_resource(pdev, 0);
-   942		if (IS_ERR(wrapper->base))
-   943			return PTR_ERR(wrapper->base);
-   944	
-   945		desc = device_get_match_data(&pdev->dev);
-   946	
-   947		if (!has_acpi_companion(&pdev->dev) && desc->geni_se_rsc_init) {
-   948			ret = desc->geni_se_rsc_init(wrapper, desc);
-   949			if (ret)
-   950				return -EINVAL;
-   951		}
-   952	
- > 953	out:
-   954		dev_set_drvdata(dev, wrapper);
-   955		dev_dbg(dev, "GENI SE Driver probed\n");
-   956		return devm_of_platform_populate(dev);
-   957	}
-   958	
+We should make sure that prog_len is larger than sizeof(sig) prior to this
+memcpy(). It is probably not a real issue in practice but it would be good to
+ensure that we can't be tricked to copy and operate on any bytes proceeding
+buf.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tyler
+
+> +	sig_len = be32_to_cpu(sig.sig_len);
+> +	prog_len -= sig_len + sizeof(sig);
+> +
+> +	err = mod_check_sig(&sig, prog->len * sizeof(struct bpf_insn), "ebpf");
+> +	if (err)
+> +		return err;
+> +	return hornet_verify_lskel(prog, maps, buf + prog_len, sig_len);
+> +}
