@@ -1,224 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FE5293473;
-	Fri, 11 Apr 2025 09:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41810278E6D;
+	Fri, 11 Apr 2025 10:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744363679; cv=none; b=KvV4/aL4E28egYKPkhK8xIdcbQJC80mnEg7ILnpA0LcJyfjiR5dzc6YGoM2vsTPm9Q3vfR6LUyP+y7Ba/rrU2YpBkteY/uuH/S8Q50DRmbr9Eq79IhVtr+Q0ImNbEJwGoNGM/A2hRmGKBKIuLTF7K/pyg6XXhN1RlFFQkfFyHbM=
+	t=1744368855; cv=none; b=QDrJ0/ZkstUyyGRJjSYNpplvTUf7mD2Rz5/JCyg8v1h7uyrKyawhG7Q5wYXsmYy4/bE1cFZ06WNbarBrBipRlaglRogJB+yL9PE3IuQpLHVxt0wGwD/nZOmMcryUaY4F9K1IXEGeZRvnyMaOsXnS2QVRT18sIcJec2phA0Tns6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744363679; c=relaxed/simple;
-	bh=UiQBPl/K/qgihIAKV8+hDqx22u4OxQn/u+bdxrbMV14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=girUK5+PyP1rVNGx4Pl9S6quEmKk0HvOyKLEcUu5Fb9NqSNBsy/rO3+JNouo68swNCSdV2WNZa8Tzy7lzmYv+TQvrvI1GL7UupyN5Sx5Wz3fyGXcwKm1UrBAXX018cthJ3WSrzBHI5orw2z7Jl2Aep+QY8JzJ2dyAezcgg5orXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YgbHVbPG; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744368855; c=relaxed/simple;
+	bh=ivxH0h28h54uT++OFPn2fGmx8H36zuQIX9TAA6mwKOs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p5gvvSpHNE3yuIuUgprHnxSVW2XR2i7mMmx/pOC2K76BWCDBDV8kv1woYWsfijXeXzG2AiP+XEPFwLRoTRCY4TUNpfA4Hy+7VOrSs8i2/KURMPy6lfRpXhGnP0tmAfh6Px+Xx8O8XB2WBBWb7J+/xupHBwY2iaJZCjOTb7kE7pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=oEDtWs0M; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YgbHVbPG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744363678; x=1775899678;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UiQBPl/K/qgihIAKV8+hDqx22u4OxQn/u+bdxrbMV14=;
-  b=YgbHVbPGSiJ+p5espBrvKyxEuGT3KzOHqO8bulNDtHjww1sWqNFLY2qj
-   6x48r4O0i/CE9wE1BZdE9EA/H0fQIi7nKvm4C1Sw5okZb5v3RNC+adtoJ
-   /eoz++H82PesvnSraztrboP3V9crAZIhFaHWttpkFkvwQIZQxh8thYFEz
-   H/QvppNYZp368WosuMR0RzZlGpaO9euWQbER/HX/+KkckfY2at2et6eRG
-   D82Q7pvjnCP7wuN8TJLktNgcctzqvth5gjUDlgzPuDSGFKYLFgG2FGiKV
-   1+YSho2CDlHkBAXHKk5Lhpu3D9esOilFY3pnZq5iT5484QKlse19T1ps/
-   w==;
-X-CSE-ConnectionGUID: Ug5i23H3T5ehx5eUdEEGkQ==
-X-CSE-MsgGUID: MeWdl+RISDS1Da2hgj1ZDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="45814630"
-X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
-   d="scan'208";a="45814630"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 02:27:54 -0700
-X-CSE-ConnectionGUID: 8cW71r+tRgKR66Frnxa7tw==
-X-CSE-MsgGUID: p32CSjJKTJGhD3PH1/xmkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
-   d="scan'208";a="160118272"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 11 Apr 2025 02:27:51 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3Aft-000B02-0n;
-	Fri, 11 Apr 2025 09:27:49 +0000
-Date: Fri, 11 Apr 2025 17:27:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gabriele Monaco <gmonaco@redhat.com>, linux-kernel@vger.kernel.org,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gabriele Monaco <gmonaco@redhat.com>
-Subject: Re: [PATCH] timers: Exclude isolated cpus from timer migation
-Message-ID: <202504111714.VH8TJ92G-lkp@intel.com>
-References: <20250410065446.57304-2-gmonaco@redhat.com>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="oEDtWs0M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1744368776;
+	bh=X0ufIEoNyj3oR0IYewqEF9lLAz1QUMF0bHnORwk+1hQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=oEDtWs0MtOtqbQ52t42fAH2CYfpa2sjc/7YB7kmwSWKbRWNH4BcZQrd9TA+4+5NZ2
+	 sKAQcidFwdkcNzSb5JHuCHk5pz0WqfXcmx1G8haHtSclHKYen7zausbLoykZ/i9Jqk
+	 Tm38rBjPe35TVZtQBMfs8kZQBNVPKu4dDC+t5oRE=
+X-QQ-mid: izesmtp88t1744368758t32cfd97f
+X-QQ-Originating-IP: tKvnF/gmZ4DIpXdx6u7S98Ombl0e/s4+gqgyAGenmmg=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 11 Apr 2025 18:52:34 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 5811992715279106274
+EX-QQ-RecipientCnt: 39
+From: Chen Linxuan <chenlinxuan@uniontech.com>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Chengchang Tang <tangchengchang@huawei.com>,
+	Junxian Huang <huangjunxian6@hisilicon.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Keith Busch <kbusch@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Chen Linxuan <chenlinxuan@uniontech.com>
+Cc: linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	kvm@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH 0/7] kernel-hacking: introduce CONFIG_NO_AUTO_INLINE
+Date: Fri, 11 Apr 2025 18:51:35 +0800
+Message-ID: <31F42D8141CDD2D0+20250411105142.89296-1-chenlinxuan@uniontech.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250410065446.57304-2-gmonaco@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: izesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-QQ-XMAILINFO: MtJoEQFRGvIzah4Ke5Vo4KIanFxZCiutX0b6+GqzojqVsHeLpmjJq+0/
+	rCj7ZUec/3JjBUW36XLND3xWPhVxvvJ6lz4kH0UFLiJVAxGNUuHNRdOQny7M9Q/9hKYTRpa
+	C2YSbQeNvRE4FfLsOpdlHPzB81Ft4O71uQLIImSOaEd/iqcf53UZdGxfJWx6yGYxr8r8eY7
+	SmWWRQn4wtyCBYoMKv2dD7zFhW6WzgJNPQUmskMSDfEMzu3eG8c83lNYJrGkdDf+EzEhrv3
+	ASu0G2TIiD2rKHxab3WcMxv5Fp14gHBAP5zM+mNWMdt0xMNlX7gc6s906MlnSF++XROGW9V
+	zUt+gVnqvTHsTRVQ/HYB1PiJ/p66PTnTEghuR2TV3uaCRpfUVkv+pXmJw1S2f41vP8PPgao
+	ishFqaBqT3foLyptn4Q92f+jYcIkS+KcoFH5Q3dGMYzUl4lw5vWnyovkZZWBMrK2VLHpam0
+	vA0x97qWEa7CwO3GB3Jl10nsMzByeXT2lykmVP5ax8TXrK6wLvx3CAjr0Ist0gh1A6bzL+B
+	ny1xpJtsm5Kd5tpZau+r+SSLohrxPl1v3yBpJQtCoN62s9lZV7ad/iEPeRQKxuOGqLI//hj
+	nMJFR/Ngs4Bd2Mlem/dCh0AN2ioLFgn0loX4T+MuJOJXqWk19CQn54mTbDnB71Rt7tnVIqK
+	9ryTh1S7dErXIVlg2Uf3Qbhh/XxVfuBJ+2qCDCLbxDxKYHI0/3+SgltiC5eN8Aq/PkeTgDd
+	6MXAArCIy20nGWxB21oLXCg+3t8WfsUG421o5VMAYw3Q5FEUp6f451+rc8wPfzCGieiZMf6
+	cNChTyHG3jmaZWCPTCa3eiihY+Pqz4l+KzFkr2z8t8lKr8X1xz+/vk0jzOIEJWcEMpq0gpP
+	tCGZ4qaWqpJv7IMydJ3Hleuduzdd8EIPHX9F5J5S8ggNk3cR77jGl8D5n+ehiyAyd0bNtoG
+	dRXwZS/HP38d0tGn4lS6Xp+clVOG5royvRDrFwH2UtUJbnW38pZf7v/zFczstz8UZDSE=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-RECHKSPAM: 0
 
-Hi Gabriele,
+This series introduces a new kernel configuration option NO_AUTO_INLINE,
+which can be used to disable the automatic inlining of functions.
 
-kernel test robot noticed the following build warnings:
+This will allow the function tracer to trace more functions
+because it only traces functions that the compiler has not inlined.
 
-[auto build test WARNING on 3b07108ada81a8ebcebf1fe61367b4e436c895bd]
+Previous discussions can be found here:
+Link: https://lore.kernel.org/all/20181028130945.23581-3-changbin.du@gmail.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gabriele-Monaco/timers-Exclude-isolated-cpus-from-timer-migation/20250410-145629
-base:   3b07108ada81a8ebcebf1fe61367b4e436c895bd
-patch link:    https://lore.kernel.org/r/20250410065446.57304-2-gmonaco%40redhat.com
-patch subject: [PATCH] timers: Exclude isolated cpus from timer migation
-config: hexagon-randconfig-002-20250411 (https://download.01.org/0day-ci/archive/20250411/202504111714.VH8TJ92G-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250411/202504111714.VH8TJ92G-lkp@intel.com/reproduce)
+Chen Linxuan (2):
+  drm/i915/pxp: fix undefined reference to
+    `intel_pxp_gsccs_is_ready_for_sessions'
+  RDMA/hns: initialize db in update_srq_db()
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504111714.VH8TJ92G-lkp@intel.com/
+Winston Wen (5):
+  nvme: add __always_inline for nvme_pci_npages_prp
+  mm: add __always_inline for page_contains_unaccepted
+  vfio/virtio: add __always_inline for virtiovf_get_device_config_size
+  tpm: add __always_inline for tpm_is_hwrng_enabled
+  lib/Kconfig.debug: introduce CONFIG_NO_AUTO_INLINE
 
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:15:
-   In file included from include/linux/socket.h:8:
-   In file included from include/linux/uio.h:9:
-   In file included from include/linux/mm_types.h:16:
-   In file included from include/linux/uprobes.h:18:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   1 warning generated.
---
-   In file included from drivers/spi/spi-pic32-sqi.c:9:
-   In file included from include/linux/clk.h:14:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-pic32-sqi.c:673:34: warning: unused variable 'pic32_sqi_of_ids' [-Wunused-const-variable]
-     673 | static const struct of_device_id pic32_sqi_of_ids[] = {
-         |                                  ^~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/spi/spi-orion.c:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:19:
-   In file included from include/linux/topology.h:33:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:16:
-   In file included from include/linux/uprobes.h:18:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-orion.c:614:34: warning: unused variable 'orion_spi_of_match_table' [-Wunused-const-variable]
-     614 | static const struct of_device_id orion_spi_of_match_table[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/spi/spi-pic32.c:9:
-   In file included from include/linux/clk.h:14:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-pic32.c:850:34: warning: unused variable 'pic32_spi_of_match' [-Wunused-const-variable]
-     850 | static const struct of_device_id pic32_spi_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/spi/spi-armada-3700.c:11:
-   In file included from include/linux/clk.h:14:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-armada-3700.c:806:34: warning: unused variable 'a3700_spi_dt_ids' [-Wunused-const-variable]
-     806 | static const struct of_device_id a3700_spi_dt_ids[] = {
-         |                                  ^~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/spi/spi-rockchip.c:7:
-   In file included from include/linux/clk.h:14:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-rockchip.c:1024:34: warning: unused variable 'rockchip_spi_dt_match' [-Wunused-const-variable]
-    1024 | static const struct of_device_id rockchip_spi_dt_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/spi/spi-s3c64xx.c:8:
-   In file included from include/linux/clk.h:14:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-s3c64xx.c:1644:34: warning: unused variable 's3c64xx_spi_dt_match' [-Wunused-const-variable]
-    1644 | static const struct of_device_id s3c64xx_spi_dt_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/spi/spi-meson-spifc.c:8:
-   In file included from include/linux/clk.h:14:
-   In file included from include/linux/notifier.h:16:
-   In file included from include/linux/srcu.h:21:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   drivers/spi/spi-meson-spifc.c:423:34: warning: unused variable 'meson_spifc_dt_match' [-Wunused-const-variable]
-     423 | static const struct of_device_id meson_spifc_dt_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:15:
-   In file included from include/linux/socket.h:8:
-   In file included from include/linux/uio.h:9:
-   In file included from include/linux/mm_types.h:16:
-   In file included from include/linux/uprobes.h:18:
->> include/linux/timer.h:196:83: warning: non-void function does not return a value [-Wreturn-type]
-     196 | static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-         |                                                                                   ^
-   1 warning generated.
-
-
-vim +196 include/linux/timer.h
-
-   192	
-   193	#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
-   194	extern int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask);
-   195	#else
- > 196	static inline int tmigr_isolated_exclude_cpumask(cpumask_var_t exclude_cpumask) { }
-   197	#endif
-   198	
+ Makefile                                   |  6 ++++++
+ drivers/char/tpm/tpm-chip.c                |  2 +-
+ drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.h |  8 ++++++--
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c |  2 +-
+ drivers/nvme/host/pci.c                    |  2 +-
+ drivers/vfio/pci/virtio/legacy_io.c        |  2 +-
+ lib/Kconfig.debug                          | 15 +++++++++++++++
+ mm/page_alloc.c                            |  2 +-
+ 8 files changed, 32 insertions(+), 7 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
