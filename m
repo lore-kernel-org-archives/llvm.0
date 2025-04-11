@@ -1,150 +1,225 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D3D42A9E;
-	Fri, 11 Apr 2025 21:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955F023A9AC
+	for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 23:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744408022; cv=none; b=lk1ldp09hwYzXmRP4/d3EfSuGZj6M6X7veo+XqEnJffETrTh4daJGI6g+r0p/yuwge+CB3Wn6UMvXmyTKEstF61ET8gJveKjDabiKdaDfO7v30aA9VPXOe/8YV7N4X3wUqi/v1Lucpa24FLCG6qrt0SL/JKx5DStylRF+d+QCFo=
+	t=1744413378; cv=none; b=jOyWDArBTMcEP5aEg17k/s8rPGX2pGXps2OkhvJp/83w2SglDtqNXLIOhUMbGyjySp38Lovtg8KWvI2qZGojXf2mj+jE6pt85OYH8Zrl17gWZPdjBE7lbeMGNLE9FLagN3feeAcLZNJvWZPbvgfBW5DKS7/xNPGlB85k62UOluQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744408022; c=relaxed/simple;
-	bh=c41/NBQigKT62i1YBHl9mzC986n1DF5Ga+1jnwDYVYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rK+R4Xuf5OdAos/csigjCiMmmdOPWLTE7GDVu/7v4LNa3Tb1eC4pOco7rBeeXPjfh3Glg2tjBC625NmLAIEGgDbZmdhMtugODyTZgHXmIz+/vDvHqgFua0/+90ehc+3EgfVt9qQ+4EuOqnAvstVNACntwr+qNbRa+ONZkSrbQsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WEZbOLhn; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744413378; c=relaxed/simple;
+	bh=y/67TUX3SKsxvpdITZXAWtpG9m+MFwkW0ufwvWD8ZvE=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Subject:
+	 References:In-Reply-To; b=mDjvqSaaplIF7niGxwGb/uB37GUg2LX93JSXsGTl0WqFbQU3/S/knxZTJ4wbF63PvaVFuC/BkvJ+iaGAsGYsVolQOiNeN8tAYIkHxFqU7H4paAzHwf+AdovT6tNeUwvekeRcpjFPMXlyb2zt/Bi4WS3ggGkZkpFE7pjzyCebPaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KjxoW0yZ; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WEZbOLhn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744408020; x=1775944020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c41/NBQigKT62i1YBHl9mzC986n1DF5Ga+1jnwDYVYk=;
-  b=WEZbOLhnvxUNCLZSHSfC8IJQjTe+e1a4opbd7If8yQxjpXsLIppMubul
-   Gnux/gJSMlO5L0twieCZaThYPo7atv0MlYvIHNpizKNMkj8LbJXg10kTu
-   mbV3rIGQFCH3IJy0ZMnCelvKADeL85jg5g55E7DLUbQQx/532iWLnwu1d
-   ESF7bWjQCc3ui4fRQzfbYvwzsBSU6a7kHkvATL6Gy71wB1XB1/NLu7Mvy
-   z5o2Ma4gC3WNUY9ZBZMPQTWHbOoLEjqmhHbY2/WiHeaHevRE5+Jv/Lfdx
-   ZW3jmzNc6G204urPQNc/SO94bsWNpmyOOWLpw9KqqS9wNsW3k8/Sx5KFA
-   Q==;
-X-CSE-ConnectionGUID: DO++mbTZTISSVOvHXOZsjQ==
-X-CSE-MsgGUID: kGho0fwrSbWEQPmUu32ECQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="45860295"
-X-IronPort-AV: E=Sophos;i="6.15,206,1739865600"; 
-   d="scan'208";a="45860295"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 14:46:59 -0700
-X-CSE-ConnectionGUID: HT+1SIX3T2Sj7jo5OUNslQ==
-X-CSE-MsgGUID: WE+g5kl3QMyUZ86Kgnj40A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,206,1739865600"; 
-   d="scan'208";a="134158851"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Apr 2025 14:46:58 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3MDA-000BP6-0v;
-	Fri, 11 Apr 2025 21:46:56 +0000
-Date: Sat, 12 Apr 2025 05:46:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 08/11] x86/sev: Split off startup code from core code
-Message-ID: <202504120536.izfqm3jS-lkp@intel.com>
-References: <20250410134117.3713574-21-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KjxoW0yZ"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6ecf99dd567so29488726d6.0
+        for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 16:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1744413375; x=1745018175; darn=lists.linux.dev;
+        h=in-reply-to:references:subject:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tuGybtALY1nU6Xel+qCGNU6dttZXpp155m7wcuPBHmI=;
+        b=KjxoW0yZ1tVeHDw+MrE3ou4OywM2WPpc5uo+e3FO0OsTrbaZGFASbCn/6w91Op1Wmq
+         nEF49QrR6X1OFA3shrponql710YD+OjTyUBF1Q2OkP9K7tpFuH6UhUCcpFULLFrJ2bt9
+         d8VNhOqh0HyHXLbkB4dTIEdYV0SKJVZbMvqwpdbmTLT17kXB+rJG8SSNI6l+kaE2o3Rb
+         xfOEMGXexwfyBWlyEPzK9T+8+3J3RDS1rFqPmclLozC35W3bItTXw+HBsEy823AGo1VO
+         tA6Ku5vUhtB/06Yy+n6uY8Kzl1FAWH5fWvqtzMlvJeIpVLdGSoHgxDzExnn222GQmUAD
+         TA6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744413375; x=1745018175;
+        h=in-reply-to:references:subject:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tuGybtALY1nU6Xel+qCGNU6dttZXpp155m7wcuPBHmI=;
+        b=Lw1vE8zx033zHJMuuaOatgegaYtjRyGOcfEvHni93f697DW7wS7E1qvryC2/f08t/m
+         LL5DNaUUdAUNI6aHmHrZieOwJNBuLXEKPTVa8owWrDb1XR+gA+qyu7VdelSps2OoQXR4
+         DfN1jgpBPtmWpdRzKSSAs3ZZO2jfE/eThsqHdJr+Mye8HNtxwHZIlvytPWvcMF+bvCVE
+         Eki8lJ5yXwOKi2CDT1Il+tKCbvmOMMbx6KGizRzk0cKrBDS9sJWBsRZ1cRaQImrBagN8
+         iTWgIAFWqrexfTqB/y7yAKGc8TwMg7P+qztr2Vnjb9Tnt3g+V4uXto9EIJIDdJWg1Atp
+         atfA==
+X-Forwarded-Encrypted: i=1; AJvYcCXxlX8SccCNbAaHWRrk8Br61yFIqQJzCzJWKy5d/AMOHPmCdH6zaw06HNoWjJ55ptSsoC5A@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw+ngH1gxHoC4jEqpQo179MNDZN0lC6xXfjrbHdWbuMvLo68faA
+	KSpP198GFJHZiCRwTS5+BXlMomI1LwiklWNpkxUrqMLecrGw38VF3md9qkEpyQ==
+X-Gm-Gg: ASbGncuD9sZIpADOYMdO9fGhrGI3Mnvq9oJ7tH8z88Vue3Z6BJXBXpQXh5+Bnpdjyf4
+	2IO5EYvdTyxt7fRF2/hDHKldC6yUeKuPhCkJdz6hJI1OtBeKdAn6ZkQP644cH4TBixGkSW8a89c
+	dtEv3TPcxQNpyjrxqLGSRMUQua/wwuZC9eHDvp58n7EurWXbrJqdd9whBN75Vl9/B20/ayc7qXo
+	wHjV8TcmrKw5i4W4IzSsA3JM0j3/PM1wiJ7batY+UpVN19ekALCWz8rseqi9ujZj+gTtOb4ywJ2
+	97pNoacU7BF9sqae95tQ4rg2i9P7B3BNHbPDHLjAw5OoVTiWa8sSj0KR6FeQAmGtVcEk/SYyQyA
+	9UVrMt88zUw==
+X-Google-Smtp-Source: AGHT+IGjduBmlSpWU0mlp+40mGyjda74cdL2upZ68BYIBvIaRlX1u4yCfExf6wZG67mqfhzmsnsAMA==
+X-Received: by 2002:a05:6214:4015:b0:6e6:6c10:76fb with SMTP id 6a1803df08f44-6f230db4864mr77277436d6.25.1744413375163;
+        Fri, 11 Apr 2025 16:16:15 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f0dea10697sm42931066d6.108.2025.04.11.16.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Apr 2025 16:16:14 -0700 (PDT)
+Date: Fri, 11 Apr 2025 19:16:14 -0400
+Message-ID: <d3ad9a7bb9eb68a3ae5dd18bf091825d@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250410134117.3713574-21-ardb+git@google.com>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250411_1406/pstg-lib:20250411_1552/pstg-pwork:20250411_1406
+From: Paul Moore <paul@paul-moore.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, nkapron@google.com, 
+	teknoraver@meta.com, roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [PATCH v2 1/4] security: Hornet LSM
+References: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
 
-Hi Ard,
+On Apr  4, 2025 Blaise Boscaccy <bboscaccy@linux.microsoft.com> wrote:
+> 
+> This adds the Hornet Linux Security Module which provides signature
+> verification of eBPF programs. This allows users to continue to
+> maintain an invariant that all code running inside of the kernel has
+> been signed.
+> 
+> The primary target for signature verification is light-skeleton based
+> eBPF programs which was introduced here:
+> https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@gmail.com/
+> 
+> eBPF programs, before loading, undergo a complex set of operations
+> which transform pseudo-values within the immediate operands of
+> instructions into concrete values based on the running
+> system. Typically, this is done by libbpf in
+> userspace. Light-skeletons were introduced in order to support
+> preloading of bpf programs and user-mode-drivers by removing the
+> dependency on libbpf and userspace-based operations.
+> 
+> Userpace modifications, which may change every time a program gets
+> loaded or runs on a slightly different kernel, break known signature
+> verification algorithms. A method is needed for passing unadulterated
+> binary buffers into the kernel in-order to use existing signature
+> verification algorithms. Light-skeleton loaders with their support of
+> only in-kernel relocations fit that constraint.
+> 
+> Hornet employs a signature verification scheme similar to that of
+> kernel modules. A signature is appended to the end of an
+> executable file. During an invocation of the BPF_PROG_LOAD subcommand,
+> a signature is extracted from the current task's executable file. That
+> signature is used to verify the integrity of the bpf instructions and
+> maps which were passed into the kernel. Additionally, Hornet
+> implicitly trusts any programs which were loaded from inside kernel
+> rather than userspace, which allows BPF_PRELOAD programs along with
+> outputs for BPF_SYSCALL programs to run.
+> 
+> The validation check consists of checking a PKCS#7 formatted signature
+> against a data buffer containing the raw instructions of an eBPF
+> program, followed by the initial values of any maps used by the
+> program. Maps are frozen before signature verification checking to
+> stop TOCTOU attacks.
+> 
+> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+> ---
+>  Documentation/admin-guide/LSM/Hornet.rst |  55 ++++++
+>  Documentation/admin-guide/LSM/index.rst  |   1 +
+>  MAINTAINERS                              |   9 +
+>  crypto/asymmetric_keys/pkcs7_verify.c    |  10 +
+>  include/linux/kernel_read_file.h         |   1 +
+>  include/linux/verification.h             |   1 +
+>  include/uapi/linux/lsm.h                 |   1 +
+>  security/Kconfig                         |   3 +-
+>  security/Makefile                        |   1 +
+>  security/hornet/Kconfig                  |  11 ++
+>  security/hornet/Makefile                 |   4 +
+>  security/hornet/hornet_lsm.c             | 239 +++++++++++++++++++++++
+>  12 files changed, 335 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+>  create mode 100644 security/hornet/Kconfig
+>  create mode 100644 security/hornet/Makefile
+>  create mode 100644 security/hornet/hornet_lsm.c
 
-kernel test robot noticed the following build errors:
+...
 
-[auto build test ERROR on tip/master]
-[also build test ERROR on next-20250411]
-[cannot apply to tip/x86/core tip/x86/mm efi/next tip/auto-latest linus/master v6.15-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> diff --git a/security/hornet/hornet_lsm.c b/security/hornet/hornet_lsm.c
+> new file mode 100644
+> index 000000000000..d9e36764f968
+> --- /dev/null
+> +++ b/security/hornet/hornet_lsm.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/x86-asm-Make-rip_rel_ptr-usable-from-fPIC-code/20250410-214836
-base:   tip/master
-patch link:    https://lore.kernel.org/r/20250410134117.3713574-21-ardb%2Bgit%40google.com
-patch subject: [PATCH v4 08/11] x86/sev: Split off startup code from core code
-config: x86_64-buildonly-randconfig-005-20250411 (https://download.01.org/0day-ci/archive/20250412/202504120536.izfqm3jS-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120536.izfqm3jS-lkp@intel.com/reproduce)
+...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504120536.izfqm3jS-lkp@intel.com/
+> +/* kern_sys_bpf is declared as an EXPORT_SYMBOL in kernel/bpf/syscall.c, however no definition is
+> + * provided in any bpf header files. If/when this function has a proper definition provided
+> + * somewhere this declaration should be removed
+> + */
+> +int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
 
-All errors (new ones prefixed by >>):
+I believe the maximum generally accepted line length is now up to 100
+characters, but I remain a big fan of the ol' 80 character terminal
+width and would encourage you to stick to that if possible.  However,
+you're the one who is signing on for maintenence of Hornet, not me, so
+if you love those >80 char lines, you do you :)
 
->> arch/x86/boot/compressed/sev.c:263:6: error: call to undeclared function 'vmgexit_psc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     263 |         if (vmgexit_psc(boot_ghcb, desc))
-         |             ^
->> arch/x86/boot/compressed/sev.c:266:2: error: call to undeclared function 'pvalidate_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     266 |         pvalidate_pages(desc);
-         |         ^
-   arch/x86/boot/compressed/sev.c:266:2: note: did you mean 'pvalidate_4k_page'?
-   arch/x86/boot/compressed/../../coco/sev/shared.c:1227:20: note: 'pvalidate_4k_page' declared here
-    1227 | static void __head pvalidate_4k_page(unsigned long vaddr, unsigned long paddr,
-         |                    ^
-   2 errors generated.
+I also understand why you are doing the kern_sys_bpf() declaration here,
+but once this lands in Linus' tree I would encourage you to try moving
+the declaration into a kernel-wide BPF header where it really belongs.
 
+> +static int hornet_check_binary(struct bpf_prog *prog, union bpf_attr *attr,
+> +			       struct hornet_maps *maps)
+> +{
+> +	struct file *file = get_task_exe_file(current);
+> +	const unsigned long markerlen = sizeof(EBPF_SIG_STRING) - 1;
+> +	void *buf = NULL;
+> +	size_t sz = 0, sig_len, prog_len, buf_sz;
+> +	int err = 0;
+> +	struct module_signature sig;
+> +
+> +	buf_sz = kernel_read_file(file, 0, &buf, INT_MAX, &sz, READING_EBPF);
+> +	fput(file);
+> +	if (!buf_sz)
+> +		return -1;
 
-vim +/vmgexit_psc +263 arch/x86/boot/compressed/sev.c
+I'm pretty sure I asked you about this already off-list, but I can't
+remember the answer so I'm going to bring this up again :)
 
-597cfe48212a3f arch/x86/boot/compressed/sev-es.c Joerg Roedel 2020-09-07  232  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  233  static phys_addr_t __snp_accept_memory(struct snp_psc_desc *desc,
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  234  				       phys_addr_t pa, phys_addr_t pa_end)
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  235  {
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  236  	struct psc_hdr *hdr;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  237  	struct psc_entry *e;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  238  	unsigned int i;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  239  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  240  	hdr = &desc->hdr;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  241  	memset(hdr, 0, sizeof(*hdr));
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  242  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  243  	e = desc->entries;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  244  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  245  	i = 0;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  246  	while (pa < pa_end && i < VMGEXIT_PSC_MAX_ENTRY) {
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  247  		hdr->end_entry = i;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  248  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  249  		e->gfn = pa >> PAGE_SHIFT;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  250  		e->operation = SNP_PAGE_STATE_PRIVATE;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  251  		if (IS_ALIGNED(pa, PMD_SIZE) && (pa_end - pa) >= PMD_SIZE) {
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  252  			e->pagesize = RMP_PG_SIZE_2M;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  253  			pa += PMD_SIZE;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  254  		} else {
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  255  			e->pagesize = RMP_PG_SIZE_4K;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  256  			pa += PAGE_SIZE;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  257  		}
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  258  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  259  		e++;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  260  		i++;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  261  	}
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  262  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06 @263  	if (vmgexit_psc(boot_ghcb, desc))
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  264  		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  265  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06 @266  	pvalidate_pages(desc);
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  267  
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  268  	return pa;
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  269  }
-6c3211796326a9 arch/x86/boot/compressed/sev.c    Tom Lendacky 2023-06-06  270  
+This file read makes me a bit nervous about a mismatch between the
+program copy operation done in the main BPF code and the copy we do
+here in kernel_read_file().  Is there not some way to build up the
+buffer with the BPF program from the attr passed into this function
+(e.g. attr.insns?)?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If there is some clever reason why all of this isn't an issue, it might
+be a good idea to put a small comment above the kernel_read_file()
+explaining why it is both safe and good.
+
+> +	prog_len = buf_sz;
+> +
+> +	if (prog_len > markerlen &&
+> +	    memcmp(buf + prog_len - markerlen, EBPF_SIG_STRING, markerlen) == 0)
+> +		prog_len -= markerlen;
+> +
+> +	memcpy(&sig, buf + (prog_len - sizeof(sig)), sizeof(sig));
+> +	sig_len = be32_to_cpu(sig.sig_len);
+> +	prog_len -= sig_len + sizeof(sig);
+> +
+> +	err = mod_check_sig(&sig, prog->len * sizeof(struct bpf_insn), "ebpf");
+> +	if (err)
+> +		return err;
+> +	return hornet_verify_lskel(prog, maps, buf + prog_len, sig_len);
+> +}
+
+--
+paul-moore.com
