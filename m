@@ -1,111 +1,158 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C318F10F9;
-	Sat, 12 Apr 2025 04:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0DFA1C6FF2
+	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 13:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744432393; cv=none; b=PI3kHc5wvROflCd9nD5fjyiGG+cMsFIc3MFiL4f1+pFiB/x+6YLQuNF3W9z5X+ovQ2fIsSyA6tGjxL4XLVdmyKjA3ZIQZUMoklHI5HlA3nOmmURumHQ6Y0RzQK6R6/bsaNJL04DKTSLE7nTsnANm616Oj/3E9OYz1xWimlv+g5c=
+	t=1744466297; cv=none; b=uxtpnsz0+5+8dekw2y4gv6B3Pwslsplz8f/yIWuzsHc26V5EQhgMS9S4NLj8VYM/o+wr0rBjUzl50hc8fd1XTPqBHPPimsmwYUV1LnIigLCLtqsa+j4yk4KrPQ2cmEmwPSW1zarDP1EhlwBh1mOqfBp07OEDNKxonyEn12KA8x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744432393; c=relaxed/simple;
-	bh=8HY4pXq4/0sgSGqWKzYB0xMabci34z/M8SocsQbtjIc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JkGigN14ttjUx/HaIQZ+WOlkYRKi+WxNhmicw8EUPcTrCu1EtgWVBM9HqTkiTwA77nZhNrUCbmp9qdmA6bGVVjosnoxeSoG3nAQrXqb7k5qaQqIHWm12yIEbOSbAeHLBtuirIcoq1rke33lBC3X5zuqSJ/cks9nEiIvllqor0bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=UmkMzcYF; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1744466297; c=relaxed/simple;
+	bh=ClLf6pd9bTzI1Zy4+TxzeK0uSIR+DiZghc9j4o2x+1o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hpb2x9cTH1yObEWkY3L70xyAqfXUz3H1Wgx5Y5lwW/0JtPztVCKdoNZzNReAxJWq0cnTlwKFBYKRP+OFVvQbraTbaG6h7b0hPQa9Hapsx5OW4mpFwENKvbkAVkluAylAnrgWtIgLbKoCW9XWjaSJwIFAB3wzw0iDDTDqJfv9kW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ctRJGxUn; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="UmkMzcYF"
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53C4WWUM871113
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 11 Apr 2025 21:32:32 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53C4WWUM871113
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1744432355;
-	bh=8HY4pXq4/0sgSGqWKzYB0xMabci34z/M8SocsQbtjIc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UmkMzcYFMOohEYDvst/+wSrvJqxBWNM3y8pTlydtS9u0Vr7uRFr3Z3pCuQCca14kO
-	 ACsIUaW4DWSFZQk6os5w5N7c+E5hX8uOXvMG58Zw1ACWcaqL0evKoHrKsjwK2mCmbu
-	 3fbVO1XRm3rPuvtxsvqFa40+ZJdSrPdyFPMsAPCRm9EzVpscdqiU1jHIOYNpql0/Q+
-	 A4rJGWpOKXJ4rM8Ry7S9QSfW5JMyxnLBqri634s7bqAxLMEVGyTj2wxY2EKLJiAwY7
-	 7S3D+HGa8zlLeI3TPeDpXLNu9OHcHMD6lAYjW/h+oxH9TUSCd3g/AuG8/qoXjh0Ibr
-	 awatBQNumv6Tw==
-Message-ID: <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
-Date: Fri, 11 Apr 2025 21:32:32 -0700
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ctRJGxUn"
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 25D6621165B8;
+	Sat, 12 Apr 2025 06:58:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 25D6621165B8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744466289;
+	bh=zu0xtIux+vB60++y6tlbnAcAeCnE8i9Dvqd2crr17VQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=ctRJGxUnarL1x3rwLFV8mBmNc3kTQ8bmhzgl86pwB64rU7x4F0uR0RbSDZRhN8fWK
+	 6NogRPkUANeXVftTcHYLC9sqh+m90vMBzrg0ZVAZkdyJn9b+Qn84ZMDf/eNxvrDQZW
+	 KQKb2GNF3XL4OSER5Fbnwana9xHXUnJlDRHrDfW4=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
+ <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
+ Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
+ <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
+ <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
+ <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
+ <xiyou.wangcong@gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+In-Reply-To: <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+ <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+Date: Sat, 12 Apr 2025 06:57:58 -0700
+Message-ID: <87semdjxcp.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
- when available
-To: Jim Mattson <jmattson@google.com>, Sean Christopherson <seanjc@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
-        acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
-        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com
-References: <20250331082251.3171276-1-xin@zytor.com>
- <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
- <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 4/11/2025 2:12 PM, Jim Mattson wrote:
-> Surely, any CPU that has WRMSRNS also supports "Virtualize
-> IA32_SPEC_CTRL," right? Shouldn't we be using that feature rather than
-> swapping host and guest values with some form of WRMSR?
+TAlexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Good question, the simple answer is that they are irrelevant.
+> On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Blaise Boscaccy
+> <bboscaccy@linux.microsoft.com> wrote:
+>> +
+>> +static int hornet_find_maps(struct bpf_prog *prog, struct hornet_maps *=
+maps)
+>> +{
+>> +       struct bpf_insn *insn =3D prog->insnsi;
+>> +       int insn_cnt =3D prog->len;
+>> +       int i;
+>> +       int err;
+>> +
+>> +       for (i =3D 0; i < insn_cnt; i++, insn++) {
+>> +               if (insn[0].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)) {
+>> +                       switch (insn[0].src_reg) {
+>> +                       case BPF_PSEUDO_MAP_IDX_VALUE:
+>> +                       case BPF_PSEUDO_MAP_IDX:
+>> +                               err =3D add_used_map(maps, insn[0].imm);
+>> +                               if (err < 0)
+>> +                                       return err;
+>> +                               break;
+>> +                       default:
+>> +                               break;
+>> +                       }
+>> +               }
+>> +       }
+>
+> ...
+>
+>> +               if (!map->frozen) {
+>> +                       attr.map_fd =3D fd;
+>> +                       err =3D kern_sys_bpf(BPF_MAP_FREEZE, &attr, size=
+of(attr));
+>
+> Sorry for the delay. Still swamped after conferences and the merge window.
+>
+
+No worries.
+
+> Above are serious layering violations.
+> LSMs should not be looking that deep into bpf instructions.
+
+These aren't BPF internals; this is data passed in from
+userspace. Inspecting userspace function inputs is definitely within the
+purview of an LSM.
+
+Lskel signature verification doesn't actually need a full disassembly,
+but it does need all the maps used by the lskel. Due to API design
+choices, this unfortunately requires disassembling the program to see
+which array indexes are being used.
+
+> Calling into sys_bpf from LSM is plain nack.
+>
+
+kern_sys_bpf is an EXPORT_SYMBOL, which means that it should be callable
+from a module. Lskels without frozen maps are vulnerable to a TOCTOU
+attack from a sufficiently privileged user. Lskels currently pass
+unfrozen maps into the kernel, and there is nothing stopping someone
+from modifying them between BPF_PROG_LOAD and BPF_PROG_RUN.
+
+> The verification of module signatures is a job of the module loading proc=
+ess.
+> The same thing should be done by the bpf system.
+> The signature needs to be passed into sys_bpf syscall
+> as a part of BPF_PROG_LOAD command.
+> It probably should be two new fields in union bpf_attr
+> (signature and length),
+> and the whole thing should be processed as part of the loading
+> with human readable error reported back through the verifier log
+> in case of signature mismatch, etc.
+>
+
+I don't necessarily disagree, but my main concern with this is that
+previous code signing patchsets seem to get gaslit or have the goalposts
+moved until they die or are abandoned.
+
+Are you saying that at this point, you would be amenable to an in-tree
+set of patches that enforce signature verification of lskels during
+BPF_PROG_LOAD that live in syscall.c, without adding extra non-code
+signing requirements like attachment point verification, completely
+eBPF-based solutions, or rich eBPF-based program run-time policy
+enforcement?
+
+Our entire use case for this is simply "we've signed all code running in
+ring 0," nothing more. I'm concerned that code signing may be blocked
+forever while eBPF attempts to reinvent its own runtime policy framework
+that has absolutely nothing to do with proving code provenance.
+
+> What LSM can do in addition is to say that if the signature is not
+> specified in the prog_load command then deny such request outright.
+> bpf syscall itself will deny program loading if signature is incorrect.
