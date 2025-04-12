@@ -1,117 +1,122 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5A61DFED
-	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 14:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3518F1F03C1;
+	Sat, 12 Apr 2025 15:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744467074; cv=none; b=W7BH6fFZOgcfNbI1ndf/3zugZ6EhMUopAgK/C2X1aSFcFm0E2nAhzAJOiyviArFV+FoQsAwvSIJzDXMEaV+Hf5j4m06fmXLGi+oE0d3VtFzi7nB0o8zKvqLlzsdhiZgWvRIDcsgLw9qCoOPNgA8PmOHFJQeIKI41XdcL8JE9wqI=
+	t=1744471292; cv=none; b=s27NoGq0NPtIxj0s47pLeQYkRff89d4TmZO/bMqp5smVC9JUCb/Un4zS3yLgKM9VZS876WJBoEYlCpM4WYzTRTIkFH9fyEnC8NkE/fWGTmWceMgYPx/NxRZFmNzD+lZUhL3s7TReg5NYoeO7StJ4j8aU2Ey2Wu+NN7nu/CzC1NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744467074; c=relaxed/simple;
-	bh=6UupgWJqX74K4rb42t9zk7pR4gsrJNFwzwL4a7gqYCw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QuxKJC1Xd2yQsgMJrPOGmEo9tG5LWJvaXQiBz0b04jfWf0tyf6x7Y+LPP37ST3J3BCD9f4IlrPUll69/aBq7MkLvk+l66OCoLF7p2Cf1kggENjqnYyjafcl3Cm/QyxNruWpyIcRpfU+BD0vrko2iw4+IEJX/1cEOCGspRZZPnmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RRMoS31T; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1744471292; c=relaxed/simple;
+	bh=GjAmbx4+3OF0nu94aqax2/FqFb/9eWhRE4jjPMDFVF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YXU/oOb1Ux/iiioE2WQx9HL1XvuFi+cVloWruN2FoVm8vETvpfnSSF56+oGi3IAjRuxO1rSM8Mz+0hNIaZAk9LmD4N+jj+7dLHn+He5AHhPlp0/R3QNJ2T3sYwqblcl5fhsnkOjVLmROLqKOboOuRQzJZLjSrhNmE2/OFmnVJgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MluxLLuC; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RRMoS31T"
-Received: from narnia (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7A2A321165B8;
-	Sat, 12 Apr 2025 07:11:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A2A321165B8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744467072;
-	bh=pTnd2Oc8i8/ma8A52qza9zwPziCRMHwOGThxeMcufiE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=RRMoS31T422OQGTx+ALxBabnWUobD2SGOF9kKhtax/Q9kNBsnMTF30iIo6s62oUcd
-	 9hayyqT4XBOzTiMuXmDqpBpb3kjYL34C0pagTkdwl+BsCNobtK8HIYmwSTpnWM72sc
-	 7MbXa9/e4EXJcrbLuqpTIOI03a2CVhMn3o5hgH1k=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Matteo Croce
- <technoboy85@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
- <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
- =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
- Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
- <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
- <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
- Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
- <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
- <xiyou.wangcong@gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-In-Reply-To: <CAADnVQJ5VaXVN=L+0ygEWJkMtPZnqAVEoeFiLBvikntX0zD49w@mail.gmail.com>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
- <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
- <CAADnVQJ5VaXVN=L+0ygEWJkMtPZnqAVEoeFiLBvikntX0zD49w@mail.gmail.com>
-Date: Sat, 12 Apr 2025 07:11:01 -0700
-Message-ID: <87plhhjwqy.fsf@microsoft.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MluxLLuC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744471291; x=1776007291;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GjAmbx4+3OF0nu94aqax2/FqFb/9eWhRE4jjPMDFVF0=;
+  b=MluxLLuCCoBHh5lFU4jlsMeNlW+89n4BXg/Lz1g4rKPdFfcGhcKZ+iII
+   hHLHqB8WmdwfHCOzFzjqN81pjQaPnLGZXknm4W/YTJRmLOOkTqjbQw9FD
+   4HcsMQzGKDBBCbr93XwA67swZdoa0wcgAnZsPV73BmHpp2D5DpHHP32OA
+   oqM6OhcNOZuT+BO21InglMIkJCRWYsZiQJgaSQr43RmBry5/3C23CRlYl
+   ugPVErRNUXqEykmSVEnVFZ2xkqTt5VvmX6MWSYB1/8vxGuLe/DfqydcXR
+   tYSGVr6qvD7ZUCMfvn1C0lIyawI78afvB/rxyHjN0CRfGpLc4BWVHxnql
+   Q==;
+X-CSE-ConnectionGUID: tEXhsS3iRd+duAyidWEVEA==
+X-CSE-MsgGUID: pJiQznUfQleVyrfM+j1NIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="71384991"
+X-IronPort-AV: E=Sophos;i="6.15,208,1739865600"; 
+   d="scan'208";a="71384991"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 08:21:29 -0700
+X-CSE-ConnectionGUID: wLvR/RbcTqy1MgixeGozlA==
+X-CSE-MsgGUID: A64WAPyvRtaldUoFrA9rdA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,208,1739865600"; 
+   d="scan'208";a="134292792"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 12 Apr 2025 08:21:28 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u3cfd-000Bsw-1W;
+	Sat, 12 Apr 2025 15:21:25 +0000
+Date: Sat, 12 Apr 2025 23:20:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	selinux@vger.kernel.org,
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: [pcmoore-selinux:next 7/7] security/selinux/hooks.c:3173: warning:
+ Function parameter or struct member 'avd' not described in
+ 'task_avdcache_update'
+Message-ID: <202504122308.Ch8PzJdD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+head:   5d7ddc59b3d89b724a5aa8f30d0db94ff8d2d93f
+commit: 5d7ddc59b3d89b724a5aa8f30d0db94ff8d2d93f [7/7] selinux: reduce path walk overhead
+config: i386-buildonly-randconfig-003-20250412 (https://download.01.org/0day-ci/archive/20250412/202504122308.Ch8PzJdD-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504122308.Ch8PzJdD-lkp@intel.com/reproduce)
 
-> On Fri, Apr 11, 2025 at 5:30=E2=80=AFPM Matteo Croce <technoboy85@gmail.c=
-om> wrote:
->>
->> Il giorno sab 12 apr 2025 alle ore 02:19 Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> ha scritto:
->>
->> Similar to what I proposed here?
->>
->> https://lore.kernel.org/bpf/20211203191844.69709-2-mcroce@linux.microsof=
-t.com/
-> ...
->> @@ -1346,6 +1346,8 @@ union bpf_attr {
->>   __aligned_u64 fd_array; /* array of FDs */
->>   __aligned_u64 core_relos;
->>   __u32 core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
->> + __aligned_u64 signature; /* instruction's signature */
->> + __u32 sig_len; /* signature size */
->
-> Well, yeah, two fields are obvious.
-> But not like that link from 2021.
-> KP proposed them a year later in 2022 on top of lskel
-> which was much closer to be acceptable.
-> We need to think it through and complete the work,
-> since there are various ways to do it.
-> For example, lskel has a map and a prog.
-> A signature in a prog may cover both, but
-> not necessary it's a good design.
-> A signature for the map plus a signature for the prog
-> that is tied to a map might be a better option.
-> At map creation time the contents can be checked,
-> the map is frozen, and then the verifier can proceed
-> with prog's signature checking.
-> lskel doesn't support all the bpf feature yet, so we need
-> to make sure that the signature verification process
-> is extensible when lskel gains new features.
->
-> Attaching was also brought up at lsfmm.
-> Without checking the attach point the whole thing is quite
-> questionable from security pov.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504122308.Ch8PzJdD-lkp@intel.com/
 
-That statement is quite questionable. Yes, IIRC you brought that up. And
-again, runtime policy enforcement has nothing to do with proving code
-provenance. They are completely independent concerns.
+All warnings (new ones prefixed by >>):
 
-That would be akin to saying that having locks on a door is questionable
-without having surveillance cameras installed.
+>> security/selinux/hooks.c:3173: warning: Function parameter or struct member 'avd' not described in 'task_avdcache_update'
+>> security/selinux/hooks.c:3173: warning: Excess function parameter 'avdc' description in 'task_avdcache_update'
+
+
+vim +3173 security/selinux/hooks.c
+
+  3158	
+  3159	/**
+  3160	 * task_avdcache_update - Update the task's AVD cache
+  3161	 * @tsec: the task's security state
+  3162	 * @isec: the inode associated with the cache entry
+  3163	 * @avdc: the AVD info to cache
+  3164	 * @audited: the permission audit bitmask to cache
+  3165	 *
+  3166	 * Update the AVD cache in @tsec with the @avdc and @audited info associated
+  3167	 * with @isec.
+  3168	 */
+  3169	static inline void task_avdcache_update(struct task_security_struct *tsec,
+  3170						struct inode_security_struct *isec,
+  3171						struct av_decision *avd,
+  3172						u32 audited)
+> 3173	{
+  3174		int spot;
+  3175	
+  3176		/* focused on path walk optimization, only cache directories */
+  3177		if (isec->sclass != SECCLASS_DIR)
+  3178			return;
+  3179	
+  3180		/* update cache */
+  3181		spot = (tsec->avdcache.dir_spot + 1) & (TSEC_AVDC_DIR_SIZE - 1);
+  3182		tsec->avdcache.dir_spot = spot;
+  3183		tsec->avdcache.dir[spot].isid = isec->sid;
+  3184		tsec->avdcache.dir[spot].audited = audited;
+  3185		tsec->avdcache.dir[spot].allowed = avd->allowed;
+  3186		tsec->avdcache.dir[spot].permissive = avd->flags & AVD_FLAGS_PERMISSIVE;
+  3187	}
+  3188	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
