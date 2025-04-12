@@ -1,109 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3021448E0;
-	Sat, 12 Apr 2025 21:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C54151991
+	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 22:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744495031; cv=none; b=mdHoY9W8WxShs5a1s2r5wCmJb21a0tW0sMAdirzjiefQPhRW155E+/FWvpNg6iFTvbVRM5CU07l96IfWEhWdOhIWGNcD2N5iK+AqwGbDBMkcDU+fFO5VRAJY/ZQXj8J7oXxXxJ2HZidqPeEUbPF8HCa7mibxUfcLoUhAaHai4d0=
+	t=1744496531; cv=none; b=QcoFLps8aBaIUztWgX9MK/y4oHkDn4kDa7LMKFNrdoc/mBlh9quzgU9UWC878kM71M/r/e42PEXg9LlBFcUXmx2G+3Gy5PzdL88BzgadSRNhj5rd8cPMvejRHkb95g209JcYllRqbvnlPfykcDruHxgtP/x0koAQO5+bhVLks1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744495031; c=relaxed/simple;
-	bh=ajLLm6V1nB+iIGXAIwi8kfvmKW1YEqpUd4ICX1M24dM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jBE71ujMOWtPAJz2u4wGHKp/H5QpiUAVHGyWorSBT3qZxIUztHvnXD9uonTZAAWH3vr/mgpqq60Ir7oYXnYuXjUBSQ0kXTnZcpfNFpHUWTHmxMMk4Kzxiv1H4kq8De3Kt4riaGm9Eo40CAoa7muXdDmS0LLjU3K1+rrQ3P54oqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h4gBZ7+S; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744496531; c=relaxed/simple;
+	bh=RKI2Wpi8rUCHiE7RkoriB3zHcmg9avHbrlHAmwhgfdk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=cHCMbgOxxKJbg4rfnphEbb9rNGry4PdpTdmzMqd5lnLjIdgtqUx/0mDCkY8t5Ki1zXuIi+qlX9HaxyE+KTtZlyrNWVesTXYXF2BrlIiZpjaO5xnsjqOznqOKOsrQNzeZUQ9yx/nllBcyI1OCusu8weShmB+5YKSjBcZyZMuW+Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yj4itGqu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h4gBZ7+S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744495029; x=1776031029;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ajLLm6V1nB+iIGXAIwi8kfvmKW1YEqpUd4ICX1M24dM=;
-  b=h4gBZ7+SAyBmTE8OnCV149qJHFOrZzFhuKiJ6IvvmPyMwRNCAcUmMPQM
-   IR1Dspu7cBvZPJdfG8x3Aecepzdvp5rYrBRd7SD7qyCSxGmNGlu9L2UIi
-   4vr5fWaQKi9WdnRAPH7uSpEkBHFtx/+3nJ/VdEB3CH0OdgQLnfb1m7R0M
-   +0WYEdlgpMCphCwW5l6rHoil4I1vwPrv0S3xza/8NrY4KBe+pkt9Ys2V6
-   bHn2A42G2h7oqtRfhza6NJtwMrMfcZjzRbzUiyzqDrrd7OSjsTekJGtYE
-   lugyEj1imcW55mdZvqHYVlbSVryy0s4TBNf6W3am2xiL/YGoLh53Vdwkl
-   w==;
-X-CSE-ConnectionGUID: I/U1gzTNTYSa8iT8oThPVQ==
-X-CSE-MsgGUID: OhZ1v6IxToWTF4YmvG6nMg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="45718463"
-X-IronPort-AV: E=Sophos;i="6.15,209,1739865600"; 
-   d="scan'208";a="45718463"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 14:57:08 -0700
-X-CSE-ConnectionGUID: xsCuUn9zSW6e3wr7FS89OA==
-X-CSE-MsgGUID: C0vBHpXZQ92kr93Wy/cJbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,209,1739865600"; 
-   d="scan'208";a="152676426"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Apr 2025 14:57:07 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3iqX-000C9u-1E;
-	Sat, 12 Apr 2025 21:57:05 +0000
-Date: Sun, 13 Apr 2025 05:56:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:netns-debugfs 2/3] lib/ref_tracker.c:287:4: warning: format
- specifies type 'int' but the argument has type 'long'
-Message-ID: <202504130506.zKFcdjki-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yj4itGqu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744496528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KoL0XcA+qDcbOf1z74m/pA7dKUZDohQgOkzkvKyzOUs=;
+	b=Yj4itGquXFnd6E81wYjSYBK3bYw2r0Fcp27pOM4oI/G3CcConTYwKVmfUI1xthDunf9A4w
+	pdZeeS1ZHaT0F7b1SLL66r4PTy1XBmqQ/18TrXJNxUgwfii6JM7b39O/OPtgKN3/kzopQD
+	ii4BpzLOdGILM1/BN9BIp/O2BKJi46w=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-o2esO9j_MTmS7M5TEFr2aw-1; Sat,
+ 12 Apr 2025 18:22:06 -0400
+X-MC-Unique: o2esO9j_MTmS7M5TEFr2aw-1
+X-Mimecast-MFC-AGG-ID: o2esO9j_MTmS7M5TEFr2aw_1744496525
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11F031800349
+	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 22:22:05 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F2209180B48C;
+	Sat, 12 Apr 2025 22:22:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc1,
+ upstream-mainline, b676ac48)
+Date: Sat, 12 Apr 2025 22:22:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <69705.125041218220600203@us-mta-67.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 9ASsdg6TY97nxsRxnoONnoN6LbOXuJFsZM7tfaj8GsQ_1744496525
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git netns-debugfs
-head:   193510c9521581018efe6f51e0aeddbafc8c103e
-commit: ada5a12aae58a77a6d3522609df19a7cba6e053b [2/3] ref_tracker: add a top level debugfs directory for ref_tracker
-config: arm64-randconfig-004-20250413 (https://download.01.org/0day-ci/archive/20250413/202504130506.zKFcdjki-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250413/202504130506.zKFcdjki-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504130506.zKFcdjki-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/ref_tracker.c:287:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-     286 |                 pr_warn("ref_tracker: unable to create ref_tracker debugfs directory: %d\n",
-         |                                                                                       ~~
-         |                                                                                       %ld
-     287 |                         PTR_ERR(ref_tracker_debug_dir));
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +287 lib/ref_tracker.c
+Kernel information:
+    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/bpf/bpf
 
-   281	
-   282	static int __init ref_tracker_debug_init(void)
-   283	{
-   284		ref_tracker_debug_dir = debugfs_create_dir("ref_tracker", NULL);
-   285		if (IS_ERR(ref_tracker_debug_dir)) {
-   286			pr_warn("ref_tracker: unable to create ref_tracker debugfs directory: %d\n",
- > 287				PTR_ERR(ref_tracker_debug_dir));
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1765770331
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1765770331-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
