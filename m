@@ -1,51 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC262367C9;
-	Sat, 12 Apr 2025 01:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DC378F2D;
+	Sat, 12 Apr 2025 01:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744422325; cv=none; b=cnudnZBBVs/yHxzw0dSb9onFX8rpjXG4TlAZOvrmVEHmGpPinn2K7+9oqKlCs4BrhH+/z/lhceB/5u9Vl6IoqtsF83B0HoXCBCy2HgBnz8JQqln4Yyh+iViaiDbj3atHHnLE4PeUSAp1CwOmA7o1mDgsE8MJQkb1a0gLhoxobA8=
+	t=1744422922; cv=none; b=DODAK+YISWNXoG2T/+x1Yu++FhlvXzXvj7Oc4z4hXLpzvwdOJBKaDj/AibRwk6S72+Q9fxDD5KaTExPl9zC//j7Vzi+11FjpWNhtNFvDqn9wfqPInwGyBN1HGrGodwSx+y04tCukTFoW/FQ9dgSVswaatCDro5DeGb971Wnb9AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744422325; c=relaxed/simple;
-	bh=InI5YIvfIbmAEiSsiYv9SXaP67nBUB72BNS5xoI3aAk=;
+	s=arc-20240116; t=1744422922; c=relaxed/simple;
+	bh=wmKnxb7GFyuae2WQ6SVt9gXSex8dPJlcbqKCyw/Zp1E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jI1rEGDh7tC7uxSoVjT+nfgWOZP/voZF+oglokE8NMAy1Ak5wnlYvl2I5z9NbUZ9QiE97KMgg1vLDd7ZccV+TmLVdGIrLtAu7NQYMiDxHEcevHmHuukpMbr0bmETMv7x1gIIsI3y3hDW/+qkaA+OFjOGzvywsh9O+Oj1LJ7ND4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aH+8Ve3a; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kio/Fh6jYTsJ5UbSazRbhrdUXDjpTZoSyhD029DHRIYUejimm1OKTiE8i7ljJK1qsxNqwBc3deEvdh83nzUjZUkLqu4DKrvEtsjcAwYmfPQ2RO7TTXCOpaynwX1PS2gS0JvwE1Lec/U/ug7aTumLUzqanXQwM6zhMbMO73CUXMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hMPcdfla; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aH+8Ve3a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E420EC4CEE2;
-	Sat, 12 Apr 2025 01:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744422324;
-	bh=InI5YIvfIbmAEiSsiYv9SXaP67nBUB72BNS5xoI3aAk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aH+8Ve3afihmbx2mG3X6H3vD1yYcxfvJMEbeZy3r6GNURDIawp3cGTwMPoLAOMuTg
-	 1YT/qJ5wBUGByYhU3Oq2i6i5mv0T5+dKl5WLcOUJWHirosE4yxpJNi7r1Pc+4SGUOs
-	 EtX3OnwWfkzlPA2IexZvxSPgrp5xmiZWOOK+fsPFraHP/TsHwfHkgqla/XXpBSeDHh
-	 d96HwnBB//WT0ut72I5mXESz76FZmw/PayPGVWaCoGWz3Vm9xUalZisllvVixG6bNX
-	 RMh5o5t1sbvg+WgE4+sSWcjgz4KMPFFj80RDBd8BL9+uUbjju+zyz/c0e5VpKb4fRJ
-	 3uUQJsWi7bNSg==
-Date: Fri, 11 Apr 2025 20:45:19 -0500
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Kees Cook <keescook@chromium.org>
-Subject: Re: v6.14-12245-g91e5bfe317d8: Boot regression: rk3399-rock-pi-4b
- dragonboard-410c dragonboard-845c no console output
-Message-ID: <20250412014519.GA1905363@ax162>
-References: <CA+G9fYve7+nXJNoV48TksXoMeVjgJuP8Gs=+1br+Qur1DPWV4A@mail.gmail.com>
- <20250403011849.GA3138383@ax162>
- <CA+G9fYtrsLHvMH=ofmdS3MMsMTEj3k0PD7=qsRsA4WkSqLkCzQ@mail.gmail.com>
- <20250405002757.GA836042@ax162>
- <CA+G9fYv=jUunRgUs=ROptP4p5DNxUuUHxYsnWaxUUXbiwdszsA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hMPcdfla"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744422920; x=1775958920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wmKnxb7GFyuae2WQ6SVt9gXSex8dPJlcbqKCyw/Zp1E=;
+  b=hMPcdflaXeqBa+cpEWt2oGHRHyRReLuscD77P99PcimkMnQ0jfISqJcn
+   5sHaB4GR4JjYPlVfLOy4TX6WbGhwumeD91kMaszkCg0K6FC/JrAHxjnLv
+   5tGrkCRLxkkeVhAgLdHyb/aZEi8/vpI3a9jh4jWZv+QmLmQlVIWFj2wPN
+   dYtT/LLfJmxA3pg4L4rsKBvJ2eg0ZyE15x/jpHqjpW1YyRXUXsnhR3D+l
+   hPJeIIcYirhcKKN4cyHzh52wuJWlH4uJztySrXhO7AyFDO5qHLqrIwI7o
+   /NiURYvP5yjfUSAkfLQ1ey4JDl22khaMEK7NLuC2X4OmCdjLQjWiXxYUy
+   g==;
+X-CSE-ConnectionGUID: rLnjknrUSa+MWJSVyu8b7w==
+X-CSE-MsgGUID: YXbLoGTZQmaq74SXROuRaA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="68470303"
+X-IronPort-AV: E=Sophos;i="6.15,206,1739865600"; 
+   d="scan'208";a="68470303"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 18:55:20 -0700
+X-CSE-ConnectionGUID: ysXp3TG6QtWGgy+aKhK3mg==
+X-CSE-MsgGUID: zCIgpvvmTQKne7wo+UtwKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,206,1739865600"; 
+   d="scan'208";a="129319566"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 11 Apr 2025 18:55:17 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u3Q5S-000BVW-1o;
+	Sat, 12 Apr 2025 01:55:14 +0000
+Date: Sat, 12 Apr 2025 09:55:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yaxiong Tian <iambestgod@qq.com>, rafael@kernel.org,
+	lukasz.luba@arm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>
+Subject: Re: [PATCH v2] PM: EM: Fix potential division-by-zero error in
+ em_compute_costs()
+Message-ID: <202504120921.Wqmipx6e-lkp@intel.com>
+References: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,33 +66,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYv=jUunRgUs=ROptP4p5DNxUuUHxYsnWaxUUXbiwdszsA@mail.gmail.com>
+In-Reply-To: <tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405@qq.com>
 
-Hi Naresh,
+Hi Yaxiong,
 
-On Fri, Apr 11, 2025 at 12:49:17AM +0530, Naresh Kamboju wrote:
-> clang-nightly boot failed with stable-rc 6.12, 6.13 and 6.14 and
-> mainline and next on following devices and virtual platforms.
-> - dragonboard-410c
-> - dragonboard-845c
-> - rk3399-rock-pi-4b
-> - Juno-r2
-> - e850-96
-> - FVP (Fast Models Fixed Virtual Platforms)
-> 
-> Boot Test links,
-> - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.12.y/build/v6.12.23-2-g8e0839d16957/testrun/28076019/suite/boot/test/clang-nightly-lkftconfig-kselftest/history/
-> - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.12.y/build/v6.12.23-2-g8e0839d16957/testrun/28076006/suite/boot/test/clang-nightly-lkftconfig-lto-thing/history/
-> -  https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.12.y/build/v6.12.23-2-g8e0839d16957/testrun/28076009/suite/boot/test/clang-nightly-lkftconfig-hardening/history/
+kernel test robot noticed the following build warnings:
 
-Thanks again for confirming. As this is reproducible with the FVP, I was
-able to cobble together how to boot it locally with tuxrun and your
-configuration (which felt rather convoluted to get from the website
-above) and use that to bisect LLVM:
+[auto build test WARNING on amd-pstate/linux-next]
+[also build test WARNING on amd-pstate/bleeding-edge linus/master v6.15-rc1 next-20250411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-https://github.com/ClangBuiltLinux/linux/issues/2082
+url:    https://github.com/intel-lab-lkp/linux/commits/Yaxiong-Tian/PM-EM-Fix-potential-division-by-zero-error-in-em_compute_costs/20250411-093452
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/tencent_EE27C7D1D6BDB3EE57A2C467CC59A866C405%40qq.com
+patch subject: [PATCH v2] PM: EM: Fix potential division-by-zero error in em_compute_costs()
+config: i386-buildonly-randconfig-003-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120921.Wqmipx6e-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120921.Wqmipx6e-lkp@intel.com/reproduce)
 
-I will continue to look into this next week.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504120921.Wqmipx6e-lkp@intel.com/
 
-Cheers,
-Nathan
+All warnings (new ones prefixed by >>):
+
+>> kernel/power/energy_model.c:247:14: warning: variable 'cost' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     247 |                 } else if (_is_cpu_device(dev)) {
+         |                            ^~~~~~~~~~~~~~~~~~~
+   kernel/power/energy_model.c:253:19: note: uninitialized use occurs here
+     253 |                 table[i].cost = cost;
+         |                                 ^~~~
+   kernel/power/energy_model.c:247:10: note: remove the 'if' if its condition is always true
+     247 |                 } else if (_is_cpu_device(dev)) {
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/power/energy_model.c:238:32: note: initialize the variable 'cost' to silence this warning
+     238 |                 unsigned long power_res, cost;
+         |                                              ^
+         |                                               = 0
+   1 warning generated.
+
+
+vim +247 kernel/power/energy_model.c
+
+   228	
+   229	static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+   230				    const struct em_data_callback *cb, int nr_states,
+   231				    unsigned long flags)
+   232	{
+   233		unsigned long prev_cost = ULONG_MAX;
+   234		int i, ret;
+   235	
+   236		/* Compute the cost of each performance state. */
+   237		for (i = nr_states - 1; i >= 0; i--) {
+   238			unsigned long power_res, cost;
+   239	
+   240			if ((flags & EM_PERF_DOMAIN_ARTIFICIAL) && cb->get_cost) {
+   241				ret = cb->get_cost(dev, table[i].frequency, &cost);
+   242				if (ret || !cost || cost > EM_MAX_POWER) {
+   243					dev_err(dev, "EM: invalid cost %lu %d\n",
+   244						cost, ret);
+   245					return -EINVAL;
+   246				}
+ > 247			} else if (_is_cpu_device(dev)) {
+   248				/* increase resolution of 'cost' precision */
+   249				power_res = table[i].power * 10;
+   250				cost = power_res / table[i].performance;
+   251			}
+   252	
+   253			table[i].cost = cost;
+   254	
+   255			if (table[i].cost >= prev_cost) {
+   256				table[i].flags = EM_PERF_STATE_INEFFICIENT;
+   257				dev_dbg(dev, "EM: OPP:%lu is inefficient\n",
+   258					table[i].frequency);
+   259			} else {
+   260				prev_cost = table[i].cost;
+   261			}
+   262		}
+   263	
+   264		return 0;
+   265	}
+   266	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
