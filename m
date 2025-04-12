@@ -1,57 +1,58 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522CFD531
-	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 00:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DB4B666
+	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 00:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744417827; cv=none; b=Riqkmq52ZrVTMMy2nCSTstAAlvBNm5AX8lZkfba9tV4Ge6GjBFSyzXLT/Ez2dh6WlBDo52jXGM97ASrqhuClUNXzB+6efT4zb+GwU83jNPQSAhtE7Kc6esgk0GjTTmI7qzdtSI6+NkuWZHINShe41k5Vc74igF7mhQ/bvp21Onc=
+	t=1744419484; cv=none; b=N2xl4VmE8ZR7VYodCj+Vwgx3/2UGAFqFeuMmLKPNR+ax4t0UXjHx0FTCsXayjnwTlSzxaH04cBWRhwxxqLQ1D8AznhUD2Jw1ARMVM6Q01CegdfV04RblGeUAgDCECIeOzFHG6aU23owBtLmcoGjEfkaGWMZiuc9Ctw0UCxeN5XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744417827; c=relaxed/simple;
-	bh=/T7qziyieFTegoHq1quoWb4FCMn7r7gq2B6DB98pUrY=;
+	s=arc-20240116; t=1744419484; c=relaxed/simple;
+	bh=4tcELd13teizB6G1R71cLt4/wC29H1yVOSMkrjYkSLc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rGNpMRH39mqR6g9VT2C6AhkowK/CWLTiwF2twfWg2Imjfnq3wfiYTPcxgTSfhYRDhnaJtfR1aTOJcvb7RxZxgM2II7gkKYbO3h7so8j4PfP5KxbUAkS2hDLWPJsbDOonjd2bXqJnv9pATaTvNRsktFjsrQvxJvwaGRQS225b59A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZU7bgVQn; arc=none smtp.client-ip=209.85.218.50
+	 To:Cc:Content-Type; b=bYNw1U8kj8dNyUTgxhquEPXc2W2F1n+802wPznNH+JYFhijcXiMd0OEOL7xgeiUlf4EQCo7i4QvvHJIfbevENcLG8V2ND+htGauKzDkjC/ppZX95oUoXoGbu/U/EiRiiel/lRaIiq0+cadZ85NscbRCOCNdpsTJH8qaCPig+Uu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEI2fy5z; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZU7bgVQn"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-abf3d64849dso479192766b.3
-        for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 17:30:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEI2fy5z"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso18281695e9.0
+        for <llvm@lists.linux.dev>; Fri, 11 Apr 2025 17:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744417823; x=1745022623; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PY0NYpmztQQnq3XrvsDCNu1j/I4xBInhxN+nOQvSP1o=;
-        b=ZU7bgVQn8GJPU6qhMnBI0bI0EM8HUScY6yLCu6V569jk2N701tWwiyusRAQq15c2gs
-         Yf+Y+tNcDzz/bB/OqqnDxlEH01KWaqvXkLZH1f8BuvNcVL3I6M1SpFis03Q9GyOSLWUI
-         Pp2UK8wGGKEQKdp9MbU84HNwrZqi1o7oLr0Zts6zjlGFYCNBR7HMo1gOPv4SZsSPyXKu
-         ysv+pLpOdhxWl68FhLxUbLDU+Eaz03dTTU5d/PJzn87IWaW6U0bZNVa/XsQCdFSXv0+b
-         mUy7W6lXXUBY7+JfJzqhO2T1POs3b6LJ40aMNLfAJ3JxxaeeoNyUWyo26e0rAghbMf7e
-         hbJg==
+        d=gmail.com; s=20230601; t=1744419481; x=1745024281; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=offdqmvkFJfHM6QzgUBHAoAKLM8GIhKmAd/u+Vakz+Y=;
+        b=QEI2fy5z6PJIf5OaBCexnBHnf+7hTonUJHznT6rFHQL6rePWhfjSMg0Mo/OHRWN8uz
+         66qpW2XJM5zfojil/k0p5PtLB3LZngniAa0lLSGLQQ9412pwvHBjBJjLbEZ2CGJL4S1u
+         GNLGq6I4NabGSNxOAFLvArMhPLDIObCDWL2stD6uKCG4gcZ8gV1cWTH3iyx1Jg1U4g3S
+         rZS5RiceQ46MTHHUTM+BLRc9ap4OO3Riv5JXV6eLgWkcx1kMpXZV3sRnS3VJjclnA0+0
+         /t7Upl/pHakRhM3gNyD4WtHLQBYX2A6jqSdzpKsDq3dyg+wA7MHCX7aPD+indu9Xf3dP
+         s1AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744417823; x=1745022623;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PY0NYpmztQQnq3XrvsDCNu1j/I4xBInhxN+nOQvSP1o=;
-        b=R+prIjJvofvMW1lUOSFP7BueKmokeu88yG/Nt8NYxlcD4NZe/1Z2wGV1fmlT1Msvfg
-         YXT1XqqOfeR7nOXA63vyTC2CXntVe5EpZ0n6/YKclKtBZSq9jsHeDN+9RbPHfmR+ceYo
-         NnwHQq/B8fTK7BGPKVKSIv4b433ckS4P5Y4CJA7LY+8nQBLsP2izQAb6Ub4+YIOwJqBZ
-         YszvGrCWWXgheom/h4xvnTra/8YE+jopgmxl8King6RcVlIfHD+9alYOBLDuA7dkYrOv
-         yCpisk/SPELVHBIwhZrj4gXtn4nTR4HoNGdKasDtLWuRXQybH1VnbeUrVOMmTkxcNjzs
-         wbbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVcEcufTTfFAmYAv/w7UnrRRNBW4BHaUcY6OZUp7QQUB+l3dzslGJVYzrryeJ6a/RzpzRW@lists.linux.dev
-X-Gm-Message-State: AOJu0YyMkl4ZL7R08KZAcAwTo/wPvzKlSiQYLDjnwGKnBBK+hbVR5c6y
-	oqpQCBcudSaQ5NcaWguYFGaPpA1t7Z8Z93D6P9yfSfSTChjngckOdlGyY+Np2PDJ6IBfc6kE0MX
-	AWLGhFRtcE+N4L5QhhHuesJmv0V4=
-X-Gm-Gg: ASbGncsnxG4vwGMh+679VFDs+oMIr9k6hE9lnqidIpHHHKC4rpgAqe+D0SNkwQSmpPV
-	UAWz4PqKevdcw4djX3qMPraszlnnJsj3f431JOwsD5xlHLJmHr/aycPqDpCt8Jh+fw5DHGh3L27
-	WGGEyWDLWlkG+s4QstlCnz/4ph7Iaa0Y5v
-X-Google-Smtp-Source: AGHT+IHV6V1Nd199fyktCVt8NkaX19y3fkdxuYg3faWj9lISfY7XX+/TP8euSAUokRbzoCnATi1D27aZXunIc9oKc/4=
-X-Received: by 2002:a17:907:a05:b0:ac6:b811:e65b with SMTP id
- a640c23a62f3a-acad34fca94mr400892066b.36.1744417823251; Fri, 11 Apr 2025
- 17:30:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744419481; x=1745024281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=offdqmvkFJfHM6QzgUBHAoAKLM8GIhKmAd/u+Vakz+Y=;
+        b=ks7mJ3Cvuc4wMJZWk4Bsu2RNKzBuqVk92+z7rISh5/qpo1xy2QZdkBOAGOC9bvirfa
+         D8vXiZF5YHpnaz4FfakBdQWAhXJQi5p5/M2mVW5tHWyWIC2fSXv1/9+zUUo/55RJstMh
+         PgUPsK6OvJhmw0O0Rw84RGBfL5lmLPgCgQydwUMdhhoJY2k2zW6cA2SdLACg9BzZuTW8
+         MroZjQK9MRa+0x0WMoGiUbkgYlRhWug/xl4poJBi6ef5Dgi2P+FFWL3SesJm6jx6kXXi
+         T22vE3ZHgO0EZagudaESBDbZoXfNshKsjOjPJwIoS3n2alANFF1NqyODyttKKl+BAzQ9
+         S5fg==
+X-Forwarded-Encrypted: i=1; AJvYcCWiuHb2qkG2JNGMIhTv2dv7ULOGjUolnW9i3KNoNP07jNiI2dVOa8DKf3DhvbpnxTW0d7GK@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx/5OwVXxOAoxXqctTQlOG0QihcXUkVb6CB195nh2UTqrZa03LH
+	6EIaY4Wk2QW4Q+Ds+61zT2YpSmsTR3AwQxZxmtVWEZU5ljk4NjLaKxC3KGLnDaQUV7zG0gCduhP
+	wHB/cUqMfh40Yvd6yPPbtYOmt0j4=
+X-Gm-Gg: ASbGnctMoKIDVosmQqCm5AqxYTHSEG52wBB9n2rNZc0To3F6z06brzm7ys7JNhDAQYO
+	AS7svSENTz0rakFy3FoaQPmmQcO3a7rC/+KF0f2nt6BC8bum4vMLMvOc7t2/l7aAw8quXJT/hV2
+	IEtecs7d4P5bWOv+0yGbFa4qlTf31g3I4qAAbFA/YQrt04zn4v
+X-Google-Smtp-Source: AGHT+IEFrfwIhf1dnPGv0cjHH5i2aO5ebUNrMZZQ/ewydMhNLm+WsR+aOi4a8v0IlIUg+wUzUz/zyHgd2Dl4JnAcXUM=
+X-Received: by 2002:a05:600c:5494:b0:43c:f050:fed3 with SMTP id
+ 5b1f17b1804b1-43f3a93d850mr43211925e9.11.1744419481051; Fri, 11 Apr 2025
+ 17:58:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,13 +61,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
  <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
-In-Reply-To: <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Sat, 12 Apr 2025 02:29:47 +0200
-X-Gm-Features: ATxdqUFPaRCdqR9YUd32953YWnbRjZkMYnjK4v1HZns0nPmHonjmjDP4iQ6M380
-Message-ID: <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
+ <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
+In-Reply-To: <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 11 Apr 2025 17:57:49 -0700
+X-Gm-Features: ATxdqUE8eJ3t2XNtv61JfqDn3ir3RXF5bRaDRxRoOmmkz_xcdixjr5poHk-cOzk
+Message-ID: <CAADnVQJ5VaXVN=L+0ygEWJkMtPZnqAVEoeFiLBvikntX0zD49w@mail.gmail.com>
 Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Matteo Croce <technoboy85@gmail.com>
 Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
 	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
 	"David S. Miller" <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, 
@@ -88,49 +90,44 @@ Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn
 	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
 	Cong Wang <xiyou.wangcong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il giorno sab 12 apr 2025 alle ore 02:19 Alexei Starovoitov
-<alexei.starovoitov@gmail.com> ha scritto:
+On Fri, Apr 11, 2025 at 5:30=E2=80=AFPM Matteo Croce <technoboy85@gmail.com=
+> wrote:
+>
+> Il giorno sab 12 apr 2025 alle ore 02:19 Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> ha scritto:
+>
+> Similar to what I proposed here?
+>
+> https://lore.kernel.org/bpf/20211203191844.69709-2-mcroce@linux.microsoft=
+.com/
+...
+> @@ -1346,6 +1346,8 @@ union bpf_attr {
+>   __aligned_u64 fd_array; /* array of FDs */
+>   __aligned_u64 core_relos;
+>   __u32 core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
+> + __aligned_u64 signature; /* instruction's signature */
+> + __u32 sig_len; /* signature size */
 
-Similar to what I proposed here?
+Well, yeah, two fields are obvious.
+But not like that link from 2021.
+KP proposed them a year later in 2022 on top of lskel
+which was much closer to be acceptable.
+We need to think it through and complete the work,
+since there are various ways to do it.
+For example, lskel has a map and a prog.
+A signature in a prog may cover both, but
+not necessary it's a good design.
+A signature for the map plus a signature for the prog
+that is tied to a map might be a better option.
+At map creation time the contents can be checked,
+the map is frozen, and then the verifier can proceed
+with prog's signature checking.
+lskel doesn't support all the bpf feature yet, so we need
+to make sure that the signature verification process
+is extensible when lskel gains new features.
 
-https://lore.kernel.org/bpf/20211203191844.69709-2-mcroce@linux.microsoft.com/
-
-> The verification of module signatures is a job of the module loading process.
-> The same thing should be done by the bpf system.
-> The signature needs to be passed into sys_bpf syscall
-> as a part of BPF_PROG_LOAD command.
-
- static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- {
-@@ -2302,6 +2306,43 @@ static int bpf_prog_load(union bpf_attr *attr,
-bpfptr_t uattr)
-
-> It probably should be two new fields in union bpf_attr
-> (signature and length),
-
-@@ -1346,6 +1346,8 @@ union bpf_attr {
-  __aligned_u64 fd_array; /* array of FDs */
-  __aligned_u64 core_relos;
-  __u32 core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
-+ __aligned_u64 signature; /* instruction's signature */
-+ __u32 sig_len; /* signature size */
-
-> and the whole thing should be processed as part of the loading
-> with human readable error reported back through the verifier log
-> in case of signature mismatch, etc.
-
-+ if (err) {
-+ pr_warn("Invalid BPF signature for '%s': %pe\n",
-+ prog->aux->name, ERR_PTR(err));
-+ goto free_prog_sec;
-+ }
-
-It's been four years since my submission and the discussion was
-lengthy, what was the problem with the proposed signature in bpf_attr?
-
-Regards,
--- 
-Matteo Croce
-
-perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
+Attaching was also brought up at lsfmm.
+Without checking the attach point the whole thing is quite
+questionable from security pov.
