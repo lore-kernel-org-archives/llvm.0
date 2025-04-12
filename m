@@ -1,112 +1,80 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B13033DB;
-	Sat, 12 Apr 2025 22:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA88838385;
+	Sat, 12 Apr 2025 23:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744497494; cv=none; b=UXxp0/iawRY8PNEDqwmxzCJPjx9YI1NRjfYNQ0TTwxFw6Pw15JruVa5gyKg2mJoOqVJ4i5A2LOYtgdWGMyFtpMncjiWUaYYq78FvLfybpn3yd/Oayy5ej3SGM/MifwzVoMTrO63TDfpE3dRQYmeAf2opc8eolbcRoSw0JXxnpN8=
+	t=1744499480; cv=none; b=PDFpXaNMtMGVwR2bLRk7gdQp+VRcVqU1YIWvALnrRsy8yb5yInbCu5xQ81W3FzV4/3exUscvlcf07V7EaI03jS/4KhQvk3qU8nxkuIn7aHoiltpoXmwu+IoEynNtJ3bGUtgR7LE2z2w6fOevrJInRAm9BcTpcAplb1FfMw4tNwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744497494; c=relaxed/simple;
-	bh=MFJdY5YeCNFXOhppgG525dCEyR/3V3zbq07FhS9Eib0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jfrFB11q5Q0EyUNehqT1/mt02ENTacIavua8CNMvSm6YA0cVW7NmyiAvJFJfFr1wrbzlSMjK6wphndV60DIm1oorm020BhoxubRELqB08JPwIQ+M7WOBKyBc6JNlQscdAA9zrP7SvYDpE2hoW6nT0+9dp0JEmA65LTQl/s8gt1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ndKv/FoJ; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744499480; c=relaxed/simple;
+	bh=Z8ANyn5BO+4YSxFMj2ZIePI2Es9dy8Hv6toZ4ucWxdY=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=iSvsq5gPR4dyq0UTh7mA0LL37z0VWR2087NB+w6eqsXvrhO3by4lj0JJSs643LHcmk9sRyFJ5JRc6ZYhoxOppFesZKR69HQhfuWV150Jyvt3lkzDcjU2/9j/woaCDh7RVmd6awk6YZGXxulRzn61krfAMgOAC0joUrmZQi1wfeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=lMBig7n3; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndKv/FoJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744497493; x=1776033493;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MFJdY5YeCNFXOhppgG525dCEyR/3V3zbq07FhS9Eib0=;
-  b=ndKv/FoJFu78sMpeT+QEDSuN1JoqVvxbIBnmB+0z50/t3R3hccuTA41/
-   xgqwZoY2FQpJsz5vvSEJcl+5TQsWTU5t01FX/GjEAW17c+XPSzvYJR/2g
-   5znKZgSpGK8eMFQrW6T7ZTHOz8g4D7pdgtT7UBRJEdPWtXm7Atiia5t35
-   xcoF4oTMA7iGBGvGUIH498149+AoowYePA0w1hHGo+ydsxI4t8fOhWuNF
-   IMw2q+grRmq7QcytLSzJaTcvG4LdvADMjtNhUwt+/VaRmtuggOszrJaxq
-   Yd0/8ZnNy1qAf0wLyNGZiXplQl7bKLLTgaM95CEHMk475i+k2GqRqqkKP
-   g==;
-X-CSE-ConnectionGUID: Bn1qvMROSEaGwA4Ir97j6A==
-X-CSE-MsgGUID: CSB3Oq9bTnOZQZotIFkopg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="57379333"
-X-IronPort-AV: E=Sophos;i="6.15,209,1739865600"; 
-   d="scan'208";a="57379333"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 15:38:12 -0700
-X-CSE-ConnectionGUID: gEX3VPH+SLy3CE9zzl2aEA==
-X-CSE-MsgGUID: SpSNIEtOTpaOJCr5Te45JA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,209,1739865600"; 
-   d="scan'208";a="160470815"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Apr 2025 15:38:10 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3jUG-000CBi-1j;
-	Sat, 12 Apr 2025 22:38:08 +0000
-Date: Sun, 13 Apr 2025 06:37:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:netns-debugfs 3/3] net/core/net_namespace.c:1656:5:
- warning: format specifies type 'int' but the argument has type 'long'
-Message-ID: <202504130642.HaAQv94V-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="lMBig7n3"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53CNA8tE1265382
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Sat, 12 Apr 2025 16:10:09 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53CNA8tE1265382
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744499412;
+	bh=Z8ANyn5BO+4YSxFMj2ZIePI2Es9dy8Hv6toZ4ucWxdY=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=lMBig7n3wyGQ77xYpn5pnxKVN4QM3Vkq6hDZcLvPaFwS2PWF/n09rzmm4i6ZIrSlX
+	 ldJKqqxh7XGdq6n0fK1xSbkbF0eDIoNvUz2LhiGL+7mwgnCfFlBgBbxU3imjGP8GwY
+	 zTU8dvf1jWNkf6+mSxkledPR0XPGAcZA1I9f+5+YiIA5YgCTj3M0isuBNWaO1BHck1
+	 A5Uh/ZdjOxEnzIwdlikBQnfr1jA4LYpMjCETWZHP0OeiOO0PyexivLyItY7m/buoB1
+	 Qlv5YTi1XbrFcCf8wBQrrImS7wL6ntMIDtBYRTjjMB9jzG1ZKHtxezcpa9pVk9CqYV
+	 YnyFnuF53LDCw==
+Date: Sat, 12 Apr 2025 16:10:06 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Xin Li <xin@zytor.com>, Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+CC: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v1_10/15=5D_KVM=3A_VMX=3A_Use_WR?=
+ =?US-ASCII?Q?MSRNS_or_its_immediate_form_when_available?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
+References: <20250331082251.3171276-1-xin@zytor.com> <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com> <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com> <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
+Message-ID: <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git netns-debugfs
-head:   193510c9521581018efe6f51e0aeddbafc8c103e
-commit: 193510c9521581018efe6f51e0aeddbafc8c103e [3/3] net: add debugfs files for showing netns refcount tracking info
-config: arm64-randconfig-004-20250413 (https://download.01.org/0day-ci/archive/20250413/202504130642.HaAQv94V-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250413/202504130642.HaAQv94V-lkp@intel.com/reproduce)
+On April 11, 2025 9:32:32 PM PDT, Xin Li <xin@zytor=2Ecom> wrote:
+>On 4/11/2025 2:12 PM, Jim Mattson wrote:
+>> Surely, any CPU that has WRMSRNS also supports "Virtualize
+>> IA32_SPEC_CTRL," right? Shouldn't we be using that feature rather than
+>> swapping host and guest values with some form of WRMSR?
+>
+>Good question, the simple answer is that they are irrelevant=2E
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504130642.HaAQv94V-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/core/net_namespace.c:1656:5: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-    1655 |                         pr_warn("net: unable to create ref_tracker/net_ns directory: %d\n",
-         |                                                                                      ~~
-         |                                                                                      %ld
-    1656 |                                 PTR_ERR(ns_ref_tracker_dir));
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +1656 net/core/net_namespace.c
-
-  1647	
-  1648	static int __init ns_debug_init(void)
-  1649	{
-  1650		int ret;
-  1651	
-  1652		if (ref_tracker_debug_dir) {
-  1653			ns_ref_tracker_dir = debugfs_create_dir("net_ns", ref_tracker_debug_dir);
-  1654			if (IS_ERR(ns_ref_tracker_dir)) {
-  1655				pr_warn("net: unable to create ref_tracker/net_ns directory: %d\n",
-> 1656					PTR_ERR(ns_ref_tracker_dir));
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Also, *in this specific case* IA32_SPEC_CTRL is architecturally nonseriali=
+zing, i=2Ee=2E WRMSR executes as WRMSRNS anyway=2E
