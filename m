@@ -1,99 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C54151991
-	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 22:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5191922C4;
+	Sat, 12 Apr 2025 22:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744496531; cv=none; b=QcoFLps8aBaIUztWgX9MK/y4oHkDn4kDa7LMKFNrdoc/mBlh9quzgU9UWC878kM71M/r/e42PEXg9LlBFcUXmx2G+3Gy5PzdL88BzgadSRNhj5rd8cPMvejRHkb95g209JcYllRqbvnlPfykcDruHxgtP/x0koAQO5+bhVLks1I=
+	t=1744496902; cv=none; b=i//fHs19ZlcvNvsqNBRSv39bddFhwBl3gPhIfyWfT+EIRru16p0Ln6tX5Zr02zAbpQzVDkwmROOy31YBhuAsD7Yu1sF30y/LG5fb7Je74i2Lia7bIDvJ1pJrGHaroaIVJIqtR3Yo9S6+Z3dQqqRy9DAehoT0/LWlC8G8Vtrxtgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744496531; c=relaxed/simple;
-	bh=RKI2Wpi8rUCHiE7RkoriB3zHcmg9avHbrlHAmwhgfdk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=cHCMbgOxxKJbg4rfnphEbb9rNGry4PdpTdmzMqd5lnLjIdgtqUx/0mDCkY8t5Ki1zXuIi+qlX9HaxyE+KTtZlyrNWVesTXYXF2BrlIiZpjaO5xnsjqOznqOKOsrQNzeZUQ9yx/nllBcyI1OCusu8weShmB+5YKSjBcZyZMuW+Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yj4itGqu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744496902; c=relaxed/simple;
+	bh=r2pJ9ECQtCo3FvrB2D7ogVBONNlppbZSTFqZGpwzXl8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kMAHyRB3tXW4seQnbC3djn9zvoqftHO1hRH0oy6PFOg6lU4qAcvyz2kdt/YQraOhISd+IEaGEg19VElHoiMq+lpVpnyQH0F7eXfnoxE7jonzLlJQ9oRodvpRaBFvH1WxxJtDrdfHn2jkQow1ppf/8QaeZEYfsjsI3yXDpA8tj9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHnL8cqP; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yj4itGqu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744496528;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KoL0XcA+qDcbOf1z74m/pA7dKUZDohQgOkzkvKyzOUs=;
-	b=Yj4itGquXFnd6E81wYjSYBK3bYw2r0Fcp27pOM4oI/G3CcConTYwKVmfUI1xthDunf9A4w
-	pdZeeS1ZHaT0F7b1SLL66r4PTy1XBmqQ/18TrXJNxUgwfii6JM7b39O/OPtgKN3/kzopQD
-	ii4BpzLOdGILM1/BN9BIp/O2BKJi46w=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-o2esO9j_MTmS7M5TEFr2aw-1; Sat,
- 12 Apr 2025 18:22:06 -0400
-X-MC-Unique: o2esO9j_MTmS7M5TEFr2aw-1
-X-Mimecast-MFC-AGG-ID: o2esO9j_MTmS7M5TEFr2aw_1744496525
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11F031800349
-	for <llvm@lists.linux.dev>; Sat, 12 Apr 2025 22:22:05 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F2209180B48C;
-	Sat, 12 Apr 2025 22:22:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc1,
- upstream-mainline, b676ac48)
-Date: Sat, 12 Apr 2025 22:22:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHnL8cqP"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-39c1efbefc6so1780888f8f.1;
+        Sat, 12 Apr 2025 15:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744496899; x=1745101699; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GNS6Km7it7tBhxBj7WjrNGwGk7u4QM9jaHaHQcsfxXw=;
+        b=FHnL8cqPYPE+ToOJvrPHGrZ6BlxL1v/veVrVGqfNP8O+tdBW3DZLoL2xnXM8QL5pp5
+         xEtvorF+mBkCLEZ3ti4yyT2IIuY81ZOL185LHyUT6Fsq07easHo0saJX3qULxZY+N8MH
+         zAGQo08yyL/2EMQT+QVnINPRw3VExf3/YVUCm5YrtIJ07fatruAtVNw8SHNj5RNqkAsR
+         VxF9P4raibxRO1EyNYA7NoHPxipw2Ni8wXOYQ8HoNoTkioLDn8zUH2z6mwPwKt33v2SF
+         WX0v+DUjKZAB6u1c/XLpiB2GvSzeDecNDV61QsYMTtCe+NUUE36iv5aJwlNsNmCq6Dco
+         4bSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744496899; x=1745101699;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GNS6Km7it7tBhxBj7WjrNGwGk7u4QM9jaHaHQcsfxXw=;
+        b=GjViFiG47bExgHNcBrHVzYFlO1uIE9u7Y+FtIoUZv55YM7qCz36HdvVnIOFdpkPCJc
+         QHQQRTkRmikllPP7gdt8BawwfaYnZuQGIYIOzkIz/4akQEWD5+/v77JO95X6yYrwIC/9
+         vpNrMVxAN7ka4DEb9xErt5L/n1C80m9MrEApDvEPqjP7oHBZ9EuJWIo9EWl26MDO/qWm
+         F4AKmLe3CXVJA82ZXzLz46T9nmUmv/gKqv8EQAB3kKrNh04VtvLvfTTgbyw145tHAD1F
+         AZAvaijXhQYzWhlc97BasdzYSgu0B90MIr1yIkhIpgPyVwxUAAGcd0+JWGP1mU2MvPKH
+         H9NA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJlRDg4e/zjBrVJ/01vCS4HwgmV+bT2vJFeY6ywIUEs6pFSRYVcGLE1STnAyzmjm5ScfAq1neJtXIuC8wB@lists.linux.dev
+X-Gm-Message-State: AOJu0YzfPbNYPDJUuCmTntaL42mzOjYjKZx31HfcjMrEu1sGA7WmXc74
+	XJaoPvoYeKsp/u69G7aOCXz1BHgqc8+DBj0GCb96vSCYbAX95tIu
+X-Gm-Gg: ASbGncvpeVR9keZIOeHgloY5n9gxk6EzOxvhrAGfC99pidlhrXVF3cAH0LjEX7KbMBc
+	3MGM/rwuepmhj6P96Dp3UVUzND6QhCe4FovkWgpxCK+txlPjhZ8sfLZBKCM5Z0EQXTr0bmOZZ5A
+	e6BabUEC5KMFo/BW/ZBv3UtKyBY9supSvk1sQcFbcSWv3oBwlpOmvZs90LUUdCzF8zdiv4i3mZj
+	nbpDV4mwEHV41wHB++fBv9ktSPVDc5++h/cD7vR0w9uPmy2AOJDdia70EvjiZlz5k6ljhr/qBM1
+	bnPzVts4OttmIdHPOmxBgoTDto4WC+qMVIc1p+0=
+X-Google-Smtp-Source: AGHT+IGXIrxkJ8nKaisNDDAp5cgBKkEtUUgaMk8r2LuFdsV/EADhHJUGeS0JND0WARPR5ri1DSf5wA==
+X-Received: by 2002:a5d:648a:0:b0:39a:c9ac:cd58 with SMTP id ffacd0b85a97d-39ea52124fcmr5724512f8f.29.1744496899192;
+        Sat, 12 Apr 2025 15:28:19 -0700 (PDT)
+Received: from qasdev.Home ([2a02:c7c:6696:8300:2ee:4c6:5dc7:f715])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae977513sm6079017f8f.42.2025.04.12.15.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Apr 2025 15:28:17 -0700 (PDT)
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: jlayton@kernel.org,
+	akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] ref_tracker: use %ld format specifier for PTR_ERR() during directory creation failure
+Date: Sat, 12 Apr 2025 23:27:44 +0100
+Message-Id: <20250412222744.9459-1-qasdev00@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <69705.125041218220600203@us-mta-67.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 9ASsdg6TY97nxsRxnoONnoN6LbOXuJFsZM7tfaj8GsQ_1744496525
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+PTR_ERR yields type long, so use %ld format specifier in pr_warn.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Fixes: ada5a12aae58 ("ref_tracker: add a top level debugfs directory for ref_tracker")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202504130520.rX5EVbVq-lkp@intel.com/ 
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com> 
+---
+ lib/ref_tracker.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Kernel information:
-    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/bpf/bpf
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1765770331
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1765770331-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
+index 4064154252a6..02e9f0c3dd82 100644
+--- a/lib/ref_tracker.c
++++ b/lib/ref_tracker.c
+@@ -283,7 +283,7 @@ static int __init ref_tracker_debug_init(void)
+ {
+ 	ref_tracker_debug_dir = debugfs_create_dir("ref_tracker", NULL);
+ 	if (IS_ERR(ref_tracker_debug_dir)) {
+-		pr_warn("ref_tracker: unable to create ref_tracker debugfs directory: %d\n",
++		pr_warn("ref_tracker: unable to create ref_tracker debugfs directory: %ld\n",
+ 			PTR_ERR(ref_tracker_debug_dir));
+ 		ref_tracker_debug_dir = NULL;
+ 	}
+-- 
+2.39.5
 
