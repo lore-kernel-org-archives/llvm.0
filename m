@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8847049659;
-	Sun, 13 Apr 2025 05:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D852F196;
+	Sun, 13 Apr 2025 06:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744523276; cv=none; b=duo0HKrKcRQYxJKpN72QCov8Fa16LeJZ6OAN2Ebzp66N+GfQr6DSLpe3m9k138tytReDMpXc87k5vg2bHwccKxWL9uuuvz9QQJ9pEfM2izIeB7/JEuHTu1uKk9fgShGUG+b3ZGF+g3jNXrO3kM6wxUb+lzrLFgrbRE+kFU1K6Nc=
+	t=1744525259; cv=none; b=Xk6pVDTN1IQ9LbNaRhmZUWyfiT0DbIA2UmePRWY5bLcIOa9jjzbS3Gxod6Cd2VuYCOP4K3vWJzIVcedWqvLQW+OLfBwYpkwdWgBJUz3sYiNXlTysCCPohHJlhsuYyZ5YaaAljTtH8nKBfL5q6B7niuPFQIogTA+yb/XQQ/Dpw4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744523276; c=relaxed/simple;
-	bh=8W4AHi63mRxsRLOyeJuMgkUF3IpcX8z10IvrCbKLTVs=;
+	s=arc-20240116; t=1744525259; c=relaxed/simple;
+	bh=DOuccFwjx3DtmFeb6i/UK1FlO9LzVaJWlKYk6DXOYH0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eivsG5HjntHwBBZCWUSG8OA1wHJg3K8uVFtbM27ZAeZXhaRKl5B0/HCfBnJXkAZ6zzApgQ7eLfuLj+YH4GoAqCMvxBDuzUkd69tueAKnBX8yuBqZzufZDyQKVVg5BgMNn1p/MRhTsIPulGwErvUO7IarL6blzhhK6w1RJS9hDHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RkL0Q0BJ; arc=none smtp.client-ip=192.198.163.18
+	 Content-Disposition; b=HNdggjwD6j+9AG0TtL40Q7h7o9bgBA0qLyhk5I5566Wf/0V4FtGdBatWGBPqs9oWw2ZGLhRQKBjvzIvLo00oc9db/g3K0p+UB123mWFgotrRKIp+CI5BoSTXC6M59VFkB5340o5lXQuCd1zdgNIUunEDUTZ/xAQcVjrrIZmbbhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A0MugWvZ; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RkL0Q0BJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A0MugWvZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744523275; x=1776059275;
+  t=1744525258; x=1776061258;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8W4AHi63mRxsRLOyeJuMgkUF3IpcX8z10IvrCbKLTVs=;
-  b=RkL0Q0BJvV/O2jmnSy9jMpTj9hUVIWSgz7QGymTh/lAEDLv+6OQ8Iz+D
-   5n2OIj0Eh8d5L0h5Lco18rlegwfddbnD2nebvgHdA5o7RDS4sUN2eO0C/
-   mjBxLbcx52RAYxCOuzsbwdio8Aul7tz4cJe1z2KVTBSBpoFTdpC05rEjc
-   7ofXd9luGotPMqNfRuQR02NVoxg+wsGO4slk9o4YpTF4NRmP6gGqAoHEM
-   cJgN9sjYcn+ZDhpM5/FreGPJetScsWuJp16Q4Zl9TE4W+6uCdRyvOd6jX
-   FnyLQNLb5EvBJ2vyZ00h2dXeLpED4JjvNBYCdSyr8u7Kh1q97phjv5nxt
+  bh=DOuccFwjx3DtmFeb6i/UK1FlO9LzVaJWlKYk6DXOYH0=;
+  b=A0MugWvZ4FFpn/ceqKGHdFWAfnCMqQJz79sdK0dL1Oyq/H92LC+PDF1J
+   i2uz+BznCZ+CelYVNHaraZKoJvfg9VGU0D2To+/3kOhY4MbJ/Jt2OlERI
+   8YgD+hAwEXgbtUgcUWCSFX0Wmr1K0TZa/u5ozanXWcNdbIPlgPGfIPLWG
+   yGRBUz3igCg3uQOxAyoxyYNRtJr/1NEl66O3hv1YsIMU1EJR0l13UmO4Y
+   yKBGPVQn1KGzZHvVRqXuA9rReKbRC28kYkPZdq22Y3CeQy2bv+NdAXVBD
+   6IYwRZHdBClnkS9uyuX+nhzBAut6Jux8d0hfr845So5lk7jlQ2yEAlVU5
    A==;
-X-CSE-ConnectionGUID: KYci6IKGSaCuK27wsZytyw==
-X-CSE-MsgGUID: tVV/kKuzTzC5KZwMPskfAw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="45258517"
+X-CSE-ConnectionGUID: KQMNQOmUSzyCoiBdBp/shQ==
+X-CSE-MsgGUID: iDVXnbu6TcywAMRMINwwEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="46188469"
 X-IronPort-AV: E=Sophos;i="6.15,209,1739865600"; 
-   d="scan'208";a="45258517"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 22:47:54 -0700
-X-CSE-ConnectionGUID: gr+gBrD7TvGraHuFh/dXKQ==
-X-CSE-MsgGUID: spZ9LK3QSSmV4ksBER/bAg==
+   d="scan'208";a="46188469"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2025 23:20:57 -0700
+X-CSE-ConnectionGUID: nrxS57nhST+J5tQs2pZmxw==
+X-CSE-MsgGUID: xMsMr+QsRDy2v8Ye+KO5yw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,209,1739865600"; 
-   d="scan'208";a="160520207"
+   d="scan'208";a="133642443"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Apr 2025 22:47:53 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 12 Apr 2025 23:20:56 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u3qC6-000CPy-2i;
-	Sun, 13 Apr 2025 05:47:50 +0000
-Date: Sun, 13 Apr 2025 13:47:23 +0800
+	id 1u3qi6-000CQg-0P;
+	Sun, 13 Apr 2025 06:20:54 +0000
+Date: Sun, 13 Apr 2025 14:20:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
+To: Alexey Gladkov <legion@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/stale_mmio_cleanup 75/77] vmlinux.o: warning: objtool:
- vmx_vcpu_enter_exit+0x1dd: call to kvm_vcpu_can_access_host_mmio() leaves
- .noinstr.text section
-Message-ID: <202504131340.CpobMDjX-lkp@intel.com>
+Subject: [legion:patchset/x86-apx/v2.0 17/24] vmlinux.o: warning: objtool:
+ dsa_switch_do_lag_fdb_add+0x8b2: stack state mismatch: cfa1=4+752 cfa2=4+552
+Message-ID: <202504131415.qbvnG3Wy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,21 +62,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/sean-jc/linux x86/stale_mmio_cleanup
-head:   b7b72407847dc2556f98ece1383688bcb9cfb4c2
-commit: e2be948cc4686ec2476badfb082a2bb4dd869506 [75/77] KVM: VMX: Apply MMIO Stale Data mitigation if KVM maps MMIO into the guest
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250413/202504131340.CpobMDjX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/legion/linux.git patchset/x86-apx/v2.0
+head:   a8369a4fc596b6447e704431e54db866854ac7b9
+commit: 1d76a2141887d4c32a7e02bdbfda7f61c8670f78 [17/24] x86/Kconfig: Add Intel Advanced Performance Extensions
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250413/202504131415.qbvnG3Wy-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250413/202504131340.CpobMDjX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250413/202504131415.qbvnG3Wy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504131340.CpobMDjX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504131415.qbvnG3Wy-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1dd: call to kvm_vcpu_can_access_host_mmio() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: dsa_switch_do_lag_fdb_add+0x8b2: stack state mismatch: cfa1=4+752 cfa2=4+552
+>> vmlinux.o: warning: objtool: dsa_switch_do_lag_fdb_del+0x918: stack state mismatch: cfa1=4+752 cfa2=4+552
 
 -- 
 0-DAY CI Kernel Test Service
