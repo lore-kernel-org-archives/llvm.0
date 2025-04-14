@@ -1,93 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDA829B215
-	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 12:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C0A29C327
+	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 12:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744632819; cv=none; b=m7stB4ItfHnGwtlJTMAL2j1oUSkTEgyl172X1NaKjCEERZDZ+pQKrbaKKb2edu8qZo29FZIC43wgrxAp995Gu6ZdrT8mfDs4L+cn408OjPIhI5FpmqUqpcTjHGFFCNBkB6OrqyE/E42bloL+J64AzVEdK2gqP/2ufHUzMSrrbxA=
+	t=1744633792; cv=none; b=DVYNQI/chQK1LCzfPn9EfCbjnwv/XnMmmEIqDNkhOA3IOX/oWrBhvgkoEY57vDBnQzFPPVkavsuZNoBvTz2Rg15bWj5ukwUtlBAIVX9uQGe/1FBqxJhVdSJbZRBImrD8/001MeRnRMAVyX5rr9ETGm2NMe+hukRsq2JKd7N1xl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744632819; c=relaxed/simple;
-	bh=tek+9yIhv/inJSoNG6Oa9yTvOsy+wDQ1yZOAEV9xRTQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=L7snddHehaB20wGogMWH8osJKRbSR+U+k7H4vk2hiigO6y/bybEMJLOE9vJYpiKa4x6VyL95DCmoG1J2SOQUwlVpG3faGUxTWqhdPG/5YFmzjcR8jvgL59lltMCUQfjkFJHVCbOBBCs+YH1Qyaq/pPpbEXd0lFGJLNJ7I531RuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dJpqrkAc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744633792; c=relaxed/simple;
+	bh=OiYVXkZSfdT6nhBT2tfGSCxBMvJ7xMsZXCDnusianr4=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=Rce1fqLfgij7ll4NrfG140QT8Co5H92Ufu4H9W0GtIA26CCCMMUFaXbnRe2nS4C1RRVq63+BJiI2npe8drkJyCNmdtTLKtbLkEWPp9WIw5v48Y2TBYdl4LdeT8jivuyfI9oYjI/CiRDOvrMD2QgSrC3aKo5WOD1QIhb71CvjmBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vE5ERu/Z; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dJpqrkAc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744632816;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jGXOIiFLOKlRL+utvX2910PESSbxXzHZjxCc4Cz0fY4=;
-	b=dJpqrkAcq/48ULvuqgiO+8TQ0/Oe+XzsP/iU/4N7oHbByEYN0Xn2RhhEAXODuYx+l/nzNP
-	jRjf5jzv/8/6Fc0tk6k1G/RmryoJ2vf1bsuZBTHWAFYUpDCGnL9nLt6XvdYQjlKFMFpMBg
-	UXC3UT9aCbncmAkrnnseDf+j9m2/GKo=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-W9yS-uk8Or22d5cyR0Mopw-1; Mon,
- 14 Apr 2025 08:13:30 -0400
-X-MC-Unique: W9yS-uk8Or22d5cyR0Mopw-1
-X-Mimecast-MFC-AGG-ID: W9yS-uk8Or22d5cyR0Mopw_1744632808
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 977881801A1A;
-	Mon, 14 Apr 2025 12:13:28 +0000 (UTC)
-Received: from [10.22.80.44] (unknown [10.22.80.44])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 539F119560AD;
-	Mon, 14 Apr 2025 12:13:24 +0000 (UTC)
-Date: Mon, 14 Apr 2025 14:13:18 +0200 (CEST)
-From: Mikulas Patocka <mpatocka@redhat.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc: Jens Axboe <axboe@kernel.dk>, dm-devel@lists.linux.dev, 
-    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-    Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] dm table: Fix W=1 build warning when
- mempool_needs_integrity is unused
-In-Reply-To: <Z_zd1NCtn_QxaCzC@smile.fi.intel.com>
-Message-ID: <a0b1fcbf-9cda-9da2-ecbe-ac5cbc75b775@redhat.com>
-References: <20250407072126.3879086-1-andriy.shevchenko@linux.intel.com> <Z_zdwSCfaYDotOI2@smile.fi.intel.com> <Z_zd1NCtn_QxaCzC@smile.fi.intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vE5ERu/Z"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1744633777;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vvai2S/0OVjs1P8gmT3IZRMvxpZzuZvGIu5Rcie6gGc=;
+	b=vE5ERu/ZrIA7g80vZ+sKYzWIFlzlKhHC5X2/X03m8g+9hGUeAkU4HoJoUh0f2+fkukd86g
+	TZPGQdhxxuiZHyln89OnTXjvO/qGheV4XMeHVq9d5m5ccxtfX6juhcuhXcmvO9aygjXhDK
+	HICqXuHd3K+1tSwdHhnZLJhvscPtKoM=
+Date: Mon, 14 Apr 2025 12:29:35 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <bab35a470addc4d3d32551c6776d4d4884def193@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v2] bpf, sockmap: Introduce tracing capability
+ for sockmap
+To: "kernel test robot" <lkp@intel.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mrpre@163.com,
+ "Jakub Sitnicki" <jakub@cloudflare.com>, "Cong Wang"
+ <xiyou.wangcong@gmail.com>, "Steven Rostedt" <rostedt@goodmis.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
+ Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Eric Dumazet" <edumazet@google.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Simon Horman" <horms@kernel.org>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+In-Reply-To: <202504141925.PFNOfZzb-lkp@intel.com>
+References: <20250411091634.336371-1-jiayuan.chen@linux.dev>
+ <202504141925.PFNOfZzb-lkp@intel.com>
+X-Migadu-Flow: FLOW_OUT
 
+2025/4/14 19:54, "kernel test robot" <lkp@intel.com> wrote:
 
+>=20
+>=20Hi Jiayuan,
+>=20
+>=20kernel test robot noticed the following build errors:
+>=20
+>=20[auto build test ERROR on bpf-next/master]
+>=20
+>=20url: https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/bpf-=
+sockmap-Introduce-tracing-capability-for-sockmap/20250414-093146
+> base: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
+master
+> patch link: https://lore.kernel.org/r/20250411091634.336371-1-jiayuan.c=
+hen%40linux.dev
+> patch subject: [PATCH bpf-next v2] bpf, sockmap: Introduce tracing capa=
+bility for sockmap
+> config: arm64-randconfig-001-20250414 (https://download.01.org/0day-ci/=
+archive/20250414/202504141925.PFNOfZzb-lkp@intel.com/config)
+>=20
+>=20compiler: clang version 21.0.0git (https://github.com/llvm/llvm-proje=
+ct f819f46284f2a79790038e1f6649172789734ae8)
+>=20
+>=20reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/a=
+rchive/20250414/202504141925.PFNOfZzb-lkp@intel.com/reproduce)
+> If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504141925.PFNOfZzb-l=
+kp@intel.com/
+> All errors (new ones prefixed by >>):
+>=20
+>=20>=20
+>=20> >=20
+>=20> > ld.lld: error: undefined symbol: sock_i_ino
+> > >
+> >=20
+>=20 >>> referenced by sockmap.h:70 (include/trace/events/sockmap.h:70)
+>  >>> kernel/bpf/core.o:(trace_event_raw_event_sockmap_redirect) in arch=
+ive vmlinux.a
+>  >>> referenced by sockmap.h:121 (include/trace/events/sockmap.h:121)
+>  >>> kernel/bpf/core.o:(trace_event_raw_event_sockmap_strparser) in arc=
+hive vmlinux.a
 
-On Mon, 14 Apr 2025, Andy Shevchenko wrote:
-
-> On Mon, Apr 14, 2025 at 01:04:49PM +0300, Andy Shevchenko wrote:
-> > On Mon, Apr 07, 2025 at 10:21:26AM +0300, Andy Shevchenko wrote:
-> > > The mempool_needs_integrity is unused. This, in particular, prevents
-> > > kernel builds with Clang, `make W=1` and CONFIG_WERROR=y:
-> > > 
-> > > drivers/md/dm-table.c:1052:7: error: variable 'mempool_needs_integrity' set but not used [-Werror,-Wunused-but-set-variable]
-> > >  1052 |         bool mempool_needs_integrity = t->integrity_supported;
-> > >       |              ^
-> > > 
-> > > Fix this by removing the leftover.
-> > 
-> > This issue is still present in v6.15-rc1.
-> 
-> I meant v6.15-rc2, of course.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
-I will send it to Linus (maybe with other changes) before 6.15 comes out.
-
-Mikulas
-
+I see, CONFIG_NET is not set...
