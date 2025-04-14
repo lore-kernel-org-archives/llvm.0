@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A380417D2;
-	Mon, 14 Apr 2025 01:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01227188733;
+	Mon, 14 Apr 2025 01:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744592727; cv=none; b=L5mnF+JpVf57hNeRsk9TSGrKL+PjL4Nrk8fgo89utLgy52I58rwNZLOY1DJHGLAXhTAo5GjDHU/U7nHk921IuWiwltZzA5LB3wF00tCoBmuV3KfyuhHwDI/RfrrD4byo9UM4YfPNiYKNRfcaUKvWgaZ/NPIgH5Sj7mSItxKi3YM=
+	t=1744595257; cv=none; b=sxaFCXiCkIBxyvtn09pDJOFX66e2hTrHiZuXPZ9Uw4SXkDuxXqhxL1kM62xBozXPDHqgsWy16CSxwr2zCGBgke4MfWIQ1LMA2bes/KobdMd99eTmBEItCVOhSyaaEKKjZGwQldmeqdAn0pwWLXCmncf/7TxUkLJKoBxOQfstQUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744592727; c=relaxed/simple;
-	bh=jRlXu9n1IDrt5U4910lZAha10OQNfH/tM2piwnFtkew=;
+	s=arc-20240116; t=1744595257; c=relaxed/simple;
+	bh=hGpZ4YnrqnNzyUzb6jHplwNVeEYL0W4lTdXfFPG1Ptg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YH41ayUVZcaQ3nXfJjXQvieEiO8AyEEp5ZRFep4evCnQro/okMEZsUk8lZdkAsfKEfefe/dbnOlwAI58n9ChAu2JDkuFl5GMmwhPvNfgMCHJWMz0mZmGMpmoo7KQLF/lbp2TjE5q6wqH46HNaPzdbDPah7OVG+Sjf9H2/823IZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d6QKA/Ju; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=W2ApeX2WWUhYVDsMIlkWZD6GnO4lnZI2hk7Dt7XnQRkVjXnvCsoSKSK/36RwBLZQqkabAtGvZ5lwrwOnPPNznz/kl2TAh9HFJ8jhZ4U6yWlPZixC9DpDMa9ExTxoNV51AIDUElkaOyS3QN57FmeFkKQWfpqF65o+L1MX3tU7MTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kaDGR+qh; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d6QKA/Ju"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kaDGR+qh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744592725; x=1776128725;
+  t=1744595255; x=1776131255;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jRlXu9n1IDrt5U4910lZAha10OQNfH/tM2piwnFtkew=;
-  b=d6QKA/JuykWPta3hqxD24IpYzv5sovYt2tF3HJBMLeWIebkQVHoE4Lxd
-   0z8QdTLsfgU/hC3p6yE9cGRpMkkKoq7M+uraLq89lhfDCBzwLuy7o5umq
-   eIaURPJae2AjrbHJtnSVNP2n/FDJzGII170iRMOkfHyOM7lFhA7T4daWz
-   vDT4ypw9M5MiTaFV/xWXwFKabqCaD5uO47fYa8XVMz4aWre9p6LFqQZQb
-   zrUlY7j/Tpbj/Jz3XppukIroIbFl/0lR+8Z0d7R/b8xuhVTc1tiop7Usi
-   7DlmCZGQaRV87ibCOIwTkh03ASm7Ksen/ysNHGUbJJvWnpS9go8pKSHkX
-   A==;
-X-CSE-ConnectionGUID: BFr09HfeTXezlgq9k781bA==
-X-CSE-MsgGUID: 98u/qZmWSoy54pd9Gs1CpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="46060592"
+  bh=hGpZ4YnrqnNzyUzb6jHplwNVeEYL0W4lTdXfFPG1Ptg=;
+  b=kaDGR+qhS/ZGDqV45yNNSp5HnPGdi708kYokkhfN8BwsERdUpmKWWl7i
+   oEjyxuX7vykba5VXVE0y/IwcDNj5ErdTGZt4cOunUs/cSfPWLrV0jpe1f
+   /fXgTrnvXEePs8bhlRcp+zEb3HWtcAwpB7M6q6XpYr21ef5z7R5crrffM
+   sKYSoHClAFBQqDpOEhTANKYo1aBnwO/SCEOFjy4BplUAKAb0KTlA5QZTg
+   hkSBblavJ4iK/scCzr/23mi3svqk9qqZqUhIeQIf+l7DCeArMZDmnHZsK
+   4vACd1FO3Cfmq0rXRg1mBSQY7mv7c45TYFfLtgfXOtQ9ZH9eTjNR7kD3b
+   Q==;
+X-CSE-ConnectionGUID: +mJjz02lSoq5TZGg2pF4CA==
+X-CSE-MsgGUID: bhqltXZOSRSbNEX6ovIf4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="71437245"
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="46060592"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 18:05:24 -0700
-X-CSE-ConnectionGUID: 5JrwgqbTSwS2KU0mu6IKwA==
-X-CSE-MsgGUID: vEmkDUerTGKqW109zTStXA==
+   d="scan'208";a="71437245"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2025 18:47:32 -0700
+X-CSE-ConnectionGUID: ++LQVuLDT6eJN3uQf5TOPA==
+X-CSE-MsgGUID: FGU8yX97Sy6yfg/9g93khw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="160633821"
+   d="scan'208";a="134756978"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 13 Apr 2025 18:05:23 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 13 Apr 2025 18:47:31 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u48GG-000D0Y-22;
-	Mon, 14 Apr 2025 01:05:20 +0000
-Date: Mon, 14 Apr 2025 09:04:25 +0800
+	id 1u48v3-000D66-0m;
+	Mon, 14 Apr 2025 01:47:29 +0000
+Date: Mon, 14 Apr 2025 09:47:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ira Weiny <ira.weiny@intel.com>
+To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [weiny2:dcd-v6-2025-04-13 3/20] drivers/cxl/core/mbox.c:1434:3:
- warning: variable 'num_partitions' is uninitialized when used here
-Message-ID: <202504140924.32CIeSfU-lkp@intel.com>
+Subject: [davidhildenbrand:migration 16/16] mm/compaction.c:126:8: error: no
+ member named 'compact_considered' in 'struct zone'
+Message-ID: <202504140934.caN63YOu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,101 +62,188 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/weiny2/linux-kernel.git dcd-v6-2025-04-13
-head:   6e176c0c7df9883fc969f00e23bf99f444daa4a3
-commit: 638e1d5342d06b4a65368753d80ffee77d9ea821 [3/20] cxl/mem: Read dynamic capacity configuration from the device
-config: riscv-randconfig-002-20250414 (https://download.01.org/0day-ci/archive/20250414/202504140924.32CIeSfU-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250414/202504140924.32CIeSfU-lkp@intel.com/reproduce)
+tree:   https://github.com/davidhildenbrand/linux migration
+head:   07b1b56f4f50e3b2ce6818d9ca0fbdbcd138d66f
+commit: 07b1b56f4f50e3b2ce6818d9ca0fbdbcd138d66f [16/16] tmp
+config: powerpc64-randconfig-001-20250414 (https://download.01.org/0day-ci/archive/20250414/202504140934.caN63YOu-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250414/202504140934.caN63YOu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504140924.32CIeSfU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504140934.caN63YOu-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/cxl/core/mbox.c:1434:3: warning: variable 'num_partitions' is uninitialized when used here [-Wuninitialized]
-    1434 |                 num_partitions += rc;
-         |                 ^~~~~~~~~~~~~~
-   drivers/cxl/core/mbox.c:1415:19: note: initialize the variable 'num_partitions' to silence this warning
-    1415 |         u8 num_partitions;
-         |                          ^
-         |                           = '\0'
-   1 warning generated.
+>> mm/compaction.c:126:8: error: no member named 'compact_considered' in 'struct zone'
+     126 |         zone->compact_considered = 0;
+         |         ~~~~  ^
+>> mm/compaction.c:127:8: error: no member named 'compact_defer_shift' in 'struct zone'
+     127 |         zone->compact_defer_shift++;
+         |         ~~~~  ^
+>> mm/compaction.c:129:20: error: no member named 'compact_order_failed' in 'struct zone'
+     129 |         if (order < zone->compact_order_failed)
+         |                     ~~~~  ^
+   mm/compaction.c:130:9: error: no member named 'compact_order_failed' in 'struct zone'
+     130 |                 zone->compact_order_failed = order;
+         |                 ~~~~  ^
+   mm/compaction.c:132:12: error: no member named 'compact_defer_shift' in 'struct zone'
+     132 |         if (zone->compact_defer_shift > COMPACT_MAX_DEFER_SHIFT)
+         |             ~~~~  ^
+   mm/compaction.c:133:9: error: no member named 'compact_defer_shift' in 'struct zone'
+     133 |                 zone->compact_defer_shift = COMPACT_MAX_DEFER_SHIFT;
+         |                 ~~~~  ^
+>> mm/compaction.c:135:2: error: call to undeclared function 'trace_mm_compaction_defer_compaction'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     135 |         trace_mm_compaction_defer_compaction(zone, order);
+         |         ^
+   mm/compaction.c:141:43: error: no member named 'compact_defer_shift' in 'struct zone'
+     141 |         unsigned long defer_limit = 1UL << zone->compact_defer_shift;
+         |                                            ~~~~  ^
+   mm/compaction.c:143:20: error: no member named 'compact_order_failed' in 'struct zone'
+     143 |         if (order < zone->compact_order_failed)
+         |                     ~~~~  ^
+   mm/compaction.c:147:14: error: no member named 'compact_considered' in 'struct zone'
+     147 |         if (++zone->compact_considered >= defer_limit) {
+         |               ~~~~  ^
+   mm/compaction.c:148:9: error: no member named 'compact_considered' in 'struct zone'
+     148 |                 zone->compact_considered = defer_limit;
+         |                 ~~~~  ^
+>> mm/compaction.c:152:2: error: call to undeclared function 'trace_mm_compaction_deferred'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     152 |         trace_mm_compaction_deferred(zone, order);
+         |         ^
+   mm/compaction.c:152:2: note: did you mean 'compaction_deferred'?
+   mm/compaction.c:139:13: note: 'compaction_deferred' declared here
+     139 | static bool compaction_deferred(struct zone *zone, int order)
+         |             ^
+     140 | {
+     141 |         unsigned long defer_limit = 1UL << zone->compact_defer_shift;
+     142 | 
+     143 |         if (order < zone->compact_order_failed)
+     144 |                 return false;
+     145 | 
+     146 |         /* Avoid possible overflow */
+     147 |         if (++zone->compact_considered >= defer_limit) {
+     148 |                 zone->compact_considered = defer_limit;
+     149 |                 return false;
+     150 |         }
+     151 | 
+     152 |         trace_mm_compaction_deferred(zone, order);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         compaction_deferred
+   mm/compaction.c:166:9: error: no member named 'compact_considered' in 'struct zone'
+     166 |                 zone->compact_considered = 0;
+         |                 ~~~~  ^
+   mm/compaction.c:167:9: error: no member named 'compact_defer_shift' in 'struct zone'
+     167 |                 zone->compact_defer_shift = 0;
+         |                 ~~~~  ^
+   mm/compaction.c:169:21: error: no member named 'compact_order_failed' in 'struct zone'
+     169 |         if (order >= zone->compact_order_failed)
+         |                      ~~~~  ^
+   mm/compaction.c:170:9: error: no member named 'compact_order_failed' in 'struct zone'
+     170 |                 zone->compact_order_failed = order + 1;
+         |                 ~~~~  ^
+>> mm/compaction.c:172:2: error: call to undeclared function 'trace_mm_compaction_defer_reset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     172 |         trace_mm_compaction_defer_reset(zone, order);
+         |         ^
+   mm/compaction.c:172:2: note: did you mean 'compaction_defer_reset'?
+   mm/compaction.c:162:6: note: 'compaction_defer_reset' declared here
+     162 | void compaction_defer_reset(struct zone *zone, int order,
+         |      ^
+     163 |                 bool alloc_success)
+     164 | {
+     165 |         if (alloc_success) {
+     166 |                 zone->compact_considered = 0;
+     167 |                 zone->compact_defer_shift = 0;
+     168 |         }
+     169 |         if (order >= zone->compact_order_failed)
+     170 |                 zone->compact_order_failed = order + 1;
+     171 | 
+     172 |         trace_mm_compaction_defer_reset(zone, order);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         compaction_defer_reset
+>> mm/compaction.c:162:6: warning: no previous prototype for function 'compaction_defer_reset' [-Wmissing-prototypes]
+     162 | void compaction_defer_reset(struct zone *zone, int order,
+         |      ^
+   mm/compaction.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     162 | void compaction_defer_reset(struct zone *zone, int order,
+         | ^
+         | static 
+   mm/compaction.c:178:20: error: no member named 'compact_order_failed' in 'struct zone'
+     178 |         if (order < zone->compact_order_failed)
+         |                     ~~~~  ^
+   mm/compaction.c:181:15: error: no member named 'compact_defer_shift' in 'struct zone'
+     181 |         return zone->compact_defer_shift == COMPACT_MAX_DEFER_SHIFT &&
+         |                ~~~~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
 
-vim +/num_partitions +1434 drivers/cxl/core/mbox.c
+vim +126 mm/compaction.c
 
-  1395	
-  1396	/**
-  1397	 * cxl_dev_dc_identify() - Reads the dynamic capacity information from the
-  1398	 *                         device.
-  1399	 * @mbox: Mailbox to query
-  1400	 * @dc_info: The dynamic partition information to return
-  1401	 *
-  1402	 * Read Dynamic Capacity information from the device and return the partition
-  1403	 * information.
-  1404	 *
-  1405	 * Return: 0 if identify was executed successfully, -ERRNO on error.
-  1406	 *         on error only dynamic_bytes is left unchanged.
-  1407	 */
-  1408	int cxl_dev_dc_identify(struct cxl_mailbox *mbox,
-  1409				struct cxl_dc_partition_info *dc_info)
-  1410	{
-  1411		struct cxl_dc_partition_info partitions[CXL_MAX_DC_PARTITIONS];
-  1412		size_t dc_resp_size = mbox->payload_size;
-  1413		struct device *dev = mbox->host;
-  1414		u8 start_partition;
-  1415		u8 num_partitions;
-  1416	
-  1417		struct cxl_mbox_get_dc_config_out *dc_resp __free(kfree) =
-  1418						kvmalloc(dc_resp_size, GFP_KERNEL);
-  1419		if (!dc_resp)
-  1420			return -ENOMEM;
-  1421	
-  1422		/* Read and check all partition information for validity and potential
-  1423		 * debugging; see debug output in cxl_dc_check() */
-  1424		start_partition = 0;
-  1425		do {
-  1426			int rc, i, j;
-  1427	
-  1428			rc = cxl_get_dc_config(mbox, start_partition, dc_resp, dc_resp_size);
-  1429			if (rc < 0) {
-  1430				dev_err(dev, "Failed to get DC config: %d\n", rc);
-  1431				return rc;
-  1432			}
-  1433	
-> 1434			num_partitions += rc;
-  1435	
-  1436			if (num_partitions < 1 || num_partitions > CXL_MAX_DC_PARTITIONS) {
-  1437				dev_err(dev, "Invalid num of dynamic capacity partitions %d\n",
-  1438					num_partitions);
-  1439				return -EINVAL;
-  1440			}
-  1441	
-  1442			for (i = start_partition, j = 0; i < num_partitions; i++, j++) {
-  1443				rc = cxl_dc_check(dev, partitions, i,
-  1444						  &dc_resp->partition[j]);
-  1445				if (rc)
-  1446					return rc;
-  1447			}
-  1448	
-  1449			start_partition = num_partitions;
-  1450	
-  1451		} while (num_partitions < dc_resp->avail_partition_count);
-  1452	
-  1453		/* Return 1st partition */
-  1454		dc_info->start = partitions[0].start;
-  1455		dc_info->size = partitions[0].size;
-  1456		dev_dbg(dev, "Returning partition 0 %zu size %zu\n",
-  1457			dc_info->start, dc_info->size);
-  1458	
-  1459		return 0;
-  1460	}
-  1461	EXPORT_SYMBOL_NS_GPL(cxl_dev_dc_identify, "CXL");
-  1462	
+24e2716f63e613 Joonsoo Kim   2015-02-11  118  
+24e2716f63e613 Joonsoo Kim   2015-02-11  119  /*
+24e2716f63e613 Joonsoo Kim   2015-02-11  120   * Compaction is deferred when compaction fails to result in a page
+860b32729a21e0 Alex Shi      2020-08-11  121   * allocation success. 1 << compact_defer_shift, compactions are skipped up
+24e2716f63e613 Joonsoo Kim   2015-02-11  122   * to a limit of 1 << COMPACT_MAX_DEFER_SHIFT
+24e2716f63e613 Joonsoo Kim   2015-02-11  123   */
+2271b016bf368d Hui Su        2020-12-14  124  static void defer_compaction(struct zone *zone, int order)
+24e2716f63e613 Joonsoo Kim   2015-02-11  125  {
+24e2716f63e613 Joonsoo Kim   2015-02-11 @126  	zone->compact_considered = 0;
+24e2716f63e613 Joonsoo Kim   2015-02-11 @127  	zone->compact_defer_shift++;
+24e2716f63e613 Joonsoo Kim   2015-02-11  128  
+24e2716f63e613 Joonsoo Kim   2015-02-11 @129  	if (order < zone->compact_order_failed)
+24e2716f63e613 Joonsoo Kim   2015-02-11  130  		zone->compact_order_failed = order;
+24e2716f63e613 Joonsoo Kim   2015-02-11  131  
+24e2716f63e613 Joonsoo Kim   2015-02-11  132  	if (zone->compact_defer_shift > COMPACT_MAX_DEFER_SHIFT)
+24e2716f63e613 Joonsoo Kim   2015-02-11  133  		zone->compact_defer_shift = COMPACT_MAX_DEFER_SHIFT;
+24e2716f63e613 Joonsoo Kim   2015-02-11  134  
+24e2716f63e613 Joonsoo Kim   2015-02-11 @135  	trace_mm_compaction_defer_compaction(zone, order);
+24e2716f63e613 Joonsoo Kim   2015-02-11  136  }
+24e2716f63e613 Joonsoo Kim   2015-02-11  137  
+24e2716f63e613 Joonsoo Kim   2015-02-11  138  /* Returns true if compaction should be skipped this time */
+2271b016bf368d Hui Su        2020-12-14  139  static bool compaction_deferred(struct zone *zone, int order)
+24e2716f63e613 Joonsoo Kim   2015-02-11  140  {
+24e2716f63e613 Joonsoo Kim   2015-02-11  141  	unsigned long defer_limit = 1UL << zone->compact_defer_shift;
+24e2716f63e613 Joonsoo Kim   2015-02-11  142  
+24e2716f63e613 Joonsoo Kim   2015-02-11  143  	if (order < zone->compact_order_failed)
+24e2716f63e613 Joonsoo Kim   2015-02-11  144  		return false;
+24e2716f63e613 Joonsoo Kim   2015-02-11  145  
+24e2716f63e613 Joonsoo Kim   2015-02-11  146  	/* Avoid possible overflow */
+62b35fe0eba21b Mateusz Nosek 2020-10-13  147  	if (++zone->compact_considered >= defer_limit) {
+24e2716f63e613 Joonsoo Kim   2015-02-11  148  		zone->compact_considered = defer_limit;
+24e2716f63e613 Joonsoo Kim   2015-02-11  149  		return false;
+62b35fe0eba21b Mateusz Nosek 2020-10-13  150  	}
+24e2716f63e613 Joonsoo Kim   2015-02-11  151  
+24e2716f63e613 Joonsoo Kim   2015-02-11 @152  	trace_mm_compaction_deferred(zone, order);
+24e2716f63e613 Joonsoo Kim   2015-02-11  153  
+24e2716f63e613 Joonsoo Kim   2015-02-11  154  	return true;
+24e2716f63e613 Joonsoo Kim   2015-02-11  155  }
+24e2716f63e613 Joonsoo Kim   2015-02-11  156  
+24e2716f63e613 Joonsoo Kim   2015-02-11  157  /*
+24e2716f63e613 Joonsoo Kim   2015-02-11  158   * Update defer tracking counters after successful compaction of given order,
+24e2716f63e613 Joonsoo Kim   2015-02-11  159   * which means an allocation either succeeded (alloc_success == true) or is
+24e2716f63e613 Joonsoo Kim   2015-02-11  160   * expected to succeed.
+24e2716f63e613 Joonsoo Kim   2015-02-11  161   */
+24e2716f63e613 Joonsoo Kim   2015-02-11 @162  void compaction_defer_reset(struct zone *zone, int order,
+24e2716f63e613 Joonsoo Kim   2015-02-11  163  		bool alloc_success)
+24e2716f63e613 Joonsoo Kim   2015-02-11  164  {
+24e2716f63e613 Joonsoo Kim   2015-02-11  165  	if (alloc_success) {
+24e2716f63e613 Joonsoo Kim   2015-02-11  166  		zone->compact_considered = 0;
+24e2716f63e613 Joonsoo Kim   2015-02-11  167  		zone->compact_defer_shift = 0;
+24e2716f63e613 Joonsoo Kim   2015-02-11  168  	}
+24e2716f63e613 Joonsoo Kim   2015-02-11  169  	if (order >= zone->compact_order_failed)
+24e2716f63e613 Joonsoo Kim   2015-02-11  170  		zone->compact_order_failed = order + 1;
+24e2716f63e613 Joonsoo Kim   2015-02-11  171  
+24e2716f63e613 Joonsoo Kim   2015-02-11 @172  	trace_mm_compaction_defer_reset(zone, order);
+24e2716f63e613 Joonsoo Kim   2015-02-11  173  }
+24e2716f63e613 Joonsoo Kim   2015-02-11  174  
+
+:::::: The code at line 126 was first introduced by commit
+:::::: 24e2716f63e613cf15d3beba3faa0711bcacc427 mm/compaction: add tracepoint to observe behaviour of compaction defer
+
+:::::: TO: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
