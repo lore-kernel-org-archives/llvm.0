@@ -1,222 +1,208 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637CE259C90;
-	Mon, 14 Apr 2025 08:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743C9258CE6;
+	Mon, 14 Apr 2025 09:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744618203; cv=none; b=bxH7pgDZ8oFcAQhh2seLMMJa+ZRham1sqp7EgZZ63iUSn3x1iursL+qxdzvUAh0Z2/czgqDy5AgbYyBIgvm28ahHF2Y9qkU5B6jFecVzWLoVSABIitvCF8X2Dds5dTqPiBkt3Gg3LQs8u0CAISluIoNnqLrhbKbDKfb+qsAzfBw=
+	t=1744622452; cv=none; b=HzhEcrxQXOlbkKL7/QVrsgnecplBput4tvz6kG//9ekDUQ8kwepBAQxssYJ9+TlQyZguW689jzyjpsPZwbpE5p6re6dOl2/AUUMbn6Gbd9OsC+3ObrfxAO9vg0cVGP3Yw5DElxBqoosL4O87fBWxyPzkTd2IaOc/E8CqLaV93/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744618203; c=relaxed/simple;
-	bh=UAWWkDhKlMeoJc5N1oM4q1rCMAWAwC4wkNh2Ricctkg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lDHrU3pWyg8BbXut0n4CkJp8pkij5SUM/h4TK2ff1mdqrCX1VNWac1nuyUOT6JQg0RSzgKGz+uh4R6gNKkiGC8S178ZhlcTzgZmlBzs0FyPWYm2l23OGb/Vgt78JRSZam1zRYpkt6GEDeycGgxijpZ6C2XODiVZEImWWnBPEGAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YMyUCaVU; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1744622452; c=relaxed/simple;
+	bh=bz1n5Vi8wBxB9B2+kQXtaqVfb20MXtUZpsz3bQ93BJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lRCekOObZyiKaxATRyv8fbP6fRcFQPU0ygXaXuA9G7BB5Ccz29LE59XI56O+4AqS+idf2SobDKFQhbS96UlFvCYXEMUv/8CqyahBVgeId9CzE8Rd9NRjaD3OItOirkZiHnTPvGkSWzcj3/C54bfi4ur2lpylBbWZ9IC3Us85pJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K9L9GkCg; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YMyUCaVU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K9L9GkCg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744618202; x=1776154202;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UAWWkDhKlMeoJc5N1oM4q1rCMAWAwC4wkNh2Ricctkg=;
-  b=YMyUCaVU0jELUWFCrcAkW0yuw/6lJXhY1bXekK8+s4g82N92HEnxCvEH
-   v1o7U8g76HbGpanTEUXP6SiPN0XawCKM9b5lobzsF4gQi53BEp2ZKX/Oi
-   j2c+gvJfDoPxOeZJPSiPLY8Tox2BKqAJA2r63cjOh9+OTq7PYeNB4Kj6O
-   RErETCdUDRFDXLKI9QBPJLyKoItU5NFjoZZ3mf8FEOLMwjG0tyllvV39M
-   /dtQ5vwP9GcTTw/CenoQ8oqkCD/14n5M1GRIM65yTTYBUyliiyR1hl9pa
-   AMEt3Uq4XQUWvBTvi61syWdYwrkPSJe28+WpRrCdOaSFlxV5+9FrVGzwW
-   Q==;
-X-CSE-ConnectionGUID: tCH2k6cuTFOoySiitniNSA==
-X-CSE-MsgGUID: SNdiV6RuRNmppYSswgy7Fg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="63618113"
+  t=1744622450; x=1776158450;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bz1n5Vi8wBxB9B2+kQXtaqVfb20MXtUZpsz3bQ93BJ8=;
+  b=K9L9GkCgj6hdsC6ZDizk8nVpbWIHHJ9gVdPFa8u6HpPs3QrotjMaWu3Z
+   GN9uIwnHmd8mp06pOnnxLZvvkkUrXnAdD9cUFcT2V2y3ab+3hzfbSsUTj
+   ksRJ9EQZ7FY85riFX1PUulxPt3g7tO8o3AYYhhsuB9kgPjj6bav/Xa7f/
+   wOdq7bmDzIO0wlVAhNo5yt0wCjhVv+Oi/gZ55lET/x3vGZR/ZmFhecKhx
+   qGRdJnZtx+gTf/pp99JuAYQAs8PhxGQAWyvV7dpy5N6HLzHn524XiszbP
+   V1LgPHsigLlC+neNbbFK7uGFWyB5i163B3223niIp8/SEkBduPx5nUBoz
+   g==;
+X-CSE-ConnectionGUID: 7p4NOgTWQk2EMOJ5oQgDxw==
+X-CSE-MsgGUID: MTMSflUpT/WxS1GWHmKAFA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="57071614"
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="63618113"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 01:10:00 -0700
-X-CSE-ConnectionGUID: Qvm6UMs9SBCbowBDnYAAwg==
-X-CSE-MsgGUID: RmrJIlTsT2m+aWyW5ViEKQ==
+   d="scan'208";a="57071614"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 02:20:50 -0700
+X-CSE-ConnectionGUID: 9YIxMUhpQ8WDg5wUXXbL1A==
+X-CSE-MsgGUID: L2c9Ba6lRjKWPYBikVug5A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="134499833"
+   d="scan'208";a="129617713"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 14 Apr 2025 01:09:29 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 14 Apr 2025 02:20:36 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u4Esh-000DvM-0f;
-	Mon, 14 Apr 2025 08:09:27 +0000
-Date: Mon, 14 Apr 2025 16:08:39 +0800
+	id 1u4FzW-000Dz8-0S;
+	Mon, 14 Apr 2025 09:20:34 +0000
+Date: Mon, 14 Apr 2025 17:20:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lunn:v6.15-rc1-next-next-inband 9/24]
- drivers/net/dsa/qca/qca8k-8xxx.c:622:18: warning: variable 'mgmt_conduit' is
- uninitialized when used here
-Message-ID: <202504141627.mn3a1Km6-lkp@intel.com>
+To: hans.zhang@cixtech.com, bhelgaas@google.com, lpieralisi@kernel.org,
+	kw@linux.com, manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Manikandan K Pillai <mpillai@cadence.com>,
+	Hans Zhang <hans.zhang@cixtech.com>
+Subject: Re: [PATCH v3 5/6] PCI: cadence: Add callback functions for RP and
+ EP controller
+Message-ID: <202504141719.svx3rf5x-lkp@intel.com>
+References: <20250411103656.2740517-6-hans.zhang@cixtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250411103656.2740517-6-hans.zhang@cixtech.com>
 
-tree:   https://github.com/lunn/linux.git v6.15-rc1-next-next-inband
-head:   9e2d85243a79cbf10ea6538b605260e3199fda1a
-commit: bbf56e8f7d5498f3221826f0608649ddd997afa9 [9/24] net: dsa: qca8k: Move inband mutex into DSA core
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250414/202504141627.mn3a1Km6-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250414/202504141627.mn3a1Km6-lkp@intel.com/reproduce)
+Hi,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on a24588245776dafc227243a01bfbeb8a59bafba9]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/hans-zhang-cixtech-com/dt-bindings-pci-cadence-Extend-compatible-for-new-RP-configuration/20250414-094836
+base:   a24588245776dafc227243a01bfbeb8a59bafba9
+patch link:    https://lore.kernel.org/r/20250411103656.2740517-6-hans.zhang%40cixtech.com
+patch subject: [PATCH v3 5/6] PCI: cadence: Add callback functions for RP and EP controller
+config: powerpc64-randconfig-001-20250414 (https://download.01.org/0day-ci/archive/20250414/202504141719.svx3rf5x-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250414/202504141719.svx3rf5x-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504141627.mn3a1Km6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504141719.svx3rf5x-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/qca/qca8k-8xxx.c:622:18: warning: variable 'mgmt_conduit' is uninitialized when used here [-Wuninitialized]
-     622 |         read_skb->dev = mgmt_conduit;
-         |                         ^~~~~~~~~~~~
-   drivers/net/dsa/qca/qca8k-8xxx.c:567:33: note: initialize the variable 'mgmt_conduit' to silence this warning
-     567 |         struct net_device *mgmt_conduit;
-         |                                        ^
-         |                                         = NULL
+>> drivers/pci/controller/cadence/pcie-cadence.c:303:12: warning: variable 'ctrl0' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     303 |                 desc1 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN(fn);
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/cadence/pcie-cadence.h:342:2: note: expanded from macro 'CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN'
+     342 |         FIELD_PREP(CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN_MASK, devfn)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      69 |                                  ~((_mask) >> __bf_shf(_mask)) &        \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      70 |                                         (0 + (_val)) : 0,               \
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      71 |                                  _pfx "value too large for the field"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:557:2: note: expanded from macro 'compiletime_assert'
+     557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:545:2: note: expanded from macro '_compiletime_assert'
+     545 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:537:7: note: expanded from macro '__compiletime_assert'
+     537 |                 if (!(condition))                                       \
+         |                     ^~~~~~~~~~~~
+   drivers/pci/controller/cadence/pcie-cadence.c:323:46: note: uninitialized use occurs here
+     323 |                              CDNS_PCIE_HPA_AT_OB_REGION_CTRL0(r), ctrl0);
+         |                                                                   ^~~~~
+   drivers/pci/controller/cadence/pcie-cadence.c:303:12: note: remove the 'if' if its condition is always true
+     303 |                 desc1 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN(fn);
+         |                          ^
+   drivers/pci/controller/cadence/pcie-cadence.h:342:2: note: expanded from macro 'CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN'
+     342 |         FIELD_PREP(CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN_MASK, devfn)
+         |         ^
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^
+   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                 ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:557:2: note: expanded from macro 'compiletime_assert'
+     557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:545:2: note: expanded from macro '_compiletime_assert'
+     545 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:537:3: note: expanded from macro '__compiletime_assert'
+     537 |                 if (!(condition))                                       \
+         |                 ^
+   drivers/pci/controller/cadence/pcie-cadence.c:291:39: note: initialize the variable 'ctrl0' to silence this warning
+     291 |         u32 addr0, addr1, desc0, desc1, ctrl0;
+         |                                              ^
+         |                                               = 0
+   1 warning generated.
+--
+>> drivers/pci/controller/cadence/pcie-cadence-host.c:122:3: warning: variable 'desc0' is uninitialized when used here [-Wuninitialized]
+     122 |                 desc0 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC0_TYPE_CONF_TYPE0;
+         |                 ^~~~~
+   drivers/pci/controller/cadence/pcie-cadence-host.c:80:18: note: initialize the variable 'desc0' to silence this warning
+      80 |         u32 addr0, desc0, desc1, ctrl0;
+         |                         ^
+         |                          = 0
    1 warning generated.
 
 
-vim +/mgmt_conduit +622 drivers/net/dsa/qca/qca8k-8xxx.c
+vim +303 drivers/pci/controller/cadence/pcie-cadence.c
 
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  559  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  560  static int
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  561  qca8k_phy_eth_command(struct qca8k_priv *priv, bool read, int phy,
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  562  		      int regnum, u16 data)
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  563  {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  564  	struct sk_buff *write_skb, *clear_skb, *read_skb;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  565  	struct qca8k_mgmt_eth_data *mgmt_eth_data;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  566  	u32 write_val, clear_val = 0, val;
-6ca80638b90cec drivers/net/dsa/qca/qca8k-8xxx.c Florian Fainelli  2023-10-23  567  	struct net_device *mgmt_conduit;
-a981e435577331 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  568  	u32 resp_data[4];
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  569  	int ret, ret1;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  570  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  571  	if (regnum >= QCA8K_MDIO_MASTER_MAX_REG)
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  572  		return -EINVAL;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  573  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  574  	mgmt_eth_data = &priv->mgmt_eth_data;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  575  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  576  	write_val = QCA8K_MDIO_MASTER_BUSY | QCA8K_MDIO_MASTER_EN |
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  577  		    QCA8K_MDIO_MASTER_PHY_ADDR(phy) |
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  578  		    QCA8K_MDIO_MASTER_REG_ADDR(regnum);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  579  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  580  	if (read) {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  581  		write_val |= QCA8K_MDIO_MASTER_READ;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  582  	} else {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  583  		write_val |= QCA8K_MDIO_MASTER_WRITE;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  584  		write_val |= QCA8K_MDIO_MASTER_DATA(data);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  585  	}
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  586  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  587  	/* Prealloc all the needed skb before the lock */
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  588  	write_skb = qca8k_alloc_mdio_header(MDIO_WRITE, QCA8K_MDIO_MASTER_CTRL, &write_val,
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  589  					    QCA8K_ETHERNET_PHY_PRIORITY, sizeof(write_val));
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  590  	if (!write_skb)
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  591  		return -ENOMEM;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  592  
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  593  	clear_skb = qca8k_alloc_mdio_header(MDIO_WRITE, QCA8K_MDIO_MASTER_CTRL, &clear_val,
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  594  					    QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
-c3664d913dc115 drivers/net/dsa/qca8k.c          Dan Carpenter     2022-02-04  595  	if (!clear_skb) {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  596  		ret = -ENOMEM;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  597  		goto err_clear_skb;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  598  	}
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  599  
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  600  	read_skb = qca8k_alloc_mdio_header(MDIO_READ, QCA8K_MDIO_MASTER_CTRL, &clear_val,
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  601  					   QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
-90386223f44e2a drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  602  	if (!read_skb) {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  603  		ret = -ENOMEM;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  604  		goto err_read_skb;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  605  	}
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  606  
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  607  	/* It seems that accessing the switch's internal PHYs via management
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  608  	 * packets still uses the MDIO bus within the switch internally, and
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  609  	 * these accesses can conflict with external MDIO accesses to other
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  610  	 * devices on the MDIO bus.
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  611  	 * We therefore need to lock the MDIO bus onto which the switch is
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  612  	 * connected.
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  613  	 */
-078e0d596f7b59 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2024-11-10  614  	mutex_lock_nested(&priv->bus->mdio_lock, MDIO_MUTEX_NESTED);
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  615  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  616  	/* Actually start the request:
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  617  	 * 1. Send mdio master packet
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  618  	 * 2. Busy Wait for mdio master command
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  619  	 * 3. Get the data if we are reading
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  620  	 * 4. Reset the mdio master (even with error)
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  621  	 */
-6ca80638b90cec drivers/net/dsa/qca/qca8k-8xxx.c Florian Fainelli  2023-10-23 @622  	read_skb->dev = mgmt_conduit;
-6ca80638b90cec drivers/net/dsa/qca/qca8k-8xxx.c Florian Fainelli  2023-10-23  623  	clear_skb->dev = mgmt_conduit;
-6ca80638b90cec drivers/net/dsa/qca/qca8k-8xxx.c Florian Fainelli  2023-10-23  624  	write_skb->dev = mgmt_conduit;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  625  
-1af904b8c118ec drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  626  	ret = dsa_inband_request(&mgmt_eth_data->inband, write_skb,
-a89ed17ef27735 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  627  				 qca8k_mdio_header_fill_seq_num,
-a981e435577331 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  628  				 NULL, 0,
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  629  				 QCA8K_ETHERNET_TIMEOUT);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  630  
-97c0b9f9f76e51 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-11-26  631  	if (ret < 0) {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  632  		kfree_skb(read_skb);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  633  		goto exit;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  634  	}
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  635  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  636  	ret = read_poll_timeout(qca8k_phy_eth_busy_wait, ret1,
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  637  				!(val & QCA8K_MDIO_MASTER_BUSY), 0,
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  638  				QCA8K_BUSY_WAIT_TIMEOUT * USEC_PER_MSEC, false,
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  639  				mgmt_eth_data, read_skb, &val);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  640  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  641  	if (ret < 0 && ret1 < 0) {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  642  		ret = ret1;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  643  		goto exit;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  644  	}
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  645  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  646  	if (read) {
-1af904b8c118ec drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  647  		ret = dsa_inband_request(&mgmt_eth_data->inband, read_skb,
-a89ed17ef27735 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  648  					 qca8k_mdio_header_fill_seq_num,
-a981e435577331 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  649  					 &resp_data, sizeof(resp_data),
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  650  					 QCA8K_ETHERNET_TIMEOUT);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  651  
-97c0b9f9f76e51 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-11-26  652  		if (ret < 0)
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  653  			goto exit;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  654  
-a981e435577331 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  655  		ret = resp_data[0] & QCA8K_MDIO_MASTER_DATA_MASK;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  656  	} else {
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  657  		kfree_skb(read_skb);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  658  	}
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  659  exit:
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  660  
-05ef699ffbdd73 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  661  	/* This is expected to fail sometimes, so don't check return value. */
-05ef699ffbdd73 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  662  	dsa_inband_request(&mgmt_eth_data->inband, clear_skb,
-a89ed17ef27735 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  663  			   qca8k_mdio_header_fill_seq_num,
-a981e435577331 drivers/net/dsa/qca/qca8k-8xxx.c Andrew Lunn       2022-09-17  664  			   NULL, 0,
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  665  			   QCA8K_ETHERNET_TIMEOUT);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  666  
-526c8ee04bdbd4 drivers/net/dsa/qca/qca8k-8xxx.c Marek Behún       2023-10-04  667  	mutex_unlock(&priv->bus->mdio_lock);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  668  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  669  	return ret;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  670  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  671  err_read_skb:
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  672  	kfree_skb(clear_skb);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  673  err_clear_skb:
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  674  	kfree_skb(write_skb);
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  675  
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  676  	return ret;
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  677  }
-2cd5485663847d drivers/net/dsa/qca8k.c          Christian Marangi 2022-02-02  678  
-
-:::::: The code at line 622 was first introduced by commit
-:::::: 6ca80638b90cec66547011ee1ef79e534589989a net: dsa: Use conduit and user terms
-
-:::::: TO: Florian Fainelli <florian.fainelli@broadcom.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
+   286	
+   287	void cdns_pcie_hpa_set_outbound_region_for_normal_msg(struct cdns_pcie *pcie,
+   288							      u8 busnr, u8 fn,
+   289							      u32 r, u64 cpu_addr)
+   290	{
+   291		u32 addr0, addr1, desc0, desc1, ctrl0;
+   292	
+   293		desc0 = CDNS_PCIE_HPA_AT_OB_REGION_DESC0_TYPE_NORMAL_MSG;
+   294		desc1 = 0;
+   295	
+   296		/* See cdns_pcie_set_outbound_region() comments above. */
+   297		if (pcie->is_rc) {
+   298			desc1 = CDNS_PCIE_HPA_AT_OB_REGION_DESC1_BUS(busnr) |
+   299				CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN(0);
+   300			ctrl0 = CDNS_PCIE_HPA_AT_OB_REGION_CTRL0_SUPPLY_BUS |
+   301				CDNS_PCIE_HPA_AT_OB_REGION_CTRL0_SUPPLY_DEV_FN;
+   302		} else {
+ > 303			desc1 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN(fn);
+   304		}
+   305	
+   306		addr0 = CDNS_PCIE_HPA_AT_OB_REGION_CPU_ADDR0_NBITS(17) |
+   307			(lower_32_bits(cpu_addr) & GENMASK(31, 8));
+   308		addr1 = upper_32_bits(cpu_addr);
+   309	
+   310		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   311				     CDNS_PCIE_HPA_AT_OB_REGION_PCI_ADDR0(r), 0);
+   312		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   313				     CDNS_PCIE_HPA_AT_OB_REGION_PCI_ADDR1(r), 0);
+   314		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   315				     CDNS_PCIE_HPA_AT_OB_REGION_DESC0(r), desc0);
+   316		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   317				     CDNS_PCIE_HPA_AT_OB_REGION_DESC1(r), desc1);
+   318		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   319				     CDNS_PCIE_HPA_AT_OB_REGION_CPU_ADDR0(r), addr0);
+   320		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   321				     CDNS_PCIE_HPA_AT_OB_REGION_CPU_ADDR1(r), addr1);
+   322		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
+   323				     CDNS_PCIE_HPA_AT_OB_REGION_CTRL0(r), ctrl0);
+   324	}
+   325	
 
 -- 
 0-DAY CI Kernel Test Service
