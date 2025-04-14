@@ -1,141 +1,143 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E46288CBB;
-	Mon, 14 Apr 2025 17:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120E7284685;
+	Mon, 14 Apr 2025 17:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744650796; cv=none; b=Frzv/z6XOI2iN/pJ53E80meHn1bEBeT4vUCz9oX9SMPZJq7CVC6Nw8as1N5ufzCXsul7G7JM3GD5BtCteWtrasyOsDfiiSD5E+SdAYSv0RS1pVSoXWce2Wx+c6M/nK0JCbTl0xpVTl1v41VgdtfQTn9H+nSOpSLe76B8hFXc0BI=
+	t=1744651066; cv=none; b=u93ZIC7WfErsmHVNShEN2JEpb4oj9cHLXbXRXpklJnxh3ijO0kuawaKCupf47QkhQHo8xd3R9fG7V7iVXnKsyF3wrqP1PmEwAakVM+x8XUG1yziiYaal6M3UzzckMbOT9WZCBBrirSxQQxyFwYmxBZmzS18kakoVh9Ttrs3IjJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744650796; c=relaxed/simple;
-	bh=sFTaMFijVk2HZVriqjm0aoHOUR8tYLFf51KFMR53Zes=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
-	 MIME-Version; b=I1DUy43a2I3NF7bEY88nFzuxIUQN1MlNlc1HE0xkYw9y3O2fCcEH4MER/FE6SwF0eM6mI5BwHfofD0klVjBkrw3aM0p0rfQ6tzb3gu2lNvEsHHZ5Gk+Yox/tO+8IMCYQ8iqu/4EJn7V5tiVNKgBmqEquOrvh0M/lVdjmVfi0MuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heQozt/B; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744651066; c=relaxed/simple;
+	bh=rzA20/pIdWBHMGU7xAsPsa+U0QCOSidUUd989Wkkeeg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EEWzRrB+1Byo7CWF1hkbc/xX/bh8yyykWLOa+rd5TIJvjY3voWsi2a+2crDHWN3Joa4Hg1KCtF/IUB/xmml4i7qymU4/0LebdfYCBcmNb2mOrkUpoB8gA75U96KfVFYZCQ1xtPVY80dwEwfQlGg4/HZmB8pzBQ/r3qmQYiQlx2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Dx/VuRjp; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heQozt/B"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43d2d952eb1so37605175e9.1;
-        Mon, 14 Apr 2025 10:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744650793; x=1745255593; darn=lists.linux.dev;
-        h=mime-version:user-agent:content-transfer-encoding:in-reply-to:date
-         :cc:to:from:subject:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AhLhCv09lRa1OLV+bmnI0sicXwTDVpYEF9Itb4YCx/Y=;
-        b=heQozt/B7Dt9CND25Gdsn0FFp+JtVUsH2pdoKkTRxrhV/wdGIc+j/mXSMZpRzTVTyS
-         mXnZi4Fd33Km8s7x8tM5agm+qYMoCttTgZBGi49nBPeSMgO1I9v+fraMaDDIUaJd+XqY
-         ZQ6QJTZqSKC7x6cR8l4YpaNa3Dw0PQ3OeUBb/9MZqPv5mFhTTK3Z6oTqlSWKY13lUvSt
-         qWuHUB6lcqZdlfSRiF1rHETwRSJBVJbHl//jN/mHgLPB7V0l4gnH5nNvCGcASyMhGgic
-         i3YX/L4ATiH51b8O09UN14IAx1HlotCc6X3K/NTTfres8KnW+/LCy9eKe572H2UiJvNQ
-         Wy1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744650793; x=1745255593;
-        h=mime-version:user-agent:content-transfer-encoding:in-reply-to:date
-         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AhLhCv09lRa1OLV+bmnI0sicXwTDVpYEF9Itb4YCx/Y=;
-        b=EUeKrsfQtIu4CfDYWrCD1RlYKF7Z8fQhNv9UtNEmmjpfckDB16iuoz+YpMHXGkni+2
-         CmuKf/XIhM08ieSosZXS3rRDjBTLKUI4RnpyEMK+DrzUc+zVmnTjDkChhLwkR0ErEInu
-         FO0jn9wNAFUVsjuMsHDm8Rz9PrIKzuyIOyAoASgNxObMJMdxUiagltKIIIqzdPBqUYk6
-         na1Xk1UAiNrxCp2REEXzApeuDLrv7ps6QLPVEdciZ1ZQMSuMi5rPOYO9DPq+Bl6pjcNR
-         pjgH0R8FBDnafsU6MA2eGfQ7cjPCcToACKZ3fobHtWBvtG9DJFW2rORWVYNaN9FWO03w
-         MPGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDm3F9JUvTvH031L92u6Dr4hUm0Nx+2+yUbYrfjcCbYrdYoommLX3Fjz1FrK5QHr5sX2N7@lists.linux.dev, AJvYcCX0gxUbeeklfbKLtETtowQ8kMEJ1jFAvI7AxIHZ11qTXImla+EBZkV16Ttj/cK/pJH9DOCfN1Mjc0+VRAtdeh8=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyyzA28Ujr+VySYHVYuOMgj/YI2Cf9/87dVwaOcZTTrXAWus8H/
-	C9SxQOkvWD4fnqGGORluWnSfQo7zNdJSmZe59b9dUI5FJ8HPeD74
-X-Gm-Gg: ASbGncv0jyindZBBa0ZIQp1KQ1XfUbCVnUia/nAGdBo7yfe68xE8f6VqpZvy8a2+lwW
-	Wphew5uGXF6bUeqYFjlg7tidRTs4ef/x4IbOVf0hOHSFo8+e4ZfUk+j9rhGMYVzNr/2AtPV5HOF
-	owgXNs7AcLJK/fYXZyu28gPfr3KnkiuRExKb6l6H+aEgYeSOYyKKXQLsgj1sSmLX4VUu6Vom1sW
-	BqinBBaXVFcpsHMfmeRWr/1CHD44LVnDnyJGRC10tq2G93u+f0W1ilGwd3GWto93+ideoSC8Fe1
-	uqvQJC98IcsNb9akSx5mPhEDUporblbZgw6sznIKZKvdfno/Jbn3XE7tsx+ThG1gfEd3P+8808m
-	dfPs8vJRuS1bS5ERC6W53oA==
-X-Google-Smtp-Source: AGHT+IFaPusiZQT0QiFcyLJp0TXK65g3+z16rgMNv9l2dKvCZ0RLPJLCBzoBrYTr6CV/HfnsWx9kLw==
-X-Received: by 2002:a05:600c:8519:b0:43d:300f:fa51 with SMTP id 5b1f17b1804b1-43f3a93ebb3mr115773795e9.9.1744650792986;
-        Mon, 14 Apr 2025 10:13:12 -0700 (PDT)
-Received: from ?IPv6:2001:b07:5d29:f42d:74f6:abb7:53c9:817c? ([2001:b07:5d29:f42d:74f6:abb7:53c9:817c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f204c500bsm191180875e9.0.2025.04.14.10.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 10:13:12 -0700 (PDT)
-Message-ID: <0f4f2ed70829fffb2eb816e34e26be22681705a5.camel@gmail.com>
-Subject: Re: [RFC PATCH v1 13/15] x86/msr: Use the alternatives mechanism to
- read MSR
-From: Francesco Lavra <francescolavra.fl@gmail.com>
-To: xin@zytor.com
-Cc: acme@kernel.org, adrian.hunter@intel.com, ajay.kaher@broadcom.com, 
- alexander.shishkin@linux.intel.com, alexey.amakhalov@broadcom.com, 
- andrew.cooper3@citrix.com, bcm-kernel-feedback-list@broadcom.com, 
- boris.ostrovsky@oracle.com, bp@alien8.de, bpf@vger.kernel.org, 
- dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com, 
- hpa@zytor.com, irogers@google.com, jgross@suse.com, jolsa@kernel.org, 
- kan.liang@linux.intel.com, kvm@vger.kernel.org, kys@microsoft.com, 
- linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org, 
- linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
- llvm@lists.linux.dev,  luto@kernel.org, mark.rutland@arm.com,
- mingo@redhat.com, namhyung@kernel.org,  pbonzini@redhat.com,
- peterz@infradead.org, seanjc@google.com, tglx@linutronix.de, 
- tony.luck@intel.com, virtualization@lists.linux.dev, vkuznets@redhat.com, 
- wei.liu@kernel.org, x86@kernel.org, xen-devel@lists.xenproject.org
-Date: Mon, 14 Apr 2025 19:13:09 +0200
-In-Reply-To: <20250331082251.3171276-14-xin@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Dx/VuRjp"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=IYRKGwR89Rpw68pdLeCst1myOZk4GqPsPOkkIazWR3w=; b=Dx
+	/VuRjp0nFQKNbq1x3+XqZofv0ZRl6pr8c0elKq4L5tqkwKQSiOVIkavVio24lxk1k60DTPHSABwJ8
+	mWgekEFQAkOwh3KxZqIcUmirU6CVu0e92MYFR/WHbtCvI27sadxWQC7gSaWj3rKB2Y/KmiKMCAeoL
+	Jlaa3jt9wRrFnb0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1u4NRA-009EqC-1B; Mon, 14 Apr 2025 19:17:36 +0200
+Date: Mon, 14 Apr 2025 19:17:36 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Sai Krishna Gajula <saikrishnag@marvell.com>
+Cc: "davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+	Geethasowjanya Akula <gakula@marvell.com>,
+	Linu Cherian <lcherian@marvell.com>,
+	Jerin Jacob <jerinj@marvell.com>,
+	Hariprasad Kelam <hkelam@marvell.com>,
+	Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	Bharat Bhushan <bbhushan2@marvell.com>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>,
+	"morbo@google.com" <morbo@google.com>,
+	"justinstitt@google.com" <justinstitt@google.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"horms@kernel.org" <horms@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [net-next PATCH v3 1/2] octeontx2-af: correct __iomem
+ annotations flagged by Sparse
+Message-ID: <e80bd0f7-f38e-4882-aa48-ff98d0fd0101@lunn.ch>
+References: <20250311182631.3224812-1-saikrishnag@marvell.com>
+ <20250311182631.3224812-2-saikrishnag@marvell.com>
+ <7009d4cc-a008-49ea-8f50-1e9aec63b592@lunn.ch>
+ <BY3PR18MB4707C3348715B237C0A95C47A0B32@BY3PR18MB4707.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BY3PR18MB4707C3348715B237C0A95C47A0B32@BY3PR18MB4707.namprd18.prod.outlook.com>
 
-On 2025-03-31 at 8:22, Xin Li (Intel) wrote:
-> diff --git a/arch/x86/xen/xen-asm.S b/arch/x86/xen/xen-asm.S
-> index e672632b1cc0..6e7a9daa03d4 100644
-> --- a/arch/x86/xen/xen-asm.S
-> +++ b/arch/x86/xen/xen-asm.S
-> @@ -399,3 +399,37 @@ SYM_CODE_END(xen_entry_SYSCALL_compat)
->  	RET
->  SYM_FUNC_END(asm_xen_write_msr)
->  EXPORT_SYMBOL_GPL(asm_xen_write_msr)
-> +
-> +/*
-> + * The prototype of the Xen C code:
-> + * 	struct { u64 val, bool done } xen_do_read_msr(u32 msr)
-> + */
-> +SYM_FUNC_START(asm_xen_read_msr)
-> +	ENDBR
-> +	FRAME_BEGIN
-> +	XEN_SAVE_CALLEE_REGS_FOR_MSR
-> +	mov %ecx, %edi		/* MSR number */
-> +	call xen_do_read_msr
-> +	test %dl, %dl		/* %dl=3D1, i.e., ZF=3D0, meaning
-> successfully done */
-> +	XEN_RESTORE_CALLEE_REGS_FOR_MSR
-> +	jnz 2f
-> +
-> +1:	rdmsr
-> +	_ASM_EXTABLE_FUNC_REWIND(1b, -5, FRAME_OFFSET /
-> (BITS_PER_LONG / 8))
-> +	shl $0x20, %rdx
-> +	or %rdx, %rax
-> +	/*
-> +	 * The top of the stack points directly at the return
-> address;
-> +	 * back up by 5 bytes from the return address.
-> +	 */
+On Mon, Apr 14, 2025 at 04:38:53PM +0000, Sai Krishna Gajula wrote:
+> > -----Original Message-----
+> > From: Andrew Lunn <andrew@lunn.ch>
+> > Sent: Wednesday, March 12, 2025 2:52 AM
+> > To: Sai Krishna Gajula <saikrishnag@marvell.com>
+> > Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> > pabeni@redhat.com; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > Sunil Kovvuri Goutham <sgoutham@marvell.com>; Geethasowjanya Akula
+> > <gakula@marvell.com>; Linu Cherian <lcherian@marvell.com>; Jerin Jacob
+> > <jerinj@marvell.com>; Hariprasad Kelam <hkelam@marvell.com>; Subbaraya
+> > Sundeep Bhatta <sbhatta@marvell.com>; andrew+netdev@lunn.ch; Bharat
+> > Bhushan <bbhushan2@marvell.com>; nathan@kernel.org;
+> > ndesaulniers@google.com; morbo@google.com; justinstitt@google.com;
+> > llvm@lists.linux.dev; horms@kernel.org; kernel test robot <lkp@intel.com>
+> > Subject: Re: [net-next PATCH v3 1/2] octeontx2-af: correct
+> > __iomem annotations flagged by Sparse
+> > 
+> > > if (mbox->mbox. hwbase) > - iounmap(mbox->mbox. hwbase); > +
+> > > iounmap((void __iomem *)mbox->mbox. hwbase); This looks wrong. If you
+> > > are unmapping it, you must of mapped it somewhere. And that mapping
+> > > would of returned an __iomem
+> > 
+> > >  	if (mbox->mbox.hwbase)
+> > > -		iounmap(mbox->mbox.hwbase);
+> > > +		iounmap((void __iomem *)mbox->mbox.hwbase);
+> > 
+> > This looks wrong. If you are unmapping it, you must of mapped it
+> > somewhere. And that mapping would of returned an __iomem value. So
+> > mbox.hwbase should be an __iomem value and you would not need this
+> > cast.
 
-This works only if this function has been called directly (e.g. via
-`call asm_xen_write_msr`), but doesn't work with alternative call types
-(like indirect calls). Not sure why one might want to use an indirect
-call to invoke asm_xen_write_msr, but this creates a hidden coupling
-between caller and callee.
-I don't have a suggestion on how to get rid of this coupling, other
-than setting ipdelta in _ASM_EXTABLE_FUNC_REWIND() to 0 and adjusting
-the _ASM_EXTABLE_TYPE entries at the call sites to consider the
-instruction that follows the function call (instead of the call
-instruction) as the faulting instruction (which seems pretty ugly, at
-least because what follows the function call could be an instruction
-that might itself fault). But you may want to make this caveat explicit
-in the comment.
+> Yes,  mbox->mbox.hwbase is ioremapped with cache (ioremap_wc), while initialization it is declared as __iomem. But this hwbase is actually a DRAM memory mapped to BAR for better accessibility across the system. Since we use large memcpy (64KB and more) to/from this hwbase, we forced it to use as "void */u64" before exiting with unmap. As this is DRAM memory, memory access will not have side effects. Infact the AI applications also recommended similar mechanism. Please suggest if you have any other view and this can be addressed in some other way.
+
+Please configure your email client to correctly wrap emails.
+
+Did you check the performance of memcpy_fromio()? That is the API you
+are supposed to be using with an __iomem. I _think_ memcpy is only
+going to work for some architectures and other architectures will give
+you problems. That is the whole point of the __iomem, to make sure you
+use the correct API which works across architectures.
+
+> > 
+> > >  	for (qidx = 0; qidx < pf->qset.cq_cnt; qidx++) {
+> > > -		ptr = otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
+> > > +		ptr = (__force u64 *)otx2_get_regaddr(pf,
+> > NIX_LF_CQ_OP_INT);
+> > >  		val = otx2_atomic64_add((qidx << 44), ptr);
+> > 
+> > This also looks questionable. You should be removing casts, not adding them.
+> > otx2_get_regaddr() returns an __iomem. So maybe
+> > otx2_atomic64_add() is actually broken here?
+> Similar to the above case, otx2_atomic64_add is a special case where it uses assembly code as part of definition, hence we had to use typecasting the "ptr". Please suggest if there is any better way.
+> 
+> static inline u64 otx2_atomic64_add(u64 incr, u64 *ptr)
+> {
+>         u64 result;
+> 
+
+Teach this function to accept an __iomem. Worst case, you remove the
+cast here, before going into assembly.
+
+>         __asm__ volatile(".cpu   generic+lse\n"
+>                          "ldadd %x[i], %x[r], [%[b]]"
+>                          : [r]"=r"(result), "+m"(*ptr)
+>                          : [i]"r"(incr), [b]"r"(ptr)
+>                          : "memory");
+
+What actually happens if you keep the attribute? My guess is
+nothing. These are sparse markups, and gcc/as never seems them.
+
+	Andrew
