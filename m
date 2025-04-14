@@ -1,108 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA9519D06A
-	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 19:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D55B81DBB03
+	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 20:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744658923; cv=none; b=Ll/ab/TQvp1P8QikIjVJuWtcmyPzrvNjvsVZN29B03NlgEyDsv7UHtpg1hUgg4HrWtOLrQzMQk29k8/VQMuXRIFDYqwibvrZmib2tl+5XIwZwCJFrRsEbZD25PhI7cy7HF9UILD80YoedzEqQTOhYrFxwrwhW66zDV9R96n1Bmw=
+	t=1744661483; cv=none; b=Dm3j9x2LjyxbMw6lLvAnmQ49kVQWakAuXgSDlTIz7kuSpRnWGb1wiPVovmXGuj2bZJldI+jccjSFk8MUvzLGq3wnN+A03bHOEeZm3wcSLeJpcA3OwNpPPz/qd/lR43LQPVQqJ4JOxGcdTG89RoDiZFYrJe08B6elwYUB88xdTRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744658923; c=relaxed/simple;
-	bh=celI2uC81gJXumKSv3Ve1wnDLQ3I9UtQ36LMkVkZf5A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aBj5COHkdss4TzjbD8NINxeZS5ihIy9FW6wR4Xb5ztWYS90rhn8J8FgxY9AovkyRx9CCVrdukAdbVlzSiuVv71AIFhlQ4Dc08535uWpONKZBdGF7XgkiriQHRXQOfTRnINFTYmL8542BlL/KtB34thf7HVE79KseED8Zn7N7loM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SEYO5/Pu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744661483; c=relaxed/simple;
+	bh=m9gUHGSqqjzXCUNW6X/n+Ri/iJ5aMnBxw6nMVp+5E6M=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=HoM9is47dLiegryOg1R4gQiDNgUS0L4y+psijSob7A2pMyqt/BK/YVJQMEFTIWwvH7iM7JSFEm8Hz89Z/oV/CXbr7QiaKi0Z50rAwmlleoLCuxt9fP5AGX/SjgOyFA1f1dvJaS73aA72NfEDTIaBKADGYj/P0AiuLALRORLm93c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=DGcER8U0; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SEYO5/Pu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D17C4CEE2
-	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 19:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744658922;
-	bh=celI2uC81gJXumKSv3Ve1wnDLQ3I9UtQ36LMkVkZf5A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SEYO5/PuTQgJTq+MAvRyI5jfeY6tDY6CHtIJaOlLLPAdzPKSeChkfbpYeD7MuX5Bq
-	 SiZSEudppB04rHdoqxDVeJn6UdoIGxXiAXrW6hcssz1QlhGLaxyTOYV0OGAzFDY2JL
-	 qslv95VYexeMgpyNXhT/s8hupNF2DbkhLVXh/ZBGXiS55OBM879y2ooENYqbCO2Sdy
-	 anEA5DnoYm2GHhlQtHMN3JomreLXPkPAU58Eall9BUuR30ldt+nC6rx0ddhAxR0NyI
-	 iNO+Y87V305EtYkpo4AttDftidW7WJX1a4KxxpjDu17Fb7hnQCt26KaZW2zpb7Q1m2
-	 ViL/EKJSd6VLw==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-54c090fc7adso3300688e87.2
-        for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 12:28:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU1y1L4YIFSIhXW3WLq0GyYxRJMDnMxc2So8LfuZ3SlIYiep4XCgQRAAnqLNv3j1Rg+8VqN@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw5+25S34Wsb/hIdN5Xr+xRwjAc20/vW72KeaNoiQPUo/OFb0T1
-	JUp7sgKGE1ezk2GPOVOGEqIZ6TFJxdjT8ym+4S/7tx0JdKcVhOkGAN/ABJ0uhunH6wXBL0uuHox
-	kPo3YHFb5G9fd87NIucxEbjQw3a8=
-X-Google-Smtp-Source: AGHT+IGDNx3FpSJFrwnYyeIY4a4YMrCmIfBvBjeHcJ+jBj+75v9JAbSBQEkyd5lpp/4PjWtvytS2vcIMwfzqLSUgq1Q=
-X-Received: by 2002:a05:6512:398a:b0:549:5b54:2c66 with SMTP id
- 2adb3069b0e04-54d45296668mr3690823e87.23.1744658921135; Mon, 14 Apr 2025
- 12:28:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="DGcER8U0"
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3E98D210C426;
+	Mon, 14 Apr 2025 13:11:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3E98D210C426
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744661480;
+	bh=P556LurTOELheJsvrtJpXaQl7rF2eMtCrBpdxv4c0g8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=DGcER8U0Lp6LIp5x8dw8dW/kKK1vADezhCEhZACHXla6ONsZ/FiK3dfjlQd/DeITL
+	 6lyD6wH7iWHkvv5LbIiMagDI/VQwjUWpO/P+F21KKUt2eFOC3eYPU3j6gOs5oqok7S
+	 SMP1E1bth48QsO3rcIBsYXqH09fmAhbiTS24RlfI=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Tyler Hicks <code@tyhicks.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
+ <neal@gompa.dev>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ llvm@lists.linux.dev, nkapron@google.com, teknoraver@meta.com,
+ roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+In-Reply-To: <Z/lo3iVcJgB2pfQX@redbud>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+ <Z/lo3iVcJgB2pfQX@redbud>
+Date: Mon, 14 Apr 2025 13:11:09 -0700
+Message-ID: <87lds2jyg2.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250414-x86-boot-startup-lto-error-v1-1-7c8bed7c131c@kernel.org>
-In-Reply-To: <20250414-x86-boot-startup-lto-error-v1-1-7c8bed7c131c@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 14 Apr 2025 21:28:28 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGZ27y1t-xxqNCJopi-UQWH65S0j-zB_S_4=pEY5XpKbA@mail.gmail.com>
-X-Gm-Features: ATxdqUGSuIW2wjpt4Ynq0D9vfgxSNnN-it3Rx842q4v1y6tPZOwRfvpMymXkGBM
-Message-ID: <CAMj1kXGZ27y1t-xxqNCJopi-UQWH65S0j-zB_S_4=pEY5XpKbA@mail.gmail.com>
-Subject: Re: [PATCH] x86/boot/startup: Disable LTO
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, x86@kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Mon, 14 Apr 2025 at 21:26, Nathan Chancellor <nathan@kernel.org> wrote:
+Tyler Hicks <code@tyhicks.com> writes:
+
+> On 2025-04-04 14:54:50, Blaise Boscaccy wrote:
+>> +static int hornet_verify_lskel(struct bpf_prog *prog, struct hornet_maps *maps,
+>> +			       void *sig, size_t sig_len)
+>> +{
+>> +	int fd;
+>> +	u32 i;
+>> +	void *buf;
+>> +	void *new;
+>> +	size_t buf_sz;
+>> +	struct bpf_map *map;
+>> +	int err = 0;
+>> +	int key = 0;
+>> +	union bpf_attr attr = {0};
+>> +
+>> +	buf = kmalloc_array(prog->len, sizeof(struct bpf_insn), GFP_KERNEL);
+>> +	if (!buf)
+>> +		return -ENOMEM;
+>> +	buf_sz = prog->len * sizeof(struct bpf_insn);
+>> +	memcpy(buf, prog->insnsi, buf_sz);
+>> +
+>> +	for (i = 0; i < maps->used_map_cnt; i++) {
+>> +		err = copy_from_bpfptr_offset(&fd, maps->fd_array,
+>> +					      maps->used_idx[i] * sizeof(fd),
+>> +					      sizeof(fd));
+>> +		if (err < 0)
+>> +			continue;
+>> +		if (fd < 1)
+>> +			continue;
+>> +
+>> +		map = bpf_map_get(fd);
 >
-> When building with CONFIG_LTO_CLANG, there is an error in the x86 boot
-> startup code because it builds with a different code model than the rest
-> of the kernel:
+> I'm not very familiar with BPF map lifetimes but I'd assume we need to have a
+> corresponding bpf_map_put(map) before returning.
 >
->   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 2' from vmlinux.a(head64.o at 1302448), and 'i32 1' from vmlinux.a(map_kernel.o at 1314208)
->   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 2' from vmlinux.a(common.o at 1306108), and 'i32 1' from vmlinux.a(gdt_idt.o at 1314148)
+>> +		if (IS_ERR(map))
+>> +			continue;
+>> +
+>> +		/* don't allow userspace to change map data used for signature verification */
+>> +		if (!map->frozen) {
+>> +			attr.map_fd = fd;
+>> +			err = kern_sys_bpf(BPF_MAP_FREEZE, &attr, sizeof(attr));
+>> +			if (err < 0)
+>> +				goto out;
+>> +		}
+>> +
+>> +		new = krealloc(buf, buf_sz + map->value_size, GFP_KERNEL);
+>> +		if (!new) {
+>> +			err = -ENOMEM;
+>> +			goto out;
+>> +		}
+>> +		buf = new;
+>> +		new = map->ops->map_lookup_elem(map, &key);
+>> +		if (!new) {
+>> +			err = -ENOENT;
+>> +			goto out;
+>> +		}
+>> +		memcpy(buf + buf_sz, new, map->value_size);
+>> +		buf_sz += map->value_size;
+>> +	}
+>> +
+>> +	err = verify_pkcs7_signature(buf, buf_sz, sig, sig_len,
+>> +				     VERIFY_USE_SECONDARY_KEYRING,
+>> +				     VERIFYING_EBPF_SIGNATURE,
+>> +				     NULL, NULL);
+>> +out:
+>> +	kfree(buf);
+>> +	return err;
+>> +}
+>> +
+>> +static int hornet_check_binary(struct bpf_prog *prog, union bpf_attr *attr,
+>> +			       struct hornet_maps *maps)
+>> +{
+>> +	struct file *file = get_task_exe_file(current);
 >
-> As this directory is for code that only runs during early system
-> initialization, LTO is not very important, so filter out the LTO flags
-> from KBUILD_CFLAGS for arch/x86/boot/startup to resolve the build error.
+> We should handle get_task_exe_file() returning NULL. I don't think it is likely
+> to happen when passing `current` but kernel_read_file() doesn't protect against
+> it and we'll have a NULL pointer dereference when it calls file_inode(NULL).
 >
-> Fixes: 4cecebf200ef ("x86/boot: Move the early GDT/IDT setup code into startup/")
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Closes: https://lore.kernel.org/CA+G9fYvnun+bhYgtt425LWxzOmj+8Jf3ruKeYxQSx-F6U7aisg@mail.gmail.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/x86/boot/startup/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>> +	const unsigned long markerlen = sizeof(EBPF_SIG_STRING) - 1;
+>> +	void *buf = NULL;
+>> +	size_t sz = 0, sig_len, prog_len, buf_sz;
+>> +	int err = 0;
+>> +	struct module_signature sig;
+>> +
+>> +	buf_sz = kernel_read_file(file, 0, &buf, INT_MAX, &sz, READING_EBPF);
+>
+> We are leaking buf in this function. kernel_read_file() allocates the memory
+> for us but we never kfree(buf).
+>
+>> +	fput(file);
+>> +	if (!buf_sz)
+>> +		return -1;
+>> +
+>> +	prog_len = buf_sz;
+>> +
+>> +	if (prog_len > markerlen &&
+>> +	    memcmp(buf + prog_len - markerlen, EBPF_SIG_STRING, markerlen) == 0)
+>> +		prog_len -= markerlen;
+>
+> Why is the marker optional? Looking at module_sig_check(), which verifies the
+> signature on kernel modules, I see that it refuses to proceed if the marker is
+> not found. Should we do the same and refuse to operate on any unexpected input?
 >
 
-Thanks for the fix
+Looking at this again, there doesn't seem to be a good reason to have an
+optional marker. I'll get that fixed in v3 along with the rest of these
+suggestions. 
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-
-
-> diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
-> index ccdfc42a4d59..bb7c826e586c 100644
-> --- a/arch/x86/boot/startup/Makefile
-> +++ b/arch/x86/boot/startup/Makefile
-> @@ -7,8 +7,9 @@ KBUILD_CFLAGS           += -D__DISABLE_EXPORTS -mcmodel=small -fPIC \
->                            -fno-stack-protector -D__NO_FORTIFY \
->                            -include $(srctree)/include/linux/hidden.h
+>> +
+>> +	memcpy(&sig, buf + (prog_len - sizeof(sig)), sizeof(sig));
 >
-> -# disable ftrace hooks
-> +# disable ftrace hooks and LTO
->  KBUILD_CFLAGS  := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS))
-> +KBUILD_CFLAGS  := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
->  KASAN_SANITIZE := n
->  KCSAN_SANITIZE := n
->  KMSAN_SANITIZE := n
+> We should make sure that prog_len is larger than sizeof(sig) prior to this
+> memcpy(). It is probably not a real issue in practice but it would be good to
+> ensure that we can't be tricked to copy and operate on any bytes proceeding
+> buf.
 >
-> ---
-> base-commit: 9287216a0c8f7bf7b485e18ad71584b434b59bb6
-> change-id: 20250414-x86-boot-startup-lto-error-26e0825706a3
+> Tyler
 >
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+>> +	sig_len = be32_to_cpu(sig.sig_len);
+>> +	prog_len -= sig_len + sizeof(sig);
+>> +
+>> +	err = mod_check_sig(&sig, prog->len * sizeof(struct bpf_insn), "ebpf");
+>> +	if (err)
+>> +		return err;
+>> +	return hornet_verify_lskel(prog, maps, buf + prog_len, sig_len);
+>> +}
