@@ -1,111 +1,103 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C0A29C327
-	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 12:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D2323D2B0
+	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 14:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744633792; cv=none; b=DVYNQI/chQK1LCzfPn9EfCbjnwv/XnMmmEIqDNkhOA3IOX/oWrBhvgkoEY57vDBnQzFPPVkavsuZNoBvTz2Rg15bWj5ukwUtlBAIVX9uQGe/1FBqxJhVdSJbZRBImrD8/001MeRnRMAVyX5rr9ETGm2NMe+hukRsq2JKd7N1xl0=
+	t=1744639890; cv=none; b=EmZ7OY1WWmSU//h9r31oTynlwmwtSnd0O+aJAqnBXa8Zgxa2Vp8FNYFw3dXRSHgrhiveGOvxsq/RM/3vE7Mzsf/s3QezgVZ0MoLHYlOVuWqzLyvwLqhWXLUk0NYIOpYju8IC+6G5Gt552B16BKTbXmPiUMCyvWK96ncwwVuCaTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744633792; c=relaxed/simple;
-	bh=OiYVXkZSfdT6nhBT2tfGSCxBMvJ7xMsZXCDnusianr4=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=Rce1fqLfgij7ll4NrfG140QT8Co5H92Ufu4H9W0GtIA26CCCMMUFaXbnRe2nS4C1RRVq63+BJiI2npe8drkJyCNmdtTLKtbLkEWPp9WIw5v48Y2TBYdl4LdeT8jivuyfI9oYjI/CiRDOvrMD2QgSrC3aKo5WOD1QIhb71CvjmBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vE5ERu/Z; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1744639890; c=relaxed/simple;
+	bh=tEuPCZrbW4uGWbDihJx7L/LXb8gjOIKkMgf9s/m/B/w=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=l//rLd1FubW5Y6s+7D0to3J7H0F8lXM6Ov+YvAtuRkpAOZb7zZk6pB9eyavcxYIxLvnCaY9v8o7U/GuGY9P7DyA/BQlt6l8kiZQ2r6531oJ/1+rmI2258Tw0Z6ZzXuui2kt3nNs4Gi5r4cURD5/DNNDV1MXjRZl8tmchWLcDCeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tgQwpAKY; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vE5ERu/Z"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tgQwpAKY"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-301302a328bso4282823a91.2
+        for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 07:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744639888; x=1745244688; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rN4c8fNLuwFLiyiUAz0qlqS5AwW3WCou4y1O1Fl9+04=;
+        b=tgQwpAKYe0zWPwvq0USxz7hLDH2yKwkSXFIyYD3HX6A6wKB/UVppzm6cAtPGc66BpE
+         pO4jYTnktCmb3Lt6m9B0t/BV3L1hS2xu3lLjzmv3P6I7dlEzSCYMDx1jEcR5YPGn0cxK
+         c6hM7C0ALZNm3/ZONAhq81PyEkE1PzXjnaCfzr8x2OOQH9fhfxtb8uyJfBF8gWC3n4rd
+         BbIQYd01b/oqIdGwdjM5LnwndnSLrIdmLA+8YMy1D0RiDJyddN7P81QAeJrHWjdsJoeJ
+         x89fFwIzjDXmP2Zu2rRo0fBkCjAyHz9CTvxNZWSzKnooiKjykK5e/dvzi6cccVmGE5tO
+         GK9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744639888; x=1745244688;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rN4c8fNLuwFLiyiUAz0qlqS5AwW3WCou4y1O1Fl9+04=;
+        b=YJqF4Q3COLGobFLXKncMvKE5VcSmZpRDK0RDp9pADPBRNj8/Z4uEP3zBSZR1Dvo8CE
+         h39Q483LuUDpGsUzHdmWHEKNfurknZRXI1H0z2f/G+avkPGt1IOHWGpz0A2ReDt4/v0A
+         Ajr1m4/AeYGUbReK0PUUG2hfwAHbx0nE267dVFeUnx4dmeGwRwESxcB/E9BT8Oif6rvi
+         iLi1QSNYSYU5nE5w/IxOqSskhctN7h0VJUJDRzQjS67glNFUBKfUrO8baRPZw0Qrv5oc
+         YGvRqMwwat87YpwO0nuJSf6CvkETfIHsd1Hlq8RQWrL3pNkVNGV9yJIq3NDsYyqiVvac
+         kJXA==
+X-Gm-Message-State: AOJu0YyFmfi6IA/XLf5bgOAff9LsaQVYxTR/4fnFKfejcl+GoQ9n8tlu
+	3LxnjdQgThrzLsg7LOjZl0V2+tIjqtx9A0bhwHi4CAwx8WdMN1d5U++Kb1Pofke6p5bAKFdcBSW
+	jiwO1JlzJauqt5jDMXzy9b4wbFZuFVsSqVkpU0RDwsxZ8GUH2VaAxy7g=
+X-Gm-Gg: ASbGncvZYTv0eyMpyb0VHDv3pX+kqAp+YF7zz1UU/UWSCiGVvkaTLuPPqSUKjhgvdhN
+	D+Ut2fH8Yc30wXnYn+68/hrCo9IVb4gweNZvJyJntPCut7seBWsTo2i11ZW5ZjwmGQi5Vx4W7PL
+	P5yN3aMsBB9gbwDv1nUfLfSlz7zgtrHbHAjQAfIZJchfpB7IcYxyo=
+X-Google-Smtp-Source: AGHT+IGvcRdqaiufKsFDDDQaCGUwRsDmsPajuU91sQMLxAcWYm80/WD1jFGm+db3CQMcEptop6u1R1NHxXqb63usPvA=
+X-Received: by 2002:a17:90b:2811:b0:2ee:c291:765a with SMTP id
+ 98e67ed59e1d1-30823639c94mr17879078a91.8.1744639887495; Mon, 14 Apr 2025
+ 07:11:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1744633777;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vvai2S/0OVjs1P8gmT3IZRMvxpZzuZvGIu5Rcie6gGc=;
-	b=vE5ERu/ZrIA7g80vZ+sKYzWIFlzlKhHC5X2/X03m8g+9hGUeAkU4HoJoUh0f2+fkukd86g
-	TZPGQdhxxuiZHyln89OnTXjvO/qGheV4XMeHVq9d5m5ccxtfX6juhcuhXcmvO9aygjXhDK
-	HICqXuHd3K+1tSwdHhnZLJhvscPtKoM=
-Date: Mon, 14 Apr 2025 12:29:35 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <bab35a470addc4d3d32551c6776d4d4884def193@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v2] bpf, sockmap: Introduce tracing capability
- for sockmap
-To: "kernel test robot" <lkp@intel.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mrpre@163.com,
- "Jakub Sitnicki" <jakub@cloudflare.com>, "Cong Wang"
- <xiyou.wangcong@gmail.com>, "Steven Rostedt" <rostedt@goodmis.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
- Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
- Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-In-Reply-To: <202504141925.PFNOfZzb-lkp@intel.com>
-References: <20250411091634.336371-1-jiayuan.chen@linux.dev>
- <202504141925.PFNOfZzb-lkp@intel.com>
-X-Migadu-Flow: FLOW_OUT
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Mon, 14 Apr 2025 16:11:15 +0200
+X-Gm-Features: ATxdqUE88UhynrTms5J5w8VyMpN0utUaEsGYZOg0K2pAoIUegIx51WjnYJJGywU
+Message-ID: <CANp29Y4FmGDXm3LWvW6D+JR8CWf=fvuiAseFb1h2HQSDjFKO2A@mail.gmail.com>
+Subject: Latest clang versions fail to compile CONFIG_X86_X32_ABI=y
+To: llvm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+Cc: syzkaller <syzkaller@googlegroups.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-2025/4/14 19:54, "kernel test robot" <lkp@intel.com> wrote:
+Hi,
 
->=20
->=20Hi Jiayuan,
->=20
->=20kernel test robot noticed the following build errors:
->=20
->=20[auto build test ERROR on bpf-next/master]
->=20
->=20url: https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/bpf-=
-sockmap-Introduce-tracing-capability-for-sockmap/20250414-093146
-> base: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
-master
-> patch link: https://lore.kernel.org/r/20250411091634.336371-1-jiayuan.c=
-hen%40linux.dev
-> patch subject: [PATCH bpf-next v2] bpf, sockmap: Introduce tracing capa=
-bility for sockmap
-> config: arm64-randconfig-001-20250414 (https://download.01.org/0day-ci/=
-archive/20250414/202504141925.PFNOfZzb-lkp@intel.com/config)
->=20
->=20compiler: clang version 21.0.0git (https://github.com/llvm/llvm-proje=
-ct f819f46284f2a79790038e1f6649172789734ae8)
->=20
->=20reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/a=
-rchive/20250414/202504141925.PFNOfZzb-lkp@intel.com/reproduce)
-> If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202504141925.PFNOfZzb-l=
-kp@intel.com/
-> All errors (new ones prefixed by >>):
->=20
->=20>=20
->=20> >=20
->=20> > ld.lld: error: undefined symbol: sock_i_ino
-> > >
-> >=20
->=20 >>> referenced by sockmap.h:70 (include/trace/events/sockmap.h:70)
->  >>> kernel/bpf/core.o:(trace_event_raw_event_sockmap_redirect) in arch=
-ive vmlinux.a
->  >>> referenced by sockmap.h:121 (include/trace/events/sockmap.h:121)
->  >>> kernel/bpf/core.o:(trace_event_raw_event_sockmap_strparser) in arc=
-hive vmlinux.a
+I've been trying to build a Linux kernel using newer llvm toolchain
+versions (18, 19, 20), but it consistently fails with the following
+errors:
 
-I see, CONFIG_NET is not set...
+ld.lld: error: arch/x86/entry/vdso/vgetrandom-x32.o:(.note.gnu.property+0x0):
+data is too short
+ld.lld: error: arch/x86/entry/vdso/vgetcpu-x32.o:(.note.gnu.property+0x0):
+data is too short
+ld.lld: error: arch/x86/entry/vdso/vclock_gettime-x32.o:(.note.gnu.property+0x0):
+data is too short
+
+The steps to reproduce:
+$ git checkout v6.15-rc2
+$ make defconfig
+$ ./scripts/config -e X86_X32_ABI
+$ make CC=clang LD=ld.lld -j48
+
+The versions used:
+$ clang --version
+Debian clang version 20.1.2
+(++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97)
+$ ld.lld --version
+Debian LLD 20.1.2 (compatible with GNU linkers)
+
+Is this a known clang/Linux issue?
+
+There's a kernel commit that addresses a similar problem:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aaeed6ecc1253ce1463fa1aca0b70a4ccbc9fa75
+
+but the error is slightly different there and the added Kconfig
+condition apparently did not kick in.
+
+-- 
+Aleksandr
