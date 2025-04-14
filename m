@@ -1,143 +1,113 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120E7284685;
-	Mon, 14 Apr 2025 17:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F651990B7;
+	Mon, 14 Apr 2025 17:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744651066; cv=none; b=u93ZIC7WfErsmHVNShEN2JEpb4oj9cHLXbXRXpklJnxh3ijO0kuawaKCupf47QkhQHo8xd3R9fG7V7iVXnKsyF3wrqP1PmEwAakVM+x8XUG1yziiYaal6M3UzzckMbOT9WZCBBrirSxQQxyFwYmxBZmzS18kakoVh9Ttrs3IjJw=
+	t=1744652964; cv=none; b=ZUziNCz2g7YxYSNV0D1rQbbnk5iNoahqSU8Uxnx/tOvZ7xNqKIOqE2cklpuoBcW4GmdvCbZV/fbefI4oOzMJe11J5oobUs2ZG9WQevo9jJlmaUhUR5mS5q7ipubzqtimjtVh9P3zBk2ZbewLyvXmXfeRm4o2lKp37TJiBgrD0Ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744651066; c=relaxed/simple;
-	bh=rzA20/pIdWBHMGU7xAsPsa+U0QCOSidUUd989Wkkeeg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EEWzRrB+1Byo7CWF1hkbc/xX/bh8yyykWLOa+rd5TIJvjY3voWsi2a+2crDHWN3Joa4Hg1KCtF/IUB/xmml4i7qymU4/0LebdfYCBcmNb2mOrkUpoB8gA75U96KfVFYZCQ1xtPVY80dwEwfQlGg4/HZmB8pzBQ/r3qmQYiQlx2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Dx/VuRjp; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1744652964; c=relaxed/simple;
+	bh=pCf6zl5WWMLk499XrU3ze5XCG4TXFPjHsQDAk9yq3ts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YAYz92XePxwyz5cuDrOsIofo+/YR3uw066qsWexko6ErG9YUKC/jmaS0u81y/gywdbD+Dn9boXVpRK21fZJR92qaAvJUU+C6YqESXdkl2AR6ndrY07HJ4A/S1nA6q5McGeFvcUkj4sdsBk37gxar+nZ4YZsQfNTE0M24AxSCy1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=OWsAVJsJ; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Dx/VuRjp"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=IYRKGwR89Rpw68pdLeCst1myOZk4GqPsPOkkIazWR3w=; b=Dx
-	/VuRjp0nFQKNbq1x3+XqZofv0ZRl6pr8c0elKq4L5tqkwKQSiOVIkavVio24lxk1k60DTPHSABwJ8
-	mWgekEFQAkOwh3KxZqIcUmirU6CVu0e92MYFR/WHbtCvI27sadxWQC7gSaWj3rKB2Y/KmiKMCAeoL
-	Jlaa3jt9wRrFnb0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1u4NRA-009EqC-1B; Mon, 14 Apr 2025 19:17:36 +0200
-Date: Mon, 14 Apr 2025 19:17:36 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Sai Krishna Gajula <saikrishnag@marvell.com>
-Cc: "davem@davemloft.net" <davem@davemloft.net>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-	Geethasowjanya Akula <gakula@marvell.com>,
-	Linu Cherian <lcherian@marvell.com>,
-	Jerin Jacob <jerinj@marvell.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	Bharat Bhushan <bbhushan2@marvell.com>,
-	"nathan@kernel.org" <nathan@kernel.org>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>,
-	"morbo@google.com" <morbo@google.com>,
-	"justinstitt@google.com" <justinstitt@google.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"horms@kernel.org" <horms@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [net-next PATCH v3 1/2] octeontx2-af: correct __iomem
- annotations flagged by Sparse
-Message-ID: <e80bd0f7-f38e-4882-aa48-ff98d0fd0101@lunn.ch>
-References: <20250311182631.3224812-1-saikrishnag@marvell.com>
- <20250311182631.3224812-2-saikrishnag@marvell.com>
- <7009d4cc-a008-49ea-8f50-1e9aec63b592@lunn.ch>
- <BY3PR18MB4707C3348715B237C0A95C47A0B32@BY3PR18MB4707.namprd18.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="OWsAVJsJ"
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53EHmldx2305377
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 14 Apr 2025 10:48:48 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53EHmldx2305377
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744652930;
+	bh=pCf6zl5WWMLk499XrU3ze5XCG4TXFPjHsQDAk9yq3ts=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OWsAVJsJQtReNkvBxn4n90Jw5b4hgpiiMsQMj1kLj82PEd0mx8nuHiF2kM8Mvx3Xw
+	 LqxRXhBr5R0xxDPh57nO2hOouAGBLY3AKdZeqNoPCmA97JPCWtZ0UYmnsK+6p053w2
+	 lqlg5oeia/VCC2I4n1QOzlzq2Q+EByucHb13DRq32ZiCSS+Txt0R8+YpBvAIWB7Gct
+	 FuwsCZqp8vL1531axOppQPBxHdE0eB7iOltYssLVQ7RMeDVsVCMmRKTPxkgHRBImAx
+	 dIJ72y7yKeVu96cbY7s+wNxgXc4DZJO3Heom3U0XoQS1v8gYW+MgQaG/x5uDeQr3y+
+	 wlW0XdVD1zBrA==
+Message-ID: <0cad1e0b-2bfd-4258-90cd-8d319bf0e74a@zytor.com>
+Date: Mon, 14 Apr 2025 10:48:47 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BY3PR18MB4707C3348715B237C0A95C47A0B32@BY3PR18MB4707.namprd18.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
+ when available
+To: "H. Peter Anvin" <hpa@zytor.com>, Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
+ <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
+ <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
+ <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 14, 2025 at 04:38:53PM +0000, Sai Krishna Gajula wrote:
-> > -----Original Message-----
-> > From: Andrew Lunn <andrew@lunn.ch>
-> > Sent: Wednesday, March 12, 2025 2:52 AM
-> > To: Sai Krishna Gajula <saikrishnag@marvell.com>
-> > Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> > pabeni@redhat.com; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > Sunil Kovvuri Goutham <sgoutham@marvell.com>; Geethasowjanya Akula
-> > <gakula@marvell.com>; Linu Cherian <lcherian@marvell.com>; Jerin Jacob
-> > <jerinj@marvell.com>; Hariprasad Kelam <hkelam@marvell.com>; Subbaraya
-> > Sundeep Bhatta <sbhatta@marvell.com>; andrew+netdev@lunn.ch; Bharat
-> > Bhushan <bbhushan2@marvell.com>; nathan@kernel.org;
-> > ndesaulniers@google.com; morbo@google.com; justinstitt@google.com;
-> > llvm@lists.linux.dev; horms@kernel.org; kernel test robot <lkp@intel.com>
-> > Subject: Re: [net-next PATCH v3 1/2] octeontx2-af: correct
-> > __iomem annotations flagged by Sparse
-> > 
-> > > if (mbox->mbox. hwbase) > - iounmap(mbox->mbox. hwbase); > +
-> > > iounmap((void __iomem *)mbox->mbox. hwbase); This looks wrong. If you
-> > > are unmapping it, you must of mapped it somewhere. And that mapping
-> > > would of returned an __iomem
-> > 
-> > >  	if (mbox->mbox.hwbase)
-> > > -		iounmap(mbox->mbox.hwbase);
-> > > +		iounmap((void __iomem *)mbox->mbox.hwbase);
-> > 
-> > This looks wrong. If you are unmapping it, you must of mapped it
-> > somewhere. And that mapping would of returned an __iomem value. So
-> > mbox.hwbase should be an __iomem value and you would not need this
-> > cast.
+On 4/12/2025 4:10 PM, H. Peter Anvin wrote:
+> Also,*in this specific case* IA32_SPEC_CTRL is architecturally nonserializing, i.e. WRMSR executes as WRMSRNS anyway.
 
-> Yes,  mbox->mbox.hwbase is ioremapped with cache (ioremap_wc), while initialization it is declared as __iomem. But this hwbase is actually a DRAM memory mapped to BAR for better accessibility across the system. Since we use large memcpy (64KB and more) to/from this hwbase, we forced it to use as "void */u64" before exiting with unmap. As this is DRAM memory, memory access will not have side effects. Infact the AI applications also recommended similar mechanism. Please suggest if you have any other view and this can be addressed in some other way.
-
-Please configure your email client to correctly wrap emails.
-
-Did you check the performance of memcpy_fromio()? That is the API you
-are supposed to be using with an __iomem. I _think_ memcpy is only
-going to work for some architectures and other architectures will give
-you problems. That is the whole point of the __iomem, to make sure you
-use the correct API which works across architectures.
-
-> > 
-> > >  	for (qidx = 0; qidx < pf->qset.cq_cnt; qidx++) {
-> > > -		ptr = otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
-> > > +		ptr = (__force u64 *)otx2_get_regaddr(pf,
-> > NIX_LF_CQ_OP_INT);
-> > >  		val = otx2_atomic64_add((qidx << 44), ptr);
-> > 
-> > This also looks questionable. You should be removing casts, not adding them.
-> > otx2_get_regaddr() returns an __iomem. So maybe
-> > otx2_atomic64_add() is actually broken here?
-> Similar to the above case, otx2_atomic64_add is a special case where it uses assembly code as part of definition, hence we had to use typecasting the "ptr". Please suggest if there is any better way.
-> 
-> static inline u64 otx2_atomic64_add(u64 incr, u64 *ptr)
-> {
->         u64 result;
-> 
-
-Teach this function to accept an __iomem. Worst case, you remove the
-cast here, before going into assembly.
-
->         __asm__ volatile(".cpu   generic+lse\n"
->                          "ldadd %x[i], %x[r], [%[b]]"
->                          : [r]"=r"(result), "+m"(*ptr)
->                          : [i]"r"(incr), [b]"r"(ptr)
->                          : "memory");
-
-What actually happens if you keep the attribute? My guess is
-nothing. These are sparse markups, and gcc/as never seems them.
-
-	Andrew
+While the immediate form WRMSRNS could be faster because the MSR index
+is available *much* earlier in the pipeline, right?
