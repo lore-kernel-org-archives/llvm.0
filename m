@@ -1,138 +1,193 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFBD27F73F
-	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 16:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E262928B4E2
+	for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 16:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744646886; cv=none; b=JEgin/wtSo+yJ6+o2Wd7BXNF9ggYT5rHZQlw3+KwUGonUNfRhAlVaUrlWnnEedThqYODD/buyu4P71+WJ59GMzXWLca/CkKoZN4M8c9n0TM/SpDTga0Bu8XwJ3ZwAdNtYWSRD2NXC12zXvsk8Wsj4B3qsn/jyvv/ABpRSDL90Fo=
+	t=1744646903; cv=none; b=BgbsmtZV6sHONNtzazxUNVwZtEWdxTgC+HnzsUHK9D2u/iWHvpvImvgdWEZ4PR0GlI+tLXOl92AvmqMZhrdk7NAAROjI0Nuv94f3YZuqXqBF1UWE9JbnZmnHXYH0uwQU7CBQWzvvhE8EZVY8c6iU4Canf94XtkTRsXmyUPJAptU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744646886; c=relaxed/simple;
-	bh=YsDDrqdiKPewJFDI/ZaIPX3S15luwx8n2Mto/qWn4FU=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=FGGdttYqlvxGhIqzrQgHWaCHLpnDRwvqR4/c/oSPHch9XLF84TJyX6GlBrRzNs7g4mYTQRFyC5BR4zeaOT6YuUWf2LiRWdv3Y+cHLQjxb7h3I1kSMyEc5fVY/BVNRKC34wwfwOSaC1qKDmVGiYdWcDntM8Tl459loVf3IDVSldw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K+UGElNk; arc=none smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1744646903; c=relaxed/simple;
+	bh=UM2X1MMDXZM7fTOBoaVl4irheKjkJEoFW6yGloSDkIU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HToY/QT4S/KL7rGsX45glm0yWLxSWA78saduVrrfBpSdfGMb/BsQ3aB090fVMuFUff7umhxsBE7+xzaAES0w8MrKI8QHQmDpQkkx9czX9xSR0qzfxOZB/ErgywA2vDha67pWSxuGdzFbukbDqBL0TsyKkE9WSUO01FvssW+cOhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=JL1Ehupt; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K+UGElNk"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-525b44ec88aso2132197e0c.3
-        for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 09:08:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JL1Ehupt"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e637edaa652so3393488276.1
+        for <llvm@lists.linux.dev>; Mon, 14 Apr 2025 09:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744646882; x=1745251682; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GVdhvs8iCKF+l1CgTbrVGuUPsMa5kPGA5aq8CngfGco=;
-        b=K+UGElNkQBIKt5ZI3JVaZXIKbVxs1qvo4UMe7lnfGnOIIrUiavha5nCQLAuZc48/Ey
-         Wo0jxhSW+7rAwaZc/C+eXj7uFAVQiBNepXU+kJLmpVlW1VwwSXAjYQhrMyCIPWUaQ90s
-         kwQhnoYjWM1aWAE/B1EkK7o5MXSQaemBUzeuverq3Ct0NRKAuOwRswQUrXD1swwyvO/I
-         FMGbjp2nRp8oLA7+H5Y/gPwhqFafquE84Zocn1Jd0Kv1m2w7LDmCu17CDrgNleBr5U9I
-         aGUZ7L8Y+AxclASBQ7jq027w6whvQaCN7bOtgGwJSfhIDwY9Yxk7gr7QuH8kzLwTxbGE
-         e/aQ==
+        d=paul-moore.com; s=google; t=1744646900; x=1745251700; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CL3vhJ/AOwi9smEiZpaLEqVlOaMdXAZ9MQuarYjoWe8=;
+        b=JL1EhuptTIZe2RxMfq7enfaqb2Kd1A3BY4LHitCK4kOrcCt/JgBFz1JSW9Q+dPtAuB
+         ODl1/kFvo+D8ZjLB9xwWnaEX52YmkL5GQhusBq7YnnYR7wFes2sQMM/d2k57+irxs6RW
+         2EOWI6sSnEH26POSkNuweaQWZIaOfxW2aDZN1gd8sRStFEjD9gNs8ce7Xt+urshe/ZKM
+         j/OD2Bb4rEEoFiHycDP/sYEf01bE/kdGOQdKC1jLJRHdUhQaH4rJEwqZykl4U83vMoBE
+         703W3SOnLxCmDxYwAPTA0gCkOP7F+g5n0dljxo3XIZCd6vBuhGQFDkVDP2ymLnlRuvUu
+         SWpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744646882; x=1745251682;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GVdhvs8iCKF+l1CgTbrVGuUPsMa5kPGA5aq8CngfGco=;
-        b=CjjLNhjiSejR9i3kCCZrpZa8OCAzOZc6UabKLkxQfqNn0HlPTJNY4cshqKuXMYh4Le
-         dWlFEAOzSJF+ln9SIjX2jTBtIzMSZmAB4d6cDw5DOmeUZM7q3dpid0UxNdCpdkIl4B0O
-         miuVFQ4ggi3LiHH8GH+WOlglfZDUulYQbtrFfbPX1HnjmD8+FaXQTcy47XzHyDXVDR/A
-         GHD+Wyjebh81sVvBK79uemZwt0WUhEAKNxhEEbM9VeWOddv9BKKI1wsmtCSrLNskOY5+
-         C7CsuzigQSeplfimOg9hUtOAWKapmdFbYNlmo48ZEjdbmW5OPZLXQVpCS5z8MBu8f3Uk
-         LS8Q==
-X-Gm-Message-State: AOJu0Yyk0GPRhCo3WAqmelOykilFrqp4NuydzZuoSIp+dUCkSuTsx6lB
-	PoDENPCmOnGphB6TG1qwG9dkTCedNbyGeAmYzpO//ziC42vX5i1IMAk7DmZ9u3kas3EtmktRN0w
-	wFcN0uFgWkKA4IcKdfK9ye6nWW7c7Dl3XTb4V3nu1OUPNl/a7Xdo=
-X-Gm-Gg: ASbGnctHJ78C43SjstLjtkCTAP354Gstoo7jGrsHO6Kgj252MHk5vaysbqhB15JkLqL
-	rtnPfTG2a0s2txppx5R0ae+afQ0ZX76c30C0Vo2BwajmlJGjEyv5NZeywvU0EhE0MKCaxONvU94
-	gr0GDO4pZ8e4opw63baeNlTVtyyQ2GRj1XmjDmj7Wrv6li8lPVKhykC4s=
-X-Google-Smtp-Source: AGHT+IHBAGkweFTifi1qPgR9IAfMLmuSmWZaZQ6DuipMBRn0J0LfwS+rc70yp8/jIym5PdQxz5lfL2wrwCdthfYvTjU=
-X-Received: by 2002:ac5:cdf7:0:b0:528:6ea9:bc45 with SMTP id
- 71dfb90a1353d-5286ea9d6a9mr5875777e0c.7.1744646882420; Mon, 14 Apr 2025
- 09:08:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744646900; x=1745251700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CL3vhJ/AOwi9smEiZpaLEqVlOaMdXAZ9MQuarYjoWe8=;
+        b=JdCXwas3zZVtAuCxkdVUpz4S1Ko/vnKBIQkXtqUCmMyGABYLafYAv7CHZAP4i8VFxb
+         TC9bUt0GY2KeN4PZ0U/Md8xHrqiTzaPrHs7DDUokzS0LM6hQLB4xqr4P139BzxxSMAaf
+         /ESRyzPAaMHR0f6X6Ic3oeYyihA5bGO/pCSWnFYYRxfjMpKihm/SYwCjymQkahsi8Pkq
+         4jsgLQlxCEvQbGGFuBdxLyBaIBdp834I5VV3dvE1KSLwvZsMrA02SdS1LWo6ziH/LiZR
+         G8aR9Q78qO5YupvSJ88niCaNPcUDfhI+SyFQ14AJc0VmTfJ6OUlzDk27C6Or2Q3mvEYu
+         k4mg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+hzhFYfGGkI6jSz8m0pDS8UqX4uyJMjaiNzDY9McmipX5kCkKwzZ1+FwHAJbZfB5M20LP@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz4JCRTPVmx9QDU+gAsKDP5TJEfebR5MRik8AeuyrljuG1ahIqt
+	vVQtsliyF7RqNJfyphD3+QAQHkcLzuo5ZpLupbLAeOh2QMc9QzQq6qG3Slq6Ef8v1bKrWXLwsNu
+	SmFQHgPIKbhtPf2mSJdBxzFylQNpkaUPpdtEB
+X-Gm-Gg: ASbGncuQNo4hCxgGOijm94L1RO42rD0Nsi4xpykGduWqNg1+/Pa43DRytk7pJxsFIle
+	14cgBdkdyqL3s5YRRUZKaAIhJMAuOQfrcHN8l/nEZ5mf1LA8D7KzrUSrDLoKKqKCtW2QgHCrIOv
+	Uxwbhv3pG4ucIe7uIS9xT4dw==
+X-Google-Smtp-Source: AGHT+IEIR0Yjon2HOlR6cN2sFBuht845hyAi0y0g8G/WBIBmJsXWf+CNllSW2DnKB64zYskb2VqpvQmI+s8gSsNUMNs=
+X-Received: by 2002:a05:6902:2086:b0:e6d:e3f8:5167 with SMTP id
+ 3f1490d57ef6-e704e00541cmr21022948276.39.1744646899625; Mon, 14 Apr 2025
+ 09:08:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 14 Apr 2025 21:37:51 +0530
-X-Gm-Features: ATxdqUEU9CbNcg5O-P00XITiRp_i9HXoSVbIKt6BMPS9caFWsHNxBM8T9sm2aH8
-Message-ID: <CA+G9fYvnun+bhYgtt425LWxzOmj+8Jf3ruKeYxQSx-F6U7aisg@mail.gmail.com>
-Subject: x86_64 clang-20 clang-nightly config lto-full failed - ld.lld: error:
- linking module flags 'Code Model': IDs have conflicting values: 'i32 1' from
- vmlinux.a(gdt_idt.o at 1321040), and 'i32 2' from ld-temp.o
-To: clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com>
+In-Reply-To: <87semdjxcp.fsf@microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 14 Apr 2025 12:08:08 -0400
+X-Gm-Features: ATxdqUE4xsXRFht60hSZa09A9jxdssSnYGr-dDs5eKOQiFPM4gPTEA6FMREhjdE
+Message-ID: <CAHC9VhQ-Zs56LG9D-9Xs14Au-ub8aR4W+THDJfEsza_54CJf-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Regressions on x86_64 config LTO_CLANG_FULL with korg-clang-20 and
-clang-nightly on the
-Linux next-20250407 and found again on next-20250414 tag
+On Sat, Apr 12, 2025 at 9:58=E2=80=AFAM Blaise Boscaccy
+<bboscaccy@linux.microsoft.com> wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> > On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Blaise Boscaccy
+> > <bboscaccy@linux.microsoft.com> wrote:
 
-First seen on the next-20250407.
-Bad: next-20250407 and next-20250414
-Good:next-20250404
+...
 
-* x86_64, Build
- - Build/korg-clang-20-lkftconfig-lto-full
- - Build/clang-nightly-lkftconfig-lto-full
+> > Above are serious layering violations.
+> > LSMs should not be looking that deep into bpf instructions.
+>
+> These aren't BPF internals; this is data passed in from
+> userspace. Inspecting userspace function inputs is definitely within the
+> purview of an LSM.
+>
+> Lskel signature verification doesn't actually need a full disassembly,
+> but it does need all the maps used by the lskel. Due to API design
+> choices, this unfortunately requires disassembling the program to see
+> which array indexes are being used.
+>
+> > Calling into sys_bpf from LSM is plain nack.
+> >
+>
+> kern_sys_bpf is an EXPORT_SYMBOL, which means that it should be callable
+> from a module. Lskels without frozen maps are vulnerable to a TOCTOU
+> attack from a sufficiently privileged user. Lskels currently pass
+> unfrozen maps into the kernel, and there is nothing stopping someone
+> from modifying them between BPF_PROG_LOAD and BPF_PROG_RUN.
 
-Regression Analysis:
-- New regression? Yes
-- Reproducibility? Yes
+I agree with Blaise on both the issue of iterating through the eBPF
+program as well as calling into EXPORT_SYMBOL'd functions; I see no
+reason why these things couldn't be used in a LSM.  These are both
+"public" interfaces; reading/iterating through the eBPF instructions
+falls under a "don't break userspace" API, and EXPORT_SYMBOL is
+essentially public by definition.
 
-Build regression: x86_64 clang-20 clang-nightly config lto-full failed
+It is a bit odd that the eBPF code is creating an exported symbol and
+not providing a declaration in a kernel wide header file, but that's a
+different issue.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > The verification of module signatures is a job of the module loading pr=
+ocess.
+> > The same thing should be done by the bpf system.
+> > The signature needs to be passed into sys_bpf syscall
+> > as a part of BPF_PROG_LOAD command.
+> > It probably should be two new fields in union bpf_attr
+> > (signature and length),
+> > and the whole thing should be processed as part of the loading
+> > with human readable error reported back through the verifier log
+> > in case of signature mismatch, etc.
+> >
+>
+> I don't necessarily disagree, but my main concern with this is that
+> previous code signing patchsets seem to get gaslit or have the goalposts
+> moved until they die or are abandoned.
 
-## Build log
-ld.lld: error: linking module flags 'Code Model': IDs have conflicting
-values: 'i32 1'
-    from vmlinux.a(gdt_idt.o at 1321040), and 'i32 2' from ld-temp.o
+My understanding from the previous threads is that the recommendation
+from the BPF devs was that anyone wanting to implement BPF program
+signature validation at load time should implement a LSM that
+leverages a light skeleton based loading mechanism and implement a
+gatekeeper which would authorize BPF program loading based on
+signatures.  From what I can see that is exactly what Blaise has done
+with Hornet.  While Hornet is implemented in C, that alone should not
+be reason for rejection; from the perspective of the overall LSM
+framework, we don't accept or reject individual LSMs based on their
+source language, we have both BPF and C based LSMs today, and we've
+been working with the Rust folks to ensure we have the right things in
+place to support Rust in the future.  If your response to Hornet is
+that it isn't acceptable because it is written in C and not BPF, you
+need to know that such a response isn't an acceptable objection.
 
-Clang-20 versions:
-   "name": "clang",
-   "version": "20.1.2",
-   "version_full": "ClangBuiltLinux clang version 20.1.2
-   (https://github.com/llvm/llvm-project.git
-58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)"
+> Are you saying that at this point, you would be amenable to an in-tree
+> set of patches that enforce signature verification of lskels during
+> BPF_PROG_LOAD that live in syscall.c, without adding extra non-code
+> signing requirements like attachment point verification, completely
+> eBPF-based solutions, or rich eBPF-based program run-time policy
+> enforcement?
 
-Clang-nightly versions:
-   "name": "clang",
-   "version": "21.0.0",
-   "version_full": "Debian clang version 21.0.0
-   (++20250402105505+c57b9c233a87-1~exp1~20250402225526.1363)"
+I worry that we are now circling back to the original idea of doing
+BPF program signature validation in the BPF subsystem itself.  To be
+clear, I think that would be okay, if not ultimately preferable, but I
+think we've all seen this attempted numerous times in the past and it
+has been delayed, dismissed in favor of alternatives, or simply
+rejected for one reason or another.  If there is a clearly defined
+path forward for validation of signatures on BPF programs within the
+context of the BPF subsystem that doesn't require a trusted userspace
+loader/library/etc. that is one thing, but I don't believe we
+currently have that, despite user/dev requests for such a feature
+stretching out over several years.
 
-## Source
-* Kernel version: 6.15.0-rc2
-* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-* Git sha: b425262c07a6a643ebeed91046e161e20b944164
-* Git describe: next-20250414
-* Project details:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250414/
+I believe there are a few questions/issues that have been identified
+in Hornet's latest round of reviews which may take Blaise a few days
+(week?) to address; if the BPF devs haven't provided a proposal in
+which one could acceptably implement in-kernel BPF signature
+validation by that time, I see no reason why development and review of
+Hornet shouldn't continue into a v3 revision.
 
-## Test
-* Test log: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250407/testrun/27929871/suite/build/test/clang-nightly-lkftconfig-lto-full/log
-* Test details:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250414/testrun/28114606/suite/build/test/clang-nightly-lkftconfig-lto-full/
-* Test history:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250414/testrun/28114606/suite/build/test/clang-nightly-lkftconfig-lto-full/history/
-* Test history:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250414/testrun/28114590/suite/build/test/korg-clang-20-lkftconfig-lto-full/history/
-* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2viBgnFQjsmdmrsmASvlyYWisRa/
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2viBgnFQjsmdmrsmASvlyYWisRa/config
-
-## Steps to reproduce
-# tuxmake --runtime podman --target-arch x86_64 --toolchain korg-clang-20 \
-   --kconfig defconfig --kconfig-add CONFIG_DEBUG_INFO_REDUCED=y \
-   --kconfig-add CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y \
-   --kconfig-add CONFIG_IGB=y \
-   --kconfig-add CONFIG_LTO_CLANG_FULL=y LLVM=1 LLVM_IAS=1
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+paul-moore.com
