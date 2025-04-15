@@ -1,69 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B5618A6A9;
-	Tue, 15 Apr 2025 06:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E53849C
+	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 06:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744697853; cv=none; b=utZ53IgOhXOXoQ3/T5CWUltpxjSqI+besRjvXOGvHTHUb1qgXyJSp9eQ+vUR+C64WvJXBRPquY/YEzJ2u6Jxus4G5+4pI4hYksKGIZxw0IERvXX6wPqmvXcpZQBAcSOEpop2SLHwAh3aJ0D5HLzATEcciBQ3mQAyL4Q56I3TRQ8=
+	t=1744699565; cv=none; b=JkKbuh6GkL8G7Sm8et+N+gdIG8+ixLayohhtJG0uRcfX3Aqz4RQvXrgJVe4nTX0Kp3C/GkFQKE4OufMkOgRvxRh6/xx8izhnlWaluLDT0FcaTDRUSolDxSM518SLShJAOOcqCWEPlbx53Yp1cqoQZmeBtMsnEsE7goeFBtaULKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744697853; c=relaxed/simple;
-	bh=oMp5bg88AhH5U94XDV4HaMSAy3UaGzipazBEuW0fFLQ=;
+	s=arc-20240116; t=1744699565; c=relaxed/simple;
+	bh=SBEr8CwCyXVE2U80w9UyF6A35EP/6o196oB1OA0kh/U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XGNXtpnT5j1eR2D+V2CuKz/RT+NLh2PrqBNrZPC6gdSQLmamksq4tFlMJIFpYijwK5MRS6CdyvN54d6Ql3KVGUWLpHyv9PRW2Y8rYL/X0ZMi/YudhSmB01KK6/EskDhaVqNwIZQJcptLDfyagyqamGSWVspoy9tsC86BVk7whcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8VjnLjj; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iT9wJ0nHJDvW5GCCt+bjSVpsSMVICVc+R+au1T47aHZ04ijrsGmHUD1YZSydlScxq8s5wipyV4uSQh92+ccAaAW1tWFKdtt56xYpsOfNKohbzu9YGvfvJEfLdg8GYmSrJYAROkQrffMlS7jBTmnUgmkIAhDxfZb8JbhVkdYxMLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GI11/ETv; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8VjnLjj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GI11/ETv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744697852; x=1776233852;
+  t=1744699564; x=1776235564;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oMp5bg88AhH5U94XDV4HaMSAy3UaGzipazBEuW0fFLQ=;
-  b=I8VjnLjj3KZFAH6gC5kcZlmTqniRLtYFGssW8bX8fZt4QW9foYdEP0CW
-   LDI5qN4DKcbGaPV0w84MW9J0O0GoAtdYLcGpZv9aYoMe1/gMtYutZIxAa
-   WIknaKOeGz9lDruTufxs7ImV3qqINXztCVKyJ34gRcuSRIfM7Qlzs5ytV
-   26DLPROH9lWltW2KMrKKwUIEC7UnXoc2RD99lztAO/EbUItABVvE7Nyda
-   WH/EaWgFGmnu9+53G3HUz2GqxtKMnLh+lizkx6pPo0dXc6slyRzWjQ3Bt
-   +8zeVBZ38/AzgR5TI/gTuu3g1sr6bShnVrisDk59OsktvM6GohBRIoCl4
+  bh=SBEr8CwCyXVE2U80w9UyF6A35EP/6o196oB1OA0kh/U=;
+  b=GI11/ETvM6V1F9zFlCdfgVWdUFB+aFslHs8M+tOIFaXjZkQIfLhIp7Ln
+   vMX2H4wjaFWgnVWSMQTnRkVs6yupz8zGe6riia5TL282b7ip6MbNzrz+9
+   ALWH67bsSH8pOQtdRcMwZnB4fMPL0Oc5CUhFLf08oTqmixv2R35fPHBL7
+   POZwr1kHT3unpMqWVXMyf5w1L0bFAjyErX31p3ltnin0I9PYud1UzO68+
+   1K05/EwJlm2hvScy68Yw+hHQR8gcW9Kvhbqi+4kKObPny7KkBSQX/haD2
+   1Y6QQCNSdIGiBfCXG5LjM7oVigiiAAvHrmwTdwdSnTwFf8MzqGOykoOIC
    w==;
-X-CSE-ConnectionGUID: mXbkBWFuQc6wRVFaJ/hIpA==
-X-CSE-MsgGUID: Nd/2xxyZSouOhIgSBoCw1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="57553653"
+X-CSE-ConnectionGUID: CUrHwMvwSOalvpsvSsvf2g==
+X-CSE-MsgGUID: NeyQ2asTR2G0fDA1Gy5gWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="57182747"
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="57553653"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:17:31 -0700
-X-CSE-ConnectionGUID: F3Bjzp7aS8yBT+ylbnfwxA==
-X-CSE-MsgGUID: 09qgvQJFTgupxCMA3RiOYw==
+   d="scan'208";a="57182747"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:46:04 -0700
+X-CSE-ConnectionGUID: K63iAaCpTzqDWGS1VbWsYw==
+X-CSE-MsgGUID: JTqxjqWGR7Gt9XIYIB8RqA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="130349942"
+   d="scan'208";a="130567637"
 Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:17:28 -0700
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:46:02 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u4Zbp-0000000CSTC-2I7c;
-	Tue, 15 Apr 2025 09:17:25 +0300
-Date: Tue, 15 Apr 2025 09:17:25 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>, dm-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] dm table: Fix W=1 build warning when
- mempool_needs_integrity is unused
-Message-ID: <Z_359RoIe9TjAWV0@smile.fi.intel.com>
-References: <20250407072126.3879086-1-andriy.shevchenko@linux.intel.com>
- <Z_zdwSCfaYDotOI2@smile.fi.intel.com>
- <Z_zd1NCtn_QxaCzC@smile.fi.intel.com>
- <a0b1fcbf-9cda-9da2-ecbe-ac5cbc75b775@redhat.com>
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1u4a3T-0000000CSsu-0IkC;
+	Tue, 15 Apr 2025 09:45:59 +0300
+Date: Tue, 15 Apr 2025 09:45:58 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] HID: simplify code in fetch_item()
+Message-ID: <Z_4ApoWzgWSovgRi@smile.fi.intel.com>
+References: <ZvwYbESMZ667QZqY@google.com>
+ <20241010222451.GA3571761@thelio-3990X>
+ <Z_yrjPBO_CPS8WX1@black.fi.intel.com>
+ <20250415003326.GA4164044@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,29 +69,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a0b1fcbf-9cda-9da2-ecbe-ac5cbc75b775@redhat.com>
+In-Reply-To: <20250415003326.GA4164044@ax162>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Apr 14, 2025 at 02:13:18PM +0200, Mikulas Patocka wrote:
-> On Mon, 14 Apr 2025, Andy Shevchenko wrote:
-> > On Mon, Apr 14, 2025 at 01:04:49PM +0300, Andy Shevchenko wrote:
-> > > On Mon, Apr 07, 2025 at 10:21:26AM +0300, Andy Shevchenko wrote:
-> > > > The mempool_needs_integrity is unused. This, in particular, prevents
-> > > > kernel builds with Clang, `make W=1` and CONFIG_WERROR=y:
-> > > > 
-> > > > drivers/md/dm-table.c:1052:7: error: variable 'mempool_needs_integrity' set but not used [-Werror,-Wunused-but-set-variable]
-> > > >  1052 |         bool mempool_needs_integrity = t->integrity_supported;
-> > > >       |              ^
-> > > > 
-> > > > Fix this by removing the leftover.
-> > > 
-> > > This issue is still present in v6.15-rc1.
-> > 
-> > I meant v6.15-rc2, of course.
-> 
-> I will send it to Linus (maybe with other changes) before 6.15 comes out.
+On Mon, Apr 14, 2025 at 05:33:26PM -0700, Nathan Chancellor wrote:
+> On Mon, Apr 14, 2025 at 09:30:36AM +0300, Andy Shevchenko wrote:
+> > On Thu, Oct 10, 2024 at 03:24:51PM -0700, Nathan Chancellor wrote:
+> > > On Tue, Oct 01, 2024 at 08:42:36AM -0700, Dmitry Torokhov wrote:
 
-Thank you!
+...
+
+> > > Getting rid of the unreachable() in some way resolves the issue. I
+> > > tested using BUG() in lieu of unreachable() like the second change I
+> > > mentioned above, which resolves the issue cleanly, as the default case
+> > > clearly cannot happen. ...
+> > 
+> > As Dmitry pointed out to this old discussion, I have a question about the above
+> > test. Have you tried to use BUG() while CONFIG_BUG=n? Does it _also_ solve the
+> > issue?
+> 
+> Yes because x86 appears to always emit ud2 for BUG() regardless of
+> whether CONFIG_BUG is set or not since HAVE_ARCH_BUG is always
+> respected.
+
+Thank you for the reply. But do you know if this is guaranteed on the rest of
+supported architectures? I.o.w. may we assume that BUG() in lieu of unreachable()
+will always fix the issue?
 
 -- 
 With Best Regards,
