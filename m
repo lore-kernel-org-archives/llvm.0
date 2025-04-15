@@ -1,66 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E53849C
-	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 06:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FAE19F438;
+	Tue, 15 Apr 2025 06:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744699565; cv=none; b=JkKbuh6GkL8G7Sm8et+N+gdIG8+ixLayohhtJG0uRcfX3Aqz4RQvXrgJVe4nTX0Kp3C/GkFQKE4OufMkOgRvxRh6/xx8izhnlWaluLDT0FcaTDRUSolDxSM518SLShJAOOcqCWEPlbx53Yp1cqoQZmeBtMsnEsE7goeFBtaULKQ=
+	t=1744699628; cv=none; b=UY8/yju2qEEBMgRr21q5rqSu2Iy/10O47UBIB2fcN00beZoXNkji3x/asasIwAAQ9qcTAV3POWmz+xDJgJQUcqR44Qx0yxih+bh6tqA/NMJfMHFXpopqwn/i7a/r6ZdiGH2IkGx4rYrn1Z5WwPEsIUP2QpzxHNrH+s2dxNBHrF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744699565; c=relaxed/simple;
-	bh=SBEr8CwCyXVE2U80w9UyF6A35EP/6o196oB1OA0kh/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iT9wJ0nHJDvW5GCCt+bjSVpsSMVICVc+R+au1T47aHZ04ijrsGmHUD1YZSydlScxq8s5wipyV4uSQh92+ccAaAW1tWFKdtt56xYpsOfNKohbzu9YGvfvJEfLdg8GYmSrJYAROkQrffMlS7jBTmnUgmkIAhDxfZb8JbhVkdYxMLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GI11/ETv; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1744699628; c=relaxed/simple;
+	bh=6tTR64EQPvbi2DJSbe3CfVvBjbA8At40asFOpUjhmt8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rEqrCKlOfj2VOVShME8WMGY54PKrVhFCtHxpF/onb+01Ixcs9GkdcU2GBcNFnGaDYq4xcN6DFGQ4H8qYBwhLhTNdF5xfjGzBQVOBDNCQ3OYEC5cAZimTDId5a7eT3RBFZyNkI8dOwoTy9Ua3RlyF9P9aqWT6SUFR6TLcgUSdSPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YdRRyES9; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GI11/ETv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YdRRyES9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744699564; x=1776235564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SBEr8CwCyXVE2U80w9UyF6A35EP/6o196oB1OA0kh/U=;
-  b=GI11/ETvM6V1F9zFlCdfgVWdUFB+aFslHs8M+tOIFaXjZkQIfLhIp7Ln
-   vMX2H4wjaFWgnVWSMQTnRkVs6yupz8zGe6riia5TL282b7ip6MbNzrz+9
-   ALWH67bsSH8pOQtdRcMwZnB4fMPL0Oc5CUhFLf08oTqmixv2R35fPHBL7
-   POZwr1kHT3unpMqWVXMyf5w1L0bFAjyErX31p3ltnin0I9PYud1UzO68+
-   1K05/EwJlm2hvScy68Yw+hHQR8gcW9Kvhbqi+4kKObPny7KkBSQX/haD2
-   1Y6QQCNSdIGiBfCXG5LjM7oVigiiAAvHrmwTdwdSnTwFf8MzqGOykoOIC
-   w==;
-X-CSE-ConnectionGUID: CUrHwMvwSOalvpsvSsvf2g==
-X-CSE-MsgGUID: NeyQ2asTR2G0fDA1Gy5gWQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="57182747"
+  t=1744699627; x=1776235627;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6tTR64EQPvbi2DJSbe3CfVvBjbA8At40asFOpUjhmt8=;
+  b=YdRRyES9HUbaa+6nNF4PguTG80r+LfFFGU7Gw6yFEbSJLAc2K9MHpj52
+   ZeJ+gSb7iwAzCoYkPEMkHWxLYB7bfzrHzqOk/lb6qgB52RalYe2vAHNxT
+   bDT+0tp86KaTp6ND4Jw4QZLYeIli4Dbjg6WdztLTnsMTgXCacNifnOhVy
+   OCC7q5mVM0HIyzEvRweev/6pyTLoAgyDadhYjTE7qGuoGBQNMUgQ9z9I1
+   O8qsny9dGl58k9b+ppOA3msGjePpF1H8O/icHJbiGtl2/Ogs9evzedcBY
+   hDf4tEyNVGo4fs1X0SdZTJpLG6ODuAMIljLR3JcHTc4YaXlZGg4zrWm0I
+   A==;
+X-CSE-ConnectionGUID: 0lN8nwYKQJS2EX8NS1f9Tw==
+X-CSE-MsgGUID: tp6jwAl8QFSdKR4iMGUOOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="56370032"
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="57182747"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:46:04 -0700
-X-CSE-ConnectionGUID: K63iAaCpTzqDWGS1VbWsYw==
-X-CSE-MsgGUID: JTqxjqWGR7Gt9XIYIB8RqA==
+   d="scan'208";a="56370032"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:47:06 -0700
+X-CSE-ConnectionGUID: nKZzEvZVRXi+H5mtiLr9Dg==
+X-CSE-MsgGUID: hlQckR5uT2OvdD8USO7m3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="130567637"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 23:46:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1u4a3T-0000000CSsu-0IkC;
-	Tue, 15 Apr 2025 09:45:59 +0300
-Date: Tue, 15 Apr 2025 09:45:58 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] HID: simplify code in fetch_item()
-Message-ID: <Z_4ApoWzgWSovgRi@smile.fi.intel.com>
-References: <ZvwYbESMZ667QZqY@google.com>
- <20241010222451.GA3571761@thelio-3990X>
- <Z_yrjPBO_CPS8WX1@black.fi.intel.com>
- <20250415003326.GA4164044@ax162>
+   d="scan'208";a="130914300"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 14 Apr 2025 23:47:04 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u4a4U-000FIm-2X;
+	Tue, 15 Apr 2025 06:47:02 +0000
+Date: Tue, 15 Apr 2025 14:46:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x13e: relocation to
+ !ENDBR: __cfi_machine_kexec_prepare+0x4
+Message-ID: <202504151432.cBR45Uyk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,35 +62,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415003326.GA4164044@ax162>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Apr 14, 2025 at 05:33:26PM -0700, Nathan Chancellor wrote:
-> On Mon, Apr 14, 2025 at 09:30:36AM +0300, Andy Shevchenko wrote:
-> > On Thu, Oct 10, 2024 at 03:24:51PM -0700, Nathan Chancellor wrote:
-> > > On Tue, Oct 01, 2024 at 08:42:36AM -0700, Dmitry Torokhov wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   834a4a689699090a406d1662b03affa8b155d025
+commit: 7582b7be16d0ba90e3dbd9575a730cabd9eb852a kprobes: remove dependency on CONFIG_MODULES
+date:   11 months ago
+config: x86_64-buildonly-randconfig-005-20250415 (https://download.01.org/0day-ci/archive/20250415/202504151432.cBR45Uyk-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250415/202504151432.cBR45Uyk-lkp@intel.com/reproduce)
 
-...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504151432.cBR45Uyk-lkp@intel.com/
 
-> > > Getting rid of the unreachable() in some way resolves the issue. I
-> > > tested using BUG() in lieu of unreachable() like the second change I
-> > > mentioned above, which resolves the issue cleanly, as the default case
-> > > clearly cannot happen. ...
-> > 
-> > As Dmitry pointed out to this old discussion, I have a question about the above
-> > test. Have you tried to use BUG() while CONFIG_BUG=n? Does it _also_ solve the
-> > issue?
-> 
-> Yes because x86 appears to always emit ud2 for BUG() regardless of
-> whether CONFIG_BUG is set or not since HAVE_ARCH_BUG is always
-> respected.
+All warnings (new ones prefixed by >>):
 
-Thank you for the reply. But do you know if this is guaranteed on the rest of
-supported architectures? I.o.w. may we assume that BUG() in lieu of unreachable()
-will always fix the issue?
+   vmlinux.o: warning: objtool: ___bpf_prog_run+0x1be: sibling call from callable instruction with modified stack frame
+>> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x13e: relocation to !ENDBR: __cfi_machine_kexec_prepare+0x4
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
