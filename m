@@ -1,66 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DBF28469B
-	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 12:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC27819F11E;
+	Tue, 15 Apr 2025 13:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744719123; cv=none; b=muYoRgDJrucZniIwQzUd2nFAw+HtnLsEkdo6XuS1QRKEMiIXceWHHKoG7Dgi2ndaToOpuGNh7Jq+MsHrTN9qVadfe+O52krVt1g2SJk/92LA0uT69X881L69Uyr06BbUVzqvaKby937xf6cb6KEts+Y/N1p7+r+VCyOpn2/R8XU=
+	t=1744724710; cv=none; b=YaPrdRFkHZlg/NXbAoFJSFJQH9QD1UHyRdC1W+GrHAfBMCjfwN2SnFbVPiJ+XTHuf+IDnJXOWk+xi8CgNXzm4fetKgZQvPiGj2oTVUUO+OQHH1yDU9jfowGfLZrJD5hI71qZo4/XQBIIqFGjiLmeXzmwzSr/3jDvD+NRSOn+Hw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744719123; c=relaxed/simple;
-	bh=0hYUve0xkE/hQHXWHLhI5xgSlQ8xtJMN237cyCHu2cw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7+HH6r9fqv1uulBh69fe3NkF0Jti1hvx1Ved7AbfQKVUe+Z0EBunzkeuXKJL8mML3SAKGTkz5Dnk6cTa3SiEswAZSDFc37+FcDB9xzrKk+u1DXRx98nH7FotG81P5SVb6BJwq3m8GIQG19gGL0cIVAH8aOzJy+cUVc899iTNmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a56sdakV; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1744724710; c=relaxed/simple;
+	bh=CLr30k7rL5r+IsjYC34IBGddQe/Zwox3Dk9rhXGMJOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SZ95ZjbDKxuHFXdlVRPzvzOF7uFf2Qxk3r7JUFDnHog4WbCT0+ILqKr2o92L6EygXwwqxUKYERYV7iFyoeIJf9atC1/XhcBXDL4cFK13hAR8hYj3u/LgG+AgyYO3D00dap9ne+aT1OBTilb782PpHDlvVp6DcC7MFzWU0+jadxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tq+aR/HN; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a56sdakV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tq+aR/HN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744719122; x=1776255122;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0hYUve0xkE/hQHXWHLhI5xgSlQ8xtJMN237cyCHu2cw=;
-  b=a56sdakVQ4i43fWkQ9/41W4VrTFVi9C6ZtweZbBFLSx3NfZkiJGKIVJu
-   brxa19368ltHxNAroikQpkj+OVOAf8gKpDVEymQ7/Fr1+pL5vD+BRz05G
-   5L3r7rmQ0ggLzGKSXWexKVP3rOUkXevHkkHnYzgZ1j3q8rbEd/Fa/B1w5
-   45wUZTqjP6c4zsY/Av87iYvsXejq16rw1203uYIsxmKzov4tBGtHgAh17
-   2kk9yna9WGQRXSYtB41TjHsY+bOIwPDtfA2jzFj1W77wRiqnc+k6+6nHJ
-   GNot1lhjgGAR4Zpb8ae1IH0BX4ouxgBz0+8koPQjnpkZGdv8tsbYRwJye
-   w==;
-X-CSE-ConnectionGUID: WQrebrWGQASa3WjoEggVMw==
-X-CSE-MsgGUID: GUjyqVdCSSWKd60+rDxbPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="45458680"
+  t=1744724709; x=1776260709;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CLr30k7rL5r+IsjYC34IBGddQe/Zwox3Dk9rhXGMJOA=;
+  b=Tq+aR/HNpxwZ9UxJSMfN2UKZEnzWG7OqKWjNGTe77CQvKUDbpG1zVLsw
+   ibT//zHA2nF9HSLEtL3p6EufPmvoMhYeV91ojbN5ofpjJXPkZh4hRJwf2
+   qR5KBhUVOoJXW9ALb5Na16z/b1a225osc9Xn4SJFyVNseITfMWQ2DMGiZ
+   rZ7ZmWOzVUmtXydiEyWWjQ6/SKn3cooYBzMpUKR872OY7udOZyRdCUoWx
+   9LWhXOHyz0d3I6+fzszaJUQ8Ssb0Z2krmpBs6vsGLURaGrCZ95709oMo8
+   qNHIP+MgzGCfkFZ2MSXAiu/G3oFxR4VQVsgl7Da9MJWv28cNFS8bYE+hv
+   A==;
+X-CSE-ConnectionGUID: U3jyB27JRKODek9lgv/onA==
+X-CSE-MsgGUID: t7J09/aRS0KvPQuCSWRqHQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46322446"
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="45458680"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 05:12:01 -0700
-X-CSE-ConnectionGUID: si6E1ClKTem4PZIaad4ZSA==
-X-CSE-MsgGUID: u+ZNaiIjTsSSyRqFj1oGwQ==
+   d="scan'208";a="46322446"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 06:45:08 -0700
+X-CSE-ConnectionGUID: kZ9a4aKXSkqM07Wjx41/VA==
+X-CSE-MsgGUID: wQv02wtWQWSqSDtxRO5FTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="131001182"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 05:11:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u4f8u-0000000CXRT-1mVG;
-	Tue, 15 Apr 2025 15:11:56 +0300
-Date: Tue, 15 Apr 2025 15:11:56 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Corey Minyard <corey@minyard.net>
-Cc: openipmi-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] ipmi: si: Cast to smaller integer type without
- warning
-Message-ID: <Z_5NDNeDztC1-6vx@smile.fi.intel.com>
-References: <20250415085156.446430-1-andriy.shevchenko@linux.intel.com>
- <Z_5FV65cyIwiI9rs@mail.minyard.net>
- <Z_5L1J11W-ArXcUe@smile.fi.intel.com>
+   d="scan'208";a="130659370"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 15 Apr 2025 06:45:06 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u4gb1-000GEC-29;
+	Tue, 15 Apr 2025 13:45:03 +0000
+Date: Tue, 15 Apr 2025 21:44:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haylen Chu <heylenay@4d2.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Yixun Lan <dlan@gentoo.org>, Alex Elder <elder@riscstar.com>,
+	Inochi Amaoto <inochiama@outlook.com>
+Subject: [spacemit:for-next 4/6] drivers/clk/spacemit/ccu-k1.c:241:1: error:
+ initializer element is not a compile-time constant
+Message-ID: <202504152107.7ekGPIrF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,45 +63,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z_5L1J11W-ArXcUe@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Apr 15, 2025 at 03:06:45PM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 15, 2025 at 06:39:03AM -0500, Corey Minyard wrote:
-> > On Tue, Apr 15, 2025 at 11:51:56AM +0300, Andy Shevchenko wrote:
-> > > Debian clang version 19.1.7 is not happy when compiled with
-> > > `make W=1` (note, CONFIG_WERROR=y is the default):
-> > > 
-> > > ipmi_si_platform.c:268:15: error: cast to smaller integer type 'enum si_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-> > >   268 |         io.si_type      = (enum si_type)device_get_match_data(&pdev->dev);
-> > > 
-> > > Fix this by intermediate cast to the uintptr_t, that makes compiler happy.
-> > 
-> > Unless things have changed recently, Linus prefers "unsigned long" per
-> > https://patchwork.kernel.org/project/linux-hardening/patch/20220616143617.449094-1-Jason@zx2c4.com/#24899749
-> 
-> I'm not sure I got your point. That discussion seems irrelevant to me.
-> They are talking about pointer-as-an-integer cases. Here we already know
-> that we are passing integer-as-a-pointer and this is the opposite
-> conversion.
-> 
-> > And it would match what is in the match table.
-> 
-> Match tables are tend to move to pointers, enum is usually goes to int.
-> 
-> > Is that change ok?
-> 
-> If you don't like my change, please do yours and consider this as
-> a bug report that needs to be addressed. I prefer more my solution
-> as we do that in many places for the exact scenario.
+tree:   https://github.com/spacemit-com/linux for-next
+head:   9ead3efbc88a21e9a1f38948cc0902518022a2e5
+commit: e2d238ba301f25a5c8a7d490a36f9cd014d7aecc [4/6] clk: spacemit: Add clock support for SpacemiT K1 SoC
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250415/202504152107.7ekGPIrF-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250415/202504152107.7ekGPIrF-lkp@intel.com/reproduce)
 
-Note, the proper solution to the cases like this is to move to info-like
-structure and actually operate with the pointers instead of enums, longs, etc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504152107.7ekGPIrF-lkp@intel.com/
 
-That's what's slowly moving on in IIO subsystem, for instance.
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/spacemit/ccu-k1.c:241:1: error: initializer element is not a compile-time constant
+     241 | CCU_DDN_DEFINE(slow_uart1_14p74, pll1_d16_153p6, MPMU_SUCCR, GENMASK(28, 16), GENMASK(12, 0), 0);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/spacemit/ccu_ddn.h:33:15: note: expanded from macro 'CCU_DDN_DEFINE'
+      33 |         .num_shift      = __ffs(_num_mask),                                     \
+         |                           ^~~~~~~~~~~~~~~~
+   drivers/clk/spacemit/ccu-k1.c:242:1: error: initializer element is not a compile-time constant
+     242 | CCU_DDN_DEFINE(slow_uart2_48, pll1_d4_614p4, MPMU_SUCCR_1, GENMASK(28, 16), GENMASK(12, 0), 0);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/spacemit/ccu_ddn.h:33:15: note: expanded from macro 'CCU_DDN_DEFINE'
+      33 |         .num_shift      = __ffs(_num_mask),                                     \
+         |                           ^~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +241 drivers/clk/spacemit/ccu-k1.c
+
+   239	
+   240	CCU_GATE_DEFINE(slow_uart, CCU_PARENT_NAME(osc), MPMU_ACGR, BIT(1), CLK_IGNORE_UNUSED);
+ > 241	CCU_DDN_DEFINE(slow_uart1_14p74, pll1_d16_153p6, MPMU_SUCCR, GENMASK(28, 16), GENMASK(12, 0), 0);
+   242	CCU_DDN_DEFINE(slow_uart2_48, pll1_d4_614p4, MPMU_SUCCR_1, GENMASK(28, 16), GENMASK(12, 0), 0);
+   243	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
