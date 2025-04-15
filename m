@@ -1,256 +1,155 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98EB29D19
-	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 15:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4962DFA2D
+	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 16:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744731939; cv=none; b=tMUtChBT3VbCvbWxbK876WYT24f1CR8FAoogie1UBVSPul3+Jy9FLpNfSfYv28cmR6LfNdaBRscbfjtd/Nfxag3cIo7eqqXTLTEyNpw3BpRhkkWTb8mfikcRrMVmizTXeho8CIcT368p3KJsT0dE4y5X0Z5OaDkWh09yXFgIIcA=
+	t=1744732998; cv=none; b=C2mUVOdtRBHDdqxw039vo45BcvVRmseFjKiW95K18JC3/r3KBqTFgVjwmMHnIm9ItIyA1ALjePVLN1B948+Lz1K17kEqb124YlFrGolPsMF3c1AtQDcE2IURtIQLytkL+P0gF0d4HHJZf8MIokeRfhtKmCbTWf1x8qN/JxUn+Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744731939; c=relaxed/simple;
-	bh=o0Eg9TfT7BJvamHuPbuu03I8bpxbABShuJ3X8yYmfcI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SNKCabfjrPcgqDUMyAKlaaC2ojelHMm88g/lHrtzniC4LOXeyhSlGx7Y4A+erlxYBpHmZCcVyClhoI+x4+YAoJc2YxGUtF68qZr3whRXl7WLQSFq+hH4nI3ZrubQQ/AeKB5oiZEh970vv1qYln/ZFmchFbCYsJMhnAJz6LRUwpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=BLgKTF0Q; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1744732998; c=relaxed/simple;
+	bh=lYBkXbwh08npPqWg5a/3LlWt/j3jbuo6HOEpkAE6jTc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IhaoTKeVPCaPgYeBYZ353eAgPTfcOqevTWiaNf1XHAFGGJrq2PwAIvOdfL2lQhd+uMkBdW+N+HwUfw0L6d5T/Q1AZuh7ceicQtJC2BuhpBfMizCzojk4ia/rTDm+laRCqVhN4OAsohW26QryCmTyk20JlJkBox2e5EkOyc0uRVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=sFdvHZB9; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="BLgKTF0Q"
-Received: from narnia (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id A3E9A210C443;
-	Tue, 15 Apr 2025 08:45:27 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A3E9A210C443
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744731937;
-	bh=QuJyjod+PaXXHNfCMhPGMW9mLvFTWCWAv7e+voj8vdo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=BLgKTF0QYGwhBiUKzBI83CwLp6uOuqH/rY3yqMfbDQX4A4kaUL3UWtisXJDrRAnDR
-	 mOrfD3P30AUwXj+9OBwC3yLw9XRi0+CidxFNAOizuUezj6gsmGYe4ZnSuUO8GlsZjy
-	 mW0p4dYmbkkAV5SouL1VVFtRwgjmhvezJoV+fGAw=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
- <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
- =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
- Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
- <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
- <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
- Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
- <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
- <xiyou.wangcong@gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-In-Reply-To: <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
- <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <87semdjxcp.fsf@microsoft.com>
- <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
- <87friajmd5.fsf@microsoft.com>
- <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
-Date: Tue, 15 Apr 2025 08:45:25 -0700
-Message-ID: <87a58hjune.fsf@microsoft.com>
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="sFdvHZB9"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3d5bb2ae4d3so20649325ab.0
+        for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 09:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1744732994; x=1745337794; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vya5laCOwqQD49KDWVQh568j1mmJYzr4WruJF+Ip7NE=;
+        b=sFdvHZB9+14fDjMKVbCJO9Ndy3dQFq1OZywQjj8udWIUDyaWfOmC6Isqlir/nZ+fXu
+         QNXGDmydr8e6yaa8aw9+yL4A3941SvDI8MByWsEBIaUbTpQr9OnJf2PZ04tD/mGgrvLN
+         zSZhmTQvixxcK+n8+tJBdXSYIpTfToQq2snykfi0KrwVRPm6Hi3g+UQxUKD7otHXgUsH
+         UTIqIrgKsrKT4kNvUmDGWqtjuZT7Pg6WFA8x0oBYXx9l9jyt0yVWBCOvajeFJDWos49d
+         hoYpQuqYWRrBzpiyKulL6vYJS0VjjlxNxF3qaZNZlCS2272VyuF8kIrTnSOKCA6JT4kQ
+         v/xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744732994; x=1745337794;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vya5laCOwqQD49KDWVQh568j1mmJYzr4WruJF+Ip7NE=;
+        b=R6RowheUnXxOLrP1oy5cX6aBUQJxzV1u9I/LATrBKeYEm7AjcxNqu3i+I8yX73/ebV
+         bcmxhmA7FCZSityUVQRR/EFeqvHBRcjCqGzI+J8kRHcQgV+0Zle0sFi/kkliF3H12glK
+         muN9RVRZYi1M3Vk/B+AbhaVQbti0ztwCIr963JHs3ydiCBUhHDAQ/IlyxpQgT/6vECiL
+         4x6pvEO8I4I28vFXoQo/CnlK16lITXNPFkXvXos0wmenotShaXrhDGzFQwWIbkWzKeXS
+         bsW5dV36oqZA9xxTlX0PhuvkWm/4bY2dbkaDl/n9vUOG+/PIg7RIwKlPyYX/0v0Bbbd4
+         Dl1w==
+X-Forwarded-Encrypted: i=1; AJvYcCW6jAziouEUvcNseA4TNPdxmfcgtemA2WGP5T5DcmRPXthuCfyQ4Ce0AQb05s3yGtD/qYmZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YzYYBqHT0T5uG3LcZRzgTfDsL+3b/kg4W9o+MX5ADI4PVS5SCLJ
+	ecNchp6f0LBtleJovqsA7WRn+JRnJTTTw6ZR7S+jxzuFFqC9mh7SCOVRhz2viXc=
+X-Gm-Gg: ASbGnct72cEt3UGCGx9VA+hRXKUl+drUnxx+aOUe3i+KAT3IDTXcUwj2QarK9zf6TNY
+	yc3vVbEIPAib0WXqzp2cZ1VhuLiS/62NbJcNI7fE2yG1MERL/Y60k4SB8bKlB5eE2b4GnYCchvw
+	JhQ6o42yZiEtRnKMPnlEe6uqJ4sNjo2drVlkU9EBqZr9LefgCwJzIIczZ/V+D2TptrETxBt906r
+	n8pjYBX8Rmo0Ke/Qo2yhXKubspVkiqPrJxs8ok2wKizaDa+DoPTWVeeuB9mSQh1F6p8T3dUjO8K
+	boxuL/gsDQImx/3CVppBxZ+prrtNmo5OApmasiBx0iFWJjZSCcVI7jxBwY1qA7izdXTgRyioykS
+	J0+da
+X-Google-Smtp-Source: AGHT+IEtlCnnPDJ3cn+xWJLo5c8wTQqAyZYlX57UyLdVGhBFJ6IychxlTyKQMafYoxog8e9tbRNzeA==
+X-Received: by 2002:a92:c267:0:b0:3d6:cb9b:cbec with SMTP id e9e14a558f8ab-3d7ec1ca79amr139889325ab.5.1744732994213;
+        Tue, 15 Apr 2025 09:03:14 -0700 (PDT)
+Received: from [172.22.22.28] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d7dc5828c3sm33962785ab.48.2025.04.15.09.03.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Apr 2025 09:03:13 -0700 (PDT)
+Message-ID: <9b52f950-9baf-4293-b211-82891b6f349e@riscstar.com>
+Date: Tue, 15 Apr 2025 11:03:12 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [spacemit:for-next 4/6] drivers/clk/spacemit/ccu-k1.c:241:1:
+ error: initializer element is not a compile-time constant
+To: Yixun Lan <dlan@gentoo.org>
+Cc: Haylen Chu <heylenay@4d2.org>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Inochi Amaoto <inochiama@outlook.com>
+References: <202504152107.7ekGPIrF-lkp@intel.com>
+ <564eb8e7-a4e1-49e6-a79d-da880a526540@riscstar.com>
+ <20250415143137-GYB30887@gentoo>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <20250415143137-GYB30887@gentoo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> On Mon, Apr 14, 2025 at 5:32=E2=80=AFPM Blaise Boscaccy
-> <bboscaccy@linux.microsoft.com> wrote:
+On 4/15/25 9:31 AM, Yixun Lan wrote:
+> Hi Alex,
+> 
+> On 09:16 Tue 15 Apr     , Alex Elder wrote:
+>> On 4/15/25 8:44 AM, kernel test robot wrote:
+>>> tree:   https://github.com/spacemit-com/linux for-next
+>>> head:   9ead3efbc88a21e9a1f38948cc0902518022a2e5
+>>> commit: e2d238ba301f25a5c8a7d490a36f9cd014d7aecc [4/6] clk: spacemit: Add clock support for SpacemiT K1 SoC
+>>> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250415/202504152107.7ekGPIrF-lkp@intel.com/config)
+>>> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250415/202504152107.7ekGPIrF-lkp@intel.com/reproduce)
+>>>
+>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>> the same patch/commit), kindly add following tags
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202504152107.7ekGPIrF-lkp@intel.com/
+>>>
+>>> All errors (new ones prefixed by >>):
 >>
->> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>> If I'm interpreting this right, this seems to be a problem on
+>> a S390 build (under COMPILE_TEST), because there is no constant
+>> version of the __ffs() for that architecture.  This might be the
+>> case on other architectures as well.
 >>
->> > On Sat, Apr 12, 2025 at 6:58=E2=80=AFAM Blaise Boscaccy
->> > <bboscaccy@linux.microsoft.com> wrote:
->> >>
->> >> TAlexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->> >>
->> >> > On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Blaise Boscaccy
->> >> > <bboscaccy@linux.microsoft.com> wrote:
->> >> >> +
->> >> >> +static int hornet_find_maps(struct bpf_prog *prog, struct hornet_=
-maps *maps)
->> >> >> +{
->> >> >> +       struct bpf_insn *insn =3D prog->insnsi;
->> >> >> +       int insn_cnt =3D prog->len;
->> >> >> +       int i;
->> >> >> +       int err;
->> >> >> +
->> >> >> +       for (i =3D 0; i < insn_cnt; i++, insn++) {
->> >> >> +               if (insn[0].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW=
-)) {
->> >> >> +                       switch (insn[0].src_reg) {
->> >> >> +                       case BPF_PSEUDO_MAP_IDX_VALUE:
->> >> >> +                       case BPF_PSEUDO_MAP_IDX:
->> >> >> +                               err =3D add_used_map(maps, insn[0]=
-.imm);
->> >> >> +                               if (err < 0)
->> >> >> +                                       return err;
->> >> >> +                               break;
->> >> >> +                       default:
->> >> >> +                               break;
->> >> >> +                       }
->> >> >> +               }
->> >> >> +       }
->> >> >
->> >> > ...
->> >> >
->> >> >> +               if (!map->frozen) {
->> >> >> +                       attr.map_fd =3D fd;
->> >> >> +                       err =3D kern_sys_bpf(BPF_MAP_FREEZE, &attr=
-, sizeof(attr));
->> >> >
->> >> > Sorry for the delay. Still swamped after conferences and the merge =
-window.
->> >> >
->> >>
->> >> No worries.
->> >>
->> >> > Above are serious layering violations.
->> >> > LSMs should not be looking that deep into bpf instructions.
->> >>
->> >> These aren't BPF internals; this is data passed in from
->> >> userspace. Inspecting userspace function inputs is definitely within =
-the
->> >> purview of an LSM.
->> >>
->> >> Lskel signature verification doesn't actually need a full disassembly,
->> >> but it does need all the maps used by the lskel. Due to API design
->> >> choices, this unfortunately requires disassembling the program to see
->> >> which array indexes are being used.
->> >>
->> >> > Calling into sys_bpf from LSM is plain nack.
->> >> >
->> >>
->> >> kern_sys_bpf is an EXPORT_SYMBOL, which means that it should be calla=
-ble
->> >> from a module.
->> >
->> > It's a leftover.
->> > kern_sys_bpf() is not something that arbitrary kernel
->> > modules should call.
->> > It was added to work for cases where kernel modules
->> > carry their own lskels.
->> > That use case is gone, so EXPORT_SYMBOL will be removed.
->> >
+>> On RISC-V, this is fine.
 >>
->> I'm not following that at all. You recommended using module-based lskels
->> to get around code signing requirements at lsfmmbpf and now you want to
->> nuke that entire feature? And further, skel_internal will no longer be
->> usable from within the kernel and bpf_preload is no longer going to be
->> supported?
-
-The eBPF dev community has spent what, 4-5 years on this, with little to
-no progress. I have little faith that this is going to progress on your
-end in a timely manner or at all, and frankly we (and others) needed
-this yesterday. Hornet has zero impact on the bpf subsystem, yet you
-seem viscerally opposed to us doing this. Why are you trying to stop us
-from securing our cloud?
-
->
-> It was exported to modules to run lskel-s from modules.
-> It's bpf internal api, but seeing how you want to abuse it
-> the feature has to go. Sadly.
->
-
-Are we in preschool again? You don't like how others are playing with
-your toys so you want to take them away from everyone. Forever.=20
-
->> >> Lskels without frozen maps are vulnerable to a TOCTOU
->> >> attack from a sufficiently privileged user. Lskels currently pass
->> >> unfrozen maps into the kernel, and there is nothing stopping someone
->> >> from modifying them between BPF_PROG_LOAD and BPF_PROG_RUN.
->> >>
->> >> > The verification of module signatures is a job of the module loadin=
-g process.
->> >> > The same thing should be done by the bpf system.
->> >> > The signature needs to be passed into sys_bpf syscall
->> >> > as a part of BPF_PROG_LOAD command.
->> >> > It probably should be two new fields in union bpf_attr
->> >> > (signature and length),
->> >> > and the whole thing should be processed as part of the loading
->> >> > with human readable error reported back through the verifier log
->> >> > in case of signature mismatch, etc.
->> >> >
->> >>
->> >> I don't necessarily disagree, but my main concern with this is that
->> >> previous code signing patchsets seem to get gaslit or have the goalpo=
-sts
->> >> moved until they die or are abandoned.
->> >
->> > Previous attempts to add signing failed because
->> > 1. It's a difficult problem to solve
->> > 2. people only cared about their own narrow use case and not
->> > considering the needs of bpf ecosystem as a whole.
->> >
->> >> Are you saying that at this point, you would be amenable to an in-tree
->> >> set of patches that enforce signature verification of lskels during
->> >> BPF_PROG_LOAD that live in syscall.c,
->> >
->> > that's the only way to do it.
->> >
+>> Any recommendations on how to address this?
 >>
->> So the notion of forcing people into writing bpf-based gatekeeper progra=
-ms
->> is being abandoned? e.g.
+> it occur to me the __ffs() isn't really necessary, since all input
+> is constant value (GENMASK here), we then should know the shift..
+
+I asked Haylen to make this change.  Yes, we know the
+shift, but I much prefer specifying only a constant mask
+(which implies both the shift and the width) rather than
+a constant mask and shift (or width and shift).
+
+If there's no way to avoid this S390 compile error, then
+adding the separate (and redundant) shift value back
+into all these definitions is a solution.
+
+					-Alex
+
+> 
 >>
->> https://lore.kernel.org/bpf/bqxgv2tqk3hp3q3lcdqsw27btmlwqfkhyg6kohsw7lwd=
-gbeol7@nkbxnrhpn7qr/#t
->> https://lore.kernel.org/bpf/61aae2da8c7b0_68de0208dd@john.notmuch/
->
-> Not abandoned.
-> bpf-based tuning of load conditions is still necessary.
-> The bpf_prog_load command will check the signature only.
-> It won't start rejecting progs that don't have a signature.
-> For that a one liner bpf-lsm or C-based lsm would be needed
-> to address your dont-trust-root use case.
->
-
-Since this will require an LSM no matter what, there is zero reason for
-us not to proceed with Hornet. If or when you actually figure out how to
-sign an lskel and upstream updated LSM hooks, I can always rework Hornet
-to use that instead.
-
 >>
->> >> without adding extra non-code
->> >> signing requirements like attachment point verification, completely
->> >> eBPF-based solutions, or rich eBPF-based program run-time policy
->> >> enforcement?
->> >
->> > Those are secondary considerations that should also be discussed.
->> > Not necessarily a blocker.
+>>>
+>>>>> drivers/clk/spacemit/ccu-k1.c:241:1: error: initializer element is not a compile-time constant
+>>>        241 | CCU_DDN_DEFINE(slow_uart1_14p74, pll1_d16_153p6, MPMU_SUCCR, GENMASK(28, 16), GENMASK(12, 0), 0);
+>>>            | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>      drivers/clk/spacemit/ccu_ddn.h:33:15: note: expanded from macro 'CCU_DDN_DEFINE'
+>>>         33 |         .num_shift      = __ffs(_num_mask),                                     \
+>>>            |                           ^~~~~~~~~~~~~~~~
+>>>      drivers/clk/spacemit/ccu-k1.c:242:1: error: initializer element is not a compile-time constant
+>>>        242 | CCU_DDN_DEFINE(slow_uart2_48, pll1_d4_614p4, MPMU_SUCCR_1, GENMASK(28, 16), GENMASK(12, 0), 0);
+>>>            | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>      drivers/clk/spacemit/ccu_ddn.h:33:15: note: expanded from macro 'CCU_DDN_DEFINE'
+>>>         33 |         .num_shift      = __ffs(_num_mask),                                     \
+>>>            |                           ^~~~~~~~~~~~~~~~
+>>>      2 errors generated.
+>>>
+>>>
+>>> vim +241 drivers/clk/spacemit/ccu-k1.c
+>>>
+>>>      239	
+>>>      240	CCU_GATE_DEFINE(slow_uart, CCU_PARENT_NAME(osc), MPMU_ACGR, BIT(1), CLK_IGNORE_UNUSED);
+>>>    > 241	CCU_DDN_DEFINE(slow_uart1_14p74, pll1_d16_153p6, MPMU_SUCCR, GENMASK(28, 16), GENMASK(12, 0), 0);
+>>>      242	CCU_DDN_DEFINE(slow_uart2_48, pll1_d4_614p4, MPMU_SUCCR_1, GENMASK(28, 16), GENMASK(12, 0), 0);
+>>>      243	
+>>>
 >>
->> Again, I'm confused here since you recently stated this whole thing
->> was "questionable" without attachment point verification.
->
-> Correct.
-> For fentry prog type the attachment point is checked during the load,
-> but for tracepoints it's not, and anyone who is claiming that
-> their system is secure because the tracepoint prog was signed
-> is simply clueless in how bpf works.
+> 
 
-No one is making that claim, although I do appreciate the lovely
-ad-hominem attack and absolutist standpoint. It's not like we invented
-code signing last week. All we are trying to do is make our cloud
-ever-so-slightly more secure and share the results with the community.
-
-The attack vectors I'm looking at are things like CVE-2021-33200. ACLs
-for attachment points do nothing to stop that whereas code signing is a
-possible countermeasure. This kind of thing is probably a non-issue with
-your private cloud, but it's a very real issue with publicly accessible
-ones.=20=20
