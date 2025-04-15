@@ -1,65 +1,55 @@
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4180C28BA92
-	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 11:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB3B28469B
+	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 12:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744717153; cv=none; b=t4fmyups9lVKG1XI5iYrcV13pFZOMYfyyU52iwaOZ61JLPl8Q046SedFcC4Pc77K8/Tx22Aq1AkPM9L0t+t/E6RQqcfIolQ4WcTgpBdaDQU7q8/3+hZ/MDntvaZyuvxSc173ssNX9u84LXCZtkP6T5xlSwlJY3w1EIIjjK/XInw=
+	t=1744718812; cv=none; b=LO/0IllTeU/FBBNpwSDr6qmcDKS4dMuGXb3eBpiAqQL4SIpDrzcZwUs3HkoYzSyK0r81Up8sAE6KDkeKnD916bkhPWWpWSnKGQxd0L71Bm0g3wexRCUzsRSiyuQkCgFQOvUXg3Hb8lT/84jmj2wQjw6k3FIjHL1qIBA3CE4yKa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744717153; c=relaxed/simple;
-	bh=BhNz9z2uhmXkHpxm02pi4D65XhZgtBupMPkVQYFgDBo=;
+	s=arc-20240116; t=1744718812; c=relaxed/simple;
+	bh=x4b1Ksyd2oZZ01nHbkKfVYXSxKoQwElChjUNG5hzlbo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QnohgKyJmVrUbXW8DO2QZN1Pjo1Ko2602LD17tnakAogwMQdy0M1b304LpGNyrA3BKNlMkNbkQOHN/xKCHKZcqpwvG/AMuw20bz5lqKhxOzwH1XfTchT3WlNYzM4oS0QQfcx17W68FLb0SmI88y1axTIj5hpmSNHerrEuCOA1p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=minyard.net; spf=none smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard-net.20230601.gappssmtp.com header.i=@minyard-net.20230601.gappssmtp.com header.b=e3BZ4Njf; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=minyard.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=minyard.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=PKfDMwMx34ccQge7AgSdkG4vvC8i0BI20cs3u/4G796ytqnRMEBd4xgmz8KmZkoCXzNJPDKs3ZdVR+o1zj+KFlRcxWp3xu55IY3Kd8OdF5KWQL6lIlEX6/jXGfWeoBsyjzRkVv9ocTAKtMXde8P8rzI1yJI6hpmV5Hcp33RxHkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NPHTkUH7; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=minyard-net.20230601.gappssmtp.com header.i=@minyard-net.20230601.gappssmtp.com header.b="e3BZ4Njf"
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6041e84715eso3760045eaf.1
-        for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 04:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=minyard-net.20230601.gappssmtp.com; s=20230601; t=1744717150; x=1745321950; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdC+ybos8o0ITBqE7ZOhXVTr+xRo3uW3qXJPs1bo0DU=;
-        b=e3BZ4NjftI+yhg8bCE8DQ1KPi3c5f+Ga+ds3vzuGZ2IsePDQAcXPiz7Y1vIwGVSW+N
-         43xY9ognEF7YpQyHQ0ZlkW/zO1A2mDPaasOscxhhsNaiO0O+JPx303aFoX7VxDX17skz
-         xf81/mNOY1K2KmZPklW/crIT+eXc68bUY5fzdt7yD0UlWn2l1VVpvuE6PxXOib767JVl
-         Ga23x8wEtCVte3xDF8xx2K09gY27mCnUzqg/iUPQzIENlyBFWD7BdN7paR7mByKuqgHD
-         c3YnHlbr6F3+u0yl5qOsi6bHW6waVbyhAL1nYMTYVDm64VB2D3Y7m4Wwgafv7hrpna84
-         bFUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744717150; x=1745321950;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sdC+ybos8o0ITBqE7ZOhXVTr+xRo3uW3qXJPs1bo0DU=;
-        b=BaEfPPUnXID5L/8tV6L7aw3hbSDWNm2TRSxODouhUL4cYiyjhtHmYxI59uHmS3Osg8
-         RZ/4cvmfyDa9cXFRrIk4Gq18Y1cGMmvhgl03CpkcU+u1/itG+XKQSb6prSz7yQdhYR43
-         dwuoeieFoliiHArk5JgcZ7IjurkNdOdCN8q5oZ1or0Ra1cm8MQzu1IxXXJM3PCV+OKtq
-         01Nc2/dZxDMi/hn8WU/kLl7zHcHhwBOUpdxdlwvlheH1lF38UFLLKHbFbI2ZVVNhZfch
-         B+Ji5S1oMbp1vhekdPv0z0Yq+BLMXfPB9CvknedHGnm2uLC2UB9iMTriNSeC+8hLlaNx
-         xQ4w==
-X-Forwarded-Encrypted: i=1; AJvYcCWIcLVY729XwAdRTL6ORU9H613e0DjKfy99BihbpU28Op3y9VPoqESiiRs+Wt8Ex8qsUSAK@lists.linux.dev
-X-Gm-Message-State: AOJu0YxHoT5yS+BoOB9Xs77i2ujUM1kL7BzRrnKP00Ak9OzY1cINZjv1
-	6Lw9Ub/fDiViLmUEifT6HFrKztzXgkRMNTTRog7Dm0iugdwx7WQkWWQdBrKZysw=
-X-Gm-Gg: ASbGncvzCom8y8m65GIQZvTR/iWQ0S/uereyZFimPNTfNwPD7rVlYdnWByDAC+B+I7c
-	sPlbE9xmzOs1ekFp/MJ7g2b3jGVBoGcs6djq0pl49/a+5oGg5cZTJ9KcaBl8duwhgGcwesGx6wO
-	Gj4TCZaWX7CRxJizkCetBc/3e9POYjX/RTTjg5rs7VhielD8NJdYr/qwUXny0ghXdkrrmHQUbX8
-	+0g8ph7ycKb8eteVc7+K1Ax4Wbxr31V/QWgWBXGYKdPOTXWUxuZdppXP4n9oZ9wruJw4yZ53TL9
-	J8jCfLb5OzypI2NVeMBgPZGjT0AYE5w9cuP/I0/v4qGI
-X-Google-Smtp-Source: AGHT+IEWPVoxhxIvxVHdnqC7V9/omUZ3FlFGZ3fwPxEPX6EqBcnW2Xm7wlYDSJKTdcPaMOSX3JLTkg==
-X-Received: by 2002:a05:6820:99b:b0:604:d2b:c585 with SMTP id 006d021491bc7-6046f587ad1mr9852773eaf.3.1744717150155;
-        Tue, 15 Apr 2025 04:39:10 -0700 (PDT)
-Received: from mail.minyard.net ([2001:470:b8f6:1b:2b95:bd83:8713:77cf])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6045f53776esm2340926eaf.22.2025.04.15.04.39.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 04:39:08 -0700 (PDT)
-Date: Tue, 15 Apr 2025 06:39:03 -0500
-From: Corey Minyard <corey@minyard.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NPHTkUH7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744718811; x=1776254811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x4b1Ksyd2oZZ01nHbkKfVYXSxKoQwElChjUNG5hzlbo=;
+  b=NPHTkUH7B62ERFK7YGBo2oS+gVtOeuvIbVMuD4gKh7J4J8nUS0NQbwMi
+   T6tIMNS740V+9g+r2vHW0BrNvuPH7sJrPUTaWz2j2t7CLIquzxaLAqODh
+   Es8VHMFuem2szn1pIEs2q3lZBwdPrPsiQ7Wb/8b4ZWf6skdoZQTsOilCY
+   E+Y64A5BROY5bvpyNFLdyGl/5McifuOIrkdUI9q2QiaacVjrF0os49ErL
+   BY2cYIRR40P+o573vZZiTB6+pljf2Sw37UepFtiIHpAyOQgJO+9Pxv4fU
+   T0I0ZCqzDFj11aYwPlUnCCalXZ+MaM6xLn2tUFg26yWG4USPVVaQuo6r9
+   g==;
+X-CSE-ConnectionGUID: z17g4O7yQE6VVWleylPp2Q==
+X-CSE-MsgGUID: n/GAlkQlRXCu/7CjSBli4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="56883901"
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="56883901"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 05:06:50 -0700
+X-CSE-ConnectionGUID: 3ZUTnRvyQc2AZuhJ32hn1w==
+X-CSE-MsgGUID: NkzuOuzgR1OaN+lXV9EWhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="130632856"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 05:06:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u4f3t-0000000CXNM-021J;
+	Tue, 15 Apr 2025 15:06:45 +0300
+Date: Tue, 15 Apr 2025 15:06:44 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Corey Minyard <corey@minyard.net>
 Cc: openipmi-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
@@ -67,9 +57,9 @@ Cc: openipmi-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
 	Justin Stitt <justinstitt@google.com>
 Subject: Re: [PATCH v1 1/1] ipmi: si: Cast to smaller integer type without
  warning
-Message-ID: <Z_5FV65cyIwiI9rs@mail.minyard.net>
-Reply-To: corey@minyard.net
+Message-ID: <Z_5L1J11W-ArXcUe@smile.fi.intel.com>
 References: <20250415085156.446430-1-andriy.shevchenko@linux.intel.com>
+ <Z_5FV65cyIwiI9rs@mail.minyard.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,46 +68,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415085156.446430-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <Z_5FV65cyIwiI9rs@mail.minyard.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Apr 15, 2025 at 11:51:56AM +0300, Andy Shevchenko wrote:
-> Debian clang version 19.1.7 is not happy when compiled with
-> `make W=1` (note, CONFIG_WERROR=y is the default):
+On Tue, Apr 15, 2025 at 06:39:03AM -0500, Corey Minyard wrote:
+> On Tue, Apr 15, 2025 at 11:51:56AM +0300, Andy Shevchenko wrote:
+> > Debian clang version 19.1.7 is not happy when compiled with
+> > `make W=1` (note, CONFIG_WERROR=y is the default):
+> > 
+> > ipmi_si_platform.c:268:15: error: cast to smaller integer type 'enum si_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> >   268 |         io.si_type      = (enum si_type)device_get_match_data(&pdev->dev);
+> > 
+> > Fix this by intermediate cast to the uintptr_t, that makes compiler happy.
 > 
-> ipmi_si_platform.c:268:15: error: cast to smaller integer type 'enum si_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
->   268 |         io.si_type      = (enum si_type)device_get_match_data(&pdev->dev);
-> 
-> Fix this by intermediate cast to the uintptr_t, that makes compiler happy.
+> Unless things have changed recently, Linus prefers "unsigned long" per
+> https://patchwork.kernel.org/project/linux-hardening/patch/20220616143617.449094-1-Jason@zx2c4.com/#24899749
 
-Unless things have changed recently, Linus prefers "unsigned long" per
-https://patchwork.kernel.org/project/linux-hardening/patch/20220616143617.449094-1-Jason@zx2c4.com/#24899749
+I'm not sure I got your point. That discussion seems irrelevant to me.
+They are talking about pointer-as-an-integer cases. Here we already know
+that we are passing integer-as-a-pointer and this is the opposite
+conversion.
 
-And it would match what is in the match table.
+> And it would match what is in the match table.
 
-Is that change ok?
+Match tables are tend to move to pointers, enum is usually goes to int.
 
--corey
+> Is that change ok?
 
-> 
-> Fixes: 5be50eb5ae99 ("ipmi: si: Use device_get_match_data()")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/char/ipmi/ipmi_si_platform.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/ipmi/ipmi_si_platform.c b/drivers/char/ipmi/ipmi_si_platform.c
-> index 550cabd43ae6..47d3cbeb3fa0 100644
-> --- a/drivers/char/ipmi/ipmi_si_platform.c
-> +++ b/drivers/char/ipmi/ipmi_si_platform.c
-> @@ -265,7 +265,7 @@ static int of_ipmi_probe(struct platform_device *pdev)
->  	}
->  
->  	memset(&io, 0, sizeof(io));
-> -	io.si_type	= (enum si_type)device_get_match_data(&pdev->dev);
-> +	io.si_type	= (enum si_type)(uintptr_t)device_get_match_data(&pdev->dev);
->  	io.addr_source	= SI_DEVICETREE;
->  	io.irq_setup	= ipmi_std_irq_setup;
->  
-> -- 
-> 2.47.2
-> 
+If you don't like my change, please do yours and consider this as
+a bug report that needs to be addressed. I prefer more my solution
+as we do that in many places for the exact scenario.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
