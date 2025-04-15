@@ -1,155 +1,98 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C0919C553
-	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 08:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8141F2820D7
+	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 08:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744706854; cv=none; b=P12QuvBsq+RICmYjo3EJ2gAIWk+Sju32pk5IunWRk4R9UMOUfm7lxPvYO6xku1IEwS1zwmFgq6SuYelDQMLQEp1m37xlc+QgZBaCvx9++B//xo7F+QUZV+VFF2Mm49Ako+hS9kZcuW8tGfXr5GepzC06f7YiXpV8hJRRF5UvKp0=
+	t=1744707130; cv=none; b=YvLFYrm11ZyP9G1FCcp/6M4N3eGx3KCHaVUQRv1oweXNYJYC4pIe4k0NDfgv+Ke23+0FuqFVMUJJTOEn52PuhpxrRT4uv9/Z5NYXKAr9S2IX1jU5bdDNvfwrq2KtqR8/EoOZTSKGXRay1xpgekOsMF0d/vrhtfu/F/NWW1TeLvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744706854; c=relaxed/simple;
-	bh=6aaXfc25NEvE47B9WK+pF4wB4Ka8W/SaAt16XdAIFWI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=cOEYdxZinWIEDjV59mwqtvWuVXdoOOFBFEsWhUkSmGJx5VBNppfy3vIzL0HURgk6EY1Gb+iP6fYVmBBeGV6eGAKzTh18/XQ2/PLpaRnoOSD+hxGJkJVhrE7clibkBVvjKyq639Ytj7a+RoBNG4fQ4lq3dfXVgcKbHAP0qnUSoCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AF55339;
-	Tue, 15 Apr 2025 01:47:31 -0700 (PDT)
-Received: from [10.57.68.100] (unknown [10.57.68.100])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D0AF53F694;
-	Tue, 15 Apr 2025 01:47:29 -0700 (PDT)
-Message-ID: <0658a7d4-3048-4078-af14-574b87e4122a@arm.com>
-Date: Tue, 15 Apr 2025 09:47:27 +0100
+	s=arc-20240116; t=1744707130; c=relaxed/simple;
+	bh=BeQA07rWAq2VXgsT6pVbTPlGkpKB8k/93dQmrF4ZzOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bu8hXdz7j/AotbKdzfRsv32N0h6roWSewGEf48X7gkj5su+VKAM0uwGE4JL+ad8ndqBDD0v78/ZauuEo9GpP7sgRu06PWXjs10a8qKXD5WN/9JhZJd+GxV8GUS6NToBLZZisW3naoSI3EC2u5mtTh/hixavYmyNkiiY9EnSJmMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cOExYCDy; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cOExYCDy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744707127; x=1776243127;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BeQA07rWAq2VXgsT6pVbTPlGkpKB8k/93dQmrF4ZzOw=;
+  b=cOExYCDycjvpY2J9AV6u9OOwVTnbEOZnztzmFjRnJcXfRPg3E+6W9S2J
+   TaGGfOfLZeXQY24PCsi689htuGhkjjvPeYBA+jmiyEu6SBXpQSvNdw7jn
+   85IdIEDp8q2oAOc+TjuAWc/zsBN5bqDjz6pEU0sHPGXWPcX7vNGdK3gKp
+   aTuBShkuq34STHAclxcdu77S2RF1go7d/558KMqrcmV/rAtHzETve+kIl
+   /sihpQjivagQCNbHF1PgghAxpQTyoZ/WLd/+OTKtQ9iHeno1SMhDLIvuP
+   zaGkAcy+9HUjlEJV1YeGlkGhOzQ7VJPeM/k7Yc3sinT60t3Ukwkqwr+OK
+   g==;
+X-CSE-ConnectionGUID: bdeLtNlIQT+gi/H5hUgnXw==
+X-CSE-MsgGUID: 2QdcUL6cQAGTbtoQ+eRwTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="63745978"
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="63745978"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 01:52:07 -0700
+X-CSE-ConnectionGUID: FyNUypTFSeiyoq4rfHLfSw==
+X-CSE-MsgGUID: ALl81ON2TbKPQjQo4yJMSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="134855335"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa005.fm.intel.com with ESMTP; 15 Apr 2025 01:52:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 849DB17B; Tue, 15 Apr 2025 11:52:03 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: openipmi-developer@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Corey Minyard <corey@minyard.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] ipmi: si: Cast to smaller integer type without warning
+Date: Tue, 15 Apr 2025 11:51:56 +0300
+Message-ID: <20250415085156.446430-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] drivers/thermal/exynos: Refactor clk_sec
- initialization inside SOC-specific case
-To: Anand Moon <linux.amoon@gmail.com>
-References: <20250410063754.5483-1-linux.amoon@gmail.com>
- <20250410063754.5483-2-linux.amoon@gmail.com>
-Content-Language: en-US
-Cc: open list <linux-kernel@vger.kernel.org>,
- Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
- Alim Akhtar <alim.akhtar@samsung.com>, Krzysztof Kozlowski
- <krzk@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>,
- "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
- <llvm@lists.linux.dev>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES"
- <linux-arm-kernel@lists.infradead.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20250410063754.5483-2-linux.amoon@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Debian clang version 19.1.7 is not happy when compiled with
+`make W=1` (note, CONFIG_WERROR=y is the default):
 
+ipmi_si_platform.c:268:15: error: cast to smaller integer type 'enum si_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+  268 |         io.si_type      = (enum si_type)device_get_match_data(&pdev->dev);
 
-On 4/10/25 07:37, Anand Moon wrote:
-> Refactor the initialization of the clk_sec clock to be inside the
-> SOC_ARCH_EXYNOS5420_TRIMINFO case. It ensures that the clk_sec clock
-> is only initialized for the specified SOC and not for other SOCs,
-> thereby simplifying the code. The clk_sec clock is used by the TMU
-> for GPU on the Exynos 542x platform.
-> 
-> Removed redundant IS_ERR() checks for the clk_sec clock since error
-> handling is already managed internally by clk_unprepare() functions.
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
-> v5: None
-> v4: Fix the aligment of code clk for clk_prepare in proper if/else block.
->      update the commit for clk_sec used.
->      checked to goto clean up all the clks are proper.
->      drop IS_ERR() check for clk_sec.
-> v3: improve the commit message.
-> ---
->   drivers/thermal/samsung/exynos_tmu.c | 37 ++++++++++++++--------------
->   1 file changed, 18 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> index 47a99b3c5395..3657920de000 100644
-> --- a/drivers/thermal/samsung/exynos_tmu.c
-> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> @@ -1037,29 +1037,30 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->   		return ret;
->   
->   	data->clk = devm_clk_get(dev, "tmu_apbif");
-> -	if (IS_ERR(data->clk))
-> +	if (IS_ERR(data->clk)) {
->   		return dev_err_probe(dev, PTR_ERR(data->clk), "Failed to get clock\n");
-> -
-> -	data->clk_sec = devm_clk_get(dev, "tmu_triminfo_apbif");
-> -	if (IS_ERR(data->clk_sec)) {
-> -		if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO)
-> -			return dev_err_probe(dev, PTR_ERR(data->clk_sec),
-> -					     "Failed to get triminfo clock\n");
->   	} else {
-> -		ret = clk_prepare(data->clk_sec);
-> +		ret = clk_prepare(data->clk);
->   		if (ret) {
->   			dev_err(dev, "Failed to get clock\n");
->   			return ret;
->   		}
->   	}
->   
-> -	ret = clk_prepare(data->clk);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to get clock\n");
-> -		goto err_clk_sec;
-> -	}
-> -
->   	switch (data->soc) {
-> +	case SOC_ARCH_EXYNOS5420_TRIMINFO:
-> +		data->clk_sec = devm_clk_get(dev, "tmu_triminfo_apbif");
-> +		if (IS_ERR(data->clk_sec)) {
-> +			ret = dev_err_probe(dev, PTR_ERR(data->clk_sec),
-> +					    "Failed to get clk_sec clock\n");
-> +			goto err_clk;
-> +		}
-> +		ret = clk_prepare(data->clk_sec);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to prepare clk_sec clock\n");
-> +			goto err_clk_sec;
-> +		}
-> +		break;
->   	case SOC_ARCH_EXYNOS5433:
->   	case SOC_ARCH_EXYNOS7:
->   		data->sclk = devm_clk_get(dev, "tmu_sclk");
-> @@ -1112,11 +1113,10 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->   
->   err_sclk:
->   	clk_disable_unprepare(data->sclk);
-> +err_clk_sec:
-> +	clk_unprepare(data->clk_sec);
->   err_clk:
->   	clk_unprepare(data->clk);
-> -err_clk_sec:
-> -	if (!IS_ERR(data->clk_sec))
-> -		clk_unprepare(data->clk_sec);
->   	return ret;
->   }
->   
-> @@ -1128,8 +1128,7 @@ static void exynos_tmu_remove(struct platform_device *pdev)
->   
->   	clk_disable_unprepare(data->sclk);
->   	clk_unprepare(data->clk);
-> -	if (!IS_ERR(data->clk_sec))
-> -		clk_unprepare(data->clk_sec);
-> +	clk_unprepare(data->clk_sec);
->   }
->   
->   #ifdef CONFIG_PM_SLEEP
+Fix this by intermediate cast to the uintptr_t, that makes compiler happy.
 
-It looks good. I've missed the v4 where you addressed my comments.
+Fixes: 5be50eb5ae99 ("ipmi: si: Use device_get_match_data()")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/char/ipmi/ipmi_si_platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+diff --git a/drivers/char/ipmi/ipmi_si_platform.c b/drivers/char/ipmi/ipmi_si_platform.c
+index 550cabd43ae6..47d3cbeb3fa0 100644
+--- a/drivers/char/ipmi/ipmi_si_platform.c
++++ b/drivers/char/ipmi/ipmi_si_platform.c
+@@ -265,7 +265,7 @@ static int of_ipmi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	memset(&io, 0, sizeof(io));
+-	io.si_type	= (enum si_type)device_get_match_data(&pdev->dev);
++	io.si_type	= (enum si_type)(uintptr_t)device_get_match_data(&pdev->dev);
+ 	io.addr_source	= SI_DEVICETREE;
+ 	io.irq_setup	= ipmi_std_irq_setup;
+ 
+-- 
+2.47.2
+
