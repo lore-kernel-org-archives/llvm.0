@@ -1,65 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA4E27FD4F
-	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 09:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6A627F4F8;
+	Tue, 15 Apr 2025 09:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744707612; cv=none; b=ItZL7GZ64OmlJalYV6dxRQ60s0GvcmEtdabtI7re7sMr0uNMyublkf3GBSkN0t0XdTKo4H9WFTX4dXG8DMmOFrOx8szn+TaKUk3bCfvMdudS+s5Wcs12fVgioDrhNYAlLJBXccwgcydFEwLmY0AehHX2yYoyCctHiPIDBZ1u5aA=
+	t=1744708293; cv=none; b=Lwb3DmvUKD3bOI2YMDQ8D62i4A8cb+XlPCwMowC5ffjUaHYT/QGpHttUB4aaPtzY/icH4iUZk3yRBtrinUbhLFACC/5LXO0zfhHQZaFYErSiF12AphnRO7ETZ0u01dmFLdZHersSxSUWoeVMQUPbQiljf8rwrko2WVI3YSvcPTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744707612; c=relaxed/simple;
-	bh=xBWPCSVDb/jNFzNj7wFwHu6Gc3RMfVNi+DfW2HhL7rE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TlyNtj4FsjQ2tb1DW/a8pAMrNOejCbN+xZsmTuJJ8RK0wDkMBX9/MtK/fUtFieJIwpEugyb1Q/fmnDHiUbVFKVBfknfuhLOc1EspTshX9BQof9TNVdbbJtyyhQe8fmAJ98fRoTj+zupWt/eFRtxASsf+yKC3mmkBASzzCNkTfTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gcrMPOPZ; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1744708293; c=relaxed/simple;
+	bh=MrvbtWyVcwF9RnVgOYkeHUHTLHblRw+PRJpoBp4DgXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ujlkj4o6CzUHHxtXDUtx12/6J84nKKKpGZIvCaTGX9ZHdxShEE8hgruwvQK2g942W/ErS3/LIbtqc7etCDC1Z/kJyB9mvk9r64sy99do07aGsv82CUPV35/asj6wdpaadOTAL0gFyDbeDzkWwxt1DDHjHqygH239MUAF6th0rhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MrfYnlO7; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gcrMPOPZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MrfYnlO7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744707610; x=1776243610;
+  t=1744708292; x=1776244292;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=xBWPCSVDb/jNFzNj7wFwHu6Gc3RMfVNi+DfW2HhL7rE=;
-  b=gcrMPOPZX5pzWd0ruMbGLSzeNjtiVfl/dNLh8Q7SaKWnfZANiEDy29qh
-   rZsmzWrYM7BJlQK/XPHjyUMzU4cBcL3eUUHZqTqLyGMeTIZMyAWz0+T4m
-   AOnDE58kkWK1MkK6lc6WvMEGBpY+k8jinxEkFr4/Ka7DAOq4Yndmnn6Yw
-   i8xke5uF5TqZWl7HFP/y/AV3ojWzGXxKp854AhNLvwJodpNX6cWCRLWrW
-   ZutNC9q2NfMbpqnA/vQbHTfOakU2fBd0QVPwxsnR5LrFrWxLLrKaiMD8p
-   MUhWrvFK334f/gtNmQFK4kUZJCRgmX2tVIR8tewnU8+toLz/WE2tGI/9K
+  bh=MrvbtWyVcwF9RnVgOYkeHUHTLHblRw+PRJpoBp4DgXc=;
+  b=MrfYnlO7H//eBnOI1mC5Oar3frpBwM44QGqo1MSCnkUwuHNSBRaWq9QA
+   t2g+nc6hxhCXk2saWHUJyvrz7V6Jn/rc+aVzrwqsdqGIsKR+H2+gLhQf/
+   EiT0/zYkKqWksSXG57sPnv4pxXD04FZtZkC4tVdtRDD473/H8TfJkHEX3
+   ypkAMvevUf63CzbovD2nuixAa/HdeLCL1SyTN5x1O0DGUoliQ6BfvXn23
+   lLMBHVi/BeKqNnscojDfMY1o1vbqbPC7tYii08XFHzMxDt69bfyq6/onb
+   EseIUStk1bm0n7Ag9wZeAu5LtdFCNVGv1LXEPri13lh/mah8y8CHdoYjZ
    w==;
-X-CSE-ConnectionGUID: ra4qNnOfS2Kn2bdXsohDBg==
-X-CSE-MsgGUID: VR7EYbsrR2SO82lD+sOSOg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="56843164"
+X-CSE-ConnectionGUID: 690nCZzkSHGO5g0PjmxlVg==
+X-CSE-MsgGUID: dK/P1kxgS4ODdXL5HEpcsw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="57571003"
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="56843164"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 01:59:02 -0700
-X-CSE-ConnectionGUID: 1DbjZ8d8TGi5A5RUX5ewfw==
-X-CSE-MsgGUID: 05h2elAbSgKOV2ofHA7y4A==
+   d="scan'208";a="57571003"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 02:10:24 -0700
+X-CSE-ConnectionGUID: xKnt04DHRiKMV23XT0IbeQ==
+X-CSE-MsgGUID: 2e0VVgcHTFykIH7kY3WIGg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="134165879"
+   d="scan'208";a="129917956"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 15 Apr 2025 01:58:59 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 15 Apr 2025 02:10:22 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 467BB17B; Tue, 15 Apr 2025 11:58:58 +0300 (EEST)
+	id E758917B; Tue, 15 Apr 2025 12:10:20 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-kernel@vger.kernel.org,
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+Cc: Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] lockdep: Move hlock_equal() to the respective ifdeffery
-Date: Tue, 15 Apr 2025 11:58:56 +0300
-Message-ID: <20250415085857.495543-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] staging: rtl8723bs: Fix compilation errors for W=1 build
+Date: Tue, 15 Apr 2025 12:10:19 +0300
+Message-ID: <20250415091019.545905-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,112 +66,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When hlock_equal() is unused, it prevents kernel builds with clang,
-`make W=1` and CONFIG_WERROR=y, CONFIG_LOCKDEP=y and
-CONFIG_LOCKDEP_SMALL=n:
+When building a kernel with Clang 19 the couple of warnings
+become the errors (due to CONFIG_WERROR=y by default).
 
-  lockdep.c:2005:20: error: unused function 'hlock_equal' [-Werror,-Wunused-function]
+.../rtl8723bs/core/rtw_xmit.c:1939:13: error: variable 'drop_cnt' set but not used [-Werror,-Wunused-but-set-variable]
+.../rtl8723bs/hal/hal_com.c:893:6: error: variable 'res' set but not used [-Werror,-Wunused-but-set-variable]
 
-Fix this by moving the function to the respective existing ifdeffery
-for its the only user.
+Fix them accordingly.
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
-
-Fixes: 68e305678583 ("lockdep: Adjust check_redundant() for recursive read change")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- kernel/locking/lockdep.c | 70 ++++++++++++++++++++--------------------
- 1 file changed, 35 insertions(+), 35 deletions(-)
+ drivers/staging/rtl8723bs/core/rtw_xmit.c |  9 ++-------
+ drivers/staging/rtl8723bs/hal/hal_com.c   | 11 ++++-------
+ 2 files changed, 6 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 58d78a33ac65..546e92827de4 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -1976,41 +1976,6 @@ print_circular_bug_header(struct lock_list *entry, unsigned int depth,
- 	print_circular_bug_entry(entry, depth);
+diff --git a/drivers/staging/rtl8723bs/core/rtw_xmit.c b/drivers/staging/rtl8723bs/core/rtw_xmit.c
+index 297c93d65315..e2f7b2415524 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_xmit.c
++++ b/drivers/staging/rtl8723bs/core/rtw_xmit.c
+@@ -1936,7 +1936,6 @@ static void do_queue_select(struct adapter	*padapter, struct pkt_attrib *pattrib
+ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **ppkt)
+ {
+ 	static unsigned long start;
+-	static u32 drop_cnt;
+ 
+ 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+ 	struct xmit_frame *pxmitframe = NULL;
+@@ -1948,15 +1947,11 @@ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **ppkt)
+ 
+ 	pxmitframe = rtw_alloc_xmitframe(pxmitpriv);
+ 
+-	if (jiffies_to_msecs(jiffies - start) > 2000) {
++	if (jiffies_to_msecs(jiffies - start) > 2000)
+ 		start = jiffies;
+-		drop_cnt = 0;
+-	}
+ 
+-	if (!pxmitframe) {
+-		drop_cnt++;
++	if (!pxmitframe)
+ 		return -1;
+-	}
+ 
+ 	res = update_attrib(padapter, *ppkt, &pxmitframe->attrib);
+ 
+diff --git a/drivers/staging/rtl8723bs/hal/hal_com.c b/drivers/staging/rtl8723bs/hal/hal_com.c
+index 1213a91cffff..d91e2461fd7e 100644
+--- a/drivers/staging/rtl8723bs/hal/hal_com.c
++++ b/drivers/staging/rtl8723bs/hal/hal_com.c
+@@ -890,15 +890,14 @@ static u32 Array_kfreemap[] = {
+ void rtw_bb_rf_gain_offset(struct adapter *padapter)
+ {
+ 	u8 value = padapter->eeprompriv.EEPROMRFGainOffset;
+-	u32 res, i = 0;
+ 	u32 *Array = Array_kfreemap;
+ 	u32 v1 = 0, v2 = 0, target = 0;
++	u32 i = 0;
+ 
+ 	if (value & BIT4) {
+ 		if (padapter->eeprompriv.EEPROMRFGainVal != 0xff) {
+-			res = rtw_hal_read_rfreg(padapter, RF_PATH_A, 0x7f, 0xffffffff);
+-			res &= 0xfff87fff;
+-			/* res &= 0xfff87fff; */
++			rtw_hal_read_rfreg(padapter, RF_PATH_A, 0x7f, 0xffffffff);
++
+ 			for (i = 0; i < ARRAY_SIZE(Array_kfreemap); i += 2) {
+ 				v1 = Array[i];
+ 				v2 = Array[i+1];
+@@ -909,9 +908,7 @@ void rtw_bb_rf_gain_offset(struct adapter *padapter)
+ 			}
+ 			PHY_SetRFReg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, BIT18|BIT17|BIT16|BIT15, target);
+ 
+-			/* res |= (padapter->eeprompriv.EEPROMRFGainVal & 0x0f)<< 15; */
+-			/* rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res); */
+-			res = rtw_hal_read_rfreg(padapter, RF_PATH_A, 0x7f, 0xffffffff);
++			rtw_hal_read_rfreg(padapter, RF_PATH_A, 0x7f, 0xffffffff);
+ 		}
+ 	}
  }
- 
--/*
-- * We are about to add A -> B into the dependency graph, and in __bfs() a
-- * strong dependency path A -> .. -> B is found: hlock_class equals
-- * entry->class.
-- *
-- * If A -> .. -> B can replace A -> B in any __bfs() search (means the former
-- * is _stronger_ than or equal to the latter), we consider A -> B as redundant.
-- * For example if A -> .. -> B is -(EN)-> (i.e. A -(E*)-> .. -(*N)-> B), and A
-- * -> B is -(ER)-> or -(EN)->, then we don't need to add A -> B into the
-- * dependency graph, as any strong path ..-> A -> B ->.. we can get with
-- * having dependency A -> B, we could already get a equivalent path ..-> A ->
-- * .. -> B -> .. with A -> .. -> B. Therefore A -> B is redundant.
-- *
-- * We need to make sure both the start and the end of A -> .. -> B is not
-- * weaker than A -> B. For the start part, please see the comment in
-- * check_redundant(). For the end part, we need:
-- *
-- * Either
-- *
-- *     a) A -> B is -(*R)-> (everything is not weaker than that)
-- *
-- * or
-- *
-- *     b) A -> .. -> B is -(*N)-> (nothing is stronger than this)
-- *
-- */
--static inline bool hlock_equal(struct lock_list *entry, void *data)
--{
--	struct held_lock *hlock = (struct held_lock *)data;
--
--	return hlock_class(hlock) == entry->class && /* Found A -> .. -> B */
--	       (hlock->read == 2 ||  /* A -> B is -(*R)-> */
--		!entry->only_xr); /* A -> .. -> B is -(*N)-> */
--}
--
- /*
-  * We are about to add B -> A into the dependency graph, and in __bfs() a
-  * strong dependency path A -> .. -> B is found: hlock_class equals
-@@ -2915,6 +2880,41 @@ static inline bool usage_skip(struct lock_list *entry, void *mask)
- #endif /* CONFIG_TRACE_IRQFLAGS */
- 
- #ifdef CONFIG_LOCKDEP_SMALL
-+/*
-+ * We are about to add A -> B into the dependency graph, and in __bfs() a
-+ * strong dependency path A -> .. -> B is found: hlock_class equals
-+ * entry->class.
-+ *
-+ * If A -> .. -> B can replace A -> B in any __bfs() search (means the former
-+ * is _stronger_ than or equal to the latter), we consider A -> B as redundant.
-+ * For example if A -> .. -> B is -(EN)-> (i.e. A -(E*)-> .. -(*N)-> B), and A
-+ * -> B is -(ER)-> or -(EN)->, then we don't need to add A -> B into the
-+ * dependency graph, as any strong path ..-> A -> B ->.. we can get with
-+ * having dependency A -> B, we could already get a equivalent path ..-> A ->
-+ * .. -> B -> .. with A -> .. -> B. Therefore A -> B is redundant.
-+ *
-+ * We need to make sure both the start and the end of A -> .. -> B is not
-+ * weaker than A -> B. For the start part, please see the comment in
-+ * check_redundant(). For the end part, we need:
-+ *
-+ * Either
-+ *
-+ *     a) A -> B is -(*R)-> (everything is not weaker than that)
-+ *
-+ * or
-+ *
-+ *     b) A -> .. -> B is -(*N)-> (nothing is stronger than this)
-+ *
-+ */
-+static inline bool hlock_equal(struct lock_list *entry, void *data)
-+{
-+	struct held_lock *hlock = (struct held_lock *)data;
-+
-+	return hlock_class(hlock) == entry->class && /* Found A -> .. -> B */
-+	       (hlock->read == 2 ||  /* A -> B is -(*R)-> */
-+		!entry->only_xr); /* A -> .. -> B is -(*N)-> */
-+}
-+
- /*
-  * Check that the dependency graph starting at <src> can lead to
-  * <target> or not. If it can, <src> -> <target> dependency is already
 -- 
 2.47.2
 
