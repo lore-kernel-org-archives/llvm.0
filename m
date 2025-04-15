@@ -1,113 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B960B27C858;
-	Tue, 15 Apr 2025 08:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196ED1DAC92
+	for <llvm@lists.linux.dev>; Tue, 15 Apr 2025 08:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744706133; cv=none; b=oyDV17DrFLFm94b2OAZp2sBu8RQLq3sEEoGe5Jb1HqL+QBh0jL5W4BZuA9rriZLVhNgzYXco057ikj5SB4WaqoGkwyVfNFWnMu1tc8WUZz28wK8AETyaMXUV5Sh7vS9wx69dx1tb5mU3mSY8k+9rNEWHL56kW924AgaWbyORIxg=
+	t=1744706225; cv=none; b=hd781MvptZo6s23XAfX9we6clVApX8/6GoNtFm16c5LqB61vpj4yK+uKoKW5o/ZnIMCDHyvN+fh67mPOpKDX8/Betcno3AiVVFOb8yCPofoZbtbh5s7EDKX9LgKTUjGMUz493hnPs3JgDLf9KW4i2Y2O+AWW9nL0YdGGZDfPDe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744706133; c=relaxed/simple;
-	bh=jGqXa6qAd07xPumuQnTOwwVerUwK7vIp8vwS6j9n5Yw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TmQ46/FhstgGCethVkD9YNp86YVMLzYMRWGTZzQ2GOBLUx//nwJoVjBjbXEh4X6g2Yl/6vcWsGbcGjTAFdYCNGGNA8/Wqn4i8A0hWI5wt1mRILEinb0gkqyGPtA4bgKx8LYGsW5aIZIyXJe+EpLuaN4AuzsFZd9lxsJRCI4Sdo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0DOwnR0; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0DOwnR0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744706132; x=1776242132;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jGqXa6qAd07xPumuQnTOwwVerUwK7vIp8vwS6j9n5Yw=;
-  b=b0DOwnR0lwOpWG5+QAxArIKEOSZNSnQ2gWEBB3h3zKuVLd5IljyZDJC4
-   5JG/S0ChWZg5k0HP4NhO0lFrY5K8jPkzTB+5cRYP+1CFLcCDHScsxnqOU
-   iUy5LWz5FkGwUVVz2+B69+ZuMByu4beQMDH3I+sxWQ85to3ScYGBb+Uyy
-   3nQPO/Cg/erOjp6VPHA8re5i/3w3L2I0sGxxj6DJ1DExAgOC0ZK2L36qo
-   tH0uE7e8s7HEuVyBoR6rW/Zn+DCIasXvHP1yKiUpXxRM6pg6Zrnt9TnnN
-   4fl49F9bbLpKkLL5rIUKFPWEbl8Mk7KbatW+6xCrQ4Wsq97pZ2KdpomMq
-   A==;
-X-CSE-ConnectionGUID: 0xFXX4iVRtqYp72VxkKLSA==
-X-CSE-MsgGUID: ON4m3OEsT12RKvwWjatJNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="45337954"
-X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="45337954"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 01:34:19 -0700
-X-CSE-ConnectionGUID: 0oNhRal1SjGXEsB3HijK6Q==
-X-CSE-MsgGUID: XcQw+3HNSKCqozLjnKIVaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
-   d="scan'208";a="161039023"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 15 Apr 2025 01:34:16 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u4bkD-000FPu-2n;
-	Tue, 15 Apr 2025 08:34:13 +0000
-Date: Tue, 15 Apr 2025 16:33:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: Re: [PATCH v4] hwmon: (max77705) add initial support
-Message-ID: <202504151600.nzy7dDhd-lkp@intel.com>
-References: <20250412-initial-support-for-max77705-sensors-v4-1-2e4cf268a3d0@gmail.com>
+	s=arc-20240116; t=1744706225; c=relaxed/simple;
+	bh=R/ubAIoevAV3mGWYv95flteGTRaTDejxRF0LQgRjdpc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=nLLTL1V2mPzb09JFALVeWqo1QHk69r1qi5fKPW5wDmIFvRt4agx0p+95IXBUdNMpqcAeY7ndMUA4CdArNJrxxbKp9dQiJ06sxRmzujZ8iClV3WBSjrKxz9ATY9ndUzflGzIQL+4Bi1USzbmJchxKig3AvDXXWvuPMWGzMEwDchc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95EBF339;
+	Tue, 15 Apr 2025 01:37:00 -0700 (PDT)
+Received: from [10.57.68.100] (unknown [10.57.68.100])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58BBB3F694;
+	Tue, 15 Apr 2025 01:36:59 -0700 (PDT)
+Message-ID: <6abf897b-bbde-4586-941d-9915f15f1934@arm.com>
+Date: Tue, 15 Apr 2025 09:36:56 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250412-initial-support-for-max77705-sensors-v4-1-2e4cf268a3d0@gmail.com>
-
-Hi Dzmitry,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on a4cda136f021ad44b8b52286aafd613030a6db5f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/hwmon-max77705-add-initial-support/20250414-123556
-base:   a4cda136f021ad44b8b52286aafd613030a6db5f
-patch link:    https://lore.kernel.org/r/20250412-initial-support-for-max77705-sensors-v4-1-2e4cf268a3d0%40gmail.com
-patch subject: [PATCH v4] hwmon: (max77705) add initial support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250415/202504151600.nzy7dDhd-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250415/202504151600.nzy7dDhd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504151600.nzy7dDhd-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/max77705-hwmon.c:59:41: warning: unused variable 'max77705_hwmon_readable_table' [-Wunused-const-variable]
-      59 | static const struct regmap_access_table max77705_hwmon_readable_table = {
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/3] drivers/thermal/exymos: Fixed the efuse min max
+ value for exynos5422
+To: Anand Moon <linux.amoon@gmail.com>
+References: <20250410063754.5483-1-linux.amoon@gmail.com>
+ <20250410063754.5483-4-linux.amoon@gmail.com>
+Content-Language: en-US
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+ "open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+ Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+ Zhang Rui <rui.zhang@intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES"
+ <linux-arm-kernel@lists.infradead.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
+ <llvm@lists.linux.dev>,
+ "open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20250410063754.5483-4-linux.amoon@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +/max77705_hwmon_readable_table +59 drivers/hwmon/max77705-hwmon.c
 
-    58	
-  > 59	static const struct regmap_access_table max77705_hwmon_readable_table = {
-    60		.yes_ranges = max77705_hwmon_readable_ranges,
-    61		.n_yes_ranges = ARRAY_SIZE(max77705_hwmon_readable_ranges),
-    62	};
-    63	
+On 4/10/25 07:37, Anand Moon wrote:
+> As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
+> if e-Fuse value is out of this range, then thermal sensor may not
+> sense thermal data properly. Refactors the efuse value
+> initialization logic within exynos_map_dt_data function by
+> replacing the nested if-else statements with a switch statement.
+> Ensures proper initialization of efuse values based on the SOC type.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> v5: None
+> v4: None
+> v3: Improve the logic to convert if/else to switch
+> ---
+>   drivers/thermal/samsung/exynos_tmu.c | 19 +++++++++++++++----
+>   1 file changed, 15 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index ac3b9d2c900c..a71cde0a4b17 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -899,12 +899,23 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+>   		data->gain = 8;
+>   		data->reference_voltage = 16;
+>   		data->efuse_value = 55;
+> -		if (data->soc != SOC_ARCH_EXYNOS5420 &&
+> -		    data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
+> +		data->max_efuse_value = 100;
+> +		switch (data->soc) {
+> +		case SOC_ARCH_EXYNOS3250:
+> +		case SOC_ARCH_EXYNOS4412:
+> +		case SOC_ARCH_EXYNOS5250:
+> +		case SOC_ARCH_EXYNOS5260:
+>   			data->min_efuse_value = 40;
+> -		else
+> +			break;
+> +		case SOC_ARCH_EXYNOS5420:
+> +		case SOC_ARCH_EXYNOS5420_TRIMINFO:
+> +			data->min_efuse_value = 16;
+> +			data->max_efuse_value = 76;
+> +			break;
+> +		default:
+>   			data->min_efuse_value = 0;
+> -		data->max_efuse_value = 100;
+> +			break;
+> +		}
+>   		break;
+>   	case SOC_ARCH_EXYNOS5433:
+>   		data->tmu_set_low_temp = exynos5433_tmu_set_low_temp;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I should have added that in earlier version: LGTM,
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
