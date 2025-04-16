@@ -1,95 +1,96 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2DB01DDC3E
-	for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 17:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D42224244
+	for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 18:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744824691; cv=none; b=D112bay0m7XE+Vj/hkzkE9hZPnuUGUwfGZ2xTZipyOp3LYwMVcpZRUH+pnjEbJfZva1suW8uQj6sB94tv2xyZmdnzK711dqhzkNFbLIRmnjhKP/O2uuvv7+r8A20fBHAVw+7S0tUQDUzY4DsfFhN5NLW8VVqp8vKkR6ZAoaOZMI=
+	t=1744829053; cv=none; b=G377+jg9sTIJZ169k71u1fYjaHnG+MIGGMhITDpsfSCtm+Y1xqt4yxI/EXqPRkYVFS/ft6oKTM+1SVzXh+Z8+wFNzvSVYgmd6+TsNZZanrzZs/STCuldtnMPspeTWCUPP6Ps+IqrGEITtiehYGb5irE9G0vvSbIESdvdhQfy8zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744824691; c=relaxed/simple;
-	bh=5Pv3Hc0R8ZXL+oH8n2b7z3OtCOacHKIR1ANqXH+K9c0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Z6xAiaGvNQheyQ613Gf8n2WutwhQB4Ggf/OdQ9ZWAejineJRBApQhgWc3kPaOzvAb9+pl5V+zXfDL33JkEkj+Ub/Kwc6kz9o+vEh27VTA5OxVJPRTGd+i46sezK5If3i7vEs8J4bohK+yf8Jje/gFqSX/zb20N+OYJniVzMq8dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TJVRAyam; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1744829053; c=relaxed/simple;
+	bh=xvCR5iVQAHk4Tvf6E441jur/WH6gyOI6MT643z7GMqk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R4dg7auKh4EoKZNgl/CzJrxzBR5JsULH8+nKTbMOVi6Op0BPqRiO39wW51t/c52Cj5e+gvYAgwTCKz3QGvvPMHABqTCO85TxiB97lOFWAZ+Hw0cT2lpheAoRKkAmdtsBP/x7/hGTpVl5Hd46f68C/EztTsZJQCFI4ApheQFpDeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e2E0Urxq; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TJVRAyam"
-Received: from narnia (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CA0032052508;
-	Wed, 16 Apr 2025 10:31:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CA0032052508
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744824689;
-	bh=b7cZx62sBqiNAK+Z5g1uUfPSpgmxvu8T11NIoXrTY/o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=TJVRAyamNt8PTaChjPR4KaTuMaecAOHx9O2mwAnlkPR9lulk07gjnRGoxXT/5rHwB
-	 ZlrItUV1NU7JpKbyzk/UEEXb1e+ROAv34a6ZYR5OoptpDpkfF+e1fJEz/jPiDVMnTN
-	 ekQqoaiXnzkMd9ip4K/kRhdBVUggBCaWt16+ZVoo=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
- <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
- =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
- Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
- <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
- <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
- Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
- <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
- <xiyou.wangcong@gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-In-Reply-To: <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
- <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <87semdjxcp.fsf@microsoft.com>
- <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
- <87friajmd5.fsf@microsoft.com>
- <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
- <87a58hjune.fsf@microsoft.com>
- <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
-Date: Wed, 16 Apr 2025 10:31:18 -0700
-Message-ID: <87y0w0hv2x.fsf@microsoft.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2E0Urxq"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3032a9c7cfeso1281653a91.1
+        for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 11:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744829052; x=1745433852; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xvCR5iVQAHk4Tvf6E441jur/WH6gyOI6MT643z7GMqk=;
+        b=e2E0UrxqMbiMpoKPaEMIPWLXwffyEZR4cBJRQTQeBPnzFL/9jg2/pl3T3LajVmBOZh
+         ixSOZI8cnGlEldtFb5nwFczdkeTxPQfX7pW+KBWGV3K6qwWyVz6K/f9mwhGT8juHUkkk
+         1vuLAWVhQ5uP6QyPN2X8bJcLw02SwPxX2VW2HcbIc6yXu7LuKoMi0Yn9Kuea9kW6uC60
+         duBuCNtth4gGIFM/xT87pL0n3KaWIdZdcF+Sud9GtQp+4/92Eqy36rZdq3XL/otFyI4X
+         EKwkVMkNtOMnkOIaulm3OFOf53Tl3iqkIHBpVxDe4qQjawrUWAmoUZZrC5jtOL1tN9fp
+         Z8SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744829052; x=1745433852;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xvCR5iVQAHk4Tvf6E441jur/WH6gyOI6MT643z7GMqk=;
+        b=BeUjp7WnUyTUQ093i0ytSlV7CRIlJaL9nY6zWuigkAGQToe4AxKd9pVDbSqEfMWoXV
+         xg0I7BcaZf+6fdRmHfFEJIWwIkLXOql6tNI6qRPCrNN+cj56szryEHmJ6Kh1BXUAlNbs
+         ZjZEAypHr4kAmDJmHwULy0triBKgRX2rplqN0ssg/afJT/o9vRP9ilOHxmLD0643uRUq
+         KIELs49tk8+XxulPlfMo6eyWWRgvJulA/0XXzoGrK4ZR+XCCDbAS7WsxH7C8HF60Q+QN
+         h6mXyF8DrrTV0FezAnCKdz8N8kIV4kjsQ+ulx5DI6NLHN0F1rPcHvSooY2rsGdPgw90G
+         QYfg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6ztPYfsjDXqb9d/0Qqlz9DoFz4zBO5Wz7AxhaJY8pJqNkdCxhZTCo/5uGoZOjgwg+Outt@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx15dOmDIKR0RxhQ2otuZ56+RbRTZX+4EjHvXn7fjdV5ISlIpFo
+	jwmw3VkRl3nJSTlUWCvX+B9NWwsx/s4a+7ttCSikD3uykkxpE6TDh0FSpoG09dEWOmKe8tEp0Ad
+	03IfsGSH9I2GqZZ+EUy70NMJAeuM=
+X-Gm-Gg: ASbGncswxvZxNp5d8B0LXutgypavDvbqNfYoyRFK2IMzUxOHWJXIZBi66rQkUeYd4gS
+	A8fBNfnjYDE5YhpUWdkPTsaXFFIlwi61zC1ckbY/ltpCmy68XzImQ+7BhqsE5upqKups05eWi4w
+	KL0GBlTnrAiuF5wxd/SQA91w==
+X-Google-Smtp-Source: AGHT+IGz/z+KUxXc0G33wVCMhaj0SKBILS+bup38MKz4IGI65K2wAnc340DmtbFbjrtGqJWq1M1fbmkQ1lCjHd+vde4=
+X-Received: by 2002:a17:90b:4a4f:b0:2ff:4be6:c5bd with SMTP id
+ 98e67ed59e1d1-3086eff3792mr78829a91.8.1744829051661; Wed, 16 Apr 2025
+ 11:44:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20250416172016.work.154-kees@kernel.org>
+In-Reply-To: <20250416172016.work.154-kees@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 16 Apr 2025 20:43:58 +0200
+X-Gm-Features: ATxdqUGibHpjNZ3ZNK7NgImsJdoOgHlkWudDRmL9Gskw_Ayg7Z7YSleG2ywgKQM
+Message-ID: <CANiq72=2Y1NYVkEYR=Q5_HDbLu=P6KRsOzDKGw-8Zw6U-_KtYA@mail.gmail.com>
+Subject: Re: [PATCH] compiler_types: Identify compiler versions for __builtin_dynamic_object_size
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Marco Elver <elver@google.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, llvm@lists.linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, Jan Hendrik Farr <kernel@jfarr.cc>, 
+	Tony Ambardar <tony.ambardar@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Uros Bizjak <ubizjak@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> History repeats itself.
-> 1. the problem is hard.
-> 2. you're only interested in addressing your own use case.
-> There is no end-to-end design here and no attempt to
-> think it through how it will work for others.
+On Wed, Apr 16, 2025 at 7:20=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
 >
+> Clarify when __builtin_dynamic_object_size() is available. All our
+> supported Clang versions support it. GCC 12 and later support it. Link
+> to documentation for both.
+>
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-Well, I suppose anything worth doing is going to be hard :)
+Looks good to me, thanks!
 
-The end-to-end design for this is the same end-to-end design that exists
-for signing kernel modules today. We envisioned it working for others
-the same way module signing works for others. 
+If you/someone is taking it through their tree:
 
-> Hacking into bpf internal objects like maps is not acceptable.
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-We've heard your concerns about kern_sys_bpf and we agree that the LSM
-should not be calling it. The proposal in this email should meet both of
-our needs
-https://lore.kernel.org/bpf/874iypjl8t.fsf@microsoft.com/
-
-
--blaise
+Cheers,
+Miguel
