@@ -1,104 +1,124 @@
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6057B230BD9;
-	Wed, 16 Apr 2025 10:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33877209F5D;
+	Wed, 16 Apr 2025 10:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744798191; cv=none; b=MtZ9yiWCwLnYwOBqAFRs5ZiUa8cQMSOLPCaWqaVr569cUVfgGiYwdIN/oV795psVm73FsLcRNei/Q8jCg/RX3LhKeu1yuXS80V8XDOoAltLh3RxKR5KAWMC9x9CaBEiSFm4q4+D4+sNv/iFnoZp/mo7NrClp6YKXhep+SGcLfHk=
+	t=1744800165; cv=none; b=dqGJsRmBGzjSgOV74JdwfFHQHPvjKTBKJ12M+J4cnI39RUtxQZjswB6UmoiLQxeHdrmqmRgGQfUoUnR6yixkvpohGwaNg6PnFMCbDZsXEsrIwKxJiq5zAftS5RAG+p5QM1qFIbjSOkEjUxuTSMCSN3JWHUJX05IXS2nIBsaPMOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744798191; c=relaxed/simple;
-	bh=K5EIWptPNf+bD6TCzDb13Bmy9OoJJigove2+9RXxBVM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jiSxYOfGPPzsNZaR6+5Fwc7l9QCDcHyNyvgJru+V7TOITDv4CvUb1fjKxT5pruJOThaOAftbVvfn0gPJGT8yygbEKPejzJiCF84I9Dt1K9lnQB9nPXmh0rLSFtRLCEw2+TioWrEvgOrVSNTFMsLX3z3gUXNhw9QM9dGDzRO92Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=XniFCzRR; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1744800165; c=relaxed/simple;
+	bh=AHkqbmZu0vUKvlzbcbpT+pSgZKzWPBSWq33QnZJEtMQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lXgLGz/CXYPxL1lAuqkCMOt+/z3BKWoQ35kkh4GpucksdHoubCZpY3NTPmsa8jry6cyLXip062Ib66Mg3KUfw9bkm24hGOux+GtqKeUfnk3AyTirrECvJAqa8piOWB6KtlH7idOuVRq0IjgqPFkWG6BmTWvmUqEVKzE6KkJTI3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dr1TRwOD; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="XniFCzRR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1744798179;
-	bh=K5EIWptPNf+bD6TCzDb13Bmy9OoJJigove2+9RXxBVM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=XniFCzRRu2XnS24lydggXG5urVMcXZNtYGK346HVOEEuRL3mwInWhW6ZpFl9EfpHx
-	 v4y7I34TL18IfEU5VNVLVdmRLTBPTN+Jz2Rha/PN6P4G0IRRviQctnLPYXeFytfKoV
-	 4RMBfLlzr/QUuyw1THwa8YEMR1QQRINZs8gxGq/U=
-X-QQ-mid: izesmtp88t1744798177t30911463
-X-QQ-Originating-IP: Y0K1gEdnjwRv1AeBDV6CCq4xv4PZRxrn8U2uvTCCyEk=
-Received: from mail-yb1-f176.google.com ( [209.85.219.176])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 16 Apr 2025 18:09:35 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8037632543476522304
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e589c258663so5815090276.1;
-        Wed, 16 Apr 2025 03:09:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW7QnI9bK7XeYnhHBcD9VEPDMBwTrE6BB4sJFsCVHhxmEr87BHJ+4JB1i34NLqbQ4bg18stPQOPV5ckSEa0yrQ=@lists.linux.dev, AJvYcCWHDmwmw5Ok15S7bZsVJR+pqQfl9nlqMvPBXQ4U7lSt5DD6Iav2iGOUM8tXLhiRG6DmW9na@lists.linux.dev
-X-Gm-Message-State: AOJu0YxvJbdABkAbg0fwxHUrQ7k6jmE7r6sgfEALiHFJG0Hy6lPOIKpM
-	80nRhIX4c6ySFP/M8Z7S1p9MSAhdORKehEeKvfxALai/erg5v+rPg3mwC3JC26PGc06VObxAcwb
-	49/FiodyxDqQsPyWGa/TE6WJCILk=
-X-Google-Smtp-Source: AGHT+IFxOQerwyXR4s01cKj1FQCmW5mZBGS8EUkxg2eBy2yn8PQm4fMpJOhxMxu+WrXOTx3w5ulHOeUcX04b8xnFFTA=
-X-Received: by 2002:a05:6902:2b8a:b0:e6d:eb74:272 with SMTP id
- 3f1490d57ef6-e7275967af8mr1257382276.22.1744798174393; Wed, 16 Apr 2025
- 03:09:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dr1TRwOD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744800163; x=1776336163;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AHkqbmZu0vUKvlzbcbpT+pSgZKzWPBSWq33QnZJEtMQ=;
+  b=dr1TRwOD11igiQUlkZ2JtSOMZS6YjRpct9v76Ul8wwcxjHH+5+Doe/Ve
+   FQw10YaOll7qOx+IxpTypvuyBDFaCppLC6ew/Xx/rvK+TNw1A8c0iGGfS
+   3+i8fb6pn/H422HFzQRLN1Ov1m0FL9wa2xR8YXR5anUNMqf04UsXIKcIR
+   RfIlvtOORZwyAqwlYdt3doUlSYkELhgH/9SVrLzWbHv7puon7lwmLRXNE
+   2dx/qgUDZcCRncsRLf5ne2CnQ1yIQdowlt1ab9VwR6gmuPxkaiN/YrqwL
+   2I5R55EJoay6w2ewf4eupv8TdZl25urnIFxc15O8Dztv9+tpsONPeP5aA
+   A==;
+X-CSE-ConnectionGUID: tnLJwX5tTAiRbCYSK3tQOg==
+X-CSE-MsgGUID: 577jX2CUQziU2g22R3SgRw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="50162147"
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="50162147"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 03:42:42 -0700
+X-CSE-ConnectionGUID: NnmnWTCtRt2WW5r8kw2h2A==
+X-CSE-MsgGUID: 2EQrkd6vRK6MQNqPpqBtaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="135597035"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 16 Apr 2025 03:42:40 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u50E1-000JXw-12;
+	Wed, 16 Apr 2025 10:42:37 +0000
+Date: Wed, 16 Apr 2025 18:41:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brahmajit Das <brahmajit.xyz@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] regulator: hi6421v530: fix building with GCC 15
+Message-ID: <202504161823.huZUOtmg-lkp@intel.com>
+References: <20250415111411.6331-1-listout@listout.xyz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <E9B8B40E39453E89+20250411105306.89756-1-chenlinxuan@uniontech.com>
- <20250416044827.GA24153@lst.de>
-In-Reply-To: <20250416044827.GA24153@lst.de>
-From: Chen Linxuan <chenlinxuan@uniontech.com>
-Date: Wed, 16 Apr 2025 18:09:22 +0800
-X-Gmail-Original-Message-ID: <45D187D71349584D+CAC1kPDPYiUKqRmqW=hzOyGudvUXcwxo0kgDU_j40+t7rYHsU-g@mail.gmail.com>
-X-Gm-Features: ATxdqUHphIIrq227AoMvNzUOdxFn7upg3kfvytoiynDmEPipLLJsDaFiQeVe_To
-Message-ID: <CAC1kPDPYiUKqRmqW=hzOyGudvUXcwxo0kgDU_j40+t7rYHsU-g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/7] kernel-hacking: introduce CONFIG_NO_AUTO_INLINE
-To: Christoph Hellwig <hch@lst.de>
-Cc: Chen Linxuan <chenlinxuan@uniontech.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Chengchang Tang <tangchengchang@huawei.com>, 
-	Junxian Huang <huangjunxian6@hisilicon.com>, Leon Romanovsky <leon@kernel.org>, 
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>, 
-	Yishai Hadas <yishaih@nvidia.com>, 
-	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>, Kevin Tian <kevin.tian@intel.com>, 
-	Alex Williamson <alex.williamson@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	kvm@vger.kernel.org, virtualization@lists.linux.dev, linux-mm@kvack.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-QQ-SENDSIZE: 520
-Feedback-ID: izesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: NwayLIc/Avn/uc+dRHJ7b63Usqzraz51Cf/oicWYU1KzQUw0JkCFlCqb
-	EHpejWNiykim42BXNNI7d72q3HszTlR5jcf6Xsv1+P/MJ7POWRzqMhhc1oqhVf0sTh9Q743
-	pjy6RvAWrZSUzf1xk6ybfjRty0uPmMxwtbLt1/ai8cr+oUKLxn1yX4H7syybrVvXD/8CPiV
-	N2z7mhyGjSMwptUGitgadmHzCyoc80WrkzZkNNQfrDrhT8K/6dFA4o5b3JftMoJM7SzWGJB
-	tod+UCw6cXy073asZkPcg/Un9mxgI+tIoqg4dvoodYVHkWavX7wwXDLh5FC3/r+4Z7RP3ma
-	jlnLpQDsjVD0aOOTrUBJdpUn0PbinL73i+CNsfxiGsnv/HWigLJMhQn0TclDjtChsnkI/1V
-	0kwQbVZdJwHOJl4OU+VaDeaovVcWYqjUwA77ef/TjAyIalZHkYp0v+mPK+sTPzbiRvLO4JV
-	dfYQUBzHqL79zmLgBgRgm8h4EchwYjJKgf7/q7TOMQrRct5QarS/+5dtgquOullcq04znPK
-	jgfe9mJ3D1aiJjDmQh0XvTulLU4faFLXrI+d1/czQZ5TmhjrwidKte5Hew3eOfsdUk/xO0A
-	XfQ9nsmHi8v35xzN9mRY3j8EfoUDzoATe9QmRby2aH4CyP9rdg0y3SA4XGNVDRZW0RWGKkr
-	/9qZ3sCd+w5nLmkTTx59BpeMV2b0HcqdPC9xrQnGNYvNwt1nVYuC/fRk+yBHHfbPC6cm83x
-	y7ynIm3VJ2HF5Bz6Z4AeP4/yVUFcvXayRHbVHglbL2kd0zDPt9n9FlAEHeN9PvwUDrvcM5R
-	UyEB93Y/KPDOCt+HxnO4oUpjxKhU9xL8Fwhr0PXr4z2HvLyhHTzgf4YjzM7F8h+B6egYbpn
-	CwtAxmsU9YPfRA7YaqYyg9OwAcInlCBeBajbYAoMt81SKRdD3VIs6dmsFDZqGjXPOGBSUUR
-	1ZS97ZwQeJkajkOCuxOB+GmKPlm2xaNnWYyPuU14FyAADXtPaP9ZMe8+wYmSZ2daRrgFlzU
-	baOryQr7xyKy0m/fSShWFBGbj9c4Wtu+9G6Pr7+Bi18eJ8Jr3FGthCni5MJn3ADs6BBtpb+
-	Q==
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250415111411.6331-1-listout@listout.xyz>
 
-Sorry for the mistake, v2 has been send:
+Hi Brahmajit,
 
-https://lore.kernel.org/all/20250416-noautoinline-v2-0-e69a2717530f@uniontech.com/
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.15-rc2 next-20250416]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Brahmajit-Das/regulator-hi6421v530-fix-building-with-GCC-15/20250415-191555
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250415111411.6331-1-listout%40listout.xyz
+patch subject: [PATCH 1/1] regulator: hi6421v530: fix building with GCC 15
+config: hexagon-randconfig-001-20250416 (https://download.01.org/0day-ci/archive/20250416/202504161823.huZUOtmg-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250416/202504161823.huZUOtmg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504161823.huZUOtmg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   scripts/kernel-doc: 1: kernel-doc.py: not found
+   make[3]: *** [scripts/Makefile.build:203: scripts/mod/empty.o] Error 127 shuffle=4166761562
+   make[3]: *** Deleting file 'scripts/mod/empty.o'
+   In file included from scripts/mod/devicetable-offsets.c:3:
+>> include/linux/mod_devicetable.h:608:47: warning: unknown attribute 'nonstring' ignored [-Wunknown-attributes]
+     608 |         char name[PLATFORM_NAME_SIZE] __attribute__((nonstring));
+         |                                                      ^~~~~~~~~
+   1 warning generated.
+   make[3]: Target 'scripts/mod/' not remade because of errors.
+   make[2]: *** [Makefile:1279: prepare0] Error 2 shuffle=4166761562
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=4166761562
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=4166761562
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/nonstring +608 include/linux/mod_devicetable.h
+
+   606	
+   607	struct platform_device_id {
+ > 608		char name[PLATFORM_NAME_SIZE] __attribute__((nonstring));
+   609		kernel_ulong_t driver_data;
+   610	};
+   611	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
