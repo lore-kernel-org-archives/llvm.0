@@ -1,68 +1,68 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37BA22C32D
-	for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 06:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3479D22B5B5
+	for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 06:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744785282; cv=none; b=qigiqHWI3sPavjcbEEbgnrPfvc7mopB1CVLCaLNBFHYAZ7mlitajbwZ/R2QbZwR2MEEs2EOo4Kjh9HRmNvRedGoXUAebuhzGfhl/NJm40nqj36vZ0qgMiBMWwcxjOJcSgKxbk5Nq2oYo6az1q1LRL2pRDq5IXXNbBvmkWCgHcPA=
+	t=1744786099; cv=none; b=MmJbMRmMg2RTHRFMOx1b3p/T9j6jUWRA8AisDEgeu1IWFPUnJNB6QQ/AEkm6ALbfjrQKkMWUJWhGER6Xjo6fuacYaVYMT3jNXdSDxMCglUd0RLrEzW4Tv4Bxfkc9icX0iTPEaiXX6GEGAaRUz6r2nmXvthhUZRG9EoY2tvq0KyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744785282; c=relaxed/simple;
-	bh=S0QN9aMOfNreqfKF8qZmVU0ifAofjrywgk5i4jdOUH0=;
+	s=arc-20240116; t=1744786099; c=relaxed/simple;
+	bh=GnnHax3CLs/eDEcISozxIW47zxtfYAHKNkWa76+Y2OI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=laMVxfHADzNA86ZaI/lqkh+iptVythXhdoQoHbOv5lD/9wVnR/aCG79eknXBKKWszQGKuL/SQ41lheDfySLndmoTeh6hhYQqZtPa1bWHrVDwSUVH8QLKr3Y77Yt4/2zHw2VHmEFDQafaN3XNy7vnKsUYU3qKnd/K3Tik7aZJHaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OQzxgroK; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=mFVrmnmpHw23EuIUvrhjkqaUP7aIV2WI7R6ZW/Z7Uxlx3xq8Mg4z/F/LAVOPPHvrs87Us/442M5nVrIs+gSRjM6zH+5eQ75NmROXKNilwArTguGAd9+xijcMuRmhYsDhKde+hXn1ib/3VSNvcK5J1fRqCU0qb1oveyrLQrDWfJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EsFo36re; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OQzxgroK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EsFo36re"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744785281; x=1776321281;
+  t=1744786098; x=1776322098;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=S0QN9aMOfNreqfKF8qZmVU0ifAofjrywgk5i4jdOUH0=;
-  b=OQzxgroKZFUeb86MSp2bAzjeUDHpiKSHXXYl+VhQbP+jcDvjfCtznGMV
-   DhhHfbDRCOlUAQT40k2XIyWyAkzMXWxLWcDA8bwuTHr4TyFWpe8Ltl2zr
-   E/vnTuZXqfwKc2CX27HcB/nYj3/8uoQMW+ksYzaoA0nfzkOuGhHX2T3Z1
-   3FEXjK0ea2KONYrpj+8V3TLEcDS51dKqimbtu0k3gPv3JDbtPu5nXvaNK
-   LEEnb67Z4CIh5cka8as807YcQb6lEaBW9AAPInDGlXj5GgGQn1G1T2SDz
-   BoNRQn6T6hbkSAqWeJkBKaFbqErxBCRDuVBj5+rUfFzsgYrN+hALVh5wW
-   A==;
-X-CSE-ConnectionGUID: 6YLb37IJQrmd4a5aI4qg7A==
-X-CSE-MsgGUID: uzSiESIFSCCBvpO63UTqfA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46333586"
+  bh=GnnHax3CLs/eDEcISozxIW47zxtfYAHKNkWa76+Y2OI=;
+  b=EsFo36re4UcrMgAFiCbgGb0n0+P7+Ng+xNQ01+H2yLF+4UUCpvNKZ+p1
+   OqNGLtJeuRfkASOOLbifPN7zs4h1+WPKor9EKVzZdl8iTpTqdjxhqzOZF
+   5iRT99ihBp5NXGZ7pqw1k0EbeANA2gSUZOQtpBMOr5S+qZMIYXQuS3078
+   VKcFMdrGLFUetY/DrhzJa9ltnoz2cq4zaMV4YZHz10qiEgzfJqTJhuBFG
+   2LaCypnnHs9i2mr8vxsdkNklun4HVMx/Fym+++6weRAZGy9vVHS6B3wQu
+   RMY3MChV+pRjEQBrwHMX9ROpXJhSDeNRBa8ULqTV+d/1sVz071u5Z6RFU
+   Q==;
+X-CSE-ConnectionGUID: N17+HpS2Qo2p3C5uQ+JBYg==
+X-CSE-MsgGUID: jQ+2Vl+BRbqokLYONGDSuw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46334757"
 X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="46333586"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 23:34:41 -0700
-X-CSE-ConnectionGUID: iwAcN+cgT2aLo/lfqdzO8A==
-X-CSE-MsgGUID: bnJuy8XJQEGMUMTBUyih9A==
+   d="scan'208";a="46334757"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 23:48:17 -0700
+X-CSE-ConnectionGUID: 2ASbkVj7TvCkBkqJVW7E6w==
+X-CSE-MsgGUID: 7/DzJlehTp6WrO5UTCNBKQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="130111853"
+   d="scan'208";a="153566951"
 Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 23:34:38 -0700
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 23:48:15 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u4wLz-0000000ClZV-173E;
-	Wed, 16 Apr 2025 09:34:35 +0300
-Date: Wed, 16 Apr 2025 09:34:35 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Corey Minyard <corey@minyard.net>
-Cc: openipmi-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] ipmi: si: Cast to smaller integer type without
- warning
-Message-ID: <Z_9Pe_l-RrO-9v0u@smile.fi.intel.com>
-References: <20250415085156.446430-1-andriy.shevchenko@linux.intel.com>
- <Z_5FV65cyIwiI9rs@mail.minyard.net>
- <Z_5L1J11W-ArXcUe@smile.fi.intel.com>
- <Z_5NDNeDztC1-6vx@smile.fi.intel.com>
- <Z_6uzH9DsWIh-hIz@mail.minyard.net>
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1u4wZA-0000000ClnF-2FBE;
+	Wed, 16 Apr 2025 09:48:12 +0300
+Date: Wed, 16 Apr 2025 09:48:12 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] HID: simplify code in fetch_item()
+Message-ID: <Z_9SrP4kIGTCexF_@smile.fi.intel.com>
+References: <ZvwYbESMZ667QZqY@google.com>
+ <20241010222451.GA3571761@thelio-3990X>
+ <Z_yrjPBO_CPS8WX1@black.fi.intel.com>
+ <20250415003326.GA4164044@ax162>
+ <Z_4ApoWzgWSovgRi@smile.fi.intel.com>
+ <20250415152149.GB995325@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,51 +71,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z_6uzH9DsWIh-hIz@mail.minyard.net>
+In-Reply-To: <20250415152149.GB995325@ax162>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Apr 15, 2025 at 02:09:00PM -0500, Corey Minyard wrote:
-> On Tue, Apr 15, 2025 at 03:11:56PM +0300, Andy Shevchenko wrote:
-> > On Tue, Apr 15, 2025 at 03:06:45PM +0300, Andy Shevchenko wrote:
-> > > On Tue, Apr 15, 2025 at 06:39:03AM -0500, Corey Minyard wrote:
-> > > > On Tue, Apr 15, 2025 at 11:51:56AM +0300, Andy Shevchenko wrote:
-> > > > > Debian clang version 19.1.7 is not happy when compiled with
-> > > > > `make W=1` (note, CONFIG_WERROR=y is the default):
-> > > > > 
-> > > > > ipmi_si_platform.c:268:15: error: cast to smaller integer type 'enum si_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-> > > > >   268 |         io.si_type      = (enum si_type)device_get_match_data(&pdev->dev);
-> > > > > 
-> > > > > Fix this by intermediate cast to the uintptr_t, that makes compiler happy.
-> > > > 
-> > > > Unless things have changed recently, Linus prefers "unsigned long" per
-> > > > https://patchwork.kernel.org/project/linux-hardening/patch/20220616143617.449094-1-Jason@zx2c4.com/#24899749
-> > > 
-> > > I'm not sure I got your point. That discussion seems irrelevant to me.
-> > > They are talking about pointer-as-an-integer cases. Here we already know
-> > > that we are passing integer-as-a-pointer and this is the opposite
-> > > conversion.
-> > > 
-> > > > And it would match what is in the match table.
-> > > 
-> > > Match tables are tend to move to pointers, enum is usually goes to int.
-> > > 
-> > > > Is that change ok?
-> > > 
-> > > If you don't like my change, please do yours and consider this as
-> > > a bug report that needs to be addressed. I prefer more my solution
-> > > as we do that in many places for the exact scenario.
-> > 
-> > Note, the proper solution to the cases like this is to move to info-like
-> > structure and actually operate with the pointers instead of enums, longs, etc.
-> > 
-> > That's what's slowly moving on in IIO subsystem, for instance.
-> 
-> Yes, you are right, I'll probably make that change.  I'm not sure
-> about the uintptr thing, but I think the right change is to do an info
-> structure.  I never liked that code as it was, anyway.
+On Tue, Apr 15, 2025 at 08:21:49AM -0700, Nathan Chancellor wrote:
+> On Tue, Apr 15, 2025 at 09:45:58AM +0300, Andy Shevchenko wrote:
+> > On Mon, Apr 14, 2025 at 05:33:26PM -0700, Nathan Chancellor wrote:
+> > > On Mon, Apr 14, 2025 at 09:30:36AM +0300, Andy Shevchenko wrote:
+> > > > On Thu, Oct 10, 2024 at 03:24:51PM -0700, Nathan Chancellor wrote:
+> > > > > On Tue, Oct 01, 2024 at 08:42:36AM -0700, Dmitry Torokhov wrote:
 
-Please do, I will happily test anything you provide as currently this code breaks
-`make W=1` builds.
+...
+
+> > > > > Getting rid of the unreachable() in some way resolves the issue. I
+> > > > > tested using BUG() in lieu of unreachable() like the second change I
+> > > > > mentioned above, which resolves the issue cleanly, as the default case
+> > > > > clearly cannot happen. ...
+> > > > 
+> > > > As Dmitry pointed out to this old discussion, I have a question about the above
+> > > > test. Have you tried to use BUG() while CONFIG_BUG=n? Does it _also_ solve the
+> > > > issue?
+> > > 
+> > > Yes because x86 appears to always emit ud2 for BUG() regardless of
+> > > whether CONFIG_BUG is set or not since HAVE_ARCH_BUG is always
+> > > respected.
+> > 
+> > Thank you for the reply. But do you know if this is guaranteed on the rest of
+> > supported architectures? I.o.w. may we assume that BUG() in lieu of unreachable()
+> > will always fix the issue?
+> 
+> I don't know. As far as I can tell, BUG() is always better than a bare
+> unreachable() because it is either the same as unreachable() if the
+> architecture does not define HAVE_ARCH_BUG and CONFIG_BUG=n (and in the
+> case of CONFIG_BUG=n, I think the user should get to pick up the pieces)
+> or when CONFIG_BUG=y and/or HAVE_ARCH_BUG is defined, the unreachable()
+> will truly be unreachable in the control flow graph because of the trap
+> or __noreturn from BUG(), so no undefined behavior. I think you would
+> only be able to find cases where BUG() was not sufficient to avoid
+> undefined behavior at runtime instead of compile time, as objtool only
+> supports loongarch and x86 right now and both ensure BUG() always traps.
+> I might be missing something though.
+
+Thank you for this information!
 
 -- 
 With Best Regards,
