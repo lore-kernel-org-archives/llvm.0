@@ -1,96 +1,94 @@
-Received: from server4.hayhost.am (server4.hayhost.am [2.56.206.6])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4D42DFA42;
-	Wed, 16 Apr 2025 22:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=2.56.206.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43099242930;
+	Wed, 16 Apr 2025 23:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744842222; cv=none; b=hSWjQDIH+M7IiRvvL46Uhi73dMIDHmkMroGPTmrvk37Y07o5FUXmFOkgO6LoQpF5nJDn0UmJipHSQxdvYlxqGoQGWHELzmI33332IlMbB2Hs2vA4J+kl7k0D4EdQyAhWykEXJWxGO6U8xrDjSESOYCaEwzEvRzlXNjoYRyTYXB0=
+	t=1744845908; cv=none; b=Yo6o/VRxa1vQ6kOEsn3gH4XsJsY2j35S3CEjJpYiJjy38UJCCZpbicVYaPQObL+OFrw6aONbhu5+sFe6Ij/+5p8g8NgeYfaCsFm5pQqzuB6lZCY7yRr+6/l/f4EdCSQnIDCVU418VhSJ+2s4aYrrJMkgsASys93KOscABcjEgJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744842222; c=relaxed/simple;
-	bh=TPaUrtCeLu2Z5hZj1r8jOLlPE4F4Jv22vBCUSxcI3/U=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=B7pvO6Iai1+2ofD+OHKQoCKD/cfkif5QqJHfSyIsONIoNitLRj4bkB0WleFuT59bzQv4x3y7yIq3i8krz/EqulGRPMvP7U42a9LyjeYSXVgUFNGgNcUaviekBoVpSwtspAZTeutK06JqSMIZCUWbvZGdMH6r9p9nVsJHcN5OgEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=beldev.am; spf=pass smtp.mailfrom=beldev.am; dkim=pass (2048-bit key) header.d=beldev.am header.i=@beldev.am header.b=E04+mUxl; arc=none smtp.client-ip=2.56.206.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=beldev.am
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=beldev.am
+	s=arc-20240116; t=1744845908; c=relaxed/simple;
+	bh=IxtXOMnY6EX4iLYnbxrBI9tgWv+kilLamY4zLaHlROE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mYkcEbolm8kr0bVKHXBbkdcB6VEKEaBpG36ZWp91fTlZM/IeWHg4SvxDEi3IlNG/VdPzRtYXjHkpbzCzRzQqRL8Czy4YLK2N4O/6dJkIaNStkgUehXMWOu0FtYHMLsTPj+ZDPutR2y4QpG7V7LBW4NoTzjBQT8mnkQMnS6uHmc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JF6nX9TJ; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beldev.am header.i=@beldev.am header.b="E04+mUxl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=beldev.am;
-	s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
-	In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=xoQPmEh//Ecul4GGVBoluXgRVmoldj/oaTPva2dmdcs=; b=E04+mUxlLrAtSm5ipCfSqzhCAF
-	6W5QGNhSmBGCOyHeMQjBCTSnjrIotWuu1mRjCp6mtwEbU11/1tyWmKb9HfiqY2V5oAb5aN36lLTzs
-	CnnVlDFPx8oF1YnLwPK01lvhGEgd4vhF5M2Dk5N0JTfssoX1dm6YXXQY7Lg/RfzdMUBG4RmCDH9eR
-	YuH/gHz7ts638JKMotBXHOOO0v0SFvs/0hjHufJD9uAh4zgASQEcxLFIBcG55MTxmq/7fBb7v3nPu
-	yiJsy1o3KkNbAG3pwKcv7sordcUloq1xXXvPo0WHZNsFyoN81SHjcmEQOWNWF/O6+Ykg5QTaFVJ1F
-	NLf+ejYw==;
-Received: from [::1] (port=24590 helo=server4.hayhost.am)
-	by server4.hayhost.am with esmtpa (Exim 4.98.1)
-	(envelope-from <igor.b@beldev.am>)
-	id 1u5BAX-00000000FU6-44pM;
-	Thu, 17 Apr 2025 02:23:45 +0400
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JF6nX9TJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744845906; x=1776381906;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IxtXOMnY6EX4iLYnbxrBI9tgWv+kilLamY4zLaHlROE=;
+  b=JF6nX9TJUact3tab9ytgFq/12DCFzPwU8KAEGqwZrJW0Ls6jnYasrbId
+   R6qY0soqoCnJ9UtVU+24voDIcqUY2qPlb63nOBFxdxvVS3UyIrZC867xN
+   6BDrf8pwsHGxC58uYN2zLV8mct4uUdI1NEFlS8nnwaxEM6sM0vvyJpdyS
+   QOwKUpzlwAD3o70gtCvrhtJ+12iusx3nXCvRLiF4VuinxsNliR/z8huvV
+   VQT+yyv9yyUNXaJd808zDAWKJoqpMnqWCE0OP6Uj9HTuPhzSgn2kKhBiY
+   dkRGh+sh/Lb4Hy/hriQBxTG6RCT5zytgtAmzzUFeCJeFlqan/hz0n34I5
+   g==;
+X-CSE-ConnectionGUID: abIu6E6bS8a3u7UderrfQw==
+X-CSE-MsgGUID: cnf7QEgySEKvPDP0pPCFdA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="57059111"
+X-IronPort-AV: E=Sophos;i="6.15,217,1739865600"; 
+   d="scan'208";a="57059111"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 16:25:02 -0700
+X-CSE-ConnectionGUID: FRzL9G4CQFCDTuhcVK6eGA==
+X-CSE-MsgGUID: 58okQ/akTqSgn4K0qTQG7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,217,1739865600"; 
+   d="scan'208";a="130600757"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 16 Apr 2025 16:25:00 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u5C7m-000KRk-19;
+	Wed, 16 Apr 2025 23:24:58 +0000
+Date: Thu, 17 Apr 2025 07:24:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [linux-next:master 4325/4528] s390x-linux-ld:
+ pinctrl-sx150x.c:undefined reference to `i2c_smbus_write_byte_data'
+Message-ID: <202504170707.IBFj7H28-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Thu, 17 Apr 2025 02:23:44 +0400
-From: Igor Belousov <igor.b@beldev.am>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, Vitaly Wool
- <vitaly.wool@konsulko.se>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>
-Subject: Re: [akpm-mm:mm-new 195/196] mm/zblock.c:369:13: error: incompatible
- function pointer types initializing 'int (*)(void *, size_t, gfp_t, unsigned
- long *, const int)' (aka 'int (*)(void *, unsigned int, unsigned int, unsigned
- long *, const int)') with an expression of type 'int (void ...
-In-Reply-To: <20250416092641.198e1e2216f381c5e5852095@linux-foundation.org>
-References: <202504161517.KYEDQav9-lkp@intel.com>
- <20250416092641.198e1e2216f381c5e5852095@linux-foundation.org>
-User-Agent: Roundcube Webmail/1.6.9
-Message-ID: <2eeb20e32cc4ae0403b30fd9a5dbfd2e@beldev.am>
-X-Sender: igor.b@beldev.am
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server4.hayhost.am
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - beldev.am
-X-Get-Message-Sender-Via: server4.hayhost.am: authenticated_id: igor.b@beldev.am
-X-Authenticated-Sender: server4.hayhost.am: igor.b@beldev.am
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello Andrew,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f660850bc246fef15ba78c81f686860324396628
+commit: c4d1b2ee4407b0b12e0dade40361eb86c1c710ed [4325/4528] pinctrl: sx150x: enable building modules with COMPILE_TEST=y
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250417/202504170707.IBFj7H28-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250417/202504170707.IBFj7H28-lkp@intel.com/reproduce)
 
-2025-04-16 20:26 wrote Andrew Morton:
-> On Wed, 16 Apr 2025 15:21:24 +0800 kernel test robot <lkp@intel.com> 
-> wrote:
-> 
->> If you fix the issue in a separate patch/commit (i.e. not just a new 
->> version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: 
->> https://lore.kernel.org/oe-kbuild-all/202504161517.KYEDQav9-lkp@intel.com/
->> 
->> All errors (new ones prefixed by >>):
->> 
->> >> mm/zblock.c:369:13: error: incompatible function pointer types initializing 'int (*)(void *, size_t, gfp_t, unsigned long *, const int)' (aka 'int (*)(void *, unsigned int, unsigned int, unsigned long *, const int)') with an expression of type 'int (void *, size_t, gfp_t, unsigned long *)' (aka 'int (void *, unsigned int, unsigned int, unsigned long *)') [-Wincompatible-function-pointer-types]
->>      369 |         .malloc =               zblock_zpool_malloc,
->>          |                                 ^~~~~~~~~~~~~~~~~~~
->>    1 error generated.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-add-zblock-allocator-fix.patch
-> was supposed to fix this?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504170707.IBFj7H28-lkp@intel.com/
 
-I can provide a new version of the patch.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Igor
+   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_probe':
+   pinctrl-sx150x.c:(.text+0x15e): undefined reference to `i2c_get_match_data'
+>> s390x-linux-ld: pinctrl-sx150x.c:(.text+0x39e): undefined reference to `i2c_smbus_write_byte_data'
+   s390x-linux-ld: pinctrl-sx150x.c:(.text+0x432): undefined reference to `i2c_smbus_write_byte_data'
+   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_regmap_reg_read':
+   pinctrl-sx150x.c:(.text+0x2ba0): undefined reference to `i2c_smbus_read_byte_data'
+   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_regmap_reg_write':
+   pinctrl-sx150x.c:(.text+0x317c): undefined reference to `i2c_smbus_write_byte_data'
+   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_init':
+   pinctrl-sx150x.c:(.init.text+0x32): undefined reference to `i2c_register_driver'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
