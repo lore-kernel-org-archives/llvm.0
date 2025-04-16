@@ -1,97 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB162153D2;
-	Wed, 16 Apr 2025 17:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2DB01DDC3E
+	for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 17:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744824030; cv=none; b=LrJ5xADgyEyU+9YKK2mFZ0DL2b9bNY3VYrEMwT5DzN351QtAUR3It0juqJUOg3ptyPmEo7Z56FvfLHS8Qp7qu5RGvM/dECtEJWGbnLSTz7sjmMqi4s4cbAIdNsOe/fsx+gv1Lx+r1GQujGgjaVsjqusIivp5QsvHZJ1gOdwxntg=
+	t=1744824691; cv=none; b=D112bay0m7XE+Vj/hkzkE9hZPnuUGUwfGZ2xTZipyOp3LYwMVcpZRUH+pnjEbJfZva1suW8uQj6sB94tv2xyZmdnzK711dqhzkNFbLIRmnjhKP/O2uuvv7+r8A20fBHAVw+7S0tUQDUzY4DsfFhN5NLW8VVqp8vKkR6ZAoaOZMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744824030; c=relaxed/simple;
-	bh=JkQc01G33utQwTTvGf9JQj+ZoRf8sigUW1uHVbU6Vn4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k6hCEX9BgP/3q14qC9h/CJ8qQqZEH74Yx4xYn8gsjRT30K3BbJdyiEcvTxtAcpfF5qWW7cmZ7yU+NFY5LoZYYbvRvH8coxr9QvWkJ3LeyYDjzQuvMcftvsEAIeZ7BNopMaZEIMIvbxFa4XdLkOok+JK16riyamWJYIZFPA+tQsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUW5oIFL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744824691; c=relaxed/simple;
+	bh=5Pv3Hc0R8ZXL+oH8n2b7z3OtCOacHKIR1ANqXH+K9c0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Z6xAiaGvNQheyQ613Gf8n2WutwhQB4Ggf/OdQ9ZWAejineJRBApQhgWc3kPaOzvAb9+pl5V+zXfDL33JkEkj+Ub/Kwc6kz9o+vEh27VTA5OxVJPRTGd+i46sezK5If3i7vEs8J4bohK+yf8Jje/gFqSX/zb20N+OYJniVzMq8dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TJVRAyam; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUW5oIFL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A06C4CEE2;
-	Wed, 16 Apr 2025 17:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744824029;
-	bh=JkQc01G33utQwTTvGf9JQj+ZoRf8sigUW1uHVbU6Vn4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=DUW5oIFLQ2+UIcz2mNwofou4olw/+wEiiJBU+/45omnMiI7oAonFkbCWM/ZxpGs1k
-	 3gm9iFmSbokM5Vn5owAVVm+WI4iNZUgjZfDaoAn7mVdtD4DdZ1Uj57YwFfJhnVDnZH
-	 BR9Dg4AqvVCRSc+f2Gj1CjkfFWh/y4dhAQLUcxyyFyXMHXGNIWJzi028GY4vhdrUFD
-	 ZuZENRxRePAKHWW1vlmbQ96pTx4FXMS8TDtoRGbH/7/RG6EFQZForp1hIt+lHHPmG6
-	 PP0YUgxFL6FnyM/OurA+AKk9SKBFUyG9w6z7ppK4mcgeOvy8q4icZhBsR9M5QqTmU7
-	 mLDoySUL8UH8A==
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Marco Elver <elver@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	llvm@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] compiler_types: Identify compiler versions for __builtin_dynamic_object_size
-Date: Wed, 16 Apr 2025 10:20:20 -0700
-Message-Id: <20250416172016.work.154-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TJVRAyam"
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id CA0032052508;
+	Wed, 16 Apr 2025 10:31:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CA0032052508
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744824689;
+	bh=b7cZx62sBqiNAK+Z5g1uUfPSpgmxvu8T11NIoXrTY/o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=TJVRAyamNt8PTaChjPR4KaTuMaecAOHx9O2mwAnlkPR9lulk07gjnRGoxXT/5rHwB
+	 ZlrItUV1NU7JpKbyzk/UEEXb1e+ROAv34a6ZYR5OoptpDpkfF+e1fJEz/jPiDVMnTN
+	 ekQqoaiXnzkMd9ip4K/kRhdBVUggBCaWt16+ZVoo=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
+ <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
+ Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
+ <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
+ <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
+ <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
+ <xiyou.wangcong@gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+In-Reply-To: <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+ <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com>
+ <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com>
+ <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com>
+ <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+Date: Wed, 16 Apr 2025 10:31:18 -0700
+Message-ID: <87y0w0hv2x.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1422; i=kees@kernel.org; h=from:subject:message-id; bh=JkQc01G33utQwTTvGf9JQj+ZoRf8sigUW1uHVbU6Vn4=; b=owGbwMvMwCVmps19z/KJym7G02pJDOn/n11JnzfvUAGPv2hUUV/MOqVYCe/ofc/msN+12nHx2 3udNr+CjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIl8287wP38j8/ZjzyMe5275 dFCO/6/D3lWxMY9rAjhXhd9Xl5x8U42RYePZesaqFs7euAXKQvd2pjWZF9WuDwg5lfm68V/Dsek HeAE=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Clarify when __builtin_dynamic_object_size() is available. All our
-supported Clang versions support it. GCC 12 and later support it. Link
-to documentation for both.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Marco Elver <elver@google.com>
-Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: llvm@lists.linux.dev
----
- include/linux/compiler_types.h | 5 +++++
- 1 file changed, 5 insertions(+)
+> History repeats itself.
+> 1. the problem is hard.
+> 2. you're only interested in addressing your own use case.
+> There is no end-to-end design here and no attempt to
+> think it through how it will work for others.
+>
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 501cffddc2f4..20881cc761fa 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -449,6 +449,11 @@ struct ftrace_likely_data {
- /*
-  * When the size of an allocated object is needed, use the best available
-  * mechanism to find it. (For cases where sizeof() cannot be used.)
-+ *
-+ * Optional: only supported since gcc >= 12
-+ *
-+ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Object-Size-Checking.html
-+ * clang: https://clang.llvm.org/docs/LanguageExtensions.html#evaluating-object-size
-  */
- #if __has_builtin(__builtin_dynamic_object_size)
- #define __struct_size(p)	__builtin_dynamic_object_size(p, 0)
--- 
-2.34.1
+Well, I suppose anything worth doing is going to be hard :)
 
+The end-to-end design for this is the same end-to-end design that exists
+for signing kernel modules today. We envisioned it working for others
+the same way module signing works for others. 
+
+> Hacking into bpf internal objects like maps is not acceptable.
+
+We've heard your concerns about kern_sys_bpf and we agree that the LSM
+should not be calling it. The proposal in this email should meet both of
+our needs
+https://lore.kernel.org/bpf/874iypjl8t.fsf@microsoft.com/
+
+
+-blaise
