@@ -1,129 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7F922DFBA;
-	Wed, 16 Apr 2025 07:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EB9236421;
+	Wed, 16 Apr 2025 09:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744790049; cv=none; b=b7eZ1sjswke9I+22zbua6GJCHJiGQnU7idbbiwCtcKEbFpX441ciizllkJBVN4Q/+JiF/3UnBM0c/jCcXgFyKAuE12aE4ODhHUkNMhfG03QJQVyAki+hzfdztJdU9e8sbkz8QVPwZeyIoIoTO7vTHIH0ijc5GeJqEdGYd6WhqOg=
+	t=1744796701; cv=none; b=MMXUDDfAbzMNGebvyDPFy60k4NUIZvq5F43Bu6Sl0hNG+J504Soc16EoKYbmrc8FO2PzZH6rcVbPP6MDj37jGoibGHrpt5WWYCxOEMpPM1XiYnkz56C6mMPwXbL8Z1/znqvAMOA2Ku+X+hswD/0gxQv5vF+jcoELx9Vpsmo13zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744790049; c=relaxed/simple;
-	bh=M+jg169zSVo6ZismI6ncNWlx1PXdIQmNy/hfg0Q9PJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W1Q3IcuaEVt4cbbq388NXkXpaRxVP4yLuvjID6k15JjcZL1MVexm43aH5t3Fxt2V8UCG8+Zo/g8xGIVshPlwjGUGqrquw8nUdwGjIdq4DOQa/9pqkSgwXJ37SnhHQ1Yi34aNC2tFQkAQVUZm2yD8a/T+qCq7HCWbgkuevl35IVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PC/sMngk; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744796701; c=relaxed/simple;
+	bh=Yv+kifpgtaJLLbyR4rAn27RlbXnINX7O4xl+RP8J8Ps=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=VgRVEp2sZGCjELve5cK7CflNS8wzSwNIOwmcaJNskzC7fjULShYnIIrefT8YaiG1HUcKjvyNNZRKXB00/8LX/OIgUEOUYkHvwYoEQV5hnYZh57BsLmiSyB6dL+3ierpoKovyWd+eTbENv6WIcRpf4ZVRpnVfZKQ5W13TjGNg7Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lach4qKY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PC/sMngk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744790047; x=1776326047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M+jg169zSVo6ZismI6ncNWlx1PXdIQmNy/hfg0Q9PJQ=;
-  b=PC/sMngkAdrvSQh9k0miF/lEtMEB4ZNVk590Y5O4IyqQA/PIBFiq6Z2d
-   Rte8alQKLM1nAfkQRJU4CDlybW9ENlI4KoUECxJAD3Mz/Ac7ygpqsR0BA
-   dMzH+0aL5E3soRgzTtS7rZg8MgoQk0ZQRZX7I2KJQdUiUCre5dSAM8rWL
-   cJpxWaRWgrqgiEw0Gq98f2R3yECNMCJZh5mAGrrqKtdKHAc651o4/n+/K
-   g/bo1zNMDW6l2sj0rubDyJbp9l8pBVO5w+MPR7pOrsrmm7g/PH4huzudD
-   SUUYw7LH9rOCQXa2K7aiYfAQHSa7ql1S5GUaROjMN4xXGHEh0urp3vWP1
-   w==;
-X-CSE-ConnectionGUID: I4VK9cTKTcyOUquKIENHdQ==
-X-CSE-MsgGUID: dF/M+D0PSlGc/mupo63Z1g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46487846"
-X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="46487846"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 00:54:06 -0700
-X-CSE-ConnectionGUID: y+iglnNJQK6HRW0n2kQwyw==
-X-CSE-MsgGUID: pi2gb3OgRoup42oW9KxnBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="130891544"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Apr 2025 00:54:04 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u4xar-000JGi-2f;
-	Wed, 16 Apr 2025 07:54:01 +0000
-Date: Wed, 16 Apr 2025 15:53:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oscar Salvador <osalvador@suse.de>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Matthew Wilcox <willy@infradead.org>,
-	Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH] mm, hugetlb: Reset mapping to TAIL_MAPPING before
- restoring vmemmap
-Message-ID: <202504161522.S1qEFD4b-lkp@intel.com>
-References: <20250415054705.370412-1-osalvador@suse.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lach4qKY"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94480C4CEEF;
+	Wed, 16 Apr 2025 09:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744796700;
+	bh=Yv+kifpgtaJLLbyR4rAn27RlbXnINX7O4xl+RP8J8Ps=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Lach4qKYDtR1r2uJIArcYnjlMTOKDb0ehkvd5UN0MlTPQ66miK+ydvERbEHHi1kFA
+	 tBpf9tUwVubeot9VKKHdObFIhyHr/l51RlJxsTRZ8oj+g4/BdRuPjSBNuldgQBVM+9
+	 UvX2qv3N66+SaIbevmpj0dgd+m8BxLNLtkxxA8hz1nsdQQLysQx6/OlU0DrTjpN/i1
+	 pfOB/R/QsgyA7x4qHvwXeyAh6EW9/Zr4yPpm4MGoXjLe/CsH00SkVm2vlbMhQ71VT6
+	 zbEXJXdUkgPzB0m6KeyasjYLeU/Lt3gTqLYOSq30P+a2Ew9wGYWT/leA7ITiHM3RxA
+	 LyZSn/JD5X2vw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C67C369BD;
+	Wed, 16 Apr 2025 09:45:00 +0000 (UTC)
+From: Chen Linxuan via B4 Relay <devnull+chenlinxuan.uniontech.com@kernel.org>
+Date: Wed, 16 Apr 2025 17:44:47 +0800
+Subject: [PATCH RFC v2 1/5] nvme: add __always_inline for
+ nvme_pci_npages_prp
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250415054705.370412-1-osalvador@suse.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250416-noautoinline-v2-1-e69a2717530f@uniontech.com>
+References: <20250416-noautoinline-v2-0-e69a2717530f@uniontech.com>
+In-Reply-To: <20250416-noautoinline-v2-0-e69a2717530f@uniontech.com>
+To: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+ Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+ Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>, 
+ Kevin Tian <kevin.tian@intel.com>, 
+ Alex Williamson <alex.williamson@redhat.com>, 
+ Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+ Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-mm@kvack.org, kvm@vger.kernel.org, virtualization@lists.linux.dev, 
+ linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev, Winston Wen <wentao@uniontech.com>, 
+ Chen Linxuan <chenlinxuan@uniontech.com>, 
+ Changbin Du <changbin.du@intel.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2975;
+ i=chenlinxuan@uniontech.com; h=from:subject:message-id;
+ bh=sGDh7M1GW9E/6Y/0K/CCKXvss9WxUze9tBDMdqLrW6k=;
+ b=owEBbQKS/ZANAwAKAXYe5hQ5ma6LAcsmYgBn/3wVG003JQmokzL+qRyfJcdxP60RFA0LrONcP
+ OK5orjrbTuJAjMEAAEKAB0WIQTO1VElAk6xdvy0ZVp2HuYUOZmuiwUCZ/98FQAKCRB2HuYUOZmu
+ i8TED/0fmsPVnspcWh0W6L0ZSZOLbCvbFNwkSR8ln0sclXUOPtKwmyiPlZa4zJmx7OcofjIaLD/
+ r/WJyI8YJpl735QY3QIBTbrps+iGTDVaqLw8NMv1GsgSn5r61K4TxGHIfCjlSFoamR3OMWdNCrS
+ WgKkuDC2E6ay6dA0WfzSP78maBTAvxztzt0mrFpxZQijD5Ky6gSFVQAeztouTp6ootKC9gvMeO5
+ +gtRmuu9R5kMvmwGyagr3VY9mc0otVIg2xlYhJiaVOu4CfRoc0oOpQcaFGlds7Ffe9vB6Apy562
+ 0ADyZ/DVMUzU4vli0sb0ABqeWUWJvQn0/PvNjTUSDE7ohfpIGMasSJ4U4pGTk2h2Uup4lO1Qk5Y
+ itpYWcQQWcxZirZzGnfIAEsscrdlIW1hfEPHbAAmbwUCKwM4mYIvIvT4jVx7V8WAsDJybp72ugL
+ sSHbcb/PohzAsREiVXj+ctQfKvFssyCqeC4QmvrsOAIySwTmvnVd/kmriXFtFBV32jCCFt1yrzy
+ DHcdVAGXK0AEbs+63WGWuWrlpIqyutFQpNNkxOFaL3DlLSgZdNLg8Z6TeBEpltgoSrnRHWSN6KK
+ 2We5DBjR8F7GIDWR3F/H9QRYE/Z0BaE7a9oEZKSwd3QL13ItpXVkjs4ZYIJ497+OIimgPtSzbF9
+ Tn7aHUXUKD2PLjg==
+X-Developer-Key: i=chenlinxuan@uniontech.com; a=openpgp;
+ fpr=D818ACDD385CAE92D4BAC01A6269794D24791D21
+X-Endpoint-Received: by B4 Relay for chenlinxuan@uniontech.com/default with
+ auth_id=380
+X-Original-From: Chen Linxuan <chenlinxuan@uniontech.com>
+Reply-To: chenlinxuan@uniontech.com
 
-Hi Oscar,
+From: Winston Wen <wentao@uniontech.com>
 
-kernel test robot noticed the following build errors:
+On x86_64 with gcc version 13.3.0, I build drivers/nvme/host/pci.c
+with:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+  make defconfig
+  ./scripts/kconfig/merge_config.sh .config <(
+    echo CONFIG_BLK_DEV_NVME=m
+  )
+  make KCFLAGS="-fno-inline-small-functions -fno-inline-functions-called-once" \
+    drivers/nvme/host/pci.o
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/mm-hugetlb-Reset-mapping-to-TAIL_MAPPING-before-restoring-vmemmap/20250415-134835
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250415054705.370412-1-osalvador%40suse.de
-patch subject: [PATCH] mm, hugetlb: Reset mapping to TAIL_MAPPING before restoring vmemmap
-config: x86_64-buildonly-randconfig-006-20250416 (https://download.01.org/0day-ci/archive/20250416/202504161522.S1qEFD4b-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250416/202504161522.S1qEFD4b-lkp@intel.com/reproduce)
+Then I get a compile error:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504161522.S1qEFD4b-lkp@intel.com/
+    CALL    scripts/checksyscalls.sh
+    DESCEND objtool
+    INSTALL libsubcmd_headers
+    CC      drivers/nvme/host/pci.o
+  In file included from <command-line>:
+  drivers/nvme/host/pci.c: In function 'nvme_init':
+  ././include/linux/compiler_types.h:557:45: error: call to '__compiletime_assert_878' declared with attribute error: BUILD_BUG_ON failed: nvme_pci_npages_prp() > NVME_MAX_NR_ALLOCATIONS
+    557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        |                                             ^
+  ././include/linux/compiler_types.h:538:25: note: in definition of macro '__compiletime_assert'
+    538 |                         prefix ## suffix();                             \
+        |                         ^~~~~~
+  ././include/linux/compiler_types.h:557:9: note: in expansion of macro '_compiletime_assert'
+    557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+        |         ^~~~~~~~~~~~~~~~~~~
+  ./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+     39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+        |                                     ^~~~~~~~~~~~~~~~~~
+  ./include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+        |         ^~~~~~~~~~~~~~~~
+  drivers/nvme/host/pci.c:3804:9: note: in expansion of macro 'BUILD_BUG_ON'
+   3804 |         BUILD_BUG_ON(nvme_pci_npages_prp() > NVME_MAX_NR_ALLOCATIONS);
+        |         ^~~~~~~~~~~~
 
-All errors (new ones prefixed by >>):
+Mark nvme_pci_npages_prp() with __always_inline make it can be computed
+at compile time.
 
->> mm/hugetlb_vmemmap.c:506:2: error: call to undeclared function 'set_hugetlb_cgroup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     506 |         set_hugetlb_cgroup(folio, TAIL_MAPPING);
-         |         ^
-   1 error generated.
+Co-developed-by: Chen Linxuan <chenlinxuan@uniontech.com>
+Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
+Signed-off-by: Winston Wen <wentao@uniontech.com>
+---
+ drivers/nvme/host/pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-vim +/set_hugetlb_cgroup +506 mm/hugetlb_vmemmap.c
-
-   488	
-   489	/**
-   490	 * hugetlb_vmemmap_restore_folio - restore previously optimized (by
-   491	 *				hugetlb_vmemmap_optimize_folio()) vmemmap pages which
-   492	 *				will be reallocated and remapped.
-   493	 * @h:		struct hstate.
-   494	 * @folio:     the folio whose vmemmap pages will be restored.
-   495	 *
-   496	 * Return: %0 if @folio's vmemmap pages have been reallocated and remapped,
-   497	 * negative error code otherwise.
-   498	 */
-   499	int hugetlb_vmemmap_restore_folio(const struct hstate *h, struct folio *folio)
-   500	{
-   501		/*
-   502		 * Before restoring vmemmap, make sure to reset mapping to TAIL_MAPPING,
-   503		 * so tail pages that were reset will have the right thing after being
-   504		 * restored, and the checks in free_tail_page_prepare() will pass.
-   505		 */
- > 506		set_hugetlb_cgroup(folio, TAIL_MAPPING);
-   507		return __hugetlb_vmemmap_restore_folio(h, folio, VMEMMAP_SYNCHRONIZE_RCU);
-   508	}
-   509	
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index b178d52eac1b7f7286e217226b9b3686d07b7b6c..9ab070a9f0372bc6595c29a884ee9f2ffe5ae8e9 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -390,7 +390,7 @@ static bool nvme_dbbuf_update_and_check_event(u16 value, __le32 *dbbuf_db,
+  * as it only leads to a small amount of wasted memory for the lifetime of
+  * the I/O.
+  */
+-static int nvme_pci_npages_prp(void)
++static __always_inline int nvme_pci_npages_prp(void)
+ {
+ 	unsigned max_bytes = (NVME_MAX_KB_SZ * 1024) + NVME_CTRL_PAGE_SIZE;
+ 	unsigned nprps = DIV_ROUND_UP(max_bytes, NVME_CTRL_PAGE_SIZE);
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
+
