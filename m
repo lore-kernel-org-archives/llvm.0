@@ -1,173 +1,218 @@
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BF2221272
-	for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 12:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF860204F8B;
+	Wed, 16 Apr 2025 15:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744806042; cv=none; b=jId3Kw4wz0Dddoi8wBzuri7jvsF3ukfNvUB6NpFwoVWi+DwROvmRKAKzoM9swsIQOy3z+2vxVFVtB+djRqLpMlukdBLR/BsX4S+2YickKkoWKYLpaFj1C723PBJN2GSd7ACMg8/qxFLjK7TSjafI510YYaJLTNEx0bNAR4CbWOU=
+	t=1744816336; cv=none; b=YGLnXLsODw/gNsjSSneb5v668U2Xvvu9Tv8sXRmnOU5N3xXEWttPds9xtF/z/ZJ8Zy7M4QfgcMpDZwydbHcLODKrQQmiW//QHcIgpRLMlFlmaPr7aXcRlrxTQb327fFdou41h8dNYBxkKMzYwJ6SuCz/AzUeDoL7NYC7w69ffDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744806042; c=relaxed/simple;
-	bh=WaTSUYK1hMxKOQ6WiHv2mnmP1BM+kYKbkKvvvb2454I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=APIkZM47R6G5W2tXOnWlYMJu9mZfP8A+T8NfVmQkQOmcFsO/bpk105zwDFvZI4Z/B/a8VFI7O/bP0qoJZiBUNTMlP3PepxvXF0VpJrcy5GFdzp6n2FfuU/7zPO3j0IvA4sKnGeLfUEgxsKGhrIdpGCivR+wuL1CUkukk/xcEjn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=AxDEobPs; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	s=arc-20240116; t=1744816336; c=relaxed/simple;
+	bh=9qzPencW113V2WTgWeho/3FWA2JpX7obGfHVurw4i9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=t7e0qXHrTTIHSC0MHiAr3pRplPGKt6n5pj48kS8A4nGtdW/lmDo9F/Xx+xj2IHifPs56d+0BPDUWG64P0KZewpaTHxiG04jvMvmRuhfCHgZizVA1Wdp81o5FB+idEjQdJ9/aDfE0KPeablkv2fVFeqT49VQcscP6DCsnXZKH95M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IyH5VtP9; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="AxDEobPs"
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-861525e9b0aso478130239f.3
-        for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 05:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1744806038; x=1745410838; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PHOXMSmibh9YxF/cJXula+hYg363zDSu6L63qFd8Pf0=;
-        b=AxDEobPsrf0BGKQQyApQxyDwmDrJ+H0suKmyN3LPZCWE0khfP7xypcLEzK8W+TE8KN
-         C1zHhoq8IOZxubqakM+MaDnzbeR9JYwlrUgYZhEz8B1I5N2VVMPs3Jnz8TesBH8fmAcM
-         4Vln6JARwK5tcaZTDW20EYFdEIYdimUED1iBef3czHevsw/r++jzMKpfNzcoOB4PVmcd
-         1IMSYToxIo+60i21DfZ9ttlN5n0kW7nRVR/CZhcwxU0bcsfTBYXZUvcB6ix69/uOgAfz
-         ML/72prwi33Q9B7FeClaUp0p1Bd4/6P4/Zsy75BzwKNnGIDGh1e4YP4dj62vPBvtEfBR
-         GnXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744806038; x=1745410838;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PHOXMSmibh9YxF/cJXula+hYg363zDSu6L63qFd8Pf0=;
-        b=mRZVUOegnrWEUx9VHj51ZJZVWbayS31x3P1XVhdoWapqsKlbgGmj8J66AOI/qqB0wr
-         0GBgMDYL/cmqEIS+33EKERmAKFVNtInD1y9U1G0xTKcNPsxIceO3shJflrSbpJd80Dzp
-         Auwg/cAmlxjRK/uVtKf7VNES1dIx7LnhbIFGRmiY6T+DDnFMw+OvNR2JpAfce9cgJwNo
-         lAxLz1uQIhsYZUcIO86RlF9iaSjWUZTssIQ7YePDvSsijPNXbCFH2Lhnun115XCbTulw
-         /oeg/gs7nTXuuS2x+L0mpik0VZY3QK1E0RH4WP40iczaohF1RyuNkwmqqvSkLl2/Pz9g
-         wjVA==
-X-Gm-Message-State: AOJu0YxCUilJ04Xwh8rMRwS54cTgE+oQ43AlT0BnFOcrfuDYoqsP6kDM
-	9THHJGv/bOupTS3EMsb6mTUn+LmrW0d78bGeDLiU+DTMOTWEPD95g7+T/UERHV/hFkrtbK+9XuQ
-	w9KQ=
-X-Gm-Gg: ASbGncvEDgAVPc4Z/VWWiidvGTYmMXVo4xLaZM4eQ7UenzGqLDPkE4QG6uAAPiMH9U4
-	5ZvpHtaaNN1uh58wJLSSM8jthiWE5qvnYT9UYUl7MGCOCaZIi+dryZf6e/pDi885ftSxZyK84R5
-	YIDs5mDqE9B17aMVpcDw7AO+gEILl5uZkLFNF3D3DbSykwaL7Ze6oTZpVjAstDZT779ktJEtKiL
-	FXs0dqwrEjMPaqBOwkMQaQ5SHt5KEyUGUjUhLVrkVDXy2//FlkqmF8I6tRTl2YhL6ERXIlE7acQ
-	G73hNHjALqskZ+k/5KyipIOn3hK6H+1RhY3E0ys3Qkis1KOJMF1rKTCdnyCh2OA5c6K2pkXxc2V
-	85PJb
-X-Google-Smtp-Source: AGHT+IHMbZ4MBgMdxEe56ThzGgfclttS+FisMoQtlDjaHIQBfnLNjjLI8JRFK/A93FU4XEoVTlZziw==
-X-Received: by 2002:a05:6602:1fd6:b0:861:c732:8cd0 with SMTP id ca18e2360f4ac-861c7328ce9mr103156339f.0.1744806038403;
-        Wed, 16 Apr 2025 05:20:38 -0700 (PDT)
-Received: from [172.22.22.28] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505dfdf6fsm3619310173.85.2025.04.16.05.20.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Apr 2025 05:20:38 -0700 (PDT)
-Message-ID: <10f1ff34-5a34-4a18-b0e7-010c407190fa@riscstar.com>
-Date: Wed, 16 Apr 2025 07:20:37 -0500
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IyH5VtP9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744816334; x=1776352334;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9qzPencW113V2WTgWeho/3FWA2JpX7obGfHVurw4i9A=;
+  b=IyH5VtP9oV64b7N4FFgFiUB64TL/+s/h+8Tb2oR0HLnfKfutkz9EO+55
+   Z5a4bo1Yn1bUiUZb/tWs08vbZFw7tq7qb67sVbObtHxgne5PyPdUsJLvM
+   h2BVJSZ3Ww6ygcQh05zXrcezOCndUadrVkUhotiKvniaGpG4FWz8NEf+6
+   Z6wX8LhSAbxnKri+Xz5MQGaPs4s7HjUXzOP/IQaa90SYkG6wvmWsEIzsw
+   NvQcFPnDWTyW95CCpXjz4K+IMah4iAJeFXmMgWpNEKTeSmeU3aN/aPmBq
+   g13ZuKylb8dh1MmWv8XYrffQldkNQXYnhjf1wrEKWVCqdaqww8wi0rZW1
+   Q==;
+X-CSE-ConnectionGUID: 3YghHb2XS+O97Vzpidujrg==
+X-CSE-MsgGUID: Eu8tECrQTwaY3vhv+MFVIQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="57743810"
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="57743810"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 08:12:13 -0700
+X-CSE-ConnectionGUID: kEtLLD14QEGomv8Ma75Itg==
+X-CSE-MsgGUID: PavtYALoT8KUELr3Auvt1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="135355347"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 16 Apr 2025 08:12:12 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u54Qr-000JxP-2v;
+	Wed, 16 Apr 2025 15:12:09 +0000
+Date: Wed, 16 Apr 2025 23:11:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ingo Molnar <mingo@kernel.org>
+Subject: [mingo-tip:WIP.timers/core 4/10]
+ net/ipv4/inet_connection_sock.c:1072:29: error: call to undeclared function
+ 'from_timer'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202504162318.HYFGIAgD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [spacemit:for-next 4/6] drivers/clk/spacemit/ccu-k1.c:241:1:
- error: initializer element is not a compile-time constant
-To: Haylen Chu <heylenay@4d2.org>, Yixun Lan <dlan@gentoo.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Inochi Amaoto <inochiama@outlook.com>
-References: <202504152107.7ekGPIrF-lkp@intel.com>
- <564eb8e7-a4e1-49e6-a79d-da880a526540@riscstar.com>
- <20250415143137-GYB30887@gentoo>
- <9b52f950-9baf-4293-b211-82891b6f349e@riscstar.com>
- <Z_-eYhc2kZrVoL9m@ketchup>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <Z_-eYhc2kZrVoL9m@ketchup>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4/16/25 7:11 AM, Haylen Chu wrote:
-> On Tue, Apr 15, 2025 at 11:03:12AM -0500, Alex Elder wrote:
->> On 4/15/25 9:31 AM, Yixun Lan wrote:
->>> Hi Alex,
->>>
->>> On 09:16 Tue 15 Apr     , Alex Elder wrote:
->>>> On 4/15/25 8:44 AM, kernel test robot wrote:
->>>>> tree:   https://github.com/spacemit-com/linux for-next
->>>>> head:   9ead3efbc88a21e9a1f38948cc0902518022a2e5
->>>>> commit: e2d238ba301f25a5c8a7d490a36f9cd014d7aecc [4/6] clk: spacemit: Add clock support for SpacemiT K1 SoC
->>>>> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250415/202504152107.7ekGPIrF-lkp@intel.com/config)
->>>>> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
->>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250415/202504152107.7ekGPIrF-lkp@intel.com/reproduce)
->>>>>
->>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>>>> the same patch/commit), kindly add following tags
->>>>> | Reported-by: kernel test robot <lkp@intel.com>
->>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202504152107.7ekGPIrF-lkp@intel.com/
->>>>>
->>>>> All errors (new ones prefixed by >>):
->>>>
->>>> If I'm interpreting this right, this seems to be a problem on
->>>> a S390 build (under COMPILE_TEST), because there is no constant
->>>> version of the __ffs() for that architecture.  This might be the
->>>> case on other architectures as well.
->>>>
->>>> On RISC-V, this is fine.
->>>>
->>>> Any recommendations on how to address this?
->>>>
->>> it occur to me the __ffs() isn't really necessary, since all input
->>> is constant value (GENMASK here), we then should know the shift..
->>
->> I asked Haylen to make this change.  Yes, we know the
->> shift, but I much prefer specifying only a constant mask
->> (which implies both the shift and the width) rather than
->> a constant mask and shift (or width and shift).
->>
->> If there's no way to avoid this S390 compile error, then
->> adding the separate (and redundant) shift value back
->> into all these definitions is a solution.
-> 
-> We could avoid the redundancy by specifying only width and shift and
-> move the call to GENMASK() into the macro, see my previous reply. To me
-> it doesn't look very different, it's just about where to invoke
-> GENMASK().
+Hi Ingo,
 
-Do what you like to fix it.  What you suggest is fine with me.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-					-Alex
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.timers/core
+head:   e42d8536937923868af908502797aa7923df52b1
+commit: 24e5f9a3c2f20d7a7c04b6d5cb2b4b7ec4f1a707 [4/10] treewide, timers: Rename destroy_timer_on_stack() => timer_destroy_on_stack()
+config: i386-buildonly-randconfig-005-20250416 (https://download.01.org/0day-ci/archive/20250416/202504162318.HYFGIAgD-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250416/202504162318.HYFGIAgD-lkp@intel.com/reproduce)
 
->> 					-Alex
-> 
-> Thanks,
-> Haylen Chu
-> 
->>
->>>
->>>>
->>>>
->>>>>
->>>>>>> drivers/clk/spacemit/ccu-k1.c:241:1: error: initializer element is not a compile-time constant
->>>>>         241 | CCU_DDN_DEFINE(slow_uart1_14p74, pll1_d16_153p6, MPMU_SUCCR, GENMASK(28, 16), GENMASK(12, 0), 0);
->>>>>             | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>>       drivers/clk/spacemit/ccu_ddn.h:33:15: note: expanded from macro 'CCU_DDN_DEFINE'
->>>>>          33 |         .num_shift      = __ffs(_num_mask),                                     \
->>>>>             |                           ^~~~~~~~~~~~~~~~
->>>>>       drivers/clk/spacemit/ccu-k1.c:242:1: error: initializer element is not a compile-time constant
->>>>>         242 | CCU_DDN_DEFINE(slow_uart2_48, pll1_d4_614p4, MPMU_SUCCR_1, GENMASK(28, 16), GENMASK(12, 0), 0);
->>>>>             | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>>       drivers/clk/spacemit/ccu_ddn.h:33:15: note: expanded from macro 'CCU_DDN_DEFINE'
->>>>>          33 |         .num_shift      = __ffs(_num_mask),                                     \
->>>>>             |                           ^~~~~~~~~~~~~~~~
->>>>>       2 errors generated.
->>>>>
->>>>>
->>>>> vim +241 drivers/clk/spacemit/ccu-k1.c
->>>>>
->>>>>       239	
->>>>>       240	CCU_GATE_DEFINE(slow_uart, CCU_PARENT_NAME(osc), MPMU_ACGR, BIT(1), CLK_IGNORE_UNUSED);
->>>>>     > 241	CCU_DDN_DEFINE(slow_uart1_14p74, pll1_d16_153p6, MPMU_SUCCR, GENMASK(28, 16), GENMASK(12, 0), 0);
->>>>>       242	CCU_DDN_DEFINE(slow_uart2_48, pll1_d4_614p4, MPMU_SUCCR_1, GENMASK(28, 16), GENMASK(12, 0), 0);
->>>>>       243	
->>>>>
->>>>
->>>
->>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504162318.HYFGIAgD-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> net/ipv4/inet_connection_sock.c:1072:29: error: call to undeclared function 'from_timer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1072 |         struct request_sock *req = from_timer(req, t, rsk_timer);
+         |                                    ^
+   net/ipv4/inet_connection_sock.c:1072:29: note: did you mean 'mod_timer'?
+   include/linux/timer.h:151:12: note: 'mod_timer' declared here
+     151 | extern int mod_timer(struct timer_list *timer, unsigned long expires);
+         |            ^
+>> net/ipv4/inet_connection_sock.c:1072:48: error: use of undeclared identifier 'rsk_timer'
+    1072 |         struct request_sock *req = from_timer(req, t, rsk_timer);
+         |                                                       ^
+   2 errors generated.
+
+
+vim +/from_timer +1072 net/ipv4/inet_connection_sock.c
+
+  1069	
+  1070	static void reqsk_timer_handler(struct timer_list *t)
+  1071	{
+> 1072		struct request_sock *req = from_timer(req, t, rsk_timer);
+  1073		struct request_sock *nreq = NULL, *oreq = req;
+  1074		struct sock *sk_listener = req->rsk_listener;
+  1075		struct inet_connection_sock *icsk;
+  1076		struct request_sock_queue *queue;
+  1077		struct net *net;
+  1078		int max_syn_ack_retries, qlen, expire = 0, resend = 0;
+  1079	
+  1080		if (inet_sk_state_load(sk_listener) != TCP_LISTEN) {
+  1081			struct sock *nsk;
+  1082	
+  1083			nsk = reuseport_migrate_sock(sk_listener, req_to_sk(req), NULL);
+  1084			if (!nsk)
+  1085				goto drop;
+  1086	
+  1087			nreq = inet_reqsk_clone(req, nsk);
+  1088			if (!nreq)
+  1089				goto drop;
+  1090	
+  1091			/* The new timer for the cloned req can decrease the 2
+  1092			 * by calling inet_csk_reqsk_queue_drop_and_put(), so
+  1093			 * hold another count to prevent use-after-free and
+  1094			 * call reqsk_put() just before return.
+  1095			 */
+  1096			refcount_set(&nreq->rsk_refcnt, 2 + 1);
+  1097			timer_setup(&nreq->rsk_timer, reqsk_timer_handler, TIMER_PINNED);
+  1098			reqsk_queue_migrated(&inet_csk(nsk)->icsk_accept_queue, req);
+  1099	
+  1100			req = nreq;
+  1101			sk_listener = nsk;
+  1102		}
+  1103	
+  1104		icsk = inet_csk(sk_listener);
+  1105		net = sock_net(sk_listener);
+  1106		max_syn_ack_retries = READ_ONCE(icsk->icsk_syn_retries) ? :
+  1107			READ_ONCE(net->ipv4.sysctl_tcp_synack_retries);
+  1108		/* Normally all the openreqs are young and become mature
+  1109		 * (i.e. converted to established socket) for first timeout.
+  1110		 * If synack was not acknowledged for 1 second, it means
+  1111		 * one of the following things: synack was lost, ack was lost,
+  1112		 * rtt is high or nobody planned to ack (i.e. synflood).
+  1113		 * When server is a bit loaded, queue is populated with old
+  1114		 * open requests, reducing effective size of queue.
+  1115		 * When server is well loaded, queue size reduces to zero
+  1116		 * after several minutes of work. It is not synflood,
+  1117		 * it is normal operation. The solution is pruning
+  1118		 * too old entries overriding normal timeout, when
+  1119		 * situation becomes dangerous.
+  1120		 *
+  1121		 * Essentially, we reserve half of room for young
+  1122		 * embrions; and abort old ones without pity, if old
+  1123		 * ones are about to clog our table.
+  1124		 */
+  1125		queue = &icsk->icsk_accept_queue;
+  1126		qlen = reqsk_queue_len(queue);
+  1127		if ((qlen << 1) > max(8U, READ_ONCE(sk_listener->sk_max_ack_backlog))) {
+  1128			int young = reqsk_queue_len_young(queue) << 1;
+  1129	
+  1130			while (max_syn_ack_retries > 2) {
+  1131				if (qlen < young)
+  1132					break;
+  1133				max_syn_ack_retries--;
+  1134				young <<= 1;
+  1135			}
+  1136		}
+  1137		syn_ack_recalc(req, max_syn_ack_retries, READ_ONCE(queue->rskq_defer_accept),
+  1138			       &expire, &resend);
+  1139		req->rsk_ops->syn_ack_timeout(req);
+  1140		if (!expire &&
+  1141		    (!resend ||
+  1142		     !inet_rtx_syn_ack(sk_listener, req) ||
+  1143		     inet_rsk(req)->acked)) {
+  1144			if (req->num_timeout++ == 0)
+  1145				atomic_dec(&queue->young);
+  1146			mod_timer(&req->rsk_timer, jiffies + reqsk_timeout(req, TCP_RTO_MAX));
+  1147	
+  1148			if (!nreq)
+  1149				return;
+  1150	
+  1151			if (!inet_ehash_insert(req_to_sk(nreq), req_to_sk(oreq), NULL)) {
+  1152				/* delete timer */
+  1153				__inet_csk_reqsk_queue_drop(sk_listener, nreq, true);
+  1154				goto no_ownership;
+  1155			}
+  1156	
+  1157			__NET_INC_STATS(net, LINUX_MIB_TCPMIGRATEREQSUCCESS);
+  1158			reqsk_migrate_reset(oreq);
+  1159			reqsk_queue_removed(&inet_csk(oreq->rsk_listener)->icsk_accept_queue, oreq);
+  1160			reqsk_put(oreq);
+  1161	
+  1162			reqsk_put(nreq);
+  1163			return;
+  1164		}
+  1165	
+  1166		/* Even if we can clone the req, we may need not retransmit any more
+  1167		 * SYN+ACKs (nreq->num_timeout > max_syn_ack_retries, etc), or another
+  1168		 * CPU may win the "own_req" race so that inet_ehash_insert() fails.
+  1169		 */
+  1170		if (nreq) {
+  1171			__NET_INC_STATS(net, LINUX_MIB_TCPMIGRATEREQFAILURE);
+  1172	no_ownership:
+  1173			reqsk_migrate_reset(nreq);
+  1174			reqsk_queue_removed(queue, nreq);
+  1175			__reqsk_free(nreq);
+  1176		}
+  1177	
+  1178	drop:
+  1179		__inet_csk_reqsk_queue_drop(sk_listener, oreq, true);
+  1180		reqsk_put(oreq);
+  1181	}
+  1182	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
