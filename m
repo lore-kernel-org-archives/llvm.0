@@ -1,63 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A2724B34;
-	Wed, 16 Apr 2025 07:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7F922DFBA;
+	Wed, 16 Apr 2025 07:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744788125; cv=none; b=fRwFhanWDFWHuVIWCSkG8iTjsL49/peC61IJir8ecHzypWz1++y5mBgewz0ZAQ1WcrVF50jgC01sRsoqLLDI7ErJFJLBZlxv6YkCKEPLe4JwUnr79OlkPxGJwTiiNutsicVME7EVQ/Pa5nvGju60u/GuhS/VT/O7/ujxGf86LQc=
+	t=1744790049; cv=none; b=b7eZ1sjswke9I+22zbua6GJCHJiGQnU7idbbiwCtcKEbFpX441ciizllkJBVN4Q/+JiF/3UnBM0c/jCcXgFyKAuE12aE4ODhHUkNMhfG03QJQVyAki+hzfdztJdU9e8sbkz8QVPwZeyIoIoTO7vTHIH0ijc5GeJqEdGYd6WhqOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744788125; c=relaxed/simple;
-	bh=TgE2kGOIH0k8zXkWv7SPIoeRhIJCGcMjX8R6sCfEFIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PGheAiuWyLD6FYG0a4I5a7bk2vqEiioVmdp/eHHmzMl2HNWBOgZVb/61bQExZ2v43Db5ZZkR5b8XueOv2OR2sRre4R968sMCjxDG8+nJenH+NAcquGm/Y3iSUq8JkxiWFbBzF6Wmm/aclwQ/fHHI0J9Epq2Xj8SOvQygxeZQr5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RkOUAgRe; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1744790049; c=relaxed/simple;
+	bh=M+jg169zSVo6ZismI6ncNWlx1PXdIQmNy/hfg0Q9PJQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W1Q3IcuaEVt4cbbq388NXkXpaRxVP4yLuvjID6k15JjcZL1MVexm43aH5t3Fxt2V8UCG8+Zo/g8xGIVshPlwjGUGqrquw8nUdwGjIdq4DOQa/9pqkSgwXJ37SnhHQ1Yi34aNC2tFQkAQVUZm2yD8a/T+qCq7HCWbgkuevl35IVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PC/sMngk; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RkOUAgRe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PC/sMngk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744788124; x=1776324124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TgE2kGOIH0k8zXkWv7SPIoeRhIJCGcMjX8R6sCfEFIk=;
-  b=RkOUAgResFe4WAaMugEfcnzO18JvYz7U+IWKBOP2Cl1ZZh/PxlUF9Ezy
-   0S2HZD9LtJSBc8QuwLCIBif4+VGJ5etbycdTH5Gfvo9DicFKQnM65qkoW
-   24tB+whZkpU79VHDPSXsNo8yQXLhS6Zsj0jk632MexoLldx2rpW1frShj
-   D46N6qUK5sbU+3dZ4beUvmLH4AKu5nAwPcZSZyPvS3MZhPOENdv0yfZJ+
-   HJ7wQQKrOFmp2Ms2DD6bqk8p40IswdsZyRUlvnFzpwS0WIZamUfCwApkp
-   Q7A7EbLzeyVzX7aZYg1MlGSub+O0w9r6PXyuhH/bijlG40TnsyCIBdQZy
-   A==;
-X-CSE-ConnectionGUID: 5BpOPjlKS5ewvjqN5MgxoA==
-X-CSE-MsgGUID: VG015DfOTGKFRI6mV5k1qw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="71714450"
+  t=1744790047; x=1776326047;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M+jg169zSVo6ZismI6ncNWlx1PXdIQmNy/hfg0Q9PJQ=;
+  b=PC/sMngkAdrvSQh9k0miF/lEtMEB4ZNVk590Y5O4IyqQA/PIBFiq6Z2d
+   Rte8alQKLM1nAfkQRJU4CDlybW9ENlI4KoUECxJAD3Mz/Ac7ygpqsR0BA
+   dMzH+0aL5E3soRgzTtS7rZg8MgoQk0ZQRZX7I2KJQdUiUCre5dSAM8rWL
+   cJpxWaRWgrqgiEw0Gq98f2R3yECNMCJZh5mAGrrqKtdKHAc651o4/n+/K
+   g/bo1zNMDW6l2sj0rubDyJbp9l8pBVO5w+MPR7pOrsrmm7g/PH4huzudD
+   SUUYw7LH9rOCQXa2K7aiYfAQHSa7ql1S5GUaROjMN4xXGHEh0urp3vWP1
+   w==;
+X-CSE-ConnectionGUID: I4VK9cTKTcyOUquKIENHdQ==
+X-CSE-MsgGUID: dF/M+D0PSlGc/mupo63Z1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46487846"
 X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="71714450"
+   d="scan'208";a="46487846"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 00:22:03 -0700
-X-CSE-ConnectionGUID: +FP4yAXXTNm7DpvYT17Fqg==
-X-CSE-MsgGUID: 4GLV69zgQg+tlaTTMCFjOw==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 00:54:06 -0700
+X-CSE-ConnectionGUID: y+iglnNJQK6HRW0n2kQwyw==
+X-CSE-MsgGUID: pi2gb3OgRoup42oW9KxnBg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="130883699"
+   d="scan'208";a="130891544"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Apr 2025 00:22:01 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 16 Apr 2025 00:54:04 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u4x5r-000JFG-1K;
-	Wed, 16 Apr 2025 07:21:59 +0000
-Date: Wed, 16 Apr 2025 15:21:24 +0800
+	id 1u4xar-000JGi-2f;
+	Wed, 16 Apr 2025 07:54:01 +0000
+Date: Wed, 16 Apr 2025 15:53:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vitaly Wool <vitaly.wool@konsulko.se>
+To: Oscar Salvador <osalvador@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Igor Belousov <igor.b@beldev.am>
-Subject: [akpm-mm:mm-new 195/196] mm/zblock.c:369:13: error: incompatible
- function pointer types initializing 'int (*)(void *, size_t, gfp_t, unsigned
- long *, const int)' (aka 'int (*)(void *, unsigned int, unsigned int,
- unsigned long *, const int)') with an expression of type 'int (void ...
-Message-ID: <202504161517.KYEDQav9-lkp@intel.com>
+	Muchun Song <muchun.song@linux.dev>,
+	David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Matthew Wilcox <willy@infradead.org>,
+	Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH] mm, hugetlb: Reset mapping to TAIL_MAPPING before
+ restoring vmemmap
+Message-ID: <202504161522.S1qEFD4b-lkp@intel.com>
+References: <20250415054705.370412-1-osalvador@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,43 +70,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250415054705.370412-1-osalvador@suse.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
-head:   13ef12753ee527caca620af5ab72ef6249c20622
-commit: 40d54ac31c6e801d94f2563158650b69c15fbf82 [195/196] mm: add zblock allocator
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250416/202504161517.KYEDQav9-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250416/202504161517.KYEDQav9-lkp@intel.com/reproduce)
+Hi Oscar,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/mm-hugetlb-Reset-mapping-to-TAIL_MAPPING-before-restoring-vmemmap/20250415-134835
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250415054705.370412-1-osalvador%40suse.de
+patch subject: [PATCH] mm, hugetlb: Reset mapping to TAIL_MAPPING before restoring vmemmap
+config: x86_64-buildonly-randconfig-006-20250416 (https://download.01.org/0day-ci/archive/20250416/202504161522.S1qEFD4b-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250416/202504161522.S1qEFD4b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504161517.KYEDQav9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504161522.S1qEFD4b-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/zblock.c:369:13: error: incompatible function pointer types initializing 'int (*)(void *, size_t, gfp_t, unsigned long *, const int)' (aka 'int (*)(void *, unsigned int, unsigned int, unsigned long *, const int)') with an expression of type 'int (void *, size_t, gfp_t, unsigned long *)' (aka 'int (void *, unsigned int, unsigned int, unsigned long *)') [-Wincompatible-function-pointer-types]
-     369 |         .malloc =               zblock_zpool_malloc,
-         |                                 ^~~~~~~~~~~~~~~~~~~
+>> mm/hugetlb_vmemmap.c:506:2: error: call to undeclared function 'set_hugetlb_cgroup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     506 |         set_hugetlb_cgroup(folio, TAIL_MAPPING);
+         |         ^
    1 error generated.
 
 
-vim +369 mm/zblock.c
+vim +/set_hugetlb_cgroup +506 mm/hugetlb_vmemmap.c
 
-   363	
-   364	static struct zpool_driver zblock_zpool_driver = {
-   365		.type =			"zblock",
-   366		.owner =		THIS_MODULE,
-   367		.create =		zblock_zpool_create,
-   368		.destroy =		zblock_zpool_destroy,
- > 369		.malloc =		zblock_zpool_malloc,
-   370		.free =			zblock_zpool_free,
-   371		.obj_read_begin =	zblock_zpool_read_begin,
-   372		.obj_read_end =		zblock_zpool_read_end,
-   373		.obj_write =		zblock_zpool_obj_write,
-   374		.total_pages =		zblock_zpool_total_pages,
-   375	};
-   376	
+   488	
+   489	/**
+   490	 * hugetlb_vmemmap_restore_folio - restore previously optimized (by
+   491	 *				hugetlb_vmemmap_optimize_folio()) vmemmap pages which
+   492	 *				will be reallocated and remapped.
+   493	 * @h:		struct hstate.
+   494	 * @folio:     the folio whose vmemmap pages will be restored.
+   495	 *
+   496	 * Return: %0 if @folio's vmemmap pages have been reallocated and remapped,
+   497	 * negative error code otherwise.
+   498	 */
+   499	int hugetlb_vmemmap_restore_folio(const struct hstate *h, struct folio *folio)
+   500	{
+   501		/*
+   502		 * Before restoring vmemmap, make sure to reset mapping to TAIL_MAPPING,
+   503		 * so tail pages that were reset will have the right thing after being
+   504		 * restored, and the checks in free_tail_page_prepare() will pass.
+   505		 */
+ > 506		set_hugetlb_cgroup(folio, TAIL_MAPPING);
+   507		return __hugetlb_vmemmap_restore_folio(h, folio, VMEMMAP_SYNCHRONIZE_RCU);
+   508	}
+   509	
 
 -- 
 0-DAY CI Kernel Test Service
