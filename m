@@ -1,116 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B704139CE3;
-	Thu, 17 Apr 2025 17:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746F541C63
+	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 20:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744910538; cv=none; b=d9yI0XxdkZVcIZ2tijAD97AbJX1U6E5mJJMZRISathp9FZSKX+lqKnY1syUP6cVKS/kRxmDDD4QSeQput8kxAs3/dd4mkY019Kg7+P+dLQbk38YLUem8hCFC2LXatOuoIxlg9MyjzshnZivsVDsRDkdABoS39lFeF7e7bdZf4V4=
+	t=1744922531; cv=none; b=Ly8nk0g5p6gm/VnqOiWuoONoPL7BDUktoJp9H7dInTavXdDncU5goMbOkV5iz26nb+NsuvmnVtId5MsycD+fj8f+0njxkprEu49C/M+2VSpIdPbQ60Ml7HOnYuGbyvMa4Iaba7iiVAet1fZvRXtB94dF24quT4LcnT+VW+NjhPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744910538; c=relaxed/simple;
-	bh=n2y0CS5aOrvadnYjaE0BF+yGrB4aZ5tPcmVJhwzLnYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CPZPk5/V6eU2USMw0tWdI4KWSn0NhBmhgqSGYgOAYjBRwZGoR+xzrd5guGUBt6IXZhyeiiTL+6qMIb6tBFoW4skLqE9HKR1mC91j/5dte1GDkQ20XLzD0tRm6udViWu7UJJk9a2tuCRq5UIuXJiSsJL9VDSGdkZ/DDlhPlRnoLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UwGvfpDd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744922531; c=relaxed/simple;
+	bh=tFPAcQGN1X7jDVB35ve1VuSG20jDsTidJbjX7TSe2Ww=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=aTyFNkB8GA1oH4VY53EaCPNeg4r1GCFE2UwuiE1XKGPuOc1B7B1fvP7pzGXO1z9i1ewgXRgq5GMkboEm1n4CEz1C7nIWec9BsfBzGG5arGrBn4RvEo8WXV//DSwrfAIRlzX0dDgOPvaBLA0t75OU2ZgZ8QIhl/lnuDQkKdsVOMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AaXfEawT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UwGvfpDd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BAAC4CEE4;
-	Thu, 17 Apr 2025 17:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744910537;
-	bh=n2y0CS5aOrvadnYjaE0BF+yGrB4aZ5tPcmVJhwzLnYo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UwGvfpDd7TPhukQBmk924er4s4Tw9UprUrqNlno1+IGcfgw9fEcLb/voCSukCl/up
-	 e6iSyDK4b6OGvB556b3rPQdZAnwcMYzvIaqRKDnZ6c8vCVo487VJreoXx8w96eSR1g
-	 AfZw7aE8Sha+lpmU0Bsx8YGTL0XTKyyd1xQ+rXmWKSAzAaPAsU8UbVs7EOUm5f66on
-	 rke9Dpvrnva1LGvchV6f7uasEbhxN75Y3sbqEM1NtdAzk2Y9sZYcIz7m15G/P3Zeyl
-	 SdaDMwaVYO0Gczy23cbSXWW9jOGptMRMkIMU7wkH+ajbQsWX2AHYhPRCc94cFyjrYD
-	 CMoI5YVg8ZECQ==
-Date: Thu, 17 Apr 2025 10:22:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, llvm@lists.linux.dev
-Subject: Please apply 8b55f8818900 to 6.12 through 6.1
-Message-ID: <20250417172213.GA1197662@ax162>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AaXfEawT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744922528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oVA9hx1BRf+v4x0Q3Q+kTDpH031jh6UJbFj42JgaVYI=;
+	b=AaXfEawTtVnOzFozGZQyGIsecj1biRkEvkv1OgfdkpKRF9PxQpm/YoUqp5482Pp3bCPTk2
+	xmXf3Cmom+Z8cB6/CzgdLgQUBdFDcKYQQFPDa+Slf1jHj2h4kL5vKhj1FvxDKBI4XRcMn2
+	irgzpaihe5td4RZv0ylHjSUYbYRF7kI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-674-uxi7zMhuOsi8AQaZS__mAQ-1; Thu,
+ 17 Apr 2025 16:42:07 -0400
+X-MC-Unique: uxi7zMhuOsi8AQaZS__mAQ-1
+X-Mimecast-MFC-AGG-ID: uxi7zMhuOsi8AQaZS__mAQ_1744922526
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3AB8C1800983
+	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 20:42:06 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E395E18001EA;
+	Thu, 17 Apr 2025 20:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc2,
+ upstream-mainline, b5c6891b)
+Date: Thu, 17 Apr 2025 20:42:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="375avBN/oRxIdj0e"
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <27777.125041716420700127@us-mta-674.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ltW5ThbHeVr4J_rlIZsGQ78ycfHrsneTBz86JFxtHBs_1744922526
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
---375avBN/oRxIdj0e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Kernel information:
+    Commit message: Merge tag 'net-6.15-rc3' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-Hi Greg and Sasha,
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1774395453
 
-Please consider applying commit 8b55f8818900 ("media: mediatek: vcodec:
-mark vdec_vp9_slice_map_counts_eob_coef noinline") to 6.12, 6.6, and
-6.1, as it avoids a warning that breaks arm64 allmodconfig for certain
-clang versions due to -Werror. It applies cleanly to the first two trees
-for me and I have attached a backport for 6.1 due to a file location
-change. Please let me know if there are any issues.
-
-Cheers,
-Nathan
-
---375avBN/oRxIdj0e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename=6.1-8b55f8818900.patch
-
-From 062b81d06d45f6ef9b9045a6fd3b4359bb80e481 Mon Sep 17 00:00:00 2001
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Fri, 18 Oct 2024 15:14:42 +0000
-Subject: [PATCH 6.1] media: mediatek: vcodec: mark
- vdec_vp9_slice_map_counts_eob_coef noinline
-
-commit 8b55f8818900c99dd4f55a59a103f5b29e41eb2c upstream.
-
-With KASAN enabled, clang fails to optimize the inline version of
-vdec_vp9_slice_map_counts_eob_coef() properly, leading to kilobytes
-of temporary values spilled to the stack:
-
-drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c:1526:12: error: stack frame size (2160) exceeds limit (2048) in 'vdec_vp9_slice_update_prob' [-Werror,-Wframe-larger-than]
-
-This seems to affect all versions of clang including the latest (clang-20),
-but the degree of stack overhead is different per release.
-
-Marking the function as noinline_for_stack is harmless here and avoids
-the problem completely.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-[nathan: Handle file location change in older trees]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c  | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index cf16cf2807f0..f0e207044bf3 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -1192,7 +1192,8 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
- 	return ret;
- }
- 
--static
-+/* clang stack usage explodes if this is inlined */
-+static noinline_for_stack
- void vdec_vp9_slice_map_counts_eob_coef(unsigned int i, unsigned int j, unsigned int k,
- 					struct vdec_vp9_slice_frame_counts *counts,
- 					struct v4l2_vp9_frame_symbol_counts *counts_helper)
-
-base-commit: 420102835862f49ec15c545594278dc5d2712f42
--- 
-2.49.0
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1774395453-x86_64-kernel-debug
 
 
---375avBN/oRxIdj0e--
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
