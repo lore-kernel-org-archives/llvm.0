@@ -1,129 +1,85 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179CD1DE4C8
-	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 05:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262AA218821
+	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 07:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744867673; cv=none; b=ZwmCvQez6Raq1FsNYbOgJokwGCETLyJhkqPyPhfwPzvc9JISXkCRTA5Ed1uVSigMHqhsMsD/2rAHdJvncXNGdUbOJ2jsWjk/h+DeeHTCsH6N78sTcR5rZD9kfswNrRYOa9t4yMvun9RSrD0z70H3xXeL6x9ttm7JQBQdpQT7zyo=
+	t=1744875615; cv=none; b=lh2YJMLWblfVaOVEGgjzBBEnO9LAOs/6UZcfxGxBn/hWGjPvaVDT8yBVR5GHolA6znYN0si1rL0gNWyyyQFxfrpGE1hUNkTHzdxfNE5IMJv6cUrA1DUf7onk6vatNqymW6ebOyZ7cUDQNa6zVBwZmBLD0tx+uVJAqMxsPGG6ZLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744867673; c=relaxed/simple;
-	bh=cdfbNlSSYNTWomLKejfopoWkPO/EVrv37gekGZmTtWk=;
+	s=arc-20240116; t=1744875615; c=relaxed/simple;
+	bh=uTWUZ7GG75MGdOuYepKN19ZkysIgaqJ3eIvg+KIv+4k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TYhhIhMVd214+9VDL7cNTzO2dBwf2/iDFq9zTCfyaVBSl4w1K4LN46v1BIp53vRaqjCbCiHk9dXHycDHn0xNWvxobElOns3ht3VCBGGSdQlTHy4vjmYu7t2+EwZBfT5YTMjPGiYBCe6LNfqZhyNHpNwM8ITZpJj6o/7Y3hTRlBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y7GqTU8t; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=V15BHXNu5KeTJ0DcQ3GZSl4qZhV8rERI5jEarMun2hfbnLCXL02US1vQyEmRPGsqosGlnKoIxd8Udm5Dr3Y2amxRpBzCrZu8ScUFI2zcNaoEFjBGaXqdk9Py8FV7ryu/sdMtY4N/h+8noCj1VPUUcx6sj3MenT57Pf/J8cqFQxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pZWrOBQG; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y7GqTU8t"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e5cbd8b19bso4161a12.1
-        for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 22:27:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pZWrOBQG"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-30bee278c2aso16542781fa.0
+        for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 00:40:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744867670; x=1745472470; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1744875611; x=1745480411; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hYexaaD/XfjLpPFvDW5lXRpDFj4TDj59maFzOcDuYgA=;
-        b=Y7GqTU8t/MsCuapd4Rm/+pBkZ2TahMXs1wv3r6r3iLEKXnMEnOEfPgACEDHXQP9V/h
-         avSt49zA3vRcxdz/N65IrgmGClULx2J05Dffo2NKeGjjSGd1Zl3mew1jvFfS5EV5jp7S
-         XzXKN22K1GsUbPi6jbD5TwXMQ9uPQJ0NZt43+94UUrVL5wgVKFrIBNxFQx0tw55k9/bB
-         6KPzr+Ab5H6B3JeS0b+iPWimyJPwFmKmXlUYF/EACB29KwIkhmPkCLWdkbShTJOLfVfi
-         9TWzJnC2AxM47sJ9Fws5cDGOOo6tADdlyG9O8CB4LmFkXty3ww3pdnedgHBy3udO9fR6
-         eCYA==
+        bh=uTWUZ7GG75MGdOuYepKN19ZkysIgaqJ3eIvg+KIv+4k=;
+        b=pZWrOBQG3zSqZ82V3uKzNbvso0h3q6w1jmBRvvSQp0UXcj8dPRjAuGVtUqPGa5O0Vi
+         sxs7rWg4WEmWXv3mrIVeDveh3V1psvCHPfFOWtJDuL6eDUz9q1eTl/G2/MzQo/7Il/O2
+         4ENN3FtOuTUeTpzsUCkBZ6fj+qf9EvZqEW0RbcU5VZ5rB/X8WVq4CjjpzQwZ2jRVrxtc
+         8FXoC7oz0+Yfr5UiP0yCrQnXGDN3YHIaPlzSrTVxAi/pnAVgMxBVJ1daJJXrnyOGOYcc
+         lJng0G9t0k9eaM4IHvCnF24txql+BV2JShCQ0s8sgItI87HCErAM7bRsI9LY5wYbEZZY
+         Y0vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744867670; x=1745472470;
+        d=1e100.net; s=20230601; t=1744875611; x=1745480411;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hYexaaD/XfjLpPFvDW5lXRpDFj4TDj59maFzOcDuYgA=;
-        b=aTQlDXPICQGBlAyw1DYn+AlrxKDuXjkVNB3UVIpvuRu7WBVhr4fhiCpRmw1DNnyJyo
-         8AfYhL0dkuu0up0WkeHEpqPyO8YrHEx2lDCQfciK7+Gl9cllEGXZAORQWY5A7fu3VPna
-         HpillVDhWdys981hgK4nAQKMZtOcDck4owzl1j11yh8JOLjN0Oxp/I0Ti1+awAGPRbtC
-         B7ER6BIRUzhP6xYrstLkuCsQuYKrCYCbLDJR32R0pnWKe5Yr+HuGqbg3BN9kl8kCUNv0
-         robwtK7960PBuEvnjmSEJlzawp8n+4tdAa/K1r+sHS9iONzPzq4pldCrysjT+CqQKt+W
-         +Hpw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBvnvlaQ4FsWgDr4uEmL/rF86DlnI+BHZAnbvom+lMEGlYMCxiZtOwxfuOztorYgRVi2aS@lists.linux.dev
-X-Gm-Message-State: AOJu0YyLVVGxKliqIM00mUpdScHIncRSpmFWOnskhSsRxlAdDK1Oi0NP
-	Gu665SJsyIjJ6KDkEvjqnpUN+p0orwMDMQUUdLAVNpqGeE98crkpyLV3HopDc3NefoVG4wyCJui
-	xZmVnDOus/g3YR4Xd40eecvHWgsinypg9hfpj
-X-Gm-Gg: ASbGncvLBfFNR5BDGwDG70wU+oY4YWR3UhemLSXGGEB6GlWqXH7eaJWCC9p7qjwyKOd
-	UqfibwezYqu7+O/R06NRb9zk6WhzkG/Grh0atAvDklqtMt5NOs5LOeeAfvZGxQHD01U1qX4ommE
-	z+pZv8Nb11IhOr3WpimNHj++TqstaPXLA=
-X-Google-Smtp-Source: AGHT+IEfnYTjDb2YDNT31bGOjtTYJLMFM5bvrKmSyvizNQt90dhBUYdSlJhYai9Fe5wl0HrbKs+J1t32rN6Ov3qRbgg=
-X-Received: by 2002:aa7:cb47:0:b0:5dc:5ae8:7e1 with SMTP id
- 4fb4d7f45d1cf-5f4cb1ee7d2mr54266a12.6.1744867669932; Wed, 16 Apr 2025
- 22:27:49 -0700 (PDT)
+        bh=uTWUZ7GG75MGdOuYepKN19ZkysIgaqJ3eIvg+KIv+4k=;
+        b=Qtj2BE/k2CBCFLVc/9LabNyW8Ik6hgFsIzPaf7F7anoI3+gcHQRBZ+TrZ4cr/JTA6C
+         jD4mtdM1wkkRayEjLWacHidUTybkBkq764xHJ/iNczxG9G0cZr7BhgG/0vSyhxy1vV1/
+         CgYVLfgkgiTek9fEJWfeo01JxV00sneIdpF4gMTokIIlFCp6+oRV+6UCJ5QTJpBk3FMn
+         sIic0BcoPl+VaeW9RpiKmyY9N5mcrlJVGqH/aG5jXaM3QasedSRRMRGH3iSN4tzfA0BX
+         ko31vglZxvcTnX81ryPGotRRrStrvK/urxAYrqwpLVMk5F5Ndd5gAF+6UUHwL8N4UmCH
+         GBOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWC1Ydp88Zp3x+sB0wQXdxJK+VTprLeT4saOlByu6TFN9EsdaNDWCH25GWW6tXKTc3MGY2O@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyh/hT9rPATlVEw6xk5Vl220P8CMEuDQZDB8dXqLyvJQpfBmBnp
+	L5eoKzYP+D/AXIF+WKsef8mfgL6SejRXpt0jIPQgc2R3MRavy/muOjCxdUn63e3aBZM5bStEmSV
+	xV5F5H4tT8VKM/tOIh2JTwozEu02BEdUq1GaU1Q==
+X-Gm-Gg: ASbGncujFrpSMf8grX4c/5P10ZF9KDlR/axdRC//ScNM84/ufSNL6akTVCuEWT2F7yD
+	zbDFvcSJrTxYjksHSC54ldDVcIt0b70kyQ3gVKziLQPdvpABRocMXVUvF3aXngOlBTD7zQqyFDc
+	nw0k2B+zjV3sBVKTT9epdrBQ==
+X-Google-Smtp-Source: AGHT+IEiIqX4aUPaydJ1PP141MrnnbHon/RuJNnAkVqairRqk2NvTUxvddZyFvb/1Nqn9kMA1RIB96pFHZiG8rhrSbY=
+X-Received: by 2002:a05:651c:221c:b0:30c:1aa6:5565 with SMTP id
+ 38308e7fff4ca-31086da3d9emr5323571fa.20.1744875611003; Thu, 17 Apr 2025
+ 00:40:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250415174145.346121-2-robertpang@google.com>
- <202504171044.TFdtTfEh-lkp@intel.com> <CAJhEC05SjwDBis3rfDw4-gg+tEyQ-aCkTSFVFs+Zw9xSSZUekw@mail.gmail.com>
-In-Reply-To: <CAJhEC05SjwDBis3rfDw4-gg+tEyQ-aCkTSFVFs+Zw9xSSZUekw@mail.gmail.com>
-From: Robert Pang <robertpang@google.com>
-Date: Wed, 16 Apr 2025 22:27:38 -0700
-X-Gm-Features: ATxdqUFjHyCjORk3eB-_sluj8w7gnJsdcVWCqMLgq27w3d3pK3-noa_m90Pbfxg
-Message-ID: <CAJhEC05=knZ-rFRLDk1K85GAJZJUOja_SAKPw0edXy9rK05_=w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] bcache: process fewer btree nodes in incremental
- GC cycles
+References: <202504170707.IBFj7H28-lkp@intel.com>
+In-Reply-To: <202504170707.IBFj7H28-lkp@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 17 Apr 2025 09:40:00 +0200
+X-Gm-Features: ATxdqUGx8WO-eDXtMko006_t0ICMvYXMIboRMkFn_7RA_E8SVE1D6ETmNgEk9DA
+Message-ID: <CACRpkdZ-2eOrDRDFk2UqKULyog1GJzsSS4epidbQiNH-xPcV7w@mail.gmail.com>
+Subject: Re: [linux-next:master 4325/4528] s390x-linux-ld: pinctrl-sx150x.c:undefined
+ reference to `i2c_smbus_write_byte_data'
 To: kernel test robot <lkp@intel.com>
-Cc: Coly Li <colyli@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	linux-bcache@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Mingzhe Zou <mingzhe.zou@easystack.cn>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Neil Armstrong <neil.armstrong@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Revised version sent.
+On Thu, Apr 17, 2025 at 1:25=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
 
-On Wed, Apr 16, 2025 at 8:13=E2=80=AFPM Robert Pang <robertpang@google.com>=
- wrote:
->
-> Please accept my apologies for the build error. It appears that the curre=
-nt
-> patch is missing a macro for 64-bit integer division needed for the i386
-> architecture. I will address this issue and submit a revised version prom=
-ptly.
->
-> On Wed, Apr 16, 2025 at 7:31=E2=80=AFPM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > Hi Robert,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on linus/master]
-> > [also build test ERROR on v6.15-rc2 next-20250416]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Pang/bcac=
-he-process-fewer-btree-nodes-in-incremental-GC-cycles/20250416-133615
-> > base:   linus/master
-> > patch link:    https://lore.kernel.org/r/20250415174145.346121-2-robert=
-pang%40google.com
-> > patch subject: [PATCH v2 1/1] bcache: process fewer btree nodes in incr=
-emental GC cycles
-> > config: i386-buildonly-randconfig-001-20250417 (https://download.01.org=
-/0day-ci/archive/20250417/202504171044.TFdtTfEh-lkp@intel.com/config)
-> > compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58=
-df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250417/202504171044.TFdtTfEh-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202504171044.TFdtTfEh-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> >
-> > >> ERROR: modpost: "__udivdi3" [drivers/md/bcache/bcache.ko] undefined!
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
+> commit: c4d1b2ee4407b0b12e0dade40361eb86c1c710ed [4325/4528] pinctrl: sx1=
+50x: enable building modules with COMPILE_TEST=3Dy
+
+I just dropped this commit from my tree, it's buggy.
+
+Yours,
+Linus Walleij
