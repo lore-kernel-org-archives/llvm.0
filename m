@@ -1,99 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8151A9B5D
-	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 05:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179CD1DE4C8
+	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 05:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744867330; cv=none; b=WrKjL4OkSx12zbBdbVRgIiB5ANv5yKSiYeRqXe9c3A0uru3gXOOSBtMnlvxKXZ8eQKlv8lXzS8+SJrk2jPIRb3UC5mUnFmOBDjU1l7VVY2ZvaySgGUtPjna1aVnZD7F35U9zsv8X9s4DaOrmdeLklwdn7jtavd8R3h7jsptpurU=
+	t=1744867673; cv=none; b=ZwmCvQez6Raq1FsNYbOgJokwGCETLyJhkqPyPhfwPzvc9JISXkCRTA5Ed1uVSigMHqhsMsD/2rAHdJvncXNGdUbOJ2jsWjk/h+DeeHTCsH6N78sTcR5rZD9kfswNrRYOa9t4yMvun9RSrD0z70H3xXeL6x9ttm7JQBQdpQT7zyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744867330; c=relaxed/simple;
-	bh=OBe8n742pkfLyVdYBGp28QXVULL3INjfHDUmJ1F8ZJ4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=B71O84CYSPm3W4TtpFzOP6NRzBESnG/KS/XgFcw1JtguK+8RC7UidbvQvXzgYjzeEfyEZInNwLbKwufL3qmnuYYxKATCK/G5g76i3sH+1TlvnhWrAMg9UNtAdzr53VPzu2+Nt+43OB/4dnPK6UFHKCq1ZEhZQXkz5DVHlqUxWLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PHcedPn/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744867673; c=relaxed/simple;
+	bh=cdfbNlSSYNTWomLKejfopoWkPO/EVrv37gekGZmTtWk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TYhhIhMVd214+9VDL7cNTzO2dBwf2/iDFq9zTCfyaVBSl4w1K4LN46v1BIp53vRaqjCbCiHk9dXHycDHn0xNWvxobElOns3ht3VCBGGSdQlTHy4vjmYu7t2+EwZBfT5YTMjPGiYBCe6LNfqZhyNHpNwM8ITZpJj6o/7Y3hTRlBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y7GqTU8t; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PHcedPn/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744867327;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=X9BT+MwOHzMsfVK7L0Xq8qtE3UBb25BZABKOh0g5Lj8=;
-	b=PHcedPn/TFn1Q1KmB4UTSGJSYj96qhfsjHDqWyjDxYvQnJeLOvIZ1z4uIVKd9Tm9cnfV1D
-	XwS74qEnoP1be8NEIBn9CqT7ruczFZyBj+itHJqZstQQd2tL5NuPigj50ENHpiRyfBXn51
-	wRRBUHHHuBIP86aU/nw43LXyAte/iL4=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-194-DAO6RkpXO62oMNy7EmRmQQ-1; Thu,
- 17 Apr 2025 01:22:05 -0400
-X-MC-Unique: DAO6RkpXO62oMNy7EmRmQQ-1
-X-Mimecast-MFC-AGG-ID: DAO6RkpXO62oMNy7EmRmQQ_1744867325
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EC02D19560BB
-	for <llvm@lists.linux.dev>; Thu, 17 Apr 2025 05:22:04 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8044D195608D;
-	Thu, 17 Apr 2025 05:22:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc2,
- upstream-mainline, cfb2e2c5)
-Date: Thu, 17 Apr 2025 05:22:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y7GqTU8t"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e5cbd8b19bso4161a12.1
+        for <llvm@lists.linux.dev>; Wed, 16 Apr 2025 22:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744867670; x=1745472470; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hYexaaD/XfjLpPFvDW5lXRpDFj4TDj59maFzOcDuYgA=;
+        b=Y7GqTU8t/MsCuapd4Rm/+pBkZ2TahMXs1wv3r6r3iLEKXnMEnOEfPgACEDHXQP9V/h
+         avSt49zA3vRcxdz/N65IrgmGClULx2J05Dffo2NKeGjjSGd1Zl3mew1jvFfS5EV5jp7S
+         XzXKN22K1GsUbPi6jbD5TwXMQ9uPQJ0NZt43+94UUrVL5wgVKFrIBNxFQx0tw55k9/bB
+         6KPzr+Ab5H6B3JeS0b+iPWimyJPwFmKmXlUYF/EACB29KwIkhmPkCLWdkbShTJOLfVfi
+         9TWzJnC2AxM47sJ9Fws5cDGOOo6tADdlyG9O8CB4LmFkXty3ww3pdnedgHBy3udO9fR6
+         eCYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744867670; x=1745472470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hYexaaD/XfjLpPFvDW5lXRpDFj4TDj59maFzOcDuYgA=;
+        b=aTQlDXPICQGBlAyw1DYn+AlrxKDuXjkVNB3UVIpvuRu7WBVhr4fhiCpRmw1DNnyJyo
+         8AfYhL0dkuu0up0WkeHEpqPyO8YrHEx2lDCQfciK7+Gl9cllEGXZAORQWY5A7fu3VPna
+         HpillVDhWdys981hgK4nAQKMZtOcDck4owzl1j11yh8JOLjN0Oxp/I0Ti1+awAGPRbtC
+         B7ER6BIRUzhP6xYrstLkuCsQuYKrCYCbLDJR32R0pnWKe5Yr+HuGqbg3BN9kl8kCUNv0
+         robwtK7960PBuEvnjmSEJlzawp8n+4tdAa/K1r+sHS9iONzPzq4pldCrysjT+CqQKt+W
+         +Hpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBvnvlaQ4FsWgDr4uEmL/rF86DlnI+BHZAnbvom+lMEGlYMCxiZtOwxfuOztorYgRVi2aS@lists.linux.dev
+X-Gm-Message-State: AOJu0YyLVVGxKliqIM00mUpdScHIncRSpmFWOnskhSsRxlAdDK1Oi0NP
+	Gu665SJsyIjJ6KDkEvjqnpUN+p0orwMDMQUUdLAVNpqGeE98crkpyLV3HopDc3NefoVG4wyCJui
+	xZmVnDOus/g3YR4Xd40eecvHWgsinypg9hfpj
+X-Gm-Gg: ASbGncvLBfFNR5BDGwDG70wU+oY4YWR3UhemLSXGGEB6GlWqXH7eaJWCC9p7qjwyKOd
+	UqfibwezYqu7+O/R06NRb9zk6WhzkG/Grh0atAvDklqtMt5NOs5LOeeAfvZGxQHD01U1qX4ommE
+	z+pZv8Nb11IhOr3WpimNHj++TqstaPXLA=
+X-Google-Smtp-Source: AGHT+IEfnYTjDb2YDNT31bGOjtTYJLMFM5bvrKmSyvizNQt90dhBUYdSlJhYai9Fe5wl0HrbKs+J1t32rN6Ov3qRbgg=
+X-Received: by 2002:aa7:cb47:0:b0:5dc:5ae8:7e1 with SMTP id
+ 4fb4d7f45d1cf-5f4cb1ee7d2mr54266a12.6.1744867669932; Wed, 16 Apr 2025
+ 22:27:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <31776.125041701220500915@us-mta-194.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: CBwpU7ZnAbBauG8OSNujfJyTVt_DxSBzOGmKg4o80iQ_1744867325
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20250415174145.346121-2-robertpang@google.com>
+ <202504171044.TFdtTfEh-lkp@intel.com> <CAJhEC05SjwDBis3rfDw4-gg+tEyQ-aCkTSFVFs+Zw9xSSZUekw@mail.gmail.com>
+In-Reply-To: <CAJhEC05SjwDBis3rfDw4-gg+tEyQ-aCkTSFVFs+Zw9xSSZUekw@mail.gmail.com>
+From: Robert Pang <robertpang@google.com>
+Date: Wed, 16 Apr 2025 22:27:38 -0700
+X-Gm-Features: ATxdqUFjHyCjORk3eB-_sluj8w7gnJsdcVWCqMLgq27w3d3pK3-noa_m90Pbfxg
+Message-ID: <CAJhEC05=knZ-rFRLDk1K85GAJZJUOja_SAKPw0edXy9rK05_=w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] bcache: process fewer btree nodes in incremental
+ GC cycles
+To: kernel test robot <lkp@intel.com>
+Cc: Coly Li <colyli@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	linux-bcache@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Mingzhe Zou <mingzhe.zou@easystack.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Revised version sent.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'mm-hotfixes-stable-2025-04-16-19-59' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1773001462
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1773001462-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+On Wed, Apr 16, 2025 at 8:13=E2=80=AFPM Robert Pang <robertpang@google.com>=
+ wrote:
+>
+> Please accept my apologies for the build error. It appears that the curre=
+nt
+> patch is missing a macro for 64-bit integer division needed for the i386
+> architecture. I will address this issue and submit a revised version prom=
+ptly.
+>
+> On Wed, Apr 16, 2025 at 7:31=E2=80=AFPM kernel test robot <lkp@intel.com>=
+ wrote:
+> >
+> > Hi Robert,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on linus/master]
+> > [also build test ERROR on v6.15-rc2 next-20250416]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Pang/bcac=
+he-process-fewer-btree-nodes-in-incremental-GC-cycles/20250416-133615
+> > base:   linus/master
+> > patch link:    https://lore.kernel.org/r/20250415174145.346121-2-robert=
+pang%40google.com
+> > patch subject: [PATCH v2 1/1] bcache: process fewer btree nodes in incr=
+emental GC cycles
+> > config: i386-buildonly-randconfig-001-20250417 (https://download.01.org=
+/0day-ci/archive/20250417/202504171044.TFdtTfEh-lkp@intel.com/config)
+> > compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58=
+df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20250417/202504171044.TFdtTfEh-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202504171044.TFdtTfEh-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> >
+> > >> ERROR: modpost: "__udivdi3" [drivers/md/bcache/bcache.ko] undefined!
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests/wiki
