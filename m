@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43099242930;
-	Wed, 16 Apr 2025 23:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2447864A98;
+	Thu, 17 Apr 2025 02:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744845908; cv=none; b=Yo6o/VRxa1vQ6kOEsn3gH4XsJsY2j35S3CEjJpYiJjy38UJCCZpbicVYaPQObL+OFrw6aONbhu5+sFe6Ij/+5p8g8NgeYfaCsFm5pQqzuB6lZCY7yRr+6/l/f4EdCSQnIDCVU418VhSJ+2s4aYrrJMkgsASys93KOscABcjEgJA=
+	t=1744857090; cv=none; b=b+E4sU0WmHzTdf1L9BEyszUNgMGJYw1sZ3Tujk/ZoPX3yZ9NaHmo3/jV7XmtSoKpTSaT3EpOY5waxdTYbBUsjJMVcy3rZicdDom+tjzWHX4+ix668pUgkMXCYmpv2mYSCfC/LqXWZbVmKWjWceb02kPU5kkKQ3bvQ9Q++qXDX6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744845908; c=relaxed/simple;
-	bh=IxtXOMnY6EX4iLYnbxrBI9tgWv+kilLamY4zLaHlROE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mYkcEbolm8kr0bVKHXBbkdcB6VEKEaBpG36ZWp91fTlZM/IeWHg4SvxDEi3IlNG/VdPzRtYXjHkpbzCzRzQqRL8Czy4YLK2N4O/6dJkIaNStkgUehXMWOu0FtYHMLsTPj+ZDPutR2y4QpG7V7LBW4NoTzjBQT8mnkQMnS6uHmc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JF6nX9TJ; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1744857090; c=relaxed/simple;
+	bh=RuTtooDYoMbsdrtm8qNmd5HQ+945cpWtQ0qTs88NgxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z37YiLaOt4L8Qw7eA5sOP5OT1j/+7UWhjLeFjlc8qfj5ITSeJBtF/TeqwSqujb41kQUUjnsXMNnHv4KwaJ9vW4Y6gOaQ57u6wwwv89kuq6Y9K7dl6TbXwr4e58xN1nERhPXxZhqrWrIMPrV/52fiQ3xY0zfQE1hKI2vEi3K+PbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hKj2hXhR; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JF6nX9TJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hKj2hXhR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744845906; x=1776381906;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IxtXOMnY6EX4iLYnbxrBI9tgWv+kilLamY4zLaHlROE=;
-  b=JF6nX9TJUact3tab9ytgFq/12DCFzPwU8KAEGqwZrJW0Ls6jnYasrbId
-   R6qY0soqoCnJ9UtVU+24voDIcqUY2qPlb63nOBFxdxvVS3UyIrZC867xN
-   6BDrf8pwsHGxC58uYN2zLV8mct4uUdI1NEFlS8nnwaxEM6sM0vvyJpdyS
-   QOwKUpzlwAD3o70gtCvrhtJ+12iusx3nXCvRLiF4VuinxsNliR/z8huvV
-   VQT+yyv9yyUNXaJd808zDAWKJoqpMnqWCE0OP6Uj9HTuPhzSgn2kKhBiY
-   dkRGh+sh/Lb4Hy/hriQBxTG6RCT5zytgtAmzzUFeCJeFlqan/hz0n34I5
-   g==;
-X-CSE-ConnectionGUID: abIu6E6bS8a3u7UderrfQw==
-X-CSE-MsgGUID: cnf7QEgySEKvPDP0pPCFdA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="57059111"
+  t=1744857088; x=1776393088;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RuTtooDYoMbsdrtm8qNmd5HQ+945cpWtQ0qTs88NgxE=;
+  b=hKj2hXhR+hOh7IrroeAwmpA2r5z3zxnAmzjxyByWNQ16tPdDh42yc/w9
+   /4lP8/T0i3ST55e+9tW/+/nuSdA0Rn4viPqiHyakgjuwfB0Cc8gwEyooC
+   HRNNZS48erJaJOj6fuicE5XPbgxxItHgsKowOlP+I3Q5a7JKMlWi8I+hN
+   CD6OVc/w1/mLEWpChISqWLwqiJHFHe+3ugLjEMH1VEkzQxFseGUsAH2cC
+   n8B79ptKgwwXo/c57ICS5LljxpU/SF7b6bRFNOepal5gF5eFLmGdeGlpB
+   QFSLi5rWdkqclD7O2SN8FWtljuDZ3JO4C9M+8lboYd/+RvHVRJYX2axpw
+   Q==;
+X-CSE-ConnectionGUID: OW06dQboRTqwG0wI832bJw==
+X-CSE-MsgGUID: GtDNFXwkTTO8Qc3vwn8Xkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="50075735"
 X-IronPort-AV: E=Sophos;i="6.15,217,1739865600"; 
-   d="scan'208";a="57059111"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 16:25:02 -0700
-X-CSE-ConnectionGUID: FRzL9G4CQFCDTuhcVK6eGA==
-X-CSE-MsgGUID: 58okQ/akTqSgn4K0qTQG7A==
+   d="scan'208";a="50075735"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 19:31:27 -0700
+X-CSE-ConnectionGUID: N5A6QRvBRXSxsIL7qykapQ==
+X-CSE-MsgGUID: ypTfot/dTn6LQeHRYspquQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,217,1739865600"; 
-   d="scan'208";a="130600757"
+   d="scan'208";a="135515948"
 Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 16 Apr 2025 16:25:00 -0700
+  by orviesa003.jf.intel.com with ESMTP; 16 Apr 2025 19:31:25 -0700
 Received: from kbuild by b207828170a5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u5C7m-000KRk-19;
-	Wed, 16 Apr 2025 23:24:58 +0000
-Date: Thu, 17 Apr 2025 07:24:17 +0800
+	id 1u5F2B-000KoA-0C;
+	Thu, 17 Apr 2025 02:31:23 +0000
+Date: Thu, 17 Apr 2025 10:31:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+To: Robert Pang <robertpang@google.com>, Coly Li <colyli@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	linux-bcache@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [linux-next:master 4325/4528] s390x-linux-ld:
- pinctrl-sx150x.c:undefined reference to `i2c_smbus_write_byte_data'
-Message-ID: <202504170707.IBFj7H28-lkp@intel.com>
+	Robert Pang <robertpang@google.com>,
+	Mingzhe Zou <mingzhe.zou@easystack.cn>
+Subject: Re: [PATCH v2 1/1] bcache: process fewer btree nodes in incremental
+ GC cycles
+Message-ID: <202504171044.TFdtTfEh-lkp@intel.com>
+References: <20250415174145.346121-2-robertpang@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,31 +67,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250415174145.346121-2-robertpang@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f660850bc246fef15ba78c81f686860324396628
-commit: c4d1b2ee4407b0b12e0dade40361eb86c1c710ed [4325/4528] pinctrl: sx150x: enable building modules with COMPILE_TEST=y
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250417/202504170707.IBFj7H28-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250417/202504170707.IBFj7H28-lkp@intel.com/reproduce)
+Hi Robert,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.15-rc2 next-20250416]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Pang/bcache-process-fewer-btree-nodes-in-incremental-GC-cycles/20250416-133615
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250415174145.346121-2-robertpang%40google.com
+patch subject: [PATCH v2 1/1] bcache: process fewer btree nodes in incremental GC cycles
+config: i386-buildonly-randconfig-001-20250417 (https://download.01.org/0day-ci/archive/20250417/202504171044.TFdtTfEh-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250417/202504171044.TFdtTfEh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504170707.IBFj7H28-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504171044.TFdtTfEh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_probe':
-   pinctrl-sx150x.c:(.text+0x15e): undefined reference to `i2c_get_match_data'
->> s390x-linux-ld: pinctrl-sx150x.c:(.text+0x39e): undefined reference to `i2c_smbus_write_byte_data'
-   s390x-linux-ld: pinctrl-sx150x.c:(.text+0x432): undefined reference to `i2c_smbus_write_byte_data'
-   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_regmap_reg_read':
-   pinctrl-sx150x.c:(.text+0x2ba0): undefined reference to `i2c_smbus_read_byte_data'
-   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_regmap_reg_write':
-   pinctrl-sx150x.c:(.text+0x317c): undefined reference to `i2c_smbus_write_byte_data'
-   s390x-linux-ld: drivers/pinctrl/pinctrl-sx150x.o: in function `sx150x_init':
-   pinctrl-sx150x.c:(.init.text+0x32): undefined reference to `i2c_register_driver'
+>> ERROR: modpost: "__udivdi3" [drivers/md/bcache/bcache.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
