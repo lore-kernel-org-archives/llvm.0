@@ -1,58 +1,62 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2084.outbound.protection.outlook.com [40.107.236.84])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A446C22A4C5
-	for <llvm@lists.linux.dev>; Fri, 18 Apr 2025 16:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5384C21C185
+	for <llvm@lists.linux.dev>; Fri, 18 Apr 2025 16:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.81
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744992683; cv=fail; b=MVP6Bzf2m+cTMvuL5Kg+HHZvDaeYxEKzs0HIHW97mG/WFSGrU6ogtnPPWTM1qvQV9dH/6DhoUqzG2iULIEgm7QN4a3P3B/o/RhBlBsgf7g/YiVFCF76Aw+XRTQwNVJiGhvTmBvjsG0OZFvKSTkxUozWXqGDrIoQd1FQ+8rKPB8U=
+	t=1744992964; cv=fail; b=bJmLQZd2pKfPkjwvxua+IpftKGP7RDCfbe155KyBgW1RmCWiHEGsmQkP1PBbu0tPf9V3aF7/yjUFv8vUAE/ipapjlNHcuTpAu9MMqBMDh/lY8bruxAbf8wb4HOwzTN+0WNLBcyLCYYFiOyvFa2N8LYjO0j1Sf1JN4SonFls80Hg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744992683; c=relaxed/simple;
-	bh=1pNIOSwVlcx74oHBooiZZQ7JFRmKzg0JM8bjMi2JezM=;
+	s=arc-20240116; t=1744992964; c=relaxed/simple;
+	bh=RCfdJZQ75bnrJNXrnKqOx2QB7qoasYlPFpjKNx5Q0KQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ezcbc1ftId5sG6wp9W8kQHCXB+4VoRvGVvG5t+52PE6lzwl6tkLKEme8Azmd0zGShmX38nxlmRTekHR/MZdZqtHFrfdWUNAl9lNtba32vAWJ2weevPv0EWbxBPs/pDniGL5b9b5xGmspZKSaMoI41ok0/8ThxTNhri9l4unr1d4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TDpxIXfK; arc=fail smtp.client-ip=40.107.236.84
+	 Content-Type:MIME-Version; b=HC4C/Gp2alXr03ibcbgzVN+LstFa9R2c3e4yDgFzx7USvFM3yDQCKbhbo3VYq3BBJtH1tuDbvUqOm9ojNdQbW4XcfjuP9xli1EIih8N4z5HRfawqFZEMn6WuI8c2UbtPcvE9Vy1IbBmphOdegqOFoiBei5cgwZAposi8HIMeGrI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=laj6EBZH; arc=fail smtp.client-ip=40.107.93.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TDpxIXfK"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="laj6EBZH"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QHXKBrbeC8AY2KZbB5eatu9e2IQNjjgy5Aum1QdC/2Wf2kDOMohEmkZ60J46tYB0rvUnlmNfmMGyXSJEPzz4ak8p3V9sSzKAxnf0Ai4FcN6InQne+tRoOiK2ZqHwiNAmxn/GQHXyTWfxfmfj15O+nRmApNuVQXj/7Adawrm7ZNpt9fhWKPnvcONQ02WrMbo4krmO6rCfXvXiQhswFQC25bp4TkrVrQgIDxVuOyGzHhb8Kjwu/v840f6OxMaAyyKPipBLxxin6VUqoAJ+OfBumXlHPQ20565jGat8jmq774n64b3zBZJBuNYK7amAby0F4ChOKCvX1k/puRfwov2iSw==
+ b=A3VeM91tTz8Z0G38EQRrVwl4TMCznaUbCOeV4+rc+23cV6FfZs2gtGgPr0mYhN64c8cX6tYT871LP+rWb8qFmuCLI/LX8x5anANaAuzDVBy8JEqTGa8vxckOv78sM/5C/pa7eFlquaszBNI0Xe9VFGzRY40mpdsOTBmwroZ+UpKiJl6UYbjxzNFXjh7v7UAMBUhhasYYvrGnjsAkS7NAw/qaiP83CRWuyhS2ltZZKLcDBF+Kykb+AtqDJLKoEkp4w8BZ4T4nqR+cmwsG2CRJItgEPGUQS/VKzQOqKLAHgjBZhV+AlOXNegz3Vm2Pq9HMLe2mPlEalmFGHaGeSn6YrA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3WReI1uJwFhOyrWHr5wPh2PS07rRsGdVVD2iitr8WYU=;
- b=wXVCBtkdzgtQ7LS+xcTj4ovBAw9KpAyqxIRIg46AZeN4UDc52mIhgVlS2GTUKtBMin38bsrYwW8pMMJJ2Z43pfqGGVtO0IuJ0nu+zVswXpw5iyqvuxTE+RFPjVcLH32os5lDJkWUCq0iNCuhIR8qmRwBjlLL+Rq3NUwxqfaFfJoocHzSbdDY34sKDySQlSOLrwGiNmBeBv6VU8yYwUW/EYsNH+iMaV6Ftfk/lnGq7c+cE9wEnwBwMJrZF4VP1UQ9YOdE3ftZBFRIk3JmvybD8q6YyqRkrfysvJobvghneEqhLhEBf5IYlSNTuAuy/ancB5z5D4Y7Ki5tcQIa+2SwkA==
+ bh=xWrVm5wwxoUa7O/NQ9vHH3d8io7nbGvKuxzmGz8aaJo=;
+ b=WgxT2dLB+jW1XGLNqs57wbfTf6hN5ZzhugMEOMId0MbjAMmPf7zAUi384pnSeZGzTrbSAv+y2owfnJ8/ov6ps1TIp1+KcR1FWeE1vOnwJb6mYd9VMojWP83a/+BgkUeW5GfLR+sD94HAdkRuscp6uxjgCywCr821L7vUV7I6tfiFcOokmvhRJ1sYZ44HaXTX2fOBECdPXaO4LAyDKLSlAuqHX6CzETtSSIEqlDrT0hSSkpcCrVe9MQ+vJwfHUKiuyf3NUrxA9vhI0ESSUU/pfsqVmlTwxn9EsAvZ6Yo/51GFumnCTYijixl6JtbwELxu7wBIfYF2HkZzqc27Yv3chg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3WReI1uJwFhOyrWHr5wPh2PS07rRsGdVVD2iitr8WYU=;
- b=TDpxIXfKpNI235XBCl5EUb9y1TT//ORDmptyhqOOowZlGpsbbQODmvc6IBSSMA5BCLb6igyqK/V2zKNvKLU99RUUlv9qvub27CyE3Ea0XebMZ72awZ04WTD1RB4Fdu08tSdOeiEnJyL7mxA03ucz1tFX8MGXDyX9mWu5imo2BTScXVDll1mP+P859UV3qylWAgjDDTMteCdVbPMVor9rt8IlSyrrdqALGHDMPO5M6pLeaSnpzH+R2j5ynPGH8xos6O7GT71Hy3sJe/ZtKIjgjyAr7N4qdEvjuMG5v4g2irla3wlYScamB5KZg1QkoI6Z6iVSOQp0AJY2ZXbjQdnVxw==
+ bh=xWrVm5wwxoUa7O/NQ9vHH3d8io7nbGvKuxzmGz8aaJo=;
+ b=laj6EBZH18M+GuXTuM92uRjSGlEGgCa8ZghRbQxEvLFEgxrac5ilLTjoaZCTgwvW4jILfbjVKCcFEAr5LjRqlkilZZ9FRT4nu0BTI5mj4IiZ8l+dubHeJPVvbqdYHYvW9tKWptXbsdNZbWmTYHwLaXhEruvE7CYrhtYFIeX8hdq30F0xgPFfgT02V8DW/esY/eTmCVcuPl76PQU2eP13TNAJiaZeE/RxPDpXabEIdArB8fa4FKnieRznww21I/mSx4QnKrdQXgiQHFgsyAFeHmrEeSc0EaFNEtuO5yn5nVZaxsH0vYcafSvzpH+tWWJxjIXYnzeHwaNNpQM8bG0FxQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
- by CYYPR12MB8962.namprd12.prod.outlook.com (2603:10b6:930:c4::13) with
+ by CH3PR12MB8726.namprd12.prod.outlook.com (2603:10b6:610:17b::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.22; Fri, 18 Apr
- 2025 16:11:17 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.34; Fri, 18 Apr
+ 2025 16:15:58 +0000
 Received: from SN7PR12MB8059.namprd12.prod.outlook.com
  ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
  ([fe80::4ee2:654e:1fe8:4b91%6]) with mapi id 15.20.8655.022; Fri, 18 Apr 2025
- 16:11:17 +0000
+ 16:15:58 +0000
 From: Joel Fernandes <joelagnelf@nvidia.com>
 To: linux-kernel@vger.kernel.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
 	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
+	Zqiang <qiang.zhang1211@gmail.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
 	Gary Guo <gary@garyguo.net>,
 	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
 	Benno Lossin <benno.lossin@proton.me>,
@@ -65,20 +69,20 @@ To: linux-kernel@vger.kernel.org,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>
 Cc: rcu@vger.kernel.org,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	linux-kselftest@vger.kernel.org,
+	I Hsin Cheng <richard120310@gmail.com>,
+	Charalampos Mitrodimas <charmitro@posteo.net>,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 12/12] torture: Add testing of RCU's Rust bindings to torture.sh
-Date: Fri, 18 Apr 2025 12:09:58 -0400
-Message-ID: <20250418161005.2425391-27-joelagnelf@nvidia.com>
+Subject: [PATCH 4/7] rust: sync: rcu: Mark Guard methods as inline
+Date: Fri, 18 Apr 2025 12:15:37 -0400
+Message-ID: <20250418161542.2429420-5-joelagnelf@nvidia.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250418161005.2425391-1-joelagnelf@nvidia.com>
-References: <20250418161005.2425391-1-joelagnelf@nvidia.com>
+In-Reply-To: <20250418161542.2429420-1-joelagnelf@nvidia.com>
+References: <20250418161542.2429420-1-joelagnelf@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN0P220CA0010.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:52e::20) To SN7PR12MB8059.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0032.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::7) To SN7PR12MB8059.namprd12.prod.outlook.com
  (2603:10b6:806:32b::7)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -87,174 +91,167 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|CYYPR12MB8962:EE_
-X-MS-Office365-Filtering-Correlation-Id: 084bc372-7dd5-47d7-ed65-08dd7e93a6a1
+X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|CH3PR12MB8726:EE_
+X-MS-Office365-Filtering-Correlation-Id: 343dcc5d-c17b-4cfd-1330-08dd7e944e0a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020;
+	BCL:0;ARA:13230040|376014|1800799024|7416014|366016|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hnry+nqOgep/MqVVs8DK8PSLXjUX5roFNzlRxtZmkT0bexJOsJMRt2RRuaJ7?=
- =?us-ascii?Q?rOKWg2WjZ6iLNm3z/w+JGIOMs3jUAlLpzxQ1onTbE6CN8vMJLUm1XMS00cs7?=
- =?us-ascii?Q?+Tyy2ZI4OlZU/OJ3FPMC3vNvaeHUbg+ovm2ewnkN1Sq2FTGol09bzZWL2tnL?=
- =?us-ascii?Q?acJEadm5IP/nvpGTKZ4daLTO/w0eVY40Vj3LheFYdS3aL46QCPwzJ5iXDGoF?=
- =?us-ascii?Q?EoaupIethWaPK/khCoSOPTymGgWAOnEtjKozDeW02vz67ay8mByTOi1V4eAK?=
- =?us-ascii?Q?5jbIuBd/re2iP7GNqMcq+j7hKwpJ/O6OYdBkyX/T+Fe6WdmC5nSOfuU4SxgB?=
- =?us-ascii?Q?zBob4Injb5Mo8Ht0AeIUuRj70ubYRxtMgYW8JGmprE/XwzIHf3BQI3OAf6y7?=
- =?us-ascii?Q?+LiJDCtfw6jHj7ktG5VOdMivJqgf9QuN3MTDE6KcPPPwOATIjOAskJs10bpH?=
- =?us-ascii?Q?MRF8maiHP63SN32gQTKeJsV7+at0qSgObzox00SEGylPoWQeSSiJ2sgk2hbi?=
- =?us-ascii?Q?+3xo4baEAL7u7wqwAsfDFJDh24xtlJiB8JIi7TpC/koyZ0taunI4Tx8Uog7S?=
- =?us-ascii?Q?eif+Y/IcHgZI1XLYbI0kfr4wpbxeD1R06WaX8zcd0xJSrT0poFHkaiqT6G0B?=
- =?us-ascii?Q?NSKC9iQnCTsvuo6VLVwpqdvwIZPXfBHtcjuKTtAiJ3zPe6VXhKxrz2Qa/L5d?=
- =?us-ascii?Q?UjigIoc8w6NcTBUb22R0Ziw9qCItdKALgwjKt6s2gUinhrbHRujIYiwAn2dC?=
- =?us-ascii?Q?BLyjJboDE0mhgWmsgs0Yr0YtdKo8WoQ7PzXRzzAgb9O24Kvcj8xOCBQuaRDm?=
- =?us-ascii?Q?C+K1njQKYnJYqq/TGRpPK+vw9sGpaHNvmz2q4Rau9yENHGvIoyeZ/KIJG0TZ?=
- =?us-ascii?Q?JQpQXOrW0qQAinkxTjhqqAoR30PfKja+9vBmtSxVd1MeWOTUEOtSkl9ju7D9?=
- =?us-ascii?Q?0GOH14wpq1A2pztTb6cDkkJhd/vGftYKnb+jxgf+hCvQ61/63WobdPEzolry?=
- =?us-ascii?Q?F69YjBMW4UNz2JshWbh9c1r2pHAf2stkZr6bivIL6GM5o8uqNrUOwidUdo46?=
- =?us-ascii?Q?YCPeZnyf0HLIJgL2KlxcZJiuWAoS0RUc8PMjQYOzTw4++Y4ZPbyGo4ccMFNL?=
- =?us-ascii?Q?yMcUJWhYlp3OK0/NrBzavPFpn6OqWLwctEu13no+co3mUtZCkxuXdPId+/2e?=
- =?us-ascii?Q?fdLLee7n94RADNW6J/YjplI8vyez+noc1SZMVGXMfiyYc2OUEn9rbA1HrKtF?=
- =?us-ascii?Q?qjrR8oSZfof1grGRHgDx4/ob1NctHeQK/rMlu8mPmC+S4dJOnvP1ap7tebXZ?=
- =?us-ascii?Q?9eFh0K+YpOXWbMVh7822pe2HCqhmuFxvSTIGjwij3cGBARi1vH/uO5unqK+Q?=
- =?us-ascii?Q?4W9gXFryV91jucNLNXxYyJ2wUtXD9V1mCfDMDHB/lrD7zxFEBrUWZFHUPdUP?=
- =?us-ascii?Q?My9U5fhVI+PX7ooWA/bltyNr2wKpYNw6CoN1rlIcfLifctUlznO1rA=3D=3D?=
+	=?us-ascii?Q?9+avmD13voBZhmDpcGn4zHZMUB/CPHjjIv1n58joArZtfqjZkoknucQGicdg?=
+ =?us-ascii?Q?XgPcTJ6k2cw6hBCHhy/IB4/lrgqbSLYGhZkuIaVEkytLqp0QQZ2TKFdpmazb?=
+ =?us-ascii?Q?qTE6GIHNjrSNlI/lFufRy8raQArkTrs8mAqQto598ovnM02Gcr2vTHAS6PpT?=
+ =?us-ascii?Q?kn7q7J21NpIGmI8MEWup6R3XhmVI6QXPKEWqr8m5oNXe7vyfzxUvPSreFi+s?=
+ =?us-ascii?Q?EKGqghx4QBYjauz/w+8RVXa3OwHgMLJC3/pEmnzzrCJB79WeniQZxWTSVJx4?=
+ =?us-ascii?Q?kEXQmE1a+1AhxiuprGukRuSKnka81LEC8UKHZCICnlAYsTDyTJaxzilDdjCR?=
+ =?us-ascii?Q?JeV2AQg+VrLTq0amzQ/Lu8O6UJheIb3sR8YtIVDnGuZUoLRbF/XaupOZkAoC?=
+ =?us-ascii?Q?mJBB4rOHMyI18Nl64Irvi0ad73BvcdE4cOk2ubbkKyS0gNryqojHsH8e+93H?=
+ =?us-ascii?Q?1Wk1/molr/+kEs8aIYCR04wvhRTYpxpETuMZ7BWPAkzCEEWl0Apqn9RgYPEz?=
+ =?us-ascii?Q?QZbKmEtaV2n37zFsCtG9cF8tUVaBGkWxDCaJMJaIkVPLoMJTmnyBUPwmfLV6?=
+ =?us-ascii?Q?oOw46atHe1b95YSzXT/1pH4kr5Etvta5N2uCOKE9f7pAOr3K27whRrSP2uh4?=
+ =?us-ascii?Q?LUnrpiBEOT88CBTnPwiGqRoIT7XvaFbEG+EF3Zf9ofCynnL0voy4BXIv6YSU?=
+ =?us-ascii?Q?olYzFLKbYuenoPoLBaeUmSpUzRirM47OTX999NevRKtTdSvZmfbY9bpaAXiy?=
+ =?us-ascii?Q?+WMfUj78u8B/qG/1qrH1aMCIfCBPgysbxgDbmYdJKQAQsx7dvtWUJqyDd+vU?=
+ =?us-ascii?Q?GQfrSPjnUvgFmbXftmVhAwuUf9kFWBYa4kJcBFPnGVaVlf/8kZ6eiKeOt0B1?=
+ =?us-ascii?Q?vFyIAHmXycvBrnhQo3Ojc1GnBVRngdgaVzeVFoNB4hvCpQ6N14bx6Y1Y96t4?=
+ =?us-ascii?Q?jFAx2xLqHAPM4x7uo1Eb1uu0dsmd5Wg0fOKY/AutGi4p3CXGVXCFgk615le4?=
+ =?us-ascii?Q?+lHQ177cGQCBSTVMGeG44vD683gB+z1UKDKb6yIe3UlwTBKTv0IgR7dEv6Zh?=
+ =?us-ascii?Q?nnqOBt3NtfsgEMQURGwgUFkGJtFoYqZgk6UTBsCUYTAfXkDe1P4si6QSKYGo?=
+ =?us-ascii?Q?+eeuLrceu8kCQlzcN/FrBTGH0zMRXFnoae4/RhMmF+qq7H1AptMf6/vNmmXm?=
+ =?us-ascii?Q?POGndJfn535AZkqDAWzOZsg3Sq7vY5bF1itOgvOxkXCXz/q6H0wJBv/Niu9z?=
+ =?us-ascii?Q?uPuNpdea9H5V/Q8zUBQOzpqDGCc6/PQx+K3U6NGVIz+MuRw9UEnnETS3tzNL?=
+ =?us-ascii?Q?dHZH7lZeSKy3uGZCTsT8A2B2EKOgenAczhcVtiiElBhNWJTYB6dVmSTTzYRO?=
+ =?us-ascii?Q?xddEjL1SOjo3601REYzxHj3i8ko9q0KEUAjzIFHSmctgtKF17gklak/n1x8E?=
+ =?us-ascii?Q?B+gcaaPkAwGGBP92kWbBzLd6ZNqz07HQji+A3ESCoepA+oZxepA/yg=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?n+8tyuSgVD8srbW7Nh1+gIJoeVBrx38H7kMiCQvecQi2XSghxo1OPa3D74G7?=
- =?us-ascii?Q?Na4SenAYG9xTdvWgz7YYIZ/a34RoCjGkv2GKmn21bEpjytJ71CP+fVVrv1Wo?=
- =?us-ascii?Q?rrxR4Flo81MQfxfOriGPk/H6uxq7P8u3uIfQgX8cHdak5TIU0pqOqOo3/lf5?=
- =?us-ascii?Q?D57B35I16M3cq5nYVDZs35CjfH/1XQGdXZvZrrdkHK+bZAGmSLhvxefuPw/D?=
- =?us-ascii?Q?2/cHiC2wLbmpXEskWTEIMAy+OxshB28CYaReG0/zCo4cW6JwNGTccaNmOt9i?=
- =?us-ascii?Q?pZtPxZ9idzXbYJWJqkq/VXIEtKSYEadcAdKldXUR+ws9urNeN8CKOguFoDxr?=
- =?us-ascii?Q?tArl7cDdlATpSkkNWjbcRnOi0LXl5gTwctN2gLrhlVk+/V3xnkdxZrwd0V9B?=
- =?us-ascii?Q?/LXP/gRJE3e7jMY12aJrERnskusRhfeEQ4th4Y1ZuokyfxYJ1YT5qvnNgV1/?=
- =?us-ascii?Q?Z4xesyGR6V2uxnB0L1lX/Apbx6OnbQoa5ApbC0NHdRPvrwudxRUwrq15H3gl?=
- =?us-ascii?Q?UCC4EAzT/lyTDy2rfK7pdojPFhRU18130ZxKQTYfq9v+YxGAxJktz0aNPhpZ?=
- =?us-ascii?Q?M7Nz5pE7WkHjXzr0N4MMesmn2GeKJjFhMhWPsHTJOvnuHVGb5eKcbj8nSwlr?=
- =?us-ascii?Q?R0KzTq2yeHn2xvUEdHB7p481NV5M2qO22QNCc9UD0PF3MYpGmFB5bpnbaT2m?=
- =?us-ascii?Q?IFShFBy+kZLXrNNs3kdfG7DBDcBBoitwfmxDQIi6/awwALiM4hJukoQ4NgIi?=
- =?us-ascii?Q?Cd4SFriTKIhXYSdT/8oNsspYQxGZS8NVuY14CEX9+x3P5dNcxf5xx6aisSI7?=
- =?us-ascii?Q?rzPasysh5ao2Yd86hWBzZQcd8vPgznF1bzLHAY3IRORO0HPkGytUXv13cAhP?=
- =?us-ascii?Q?a9h5RvxhJnyzEUV7XdHGazxdGrLsIYJX3G41m18xKfei76vNzkGUuX9rCrIJ?=
- =?us-ascii?Q?fmM7qKiEYZl/7ezszzcMmAr5YFkcSwrc43uIjY/c7ubsEExA+jskSp3+dvzh?=
- =?us-ascii?Q?jcWXoh3/U9mSG4PopAlCTs6g0AXR+89klXNuEXNqAQGVReWqP4V3Fwr36e/k?=
- =?us-ascii?Q?KJrNAbUlpn023TimNNSrkngdlx13rVx15v4CIuoWETIVdibughKvLM3wmdsR?=
- =?us-ascii?Q?bbGsz2Z47fEtNwK64WmvClN46tEJ8QV3etpcK2WENCkkRVTn8qIsjhROx6e9?=
- =?us-ascii?Q?KdH8usjUgqt01r8Mj5/QPCFudFxE4i38Ec6oMtOVl4mg5orubxuLdRDNzIvu?=
- =?us-ascii?Q?/lYXfmh/z4qS8uEra7wOC58WXAvhKSqhUNAalRfp0YDm6graQkFZUli/U1Hd?=
- =?us-ascii?Q?ewDgPVDtKqzpjRNJspNwZN3XAKbfROmDSD8QZrewirLT/nQ6GnoW+PsH/rXH?=
- =?us-ascii?Q?cgmvhLTa9rYbhHB54uDSLdTR9gTUx5BSFFQh9KYOdUZPdP0shRky/1r/GePo?=
- =?us-ascii?Q?0GSPTUe0FL73L9E6t9KuqUcaNgtEH6ZAtXHNUXsOifL8gPHbXFl6zTE07oYY?=
- =?us-ascii?Q?ROJvm/elLGDbndpYjihF581vV5e/Pim7GU89OqYR41GP0B8Kzllgs5bi0Bgs?=
- =?us-ascii?Q?s8kJj5ELMfx7Gm5yPoOzjud8YhMwN/QoJyk079Dn?=
+	=?us-ascii?Q?Z6TmmlfwV4J/H5h6EdVTeBoK/r93192XoJ7YVC+o3195VHQUH/t0j2oEapOu?=
+ =?us-ascii?Q?DwHMKdLZcnhkvMQ3TUkhIw2/1xa6k2vQfPFOBMsyCarG+ID9zge78X+2DiHY?=
+ =?us-ascii?Q?l+QKhfTezBS/vMC6ewk0Z1x+G6Gan9Q1z54Kn3ivO4lCdHv40xSpFZDX1Awm?=
+ =?us-ascii?Q?+3ENjDZ6UcL73OUQj5q0PVpzXhqC03PEO0jcfrH90Tk99AL90A3kyzAR9mX2?=
+ =?us-ascii?Q?0PMwoxsp5b2n2gG0yolErmFv1E0qnuClIwcqEuv+Se7c+GpjLR+kpmpgGckb?=
+ =?us-ascii?Q?thQhMAfbnptzz0vHv0YxEuV7TWTC0Z8JxT7bdq2dLo/xKLxSSOfR/Sdishwd?=
+ =?us-ascii?Q?zlyEGFPAYN1NNnacS8u7Bh0wzp1cEs0oJr+QYe8AHqIcBNbsu+qMbNxPSpe/?=
+ =?us-ascii?Q?qm8wZKPK/1SGSaULvbbM7mSX2HTAC9YVHZGtGxkuMS0lHDJxAiNbPv5tCLLz?=
+ =?us-ascii?Q?GBJgzzBGqScbVCJ64F5bcjqhy5aiRnTRYVoHqX3R3yh/hSsSFOvQKnBpu0LO?=
+ =?us-ascii?Q?8p0sELXGaqbv0UMpXdUCdLiWH/NjZpbdvMlq8oAz926J1P5OAmIUz4/xsfey?=
+ =?us-ascii?Q?ipS+naOARGuE6GU6rk6YWHWFs+LlekT3C9qHMF3axJZ5SizFY6SpVzsa1hQH?=
+ =?us-ascii?Q?nAzSb+YV62Xr3kGUskTZP/GvsN9m91v76cyiwEP8H3p9fBliUHrx7WgaMuG3?=
+ =?us-ascii?Q?+kTubp0M2lFVvKqbKy5ViRZOgMWBB9Znb3bWE/wBwksK6OXENO4LqqAwX4Kb?=
+ =?us-ascii?Q?JMhC1CVeelPbIaXFDZIFoRaenHcZx01qfxu4p2WQhFPri2Pn/JnsXk6is+hJ?=
+ =?us-ascii?Q?NgAgLB7H1x4wNX8gHaEX+ui01SygZL09Jxo+ZqSxQSYWmMpO5sSAxbziXSDC?=
+ =?us-ascii?Q?6t5pAmkaoL2dnpl94Qair8qQ0wITREIy43QWsJvbd4hrSoKmEskHH7qSRMR6?=
+ =?us-ascii?Q?/VUQ7itqkjMMR9Jmx24e6tpEvolEUMi0P/+s9WXI/1n2KJ3YJpgWQmH/JoV9?=
+ =?us-ascii?Q?6OKc6dQquRXqJqEr/Ff4w7dv00l3w4CNfDZsKHjt0bqNrBmFHNhFgDOV5ELv?=
+ =?us-ascii?Q?CeheCJjnB73RrvBMT/YTlfl8oH/zFajeNlrmVJIIBRhk5Ta37jt0WrbHeX00?=
+ =?us-ascii?Q?K++k2cOpFWX3IZ/JAZWZSc/ZieN9DbUExZybwAx2KR+EEnNkFHH/kxTOwTvf?=
+ =?us-ascii?Q?jZYGUMrfMl0HLOqWKm75QWkXd+lIQ5ow2exUUS0fKj5q4YUyripOhLcowRDi?=
+ =?us-ascii?Q?yeHnTgvfhxlWlGu8kuhoOFFUVmhVjE2E88Er6qWLYmXixwnaARu1ZMNDHahQ?=
+ =?us-ascii?Q?ZCx5T8hOhbaoaTJceKTFuDvyFwd/fkSCP/0NGjiRxVGLMO27WXG/TbdfW7in?=
+ =?us-ascii?Q?c2d89SNFIlWM/IItggBncWxRAsSjAmMgj3jFmBveN6AYEOSnaJPsb0i3NR7D?=
+ =?us-ascii?Q?j0HwAL++Bf8BVOvas380W+wheoIrL94RXrI6+8ftT5vQwf9bZHSaBaQ86/5P?=
+ =?us-ascii?Q?d9b9MAAYUFvhVoOS4qSY4eyux3Htt7rz07H/lE5hZoWUydrK00MM+IYVa58g?=
+ =?us-ascii?Q?UbjUZ/QUZe5jO8lVSJ9IV13lK8rL8BnTVUUh3T64?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 084bc372-7dd5-47d7-ed65-08dd7e93a6a1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 343dcc5d-c17b-4cfd-1330-08dd7e944e0a
 X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2025 16:11:17.8769
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2025 16:15:58.7111
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I4l09TfyXMI8SAp7A44TmFEXNLWHU+sllm+q82BWBwg/b2Ev/cufCwdENFTQv33wmArAje6/3SzD4Qm7Wvz2Mg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8962
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7ChoqA83a771WgmJgRALWcvxcrXYKZ3dwgGkgjmYI6PinZlTRHSbCmIHYerQOlJxr4oMx7YS3H6xTlX+v09NIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8726
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+From: I Hsin Cheng <richard120310@gmail.com>
 
-This commit adds a --do-rcu-rust parameter to torture.sh, which invokes
-a rust_doctests_kernel kunit run.  Note that kunit wants a clean source
-tree, so this runs "make mrproper", which might come as a surprise to
-some users.  Should there be a --mrproper parameter to torture.sh to make
-the user explicitly ask for it?
+Currently the implementation of "Guard" methods are basically wrappers
+around rcu's function within kernel. Building the kernel with llvm
+18.1.8 on x86_64 machine will generate the following symbols:
 
-Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+$ nm vmlinux | grep ' _R'.*Guard | rustfilt
+ffffffff817b6c90 T <kernel::sync::rcu::Guard>::new
+ffffffff817b6cb0 T <kernel::sync::rcu::Guard>::unlock
+ffffffff817b6cd0 T <kernel::sync::rcu::Guard as core::ops::drop::Drop>::drop
+ffffffff817b6c90 T <kernel::sync::rcu::Guard as core::default::Default>::default
+
+These Rust symbols are basically wrappers around functions
+"rcu_read_lock" and "rcu_read_unlock". Marking them as inline can
+reduce the generation of these symbols, and saves the size of code
+generation for 132 bytes.
+
+$ ./scripts/bloat-o-meter vmlinux_old vmlinux_new
+(Output is demangled for readability)
+
+add/remove: 0/10 grow/shrink: 0/1 up/down: 0/-132 (-132)
+Function                                     old     new   delta
+rust_driver_pci::SampleDriver::probe        1041    1034      -7
+kernel::sync::rcu::Guard::default             9       -      -9
+kernel::sync::rcu::Guard::drop                9       -      -9
+kernel::sync::rcu::read_lock                  9       -      -9
+kernel::sync::rcu::Guard::unlock              9       -      -9
+kernel::sync::rcu::Guard::new                 9       -      -9
+__pfx__kernel::sync::rcu::Guard::default     16       -     -16
+__pfx__kernel::sync::rcu::Guard::drop        16       -     -16
+__pfx__kernel::sync::rcu::read_lock          16       -     -16
+__pfx__kernel::sync::rcu::Guard::unlock      16       -     -16
+__pfx__kernel::sync::rcu::Guard::new         16       -     -16
+Total: Before=23365955, After=23365823, chg -0.00%
+
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
+Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Reviewed-by: Charalampos Mitrodimas <charmitro@posteo.net>
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
 ---
- .../selftests/rcutorture/bin/torture.sh       | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ rust/kernel/sync/rcu.rs | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-index 5ccd60a563be..6d1a84f3f631 100755
---- a/tools/testing/selftests/rcutorture/bin/torture.sh
-+++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-@@ -59,6 +59,7 @@ do_clocksourcewd=yes
- do_rt=yes
- do_rcutasksflavors=yes
- do_srcu_lockdep=yes
-+do_rcu_rust=no
+diff --git a/rust/kernel/sync/rcu.rs b/rust/kernel/sync/rcu.rs
+index b51d9150ffe2..a32bef6e490b 100644
+--- a/rust/kernel/sync/rcu.rs
++++ b/rust/kernel/sync/rcu.rs
+@@ -17,6 +17,7 @@
  
- # doyesno - Helper function for yes/no arguments
- function doyesno () {
-@@ -89,6 +90,7 @@ usage () {
- 	echo "       --do-rcutorture / --do-no-rcutorture / --no-rcutorture"
- 	echo "       --do-refscale / --do-no-refscale / --no-refscale"
- 	echo "       --do-rt / --do-no-rt / --no-rt"
-+	echo "       --do-rcu-rust / --do-no-rcu-rust / --no-rcu-rust"
- 	echo "       --do-scftorture / --do-no-scftorture / --no-scftorture"
- 	echo "       --do-srcu-lockdep / --do-no-srcu-lockdep / --no-srcu-lockdep"
- 	echo "       --duration [ <minutes> | <hours>h | <days>d ]"
-@@ -191,6 +193,9 @@ do
- 	--do-rt|--do-no-rt|--no-rt)
- 		do_rt=`doyesno "$1" --do-rt`
- 		;;
-+	--do-rcu-rust|--do-no-rcu-rust|--no-rcu-rust)
-+		do_rcu_rust=`doyesno "$1" --do-rcu-rust`
-+		;;
- 	--do-scftorture|--do-no-scftorture|--no-scftorture)
- 		do_scftorture=`doyesno "$1" --do-scftorture`
- 		;;
-@@ -485,6 +490,46 @@ then
- 	torture_set "rcurttorture-exp" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration "$duration_rcutorture" --configs "TREE03" --kconfig "CONFIG_PREEMPT_RT=y CONFIG_EXPERT=y CONFIG_HZ_PERIODIC=n CONFIG_NO_HZ_FULL=y" --trust-make
- fi
+ impl Guard {
+     /// Acquires the RCU read side lock and returns a guard.
++    #[inline]
+     pub fn new() -> Self {
+         // SAFETY: An FFI call with no additional requirements.
+         unsafe { bindings::rcu_read_lock() };
+@@ -25,16 +26,19 @@ pub fn new() -> Self {
+     }
  
-+if test "$do_rcu_rust" = "yes"
-+then
-+	echo " --- do-rcu-rust:" Start `date` | tee -a $T/log
-+	rrdir="tools/testing/selftests/rcutorture/res/$ds/results-rcu-rust"
-+	mkdir -p "$rrdir"
-+	echo " --- make LLVM=1 rustavailable " | tee -a $rrdir/log > $rrdir/rustavailable.out
-+	make LLVM=1 rustavailable > $T/rustavailable.out 2>&1
-+	retcode=$?
-+	echo $retcode > $rrdir/rustavailable.exitcode
-+	cat $T/rustavailable.out | tee -a $rrdir/log >> $rrdir/rustavailable.out 2>&1
-+	buildphase=rustavailable
-+	if test "$retcode" -eq 0
-+	then
-+		echo " --- Running 'make mrproper' in order to run kunit." | tee -a $rrdir/log > $rrdir/mrproper.out
-+		make mrproper > $rrdir/mrproper.out 2>&1
-+		retcode=$?
-+		echo $retcode > $rrdir/mrproper.exitcode
-+		buildphase=mrproper
-+	fi
-+	if test "$retcode" -eq 0
-+	then
-+		echo " --- Running rust_doctests_kernel." | tee -a $rrdir/log > $rrdir/rust_doctests_kernel.out
-+		./tools/testing/kunit/kunit.py run --make_options LLVM=1 --make_options CLIPPY=1 --arch arm64 --kconfig_add CONFIG_SMP=y --kconfig_add CONFIG_WERROR=y --kconfig_add CONFIG_RUST=y rust_doctests_kernel >> $rrdir/rust_doctests_kernel.out 2>&1
-+		# @@@ Remove "--arch arm64" in order to test on native architecture?
-+		# @@@ Analyze $rrdir/rust_doctests_kernel.out contents?
-+		retcode=$?
-+		echo $retcode > $rrdir/rust_doctests_kernel.exitcode
-+		buildphase=rust_doctests_kernel
-+	fi
-+	if test "$retcode" -eq 0
-+	then
-+		echo "rcu-rust($retcode)" $rrdir >> $T/successes
-+		echo Success >> $rrdir/log
-+	else
-+		echo "rcu-rust($retcode)" $rrdir >> $T/failures
-+		echo " --- rcu-rust Test summary:" >> $rrdir/log
-+		echo " --- Summary: Exit code $retcode from $buildphase, see $rrdir/$buildphase.out" >> $rrdir/log
-+	fi
-+fi
-+
- if test "$do_srcu_lockdep" = "yes"
- then
- 	echo " --- do-srcu-lockdep:" Start `date` | tee -a $T/log
+     /// Explicitly releases the RCU read side lock.
++    #[inline]
+     pub fn unlock(self) {}
+ }
+ 
+ impl Default for Guard {
++    #[inline]
+     fn default() -> Self {
+         Self::new()
+     }
+ }
+ 
+ impl Drop for Guard {
++    #[inline]
+     fn drop(&mut self) {
+         // SAFETY: By the type invariants, the RCU read side is locked, so it is ok to unlock it.
+         unsafe { bindings::rcu_read_unlock() };
+@@ -42,6 +46,7 @@ fn drop(&mut self) {
+ }
+ 
+ /// Acquires the RCU read side lock.
++#[inline]
+ pub fn read_lock() -> Guard {
+     Guard::new()
+ }
 -- 
 2.43.0
 
