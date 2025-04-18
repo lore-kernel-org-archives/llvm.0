@@ -1,171 +1,118 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD271274FF8
-	for <llvm@lists.linux.dev>; Fri, 18 Apr 2025 13:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7415464E;
+	Fri, 18 Apr 2025 15:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744983159; cv=none; b=SzjoYsrY1n6aK3fCDC0j8hK3Uvuj6vG9dUldATTojUj73Xd0AnxbTg7/Ms9TdAuorSJCWGHsUiEgQQpIzEgHOat57GZADQZpgpf4jT8Gc9zx4/4f/OAL9MsW5M9gYWtZUhYHYDFFV47Cb4V8v7S8cQmDZv1j/Lovi2AvzNRXF2o=
+	t=1744990245; cv=none; b=hEWxF74pygJoeuqBfnkDRp6STrm5Co3EgP4dOr/5U2e+qnYWJOLBv8UgdINMSCflkwhZiA7OtpOxVBHRr9Yhl3FoysRwVSrGPy6Q76KaSg9PrhRy/uhZC3sj1Ki2pfHag0ZES11HtByH51xB805aZNRfg05KwF1HdYPHgYg/Y5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744983159; c=relaxed/simple;
-	bh=7eowmYUF0pclok0D9/mq1P0map8wOZ69347Wa9sCHNs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FOmPcsWKBQKUmfvEzt11wuIkr/TE3rUgzX4KWp0+WmpYD/grf5dmgfR7fcncbUnhdBcWs7PoRduid3nsDgoueMyLDmUqUiQOarBkaolyl94xI6UPxmpTwLSstZ+Yey4bCCzPPQDJ9vFJ/M3qlm/GVHnM3Fh0b9tZOLpwkyQyC+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJc6lAzQ; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744990245; c=relaxed/simple;
+	bh=nuvyM8ba/KNSvSEHshiPj/M6iMCDkZufAcp05tmzU2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QrpGIt4UJMBtp7qei5+xuNUYfAwOzAwKBnjJ3podgAGdt9OLxwca/pGm07sZsgymmknSL8v9t4MXZ29u/aMK5o/OH0vIDiYwJHFU9G3MDdUDIt7KPn2pNpe89xTUpU4tEA3mkzO6qveB9IsXjNDVKtMoJjbAw3JqQZ2YaTntwkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jHuONcdG; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJc6lAzQ"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5ed43460d6bso2831742a12.0
-        for <llvm@lists.linux.dev>; Fri, 18 Apr 2025 06:32:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744983156; x=1745587956; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GXZIWWM8mZYdiQktFqPI0+JPo4B/dX6RUUwchm1Zb5I=;
-        b=HJc6lAzQAQ+Iig4VsLdTQMxMiicOZsNUf89HWZgWthd6e9MrbzQqfW7iDOb3GI8SZi
-         8mDcqqazgUasDJ+QkJ8HV5BGBvwFS92Xyf55Kkz2vT32XLb29K0szSRhagxhe8UvtZuO
-         symkRqSEubuiKva7cBw88D51UJ5AgyNiTP4ihXi33L+XsCjSh9IQRMk4S0qfjIxBMC2U
-         cSc9E1xC6xHE50cbYtcc8TSqkA3Was8pTY2P8QTGnp+TVmAj9NQgMlIsBtRGEwBZmrk8
-         gcOASSkDQKbg2QLKfdhzTigISBJRncZ/XQ3P8+a/oWjC5csrFw9PwHTWPxwJrMHLH8O3
-         TTdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744983156; x=1745587956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GXZIWWM8mZYdiQktFqPI0+JPo4B/dX6RUUwchm1Zb5I=;
-        b=oA2wPhTvVsRCezngA+syBlOler2fo/CA/VvjPrhQ633AJqY6wUwm3llb4VJ9IGFexy
-         yZr8Jfm2R/KKKKJrZAzmqHiujtDy/+Eh3Bqt3TUpIdoYfuuw4uRdevBz5qyyZ5Per3Z6
-         QIKuOWMJX+jo3i4TGTdyQ05RIRdo8jbkIwRn2sDPnmHwStRE0AgUUSg/aviSAfGAwT+a
-         EOec09i5ULvqKvh0Al7ZEuv3CHW1OGIK+Cwm4bJ/Igl/v3k+enQk4qQPzk6/dRZsxG8P
-         pBbfGJXP5NdaL79ExO/wd2xbtLSGOIoj4pQFgr/Q7R7spFcAFpHGTvHfbpIeI1oMrguW
-         7y2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUx/XXeOheAABJGgDlym19XDnbENTcabG+v7FhN06Z4JJSzbapC339zZAv8rlkAn26g0Bk/@lists.linux.dev
-X-Gm-Message-State: AOJu0YwJ29Rw4Mcvt/NuBP6UcARCb+0k1AP6DoZG0rFlaAraHuAJxuA8
-	jKGwazwhMwfe1AoOk6fRCZyU5b4UQL1nJSoruhvIOvCS7v0t17uhe7jde8DN4t9TXkKZBnCfgNj
-	0Jrs77qXwSCCvyAPG29I7XEvJdWQ=
-X-Gm-Gg: ASbGncvugDtcuwZuha4qTy+0M0wSDXcAVfOX318w2hhLkBiQYlDh+rmhpP17fjfOov1
-	X88gJewQnw8Mdgf+PC0RgTMK07IHrTeHFArSWxY3H98m/VBA4C2Cx6Lla7yFcLb+miCNm45RJSC
-	ICOSGzfKz7v9ZbTok4kBla
-X-Google-Smtp-Source: AGHT+IEf1FP4PE+QPrL3TzSuKDCTAio1byV8qwIANyIcWwl3yMCy7oqqmZBQNjRLb7+OZ1bOcdJO2NJMrjzSMyIelCY=
-X-Received: by 2002:a17:907:6090:b0:abf:4b6e:e107 with SMTP id
- a640c23a62f3a-acb74b52090mr242322666b.25.1744983155938; Fri, 18 Apr 2025
- 06:32:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jHuONcdG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744990244; x=1776526244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nuvyM8ba/KNSvSEHshiPj/M6iMCDkZufAcp05tmzU2Y=;
+  b=jHuONcdGD+O942heWiBEmMNXMMyq9C79n7tMLf4+9A8GoHS8qoTxT/V9
+   oBvfdQB2pN6oSiYG2OaeGbGvVbin4A/mYxAFCV2DPrQPWC0E2+t0X7kJg
+   EihUi8Z45DhKg5xZOlGQ4X/JZ7WAJJKulg0ZGEiMp9Kmd3I/OgTTQ3waU
+   qxhBU509igLLr9SubmHsM1vNFxmq0zOk6SG5uMe7Sji/6gJHV7D8+51k3
+   FWYbzQCeGEaZiM+/TdFtgh1Zv3TVRGAT1Tz+CaRsS4YKleDwvk0/QlazH
+   JR/vZPHabwsLBzoZ+Uzn6JLwuSLVSKksxHeCzjyrV2glD0E3fSbYQE5tW
+   Q==;
+X-CSE-ConnectionGUID: sZQ20976SD6+G5fDjwAtUw==
+X-CSE-MsgGUID: RYk7HxlLQG+gTsVTTLp0zg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="46740047"
+X-IronPort-AV: E=Sophos;i="6.15,222,1739865600"; 
+   d="scan'208";a="46740047"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2025 08:30:43 -0700
+X-CSE-ConnectionGUID: Ka+PNSTpTje/kVVVCKwmUQ==
+X-CSE-MsgGUID: +PoCNITSR8+UZvF95gi+ZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,222,1739865600"; 
+   d="scan'208";a="168340356"
+Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 18 Apr 2025 08:30:40 -0700
+Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u5nfp-00030T-2u;
+	Fri, 18 Apr 2025 15:30:37 +0000
+Date: Fri, 18 Apr 2025 23:29:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>, gregkh@linuxfoundation.org,
+	david.m.ertman@intel.com, ira.weiny@intel.com, lee@kernel.org,
+	andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+	heikki.krogerus@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v3] mfd: core: Support auxiliary device
+Message-ID: <202504182338.SwsgSLNm-lkp@intel.com>
+References: <20250418123433.2586383-1-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250410063754.5483-1-linux.amoon@gmail.com> <20250410063754.5483-4-linux.amoon@gmail.com>
- <aAILE01SjRR874jc@mai.linaro.org>
-In-Reply-To: <aAILE01SjRR874jc@mai.linaro.org>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Fri, 18 Apr 2025 19:02:18 +0530
-X-Gm-Features: ATxdqUHbJXVdHhwcS0IwraNdsY4dmTwIZsNctwmfdNkH6lfYcXleJugDkxPs4Aw
-Message-ID: <CANAwSgRK5ONpBM35U7DG=wtHv9N-9kRpbveqyGsVORnJiS5mmg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] drivers/thermal/exymos: Fixed the efuse min max
- value for exynos5422
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
-	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250418123433.2586383-1-raag.jadav@intel.com>
 
-Hi Daniel,
+Hi Raag,
 
-On Fri, 18 Apr 2025 at 13:49, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
-ote:
->
-> On Thu, Apr 10, 2025 at 12:07:50PM +0530, Anand Moon wrote:
-> > As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
-> > if e-Fuse value is out of this range, then thermal sensor may not
-> > sense thermal data properly. Refactors the efuse value
-> > initialization logic within exynos_map_dt_data function by
-> > replacing the nested if-else statements with a switch statement.
-> > Ensures proper initialization of efuse values based on the SOC type.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->
-> Same subject typo: s/exymos/exynos/
+kernel test robot noticed the following build warnings:
 
-Thanks for your review comments.
-Opps, I will fix this next version it got skipped.
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on lee-mfd/for-mfd-fixes linus/master v6.15-rc2 next-20250417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> > ---
-> > v5: None
-> > v4: None
-> > v3: Improve the logic to convert if/else to switch
-> > ---
-> >  drivers/thermal/samsung/exynos_tmu.c | 19 +++++++++++++++----
-> >  1 file changed, 15 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/sam=
-sung/exynos_tmu.c
-> > index ac3b9d2c900c..a71cde0a4b17 100644
-> > --- a/drivers/thermal/samsung/exynos_tmu.c
-> > +++ b/drivers/thermal/samsung/exynos_tmu.c
-> > @@ -899,12 +899,23 @@ static int exynos_map_dt_data(struct platform_dev=
-ice *pdev)
-> >               data->gain =3D 8;
-> >               data->reference_voltage =3D 16;
-> >               data->efuse_value =3D 55;
-> > -             if (data->soc !=3D SOC_ARCH_EXYNOS5420 &&
-> > -                 data->soc !=3D SOC_ARCH_EXYNOS5420_TRIMINFO)
-> > +             data->max_efuse_value =3D 100;
-> > +             switch (data->soc) {
-> > +             case SOC_ARCH_EXYNOS3250:
-> > +             case SOC_ARCH_EXYNOS4412:
-> > +             case SOC_ARCH_EXYNOS5250:
-> > +             case SOC_ARCH_EXYNOS5260:
-> >                       data->min_efuse_value =3D 40;
-> > -             else
-> > +                     break;
-> > +             case SOC_ARCH_EXYNOS5420:
-> > +             case SOC_ARCH_EXYNOS5420_TRIMINFO:
-> > +                     data->min_efuse_value =3D 16;
-> > +                     data->max_efuse_value =3D 76;
-> > +                     break;
-> > +             default:
-> >                       data->min_efuse_value =3D 0;
-> > -             data->max_efuse_value =3D 100;
-> > +                     break;
-> > +             }
-> >               break;
-> >       case SOC_ARCH_EXYNOS5433:
-> >               data->tmu_set_low_temp =3D exynos5433_tmu_set_low_temp;
->
-> Thanks for taking care of cleaning up this portion of code. IMO, it would=
- be
-> interesting to go a bit further in the house keeping by replacing this bi=
-g
-> switch with a set of structures stored as __init sections. The initializa=
-tion
-> finds the right structure and does a structure copy to 'data'.
->
-> It is up to you to do this change or not.
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/mfd-core-Support-auxiliary-device/20250418-203658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250418123433.2586383-1-raag.jadav%40intel.com
+patch subject: [PATCH v3] mfd: core: Support auxiliary device
+config: riscv-randconfig-001-20250418 (https://download.01.org/0day-ci/archive/20250418/202504182338.SwsgSLNm-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250418/202504182338.SwsgSLNm-lkp@intel.com/reproduce)
 
-I'll be sure to check this out.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504182338.SwsgSLNm-lkp@intel.com/
 
-Thanks
--Anand
->
-> --
->
->  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
-RM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+All warnings (new ones prefixed by >>):
+
+>> drivers/mfd/mfd-core.c:389:31: warning: result of comparison of constant 2147483648 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
+     389 |         if (dev_is_pci(parent) && id == MFD_AUX_TYPE)
+         |                                   ~~ ^  ~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/int +389 drivers/mfd/mfd-core.c
+
+   384	
+   385	static int mfd_add_device(struct device *parent, int id, const struct mfd_cell *cells,
+   386				  struct resource *mem_base, int irq_base, struct irq_domain *domain)
+   387	{
+   388		/* TODO: Convert the platform device abusers and remove this flag */
+ > 389		if (dev_is_pci(parent) && id == MFD_AUX_TYPE)
+   390			return mfd_add_auxiliary_device(parent, id, cells, mem_base, irq_base, domain);
+   391	
+   392		return mfd_add_platform_device(parent, id, cells, mem_base, irq_base, domain);
+   393	}
+   394	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
