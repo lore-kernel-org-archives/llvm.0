@@ -1,60 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFD982C60;
-	Sat, 19 Apr 2025 10:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0980881ACA;
+	Sat, 19 Apr 2025 11:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745057722; cv=none; b=otJJs8EZSpKP5LfItS1PyiaBbLDNRsKaGdFyDGJ2piAGwF1GKiTsUfMG94eVEgWaSGI81o0//9FTMmLQRUGaca+fYGD7371j3/w8doC8StyxGw41UsrdFxquQnM7zNHG/67fRhuqla+lZa9QcB2+7OzTx1oc7zbVfp96ZK8Kca0=
+	t=1745060845; cv=none; b=mvVApygs6bUlY97tLKS12378m1Yv+BCF0ELvayMNXV0MejUfVV/JruxFzZV4HJFSAYMZfhn8g7EpiZCIHFVPqSmjTrkTGheAkrK9U2sRxLUDd7jtNJmUKhR1OSP6AbXEFl/HFPWHczX8BEkltkcQOxSfSg6lTDyQ0nJSu6g62Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745057722; c=relaxed/simple;
-	bh=g6+kFeQoubcZYULFGICuNx5srhbeObkeMgeGHTjSLN0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KmXZE67WSaQBF5TA1WKrnlfgFM41LEenqwVUN+ZUEfehnUWV9AUs/IdXQBzPQfk8qv2n9KX6ag4Df1kHGbZ2CiGow6rsl0dQwmR7fjqaNN9ffiqMTQsthH8vEe0MJTG0NrqAMknlrUNzSE20zdb3H+X4ClQZF4gUagLIdMb0PIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jw6oX+fb; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1745060845; c=relaxed/simple;
+	bh=6/Bq+wC1TElgwKJijhenPYtXnDs2ewz5mgzreuNFVEc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GeO8FHZUk2dqemqFNw+gBx4ClT8OnpYu9AXT0Rk/O6Z387mTEA0DLOdksEKqqTcAjlxZLO4kPzNLRKE2hfKHavEBdinPvor1aNF0SpzKBK6aBQ21So9nS+oeZLENMXKnDa9txBo3OgErdFlmtliDHzUDZyp1TKuNJn4wUYnFM9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ipfxEpw1; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jw6oX+fb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ipfxEpw1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745057720; x=1776593720;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=g6+kFeQoubcZYULFGICuNx5srhbeObkeMgeGHTjSLN0=;
-  b=jw6oX+fbbB9Xr9kRHJtvsw2rrYuv+q7Rr41/snpqbdAS0lekAP37lqx/
-   fPmeZKCX9OU5m7urGHk+gzU9HhsFL1Xj3njsfBUxcp9GuLpZwFHV4zTCh
-   R/gf6E080AuUJQ9Afm51fro2YKmVGle11DzGAbJemdcswqSYKI0R3U1tN
-   POJNKflfNsf39LhmQI/M8H/Mw38bhu8s7MGxy/c8MbJlD+vqOX7Q7Ry/f
-   ITBAzG4mt9m2pIBBTov/Kxgi51kNZJNCFrvdNTA4hRV+q2LUS4DEtcTig
-   sFVc0qjLWrbmb07ruuiLnvf814t0bhhYPs8CJ9YQyQqmZOHAZ1j6/Iphr
-   Q==;
-X-CSE-ConnectionGUID: lLIeeYl1QT+dO+8mn2Gs9Q==
-X-CSE-MsgGUID: 1nSH+UU2TqWDM+mXIvUtnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="46589030"
+  t=1745060844; x=1776596844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6/Bq+wC1TElgwKJijhenPYtXnDs2ewz5mgzreuNFVEc=;
+  b=ipfxEpw1tOqoRRLQt+CxR8Dwk+Sz2jPJfyxN2VCI0K1nauoRqm52Mi6J
+   mhMrj7RaoKUno2f9qf/KXC7c7xPyRgfWdvC+xp0Ms471HXA6ElsvCLauA
+   cY4kVfmKQa1kRw85ePwtf8dQeeuAcRCEUzfhB387w7w4pyRFW5UO7WH8m
+   627pXcoutIQz72q7aREep/Ez4/zzSJDwiGYoVaV6qLFXn9tY2QZdOCbQE
+   9OrBz5r3q34nJd6madF17gtrzwuaOG6KVTW+GUgTcjPal6bi79jKSwqQG
+   TyoGyyK7dwiju6F6rReusAJXAQ9NkU1cJmcioYNRDsO/Gso5xvbW2ZjUN
+   A==;
+X-CSE-ConnectionGUID: 6ZYZ3dHXTBS12P1HjkSZ0A==
+X-CSE-MsgGUID: SpOp2ZSARs+GwdCFWqMxJg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="46679768"
 X-IronPort-AV: E=Sophos;i="6.15,224,1739865600"; 
-   d="scan'208";a="46589030"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2025 03:15:19 -0700
-X-CSE-ConnectionGUID: 6zt2Bim7SLGrhYOSypg1Vg==
-X-CSE-MsgGUID: PV9Sw1/cSzeHMmUEisKCNQ==
+   d="scan'208";a="46679768"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2025 04:07:23 -0700
+X-CSE-ConnectionGUID: 1M3dG9vYQH+NyN2r9P4ykw==
+X-CSE-MsgGUID: 2YiU9dAXSR+8dPesollMFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,224,1739865600"; 
-   d="scan'208";a="136287812"
+   d="scan'208";a="131891179"
 Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 19 Apr 2025 03:15:17 -0700
+  by orviesa007.jf.intel.com with ESMTP; 19 Apr 2025 04:07:22 -0700
 Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u65EA-0003mr-2N;
-	Sat, 19 Apr 2025 10:15:14 +0000
-Date: Sat, 19 Apr 2025 18:14:39 +0800
+	id 1u662Y-0003oP-2n;
+	Sat, 19 Apr 2025 11:07:18 +0000
+Date: Sat, 19 Apr 2025 19:06:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
+To: Ruihan Li <lrh2000@pku.edu.cn>, Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [akpm-mm:mm-unstable 25/176] arch/x86/kernel/vmlinux.lds.S:476:1:
- warning: '/*' within block comment
-Message-ID: <202504191813.4r9H6Glt-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
+Subject: Re: [PATCH] mm/mm_init: Don't iterate pages below ARCH_PFN_OFFSET
+Message-ID: <202504191834.zUYILN1L-lkp@intel.com>
+References: <20250418162727.1535335-1-lrh2000@pku.edu.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,45 +65,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250418162727.1535335-1-lrh2000@pku.edu.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   dc683247117ee018e5da6b04f1c499acdc2a1418
-commit: 05d94eeb2ac3d97760162ceaa779c03a479a8fb9 [25/176] x86-disable-image-size-check-for-test-builds-fix
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250419/202504191813.4r9H6Glt-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250419/202504191813.4r9H6Glt-lkp@intel.com/reproduce)
+Hi Ruihan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ruihan-Li/mm-mm_init-Don-t-iterate-pages-below-ARCH_PFN_OFFSET/20250419-002910
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250418162727.1535335-1-lrh2000%40pku.edu.cn
+patch subject: [PATCH] mm/mm_init: Don't iterate pages below ARCH_PFN_OFFSET
+config: s390-randconfig-001-20250419 (https://download.01.org/0day-ci/archive/20250419/202504191834.zUYILN1L-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250419/202504191834.zUYILN1L-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504191813.4r9H6Glt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504191834.zUYILN1L-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/vmlinux.lds.S:476:1: warning: '/*' within block comment [-Wcomment]
-     476 | /*
-         | ^
-   1 warning generated.
+>> mm/mm_init.c:975:27: error: use of undeclared identifier 'ARCH_PFN_OFFSET'
+     975 |         unsigned long hole_pfn = ARCH_PFN_OFFSET;
+         |                                  ^
+   1 error generated.
 
 
-vim +476 arch/x86/kernel/vmlinux.lds.S
+vim +/ARCH_PFN_OFFSET +975 mm/mm_init.c
 
-   467	
-   468	/*
-   469	 * COMPILE_TEST kernels can be large - CONFIG_KASAN, for example, can cause
-   470	 * this.  Let's assume that nobody will be running a COMPILE_TEST kernel and
-   471	 * let's assert that fuller build coverage is more valuable than being able to
-   472	 * run a COMPILE_TEST kernel.
-   473	 */
-   474	#ifndef CONFIG_COMPILE_TEST
-   475	/*
- > 476	/*
-   477	 * The ASSERT() sync to . is intentional, for binutils 2.14 compatibility:
-   478	 */
-   479	. = ASSERT((_end - LOAD_OFFSET <= KERNEL_IMAGE_SIZE),
-   480		   "kernel image bigger than KERNEL_IMAGE_SIZE");
-   481	#endif
-   482	
+   971	
+   972	static void __init memmap_init(void)
+   973	{
+   974		unsigned long start_pfn, end_pfn;
+ > 975		unsigned long hole_pfn = ARCH_PFN_OFFSET;
+   976		int i, j, zone_id = 0, nid;
+   977	
+   978		for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
+   979			struct pglist_data *node = NODE_DATA(nid);
+   980	
+   981			for (j = 0; j < MAX_NR_ZONES; j++) {
+   982				struct zone *zone = node->node_zones + j;
+   983	
+   984				if (!populated_zone(zone))
+   985					continue;
+   986	
+   987				memmap_init_zone_range(zone, start_pfn, end_pfn,
+   988						       &hole_pfn);
+   989				zone_id = j;
+   990			}
+   991		}
+   992	
+   993		/*
+   994		 * Initialize the memory map for hole in the range [memory_end,
+   995		 * section_end] for SPARSEMEM and in the range [memory_end, memmap_end]
+   996		 * for FLATMEM.
+   997		 * Append the pages in this hole to the highest zone in the last
+   998		 * node.
+   999		 */
+  1000	#ifdef CONFIG_SPARSEMEM
+  1001		end_pfn = round_up(end_pfn, PAGES_PER_SECTION);
+  1002	#else
+  1003		end_pfn = round_up(end_pfn, MAX_ORDER_NR_PAGES);
+  1004	#endif
+  1005		if (hole_pfn < end_pfn)
+  1006			init_unavailable_range(hole_pfn, end_pfn, zone_id, nid);
+  1007	}
+  1008	
 
 -- 
 0-DAY CI Kernel Test Service
