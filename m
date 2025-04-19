@@ -1,30 +1,30 @@
 Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAC818A6A5
-	for <llvm@lists.linux.dev>; Sat, 19 Apr 2025 19:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D11013635C
+	for <llvm@lists.linux.dev>; Sat, 19 Apr 2025 20:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745090420; cv=none; b=ObZLR2pPfRI4p4AseSG7mVsDrFhndWSZmjuL6X7CEJkb2Pcer/rwnC2kw148uBdtx5FDmRavPgVQ3LEF2g3MlCx616aoReCEF86z+tertVzW7M/tYmaJsT2pKrFeoiuau0aIcESCw4zR65cWz2bIHH5QfGbAwI8Q+M9grCcCqFI=
+	t=1745094259; cv=none; b=Wfr9/tOUnEULk0PWf3lb3t9WfByis7k5AdH+uCL4Rz8iGMIWDbztGz60Bsjfhs02OrrOqDkmrgANoEtj9aHapAzqcqStQFYMfSmNwxhZ+O/LCNkjamAQrYuExh2Iv0HJ4SP3vgVCy5vPjz25eIGxg4b9iV4bZkxqo4quIAHM7mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745090420; c=relaxed/simple;
+	s=arc-20240116; t=1745094259; c=relaxed/simple;
 	bh=Uo2UT1Q7UtdrIvUQNgEy4vX4zGbDLfyNfqQiy/5CWZc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UHRAGQdUfrqxb0jcGkKyI7EgYH93l9CRMkAkXRTuvqGoGpWAjpxJNL8oPX//QKCDItexn03OdKA85WsYhl1aTWRyU9yAFMtNTAbcpGh/3zDjclWBY52T2ZzZOYrmQ9zzaOKdE0bg5AqgSb7OzPb9C12aXN9EqWyzX7Pm9C6qaPs=
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tSpsbR6/Ics9yk+5dO/rCcksk6JmjP98KzY5n65QPHbksKsWDiAfmgvOJSfNwiTUCX1zVQ/alhZZRF29Vjn4aiP9FykAzbCe5jObmb3PMiMy838pNfPMDOxcBTjaS3jX10VZJakeHvg8RHDqSU1vEVHUpxDbPU/yPXBhxhrpwNw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
 Received: from [127.0.1.1] (unknown [IPv6:2a01:e0a:3e8:c0d0:5f83:1f5d:4371:dbb0])
-	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id E908953875;
-	Sat, 19 Apr 2025 19:20:07 +0000 (UTC)
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 0E165538F5;
+	Sat, 19 Apr 2025 20:24:13 +0000 (UTC)
 Authentication-Results: Plesk;
         spf=pass (sender IP is 2a01:e0a:3e8:c0d0:5f83:1f5d:4371:dbb0) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=[127.0.1.1]
 Received-SPF: pass (Plesk: connection is authenticated)
 From: Arnaud Lecomte <contact@arnaud-lcm.com>
 Subject: [PATCH 0/2] checkpatch.pl: add warning for // comments on private
  Rust items
-Date: Sat, 19 Apr 2025 21:20:01 +0200
+Date: Sat, 19 Apr 2025 22:24:02 +0200
 Message-Id: 
- <20250419-checkpatch-rust-private-item-comment-v1-0-89b2ccd32fd9@arnaud-lcm.com>
+ <20250419-checkpatch-rust-private-item-comment-v1-0-0f8bc109bd5a@arnaud-lcm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,7 +33,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGH3A2gC/x2N0QrCMAwAf2Xk2cBaLai/Ij5kXbRB2pU0G8LYv
+X-B4-Tracking: v=1; b=H4sIAGIGBGgC/x2N0QrCMAwAf2Xk2cBaLai/Ij5kXbRB2pU0G8LYv
  1t8PDjudmiswg3uww7KmzRZSgd3GiAmKm9GmTuDH30YL+6GMXH8VLKYUNdmWFU2sq4ZZ4xLzlw
  Mp+lMwV8dh5mgp6ryS77/zeN5HD+0yeUVdgAAAA==
 To: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
@@ -51,14 +51,14 @@ To: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
 Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
  llvm@lists.linux.dev, contact@arnaud-lcm.com, skhan@linuxfoundation.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745090407; l=4922;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745094253; l=4922;
  i=contact@arnaud-lcm.com; s=20250405; h=from:subject:message-id;
  bh=Uo2UT1Q7UtdrIvUQNgEy4vX4zGbDLfyNfqQiy/5CWZc=;
- b=o7Cg/tf+1ZhNWe2n7Jd/Qkt3jaGC0f2EDINy4gUIvfEoD3KcH1nHJ10q/Q6OmncwtenVWeChA
- 0nYaFbNxLzaBS3cQGBdEbAOInGEtMjJh8I5pBnMNhfa+S2VypMKSutk
+ b=kqlCVSZDa9yhCUULJPx2TyErTUQRGqyyvGW23d7UU+9pBPOb7CokSznKGZ1pcGZiHZ1bOlzZV
+ WwZYipLaRUEAE46TomkNyLvIhmPJexFJYW64KbHm6OdPdJa606HAfUA
 X-Developer-Key: i=contact@arnaud-lcm.com; a=ed25519;
  pk=Ct5pwYkf/5qSRyUpocKOdGc2XBlQoMYODwgtlFsDk7o=
-X-PPP-Message-ID: <174509040856.22801.8973078304144591016@Plesk>
+X-PPP-Message-ID: <174509425367.643.8267160010781916301@Plesk>
 X-PPP-Vhost: arnaud-lcm.com
 
 Hi,
