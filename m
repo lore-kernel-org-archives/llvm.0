@@ -1,132 +1,95 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5355F1A5BB0
-	for <llvm@lists.linux.dev>; Sun, 20 Apr 2025 19:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC8F184F;
+	Sun, 20 Apr 2025 21:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745178527; cv=none; b=LuyafaPSCU0MA9AmBxF4i3K0B+3EnX/QdmXd9UKT67JPbugbm9tnbET25zeKdNxnAT+6bVkuPkeYH+gPw40zgrozaBN1LOg9dDSx+EAWk8WhZTFOHLh2w4jv/3R7aEc2nKOOZDItfxz4jsLCSWi7dNIwrOmVYh70KwpQrDKK+5c=
+	t=1745184827; cv=none; b=HP78D8LdieiN+kM4RY5PqZCoT6qqfSPoPNMi/ySqoPdHJtJ+2bOMx/Cp2U2S9urbrjsbWgqz/n64JXxsu961iAQV4la3L+4h5NWL3GgC0V9V+jFJIkR72LatvRLpnv8uVAbJtkmsxpFkVJhlmWnuMsYvqdDeCgUWH3TGoCIaDeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745178527; c=relaxed/simple;
-	bh=rrMYwMnlrmdWpZrJ4kdBxP9ePBTeqAF3k4w/V3+8Kfw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WYGQ05SlwCYuVWhn/LbrBKxTEvkDLNpMs3A2J4AAWaOrkAoa6HVoLf4egzZOD1A6voXQNIWn+W+DakFJW1Ihu/NFkm9T04dtLs6dqPoy3lEtExkLrssZU41cF8Xhh9/E1omIl3VIOSHsp5Te7Ey3o+eJkgR/YgvL2PEBLSysgAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kJ8AL0Sa; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1745184827; c=relaxed/simple;
+	bh=IqPt8BDNEs11IlRY+tU6po9XQkp9SFh/oHg0XBaPZ7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FwFOJkHX0xoCGSybBmPQBn8Y2xfbdOZXnTt9PJuC6521gEirMhPbHAfJ8gTrmOzjtC5RbUkojVYRBj1KmlKO39ybJY+XWWbrPPiIZcPVmHZaFOsVhMV9bQ8A59G27HXOR+m/NrOrSmy+HbqYRnt4ZrokGDWZf79zpjuR5SBdemY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XitlFMxu; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kJ8AL0Sa"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-30363975406so384683a91.0
-        for <llvm@lists.linux.dev>; Sun, 20 Apr 2025 12:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745178525; x=1745783325; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wRibRGPlM/02qOR9HcoY4oCMNCshfk4pYbOUB71XnBA=;
-        b=kJ8AL0SaH6I3eDVIokRjYYKvkSEMeAmyhe/ssBOADmq8izMTW7s2E64xpOxbp9dmsp
-         s30L47wO7fP5jYeMWS0d/EZjJy8J1A+Cbtuv+pBOrKYH7inDyakUCRxShYqWeJdCfZLE
-         nad0ERlZJ6XWWwI/SyuEko1liW2OJa9pyRXjp8qwkUHk9FYsLOBPSeJpWblq4ipW4wQM
-         iAwXUClYJ2rsyRf5rEvgUBmFOqsmIEJMFCaoq4Cd6pdpZrMa6EHoAz3nbfqS5uuy5eEa
-         TEWdGcsdTvO2aEvOpz6PRcElJB1LNQeasdsCO/MNxPw9e1ARMhwv6wxxrAnoE03Y/O0A
-         p9lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745178525; x=1745783325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wRibRGPlM/02qOR9HcoY4oCMNCshfk4pYbOUB71XnBA=;
-        b=YlwMSeLuersOMiLqoGHs+Q170SEn+e7xB4qdTg4hgimtWGlMd9wWVhogmgqY4H4Bzz
-         KIRj48WwVREUqeF6OSp52crpYuEDdaSpDv+LaDuerwaH83tbczoY77oU7EJYyG/BApt1
-         wWQg5gl+rJHY+FAD23VclxRFV+VlLWzfg+//RwQVP/25J2olcL0WITv9/Ej9h21uBp+L
-         PlQz6xyaHpHL3RVBRa9VrjSQ0o4y1nlKXmwpNV0howY1kIhezSE/+gRH0a2fPLcMnQoP
-         48YdWOdgKR0UFWmlUtJBwbLopXvvNbNOIYH9pw7nMqC1B6/CS+d/I2aOoaQKSqYZY/4m
-         fXHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXLfLl3Mm/gPZDFjUPW15bPD01ajDZQEfdgoZlknVsrodQ5nYX6jfvQAnOIhL14mLqJb1yY@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz1z25kjKv2NZXX6VSd4biyA76tqfr4qwKnSxxl0D9p9NmJWiRV
-	7Hc5RnRWolr6NirgpP76dDOoMtPcRl66nDYLBP0pxVrRAUW52MDVf32OqKIQ9kBUHIs985FFVCg
-	BoT5Jm45Sik1h4MgaVCcXKy2MpLo=
-X-Gm-Gg: ASbGnct8+SNp/7MfldxleE9DIm9vzADEc8mBLUTraTEAGuYtjpIAlWNw06fY2u3DPJ/
-	i3cWcye1Qpqrk4e1TsWLABpgGNdkbSBn0H4uZAeteOwT21NMxAuABYxCOOapC7wFkIeGEVD3tHF
-	hblh0l8+cYnKbG5caVZHoh1g==
-X-Google-Smtp-Source: AGHT+IHUf8MxGXvEMHQggz21sFqv2EdwY+ocyAL74RdwapFcFoaxWiIRVtxfetoljJK98wYSr1Ymf/+7P2Akzd1KQWA=
-X-Received: by 2002:a17:90b:3b8d:b0:2fe:b77a:2eba with SMTP id
- 98e67ed59e1d1-3087bb426aemr5723618a91.1.1745178525504; Sun, 20 Apr 2025
- 12:48:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XitlFMxu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745184825; x=1776720825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IqPt8BDNEs11IlRY+tU6po9XQkp9SFh/oHg0XBaPZ7M=;
+  b=XitlFMxudyHDh4kfhWuDVtU9TUFVLfMd3Z0EDdWnh+/d3+9IhLewolOK
+   dV29yD4IgG7VAF2TpU7b0RmYVUcCI2VWM6tToRSBuuXWtCL99u9eCvCKG
+   mLovsfH0rMSQp7FJ9F2XL4dCfEP9WL4/ymp9DZOkEvX3mYzzbZL87mMjB
+   +RWqmTi0yP9v5yfNrYdpNP7yZwkBRPaBFyH4Nh8M9hUJmgzx4hpyZ8vsV
+   eDyvnJgEY5IDgzVLeaKxOj+QiOkiVhFObDI1jKakvQHexEC6axBuRJZRu
+   ONQ9Eyt9ByYwscH62pFxCigIg6uUeso3ZVnDuwBSk7MEbipW/j6Lmdlo5
+   A==;
+X-CSE-ConnectionGUID: RJbTCQQvQqCzRTleiRrvMA==
+X-CSE-MsgGUID: m2p+R6KPRMWqzTP9w8EY6w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11409"; a="46823189"
+X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
+   d="scan'208";a="46823189"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2025 14:33:43 -0700
+X-CSE-ConnectionGUID: G8WrNrIYR0mA5nKY8mNasQ==
+X-CSE-MsgGUID: ys+iET5vSkCDoBN2QgtG/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
+   d="scan'208";a="136525541"
+Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 20 Apr 2025 14:33:43 -0700
+Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u6cIG-0004vh-0q;
+	Sun, 20 Apr 2025 21:33:40 +0000
+Date: Mon, 21 Apr 2025 05:32:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 05/13] crypto: arm - move library functions to
+ arch/arm/lib/crypto/
+Message-ID: <202504210545.llc4JaKQ-lkp@intel.com>
+References: <20250420192609.295075-6-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250420184700.47144-1-contact@arnaud-lcm.com>
-In-Reply-To: <20250420184700.47144-1-contact@arnaud-lcm.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 20 Apr 2025 21:48:33 +0200
-X-Gm-Features: ATxdqUHcVK0N1mNr_8KS6bGNiAiT-Za3XXwOOGYlTUvAwClu7WSCO2gTmQysaCg
-Message-ID: <CANiq72k4RJw3YENvQj5Q7LCG-v+nhZs=QhVa1AthUfZUoHmYdA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] checkpatch.pl: Add warning for // comments on
- private Rust items
-To: Arnaud Lecomte <contact@arnaud-lcm.com>
-Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, 
-	Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250420192609.295075-6-ebiggers@kernel.org>
 
-On Sun, Apr 20, 2025 at 8:47=E2=80=AFPM Arnaud Lecomte <contact@arnaud-lcm.=
-com> wrote:
->
-> The Rust-for-Linux project currently lacks enforcement of documentation f=
-or private Rust items,
-> as highlighted in https://github.com/Rust-for-Linux/linux/issues/1157.
-> While rustc already lints missing documentation for public items, private=
- items remain unchecked.
-> This patch series aims to close that gap by ensuring proper documentation=
- practices
-> for private Rust items in the kernel.
+Hi Eric,
 
-To clarify, it is not that we want to enforce all private items to
-have documentation, but rather to catch the odd `//` comment that was
-supposed to be documentation. (The background here seems to imply the
-former.)
+kernel test robot noticed the following build errors:
 
-> // Improper doc comment for a private function. - should trigger
-> fn test() -> u32 {
+[auto build test ERROR on bb9c648b334be581a791c7669abaa594e4b5ebb7]
 
-Since this is just a `checkpatch.pl` warning, it may be fine to always
-warn, i.e. the submitter can always decide if it is a false positive
-or not -- I hope it does not become too annoying :)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Biggers/crypto-arm64-drop-redundant-dependencies-on-ARM64/20250421-033019
+base:   bb9c648b334be581a791c7669abaa594e4b5ebb7
+patch link:    https://lore.kernel.org/r/20250420192609.295075-6-ebiggers%40kernel.org
+patch subject: [PATCH v2 05/13] crypto: arm - move library functions to arch/arm/lib/crypto/
+config: arm-randconfig-001-20250421 (https://download.01.org/0day-ci/archive/20250421/202504210545.llc4JaKQ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504210545.llc4JaKQ-lkp@intel.com/reproduce)
 
-(That is why the issue mentioned perhaps using some heuristics to decide).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504210545.llc4JaKQ-lkp@intel.com/
 
-> WARNING: Consider using `///` for private item documentation (line 33)
+All errors (new ones prefixed by >>):
 
-This text seems fine to me, although I wonder if newcomers to Rust may
-just transform it into `///` when seeing this warning, i.e. the
-opposite mistake. Perhaps we can make it more "conditional" (even if
-the "Consider" is already there), e.g.
+>> arch/arm/lib/crypto/poly1305-core.S:16:1: error: target does not support ARM mode
+   .code 32
+   ^
 
-    Consider using `///` if this comment was intended as documentation
-
-> To: Nathan Chancellor <nathan@kernel.org>
-> To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> To: Bill Wendling <morbo@google.com>
-> To: Justin Stitt <justinstitt@google.com>
-> Cc: llvm@lists.linux.dev
-
-Should the LLVM subsystem be Cc'd?
-
-Thanks for the patches!
-
-Cheers,
-Miguel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
