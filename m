@@ -1,95 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC8F184F;
-	Sun, 20 Apr 2025 21:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E57D2111
+	for <llvm@lists.linux.dev>; Sun, 20 Apr 2025 21:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745184827; cv=none; b=HP78D8LdieiN+kM4RY5PqZCoT6qqfSPoPNMi/ySqoPdHJtJ+2bOMx/Cp2U2S9urbrjsbWgqz/n64JXxsu961iAQV4la3L+4h5NWL3GgC0V9V+jFJIkR72LatvRLpnv8uVAbJtkmsxpFkVJhlmWnuMsYvqdDeCgUWH3TGoCIaDeU=
+	t=1745185330; cv=none; b=POF1rqTsSKpPihg5YEFnQTDr74HJCtZHFjbDN9xU9iUhAKdRkcYQEL2B29uvuvkF5vDqZiYjAmOrshne1/jB0d+8XZLInRfnku+TkIu2NSnL9jkqLOwdGcxbuTMVxnPA93nsUw2lpUIJp/LymLXO5JAC6UoGZvW0euxcCt+HmNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745184827; c=relaxed/simple;
-	bh=IqPt8BDNEs11IlRY+tU6po9XQkp9SFh/oHg0XBaPZ7M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FwFOJkHX0xoCGSybBmPQBn8Y2xfbdOZXnTt9PJuC6521gEirMhPbHAfJ8gTrmOzjtC5RbUkojVYRBj1KmlKO39ybJY+XWWbrPPiIZcPVmHZaFOsVhMV9bQ8A59G27HXOR+m/NrOrSmy+HbqYRnt4ZrokGDWZf79zpjuR5SBdemY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XitlFMxu; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745185330; c=relaxed/simple;
+	bh=306vySfW4PAV9cPhicpJg6L/GVhVDR+sswldKKuKJ2o=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=V/rtch4et+ejmvqrbvedJFndXr3AiS3Z60ZHGqfOEi3yt1G+jY0ENCDQaXh5Ss1kHD88pAiSV7Oo/DPUKHysCh6ckXcM3JRMkn9xA6miV4RBCbq2/jK32C8zEAhvjm8Brar7Gs/GOiWGmGw2tChSqLLSKfdjGKR26WKHiO6QYbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D7TmkOba; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XitlFMxu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745184825; x=1776720825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IqPt8BDNEs11IlRY+tU6po9XQkp9SFh/oHg0XBaPZ7M=;
-  b=XitlFMxudyHDh4kfhWuDVtU9TUFVLfMd3Z0EDdWnh+/d3+9IhLewolOK
-   dV29yD4IgG7VAF2TpU7b0RmYVUcCI2VWM6tToRSBuuXWtCL99u9eCvCKG
-   mLovsfH0rMSQp7FJ9F2XL4dCfEP9WL4/ymp9DZOkEvX3mYzzbZL87mMjB
-   +RWqmTi0yP9v5yfNrYdpNP7yZwkBRPaBFyH4Nh8M9hUJmgzx4hpyZ8vsV
-   eDyvnJgEY5IDgzVLeaKxOj+QiOkiVhFObDI1jKakvQHexEC6axBuRJZRu
-   ONQ9Eyt9ByYwscH62pFxCigIg6uUeso3ZVnDuwBSk7MEbipW/j6Lmdlo5
-   A==;
-X-CSE-ConnectionGUID: RJbTCQQvQqCzRTleiRrvMA==
-X-CSE-MsgGUID: m2p+R6KPRMWqzTP9w8EY6w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11409"; a="46823189"
-X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
-   d="scan'208";a="46823189"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2025 14:33:43 -0700
-X-CSE-ConnectionGUID: G8WrNrIYR0mA5nKY8mNasQ==
-X-CSE-MsgGUID: ys+iET5vSkCDoBN2QgtG/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
-   d="scan'208";a="136525541"
-Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 20 Apr 2025 14:33:43 -0700
-Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u6cIG-0004vh-0q;
-	Sun, 20 Apr 2025 21:33:40 +0000
-Date: Mon, 21 Apr 2025 05:32:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 05/13] crypto: arm - move library functions to
- arch/arm/lib/crypto/
-Message-ID: <202504210545.llc4JaKQ-lkp@intel.com>
-References: <20250420192609.295075-6-ebiggers@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D7TmkOba"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745185327;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PsdM2KOZV9pVgBCAx+h6Vzla5TSOOPNFlbg4VQg0T2U=;
+	b=D7TmkObaIzYMnTWvJ9dEzlZHWAClI5fX1baIYUq31rRb8pBHDnxagm0CbnmtEaozwIi0G9
+	LXL9dLhZzvj4ZDkBem++ssh39CpLFy+E4H7wOJqSXvktsJVOFpdvN99BC+B8Y9EVgG9GaI
+	ig3wAFxoeER1qtB6S/tPP+h6b/4/0Kw=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-194-PZMMzN4TNyWMu6kWNp8LxA-1; Sun,
+ 20 Apr 2025 17:42:05 -0400
+X-MC-Unique: PZMMzN4TNyWMu6kWNp8LxA-1
+X-Mimecast-MFC-AGG-ID: PZMMzN4TNyWMu6kWNp8LxA_1745185325
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C279B18001CA
+	for <llvm@lists.linux.dev>; Sun, 20 Apr 2025 21:42:04 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4F232180045C;
+	Sun, 20 Apr 2025 21:42:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc2,
+ upstream-mainline, ac71fabf)
+Date: Sun, 20 Apr 2025 21:42:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250420192609.295075-6-ebiggers@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <31443.125042017420500515@us-mta-194.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: _AbF_g4NiU4YGJ8d7Se2iEZvM2R986gEnsVM_NblW4Y_1745185325
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eric,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-[auto build test ERROR on bb9c648b334be581a791c7669abaa594e4b5ebb7]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Biggers/crypto-arm64-drop-redundant-dependencies-on-ARM64/20250421-033019
-base:   bb9c648b334be581a791c7669abaa594e4b5ebb7
-patch link:    https://lore.kernel.org/r/20250420192609.295075-6-ebiggers%40kernel.org
-patch subject: [PATCH v2 05/13] crypto: arm - move library functions to arch/arm/lib/crypto/
-config: arm-randconfig-001-20250421 (https://download.01.org/0day-ci/archive/20250421/202504210545.llc4JaKQ-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504210545.llc4JaKQ-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: gcc-15: work around sequence-point warning
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504210545.llc4JaKQ-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1777419694
 
-All errors (new ones prefixed by >>):
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1777419694-x86_64-kernel-debug
 
->> arch/arm/lib/crypto/poly1305-core.S:16:1: error: target does not support ARM mode
-   .code 32
-   ^
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
