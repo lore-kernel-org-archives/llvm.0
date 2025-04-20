@@ -1,60 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3DB29D0E;
-	Sun, 20 Apr 2025 13:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD13C1E5B76;
+	Sun, 20 Apr 2025 14:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745154768; cv=none; b=fwQXXRz3Sj//ZzT/zodxDOqhj2boBt7Z5vLpKappY0ltSNnQuJ4sA32AM2kxEgqT72e33XFMxY6CZ+SeAMtHWK+9qpz7P1ofwyDKyhtWJ7c7jbb2ndUPSmTL72h7OsPYm9qnsNvnICo6R0ZgIcvwrZBvnS+Y2dBZBOoCA6mDR00=
+	t=1745159772; cv=none; b=RvYdN8JoMIfn4SlJqBihpHwu7KuhEXyqFE8tyo/kug8h/4DUowS+ELdChvislquXr7GjFkji1BJ9OW1X6vDlGObrNzN0VLNOwTGy6k6C8V1bHk/0QlwPtOCg79C3YXsHl0ahIB35zuM7lvqpZg3Rf223UDmTdJVeADSMZouWV7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745154768; c=relaxed/simple;
-	bh=G6pQpwnI/eYeqmJ5FQQDRAqA0ueV0xwN1jnW78gamQU=;
+	s=arc-20240116; t=1745159772; c=relaxed/simple;
+	bh=PU6qKLj87YBy5+uqg2F4+r2zilpcE3fFtFR5664YCnQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AP1oi+4PP5pupvGpVfw1nDhhEj0xyHLdgfcRAv73Cq9HCNkPtuGFWi7h9uJKB3YLY5MZvwH1n8lEV/09kaYVo54KLdjQXZK93ajxfKGPAkKS85mS2dZMfn1BdlndSSkP2JW24eov9u41MUkAPJUqJzEvRI5dm6sbZr4HTARLvA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ay1odalw; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=s0V80WjrXaOWTQ+c51aXnMpDLEcOLNroLtalpoJKI009FqpD7VfkdCh4GrFxiYN/1rQODujnT4CmHVA247hynkjEnEgcwqZ5poComQWiwYKogtWfrtYvIM7V8EoqG0eMOR4NzWYrAWu3nMqqotzEeCEwcebhquqRW0yYR6kTwk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lnkZY/1s; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ay1odalw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lnkZY/1s"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745154766; x=1776690766;
+  t=1745159771; x=1776695771;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=G6pQpwnI/eYeqmJ5FQQDRAqA0ueV0xwN1jnW78gamQU=;
-  b=ay1odalwgyy7DqbR7ZcDKwinDejU8/lervjwwVVz7ya4vs3opNLkBOLQ
-   ta9jwDKQ785ubKcINFGjU58MkCMVOTguzST7YNc+AmKjgjKohpUw6YNpL
-   Wau3FyBi7D5/3Gw4cQXt0SRFZZjjL/l5OWzYKV3T+4vr7faZ7GukVTwQW
-   gXjMY1YsjfUe81oodWfkgQYfg3aadzucPSRYu7+JRxIrnqKe0lEoHsYN+
-   NAu6cVN/XunWyyaSq+nzO2hwB/XZ2Ld/2klyqsyiJcghtkc7UOyS9rr93
-   jY74S+dTpSmNc1OqIKLh2zHElibq7cRnQaxn8l0rxINYe0NBaM1DqlVdl
-   Q==;
-X-CSE-ConnectionGUID: apoxqCxETM+xLWvsiA+8tA==
-X-CSE-MsgGUID: joSJ/qZLRrq4zceRxpkQAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11409"; a="49373724"
+  bh=PU6qKLj87YBy5+uqg2F4+r2zilpcE3fFtFR5664YCnQ=;
+  b=lnkZY/1syYiEdqhqZlN1hgr0ycGtf0Eks3qqR+EFX22UAP0t8rdQXvru
+   6UdErZNAn9MrcwnWyj/pS0jA+pa1xQyUwyhUgaPidUZ69G5WTsFNP9T4T
+   SQHmtW9eRGU5nVJ+ygF0159m5Uyc1aTgf3L3e+vm2f1V2MDI/jqi+AFwB
+   P+Dt6/uNcvYs6Q86oURdCnCUIq3kWw3yL7jr9cIK3NmcrqE6ADASAnro3
+   zvplRwiEGWB8YcBlf65N4DEewz+aJV0YypeQYgqF9nyc0ag4vA+PWKPU+
+   QjwyVDB9dwdiRJveIB3Z0s8tkrlEQIdMuwPa8XNQ6GGIBESz0MfDOICRs
+   g==;
+X-CSE-ConnectionGUID: P3CdkrW4TqOpnjg6cYYzJQ==
+X-CSE-MsgGUID: ANPuLYVxTkSmIld2b7XNDQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11409"; a="49376626"
 X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
-   d="scan'208";a="49373724"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2025 06:12:45 -0700
-X-CSE-ConnectionGUID: bsl6xqr0TJSaTna/3USf1A==
-X-CSE-MsgGUID: Etvv+ilTRxaX5407nn7NRg==
+   d="scan'208";a="49376626"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2025 07:36:10 -0700
+X-CSE-ConnectionGUID: wCEr1jZLRoG8pVNL8XssTw==
+X-CSE-MsgGUID: vLmfO2M6RLOxlL2HegtMhw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
-   d="scan'208";a="136603687"
+   d="scan'208";a="168714530"
 Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Apr 2025 06:12:44 -0700
+  by orviesa001.jf.intel.com with ESMTP; 20 Apr 2025 07:36:07 -0700
 Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u6UTS-0004eb-0T;
-	Sun, 20 Apr 2025 13:12:42 +0000
-Date: Sun, 20 Apr 2025 21:12:25 +0800
+	id 1u6Vm8-0004hZ-2z;
+	Sun, 20 Apr 2025 14:36:04 +0000
+Date: Sun, 20 Apr 2025 22:35:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Raj Sahu <rjsu26@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC bpf-next 4/4] bpf: Runtime part of fast-path termination
- approach
-Message-ID: <202504202052.82sne6fn-lkp@intel.com>
-References: <20250420105524.2115690-5-rjsu26@gmail.com>
+To: Dzmitry Sankouski <dsankouski@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: Re: [PATCH v5] hwmon: (max77705) add initial support
+Message-ID: <202504202204.GCyy3bOc-lkp@intel.com>
+References: <20250419-initial-support-for-max77705-sensors-v5-1-4504a9b48ba1@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,56 +70,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250420105524.2115690-5-rjsu26@gmail.com>
+In-Reply-To: <20250419-initial-support-for-max77705-sensors-v5-1-4504a9b48ba1@gmail.com>
 
-Hi Raj,
+Hi Dzmitry,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on a4cda136f021ad44b8b52286aafd613030a6db5f]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Raj-Sahu/bpf-Introduce-new-structs-and-struct-fields/20250420-185825
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250420105524.2115690-5-rjsu26%40gmail.com
-patch subject: [RFC bpf-next 4/4] bpf: Runtime part of fast-path termination approach
-config: x86_64-buildonly-randconfig-001-20250420 (https://download.01.org/0day-ci/archive/20250420/202504202052.82sne6fn-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250420/202504202052.82sne6fn-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/hwmon-max77705-add-initial-support/20250420-030631
+base:   a4cda136f021ad44b8b52286aafd613030a6db5f
+patch link:    https://lore.kernel.org/r/20250419-initial-support-for-max77705-sensors-v5-1-4504a9b48ba1%40gmail.com
+patch subject: [PATCH v5] hwmon: (max77705) add initial support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250420/202504202204.GCyy3bOc-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250420/202504202204.GCyy3bOc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504202052.82sne6fn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504202204.GCyy3bOc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/xen/smp.c:256:38: error: too few arguments to function call, single argument 'regs' was not specified
-     256 |         generic_smp_call_function_interrupt();
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   include/linux/smp.h:176:6: note: 'generic_smp_call_function_single_interrupt' declared here
-     176 | void generic_smp_call_function_single_interrupt(struct pt_regs *regs);
-         |      ^                                          ~~~~~~~~~~~~~~~~~~~~
-   arch/x86/xen/smp.c:264:45: error: too few arguments to function call, single argument 'regs' was not specified
-     264 |         generic_smp_call_function_single_interrupt();
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   include/linux/smp.h:176:6: note: 'generic_smp_call_function_single_interrupt' declared here
-     176 | void generic_smp_call_function_single_interrupt(struct pt_regs *regs);
-         |      ^                                          ~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/hwmon/max77705-hwmon.c:51:34: warning: unused variable 'max77705_hwmon_readable_ranges' [-Wunused-const-variable]
+      51 | static const struct regmap_range max77705_hwmon_readable_ranges[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/regs +256 arch/x86/xen/smp.c
+vim +/max77705_hwmon_readable_ranges +51 drivers/hwmon/max77705-hwmon.c
 
-f447d56d36af18 arch/x86/xen/smp.c  Ben Guthro          2012-04-21  253  
-3b16cf87486143 arch/x86/xen/smp.c  Jens Axboe          2008-06-26  254  static irqreturn_t xen_call_function_interrupt(int irq, void *dev_id)
-3b16cf87486143 arch/x86/xen/smp.c  Jens Axboe          2008-06-26  255  {
-3b16cf87486143 arch/x86/xen/smp.c  Jens Axboe          2008-06-26 @256  	generic_smp_call_function_interrupt();
-1b437c8c73a36d arch/x86/xen/smp.c  Brian Gerst         2009-01-19  257  	inc_irq_stat(irq_call_count);
-f87e4cac4f4e94 arch/i386/xen/smp.c Jeremy Fitzhardinge 2007-07-17  258  
-3b16cf87486143 arch/x86/xen/smp.c  Jens Axboe          2008-06-26  259  	return IRQ_HANDLED;
-3b16cf87486143 arch/x86/xen/smp.c  Jens Axboe          2008-06-26  260  }
-f87e4cac4f4e94 arch/i386/xen/smp.c Jeremy Fitzhardinge 2007-07-17  261  
+    50	
+  > 51	static const struct regmap_range max77705_hwmon_readable_ranges[] = {
+    52		regmap_reg_range(AVGISYS_REG,	AVGISYS_REG + 1),
+    53		regmap_reg_range(IIN_REG,	IIN_REG + 1),
+    54		regmap_reg_range(ISYS_REG,	ISYS_REG + 1),
+    55		regmap_reg_range(VBYP_REG,	VBYP_REG + 1),
+    56		regmap_reg_range(VSYS_REG,	VSYS_REG + 1),
+    57	};
+    58	
 
 -- 
 0-DAY CI Kernel Test Service
