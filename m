@@ -1,59 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A311A841F;
-	Sun, 20 Apr 2025 09:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355A11E5707;
+	Sun, 20 Apr 2025 12:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745143052; cv=none; b=tkfScuDHTFLejIXhkBeDkjRoHVlWFSvymn3iayz/V480iFtwDm5LPyuTk6EZS1w5KYZcITa3e7rZWJqisNI/hLhx6cq6K5RgzhmYpc+whqsD704POZ+qs0EcJgZXF+NqJUkvxypVxpLTkqF/u7asedJ0y5fT4050qVbhEbgTncU=
+	t=1745150986; cv=none; b=SZ1u2QvoYR/V1R1xQ1Pr/LBQn9ss2cebzr/bz1WQKP4qhp1KlSwFDHuq2vrHbEIxlqoMCIeDgqj1QW5jO/G2vbim1b0ML/m2TSTBG32GBNmFQzusIghSTFdRHOJyVZpVhSfOkojT/RitiPoHB+M9qLk/LZHaoU3sAgoUaVoMenQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745143052; c=relaxed/simple;
-	bh=rAkOHGBGxFrFVyTfH7sdPlAPyOGvpOR61qWJ1+CCp0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=M4+hIlWTi+Hr+UDifNa/zeNli466Ue4s2azj3I/Q4w2vV/RLHY0a0i/l/vyqsORo/m/kKk5vsC5PSYxa9ACFepYEctQWxpzUdiVVupE2O2fvO09WumI+uQiuJiJ41HIhjAOQVTASxTV9APIQLuzsmudzPMFhAsRUMcV7ghRAls8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q/itxP0r; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1745150986; c=relaxed/simple;
+	bh=NFlaEuLIw0Zajlp8jpqXN2CskXo/XnjXuoyqH9AEvhw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AcgU6QI40rW5lxpuvw8bTFS3ed5xdSZGemK3/qvZ7/SOI7Ttm7r+Jllu4yUZMf/LD6C7AgANuKdrgwSmn7rEePriILma/3vZY256XZwvZUyN++ZLsBljPCNGky66vbsIX/QdJq3HqmW/HXSwgR6MEBHPnip8UB+1GFZGbqxdF3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dUDDoo7F; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q/itxP0r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dUDDoo7F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745143051; x=1776679051;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rAkOHGBGxFrFVyTfH7sdPlAPyOGvpOR61qWJ1+CCp0s=;
-  b=Q/itxP0rxfNzzzXTIgjiBV7UCrIEAEN5m77JprFDNpWjiHnmzbl7roVs
-   eVZVEnwqPtP85B4linkpdbh5zeJxzQg3vc7YtxjfA6LB3iRvVl/05DzVH
-   9Sh8DyL1GkaMoRYjkyADSXv7SR8mMfRFOAJMHzWG5jnpA8e9F0/WWKzsR
-   PwROceh/gEK2cvRsaiX3Kssgnnz5Q4Ginwe7eP+ljo0zJYqBBN9uReFYE
-   iWlPgtfnxTffTI9FaBmXIlZGDW3ZYtbtSSNFNPgdKMvErE/Z1rc85ZJap
-   cvPZQKnQRPrFk6d8dGWhTVSNlWN6LIkZJX760l1YVfFXj1CUbgGZzXuBr
-   A==;
-X-CSE-ConnectionGUID: qMebsj1ASZ2oKMd77ildUQ==
-X-CSE-MsgGUID: eSvsakr3Rv2DhrJly3RNwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11408"; a="69198317"
+  t=1745150985; x=1776686985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NFlaEuLIw0Zajlp8jpqXN2CskXo/XnjXuoyqH9AEvhw=;
+  b=dUDDoo7FnOLuE+xfhUIdUgvkjoctfMHJFeDGghrfInX0BPERkwjC2Rvb
+   rMc2zBpnxJ4aDjer993c3Qhlasxn3iXLOtNuxExkoXTwbR/bRQbnZJk2Z
+   9VFmlwAybz/CN4CUpUil85CwsJE3hwKFkPe6aqy2fwLieduAnaaBxGS4w
+   JbGMj0xpKYJ7RmA/+LGcEgbP8qYN+eFhb9ZmWU4PDqAek5SRE6MWtx8jX
+   CJ2QKTOOzCMJBepAGrKs8k3FvKFAQrAYgPFijE0ds8cKgPkzXFk4o6zpl
+   YgmLqIq5y0ySG2mjx+em/Gfj6ccHwEmyQI8hlrvBCXKuJvF2kyFc5nRtm
+   Q==;
+X-CSE-ConnectionGUID: 7spb+QNLQOCMFMNatKAbhQ==
+X-CSE-MsgGUID: Vm1/YsA6RCGncEiEFuZtJA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11408"; a="72095979"
 X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
-   d="scan'208";a="69198317"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2025 02:57:31 -0700
-X-CSE-ConnectionGUID: LgKwv8FvQ4+SahmYm9WEZw==
-X-CSE-MsgGUID: dL5XNpHmQx2KdkLvO8L+1Q==
+   d="scan'208";a="72095979"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2025 05:09:45 -0700
+X-CSE-ConnectionGUID: QUR9/X0LQLKchS+BDV4HsQ==
+X-CSE-MsgGUID: SUTGsSbdSOu5YWkRvUIDYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,225,1739865600"; 
-   d="scan'208";a="154636724"
+   d="scan'208";a="135582954"
 Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Apr 2025 02:57:29 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 20 Apr 2025 05:09:39 -0700
 Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u6RQV-0004Zf-0F;
-	Sun, 20 Apr 2025 09:57:27 +0000
-Date: Sun, 20 Apr 2025 17:56:42 +0800
+	id 1u6TUP-0004cL-0v;
+	Sun, 20 Apr 2025 12:09:37 +0000
+Date: Sun, 20 Apr 2025 20:09:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ingo Molnar <mingo@kernel.org>
-Subject: [mingo-tip:WIP.x86/e820 20/20] arch/x86/kernel/e820.o: warning:
- objtool: e820__setup_pci_gap() is missing an ELF size annotation
-Message-ID: <202504201720.szkKSgMx-lkp@intel.com>
+To: Guodong Xu <guodong@riscstar.com>, ukleinek@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	dlan@gentoo.org, p.zabel@pengutronix.de, drew@pdp7.com,
+	inochiama@gmail.com, geert+renesas@glider.be, heylenay@4d2.org,
+	tglx@linutronix.de, hal.feng@starfivetech.com,
+	unicorn_wang@outlook.com, duje.mihanovic@skole.hr
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, elder@riscstar.com,
+	linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, guodong@riscstar.com
+Subject: Re: [PATCH v2 3/6] riscv: dts: spacemit: add PWM support for K1 SoC
+Message-ID: <202504201920.P8LBocr2-lkp@intel.com>
+References: <20250420070251.378950-4-guodong@riscstar.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,26 +71,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250420070251.378950-4-guodong@riscstar.com>
 
-Hi Ingo,
+Hi Guodong,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.x86/e820
-head:   00188fb1706a5b13228b766cb47dcda740319a86
-commit: 00188fb1706a5b13228b766cb47dcda740319a86 [20/20] x86/boot/e820: Standardize e820 table index variable types under 'u32'
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250420/202504201720.szkKSgMx-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250420/202504201720.szkKSgMx-lkp@intel.com/reproduce)
+[auto build test ERROR on spacemit/for-next]
+[also build test ERROR on spacemit/fixes robh/for-next linus/master v6.15-rc2 next-20250417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guodong-Xu/dt-bindings-pwm-marvell-pxa-pwm-Add-SpacemiT-K1-PWM-support/20250420-150635
+base:   https://github.com/spacemit-com/linux for-next
+patch link:    https://lore.kernel.org/r/20250420070251.378950-4-guodong%40riscstar.com
+patch subject: [PATCH v2 3/6] riscv: dts: spacemit: add PWM support for K1 SoC
+config: riscv-randconfig-001-20250420 (https://download.01.org/0day-ci/archive/20250420/202504201920.P8LBocr2-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250420/202504201920.P8LBocr2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504201720.szkKSgMx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504201920.P8LBocr2-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/e820.o: warning: objtool: e820__setup_pci_gap() is missing an ELF size annotation
+>> Error: arch/riscv/boot/dts/spacemit/k1.dtsi:532.27-28 syntax error
+   FATAL ERROR: Unable to parse input tree
 
 -- 
 0-DAY CI Kernel Test Service
