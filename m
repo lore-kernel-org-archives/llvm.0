@@ -1,60 +1,70 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73737CA5E;
-	Mon, 21 Apr 2025 12:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3927E1411DE;
+	Mon, 21 Apr 2025 15:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745238987; cv=none; b=i8V+8Xr2HkBJCYNqwGA7uY4yfypV6mBzl8+bCD2ePE6ySed5C9iPB+Id5ODw3ShtDDs7cffWmthiLBpldcDxlkhVpEXCZ1p9a2J1KyAFYNaw365cMIA6eAk+E2RWgmtn1z9e0LgeGMuZ/UUPIRqIfa7Lu9i3Yfrv7sHm94Uj4/U=
+	t=1745249022; cv=none; b=NKZNEMiNxlmTJH0gQJ4jevw0Oi8QEnJ+8SgsLkFvbRXZuJaso4X7IPzbcTWhSPe/0UnhZSctoL3I9lh4UoH/5cjK3SKyKuEvt5tFgKHZOQJwUFSFO2w/NYx6CC6w0mjUN7woONR39SH1t2ZDFn989wXYuFJ3B1ILkT+8I7/C61A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745238987; c=relaxed/simple;
-	bh=PjGhbFMLH+F4wV6pogXA/RFWQfDWC9un/aPnTib5kAw=;
+	s=arc-20240116; t=1745249022; c=relaxed/simple;
+	bh=vJPOq/jtYR3O8m4x/saV7Lfzl0TMxKs1hSTnn1MH0/Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TjqK/3XSZAc6D+MVgdq9U4BT3TZlaz32WjNtMORJiYZRL8Oyp7075p8HiS+7WrSJJ/ww0zHeUvuFs5QdtL1dxXmQTnZov2kA5GbDf/8xONAGdHDxx7Tf+m46jUdNes7m0RCMwWlJ7fTIcZJW/1Bquu1z95S/0JineAT63GM6lG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z1FW71Gi; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=sPfHUUMJcGpQZBQvhJBdQWJP0XvXiMf2+MqMvwIkL3mC99+w3yGaeBEXQdJJFocXS+ncwvb3LgXRFEmJJq3K8sUl4dXR0SCi+Mq9gHLzW14JNBszLc5KOLSRF6pLnebaf4NtdyY3g5isTqYsGXYtXAFpe/MT7AN1VGMHR/IUYwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J3GFh0q0; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z1FW71Gi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J3GFh0q0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745238985; x=1776774985;
+  t=1745249020; x=1776785020;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PjGhbFMLH+F4wV6pogXA/RFWQfDWC9un/aPnTib5kAw=;
-  b=Z1FW71Gilf2rs6IYZj8tDbz5OoJer9yZ79Z62wDyqu55BDdthiRmt9j7
-   iwc4nwiTTfj8hZy2XIO8IuSae6TtG5UxZhrv4+BjyTMXnOr9R5APmzB49
-   jbRA9S+6gsBoRmD5BZI7+ZZAGWF1STAWJVmgfqxz1vUdKAmnY+r529ewg
-   JnD7/v7ozifwSlM7Y63avUp6hcbrrsJHX4Ydr55XmpkcEII1doU/DQg7i
-   WECeVbGsO5WXhHzvJoUFg33IquxQrQ+6tFZ5jkA0pZ2+T3R8/xMQ3wlk/
-   c30T0CjF5V7iYzwiLmZFpC4ok6pasPOep5SWqrSYV1cyF3PEw5aCAGGuD
-   w==;
-X-CSE-ConnectionGUID: wzmBDdxFSLSq9+3WK55JmQ==
-X-CSE-MsgGUID: HIARDqDbS6+O1g43Iebv/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="46002948"
+  bh=vJPOq/jtYR3O8m4x/saV7Lfzl0TMxKs1hSTnn1MH0/Q=;
+  b=J3GFh0q0+Xo4hZsYg/Pw1Fe4W/+XqWPhK3DPCNA9FDuoITAhCe4WF+JG
+   WOTHmMZF5ovv2HAt7wTYr/sQRKJw/G/0sBEmYFUgfz9lj7+1Hx4FH+Swy
+   of9frH5qJXQNeqS+bpKH0Uo81WR5STSN1r3ekHhuEQaImrNRI1RtMeNP/
+   +zJ3blSmyhDp9TylZDhxjHI/4YaAN00+P97lF0oxU/3LCQpQi92kOI+9D
+   4cZXMWjAeA68cuOOvId7WoeY9kcLGJq2G+krR5mWdP+7/dMmkGHMiQCob
+   24sqbMqotbj5dfzXd3cQfbqVC1l9+tLPp7yKH9CeQjlepD4RdV7QuKlTM
+   A==;
+X-CSE-ConnectionGUID: ORqy7wydT4qrwEUYxafR7g==
+X-CSE-MsgGUID: cPHiQ7a9SQeNiy8tT5beHg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="46018340"
 X-IronPort-AV: E=Sophos;i="6.15,228,1739865600"; 
-   d="scan'208";a="46002948"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 05:36:25 -0700
-X-CSE-ConnectionGUID: FqLFtJ/OSQ6mTEXLvzyGUA==
-X-CSE-MsgGUID: o6778mzCTnyKZBJ+bwairg==
+   d="scan'208";a="46018340"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 08:23:39 -0700
+X-CSE-ConnectionGUID: qYxPlAo5T1q0ooVmsIMlWQ==
+X-CSE-MsgGUID: Spq369kLR+qDitQqo2fORA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,228,1739865600"; 
-   d="scan'208";a="162753154"
+   d="scan'208";a="136707842"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 21 Apr 2025 05:36:23 -0700
+  by orviesa004.jf.intel.com with ESMTP; 21 Apr 2025 08:23:35 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u6qNp-00007T-1e;
-	Mon, 21 Apr 2025 12:36:21 +0000
-Date: Mon, 21 Apr 2025 20:36:15 +0800
+	id 1u6szd-0000Bh-0Y;
+	Mon, 21 Apr 2025 15:23:33 +0000
+Date: Mon, 21 Apr 2025 23:23:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jagath Jog J <jagathjog1996@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 1/1] drm/mipi-dbi: Use drm_device for debugfs, drop
- drm_minor and .debugfs_init
-Message-ID: <202504212018.dSYIH2wr-lkp@intel.com>
-References: <20250421085907.24972-2-jagathjog1996@gmail.com>
+To: Nylon Chen <nylon.chen@sifive.com>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Nylon Chen <nylon.chen@sifive.com>, Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v11 4/5] pwm: sifive: Fix rounding issues in apply and
+ get_state functions
+Message-ID: <202504212351.Aa9tPMsO-lkp@intel.com>
+References: <20250421095521.1500427-5-nylon.chen@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,60 +73,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250421085907.24972-2-jagathjog1996@gmail.com>
+In-Reply-To: <20250421095521.1500427-5-nylon.chen@sifive.com>
 
-Hi Jagath,
+Hi Nylon,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.15-rc3 next-20250417]
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.15-rc3 next-20250417]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/drm-mipi-dbi-Use-drm_device-for-debugfs-drop-drm_minor-and-debugfs_init/20250421-170105
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250421085907.24972-2-jagathjog1996%40gmail.com
-patch subject: [RFC 1/1] drm/mipi-dbi: Use drm_device for debugfs, drop drm_minor and .debugfs_init
-config: hexagon-randconfig-002-20250421 (https://download.01.org/0day-ci/archive/20250421/202504212018.dSYIH2wr-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504212018.dSYIH2wr-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20250421-174716
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250421095521.1500427-5-nylon.chen%40sifive.com
+patch subject: [PATCH v11 4/5] pwm: sifive: Fix rounding issues in apply and get_state functions
+config: i386-buildonly-randconfig-003-20250421 (https://download.01.org/0day-ci/archive/20250421/202504212351.Aa9tPMsO-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504212351.Aa9tPMsO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504212018.dSYIH2wr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504212351.Aa9tPMsO-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/gpu/drm/tiny/ili9341.c:155:19: error: incompatible function pointer types initializing 'void (*)(struct drm_minor *)' with an expression of type 'void (struct mipi_dbi_dev *)' [-Wincompatible-function-pointer-types]
-     155 |         .debugfs_init           = mipi_dbi_debugfs_init,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/gpu/drm/tiny/hx8357d.c:199:19: error: incompatible function pointer types initializing 'void (*)(struct drm_minor *)' with an expression of type 'void (struct mipi_dbi_dev *)' [-Wincompatible-function-pointer-types]
-     199 |         .debugfs_init           = mipi_dbi_debugfs_init,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +155 drivers/gpu/drm/tiny/ili9341.c
-
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  149  
-70a59dd82959f8 drivers/gpu/drm/tiny/ili9341.c    Simona Vetter     2020-11-04  150  static const struct drm_driver ili9341_driver = {
-0424fdaf883a68 drivers/gpu/drm/tinydrm/ili9341.c Simona Vetter     2019-06-17  151  	.driver_features	= DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  152  	.fops			= &ili9341_fops,
-4a83c26a1d8702 drivers/gpu/drm/tiny/ili9341.c    Danilo Krummrich  2022-08-02  153  	DRM_GEM_DMA_DRIVER_OPS_VMAP,
-df0cc9eaff170e drivers/gpu/drm/tiny/ili9341.c    Thomas Zimmermann 2024-09-24  154  	DRM_FBDEV_DMA_DRIVER_OPS,
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25 @155  	.debugfs_init		= mipi_dbi_debugfs_init,
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  156  	.name			= "ili9341",
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  157  	.desc			= "Ilitek ILI9341",
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  158  	.major			= 1,
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  159  	.minor			= 0,
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  160  };
-3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  161  
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ucs2_string.o
+>> ERROR: modpost: "__udivdi3" [drivers/pwm/pwm-sifive.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
