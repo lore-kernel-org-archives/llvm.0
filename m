@@ -1,119 +1,186 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0891A304A
-	for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 18:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E721EA7D2
+	for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 18:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745261093; cv=none; b=r2SXwI0/PJOyKeUemujNZ6+8Wv+TyV/qeze0itWeV5aLjXzNxXRTSx211IGclhVkqbdd6toHupi+dhRe19FNLAfUkqIY1GgcSzAjg4yGOYjIUTXanwKqHSZg9HVyRhPRCAOUmof49AJS+PlPxxJVEz2eEDsB3LLhusISuBTTA14=
+	t=1745261573; cv=none; b=j6Y8ggL39wXWbfY3PY4ibgfo/RapApaGFrBu4oW/n3mCNjeOrSr+7P0tr+mmCKlOkvyd4r7CtUsCbYFVA3m9vgfCxFnI1TWtjOcBp5WALDb66kqdIU97WoiPL2BujaU4nAaG508JrJmNpGe9Plu5M45AE1Q83XfMz3Z9h2pA8eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745261093; c=relaxed/simple;
-	bh=4NTNZ7kRwuNfDxpSzwP4LyO5D/370ZD8+egSjrKvECI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZrXDXVMfSR0apvk17BYuOGVKwgAlbUy9tXO0f16mu4nMUhzN7WG56sIO7a13ip6V03EE1eR37uCTwlW8FXcc/XsVfzCkigHfdWCwF51zLmk5QFoFGylhTxxtARtE7sV2Sap3KhdA6ZD39rtG6Ya0f5bCcj6qBstT+79Ofrlw0H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZDIniHKn; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1745261573; c=relaxed/simple;
+	bh=MAT6Ew2gJpdMJ8irAU8emiSANZdL6DjJHNFxnFPsi3c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tQ7tChs/atfN5HItoeIXXj0wmWA9Q/bBCyvsTyRMOaFIILM/8f+BNP9HPf0uLp6qJieXEG2RNi0s+r+nElciyDeqf201njESkiGGAmPZ+QIzkz7SDtHgdxeGeexhCi6v3JxrZ5+y3vzkBGUCfPDDB/z3FAsnqGQfe5NUljfX3vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dbYeHOYT; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZDIniHKn"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53LIgpFG030909
-	for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 18:44:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	UtRScXxIHm6oxt6nV96BNJpPBcZBVBaxFiOva74/L34=; b=ZDIniHKnxVIunbVG
-	SQU2BDP1upbXg5y+6qmUDGhoPvYsYbSdpoeYBV0dZ07C/NMfWzXNCK1LJUHuMBUN
-	aQAdI/IL4fh8MEveL39+rQ2mC+g6o6VlQusA7cbBuWZReJM2EcYPOfiMrOdbwq9n
-	4KLk+UChODRUsMlvoWo27Z44d863pjWxzH4JcqsFhszglTbu5i0AF45HofFzYlGt
-	7ec0aV/gIIFuERCmuGLjtdSGIO8YKHT4QJomDuqNyiQVJXMNZdVQjAViIQpFcZtS
-	7TL4iz0jxbEkdpV77SAhT7nTS2+aSgKYIWCKwZYLVQmcsOCz5reGRmCwZnCSOwd6
-	a/ATQA==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46435jd21u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 18:44:50 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b0e0c573531so1585622a12.3
-        for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 11:44:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dbYeHOYT"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e7270e0edf5so3854896276.2
+        for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 11:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1745261569; x=1745866369; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lz3xUPpEUe/pX3Hqv/1lT4GmPjs/7L4gms/heykjQds=;
+        b=dbYeHOYTmwwPER3UOdngK1/GHTSPz8WLOR6U5IBvkDhEnjq1xoSX1fdO29oZzno7ZF
+         FE/jDW/W3CW+EcGr9RcyknQSS9Y4aZODimZKe8WqXgJ87xJYSrbbQb+eeXgE5Qvn0Hwl
+         L7QEGRooBH9be0Hwks1BTybzvnFBrE/946nzoTiyzt/Et0Hsg2RHuqZowjwN6zAq1tcp
+         TyU1Wm7HtEYm0waVHy3ojtImdt06NLDyamEnBXBbfdWtLGA+MjGOLiz+lhSaVTz/E6m+
+         doGVJJfCuuQuAUxRka6j9SYGNYZwaQZFyGsF4a5XQ8OoD4V0+06s3xXzPuKDyxFzubdp
+         1CDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745261089; x=1745865889;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtRScXxIHm6oxt6nV96BNJpPBcZBVBaxFiOva74/L34=;
-        b=Ex4Town23lMEQDPPT4f7YXKqis1MOvag4M+ipjfZP0XPTtUh3WpgcbKehEh8lXpcza
-         ijKpOasUtFDH+6eEjDfpes5DW06Qz6IcRmJgEnG9ctOJ0NLb59Wa98doYQU1YRKDoG8J
-         K6OXJEe4G2ftbRiiyjlLAUMiSjdPUAkfU2hgngs1x+4h0mEDQ7XFrxlYMOnqeupG/2/O
-         Q1l6XtaTU5X5sAIhPNB5uQsjo5EFcEjcH/1Z4YfNnpypSVB0URAam3B5wUN3Gvrz3/ev
-         pFEPRT2vHz3Xvlw+zvjq1AK2iYIT9bu/byl50RbqF/wbdoPr+XxLcBvV9bafpz6Oed9n
-         yLxw==
-X-Gm-Message-State: AOJu0YxW3Qcsiv0WhqYmcYgfu0m9rB1XsL2Rdk1wfTgOAmBE/9X9Bvjc
-	E7SAkwJSEI/8l4kLt7RkAf9i/4md9sytGZjhsDyQjqG74Ih1r250ghy2qUZWgtEuT0D4oZ5lf97
-	VIUjtKNpK86xEHuyz5VHEzeExTbqC835zrKmE/yi9A4+aO4Q/E0mo
-X-Gm-Gg: ASbGncsmx9+QP2+E7twSmMOs/bRCK8ceZrLnt/1lB/2s9EKtsbsEHBNPURO9S/fNR/e
-	Xf4uW1iVZX/EAhqblw4Setlh6X/M/xUCxNJSyABYyBr3e17NcC09kdQxta561ebVCNMAiBsOvGC
-	AYwvtqO+1Y/xaG1tEoRR6qh6h5UgslAPiJ0ljp2zBEJSH0xebrJUsnhaIt6Ghv1X/6JotJOaWID
-	1ELQuV/cAgoSs88hFuvMPaU06lHGi3F20N3sLXbxxhFLdQ2n9PzZFI6LFYsFi20qf6LFMgDolzj
-	LVNwfM+nurwztLXVLWM6XiUi6IZ8YyKybiBr7sQpG5TjI7p7FepBMy/e1gtoCGcnkLd/eAbDbjP
-	Tn/aR
-X-Received: by 2002:a05:6a20:9f09:b0:1ee:e655:97ea with SMTP id adf61e73a8af0-203cbd60a89mr19672754637.41.1745261088714;
-        Mon, 21 Apr 2025 11:44:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEA0pK6tF2JhEK8ouZupmBtQFU+yOMOxYbB5tNIrlUqNDVEr9iX1u+Kx1ALJ2l8+cvsKSayMw==
-X-Received: by 2002:a05:6a20:9f09:b0:1ee:e655:97ea with SMTP id adf61e73a8af0-203cbd60a89mr19672724637.41.1745261088351;
-        Mon, 21 Apr 2025 11:44:48 -0700 (PDT)
-Received: from [192.168.1.111] (c-73-202-227-126.hsd1.ca.comcast.net. [73.202.227.126])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b0fd23599cesm2989744a12.59.2025.04.21.11.44.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Apr 2025 11:44:48 -0700 (PDT)
-Message-ID: <47ea4e64-cd87-4c42-a20d-f663f197e44c@oss.qualcomm.com>
-Date: Mon, 21 Apr 2025 11:44:46 -0700
+        d=1e100.net; s=20230601; t=1745261569; x=1745866369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lz3xUPpEUe/pX3Hqv/1lT4GmPjs/7L4gms/heykjQds=;
+        b=BQPsWBA1HtG0wbLW+taJuzgj0jOESN98gVLEQ5ZgwgyB5UdXLvalEeRF7+Zu3UcMtg
+         ZUx/XpV5j2hrZ5rsW16eFpXrEXsloKVt4ZW+sM7HGkARNpXHYu4olz207TPKlnCFNHuJ
+         +s+XW9C6DgqrVOMhG5z7NkvgiXBmA3c8MWx9ZsvgwgXAe67O2UZpmgXvaBOzv+575kEW
+         TFi5hlL6egkL/F4qUJrx94yELEayORmaYduAJfpcoJl944qppwxlNDHAvw609Sbe7Gc+
+         P7akWX2L62vt6mLvzIZsD9rVov0EKhD6y/UazQNNDg3SRttpVED1BeDCsSwijaSlZiaY
+         BT8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWyvpvQSGIw77Q/FaQEZkQIkx1GcXLmcNCl4FGfC8X2efi7s6NoiCFeGNU47jCsoK2H/CwN@lists.linux.dev
+X-Gm-Message-State: AOJu0YyL2t8x+Alswp7ETREmM3lXp5aLsbj4EfkBP7T1u0lmSilHR3wS
+	c2qn8ttXFSD07iuFKu5bNgEpWB+4qH98iruHIfD6iA+JVwHRfCo581iny2gNluYFCHWIeK0reEm
+	TYn6zvsvyCFzFmi+vOCA0JxtGfj9BjLp6A5k/
+X-Gm-Gg: ASbGncvq/peDHkllOtjEH+9kOxKpPKZeVEjrLBg13WFhOZfj1qBaGSYDlT2AaN4Jg1P
+	rWbUX5R52Lhj2NpjUl6gnWoZIRTibXwWaQUFZ3bUr2fyYeYljDxmdOneKbUzCnnDxE31PaWQxTz
+	TDdSGYqCjO+NfCZ/5eDkk0pw==
+X-Google-Smtp-Source: AGHT+IEuH9hzO8L5xENmqEA5+rCv5QU5f2RwWDzAiO15hUKUo3LnS3Mbacdqm494PthrNYTv96+oKoVST5i5x+eAlHw=
+X-Received: by 2002:a05:690c:648a:b0:6fe:abff:cb17 with SMTP id
+ 00721157ae682-706ccda15f4mr176888017b3.26.1745261569456; Mon, 21 Apr 2025
+ 11:52:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH ath-next] wifi: ath12k: allow beacon protection keys to be
- installed in hardware
-To: kernel test robot <lkp@intel.com>,
-        Karthikeyan Kathirvel <karthikeyan.kathirvel@oss.qualcomm.com>,
-        ath12k@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-wireless@vger.kernel.org
-References: <20250421114711.3660911-1-karthikeyan.kathirvel@oss.qualcomm.com>
- <202504220128.2KvxCzaG-lkp@intel.com>
-From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <202504220128.2KvxCzaG-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=EOYG00ZC c=1 sm=1 tr=0 ts=68069222 cx=c_pps a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=e70TP3dOR9hTogukJ0528Q==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=QyXUC8HyAAAA:8 a=EUspDBNiAAAA:8 a=p4PaQEVxqj5bAbq44HAA:9 a=QEXdDO2ut3YA:10
- a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-GUID: 2KpjDCUxBs5f1wVMe7VYo-zZG1YmWZo1
-X-Proofpoint-ORIG-GUID: 2KpjDCUxBs5f1wVMe7VYo-zZG1YmWZo1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-21_09,2025-04-21_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=590 mlxscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 phishscore=0 spamscore=0 adultscore=0 impostorscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504210146
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <64859c5c8fd969186c1997a340ed6307e2c70f06.camel@HansenPartnership.com>
+In-Reply-To: <64859c5c8fd969186c1997a340ed6307e2c70f06.camel@HansenPartnership.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 21 Apr 2025 14:52:38 -0400
+X-Gm-Features: ATxdqUEW2UYysWiho25YbREtPd_DwN7ErCdbG2Ug5RajPR5M9exUr19Bmcv_5Vs
+Message-ID: <CAHC9VhSu_tn6d2A4-CYQn_Kr4mdRKEBXLabbPkLZuwQcC2KhJA@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, nkapron@google.com, 
+	teknoraver@meta.com, roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/21/2025 10:16 AM, kernel test robot wrote:
-> Hi Karthikeyan,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on d33705bb41ff786b537f8ed50a187a474db111c1]
+On Sat, Apr 19, 2025 at 2:43=E2=80=AFPM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+> On Fri, 2025-04-04 at 14:54 -0700, Blaise Boscaccy wrote:
+> [...]
+> > diff --git a/include/linux/kernel_read_file.h
+> > b/include/linux/kernel_read_file.h
+> > index 90451e2e12bd..7ed9337be542 100644
+> > --- a/include/linux/kernel_read_file.h
+> > +++ b/include/linux/kernel_read_file.h
+> > @@ -14,6 +14,7 @@
+> >       id(KEXEC_INITRAMFS, kexec-initramfs)    \
+> >       id(POLICY, security-policy)             \
+> >       id(X509_CERTIFICATE, x509-certificate)  \
+> > +     id(EBPF, ebpf)                          \
+>
+> This causes a BUILD_BUG_ON for me in security/selinux/hooks.c with
+> CONFIG_SECURITY_SELINUX=3Dy because READING_MAX_ID and LOADING_MAX_ID
+> become 8.
+>
+> Below is what I had to do to get the compile to work.
 
-lkp@intel.com folks:
-This patch contains the following footer:
+That code was updated during the v6.15 merge window, depending on what
+kernel sources Blaise is using for development it's possible he didn't
+bump into this even if he was building with SELinux enabled.
 
-base-commit: d33705bb41ff786b537f8ed50a187a474db111c1
-Depends-on: <20250421111505.3633992-1-karthikeyan.kathirvel@oss.qualcomm.com>
+Otherwise the changes below look reasonable to me.
 
-Is there a different mechanism needed to tell the robot about the dependency?
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index e7a7dcab81db..9a7ed0b4b08d 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -4133,7 +4133,7 @@ static int selinux_kernel_read_file(struct file *fi=
+le,
+>  {
+>         int rc =3D 0;
+>
+> -       BUILD_BUG_ON_MSG(READING_MAX_ID > 7,
+> +       BUILD_BUG_ON_MSG(READING_MAX_ID > 8,
+>                          "New kernel_read_file_id introduced; update SELi=
+nux!");
+>
+>         switch (id) {
+> @@ -4158,6 +4158,10 @@ static int selinux_kernel_read_file(struct file *f=
+ile,
+>                 rc =3D selinux_kernel_load_from_file(file,
+>                                                 SYSTEM__X509_CERTIFICATE_=
+LOAD);
+>                 break;
+> +       case READING_EBPF:
+> +               rc =3D selinux_kernel_load_from_file(file,
+> +                                               SYSTEM__EBPF_LOAD);
+> +               break;
+>         default:
+>                 break;
+>         }
+> @@ -4169,7 +4173,7 @@ static int selinux_kernel_load_data(enum kernel_loa=
+d_data_id id, bool contents)
+>  {
+>         int rc =3D 0;
+>
+> -       BUILD_BUG_ON_MSG(LOADING_MAX_ID > 7,
+> +       BUILD_BUG_ON_MSG(LOADING_MAX_ID > 8,
+>                          "New kernel_load_data_id introduced; update SELi=
+nux!");
+>
+>         switch (id) {
+> @@ -4195,6 +4199,10 @@ static int selinux_kernel_load_data(enum kernel_lo=
+ad_data_id id, bool contents)
+>                 rc =3D selinux_kernel_load_from_file(NULL,
+>                                                 SYSTEM__X509_CERTIFICATE_=
+LOAD);
+>                 break;
+> +       case LOADING_EBPF:
+> +               rc =3D selinux_kernel_load_from_file(NULL,
+> +                                                  SYSTEM__EBPF_LOAD);
+> +               break;
+>         default:
+>                 break;
+>         }
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/inclu=
+de/classmap.h
+> index 04a9b480885e..671db23451df 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -65,7 +65,7 @@ const struct security_class_mapping secclass_map[] =3D =
+{
+>           { "ipc_info", "syslog_read", "syslog_mod", "syslog_console",
+>             "module_request", "module_load", "firmware_load",
+>             "kexec_image_load", "kexec_initramfs_load", "policy_load",
+> -           "x509_certificate_load", NULL } },
+> +           "x509_certificate_load", "ebpf_load", NULL } },
+>         { "capability", { COMMON_CAP_PERMS, NULL } },
+>         { "filesystem",
+>           { "mount", "remount", "unmount", "getattr", "relabelfrom",
+>
 
+--=20
+paul-moore.com
