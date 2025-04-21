@@ -1,70 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3927E1411DE;
-	Mon, 21 Apr 2025 15:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAD71CAA79;
+	Mon, 21 Apr 2025 16:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745249022; cv=none; b=NKZNEMiNxlmTJH0gQJ4jevw0Oi8QEnJ+8SgsLkFvbRXZuJaso4X7IPzbcTWhSPe/0UnhZSctoL3I9lh4UoH/5cjK3SKyKuEvt5tFgKHZOQJwUFSFO2w/NYx6CC6w0mjUN7woONR39SH1t2ZDFn989wXYuFJ3B1ILkT+8I7/C61A=
+	t=1745252252; cv=none; b=hnfrRZBCyrs7p1U6AabQeLdGvXfcM9vZJ3wXO1HcCtJ0cyPJG+DrOYSVfvBITQqiisjL3TjmS9JLtDBovgPDx1oqDYM/jJRpIPlLavPkPcXZ3Yi6dVp2LABnKtam9xdhhDYChyDxibmyMJ69BnpMy0VeHrTMVTRs+XAC9hf85UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745249022; c=relaxed/simple;
-	bh=vJPOq/jtYR3O8m4x/saV7Lfzl0TMxKs1hSTnn1MH0/Q=;
+	s=arc-20240116; t=1745252252; c=relaxed/simple;
+	bh=zZjJug2ojlk7B/L1/Ay2G/DAGNeupwICVA+YK/CB0Ng=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sPfHUUMJcGpQZBQvhJBdQWJP0XvXiMf2+MqMvwIkL3mC99+w3yGaeBEXQdJJFocXS+ncwvb3LgXRFEmJJq3K8sUl4dXR0SCi+Mq9gHLzW14JNBszLc5KOLSRF6pLnebaf4NtdyY3g5isTqYsGXYtXAFpe/MT7AN1VGMHR/IUYwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J3GFh0q0; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xqqtss7oR6NIEyv7pMUjZddx3wvjw96byKDJgNTJyKnoxbmrUzWD/bLPaUVDerrnECFnY2CzvKIN8I+fMPpQpCKa581IqyIzSGR/mPO/TR0guLPY9n+j8niU53v/hI/OG+oY56snzDDenuIfH9Hb2htXZk5LWT5Eg2xFR+qqJ5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkEOPtLM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J3GFh0q0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745249020; x=1776785020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vJPOq/jtYR3O8m4x/saV7Lfzl0TMxKs1hSTnn1MH0/Q=;
-  b=J3GFh0q0+Xo4hZsYg/Pw1Fe4W/+XqWPhK3DPCNA9FDuoITAhCe4WF+JG
-   WOTHmMZF5ovv2HAt7wTYr/sQRKJw/G/0sBEmYFUgfz9lj7+1Hx4FH+Swy
-   of9frH5qJXQNeqS+bpKH0Uo81WR5STSN1r3ekHhuEQaImrNRI1RtMeNP/
-   +zJ3blSmyhDp9TylZDhxjHI/4YaAN00+P97lF0oxU/3LCQpQi92kOI+9D
-   4cZXMWjAeA68cuOOvId7WoeY9kcLGJq2G+krR5mWdP+7/dMmkGHMiQCob
-   24sqbMqotbj5dfzXd3cQfbqVC1l9+tLPp7yKH9CeQjlepD4RdV7QuKlTM
-   A==;
-X-CSE-ConnectionGUID: ORqy7wydT4qrwEUYxafR7g==
-X-CSE-MsgGUID: cPHiQ7a9SQeNiy8tT5beHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="46018340"
-X-IronPort-AV: E=Sophos;i="6.15,228,1739865600"; 
-   d="scan'208";a="46018340"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 08:23:39 -0700
-X-CSE-ConnectionGUID: qYxPlAo5T1q0ooVmsIMlWQ==
-X-CSE-MsgGUID: Spq369kLR+qDitQqo2fORA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,228,1739865600"; 
-   d="scan'208";a="136707842"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 21 Apr 2025 08:23:35 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u6szd-0000Bh-0Y;
-	Mon, 21 Apr 2025 15:23:33 +0000
-Date: Mon, 21 Apr 2025 23:23:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nylon Chen <nylon.chen@sifive.com>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Nylon Chen <nylon.chen@sifive.com>, Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v11 4/5] pwm: sifive: Fix rounding issues in apply and
- get_state functions
-Message-ID: <202504212351.Aa9tPMsO-lkp@intel.com>
-References: <20250421095521.1500427-5-nylon.chen@sifive.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkEOPtLM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE144C4CEE4;
+	Mon, 21 Apr 2025 16:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745252251;
+	bh=zZjJug2ojlk7B/L1/Ay2G/DAGNeupwICVA+YK/CB0Ng=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RkEOPtLMEvJT0lnK8J8+VHN4kf4nhgwNj6DETp7+HlYoJEdJ+b9Hey4FsCSv1s5ym
+	 Bq1DqzrRtCxIcCRvwaWFNaPwYarfJXzFTyUrz68mYLrSnwNWs8yYjGcn4VnNFCGeje
+	 I9Vz9HK7PcdIYjVR+K7OvHg0UMOhzPEvoEZvzRplEmGWdt+rDgQ/eOEbbYw2sT4igJ
+	 M05A5+SbFbSvdYHS6SykX/UHmm1HYeGCBoavZSPBwOgvizlV36aWXysKehqpahNZ6K
+	 Qpv+p9coAmfOHWOTj8iMNHa0w6SthNyNUXUPL92YjEuMGyxnbt71f8G6vAIZCZ6gSs
+	 dA0DlW+yXI2Bw==
+Date: Mon, 21 Apr 2025 09:17:25 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Masahiro Yamada <masahiroy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kbuild: Switch from -Wvla to -Wvla-larger-than=0
+Message-ID: <20250421161725.GA3253782@ax162>
+References: <20250418213235.work.532-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,36 +54,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250421095521.1500427-5-nylon.chen@sifive.com>
+In-Reply-To: <20250418213235.work.532-kees@kernel.org>
 
-Hi Nylon,
+On Fri, Apr 18, 2025 at 02:32:39PM -0700, Kees Cook wrote:
+> Variable Length Arrays (VLAs) on the stack must not be used in the kernel.
+> Function parameter VLAs[1] should be usable, but -Wvla will warn for
+> those. For example, this will produce a warning but it is not using a
+> stack VLA:
+> 
+>     int something(size_t n, int array[n]) { ...
+> 
+> Clang has no way yet to distinguish between the VLA types[2], so
+> depend on GCC for now to keep stack VLAs out of the tree by using GCC's
+> -Wvla-larger-than=0 option (though GCC may split -Wvla[3] similarly to
+> how Clang is planning to).
+> 
+> Switch to -Wvla-larger-than=0 and adjust the two VLA-checking selftests
+> to disable the updated option name.
+> 
+> Link: https://en.cppreference.com/w/c/language/array [1]
+> Link: https://github.com/llvm/llvm-project/issues/57098 [2]
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98217 [3]
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.15-rc3 next-20250417]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20250421-174716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250421095521.1500427-5-nylon.chen%40sifive.com
-patch subject: [PATCH v11 4/5] pwm: sifive: Fix rounding issues in apply and get_state functions
-config: i386-buildonly-randconfig-003-20250421 (https://download.01.org/0day-ci/archive/20250421/202504212351.Aa9tPMsO-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504212351.Aa9tPMsO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504212351.Aa9tPMsO-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ucs2_string.o
->> ERROR: modpost: "__udivdi3" [drivers/pwm/pwm-sifive.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  lib/Makefile               | 2 +-
+>  mm/kasan/Makefile          | 2 +-
+>  scripts/Makefile.extrawarn | 9 +++++++--
+>  3 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/lib/Makefile b/lib/Makefile
+> index f07b24ce1b3f..37b6e5782ecb 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -71,7 +71,7 @@ CFLAGS_test_bitops.o += -Werror
+>  obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
+>  obj-$(CONFIG_TEST_IDA) += test_ida.o
+>  obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
+> -CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+> +CFLAGS_test_ubsan.o += $(call cc-option, -Wno-vla-larger-than)
+>  CFLAGS_test_ubsan.o += $(call cc-disable-warning, unused-but-set-variable)
+>  UBSAN_SANITIZE_test_ubsan.o := y
+>  obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
+> diff --git a/mm/kasan/Makefile b/mm/kasan/Makefile
+> index 1a958e7c8a46..0e326116a70b 100644
+> --- a/mm/kasan/Makefile
+> +++ b/mm/kasan/Makefile
+> @@ -35,7 +35,7 @@ CFLAGS_shadow.o := $(CC_FLAGS_KASAN_RUNTIME)
+>  CFLAGS_hw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+>  CFLAGS_sw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+>  
+> -CFLAGS_KASAN_TEST := $(CFLAGS_KASAN) $(call cc-disable-warning, vla)
+> +CFLAGS_KASAN_TEST := $(CFLAGS_KASAN) $(call cc-option, -Wno-vla-larger-than)
+>  ifndef CONFIG_CC_HAS_KASAN_MEMINTRINSIC_PREFIX
+>  # If compiler instruments memintrinsics by prefixing them with __asan/__hwasan,
+>  # we need to treat them normally (as builtins), otherwise the compiler won't
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index d75897559d18..0229b10c5d81 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -45,8 +45,13 @@ endif
+>  # These result in bogus false positives
+>  KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
+>  
+> -# Variable Length Arrays (VLAs) should not be used anywhere in the kernel
+> -KBUILD_CFLAGS += -Wvla
+> +# Stack Variable Length Arrays (VLAs) must not be used in the kernel.
+> +# Function array parameters should, however, be usable, but -Wvla will
+> +# warn for those. Clang has no way yet to distinguish between the VLA
+> +# types, so depend on GCC for now to keep stack VLAs out of the tree.
+> +# https://github.com/llvm/llvm-project/issues/57098
+> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98217
+> +KBUILD_CFLAGS += $(call cc-option,-Wvla-larger-than=0)
+>  
+>  # disable pointer signed / unsigned warnings in gcc 4.0
+>  KBUILD_CFLAGS += -Wno-pointer-sign
+> -- 
+> 2.34.1
+> 
