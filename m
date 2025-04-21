@@ -1,84 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6141EA7C8;
-	Mon, 21 Apr 2025 21:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E15821D58E
+	for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 22:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745271050; cv=none; b=MumAtGrvH34OlyngyTvfMF6BAtgKj8LFXRSD7786qpci04HWzGVNW20XC8N1eK4vw6wlloUdGkl8kLwYFygf4ApvHbKx2YhcBEldhgMa9+bbsyUFAcsHU04fqSYh/MVVohyzUrroIr/PUUhqypjPPIpkbqAF/pxI9mA7FOO0BCA=
+	t=1745273049; cv=none; b=S8URMXa/t1KIlVQiecB5RhfXKdnjd4UCsCbxU8uhXVW/X8rgjWOAwDxZv5n5/stx+dfBiMgPQWpmO6SIfue+Aa1upxJW8IKdp/yDNwYT04clF+E6U2ch6/vXlg35GIuLjxjtK2B6ikeAfxexsCBqHi7lvtnw9wDQp+eGCea93VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745271050; c=relaxed/simple;
-	bh=6T/GDJH5/bTv1NCnAu3j4ghfQs2StTuGKdbf8ISr+oE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mz9UkymmFhmZJIlSPvr9j1IVB6tfj0seTGHlpdlh9caXyIKrxtFYBNo/qHN2jUzPq3K0MyUWqvPz8dcg8ptGj/BRkt2pjBHpzvRRXezB6LdagLWSWkSrexev43spOdYTgxNbdozzKy+OQf2cBzVwD0IFekZ0XOOrfeJVDn7kmM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ovisxryp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745273049; c=relaxed/simple;
+	bh=+muycKiBaV5UQqyraI1xwjnbIAioVU0Qup0KnvqWYU8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VAAxUTad/NaM6hnk5lNi6twMDzbL67/wIcRLrOQMRAsDhiqYfMsACPDSbZ/rMC4w2S2Pbc2obmxz2yMRqnKlWEe4uDlTFwOuBNaWmoTDsmEdRiCuGjyO3nqRRFZPi7EB0jb6KCsJL/ZwtP+M9lj8R7vd0Ns9hh1AIZ5h0ssbLWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Mg/VKphD; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ovisxryp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85EFC4CEE4;
-	Mon, 21 Apr 2025 21:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745271049;
-	bh=6T/GDJH5/bTv1NCnAu3j4ghfQs2StTuGKdbf8ISr+oE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ovisxryprkhugTTXuEtolnUSpQ9pH46a1Gk/2mdmbcLHjgw8Z+4JkD+CMMjl+0CA1
-	 dtLTYJKgwoczoBPVNKYf3l/VCZzPt1kf9lHT7Y4S0tcJY2NkMJkb5Ps0+XnbOpNXeI
-	 FbzDDb2IzTd++0z2gMJbOKT5KcT4wAZQ0l41WuTyKHayxmWjaLDqsZjzWVTxM78rUs
-	 UVP0hCxK+8BELCSr9RsynvfNCrM98t7kqFAuCn1Ok3uVeZjAnkFcjNxu6f8VirjuNu
-	 e3ceCXvIbWH3YFEDlUuOdFeHKtyKVJVYEyPbMG9FvOlEeHXwCcPDXRDpRMyeLtzRp0
-	 dTPbbi8mZZ7jg==
-From: Kees Cook <kees@kernel.org>
-To: Christoph Hellwig <hch@lst.de>,
-	Kees Cook <kees@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	kasan-dev@googlegroups.com,
-	linux-mm@kvack.org,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Switch from -Wvla to -Wvla-larger-than=0
-Date: Mon, 21 Apr 2025 14:30:41 -0700
-Message-Id: <174527103909.545282.5440977919378383304.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250418213235.work.532-kees@kernel.org>
-References: <20250418213235.work.532-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Mg/VKphD"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e6dea30465aso3534381276.1
+        for <llvm@lists.linux.dev>; Mon, 21 Apr 2025 15:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1745273046; x=1745877846; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zJkBF2Iq9gEiEg9l+Unpndzsq5ns/iefqc51nXn2fRQ=;
+        b=Mg/VKphDB8HCEHHjTmRYHegt1aMBXkh9dLs0Ma0Nbw2/JsChnFZpHz21XsfCBhCxU2
+         URA4CbBRulhDrQvttn9cOoBuKRWm+EoqyBBQKFcMo35jQY9eWqP/KEYZA4CMfKcpIasn
+         Fi+UbqTpeGOMtEKaFKO5aYZDpv5mKNwPYqWUk+c9WXrwXfVSBVLY+++YJ1PNuk1RKTJj
+         AqBUqvip/rA+dYQ0FuzXWnv8JbxemU5EMC6ausEg0sWp0kDmdXIVXd7FzdMCq/CBMQo/
+         j/byMZOCn4QA/j4EXkAIv8h9PY2AIpnBsmoicHejjl03b0ilCuoFeRIO3DP4TBdlSejJ
+         WImw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745273046; x=1745877846;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zJkBF2Iq9gEiEg9l+Unpndzsq5ns/iefqc51nXn2fRQ=;
+        b=QQXu4d1pMELvVklyI2xz1Das5HNSBKyJaRQp73AIiZnxdyKAD1Fjf1Jz+Olym8iv1H
+         +MQT9ZNtG91XCY88mfkXtaPvxCkxz8vz6x6b0Vq95c0PiTD6TdTucHSjn6du8DMeMx7k
+         8ZDZwAC4c9imgNQKatBKJFl3DtDVm/z/xuMs8hZNzY33OaVkI1ysIvqPmYoWLI8Y+FXT
+         m8TiLkWCNB3X3Gy5oFlpauJi06S85YB3aR/BHPT0bHRzm3yvKJY6fYUaWkc5TCe2iMnC
+         zonqowAjHLOinwrouUyx8AkV171waaWNORTxQCf4u5ADfQu6XnK3SXHBbEMR412y8MVT
+         +8Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqPjrjOiZlCBEBdEimJUPkSIjUv2sae9Fo6h8Cu3W+FHrYu6M8pWzywiJJDh8nxs+TQEG5@lists.linux.dev
+X-Gm-Message-State: AOJu0YzBkFoVft2nc9jEL6KtxsNqaUXjZRieE/OX4L7GCulokCWDx1g6
+	esEFYNB/V7QndKKYd8ksg0ZEZw6syhqtHmbPs9QlekqvdnYY/DPX85KwM72bbK/LvbOuF2Fk3iQ
+	6vCT0g6kvH6OLoCUExy71YnmFF/i1ZVx3Rh6/
+X-Gm-Gg: ASbGncvvHg9Hv+XeSAJDG0GF4pd9VXKQK/qUM8x6T46qNHYKroQ8sn6FD4noX2Oa5JP
+	TuE2EuOynp1+10Qdi+tsUJkLcYVIVV5YSHkG/Cat87QONdbBdRpfMZgQJlTZ646hb+y6TbVZJ9m
+	3xVkdefa3p7rSRYhZgjcn9LQ==
+X-Google-Smtp-Source: AGHT+IFjErmdtD9yYgSCvg50nxSRhAaGxDl0MNp2zLoVowjSrOfaMAYKD0cmZ307fSWsTGOXpc7lz6KmktYrMh1O/kc=
+X-Received: by 2002:a05:690c:380a:b0:706:aedf:4d91 with SMTP id
+ 00721157ae682-706cccfa7f8mr180651297b3.14.1745273045751; Mon, 21 Apr 2025
+ 15:04:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+ <87y0w0hv2x.fsf@microsoft.com> <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 21 Apr 2025 18:03:54 -0400
+X-Gm-Features: ATxdqUFcqFjq20jX5yxtvOH3DHCD3LQ0LRd6y2kU6Qtvx6XNCs0BPjy44J04_l4
+Message-ID: <CAHC9VhS0kQf1mdrvdrs4F675ZbGh9Yw8r2noZqDUpOxRYoTL8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 18 Apr 2025 14:32:39 -0700, Kees Cook wrote:
-> Variable Length Arrays (VLAs) on the stack must not be used in the kernel.
-> Function parameter VLAs[1] should be usable, but -Wvla will warn for
-> those. For example, this will produce a warning but it is not using a
-> stack VLA:
-> 
->     int something(size_t n, int array[n]) { ...
-> 
-> [...]
+On Mon, Apr 21, 2025 at 4:13=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Wed, Apr 16, 2025 at 10:31=E2=80=AFAM Blaise Boscaccy
+> <bboscaccy@linux.microsoft.com> wrote:
+> >
+> > > Hacking into bpf internal objects like maps is not acceptable.
+> >
+> > We've heard your concerns about kern_sys_bpf and we agree that the LSM
+> > should not be calling it. The proposal in this email should meet both o=
+f
+> > our needs
+> > https://lore.kernel.org/bpf/874iypjl8t.fsf@microsoft.com/
 
-Applied to for-next/hardening, thanks!
+...
 
-[1/1] kbuild: Switch from -Wvla to -Wvla-larger-than=0
-      https://git.kernel.org/kees/c/9c2cfa10444c
+> Calling bpf_map_get() and
+> map->ops->map_lookup_elem() from a module is not ok either.
 
-Take care,
+A quick look uncovers code living under net/ which calls into these APIs.
 
--- 
-Kees Cook
+> lskel doing skel_map_freeze is not solving the issue.
+> It is still broken from TOCTOU pov.
+> freeze only makes a map readonly to user space.
+> Any program can still read/write it.
 
+When you say "any program" you are referring to any BPF program loaded
+into the kernel, correct?  At least that is my understanding of
+"freezing" a BPF map, while userspace is may be unable to modify the
+map's contents, it is still possible for a BPF program to modify it.
+If I'm mistaken, I would appreciate a pointer to a correct description
+of map freezing.
+
+Assuming the above is correct, that a malicious bit of code running in
+kernel context could cause mischief, isn't a new concern, and in fact
+it is one of the reasons why Hornet is valuable.  Hornet allows
+admins/users to have some assurance that the BPF programs they load
+into their system come from a trusted source (trusted not to
+intentionally do Bad Things in the kernel) and haven't been modified
+to do Bad Things (like modify lskel maps).
+
+> One needs to think of libbpf equivalent loaders in golang and rust.
+...
+> systemd is also using an old style bpf progs written in bpf assembly.
+
+I've briefly talked with Blaise about the systemd issue in particular,
+and I believe there are some relatively easy ways to work around the
+ELF issue in the current version of Hornet.  I know Blaise is tied up
+for the next couple of days on another fire, but I'm sure the next
+revision will have a solution for this.
+
+> Introduction of lskel back in 2021 was the first step towards signing
+> (as the commit log clearly states).
+> lskel approach is likely a solution for a large class of bpf users,
+> but not for all. It won't work for bpftrace and bcc.
+
+As most everyone on the To/CC line already knows, Linux kernel
+development is often iterative.  Not only is it easier for the kernel
+devs to develop and review incremental additions to functionality, it
+also enables a feedback loop where users can help drive the direction
+of the functionality as it is built.  I view Hornet as an iterative
+improvement, building on the lskel concept, that helps users towards
+their goal of load time verification of code running inside the
+kernel.  Hornet, as currently described, may not be the solution for
+everything, but it can be the solution for something that users are
+desperately struggling with today and as far as I'm concerned, that is
+a good thing worth supporting.
+
+--=20
+paul-moore.com
