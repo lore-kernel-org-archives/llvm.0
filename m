@@ -1,85 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F828F1;
-	Mon, 21 Apr 2025 12:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73737CA5E;
+	Mon, 21 Apr 2025 12:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745238392; cv=none; b=j77BRonOy7V0Cp8+kTaCDk2TbeFvACSzTcOLMUQiLYKzEuTjt4wzxAElWN34SX3CN+q+BfurSzo0kwfNQDpkboXfmv0PwIFSyMgRSrFTUnSOEtHsa0G6cBo/zGAKgHjQUsE1oLLBkO2paZsg58xl3O9FsPKcRnjEbkTK+5ksNiw=
+	t=1745238987; cv=none; b=i8V+8Xr2HkBJCYNqwGA7uY4yfypV6mBzl8+bCD2ePE6ySed5C9iPB+Id5ODw3ShtDDs7cffWmthiLBpldcDxlkhVpEXCZ1p9a2J1KyAFYNaw365cMIA6eAk+E2RWgmtn1z9e0LgeGMuZ/UUPIRqIfa7Lu9i3Yfrv7sHm94Uj4/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745238392; c=relaxed/simple;
-	bh=VeykHOrzRl/NU33aBVnLmR9PAKtlL11sk1P3BYvuIR4=;
+	s=arc-20240116; t=1745238987; c=relaxed/simple;
+	bh=PjGhbFMLH+F4wV6pogXA/RFWQfDWC9un/aPnTib5kAw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XkqXoBddrPjZSqyrfnF2EObEMsypd1OV0wkZsK+mC/oBLT5jcV3bM5xoDB5DiF85MBq16VsWqetZI8laOwcJ63LTOCWMxwq2Vbaez2mz4ftHQmjzqmkto+6RcIWwxXjbrZJAHJLDX7wvlyMToDJGvvauyB8ZA05G3mRAYGUvwUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UHaJFj8t; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=TjqK/3XSZAc6D+MVgdq9U4BT3TZlaz32WjNtMORJiYZRL8Oyp7075p8HiS+7WrSJJ/ww0zHeUvuFs5QdtL1dxXmQTnZov2kA5GbDf/8xONAGdHDxx7Tf+m46jUdNes7m0RCMwWlJ7fTIcZJW/1Bquu1z95S/0JineAT63GM6lG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z1FW71Gi; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UHaJFj8t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z1FW71Gi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745238391; x=1776774391;
+  t=1745238985; x=1776774985;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VeykHOrzRl/NU33aBVnLmR9PAKtlL11sk1P3BYvuIR4=;
-  b=UHaJFj8tVshpW6eo4KD8E+E7UtkmQ8AajaXiUPH+w5/Yn/t6oFabT8Ut
-   8PtwY/Rsff2epkVkaq56oWaCDNoN8DKcsHFSg4DQKQoYo5UADPDxA1t23
-   w1ZyRbhkp71M+tx+1PtZpYtZqNh3uZPtMsvJ2hhjWY/nAEftek6/FUl1/
-   f+2wwZxij19zvDUZq8qz+NgGLCrAXVm1C1C8NBfAp3CbElYlDvRFp8dJ0
-   ThX80zozmUK8irnr1yDUNqGem1UTyqhl0HIGu0/Qt8W+ArpWflfcVM8ZM
-   +vc6qFiB5lZKQOOOYxZ/FXrstpT90MZuwM16WEOMsSXCrWuuCmVaTqvsM
-   A==;
-X-CSE-ConnectionGUID: UF2Cm6dFQ9GDGEAfzaNQLw==
-X-CSE-MsgGUID: YkZFdzanQ3GYvS7iXpzzWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="34387702"
+  bh=PjGhbFMLH+F4wV6pogXA/RFWQfDWC9un/aPnTib5kAw=;
+  b=Z1FW71Gilf2rs6IYZj8tDbz5OoJer9yZ79Z62wDyqu55BDdthiRmt9j7
+   iwc4nwiTTfj8hZy2XIO8IuSae6TtG5UxZhrv4+BjyTMXnOr9R5APmzB49
+   jbRA9S+6gsBoRmD5BZI7+ZZAGWF1STAWJVmgfqxz1vUdKAmnY+r529ewg
+   JnD7/v7ozifwSlM7Y63avUp6hcbrrsJHX4Ydr55XmpkcEII1doU/DQg7i
+   WECeVbGsO5WXhHzvJoUFg33IquxQrQ+6tFZ5jkA0pZ2+T3R8/xMQ3wlk/
+   c30T0CjF5V7iYzwiLmZFpC4ok6pasPOep5SWqrSYV1cyF3PEw5aCAGGuD
+   w==;
+X-CSE-ConnectionGUID: wzmBDdxFSLSq9+3WK55JmQ==
+X-CSE-MsgGUID: HIARDqDbS6+O1g43Iebv/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="46002948"
 X-IronPort-AV: E=Sophos;i="6.15,228,1739865600"; 
-   d="scan'208";a="34387702"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 05:26:30 -0700
-X-CSE-ConnectionGUID: DM+66G8WS0aUAReB8yVmrw==
-X-CSE-MsgGUID: bDX798mTQZibSE18cF3M2Q==
+   d="scan'208";a="46002948"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 05:36:25 -0700
+X-CSE-ConnectionGUID: FqLFtJ/OSQ6mTEXLvzyGUA==
+X-CSE-MsgGUID: o6778mzCTnyKZBJ+bwairg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,228,1739865600"; 
-   d="scan'208";a="168907659"
+   d="scan'208";a="162753154"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Apr 2025 05:26:23 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 21 Apr 2025 05:36:23 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u6qE8-00006p-24;
-	Mon, 21 Apr 2025 12:26:20 +0000
-Date: Mon, 21 Apr 2025 20:26:00 +0800
+	id 1u6qNp-00007T-1e;
+	Mon, 21 Apr 2025 12:36:21 +0000
+Date: Mon, 21 Apr 2025 20:36:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luis Gerhorst <luis.gerhorst@fau.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Henriette Herzog <henriette.herzog@rub.de>,
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-	Cupertino Miranda <cupertino.miranda@oracle.com>,
-	Jiayuan Chen <mrpre@163.com>, Matan Shachnai <m.shachnai@gmail.com>
+To: Jagath Jog J <jagathjog1996@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 05/11] bpf, arm64, powerpc: Add
- bpf_jit_bypass_spec_v1/v4()
-Message-ID: <202504212030.IF1SLhz6-lkp@intel.com>
-References: <20250421091802.3234859-6-luis.gerhorst@fau.de>
+Subject: Re: [RFC 1/1] drm/mipi-dbi: Use drm_device for debugfs, drop
+ drm_minor and .debugfs_init
+Message-ID: <202504212018.dSYIH2wr-lkp@intel.com>
+References: <20250421085907.24972-2-jagathjog1996@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -88,64 +63,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250421091802.3234859-6-luis.gerhorst@fau.de>
+In-Reply-To: <20250421085907.24972-2-jagathjog1996@gmail.com>
 
-Hi Luis,
+Hi Jagath,
 
-kernel test robot noticed the following build warnings:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 8582d9ab3efdebb88e0cd8beed8e0b9de76443e7]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.15-rc3 next-20250417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Gerhorst/selftests-bpf-Fix-caps-for-__xlated-jited_unpriv/20250421-175926
-base:   8582d9ab3efdebb88e0cd8beed8e0b9de76443e7
-patch link:    https://lore.kernel.org/r/20250421091802.3234859-6-luis.gerhorst%40fau.de
-patch subject: [PATCH bpf-next v2 05/11] bpf, arm64, powerpc: Add bpf_jit_bypass_spec_v1/v4()
-config: arm-randconfig-001-20250421 (https://download.01.org/0day-ci/archive/20250421/202504212030.IF1SLhz6-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/drm-mipi-dbi-Use-drm_device-for-debugfs-drop-drm_minor-and-debugfs_init/20250421-170105
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250421085907.24972-2-jagathjog1996%40gmail.com
+patch subject: [RFC 1/1] drm/mipi-dbi: Use drm_device for debugfs, drop drm_minor and .debugfs_init
+config: hexagon-randconfig-002-20250421 (https://download.01.org/0day-ci/archive/20250421/202504212018.dSYIH2wr-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504212030.IF1SLhz6-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250421/202504212018.dSYIH2wr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504212030.IF1SLhz6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504212018.dSYIH2wr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/core.c:3037:13: warning: no previous prototype for function 'bpf_jit_bypass_spec_v1' [-Wmissing-prototypes]
-    3037 | bool __weak bpf_jit_bypass_spec_v1(void)
-         |             ^
-   kernel/bpf/core.c:3037:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3037 | bool __weak bpf_jit_bypass_spec_v1(void)
-         | ^
-         | static 
->> kernel/bpf/core.c:3042:13: warning: no previous prototype for function 'bpf_jit_bypass_spec_v4' [-Wmissing-prototypes]
-    3042 | bool __weak bpf_jit_bypass_spec_v4(void)
-         |             ^
-   kernel/bpf/core.c:3042:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3042 | bool __weak bpf_jit_bypass_spec_v4(void)
-         | ^
-         | static 
-   2 warnings generated.
+>> drivers/gpu/drm/tiny/ili9341.c:155:19: error: incompatible function pointer types initializing 'void (*)(struct drm_minor *)' with an expression of type 'void (struct mipi_dbi_dev *)' [-Wincompatible-function-pointer-types]
+     155 |         .debugfs_init           = mipi_dbi_debugfs_init,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/gpu/drm/tiny/hx8357d.c:199:19: error: incompatible function pointer types initializing 'void (*)(struct drm_minor *)' with an expression of type 'void (struct mipi_dbi_dev *)' [-Wincompatible-function-pointer-types]
+     199 |         .debugfs_init           = mipi_dbi_debugfs_init,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/bpf_jit_bypass_spec_v1 +3037 kernel/bpf/core.c
+vim +155 drivers/gpu/drm/tiny/ili9341.c
 
-  3031	
-  3032	/* By default, enable the verifier's mitigations against Spectre v1 and v4 for
-  3033	 * all archs. The value returned must not change at runtime as there is
-  3034	 * currently no support for reloading programs that were loaded without
-  3035	 * mitigations.
-  3036	 */
-> 3037	bool __weak bpf_jit_bypass_spec_v1(void)
-  3038	{
-  3039		return false;
-  3040	}
-  3041	
-> 3042	bool __weak bpf_jit_bypass_spec_v4(void)
-  3043	{
-  3044		return false;
-  3045	}
-  3046	
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  149  
+70a59dd82959f8 drivers/gpu/drm/tiny/ili9341.c    Simona Vetter     2020-11-04  150  static const struct drm_driver ili9341_driver = {
+0424fdaf883a68 drivers/gpu/drm/tinydrm/ili9341.c Simona Vetter     2019-06-17  151  	.driver_features	= DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  152  	.fops			= &ili9341_fops,
+4a83c26a1d8702 drivers/gpu/drm/tiny/ili9341.c    Danilo Krummrich  2022-08-02  153  	DRM_GEM_DMA_DRIVER_OPS_VMAP,
+df0cc9eaff170e drivers/gpu/drm/tiny/ili9341.c    Thomas Zimmermann 2024-09-24  154  	DRM_FBDEV_DMA_DRIVER_OPS,
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25 @155  	.debugfs_init		= mipi_dbi_debugfs_init,
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  156  	.name			= "ili9341",
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  157  	.desc			= "Ilitek ILI9341",
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  158  	.major			= 1,
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  159  	.minor			= 0,
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  160  };
+3fa0e8f6f9609b drivers/gpu/drm/tinydrm/ili9341.c David Lechner     2018-05-25  161  
 
 -- 
 0-DAY CI Kernel Test Service
