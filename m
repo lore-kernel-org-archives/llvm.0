@@ -1,36 +1,36 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65472367B7;
-	Tue, 22 Apr 2025 07:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CB9235BFB
+	for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 07:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745306650; cv=none; b=mthifLzgL79ijZoZDJ+X5zWKtxpHl20vHvWwIIggSLnrrWt7506BRue5CWaMnVfU+Fx0Cq+fFCM4WIeEyJfqyceNlbKazH3L73FT3Sg8pwpA99U5iusxzg0QmQYsvjeDLjx7XiON+5OEVFzLSaDnHKPqzcE8lQjknRABuNgEtrc=
+	t=1745308716; cv=none; b=RCd/B7+OIJ3DC/Pddy4nqwzyhnrpp6KzZXy0ixLBCDSdioju9SWNDS0IoXQZ6K65pztJcc08abQCDD5CzXbB7/fYRVbaDirsKfBHTcgibiqiX1vcNgV2OgfjK/LgUzcO9teZa7xZrdTB/QVArcG7lsjZMpq8N2EtsVEHn4bb2Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745306650; c=relaxed/simple;
-	bh=8DTcTxbdVgCbu+VQ+vw2b7TEstY2Tmu60WHjO6bAJEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pikALF7VIV6PEdFI25lKaJwnSl07d7U4rMPyWuAjKTiih0dVAHe9Bywn5FjqMtAYYO4uTmnr0CMNn6o7DC/TzWLs+gN/1jOoGanAiOx9asegEKcXrr3b7maXCJ9D/oL/HSjakGxNSnDoRqit3/zh77Ga4rEue52y2Sbh5J01kZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pfy0XOA0; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pfy0XOA0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF57C4CEE9;
-	Tue, 22 Apr 2025 07:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1745306650;
-	bh=8DTcTxbdVgCbu+VQ+vw2b7TEstY2Tmu60WHjO6bAJEc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pfy0XOA0Nf7+RIOYBmgAp2XgFWtskrTdXkiJFA2aHo36G0/wGq/R+5JKfFHEU6xCK
-	 gheANCatJYPW/NZqBJ+JBlgPjDkLeXh0B0AwDuDwhKy6gIXNrqvAMwtmpswuF3UAbp
-	 isSRZ+7SclZwo5bLkk8GTlnXSNeC7KjF3Af3v9uA=
-Date: Tue, 22 Apr 2025 09:23:57 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: Backports of 84ffc79bfbf7 for 6.12 and earlier
-Message-ID: <2025042248-culinary-unnamable-89e4@gregkh>
-References: <20250417171024.GA171175@ax162>
+	s=arc-20240116; t=1745308716; c=relaxed/simple;
+	bh=eDDGJ+jglbP09EosM6RIfoGJYGCs7gmdzWKgCV1xPO4=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eQXFFA+HYp7XfibXXiNzsS0SyNhCIsp56aV9qMyVvVnowvmahGoKW12MdO6glC6j23ReG+wI/8r7VEGP4cE1P8iqopoCzGBL/J4iXzBnNAR7ybnxSHuqUoFneSnBfR57nmOsAL3Yp5Vuq45Nz49i5mzNuVi3a/YmBYxLAMf8QCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89C3B152B;
+	Tue, 22 Apr 2025 00:58:24 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59B8A3F66E;
+	Tue, 22 Apr 2025 00:58:28 -0700 (PDT)
+Date: Tue, 22 Apr 2025 08:58:26 +0100
+From: Leo Yan <leo.yan@arm.com>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] tools build: Use -fzero-init-padding-bits=all
+Message-ID: <20250422075826.GA28953@e132581.arm.com>
+References: <20250402173056.829400-1-leo.yan@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,16 +39,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250417171024.GA171175@ax162>
+In-Reply-To: <20250402173056.829400-1-leo.yan@arm.com>
 
-On Thu, Apr 17, 2025 at 10:10:24AM -0700, Nathan Chancellor wrote:
-> Hi Greg and Sasha,
+On Wed, Apr 02, 2025 at 06:30:56PM +0100, Leo Yan wrote:
+> GCC-15 release claims [1]:
 > 
-> Please find attached backports for commit 84ffc79bfbf7 ("kbuild: Add
-> '-fno-builtin-wcslen'") to 6.12 and earlier. It has already been queued
-> for 6.13 and 6.14 since it applied cleanly. If there are any issues,
-> please let me know.
+>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>   of the whole union (except for static storage duration initialization),
+>   it just initializes the first union member to zero. If initialization
+>   of the whole union including padding bits is desirable, use {} (valid
+>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+>   restore old GCC behavior.
+> 
+> As a result, this new behaviour might cause unexpected data when we
+> initialize a union with using the '{ 0 }' initializer.
+> 
+> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+> in unions and structures.  This commit applies the same option for tools
+> building.
 
-Now applied, thanks.
+Gentle ping.
 
-greg k-h
+Thanks,
+Leo
