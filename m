@@ -1,72 +1,72 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04B827CCF3
-	for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 13:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC65B202978
+	for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 14:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745329592; cv=none; b=RNdAlbDYdIdmDnU37RImID5unUkMaULey5PIaqkpAaPb4JFVctX5KbWz4Md+9QvevcvsR7I7eM/avJvUGjbbl/aQQ+knLFHs8kAbvdY7MQakWHmzRJ6oi9FzU+CuJ1pW8jzLdA9MeuO3TFGsNfEvzIvIHEr69RecY9Flh3Nb0ww=
+	t=1745331060; cv=none; b=SNTz+aP2xbVa/NIkqlsrwmiXqUhIYmSDMSz6hEROlv+WSFCTMSOiEUMbF8wfTaRYKojrYFrJzpmAUM1mLjsRPzjrnj7MToqSVPXjTXES6YEnvt62vPLp7scsCYvb0jx89JZIfT6JV/Mmqy/csQJYppunmKDA40Hr26tTj/3xrME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745329592; c=relaxed/simple;
-	bh=dMecEbaMU5nXf1Rjydxt+TbhsUOIhNDz3YslKq53vwc=;
+	s=arc-20240116; t=1745331060; c=relaxed/simple;
+	bh=2MM6fvdAAQzaNltoa3ZzC6OQFO8sSXRGY0+MhpYMgCY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KgLZzyJBCAdVbzZj1WuOxe+g57KgGLOGVw9yW68dHTpuMPgvvM7lU6Gs33e7Gi402z2n9DJeFMU0MCymJabxh/9aGW5iZl6/to93llbATTEI9shuwe/ibrNAD744bqiq9X83LrvbRWh5s7tMtMZF0VQzI3xdUbI7m5M/RegJ57o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lhjsF9OO; arc=none smtp.client-ip=209.85.216.50
+	 To:Cc:Content-Type; b=kJ4o1tVFBkmSUyr6Gog5e1iNFAd6GhBexubIpGJWInmccBcfKSikERT1w+nI1LDtoIDGzVjIxg86m8XgW9Kiiv+2hnh0V/VcaUzm3I+dh2qjkIf0HYaxx7zRsrr2MnDOyOlqgFupEHaIyo13WXDoSqkNDwGlL97EoaszxAs7gn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbYZUmZr; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lhjsF9OO"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ff6ce72844so574020a91.2
-        for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 06:46:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbYZUmZr"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b07698318ebso346009a12.2
+        for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 07:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745329590; x=1745934390; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1745331058; x=1745935858; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=awwFbDm7jflKQEqDpnbX53KjJNqGVg4jeRSb+a5lprA=;
-        b=lhjsF9OOoHHkwAMhcPq+MroFJfyaxSmrz0BtepnTL8NKYr6ek+W4Y2Q2EuCVJXg/D8
-         NsLi1FYIZKPbyTAEapCCQChGu40dMXf7a3YMjMLAA6ZjiH/FfXeZsbILWe5F1QxrfB0P
-         nZjGifvvEudZN/lVmBL97kQRnXK/iLZsQ7Wkrsrim7dC28sBmCKfEiEwBzXrgXIas/sr
-         Tic6R0vmTcpwVwMySIV1wgjOmmVdfddiTAqkfx7i79XPSTi14eapETE5OhPrC9RgI4Zi
-         xDSBLCwim9PMOb0IcCSrCT8/qCqtVtwioXkM6Pli5XoNbOMmdR4RaJ1nZDiLH0aB3+DN
-         Eymg==
+        bh=2MM6fvdAAQzaNltoa3ZzC6OQFO8sSXRGY0+MhpYMgCY=;
+        b=RbYZUmZr5wPM8it+/Jcm77pdF/shZ/3TRwz619rRecpl4p2VVRDXE9Draozth3chd8
+         aY9QLTe2f7nyvk4vSX/jO8sR4Q4OsIx+Qw+1jaO6u2jrcxDbElgXWgBi7isBahV/QHZM
+         yXyI4yTInm6Va+6WoAlxMr6rbKOgMwLSC6wcxTKlPgTmtjArMtLbB1FbQuOuh56WdpIa
+         JDYG422zXUWN1W3ndzPZxxb5qzXZixIsWpsfLncyWiN6aDmyKz47sMrt5FZVTjX59V/A
+         VdUASy3K1liDo/83dk+XndTCiO37EZS/u8RvPanF6+YCHlKya/3KDNAxNYT5+zGrMiUt
+         zmrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745329590; x=1745934390;
+        d=1e100.net; s=20230601; t=1745331058; x=1745935858;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=awwFbDm7jflKQEqDpnbX53KjJNqGVg4jeRSb+a5lprA=;
-        b=i/dXL6bSy0PMI0VAiH56xSong5kKbJ0QkB3Qn1yynjO+qs6K9G4LFP33Cjr9xBJSMK
-         6/BeocDmxiaHphZQFJHT/Qupw9ec8lfP2QMgp5+YeNlPWKOwWWyliqnP36wwOAA3icam
-         lRKbJKfYBh+OADC6JGZESEeuYkbzkhb/ygaoy5juSwQ/z7HOhusousSSEdOwPd0adEZr
-         C/sJtdXt7O6RzdIcQ5dokXVmGRj42UMYd8osLd4N3/w2gkMHhW8Mofy40PJYGU6E4dej
-         urjoHfW9ugwC2aGGC4tRLEq6QCXS2ClIaW+Usd/4MVG5pEDAs5TBGmHYBfI73OdeF0Z8
-         Dv5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXipgvvazyONUAz21zC+R3HDhVtf2tHD9zkB1jcqaA3qdo2qLnh6a1lFrQBX4u4O/4CZlYi@lists.linux.dev
-X-Gm-Message-State: AOJu0YyPLHkK1O2g28LTeapTatkzpjYmf+pYp8xcBjSCuHfCkMgjKjOt
-	zTNW6OSx/4y1kvZ4Cw0WJZteHwb7ry0M/Nnp2EWiiaxW9mCHDxfBHsdyUAHyGPDTAzi84FlIG7L
-	FQ2MumKqNAw+gvvVROycoPt8DGok=
-X-Gm-Gg: ASbGncu2Ne4QmUPbN/jGRoqw6OOPAGaLtdrXH372pITTY016Y2hy4qdBTT+/g7SPSE9
-	dJHipd33CzGd5HaeWre/WQAV4NNvBV/ibxl7XweO4hPlLgWK1N4tmeXzKxsYguPl5+66JoaPzt5
-	JWZKaqpO+ds9xoF7Zf/PL2nA==
-X-Google-Smtp-Source: AGHT+IEvD/7Oi1OXNnSpSvib9zBGTiZYtSa6KmXETml5Sc3wcLno9P6YnLmXGVY+d+60He3bpYpfTe9GXBlxik21cGA=
+        bh=2MM6fvdAAQzaNltoa3ZzC6OQFO8sSXRGY0+MhpYMgCY=;
+        b=f7hiFlMR0J651SwJgKa3HUUX+JITzgGeD2Di/rrY/cWAenYI83XpP5y0tuxwxszyhI
+         XKERSZMhNSUkup0M7o5CS2jZnqcnmOsDFC6fQRiHalMFJMQcQ+9whsTTtohxqPJFygIN
+         RupnNPnl4Hez/5RNT/APMoDM/v6Dk0u0EMjm70oaU8BAXlpa0PBLfwkRyX7XZ/hKIoWM
+         FbqBf3SVvjh7M6W89w/8kpc+IqFcP4ahbHoURam+eJrWEA30Zs5XvWnGO2/GU4j3jQem
+         e39kZBkykte0nI2oSFfc02rc7fnYgJA1tk+aQrB/ItAGbeBtg4+F36HZXhlBTM5+w4x9
+         7zSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVvjJeS7+U81BxldhsLipQ9Ipyc914wJfG/yBkNAqkiYeUL2DAyh/N7XUtaH5vQPgvTFD+A@lists.linux.dev
+X-Gm-Message-State: AOJu0YyS+/CoOT0VoQXXcC/NgURI7/4JjxfkQFUFIT2bEQFBuxKs4EyV
+	C2O46P6u2mI8uxlDp2gZtaN3LILHjf21pqJ1XiWmXpgqAr3q7qFs/LTvfoAWHxOAc8INZ/4ai5c
+	z+ADfNji+yNgtYT8afuggJvf0kg4=
+X-Gm-Gg: ASbGncu/tMSUGemTvETkhDWCUYhoyGHeKm0cXe4s5ibsj13v13Y/B46nByiHO7A9fF0
+	+YwOkXiiXcO/cy8YN03JMbi4M4CWcZJMgYpJg0ofJEWytP/XtQmy2uw4wwhFrkyELcotL+9ba8B
+	qUDmlZOMDSKzX5f3Om0BXXOfn2VyXiG+tt
+X-Google-Smtp-Source: AGHT+IHNrZukhtHZqdbBi0rMLPXMhyRUwthSlOF6B/9nJ244nnrvPdxxYhxg5zPl9IwCLDR/Yn0OqTmVZ44CVdDTrRg=
 X-Received: by 2002:a17:90b:1c91:b0:2ee:f59a:94d3 with SMTP id
- 98e67ed59e1d1-3087ba5ccbamr8017716a91.0.1745329589855; Tue, 22 Apr 2025
- 06:46:29 -0700 (PDT)
+ 98e67ed59e1d1-3087ba5ccbamr8060310a91.0.1745331057902; Tue, 22 Apr 2025
+ 07:10:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250422125633.30413-1-contact@arnaud-lcm.com> <20250422125824.30525-1-contact@arnaud-lcm.com>
-In-Reply-To: <20250422125824.30525-1-contact@arnaud-lcm.com>
+References: <20250422125633.30413-1-contact@arnaud-lcm.com>
+In-Reply-To: <20250422125633.30413-1-contact@arnaud-lcm.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 22 Apr 2025 15:46:16 +0200
-X-Gm-Features: ATxdqUFOX-8ZK9wTG68OV2QHGuhfwdNTtWKDYoDi6eyZlmEfBl_bLh2iur-YQGs
-Message-ID: <CANiq72n41Oj4K-yZCWbNXJQEEjTqjXHYgrkffAg_mUg8dKLWQg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] checkpatch.pl: warn about // comments on private
- Rust items
+Date: Tue, 22 Apr 2025 16:10:45 +0200
+X-Gm-Features: ATxdqUG-FAOW6e-i0WqSstuY50PV6UgDsUfeNCfXkoL6rqSF8GshcvdRIVq93BI
+Message-ID: <CANiq72mo+DSyFZ3gVWVhqH5LHa0hkJ6gyTN70=smhRYzpNMYWA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] checkpatch.pl: Add warning for // comments on
+ private Rust items
 To: Arnaud Lecomte <contact@arnaud-lcm.com>
 Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, 
 	Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
@@ -83,46 +83,32 @@ Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025 at 2:58=E2=80=AFPM Arnaud Lecomte <contact@arnaud-lcm.=
+On Tue, Apr 22, 2025 at 2:56=E2=80=AFPM Arnaud Lecomte <contact@arnaud-lcm.=
 com> wrote:
 >
-> The detection uses multiple heuristics to identify likely doc comments:
->   - Comments containing markdown
+> Background
+> ----------
+>
+> The Rust-for-Linux project currently lacks enforcement of documentation f=
+or private Rust items,
+> as highlighted in https://github.com/Rust-for-Linux/linux/issues/1157.
+> While rustc already lints missing documentation for public items, private=
+ items remain unchecked.
+> This patch series aims to close that gap by ensuring proper documentation=
+ practices
+> for private Rust items in the kernel.
 
-Markdown is required in both documentation and comments, so I don't
-think we can use some of those, e.g. inline code spans (i.e.
-backticks) are common (and actually expected) in comments. Something
-like a title (i.e. `#`) or intra-doc links are uncommon, though.
+I think this background wasn't changed from the previous version --
+you can include a changelog in the cover letter too (some do that
+only, instead of per-patch), which may help to mention what changed in
+the cover letter itself, if any, since this is a good and long cover
+letter :)
 
->   - Comments starting with an imperative tone
-
-Some people document using the third-person, e.g. some functions say
-"Returns ..." like you have below. (It is not easy to enforce
-kernel-wide a single style here, thus so far we don't.)
-
-(Looking briefly at the code) Ah, I think you are covering both, good.
-
->   - Comments with references: @see, @link, ...
-
-Do you mean Markdown references? Or javadoc-like ones?
-
-(Looking again at the code...) I think you are referring to actually
-strings like `@see`. Hmm... I don't think we have those -- the only
-`@` I would expect in a comment are thinks like emails or the
-`rustdoc` syntax to disambiguate the "kind" of item, e.g.
-`type@NotThreadSafe`. I do see a `@maxlen` somewhere, but that should
-have been an inline code span, and anyway it is not a `@see` or
-`@link`. But I may be confused here?
-
-> Comments are only flagged if they:
->  - Appear above private items
->  - Don't contain obvious non-doc patterns (TODO, FIXME)
->  - Score sufficiently on heuristics
-
-Nice work! I wasn't expecting something with actual weighted scoring,
-but if the maintainers are OK with something as involved as that, then
-I guess it is fine. We may need to tweak the scoring in the future,
-but it may be a good experiment.
+By the way, some of this cover letter (the "Results" section in
+particular with the examples) could be nice as part of the commit
+message on the first commit -- that will make it forever part of the
+Git repository, which can be useful to understand the commit itself
+and why you designed the heuristics like you did.
 
 Thanks!
 
