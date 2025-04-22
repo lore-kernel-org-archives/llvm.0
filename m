@@ -1,141 +1,224 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E7413B2B8;
-	Tue, 22 Apr 2025 12:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E072BB13
+	for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 12:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745326412; cv=none; b=dzG8EhkAnx5jF2DZIejiz4/BEsY1NkojaSSfe5ULLDs0f1EJ7DNyWqiSF1V5vBLohCQhV6/FqrEG21R3iFLRNRXPEmdiE3++U1YzOI+s3Ye75IbY9449YY+HUizOCQ1pBFsQqG93+ai+yeC2EeNLtgaxofzwVtUvbr1IzRTtzqE=
+	t=1745326615; cv=none; b=cxPgExpDHMv+RD+vBDiTXpmF+m2hrhLq0RX14UhbDLRGEoSflYHuBqmdwf5HLNveahB8B9RAg5JTciL5xVgpk4NQMRDf52cQRtX1695YAMCoCxukFZbrvpPm+tx6RkVmujcHvkqeUc38Qq5MBLqCCgDpmiAGYrot8Tibl1EOFU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745326412; c=relaxed/simple;
-	bh=Z9CiUl8n3GG0QL53fQ0tbSFIJfT5VW0MonfGETeCdzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=m/tL6enc1mzzR/rlOPXE7yYQFDzV93Dke8B6DrhlrGC6MQA/B3g+gTJ1oonn7TzjUXnrub0E5rGmPtUUTAGi/aMYBTUrKiI98V4o+L1cCrJL6SCd2y4SVAknCGQyGdYsPeDCXh/Fg4LbyTriF549fOlKxEg0dsGxNElZ7jV8VKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DOtOfAr4; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DOtOfAr4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745326411; x=1776862411;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z9CiUl8n3GG0QL53fQ0tbSFIJfT5VW0MonfGETeCdzQ=;
-  b=DOtOfAr4YfX0ersQauXC7CoIOOVHK33RvVk/zpf9XeDq7Yj8VRZs2aGl
-   7wV/xu9+kR3PzxQ4keqyK3Vb5zFSQdvah46XVE/vgk0d/nuFqd7f/uETK
-   QvAwGGZ4mTbwcXxs5FEvohyu4wBd7+JA+5rAFHIeAEoXFIKidKm+cJ/I/
-   7J9cZzNOE6ST/ER52Sei22w+fPk7M9q+OX3pD2hJQi2AAVK/1jdRHgrnV
-   g5W+GoPfFdrXwmKOih2exDVm8m1IOO1whwoYR5VnwtF221hw82XkT1sz9
-   sL/hbEJqyOs9LLBaD6zm6rNuK8yfwkO8XSXX4zhECMrkA9zMeCiqorScx
-   w==;
-X-CSE-ConnectionGUID: a1IWHinuQ+OmO8jxKf97vA==
-X-CSE-MsgGUID: BxZy6O+iQpeGEy0sDBlx/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="46770831"
-X-IronPort-AV: E=Sophos;i="6.15,231,1739865600"; 
-   d="scan'208";a="46770831"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 05:53:31 -0700
-X-CSE-ConnectionGUID: ph0Ppv6SQVW0sk1gMaYmIg==
-X-CSE-MsgGUID: 1sygbuMETxmVJxvyywDFuw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,231,1739865600"; 
-   d="scan'208";a="162969018"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Apr 2025 05:53:29 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u7D7u-00010t-2Q;
-	Tue, 22 Apr 2025 12:53:26 +0000
-Date: Tue, 22 Apr 2025 20:52:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [krzk:next/drivers 7/7] drivers/firmware/samsung/exynos-acpm.c:672:
- warning: Function parameter or struct member 'acpm_np' not described in
- 'acpm_get_by_node'
-Message-ID: <202504222051.7TqaSQ48-lkp@intel.com>
+	s=arc-20240116; t=1745326615; c=relaxed/simple;
+	bh=y8ihA9xM3F8vLDO0to0+a31KSyQ+qiH8wzsdSBfkebo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p3YaXiG9ErZHlrhrBqZY3EO+a2vc67wX2rxWQpnkfThyCxrqim5RFVcxTM7hkPs25n3fFenlE7BYs3SKg3EYc0Gefo8DBfk3SAN0OaiE5b/K8cG56V8NbYmfnqmnINgV4gp3OXqBUJI2tamuJv0FijzdtqcmJHkAl8iITBjPKCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
+Received: from arnaudlcm-X570-UD.. (unknown [IPv6:2a01:e0a:3e8:c0d0:c864:fba8:3048:a3c2])
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 2BF373CD51F;
+	Tue, 22 Apr 2025 12:56:44 +0000 (UTC)
+Authentication-Results: Plesk;
+	spf=pass (sender IP is 2a01:e0a:3e8:c0d0:c864:fba8:3048:a3c2) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=arnaudlcm-X570-UD..
+Received-SPF: pass (Plesk: connection is authenticated)
+From: Arnaud Lecomte <contact@arnaud-lcm.com>
+To: Andy Whitcroft <apw@canonical.com>,
+	Joe Perches <joe@perches.com>,
+	Dwaipayan Ray <dwaipayanray1@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev,
+	contact@arnaud-lcm.com,
+	skhan@linuxfoundation.org
+Subject: [PATCH v3 0/2] checkpatch.pl: Add warning for // comments on private
+ Rust items
+Date: Tue, 22 Apr 2025 14:56:33 +0200
+Message-ID: <20250422125633.30413-1-contact@arnaud-lcm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: <174532660477.19425.2801981240070484205@Plesk>
+X-PPP-Vhost: arnaud-lcm.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git next/drivers
-head:   a8dc26a0ec43fd416ca781a8030807e65f71cfc5
-commit: a8dc26a0ec43fd416ca781a8030807e65f71cfc5 [7/7] firmware: exynos-acpm: introduce devm_acpm_get_by_node()
-config: i386-buildonly-randconfig-001-20250422 (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504222051.7TqaSQ48-lkp@intel.com/
+Background
+----------
 
-All warnings (new ones prefixed by >>):
+The Rust-for-Linux project currently lacks enforcement of documentation for private Rust items,
+as highlighted in https://github.com/Rust-for-Linux/linux/issues/1157.
+While rustc already lints missing documentation for public items, private items remain unchecked.
+This patch series aims to close that gap by ensuring proper documentation practices
+for private Rust items in the kernel.
 
->> drivers/firmware/samsung/exynos-acpm.c:672: warning: Function parameter or struct member 'acpm_np' not described in 'acpm_get_by_node'
->> drivers/firmware/samsung/exynos-acpm.c:672: warning: expecting prototype for acpm_get_by_phandle(). Prototype was for acpm_get_by_node() instead
+The actual solution comes in several parts
+------------------------------------------
 
+ 1) Patch 1 : Implements detection logic to emit warnings for improperly
+ documented private Rust items (e.g., // comments instead of ///)
+ through a set of heuristics.
+ 2) Patch 2 : Adds an auto-fix mechanism via the --fix option to help
+ developers correct documentation issues.
 
-vim +672 drivers/firmware/samsung/exynos-acpm.c
+Results
+--------------------
 
-a88927b534ba18 Tudor Ambarus 2025-02-13  662  
-a88927b534ba18 Tudor Ambarus 2025-02-13  663  /**
-a88927b534ba18 Tudor Ambarus 2025-02-13  664   * acpm_get_by_phandle() - get the ACPM handle using DT phandle.
-a88927b534ba18 Tudor Ambarus 2025-02-13  665   * @dev:        device pointer requesting ACPM handle.
-a88927b534ba18 Tudor Ambarus 2025-02-13  666   * @property:   property name containing phandle on ACPM node.
-a88927b534ba18 Tudor Ambarus 2025-02-13  667   *
-a88927b534ba18 Tudor Ambarus 2025-02-13  668   * Return: pointer to handle on success, ERR_PTR(-errno) otherwise.
-a88927b534ba18 Tudor Ambarus 2025-02-13  669   */
-a8dc26a0ec43fd AndrÈ Draszik 2025-03-27  670  static const struct acpm_handle *acpm_get_by_node(struct device *dev,
-a8dc26a0ec43fd AndrÈ Draszik 2025-03-27  671  						  struct device_node *acpm_np)
-a88927b534ba18 Tudor Ambarus 2025-02-13 @672  {
-a88927b534ba18 Tudor Ambarus 2025-02-13  673  	struct platform_device *pdev;
-a88927b534ba18 Tudor Ambarus 2025-02-13  674  	struct device_link *link;
-a88927b534ba18 Tudor Ambarus 2025-02-13  675  	struct acpm_info *acpm;
-a88927b534ba18 Tudor Ambarus 2025-02-13  676  
-a88927b534ba18 Tudor Ambarus 2025-02-13  677  	pdev = of_find_device_by_node(acpm_np);
-53734383a73888 AndrÈ Draszik 2025-03-19  678  	if (!pdev)
-a88927b534ba18 Tudor Ambarus 2025-02-13  679  		return ERR_PTR(-EPROBE_DEFER);
-a88927b534ba18 Tudor Ambarus 2025-02-13  680  
-a88927b534ba18 Tudor Ambarus 2025-02-13  681  	acpm = platform_get_drvdata(pdev);
-a88927b534ba18 Tudor Ambarus 2025-02-13  682  	if (!acpm) {
-a88927b534ba18 Tudor Ambarus 2025-02-13  683  		platform_device_put(pdev);
-a88927b534ba18 Tudor Ambarus 2025-02-13  684  		return ERR_PTR(-EPROBE_DEFER);
-a88927b534ba18 Tudor Ambarus 2025-02-13  685  	}
-a88927b534ba18 Tudor Ambarus 2025-02-13  686  
-a88927b534ba18 Tudor Ambarus 2025-02-13  687  	if (!try_module_get(pdev->dev.driver->owner)) {
-a88927b534ba18 Tudor Ambarus 2025-02-13  688  		platform_device_put(pdev);
-a88927b534ba18 Tudor Ambarus 2025-02-13  689  		return ERR_PTR(-EPROBE_DEFER);
-a88927b534ba18 Tudor Ambarus 2025-02-13  690  	}
-a88927b534ba18 Tudor Ambarus 2025-02-13  691  
-a88927b534ba18 Tudor Ambarus 2025-02-13  692  	link = device_link_add(dev, &pdev->dev, DL_FLAG_AUTOREMOVE_SUPPLIER);
-a88927b534ba18 Tudor Ambarus 2025-02-13  693  	if (!link) {
-a88927b534ba18 Tudor Ambarus 2025-02-13  694  		dev_err(&pdev->dev,
-a88927b534ba18 Tudor Ambarus 2025-02-13  695  			"Failed to create device link to consumer %s.\n",
-a88927b534ba18 Tudor Ambarus 2025-02-13  696  			dev_name(dev));
-a88927b534ba18 Tudor Ambarus 2025-02-13  697  		platform_device_put(pdev);
-a88927b534ba18 Tudor Ambarus 2025-02-13  698  		module_put(pdev->dev.driver->owner);
-a88927b534ba18 Tudor Ambarus 2025-02-13  699  		return ERR_PTR(-EINVAL);
-a88927b534ba18 Tudor Ambarus 2025-02-13  700  	}
-a88927b534ba18 Tudor Ambarus 2025-02-13  701  
-a88927b534ba18 Tudor Ambarus 2025-02-13  702  	return &acpm->handle;
-a88927b534ba18 Tudor Ambarus 2025-02-13  703  }
-a88927b534ba18 Tudor Ambarus 2025-02-13  704  
+The following implementation has been tested against real patches:
+ - https://lore.kernel.org/rust-for-linux/dc63bdc4bff8f084714e2c8ff30e4c0d435e85b7.camel@redhat.com/T/#t
+ - https://lore.kernel.org/rust-for-linux/20250418-ptr-as-ptr-v10-0-3d63d27907aa@gmail.com/T/#t
+ - https://lore.kernel.org/rust-for-linux/20250420-nova-frts-v1-1-ecd1cca23963@nvidia.com/T/#u
+and this file:
 
-:::::: The code at line 672 was first introduced by commit
-:::::: a88927b534ba18019b0440cf3d7f068407b5250c firmware: add Exynos ACPM protocol driver
+// SPDX-License-Identifier: GPL-2.0
 
-:::::: TO: Tudor Ambarus <tudor.ambarus@linaro.org>
-:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+// Simple comment - should not trigger
 
+// Returns a reference to the underlying [`cpufreq::Table`]. - should trigger
+fn table(&self) -> &cpufreq::Table {
+    // SAFETY: The `ptr` is guaranteed by the C code to be valid. - should not trigger
+    unsafe { cpufreq::Table::from_raw(self.ptr) }
+}
+
+// Meaning of life - should not trigger
+fn test() -> u32 {
+    42
+}
+
+/// Proper doc comment for a private function.
+fn proper_doc() -> u32 {
+    42
+}
+
+// TODO: implement more logic - should not trigger
+fn todo_marker() -> bool {
+    true
+}
+
+// Just a regular comment not followed by code - should not trigger
+
+pub fn public_function() {
+    // Public function - should not trigger
+}
+
+// Test - should not trigger
+struct Point2D {
+  pub x: f32,
+  pub y: f32
+}
+
+// Test - should not trigger
+pub struct Point2D {
+  pub x: f32,
+  pub y: f32
+}
+
+mod test_module {
+    // Module inner comment - should not trigger
+}
+
+// Comment before macro - should not trigger
+macro_rules! my_macro {
+    // Comment inside macro - should not trigger
+    () => {};
+}
+
+// Comment before public macro - should not trigger
+macro_rules! my_public_macro {
+
+}
+
+// Comment before unsafe block - should not trigger
+unsafe {
+    // Comment inside unsafe block - should not trigger
+    let x = 5;
+}
+
+// Comment with multiple
+// Line
+// Youhouuu
+// - should trigger
+fn with_unsafe_keyword() {
+    println!("test");
+}
+
+// NOTE: important consideration - should not trigger
+fn note_marker() -> bool {
+    true
+}
+
+// Comment with code example: - should trigger
+// ``` let x = 5; ```
+fn with_mixed_comments() {
+    println!("test");
+}
+
+which led to this output:
+WARNING: Consider using `///` if the comment was intended as documentation (line 5).
++// Returns a reference to the underlying [`cpufreq::Table`]. - should trigger
+WARNING: Consider using `///` if the comment was intended as documentation (line 72).
++// Comment with multiple
+WARNING: Consider using `///` if the comment was intended as documentation (line 73).
++// Line
+WARNING: Consider using `///` if the comment was intended as documentation (line 74).
++// Youhouuu
+WARNING: Consider using `///` if the comment was intended as documentation (line 75).
++// - should trigger
+WARNING: Consider using `///` if the comment was intended as documentation (line 92).
++// Comment with code example: - should trigger
+total: 0 errors, 6 warnings, 96 lines checked
+
+NOTE: For some of the reported defects, checkpatch may be able to
+      mechanically convert to the typical style using --fix or --fix-inplace.
+
+test.rs has style problems, please review.
+
+NOTE: If any of the errors are false positives, please report
+      them to the maintainer, see CHECKPATCH in MAINTAINERS.
+
+To: Andy Whitcroft <apw@canonical.com>
+To: Joe Perches <joe@perches.com>
+To: Dwaipayan Ray <dwaipayanray1@gmail.com>
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To: Miguel Ojeda <ojeda@kernel.org>
+To: Alex Gaynor <alex.gaynor@gmail.com>
+To: Boqun Feng <boqun.feng@gmail.com>
+To: Gary Guo <gary@garyguo.net>
+To: Bj√∂rn Roy Baron <bjorn3_gh@protonmail.com>
+To: Benno Lossin <benno.lossin@proton.me>
+To: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alice Ryhl <aliceryhl@google.com>
+To: Trevor Gross <tmgross@umich.edu>
+To: Danilo Krummrich <dakr@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: rust-for-linux@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Cc: contact@arnaud-lcm.com
+Cc: skhan@linuxfoundation.org
+Link: https://lore.kernel.org/all/20250420184700.47144-1-contact@arnaud-lcm.com/
+Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
