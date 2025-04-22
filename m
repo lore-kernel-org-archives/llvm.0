@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C0319049A;
-	Tue, 22 Apr 2025 01:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AE8184540;
+	Tue, 22 Apr 2025 02:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745287178; cv=none; b=OWI8ZgOEdmROpEBzJE0pS1IT8alzzq6H6nFiTQ+OoEKajLwxkAegI99AronXp6lmIUqIIdd9YFpnvcZDyPcWqFpV9O1C5HQwYXRDuZAt5wRjlAGK+db91RQ6e25xoSAXtsfnjgO+S7+cJI+cl8FMAClQFNfAu5T2jJhsmttgXC8=
+	t=1745287782; cv=none; b=laftuR4LG2mD5HOPoo+BZpYjdA6Aq49kNQdZLsgZn9BX35nSeb7WjaTU8E3/WQUq9KaekomlWbpQX0AMxj0wlvsJkiH9jmQL4l3VGOA73yekLEntLFER4BE6o/efB+n1dtJhjVJNFZDQ8+Z9jP7MNAdN90RmNmM1qaCfUST97GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745287178; c=relaxed/simple;
-	bh=Xd64fh8MqRRrEwKvO6QbDLV/7uoXAP084da/t7pSODo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iBADcBtDofzGGFZkyxNGCFCr8AOiAFMajSwXb7RGAD4CUeA9FqlOmdqPDEVswMeej+VVy0y76v6KCmvGuRwCn6gKKKcl8lTp+JSJRNH3b8SsQqWA77AOIZuGi7rTfK9A6UVL2hQk4FVDZyc1ak+L2LmkZjOZHKGgLOig8gtS6IY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqtvNTi0; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1745287782; c=relaxed/simple;
+	bh=3IPdSJ3I70j4LJHQ7iHlhoXeqRYAYXW3zl/zrWVJSrE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DhX3Ty1gh5xGcNyenkJulaBs1xxh9Fziu7eLVyAqCqHBHFbDOTkJXPUtkNgGOT6569ey3aXZ4cVMvlo+6ID/jZvuuqJ3vewFG4sTkUsQJA83kUKctDUumy2PneI/XotyDSzBy49APWeY0Swx67CjE/1qLQwXUSP3yDTk/HGV2jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mBUH7gWs; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqtvNTi0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mBUH7gWs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745287176; x=1776823176;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xd64fh8MqRRrEwKvO6QbDLV/7uoXAP084da/t7pSODo=;
-  b=hqtvNTi0qiv5QKN2hbZOiO/oq3pis0K+Tho3JTvSToBWQWhIef/ksY7u
-   YCcIDFoRkNVINO1GTMO5tuZpl35rIy8xgkwjn2HU859jqOTNgap2hAfoQ
-   wYa/vJJD05VZM68ugFlLJB03Ox5v4yPDhQ503nDJC6+ek9h0+MkqHhrDT
-   SggxsbySPZTzBaLq6kjLp47L3fFN/JAzdP0UdH7TYHykE4yXDF78a9aFn
-   VQ/yyAJeXhlMQkqr8B4PutprFH8mQVnjp1TlEzOsQ076MjwrS6smuRZs+
-   FObsR9FclhDvq+1epUMAY60weeYlsfYFJtYOGgfg5ot1l+/ujiO3+teq1
-   g==;
-X-CSE-ConnectionGUID: AkJy4jU4S3GQHZZpFz0oxw==
-X-CSE-MsgGUID: Mg43tJYmQTyI7+KVuSBgeg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="57479142"
+  t=1745287777; x=1776823777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3IPdSJ3I70j4LJHQ7iHlhoXeqRYAYXW3zl/zrWVJSrE=;
+  b=mBUH7gWsKKANm31ienlQtKyeIHsb2dg0Dwb12JOSwY7MqQVSHQfZgR9Y
+   aUhJM/rgrPugFtb6oBeEJClNPUxm3eMCK5+I2fRmMtAHPTWsCvX7D1vFc
+   OW9TFtRX/UUutdQ9qwhAeO+ALIlSYt8iYgp8nnPtGyy7VtuGv8wl3SNDp
+   qLxSJBuvJzI5LmOhpel6LnrTz5z+h0rMaVfOhhfdEY+H5UxXZW/nFUCT2
+   rJTwxuDgZGzcQOawKjI4EoMqS/sOfou690FYbJTO4kvkMagOGJ/LDBoDk
+   kn+v1wgnckCh9tEZkioBM+wJlpOnf+cjBdnUaeQnnbYU2MZ6OghoOw1v6
+   A==;
+X-CSE-ConnectionGUID: 2t0tN0WKRtOXiCpYI9QoKQ==
+X-CSE-MsgGUID: wJhFG4caRjukoawAkZJZ+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="72226426"
 X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
-   d="scan'208";a="57479142"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 18:59:35 -0700
-X-CSE-ConnectionGUID: /DxbFNOfTqO24Z8wBe1cYQ==
-X-CSE-MsgGUID: OPDvtGt0Spe8cbSYtACBHw==
+   d="scan'208";a="72226426"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 19:09:37 -0700
+X-CSE-ConnectionGUID: xul+jjYbR/SaEE/EiQltpQ==
+X-CSE-MsgGUID: kTkGfurvTZ6A9/0cvpkiSw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
-   d="scan'208";a="132421031"
+   d="scan'208";a="132835551"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 21 Apr 2025 18:59:34 -0700
+  by orviesa008.jf.intel.com with ESMTP; 21 Apr 2025 19:09:34 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u72v5-0000WV-0L;
-	Tue, 22 Apr 2025 01:59:31 +0000
-Date: Tue, 22 Apr 2025 09:58:47 +0800
+	id 1u734l-0000WZ-29;
+	Tue, 22 Apr 2025 02:09:31 +0000
+Date: Tue, 22 Apr 2025 10:09:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dongcheng Yan <dongcheng.yan@intel.com>
+To: Marwin Hormiz <marwinhormiz@gmail.com>, dpenkler@gmail.com,
+	gregkh@linuxfoundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/i2c/lt6911uxe.c:446:14: error: use of undeclared
- identifier 'v4l2_subdev_s_stream_helper'; did you mean
- 'v4l2_subdev_is_streaming'?
-Message-ID: <202504220916.ikwkHJgy-lkp@intel.com>
+	dan.carpenter@linaro.org, matchstick@neverthere.org, arnd@arndb.de,
+	niharchaithanya@gmail.com, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Marwin Hormiz <marwinhormiz@gmail.com>
+Subject: Re: [PATCH 1/1] staging: gpib: gpio: Fix memory allocation style in
+ gpib_bitbang.c
+Message-ID: <202504220954.L1QvhSdD-lkp@intel.com>
+References: <20250421184144.220972-1-marwinhormiz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,79 +68,205 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250421184144.220972-1-marwinhormiz@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9d7a0577c9db35c4cc52db90bc415ea248446472
-commit: e49563c3be09d4639ccff8ca68ef63b6f6c8456d media: i2c: add lt6911uxe hdmi bridge driver
-date:   7 weeks ago
-config: i386-randconfig-015-20250422 (https://download.01.org/0day-ci/archive/20250422/202504220916.ikwkHJgy-lkp@intel.com/config)
+Hi Marwin,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Marwin-Hormiz/staging-gpib-gpio-Fix-memory-allocation-style-in-gpib_bitbang-c/20250422-024547
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250421184144.220972-1-marwinhormiz%40gmail.com
+patch subject: [PATCH 1/1] staging: gpib: gpio: Fix memory allocation style in gpib_bitbang.c
+config: i386-buildonly-randconfig-001-20250422 (https://download.01.org/0day-ci/archive/20250422/202504220954.L1QvhSdD-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250422/202504220916.ikwkHJgy-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250422/202504220954.L1QvhSdD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504220916.ikwkHJgy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504220954.L1QvhSdD-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/media/i2c/lt6911uxe.c:446:14: error: use of undeclared identifier 'v4l2_subdev_s_stream_helper'; did you mean 'v4l2_subdev_is_streaming'?
-     446 |         .s_stream = v4l2_subdev_s_stream_helper,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                     v4l2_subdev_is_streaming
-   include/media/v4l2-subdev.h:2018:6: note: 'v4l2_subdev_is_streaming' declared here
-    2018 | bool v4l2_subdev_is_streaming(struct v4l2_subdev *sd);
-         |      ^
->> drivers/media/i2c/lt6911uxe.c:446:14: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, int)' with an expression of type 'bool (struct v4l2_subdev *)' (aka '_Bool (struct v4l2_subdev *)') [-Wincompatible-function-pointer-types]
-     446 |         .s_stream = v4l2_subdev_s_stream_helper,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/media/i2c/lt6911uxe.c:456:13: error: use of undeclared identifier 'v4l2_subdev_get_fmt'; did you mean 'v4l2_subdev_notify'?
-     456 |         .get_fmt = v4l2_subdev_get_fmt,
-         |                    ^~~~~~~~~~~~~~~~~~~
-         |                    v4l2_subdev_notify
-   include/media/v4l2-device.h:238:20: note: 'v4l2_subdev_notify' declared here
-     238 | static inline void v4l2_subdev_notify(struct v4l2_subdev *sd,
-         |                    ^
->> drivers/media/i2c/lt6911uxe.c:460:24: error: use of undeclared identifier 'v4l2_subdev_get_frame_interval'
-     460 |         .get_frame_interval = v4l2_subdev_get_frame_interval,
-         |                               ^
->> drivers/media/i2c/lt6911uxe.c:703:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     703 | module_i2c_driver(lt6911uxe_i2c_driver);
-         | ^
-         | int
->> drivers/media/i2c/lt6911uxe.c:703:19: error: a parameter list without types is only allowed in a function definition
-     703 | module_i2c_driver(lt6911uxe_i2c_driver);
-         |                   ^
-   6 errors generated.
+>> drivers/staging/gpib/gpio/gpib_bitbang.c:380:29: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     380 |         dbg_printk(3, ".........." LINFMT "\n", LINVAL);
+         |                                    ^~~~~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:54:32: note: expanded from macro 'LINFMT'
+      54 | #define LINFMT "DAV: %d  NRFD:%d  NDAC: %d SRQ: %d"
+         |                               ~^
+   drivers/staging/gpib/gpio/gpib_bitbang.c:47:29: note: expanded from macro 'dbg_printk'
+      47 |                         dev_dbg(board->gpib_dev, frm, ## __VA_ARGS__); } \
+         |                                                  ^~~
+   include/linux/dev_printk.h:171:41: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:28:41: note: expanded from macro 'pr_fmt'
+      28 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+         |                                         ^~~
+   include/linux/dev_printk.h:139:28: note: expanded from macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                 ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:454:7: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     454 |                            LINFMT ".\n", val, priv->dav_rx, priv->w_cnt, priv->length,
+         |                            ^~~~~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:54:32: note: expanded from macro 'LINFMT'
+      54 | #define LINFMT "DAV: %d  NRFD:%d  NDAC: %d SRQ: %d"
+         |                               ~^
+   drivers/staging/gpib/gpio/gpib_bitbang.c:47:29: note: expanded from macro 'dbg_printk'
+      47 |                         dev_dbg(board->gpib_dev, frm, ## __VA_ARGS__); } \
+         |                                                  ^~~
+   include/linux/dev_printk.h:171:41: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:28:41: note: expanded from macro 'pr_fmt'
+      28 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+         |                                         ^~~
+   include/linux/dev_printk.h:139:28: note: expanded from macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                 ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:550:49: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     550 |                         dbg_printk(1, "timeout after %zu/%zu at %d " LINFMT " eoi: %d\n",
+         |                                                                      ^~~~~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:54:42: note: expanded from macro 'LINFMT'
+      54 | #define LINFMT "DAV: %d  NRFD:%d  NDAC: %d SRQ: %d"
+         |                                         ~^
+   drivers/staging/gpib/gpio/gpib_bitbang.c:47:29: note: expanded from macro 'dbg_printk'
+      47 |                         dev_dbg(board->gpib_dev, frm, ## __VA_ARGS__); } \
+         |                                                  ^~~
+   include/linux/dev_printk.h:171:41: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:28:41: note: expanded from macro 'pr_fmt'
+      28 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+         |                                         ^~~
+   include/linux/dev_printk.h:139:28: note: expanded from macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                 ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:610:70: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     610 |                 dbg_printk(1, "out of order interrupt after %zu/%zu at %d cmd %d " LINFMT ".\n",
+         |                                                                                    ^~~~~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:54:32: note: expanded from macro 'LINFMT'
+      54 | #define LINFMT "DAV: %d  NRFD:%d  NDAC: %d SRQ: %d"
+         |                               ~^
+   drivers/staging/gpib/gpio/gpib_bitbang.c:47:29: note: expanded from macro 'dbg_printk'
+      47 |                         dev_dbg(board->gpib_dev, frm, ## __VA_ARGS__); } \
+         |                                                  ^~~
+   include/linux/dev_printk.h:171:41: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:28:41: note: expanded from macro 'pr_fmt'
+      28 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+         |                                         ^~~
+   include/linux/dev_printk.h:139:28: note: expanded from macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                 ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:617:49: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     617 |                 dbg_printk(1, "DAV low after %zu/%zu cmd %d " LINFMT ". No action.\n",
+         |                                                               ^~~~~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:54:32: note: expanded from macro 'LINFMT'
+      54 | #define LINFMT "DAV: %d  NRFD:%d  NDAC: %d SRQ: %d"
+         |                               ~^
+   drivers/staging/gpib/gpio/gpib_bitbang.c:47:29: note: expanded from macro 'dbg_printk'
+      47 |                         dev_dbg(board->gpib_dev, frm, ## __VA_ARGS__); } \
+         |                                                  ^~~
+   include/linux/dev_printk.h:171:41: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:28:41: note: expanded from macro 'pr_fmt'
+      28 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+         |                                         ^~~
+   include/linux/dev_printk.h:139:28: note: expanded from macro 'dev_no_printk'
+     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
+         |                                                 ^~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:687:50: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     687 |                 dbg_printk(1, "DAV high after %zu/%zu cmd %d " LINFMT ". No action.\n",
+         |                                                                ^~~~~~
+   drivers/staging/gpib/gpio/gpib_bitbang.c:54:32: note: expanded from macro 'LINFMT'
+      54 | #define LINFMT "DAV: %d  NRFD:%d  NDAC: %d SRQ: %d"
+         |                               ~^
+   drivers/staging/gpib/gpio/gpib_bitbang.c:47:29: note: expanded from macro 'dbg_printk'
+      47 |                         dev_dbg(board->gpib_dev, frm, ## __VA_ARGS__); } \
+         |                                                  ^~~
+   include/linux/dev_printk.h:171:41: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
 
 
-vim +446 drivers/media/i2c/lt6911uxe.c
+vim +380 drivers/staging/gpib/gpio/gpib_bitbang.c
 
-   444	
-   445	static const struct v4l2_subdev_video_ops lt6911uxe_video_ops = {
- > 446		.s_stream = v4l2_subdev_s_stream_helper,
-   447	};
-   448	
-   449	/*
-   450	 * lt6911uxe provides editable EDID for customers, but only can be edited like
-   451	 * updating flash. Due to this limitation, it is not possible to implement
-   452	 * EDID support.
-   453	 */
-   454	static const struct v4l2_subdev_pad_ops lt6911uxe_pad_ops = {
-   455		.set_fmt = lt6911uxe_set_format,
- > 456		.get_fmt = v4l2_subdev_get_fmt,
-   457		.enable_streams = lt6911uxe_enable_streams,
-   458		.disable_streams = lt6911uxe_disable_streams,
-   459		.enum_mbus_code = lt6911uxe_enum_mbus_code,
- > 460		.get_frame_interval = v4l2_subdev_get_frame_interval,
-   461		.s_dv_timings = lt6911uxe_s_dv_timings,
-   462		.g_dv_timings = lt6911uxe_g_dv_timings,
-   463		.query_dv_timings = lt6911uxe_query_dv_timings,
-   464		.enum_dv_timings = lt6911uxe_enum_dv_timings,
-   465		.dv_timings_cap = lt6911uxe_dv_timings_cap,
-   466		.get_mbus_config = lt6911uxe_get_mbus_config,
-   467	};
-   468	
+4cd654f847693c2 Dave Penkler  2024-09-18  350  
+4cd654f847693c2 Dave Penkler  2024-09-18  351  /***************************************************************************
+4cd654f847693c2 Dave Penkler  2024-09-18  352   *									   *
+4cd654f847693c2 Dave Penkler  2024-09-18  353   * READ									   *
+4cd654f847693c2 Dave Penkler  2024-09-18  354   *									   *
+4cd654f847693c2 Dave Penkler  2024-09-18  355   ***************************************************************************/
+4cd654f847693c2 Dave Penkler  2024-09-18  356  
+aa7f3b35ac16fd4 Michael Rubin 2025-04-17  357  static int bb_read(struct gpib_board *board, u8 *buffer, size_t length,
+4cd654f847693c2 Dave Penkler  2024-09-18  358  		   int *end, size_t *bytes_read)
+4cd654f847693c2 Dave Penkler  2024-09-18  359  {
+4cd654f847693c2 Dave Penkler  2024-09-18  360  	struct bb_priv *priv = board->private_data;
+4cd654f847693c2 Dave Penkler  2024-09-18  361  	unsigned long flags;
+4cd654f847693c2 Dave Penkler  2024-09-18  362  	int retval = 0;
+4cd654f847693c2 Dave Penkler  2024-09-18  363  
+4cd654f847693c2 Dave Penkler  2024-09-18  364  	ACT_LED_ON;
+4cd654f847693c2 Dave Penkler  2024-09-18  365  	SET_DIR_READ(priv);
+4cd654f847693c2 Dave Penkler  2024-09-18  366  
+4cd654f847693c2 Dave Penkler  2024-09-18  367  	dbg_printk(2, "board: %p  lock %d  length: %zu\n",
+4cd654f847693c2 Dave Penkler  2024-09-18  368  		   board, mutex_is_locked(&board->user_mutex), length);
+4cd654f847693c2 Dave Penkler  2024-09-18  369  
+4cd654f847693c2 Dave Penkler  2024-09-18  370  	priv->end = 0;
+4cd654f847693c2 Dave Penkler  2024-09-18  371  	priv->count = 0;
+4cd654f847693c2 Dave Penkler  2024-09-18  372  	priv->rbuf = buffer;
+4cd654f847693c2 Dave Penkler  2024-09-18  373  	if (length == 0)
+4cd654f847693c2 Dave Penkler  2024-09-18  374  		goto read_end;
+4cd654f847693c2 Dave Penkler  2024-09-18  375  	priv->request = length;
+4cd654f847693c2 Dave Penkler  2024-09-18  376  	priv->eos_check = (priv->eos_flags & REOS) == 0; /* do eos check */
+4cd654f847693c2 Dave Penkler  2024-09-18  377  	priv->eos_check_8 = priv->eos_flags & BIN;	 /* over 8 bits */
+4cd654f847693c2 Dave Penkler  2024-09-18  378  	priv->eos_mask_7 = priv->eos & 0x7f;		 /* with this 7 bit eos */
+4cd654f847693c2 Dave Penkler  2024-09-18  379  
+4cd654f847693c2 Dave Penkler  2024-09-18 @380  	dbg_printk(3, ".........." LINFMT "\n", LINVAL);
+4cd654f847693c2 Dave Penkler  2024-09-18  381  
+4cd654f847693c2 Dave Penkler  2024-09-18  382  	spin_lock_irqsave(&priv->rw_lock, flags);
+4cd654f847693c2 Dave Penkler  2024-09-18  383  	priv->dav_mode = 1;
+4cd654f847693c2 Dave Penkler  2024-09-18  384  	priv->dav_rx = 1;
+4cd654f847693c2 Dave Penkler  2024-09-18  385  	ENABLE_IRQ(priv->irq_DAV, IRQ_TYPE_LEVEL_LOW);
+4cd654f847693c2 Dave Penkler  2024-09-18  386  	priv->end_flag = 0;
+4cd654f847693c2 Dave Penkler  2024-09-18  387  	gpiod_set_value(NRFD, 1); // ready for data
+4cd654f847693c2 Dave Penkler  2024-09-18  388  	priv->r_busy = 1;
+4cd654f847693c2 Dave Penkler  2024-09-18  389  	priv->phase = 100;
+4cd654f847693c2 Dave Penkler  2024-09-18  390  	spin_unlock_irqrestore(&priv->rw_lock, flags);
+4cd654f847693c2 Dave Penkler  2024-09-18  391  
+4cd654f847693c2 Dave Penkler  2024-09-18  392  	/* wait for the interrupt routines finish their work */
+4cd654f847693c2 Dave Penkler  2024-09-18  393  
+4cd654f847693c2 Dave Penkler  2024-09-18  394  	retval = wait_event_interruptible(board->wait,
+4cd654f847693c2 Dave Penkler  2024-09-18  395  					  (priv->end_flag || board->status & TIMO));
+4cd654f847693c2 Dave Penkler  2024-09-18  396  
+4cd654f847693c2 Dave Penkler  2024-09-18  397  	dbg_printk(3, "awake from wait queue: %d\n", retval);
+4cd654f847693c2 Dave Penkler  2024-09-18  398  
+4cd654f847693c2 Dave Penkler  2024-09-18  399  	if (retval == 0 && board->status & TIMO) {
+4cd654f847693c2 Dave Penkler  2024-09-18  400  		retval = -ETIMEDOUT;
+4cd654f847693c2 Dave Penkler  2024-09-18  401  		dbg_printk(1, "timeout\n");
+4cd654f847693c2 Dave Penkler  2024-09-18  402  	} else if (retval) {
+4cd654f847693c2 Dave Penkler  2024-09-18  403  		retval = -ERESTARTSYS;
+4cd654f847693c2 Dave Penkler  2024-09-18  404  	}
+4cd654f847693c2 Dave Penkler  2024-09-18  405  
+4cd654f847693c2 Dave Penkler  2024-09-18  406  	DISABLE_IRQ(priv->irq_DAV);
+4cd654f847693c2 Dave Penkler  2024-09-18  407  	spin_lock_irqsave(&priv->rw_lock, flags);
+4cd654f847693c2 Dave Penkler  2024-09-18  408  	gpiod_set_value(NRFD, 0); // DIR_READ line state
+4cd654f847693c2 Dave Penkler  2024-09-18  409  	priv->r_busy = 0;
+4cd654f847693c2 Dave Penkler  2024-09-18  410  	spin_unlock_irqrestore(&priv->rw_lock, flags);
+4cd654f847693c2 Dave Penkler  2024-09-18  411  
+4cd654f847693c2 Dave Penkler  2024-09-18  412  read_end:
+4cd654f847693c2 Dave Penkler  2024-09-18  413  	ACT_LED_OFF;
+4cd654f847693c2 Dave Penkler  2024-09-18  414  	*bytes_read = priv->count;
+4cd654f847693c2 Dave Penkler  2024-09-18  415  	*end = priv->end;
+4cd654f847693c2 Dave Penkler  2024-09-18  416  	priv->r_busy = 0;
+4cd654f847693c2 Dave Penkler  2024-09-18  417  	dbg_printk(2, "return: %d  eoi|eos: %d count: %d\n\n", retval, priv->end, priv->count);
+4cd654f847693c2 Dave Penkler  2024-09-18  418  	return retval;
+4cd654f847693c2 Dave Penkler  2024-09-18  419  }
+4cd654f847693c2 Dave Penkler  2024-09-18  420  
 
 -- 
 0-DAY CI Kernel Test Service
