@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055DC1F790F;
-	Tue, 22 Apr 2025 23:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA6A215043;
+	Tue, 22 Apr 2025 23:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745364562; cv=none; b=sEL7X6rq3/0kxVqQPPpH2cEF6QkT4f7436fv0LfAGF7RViIdTD3eq9EC65mHbQs/9Bz2/axfEd0XVResHMa0JTBeQkhBEfmkwZG0KN2ByeqO2Ah4k3yJEmliOsPhXd65N1G53freDDmCOXVEORiuQ1mNuQ9Ke155Xe7SOts9Ao4=
+	t=1745365165; cv=none; b=pDE5LotEUnr7ibEsyp6+Ad6sdQLHxgR+ZEJzNn2+USF3yMI21mwjIOc5fzUZXk7n21EuOv7+N1xE/XwUeqPzlSGU1+kcxwuIietvSgwX8wZhENdrjn6OG66f24YYNhU+FQVnoXdZEPhST3c/J6G/CKe0Rha2kL4GMxWSNK/dF4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745364562; c=relaxed/simple;
-	bh=TEBJiz2RcXh82+A/KhCFOmlF0UU8T6N7N6QVqnIHXGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AbT4Iu9tNykGc8biFU+a6Xy7TUvLor8VZe5L92mBhps3A0msBnjuEs/YXkWHyW8721Kh8jSMJIYEuEX5xw5aOK1o3B3wqEsFuwGZOlUbpeN+PCuxZxuHnS5oQK8sZftMQlHdIM/XooIwxcBVG9m4qKZdL0uJxFA8mebpZu44OUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k0w5xfO6; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1745365165; c=relaxed/simple;
+	bh=OHp/ytXznMMejV481b4911g5hrfbMuU8PzS3ocva4vg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WScUuYmIZSIet6YVhqxxR0sIgijPNNmEC7UE+AQ5BFf3Bkln4JM1LOcEaZoJBhUnJI98jQundge48Wog57Dq9RpZ0DLTcpk3HNCvyjitn6O2RX1ckwK4smjxuoAhL5Ryc9oAp9Mc91e0awmlFu5YTmjiubJxY+RICCDxuETe++A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HP/Nc4jc; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k0w5xfO6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HP/Nc4jc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745364561; x=1776900561;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TEBJiz2RcXh82+A/KhCFOmlF0UU8T6N7N6QVqnIHXGk=;
-  b=k0w5xfO6zKAkIOQyJ/8HLY3TXAuDXyFsos2OtpX1HWSdCzF92fxMt3Hf
-   Zsjp8DEqknySHxj/sxYyr7dpfaavy7wIkj+4FsNoIXtG1J7UEb4AAFRYl
-   kzsCgPl3Jo/agyJfW6BMJENymaBGnhfVVQ/QpjhLDeYrDNGuvb65Aos1f
-   aLGC7QBG7JK/i/tYJp2EJ3yHDCJep5VmZg6iX+Jta+rdW4aBEViUaZUof
-   OdbQXPGxqJCqJSpPzI0ZD5ZiF9YXyIJ5kyfCvLNXTYofD62PUGyhWeoSC
-   bBNNXfiTdjTe1e0cYKK3gMMgFpk7DESXiSCFf798sq0Gd3xbPA02NxfW9
-   g==;
-X-CSE-ConnectionGUID: zl3N+HyBSWWFHZsvz/Jx1Q==
-X-CSE-MsgGUID: cJpUJGnbSRuFEm0Uof1RsA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="57131511"
+  t=1745365164; x=1776901164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OHp/ytXznMMejV481b4911g5hrfbMuU8PzS3ocva4vg=;
+  b=HP/Nc4jc+9RHZoQoUiYTycSifvYCBtmbG2+o9EjwMeOxpf7eFPy3J/z2
+   YXCCOTki9dEqMyUdFkvJfFVRSJG9UE5S2gc+DalJ4gYitOz01TKkVBnDw
+   7SulT9wgHcZrt9sJN1A8Ylu6UFvxK2yV9GNwUqEL/9wL22ClEPkWWUD0B
+   CBd3NCdJ/w6N6N7prCqfOHmmxzp36t9QRDZyE5Z9Od35wfVhezmOihZ70
+   O6iUmDLomDmnlKJXRU8gJmTImAIB/lhZXkrzYZV8B/pzHjh9X7G3hKLjI
+   PB+5KrzFLgPTr7v+Hw5hknLVD7EqyFFtBiTXewlKCDPT2RE8Nv7XkcD/G
+   w==;
+X-CSE-ConnectionGUID: V6obY0xGTmqfMZBJzUwUsA==
+X-CSE-MsgGUID: xNnsyIygQk+3FY+5jmkWZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="69434121"
 X-IronPort-AV: E=Sophos;i="6.15,232,1739865600"; 
-   d="scan'208";a="57131511"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 16:29:20 -0700
-X-CSE-ConnectionGUID: PrQilMN4QBqaz5zAsqN8UA==
-X-CSE-MsgGUID: nXr4UR80QQGgB5RNOBsUZA==
+   d="scan'208";a="69434121"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 16:39:23 -0700
+X-CSE-ConnectionGUID: fQEYkKKmSKC4xWuha3AAHw==
+X-CSE-MsgGUID: 0aZdvzErQcmFm0HgjA9OEQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,232,1739865600"; 
-   d="scan'208";a="131992566"
+   d="scan'208";a="155357764"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 22 Apr 2025 16:29:19 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 22 Apr 2025 16:39:19 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u7N3F-0001OP-0U;
-	Tue, 22 Apr 2025 23:29:17 +0000
-Date: Wed, 23 Apr 2025 07:28:58 +0800
+	id 1u7NCv-0001Od-2U;
+	Tue, 22 Apr 2025 23:39:17 +0000
+Date: Wed, 23 Apr 2025 07:39:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2025-04-22 101/103]
- sound/soc/soc-dapm.c:2144:11: warning: no case matching constant switch
- condition '0'
-Message-ID: <202504230702.UE4GS253-lkp@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+	mahesh@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com, lukas@wunner.de,
+	aravind.iddamsetty@linux.intel.com,
+	Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v2] PCI/PM: Avoid suspending the device with errors
+Message-ID: <202504230757.wEJUX3v6-lkp@intel.com>
+References: <20250422135341.2780925-1-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,55 +67,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250422135341.2780925-1-raag.jadav@intel.com>
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2025-04-22
-head:   f743db58ae26ad957c2beb5f627c328ec8473d30
-commit: 3b625de97e3c01b90a1b11976d6732c77df85815 [101/103] ASoC: soc-dapm: tidyup idle_bias handling - step2
-config: hexagon-randconfig-002-20250423 (https://download.01.org/0day-ci/archive/20250423/202504230702.UE4GS253-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504230702.UE4GS253-lkp@intel.com/reproduce)
+Hi Raag,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v6.15-rc3 next-20250422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/PCI-PM-Avoid-suspending-the-device-with-errors/20250422-215734
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250422135341.2780925-1-raag.jadav%40intel.com
+patch subject: [PATCH v2] PCI/PM: Avoid suspending the device with errors
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20250423/202504230757.wEJUX3v6-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504230757.wEJUX3v6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504230702.UE4GS253-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504230757.wEJUX3v6-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/soc-dapm.c:2144:11: warning: no case matching constant switch condition '0'
-    2144 |                 switch (snd_power_get_state(dapm->card->snd_card)) {
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/sound/core.h:210:35: note: expanded from macro 'snd_power_get_state'
-     210 | #define snd_power_get_state(card)       ({ (void)(card); SNDRV_CTL_POWER_D0; })
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/pci/pci-driver.c:887:7: error: call to undeclared function 'pci_aer_in_progress'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     887 |         if (!pci_aer_in_progress(pci_dev) && !pci_dev->state_saved) {
+         |              ^
+   1 error generated.
 
 
-vim +/0 +2144 sound/soc/soc-dapm.c
+vim +/pci_aer_in_progress +887 drivers/pci/pci-driver.c
 
-05623c4314cba39 Mark Brown         2011-09-28  2138  
-977f312aeaeecd0 Kuninori Morimoto  2025-04-22  2139  static bool dapm_get_idle_bias(struct snd_soc_dapm_context *dapm)
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2140  {
-3b625de97e3c01b Kuninori Morimoto  2025-04-22  2141  	if (dapm->idle_bias) {
-7369d281c9df84b Kuninori Morimoto  2025-04-22  2142  		struct snd_soc_component *component = snd_soc_dapm_to_component(dapm);
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2143  
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04 @2144  		switch (snd_power_get_state(dapm->card->snd_card)) {
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2145  		case SNDRV_CTL_POWER_D3hot:
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2146  		case SNDRV_CTL_POWER_D3cold:
-7369d281c9df84b Kuninori Morimoto  2025-04-22  2147  			if (component)
-977f312aeaeecd0 Kuninori Morimoto  2025-04-22  2148  				return !component->driver->suspend_bias_off;
-3b625de97e3c01b Kuninori Morimoto  2025-04-22  2149  		}
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2150  	}
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2151  
-3b625de97e3c01b Kuninori Morimoto  2025-04-22  2152  	return dapm->idle_bias;
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2153  }
-86dbf2ac6fcb2d2 Lars-Peter Clausen 2014-09-04  2154  
-
-:::::: The code at line 2144 was first introduced by commit
-:::::: 86dbf2ac6fcb2d2932d4610f2dfe0954aa0633f7 ASoC: Add support for automatically going to BIAS_OFF on suspend
-
-:::::: TO: Lars-Peter Clausen <lars@metafoo.de>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   851	
+   852	static int pci_pm_suspend_noirq(struct device *dev)
+   853	{
+   854		struct pci_dev *pci_dev = to_pci_dev(dev);
+   855		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+   856	
+   857		if (dev_pm_skip_suspend(dev))
+   858			return 0;
+   859	
+   860		if (pci_has_legacy_pm_support(pci_dev))
+   861			return pci_legacy_suspend_late(dev);
+   862	
+   863		if (!pm) {
+   864			pci_save_state(pci_dev);
+   865			goto Fixup;
+   866		}
+   867	
+   868		if (pm->suspend_noirq) {
+   869			pci_power_t prev = pci_dev->current_state;
+   870			int error;
+   871	
+   872			error = pm->suspend_noirq(dev);
+   873			suspend_report_result(dev, pm->suspend_noirq, error);
+   874			if (error)
+   875				return error;
+   876	
+   877			if (!pci_dev->state_saved && pci_dev->current_state != PCI_D0
+   878			    && pci_dev->current_state != PCI_UNKNOWN) {
+   879				pci_WARN_ONCE(pci_dev, pci_dev->current_state != prev,
+   880					      "PCI PM: State of device not saved by %pS\n",
+   881					      pm->suspend_noirq);
+   882				goto Fixup;
+   883			}
+   884		}
+   885	
+   886		/* Avoid suspending the device with errors */
+ > 887		if (!pci_aer_in_progress(pci_dev) && !pci_dev->state_saved) {
+   888			pci_save_state(pci_dev);
+   889	
+   890			/*
+   891			 * If the device is a bridge with a child in D0 below it,
+   892			 * it needs to stay in D0, so check skip_bus_pm to avoid
+   893			 * putting it into a low-power state in that case.
+   894			 */
+   895			if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+   896				pci_prepare_to_sleep(pci_dev);
+   897		}
+   898	
+   899		pci_dbg(pci_dev, "PCI PM: Suspend power state: %s\n",
+   900			pci_power_name(pci_dev->current_state));
+   901	
+   902		if (pci_dev->current_state == PCI_D0) {
+   903			pci_dev->skip_bus_pm = true;
+   904			/*
+   905			 * Per PCI PM r1.2, table 6-1, a bridge must be in D0 if any
+   906			 * downstream device is in D0, so avoid changing the power state
+   907			 * of the parent bridge by setting the skip_bus_pm flag for it.
+   908			 */
+   909			if (pci_dev->bus->self)
+   910				pci_dev->bus->self->skip_bus_pm = true;
+   911		}
+   912	
+   913		if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
+   914			pci_dbg(pci_dev, "PCI PM: Skipped\n");
+   915			goto Fixup;
+   916		}
+   917	
+   918		pci_pm_set_unknown_state(pci_dev);
+   919	
+   920		/*
+   921		 * Some BIOSes from ASUS have a bug: If a USB EHCI host controller's
+   922		 * PCI COMMAND register isn't 0, the BIOS assumes that the controller
+   923		 * hasn't been quiesced and tries to turn it off.  If the controller
+   924		 * is already in D3, this can hang or cause memory corruption.
+   925		 *
+   926		 * Since the value of the COMMAND register doesn't matter once the
+   927		 * device has been suspended, we can safely set it to 0 here.
+   928		 */
+   929		if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
+   930			pci_write_config_word(pci_dev, PCI_COMMAND, 0);
+   931	
+   932	Fixup:
+   933		pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+   934	
+   935		/*
+   936		 * If the target system sleep state is suspend-to-idle, it is sufficient
+   937		 * to check whether or not the device's wakeup settings are good for
+   938		 * runtime PM.  Otherwise, the pm_resume_via_firmware() check will cause
+   939		 * pci_pm_complete() to take care of fixing up the device's state
+   940		 * anyway, if need be.
+   941		 */
+   942		if (device_can_wakeup(dev) && !device_may_wakeup(dev))
+   943			dev->power.may_skip_resume = false;
+   944	
+   945		return 0;
+   946	}
+   947	
 
 -- 
 0-DAY CI Kernel Test Service
