@@ -1,148 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A20C230274;
-	Tue, 22 Apr 2025 11:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E7413B2B8;
+	Tue, 22 Apr 2025 12:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745320284; cv=none; b=CBBv77vFvQqFPqA8wHGZPQ+XcUY506VK88OOWn/kEKbkwA0UlAZxrNpRchO2WaD9VwpTeIDpfcGSRv5oNgTRCIzDFP1C43HRJhbA7AR5ylvlM7/OTz6tVTdsJf7HAKWAYUT12WjtXUix6xXJzfze3DqWpn6rptFgAJAKYGO1T8Y=
+	t=1745326412; cv=none; b=dzG8EhkAnx5jF2DZIejiz4/BEsY1NkojaSSfe5ULLDs0f1EJ7DNyWqiSF1V5vBLohCQhV6/FqrEG21R3iFLRNRXPEmdiE3++U1YzOI+s3Ye75IbY9449YY+HUizOCQ1pBFsQqG93+ai+yeC2EeNLtgaxofzwVtUvbr1IzRTtzqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745320284; c=relaxed/simple;
-	bh=GgJCNAGMvR0NtaDv652psAyvJcAiYqq6JDbJevX2YzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LbbyuXYnUE1GapMZ0Mye30a5mVQg3C5k8Fhkuhr5FWRnY9Of33if9zUDB71o9JGCSy7DOX0bXo4tTRpaT0D2+lIF0i5VKWoKfEL0BoBx7rqLCWngaeXIrTJpshUPnncuI/4SOVVfF0UfCYNtrdODf9MAVNWvdgJGAdiZt1TSjSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZlC2RnTS; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1745326412; c=relaxed/simple;
+	bh=Z9CiUl8n3GG0QL53fQ0tbSFIJfT5VW0MonfGETeCdzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m/tL6enc1mzzR/rlOPXE7yYQFDzV93Dke8B6DrhlrGC6MQA/B3g+gTJ1oonn7TzjUXnrub0E5rGmPtUUTAGi/aMYBTUrKiI98V4o+L1cCrJL6SCd2y4SVAknCGQyGdYsPeDCXh/Fg4LbyTriF549fOlKxEg0dsGxNElZ7jV8VKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DOtOfAr4; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZlC2RnTS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DOtOfAr4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745320283; x=1776856283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GgJCNAGMvR0NtaDv652psAyvJcAiYqq6JDbJevX2YzQ=;
-  b=ZlC2RnTSXAENMuzxGYVsUwPsaBAkFed/mPDu87oYPhaOx4egpTic0bPO
-   WUSmjfhjp/wPuV/ztwXbpfqXCVXOtNZBYHDH2NZO8CrTVC/OHTX3Axtzc
-   4PNHyreP+f6e0ML4gqe4Ohjbsh139dqW8I3hBaQRrA05seR4W17eztiom
-   b/xvevI2mWrUbTRS4GXlJQ7nLSA3bz5PuT+UIx+b5NbjsXEsKbQl2XceV
-   mT1A13BKb8n/kO31WANS5cn3GBWgZaCiBJ9eGqghEDfjRlM7m4VFThYon
-   JdSqZIyVfvgcP11ou3vkXO15rc75v7rZ7IMiGeAfkY7btKaAb++x+oIF8
-   Q==;
-X-CSE-ConnectionGUID: UQOuP5ICSF+DgAzvORX1Wg==
-X-CSE-MsgGUID: Tyq6CEToSJen1nS3vXoizA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="57537197"
-X-IronPort-AV: E=Sophos;i="6.15,230,1739865600"; 
-   d="scan'208";a="57537197"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 04:11:22 -0700
-X-CSE-ConnectionGUID: YdRcZeB1TpiEuEaveCHjDg==
-X-CSE-MsgGUID: 7y+61/VvTvaQNkl5z4jmSg==
+  t=1745326411; x=1776862411;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z9CiUl8n3GG0QL53fQ0tbSFIJfT5VW0MonfGETeCdzQ=;
+  b=DOtOfAr4YfX0ersQauXC7CoIOOVHK33RvVk/zpf9XeDq7Yj8VRZs2aGl
+   7wV/xu9+kR3PzxQ4keqyK3Vb5zFSQdvah46XVE/vgk0d/nuFqd7f/uETK
+   QvAwGGZ4mTbwcXxs5FEvohyu4wBd7+JA+5rAFHIeAEoXFIKidKm+cJ/I/
+   7J9cZzNOE6ST/ER52Sei22w+fPk7M9q+OX3pD2hJQi2AAVK/1jdRHgrnV
+   g5W+GoPfFdrXwmKOih2exDVm8m1IOO1whwoYR5VnwtF221hw82XkT1sz9
+   sL/hbEJqyOs9LLBaD6zm6rNuK8yfwkO8XSXX4zhECMrkA9zMeCiqorScx
+   w==;
+X-CSE-ConnectionGUID: a1IWHinuQ+OmO8jxKf97vA==
+X-CSE-MsgGUID: BxZy6O+iQpeGEy0sDBlx/w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="46770831"
+X-IronPort-AV: E=Sophos;i="6.15,231,1739865600"; 
+   d="scan'208";a="46770831"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 05:53:31 -0700
+X-CSE-ConnectionGUID: ph0Ppv6SQVW0sk1gMaYmIg==
+X-CSE-MsgGUID: 1sygbuMETxmVJxvyywDFuw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,230,1739865600"; 
-   d="scan'208";a="169189240"
+X-IronPort-AV: E=Sophos;i="6.15,231,1739865600"; 
+   d="scan'208";a="162969018"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 Apr 2025 04:11:18 -0700
+  by orviesa002.jf.intel.com with ESMTP; 22 Apr 2025 05:53:29 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u7BX1-0000tP-2l;
-	Tue, 22 Apr 2025 11:11:15 +0000
-Date: Tue, 22 Apr 2025 19:10:24 +0800
+	id 1u7D7u-00010t-2Q;
+	Tue, 22 Apr 2025 12:53:26 +0000
+Date: Tue, 22 Apr 2025 20:52:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, alexander.deucher@amd.com,
-	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-	simona@ffwll.ch, YiPeng.Chai@amd.com, tao.zhou1@amd.com
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, Wentao Liang <vulab@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH RESEND] drm/amdgpu: Remove redundant return value checks
- for amdgpu_ras_error_data_init
-Message-ID: <202504221807.hOSkO5OB-lkp@intel.com>
-References: <20250422073505.2378-1-vulab@iscas.ac.cn>
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [krzk:next/drivers 7/7] drivers/firmware/samsung/exynos-acpm.c:672:
+ warning: Function parameter or struct member 'acpm_np' not described in
+ 'acpm_get_by_node'
+Message-ID: <202504222051.7TqaSQ48-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250422073505.2378-1-vulab@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 
-Hi Wentao,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-exynos/exynos-drm-next]
-[also build test ERROR on linus/master v6.15-rc3 next-20250417]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/drm-amdgpu-Remove-redundant-return-value-checks-for-amdgpu_ras_error_data_init/20250422-153759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20250422073505.2378-1-vulab%40iscas.ac.cn
-patch subject: [PATCH RESEND] drm/amdgpu: Remove redundant return value checks for amdgpu_ras_error_data_init
-config: i386-buildonly-randconfig-005-20250422 (https://download.01.org/0day-ci/archive/20250422/202504221807.hOSkO5OB-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git next/drivers
+head:   a8dc26a0ec43fd416ca781a8030807e65f71cfc5
+commit: a8dc26a0ec43fd416ca781a8030807e65f71cfc5 [7/7] firmware: exynos-acpm: introduce devm_acpm_get_by_node()
+config: i386-buildonly-randconfig-001-20250422 (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250422/202504221807.hOSkO5OB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504221807.hOSkO5OB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504222051.7TqaSQ48-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:170:6: warning: unused variable 'ret' [-Wunused-variable]
-     170 |         int ret;
-         |             ^~~
->> drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:690:44: error: expected ';' after expression
-     690 |         amdgpu_ras_error_data_init(&obj->err_data)
-         |                                                   ^
-         |                                                   ;
-   1 warning and 1 error generated.
+>> drivers/firmware/samsung/exynos-acpm.c:672: warning: Function parameter or struct member 'acpm_np' not described in 'acpm_get_by_node'
+>> drivers/firmware/samsung/exynos-acpm.c:672: warning: expecting prototype for acpm_get_by_phandle(). Prototype was for acpm_get_by_node() instead
 
 
-vim +690 drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+vim +672 drivers/firmware/samsung/exynos-acpm.c
 
-   664	
-   665	/* make one obj and return it. */
-   666	static struct ras_manager *amdgpu_ras_create_obj(struct amdgpu_device *adev,
-   667			struct ras_common_if *head)
-   668	{
-   669		struct amdgpu_ras *con = amdgpu_ras_get_context(adev);
-   670		struct ras_manager *obj;
-   671	
-   672		if (!adev->ras_enabled || !con)
-   673			return NULL;
-   674	
-   675		if (head->block >= AMDGPU_RAS_BLOCK_COUNT)
-   676			return NULL;
-   677	
-   678		if (head->block == AMDGPU_RAS_BLOCK__MCA) {
-   679			if (head->sub_block_index >= AMDGPU_RAS_MCA_BLOCK__LAST)
-   680				return NULL;
-   681	
-   682			obj = &con->objs[AMDGPU_RAS_BLOCK__LAST + head->sub_block_index];
-   683		} else
-   684			obj = &con->objs[head->block];
-   685	
-   686		/* already exist. return obj? */
-   687		if (alive_obj(obj))
-   688			return NULL;
-   689	
- > 690		amdgpu_ras_error_data_init(&obj->err_data)
-   691	
-   692		obj->head = *head;
-   693		obj->adev = adev;
-   694		list_add(&obj->node, &con->head);
-   695		get_obj(obj);
-   696	
-   697		return obj;
-   698	}
-   699	
+a88927b534ba18 Tudor Ambarus 2025-02-13  662  
+a88927b534ba18 Tudor Ambarus 2025-02-13  663  /**
+a88927b534ba18 Tudor Ambarus 2025-02-13  664   * acpm_get_by_phandle() - get the ACPM handle using DT phandle.
+a88927b534ba18 Tudor Ambarus 2025-02-13  665   * @dev:        device pointer requesting ACPM handle.
+a88927b534ba18 Tudor Ambarus 2025-02-13  666   * @property:   property name containing phandle on ACPM node.
+a88927b534ba18 Tudor Ambarus 2025-02-13  667   *
+a88927b534ba18 Tudor Ambarus 2025-02-13  668   * Return: pointer to handle on success, ERR_PTR(-errno) otherwise.
+a88927b534ba18 Tudor Ambarus 2025-02-13  669   */
+a8dc26a0ec43fd André Draszik 2025-03-27  670  static const struct acpm_handle *acpm_get_by_node(struct device *dev,
+a8dc26a0ec43fd André Draszik 2025-03-27  671  						  struct device_node *acpm_np)
+a88927b534ba18 Tudor Ambarus 2025-02-13 @672  {
+a88927b534ba18 Tudor Ambarus 2025-02-13  673  	struct platform_device *pdev;
+a88927b534ba18 Tudor Ambarus 2025-02-13  674  	struct device_link *link;
+a88927b534ba18 Tudor Ambarus 2025-02-13  675  	struct acpm_info *acpm;
+a88927b534ba18 Tudor Ambarus 2025-02-13  676  
+a88927b534ba18 Tudor Ambarus 2025-02-13  677  	pdev = of_find_device_by_node(acpm_np);
+53734383a73888 André Draszik 2025-03-19  678  	if (!pdev)
+a88927b534ba18 Tudor Ambarus 2025-02-13  679  		return ERR_PTR(-EPROBE_DEFER);
+a88927b534ba18 Tudor Ambarus 2025-02-13  680  
+a88927b534ba18 Tudor Ambarus 2025-02-13  681  	acpm = platform_get_drvdata(pdev);
+a88927b534ba18 Tudor Ambarus 2025-02-13  682  	if (!acpm) {
+a88927b534ba18 Tudor Ambarus 2025-02-13  683  		platform_device_put(pdev);
+a88927b534ba18 Tudor Ambarus 2025-02-13  684  		return ERR_PTR(-EPROBE_DEFER);
+a88927b534ba18 Tudor Ambarus 2025-02-13  685  	}
+a88927b534ba18 Tudor Ambarus 2025-02-13  686  
+a88927b534ba18 Tudor Ambarus 2025-02-13  687  	if (!try_module_get(pdev->dev.driver->owner)) {
+a88927b534ba18 Tudor Ambarus 2025-02-13  688  		platform_device_put(pdev);
+a88927b534ba18 Tudor Ambarus 2025-02-13  689  		return ERR_PTR(-EPROBE_DEFER);
+a88927b534ba18 Tudor Ambarus 2025-02-13  690  	}
+a88927b534ba18 Tudor Ambarus 2025-02-13  691  
+a88927b534ba18 Tudor Ambarus 2025-02-13  692  	link = device_link_add(dev, &pdev->dev, DL_FLAG_AUTOREMOVE_SUPPLIER);
+a88927b534ba18 Tudor Ambarus 2025-02-13  693  	if (!link) {
+a88927b534ba18 Tudor Ambarus 2025-02-13  694  		dev_err(&pdev->dev,
+a88927b534ba18 Tudor Ambarus 2025-02-13  695  			"Failed to create device link to consumer %s.\n",
+a88927b534ba18 Tudor Ambarus 2025-02-13  696  			dev_name(dev));
+a88927b534ba18 Tudor Ambarus 2025-02-13  697  		platform_device_put(pdev);
+a88927b534ba18 Tudor Ambarus 2025-02-13  698  		module_put(pdev->dev.driver->owner);
+a88927b534ba18 Tudor Ambarus 2025-02-13  699  		return ERR_PTR(-EINVAL);
+a88927b534ba18 Tudor Ambarus 2025-02-13  700  	}
+a88927b534ba18 Tudor Ambarus 2025-02-13  701  
+a88927b534ba18 Tudor Ambarus 2025-02-13  702  	return &acpm->handle;
+a88927b534ba18 Tudor Ambarus 2025-02-13  703  }
+a88927b534ba18 Tudor Ambarus 2025-02-13  704  
+
+:::::: The code at line 672 was first introduced by commit
+:::::: a88927b534ba18019b0440cf3d7f068407b5250c firmware: add Exynos ACPM protocol driver
+
+:::::: TO: Tudor Ambarus <tudor.ambarus@linaro.org>
+:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
