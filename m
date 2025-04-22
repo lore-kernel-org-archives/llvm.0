@@ -1,21 +1,22 @@
 Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E072BB13
-	for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 12:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F5827CCF2
+	for <llvm@lists.linux.dev>; Tue, 22 Apr 2025 12:58:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745326615; cv=none; b=cxPgExpDHMv+RD+vBDiTXpmF+m2hrhLq0RX14UhbDLRGEoSflYHuBqmdwf5HLNveahB8B9RAg5JTciL5xVgpk4NQMRDf52cQRtX1695YAMCoCxukFZbrvpPm+tx6RkVmujcHvkqeUc38Qq5MBLqCCgDpmiAGYrot8Tibl1EOFU0=
+	t=1745326722; cv=none; b=GYyj4XYCTtOyj6mKfsfqYLhOLHtnEke63uiTEhGHoSNqMyTXSEx7xbRWUJwx/Idmm+RV/zlzT5Wi3QFZh5Te5Qn9MNlA+Qi/o3rs58+on5BoBIkQ6TVG9xFtQhWPNoKvQjherEOXKLsUq6GbL8Mtclcxb05/+Oax5teQjqKp/MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745326615; c=relaxed/simple;
-	bh=y8ihA9xM3F8vLDO0to0+a31KSyQ+qiH8wzsdSBfkebo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p3YaXiG9ErZHlrhrBqZY3EO+a2vc67wX2rxWQpnkfThyCxrqim5RFVcxTM7hkPs25n3fFenlE7BYs3SKg3EYc0Gefo8DBfk3SAN0OaiE5b/K8cG56V8NbYmfnqmnINgV4gp3OXqBUJI2tamuJv0FijzdtqcmJHkAl8iITBjPKCE=
+	s=arc-20240116; t=1745326722; c=relaxed/simple;
+	bh=sLvmh0xXz03b1n8p3I3OjCJD1USIuRy6gtjcc3HKS68=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XpUGGkpZe3ZEdhzv7JNoyJm6uXEDymZZ94w9ZfdAw0dI1g1uAMa7ffI5gRWv4Q0ZvE25emSj+qe6Djx3Mu9o5EFynu8GuYLPV/qEJyG2LtXxMRsU/19uydrkSLTxuALdZW5O8j/ZnEh2M8H7zExcgbOkxyJbRKkkC/BDvmf9ifg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
 Received: from arnaudlcm-X570-UD.. (unknown [IPv6:2a01:e0a:3e8:c0d0:c864:fba8:3048:a3c2])
-	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 2BF373CD51F;
-	Tue, 22 Apr 2025 12:56:44 +0000 (UTC)
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id E4BCEC1A9B;
+	Tue, 22 Apr 2025 12:58:37 +0000 (UTC)
 Authentication-Results: Plesk;
 	spf=pass (sender IP is 2a01:e0a:3e8:c0d0:c864:fba8:3048:a3c2) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=arnaudlcm-X570-UD..
 Received-SPF: pass (Plesk: connection is authenticated)
@@ -43,182 +44,181 @@ Cc: linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	contact@arnaud-lcm.com,
 	skhan@linuxfoundation.org
-Subject: [PATCH v3 0/2] checkpatch.pl: Add warning for // comments on private
- Rust items
-Date: Tue, 22 Apr 2025 14:56:33 +0200
-Message-ID: <20250422125633.30413-1-contact@arnaud-lcm.com>
+Subject: [PATCH v3 1/2] checkpatch.pl: warn about // comments on private Rust
+ items
+Date: Tue, 22 Apr 2025 14:58:24 +0200
+Message-ID: <20250422125824.30525-1-contact@arnaud-lcm.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250422125633.30413-1-contact@arnaud-lcm.com>
+References: <20250422125633.30413-1-contact@arnaud-lcm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <174532660477.19425.2801981240070484205@Plesk>
+X-PPP-Message-ID: <174532671854.21235.5865498379948025370@Plesk>
 X-PPP-Vhost: arnaud-lcm.com
 
-Hi,
+Add a new checkpatch.pl warning to detect //-style comments above
+private Rust items that were likely intended to be doc comments (///).
+This helps catch documentation that won't appear in rustdoc output.
 
-Background
-----------
+The detection uses multiple heuristics to identify likely doc comments:
+  - Comments containing markdown
+  - Comments starting with an imperative tone
+  - Comments with mention of params
+  - Comments with code block
+  - Comments with keywords: Returns, ...
+  - Block comments longer than 3 lines.
+  - Comments with references: @see, @link, ...
 
-The Rust-for-Linux project currently lacks enforcement of documentation for private Rust items,
-as highlighted in https://github.com/Rust-for-Linux/linux/issues/1157.
-While rustc already lints missing documentation for public items, private items remain unchecked.
-This patch series aims to close that gap by ensuring proper documentation practices
-for private Rust items in the kernel.
+Comments are only flagged if they:
+ - Appear above private items
+ - Don't contain obvious non-doc patterns (TODO, FIXME)
+ - Score sufficiently on heuristics
 
-The actual solution comes in several parts
-------------------------------------------
+The warning triggered then suggests to convert flagged comments to
+doc comments.
 
- 1) Patch 1 : Implements detection logic to emit warnings for improperly
- documented private Rust items (e.g., // comments instead of ///)
- through a set of heuristics.
- 2) Patch 2 : Adds an auto-fix mechanism via the --fix option to help
- developers correct documentation issues.
-
-Results
---------------------
-
-The following implementation has been tested against real patches:
- - https://lore.kernel.org/rust-for-linux/dc63bdc4bff8f084714e2c8ff30e4c0d435e85b7.camel@redhat.com/T/#t
- - https://lore.kernel.org/rust-for-linux/20250418-ptr-as-ptr-v10-0-3d63d27907aa@gmail.com/T/#t
- - https://lore.kernel.org/rust-for-linux/20250420-nova-frts-v1-1-ecd1cca23963@nvidia.com/T/#u
-and this file:
-
-// SPDX-License-Identifier: GPL-2.0
-
-// Simple comment - should not trigger
-
-// Returns a reference to the underlying [`cpufreq::Table`]. - should trigger
-fn table(&self) -> &cpufreq::Table {
-    // SAFETY: The `ptr` is guaranteed by the C code to be valid. - should not trigger
-    unsafe { cpufreq::Table::from_raw(self.ptr) }
-}
-
-// Meaning of life - should not trigger
-fn test() -> u32 {
-    42
-}
-
-/// Proper doc comment for a private function.
-fn proper_doc() -> u32 {
-    42
-}
-
-// TODO: implement more logic - should not trigger
-fn todo_marker() -> bool {
-    true
-}
-
-// Just a regular comment not followed by code - should not trigger
-
-pub fn public_function() {
-    // Public function - should not trigger
-}
-
-// Test - should not trigger
-struct Point2D {
-  pub x: f32,
-  pub y: f32
-}
-
-// Test - should not trigger
-pub struct Point2D {
-  pub x: f32,
-  pub y: f32
-}
-
-mod test_module {
-    // Module inner comment - should not trigger
-}
-
-// Comment before macro - should not trigger
-macro_rules! my_macro {
-    // Comment inside macro - should not trigger
-    () => {};
-}
-
-// Comment before public macro - should not trigger
-macro_rules! my_public_macro {
-
-}
-
-// Comment before unsafe block - should not trigger
-unsafe {
-    // Comment inside unsafe block - should not trigger
-    let x = 5;
-}
-
-// Comment with multiple
-// Line
-// Youhouuu
-// - should trigger
-fn with_unsafe_keyword() {
-    println!("test");
-}
-
-// NOTE: important consideration - should not trigger
-fn note_marker() -> bool {
-    true
-}
-
-// Comment with code example: - should trigger
-// ``` let x = 5; ```
-fn with_mixed_comments() {
-    println!("test");
-}
-
-which led to this output:
-WARNING: Consider using `///` if the comment was intended as documentation (line 5).
-+// Returns a reference to the underlying [`cpufreq::Table`]. - should trigger
-WARNING: Consider using `///` if the comment was intended as documentation (line 72).
-+// Comment with multiple
-WARNING: Consider using `///` if the comment was intended as documentation (line 73).
-+// Line
-WARNING: Consider using `///` if the comment was intended as documentation (line 74).
-+// Youhouuu
-WARNING: Consider using `///` if the comment was intended as documentation (line 75).
-+// - should trigger
-WARNING: Consider using `///` if the comment was intended as documentation (line 92).
-+// Comment with code example: - should trigger
-total: 0 errors, 6 warnings, 96 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-      mechanically convert to the typical style using --fix or --fix-inplace.
-
-test.rs has style problems, please review.
-
-NOTE: If any of the errors are false positives, please report
-      them to the maintainer, see CHECKPATCH in MAINTAINERS.
-
-To: Andy Whitcroft <apw@canonical.com>
-To: Joe Perches <joe@perches.com>
-To: Dwaipayan Ray <dwaipayanray1@gmail.com>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To: Miguel Ojeda <ojeda@kernel.org>
-To: Alex Gaynor <alex.gaynor@gmail.com>
-To: Boqun Feng <boqun.feng@gmail.com>
-To: Gary Guo <gary@garyguo.net>
-To: Björn Roy Baron <bjorn3_gh@protonmail.com>
-To: Benno Lossin <benno.lossin@proton.me>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>
-To: Trevor Gross <tmgross@umich.edu>
-To: Danilo Krummrich <dakr@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-To: Bill Wendling <morbo@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: rust-for-linux@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Cc: contact@arnaud-lcm.com
-Cc: skhan@linuxfoundation.org
-Link: https://lore.kernel.org/all/20250420184700.47144-1-contact@arnaud-lcm.com/
 Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
+---
+Changes in v3:
+- Add heuristics to decide whether we should trigger the warning on comments
+- Link to v2: https://lore.kernel.org/all/20250420194806.54354-1-contact@arnaud-lcm.com/
+---
+ scripts/checkpatch.pl | 110 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 3d22bf863eec..eb564a119d68 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -1987,6 +1987,97 @@ sub ctx_locate_comment {
+ 	chomp($current_comment);
+ 	return($current_comment);
+ }
++
++sub ctx_detect_missing_doc_comment_behind_rust_private_item {
++    my ($linenr) = @_;
++    my $start_line = $linenr - 1;
++    my $idx = $start_line;
++
++    # Skip if it's a public Rust item (starts with 'pub')
++    return unless $rawlines[$start_line] !~ /^\+?\s*pub(\s|\([^)]*\)\s)/;
++
++    # Check if it's an empty line
++    return unless $rawlines[$start_line] !~ /^\s*\+?\s*$/;
++
++    # Check if it's a comment
++    return unless $rawlines[$start_line] !~ /^\+?\s*\/\/\/?\/?.*$/;
++
++    # Check if it is a private macro
++    if ($rawlines[$start_line] =~ /^\+?\s*macro_rules!\s+([a-zA-Z_][a-zA-Z0-9_]*|#?[a-zA-Z_][a-zA-Z0-9_]*)\s*(?:\{|$)/ && $idx > 0) {
++		return unless $rawlines[$idx -1] !~ /^\+?\s*#\s*\[\s*macro_export\s*\]\s*$/;
++    } else {
++		# Check if it's a Rust item
++		return unless $rawlines[$start_line] =~ /^\+?\s*\b(fn|struct|const|enum|trait|type|mod|impl|use)\b/;
++    }
++
++    # Walk backwards through non-empty lines
++    $idx--;
++    my @comment_lines;
++    while ($idx >= 0 && $rawlines[$idx] !~ /^\s*\+?\s*$/) {
++		# Stop if a doc comment is found
++        last if $rawlines[$idx] =~ m@^\+?\s*///@;
++		# Clean the line first (remove diff markers, trim spaces)
++    	my $clean_line = $rawlines[$idx];
++    	$clean_line =~ s/^\+?\s*//;
++		$clean_line =~ s/\s*$//;
++		if($clean_line =~ m@^\+?\s*//@) { # Only add comments
++	    	unshift @comment_lines, $clean_line;
++		}
++		$idx--;
++    }
++
++    # No comments to check
++    return unless @comment_lines;
++
++    # Heuristic: Check for documentation keywords
++    my $keywords = qr/Returns|Arguments|Examples?|Panics|Safety|Note|Errors|See\s+Also/i;
++    my $has_keywords = grep { /\/\/\s*$keywords/ } @comment_lines;
++
++    # Heuristic: Markdown syntax
++	my $markdown = qr{
++		`[^`]+`               # Inline code
++		| \*\*[^*]+\*\*       # Bold with proper boundaries
++		| \b_[^_\s][^_]*_\b   # Italic with word boundaries
++		| \#[^#\s]            # Headings like # Title
++		| ^\s*```[\w]*\s*$    # Code block marker line (allow optional language)
++	}x;
++
++    my $has_markdown = grep { /$markdown/ } @comment_lines;
++
++    # Heuristic: Parameter mentions
++    my $item_line = $rawlines[$start_line];
++    my @params = ($item_line =~ /(\b\w+)\s*:\s*\w+/g); # Extract param names
++    my $param_mentions = 0;
++    if (@params) {
++        $param_mentions = grep { my $line = $_; grep { $line =~ /\b$_\b/ } @params } @comment_lines;
++    }
++
++    # Heuristic: Start with imperative tones
++    my $first_line = $comment_lines[0];
++    my $imperative_tone = $first_line =~ /^\s*\/\/\s*(Returns?|Computes?|Checks?|Converts?|Creates?)\b/i;
++
++    # Heuristic: References
++    my $has_refs = grep { /\[`\w+`\]|\@see|\@link/i } @comment_lines;
++
++    # Heuristic: Code block
++    my $has_code_block = grep { /```|\buse\s+\w+::|^\s*\/\/\s*\w+\(.*\)/ } @comment_lines;
++    # Combine heuristics
++    my $score = 0;
++    $score += 1 if $has_keywords;
++    $score += 2 if $has_markdown;
++    $score += 1 if $param_mentions;
++    $score += 2 if $imperative_tone;
++    $score += 2 if $has_refs;
++    $score += 2 if scalar(@comment_lines) >= 3;
++    $score += 2 if $has_code_block;
++
++    # Trigger if score meets threshold
++    return unless $score >= 2;
++
++    return ($idx+1, $start_line);
++}
++
++
+ sub ctx_has_comment {
+ 	my ($first_line, $end_line) = @_;
+ 	my $cmt = ctx_locate_comment($first_line, $end_line);
+@@ -2950,6 +3041,25 @@ sub process {
+ 			}
+ 		}
+ 
++# check for incorrect use of `//` instead of `\\\` for doc comments in Rust
++		if ($perl_version_ok && $realfile =~ /\.rs$/) {
++			my ($start_l, $end_l) = ctx_detect_missing_doc_comment_behind_rust_private_item($linenr);
++			if (defined($start_l) && defined($end_l)) {
++				for (my $i = $start_l; $i <= $end_l; $i++) {
++					my $comment_line = $rawlines[$i - 1];
++					next unless $comment_line =~ m@^\+//([^/].*)$@;
++					my $comment = $1;
++					# Skip obvious non-doc comments
++					next if $comment =~ m@^\s*(?:TODO|FIXME|XXX|NOTE|HACK|SAFETY):?@i;
++					next if $comment =~ m@^\s*[[:punct:]]{2,}@;
++					my $line_issue = $i - 3;
++					WARN("POSSIBLE_MISSING_RUST_DOC",
++						"Consider using `///` if the comment was intended as documentation (line $line_issue).\n" .
++					"$here\n$comment_line");
++				}
++			}
++		}
++
+ # Check the patch for a From:
+ 		if (decode("MIME-Header", $line) =~ /^From:\s*(.*)/) {
+ 			$author = $1;
 -- 
 2.43.0
 
