@@ -1,344 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999ED12E1CD;
-	Wed, 23 Apr 2025 04:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05456262FFC;
+	Wed, 23 Apr 2025 04:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745381386; cv=none; b=ncqTNkcADDXGzghA7Dv+pIXMJnHVQCOF7iB7OYCUhZqHBEU0ETqlObFZyUstydV5RwdJjRydiqOGvSkQe4OykHrTDe5dd1te43FoSRfuNxSxCzqt4Sx2JB3jvtMEgXYkxY/nyhyruXiMoVJgg5lKdQcy6N397YMmWtgQKBDKJA8=
+	t=1745382852; cv=none; b=SvyODoLMzvvjJsIOD0gTqjI/TQb9jiQcXNi+wuE/riak0FOs0aqJX4dkAaWtsViRiwvm2iFLKiQqodZEf7jul0h3ZFZa/JpsJod2q8oUHPPNwD8YSvimFD4RwpjeF8AZ0BseJ3UGvZGOgASYX/LCy39ccowVH+fyHduiagef1Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745381386; c=relaxed/simple;
-	bh=KISXD0ltBB9Z0bhlbMH9MxL/r8xahZ8DX/KFQwdLNi4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XZk6zznhVO+wWXqf3r9sFLT4ggEKf8KS9R+lLWMqoPDCakBCJrkSQCr7n6O8QvekOQVYRJ7X6/Crws1GYjaT4eF4bGiCba2EtWugdK0UHXf1N0A2+grZaFfrv1PO8pCaKwY7qbylMdfcvNVCK1fWAUpoBv0HXaN10njkgQnb+z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pv7LS2yJ; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745382852; c=relaxed/simple;
+	bh=ea7Q8NiEYH4CSiqy2JXvGKxiGUwys7CQHgeXQ7Kq7kg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y/NG3vK//AigCc88tLHnNuexmUUMx+H+vFdvClar6ZZThVW7dquzrpSqlvsV2mtf+jszkObnDBhulhiSAtGBWui0RwUrKIiLSR6PUu3ENLJ36CfA/W7xVof03t6JBQVuYspebmLNsNdLSUDcrjcv5J3oiOxN8a2ZrXk76RFUlys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCmv3kB5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pv7LS2yJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745381384; x=1776917384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KISXD0ltBB9Z0bhlbMH9MxL/r8xahZ8DX/KFQwdLNi4=;
-  b=Pv7LS2yJs5qYfKpnO60isnEX2EbHFEW3INr9IGwwOPoDAAf8mUBShGS8
-   qbPuVKQ+2/VtW6Nnsm1IlSekoj6ND4LqoTEiZKkLR1vq3iIrOQPMKyNNL
-   jOXfwwj93L3ss62KTBuX246O0oAeUPP1XISROg7TfVRG6UqodajXp8QQd
-   923oevFWU6rmmXhl5PFDsW6fdcs7E2KjwUyIEgtECAXeOJY+qeCMt/utj
-   iNRKf1WVVDn04p/8G/H1O8WhoGJTTkm5Ffay3v8ZelYN/5LSZttHuMH54
-   M/ShcgUKC1Ex16j30hOkok6g3/u664pToMaBSBuO8DL1g5fxtJyDghSzf
-   w==;
-X-CSE-ConnectionGUID: Pcp8G761QEmDdlqY5kJUCw==
-X-CSE-MsgGUID: VDJ4CfemRK+NfYVIaHW2sg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="72342468"
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="72342468"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 21:09:44 -0700
-X-CSE-ConnectionGUID: veazpDj7QZmxOlZWUAIC5Q==
-X-CSE-MsgGUID: BGgUw+7bSPiwYlKCWUgOXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="133076123"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 22 Apr 2025 21:09:40 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u7RQY-0001aF-0q;
-	Wed, 23 Apr 2025 04:09:38 +0000
-Date: Wed, 23 Apr 2025 12:08:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nylon Chen <nylon.chen@sifive.com>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Nylon Chen <nylon.chen@sifive.com>, Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v12 4/5] pwm: sifive: Fix rounding issues in apply and
- get_state functions
-Message-ID: <202504231136.Cr4O6Zg5-lkp@intel.com>
-References: <20250422085312.812877-5-nylon.chen@sifive.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCmv3kB5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69F2C4CEEE;
+	Wed, 23 Apr 2025 04:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745382851;
+	bh=ea7Q8NiEYH4CSiqy2JXvGKxiGUwys7CQHgeXQ7Kq7kg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YCmv3kB5xkOAenSn5ZaJIvQbxmpdoS+GgctOcEnM0cAOOlQvH/CIorPqKDqjPCq/I
+	 vlFmBnhq5VFO8Y5bPHhSt834Lx3a9FPmDZiZqgD1yMlwYsgWnWfLtztqOL0AxVXHr4
+	 /Ot1/fbaHVT3WpNokIbQXN2iLVr2fr1hoilXf9UhDDaUV5Re2fTPzKB9nhs+te9634
+	 Ysl4ueieq/Cv8DV09+eDCvxfMKsCA+lbJMQci2Y1RU/LPL+WMz4VUwWMGhO3wn7jpL
+	 g9qFpX3ksEji6YgYgQMUc5awJpgeo1A2+gSRghpRnRcVeymSqapQGKGiaM0nBpEUW1
+	 NysA6yHgg0XUg==
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-acb615228a4so92429766b.0;
+        Tue, 22 Apr 2025 21:34:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUBNmYmA9fWQR4vo33ILkz13McFs0aPcSeMpIcFPidc/mjUQb3WWaH7XyAbcsdX09u2cHrJn1PA1IAk@lists.linux.dev, AJvYcCV9quR2dTRu6abbYI1dGtbY8Ya1X9FzMIISIx/TTgQllkNRTu05zd+hwlptOR0MvjDLp8S/@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzg//M9keqOpRIjgqPdnXIhc6SphUlW9WNNrx8jpGJrveyZevZH
+	OZFeiRJ1MJEdSqTyKrssIVCdqkoiAdHxOWmszYQvOHwnxgURIYGEDMOakUFUYlL0JXhDXtBW9gS
+	11WTAjNLZS2NoWMEhzNu3wizSx90=
+X-Google-Smtp-Source: AGHT+IFP4BO5RnwBWtl5S3CIgtOYoe7UWVUS2BO3LLQMxBut432oihK8I+i+Cx67b/gLSDLFoL4uIwA2mE4tKQhesvM=
+X-Received: by 2002:a17:907:3e10:b0:ac6:e29b:8503 with SMTP id
+ a640c23a62f3a-ace3f255374mr106670466b.1.1745382850396; Tue, 22 Apr 2025
+ 21:34:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250422085312.812877-5-nylon.chen@sifive.com>
+References: <20250114132856.19463-1-yangtiezhu@loongson.cn> <ab7f1ba8-a49c-41a1-9b6f-ca142fbbe9d2@aosc.io>
+In-Reply-To: <ab7f1ba8-a49c-41a1-9b6f-ca142fbbe9d2@aosc.io>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 23 Apr 2025 12:33:59 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7KNuG4hN1F3ctbTL+sz7bbATzKXe610Z9==ApnrX2WXw@mail.gmail.com>
+X-Gm-Features: ATxdqUETq2aKApc4tz68VOqLG_bJRT23Khu1nX2atO0OGoEA7vT3p4-N1ptaBoU
+Message-ID: <CAAhV-H7KNuG4hN1F3ctbTL+sz7bbATzKXe610Z9==ApnrX2WXw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] drm/amd/display: Stop control flow if the divisior
+ is zero
+To: Mingcong Bai <jeffbai@aosc.io>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Xinhui Pan <Xinhui.Pan@amd.com>, Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Huacai Chen <chenhuacai@loongson.cn>, 
+	Nathan Chancellor <nathan@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev, 
+	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Kexy Biscuit <kexybiscuit@aosc.io>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nylon,
+On Wed, Apr 23, 2025 at 11:48=E2=80=AFAM Mingcong Bai <jeffbai@aosc.io> wro=
+te:
+>
+> Hi all,
+>
+> =E5=9C=A8 2025/1/14 21:28, Tiezhu Yang =E5=86=99=E9=81=93:
+> > As far as I can tell, with the current existing macro definitions, ther=
+e
+> > is no better way to do the minimal and proper changes to stop the contr=
+ol
+> > flow if the divisior is zero.
+> >
+> > In order to keep the current ability for the aim of debugging and avoid
+> > printing the warning message twice, it is better to only use ASSERT_BUG=
+()
+> > and SPL_ASSERT_BUG() directly after doing the following two steps:
+> >
+> > (1) Add ASSERT_BUG() macro definition
+> > (2) Add SPL_ASSERT_BUG() macro definition
+> >
+> > This version is based on 6.13-rc7, tested on x86 and LoongArch.
+> >
+> > Tiezhu Yang (3):
+> >    drm/amd/display: Add ASSERT_BUG() macro definition
+> >    drm/amd/display: Add SPL_ASSERT_BUG() macro definition
+> >    drm/amd/display: Harden callers of division functions
+> >
+> >   drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c  |  2 +-
+> >   drivers/gpu/drm/amd/display/dc/os_types.h           |  7 +++++++
+> >   drivers/gpu/drm/amd/display/dc/spl/spl_debug.h      | 11 +++++++++++
+> >   drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c |  2 +-
+> >   4 files changed, 20 insertions(+), 2 deletions(-)
+> >
+>
+> Gentle ping on this series...
+>
+> Harry and Huacai, can you please take a look at this updated series
+> (since you have both provided comments on previous revisions?), thank you=
+!
+I have already given my R-b.
 
-kernel test robot noticed the following build errors:
+Huacai
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.15-rc3 next-20250422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nylon-Chen/riscv-dts-sifive-unleashed-unmatched-Remove-PWM-controlled-LED-s-active-low-properties/20250422-165644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250422085312.812877-5-nylon.chen%40sifive.com
-patch subject: [PATCH v12 4/5] pwm: sifive: Fix rounding issues in apply and get_state functions
-config: arm-randconfig-004-20250423 (https://download.01.org/0day-ci/archive/20250423/202504231136.Cr4O6Zg5-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504231136.Cr4O6Zg5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504231136.Cr4O6Zg5-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pwm/pwm-sifive.c:161:2: error: unterminated function-like macro invocation
-     161 |         do_div(frac, state->period;
-         |         ^
-   include/asm-generic/div64.h:180:10: note: macro 'do_div' defined here
-     180 | # define do_div(n,base) ({                              \
-         |          ^
->> drivers/pwm/pwm-sifive.c:351:26: error: expected '}'
-     351 | MODULE_LICENSE("GPL v2");
-         |                          ^
-   drivers/pwm/pwm-sifive.c:134:1: note: to match this '{'
-     134 | {
-         | ^
-   2 errors generated.
-
-
-vim +161 drivers/pwm/pwm-sifive.c
-
-   131	
-   132	static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-   133				    const struct pwm_state *state)
-   134	{
-   135		struct pwm_sifive_ddata *ddata = pwm_sifive_chip_to_ddata(chip);
-   136		struct pwm_state cur_state;
-   137		unsigned int duty_cycle;
-   138		unsigned long long num;
-   139		bool enabled;
-   140		int ret = 0;
-   141		u32 frac, inactive;
-   142	
-   143		if (state->polarity != PWM_POLARITY_NORMAL)
-   144			return -EINVAL;
-   145	
-   146		cur_state = pwm->state;
-   147		enabled = cur_state.enabled;
-   148	
-   149		duty_cycle = state->duty_cycle;
-   150		if (!state->enabled)
-   151			duty_cycle = 0;
-   152	
-   153		/*
-   154		 * The problem of output producing mixed setting as mentioned at top,
-   155		 * occurs here. To minimize the window for this problem, we are
-   156		 * calculating the register values first and then writing them
-   157		 * consecutively
-   158		 */
-   159		num = (u64)duty_cycle * (1U << PWM_SIFIVE_CMPWIDTH);
-   160		frac = num;
- > 161		do_div(frac, state->period;
-   162		/* The hardware cannot generate a 0% duty cycle */
-   163		frac = min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
-   164		inactive = (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
-   165	
-   166		mutex_lock(&ddata->lock);
-   167		if (state->period != ddata->approx_period) {
-   168			/*
-   169			 * Don't let a 2nd user change the period underneath the 1st user.
-   170			 * However if ddate->approx_period == 0 this is the first time we set
-   171			 * any period, so let whoever gets here first set the period so other
-   172			 * users who agree on the period won't fail.
-   173			 */
-   174			if (ddata->user_count != 1 && ddata->approx_period) {
-   175				mutex_unlock(&ddata->lock);
-   176				return -EBUSY;
-   177			}
-   178			ddata->approx_period = state->period;
-   179			pwm_sifive_update_clock(ddata, clk_get_rate(ddata->clk));
-   180		}
-   181		mutex_unlock(&ddata->lock);
-   182	
-   183		/*
-   184		 * If the PWM is enabled the clk is already on. So only enable it
-   185		 * conditionally to have it on exactly once afterwards independent of
-   186		 * the PWM state.
-   187		 */
-   188		if (!enabled) {
-   189			ret = clk_enable(ddata->clk);
-   190			if (ret) {
-   191				dev_err(pwmchip_parent(chip), "Enable clk failed\n");
-   192				return ret;
-   193			}
-   194		}
-   195	
-   196		writel(inactive, ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm));
-   197	
-   198		if (!state->enabled)
-   199			clk_disable(ddata->clk);
-   200	
-   201		return 0;
-   202	}
-   203	
-   204	static const struct pwm_ops pwm_sifive_ops = {
-   205		.request = pwm_sifive_request,
-   206		.free = pwm_sifive_free,
-   207		.get_state = pwm_sifive_get_state,
-   208		.apply = pwm_sifive_apply,
-   209	};
-   210	
-   211	static int pwm_sifive_clock_notifier(struct notifier_block *nb,
-   212					     unsigned long event, void *data)
-   213	{
-   214		struct clk_notifier_data *ndata = data;
-   215		struct pwm_sifive_ddata *ddata =
-   216			container_of(nb, struct pwm_sifive_ddata, notifier);
-   217	
-   218		if (event == POST_RATE_CHANGE) {
-   219			mutex_lock(&ddata->lock);
-   220			pwm_sifive_update_clock(ddata, ndata->new_rate);
-   221			mutex_unlock(&ddata->lock);
-   222		}
-   223	
-   224		return NOTIFY_OK;
-   225	}
-   226	
-   227	static int pwm_sifive_probe(struct platform_device *pdev)
-   228	{
-   229		struct device *dev = &pdev->dev;
-   230		struct pwm_sifive_ddata *ddata;
-   231		struct pwm_chip *chip;
-   232		int ret;
-   233		u32 val;
-   234		unsigned int enabled_pwms = 0, enabled_clks = 1;
-   235	
-   236		chip = devm_pwmchip_alloc(dev, 4, sizeof(*ddata));
-   237		if (IS_ERR(chip))
-   238			return PTR_ERR(chip);
-   239	
-   240		ddata = pwm_sifive_chip_to_ddata(chip);
-   241		ddata->parent = dev;
-   242		mutex_init(&ddata->lock);
-   243		chip->ops = &pwm_sifive_ops;
-   244	
-   245		ddata->regs = devm_platform_ioremap_resource(pdev, 0);
-   246		if (IS_ERR(ddata->regs))
-   247			return PTR_ERR(ddata->regs);
-   248	
-   249		ddata->clk = devm_clk_get_prepared(dev, NULL);
-   250		if (IS_ERR(ddata->clk))
-   251			return dev_err_probe(dev, PTR_ERR(ddata->clk),
-   252					     "Unable to find controller clock\n");
-   253	
-   254		ret = clk_enable(ddata->clk);
-   255		if (ret) {
-   256			dev_err(dev, "failed to enable clock for pwm: %d\n", ret);
-   257			return ret;
-   258		}
-   259	
-   260		val = readl(ddata->regs + PWM_SIFIVE_PWMCFG);
-   261		if (val & PWM_SIFIVE_PWMCFG_EN_ALWAYS) {
-   262			unsigned int i;
-   263	
-   264			for (i = 0; i < chip->npwm; ++i) {
-   265				val = readl(ddata->regs + PWM_SIFIVE_PWMCMP(i));
-   266				if (val > 0)
-   267					++enabled_pwms;
-   268			}
-   269		}
-   270	
-   271		/* The clk should be on once for each running PWM. */
-   272		if (enabled_pwms) {
-   273			while (enabled_clks < enabled_pwms) {
-   274				/* This is not expected to fail as the clk is already on */
-   275				ret = clk_enable(ddata->clk);
-   276				if (unlikely(ret)) {
-   277					dev_err_probe(dev, ret, "Failed to enable clk\n");
-   278					goto disable_clk;
-   279				}
-   280				++enabled_clks;
-   281			}
-   282		} else {
-   283			clk_disable(ddata->clk);
-   284			enabled_clks = 0;
-   285		}
-   286	
-   287		/* Watch for changes to underlying clock frequency */
-   288		ddata->notifier.notifier_call = pwm_sifive_clock_notifier;
-   289		ret = clk_notifier_register(ddata->clk, &ddata->notifier);
-   290		if (ret) {
-   291			dev_err(dev, "failed to register clock notifier: %d\n", ret);
-   292			goto disable_clk;
-   293		}
-   294	
-   295		ret = pwmchip_add(chip);
-   296		if (ret < 0) {
-   297			dev_err(dev, "cannot register PWM: %d\n", ret);
-   298			goto unregister_clk;
-   299		}
-   300	
-   301		platform_set_drvdata(pdev, chip);
-   302		dev_dbg(dev, "SiFive PWM chip registered %d PWMs\n", chip->npwm);
-   303	
-   304		return 0;
-   305	
-   306	unregister_clk:
-   307		clk_notifier_unregister(ddata->clk, &ddata->notifier);
-   308	disable_clk:
-   309		while (enabled_clks) {
-   310			clk_disable(ddata->clk);
-   311			--enabled_clks;
-   312		}
-   313	
-   314		return ret;
-   315	}
-   316	
-   317	static void pwm_sifive_remove(struct platform_device *dev)
-   318	{
-   319		struct pwm_chip *chip = platform_get_drvdata(dev);
-   320		struct pwm_sifive_ddata *ddata = pwm_sifive_chip_to_ddata(chip);
-   321		struct pwm_device *pwm;
-   322		int ch;
-   323	
-   324		pwmchip_remove(chip);
-   325		clk_notifier_unregister(ddata->clk, &ddata->notifier);
-   326	
-   327		for (ch = 0; ch < chip->npwm; ch++) {
-   328			pwm = &chip->pwms[ch];
-   329			if (pwm->state.enabled)
-   330				clk_disable(ddata->clk);
-   331		}
-   332	}
-   333	
-   334	static const struct of_device_id pwm_sifive_of_match[] = {
-   335		{ .compatible = "sifive,pwm0" },
-   336		{},
-   337	};
-   338	MODULE_DEVICE_TABLE(of, pwm_sifive_of_match);
-   339	
-   340	static struct platform_driver pwm_sifive_driver = {
-   341		.probe = pwm_sifive_probe,
-   342		.remove = pwm_sifive_remove,
-   343		.driver = {
-   344			.name = "pwm-sifive",
-   345			.of_match_table = pwm_sifive_of_match,
-   346		},
-   347	};
-   348	module_platform_driver(pwm_sifive_driver);
-   349	
-   350	MODULE_DESCRIPTION("SiFive PWM driver");
- > 351	MODULE_LICENSE("GPL v2");
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> Best Regards,
+> Mingcong Bai
+>
