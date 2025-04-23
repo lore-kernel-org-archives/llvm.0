@@ -1,158 +1,131 @@
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF6427FD62
-	for <llvm@lists.linux.dev>; Wed, 23 Apr 2025 14:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED38928CF58
+	for <llvm@lists.linux.dev>; Wed, 23 Apr 2025 15:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745419559; cv=none; b=D+1Y5/1fXUVcntukNKt4HT4bzAU8xJ3wjj1NcWzjhO3FxGFT4GEhn3Hd7tM47fP3mFl44XHXYkhkNuBVLtoLSt1UHjFnm9g9PL8fWmKUPsslBI6S6ZlphCLVn0rbbRkpzOlcaWygDTxuX+lzc7VUZY0q7jJeeoFTjNfc/PmteLk=
+	t=1745421044; cv=none; b=NDvIpSkh6zJRa5+5bb8i0jPG8r/OSB3rJqPpW+gd0wiIassENjPjUpk02A7p3VahEUyTesBksOvKlTPtmvNL+KrqKhuNIM8YzTaCsKEaveHp9glNCRjdmt2P46lWhtlZKhikC+kUcS/3udBHkszjDddmICCC6Z1PD81BaiSIiKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745419559; c=relaxed/simple;
-	bh=WuJs1L8beWP8qPqs8QhESGttVeHCU6eXpL36rcMevaQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=VR7+u1p6qpMnK0JuC7wcKyx+YUoPSXaOnjG/LNK3+Tr0xXAxejBw+NUltO0obAB5Mhw9tqYxvsfxn3VjmL/KzBEbSzJpx5xpMp60JeZgdMyV0QFHAholo9nWr+Z+1Apv9+WoJP2a4MZmFpJTHdVDdiz+Wafq9BAZgeTpMfJNjYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=INHNScAZ; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1745421044; c=relaxed/simple;
+	bh=uFV3fDxHeTVor0I1L/M53Jf1QkJJii9mgN/m4+mnqe0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YuA61bkbo3M5IiWQCccVoeHOlLl3OH7pd56Q2+AlYYCp1ug4Bg5qBy7CYySU5hYw5j2lgcEeXwl6oCMdxeouufIGDcOsphBahMhsEQHXEKKiGiAl52MUwcqtKWMKdjauGurFfAHTIlsXLB1JMiCdRA2mXScqotsx8ApvYO60uFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TnZZKBq+; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="INHNScAZ"
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-86b9d9b02cbso2577733241.1
-        for <llvm@lists.linux.dev>; Wed, 23 Apr 2025 07:45:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TnZZKBq+"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e6a8aa771e8so5329330276.3
+        for <llvm@lists.linux.dev>; Wed, 23 Apr 2025 08:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745419556; x=1746024356; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XVzS4DFXKFHCvPld98KfR1XMwmy5WtS3R3h/ahLL1ME=;
-        b=INHNScAZhKWy+TEKh83crlt4MUKYlSAxtTWknqgNpFfs7uQDDSFfTMOvhT928qFhBA
-         sweFnGkSesSGxrxzVTAcD9vJV6zvXq3ZAqyTrPUfeO9BwbwjufTAA3iFb3VaG0Isg976
-         doAicXKpmGFRNwRVTmPmHU/K2yjP6/89DVSTFyoNltqxRykpo4U/LERTOtQvSOxbWxuJ
-         HvpfmogT6i+BxK6Vvgh3Z8eG4HlxmV8xofZy0pHO4wn188xZJGTNQH+akCk3cQ8HSjTz
-         WBCyGDTh9JolEK8MT9NWJBsrgIeLPmbz1vtjXdmsa6nl2w9g9fZ/HPc0uXuqTcNxItfh
-         V6mg==
+        d=paul-moore.com; s=google; t=1745421041; x=1746025841; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ppDTLRNI5D/DHlJ104+9klrOmugo96Z4EzkqmTSr+tw=;
+        b=TnZZKBq+/UkNPWalUkLRI1NEiX13LmPX1GE5mrbETEUAlgh3TI/uyHwB+XAZQPa8+C
+         I37+6xf2kaV1cMgOp/bvGhDLvF9v0iOZ3+cUV+tnSt3fxgPVAf6EcwGfyPLchHnpbXCQ
+         MtRIBF6LkqeGyV0IewCVWq6AI8sp1Wdc+yWI2XZvCGA/EIMqpizX8Pe8HLP+kUmeUcFE
+         4kM0wdArRYEAHtcouhaYUNzNE6+9aUR+fyAMGol/QTogpKdHVROAzeytlGAGsNX559b4
+         7BTy03ywXS8dLDJHrONSwhJanFJpdhCR2sv2LXO+AEUuioFxoA0Blst60f3gFIBBKtaK
+         F1AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745419556; x=1746024356;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XVzS4DFXKFHCvPld98KfR1XMwmy5WtS3R3h/ahLL1ME=;
-        b=ftWETkagT7kK77kQOHwA/hjSETjoq8v5T4mqbA641LmILbQdxLpHRXUoWrKC5lgiR0
-         mdO/zmur/cfNZlJUgb7vCi8xywzLYj4yN2ez4a9QCbWg3TF9f9/Eowo3vbgL0mO4MuBP
-         nT/dkhiE4eSR5bt5UGXgXmM3vBAWX+6bQMRyvnsbCLJo1aXGPBfpyp3c1t8bvoZeaa6Q
-         SSYlahX71wZ3DAh2Ep5WWodeMU3QO/bJO0eXxpL1qGYsjEyv91/9LH1aq3ugqOolXh7/
-         RUfHArTJyD5fPplkqLLy4gOc+/173qpmpMJjK/HvTBD5nlshL3H56Nj16jF7KYBucDFK
-         zSmA==
-X-Forwarded-Encrypted: i=1; AJvYcCWl8kiDmVMUPCG5oFJToSKspcCTpaExRQ1vwWxHZ8ruRZ842fxjVYUI7dojasz4XijoUlaN@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxu8r+NwEJNkr0W8+cmZhNeOE/5Gb5UDn8gHO7cvr+v6bClTzfX
-	WGaXxDIr7+JH8gvY6PCChGwoM+w4MYDDenszX9xNmzvmVL319ZjBS72zjckOG7FSIV5WYW1OCX2
-	HlQeEcU1Tufh7lc87gWesYUUO3nUNsxFMcxobrQ==
-X-Gm-Gg: ASbGncteTlq/tNQegqtAVm0ODO1gc1qoHc22vjarGmquAqjA9FQJ/SGmYsNK7PlymUw
-	FY9OeIeaL5BllfrgWI+2JwzUtxGdMwaTMfPkbxsDEGI6Yz74/sSUWhaDwQ33YIZa0qaehkDNPGr
-	dowuKH0/85jxXZcW/bVfXedl/KW7kV1VTe54tsj/P1GHW6cOQ2PfsWvVWG0CdwolFkyEE=
-X-Google-Smtp-Source: AGHT+IERRJGw6BAbTzZ7eENF+DT2FWTrJnr1CWFNiPg11ivsYpv0iKhIOifBDRXvHHv1G8kwWKWca5Of8Ul4FmXDow8=
-X-Received: by 2002:a05:6102:3195:b0:4bb:db41:3b6c with SMTP id
- ada2fe7eead31-4cb8012897dmr13504466137.12.1745419556210; Wed, 23 Apr 2025
- 07:45:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745421041; x=1746025841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ppDTLRNI5D/DHlJ104+9klrOmugo96Z4EzkqmTSr+tw=;
+        b=r1uxEOQa6LujrQa+pOdlGdAX5m0QAgUF/P4+u5Uwq3vFANgZ7hYc2OtLSppc5BkkEa
+         giaSXNCByi8JUFXIHdYu0s3zj8vQPHMB3OJbAbjJ39YyGzvPMf4CT23yBrJfogV4hmwi
+         i5aIT53ea9eqifyOO6mDTutZ3iOhlu64Tau2sR3GPqPQgHdszwtUccr0JJc5rOEU2JEJ
+         Ya6haI84/zTjMWIao/qjZJpaa6KsfM/AzKFj10WTp2YUbbMTYFJCwe5E58LqHAic1DWu
+         VKZkh3FNt8IH5lxlXmbgmb4ZxcUzYCAkT7BkHAFGZ8ZQbcpZtGhMtf25YtdOfG2v6/UQ
+         a9PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJYlBzGe6g5q0tS/fOF+pYu6vQKV6KkH4p/Yrs7/1wxefWnXnLKuMeml0KXO/Yw0RwUak9@lists.linux.dev
+X-Gm-Message-State: AOJu0YxP46TPf5e2XZj2tb1T4D4buDIaGA8he9PRpgYxOz9xWMBqmZjW
+	HcrZB5O58DXmgx6e/aFLfVLZfoIdo7rUOCFpWx75qO1g95ttfTHndbLkgjQrOx7hfwNzz3d3baf
+	e0LfZ7Y1NQa8b8/WVzk7tirhBfutnjC89Yzf+
+X-Gm-Gg: ASbGncvWH+N2B6ESUTgRwJWQKCXACycihRFwYaJveT6zM3M7UC5MdicfbAE2gCQyUBa
+	BsP0uKBPcFu5eZ1wpU+4j/h14vk/efPHLeycUNYm0U+IKj1DXgUTu9akdlGK+0iAWgDkfX/X6cw
+	oe9TsvuW45m4LNkRwcQ9EY6jBnNQIJM2D0
+X-Google-Smtp-Source: AGHT+IHNlf00p8r3DHcmCpgY+IFBhYtAhRgyVsFb6FFk96MPIernB0HKWY5qgWQbLL58D4kTom9itSs/0uIOQcHE5fg=
+X-Received: by 2002:a05:690c:6801:b0:6fd:33a5:59a with SMTP id
+ 00721157ae682-706ccd1a5ccmr309843197b3.18.1745421040868; Wed, 23 Apr 2025
+ 08:10:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 23 Apr 2025 20:15:45 +0530
-X-Gm-Features: ATxdqUFKPsvKE8tS36jt8rkB_HWHxH1SfL5siJ13k1SJ6uSB3Mz80W-5YsuEDvs
-Message-ID: <CA+G9fYtN2ie+YtK3H9mrQ5QqrSCFGGjVbtJcfiYX0oHMVWMn9w@mail.gmail.com>
-Subject: next-20250422: arch/riscv/kernel/vdso/vdso.so.dbg: dynamic
- relocations are not supported
-To: open list <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>
-Cc: Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Nam Cao <namcao@linutronix.de>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+ <87y0w0hv2x.fsf@microsoft.com> <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+ <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
+In-Reply-To: <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 23 Apr 2025 11:10:29 -0400
+X-Gm-Features: ATxdqUEil0O912atUTQeKlUUv4Sfsc4c76L7yegeINodkXYOkWCpNQ86Ynaeoaw
+Message-ID: <CAHC9VhTi6+CHD9OtWj5=pPDrtwF+S9yfBOKqghe=9wXmd7jrxA@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Regressions on riscv tinyconfig and lkftconfig failed with clang-20
-and gcc-13 on the Linux next-20250422 tag onwards.
+On Wed, Apr 23, 2025 at 10:12=E2=80=AFAM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+> On Mon, 2025-04-21 at 13:12 -0700, Alexei Starovoitov wrote:
+> [...]
+> > Calling bpf_map_get() and
+> > map->ops->map_lookup_elem() from a module is not ok either.
+>
+> I don't understand this objection.  The program just got passed in to
+> bpf_prog_load() as a set of attributes which, for a light skeleton,
+> directly contain the code as a blob and have the various BTF
+> relocations as a blob in a single element array map.  I think everyone
+> agrees that the integrity of the program would be compromised by
+> modifications to the relocations, so the security_bpf_prog_load() hook
+> can't make an integrity determination without examining both.  If the
+> hook can't use the bpf_maps.. APIs directly is there some other API it
+> should be using to get the relocations, or are you saying that the
+> security_bpf_prog_load() hook isn't fit for purpose and it should be
+> called after the bpf core has loaded the relocations so they can be
+> provided to the hook as an argument?
+>
+> The above, by the way, is independent of signing, because it applies to
+> any determination that might be made in the security_bpf_prog_load()
+> hook regardless of purpose.
 
-The defconfig builds pass but tinyconfig and lkftconfig (compat and
-VDSO) failed.
+I've also been worrying that some of the unspoken motivation behind
+the objection is simply that Hornet is not BPF.  If/when we get to a
+point where Hornet is sent up to Linus and Alexei's objection to the
+Hornet LSM inspecting BPF maps stands, it seems as though *any* LSM,
+including BPF LSMs, would need to be prevented from accessing BPF
+maps.  I'm fairly certain no one wants to see it come to that.
 
-First seen on the next-20250422
- Good: next-20250417
- Bad:  next-20250422..next-20250423
-
-Regressions found on riscv:
-  - build/rv32-clang-20-tinyconfig
-  - build/rv32-clang-20-tinyconfig
-  - build/korg-clang-20-lkftconfig-hardening
-  - build/gcc-13-lkftconfig
-
-Regression Analysis:
- - New regression? Yes
- - Reproducibility? Yes
-
-Build regression: riscv vdso.so.dbg dynamic relocations are not supported
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build log riscv
-build errors with gcc
-arch/riscv/kernel/vdso/vdso.so.dbg: dynamic relocations are not supported
-make[3]: *** [arch/riscv/kernel/vdso/Makefile:60:
-arch/riscv/kernel/vdso/vdso.so.dbg] Error 1
-
-build errors with clang
-ld.lld: error: version script assignment of 'LINUX_4.15' to symbol
-'__vdso_getrandom' failed: symbol not defined
-llvm-nm: error: arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg: No
-such file or directory
-ld.lld: error: version script assignment of 'LINUX_4.15' to symbol
-'__vdso_getrandom' failed: symbol not defined
-llvm-objcopy: error:
-'arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg': No such file or
-directory
-arch/riscv/kernel/compat_signal.c:220:28: error: use of undeclared
-identifier 'compat__vdso_rt_sigreturn_offset'
-  220 |         regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
-      |                                   ^
-arch/riscv/include/asm/vdso.h:29:42: note: expanded from macro
-'COMPAT_VDSO_SYMBOL'
-   29 |         (void __user *)((unsigned long)(base) +
-compat__vdso_##name##_offset)
-      |                                                 ^
-<scratch space>:317:1: note: expanded from here
-  317 | compat__vdso_rt_sigreturn_offset
-      | ^
-1 error generated.
-
-
-## Source
-* Kernel version: 6.15.0-rc3
-* Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
-* Git sha: 2c9c612abeb38aab0e87d48496de6fd6daafb00b
-* Git describe: next-20250422
-* Project details:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250422/
-* Architectures: riscv
-* Toolchains: clang-20, gcc-13
-* Kconfigs: lkftconfig
-
-## Build riscv
-* Build log: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250422/testrun/28190346/suite/build/test/gcc-13-lkftconfig/log
-* Build history:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250422/testrun/28190346/suite/build/test/gcc-13-lkftconfig/history/
-* Build details:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250422/testrun/28190346/suite/build/test/gcc-13-lkftconfig/details/
-* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2w5Fmeq3a09b3torxIis2kurhBY/
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2w5Fmeq3a09b3torxIis2kurhBY/config
-
-## Steps to reproduce on riscv
- - tuxmake --runtime podman --target-arch riscv --toolchain clang-20
---kconfig tinyconfig --kconfig-add rv32_defconfig LLVM=1
- - tuxmake --runtime podman --target-arch riscv --toolchain gcc-13
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2w5Fmeq3a09b3torxIis2kurhBY/config
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+paul-moore.com
