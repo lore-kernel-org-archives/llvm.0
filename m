@@ -1,112 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05456262FFC;
-	Wed, 23 Apr 2025 04:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EA01DFE20;
+	Wed, 23 Apr 2025 08:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745382852; cv=none; b=SvyODoLMzvvjJsIOD0gTqjI/TQb9jiQcXNi+wuE/riak0FOs0aqJX4dkAaWtsViRiwvm2iFLKiQqodZEf7jul0h3ZFZa/JpsJod2q8oUHPPNwD8YSvimFD4RwpjeF8AZ0BseJ3UGvZGOgASYX/LCy39ccowVH+fyHduiagef1Pg=
+	t=1745396617; cv=none; b=DMPPlqtcSqmZDMqDwNl6hryMt64Bd/X0Dt9xSuvOzJUirdFWASbtq8yZLqzt4MuMb/OGrAtPQ3R5Vtzm+u37mulkvolmbOMutWnTnWFlENz/xozUol3P3ckpmVaLroigZQKAWgm4Si3ipulP1sjGglSwGQtTZuO4n8tKsMFULeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745382852; c=relaxed/simple;
-	bh=ea7Q8NiEYH4CSiqy2JXvGKxiGUwys7CQHgeXQ7Kq7kg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y/NG3vK//AigCc88tLHnNuexmUUMx+H+vFdvClar6ZZThVW7dquzrpSqlvsV2mtf+jszkObnDBhulhiSAtGBWui0RwUrKIiLSR6PUu3ENLJ36CfA/W7xVof03t6JBQVuYspebmLNsNdLSUDcrjcv5J3oiOxN8a2ZrXk76RFUlys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCmv3kB5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745396617; c=relaxed/simple;
+	bh=+k9yqO/s4OaNqrko4uLFiQ6t4We61L1bjrE/LVw5Jcg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QR2soVJS6LUlRuvFrUyHaB85oi8SE3d2cleQITx6zK3uHuCRyCCvyqo6M770rJU+DVR7ijgJ1mbzLIHv9WTkPTNj6Yp5mmpDTf9q9w8JMOoI9FDaZQfrdCpvUlhoX0Oh07sadODjX8bZ1yb6XrKRecUcoKlor9d3mz3RME64cKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CDF2gUzC; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCmv3kB5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69F2C4CEEE;
-	Wed, 23 Apr 2025 04:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745382851;
-	bh=ea7Q8NiEYH4CSiqy2JXvGKxiGUwys7CQHgeXQ7Kq7kg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YCmv3kB5xkOAenSn5ZaJIvQbxmpdoS+GgctOcEnM0cAOOlQvH/CIorPqKDqjPCq/I
-	 vlFmBnhq5VFO8Y5bPHhSt834Lx3a9FPmDZiZqgD1yMlwYsgWnWfLtztqOL0AxVXHr4
-	 /Ot1/fbaHVT3WpNokIbQXN2iLVr2fr1hoilXf9UhDDaUV5Re2fTPzKB9nhs+te9634
-	 Ysl4ueieq/Cv8DV09+eDCvxfMKsCA+lbJMQci2Y1RU/LPL+WMz4VUwWMGhO3wn7jpL
-	 g9qFpX3ksEji6YgYgQMUc5awJpgeo1A2+gSRghpRnRcVeymSqapQGKGiaM0nBpEUW1
-	 NysA6yHgg0XUg==
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-acb615228a4so92429766b.0;
-        Tue, 22 Apr 2025 21:34:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUBNmYmA9fWQR4vo33ILkz13McFs0aPcSeMpIcFPidc/mjUQb3WWaH7XyAbcsdX09u2cHrJn1PA1IAk@lists.linux.dev, AJvYcCV9quR2dTRu6abbYI1dGtbY8Ya1X9FzMIISIx/TTgQllkNRTu05zd+hwlptOR0MvjDLp8S/@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzg//M9keqOpRIjgqPdnXIhc6SphUlW9WNNrx8jpGJrveyZevZH
-	OZFeiRJ1MJEdSqTyKrssIVCdqkoiAdHxOWmszYQvOHwnxgURIYGEDMOakUFUYlL0JXhDXtBW9gS
-	11WTAjNLZS2NoWMEhzNu3wizSx90=
-X-Google-Smtp-Source: AGHT+IFP4BO5RnwBWtl5S3CIgtOYoe7UWVUS2BO3LLQMxBut432oihK8I+i+Cx67b/gLSDLFoL4uIwA2mE4tKQhesvM=
-X-Received: by 2002:a17:907:3e10:b0:ac6:e29b:8503 with SMTP id
- a640c23a62f3a-ace3f255374mr106670466b.1.1745382850396; Tue, 22 Apr 2025
- 21:34:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CDF2gUzC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745396615; x=1776932615;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+k9yqO/s4OaNqrko4uLFiQ6t4We61L1bjrE/LVw5Jcg=;
+  b=CDF2gUzCXstymEhEI/jUMZQ9tFpPdLZTm5Eu9vVAFCUbjDY2If1xOIAB
+   4vV7QXtw7FGRW/9zm0w6KViA60/T1go1r34fQcPk/oXLq/JOofA8O6eUg
+   1VOqRKRCRxLZlXfe39EYuqVa+H52DzCv/zdt/KCC0Fy5tlTh82dFy4gWY
+   qe55LeDS5KWxf9FBG75zDxB+RFFHtdqn5EvkTAMRyZ75VlIbFhVgJvg5/
+   gQgQK9D15yQkJjkfphRAtTfEZqqU05K8Wy0H1+dtJa64Sv4RavZbYUOJK
+   VvgiojJJZD0fZAL/FpQsWmfZ8JraZnGW6yaRoLUaSw7hvc+OZVzYwmGEa
+   A==;
+X-CSE-ConnectionGUID: glIIlJclQxG8l+ZCto9t9w==
+X-CSE-MsgGUID: y580DuOaQMCHUo3CWAqO0g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="50809239"
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="50809239"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 01:22:04 -0700
+X-CSE-ConnectionGUID: /3T1SlrDSG+PlKYOBY46FQ==
+X-CSE-MsgGUID: mcZ7cnjoRSuOafvzc1VPVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="137114903"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 23 Apr 2025 01:22:01 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u7VMl-0001jd-0G;
+	Wed, 23 Apr 2025 08:21:59 +0000
+Date: Wed, 23 Apr 2025 16:21:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: xu xin <xu.xin.sc@gmail.com>, xu.xin16@zte.com.cn
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	akpm@linux-foundation.org, david@redhat.com,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, wang.yaxin@zte.com.cn, yang.yang29@zte.com.cn
+Subject: Re: [PATCH RESEND 6/6] memcontrol-v1: add ksm_profit in
+ cgroup/memory.ksm_stat
+Message-ID: <202504231523.owjrO2Yy-lkp@intel.com>
+References: <20250422112251.3231599-1-xu.xin16@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250114132856.19463-1-yangtiezhu@loongson.cn> <ab7f1ba8-a49c-41a1-9b6f-ca142fbbe9d2@aosc.io>
-In-Reply-To: <ab7f1ba8-a49c-41a1-9b6f-ca142fbbe9d2@aosc.io>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 23 Apr 2025 12:33:59 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7KNuG4hN1F3ctbTL+sz7bbATzKXe610Z9==ApnrX2WXw@mail.gmail.com>
-X-Gm-Features: ATxdqUETq2aKApc4tz68VOqLG_bJRT23Khu1nX2atO0OGoEA7vT3p4-N1ptaBoU
-Message-ID: <CAAhV-H7KNuG4hN1F3ctbTL+sz7bbATzKXe610Z9==ApnrX2WXw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] drm/amd/display: Stop control flow if the divisior
- is zero
-To: Mingcong Bai <jeffbai@aosc.io>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Xinhui Pan <Xinhui.Pan@amd.com>, Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Nathan Chancellor <nathan@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev, 
-	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Kexy Biscuit <kexybiscuit@aosc.io>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422112251.3231599-1-xu.xin16@zte.com.cn>
 
-On Wed, Apr 23, 2025 at 11:48=E2=80=AFAM Mingcong Bai <jeffbai@aosc.io> wro=
-te:
->
-> Hi all,
->
-> =E5=9C=A8 2025/1/14 21:28, Tiezhu Yang =E5=86=99=E9=81=93:
-> > As far as I can tell, with the current existing macro definitions, ther=
-e
-> > is no better way to do the minimal and proper changes to stop the contr=
-ol
-> > flow if the divisior is zero.
-> >
-> > In order to keep the current ability for the aim of debugging and avoid
-> > printing the warning message twice, it is better to only use ASSERT_BUG=
-()
-> > and SPL_ASSERT_BUG() directly after doing the following two steps:
-> >
-> > (1) Add ASSERT_BUG() macro definition
-> > (2) Add SPL_ASSERT_BUG() macro definition
-> >
-> > This version is based on 6.13-rc7, tested on x86 and LoongArch.
-> >
-> > Tiezhu Yang (3):
-> >    drm/amd/display: Add ASSERT_BUG() macro definition
-> >    drm/amd/display: Add SPL_ASSERT_BUG() macro definition
-> >    drm/amd/display: Harden callers of division functions
-> >
-> >   drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c  |  2 +-
-> >   drivers/gpu/drm/amd/display/dc/os_types.h           |  7 +++++++
-> >   drivers/gpu/drm/amd/display/dc/spl/spl_debug.h      | 11 +++++++++++
-> >   drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c |  2 +-
-> >   4 files changed, 20 insertions(+), 2 deletions(-)
-> >
->
-> Gentle ping on this series...
->
-> Harry and Huacai, can you please take a look at this updated series
-> (since you have both provided comments on previous revisions?), thank you=
-!
-I have already given my R-b.
+Hi xu,
 
-Huacai
+kernel test robot noticed the following build errors:
 
->
-> Best Regards,
-> Mingcong Bai
->
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.15-rc3 next-20250422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/xu-xin/memcontrol-rename-mem_cgroup_scan_tasks/20250422-231623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250422112251.3231599-1-xu.xin16%40zte.com.cn
+patch subject: [PATCH RESEND 6/6] memcontrol-v1: add ksm_profit in cgroup/memory.ksm_stat
+config: i386-buildonly-randconfig-006-20250423 (https://download.01.org/0day-ci/archive/20250423/202504231523.owjrO2Yy-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504231523.owjrO2Yy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504231523.owjrO2Yy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: ksm_process_profit
+   >>> referenced by memcontrol-v1.c:1843 (mm/memcontrol-v1.c:1843)
+   >>>               mm/memcontrol-v1.o:(evaluate_memcg_ksm_stat) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
