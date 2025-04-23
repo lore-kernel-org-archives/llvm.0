@@ -1,176 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF1F4086A;
-	Wed, 23 Apr 2025 01:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745370153; cv=none; b=mN6z/TTZwVaNIuNtehtyEzQ5NDLP6udD1Px9PmfpnCK0xf9x5gnpTysUkeZ4PU/kozdatc/XqKJfl3UayzTkKEaDDHBjKxUKr4y0AsFv3kQT74zDJw5z8dxaR64wbYQ72Pl6rXntC8KisbIfBxr1VGG9E9SwwNNCfr0nVFdxcWo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745370153; c=relaxed/simple;
-	bh=V5z5E5+X3Jf2jY7+WG1Lr+g/krh0x4f/dkIPVzE6Zsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D9plis2dFvpIbzdLcpyE7Xs5J+JQBZJhl2+YnaZCbzHAYdFyCH305A2bAc1H3h4MreT9vay/UGNaGMqd0FA/KOvyPk9ZX93PSGadxyk9IIpMXVbzSUKtc17Nrp6zgkahd2XrRtxKQNCGGK0JvZ51uD1domuVUTQ1uAh333tjF8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B4zVrS96; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A6725FA26;
+	Wed, 23 Apr 2025 01:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745372304; cv=fail; b=WShjg4bVJZwJdvXEtUdpQ3wBf1IVAJP9cG8sx3H50Z22JSKQGoF7Yu6vmEpTb4stPUV2NSARGcr7rJt3hephtVVKNjUDKombrnlCorYHaFDkIqb740Rp6v3T6hkKYMXm3v1EpIJAZowNzbGhI54MywoSI7PsJJpN+a3qizu+Py4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745372304; c=relaxed/simple;
+	bh=7VxOr0wy118I566ekMq1H0iMDTiS/PjLBPmIjDCfHI4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=pLUq1UFVT7FN41DRoym4CG4lSb90l9g8cZg9voC6F1V0zxk2OXybB0T2HWpw/f7TpY/JbdVCu/YglqrbHSeALr1oNlojIhfdLXzKGQdB+Zcj1t7cNe2RU5uda8+hjH+0fUWAJf5LKKR8Q6hOpKnD+yZszcKiPtBJlkLqz9TFQPE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nxcZahVl; arc=fail smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B4zVrS96"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nxcZahVl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745370152; x=1776906152;
+  t=1745372303; x=1776908303;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V5z5E5+X3Jf2jY7+WG1Lr+g/krh0x4f/dkIPVzE6Zsw=;
-  b=B4zVrS96NXFI6G1kDT8RPsQQ80L9dV+eFZyuMnPPsCOie0/d9doE176q
-   Uum4w75MebUxBjuTKTVOsRI02lpoqmShrxQI9OPnWj/DFStreqeRc5ume
-   Vt+6itCjGPs5nDCFvkVVgPl+WhfBNBnbdoM5VzQaeZ6XxUa82UFxSUEkr
-   HAiWFd74GUNB7gtKHeFKwLUCF1yLJjAivTg39D9jjAOngX1b64Y0vjgki
-   23BzdPWNqOYoz1ee9m0OnvazMlOhtf5vCO1XKyU+14l6gLZ7xFEw1Py41
-   FHA66evrQl/xDRiT+khNgKQF6bSkBnK7qPUvBwHzy7Amu3dSTH3NBpVZD
-   w==;
-X-CSE-ConnectionGUID: KaUlI8BKQZ+VpOW5qckhBA==
-X-CSE-MsgGUID: 63yjvmngTIyUeX/Sd8YZTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="69439435"
+   in-reply-to:mime-version;
+  bh=7VxOr0wy118I566ekMq1H0iMDTiS/PjLBPmIjDCfHI4=;
+  b=nxcZahVlKPH/b4UmLebd8f2uoVFuRthK7L7NX85fJFhjl5zvyFJ2jvFx
+   25vfECAV60ehRQtnsS7i4oPOmMOkEHaUSj5Z7MX9Hs3Btc27RaY2JRpwb
+   JYt8WmOsD+7h/ksTi5eRvP5jM8rzDidmVXCbQUZqwWL4Wkmk6VpadEiln
+   bEyar8ZIUr67sbYbeCZnUSZy1KMAa8LM2fRnxVYoKuOmyk8JqCbJpGHe/
+   R3cuo/vuCn9JBO3v0p3t2dXScgbznYb6SF7iM2/s3PIQbd6Hx/6a3Y9NV
+   OQBqS/ID3sQvt7gEfp1eW9x/Tr21E2bxl9Vj2ZNBMTihpyA5YBaFkHwu2
+   Q==;
+X-CSE-ConnectionGUID: 5FCN8DMdTD+UBFuEa5oZ7Q==
+X-CSE-MsgGUID: qJJYGGQ1SqawGXG7QFBFMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="64361024"
 X-IronPort-AV: E=Sophos;i="6.15,232,1739865600"; 
-   d="scan'208";a="69439435"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 18:02:31 -0700
-X-CSE-ConnectionGUID: 3KLY5xfjSJCF2TMuhEQFlA==
-X-CSE-MsgGUID: s7ej81ZcQcCQytNIvEW19Q==
+   d="scan'208";a="64361024"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 18:38:22 -0700
+X-CSE-ConnectionGUID: RXCXTy27STyI0z6W/xIVdw==
+X-CSE-MsgGUID: 2hX+BnMLStSzgrzAzjsa2Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,232,1739865600"; 
-   d="scan'208";a="169376875"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 Apr 2025 18:02:27 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u7OVL-0001S7-2x;
-	Wed, 23 Apr 2025 01:02:23 +0000
-Date: Wed, 23 Apr 2025 09:02:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zongmin Zhou <min_halo@163.com>, skhan@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, i@zenithal.me,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	shuah@kernel.org, valentina.manea.m@gmail.com,
-	Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: Re: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
-Message-ID: <202504230805.MkmxQyas-lkp@intel.com>
-References: <20250422063409.607859-1-min_halo@163.com>
+   d="scan'208";a="132024635"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 18:38:21 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Tue, 22 Apr 2025 18:38:20 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14 via Frontend Transport; Tue, 22 Apr 2025 18:38:20 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.46) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Tue, 22 Apr 2025 18:38:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=quPLI9dDkyvBw3/v8mAZnNu0eNT5gC+EayPdBUUCWaPqHNb1z0bk6VfrbsmOC8n/OxF7zVd6Mq1kS+4X9vcOnuPunZ63Z0U37UXLHZn2QJHee1Kt2CGSB9d+Uc+Jd9aVQ4WARjP4nLKtWtiyjnZ2oLenMjMz5s29h7p973yWUB/Bfn9eXKSUk97oU45lHtV3/EKX7co9AgKsKDzdpTq5VtvQaisTq7LP11QGGD/auyZeDz34I+R3Vw+dPDtHoSu5JEt1YAL4bjJxX/cCIClKQQi0ZfyNdV82SqbxQmwNWiPGlv+/e+VcSY0FeMotY/BAz4rtPcS6EmcI29ecDBWa5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=buxVHD/bYwbnF6lyNSXlkVlYiQjaKR6/HjNiB5/ilNc=;
+ b=Pi7RTLyh3eC7iQP3pwFcERsSQrppe23lAzHQufZidVmgfVBdGz1wIQ7Qkqry8Y4FepcZfCqY0u4rUCapNtu5rGVCLcqldXT3vR86tOyjiai9elq6C+bHH6FLg0prgKZ59MJEfRhDgJ70lMXDedfZddnNYIM4qscds9/K5sgzWXXx/pXOvVmK1ahwNE+pcsQzkHUppLqUHFQ0Fs0WTY+e3FV+pmgKGBogYlpx7C44j0LhrLyETT+k4CWO0JjrnhJZq9FsnQ0Q+qFtML2PmdZY3GMikdTu73x55YXApJWqe77B/MlyUUe0d1Od7Dj1hbPCQ+pPy8NmeLThAVBo9d+ojA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB5674.namprd11.prod.outlook.com (2603:10b6:510:ec::10)
+ by DM3PR11MB8681.namprd11.prod.outlook.com (2603:10b6:0:49::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8678.22; Wed, 23 Apr 2025 01:38:04 +0000
+Received: from PH0PR11MB5674.namprd11.prod.outlook.com
+ ([fe80::77d3:dfb2:3bd:e02a]) by PH0PR11MB5674.namprd11.prod.outlook.com
+ ([fe80::77d3:dfb2:3bd:e02a%5]) with mapi id 15.20.8655.033; Wed, 23 Apr 2025
+ 01:38:04 +0000
+Date: Wed, 23 Apr 2025 09:37:55 +0800
+From: Philip Li <philip.li@intel.com>
+To: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
+CC: kernel test robot <lkp@intel.com>, Karthikeyan Kathirvel
+	<karthikeyan.kathirvel@oss.qualcomm.com>, <ath12k@lists.infradead.org>,
+	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<linux-wireless@vger.kernel.org>
+Subject: Re: [PATCH ath-next] wifi: ath12k: allow beacon protection keys to
+ be installed in hardware
+Message-ID: <aAhEc8yrW4vcrE7J@rli9-mobl>
+References: <20250421114711.3660911-1-karthikeyan.kathirvel@oss.qualcomm.com>
+ <202504220128.2KvxCzaG-lkp@intel.com>
+ <47ea4e64-cd87-4c42-a20d-f663f197e44c@oss.qualcomm.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <47ea4e64-cd87-4c42-a20d-f663f197e44c@oss.qualcomm.com>
+X-ClientProxiedBy: SG2PR04CA0164.apcprd04.prod.outlook.com (2603:1096:4::26)
+ To PH0PR11MB5674.namprd11.prod.outlook.com (2603:10b6:510:ec::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250422063409.607859-1-min_halo@163.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB5674:EE_|DM3PR11MB8681:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb5ee578-c59e-4654-a483-08dd82077d96
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?gDuTLDyajT5ziW4g0pHY62LdplkFpddNt6EP6WP8wxC+1UwaDE2YAtjzpb+7?=
+ =?us-ascii?Q?znVbNISnzCp9h+PcrmcfQcj/VcVykbvnKTf9fZbtjE69plXTqbFsiVkOcLv4?=
+ =?us-ascii?Q?9eQbiFoe1BJoje7b9kHEkJL6qTb0hyTCSBRJ+I0mDJqVPBPf9pazc96EiiDl?=
+ =?us-ascii?Q?XBbKuvl2q1UkwQRcjWrynDrXC3hPCuXkT7UCCv+WZFSc1dXoOLqjkom335jH?=
+ =?us-ascii?Q?BtrHMDgKasgfruS4n50gv5UduOcc8INtHaHwf0HKdyVBTngQh4nKYlf0UYJe?=
+ =?us-ascii?Q?1u4Pa28YvaiLAntpn73Q+Du6X0urEhXIjMMK+W0XRXqjN4KxMeW/UF7K7naY?=
+ =?us-ascii?Q?YPdbpuMDHuDQGARerU5FI0sBC0/DENyqhwXnnDnf0V0o1uvPX2gpitvFVb+v?=
+ =?us-ascii?Q?gGg+weVv38tw6dJLiu0tr19xlMQH6tpZBEtcOmZgVwQDBV7YztdJ2d/qPecu?=
+ =?us-ascii?Q?RvmNWrEv2/E53mvUHrAxuzW0iZ2MLWsoNFmLSZz5wsQZfdQdNaBT4XJGHq6h?=
+ =?us-ascii?Q?Vw0s/BM0W6crpH1ocqRBvCKVJZgoBlA2PH/0wKnETg7Vo5Mkoe2rixUkTAoV?=
+ =?us-ascii?Q?kPPF5+/POF5SdsmSnJCwsmXmJf/BZ3yR1Rh3laGT516nqmpEKN9cWlhG11mt?=
+ =?us-ascii?Q?abyzK7yAinTL3b8b7WhGO3LHCCKpdAqGviQjmYatHAJnOqWs8JExU5MsGzNs?=
+ =?us-ascii?Q?pqLBweua3msC/k82navkn6JHmBmXHf2kb0H8fawrg0Qa5P1cmE/QmP9KpEq3?=
+ =?us-ascii?Q?cKpfO3tvcgZ0hwSxFmdUh9g2I1ZWnj16urNoqN1TsrmxdyhtgxjiZvb3i57f?=
+ =?us-ascii?Q?XwMJtGljsBCqtG5iEVqvBW4GipbaWi3JYQ4lyY9vNbTD2VSl5ZX2ghI1YNcb?=
+ =?us-ascii?Q?mAY8LwVWY4atkQBu/XfqBvhWBO9jOmTraWKbvctHcNi8HMOJfX79Jxx/rrpy?=
+ =?us-ascii?Q?xO12T4nNRwqoe6Q7frHNKvjSMVICx03lQjLephtwjnV0lf9LVLkEoDpakKbY?=
+ =?us-ascii?Q?A4xhnos4fHp+jTDPxFjInSOTP/bvEG/dn0CeEFAlGrqQAL8PoB4g4tdeHLJB?=
+ =?us-ascii?Q?UWtuXkxFq5JoK2y0Je5jXmYohq2RK5igmNNJewqR5ujUVUUOO7kqC6l9PWHn?=
+ =?us-ascii?Q?ZN7GgsUyHKQZq2g+sWwfIC5TWUc/eMOGbJ2VpZ8rM38hGxBpiGSLegW8rsn2?=
+ =?us-ascii?Q?AlZJCCLviw67r4H3qN391FDoVC2/SOuC4p1pX7BQ9JNd8T3ZrbFbRFIYjV0L?=
+ =?us-ascii?Q?ylfPn4LmseQvQorNa4//YvDYSLkTs+l93n6loQ+JmD+alX0VOE3DWifc25YM?=
+ =?us-ascii?Q?i7aCd6XGffnSjks7HGW1b0+JC6KjhlHa9uqP5bWOekY+EjCVpZ+YU3jbZE4Q?=
+ =?us-ascii?Q?Gbc5FrWcSNzsHeD4tJiwUOWiqcNcpbYdyrwCxTAmygh4PqudozM92tJ8/sIg?=
+ =?us-ascii?Q?GFBlQS3AOAY=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5674.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?URaAHpyOSlPetyzXbdc5I3zLh1oiarsuNfKkriig6CAEcnq9XluyyfozYh53?=
+ =?us-ascii?Q?Xcirbc6pWvFhhPfRcETDyfApnqBMt6Sfl/FQJnrh3Np7TGbPCxB4cBNsDLRS?=
+ =?us-ascii?Q?f65nf6ZYKdiRT6Uuld2GOFuaCDDUWkl9fezNle7dr5GKkRdL4Ls+jtsjcUK7?=
+ =?us-ascii?Q?faHTp5clTtRGB9jk4Rqq31n+Ksymn9WD/1sXp7btrTv3RUZ/Cla6KQDnX7IC?=
+ =?us-ascii?Q?oO1/CBaEVt7rUOCGwYj+VcTRF11YpxnPXcmWXH4qT75Va9D6WI7eHw6byrVH?=
+ =?us-ascii?Q?0dYEY4/LwGo9W1Rgq///orq11QoHbHoXdOlqBmmjPBR5HOryfdn2innzzC8P?=
+ =?us-ascii?Q?+6C0nrJhV3xkVsM2T2DvVos5fkTJEKfHw0bbk8qocw2LAZHEvs2+j5s7W2ll?=
+ =?us-ascii?Q?d/uvnp02wqrLdRrYPLdSkDsdwiEoHSa91vQ8dINiF2Ju1iiv+GGlSN6Qtf+I?=
+ =?us-ascii?Q?eyATsisfYChG/mLTM7Nm6cKcTeo7AcPRs6BxFbOjc8k+Pr5TblN2HqqhEVdV?=
+ =?us-ascii?Q?8xIzMf8pqjLfyc/fouk0WNdOd+r/uIdTuMxLegZ4HrMVlXdIs2izi8wVvIkX?=
+ =?us-ascii?Q?0VKwbec0SvxylAQCyKyJUyw3sRrGtzyFEtXpz+uvNrkfVntYl7g4Pyc5pVZc?=
+ =?us-ascii?Q?z2lDFfpeULsVRw2rwN8eouswg+tuDsS6DtzYeh/98dwn6lBrjZ8c+ObvV/gW?=
+ =?us-ascii?Q?rt46GGeZ4DDoDTeiiaKZgbqGLscFmiOqFydsTYWOEcvokx/u/RW8VaXc1hGa?=
+ =?us-ascii?Q?msrU+ikDWfWU/NVyxwROuL7a+yOiW7RpAzUEZHh5P0EZ9+C8/q1hSWsfbrEV?=
+ =?us-ascii?Q?DwxPjk1pYs4ONfphCS8SZ9ptTMNl9naY4Baf6jXSUvZb5es+RmGNkpMNfeCa?=
+ =?us-ascii?Q?4b0XuQLkacJP0sJ+n9xoUaaTdSkXPJJmM33Wq0n3aVPFm1xd0vOlQI/mNeCo?=
+ =?us-ascii?Q?rK+AUeDai/3m0Og5z5ToHIaPXCg+ktyTBc9HZm2JRK070jSXD7mO98YalY5D?=
+ =?us-ascii?Q?HLqDyYXkjdXVHVUdt++WMa519cjvMIFKqs+EfexbcjY3J1SLxQBOoOZdKb4+?=
+ =?us-ascii?Q?CQqcHK9Rdsbby/pGOxIJx0KGFVm2dMF1/l1W5ai9Qqvd/Whnhlf6L5kRsR4H?=
+ =?us-ascii?Q?ziE3H+DU7MF7hLdhxKpysHBTu2R0fiHDjNQo++/mUs8E/GLHYJ8amemJJrS6?=
+ =?us-ascii?Q?cK1IjmNr70J7r2lBwLRZdZBEaBuxezu07D5cEKlQCP14lOPdR3Npk9/JNzV+?=
+ =?us-ascii?Q?Y+isIXTlj+CeBGo/xYj7sYGS9qXG3ao9c854lB2+/lwX0L9Q+Mk/1q8CVjOy?=
+ =?us-ascii?Q?DOSPILqLY+gIPqCdK2qdStr/xzNrh/jtKxWcruOF+lPW/nOBMDfW9U4h67Qy?=
+ =?us-ascii?Q?sQopInDPxiOpQl3bOEQ7C6jbj4vGr5+Wfr8MWCXDaNJq9cHKEiS8FnmDyxbv?=
+ =?us-ascii?Q?S/aD6AapZUF+8xt6cbrH+OiSezfmOzIpZjp5j4Y2BxcyrmWyJq6gymA1BDmx?=
+ =?us-ascii?Q?XYv/VCgA66DhSGh7XnMuOwI/ptZZ+bLAjaK/s8eCkQPNw41MwJGUHmi5rt1P?=
+ =?us-ascii?Q?UImlx3AbiYIwniAuwcy0VamRkUSQaYM0eJbPtliy?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb5ee578-c59e-4654-a483-08dd82077d96
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5674.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2025 01:38:04.2902
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b1MVxtb9/njhZa1mug5sJqdAiXqG3MdXz2PmANRHkKPlVF0nFws963xzzKBaXJ9DlUbZ+g9qga3BT/Jp0f4/zA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR11MB8681
+X-OriginatorOrg: intel.com
 
-Hi Zongmin,
+On Mon, Apr 21, 2025 at 11:44:46AM -0700, Jeff Johnson wrote:
+> On 4/21/2025 10:16 AM, kernel test robot wrote:
+> > Hi Karthikeyan,
+> > 
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on d33705bb41ff786b537f8ed50a187a474db111c1]
+> 
+> lkp@intel.com folks:
+> This patch contains the following footer:
+> 
+> base-commit: d33705bb41ff786b537f8ed50a187a474db111c1
+> Depends-on: <20250421111505.3633992-1-karthikeyan.kathirvel@oss.qualcomm.com>
+> 
+> Is there a different mechanism needed to tell the robot about the dependency?
 
-kernel test robot noticed the following build errors:
+Sorry for confusion, for now if there's base-commit specified, the bot would
+only consider it as the base and apply the patch. And actually, if there's
+a dependency specified by link, the bot so far can't recognize it well.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.15-rc3 next-20250422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+BTW: for this case, does it mean the patch need be applied on this "Depends-on"
+patch, and this "Depends-on" patch is on top of the base-commit?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zongmin-Zhou/usbip-set-the-dma-mask-to-64bit-default-for-vhci-driver/20250422-143646
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250422063409.607859-1-min_halo%40163.com
-patch subject: [PATCH] usbip: set the dma mask to 64bit default for vhci-driver
-config: arm-randconfig-004-20250423 (https://download.01.org/0day-ci/archive/20250423/202504230805.MkmxQyas-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250423/202504230805.MkmxQyas-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504230805.MkmxQyas-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/usbip/vhci_hcd.c:1349:2: error: call to undeclared function 'dma_set_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1349 |         dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-         |         ^
-   drivers/usb/usbip/vhci_hcd.c:1349:2: note: did you mean 'xa_set_mark'?
-   include/linux/xarray.h:361:6: note: 'xa_set_mark' declared here
-     361 | void xa_set_mark(struct xarray *, unsigned long index, xa_mark_t);
-         |      ^
->> drivers/usb/usbip/vhci_hcd.c:1349:27: error: call to undeclared function 'DMA_BIT_MASK'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1349 |         dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-         |                                  ^
-   2 errors generated.
-
-
-vim +/dma_set_mask +1349 drivers/usb/usbip/vhci_hcd.c
-
-  1338	
-  1339	static int vhci_hcd_probe(struct platform_device *pdev)
-  1340	{
-  1341		struct vhci             *vhci = *((void **)dev_get_platdata(&pdev->dev));
-  1342		struct usb_hcd		*hcd_hs;
-  1343		struct usb_hcd		*hcd_ss;
-  1344		int			ret;
-  1345	
-  1346		usbip_dbg_vhci_hc("name %s id %d\n", pdev->name, pdev->id);
-  1347	
-  1348		/* Set the dma mask to support 64bit for vhci-hcd driver. */
-> 1349		dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-  1350	
-  1351		/*
-  1352		 * Allocate and initialize hcd.
-  1353		 * Our private data is also allocated automatically.
-  1354		 */
-  1355		hcd_hs = usb_create_hcd(&vhci_hc_driver, &pdev->dev, dev_name(&pdev->dev));
-  1356		if (!hcd_hs) {
-  1357			pr_err("create primary hcd failed\n");
-  1358			return -ENOMEM;
-  1359		}
-  1360		hcd_hs->has_tt = 1;
-  1361	
-  1362		/*
-  1363		 * Finish generic HCD structure initialization and register.
-  1364		 * Call the driver's reset() and start() routines.
-  1365		 */
-  1366		ret = usb_add_hcd(hcd_hs, 0, 0);
-  1367		if (ret != 0) {
-  1368			pr_err("usb_add_hcd hs failed %d\n", ret);
-  1369			goto put_usb2_hcd;
-  1370		}
-  1371	
-  1372		hcd_ss = usb_create_shared_hcd(&vhci_hc_driver, &pdev->dev,
-  1373					       dev_name(&pdev->dev), hcd_hs);
-  1374		if (!hcd_ss) {
-  1375			ret = -ENOMEM;
-  1376			pr_err("create shared hcd failed\n");
-  1377			goto remove_usb2_hcd;
-  1378		}
-  1379	
-  1380		ret = usb_add_hcd(hcd_ss, 0, 0);
-  1381		if (ret) {
-  1382			pr_err("usb_add_hcd ss failed %d\n", ret);
-  1383			goto put_usb3_hcd;
-  1384		}
-  1385	
-  1386		usbip_dbg_vhci_hc("bye\n");
-  1387		return 0;
-  1388	
-  1389	put_usb3_hcd:
-  1390		usb_put_hcd(hcd_ss);
-  1391	remove_usb2_hcd:
-  1392		usb_remove_hcd(hcd_hs);
-  1393	put_usb2_hcd:
-  1394		usb_put_hcd(hcd_hs);
-  1395		vhci->vhci_hcd_hs = NULL;
-  1396		vhci->vhci_hcd_ss = NULL;
-  1397		return ret;
-  1398	}
-  1399	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> 
