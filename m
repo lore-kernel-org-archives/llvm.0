@@ -1,131 +1,193 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED38928CF58
-	for <llvm@lists.linux.dev>; Wed, 23 Apr 2025 15:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F091A08A6;
+	Wed, 23 Apr 2025 16:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745421044; cv=none; b=NDvIpSkh6zJRa5+5bb8i0jPG8r/OSB3rJqPpW+gd0wiIassENjPjUpk02A7p3VahEUyTesBksOvKlTPtmvNL+KrqKhuNIM8YzTaCsKEaveHp9glNCRjdmt2P46lWhtlZKhikC+kUcS/3udBHkszjDddmICCC6Z1PD81BaiSIiKQ=
+	t=1745424810; cv=none; b=uxvSJkIXUbChMCBPthUv0lhj/EpJsgYfXqnONwzsIbrRealNdopmzoyIG1n+UxG9sl5GKYNIQ0xePXSa4JN2K7tBbO7oRRr8Jw1xmb+6oO8ujleeTHZ7/RgA/L2HBd5c05wCGbh+iI4N3rhvQnSmTGixH5IAxLyahPsto4VVHVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745421044; c=relaxed/simple;
-	bh=uFV3fDxHeTVor0I1L/M53Jf1QkJJii9mgN/m4+mnqe0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YuA61bkbo3M5IiWQCccVoeHOlLl3OH7pd56Q2+AlYYCp1ug4Bg5qBy7CYySU5hYw5j2lgcEeXwl6oCMdxeouufIGDcOsphBahMhsEQHXEKKiGiAl52MUwcqtKWMKdjauGurFfAHTIlsXLB1JMiCdRA2mXScqotsx8ApvYO60uFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TnZZKBq+; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1745424810; c=relaxed/simple;
+	bh=U2yFwq3RpBg+WNw4vkVzMAwlOlucHUu4o9YFxpiLI0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LWjHN5Xep1aWav7qISRQAUoQZ5tWFcjW8gYBGf7iCmTm5Grcuuzf8dGztjYeofVEqAkjQnnMsYvlOxl/geJPaV5E18NfAO0ksw8an6gmR7PpmSp6Zu9hPwcK8zEAYvDo3rxKvKrVEHCX2+gAexMJhj/1TyjUQ2mJ//puHfRKv7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TRrELMQ4; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TnZZKBq+"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e6a8aa771e8so5329330276.3
-        for <llvm@lists.linux.dev>; Wed, 23 Apr 2025 08:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1745421041; x=1746025841; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ppDTLRNI5D/DHlJ104+9klrOmugo96Z4EzkqmTSr+tw=;
-        b=TnZZKBq+/UkNPWalUkLRI1NEiX13LmPX1GE5mrbETEUAlgh3TI/uyHwB+XAZQPa8+C
-         I37+6xf2kaV1cMgOp/bvGhDLvF9v0iOZ3+cUV+tnSt3fxgPVAf6EcwGfyPLchHnpbXCQ
-         MtRIBF6LkqeGyV0IewCVWq6AI8sp1Wdc+yWI2XZvCGA/EIMqpizX8Pe8HLP+kUmeUcFE
-         4kM0wdArRYEAHtcouhaYUNzNE6+9aUR+fyAMGol/QTogpKdHVROAzeytlGAGsNX559b4
-         7BTy03ywXS8dLDJHrONSwhJanFJpdhCR2sv2LXO+AEUuioFxoA0Blst60f3gFIBBKtaK
-         F1AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745421041; x=1746025841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ppDTLRNI5D/DHlJ104+9klrOmugo96Z4EzkqmTSr+tw=;
-        b=r1uxEOQa6LujrQa+pOdlGdAX5m0QAgUF/P4+u5Uwq3vFANgZ7hYc2OtLSppc5BkkEa
-         giaSXNCByi8JUFXIHdYu0s3zj8vQPHMB3OJbAbjJ39YyGzvPMf4CT23yBrJfogV4hmwi
-         i5aIT53ea9eqifyOO6mDTutZ3iOhlu64Tau2sR3GPqPQgHdszwtUccr0JJc5rOEU2JEJ
-         Ya6haI84/zTjMWIao/qjZJpaa6KsfM/AzKFj10WTp2YUbbMTYFJCwe5E58LqHAic1DWu
-         VKZkh3FNt8IH5lxlXmbgmb4ZxcUzYCAkT7BkHAFGZ8ZQbcpZtGhMtf25YtdOfG2v6/UQ
-         a9PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJYlBzGe6g5q0tS/fOF+pYu6vQKV6KkH4p/Yrs7/1wxefWnXnLKuMeml0KXO/Yw0RwUak9@lists.linux.dev
-X-Gm-Message-State: AOJu0YxP46TPf5e2XZj2tb1T4D4buDIaGA8he9PRpgYxOz9xWMBqmZjW
-	HcrZB5O58DXmgx6e/aFLfVLZfoIdo7rUOCFpWx75qO1g95ttfTHndbLkgjQrOx7hfwNzz3d3baf
-	e0LfZ7Y1NQa8b8/WVzk7tirhBfutnjC89Yzf+
-X-Gm-Gg: ASbGncvWH+N2B6ESUTgRwJWQKCXACycihRFwYaJveT6zM3M7UC5MdicfbAE2gCQyUBa
-	BsP0uKBPcFu5eZ1wpU+4j/h14vk/efPHLeycUNYm0U+IKj1DXgUTu9akdlGK+0iAWgDkfX/X6cw
-	oe9TsvuW45m4LNkRwcQ9EY6jBnNQIJM2D0
-X-Google-Smtp-Source: AGHT+IHNlf00p8r3DHcmCpgY+IFBhYtAhRgyVsFb6FFk96MPIernB0HKWY5qgWQbLL58D4kTom9itSs/0uIOQcHE5fg=
-X-Received: by 2002:a05:690c:6801:b0:6fd:33a5:59a with SMTP id
- 00721157ae682-706ccd1a5ccmr309843197b3.18.1745421040868; Wed, 23 Apr 2025
- 08:10:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TRrELMQ4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745424806; x=1776960806;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=U2yFwq3RpBg+WNw4vkVzMAwlOlucHUu4o9YFxpiLI0M=;
+  b=TRrELMQ4dTRqiCGhXLPiVj7vLFzR1eAEQidwMYDqI3FLGPR9rYCPMNcv
+   iAvaI6W8s70tFqPaB1ODAOmIViyPTr1akvYKRMg4QKCUhYVLO9j4T7tqJ
+   La6uQYiaJTLdflT3FRNN8jiSVfiblfuwb4snqtnWzKlrUskuYEmiIVAaq
+   WNCnKnOONKj/1OIWiQwLS1Su1jyyBoKZJpsocisnEygjm+mC5ldSz1tOL
+   MPWmiLBjQD/5vddg1e1ab0ANUvogVPoN9DDfO9CGnQCknUdaRtzGA3Nlz
+   gJET/yMiuLGLY0JGWN6z0m6YBzRdWohG0yp3Zdt+4iLqfc5f0PrMtWrjN
+   A==;
+X-CSE-ConnectionGUID: w5y1msKnQS+RENMlWaFiKg==
+X-CSE-MsgGUID: Jx7kwbUoT9OmdrvnDoNIoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="46937259"
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="46937259"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 09:13:25 -0700
+X-CSE-ConnectionGUID: bPLwa6SlQACTActRM+QX0w==
+X-CSE-MsgGUID: nRab89R3QqqjnlU8aM/dsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="136434963"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 23 Apr 2025 09:13:24 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u7civ-0003QR-1x;
+	Wed, 23 Apr 2025 16:13:21 +0000
+Date: Thu, 24 Apr 2025 00:12:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:svm/sev_cache_opts 19/24] drivers/gpu/drm/drm_cache.c:96:2:
+ error: invalid argument type 'void' to unary expression
+Message-ID: <202504240050.Ipyo2SjN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
- <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
- <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
- <87y0w0hv2x.fsf@microsoft.com> <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
- <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
-In-Reply-To: <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 23 Apr 2025 11:10:29 -0400
-X-Gm-Features: ATxdqUEil0O912atUTQeKlUUv4Sfsc4c76L7yegeINodkXYOkWCpNQ86Ynaeoaw
-Message-ID: <CAHC9VhTi6+CHD9OtWj5=pPDrtwF+S9yfBOKqghe=9wXmd7jrxA@mail.gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
-	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
-	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Apr 23, 2025 at 10:12=E2=80=AFAM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
-> On Mon, 2025-04-21 at 13:12 -0700, Alexei Starovoitov wrote:
-> [...]
-> > Calling bpf_map_get() and
-> > map->ops->map_lookup_elem() from a module is not ok either.
->
-> I don't understand this objection.  The program just got passed in to
-> bpf_prog_load() as a set of attributes which, for a light skeleton,
-> directly contain the code as a blob and have the various BTF
-> relocations as a blob in a single element array map.  I think everyone
-> agrees that the integrity of the program would be compromised by
-> modifications to the relocations, so the security_bpf_prog_load() hook
-> can't make an integrity determination without examining both.  If the
-> hook can't use the bpf_maps.. APIs directly is there some other API it
-> should be using to get the relocations, or are you saying that the
-> security_bpf_prog_load() hook isn't fit for purpose and it should be
-> called after the bpf core has loaded the relocations so they can be
-> provided to the hook as an argument?
->
-> The above, by the way, is independent of signing, because it applies to
-> any determination that might be made in the security_bpf_prog_load()
-> hook regardless of purpose.
+tree:   https://github.com/sean-jc/linux svm/sev_cache_opts
+head:   fc0ae43d0eef1292a97a3109a394871b69ac9459
+commit: a3224547b78b7ba78d71baa8cf1ae1fcefd6fad8 [19/24] x86, lib: Drop the unused return value from wbinvd_on_all_cpus()
+config: x86_64-buildonly-randconfig-004-20250423 (https://download.01.org/0day-ci/archive/20250424/202504240050.Ipyo2SjN-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250424/202504240050.Ipyo2SjN-lkp@intel.com/reproduce)
 
-I've also been worrying that some of the unspoken motivation behind
-the objection is simply that Hornet is not BPF.  If/when we get to a
-point where Hornet is sent up to Linus and Alexei's objection to the
-Hornet LSM inspecting BPF maps stands, it seems as though *any* LSM,
-including BPF LSMs, would need to be prevented from accessing BPF
-maps.  I'm fairly certain no one wants to see it come to that.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504240050.Ipyo2SjN-lkp@intel.com/
 
---=20
-paul-moore.com
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/drm_cache.c:96:2: error: invalid argument type 'void' to unary expression
+      96 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+>> drivers/gpu/drm/drm_cache.c:96:2: error: invalid argument type 'void' to unary expression
+      96 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+>> drivers/gpu/drm/drm_cache.c:96:2: error: invalid argument type 'void' to unary expression
+      96 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   drivers/gpu/drm/drm_cache.c:142:2: error: invalid argument type 'void' to unary expression
+     142 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/gpu/drm/drm_cache.c:142:2: error: invalid argument type 'void' to unary expression
+     142 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+   drivers/gpu/drm/drm_cache.c:142:2: error: invalid argument type 'void' to unary expression
+     142 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   drivers/gpu/drm/drm_cache.c:175:2: error: invalid argument type 'void' to unary expression
+     175 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/gpu/drm/drm_cache.c:175:2: error: invalid argument type 'void' to unary expression
+     175 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+   drivers/gpu/drm/drm_cache.c:175:2: error: invalid argument type 'void' to unary expression
+     175 |         if (wbinvd_on_all_cpus())
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:45: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   9 errors generated.
+
+
+vim +/void +96 drivers/gpu/drm/drm_cache.c
+
+c9c97b8c750198 Dave Airlie     2009-08-27  89  
+c9c97b8c750198 Dave Airlie     2009-08-27  90  #if defined(CONFIG_X86)
+906bf7fda2c9cf Borislav Petkov 2016-03-29  91  	if (static_cpu_has(X86_FEATURE_CLFLUSH)) {
+c9c97b8c750198 Dave Airlie     2009-08-27  92  		drm_cache_flush_clflush(pages, num_pages);
+673a394b1e3b69 Eric Anholt     2008-07-30  93  		return;
+673a394b1e3b69 Eric Anholt     2008-07-30  94  	}
+673a394b1e3b69 Eric Anholt     2008-07-30  95  
+b04d4a38c0691e Ben Widawsky    2014-12-15 @96  	if (wbinvd_on_all_cpus())
+499447db0ebf43 Joe Perches     2017-02-28  97  		pr_err("Timed out waiting for cache flush\n");
+c9c97b8c750198 Dave Airlie     2009-08-27  98  
+
+:::::: The code at line 96 was first introduced by commit
+:::::: b04d4a38c0691e4467fa2988b6fe481bf759daaf drm/cache: Use wbinvd helpers
+
+:::::: TO: Ben Widawsky <ben@bwidawsk.net>
+:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
