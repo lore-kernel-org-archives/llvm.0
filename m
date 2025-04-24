@@ -1,126 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2667927FD54;
-	Thu, 24 Apr 2025 20:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BFF2820B3;
+	Thu, 24 Apr 2025 20:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745527017; cv=none; b=mhJIbTBc+2M2J2MwH+SU1Zq0sD2lOgRcYXmG8Hb3P8oIZxDIFaUjzxe2NwAiK6/9DPX0abicfc+vqfpGhHDBVRiQrGJnZ0Rm1etVxQPZiK92SQWmZ/926ZqsJQKXs4o+Ttdj86n/5Rd7ZNlJWs7rny/K54c1Ri8XVjGf4VA+C5s=
+	t=1745527036; cv=none; b=alxuksP3HMESBzWm/Wcf1cc3Z0c4tlRkk+GuPSdqA44Oh3iReMqGkV3SG7om0Dl5SMwkgF31TKnsE2yK6ozk24P3yJz1SefpLVgyMWgg9ksByaFpJkAKvjH3nVXrM1t15YoFm03PIU3dkyDknCDqkZTwy60n3vjP/zMIX0nzqVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745527017; c=relaxed/simple;
-	bh=SpjP2k6c3xqmjUvc+9CYhWMVG9VqXdVZXCAZt+ZisPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mbDQEtOfSzXHdEbD86eK0dJergBcLSbsRr7R7GM3tIXZDqzNfSdrCDI+0nErwsDk80Wt43VHfAMpKz5gBE4OFIKQo60dM5Cly8A5LTe8zIzkxqB77T1LlpxHjbxnKsD1BVPnPeGs9R3mP9shrzEeEoVfyO6vVBKNjEHMLhS9DNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QApv+PQu; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745527036; c=relaxed/simple;
+	bh=M/37xDWiT5miiJk+5wpGNYnw8142gJaTtLFfJ8+oO+c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qWANU5a/P4KB16HKYlntrqmn23C4WMU6mYNC2nTk2LcCFGi/cmOdMYABKpqalwC6cgHa5Vr5yB4Mp9R+SgmQxtLsPv38mUlBqeeyu3sKnrKwXpAP+ofgyCCHDmmkewGUCFteegsk9FxDVuaPYU29oYEPU5bH/tJINABYVft5dz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwOWzMOS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QApv+PQu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745527015; x=1777063015;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SpjP2k6c3xqmjUvc+9CYhWMVG9VqXdVZXCAZt+ZisPg=;
-  b=QApv+PQurYbCB5MhjxovHjitVHZ9Ggq6oBWovio266rYEdOEMSjCmXNX
-   En4M+XQkya7mUlZmVeDLtx28EVs6ct6KDO7sXEL3ggFVBJwoRk+0Mn2hg
-   qxvnZaFBq4WdYEXK1vyYIxgL/O3m36eE5GV5OlxFf2dlWIsoxfZAhDoxW
-   DtL5ID0j1Dnsy6pbm4Q556sJ2xUStadzskEAtsnOYYWUQ61dXry3sTVTi
-   odGBi5NWNvKyiIwlwmnicLvzoP+pUFa3ZN2iUZ/FNmhbmr67+mKAMd9lp
-   p410mBCXFimG8ZvHpMrfmR3/q9aob7Zwk4uLxTE4nSGIdS2Ua9xVdZpTh
-   A==;
-X-CSE-ConnectionGUID: fMDsxCmtTA6RIx3D0vaS7g==
-X-CSE-MsgGUID: ILrZtDuXS8eEqwH7cE5XSg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="64709238"
-X-IronPort-AV: E=Sophos;i="6.15,237,1739865600"; 
-   d="scan'208";a="64709238"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 13:36:54 -0700
-X-CSE-ConnectionGUID: bYehlejxQx+0WEQWvUxDYQ==
-X-CSE-MsgGUID: oJosCEZ8Rb25xGPHYDGEmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,237,1739865600"; 
-   d="scan'208";a="163779372"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Apr 2025 13:36:51 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u83JR-0004ZN-0B;
-	Thu, 24 Apr 2025 20:36:49 +0000
-Date: Fri, 25 Apr 2025 04:35:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev,
-	Christoph Lameter <cl@linux-foundation.org>,
-	David Rientjes <rientjes@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only
- user
-Message-ID: <202504250400.BLLCAX1T-lkp@intel.com>
-References: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwOWzMOS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A0BCC4CEE3;
+	Thu, 24 Apr 2025 20:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745527035;
+	bh=M/37xDWiT5miiJk+5wpGNYnw8142gJaTtLFfJ8+oO+c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NwOWzMOS+iXODNiwX7O3puyENyzjHL6O3/y6tqAIBMPfC6EKCYTuFOFTgH6B5Fxmj
+	 M+3d2vLFxx8ir5r8kbn6n6afz7DInUBZ6ypTreYNiIk+/Pu6GHyisbdzu3Z97LreR4
+	 mD+DxgNA3WFQi9F07/yNxvsh+/fGyNU8bcygs7J5gih6WF5AVr8zpFohz8JTI3bCH8
+	 rarNfRWNa+IpfzPstce6xZveLbKupHCSpE2jxAz7apEloJCD5wV5qN2hNCwuawMoTx
+	 w0ljuUB4XpAfbGgK5cTvDOy/3bcBAK1ffF+CM2UZ9ZeXt7O0I64dZM6PKIW6Kr/qM6
+	 dWLK3VAcC7lMQ==
+Message-ID: <3f0f7795-93dd-43c8-b64b-ace90cf26447@kernel.org>
+Date: Thu, 24 Apr 2025 22:37:12 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [krzk:next/drivers 7/7]
+ drivers/firmware/samsung/exynos-acpm.c:672: warning: Function parameter or
+ struct member 'acpm_np' not described in 'acpm_get_by_node'
+To: kernel test robot <lkp@intel.com>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <202504222051.7TqaSQ48-lkp@intel.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <202504222051.7TqaSQ48-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Andy,
+On 22/04/2025 14:52, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git next/drivers
+> head:   a8dc26a0ec43fd416ca781a8030807e65f71cfc5
+> commit: a8dc26a0ec43fd416ca781a8030807e65f71cfc5 [7/7] firmware: exynos-acpm: introduce devm_acpm_get_by_node()
+> config: i386-buildonly-randconfig-001-20250422 (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48-lkp@intel.com/config)
+> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504222051.7TqaSQ48-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/firmware/samsung/exynos-acpm.c:672: warning: Function parameter or struct member 'acpm_np' not described in 'acpm_get_by_node'
+>>> drivers/firmware/samsung/exynos-acpm.c:672: warning: expecting prototype for acpm_get_by_phandle(). Prototype was for acpm_get_by_node() instead
 
-kernel test robot noticed the following build errors:
+Not sure if this was result of long holidays or just ignoring this... if
+the latter then: please always respond/address somehow bot reports.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+I sent fix for that, but in general I expect active contributors to fix
+their own patches.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/mm-slab-fold-need_slab_obj_ext-into-its-only-user/20250425-004842
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250424164800.2658961-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only user
-config: i386-buildonly-randconfig-001-20250425 (https://download.01.org/0day-ci/archive/20250425/202504250400.BLLCAX1T-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250425/202504250400.BLLCAX1T-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504250400.BLLCAX1T-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   mm/slub.c: In function 'unaccount_slab':
->> mm/slub.c:2591:36: error: implicit declaration of function 'need_slab_obj_ext'; did you mean 'free_slab_obj_exts'? [-Werror=implicit-function-declaration]
-    2591 |         if (memcg_kmem_online() || need_slab_obj_ext())
-         |                                    ^~~~~~~~~~~~~~~~~
-         |                                    free_slab_obj_exts
-   cc1: some warnings being treated as errors
-
-
-vim +2591 mm/slub.c
-
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2587  
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2588  static __always_inline void unaccount_slab(struct slab *slab, int order,
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2589  					   struct kmem_cache *s)
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2590  {
-4b8736964640fe1 Suren Baghdasaryan 2024-03-21 @2591  	if (memcg_kmem_online() || need_slab_obj_ext())
-21c690a349baab8 Suren Baghdasaryan 2024-03-21  2592  		free_slab_obj_exts(slab);
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2593  
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2594  	mod_node_page_state(slab_pgdat(slab), cache_vmstat_idx(s),
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2595  			    -(PAGE_SIZE << order));
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2596  }
-0bedcc66d2a43a5 Vlastimil Babka    2023-10-03  2597  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
