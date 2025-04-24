@@ -1,138 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BF418B495
-	for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 16:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447B028E5F0
+	for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 17:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745513291; cv=none; b=SRr2nBSr1A6+oD2QE/14FXqKP2VXPhjKNeNH2oBNpMdBf5q8W5Ef6No/+l4WwU+9gCdzLvcSAgeTwi75G9ElD7o1/1zDVLQbmMHC78TWG08jOnGfIvH8CI7neJH+ED2PoM9Lkti6vx+ys3K0Jb8JOjb474BLO2LrKUCaVrBLiTI=
+	t=1745514904; cv=none; b=N2B6jjr4Smn42HCAgFQJLD/fFj5nHctbb3tm6fU/CbAXEaIhyO5fPZJwawejnyGGYXVf2xMmB9LgXc52xCNTUwbgnOSHMUgMqGL0TNdDDpeeNILnDD2HyoyLwrCRniXo0eNmqXHOzc0KM2sPyJVULUOFt+ydSq9eioXqOEaTaUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745513291; c=relaxed/simple;
-	bh=ySwKksoJVylHv17+76jDGSBW5NovddheXIa8c/3FWGc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A6v1hqYLyHqJjYsHXJovnSjoRHQzBySDpFHE+Afcuc6gd8//LFDzHIo0s6L8gQRZsBR34KowXKUR3fiwh0MmVtzooH/Qzzcuy7WkxR+lAmq+3hmB8qE6WxI7GqXwgiqXtC+X3bfAPZGMRDJWwTEQpk3wppzMs4cq6zAedXvm24U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=POHImNsL; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1745514904; c=relaxed/simple;
+	bh=UhUt3ao8pozoBaRx+y41ElAHV9S/D/UZDK22mXi+fPs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y5zrvDnFtyw3bjW1yWLiijWUngxA7TMWwpEd2Xy3vYIkmiqWMfDkPlXa+nm3Ji7gbf3UXKz3o0sPRBeDxaLBOC4gV4u39ivNM1PAjiwoKqr26/sXMgS6QRB7CSaO5ImGvWtJhWsWyEVWczukU7yV79GY10eQh28dCb7wTkWajm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2hZyWLWf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Wn+UeLPQ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2hZyWLWf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Wn+UeLPQ; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="POHImNsL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745513290; x=1777049290;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ySwKksoJVylHv17+76jDGSBW5NovddheXIa8c/3FWGc=;
-  b=POHImNsLrQssdm2bjdASlda8hS1oV8buGi4M4vPq4Cj2yTHBBd9rW1C1
-   vsUaEc+Wv17TghpsDpCQSWvga+XJ3/iHs7KpFaVaQPF4gRXzYR/D8Rh94
-   +LKb3yazNq3ENFMWq+AQwkP1dgPICnK4yxln+//Py/pvod0v5idb+J32O
-   pxHPlYHzrSc1bBt/qOn5h2H2q5/FB7z/bI8lTkLGgT81DFRqhJb5zz1LF
-   QydKE24mIVY04Dojg7F1l1PLyvBAr3g6MKc226oqH+4Z2J96RGaLFbKG9
-   9fmuCRE03UBgfztnVAsdQbTvWU8n2FQ5GRf2Zx5AUhnLc7d6w0wNgR6F/
-   g==;
-X-CSE-ConnectionGUID: FQY/52F5TQG+vIjCvi67gQ==
-X-CSE-MsgGUID: WeIVpsL2Qry9I8shHeBgiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="49816905"
-X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
-   d="scan'208";a="49816905"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 09:48:09 -0700
-X-CSE-ConnectionGUID: rQ1ocbUzQhuWSA1zOhprqw==
-X-CSE-MsgGUID: sO9y2MC2RBmDNooNgnf5Rw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
-   d="scan'208";a="132661087"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 24 Apr 2025 09:48:06 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id D4F221AC; Thu, 24 Apr 2025 19:48:04 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only user
-Date: Thu, 24 Apr 2025 19:48:00 +0300
-Message-ID: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2hZyWLWf";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Wn+UeLPQ";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2hZyWLWf";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Wn+UeLPQ"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 4FE371F443;
+	Thu, 24 Apr 2025 17:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1745514901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jA/Yq2sLS38l5G8KlTT+Pd1kKyunnmm3yQ5Qp9zrVQ=;
+	b=2hZyWLWf+UC9v/ZRtwrwRlkE2JY6xC6F+61YKo3LnHoCWrvu19loWtL8lKPTvZuqWff+xo
+	2k2jCatOwyPUh55FiWku+4u65fFjytOQUAoBhVAHHuVqvbjrHwTBZxMRhlC4tLcjKcfATU
+	JPeKzjmgE3NvXWdGPeHeO+b3U4bJDlo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1745514901;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jA/Yq2sLS38l5G8KlTT+Pd1kKyunnmm3yQ5Qp9zrVQ=;
+	b=Wn+UeLPQNIiE8LoygUPcOnHfVxls+Q1lG/TeKDf9Psc7K4AsGjmDMOFHCjS26t69miUX3k
+	P/kw/osTi/vpbeDg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1745514901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jA/Yq2sLS38l5G8KlTT+Pd1kKyunnmm3yQ5Qp9zrVQ=;
+	b=2hZyWLWf+UC9v/ZRtwrwRlkE2JY6xC6F+61YKo3LnHoCWrvu19loWtL8lKPTvZuqWff+xo
+	2k2jCatOwyPUh55FiWku+4u65fFjytOQUAoBhVAHHuVqvbjrHwTBZxMRhlC4tLcjKcfATU
+	JPeKzjmgE3NvXWdGPeHeO+b3U4bJDlo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1745514901;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jA/Yq2sLS38l5G8KlTT+Pd1kKyunnmm3yQ5Qp9zrVQ=;
+	b=Wn+UeLPQNIiE8LoygUPcOnHfVxls+Q1lG/TeKDf9Psc7K4AsGjmDMOFHCjS26t69miUX3k
+	P/kw/osTi/vpbeDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 342D7139D0;
+	Thu, 24 Apr 2025 17:15:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id S9xtDJVxCmhhJwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 24 Apr 2025 17:15:01 +0000
+Message-ID: <691b0ba9-7587-4663-8aa3-8ce63ef509c6@suse.cz>
+Date: Thu, 24 Apr 2025 19:15:00 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only
+ user
+Content-Language: en-US
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Harry Yoo <harry.yoo@oracle.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Zhenhua Huang <quic_zhenhuah@quicinc.com>
+References: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[gentwo.org,google.com,linux-foundation.org,linux.dev,oracle.com,kernel.org,gmail.com,quicinc.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	TAGGED_RCPT(0.00)[lkml];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,intel.com:email]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-need_slab_obj_ext() is used only in one place, fold it into there.
-Without that, clang can't build kernel with `make W=1` when
-CONFIG_WERROR=y, which is default in the x86 configurations.
+On 4/24/25 18:48, Andy Shevchenko wrote:
+> need_slab_obj_ext() is used only in one place, fold it into there.
+> Without that, clang can't build kernel with `make W=1` when
+> CONFIG_WERROR=y, which is default in the x86 configurations.
 
-mm/slub.c:2079:20: error: unused function 'need_slab_obj_ext' [-Werror,-Wunused-function]
+Note that gcc doesn't warn on this even with W=1.
 
-To solve this, fold need_slab_obj_ext() into its only user.
+Is really clang + W=1 + CONFIG_WERROR building ok these days except this one
+unused function?
 
-Fixes: e33b7ae3d802 ("mm, slab: clean up slab->obj_exts always")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- mm/slub.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
+> mm/slub.c:2079:20: error: unused function 'need_slab_obj_ext' [-Werror,-Wunused-function]
+> 
+> To solve this, fold need_slab_obj_ext() into its only user.
+> 
+> Fixes: e33b7ae3d802 ("mm, slab: clean up slab->obj_exts always")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/mm/slub.c b/mm/slub.c
-index 966785362a62..50e9730828a6 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2048,18 +2048,6 @@ static inline void free_slab_obj_exts(struct slab *slab)
- 	slab->obj_exts = 0;
- }
- 
--static inline bool need_slab_obj_ext(void)
--{
--	if (mem_alloc_profiling_enabled())
--		return true;
--
--	/*
--	 * CONFIG_MEMCG creates vector of obj_cgroup objects conditionally
--	 * inside memcg_slab_post_alloc_hook. No other users for now.
--	 */
--	return false;
--}
--
- #else /* CONFIG_SLAB_OBJ_EXT */
- 
- static inline void init_slab_obj_exts(struct slab *slab)
-@@ -2076,11 +2064,6 @@ static inline void free_slab_obj_exts(struct slab *slab)
- {
- }
- 
--static inline bool need_slab_obj_ext(void)
--{
--	return false;
--}
--
- #endif /* CONFIG_SLAB_OBJ_EXT */
- 
- #ifdef CONFIG_MEM_ALLOC_PROFILING
-@@ -2128,7 +2111,11 @@ __alloc_tagging_slab_alloc_hook(struct kmem_cache *s, void *object, gfp_t flags)
- static inline void
- alloc_tagging_slab_alloc_hook(struct kmem_cache *s, void *object, gfp_t flags)
- {
--	if (need_slab_obj_ext())
-+	/*
-+	 * CONFIG_MEMCG creates vector of obj_cgroup objects conditionally
-+	 * inside memcg_slab_post_alloc_hook(). No other users for now.
-+	 */
-+	if (mem_alloc_profiling_enabled())
- 		__alloc_tagging_slab_alloc_hook(s, object, flags);
- }
- 
--- 
-2.47.2
+Thanks, I've folded the fix in.
 
