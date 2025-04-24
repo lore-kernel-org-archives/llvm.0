@@ -1,92 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1F64315C;
-	Thu, 24 Apr 2025 15:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BF418B495
+	for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 16:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745508524; cv=none; b=czLOCSpFEIFWnBkq3z34i1nigDVvWps5UhUDZiqLm9FSdnqrn/vwgm3OxgT8uGyhLNim9mw6AFYkSCel5/4MB8xoC7aeG4KMjwQdtF1UQFfIbh457iERJVKwUS/+ZKL9f5noJyF2xKSMSflZEzSmWY2L1D3rdtMkacehFBDJ+E4=
+	t=1745513291; cv=none; b=SRr2nBSr1A6+oD2QE/14FXqKP2VXPhjKNeNH2oBNpMdBf5q8W5Ef6No/+l4WwU+9gCdzLvcSAgeTwi75G9ElD7o1/1zDVLQbmMHC78TWG08jOnGfIvH8CI7neJH+ED2PoM9Lkti6vx+ys3K0Jb8JOjb474BLO2LrKUCaVrBLiTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745508524; c=relaxed/simple;
-	bh=Euv6tom3fZIqVEpTEjRQbUyHhU+/a5Q3E4Z5AiMuBNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kj02iGamtPcQ9Jyvyw3BZyg61oEcJFvinIotyAVzXCLfTJKYHJ8gtusWtF/Kd6INfGmRTQNg45Ft+cRFVrlAuakubDV6grSd2dxHLF06o/0x42vlXuKBEWP2PQP6dXWGOtH5tyIzEwNanfkfSBnSnbCFNaRhYpkT03TRn1tkorI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GrxRqP8P; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745513291; c=relaxed/simple;
+	bh=ySwKksoJVylHv17+76jDGSBW5NovddheXIa8c/3FWGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A6v1hqYLyHqJjYsHXJovnSjoRHQzBySDpFHE+Afcuc6gd8//LFDzHIo0s6L8gQRZsBR34KowXKUR3fiwh0MmVtzooH/Qzzcuy7WkxR+lAmq+3hmB8qE6WxI7GqXwgiqXtC+X3bfAPZGMRDJWwTEQpk3wppzMs4cq6zAedXvm24U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=POHImNsL; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GrxRqP8P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6117CC4CEE3;
-	Thu, 24 Apr 2025 15:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1745508523;
-	bh=Euv6tom3fZIqVEpTEjRQbUyHhU+/a5Q3E4Z5AiMuBNQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GrxRqP8PlUoaiYbRXy4O7PJv2OfyiR2e4+i4zK0vKA+0iymFhjn9CPp5sM/mmx7WV
-	 wfnMR8dDwpxcrrbOhWSbGV6i1SJ4+oKsrHiHwhZISaNczapcZR+6ODAW0ZSieSPvlZ
-	 37Chbr+LQvH4/ttgnpq3ApNGBgp44iJca7zST2wc=
-Date: Thu, 24 Apr 2025 17:28:41 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: He Zhe <zhe.he@windriver.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="POHImNsL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745513290; x=1777049290;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ySwKksoJVylHv17+76jDGSBW5NovddheXIa8c/3FWGc=;
+  b=POHImNsLrQssdm2bjdASlda8hS1oV8buGi4M4vPq4Cj2yTHBBd9rW1C1
+   vsUaEc+Wv17TghpsDpCQSWvga+XJ3/iHs7KpFaVaQPF4gRXzYR/D8Rh94
+   +LKb3yazNq3ENFMWq+AQwkP1dgPICnK4yxln+//Py/pvod0v5idb+J32O
+   pxHPlYHzrSc1bBt/qOn5h2H2q5/FB7z/bI8lTkLGgT81DFRqhJb5zz1LF
+   QydKE24mIVY04Dojg7F1l1PLyvBAr3g6MKc226oqH+4Z2J96RGaLFbKG9
+   9fmuCRE03UBgfztnVAsdQbTvWU8n2FQ5GRf2Zx5AUhnLc7d6w0wNgR6F/
+   g==;
+X-CSE-ConnectionGUID: FQY/52F5TQG+vIjCvi67gQ==
+X-CSE-MsgGUID: WeIVpsL2Qry9I8shHeBgiQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="49816905"
+X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
+   d="scan'208";a="49816905"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 09:48:09 -0700
+X-CSE-ConnectionGUID: rQ1ocbUzQhuWSA1zOhprqw==
+X-CSE-MsgGUID: sO9y2MC2RBmDNooNgnf5Rw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
+   d="scan'208";a="132661087"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 24 Apr 2025 09:48:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id D4F221AC; Thu, 24 Apr 2025 19:48:04 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Guenter Roeck <linux@roeck-us.net>, shuah <shuah@kernel.org>,
-	patches@kernelci.org, lkft-triage@lists.linaro.org,
-	Pavel Machek <pavel@denx.de>, Jon Hunter <jonathanh@nvidia.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Slade Watkins <srw@sladewatkins.net>, rwarsow@gmx.de,
-	Conor Dooley <conor@kernel.org>, hargar@microsoft.com,
-	Mark Brown <broonie@kernel.org>, Netdev <netdev@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Harry Yoo <harry.yoo@oracle.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH 6.1 000/291] 6.1.135-rc1 review
-Message-ID: <2025042404-playhouse-manual-85bd@gregkh>
-References: <20250423142624.409452181@linuxfoundation.org>
- <CA+G9fYu+FEZ-3ye30Hk2sk1+LFsw7iO5AHueUa9H1Ub=JO-k2g@mail.gmail.com>
- <2025042443-ibuprofen-scavenger-c4df@gregkh>
- <e77b24ce-e91b-4c90-82d6-0fa91fcce163@app.fastmail.com>
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only user
+Date: Thu, 24 Apr 2025 19:48:00 +0300
+Message-ID: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e77b24ce-e91b-4c90-82d6-0fa91fcce163@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 24, 2025 at 04:34:04PM +0200, Arnd Bergmann wrote:
-> On Thu, Apr 24, 2025, at 15:41, Greg Kroah-Hartman wrote:
-> > On Thu, Apr 24, 2025 at 07:01:02PM +0530, Naresh Kamboju wrote:
-> >> 
-> >> ## Build error:
-> >> net/sched/act_mirred.c:265:6: error: variable 'is_redirect' is used
-> >> uninitialized whenever 'if' condition is true
-> >> [-Werror,-Wsometimes-uninitialized]
-> >>   265 |         if (unlikely(!(dev->flags & IFF_UP)) ||
-> >> !netif_carrier_ok(dev)) {
-> >>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Odd this isn't showing up in newer releases, as this is an old commit
-> > and nothing has changed in this file since then (it showed up in 6.8.)
-> >
-> > Is there some follow-up commit somewhere that I'm missing that resolved
-> > this issue?
-> 
-> I think the difference is commit 16085e48cb48 ("net/sched: act_mirred:
-> Create function tcf_mirred_to_dev and improve readability") from 
-> v6.8, which adds the initialization that 166c2c8a6a4d ("net/sched:
-> act_mirred: don't override retval if we already lost the skb")
-> relies on.
+need_slab_obj_ext() is used only in one place, fold it into there.
+Without that, clang can't build kernel with `make W=1` when
+CONFIG_WERROR=y, which is default in the x86 configurations.
 
-Ok, that didn't apply cleanly either, so I'm just going to drop this
-backported patch and wait for the submitter to fix it up and resend it.
+mm/slub.c:2079:20: error: unused function 'need_slab_obj_ext' [-Werror,-Wunused-function]
 
-thanks,
+To solve this, fold need_slab_obj_ext() into its only user.
 
-greg k-h
+Fixes: e33b7ae3d802 ("mm, slab: clean up slab->obj_exts always")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ mm/slub.c | 23 +++++------------------
+ 1 file changed, 5 insertions(+), 18 deletions(-)
+
+diff --git a/mm/slub.c b/mm/slub.c
+index 966785362a62..50e9730828a6 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2048,18 +2048,6 @@ static inline void free_slab_obj_exts(struct slab *slab)
+ 	slab->obj_exts = 0;
+ }
+ 
+-static inline bool need_slab_obj_ext(void)
+-{
+-	if (mem_alloc_profiling_enabled())
+-		return true;
+-
+-	/*
+-	 * CONFIG_MEMCG creates vector of obj_cgroup objects conditionally
+-	 * inside memcg_slab_post_alloc_hook. No other users for now.
+-	 */
+-	return false;
+-}
+-
+ #else /* CONFIG_SLAB_OBJ_EXT */
+ 
+ static inline void init_slab_obj_exts(struct slab *slab)
+@@ -2076,11 +2064,6 @@ static inline void free_slab_obj_exts(struct slab *slab)
+ {
+ }
+ 
+-static inline bool need_slab_obj_ext(void)
+-{
+-	return false;
+-}
+-
+ #endif /* CONFIG_SLAB_OBJ_EXT */
+ 
+ #ifdef CONFIG_MEM_ALLOC_PROFILING
+@@ -2128,7 +2111,11 @@ __alloc_tagging_slab_alloc_hook(struct kmem_cache *s, void *object, gfp_t flags)
+ static inline void
+ alloc_tagging_slab_alloc_hook(struct kmem_cache *s, void *object, gfp_t flags)
+ {
+-	if (need_slab_obj_ext())
++	/*
++	 * CONFIG_MEMCG creates vector of obj_cgroup objects conditionally
++	 * inside memcg_slab_post_alloc_hook(). No other users for now.
++	 */
++	if (mem_alloc_profiling_enabled())
+ 		__alloc_tagging_slab_alloc_hook(s, object, flags);
+ }
+ 
+-- 
+2.47.2
+
