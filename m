@@ -1,71 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA3F502BE
-	for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 17:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8BA291169;
+	Thu, 24 Apr 2025 19:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745515361; cv=none; b=XVJEZgBMsIj6AtV152Ir7qJD6JuMLK1iiBnK0Sa1qQFuVHpQ8Pmw5dVT+ygOjfx+my1uQheJONoO8aNyvbdPSzCDgajY2nA4xqhvs1ngUlq5o3QpH/8O3aYp96PdkA8+6XTmsYoYT2I6uO/54VRtMsUcQ1JaEdagHemx61I3Vhw=
+	t=1745523711; cv=none; b=V7OaINAN0z+hCG8R1Jcl76G3MexA8agxECpFGzFBPcLWTymzhM7HHuGkCyMcX5NzHz00/CYTfWY1Dm5IyjAxh3mbwvrn9Vxykr07O36BVmPqN6ju37zgA+essYDu9PayvzvJL7JJla6vVrPc0+i/8drQrHsLC/xU+WMYAAPJ1mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745515361; c=relaxed/simple;
-	bh=5mUMu6rbhZGdHK9UQ3fq199ViRrbpnMG+Pe7EeSBYHk=;
+	s=arc-20240116; t=1745523711; c=relaxed/simple;
+	bh=OAsMQK/TROQjnTfZeP0n8qIChfLSAQtuIkjd4Lq/i78=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qViDiOwSj9GlCJXzGGG+V7mW/bZyix1E6UvGbPBkUlahYAn0T+NUm4Yjy1jmXl/dAc6CFp5p977QOvRsfAHZHYdfML59iyHCfF0l/Fuyln7yx77DhMyqLtovYaY4VCgXJKp68PNm9hNnl2TI3Y1jIBHkVNEKL51cP28uR06LZ/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CdhFuXCb; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=AZ4cwjMc38x4bhVjqOnQx2hlPWqly0gN5kt59LlIK5rLV480viAaLNOngCrA5tcOeaHwPOi3QMH2jAYCSDujOGF9NFbcmrAZLfysJ/jC4uL5akgrVivbbGVXHIJbShKKbriUw9RcNk5U+sw6dGL+uYY/EGHVUuJ/u3E0gcCa3WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jfa5al/q; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CdhFuXCb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jfa5al/q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745515359; x=1777051359;
+  t=1745523710; x=1777059710;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5mUMu6rbhZGdHK9UQ3fq199ViRrbpnMG+Pe7EeSBYHk=;
-  b=CdhFuXCbR2767AEtdwbQyhApUyefreDBlA7ZBiyirOn/JOBcSXlA7Mgr
-   0zv5jpmmZdx0pPtZkYSYblpiuHw3MD3Vu7c/JQewV8IKd9vhBUeF73zHU
-   U5D2qMSf1Y9dU5BelSJDwC5EDmEVMM5mk0Iymawa4IG+fkqn7KBKbXp0k
-   bIu27XuoW/G4Gca3Zci1ll7xFpXqM1V47ug4YP8bciGIXtxbaGaJhHNVt
-   oHDTZG40YwKFkuSNMltAUkjyxlc0inal6+eGd9awcrKKRVVF9BmAyo78Q
-   WNTh/hSPkaKhNuqViQuyL/m2oLMLy89sPACvAgiabmEfNehoFR1Eb5C9z
-   A==;
-X-CSE-ConnectionGUID: JIarjDw6SDyMEir8nyrvng==
-X-CSE-MsgGUID: TbVHeDOOTluEcaOm1/U6+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="47337798"
+  bh=OAsMQK/TROQjnTfZeP0n8qIChfLSAQtuIkjd4Lq/i78=;
+  b=jfa5al/q40CY1WNKBZZR9EekDaMQI3Z2i50fKxD8XtkiXrHYaCPAKtGg
+   mCjpFd1iJkVEt9HBFPq/91LVrcmJpCf7+GIBXsQi4Faoex0alZ+Ukll9D
+   pvHTYUOEPkBhqAtmKM8Al2QAQv362aWsVVH3MGUbLcUecgKi3It6Lg0ae
+   I32s3GO9wQuAIUcQA1228VnMYZGFim9y+OeJO21lMf30xkKMDa05AmqEM
+   JEBaNRhICWwQT2kFVKKMTitwN0Gc3Nx3+r+4fdiHKqPqEwMOE/f6xRthH
+   Iso0RCmRDjJwvLgYk/wIi/HPaGt98aE4/V8nsGO4wKyE84Pmdv+bBdtaZ
+   w==;
+X-CSE-ConnectionGUID: RfDCJmTiSWS0QLHMA+9sog==
+X-CSE-MsgGUID: I80Bo7L/Qsq4/Xw1+kEtJw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="58165995"
 X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
-   d="scan'208";a="47337798"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 10:22:38 -0700
-X-CSE-ConnectionGUID: tD2Gso2KSRuNHJoaLB2hYg==
-X-CSE-MsgGUID: LaysRMefQBqWQKcbLmi1ww==
+   d="scan'208";a="58165995"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 12:41:49 -0700
+X-CSE-ConnectionGUID: ZpVkg/xUQfuZ+zFl/zKsUA==
+X-CSE-MsgGUID: leQSlnPzQ0yA7TyYaXb7GA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
-   d="scan'208";a="132553866"
-Received: from smile.fi.intel.com ([10.237.72.55])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 10:22:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u80HP-000000003Ju-1XjY;
-	Thu, 24 Apr 2025 20:22:31 +0300
-Date: Thu, 24 Apr 2025 20:22:31 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Christoph Lameter <cl@gentwo.org>,
+   d="scan'208";a="133676820"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 24 Apr 2025 12:41:45 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u82S7-0004VJ-0k;
+	Thu, 24 Apr 2025 19:41:43 +0000
+Date: Fri, 25 Apr 2025 03:41:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christoph Lameter <cl@linux-foundation.org>,
 	David Rientjes <rientjes@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
 	Roman Gushchin <roman.gushchin@linux.dev>,
 	Harry Yoo <harry.yoo@oracle.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Zhenhua Huang <quic_zhenhuah@quicinc.com>
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only
  user
-Message-ID: <aApzV7Xaq7akuo6m@smile.fi.intel.com>
+Message-ID: <202504250357.9ZZudhto-lkp@intel.com>
 References: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
- <691b0ba9-7587-4663-8aa3-8ce63ef509c6@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,37 +76,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <691b0ba9-7587-4663-8aa3-8ce63ef509c6@suse.cz>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
 
-On Thu, Apr 24, 2025 at 07:15:00PM +0200, Vlastimil Babka wrote:
-> On 4/24/25 18:48, Andy Shevchenko wrote:
-> > need_slab_obj_ext() is used only in one place, fold it into there.
-> > Without that, clang can't build kernel with `make W=1` when
-> > CONFIG_WERROR=y, which is default in the x86 configurations.
-> 
-> Note that gcc doesn't warn on this even with W=1.
-> 
-> Is really clang + W=1 + CONFIG_WERROR building ok these days except this one
-> unused function?
+Hi Andy,
 
-Almost, I'm working towards having it clean on x86 defconfigs that are in the
-Linux kernel. There are only few left to address. GCC, FWIW, complains on bunch
-of other things :-)
+kernel test robot noticed the following build errors:
 
-> > mm/slub.c:2079:20: error: unused function 'need_slab_obj_ext' [-Werror,-Wunused-function]
-> > 
-> > To solve this, fold need_slab_obj_ext() into its only user.
-> > 
-> > Fixes: e33b7ae3d802 ("mm, slab: clean up slab->obj_exts always")
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Thanks, I've folded the fix in.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Thank you!
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/mm-slab-fold-need_slab_obj_ext-into-its-only-user/20250425-004842
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250424164800.2658961-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only user
+config: arm-randconfig-003-20250425 (https://download.01.org/0day-ci/archive/20250425/202504250357.9ZZudhto-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250425/202504250357.9ZZudhto-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504250357.9ZZudhto-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/slub.c:2591:29: error: call to undeclared function 'need_slab_obj_ext'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2591 |         if (memcg_kmem_online() || need_slab_obj_ext())
+         |                                    ^
+   mm/slub.c:2591:29: note: did you mean 'free_slab_obj_exts'?
+   mm/slub.c:2064:20: note: 'free_slab_obj_exts' declared here
+    2064 | static inline void free_slab_obj_exts(struct slab *slab)
+         |                    ^
+   1 error generated.
+
+
+vim +/need_slab_obj_ext +2591 mm/slub.c
+
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2587  
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2588  static __always_inline void unaccount_slab(struct slab *slab, int order,
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2589  					   struct kmem_cache *s)
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2590  {
+4b8736964640fe Suren Baghdasaryan 2024-03-21 @2591  	if (memcg_kmem_online() || need_slab_obj_ext())
+21c690a349baab Suren Baghdasaryan 2024-03-21  2592  		free_slab_obj_exts(slab);
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2593  
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2594  	mod_node_page_state(slab_pgdat(slab), cache_vmstat_idx(s),
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2595  			    -(PAGE_SIZE << order));
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2596  }
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2597  
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
