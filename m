@@ -1,91 +1,97 @@
-Received: from abb.hmeau.com (unknown [144.6.53.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEF74C6D;
-	Fri, 25 Apr 2025 02:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BCD15E96
+	for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 03:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745549347; cv=none; b=h2ABYomVpWfPUvHC9nvEo6tegQ/HnL8IBpsT+xQeAnbJG61Vnw7leJdv086yOEEPDWf36gXPkSFG83ILaYBBLEhY+79PSeojI8dmcGl5qZnGe9SZvte5zsYkzIXAMVLuJfgI3xzC0lO1j89neC251sSMawufTMcG9q4oewFVq+k=
+	t=1745551873; cv=none; b=iAC9IRq9UKYfw9OBkaV1PSRltoHZOI8jjdjFoPWd3qpOwuYxY0yp0JGcA5JYcinuLRy4bKr/hmhEQ5h7aadV7OQQgj1xEkTTNV6CodQYqteH9EKyATywabTcXBCaeVOP5AyDp6xcNbdyymBdvjEvTXnKrbvCn96uU52hnCFmARM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745549347; c=relaxed/simple;
-	bh=IjZgThLJOqvB9xuumimrb2GgbbBBWLz6m6/8mqn+R3A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pjv4dZBFsZ6NSJTQKgTYPZ9i2aQh5MzhzfuJvH2OMSvLsnZfMtr78KEftYJAPny0WdOGyQ8vqvdBQdqjvVcPajxwGBGYX2Jv+k3hmyPgml1JNuuC9vLtjwQzfsOeCw/BDMleYJE8OfbozK4FrSeO4DekrXQfjUgz8geHqs1Cjzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=ANccXNGd; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+	s=arc-20240116; t=1745551873; c=relaxed/simple;
+	bh=jrRGhxPyf95ypPJHo2BAQFIRKdPXSpjIpa1ctUMjIXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ouh6RzCKMkW+YqYH8Ncp4vO3nleU6AEwDXdSxU71ry46vHUiGGydavCMIsdv87RiVeeUMdPGquDWd0Bdx5Ax7BNA9tq/eqvSG3hi6W35DsnRu9PJ7EpWEt6ZQ+sUhGiZFnngFqJhCfT2zGUj+TvK+MpUnMhbcdjadA3cfGbTNFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HftQMqO/; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="ANccXNGd"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=cnV8pteBUZTuj+uhOfEOc824fXoOdF+CLlRvwwfF0wI=; b=ANccXNGdGcg2JeipvXlhXmq2p1
-	kOhXe1gyb33uDHyNvPxiIN9ZmFF1oQmf7i9p8dT6Usdeqsxia/QmihmTYdiCK2oRCRCExSKgvIt6P
-	IiK9JUiK0T91CqTXL5/W1Z89FX5nMz3a9BC/c3pTpOkoCbP73bO1bbSteqoOUojhrn+1wFeEvagDH
-	ELlsKqjlhgpYvzc0q5y3FigvrvR1oqsWq3Ip0iJp0yBU8Km5u4acHS5mdjb0XUSVqmxH2p0MNfz5h
-	0nZ1hY8DfbgtyAbIS3gvjfGePHljQIRNQY927YkhFzF07YTqix8Y70UrX/bmbQ9LDZPs3kM4eDXpy
-	+Y0LY7UQ==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1u897M-000rbH-26;
-	Fri, 25 Apr 2025 10:48:45 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 25 Apr 2025 10:48:44 +0800
-Date: Fri, 25 Apr 2025 10:48:44 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] riscv: crypto - Use SYM_FUNC_START for functions only
- called directly
-Message-ID: <aAr4DFlbPiNKpBmp@gondor.apana.org.au>
-References: <20250424-riscv-crypto-fix-cfi-build-v1-1-2d7516737379@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HftQMqO/"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acbb48bad09so318944866b.0
+        for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 20:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1745551868; x=1746156668; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+X7UpAVVUSxTxgawTFy/Rtqo3IuG46uus58xF7sJ7Y=;
+        b=HftQMqO/FfFyavoRkBN1zjXCrPP/GwOrh9djX64KelbGCf3W/Q/Pel/MwxrZdWmwPw
+         dpijaFucq9GrFHHxsik620kbNFsJ7c/Q+WWeGQuIbRgcXwzBseU0N5smP2axqxCHdS2k
+         hANt7/NalypV46LAAkZjDZTz17vK5oAEjo1Ko=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745551868; x=1746156668;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+X7UpAVVUSxTxgawTFy/Rtqo3IuG46uus58xF7sJ7Y=;
+        b=TIOQ0qofEjt/UUgFEYoEY++fZNbCfjhGzAVP3HXycw4IzU3S4P9ca+oVqBrw/Pd3kp
+         9859s5vzm8JsSlJBXWH1G1mHIgDNNy8vnZt2kVwuVM08IMbroyMgmo+Q1tkdgIxR2ZbA
+         Ga/z+P4FLDe3l6At2merAEsXPi5HlYbOs4ntQ6w8QAeukiB7M2H49nKOxyj/YtjRzWhP
+         m1Dp5Jj4wJccAWFhICc4nJXEfev53ihyj4tGw9TTPUk3uia8Id4EqnhsUZmQitZTt6gN
+         J8l/EFaPz4jnw9WZfoH2iZOIkWNW1PzoaZ0ZS1VJ2nsE3VLysFUw9WaDxwQY3hK8G6JG
+         IagQ==
+X-Gm-Message-State: AOJu0YwuInwtHugtei2nVYn0yyjjjFiw8pvJRuYiYc4TKendWhJbIyPB
+	LI45mk8/8A1XhAEExOgf0rNyadw2O2GZ1jFLef/msDPMnkfSReML4r0ASGnFmPojEb1LlIUg+hp
+	lO7ih5A==
+X-Gm-Gg: ASbGnctlo9m9CcWh217EqCfCBkuxWeKH+TscfgH+vjzOv3Eb1iHl5XyrTcSiPZYIaeW
+	azTXW7fCxwQXDCcEA9gAvjQSDqkxAoH11TBU8vuwQ4mt6Ig+aPxmW6xjeHUNofcQ2Z4aAV26DUF
+	TjsKgUHiia7OC4uaemqoDIiWJxRrb5AFnUWG9kVT1Gyq3+w5eycZ09Lz+FvWdhRvlb+UWcYbbs6
+	b/6iny4wzLi3RKq9daM/N0LThxoMz3ECz0W2tQ5tge75uYDrLdTefaAu1nezCik7CE2MeUTua4a
+	YtLE63So54eei0MaP1LUmEVZm+gwm2+NbEvbeaId1ivbzJURdigF8KGbOIkBhItQvTDr5UD+4uq
+	4bMtUWJM0cv1Cjv3zOV8FJK3YWQ==
+X-Google-Smtp-Source: AGHT+IGawm/cTxUEWoJe4NwDRPhG4vqYXfuyPhlDkfW0h3epQ879bBeTybMpq5TYEYJQWD4uRlgQxg==
+X-Received: by 2002:a17:906:eecb:b0:aca:c7c6:b218 with SMTP id a640c23a62f3a-ace7103b316mr68858366b.1.1745551867692;
+        Thu, 24 Apr 2025 20:31:07 -0700 (PDT)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ecf8603sm58672466b.112.2025.04.24.20.31.06
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Apr 2025 20:31:06 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac6ed4ab410so286227966b.1
+        for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 20:31:06 -0700 (PDT)
+X-Received: by 2002:a17:907:6ea0:b0:acb:5c83:251 with SMTP id
+ a640c23a62f3a-ace713cfb98mr63838566b.53.1745551866239; Thu, 24 Apr 2025
+ 20:31:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250424-riscv-crypto-fix-cfi-build-v1-1-2d7516737379@kernel.org>
+References: <20250425003342.GA795313@ax162> <CAHk-=whfT3A8K2Z+WbieGG5Hhc9QAT5s3qsbB19O0Roj2G5tfA@mail.gmail.com>
+ <20250425021138.GA3800209@ax162>
+In-Reply-To: <20250425021138.GA3800209@ax162>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 24 Apr 2025 20:30:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
+X-Gm-Features: ATxdqUH-bKC0VcMIV-F2AOd9j-f5mi3EXH_KaqVlz4TTORr-ZxoTf-cSfjxOSBI
+Message-ID: <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
+Subject: Re: Adding __popcountsi2 and __popcountdi2
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Apr 24, 2025 at 05:23:22PM -0700, Nathan Chancellor wrote:
-> After some recent changes to the RISC-V crypto code that turned some
-> indirect function calls into direct ones, builds with CONFIG_CFI_CLANG
-> fail with:
-> 
->   ld.lld: error: undefined symbol: __kcfi_typeid_sm3_transform_zvksh_zvkb
->   >>> referenced by arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.o:(.text+0x2) in archive vmlinux.a
-> 
->   ld.lld: error: undefined symbol: __kcfi_typeid_sha512_transform_zvknhb_zvkb
->   >>> referenced by arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.o:(.text+0x2) in archive vmlinux.a
-> 
->   ld.lld: error: undefined symbol: __kcfi_typeid_sha256_transform_zvknha_or_zvknhb_zvkb
->   >>> referenced by arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.o:(.text+0x2) in archive vmlinux.a
-> 
-> As these functions are no longer indirectly called (i.e., have their
-> address taken), the compiler will not emit __kcfi_typeid symbols for
-> them but SYM_TYPED_FUNC_START expects these to exist at link time.
-> 
-> Switch the definitions of these functions to use SYM_FUNC_START, as they
-> no longer need kCFI type information since they are only called
-> directly.
-> 
-> Fixes: 1523eaed0ac5 ("crypto: riscv/sm3 - Use API partial block handling")
-> Fixes: 561aab1104d8 ("crypto: riscv/sha512 - Use API partial block handling")
-> Fixes: e6c5597badf2 ("crypto: riscv/sha256 - Use API partial block handling")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S | 4 ++--
->  arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.S           | 4 ++--
->  arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.S               | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
+On Thu, 24 Apr 2025 at 19:11, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> I will test declaring __popcount{s,d}i2() as aliases of
+> __sw_hweight{32,64}() to see what effect that has but I figured that
+> calling the __arch_hweight variants was more correct because some
+> architectures (at least RISC-V and x86 when I looked) use alternatives
+> in that path to use hardware instructions and avoid the software path
+> altogether. While there would still be the overhead from the function
+> call, I figured not using the software fallback would at least soften
+> that blow.
 
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Once you have the overhead of a function call - and all the register
+games etc that involves, you're almost certainly better off with the
+simple unconditional bitwise games.
+
+                Linus
