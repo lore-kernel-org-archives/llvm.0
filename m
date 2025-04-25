@@ -1,164 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B95F81E;
-	Fri, 25 Apr 2025 00:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868E622301;
+	Fri, 25 Apr 2025 00:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745540613; cv=none; b=Cyf96yxtNAo8S5/tn1vyoZCzHDLsQfP+IlOtqg4axfBVCCGWRIR2udiYyfccHhBGXaf7mq8M6UqQw9wtPJbv8PmIxyPozm3XqdmGWCmNAGrn1kWtO2lNENPwH83BXObDktn70P2HIv3O7pYnH/17h/+9yRRlGzpuSyiu3CakF9w=
+	t=1745541227; cv=none; b=m9FT3ZghyylE2GTvBzdfiTEm8A4BU6QDS6SqeKhTTvNLvCfjB4NjXekZT49fZPZ2GNbFcaoRB+ZxtoLBhfrsoMP8NTscoPcwWGLyTLYkj+reKY6tUm7hRIoekdf1FMumN7kNVqaq0nN3BdXStVz/Myd7NrD1+TZueiMjqY3FkL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745540613; c=relaxed/simple;
-	bh=UEkSo+BagKkIVRMMe9pgkrGMxtdYLmVfK4/QgaOoRvc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ex84vSnwWi0eXVM1WNg35JPUhIuCTWuU60oK1zPvYhEu0cALN9+d3Jd5a0fEBkGD9mvJHZ5JO+4giHIuNB/X34HJ9i3A9ePn0A7KGbyj+90lIItFZ7LN7+LH08/EfFqX3DHMN48FDj4Rx2IhTX42YX+DXXWSGzDv5HQk41w8R/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pUarwgPx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745541227; c=relaxed/simple;
+	bh=8dKg+gxw1L61gv9qTm3DKR2v0jmhRr/YeqeNDI8CLi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kw7Le9weSWgksi1jYK3o+ZWZK9c6Ro3EXuX3xOYtTNsM21nPLS5mwTu/Y3Vcl5LORuVg41N9TnsnkghY0zeiuVWMezcp35qALS5jaBzsT8ihoLYZgrvfeB9D6A7VS4NCvoUcf/U+q9lyIgyOujP5o/LXNBBrU5SjWX1D0d2V4Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3o/hAlL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pUarwgPx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC6CC4CEE3;
-	Fri, 25 Apr 2025 00:23:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3o/hAlL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF47C4CEE3;
+	Fri, 25 Apr 2025 00:33:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745540612;
-	bh=UEkSo+BagKkIVRMMe9pgkrGMxtdYLmVfK4/QgaOoRvc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=pUarwgPxg10MK0UdQ+n5BCmMishwDRNdqKKtmZeSwy6yosN15zyV66BLSRDZi5A3c
-	 yVKMHZZzjcPoaTAJlS3aJBbN3RbJtDAlMxvqvthKXy3RD4ayvHKrha1/fo9OcfQHxq
-	 y7p3Ui7hk/Mm4qo9Aui0h5LGGGoYcAD3AX1BjZjgVC+bWmpXfVuc+PIbBPy645vLsk
-	 +KV3W7aTXxXHLe9iZPp+6GvbYbRheGZDd2kiLKlCP9S8dqK9184eXrNyta7wElhwM4
-	 FTPshbqWhVU5pc0It3lqahAGYR/TDUNf7wxEMMQkU0TwwNjZvcrEDK4Pblvz2ty7Yo
-	 WclNOcBljsHiQ==
+	s=k20201202; t=1745541225;
+	bh=8dKg+gxw1L61gv9qTm3DKR2v0jmhRr/YeqeNDI8CLi0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=G3o/hAlLxPfqX3BsBk2xxAGTRsj8oHscghHg3hD4uFdErsyBILQvGDCfWmLKwXalT
+	 Jj13JaYAHdDXvd+OxrZPvqsBQksAu29HtZ6uRVcDDSFQlaZSUZgOZQlQU8YksOho3e
+	 iKRjKoLwt9ayNISCEBxjlkx16/QiGdmqxfHBeD/JCNLr5h+aUJLauEEMiiH1Ve4D22
+	 3cJV7sHg2D3XrbBTyTeFnkmWEtV9U3hvdMteYqh/r11jNbfM6LnWpW1og3dbkli3yM
+	 eDyl7OEjoyI0zdXnk4wnyEh8+dsvgrbwRnJ/KrCAy3DfHpULIRfp5bCmLvhuNhg8+V
+	 zZ3WoYznD00Zg==
+Date: Thu, 24 Apr 2025 17:33:42 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 24 Apr 2025 17:23:22 -0700
-Subject: [PATCH] riscv: crypto - Use SYM_FUNC_START for functions only
- called directly
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Adding __popcountsi2 and __popcountdi2
+Message-ID: <20250425003342.GA795313@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250424-riscv-crypto-fix-cfi-build-v1-1-2d7516737379@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPnVCmgC/x3M0QpAQBBA0V/RPJtai8SvyIMds0wJzSKSf7d5P
- HW7DwRW4QBN8oDyKUHWJSJLE6CpX0ZGGaLBGluawhaoEuhE0nvbV/RyIXlBd8g8YF1WlSfnXW5
- 6iINNOQb/vO3e9wM6U9lmbAAAAA==
-X-Change-ID: 20250424-riscv-crypto-fix-cfi-build-9577fcbfb30a
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4387; i=nathan@kernel.org;
- h=from:subject:message-id; bh=UEkSo+BagKkIVRMMe9pgkrGMxtdYLmVfK4/QgaOoRvc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlc15gdXliefvD94bbcI7N/HPy2dd+jWCa5aMaq2Ts9a
- s1lVgb/7ChlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATsT3MyPCbPehTSr3+2ZsP
- Dqa6ymWJap1UdSs98Nj92LItsl/2GDsy/JXjmSl+buulJcuLYzcv6JwlNPsIf8TCyuOJttM9u2w
- 2GjECAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After some recent changes to the RISC-V crypto code that turned some
-indirect function calls into direct ones, builds with CONFIG_CFI_CLANG
-fail with:
+Hi Linus,
 
-  ld.lld: error: undefined symbol: __kcfi_typeid_sm3_transform_zvksh_zvkb
-  >>> referenced by arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.o:(.text+0x2) in archive vmlinux.a
+Since I ran into problems at pull request time previously, I figured I
+would save myself some trouble and gauge your opinion up front. How
+palatable would the diff at the end of the thread be for the kernel?
+Clang would like to start emitting calls to __popcountsi2 and
+__popcountdi2 [1] for certain architectures (ARM and RISC-V), which
+would normally be a part of the compiler runtime but obviously the
+kernel does not link against it so it breaks the build. I figured added
+these may not be as bad as the wcslen() case because most architectures
+generally have an optimized popcount implementation and I am not sure
+compiler builtins are banned entirely from the kernel but I can
+understand if it is still contentious. It sounds like GCC has previously
+wanted to something similar [2] and it was somewhat brought up on the
+mailing lists [3] but never persued further it seems. Since this is a
+compiler runtime function, '-fno-builtin' would not work to avoid this.
 
-  ld.lld: error: undefined symbol: __kcfi_typeid_sha512_transform_zvknhb_zvkb
-  >>> referenced by arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.o:(.text+0x2) in archive vmlinux.a
+Cheers,
+Nathan
 
-  ld.lld: error: undefined symbol: __kcfi_typeid_sha256_transform_zvknha_or_zvknhb_zvkb
-  >>> referenced by arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.o:(.text+0x2) in archive vmlinux.a
+[1]: https://github.com/llvm/llvm-project/pull/101786
+[2]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105253#c10
+[3]: https://lore.kernel.org/YlSb5D3rDTyCWpay@tucnak/
 
-As these functions are no longer indirectly called (i.e., have their
-address taken), the compiler will not emit __kcfi_typeid symbols for
-them but SYM_TYPED_FUNC_START expects these to exist at link time.
-
-Switch the definitions of these functions to use SYM_FUNC_START, as they
-no longer need kCFI type information since they are only called
-directly.
-
-Fixes: 1523eaed0ac5 ("crypto: riscv/sm3 - Use API partial block handling")
-Fixes: 561aab1104d8 ("crypto: riscv/sha512 - Use API partial block handling")
-Fixes: e6c5597badf2 ("crypto: riscv/sha256 - Use API partial block handling")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S | 4 ++--
- arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.S           | 4 ++--
- arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.S               | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S b/arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
-index 8ebcc17de4dc..f1f5779e4732 100644
---- a/arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
-+++ b/arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
-@@ -43,7 +43,7 @@
- // - RISC-V Vector SHA-2 Secure Hash extension ('Zvknha' or 'Zvknhb')
- // - RISC-V Vector Cryptography Bit-manipulation extension ('Zvkb')
+diff --git a/lib/Makefile b/lib/Makefile
+index f07b24ce1b3f..0240fa7d6b5b 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -52,7 +52,7 @@ obj-y	+= lockref.o
  
--#include <linux/cfi_types.h>
-+#include <linux/linkage.h>
- 
- .text
- .option arch, +zvknha, +zvkb
-@@ -108,7 +108,7 @@
- 
- // void sha256_transform_zvknha_or_zvknhb_zvkb(u32 state[8], const u8 *data,
- //					       int num_blocks);
--SYM_TYPED_FUNC_START(sha256_transform_zvknha_or_zvknhb_zvkb)
-+SYM_FUNC_START(sha256_transform_zvknha_or_zvknhb_zvkb)
- 
- 	// Load the round constants into K0-K15.
- 	vsetivli	zero, 4, e32, m1, ta, ma
-diff --git a/arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.S b/arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.S
-index 3a9ae210f915..89f4a10d12dd 100644
---- a/arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.S
-+++ b/arch/riscv/crypto/sha512-riscv64-zvknhb-zvkb.S
-@@ -43,7 +43,7 @@
- // - RISC-V Vector SHA-2 Secure Hash extension ('Zvknhb')
- // - RISC-V Vector Cryptography Bit-manipulation extension ('Zvkb')
- 
--#include <linux/cfi_types.h>
-+#include <linux/linkage.h>
- 
- .text
- .option arch, +zvknhb, +zvkb
-@@ -95,7 +95,7 @@
- 
- // void sha512_transform_zvknhb_zvkb(u64 state[8], const u8 *data,
- //				     int num_blocks);
--SYM_TYPED_FUNC_START(sha512_transform_zvknhb_zvkb)
-+SYM_FUNC_START(sha512_transform_zvknhb_zvkb)
- 
- 	// Setup mask for the vmerge to replace the first word (idx==0) in
- 	// message scheduling.  There are 4 words, so an 8-bit mask suffices.
-diff --git a/arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.S b/arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.S
-index a2b65d961c04..4fe754846f65 100644
---- a/arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.S
-+++ b/arch/riscv/crypto/sm3-riscv64-zvksh-zvkb.S
-@@ -43,7 +43,7 @@
- // - RISC-V Vector SM3 Secure Hash extension ('Zvksh')
- // - RISC-V Vector Cryptography Bit-manipulation extension ('Zvkb')
- 
--#include <linux/cfi_types.h>
-+#include <linux/linkage.h>
- 
- .text
- .option arch, +zvksh, +zvkb
-@@ -81,7 +81,7 @@
- .endm
- 
- // void sm3_transform_zvksh_zvkb(u32 state[8], const u8 *data, int num_blocks);
--SYM_TYPED_FUNC_START(sm3_transform_zvksh_zvkb)
-+SYM_FUNC_START(sm3_transform_zvksh_zvkb)
- 
- 	// Load the state and endian-swap each 32-bit word.
- 	vsetivli	zero, 8, e32, m2, ta, ma
-
----
-base-commit: 63dc06cd12f980e304158888485a26ae2be7f371
-change-id: 20250424-riscv-crypto-fix-cfi-build-9577fcbfb30a
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
+ 	 bust_spinlocks.o kasprintf.o bitmap.o scatterlist.o \
+-	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
++	 list_sort.o uuid.o iov_iter.o clz_ctz.o popcount.o \
+ 	 bsearch.o find_bit.o llist.o lwq.o memweight.o kfifo.o \
+ 	 percpu-refcount.o rhashtable.o base64.o \
+ 	 once.o refcount.o rcuref.o usercopy.o errseq.o bucket_locks.o \
+diff --git a/lib/popcount.c b/lib/popcount.c
+new file mode 100644
+index 000000000000..0234961cc35e
+--- /dev/null
++++ b/lib/popcount.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * The functions in this file aren't called directly, but may be emitted
++ * by the compiler.
++ */
++
++#include <linux/bitops.h>
++#include <linux/export.h>
++
++int __popcountsi2(unsigned int val);
++int __popcountsi2(unsigned int val)
++{
++	return __arch_hweight32(val);
++}
++EXPORT_SYMBOL(__popcountsi2);
++
++int __popcountdi2(unsigned long long val);
++int __popcountdi2(unsigned long long val)
++{
++	return __arch_hweight64(val);
++}
++EXPORT_SYMBOL(__popcountdi2);
