@@ -1,139 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE8F216E1B;
-	Fri, 25 Apr 2025 18:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF0422128F
+	for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 20:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745606671; cv=none; b=T7Si1ViUih417qTegztSoR2l0HY26LHH6iyr5WdLH10abFmIhezEgYN6T74GxoFuMar7EzApak1KwlWnmRtHXjWJwWbxNiCMdJY7tMOvfyghIkuXy5htNBz+WvOBjhiZhJ0xyO7rvBduTU+4GYn/L+X6MB5UD+WovfMp3Pg7Bh4=
+	t=1745612589; cv=none; b=X3kVw9ibYddpWY7CHO4zM8rWOXxRe1jb2FnK39BwKWtsDh4GztcFDyXf2ffTgcK8xS3BINpAXnTnc6t9hVvGv1PxmEb/FeEtoucZrqKqjx1S38yOVpGMIsn2FlAY2kEqcf3ca3/z0jcGpivBXrjEG9U+wSm3iJs0q6TzeIt0rBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745606671; c=relaxed/simple;
-	bh=kqRG1XBJc9DW5Ecd0qIWYW6BijL3k7/p0zlS9agGn1k=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EfXwRdScZRiT2NS03ctZ/F2XuXFJGlVRl8Rb0A16+7hPHhr6e08rwiEtpdkmK/rbXmuyGySD96xW+D3NN0IbpQk/pvFZgiYHDd1dnoK0bJ3nzcpEPvfdSHtO3wieXKzY+4tB0UbB4l2PgoXQ1OUPDdKOwsB+0fOnQgtyQudrBu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWLSz1ka; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745612589; c=relaxed/simple;
+	bh=/2FqDtRa2uXemWd+/qQ6PYpRpRScoB7amkh75a/lK30=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lPAi/sRgOAHlvSIB240B86gMJuc0R1JQo1xtaL18aeUCJVauNMy9YgrJxl/YOuOF8xQE9d+Tca9RNfSUDGcWVwyWa60KWIh26t3Ak2V6wq0tPTOuQqkDyoAIUawSyOSdShvP83lK9SeGBodDAFtamETPbc9HX/QnGqf058Uq9/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BFYuOfT+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWLSz1ka"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D56C4CEE4;
-	Fri, 25 Apr 2025 18:44:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745606670;
-	bh=kqRG1XBJc9DW5Ecd0qIWYW6BijL3k7/p0zlS9agGn1k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kWLSz1kaJ0Ibzi6tDPWApcg7ivnePju8rKj/SBaB0c/jYi5wHP7JBTFgO/EK2SUSW
-	 5V+aK+cdxCP1/+l/U97Tkm9PgjuHOlhK87s1jt9un3juXj7sptaI8VDFUmXCKRPbMN
-	 WeCtmZeTFZmN8jTRX0j42ZQqXmgLxC8hA+HZA4m2ocO4cAMLirp29fKmqU5llRxyDc
-	 /vDgpt/biXLg4VxQDW55IYoqLRyGMtL1/9h6Nfb+dD6XfyMZ69LoSEBQFGnyjTNP2f
-	 2rWzSc80AUBtE0hh736gtBSTUk+0dFXo1MRDChDzXEIR/knrvjUGGOMYCrD5NWqd57
-	 St26DEUJcsztg==
-From: Kees Cook <kees@kernel.org>
-To: Miri Korenblit <miriam.rachel.korenblit@intel.com>
-Cc: Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Yedidya Benshimol <yedidya.ben.shimol@intel.com>,
-	Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-	Avraham Stern <avraham.stern@intel.com>,
-	linux-wireless@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Daniel Gabay <daniel.gabay@intel.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2] wifi: iwlwifi: mld: Work around Clang loop unrolling bug
-Date: Fri, 25 Apr 2025 11:44:22 -0700
-Message-Id: <20250425184418.it.308-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BFYuOfT+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745612585;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EaaICtS6jRrHlc4/RguIgmehOESpzrgAE+ntqxcYkmo=;
+	b=BFYuOfT+s9PvB9TVnCHXAJn2ALLMbX1uQEJfKEpf+to2SCgreoUqDsbcmK/K6U94PpnMjU
+	t9TYvVbkpgK34U0ky29GNjuy+bm8UxGAWW6m4DLCt4DjM/dWUAOj+O6OKs5qWI44/DcvCs
+	GbavR4xdEuCD2yJHN0gkoOo37TlMTsU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-609-OvYR921VPEefkdt5-cmEmQ-1; Fri,
+ 25 Apr 2025 16:23:03 -0400
+X-MC-Unique: OvYR921VPEefkdt5-cmEmQ-1
+X-Mimecast-MFC-AGG-ID: OvYR921VPEefkdt5-cmEmQ_1745612583
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AC449180056F
+	for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 20:23:02 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 565AF18001D5;
+	Fri, 25 Apr 2025 20:23:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc3,
+ upstream-mainline, 7deea563)
+Date: Fri, 25 Apr 2025 20:23:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3599; i=kees@kernel.org; h=from:subject:message-id; bh=kqRG1XBJc9DW5Ecd0qIWYW6BijL3k7/p0zlS9agGn1k=; b=owGbwMvMwCVmps19z/KJym7G02pJDBncN9jqps6KXXlo4yvXc+6vhFislq2LfRzo9+DD1Uqh7 g1O855IdpSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAExkmTTDfxfHE7XPWU4tW6gY 6aCVat+/O+dh5RvpUBeXQ59zhWpvv2H4n3pl5wfXSykf7U+bv+f2vZX1/IPtH/8LG35Urbd0Oh0 xjREA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <74194.125042516230302687@us-mta-609.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: bIowpaHsCpCJx6ja7dp3sjfJ9U_LY9IrNzVVgBDicnc_1745612583
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The nested loop in iwl_mld_send_proto_offload() confuses Clang into
-thinking there could be final loop iteration past the end of the "nsc"
-array (which is only 4 entries). The FORTIFY checking in memcmp()
-(via ipv6_addr_cmp()) notices this (due to the available bytes in the
-out-of-bounds position of &nsc[4] being 0), and errors out, failing
-the build. For some reason (likely due to architectural loop unrolling
-configurations), this is only exposed on ARM builds currently. Due to
-Clang's lack of inline tracking[1], the warning is not very helpful:
+Hi, we tested your kernel and here are the results:
 
-include/linux/fortify-string.h:719:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-  719 |                         __read_overflow();
-      |                         ^
-1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-But this was tracked down to iwl_mld_send_proto_offload()'s
-ipv6_addr_cmp() call.
 
-An upstream Clang bug has been filed[2] to track this, but for now.
-Fix the build by explicitly bounding the inner loop by "n_nsc", which is
-what "c" is already limited to. Additionally do not repeat the ns_config
-and targ_addrs array sizes with their open-coded names since they can
-be determined at compile-time with ARRAY_SIZE().
+Kernel information:
+    Commit message: Merge tag 'block-6.15-20250424' of git://git.kernel.dk/=
+linux
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2076
-Link: https://github.com/llvm/llvm-project/pull/73552 [1]
-Link: https://github.com/llvm/llvm-project/issues/136603 [2]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- v2:
-  - move "j < n_nsc" forward to stabilize loop bounds (Nathan)
-  - use ARRAY_SIZE() for robustness
- v1: https://lore.kernel.org/all/20250421204153.work.935-kees@kernel.org/
-Cc: Miri Korenblit <miriam.rachel.korenblit@intel.com>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Yedidya Benshimol <yedidya.ben.shimol@intel.com>
-Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Cc: Avraham Stern <avraham.stern@intel.com>
-Cc: <linux-wireless@vger.kernel.org>
----
- drivers/net/wireless/intel/iwlwifi/mld/d3.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1786972913
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mld/d3.c b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-index dc736fdc176d..c51a6596617d 100644
---- a/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-@@ -1728,17 +1728,13 @@ iwl_mld_send_proto_offload(struct iwl_mld *mld,
- #if IS_ENABLED(CONFIG_IPV6)
- 	struct iwl_mld_vif *mld_vif = iwl_mld_vif_from_mac80211(vif);
- 	struct iwl_mld_wowlan_data *wowlan_data = &mld_vif->wowlan_data;
--	struct iwl_ns_config *nsc;
--	struct iwl_targ_addr *addrs;
--	int n_nsc, n_addrs;
-+	const int n_addrs = ARRAY_SIZE(cmd->targ_addrs);
-+	struct iwl_targ_addr *addrs = cmd->targ_addrs;
-+	const int n_nsc = ARRAY_SIZE(cmd->ns_config);
-+	struct iwl_ns_config *nsc = cmd->ns_config;
- 	int i, c;
- 	int num_skipped = 0;
- 
--	nsc = cmd->ns_config;
--	n_nsc = IWL_PROTO_OFFLOAD_NUM_NS_CONFIG_V3L;
--	addrs = cmd->targ_addrs;
--	n_addrs = IWL_PROTO_OFFLOAD_NUM_IPV6_ADDRS_V3L;
--
- 	/* For each address we have (and that will fit) fill a target
- 	 * address struct and combine for NS offload structs with the
- 	 * solicited node addresses.
-@@ -1759,7 +1755,7 @@ iwl_mld_send_proto_offload(struct iwl_mld *mld,
- 
- 		addrconf_addr_solict_mult(&wowlan_data->target_ipv6_addrs[i],
- 					  &solicited_addr);
--		for (j = 0; j < c; j++)
-+		for (j = 0; j < n_nsc && j < c; j++)
- 			if (ipv6_addr_cmp(&nsc[j].dest_ipv6_addr,
- 					  &solicited_addr) == 0)
- 				break;
--- 
-2.34.1
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1786972913-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
