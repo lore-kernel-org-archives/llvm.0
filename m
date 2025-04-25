@@ -1,97 +1,171 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BCD15E96
-	for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 03:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97F119DF48;
+	Fri, 25 Apr 2025 04:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745551873; cv=none; b=iAC9IRq9UKYfw9OBkaV1PSRltoHZOI8jjdjFoPWd3qpOwuYxY0yp0JGcA5JYcinuLRy4bKr/hmhEQ5h7aadV7OQQgj1xEkTTNV6CodQYqteH9EKyATywabTcXBCaeVOP5AyDp6xcNbdyymBdvjEvTXnKrbvCn96uU52hnCFmARM=
+	t=1745554778; cv=none; b=WmQ9ktU7xlcQNL3M5hUgDQ45TDmiSBrfSlOytb2f7MpTVGRbK1S1x1mEvdPVjBdrDfBMaHpcFOhDyS1KBZQREHhjDOb+yFC9+8R0js6g4bbRAx+GHL5pA4aH+72iEQLxkNOa3TORaV4xWRhhLQ862CoA7WymqjebUQz23mEnhyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745551873; c=relaxed/simple;
-	bh=jrRGhxPyf95ypPJHo2BAQFIRKdPXSpjIpa1ctUMjIXA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ouh6RzCKMkW+YqYH8Ncp4vO3nleU6AEwDXdSxU71ry46vHUiGGydavCMIsdv87RiVeeUMdPGquDWd0Bdx5Ax7BNA9tq/eqvSG3hi6W35DsnRu9PJ7EpWEt6ZQ+sUhGiZFnngFqJhCfT2zGUj+TvK+MpUnMhbcdjadA3cfGbTNFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HftQMqO/; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1745554778; c=relaxed/simple;
+	bh=HvUQ2jlkbOcoo0ZLx18H2YZfkCaqCX2iH2Clv+lgH08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TvbChDxW9oYSenYJwpHH75XOC4sYyiq4BJjDCbnrc9yxVk8hDVKLSqt6819Xd9LhNAMGAeKespg8p2HxgZfB69F/CSjqlk1DtXsCBt8MSmdFLiwllV+RRMxcMVFE/U/07HEUGwQ8COpua5U7g+Weks2pRggi4Tliu9+QAJVCeug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dj3xELOr; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HftQMqO/"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acbb48bad09so318944866b.0
-        for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 20:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1745551868; x=1746156668; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3+X7UpAVVUSxTxgawTFy/Rtqo3IuG46uus58xF7sJ7Y=;
-        b=HftQMqO/FfFyavoRkBN1zjXCrPP/GwOrh9djX64KelbGCf3W/Q/Pel/MwxrZdWmwPw
-         dpijaFucq9GrFHHxsik620kbNFsJ7c/Q+WWeGQuIbRgcXwzBseU0N5smP2axqxCHdS2k
-         hANt7/NalypV46LAAkZjDZTz17vK5oAEjo1Ko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745551868; x=1746156668;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3+X7UpAVVUSxTxgawTFy/Rtqo3IuG46uus58xF7sJ7Y=;
-        b=TIOQ0qofEjt/UUgFEYoEY++fZNbCfjhGzAVP3HXycw4IzU3S4P9ca+oVqBrw/Pd3kp
-         9859s5vzm8JsSlJBXWH1G1mHIgDNNy8vnZt2kVwuVM08IMbroyMgmo+Q1tkdgIxR2ZbA
-         Ga/z+P4FLDe3l6At2merAEsXPi5HlYbOs4ntQ6w8QAeukiB7M2H49nKOxyj/YtjRzWhP
-         m1Dp5Jj4wJccAWFhICc4nJXEfev53ihyj4tGw9TTPUk3uia8Id4EqnhsUZmQitZTt6gN
-         J8l/EFaPz4jnw9WZfoH2iZOIkWNW1PzoaZ0ZS1VJ2nsE3VLysFUw9WaDxwQY3hK8G6JG
-         IagQ==
-X-Gm-Message-State: AOJu0YwuInwtHugtei2nVYn0yyjjjFiw8pvJRuYiYc4TKendWhJbIyPB
-	LI45mk8/8A1XhAEExOgf0rNyadw2O2GZ1jFLef/msDPMnkfSReML4r0ASGnFmPojEb1LlIUg+hp
-	lO7ih5A==
-X-Gm-Gg: ASbGnctlo9m9CcWh217EqCfCBkuxWeKH+TscfgH+vjzOv3Eb1iHl5XyrTcSiPZYIaeW
-	azTXW7fCxwQXDCcEA9gAvjQSDqkxAoH11TBU8vuwQ4mt6Ig+aPxmW6xjeHUNofcQ2Z4aAV26DUF
-	TjsKgUHiia7OC4uaemqoDIiWJxRrb5AFnUWG9kVT1Gyq3+w5eycZ09Lz+FvWdhRvlb+UWcYbbs6
-	b/6iny4wzLi3RKq9daM/N0LThxoMz3ECz0W2tQ5tge75uYDrLdTefaAu1nezCik7CE2MeUTua4a
-	YtLE63So54eei0MaP1LUmEVZm+gwm2+NbEvbeaId1ivbzJURdigF8KGbOIkBhItQvTDr5UD+4uq
-	4bMtUWJM0cv1Cjv3zOV8FJK3YWQ==
-X-Google-Smtp-Source: AGHT+IGawm/cTxUEWoJe4NwDRPhG4vqYXfuyPhlDkfW0h3epQ879bBeTybMpq5TYEYJQWD4uRlgQxg==
-X-Received: by 2002:a17:906:eecb:b0:aca:c7c6:b218 with SMTP id a640c23a62f3a-ace7103b316mr68858366b.1.1745551867692;
-        Thu, 24 Apr 2025 20:31:07 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ecf8603sm58672466b.112.2025.04.24.20.31.06
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Apr 2025 20:31:06 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac6ed4ab410so286227966b.1
-        for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 20:31:06 -0700 (PDT)
-X-Received: by 2002:a17:907:6ea0:b0:acb:5c83:251 with SMTP id
- a640c23a62f3a-ace713cfb98mr63838566b.53.1745551866239; Thu, 24 Apr 2025
- 20:31:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dj3xELOr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745554776; x=1777090776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HvUQ2jlkbOcoo0ZLx18H2YZfkCaqCX2iH2Clv+lgH08=;
+  b=dj3xELOraIB7aik0g0Oa+q8TG7lsShKJ9P5AsSAEqG8mdyTb6xBAmqmG
+   qVPH75qNAP6W9SRgO1wARjqk5L0O7m+IoneYf/wWGUoUVMcCK0E32Qtnl
+   9mcrog8MllCLsIa9gD9fjfefrjC32EyuafY1o3Et0k5Vn/s9xMBNLabFD
+   +l1sp+Brmmszt0wOYdKcvIKRbP3ugVEV1XqjXFdf9v/QCoNK8ejhZvpGF
+   P21RVEKAauvSTCehaqSJxIeWq5UMkEEj2F9MEbuhn1rvXU2O49Wn99+rc
+   uHd1Qs9XNtflbgkQdwZ5+qboy5QJOLl2hMJZCBzz8JhWPXr9mREVr9lv1
+   A==;
+X-CSE-ConnectionGUID: TxoXaHseSHWH9y8Vg7KDwA==
+X-CSE-MsgGUID: UeWCaX8YScmvYOeBhuK1YQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="47225233"
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="47225233"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 21:19:35 -0700
+X-CSE-ConnectionGUID: mud3aOYySRScxADNvob0ig==
+X-CSE-MsgGUID: Uh0zV26bTnKghmeikkJV/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="170016448"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 24 Apr 2025 21:19:31 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u8AXB-0004pV-0L;
+	Fri, 25 Apr 2025 04:19:29 +0000
+Date: Fri, 25 Apr 2025 12:18:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: hans.zhang@cixtech.com, bhelgaas@google.com, lpieralisi@kernel.org,
+	kw@linux.com, manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	peter.chen@cixtech.com, linux-pci@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Manikandan K Pillai <mpillai@cadence.com>,
+	Hans Zhang <hans.zhang@cixtech.com>
+Subject: Re: [PATCH v4 3/5] PCI: cadence: Add header support for PCIe HPA
+ controller
+Message-ID: <202504251214.ngJwGxvn-lkp@intel.com>
+References: <20250424010445.2260090-4-hans.zhang@cixtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250425003342.GA795313@ax162> <CAHk-=whfT3A8K2Z+WbieGG5Hhc9QAT5s3qsbB19O0Roj2G5tfA@mail.gmail.com>
- <20250425021138.GA3800209@ax162>
-In-Reply-To: <20250425021138.GA3800209@ax162>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 24 Apr 2025 20:30:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
-X-Gm-Features: ATxdqUH-bKC0VcMIV-F2AOd9j-f5mi3EXH_KaqVlz4TTORr-ZxoTf-cSfjxOSBI
-Message-ID: <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
-Subject: Re: Adding __popcountsi2 and __popcountdi2
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250424010445.2260090-4-hans.zhang@cixtech.com>
 
-On Thu, 24 Apr 2025 at 19:11, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> I will test declaring __popcount{s,d}i2() as aliases of
-> __sw_hweight{32,64}() to see what effect that has but I figured that
-> calling the __arch_hweight variants was more correct because some
-> architectures (at least RISC-V and x86 when I looked) use alternatives
-> in that path to use hardware instructions and avoid the software path
-> altogether. While there would still be the overhead from the function
-> call, I figured not using the software fallback would at least soften
-> that blow.
+Hi,
 
-Once you have the overhead of a function call - and all the register
-games etc that involves, you're almost certainly better off with the
-simple unconditional bitwise games.
+kernel test robot noticed the following build errors:
 
-                Linus
+[auto build test ERROR on fc96b232f8e7c0a6c282f47726b2ff6a5fb341d2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/hans-zhang-cixtech-com/dt-bindings-pci-cadence-Extend-compatible-for-new-RP-configuration/20250424-090651
+base:   fc96b232f8e7c0a6c282f47726b2ff6a5fb341d2
+patch link:    https://lore.kernel.org/r/20250424010445.2260090-4-hans.zhang%40cixtech.com
+patch subject: [PATCH v4 3/5] PCI: cadence: Add header support for PCIe HPA controller
+config: i386-buildonly-randconfig-003-20250425 (https://download.01.org/0day-ci/archive/20250425/202504251214.ngJwGxvn-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250425/202504251214.ngJwGxvn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504251214.ngJwGxvn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/pci/controller/cadence/pcie-cadence.c:9:
+>> drivers/pci/controller/cadence/pcie-cadence.h:851:8: error: expected ')'
+     851 |                                                  int where)
+         |                                                  ^
+   drivers/pci/controller/cadence/pcie-cadence.h:850:49: note: to match this '('
+     850 | static inline void __iomem *cdns_pci_hpa_map_bus(struct pci_bus *bus, unsigned int devfn
+         |                                                 ^
+   1 error generated.
+
+
+vim +851 drivers/pci/controller/cadence/pcie-cadence.h
+
+   811	
+   812	#ifdef CONFIG_PCIE_CADENCE_HOST
+   813	int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc);
+   814	int cdns_pcie_host_init(struct cdns_pcie_rc *rc);
+   815	int cdns_pcie_host_setup(struct cdns_pcie_rc *rc);
+   816	void __iomem *cdns_pci_map_bus(struct pci_bus *bus, unsigned int devfn,
+   817				       int where);
+   818	int cdns_pcie_host_init_root_port(struct cdns_pcie_rc *rc);
+   819	int cdns_pcie_host_bar_ib_config(struct cdns_pcie_rc *rc,
+   820					 enum cdns_pcie_rp_bar bar,
+   821					 u64 cpu_addr, u64 size,
+   822					 unsigned long flags);
+   823	int cdns_pcie_host_init_address_translation(struct cdns_pcie_rc *rc);
+   824	void __iomem *cdns_pci_hpa_map_bus(struct pci_bus *bus, unsigned int devfn, int where);
+   825	int cdns_pcie_hpa_host_init_root_port(struct cdns_pcie_rc *rc);
+   826	int cdns_pcie_hpa_host_bar_ib_config(struct cdns_pcie_rc *rc,
+   827					     enum cdns_pcie_rp_bar bar,
+   828					     u64 cpu_addr, u64 size,
+   829					     unsigned long flags);
+   830	int cdns_pcie_hpa_host_init_address_translation(struct cdns_pcie_rc *rc);
+   831	int cdns_pcie_hpa_host_init(struct cdns_pcie_rc *rc);
+   832	#else
+   833	static inline int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc)
+   834	{
+   835		return 0;
+   836	}
+   837	static inline int cdns_pcie_host_init(struct cdns_pcie_rc *rc)
+   838	{
+   839		return 0;
+   840	}
+   841	static inline int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
+   842	{
+   843		return 0;
+   844	}
+   845	static inline void __iomem *cdns_pci_map_bus(struct pci_bus *bus, unsigned int devfn,
+   846						     int where)
+   847	{
+   848		return NULL;
+   849	}
+   850	static inline void __iomem *cdns_pci_hpa_map_bus(struct pci_bus *bus, unsigned int devfn
+ > 851							 int where)
+   852	{
+   853		return NULL;
+   854	}
+   855	static inline int cdns_pcie_hpa_host_init_root_port(struct cdns_pcie_rc *rc)
+   856	{
+   857		return 0;
+   858	}
+   859	static inline int cdns_pcie_hpa_host_bar_ib_config(struct cdns_pcie_rc *rc,
+   860							   enum cdns_pcie_rp_bar bar,
+   861							   u64 cpu_addr, u64 size,
+   862							   unsigned long flags)
+   863	{
+   864		return 0;
+   865	}
+   866	static inline int cdns_pcie_hpa_host_init_address_translation(struct cdns_pcie_rc *rc)
+   867	{
+   868		return 0;
+   869	}
+   870	#endif
+   871	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
