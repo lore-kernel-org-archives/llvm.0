@@ -1,108 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868E622301;
-	Fri, 25 Apr 2025 00:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9FA49620
+	for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 01:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745541227; cv=none; b=m9FT3ZghyylE2GTvBzdfiTEm8A4BU6QDS6SqeKhTTvNLvCfjB4NjXekZT49fZPZ2GNbFcaoRB+ZxtoLBhfrsoMP8NTscoPcwWGLyTLYkj+reKY6tUm7hRIoekdf1FMumN7kNVqaq0nN3BdXStVz/Myd7NrD1+TZueiMjqY3FkL8=
+	t=1745545014; cv=none; b=q7wVUmWOPnei60yDdp1BoedA0veI8pZj1CHeKTqzuS2txtuOuDKgn/9b27TOGpKteseIostxIb1f41ouqwKkRfWdiodcsQI9RRHMLebVdXkJysD/tZMkxhF3mKXEk6cRot8k+pwiVdkJpT1B4wVrRIZ6aScMMAX5uHAaLsBJSQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745541227; c=relaxed/simple;
-	bh=8dKg+gxw1L61gv9qTm3DKR2v0jmhRr/YeqeNDI8CLi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kw7Le9weSWgksi1jYK3o+ZWZK9c6Ro3EXuX3xOYtTNsM21nPLS5mwTu/Y3Vcl5LORuVg41N9TnsnkghY0zeiuVWMezcp35qALS5jaBzsT8ihoLYZgrvfeB9D6A7VS4NCvoUcf/U+q9lyIgyOujP5o/LXNBBrU5SjWX1D0d2V4Es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3o/hAlL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745545014; c=relaxed/simple;
+	bh=p5aAM8nvuq5KR9Vajvi+nQEW2Rln1Bwv8GwF4gnQeO4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CiVRJ9m1h9zCgwhLwQp398E3DJzDKzY78hlEMVZSpj+MksObJkcqK7jRRCHKKNctUpYMjKzO6H84uKqZupH2gHAlDVom1bZGFx8FOkLyuBs4dmtQvAOLlPXCnsY+3xuZxoORQ3WiLMcvAtnfp7nHPc2I/Q4YgzAsJZrbstPdTLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LlsczicW; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3o/hAlL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF47C4CEE3;
-	Fri, 25 Apr 2025 00:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745541225;
-	bh=8dKg+gxw1L61gv9qTm3DKR2v0jmhRr/YeqeNDI8CLi0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=G3o/hAlLxPfqX3BsBk2xxAGTRsj8oHscghHg3hD4uFdErsyBILQvGDCfWmLKwXalT
-	 Jj13JaYAHdDXvd+OxrZPvqsBQksAu29HtZ6uRVcDDSFQlaZSUZgOZQlQU8YksOho3e
-	 iKRjKoLwt9ayNISCEBxjlkx16/QiGdmqxfHBeD/JCNLr5h+aUJLauEEMiiH1Ve4D22
-	 3cJV7sHg2D3XrbBTyTeFnkmWEtV9U3hvdMteYqh/r11jNbfM6LnWpW1og3dbkli3yM
-	 eDyl7OEjoyI0zdXnk4wnyEh8+dsvgrbwRnJ/KrCAy3DfHpULIRfp5bCmLvhuNhg8+V
-	 zZ3WoYznD00Zg==
-Date: Thu, 24 Apr 2025 17:33:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Adding __popcountsi2 and __popcountdi2
-Message-ID: <20250425003342.GA795313@ax162>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LlsczicW"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ac2aeada833so339602666b.0
+        for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 18:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1745545010; x=1746149810; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7Zbmc9PFyMIhUbm13T2e4rkkq7qjR76gjJbFxlv9Tw=;
+        b=LlsczicWLgkMeQiWk2QOGMque86BFkB6iJBO4/oSy2eLunu6TaqJSxaogXCud2vRim
+         8BCInAtIkg+Y+8pDtZWIsebPjcNF3888/TnqGZIuC0fY3iTWp5yQlOPPPU0xJnUYR6+h
+         /UW4IxYwNQret+2+0lWsi9PmHJ8IM8MtIJD4M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745545010; x=1746149810;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b7Zbmc9PFyMIhUbm13T2e4rkkq7qjR76gjJbFxlv9Tw=;
+        b=uoZHvMjy1mG9ZeEA7Vt9Bb78oXr6c+PHRrz61UG/b4SAGzKKLAtSewL11NJntIZw6Y
+         8vpczyf+TthBodT8iGfPV5zcj4WXIHkJ1ncgIW5XLyzMEgIJHsbhWlq872d9Ua0yd0EJ
+         sTYurAAs4SvlDJHwATwzA1mIgPb2bEiQqJYYrFkjGnlsAscauuKHfknuPpBExYozcHMd
+         vvKP2HBvMS1hq/WsL59EsADo7q8bEfScrEBjDyDqhKZZ40iI3Khfk6Pv44X8ITPS0N6Y
+         ZFYElOgiIt7Zis5asSWqkZESIX/FC3W68PqMYG4tC3VrcRlkb/wQaLnzobcLpVE6fO3+
+         xjqA==
+X-Gm-Message-State: AOJu0Yx4Uj9my8FPzzVCfnAyIj/fUj6z7mLJtvZhtQyqLGdFFpzTA6S5
+	Bg39L7B7VdlvdhkMaDmfJD49VrosdlM0+Sao3oe9J3sG7ua+42GQuDvD3e1JaBUDJiVVNJSd9Ka
+	mRnfzdw==
+X-Gm-Gg: ASbGnctn4oI3sOgrjmuTKJqaYch2o/8c09yL+z/flV7zv/HDpL9KTgIbxhCDUaLexOd
+	f75dy469EJ19pAUkt4LANYEypQ7hONY1+TMCt2q/4MBAyXwT1e/3C+AY5NIS/lFJ7qc0CQ3c0Dt
+	q7QkclAWHMvHaF3y38TzpojEzJ7l3y/sJZwtuWijZazHAiJHsTxxdNtsEv0HFsK/NYhf6kG5Y0j
+	Owut2bMP292Q//d2Krxa51F00oRl92gY1tqDWWvqsE8bZh5G6jobYgYpnBg9LtkipZc77n9xYhc
+	XWvEKvmoui89a9kYDr/QUfyF8ZOLubK1KnYKBMvAIl+JxvUB0IXAkVwY9lDSiTFZjjMr8mWVo+H
+	f5oRkpigrTMN+MBcSVcLn8/jL1g==
+X-Google-Smtp-Source: AGHT+IHLPAfUf63Rvdx2VWlliCwLF+m4sPXto4uzb0EPz0KywNHuuTeFK03CpqAd9KzrZJnuTIJLPA==
+X-Received: by 2002:a17:907:1c98:b0:aca:aeb4:938e with SMTP id a640c23a62f3a-ace733d15ebmr27653166b.8.1745545010161;
+        Thu, 24 Apr 2025 18:36:50 -0700 (PDT)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ed701f9sm47075966b.139.2025.04.24.18.36.49
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Apr 2025 18:36:49 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5f6fb95f431so755613a12.0
+        for <llvm@lists.linux.dev>; Thu, 24 Apr 2025 18:36:49 -0700 (PDT)
+X-Received: by 2002:a17:907:97c4:b0:ace:4870:507c with SMTP id
+ a640c23a62f3a-ace5a44a4bdmr367221766b.23.1745545009283; Thu, 24 Apr 2025
+ 18:36:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250425003342.GA795313@ax162>
+In-Reply-To: <20250425003342.GA795313@ax162>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 24 Apr 2025 18:36:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whfT3A8K2Z+WbieGG5Hhc9QAT5s3qsbB19O0Roj2G5tfA@mail.gmail.com>
+X-Gm-Features: ATxdqUH_oZs_YreS6F_9--y11jLu023Kq43k2pNb3lC2tv-avxOMETPk50B1xGw
+Message-ID: <CAHk-=whfT3A8K2Z+WbieGG5Hhc9QAT5s3qsbB19O0Roj2G5tfA@mail.gmail.com>
+Subject: Re: Adding __popcountsi2 and __popcountdi2
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Linus,
+On Thu, 24 Apr 2025 at 17:33, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> I figured added
+> these may not be as bad as the wcslen() case because most architectures
+> generally have an optimized popcount implementation and I am not sure
+> compiler builtins are banned entirely from the kernel but I can
+> understand if it is still contentious.
 
-Since I ran into problems at pull request time previously, I figured I
-would save myself some trouble and gauge your opinion up front. How
-palatable would the diff at the end of the thread be for the kernel?
-Clang would like to start emitting calls to __popcountsi2 and
-__popcountdi2 [1] for certain architectures (ARM and RISC-V), which
-would normally be a part of the compiler runtime but obviously the
-kernel does not link against it so it breaks the build. I figured added
-these may not be as bad as the wcslen() case because most architectures
-generally have an optimized popcount implementation and I am not sure
-compiler builtins are banned entirely from the kernel but I can
-understand if it is still contentious. It sounds like GCC has previously
-wanted to something similar [2] and it was somewhat brought up on the
-mailing lists [3] but never persued further it seems. Since this is a
-compiler runtime function, '-fno-builtin' would not work to avoid this.
+Why does the compiler even bother to do this if the architecture
+doesn't have the popcount instruction? The function call is quite
+possibly more expensive than just doing it the stupid way.
 
-Cheers,
-Nathan
+But if you want to do this, put the damn thing as an alias on the code
+that actually *does* the SW fallback in lib/hweight.c.
 
-[1]: https://github.com/llvm/llvm-project/pull/101786
-[2]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105253#c10
-[3]: https://lore.kernel.org/YlSb5D3rDTyCWpay@tucnak/
+Because the way your patch does it now, it takes "I'm doing stupid
+things" to the next level by turning that function call into *two*
+function calls - first calling __popcountsi2, which then calls
+__sw_hweight32.
 
-diff --git a/lib/Makefile b/lib/Makefile
-index f07b24ce1b3f..0240fa7d6b5b 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -52,7 +52,7 @@ obj-y	+= lockref.o
- 
- obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
- 	 bust_spinlocks.o kasprintf.o bitmap.o scatterlist.o \
--	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
-+	 list_sort.o uuid.o iov_iter.o clz_ctz.o popcount.o \
- 	 bsearch.o find_bit.o llist.o lwq.o memweight.o kfifo.o \
- 	 percpu-refcount.o rhashtable.o base64.o \
- 	 once.o refcount.o rcuref.o usercopy.o errseq.o bucket_locks.o \
-diff --git a/lib/popcount.c b/lib/popcount.c
-new file mode 100644
-index 000000000000..0234961cc35e
---- /dev/null
-+++ b/lib/popcount.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * The functions in this file aren't called directly, but may be emitted
-+ * by the compiler.
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/export.h>
-+
-+int __popcountsi2(unsigned int val);
-+int __popcountsi2(unsigned int val)
-+{
-+	return __arch_hweight32(val);
-+}
-+EXPORT_SYMBOL(__popcountsi2);
-+
-+int __popcountdi2(unsigned long long val);
-+int __popcountdi2(unsigned long long val)
-+{
-+	return __arch_hweight64(val);
-+}
-+EXPORT_SYMBOL(__popcountdi2);
+Let's not do stupid things, ok?
+
+              Linus
