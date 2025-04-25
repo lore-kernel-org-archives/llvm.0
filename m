@@ -1,137 +1,94 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6AE1632D9
-	for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 16:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACEB1A23A0;
+	Fri, 25 Apr 2025 17:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745599969; cv=none; b=uV5AXTJ3lwHgoOapefFa5+D3g2kRSqm7YRIL1bWTAKGuUfTJ2FOSu8dMLFD+zDDrCYnFhOwti/MvlUoGHKB2R3f/7q2KRmMdpKIC58Yttdw6l08NWTBnYtt4yEd5zctXmTx0/t14nfiMmCL1DbmsJW68A0XmwtJx9UKhP40q9qE=
+	t=1745600854; cv=none; b=A34zeKzduYP4aOFsAI3eBornkyfUPDeQciIX8zdKTjmevOxp1K1+7xIvSTgGLwlpMdZZqbQoF/Ma2NbcMaeJ42a9wXfvDWTrM8k9bOWHS+NZFcz/Ldem1FJZnkob5azVZVxVZOUpFuPQIPuGLPHiesgqctmOM2qCaIMdpozJ2Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745599969; c=relaxed/simple;
-	bh=E/6K11Nu1doilIwKesstDitPx1319vRFjJrnwsJWGlQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rUxBTB2xZq4+fvMnK/BhftYSz+gcCbtrl6A2XUbnczcxFQKiZAQ+usi8HBfT4xNpSkKAIcqcDmoHIwc0kTKp6ORF8NNm8ug2H2xE2qJxzJ0Z4fD6D32gkNQoTChWjH2Jhoapww0fOXWeS1ehO5T6MhT7fmy5984bG61f9vtWtys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nB5xOaLq; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1745600854; c=relaxed/simple;
+	bh=xACxU08YfavSIBhz1z+Mxxtk2BAK8e0mIyI+1/SYI6A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gCmZiuFWfAJcQ/6aIUwRbRF5SGHZRwC+41cj1qVWQKaK4M/v6gYww/ElCZfY7dQRnDYAiNtnFnXmKwbb9rGmEmCPZiL/IOq5pPAmVrd6gD5i+YF+88597WHuusvHTNClhN2g9tSYxwkGktSLUPXCL7wyw/wt0T7i+ni2FP0apFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QsnCd9rw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nB5xOaLq"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-73c17c770a7so3330453b3a.2
-        for <llvm@lists.linux.dev>; Fri, 25 Apr 2025 09:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745599967; x=1746204767; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KPE0jw/cbWW6nhWNEm39me5DCK6XBagvczncyZzTTCk=;
-        b=nB5xOaLq85zAlusl+26CDcoY4/n8vcdZZ7B7hmeSmoBsCRr3s8MOR8YZdqcZMDJ2kg
-         EWbTzHXXnp8Nt4jGHNg7guoGR/CvbO6q/kN01OVopmQs5xKo2HYG+/cuaPSBNcUbyhbG
-         RdojS976eh6dpNs6HOx/hbuV3q1nclFrJ9uzFKDz/Giq6G4PC8tRJS48br8LYcSwaunY
-         S2TDFRjfHLdRNOG+tftk9NaAZW/Ncc/zJG1m0VPdGPkXHUJqVWmjicOWcK3p+GJTVnCQ
-         c372l7lOeTRGnokIp9C1RCwcvrLqi+VmRB+BTJmuIXES4lFgqmlYnv0MvJBLyXAR5T3f
-         eKGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745599967; x=1746204767;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KPE0jw/cbWW6nhWNEm39me5DCK6XBagvczncyZzTTCk=;
-        b=VoT90Lrr00wcGIi79prG8kcrH6LjQD0n6l4aEXMoKaDf/faa5RHdGLzXbXs0O8LivS
-         JVcB41Qin/OOAx6YANncCEzfGGRYM98wo8SQ0PbgW7x7Gof47azvTrgcal28xcPkEoJY
-         Oc6uip2Wv+v2Du23Bc3D+RXyEJD2UJgkLT0jhNwqq5koM9pFjXdS/Upv77lJc8TJe1ca
-         nh+hmAbP0OdxiuWd9rt5cdpJr8B+X0rfER/JpS44cPl00EGtu/e/N6nFHNCtI3LpVd0n
-         KYl0D/XCZwyA07Z9hCSTYMhNlrQmV4pYj5WnN9b9Etul7GxMerv8Dim5bkPjVDkUxPSL
-         OrcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVlD44v6E4gzAdvkDqn9bA5c5NoIZznjO8b/pdgEc3t/B6PlWGE4lTDS0ja/lMOXpibCkCu@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxm/zX5O3TbaeDUptqU1vv7s3ft+flAnE3IhUVuiX0HKr2T4Dnm
-	LdWnZblhV01NEZbAvXwg6Y4eSwndE+0cSJTobEExYkOuK5QgGu77zjugbmHX/t1dTFbof3QGFAa
-	OW9ed7r2RQc8mBg+/FEXKn/o+jxg=
-X-Gm-Gg: ASbGncvPtYUUkGV411RACqUcecutjRktjZYHDsyVXhi7R2tyTQGfOXWgCFYUBt65zOd
-	tzoVLRXBAhLUz3MFd88JwxKlUWLQ3aHHdjXdGzIHD/RA9rXjB7R/teEIg9aMx+DgzyjaElk3UUa
-	r//IG0vJtuw6zp5YSNou8Zv4waR0/tXmDbvI3J4aBB53C/nhJt
-X-Google-Smtp-Source: AGHT+IHsE4tpFV00HDt6z5NOiZdy4xqMC2tQ7aGg3Q1NBqpL8kEB1l+fIJtawgH16A553JEcLhActfPM/+fohqK2riQ=
-X-Received: by 2002:a05:6a21:4002:b0:1f5:931d:ca6d with SMTP id
- adf61e73a8af0-2045b6ae067mr4051413637.1.1745599967202; Fri, 25 Apr 2025
- 09:52:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QsnCd9rw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745600853; x=1777136853;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xACxU08YfavSIBhz1z+Mxxtk2BAK8e0mIyI+1/SYI6A=;
+  b=QsnCd9rwzCRJZETlUad2oZn/AShIKCsiZiUSzxwNXQ3gaT1Mewa5GRW3
+   zCiJKwGZuV7N5PlK6y91nMF9DffHXM8ra/+34xYKIv7ANwYfLLtsttRW5
+   zT+AHjZ7/oILnfMeTMCCYQoeNKXp/qTp+o1ctsP5i78Sndqz3ElY3RGrv
+   Qjf2fY1JgdZjb7PmOyf3nW25/xsbQItQBbrNMCNwVoAl0v/oCAt/2GMh7
+   kbcm1kRxW81Sq2e11bktTB93DwgCVu7u8nLzFmiGd1kAJv+U4MyqTQRwf
+   JsO3tCoSjDSmqiMW6OtQQtdg8ktpz2ZgQav9UeizZcJzRopcEBsYSWypA
+   A==;
+X-CSE-ConnectionGUID: O7jretYnR/aos4cYWgGRaw==
+X-CSE-MsgGUID: auqWwjOoSHKek8AC6Pkx7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="47360005"
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="47360005"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 10:07:32 -0700
+X-CSE-ConnectionGUID: Idg15IsVQnizmjaa/0I/OQ==
+X-CSE-MsgGUID: 6A7BFc5BQimxFwVh19BGhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="132695902"
+Received: from smile.fi.intel.com ([10.237.72.55])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 10:07:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u8MWL-00000000KIx-01d2;
+	Fri, 25 Apr 2025 20:07:25 +0300
+Date: Fri, 25 Apr 2025 20:07:24 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Christoph Lameter <cl@linux-foundation.org>,
+	David Rientjes <rientjes@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] mm, slab: fold need_slab_obj_ext() into its only
+ user
+Message-ID: <aAvBTL7vVLc6iqsD@smile.fi.intel.com>
+References: <20250424164800.2658961-1-andriy.shevchenko@linux.intel.com>
+ <202504250357.9ZZudhto-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250425095042.838824-1-jianghaoran@kylinos.cn>
-In-Reply-To: <20250425095042.838824-1-jianghaoran@kylinos.cn>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 25 Apr 2025 09:52:34 -0700
-X-Gm-Features: ATxdqUEVCDIzlgDehq91RGcWZVxbp-q_nLVPhO7lnNt562E0ZXlBsA1KFWVfwvI
-Message-ID: <CAEf4Bzabjf68a-bP1RuHUEAdiz0MuWuyS5w+nZagEOHesDQgpQ@mail.gmail.com>
-Subject: Re: [PATCH] samples/bpf: Fix compilation failure for samples/bpf on
- LoongArch Fedora
-To: Haoran Jiang <jianghaoran@kylinos.cn>
-Cc: linux-kernel@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@google.com, haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, 
-	ndesaulniers@google.com, trix@redhat.com, bpf@vger.kernel.org, 
-	llvm@lists.linux.dev, chenhuacai@kernel.org, yangtiezhu@loongson.cn, 
-	zhangxi <zhangxi@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202504250357.9ZZudhto-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Apr 25, 2025 at 2:51=E2=80=AFAM Haoran Jiang <jianghaoran@kylinos.c=
-n> wrote:
->
-> When building the latest samples/bpf on LoongArch Fedora
->
->      make M=3Dsamples/bpf
->
-> There are compilation errors as follows:
->
-> In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-> In file included from ./include/uapi/linux/in.h:25:
-> In file included from ./include/linux/socket.h:8:
-> In file included from ./include/linux/uio.h:9:
-> In file included from ./include/linux/thread_info.h:60:
-> In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-> In file included from ./arch/loongarch/include/asm/processor.h:13:
-> In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-> ./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin=
-.h' file not found
->          ^~~~~~~~~~~~~~~
-> 1 error generated.
->
-> larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-> and the header file location is specified at compile time.
->
-> Test on LoongArch Fedora:
-> https://github.com/fedora-remix-loongarch/releases-info
->
-> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-> Signed-off-by: zhangxi <zhangxi@kylinos.cn>
-> Change-Id: I5fca6f0cee21e429982c5a3865efc5afeb3fa757
-> ---
->  samples/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
+On Fri, Apr 25, 2025 at 03:41:15AM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
 
-applied to bpf tree, thanks
+Yes, it's fixup to the Linux Next commit which is not in Andrew's tree AFAIU.
 
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index 3fa16412db15..927d72659173 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -392,7 +392,7 @@ $(obj)/%.o: $(src)/%.c
->         @echo "  CLANG-bpf " $@
->         $(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS=
-) \
->                 -I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
-> -               -I$(LIBBPF_INCLUDE) \
-> +               -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
->                 -D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-poi=
-nter-sign \
->                 -D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-=
-types \
->                 -Wno-gnu-variable-sized-type-not-at-end \
-> --
-> 2.25.1
->
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
