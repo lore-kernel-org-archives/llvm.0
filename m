@@ -1,140 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F1818C03F;
-	Sat, 26 Apr 2025 18:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2DD14D2A0
+	for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 19:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745691210; cv=none; b=WMXzSrkbfGjKf46dR80Us4QoOVNwobv3/OhQhGECDY5lHZShJIA9YdTsIIQBvCk+dRhb/I6RI15BtupwgimAVjb6aUhZxnvl/03DpcEJhTf/zX4wM88tqBljQQytVRAnqC7957N6Lj+r2JhnUa8jGEqj0shofproqWQf7AXbwQs=
+	t=1745696057; cv=none; b=txdU+nlGG1ery77nXy43UPpbl4cVITvWiSV/vhV2x2btudeKxAgy6TD22ep+tM+kCbDi5nfknG1ccXwCXaqsVOgPR2vwF+LZbAyI8U6xxHUimzqR7q9Kfp22KAfsvJuLW3An0rpboe9zSPYLT9pk32U7DranRrn3CNXD0JVt55A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745691210; c=relaxed/simple;
-	bh=LhE4SeXnk5k636Fq+ooPMjm/NrlC4oZZROzZSTVqIvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OtQaHHDkVfJisqH2enJd0uUigdk+cellrk3ArP0jWT0IU++YFbAsZhSkvWotFo70Oe0K9FofLWrX+FkQEOf5m/+5aq2emmR5UZPaqnPPKFw8X6n+jcqtAHBXZ1sOVZes20pSl9lwnPeDFpJEdX4Tcygpxdkw+qQZyVU11DiMwtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eIC0dwYr; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745696057; c=relaxed/simple;
+	bh=HBlxK4AawqfYPS0GhpPe0PN4s5T2JQ/nvCV6tzL3U00=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=OQFvBqlj5stglrS3brJebHSa4XQtysmir5qSphguTrpSdirGV215wueZNRdM45DsGXtI2X2QojaCKL1d9B5oGon5tzlk18sov0jwnljWY7+0NEQtft8qTlmPy9V2bquT7p9Af6Ij5IVjgHzQl3Zb/6DY1Xjq4FqE7aMRhyZAtqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FklYMRjf; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eIC0dwYr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745691208; x=1777227208;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LhE4SeXnk5k636Fq+ooPMjm/NrlC4oZZROzZSTVqIvs=;
-  b=eIC0dwYrx584fnOqt9SSOqLjM35RC14fkB3Tv7PnYWQ12dikt3uxRdpv
-   atGXDK6gITfsNlaO7Ui9kPtbkhHE0hfb9TgR/dBCtsukf/VfMUVlw2XIJ
-   KGv3DNRD/sycDD+UwgxnG+nN6/L3VNKmy3HkB6luzeEbDYCz6pI/ARWXv
-   y/c1ZvDl/VyEG33mDL73I4poVlmT4ay6PooALbh/3HO64igPFQIChHga3
-   Zt/rqkXUk2bNLrMBSWycse/H1dJkAY9467sp8pxXszLr5V5M6R2CZoaC+
-   AubbgODOuYUoCGheNRm/SkBkhsjK480sy4KtmTGdNh9fVW0jxLAS5YTIv
-   g==;
-X-CSE-ConnectionGUID: m05aKsoaTTSmgXXIUEBeLA==
-X-CSE-MsgGUID: a6kqcMBWTo2PzTDovQyBJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="49977646"
-X-IronPort-AV: E=Sophos;i="6.15,242,1739865600"; 
-   d="scan'208";a="49977646"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 11:13:27 -0700
-X-CSE-ConnectionGUID: OfhAktAPT46l2213WsEbAQ==
-X-CSE-MsgGUID: tOiVkebtS166gX/g5t8D8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,242,1739865600"; 
-   d="scan'208";a="133657364"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 26 Apr 2025 11:13:26 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u8k1j-0005wp-2V;
-	Sat, 26 Apr 2025 18:13:23 +0000
-Date: Sun, 27 Apr 2025 02:12:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiawen Wu <jiawenwu@trustnetic.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	linux-doc@vger.kernel.org
-Subject: drivers/net/ethernet/wangxun/libwx/wx_ptp.c:415: warning: This
- comment starts with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202504270243.xykBkzwC-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FklYMRjf"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-acacb8743a7so564103066b.1
+        for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 12:34:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745696053; x=1746300853; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/3alXIn8OrPaSy6pt058myi7d9sgrq3J8qKIPENyqG0=;
+        b=FklYMRjfRrZs0kNdBIS53/RtrN5O/GK8jVmoZlqdL+sgtJ/GCMNlt7MhasRi7rOGK0
+         Pd5+4GtMBexzu9fCRkry9NI16zWMxjaekAnVpFzXeD6yfp8aruTUOljVno0GxrmwhQYN
+         msxqpG4fiiQFRfV3ogHgvhGun17Bvx2SW/2p3tDpxlosn27s4ikuxnZ3pGc3oLG0CbX+
+         E0+1yt/ULFo0PdjmBfVIvKvs9vlrj5GjKG83FnZ3sFRHGcULdDL8V5szMP2FsxAu06P4
+         A2FVoZZDSfTslb+Y2U0KXP7HZq1hbAzBhAlMPFmfVgYtH8OKIQB7WIvNLAGOvC0qKyv6
+         VpLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745696053; x=1746300853;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/3alXIn8OrPaSy6pt058myi7d9sgrq3J8qKIPENyqG0=;
+        b=wjBNPiz/8JjaZCZmQQQw+2cLQkxvlrw6bNkr2HgyTICrpzxuk76fRafasvjfM+tp2Y
+         CHxKmEzMKfvjK9L9P+MMTBxY++wfLiCK9TT9zhqiQqKHzc8S/eBbfNAyNaM7CEhZl/ko
+         H+vDHQu+6c5/r3HusB3R44rpLorMBoFI7TAPAu80w9NXyuEiMtcjcwo9QbJ9nmAu0DNM
+         2l3ojZ7HSPkRKi0rZb40qYXuuvoGf9QxwUjZgu0N+w/mtHVsWECpCOyj+Awehami+Q8t
+         4btj32uhvqQdTWzgceFmPOyBK2sbWKENQH3opVqx1QTJ+1cE8cEhcPxuqQ3GeggbFrE9
+         jVsw==
+X-Gm-Message-State: AOJu0Yyl13MUl9k/KODy7wWx5BjWg34k/dtod6E2ywk2DyMWLCfMpVwl
+	XsZ1Wn/nlXX6l/pcXqfyrvdENWGg2CecCesSGB4PWx0CrKol9scm4uGt7C5/2muwEXmwZinV974
+	q
+X-Gm-Gg: ASbGncuEbW8sGEcQFKypXOSA69gds9emVadFiHzjOp/2ja0K2owyf4cAy6xnfqLU+WX
+	gxCS9ElTx0Md4J+cFWBBSmTVVyBl+W6CRfGGngmUeyjUROPv9HLRX3owt1ITfC9VEKWrzMc5psU
+	8O1WWksxWAK5Yfjp+ewwBLUVAvmStQ4yf+fUE7MU3qHZTbyWN4j23QQnkqe47WV4cImlU2ezYkc
+	LEFAuhrB+yqb9HMvtTvdtTGYlq4jIhuKr/at0GicwVyL2yBNfWqRsouRoK/W/7Sl53/nc3VwHJf
+	5gssh1ZpXtxVcn+dRKddjtNHG8cxPelwbZOpcmWPgy07PteOwh8DseeCt5sTCEt4IFC6n/x/gKx
+	ANfk+sVZh0mDa
+X-Google-Smtp-Source: AGHT+IEYrfbGxXDqAeLmH1tIb+0ieo/NONpgzvoFv8OnHg9nfRO5UhD+WK17hRFHqQV0ER1HIMVdaA==
+X-Received: by 2002:a17:907:da9:b0:acb:1165:9a93 with SMTP id a640c23a62f3a-ace5a124befmr1106953566b.3.1745696053261;
+        Sat, 26 Apr 2025 12:34:13 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ecf8ca6sm326291166b.118.2025.04.26.12.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Apr 2025 12:34:12 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sat, 26 Apr 2025 19:34:12 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1123415294.9419.1745696052831@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-21-init-9781-g576161cb6069: Failure on arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_9418_837266803.1745696052154"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allmodconfig
+X-Jenkins-Result: SUCCESS
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   02ddfb981de88a2c15621115dd7be2431252c568
-commit: 2d8967e86c9b12e7b8a82a531572186b2b97e804 net: ngbe: Add support for 1PPS and TOD
-date:   9 weeks ago
-config: arm64-randconfig-001-20250426 (https://download.01.org/0day-ci/archive/20250427/202504270243.xykBkzwC-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250427/202504270243.xykBkzwC-lkp@intel.com/reproduce)
+------=_Part_9418_837266803.1745696052154
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504270243.xykBkzwC-lkp@intel.com/
+Dear contributor,
 
-All warnings (new ones prefixed by >>):
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
->> drivers/net/ethernet/wangxun/libwx/wx_ptp.c:415: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-            * When PPS is enabled, unmask the interrupt for the ClockOut
+In tcwg_kernel/llvm-master-arm-next-allmodconfig, after:
+  | commit llvmorg-21-init-9781-g576161cb6069
+  | Author: Aaron Ballman <aaron@aaronballman.com>
+  | Date:   Fri Apr 25 08:21:41 2025 -0400
+  | 
+  |     [C] Warn on uninitialized const objects (#137166)
+  |     
+  |     Unlike C++, C allows the definition of an uninitialized `const` object.
+  |     If the object has static or thread storage duration, it is still
+  |     zero-initialized, otherwise, the object is left uninitialized. In either
+  | ... 15 lines of the commit log omitted.
+
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23469
+  | # First few build errors in logs:
+  | # 00:03:16 arch/arm/mach-bcm/platsmp-brcmstb.c:110:11: error: default initialization of an object of type 'typeof (timeo)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:03:16 make[3]: *** [scripts/Makefile.build:203: arch/arm/mach-bcm/platsmp-brcmstb.o] Error 1
+  | # 00:03:17 make[2]: *** [scripts/Makefile.build:461: arch/arm/mach-bcm] Error 2
+  | # 00:03:22 ./include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:03:22 make[4]: *** [scripts/Makefile.build:203: security/selinux/avc.o] Error 1
+  | # 00:03:25 ./include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:03:25 ./include/net/ip6_fib.h:271:10: error: default initialization of an object of type 'typeof (f6i->expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:03:27 make[4]: *** [scripts/Makefile.build:203: security/selinux/hooks.o] Error 1
+  | # 00:03:29 ./include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:03:29 make[4]: *** [scripts/Makefile.build:203: security/selinux/selinuxfs.o] Error 1
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 25485
+
+Used configuration :
+ tcwg_kernel/llvm-master-arm-next-allmodconfig
+
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-1671. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +415 drivers/net/ethernet/wangxun/libwx/wx_ptp.c
 
-   408	
-   409	static int wx_ptp_feature_enable(struct ptp_clock_info *ptp,
-   410					 struct ptp_clock_request *rq, int on)
-   411	{
-   412		struct wx *wx = container_of(ptp, struct wx, ptp_caps);
-   413	
-   414		/**
- > 415		 * When PPS is enabled, unmask the interrupt for the ClockOut
-   416		 * feature, so that the interrupt handler can send the PPS
-   417		 * event when the clock SDP triggers. Clear mask when PPS is
-   418		 * disabled
-   419		 */
-   420		if (rq->type != PTP_CLK_REQ_PEROUT || !wx->ptp_setup_sdp)
-   421			return -EOPNOTSUPP;
-   422	
-   423		/* Reject requests with unsupported flags */
-   424		if (rq->perout.flags & ~(PTP_PEROUT_DUTY_CYCLE |
-   425					 PTP_PEROUT_PHASE))
-   426			return -EOPNOTSUPP;
-   427	
-   428		if (rq->perout.phase.sec || rq->perout.phase.nsec) {
-   429			wx_err(wx, "Absolute start time not supported.\n");
-   430			return -EINVAL;
-   431		}
-   432	
-   433		if (rq->perout.period.sec != 1 || rq->perout.period.nsec) {
-   434			wx_err(wx, "Only 1pps is supported.\n");
-   435			return -EINVAL;
-   436		}
-   437	
-   438		if (rq->perout.flags & PTP_PEROUT_DUTY_CYCLE) {
-   439			struct timespec64 ts_on;
-   440	
-   441			ts_on.tv_sec = rq->perout.on.sec;
-   442			ts_on.tv_nsec = rq->perout.on.nsec;
-   443			wx->pps_width = timespec64_to_ns(&ts_on);
-   444		} else {
-   445			wx->pps_width = 120000000;
-   446		}
-   447	
-   448		if (on)
-   449			set_bit(WX_FLAG_PTP_PPS_ENABLED, wx->flags);
-   450		else
-   451			clear_bit(WX_FLAG_PTP_PPS_ENABLED, wx->flags);
-   452	
-   453		return wx->ptp_setup_sdp(wx);
-   454	}
-   455	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/302/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/301/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/576161cb6069e2c7656a8ef530727a0f4aefff30/tcwg_kernel/llvm-master-arm-next-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/576161cb6069e2c7656a8ef530727a0f4aefff30
+------=_Part_9418_837266803.1745696052154--
