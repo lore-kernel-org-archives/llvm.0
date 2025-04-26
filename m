@@ -1,99 +1,140 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811241EB5C3
-	for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 01:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F321A42C4;
+	Sat, 26 Apr 2025 06:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745631791; cv=none; b=U9bmIz3qPu7i1tGtDIyuU86Al0OPjwsgASB9eoOm9BM6/yH9SRKUyS3XuQorBzy9Tu80YM+tEmrNSZZnLamDVPq6D5s4tVNsU9haTIGdQIA6BzeqTLyP7/qmtV97nIy2wAEYAeka0aSfGFM/WxuzUEfLbLBeF0tpDmYn4y95GvA=
+	t=1745647243; cv=none; b=Xzkvwk58OlpHgqRwIG1OZ3DmetlA7ImZTIQiNEiynu6yQGGGOErAT09THmqAi7kRN3OSqWguWJsR4NNIzuGrAkm9bU+x/NZpZgwbkrq2h81YyIoH7Aq/gD7vFS2QSoWOc/03A6Lxiws13ULdBRiZb173c1Gv3MX3KzsR3kAEVEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745631791; c=relaxed/simple;
-	bh=KpDDFE9vCNss3DtdWqRx6Y0+bR3L0JK2pc/CeyndbWs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PUXEeIl47mXGTFbGSeTnMRdn5f6eA7XQl+cULVl0en0dKcFRITrLVO9gmJ8HI9AfAic0Gp066B7E+JvbyAvhsqd5uqh0LoUGoVI28rguVTZW5pBOngpcSkyLZIL8VZcUxCdJXfpj3t/izHYTH3Dg0YEb9FBQQ5Y2BZGXNBDF1EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bfxol/oX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1745647243; c=relaxed/simple;
+	bh=DHN+2XwaGWSWPVgZUpkQ5NWYnVCsHjEBcx8IoO728h0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ReGDhizANIBIvwdX5K9mxt3IzDPynoeIUzdpy1fAzcs74fydQIVfEsxKNZzKKIAnVeX7gdv7qwyUT5FNDzGfTpVmj0jELFdUMRsRN6sEjT7/ID/bZQkxJTMgBdWDOcWEE//j/Bbj6J15K/n9oaXCBCur4gm0YEKtqvQaz/oOtpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VWKotXnk; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bfxol/oX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745631788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=WOczhyhomZqIFn8OWpi1NyYJ34vkoMhspMIU0HX1lag=;
-	b=bfxol/oXSBQh+gBbDyOLqEAk0qiva0d8Arhs9oz5qfzta20c2GXy5ZPRLJCccr+mNrVlyV
-	kEYPB9zi0ztgXgEW10dY3WNujmtfvym6gHHg/kpN2Vd0Cn4qXtSEvajWP1pX71qj5glHak
-	43cleQUn8lAvwQ3lzeqtTeTnOMmxUNE=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-168-lUaY0Yz3Oq6pmpuAE2qnVA-1; Fri,
- 25 Apr 2025 21:43:06 -0400
-X-MC-Unique: lUaY0Yz3Oq6pmpuAE2qnVA-1
-X-Mimecast-MFC-AGG-ID: lUaY0Yz3Oq6pmpuAE2qnVA_1745631785
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ABE1F195608C
-	for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 01:43:05 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E1871800352;
-	Sat, 26 Apr 2025 01:43:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc3,
- upstream-mainline, 1eb09e62)
-Date: Sat, 26 Apr 2025 01:43:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VWKotXnk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745647242; x=1777183242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DHN+2XwaGWSWPVgZUpkQ5NWYnVCsHjEBcx8IoO728h0=;
+  b=VWKotXnkCmPbL7t8bSLFLpjAKyRKWmweuVZJ/yn+E6Pf7tiu3xgQVx5e
+   7He+YqtrBaOy56lSE84+65riWkRc8hwqsddgfH4wpLByi5AZF68Y8s9Ru
+   qyJI7Xossz3+BM/rgy/R7dGmoCtezLwAwDKRR03w6jmIADGcV/LSVD4cG
+   X7i/D6dKKpvWoVM5jDqZdxn4G+z1/WETA7KqVDRS9t6jp0TWD5rAJLUIY
+   RBJNKSNFrI6/tixUJw2wklHCVwq2KsZ+LJ+s0KhAnYDl13BA34LXOhoFN
+   WwngoXGg5LzZ2rk6iUXaSRs5v4vEQucX+0+Ezfb3fXLBn/C6hR/WUzWtw
+   g==;
+X-CSE-ConnectionGUID: q0LPAqbtSGqy+hCGGz0cGA==
+X-CSE-MsgGUID: mCkEqLtqQPq8UGBFtMBGRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="57951643"
+X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
+   d="scan'208";a="57951643"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 23:00:41 -0700
+X-CSE-ConnectionGUID: fGVsoJFCSU20yY+XSe/Qyg==
+X-CSE-MsgGUID: ckQjLZxXSfiXaCohK5TDOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
+   d="scan'208";a="170290518"
+Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 25 Apr 2025 23:00:37 -0700
+Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u8YaX-0005iR-2e;
+	Sat, 26 Apr 2025 06:00:33 +0000
+Date: Sat, 26 Apr 2025 13:59:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yunhui Cui <cuiyunhui@bytedance.com>, arnd@arndb.de,
+	andriy.shevchenko@linux.intel.com, benjamin.larsson@genexis.eu,
+	gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+	ilpo.jarvinen@linux.intel.com, jirislaby@kernel.org,
+	jkeeping@inmusicbrands.com, john.ogness@linutronix.de,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	markus.mayer@linaro.org, matt.porter@linaro.org,
+	namcao@linutronix.de, paulmck@kernel.org, pmladek@suse.com,
+	schnelle@linux.ibm.com, sunilvl@ventanamicro.com,
+	tim.kryger@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 2/4] serial: 8250: introduce serial8250_discard_data()
+Message-ID: <202504261327.CEtXsr6g-lkp@intel.com>
+References: <20250425062425.68761-2-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <37230.125042521430600259@us-mta-168.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: v3RIaC0ceeD50iKD39DPSFjOL-1-IYpxuYw-KI6ZUa4_1745631785
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250425062425.68761-2-cuiyunhui@bytedance.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Yunhui,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on soc/for-next]
+[cannot apply to tty/tty-testing tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.15-rc3 next-20250424]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunhui-Cui/serial-8250-introduce-serial8250_discard_data/20250425-142655
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20250425062425.68761-2-cuiyunhui%40bytedance.com
+patch subject: [PATCH v4 2/4] serial: 8250: introduce serial8250_discard_data()
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250426/202504261327.CEtXsr6g-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504261327.CEtXsr6g-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504261327.CEtXsr6g-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/tty/serial/8250/8250_port.c:2146:32: error: use of undeclared identifier 'flags'
+    2146 |         uart_port_lock_irqsave(port, &flags);
+         |                                       ^
+   drivers/tty/serial/8250/8250_port.c:2150:36: error: use of undeclared identifier 'flags'
+    2150 |         uart_port_unlock_irqrestore(port, flags);
+         |                                           ^
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'ata-6.15-rc4' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/libata/linux
+vim +/flags +2146 drivers/tty/serial/8250/8250_port.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1787256712
+  2131	
+  2132	#ifdef CONFIG_CONSOLE_POLL
+  2133	/*
+  2134	 * Console polling routines for writing and reading from the uart while
+  2135	 * in an interrupt or debug context.
+  2136	 */
+  2137	
+  2138	static int serial8250_get_poll_char(struct uart_port *port)
+  2139	{
+  2140		struct uart_8250_port *up = up_to_u8250p(port);
+  2141		int status = NO_POLL_CHAR;
+  2142		u16 lsr;
+  2143	
+  2144		serial8250_rpm_get(up);
+  2145	
+> 2146		uart_port_lock_irqsave(port, &flags);
+  2147		lsr = serial_port_in(port, UART_LSR);
+  2148		if ((lsr & UART_LSR_DR))
+  2149			status = serial_port_in(port, UART_RX);
+  2150		uart_port_unlock_irqrestore(port, flags);
+  2151	out:
+  2152		serial8250_rpm_put(up);
+  2153		return status;
+  2154	}
+  2155	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1787256712-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
