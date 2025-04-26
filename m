@@ -1,68 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F321A42C4;
-	Sat, 26 Apr 2025 06:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E9324BC01;
+	Sat, 26 Apr 2025 07:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745647243; cv=none; b=Xzkvwk58OlpHgqRwIG1OZ3DmetlA7ImZTIQiNEiynu6yQGGGOErAT09THmqAi7kRN3OSqWguWJsR4NNIzuGrAkm9bU+x/NZpZgwbkrq2h81YyIoH7Aq/gD7vFS2QSoWOc/03A6Lxiws13ULdBRiZb173c1Gv3MX3KzsR3kAEVEM=
+	t=1745650908; cv=none; b=LnJ0XXBgN9/FTwcBYBMtMxChjhEEzGEjGWf28bEWHW28G6SMxRyMdzIB6uKZDcNI8svzRXHX4KHbNvOODUmaMqXTj3JTO8bF0E2fh8I5SIfzfeObYdtusXMS+BxvUkrI7cRTcdlG7/vycyivmsC4sVpMIG0c700ZJH/w98lTvc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745647243; c=relaxed/simple;
-	bh=DHN+2XwaGWSWPVgZUpkQ5NWYnVCsHjEBcx8IoO728h0=;
+	s=arc-20240116; t=1745650908; c=relaxed/simple;
+	bh=GP0K1Rv9ZXdHQPB5bmi50oLNLtVvYZGG8O2PcVpf/mg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ReGDhizANIBIvwdX5K9mxt3IzDPynoeIUzdpy1fAzcs74fydQIVfEsxKNZzKKIAnVeX7gdv7qwyUT5FNDzGfTpVmj0jELFdUMRsRN6sEjT7/ID/bZQkxJTMgBdWDOcWEE//j/Bbj6J15K/n9oaXCBCur4gm0YEKtqvQaz/oOtpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VWKotXnk; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=Noel+yuhC+wBIouF5iNL9z73B4NscaGf6iwaiiLkHpuSUxT2GELHsLh+Pd+J7yaZTzRKQ7jYQT1jj3oS8RtKfsYvgIhVMGWZQOoAjZeGsea9RHoGtLK8fICEkaMMET0vX27sxACI5q3kgYCJzEugreHFeOHDuOzGP3vBnRocIHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k5l3cfcv; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VWKotXnk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k5l3cfcv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745647242; x=1777183242;
+  t=1745650907; x=1777186907;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DHN+2XwaGWSWPVgZUpkQ5NWYnVCsHjEBcx8IoO728h0=;
-  b=VWKotXnkCmPbL7t8bSLFLpjAKyRKWmweuVZJ/yn+E6Pf7tiu3xgQVx5e
-   7He+YqtrBaOy56lSE84+65riWkRc8hwqsddgfH4wpLByi5AZF68Y8s9Ru
-   qyJI7Xossz3+BM/rgy/R7dGmoCtezLwAwDKRR03w6jmIADGcV/LSVD4cG
-   X7i/D6dKKpvWoVM5jDqZdxn4G+z1/WETA7KqVDRS9t6jp0TWD5rAJLUIY
-   RBJNKSNFrI6/tixUJw2wklHCVwq2KsZ+LJ+s0KhAnYDl13BA34LXOhoFN
-   WwngoXGg5LzZ2rk6iUXaSRs5v4vEQucX+0+Ezfb3fXLBn/C6hR/WUzWtw
-   g==;
-X-CSE-ConnectionGUID: q0LPAqbtSGqy+hCGGz0cGA==
-X-CSE-MsgGUID: mCkEqLtqQPq8UGBFtMBGRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="57951643"
+  bh=GP0K1Rv9ZXdHQPB5bmi50oLNLtVvYZGG8O2PcVpf/mg=;
+  b=k5l3cfcv7wiw2SitjxMFDLQjo2i0DD2CwW9exphdvNUPtVcDwc48m9jP
+   045xiwMxp0rsypAKq2O1cv1ZG0T0K1dkxJKmsiez3dCZozWM7oM/b7Pxj
+   kHXO4HqB5a2i121bXJsBB7i0de7HADzqkYprez/vrvIHH1cpAV8weAYd1
+   y/PJcmoZpH7IdoHApHDSb1wpFyGZy2/xBnCp1Q96EqIXrQtelSOT2BrSR
+   oDcb5mIjPfOUGZvVvIlsXvNdwjcq6CUQe0j0Y912CV/BPQQEJHKRsR2uN
+   mopqmsQ8zjiM8cBkMto4ajo8ORpWi4Y2AUWzq9uwEUZkQ78DIQqOsQ/VG
+   w==;
+X-CSE-ConnectionGUID: FHIVQeImRMyoPlL+G9tHBw==
+X-CSE-MsgGUID: VrjaarMlRMqaWqiDmiZy3w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="51112566"
 X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="57951643"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 23:00:41 -0700
-X-CSE-ConnectionGUID: fGVsoJFCSU20yY+XSe/Qyg==
-X-CSE-MsgGUID: ckQjLZxXSfiXaCohK5TDOg==
+   d="scan'208";a="51112566"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 00:01:46 -0700
+X-CSE-ConnectionGUID: UB3CB3T6QZWK5LSf3Zj6Ag==
+X-CSE-MsgGUID: ALlMkpTIRLKP8WKzX6udoQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="170290518"
+   d="scan'208";a="138238692"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 25 Apr 2025 23:00:37 -0700
+  by orviesa005.jf.intel.com with ESMTP; 26 Apr 2025 00:01:40 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u8YaX-0005iR-2e;
-	Sat, 26 Apr 2025 06:00:33 +0000
-Date: Sat, 26 Apr 2025 13:59:57 +0800
+	id 1u8ZXe-0005lJ-18;
+	Sat, 26 Apr 2025 07:01:38 +0000
+Date: Sat, 26 Apr 2025 15:01:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yunhui Cui <cuiyunhui@bytedance.com>, arnd@arndb.de,
-	andriy.shevchenko@linux.intel.com, benjamin.larsson@genexis.eu,
-	gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-	ilpo.jarvinen@linux.intel.com, jirislaby@kernel.org,
-	jkeeping@inmusicbrands.com, john.ogness@linutronix.de,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	markus.mayer@linaro.org, matt.porter@linaro.org,
-	namcao@linutronix.de, paulmck@kernel.org, pmladek@suse.com,
-	schnelle@linux.ibm.com, sunilvl@ventanamicro.com,
-	tim.kryger@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 2/4] serial: 8250: introduce serial8250_discard_data()
-Message-ID: <202504261327.CEtXsr6g-lkp@intel.com>
-References: <20250425062425.68761-2-cuiyunhui@bytedance.com>
+To: Fabrice Gasnier <fabrice.gasnier@foss.st.com>, lee@kernel.org,
+	alexandre.torgue@foss.st.com, daniel.lezcano@linaro.org,
+	tglx@linutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ukleinek@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jic23@kernel.org, robh@kernel.org, catalin.marinas@arm.com,
+	will@kernel.org, devicetree@vger.kernel.org, wbg@kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+	olivier.moysan@foss.st.com, fabrice.gasnier@foss.st.com
+Subject: Re: [PATCH v5 3/7] clocksource: stm32-lptimer: add support for
+ stm32mp25
+Message-ID: <202504261456.aCATBoYN-lkp@intel.com>
+References: <20250425124755.166193-4-fabrice.gasnier@foss.st.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,69 +72,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250425062425.68761-2-cuiyunhui@bytedance.com>
+In-Reply-To: <20250425124755.166193-4-fabrice.gasnier@foss.st.com>
 
-Hi Yunhui,
+Hi Fabrice,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on soc/for-next]
-[cannot apply to tty/tty-testing tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.15-rc3 next-20250424]
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on lee-leds/for-leds-next linus/master v6.15-rc3 next-20250424]
+[cannot apply to atorgue-stm32/stm32-next lee-mfd/for-mfd-fixes]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yunhui-Cui/serial-8250-introduce-serial8250_discard_data/20250425-142655
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20250425062425.68761-2-cuiyunhui%40bytedance.com
-patch subject: [PATCH v4 2/4] serial: 8250: introduce serial8250_discard_data()
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250426/202504261327.CEtXsr6g-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504261327.CEtXsr6g-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabrice-Gasnier/dt-bindings-mfd-stm32-lptimer-add-support-for-stm32mp25/20250425-210409
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250425124755.166193-4-fabrice.gasnier%40foss.st.com
+patch subject: [PATCH v5 3/7] clocksource: stm32-lptimer: add support for stm32mp25
+config: arm-randconfig-003-20250426 (https://download.01.org/0day-ci/archive/20250426/202504261456.aCATBoYN-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504261456.aCATBoYN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504261327.CEtXsr6g-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504261456.aCATBoYN-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/tty/serial/8250/8250_port.c:2146:32: error: use of undeclared identifier 'flags'
-    2146 |         uart_port_lock_irqsave(port, &flags);
-         |                                       ^
-   drivers/tty/serial/8250/8250_port.c:2150:36: error: use of undeclared identifier 'flags'
-    2150 |         uart_port_unlock_irqrestore(port, flags);
-         |                                           ^
-   2 errors generated.
+>> drivers/clocksource/timer-stm32-lp.c:57:6: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
+      57 |         if (!val & STM32_LPTIM_ENABLE) {
+         |             ^    ~
+   drivers/clocksource/timer-stm32-lp.c:57:6: note: add parentheses after the '!' to evaluate the bitwise operator first
+      57 |         if (!val & STM32_LPTIM_ENABLE) {
+         |             ^                        
+         |              (                       )
+   drivers/clocksource/timer-stm32-lp.c:57:6: note: add parentheses around left hand side expression to silence this warning
+      57 |         if (!val & STM32_LPTIM_ENABLE) {
+         |             ^
+         |             (   )
+   1 warning generated.
 
 
-vim +/flags +2146 drivers/tty/serial/8250/8250_port.c
+vim +57 drivers/clocksource/timer-stm32-lp.c
 
-  2131	
-  2132	#ifdef CONFIG_CONSOLE_POLL
-  2133	/*
-  2134	 * Console polling routines for writing and reading from the uart while
-  2135	 * in an interrupt or debug context.
-  2136	 */
-  2137	
-  2138	static int serial8250_get_poll_char(struct uart_port *port)
-  2139	{
-  2140		struct uart_8250_port *up = up_to_u8250p(port);
-  2141		int status = NO_POLL_CHAR;
-  2142		u16 lsr;
-  2143	
-  2144		serial8250_rpm_get(up);
-  2145	
-> 2146		uart_port_lock_irqsave(port, &flags);
-  2147		lsr = serial_port_in(port, UART_LSR);
-  2148		if ((lsr & UART_LSR_DR))
-  2149			status = serial_port_in(port, UART_RX);
-  2150		uart_port_unlock_irqrestore(port, flags);
-  2151	out:
-  2152		serial8250_rpm_put(up);
-  2153		return status;
-  2154	}
-  2155	
+    50	
+    51	static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned long evt)
+    52	{
+    53		int ret;
+    54		u32 val;
+    55	
+    56		regmap_read(priv->reg, STM32_LPTIM_CR, &val);
+  > 57		if (!val & STM32_LPTIM_ENABLE) {
+    58			/* Enable LPTIMER to be able to write into IER and ARR registers */
+    59			regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
+    60			/*
+    61			 * After setting the ENABLE bit, a delay of two counter clock cycles is needed
+    62			 * before the LPTIM is actually enabled. For 32KHz rate, this makes approximately
+    63			 * 62.5 micro-seconds, round it up.
+    64			 */
+    65			udelay(63);
+    66		}
+    67		/* set next event counter */
+    68		regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
+    69		/* enable ARR interrupt */
+    70		regmap_write(priv->reg, STM32_LPTIM_IER, STM32_LPTIM_ARRMIE);
+    71	
+    72		/* Poll DIEROK and ARROK to ensure register access has completed */
+    73		ret = regmap_read_poll_timeout_atomic(priv->reg, STM32_LPTIM_ISR, val,
+    74						      (val & STM32_LPTIM_DIEROK_ARROK) ==
+    75						      STM32_LPTIM_DIEROK_ARROK,
+    76						      10, 500);
+    77		if (ret) {
+    78			dev_err(priv->dev, "access to LPTIM timed out\n");
+    79			/* Disable LPTIMER */
+    80			regmap_write(priv->reg, STM32_LPTIM_CR, 0);
+    81			return ret;
+    82		}
+    83		/* Clear DIEROK and ARROK flags */
+    84		regmap_write(priv->reg, STM32_LPTIM_ICR, STM32_LPTIM_DIEROKCF_ARROKCF);
+    85	
+    86		return 0;
+    87	}
+    88	
 
 -- 
 0-DAY CI Kernel Test Service
