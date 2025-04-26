@@ -1,151 +1,118 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2DD14D2A0
-	for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 19:34:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32E12628D;
+	Sat, 26 Apr 2025 20:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745696057; cv=none; b=txdU+nlGG1ery77nXy43UPpbl4cVITvWiSV/vhV2x2btudeKxAgy6TD22ep+tM+kCbDi5nfknG1ccXwCXaqsVOgPR2vwF+LZbAyI8U6xxHUimzqR7q9Kfp22KAfsvJuLW3An0rpboe9zSPYLT9pk32U7DranRrn3CNXD0JVt55A=
+	t=1745697920; cv=none; b=Oln4kPjWA8/CM/zk5IwvC1FIDUrShQAMjEbiPOEfeVo+mp0DbdKRFjbt7pwHdNq+8iDGJ59bSNGEh75/TS9hDCx2oyqnzCWdzLt9sWtg0fXdvRxXyREWpZ059enmzmCRtofDd9zFv9bB03uv9UIVsbzY1kpnwRPvLANjsRy0hvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745696057; c=relaxed/simple;
-	bh=HBlxK4AawqfYPS0GhpPe0PN4s5T2JQ/nvCV6tzL3U00=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=OQFvBqlj5stglrS3brJebHSa4XQtysmir5qSphguTrpSdirGV215wueZNRdM45DsGXtI2X2QojaCKL1d9B5oGon5tzlk18sov0jwnljWY7+0NEQtft8qTlmPy9V2bquT7p9Af6Ij5IVjgHzQl3Zb/6DY1Xjq4FqE7aMRhyZAtqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FklYMRjf; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1745697920; c=relaxed/simple;
+	bh=anucA2fhUpmZ6Yai/LMGEEPEFJm0oLNwTHqcBdoDPig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UBEywpzdvMKTqeu7OWYegKqpXfhLoyuf7EgxKsFE70ygNyCEqW04vPZLBjQy5Jv956Q8qhDPwnDpdAcsyRDW+bNecm5qmdVM7O0J2XQ+dK6X9YmKDxAdoyN1n3DtviDaCI0MysX4K5dnhZrxnKg0vzE9yZjJC1NG9bRGEVOF9As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAsAEkA6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FklYMRjf"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-acacb8743a7so564103066b.1
-        for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 12:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745696053; x=1746300853; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/3alXIn8OrPaSy6pt058myi7d9sgrq3J8qKIPENyqG0=;
-        b=FklYMRjfRrZs0kNdBIS53/RtrN5O/GK8jVmoZlqdL+sgtJ/GCMNlt7MhasRi7rOGK0
-         Pd5+4GtMBexzu9fCRkry9NI16zWMxjaekAnVpFzXeD6yfp8aruTUOljVno0GxrmwhQYN
-         msxqpG4fiiQFRfV3ogHgvhGun17Bvx2SW/2p3tDpxlosn27s4ikuxnZ3pGc3oLG0CbX+
-         E0+1yt/ULFo0PdjmBfVIvKvs9vlrj5GjKG83FnZ3sFRHGcULdDL8V5szMP2FsxAu06P4
-         A2FVoZZDSfTslb+Y2U0KXP7HZq1hbAzBhAlMPFmfVgYtH8OKIQB7WIvNLAGOvC0qKyv6
-         VpLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745696053; x=1746300853;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3alXIn8OrPaSy6pt058myi7d9sgrq3J8qKIPENyqG0=;
-        b=wjBNPiz/8JjaZCZmQQQw+2cLQkxvlrw6bNkr2HgyTICrpzxuk76fRafasvjfM+tp2Y
-         CHxKmEzMKfvjK9L9P+MMTBxY++wfLiCK9TT9zhqiQqKHzc8S/eBbfNAyNaM7CEhZl/ko
-         H+vDHQu+6c5/r3HusB3R44rpLorMBoFI7TAPAu80w9NXyuEiMtcjcwo9QbJ9nmAu0DNM
-         2l3ojZ7HSPkRKi0rZb40qYXuuvoGf9QxwUjZgu0N+w/mtHVsWECpCOyj+Awehami+Q8t
-         4btj32uhvqQdTWzgceFmPOyBK2sbWKENQH3opVqx1QTJ+1cE8cEhcPxuqQ3GeggbFrE9
-         jVsw==
-X-Gm-Message-State: AOJu0Yyl13MUl9k/KODy7wWx5BjWg34k/dtod6E2ywk2DyMWLCfMpVwl
-	XsZ1Wn/nlXX6l/pcXqfyrvdENWGg2CecCesSGB4PWx0CrKol9scm4uGt7C5/2muwEXmwZinV974
-	q
-X-Gm-Gg: ASbGncuEbW8sGEcQFKypXOSA69gds9emVadFiHzjOp/2ja0K2owyf4cAy6xnfqLU+WX
-	gxCS9ElTx0Md4J+cFWBBSmTVVyBl+W6CRfGGngmUeyjUROPv9HLRX3owt1ITfC9VEKWrzMc5psU
-	8O1WWksxWAK5Yfjp+ewwBLUVAvmStQ4yf+fUE7MU3qHZTbyWN4j23QQnkqe47WV4cImlU2ezYkc
-	LEFAuhrB+yqb9HMvtTvdtTGYlq4jIhuKr/at0GicwVyL2yBNfWqRsouRoK/W/7Sl53/nc3VwHJf
-	5gssh1ZpXtxVcn+dRKddjtNHG8cxPelwbZOpcmWPgy07PteOwh8DseeCt5sTCEt4IFC6n/x/gKx
-	ANfk+sVZh0mDa
-X-Google-Smtp-Source: AGHT+IEYrfbGxXDqAeLmH1tIb+0ieo/NONpgzvoFv8OnHg9nfRO5UhD+WK17hRFHqQV0ER1HIMVdaA==
-X-Received: by 2002:a17:907:da9:b0:acb:1165:9a93 with SMTP id a640c23a62f3a-ace5a124befmr1106953566b.3.1745696053261;
-        Sat, 26 Apr 2025 12:34:13 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ecf8ca6sm326291166b.118.2025.04.26.12.34.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Apr 2025 12:34:12 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sat, 26 Apr 2025 19:34:12 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1123415294.9419.1745696052831@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-21-init-9781-g576161cb6069: Failure on arm
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAsAEkA6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86224C4CEE2;
+	Sat, 26 Apr 2025 20:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745697919;
+	bh=anucA2fhUpmZ6Yai/LMGEEPEFJm0oLNwTHqcBdoDPig=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nAsAEkA6mO4DURrDH/gME/mLaHU5WC6a71M7C42Q89LgHhxb08l3/e1BfVmPD1gZ8
+	 vt2dTj4SYMx7XQnCNn17tWJnbxdqOhuMlYP+pfmdxalSdx4NqTBbz3gPYgMYBhaAq0
+	 h819pLS5+CQwWErAfBDfyyzTvzrSeZgVf5q/I1ha8jns/r3p2PxiCAL7IAYZdAdFBH
+	 bdIMvbHEIqFP9l2WmLVdpFIFFQAEi+2Nig4z1uB+Sk8EPK8k8v8VvnsywaKN0msXvj
+	 usaypPu9quOYgfeeh2GKhgmX8ReSf/Pu1Gsm31tYhi2MCeIQ2LT9y0zN/EMFJP29uQ
+	 saCsTaYkFi5Qg==
+Date: Sat, 26 Apr 2025 16:05:13 -0400
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	dri-devel <dri-devel@lists.freedesktop.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: clang and drm issue: objtool warnings from clang build
+Message-ID: <20250426200513.GA427956@ax162>
+References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
+ <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_9418_837266803.1745696052154"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
 
-------=_Part_9418_837266803.1745696052154
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi Linus,
 
-Dear contributor,
+On Sat, Apr 26, 2025 at 10:42:40AM -0700, Linus Torvalds wrote:
+> But I *really* think that clang silently just generating known bad
+> code for invalida operations like this is very very dangerous, and is
+> a bug in clang.
+> 
+> Can we *please* get a flag for clang that it doesn't just stop
+> generating code because it has decided some path is unreachable or
+> undefined? Add a TRAP instruction, for Chrissake! PLEASE!
+> 
+>  Maybe such a flag already exists, and the kernel just doesn't know
+> about it. This whole "do random things for undefined behavior" is a
+> bug, dammit.
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+I think there is an internal LLVM flag, '-trap-unreachable', that does
+what we would want here. Within the last year, I tested adding something
+like
 
-In tcwg_kernel/llvm-master-arm-next-allmodconfig, after:
-  | commit llvmorg-21-init-9781-g576161cb6069
-  | Author: Aaron Ballman <aaron@aaronballman.com>
-  | Date:   Fri Apr 25 08:21:41 2025 -0400
-  | 
-  |     [C] Warn on uninitialized const objects (#137166)
-  |     
-  |     Unlike C++, C allows the definition of an uninitialized `const` object.
-  |     If the object has static or thread storage duration, it is still
-  |     zero-initialized, otherwise, the object is left uninitialized. In either
-  | ... 15 lines of the commit log omitted.
+    KBUILD_CFLAGS += -mllvm -trap-unreachable
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23469
-  | # First few build errors in logs:
-  | # 00:03:16 arch/arm/mach-bcm/platsmp-brcmstb.c:110:11: error: default initialization of an object of type 'typeof (timeo)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:03:16 make[3]: *** [scripts/Makefile.build:203: arch/arm/mach-bcm/platsmp-brcmstb.o] Error 1
-  | # 00:03:17 make[2]: *** [scripts/Makefile.build:461: arch/arm/mach-bcm] Error 2
-  | # 00:03:22 ./include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:03:22 make[4]: *** [scripts/Makefile.build:203: security/selinux/avc.o] Error 1
-  | # 00:03:25 ./include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:03:25 ./include/net/ip6_fib.h:271:10: error: default initialization of an object of type 'typeof (f6i->expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:03:27 make[4]: *** [scripts/Makefile.build:203: security/selinux/hooks.o] Error 1
-  | # 00:03:29 ./include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:03:29 make[4]: *** [scripts/Makefile.build:203: security/selinux/selinuxfs.o] Error 1
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 25485
+to Makefile under an 'ifdef CONFIG_CC_IS_CLANG' and it eliminated most
+objtool warnings but I seem to recall it introducing some new ones, I
+think around __noreturn functions? I know Josh has done a lot of work on
+objtool recently so I should retest. GCC has this behavior exposed under
+-funreachable-traps, I could see about trying to expose that in clang.
 
-Used configuration :
- tcwg_kernel/llvm-master-arm-next-allmodconfig
+This specific case started with clang-20 and your analysis is spot on:
 
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1671. Please let us know if you have a fix.
+https://lore.kernel.org/20241220223403.GA2605890@ax162/
 
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+On Sat, Apr 26, 2025 at 10:52:10AM -0700, Linus Torvalds wrote:
+> Please people: "ASSERT()" like behavior is simply not acceptable in
+> the kernel. WARN_ON() and friends need to either be otherwise benign
+> (ie "warn but then continue to do valid things") or they need to be
+> *handled* (ie "warn and then refuse to do things that aren't valid").
+> 
+> Just warning and then doing random crap is not sane. If you aren't
+> capable of dealing with the situation, don't do the bogus test. Just
+> warning about it isn't fixing the code, and can make things actively
+> worse as in these two examples.
 
------------------8<--------------------------8<--------------------------8<--------------------------
+This was the most recent series to clear up those objtool warnings in
+the AMD driver:
 
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+https://lore.kernel.org/20250114132856.19463-1-yangtiezhu@loongson.cn/
 
+Not sure if other ASSERT() uses should be audited or eliminated too but
+that would at least make the build cleaner.
 
+> Not this silent "now I generate random code by falling through to
+> something else entirely" that clang does now. Not good.
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/302/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/301/artifact/artifacts
+Aside from what I mention above, I suppose getting OBJTOOL_WERROR in
+useful shape would help with this a little bit because it will be easier
+for me and others testing tip of tree LLVM to notice when optimizations
+introduce new warnings.
 
-Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/576161cb6069e2c7656a8ef530727a0f4aefff30/tcwg_kernel/llvm-master-arm-next-allmodconfig/reproduction_instructions.txt
-
-Full commit : https://github.com/llvm/llvm-project/commit/576161cb6069e2c7656a8ef530727a0f4aefff30
-------=_Part_9418_837266803.1745696052154--
+Cheers,
+Nathan
