@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1BB25C81A;
-	Sat, 26 Apr 2025 15:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5E225C713;
+	Sat, 26 Apr 2025 15:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745680038; cv=none; b=hwP3BPtKMNoIREJdmReUfj1/FI4ZCD+nNydoVdQHcfK8m4A2B/omlrxRAvNEQEI0wHKElnxPZEuPvWXQBxns6zUw0CT4d5yh5fbFVGWdMpjtCKgSJXdsq+UvuO66rJvaJVUjM77N7Tl7dAGIVuogUxqJBjEWF2GQidrLFE1w2vo=
+	t=1745681240; cv=none; b=H7gdpNfOThvoMVWCyhDWUbS13z9JDwgtciAjQDoXXSt/qtbhBwH+0q1yqwF8uYuShnhMsXkXZFuL+0Av69MLjVu3qvWj51uRubX5wAjWN1I1BHpvGjPYtfwjgunIKLDuzBYXfGaO8qTs/vSQZuDoTssHmRuG/00qaNWlDHwD27I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745680038; c=relaxed/simple;
-	bh=PEQwD/lQ5ZSizz+elzJnGm+DT2hvILIDJK0qmqPIWXI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NPf3iFH2XSwaoM5jjHY4AVAQjX1bZvi/rhpJXOR1zzdibBCrolAdf8U/uyaKqjqzstmXCmlijwxtGWwH5fuyteSRtcojAox6G4YLWL50DyGfjPKSruULHjB11zh07SZjvLDd3OrOPVcdYQ3yyO4fbZ3041TwDxIhtMRTth0hfus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WIMuig6N; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1745681240; c=relaxed/simple;
+	bh=Qtd0dyIZfJKj7+m+rfi4DTy1I/LCHUZ/AplD+F81XpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YDEmtF0KkVqiF34L3qlE/Mwn+pOP3qX1LA+YF/jj6Ig5etYxAzqxMgiMlN4YO4hLEUYOSaN7QnX2HaQZuABVBgqy48T0bVSlXXrhmelxgFqDCx8YaTlxE0tquZ2/t/pnT/DDeqDR15EliXqTA6Hv862Kbp8SiRAKjA6EqxDMXec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CPOeXVjE; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WIMuig6N"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CPOeXVjE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745680035; x=1777216035;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PEQwD/lQ5ZSizz+elzJnGm+DT2hvILIDJK0qmqPIWXI=;
-  b=WIMuig6NrKRh0+dFb+KZZHiFaleAl9wVlLAyknc9pYdgr3ToHR8oCqRw
-   OlObapDfrBYNNj93gRgjzql/pyQDqv5eKcH5r2e7dE/IC/94wiCoLDRTd
-   LFN3ObhRSy6tzy1LT9Ea0dtjldctQ5wOyuJLBiKXmKHcbXlUc4xq4MY+q
-   aGrbw3RftRZrBBBeojifqjUns3YyAA334XGP6Yxn5lDUkEM1c7d+zj7xt
-   UZ5L6l+uqlkeTXw+jyec6XYgRUKM6elaya7nmy0zHYPIf0WxhJnv9WyLs
-   UUGLA4DmqlAS1SYYzWgklvnZUa1+N3eDEzVDxxwG+Lorj7i7GHSSkE9du
-   Q==;
-X-CSE-ConnectionGUID: Wk6x4mhXREWyaRYnbu+WzQ==
-X-CSE-MsgGUID: wCfwGRbAQ7+WHhxPr1/Qjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47029504"
+  t=1745681237; x=1777217237;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qtd0dyIZfJKj7+m+rfi4DTy1I/LCHUZ/AplD+F81XpA=;
+  b=CPOeXVjEsWwnpJKp4bmyAWwk2a0131tyKdfCoE9v9Uyt14821gpCZ/vu
+   7ZgaUkynTiLkDOD8DWD01eM1ltNdRjXIaih3pfwX6tWrx6NBiJkFGwTEO
+   b9rEldouE9pTFd+JT3YCNobxQrxgjx+txlBpCB5jqbweeTlogbePXbIs3
+   yDXXshESN3FwkBJsueH/DC+ssqskLBc1IWcYaUexhb83KFjrdNNT05hoK
+   W+q3nJDLfwiK3POUMiEoMhm9gCPGQuMWBLlVowXJgu2FtomPRUbres/5W
+   3EQGaZ+ojtzalEqf6o379/wyqtdQXbMH2lxhEEuD32PlgQj9dmfh5aEbh
+   w==;
+X-CSE-ConnectionGUID: QlaCSZ0eROKuPeD5Wy851Q==
+X-CSE-MsgGUID: 6K9wr0T3S7eiyg8rC97+Xg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="51140960"
 X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="47029504"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 08:07:14 -0700
-X-CSE-ConnectionGUID: FBOfz7P1T9i/0NA3tSAZAQ==
-X-CSE-MsgGUID: 7Y1EePHHQq+a1QOPPdcWPA==
+   d="scan'208";a="51140960"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 08:27:15 -0700
+X-CSE-ConnectionGUID: vIOf90g1TqmfwU94/Brdog==
+X-CSE-MsgGUID: yT0Jv8AjQ/asx7LR1shiGw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="138116515"
+   d="scan'208";a="133449003"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 26 Apr 2025 08:07:12 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 26 Apr 2025 08:27:14 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u8h7W-0005sJ-15;
-	Sat, 26 Apr 2025 15:07:10 +0000
-Date: Sat, 26 Apr 2025 23:06:24 +0800
+	id 1u8hQt-0005sb-1z;
+	Sat, 26 Apr 2025 15:27:11 +0000
+Date: Sat, 26 Apr 2025 23:26:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Darshan Rathod <darshanrathod475@gmail.com>, abbotti@mev.co.uk0
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Kuogee Hsieh <quic_khsieh@quicinc.com>
-Subject: drivers/gpu/drm/msm/dp/dp_link.c:1144: warning: Function parameter
- or struct member 'DP_TRAIN_LEVEL_MAX' not described in 'if'
-Message-ID: <202504262322.aKhjr99H-lkp@intel.com>
+	hsweeten@visionengravers.com, linux-kernel@vger.kernel.org,
+	Darshan Rathod <darshanrathod475@gmail.com>
+Subject: Re: [PATCH] Staging: comedi: das16: Fixed a stucture warning in code
+Message-ID: <202504262332.cRQb8NpG-lkp@intel.com>
+References: <20250426113627.36525-1-darshanrathod475@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,103 +64,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250426113627.36525-1-darshanrathod475@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   02ddfb981de88a2c15621115dd7be2431252c568
-commit: 22578178e5dd6d3aa4490879df8b6c2977d980be drm/msm/dp: allow voltage swing / pre emphasis of 3
-date:   1 year, 1 month ago
-config: arm64-randconfig-001-20250426 (https://download.01.org/0day-ci/archive/20250426/202504262322.aKhjr99H-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504262322.aKhjr99H-lkp@intel.com/reproduce)
+Hi Darshan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Darshan-Rathod/Staging-comedi-das16-Fixed-a-stucture-warning-in-code/20250426-193741
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250426113627.36525-1-darshanrathod475%40gmail.com
+patch subject: [PATCH] Staging: comedi: das16: Fixed a stucture warning in code
+config: arm64-randconfig-003-20250426 (https://download.01.org/0day-ci/archive/20250426/202504262332.cRQb8NpG-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504262332.cRQb8NpG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504262322.aKhjr99H-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504262332.cRQb8NpG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/gpu/drm/msm/dp/dp_link.c:641: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-            * Read the device service IRQ vector (Byte 0x201) to determine
-   drivers/gpu/drm/msm/dp/dp_link.c:659: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-            * Read the link request byte (Byte 0x218) to determine what type
-   drivers/gpu/drm/msm/dp/dp_link.c:852: warning: Function parameter or struct member 'link->drm_dev' not described in 'drm_dbg_dp'
-   drivers/gpu/drm/msm/dp/dp_link.c:852: warning: Function parameter or struct member '0x%x' not described in 'drm_dbg_dp'
-   drivers/gpu/drm/msm/dp/dp_link.c:852: warning: Function parameter or struct member '0x%x\n"' not described in 'drm_dbg_dp'
-   drivers/gpu/drm/msm/dp/dp_link.c:852: warning: expecting prototype for Update the voltage and pre(). Prototype was for drm_dbg_dp() instead
->> drivers/gpu/drm/msm/dp/dp_link.c:1144: warning: Function parameter or struct member 'DP_TRAIN_LEVEL_MAX' not described in 'if'
-   drivers/gpu/drm/msm/dp/dp_link.c:1144: warning: expecting prototype for Adjust the voltage swing and pre(). Prototype was for if() instead
+>> drivers/comedi/drivers/das16.c:969:18: error: cannot assign to variable 'lrange' with const-qualified type 'const struct comedi_lrange *'
+     969 |                 lrange->length = 1;
+         |                 ~~~~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:959:31: note: variable 'lrange' declared const here
+     959 |                 const struct comedi_lrange *lrange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+>> drivers/comedi/drivers/das16.c:971:15: error: cannot assign to variable 'krange' with const-qualified type 'const struct comedi_krange *'
+     971 |                 krange->min = min;
+         |                 ~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:960:31: note: variable 'krange' declared const here
+     960 |                 const struct comedi_krange *krange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/comedi/drivers/das16.c:972:15: error: cannot assign to variable 'krange' with const-qualified type 'const struct comedi_krange *'
+     972 |                 krange->max = max;
+         |                 ~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:960:31: note: variable 'krange' declared const here
+     960 |                 const struct comedi_krange *krange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/comedi/drivers/das16.c:973:17: error: cannot assign to variable 'krange' with const-qualified type 'const struct comedi_krange *'
+     973 |                 krange->flags = UNIT_volt;
+         |                 ~~~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:960:31: note: variable 'krange' declared const here
+     960 |                 const struct comedi_krange *krange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/comedi/drivers/das16.c:1003:18: error: cannot assign to variable 'lrange' with const-qualified type 'const struct comedi_lrange *'
+    1003 |                 lrange->length = 1;
+         |                 ~~~~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:993:31: note: variable 'lrange' declared const here
+     993 |                 const struct comedi_lrange *lrange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/comedi/drivers/das16.c:1005:15: error: cannot assign to variable 'krange' with const-qualified type 'const struct comedi_krange *'
+    1005 |                 krange->min = min;
+         |                 ~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:994:31: note: variable 'krange' declared const here
+     994 |                 const struct comedi_krange *krange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/comedi/drivers/das16.c:1006:15: error: cannot assign to variable 'krange' with const-qualified type 'const struct comedi_krange *'
+    1006 |                 krange->max = max;
+         |                 ~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:994:31: note: variable 'krange' declared const here
+     994 |                 const struct comedi_krange *krange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/comedi/drivers/das16.c:1007:17: error: cannot assign to variable 'krange' with const-qualified type 'const struct comedi_krange *'
+    1007 |                 krange->flags = UNIT_volt;
+         |                 ~~~~~~~~~~~~~ ^
+   drivers/comedi/drivers/das16.c:994:31: note: variable 'krange' declared const here
+     994 |                 const struct comedi_krange *krange;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   8 errors generated.
 
 
-vim +1144 drivers/gpu/drm/msm/dp/dp_link.c
+vim +969 drivers/comedi/drivers/das16.c
 
-  1108	
-  1109	int dp_link_adjust_levels(struct dp_link *dp_link, u8 *link_status)
-  1110	{
-  1111		int i;
-  1112		u8 max_p_level;
-  1113		int v_max = 0, p_max = 0;
-  1114		struct dp_link_private *link;
-  1115	
-  1116		if (!dp_link) {
-  1117			DRM_ERROR("invalid input\n");
-  1118			return -EINVAL;
-  1119		}
-  1120	
-  1121		link = container_of(dp_link, struct dp_link_private, dp_link);
-  1122	
-  1123		/* use the max level across lanes */
-  1124		for (i = 0; i < dp_link->link_params.num_lanes; i++) {
-  1125			u8 data_v = drm_dp_get_adjust_request_voltage(link_status, i);
-  1126			u8 data_p = drm_dp_get_adjust_request_pre_emphasis(link_status,
-  1127										 i);
-  1128			drm_dbg_dp(link->drm_dev,
-  1129					"lane=%d req_vol_swing=%d req_pre_emphasis=%d\n",
-  1130					i, data_v, data_p);
-  1131			if (v_max < data_v)
-  1132				v_max = data_v;
-  1133			if (p_max < data_p)
-  1134				p_max = data_p;
-  1135		}
-  1136	
-  1137		dp_link->phy_params.v_level = v_max >> DP_TRAIN_VOLTAGE_SWING_SHIFT;
-  1138		dp_link->phy_params.p_level = p_max >> DP_TRAIN_PRE_EMPHASIS_SHIFT;
-  1139	
-  1140		/**
-  1141		 * Adjust the voltage swing and pre-emphasis level combination to within
-  1142		 * the allowable range.
-  1143		 */
-> 1144		if (dp_link->phy_params.v_level > DP_TRAIN_LEVEL_MAX) {
-  1145			drm_dbg_dp(link->drm_dev,
-  1146				"Requested vSwingLevel=%d, change to %d\n",
-  1147				dp_link->phy_params.v_level,
-  1148				DP_TRAIN_LEVEL_MAX);
-  1149			dp_link->phy_params.v_level = DP_TRAIN_LEVEL_MAX;
-  1150		}
-  1151	
-  1152		if (dp_link->phy_params.p_level > DP_TRAIN_LEVEL_MAX) {
-  1153			drm_dbg_dp(link->drm_dev,
-  1154				"Requested preEmphasisLevel=%d, change to %d\n",
-  1155				dp_link->phy_params.p_level,
-  1156				DP_TRAIN_LEVEL_MAX);
-  1157			dp_link->phy_params.p_level = DP_TRAIN_LEVEL_MAX;
-  1158		}
-  1159	
-  1160		max_p_level = DP_TRAIN_LEVEL_MAX - dp_link->phy_params.v_level;
-  1161		if (dp_link->phy_params.p_level > max_p_level) {
-  1162			drm_dbg_dp(link->drm_dev,
-  1163				"Requested preEmphasisLevel=%d, change to %d\n",
-  1164				dp_link->phy_params.p_level,
-  1165				max_p_level);
-  1166			dp_link->phy_params.p_level = max_p_level;
-  1167		}
-  1168	
-  1169		drm_dbg_dp(link->drm_dev, "adjusted: v_level=%d, p_level=%d\n",
-  1170			dp_link->phy_params.v_level, dp_link->phy_params.p_level);
-  1171	
-  1172		return 0;
-  1173	}
-  1174	
+742c4a095973f69 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-12  947  
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  948  static const struct comedi_lrange *das16_ai_range(struct comedi_device *dev,
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  949  						  struct comedi_subdevice *s,
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  950  						  struct comedi_devconfig *it,
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  951  						  unsigned int pg_type,
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  952  						  unsigned int status)
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  953  {
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  954  	unsigned int min = it->options[4];
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  955  	unsigned int max = it->options[5];
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  956  
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  957  	/* get any user-defined input range */
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  958  	if (pg_type == das16_pg_none && (min || max)) {
+5c47473ec0f437f drivers/comedi/drivers/das16.c         Darshan Rathod      2025-04-26  959  		const struct comedi_lrange *lrange;
+5c47473ec0f437f drivers/comedi/drivers/das16.c         Darshan Rathod      2025-04-26  960  		const struct comedi_krange *krange;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  961  
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  962  		/* allocate single-range range table */
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  963  		lrange = comedi_alloc_spriv(s,
+ee8ed0141d532d6 drivers/comedi/drivers/das16.c         Gustavo A. R. Silva 2022-01-25  964  					    struct_size(lrange, range, 1));
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  965  		if (!lrange)
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  966  			return &range_unknown;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  967  
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  968  		/* initialize ai range */
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26 @969  		lrange->length = 1;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  970  		krange = lrange->range;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26 @971  		krange->min = min;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  972  		krange->max = max;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  973  		krange->flags = UNIT_volt;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  974  
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  975  		return lrange;
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  976  	}
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  977  
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  978  	/* use software programmable range */
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  979  	if (status & DAS16_STATUS_UNIPOLAR)
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  980  		return das16_ai_uni_lranges[pg_type];
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  981  	return das16_ai_bip_lranges[pg_type];
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  982  }
+0ce8280e2876091 drivers/staging/comedi/drivers/das16.c H Hartley Sweeten   2015-01-26  983  
 
 -- 
 0-DAY CI Kernel Test Service
