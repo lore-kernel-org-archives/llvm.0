@@ -1,118 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32E12628D;
-	Sat, 26 Apr 2025 20:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943B91C36
+	for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 20:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745697920; cv=none; b=Oln4kPjWA8/CM/zk5IwvC1FIDUrShQAMjEbiPOEfeVo+mp0DbdKRFjbt7pwHdNq+8iDGJ59bSNGEh75/TS9hDCx2oyqnzCWdzLt9sWtg0fXdvRxXyREWpZ059enmzmCRtofDd9zFv9bB03uv9UIVsbzY1kpnwRPvLANjsRy0hvw=
+	t=1745701041; cv=none; b=TmXyvx7PS5LG5DFn9lb9ix5R9Py64Tfxei0TrMvxiXG5MyIHNB7/2qQOvzKTSM45HqUw5Ofsg1z1Y0spd2ZDCYsZcIGwQW/6aDhjTjjsuiTKGADif+PvSg3H/fjSrb5iy6qqNs3Rv6CtlpRUVuvOSV2uHcgMScPvycIObTX8tcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745697920; c=relaxed/simple;
-	bh=anucA2fhUpmZ6Yai/LMGEEPEFJm0oLNwTHqcBdoDPig=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UBEywpzdvMKTqeu7OWYegKqpXfhLoyuf7EgxKsFE70ygNyCEqW04vPZLBjQy5Jv956Q8qhDPwnDpdAcsyRDW+bNecm5qmdVM7O0J2XQ+dK6X9YmKDxAdoyN1n3DtviDaCI0MysX4K5dnhZrxnKg0vzE9yZjJC1NG9bRGEVOF9As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAsAEkA6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745701041; c=relaxed/simple;
+	bh=vrnKQhr5cfP9Ei4CCB31DhEqb6QWvhLq1OVYP4NPdFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s0J52wxI53F8KEcnnCoi6uvS2dHczvk9ZF3oZO+SUe/oMrvl7K+pXozNpfLLAv7IsIZiGQCcGpLRPXVV9nyBfGzr5ceF7URz3xNyQqvPJ8/pOIjWZU1l2paoaM1g/So21qRQLct2jR77933SibYlIgWxXkFdHPUGS6NAEoASNKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QuiZciHp; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAsAEkA6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86224C4CEE2;
-	Sat, 26 Apr 2025 20:05:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745697919;
-	bh=anucA2fhUpmZ6Yai/LMGEEPEFJm0oLNwTHqcBdoDPig=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nAsAEkA6mO4DURrDH/gME/mLaHU5WC6a71M7C42Q89LgHhxb08l3/e1BfVmPD1gZ8
-	 vt2dTj4SYMx7XQnCNn17tWJnbxdqOhuMlYP+pfmdxalSdx4NqTBbz3gPYgMYBhaAq0
-	 h819pLS5+CQwWErAfBDfyyzTvzrSeZgVf5q/I1ha8jns/r3p2PxiCAL7IAYZdAdFBH
-	 bdIMvbHEIqFP9l2WmLVdpFIFFQAEi+2Nig4z1uB+Sk8EPK8k8v8VvnsywaKN0msXvj
-	 usaypPu9quOYgfeeh2GKhgmX8ReSf/Pu1Gsm31tYhi2MCeIQ2LT9y0zN/EMFJP29uQ
-	 saCsTaYkFi5Qg==
-Date: Sat, 26 Apr 2025 16:05:13 -0400
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	dri-devel <dri-devel@lists.freedesktop.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: clang and drm issue: objtool warnings from clang build
-Message-ID: <20250426200513.GA427956@ax162>
-References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
- <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QuiZciHp"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aca99fc253bso508797766b.0
+        for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 13:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1745701037; x=1746305837; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UoAad0UF3aMOunyUShqi7DpSlcddCQ3yXawelXX5azs=;
+        b=QuiZciHpN+MPdztMELFckAQ5rzI6JKSLJVsrmJAAnyJltlmRJKvZYukjLxpBK8hEVe
+         yhm5XxgViqClbESxwovkuewMsej96g8cL187e09eZTCN2o6wPtLJPJDhK3XtnQXpxMM1
+         QvyKLZ9hS2XwYf5g6FyDlnefneMASctZtlZBo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745701037; x=1746305837;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UoAad0UF3aMOunyUShqi7DpSlcddCQ3yXawelXX5azs=;
+        b=C1V0ZbXKXSob4iFda/afV+y7TUx/mpdeAW47+DDlrZdZKeUB4JvUWOuU/cPeD2v+Pn
+         EXmOQoKVeG7zEGKmT5zOiI0KXbOKak8WSagvcTQH/CLg7ngAjS67860CiDbfbAjHazDH
+         +g9/l5X1PnSTAobX27ffDms7AjNqjxXkhbFkD3nwVSyuHbPm4u4U/8p+XAg6PCe17yto
+         S3O2t984gZ6Y9vsFQ+K8o459+oj8kf8QFD0rDjeJTnDm28GA3Lmrb+FmsNZKuZbYEXJw
+         NNCPTbFT6xCPSVfTZxuPzszXJxuP8HizUp+7oSwXChVnxF/imkjteA8PPQDQHICzMGjd
+         c6Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWYM9LI74suBGSh052wy92lgEivyTyMjulrWvLSbXvOZUSXNd2bhwSub+hYwpN3jnWF7Dv@lists.linux.dev
+X-Gm-Message-State: AOJu0YwviCAk6sDQmWAQpzzavTehykjVTfLVWSPAy26slNN/IM4q4Pn7
+	kwwddPjIyWLZdvd69FwtGWnps1uukHWpbudn76Taw+AClEPzQrYFIQn5vr6LHu363uJR3NZqc5f
+	HSnvwTw==
+X-Gm-Gg: ASbGncsR8eDDtB0GvWmvumek6cOQeicZeP6xkmlUULP3Bp8jv2P7v/WYQQduyuk4svp
+	V0Lr2Zn8neykjyeAgqULGAKg8Cnf1egSOImNNTUSeiojYjYaGQXZpIMFCPhII6qaz95FIGplVYR
+	c0jq7QWDBnCvVl+mE+YJdlZzc69HTjpY1oy4cTi3wyT7QRU3U6XpTIoHG1ujAfKXIBRYeAc8WEX
+	zaAcGLFL4q3qgpCvJPjHIeamRyy18cESPSZ4T6VvU/NNrZ+Asap+MlpLn1GH+IZzOtBMoEIWeho
+	Tx4tbxjtJZlmJzSsViN+14s9qXQkAgaXTIe6CamIZBkyWM/QDUtuAzbzXLS3oDPT2sAFCpPkgTG
+	7TTq1yln1AxiegnQ=
+X-Google-Smtp-Source: AGHT+IEyx+2gXRPQMIGy33cSHk9VZHJQ9flUW+wL2KrGA2Im7siLJOVmMtOXjjCJLjHY4P10E9xjWg==
+X-Received: by 2002:a17:907:c0d:b0:ac4:3d8:2e90 with SMTP id a640c23a62f3a-ace848f17dbmr342640366b.13.1745701037634;
+        Sat, 26 Apr 2025 13:57:17 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ed704bdsm342293666b.148.2025.04.26.13.57.15
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Apr 2025 13:57:16 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac2963dc379so503083866b.2
+        for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 13:57:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU198w5e4VsQi8saNI7SArJ00h0Dwk1/w4g6eqNVtADt5NPVDVvfDbTJZP24qANh+a9BQrS@lists.linux.dev
+X-Received: by 2002:a17:907:da6:b0:aca:d5e9:9ce with SMTP id
+ a640c23a62f3a-ace848c0444mr251602866b.9.1745701035588; Sat, 26 Apr 2025
+ 13:57:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
+References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
+ <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com> <20250426200513.GA427956@ax162>
+In-Reply-To: <20250426200513.GA427956@ax162>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 26 Apr 2025 13:56:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
+X-Gm-Features: ATxdqUFEDV4hwTKkCo5LsFlF2depTN17SPH8wq3XkwJj60cqlzJsiqa-S0xR4lk
+Message-ID: <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
+Subject: Re: clang and drm issue: objtool warnings from clang build
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Harry Wentland <harry.wentland@amd.com>, 
+	Leo Li <sunpeng.li@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Linus,
+On Sat, 26 Apr 2025 at 13:05, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+>     KBUILD_CFLAGS += -mllvm -trap-unreachable
 
-On Sat, Apr 26, 2025 at 10:42:40AM -0700, Linus Torvalds wrote:
-> But I *really* think that clang silently just generating known bad
-> code for invalida operations like this is very very dangerous, and is
-> a bug in clang.
-> 
-> Can we *please* get a flag for clang that it doesn't just stop
-> generating code because it has decided some path is unreachable or
-> undefined? Add a TRAP instruction, for Chrissake! PLEASE!
-> 
->  Maybe such a flag already exists, and the kernel just doesn't know
-> about it. This whole "do random things for undefined behavior" is a
-> bug, dammit.
+Hmm. That certainly builds for me, but yeah, it generates new objtool
+warnings, notably
 
-I think there is an internal LLVM flag, '-trap-unreachable', that does
-what we would want here. Within the last year, I tested adding something
-like
+   panic() missing __noreturn in .c/.h or NORETURN() in noreturns.h
 
-    KBUILD_CFLAGS += -mllvm -trap-unreachable
+and I *think* that is because that flag makes clang not honour our
+*explicit* "this code is unreachable" annotations.
 
-to Makefile under an 'ifdef CONFIG_CC_IS_CLANG' and it eliminated most
-objtool warnings but I seem to recall it introducing some new ones, I
-think around __noreturn functions? I know Josh has done a lot of work on
-objtool recently so I should retest. GCC has this behavior exposed under
--funreachable-traps, I could see about trying to expose that in clang.
+So now objtool complains about the fact that clang has generated some
+random code that follows a call to 'panic()' even though objtool knows
+that panic() cannot return.
 
-This specific case started with clang-20 and your analysis is spot on:
+And those explicit annotations definitely should be honored.
 
-https://lore.kernel.org/20241220223403.GA2605890@ax162/
+IOW, there's a *big* difference between "the programmer told me this
+is unreachable, so I won't generate code past this point" and "I have
+decided this is undefined behavior, so now I won't generate code past
+this point".
 
-On Sat, Apr 26, 2025 at 10:52:10AM -0700, Linus Torvalds wrote:
-> Please people: "ASSERT()" like behavior is simply not acceptable in
-> the kernel. WARN_ON() and friends need to either be otherwise benign
-> (ie "warn but then continue to do valid things") or they need to be
-> *handled* (ie "warn and then refuse to do things that aren't valid").
-> 
-> Just warning and then doing random crap is not sane. If you aren't
-> capable of dealing with the situation, don't do the bogus test. Just
-> warning about it isn't fixing the code, and can make things actively
-> worse as in these two examples.
+So what I'm asking for is absolutely not "trap on unreachable". That's
+wrong and just plain stupid.
 
-This was the most recent series to clear up those objtool warnings in
-the AMD driver:
+I'm asking for "trap on UD instead of *assuming* it's unreachable".
 
-https://lore.kernel.org/20250114132856.19463-1-yangtiezhu@loongson.cn/
+Because clearly that code *can* be reached, it's just doing something undefined.
 
-Not sure if other ASSERT() uses should be audited or eliminated too but
-that would at least make the build cleaner.
+See? Big big difference.
 
-> Not this silent "now I generate random code by falling through to
-> something else entirely" that clang does now. Not good.
-
-Aside from what I mention above, I suppose getting OBJTOOL_WERROR in
-useful shape would help with this a little bit because it will be easier
-for me and others testing tip of tree LLVM to notice when optimizations
-introduce new warnings.
-
-Cheers,
-Nathan
+             Linus
