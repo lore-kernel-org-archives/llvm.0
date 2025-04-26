@@ -1,59 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090567494;
-	Sat, 26 Apr 2025 23:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A141A4414;
+	Sat, 26 Apr 2025 23:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745708569; cv=none; b=RuTOp1BtEeLCD8/8dmzSzP1IV8Oo3FskqZjzQK0D+HTZ/3r9J40NYHegPhW2IgtHkb4iJEIlg7UVI+B7XKPH2psGgdiZqo4DF0bR+x0H5CC1UP1uIsdzRjKSfRyURr58MLWtlxFREKK7EpGknvUqGX4Z+arwJngb8WtvSHrOj90=
+	t=1745709830; cv=none; b=jUkKjYEE6KwuAe2V1PpnuqxU6EBF3UIPu3gtQIG7w6k/BETA3FL/7mAzxvPGAEz8BndW6sWb8raruWCfE9H6QmyPCrlOcpRlI1M6iEAmu/wz91yXIdls76YX2uIe3KpKn8ERzmDCLycPJMCns0CHTm2bXBGHN6JS0fidiBGZnYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745708569; c=relaxed/simple;
-	bh=8Sy8u61N0SG7KWgoAF+6QIjhowpXLXZkpX65CJXZmCw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XDOS2oYdlQYVzgqG6FEmu3bCWWLCSgra3NoKg3/AmwD34oZyeHlOvv1UiSPvUvYFEZYmGyB6fP58u3QmzWdoqndGh1V00Ab3DdEqbmII9P2W/q87wEXHcJUR/vUkHnVAwvMHO8g172+VvFcsyw+HALRXrAbTqI/iC9RRbXGlNOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ie4pGmIT; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745709830; c=relaxed/simple;
+	bh=0EzI2PsxZX+NCSTOzZTgOkGoOnmSI6hi1Q7oSC2m2BQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gcAsmrvtZ9gqmwo8q8nHwMQ/Onp/D8c1sTMiWg8xUMqyWSqMD+4nj3dPoyKXpU4Qdo04iKyitzP1YWB6dotGSmd8a4t02MIpBt5cMDKeqG3Dx84IiE/9sS1AgrR7/NYSfstjbn5/lPv3wjugKwNpWF6K0bqoPhZ1c/k+VafW0Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gzlmzQaD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ie4pGmIT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745708567; x=1777244567;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8Sy8u61N0SG7KWgoAF+6QIjhowpXLXZkpX65CJXZmCw=;
-  b=ie4pGmIT++0PljxSWZI5T1xaIz3MxsR1XULeXrB4AzLwXLnbp7yHP83I
-   hBVzUEe1Zlfcym8v7hwi7vvasWJV/Q785Vo9YpPoV9BS6AGX0P9OXPUnx
-   //M3GiWcMtHKZvw7iDQQQoug53vZh33F5oZN55WUVpV3JJd+cfo//p4lK
-   yUjgZllmShWjZ2gMH15nfWI/YEwHBnXLKUwHhyq2HlbskYo3INboc2uuk
-   +dq5vJkv0AJQTQemyXY0zBDS3Kyj/5kCHCHTTA+V4i2twtuCco189ilUj
-   5dJQtCzmDmFUEzZTYd/A6dUA8XFMZyQo6ZAkTf8Ud/j93UWxTcD4WTMg8
-   g==;
-X-CSE-ConnectionGUID: s3HbN+WbSvGxR6VGUKFBMQ==
-X-CSE-MsgGUID: Q7brTYcrRT+iEICoCC/Htw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="64862824"
-X-IronPort-AV: E=Sophos;i="6.15,242,1739865600"; 
-   d="scan'208";a="64862824"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 16:02:46 -0700
-X-CSE-ConnectionGUID: Hd2BN2pmS0edHP1aAa1XJg==
-X-CSE-MsgGUID: Mzimxq45TYa7F5La8cI3OA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,242,1739865600"; 
-   d="scan'208";a="133685505"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 26 Apr 2025 16:02:45 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u8oXj-00061J-0J;
-	Sat, 26 Apr 2025 23:02:43 +0000
-Date: Sun, 27 Apr 2025 07:01:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [linux-next:master 5982/6092] ERROR: modpost: "get_phy_device"
- [drivers/net/phy/mdio-bus.ko] undefined!
-Message-ID: <202504270639.mT0lh2o1-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gzlmzQaD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D811C4CEE2;
+	Sat, 26 Apr 2025 23:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745709830;
+	bh=0EzI2PsxZX+NCSTOzZTgOkGoOnmSI6hi1Q7oSC2m2BQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gzlmzQaDWmCVVuyKJBFhgxPi/QyNZdzcHOnM46pg2w02j6agoQMEnDNw3Ya0pJwmw
+	 Pl1Pa+4rqDzYTc5FgsmIX2EvVdz+N2eIEVF1HjwMU4mVG0uFV88ZQ5SmMZmfQaVlj3
+	 g63YgGX2D6DHZRwcxbCrAeGV2zFgcRX91jLYQCskCVaF3pETvU1smL51mHIInrOU2T
+	 B3KlsL78r0+gAcziSyL1C2TVkfCY9oMshyTk/W0evOD72s0ZyvMJspIHHxzOgICLA0
+	 3l8bVkPivxNLmNmaX++FLv8b+oMAqLKbYNTAV4EkdjX4oVnbD8dZiLZUe1PhurQRq8
+	 asV0DSpMgJkrg==
+Date: Sat, 26 Apr 2025 19:23:44 -0400
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	dri-devel <dri-devel@lists.freedesktop.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: clang and drm issue: objtool warnings from clang build
+Message-ID: <20250426232344.GA1395819@ax162>
+References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
+ <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
+ <20250426200513.GA427956@ax162>
+ <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,25 +56,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   393d0c54cae31317deaa9043320c5fd9454deabc
-commit: 52358dd63e348c3b6c488acc105be1aeda8fb923 [5982/6092] net: phy: remove function stubs
-config: powerpc64-randconfig-003-20250427 (https://download.01.org/0day-ci/archive/20250427/202504270639.mT0lh2o1-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250427/202504270639.mT0lh2o1-lkp@intel.com/reproduce)
+On Sat, Apr 26, 2025 at 01:56:59PM -0700, Linus Torvalds wrote:
+> IOW, there's a *big* difference between "the programmer told me this
+> is unreachable, so I won't generate code past this point" and "I have
+> decided this is undefined behavior, so now I won't generate code past
+> this point".
+> 
+> So what I'm asking for is absolutely not "trap on unreachable". That's
+> wrong and just plain stupid.
+> 
+> I'm asking for "trap on UD instead of *assuming* it's unreachable".
+> 
+> Because clearly that code *can* be reached, it's just doing something undefined.
+> 
+> See? Big big difference.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504270639.mT0lh2o1-lkp@intel.com/
+Ah yes, that is a big yet subtle difference that I had not considered,
+my bad for missing that. I was only thinking about the implicitly
+inserted __builtin_unreachable() from potential UB, not the explicitly
+added ones from the developers.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+I suspect that it would not be easy to split that distinction in LLVM
+but since I am not a compiler person, I will see if this has come up
+before and talk to people otherwise. I know there has been work in LLVM
+to try and stop undefined behavior from destroying control flow with
+things like the freeze instruction but I am not sure that would help us
+in this situation. Pardon my ignorance though, isn't something like this
+basically just '-fsanitize=undefined -fsanitize-trap=all'?
 
->> ERROR: modpost: "get_phy_device" [drivers/net/phy/mdio-bus.ko] undefined!
->> ERROR: modpost: "phy_device_register" [drivers/net/phy/mdio-bus.ko] undefined!
->> ERROR: modpost: "phy_device_free" [drivers/net/phy/mdio-bus.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
