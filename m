@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD921296D37;
-	Fri, 25 Apr 2025 23:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1CE360;
+	Sat, 26 Apr 2025 00:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745622861; cv=none; b=rvT24ea6qkG247+loGtX5ceYKh7t+YFcRyOlwA0XjCZ087P5bBIx0xABoJQ5KIH3zCEjtl8/RUrCObPim1TsNpjGFrsFi92dzdloaAyW5XoQIdpBxI+szTWOhOA1V8vOODFcihF8lqIPYDlr4VMEk7Hnm50ZyHLt/ZaP6jZwVHk=
+	t=1745625848; cv=none; b=WkM0uFGeivOEYE5ytEjaYdEQIuk1zh/MlZpLrKNezxtV17WZbLDQfyEJGYumrm/TkHduSSEAp7RzfY0eZZXX/VIqgL5kfCo+Wj0hMgpSm65SoqxetGeJyOOMrkln3B1RB9K0hgvGEKGSZ3txg+TQ5e4IxXs1Js9nKl4Bm+2gI74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745622861; c=relaxed/simple;
-	bh=/3+EpY5kAKYfUTr3MB2kwKL0Bo2vCJ3MPx+r89JsXWI=;
+	s=arc-20240116; t=1745625848; c=relaxed/simple;
+	bh=rAnrPpzUOTKLQUbr+pLdW81qjbjnGHinJQrnqS/DX9U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ovsOKBIVR05URk5FYN8pzbyYwDTa85ZNcQ6cXRKxZqZx6mBlDjtx6PghfaLIKiAnah2+GmJWUXrviVadhQKEXptwxTQ6y7wVT6GS7XMf219kE1Tsr7ZW5Jw4LDFIK/FH4dff/p0AdjlsmNWNvVmrg517OYNiyZmse3xj/jxdhf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dwDLP1LP; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=hMpDcs8rCItR3aT2wTGRNWHbG7zo+vFnOYOI9cf3kv2chFi2bF1i5/1Kgr9ZwTQxxwUxKvYaQIEEAirm3U/cpum+YhHSbKoUoV11fJ2szAQnmkZ8kBrorMBdK6rRTnn0WJXpfq38jTDPVwUVoqI9ukbhnbFj0yj5HF3MYFiYAx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+a1WqRe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dwDLP1LP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75084C4CEE4;
-	Fri, 25 Apr 2025 23:14:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+a1WqRe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57CFC4CEE4;
+	Sat, 26 Apr 2025 00:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745622861;
-	bh=/3+EpY5kAKYfUTr3MB2kwKL0Bo2vCJ3MPx+r89JsXWI=;
+	s=k20201202; t=1745625847;
+	bh=rAnrPpzUOTKLQUbr+pLdW81qjbjnGHinJQrnqS/DX9U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dwDLP1LPFqDQzFvH2p/24nfWsndGZDv1qaWEVnvV8Cts7dVW9nxlho0UGTdVkGCM3
-	 xR6JvcrGLS6jrrMR1Xt0YutHI2zoASO0hjiXmXtptzftbHw+EkjHy5zqDhMjJqBrua
-	 DG0CZKaIk2kt/sRrSynLLzI/oVDkQKLxgxOd3LfZcUaG7PNqbN2cu7wt64w4dUJ24o
-	 Y0yCrDuX2OCl2GnwM+89vKY1X5C/fYP/GLlaDwx/zKflH7Xo5Fd4SpL9/d9nYSPkBK
-	 jBszw1+fbSz7tCbwazfyR7xBTiyvJpptopTvQvgS463Dz/yfaRm4wCbtPPrEtvD4X3
-	 YtKYgm6BVSmGg==
-Date: Fri, 25 Apr 2025 19:14:15 -0400
+	b=o+a1WqReSMdJks1s2lioODuUEivnYvrabCQYOY8A4nyQer9w7JsFbwDYezW1foXNN
+	 fzfVKDmKDx7DhUWmkGoFIIzx/C3JAeSsc7ixMp0PBJL6znpzzg/f0JNyyrjHL5Mq8Y
+	 NDI18hY40Tc2/llsQKp5g2jKv6B3VleXQkF9Ehzlxm2dCDDPsdX+d1fkQScSgTWozM
+	 e4sQgiOSi4xq8hSZIqUgZUON34dZiXodgg673SNNZISN0X8LbFV8pLWcSe4EVtEcRX
+	 e2Fltf+RtqxuAIXYLAvY+J5qcaXrgQAlPBPh2MqRcpn1M9P9i3BrEj7Q9vL7tCsskt
+	 59cdVFvNc5s5w==
+Date: Fri, 25 Apr 2025 20:04:01 -0400
 From: Nathan Chancellor <nathan@kernel.org>
 To: Kees Cook <kees@kernel.org>
 Cc: Miri Korenblit <miriam.rachel.korenblit@intel.com>,
@@ -34,19 +34,17 @@ Cc: Miri Korenblit <miriam.rachel.korenblit@intel.com>,
 	Yedidya Benshimol <yedidya.ben.shimol@intel.com>,
 	Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
 	Avraham Stern <avraham.stern@intel.com>,
-	Daniel Gabay <daniel.gabay@intel.com>,
 	linux-wireless@vger.kernel.org,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Anjaneyulu <pagadala.yesu.anjaneyulu@intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] wifi: iwlwifi: mld: Work around Clang loop unrolling bug
-Message-ID: <20250425231415.GA3584546@ax162>
-References: <20250421204153.work.935-kees@kernel.org>
- <20250422195903.GA3475704@ax162>
- <202504251032.51B2CB6233@keescook>
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Daniel Gabay <daniel.gabay@intel.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] wifi: iwlwifi: mld: Work around Clang loop unrolling
+ bug
+Message-ID: <20250426000401.GB3584546@ax162>
+References: <20250425184418.it.308-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,58 +53,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202504251032.51B2CB6233@keescook>
+In-Reply-To: <20250425184418.it.308-kees@kernel.org>
 
-On Fri, Apr 25, 2025 at 11:18:33AM -0700, Kees Cook wrote:
-> On Tue, Apr 22, 2025 at 12:59:03PM -0700, Nathan Chancellor wrote:
-> >   $ git cite
-> >   a33b5a08cbbd ("Merge tag 'sched_ext-for-6.15-rc3-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext")
+On Fri, Apr 25, 2025 at 11:44:22AM -0700, Kees Cook wrote:
+> The nested loop in iwl_mld_send_proto_offload() confuses Clang into
+> thinking there could be final loop iteration past the end of the "nsc"
+> array (which is only 4 entries). The FORTIFY checking in memcmp()
+> (via ipv6_addr_cmp()) notices this (due to the available bytes in the
+> out-of-bounds position of &nsc[4] being 0), and errors out, failing
+> the build. For some reason (likely due to architectural loop unrolling
+> configurations), this is only exposed on ARM builds currently. Due to
+> Clang's lack of inline tracking[1], the warning is not very helpful:
 > 
-> Make me look. :) "cite" is a local alias, yes? Looks like my own alias
-> for "short", but basically "short HEAD". From my ~/.gitconfig:
+> include/linux/fortify-string.h:719:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
+>   719 |                         __read_overflow();
+>       |                         ^
+> 1 error generated.
 > 
-> [alias]
->         short = "!f() { for i in \"$@\"; do git log -1 --pretty='%h (\"%s\")' \"$i\"; done; }; f"
-
-Heh, yes, that was me being lazy :) 'cite' ultimately expands to
-
-  show --format='%h ("%s")' --no-patch
-
-to basically do what yours does.
-
-  $ git cite HEAD~2 HEAD^ HEAD
-  e72e9e693307 ("Merge tag 'net-6.15-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
-  30e268185e59 ("Merge tag 'landlock-6.15-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux")
-  02ddfb981de8 ("Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi")
-
-> > diff --git a/drivers/net/wireless/intel/iwlwifi/mld/d3.c b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-> > index fba6a7b1bb5c..7ce01ad3608e 100644
-> > --- a/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-> > +++ b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-> > @@ -1757,7 +1757,7 @@ iwl_mld_send_proto_offload(struct iwl_mld *mld,
-> >  
-> >  		addrconf_addr_solict_mult(&wowlan_data->target_ipv6_addrs[i],
-> >  					  &solicited_addr);
-> > -		for (j = 0; j < c && j < n_nsc; j++)
-> > +		for (j = 0; j < n_nsc && j < c; j++)
-> >  			if (ipv6_addr_cmp(&nsc[j].dest_ipv6_addr,
-> >  					  &solicited_addr) == 0)
-> >  				break;
+> But this was tracked down to iwl_mld_send_proto_offload()'s
+> ipv6_addr_cmp() call.
 > 
-> Oof, an unstable solution. Well, I guess we work with what we've got.
-> Your change also solves it for me, so I'll send a v2 with it that way.
+> An upstream Clang bug has been filed[2] to track this, but for now.
+> Fix the build by explicitly bounding the inner loop by "n_nsc", which is
+> what "c" is already limited to. Additionally do not repeat the ns_config
+> and targ_addrs array sizes with their open-coded names since they can
+> be determined at compile-time with ARRAY_SIZE().
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2076
+> Link: https://github.com/llvm/llvm-project/pull/73552 [1]
+> Link: https://github.com/llvm/llvm-project/issues/136603 [2]
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-Indeed... I will review v2 shortly but another option would be stick a
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-  #include <linux/unroll.h>
-
-  #ifdef CONFIG_CC_IS_CLANG
-  unrolled_none
-  #endif
-
-above the loop to just avoid tripping the optimizer up altogether but I
-understand that is just as unstable as this one (even if it is one of
-the few ways that the compiler gives us to turn off optimizations).
-
-Cheers,
-Nathan
+> ---
+>  v2:
+>   - move "j < n_nsc" forward to stabilize loop bounds (Nathan)
+>   - use ARRAY_SIZE() for robustness
+>  v1: https://lore.kernel.org/all/20250421204153.work.935-kees@kernel.org/
+> Cc: Miri Korenblit <miriam.rachel.korenblit@intel.com>
+> Cc: Johannes Berg <johannes.berg@intel.com>
+> Cc: Yedidya Benshimol <yedidya.ben.shimol@intel.com>
+> Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+> Cc: Avraham Stern <avraham.stern@intel.com>
+> Cc: <linux-wireless@vger.kernel.org>
+> ---
+>  drivers/net/wireless/intel/iwlwifi/mld/d3.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/intel/iwlwifi/mld/d3.c b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
+> index dc736fdc176d..c51a6596617d 100644
+> --- a/drivers/net/wireless/intel/iwlwifi/mld/d3.c
+> +++ b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
+> @@ -1728,17 +1728,13 @@ iwl_mld_send_proto_offload(struct iwl_mld *mld,
+>  #if IS_ENABLED(CONFIG_IPV6)
+>  	struct iwl_mld_vif *mld_vif = iwl_mld_vif_from_mac80211(vif);
+>  	struct iwl_mld_wowlan_data *wowlan_data = &mld_vif->wowlan_data;
+> -	struct iwl_ns_config *nsc;
+> -	struct iwl_targ_addr *addrs;
+> -	int n_nsc, n_addrs;
+> +	const int n_addrs = ARRAY_SIZE(cmd->targ_addrs);
+> +	struct iwl_targ_addr *addrs = cmd->targ_addrs;
+> +	const int n_nsc = ARRAY_SIZE(cmd->ns_config);
+> +	struct iwl_ns_config *nsc = cmd->ns_config;
+>  	int i, c;
+>  	int num_skipped = 0;
+>  
+> -	nsc = cmd->ns_config;
+> -	n_nsc = IWL_PROTO_OFFLOAD_NUM_NS_CONFIG_V3L;
+> -	addrs = cmd->targ_addrs;
+> -	n_addrs = IWL_PROTO_OFFLOAD_NUM_IPV6_ADDRS_V3L;
+> -
+>  	/* For each address we have (and that will fit) fill a target
+>  	 * address struct and combine for NS offload structs with the
+>  	 * solicited node addresses.
+> @@ -1759,7 +1755,7 @@ iwl_mld_send_proto_offload(struct iwl_mld *mld,
+>  
+>  		addrconf_addr_solict_mult(&wowlan_data->target_ipv6_addrs[i],
+>  					  &solicited_addr);
+> -		for (j = 0; j < c; j++)
+> +		for (j = 0; j < n_nsc && j < c; j++)
+>  			if (ipv6_addr_cmp(&nsc[j].dest_ipv6_addr,
+>  					  &solicited_addr) == 0)
+>  				break;
+> -- 
+> 2.34.1
+> 
