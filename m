@@ -1,159 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6452924E4AD;
-	Sun, 27 Apr 2025 10:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB042512C5
+	for <llvm@lists.linux.dev>; Sun, 27 Apr 2025 10:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745749958; cv=none; b=pbsKOER09jZzdLjkM9je+iVF556fWC3UDHFe4dkud4b81K4QaVG7WQ71WbT7oJpSLeW6sOSIsm8sSkiWChjBWDt8c2vMR28eQEeD4WLYxNQ9webGLBjQdGHOrxwBldhr4Jt1B509PmfggtziRrQVKbwg+cCaf9ggnwaYIMG9dWo=
+	t=1745751082; cv=none; b=ltLsR9W4FzOE9R/kJj06TSgFIwGIFc4SwkDxD/U9j/eCIgrFZH14YEtyW7+pUIY+JKNg9fjb99+Gw0VQM0kIm2Ulm865xzL12sTt2ZJ7DhGzjpQCzVsPzd77gWu6IC00Ol4sPZNB1mEyY9YumnkM0ZsUlJvzmkS2jgAhklUmnAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745749958; c=relaxed/simple;
-	bh=k2/z9kcXsQJ7meYivpJpuNUhu4YGGk81DForHjmwz1s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NSHdxuhPwoO/jT6ui2NbqFC1Rb6YbO1ghIUmbZAn0puHSEyFmrKKEZf6I2Wco9zLcRREd/XgC1qGITYG1Vs+mqTO9PXnAZlVqvy6kpc8CG1tQNOA1bDakIZTs9UuDRNPjOy+HIS+xasSlEfGN9WL/DynZhthC2kkbnJR9n6sCvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f65xq2St; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745751082; c=relaxed/simple;
+	bh=VBNyX+A/EB/Cj4qU0XgLHNxhJ97XrYmyCZDdhGUIJhA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=peU5Gsek44jWrJWtmJDn6QS3NRX6wEdxvEGQQiYKDwrg+qR8LhvjY5qYLEwh4LP1NISv0b3ShlXRP514jAgtNTj7jtG/hqbU6qY5soFTj4qvvgkouMlVGTaT6NcqkEC9b6EfpgI6hmM29CUpBouY4xUEVeitXBu7J2xz8ji/ryE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A1cvbZSu; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f65xq2St"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745749956; x=1777285956;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=k2/z9kcXsQJ7meYivpJpuNUhu4YGGk81DForHjmwz1s=;
-  b=f65xq2StXkWg320FsRPBMDP+WO6sdFWW1qcb/7QW6S6oX4/RJ4BLaDrk
-   5j4VxOFBCb1HfWoTzH8mdzssGzE6dEAveJlA7S+7cXerw+D4mDC8Uw0Cn
-   +QbQ2xeYudRDzXwSgXdcYOr9plxQR1cRffRflQXLudhzLV+9XabMtEvW+
-   T4FOcQfjVW0V81qpqR8P4Q0Y3RyjZCCep9U6XSXUJBUaN9zcGXCbFz2GV
-   y39TMTLzW6BxfiUw10EOsp20hmAjGMPrTwQGCTtftSVi1lQLc6focEpOR
-   W/Izt0e4TxacuVS+ei2FPGQs6wXxOjyvACZG4k6BiwEnGQbnD4m+0UyPA
-   A==;
-X-CSE-ConnectionGUID: NUuNaLQ0Sj6PZ+1g3QMyBQ==
-X-CSE-MsgGUID: 0tUXEANiRiG20bB2neFgeg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="46470880"
-X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="46470880"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2025 03:32:35 -0700
-X-CSE-ConnectionGUID: 8xvmdnDcQvyUFgEL9HjW4Q==
-X-CSE-MsgGUID: 2hPdWLk0SISSO8nf4DPFRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="138088705"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 27 Apr 2025 03:32:33 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u8zJH-0006F3-0X;
-	Sun, 27 Apr 2025 10:32:31 +0000
-Date: Sun, 27 Apr 2025 18:32:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Penkler <dpenkler@gmail.com>, gregkh@linuxfoundation.org,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dave Penkler <dpenkler@gmail.com>
-Subject: Re: [PATCH 3/3] staging: gpib: Avoid unused variable warning
-Message-ID: <202504271837.SgHoiLBt-lkp@intel.com>
-References: <20250427091018.13705-4-dpenkler@gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A1cvbZSu"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-acb5cf13996so54746966b.1
+        for <llvm@lists.linux.dev>; Sun, 27 Apr 2025 03:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745751079; x=1746355879; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yljTxf0X+Iy2a+Dq+Yedd2V84jdSSx02dCrGHjuEXak=;
+        b=A1cvbZSuqISseVpCb7HXQx2pP7EvC1NuMVavSQ3Ee0zBQfmSFFBUEntTXUgby26d9R
+         VoSh2gbGwSB+j+cDefxxVQstshX/pXQ5snhTRktxSjNBrUGecuLjHrUxKA4IegYgyI34
+         OqhMVQDcqSkOBQda176wJhQow58Xs+3W7lV4XJAmp7Tt5ZfufoPWRco/z+do1mtC1vX1
+         80HUfZ+fjHGCFZEZ6HbDWOscojV1q+xdn9biLe8u1yE+bjP0gGqpuVhoQjBRAb5iiAG9
+         za+6rhCV0XyaEPZFNVHexnP29XG+WQ0LikbxIU5HQAauRwUvL7kQgzPG6XeJzDc4b1Fm
+         LjLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745751079; x=1746355879;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yljTxf0X+Iy2a+Dq+Yedd2V84jdSSx02dCrGHjuEXak=;
+        b=ALhS6PSw5Dlu0FWfmYWe4iYoPCmUll9jKUFfYWVE7m8p8aGYmiORZRL5xO0nAlT0FG
+         FML6J0cTSiMo9YwZQX46OI2rgzZQWphprTrOKVNqGvP7Tn0PcDwga1Wx1ZSEyk5lPuo3
+         cwcOsGDjhthMGz/J1NueZ7tuwvzKbYOXGdg1MGocg88Wg4m3A/qPEALGlpPPnwabDkyT
+         52s+OyeWmqe2PbGrFjN7jYH+PCxy5D3qSyVEd6E4WIGDhjZMDaD7UAoJB2UAwp3xaYOy
+         t0jXrp+IZnY+MlJ0HODhMIKuqgqH11+NjwgJ2E7fKf3xSvm1F/XepEnjJN8bsnXBlPUk
+         W3PA==
+X-Forwarded-Encrypted: i=1; AJvYcCW3ze0Re0arOQj+s6yDzhFsX7jBc9Syo7aduw5G1k85jqtYA2TPzy67oVSIypvSa0LTEaTd@lists.linux.dev
+X-Gm-Message-State: AOJu0YzViKoCpLjeMgnwkqVvflYI0Dgk3zhaBWDHD/DA0BsFk6I03pMJ
+	zrH92RgU8RfhUSLlJN5WaQmwARCGP89krPZPUa6A70DydhwCef4HQHH4zKyqqVk=
+X-Gm-Gg: ASbGncu9GNhoj2lmWVg4mS8XqdCY4FTtiE+HxaE+mtG8Ei4iaP1GUNBHRsiVvaB9216
+	KiDfnAm2LLcxojpPNkGCNCLyi2MCyAiuo8C/O5hk4kRsWf3VBAIl0p8Eac0wzDUB4CYd3wmZYee
+	tvEsxBYBYOeWdv7nAhFokCSoKYw7QgYciNNhMM9gQU7OOvaZj5r+zPUK5xyRQU15II2k71Yqq8e
+	lkYsBsldlh/W5AxjKwYRnZ48rnUOmmh+4N4dwT+9IVMdt7Kn+H33lgUAcmem7r7esdZEaBK32kN
+	AYc/3GU1wqDgf3xN1usETTBJolAyC/zVv+vOyjVeCO34QUsvMg==
+X-Google-Smtp-Source: AGHT+IGhMTLffqdEgqGOe3aQqJyYJ+B8VJatnZKsdwxT6z/hpa0miMBIbPX1H8NsL96ToaFl+7ia4A==
+X-Received: by 2002:a17:907:70d:b0:acb:7dde:d88f with SMTP id a640c23a62f3a-ace710952cfmr213755866b.5.1745751078562;
+        Sun, 27 Apr 2025 03:51:18 -0700 (PDT)
+Received: from kuoka.. ([178.197.207.88])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e5087e4sm425679266b.73.2025.04.27.03.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Apr 2025 03:51:17 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Shenghao Ding <shenghao-ding@ti.com>,
+	Kevin Lu <kevin-lu@ti.com>,
+	Baojun Xu <baojun.xu@ti.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	kernel test robot <lkp@intel.com>,
+	Dmitry Baryshkov <lumag@kernel.org>
+Subject: [PATCH 1/2] ASoC: codecs: wsa88xx/wcd938x: Drop kerneldoc marker from inner comment
+Date: Sun, 27 Apr 2025 12:51:06 +0200
+Message-ID: <20250427105105.18164-3-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2016; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=VBNyX+A/EB/Cj4qU0XgLHNxhJ97XrYmyCZDdhGUIJhA=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoDgwZBz05ULqfGRWDmIA3VjNhzumOvxtTsbMlY
+ dg+5GjAnS2JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaA4MGQAKCRDBN2bmhouD
+ 15QJD/90D9EKpDVCJB3Q1L4eB3Pe5TU6dT1kGsAhZA+Pqf8oYw+k73PHzJOhdzxDcYw7Jh9APL1
+ l0oPIwaq4Ss64RIt/2aX/hGXvBLrHLd0Pr3GtCvJxKa3G/Byx41Tjnu5L8IvKapft0iG9SeN2RR
+ ZuH5GgxAf0H2j2r72Gq7SmxRm4T0B+fo3Tk9jcjx+2TExtvNy2/m9g+h1d3kSHGJkdC8yZILyZp
+ /61MQ0I9T0hbCINYxg2LHvjmdmaVu4kdCSqTiFrltzPpFCFOfuB7uBNtZUd7u2hnN0Mb/cCCIio
+ i/PftL0i2+SM3Qd63HLxjKKZL+28ztNL+e4rStAeAiWl+pUQngfGXKphkywZHjnVivsHmpKgGLL
+ 1R+N2W+dUj2TEAJnig7cEdtFqGF3EG+6brrpLNziAywA9oCF+V0dd0yka/51q4CKBWUBZ5hsQby
+ 8SwhWV6YnMnHr7WxQocZmHQNBSXZnT7dgkb9avwz2jg7J6YwhTJ+ZdTSlxhW7HIK9Jb4Z9RzEwX
+ YDnrub4G93/Z4Ic4nEf3txXJKLJOdYwt+4QMhE8My4n4S/EVAuG2hWXQLjLqYyYfYx1ivv9fxzj
+ tG9wxyJ7FtfBwbBS0kOyhp8H+BVPMPuWphQ1XRpxi6llC85FdFRrffSYg3Hmz79FRGP6w2l7JnC dbEzfqOuSPOcfLA==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250427091018.13705-4-dpenkler@gmail.com>
 
-Hi Dave,
+Drop the kerneldoc marker from a comment within a function:
 
-kernel test robot noticed the following build errors:
+  wsa883x.c:1402: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
 
-[auto build test ERROR on staging/staging-testing]
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202504261851.TJGZIvtl-lkp@intel.com/
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Penkler/staging-gpib-Fix-PCMCIA-config-identifier/20250427-171209
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250427091018.13705-4-dpenkler%40gmail.com
-patch subject: [PATCH 3/3] staging: gpib: Avoid unused variable warning
-config: arm-randconfig-001-20250427 (https://download.01.org/0day-ci/archive/20250427/202504271837.SgHoiLBt-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250427/202504271837.SgHoiLBt-lkp@intel.com/reproduce)
+---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504271837.SgHoiLBt-lkp@intel.com/
+Cc: Dmitry Baryshkov <lumag@kernel.org>
+Cc: Srinivas Kandagatla <srini@kernel.org>
+---
+ sound/soc/codecs/wcd938x-sdw.c | 2 +-
+ sound/soc/codecs/wsa883x.c     | 2 +-
+ sound/soc/codecs/wsa884x.c     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/staging/gpib/ines/ines_gpib.c:1118:2: error: use of undeclared identifier 'dev'
-    1118 |         dev = link->priv;
-         |         ^
-   1 error generated.
-
-
-vim +/dev +1118 drivers/staging/gpib/ines/ines_gpib.c
-
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1107  
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1108  /*
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1109   * gpib_config() is scheduled to run after a CARD_INSERTION event
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1110   * is received, to configure the PCMCIA socket, and to make the
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1111   * device available to the system.
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1112   */
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1113  static int ines_gpib_config(struct pcmcia_device *link)
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1114  {
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1115  	int retval;
-77b41a9342f610 Dave Penkler  2025-01-14  1116  	void __iomem *virt;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1117  
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18 @1118  	dev = link->priv;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1119  
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1120  	retval = pcmcia_loop_config(link, &ines_gpib_config_iteration, NULL);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1121  	if (retval) {
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1122  		dev_warn(&link->dev, "no configuration found\n");
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1123  		ines_gpib_release(link);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1124  		return -ENODEV;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1125  	}
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1126  
-0de51244e7b7e3 Dave Penkler  2025-02-20  1127  	dev_dbg(&link->dev, "ines_cs: manufacturer: 0x%x card: 0x%x\n",
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1128  		link->manf_id, link->card_id);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1129  
-2de3fa2c3f4e25 Paul Retourné 2025-04-11  1130  	/*
-2de3fa2c3f4e25 Paul Retourné 2025-04-11  1131  	 * for the ines card we have to setup the configuration registers in
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1132  	 * attribute memory here
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1133  	 */
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1134  	link->resource[2]->flags |= WIN_MEMORY_TYPE_AM | WIN_DATA_WIDTH_8 | WIN_ENABLE;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1135  	link->resource[2]->end = 0x1000;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1136  	retval = pcmcia_request_window(link, link->resource[2], 250);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1137  	if (retval) {
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1138  		dev_warn(&link->dev, "pcmcia_request_window failed\n");
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1139  		ines_gpib_release(link);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1140  		return -ENODEV;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1141  	}
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1142  	retval = pcmcia_map_mem_page(link, link->resource[2], 0);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1143  	if (retval) {
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1144  		dev_warn(&link->dev, "pcmcia_map_mem_page failed\n");
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1145  		ines_gpib_release(link);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1146  		return -ENODEV;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1147  	}
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1148  	virt = ioremap(link->resource[2]->start, resource_size(link->resource[2]));
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1149  	writeb((link->resource[2]->start >> 2) & 0xff, virt + 0xf0); // IOWindow base
-77b41a9342f610 Dave Penkler  2025-01-14  1150  	iounmap(virt);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1151  
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1152  	/*
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1153  	 * This actually configures the PCMCIA socket -- setting up
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1154  	 * the I/O windows and the interrupt mapping.
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1155  	 */
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1156  	retval = pcmcia_enable_device(link);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1157  	if (retval) {
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1158  		ines_gpib_release(link);
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1159  		return -ENODEV;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1160  	}
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1161  	return 0;
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1162  } /* gpib_config */
-bb1bd92fa0f2c9 Dave Penkler  2024-09-18  1163  
-
+diff --git a/sound/soc/codecs/wcd938x-sdw.c b/sound/soc/codecs/wcd938x-sdw.c
+index cabddadc90ef..e822cc145250 100644
+--- a/sound/soc/codecs/wcd938x-sdw.c
++++ b/sound/soc/codecs/wcd938x-sdw.c
+@@ -1225,7 +1225,7 @@ static int wcd9380_probe(struct sdw_slave *pdev,
+ 	if (!wcd)
+ 		return -ENOMEM;
+ 
+-	/**
++	/*
+ 	 * Port map index starts with 0, however the data port for this codec
+ 	 * are from index 1
+ 	 */
+diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
+index 1c9df7c061bd..f04d99c66f33 100644
+--- a/sound/soc/codecs/wsa883x.c
++++ b/sound/soc/codecs/wsa883x.c
+@@ -1584,7 +1584,7 @@ static int wsa883x_probe(struct sdw_slave *pdev,
+ 	wsa883x->sconfig.type = SDW_STREAM_PDM;
+ 	mutex_init(&wsa883x->sp_lock);
+ 
+-	/**
++	/*
+ 	 * Port map index starts with 0, however the data port for this codec
+ 	 * are from index 1
+ 	 */
+diff --git a/sound/soc/codecs/wsa884x.c b/sound/soc/codecs/wsa884x.c
+index daada1a2a34c..fd6ebc25fe89 100644
+--- a/sound/soc/codecs/wsa884x.c
++++ b/sound/soc/codecs/wsa884x.c
+@@ -2085,7 +2085,7 @@ static int wsa884x_probe(struct sdw_slave *pdev,
+ 	wsa884x->sconfig.direction = SDW_DATA_DIR_RX;
+ 	wsa884x->sconfig.type = SDW_STREAM_PDM;
+ 
+-	/**
++	/*
+ 	 * Port map index starts with 0, however the data port for this codec
+ 	 * are from index 1
+ 	 */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
