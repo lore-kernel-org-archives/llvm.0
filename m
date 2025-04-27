@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36F179E1;
-	Sun, 27 Apr 2025 03:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446451448D5;
+	Sun, 27 Apr 2025 06:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745725694; cv=none; b=HkIYtP93kQnzMrI+lPhQV2iyWSzQ1UwfetGY3NKtzh6qU96ftJx+p40KmSc3wY2Vwl0wxlJSO9d1+TTuDGxHnhEAhRWzHGCPo2OfYDg9OSUeZoxw20T/iEyQMezuI17DbYPRa+lxthU8rhpMaiTFPHyj4g7GV3JlodzDfH5yGqw=
+	t=1745733925; cv=none; b=NROK/VyLvCrt63QBmc5igscxLdTFAXOd+PRNSGcdz0jz3J72H6PvBz1IRBKkHxasTh0e3IA9qnToIhk4lVjjIF59siMKnynBS+fgrJUbe4uAJX4VxZLI2s/hHKSNCuxj3C60T+cfqBe3qgfz3TZLUq5dKSVDnXPXO1Ki7RS6jS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745725694; c=relaxed/simple;
-	bh=gOxPEKItWYYS/z6lUkWsgyySoOhcKG+igPf/hN0e3UQ=;
+	s=arc-20240116; t=1745733925; c=relaxed/simple;
+	bh=ZldK3+fSlzSjRsOdQzFFyxV4omaUhKTuFH+wBprq+/w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iFYJGwRGiLGDlEKVXOpY0I6GH5H1tmVyMwuKXZcu6FAxOfJ6nk3TSyD3kb+9qAzsG2H8f7MGqu6wFmJu7orB/4cIHQgf2VwtHQ+bJcBYU34ejG3BwOTXV87DHWId3Dk0bYX0h3Q5kTgNexCWh+dsrRlZJMvvFzXkgchwxwOH/RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RpmpL9Td; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=ATHqJciLzd8HoGcKhCJhPSTz+c118yqNByKT2nPWTuIlIdX/C6pVN1cfCmxX25TG/+dt0VQIurF+z1jw9v5bh9HkbXdDlvur/zXT46xGoAubWKzvY+VxlPv3IWAArYJVAO+t/EWXgPXK8QfIdEPcw6LWG+lQeXiDGcE4urNfq18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HpO9kfxN; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RpmpL9Td"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HpO9kfxN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745725692; x=1777261692;
+  t=1745733923; x=1777269923;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gOxPEKItWYYS/z6lUkWsgyySoOhcKG+igPf/hN0e3UQ=;
-  b=RpmpL9Tdoc67kh02DQUW7znSmZHidWgIYNsjFrH8y5NiKutTPlkR1lpm
-   hIj+gOy6zJn68VY7R9MuJJLLQ+NBto9d3d8BJNOy6dRkDiFwW68Wa+k1P
-   yxnekMK0/umzOPnM6F+I3BLz95Mdx9tAcYKOmhbJN0R6u5l4GK6lXTgpw
-   vhZLfRPMFQYMgBZxvN1zThihBIdk8lDwtAodo8TXm0mCpRwz5fjkI8NeN
-   CIeh6TAHAAz8tRhztbhPo1tK2InB67oO45rUXaUZR+p7AIa8px96NaZ4y
-   cTBBzM6ifjqMK5VCu+UbZUu3H4Av0Eq1/NdC0z5XmLHbU/NEKDwezAXa2
-   w==;
-X-CSE-ConnectionGUID: FaUtgC79TfeUmZ8Rku4ChA==
-X-CSE-MsgGUID: QFJE9PuBSnexbHfKkKTE+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47250761"
+  bh=ZldK3+fSlzSjRsOdQzFFyxV4omaUhKTuFH+wBprq+/w=;
+  b=HpO9kfxNUD/LP62iWLGmIh5VVfEOzmKOTHr/3strVK8c4SmY134zhS6N
+   ynRZHUghRUrx2J7Fy9QXv/pSYzyZ/v+qhBKELx/VDvPvW9tExM2EWWTbA
+   A56qhR/LU5La+4Kk9hQqvsxeEQTnqGiAqtBTXqMvyac9Ukb11sHONeBs7
+   rh8C4nd9gRRVFfJqPf2pVGFGuKuIv+b9plJ/8qQhcjDy7bbc17khAxBH9
+   7jTT+/h7aSfDh3s6muf2PkFLCytYlmjb+WzFcbQESIy/TYXCeN5IOJYuK
+   jCPUnsjtdB3YyPZeX3oCrXURALtf16TaG8CCm1lYl/Vg74x+GXsvZTfNu
+   A==;
+X-CSE-ConnectionGUID: LaRGkKRCRLaohttu4jicTw==
+X-CSE-MsgGUID: XugQ6OLWSt+Z5QkTeRIwbg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="58706657"
 X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="47250761"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 20:48:12 -0700
-X-CSE-ConnectionGUID: +WTW5eaiQ2ShKZJV44Iq3A==
-X-CSE-MsgGUID: 5zFEzJhuQnCBSxzW+pRrEA==
+   d="scan'208";a="58706657"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:05:22 -0700
+X-CSE-ConnectionGUID: QYM4ZrilT4G7I63yKlDDFQ==
+X-CSE-MsgGUID: KSzi8iNSQUqg49j/SDdZVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="133194156"
+   d="scan'208";a="164295196"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Apr 2025 20:48:07 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 26 Apr 2025 23:05:16 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u8szs-00066J-0d;
-	Sun, 27 Apr 2025 03:48:04 +0000
-Date: Sun, 27 Apr 2025 11:47:19 +0800
+	id 1u8v8b-00068j-2a;
+	Sun, 27 Apr 2025 06:05:13 +0000
+Date: Sun, 27 Apr 2025 14:04:51 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -71,7 +71,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-hardening@vger.kernel.org,
 	linux-security-module@vger.kernel.org
 Subject: Re: [PATCH 2/3] lib/tests: Add randstruct KUnit test
-Message-ID: <202504271150.Be642Srg-lkp@intel.com>
+Message-ID: <202504271552.T3fbs0XC-lkp@intel.com>
 References: <20250427013836.877214-2-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -98,18 +98,18 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Kees-Cook/randstruct-gcc-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
 patch link:    https://lore.kernel.org/r/20250427013836.877214-2-kees%40kernel.org
 patch subject: [PATCH 2/3] lib/tests: Add randstruct KUnit test
-config: riscv-randconfig-001-20250427 (https://download.01.org/0day-ci/archive/20250427/202504271150.Be642Srg-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250427/202504271150.Be642Srg-lkp@intel.com/reproduce)
+config: powerpc64-randconfig-002-20250427 (https://download.01.org/0day-ci/archive/20250427/202504271552.T3fbs0XC-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250427/202504271552.T3fbs0XC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504271150.Be642Srg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504271552.T3fbs0XC-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> lib/tests/randstruct_kunit.c:36:36: warning: '_Static_assert' with no message is a C23 extension [-Wc23-extensions]
+>> lib/tests/randstruct_kunit.c:36:36: warning: '_Static_assert' with no message is a C2x extension [-Wc2x-extensions]
       36 | _Static_assert(MEMBER_NAME_MAX == 8);
          |                                    ^
          |                                    , ""
