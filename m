@@ -1,126 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32646747F;
-	Sat, 26 Apr 2025 23:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31A11F463C
+	for <llvm@lists.linux.dev>; Sun, 27 Apr 2025 00:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745710371; cv=none; b=MmvYFF+8ru+3f6gF7f1e+J0/hTag7iO2Lf93rwSZlM2IuIQhoYTQT5FDtQx5CootvPZFqS2OyF5sXDtLvvlPbrcKO5wGh1/DHO3e4LFhQx1tWTfF78l0cK8jy910NAVpLlMPfQ7GuyqApjIvkrDYMNAHErb8I2bK07J7WRCjcRs=
+	t=1745713889; cv=none; b=I8ZwzsREWSZ23NzPePuwLd5ARTjXcFD0ClwGaksq7tnsbV5dqll1mbsQGJw8ScRBl/pqryFx/xlIS77vIjb7jdbzRpQFT+1WhK7yVgTz/tAAtfKG6yrAqNVoWMt4sKSZ9NAX3klxet/3tPYt1NqPREUsZLnOOePqBPXZABAtCjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745710371; c=relaxed/simple;
-	bh=k8ZVkr6CliA3+udI94SAURtacqxZgPrsY3DirrGRsGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uQzqh/vf1e6smj6S38camxLHmtY1aPeIGnzR2bXnNd1DBq+YhNPvWDCVAmcbnbq+NAG51yroSszpBf6HY+dTJka6VBYwM1gH1xK+btmllpvKu8ujGaKUqC5wkI30H50KtvPYmTNz5RZlp7WglWviZjBNLTvDsXzhculz17Tfn48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=biKnX8UT; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745713889; c=relaxed/simple;
+	bh=AgzPwiGXLA6nx0hLzoXimLP2/tpD66FvISS4pbCQCr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uFvyvJcNhwrfY/5q1XmYARYM6Uas3V7SVwzZ/wjijMNapZxeyXyohMJaqejc37vVfZW0sb8pxaMNWo0cIsAuc2k/v6etNWGCMgZsA6cOcIxqb1YokCybXNpe4JeFgQQDyDKM8JX1M11hBFmflGDyhria/OGTjm+WEvuU7HEmymI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Slp9HZwZ; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="biKnX8UT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745710370; x=1777246370;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k8ZVkr6CliA3+udI94SAURtacqxZgPrsY3DirrGRsGI=;
-  b=biKnX8UTxO+bPfdsBCfECpZ7eCqXhacT90KA/yeHBTXijjgQK7KE0gIT
-   QvvKPZJvUbJEM5hVG/a1B5bi3KajcGgEfQZRcuYQpJoyo4X3u6Rt6nK+l
-   IJe8BB7W2/KGXz2HuGFJfWuszhMvjP6myN/KmN4X06Uz30sUXclN4her9
-   5D4iDGZJ5RBIccjsuCEgxFg8Vlrui8G23kzQrE3pPo8MR3EQ05Xj1efn0
-   UVW4MW9JC7iDUVPnIBTImG6iRLcxTZXdogLzARzc6yhYssSpqCysWUSPu
-   dcqo3GPqGf3q2DIfkVLlGZYmyrK5PkrKzwX32A6epKxnP2PNoefwvc16Z
-   w==;
-X-CSE-ConnectionGUID: yjVUJYOPSCmkqY5kRj+d4Q==
-X-CSE-MsgGUID: LhqJa1QkRhOrpDRo6UJ7eA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47218202"
-X-IronPort-AV: E=Sophos;i="6.15,242,1739865600"; 
-   d="scan'208";a="47218202"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 16:32:49 -0700
-X-CSE-ConnectionGUID: 7b2e/8ktQriMBZ7IJxsM8w==
-X-CSE-MsgGUID: +wziMIuVRjGVxw3dGq+kVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,242,1739865600"; 
-   d="scan'208";a="132927021"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 26 Apr 2025 16:32:48 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u8p0n-00061l-0P;
-	Sat, 26 Apr 2025 23:32:45 +0000
-Date: Sun, 27 Apr 2025 07:32:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] audit accesses to unassigned PCI config regions
-Message-ID: <202504270713.ZepwWC7B-lkp@intel.com>
-References: <20250426212253.40473-3-chath@bu.edu>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Slp9HZwZ"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-acb39c45b4eso553832666b.1
+        for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 17:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1745713885; x=1746318685; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kFnF6XQXyjuHCzFQmPZ6cMo/XgSLXx5JlYecXTeUa1Y=;
+        b=Slp9HZwZgAuV9X18CR+Tqbjl+wAP9xq4nz5nK0v06B3YGL1pFW7T60PBCvshb1r/d9
+         Gee0YsoNCz3Qu4auoYFotA2H7PXCtVID6lWPXnlIBWPN3olk5AqJ7jIRtxJXCS4EgUZ+
+         EbLC/ntjvs5d3rXk5ix1C+txVNpobsUVlIHOw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745713885; x=1746318685;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kFnF6XQXyjuHCzFQmPZ6cMo/XgSLXx5JlYecXTeUa1Y=;
+        b=Rmf2Bsjck4bQbju5IjgH6x7RBi7XehjTCLS/urXV1cMeSrSkeAYhGRgnUbyXt2pofd
+         S3pFnsWB59fOZC5Mch6LqNAC4V08nUBI87+wAXgrLEi4DGOxESTTl+rJg2QSM4iBrcT9
+         pJpTFe7OC7l4EJjZ/I+JEFvPVCgRiodILSPbjAHbgWnqoN/J5Q9O4d9so2Ch0RrzH+6c
+         RCBONESyhWOmZkCY7BOkL1IE4KJV6s8tc0XT8Q/a3kmlcLr0UITsbl3wtkKyK21vgGSu
+         5hbrcTu9iGvnGYERWtrB89kEcf5NJ1JdnddInSYC8t+GU563NbVxT2+FUvvd8+4FYSLs
+         HY9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU9uAKJN360ZVJT4/ggBjfXBf9748De0or2joJrAxWppzRN/SjC9+pKwsedZ3YBb1E+yMpN@lists.linux.dev
+X-Gm-Message-State: AOJu0YzDYZuJYZDBjisbkYvcHu1UeXuRI950fxtS4qJyogB4it0AeLzD
+	kNVOOLcwPTY/fMSU8QQ0Z1cw4ialIYoiwV4ymqrlSQk2QW8O+td63U6N9FR3R1/QaQa//t19bvs
+	LPX3X8Q==
+X-Gm-Gg: ASbGncsa/ZsJ44UefRaPEBsVeioGtYtorfHHEsca2IR+dzyOfG1GwRwUlaZnKc5GSUQ
+	IRbp+0VdtXeg6x4WafmEezYLt2MrMzdkDm/Iww2/GvJVsJ6W61vcx4HoreQEz6m/EkG0r/NeHEv
+	fTNGN7A6os+6J9Af2aXiKqMOUVv74PdH2dlxTeY9wo8SO7GsGc7LDTKXYji7zzsNBRuQ+lRttCQ
+	ObtSghN6uUZF/dzGscKDGBbcXYdsK8X7QGoSLh3QGiqMlPO+jjzMBCNBkmikTfcyztDf7LXmwrU
+	Z9fdJSfIH4XH06ai4EI99EPX5uDrVbj0Bt9K+6/QJOo4Kzwsw/iG3tXFLq3zHXz6/oXqRznmTOP
+	NcGPlwfHhJnYrfJQ=
+X-Google-Smtp-Source: AGHT+IHlucD4qSfx415/aHjkeirH8S2AEKq5XcVmyYTyYfgje8V799zXAkpXOJJC7hKaaEg/tqFS/A==
+X-Received: by 2002:a17:907:86a0:b0:acb:6eb9:b488 with SMTP id a640c23a62f3a-ace73b23752mr719694166b.41.1745713885046;
+        Sat, 26 Apr 2025 17:31:25 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e4f8835sm367808666b.67.2025.04.26.17.31.22
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Apr 2025 17:31:24 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5f6214f189bso6696151a12.2
+        for <llvm@lists.linux.dev>; Sat, 26 Apr 2025 17:31:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUCEuKeRry00C7RCdGXNs9+n1t/t5ajdeoWaPScoZwX1CRdTzfkm/Y6yYuISLUUneIAmXKF@lists.linux.dev
+X-Received: by 2002:a17:907:944a:b0:ace:3a90:77 with SMTP id
+ a640c23a62f3a-ace73b23775mr666667966b.48.1745713882190; Sat, 26 Apr 2025
+ 17:31:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250426212253.40473-3-chath@bu.edu>
+References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
+ <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
+ <20250426200513.GA427956@ax162> <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
+ <20250426232344.GA1395819@ax162>
+In-Reply-To: <20250426232344.GA1395819@ax162>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 26 Apr 2025 17:31:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wha-AgeeqATWRrKuopM4fKhhF_tZE_raQM77qO7Zd3fOQ@mail.gmail.com>
+X-Gm-Features: ATxdqUG4kycEbobY8t6qpPfU6v6hZ5LAqpyt3P0fzgjGlYoNIvpe5smXYXHg7i8
+Message-ID: <CAHk-=wha-AgeeqATWRrKuopM4fKhhF_tZE_raQM77qO7Zd3fOQ@mail.gmail.com>
+Subject: Re: clang and drm issue: objtool warnings from clang build
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Harry Wentland <harry.wentland@amd.com>, 
+	Leo Li <sunpeng.li@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Chathura,
+On Sat, 26 Apr 2025 at 16:23, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+>  Pardon my ignorance though, isn't something like this
+> basically just '-fsanitize=undefined -fsanitize-trap=all'?
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Sure. Except -fsanitize=undefined is a horrible horrible thing.
 
-[auto build test WARNING on f1a3944c860b0615d0513110d8cf62bb94adbb41]
+Why? Because it pointlessly adds code to *look* for undefined
+behavior, which is only extra overhead.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chathura-Rajapaksha/block-accesses-to-unassigned-PCI-config-regions/20250427-052942
-base:   f1a3944c860b0615d0513110d8cf62bb94adbb41
-patch link:    https://lore.kernel.org/r/20250426212253.40473-3-chath%40bu.edu
-patch subject: [RFC PATCH 2/2] audit accesses to unassigned PCI config regions
-config: arm-randconfig-003-20250427 (https://download.01.org/0day-ci/archive/20250427/202504270713.ZepwWC7B-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250427/202504270713.ZepwWC7B-lkp@intel.com/reproduce)
+I)OW, if we have a divide, just *DO THE DIVIDE*. Don't some extra
+pointless code to "is the divisor zero, and trap if so".
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504270713.ZepwWC7B-lkp@intel.com/
+Because dammit, that's what the divide instruction ALREADY DOES.
 
-All warnings (new ones prefixed by >>):
+The whole concept of "use undefined C behavior to change code
+generation" is complete and utter BS. It's wrong. It's stupid. And a
+compiler shouldn't do it.
 
->> drivers/vfio/pci/vfio_pci_config.c:2011:32: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    2008 |                          "device=%04x:%02x:%02x.%d access=%s offset=0x%llx size=%ld blocked=%u\n",
-         |                                                                                 ~~~
-         |                                                                                 %zu
-    2009 |                          pci_domain_nr(pdev->bus), pdev->bus->number,
-    2010 |                          PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn),
-    2011 |                          vfio_audit_str[op], *ppos, count, blocked);
-         |                                                     ^~~~~
-   1 warning generated.
+The argument for it is "once it's udnefined, I might as well optimize
+it away". But in reality, that argument is pure garbage.
 
+It's garbage for several reasons:
 
-vim +2011 drivers/vfio/pci/vfio_pci_config.c
+ - there's no real life optimization to have in practice. You aren't
+actually improving code generation.
 
-  1994	
-  1995	static void vfio_audit_access(const struct pci_dev *pdev,
-  1996				      size_t count, loff_t *ppos, bool blocked, unsigned int op)
-  1997	{
-  1998		struct audit_buffer *ab;
-  1999	
-  2000		if (WARN_ON_ONCE(op >= VFIO_AUDIT_MAX))
-  2001			return;
-  2002		if (audit_enabled == AUDIT_OFF)
-  2003			return;
-  2004		ab = audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_VFIO);
-  2005		if (unlikely(!ab))
-  2006			return;
-  2007		audit_log_format(ab,
-  2008				 "device=%04x:%02x:%02x.%d access=%s offset=0x%llx size=%ld blocked=%u\n",
-  2009				 pci_domain_nr(pdev->bus), pdev->bus->number,
-  2010				 PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn),
-> 2011				 vfio_audit_str[op], *ppos, count, blocked);
-  2012		audit_log_end(ab);
-  2013	}
-  2014	
+ - there are real and serious downsides in security, and this case is
+an example of that very issue
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ - the historical reason for most C undefined behavior DOES NOT
+ACTUALLY EXIST ANY MORE.
+
+Nick Desaulniers recently pointed me at a paper that is worth reading
+by any compiler person:
+
+   https://web.ist.utl.pt/nuno.lopes/pubs/ub-pldi25.pdf
+
+which backs me up on that "UD optimizations aren't actually optimizing
+anything" thing.
+
+So please. Clang people need to get a clue. Yes, we care *deeply*
+about performance in the kernel, but a C compiler that thinks that
+using UD to generate "better" code is a disgrace and pure garbage.
+Because security matters a whole lot too, and the downsides of turning
+undefined behavior into random garbage are about a million times
+bigger than the "I can remove one integer instruction for zero gain".
+
+For the kerrnel, we want to disable absolutely all undefined behavior
+crap ideas by the compiler. It's why we use -fwrapv and have for
+years. It's why we disable the idiotic "strict alias" stuff that
+should never have become part of C. And it's why I want that "turn UD
+into unreachable" mindfart fixed.
+
+The notion of "optimizing" unreachable code is crazy. And the notion
+of thinking that "UD means unreachable" is so incredibly insane that
+any compiler person that thinks it is reasonable should have his head
+examined.
+
+               Linus
