@@ -1,123 +1,146 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560261FC114
-	for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 10:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 948FE262FF8
+	for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 11:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745837648; cv=none; b=iWxdCWT6Sdtymz3ncZs3PffTqV2hvPYpJcqp4IG41s4DstQc1DvVDyEWEamW9UtlJVgK1WH8pgVY5JrLnewc4fdc6cvPewA2MZ6dVSHCFTDmBVjFMFrzjgqruU+GrIGRDtb7e1LIM2KD9WhMbCXaaro42FRXFo+gYWRawjyStQc=
+	t=1745838612; cv=none; b=Ov0fwwCfhRp1xd1AXuYTjSDEsXAjTNcAJ3Y7TgCrs6KU/PanZFaWBF8Ut9FGkJ/t+IfeU3H5vTXPD88S09u7Xo+AK0UhwWaNakoNCKqWq+wtxCnRUOYfL1NfX1VKLkbiBA4CPweVYT2gCbulQsE8YomFBblDAsYMIw2h55QefQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745837648; c=relaxed/simple;
-	bh=vJYYTWjFyBDX+IlkKzxTjJZfUn9LjHFj0wZGb1hpmMA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m/4Vkw7Btc07HMQr2vB9CvOi1soZRIVXjMsGrrRgahyLBqdAH4CM42hgoKYdeck0yFemyLsGMxgxFRXZemiNPPmUjO+UjAb6Ocac/Se3nfrHYqHxScrEHukNO1A8Ofr8mCY4KZ7CnltlDEwh3FkLZ6+GVtE+sh45wbznqfFvdBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fbPOoBW3; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fbPOoBW3"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43690d4605dso34053115e9.0
-        for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 03:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745837644; x=1746442444; darn=lists.linux.dev;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vJYYTWjFyBDX+IlkKzxTjJZfUn9LjHFj0wZGb1hpmMA=;
-        b=fbPOoBW33y6eOBzCJpUZ3dnAHfB4VAQ3LvnVCL/EkPlW4ISaqzucacn0IigOWVH6U5
-         usLWHwu3MDyrjCOCqeF7J/kLPLYzuluSHcUv54RoWUMSiI0FriwkpZ+LV6SNiyT1UMIj
-         TEO+JYV1n3fjGlgZS27OrSmlerJuI8goUXwlaXlaBKQnvxUKyuX30We4AxANPbGoTMO3
-         4Nd71dOcDU15E0paKaiLOAS0+t4e8Zgf65LNcoYu6Xcz9qfSQ9DZLoUrT6J2ziClwSUM
-         QhnomAnANl606K0c7tkxRSpZRr1RZ+TihT8UUUx53deN11y7ysF8nNpYUcum6DEtSV2P
-         zW/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745837644; x=1746442444;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vJYYTWjFyBDX+IlkKzxTjJZfUn9LjHFj0wZGb1hpmMA=;
-        b=hOCE1CTO5HuMr1skTk9mYHXWZESiIZsgcnUWCw5Q2kZxxxho0LL+9C3mlzIwAWfp7H
-         8OWocEOh81TDVhMFZbJi8eAR4IXNqfRPKPMdfhBUrpe/namKNWrPUN4C/oh4oBKSOdng
-         n78jyGW+fm7SeTC4EejKQ0YBSqALCVay4nOaK8g5Sg2MLKoZl/UpxNAuMWK/xnmOsQ0o
-         9F86F6sua6/fUq3Gwmun0HnLw1oVVzBbBCGRZo9faKQLLpgmTc5TqjQfylC+aIAyGOSo
-         32mMU9hctQUc8Pr1NY9BEwZ0ZQi+uP2WKFrQ8CFtoQn4CJ4TxCdR3vyU4lll3QYXgCq4
-         ZnMA==
-X-Gm-Message-State: AOJu0YxukjxncWRO+hzvpS4KpMEa/v8i09/cNmi7XPQUF022xohP0Kok
-	MndibS3X4RuawbJeRwgAe7eD88lz+0gRDyiMXhqLGE7fNmJdC3nPAxQnq35lR+Q=
-X-Gm-Gg: ASbGnctKy1TCfRn3JSzsJ/TfbKLLJ/fQu6h2d5ON5JrxGoTy5sKGEZ5c10RhvvwDodB
-	kD0HVbiGrehp4akDjYNKc1md0lPrS4UMTSyqtjctxnXiG6xIM1DYM67oRw3lYHiu6mvAimY5TZL
-	UghTz2mwJuzMGb77EGUfx78N0eOKDXUEG6KtLZ6yolWiqxG5P7gl9xgqM21uW0N1lNtKXAmx224
-	7cadLWwdt0LTwKFwwrCMRL4CHoiL/LWx2/ltj4wvGPP6UH3I+bBHUl39dHSoONjXt27sxBamhIw
-	CrweCxAPMmXOSkS/hGsG02acJ754wqhrLUQ80BMpzJ5O
-X-Google-Smtp-Source: AGHT+IE5ALPDQ2XMbchs7dJLxyLSOiymC/SUhWH5ENA4v0SqHQ/mBm4J43KbUFaK+HBjkuPR28vHcQ==
-X-Received: by 2002:a05:6000:4029:b0:3a0:8298:143d with SMTP id ffacd0b85a97d-3a08298145emr3587865f8f.13.1745837644433;
-        Mon, 28 Apr 2025 03:54:04 -0700 (PDT)
-Received: from draszik.lan ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073ca5debsm10907346f8f.38.2025.04.28.03.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 03:54:04 -0700 (PDT)
-Message-ID: <e377be676ffd2b6a697b39c3ab11007f5db53fb2.camel@linaro.org>
-Subject: Re: [krzk:next/drivers 7/7]
- drivers/firmware/samsung/exynos-acpm.c:672: warning: Function parameter or
- struct member 'acpm_np' not described in 'acpm_get_by_node'
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Date: Mon, 28 Apr 2025 11:54:03 +0100
-In-Reply-To: <3f0f7795-93dd-43c8-b64b-ace90cf26447@kernel.org>
-References: <202504222051.7TqaSQ48-lkp@intel.com>
-	 <3f0f7795-93dd-43c8-b64b-ace90cf26447@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3-2+build1 
+	s=arc-20240116; t=1745838612; c=relaxed/simple;
+	bh=A9Okykt1CO9Gdzyw8Gz9j8J09jGfp2GgOobllD66Xws=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IU3E9uNwBLML+ECib+BNor5cBA9rEBf07UWAs1BEto0/ERZh27NkyK+YaUlcIDd/F25WMMdMo6fz+0szcmTXE1bgA1IqnPBNybn4eTIooUpBYyDuJqJhsI6duANaDP8Bel3kFZm3mDnq/6rk76zHQ2byCjbsOrn3PS9sHbHtR1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A2F11595;
+	Mon, 28 Apr 2025 04:10:02 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1AB783F673;
+	Mon, 28 Apr 2025 04:10:08 -0700 (PDT)
+Date: Mon, 28 Apr 2025 12:10:03 +0100
+From: Leo Yan <leo.yan@arm.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Namhyung Kim <namhyung@kernel.org>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
+	Ben Gainey <ben.gainey@arm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Eder Zulian <ezulian@redhat.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
+	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Howard Chu <howardchu95@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Jann Horn <jannh@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Graham Woodward <graham.woodward@arm.com>,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
+	Tengda Wu <wutengda@huaweicloud.com>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	Chun-Tse Shao <ctshao@google.com>,
+	Casey Chen <cachen@purestorage.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Li Huafei <lihuafei1@huawei.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Andrew Kreimer <algonell@gmail.com>,
+	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
+	Junhao He <hejunhao3@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	Steve Clevenger <scclevenger@os.amperecomputing.com>,
+	Zixian Cai <fzczx123@gmail.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250428111003.GC551819@e132581.arm.com>
+References: <20250401182347.3422199-1-irogers@google.com>
+ <20250401182347.3422199-10-irogers@google.com>
+ <20250402143541.GM115840@e132581.arm.com>
+ <CAP-5=fVqax8cxdZ4HLBP4AMxL6jADfYNrORC97T6F23mjf3N1w@mail.gmail.com>
+ <20250402163807.GP115840@e132581.arm.com>
+ <CAP-5=fVJkJ39_qx2T9ZHn-fdxjECP_2G+cyfRRAjLvZZt5vz2A@mail.gmail.com>
+ <Z-4URXOzsVHTY7zz@google.com>
+ <CAP-5=fXwAA0PNYAOLNLdHY8g+AyEB0UxmzgX5w-gGj_DZqUxtg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fXwAA0PNYAOLNLdHY8g+AyEB0UxmzgX5w-gGj_DZqUxtg@mail.gmail.com>
 
-Hi Krzysztof,
+Hi Namhyung, Ian,
 
-On Thu, 2025-04-24 at 22:37 +0200, Krzysztof Kozlowski wrote:
-> On 22/04/2025 14:52, kernel test robot wrote:
-> > tree:=C2=A0=C2=A0 https://git.kernel.org/pub/scm/linux/kernel/git/krzk/=
-linux.git=C2=A0next/drivers
-> > head:=C2=A0=C2=A0 a8dc26a0ec43fd416ca781a8030807e65f71cfc5
-> > commit: a8dc26a0ec43fd416ca781a8030807e65f71cfc5 [7/7] firmware: exynos=
--acpm: introduce devm_acpm_get_by_node()
-> > config: i386-buildonly-randconfig-001-20250422
-> > (https://download.01.org/0day-ci/archive/20250422/202504222051.7TqaSQ48=
--lkp@intel.com/config)
-> > compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project=C2=
-=A058df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250422/202504222051.7TqaSQ48-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes: https://lore.kernel.org/oe-kbuild-all/202504222051.7TqaSQ48-l=
-kp@intel.com/
-> >=20
-> > All warnings (new ones prefixed by >>):
-> >=20
-> > > > drivers/firmware/samsung/exynos-acpm.c:672: warning: Function param=
-eter or struct member 'acpm_np' not described in
-> > > > 'acpm_get_by_node'
-> > > > drivers/firmware/samsung/exynos-acpm.c:672: warning: expecting prot=
-otype for acpm_get_by_phandle(). Prototype was for
-> > > > acpm_get_by_node() instead
->=20
-> Not sure if this was result of long holidays or just ignoring this... if
-> the latter then: please always respond/address somehow bot reports.
->=20
-> I sent fix for that, but in general I expect active contributors to fix
-> their own patches.
+On Thu, Apr 03, 2025 at 08:20:02AM -0700, Ian Rogers wrote:
 
-Thanks for submitting the fix, and yes, I was away.
+[...]
 
-Cheers,
-Andre'
+> > > Anyway, I don't have time to do such a larger refactor so
+> > > somebody else is going to need to pick that up. I did refactor the
+> > > cases where I thought it mattered more, but as you say that does lead
+> > > to a feeling of inconsistency in the series.
+> >
+> > I'm curious there are any actual errorenous cases other than the return
+> > type of comparisons from Leo.
 
+I am just wandering if we could give priority for errorenous cases.
+
+Could you send fixes for these cases firstly and leave out refactoring
+for later merging?
+
+[...]
+
+> There are lots of cases like:
+> ```
+>                 case ARM_SPE_COUNTER:
+>                        if (idx == SPE_CNT_PKT_HDR_INDEX_TOTAL_LAT)
+> -                               decoder->record.latency = payload;
+> +                               decoder->record.latency = (u32)payload;
+
+This would be fine.  Since Arm SPE implements a counter with a maximum
+of 16 bits, there will never be an overflow when storing the data in a
+32-bit unsigned integer.
+
+Thanks,
+Leo
