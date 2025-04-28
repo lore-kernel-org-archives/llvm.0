@@ -1,178 +1,100 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACA9202C38
-	for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 20:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035DF1DE2CF;
+	Mon, 28 Apr 2025 22:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745873931; cv=none; b=qAezpk7tqptxueDub+MqWNgcfrELhUpNuK+CVx9AVenR0InnVtlUulBNIU7rpoSyqvP2wrV1HaVDTSZ7ahArCteL3na+Can8pjCt4tFAdVanaNHg5mI9D1JdD3GGdMb3f2Eusu+2Zy89VhCjPd0InT0AUDdFXEU97jmMqNsqyvM=
+	t=1745877712; cv=none; b=U4FvUrzwcvyadTQKgQqTFSCVzrAjEel0BFwMEtcTY4eU3jYvej935epA6XMGtDmFIev3XpYm2iJup/5YWLGSpn4nPNx4oHE9sgT+FZbcs+ChrwF2iXSRDWJxjU1dZfHvzeTu66tWBden8LiOAyA132oMd9fiMV1DuKG6+dawtdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745873931; c=relaxed/simple;
-	bh=4iyX54oCBGEccZV7NFgaUB4UpcQsiWByq2oxmUaqGlw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=soG4KZo1bYfSR7qpaKwlxhPOuyCxCz0gIo6HnZEzsgtxJakMXBCRxsVopA2SK9lT6G0TaLw4XJANfeUrHkup+KPuEwII/XeC25vftPKvPTIhKK85NPIDnZM/74XJbZjztJpRdUVnEPrkuyUQkBQhAdvzqIJoL18GXS/+Bbv3Z2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fZmGmYcO; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1745877712; c=relaxed/simple;
+	bh=TzUT2DGtBUJzrG7xMMDQeBP+PRRIqcfkkj/d4QN4onk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=U+rTyOUOaLum57HvGn/CylyMry6xPq89GIjxyX5S3fHCjbe/5kJAAnQZKl34bYtRHWC36V0GpT+SUCA8R9puRCzN4Ds4luf3rbj5pa85TrdBkXQ3mljckuXsYdwwLKyD7DCj1nIXU1ns8D66oOeiu521Ono+gGJsQGHjbks3jAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ien+hFQT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fZmGmYcO"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5ed43460d6bso7728914a12.0
-        for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 13:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745873928; x=1746478728; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cXxnMI8M/GtLF+9NF954ti8G8yA0onSPXV9Pub/d3Ic=;
-        b=fZmGmYcOTpln8m5vxmps5gBxYVXm6qe2i9vRIkwuxsNYqeZYb/0Q6KJ43NUxywxERN
-         PEWAzNYD5N6NNnlQkKwCjPek4gba/p149NSKsrGakbevAnGOD7ZZP8XQP1jZ8ZyYCC3T
-         VxjQhvugik8WH9iPXCef1p6P4TlLf1gegmbVAlSHb9cuGqf8XhZwcGh3YxPZVFtzFbR0
-         01H9QNv0G/PipFs8eC8z3H0+HbCdc0mFOeZ8wlR1rrBbchbp+iLioSTqnuXRLzAK4kSZ
-         XdhfmWEOEKERmTYfZID46r+4OQvIBd6RFXCbjSSTmyg8Ha8RhkAcZy8ko8O4nRoQm1yp
-         ws9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745873928; x=1746478728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cXxnMI8M/GtLF+9NF954ti8G8yA0onSPXV9Pub/d3Ic=;
-        b=dtsia6F5r45oWDxVAcNRykw6mzVi1sOJIZWuTiQR3KovrHUsfvNihe20jjVjpnOBLW
-         cBRLKuARjo5Du4Xpy97YFJUf6ZTLRni+cbQ690jeIqe01FplZsLwzgRmd85mPpoM8Sw0
-         eRjvVUGu0aLFDRvP3Gh01wP8OG9m/4PVRG/Y6Dy1k5FC51+8qAIwkGTpU+JV2ZkGYjD/
-         RMtEew1xpUsMs8YLp/E9qJW2uV4qalFbwRxpQ1e2Snh3n20wH5XjLP94V4tTy6eEtK9u
-         zLpCMtE/h+/9NKBk2UqtVR0HNVopXhsozo3XlPHPCtM0rHx7J/jH2XU04VbZzbbp2w0+
-         hu0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWmz48DKmxUbZS1Qfe4cJAuc1fwoiECGaNZQwkpCowogEapOOreRMOLyQtoENMhE/+HYmpZ@lists.linux.dev
-X-Gm-Message-State: AOJu0YwYcpMI8F2pGgtM1mxSuZJ7Ol+lcnXDS7lcqC3yX5vLCcOQhffT
-	557ALxb04YIZXzOocXE5/gjjoGCmZqvKWY4VimosjQiyiJwlK1pmTyI8M/IlBvUdBTgWYjUut2g
-	XQLg3Uf9Qx1DyUd3wBWRD8JnS9bHmOMWB5kg=
-X-Gm-Gg: ASbGnctcYpKjhHYnzlmO+mEpD3ArjdlmHGgHDRZQO7QrBRsQexRrl8cKQrKSwDhdiBb
-	tiqzvCzw+G6NAgqn13H+QOotZKkoZXth23evOof1escSOsP/Fwm3qogiJWJSqqVQyAGRHbIoOkI
-	jqboKrNnH+ZRfN/A9+CLc=
-X-Google-Smtp-Source: AGHT+IGOyelpELUrcOaJAvR9wIXmVNLb4kVyS6Bj3YvQoR4friAxcC5mv6fARKTEWbb74RFaxnK/H/YGZe2ubcspY0I=
-X-Received: by 2002:a17:907:2da3:b0:ace:3643:1959 with SMTP id
- a640c23a62f3a-acec4b404d3mr117462266b.7.1745873927652; Mon, 28 Apr 2025
- 13:58:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ien+hFQT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A5EC4CEE4;
+	Mon, 28 Apr 2025 22:01:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745877711;
+	bh=TzUT2DGtBUJzrG7xMMDQeBP+PRRIqcfkkj/d4QN4onk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Ien+hFQTYrk0Ss3ZUo2IeTQasSQ4uLYP372OpxPZUU0RBViZc9OhR0439eGCLgrWc
+	 vD8ivxWX2ruDYXKzkbpvf8SGx1pjiUOgcjxmSTYB9DCnUs2+JIwMQ4UFVY2xfNpbzL
+	 Wesi7yjDUapaz86RzCOgDmaXN8eAXM8wQg1VmUs8bFt1m94wB1ehBYM7vfFKgtZbqP
+	 h1ETofk9O6PS30saEIOvQPjhbPKlhQZgxuhh6t/T7q56zp0FQpVAgh4fveLtvaS2qe
+	 t3q3uZFKHxG6gyWhELPI8UpK7uUqWKppa5sX/DeuyuN8igGJtrvapEY9g5Cv0cItTX
+	 N3CB25WzirZdg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 28 Apr 2025 15:01:35 -0700
+Subject: [PATCH] btrfs: Fix use of GCC_VERSION in messages.h
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
- <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
- <20250426200513.GA427956@ax162> <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
- <20250426232344.GA1395819@ax162> <CAHk-=wha-AgeeqATWRrKuopM4fKhhF_tZE_raQM77qO7Zd3fOQ@mail.gmail.com>
- <CAGG=3QUk8-Ak7YKnRziO4=0z=1C_7+4jF+6ZeDQ9yF+kuTOHOQ@mail.gmail.com> <CAHk-=wgrT9++rFTnM1vh3bwx2Pcc18anDGQCwEL+0d2nDm3p+A@mail.gmail.com>
-In-Reply-To: <CAHk-=wgrT9++rFTnM1vh3bwx2Pcc18anDGQCwEL+0d2nDm3p+A@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Mon, 28 Apr 2025 13:58:30 -0700
-X-Gm-Features: ATxdqUF4QkWNeHvPaIyn2o9vl9GR7lp0ClD6ieeSP_GVkSD20WfrHb3VJY9h8jg
-Message-ID: <CAGG=3QVJWRNUEAm=bbszJGvAwT-1Fka4hd-0R6Uszyx8WZ3zQQ@mail.gmail.com>
-Subject: Re: clang and drm issue: objtool warnings from clang build
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	"the arch/x86 maintainers" <x86@kernel.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250428-btrfs-fix-messages-h-clang-v1-1-5ede51586a9c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAL76D2gC/x3MSwqAMAwA0atI1gZstSBeRVxom9qAPxoRQby7w
+ eXAYx4QykwCXfFApouF903DlAX4NG4zIQdtsJV1VWNbnM4cBSPfuJLIOJNgQr8oRWu8a0Mda0M
+ BdHBkUvfP++F9P6y2lOFsAAAA
+X-Change-ID: 20250428-btrfs-fix-messages-h-clang-21c58d3f31ed
+To: Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+ David Sterba <dsterba@suse.com>
+Cc: linux-btrfs@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1504; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=TzUT2DGtBUJzrG7xMMDQeBP+PRRIqcfkkj/d4QN4onk=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBn8v84e1WDYsW3XXPaoWrZt037GmUTOnfrj9LeyV4yf5
+ 914ur9lZkcpC4MYF4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYyJVKRoYLRr5XeWp2njcX
+ MSuqeL/2qW16aeyt69PkfDwXqIRUR9ow/OF+ILxQTXr2bdmsBRxJDZPUL12aorLINSfXKf5aZ/L
+ BZawA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Mon, Apr 28, 2025 at 12:34=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, 28 Apr 2025 at 11:08, Bill Wendling <morbo@google.com> wrote:
-> >
-> > This situation is one of the
-> > easier ones: "do something other than fall into the next function";
->
-> Note that the "fall into the next function" is just something that
-> objtool notices. It *could* be "fall into the next basic block of the
-> same function, and objtool wouldn't warn, because objtool generally
-> wouldn't notice (there could be other things that make objtool notice,
-> of course - things like stack updates being out of whack or similar).
->
-> But I really wish that clang would look at a "don't depend on UD as a
-> code generation model AT ALL" as a flag.
->
-> The whole "this is undefined, so I'll generate something different"
-> model is just wrong.
->
-> That said, there are certainly graduations of wrong:
->
-> > but there are far more involved examples, of course. And even in this
-> > case, the compiler needs to know if a "trap" is okay, or would
-> > returning with garbage in %rax be okay.
->
-> Honestly, the least wrong thing is to just NOT HAVE THE CHECK FOR ZERO AT=
- ALL.
->
-> IOW, just generate the divide instruction.
->
-> I can almost guarantee that that will actually then generate the best
-> code too, because you'll probably just end up sharing the divide
-> instruction will all the *normal* cases.
->
-I get what you're saying, I really do. I'm actually in the "playing
-Wack-A-Mole(tm) is far better than generating code that accidentally
-launches the nukes" crowd. The fact that the compiler silently
-generates something wrong is horrifying to me. The compiler has a ton
-of options to allow for "bad" math, but they're mostly (all?) for
-floating point operations. It has some for integers, like the -fwrapv
-you mentioned.
+Clang warns (or errors with CONFIG_WERROR=y):
 
-> So the best model is to literally remove that pointless and stupid "is
-> this a divide by zero" code. It's pointless and stupid because it
-> literally just makes for more work both for the compiler AND it
-> generates worse code.
->
-> Why do extra work to generate worse code?
->
-> Btu if some religious nutcase decides that "I will not generate divide
-> instructions if I know the divisor is zero" is a hill they will die
-> on, generating a "trap" instruction is certainly not inexcusable.
->
-I'll see what I can do with this. I might be able to sneak a patch in
-past the religious nutcases. The fact that we have the two flags
-Nathan and I mentioned could indicate that someone will be amenable to
-the patch.
+  fs/btrfs/messages.h:188:5: error: 'GCC_VERSION' is not defined, evaluates to 0 [-Werror,-Wundef]
+    188 | #if GCC_VERSION >= 80000
+        |     ^
 
--bw
+GCC_VERSION is defined in compiler-gcc.h, which is not included when
+building with clang. Use the always defined Kconfig symbol,
+CONFIG_GCC_VERSION, to do the comparison.
 
-> Generating a random value for %eax is WRONG. Now, that said, it's
-> clearly less wrong than falling through to some unrelated code
-> entirely, so it would be an improvement on the *current* situation,
-> but that's like saying that getting shot in the foot is an improvement
-> on getting shot in the head: true, but if the alternative is not
-> getting shot at all, why is that "less bad" alternative even on the
-> table?
->
-> The "just execute random code" is clearly so bad that it *should* be
-> off the table in the first place, and I don't understand why it is
-> what clang does now. It's just crazy.
->
-> And yes, this really is a very potential and real security issue. In
-> the kernel I don't think we have this ever happening, partly because a
-> lot of configurations use gcc which afaik doesn't have this particular
-> horrendous model of UD.
->
-> But this isn't just a kernel issue, it's a "anybody using clang to
-> build any program that might have security issues would be *insane* to
-> think this is a good model for dealing with UD". We do more checking
-> than most on the code generation, so we actually had tools that
-> noticed this odd code generaton. I can guarantee you that 99% of all
-> projects out there would never have even noticed.
->
-> And who knows what cases we *don't* find.
->
-> And obviously hopefully UD doesn't actually happen. But that's like
-> saying "hopefully we have no bugs". It's not reality.
->
-> Using UD to change code generation really is a truly horrendously bad
-> idea in the first place, but doing it in anything where security might
-> matter takes "bad idea" to "just don't do this".
->
->                  Linus
+Additionally, as a comment above this #ifdef notes, clang supports
+__VA_OPT__, which is really what is needed for this block to function.
+Include a check for CONFIG_CC_IS_CLANG as well, since clang 13 is the
+minimum supported version for building the kernel.
+
+Fixes: 14d740332aa0 ("btrfs: enhance ASSERT() to take optional format string")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ fs/btrfs/messages.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/btrfs/messages.h b/fs/btrfs/messages.h
+index dcba4f43ee00..5539fb3c2e24 100644
+--- a/fs/btrfs/messages.h
++++ b/fs/btrfs/messages.h
+@@ -185,7 +185,7 @@ static inline void verify_assert_printk_format(const char *fmt, ...) {
+  */
+ #define __REST_ARGS(_, ... ) __VA_OPT__(,) __VA_ARGS__
+ 
+-#if GCC_VERSION >= 80000
++#if defined(CONFIG_CC_IS_CLANG) || CONFIG_GCC_VERSION >= 80000
+ /*
+  * Assertion with optional printk() format.
+  *
+
+---
+base-commit: b25667588fc3bf7b500c592959c3e6012e35a0de
+change-id: 20250428-btrfs-fix-messages-h-clang-21c58d3f31ed
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
