@@ -1,181 +1,141 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9AAA27A930
-	for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 16:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA5F1DE2B5
+	for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 17:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745857792; cv=none; b=IagLV0NEQH8J7/avL2I+b76we78lSItZmH84auBtqlm+5B/hmgMA6H8dJ8TlzZ6kwMe0+Xt6FvlBptSFjCfyXvsDSajbVm1Kp8Keqis/0GG5QVBbmyk7un27OE1+7lmZbi6r4Yc8fkOQFDPUhyWsM3QQ2AQ4f23InjLvJqXWtL8=
+	t=1745862835; cv=none; b=WGCk+2k8L6ttdD8C9CzJrHnG1sOH65vfsKEjw0Pg5tqc++7l6H4VMFhe59RIgNdTXXrNZ7bfv+89Od5sCjoTO8ctObJdD8kx28UW+P7TvgMfYSjibQ3Q+aJQptGSVBAL926U2J/ktcA0Tar3rjjqxReueyXm4SgxSlcEUPWkqMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745857792; c=relaxed/simple;
-	bh=1C95W2/fwHyRHtk+JHGiXWsNxXt0GtsvL7KIBD8kVKc=;
+	s=arc-20240116; t=1745862835; c=relaxed/simple;
+	bh=hI9l8kcessfNWDnOCtcAb1CkErwiSLvOks9oZEhZYRw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NF074sGyJCC3Owhk3PbqyxKPwiIq2vG504xkJnvcaUcqkbu3J8RQZJtq5NRZ9B3yVZRAQERSEhVouGQa4QLd5TY/KsLPkAmM3wq7UTvZw3T99G1c5SeB7CovCMMHVy4NlMoPObP7D4RibbOgC9r2JdeMtb9dzrUL5SJ33SWK0fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1h4ORn/Q; arc=none smtp.client-ip=209.85.166.182
+	 To:Cc:Content-Type; b=Y0zO7bJe2SzT7aNj+M4z/Ww58bNomoo3q1PkiMswSZt05JJW9IiQZm8Ko64Hrlee5Z379k2AQAYRSxan+p3G0rjBg9HcbT7ktcrW/8cy4ypgZ8A6l8B5OzlTgf8EXMRI2r4vgNEPWUzvB+JARDeMurz9pQZ3I/pEm7yxHklQFbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u1EZnJUP; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1h4ORn/Q"
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3d44cb27ef4so364435ab.1
-        for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 09:29:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u1EZnJUP"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ac3fcf5ab0dso816711366b.3
+        for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 10:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745857790; x=1746462590; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1745862832; x=1746467632; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wh+DRrWbqOmIJ5njoJ2wjPW5CmA60O8YuWuF+JN+TBY=;
-        b=1h4ORn/QBOBEeq6pnBI/1kFmCv3TuPqt1SimWXkC///zqAw0QvFq1JrsNuUWUEGZ9d
-         AgoPCFWO0RgLEODyCzbEZzA5p4BDStslNnR8KozpbGIj26XEhtxLHvV53/UYcG8+RZzG
-         aiR4xkvKjncbXpWYgpuDZGJAJ55gLzsfdMvyma0d/ftWmrCSh4FmUaNBz30XWy5MRQCw
-         T34NRFa2qz5OTb5AvWWTJWTq0PEFgTctvbceXN8r9K4yaoJTWmYSj4aHSeoDeilxxCAu
-         AuDu2pLGyEUzEmvj3kAjyVVRi6Nvqv4i2135FjMmCHd50LarAGYi0ZX8+3E8o24caX9j
-         6f4g==
+        bh=cELG0a2mXl5N6mpi0+RLp319EHg3sGhSPY6U6Zc2/4k=;
+        b=u1EZnJUPgDjpElfITqN2KBsH4rTalRDsLzU3e5mcVgFq6LhHuRMfhTVHpADYWLHyEy
+         ExDsg3T8CSJwtaBmkJ4M411xwN8VXvCx+xA5oQP6f7PpTRBzP+vSVeqtqxs4jrU6koFg
+         lIVgbvtqkdzm4GSbS0SR2hYBGitajo3Lmd5CNK89wlIAINqXj2T0ipOpwQ9gZ1Xp/6Ia
+         2/T/flQwGKAb5EkTqdVLsDtwCa5RpZbn3bEDeXt+tSXSR96/pu4dKsOC+rWCDx7ql1kD
+         tqqaxEaNWupr9kukGEBLM9zcU5qMiiP/SQCQr/EnVwNk1vBK8FZ7+IiMglGd7+SVN+gh
+         hlzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745857790; x=1746462590;
+        d=1e100.net; s=20230601; t=1745862832; x=1746467632;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wh+DRrWbqOmIJ5njoJ2wjPW5CmA60O8YuWuF+JN+TBY=;
-        b=mV0bb9EU8JRfEtvp1FVb7vCF3g/TMVuTUIHel6RpIUuD9ctvdxwxrEAh4TqW88TDeF
-         lymynhiaeyFExGiYoXbUwlHQEIt1gjApyOIonSg1QHYbjLWkW/jWm7ZMeU42cYKpBFBw
-         0+vw5u2lmds9TSqAGb/MbVJaxvPVlWI8Txmqyi0rCOZMifWpWR1Ocq+S7ADyE0zVWzd5
-         towZlpd6NjFrQghGPAuZIeLBx0pIUc0Ff1pKL7loKI2SFfPhRayx2Hmb7S5CQqeJH7vY
-         oqj6BJVRPUpFZVMWkanoqXLUY0lYi15tmk8kDkkppxg6qqZAnIJCiqtB3BO495amRgwr
-         bYvg==
-X-Forwarded-Encrypted: i=1; AJvYcCXnRdFjQrKoXaImKufeYQ43nl2bzjlG/Tf+F1HcrSyDWmPZ3g3WFztrOoiwN4XvaCnrD+Kz@lists.linux.dev
-X-Gm-Message-State: AOJu0YzyG/5agGNg7TAd1VQph/TXIupWVQx91Ev1ygrDgP5xP6mZ/Rqb
-	ZwsEiC8b2cCfXftmm8A42JuCxg5dPmuuReqJ/JZ4dHbiBitBearjB2l6Jc+/5Iz0cgsg3ZGKDoh
-	OSZyUTEJnn2Ykm9PUtS8daUzrUvCGDaelwOrR
-X-Gm-Gg: ASbGncv/vLt0GG2aZGYPnNmC3/Lr35hi0omQIOR93J0ZdfUIzDiFkqOs1WRRxTMaK+p
-	XT7P9Us8KgWID5S8E4ByEqBJSwaxoHigIt7TsoBhiSJyyg682kNzOI/wioo5m26piWaHZAME9Fk
-	dWdWddLh7TwHWiXylXEvXVGBrPL0tfEhee7/5KN0G7i67yQkdC5oA=
-X-Google-Smtp-Source: AGHT+IFgni9S3EbldkBFy+UaV2PGINeyU7XHMyTvnEqm962Opij8z4ZbWegad0NVAIeYhQ5KVDq9OkArcBx8RVmrN4I=
-X-Received: by 2002:a92:c262:0:b0:3d3:d954:d3f with SMTP id
- e9e14a558f8ab-3d95c9b72e1mr504055ab.26.1745857789426; Mon, 28 Apr 2025
- 09:29:49 -0700 (PDT)
+        bh=cELG0a2mXl5N6mpi0+RLp319EHg3sGhSPY6U6Zc2/4k=;
+        b=je+isJQFscXz3Mwa5E26j/+qlrawix5b2gfNLSZ5g/2/4qB6X09jB9uD20cyqcrqNW
+         v6ccZM6BbKySfq7SLPOlTbO5TBb2OI8sqEuGtO2DwKau9PWt7ubG+zxIiuX+sQ7ywD1J
+         q4hkKGb30TLMr6GITFAkcM3TFNDPYcOOVgAS3ViGwr7fRDEbRLBima0QNeGtV5tZYIzW
+         QZgkIQfHnuQK9GWyNlMumK/i36bxENkrO4sYkvgW8ItST7jwcQWbq21OEcbuc3GQ8v3D
+         ljfkMBJHeZGADCOBD7E9Z5Sz9/o4wTYjY5I27Ki8A/0nONtv+Z5FmjkB8juFHGJMZ3ii
+         E0mA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1aeRFxCEpaV9BIm3fD8oichBuHvBe83eME1aqP+wGSYbxgjwK/glMptRC+z4FFBYxWSOy@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx+WjWa1nmYi6QocQ/Y2sR+rFHIg2lajFIdTVBLeoO2R+6DQojY
+	3BdFFl3MmBpkh+14OC2F2/IhWTScDSeNRzxFugQdcf2eOdtfPCIg7wBnegMNE5h4YO7Z5s3BEcR
+	GVbzEG01ExTOtO5TImPP9nwfTP8r55NK5v1g=
+X-Gm-Gg: ASbGncsFSzxPWS74lhVJo55K02VZ1YhO6LS+csf1nniozneArWxP20bK4CIlyR0CROL
+	WetruAyvCPOXGGK9/x1SFneO93+r2v332sn8cZIJttB6UyTxCn4j+TJr5/0xUXE2WQ55GVD84yi
+	Ziv+pADJWe+KK43VedHBs=
+X-Google-Smtp-Source: AGHT+IHqIg2Loa+Y0QKSG8YxCDTk31ezU03P7AATW+Z/1ns4Jt8XF4Ad3BTyh3bkX7w/0eQbixiiXnU4rTOZoxrjc1Q=
+X-Received: by 2002:a17:907:7d8a:b0:ac6:fec7:34dd with SMTP id
+ a640c23a62f3a-acec6c67f34mr8894566b.52.1745862831882; Mon, 28 Apr 2025
+ 10:53:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250401182347.3422199-1-irogers@google.com> <20250401182347.3422199-10-irogers@google.com>
- <20250402143541.GM115840@e132581.arm.com> <CAP-5=fVqax8cxdZ4HLBP4AMxL6jADfYNrORC97T6F23mjf3N1w@mail.gmail.com>
- <20250402163807.GP115840@e132581.arm.com> <CAP-5=fVJkJ39_qx2T9ZHn-fdxjECP_2G+cyfRRAjLvZZt5vz2A@mail.gmail.com>
- <Z-4URXOzsVHTY7zz@google.com> <CAP-5=fXwAA0PNYAOLNLdHY8g+AyEB0UxmzgX5w-gGj_DZqUxtg@mail.gmail.com>
- <20250428111003.GC551819@e132581.arm.com>
-In-Reply-To: <20250428111003.GC551819@e132581.arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 28 Apr 2025 09:29:37 -0700
-X-Gm-Features: ATxdqUGFjH4q5v7Uk07WHlS_ccOT0RLSXjfxw6By-jFHE3jlf4Ygq-0h-8TAKBU
-Message-ID: <CAP-5=fX3jn=ff9itMemKB22ACnHtU_cO6YUcx=uYYWX4=QaLJw@mail.gmail.com>
-Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
-To: Leo Yan <leo.yan@arm.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Namhyung Kim <namhyung@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Kyle Meyer <kyle.meyer@hpe.com>, Ben Gainey <ben.gainey@arm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kajol Jain <kjain@linux.ibm.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, Eder Zulian <ezulian@redhat.com>, 
-	Dapeng Mi <dapeng1.mi@linux.intel.com>, Kuan-Wei Chiu <visitorckw@gmail.com>, 
-	He Zhe <zhe.he@windriver.com>, Dirk Gouders <dirk@gouders.net>, 
-	Brian Geffon <bgeffon@google.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Howard Chu <howardchu95@gmail.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Colin Ian King <colin.i.king@gmail.com>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Jann Horn <jannh@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Yang Jihong <yangjihong@bytedance.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Graham Woodward <graham.woodward@arm.com>, 
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>, 
-	Anshuman Khandual <anshuman.khandual@arm.com>, Zhongqiu Han <quic_zhonhan@quicinc.com>, 
-	Hao Ge <gehao@kylinos.cn>, Tengda Wu <wutengda@huaweicloud.com>, 
-	Gabriele Monaco <gmonaco@redhat.com>, Chun-Tse Shao <ctshao@google.com>, 
-	Casey Chen <cachen@purestorage.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
-	Li Huafei <lihuafei1@huawei.com>, "Steinar H. Gunderson" <sesse@google.com>, Levi Yun <yeoreum.yun@arm.com>, 
-	Weilin Wang <weilin.wang@intel.com>, Thomas Falcon <thomas.falcon@intel.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Andrew Kreimer <algonell@gmail.com>, 
-	=?UTF-8?Q?Krzysztof_=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>, Junhao He <hejunhao3@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
-	Steve Clevenger <scclevenger@os.amperecomputing.com>, Zixian Cai <fzczx123@gmail.com>, 
-	Stephen Brennan <stephen.s.brennan@oracle.com>, Yujie Liu <yujie.liu@intel.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
+ <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
+ <20250426200513.GA427956@ax162> <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Mon, 28 Apr 2025 10:53:34 -0700
+X-Gm-Features: ATxdqUEJVTdPbMJGumIpmgzZbU1wN2Zlt9jaYxbaWMUYvK-iFBpwnq2gM8nUxXs
+Message-ID: <CAGG=3QWKQ++Yhh0w8zJobs=C4M7F01doAw9t2h=f2W9wxSG3Mw@mail.gmail.com>
+Subject: Re: clang and drm issue: objtool warnings from clang build
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	"the arch/x86 maintainers" <x86@kernel.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 28, 2025 at 4:10=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+On Sat, Apr 26, 2025 at 1:57=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Hi Namhyung, Ian,
+> On Sat, 26 Apr 2025 at 13:05, Nathan Chancellor <nathan@kernel.org> wrote=
+:
+> >
+> >     KBUILD_CFLAGS +=3D -mllvm -trap-unreachable
 >
-> On Thu, Apr 03, 2025 at 08:20:02AM -0700, Ian Rogers wrote:
+> Hmm. That certainly builds for me, but yeah, it generates new objtool
+> warnings, notably
 >
-> [...]
+>    panic() missing __noreturn in .c/.h or NORETURN() in noreturns.h
 >
-> > > > Anyway, I don't have time to do such a larger refactor so
-> > > > somebody else is going to need to pick that up. I did refactor the
-> > > > cases where I thought it mattered more, but as you say that does le=
-ad
-> > > > to a feeling of inconsistency in the series.
-> > >
-> > > I'm curious there are any actual errorenous cases other than the retu=
-rn
-> > > type of comparisons from Leo.
+> and I *think* that is because that flag makes clang not honour our
+> *explicit* "this code is unreachable" annotations.
 >
-> I am just wandering if we could give priority for errorenous cases.
->
-> Could you send fixes for these cases firstly and leave out refactoring
-> for later merging?
->
-> [...]
+There's also this flag:
 
-Hi Leo,
+  -mllvm -no-trap-after-noreturn
 
-So I sent out cleaning up the kernel headers separately:
-https://lore.kernel.org/lkml/20250403165702.396388-1-irogers@google.com/
-Arnd commented that it would be nicer to do larger changes, but my
-concern was breaking printf modifiers, etc. It looks like those
-patches have lost momentum, not sure what's going to happen about them
-being merged.
+Here's the documentation for both flags:
 
-On the fixes vs refactoring. I'm not sure refactoring is the right
-term for the other things in the series. It is basically trying to
-make implicit casts explicit, without doing some boil the ocean
-exercise. I went through the issues in the email this is a reply to:
-https://lore.kernel.org/lkml/CAP-5=3DfXwAA0PNYAOLNLdHY8g+AyEB0UxmzgX5w-gGj_=
-DZqUxtg@mail.gmail.com/
-Do you want to send the bits you think need prioritizing to the list?
+static cl::opt<bool>
+    EnableTrapUnreachable("trap-unreachable", cl::Hidden,
+                          cl::desc("Enable generating trap for unreachable"=
+));
 
-> > There are lots of cases like:
-> > ```
-> >                 case ARM_SPE_COUNTER:
-> >                        if (idx =3D=3D SPE_CNT_PKT_HDR_INDEX_TOTAL_LAT)
-> > -                               decoder->record.latency =3D payload;
-> > +                               decoder->record.latency =3D (u32)payloa=
-d;
+static cl::opt<bool> EnableNoTrapAfterNoreturn(
+    "no-trap-after-noreturn", cl::Hidden,
+    cl::desc("Do not emit a trap instruction for 'unreachable' IR instructi=
+ons "
+             "after noreturn calls, even if --trap-unreachable is set."));
+
+
+Could you share how you configured your build?
+
+-bw
+
+> So now objtool complains about the fact that clang has generated some
+> random code that follows a call to 'panic()' even though objtool knows
+> that panic() cannot return.
 >
-> This would be fine.  Since Arm SPE implements a counter with a maximum
-> of 16 bits, there will never be an overflow when storing the data in a
-> 32-bit unsigned integer.
-
-The payload was > sizeof(u32), should record.latency be a u16? My
-point wasn't so much to complain about adding a u32 cast in the SPE
-code, but that having the cast makes it clear that truncation is
-expected. Adding the casts isn't fixing a bug, but it is making it
-clearer that the code will truncate the payload value (imo).
-
-Thanks,
-Ian
-
-> Thanks,
-> Leo
+> And those explicit annotations definitely should be honored.
+>
+> IOW, there's a *big* difference between "the programmer told me this
+> is unreachable, so I won't generate code past this point" and "I have
+> decided this is undefined behavior, so now I won't generate code past
+> this point".
+>
+> So what I'm asking for is absolutely not "trap on unreachable". That's
+> wrong and just plain stupid.
+>
+> I'm asking for "trap on UD instead of *assuming* it's unreachable".
+>
+> Because clearly that code *can* be reached, it's just doing something und=
+efined.
+>
+> See? Big big difference.
+>
+>              Linus
