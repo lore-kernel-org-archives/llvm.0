@@ -1,192 +1,232 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0E41CF96;
-	Mon, 28 Apr 2025 01:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745805223; cv=none; b=jrjIGaWztPIZ5Lo1uX42kcTTj/0s+YyRhjcq6ffpp/xEMqwLJt8d7SRgHpHvi5oUNgbzcqeG/f96KV9mAm7cJP+pdoITLsvJ3FvhvOTW3+9HdUfqQ7Ivt4FyxG4qt0OsrQ7woVYSogSiys4TBYguNZNabUThB4DSb5mh2gZZlNA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745805223; c=relaxed/simple;
-	bh=P8TorOk5myL/XVwjznZVA/KsJ4kW28jYflsXZJyX2f4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gBnvThBTMdpFbRlqvN92YXqTmMYxLhiwQdYbw8gRkBGmmC+Go8Fj6dSZ4wOwFQeoJOpwiOzb2/5EppxKmp8hQ3PMgeFVKYNWADDZei0aLsCSbh1L7fB0kwt3iqbnI6NgpFDkrq4wZkhplUt+iPgi5Rc9KCGBSUq80Hh7NkJV35A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GRIVw3wL; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GRIVw3wL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745805221; x=1777341221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P8TorOk5myL/XVwjznZVA/KsJ4kW28jYflsXZJyX2f4=;
-  b=GRIVw3wLcHpBzNzsdm8R7KXCJ7k9+ANdmCZsUutAE3x1STb7reGlznXR
-   hPrYNEibXTTC7pVjtYKcMsJJR8Q/cNOyzIXncsuyE6C5TAWaS5R73FgF7
-   XkF/eYTwhN+hsvVeOhMw1nT8/G1CuGeFoZXg5VJVG8qc/CpGMxCdosoPN
-   NEn7/9ka3aNIt7GBO61MSDxhJ41YqhxrM3zEQSdzzD5fGliEi4B7sgdIV
-   fouhXVYdxc0RkvYon2zLaut5UhkabIUXEV2tkFB8rgaARZ7yUYz6fYeNZ
-   zOLdOvo5Kfv16fonwLSwxEaMUYbvklSUTycd69xv86jRfv9VIAXsAE2lz
-   Q==;
-X-CSE-ConnectionGUID: jk3ejvz5TDmg2GmGH0xoyA==
-X-CSE-MsgGUID: 49QYRic7RJSGGcge67GVzQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11416"; a="47398648"
-X-IronPort-AV: E=Sophos;i="6.15,245,1739865600"; 
-   d="scan'208";a="47398648"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2025 18:53:41 -0700
-X-CSE-ConnectionGUID: TsWwCYQwTh6wyHL3yHdWvQ==
-X-CSE-MsgGUID: cPaMhLeZRCOAsgiy0SDahQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,245,1739865600"; 
-   d="scan'208";a="133690933"
-Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 27 Apr 2025 18:53:38 -0700
-Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u9Dge-0006XJ-1f;
-	Mon, 28 Apr 2025 01:53:36 +0000
-Date: Mon, 28 Apr 2025 09:53:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: trondmy@kernel.org, Anna Schumaker <anna@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org
-Subject: Re: [PATCH] NFS: Avoid flushing data while holding directory locks
- in nfs_rename()
-Message-ID: <202504280902.aKsSfRfW-lkp@intel.com>
-References: <a804c54445a3f028007763e05285d765afcab0f9.1745794273.git.trond.myklebust@hammerspace.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B693213252;
+	Mon, 28 Apr 2025 07:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.178.238
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745826805; cv=fail; b=Lunz/+Z06M/iQx2X6llKXTAfco6uXM6Yp4JPM9/isgRV9U3p6Tej+8FO+2L5b4L5qyUZZ/RYKw6ZhcXe58XSVIRqmZMsZoKkRuCWUEKD8rm2or4/vq/20xhtMvqxSssOEW+MMTWMEfyKLjVkCS3apJ5GaMMKiUof/7/ZGaBrkcU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745826805; c=relaxed/simple;
+	bh=sn6Ylmr9oc89ti0sGq1CCzErrJ9Pkpj+Md9ovV+D2mE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=OIYCZMwlsy6Ec9MteQcTiuGENow8UX4KQBzXT45TZIfpqexNBdlhZXrHN5bXTdNUBbEjQ9ILLJYE1kiDCyP4AK1kmTSMENIQQmWrL15C5fTeZPUirYbGG3w6tF9ISKZrxPvKbGD9SgV/vduooUzOJhxwbTnGwt2oZ//5Vc2wMqU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=fail smtp.client-ip=205.220.178.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53RMuJ5A016452;
+	Mon, 28 Apr 2025 07:53:00 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2170.outbound.protection.outlook.com [104.47.58.170])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 468pf92kpf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Apr 2025 07:53:00 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UDy8tFYiYgg21fSwaR8c3v3eaKkg62krlmYgJHMfgYpo+hSF8SldDqtZKdstsE9OxtDiNwLgx7q5QoKctsNdFrFTZxzw7lvUG+WkNMfoob3Tk8yBsup0FFHZ9sdB6sI+3JKpWqk6TQY2rxMC3xnAeX4brq4uKbj8ARG6nDtat0dIqqA8zKtaO9dUOdw/ps2ZazaaCd+y5JWNKOxY+ySkkFr/A9BidUV+5f4kxa/YgzlvCl0xA+PUaaKzupVYAYmNwSrjB2Im8aKP9hx3J+r4KHEi/xxif631f3KCGBzW9RvwnzJ+xbZhRmCcgraImg5fo1oH2BWoHmkCDYMCEBKqlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4S961YOBI68wurTxNegjh2T7RSXnJrS4YjiafMQl2bU=;
+ b=PIaePyHC3xLtMLlfiooBaThMQ7HnwIQ+uKpsQtU7zG9q5GEbW61ZucZy1eCB2l+s4ryAJNvZANLrCw6MGUb/QcSUwLlt2KFKJVHIh+5v0ASv0VsdvKKypho9FHgLnvTr8C8YpsT/uJW4FXBe2nvoWYK6DOrAZ4WN0RWzFiPiP1LyhEgbRD0XvJwBSndAMLokHYApU0zSbXnzDOzngPpL26/ibAznkvcu6db1KYpTL92/nm3dq8ml6x1VyQRt9OdrNdNkxfS+QF0zdgJvFr8kPrbhoe7WLhv6S2s7uCmyAMf2cDGNMZ6iRuLwPdFy3PT8dHl8jdmIkmF/Th2OAHq11A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from SA3PR11MB7527.namprd11.prod.outlook.com (2603:10b6:806:314::20)
+ by PH8PR11MB7990.namprd11.prod.outlook.com (2603:10b6:510:259::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.27; Mon, 28 Apr
+ 2025 07:52:58 +0000
+Received: from SA3PR11MB7527.namprd11.prod.outlook.com
+ ([fe80::3133:62e0:c57c:e538]) by SA3PR11MB7527.namprd11.prod.outlook.com
+ ([fe80::3133:62e0:c57c:e538%6]) with mapi id 15.20.8678.028; Mon, 28 Apr 2025
+ 07:52:58 +0000
+Message-ID: <b3f78f39-4c64-4957-8363-5b67c19a9f1e@windriver.com>
+Date: Mon, 28 Apr 2025 15:50:14 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.1 000/291] 6.1.135-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck
+ <linux@roeck-us.net>, shuah <shuah@kernel.org>,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        Pavel Machek <pavel@denx.de>, Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <srw@sladewatkins.net>, rwarsow@gmx.de,
+        Conor Dooley <conor@kernel.org>, hargar@microsoft.com,
+        Mark Brown <broonie@kernel.org>, Netdev <netdev@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "David S . Miller"
+ <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20250423142624.409452181@linuxfoundation.org>
+ <CA+G9fYu+FEZ-3ye30Hk2sk1+LFsw7iO5AHueUa9H1Ub=JO-k2g@mail.gmail.com>
+ <2025042443-ibuprofen-scavenger-c4df@gregkh>
+ <e77b24ce-e91b-4c90-82d6-0fa91fcce163@app.fastmail.com>
+ <2025042404-playhouse-manual-85bd@gregkh>
+From: He Zhe <zhe.he@windriver.com>
+Content-Language: en-US
+In-Reply-To: <2025042404-playhouse-manual-85bd@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TY4P286CA0008.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:26d::15) To PH0PR11MB7524.namprd11.prod.outlook.com
+ (2603:10b6:510:281::18)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a804c54445a3f028007763e05285d765afcab0f9.1745794273.git.trond.myklebust@hammerspace.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR11MB7527:EE_|PH8PR11MB7990:EE_
+X-MS-Office365-Filtering-Correlation-Id: 45756da7-e201-47c0-a065-08dd8629b0b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YnZRazVUTnJNS0pVblFDdzMrQ3RQYUg3L0lRem5QVCs4QndtV3hBaG5nb2dX?=
+ =?utf-8?B?dlp1anJZNlQ4aE5XbUJVYlNFUllpWGxQZjN0bWVXVkJJRFc1T2kxdGdaVWVh?=
+ =?utf-8?B?bkJKcnVtK0NNaEdQVzJwUGR0MUd1ZzVtUDhjRjhMSllLTStvSHJvVFQ4UDRU?=
+ =?utf-8?B?d2dwbHNKTlc1a0Rjd25DUTEwaERWQ05yR3BEQ3BXMUlXcTRJOTdNWVU4NVpn?=
+ =?utf-8?B?SHVETkhqaXZyZnlKc085NVc5U0drL0UvemlLbnBGZDEzNjRpeWd1SUZMYlFp?=
+ =?utf-8?B?OGhFV0NiRldUelNEdWZ3MTdDV0IydWxZZjA0NnZsT0VjNE55cU9yMmZLbjJy?=
+ =?utf-8?B?aWxMMkdGdnhRUFhRRWtWbzh3cGV3SDhGM1lZWUZJQmxPMEszTHhpRWl5THVa?=
+ =?utf-8?B?T0ZyUE1ub1MyNlh6NmI0SS9RV21rcU5uTkw2a1R0akZORW9tMEIxb2RrMXdO?=
+ =?utf-8?B?aUtIaldPMEhOVWpnZTJVRThwemo1L1doakREbmxsUTRHbXdDeXJSOVM3TU93?=
+ =?utf-8?B?Z0s3ZWFCQUhGUlVUdjVCa2ZTSG1oVDhJdVMxaEtuSm1NREdHUGQrUkVoc3FF?=
+ =?utf-8?B?ZlV5elZveG10eFgwdW5kRVF1cFdNSTk2WmRGK0xVUVFENEJobmFBSGRObWYx?=
+ =?utf-8?B?UUR6ZDRqejFQTU1aQTVFeEpvQ21qYTRiaCsrODVRcEtlZGZiVVlSRXdQZm1I?=
+ =?utf-8?B?M0xsYjR4NGFhMEFXcjBYT3pzakV1QmRUR0p4RER5SmxhWithY1ArTFdCUjhi?=
+ =?utf-8?B?Z1hZUW9mUm1VRFVWckc5OVpuWU5leUhiNEFtMFE3aVFuUnhUd0QwamlDaTFO?=
+ =?utf-8?B?MUdFOEFjRlFpYUpjY3l6MDdmd3FMdEo2RkxQNEVyQndiZ1Jtb1dxUWJmajhy?=
+ =?utf-8?B?VVRKQ3piN0NEWk91WEM0ZGdIaFJRcjdRaThmNGI2Y01tcmhTMUxjWkNtZStY?=
+ =?utf-8?B?U2hacnBkVXdCbnFjNCtwQ3JxZUgxSXAyeU4xVzFqeDNyZFZkTHI2K2RBYzJY?=
+ =?utf-8?B?ajNMcmJNeXVHaUhqWUxlR2YvU1BjNFI3djdTWVBXUS9FOXN5K3p4cndyV0Vp?=
+ =?utf-8?B?OTFvYXI3VU5kYUFSdW10MTRiYTJWdktQSk83L0JHclBRbmh1T1dZQkRFQ3BV?=
+ =?utf-8?B?aDlSZmpTNlo1K3RGVm5QTkMzOGZETFBuejFScjJqY1FVcWQrZ0NRVk5ONG4y?=
+ =?utf-8?B?a1BsTkJiZDcxY0FEN0IyVVkvSDl1MEhyTVVuSXRjQ1QvQ3Z4ZTlCTlFaQmkr?=
+ =?utf-8?B?N0tlUHRpTlRRM29OMHpkYWpwQzV1eng3SUNmcFhJdmEwQ1Y1anVIdDUxNkwv?=
+ =?utf-8?B?S1dxbWJGUXBkTVZQOHJYdTJOdWpXN2EvRHE2ZUtFOVdWWm5rMXMwRWlSb0V2?=
+ =?utf-8?B?bEVxR3RNdVdUdDZOM1hNV0tKQjhjemFPV211WTJya05MRHdTVnkrK1hVLzI0?=
+ =?utf-8?B?cDNrbEJaUjErWHhtS1VVSWxNR2YzbUFoWFo5c1Bab2NNMGdpZUJ5bS9yN3Uz?=
+ =?utf-8?B?OU5SUGJsUkVleWRuZWNYazFtQU5TTEtPMmZIUDZtaHlTU0F0clFMYWhHSkww?=
+ =?utf-8?B?MEN3UUpHc2twYVVIWmVCYXNuRktFVWpnRncydU5STndINVRXeVRwTjJFYXU3?=
+ =?utf-8?B?d2JCWjJSMm9yMkZBTm5HNUVwY0E2WXV0UCtlb0h0cUNmK3grZjNycWNTN3Y3?=
+ =?utf-8?B?eFFITFNUaldpUmp0VWttRjQ1ZUN5clJjbUwrWFZPVjhYbWRCbXZGSHlhZ0dI?=
+ =?utf-8?B?dXFFcnB5dklrVEN3M1gyak9tUE9WQ0lWMGFTZEdQbWpLSG1CTWh5TEt2eHNW?=
+ =?utf-8?B?ZmlHWXllaVhRQmVUZzJFNWc4VGtrK3NRUGdzMTdGYlNqS2dmcytKQ2xiVGZm?=
+ =?utf-8?B?UTMzc09rMTZRWURLRjZyQmlWZmZRekVJdExlTWFHaHdvNXc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR11MB7527.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TnZkR3FGbnBkT2NjNjJBTGdML2NPNG8yYmpseUdOUG5LNHZValVXSnlRRmIy?=
+ =?utf-8?B?Z2J2bU5PZmgwZVlYbkxmQTgxYWFMcjRGc21HcWNUV2dYU25YdDFrOG5ZQ1Yw?=
+ =?utf-8?B?L2c3am95ZjRFRTU4MENEdTFUTW8vVUV4YzN6OWdzYzJyQm9uR21pYkkyZ0lP?=
+ =?utf-8?B?SDY5RWpQRDNMV2hoOXIrUy9ZUHVWRGZZRlFVNHM3MHhzcEFCeTBHbGJJWGlp?=
+ =?utf-8?B?dXR1RFhzK05wZlVKdVVtUE4wSUd5NlRYa1lMWEM3RTNGMlUvWG9jVjVqK096?=
+ =?utf-8?B?dzFVcG1XRzlnUmxOU0NWTS8yOUxLRW1sTmpKSFV1MS9ON2ZsMXJ0UUt3S0Np?=
+ =?utf-8?B?VUV6cS9TQ3ZKMzhWY3lhV0hQYWlTZWYvRkhzK20yWlBoL2tHMnRFbHp4Ri9T?=
+ =?utf-8?B?dWZNL0lwZ1Y3d1hsZmZZc1VWWU5jc3RpdElTbmRlK3BTYjRHVkJCaVRGY0xM?=
+ =?utf-8?B?cU1qQmdGWDA5OU5MWWpNdXBVN2ErbzM2a2ZVa01ScXc4WWdna2pqWEo0Q2kv?=
+ =?utf-8?B?WXNGNi9XYnpLMitINW4wZ3J6ZUIvNTFsNHM5Rnp3K0ptU29ya3JGN2tUYkNM?=
+ =?utf-8?B?a2c0VitUd2R1ZkFBT1dWd00zRFpUL0M4ZWhpSXJiM0RmWEFTaUYzM1I5MTB3?=
+ =?utf-8?B?MVpJcy9CTWNDcHAydlVPY2ZKemxpeGhrS2FMK0FSQm9UbGVlMzFYdWhrK05J?=
+ =?utf-8?B?bk1ZM3hURjdvVWlFOU5WTWJpdGt0ZENUZmptcTJiME1vNlhGZEE1SWw0K3R6?=
+ =?utf-8?B?YlcrRDQvMEtvOFBxQm5TYjIyMzk5RFNWcm9kd3BORzFNL1lKQVl6K0QvNFhB?=
+ =?utf-8?B?UHo2VFFPVHJFVEViem5xL0pCQW95QzY3VnJzY2I1TzBXeVRMcjA3L0l3UThJ?=
+ =?utf-8?B?KzREMWJDY1E5MmFGTkNpOUxVM2dtNXV6SmVHVEovS1ZUYkNYNXhmVERpU2or?=
+ =?utf-8?B?YUNTZFZBNVNhc2xXYytFSDdyOWpnWjRtU3dlNVZMTDFSZ1ZHNnVvLzE4N0JE?=
+ =?utf-8?B?ZVVwTWx3cXdhMUR5NU1jWC9GbHR3bXBhaVdOdTIrZXZGN2VjWWtTNklXdmw4?=
+ =?utf-8?B?ZUhmbEhjSUVmdG10V1g0aTNOZFBRR3RlUGJhdHhDTzFOM1BFSUVLb2lvbEx6?=
+ =?utf-8?B?cEFqU3lPSmN5ZTFaRWovNWJFUVFQbVhtbVUyMktJN2RYVjhlV0FWQWd0b2Zq?=
+ =?utf-8?B?SWozVDhlSlRtWUN2VEZvK09SQnJiZ3R4QjVTTENyeTJaaDN5NWVUYktLbnA0?=
+ =?utf-8?B?L3BwM3RTbHovdlZ3bjhvUFNnL1hEWENCVk0yWTlTcWlVWWFqM2FZWHRvanQz?=
+ =?utf-8?B?dFFhUnI1bWxSSGZqQSsxUWRhVW1zbTlldzZUbWhGTVJjL042T0ZTdm5kNmdn?=
+ =?utf-8?B?dTRMeCtXODY2a2pwQ3NOTmh1eHkvd1FiVVBxMkp4M3dTM0Ntb212V1NOZEJ0?=
+ =?utf-8?B?SUtWZTRUSDQwUXNkYlQ2dElVeVdVOHJZMWhNamRvMHVIQUczUjgvTDgvMkxN?=
+ =?utf-8?B?UnhDdkJQSWJXOWVadlpvMDNwU1Z6TzVDbkQ5K1FOMFJNQXRTOHlCUFlWdDVV?=
+ =?utf-8?B?UE40Z3NZdTJZMW90dzdSWnZIOGRmc3A5ODZjS1A1TGljZVArWEU1a1NrQjdo?=
+ =?utf-8?B?SVRyUEZuRUNraUdacktYYktub0tBbXBkRHV0SEZEQURBV3M3N3JTWndFY2sw?=
+ =?utf-8?B?eUdUKzU1azE3L2FLbk15UE1iN2F4dFhuNE1ZY3BuV04vK1RWQkgyMkMveGZo?=
+ =?utf-8?B?aVlobHRDQlovWmQ3N3FIRjJTakF3VHB3dzBRcGNlZXUrVjg2LzhMS1NXRnhJ?=
+ =?utf-8?B?OGJRY1hNODk2ZEIzQnU1K1dERjg2ZW5uczdBSEk1aVNsMEN4SXBOek1oYWov?=
+ =?utf-8?B?TnRuSXUvZFRDcXBRdUJRSE42ZWdOQXJnelBjdU5mdk1QMTFoT0RUbE1sZ2lz?=
+ =?utf-8?B?YWlkTDZPY1FrSlQ0REExRVIycUFkdDdkVGJPRjhmbFpLVVozUUNuajh4a1px?=
+ =?utf-8?B?a3hhZ0RHMGNqa1RBekx2V3dNRUVUSHErZyszblFWK3V5Y0pLL2hGVlVTM0xF?=
+ =?utf-8?B?bU1xQ3RJMGlLZ3RNK2ZMQUZXWDJUTUdOMFZVbkNDN041M2NNZ3VLNmV2Wk96?=
+ =?utf-8?Q?Zycls0T2rNBuDj6oNizv3JZMv?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45756da7-e201-47c0-a065-08dd8629b0b6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7524.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2025 07:52:57.9723
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NaCGizGxlLLkj53TlmCMI8n8gU4zKe+E5XeaGU5VdSGGyGSpAoHGSrLFiWsxPMuj1B3ip137EO5BbgCi8C83Wg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7990
+X-Proofpoint-GUID: fHCe5HMd7_cCq8fbaTAaHjky90LVhdjq
+X-Authority-Analysis: v=2.4 cv=EavIQOmC c=1 sm=1 tr=0 ts=680f33dc cx=c_pps a=sGbpJkUcFVeWJOR+0qTsNQ==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=XR8D0OoHHMoA:10 a=BlBv2f2rG0pTCLRqT2YA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI4MDA2NCBTYWx0ZWRfX+tAE85Rd+H4+ aYNBL9IsZ8vZ/S71iKdxyRgT7u0R0GkWO8kDEVKIQOk3QDmaVI1EQa6zloYZjnzv+mctPqHD1kI GOjCrUhfVhA2ImUeESc33F0fH5zD/HVlzCVoFQuM3Eux2QJQDhQugUqGKCs6aUay0aSNSk9YW7q
+ wSjkYjHcVMlN9egt/f/wCVQH60XNnrXkqs2Vl72iQfqJTM7UEnslQOop+7ow7zR197EuRHHIvMu mCOoS8AGLAMVtyUQY7rbZ73uWvDY5damN8tnYGWToUDIfB6+YoAmRcAZx/gr46/H6zJF7cPloTB 5Z4FOItw2v3EPLT3FrDi3pPWt7RPEXuFm5Cpslvg5ERtAISPygQsTrd8EitIFrYmHaT9Vwiu8Om
+ uawe+VxRHaVe6vypwA8+1uY2jfhKsMnmiKOhZnz53RRQENi3qfqHCBcDcUSct0yt2RMEDugL
+X-Proofpoint-ORIG-GUID: fHCe5HMd7_cCq8fbaTAaHjky90LVhdjq
+X-Sensitive_Customer_Information: Yes
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-28_03,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 clxscore=1011
+ mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.21.0-2504070000
+ definitions=main-2504280064
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on linus/master v6.15-rc3 next-20250424]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/trondmy-kernel-org/NFS-Avoid-flushing-data-while-holding-directory-locks-in-nfs_rename/20250428-070327
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/a804c54445a3f028007763e05285d765afcab0f9.1745794273.git.trond.myklebust%40hammerspace.com
-patch subject: [PATCH] NFS: Avoid flushing data while holding directory locks in nfs_rename()
-config: i386-buildonly-randconfig-004-20250428 (https://download.01.org/0day-ci/archive/20250428/202504280902.aKsSfRfW-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250428/202504280902.aKsSfRfW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504280902.aKsSfRfW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/nfs/client.c:1109:10: error: no member named 'fh_expire_type' in 'struct nfs_server'
-    1109 |         server->fh_expire_type = NFS_FH_VOL_RENAME;
-         |         ~~~~~~  ^
->> fs/nfs/client.c:1109:27: error: use of undeclared identifier 'NFS_FH_VOL_RENAME'
-    1109 |         server->fh_expire_type = NFS_FH_VOL_RENAME;
-         |                                  ^
-   2 errors generated.
---
->> fs/nfs/dir.c:2686:14: error: no member named 'fh_expire_type' in 'struct nfs_server'
-    2686 |         if (server->fh_expire_type & NFS_FH_RENAME_UNSAFE)
-         |             ~~~~~~  ^
->> fs/nfs/dir.c:2686:31: error: use of undeclared identifier 'NFS_FH_RENAME_UNSAFE'
-    2686 |         if (server->fh_expire_type & NFS_FH_RENAME_UNSAFE)
-         |                                      ^
-   fs/nfs/dir.c:2687:20: error: no member named 'fh_expire_type' in 'struct nfs_server'
-    2687 |                 return !(server->fh_expire_type & NFS_FH_NOEXPIRE_WITH_OPEN);
-         |                          ~~~~~~  ^
->> fs/nfs/dir.c:2687:37: error: use of undeclared identifier 'NFS_FH_NOEXPIRE_WITH_OPEN'
-    2687 |                 return !(server->fh_expire_type & NFS_FH_NOEXPIRE_WITH_OPEN);
-         |                                                   ^
-   4 errors generated.
 
 
-vim +1109 fs/nfs/client.c
+On 2025/4/24 23:28, Greg Kroah-Hartman wrote:
+> On Thu, Apr 24, 2025 at 04:34:04PM +0200, Arnd Bergmann wrote:
+>> On Thu, Apr 24, 2025, at 15:41, Greg Kroah-Hartman wrote:
+>>> On Thu, Apr 24, 2025 at 07:01:02PM +0530, Naresh Kamboju wrote:
+>>>> ## Build error:
+>>>> net/sched/act_mirred.c:265:6: error: variable 'is_redirect' is used
+>>>> uninitialized whenever 'if' condition is true
+>>>> [-Werror,-Wsometimes-uninitialized]
+>>>>   265 |         if (unlikely(!(dev->flags & IFF_UP)) ||
+>>>> !netif_carrier_ok(dev)) {
+>>>>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> Odd this isn't showing up in newer releases, as this is an old commit
+>>> and nothing has changed in this file since then (it showed up in 6.8.)
+>>>
+>>> Is there some follow-up commit somewhere that I'm missing that resolved
+>>> this issue?
+>> I think the difference is commit 16085e48cb48 ("net/sched: act_mirred:
+>> Create function tcf_mirred_to_dev and improve readability") from 
+>> v6.8, which adds the initialization that 166c2c8a6a4d ("net/sched:
+>> act_mirred: don't override retval if we already lost the skb")
+>> relies on.
+> Ok, that didn't apply cleanly either, so I'm just going to drop this
+> backported patch and wait for the submitter to fix it up and resend it.
 
-  1067	
-  1068	/*
-  1069	 * Create a version 2 or 3 volume record
-  1070	 * - keyed on server and FSID
-  1071	 */
-  1072	struct nfs_server *nfs_create_server(struct fs_context *fc)
-  1073	{
-  1074		struct nfs_fs_context *ctx = nfs_fc2context(fc);
-  1075		struct nfs_server *server;
-  1076		struct nfs_fattr *fattr;
-  1077		int error;
-  1078	
-  1079		server = nfs_alloc_server();
-  1080		if (!server)
-  1081			return ERR_PTR(-ENOMEM);
-  1082	
-  1083		server->cred = get_cred(fc->cred);
-  1084	
-  1085		error = -ENOMEM;
-  1086		fattr = nfs_alloc_fattr();
-  1087		if (fattr == NULL)
-  1088			goto error;
-  1089	
-  1090		/* Get a client representation */
-  1091		error = nfs_init_server(server, fc);
-  1092		if (error < 0)
-  1093			goto error;
-  1094	
-  1095		/* Probe the root fh to retrieve its FSID */
-  1096		error = nfs_probe_fsinfo(server, ctx->mntfh, fattr);
-  1097		if (error < 0)
-  1098			goto error;
-  1099		if (server->nfs_client->rpc_ops->version == 3) {
-  1100			if (server->namelen == 0 || server->namelen > NFS3_MAXNAMLEN)
-  1101				server->namelen = NFS3_MAXNAMLEN;
-  1102			if (!(ctx->flags & NFS_MOUNT_NORDIRPLUS))
-  1103				server->caps |= NFS_CAP_READDIRPLUS;
-  1104		} else {
-  1105			if (server->namelen == 0 || server->namelen > NFS2_MAXNAMLEN)
-  1106				server->namelen = NFS2_MAXNAMLEN;
-  1107		}
-  1108		/* Linux 'subtree_check' borkenness mandates this setting */
-> 1109		server->fh_expire_type = NFS_FH_VOL_RENAME;
-  1110	
-  1111		if (!(fattr->valid & NFS_ATTR_FATTR)) {
-  1112			error = ctx->nfs_mod->rpc_ops->getattr(server, ctx->mntfh,
-  1113							       fattr, NULL);
-  1114			if (error < 0) {
-  1115				dprintk("nfs_create_server: getattr error = %d\n", -error);
-  1116				goto error;
-  1117			}
-  1118		}
-  1119		memcpy(&server->fsid, &fattr->fsid, sizeof(server->fsid));
-  1120	
-  1121		dprintk("Server FSID: %llx:%llx\n",
-  1122			(unsigned long long) server->fsid.major,
-  1123			(unsigned long long) server->fsid.minor);
-  1124	
-  1125		nfs_server_insert_lists(server);
-  1126		server->mount_time = jiffies;
-  1127		nfs_free_fattr(fattr);
-  1128		return server;
-  1129	
-  1130	error:
-  1131		nfs_free_fattr(fattr);
-  1132		nfs_free_server(server);
-  1133		return ERR_PTR(error);
-  1134	}
-  1135	EXPORT_SYMBOL_GPL(nfs_create_server);
-  1136	
+Sorry for the inconvenience. We have fixed the above issue found by clang-20
+and will sent out v2 soon.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Zhe
+
+>
+> thanks,
+>
+> greg k-h
+
