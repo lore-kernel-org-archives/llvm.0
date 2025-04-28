@@ -1,127 +1,126 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C3720101D;
-	Mon, 28 Apr 2025 20:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8ABD2206A2
+	for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 20:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745872192; cv=none; b=khRJXBvoKKYaSxfBISNPETDihB7PFHiMS7x0iOWbpojkADx+OdTHl/EcxLYnzQRN7T4qKIObpqsXWhhiSBgDQsLlMEtKPsG/IKd1NpSTAIoMYQals3NpzSia9wlgnE5IfVKEuX6B85E/Ukv8Yfd08pJBh49Gla1QoL7LlkRbMUA=
+	t=1745873881; cv=none; b=mpo3p1h/7HmMG9SMQP4Iktc69n1sDkG3+8c76p7R7i2BHROSqE/WrLQJGIC10NvO36OwAJNIAQZma+tHmS4QOIFMHfHa6gxDc9aWfXztESLwLVt6XUOWB7mz5grraOWk0b0EIEC1toeAvRSad55MA0ECTSDZ+1sqAepx2csVEOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745872192; c=relaxed/simple;
-	bh=9y0PfaE/6TV4pAXVufp0rlzILp7rIOKrXiLkxRqTKx0=;
+	s=arc-20240116; t=1745873881; c=relaxed/simple;
+	bh=Y1kfu9Z+QL2uu7AjVyJUXKJPHvRaR5bEkxSSmhH3KP8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qOO1TzAqVH2DF/060itVkTQJzLiRfbCsWuYVhUJQN+ZBbv9s7ue6TTNbWMjSeXWJIcQeMAF59CS2jYjJ8slm7Wfobks4XxVASTyfau3b4eKcoua0Ecw13s1IxYWXoLU7Oz9YaGjpvu9XmLMO4KYmulzyxbIIUIAz3KBmB8e7YVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KhQqty/y; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=of23Xz3X+Xku82wJtYqYc2CN3XRt2jrJl54lWVQB3Z071y3MV+0x1/oaQ+4T8f89gGaShtqjakzHjijOhwVgrAjaa3S1HlcjWAViLTcDLLRfiw13GY4BlH6zTzqurbneKNk4I+Jfw1pdOfml9Kr5PNLSCQuJ4NCyh5dZVH4yrtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=eEzjdbry; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KhQqty/y"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ff62f9b6e4so701968a91.0;
-        Mon, 28 Apr 2025 13:29:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="eEzjdbry"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5f435c9f2f9so7416379a12.1
+        for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 13:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745872190; x=1746476990; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=muruLZ8jDogUrA97U90RpTPwvwdtevKxgVq9iGiXD/0=;
-        b=KhQqty/yJwNPs9fRm0QJOmQzK0G7iXAF8KICoh5lhy/kdppEk95dhlK7tOEDUNZCRw
-         tZEXJsXPNqtiqJuebfbEZwavIl5UfjigLvCpCv4do/6JcEOPpvNH2OMHkWPFDP+sM83D
-         9UpEeEV2/XGcl7rT+e1ywYY16WIZ5qS4on7p21791jTmVUVcYqj6FE/THY7FNyV92301
-         TYler5qWMGPl97TRup5MGni6ucHZ+9adV0ULuYlpBxzIAoYn3rucD3c9sNs6pVferBcV
-         4QqesAdhF73D5VUOhLTtbMTA3WBq77VQTNvuUNx3GZRrHJAeRLmxEPeZZEwBir/wwndb
-         EOiw==
+        d=linux-foundation.org; s=google; t=1745873877; x=1746478677; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AuAi49HAJJQIt//Ur0G31c7rmQctMxdbA26IlvOPDzQ=;
+        b=eEzjdbry0F266hMm/E0k+V5JB63qet8G40wr4YXSlMdtEGQZKHuFneo2BBLFs1Aa61
+         Dgu/4GKExTU5rD/5FvSLsBbh1e2vkUqtciAIbXMlnwiNmm1tyz/VNazC3J/etyvgv4L5
+         HAhbfpoNF0orPbvh+u/JsuIdp0McA1j9//L8E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745872190; x=1746476990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=muruLZ8jDogUrA97U90RpTPwvwdtevKxgVq9iGiXD/0=;
-        b=qqYzhgRENrtBNyjFtAduY/ifC8TTj2JZU2BCf0XaetCxEEb7EVbkr3Irc8HoKhEz3y
-         5QaN/ZOiq+qfimPXwKCJ1ZDHI6FT7kU6JeplSw3RJDZo1bEHRMfdDL0/qkU/fYTXJUFG
-         ozrNwRl8rOm6sxu6psLzo7cmoaXqyrAe8OebLWWnm8lN+RhOgEFOTx7ZGxy9YDvZHl11
-         s16TcOM5nrGxxlEMTLz50zv4mZRgNR+4ggdGUHog3N6qNHVjhEDHGVesZEB129NdbyFS
-         UZAY7IEG1SWEcc7KkoWRdZe/Z2/0k6NbSP3y8xx9wI6qvALItlGAOXiGEuiMoluAD5Kz
-         WKGg==
-X-Forwarded-Encrypted: i=1; AJvYcCXDfMQt6LbiVEumcEeuGtMBConDCfgEY8goLkkj6O5JvOEKM17IZnOQDg8AMM/12vT/umGrE7N95r9v@lists.linux.dev, AJvYcCXTAunZPN0PJZMogmQU1pFkOvtIgTMfA8UWwYQz+b5tP/P70KPc0a6fLSSrVcyLhnQnPDrt@lists.linux.dev
-X-Gm-Message-State: AOJu0YzL9Qt6/xFF4XCy4X0QhHDu4q0tCxBcwCKFtMsVxAe60IcthAX9
-	IWUMMZwZdfro2YBVw2+NUyfl/gw7qyQT3BAUu42GBYGG4y4zpga/9yu7SF0XaWEJ5Yk0yo8552M
-	vIhspmfkvAW5rgkkzcDurq//z+yA=
-X-Gm-Gg: ASbGncvFPdtlmuDuQwaaU6+2EQItnspqhzNHsIvIn/2ts8VTTRuD5uxQFj3WJ977B2u
-	jRDdPtNj4SZXi7fnBLjnvPRT/JhGN8FGWKBxfol40p9WY77G8RWvspUNuyFQcrayI+VPRwtlEqk
-	4VuqGyIEJ1xmqQZLNNuuB9HA==
-X-Google-Smtp-Source: AGHT+IEUTtzLxs5g5kci6lKCF5KVuZ0xnaZX56Mvsf90g0KbQUQr8wiEQn+WQgoSjGtyk87mNvopu1KNHYsC8JAMUx4=
-X-Received: by 2002:a17:90b:4d08:b0:304:eacf:8bba with SMTP id
- 98e67ed59e1d1-30a220c9efdmr372231a91.4.1745872190315; Mon, 28 Apr 2025
- 13:29:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745873877; x=1746478677;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AuAi49HAJJQIt//Ur0G31c7rmQctMxdbA26IlvOPDzQ=;
+        b=rgjzn+SDMx2GlkZfZP6tGcCmHN/2lnxRoA4eleXnB9UcK+gNRaXidEDBP2BJVcqJKi
+         zF5PFbx1U+l/TxrP3SVR2llz3LusGx4vjcEmhsNzPNv+ue158HlbGtdByTnXrR9Ubkhg
+         7T9S+lZWV6x5Y+j6MAjfWdRVZLWTEUofBn58/Lb00csERoRVnxI5jw5lS7AxK5MjgJHi
+         GIcd0hrPeKWRkcFv3o7Ju+WQ1asna3rMGVJB8eh11jd/QpO2V0Zqk2dpD+tiQJJxe+8J
+         4n0IEjfVvylYzbcJ8CXlAblY+1KXQMrkQU/iyiWZZ2Pz0KiWmRaNCwzFnZLgEIRWl+wL
+         K+6A==
+X-Forwarded-Encrypted: i=1; AJvYcCWHinCZD+x4p+PMlZMuq/9PMqhlMbfLUgFkgDRauuxtUuM9TtVW5xAm00h6p6TmCpoVDJiZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxtFMspmV/fBiWDSKet5XD68TC7xLLZX6HOkrop3HjZldRJzFBc
+	ZGcHr9nmVj9z0wibNxuznVmLwAQ2JpVv0vUVvdkEYmOd/aiwsVB0EtzONzmF0p2o6qYrigHLwfv
+	YjsphMQ==
+X-Gm-Gg: ASbGncuscgJv8DbGwozZh3ykkcfNUruwVEZ26vDMldQxUwkhCu+C8clx8tXAPwd3cyc
+	pGuiMRxxoN4iw3hzoE78CZQGTX1m2oGflUuTOjLFSKwMbvPQrnPhXdiIE2RVEtJ9FZC6WtFgdch
+	O2IsQFEcyyqEAIy/rsZsk5xn5GUf/guru5h+3vz9RB8px+G938mnZmIde7by+tjv126Ivc44SU5
+	PPmPlZlVj+YHBpXGO4Oen2NfNNJM1VquLGtj/m1pyj2Y9P5HxYdh1u9N9gZ7PRX+u8neXomd53o
+	xbwKpco9/Ckvf3tbqa81ygm/5GYv7yaJcZBYWXW7gd4yvKslfC/Kfyo5caRhQhUWiz0M/LgTML0
+	dbWUvDXMTFP6AzrU=
+X-Google-Smtp-Source: AGHT+IF26mzLXZ6cAcZYN9jMPOjyr1bUC1YvzxSQN0sSy8/3SCZ0mlTHjSVo2oR4tq9cOfPJDDHjwQ==
+X-Received: by 2002:a17:906:c108:b0:ac7:391b:e688 with SMTP id a640c23a62f3a-ace84bd60e4mr804509666b.58.1745873876650;
+        Mon, 28 Apr 2025 13:57:56 -0700 (PDT)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f7035462c2sm6302168a12.58.2025.04.28.13.57.55
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Apr 2025 13:57:55 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac2c663a3daso1037347866b.2
+        for <llvm@lists.linux.dev>; Mon, 28 Apr 2025 13:57:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU6VL6eEi3mhTD/JQ5cOfj6DUYJl1sGERYlas6hJZFq+z06+CQ5hDYO5LqZ6OCx/3qPKB0y@lists.linux.dev
+X-Received: by 2002:a17:907:2d21:b0:ace:6e8b:516c with SMTP id
+ a640c23a62f3a-ace848f79c7mr950122666b.20.1745873875562; Mon, 28 Apr 2025
+ 13:57:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250114132856.19463-1-yangtiezhu@loongson.cn> <ab7f1ba8-a49c-41a1-9b6f-ca142fbbe9d2@aosc.io>
-In-Reply-To: <ab7f1ba8-a49c-41a1-9b6f-ca142fbbe9d2@aosc.io>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 28 Apr 2025 16:29:39 -0400
-X-Gm-Features: ATxdqUGv1ycYYD9t-wVox9vr8AM5Fx_3PDDiQ8wX5TQlGWUKZ2inXTmqYb8_VfM
-Message-ID: <CADnq5_PCMDBVQn6sL7_3C=aHk-b-wn-JzPnQoTun7DcqN1PNrQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] drm/amd/display: Stop control flow if the divisior
- is zero
-To: Mingcong Bai <jeffbai@aosc.io>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Xinhui Pan <Xinhui.Pan@amd.com>, Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Nathan Chancellor <nathan@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev, 
-	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Kexy Biscuit <kexybiscuit@aosc.io>
+References: <CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com>
+ <CAHk-=wip2-yTrWpAkrUQ0iejEo2PjReddu4xntwBvdnSvWDbzg@mail.gmail.com>
+ <20250426200513.GA427956@ax162> <CAHk-=wgPCbZv0JgqoNWMOO+p=N772YW16xYk_pmb1GU7aeuPFA@mail.gmail.com>
+ <20250426232344.GA1395819@ax162> <CAHk-=wha-AgeeqATWRrKuopM4fKhhF_tZE_raQM77qO7Zd3fOQ@mail.gmail.com>
+ <CAGG=3QUk8-Ak7YKnRziO4=0z=1C_7+4jF+6ZeDQ9yF+kuTOHOQ@mail.gmail.com>
+ <CAHk-=wgrT9++rFTnM1vh3bwx2Pcc18anDGQCwEL+0d2nDm3p+A@mail.gmail.com> <zizdtmyqqprnlgy2rzvvmqzhganxpuxqqkudhwakianlapl6zp@zucf2xtoabez>
+In-Reply-To: <zizdtmyqqprnlgy2rzvvmqzhganxpuxqqkudhwakianlapl6zp@zucf2xtoabez>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 28 Apr 2025 13:57:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=witM==gebAaEqr_Z9jV-Y7i-=w_tfMovzhgW+VX4Fwkmw@mail.gmail.com>
+X-Gm-Features: ATxdqUHVoU0fqtTa0EcdInlUrRY0LAso2qHrbrMUyXdvOmWof2RJdPZnjJYyf4I
+Message-ID: <CAHk-=witM==gebAaEqr_Z9jV-Y7i-=w_tfMovzhgW+VX4Fwkmw@mail.gmail.com>
+Subject: Re: clang and drm issue: objtool warnings from clang build
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	"the arch/x86 maintainers" <x86@kernel.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025 at 11:55=E2=80=AFPM Mingcong Bai <jeffbai@aosc.io> wro=
-te:
+On Mon, 28 Apr 2025 at 12:54, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 >
-> Hi all,
->
-> =E5=9C=A8 2025/1/14 21:28, Tiezhu Yang =E5=86=99=E9=81=93:
-> > As far as I can tell, with the current existing macro definitions, ther=
-e
-> > is no better way to do the minimal and proper changes to stop the contr=
-ol
-> > flow if the divisior is zero.
-> >
-> > In order to keep the current ability for the aim of debugging and avoid
-> > printing the warning message twice, it is better to only use ASSERT_BUG=
-()
-> > and SPL_ASSERT_BUG() directly after doing the following two steps:
-> >
-> > (1) Add ASSERT_BUG() macro definition
-> > (2) Add SPL_ASSERT_BUG() macro definition
-> >
-> > This version is based on 6.13-rc7, tested on x86 and LoongArch.
-> >
-> > Tiezhu Yang (3):
-> >    drm/amd/display: Add ASSERT_BUG() macro definition
-> >    drm/amd/display: Add SPL_ASSERT_BUG() macro definition
-> >    drm/amd/display: Harden callers of division functions
-> >
-> >   drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c  |  2 +-
-> >   drivers/gpu/drm/amd/display/dc/os_types.h           |  7 +++++++
-> >   drivers/gpu/drm/amd/display/dc/spl/spl_debug.h      | 11 +++++++++++
-> >   drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c |  2 +-
-> >   4 files changed, 20 insertions(+), 2 deletions(-)
-> >
->
-> Gentle ping on this series...
->
-> Harry and Huacai, can you please take a look at this updated series
-> (since you have both provided comments on previous revisions?), thank you=
-!
+> BTW, I've noticed Clang also generates UB for negative shift values.  I
+> assume we'd want it to stop checking for those as well.
 
-I grabbed this series, but after reading this thread:
-https://lists.freedesktop.org/archives/dri-devel/2025-April/503021.html
-I'm wondering if it wouldn't be better to just allow the divide by 0
-rather than triggering BUG().
+Yeah, that seems to match the exact same issue.
 
-Alex
+And again - the correct fix would be for the compiler to not do extra
+work only to make for worse results.
+
+Note that it's different if we *ask* for -fsanitize-undefined-xyz: at
+that point we're literally asking the compiler to add extra code for
+reporting.
+
+But even then we absolutely don't want the "fall through to random
+code" behavior. We'd only want the reporting part, and then still
+generate valid code.
+
+So the "turn undefined behavior into truly random behavior" is *never*
+a valid model.
+
+It would be much better handled as implementation-defined. So "divide
+by zero" would have a very valid model - it will raise an exception.
+And shift by negative would have all the usual semantics on x86 (the
+shift value is just masked).
+
+Undefined behavior is a bad bad thing to try to take advantage of.
+It's bad in CPU design, it's bad in compiler design. If we have a bug
+- and bugs *will* happen - it's a lot better if that bug then causes
+some reliably bad behavior. It's better for security, it's better for
+debuggability.
+
+            Linus
