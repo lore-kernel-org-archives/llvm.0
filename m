@@ -1,63 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B544191F7E;
-	Tue, 29 Apr 2025 01:19:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419051DB958;
+	Tue, 29 Apr 2025 01:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745889575; cv=none; b=mK9wgkm0G/jW68ZiPgKaE4Pz/Oxr9gAThnDZxLu3/bsK+j+jpcqOcAEf8wIkzJADOloTF8aUA3uGYYLTs3QMq987k5AVIKB75n7EgVNuOWsO8qNKllFLXFtdZjb1u+GhCiXhweDxpG7rzVhX8262UNfYh5M9PS/hjSZOzmWcdJY=
+	t=1745889593; cv=none; b=idXOQv4XgCSLkEodZ9yttQ5GOR8lu5NoyQs2qPF1xKRWk8+E6egL1SJkP64+DBQN2vrMKGO6m7frcdujCMrZy6RkKrUfObMbM6LC7d0ObK2z5KGKv6XhWW1SsvoadMKIAFYqx1NJ8Tx5WODo7oGOusGk3C1JaTMyT08TytkRKUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745889575; c=relaxed/simple;
-	bh=qFqS07C21iG42LTejRUq51BjuyBgmJ+Qv3iR2LFVNWE=;
+	s=arc-20240116; t=1745889593; c=relaxed/simple;
+	bh=R3UAhkpOPCmKmxNTzkcTSJ8pqpaUKXLkVbgY8NNMnek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BLQdDU5n7JZ9FF5SMI6r5NVb+QXG0WTt0azZPaxWu3F2MBXno5ETd0S6eoFn7O/S6belB8YAtKj4Bz9zPZLCYa5w16/NZzppGRErxM6JYueET3VPT2TJnwi4gOkxeKNl6mxR1Q/OSfNj9Zx1XIe73IWo5Zc6h+whUc27+hydHQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IhF8RQcR; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=tg0o/kU4A7xwsaNfE00d6K9Z2ANbIiHNXiv6x8+HfeAJW4ksk1kp5ps/HwAwuzJ1Mt15jUEuYnbqZkql2aczloBu+RokqUnA1VukPcaYydy17uwXwhxzPIsLAfIrGRwsUHBiERYU96KvFpnXxBgz9UeVdrLNsI+w67LwqcIip94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ppi8C9P7; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IhF8RQcR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ppi8C9P7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745889573; x=1777425573;
+  t=1745889589; x=1777425589;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qFqS07C21iG42LTejRUq51BjuyBgmJ+Qv3iR2LFVNWE=;
-  b=IhF8RQcRf/MyTJhfepFdv5+BDP9MuSe+VC66VHdjSy5nnQqSjuWASrOW
-   Lg99aIa5smKkicXL3mm45M4XSgS2//iUSofU6skHoQbl++xBc7qj37W0S
-   bNm4lFNNZwcFjvkQeS+q/TCBTrq0HgmpI04O2C56ontNu9T8DPI238cr1
-   jnfF4b39twcXBR1bKYuG8OuWhehK5v+UKh79FnT6TnlG4bNT1NDEp4FMK
-   6C81cEYseWnh2B5gHg1ntNgp1vR15R+zDPPfY+GsVOkzf5OvWL/3qoJ4a
-   nnK9QvRbPRa2nFZcyt6Fsd+h5PEbj54uusOBqzPP56yEm2sL7yYYV4/Lw
-   g==;
-X-CSE-ConnectionGUID: wwjB6wTvTg2H7uM9WQbjGA==
-X-CSE-MsgGUID: bzfjQWESTLSefOrVcgnWZQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="72874008"
+  bh=R3UAhkpOPCmKmxNTzkcTSJ8pqpaUKXLkVbgY8NNMnek=;
+  b=Ppi8C9P7ZWFnwQaLr4UtY2scZYD+CESpKlKBbj9L/ZniuMxtI8QyDfqM
+   QZEyuohpZH7msLLkf6dBHv7rZ4C20xoxgmGcrzGpmHXwR+mw3Ie8K6ozM
+   3GbHh5e+9PBgS2Mod4e010SOAZcl+g8rH/x3QcC59n2cRylC2EF44ME4h
+   qs0oGxBqmJq3KLwSQga8L9lHuCbfPmqGnlB0Lq55KpXR/jDm6UVmjRd8Q
+   xqrIeOOhaULJRPB6vAt0DVZWB18AmIFXMWaFO1t/TCk9T101uoBG5S2s7
+   tKUc4GTSVGxh2QhJtYfWaNwFkDgAqA7jxXB8s62l4/zb1IFMaKtWhClKZ
+   w==;
+X-CSE-ConnectionGUID: K4yHyYtITnKAibm5Ovo9Gw==
+X-CSE-MsgGUID: h8NWTL8YRP2bnap8+OlvYg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="51165300"
 X-IronPort-AV: E=Sophos;i="6.15,247,1739865600"; 
-   d="scan'208";a="72874008"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 18:19:31 -0700
-X-CSE-ConnectionGUID: 55lpcPONSgyUiCQ2sa4E6A==
-X-CSE-MsgGUID: omqvoasxT+Sk60XLylKEVA==
+   d="scan'208";a="51165300"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 18:19:36 -0700
+X-CSE-ConnectionGUID: NL+2JPk/QSatszxG4Hf86A==
+X-CSE-MsgGUID: SgVXDWYzSQ2Krf65Z8hqvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,247,1739865600"; 
-   d="scan'208";a="133581488"
+   d="scan'208";a="164775790"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 28 Apr 2025 18:19:28 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 28 Apr 2025 18:19:28 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u9Zd7-00001j-2B;
+	id 1u9Zd7-00001R-1V;
 	Tue, 29 Apr 2025 01:19:25 +0000
-Date: Tue, 29 Apr 2025 05:02:25 +0800
+Date: Tue, 29 Apr 2025 02:45:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [rft, PATCH v1 1/1] PM: Don't use "proxy" headers
-Message-ID: <202504290454.QoNM6l5v-lkp@intel.com>
-References: <20250428071922.3264455-1-andriy.shevchenko@linux.intel.com>
+To: Sai Sree Kartheek Adivi <s-adivi@ti.com>, peter.ujfalusi@gmail.com,
+	vkoul@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, nm@ti.com, ssantosh@kernel.org,
+	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	praneeth@ti.com, vigneshr@ti.com, u-kumar1@ti.com, a-chavda@ti.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 5/8] drivers: soc: ti: k3-ringacc: handle absence of tisci
+Message-ID: <202504290207.ct0tnV56-lkp@intel.com>
+References: <20250428072032.946008-6-s-adivi@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,204 +67,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250428071922.3264455-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20250428072032.946008-6-s-adivi@ti.com>
 
-Hi Andy,
+Hi Sai,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v6.15-rc4 next-20250428]
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on linus/master v6.15-rc4]
+[cannot apply to next-20250428]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/PM-Don-t-use-proxy-headers/20250428-152021
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250428071922.3264455-1-andriy.shevchenko%40linux.intel.com
-patch subject: [rft, PATCH v1 1/1] PM: Don't use "proxy" headers
-config: riscv-randconfig-002-20250428 (https://download.01.org/0day-ci/archive/20250429/202504290454.QoNM6l5v-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250429/202504290454.QoNM6l5v-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Sree-Kartheek-Adivi/dt-bindings-dma-ti-Add-document-for-K3-BCDMA-V2/20250428-152616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20250428072032.946008-6-s-adivi%40ti.com
+patch subject: [PATCH 5/8] drivers: soc: ti: k3-ringacc: handle absence of tisci
+config: arm64-randconfig-001-20250428 (https://download.01.org/0day-ci/archive/20250429/202504290207.ct0tnV56-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250429/202504290207.ct0tnV56-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504290454.QoNM6l5v-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504290207.ct0tnV56-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/ssb/pcihost_wrapper.c:14:
->> include/linux/pm.h:690:18: error: field has incomplete type 'struct hrtimer'
-     690 |         struct hrtimer          suspend_timer;
-         |                                 ^
-   include/linux/pm.h:690:9: note: forward declaration of 'struct hrtimer'
-     690 |         struct hrtimer          suspend_timer;
-         |                ^
-   In file included from drivers/ssb/pcihost_wrapper.c:15:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ssb/pcihost_wrapper.c:15:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ssb/pcihost_wrapper.c:15:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ssb/pcihost_wrapper.c:15:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ssb/pcihost_wrapper.c:15:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ssb/pcihost_wrapper.c:15:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
+>> drivers/soc/ti/k3-ringacc.c:214: warning: Function parameter or struct member 'cfg' not described in 'k3_ring'
+>> drivers/soc/ti/k3-ringacc.c:214: warning: Function parameter or struct member 'intr' not described in 'k3_ring'
 
 
-vim +690 include/linux/pm.h
+vim +214 drivers/soc/ti/k3-ringacc.c
 
-08810a4119aaeb Rafael J. Wysocki 2017-10-25  660  
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  661  struct dev_pm_info {
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  662  	pm_message_t		power_state;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  663  	bool			can_wakeup:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  664  	bool			async_suspend:1;
-9ed9895370aedd Rafael J. Wysocki 2016-10-30  665  	bool			in_dpm_list:1;	/* Owned by the PM core */
-f76b168b6f117a Alan Stern        2011-06-18  666  	bool			is_prepared:1;	/* Owned by the PM core */
-6d0e0e84f66d32 Alan Stern        2011-06-18  667  	bool			is_suspended:1;	/* Ditto */
-3d2699bc179a10 Liu, Chuansheng   2014-02-18  668  	bool			is_noirq_suspended:1;
-3d2699bc179a10 Liu, Chuansheng   2014-02-18  669  	bool			is_late_suspended:1;
-85945c28b5a888 Sudeep Holla      2019-02-14  670  	bool			no_pm:1;
-bed2b42d9f0b41 Rafael J. Wysocki 2012-08-06  671  	bool			early_init:1;	/* Owned by the PM core */
-aae4518b3124b2 Rafael J. Wysocki 2014-05-16  672  	bool			direct_complete:1;	/* Owned by the PM core */
-08810a4119aaeb Rafael J. Wysocki 2017-10-25  673  	u32			driver_flags;
-074037ec79bea7 Rafael J. Wysocki 2010-09-22  674  	spinlock_t		lock;
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  675  #ifdef CONFIG_PM_SLEEP
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  676  	struct list_head	entry;
-5af84b82701a96 Rafael J. Wysocki 2010-01-23  677  	struct completion	completion;
-074037ec79bea7 Rafael J. Wysocki 2010-09-22  678  	struct wakeup_source	*wakeup;
-4ca46ff3e0d8c2 Rafael J. Wysocki 2011-10-16  679  	bool			wakeup_path:1;
-feb70af0e3ac68 Rafael J. Wysocki 2012-08-13  680  	bool			syscore:1;
-aa8e54b559479d Tomeu Vizoso      2016-01-07  681  	bool			no_pm_callbacks:1;	/* Owned by the PM core */
-3038b22bc09856 Rafael J. Wysocki 2025-02-25  682  	bool			work_in_progress:1;	/* Owned by the PM core */
-bca84a7b93fdc7 Rafael J. Wysocki 2025-02-18  683  	bool			smart_suspend:1;	/* Owned by the PM core */
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  684  	bool			must_resume:1;		/* Owned by the PM core */
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  685  	bool			may_skip_resume:1;	/* Set by subsystems */
-805bdaec1a4415 Rafael J. Wysocki 2011-02-24  686  #else
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  687  	bool			should_wakeup:1;
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  688  #endif
-d30d819dc83107 Rafael J. Wysocki 2014-11-27  689  #ifdef CONFIG_PM
-8234f6734c5d74 Vincent Guittot   2018-12-14 @690  	struct hrtimer		suspend_timer;
-6b61d49a55796d Grygorii Strashko 2020-09-18  691  	u64			timer_expires;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  692  	struct work_struct	work;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  693  	wait_queue_head_t	wait_queue;
-4990d4fe327b9d Tony Lindgren     2015-05-18  694  	struct wake_irq		*wakeirq;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  695  	atomic_t		usage_count;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  696  	atomic_t		child_count;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  697  	unsigned int		disable_depth:3;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  698  	bool			idle_notification:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  699  	bool			request_pending:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  700  	bool			deferred_resume:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  701  	bool			needs_force_resume:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  702  	bool			runtime_auto:1;
-372a12ed9d99c0 Ulf Hansson       2016-04-08  703  	bool			ignore_children:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  704  	bool			no_callbacks:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  705  	bool			irq_safe:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  706  	bool			use_autosuspend:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  707  	bool			timer_autosuspends:1;
-b017500ab53c06 Rafael J. Wysocki 2024-01-22  708  	bool			memalloc_noio:1;
-baa8809f60971d Rafael J. Wysocki 2016-10-30  709  	unsigned int		links_count;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  710  	enum rpm_request	request;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  711  	enum rpm_status		runtime_status;
-c24efa6732788f Rafael J. Wysocki 2021-12-07  712  	enum rpm_status		last_status;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  713  	int			runtime_error;
-15bcb91d7e607d Alan Stern        2010-09-25  714  	int			autosuspend_delay;
-8234f6734c5d74 Vincent Guittot   2018-12-14  715  	u64			last_busy;
-a08c2a5a319411 Thara Gopinath    2019-01-23  716  	u64			active_time;
-a08c2a5a319411 Thara Gopinath    2019-01-23  717  	u64			suspended_time;
-a08c2a5a319411 Thara Gopinath    2019-01-23  718  	u64			accounting_timestamp;
-5e928f77a09a07 Rafael J. Wysocki 2009-08-18  719  #endif
-5c095a0e0d600d Rafael J. Wysocki 2011-08-25  720  	struct pm_subsys_data	*subsys_data;  /* Owned by the subsystem. */
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  721  	void (*set_latency_tolerance)(struct device *, s32);
-5f986c590fcf42 Rafael J. Wysocki 2012-10-23  722  	struct dev_pm_qos	*qos;
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  723  };
-1eede070a59e1c Rafael J. Wysocki 2008-05-20  724  
+6b3da0b475b877 Peter Ujfalusi          2020-07-24  168  
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  169  /**
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  170   * struct k3_ring - RA Ring descriptor
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  171   *
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  172   * @rt: Ring control/status registers
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  173   * @fifos: Ring queues registers
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  174   * @proxy: Ring Proxy Datapath registers
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  175   * @ring_mem_dma: Ring buffer dma address
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  176   * @ring_mem_virt: Ring buffer virt address
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  177   * @ops: Ring operations
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  178   * @size: Ring size in elements
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  179   * @elm_size: Size of the ring element
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  180   * @mode: Ring mode
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  181   * @flags: flags
+50883affe17e11 Lee Jones               2020-11-21  182   * @state: Ring state
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  183   * @ring_id: Ring Id
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  184   * @parent: Pointer on struct @k3_ringacc
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  185   * @use_count: Use count for shared rings
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  186   * @proxy_id: RA Ring Proxy Id (only if @K3_RINGACC_RING_USE_PROXY)
+8c42379e40e2db Peter Ujfalusi          2020-10-25  187   * @dma_dev: device to be used for DMA API (allocation, mapping)
+d782298c6f6b85 Grygorii Strashko       2020-12-08  188   * @asel: Address Space Select value for physical addresses
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  189   */
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  190  struct k3_ring {
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  191  	struct k3_ring_rt_regs __iomem *rt;
+babdc2c3524293 Sai Sree Kartheek Adivi 2025-04-28  192  	struct k3_ring_cfg_regs __iomem *cfg;
+babdc2c3524293 Sai Sree Kartheek Adivi 2025-04-28  193  	struct k3_ring_intr_regs __iomem *intr;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  194  	struct k3_ring_fifo_regs __iomem *fifos;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  195  	struct k3_ringacc_proxy_target_regs  __iomem *proxy;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  196  	dma_addr_t	ring_mem_dma;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  197  	void		*ring_mem_virt;
+d9483b44c94eba Christophe JAILLET      2024-07-09  198  	const struct k3_ring_ops *ops;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  199  	u32		size;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  200  	enum k3_ring_size elm_size;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  201  	enum k3_ring_mode mode;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  202  	u32		flags;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  203  #define K3_RING_FLAG_BUSY	BIT(1)
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  204  #define K3_RING_FLAG_SHARED	BIT(2)
+d782298c6f6b85 Grygorii Strashko       2020-12-08  205  #define K3_RING_FLAG_REVERSE	BIT(3)
+6b3da0b475b877 Peter Ujfalusi          2020-07-24  206  	struct k3_ring_state state;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  207  	u32		ring_id;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  208  	struct k3_ringacc	*parent;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  209  	u32		use_count;
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  210  	int		proxy_id;
+8c42379e40e2db Peter Ujfalusi          2020-10-25  211  	struct device	*dma_dev;
+d782298c6f6b85 Grygorii Strashko       2020-12-08  212  	u32		asel;
+d782298c6f6b85 Grygorii Strashko       2020-12-08  213  #define K3_ADDRESS_ASEL_SHIFT	48
+3277e8aa2504d9 Grygorii Strashko       2020-01-15 @214  };
+3277e8aa2504d9 Grygorii Strashko       2020-01-15  215  
 
 -- 
 0-DAY CI Kernel Test Service
