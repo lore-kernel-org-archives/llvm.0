@@ -1,59 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EC72D322D;
-	Tue, 29 Apr 2025 14:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB2B23F413;
+	Tue, 29 Apr 2025 16:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745935999; cv=none; b=fp4Rv39CuUJbgjJe0JLCOBMf9wXI4Xx7Ga0mWWktZnRHgkwKKF5x4KDoradW31aEvJX4Jb6CjThEFGbf831cacPRKWFjQrVT/F5mMCAH0MZpjOTZtClovdytVh+tRcnR314h4LY7olvssCcjFOn3M2OzMpmmCbIYyFB9qrV17CY=
+	t=1745944676; cv=none; b=F9N+YB0pnmnxgRbVT9oIVMvNYzdokEFbWp7CEtEiOH36rgDZlb5JoE8qP2WSTfTPQR+3oHCyfIsDDxkxc0iF3brS+l20QxZGy40HJjhvytfYeNE2DKfLCgmZpPw2cApaT/Zlk41Z8EhPM0qnwiKrt9vqQgmySrsTy9Mxlzq9IqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745935999; c=relaxed/simple;
-	bh=Yu7f9tzi6LX1C8UdNtJGalMf9pu2ilKEueJGgLENWAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HtpNp+kV5nlgU5yIqTb/E9wa0EwRBRnQqCPo0e789e7HM+yzbONRFWTz1t8sMm8UKfq2oNnR5Hl5NYNwPXExJnPTSl0X/8WTrq+ArfAdtWtQMCwb9H5xCNJG0lqwJVAfDFZJUSnplpwIjt5ELip+k/2nj8oqkf4f36cbdQ3aheY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIuO5GNN; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1745944676; c=relaxed/simple;
+	bh=VLHDyQ3gv+d0/xCunQosPm0u0ghgi9MXHQslBr37jyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNqA1c/ttn18+mdL7/LTzH56tcqCB4mF7ocPpO9lurpM4eIyGH5o9Q0y823IWdgTUOiBfo8wV65d4K/1kW0y2VLg3q56DL2FxDeo5RkXdBA0fVeoAYNgvj7neIaH6O8BoiR4JgCCisgNvxHWMADmM2y6Qt6nkP1HyJQe8i9ICBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FbS/BQrQ; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIuO5GNN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FbS/BQrQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745935998; x=1777471998;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Yu7f9tzi6LX1C8UdNtJGalMf9pu2ilKEueJGgLENWAE=;
-  b=GIuO5GNNwgOQDMd8TPE5j6N0hiIj2RmbhSksF1fO0ZoxRpFXPgsTDICl
-   PmRHhIc9wddVJIUVyhutK4X/aIdN1l0Erj0Fd4QGGSj0BwfEiI0OExxQ9
-   4KWZyZ1jT6H8cDkKtV/NI/hIDPI15cOYEsD1XmzC5SM0FkQpITiFhGnCw
-   P8uIvNMxLCZHl4iZOzMO613T1EgGfx3sHjdk/Es3Mw3hG5K6NGCn75TaC
-   E/TtQzdlto60SKAwBaZbCD1Ihgw5idV7+YUaDs4rabY810sDdP9FmPV43
-   +K9C5bwdi4xTSreu2+3nJOkIspa0LBTlE0/EN4BOE6Krc4pFBO6DYjhv1
-   Q==;
-X-CSE-ConnectionGUID: DU95cQpKSGWtrcZ0VBAFmA==
-X-CSE-MsgGUID: GuOtcIBdRqiP5gxoxLgTlg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="47654138"
+  t=1745944674; x=1777480674;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VLHDyQ3gv+d0/xCunQosPm0u0ghgi9MXHQslBr37jyA=;
+  b=FbS/BQrQa2y1KMzMc4fPSXI/2Z/s+Veigq2nazVgWAu6lumB2lmrfbXQ
+   znSa+orHN7mhs7zwBnFICD6hFyoBSVZpOX3wiHRyk+SxXzv8VhRfqHY4N
+   qcpECJlytct+MAJIMjGFzBqLy0nNyAE1QzJuO4BdQYUVKdFnwW4SMxGWb
+   steJjUyHjXSRnngFtpkU7JWDTjuckS4r6bTIn0ze4K25xiLWvORhqHnE7
+   H04YnxTzo1UrV3ivV1z+mvv86qXjmlxyrcKYOEXkZGIh9wPAl8B9+jZz7
+   PcnW4wZOxL268XhI6ay1z7BLyuQcviApIA3R/GqssyrqT3gSX0I8FL4nP
+   w==;
+X-CSE-ConnectionGUID: 57bhDOKmTVKIKZj5eArz4A==
+X-CSE-MsgGUID: FW585erWSBeNx/kx9EAspg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="58215016"
 X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
-   d="scan'208";a="47654138"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 07:12:57 -0700
-X-CSE-ConnectionGUID: LiH06JmYRpCXr7FKVNMURA==
-X-CSE-MsgGUID: oLAD9oZ4SxOleM7Mv5wh4g==
+   d="scan'208";a="58215016"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 09:37:53 -0700
+X-CSE-ConnectionGUID: TGvhxFDySBa9YR8V/Yeb2g==
+X-CSE-MsgGUID: qYG2wNeAR8it1V++ON/tcA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
-   d="scan'208";a="137869491"
+   d="scan'208";a="133771195"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 29 Apr 2025 07:12:55 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 29 Apr 2025 09:37:49 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u9lhc-0000lL-2T;
-	Tue, 29 Apr 2025 14:12:52 +0000
-Date: Tue, 29 Apr 2025 22:12:46 +0800
+	id 1u9nxq-0000vH-2S;
+	Tue, 29 Apr 2025 16:37:46 +0000
+Date: Wed, 30 Apr 2025 00:37:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: Donet Tom <donettom@linux.ibm.com>, Mike Rapoport <rppt@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>, rafael@kernel.org,
+	Danilo Krummrich <dakr@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:work.coredump.socket 5/7] fs/coredump.c:838:undefined
- reference to `__sys_socket_file'
-Message-ID: <202504292132.X8Dp1ivB-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ritesh Harjani <ritesh.list@gmail.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Dave Jiang <dave.jiang@intel.com>, linux-kernel@vger.kernel.org,
+	Donet Tom <donettom@linux.ibm.com>
+Subject: Re: [PATCH v2 1/2] driver/base: Optimize memory block registration
+ to reduce boot time
+Message-ID: <202504300020.lYdm2Yud-lkp@intel.com>
+References: <fbe1e0c7d91bf3fa9a64ff5d84b53ded1d0d5ac7.1745852397.git.donettom@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,333 +75,307 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <fbe1e0c7d91bf3fa9a64ff5d84b53ded1d0d5ac7.1745852397.git.donettom@linux.ibm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.coredump.socket
-head:   d8ddde5ebf795ed29f5878dcb81155d7d284a2ea
-commit: 2361e84e09b447644c90d5af5863c54862461935 [5/7] coredump: add COREDUMP_SOCK
-config: s390-randconfig-001-20250429 (https://download.01.org/0day-ci/archive/20250429/202504292132.X8Dp1ivB-lkp@intel.com/config)
+Hi Donet,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.15-rc4 next-20250429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Donet-Tom/driver-base-Remove-unused-functions/20250429-010442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/fbe1e0c7d91bf3fa9a64ff5d84b53ded1d0d5ac7.1745852397.git.donettom%40linux.ibm.com
+patch subject: [PATCH v2 1/2] driver/base: Optimize memory block registration to reduce boot time
+config: s390-randconfig-001-20250429 (https://download.01.org/0day-ci/archive/20250430/202504300020.lYdm2Yud-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250429/202504292132.X8Dp1ivB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250430/202504300020.lYdm2Yud-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504292132.X8Dp1ivB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504300020.lYdm2Yud-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   s390x-linux-ld: fs/coredump.o: in function `do_coredump':
->> fs/coredump.c:838:(.text+0xebe): undefined reference to `__sys_socket_file'
->> s390x-linux-ld: fs/coredump.c:843:(.text+0x125e): undefined reference to `__sys_connect_file'
->> s390x-linux-ld: fs/coredump.c:847:(.text+0x1486): undefined reference to `sock_from_file'
->> s390x-linux-ld: fs/coredump.c:847:(.text+0x1490): undefined reference to `__sys_shutdown_sock'
-
-
-vim +838 fs/coredump.c
-
-   608	
-   609	void do_coredump(const kernel_siginfo_t *siginfo)
-   610	{
-   611		struct core_state core_state;
-   612		struct core_name cn;
-   613		struct mm_struct *mm = current->mm;
-   614		struct linux_binfmt * binfmt;
-   615		const struct cred *old_cred;
-   616		struct cred *cred;
-   617		int retval = 0;
-   618		size_t *argv = NULL;
-   619		int argc = 0;
-   620		/* require nonrelative corefile path and be extra careful */
-   621		bool need_suid_safe = false;
-   622		bool core_dumped = false;
-   623		static atomic_t core_dump_count = ATOMIC_INIT(0);
-   624		struct coredump_params cprm = {
-   625			.siginfo = siginfo,
-   626			.limit = rlimit(RLIMIT_CORE),
-   627			/*
-   628			 * We must use the same mm->flags while dumping core to avoid
-   629			 * inconsistency of bit flags, since this flag is not protected
-   630			 * by any locks.
-   631			 */
-   632			.mm_flags = mm->flags,
-   633			.vma_meta = NULL,
-   634			.cpu = raw_smp_processor_id(),
-   635		};
-   636	
-   637		audit_core_dumps(siginfo->si_signo);
-   638	
-   639		binfmt = mm->binfmt;
-   640		if (!binfmt || !binfmt->core_dump)
-   641			goto fail;
-   642		if (!__get_dumpable(cprm.mm_flags))
-   643			goto fail;
-   644	
-   645		cred = prepare_creds();
-   646		if (!cred)
-   647			goto fail;
-   648		/*
-   649		 * We cannot trust fsuid as being the "true" uid of the process
-   650		 * nor do we know its entire history. We only know it was tainted
-   651		 * so we dump it as root in mode 2, and only into a controlled
-   652		 * environment (pipe handler or fully qualified path).
-   653		 */
-   654		if (__get_dumpable(cprm.mm_flags) == SUID_DUMP_ROOT) {
-   655			/* Setuid core dump mode */
-   656			cred->fsuid = GLOBAL_ROOT_UID;	/* Dump root private */
-   657			need_suid_safe = true;
-   658		}
-   659	
-   660		retval = coredump_wait(siginfo->si_signo, &core_state);
-   661		if (retval < 0)
-   662			goto fail_creds;
-   663	
-   664		old_cred = override_creds(cred);
-   665	
-   666		retval = format_corename(&cn, &cprm, &argv, &argc);
-   667		if (retval < 0) {
-   668			coredump_report_failure("format_corename failed, aborting core");
-   669			goto fail_unlock;
-   670		}
-   671	
-   672		switch (cn.core_type) {
-   673		case COREDUMP_FILE: {
-   674			struct mnt_idmap *idmap;
-   675			struct inode *inode;
-   676			int open_flags = O_CREAT | O_WRONLY | O_NOFOLLOW |
-   677					 O_LARGEFILE | O_EXCL;
-   678	
-   679			if (cprm.limit < binfmt->min_coredump)
-   680				goto fail_unlock;
-   681	
-   682			if (need_suid_safe && cn.corename[0] != '/') {
-   683				coredump_report_failure(
-   684					"this process can only dump core to a fully qualified path, skipping core dump");
-   685				goto fail_unlock;
-   686			}
-   687	
-   688			/*
-   689			 * Unlink the file if it exists unless this is a SUID
-   690			 * binary - in that case, we're running around with root
-   691			 * privs and don't want to unlink another user's coredump.
-   692			 */
-   693			if (!need_suid_safe) {
-   694				/*
-   695				 * If it doesn't exist, that's fine. If there's some
-   696				 * other problem, we'll catch it at the filp_open().
-   697				 */
-   698				do_unlinkat(AT_FDCWD, getname_kernel(cn.corename));
-   699			}
-   700	
-   701			/*
-   702			 * There is a race between unlinking and creating the
-   703			 * file, but if that causes an EEXIST here, that's
-   704			 * fine - another process raced with us while creating
-   705			 * the corefile, and the other process won. To userspace,
-   706			 * what matters is that at least one of the two processes
-   707			 * writes its coredump successfully, not which one.
-   708			 */
-   709			if (need_suid_safe) {
-   710				/*
-   711				 * Using user namespaces, normal user tasks can change
-   712				 * their current->fs->root to point to arbitrary
-   713				 * directories. Since the intention of the "only dump
-   714				 * with a fully qualified path" rule is to control where
-   715				 * coredumps may be placed using root privileges,
-   716				 * current->fs->root must not be used. Instead, use the
-   717				 * root directory of init_task.
-   718				 */
-   719				struct path root;
-   720	
-   721				task_lock(&init_task);
-   722				get_fs_root(init_task.fs, &root);
-   723				task_unlock(&init_task);
-   724				cprm.file = file_open_root(&root, cn.corename,
-   725							   open_flags, 0600);
-   726				path_put(&root);
-   727			} else {
-   728				cprm.file = filp_open(cn.corename, open_flags, 0600);
-   729			}
-   730			if (IS_ERR(cprm.file))
-   731				goto fail_unlock;
-   732	
-   733			inode = file_inode(cprm.file);
-   734			if (inode->i_nlink > 1)
-   735				goto close_fail;
-   736			if (d_unhashed(cprm.file->f_path.dentry))
-   737				goto close_fail;
-   738			/*
-   739			 * AK: actually i see no reason to not allow this for named
-   740			 * pipes etc, but keep the previous behaviour for now.
-   741			 */
-   742			if (!S_ISREG(inode->i_mode))
-   743				goto close_fail;
-   744			/*
-   745			 * Don't dump core if the filesystem changed owner or mode
-   746			 * of the file during file creation. This is an issue when
-   747			 * a process dumps core while its cwd is e.g. on a vfat
-   748			 * filesystem.
-   749			 */
-   750			idmap = file_mnt_idmap(cprm.file);
-   751			if (!vfsuid_eq_kuid(i_uid_into_vfsuid(idmap, inode),
-   752					    current_fsuid())) {
-   753				coredump_report_failure("Core dump to %s aborted: "
-   754					"cannot preserve file owner", cn.corename);
-   755				goto close_fail;
-   756			}
-   757			if ((inode->i_mode & 0677) != 0600) {
-   758				coredump_report_failure("Core dump to %s aborted: "
-   759					"cannot preserve file permissions", cn.corename);
-   760				goto close_fail;
-   761			}
-   762			if (!(cprm.file->f_mode & FMODE_CAN_WRITE))
-   763				goto close_fail;
-   764			if (do_truncate(idmap, cprm.file->f_path.dentry,
-   765					0, 0, cprm.file))
-   766				goto close_fail;
-   767			break;
-   768		}
-   769		case COREDUMP_PIPE: {
-   770			int argi;
-   771			int dump_count;
-   772			char **helper_argv;
-   773			struct subprocess_info *sub_info;
-   774	
-   775			if (cprm.limit == 1) {
-   776				/* See umh_coredump_setup() which sets RLIMIT_CORE = 1.
-   777				 *
-   778				 * Normally core limits are irrelevant to pipes, since
-   779				 * we're not writing to the file system, but we use
-   780				 * cprm.limit of 1 here as a special value, this is a
-   781				 * consistent way to catch recursive crashes.
-   782				 * We can still crash if the core_pattern binary sets
-   783				 * RLIM_CORE = !1, but it runs as root, and can do
-   784				 * lots of stupid things.
-   785				 *
-   786				 * Note that we use task_tgid_vnr here to grab the pid
-   787				 * of the process group leader.  That way we get the
-   788				 * right pid if a thread in a multi-threaded
-   789				 * core_pattern process dies.
-   790				 */
-   791				coredump_report_failure("RLIMIT_CORE is set to 1, aborting core");
-   792				goto fail_unlock;
-   793			}
-   794			cprm.limit = RLIM_INFINITY;
-   795	
-   796			dump_count = atomic_inc_return(&core_dump_count);
-   797			if (core_pipe_limit && (core_pipe_limit < dump_count)) {
-   798				coredump_report_failure("over core_pipe_limit, skipping core dump");
-   799				goto fail_dropcount;
-   800			}
-   801	
-   802			helper_argv = kmalloc_array(argc + 1, sizeof(*helper_argv),
-   803						    GFP_KERNEL);
-   804			if (!helper_argv) {
-   805				coredump_report_failure("%s failed to allocate memory", __func__);
-   806				goto fail_dropcount;
-   807			}
-   808			for (argi = 0; argi < argc; argi++)
-   809				helper_argv[argi] = cn.corename + argv[argi];
-   810			helper_argv[argi] = NULL;
-   811	
-   812			retval = -ENOMEM;
-   813			sub_info = call_usermodehelper_setup(helper_argv[0],
-   814							helper_argv, NULL, GFP_KERNEL,
-   815							umh_coredump_setup, NULL, &cprm);
-   816			if (sub_info)
-   817				retval = call_usermodehelper_exec(sub_info,
-   818								  UMH_WAIT_EXEC);
-   819	
-   820			kfree(helper_argv);
-   821			if (retval) {
-   822				coredump_report_failure("|%s pipe failed", cn.corename);
-   823				goto close_fail;
-   824			}
-   825			break;
-   826		}
-   827		case COREDUMP_SOCK: {
-   828			struct file *file __free(fput) = NULL;
-   829			struct sockaddr_un unix_addr = {
-   830				.sun_family = AF_UNIX,
-   831			};
-   832			struct sockaddr_storage *addr;
-   833	
-   834			retval = strscpy(unix_addr.sun_path, cn.corename, sizeof(unix_addr.sun_path));
-   835			if (retval < 0)
-   836				goto close_fail;
-   837	
- > 838			file = __sys_socket_file(AF_UNIX, SOCK_STREAM, 0);
-   839			if (IS_ERR(file))
-   840				goto close_fail;
-   841	
-   842			addr = (struct sockaddr_storage *)(&unix_addr);
- > 843			retval = __sys_connect_file(file, addr, sizeof(unix_addr), O_CLOEXEC);
-   844			if (retval)
-   845				goto close_fail;
-   846	
- > 847			retval =  __sys_shutdown_sock(sock_from_file(file), SHUT_RD);
-   848			if (retval)
-   849				goto close_fail;
-   850	
-   851			cprm.file = no_free_ptr(file);
-   852			break;
-   853		}
-   854		default:
-   855			WARN_ON_ONCE(true);
-   856			retval = -EINVAL;
-   857			goto close_fail;
-   858		}
-   859	
-   860		/* get us an unshared descriptor table; almost always a no-op */
-   861		/* The cell spufs coredump code reads the file descriptor tables */
-   862		retval = unshare_files();
-   863		if (retval)
-   864			goto close_fail;
-   865		if (!dump_interrupted()) {
-   866			/*
-   867			 * umh disabled with CONFIG_STATIC_USERMODEHELPER_PATH="" would
-   868			 * have this set to NULL.
-   869			 */
-   870			if (!cprm.file) {
-   871				coredump_report_failure("Core dump to |%s disabled", cn.corename);
-   872				goto close_fail;
-   873			}
-   874			if (!dump_vma_snapshot(&cprm))
-   875				goto close_fail;
-   876	
-   877			file_start_write(cprm.file);
-   878			core_dumped = binfmt->core_dump(&cprm);
-   879			/*
-   880			 * Ensures that file size is big enough to contain the current
-   881			 * file postion. This prevents gdb from complaining about
-   882			 * a truncated file if the last "write" to the file was
-   883			 * dump_skip.
-   884			 */
-   885			if (cprm.to_skip) {
-   886				cprm.to_skip--;
-   887				dump_emit(&cprm, "", 1);
-   888			}
-   889			file_end_write(cprm.file);
-   890			free_vma_snapshot(&cprm);
-   891		}
-   892		if ((cn.core_type == COREDUMP_PIPE) && core_pipe_limit)
-   893			wait_for_dump_helpers(cprm.file);
-   894	close_fail:
-   895		if (cprm.file)
-   896			filp_close(cprm.file, NULL);
-   897	fail_dropcount:
-   898		if (cn.core_type == COREDUMP_PIPE)
-   899			atomic_dec(&core_dump_count);
-   900	fail_unlock:
-   901		kfree(argv);
-   902		kfree(cn.corename);
-   903		coredump_finish(core_dumped);
-   904		revert_creds(old_cred);
-   905	fail_creds:
-   906		put_cred(cred);
-   907	fail:
-   908		return;
-   909	}
-   910	
+   In file included from fs/attr.c:18:
+   In file included from include/linux/security.h:35:
+   In file included from include/linux/bpf.h:30:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   1 warning generated.
+--
+   In file included from mm/slub.c:14:
+   In file included from include/linux/swap.h:11:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   mm/slub.c:414:6: warning: unused function 'stat_add' [-Wunused-function]
+     414 | void stat_add(const struct kmem_cache *s, enum stat_item si, int v)
+         |      ^~~~~~~~
+   mm/slub.c:527:21: warning: unused function 'get_freepointer_safe' [-Wunused-function]
+     527 | static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
+         |                     ^~~~~~~~~~~~~~~~~~~~
+   mm/slub.c:627:1: warning: unused function 'slub_set_cpu_partial' [-Wunused-function]
+     627 | slub_set_cpu_partial(struct kmem_cache *s, unsigned int nr_objects)
+         | ^~~~~~~~~~~~~~~~~~~~
+   mm/slub.c:691:20: warning: unused function '__slab_update_freelist' [-Wunused-function]
+     691 | static inline bool __slab_update_freelist(struct kmem_cache *s, struct slab *slab,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~
+   mm/slub.c:1889:20: warning: unused function 'set_track' [-Wunused-function]
+    1889 | static inline void set_track(struct kmem_cache *s, void *object,
+         |                    ^~~~~~~~~
+   mm/slub.c:3429:19: warning: unused function 'node_match' [-Wunused-function]
+    3429 | static inline int node_match(struct slab *slab, int node)
+         |                   ^~~~~~~~~~
+   7 warnings generated.
+--
+   In file included from mm/mremap.c:12:
+   In file included from include/linux/mm_inline.h:8:
+   In file included from include/linux/swap.h:11:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   mm/mremap.c:288:20: warning: unused function 'arch_supports_page_table_move' [-Wunused-function]
+     288 | static inline bool arch_supports_page_table_move(void)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/mremap.c:287:39: note: expanded from macro 'arch_supports_page_table_move'
+     287 | #define arch_supports_page_table_move arch_supports_page_table_move
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from kernel/jump_label.c:9:
+   In file included from include/linux/memory.h:19:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/jump_label.c:415:20: warning: unused function 'static_key_type' [-Wunused-function]
+     415 | static inline bool static_key_type(struct static_key *key)
+         |                    ^~~~~~~~~~~~~~~
+   kernel/jump_label.c:420:20: warning: unused function 'static_key_linked' [-Wunused-function]
+     420 | static inline bool static_key_linked(struct static_key *key)
+         |                    ^~~~~~~~~~~~~~~~~
+   kernel/jump_label.c:425:20: warning: unused function 'static_key_clear_linked' [-Wunused-function]
+     425 | static inline void static_key_clear_linked(struct static_key *key)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/jump_label.c:430:20: warning: unused function 'static_key_set_linked' [-Wunused-function]
+     430 | static inline void static_key_set_linked(struct static_key *key)
+         |                    ^~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
+--
+   In file included from io_uring/uring_cmd.c:7:
+   In file included from include/linux/security.h:35:
+   In file included from include/linux/bpf.h:30:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   io_uring/uring_cmd.c:306:19: warning: unused function 'io_uring_cmd_getsockopt' [-Wunused-function]
+     306 | static inline int io_uring_cmd_getsockopt(struct socket *sock,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   io_uring/uring_cmd.c:333:19: warning: unused function 'io_uring_cmd_setsockopt' [-Wunused-function]
+     333 | static inline int io_uring_cmd_setsockopt(struct socket *sock,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+   In file included from kernel/trace/ftrace.c:17:
+   In file included from include/linux/stop_machine.h:5:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/trace/ftrace.c:4354:19: warning: unused function 'test_for_valid_rec' [-Wunused-function]
+    4354 | static inline int test_for_valid_rec(struct dyn_ftrace *rec)
+         |                   ^~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from kernel/sched/fair.c:57:
+   In file included from kernel/sched/sched.h:31:
+   In file included from include/linux/cpufreq.h:12:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/sched/fair.c:484:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
+     484 | static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:505:19: warning: unused function 'tg_is_idle' [-Wunused-function]
+     505 | static inline int tg_is_idle(struct task_group *tg)
+         |                   ^~~~~~~~~~
+   kernel/sched/fair.c:6747:20: warning: unused function 'sync_throttle' [-Wunused-function]
+    6747 | static inline void sync_throttle(struct task_group *tg, int cpu) {}
+         |                    ^~~~~~~~~~~~~
+   kernel/sched/fair.c:6771:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
+    6771 | static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+         |                                     ^~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:6775:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
+    6775 | static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~
+   6 warnings generated.
+--
+   In file included from kernel/sched/core.c:14:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:94:
+   In file included from include/trace/syscall.h:5:
+   In file included from include/linux/tracepoint.h:22:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/sched/core.c:6444:1: warning: unused function 'class_core_lock_lock_ptr' [-Wunused-function]
+    6444 | DEFINE_LOCK_GUARD_1(core_lock, int,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6445 |                     sched_core_lock(*_T->lock, &_T->flags),
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6446 |                     sched_core_unlock(*_T->lock, &_T->flags),
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6447 |                     unsigned long flags)
+         |                     ~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:408:49: note: expanded from macro 'DEFINE_LOCK_GUARD_1'
+     408 | __DEFINE_CLASS_IS_CONDITIONAL(_name, false);                            \
+         |                                                                         ^
+     409 | __DEFINE_UNLOCK_GUARD(_name, _type, _unlock, __VA_ARGS__)               \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:387:10: note: expanded from macro '\
+   __DEFINE_UNLOCK_GUARD'
+     387 |                                                                         \
+         |                                                                         ^
+     388 | __DEFINE_GUARD_LOCK_PTR(_name, &_T->lock)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:295:23: note: expanded from macro '\
+   __DEFINE_GUARD_LOCK_PTR'
+     295 |         static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:36:1: note: expanded from here
+      36 | class_core_lock_lock_ptr
+         | ^~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from kernel/trace/rv/monitors/snep/snep.c:3:
+   In file included from include/linux/tracepoint.h:22:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/trace/rv/monitors/snep/snep.c:21:1: warning: unused function 'da_handle_start_run_event_snep' [-Wunused-function]
+      21 | DECLARE_DA_MON_PER_CPU(snep, unsigned char);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/rv/da_monitor.h:536:48: note: expanded from macro 'DECLARE_DA_MON_PER_CPU'
+     536 | DECLARE_DA_MON_INIT_PER_CPU(name, type)                                                         \
+         |                                                                                                 ^
+     537 | DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT(name, type)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/rv/da_monitor.h:438:20: note: expanded from macro '\
+   DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT'
+     438 | static inline bool da_handle_start_run_event_##name(enum events_##name event)                   \
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:2:1: note: expanded from here
+       2 | da_handle_start_run_event_snep
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from kernel/trace/rv/monitors/scpd/scpd.c:3:
+   In file included from include/linux/tracepoint.h:22:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/trace/rv/monitors/scpd/scpd.c:21:1: warning: unused function 'da_handle_start_run_event_scpd' [-Wunused-function]
+      21 | DECLARE_DA_MON_PER_CPU(scpd, unsigned char);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/rv/da_monitor.h:536:48: note: expanded from macro 'DECLARE_DA_MON_PER_CPU'
+     536 | DECLARE_DA_MON_INIT_PER_CPU(name, type)                                                         \
+         |                                                                                                 ^
+     537 | DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT(name, type)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/rv/da_monitor.h:438:20: note: expanded from macro '\
+   DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT'
+     438 | static inline bool da_handle_start_run_event_##name(enum events_##name event)                   \
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:2:1: note: expanded from here
+       2 | da_handle_start_run_event_scpd
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from kernel/trace/rv/monitors/wip/wip.c:3:
+   In file included from include/linux/tracepoint.h:22:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+>> include/linux/node.h:124:6: warning: no previous prototype for function 'register_memory_blocks_under_node_early' [-Wmissing-prototypes]
+     124 | void register_memory_blocks_under_node_early(int nid)
+         |      ^
+   include/linux/node.h:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     124 | void register_memory_blocks_under_node_early(int nid)
+         | ^
+         | static 
+   kernel/trace/rv/monitors/wip/wip.c:20:1: warning: unused function 'da_handle_start_run_event_wip' [-Wunused-function]
+      20 | DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/rv/da_monitor.h:536:48: note: expanded from macro 'DECLARE_DA_MON_PER_CPU'
+     536 | DECLARE_DA_MON_INIT_PER_CPU(name, type)                                                         \
+         |                                                                                                 ^
+     537 | DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT(name, type)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/rv/da_monitor.h:438:20: note: expanded from macro '\
+   DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT'
+     438 | static inline bool da_handle_start_run_event_##name(enum events_##name event)                   \
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:172:1: note: expanded from here
+     172 | da_handle_start_run_event_wip
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+..
 
 -- 
 0-DAY CI Kernel Test Service
