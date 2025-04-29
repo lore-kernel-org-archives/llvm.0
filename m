@@ -1,136 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899DA2741C2;
-	Tue, 29 Apr 2025 22:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8894A256995;
+	Tue, 29 Apr 2025 23:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745966307; cv=none; b=hUGfsrFiqRNi4G2rWgSdR58Cu4u3bSrmF2yFBwfX9x7foxxy0dL77Yof+i5D9bHeYQT6u2m69XuWtcyLXG8ocQfKPvCgIzHxTG6YkVQMC8wDMBdzMJ1dXtZ7f3CBaQlTsslnf/CbOYO1TXU7yJ9STbVEonMmRPHGg9huQMeM+hg=
+	t=1745970682; cv=none; b=pCG2xpqWlRa9UZRs01k3wNcIlTs3k86szQm/N//mcEcwJgidFGhm2QCvWiJn9OQziMhGuSRr0KFXsUEb6AdNrqwZrNAfV5jhRrolnlVGlEnJnB+/QRuErLhXpOqVF82D4He1+Jbd2yB3PiA+lnC8/NE7f/kVaEF7HUfmn50CYKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745966307; c=relaxed/simple;
-	bh=9j0OBpPTy7CNxdm0ZJpE9tcdc4Fsfevskh7TEvuHBAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gxVh62b9Sbzji+YG/d4i9243wHLBeuaLYSCjR4aKlGM9q9WtcOLdLziHtxn/0eYoVoaxI4xASSSAX4H4ljS9mwi1CAoUMz843BuNLWefX5YXj0Pr0x0bMOT8lVa5FALfhKgSqdchy5UOiwMcS93fVybRxqTMwqlBrSd5j1XqlHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hhTK47+t; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745970682; c=relaxed/simple;
+	bh=ugnFpq/CJSiQpHZT0kH7G9ZFQdagTJgfEfE3JRV6fFs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=J6+WAi4m6oTcN0CnHgzQNMQ8AT4csymWcY/pHsuZLNHfz20m+9z8eWckYELSDXnyPRigZ8PNchsrELRVo+ZLgOF5UWV9XRhCta3vQJjTYaWEB8RN5mgsLH9mbWt4BjRHWjdA8HCAnBaVI7cRxrjxIA4cHisltOsp0MkndPaCSdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KcoAUxiZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hhTK47+t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745966306; x=1777502306;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9j0OBpPTy7CNxdm0ZJpE9tcdc4Fsfevskh7TEvuHBAc=;
-  b=hhTK47+tWiAs99FfIiakRrxdOI8b/948vAD97ym5zRr5PiWXMNrpulCR
-   tyJGkn5PmpLBN8hEeJfHY1ciLV+gw8Ht7KeXborJFxL6X0bgCghRKX9gl
-   xrRbCC9n/nekZiF3ftAfC7xb/HKwX704TltJUPcXIFCRu7EJ/FIKjpW6R
-   C3RUvRWrV+y18BRndl/x+41fz9uA0a1XomGF+Tx26lFvHndArIIQWd13k
-   Fjb+7eT02hB5fQrYDsJlwUvXjP5v1IcOWUnqvvvsR23WQZl8IMS4EFo+x
-   LbTJCvWa6dRT5J3xlseiyXWLAqzG96Wi19lRAZhgJzRrzIjoJm1yA+YkF
-   A==;
-X-CSE-ConnectionGUID: +WRoZEa9RN2YwqGTsrP7hA==
-X-CSE-MsgGUID: ylgtVBY2SYa5+RLOYGopzw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="51427994"
-X-IronPort-AV: E=Sophos;i="6.15,250,1739865600"; 
-   d="scan'208";a="51427994"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 15:38:23 -0700
-X-CSE-ConnectionGUID: HmcNqxyQTMW8M/btigjxDQ==
-X-CSE-MsgGUID: dOALC5XtQh+q5bhAJOzfnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,250,1739865600"; 
-   d="scan'208";a="138765459"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 29 Apr 2025 15:38:21 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u9tal-0002zm-2S;
-	Tue, 29 Apr 2025 22:38:19 +0000
-Date: Wed, 30 Apr 2025 06:37:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [jgunthorpe:iommu_pt 19/22] ld.lld: error: undefined symbol:
- pt_iommu_x86_64_hw_info
-Message-ID: <202504300622.6hXIcimG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KcoAUxiZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD48BC4CEE3;
+	Tue, 29 Apr 2025 23:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745970682;
+	bh=ugnFpq/CJSiQpHZT0kH7G9ZFQdagTJgfEfE3JRV6fFs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KcoAUxiZoOPYCuhS6vf9GK0Fw2CVOeI0C03x8dlkOSb23N8uNIEz/wxaSvvP21tj2
+	 ikG3OrxwJPFX/j4rDveqBuawR43z1jpXlrmBW+rkCuQBA/3gnqmILqHXgPh+Ncu+jc
+	 o//749AfFbsNfG5iSa6tEv6vC3gWPwC1YkGOB+NImrj1I0kBnB7k31oogQLDOgmCfV
+	 O3M/nsCnREVIDuf1GcYexcmmljCqWAKZTIHV8qnCv0Gtd9+bp+zr0kyDz1ZPTg5F9G
+	 g6WZA1sc4BnWAtk8+4leMOCPutykXstm7gERnKC4GguEO561ER7bwC5gpEqMwj3kdC
+	 dhs0QgaIvdlIw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
+	zhangxi <zhangxi@kylinos.cn>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	nathan@kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.14 39/39] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
+Date: Tue, 29 Apr 2025 19:50:06 -0400
+Message-Id: <20250429235006.536648-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250429235006.536648-1-sashal@kernel.org>
+References: <20250429235006.536648-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.4
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/jgunthorpe/linux iommu_pt
-head:   c1dec260d8b78443ef82054138c29a8d3d155a74
-commit: ee6aae7327cd34c61889435908500dbce710d984 [19/22] iommu/amd: Use the generic iommu page table
-config: x86_64-buildonly-randconfig-006-20250430 (https://download.01.org/0day-ci/archive/20250430/202504300622.6hXIcimG-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250430/202504300622.6hXIcimG-lkp@intel.com/reproduce)
+From: Haoran Jiang <jianghaoran@kylinos.cn>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504300622.6hXIcimG-lkp@intel.com/
+[ Upstream commit 548762f05d19c5542db7590bcdfb9be1fb928376 ]
 
-All errors (new ones prefixed by >>):
+When building the latest samples/bpf on LoongArch Fedora
 
->> ld.lld: error: undefined symbol: pt_iommu_x86_64_hw_info
-   >>> referenced by iommu.c:2144 (drivers/iommu/amd/iommu.c:2144)
-   >>>               vmlinux.o:(amd_iommu_attach_device)
---
->> ld.lld: error: undefined symbol: pt_iommu_amdv1_hw_info
-   >>> referenced by iommu.c:2029 (drivers/iommu/amd/iommu.c:2029)
-   >>>               vmlinux.o:(set_dte_entry)
---
->> ld.lld: error: undefined symbol: pt_iommu_x86_64_unmap_pages
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv2_ops)
---
->> ld.lld: error: undefined symbol: pt_iommu_amdv1_init
-   >>> referenced by iommu.c:2608 (drivers/iommu/amd/iommu.c:2608)
-   >>>               vmlinux.o:(amd_iommu_domain_alloc_paging_v1)
---
->> ld.lld: error: undefined symbol: pt_iommu_x86_64_init
-   >>> referenced by iommu.c:2669 (drivers/iommu/amd/iommu.c:2669)
-   >>>               vmlinux.o:(amd_iommu_domain_alloc_paging_v2)
---
->> ld.lld: error: undefined symbol: pt_iommu_amdv1_read_and_clear_dirty
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv1_dirty_ops)
---
->> ld.lld: error: undefined symbol: pt_iommu_amdv1_map_pages
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv1_ops)
---
->> ld.lld: error: undefined symbol: pt_iommu_amdv1_iova_to_phys
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv1_ops)
---
->> ld.lld: error: undefined symbol: pt_iommu_amdv1_unmap_pages
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv1_ops)
---
->> ld.lld: error: undefined symbol: pt_iommu_x86_64_map_pages
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv2_ops)
---
->> ld.lld: error: undefined symbol: pt_iommu_x86_64_iova_to_phys
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(amdv2_ops)
+     make M=samples/bpf
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMU_PT_AMDV1
-   Depends on [n]: GENERIC_PT [=n] && IOMMU_PT [=n] && !GENERIC_ATOMIC64 [=n]
-   Selected by [y]:
-   - AMD_IOMMU [=y] && IOMMU_SUPPORT [=y] && X86_64 [=y] && PCI [=y] && ACPI [=y] && HAVE_CMPXCHG_DOUBLE [=y]
-   WARNING: unmet direct dependencies detected for IOMMU_PT_X86_64
-   Depends on [n]: GENERIC_PT [=n] && IOMMU_PT [=n] && !GENERIC_ATOMIC64 [=n]
-   Selected by [y]:
-   - AMD_IOMMU [=y] && IOMMU_SUPPORT [=y] && X86_64 [=y] && PCI [=y] && ACPI [=y] && HAVE_CMPXCHG_DOUBLE [=y]
+There are compilation errors as follows:
 
+In file included from ./linux/samples/bpf/sockex2_kern.c:2:
+In file included from ./include/uapi/linux/in.h:25:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:9:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/loongarch/include/asm/thread_info.h:15:
+In file included from ./arch/loongarch/include/asm/processor.h:13:
+In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
+./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
+         ^~~~~~~~~~~~~~~
+1 error generated.
+
+larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
+and the header file location is specified at compile time.
+
+Test on LoongArch Fedora:
+https://github.com/fedora-remix-loongarch/releases-info
+
+Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+Signed-off-by: zhangxi <zhangxi@kylinos.cn>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20250425095042.838824-1-jianghaoran@kylinos.cn
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ samples/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 5b632635e00dd..95a4fa1f1e447 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -376,7 +376,7 @@ $(obj)/%.o: $(src)/%.c
+ 	@echo "  CLANG-bpf " $@
+ 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
+ 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
+-		-I$(LIBBPF_INCLUDE) \
++		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+ 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
+ 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
+ 		-Wno-gnu-variable-sized-type-not-at-end \
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
