@@ -1,107 +1,59 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE22C204F9B
-	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 09:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDDC278E42;
+	Tue, 29 Apr 2025 10:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745920422; cv=none; b=isuIE1WMVnMXm7GdwWuiOMUBTc/PvKdiBMyEYAwupjtxXpR3CJQv9HPLX9hJ27wOV7IS6b00tNYJ9VGS7x+aaJrbyaUt28LQSnYl7qGiK0b+OC0cGwTumOxK73wzsALDfQcZyMCsR6jksnRwy+BiYpNDotwpIRa5xJtRVJXpSNY=
+	t=1745923455; cv=none; b=eYaNbOQFUHss+4I0aWHJJPmdD0cIrspblTEaq6t5eGzrSEFNpRZxzSkrjEMpYzLiOrSwmJX+BEZ9y0J1IGk9o4n2KRutpXDhhvwYV719nxx/Fr29QADW5gQWCp8JHvHhLvFQvjiHT1YAGGW6sDczqCbhzuoPFQQx3wQqol+ZgPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745920422; c=relaxed/simple;
-	bh=OhGV0jZlvwbTl/ALDvHmL48asVDhok2hLypoi47b+h0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bYtlqqYeS+CSyVGtRx+RYTYz5pN1SmuduAsh/s0n93ssxKUJzwd9qfGI0BBnQnjskj94KqRLyd8kIjSvbGPDVkSLAdH4MjPYHELjIjGd0YgUYYkzBc4Ji2ABtUOAUS1bLV6Hfd14I7VJYgK5cT0WHFmgwZ0GInrTDQs0V0d9IT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3860E1516;
-	Tue, 29 Apr 2025 02:53:33 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EBBE3F66E;
-	Tue, 29 Apr 2025 02:53:39 -0700 (PDT)
-Date: Tue, 29 Apr 2025 10:53:35 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Namhyung Kim <namhyung@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Yicong Yang <yangyicong@hisilicon.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
-	Ben Gainey <ben.gainey@arm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	Eder Zulian <ezulian@redhat.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
-	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Howard Chu <howardchu95@gmail.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Jann Horn <jannh@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Yang Jihong <yangjihong@bytedance.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Graham Woodward <graham.woodward@arm.com>,
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
-	Tengda Wu <wutengda@huaweicloud.com>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Chun-Tse Shao <ctshao@google.com>,
-	Casey Chen <cachen@purestorage.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Li Huafei <lihuafei1@huawei.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
-	Thomas Falcon <thomas.falcon@intel.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Andrew Kreimer <algonell@gmail.com>,
-	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
-	Junhao He <hejunhao3@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Xu Yang <xu.yang_2@nxp.com>,
-	Steve Clevenger <scclevenger@os.amperecomputing.com>,
-	Zixian Cai <fzczx123@gmail.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>,
-	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
-Message-ID: <20250429095335.GH551819@e132581.arm.com>
-References: <20250401182347.3422199-1-irogers@google.com>
- <20250401182347.3422199-10-irogers@google.com>
- <20250402143541.GM115840@e132581.arm.com>
- <CAP-5=fVqax8cxdZ4HLBP4AMxL6jADfYNrORC97T6F23mjf3N1w@mail.gmail.com>
- <20250402163807.GP115840@e132581.arm.com>
- <CAP-5=fVJkJ39_qx2T9ZHn-fdxjECP_2G+cyfRRAjLvZZt5vz2A@mail.gmail.com>
- <Z-4URXOzsVHTY7zz@google.com>
- <CAP-5=fXwAA0PNYAOLNLdHY8g+AyEB0UxmzgX5w-gGj_DZqUxtg@mail.gmail.com>
- <20250428111003.GC551819@e132581.arm.com>
- <CAP-5=fX3jn=ff9itMemKB22ACnHtU_cO6YUcx=uYYWX4=QaLJw@mail.gmail.com>
+	s=arc-20240116; t=1745923455; c=relaxed/simple;
+	bh=m/qJy+b8NE/HLp9V6SCwIyhElarYggTKKzO6CI8FZFY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FXa1mqxJZxboG2W4BXo8HyCa8EVsl9m+HLGO0jfcg2CmTAi0/m7ZeVeYhubBt0Ka3f+axubTlPgTOjLKyaHsssWrMuhF1PmC9V/XKUNSYW/IkWPM71hfjSYS6HKuXeMuEcJ3XaIf4P0KkeCRfmgaY1XzqEyiinfk2oG2OmANvlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UflEYS+z; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UflEYS+z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745923453; x=1777459453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m/qJy+b8NE/HLp9V6SCwIyhElarYggTKKzO6CI8FZFY=;
+  b=UflEYS+zaz7FxWMMehzWUK45neFXI1cbOpJABMyWnAOfEoOBPLWuIlF2
+   6ULFU0SaXKuS8VZQjr1YSeNQI7hJL6RTLtg31g1Nz0TdgwOD5ZM0PUJKe
+   YAXLu7qzJp8fVptpMgPvByyo0jHxhXQRzdI31JwcSLEaSlEq6bcNY6kKz
+   NNNujgluIDtInydzfoBsuomx9yQYLWbUloGtKNlhGxiIBRM95mtrwkHhT
+   F7AXfUCUOhJf2baiOUViIcxhozMyJMcX0emHsLw0b2Exg3FXpsSkO0L8w
+   R0xbG9p5M6Lp+fGdRmPRHxM8n0rrXhcf3kkndjCckraPWU/z3X5vJRiOx
+   A==;
+X-CSE-ConnectionGUID: yMBbHei2TuK/iLp0U+J3cg==
+X-CSE-MsgGUID: IsBWvAV5RBSWgLPi4+VVrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="58190987"
+X-IronPort-AV: E=Sophos;i="6.15,248,1739865600"; 
+   d="scan'208";a="58190987"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 03:44:12 -0700
+X-CSE-ConnectionGUID: MfsDg1wETeyZlTYfM/4AbA==
+X-CSE-MsgGUID: bBhn+R+5SSOSIp6Yb+Vg1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,248,1739865600"; 
+   d="scan'208";a="133672806"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Apr 2025 03:44:11 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u9iRd-0000fB-0w;
+	Tue, 29 Apr 2025 10:44:09 +0000
+Date: Tue, 29 Apr 2025 18:43:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:bugfix/common 5/6] fs/f2fs/data.c:153:38: error: use of
+ undeclared identifier 'sbi'
+Message-ID: <202504291850.1MMsrq8x-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -110,73 +62,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fX3jn=ff9itMemKB22ACnHtU_cO6YUcx=uYYWX4=QaLJw@mail.gmail.com>
 
-Hi Ian,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/common
+head:   0d3a805efb57a446736f275ab88d6f8b29a3ad09
+commit: 238708a6490ffcfb6314c2a8b2238d2bf2b3178b [5/6] f2fs: fix to do sanity check on node footer in read_end_io
+config: s390-randconfig-001-20250429 (https://download.01.org/0day-ci/archive/20250429/202504291850.1MMsrq8x-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250429/202504291850.1MMsrq8x-lkp@intel.com/reproduce)
 
-On Mon, Apr 28, 2025 at 09:29:37AM -0700, Ian Rogers wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504291850.1MMsrq8x-lkp@intel.com/
 
-[...]
+All errors (new ones prefixed by >>):
 
-> Hi Leo,
-> 
-> So I sent out cleaning up the kernel headers separately:
-> https://lore.kernel.org/lkml/20250403165702.396388-1-irogers@google.com/
-> Arnd commented that it would be nicer to do larger changes, but my
-> concern was breaking printf modifiers, etc. It looks like those
-> patches have lost momentum, not sure what's going to happen about them
-> being merged.
-> 
-> On the fixes vs refactoring. I'm not sure refactoring is the right
-> term for the other things in the series. It is basically trying to
-> make implicit casts explicit, without doing some boil the ocean
-> exercise.
+>> fs/f2fs/data.c:153:38: error: use of undeclared identifier 'sbi'
+     153 |                 if (folio->mapping == NODE_MAPPING(sbi)) {
+         |                                                    ^
+>> fs/f2fs/data.c:154:8: error: call to undeclared function 'sanity_check_node_footer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     154 |                         if (sanity_check_node_footer(sbi, folio, folio->index,
+         |                             ^
+   fs/f2fs/data.c:154:33: error: use of undeclared identifier 'sbi'
+     154 |                         if (sanity_check_node_footer(sbi, folio, folio->index,
+         |                                                      ^
+   3 errors generated.
 
-Yeah, I agreed that some "refactoring" is actually fixing bugs.
 
-> I went through the issues in the email this is a reply to:
-> https://lore.kernel.org/lkml/CAP-5=fXwAA0PNYAOLNLdHY8g+AyEB0UxmzgX5w-gGj_DZqUxtg@mail.gmail.com/
-> Do you want to send the bits you think need prioritizing to the list?
+vim +/sbi +153 fs/f2fs/data.c
 
-For me, at least two things can be fixed first:
+   122	
+   123	/*
+   124	 * Update and unlock a bio's pages, and free the bio.
+   125	 *
+   126	 * This marks pages up-to-date only if there was no error in the bio (I/O error,
+   127	 * decryption error, or verity error), as indicated by bio->bi_status.
+   128	 *
+   129	 * "Compressed pages" (pagecache pages backed by a compressed cluster on-disk)
+   130	 * aren't marked up-to-date here, as decompression is done on a per-compression-
+   131	 * cluster basis rather than a per-bio basis.  Instead, we only must do two
+   132	 * things for each compressed page here: call f2fs_end_read_compressed_page()
+   133	 * with failed=true if an error occurred before it would have normally gotten
+   134	 * called (i.e., I/O error or decryption error, but *not* verity error), and
+   135	 * release the bio's reference to the decompress_io_ctx of the page's cluster.
+   136	 */
+   137	static void f2fs_finish_read_bio(struct bio *bio, bool in_task)
+   138	{
+   139		struct folio_iter fi;
+   140		struct bio_post_read_ctx *ctx = bio->bi_private;
+   141	
+   142		bio_for_each_folio_all(fi, bio) {
+   143			struct folio *folio = fi.folio;
+   144	
+   145			if (f2fs_is_compressed_page(&folio->page)) {
+   146				if (ctx && !ctx->decompression_attempted)
+   147					f2fs_end_read_compressed_page(&folio->page, true, 0,
+   148								in_task);
+   149				f2fs_put_folio_dic(folio, in_task);
+   150				continue;
+   151			}
+   152	
+ > 153			if (folio->mapping == NODE_MAPPING(sbi)) {
+ > 154				if (sanity_check_node_footer(sbi, folio, folio->index,
+   155							NODE_TYPE_REGULAR, true))
+   156					bio->bi_status = BLK_STS_IOERR;
+   157			}
+   158	
+   159			dec_page_count(F2FS_F_SB(folio), __read_io_type(folio));
+   160			folio_end_read(folio, bio->bi_status == 0);
+   161		}
+   162	
+   163		if (ctx)
+   164			mempool_free(ctx, bio_post_read_ctx_pool);
+   165		bio_put(bio);
+   166	}
+   167	
 
-- One is the test case switch-tracking.c is broken on Arm64, your
-  change for the compar() function would be fine for me.
-
-- You mentioned the issue in ui/hist.c:
-  ret = b->callchain->max_depth - a->callchain->max_depth;
-
-These two issues are similiar and can fixed in the same format.
-
-> > > There are lots of cases like:
-> > > ```
-> > >                 case ARM_SPE_COUNTER:
-> > >                        if (idx == SPE_CNT_PKT_HDR_INDEX_TOTAL_LAT)
-> > > -                               decoder->record.latency = payload;
-> > > +                               decoder->record.latency = (u32)payload;
-> >
-> > This would be fine.  Since Arm SPE implements a counter with a maximum
-> > of 16 bits, there will never be an overflow when storing the data in a
-> > 32-bit unsigned integer.
-> 
-> The payload was > sizeof(u32), should record.latency be a u16?
-
-Yes, we can change to u16 type for latency.
-
-> My point wasn't so much to complain about adding a u32 cast in the SPE
-> code, but that having the cast makes it clear that truncation is
-> expected. Adding the casts isn't fixing a bug, but it is making it
-> clearer that the code will truncate the payload value (imo).
-
-As Arm SPE has defined the format, I would prefer to refine the code
-based on the format:
-
-  #define SPE_CNT_PKT_COUNT(v)    ((v) & GENMASK_ULL(15, 0))
-
-  decoder->record.latency = SPE_CNT_PKT_COUNT(payload);
-
-I can send a minor patch series for this, if not conflict with your
-side.
-
-Thanks,
-Leo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
