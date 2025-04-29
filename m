@@ -1,55 +1,55 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE302550C3
-	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 18:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27941255250
+	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 18:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745953158; cv=none; b=l/EKxtBwXVYVlNu2cX456ix6367wIA6/djASZ8ET7cWydoWq4AeMTQDRVxA/P2MeAGG6KjBFRdoHDfHh2BNzptQfoOVwGtgxzp31J0nwBXtwRk3xvqU8X4mGC/s0INEYziLGXAqcrgCfbVzpwQENDZyTTbGHQqx8f9X+HPP8H1w=
+	t=1745953160; cv=none; b=QHHKD76Z3TgApL2WhOqNj7VYOpVk4spJUvVj5fAxslS7eCz3AgqoiVZ9xmL8qpwaOG7nJv+ZPhwGd0eD5PK+1AT0guxlVFfErOge9G9BRipVnOkUjJoVT/nj/3ob/lpkknWstyuj5ycHrTpSN7R3NkGrDeujuQAO60EEaiGXyIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745953158; c=relaxed/simple;
-	bh=J3jpNhn0L0RmqQRHro2IecNg02DmmYFRiA3vyYti8QU=;
+	s=arc-20240116; t=1745953160; c=relaxed/simple;
+	bh=YsSJK+JBgrMChothMITffQgSKnUI35D9iUSvUi32+oo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=Doou+8HwDKRppuSbEsjFJoRYwC1VE4T+/D6XnqT3F9+CQRppEEm8sBt+h61Q8eDUtxuXhnxsCCsgYvg9z45EliKQBp59oz6wOLuko0lLohA86vnvCzfaAuXelHegWYIykOdVRdM/EXiiXqQQAKCyKvZXoia/RfxKhQQDZ1IWj1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IaSH20KR; arc=none smtp.client-ip=209.85.216.74
+	 To:Content-Type; b=ASqxYOKMKurg45ayTGaLJK3eaIwnYqwYG2yvqu++9dVTrv91DdgVzrHankXONXn3azGND3MrpMlwQhtml+qVMQpBNdT+dbbAbK0YYIlcKw7Wgvb292IAEVO3IfEi4TakKnvLTCvVRa0n6U4Xcg52BcGOxc5UKjBP5sw4jaxB+XU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c2kkMkhr; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IaSH20KR"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3032f4eca83so5722141a91.3
-        for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 11:59:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c2kkMkhr"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-736bf7eb149so4246918b3a.0
+        for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 11:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745953156; x=1746557956; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1745953158; x=1746557958; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kwZxu6T2B4sSkVVEcDdLfRn7wg748q/A7mexDtxkipg=;
-        b=IaSH20KRfdtu9u03Ouj+QZpS0wG/eUpyE+bUoCASd+Uhl9Bp2dwMISLuAEdcka4A3A
-         emZTEyV18LwSD131T2NHkBOdDNrJPzFpAx/LC+ppoJjKSi4mYVGJaT28D9SL812b3aAF
-         2DyzDUHsGfj4a+ckkDKFJ9ZmxAjvp8ZrlNRvgGzcOjfiwRsLOJ9vj3s3Udt7PKlDTRZK
-         eBOBO6XIwc7+gtc7FXX1Rwg5XP+e0QJQpAIkG6OsPMY5q3pnVBfgzO+eWo2x/1Rsxtsv
-         ouAkLI5DexrCLyq5/bMdIyRJQVhkQOjSR0b1NeWRfdZc5PuYp9VXm9rWNE79vG77IR9f
-         0phA==
+        bh=9cYhstsrbro2bvVLigEn3Nm+qEHX+oY+qpb1akXLGPE=;
+        b=c2kkMkhrqbSn2BpnoLU7buZNe8XI1Z2lWT2AVhp1FPX6ccGNMDRd67PHFO2142TjrT
+         jY/Gx+Jg7kg46QoH3Nbqwl6H1DcTDYLhlLFewRcYj0y9Xg/rWn5w4pUA7V8TNWcirJ1T
+         Gn3RFytbpa7A5M1eu8rR0nHnmqJ+X2xtDSw5codoxWqPjEHFOQ4mZFFIrbvqzEL/cKz0
+         R/hicwAHp4zzYdzkPPhKprfUsqjkjEUpQEnfDe4qXdWr5+WU5ZXyX03WOoYFR82rWypC
+         6nNvg/SBjKPG+R9jS+thjVH3oqTumcZQmnGrLkHVbDB1Hz2CuqHLuh5Jw8fQ2SmhU7Vs
+         lGJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745953156; x=1746557956;
+        d=1e100.net; s=20230601; t=1745953158; x=1746557958;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwZxu6T2B4sSkVVEcDdLfRn7wg748q/A7mexDtxkipg=;
-        b=qZMW2+wHTe0iM1ppFp8kVf1rM80LcHoIqE17g5WPvzMpGNqRyk7wHrByj5Dfoccnkv
-         +ZvHJenn61s2bEpgsPZaBPKN93izK5y72fD8MkoBlh5EmM8GKgTfJuUfBbQKWkDhaICQ
-         3psytPLLNKn280v0+G33MUXUhpMZUfQ7TAfA/iEJLDtMq+B/iLZLdMaax/ThqpgVjRd+
-         jpRTkilnMY8i263GON7sZHRC7TzSDnaBh/fdBqcASRHO044KeV2yvQtw3ZEqxgvlA4+g
-         rc+8nWOxoZ77SGL+du/+PYBcu+715pYj+CiTbaRhucwH2FsmlOLB+TwnVI0jVVGqlDEg
-         fGKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXe8TvGBuuBO4mJ7Fv0K5xg4y6Jk+w20h+Y+SXZbGnlzjQNW1Jj5nNT7DbbEHklYvPlnReW@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxd+nHj6xMZMza8qF2IskznMFWnTl3H3/m43XjBN0HJrTE/HQW+
-	/Gc0xExDNP76vghfFgnd1OFyDbmcn8HEpVXdgE+wqgMVrLmflIUlztD9zJjRdLr0oDr57Ra51uO
-	7+pBNNg==
-X-Google-Smtp-Source: AGHT+IEgShAFHftTTVxbrvVcDqE2v6HQyys2Tjgrus0Ml4unFOZkCNqcLxKiT5FKmZLOfryZx2Mt7AWcMLto
-X-Received: from pjbdj11.prod.google.com ([2002:a17:90a:d2cb:b0:2ff:6e58:8a0a])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:55c7:b0:2ee:e113:815d
- with SMTP id 98e67ed59e1d1-30a332ee938mr337025a91.8.1745953156249; Tue, 29
- Apr 2025 11:59:16 -0700 (PDT)
-Date: Tue, 29 Apr 2025 11:58:36 -0700
+        bh=9cYhstsrbro2bvVLigEn3Nm+qEHX+oY+qpb1akXLGPE=;
+        b=SWXWcDohB/jMA6dsPisWDaJl2AWiMvwSCS4TLLk68qwJer90pq45HkCdZEfXs+IvHO
+         TG68x8DFTurNgSmjF3aCRMtO9fhl7CsrnUXA3Lfz1A0iVAFHkyQoGAspxIG+AfwQiQm9
+         h/rLQUiIIeX6zxl6FGPHbKripxv3CWU31DVEJSeotX3CUU1MsS4kAN5f+kdhwFA+dnay
+         IqGtG2QcSVhoD5FB1E17ftf8o5LAJN1rgIs2o/qhWgEvd4JqA5Szntew8VomWtK8bL/T
+         DjtO+Rxy0tTThXqjdgNeuEu0QZTeJ+M2b+Vd7jv8ad8lWFEgCBHBr1gUk6nH1ulF2Cci
+         NABw==
+X-Forwarded-Encrypted: i=1; AJvYcCX16/70szi/9ohRUDn3xCURv8MTPLS+B6JTztxyKjihzlNU3ZHV1KQYXA90bReFiT8dOHKt@lists.linux.dev
+X-Gm-Message-State: AOJu0YzrJWz6MPbxpoM5NMRDTv0NtjLR0lQnUHrx/DIk3FzNhwdyf13s
+	HCMzk+Nz/adNsU3SmeYIn0mBLwECwiWhYZ1jT1CoDi9sz7ojdBKmin/L/49ekqM6q1Z0QP+oUQg
+	/SIMf/Q==
+X-Google-Smtp-Source: AGHT+IHLURQcORFZUyCUqj8vJLBwbANzxkfzIIQ8cSeqkoyYPkmTVhIgayBTFK2Pn7ZLE0MZ25TyzB0tZWfm
+X-Received: from pgac2.prod.google.com ([2002:a05:6a02:2942:b0:af3:30b9:99a4])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:2d07:b0:1f5:6c94:2cd7
+ with SMTP id adf61e73a8af0-20a899fc1ddmr96977637.42.1745953158400; Tue, 29
+ Apr 2025 11:59:18 -0700 (PDT)
+Date: Tue, 29 Apr 2025 11:58:37 -0700
 In-Reply-To: <20250429185839.1807005-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250429185839.1807005-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.901.g37484f566f-goog
-Message-ID: <20250429185839.1807005-5-irogers@google.com>
-Subject: [PATCH v1 4/6] perf test demangle-rust: Add Rust demangling test
+Message-ID: <20250429185839.1807005-6-irogers@google.com>
+Subject: [PATCH v1 5/6] perf test demangle-java: Switch to using dso__demangle_sym
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -83,160 +83,59 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Daniel Xu <dxu@dxuuu.xyz>
 Content-Type: text/plain; charset="UTF-8"
 
-The test cases are listed examples in:
-https://doc.rust-lang.org/rustc/symbol-mangling/v0.html
-
-This test was previously part of a different Rust v0 demangler:
-https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com/
+The use of the demangle-java APIs means we don't detect if a different
+demangler is used before the Java one for the case that matters to
+perf. Remove the return types from the demangled names as
+dso__demangle_sym removes those.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/Build                   |  1 +
- tools/perf/tests/builtin-test.c          |  1 +
- tools/perf/tests/demangle-rust-v0-test.c | 74 ++++++++++++++++++++++++
- tools/perf/tests/tests.h                 |  1 +
- tools/perf/util/symbol-elf.c             |  4 +-
- 5 files changed, 79 insertions(+), 2 deletions(-)
- create mode 100644 tools/perf/tests/demangle-rust-v0-test.c
+ tools/perf/tests/demangle-java-test.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-index 934f32090553..2181f5a92148 100644
---- a/tools/perf/tests/Build
-+++ b/tools/perf/tests/Build
-@@ -56,6 +56,7 @@ perf-test-y += genelf.o
- perf-test-y += api-io.o
- perf-test-y += demangle-java-test.o
- perf-test-y += demangle-ocaml-test.o
-+perf-test-y += demangle-rust-v0-test.o
- perf-test-y += pfm.o
- perf-test-y += parse-metric.o
- perf-test-y += pe-file-parsing.o
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index 14d30a5053be..45d3d8b3317a 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -126,6 +126,7 @@ static struct test_suite *generic_tests[] = {
- 	&suite__maps__merge_in,
- 	&suite__demangle_java,
- 	&suite__demangle_ocaml,
-+	&suite__demangle_rust,
- 	&suite__parse_metric,
- 	&suite__pe_file_parsing,
- 	&suite__expand_cgroup_events,
-diff --git a/tools/perf/tests/demangle-rust-v0-test.c b/tools/perf/tests/demangle-rust-v0-test.c
-new file mode 100644
-index 000000000000..efbc0fc25ffc
---- /dev/null
-+++ b/tools/perf/tests/demangle-rust-v0-test.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+#include "tests.h"
-+#include "debug.h"
+diff --git a/tools/perf/tests/demangle-java-test.c b/tools/perf/tests/demangle-java-test.c
+index 93c94408bdc8..ebaf60cdfa99 100644
+--- a/tools/perf/tests/demangle-java-test.c
++++ b/tools/perf/tests/demangle-java-test.c
+@@ -3,10 +3,9 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <linux/kernel.h>
+-#include "tests.h"
+-#include "session.h"
+ #include "debug.h"
+-#include "demangle-java.h"
 +#include "symbol.h"
-+#include <linux/kernel.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+static int test__demangle_rust(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
-+{
-+	int ret = TEST_OK;
-+	char *buf = NULL;
-+	size_t i;
-+
-+	struct {
-+		const char *mangled, *demangled;
-+	} test_cases[] = {
-+		{ "_RNvMsr_NtCs3ssYzQotkvD_3std4pathNtB5_7PathBuf3newCs15kBYyAo9fc_7mycrate",
-+		  "<std::path::PathBuf>::new" },
-+		{ "_RNvCs15kBYyAo9fc_7mycrate7example",
-+		  "mycrate::example" },
-+		{ "_RNvMs_Cs4Cv8Wi1oAIB_7mycrateNtB4_7Example3foo",
-+		  "<mycrate::Example>::foo" },
-+		{ "_RNvXCs15kBYyAo9fc_7mycrateNtB2_7ExampleNtB2_5Trait3foo",
-+		  "<mycrate::Example as mycrate::Trait>::foo" },
-+		{ "_RNvMCs7qp2U7fqm6G_7mycrateNtB2_7Example3foo",
-+		  "<mycrate::Example>::foo" },
-+		{ "_RNvMs_Cs7qp2U7fqm6G_7mycrateNtB4_7Example3bar",
-+		  "<mycrate::Example>::bar" },
-+		{ "_RNvYNtCs15kBYyAo9fc_7mycrate7ExampleNtB4_5Trait7exampleB4_",
-+		  "<mycrate::Example as mycrate::Trait>::example" },
-+		{ "_RNCNvCsgStHSCytQ6I_7mycrate4main0B3_",
-+		  "mycrate::main::{closure#0}" },
-+		{ "_RNCNvCsgStHSCytQ6I_7mycrate4mains_0B3_",
-+		  "mycrate::main::{closure#1}" },
-+		{ "_RINvCsgStHSCytQ6I_7mycrate7examplelKj1_EB2_",
-+		  "mycrate::example::<i32, 1>" },
-+		{ "_RINvCs7qp2U7fqm6G_7mycrate7exampleFG0_RL1_hRL0_tEuEB2_",
-+		  "mycrate::example::<for<'a, 'b> fn(&'a u8, &'b u16)>",
-+		},
-+		{ "_RINvCs7qp2U7fqm6G_7mycrate7exampleKy12345678_EB2_",
-+		  "mycrate::example::<305419896>" },
-+		{ "_RNvNvMCsd9PVOYlP1UU_7mycrateINtB4_7ExamplepKpE3foo14EXAMPLE_STATIC",
-+		  "<mycrate::Example<_, _>>::foo::EXAMPLE_STATIC",
-+		},
-+		{ "_RINvCs7qp2U7fqm6G_7mycrate7exampleAtj8_EB2_",
-+		  "mycrate::example::<[u16; 8]>" },
-+		{ "_RINvCs7qp2U7fqm6G_7mycrate7exampleNtB2_7ExampleBw_EB2_",
-+		  "mycrate::example::<mycrate::Example, mycrate::Example>" },
-+		{ "_RINvMsY_NtCseXNvpPnDBDp_3std4pathNtB6_4Path3neweECs7qp2U7fqm6G_7mycrate",
-+		  "<std::path::Path>::new::<str>" },
-+		{ "_RNvNvNvCs7qp2U7fqm6G_7mycrate7EXAMPLE7___getit5___KEY",
-+		  "mycrate::EXAMPLE::__getit::__KEY" },
-+	};
-+
-+	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-+		buf = dso__demangle_sym(/*dso=*/NULL, /*kmodule=*/0, test_cases[i].mangled);
-+		if (!buf) {
-+			pr_debug("FAILED to demangle: \"%s\"\n \"%s\"\n", test_cases[i].mangled,
-+				 test_cases[i].demangled);
-+			continue;
-+		}
-+		if (strcmp(buf, test_cases[i].demangled)) {
-+			pr_debug("FAILED: %s: %s != %s\n", test_cases[i].mangled,
-+				 buf, test_cases[i].demangled);
-+			ret = TEST_FAIL;
-+		}
-+		free(buf);
-+	}
-+
-+	return ret;
-+}
-+
-+DEFINE_SUITE("Demangle Rust", demangle_rust);
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index 8aea344536b8..bb7951c61971 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -157,6 +157,7 @@ DECLARE_SUITE(jit_write_elf);
- DECLARE_SUITE(api_io);
- DECLARE_SUITE(demangle_java);
- DECLARE_SUITE(demangle_ocaml);
-+DECLARE_SUITE(demangle_rust);
- DECLARE_SUITE(pfm);
- DECLARE_SUITE(parse_metric);
- DECLARE_SUITE(pe_file_parsing);
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index f953868521f2..8734e8b6cf84 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -319,7 +319,7 @@ static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
- 	 * DWARF DW_compile_unit has this, but we don't always have access
- 	 * to it...
- 	 */
--	if (!want_demangle(dso__kernel(dso) || kmodule))
-+	if (!want_demangle((dso && dso__kernel(dso)) || kmodule))
- 		return demangled;
++#include "tests.h"
  
- 	rust_demangle_demangle(elf_name, &rust_demangle);
-@@ -338,7 +338,7 @@ static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
- 			}
- 			demangled = tmp;
- 			if (rust_demangle_display_demangle(&rust_demangle, demangled, buf_len,
--							   /*alternate=*/false) == OverflowOk)
-+							   /*alternate=*/true) == OverflowOk)
- 				return demangled;
- 		}
- 		/* Buffer exceeded sensible bounds, return what is there. */
+ static int test__demangle_java(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+@@ -18,19 +17,19 @@ static int test__demangle_java(struct test_suite *test __maybe_unused, int subte
+ 		const char *mangled, *demangled;
+ 	} test_cases[] = {
+ 		{ "Ljava/lang/StringLatin1;equals([B[B)Z",
+-		  "boolean java.lang.StringLatin1.equals(byte[], byte[])" },
++		  "java.lang.StringLatin1.equals(byte[], byte[])" },
+ 		{ "Ljava/util/zip/ZipUtils;CENSIZ([BI)J",
+-		  "long java.util.zip.ZipUtils.CENSIZ(byte[], int)" },
++		  "java.util.zip.ZipUtils.CENSIZ(byte[], int)" },
+ 		{ "Ljava/util/regex/Pattern$BmpCharProperty;match(Ljava/util/regex/Matcher;ILjava/lang/CharSequence;)Z",
+-		  "boolean java.util.regex.Pattern$BmpCharProperty.match(java.util.regex.Matcher, int, java.lang.CharSequence)" },
++		  "java.util.regex.Pattern$BmpCharProperty.match(java.util.regex.Matcher, int, java.lang.CharSequence)" },
+ 		{ "Ljava/lang/AbstractStringBuilder;appendChars(Ljava/lang/String;II)V",
+-		  "void java.lang.AbstractStringBuilder.appendChars(java.lang.String, int, int)" },
++		  "java.lang.AbstractStringBuilder.appendChars(java.lang.String, int, int)" },
+ 		{ "Ljava/lang/Object;<init>()V",
+-		  "void java.lang.Object<init>()" },
++		  "java.lang.Object<init>()" },
+ 	};
+ 
+ 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
+-		buf = java_demangle_sym(test_cases[i].mangled, 0);
++		buf = dso__demangle_sym(/*dso=*/NULL, /*kmodule=*/0, test_cases[i].mangled);
+ 		if (strcmp(buf, test_cases[i].demangled)) {
+ 			pr_debug("FAILED: %s: %s != %s\n", test_cases[i].mangled,
+ 				 buf, test_cases[i].demangled);
 -- 
 2.49.0.901.g37484f566f-goog
 
