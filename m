@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81C32D81A0;
-	Tue, 29 Apr 2025 23:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56CB280330;
+	Tue, 29 Apr 2025 23:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970817; cv=none; b=FcjsWhU9aoZwKz7DIDFYYOz3pBFU3bAjoCgv/vkJ2ldtWZbBgCyMHJBxoq99MwDZs5o6gseJ3d4glXEHBkACC0lts7fVnEnfL1lQ+0Pr7rc4XFa2qhOcgKSXUPzSNxUS6JBgaaq4cxYmKhBgXfzsjihf8I+LrHlZjZXg0iTI5gA=
+	t=1745970835; cv=none; b=IcPXWJiBo4dpefqnEFCRxgkFoqr1mcw+UHXM47tqzZVpcmvuHGVzSRbJRUsLtMJJ69/g+JUL5jmrQSf+Vybij6N2u8gArVF/rX5acjQ2r9oEe88O5tnRvhE549sZcoy1WGT2aHVEVCWNVpcoU+wD+LS0Sw+5UHx90Xe3ftl3wNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970817; c=relaxed/simple;
-	bh=2lwC8t7cAngkPhM9CWEOePbjKZzinY9vlg4dD5N0xGc=;
+	s=arc-20240116; t=1745970835; c=relaxed/simple;
+	bh=3maTfG7PXMhhsZXTByIasarqq9svT5JNZYu4B7xjUC8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hbJ7RMXCMYU1T6sXoid3SqJdOk7O/2vWhXTuO7PR0KGJwIAF/ACd3Kjo0lLgXhU5FOb/LzBwl2Jz6T/2wBxdwXZ+Nty3/ix7TMkv/rWA8lT7GFYMyUDuUcwZkpzVVRQUyKGOsujDSWMs0waslAjRksNxOKsa86v3MRle8mW67E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ja55T0ns; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Edcv3DpEHDSy1J3enwlM9/bU88qFn7yk1fv/a0NBchaBJ2gGvqZai3QTjMEptSNMXhsLAey/MfzhCXSshJQDCOH/QK0q/LHpNl6oGkaiNCYjrzRhHYlXOOWQpGz46z2wdK74d02suHYsXfN8B8i7FyndLdNPwo3iE3L0KeuY13Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YP2/ffk+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ja55T0ns"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7332AC4CEE3;
-	Tue, 29 Apr 2025 23:53:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YP2/ffk+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C6DC4CEE3;
+	Tue, 29 Apr 2025 23:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970817;
-	bh=2lwC8t7cAngkPhM9CWEOePbjKZzinY9vlg4dD5N0xGc=;
+	s=k20201202; t=1745970835;
+	bh=3maTfG7PXMhhsZXTByIasarqq9svT5JNZYu4B7xjUC8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ja55T0nswkxn8SnXB8nxQ5xmsJYujAPU3voR0n3oUI/bdEJ2/4KTV7sc9oWtMpcMJ
-	 Q1BR6CUyq+OdAahdexN1mtNSytKSDGmkzMzZKroJP3q2sxWuLw2NE3L2Sfb7XGu386
-	 rsxVkMuE1/5G/qQPk/35M4JnApiEjjMRjAD9cYB8H9cr116KATkMQfuX6byBzynARu
-	 sg+MRWCFHYBRZWuF/n/YN4OLGhgF3VHZUC0nK4hzmW3Xh18Y5jU9nb+RUGZgKES0iZ
-	 Hm4rQDA3GV2G4+Pu/Q3gERT/tMgUO9Ll2Z/9c3cHNwL8UNEYwuJYtJLufGnx30vC3y
-	 v2hP24G4c7wUw==
+	b=YP2/ffk+BYJJPqfI/2a53zm1+1i4uXp6CkZCL8mTMB2+bCiiD0Pumy/cUbLL9tCtL
+	 9RQGgRxJHUkbY/9yaOOEJRfecUtWwCg57l3bOvBy7nQFDLNiOPKQr5drTHnbJeu7Be
+	 Nt7QabtZFA12bKrA4qBpbzkBG0eScgV3aX3Hpd9eyKzXW5IREcAwvMNYfqVGqRO/WW
+	 2RE7N+o2pJU68s8qIjjldhNsFjnfm45EYqmYFtwjYd1T2+QAE16H5U5qk5ThUVwy/7
+	 6bVP7A6p+ZO55pJNahymqTaIH3amXbE+CnLg6Jvpg3Pi4nYfIkMAOKi5rV4BA6MOrq
+	 AP4RFSRgRVIyQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -38,12 +38,12 @@ Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
 	nathan@kernel.org,
 	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 10/10] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
-Date: Tue, 29 Apr 2025 19:53:15 -0400
-Message-Id: <20250429235316.538129-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 7/7] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
+Date: Tue, 29 Apr 2025 19:53:38 -0400
+Message-Id: <20250429235339.538269-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235316.538129-1-sashal@kernel.org>
-References: <20250429235316.538129-1-sashal@kernel.org>
+In-Reply-To: <20250429235339.538269-1-sashal@kernel.org>
+References: <20250429235339.538269-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.135
+X-stable-base: Linux 5.15.180
 Content-Transfer-Encoding: 8bit
 
 From: Haoran Jiang <jianghaoran@kylinos.cn>
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 727da3c5879b2..77bf18cfdae7f 100644
+index e2c9ea65df9fb..9edf83eb2a99d 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
+@@ -438,7 +438,7 @@ $(obj)/%.o: $(src)/%.c
  	@echo "  CLANG-bpf " $@
  	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
  		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
