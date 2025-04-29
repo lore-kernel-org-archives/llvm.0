@@ -1,111 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44C225EF8D;
-	Tue, 29 Apr 2025 19:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4A125334E
+	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 20:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745955847; cv=none; b=o4LO1xe9WE+hqUSVNdPN7tTvH3I3O212JymyKLDVYYggw7VWmEpIC2V+sfUNGESkRO3Cu7BpoOq3s4dARku+MGdNLJ8f5LV9P/+DgS20IB+MdENfodMEh05Ukuknxj/9XztdiAnzKQHRaGPGixel0TeKiITTtUm8WzPkJltAVrQ=
+	t=1745957129; cv=none; b=SIiKofGMe9jHiTtpI9jk/Ql3nfyj/IqoC+hdCBhEhka3CGYqhtaMiwpmH/EAK0NP7Mnmw5+wZNIfd620HQBO5CCHQEKEwCRuPr/D0QzZFDz5EPbZlYc/feLqTu6OOG1sdMGinP2SnekCDt7P04vmJAwEht9fqgnrhRpfzvNmEfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745955847; c=relaxed/simple;
-	bh=YNdSrAHLeL7y15KjsKQBANpPGnM6d1OxDpZRYlI//8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HQRmYJMcyTVdzgMieFTu86m3GGM+98bsc2mlHVYJ6WfCaPPZMfjupFR0pnT2HEM/owsRRAUq3LrZAeYCtgw37mTYdr2rEoPSQM4zugtZam3J+IWTMLu1eaU7ETMZmIo1NS02e4eojg+Yedu9yh69SW4OodAihZqmeDyAd+J9d2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HFBM7kq0; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745957129; c=relaxed/simple;
+	bh=EPaDz9srlvFWoL0LgrmxpJ5HNRLE1J4tFa1bEpEb/Wc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SlThINGr9bq+GelIYaCHjy34/8oCvM5HDp2S78QHIUtAZt71o1t5Vq8saN0tdH797N2PxiF4RJ84dCJJtYTZYyYl7cMK20aXAQ5ATdLosC5KU7/JhUw/rUATG44nGrWq7BS0BOs6CrMaM41a5KfhB9GqT298DCwa66K+ZIW3JQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHGfWuI9; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HFBM7kq0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745955844; x=1777491844;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YNdSrAHLeL7y15KjsKQBANpPGnM6d1OxDpZRYlI//8w=;
-  b=HFBM7kq0HppxR1lDXkGbVfM9Qjl/HUrVKtay9iSclcIGf1hdFCUDhlP3
-   lmqOD7Ik0uWkd6Rpv8lH1iWR5cct8VapB0nUIF7TswpE3LScBSexfw4GK
-   Ime903LD/8TRtJHWLE6NMRg9jbaG6CEnHnNlHEvenvQULXH5qH9cZdAhW
-   6foiBfGDMOZ0ObigDKdh8TyeVpNW/6QIldEH4TaIn3MBztdSJpRwcldmu
-   w+HI+Qo8Ij+Luw799L7GG5AgVt7awy0LCsi9l3fXMPd48qvifqe1SAgc8
-   tBraqYNNAkSifdhG6YL5xlUtBEySLA/auik9H4LUyOUsdykw7ucxxmbwi
-   Q==;
-X-CSE-ConnectionGUID: mOEDFibmT96LgQV23fPXyg==
-X-CSE-MsgGUID: 5WHMYradRyecvFd/uVy0rA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="70100729"
-X-IronPort-AV: E=Sophos;i="6.15,250,1739865600"; 
-   d="scan'208";a="70100729"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 12:44:01 -0700
-X-CSE-ConnectionGUID: gzVQKWfuTRWP+jZB5ZxC4g==
-X-CSE-MsgGUID: qmEVvTX3TxCohHV6GJNE7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,250,1739865600"; 
-   d="scan'208";a="134908089"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 29 Apr 2025 12:44:00 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u9qs1-0002sp-1m;
-	Tue, 29 Apr 2025 19:43:57 +0000
-Date: Wed, 30 Apr 2025 03:43:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [jgunthorpe:iommu_pt 19/22] drivers/iommu/amd/iommu.c:60:37:
- warning: unused variable 'amd_dirty_ops'
-Message-ID: <202504300300.5BmHwgTO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHGfWuI9"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b078bb16607so702719a12.2
+        for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 13:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745957127; x=1746561927; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EPaDz9srlvFWoL0LgrmxpJ5HNRLE1J4tFa1bEpEb/Wc=;
+        b=aHGfWuI9HeXz1Tukds+YcjRoWDYCfvCpss7vliTO4J8BKXCdvi5x8YBgxr/gXclqEJ
+         r9J0D20YaUVz9o1g9P3NUZpPmT6nKpJGEc9luaIAuCFOcCariOlhVTCQ9Tneer8VMK1l
+         O1L4uQI3naq9OKp70Ley+1XBDloTRXufKd3FrozNRRe5MH0uFB9NfoRPFkAeURJ4Sl5s
+         lwqv72mlNj6SBYk6uoOxbF+5i3ifjdEF85nS39VmX10gKNWAf4r2mPMMDedewOaHe2BH
+         yHoO+bsCNoZKNEVNSRRPwUvnoib84HjuGfygz/ZO5TlL286D7g7iRVky1j6o4LqtP1MG
+         tw1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745957127; x=1746561927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EPaDz9srlvFWoL0LgrmxpJ5HNRLE1J4tFa1bEpEb/Wc=;
+        b=BB9OPsGwQOX5ip47Yv0VDIQmiDan9lc1vf2MNHYIgIJjta/Bnls71pNUOBbjNgEu/n
+         o0k68XGEAKTPLy4GrO0dnAqqwBus8QgrvdCiIUzYBGy7EMFxYuB2Tyz0UPOGq99QkIhC
+         H0ML2bArtxdwXHkHf9PAXy78k8eh3tLFrLaa+EVmqBCiZpfygMJqRfrfMzn23CR12J5w
+         AqrbRnzoDtAcHVJy++EK1Pm0psyKuHchT183tKX9PwObgo1SGzMB2GElNc8S7OAGL2Z3
+         hda6lmzXhHTUR2mrSeki8qFnEgSTg9z6GcxLRDQ4wCgLvpS3D5ee5B3m22ZvK4TZAwtm
+         J2vg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3cYosYdSZw97OBReMEQu2jgsB3UmmbPVBSrc65HmirCN6LsbxJoaadePTBX4T3ZCuMlaq@lists.linux.dev
+X-Gm-Message-State: AOJu0YxP0JfOGezjC/Rtv/wKO35+jQch2pvOaeneR36vzm9NiDFTV8PT
+	0xDRb4ziSBX03ysMRxZ+a/HbE44Atppa1jQh/DJkNQ3dDtcuWppdDnR/pE/niHoQmxR34o5Cy7k
+	lKcMT+fnkVJkk0kLkW/YaOfM4hcI=
+X-Gm-Gg: ASbGncsOmZQDpBf23234zRF3bttQzRghSUiaTARFDKb1UYswdJj16T+06SWVKuLQPhY
+	4PcgYQCoX+0qgGtzcLQeoLbcYsVM3JlmZj5wfExcVr5ArRa3DxXvhixrAYPZwJ8aQ0v2nL35zcC
+	L4x6yxmb8yHdRyblo10ZbHnA==
+X-Google-Smtp-Source: AGHT+IGWF+l7or88VbtVsoih9aXdUV02U9Qn+pFOHncarixgIstYhZ3FKuRbLZND0+TvviOL031nXIBqToZtnStd7r0=
+X-Received: by 2002:a17:90b:1d06:b0:30a:28e2:a003 with SMTP id
+ 98e67ed59e1d1-30a333537cbmr236830a91.3.1745957126955; Tue, 29 Apr 2025
+ 13:05:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250429185839.1807005-1-irogers@google.com> <20250429185839.1807005-4-irogers@google.com>
+In-Reply-To: <20250429185839.1807005-4-irogers@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 29 Apr 2025 22:05:14 +0200
+X-Gm-Features: ATxdqUHM5AHs_-EVk1tBU6W6vNSJKG_yZ1Vj6N1JMNl33Yw5FxIdRgkNWcOtSx4
+Message-ID: <CANiq72kw97U_5dy1MCVRHfKUVWDfrrE50anfEa1gL1qy=yQUxg@mail.gmail.com>
+Subject: Re: [PATCH v1 3/6] perf demangle-rust: Remove previous legacy rust decoder
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@linaro.org>, 
+	Howard Chu <howardchu95@gmail.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
+	Stephen Brennan <stephen.s.brennan@oracle.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev, Daniel Xu <dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/jgunthorpe/linux iommu_pt
-head:   c1dec260d8b78443ef82054138c29a8d3d155a74
-commit: ee6aae7327cd34c61889435908500dbce710d984 [19/22] iommu/amd: Use the generic iommu page table
-config: x86_64-buildonly-randconfig-006-20250430 (https://download.01.org/0day-ci/archive/20250430/202504300300.5BmHwgTO-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250430/202504300300.5BmHwgTO-lkp@intel.com/reproduce)
+On Tue, Apr 29, 2025 at 8:59=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> Code is unused since the introduction of rustc-demangle demangler.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504300300.5BmHwgTO-lkp@intel.com/
+Looks fine -- the only two calls I see are gone in the previous patch, so:
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 
->> drivers/iommu/amd/iommu.c:60:37: warning: unused variable 'amd_dirty_ops' [-Wunused-const-variable]
-      60 | static const struct iommu_dirty_ops amd_dirty_ops;
-         |                                     ^~~~~~~~~~~~~
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMU_PT_AMDV1
-   Depends on [n]: GENERIC_PT [=n] && IOMMU_PT [=n] && !GENERIC_ATOMIC64 [=n]
-   Selected by [y]:
-   - AMD_IOMMU [=y] && IOMMU_SUPPORT [=y] && X86_64 [=y] && PCI [=y] && ACPI [=y] && HAVE_CMPXCHG_DOUBLE [=y]
-   WARNING: unmet direct dependencies detected for IOMMU_PT_X86_64
-   Depends on [n]: GENERIC_PT [=n] && IOMMU_PT [=n] && !GENERIC_ATOMIC64 [=n]
-   Selected by [y]:
-   - AMD_IOMMU [=y] && IOMMU_SUPPORT [=y] && X86_64 [=y] && PCI [=y] && ACPI [=y] && HAVE_CMPXCHG_DOUBLE [=y]
-
-
-vim +/amd_dirty_ops +60 drivers/iommu/amd/iommu.c
-
-6efed63bec36e2 drivers/iommu/amd_iommu.c   Joerg Roedel 2012-06-14  58  
-b0119e870837dc drivers/iommu/amd_iommu.c   Joerg Roedel 2017-02-01  59  const struct iommu_ops amd_iommu_ops;
-9abe6c55354db3 drivers/iommu/amd/iommu.c   Kunwu Chan   2023-11-20 @60  static const struct iommu_dirty_ops amd_dirty_ops;
-26961efe0dab9c arch/x86/kernel/amd_iommu.c Joerg Roedel 2008-12-03  61  
-
-:::::: The code at line 60 was first introduced by commit
-:::::: 9abe6c55354db38f0906fcaf4e1c1644c26cd624 iommu/amd: Set variable amd_dirty_ops to static
-
-:::::: TO: Kunwu Chan <chentao@kylinos.cn>
-:::::: CC: Joerg Roedel <jroedel@suse.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
