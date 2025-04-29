@@ -1,210 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86122741C2;
-	Tue, 29 Apr 2025 04:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD13274FE3
+	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 06:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745899578; cv=none; b=AD+WZrqWIz73bswLr1jw5ILxq1fqdXD4PSDDlTQ+cdNNNO2KEtv2Xu+Q8y+HNOfRLRt+VnXipYaVCPMjAfgzCUzqXY1IM/9QSnNkw2FfX1JFHcX44rdo+prluvbiG5C8cXyNJav1eeMAnJf9+6OCf/0pJjtEqBE0F1od613QzYg=
+	t=1745908685; cv=none; b=ITKZYbwq+KE1PmW5zDO8X0fyuSawMZ+VwcKc1D8Mxv5YMEBDSPmLfSXwd4eU2nksGtuiSNVZK6Z0TGBknyha6u3QreUR5RVuSLOK7d7yruCE3hQMKJqIlcuLtDMt2QcUTL9yg79wVmuQnjFqNwxIEd939BUOi3/2Tik3V6QJW4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745899578; c=relaxed/simple;
-	bh=I3qZ450wr0Q9CAPbI9DMJdfFZ5c1+02YMYdsGYpKCO4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ue+oEsvHSxwCu+IKP/oQYK+5mqilH1/XxEaP84h++etsYrUvISPnq2RI9gTbvHqbc0ezLejkkeqvCLzp7IIhTzVfGZOYyNanSef6hUSCxkY3OL2RyXQQbJ+e0XETXy/HoZ0tPpJbMZtd/qu+2vzHCiQNRMOMgvyYRrIbm7s+jNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JE0vEjoK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745908685; c=relaxed/simple;
+	bh=8eas/4/AnYGINUxqMFFXYPgxi4CkzW0giq7AvI1HQ1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M2gj60iSxkIAZG6ujMTqFprCZD8IJJRe5nG6JnsEFyjyhEilF5zgWTjzj9IH7htY8YGkr+dJauKJVn7FvgfzOElVKRjba5Xnfjo3dY1pMRzVIBNWA1rgSw/nDPS9p6nVcIf9gbJdkg7V0zab7hcPSw56uZC9DNa2z8NmTnANL/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ExOyA1XS; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AJPaCBWm; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ExOyA1XS; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AJPaCBWm; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JE0vEjoK"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58FE1C4CEFF;
-	Tue, 29 Apr 2025 04:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745899577;
-	bh=I3qZ450wr0Q9CAPbI9DMJdfFZ5c1+02YMYdsGYpKCO4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=JE0vEjoKdI3aoLXySgz46sIqLxGHS10+ctvdryhzIzUS4HhXuF3Tl298hubpjKFM/
-	 w6TK/WAFgLyiSvmTT0C7btzFR8/sJwuEVJ7dvhLp/FopZjfp4F38JZxjFbjWToxx+2
-	 ZOs3hbeOeMzuD9W/l6w5BjAZ2TP8rnJk5mpj6qfsfebVTmp5WeguGbLar2dJg+54Ta
-	 BQeBNnkwOGxnWBYdRi+L77qoR8Ib+Sgt4uGR4FMtkCWkIFE7JcS9361sDdnaf8uzpI
-	 5PpYZSpLvvidhBYF+z1LHu2vN47VszMgmkxuY95ZwPxZ0LohS1hnrc8xtucx7pzmvs
-	 64lF44iLXmi+w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C8CFC3ABA8;
-	Tue, 29 Apr 2025 04:06:17 +0000 (UTC)
-From: Chen Linxuan via B4 Relay <devnull+chenlinxuan.uniontech.com@kernel.org>
-Date: Tue, 29 Apr 2025 12:06:12 +0800
-Subject: [PATCH RFC v3 8/8] lib/Kconfig.debug: introduce
- CONFIG_NO_AUTO_INLINE
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ExOyA1XS";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AJPaCBWm";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ExOyA1XS";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AJPaCBWm"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 285D11FB5A;
+	Tue, 29 Apr 2025 06:38:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1745908682;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TkaaCo63sFcXfE3cMCVUk6B4ngYZXwCftcAwG1Ak+5g=;
+	b=ExOyA1XSB6o9VSFoDQ99X20fq4CUf7kfwLb7vM12d3cz1b41vNMN1A7/tTOomM6S8JdWJP
+	NIamUdaIACyndErk/NLzfnA/t5CItkn8wR/Xe0/H2VDyKSNKYarc/4kiVWXKQitYyq2dY/
+	MNclgUW/AvnItu1IkZGNAAh2bA2yGks=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1745908682;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TkaaCo63sFcXfE3cMCVUk6B4ngYZXwCftcAwG1Ak+5g=;
+	b=AJPaCBWmw0E+YCrKSg5Pvm6z23qKoQ5rSI/UmHIxu3EdWWpAPXeZSGL2JjvNGThHh02Z49
+	Aps6+njkpZxuO1Cw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1745908682;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TkaaCo63sFcXfE3cMCVUk6B4ngYZXwCftcAwG1Ak+5g=;
+	b=ExOyA1XSB6o9VSFoDQ99X20fq4CUf7kfwLb7vM12d3cz1b41vNMN1A7/tTOomM6S8JdWJP
+	NIamUdaIACyndErk/NLzfnA/t5CItkn8wR/Xe0/H2VDyKSNKYarc/4kiVWXKQitYyq2dY/
+	MNclgUW/AvnItu1IkZGNAAh2bA2yGks=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1745908682;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TkaaCo63sFcXfE3cMCVUk6B4ngYZXwCftcAwG1Ak+5g=;
+	b=AJPaCBWmw0E+YCrKSg5Pvm6z23qKoQ5rSI/UmHIxu3EdWWpAPXeZSGL2JjvNGThHh02Z49
+	Aps6+njkpZxuO1Cw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 12E3C13931;
+	Tue, 29 Apr 2025 06:38:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VSVlBMpzEGh0YgAAD6G6ig
+	(envelope-from <dsterba@suse.cz>); Tue, 29 Apr 2025 06:38:02 +0000
+Date: Tue, 29 Apr 2025 08:38:00 +0200
+From: David Sterba <dsterba@suse.cz>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] btrfs: Fix use of GCC_VERSION in messages.h
+Message-ID: <20250429063800.GA18094@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20250428-btrfs-fix-messages-h-clang-v1-1-5ede51586a9c@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250429-noautoinline-v3-8-4c49f28ea5b5@uniontech.com>
-References: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
-In-Reply-To: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
-To: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
- Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>, 
- Kevin Tian <kevin.tian@intel.com>, 
- Alex Williamson <alex.williamson@redhat.com>, 
- Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
- Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, 
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Peter Zijlstra <peterz@infradead.org>, 
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
- Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
- Juergen Gross <jgross@suse.com>, 
- Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-mm@kvack.org, kvm@vger.kernel.org, virtualization@lists.linux.dev, 
- linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, Winston Wen <wentao@uniontech.com>, 
- kasan-dev@googlegroups.com, xen-devel@lists.xenproject.org, 
- Chen Linxuan <chenlinxuan@uniontech.com>, 
- Changbin Du <changbin.du@intel.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4279;
- i=chenlinxuan@uniontech.com; h=from:subject:message-id;
- bh=Bd93x7WuEFeV0iOsS3dMjqDGQS+n9awf6aimsKD9UOk=;
- b=owEBbQKS/ZANAwAKAXYe5hQ5ma6LAcsmYgBoEFA1dN0rUHGv15CSgUAacYmKqLp9Xxxon6yon
- c7TiGmprM+JAjMEAAEKAB0WIQTO1VElAk6xdvy0ZVp2HuYUOZmuiwUCaBBQNQAKCRB2HuYUOZmu
- i55nD/9Z3vTJGmV0EjUhmeI4qXKmcdAMAq1X/bMvCKKqJb8nDqxr3XzOsrgtlGbWtGbSRpAcMRC
- kIBZwz/EFrXdSky2mgTEfswE2JzuHKo+Mt434POfvbTmTZzfhinHk2rveNLn14K6QQxOZNTHzoq
- DY3XtiBsr5/6XiSk58sFs0UB2do+v1RDxbRgPVRbwakBRf2EpGtYK+ZkSVPourJzkqG7PrIvHKY
- FyKSLRcxh2ehQ+zdjfMyhxbXKMW3rLF6KyReLohSbuPnAZH9vBG07d85cT+hlqayZ2VFrTJWayX
- ogvHBmQbs0jd6kEOOcqxulI9+HLWeFHpLWXkscXCbtKYFnN3of88CFc5dM1NBfTsa2bE/5c69eS
- TXaS9CEvSaJLZP2bguKxeYXuKMcX7aCIEmkb5ywt+zXQ2sBHHXVo62B2vH+ZEPTvJ0JBvREoDHA
- Z07bh3e0yi+U/gCk96uDLgnOmSkQUjen6r/WDp03CqP8r46lIU2aWAN8mPN0/bL6Leb+yx3Y5Gf
- MfHerWdPEqYeBh6stf8GRI22HdoAjnaigM4iGlYaLrvgjiuVjR2tHFFGtnPEviP7O+74W7AnPTn
- n9vHmKNe5H9AurNLXL/K7j5eRYSPpaBVROMuUUngVLHw7qljfnSQMwRNYonB6pGCO3WTd5AnIHj
- tq2/DJ+5MgngDcg==
-X-Developer-Key: i=chenlinxuan@uniontech.com; a=openpgp;
- fpr=D818ACDD385CAE92D4BAC01A6269794D24791D21
-X-Endpoint-Received: by B4 Relay for chenlinxuan@uniontech.com/default with
- auth_id=380
-X-Original-From: Chen Linxuan <chenlinxuan@uniontech.com>
-Reply-To: chenlinxuan@uniontech.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250428-btrfs-fix-messages-h-clang-v1-1-5ede51586a9c@kernel.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
+X-Spam-Score: -4.00
+X-Spam-Flag: NO
 
-From: Chen Linxuan <chenlinxuan@uniontech.com>
+On Mon, Apr 28, 2025 at 03:01:35PM -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y):
+> 
+>   fs/btrfs/messages.h:188:5: error: 'GCC_VERSION' is not defined, evaluates to 0 [-Werror,-Wundef]
+>     188 | #if GCC_VERSION >= 80000
+>         |     ^
+> 
+> GCC_VERSION is defined in compiler-gcc.h, which is not included when
+> building with clang. Use the always defined Kconfig symbol,
+> CONFIG_GCC_VERSION, to do the comparison.
+> 
+> Additionally, as a comment above this #ifdef notes, clang supports
+> __VA_OPT__, which is really what is needed for this block to function.
+> Include a check for CONFIG_CC_IS_CLANG as well, since clang 13 is the
+> minimum supported version for building the kernel.
+> 
+> Fixes: 14d740332aa0 ("btrfs: enhance ASSERT() to take optional format string")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Add a new kernel hacking option CONFIG_NO_AUTO_INLINE that prevents the
-compiler from auto-inlining functions not explicitly marked with the
-'inline' keyword.
-
-This enhancement improves function tracer capabilities as it can only
-trace functions that haven't been inlined by the compiler.
-
-Previous discussions:
-
-Link: https://lore.kernel.org/all/20181028130945.23581-3-changbin.du@gmail.com/
-
-This patch is modified from commit 917fad29febd ("kernel hacking: add a
-config option to disable compiler auto-inlining") which can be founded
-in linux-next-history:
-
-Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/next/linux-next-history.git/commit/?id=917fad29febd
-
-Cc: Changbin Du <changbin.du@gmail.com>
-Co-developed-by: Winston Wen <wentao@uniontech.com>
-Signed-off-by: Winston Wen <wentao@uniontech.com>
-Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
----
- Makefile          | 16 ++++++++++++++++
- lib/Kconfig.debug | 21 +++++++++++++++++++++
- lib/Makefile      |  3 +++
- 3 files changed, 40 insertions(+)
-
-diff --git a/Makefile b/Makefile
-index 5aa9ee52a765b7aed27f44028cdcc34a90979acb..60dec6c123543150a3332a9a819fa6933e94db4f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1073,6 +1073,22 @@ endif
- # Ensure compilers do not transform certain loops into calls to wcslen()
- KBUILD_CFLAGS += -fno-builtin-wcslen
- 
-+ifdef CONFIG_NO_AUTO_INLINE
-+# -fno-inline-functions behaves differently between gcc and clang.
-+# With gcc, it prevents auto-inlining of functions but still considers functions
-+# explicitly marked with "inline" for inlining. However, with clang, the flag
-+# prevents inlining of all functions, including those explicitly marked with
-+# inline. Clang provides the "-finline-hint-functions" option, which
-+# specifically allows inlining of functions marked with "inline".
-+#
-+# In summary, to achieve equivalent behavior across compilers:
-+# -fno-inline-functions (gcc) = -fno-inline-functions + -finline-hint-functions (clang)
-+KBUILD_CFLAGS   += -fno-inline-functions \
-+		   $(call cc-option, -finline-hint-functions) \
-+		   $(call cc-option, -fno-inline-small-functions) \
-+		   $(call cc-option, -fno-inline-functions-called-once)
-+endif
-+
- # change __FILE__ to the relative path to the source directory
- ifdef building_out_of_srctree
- KBUILD_CPPFLAGS += $(call cc-option,-ffile-prefix-map=$(srcroot)/=)
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index f9051ab610d54358b21d61c141b737bb345b4cee..56530f0145c885e9846dae1d2f8c6125c610d25b 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -436,8 +436,29 @@ config GDB_SCRIPTS
- 	  instance. See Documentation/process/debugging/gdb-kernel-debugging.rst
- 	  for further details.
- 
-+
- endif # DEBUG_INFO
- 
-+config NO_AUTO_INLINE
-+	bool "Disable compiler auto-inline optimizations (EXPERIMENTAL)"
-+	default n
-+	help
-+	  This will prevent the compiler from optimizing the kernel by
-+	  auto-inlining functions not marked with the inline keyword.
-+	  With this option, only functions explicitly marked with
-+	  "inline" will be inlined. This will allow the function tracer
-+	  to trace more functions because it only traces functions that
-+	  the compiler has not inlined.
-+
-+	  Note that Clang with -O2 optimization does not fully support
-+	  disabling all inline-related optimizations,
-+	  as Clang does not support options like
-+	  -fno-inline-small-functions and -fno-inline-functions-called-once
-+	  that gcc does.
-+	  Some functions without the inline keyword may still be inlined.
-+
-+	  If unsure, select N.
-+
- config FRAME_WARN
- 	int "Warn for stack frames larger than"
- 	range 0 8192
-diff --git a/lib/Makefile b/lib/Makefile
-index f07b24ce1b3f8db28796e461db1324d97133fdd5..2ac97f0856a12f66e6c3825af6aabafa61869262 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -87,6 +87,9 @@ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
- ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
- # FIXME: Clang breaks test_bitmap_const_eval when KASAN and GCOV are enabled
- GCOV_PROFILE_test_bitmap.o := n
-+# FIXME:
-+# Clang breaks test_bitmap_const_eval when NO_AUTO_INLINE and KASAN are enabled
-+CFLAGS_test_bitmap.o += -finline-functions
- endif
- 
- obj-$(CONFIG_TEST_UUID) += test_uuid.o
-
--- 
-2.43.0
-
-
+Thanks, back then I verified that the minimum clang version required for
+kernel compiles the code and using just GCC_VERSION looked correct from
+other code but apparently not. Folded to the patch, thanks.
