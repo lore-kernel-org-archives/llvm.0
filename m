@@ -1,123 +1,143 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3640D2550B6
-	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 18:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0A9247299
+	for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 19:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745953162; cv=none; b=oPEFSo/YMXy0HklrljR6/3Wo5LFZZroy/btVz4e8mUxPlQA8MxRghYikkRBgoQz29Of1h/QTubowZZVW7KnXlEkWvBI8vh6gS59xqhpIFMrqJGS2cJMgsZy1lfEl1fOKk4Qfvd1w/ufszowazs9B8K1j6pSpBxgIQKgDjHHqmX4=
+	t=1745955198; cv=none; b=pAGXRhcGRQzUTFcREYjmG3Wz3cHoh+K34gjWqbDY5m8Gpock8zakHu3jxAbvKGM9x6bN10SEnvuCzMDJJ7sKkP1tTBjKGKqNM2UuE60/9dOb/QSC4jt8tVfy2abY0+DfXvgRQK7LfCZnvCY2DsZCbugizpxzgxt3iXQodX7p1sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745953162; c=relaxed/simple;
-	bh=pLvxUdxndsr2wYkJQYg49ecez/cviTwRj3eN4nJwgxo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=guKeXWqTiBxDD7MXJZV6c47uLhNF/SlJAey3kXtylNiNyOCYMh5rxRdlHW7k3eSkEvmty2d8EzQ7eFbsTisMLDqkk+ThWy/ccxioorZGE8+L4qhkFu5ik07i52VU5tO2WIIM24SprEUcbOnzFqfFg/n/My/AzJY24w7eupSuekI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aP6UquRt; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1745955198; c=relaxed/simple;
+	bh=t/TaDhTEiYr8JZ9az+xPIoer1kKQ0EqLa+WBBbutaGU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Iqr/4DSGWAbeLkj7h7dGniwxuLzpg3DSCQiGF1v6NblbE74bhaXtNKsWz3QBzzJSpT+b5iWhcvjLLf1uX0d2tXSq7+Zl8y7stF/lMzwLo5lyM0ff9/wjWcwgbJH+DmJo2DQH8yh/MDukZlAgN7kAwh7wLIAdgK/VN/yZ8uPkeyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCZG2Xm2; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aP6UquRt"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b115383fcecso3608601a12.1
-        for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 11:59:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCZG2Xm2"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ff67f44fcaso510782a91.3
+        for <llvm@lists.linux.dev>; Tue, 29 Apr 2025 12:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745953160; x=1746557960; darn=lists.linux.dev;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VWjkucJuMaosxMcy1Z3rSUNsLtdDY3ZZywavpz7InSY=;
-        b=aP6UquRtiQwNS/d/vOMoc8z2qpvj4/Z6hRrktkQXs4P1ALI1pACuFkAFUQ1FKCeCLo
-         u7FdOfVOEY0j/gwe3KQMIxthSWRHg7fdEMQqiFhepN8bXnppkElsxPXnsJB2iDcZjFh2
-         UK2bpSmBUWEJmWRCgnmp/98Npo4G3LSuixrOTj/JR2nveyFuNdPQmCKQIXC17x98sJMY
-         VzoHAYJ7dfeqymWwDUe8bmoLpuUTPAuMQUqCJScTwHLBROBDh6e4O8XgAZHitIxjE0wQ
-         KBliAjNPgTTxNaeaW1EQavVvjwM39lRCGAkKDuVjG83BlCu95TtYcBH1klE8uhDZ115R
-         iCLg==
+        d=gmail.com; s=20230601; t=1745955197; x=1746559997; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N+6R87BCw+XZw8t56W3vKaa9E85JmDHuUT63nFr7qjY=;
+        b=fCZG2Xm2R0KI1RS+45ZvbynyyZEJMhzyffjyC26t11WkTMjftbY52nLpQapK2uIejq
+         Q6wfOoHbkRhUNtHsl20EfcCIf4BVOJDgKcF8dFdsRvVNXRGIQTMJqXutJJl2mXSyd+7p
+         BtizTJdpVPSryoHI7cRUXxIjqb/6jnc3r0Hlbe6vvrn7zw1hIQu/FqtHaDjNkFR2WRs9
+         Itl2ZhcZhChy9m8Vc1w+kmSfwD34RB82awzBScyhVXgLTVQikQlDHqCFIownTTL7lYIe
+         YoS8Ll6KHf03WzIVpATLBFgT7foqf37vH9PSIkGWI+klgJrnYCE0ouVV/ZXV0KcvGOf1
+         yC6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745953160; x=1746557960;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWjkucJuMaosxMcy1Z3rSUNsLtdDY3ZZywavpz7InSY=;
-        b=nBpQss9ogL2zWp/RQkGVhbUUGiz/sz36cDy1KFN8A66yaqw7bqhf5F7iCpJFniLFej
-         g8dGp2wbPFXS5yydbyvd8YshEM8/mahJ2zKpDUPqKK3Zpm9lf7IW7pr4iug9CtHQmCqA
-         6cr3qlwRNTxwY/TD4M23qS7Z6gDrYZ6AiWFv76dNh72gMYG5eQwuJRtOXF9JH1AZ/7Vf
-         cgj3wYd+ylp7YwxmSR3sY7s4GFtJk656zIsvfjS8Afh6yG/xv/O+S3H53K1uqbatL8CX
-         W1uaOdfaBy+QfWMVU/PGu32N6shaPnSjyMM7xcg6jJq83qjVvxZRKWC9/gZTHjrEXHIb
-         m8FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX4cWRsPooCfnlV4zaqzhKz44ByUGJHMmXf/G5xX1zHFcNO57KMs2lKySXmCQVKt9t7bCq2@lists.linux.dev
-X-Gm-Message-State: AOJu0YzYSrmcyXcrrtRXLkOSsOGD9nb4ELvQ5AenYKOOOEJjLiCcTIeg
-	H4jnwStBQjHgzl+Zh2DgetxGpmC8q/0kQn7K/qSm0EQvyewfHDAXHLuHuE5UnG5iqoX1Hjfm3Yh
-	uwjxE7Q==
-X-Google-Smtp-Source: AGHT+IE9GdSCCd1KtURt295JV/22SX3CPi6lw9sUTh1EaaTFjgWPJE0uM3WPfZxAJUze5crpoLd8uFNTRjF3
-X-Received: from pfbkq4.prod.google.com ([2002:a05:6a00:4b04:b0:736:56a2:99ac])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:d504:b0:1f5:7c6f:6c8a
- with SMTP id adf61e73a8af0-20a899fc238mr130852637.35.1745953160176; Tue, 29
- Apr 2025 11:59:20 -0700 (PDT)
-Date: Tue, 29 Apr 2025 11:58:38 -0700
-In-Reply-To: <20250429185839.1807005-1-irogers@google.com>
+        d=1e100.net; s=20230601; t=1745955197; x=1746559997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N+6R87BCw+XZw8t56W3vKaa9E85JmDHuUT63nFr7qjY=;
+        b=csRugDMznuo5rP82AqBeOIL9EA7D3P4M/XqvKhNgvs87hyv70zugRvo05DTX9FIpQR
+         wKR9hxZfZxx1P/ffXqLNu3EQVzt8rqqnn+3Cr6L9idy/61oo80D3HpfUQHmwoc94Xzdp
+         awShXQ6Ie9wbyvA2VKXKeEtpVB1T28sYNDgL2FIb+Wx1/P9w8Aj6jvb3W02XBtovE/Ro
+         B7hY+kL93gYpoGO3bblOmsTq8ld9UD7a7ZqZbshst5hJg+53cZT1UzXnEHZZWjbzAUpk
+         5dM8ZfgETCT7TjTattWBNZ+FHO1lYYB+oPx3gFD992CIA8hmITa30WR461m8CqxtPKLE
+         c98A==
+X-Forwarded-Encrypted: i=1; AJvYcCUdr3pQ3+Twk6NEj+AfZjeNO/ecLVakb9A3ZYL+78DG+nbs+qEYgXh7cZSW+gi69m00hqlt@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx4gkZXGrr+wZJEP7+SximgJzR1hxiZJvFnl2ehAjWJ++5BmFzL
+	dpqVDxR8SJGg0bc0LMzJIwbR1KKLAwDaVrIatUIhpCyIr6tvXPKVQQXbL+3i/GHNw9LmjM2vEtu
+	0hgYTFf45Zc+m1hzes9DhUonMYK8=
+X-Gm-Gg: ASbGncvEOag1nGjdcmnCh2J3Lo1PPGg5gdnqpgHfkPKCaOTAQAn/e1HzK1vjiA1MEmU
+	8nUYQr09CHssSfu+ZRukHscOyTzqVg6Kf01Qt7QG5WpKGMlpeR3PN7bdnna50pJNTFoOfMU1POT
+	h2pZ7XfZf9umGF3b87C5UPGA==
+X-Google-Smtp-Source: AGHT+IGQqF75KnMv+4bVCZkAaU+P9VRF9V2GaCglJcEOLFkIoEF/9gIcBxqPqDF/usHsH68nxd+NNiRHshS5SL0h1Xo=
+X-Received: by 2002:a17:90b:3b91:b0:2ff:6bcf:5411 with SMTP id
+ 98e67ed59e1d1-30a332d60e6mr187967a91.1.1745955196640; Tue, 29 Apr 2025
+ 12:33:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250429185839.1807005-1-irogers@google.com>
-X-Mailer: git-send-email 2.49.0.901.g37484f566f-goog
-Message-ID: <20250429185839.1807005-7-irogers@google.com>
-Subject: [PATCH v1 6/6] perf test demangle-ocaml: Switch to using dso__demangle_sym
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+MIME-Version: 1.0
+References: <20250429185839.1807005-1-irogers@google.com> <20250429185839.1807005-2-irogers@google.com>
+In-Reply-To: <20250429185839.1807005-2-irogers@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 29 Apr 2025 21:33:03 +0200
+X-Gm-Features: ATxdqUF8JMzltITilMhWL094El5ZtueGDzQXtv_0-w06j1KIuKQGPrNQhTePM5Q
+Message-ID: <CANiq72kDkPgXS2SasysSa0MXX68kkkhYbSpvK9KAYxFbEKpLig@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] perf demangle-rust: Add rustc-demangle C demangler
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	James Clark <james.clark@linaro.org>, Howard Chu <howardchu95@gmail.com>, 
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Stephen Brennan <stephen.s.brennan@oracle.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Daniel Xu <dxu@dxuuu.xyz>
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@linaro.org>, 
+	Howard Chu <howardchu95@gmail.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
+	Stephen Brennan <stephen.s.brennan@oracle.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev, Daniel Xu <dxu@dxuuu.xyz>, 
+	Ariel Ben-Yehuda <ariel.byd@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The use of the demangle-ocaml APIs means we don't detect if a different
-demangler is used before the OCaml one for the case that matters to
-perf.
+On Tue, Apr 29, 2025 at 8:59=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> Imported at 80e40f5 from:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/demangle-ocaml-test.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+I would suggest using the usual commit reference format:
 
-diff --git a/tools/perf/tests/demangle-ocaml-test.c b/tools/perf/tests/demangle-ocaml-test.c
-index 90a4285e2ad5..612c788b7e0d 100644
---- a/tools/perf/tests/demangle-ocaml-test.c
-+++ b/tools/perf/tests/demangle-ocaml-test.c
-@@ -2,10 +2,9 @@
- #include <string.h>
- #include <stdlib.h>
- #include <stdio.h>
--#include "tests.h"
--#include "session.h"
- #include "debug.h"
--#include "demangle-ocaml.h"
-+#include "symbol.h"
-+#include "tests.h"
- 
- static int test__demangle_ocaml(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
- {
-@@ -27,7 +26,7 @@ static int test__demangle_ocaml(struct test_suite *test __maybe_unused, int subt
- 	};
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
--		buf = ocaml_demangle_sym(test_cases[i].mangled);
-+		buf = dso__demangle_sym(/*dso=*/NULL, /*kmodule=*/0, test_cases[i].mangled);
- 		if ((buf == NULL && test_cases[i].demangled != NULL)
- 				|| (buf != NULL && test_cases[i].demangled == NULL)
- 				|| (buf != NULL && strcmp(buf, test_cases[i].demangled))) {
--- 
-2.49.0.901.g37484f566f-goog
+    commit 80e40f57d99f ("add comment about finding latest version of code"=
+)
 
+> The files are renamed as perf supports multiple demanglers and so
+> demangle as a name would be overloaded.
+>
+> The work here was done by github.com/arielb1 and I am merely importing
+> it as discussed in the rust-lang issue.
+
+Cc: Ariel Ben-Yehuda <ariel.byd@gmail.com>
+
+> +// SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
+Hmm... The documentation is unclear, but I don't think parenthesis are
+needed (the docs have examples without them and for this particular
+pair we do not use them elsewhere).
+
+> +// Code for demangling Rust symbols. This code is mostly
+> +// a line-by-line translation of the Rust code in `rustc-demangle`.
+> +
+> +// you can find the latest version of this code in https://github.com/ru=
+st-lang/rustc-demangle
+
+Ideally, above this, i.e. before the original file starts, we could
+have something like we have for other vendored code, e.g. what we
+wrote elsewhere for some code from the standard library:
+
+    //! The contents of this file come from the Rust standard library, host=
+ed in
+    //! the <https://github.com/rust-lang/rust> repository, licensed under
+    //! "Apache-2.0 OR MIT" and adapted for kernel use. For copyright detai=
+ls,
+    //! see <https://github.com/rust-lang/rust/blob/master/COPYRIGHT>.
+
+(And then below the actual file)
+
+It wouldn't hurt to mention also something like we did for `alloc`:
+
+    Please note that these files should be kept as close as possible to
+    upstream.
+
+I hope that helps!
+
+Cheers,
+Miguel
