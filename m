@@ -1,143 +1,129 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D1125B68D
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 12:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C791714AC
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 14:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746016435; cv=none; b=SlcCD0FHl/VK9ZPHA+xTUr8UTeLRFdvZ8o1JdqDmpi8zcnH4MpaVk8tvt4rO+FxLhydMzl6CoC7CFBauitHIDp++BubvxHOl598Gofr07o2/Qyj+qVhASRpSfjdR8hpGDfoM16+2AD/pDMfbxr+CHyFLhXDgcfV8VF1V3COl+zA=
+	t=1746024553; cv=none; b=KUNpTOzqvlV2nbBtbsyFeD04B11C76xMi+nHbrqjjwsO62nQqlQlzDcev5EvkvLzSndlvr0DIoLeZNG7PrWGRkBvzAtOgworpZBbfPczL+WJ+fcjgGVzDUgRLudgEuvWTDj/RtT82B/Ub6Y9QM4XGt0greRxJB59wUglnn6LJHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746016435; c=relaxed/simple;
-	bh=w3jz2F7DYQyYj2UyhyQ+qsvOLyYvH1eF//AIxNpzRxg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rJLQo4ig4Rehpq5wLGXHp9W7TTs5gRLvtEFuEVsHLgH2rsytmxGThRu/3GADTbX4m9S34GuDtZrTAiVxLWsSF9qaW1TkwzP+yTzeE30RRG6yi7JTCcBBUcj7pqAv8srj6lZ85Vd5maWm0XWloP/qcAvrd3w10Tva3yYLXwg1k0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEZQOk/g; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746024553; c=relaxed/simple;
+	bh=CILepFcQs26AEIw+dD8dvv4PB71xYniCij3C8i7ZDkA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cMuupDkMsoZZFcGEiJbFywSR8Fk7G3yg0NinNaW1Ga28iLFKpIX49qZMD6MT04irE/ojSS/r6QzUJAUENCN+wauYSRthdxDgRXpFQ99XCQrR4QQDjF5YUfz949u8LSil5R1q1ZQry+mumKIAj6aqpwUtjmdiKzJovzBTqzZ8LIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sQrHvjMj; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEZQOk/g"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-736c062b1f5so6142505b3a.0
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 05:33:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sQrHvjMj"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3d8c4222fc9so340585ab.0
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 07:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746016433; x=1746621233; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1746024551; x=1746629351; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VjF1aak/Vxutzt5SCKZiyBKrPP8O+zRq73MMdmerku4=;
-        b=jEZQOk/gg9vERMzycMZHCq0eXCEhezUf3i7T9GJAHPcY6dP/AP5Yi31sKrRr7Tkqx3
-         0kZ5oE4G6TwqlQc9qQsGQ8JIZEgJO6hS3uCS8PA3ZZhtWt6lV1Cbp8CUMK1S2td7CFef
-         fgtFrqBcVgeSH50O5qAq1MgYLz4eQvcbulZYdzsgFyoaia4U/exR2bpz+0f4qyIKZHpQ
-         6icM/IX3upJosrXAAeUugxps3MJ9pk9ke2XlZEEK0WUbkPm6V8kCd8sdhDpYEhHIFjMt
-         80nDw6hxbkLB1iABivHLRialR6VR+6heU/P0rKDiyjF4YKwKgRxXVSnKj/mzlnY3Fnrv
-         5LyA==
+        bh=CILepFcQs26AEIw+dD8dvv4PB71xYniCij3C8i7ZDkA=;
+        b=sQrHvjMjeWkCaNU6y9RG3OlU3YsOL8iSNI8TahFzHOdyUQw0K3mNpBfMogem7oTlYm
+         R8h39T22usVduZpoJ0U+OeVIZoVHZr4krTXb6ejXI1XtPKUdbbo7K5HnBX9YgRFK+FOv
+         10uLJNEj+Is9rGy2EsMDapNXkfNaARvjC5vGs2yxdhV8gowPtAQQiIiYMXFd1Ho+n1Ma
+         JRvKqA07lWJRav2fPyTe/0QJ3/m6w8vyP+O/O5bjDpiF1xMjOPJCpSOwFXLiP0NaeiNJ
+         n3WC0kyiHdCzGuMUpPBAU1pt0WxCJPbM4rOFxXXMDatkgFG1an02EBPHWSJSSKnMNTa0
+         Xy5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746016433; x=1746621233;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1746024551; x=1746629351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VjF1aak/Vxutzt5SCKZiyBKrPP8O+zRq73MMdmerku4=;
-        b=uvr28NAP5Hb3tMbZEPj8gUMEXEWEJK0+b14udRZSEobqfVJri+6ejYRu+vucFhNF0/
-         OJD8LKcbPAUdk9ug8Ardv39ghBSBPl7y8SxYNvcKAwh8L+BYfe0G/RIvXXmUUFT6Dfsr
-         VEDvSzC/ESIelXRLljbg6MBh/oN9+0w7NAjKoxQD0RyFLJmgmPX89VZXe4f64rPpTRHR
-         UQ1NZUe5RYo1R7LDYHqA0IaHeSHSXTDb4VoijUKFxyK75+2LYC/FTXv/WPS91z0pP/B/
-         xrNQSdzvl8fpXGDjuJOgQPSzwLI8jrxvQkx5qzH+drCJKL6Rnw0NukyDItpoRJd5/PKd
-         bEdw==
-X-Forwarded-Encrypted: i=1; AJvYcCWAdtsqBlawx8N7/wdwcdy04w2H++JP2wBElFyi9sUmkwE28TtCwrwKAoxNT1xm9nvXlQo7@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxe/wksgyjeHv+QewH882lsKPRlruVPlJEx8AUxRGZt+BwBK2qX
-	w6JMcSC3GUWUM7hM61HHsj7yk2gq0xluCcVFVbBLyEsx+ektGd4u
-X-Gm-Gg: ASbGnct2pN9e0Ms3vW4XC0lnIlB1E35vcEYwi7g0yrbzYKQTZWJM7+G/l/Aj+aaGl73
-	c0MUW8G55QUbyTVlMF3utc8KedAXLPOsUR3poCNl6wTelIRNCtn+G/arQxVL+ChhGZC7ODYAK1z
-	ZkxK3zZRDGPjL8L7y5OXu+u094qxvlw//1b2JsehO5XT3zFsU3+ks/jHCcggFqood9CvYbzQtVT
-	QjqwkQEKyVGW/uscAYg/Y9dWw7/ay70QtEwnUcIiwu5V2uEtR7L1WlaGArVUpQvYxFP2qY3JxPb
-	cJA+7B7PfOW3PL6NIGIG/rrANu5FjSXS+emuWjzLFmzjVtysd0f7lg==
-X-Google-Smtp-Source: AGHT+IHJKBDe80VIu8qKthsvPbjAJ96qR6Xh6rsf0+iAijz4bJVrcEqmDWrR6oeCmx91YoLYuQSEJQ==
-X-Received: by 2002:a05:6a00:3a29:b0:736:69aa:112c with SMTP id d2e1a72fcca58-74038989dc9mr3923336b3a.9.1746016432889;
-        Wed, 30 Apr 2025 05:33:52 -0700 (PDT)
-Received: from localhost.localdomain ([110.44.101.8])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74039a62e23sm1522627b3a.147.2025.04.30.05.33.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 05:33:52 -0700 (PDT)
-From: Anand Moon <linux.amoon@gmail.com>
-To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-pm@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Cc: Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCH v6 4/4] thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
-Date: Wed, 30 Apr 2025 18:03:00 +0530
-Message-ID: <20250430123306.15072-5-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250430123306.15072-1-linux.amoon@gmail.com>
-References: <20250430123306.15072-1-linux.amoon@gmail.com>
+        bh=CILepFcQs26AEIw+dD8dvv4PB71xYniCij3C8i7ZDkA=;
+        b=afqw936aD6LdBLgQuUkY6IHj2JGldUhCYYWCNNHQTb2tg9B1yly+L8oE0FY7MgV4wJ
+         ZKCe1P0vcb+4U5feLIBsyPW6Lp/s4X8ML0EZ1KAoFf49+g6PdnlDJgU/FSDhjZ4qtN2Z
+         jS0YL0Vz1Ung2QlF1l2yaUVRFbioTw7Ju9iC3fZOjKbmh8lCNR1HA8HUAuUMjBhxsHq+
+         Br6DkQmeGRj7aZ+tJYxvRVUzIRuPsoSEm2lRCejVpdNVY84P57WUUlyzXhwJtWNJ3RB9
+         tGoKiFa+iYA25xlr6hjD93q2I9uLpNcjQXBSN9dGsPrs0slzZC0q+C36i9kR3bUXkb+Y
+         +pHg==
+X-Forwarded-Encrypted: i=1; AJvYcCUEnlx27137R1qIJZ3Pf+aId3IOuypyKkVVzyXHw5PIzrcjR4vFZ69HgVSQq54tOZ6FIkBv@lists.linux.dev
+X-Gm-Message-State: AOJu0YynblLTK9uGAdtuICjjBYQAbe+AM8cs+gmQffTQxquumxSe7pnN
+	7opJVd9PJ867JmJbZNE68F57FiwuaxzdmBtyymWd0tDyjVTZ+UFcKU1h/pmfexujhSqUXK8yVDn
+	yLGenNX/Oa0nA60Yx4ZoXjhgUYvIU9ocWl97l
+X-Gm-Gg: ASbGncsGqFP1KdDM48nkHEzMFLd7jPwl9VEFnElGkS7/8QRmZfM0do07QOXJYIyD6Eo
+	G5ShhYJwoDZ0YfBgq4FFpOkestz5FuyrGK8vYhr2/JLoirOcnYnsrrX+Kbfn9PYVNhm6yLY75lv
+	t/LNR5dHGYgZ+TrKuRgyYRGwl/CebFab3LyWejEdKuYkuRLYF7366j4YKbk7UVYA==
+X-Google-Smtp-Source: AGHT+IFAizhQRm0R8dfeN7EIqhIlzC2ZQ8SocO4Qcy1Af41c6pC0dwToFD9rV8G6++v1J0pmJJOGSp1vLrB23TKj2m4=
+X-Received: by 2002:a05:6e02:b4b:b0:3d9:2425:b7e8 with SMTP id
+ e9e14a558f8ab-3d96756dedamr3907875ab.12.1746024550728; Wed, 30 Apr 2025
+ 07:49:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250430004128.474388-1-irogers@google.com> <20250430004128.474388-2-irogers@google.com>
+ <CANiq72ksEJdnT86V42hoNVfB7OpmaouD+eBQwpRJR899nPsttA@mail.gmail.com>
+In-Reply-To: <CANiq72ksEJdnT86V42hoNVfB7OpmaouD+eBQwpRJR899nPsttA@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 30 Apr 2025 07:48:59 -0700
+X-Gm-Features: ATxdqUEPHqIQG3OOhkd2oFmm3FzIuozjO9Pt1ZPG0aQ7nNJqjlxAeo96AVMkx1g
+Message-ID: <CAP-5=fUjC0ozuTYbHd5CkSgOurZuG9b96uiC-jdR9V1qvrtKtg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] perf demangle-rust: Add rustc-demangle C demangler
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@linaro.org>, 
+	Howard Chu <howardchu95@gmail.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
+	Stephen Brennan <stephen.s.brennan@oracle.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev, Daniel Xu <dxu@dxuuu.xyz>, 
+	Ariel Ben-Yehuda <ariel.byd@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
-if e-Fuse value is out of this range, then thermal sensor may not
-sense thermal data properly. Refactors the efuse value
-initialization logic within exynos_map_dt_data function by
-replacing the nested if-else statements with a switch statement.
-Ensures proper initialization of efuse values based on the SOC type.
+On Tue, Apr 29, 2025 at 8:37=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Wed, Apr 30, 2025 at 2:41=E2=80=AFAM Ian Rogers <irogers@google.com> w=
+rote:
+> >
+> > Imported at commit 80e40f57d99f ("add comment about finding latest
+> > version of code") from:
+> > https://github.com/rust-lang/rustc-demangle/blob/main/crates/native-c/s=
+rc/demangle.c
+> > https://github.com/rust-lang/rustc-demangle/blob/main/crates/native-c/i=
+nclude/demangle.h
+> >
+> > There is discussion of this issue motivating the import in:
+> > https://github.com/rust-lang/rust/issues/60705
+> > https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com=
+/
+> >
+> > The SPDX lines reflect the dual license Apache-2 or MIT in:
+> > https://github.com/rust-lang/rustc-demangle/blob/main/README.md
+> > Following Migual Ojeda's suggestion comments were added on copyright
+> > and keeping the code in sync with upstream.
+>
+> Thanks! I doubled-checked that the files added here are essentially
+> equal to upstream, modulo trailing whitespace cleanups, the header
+> addition and the change to the include name, so:
+>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> (Typo on "Migual", but I don't mind it -- it sounds like "M-equal" :)
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v6: Add Rb Lukasz and fix typo in subject
-v5: None
-V4: None
----
- drivers/thermal/samsung/exynos_tmu.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+Thanks! and sorry for the typo.
 
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 5f017a78f437..ef216aac13ee 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -899,12 +899,23 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->gain = 8;
- 		data->reference_voltage = 16;
- 		data->efuse_value = 55;
--		if (data->soc != SOC_ARCH_EXYNOS5420 &&
--		    data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
-+		data->max_efuse_value = 100;
-+		switch (data->soc) {
-+		case SOC_ARCH_EXYNOS3250:
-+		case SOC_ARCH_EXYNOS4412:
-+		case SOC_ARCH_EXYNOS5250:
-+		case SOC_ARCH_EXYNOS5260:
- 			data->min_efuse_value = 40;
--		else
-+			break;
-+		case SOC_ARCH_EXYNOS5420:
-+		case SOC_ARCH_EXYNOS5420_TRIMINFO:
-+			data->min_efuse_value = 16;
-+			data->max_efuse_value = 76;
-+			break;
-+		default:
- 			data->min_efuse_value = 0;
--		data->max_efuse_value = 100;
-+			break;
-+		}
- 		break;
- 	case SOC_ARCH_EXYNOS5433:
- 		data->tmu_set_low_temp = exynos5433_tmu_set_low_temp;
--- 
-2.49.0
+Ian
 
+> Cheers,
+> Miguel
