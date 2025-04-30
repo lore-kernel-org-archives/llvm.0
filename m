@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D1B1552E0;
-	Wed, 30 Apr 2025 05:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E1A1E51E0;
+	Wed, 30 Apr 2025 06:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745991980; cv=none; b=ZLnSJvnPTzPkjkL9d0SI3uwmhX6UbFEkQxcS+14aQIRAoHf+D8ZWKAkPItC1M1lVM6Q7xpzu9u3vrEKENWCh7Li8rLJYHwwOO3ZoHNqJjMZQ6QwFlstHw1AHYVmxqEHZ9ko+LwkgYYA7ZxBTMOwo8R/957KHILOvVZ9o/J1enCw=
+	t=1745993902; cv=none; b=CjbKWkHddQfnwVxVctuRHLxonfXCY3+B/riWwTMQJdDioTNVLv31B7InYk8FVIxgZnQxDJDxRgwzvZUey9z2aV+ImHl1ii/z8etfCcNmJ7Z35TL4nWOxYDYtIS0/W+lo1xlypHjud4aojvzticN+BO5Vw6/mUBCa1gALg2Cslu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745991980; c=relaxed/simple;
-	bh=B59v+IvNsmnaorjIyh3dZ9NgCQZ2KF+vHvFz0KbpMgE=;
+	s=arc-20240116; t=1745993902; c=relaxed/simple;
+	bh=PYkZX74d10lvPGrseB5FE9s3+bTtnF0aDOcSfLFSv0w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MOD2/do/y7Zcek33EM3GXDN0ViDjXXHksppd3diSITGbR/oaXI5fNjcCjIMUq8cRoW/RjeOoDg2/ExcnVPP0bzSFB7brtAfZibKeUz3qxP5LSxpZxqvua4EfXjexISLf8nGkpRVtHpusqHTdff4qm8FrxjmbL5w6j2evIrwPNMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YIgywVq9; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=cqzxitWOl9es+vaXnG9OYc4fozN75+YBqLCuy+/OP0/LpB4qqzsv+saevEOQqA+T+r3hmCdvyWc/Y5UqSm45+X52LQuwpm6i+7Y3t13qS9brRG2juwHvXtnvOZvfpzLimXajLNXuG8+RZ1cQqJohYn4fOkc1uDIU9zSTrgBt04k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e9g9fz2r; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YIgywVq9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e9g9fz2r"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745991978; x=1777527978;
+  t=1745993901; x=1777529901;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=B59v+IvNsmnaorjIyh3dZ9NgCQZ2KF+vHvFz0KbpMgE=;
-  b=YIgywVq94qrVe6X0dgujg2+LSESd71TveclOCer6GEtroHNFXWsTLBJ3
-   yjrf85T8ia5FUgzVIV84a2Ebb9OzKcB5ugVI5vZd+KizfPNBYQshE6Njw
-   LHTOeZxiu3PAOisssqqAqqlUbh2OmX3lyK3SiIlF3cm7G/rV+ZdQSBnzv
-   vgaYdUY2qvLxqeAhnDH4MVJsoUh1Q5UUBCXq+0iafqU0rArAv4ghMf/MD
-   Usv2FrS1mBk68bZgb9KHxTpgPt7fY5itxRdOjJPXI6+8CPCkyA7VqWc3N
-   P/zuXv2IRtL88gVJ45jEX8D168zEHfFhLiWVKpYOjkAXVuvmIuZtoxF/V
-   g==;
-X-CSE-ConnectionGUID: JPEOs7CzT2aK0Q4oF3ibRQ==
-X-CSE-MsgGUID: 0NcsyeIlR3igOELzNnKPRQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="73023722"
+  bh=PYkZX74d10lvPGrseB5FE9s3+bTtnF0aDOcSfLFSv0w=;
+  b=e9g9fz2rvJJQVwFQma6mHkmrz1PnzcuTnS6nDoFp1y/88OjIU5+9f7hR
+   tmAllqCy6i9SHpyWP/68kE1fZwKfkxpGURLaOckwPL/RiqgieiyxiO5Xj
+   Bvu9hdgP85uJytHPdguyWGBZ/3bkDEf/Ms2MYv38AmaNZstgk6vilisVu
+   2jL6FOUWUrK0ML8IjhEq558T0cU8Qw6ztL1nBFSQo6/nwp5j1scIEh6qa
+   okdS04iugaEUS10C7aW2BQfao00It+GYazsXrMbrpyLW2jdGliW5sT90J
+   TTgPEVLvcgKqqKMSdSqIi3IMSzf1fK8yTo1owqFqD3C+paUEWS2PgjOZK
+   A==;
+X-CSE-ConnectionGUID: y8U6PWxdRlmHDBXXnMwl4g==
+X-CSE-MsgGUID: SveYyCMNRGK04NrV0jcX7w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="47521361"
 X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
-   d="scan'208";a="73023722"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 22:46:16 -0700
-X-CSE-ConnectionGUID: mv+A/y/RQrCyY35Lon7BEA==
-X-CSE-MsgGUID: e4thOnXNQpWq2L2samo24A==
+   d="scan'208";a="47521361"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 23:18:20 -0700
+X-CSE-ConnectionGUID: JZDNPxd7Si6aYG0rC+r71w==
+X-CSE-MsgGUID: v1JASB2zTtuddJoWKG34Iw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
-   d="scan'208";a="133931527"
+   d="scan'208";a="133929263"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 29 Apr 2025 22:46:07 -0700
+  by orviesa006.jf.intel.com with ESMTP; 29 Apr 2025 23:18:12 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uA0Gj-0003CH-0W;
-	Wed, 30 Apr 2025 05:46:05 +0000
-Date: Wed, 30 Apr 2025 13:45:46 +0800
+	id 1uA0lm-0003Dv-0B;
+	Wed, 30 Apr 2025 06:18:10 +0000
+Date: Wed, 30 Apr 2025 14:17:42 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -61,10 +61,9 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	yangyicong@hisilicon.com, linux-arm-kernel@lists.infradead.org,
 	namit@vmware.com, hughd@google.com, yang@os.amperecomputing.com,
 	ziy@nvidia.com, Dev Jain <dev.jain@arm.com>
-Subject: Re: [PATCH v2 3/7] mm: Add batched versions of
- ptep_modify_prot_start/commit
-Message-ID: <202504301328.ltLGuTxD-lkp@intel.com>
-References: <20250429052336.18912-4-dev.jain@arm.com>
+Subject: Re: [PATCH v2 6/7] mm: Batch around can_change_pte_writable()
+Message-ID: <202504301306.AU2G1yvg-lkp@intel.com>
+References: <20250429052336.18912-7-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,185 +72,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250429052336.18912-4-dev.jain@arm.com>
+In-Reply-To: <20250429052336.18912-7-dev.jain@arm.com>
 
 Hi Dev,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on arm64/for-next/core linus/master v6.15-rc4 next-20250429]
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on arm64/for-next/core linus/master v6.15-rc4 next-20250429]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Dev-Jain/mm-Refactor-code-in-mprotect/20250429-133151
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250429052336.18912-4-dev.jain%40arm.com
-patch subject: [PATCH v2 3/7] mm: Add batched versions of ptep_modify_prot_start/commit
-config: arm-randconfig-003-20250430 (https://download.01.org/0day-ci/archive/20250430/202504301328.ltLGuTxD-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20250429052336.18912-7-dev.jain%40arm.com
+patch subject: [PATCH v2 6/7] mm: Batch around can_change_pte_writable()
+config: arm64-randconfig-002-20250430 (https://download.01.org/0day-ci/archive/20250430/202504301306.AU2G1yvg-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250430/202504301328.ltLGuTxD-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250430/202504301306.AU2G1yvg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504301328.ltLGuTxD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504301306.AU2G1yvg-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:31:
->> include/linux/pgtable.h:901:8: error: call to undeclared function 'ptep_modify_prot_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     901 |         pte = ptep_modify_prot_start(vma, addr, ptep);
-         |               ^
->> include/linux/pgtable.h:921:3: error: call to undeclared function 'ptep_modify_prot_commit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     921 |                 ptep_modify_prot_commit(vma, addr, ptep, old_pte, pte);
-         |                 ^
->> include/linux/pgtable.h:1356:21: error: static declaration of 'ptep_modify_prot_start' follows non-static declaration
-    1356 | static inline pte_t ptep_modify_prot_start(struct vm_area_struct *vma,
-         |                     ^
-   include/linux/pgtable.h:901:8: note: previous implicit declaration is here
-     901 |         pte = ptep_modify_prot_start(vma, addr, ptep);
-         |               ^
-   include/linux/pgtable.h:1367:20: error: static declaration of 'ptep_modify_prot_commit' follows non-static declaration
-    1367 | static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
-         |                    ^
-   include/linux/pgtable.h:921:3: note: previous implicit declaration is here
-     921 |                 ptep_modify_prot_commit(vma, addr, ptep, old_pte, pte);
-         |                 ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
+>> mm/mprotect.c:46:15: warning: unused variable 'page' [-Wunused-variable]
+      46 |         struct page *page;
+         |                      ^~~~
+   mm/mprotect.c:226:51: error: use of undeclared identifier 'folio'
+     226 |                             can_change_ptes_writable(vma, addr, ptent, folio, 1))
+         |                                                                        ^
+   1 warning and 1 error generated.
 
 
-vim +/ptep_modify_prot_start +901 include/linux/pgtable.h
+vim +/page +46 mm/mprotect.c
 
-   893	
-   894	/* See the comment for ptep_modify_prot_start */
-   895	#ifndef modify_prot_start_ptes
-   896	static inline pte_t modify_prot_start_ptes(struct vm_area_struct *vma,
-   897			unsigned long addr, pte_t *ptep, unsigned int nr)
-   898	{
-   899		pte_t pte, tmp_pte;
-   900	
- > 901		pte = ptep_modify_prot_start(vma, addr, ptep);
-   902		while (--nr) {
-   903			ptep++;
-   904			addr += PAGE_SIZE;
-   905			tmp_pte = ptep_modify_prot_start(vma, addr, ptep);
-   906			if (pte_dirty(tmp_pte))
-   907				pte = pte_mkdirty(pte);
-   908			if (pte_young(tmp_pte))
-   909				pte = pte_mkyoung(pte);
-   910		}
-   911		return pte;
-   912	}
-   913	#endif
-   914	
-   915	/* See the comment for ptep_modify_prot_commit */
-   916	#ifndef modify_prot_commit_ptes
-   917	static inline void modify_prot_commit_ptes(struct vm_area_struct *vma, unsigned long addr,
-   918			pte_t *ptep, pte_t old_pte, pte_t pte, unsigned int nr)
-   919	{
-   920		for (;;) {
- > 921			ptep_modify_prot_commit(vma, addr, ptep, old_pte, pte);
-   922			if (--nr == 0)
-   923				break;
-   924			ptep++;
-   925			addr += PAGE_SIZE;
-   926			old_pte = pte_next_pfn(old_pte);
-   927			pte = pte_next_pfn(pte);
-   928		}
-   929	}
-   930	#endif
-   931	
+36f881883c5794 Kirill A. Shutemov 2015-06-24  42  
+695112a1385b39 Dev Jain           2025-04-29  43  bool can_change_ptes_writable(struct vm_area_struct *vma, unsigned long addr,
+695112a1385b39 Dev Jain           2025-04-29  44  			      pte_t pte, struct folio *folio, unsigned int nr)
+64fe24a3e05e5f David Hildenbrand  2022-06-14  45  {
+64fe24a3e05e5f David Hildenbrand  2022-06-14 @46  	struct page *page;
+64fe24a3e05e5f David Hildenbrand  2022-06-14  47  
+7ea7e333842ed5 David Hildenbrand  2022-11-08  48  	if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE)))
+7ea7e333842ed5 David Hildenbrand  2022-11-08  49  		return false;
+64fe24a3e05e5f David Hildenbrand  2022-06-14  50  
+7ea7e333842ed5 David Hildenbrand  2022-11-08  51  	/* Don't touch entries that are not even readable. */
+d84887739d5c98 Nadav Amit         2022-11-08  52  	if (pte_protnone(pte))
+64fe24a3e05e5f David Hildenbrand  2022-06-14  53  		return false;
+64fe24a3e05e5f David Hildenbrand  2022-06-14  54  
+64fe24a3e05e5f David Hildenbrand  2022-06-14  55  	/* Do we need write faults for softdirty tracking? */
+f38ee285191813 Barry Song         2024-06-08  56  	if (pte_needs_soft_dirty_wp(vma, pte))
+64fe24a3e05e5f David Hildenbrand  2022-06-14  57  		return false;
+64fe24a3e05e5f David Hildenbrand  2022-06-14  58  
+64fe24a3e05e5f David Hildenbrand  2022-06-14  59  	/* Do we need write faults for uffd-wp tracking? */
+64fe24a3e05e5f David Hildenbrand  2022-06-14  60  	if (userfaultfd_pte_wp(vma, pte))
+64fe24a3e05e5f David Hildenbrand  2022-06-14  61  		return false;
+64fe24a3e05e5f David Hildenbrand  2022-06-14  62  
+64fe24a3e05e5f David Hildenbrand  2022-06-14  63  	if (!(vma->vm_flags & VM_SHARED)) {
+64fe24a3e05e5f David Hildenbrand  2022-06-14  64  		/*
+7ea7e333842ed5 David Hildenbrand  2022-11-08  65  		 * Writable MAP_PRIVATE mapping: We can only special-case on
+7ea7e333842ed5 David Hildenbrand  2022-11-08  66  		 * exclusive anonymous pages, because we know that our
+7ea7e333842ed5 David Hildenbrand  2022-11-08  67  		 * write-fault handler similarly would map them writable without
+7ea7e333842ed5 David Hildenbrand  2022-11-08  68  		 * any additional checks while holding the PT lock.
+64fe24a3e05e5f David Hildenbrand  2022-06-14  69  		 */
+695112a1385b39 Dev Jain           2025-04-29  70  		if (!folio)
+695112a1385b39 Dev Jain           2025-04-29  71  			folio = vm_normal_folio(vma, addr, pte);
+695112a1385b39 Dev Jain           2025-04-29  72  		return folio_test_anon(folio) && !folio_maybe_mapped_shared(folio);
+64fe24a3e05e5f David Hildenbrand  2022-06-14  73  	}
+64fe24a3e05e5f David Hildenbrand  2022-06-14  74  
+fce831c92092ad David Hildenbrand  2024-05-22  75  	VM_WARN_ON_ONCE(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte));
+fce831c92092ad David Hildenbrand  2024-05-22  76  
+7ea7e333842ed5 David Hildenbrand  2022-11-08  77  	/*
+7ea7e333842ed5 David Hildenbrand  2022-11-08  78  	 * Writable MAP_SHARED mapping: "clean" might indicate that the FS still
+7ea7e333842ed5 David Hildenbrand  2022-11-08  79  	 * needs a real write-fault for writenotify
+7ea7e333842ed5 David Hildenbrand  2022-11-08  80  	 * (see vma_wants_writenotify()). If "dirty", the assumption is that the
+7ea7e333842ed5 David Hildenbrand  2022-11-08  81  	 * FS was already notified and we can simply mark the PTE writable
+7ea7e333842ed5 David Hildenbrand  2022-11-08  82  	 * just like the write-fault handler would do.
+7ea7e333842ed5 David Hildenbrand  2022-11-08  83  	 */
+d84887739d5c98 Nadav Amit         2022-11-08  84  	return pte_dirty(pte);
+64fe24a3e05e5f David Hildenbrand  2022-06-14  85  }
+64fe24a3e05e5f David Hildenbrand  2022-06-14  86  
 
 -- 
 0-DAY CI Kernel Test Service
