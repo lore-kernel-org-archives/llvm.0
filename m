@@ -1,55 +1,55 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD702980CA
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C251274FF8
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035538; cv=none; b=nhlNhesgQtugYe72Lj1zhkbq3QL9t0Mo8dWh12I2BT2DJoAVxH0cETyF2Dq9cb4cNeda2FJ6YzWBv7jPfHc99gw59vXJHPjQhclvJudVcwyWvNEF+0s5ZTX6P5++jTDjyj6ZDgFgtO5JMigVQmvpWHmVQWvjIEJ+38OypdGNAhk=
+	t=1746035539; cv=none; b=XA8z4r+lejisLnJRLD0GNG1XnbZBHOmzvc37P2Ce5Iru2zqmWdWomGZ00imbnkOc4Di6wbHNydDXVetADexDcsNML4+0KhFSeAJZABMF6ohU+JASnmcn0Co9iQQjAqtXO0NDcGbsJVQL5Mn6f7NM6xWKKygvs3ewiXnRp1oKnaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035538; c=relaxed/simple;
-	bh=zW9gwrTc+/elptPi5nLpagW6cIkSTRk2Fzi4B/sicXs=;
+	s=arc-20240116; t=1746035539; c=relaxed/simple;
+	bh=B4P8X+ThauaDsMSNoMu1yG7cr2e+7hdA0BByWopBD0A=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OlBgwuPQ+nPRu73OR7XAfGVBAsCOGFd/g+8RurFP6IMeGFuyMsEXmyj4C/otsmOxRj/uMbC73mqbZA1d2hXOefyAqFyyNiWGNDq7kk/vFzFv/8EGFluJRwgF3C/Ri+Az/g29WorB2AkdCRTXlrKOIR2ntR1V9hqDuyvEmdC3vXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4E9sM9/c; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=BQCDtorM4NLXSZU2sqU0eke2XKuQK79Owrqs3uNtYLqeD1sZS1Ik641MewyrbzqRsVeBSRD3CePxpr65OwGGzmZucvdd4yj+YSHtm0gl830Iw5OIu+vYAPZQ245VIbcZG9InobMzkAc0GmVP83Wxt9Fp2Uy20YMVzNTfjjRFN84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TOQGs9q5; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4E9sM9/c"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b16b35ea4aaso55478a12.1
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TOQGs9q5"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-73c09e99069so192022b3a.0
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035534; x=1746640334; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035536; x=1746640336; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZ+CoAcmYBLBiSfvRWRVDoLVZV5YoqsPUn6PdkVoLDc=;
-        b=4E9sM9/cPIPxXPQgwzIXxMzfV0IfFvSZO2Y4IMwwCLYLHeuW7xeE7d85ESerBdML4H
-         k8tSq4tWhhBdES9dkVfxEnD2vlCFl6nF1oT7buOvT/q7JZLCbY/y0oUpAM6JXIZB20bB
-         Sd7Xd02Gb+hc2Y4D4uued7NOyKo5iJDFxcngzEXfKbiKXRqk5YvJhF0Ew+tba0kS/rnk
-         FJBId8eRy9q4ulTDnd5DGTrnjjgobVDpEyQ8/PJna8LMHXSFcXBI8dzwbwuiuAZ2+NdW
-         xF1GG+nu/AHi8yEfKOjHEjuYZmebnI1jZDM7fljvKJ2ul2wRYlOUwef3tcura1YnA2sI
-         cujw==
+        bh=c9SIvg4b8LTBykzVMpfH5dHkyvhrTmI4owZU0wKlV1s=;
+        b=TOQGs9q5rmzH/Rr9Vac+/qSLCnejqUTpvJbLrnn1ybb1HHXY4CoVpq+4WroKJkVwlK
+         3SFA4OgTyULEcDEapochHwS3kOtxz5FV7BFMjlRKLlQZqpHeSYMU7Vwsx0l9JP6yw1SS
+         mTQYubuRZgHTp544TQG+IvTMuFxj8Kqi1J3qwuqj0Rbzn+5xep9dmKcnmn/6v61DYYPk
+         qyQKOyT6h3nAqOsmHUYKUcFv8pzAW4ocAqT+di+Nf5QaWpVb5dF3tKvWXoMvgVbIjskW
+         LqQnjy+Z9JPe9pyPKTw2ZUZDDntfv1CrDpwSua9bcqGpJkI9wjOz3ChjxgpLMHg5MShM
+         /CHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035534; x=1746640334;
+        d=1e100.net; s=20230601; t=1746035536; x=1746640336;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZ+CoAcmYBLBiSfvRWRVDoLVZV5YoqsPUn6PdkVoLDc=;
-        b=RRvyq+VvDrNq8QWAxTV5s918WxOr9vIaPeWzPE/gwElEGMQvqAaQKFJpHP/vlXl61V
-         AdiMyzaMB+Gqkr3GJOWaLxEOROaYuVx/KLZYs5QHljREn+zugSm9AVKzrxmiWHeKw5ez
-         xWfx4oA7YOlFlQ8RnU7NPRqNmT3pTyikJg2+TC/wjAHNSBbn9ycz66uerEhEV8mtgFcI
-         h+jU7jR+MTuWojItFS3sRsB1pCZr/7XIufE+a0VweAKHj06xDBzgShJYYX5nI+jiLqCQ
-         PPvD+57HmS2Eoa18YwjuXkSZpj6cp9b49zseZHG6bxXK5G8ASOMv3+Q05k87rvQerTxT
-         yp2g==
-X-Forwarded-Encrypted: i=1; AJvYcCWIsJL+sv3oT+tI4Sza5ZOXtOQ4ivUUQZT3iJT7/VU9w9AAWWbuQM1dvFzNJvpdf48HuMY/@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy7U35SqVm9SPmtm/eTw+y6nqC/5NPNn7tTk+UrkM3MlAjtnJw3
-	rmoy+uVmG9LKwlfByL9cOBJgudgnl3sb/bAttcs8bvNJTsOVLD8hxdHeW6QXoV5dwNtRH/7H0Vs
-	oeTwrdg==
-X-Google-Smtp-Source: AGHT+IHp/LjxEC/4A96U6Bess1KjcinEpSErDMwJi3W4FOp4Q662t7w7WCYzN140WTM3Oj8+Ts90ea5DhqAS
-X-Received: from pjbpw14.prod.google.com ([2002:a17:90b:278e:b0:2ef:8055:93d9])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2752:b0:2ee:90a1:5d42
- with SMTP id 98e67ed59e1d1-30a331ea3aemr7430537a91.0.1746035534102; Wed, 30
- Apr 2025 10:52:14 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:26 -0700
+        bh=c9SIvg4b8LTBykzVMpfH5dHkyvhrTmI4owZU0wKlV1s=;
+        b=H2NBVZzgG/d6Bus/s12EjuJfdYN1nrrgAZhilxVVgV2wWLkdkXp+yz5D5mDphnUrzU
+         S1C86SRm7r7QTh/7lnYtMvIJSEVI/+kdtLG6A/+Qh2n5x+qZ6234zwfyD1c5ewrngXkF
+         j6KCPn4YhEVI9guD4UsLgBnPhOkb+c3i9Qp2Sx/vs9jQyfFPFi8PPduznmToDV2o1BQ/
+         eOmbxR+1VdbuWCuibecO+1djA3WFya1Fe7cKA9xoCwJbDMvutFexhs7hwargQKrRwuft
+         bEiKBO2/vOPaF5+pVUaJao7o2iaNKRYCHHVIKeNLlC81tl1dLVZ2zKfAd8nv4VoPyA2r
+         6MnA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3wXn1Ur3YiV5c9Slkkcbeexq5VNnpUG07Og0VXqO30ZwbRQya30lb99Ngksq9Zmps5195@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzgrx2AZh6fKrkIROEyFHdQA89tDj7lEGFeVtyFr1z4i7YGVlyv
+	iQnvgFgvtq/4eHZVzb7BzdFihyQHQjTx6bTcf0v27XqT199K1ytxojZI22G/QF47yWzM9u03JpL
+	Mj2C18g==
+X-Google-Smtp-Source: AGHT+IGjzGff+HNk+tYsv6TUdg6dbW3ViGP7ppalI9VAj00JgvvC6ap53DDy+4MZf0hOj1/c1JTb3R8LqkAo
+X-Received: from pgdp27.prod.google.com ([2002:a63:951b:0:b0:b0c:3032:f595])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9e4a:b0:203:bb3b:5f1d
+ with SMTP id adf61e73a8af0-20a8754e89emr5818933637.6.1746035536138; Wed, 30
+ Apr 2025 10:52:16 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:27 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-39-irogers@google.com>
-Subject: [PATCH v2 38/47] perf timechart: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-40-irogers@google.com>
+Subject: [PATCH v2 39/47] perf list: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,229 +116,31 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-timechart.c | 60 ++++++++++++++++++----------------
- 1 file changed, 32 insertions(+), 28 deletions(-)
+ tools/perf/builtin-list.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timechart.c
-index 068d297aaf44..6d8d695f3099 100644
---- a/tools/perf/builtin-timechart.c
-+++ b/tools/perf/builtin-timechart.c
-@@ -118,7 +118,7 @@ struct per_pidcomm {
- 	int		Y;
- 	int		display;
+diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+index fed482adb039..ffe2e972e3f2 100644
+--- a/tools/perf/builtin-list.c
++++ b/tools/perf/builtin-list.c
+@@ -93,7 +93,7 @@ static void wordwrap(FILE *fp, const char *s, int start, int max, int corr)
+ 	bool comma = false;
  
--	long		state;
-+	int		state;
- 	u64		state_since;
+ 	while (*s) {
+-		int wlen = strcspn(s, " ,\t\n");
++		int wlen = (int)strcspn(s, " ,\t\n");
+ 		const char *sep = comma ? "," : " ";
  
- 	char		*comm;
-@@ -385,7 +385,7 @@ static struct power_event *p_state_end(struct timechart *tchart, int cpu,
- 	if (!pwr)
- 		return NULL;
+ 		if ((column + wlen >= max && column > start) || saw_newline) {
+@@ -171,7 +171,7 @@ static void default_print_event(void *ps, const char *topic, const char *pmu_nam
+ 		int desc_len = -1;
  
--	pwr->state = cpus_pstate_state[cpu];
-+	pwr->state = (int)cpus_pstate_state[cpu];
- 	pwr->start_time = cpus_pstate_start_times[cpu];
- 	pwr->end_time = timestamp;
- 	pwr->cpu = cpu;
-@@ -601,8 +601,8 @@ process_sample_cpu_idle(struct timechart *tchart __maybe_unused,
- 			struct perf_sample *sample,
- 			const char *backtrace __maybe_unused)
- {
--	u32 state  = evsel__intval(evsel, sample, "state");
--	u32 cpu_id = evsel__intval(evsel, sample, "cpu_id");
-+	u32 state  = (u32)evsel__intval(evsel, sample, "state");
-+	u32 cpu_id = (u32)evsel__intval(evsel, sample, "cpu_id");
- 
- 	if (state == (u32)PWR_EVENT_EXIT)
- 		c_state_end(tchart, cpu_id, sample->time);
-@@ -617,8 +617,8 @@ process_sample_cpu_frequency(struct timechart *tchart,
- 			     struct perf_sample *sample,
- 			     const char *backtrace __maybe_unused)
- {
--	u32 state  = evsel__intval(evsel, sample, "state");
--	u32 cpu_id = evsel__intval(evsel, sample, "cpu_id");
-+	u32 state  = (u32)evsel__intval(evsel, sample, "state");
-+	u32 cpu_id = (u32)evsel__intval(evsel, sample, "cpu_id");
- 
- 	p_state_change(tchart, cpu_id, sample->time, state);
- 	return 0;
-@@ -631,8 +631,8 @@ process_sample_sched_wakeup(struct timechart *tchart,
- 			    const char *backtrace)
- {
- 	u8 flags  = evsel__intval(evsel, sample, "common_flags");
--	int waker = evsel__intval(evsel, sample, "common_pid");
--	int wakee = evsel__intval(evsel, sample, "pid");
-+	int waker = (int)evsel__intval(evsel, sample, "common_pid");
-+	int wakee = (int)evsel__intval(evsel, sample, "pid");
- 
- 	sched_wakeup(tchart, sample->cpu, sample->time, waker, wakee, flags, backtrace);
- 	return 0;
-@@ -644,8 +644,8 @@ process_sample_sched_switch(struct timechart *tchart,
- 			    struct perf_sample *sample,
- 			    const char *backtrace)
- {
--	int prev_pid   = evsel__intval(evsel, sample, "prev_pid");
--	int next_pid   = evsel__intval(evsel, sample, "next_pid");
-+	int prev_pid   = (int)evsel__intval(evsel, sample, "prev_pid");
-+	int next_pid   = (int)evsel__intval(evsel, sample, "next_pid");
- 	u64 prev_state = evsel__intval(evsel, sample, "prev_state");
- 
- 	sched_switch(tchart, sample->cpu, sample->time, prev_pid, next_pid,
-@@ -660,8 +660,8 @@ process_sample_power_start(struct timechart *tchart __maybe_unused,
- 			   struct perf_sample *sample,
- 			   const char *backtrace __maybe_unused)
- {
--	u64 cpu_id = evsel__intval(evsel, sample, "cpu_id");
--	u64 value  = evsel__intval(evsel, sample, "value");
-+	int cpu_id = (int)evsel__intval(evsel, sample, "cpu_id");
-+	int value  = (int)evsel__intval(evsel, sample, "value");
- 
- 	c_state_start(cpu_id, sample->time, value);
- 	return 0;
-@@ -683,7 +683,7 @@ process_sample_power_frequency(struct timechart *tchart,
- 			       struct perf_sample *sample,
- 			       const char *backtrace __maybe_unused)
- {
--	u64 cpu_id = evsel__intval(evsel, sample, "cpu_id");
-+	int cpu_id = (int)evsel__intval(evsel, sample, "cpu_id");
- 	u64 value  = evsel__intval(evsel, sample, "value");
- 
- 	p_state_change(tchart, cpu_id, sample->time, value);
-@@ -697,10 +697,9 @@ process_sample_power_frequency(struct timechart *tchart,
-  */
- static void end_sample_processing(struct timechart *tchart)
- {
--	u64 cpu;
- 	struct power_event *pwr;
- 
--	for (cpu = 0; cpu <= tchart->numcpus; cpu++) {
-+	for (unsigned int cpu = 0; cpu <= tchart->numcpus; cpu++) {
- 		/* C state */
- #if 0
- 		pwr = zalloc(sizeof(*pwr));
-@@ -723,7 +722,7 @@ static void end_sample_processing(struct timechart *tchart)
- 			return;
- 
- 		if (!pwr->state)
--			pwr->state = tchart->min_freq;
-+			pwr->state = (int)tchart->min_freq;
- 	}
- }
- 
-@@ -812,7 +811,7 @@ static int pid_end_io_sample(struct timechart *tchart, int pid, int type,
- 	}
- 
- 	if (ret < 0) {
--		sample->err = ret;
-+		sample->err = (int)ret;
- 	} else if (type == IOTYPE_READ || type == IOTYPE_WRITE ||
- 		   type == IOTYPE_TX || type == IOTYPE_RX) {
- 
-@@ -852,7 +851,8 @@ process_enter_read(struct timechart *tchart,
- 		   struct evsel *evsel,
- 		   struct perf_sample *sample)
- {
--	long fd = evsel__intval(evsel, sample, "fd");
-+	int fd = (int)evsel__intval(evsel, sample, "fd");
-+
- 	return pid_begin_io_sample(tchart, sample->tid, IOTYPE_READ,
- 				   sample->time, fd);
- }
-@@ -872,7 +872,8 @@ process_enter_write(struct timechart *tchart,
- 		    struct evsel *evsel,
- 		    struct perf_sample *sample)
- {
--	long fd = evsel__intval(evsel, sample, "fd");
-+	int fd = (int)evsel__intval(evsel, sample, "fd");
-+
- 	return pid_begin_io_sample(tchart, sample->tid, IOTYPE_WRITE,
- 				   sample->time, fd);
- }
-@@ -892,7 +893,8 @@ process_enter_sync(struct timechart *tchart,
- 		   struct evsel *evsel,
- 		   struct perf_sample *sample)
- {
--	long fd = evsel__intval(evsel, sample, "fd");
-+	int fd = (int)evsel__intval(evsel, sample, "fd");
-+
- 	return pid_begin_io_sample(tchart, sample->tid, IOTYPE_SYNC,
- 				   sample->time, fd);
- }
-@@ -912,7 +914,8 @@ process_enter_tx(struct timechart *tchart,
- 		 struct evsel *evsel,
- 		 struct perf_sample *sample)
- {
--	long fd = evsel__intval(evsel, sample, "fd");
-+	int fd = (int)evsel__intval(evsel, sample, "fd");
-+
- 	return pid_begin_io_sample(tchart, sample->tid, IOTYPE_TX,
- 				   sample->time, fd);
- }
-@@ -932,7 +935,8 @@ process_enter_rx(struct timechart *tchart,
- 		 struct evsel *evsel,
- 		 struct perf_sample *sample)
- {
--	long fd = evsel__intval(evsel, sample, "fd");
-+	int fd = (int)evsel__intval(evsel, sample, "fd");
-+
- 	return pid_begin_io_sample(tchart, sample->tid, IOTYPE_RX,
- 				   sample->time, fd);
- }
-@@ -952,7 +956,8 @@ process_enter_poll(struct timechart *tchart,
- 		   struct evsel *evsel,
- 		   struct perf_sample *sample)
- {
--	long fd = evsel__intval(evsel, sample, "fd");
-+	int fd = (int)evsel__intval(evsel, sample, "fd");
-+
- 	return pid_begin_io_sample(tchart, sample->tid, IOTYPE_POLL,
- 				   sample->time, fd);
- }
-@@ -1034,7 +1039,7 @@ static void draw_c_p_states(struct timechart *tchart)
- 	while (pwr) {
- 		if (pwr->type == PSTATE) {
- 			if (!pwr->state)
--				pwr->state = tchart->min_freq;
-+				pwr->state = (int)tchart->min_freq;
- 			svg_pstate(pwr->cpu, pwr->start_time, pwr->end_time, pwr->state);
- 		}
- 		pwr = pwr->next;
-@@ -1310,7 +1315,7 @@ static void draw_process_bars(struct timechart *tchart)
- 
- static void add_process_filter(const char *string)
- {
--	int pid = strtoull(string, NULL, 10);
-+	int pid = (int)strtoull(string, NULL, 10);
- 	struct process_filter *filt = malloc(sizeof(*filt));
- 
- 	if (!filt)
-@@ -1458,7 +1463,6 @@ static int determine_display_io_tasks(struct timechart *timechart, u64 threshold
- 
- static void write_svg_file(struct timechart *tchart, const char *filename)
- {
--	u64 i;
- 	int count;
- 	int thresh = tchart->io_events ? BYTES_THRESH : TIME_THRESH;
- 
-@@ -1494,7 +1498,7 @@ static void write_svg_file(struct timechart *tchart, const char *filename)
- 
- 		svg_legenda();
- 
--		for (i = 0; i < tchart->numcpus; i++)
-+		for (unsigned int i = 0; i < tchart->numcpus; i++)
- 			svg_cpu_box(i, tchart->max_freq, tchart->turbo_frequency);
- 
- 		draw_cpu_usage(tchart);
-@@ -1616,7 +1620,7 @@ static int __cmd_timechart(struct timechart *tchart, const char *output_name)
- 
- 	session = perf_session__new(&data, &tchart->tool);
- 	if (IS_ERR(session))
--		return PTR_ERR(session);
-+		return (int)PTR_ERR(session);
- 
- 	symbol__init(&session->header.env);
- 
+ 		if (pmu_name && strcmp(pmu_name, "default_core")) {
+-			desc_len = strlen(desc);
++			desc_len = (int)strlen(desc);
+ 			desc_len = asprintf(&desc_with_unit,
+ 					    desc_len > 0 && desc[desc_len - 1] != '.'
+ 					      ? "%s. Unit: %s" : "%s Unit: %s",
 -- 
 2.49.0.906.g1f30a19c02-goog
 
