@@ -1,55 +1,55 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EAC275842
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9ED278E5A
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035469; cv=none; b=ZSikxUazoQvo4f+kfDolHYQqd+41sUqFTDnfA1RYgDASsWQeHc+rLWkC7RJ7OBBXitupBlaYH4waeONSFBgZcjxKDh9YxCS9A3b38p+Wx2yaL84PbEfUdCT6mqubd3IcgF1j1E7DVxMAMAvsZuQrnBdY2/cL0PFbrrO3/5OCBnI=
+	t=1746035470; cv=none; b=iop7xURN6q0Uw4AAsdrkbBFQ9dOLGkPehJNaBVk8gZgaUbmIcQbv/8cb1Fx+7++M4uPEcMJ1IOWT3EEFOwxf6r952XBorWx3B15j40J4S+///PoiYj041w3hWGbgLEfCeYA1Nm/XOlYpACeLmsMO81WWSqxilkxH2NlHCYeewdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035469; c=relaxed/simple;
-	bh=tzHoFVvqF7tZ5zDdvSBlUB5Nky5e43gxmTueOG1LlaE=;
+	s=arc-20240116; t=1746035470; c=relaxed/simple;
+	bh=7tLf8ZlpDGA58/SmNmZNJE4X51OXHkvdbXoRMSCnQ20=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qHwd1MBXGBVfjsSgB7xh47IdOjTGeBUYOAfEzjE6DtATdd5I+pxgPUO712eY0F4Rt4RZnMyRiHGgAZcybbi2Iwg+ub2VypBXvpt4TFSU33sisPctjpTsycg8d9Us+nL/pp7w6y1/F8JC9fTjjnEfjsSLuD91A+yMHUlA+jZda4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V/BymaLa; arc=none smtp.client-ip=209.85.210.201
+	 To:Cc:Content-Type; b=ATis4UnBm2Q3LtJWKhLUgG8heZGnY+onD6f6YcwMbbOPG1Hwqpvep23rLCwlJ1FdGWmYctaMj3C/QPH5AknKnaSvgykk4YstbIYXaSn5LN09iNViXn2BlcrI5rX7vPt1cpaov7j0JXjQnfJVxwOOrsKNFyzkab+QrpzTLC7OKxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IX5hZZPO; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V/BymaLa"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-739525d4d7bso109109b3a.2
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IX5hZZPO"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-22de54b0b97so819535ad.2
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035466; x=1746640266; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035468; x=1746640268; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BKlr9pon+7w1T67KBxwboNOGjH8z6Rox+PAx2UWIQ/8=;
-        b=V/BymaLalW6SXEmndSKuA3JKg+5Ssmle45JaxzJCdx71xX19St9dwYzlOcCO0UDdOh
-         3h3qCfKPWja0bp6qXZp7pvjd+4gQWmLghc7CfRNBGDnT/9lcXRZ3WNcscw+tbq8Fkx/0
-         ZOxxl7tSj9PEp8Ko+163PBDXEdXTqrvkKhvFWzEcMRkYT534MQ6CHvGZgorzsELO/Lfv
-         uHh51mQ1oRmYwuZzQxKUSAVE3NMOlLpbLr86lA6oCwxAVFHMKhtmYBsihRErH1MpMwFT
-         b0ZEmEU07UPHG39UjTb4w579PGDadbGPMvmYQdw/hW192jLVAr5Sfk5apDGSbeDdT+n7
-         VskA==
+        bh=f3P3h5pAB5HUVcxM6Pr4S0kZF2+GkLiV5d80YFIKGnY=;
+        b=IX5hZZPOT/aSgK95ARjmr8vV0O9mLfMDNtKZHJFlxkNQ46w8BSyhITxx8m7w19SZJs
+         posxkFtfoqNpoTH22zw+2n2qtaD7IxnPBkJbcOwi815SjXY0/6L5HrS51S9onWyHkqNJ
+         xG929LP8qFV4XcxyhWwXnG6kR8ayRwZuG/uKrvQJgszzt110L8FLSAbYAgmLL4noY9LW
+         oeWetSuVkivqlmOm2jt4JdHRvSoJ3+3Q0QsS4XrtHzRUVa9NY+y34HanJeKLz0II0u3R
+         7/cWgMu8czwAO4kXrel9uk9JDQkJ4SAPOJiv5Y1n6z0XlNMSgMWBczk1b/qz/geQz1dW
+         lVTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035466; x=1746640266;
+        d=1e100.net; s=20230601; t=1746035468; x=1746640268;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BKlr9pon+7w1T67KBxwboNOGjH8z6Rox+PAx2UWIQ/8=;
-        b=T8+68ivMLdYkpA2Imm63m7wq/M+w/GvVetSMCm9MAQp0L8qBMhy3RJNV2+XvAugG+t
-         3TY/m0bPe8c7K5RLiL0h2nKoickqnIo+bXSezNIVmPN7kBWK5GVRd0HbYiZJJ+NfpvgG
-         v7w4PYb4wlREEMjdoLNltjHTgqDlYaP4KxyOYEwmRsON/TJ6Kr4Aq61JG6fXqWrmKLnL
-         2oaAVJRsi1M1W2iS7wY1PbHrZVtUqseRoJYrbsuJGdVtWCnfT8LvuCJQhLpqsdwi+G0J
-         s5vHceq65wlmE4va8tQcaDkVvDmSuYDVW0oqRSlDgYWhJTywo3l6sV72xozLg+K83sYK
-         o0xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhGdGEmgu41wsXSjf1DrULvHzN3+DkJEk6XegZCHfmiQEsPHWijqRwArbX27u6/d4a7Vxf@lists.linux.dev
-X-Gm-Message-State: AOJu0YxpAGFsZuvx8OJvvyP2A/HErK1157wpM0OBiNIu6WbmjTNobU+4
-	tvfBJxSrqf/cFxoTvW82wwKd7MpDHIijy3MmDMNq+O/Pnl59lOvaf0DwHw0VyWH2eMpwL1csnDz
-	3YptjYg==
-X-Google-Smtp-Source: AGHT+IEvfCaQRBg4HaHRic54PooLid+vwMTTSRFafNXb/3ZzRoRt9dKqoM/six2KuYpANstVXaueapGaZsPj
-X-Received: from pgng14.prod.google.com ([2002:a63:374e:0:b0:b1a:e979:b40f])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:1588:b0:1f5:8e94:2e81
- with SMTP id adf61e73a8af0-20ba6a20782mr153899637.9.1746035466023; Wed, 30
- Apr 2025 10:51:06 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:49:52 -0700
+        bh=f3P3h5pAB5HUVcxM6Pr4S0kZF2+GkLiV5d80YFIKGnY=;
+        b=LABEfChyKEP+xzT0iwM5uy4TGnDRS0tvgdFwYvbMcYS0cVpSY6cowv6DyE1NPs+I8g
+         JsSCcvdESd0bk+SNch7N9EaGXBXipSd15CKl8o+vbEFyLwWJ7uDBY8SIy7GGes5Dk6XY
+         Iy24IrnHwHyL1xt49PySBBit1z9idmuE0O4zXwk+JMVZZmwrttRR71rmWKUpphRwkk0W
+         iCcxi/hpxllRKvAafON6Qy3BD+LTaXSyZJfulsPg0vw15pr/BXrIZblZ5WxD5ZrXvtKv
+         podS7EFNS23IIipjktde1APjpxM5qILIUIaJ8AjY11Sl/SVbCeiwuqe7Ot1VUMuY5f9K
+         Aq5A==
+X-Forwarded-Encrypted: i=1; AJvYcCXWkPLhdBqO/FZazEiXurbtdy864abWBX++rF98XiPySJDe6Qz+vqDWzgHpZtvTyYN93HEm@lists.linux.dev
+X-Gm-Message-State: AOJu0YzJ0b+3Z3bPGijDpHF6j3ssoGIDSclhLAw3TM9ePeH7qUSdbAJY
+	HangfB5enOANtGSZ7nLNqHrmRJ9b7OW/A+4793+MebS3qY9cAXMwjbtxQFhRxKNd39sRlMlFr9y
+	kddTdzA==
+X-Google-Smtp-Source: AGHT+IEo4BpVSTP736KrWVvKElXNGdJEvRja+RffiZep9xfmBDE9bpWvo/gjF9Sok1i5GqMVUn1zEL5vbAu7
+X-Received: from pjbee6.prod.google.com ([2002:a17:90a:fc46:b0:2ff:852c:ceb8])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:c888:b0:301:1d9f:4ba2
+ with SMTP id 98e67ed59e1d1-30a34450bdcmr5395853a91.28.1746035468058; Wed, 30
+ Apr 2025 10:51:08 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:49:53 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-5-irogers@google.com>
-Subject: [PATCH v2 04/47] perf bench: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-6-irogers@google.com>
+Subject: [PATCH v2 05/47] arm64: cputype: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,373 +116,22 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/bench/breakpoint.c           |  8 +++++---
- tools/perf/bench/epoll-wait.c           |  3 ++-
- tools/perf/bench/evlist-open-close.c    |  8 ++++----
- tools/perf/bench/find-bit-bench.c       |  5 +++--
- tools/perf/bench/futex.h                |  4 ++--
- tools/perf/bench/inject-buildid.c       |  8 ++++----
- tools/perf/bench/mem-functions.c        |  2 +-
- tools/perf/bench/pmu-scan.c             | 12 ++++++------
- tools/perf/bench/sched-messaging.c      |  4 ++--
- tools/perf/bench/sched-pipe.c           | 15 +++++++++------
- tools/perf/bench/sched-seccomp-notify.c |  2 +-
- tools/perf/bench/synthesize.c           |  6 +++---
- tools/perf/builtin-bench.c              |  2 +-
- 13 files changed, 43 insertions(+), 36 deletions(-)
+ tools/arch/arm64/include/asm/cputype.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/bench/breakpoint.c b/tools/perf/bench/breakpoint.c
-index dfd18f5db97d..72802b334eeb 100644
---- a/tools/perf/bench/breakpoint.c
-+++ b/tools/perf/bench/breakpoint.c
-@@ -57,7 +57,7 @@ static int breakpoint_setup(void *addr)
- 	attr.bp_addr = (unsigned long)addr;
- 	attr.bp_type = HW_BREAKPOINT_RW;
- 	attr.bp_len = HW_BREAKPOINT_LEN_1;
--	fd = syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
-+	fd = (int)syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
+diff --git a/tools/arch/arm64/include/asm/cputype.h b/tools/arch/arm64/include/asm/cputype.h
+index 488f8e751349..d7289b9d2758 100644
+--- a/tools/arch/arm64/include/asm/cputype.h
++++ b/tools/arch/arm64/include/asm/cputype.h
+@@ -227,7 +227,7 @@
  
- 	if (fd < 0)
- 		fd = -errno;
-@@ -111,7 +111,8 @@ static void *breakpoint_thread(void *arg)
- // then starts nparallel threads which create and join bench_repeat batches of nthreads threads.
- int bench_breakpoint_thread(int argc, const char **argv)
- {
--	unsigned int i, result_usec;
-+	unsigned int i;
-+	long result_usec;
- 	int repeat = bench_repeat;
- 	struct breakpoint *breakpoints;
- 	pthread_t *parallel;
-@@ -197,7 +198,8 @@ static const char * const enable_usage[] = {
- // and then disables and enables the breakpoint bench_repeat times.
- int bench_breakpoint_enable(int argc, const char **argv)
- {
--	unsigned int i, nthreads, result_usec, done = 0;
-+	unsigned int i, nthreads, done = 0;
-+	long result_usec;
- 	char watched;
- 	int fd;
- 	pthread_t *threads;
-diff --git a/tools/perf/bench/epoll-wait.c b/tools/perf/bench/epoll-wait.c
-index 20fe4f72b4af..5ea3e0b2daf2 100644
---- a/tools/perf/bench/epoll-wait.c
-+++ b/tools/perf/bench/epoll-wait.c
-@@ -182,7 +182,8 @@ static void shuffle(void *array, size_t n, size_t size)
+ #include <asm/sysreg.h>
  
- static void *workerfn(void *arg)
- {
--	int fd, ret, r;
-+	int fd, ret;
-+	ssize_t r;
- 	struct worker *w = (struct worker *) arg;
- 	unsigned long ops = w->ops;
- 	struct epoll_event ev;
-diff --git a/tools/perf/bench/evlist-open-close.c b/tools/perf/bench/evlist-open-close.c
-index 79cedcf94a39..6b75e2dc2fbf 100644
---- a/tools/perf/bench/evlist-open-close.c
-+++ b/tools/perf/bench/evlist-open-close.c
-@@ -173,16 +173,16 @@ static char *bench__repeat_event_string(const char *evstr, int n)
- {
- 	char sbuf[STRERR_BUFSIZE];
- 	struct strbuf buf;
--	int i, str_size = strlen(evstr),
--	    final_size = str_size * n + n,
--	    err = strbuf_init(&buf, final_size);
-+	size_t str_size = strlen(evstr);
-+	size_t final_size = str_size * n + n;
-+	int err = strbuf_init(&buf, final_size);
+-#define read_cpuid(reg)			read_sysreg_s(SYS_ ## reg)
++#define read_cpuid(reg)			((u32)read_sysreg_s(SYS_ ## reg))
  
- 	if (err) {
- 		pr_err("strbuf_init: %s\n", str_error_r(err, sbuf, sizeof(sbuf)));
- 		goto out_error;
- 	}
- 
--	for (i = 0; i < n; i++) {
-+	for (int i = 0; i < n; i++) {
- 		err = strbuf_add(&buf, evstr, str_size);
- 		if (err) {
- 			pr_err("strbuf_add: %s\n", str_error_r(err, sbuf, sizeof(sbuf)));
-diff --git a/tools/perf/bench/find-bit-bench.c b/tools/perf/bench/find-bit-bench.c
-index 7e25b0e413f6..59b00e89f71b 100644
---- a/tools/perf/bench/find-bit-bench.c
-+++ b/tools/perf/bench/find-bit-bench.c
-@@ -31,7 +31,7 @@ static const char *const bench_usage[] = {
- static unsigned int accumulator;
- static unsigned int use_of_val;
- 
--static noinline void workload(int val)
-+static noinline void workload(unsigned long val)
- {
- 	use_of_val += val;
- 	accumulator++;
-@@ -59,8 +59,9 @@ static int do_for_each_set_bit(unsigned int num_bits)
- 	u64 runtime_us;
- 	struct stats fb_time_stats, tb_time_stats;
- 	double time_average, time_stddev;
--	unsigned int bit, i, j;
-+	unsigned int i, j;
- 	unsigned int set_bits, skip;
-+	unsigned long bit;
- 
- 	init_stats(&fb_time_stats);
- 	init_stats(&tb_time_stats);
-diff --git a/tools/perf/bench/futex.h b/tools/perf/bench/futex.h
-index ebdc2b032afc..6d9076e091eb 100644
---- a/tools/perf/bench/futex.h
-+++ b/tools/perf/bench/futex.h
-@@ -49,14 +49,14 @@ static inline int
- futex_syscall(volatile u_int32_t *uaddr, int op, u_int32_t val, struct timespec *timeout,
- 	      volatile u_int32_t *uaddr2, int val3, int opflags)
- {
--	return syscall(SYS_futex, uaddr, op | opflags, val, timeout, uaddr2, val3);
-+	return (int)syscall(SYS_futex, uaddr, op | opflags, val, timeout, uaddr2, val3);
- }
- 
- static inline int
- futex_syscall_nr_requeue(volatile u_int32_t *uaddr, int op, u_int32_t val, int nr_requeue,
- 			 volatile u_int32_t *uaddr2, int val3, int opflags)
- {
--	return syscall(SYS_futex, uaddr, op | opflags, val, nr_requeue, uaddr2, val3);
-+	return (int)syscall(SYS_futex, uaddr, op | opflags, val, nr_requeue, uaddr2, val3);
- }
- 
- /**
-diff --git a/tools/perf/bench/inject-buildid.c b/tools/perf/bench/inject-buildid.c
-index f55c07e4be94..b78de817e721 100644
---- a/tools/perf/bench/inject-buildid.c
-+++ b/tools/perf/bench/inject-buildid.c
-@@ -175,7 +175,7 @@ static ssize_t synthesize_mmap(struct bench_data *data, struct bench_dso *dso, u
- 	union perf_event event;
- 	size_t len = offsetof(struct perf_record_mmap2, filename);
- 	u64 *id_hdr_ptr = (void *)&event;
--	int ts_idx;
-+	size_t ts_idx;
- 
- 	len += roundup(strlen(dso->name) + 1, 8) + bench_id_hdr_size;
- 
-@@ -250,14 +250,14 @@ static void *data_reader(void *arg)
- 	struct bench_data *data = arg;
- 	char buf[8192];
- 	int flag;
--	int n;
- 
- 	flag = fcntl(data->output_pipe[0], F_GETFL);
- 	fcntl(data->output_pipe[0], F_SETFL, flag | O_NONBLOCK);
- 
- 	/* read out data from child */
- 	while (true) {
--		n = read(data->output_pipe[0], buf, sizeof(buf));
-+		ssize_t n = read(data->output_pipe[0], buf, sizeof(buf));
-+
- 		if (n > 0)
- 			continue;
- 		if (n == 0)
-@@ -451,7 +451,7 @@ static void do_inject_loop(struct bench_data *data, bool build_id_all)
- static int do_inject_loops(struct bench_data *data)
- {
- 
--	srand(time(NULL));
-+	srand((int)time(NULL));
- 	symbol__init(NULL);
- 
- 	bench_sample_type  = PERF_SAMPLE_IDENTIFIER | PERF_SAMPLE_IP;
-diff --git a/tools/perf/bench/mem-functions.c b/tools/perf/bench/mem-functions.c
-index 19d45c377ac1..672b76eb8f99 100644
---- a/tools/perf/bench/mem-functions.c
-+++ b/tools/perf/bench/mem-functions.c
-@@ -82,7 +82,7 @@ static int init_cycles(void)
- 
- static u64 get_cycles(void)
- {
--	int ret;
-+	ssize_t ret;
- 	u64 clk;
- 
- 	ret = read(cycles_fd, &clk, sizeof(u64));
-diff --git a/tools/perf/bench/pmu-scan.c b/tools/perf/bench/pmu-scan.c
-index 9e4d36486f62..4a885d4bd279 100644
---- a/tools/perf/bench/pmu-scan.c
-+++ b/tools/perf/bench/pmu-scan.c
-@@ -19,8 +19,8 @@ static unsigned int iterations = 100;
- 
- struct pmu_scan_result {
- 	char *name;
--	int nr_aliases;
--	int nr_formats;
-+	size_t nr_aliases;
-+	size_t nr_formats;
- 	int nr_caps;
- 	bool is_core;
- };
-@@ -63,7 +63,7 @@ static int save_result(void)
- 		list_for_each(list, &pmu->format)
- 			r->nr_formats++;
- 
--		pr_debug("pmu[%d] name=%s, nr_caps=%d, nr_aliases=%d, nr_formats=%d\n",
-+		pr_debug("pmu[%d] name=%s, nr_caps=%d, nr_aliases=%zu, nr_formats=%zu\n",
- 			nr_pmus, r->name, r->nr_caps, r->nr_aliases, r->nr_formats);
- 		nr_pmus++;
- 	}
-@@ -77,7 +77,7 @@ static int check_result(bool core_only)
- 	struct pmu_scan_result *r;
- 	struct perf_pmu *pmu;
- 	struct list_head *list;
--	int nr;
-+	size_t nr;
- 
- 	for (int i = 0; i < nr_pmus; i++) {
- 		r = &results[i];
-@@ -98,7 +98,7 @@ static int check_result(bool core_only)
- 
- 		nr = perf_pmu__num_events(pmu);
- 		if (nr != r->nr_aliases) {
--			pr_err("Unmatched number of event aliases in %s: expect %d vs got %d\n",
-+			pr_err("Unmatched number of event aliases in %s: expect %zu vs got %zu\n",
- 				pmu->name, r->nr_aliases, nr);
- 			return -1;
- 		}
-@@ -107,7 +107,7 @@ static int check_result(bool core_only)
- 		list_for_each(list, &pmu->format)
- 			nr++;
- 		if (nr != r->nr_formats) {
--			pr_err("Unmatched number of event formats in %s: expect %d vs got %d\n",
-+			pr_err("Unmatched number of event formats in %s: expect %zu vs got %zu\n",
- 				pmu->name, r->nr_formats, nr);
- 			return -1;
- 		}
-diff --git a/tools/perf/bench/sched-messaging.c b/tools/perf/bench/sched-messaging.c
-index 93dcd9dba3d0..a2eb47944f44 100644
---- a/tools/perf/bench/sched-messaging.c
-+++ b/tools/perf/bench/sched-messaging.c
-@@ -102,7 +102,7 @@ static void *sender(struct sender_context *ctx)
- 	/* Now pump to every receiver. */
- 	for (i = 0; i < nr_loops; i++) {
- 		for (j = 0; j < ctx->num_fds; j++) {
--			int ret, done = 0;
-+			ssize_t ret, done = 0;
- 
- again:
- 			ret = write(ctx->out_fds[j], data + done,
-@@ -133,7 +133,7 @@ static void *receiver(struct receiver_context* ctx)
- 	/* Receive them all */
- 	for (i = 0; i < ctx->num_packets; i++) {
- 		char data[DATASIZE];
--		int ret, done = 0;
-+		ssize_t ret, done = 0;
- 
- again:
- 		ret = read(ctx->in_fds[0], data + done, DATASIZE - done);
-diff --git a/tools/perf/bench/sched-pipe.c b/tools/perf/bench/sched-pipe.c
-index 70139036d68f..b847213fd616 100644
---- a/tools/perf/bench/sched-pipe.c
-+++ b/tools/perf/bench/sched-pipe.c
-@@ -102,7 +102,8 @@ static const char * const bench_sched_pipe_usage[] = {
- static int enter_cgroup(int nr)
- {
- 	char buf[32];
--	int fd, len, ret;
-+	int fd;
-+	ssize_t ret, len;
- 	int saved_errno;
- 	struct cgroup *cgrp;
- 	pid_t pid;
-@@ -118,7 +119,7 @@ static int enter_cgroup(int nr)
- 	cgrp = cgrps[nr];
- 
- 	if (threaded)
--		pid = syscall(__NR_gettid);
-+		pid = (pid_t)syscall(__NR_gettid);
- 	else
- 		pid = getpid();
- 
-@@ -172,23 +173,25 @@ static void exit_cgroup(int nr)
- 
- static inline int read_pipe(struct thread_data *td)
- {
--	int ret, m;
-+	ssize_t ret;
-+	int m;
- retry:
- 	if (nonblocking) {
- 		ret = epoll_wait(td->epoll_fd, &td->epoll_ev, 1, -1);
- 		if (ret < 0)
--			return ret;
-+			return (int)ret;
- 	}
- 	ret = read(td->pipe_read, &m, sizeof(int));
- 	if (nonblocking && ret < 0 && errno == EWOULDBLOCK)
- 		goto retry;
--	return ret;
-+	return (int)ret;
- }
- 
- static void *worker_thread(void *__tdata)
- {
- 	struct thread_data *td = __tdata;
--	int i, ret, m = 0;
-+	int i, m = 0;
-+	ssize_t ret;
- 
- 	ret = enter_cgroup(td->nr);
- 	if (ret < 0) {
-diff --git a/tools/perf/bench/sched-seccomp-notify.c b/tools/perf/bench/sched-seccomp-notify.c
-index 269c1f4a6852..4f0c68b366e3 100644
---- a/tools/perf/bench/sched-seccomp-notify.c
-+++ b/tools/perf/bench/sched-seccomp-notify.c
-@@ -43,7 +43,7 @@ static const char * const bench_seccomp_usage[] = {
- 
- static int seccomp(unsigned int op, unsigned int flags, void *args)
- {
--	return syscall(__NR_seccomp, op, flags, args);
-+	return (int)syscall(__NR_seccomp, op, flags, args);
- }
- 
- static int user_notif_syscall(int nr, unsigned int flags)
-diff --git a/tools/perf/bench/synthesize.c b/tools/perf/bench/synthesize.c
-index 9b333276cbdb..484ba825fcf4 100644
---- a/tools/perf/bench/synthesize.c
-+++ b/tools/perf/bench/synthesize.c
-@@ -120,7 +120,7 @@ static int run_single_threaded(void)
- 	session = perf_session__new(NULL, NULL);
- 	if (IS_ERR(session)) {
- 		pr_err("Session creation failed.\n");
--		return PTR_ERR(session);
-+		return (int)PTR_ERR(session);
- 	}
- 	threads = thread_map__new_by_pid(getpid());
- 	if (!threads) {
-@@ -163,7 +163,7 @@ static int do_run_multi_threaded(struct target *target,
- 	for (i = 0; i < multi_iterations; i++) {
- 		session = perf_session__new(NULL, NULL);
- 		if (IS_ERR(session))
--			return PTR_ERR(session);
-+			return (int)PTR_ERR(session);
- 
- 		atomic_set(&event_count, 0);
- 		gettimeofday(&start, NULL);
-@@ -210,7 +210,7 @@ static int run_multi_threaded(void)
- 	int err;
- 
- 	if (max_threads == UINT_MAX)
--		max_threads = sysconf(_SC_NPROCESSORS_ONLN);
-+		max_threads = (int)sysconf(_SC_NPROCESSORS_ONLN);
- 
- 	puts(
- "Computing performance of multi threaded perf event synthesis by\n"
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index 2c1a9f3d847a..2f6a34908273 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -212,7 +212,7 @@ static int bench_str2int(const char *str)
- static int run_bench(const char *coll_name, const char *bench_name, bench_fn_t fn,
- 		     int argc, const char **argv)
- {
--	int size;
-+	size_t size;
- 	char *name;
- 	int ret;
- 
+ /*
+  * Represent a range of MIDR values for a given CPU model and a
 -- 
 2.49.0.906.g1f30a19c02-goog
 
