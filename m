@@ -1,55 +1,55 @@
 Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8089827FD5D
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5F627F742
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035490; cv=none; b=aLpI1gRTBQpbWiHsWQU3Q6vq5X4FILXDgPZoS9jlteChsSLK2QhGOYJDyvyyc5djkgMiD0dsZ4A8deQSXxeqE7GalfqErM00lzj6xf3ltQoFHsDrO7l3NS1UGkj8Kptvi9R1e542mkCTRzacpL1k+CHFKr6bize8TAbgfx3znDY=
+	t=1746035492; cv=none; b=ClQ6O5eLldiq0xVibsjsI8c7wYWvH3EcThCbsQfD7iHkEZaKmG3XpGVkskeydevYUw7BlY5sWhIFZiH7bPIcIJ2oAqziwbhz7DbRYHuz026vej0Hg0Sq63eJsXwXxE2f4TfmJ0gD37QQajXER/9fRKQ+S0m0cE9m2Gy8egX2tU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035490; c=relaxed/simple;
-	bh=fBONA3uIlmAjZ4yMhUPk4a2yW0//Co8RC/NrTAeAagw=;
+	s=arc-20240116; t=1746035492; c=relaxed/simple;
+	bh=ylzDCz7ABNgz73jC33kqWkLxtIyjwa4WXPEBCQ9IPSs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=WUZhHsuburtLJ6Ra2kyGxuZoIxLARQqIlOd5DCRb8mD6QSqrjl9GR2eOTahuiRZGViUNtM61uI0bjob7EFgRoHeGeTMeCHEWcJdedU5W0WdxQygcO6bZctlJoWFQcR68y093IOGJ0o50bTKAbFOtntRlCzVS9zzn9SuoQWiBAIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eWpU6TDy; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=mIyfRzEVfa2iE71wS5mR+jjqPaKfsHsAGwxeftyEfkItMmk57hXugSyfo2GGA85KNsrn47VwXzST7LoQAwtxW8/rS55mRfEALwEHTfFuKr1Y5gBFgJHJm3JNKn8Y8IMm1njLrE2+QlHTUThRjR0+pOBL70lCrD0KUOk5Cj3VjDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=upZVGW2g; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eWpU6TDy"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-225429696a9so1455275ad.1
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="upZVGW2g"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2242ce15cc3so1073195ad.1
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035488; x=1746640288; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035490; x=1746640290; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oCcMOkMJ6nVRY+G559CvBPXmkx4KPAiCuoG+6vArkCs=;
-        b=eWpU6TDyupALNYUADR75Ca2BpSPpn+TazGpziGgvt0fkx/q8PwDByMnkKQe4C8gOLO
-         EUQP6QZWI2hky4OgjPnLWg780TTgRu1uoQaj+lgFt4fkwEgR/L0kmdx8MQ8WjDjOmlGD
-         TRbC2wn3l1QmBasXQGckXKJ6OZ8cHeEr61F/32IdomEkQYw0zWqw2fzP+4JtMURb7xUu
-         0wowDOxGKhTQ4Lfbjf90pRNOoKsnoON4OO5LXIRdbMeIQUea2tuphK9hWls/uGth3cWE
-         DTue5o7r3Qy0T9gtLiXPkVsTUuuzx9APDH1/CK0hR+dnWxbluXQ4FFr0MwR573CEB6ap
-         IhBg==
+        bh=PKvodGdphwgw3/59PaEVxt3ZIF+tbA/HSL0dM2VGnxA=;
+        b=upZVGW2gqAPEPcRDb7LE4goYZUdgJU4TTxQorX9LBhK/KyPRYzhIy7f9s+qjYGIJtX
+         RK1fYJrSbRBnQGujqJRh6nXoC4hoEfp+PqSwGNYndEm40/ijjMONsOYBylFA13AQAIss
+         TyXcbpDZMy3V8mN1NFBQQScWJpesEkmpvdrqkpYnEhIkZrAF2z74CsM0xkb3PG2Kjfxo
+         Fwt0usTvF7I3431+lkKr+dMy1bOrKp5tmWq8V5BvJlnUtv0StSmsA7vLlBaEUVmzWF/B
+         SZKnHUQZMqxX8MU6bv/7ZzTsbv+zFmYDdjb1U0BU+wKBETAkR24Nrug58hTrtXEAhTdv
+         4U/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035488; x=1746640288;
+        d=1e100.net; s=20230601; t=1746035490; x=1746640290;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oCcMOkMJ6nVRY+G559CvBPXmkx4KPAiCuoG+6vArkCs=;
-        b=OKztNKiO0+PBCSS9wfSmaaKHXb1UiZ9BoGXf41g9ZtKwy6b5ssFCmbNr4alEy/hOM4
-         B6G1Y5vADInbH8cOGzasj1CdnLA5GEwZLd1C2lcrAG5EPgQBOEi6k9Cpk2x34RbVSFYy
-         JrIzWcrV/+njKY8KtWBbv50MumHRjMkty5cBUiFJvzGzOm+IbbqDSFsJwDXtxlCrH0HE
-         SB0pj3YMLm9sHbkRYtKSvukcZJ2291KezcVeipd12JjlKScQ8joUNcuD2iwUgHyiJMD5
-         DHB5U92WPJd85S2DlH8SrZi/6X0FUQLdz2MxqYFidFFSc1ZswPew6DLXpLCw79r86VkX
-         y5iw==
-X-Forwarded-Encrypted: i=1; AJvYcCUo+U/6QVKqq6KSgHWYWdLiU3Kz0yM7ethM1cSLqiAyCiaYM5NPHY1NNyGLVFr/YgozA/Ch@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzys3r62YerRL9N8z3JZO1kF2+iRR7yslz/J9wJS50bjxEbYApA
-	cBPJjpypVBMW1lEwzBJi2TXzCmnSA+VUkoM2YDAIbc83Yk8JcLMyHl9Y2MBZ3+f4aJY1vX6uNNZ
-	sGDzIzQ==
-X-Google-Smtp-Source: AGHT+IEZUQuh6O8cqIu2sdaa1zcv62a+B5jkQCmIGT9u8q4uK0EvgjUV0foEedm6TafaS4MGEDz7NL4QC540
-X-Received: from pjm4.prod.google.com ([2002:a17:90b:2fc4:b0:305:2d68:2be6])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c40f:b0:229:1717:8812
- with SMTP id d9443c01a7336-22df56afa5emr51435105ad.0.1746035487474; Wed, 30
- Apr 2025 10:51:27 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:03 -0700
+        bh=PKvodGdphwgw3/59PaEVxt3ZIF+tbA/HSL0dM2VGnxA=;
+        b=d2MsKMLE1N9ZirjA9OX5ZjsiW1v0xSLthuXJZZfpxN3QwLpknl4cBp4JA9MeqDbYUR
+         kwYYdPDLvoxg8hwNa301q8EmC50cOSJya6hAUKnRMVSIFe5577wTewq2PH8/fIw8iPP6
+         y2C78ypllS3r1DDS7XBbVsr8Atcrki8fDDPqJiswbRvZaAT0ErqD5pOPkX4re4g29pDl
+         xoO46hndpu3+NVrtvQQ88Ps5jH6p80P3s5oHq6X0j+6KaOBYQX2OkMHm7INiktuPCJJV
+         5LcYlFWQY/rcpX9Ty9tf/MjVUJLpEMQ+XQeCMptDoSo0xCH2i5YsmK6jsVbM9ehtfBkw
+         NgNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXlSPKvxjljUYwsSTEEHE8MCW80cdBOBjWULYsolfAzKeoAKV77+1FQsqdBTK6thzVFXeQU@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyx7VnO7J2emmB3cyj9S5bd64jloJnk8uzl61T7e5nrtsMgzKud
+	X9+wkxTFkbyJVL+nBa77pgkHLRCJbhzpnWte1rJHYY+VeffE7iEaQTd3Vyu9eKFFbtJqLqhWNhr
+	flc48pA==
+X-Google-Smtp-Source: AGHT+IG3HFqCqUHV2O/fvwRA05Ia4nOSW+cf2ULUFRm7S3WdX6PSZJ9m9PEqLWVOShsiSpMoyTeVc4TfDMSC
+X-Received: from pgbee3.prod.google.com ([2002:a05:6a02:4583:b0:b16:4869:6621])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f685:b0:223:f9a4:3f9c
+ with SMTP id d9443c01a7336-22df34a60dbmr58244925ad.9.1746035489482; Wed, 30
+ Apr 2025 10:51:29 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:04 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-16-irogers@google.com>
-Subject: [PATCH v2 15/47] perf pmu: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-17-irogers@google.com>
+Subject: [PATCH v2 16/47] perf annotate powerpc: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,174 +116,22 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/hwmon_pmu.c |  8 ++++----
- tools/perf/util/pmu.c       |  9 ++++-----
- tools/perf/util/pmus.c      | 16 ++++++++--------
- tools/perf/util/tool_pmu.c  |  2 +-
- 4 files changed, 17 insertions(+), 18 deletions(-)
+ tools/perf/arch/powerpc/annotate/instructions.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/hwmon_pmu.c b/tools/perf/util/hwmon_pmu.c
-index 3cce77fc8004..6245eeb593c9 100644
---- a/tools/perf/util/hwmon_pmu.c
-+++ b/tools/perf/util/hwmon_pmu.c
-@@ -170,7 +170,7 @@ bool parse_hwmon_filename(const char *filename,
- 	for (size_t i = 0; fn_type[i] != '\0'; i++) {
- 		if (fn_type[i] >= '0' && fn_type[i] <= '9') {
- 			fn_type[i] = '\0';
--			*number = strtoul(&filename[i], (char **)&fn_item, 10);
-+			*number = (int)strtoul(&filename[i], (char **)&fn_item, 10);
- 			if (*fn_item == '_')
- 				fn_item++;
- 			break;
-@@ -194,7 +194,7 @@ bool parse_hwmon_filename(const char *filename,
- 		return false;
- 	}
+diff --git a/tools/perf/arch/powerpc/annotate/instructions.c b/tools/perf/arch/powerpc/annotate/instructions.c
+index ca567cfdcbdb..598dc10a1751 100644
+--- a/tools/perf/arch/powerpc/annotate/instructions.c
++++ b/tools/perf/arch/powerpc/annotate/instructions.c
+@@ -18,7 +18,7 @@ static struct ins_ops *powerpc__associate_instruction_ops(struct arch *arch, con
  
--	*type = elem - &hwmon_type_strs[0];
-+	*type = (enum hwmon_type)(elem - &hwmon_type_strs[0]);
- 	if (!item)
- 		return true;
+ 	ops = &jump_ops;
  
-@@ -213,7 +213,7 @@ bool parse_hwmon_filename(const char *filename,
- 			 fn_item, filename);
- 		return false;
- 	}
--	*item = elem - &hwmon_item_strs[0];
-+	*item = (enum hwmon_item)(elem - &hwmon_item_strs[0]);
- 	return true;
- }
- 
-@@ -352,7 +352,7 @@ struct perf_pmu *hwmon_pmu__new(struct list_head *pmus, int hwmon_dir, const cha
+-	i = strlen(name) - 1;
++	i = (int)strlen(name) - 1;
+ 	if (i < 0)
  		return NULL;
  
- 	hwm->hwmon_dir_fd = hwmon_dir;
--	hwm->pmu.type = PERF_PMU_TYPE_HWMON_START + strtoul(sysfs_name + 5, NULL, 10);
-+	hwm->pmu.type = PERF_PMU_TYPE_HWMON_START + (int)strtoul(sysfs_name + 5, NULL, 10);
- 	if (hwm->pmu.type > PERF_PMU_TYPE_HWMON_END) {
- 		pr_err("Unable to encode hwmon type from %s in valid PMU type\n", sysfs_name);
- 		goto err_out;
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index bbb906bb2159..0a3c9e5eb527 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -1310,7 +1310,7 @@ __u64 perf_pmu__format_bits(struct perf_pmu *pmu, const char *name)
- {
- 	struct perf_pmu_format *format = pmu_find_format(&pmu->format, name);
- 	__u64 bits = 0;
--	int fbit;
-+	size_t fbit;
- 
- 	if (!format)
- 		return 0;
-@@ -1355,9 +1355,8 @@ static void pmu_format_value(unsigned long *format, __u64 value, __u64 *v,
- 
- static __u64 pmu_format_max_value(const unsigned long *format)
- {
--	int w;
-+	size_t w = bitmap_weight(format, PERF_PMU_FORMAT_BITS);
- 
--	w = bitmap_weight(format, PERF_PMU_FORMAT_BITS);
- 	if (!w)
- 		return 0;
- 	if (w < 64)
-@@ -1872,7 +1871,7 @@ int perf_pmu__for_each_format(struct perf_pmu *pmu, void *state, pmu_format_call
- 	if (!pmu->is_core)
- 		return 0;
- 
--	for (size_t i = 0; i < ARRAY_SIZE(terms); i++) {
-+	for (int i = 0; i < (int)ARRAY_SIZE(terms); i++) {
- 		int config = PERF_PMU_FORMAT_VALUE_CONFIG;
- 
- 		if (i < PERF_PMU_FORMAT_VALUE_CONFIG_END)
-@@ -2329,7 +2328,7 @@ static void perf_pmu__compute_config_masks(struct perf_pmu *pmu)
- 		return;
- 
- 	list_for_each_entry(format, &pmu->format, list)	{
--		unsigned int i;
-+		size_t i;
- 		__u64 *mask;
- 
- 		if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END)
-diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-index b99292de7669..0b9071219376 100644
---- a/tools/perf/util/pmus.c
-+++ b/tools/perf/util/pmus.c
-@@ -59,7 +59,7 @@ static void pmu_read_sysfs(unsigned int to_read_pmus);
- 
- size_t pmu_name_len_no_suffix(const char *str)
- {
--	int orig_len, len;
-+	size_t orig_len, len;
- 	bool has_hex_digits = false;
- 
- 	orig_len = len = strlen(str);
-@@ -353,7 +353,7 @@ struct perf_pmu *perf_pmus__scan_core(struct perf_pmu *pmu)
- static struct perf_pmu *perf_pmus__scan_skip_duplicates(struct perf_pmu *pmu)
- {
- 	bool use_core_pmus = !pmu || pmu->is_core;
--	int last_pmu_name_len = 0;
-+	size_t last_pmu_name_len = 0;
- 	const char *last_pmu_name = (pmu && pmu->name) ? pmu->name : "";
- 
- 	if (!pmu) {
-@@ -364,7 +364,7 @@ static struct perf_pmu *perf_pmus__scan_skip_duplicates(struct perf_pmu *pmu)
- 
- 	if (use_core_pmus) {
- 		list_for_each_entry_continue(pmu, &core_pmus, list) {
--			int pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
-+			size_t pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
- 
- 			if (last_pmu_name_len == pmu_name_len &&
- 			    !strncmp(last_pmu_name, pmu->name ?: "", pmu_name_len))
-@@ -376,7 +376,7 @@ static struct perf_pmu *perf_pmus__scan_skip_duplicates(struct perf_pmu *pmu)
- 		pmu = list_prepare_entry(pmu, &other_pmus, list);
- 	}
- 	list_for_each_entry_continue(pmu, &other_pmus, list) {
--		int pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
-+		size_t pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
- 
- 		if (last_pmu_name_len == pmu_name_len &&
- 		    !strncmp(last_pmu_name, pmu->name ?: "", pmu_name_len))
-@@ -581,7 +581,7 @@ static int build_format_string(void *state, const char *name, int config,
- 			       const unsigned long *bits)
- {
- 	struct build_format_string_args *args = state;
--	unsigned int num_bits;
-+	size_t num_bits;
- 	int ret1, ret2 = 0;
- 
- 	(void)config;
-@@ -631,14 +631,14 @@ void perf_pmus__print_raw_pmu_events(const struct print_callbacks *print_cb, voi
- 			.long_string = STRBUF_INIT,
- 			.num_formats = 0,
- 		};
--		int len = pmu_name_len_no_suffix(pmu->name);
-+		size_t len = pmu_name_len_no_suffix(pmu->name);
- 		const char *desc = "(see 'man perf-list' or 'man perf-record' on how to encode it)";
- 
- 		if (!pmu->is_core)
- 			desc = NULL;
- 
--		strbuf_addf(&format_args.short_string, "%.*s/", len, pmu->name);
--		strbuf_addf(&format_args.long_string, "%.*s/", len, pmu->name);
-+		strbuf_addf(&format_args.short_string, "%.*s/", (int)len, pmu->name);
-+		strbuf_addf(&format_args.long_string, "%.*s/", (int)len, pmu->name);
- 		perf_pmu__for_each_format(pmu, &format_args, build_format_string);
- 
- 		if (format_args.num_formats > 3)
-diff --git a/tools/perf/util/tool_pmu.c b/tools/perf/util/tool_pmu.c
-index 727a10e3f990..3f9367424440 100644
---- a/tools/perf/util/tool_pmu.c
-+++ b/tools/perf/util/tool_pmu.c
-@@ -103,7 +103,7 @@ enum tool_pmu_event evsel__tool_event(const struct evsel *evsel)
- 
- const char *evsel__tool_pmu_event_name(const struct evsel *evsel)
- {
--	return tool_pmu__event_to_str(evsel->core.attr.config);
-+	return tool_pmu__event_to_str((enum tool_pmu_event)evsel->core.attr.config);
- }
- 
- static bool read_until_char(struct io *io, char e)
 -- 
 2.49.0.906.g1f30a19c02-goog
 
