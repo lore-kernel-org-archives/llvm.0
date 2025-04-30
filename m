@@ -1,63 +1,66 @@
 Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F212609C5
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E096D262811
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746033342; cv=none; b=KY+Zu0Wruq36w4IFvTcqcTL4J/tbeT8UuSRk6FKTTcFmEom6Rfph8WSsk2Q2XNYhrjXU6S13mvyom0d7CAHELh1YydmtL82BC5OZbzEyBX5yNhimJpLSH047NZWLdNY2wOYMSeE1b5DSMqUg9HGlbTrAfAgVgww1M85tc1FBYmM=
+	t=1746033345; cv=none; b=Hn6F8H2vm3L7SRMA/xA7Lw0s58sjS+0Snnnvt5WZsQwnOtz3RD++/iC8sEouzWlpN6Fz6GXk1lkfTwvcDPutAsVnulhFOHYGjJ9fc7hVZKMUakezngqf7Kc4hs1oDthBhyvQiuhy9geZurSQh3EK00d+wKa23pSIhfDz2OVZUQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746033342; c=relaxed/simple;
-	bh=a1OE5bfqiQpD3wUqlPPLecFwn0/TgL4JwzH7YA5a96I=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=qpohYBKouPdde3OqcFEyePCHvsT81LUtxUaJ8+U0qR9UlX8nVOiPdBh0fzTfveYKLCnyzjd8Az1JdvY9pPQc/s/pcnNKBDbncdsErHbGZawb1VwHlua/YYQrkHUh4TLIoVeXqmMpCzwG3RN7QCuEy52p2Lzmg2LMjUela0XCQ1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PeIMc1Z9; arc=none smtp.client-ip=209.85.210.201
+	s=arc-20240116; t=1746033345; c=relaxed/simple;
+	bh=lm5ga5E1Bh0WGysa1ZSSmKbnAd9w4JpDDVcJpw+p0k4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=ZbpBwU69i1CvLRwtpjRtXjekdw8ix77ZuXT/xlt2nk5CRRf5WPPSy6o/sL+wS8X6V2vKXGpMHQ1E5NiH5Ss4UP77e2WMpmGpJuA9wb7zTk7e3bVMsV8LUk94QhrvVNdOvb/mjZ//dBLRqswD8/qu96f0Hw/jRBKDJjGtGO8iAOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qdpBrsK7; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PeIMc1Z9"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7394772635dso77244b3a.0
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:15:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qdpBrsK7"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-736cb72efd5so107779b3a.3
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746033340; x=1746638140; darn=lists.linux.dev;
-        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2l6EpSn49twaG/1RM3U2XqpvkRe6FWEsiPTfIGBFJKk=;
-        b=PeIMc1Z9Hby46btrrqz5JqKald6Wl2znySmxsSnVKdk/2rEEyw5h5ByEbk+fnCeSaL
-         hXNfGTAyVVn0F2bjOLNZkuLH5JfOWfamUJNR54bd3+y42D4kGbEpV/7RJwDyRRBfTym4
-         LdUwTX78lRrvtSEwkY9PaWfhPyBlevojR4HfGZxK3yyRfMvLNr7S54DfVgpRY1Cxvedw
-         4ePq+3ySk76sJm9fYbT+DDchIwKpL+HkTcT98olNt33WI4s+NfzjymqEBCWZDLMm65+I
-         Tu0zH+QoXP9cBZoZt8K/dZok9S+LLx5QslJj+o+5nOvP82T6p7/mnTl3FGq+37HfWTPT
-         Xrtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746033340; x=1746638140;
-        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=google.com; s=20230601; t=1746033342; x=1746638142; darn=lists.linux.dev;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2l6EpSn49twaG/1RM3U2XqpvkRe6FWEsiPTfIGBFJKk=;
-        b=srzzvswusuhRisyeaW49LvG1xI/3clvqG7cU+CnUbG6pcHhta8aBw/Rk3qomMKEgbt
-         4DIMGACPL2grScebARQ936eA+hgKVzHFdCMqye9XMgsg//8RNGnZqrn3YdF2al98gqbH
-         bnDLUSQZPCXzZK5jHxsw1/hVMwiRWHZqKGUUq+WJYcZ2iXC5LPfix+L7G8xIldwEFCFf
-         G5QO0w2Fm6ItzBZV8etynmvWv9Qc7Pben9K4p6zYwpyLKDjD0TgLFQxEHeqL2xZY0cYW
-         HhwfyjgGxA/VFSY8CtQOXr7LtgYrmRMlhuCheislMxTlV4/Gtzn8vv5+rRJnVN3Aa6Ch
-         mTNg==
-X-Forwarded-Encrypted: i=1; AJvYcCW/LQ2GSCnjqYddi16PEuqQoKX1aWuIGOjgBvncouvdKy29yEblDr2EMdPisReZr1EhAFru@lists.linux.dev
-X-Gm-Message-State: AOJu0YwRxIdW+624tkW4mUXSyS3MuioLw/5CPqmRvxB7nADZhZxLnula
-	zfKtymI8aZdpShnIRHmZyM5p40S6lLlQ7AtBl2LWadnZr44WfypBQtIq7dLUy+IyjNyEyrCE3vf
-	IeWFNqA==
-X-Google-Smtp-Source: AGHT+IHwG7pdNLiBaAM24HThjkOi7tLfoBL4L6u/i7asjEelEVXiAdsmMsTUPy8p7bw7xwkQu9IheoDEPmPe
-X-Received: from pgbfq21.prod.google.com ([2002:a05:6a02:2995:b0:af2:3b16:9767])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3d8c:b0:1f1:432:f4a3
- with SMTP id adf61e73a8af0-20aa2fcc884mr4171936637.23.1746033340179; Wed, 30
- Apr 2025 10:15:40 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:15:29 -0700
+        bh=FpIgS0wmOV5UbvgaGzkA8qij/rEeOqGzeG6VWVukYPI=;
+        b=qdpBrsK7Y9EyfNzj2EkT2j/oaawqaUdF8UiQV3pjo1Jp+YWzFKf8XFlptNTeuj72XP
+         f8Kdz/L5btGJQEPY6j8ZuC4SjNUM2X0MJJsTx+K4KvtY1t5UxoP+U/lmAR/quELOVNic
+         jnGcqPwdbEmI7doSfWwZUTy9PDpzluvPV9+0wYXJUJ0kr55McSfwyyIRCYCLIIhEyAka
+         vMqbf5ibdynoB0KBwASyiGcC9jubigROL9UdtCp5aiSy3kYr2nrs5ZKIGdh6TBoUgvIM
+         jXXX+cyClMjmeHro89gspNV+9kjuNiDOk6/hWp6+fmQ82+DgxP0UiRbDlVMminBaq28B
+         N3rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746033342; x=1746638142;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FpIgS0wmOV5UbvgaGzkA8qij/rEeOqGzeG6VWVukYPI=;
+        b=LVHcQs/EyFjvNv190lFT4Fbd9rHSuF2Gg+gyrUXHy06OY+/pnTEmD8A22oiCL4eqIq
+         HvLUuYl++V7uwP0odiNwiMaXffA1Poa1kOlApEicgyk83Gu+TZo/5w5liVjViJg8zmW+
+         dS45jkIC2xKkQg8jtTvheZgZB978BGK2t4jiPBmA/8np/eFdMm5n4QKlDATxxWEEOVi+
+         pXgg3ioI/4lgH7uMHyToYkx9bEYpxLnwG13XNaFdRhni/BEUposmiHMI+x1tjKRCRt1F
+         Xvw/60a0h3GVPBy8tG66Zk//kn/Ablc0noif2vnB9cBi8SS8wln06Bs3lP+P+KS52mNs
+         3VPw==
+X-Forwarded-Encrypted: i=1; AJvYcCXjx91nGLswGt4qZBno91ifMtoEGeD0fjmKCtP4pO14T+XhLFSBrYl1QaSKdsFEOeWhpxOA@lists.linux.dev
+X-Gm-Message-State: AOJu0YySFNXtuBjVo9vtsxh6qMFrpCSnNAyn6f++WdIoTxtBOtpE2YjO
+	EaHA0fuCxtc66M51BzeP4C8Rj4I6jRx0We5v1sh8OAowciLKZcCjnw2AE3+PNOWexQsmbSw266Q
+	1kWHg8g==
+X-Google-Smtp-Source: AGHT+IGv8XMgRIoeJR1rySLXISqqmVQqJou5NGwUjKxk7iOH4VQdGHhiObrDzUu60o16T054lU4v3OaRDTR/
+X-Received: from pgkb21.prod.google.com ([2002:a63:eb55:0:b0:b1f:857e:2198])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:e617:b0:1f5:75a9:526c
+ with SMTP id adf61e73a8af0-20a87c5680dmr5326067637.13.1746033342084; Wed, 30
+ Apr 2025 10:15:42 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:15:30 -0700
+In-Reply-To: <20250430171534.132774-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20250430171534.132774-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430171534.132774-1-irogers@google.com>
-Subject: [PATCH v2 0/5] Silence some clang -Wshorten-64-to-32 warnings
+Message-ID: <20250430171534.132774-2-irogers@google.com>
+Subject: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32 warning
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
@@ -68,35 +71,32 @@ To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.d
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan <leo.yan@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Clang's shorten-64-to-32 can be useful to spot certain kinds of bugs
-that can be more prevalent in C code due to implicit 64 to 32-bit
-casting. Add some explicit casts to header files so as to avoid the
-warning when these headers are used.
+The clang warning -Wshorten-64-to-32 can be useful to catch
+inadvertent truncation. In some instances this truncation can lead to
+changing the sign of a result, for example, truncation to return an
+int to fit a sort routine. Silence the warning by making the implicit
+truncation explicit. This isn't to say the code is currently incorrect
+but without silencing the warning it is hard to spot the erroneous
+cases.
 
-This patch started out as a single patch in a series for the perf tool
-where a bug could have been identified were -Wshorten-64-to-32
-enabled:
-https://lore.kernel.org/lkml/20250401182347.3422199-3-irogers@google.com/
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ include/linux/bitfield.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2: Rebase and try to address Arnd Bergmann's comments wrt the commit
-    message. Arnd also mentioned doing larger refactors, changing
-    return types and adding helper functions. I've held off doing this
-    given concerns over breaking printf flags.
-
-Ian Rogers (5):
-  bitfield: Silence a clang -Wshorten-64-to-32 warning
-  bitmap: Silence a clang -Wshorten-64-to-32 warning
-  bitops: Silence a clang -Wshorten-64-to-32 warning
-  math64: Silence a clang -Wshorten-64-to-32 warning
-  hash.h: Silence a clang -Wshorten-64-to-32 warning
-
- include/asm-generic/bitops/fls64.h | 2 +-
- include/linux/bitfield.h           | 2 +-
- include/linux/bitmap.h             | 2 +-
- include/linux/hash.h               | 2 +-
- include/linux/math64.h             | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
-
+diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
+index 63928f173223..cc5cfed041bb 100644
+--- a/include/linux/bitfield.h
++++ b/include/linux/bitfield.h
+@@ -176,7 +176,7 @@ static __always_inline __##type type##_encode_bits(base v, base field)	\
+ {									\
+ 	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
+ 		__field_overflow();					\
+-	return to((v & field_mask(field)) * field_multiplier(field));	\
++	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
+ }									\
+ static __always_inline __##type type##_replace_bits(__##type old,	\
+ 					base val, base field)		\
 -- 
 2.49.0.906.g1f30a19c02-goog
 
