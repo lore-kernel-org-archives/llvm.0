@@ -1,55 +1,55 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E096D262811
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66523266562
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746033345; cv=none; b=Hn6F8H2vm3L7SRMA/xA7Lw0s58sjS+0Snnnvt5WZsQwnOtz3RD++/iC8sEouzWlpN6Fz6GXk1lkfTwvcDPutAsVnulhFOHYGjJ9fc7hVZKMUakezngqf7Kc4hs1oDthBhyvQiuhy9geZurSQh3EK00d+wKa23pSIhfDz2OVZUQQ=
+	t=1746033347; cv=none; b=SXOyFLRoMg1AmUEXsYpH6NJqrdRRn819uhXw+MllTToWWGTSkxeJ8WGQkJZucSAZhYA0Lgc+FDZmeqwZJxBnjNup/ovMIWjl11dlJj96lyIDIU19rPYeoS9W93WQcNMJTsjGuxrTiMj0YybU+3IAEQ+Z1CL8rI9Uj0M5gkg+TZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746033345; c=relaxed/simple;
-	bh=lm5ga5E1Bh0WGysa1ZSSmKbnAd9w4JpDDVcJpw+p0k4=;
+	s=arc-20240116; t=1746033347; c=relaxed/simple;
+	bh=/nCqqKVIM3lCaTp25K5Y9r9lVgOCOQUHMpBywdgb4IQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=ZbpBwU69i1CvLRwtpjRtXjekdw8ix77ZuXT/xlt2nk5CRRf5WPPSy6o/sL+wS8X6V2vKXGpMHQ1E5NiH5Ss4UP77e2WMpmGpJuA9wb7zTk7e3bVMsV8LUk94QhrvVNdOvb/mjZ//dBLRqswD8/qu96f0Hw/jRBKDJjGtGO8iAOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qdpBrsK7; arc=none smtp.client-ip=209.85.210.201
+	 To:Content-Type; b=qD4HR1LQ+6bqFO4Y6Xt7IVYI5WwupaeagimsyGkO4Uph4voo2z8ciyqVXrYXVPQFUn1kPSjBO5hCdrZN+R8Ly+NUxhSB25gzrxho+lt1u33QC2w8L308/XiEHsF0agQE+T4qfD0bn1vM7TxlEJ8izSmOSQptp0WsGCDZfZ4xRAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E3BNYeL2; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qdpBrsK7"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-736cb72efd5so107779b3a.3
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:15:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E3BNYeL2"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-227ea16b03dso876305ad.3
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:15:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746033342; x=1746638142; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746033345; x=1746638145; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FpIgS0wmOV5UbvgaGzkA8qij/rEeOqGzeG6VWVukYPI=;
-        b=qdpBrsK7Y9EyfNzj2EkT2j/oaawqaUdF8UiQV3pjo1Jp+YWzFKf8XFlptNTeuj72XP
-         f8Kdz/L5btGJQEPY6j8ZuC4SjNUM2X0MJJsTx+K4KvtY1t5UxoP+U/lmAR/quELOVNic
-         jnGcqPwdbEmI7doSfWwZUTy9PDpzluvPV9+0wYXJUJ0kr55McSfwyyIRCYCLIIhEyAka
-         vMqbf5ibdynoB0KBwASyiGcC9jubigROL9UdtCp5aiSy3kYr2nrs5ZKIGdh6TBoUgvIM
-         jXXX+cyClMjmeHro89gspNV+9kjuNiDOk6/hWp6+fmQ82+DgxP0UiRbDlVMminBaq28B
-         N3rQ==
+        bh=gN/a6V8QiIvdypmyI6y6Go6q2Ye8wXD3lVvCZhX5yNo=;
+        b=E3BNYeL2heKiQb7uVPXPW4C1VR9z8L/Q8Hj13Wtsw5LckmhhfkESy6QDDh12rqyw43
+         QJXssuf20O5VFLTl7ibeiQ49g8fbgHy8Mah/U2iWN+A83B2jVYewUXYw/apWthSUwku3
+         tCewSmiChHL2NoqrJIDxV2t+P85qSj03D0SQEBLfq54mAAiyDT/JgO+M30S8c3UZjrwx
+         fVMCc6zdCl9vcbYOn2fFq7MYAysrV4xPRBsfXqPJ6plF+aagVaJHcUwvlZLP0IRL7UtH
+         uxhQIPVBz65Gvwc6rfnQ20osjpAOtZmzsB7f+rpwz/SU8ySV5ozUfA4ZXd+wO8kTf8oO
+         bukw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746033342; x=1746638142;
+        d=1e100.net; s=20230601; t=1746033345; x=1746638145;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FpIgS0wmOV5UbvgaGzkA8qij/rEeOqGzeG6VWVukYPI=;
-        b=LVHcQs/EyFjvNv190lFT4Fbd9rHSuF2Gg+gyrUXHy06OY+/pnTEmD8A22oiCL4eqIq
-         HvLUuYl++V7uwP0odiNwiMaXffA1Poa1kOlApEicgyk83Gu+TZo/5w5liVjViJg8zmW+
-         dS45jkIC2xKkQg8jtTvheZgZB978BGK2t4jiPBmA/8np/eFdMm5n4QKlDATxxWEEOVi+
-         pXgg3ioI/4lgH7uMHyToYkx9bEYpxLnwG13XNaFdRhni/BEUposmiHMI+x1tjKRCRt1F
-         Xvw/60a0h3GVPBy8tG66Zk//kn/Ablc0noif2vnB9cBi8SS8wln06Bs3lP+P+KS52mNs
-         3VPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXjx91nGLswGt4qZBno91ifMtoEGeD0fjmKCtP4pO14T+XhLFSBrYl1QaSKdsFEOeWhpxOA@lists.linux.dev
-X-Gm-Message-State: AOJu0YySFNXtuBjVo9vtsxh6qMFrpCSnNAyn6f++WdIoTxtBOtpE2YjO
-	EaHA0fuCxtc66M51BzeP4C8Rj4I6jRx0We5v1sh8OAowciLKZcCjnw2AE3+PNOWexQsmbSw266Q
-	1kWHg8g==
-X-Google-Smtp-Source: AGHT+IGv8XMgRIoeJR1rySLXISqqmVQqJou5NGwUjKxk7iOH4VQdGHhiObrDzUu60o16T054lU4v3OaRDTR/
-X-Received: from pgkb21.prod.google.com ([2002:a63:eb55:0:b0:b1f:857e:2198])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:e617:b0:1f5:75a9:526c
- with SMTP id adf61e73a8af0-20a87c5680dmr5326067637.13.1746033342084; Wed, 30
- Apr 2025 10:15:42 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:15:30 -0700
+        bh=gN/a6V8QiIvdypmyI6y6Go6q2Ye8wXD3lVvCZhX5yNo=;
+        b=FF7zi3L6lQwPnO6RKtSo5qmx90ZF3XWWG8mWCWL0KjVcoQ72hrqz93K2C/PXOtoGnS
+         /XG14BLa5aZu9vT+LhIUb1UG1EXFWTWfIfSlY5tQZ1pJ15ksGuGVyA0lSP1XiqD1cPU4
+         xVgiV1SOL2O0HOSqaUkztwpeNNUQugNpmRmb2P2AeFvLXTHwBQutUABTM/xPtg9wpLIV
+         TngI2RpN9TUAbOIprcAQXB/1YC1rI7pFijYDEn7KmzBhT8/Z1I1EIdOo73u0t0pndciM
+         dFBdd4CCaKhWFHLyvsffiMKiAUD/HOr6dXKF7LqmYP9RhrBcw5OwRdEGmo87InQ/wFAq
+         1Bfg==
+X-Forwarded-Encrypted: i=1; AJvYcCWftuF4OVrD6sX58tiSbgH6so/V33MM+X9JeGYKwzomdUI3Jnt3WXF7oX6ymiUR0Is8T/bV@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy/QP2bj8TuqlT/XPK1tWJtxm8sGwPCuWrnYk0DK/XZMuW1eqEl
+	Xr7jua+aMvnKyED2pncnW/v9p06sWFW3N3T5tvcm7uLCMY9ZUrx/j59f//T29qyw4kV3tIKYLa5
+	fzh71Xw==
+X-Google-Smtp-Source: AGHT+IEyeKPexv1uh48dcAlUBWAzGseOfey8PKS/qHG5wARnrrceWevHm0oXIBRzRj/577/EUtzzAPcRJ5k6
+X-Received: from pgam18.prod.google.com ([2002:a05:6a02:2b52:b0:af2:3385:de87])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:dac2:b0:21f:71b4:d2aa
+ with SMTP id d9443c01a7336-22df5764482mr52271135ad.5.1746033343976; Wed, 30
+ Apr 2025 10:15:43 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:15:31 -0700
 In-Reply-To: <20250430171534.132774-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430171534.132774-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430171534.132774-2-irogers@google.com>
-Subject: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32 warning
+Message-ID: <20250430171534.132774-3-irogers@google.com>
+Subject: [PATCH v2 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
@@ -81,22 +81,22 @@ cases.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- include/linux/bitfield.h | 2 +-
+ include/linux/bitmap.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index 63928f173223..cc5cfed041bb 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -176,7 +176,7 @@ static __always_inline __##type type##_encode_bits(base v, base field)	\
- {									\
- 	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
- 		__field_overflow();					\
--	return to((v & field_mask(field)) * field_multiplier(field));	\
-+	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
- }									\
- static __always_inline __##type type##_replace_bits(__##type old,	\
- 					base val, base field)		\
+diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+index 595217b7a6e7..4395e0a618f4 100644
+--- a/include/linux/bitmap.h
++++ b/include/linux/bitmap.h
+@@ -442,7 +442,7 @@ static __always_inline
+ unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
+ {
+ 	if (small_const_nbits(nbits))
+-		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
++		return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
+ 	return __bitmap_weight(src, nbits);
+ }
+ 
 -- 
 2.49.0.906.g1f30a19c02-goog
 
