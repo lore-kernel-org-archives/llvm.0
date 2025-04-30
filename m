@@ -1,104 +1,111 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E0825A33A
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 12:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C8B24728A
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 12:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746015114; cv=none; b=ChaJEpbZmxCKSerQL1Y5eTNfsynq9qGscFNyK84h7Wy2QgwsLN1lKKjppWyGULUAridDn1/hgcIuEotb51MFxhdlEuzk6B5R3dnlVN1GWJou6dKuYWBePEVlZE6AyrtDB2F0DYrYkCg8sBl+w+sOpUBwzdnGlDjJ28iAaNQDTQo=
+	t=1746015157; cv=none; b=rtDecsQSU7xvB18khLFfMVQQZR3u0KhUCI3PJc1rMLEsLKnqtS3ig4Kc80RjSwnOoFGqtfDP77l2xnZgef975PxIs2Rn4xfq/tJdRWOqDLV9Fuo8DSRNNEOa7U2xtZf6b5kjPDby3oSwhYe45N/a1LJb2J5p8yVYc/hiswJ0ln8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746015114; c=relaxed/simple;
-	bh=9V8hG0kuB8a9dfhOvU2/xeY8oePk9/AvAiE5vkZROHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VB8+j01jEI9e9XHIw2LHswFrHEBAcn+X32gtNsifLUWTRzINscsI06LWIWOfIGvpEfD7SpGavsWL6SCZqsNuUXaQ2ZfrKNiFWBKcUogkuH6UiG4CQgjjB499C49fxJYi6feH6qo28g7NFIeO4LZyc2+E7lLBw8hmxEKcAOyhU34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AFpGGKDR; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1746015157; c=relaxed/simple;
+	bh=gvAopjoNyA7dbzXulW4xl/bX7+60c+NQIsGH5vBcpAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JVV6Zk+0Mj5nc55DAcvTtgEVuvpkOwm72H4bsl7076gPJlgbdinXFh9JomdjY5Tx3Ew0BLkKlXQf6n9FKIwRC8MKZRbNU1g925CkwYkAU4GSsOHvQhUCaNZAYFl81sogLY9kFYV5sNUFizj3NbJ2VMGDssUBnKtKcVJAVMmmSlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aKk40oN1; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AFpGGKDR"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-acb39c45b4eso1139123866b.1
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 05:11:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aKk40oN1"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso4782350f8f.0
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 05:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746015111; x=1746619911; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B95QSXbaRKrQee1y60Xx4b/cA/KifuO/m3Um/1ZsFQ8=;
-        b=AFpGGKDRBRMBEVkgY+2qYp9TP5iDIzX/hVkTRQ/k0H06emvdZH8j900HnBu2+DosLz
-         hNHd3lgZByD02yM09xTMH1IkaR3r7v1vlTKTwDFy0YKxnpSm+YP0lboQPCN1qGm525r4
-         SApCorzfHTJHBhC0diQLQhCGi3iWxxhx+KtTitt9umkXPaoM05jzYT5uyVvkgTtw3Pr9
-         CKPH40IGyHwl1bDpj3RzovHYHzj7tQH7GE90NuMu3BvhutWu8Be8DoS07nY5XN78gGZQ
-         wnGYPFF/C/whSkIW026Z7iKnYZqoF6TTgZKfW6kRHAJn3/WhXo+p4x7wRDZBStcM6Eqf
-         XWow==
+        d=gmail.com; s=20230601; t=1746015154; x=1746619954; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=exV/Dw+Vt005ATLp0ivkfrkkCFtH2VHvaATRN0wi0iE=;
+        b=aKk40oN11Pfj6iS4ixgS/bi6eDwpA9NHAFYr0zoXJ/94akbvQLf4219JdQmunrE6nC
+         tIA8yjBbTRAIrsw4fr6pHvHS9WrGmsMBChQFlwi5laCVMs0FgoNNG6pPSsl681h5rJWC
+         JSJukjM8VsvJFOhp91rXypMAKwLZHsqlgtLnCSEe+ue06wlGy6wjB9zRJv67R7ewgr6/
+         +hhovKO/yUVX9CYe8wk3AqsaujMXZMe21JOotvhmadGDyXtCjfKA9wjkPGkY7YDE3jpq
+         3Aua47L8MOH50AZskh1aP1AnxkO1Hms6gB2rEp+t/FXmgqdt2O5KuSed6KKF+yns3TWa
+         W0/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746015111; x=1746619911;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B95QSXbaRKrQee1y60Xx4b/cA/KifuO/m3Um/1ZsFQ8=;
-        b=OMuESz0W+zcISLTCjBaeBVvsYf4+PJ4McXrqz20O9eSZyk7XdWeo4W6xgf7cyKEVEe
-         oy3SAk6kDmUKFV198GpBkUD9eVQEPlCFHEBJatHw9tiRMwQpBoXrB4hlIj6g//WyCJgV
-         CUrZEED1FZ28eh6L0GGRJWpzxuR0kbFj8ao12UhBLmzw1xt8jrH62pZorG4YdFbjwRm0
-         nkBhXLcd5pHBNA+yoVvfIlqLyhPUlHAR2KX6HCMVOn4f2GBEVzHnX0OxyBXhzKQ8/x8D
-         ebrwuAnhE8gyrPJVTFFbWR1x1haeQAmR+HXiiS5+2uumJGfz/3qxz9mDoT39Re/Z6YbZ
-         gk3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUTAue0I1dI79NNSzaufTBKm7yrkY/Z5UtiJt+RmjqKdm1G1F6AwKgpRAmxqtuQJIEmjcLb@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy8Dg70LAxfuZslUvE4lMo9qYSrWhTqJtZbRIsD9k/nFS+Fh5xp
-	ZmrnnP2GxjP6HowE90y0Jw5U6xePOzV47N/qQGE6U/vThBGMjCa2nB3PDrJ2OjI=
-X-Gm-Gg: ASbGncvdQ5RMGXGGsXd4pR2NB4zkt2KUJe+11kLW8CRFmDAcEa2MElAGSpP1oA32wWC
-	PfSzJqRbb8RO0LHXFh+lrCaz1iOuZ07CCpizfyKajhV6utEg+fs2eIAdvvJ/rel+8O//Ixw7mv2
-	aIbi8GKdyu4+1Zz6rnDotfTpcSSDc9x1nz2zAUvuyS0scpltkoG4BiTsKhaseopLhc6mpPfBuv9
-	ITFcGXQzdM37qFHvqOF0Y5F6tJuPcTSsV3Hx8aGGZqxuFvThc5iJhXPxYjnyYqPRWeHnmY2my6v
-	2AsN9mAeZ+Ed6QTnrHsypCSqgUa2YPmMyTjzJlU8M+1NDvJRvq+SJwb3YzGtYrj8iCyri+MyDgL
-	cKUQBH18CoHuWHA90
-X-Google-Smtp-Source: AGHT+IFr6SQQ+d2QrrxDwLOsR+z8bVyCtqJ1ToE4PnHRFIcIMnjdCwxrzr0yGNH9fg/1HzSz+gHXaQ==
-X-Received: by 2002:a17:907:3e8c:b0:ac7:f348:b8bc with SMTP id a640c23a62f3a-acedc7be3f8mr277378366b.61.1746015110909;
-        Wed, 30 Apr 2025 05:11:50 -0700 (PDT)
-Received: from ?IPV6:2a02:3033:263:b03d:abf1:3c8d:23a2:52d? ([2a02:3033:263:b03d:abf1:3c8d:23a2:52d])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ed702ecsm922371266b.137.2025.04.30.05.11.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Apr 2025 05:11:50 -0700 (PDT)
-Message-ID: <06495223-342d-4759-995f-f62234fb1020@suse.com>
-Date: Wed, 30 Apr 2025 14:11:49 +0200
+        d=1e100.net; s=20230601; t=1746015154; x=1746619954;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=exV/Dw+Vt005ATLp0ivkfrkkCFtH2VHvaATRN0wi0iE=;
+        b=ftidzYvNsxDvZILtVyNrzWX1satvqFNv+NolxaU1weDhPyIr7dMIOkKrkPJyzBP2/I
+         r22KyfCkbnZi082otL3XukDVGb2ZD394QgONdoX6zAz/oA6ResFrA3N9yI5+5YNbksVH
+         u6Nq/Cuh7j9+9BAVW+ZgHalGFKyCPIZrBjTkz0iXynadGqYiJ+euY598tDkh/szazA8K
+         vbpUwuEn9vM1Xs4o7AppmFjGTd7j+lQ2VCRkVkS5d8hF29SZp0uLc5VdW/RoAD6rGXm7
+         9mjmv5LHU4fVCwuPIPOGvySIBZj/nxgDSm9M1K4/oBPTbKFZkqWERsXgGHSxGv+FTYXs
+         fJag==
+X-Forwarded-Encrypted: i=1; AJvYcCVjv1Ni7Aj6Q9W+AUSc5UxTegV6eS7BqMhIINT71kMErHMW1ZVUAmhOgM/CI2D//iFtmBQh@lists.linux.dev
+X-Gm-Message-State: AOJu0YxnlFAUgJ1+sHjmwWtstC9DkXd3QXq0WwK6tY4QSXnkSfpqkUwN
+	DaeBtC8DzUZmwvcpiJEr0APUJsZHz4YdjF2t/URR5RG1wxGbnion
+X-Gm-Gg: ASbGncuYwUCsqtD2QG4RWfM/0G6xtoCuk2rPSVP1NXNIXYfO2lK08yqh0c9ONSlgWEr
+	0zcrtv1Wokz5B5dIJdki7V5xQ97UXzytFGlfIzOhULX5F4EFt+sFTbkxROauGBlQrsJNATyjPic
+	m+iOWRr4eSxhL8pDIZ9t1HV5/t1C9ohtiYMoUX3jONqPkrtRpKqjGiWSJbSDwaz0Qy4KgD73Krb
+	hHjlcvemdtBTcyYncT53W6sQ+xUtErfitQ07YCeg06aqQy5OnpWK/Do6CmT5Mum4g16geEBjki5
+	GThdF3p84ZC4Npunf1/y0A6poR2Osv2u9SOK5BDHRwv1MFpNMs+NzaHj4rFsDtWSoMJoD2//i+l
+	iJ+s=
+X-Google-Smtp-Source: AGHT+IHdNy2cnEFHIFGItGh5hGfN1ZHCaeYaOLyj5VuHMZN0pXEx9Cb435wW4njErTV4EecqJL6luQ==
+X-Received: by 2002:a05:6000:2585:b0:39e:e217:28c0 with SMTP id ffacd0b85a97d-3a08ff34c51mr2240192f8f.10.1746015154143;
+        Wed, 30 Apr 2025 05:12:34 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073cc1842sm17094081f8f.54.2025.04.30.05.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 05:12:33 -0700 (PDT)
+Date: Wed, 30 Apr 2025 13:12:32 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Subject: Re: Adding __popcountsi2 and __popcountdi2
+Message-ID: <20250430131232.3caea352@pumpkin>
+In-Reply-To: <20250425003342.GA795313@ax162>
+References: <20250425003342.GA795313@ax162>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: dc395x: Remove leftover if statement in reselect()
-To: Finn Thain <fthain@linux-m68k.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Ali Akcaagac <aliakc@web.de>,
- Jamie Lenehan <lenehan@twibble.org>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Colin Ian King <colin.i.king@gmail.com>, linux-scsi@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20250429-scsi-dc395x-fix-uninit-var-v1-1-25215d481020@kernel.org>
- <91ba6cf2-ca95-1ebe-837f-ecc89f547ea2@linux-m68k.org>
- <41bc286e-6e6b-4ae8-ad6a-3bdf56cd172b@suse.com>
- <bd660f83-434a-85dc-0037-7830f58acd6f@linux-m68k.org>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <bd660f83-434a-85dc-0037-7830f58acd6f@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 30.04.25 11:43, Finn Thain wrote:
+On Thu, 24 Apr 2025 17:33:42 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
->> yes, I was unsure about terminology used for code that is by default not
->> compiled, but would not compile if the attempt is made to compile it.
->>
+> Hi Linus,
 > 
-> Yes, I realize that you were referring to the intention as "cleanup" and
-> not the actual patch that got merged.
-> 
-> I'm afraid my message was poorly expressed. I don't have a problem with
-> your fix. I was only interested in the general case.
+> Since I ran into problems at pull request time previously, I figured I
+> would save myself some trouble and gauge your opinion up front. How
+> palatable would the diff at the end of the thread be for the kernel?
+> Clang would like to start emitting calls to __popcountsi2 and
+> __popcountdi2 [1] for certain architectures (ARM and RISC-V), which
+> would normally be a part of the compiler runtime but obviously the
+> kernel does not link against it so it breaks the build. I figured added
+> these may not be as bad as the wcslen() case because most architectures
+> generally have an optimized popcount implementation and I am not sure
+> compiler builtins are banned entirely from the kernel but I can
+> understand if it is still contentious. It sounds like GCC has previously
+> wanted to something similar [2] and it was somewhat brought up on the
+> mailing lists [3] but never persued further it seems. Since this is a
+> compiler runtime function, '-fno-builtin' would not work to avoid this.
 
-Well, in general I think such code is problematic. In general I think we should use dynamic debugging statements. The issue seems to be of terminology. However, we can hope that this will
-go away and become moot.
+Is this the compiler converting a call to __builtin_popcount() into
+a function call - which the kernel can arrange to never do.
 
-	Regards
-		Oliver
-  
+Or the compiler detecting a code pattern that looks like an open-coded
+'popcount' function and deciding to convert it to a call to the builtin?
+(which is a translation the kernel pretty much never wants for any
+such code pattern - including memcpy()).
+
+In either case the link failure is exactly what you want.
+
+	David
+
