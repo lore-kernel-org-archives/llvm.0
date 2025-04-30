@@ -1,55 +1,55 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A25289E03
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568C6267733
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035504; cv=none; b=tQWYRYpAiujFjnUgEjTycILOU8eX5v/V7o7EuxTQe2k5wcKRLV2WvKL4BlOV/laVDUaPrD2Lfwcj29SFBCetOqCazQjEdpxUXbgiZZfvrnFE971hnXqi2+YG4QyWVz3UcyDNWRjVvxXQXVefDKzUAc1vD0ih2sfee5D2jNxK77w=
+	t=1746035506; cv=none; b=GBf+kWIiu3baPwfB0rWix1Ex4Ub9vPIw1OnaQx5DANTTSpGNpspd+Du/LhFTk3EOvWVKrlh1Sot1r1QNVdxNefec1oC2P9BDTQ3dcEzfwTkBDAMijo023DVsouPkplVjmWD3yfmYKyJjQuxJ5OXiF51aYShPgBvGCM0Fft43jMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035504; c=relaxed/simple;
-	bh=HtEi870zwLq6ctFcnBRLp+ytP6nQssFq45sLuZd5sJg=;
+	s=arc-20240116; t=1746035506; c=relaxed/simple;
+	bh=qYxyPi6RkviI4bX+6bORVAMTvoU1dSPnFuXQJ++clR8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MWEHS6h9aqItgDwDv8quACFOqz0uh2JTfXXg0q3DhbW+/n3N4ZiiNJmsQQjus1QRb1z5bEnBH9Q2gFACcHNRUBBrJlwiC3xpkwtRB5ajGBIL+jhg2Uorrz4XTPQxv2+tOnMvj562f3Y+0s4zPloIYXBQCCNyOLWRln5aEBbBWho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D14I/Amr; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=bjmtVHYFbjaTxBx20S5NUecAjwsc0UujUVOa9F0udiI+kr3TBIB8MGtlz0Dr1E+BWQOG0nKQ5e4dE6YlE3ijtIcfYmZnA0nHMTvMexlHA6l/cx/bR6RCwHMmsFK5a8IS7Yh9lOene9JJ5J/EiQxiy4u6a+S64lWwTUvbairW0Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LSStAuSl; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D14I/Amr"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff7cf599beso166117a91.0
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LSStAuSl"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30870e7e4fcso126667a91.0
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035502; x=1746640302; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035504; x=1746640304; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QU4fF1ojZigMaeFSYqEf31ecZKLdrPKuyzN12ALOJyE=;
-        b=D14I/AmraMjZySDEsaQs4+99Qf7WYPln1qdB02ln53Zp9CjtUtQu9gkFMgMWdC72P0
-         fXAhWQ0D3Y5OXI1rNSY1fS8N9A7yYoPtvVrfHU8BAl5wp5t4yDBZeZgj96aRXtjscfT9
-         qZMYHPBAhOx0NfOFeZAaaltZ8Y7LgFUFmBIhXdZE+raptgthcbp7JFvz0WS3gLjdYXpJ
-         z2IdFNJmJSR4llmyWlElrHaGRajcbwpJXLxjRW5dydVdjW3O0MylBU+Y0clht74mcsUO
-         zRGehawQBpk1wMXxFQgjJZMmY9XkWZRuZPS+xOQtTqhPk9Sve87yUYs98EqXNQW3DMHJ
-         JiyQ==
+        bh=J2GFrTv5xjFh/L7If88NMoXB+NztpoP+PMoIikktuv4=;
+        b=LSStAuSlorZisUQUHqbsShVIFHpJy39y9wVMgJ4nipdJV5AUfAAVgjEp3XlYSnTVOk
+         n9qx7gwlFZdkI9fKtsI+tF8eq2apfZV6ujrZt17T9qodc7UEq6yzwvpU5xfqiuPw/jjn
+         ct7pIqmqGOmIPPEMA6hwNSNAHGLd6ybSsquXTvt58t61SFk/bbQ9dq8uKhKS6YNX+OnX
+         CxRqb74/eG2fK9++LJjggJd55nXxyth9dxuU72X5IKS1Col0+AdKC77lWg/H6bx6TBTg
+         TcqAgTrMYJmsw6AlH2c9N+xbhZibbhrtQjdTb0i/vZfAMzQ5urjTcxKEagLXbcF3FIx5
+         xemw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035502; x=1746640302;
+        d=1e100.net; s=20230601; t=1746035504; x=1746640304;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QU4fF1ojZigMaeFSYqEf31ecZKLdrPKuyzN12ALOJyE=;
-        b=hUlZaIZmoXzg9IeSiEupYscVkYLgaCEjxdTQKbvUqPssLHt9xd3yhbSlwXLlr2vDh+
-         fiwhCY0os1lgq1XQ/iFssCWLOcix0j8fkWXKV6gCjmBbD6eG/5GEv7IXYmpENHDpHh4a
-         a6/7p1tIyVJDp7NYuGlHHPkGD+NVLfYaB9pQC8pMpoWRksUMhJZnSL3pj+J/X4XwX9Up
-         JumdAzf/QdxeOGaasX0iPxC5+bmmRYSxHU/PYTg1sis/K9qjnsnRa/MDVlDkFIQkHKKP
-         p0JDBDXzEjrW3wQXfZAUL2r+/sUTgv+GgkLZ6bjHOV6FQUmIkYpUAval3ugapd/jmR+T
-         TI0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXVzcGYfASg8yDdEM4yUI5vqMUbtOApbSb8+YLrn4FRa0RUVeZvug9qbPS+/4+e8FNrcCuv@lists.linux.dev
-X-Gm-Message-State: AOJu0YxBfesjJ/WYNu06TgjO+ycpom3bEntaaTDzLRVoAum2Npe4bOjp
-	UaH+WjH0qfbEbPgRNHwPNnlsOL4qMShvQdSRJsQKhpux3GJ3anLCoTaKuWWrOLc7ON1/6dKoTag
-	1ukP4iA==
-X-Google-Smtp-Source: AGHT+IEyGPUBxMB6EpZfVFCzzx4iOi+6sy5uLJmR1hik9If22WqT2MHcyOSep4d8z+0agoaxbHwiyXwQLHex
-X-Received: from pjk3.prod.google.com ([2002:a17:90b:5583:b0:2ef:7af4:5e8e])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1b0d:b0:2ee:d433:7c50
- with SMTP id 98e67ed59e1d1-30a3335ef40mr4881540a91.23.1746035501383; Wed, 30
- Apr 2025 10:51:41 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:10 -0700
+        bh=J2GFrTv5xjFh/L7If88NMoXB+NztpoP+PMoIikktuv4=;
+        b=EitroK9+O+O2C4nm46o8OOCoWiSS84EHw7rwKW6lFtrncucghGdyE6fk0YhC0NNV0Z
+         6t0V4klevT76pNHx20FmfoeyCpQ/ysJi3Z4i6eB3vnNSe//Cl/ZFkvbemYH2kitH1MYZ
+         jqLyI6/k78Dx0b4VNfvG29ChKDVYlTxWY6SWp9Tw+DLkrynI9ZdxVEhZIjMGi6wshKpN
+         PRaOhi8MPVL7Ybmduc2G4WV7XuFvO0Q5k7laPFM+xpOCUNy2Okj88FJ7Iw+9l4GSJaRZ
+         iK/c3Nh6P2k6LWyWXjc64l8ZAdOo5qNjglM3z0rxLRKjnpTub7/pjNgcH+VF6d6aS4LZ
+         aEJw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDJ8ZcGfMwso6crG7VbJ9/YSW6dsfZ3N0YXMLChq+s9c2zUGtWqLsTJ1iEbkOwo3jbH1qz@lists.linux.dev
+X-Gm-Message-State: AOJu0YzIMEiHTSAMy/gV1fOWzuxXbE1aYWGZUi03ZZvl2q6AZ+mc2MC/
+	S2cReUgDcjkFAlwfZ4hyA0q/wZ4mJvJI8Hp3eb3R9d6Ynjb7SzFO6jhyEuD0+WK3NHGy7XgjkvE
+	lzvQegw==
+X-Google-Smtp-Source: AGHT+IGv2W/7VpCyNYDC1NVo2pEj4o3KLFYg0roQUo8v41bXyZlRs19Lsz8lL/tQOofmbcRVbLIJwW0fQB8/
+X-Received: from pjuw16.prod.google.com ([2002:a17:90a:d610:b0:2e9:38ea:ca0f])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2dc4:b0:2fa:1e56:5d82
+ with SMTP id 98e67ed59e1d1-30a3f0ae2demr585709a91.17.1746035503469; Wed, 30
+ Apr 2025 10:51:43 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:11 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-23-irogers@google.com>
-Subject: [PATCH v2 22/47] perf annotate: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-24-irogers@google.com>
+Subject: [PATCH v2 23/47] perf report: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,176 +116,149 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-annotate.c |  4 ++--
- tools/perf/util/annotate.c    | 22 +++++++++++-----------
- tools/perf/util/disasm.c      | 11 ++++++-----
- 3 files changed, 19 insertions(+), 18 deletions(-)
+ tools/perf/builtin-report.c |  4 ++--
+ tools/perf/util/callchain.c | 12 ++++++------
+ tools/perf/util/callchain.h |  2 +-
+ tools/perf/util/srccode.c   |  6 +++---
+ tools/perf/util/srcline.c   |  2 +-
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 9833c2c82a2f..97943a12b6c9 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -157,7 +157,7 @@ static void process_branch_stack(struct branch_stack *bs, struct addr_location *
- 	if (!bi)
- 		return;
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index f0299c7ee025..9c10209d7b57 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -800,7 +800,7 @@ static int count_lost_samples_event(const struct perf_tool *tool,
+ 	evsel = evlist__id2evsel(rep->session->evlist, sample->id);
+ 	if (evsel) {
+ 		struct hists *hists = evsel__hists(evsel);
+-		u32 count = event->lost_samples.lost;
++		u32 count = (u32)event->lost_samples.lost;
  
--	for (i = bs->nr - 1; i >= 0; i--) {
-+	for (i = (int)bs->nr - 1; i >= 0; i--) {
- 		/*
- 		 * XXX filter against symbol
- 		 */
-@@ -880,7 +880,7 @@ int cmd_annotate(int argc, const char **argv)
+ 		if (event->header.misc & PERF_RECORD_MISC_LOST_SAMPLES_BPF)
+ 			hists__inc_nr_dropped_samples(hists, count);
+@@ -1602,7 +1602,7 @@ int cmd_report(int argc, const char **argv)
  
- 	annotate.session = perf_session__new(&data, &annotate.tool);
- 	if (IS_ERR(annotate.session))
--		return PTR_ERR(annotate.session);
-+		return (int)PTR_ERR(annotate.session);
- 
- 	annotate.session->itrace_synth_opts = &itrace_synth_opts;
- 
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index 264a212b47df..055f3da1b95b 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -337,7 +337,8 @@ static int symbol__account_br_cntr(struct annotated_branch *branch,
- 	unsigned int base = evsel__leader(evsel)->br_cntr_idx;
- 	unsigned int off = offset * evsel->evlist->nr_br_cntr;
- 	u64 *branch_br_cntr = branch->br_cntr;
--	unsigned int i, mask, width;
-+	unsigned int i, width;
-+	u64 mask;
- 
- 	if (!br_cntr || !branch_br_cntr)
- 		return 0;
-@@ -360,7 +361,7 @@ static int symbol__account_cycles(u64 addr, u64 start, struct symbol *sym,
- 				  u64 br_cntr)
- {
- 	struct annotated_branch *branch;
--	unsigned offset;
-+	unsigned int offset;
- 	int ret;
- 
- 	if (sym == NULL)
-@@ -377,7 +378,7 @@ static int symbol__account_cycles(u64 addr, u64 start, struct symbol *sym,
- 		if (start >= addr)
- 			start = 0;
+ 	session = perf_session__new(&data, &report.tool);
+ 	if (IS_ERR(session)) {
+-		ret = PTR_ERR(session);
++		ret = (int)PTR_ERR(session);
+ 		goto exit;
  	}
--	offset = addr - sym->start;
-+	offset = (unsigned int)(addr - sym->start);
- 	ret = __symbol__account_cycles(branch->cycles_hist,
- 					start ? start - sym->start : 0,
- 					offset, cycles,
-@@ -1563,7 +1564,7 @@ static int annotation__max_ins_name(struct annotation *notes)
- 		if (al->offset == -1)
- 			continue;
  
--		len = strlen(disasm_line(al)->ins.name);
-+		len = (int)strlen(disasm_line(al)->ins.name);
- 		if (max_name < len)
- 			max_name = len;
- 	}
-@@ -2183,20 +2184,20 @@ static int annotation_options__add_disassemblers_str(struct annotation_options *
- {
- 	while (str && *str != '\0') {
- 		const char *comma = strchr(str, ',');
--		int len = comma ? comma - str : (int)strlen(str);
-+		size_t len = comma ? (size_t)(comma - str) : strlen(str);
- 		bool match = false;
+diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
+index d7b7eef740b9..c3206b9d7b52 100644
+--- a/tools/perf/util/callchain.c
++++ b/tools/perf/util/callchain.c
+@@ -214,7 +214,7 @@ __parse_callchain_report_opt(const char *arg, bool allow_record_opt)
  
- 		for (u8 i = 0; i < ARRAY_SIZE(perf_disassembler__strs); i++) {
- 			const char *dis_str = perf_disassembler__strs[i];
- 
--			if (len == (int)strlen(dis_str) && !strncmp(str, dis_str, len)) {
-+			if (len == strlen(dis_str) && !strncmp(str, dis_str, len)) {
- 				annotation_options__add_disassembler(options, i);
- 				match = true;
- 				break;
- 			}
+ 			if (get_stack_size(tok, &size) < 0)
+ 				return -1;
+-			callchain_param.dump_size = size;
++			callchain_param.dump_size = (u32)size;
+ 			try_stack_size = false;
+ 		} else if (!minpcnt_set) {
+ 			/* try to get the min percent */
+@@ -224,7 +224,7 @@ __parse_callchain_report_opt(const char *arg, bool allow_record_opt)
+ 			minpcnt_set = true;
+ 		} else {
+ 			/* try print limit at last */
+-			callchain_param.print_limit = strtoul(tok, &endptr, 0);
++			callchain_param.print_limit = (u32)strtoul(tok, &endptr, 0);
+ 			if (tok == endptr)
+ 				return -1;
  		}
- 		if (!match) {
--			pr_err("Invalid disassembler '%.*s'\n", len, str);
-+			pr_err("Invalid disassembler '%.*s'\n", (int)len, str);
- 			return -1;
- 		}
- 		str = comma ? comma + 1 : NULL;
-@@ -2406,7 +2407,7 @@ static int extract_reg_offset(struct arch *arch, const char *str,
- 			str++;
- 	}
+@@ -295,7 +295,7 @@ int parse_callchain_record(const char *arg, struct callchain_param *param)
+ 				unsigned long size = 0;
  
--	op_loc->offset = strtol(str, &p, 0);
-+	op_loc->offset = (int)strtol(str, &p, 0);
- 
- 	p = strchr(p, arch->objdump.register_char);
- 	if (p == NULL)
-@@ -2516,8 +2517,7 @@ int annotate_get_insn_location(struct arch *arch, struct disasm_line *dl,
- 				/* FIXME: Handle other segment registers */
- 				if (!strncmp(insn_str, "%gs:", 4)) {
- 					op_loc->segment = INSN_SEG_X86_GS;
--					op_loc->offset = strtol(insn_str + 4,
--								&p, 0);
-+					op_loc->offset = (int)strtol(insn_str + 4, &p, 0);
- 					if (p && p != insn_str + 4)
- 						op_loc->imm = true;
- 					continue;
-@@ -2531,7 +2531,7 @@ int annotate_get_insn_location(struct arch *arch, struct disasm_line *dl,
- 			if (*s == arch->objdump.register_char)
- 				op_loc->reg1 = get_dwarf_regnum(s, arch->e_machine, arch->e_flags);
- 			else if (*s == arch->objdump.imm_char) {
--				op_loc->offset = strtol(s + 1, &p, 0);
-+				op_loc->offset = (int)strtol(s + 1, &p, 0);
- 				if (p && p != s + 1)
- 					op_loc->imm = true;
+ 				ret = get_stack_size(tok, &size);
+-				param->dump_size = size;
++				param->dump_size = (u32)size;
  			}
-diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index 8f0eb56c6fc6..7e24851a3934 100644
---- a/tools/perf/util/disasm.c
-+++ b/tools/perf/util/disasm.c
-@@ -856,7 +856,7 @@ static int ins__cmp(const void *a, const void *b)
+ 		} else if (!strncmp(name, "lbr", sizeof("lbr"))) {
+ 			if (!strtok_r(NULL, ",", &saveptr)) {
+@@ -332,7 +332,7 @@ int perf_callchain_config(const char *var, const char *value)
+ 		int ret;
  
- static void ins__sort(struct arch *arch)
+ 		ret = get_stack_size(value, &size);
+-		callchain_param.dump_size = size;
++		callchain_param.dump_size = (u32)size;
+ 
+ 		return ret;
+ 	}
+@@ -817,7 +817,7 @@ split_add_child(struct callchain_node *parent,
  {
--	const int nmemb = arch->nr_instructions;
-+	const size_t nmemb = arch->nr_instructions;
+ 	struct callchain_node *new;
+ 	struct list_head *old_tail;
+-	unsigned int idx_total = idx_parents + idx_local;
++	u64 idx_total = idx_parents + idx_local;
  
- 	qsort(arch->instructions, nmemb, sizeof(struct ins), ins__cmp);
+ 	/* split */
+ 	new = create_child(parent, true);
+@@ -1027,7 +1027,7 @@ merge_chain_branch(struct callchain_cursor *cursor,
+ 	struct callchain_node *child;
+ 	struct callchain_list *list, *next_list;
+ 	struct rb_node *n;
+-	int old_pos = cursor->nr;
++	u64 old_pos = cursor->nr;
+ 	int err = 0;
+ 
+ 	list_for_each_entry_safe(list, next_list, &src->val, list) {
+diff --git a/tools/perf/util/callchain.h b/tools/perf/util/callchain.h
+index 86ed9e4d04f9..7a2abff6d0a5 100644
+--- a/tools/perf/util/callchain.h
++++ b/tools/perf/util/callchain.h
+@@ -65,7 +65,7 @@ struct callchain_node {
+ 	struct rb_node		rb_node;    /* to sort nodes in an output tree */
+ 	struct rb_root		rb_root_in; /* input tree of children */
+ 	struct rb_root		rb_root;    /* sorted output tree of children */
+-	unsigned int		val_nr;
++	u64			val_nr;
+ 	unsigned int		count;
+ 	unsigned int		children_count;
+ 	u64			hit;
+diff --git a/tools/perf/util/srccode.c b/tools/perf/util/srccode.c
+index 476e99896d5e..f5f8cdfd00c1 100644
+--- a/tools/perf/util/srccode.c
++++ b/tools/perf/util/srccode.c
+@@ -37,7 +37,7 @@ static LIST_HEAD(srcfile_list);
+ static long map_total_sz;
+ static int num_srcfiles;
+ 
+-static int countlines(char *map, int maplen)
++static int countlines(char *map, size_t maplen)
+ {
+ 	int numl;
+ 	char *end = map + maplen;
+@@ -136,7 +136,7 @@ static struct srcfile *find_srcfile(char *fn)
+ 	h->lines = calloc(h->numlines, sizeof(char *));
+ 	if (!h->lines)
+ 		goto out_map;
+-	fill_lines(h->lines, h->numlines, h->map, h->maplen);
++	fill_lines(h->lines, h->numlines, h->map, (int)h->maplen);
+ 	list_add(&h->nd, &srcfile_list);
+ 	hlist_add_head(&h->hash_nd, &srcfile_htab[hval]);
+ 	map_total_sz += h->maplen;
+@@ -166,6 +166,6 @@ char *find_sourceline(char *fn, unsigned line, int *lenp)
+ 	if (!l)
+ 		return NULL;
+ 	p = memchr(l, '\n', sf->map + sf->maplen - l);
+-	*lenp = p - l;
++	*lenp = (int)(p - l);
+ 	return l;
  }
-@@ -864,7 +864,7 @@ static void ins__sort(struct arch *arch)
- static struct ins_ops *__ins__find(struct arch *arch, const char *name, struct disasm_line *dl)
- {
- 	struct ins *ins;
--	const int nmemb = arch->nr_instructions;
-+	const size_t nmemb = arch->nr_instructions;
- 
- 	if (arch__is(arch, "powerpc")) {
- 		/*
-@@ -1263,7 +1263,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
- 	char *build_id_filename;
- 	char *build_id_path = NULL;
- 	char *pos;
--	int len;
-+	size_t len;
- 
- 	if (dso__symtab_type(dso) == DSO_BINARY_TYPE__KALLSYMS &&
- 	    !dso__is_kcore(dso))
-@@ -1754,7 +1754,8 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
- 	u64 end = map__rip_2objdump(map, sym->end);
- 	u64 len = end - start;
- 	u64 offset;
--	int i, count;
-+	int i;
-+	ssize_t count;
- 	u8 *buf = NULL;
- 	char disasm_buf[512];
- 	struct disasm_line *dl;
-@@ -1823,7 +1824,7 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
- 
- out:
- 	free(buf);
--	return count < 0 ? count : 0;
-+	return count < 0 ? (int)count : 0;
- 
- err:
- 	count = -1;
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index f32d0d4f4bc9..b2003c5490a2 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -443,7 +443,7 @@ static int filename_split(char *filename, unsigned int *line_nr)
+ 	sep = strchr(filename, ':');
+ 	if (sep) {
+ 		*sep++ = '\0';
+-		*line_nr = strtoul(sep, NULL, 0);
++		*line_nr = (unsigned int)strtoul(sep, NULL, 0);
+ 		return 1;
+ 	}
+ 	pr_debug("addr2line missing ':' in filename split\n");
 -- 
 2.49.0.906.g1f30a19c02-goog
 
