@@ -1,183 +1,178 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BA72609CA
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 15:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA7E17CA17;
+	Wed, 30 Apr 2025 15:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746028344; cv=none; b=HEsFGClhIk38gxCUBU8bctUnofSJwEk6QOUf3/17suP0WDJCin4v9cADSIjH2sNp6uxOOO6Mt+GhqeU6dPLx0mIMu59tGkX9BArZDJA2jwfMNXbrpHhbaDqZLjOE7tcabvVQp1o91X1wrouTTCu+6qZCQ4U+seXbAeglDJ5m/tQ=
+	t=1746028515; cv=none; b=T2I2DM+DLDg8HgZyNwWyLP8yWkKlDpDyzOKK9DSHeerTmb/2yYhqyoO3QGtwMOnr1ADpU3AgOWaiFiciJcOqulRqrdecAJOwIFye33G5Vlill5eJLmFRoCuCvqy2tzCFQFRAC0/m5qM57/wb3oMB4fpDPoeAYqBdFK+ordgyDdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746028344; c=relaxed/simple;
-	bh=WWEGPFSEXsgTebWgjNA2jFYbHRJpo1gsdgBtlCbVGQ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RVM51g66ERrpMLblWoij90hTql0nGrgG9ALeP2AqsAeB0wNjDDse+uxkUPQBiOlueSCaxlxIwtUpcrlmqtNtATNl7LczxPjTM2ckeTRSZBz0MnatDUBqU57hooRsJTppGFWJk/28z1CLpdFZKx5WUiOorZD+quxm2ybY6FVhZgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KPaJkYAA; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1746028515; c=relaxed/simple;
+	bh=pAi1g0+GcrXhsxxUwg/COVu8QWbSDq0H9FeDRKmvTZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FXMG7xbadRuonjgqa5+C5FxdJGVqkk38tzvdTSRmxLd43eZa9L45BTAqRiT1MaKMFau575QQpP4IMjpC8bDESFKLzJIewcLlevCfoq9E4Pi31cuPUOwARVtJUKNLnKHtV04XhMSSPtWyIAY1LJ1ZmdRX7/J0bHMw0m2O3k5Lp0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K2wiGfB1; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KPaJkYAA"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5f438523d6fso16139a12.1
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 08:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746028341; x=1746633141; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UUgz0lHIM9AvqVgwegmtWsNz7YXlDr9Kk1u0gwL4TQ8=;
-        b=KPaJkYAAWTfdWwWeKSoa32dsnqcEVkaMWZcrO25yvDvpaOj0EyXF0yTQenfEQ5l0fp
-         dG2FvcMRq0B/Xw/yykG7M+mb+hWCEzDv4JMH57JxMSKIcwC9F/sGEOcH7/o6N5o6CBRK
-         25LPUQMbOK3F9n1pmSjT+ejZavLbxj6FpSDwO2A6USzN6v/zkCFqvgJP433u34GIvtb4
-         ptDn00wjSzRvQU4gQ4mR4UhtcWaArTTpaG7haRjfEYY2PGBuAUF9gy+ppMotD/ldKhnX
-         djRr6txbVpzXnvAcSzwm3l6ZudoOmRbnYmkkQMaM+RZYRecmEiuGj4hX/ywRZrQqVc7f
-         +ksw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746028341; x=1746633141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UUgz0lHIM9AvqVgwegmtWsNz7YXlDr9Kk1u0gwL4TQ8=;
-        b=rpvt1trDJDqCWPeh/zKtcTWQhTe00uETYmjZHFcvE/rNxVck9vopm3JdDKhTWw+8cm
-         5i4/9sr6TMghmq3z78reCOqcOuHc55goAomMHV17v8Mll0yGNwdNErl2tO0w5CFtzNb+
-         Hw9eydTSSQi06I3C9fjUCxntmyL5WgqVbZfLCqpr4uQ77cUw7+zO1ciYjo5qcBs4uzJp
-         z8H3UkKoKatICL6DoCiYrMGXLs4ofQVE32UlORgbyXKmjSIJ+vgbne1iYImCatPgvObZ
-         7Rh76G3aqiKyDmOuxwo7sszZjI2U1il7AM9E2bogSIMeM1d+iPhpozAirfw6QPMGdSeZ
-         R+ew==
-X-Forwarded-Encrypted: i=1; AJvYcCXUqdL/MHxNNH0jVyizX6PkfMOd0Pk7spk7rTubeZfpt/ksh81KbpxVRoE3Q9dbFjTTUYBr@lists.linux.dev
-X-Gm-Message-State: AOJu0YzlYf1Hc2Sx2cKYW4NXRXECEH3xIvxhUWfWiAEP4uOe60sUGG3J
-	JUmzmCzR0xiOsgVHh2Ycxz9bnUR4ivwJPR61eYOFPYJHAxCY0I6FrPFGjCJ5IP+j0AS1tHikA+K
-	z0qv06A3kSaFqAvYdqwrKk9kW4qrkJPWrUnpf
-X-Gm-Gg: ASbGncvshhtn6zLugIg4ftd2mkToCbCKnKJATFyytdDgF4mcaNpZOt60LOXiunJMzAQ
-	0OrFqbiGDY4WQfM5vgbRzFrxEEoBaeoTEXoaRaJeVX/zlkEfgFb5aa9v5iPcYDDuCSmjOYlcP5B
-	ty8io4UHf+Jz7qeGVZicRfILgEnoS/9hKShZFlP05jjz4N7oI3/hKZex2KiiLWWg==
-X-Google-Smtp-Source: AGHT+IFdqOHywsMBaHqXkTcGmB67EXqbMC7FqDHfbXZkAyjokug6b3F9yQT+IzlELuucqJyVURMXtid879Fh+aycpm8=
-X-Received: by 2002:a05:6402:30b1:b0:5ed:f521:e06c with SMTP id
- 4fb4d7f45d1cf-5f8aac01ebdmr113976a12.7.1746028341167; Wed, 30 Apr 2025
- 08:52:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K2wiGfB1"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53UDnBtg027609;
+	Wed, 30 Apr 2025 15:54:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=0rJOsX
+	oPMQhpiqynyefL1qZwMh6TkDUagnvd4/qOyd8=; b=K2wiGfB15TYazXEnpvRv1V
+	CpV8N8jNb1inCirUlCY5p1+Mpp/dKc9l6G+rth3k3o7nHl5+c3OWq6Npvs5h+nWW
+	Lcm7zbgzHrVXdY7cUj0/fjTV+4A4ELvvRncr/+0hlIFwk2gjmH6ZoCB6G0CyPiN4
+	t+9DR3Qccj5dFQ7j4N9y9zmHw41KNdMG97QxmQR2mwoi9YwYnLWa5FAT9QD4tTC2
+	o/vT7uGXCG51UopyBrzbcy+ZWUZaOvOD1xUxDrAeHcxBG94GyS7dFD3TvnLmt6k6
+	mApOaKQs/+bHcz4nY8N1iERMAdVAhklDXOEMNCGfpp9xY/TLyRj0g5TGw8etc08Q
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46b8r0un51-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Apr 2025 15:54:55 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 53UFmj17027098;
+	Wed, 30 Apr 2025 15:54:54 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46b8r0un4u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Apr 2025 15:54:54 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53UFdC7A031677;
+	Wed, 30 Apr 2025 15:54:53 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4699tu8pwy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Apr 2025 15:54:53 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53UFspgu14156496
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 30 Apr 2025 15:54:52 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C11CE5805A;
+	Wed, 30 Apr 2025 15:54:51 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B44C25805C;
+	Wed, 30 Apr 2025 15:54:49 +0000 (GMT)
+Received: from [9.61.85.22] (unknown [9.61.85.22])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 30 Apr 2025 15:54:49 +0000 (GMT)
+Message-ID: <c8e88c29-e1bb-4845-a362-dc352d690508@linux.ibm.com>
+Date: Wed, 30 Apr 2025 11:54:49 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250430-rust-kcov-v1-1-b9ae94148175@google.com> <CANp29Y4o8o6gz6GbM6NhP9sJUi94q29=aa+tLc1aCk0UVpgj0w@mail.gmail.com>
-In-Reply-To: <CANp29Y4o8o6gz6GbM6NhP9sJUi94q29=aa+tLc1aCk0UVpgj0w@mail.gmail.com>
-From: Matthew Maurer <mmaurer@google.com>
-Date: Wed, 30 Apr 2025 08:52:09 -0700
-X-Gm-Features: ATxdqUFfWkFt2krZSEThZVrbRM32DbyGd7csCuhOc9hU0LccEz016XDL5xHWJ3s
-Message-ID: <CAGSQo01gLXKWLWcrxSytmCB4YmRnGDX++ZizTws0bEjJ1amWtA@mail.gmail.com>
-Subject: Re: [PATCH] kcov: rust: add flags for KCOV with Rust
-To: Aleksandr Nogikh <nogikh@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.1 000/167] 6.1.136-rc1 review
+To: Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
+        hargar@microsoft.com, broonie@kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>, linux-s390@vger.kernel.org,
+        linux-mips@vger.kernel.org, io-uring@vger.kernel.org,
+        virtualization@lists.linux.dev, Halil Pasic <pasic@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>
+References: <20250429161051.743239894@linuxfoundation.org>
+ <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
+Content-Language: en-US
+From: Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDExMSBTYWx0ZWRfX7Wf07gSrdqCk zb0K3R03TxsVsyR1iTUQrpsn8SgfAs0YFKySz/5l60nS4Ty5Ocio1IGZiRsSV+b6BaQ34Fw0vKl ioFN6STKCZicQtlKBajk+fMGVQHIWLwsOHmjMfdnISc6UX6/lQi32CbkOacKy/qWe59SsGqD1FW
+ yGAw7jomIrcY7Y+QlX3QnxqhlFLuOCqh+3nvUuQYjBBEicyOXHCNHfg56gMlKo5TQ/HU7CKD1Vz W4soxBFSdg8ydvaCNHKx0zyGUk5RgEVNwU6w4KkJxsKXecKKMDQcqtH9SDveCufpn4QuNdXaLOW HAoIki6/XzHtkh/RZDURZLd+FVRmQ2ZYWFKlr3RObtf5HJq1oVyxlxnHoPOrM947oMgF6/F//iH
+ LrRowoVxEOQ07s5PL23CPXOo0ntDDhtUxrPRU8Domof8K1cr/useUFXFiV+noDH/q8fUiJLd
+X-Authority-Analysis: v=2.4 cv=OqdPyz/t c=1 sm=1 tr=0 ts=681247cf cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=eZE_XS7iPCa-stX4-vkA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: Sij4fx90_ksNlpmCP9y4w-QIVKqfbDsT
+X-Proofpoint-ORIG-GUID: 2ilcYsyPiGbEAPeMVPlTbkq5Tf2pWo3G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-30_04,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1011 spamscore=0 mlxlogscore=602
+ phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504300111
 
-On Wed, Apr 30, 2025 at 4:55=E2=80=AFAM Aleksandr Nogikh <nogikh@google.com=
-> wrote:
->
-> On Wed, Apr 30, 2025 at 10:04=E2=80=AFAM Alice Ryhl <aliceryhl@google.com=
-> wrote:
-> >
-> > Rust code is currently not instrumented properly when KCOV is enabled.
-> > Thus, add the relevant flags to perform instrumentation correctly. This
-> > is necessary for efficient fuzzing of Rust code.
-> >
-> > The sanitizer-coverage features of LLVM have existed for long enough
-> > that they are available on any LLVM version supported by rustc, so we d=
-o
-> > not need any Kconfig feature detection.
-> >
-> > The coverage level is set to 3, as that is the level needed by trace-pc=
-.
-> >
-> > Co-developed-by: Matthew Maurer <mmaurer@google.com>
-> > Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
->
-> Thanks!
->
-> I've run syzkaller against a kernel built with the patch applied and
-> the tool was able to successfully obtain coverage feedback from the
-> Rust code, so
-> Tested-by: Aleksandr Nogikh <nogikh@google.com>
->
-> As a side note, in the resulting code coverage I also see a lot of PCs
-> from rustlib, which isn't the primary target when fuzzing the kernel.
-> Do you find it reasonable not to instrument rustlib with coverage
-> callbacks? For C code, there do exist some exceptions for KCOV, see
-> e.g. lib/Makefile.
 
-I think filtering out `core.o` and `compiler_builtins.o` would make
-sense, as those are not kernel-originals. Filtering `pin_init.o`
-probably makes sense too.
+> 2)
+> Regressions on s390 with defconfig builds with gcc-13, gcc-8 and
+> clang-20 and clang-nightly toolchains on the stable-rc 6.1.136-rc1.
+> 
+> * s390, build
+>   - clang-20-defconfig
+>   - clang-nightly-defconfig
+>   - gcc-13-allmodconfig
+>   - gcc-13-defconfig
+>   - gcc-8-defconfig-fe40093d
+> 
+> Regression Analysis:
+>  - New regression? Yes
+>  - Reproducibility? Yes
+> 
+...
+> drivers/s390/virtio/virtio_ccw.c:88:9: error: unknown type name 'dma64_t'
+>    88 |         dma64_t queue;
+>       |         ^~~~~~~
+> drivers/s390/virtio/virtio_ccw.c:95:9: error: unknown type name 'dma64_t'
+>    95 |         dma64_t desc;
+>       |         ^~~~~~~
+> drivers/s390/virtio/virtio_ccw.c:99:9: error: unknown type name 'dma64_t'
+>    99 |         dma64_t avail;
+>       |         ^~~~~~~
+> drivers/s390/virtio/virtio_ccw.c:100:9: error: unknown type name 'dma64_t'
+>   100 |         dma64_t used;
+>       |         ^~~~~~~
+> drivers/s390/virtio/virtio_ccw.c:109:9: error: unknown type name 'dma64_t'
+>   109 |         dma64_t summary_indicator;
+>       |         ^~~~~~~
+> drivers/s390/virtio/virtio_ccw.c:110:9: error: unknown type name 'dma64_t'
+>   110 |         dma64_t indicator;
+>       |         ^~~~~~~
+> drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_drop_indicator':
+> drivers/s390/virtio/virtio_ccw.c:370:25: error: implicit declaration
+> of function 'virt_to_dma64'; did you mean 'virt_to_page'?
+> [-Werror=implicit-function-declaration]
+>   370 |                         virt_to_dma64(get_summary_indicator(airq_info));
+>       |                         ^~~~~~~~~~~~~
+>       |                         virt_to_page
+> drivers/s390/virtio/virtio_ccw.c:374:28: error: implicit declaration
+> of function 'virt_to_dma32'; did you mean 'virt_to_page'?
+> [-Werror=implicit-function-declaration]
+>   374 |                 ccw->cda = virt_to_dma32(thinint_area);
+>       |                            ^~~~~~~~~~~~~
+>       |                            virt_to_page
+> drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_setup_vq':
+> drivers/s390/virtio/virtio_ccw.c:552:45: error: implicit declaration
+> of function 'u64_to_dma64' [-Werror=implicit-function-declaration]
+>   552 |                 info->info_block->l.queue = u64_to_dma64(queue);
+>       |                                             ^~~~~~~~~~~~
+> drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_find_vqs':
+> drivers/s390/virtio/virtio_ccw.c:654:9: error: unknown type name 'dma64_t'
+>   654 |         dma64_t *indicatorp = NULL;
+>       |         ^~~~~~~
+> cc1: some warnings being treated as errors
 
-`kernel.o` I think we should probably keep at least for now, because
-it's kernel-created source that we'd still like proved out. In a
-theoretical world where Rust has become more normalized in a decade,
-we could filter it out to refocus fuzzers on driver code rather than
-bindings, but right now the bindings themselves are worth fuzzing IMO.
+The virtio_ccw errors are caused by '[PATCH 6.1 033/167] s390/virtio_ccw: fix virtual vs physical address confusion'
 
->
-> > ---
-> >  scripts/Makefile.kcov | 6 ++++++
-> >  scripts/Makefile.lib  | 3 +++
-> >  2 files changed, 9 insertions(+)
-> >
-> > diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
-> > index 67e8cfe3474b7dcf7552e675cffe356788e6c3a2..ddcc3c6dc513e1988aeaf07=
-b8efa106e8dffa640 100644
-> > --- a/scripts/Makefile.kcov
-> > +++ b/scripts/Makefile.kcov
-> > @@ -3,4 +3,10 @@ kcov-flags-$(CONFIG_CC_HAS_SANCOV_TRACE_PC)    +=3D -f=
-sanitize-coverage=3Dtrace-pc
-> >  kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)   +=3D -fsanitize-coverag=
-e=3Dtrace-cmp
-> >  kcov-flags-$(CONFIG_GCC_PLUGIN_SANCOV)         +=3D -fplugin=3D$(objtr=
-ee)/scripts/gcc-plugins/sancov_plugin.so
-> >
-> > +kcov-rflags-y                                  +=3D -Cpasses=3Dsancov-=
-module
-> > +kcov-rflags-y                                  +=3D -Cllvm-args=3D-san=
-itizer-coverage-level=3D3
-> > +kcov-rflags-y                                  +=3D -Cllvm-args=3D-san=
-itizer-coverage-trace-pc
-> > +kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)  +=3D -Cllvm-args=3D-san=
-itizer-coverage-trace-compares
-> > +
-> >  export CFLAGS_KCOV :=3D $(kcov-flags-y)
-> > +export RUSTFLAGS_KCOV :=3D $(kcov-rflags-y)
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index 2fe73cda0bddb9dcf709d0a9ae541318d54754d2..520905f19a9b19631394cfb=
-5e129effb8846d5b8 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -169,6 +169,9 @@ ifeq ($(CONFIG_KCOV),y)
-> >  _c_flags +=3D $(if $(patsubst n%,, \
-> >         $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-=
-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
-> >         $(CFLAGS_KCOV))
-> > +_rust_flags +=3D $(if $(patsubst n%,, \
-> > +       $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-=
-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
-> > +       $(RUSTFLAGS_KCOV))
-> >  endif
-> >
-> >  #
-> >
-> > ---
-> > base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
-> > change-id: 20250430-rust-kcov-6c74fd0f1f06
-> >
-> > Best regards,
-> > --
-> > Alice Ryhl <aliceryhl@google.com>
-> >
+Picking the following 2 dependencies would resolve the build error:
+
+1bcf7f48b7d4 s390/cio: use bitwise types to allow for type checking
+8b19e145e82f s390/cio: introduce bitwise dma types and helper functions
