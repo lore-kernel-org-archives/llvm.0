@@ -1,105 +1,149 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E2F1DD9AC
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 07:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745E42185BD
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 08:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745998792; cv=none; b=bO5sQJMfwVp2wGZcWz18rODk+Kwx61aiTPx6cetBg9kEfqCvByMM/iAKqhtUH+duLlN9QzirD1fVPwaAkamesl55VJADHDOD66kZ12qJGPwJT12gSqz72gD9y4gRYIhWu9rKfdVCt5eTYMmrniA47cYU6+ftl8eIOqrG1buGSY8=
+	t=1746000243; cv=none; b=Cbg/wrr424XOm082pD/IQslBeksAdtX3eIHFB6HABc/86/RTny8Hm0RxV+QS/za4jZtLGCIeEI07K0h5NV5ftCKINH6KwNv8cyXZ8f7eLxCrqFb3dum1vSNM2e6Zypy5JAToDBoeDtnHWqP3ZPZ9OfLNDbuXAzvgYn3Uqcnjpj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745998792; c=relaxed/simple;
-	bh=RYF5rT5SGXiuiOMM3oZfVuad7Ga744mi0LsZrurPLlo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IZgniNDoIe2UAqKkT/eRDTKxysWlbbzqy/DiqvBjJlhZyn9oogCOK6SXmmDSaXuD0NxovixtoMDdVE957CHKesL1gbrjkE9UX3WGPljFCac4pCR/ES4/TL77QmuRKn+gp4UZu33c3EdXZHDe/oKqC/UsnT+MUtBBowWr4S3WXPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SBDSP98y; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1746000243; c=relaxed/simple;
+	bh=DKnudNd/9zBWW3fHL+84dgzzzUZDXPxTFrPLc0mlmb4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EVIsN6GYWts/JRcL/wgcitBtCMOJPy7isQa5JCa7zmZSsSD2Ndx0VScDk7nXGZTsx7KOVPhqsigh/399i5/itqTsXG9vA875aQMloEigIYgHuHX1M7kOpiIRAj1nW42oxsOETXBsXzBPt6Uko9T9Se00YQyg/RdMwnEFS4MKius=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=THXjcW0Q; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SBDSP98y"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so42997525e9.0
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 00:39:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="THXjcW0Q"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43f251dc364so37756135e9.2
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 01:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1745998788; x=1746603588; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5U9OMJXkSPz8hKC+syIhe+oLvZq6aylg9p+TfyNHAYs=;
-        b=SBDSP98y7wPtreg0PrPo0l7MO074IspczXlLPkcB+7cmrxAn3WVFzl4Zpljg8sJY//
-         E1ycbss39GrCjMgvB5u8EzTUCju7Dp71XBPxluCvnJhPf9232J2c55ZJmSGjEHW/4NDJ
-         XswhTERZKbPq0eYSL1wXG3ucH8SZL8VTj00uGRIAnnnYwKThrUBVz0A7eT3XKhvis6pT
-         acVymTsKgDYrHAVnF7Lnt1u0YqB4lxlx0tx7ld4r+OPG5LvV8EIXQXEnehA1kTFlylF9
-         j3EbaD5r6N+WU+qRRYjxncv3mFlF9H4QTXex1dXNRqs867aWDzY/kC1kGsSjeoKoLruX
-         76ZQ==
+        d=google.com; s=20230601; t=1746000240; x=1746605040; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WpWRPKZTrgVHckN4fyywT4debJCD4sQBNo0HtHYOfx4=;
+        b=THXjcW0QBtOW15qcu1hoiHZNcfEYOsR4YR+w3n4SowmFDLyyPYj4TkOvQE71giNIzw
+         eQdw0zWuOqKkZCABEcruVck2uKujH2URpX+NHLyf/97QM9+SEPsbB+eoKskkwTfWZTxh
+         1qz6pq8kXm3bvymv2Aq9mTF5bk6kiyzwC5dZlJS6iiPz8GkD6xL8KMAUCrxt8hDNcDNx
+         BPTx93cgxAAHzYgxoWXnz1mNXWGco2OII/I2O0DusUROmcSz+HM+D4EjBBANYNpbhjfS
+         94XSNgrKHW6HG13XpUmzlYHsCQkazIYwsYSHl8Jmgr6rtE+FIpAQBh/u/I+53f6raEat
+         CSWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745998788; x=1746603588;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5U9OMJXkSPz8hKC+syIhe+oLvZq6aylg9p+TfyNHAYs=;
-        b=boANxXw/TLwXSrRFlQ25krfsWlGHZSJj8ihFHVbP9b8sgfNzBZfB3hjxsGgzHTmpdK
-         ftSLHHqPMap+ZVLfarejTB3KcLlJ3azAlMhOBdoxNAfencf/5s86OA39te4ejCUi/wX9
-         viaS2PBhhTD+18xxMaSOm19aybNcGdGQnxiq1vJ8cldM3grO0uemMG0roEbqSRJCxurF
-         Pp+B1oB2CtvyJNfPyjnWf+m0h9fUAsZGDW4UcRaQ3LYgUIeE6T5lzD30cnBMLOkMaf87
-         zARwA/UUzr+KFDRjvJ5r7pG7x26gnTahxSLiYRzpa+3Z1ERFGiqz188Jzh4M9fXkHPqe
-         iTnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqo6yU3YfVUS1T9EKIGCJ2idhp6TSyPYxGkdGhHkqaxoOA22bqwk8k0/e2Iexgku3gtxto@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx13CR/od5OUaLHOC+P4J6YCLBg9l9zio3OK1BTVilu4Fmp02oI
-	JUzkJWVXF6FJ7otYvgm4CH2kZgGlkJgK4umHskKYbCb9eDU+lgX3DjU/6IUNGvI=
-X-Gm-Gg: ASbGnct3zN/p9w6sBQp+q8F5e5YCB6pplXRx4xtH9FPYPSNJAxYUKYKzaOH2KJaoEsE
-	dSKoBIh4xgHVnJt5Ivx6lQ4sledu061pzFgoIYccmtzGRamWxHfuIz7FjdrSqe/8+2954oS2VY/
-	Mj6kgE/MRy5JrytHk9ohkdT+Dj7a8kgSwA9kwvYXRmJNeo3B+O8dNtHe9uXYNgX+GkvxYj0t0C6
-	Y1CQu2bs0HM1Y1sPcIWHjoIDOHDYRFwi996kb0RKZG2RAPIClYG4iOpPMDy+E5kHFqvnGuSSKCQ
-	ztAvajiCUJbAW79xUhrmY979Qi3NBvWEOMXfccipf8vNbT9xaMY8l3FsMG4FrrmdlPSsFsllRdy
-	lgCKp4PM=
-X-Google-Smtp-Source: AGHT+IE8jp0ZjUVoh7f9msS1Shj+zFFjpix/VROzqHbjQs2YUPeE4capqjHRAxR03y+nyYOapSyDRw==
-X-Received: by 2002:a05:600c:500a:b0:43b:d0fe:b8ac with SMTP id 5b1f17b1804b1-441b2695e64mr12959955e9.30.1745998788203;
-        Wed, 30 Apr 2025 00:39:48 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13c6:eb01:e359:8d71:4b9a:921f? ([2001:a61:13c6:eb01:e359:8d71:4b9a:921f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b2ba4b10sm14125645e9.16.2025.04.30.00.39.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Apr 2025 00:39:47 -0700 (PDT)
-Message-ID: <41bc286e-6e6b-4ae8-ad6a-3bdf56cd172b@suse.com>
-Date: Wed, 30 Apr 2025 09:39:47 +0200
+        d=1e100.net; s=20230601; t=1746000240; x=1746605040;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WpWRPKZTrgVHckN4fyywT4debJCD4sQBNo0HtHYOfx4=;
+        b=Dbf9Nw4CjQtTb/HKPPqLWxOhGigZlbk6pcNdo5fxbr4mxTSCHgsFk5Un7IBYNQOkDY
+         BMMOrYOixzhR/JEX2AHaKAT/cQ7GUPljBWqVwQ7D1BlIuHZIdJpjQ+ziIOG/8cX12FH1
+         WKkRgvoTyL7uXt3DqRs7jv4KvQ0FbyMzhlqpFAvMEI+FE9et+Ri0ALABUUZ5xCLyVJ9n
+         RhpYq7vog1pRYVwAspHg7pEVcurN6YjCEqZWAHNpXFYkArvRiMsWba4gK8F8C3J7OCdQ
+         KUi6/8Xse5jN+biLT7Hgl240XNIrUlgtFydgdKiy1rPOnTctrLil/QM92D0VzjteCztm
+         XhRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUNy5jn2fl3sn+1fGRsN6W89HhN/Ew1zr2F8nI8GfCwTRy/fLT1KHYBBDQslurPMam17z24@lists.linux.dev
+X-Gm-Message-State: AOJu0YwRHs1zvZlQqjUhacCJjMWxNO6QqOG2e1m7vS4jJwTppubU8Sgn
+	IaHQh7HwSch60Iqdrnl8fQ47NMnvJ/X903+ycBeFDXtZUeOk8tCvpQy3v33i4VpPrMTFVP7qeDL
+	MLEZFgCCpAzXnFQ==
+X-Google-Smtp-Source: AGHT+IEI2dIRyOiB0HL4tKwAkhWBl9UQLV5gBiXGbTGepKML2h3DJ3RmB/CkPYBC9G6m8mr7/DPfag2VQKdaGKE=
+X-Received: from wmbeu5.prod.google.com ([2002:a05:600c:81c5:b0:43d:b30:d2df])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:a4e:b0:43c:fcb1:528a with SMTP id 5b1f17b1804b1-441b1f30feemr17935465e9.6.1746000239963;
+ Wed, 30 Apr 2025 01:03:59 -0700 (PDT)
+Date: Wed, 30 Apr 2025 08:03:54 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: dc395x: Remove leftover if statement in reselect()
-To: Finn Thain <fthain@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Ali Akcaagac <aliakc@web.de>, Jamie Lenehan <lenehan@twibble.org>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Colin Ian King <colin.i.king@gmail.com>, linux-scsi@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20250429-scsi-dc395x-fix-uninit-var-v1-1-25215d481020@kernel.org>
- <91ba6cf2-ca95-1ebe-837f-ecc89f547ea2@linux-m68k.org>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <91ba6cf2-ca95-1ebe-837f-ecc89f547ea2@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGrZEWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDE2MD3aLS4hLd7OT8Ml2zZHOTtBSDNMM0AzMloPqCotS0zAqwWdGxtbU ALAxa6FsAAAA=
+X-Change-Id: 20250430-rust-kcov-6c74fd0f1f06
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2361; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=DKnudNd/9zBWW3fHL+84dgzzzUZDXPxTFrPLc0mlmb4=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBoEdltHctz9D+GQdMdpsulmMJUFsQjQ4TdJk+NW
+ R8aFYqqGmuJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaBHZbQAKCRAEWL7uWMY5
+ RkM8EACNQ+B2tYSbeUNKxBIjv1jFJCJsBOD4ZIW9UXYWnSamDV6d+85oW4gtrz/3sNyWC6BrxIb
+ ef162AJCYx1p0heTqIwEuhhUfWddFwW8WqmZvYRMcMFm3LyVpaA9BvsXuVe4v4t5bTeaFeuPRHL
+ MIczft0hFYyp0T3j2jFuSaFNIHP8CTt9FcRG2AiZeSf0klb1Kmsx9G0ZwArLD8cnVuXeKGQz+Vy
+ h42QeKg6ZVhmd46p7FBUgX8RH0xbPpkELYz6YeMkHwp0jxx2zM6EoaJizuLFTE8SkPw4sLpM9XZ
+ iYiwS125lIVSnSzWYRpJj0CuSdM9+QekWXREltJD5MvAeTODPdBBp6nS9z+K1A96Q85awr6jqYg
+ 1suryL9Pkq+gMOdf7vbQ1iB+nKo/TdTDIAyfalAtu4vo6UKyaqWR4uZ2vLzAvON7cWKO3lkowKq
+ Qdw9z8eFTyKAX0a5oqadcrknlSEzZPboyuVxdAyDyiwQMG1dGcPJxeGl44z6UZF8U7xa3toy0Tc
+ /jFXxkxBlC8m4pJqUK3F/Ep8vSTPQpHpM1wQWhaqg24PS8cqW6aDgRdItMy59S1zmYcVc7WQ2cu
+ bDjzwYoDPQEMESBIbaTCK9GyNptDtJzA5a8oV9YxUprBaiSmLy0OGe3JxLeieWSVVZ685AqDZKR FoiAzOAkF+2jjLg==
+X-Mailer: b4 0.14.2
+Message-ID: <20250430-rust-kcov-v1-1-b9ae94148175@google.com>
+Subject: [PATCH] kcov: rust: add flags for KCOV with Rust
+From: Alice Ryhl <aliceryhl@google.com>
+To: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Aleksandr Nogikh <nogikh@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Alice Ryhl <aliceryhl@google.com>
+Content-Type: text/plain; charset="utf-8"
 
+Rust code is currently not instrumented properly when KCOV is enabled.
+Thus, add the relevant flags to perform instrumentation correctly. This
+is necessary for efficient fuzzing of Rust code.
 
+The sanitizer-coverage features of LLVM have existed for long enough
+that they are available on any LLVM version supported by rustc, so we do
+not need any Kconfig feature detection.
 
-On 30.04.25 03:36, Finn Thain wrote:
-> 
-> On Tue, 29 Apr 2025, Nathan Chancellor wrote:
-> 
->> This if statement only existed for a debugging print but it was not
->> removed with the debugging print in a recent cleanup
-> 
-> The patch you called "cleanup" has a "fixes" tag. Strange.
-> 
-> I think it's unreasonable to refer to a patch which alters object code as
-> "cleanup".
+The coverage level is set to 3, as that is the level needed by trace-pc.
 
-Hi,
+Co-developed-by: Matthew Maurer <mmaurer@google.com>
+Signed-off-by: Matthew Maurer <mmaurer@google.com>
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ scripts/Makefile.kcov | 6 ++++++
+ scripts/Makefile.lib  | 3 +++
+ 2 files changed, 9 insertions(+)
 
-yes, I was unsure about terminology used for code that is by default not
-compiled, but would not compile if the attempt is made to compile it.
+diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
+index 67e8cfe3474b7dcf7552e675cffe356788e6c3a2..ddcc3c6dc513e1988aeaf07b8efa106e8dffa640 100644
+--- a/scripts/Makefile.kcov
++++ b/scripts/Makefile.kcov
+@@ -3,4 +3,10 @@ kcov-flags-$(CONFIG_CC_HAS_SANCOV_TRACE_PC)	+= -fsanitize-coverage=trace-pc
+ kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -fsanitize-coverage=trace-cmp
+ kcov-flags-$(CONFIG_GCC_PLUGIN_SANCOV)		+= -fplugin=$(objtree)/scripts/gcc-plugins/sancov_plugin.so
+ 
++kcov-rflags-y					+= -Cpasses=sancov-module
++kcov-rflags-y					+= -Cllvm-args=-sanitizer-coverage-level=3
++kcov-rflags-y					+= -Cllvm-args=-sanitizer-coverage-trace-pc
++kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -Cllvm-args=-sanitizer-coverage-trace-compares
++
+ export CFLAGS_KCOV := $(kcov-flags-y)
++export RUSTFLAGS_KCOV := $(kcov-rflags-y)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 2fe73cda0bddb9dcf709d0a9ae541318d54754d2..520905f19a9b19631394cfb5e129effb8846d5b8 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -169,6 +169,9 @@ ifeq ($(CONFIG_KCOV),y)
+ _c_flags += $(if $(patsubst n%,, \
+ 	$(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
+ 	$(CFLAGS_KCOV))
++_rust_flags += $(if $(patsubst n%,, \
++	$(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
++	$(RUSTFLAGS_KCOV))
+ endif
+ 
+ #
 
-	Regards
-		Oliver
+---
+base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
+change-id: 20250430-rust-kcov-6c74fd0f1f06
+
+Best regards,
+-- 
+Alice Ryhl <aliceryhl@google.com>
 
