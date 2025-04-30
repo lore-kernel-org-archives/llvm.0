@@ -1,91 +1,122 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB2F274FEB
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 18:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1F1266B41
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 18:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746037002; cv=none; b=gAmw8/oqe9kWQ7n8M7I6FZCuBB5Y1dBrgLf0EUbeEZ9zjXZdXEjU14PLM/dsmDctQHm8cj4QkI1/xAgpmy6vSjQb0dHbs1LoEdMRsjmQurgPipTgjwU/aO9FOSipvcxMFkvTUN4Sy34S7DDUdydpKzncwYubQHYqxLkcuU09wXs=
+	t=1746038594; cv=none; b=lr1QyJMcvr1RmsMKaz6GSlY7ijjDZpU+YJ19nPkyX9QpMiLLj+HI0oYLJ2U9WOVeAYqT8BXgJaUmp0YVEiSWihB4YQA2Qiaj0cByJefPZfDTnNRhF8HP/Mi8FQKD9hid5XBfKMqKJ9q+fy0xJxOYuuaCIdnutj6U/Vkl9Ublf/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746037002; c=relaxed/simple;
-	bh=S2zZkE8kYk7DeYMqbaUF/R2UUdCZOiBVgolXvwU4Qzk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MZrQHap70CyEqEUxDRAt0k79DzFBQkoaMiTsJjJbliT5nBLkK6K4d9f2BVZsTjG0zsuzEaJear5tJ8neeYv4IYX/gTmZ+r+PgTS1/xB+9kBl4o0e2ndJdQ4z6a7wkUOvB45mqh3jed0tajqfGhKvHJFKzQVoGEbjZ2Df8j2hM50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfvHMzQF; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746038594; c=relaxed/simple;
+	bh=i/nN4fIZ0hrYmvZ/3og6dUa1DZESXgLU6NgPCzt569g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RuxmPKQr+BEY//Mddn585xgnIGBt0dqGS50FKYFe5s5aD2ux3fMQ/Q9O1tgYculXg5eIh1CMSudJHP/n2gbwFpwarjCgTsQGx2NOyVNkJsjnrhO44TX4lQMiPdQd74CXCr5j94STReoFRFKNoghpW85dkw/cmS3EnnaZl/6pU6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jfarr.cc; spf=pass smtp.mailfrom=jfarr.cc; dkim=pass (2048-bit key) header.d=jfarr.cc header.i=@jfarr.cc header.b=Ne8hi8z/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hkXrLnmr; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jfarr.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jfarr.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfvHMzQF"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223fd44daf8so212005ad.2
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 11:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746036999; x=1746641799; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S2zZkE8kYk7DeYMqbaUF/R2UUdCZOiBVgolXvwU4Qzk=;
-        b=hfvHMzQFFXR5Rh/x0biFMvYmMGw+ZQHi7QRfstfHakqTkAt0GoYyHqH1HEuvmINFiW
-         zi06Jc6Kkb7A5zoishnEDL+3WOEtacQJoHskhJnLHPl5KF//LzxynKfGkSK4eiD3P5T1
-         0O3E4eqiCFlyIG+X/cxYi6HDAEHjhUkyRRzbitO3AHpEc8jjjSzIz6rmpbdmQLHyw4nv
-         9U6OXoOASmDdTBAWiqTS/IRN2rPaBj1UqQRqohkuj0DnB38RkpE2FO48jS8cErNmIF+i
-         aWtded1kxgJg6prhzydRkQPsLtWeV9BZ3q6sHDP8XAFAtNv2qq/w8Me5/SwkI4NwhB9E
-         dfhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746036999; x=1746641799;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S2zZkE8kYk7DeYMqbaUF/R2UUdCZOiBVgolXvwU4Qzk=;
-        b=C9NSdsOShnpOYSimmuPDvhLDCV3MH8piqbKMMpIgEFjwBAb2M6OEcKqVw/WW+1UwgO
-         Zc9mL2qDe+A/8iucT3mOiUVrqfqylZT7gS0NQKsOR5FX130Ikj99G2Ig102EE6RjIUF/
-         hlbjlCcDjgyMCPi4m36ms/D/0dihlqGVj8uRtcx0rX1F6gJ+kTPGIS2O0GRounMyWjby
-         dXM9Tt5PTjGvbDr5bX7Zqrxmy9FMh0xG3XbCIb7dDhUi/Ojpb5qSzSVFHkLegG2PytXR
-         Z28Qq87+qT4g+EVWEG7ax3VI5FeE5piu21eW671hNYbjGGfqZK2b21YWIORAim3TUbLT
-         ElKw==
-X-Gm-Message-State: AOJu0Yx5Nj5+XMHadLV8mQrlFvkqzedLlei8h53diNXgn+AREgbfJuf2
-	axbzZcwShlfOuL4aHXCCEsKUHy7h4VYv78RaW5QcO0g5iENB0saAHtfnouXy7CZgL78OOLUts9U
-	a8hold8CTdNclaNKuJEgu+QbKFmQ=
-X-Gm-Gg: ASbGnctVE+uPhl/d5PbTdMNVGHuTXXeC8R9CRJO7my8yx6LxhzE7qb7WuWmsmR0vGpa
-	rRJtxcAbVgyE74UjrFauKI+CHhVJXawONVf4rg+kesCWmdIHkY4WQEdSAia96DO3SxPOvyk8lIo
-	imazPBIvvEYzhV+3OTBTby
-X-Google-Smtp-Source: AGHT+IF1N28ck+ncNtfwPcI+Xrl/j3rXmoy8i7dANTP5Fh1Weylgg5D+MGt+ZyUiTckDw4nsn/uqlyoK2BhO9nWWPw4=
-X-Received: by 2002:a17:903:1b2f:b0:221:751f:dab9 with SMTP id
- d9443c01a7336-22df5835e22mr21391885ad.14.1746036998735; Wed, 30 Apr 2025
- 11:16:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=jfarr.cc header.i=@jfarr.cc header.b="Ne8hi8z/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hkXrLnmr"
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 4C2BD114026B;
+	Wed, 30 Apr 2025 14:43:10 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 30 Apr 2025 14:43:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jfarr.cc; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm2; t=1746038590; x=1746124990; bh=rQMATKoquDscGeyRc5D5X
+	nmAVj7VRkv10II17QRwoew=; b=Ne8hi8z/VzecCcO2kuiUovL9Ok2Lk8E+ztf1F
+	mwxi4QZKhYMPELCv1iJc5o/nN2IMLQ18JUdxZVpxFL4wOCRNmYhV9OCqFNqQUWBk
+	Z8qqjFLl9nuvjWADqP+hwu3tqqyityPdjWz+z3CphIEJlD9UopM23H0tGBJdAKwQ
+	hxRxCPmFfZGMJYs9T190sqK+fZdlCdfAkT30NlvrhSPC6t8CIDW9bWK3C6WMlml2
+	2qWb10iIjshPI6mLz1IPe2TG/reIl6BxJnQomxTPCFB3K5YNGUxownVMpRkjIKEf
+	zwPl2NVYapvhWZufBGlUjqS7asxEMPWDUoA0lCbAx6JUUUDzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1746038590; x=1746124990; bh=rQMATKoquDscGeyRc5D5XnmAVj7VRkv10II
+	17QRwoew=; b=hkXrLnmry7HPUUzVR+Y1mV74oy7YQFTtSdzqCAeX3qT1LfhdTso
+	YbjuXGIMeRhV31jPRtm/20QTvFJsx6XU4TI6YPJpDafe6gEDx22TYDFqjqcBlPDp
+	E41q0zaleLre35mRYKczvLsBE8iLyX/FWpg3j9jj0yD/phGSmU2npShs829iRJEQ
+	kM7hXqTGvl3SJ7cDjBq7ziyrIW87B+lMi/AW08DvwZGycuwRZSLRLRXXCj75XN8L
+	PgoTCqx5LOmWLcLD1mUP2KIIpUrEFvxjjWVlYXS/Rgh3+KAPSUSu7F1EldUElomq
+	veSCa/g+fWafsw/+SDNwsMPsgeyFbbaDPJQ==
+X-ME-Sender: <xms:PW8SaJfor6wQBA8JJXhgkJmffX634Nr1K7jublFR0LobbGRt47hUdw>
+    <xme:PW8SaHPOBzcTignAYDQpnJ0R3uM3VpZDqwYwFvrr4mK_Vt4I_EF2-fX-V1dm25zQD
+    UInbjjr6BNNOhF8WGI>
+X-ME-Received: <xmr:PW8SaCiRMnUABsCLAFzMaeaaGqf59OdGTybvuqSSrF48Y8ju5OFujA7IZIbJzuEY6xEJDpRyhYo9srSpPjZgVWt5tbra2mc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieejgeegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpefhvfevufff
+    kffoggfgsedtkeertdertddtnecuhfhrohhmpeflrghnucfjvghnughrihhkucfhrghrrh
+    cuoehkvghrnhgvlhesjhhfrghrrhdrtggtqeenucggtffrrghtthgvrhhnpeeliedvhfev
+    gfegtdeiudejveffheejhfetgeettedvheejjeekhfdvgfeggffhveenucffohhmrghinh
+    epkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehm
+    rghilhhfrhhomhepkhgvrhhnvghlsehjfhgrrhhrrdgttgdpnhgspghrtghpthhtohepud
+    dvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehkvggvsheskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmohhrsghosehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehthhhorhhsthgvnhdrsghluhhmsehtohgslhhugidrtg
+    homhdprhgtphhtthhopehguhhsthgrvhhorghrsheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomh
+    dprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphht
+    thhopehlihhnuhigqdhhrghruggvnhhinhhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:PW8SaC8qtRq-0uDexsCDIqtvbXzzghwrgKRmpwr916vVQcUGO6odaA>
+    <xmx:PW8SaFv0oAQIB88qwSTHxC30Joq4Z1ft2KpRR5BwDLCPSn4uVL88wA>
+    <xmx:PW8SaBFp3EIxEcw7IGUF1-QrNwNuA9ET5DqoP2gE-VIaDYJXSn5ipA>
+    <xmx:PW8SaMOTh4qz3gKzynRVAOzEDyXMuYeNiAGkk6YkeF2CJeL8G5eG2Q>
+    <xmx:Pm8SaDwforoxjQazBxax1wlbNRXMjdg8NeskGJA8jmOTblGilIRZlxkb>
+Feedback-ID: i01d149f8:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Apr 2025 14:43:08 -0400 (EDT)
+From: Jan Hendrik Farr <kernel@jfarr.cc>
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	thorsten.blum@toblux.com,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Jan Hendrik Farr <kernel@jfarr.cc>
+Subject: [PATCH 0/1] hardening: simplify CONFIG_CC_HAS_COUNTED_BY
+Date: Wed, 30 Apr 2025 20:42:30 +0200
+Message-ID: <20250430184231.671365-1-kernel@jfarr.cc>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250430165343.GA1436080@ax162>
-In-Reply-To: <20250430165343.GA1436080@ax162>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 30 Apr 2025 20:16:25 +0200
-X-Gm-Features: ATxdqUF9QKjnhgdhbv81XkThLwmEAwlHnaUZr3nyNeFy-Sx2UyqWacT6ckzKa1I
-Message-ID: <CANiq72n+0kxXfbnDsjNMH8wUXAPySfnPKx5OCoppotiNye9CVg@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 20.1.4 uploaded
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 30, 2025 at 6:53=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> I have built and uploaded LLVM 20.1.4 to
-> https://mirrors.edge.kernel.org/pub/tools/llvm/.
->
-> If there are any issues found, please let us know via email or
-> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-> opportunity to get them fixed in main and backported before the 20.x
-> series is no longer supported.
+Hi Kees,
 
-Tested the x86_64 binaries for Rust x86_64 and arm64:
+here's the patch to remove the build test from CONFIG_CC_HAS_COUNTED_BY,
+which is no longer needed with the release of gcc 15.1.
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+Removing the build test once gcc 15.1 is released was originally
+suggested by Nathan in [1], so I added the Suggested-by tag.
+Let me know if you're okay with that tag, Nathan.
 
-Thanks!
+[1] https://lore.kernel.org/all/Zw8iawAF5W2uzGuh@archlinux/T/#m4a5fd6e098f996740619cc4bedc03c929693709e
 
-Cheers,
-Miguel
+Best Regards
+Jan
+
+Jan Hendrik Farr (1):
+  hardening: simplify CONFIG_CC_HAS_COUNTED_BY
+
+ init/Kconfig | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+-- 
+2.49.0
+
