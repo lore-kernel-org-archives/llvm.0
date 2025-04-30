@@ -1,110 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56CB280330;
-	Tue, 29 Apr 2025 23:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C1E1339A4
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 00:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970835; cv=none; b=IcPXWJiBo4dpefqnEFCRxgkFoqr1mcw+UHXM47tqzZVpcmvuHGVzSRbJRUsLtMJJ69/g+JUL5jmrQSf+Vybij6N2u8gArVF/rX5acjQ2r9oEe88O5tnRvhE549sZcoy1WGT2aHVEVCWNVpcoU+wD+LS0Sw+5UHx90Xe3ftl3wNk=
+	t=1745973132; cv=none; b=YsmwW24Oyv5Ijp5g8htWJqEPOcwnRF563uLas9ozD0LxIj1uC2WAzybEaQ/s/VXKEHkAY+olZr+L1yVRSYTElJGc1wOFES8i8wDckrt0EB4/E/C4V/WIVX1pWeGezezZaeAmAudH3s6mRErx0gLl2kG7pfX8QUfqj0BiCLHY4mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970835; c=relaxed/simple;
-	bh=3maTfG7PXMhhsZXTByIasarqq9svT5JNZYu4B7xjUC8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Edcv3DpEHDSy1J3enwlM9/bU88qFn7yk1fv/a0NBchaBJ2gGvqZai3QTjMEptSNMXhsLAey/MfzhCXSshJQDCOH/QK0q/LHpNl6oGkaiNCYjrzRhHYlXOOWQpGz46z2wdK74d02suHYsXfN8B8i7FyndLdNPwo3iE3L0KeuY13Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YP2/ffk+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745973132; c=relaxed/simple;
+	bh=ZaD9wsKgFSB1A7e7mM9ZV5dxNyu+zJ7BlMXgDIy4QuE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Q2RpzCHPVq+p8gDsHqoofTTNgWNF/vcCu/4NfHcMiTCIsEjqFQBaPqBz8YKhNZodLL6d5wIWQL6B11oJbs5vvb0/7hbhLpviaZoU9MhxbvdHGAHVANGl1Ppj6IhnYh5w+tahfPOPTpM52nFs9uHmMeDLQFpHnlB0vhs5Gf12I7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U8txRnaX; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YP2/ffk+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C6DC4CEE3;
-	Tue, 29 Apr 2025 23:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970835;
-	bh=3maTfG7PXMhhsZXTByIasarqq9svT5JNZYu4B7xjUC8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YP2/ffk+BYJJPqfI/2a53zm1+1i4uXp6CkZCL8mTMB2+bCiiD0Pumy/cUbLL9tCtL
-	 9RQGgRxJHUkbY/9yaOOEJRfecUtWwCg57l3bOvBy7nQFDLNiOPKQr5drTHnbJeu7Be
-	 Nt7QabtZFA12bKrA4qBpbzkBG0eScgV3aX3Hpd9eyKzXW5IREcAwvMNYfqVGqRO/WW
-	 2RE7N+o2pJU68s8qIjjldhNsFjnfm45EYqmYFtwjYd1T2+QAE16H5U5qk5ThUVwy/7
-	 6bVP7A6p+ZO55pJNahymqTaIH3amXbE+CnLg6Jvpg3Pi4nYfIkMAOKi5rV4BA6MOrq
-	 AP4RFSRgRVIyQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
-	zhangxi <zhangxi@kylinos.cn>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	nathan@kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 7/7] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
-Date: Tue, 29 Apr 2025 19:53:38 -0400
-Message-Id: <20250429235339.538269-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235339.538269-1-sashal@kernel.org>
-References: <20250429235339.538269-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U8txRnaX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745973128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=etNSQQ76z7CTDHJDnWJPlCfhn7biVh4qOL98+BGzIC4=;
+	b=U8txRnaXKoQ84qrtvrDNXh0iD8EG1ZhUv1bXYpngV5TOK229ujS6dVkWaZF/0OuMieD0r6
+	br5iT00Jj7QOe+kRq/Ae97RwG9AlEEMRQnz8WJtgdgMf9nPpaKLtd6fJRMUvgDkC9bfL/N
+	DX34s3j6zNkQCxhETUP8PCf7YqXHb38=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-614-Anc-ejX6MQG7ujIJq2arsg-1; Tue,
+ 29 Apr 2025 20:32:06 -0400
+X-MC-Unique: Anc-ejX6MQG7ujIJq2arsg-1
+X-Mimecast-MFC-AGG-ID: Anc-ejX6MQG7ujIJq2arsg_1745973126
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C822419560AF
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 00:32:05 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6250619560A3;
+	Wed, 30 Apr 2025 00:32:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
+ upstream-mainline, 8bac8898)
+Date: Wed, 30 Apr 2025 00:32:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.180
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <38746.125042920320700111@us-mta-614.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 9zaKycEBEW6bByusV-ml4PYUFjtMjYPFuas0CbtIdkc_1745973126
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Haoran Jiang <jianghaoran@kylinos.cn>
+Hi, we tested your kernel and here are the results:
 
-[ Upstream commit 548762f05d19c5542db7590bcdfb9be1fb928376 ]
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-When building the latest samples/bpf on LoongArch Fedora
 
-     make M=samples/bpf
+Kernel information:
+    Commit message: Merge tag 'mmc-v6.15-rc1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/ulfh/mmc
 
-There are compilation errors as follows:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1793095406
 
-In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-In file included from ./include/uapi/linux/in.h:25:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-In file included from ./arch/loongarch/include/asm/processor.h:13:
-In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
-         ^~~~~~~~~~~~~~~
-1 error generated.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1793095406-x86_64-kernel-debug
 
-larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-and the header file location is specified at compile time.
 
-Test on LoongArch Fedora:
-https://github.com/fedora-remix-loongarch/releases-info
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-Signed-off-by: zhangxi <zhangxi@kylinos.cn>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20250425095042.838824-1-jianghaoran@kylinos.cn
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index e2c9ea65df9fb..9edf83eb2a99d 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -438,7 +438,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(LIBBPF_INCLUDE) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
--- 
-2.39.5
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
