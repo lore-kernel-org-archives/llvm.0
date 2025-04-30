@@ -1,166 +1,272 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx10.gouders.net (mx10.gouders.net [202.61.206.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0C834545;
-	Wed, 30 Apr 2025 22:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063FE1BD9F0
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 23:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.206.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746053806; cv=none; b=eY0f0Y/8IOiHEAcDe/gP/OaRyJmjjTgXUDvR7R6lJkoh9g8zzcr2hRPVP6rCsB8j/Yj1OR12YDVP0soDgAsPYLm01Uvw4u3VqKhhQuceJyAvYLjEAehsHgKB7ovz4E3dxhQgk6aVGdMyzcnAINr5ltsSk4K2CemeSSeB3HgJ4Ek=
+	t=1746054790; cv=none; b=qdsH5DQz9SRf0xMcaDRTcL5CTh/fllhD4DvDgve6oP4DylXWjm53WKJrszlvvX9SdDxiQ9nUFFvHeZEW4tnBWwaVHrZXENe8OYzcgQCppeIg1ZXDWMMJvu/DHX5Yre0O10viOJWKUx/sT5KaI5US/2GRO0WDBCNpJfCmbf+wPlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746053806; c=relaxed/simple;
-	bh=/xOwbU5+ed/8fEvKgMPKKxMfTBakbgn8YBkdvdq0rso=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=b8AoZ+6Or1m7ZAG5E3aRl/5fEcJzAeErDVFVQ4k8uHHAoKQ34RYX97ax5MzMOZhRet4lWUld5Eb1Xk60he/YMVe3o4qngTb6dAVnlRSK5eJeaaxkuBoqKDHGSZMpLBvGy+qhAYJm8ZdHRDNRuWq5RznAbhPYA69NkviwzZXzjtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=st1n5EdK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746054790; c=relaxed/simple;
+	bh=9VGV070cNaPJBF2sqEl8whPKwO0bmDWdIjTQ5V7Qn04=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=bHszJfi7R79kve6b0ukq01V0of5nNIFwD8UMvvcKUMG73Y+Npqcs3nEhK07tS6dT+fe1qEF9XFmL6j3A6qt7vJi1CybCdMopcvO/vaa3oZndsv4wD7V2WtiWjXbhxHsT0Paz8+zQOH/J/h9IvENssI5o30srHV0bSBjZ2m9MniU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net; spf=pass smtp.mailfrom=gouders.net; dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b=SoYyB5fG; arc=none smtp.client-ip=202.61.206.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gouders.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="st1n5EdK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F4B3C4CEE7;
-	Wed, 30 Apr 2025 22:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746053805;
-	bh=/xOwbU5+ed/8fEvKgMPKKxMfTBakbgn8YBkdvdq0rso=;
-	h=From:Date:Subject:To:Cc:From;
-	b=st1n5EdKTzbAv59cJyBOXTg0Q0iPY9+y3i960YA/MJWXOrQvrSaijF9qI6r1ilAbc
-	 wPiU0FIDcgJPYjthVJEl7s+D25rje3gX1QhcGxodsyyXkGido7CtD+PAZE+4F2odiy
-	 NUPg/VBA4JamlPJ7zc/oMKOW2m4ut1+COq7np61su6uEEe0bJJoxum53L3zbDJuLUv
-	 TxcVC0D5QvfPJ0Nj3AiF+RHnQmsWIAFwZcV59jVKJTbHXw2tNhyoItRBuQGY/o39U1
-	 VvBVr8en0slTY1A9hYAaD0ubV3pmR5ZTSaY4a92Pg3PjZALbb9ekAmjwiO1Df2Atdz
-	 zrNjTGlYgKEoQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 30 Apr 2025 15:56:34 -0700
-Subject: [PATCH] kbuild: Properly disable
- -Wunterminated-string-initialization for clang
+	dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b="SoYyB5fG"
+Received: from localhost (dynamic-176-001-007-189.176.1.pool.telefonica.de [176.1.7.189])
+	(authenticated bits=0)
+	by mx10.gouders.net (8.17.1.9/8.17.1.9) with ESMTPSA id 53UNBLBs026343
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Thu, 1 May 2025 01:11:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
+	t=1746054688; bh=9VGV070cNaPJBF2sqEl8whPKwO0bmDWdIjTQ5V7Qn04=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=SoYyB5fG4jLYA30dv7qYXYltZoDIkrJVI1nVQinO1y06pRMEsQTI5VMhLoiTyhQBX
+	 uiRXEGGiMhtE3XxLjClWPqfne9NhPfBJSUtRef9MFs7ckKt6EnGVT8JltLkM+JP8U1
+	 P0WLEriTSLbP3rRW28mBVmAVswXqLO3BiBerwZLo=
+From: Dirk Gouders <dirk@gouders.net>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim
+ <namhyung@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa
+ <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang
+ <kan.liang@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus
+ Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner
+ <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr
+ Bueso <dave@stgolabs.net>,
+        =?utf-8?Q?Andr=C3=A9?= Almeida
+ <andrealmeid@igalia.com>,
+        John
+ Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+        James
+ Clark <james.clark@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>, Leo
+ Yan <leo.yan@linux.dev>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Nathan Chancellor
+ <nathan@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt
+ <justinstitt@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Al Viro
+ <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
+        Ben Gainey
+ <ben.gainey@arm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Kajol
+ Jain <kjain@linux.ibm.com>,
+        Aditya Gupta <adityag@linux.ibm.com>,
+        Eder
+ Zulian <ezulian@redhat.com>,
+        Dapeng Mi <dapeng1.mi@linux.intel.com>,
+        Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Ravi Bangoria
+ <ravi.bangoria@amd.com>,
+        Howard Chu <howardchu95@gmail.com>,
+        Charlie
+ Jenkins <charlie@rivosinc.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jann Horn
+ <jannh@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd
+ Bergmann <arnd@arndb.de>, Yang Jihong <yangjihong@bytedance.com>,
+        Dmitry
+ Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+        Graham
+ Woodward <graham.woodward@arm.com>,
+        Ilkka Koskinen
+ <ilkka@os.amperecomputing.com>,
+        Anshuman Khandual
+ <anshuman.khandual@arm.com>,
+        Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
+        Tengda Wu <wutengda@huaweicloud.com>,
+        Gabriele Monaco <gmonaco@redhat.com>,
+        Chun-Tse Shao <ctshao@google.com>, Casey Chen <cachen@purestorage.com>,
+        "Dr. David Alan Gilbert"
+ <linux@treblig.org>,
+        Li Huafei <lihuafei1@huawei.com>,
+        "Steinar H.
+ Gunderson" <sesse@google.com>,
+        Levi Yun <yeoreum.yun@arm.com>, Weilin
+ Wang <weilin.wang@intel.com>,
+        Thomas Falcon <thomas.falcon@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Andrew Kreimer
+ <algonell@gmail.com>,
+        Krzysztof =?utf-8?Q?=C5=81opatowski?=
+ <krzysztof.m.lopatowski@gmail.com>,
+        Christophe Leroy
+ <christophe.leroy@csgroup.eu>,
+        Jean-Philippe Romain
+ <jean-philippe.romain@foss.st.com>,
+        Junhao He <hejunhao3@huawei.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Xu Yang
+ <xu.yang_2@nxp.com>,
+        Steve Clevenger
+ <scclevenger@os.amperecomputing.com>,
+        Zixian Cai <fzczx123@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Yujie Liu
+ <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 04/47] perf bench: Silence -Wshorten-64-to-32 warnings
+In-Reply-To: <CAP-5=fXJpD_f6dUqroVpqe-OX5kyOPc1zpbyOZoQtqvQWBGr=Q@mail.gmail.com>
+	(Ian Rogers's message of "Wed, 30 Apr 2025 15:22:41 -0700")
+References: <20250430175036.184610-1-irogers@google.com>
+	<20250430175036.184610-5-irogers@google.com>
+	<gho6wdh00l.fsf@gouders.net>
+	<CAP-5=fUdpa40MDNu0aDBO7o8H3YMe-cYsg-YfqUUZUY4M4XLeA@mail.gmail.com>
+	<ghecx9guoj.fsf@gouders.net>
+	<CAP-5=fXJpD_f6dUqroVpqe-OX5kyOPc1zpbyOZoQtqvQWBGr=Q@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Date: Thu, 01 May 2025 01:11:16 +0200
+Message-ID: <gha57xgs8b.fsf@gouders.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250430-unterminated-string-init-clang-v1-1-10eab729bf3d@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKGqEmgC/x2N0QqCQBQFf0XucxdWzWj9lehB9GgH6ip3twjEf
- 2/pcWCY2SXBiSR9tYvjw8TVCtSnSsbHYAuUU2FpQtOFcxv0bRn+og0Zk6bstEVpzDo+i67XOHd
- Ai3iJkBLZHDO//8Htfhw/acc3T3AAAAA=
-X-Change-ID: 20250430-unterminated-string-init-clang-89f5ee3e969e
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
- Masahiro Yamada <masahiroy@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5056; i=nathan@kernel.org;
- h=from:subject:message-id; bh=/xOwbU5+ed/8fEvKgMPKKxMfTBakbgn8YBkdvdq0rso=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlCq9YILWpoi2qNWzFTt33fjwP9LOdFSqPcj+9492Qn1
- 7WGlz/vdJSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJhFkz/NORe/JZe8Gji116
- 76vtA86UnV927cq7q00VWbEy+k4SCi4M/50LjOUOOWRn8LpEbr7pmTb1tLVRZ6LmibBE9ufF/dP
- 7WQE=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Clang and GCC have different behaviors around disabling warnings
-included in -Wall and -Wextra and the order in which flags are
-specified, which is exposed by clang's new support for
--Wunterminated-string-initialization.
+Ian Rogers <irogers@google.com> writes:
 
-  $ cat test.c
-  const char foo[3] = "FOO";
-  const char bar[3] __attribute__((__nonstring__)) = "BAR";
+> On Wed, Apr 30, 2025 at 3:19=E2=80=AFPM Dirk Gouders <dirk@gouders.net> w=
+rote:
+>>
+>> Ian Rogers <irogers@google.com> writes:
+>>
+>> > On Wed, Apr 30, 2025 at 1:23=E2=80=AFPM Dirk Gouders <dirk@gouders.net=
+> wrote:
+>> >>
+>> >> Hi Ian,
+>> >>
+>> >> considering so many eyes looking at this, I am probably wrong.
+>> >>
+>> >> So, this is only a "gauge reply" to see if it's worth I really read
+>> >> through all the commits ;-)
+>> >>
+>> >> Ian Rogers <irogers@google.com> writes:
+>> >>
+>> >> [SNIP]
+>> >>
+>> >> > diff --git a/tools/perf/bench/sched-pipe.c b/tools/perf/bench/sched=
+-pipe.c
+>> >> > index 70139036d68f..b847213fd616 100644
+>> >> > --- a/tools/perf/bench/sched-pipe.c
+>> >> > +++ b/tools/perf/bench/sched-pipe.c
+>> >> > @@ -102,7 +102,8 @@ static const char * const bench_sched_pipe_usag=
+e[] =3D {
+>> >> >  static int enter_cgroup(int nr)
+>> >> >  {
+>> >> >       char buf[32];
+>> >> > -     int fd, len, ret;
+>> >> > +     int fd;
+>> >> > +     ssize_t ret, len;
+>> >> >       int saved_errno;
+>> >> >       struct cgroup *cgrp;
+>> >> >       pid_t pid;
+>> >> > @@ -118,7 +119,7 @@ static int enter_cgroup(int nr)
+>> >> >       cgrp =3D cgrps[nr];
+>> >> >
+>> >> >       if (threaded)
+>> >> > -             pid =3D syscall(__NR_gettid);
+>> >> > +             pid =3D (pid_t)syscall(__NR_gettid);
+>> >> >       else
+>> >> >               pid =3D getpid();
+>> >> >
+>> >> > @@ -172,23 +173,25 @@ static void exit_cgroup(int nr)
+>> >> >
+>> >> >  static inline int read_pipe(struct thread_data *td)
+>> >> >  {
+>> >> > -     int ret, m;
+>> >> > +     ssize_t ret;
+>> >> > +     int m;
+>> >> >  retry:
+>> >> >       if (nonblocking) {
+>> >> >               ret =3D epoll_wait(td->epoll_fd, &td->epoll_ev, 1, -1=
+);
+>> >>
+>> >> The epoll_wait(), I know of, returns an int and not ssize_t.
+>> >>
+>> >> That shouldn't show up, because it doesn't cause real problems...
+>> >
+>> > So the function is read_pipe so it should probably return a ssize_t. I
+>> > stopped short of that but made ret a ssize_t to silence the truncation
+>> > warning on the read call. Assigning smaller to bigger is of course not
+>> > an issue for epoll_wait.
+>>
+>> Oh yes, I missed that ret is also used for the result of read().
+>>
+>> Some lines down there is also a combination of
+>>
+>> ret =3D enter_cgroup() (which is int)
+>>
+>> and
+>>
+>> ret =3D write()
+>>
+>>
+>> Just confusing but yes, because ret is also used for read() and write()
+>> in those cases it should be ssize_t.
+>>
+>> I'm sorry for the noise.
+>
+> No worries, I'm appreciative of the eyes. I suspect we'll only pick up
+> the first patches in this series to fix what is a bug on ARM. I think
+> I'm responsible for too much noise here ;-)
 
-  $ clang -fsyntax-only -Wextra test.c
-  test.c:1:21: warning: initializer-string for character array is too long, array size is 3 but initializer has size 4 (including the null terminating character); did you mean to use the 'nonstring' attribute? [-Wunterminated-string-initialization]
-      1 | const char foo[3] = "FOO";
-        |                     ^~~~~
-  $ clang -fsyntax-only -Wextra -Wno-unterminated-string-initialization test.c
-  $ clang -fsyntax-only -Wno-unterminated-string-initialization -Wextra test.c
-  test.c:1:21: warning: initializer-string for character array is too long, array size is 3 but initializer has size 4 (including the null terminating character); did you mean to use the 'nonstring' attribute? [-Wunterminated-string-initialization]
-      1 | const char foo[3] = "FOO";
-        |                     ^~~~~
+A final thought (in case this patch will also be picked):
 
-  $ gcc -fsyntax-only -Wextra test.c
-  test.c:1:21: warning: initializer-string for array of ‘char’ truncates NUL terminator but destination lacks ‘nonstring’ attribute (4 chars into 3 available) [-Wunterminated-string-initialization]
-      1 | const char foo[3] = "FOO";
-        |                     ^~~~~
-  $ gcc -fsyntax-only -Wextra -Wno-unterminated-string-initialization test.c
-  $ gcc -fsyntax-only -Wno-unterminated-string-initialization -Wextra test.c
+Why not, in case of read_pipe() and worker_thread() just cast
+read() and write() to int?  Both get counts of sizeof(int) and
+it would clearly show: we know the result fits into an int.
 
-Move -Wextra up right below -Wall in Makefile.extrawarn to ensure these
-flags are at the beginning of the warning options list. Move the couple
-of warning options that have been added to the main Makefile since
-commit e88ca24319e4 ("kbuild: consolidate warning flags in
-scripts/Makefile.extrawarn") to scripts/Makefile.extrawarn after -Wall /
--Wextra to ensure they get properly disabled for all compilers.
+In case of read_pipe() that would mean to just change one line in
+contrast to:
 
-Fixes: 9d7a0577c9db ("gcc-15: disable '-Wunterminated-string-initialization' entirely for now")
-Link: https://github.com/llvm/llvm-project/issues/10359
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I am sending this to Linus since he added
--Wno-unterminated-string-initialization so it seems reasonable to take a
-fix for it but if it should just go via Masahiro's kbuild tree, that's
-fine as well.
----
- Makefile                   | 7 -------
- scripts/Makefile.extrawarn | 9 ++++++++-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+@@ -172,23 +173,25 @@ static void exit_cgroup(int nr)
+=20
+ static inline int read_pipe(struct thread_data *td)
+ {
+-	int ret, m;
++	ssize_t ret;
++	int m;
+ retry:
+ 	if (nonblocking) {
+ 		ret =3D epoll_wait(td->epoll_fd, &td->epoll_ev, 1, -1);
+ 		if (ret < 0)
+-			return ret;
++			return (int)ret;
+ 	}
+ 	ret =3D read(td->pipe_read, &m, sizeof(int));
+ 	if (nonblocking && ret < 0 && errno =3D=3D EWOULDBLOCK)
+ 		goto retry;
+-	return ret;
++	return (int)ret;
 
-diff --git a/Makefile b/Makefile
-index 5aa9ee52a765..94be5dfb81fb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1052,13 +1052,6 @@ NOSTDINC_FLAGS += -nostdinc
- # perform bounds checking.
- KBUILD_CFLAGS += $(call cc-option, -fstrict-flex-arrays=3)
- 
--#Currently, disable -Wstringop-overflow for GCC 11, globally.
--KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-disable-warning, stringop-overflow)
--KBUILD_CFLAGS-$(CONFIG_CC_STRINGOP_OVERFLOW) += $(call cc-option, -Wstringop-overflow)
--
--#Currently, disable -Wunterminated-string-initialization as broken
--KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)
--
- # disable invalid "can't wrap" optimizations for signed / pointers
- KBUILD_CFLAGS	+= -fno-strict-overflow
- 
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 2d6e59561c9d..d88acdf40855 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -8,6 +8,7 @@
- 
- # Default set of warnings, always enabled
- KBUILD_CFLAGS += -Wall
-+KBUILD_CFLAGS += -Wextra
- KBUILD_CFLAGS += -Wundef
- KBUILD_CFLAGS += -Werror=implicit-function-declaration
- KBUILD_CFLAGS += -Werror=implicit-int
-@@ -56,6 +57,13 @@ KBUILD_CFLAGS += -Wno-pointer-sign
- # globally built with -Wcast-function-type.
- KBUILD_CFLAGS += $(call cc-option, -Wcast-function-type)
- 
-+# Currently, disable -Wstringop-overflow for GCC 11, globally.
-+KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-disable-warning, stringop-overflow)
-+KBUILD_CFLAGS-$(CONFIG_CC_STRINGOP_OVERFLOW) += $(call cc-option, -Wstringop-overflow)
-+
-+# Currently, disable -Wunterminated-string-initialization as broken
-+KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)
-+
- # The allocators already balk at large sizes, so silence the compiler
- # warnings for bounds checks involving those possible values. While
- # -Wno-alloc-size-larger-than would normally be used here, earlier versions
-@@ -82,7 +90,6 @@ KBUILD_CFLAGS += $(call cc-option,-Werror=designated-init)
- # Warn if there is an enum types mismatch
- KBUILD_CFLAGS += $(call cc-option,-Wenum-conversion)
- 
--KBUILD_CFLAGS += -Wextra
- KBUILD_CFLAGS += -Wunused
- 
- #
-
----
-base-commit: b4432656b36e5cc1d50a1f2dc15357543add530e
-change-id: 20250430-unterminated-string-init-clang-89f5ee3e969e
 
 Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
 
+Dirk
