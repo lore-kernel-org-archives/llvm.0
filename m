@@ -1,55 +1,55 @@
 Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3670829375A
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B094B29374D
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035517; cv=none; b=Cs64vFV30fvY+/XfVlHBqWoN9JHTDW88ZHNcXeyfiM3eiTgvkrdlWhCPyCUTsxHzS9EgX9qpOEHpDxtWVSbS9fkMl33WwqivcwhH1sIpFEEGWPgnv84q01zh2a6dyMG9GsnwGHaZbtOwMH2MbPoQtV7qEEwpLcMeSqtt6ABXZqg=
+	t=1746035518; cv=none; b=ATJToP/5yII1EOUGTNXfnLc6tOYKnHw18sw2PsoQ/kMWn5Qvcg9SsqNam4zL+EC+8FUrI0k4cXyVHFc9yL2EjAYgtv3CrP0v1WfgLk0qbvyO3uiafIq4+sOFP7cT4KCwL666WXydpvu6+KGeRFB3r/G0hbrhJG6JqnqgTJh5/2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035517; c=relaxed/simple;
-	bh=cft+CD1tTAR3nCyTEcBy0NRmOeO+kq0ax2JOpFaz2Gk=;
+	s=arc-20240116; t=1746035518; c=relaxed/simple;
+	bh=9l2dMOM7UimoBEXqUwjoRi9BOwrL79JE0K1FOZ1eTn0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=R/YilWXyq30/VbZ9r4t7Kj3FP/sbVBK14kGPcIiivdeD6i/M0utv7dyz0BJISrJ4dJ7NNUc40AHf51M4g8ljLmuN0zbok8f4jS1P0ujr5MLzc0jqNecqc2A9JrcdLfe3xbcW7K8hBvn+7sibtnJCyRmlPkM/JJCZEnbi3/h8jyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ao9l8LlI; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=C5MyoubHfpRACQftCMehhIa8iz8iwegsbX0YD+eFTK7jqz+3PteLN93TaSUkzBqr0i5fJHQTIQeQ9FjmXSFNHZVVm0etLhXsBiqoa62bPe0CqeJ3AoiQN9bE1hZFcq3eo8uNMj1ZI8kyGUh1i2pfHhXXuBQhJi7uUwaX4eV9EZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fDfES4OK; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ao9l8LlI"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b1415cba951so44923a12.2
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fDfES4OK"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b1d9f278aecso51129a12.2
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035514; x=1746640314; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035516; x=1746640316; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPxygk1eCWlSDDmALd71PUuLxxkGD6gPcWD34OB2qtw=;
-        b=ao9l8LlINvUMCpkyxSte7Dflsc37kZb9pKsqqpNbgdac8DqznzZNOMDRQR027oVDAx
-         FMXRSI/FUePp2rkOU1UUv9E3xWs5ef5MLFAWXakXOBYTbe1vrthm+sOTzn5I4YeCe1yA
-         pPoGPawIkUc4VF1CA+KrJR+vk2bPkbdoFebXUZeKD8U0r3+9RT2pcb/mTWZSnVQRhyBB
-         FOAidMCwiKMvpPZybbqb2qYK1UEL1yVMsv3hGuVg3BEk9bxTdqasbMuDbjkZySVdcjU6
-         6moycckQIRRjgWUsEFoqHO3zCJJEflr+O8uFDxZEJ8zS3+QtvK3yMB2Ak4O0SsgOnZJC
-         A3UQ==
+        bh=IyLcztOS6ND7VNkEzmFW3p+zRnL5x5BHhQ/NtraX+jQ=;
+        b=fDfES4OKsWnpRWLoMuslqbteLK8DqY7vad7F60O7Aei0LtE+5Aq0F+fW54z9tfsxml
+         4kuVzD99WGRBm6dVvMhIoVqploG0W2rW2gZOJmWtw5TOg+SgaYpMCNnC8nDxj1zUWybe
+         L++kkRBa4UAVZT8LnYsro5izzydk9/s4Sdbty7K9X2xTwwKMnbVjXvqD6TzU8pthdKoh
+         6jtXEKpudJ8p8H/gew3TQZRqX9HHV8oASpBlXJTFJpBB6tApNILps/rUAoA1RV2dQibY
+         a2m/wnVU/IvKcdAjlEKbXENHDz0A3NX7FIATYadcTvNkirTTUEc3xWAOPIvnYqiLvmz7
+         Z3SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035514; x=1746640314;
+        d=1e100.net; s=20230601; t=1746035516; x=1746640316;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPxygk1eCWlSDDmALd71PUuLxxkGD6gPcWD34OB2qtw=;
-        b=s24bxSrzkbyoaOgh1fdfuE17akoIohAgi9nmyZ5iuGs+PWttHasGzPyov8UyLZB3Wu
-         gUXZ6dOn583uylodPcUvebnVkcqzTGDgq2aaYjcSRiZxxwIpkXt3FZ160JDPd9XOsoAq
-         kGaCshQth4VWhTl+KkN0xJfQpFQ4RO5F7mCPIVHmS21jBfm3P9GBd8thfbh2+TpUN54g
-         B3ZF6lQMLf+zr7pKaM9D+wjPf5DT4b8pzbNR2iAt4nCT9Q5WEfGsvSoShj4EEaEf2zZa
-         WVEizhzy4Hgg3ZO91/tTfZrTFaywvPg5LokZ2YUG9CY2knunl40SNNpEqg+Xa9JNfzkh
-         xMzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWkcRgjjNEQfYKcpOnivRvWLe/6ihpAWfHy+fcUpdfw24In8U1YI8hMxDkUa4wryiK4P2Oo@lists.linux.dev
-X-Gm-Message-State: AOJu0YxGrYY6ctXdFMRY4xSshYTLRbHHWcvWeZZtZxTW+SiVhRyXRRm5
-	//pQVwTZPtA6TxGI9WHq6Wr2ztlE28zQ34M14KAWpO0exXT+NDRfxnyupKVe463mSapOgxLPh3I
-	5jRaZQQ==
-X-Google-Smtp-Source: AGHT+IGTE8aXwL7iH53hhEp548KgSppsS7AxEylvEKg8WPTsd2Igbq/S3Ml+IJCwmcbPtCPMYly3PIIzmj5C
-X-Received: from pgcv17.prod.google.com ([2002:a05:6a02:5311:b0:af0:e359:c50a])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:3943:b0:1f5:5aac:f345
- with SMTP id adf61e73a8af0-20a898108f6mr6683990637.36.1746035513728; Wed, 30
- Apr 2025 10:51:53 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:16 -0700
+        bh=IyLcztOS6ND7VNkEzmFW3p+zRnL5x5BHhQ/NtraX+jQ=;
+        b=oAXoRI85Ntg0yNgmuHaDfdUjMQFIg+C47hgZnP2HtYxQvmZpulnCVS8wYlCtlTd5ZM
+         2WBwUF7sXFff7hJ3vK09e4Kv9CstVC57ak8onXLhzPu/cWV+kPtMOjjJMD9z3R0UuMLk
+         jxxhtSwKHVGINYqLV2Y2xEDkR6d+o3hiqGKDfhA3Vj0DCWku5sxQ5RuFSVMSGVK/IOlN
+         lhDoXxTjtqYNtIlaXxqksHE0VlRlc9SmlRxRSNKGsHZbm90057ouY3OOqDjpR6TiLUJW
+         X463Wo3t0JJAuybhxfGmlaOJoKQoEOX5vipR9hB/3NNOm/rMSYUuEEo6X2/Ao8pE4qN2
+         NMQw==
+X-Forwarded-Encrypted: i=1; AJvYcCXGTRb5jN2DAPCl1BF4kxuyp1cyAtANaZZJVUYKbND+XOuhczciXLOQX2EM7Y7Ar3JLzkKC@lists.linux.dev
+X-Gm-Message-State: AOJu0YyjWbHv9eZI+FFmy1PA/fKE15j7REmSgti1tnKimI4OZTPksqpq
+	povF3yjcQB45ZktVkwcQVJ4u4bHK3XTfngF7/EXGbpVULPBOIRe7nJIPLXW/aMXX1ItUKu7ex9D
+	yLtZ8SQ==
+X-Google-Smtp-Source: AGHT+IG/bAJeuyUUIqze0k4zWjdHDhymwu1QrCFfccFUxqYIawKUgDvs/Fgjiy4LZ5RieT7vyM2xLY3z/Lt1
+X-Received: from pgam9.prod.google.com ([2002:a05:6a02:2b49:b0:af2:54b0:c8d5])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:33a3:b0:1f5:852a:dd81
+ with SMTP id adf61e73a8af0-20aa41848a9mr5512244637.34.1746035515853; Wed, 30
+ Apr 2025 10:51:55 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:17 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-29-irogers@google.com>
-Subject: [PATCH v2 28/47] perf buildid: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-30-irogers@google.com>
+Subject: [PATCH v2 29/47] perf lock: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,50 +116,131 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-buildid-cache.c | 2 +-
- tools/perf/builtin-buildid-list.c  | 2 +-
- tools/perf/util/build-id.c         | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/builtin-lock.c             | 16 ++++++++--------
+ tools/perf/util/bpf_lock_contention.c | 17 +++++++++--------
+ 2 files changed, 17 insertions(+), 16 deletions(-)
 
-diff --git a/tools/perf/builtin-buildid-cache.c b/tools/perf/builtin-buildid-cache.c
-index b0511d16aeb6..7f7ebd625ed6 100644
---- a/tools/perf/builtin-buildid-cache.c
-+++ b/tools/perf/builtin-buildid-cache.c
-@@ -450,7 +450,7 @@ int cmd_buildid_cache(int argc, const char **argv)
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 05e7bc30488a..0f7e627394aa 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -569,7 +569,7 @@ static int report_lock_acquire_event(struct evsel *evsel,
+ 	struct lock_seq_stat *seq;
+ 	const char *name = evsel__strval(evsel, sample, "name");
+ 	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
+-	int flag = evsel__intval(evsel, sample, "flags");
++	int flag = (int)evsel__intval(evsel, sample, "flags");
+ 	u64 key;
+ 	int ret;
  
- 		session = perf_session__new(&data, NULL);
- 		if (IS_ERR(session))
--			return PTR_ERR(session);
-+			return (int)PTR_ERR(session);
- 	}
+@@ -837,7 +837,7 @@ static int get_symbol_name_offset(struct map *map, struct symbol *sym, u64 ip,
+ 	if (offset)
+ 		return scnprintf(buf, size, "%s+%#lx", sym->name, offset);
+ 	else
+-		return strlcpy(buf, sym->name, size);
++		return (int)strlcpy(buf, sym->name, size);
+ }
+ static int lock_contention_caller(struct evsel *evsel, struct perf_sample *sample,
+ 				  char *buf, int size)
+@@ -968,7 +968,7 @@ static int report_lock_contention_begin_event(struct evsel *evsel,
+ 	struct thread_stat *ts;
+ 	struct lock_seq_stat *seq;
+ 	u64 addr = evsel__intval(evsel, sample, "lock_addr");
+-	unsigned int flags = evsel__intval(evsel, sample, "flags");
++	unsigned int flags = (unsigned int)evsel__intval(evsel, sample, "flags");
+ 	u64 key;
+ 	int i, ret;
+ 	static bool kmap_loaded;
+@@ -1303,7 +1303,7 @@ static void print_result(void)
+ 				struct thread *t;
  
- 	if (symbol__init(session ? &session->header.env : NULL) < 0)
-diff --git a/tools/perf/builtin-buildid-list.c b/tools/perf/builtin-buildid-list.c
-index 52dfacaff8e3..ef84d1adb98f 100644
---- a/tools/perf/builtin-buildid-list.c
-+++ b/tools/perf/builtin-buildid-list.c
-@@ -109,7 +109,7 @@ static int perf_session__list_build_ids(bool force, bool with_hits)
+ 				/* st->addr contains tid of thread */
+-				t = perf_session__findnew(session, st->addr);
++				t = perf_session__findnew(session, (int)st->addr);
+ 				name = thread__comm_str(t);
+ 			}
  
- 	session = perf_session__new(&data, &build_id__mark_dso_hit_ops);
- 	if (IS_ERR(session))
+@@ -1638,7 +1638,7 @@ static void print_lock_stat_stdio(struct lock_contention *con, struct lock_stat
+ 		fprintf(lock_output, "  %10s   %s\n", get_type_flags_name(st->flags), st->name);
+ 		break;
+ 	case LOCK_AGGR_TASK:
+-		pid = st->addr;
++		pid = (int)st->addr;
+ 		t = perf_session__findnew(session, pid);
+ 		fprintf(lock_output, "  %10d   %s\n",
+ 			pid, pid == -1 ? "Unknown" : thread__comm_str(t));
+@@ -1691,7 +1691,7 @@ static void print_lock_stat_csv(struct lock_contention *con, struct lock_stat *s
+ 			fprintf(lock_output, "\n");
+ 		break;
+ 	case LOCK_AGGR_TASK:
+-		pid = st->addr;
++		pid = (int)st->addr;
+ 		t = perf_session__findnew(session, pid);
+ 		fprintf(lock_output, "%d%s %s\n", pid, sep,
+ 			pid == -1 ? "Unknown" : thread__comm_str(t));
+@@ -1870,7 +1870,7 @@ static int __cmd_report(bool display_info)
+ 	session = perf_session__new(&data, &eops);
+ 	if (IS_ERR(session)) {
+ 		pr_err("Initializing perf session failed\n");
 -		return PTR_ERR(session);
 +		return (int)PTR_ERR(session);
- 
- 	/*
- 	 * We take all buildids when the file contains AUX area tracing data
-diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-index e763e8d99a43..6a3ae17b1ccf 100644
---- a/tools/perf/util/build-id.c
-+++ b/tools/perf/util/build-id.c
-@@ -81,7 +81,7 @@ int build_id__sprintf(const struct build_id *build_id, char *bf)
- 		bid += 2;
  	}
  
--	return (bid - bf) + 1;
-+	return (int)(bid - bf) + 1;
- }
+ 	symbol_conf.allow_aliases = true;
+@@ -2023,7 +2023,7 @@ static int __cmd_contention(int argc, const char **argv)
+ 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
+ 	if (IS_ERR(session)) {
+ 		pr_err("Initializing perf session failed\n");
+-		err = PTR_ERR(session);
++		err = (int)PTR_ERR(session);
+ 		session = NULL;
+ 		goto out_delete;
+ 	}
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index 5af8f6d1bc95..5a7a820000d4 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -54,7 +54,7 @@ static void check_slab_cache_iter(struct lock_contention *con)
  
- int sysfs__sprintf_build_id(const char *root_dir, char *sbuild_id)
+ 	has_slab_iter = true;
+ 
+-	bpf_map__set_max_entries(skel->maps.slab_caches, con->map_nr_entries);
++	bpf_map__set_max_entries(skel->maps.slab_caches, (__u32)con->map_nr_entries);
+ out:
+ 	btf__free(btf);
+ }
+@@ -123,23 +123,24 @@ int lock_contention_prepare(struct lock_contention *con)
+ 	}
+ 
+ 	bpf_map__set_value_size(skel->maps.stacks, con->max_stack * sizeof(u64));
+-	bpf_map__set_max_entries(skel->maps.lock_stat, con->map_nr_entries);
+-	bpf_map__set_max_entries(skel->maps.tstamp, con->map_nr_entries);
++	bpf_map__set_max_entries(skel->maps.lock_stat, (__u32)con->map_nr_entries);
++	bpf_map__set_max_entries(skel->maps.tstamp, (__u32)con->map_nr_entries);
+ 
+ 	if (con->aggr_mode == LOCK_AGGR_TASK)
+-		bpf_map__set_max_entries(skel->maps.task_data, con->map_nr_entries);
++		bpf_map__set_max_entries(skel->maps.task_data, (__u32)con->map_nr_entries);
+ 	else
+ 		bpf_map__set_max_entries(skel->maps.task_data, 1);
+ 
+ 	if (con->save_callstack) {
+-		bpf_map__set_max_entries(skel->maps.stacks, con->map_nr_entries);
++		bpf_map__set_max_entries(skel->maps.stacks, (__u32)con->map_nr_entries);
+ 		if (con->owner) {
+ 			bpf_map__set_value_size(skel->maps.stack_buf, con->max_stack * sizeof(u64));
+ 			bpf_map__set_key_size(skel->maps.owner_stacks,
+ 						con->max_stack * sizeof(u64));
+-			bpf_map__set_max_entries(skel->maps.owner_stacks, con->map_nr_entries);
+-			bpf_map__set_max_entries(skel->maps.owner_data, con->map_nr_entries);
+-			bpf_map__set_max_entries(skel->maps.owner_stat, con->map_nr_entries);
++			bpf_map__set_max_entries(skel->maps.owner_stacks,
++						 (__u32)con->map_nr_entries);
++			bpf_map__set_max_entries(skel->maps.owner_data, (__u32)con->map_nr_entries);
++			bpf_map__set_max_entries(skel->maps.owner_stat, (__u32)con->map_nr_entries);
+ 			skel->rodata->max_stack = con->max_stack;
+ 		}
+ 	} else {
 -- 
 2.49.0.906.g1f30a19c02-goog
 
