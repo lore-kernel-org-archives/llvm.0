@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46EF2989AD
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF8A299507
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035542; cv=none; b=bxPVdluSKuGE08oSg8b0MovLngXyGKLpgp1rzBGjvIJEUSSELx/6zW2Lbd0fdytCI74/FPHy9Vxya9CoV7+xgyrCqA3d6n7my2DzLrxWeEUobEchX38gqlKrgB4fan4fKmOtnmV8zlIxiVoQyncLHMwbbkPcriyFv11MS0R7W/I=
+	t=1746035544; cv=none; b=mtKNvLKY61spGehrwevrSAO/BifhR8iOatau4VrVJXF+L/JFRo4eFJDErZgorknSCa3mFMgDAowQegs20L+Nq52NgbsCWkJJ82FPlZLZOIhSRngUGVsubsXAQZzcGGVO79KHVOgKBH6GARs8viOp56R3TsB2LAOtQnWrmzhZu3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035542; c=relaxed/simple;
-	bh=HPHxz81OxLaecpnlL9lqndi4Kc/aGSQDxqv1zSPPuXY=;
+	s=arc-20240116; t=1746035544; c=relaxed/simple;
+	bh=8xk6c6XVrGf8DBibt8WgV9cuw6KjrbvUvvlMxNIw7J4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=AWH2sRtyIWqQ2JFI1/Or9oQiX6ekv213vYebZxM62oEVxr3d9R5oxtV7joil0KXi3JpiuOS8/ZVylCypLr35HNtRlXW93jM/mlAzJ+YQahCo+1wB38jO7jbeO2lsoUu0biCDMFqr3N+VFuR55zOSHzoqZJc7Wqnu0YMBGMBM/ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dW97LlzO; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=IS4cUQzHgJolAWOO74imqzzoiN6i33vx6TtVSPooqNSYwfRYVYx+T/Vk4h5m8qVZyLiyuxcihZlWDYV25qzgiZUuny8njN24k8kksQdJPfT5YL7xtKTgxCdrwCohhEQzxXRGV89pcvExKh6Caw1IhHREo8i5s2nK5qOrwAzGGRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mqkogQcs; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dW97LlzO"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3011bee1751so130329a91.1
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mqkogQcs"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-309c6e43a9aso224886a91.2
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035540; x=1746640340; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035542; x=1746640342; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qemr2dcVwpSLldCyiGlwsuB9xh9m4dXk1i2vOyXbcwI=;
-        b=dW97LlzO0msvRVm6dEuUNl6MPhZVCnLrCBnJ1dwF+eCZrRNXiMDJ6egPqAujxvBxRR
-         xC5GUiMkwcK9SCjVn+6UuyE4fJQFg1g/8BMxTe4oAeFvoZtV4wpxYHOVldJ7yqZuLd6W
-         lExdwum7r0MTtp8yZICVZzCdTNOTH4O1JsfwzF6VgHUpTaZzLMTVmrlM7Z21IiKwCeuw
-         plk4mUsf+7lYxgAmVv8GfqdDDS/ucKwqp32tgGL8TMtT7aDNRCIjvJLfDvmdeC5J+0Rf
-         dWQmwDf2E90ad4/bOPljvNqOsBNZCrpKUfsdQNuyx8L2ht8RSFzzUSn6leQ6KNZoYf7d
-         thww==
+        bh=BfYoNaqxvhQ9eTV8t6yeDJ1HU1t4q/f6AZhR7HYRkks=;
+        b=mqkogQcsEW/fG+BiLmOgbDnOA/10MgA8T6dBaWXKjgor1vslarg9HQNCGjkScxemRR
+         GtK2lMgfcnPhMARCoTxYfilyJh2Aaw7UWZd87zH/JWQtOiZOyVjfJ0aPDiXvN/OAUzLz
+         tTqeolAvvxVkMDc83Qph1BvMxpE9WJXy5NvCs+3AECmVQECMo4G4aXhCNKAS0EuP0Um/
+         uOt3JWRYyc6rwMzFi5lzKA2yBAxV0bIJdEJ8tdK5rGiv/Ty2U8ey+Q6f6BFCqV0XfzSz
+         L8Ohxva2JVankhLexuK7X8OOb2U4nT+rQC7ICkfO21H4+rk8jMkYOLXf/gZ83XuQs3DA
+         i+ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035540; x=1746640340;
+        d=1e100.net; s=20230601; t=1746035542; x=1746640342;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qemr2dcVwpSLldCyiGlwsuB9xh9m4dXk1i2vOyXbcwI=;
-        b=btb9z0kaUfKQJ4vHu+U5sFoLI0TZIrkRW8L3lsDnfEwGZZXIAWbd1inxGnYJx+AxqJ
-         A9LKIYvAH7RY+Jy9MYEuSbQH9nFGv1UsxRbyLMS/fDUqiluzCMK0Nwf2ERehG9IurYtU
-         W7uhAw1KBMkRfHqghCZMWcNZKw5QLN4/b+XP+K4u7oQ2O5bmgHWeOK1qkjyF5I89/JEm
-         NjlouGkL0W+zfSQh/8Pg1HOK3l72KyIWOeZKuwnxLEHUzjWmSFvtFV28+c85pSGtQKaK
-         LH/BNjhvYLffYAIkSIEyIpv1oqTRE4ZYu5i+4QOZwb5rkllbvEKyRYhofM5ydMUlOuBT
-         UvTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1BzwIlb8Ch+Uof3n0bE4dO5C5QaUOpU2gBd9RFlSVnlVUxuHh00KocPzc9KHvFFl9Gp8m@lists.linux.dev
-X-Gm-Message-State: AOJu0YwFOasVgrSk9t3zJ0oB5gkwAMViPjOh8YYApvfRHojZA4PrRYFP
-	S7pvbbc4MOfNURsEFuJbmxgnY0LIGospEAZiFZfOT1LV+3u76tT2l5GZ9/bz0a+mdYKEDJo52rk
-	L442YlA==
-X-Google-Smtp-Source: AGHT+IGiwVp5/ypPQD3uAZdm6z54NsO/3JK1b7BY6DDnJgXJ1mAvzNplqKCb9spucs6B1RP5GSDw5x90hAhQ
-X-Received: from pjbsl12.prod.google.com ([2002:a17:90b:2e0c:b0:2fc:1158:9fe5])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2f05:b0:308:2b5b:d67f
- with SMTP id 98e67ed59e1d1-30a343e8575mr5995053a91.9.1746035539948; Wed, 30
- Apr 2025 10:52:19 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:29 -0700
+        bh=BfYoNaqxvhQ9eTV8t6yeDJ1HU1t4q/f6AZhR7HYRkks=;
+        b=QJOrJpeV/cRFMpJkzpd7rOCO/04/U4x8OPdNAh8wOimUjrvq7D64YcMPoaVs/S4Szs
+         O4MwLOZt/uFwp1Y3AAo/nQF+Ix9ug83aTJwaJ26ynh2O2f28VdTpbewehmk9dC9w9F/t
+         /z2QTJb550qvQeD1MyOhrW2lpPueGbVNvVz3SfhizXzt+S4Uup3FeEbiW8SCOpxcs6h6
+         CdeKo+yx87aIo6Xok65wlbwv4gpIWJ1vaObN97JR/IFJK9KbNlB9EehPKhLPJcWFU5HX
+         IKGfFBHhKWiIwCAi+WStmO4SCnerW3X784i5QSeooKnFxjQZhyWyFZAh4kcUNNrJJoHe
+         +rIA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMmTue5bF9AIN+H6otFL7BNh7qoazRf/qmG22pETTfAZfowwWHERj8JzMnixfwT3uIcmkQ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz8Zw9bEKZJr62FtSlmj8T+KX3apwf+6Bi27IPjiP7+ZzBtV3q0
+	hfvZiaNIPajmr8tUG+eVBQMcTlxF3h8C30r3Zh8R1s+mKCYhdpqz+Z3nofUGQ8oWZy/9cj2TGSP
+	BvQOT3A==
+X-Google-Smtp-Source: AGHT+IGE6ShT5AKZEjfO76Ud9wq255vjvupnoQSaA/IRCz6DrEQ38RNaMX6Vlst1q29yf69v7lZZ4wLh25wT
+X-Received: from pjbpl2.prod.google.com ([2002:a17:90b:2682:b0:2fc:d77:541])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4cce:b0:2ee:df70:1ff3
+ with SMTP id 98e67ed59e1d1-30a342f5554mr6408540a91.0.1746035542002; Wed, 30
+ Apr 2025 10:52:22 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:30 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-42-irogers@google.com>
-Subject: [PATCH v2 41/47] perf diff: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-43-irogers@google.com>
+Subject: [PATCH v2 42/47] perf daemon: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,53 +116,32 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-diff.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/perf/builtin-daemon.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
-index ae490d58af92..9c21ea8f242a 100644
---- a/tools/perf/builtin-diff.c
-+++ b/tools/perf/builtin-diff.c
-@@ -243,7 +243,7 @@ static int setup_compute(const struct option *opt, const char *str,
+diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
+index f0568431fbd5..640ba8191083 100644
+--- a/tools/perf/builtin-daemon.c
++++ b/tools/perf/builtin-daemon.c
+@@ -514,7 +514,8 @@ static int daemon_session__control(struct daemon_session *session,
+ 	struct pollfd pollfd = { .events = POLLIN, };
+ 	char control_path[PATH_MAX];
+ 	char ack_path[PATH_MAX];
+-	int control, ack = -1, len;
++	int control, ack = -1;
++	size_t len;
+ 	char buf[20];
+ 	int ret = -1;
+ 	ssize_t err;
+@@ -543,7 +544,7 @@ static int daemon_session__control(struct daemon_session *session,
+ 	len = strlen(msg);
  
- 	option = strchr(str, ':');
- 	if (option) {
--		unsigned len = option++ - str;
-+		size_t len = option++ - str;
- 
- 		/*
- 		 * The str data are not writeable, so we need
-@@ -1148,7 +1148,7 @@ static int check_file_brstack(void)
- 		d->session = perf_session__new(&d->data, &pdiff.tool);
- 		if (IS_ERR(d->session)) {
- 			pr_err("Failed to open %s\n", d->data.path);
--			return PTR_ERR(d->session);
-+			return (int)PTR_ERR(d->session);
- 		}
- 
- 		has_br_stack = perf_header__has_feat(&d->session->header,
-@@ -1179,7 +1179,7 @@ static int __cmd_diff(void)
- 	data__for_each_file(i, d) {
- 		d->session = perf_session__new(&d->data, &pdiff.tool);
- 		if (IS_ERR(d->session)) {
--			ret = PTR_ERR(d->session);
-+			ret = (int)PTR_ERR(d->session);
- 			pr_err("Failed to open %s\n", d->data.path);
- 			goto out_delete;
- 		}
-@@ -1492,10 +1492,10 @@ static int print_cycles_spark(char *bf, int size, unsigned long *svals, u64 n)
- 
- 	if (n > NUM_SPARKS)
- 		n = NUM_SPARKS;
--	if (all_zero(svals, n))
-+	if (all_zero(svals, (int)n))
- 		return 0;
- 
--	printed = print_spark(bf, size, svals, n);
-+	printed = print_spark(bf, size, svals, (int)n);
- 	printed += scnprintf(bf + printed, size - printed, " ");
- 	return printed;
- }
+ 	err = writen(control, msg, len);
+-	if (err != len) {
++	if (err != (ssize_t)len) {
+ 		pr_err("failed: write to control pipe: %d (%s)\n",
+ 		       errno, control_path);
+ 		goto out;
 -- 
 2.49.0.906.g1f30a19c02-goog
 
