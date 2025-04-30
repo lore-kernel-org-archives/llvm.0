@@ -1,161 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E1A1E51E0;
-	Wed, 30 Apr 2025 06:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E2F1DD9AC
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 07:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745993902; cv=none; b=CjbKWkHddQfnwVxVctuRHLxonfXCY3+B/riWwTMQJdDioTNVLv31B7InYk8FVIxgZnQxDJDxRgwzvZUey9z2aV+ImHl1ii/z8etfCcNmJ7Z35TL4nWOxYDYtIS0/W+lo1xlypHjud4aojvzticN+BO5Vw6/mUBCa1gALg2Cslu0=
+	t=1745998792; cv=none; b=bO5sQJMfwVp2wGZcWz18rODk+Kwx61aiTPx6cetBg9kEfqCvByMM/iAKqhtUH+duLlN9QzirD1fVPwaAkamesl55VJADHDOD66kZ12qJGPwJT12gSqz72gD9y4gRYIhWu9rKfdVCt5eTYMmrniA47cYU6+ftl8eIOqrG1buGSY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745993902; c=relaxed/simple;
-	bh=PYkZX74d10lvPGrseB5FE9s3+bTtnF0aDOcSfLFSv0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cqzxitWOl9es+vaXnG9OYc4fozN75+YBqLCuy+/OP0/LpB4qqzsv+saevEOQqA+T+r3hmCdvyWc/Y5UqSm45+X52LQuwpm6i+7Y3t13qS9brRG2juwHvXtnvOZvfpzLimXajLNXuG8+RZ1cQqJohYn4fOkc1uDIU9zSTrgBt04k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e9g9fz2r; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745998792; c=relaxed/simple;
+	bh=RYF5rT5SGXiuiOMM3oZfVuad7Ga744mi0LsZrurPLlo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IZgniNDoIe2UAqKkT/eRDTKxysWlbbzqy/DiqvBjJlhZyn9oogCOK6SXmmDSaXuD0NxovixtoMDdVE957CHKesL1gbrjkE9UX3WGPljFCac4pCR/ES4/TL77QmuRKn+gp4UZu33c3EdXZHDe/oKqC/UsnT+MUtBBowWr4S3WXPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SBDSP98y; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e9g9fz2r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745993901; x=1777529901;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PYkZX74d10lvPGrseB5FE9s3+bTtnF0aDOcSfLFSv0w=;
-  b=e9g9fz2rvJJQVwFQma6mHkmrz1PnzcuTnS6nDoFp1y/88OjIU5+9f7hR
-   tmAllqCy6i9SHpyWP/68kE1fZwKfkxpGURLaOckwPL/RiqgieiyxiO5Xj
-   Bvu9hdgP85uJytHPdguyWGBZ/3bkDEf/Ms2MYv38AmaNZstgk6vilisVu
-   2jL6FOUWUrK0ML8IjhEq558T0cU8Qw6ztL1nBFSQo6/nwp5j1scIEh6qa
-   okdS04iugaEUS10C7aW2BQfao00It+GYazsXrMbrpyLW2jdGliW5sT90J
-   TTgPEVLvcgKqqKMSdSqIi3IMSzf1fK8yTo1owqFqD3C+paUEWS2PgjOZK
-   A==;
-X-CSE-ConnectionGUID: y8U6PWxdRlmHDBXXnMwl4g==
-X-CSE-MsgGUID: SveYyCMNRGK04NrV0jcX7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="47521361"
-X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
-   d="scan'208";a="47521361"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 23:18:20 -0700
-X-CSE-ConnectionGUID: JZDNPxd7Si6aYG0rC+r71w==
-X-CSE-MsgGUID: v1JASB2zTtuddJoWKG34Iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
-   d="scan'208";a="133929263"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Apr 2025 23:18:12 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uA0lm-0003Dv-0B;
-	Wed, 30 Apr 2025 06:18:10 +0000
-Date: Wed, 30 Apr 2025 14:17:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ryan.roberts@arm.com, david@redhat.com, willy@infradead.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	catalin.marinas@arm.com, will@kernel.org, Liam.Howlett@oracle.com,
-	lorenzo.stoakes@oracle.com, vbabka@suse.cz, jannh@google.com,
-	anshuman.khandual@arm.com, peterx@redhat.com, joey.gouly@arm.com,
-	ioworker0@gmail.com, baohua@kernel.org, kevin.brodsky@arm.com,
-	quic_zhenhuah@quicinc.com, christophe.leroy@csgroup.eu,
-	yangyicong@hisilicon.com, linux-arm-kernel@lists.infradead.org,
-	namit@vmware.com, hughd@google.com, yang@os.amperecomputing.com,
-	ziy@nvidia.com, Dev Jain <dev.jain@arm.com>
-Subject: Re: [PATCH v2 6/7] mm: Batch around can_change_pte_writable()
-Message-ID: <202504301306.AU2G1yvg-lkp@intel.com>
-References: <20250429052336.18912-7-dev.jain@arm.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SBDSP98y"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so42997525e9.0
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 00:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1745998788; x=1746603588; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5U9OMJXkSPz8hKC+syIhe+oLvZq6aylg9p+TfyNHAYs=;
+        b=SBDSP98y7wPtreg0PrPo0l7MO074IspczXlLPkcB+7cmrxAn3WVFzl4Zpljg8sJY//
+         E1ycbss39GrCjMgvB5u8EzTUCju7Dp71XBPxluCvnJhPf9232J2c55ZJmSGjEHW/4NDJ
+         XswhTERZKbPq0eYSL1wXG3ucH8SZL8VTj00uGRIAnnnYwKThrUBVz0A7eT3XKhvis6pT
+         acVymTsKgDYrHAVnF7Lnt1u0YqB4lxlx0tx7ld4r+OPG5LvV8EIXQXEnehA1kTFlylF9
+         j3EbaD5r6N+WU+qRRYjxncv3mFlF9H4QTXex1dXNRqs867aWDzY/kC1kGsSjeoKoLruX
+         76ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745998788; x=1746603588;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5U9OMJXkSPz8hKC+syIhe+oLvZq6aylg9p+TfyNHAYs=;
+        b=boANxXw/TLwXSrRFlQ25krfsWlGHZSJj8ihFHVbP9b8sgfNzBZfB3hjxsGgzHTmpdK
+         ftSLHHqPMap+ZVLfarejTB3KcLlJ3azAlMhOBdoxNAfencf/5s86OA39te4ejCUi/wX9
+         viaS2PBhhTD+18xxMaSOm19aybNcGdGQnxiq1vJ8cldM3grO0uemMG0roEbqSRJCxurF
+         Pp+B1oB2CtvyJNfPyjnWf+m0h9fUAsZGDW4UcRaQ3LYgUIeE6T5lzD30cnBMLOkMaf87
+         zARwA/UUzr+KFDRjvJ5r7pG7x26gnTahxSLiYRzpa+3Z1ERFGiqz188Jzh4M9fXkHPqe
+         iTnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqo6yU3YfVUS1T9EKIGCJ2idhp6TSyPYxGkdGhHkqaxoOA22bqwk8k0/e2Iexgku3gtxto@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx13CR/od5OUaLHOC+P4J6YCLBg9l9zio3OK1BTVilu4Fmp02oI
+	JUzkJWVXF6FJ7otYvgm4CH2kZgGlkJgK4umHskKYbCb9eDU+lgX3DjU/6IUNGvI=
+X-Gm-Gg: ASbGnct3zN/p9w6sBQp+q8F5e5YCB6pplXRx4xtH9FPYPSNJAxYUKYKzaOH2KJaoEsE
+	dSKoBIh4xgHVnJt5Ivx6lQ4sledu061pzFgoIYccmtzGRamWxHfuIz7FjdrSqe/8+2954oS2VY/
+	Mj6kgE/MRy5JrytHk9ohkdT+Dj7a8kgSwA9kwvYXRmJNeo3B+O8dNtHe9uXYNgX+GkvxYj0t0C6
+	Y1CQu2bs0HM1Y1sPcIWHjoIDOHDYRFwi996kb0RKZG2RAPIClYG4iOpPMDy+E5kHFqvnGuSSKCQ
+	ztAvajiCUJbAW79xUhrmY979Qi3NBvWEOMXfccipf8vNbT9xaMY8l3FsMG4FrrmdlPSsFsllRdy
+	lgCKp4PM=
+X-Google-Smtp-Source: AGHT+IE8jp0ZjUVoh7f9msS1Shj+zFFjpix/VROzqHbjQs2YUPeE4capqjHRAxR03y+nyYOapSyDRw==
+X-Received: by 2002:a05:600c:500a:b0:43b:d0fe:b8ac with SMTP id 5b1f17b1804b1-441b2695e64mr12959955e9.30.1745998788203;
+        Wed, 30 Apr 2025 00:39:48 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13c6:eb01:e359:8d71:4b9a:921f? ([2001:a61:13c6:eb01:e359:8d71:4b9a:921f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b2ba4b10sm14125645e9.16.2025.04.30.00.39.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Apr 2025 00:39:47 -0700 (PDT)
+Message-ID: <41bc286e-6e6b-4ae8-ad6a-3bdf56cd172b@suse.com>
+Date: Wed, 30 Apr 2025 09:39:47 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250429052336.18912-7-dev.jain@arm.com>
-
-Hi Dev,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on arm64/for-next/core linus/master v6.15-rc4 next-20250429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dev-Jain/mm-Refactor-code-in-mprotect/20250429-133151
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250429052336.18912-7-dev.jain%40arm.com
-patch subject: [PATCH v2 6/7] mm: Batch around can_change_pte_writable()
-config: arm64-randconfig-002-20250430 (https://download.01.org/0day-ci/archive/20250430/202504301306.AU2G1yvg-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250430/202504301306.AU2G1yvg-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504301306.AU2G1yvg-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/mprotect.c:46:15: warning: unused variable 'page' [-Wunused-variable]
-      46 |         struct page *page;
-         |                      ^~~~
-   mm/mprotect.c:226:51: error: use of undeclared identifier 'folio'
-     226 |                             can_change_ptes_writable(vma, addr, ptent, folio, 1))
-         |                                                                        ^
-   1 warning and 1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: dc395x: Remove leftover if statement in reselect()
+To: Finn Thain <fthain@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Ali Akcaagac <aliakc@web.de>, Jamie Lenehan <lenehan@twibble.org>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Colin Ian King <colin.i.king@gmail.com>, linux-scsi@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20250429-scsi-dc395x-fix-uninit-var-v1-1-25215d481020@kernel.org>
+ <91ba6cf2-ca95-1ebe-837f-ecc89f547ea2@linux-m68k.org>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <91ba6cf2-ca95-1ebe-837f-ecc89f547ea2@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +/page +46 mm/mprotect.c
 
-36f881883c5794 Kirill A. Shutemov 2015-06-24  42  
-695112a1385b39 Dev Jain           2025-04-29  43  bool can_change_ptes_writable(struct vm_area_struct *vma, unsigned long addr,
-695112a1385b39 Dev Jain           2025-04-29  44  			      pte_t pte, struct folio *folio, unsigned int nr)
-64fe24a3e05e5f David Hildenbrand  2022-06-14  45  {
-64fe24a3e05e5f David Hildenbrand  2022-06-14 @46  	struct page *page;
-64fe24a3e05e5f David Hildenbrand  2022-06-14  47  
-7ea7e333842ed5 David Hildenbrand  2022-11-08  48  	if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE)))
-7ea7e333842ed5 David Hildenbrand  2022-11-08  49  		return false;
-64fe24a3e05e5f David Hildenbrand  2022-06-14  50  
-7ea7e333842ed5 David Hildenbrand  2022-11-08  51  	/* Don't touch entries that are not even readable. */
-d84887739d5c98 Nadav Amit         2022-11-08  52  	if (pte_protnone(pte))
-64fe24a3e05e5f David Hildenbrand  2022-06-14  53  		return false;
-64fe24a3e05e5f David Hildenbrand  2022-06-14  54  
-64fe24a3e05e5f David Hildenbrand  2022-06-14  55  	/* Do we need write faults for softdirty tracking? */
-f38ee285191813 Barry Song         2024-06-08  56  	if (pte_needs_soft_dirty_wp(vma, pte))
-64fe24a3e05e5f David Hildenbrand  2022-06-14  57  		return false;
-64fe24a3e05e5f David Hildenbrand  2022-06-14  58  
-64fe24a3e05e5f David Hildenbrand  2022-06-14  59  	/* Do we need write faults for uffd-wp tracking? */
-64fe24a3e05e5f David Hildenbrand  2022-06-14  60  	if (userfaultfd_pte_wp(vma, pte))
-64fe24a3e05e5f David Hildenbrand  2022-06-14  61  		return false;
-64fe24a3e05e5f David Hildenbrand  2022-06-14  62  
-64fe24a3e05e5f David Hildenbrand  2022-06-14  63  	if (!(vma->vm_flags & VM_SHARED)) {
-64fe24a3e05e5f David Hildenbrand  2022-06-14  64  		/*
-7ea7e333842ed5 David Hildenbrand  2022-11-08  65  		 * Writable MAP_PRIVATE mapping: We can only special-case on
-7ea7e333842ed5 David Hildenbrand  2022-11-08  66  		 * exclusive anonymous pages, because we know that our
-7ea7e333842ed5 David Hildenbrand  2022-11-08  67  		 * write-fault handler similarly would map them writable without
-7ea7e333842ed5 David Hildenbrand  2022-11-08  68  		 * any additional checks while holding the PT lock.
-64fe24a3e05e5f David Hildenbrand  2022-06-14  69  		 */
-695112a1385b39 Dev Jain           2025-04-29  70  		if (!folio)
-695112a1385b39 Dev Jain           2025-04-29  71  			folio = vm_normal_folio(vma, addr, pte);
-695112a1385b39 Dev Jain           2025-04-29  72  		return folio_test_anon(folio) && !folio_maybe_mapped_shared(folio);
-64fe24a3e05e5f David Hildenbrand  2022-06-14  73  	}
-64fe24a3e05e5f David Hildenbrand  2022-06-14  74  
-fce831c92092ad David Hildenbrand  2024-05-22  75  	VM_WARN_ON_ONCE(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte));
-fce831c92092ad David Hildenbrand  2024-05-22  76  
-7ea7e333842ed5 David Hildenbrand  2022-11-08  77  	/*
-7ea7e333842ed5 David Hildenbrand  2022-11-08  78  	 * Writable MAP_SHARED mapping: "clean" might indicate that the FS still
-7ea7e333842ed5 David Hildenbrand  2022-11-08  79  	 * needs a real write-fault for writenotify
-7ea7e333842ed5 David Hildenbrand  2022-11-08  80  	 * (see vma_wants_writenotify()). If "dirty", the assumption is that the
-7ea7e333842ed5 David Hildenbrand  2022-11-08  81  	 * FS was already notified and we can simply mark the PTE writable
-7ea7e333842ed5 David Hildenbrand  2022-11-08  82  	 * just like the write-fault handler would do.
-7ea7e333842ed5 David Hildenbrand  2022-11-08  83  	 */
-d84887739d5c98 Nadav Amit         2022-11-08  84  	return pte_dirty(pte);
-64fe24a3e05e5f David Hildenbrand  2022-06-14  85  }
-64fe24a3e05e5f David Hildenbrand  2022-06-14  86  
+On 30.04.25 03:36, Finn Thain wrote:
+> 
+> On Tue, 29 Apr 2025, Nathan Chancellor wrote:
+> 
+>> This if statement only existed for a debugging print but it was not
+>> removed with the debugging print in a recent cleanup
+> 
+> The patch you called "cleanup" has a "fixes" tag. Strange.
+> 
+> I think it's unreasonable to refer to a patch which alters object code as
+> "cleanup".
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Hi,
+
+yes, I was unsure about terminology used for code that is by default not
+compiled, but would not compile if the attempt is made to compile it.
+
+	Regards
+		Oliver
+
