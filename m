@@ -1,55 +1,55 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101482882D0
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A25289E03
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035502; cv=none; b=EsEQ0aIqJJwo2vWv9o94XUlTHMzAlhoiaNd3qvact9LYQJMJKOq4jR/M+WMtxVdBYInJ6xzY9mBNvVb6BChkNyZSXsMjOrTY6hfvYMNlZ61QCz1ShJ0CdLY/ZsKHeOPDPbdNj0x4PRFXhbdFshNRUO2KVUAjYJvdxQ46PNaWrWk=
+	t=1746035504; cv=none; b=tQWYRYpAiujFjnUgEjTycILOU8eX5v/V7o7EuxTQe2k5wcKRLV2WvKL4BlOV/laVDUaPrD2Lfwcj29SFBCetOqCazQjEdpxUXbgiZZfvrnFE971hnXqi2+YG4QyWVz3UcyDNWRjVvxXQXVefDKzUAc1vD0ih2sfee5D2jNxK77w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035502; c=relaxed/simple;
-	bh=71Fh1qtXfJOLrXvEBj1LTswa/5CQQRqQLFx8XbFD85k=;
+	s=arc-20240116; t=1746035504; c=relaxed/simple;
+	bh=HtEi870zwLq6ctFcnBRLp+ytP6nQssFq45sLuZd5sJg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VT/oNvotF4aRJKyuv7lggLNzrqkXN8nFiRPaDrRk42NA8jiSzi/y0JZkwn2jF8Rjo6kot7uUfRqe1cwcQfYpVTvsUxAM/bnAv1RCV/SB53rvJb4D0EMuj9m0EZBFluKM9lzmo5UDYkDU9ou8OLwZH9mUytKcjnu6YyS1evRDqv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D22NDN1z; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=MWEHS6h9aqItgDwDv8quACFOqz0uh2JTfXXg0q3DhbW+/n3N4ZiiNJmsQQjus1QRb1z5bEnBH9Q2gFACcHNRUBBrJlwiC3xpkwtRB5ajGBIL+jhg2Uorrz4XTPQxv2+tOnMvj562f3Y+0s4zPloIYXBQCCNyOLWRln5aEBbBWho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D14I/Amr; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D22NDN1z"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-72f3b4c0305so180173b3a.0
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D14I/Amr"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff7cf599beso166117a91.0
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035499; x=1746640299; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035502; x=1746640302; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vzdcyVDs5KmZFcO+KePSm4+Ud/p9n76j0KYupv7ixbU=;
-        b=D22NDN1z3Nmo5qKcpe9d3VLrJXVHUmUQKXzFzfaWO1GDx1Q/WK+iyMTb2CELyaaBJE
-         TuUOaUpA7nH5dfsf9RlnULk6AzyWLJYTDj4zQ7cNJ5uLz0h5m3H4kaXSJHGH8yUkuNIZ
-         s/SOF9if5IU5Zi1kUm+8CqcjU9OsJsIH53q731pT2cENCncJxY78Z7MOK64+yZZpqn8r
-         F+mlAtvIWIyYJs/XH2bzn7UFP2+5Dvql+Mr/b3bVqc9vTaAlo5+D6yCbgZLy/vxZjKlE
-         c9ee0ruLqZhFaG6OorEWLZFKwtA9mwuy3+Qh4XjDzJS4qITxLItIvLk08rsV+T4M7Rl7
-         U8sQ==
+        bh=QU4fF1ojZigMaeFSYqEf31ecZKLdrPKuyzN12ALOJyE=;
+        b=D14I/AmraMjZySDEsaQs4+99Qf7WYPln1qdB02ln53Zp9CjtUtQu9gkFMgMWdC72P0
+         fXAhWQ0D3Y5OXI1rNSY1fS8N9A7yYoPtvVrfHU8BAl5wp5t4yDBZeZgj96aRXtjscfT9
+         qZMYHPBAhOx0NfOFeZAaaltZ8Y7LgFUFmBIhXdZE+raptgthcbp7JFvz0WS3gLjdYXpJ
+         z2IdFNJmJSR4llmyWlElrHaGRajcbwpJXLxjRW5dydVdjW3O0MylBU+Y0clht74mcsUO
+         zRGehawQBpk1wMXxFQgjJZMmY9XkWZRuZPS+xOQtTqhPk9Sve87yUYs98EqXNQW3DMHJ
+         JiyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035499; x=1746640299;
+        d=1e100.net; s=20230601; t=1746035502; x=1746640302;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vzdcyVDs5KmZFcO+KePSm4+Ud/p9n76j0KYupv7ixbU=;
-        b=arCooI3cFhYzZjSVNHLSKTL4JzjfkEr8HbxanTaSDJt30NN5nqi46Qmfq9HOU8cfZk
-         5H7UiS3AIzBpEYAcOeS0n0fu01UwxJ/HyDV43sZH7ZOi21lHB3SVd28iOPlWbp4c2wuW
-         b5sbe879+abBdEZg4ihJ0H5LvPn+40iiiFzt7KGycQUKO1u8z/GD0R6+3uVuH/13luJR
-         v2+fT+izIxwmtXCwR9csE1Vd4c6vke1op4zjCjidSx++5da6rIp4i55fBVtE29qnQ5d8
-         VGEEKd6rcHQbOrOgnU6aUw5ICu8Kboe0ObjF9dzEG5bTeJitKW4WdZBeG+lmmtHr5WBu
-         dEBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdyyviXKGuYdMUhLxY9ZE6ZI2pVKtnAMizWuSMDAoQv+GG26WN+SvG9RlpbKDgP3NvjN2V@lists.linux.dev
-X-Gm-Message-State: AOJu0YxO2OQC0AT1M/epmd4CqaTs36tMh9BP8qJeALykP+zK1NomxdIK
-	ojab13IyL9Pa+/8tJ/ukgC4XeUTE82ImE459Qro4cAwg+mw2HV/BJmJoZ+HaY/KKQa993k9sGzx
-	g84Yj7A==
-X-Google-Smtp-Source: AGHT+IFOPGbRFAxJkE+dEQP10DpVFZBKzSu9vIFxGxZ8r+laJ8avCeQVWaEft4PQXwRDgfVw41yAmv4ZGYUC
-X-Received: from pgbdp2.prod.google.com ([2002:a05:6a02:f02:b0:b14:9a53:2226])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:394f:b0:1f5:8622:5ed5
- with SMTP id adf61e73a8af0-20ba6a18194mr167216637.3.1746035499179; Wed, 30
- Apr 2025 10:51:39 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:09 -0700
+        bh=QU4fF1ojZigMaeFSYqEf31ecZKLdrPKuyzN12ALOJyE=;
+        b=hUlZaIZmoXzg9IeSiEupYscVkYLgaCEjxdTQKbvUqPssLHt9xd3yhbSlwXLlr2vDh+
+         fiwhCY0os1lgq1XQ/iFssCWLOcix0j8fkWXKV6gCjmBbD6eG/5GEv7IXYmpENHDpHh4a
+         a6/7p1tIyVJDp7NYuGlHHPkGD+NVLfYaB9pQC8pMpoWRksUMhJZnSL3pj+J/X4XwX9Up
+         JumdAzf/QdxeOGaasX0iPxC5+bmmRYSxHU/PYTg1sis/K9qjnsnRa/MDVlDkFIQkHKKP
+         p0JDBDXzEjrW3wQXfZAUL2r+/sUTgv+GgkLZ6bjHOV6FQUmIkYpUAval3ugapd/jmR+T
+         TI0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXVzcGYfASg8yDdEM4yUI5vqMUbtOApbSb8+YLrn4FRa0RUVeZvug9qbPS+/4+e8FNrcCuv@lists.linux.dev
+X-Gm-Message-State: AOJu0YxBfesjJ/WYNu06TgjO+ycpom3bEntaaTDzLRVoAum2Npe4bOjp
+	UaH+WjH0qfbEbPgRNHwPNnlsOL4qMShvQdSRJsQKhpux3GJ3anLCoTaKuWWrOLc7ON1/6dKoTag
+	1ukP4iA==
+X-Google-Smtp-Source: AGHT+IEyGPUBxMB6EpZfVFCzzx4iOi+6sy5uLJmR1hik9If22WqT2MHcyOSep4d8z+0agoaxbHwiyXwQLHex
+X-Received: from pjk3.prod.google.com ([2002:a17:90b:5583:b0:2ef:7af4:5e8e])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1b0d:b0:2ee:d433:7c50
+ with SMTP id 98e67ed59e1d1-30a3335ef40mr4881540a91.23.1746035501383; Wed, 30
+ Apr 2025 10:51:41 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:10 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-22-irogers@google.com>
-Subject: [PATCH v2 21/47] perf demangle: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-23-irogers@google.com>
+Subject: [PATCH v2 22/47] perf annotate: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,40 +116,176 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/demangle-java.c  | 4 ++--
- tools/perf/util/demangle-ocaml.c | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ tools/perf/builtin-annotate.c |  4 ++--
+ tools/perf/util/annotate.c    | 22 +++++++++++-----------
+ tools/perf/util/disasm.c      | 11 ++++++-----
+ 3 files changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/tools/perf/util/demangle-java.c b/tools/perf/util/demangle-java.c
-index ddf33d58bcd3..ee20f4d08765 100644
---- a/tools/perf/util/demangle-java.c
-+++ b/tools/perf/util/demangle-java.c
-@@ -42,9 +42,9 @@ static const char *base_types['Z' - 'A' + 1] = {
-  *	error  : NULL
-  */
- static char *
--__demangle_java_sym(const char *str, const char *end, char *buf, int maxlen, int mode)
-+__demangle_java_sym(const char *str, const char *end, char *buf, size_t maxlen, int mode)
- {
--	int rlen = 0;
-+	size_t rlen = 0;
- 	int array = 0;
- 	int narg = 0;
- 	const char *q;
-diff --git a/tools/perf/util/demangle-ocaml.c b/tools/perf/util/demangle-ocaml.c
-index 9d707bb60b4b..25fe755df5ab 100644
---- a/tools/perf/util/demangle-ocaml.c
-+++ b/tools/perf/util/demangle-ocaml.c
-@@ -30,8 +30,7 @@ ocaml_demangle_sym(const char *sym)
- {
- 	char *result;
- 	int j = 0;
--	int i;
--	int len;
-+	size_t i, len;
+diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+index 9833c2c82a2f..97943a12b6c9 100644
+--- a/tools/perf/builtin-annotate.c
++++ b/tools/perf/builtin-annotate.c
+@@ -157,7 +157,7 @@ static void process_branch_stack(struct branch_stack *bs, struct addr_location *
+ 	if (!bi)
+ 		return;
  
- 	if (!ocaml_is_mangled(sym)) {
- 		return NULL;
+-	for (i = bs->nr - 1; i >= 0; i--) {
++	for (i = (int)bs->nr - 1; i >= 0; i--) {
+ 		/*
+ 		 * XXX filter against symbol
+ 		 */
+@@ -880,7 +880,7 @@ int cmd_annotate(int argc, const char **argv)
+ 
+ 	annotate.session = perf_session__new(&data, &annotate.tool);
+ 	if (IS_ERR(annotate.session))
+-		return PTR_ERR(annotate.session);
++		return (int)PTR_ERR(annotate.session);
+ 
+ 	annotate.session->itrace_synth_opts = &itrace_synth_opts;
+ 
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 264a212b47df..055f3da1b95b 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -337,7 +337,8 @@ static int symbol__account_br_cntr(struct annotated_branch *branch,
+ 	unsigned int base = evsel__leader(evsel)->br_cntr_idx;
+ 	unsigned int off = offset * evsel->evlist->nr_br_cntr;
+ 	u64 *branch_br_cntr = branch->br_cntr;
+-	unsigned int i, mask, width;
++	unsigned int i, width;
++	u64 mask;
+ 
+ 	if (!br_cntr || !branch_br_cntr)
+ 		return 0;
+@@ -360,7 +361,7 @@ static int symbol__account_cycles(u64 addr, u64 start, struct symbol *sym,
+ 				  u64 br_cntr)
+ {
+ 	struct annotated_branch *branch;
+-	unsigned offset;
++	unsigned int offset;
+ 	int ret;
+ 
+ 	if (sym == NULL)
+@@ -377,7 +378,7 @@ static int symbol__account_cycles(u64 addr, u64 start, struct symbol *sym,
+ 		if (start >= addr)
+ 			start = 0;
+ 	}
+-	offset = addr - sym->start;
++	offset = (unsigned int)(addr - sym->start);
+ 	ret = __symbol__account_cycles(branch->cycles_hist,
+ 					start ? start - sym->start : 0,
+ 					offset, cycles,
+@@ -1563,7 +1564,7 @@ static int annotation__max_ins_name(struct annotation *notes)
+ 		if (al->offset == -1)
+ 			continue;
+ 
+-		len = strlen(disasm_line(al)->ins.name);
++		len = (int)strlen(disasm_line(al)->ins.name);
+ 		if (max_name < len)
+ 			max_name = len;
+ 	}
+@@ -2183,20 +2184,20 @@ static int annotation_options__add_disassemblers_str(struct annotation_options *
+ {
+ 	while (str && *str != '\0') {
+ 		const char *comma = strchr(str, ',');
+-		int len = comma ? comma - str : (int)strlen(str);
++		size_t len = comma ? (size_t)(comma - str) : strlen(str);
+ 		bool match = false;
+ 
+ 		for (u8 i = 0; i < ARRAY_SIZE(perf_disassembler__strs); i++) {
+ 			const char *dis_str = perf_disassembler__strs[i];
+ 
+-			if (len == (int)strlen(dis_str) && !strncmp(str, dis_str, len)) {
++			if (len == strlen(dis_str) && !strncmp(str, dis_str, len)) {
+ 				annotation_options__add_disassembler(options, i);
+ 				match = true;
+ 				break;
+ 			}
+ 		}
+ 		if (!match) {
+-			pr_err("Invalid disassembler '%.*s'\n", len, str);
++			pr_err("Invalid disassembler '%.*s'\n", (int)len, str);
+ 			return -1;
+ 		}
+ 		str = comma ? comma + 1 : NULL;
+@@ -2406,7 +2407,7 @@ static int extract_reg_offset(struct arch *arch, const char *str,
+ 			str++;
+ 	}
+ 
+-	op_loc->offset = strtol(str, &p, 0);
++	op_loc->offset = (int)strtol(str, &p, 0);
+ 
+ 	p = strchr(p, arch->objdump.register_char);
+ 	if (p == NULL)
+@@ -2516,8 +2517,7 @@ int annotate_get_insn_location(struct arch *arch, struct disasm_line *dl,
+ 				/* FIXME: Handle other segment registers */
+ 				if (!strncmp(insn_str, "%gs:", 4)) {
+ 					op_loc->segment = INSN_SEG_X86_GS;
+-					op_loc->offset = strtol(insn_str + 4,
+-								&p, 0);
++					op_loc->offset = (int)strtol(insn_str + 4, &p, 0);
+ 					if (p && p != insn_str + 4)
+ 						op_loc->imm = true;
+ 					continue;
+@@ -2531,7 +2531,7 @@ int annotate_get_insn_location(struct arch *arch, struct disasm_line *dl,
+ 			if (*s == arch->objdump.register_char)
+ 				op_loc->reg1 = get_dwarf_regnum(s, arch->e_machine, arch->e_flags);
+ 			else if (*s == arch->objdump.imm_char) {
+-				op_loc->offset = strtol(s + 1, &p, 0);
++				op_loc->offset = (int)strtol(s + 1, &p, 0);
+ 				if (p && p != s + 1)
+ 					op_loc->imm = true;
+ 			}
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index 8f0eb56c6fc6..7e24851a3934 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -856,7 +856,7 @@ static int ins__cmp(const void *a, const void *b)
+ 
+ static void ins__sort(struct arch *arch)
+ {
+-	const int nmemb = arch->nr_instructions;
++	const size_t nmemb = arch->nr_instructions;
+ 
+ 	qsort(arch->instructions, nmemb, sizeof(struct ins), ins__cmp);
+ }
+@@ -864,7 +864,7 @@ static void ins__sort(struct arch *arch)
+ static struct ins_ops *__ins__find(struct arch *arch, const char *name, struct disasm_line *dl)
+ {
+ 	struct ins *ins;
+-	const int nmemb = arch->nr_instructions;
++	const size_t nmemb = arch->nr_instructions;
+ 
+ 	if (arch__is(arch, "powerpc")) {
+ 		/*
+@@ -1263,7 +1263,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ 	char *build_id_filename;
+ 	char *build_id_path = NULL;
+ 	char *pos;
+-	int len;
++	size_t len;
+ 
+ 	if (dso__symtab_type(dso) == DSO_BINARY_TYPE__KALLSYMS &&
+ 	    !dso__is_kcore(dso))
+@@ -1754,7 +1754,8 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
+ 	u64 end = map__rip_2objdump(map, sym->end);
+ 	u64 len = end - start;
+ 	u64 offset;
+-	int i, count;
++	int i;
++	ssize_t count;
+ 	u8 *buf = NULL;
+ 	char disasm_buf[512];
+ 	struct disasm_line *dl;
+@@ -1823,7 +1824,7 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
+ 
+ out:
+ 	free(buf);
+-	return count < 0 ? count : 0;
++	return count < 0 ? (int)count : 0;
+ 
+ err:
+ 	count = -1;
 -- 
 2.49.0.906.g1f30a19c02-goog
 
