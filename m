@@ -1,99 +1,199 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx10.gouders.net (mx10.gouders.net [202.61.206.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399A12BCF79
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 20:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24D02C10A6
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 20:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.206.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746045792; cv=none; b=q2oSqJdTxVOs6uYkn8n9ojtRzw0f/AtInICKrOoYVrh7QTwmUB2TeXBjueKiXZkSoQEn/7zTZ9dAQvik5wGB5bpEWsTKm1Y20C+lkHGPRtL2Jkb/rZ3GEFaunaqbBbAokCWBPM8azkRZ+yTblIWWtrOu32alpwt8Bm2gU1Vij50=
+	t=1746046354; cv=none; b=CAv8dr/RRaqjljNlw4bi7a5W7EFOmwSe8a7kUJIs7QwmgMDdc827CGkX6y49sc89FlODSjin8ZQ3Pu5ntO+4P9WgpXAhm66LfLc1wM3IMWpTshekhX3iHBYGND8g9auNWUbE88dOh6BRpWibGuNFU2/4C3JBZEbnUiDMmGu8nuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746045792; c=relaxed/simple;
-	bh=wII3JgllPClT/c//PpU/wSRk+1Mcj6cq0yGsr56XaMU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TNWdM8edXqfxWM4x5op368So+qBmQsyF8zM9F3yjFK8XZNBpYXK+ntaAH7CMVvEsnxfg7AQE2FJZUPIpyzOcP2IY6K/Iz4+41szxlP/LtqQowDU5NtoeSe/qlpzitjcmPs2DXbFNdB9HnhxGesThDyIhTSUyJnyEstyDNt+FY64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dEMCcKHi; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746046354; c=relaxed/simple;
+	bh=igmaqu04BoyuJHWkaAvyxTOcNQ1SWurIf7nrVvUlC1c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=I81U/aXC9j01jVR+RLYWw2UxPe8b9kc+i1ONgXA+Gus2mB/Mgum51ibbNkeRoDkGqvxV3vaeI6219ktqBgREp9Rlqa5bjhnsjidazgS2uQwETnjisaAJtys0UoEHJV/YA2GrNBuscH2D9H0vJXwGfdqQPh+r7ToNXIZxZ9cSrs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net; spf=pass smtp.mailfrom=gouders.net; dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b=pYwnNS01; arc=none smtp.client-ip=202.61.206.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gouders.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dEMCcKHi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746045788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zOTcKeDdtKGYEOoQ1qEYP7meU510ixl0Di/j6T6WjOI=;
-	b=dEMCcKHiZabhB2GZ+wsaf45hoLXTxjBy3bSD0a2MSen8xSyFyfw1+GEcKvlNgMcFj08O6f
-	Uw9W6Z81izMe3Knb9DxMSJnrmVUlZUW9Ii1eqg3vkMLTUWY9ZNaoPIEa8ekNcFOWOCoQXu
-	CNWxheJrOz718PahQ9ozwClV8k1HoL4=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-29-7R1x4ObQNAiDgSCJC39iAg-1; Wed,
- 30 Apr 2025 16:43:05 -0400
-X-MC-Unique: 7R1x4ObQNAiDgSCJC39iAg-1
-X-Mimecast-MFC-AGG-ID: 7R1x4ObQNAiDgSCJC39iAg_1746045784
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1792F1955DB6
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 20:43:04 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A85CE18001DA;
-	Wed, 30 Apr 2025 20:43:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
- upstream-mainline, 7a13c14e)
-Date: Wed, 30 Apr 2025 20:43:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b="pYwnNS01"
+Received: from localhost (ip-109-42-178-232.web.vodafone.de [109.42.178.232])
+	(authenticated bits=0)
+	by mx10.gouders.net (8.17.1.9/8.17.1.9) with ESMTPSA id 53UKNBpu018771
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Wed, 30 Apr 2025 22:23:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
+	t=1746044598; bh=igmaqu04BoyuJHWkaAvyxTOcNQ1SWurIf7nrVvUlC1c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=pYwnNS01YzJREwB05U6HGCvRRm1UsaZTUT/DDa2uBO6+yelbd7/r8G3614CzGUMKt
+	 y5KC8GeaNcCAK7lHMmK1VBtdpbMG7kMUyLCPjVeJA7zHAKh7KoBl95IEZ4D/ryZx5W
+	 7EOXcOQ+gXB6Cw1KNYLf8K0kAXgiGcFom76jNhgc=
+From: Dirk Gouders <dirk@gouders.net>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim
+ <namhyung@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa
+ <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang
+ <kan.liang@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus
+ Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner
+ <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr
+ Bueso <dave@stgolabs.net>,
+        =?utf-8?Q?Andr=C3=A9_Almeida?=
+ <andrealmeid@igalia.com>,
+        John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@linaro.org>,
+        Mike Leach
+ <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+        Yicong Yang
+ <yangyicong@hisilicon.com>,
+        Jonathan Cameron
+ <jonathan.cameron@huawei.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
+        Ben Gainey <ben.gainey@arm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Kajol Jain
+ <kjain@linux.ibm.com>,
+        Aditya Gupta <adityag@linux.ibm.com>,
+        Eder Zulian
+ <ezulian@redhat.com>,
+        Dapeng Mi <dapeng1.mi@linux.intel.com>,
+        Kuan-Wei
+ Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
+        Brian Geffon
+ <bgeffon@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Howard Chu
+ <howardchu95@gmail.com>,
+        Charlie Jenkins <charlie@rivosinc.com>,
+        Colin
+ Ian King <colin.i.king@gmail.com>,
+        Dominique Martinet
+ <asmadeus@codewreck.org>,
+        Jann Horn <jannh@google.com>, Masahiro Yamada
+ <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Yang Jihong
+ <yangjihong@bytedance.com>,
+        Dmitry Vyukov <dvyukov@google.com>, Andi
+ Kleen <ak@linux.intel.com>,
+        Graham Woodward <graham.woodward@arm.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Anshuman Khandual
+ <anshuman.khandual@arm.com>,
+        Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
+        Tengda Wu <wutengda@huaweicloud.com>,
+        Gabriele Monaco <gmonaco@redhat.com>,
+        Chun-Tse Shao <ctshao@google.com>, Casey Chen <cachen@purestorage.com>,
+        "Dr. David Alan Gilbert"
+ <linux@treblig.org>,
+        Li Huafei <lihuafei1@huawei.com>,
+        "Steinar H.
+ Gunderson" <sesse@google.com>,
+        Levi Yun <yeoreum.yun@arm.com>, Weilin
+ Wang <weilin.wang@intel.com>,
+        Thomas Falcon <thomas.falcon@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Andrew Kreimer
+ <algonell@gmail.com>,
+        =?utf-8?Q?Krzysztof_=C5=81opatowski?=
+ <krzysztof.m.lopatowski@gmail.com>,
+        Christophe Leroy
+ <christophe.leroy@csgroup.eu>,
+        Jean-Philippe Romain
+ <jean-philippe.romain@foss.st.com>,
+        Junhao He <hejunhao3@huawei.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Xu Yang
+ <xu.yang_2@nxp.com>,
+        Steve Clevenger
+ <scclevenger@os.amperecomputing.com>,
+        Zixian Cai <fzczx123@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Yujie Liu
+ <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 04/47] perf bench: Silence -Wshorten-64-to-32 warnings
+In-Reply-To: <20250430175036.184610-5-irogers@google.com> (Ian Rogers's
+	message of "Wed, 30 Apr 2025 10:49:52 -0700")
+References: <20250430175036.184610-1-irogers@google.com>
+	<20250430175036.184610-5-irogers@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Date: Wed, 30 Apr 2025 22:23:06 +0200
+Message-ID: <gho6wdh00l.fsf@gouders.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <55396.125043016430501339@us-mta-29.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: FuRAVZ_Y2r-PapqhbjoAloatsFlmEMaOJzZp8Oe4tmY_1746045784
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi, we tested your kernel and here are the results:
+Hi Ian,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+considering so many eyes looking at this, I am probably wrong.
+
+So, this is only a "gauge reply" to see if it's worth I really read
+through all the commits ;-)
+
+Ian Rogers <irogers@google.com> writes:
+
+[SNIP]
+
+> diff --git a/tools/perf/bench/sched-pipe.c b/tools/perf/bench/sched-pipe.c
+> index 70139036d68f..b847213fd616 100644
+> --- a/tools/perf/bench/sched-pipe.c
+> +++ b/tools/perf/bench/sched-pipe.c
+> @@ -102,7 +102,8 @@ static const char * const bench_sched_pipe_usage[] = {
+>  static int enter_cgroup(int nr)
+>  {
+>  	char buf[32];
+> -	int fd, len, ret;
+> +	int fd;
+> +	ssize_t ret, len;
+>  	int saved_errno;
+>  	struct cgroup *cgrp;
+>  	pid_t pid;
+> @@ -118,7 +119,7 @@ static int enter_cgroup(int nr)
+>  	cgrp = cgrps[nr];
+>  
+>  	if (threaded)
+> -		pid = syscall(__NR_gettid);
+> +		pid = (pid_t)syscall(__NR_gettid);
+>  	else
+>  		pid = getpid();
+>  
+> @@ -172,23 +173,25 @@ static void exit_cgroup(int nr)
+>  
+>  static inline int read_pipe(struct thread_data *td)
+>  {
+> -	int ret, m;
+> +	ssize_t ret;
+> +	int m;
+>  retry:
+>  	if (nonblocking) {
+>  		ret = epoll_wait(td->epoll_fd, &td->epoll_ev, 1, -1);
+
+The epoll_wait(), I know of, returns an int and not ssize_t.
+
+That shouldn't show up, because it doesn't cause real problems...
 
 
-Kernel information:
-    Commit message: Merge tag 'for-6.15-rc4-tag' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/kdave/linux
+Best regards,
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1794912141
+Dirk
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1794912141-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
