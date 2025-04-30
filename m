@@ -1,55 +1,55 @@
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DD0296142
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192A4296FA8
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035526; cv=none; b=mcQGz2uKqcuD/IQKyf16cJYn8f4bpZylVICDg0az0oY7SFNalq8bBZVrLNmeIaGgnIOjxxRF1tDExxV62FR343Zqce3ILyIQI06xgUOk9qSd8axq2ELObedmk69x2IoclBVpLacyMX90/jyJPTvq0jHu5sEInOfG4ROCzcESygo=
+	t=1746035528; cv=none; b=VTtEkJM9HPO5SMrXpG3UJMSSZzKUw1bCi1uqyDHMeGXN9F69MNHAy8DlNwAbBhBWthEZUazoYXfR6dry94FV52hTd1Enhnn5vnDhhQXCT/LJEIF+1d+rojBiSLoxw4/whcV6DC/eAPvICzbjefdkptQEkff2ICgPzpb9tzJqv8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035526; c=relaxed/simple;
-	bh=NA6JF+5T8PMFE786WZ9is+NQYJJhQbzJSB67SJH2UIM=;
+	s=arc-20240116; t=1746035528; c=relaxed/simple;
+	bh=+JTjjtNzvzvzjuIb761GRkF+EAmPjXbfvmiSeun8Pew=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=thcNSuEeub61GfB2LPJ4V+wFkio2t/I6aR7Iu9DzgXCPQaxh4NDTIFVighIfSowXcWgC8Er2TnRm0ZPpcpBh+RWKQvMUVuZ322UpeLsJDA29lJDCsb4ElTcuQ5C6wKTvD3P6DR1tEzbM1sJqXw9r1juFcIS0MGr4rTC+TYXaTM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FRLcF2Mu; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=ldNkvhHh5y1LGd42pneQMZ3hWQiSYljtMxpV/wTRaRF2rtM0k8AvwnsNhhYSNohZxANSfPYyMVdUYpX4OsygT/AwGWo+6dcuYRLMNVYuLRajITph+BjJbpnRGbyeieS0qUE01ybJHUH//40j4ktRAhq97ScV6YzOiJcvIg/ZLWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DAaQkdsi; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FRLcF2Mu"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ff8119b436so134144a91.0
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DAaQkdsi"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-309c6e43a9aso224513a91.2
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035524; x=1746640324; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035526; x=1746640326; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5qLcbceIaYVHwJQzlzAjBxnjnjaX/IxjWID9LpXlzn8=;
-        b=FRLcF2MuvweM1KT53DtBaocX4UscsZ1IaPPZfhD8w8NDdllD/HvkWN6aUS/dDeJxr8
-         qkwPxFzABnrLl9i0sc6VophYZ7MCareuD7NY9TBWzRQZlB2fhNEXnqH+m8iOEs6XULzM
-         mjH58c4od0twosU0hj+JcKlekr5jnfXT/RR3izYPqjkkZvd5/rD9J/P/GQVf29FpiV6V
-         +D3qB/2JSsAbl7kTDr85lB1iHneolEIvdBlcZZh3x2VgHGKN+OSVukjKo4zcRsRmbLgh
-         kfgaE/I4FFm0egKlt1nGJKxSvS9+mvPZbzK7Y9B7tOA+e7Hs/tne3OoI+N34O67Rptrw
-         VUcA==
+        bh=5CMzuyJOwSTighBfuyXClSTO3yXJaJHsRmUmT4e6o/I=;
+        b=DAaQkdsido7Ghc+QwOAJWnk7jHizYSQbXesDyzTTvSPq3EsS/W+BvflOhoNelExKm1
+         wHsfOat2y7PKFnJ1H84ttW7uBt3Jpx+PqTrqwaApI8HS8OjXUSrF4o6VLi4c6Jmh1UKc
+         Mdpk2KpfBs99Vm5vmy0cvAZNt3R+YuNSr34PSPQ7soDJRvf5OC3dB/1G/DdCXyBkQz/f
+         MC0vJRTbllfVNaD7kZNOE0p8Qg53ciZARHChAVMGFEQoV2aEqZtcvnIxK+K4GVk/Et18
+         5iyYfAZUWJG637dqxQfbP17ISwdEYxVMdRBzQQ2bX/lz3KXuEGL8epj7rmRo9TMHz9Uz
+         TITQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035524; x=1746640324;
+        d=1e100.net; s=20230601; t=1746035526; x=1746640326;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5qLcbceIaYVHwJQzlzAjBxnjnjaX/IxjWID9LpXlzn8=;
-        b=vTNOEJFPRlbpPmaNYjSAmcSysDYGvEJu0hHOsr3Bf3R8rnrNCZBi/dEkuzhC11Cy4j
-         LSHMgt+thdG1N3+kO0oGBGjITurO62qjHEjGe0/x+r0c3xqS9RdnJQZGVFxW0fdkXReV
-         gASVY1bmOxc4I+0sOun9j84jpRTpYoD62B66dl6VaXC0mRzrR/Mwxw6P+xiO9zudNMLJ
-         x8m7F6Kjm6PUqPbmC+/HV2hHCP8/9u0v7mv+tehGDsqlqk/mVHOCY5eaeY+5FWlYeGHn
-         Jn7zLjcruI/S99lRablEIuJSFhrKyYueBIf3+NOchbFyQ5kJIW1mt6P9xDS1Gi6uegIU
-         V75w==
-X-Forwarded-Encrypted: i=1; AJvYcCXYytn8YPIBhp8zoE529UIDpim9U862XPjxnyOxHa6ZbQLov9Ru1ud/IsLG5nN0NNVi6Cpo@lists.linux.dev
-X-Gm-Message-State: AOJu0YxyP3rl0bYUKcexutaq4JV0HQl4MUL/b9hKyWjRSqkMXjDqOOU+
-	kTdGelh45yw50MrPGfAZ7Qw7yvV9RN9Ya1gtElFTyXAd88fHm6Bu7ShdcP+hN7Ie+jMZbdKTFj8
-	+EiGrhw==
-X-Google-Smtp-Source: AGHT+IG0fzje+t2hW+hPy3K7I9jJjIAnkr6OhXzLc0jx8cpHraftxXNs9MU4ybMwEqBJuYkZAVaH6/yEYMns
-X-Received: from pjbst3.prod.google.com ([2002:a17:90b:1fc3:b0:301:4260:4d23])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2e4d:b0:2ee:b875:6d30
- with SMTP id 98e67ed59e1d1-30a332e9067mr6048776a91.9.1746035524221; Wed, 30
- Apr 2025 10:52:04 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:21 -0700
+        bh=5CMzuyJOwSTighBfuyXClSTO3yXJaJHsRmUmT4e6o/I=;
+        b=Aui8Zo0iVBfk6od7pp1eb/dpHoJes4hbSPiHsp2smwdQB8tpcTrd9BNrKOri1S+8Mm
+         KzoeHfLiAPCmmQdG/58P+zBfXSs24QKYp8hokXtSBmlJSHKGv4riRC+CtTOsVvVxGyD8
+         7uraOJQTZpw5LyccGH8r8zn155+Uy/VosTU1g/Mdk8jpq7jhXghKN2uu8uLoedJz/IDD
+         rMMLUNVrSpFWpk9LXpIAAyMkkMDAXOAMJd7938wC2LWxKBLQe/xBLnHX88/nCl/oLCIX
+         Ai9MJavnwHZ9P/pFOSHOpEdpFu/kgu4Jgd29DysENgUzshVBPt0qG65/rFlqQ2p4egr/
+         OMCw==
+X-Forwarded-Encrypted: i=1; AJvYcCXsnAce5+iEiMUaDMXTKPofuB6AsR6d4N4oLpuolZ+AZo23r57U+nnz5a1DBgfP0DWeKCQC@lists.linux.dev
+X-Gm-Message-State: AOJu0YxhntMdl2W+jwcsKVs3U5pvKIUyInuLQBVe6Pssofs2ic6uQ3CB
+	m9HPw1aj6vM1fd4Q6r+J6K6W2DwPP39WfkA8AfBJ86cy85+vzDn17MQ+nCJZW/Dd0oBy/dUsiOZ
+	oXl17Xw==
+X-Google-Smtp-Source: AGHT+IEm3OrqUVvQcZRWYpnAOOuCxg3CInyP2zfCYSsxoscAsnu+apEdQ6fIw3eXzJCGStlHLUhpOir1rY0e
+X-Received: from pjbsu14.prod.google.com ([2002:a17:90b:534e:b0:308:8654:b634])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3852:b0:2ff:5ed8:83d1
+ with SMTP id 98e67ed59e1d1-30a3441ebf7mr4929780a91.19.1746035526256; Wed, 30
+ Apr 2025 10:52:06 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:22 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-34-irogers@google.com>
-Subject: [PATCH v2 33/47] perf bpf_counter: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-35-irogers@google.com>
+Subject: [PATCH v2 34/47] perf ftrace: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,54 +116,95 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/bpf_counter.c        | 6 +++---
- tools/perf/util/bpf_counter_cgroup.c | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ tools/perf/builtin-ftrace.c  | 17 +++++++++++------
+ tools/perf/util/bpf_ftrace.c |  4 ++--
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index 73fcafbffc6a..3b1dbf1f5f66 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -177,7 +177,7 @@ static int bpf_program_profiler__load(struct evsel *evsel, struct target *target
- 		return -1;
+diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
+index 7caa18d5ffc3..1484d798de40 100644
+--- a/tools/perf/builtin-ftrace.c
++++ b/tools/perf/builtin-ftrace.c
+@@ -182,7 +182,8 @@ static int read_tracing_file_to_stdout(const char *name)
  
- 	while ((tok = strtok_r(bpf_str, ",", &saveptr)) != NULL) {
--		prog_id = strtoul(tok, &p, 10);
-+		prog_id = (unsigned int)strtoul(tok, &p, 10);
- 		if (prog_id == 0 || prog_id == UINT_MAX ||
- 		    (*p != '\0' && *p != ',')) {
- 			pr_err("Failed to parse bpf prog ids %s\n",
-@@ -418,7 +418,7 @@ static int bperf_reload_leader_program(struct evsel *evsel, int attr_map_fd,
- 	link = bpf_program__attach(skel->progs.on_switch);
- 	if (IS_ERR(link)) {
- 		pr_err("Failed to attach leader program\n");
--		err = PTR_ERR(link);
-+		err = (int)PTR_ERR(link);
+ 	/* read contents to stdout */
+ 	while (true) {
+-		int n = read(fd, buf, sizeof(buf));
++		ssize_t n = read(fd, buf, sizeof(buf));
++
+ 		if (n == 0)
+ 			break;
+ 		else if (n < 0)
+@@ -449,7 +450,7 @@ static int set_tracing_percpu_buffer_size(struct perf_ftrace *ftrace)
+ 		return 0;
+ 
+ 	ret = write_tracing_file_int("buffer_size_kb",
+-				     ftrace->percpu_buffer_size / 1024);
++				     (int)(ftrace->percpu_buffer_size / 1024));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -691,7 +692,8 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
+ 			break;
+ 
+ 		if (pollfd.revents & POLLIN) {
+-			int n = read(trace_fd, buf, sizeof(buf));
++			ssize_t n = read(trace_fd, buf, sizeof(buf));
++
+ 			if (n < 0)
+ 				break;
+ 			if (fwrite(buf, n, 1, stdout) != 1)
+@@ -713,7 +715,8 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
+ 
+ 	/* read remaining buffer contents */
+ 	while (true) {
+-		int n = read(trace_fd, buf, sizeof(buf));
++		ssize_t n = read(trace_fd, buf, sizeof(buf));
++
+ 		if (n <= 0)
+ 			break;
+ 		if (fwrite(buf, n, 1, stdout) != 1)
+@@ -1031,7 +1034,8 @@ static int __cmd_latency(struct perf_ftrace *ftrace)
+ 			break;
+ 
+ 		if (pollfd.revents & POLLIN) {
+-			int n = read(trace_fd, buf, sizeof(buf) - 1);
++			ssize_t n = read(trace_fd, buf, sizeof(buf) - 1);
++
+ 			if (n < 0)
+ 				break;
+ 
+@@ -1049,7 +1053,8 @@ static int __cmd_latency(struct perf_ftrace *ftrace)
+ 
+ 	/* read remaining buffer contents */
+ 	while (!ftrace->target.use_bpf) {
+-		int n = read(trace_fd, buf, sizeof(buf) - 1);
++		ssize_t n = read(trace_fd, buf, sizeof(buf) - 1);
++
+ 		if (n <= 0)
+ 			break;
+ 		make_histogram(ftrace, buckets, buf, n, line);
+diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
+index 7324668cc83e..c4b3bb4e5922 100644
+--- a/tools/perf/util/bpf_ftrace.c
++++ b/tools/perf/util/bpf_ftrace.c
+@@ -97,7 +97,7 @@ int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
+ 							    false, func->name);
+ 	if (IS_ERR(skel->links.func_begin)) {
+ 		pr_err("Failed to attach fentry program\n");
+-		err = PTR_ERR(skel->links.func_begin);
++		err = (int)PTR_ERR(skel->links.func_begin);
  		goto out;
  	}
  
-@@ -459,7 +459,7 @@ static int bperf_attach_follower_program(struct bperf_follower_bpf *skel,
- 	else {
- 		link = bpf_program__attach(skel->progs.fexit_XXX);
- 		if (IS_ERR(link))
--			err = PTR_ERR(link);
-+			err = (int)PTR_ERR(link);
+@@ -105,7 +105,7 @@ int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
+ 							  true, func->name);
+ 	if (IS_ERR(skel->links.func_end)) {
+ 		pr_err("Failed to attach fexit program\n");
+-		err = PTR_ERR(skel->links.func_end);
++		err = (int)PTR_ERR(skel->links.func_end);
+ 		goto out;
  	}
  
- 	return err;
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index 6ff42619de12..35d1b950e803 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -98,7 +98,7 @@ static int bperf_load_program(struct evlist *evlist)
- 						      FD(cgrp_switch, i));
- 		if (IS_ERR(link)) {
- 			pr_err("Failed to attach cgroup program\n");
--			err = PTR_ERR(link);
-+			err = (int)PTR_ERR(link);
- 			goto out;
- 		}
- 	}
 -- 
 2.49.0.906.g1f30a19c02-goog
 
