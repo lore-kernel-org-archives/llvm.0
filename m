@@ -1,55 +1,55 @@
 Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF8A299507
-	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04267299532
+	for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 17:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035544; cv=none; b=mtKNvLKY61spGehrwevrSAO/BifhR8iOatau4VrVJXF+L/JFRo4eFJDErZgorknSCa3mFMgDAowQegs20L+Nq52NgbsCWkJJ82FPlZLZOIhSRngUGVsubsXAQZzcGGVO79KHVOgKBH6GARs8viOp56R3TsB2LAOtQnWrmzhZu3w=
+	t=1746035546; cv=none; b=hc/pWlmejHPdhRMs97htGvaKAstSzyfx+olguK8IciNbYm4ck+D4NP2Mh1vFOANgbp0gveoN74n/H1tMwRRjEsJju08JiqOEaVm6T+b5yct9p69PXS9kcvXlEA/MKpyt1vS2jf088jOpJpWOedh9WEtasHeZO2UfYjx6tfDKWfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035544; c=relaxed/simple;
-	bh=8xk6c6XVrGf8DBibt8WgV9cuw6KjrbvUvvlMxNIw7J4=;
+	s=arc-20240116; t=1746035546; c=relaxed/simple;
+	bh=SChJhTbUNPg1ND5dFZYx1lf5bG8QjJRd5Qz/8x8RQGk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=IS4cUQzHgJolAWOO74imqzzoiN6i33vx6TtVSPooqNSYwfRYVYx+T/Vk4h5m8qVZyLiyuxcihZlWDYV25qzgiZUuny8njN24k8kksQdJPfT5YL7xtKTgxCdrwCohhEQzxXRGV89pcvExKh6Caw1IhHREo8i5s2nK5qOrwAzGGRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mqkogQcs; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=ZZWfGLsazbIUic4N6ck1T9PG6fy7+yppS/XxHB3vNATPEHNmT+j7JdmGFIOFYZmXCBEYaRVFntBfB/e22zz947WU0TV+H2d3s0C85Ga0GfyYilpBVUUsA+dqsfaFVy24OJ/6zZB88qCkeiYJsDJlEBv6mIZ/pHI+KgYbS+k6Qkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T3/3f9e5; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mqkogQcs"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-309c6e43a9aso224886a91.2
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T3/3f9e5"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-309c6e43a9aso224972a91.2
+        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 10:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746035542; x=1746640342; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746035544; x=1746640344; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BfYoNaqxvhQ9eTV8t6yeDJ1HU1t4q/f6AZhR7HYRkks=;
-        b=mqkogQcsEW/fG+BiLmOgbDnOA/10MgA8T6dBaWXKjgor1vslarg9HQNCGjkScxemRR
-         GtK2lMgfcnPhMARCoTxYfilyJh2Aaw7UWZd87zH/JWQtOiZOyVjfJ0aPDiXvN/OAUzLz
-         tTqeolAvvxVkMDc83Qph1BvMxpE9WJXy5NvCs+3AECmVQECMo4G4aXhCNKAS0EuP0Um/
-         uOt3JWRYyc6rwMzFi5lzKA2yBAxV0bIJdEJ8tdK5rGiv/Ty2U8ey+Q6f6BFCqV0XfzSz
-         L8Ohxva2JVankhLexuK7X8OOb2U4nT+rQC7ICkfO21H4+rk8jMkYOLXf/gZ83XuQs3DA
-         i+ng==
+        bh=PttgRlYacSl4neWRZmL9Egf25cjRBgUThY4Fgt+xSRQ=;
+        b=T3/3f9e5DAI3ETET+wNL8uJOG2NeNiq2uIuQ8xNtiXIvyFzO5QRvkzmUrgsB/M4mUE
+         3F9P04i/RjpP5SmDU4/3FUmsPX+wYJelCShXmcnzc32VC6W3DH2ij9tQP2rHNEPlMEEk
+         /7M00LGNr/PTyVieZpTlripw8r/dtQtHbNnbSRepO36d2jDygq8q2voLSdQTzUiMSgC6
+         HW/O+1h0pY1w/spMYhFBKHtmtpDXAIMv+weiGqxhC/D51h819Lhx8GahPq8n+i0cQABG
+         XGmg4X3fkkZP2Pfik7viZ6wsyZB5EbSZe9LhcyWxlN9Xg5iFumK2ypW8zmbC7uT+3AtP
+         5n1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746035542; x=1746640342;
+        d=1e100.net; s=20230601; t=1746035544; x=1746640344;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BfYoNaqxvhQ9eTV8t6yeDJ1HU1t4q/f6AZhR7HYRkks=;
-        b=QJOrJpeV/cRFMpJkzpd7rOCO/04/U4x8OPdNAh8wOimUjrvq7D64YcMPoaVs/S4Szs
-         O4MwLOZt/uFwp1Y3AAo/nQF+Ix9ug83aTJwaJ26ynh2O2f28VdTpbewehmk9dC9w9F/t
-         /z2QTJb550qvQeD1MyOhrW2lpPueGbVNvVz3SfhizXzt+S4Uup3FeEbiW8SCOpxcs6h6
-         CdeKo+yx87aIo6Xok65wlbwv4gpIWJ1vaObN97JR/IFJK9KbNlB9EehPKhLPJcWFU5HX
-         IKGfFBHhKWiIwCAi+WStmO4SCnerW3X784i5QSeooKnFxjQZhyWyFZAh4kcUNNrJJoHe
-         +rIA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMmTue5bF9AIN+H6otFL7BNh7qoazRf/qmG22pETTfAZfowwWHERj8JzMnixfwT3uIcmkQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz8Zw9bEKZJr62FtSlmj8T+KX3apwf+6Bi27IPjiP7+ZzBtV3q0
-	hfvZiaNIPajmr8tUG+eVBQMcTlxF3h8C30r3Zh8R1s+mKCYhdpqz+Z3nofUGQ8oWZy/9cj2TGSP
-	BvQOT3A==
-X-Google-Smtp-Source: AGHT+IGE6ShT5AKZEjfO76Ud9wq255vjvupnoQSaA/IRCz6DrEQ38RNaMX6Vlst1q29yf69v7lZZ4wLh25wT
-X-Received: from pjbpl2.prod.google.com ([2002:a17:90b:2682:b0:2fc:d77:541])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4cce:b0:2ee:df70:1ff3
- with SMTP id 98e67ed59e1d1-30a342f5554mr6408540a91.0.1746035542002; Wed, 30
- Apr 2025 10:52:22 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:50:30 -0700
+        bh=PttgRlYacSl4neWRZmL9Egf25cjRBgUThY4Fgt+xSRQ=;
+        b=MBiNauTIsl+19L1C1xY7JX1qj2QFFYi05p5r9tRpuXsWCnCwXl0NVhXUcgzruxXheg
+         V34Xi7wuNnaKxw7gXm/ktbTB0YpdHCTlJmd3/inAGtQDFgPihFLUX5tZvBp6MTtMCjHu
+         TWY1EZnxqIqaKfjwxu/HGvdubu0jgDgRHyWnz7SNAB/tIiMiZXU3GbozCZUHeSgdXHKa
+         DcEUBbZ3H7bU0ZkyK7xpFI5kvBX0JoPB1Pbr/M94ZSr9Qop03E0u2U4hIDj5DJQBuPXC
+         u9I3rYUfbZ01BG3FTsOpqXRwpoX7cYhjVc3gcG6QWVCPQYuEMpCZI5I1JzXNpsYyMsdy
+         Yfdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUh1RG3yPIifJ3yidwmpoFNq6x1l0rV4aRf84MXrUqt7dFYleP90VaJi7EsRNrolYJU194W@lists.linux.dev
+X-Gm-Message-State: AOJu0YxKXE2s3x2wjHOk6oOTX9lEZfseg5eW9p63wg0eK9uIKE8UJN/u
+	Jh7nFZeRTtIjuPt+voGuY3uncV34eIeG6IWwO4XwvfvqSixJiRLS16AzR79SChbx/FKmke5sXoN
+	HU/dbqg==
+X-Google-Smtp-Source: AGHT+IH609WX54b/JbVgl93PVIkC18sTffKfTUp//AJVPoOBnLr2z7CYeICMxOSMi9XQ3JkGUed341rCFivT
+X-Received: from pjm4.prod.google.com ([2002:a17:90b:2fc4:b0:305:2d68:2be6])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4984:b0:2ff:58b8:5c46
+ with SMTP id 98e67ed59e1d1-30a344025abmr5485273a91.8.1746035543977; Wed, 30
+ Apr 2025 10:52:23 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:50:31 -0700
 In-Reply-To: <20250430175036.184610-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250430175036.184610-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430175036.184610-43-irogers@google.com>
-Subject: [PATCH v2 42/47] perf daemon: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250430175036.184610-44-irogers@google.com>
+Subject: [PATCH v2 43/47] perf zlib: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -116,32 +116,22 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-daemon.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/perf/util/zlib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
-index f0568431fbd5..640ba8191083 100644
---- a/tools/perf/builtin-daemon.c
-+++ b/tools/perf/builtin-daemon.c
-@@ -514,7 +514,8 @@ static int daemon_session__control(struct daemon_session *session,
- 	struct pollfd pollfd = { .events = POLLIN, };
- 	char control_path[PATH_MAX];
- 	char ack_path[PATH_MAX];
--	int control, ack = -1, len;
-+	int control, ack = -1;
-+	size_t len;
- 	char buf[20];
- 	int ret = -1;
- 	ssize_t err;
-@@ -543,7 +544,7 @@ static int daemon_session__control(struct daemon_session *session,
- 	len = strlen(msg);
+diff --git a/tools/perf/util/zlib.c b/tools/perf/util/zlib.c
+index 78d2297c1b67..d30597701fd1 100644
+--- a/tools/perf/util/zlib.c
++++ b/tools/perf/util/zlib.c
+@@ -44,7 +44,7 @@ int gzip_decompress_to_file(const char *input, int output_fd)
+ 		goto out_unmap;
  
- 	err = writen(control, msg, len);
--	if (err != len) {
-+	if (err != (ssize_t)len) {
- 		pr_err("failed: write to control pipe: %d (%s)\n",
- 		       errno, control_path);
- 		goto out;
+ 	zs.next_in = ptr;
+-	zs.avail_in = stbuf.st_size;
++	zs.avail_in = (uInt)stbuf.st_size;
+ 
+ 	do {
+ 		zs.next_out = buf;
 -- 
 2.49.0.906.g1f30a19c02-goog
 
