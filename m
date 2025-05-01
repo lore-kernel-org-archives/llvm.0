@@ -1,154 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C15C269806;
-	Thu,  1 May 2025 23:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BA2265607
+	for <llvm@lists.linux.dev>; Thu,  1 May 2025 23:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746142213; cv=none; b=uawtFziZaasAB4ZXCGUit2vYfWKUwoVUhdCMZek8CdYVmc3MFnEHfCu0haYcWM3cPAoWX/a/rwI66RB/q238p8efn5Ibp7B08mhgEin66km6xsYldvk+XL1qTJLYerPFja0rTzCU9Oy1zhMbw/+17zclH3wGJFzHeJnKGf0vX7Y=
+	t=1746142697; cv=none; b=JmGEoC3URsHviAG3WLlB9Sf7fCNEPriQ9aIzyqoucuMe+0osLQu5/Y5bnwmNyeLAqryQF4tcrSakQDEAsj/ZzZVkDVisSUz5/L24Gxlo0B4yIfhXgqJOMjfm46kAJNCd9OMhflHASfqMGpEvgV71RTSyUnSyGjvo5w5C+lU/kgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746142213; c=relaxed/simple;
-	bh=aXfmMM0IyA1Pu13nHPIgtToxzTFby9IIeI8NZsGPaNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FbUZQrVkfhNM/AxfLh/h0KC4PxRr5XT9f6Q7errg9P4f2m2xdHPoxQjOioEgmSIdg15ag16epn5c+3Mt0swpisgvGAeVixoRwMA7iVN+22oc+uvJS9JPHbG3URPbz8sxK185YoDIJENGy2LN0pHKpzYva56r3204fV98+VZapeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CU76KPCw; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746142697; c=relaxed/simple;
+	bh=0bE9+sg8qqZlZPymEWPsuaZnLc6tICoEgjFXMIsxwYc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hee+x0B0x4w+ZZtRT2sC1ntXEdOzZBhTRaNhnRdd03YhOtWE0iDam0z4MfcsmVRjsGHEVV3cdKKcjSWwBBBINvP2V95Hh+QhaC1o6C2SEMhXjLEd0WVMy5Wv+jLSysDnrtxslltb9hzAq85NQ1nGhPZODi5a9xdNTjuSREm04m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cWOnesyZ; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CU76KPCw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746142211; x=1777678211;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aXfmMM0IyA1Pu13nHPIgtToxzTFby9IIeI8NZsGPaNg=;
-  b=CU76KPCwOgFxTvLOug33YIRfKTT19IdBl2jm4wUmZ8Bn1VlALMSS2rEE
-   3DVJsnFHgkCxujprPwMvo9J9x2nhVa8BGhbYNTVJfPcQ2W09YDtQqI8ho
-   Md20H2BtO5Zfqu9SkBvmnwVL5TkXoT96Ciubs24UQokiNknxd6dU/v2SH
-   3/h1YD4npbCoitEJIttU1/VBQBcefSroi8pwMUOESYbSXrIYzh0JXpDMd
-   R3uXI2zFixTBavbi40vOeyMSQAcdrMxJHYJO3Y2eq25nZphZ6ZiTzh4c8
-   ayXJSGUhPOcm8x1+8RRzfJd/e8kwGvCMxe24JnYZZWr6yHYrNvpraXQgn
-   g==;
-X-CSE-ConnectionGUID: AWzRPwdcRCiLZxruANeOyA==
-X-CSE-MsgGUID: aDJUA0GbS4ysJyK1Li8yKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="47915267"
-X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
-   d="scan'208";a="47915267"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 16:30:10 -0700
-X-CSE-ConnectionGUID: BwCrRmz2Rcuetj5z0SotRA==
-X-CSE-MsgGUID: emGAEMbPQGy9juRAWID4vw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
-   d="scan'208";a="165564294"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 01 May 2025 16:30:08 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAdLy-0004RB-2p;
-	Thu, 01 May 2025 23:30:06 +0000
-Date: Fri, 2 May 2025 07:29:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot+extras/v6.15-rc3 128/152]
- fs/resctrl/ctrlmondata.c:585:2: error: call to undeclared function
- 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202505020732.1zsVNl1R-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cWOnesyZ"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso222474266b.1
+        for <llvm@lists.linux.dev>; Thu, 01 May 2025 16:38:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1746142693; x=1746747493; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gOH+RLxLUbard4BV8J+6a/3tBBv1bO45LVfQDoB6LRw=;
+        b=cWOnesyZoMqUuZsL1ozWk9M8xfZmyhLodSsV8MB4f0SVgTkbFAKtycUu/cJUoClakK
+         26mWBiOe2e+KNkND/3Rv4KJbl2Oj76jvgMw2JQk2bhyLgZbQou7yMkuEAfGtmvSm1Cwt
+         G+HpLENrZhC6IW7+d45uheH26Ua8Mzb4Y6Aek=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746142693; x=1746747493;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gOH+RLxLUbard4BV8J+6a/3tBBv1bO45LVfQDoB6LRw=;
+        b=c+xtus+xpLV2w22hXx5/XVSebZg589CJIUyRTEvh98W3L19WSrrSmbFZx4mGAT28qD
+         4O59KRo3esZpaD3gKvWASqR9JEPfm+agMQ+gKw8xj+TzoNqwhwC6Rm4L8xi7c0nOkE7Y
+         x2fXuEgrP8/QVK/SEqL4LGYvHeh+cgLrW4iprND45pwviNrLCAB6yR4yWn3vlgZ7Dkqf
+         tuO/Af0jYOQ0OaCAeWPPyHSrqW1B3CwLpwkLveX/Di3mG1fLUqC7Gu5OPuSRZQpIX6vd
+         CQqQtOUdxtx2q419QyASTBsrzRI2G+gTwykB7x//LebQ7g2jVyZD/le2iSA2jB2wIaVE
+         hq2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUryKUXRGknUOrZEveALHirDK5GdsjB311WZEvdSgyJ9G2FPJSQ40g8W1srhG8WUrglUD2X@lists.linux.dev
+X-Gm-Message-State: AOJu0YzLgM6Mo53iPgK0KONtxjA/RuqwQxRmJT0zZxPXcAMhZclKmOeM
+	HVWmxSpOSOzGRA8Mvxa0hCLbZRhQe4JJnmJ7F2h80vQfKS0/TispT6VAztp8e+DdGJO354ZdlJb
+	eH00=
+X-Gm-Gg: ASbGncsIvsalyAEmo0a4GUJW87Yy6NOjlXmOddZw8Jjsy8Lrlcw/vMzuA5KBcAsI+iv
+	pQi+hLmWTNUV3vuW8nY9b2myFYRV/TEwxOlR7qyQfN/ym4hXSQ/ZoGE7NlfSZRpKLDsc8S62yGR
+	dFOEoTFfndUPADlFSe8iPgg35MuSID7OXQYAARGCM1k5MYYI9gQVb3ePaX4vCid/ZEFqHvVjgCs
+	h3MCsdz3diLkeK9UaJXU91Ka0/pen5KCUlcCG0RJGqaATaNYF+jFs+3x09HYkQ4O/fHtUjVtmZV
+	+6RTN3BeSZ1rOwFz/EP1AhcZSlP5tHRjyN8dyNj/VG/UhuUbdz3GZquAX/HfzRiM9RDZ3GBEMdG
+	n8TcwY3SWbc9NJaNwfbMwsPLMeQ==
+X-Google-Smtp-Source: AGHT+IEw/8GBGUMUKMk/QJ+WexEseOQBFNcDX7NzcFepe6/DHRKQQj39QHZb3ybMwRovUHxJktAMLQ==
+X-Received: by 2002:a17:907:9718:b0:ac7:f00d:52ec with SMTP id a640c23a62f3a-ad17b00da23mr87995466b.58.1746142692847;
+        Thu, 01 May 2025 16:38:12 -0700 (PDT)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad0da55b0f0sm109385566b.150.2025.05.01.16.38.11
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 May 2025 16:38:11 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac2ab99e16eso308185966b.0
+        for <llvm@lists.linux.dev>; Thu, 01 May 2025 16:38:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWEA08IgtTG4+p5Ad97NHbxx5A1HRy7E0FnvORWDjx6Ks/bua9AQMYBxB/BZahQkjzsOymr@lists.linux.dev
+X-Received: by 2002:a17:907:3c92:b0:ace:c225:c723 with SMTP id
+ a640c23a62f3a-ad17ad1a245mr90568166b.12.1746142690891; Thu, 01 May 2025
+ 16:38:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org>
+ <20250501-default-const-init-clang-v1-2-3d2c6c185dbb@kernel.org> <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
+In-Reply-To: <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 1 May 2025 16:37:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wikfj_JLqDQCc+AsymUije3Sm8h30zQeT4yieqRicFOzg@mail.gmail.com>
+X-Gm-Features: ATxdqUFyafpfCSgNRMdjOdlgLHXvb-kQiDBd8FWFkiq24cJvTKf1aNAAYT-juyY
+Message-ID: <CAHk-=wikfj_JLqDQCc+AsymUije3Sm8h30zQeT4yieqRicFOzg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] include/linux/typecheck.h: Zero initialize dummy variables
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	stable@vger.kernel.org, Linux Kernel Functional Testing <lkft@linaro.org>, 
+	Marcus Seyfarth <m.seyfarth@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot+extras/v6.15-rc3
-head:   89e83f0ddb42053b6e3e6d4a9ce2fd3dd521c3d6
-commit: c4df656cb6afb482b2d7cb0bc404beb995ffe165 [128/152] x86/resctrl: Add stub to allow other architecture to disable monitor overflow
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250502/202505020732.1zsVNl1R-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505020732.1zsVNl1R-lkp@intel.com/reproduce)
+On Thu, 1 May 2025 at 16:28, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> How long has that been valid? Because this is certainly new to the
+> kernel, and sparse does complain about this initializer.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505020732.1zsVNl1R-lkp@intel.com/
+Sparse is clearly wrong.
 
-All errors (new ones prefixed by >>):
+I went back to my old K&R book, and the "perhaps in braces" languager
+is there in that original (ok, so I only have the "newer" ANSI version
+of K&R, so I'm not checking the _original_ original).
 
->> fs/resctrl/ctrlmondata.c:585:2: error: call to undeclared function 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     585 |         resctrl_arch_mon_ctx_free(r, evtid, rr->arch_mon_ctx);
-         |         ^
-   fs/resctrl/ctrlmondata.c:585:2: note: did you mean 'resctrl_arch_mon_ctx_alloc'?
-   arch/x86/include/asm/resctrl.h:197:21: note: 'resctrl_arch_mon_ctx_alloc' declared here
-     197 | static inline void *resctrl_arch_mon_ctx_alloc(struct rdt_resource *r,
-         |                     ^
-   1 error generated.
---
->> fs/resctrl/monitor.c:188:2: error: call to undeclared function 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     188 |         resctrl_arch_mon_ctx_free(r, QOS_L3_OCCUP_EVENT_ID, arch_mon_ctx);
-         |         ^
-   fs/resctrl/monitor.c:188:2: note: did you mean 'resctrl_arch_mon_ctx_alloc'?
-   arch/x86/include/asm/resctrl.h:197:21: note: 'resctrl_arch_mon_ctx_alloc' declared here
-     197 | static inline void *resctrl_arch_mon_ctx_alloc(struct rdt_resource *r,
-         |                     ^
-   fs/resctrl/monitor.c:632:2: error: call to undeclared function 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     632 |         resctrl_arch_mon_ctx_free(rr.r, rr.evtid, rr.arch_mon_ctx);
-         |         ^
-   2 errors generated.
+I guess we might as well ignore the sparse problem, since sparse ends
+up having issues with so many other newer things we're doing, and we
+don't have anybody maintaining it.
 
-
-vim +/resctrl_arch_mon_ctx_free +585 fs/resctrl/ctrlmondata.c
-
-37d06f24730eb0 James Morse 2025-04-24  548  
-37d06f24730eb0 James Morse 2025-04-24  549  void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
-37d06f24730eb0 James Morse 2025-04-24  550  		    struct rdt_mon_domain *d, struct rdtgroup *rdtgrp,
-37d06f24730eb0 James Morse 2025-04-24  551  		    cpumask_t *cpumask, int evtid, int first)
-37d06f24730eb0 James Morse 2025-04-24  552  {
-37d06f24730eb0 James Morse 2025-04-24  553  	int cpu;
-37d06f24730eb0 James Morse 2025-04-24  554  
-37d06f24730eb0 James Morse 2025-04-24  555  	/* When picking a CPU from cpu_mask, ensure it can't race with cpuhp */
-37d06f24730eb0 James Morse 2025-04-24  556  	lockdep_assert_cpus_held();
-37d06f24730eb0 James Morse 2025-04-24  557  
-37d06f24730eb0 James Morse 2025-04-24  558  	/*
-37d06f24730eb0 James Morse 2025-04-24  559  	 * Setup the parameters to pass to mon_event_count() to read the data.
-37d06f24730eb0 James Morse 2025-04-24  560  	 */
-37d06f24730eb0 James Morse 2025-04-24  561  	rr->rgrp = rdtgrp;
-37d06f24730eb0 James Morse 2025-04-24  562  	rr->evtid = evtid;
-37d06f24730eb0 James Morse 2025-04-24  563  	rr->r = r;
-37d06f24730eb0 James Morse 2025-04-24  564  	rr->d = d;
-37d06f24730eb0 James Morse 2025-04-24  565  	rr->first = first;
-37d06f24730eb0 James Morse 2025-04-24  566  	rr->arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, evtid);
-37d06f24730eb0 James Morse 2025-04-24  567  	if (IS_ERR(rr->arch_mon_ctx)) {
-37d06f24730eb0 James Morse 2025-04-24  568  		rr->err = -EINVAL;
-37d06f24730eb0 James Morse 2025-04-24  569  		return;
-37d06f24730eb0 James Morse 2025-04-24  570  	}
-37d06f24730eb0 James Morse 2025-04-24  571  
-37d06f24730eb0 James Morse 2025-04-24  572  	cpu = cpumask_any_housekeeping(cpumask, RESCTRL_PICK_ANY_CPU);
-37d06f24730eb0 James Morse 2025-04-24  573  
-37d06f24730eb0 James Morse 2025-04-24  574  	/*
-37d06f24730eb0 James Morse 2025-04-24  575  	 * cpumask_any_housekeeping() prefers housekeeping CPUs, but
-37d06f24730eb0 James Morse 2025-04-24  576  	 * are all the CPUs nohz_full? If yes, pick a CPU to IPI.
-37d06f24730eb0 James Morse 2025-04-24  577  	 * MPAM's resctrl_arch_rmid_read() is unable to read the
-37d06f24730eb0 James Morse 2025-04-24  578  	 * counters on some platforms if its called in IRQ context.
-37d06f24730eb0 James Morse 2025-04-24  579  	 */
-37d06f24730eb0 James Morse 2025-04-24  580  	if (tick_nohz_full_cpu(cpu))
-37d06f24730eb0 James Morse 2025-04-24  581  		smp_call_function_any(cpumask, mon_event_count, rr, 1);
-37d06f24730eb0 James Morse 2025-04-24  582  	else
-37d06f24730eb0 James Morse 2025-04-24  583  		smp_call_on_cpu(cpu, smp_mon_event_count, rr, false);
-37d06f24730eb0 James Morse 2025-04-24  584  
-37d06f24730eb0 James Morse 2025-04-24 @585  	resctrl_arch_mon_ctx_free(r, evtid, rr->arch_mon_ctx);
-37d06f24730eb0 James Morse 2025-04-24  586  }
-37d06f24730eb0 James Morse 2025-04-24  587  
-
-:::::: The code at line 585 was first introduced by commit
-:::::: 37d06f24730eb0e770949e2d27f04b9639a994dc AUTO SPLIT
-
-:::::: TO: James Morse <james.morse@arm.com>
-:::::: CC: James Morse <james.morse@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+             Linus
