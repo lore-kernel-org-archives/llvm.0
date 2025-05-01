@@ -1,115 +1,154 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D795224253
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 23:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C15C269806;
+	Thu,  1 May 2025 23:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746142126; cv=none; b=HLqhX/5K+pktzmBGnzUt50j323ILmk5/rHqxOjrByajDyniTK4dFZAWZ390U6gW9iYLmwJVCo3GAy+55VskZPOV2URowurPyVqdtvCu3SYVcZyph4Po5zQ50mP7eeh3VIrqii3flWhdFbZvOwt2Ujnv5BQ6YPXqVYl7CY4704KE=
+	t=1746142213; cv=none; b=uawtFziZaasAB4ZXCGUit2vYfWKUwoVUhdCMZek8CdYVmc3MFnEHfCu0haYcWM3cPAoWX/a/rwI66RB/q238p8efn5Ibp7B08mhgEin66km6xsYldvk+XL1qTJLYerPFja0rTzCU9Oy1zhMbw/+17zclH3wGJFzHeJnKGf0vX7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746142126; c=relaxed/simple;
-	bh=TVZv1wE6IMiopn+lPutQ2XmVSkz9PSPheYWfp32DhNE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PaMfvTg4904FWRwvQkn6Db1xkPa6XZpjYMRblJpjiHdZtDuJhGe2+A4VKHv4xQfpuOCFTPFId4395s1K+7wQiQxWa/VHfuXESV2SaofSfywMZEx3v/1kChcAiytHNc7HlxXc850nX9B1jAzuXbXeB+hf9fZ+1b3EO/TxjeNOJFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YLGtSOFN; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1746142213; c=relaxed/simple;
+	bh=aXfmMM0IyA1Pu13nHPIgtToxzTFby9IIeI8NZsGPaNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FbUZQrVkfhNM/AxfLh/h0KC4PxRr5XT9f6Q7errg9P4f2m2xdHPoxQjOioEgmSIdg15ag16epn5c+3Mt0swpisgvGAeVixoRwMA7iVN+22oc+uvJS9JPHbG3URPbz8sxK185YoDIJENGy2LN0pHKpzYva56r3204fV98+VZapeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CU76KPCw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YLGtSOFN"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5c7d6b96fso2605459a12.3
-        for <llvm@lists.linux.dev>; Thu, 01 May 2025 16:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1746142122; x=1746746922; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLQxE0ZAajilS9LJlCgVNxjKesNL8CM31Y1I/hwFDe0=;
-        b=YLGtSOFNFsBB5bDzYNOu6RvbPERxVgDWj3KNwBW3zyWtKUfSLcv8+xdNIPCjm4IEjD
-         gBWVitpA/V595QP9kpzieMN7ryC+Ims/YtLjjcwpDisiEtJ7JUUGPa8td4BkXWLCgpVx
-         qc2bvOj4ii5SrqMuJGnj4RBZUtMZus+pHnJnY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746142122; x=1746746922;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xLQxE0ZAajilS9LJlCgVNxjKesNL8CM31Y1I/hwFDe0=;
-        b=VdI7RDA3hSOPJYXtt51gQNA5pNZGe7nprdm8hNPB6xvqXej5wr6h0F48yVKEiw38V6
-         CPKeK0F2OTxd39UIgDg+AoI9jDOtbrPq36Qp6cviv+1wU7T5YGZ5mdbxcWVnM/LXe75z
-         RLmo7igcCK+vMLTHjsf0u9M4g96E03tEIt5SCNeUEGSuWCYhAX2FbLPoDnZvymgdMK5I
-         IHmlsClKVZ7Rwty4WOyJ3wa7X/TcQtRz4GCyHryYImBaUXPiA27/6LjbSztTB85V7C9K
-         K9NhTpyJLUSwcwiZUGxNc1AFltvqUwzugo1CRaJJ8dpycS8FAECm3lDkNbCUVnf0720S
-         bRvg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMPBhh/W2C8/XzfzrsV7RMw7CeK1UmB4BEhBNspVSMhBgqZeNp4tC0Q2ukwF4t7RFrDpmD@lists.linux.dev
-X-Gm-Message-State: AOJu0YyA9Sn7cQMltkiHeZceXbglJkhpsnn7SuNEZveqXVpBVuvXxl8h
-	K6FxkBOS6I/ZK5DM1QgBHhe0y4Xn/j5bvw8cQLdbbHoeHCjgO2HIdQcQCjHpaA67zWlqf5Wv5EE
-	ISJo=
-X-Gm-Gg: ASbGncuIclXq5Fosz7PpA9kip+UuoNGMT4XG8ExKo64Y4pJS/3PGEUgu27cnbJKJ9oi
-	UDEPl6DMwZM0+bjD+bhXNeOEoFrkFIzs65nVy0dc7MpogVRfhY1Dizc4okjtnBHAveOfKhAxLKj
-	lNHlW/Yxl2+4VHLAudBkkBbzrAWFG9JCU03BweDXlXwJ1w6pzmnpoQSLln6/NSDsWdNJ09ZYVyS
-	428DwXiUdTNoQ2eKIF/bY8bhqQk9Hu6eoI0fCIks5k0m6LyttaxmMohAqhRZ/8dwHtGFkF/HQb7
-	Rqu5wT81xWfc2DQ3Y6A0WleS2z+h87Bfa2SAcBaJ3CQ3k+ROFQTNKXkldM7G6m7QFW58h/7mRAQ
-	svblQf+6TFmBrurY=
-X-Google-Smtp-Source: AGHT+IEPpM/Vd1w1XMwLT85L0/WzDCx3nd+4AxmP6c042B6sMCelpLmrXAw4Dn0RjFJYuNOk1r9dGQ==
-X-Received: by 2002:a17:907:7e8f:b0:ace:d21e:e82 with SMTP id a640c23a62f3a-ad17ad769d0mr84550266b.20.1746142122316;
-        Thu, 01 May 2025 16:28:42 -0700 (PDT)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad0c70d393fsm110035566b.26.2025.05.01.16.28.41
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 May 2025 16:28:41 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac2ab99e16eso307215466b.0
-        for <llvm@lists.linux.dev>; Thu, 01 May 2025 16:28:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUDNCXkYwJQnrc+x5FUj3x3b4Tg/8T4vdLXe1gUDXNyjqkf/ntesyno6x64mlAm2Br+YmJG@lists.linux.dev
-X-Received: by 2002:a17:907:86ab:b0:ac1:df32:ac27 with SMTP id
- a640c23a62f3a-ad17afb8ab0mr88710966b.53.1746142121345; Thu, 01 May 2025
- 16:28:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CU76KPCw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746142211; x=1777678211;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aXfmMM0IyA1Pu13nHPIgtToxzTFby9IIeI8NZsGPaNg=;
+  b=CU76KPCwOgFxTvLOug33YIRfKTT19IdBl2jm4wUmZ8Bn1VlALMSS2rEE
+   3DVJsnFHgkCxujprPwMvo9J9x2nhVa8BGhbYNTVJfPcQ2W09YDtQqI8ho
+   Md20H2BtO5Zfqu9SkBvmnwVL5TkXoT96Ciubs24UQokiNknxd6dU/v2SH
+   3/h1YD4npbCoitEJIttU1/VBQBcefSroi8pwMUOESYbSXrIYzh0JXpDMd
+   R3uXI2zFixTBavbi40vOeyMSQAcdrMxJHYJO3Y2eq25nZphZ6ZiTzh4c8
+   ayXJSGUhPOcm8x1+8RRzfJd/e8kwGvCMxe24JnYZZWr6yHYrNvpraXQgn
+   g==;
+X-CSE-ConnectionGUID: AWzRPwdcRCiLZxruANeOyA==
+X-CSE-MsgGUID: aDJUA0GbS4ysJyK1Li8yKw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="47915267"
+X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
+   d="scan'208";a="47915267"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 16:30:10 -0700
+X-CSE-ConnectionGUID: BwCrRmz2Rcuetj5z0SotRA==
+X-CSE-MsgGUID: emGAEMbPQGy9juRAWID4vw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
+   d="scan'208";a="165564294"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 01 May 2025 16:30:08 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uAdLy-0004RB-2p;
+	Thu, 01 May 2025 23:30:06 +0000
+Date: Fri, 2 May 2025 07:29:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot+extras/v6.15-rc3 128/152]
+ fs/resctrl/ctrlmondata.c:585:2: error: call to undeclared function
+ 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202505020732.1zsVNl1R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org> <20250501-default-const-init-clang-v1-2-3d2c6c185dbb@kernel.org>
-In-Reply-To: <20250501-default-const-init-clang-v1-2-3d2c6c185dbb@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 1 May 2025 16:28:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
-X-Gm-Features: ATxdqUGTUyHgnV_iTiKt6DDkeUKklvk9V4X7Te2h_qX7brrmy-_kNjuWcrlAGLY
-Message-ID: <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] include/linux/typecheck.h: Zero initialize dummy variables
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	stable@vger.kernel.org, Linux Kernel Functional Testing <lkft@linaro.org>, 
-	Marcus Seyfarth <m.seyfarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 1 May 2025 at 16:00, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> +({     type __dummy = {}; \
-> +       typeof(x) __dummy2 = {}; \
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot+extras/v6.15-rc3
+head:   89e83f0ddb42053b6e3e6d4a9ce2fd3dd521c3d6
+commit: c4df656cb6afb482b2d7cb0bc404beb995ffe165 [128/152] x86/resctrl: Add stub to allow other architecture to disable monitor overflow
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250502/202505020732.1zsVNl1R-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505020732.1zsVNl1R-lkp@intel.com/reproduce)
 
-I'm actually surprised that this doesn't cause warnings in itself.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505020732.1zsVNl1R-lkp@intel.com/
 
-The types in question are not necessarily compound types, and can be
-simple types like 'int'.
+All errors (new ones prefixed by >>):
 
-The fact that you can write
+>> fs/resctrl/ctrlmondata.c:585:2: error: call to undeclared function 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     585 |         resctrl_arch_mon_ctx_free(r, evtid, rr->arch_mon_ctx);
+         |         ^
+   fs/resctrl/ctrlmondata.c:585:2: note: did you mean 'resctrl_arch_mon_ctx_alloc'?
+   arch/x86/include/asm/resctrl.h:197:21: note: 'resctrl_arch_mon_ctx_alloc' declared here
+     197 | static inline void *resctrl_arch_mon_ctx_alloc(struct rdt_resource *r,
+         |                     ^
+   1 error generated.
+--
+>> fs/resctrl/monitor.c:188:2: error: call to undeclared function 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     188 |         resctrl_arch_mon_ctx_free(r, QOS_L3_OCCUP_EVENT_ID, arch_mon_ctx);
+         |         ^
+   fs/resctrl/monitor.c:188:2: note: did you mean 'resctrl_arch_mon_ctx_alloc'?
+   arch/x86/include/asm/resctrl.h:197:21: note: 'resctrl_arch_mon_ctx_alloc' declared here
+     197 | static inline void *resctrl_arch_mon_ctx_alloc(struct rdt_resource *r,
+         |                     ^
+   fs/resctrl/monitor.c:632:2: error: call to undeclared function 'resctrl_arch_mon_ctx_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     632 |         resctrl_arch_mon_ctx_free(rr.r, rr.evtid, rr.arch_mon_ctx);
+         |         ^
+   2 errors generated.
 
-       int x = {};
 
-without the compiler screaming bloody murder about that insanity blows
-my mind, but it does seem to be valid C (*).
+vim +/resctrl_arch_mon_ctx_free +585 fs/resctrl/ctrlmondata.c
 
-How long has that been valid? Because this is certainly new to the
-kernel, and sparse does complain about this initializer.
+37d06f24730eb0 James Morse 2025-04-24  548  
+37d06f24730eb0 James Morse 2025-04-24  549  void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
+37d06f24730eb0 James Morse 2025-04-24  550  		    struct rdt_mon_domain *d, struct rdtgroup *rdtgrp,
+37d06f24730eb0 James Morse 2025-04-24  551  		    cpumask_t *cpumask, int evtid, int first)
+37d06f24730eb0 James Morse 2025-04-24  552  {
+37d06f24730eb0 James Morse 2025-04-24  553  	int cpu;
+37d06f24730eb0 James Morse 2025-04-24  554  
+37d06f24730eb0 James Morse 2025-04-24  555  	/* When picking a CPU from cpu_mask, ensure it can't race with cpuhp */
+37d06f24730eb0 James Morse 2025-04-24  556  	lockdep_assert_cpus_held();
+37d06f24730eb0 James Morse 2025-04-24  557  
+37d06f24730eb0 James Morse 2025-04-24  558  	/*
+37d06f24730eb0 James Morse 2025-04-24  559  	 * Setup the parameters to pass to mon_event_count() to read the data.
+37d06f24730eb0 James Morse 2025-04-24  560  	 */
+37d06f24730eb0 James Morse 2025-04-24  561  	rr->rgrp = rdtgrp;
+37d06f24730eb0 James Morse 2025-04-24  562  	rr->evtid = evtid;
+37d06f24730eb0 James Morse 2025-04-24  563  	rr->r = r;
+37d06f24730eb0 James Morse 2025-04-24  564  	rr->d = d;
+37d06f24730eb0 James Morse 2025-04-24  565  	rr->first = first;
+37d06f24730eb0 James Morse 2025-04-24  566  	rr->arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, evtid);
+37d06f24730eb0 James Morse 2025-04-24  567  	if (IS_ERR(rr->arch_mon_ctx)) {
+37d06f24730eb0 James Morse 2025-04-24  568  		rr->err = -EINVAL;
+37d06f24730eb0 James Morse 2025-04-24  569  		return;
+37d06f24730eb0 James Morse 2025-04-24  570  	}
+37d06f24730eb0 James Morse 2025-04-24  571  
+37d06f24730eb0 James Morse 2025-04-24  572  	cpu = cpumask_any_housekeeping(cpumask, RESCTRL_PICK_ANY_CPU);
+37d06f24730eb0 James Morse 2025-04-24  573  
+37d06f24730eb0 James Morse 2025-04-24  574  	/*
+37d06f24730eb0 James Morse 2025-04-24  575  	 * cpumask_any_housekeeping() prefers housekeeping CPUs, but
+37d06f24730eb0 James Morse 2025-04-24  576  	 * are all the CPUs nohz_full? If yes, pick a CPU to IPI.
+37d06f24730eb0 James Morse 2025-04-24  577  	 * MPAM's resctrl_arch_rmid_read() is unable to read the
+37d06f24730eb0 James Morse 2025-04-24  578  	 * counters on some platforms if its called in IRQ context.
+37d06f24730eb0 James Morse 2025-04-24  579  	 */
+37d06f24730eb0 James Morse 2025-04-24  580  	if (tick_nohz_full_cpu(cpu))
+37d06f24730eb0 James Morse 2025-04-24  581  		smp_call_function_any(cpumask, mon_event_count, rr, 1);
+37d06f24730eb0 James Morse 2025-04-24  582  	else
+37d06f24730eb0 James Morse 2025-04-24  583  		smp_call_on_cpu(cpu, smp_mon_event_count, rr, false);
+37d06f24730eb0 James Morse 2025-04-24  584  
+37d06f24730eb0 James Morse 2025-04-24 @585  	resctrl_arch_mon_ctx_free(r, evtid, rr->arch_mon_ctx);
+37d06f24730eb0 James Morse 2025-04-24  586  }
+37d06f24730eb0 James Morse 2025-04-24  587  
 
-So honestly, this will just cause endless sparse warnings instead. I
-think disabling this warning for now is likely the right thing to do.
+:::::: The code at line 585 was first introduced by commit
+:::::: 37d06f24730eb0e770949e2d27f04b9639a994dc AUTO SPLIT
 
-                Linus
+:::::: TO: James Morse <james.morse@arm.com>
+:::::: CC: James Morse <james.morse@arm.com>
 
-(*) Yes, the empty initializer is new in C23, but we've used that in
-the kernel for non-scalar objects for a long time.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
