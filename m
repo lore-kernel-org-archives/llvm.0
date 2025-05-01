@@ -1,99 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAB21E991D
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 21:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65FF1D89E3;
+	Thu,  1 May 2025 23:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746135130; cv=none; b=Wq0FXW9UIvJ9N15AyPS1+FHHZyvpopN0KgcnYQKFch013fMTkoCAkmPjaP3Ug+seeHNp6U1nLj+q21tJZBIqVRzordXo8a0HPlx2BhpI58gDSK+xu8ObDqN2UF8nimBgokokUQ7vi4DR+7mc7hH0MH0juSyBdoyxdbgH08lwwic=
+	t=1746140440; cv=none; b=SBDiPIdfuAb3tQ3D5PwlQKy/KJQJ7uX0HRwDWqhUrRkKkIlxpkxoutjUUjlY0TFxVGwXNjfOHsvs3yPEaGNrylWr/CwwKv+LEF+hgaQCISLj/Xr4kA+10V5wEa+advYw68/HoB0UjHpx7h/tH4EBaZhUcPJ7w+2emvnbMfEhuP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746135130; c=relaxed/simple;
-	bh=KmYAAhfHf0JCtih5r6elC+U2pbMuoTPiEzSg3zivqyc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CbzfHjHFscXQMuCo12QySFwowq9yY8rj+EVlwgWOvtYcg2os2ZQ5TYKPXopGj5LVE5V6CUOIAmkdlq8qawnBgpC8jKkk0pqcLWy91kDu97dkO84lWaXH+LeTIn35racN4pXhsQdyW3qboqYXA/IAbvi+Qa6QQ5OAcaGro60VtTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cTykfBNi; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746140440; c=relaxed/simple;
+	bh=1xRA18ItmOxRA1HPS4t1o2JORpDbr4fyL0IDsEt7UTw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DSUh8XoUueRhWMR7btWteK435RN0eK3cDufn7r8VhiI9/L0rxiVuP6ty5isisCflUjexYGL4IovUSMVmXgje30syKfOQntAhc6caHJMnp9Wgzjx2t3gJTkjVOdJCAfhRWIsJqCiBVXWKBFcSpHywyWg5BgB9poryjBuJPANCE60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5qbQUI2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cTykfBNi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746135127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+35ahWGwa2xQnF2ROnDINTwhm6bdQYLbDcA8p59nE7Y=;
-	b=cTykfBNiB8na9L4yULOeINdUFHxw/NUikp/YM9j3dtz3MvgnqSl1dSjMFnaKNfjVw5ga0A
-	uyXZ2dCCg0Uvb+H9l3Jrm7PtuMQjVvmzz+HCqW/6oEwDdpUdNa3I6MKk5QwhwvPNthesqd
-	CmG+iaiDFPvDOp4uAFQ+XI0bb1+dc/M=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-349-ISmlPh1RN-az6EG7lF9_eQ-1; Thu,
- 01 May 2025 17:32:05 -0400
-X-MC-Unique: ISmlPh1RN-az6EG7lF9_eQ-1
-X-Mimecast-MFC-AGG-ID: ISmlPh1RN-az6EG7lF9_eQ_1746135125
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1B41B1800446
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 21:32:05 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9E33F195608D;
-	Thu,  1 May 2025 21:32:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
- upstream-mainline, ebd297a2)
-Date: Thu, 01 May 2025 21:32:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5qbQUI2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC882C4CEE3;
+	Thu,  1 May 2025 23:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746140439;
+	bh=1xRA18ItmOxRA1HPS4t1o2JORpDbr4fyL0IDsEt7UTw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=A5qbQUI2iHgOBYOzypoRJpf6LMW2l1GkDXG+/L+frUb6jNZYKW3P7rpAEiqNAqHXu
+	 F4xIP+SoOqhzi+sSEN7dTxSL3Jct6vC7TKLy+M5/k4qUu4go3NkCLyTuMwKvtLYT85
+	 zUMMttrlilXp/L3v0twxN1seQ3quZHlIpgqMG8BWPTnMNJFAylD87eNFjDU3u+HLt9
+	 71aUiKqFyKZ9Y0s4enxgsYF2xXztdwoNQ/nCW8LaoKDcnaBbP41yZFNPszCGPfJqRv
+	 3SOr8j8u/RYJVapQFg8hxdByIDVk5XoNd7mEAipEJD5vLg3pQBGTEfrbHKqCUtPeaM
+	 Mjiy/8aRJoQyQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] Deal with clang's -Wdefault-const-init-unsafe
+Date: Thu, 01 May 2025 16:00:20 -0700
+Message-Id: <20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <14887.125050117320500613@us-mta-349.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: A2D80ocls9sfrQtJyk10bqWHx253n-m58XovHwsgRC8_1746135125
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAT9E2gC/x2MQQqAMAwEvyI5G6hVi/gV8dDaVANSpVURxL8bv
+ M3A7D6QKTFl6IsHEl2ceYsiVVnAtNg4E7IXB610q5paoadgz/XAaYv5QI4suEqIzpCuXOdV7Qz
+ IfE8U+P6vh/F9P9r9ROxqAAAA
+X-Change-ID: 20250430-default-const-init-clang-b6e21b8d03b6
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Marcus Seyfarth <m.seyfarth@gmail.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=995; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=1xRA18ItmOxRA1HPS4t1o2JORpDbr4fyL0IDsEt7UTw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnCf0XcLK3y+CxTGN68ulxwp2vSvrAHs1WPZt92LFJan
+ HPKd/6xjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARL2lGhuOKO5VTJ+1r/mef
+ bXXq4I7/0xo1th+5u0kn2u6+wZ3+RzGMDKstbpnmRU70K/+z2Gk+i+H7uyaP0j/MTXrZfeRtXOR
+ cDV4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+A new on by default warning in clang aims to flag cases where a const
+variable or field is not initialized and has no default value (i.e., not
+static or thread local). The field version of the warning triggers in
+several places within the kernel that are not problematic so it is
+disabled in the first patch. The variable version of the warning only
+triggers in one place, the typecheck() macro, so I opted to silence it
+in that one place to keep it enabled until it can be proved to be
+problematic enough to disable it.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+---
+Nathan Chancellor (2):
+      kbuild: Disable -Wdefault-const-init-field-unsafe
+      include/linux/typecheck.h: Zero initialize dummy variables
 
+ include/linux/typecheck.h  | 4 ++--
+ scripts/Makefile.extrawarn | 7 +++++++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+---
+base-commit: ebd297a2affadb6f6f4d2e5d975c1eda18ac762d
+change-id: 20250430-default-const-init-clang-b6e21b8d03b6
 
-Kernel information:
-    Commit message: Merge tag 'net-6.15-rc5' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1796430815
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1796430815-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
