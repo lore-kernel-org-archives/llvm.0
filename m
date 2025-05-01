@@ -1,97 +1,99 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1D31F541E
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 01:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28503611E
+	for <llvm@lists.linux.dev>; Thu,  1 May 2025 04:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746064674; cv=none; b=aWU8kQkbDEyVCfDey4YX0PPL0iM9znw+2NjLhwLPn6MU4gBVQALY20OaWcwCOgky6D4YR7jy03gldOiUss5x95oHEHBHam8nM9/SFkgklooz/lY420p745cznuoNpoIuVoq28FQtFz19KftgSxsDh5pS5ymnWaFpCCyAvpFPhW4=
+	t=1746072130; cv=none; b=uo5fWQitFs0ExkYpqA8UwGn4qGLvUsgYAqzb2TswOpPuLtzvGmPbegpbThnMJ8txtQW2j3Smq0mz6m4Irh+9r8AsjyNZA0fpEhvGGWK3haXyMPvy6zYSQYIpqvn74yTKlIq5rq0TlSxTJ0/W9ho8H5dB1sB//WJz3WytgrG8o3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746064674; c=relaxed/simple;
-	bh=vNNOALAKojuc1IVmn4YDr6ggA0d46EQHEfPXL/A816s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T9Qtf3+LxoY+AwrigbyKWN1AD4LJwxSFekrZueWlOQZYgk7KswUe6oyGy36A+1hzLdZEpR4lMBS2fYlPA8Ya2OTRcMHG43LgNApBNoRrx81mFqUOafTTyerw6G/w/BvjBrRObI/04vEdDyG+jZ4uiHbymxbMk1AuhR0P0eCxijA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=GMy0gebi; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1746072130; c=relaxed/simple;
+	bh=/1gloc7dZMHilCxWqPsS/ObL287NCQTEkbfy/jfRiBI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YkVZLTO+pbg5HgVMHdtHam9lmeXVWVA9EFmHsj2k5EEUgb70BRzyxMr7EdtFec7nJOHcigGf0Dhj2yAHLNY8XFwS27iYGj2Nx2Te/HgP5juhWaUIq4y0ca8VDvxUr36rP9rR6exxc1jzxtcXcpPoJdfnyht0Zmx3/cQ+KG+CN9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HPfis82K; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="GMy0gebi"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5f435c9f2f9so717000a12.1
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 18:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1746064670; x=1746669470; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WydL3B0dnp8hxEJArR4oBSH0m050M1di9pDwlQ1+3BI=;
-        b=GMy0gebiYFMgIPxLdYvYTMLZVy5osiz/c8I0GcjJ+aQ2B0vHUGJmPEu8aN1CzwLmGQ
-         lIB9qRG5JcCunXpIebSQu7oWUz37B297wNQ9NEZ3jCgHMQtr9pgPSn62iQHqVJz+qDlG
-         eAz/DVvhSFmlj6qUCsOWnb474TyP56zGReS3Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746064670; x=1746669470;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WydL3B0dnp8hxEJArR4oBSH0m050M1di9pDwlQ1+3BI=;
-        b=ooJ+QqMf8gLJ+E3NzLJUDF+CRatTnKHqNgdm0rZ33Pped5cVb1MS6z2VEo6WWnPobS
-         2mREzG2lc6FXfXG5pECWX5o5b7fn0JCwSC7lYwNRFdW6MHWv8fYcw6OYjUimtkzJh2hk
-         DIDigQuOXzWBC6Efmpz91pidQn7AXd6YGXWXG3ot2lpVI8TfaG2XWJf/b51yfh2yf7fb
-         pyGb4NgiSn2RgyJ6ySM9hh205qHL0bAnZbcujWGPeIBGy4qcYIL8T1wDQ1oqQeZx3q+5
-         nGpEZc3wn/+Edy2pQ2x0Vr7RKw3jrFz2KIz3trj25uIX6S6wMh0v8wZYuqlXiEbJxXTz
-         YFwA==
-X-Forwarded-Encrypted: i=1; AJvYcCWo+fH/eeYKOC0QrXFH/rXRAvMglUmAIC7O4XoOwPVrDeF5pp3XJLRPeYKpxT5luC3a94Q+@lists.linux.dev
-X-Gm-Message-State: AOJu0YyjapE+u4da4XkG/hp1bRnYRoXgJ9WerItM62fGE4c8jIFiGPRI
-	QokIdX+Zr/DsmfNJEOydZvSKpNMPkiYCU/lr6wf91c1CBXCCOhUSWS1R4rhTeZajLP5lI5Qjj1Q
-	7sZg=
-X-Gm-Gg: ASbGncv/jKtfRRMd2kKdoIOJ+TwJM3MaX5XZkBO0ioi80ouQiqxZ8f1eNRV8L8iuI9/
-	sAEm5Fskdv5C3342C9ZS942ROVO8D9d3LvyhUNMDvcHxLk/d0s3P7QkgKranzyM9oOmK9NBUytF
-	QHIIyOhKn9zuNp7X2wQySBpOqfB7nZrZRAsDBwzcqfIqXM3oM4+Ks1rrJf9AxaDTiXtzw0q3yEx
-	iziubO5uoXFLgWVNZMTqlSPbFHFESz1MBN/rN8bQ+yN9b3eGx174UFePbgpWJqEWFcHJ6QrDORi
-	xMOUrETlEnZCKrIEEmu2gYJYagp80SxV7DcuU1R6khVO0YgBhqhCcVnxSsfcwoByun4arE1TM6t
-	Y0ediiVp8+csqhNg=
-X-Google-Smtp-Source: AGHT+IG33j4s/CoBWq8Ky+Srz5Bl7Xm5ZvRcVVEW+3Jjac6+VXhM45ttLLpqWNo12GMKROKBdyeAuA==
-X-Received: by 2002:a17:906:c149:b0:ac3:b613:a651 with SMTP id a640c23a62f3a-acef425c604mr149610266b.17.1746064669762;
-        Wed, 30 Apr 2025 18:57:49 -0700 (PDT)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e41c40bsm997319266b.20.2025.04.30.18.57.49
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Apr 2025 18:57:49 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ace333d5f7bso84394866b.3
-        for <llvm@lists.linux.dev>; Wed, 30 Apr 2025 18:57:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXiUL8fab80dFBD0DFANO+m7dTuvBphsd+bDzZI8b4ttsxyyD2ASgklbmhuau9pd00xcggM@lists.linux.dev
-X-Received: by 2002:a17:907:86a4:b0:ac3:5c8e:d3f5 with SMTP id
- a640c23a62f3a-acef4299d67mr153004566b.27.1746064668786; Wed, 30 Apr 2025
- 18:57:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HPfis82K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746072128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0st0WzAp0ZjQYXHi/MGmojSC79rgeTAwgtr+MNb3RjQ=;
+	b=HPfis82KNe9//mZtOFvQwsO2CT39jRA6YmK8FUOGzbHRXosIQ2P+xu/5UmRnCMp6VIQWOv
+	8pdb/kDyqAvAS87Gk3gR3kQCDaf0eSRywCi9HkeOUbKzF/Cs3BHi5Eten9fwhvRQwtskq4
+	p4igkUgO0luH4nm8YXliT21OIduNLh4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-317-zXj-r4LmOGWa6VRBf6LUvA-1; Thu,
+ 01 May 2025 00:02:06 -0400
+X-MC-Unique: zXj-r4LmOGWa6VRBf6LUvA-1
+X-Mimecast-MFC-AGG-ID: zXj-r4LmOGWa6VRBf6LUvA_1746072126
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01051180098F
+	for <llvm@lists.linux.dev>; Thu,  1 May 2025 04:02:06 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9483D1800359;
+	Thu,  1 May 2025 04:02:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
+ upstream-mainline, 4f79eaa2)
+Date: Thu, 01 May 2025 04:02:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250430-unterminated-string-init-clang-v1-1-10eab729bf3d@kernel.org>
-In-Reply-To: <20250430-unterminated-string-init-clang-v1-1-10eab729bf3d@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 30 Apr 2025 18:57:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiHt40bxkx=1-2iecw32h5i8GXi=zpD0nUVdZxfh2k8mg@mail.gmail.com>
-X-Gm-Features: ATxdqUFgZ1ZDKZdSgMYuRCt9GwTeRVMgI6qtOB7_7i5pEIVOBrqHEKYehH_TDJc
-Message-ID: <CAHk-=wiHt40bxkx=1-2iecw32h5i8GXi=zpD0nUVdZxfh2k8mg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Properly disable -Wunterminated-string-initialization
- for clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <82994.125050100020600527@us-mta-317.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 3PbrrptDe49gORmJL0BmgwF5XnH832pmm2RL-0EDIwE_1746072126
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 30 Apr 2025 at 15:56, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Clang and GCC have different behaviors around disabling warnings
-> included in -Wall and -Wextra and the order in which flags are
-> specified
+Hi, we tested your kernel and here are the results:
 
-Ahh, ok. The clang behavior makes sense, even if it's obviously not
-how gcc does it.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Will apply. Thanks,
 
-                 Linus
+Kernel information:
+    Commit message: kbuild: Properly disable -Wunterminated-string-initiali=
+zation for clang
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1795426337
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1795426337-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
