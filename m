@@ -1,99 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28503611E
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 04:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92151C173C;
+	Thu,  1 May 2025 04:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746072130; cv=none; b=uo5fWQitFs0ExkYpqA8UwGn4qGLvUsgYAqzb2TswOpPuLtzvGmPbegpbThnMJ8txtQW2j3Smq0mz6m4Irh+9r8AsjyNZA0fpEhvGGWK3haXyMPvy6zYSQYIpqvn74yTKlIq5rq0TlSxTJ0/W9ho8H5dB1sB//WJz3WytgrG8o3M=
+	t=1746072950; cv=none; b=i3P3LOvUE4UkQXEjAT2GtJeLCEEKjopkBtvariJZIgHIyyglwVlKXNnTizMXCeOPQ6F5XI9iJ3Z6ILYMBIGM+CQlfRV0gLTa+Hc1K1zmRP6MS9asgN7qn+NlpH/8EsJKmjW7k2Ouj1AkyhSuySj4YrsVh4vaRNSl/qCVX1Dur1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746072130; c=relaxed/simple;
-	bh=/1gloc7dZMHilCxWqPsS/ObL287NCQTEkbfy/jfRiBI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YkVZLTO+pbg5HgVMHdtHam9lmeXVWVA9EFmHsj2k5EEUgb70BRzyxMr7EdtFec7nJOHcigGf0Dhj2yAHLNY8XFwS27iYGj2Nx2Te/HgP5juhWaUIq4y0ca8VDvxUr36rP9rR6exxc1jzxtcXcpPoJdfnyht0Zmx3/cQ+KG+CN9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HPfis82K; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746072950; c=relaxed/simple;
+	bh=TjXxlPC2qVXYFnjPf2Z+aYVYmSGz4oBr/o09GypsdUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eNVog1WvesreYbMg2P2JdO4V6I1mEa4vegUCxjuh7us8Nti6z9EoBig9MFavm2ImU6sews3EiiNGPOXADq2FMLSgv8ZaIUmzi54NP0NKpifKsbdNpQYfuMjRisj/AQ2xU9Gww7P7cNadKuaUH23aXBH83jk3eSbzuI8KzhQHHY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U+mXb2Zs; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HPfis82K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746072128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0st0WzAp0ZjQYXHi/MGmojSC79rgeTAwgtr+MNb3RjQ=;
-	b=HPfis82KNe9//mZtOFvQwsO2CT39jRA6YmK8FUOGzbHRXosIQ2P+xu/5UmRnCMp6VIQWOv
-	8pdb/kDyqAvAS87Gk3gR3kQCDaf0eSRywCi9HkeOUbKzF/Cs3BHi5Eten9fwhvRQwtskq4
-	p4igkUgO0luH4nm8YXliT21OIduNLh4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-317-zXj-r4LmOGWa6VRBf6LUvA-1; Thu,
- 01 May 2025 00:02:06 -0400
-X-MC-Unique: zXj-r4LmOGWa6VRBf6LUvA-1
-X-Mimecast-MFC-AGG-ID: zXj-r4LmOGWa6VRBf6LUvA_1746072126
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01051180098F
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 04:02:06 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9483D1800359;
-	Thu,  1 May 2025 04:02:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
- upstream-mainline, 4f79eaa2)
-Date: Thu, 01 May 2025 04:02:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U+mXb2Zs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746072947; x=1777608947;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TjXxlPC2qVXYFnjPf2Z+aYVYmSGz4oBr/o09GypsdUE=;
+  b=U+mXb2ZsToEJyhVvaTWJvnXF7eGhf3HoHM6RD/XOY4YRShPmlD7BThDh
+   a24nsI9JmKgiUo8A02dLS+kZjARDPxlGA31haiKp0MgyxvSPb1Hlzl8uD
+   EdStcqQacTVmdTjKdcEITRkfF2kgWVJ3ypKNtXkoxaJd9kcGlIcGc99mf
+   DFg7tc2cCBXjewq5CQR9b8QjO8TufLIsv2x1AqCN88bZ2U1nPq6W5IJSu
+   HTp+vKowl/Pe/O5UqFSgYiXeW6w90bJAI/bRBqsjJHHXB8KDSfppB6BnN
+   CzFAZ55nP37V+jiBvnRRDQsJsUTGLrKGXWBgfpsfW0k9zkwD0Yw2BWiZT
+   A==;
+X-CSE-ConnectionGUID: SyttwPC+Rz+R4clO1ucodQ==
+X-CSE-MsgGUID: pXPcSZc3SEW6+BP9SohW/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="50407188"
+X-IronPort-AV: E=Sophos;i="6.15,253,1739865600"; 
+   d="scan'208";a="50407188"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 21:15:45 -0700
+X-CSE-ConnectionGUID: m6+G2+YkRr+FSZs6BrAhNw==
+X-CSE-MsgGUID: GWgNW513SDiTD9EXQikxTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,253,1739865600"; 
+   d="scan'208";a="171533757"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 30 Apr 2025 21:15:44 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uALKn-0003x7-1i;
+	Thu, 01 May 2025 04:15:41 +0000
+Date: Thu, 1 May 2025 12:14:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:iommu_pt_all 51/68]
+ drivers/iommu/generic_pt/fmt/../kunit_generic_pt.h:447:20: warning: result
+ of comparison of constant 280375465082880 with expression of type
+ 'pt_vaddr_t' (aka 'unsigned int') is always true
+Message-ID: <202505011237.MVSM07S7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <82994.125050100020600527@us-mta-317.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 3PbrrptDe49gORmJL0BmgwF5XnH832pmm2RL-0EDIwE_1746072126
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/jgunthorpe/linux iommu_pt_all
+head:   e09ae4f9b47677554bf952d7c55a9e2c6ade90f8
+commit: b7940ba758888328030d3a1338bf11836b963f3f [51/68] iommupt: Add the 32 bit ARMv7s page table format
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250501/202505011237.MVSM07S7-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505011237.MVSM07S7-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505011237.MVSM07S7-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: kbuild: Properly disable -Wunterminated-string-initiali=
-zation for clang
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1795426337
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1795426337-x86_64-kernel-debug
+   In file included from drivers/iommu/generic_pt/fmt/iommu_armv7s.c:11:
+   In file included from drivers/iommu/generic_pt/fmt/iommu_template.h:46:
+>> drivers/iommu/generic_pt/fmt/../kunit_generic_pt.h:447:20: warning: result of comparison of constant 280375465082880 with expression of type 'pt_vaddr_t' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
+     447 |         if (pgsize_bitmap != 0xff0000000000 ||
+         |             ~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +447 drivers/iommu/generic_pt/fmt/../kunit_generic_pt.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  425  
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  426  static void test_lvl_possible_sizes(struct kunit *test, struct pt_state *pts,
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  427  				    void *arg)
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  428  {
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  429  	unsigned int num_items_lg2 = safe_pt_num_items_lg2(pts);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  430  	pt_vaddr_t pgsize_bitmap = pt_possible_sizes(pts);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  431  	unsigned int isz_lg2 = pt_table_item_lg2sz(pts);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  432  
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  433  	if (!pt_can_have_leaf(pts)) {
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  434  		KUNIT_ASSERT_EQ(test, pgsize_bitmap, 0);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  435  		return;
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  436  	}
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  437  
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  438  	/* No bits for sizes that would be outside this table */
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  439  	KUNIT_ASSERT_EQ(test, log2_mod(pgsize_bitmap, isz_lg2), 0);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  440  	KUNIT_ASSERT_EQ(
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  441  		test, fvalog2_div(pgsize_bitmap, num_items_lg2 + isz_lg2), 0);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  442  
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  443  	/*
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  444  	 * Non contiguous must be supported. AMDv1 has a HW bug where it does
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  445  	 * not support it on one of the levels.
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  446  	 */
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28 @447  	if (pgsize_bitmap != 0xff0000000000 ||
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  448  	    strcmp(__stringify(PTPFX_RAW), "amdv1") != 0)
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  449  		KUNIT_ASSERT_TRUE(test, pgsize_bitmap & log2_to_int(isz_lg2));
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  450  	else
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  451  		KUNIT_ASSERT_NE(test, pgsize_bitmap, 0);
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  452  
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  453  	/* A contiguous entry should not span the whole table */
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  454  	if (num_items_lg2 + isz_lg2 != PT_VADDR_MAX_LG2)
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  455  		KUNIT_ASSERT_FALSE(
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  456  			test,
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  457  			pgsize_bitmap & log2_to_int(num_items_lg2 + isz_lg2));
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  458  }
+4c3d5787e1c95a Jason Gunthorpe 2024-06-28  459  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: The code at line 447 was first introduced by commit
+:::::: 4c3d5787e1c95a17df00e741ab31c913ad08433e iommupt: Add a kunit test for Generic Page Table
 
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
