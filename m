@@ -1,80 +1,118 @@
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D71079C0;
-	Thu,  1 May 2025 09:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1171220E03C;
+	Thu,  1 May 2025 09:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746090737; cv=none; b=YnO534lrxiJ1yxaC0rv7XGK1AS8nXT18yiDmwmL7K6FsTHcrNpOTJrMbm1qU4eHCbgfy+Vulp8WRUsxmKy46SviV88ipx0iJb60az3Eb5gCNOxB+BxoESaYzJOagV0PX5jB4FaNqjLw4sve8UgcYgC95JOiYNkDBEGkt5pb/2j0=
+	t=1746091408; cv=none; b=rBGCR4Zvez46cSWPvYK58B0RXwBgh/9jPm+5RTBpUsA11+AV1IOaWLUg21yBMsE+EfL4y/fGzEjBmaF9djXXBFv+7OT/oL9hRzhIxUoi91yEsTUtT5Jk2O+JMVnof7UMzF3ufNi7uZeohyqm1DtyBWCx6uzCNZojFuK9KsVf8nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746090737; c=relaxed/simple;
-	bh=2tD5Jux73LwaSNt2LjgT4rosrxpF3w/3rSr37uqz3iI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OkGvlmMsqJmbT4j/j9jWR5uQl367/rdOlyAShWUEEzOr/dK1sxujhYohJHKqFSwty8NLnPREz6/3AUvi17X2ZGy6pdzD0oN1qw1Qo+uo8b/TP+KijhsyvJpHu25bHv6+ZtkSTI0vQLKJeUJwgUO6u12zwcW4rojGKJboj+ry4hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CFC85439EA;
-	Thu,  1 May 2025 09:12:03 +0000 (UTC)
-Message-ID: <6826b6a1-8eb6-403e-b118-c1ebd5fdc2d3@ghiti.fr>
-Date: Thu, 1 May 2025 11:12:03 +0200
+	s=arc-20240116; t=1746091408; c=relaxed/simple;
+	bh=mEMr0h0yhTv0Vqj2KXFxJsF480NuePE1fdRFqc+606U=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NeuFY1BtKP8vMtBzkCpjHOi13ZGxCBcc3fhtnpoWXoSAsK4gQojP/reqQocRwWHNy4fTJgJ1hYnmlauTUWmld3ClQpdBJe3YrJW/WvG5tDKITB+CMLgBJx3FKoXS8mjJiD5/YlIeIklRDK8SGZL/JpPZIPDm0BsWTrE3cifrH9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=WC5PUHBp; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="WC5PUHBp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1746091397;
+	bh=Afd/qagLKI/fX+0RGz5E2Ib/ep+ALL7XK8CbKf8SgZ8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=WC5PUHBpzf/Bq7qfABvB68s996X+KfIVkxXtnqWlzFu6ZE1F9tPrgFtZTAApIeEah
+	 Td6zPENp9j3EAxeWDDIck+n9YbS/THiOkDHcW1tTj6/GFUMuFgv/YSPY92ZbiyyQLl
+	 yNoKEPyWyHpDIUJD7IZtBA0mycpOVKxxpLINqk4A=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 4D8E365F64;
+	Thu,  1 May 2025 05:23:16 -0400 (EDT)
+Message-ID: <7249b7dfdfa5fc56d321c9b69affa17b325d1e4a.camel@xry111.site>
+Subject: Re: [PATCH v2] riscv: vdso.lds.S: Do not export __vdso_getrandom
+ when building a 32-bit vDSO
+From: Xi Ruoyao <xry111@xry111.site>
+To: Nathan Chancellor <nathan@kernel.org>, Palmer Dabbelt
+ <palmer@rivosinc.com>,  Alexandre Ghiti	 <alex@ghiti.fr>
+Cc: linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, Linux Kernel Functional Testing <lkft@linaro.org>
+Date: Thu, 01 May 2025 17:23:14 +0800
+In-Reply-To: <20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org>
+References: 
+	<20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: next-20250422: arch/riscv/kernel/vdso/vdso.so.dbg: dynamic
- relocations are not supported
-To: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: naresh.kamboju@linaro.org, anders.roxell@linaro.org,
- aou@eecs.berkeley.edu, arnd@arndb.de, dan.carpenter@linaro.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- lkft-triage@lists.linaro.org, llvm@lists.linux.dev, masahiroy@kernel.org,
- namcao@linutronix.de, palmer@dabbelt.com, regressions@lists.linux.dev
-References: <CA+G9fYtN2ie+YtK3H9mrQ5QqrSCFGGjVbtJcfiYX0oHMVWMn9w@mail.gmail.com>
- <20250430154845.795993-1-ojeda@kernel.org> <20250501004434.GA3762678@ax162>
-Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250501004434.GA3762678@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieeludelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeejkeeugfdthefhveelffdvgeetgeelteeijeekheehfeevtdduvdfgteevgfehffenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhinhhfrhgruggvrggurdhorhhgnecukfhppedvtddtudemkeeiudemfeefkedvmegvfheltdemfedvgegumegrtdegjeemfeejjedumedufegvfhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemfeefkedvmegvfheltdemfedvgegumegrtdegjeemfeejjedumedufegvfhdphhgvlhhopeglkffrggeimedvtddtudemkeeiudemfeefkedvmegvfheltdemfedvgegumegrtdegjeemfeejjedumedufegvfhgnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepudehpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtp
- hhtthhopehnrghrvghshhdrkhgrmhgsohhjuheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohepuggrnhdrtggrrhhpvghnthgvrheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alex@ghiti.fr
 
-On 01/05/2025 02:44, Nathan Chancellor wrote:
-> On Wed, Apr 30, 2025 at 05:48:45PM +0200, Miguel Ojeda wrote:
->> On Wed, 23 Apr 2025 20:15:45 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>> build errors with clang
->>> ld.lld: error: version script assignment of 'LINUX_4.15' to symbol
->>> '__vdso_getrandom' failed: symbol not defined
->>> llvm-nm: error: arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg: No
->>> such file or directory
->> I have also been seeing this too in my Rust-enabled builds for a few
->> days at least.
-> I forgot to follow up here and say that I sent a patch for this, it just
-> needs to be applied by the RISC-V folks.
->
-> https://lore.kernel.org/20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org/
+On Wed, 2025-04-23 at 13:03 -0700, Nathan Chancellor wrote:
+> ld.lld defaults to '--no-undefined-version', which causes the compat
+> vDSO for 64-bit builds and the regular vDSO for 32-bit builds to break
+> after wiring up the vDSO getrandom() call because __vdso_getrandom is
+> unconditionally exported, even though it is not always present.
+>=20
+> =C2=A0 ld.lld: error: version script assignment of 'LINUX_4.15' to symbol=
+ '__vdso_getrandom' failed: symbol not defined
+>=20
+> Move the export of __vdso_getrandom() under an ifdef to only include it
+> when CONFIG_VDSO_GETRANDOM is defined (to exclude 32-bit builds) and
+> COMPAT_VDSO is not defined (to exclude the 32-bit vDSO on 64-bit builds)
+> to resolve the error.
+>=20
+> Fixes: 89079520cef6 ("RISC-V: vDSO: Wire up getrandom() vDSO implementati=
+on")
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/CA+G9fYtN2ie+YtK3H9mrQ5QqrSCFGGjVbtJcfiYX=
+0oHMVWMn9w@mail.gmail.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
+Reviewed-by: Xi Ruoyao <xry111@xry111.site>
 
-Yes, we will, I just want to review the assembly part of the original 
-patchset before!
+I didn't expect my patch to make it way into -next as it already failed
+the CI.  I was just too busy on $other_stuff and thinking "hey let me
+rework the patch when I get some time" :(.
 
-Thanks for the heads-up,
+> ---
+> Changes in v2:
+> - Include a check for CONFIG_VDSO_GETRANDOM to fix breakage on
+> =C2=A0 rv32_defconfig. Include the tags for the report that helped highli=
+ght
+> =C2=A0 this issue.
+> - Link to v1: https://lore.kernel.org/r/20250423-riscv-fix-compat_vdso-ll=
+d-v1-1-820de5cad605@kernel.org
+> ---
+> =C2=A0arch/riscv/kernel/vdso/vdso.lds.S | 2 ++
+> =C2=A01 file changed, 2 insertions(+)
+>=20
+> diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/v=
+dso.lds.S
+> index abc69cda0445..7c15b0f4ee3b 100644
+> --- a/arch/riscv/kernel/vdso/vdso.lds.S
+> +++ b/arch/riscv/kernel/vdso/vdso.lds.S
+> @@ -80,7 +80,9 @@ VERSION
+> =C2=A0#ifndef COMPAT_VDSO
+> =C2=A0		__vdso_riscv_hwprobe;
+> =C2=A0#endif
+> +#if defined(CONFIG_VDSO_GETRANDOM) && !defined(COMPAT_VDSO)
+> =C2=A0		__vdso_getrandom;
+> +#endif
+> =C2=A0	local: *;
+> =C2=A0	};
+> =C2=A0}
+>=20
+> ---
+> base-commit: bafa451a96d0f1404aa1a5a267f78767a55fac71
+> change-id: 20250423-riscv-fix-compat_vdso-lld-e1b80b324d97
+>=20
+> Best regards,
 
-Alex
-
-
->
-> Cheers,
-> Nathan
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
