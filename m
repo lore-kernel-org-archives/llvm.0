@@ -1,206 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2ACFC2ED;
-	Thu,  1 May 2025 01:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D5E2F3E;
+	Thu,  1 May 2025 01:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746062273; cv=none; b=X0KX4P03xHHXO4M5E7Uxrinlz5IagAhv2b//GQpQMOICLKjQspcaueQltMqB0sqkzRuMnh3+2QNo7PFqFTA7jJFsqQs+IyF3re/MMVabJdVi0fx33OKl+7HRoX2ED9tPRi6AGqKSAGT82SgXiCF3OjjpVtpFiZ/WM6Mzv/wy4XU=
+	t=1746062426; cv=none; b=sZaFBgUJEVb4LIYtigfeGrvXUXs2KUPp2MP2lOvkPWJa4Q50zK35XIbxnNsGGYdibj91O7fhGg5vMBli2gyS0JTCIjj2GSWZKnRscufHpKJlPqK8ebiXQ9NoGJsac12LAmW7zuirJEC9XZzwYjajAuDI1X3brFsRcUIHMfBHR58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746062273; c=relaxed/simple;
-	bh=taJJhelh08weuP+5uKJFnU5FDSSKTnAEkdxA0B/R8uA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=e2o16ls2NxbxT5XjYzbMc7l4tqSYg7oDo7CDKxmWvOYWNFbTdnHDY3h/aA9MljO3MrkQK8MIZLsWpXq41oqwGNRJ/tcUSA45sOYNARdB9iu+hEAzPZh6yVXfwHwiDpe3wcp0qHzqpdspOfxJCys6Xt8DJa9MfmTb/RamJccNJ9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F6yXHU66; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746062426; c=relaxed/simple;
+	bh=3IyZpzgUFuYEN0HmGWoxBd+Pp4s52MegKxt/UbLbtvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EHH5HBLOvtTWB+rvg5AJ3n0s/dQ0lkDJ2XPg5aBKyOJ0N/U58TytEEp4ry+7it/0B96/lAHtXsZJzhoSVQhyUKbsZSFx63UwHhmw5uZpds3Hxg2mKjeGaTtr2uBoIWADRaErB/HB2vWfEYsfChTFqCYsx7GiHyFU0AAj8vjotSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J9UPb7O1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F6yXHU66"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746062271; x=1777598271;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=taJJhelh08weuP+5uKJFnU5FDSSKTnAEkdxA0B/R8uA=;
-  b=F6yXHU66eP8kXHHiR9rA3W3q94Fr1sV8umCeepqMdJI+rLAe3v9yVBe4
-   PJXmOSnPLkRf7S0b5iODxT1uFAM/wpK5eAMcCMsFD/Zm747nqRsm7pNWz
-   lZQpgMtmnGuseAqEliMs2UwceK2RiraB0E8cgg1VOkunKNt2tZifVc9MV
-   yqlkCHKG3tFcDNqGtI6Oms51MGIM5fQTuigMdQzCfD/ON1lAMG2XyD2Bz
-   XgNT9e3yM91upCTjKlUKVwerQSngWr0nCbbbSRxWxCKSabFt7F/FQ01P/
-   rP+IVy+i3m3yIsgpVz2Q3bvqHyIrej7SLmBMr5wsLhCC5Wo1syOC2ffvS
-   Q==;
-X-CSE-ConnectionGUID: CpX8truhTXyF6Zt+hkZZ4w==
-X-CSE-MsgGUID: MopbfzgVTrSZVLIitEeMGg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="47649937"
-X-IronPort-AV: E=Sophos;i="6.15,253,1739865600"; 
-   d="scan'208";a="47649937"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 18:17:50 -0700
-X-CSE-ConnectionGUID: RvRSmK6QSlqbg7js984fGw==
-X-CSE-MsgGUID: XbT3VfqoTjitnePNWzX4Tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,253,1739865600"; 
-   d="scan'208";a="134019502"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 30 Apr 2025 18:17:49 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAIYc-0003sb-0d;
-	Thu, 01 May 2025 01:17:46 +0000
-Date: Thu, 1 May 2025 09:17:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:for-kernelci 21/21] drivers/spi/spi-stm32-ospi.c:828:60:
- error: incompatible pointer types passing 'struct resource **' to parameter
- of type 'struct resource *'; remove &
-Message-ID: <202505010952.VuIgscLk-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J9UPb7O1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545A9C4CEE7;
+	Thu,  1 May 2025 01:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746062426;
+	bh=3IyZpzgUFuYEN0HmGWoxBd+Pp4s52MegKxt/UbLbtvA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J9UPb7O1+IshFa6WZXkApQ+FAeIYpgBX1gm3DnzTRPPQniIbPxJ0mnpDgNXksCSiw
+	 EiJIpHndVFV8TFZZCn6y2qiQZH1kVyjHWdpHdppasynomKAKRbF4h5DqAK5w9+Zm60
+	 QriVa44hdz8SuzrcePVcBIwga5odCZZ6gD5julo/1T0vNwHonX11BZMgwXxZ+oayVh
+	 khxVRgiJoOOawXBjR2NBlKgczD0G5fJZAPypc7ef60eeVLmIQf/Hb9nJeWAcMWJbsZ
+	 /VDKz6t8/rfltnt5CKqzQ6S+9RLALBQytoDgEg7IrJyKEYk7FBml01PKKNc0i6CJ6w
+	 nmofEm/B5nCvQ==
+Date: Wed, 30 Apr 2025 18:20:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rong Xu <xur@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stafford Horne <shorne@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: distributed build support for Clang ThinLTO
+Message-ID: <20250501012019.GB3762678@ax162>
+References: <20250420010214.1963979-1-xur@google.com>
+ <CAF1bQ=RWmNt1xnnoQrsBG6-TXzSiqX6e-_Squ22UOSmUi-Tr8w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF1bQ=RWmNt1xnnoQrsBG6-TXzSiqX6e-_Squ22UOSmUi-Tr8w@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
-head:   3474fc53f28d0824c7020ddffc8559e8302f7415
-commit: 3474fc53f28d0824c7020ddffc8559e8302f7415 [21/21] spi: Use of_reserved_mem_region_to_resource() for "memory-region"
-config: hexagon-randconfig-001-20250501 (https://download.01.org/0day-ci/archive/20250501/202505010952.VuIgscLk-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505010952.VuIgscLk-lkp@intel.com/reproduce)
+Hi Rong,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505010952.VuIgscLk-lkp@intel.com/
+On Tue, Apr 29, 2025 at 01:34:00PM -0700, Rong Xu wrote:
+> Just wanted to gently follow up on this patch that I sent previously.
+> 
+> From a toolchain and compiler perspective, I genuinely believe that
+> kernel ThinLTO builds should use this. I really want to get some feedback
+> and reviews on this patch.
 
-All errors (new ones prefixed by >>):
+My apologies for some radio silence, other regressions and issues have
+been higher priority until now. I will try to take a closer look at this
+soon but I do have one comment based on your comment above and the
+Kconfig help text...
 
->> drivers/spi/spi-stm32-ospi.c:828:60: error: incompatible pointer types passing 'struct resource **' to parameter of type 'struct resource *'; remove & [-Werror,-Wincompatible-pointer-types]
-     828 |         ret = of_reserved_mem_region_to_resource(dev->of_node, 0, &res);
-         |                                                                   ^~~~
-   include/linux/of_reserved_mem.h:44:47: note: passing argument to parameter 'res' here
-      44 |                                        unsigned int idx, struct resource *res);
-         |                                                                           ^
->> drivers/spi/spi-stm32-ospi.c:830:33: error: incompatible pointer types passing 'struct resource **' to parameter of type 'const struct resource *'; remove & [-Werror,-Wincompatible-pointer-types]
-     830 |                 ospi->mm_size = resource_size(&res);
-         |                                               ^~~~
-   include/linux/ioport.h:289:68: note: passing argument to parameter 'res' here
-     289 | static inline resource_size_t resource_size(const struct resource *res)
-         |                                                                    ^
-   drivers/spi/spi-stm32-ospi.c:831:46: error: incompatible pointer types passing 'struct resource **' to parameter of type 'const struct resource *'; remove & [-Werror,-Wincompatible-pointer-types]
-     831 |                 ospi->mm_base = devm_ioremap_resource(dev, &res);
-         |                                                            ^~~~
-   include/linux/device/devres.h:101:80: note: passing argument to parameter 'res' here
-     101 | void __iomem *devm_ioremap_resource(struct device *dev, const struct resource *res);
-         |                                                                                ^
-   drivers/spi/spi-stm32-ospi.c:775:23: warning: unused variable 'rmem' [-Wunused-variable]
-     775 |         struct reserved_mem *rmem = NULL;
-         |                              ^~~~
-   drivers/spi/spi-stm32-ospi.c:776:22: warning: unused variable 'node' [-Wunused-variable]
-     776 |         struct device_node *node;
-         |                             ^~~~
-   2 warnings and 3 errors generated.
+> On Sat, Apr 19, 2025 at 6:02 PM <xur@google.com> wrote:
+...
+> > diff --git a/arch/Kconfig b/arch/Kconfig
+> > index b0adb665041f1..cbeeeb9b076d8 100644
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -810,6 +810,18 @@ config LTO_CLANG_THIN
+> >             https://clang.llvm.org/docs/ThinLTO.html
+> >
+> >           If unsure, say Y.
+> > +
+> > +config LTO_CLANG_THIN_DIST
+> > +       bool "Clang ThinLTO in distributed mode (EXPERIMENTAL)"
+> > +       depends on HAS_LTO_CLANG && ARCH_SUPPORTS_LTO_CLANG_THIN
+> > +       select LTO_CLANG
+> > +       help
+> > +         This option enables Clang's ThinLTO in distributed build mode.
+> > +         In this mode, the linker performs the thin-link, generating
+> > +         ThinLTO index files. Subsequently, the build system explicitly
+> > +         invokes ThinLTO backend compilation using these index files
+> > +         and pre-linked IR objects. The resulting final object files
+> > +         are with the .final_o suffix.
+> >  endchoice
 
+This says what the option does but it does not really say why the user
+would want to use this over CONFIG_LTO_CLANG_THIN_DIST; even as someone
+relatively familiar with these technologies, I am not sure what this
+means for the build or resulting kernel. Is there any reason why a user
+would want to use in-process ThinLTO instead of distributed? You seem to
+make the case above and in Discourse that the kernel would benefit from
+this, so should we just wholesale replace in-process ThinLTO with the
+distributed one?
 
-vim +828 drivers/spi/spi-stm32-ospi.c
-
-   769	
-   770	static int stm32_ospi_get_resources(struct platform_device *pdev)
-   771	{
-   772		struct device *dev = &pdev->dev;
-   773		struct stm32_ospi *ospi = platform_get_drvdata(pdev);
-   774		struct resource *res;
-   775		struct reserved_mem *rmem = NULL;
-   776		struct device_node *node;
-   777		int ret;
-   778	
-   779		ospi->regs_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-   780		if (IS_ERR(ospi->regs_base))
-   781			return PTR_ERR(ospi->regs_base);
-   782	
-   783		ospi->regs_phys_base = res->start;
-   784	
-   785		ospi->clk = devm_clk_get(dev, NULL);
-   786		if (IS_ERR(ospi->clk))
-   787			return dev_err_probe(dev, PTR_ERR(ospi->clk),
-   788					     "Can't get clock\n");
-   789	
-   790		ospi->clk_rate = clk_get_rate(ospi->clk);
-   791		if (!ospi->clk_rate) {
-   792			dev_err(dev, "Invalid clock rate\n");
-   793			return -EINVAL;
-   794		}
-   795	
-   796		ospi->irq = platform_get_irq(pdev, 0);
-   797		if (ospi->irq < 0)
-   798			return ospi->irq;
-   799	
-   800		ret = devm_request_irq(dev, ospi->irq, stm32_ospi_irq, 0,
-   801				       dev_name(dev), ospi);
-   802		if (ret) {
-   803			dev_err(dev, "Failed to request irq\n");
-   804			return ret;
-   805		}
-   806	
-   807		ospi->rstc = devm_reset_control_array_get_optional_exclusive(dev);
-   808		if (IS_ERR(ospi->rstc))
-   809			return dev_err_probe(dev, PTR_ERR(ospi->rstc),
-   810					     "Can't get reset\n");
-   811	
-   812		ospi->dma_chrx = dma_request_chan(dev, "rx");
-   813		if (IS_ERR(ospi->dma_chrx)) {
-   814			ret = PTR_ERR(ospi->dma_chrx);
-   815			ospi->dma_chrx = NULL;
-   816			if (ret == -EPROBE_DEFER)
-   817				goto err_dma;
-   818		}
-   819	
-   820		ospi->dma_chtx = dma_request_chan(dev, "tx");
-   821		if (IS_ERR(ospi->dma_chtx)) {
-   822			ret = PTR_ERR(ospi->dma_chtx);
-   823			ospi->dma_chtx = NULL;
-   824			if (ret == -EPROBE_DEFER)
-   825				goto err_dma;
-   826		}
-   827	
- > 828		ret = of_reserved_mem_region_to_resource(dev->of_node, 0, &res);
-   829		if (!ret) {
- > 830			ospi->mm_size = resource_size(&res);
-   831			ospi->mm_base = devm_ioremap_resource(dev, &res);
-   832			if (!ospi->mm_base) {
-   833				dev_err(dev, "unable to map memory region: %pR\n", &res);
-   834				ret = -ENOMEM;
-   835				goto err_dma;
-   836			}
-   837	
-   838			if (ospi->mm_size > STM32_OSPI_MAX_MMAP_SZ) {
-   839				dev_err(dev, "Memory map size outsize bounds\n");
-   840				ret = -EINVAL;
-   841				goto err_dma;
-   842			}
-   843		} else {
-   844			dev_info(dev, "No memory-map region found\n");
-   845		}
-   846	
-   847		init_completion(&ospi->data_completion);
-   848		init_completion(&ospi->match_completion);
-   849	
-   850		return 0;
-   851	
-   852	err_dma:
-   853		dev_info(dev, "Can't get all resources (%d)\n", ret);
-   854	
-   855		if (ospi->dma_chtx)
-   856			dma_release_channel(ospi->dma_chtx);
-   857		if (ospi->dma_chrx)
-   858			dma_release_channel(ospi->dma_chrx);
-   859	
-   860		return ret;
-   861	};
-   862	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
