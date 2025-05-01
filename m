@@ -1,117 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C781D89FD;
-	Thu,  1 May 2025 10:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF211226527
+	for <llvm@lists.linux.dev>; Thu,  1 May 2025 12:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746095635; cv=none; b=MQ4maOTK0Yy2s07ES4NOR0pKoqqN3ULyrB8evrC/QV23PZ2CoHhwkBDwHhtc5j0o1MhTK+ewB56LI87hDbX5PywCLb4pEzDIJYLBzmqJMK5xSVsfh2bw0G9cy5ebTdGi/2ooqZJHqBEBR1L5/H+CuUpT+WU2Yp5K3HR/lG5lmUc=
+	t=1746101799; cv=none; b=M9021LrRcNbtKFrK/scCrKG/j8WYBwaYslK5iufZNC7IFSttQognGGDl2sBVbS/jWm+SS7br6GIW7AI35cNgR1mjo4bkemUquJ2X8X3/28gScb72pDIXHf1EYS6rb20gD1KzCARG5RubRvf7mHafdAAqUjFacyLSN21fl1lcBpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746095635; c=relaxed/simple;
-	bh=X6UR650SqjHCyahtjHRoHLJWzg+YRrp5P85X9aePAJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O9AseHg8HNxl32JDvIKsFLxEUQhIzmfZSzhOTtIiAXv50SkbGyyLHnzd950gai+LAN15BqpXgzTqM2HRNcp2gZGqAwVLZQ51mthpRrGY4bXUg6LA+Tr/Cd+nmZ8wZyCeNA8/K/GlV7X3Y1NHB6eQVFXPlXosdYW+1pB8bkuRzcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LIK19x1B; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746101799; c=relaxed/simple;
+	bh=IyknQ/1KxQ4jy7cl/9HHS98hqktVwXtxDa2ScsUKzik=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bthXutFfi+DoX6skX9eYfhT+WhDih6FQUkvsYvbQrqZigLvt8CXTzzyYV+ftwZwJk1c/A8dJ4w+Hzrp0ZhEh3XhWmnPNd08yQOwtTnF/6TjbCrzlctJ8Lz8xFW5G0ZMcYKzGT9iBF+spTtHb03FFB4tK5cg+gAxrNk461NdIdD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eTP8vteO; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LIK19x1B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746095633; x=1777631633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X6UR650SqjHCyahtjHRoHLJWzg+YRrp5P85X9aePAJY=;
-  b=LIK19x1B9uOqVY7STXK+Z4biUkMFj6BonLAC8n44wgdad8YPiUMDY3MQ
-   xOu+7THMuhyIokYE411+I1FBHd/D/UMJxCk56etkzvYvCXv2lRflVFDcN
-   h+IJFYmSdUVx28nAcXs1set7T1EN44frEkZIUixvcaQzlS8abgAIG0lWO
-   AdjCUEhzgMRZnnGiqlqos9og2IPNC7V2eo4JCJ2kkdNrbdeN7S+BnR7b3
-   0svmcL7jqv0WbfWPw0oDkgMsmCdlUlB4197vyKkXqhD8hAA95awko+bFx
-   WIX7XpBipfL6NNMEIobanVbDP8aKOm2E7nZel4ODCF5Rr91x77yALhwKg
-   Q==;
-X-CSE-ConnectionGUID: 1tE1Wfa1R76WES9eWq1/NA==
-X-CSE-MsgGUID: 54oU4YWORfSl1qakZU5Nyg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="70266723"
-X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
-   d="scan'208";a="70266723"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 03:33:52 -0700
-X-CSE-ConnectionGUID: GFVwQs/WS9WyCnQPuxzS9A==
-X-CSE-MsgGUID: 9/8z731hQXmpMAACsa26tQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
-   d="scan'208";a="134878633"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 01 May 2025 03:33:47 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAREe-00046b-2d;
-	Thu, 01 May 2025 10:33:44 +0000
-Date: Thu, 1 May 2025 18:32:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Claudiu <claudiu.beznea@tuxon.dev>, bhelgaas@google.com,
-	lpieralisi@kernel.org, kw@linux.com,
-	manivannan.sadhasivam@linaro.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
-	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
-	saravanak@google.com, p.zabel@pengutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	claudiu.beznea@tuxon.dev, linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 1/8] soc: renesas: r9a08g045-sysc: Add max reg offset
-Message-ID: <202505011843.2uKgWFN0-lkp@intel.com>
-References: <20250430103236.3511989-2-claudiu.beznea.uj@bp.renesas.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eTP8vteO"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-5edcac160b6so603764a12.0
+        for <llvm@lists.linux.dev>; Thu, 01 May 2025 05:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746101795; x=1746706595; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/0A3i0y7AEXGrVw5WCxmIfPgVwLI2iY2Vm/Il51dpo4=;
+        b=eTP8vteOPQiUAd4ymJ6pe4eHNbqW14T7PZVgIkvTPIpHWKDiL2ugq3sJS5H9Yqbiff
+         J5hBosmBHXNFcuVpfTbi0hmwcfFQxj7ipo8tncR70tKLbOThQ3AUTyVxLznjDABiuQst
+         vazS+BGH5OT14YW+OqIx38qzqqGeKCsFyQUFXaE7GV02mUK2zm/1PByLMM9lozJz+PXK
+         FgzrZD//hoG19Kxmyhbac7DKJ4+/l+x0oNpePY9CEtsyUJ7dPO73yqxXBGZ1D4O6vC6B
+         SlvP/Zh7YRh9MWbeHZPeaZCb0QkezfGLKxN7eoWZbvflZrvnndMPEU3HWAGrbcWWDl7Z
+         ZTwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746101795; x=1746706595;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/0A3i0y7AEXGrVw5WCxmIfPgVwLI2iY2Vm/Il51dpo4=;
+        b=FQMwuCSjMCevGWSWj5StXxHpivvE32GEMiYxXrh/3FO+4pqiGzNNanh0uGpdm8T8Ir
+         quXqTxB/ppIbxHz/C5MIkdwEzN4jlso9Wcher/qom5YTJ+YiQNhPZqbmtbN1Qpukx016
+         /okI88QNmqnT/g15sEvUWzmrrRWmuSNfDN++FON2/lN1qQFzi1MRoUUzGTEhralQE04U
+         lHDcrAGCmPhGjhPxzrMBrkli7HYio7LEBy7j25KhHYaXgzmPJIJG3GNBQ6e5w8t7FdIo
+         IoqdAAZ33kutZOVHBGLOhwJxcsqVv2yr52CQ1RxIsE4Tra93fHNOsYZCHIZZed4LaiN3
+         EVew==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ8eYiYLbwArxIaRAKp6cw05hk83Mpu4cpBmD5O9ZuvI+51jkxTNcM+2ku4q1JmzvBVyvU@lists.linux.dev
+X-Gm-Message-State: AOJu0YyF4ptt7yih1jMJbs+BLv0uQUixhd56CUnFB3NtXSigWaV3SzAP
+	kRuiIJdOT7cyCpCL7n2CrunAAZwPrzI+RpDFly8M3y1r4JylPxQ0HF3esg62pmW9G3+MH/QismW
+	Cebtz9BgjeFncmQ==
+X-Google-Smtp-Source: AGHT+IHPX/PFUHy/B5MO7ne7F95HMGksgkzZCkh09JGriq4Dil8oYGmEhlEKL/ontfKDHtVmoGpFcCN9QJjYhiI=
+X-Received: from edi23.prod.google.com ([2002:a05:6402:3057:b0:5f8:f539:d6d4])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:3549:b0:5f7:eafe:76d5 with SMTP id 4fb4d7f45d1cf-5f89ae69fdbmr5712393a12.8.1746101795323;
+ Thu, 01 May 2025 05:16:35 -0700 (PDT)
+Date: Thu, 01 May 2025 12:16:16 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250430103236.3511989-2-claudiu.beznea.uj@bp.renesas.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAA9mE2gC/23MQQ7CIBCF4as0sxbDIG2tK+9huqh0oETtGKhE0
+ 3B3sWuX/8vLt0Kk4CnCqVohUPLR81xC7Sow0zA7En4sDUqqWuqDFOEVF3EznERjWm1HadHKBsr /Gcj692Zd+tKTjwuHz0Yn/K3/lIQCxbUbqNOoj9jWZ8fs7rQ3/IA+5/wF2Ne1B6MAAAA=
+X-Change-Id: 20250430-rust-kcov-6c74fd0f1f06
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3372; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=IyknQ/1KxQ4jy7cl/9HHS98hqktVwXtxDa2ScsUKzik=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBoE2Yc1seMwVTR5LqQgHftFKn3mcU9oBGoTAYMA
+ XywZQOUJWaJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaBNmHAAKCRAEWL7uWMY5
+ RruED/41KjyEBSNGnCAlbC4pSd6vvUYRCa5IqugILNA8EWWtm5XV9HG03IkpVx9l+WPGCL4raW7
+ bT2QtGi8GeAZbwMap6yw8UgVvZiY28Lij+WpnY2OVdsJF/K2HbjEdk4JEHNYj2C9+i+ASxTwG69
+ A/X717LIJcJ4EXFsfO3TVIafKmpqbCgonlQuaio5BGKsE1UzRW0+SpM6s7LTkNi6aNu/9wmKpnb
+ 8tq+mESF2tJgKjOiFddb2iHUR3Rx3lR4XQYNN38JC73fjMfW7t6CPEsLwQscoS/3u60zajicOS5
+ lZQoWisQNarEmFfngt6PDpK91WJJDjrIHWH0KPdiJ2FHWjVP1XTXY4d5nBgk9NCOl39TmerwCYW
+ M59Id7N74zcvrA6sVIrOGB73JiWdYpZcnCxYBH3kvTTErHZvtqM7KMBPl5WWhbimVOnY1WYMXv+
+ 6bg/rZjLhQwVgsdVcjUEKk901szchGmin0XreBHwnx9KZEGkCtW8+rfROMpkliIP1HLl/dMTxAN
+ drQr4WXpIrbkME5OIUtsW03u3HqG4iW1x9cmNXhtQb44r0TDoEKS23in3hEfqarJ/he4hxMhumA
+ WtZWUY5kI7tm+uZaFe1e2preFMcwNYTTbkTcobH0Yuv1OdUEtfltjYFn69OMriD0xJc3aVcMnYi HWr3YoEPbjHxiNQ==
+X-Mailer: b4 0.14.2
+Message-ID: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
+Subject: [PATCH v2] kcov: rust: add flags for KCOV with Rust
+From: Alice Ryhl <aliceryhl@google.com>
+To: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Aleksandr Nogikh <nogikh@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Alexander Potapenko <glider@google.com>, 
+	Alice Ryhl <aliceryhl@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Claudiu,
+Rust code is currently not instrumented properly when KCOV is enabled.
+Thus, add the relevant flags to perform instrumentation correctly. This
+is necessary for efficient fuzzing of Rust code.
 
-kernel test robot noticed the following build errors:
+The sanitizer-coverage features of LLVM have existed for long enough
+that they are available on any LLVM version supported by rustc, so we do
+not need any Kconfig feature detection. The coverage level is set to 3,
+as that is the level needed by trace-pc.
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus geert-renesas-devel/next geert-renesas-drivers/renesas-clk robh/for-next arm64/for-next/core linus/master v6.15-rc4 next-20250430]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We do not instrument `core` since when we fuzz the kernel, we are
+looking for bugs in the kernel, not the Rust stdlib.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu/soc-renesas-r9a08g045-sysc-Add-max-reg-offset/20250430-183951
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20250430103236.3511989-2-claudiu.beznea.uj%40bp.renesas.com
-patch subject: [PATCH 1/8] soc: renesas: r9a08g045-sysc: Add max reg offset
-config: arm64-randconfig-003-20250501 (https://download.01.org/0day-ci/archive/20250501/202505011843.2uKgWFN0-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505011843.2uKgWFN0-lkp@intel.com/reproduce)
+Co-developed-by: Matthew Maurer <mmaurer@google.com>
+Signed-off-by: Matthew Maurer <mmaurer@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+I did not pick up the Tested-by due to the changes. I verified that it
+looks right under objdump, but I don't have a syzkaller setup I can try
+it with.
+---
+Changes in v2:
+- Ignore `core` in KCOV.
+- Link to v1: https://lore.kernel.org/r/20250430-rust-kcov-v1-1-b9ae94148175@google.com
+---
+ rust/Makefile         | 1 +
+ scripts/Makefile.kcov | 6 ++++++
+ scripts/Makefile.lib  | 3 +++
+ 3 files changed, 10 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505011843.2uKgWFN0-lkp@intel.com/
+diff --git a/rust/Makefile b/rust/Makefile
+index 3aca903a7d08cfbf4d4e0f172dab66e9115001e3..80c84749d734842774a3ac2aabbc944a68d02484 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -492,6 +492,7 @@ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs \
+ ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
+ $(obj)/core.o: scripts/target.json
+ endif
++KCOV_INSTRUMENT_core.o := n
+ 
+ $(obj)/compiler_builtins.o: private skip_gendwarfksyms = 1
+ $(obj)/compiler_builtins.o: private rustc_objcopy = -w -W '__*'
+diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
+index 67e8cfe3474b7dcf7552e675cffe356788e6c3a2..ddcc3c6dc513e1988aeaf07b8efa106e8dffa640 100644
+--- a/scripts/Makefile.kcov
++++ b/scripts/Makefile.kcov
+@@ -3,4 +3,10 @@ kcov-flags-$(CONFIG_CC_HAS_SANCOV_TRACE_PC)	+= -fsanitize-coverage=trace-pc
+ kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -fsanitize-coverage=trace-cmp
+ kcov-flags-$(CONFIG_GCC_PLUGIN_SANCOV)		+= -fplugin=$(objtree)/scripts/gcc-plugins/sancov_plugin.so
+ 
++kcov-rflags-y					+= -Cpasses=sancov-module
++kcov-rflags-y					+= -Cllvm-args=-sanitizer-coverage-level=3
++kcov-rflags-y					+= -Cllvm-args=-sanitizer-coverage-trace-pc
++kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -Cllvm-args=-sanitizer-coverage-trace-compares
++
+ export CFLAGS_KCOV := $(kcov-flags-y)
++export RUSTFLAGS_KCOV := $(kcov-rflags-y)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 2fe73cda0bddb9dcf709d0a9ae541318d54754d2..520905f19a9b19631394cfb5e129effb8846d5b8 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -169,6 +169,9 @@ ifeq ($(CONFIG_KCOV),y)
+ _c_flags += $(if $(patsubst n%,, \
+ 	$(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
+ 	$(CFLAGS_KCOV))
++_rust_flags += $(if $(patsubst n%,, \
++	$(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
++	$(RUSTFLAGS_KCOV))
+ endif
+ 
+ #
 
-All errors (new ones prefixed by >>):
+---
+base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
+change-id: 20250430-rust-kcov-6c74fd0f1f06
 
->> drivers/soc/renesas/r9a08g045-sysc.c:23:3: error: field designator 'max_register_offset' does not refer to any field in type 'const struct rz_sysc_init_data'
-      23 |         .max_register_offset = 0xe28,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +23 drivers/soc/renesas/r9a08g045-sysc.c
-
-    20	
-    21	const struct rz_sysc_init_data rzg3s_sysc_init_data __initconst = {
-    22		.soc_id_init_data = &rzg3s_sysc_soc_id_init_data,
-  > 23		.max_register_offset = 0xe28,
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice Ryhl <aliceryhl@google.com>
+
