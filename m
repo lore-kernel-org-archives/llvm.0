@@ -1,118 +1,112 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1171220E03C;
-	Thu,  1 May 2025 09:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF22155A4E;
+	Thu,  1 May 2025 09:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746091408; cv=none; b=rBGCR4Zvez46cSWPvYK58B0RXwBgh/9jPm+5RTBpUsA11+AV1IOaWLUg21yBMsE+EfL4y/fGzEjBmaF9djXXBFv+7OT/oL9hRzhIxUoi91yEsTUtT5Jk2O+JMVnof7UMzF3ufNi7uZeohyqm1DtyBWCx6uzCNZojFuK9KsVf8nw=
+	t=1746092960; cv=none; b=HuZpzN/yqaO5Sa05vInxahmqYHkDmeFmH04MmWOM5hQSXwb+7qaLKBE+VTs9fBHQDK61L5aL60+u1BiySVfzMcPz7WGwyQPRGe5whAS6nWsJnkgchV6SM72h1VAfXEGhvc/clqw5hfccP0CzBOB+eXhGZDiHUgy6HqwqqVKskS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746091408; c=relaxed/simple;
-	bh=mEMr0h0yhTv0Vqj2KXFxJsF480NuePE1fdRFqc+606U=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NeuFY1BtKP8vMtBzkCpjHOi13ZGxCBcc3fhtnpoWXoSAsK4gQojP/reqQocRwWHNy4fTJgJ1hYnmlauTUWmld3ClQpdBJe3YrJW/WvG5tDKITB+CMLgBJx3FKoXS8mjJiD5/YlIeIklRDK8SGZL/JpPZIPDm0BsWTrE3cifrH9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=WC5PUHBp; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1746092960; c=relaxed/simple;
+	bh=1esRohv/papPLDdSe2D0wJD6CrWbf7Rb0wcHc4Vktxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I9Gp4kRu29CRAMPPGGV7gB1iALiuVOESYm0Ka16/+FgcR3psnrMK2vY5drk9oTQFWLRocfXxVuRlTK8V4SyjUn0GT+YPhRvA0IZ/FIYH4BNeft4Nodu5+xsQwjLi9h1a4NXPPR3fDoy0UBCEbTArInTfdzdRPo5xLuMyBZXm79E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SrJmMMVt; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="WC5PUHBp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1746091397;
-	bh=Afd/qagLKI/fX+0RGz5E2Ib/ep+ALL7XK8CbKf8SgZ8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=WC5PUHBpzf/Bq7qfABvB68s996X+KfIVkxXtnqWlzFu6ZE1F9tPrgFtZTAApIeEah
-	 Td6zPENp9j3EAxeWDDIck+n9YbS/THiOkDHcW1tTj6/GFUMuFgv/YSPY92ZbiyyQLl
-	 yNoKEPyWyHpDIUJD7IZtBA0mycpOVKxxpLINqk4A=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 4D8E365F64;
-	Thu,  1 May 2025 05:23:16 -0400 (EDT)
-Message-ID: <7249b7dfdfa5fc56d321c9b69affa17b325d1e4a.camel@xry111.site>
-Subject: Re: [PATCH v2] riscv: vdso.lds.S: Do not export __vdso_getrandom
- when building a 32-bit vDSO
-From: Xi Ruoyao <xry111@xry111.site>
-To: Nathan Chancellor <nathan@kernel.org>, Palmer Dabbelt
- <palmer@rivosinc.com>,  Alexandre Ghiti	 <alex@ghiti.fr>
-Cc: linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, Linux Kernel Functional Testing <lkft@linaro.org>
-Date: Thu, 01 May 2025 17:23:14 +0800
-In-Reply-To: <20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org>
-References: 
-	<20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SrJmMMVt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746092958; x=1777628958;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1esRohv/papPLDdSe2D0wJD6CrWbf7Rb0wcHc4Vktxs=;
+  b=SrJmMMVttkXTHk+ObbJUt8GeemYeT/5xUJAQCFmjN1TdQTGovzl7s2if
+   woAbt/Dpg4Qpb8Pg4hXwbzeD26EyBfphuG57tEVpp8TrdiLUQGa2ZMSTR
+   sICpw1Lq2xnyZGrkbOSyWKBa5rtExsxUOTBt6dz/C2zztjWscyl5KvDuB
+   YVcfbP+Ohhxtongf8ILRjA0ePPfyyDY2ih2ftbvctJF+3tzaUUv2/5zDH
+   R33M5/LzEZz7YKv1e9Yc3xYb/opZLgWlHzzuJlD64mRt0KDYtUvcR2RDN
+   QHe3osDBUFtNMjmQkx1gaKgXtqObOoIADhABhvPhguTZcd3NzuSwhI0XK
+   A==;
+X-CSE-ConnectionGUID: H8nMK648QFyFldPJcv7Oog==
+X-CSE-MsgGUID: 8N6M942RTIODy5qmDRSJFA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="47012503"
+X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
+   d="scan'208";a="47012503"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 02:49:17 -0700
+X-CSE-ConnectionGUID: hZqqKIDrTZ6x9k4u+5X0cQ==
+X-CSE-MsgGUID: PvvGOntnR1K1gk/ka/Fmng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
+   d="scan'208";a="134848637"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 01 May 2025 02:49:15 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uAQXY-00045V-1i;
+	Thu, 01 May 2025 09:49:12 +0000
+Date: Thu, 1 May 2025 17:49:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Igor Belousov <igor.b@beldev.am>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH mm-new] mm/zblock: avoid failing the build
+Message-ID: <202505011759.kmXPfmFI-lkp@intel.com>
+References: <20250428065727.57990-1-igor.b@beldev.am>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250428065727.57990-1-igor.b@beldev.am>
 
-On Wed, 2025-04-23 at 13:03 -0700, Nathan Chancellor wrote:
-> ld.lld defaults to '--no-undefined-version', which causes the compat
-> vDSO for 64-bit builds and the regular vDSO for 32-bit builds to break
-> after wiring up the vDSO getrandom() call because __vdso_getrandom is
-> unconditionally exported, even though it is not always present.
->=20
-> =C2=A0 ld.lld: error: version script assignment of 'LINUX_4.15' to symbol=
- '__vdso_getrandom' failed: symbol not defined
->=20
-> Move the export of __vdso_getrandom() under an ifdef to only include it
-> when CONFIG_VDSO_GETRANDOM is defined (to exclude 32-bit builds) and
-> COMPAT_VDSO is not defined (to exclude the 32-bit vDSO on 64-bit builds)
-> to resolve the error.
->=20
-> Fixes: 89079520cef6 ("RISC-V: vDSO: Wire up getrandom() vDSO implementati=
-on")
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Closes: https://lore.kernel.org/CA+G9fYtN2ie+YtK3H9mrQ5QqrSCFGGjVbtJcfiYX=
-0oHMVWMn9w@mail.gmail.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Igor,
 
-Reviewed-by: Xi Ruoyao <xry111@xry111.site>
+kernel test robot noticed the following build errors:
 
-I didn't expect my patch to make it way into -next as it already failed
-the CI.  I was just too busy on $other_stuff and thinking "hey let me
-rework the patch when I get some time" :(.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-> ---
-> Changes in v2:
-> - Include a check for CONFIG_VDSO_GETRANDOM to fix breakage on
-> =C2=A0 rv32_defconfig. Include the tags for the report that helped highli=
-ght
-> =C2=A0 this issue.
-> - Link to v1: https://lore.kernel.org/r/20250423-riscv-fix-compat_vdso-ll=
-d-v1-1-820de5cad605@kernel.org
-> ---
-> =C2=A0arch/riscv/kernel/vdso/vdso.lds.S | 2 ++
-> =C2=A01 file changed, 2 insertions(+)
->=20
-> diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/v=
-dso.lds.S
-> index abc69cda0445..7c15b0f4ee3b 100644
-> --- a/arch/riscv/kernel/vdso/vdso.lds.S
-> +++ b/arch/riscv/kernel/vdso/vdso.lds.S
-> @@ -80,7 +80,9 @@ VERSION
-> =C2=A0#ifndef COMPAT_VDSO
-> =C2=A0		__vdso_riscv_hwprobe;
-> =C2=A0#endif
-> +#if defined(CONFIG_VDSO_GETRANDOM) && !defined(COMPAT_VDSO)
-> =C2=A0		__vdso_getrandom;
-> +#endif
-> =C2=A0	local: *;
-> =C2=A0	};
-> =C2=A0}
->=20
-> ---
-> base-commit: bafa451a96d0f1404aa1a5a267f78767a55fac71
-> change-id: 20250423-riscv-fix-compat_vdso-lld-e1b80b324d97
->=20
-> Best regards,
+url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Belousov/mm-zblock-avoid-failing-the-build/20250428-150012
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250428065727.57990-1-igor.b%40beldev.am
+patch subject: [PATCH mm-new] mm/zblock: avoid failing the build
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250501/202505011759.kmXPfmFI-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505011759.kmXPfmFI-lkp@intel.com/reproduce)
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505011759.kmXPfmFI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/zblock.c:27:
+>> mm/zblock.h:24:2: error: invalid preprocessing directive
+      24 | #warn This PAGE_SIZE is not quite supported yet
+         |  ^
+   1 error generated.
+
+
+vim +24 mm/zblock.h
+
+    16	
+    17	#if PAGE_SIZE == 0x1000
+    18	/* max 128 slots per block, max table size 32 */
+    19	#define SLOT_BITS 7
+    20	#elif PAGE_SIZE == 0x4000
+    21	/* max 256 slots per block, max table size 64 */
+    22	#define SLOT_BITS 8
+    23	#else
+  > 24	#warn This PAGE_SIZE is not quite supported yet
+    25	#define SLOT_BITS 8
+    26	#endif
+    27	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
