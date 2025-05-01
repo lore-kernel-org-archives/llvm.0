@@ -1,61 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD1722D4E5;
-	Thu,  1 May 2025 10:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C781D89FD;
+	Thu,  1 May 2025 10:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746094305; cv=none; b=kcTfB6e9hnoubcLRYOHvHeboTDdQwFV8/Tiedf8Ko19SmuAK4Fs9nUa8C6Ya4wQeFydwELFvrFc/xyxTJqn6AMoFVl0ORat2NMQ5VrSC8yzuFlJJzx1uRzqRiK5zYpjRr9dGECtrM9B6GtnReWV6atDwvIccvW0iw4gHxIlMa4M=
+	t=1746095635; cv=none; b=MQ4maOTK0Yy2s07ES4NOR0pKoqqN3ULyrB8evrC/QV23PZ2CoHhwkBDwHhtc5j0o1MhTK+ewB56LI87hDbX5PywCLb4pEzDIJYLBzmqJMK5xSVsfh2bw0G9cy5ebTdGi/2ooqZJHqBEBR1L5/H+CuUpT+WU2Yp5K3HR/lG5lmUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746094305; c=relaxed/simple;
-	bh=dxneAx6cI3IFpADOLFOssD5GBtmaUHCHg8pPx5RmHF4=;
+	s=arc-20240116; t=1746095635; c=relaxed/simple;
+	bh=X6UR650SqjHCyahtjHRoHLJWzg+YRrp5P85X9aePAJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GsSIyJvkel5bUgalwjFYR3IJQdBWoRZFlSbQBWmrm6B7yLpwt/NFkE4DHljX9KvVZL2ZzafU7NxutJJijpv0G5I8HU2iCUi8Fg3GrS09IvZiRHfXohGlEk4TWas3oq7D9ngMMavBmcsNKRHF7vzkl3EBkyPhvngriz0p3EBwdcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YND6zxFE; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=O9AseHg8HNxl32JDvIKsFLxEUQhIzmfZSzhOTtIiAXv50SkbGyyLHnzd950gai+LAN15BqpXgzTqM2HRNcp2gZGqAwVLZQ51mthpRrGY4bXUg6LA+Tr/Cd+nmZ8wZyCeNA8/K/GlV7X3Y1NHB6eQVFXPlXosdYW+1pB8bkuRzcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LIK19x1B; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YND6zxFE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LIK19x1B"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746094305; x=1777630305;
+  t=1746095633; x=1777631633;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dxneAx6cI3IFpADOLFOssD5GBtmaUHCHg8pPx5RmHF4=;
-  b=YND6zxFEIioARDa4zhjS6lRzKbG679HN1wnEHNCOIvh6IX9XpxRRQa/s
-   ucIQVyX4/PnyfA4pKG+b2PjPL3Mq4gpHduFVu3eoCEN8qG0DOjQ/z/+PR
-   +3KFVRkhCCgM3XSd91FOhFLNZqYpUiCIRmLF04MJAlDSuOhcvVtv5COsF
-   k4kmILhr7OPPBMeDkTFlGc3gra9/W32yDvjgjx0lAPHM7PEixc4bAAEcA
-   9waMbCQqKRB4M20PHq9WP0xoDFwEINiCMYwkdFGw5SF/LLfdUoVrONAde
-   +ZXIKvAPolqhfID3YsMOSxvT4JTwbx5Wt9ZA5bWNSZ+qjarVKvHN1e/VC
-   A==;
-X-CSE-ConnectionGUID: IoEhhaXxQQeSSm9hb0izlg==
-X-CSE-MsgGUID: C14GaScATeWHEEuWTBBzTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="51586277"
+  bh=X6UR650SqjHCyahtjHRoHLJWzg+YRrp5P85X9aePAJY=;
+  b=LIK19x1B9uOqVY7STXK+Z4biUkMFj6BonLAC8n44wgdad8YPiUMDY3MQ
+   xOu+7THMuhyIokYE411+I1FBHd/D/UMJxCk56etkzvYvCXv2lRflVFDcN
+   h+IJFYmSdUVx28nAcXs1set7T1EN44frEkZIUixvcaQzlS8abgAIG0lWO
+   AdjCUEhzgMRZnnGiqlqos9og2IPNC7V2eo4JCJ2kkdNrbdeN7S+BnR7b3
+   0svmcL7jqv0WbfWPw0oDkgMsmCdlUlB4197vyKkXqhD8hAA95awko+bFx
+   WIX7XpBipfL6NNMEIobanVbDP8aKOm2E7nZel4ODCF5Rr91x77yALhwKg
+   Q==;
+X-CSE-ConnectionGUID: 1tE1Wfa1R76WES9eWq1/NA==
+X-CSE-MsgGUID: 54oU4YWORfSl1qakZU5Nyg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="70266723"
 X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
-   d="scan'208";a="51586277"
+   d="scan'208";a="70266723"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 03:11:43 -0700
-X-CSE-ConnectionGUID: 2gFzeo5SSrKfvo7agMSFBQ==
-X-CSE-MsgGUID: aNItNEOWSquxVxQwR8d4zw==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 03:33:52 -0700
+X-CSE-ConnectionGUID: GFVwQs/WS9WyCnQPuxzS9A==
+X-CSE-MsgGUID: 9/8z731hQXmpMAACsa26tQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
-   d="scan'208";a="134875143"
+   d="scan'208";a="134878633"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 01 May 2025 03:11:40 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 01 May 2025 03:33:47 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uAQtF-00046H-2A;
-	Thu, 01 May 2025 10:11:37 +0000
-Date: Thu, 1 May 2025 18:11:02 +0800
+	id 1uAREe-00046b-2d;
+	Thu, 01 May 2025 10:33:44 +0000
+Date: Thu, 1 May 2025 18:32:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>, mst@redhat.com, jasowang@redhat.com
+To: Claudiu <claudiu.beznea@tuxon.dev>, bhelgaas@google.com,
+	lpieralisi@kernel.org, kw@linux.com,
+	manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
+	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+	saravanak@google.com, p.zabel@pengutronix.de
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	eperezma@redhat.com, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev
-Subject: Re: [PATCH] vringh: use bvec_kmap_local
-Message-ID: <202505011754.RqgPPZa9-lkp@intel.com>
-References: <20250430140004.2724391-1-hch@lst.de>
+	claudiu.beznea@tuxon.dev, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH 1/8] soc: renesas: r9a08g045-sysc: Add max reg offset
+Message-ID: <202505011843.2uKgWFN0-lkp@intel.com>
+References: <20250430103236.3511989-2-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,81 +72,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250430140004.2724391-1-hch@lst.de>
+In-Reply-To: <20250430103236.3511989-2-claudiu.beznea.uj@bp.renesas.com>
 
-Hi Christoph,
+Hi Claudiu,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on mst-vhost/linux-next]
-[also build test ERROR on linus/master v6.15-rc4 next-20250430]
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus geert-renesas-devel/next geert-renesas-drivers/renesas-clk robh/for-next arm64/for-next/core linus/master v6.15-rc4 next-20250430]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/vringh-use-bvec_kmap_local/20250430-220531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-patch link:    https://lore.kernel.org/r/20250430140004.2724391-1-hch%40lst.de
-patch subject: [PATCH] vringh: use bvec_kmap_local
-config: arm64-randconfig-003-20250501 (https://download.01.org/0day-ci/archive/20250501/202505011754.RqgPPZa9-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu/soc-renesas-r9a08g045-sysc-Add-max-reg-offset/20250430-183951
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250430103236.3511989-2-claudiu.beznea.uj%40bp.renesas.com
+patch subject: [PATCH 1/8] soc: renesas: r9a08g045-sysc: Add max reg offset
+config: arm64-randconfig-003-20250501 (https://download.01.org/0day-ci/archive/20250501/202505011843.2uKgWFN0-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505011754.RqgPPZa9-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505011843.2uKgWFN0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505011754.RqgPPZa9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505011843.2uKgWFN0-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/vhost/vringh.c:1332:36: error: incompatible pointer types passing 'struct bio_vec *' to parameter of type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-    1332 |                 __virtio16 *to = kmap_local_page(&ivec.iov.bvec[0]);
-         |                                                  ^~~~~~~~~~~~~~~~~
-   include/linux/highmem.h:96:50: note: passing argument to parameter 'page' here
-      96 | static inline void *kmap_local_page(struct page *page);
-         |                                                  ^
+>> drivers/soc/renesas/r9a08g045-sysc.c:23:3: error: field designator 'max_register_offset' does not refer to any field in type 'const struct rz_sysc_init_data'
+      23 |         .max_register_offset = 0xe28,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~
    1 error generated.
 
 
-vim +1332 drivers/vhost/vringh.c
+vim +23 drivers/soc/renesas/r9a08g045-sysc.c
 
-  1304	
-  1305	static inline int putu16_iotlb(const struct vringh *vrh,
-  1306				       __virtio16 *p, u16 val)
-  1307	{
-  1308		struct iotlb_vec ivec;
-  1309		union {
-  1310			struct iovec iovec;
-  1311			struct bio_vec bvec;
-  1312		} iov;
-  1313		__virtio16 tmp;
-  1314		int ret;
-  1315	
-  1316		ivec.iov.iovec = &iov.iovec;
-  1317		ivec.count = 1;
-  1318	
-  1319		/* Atomic write is needed for putu16 */
-  1320		ret = iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p),
-  1321				      NULL, &ivec, VHOST_MAP_RO);
-  1322		if (ret < 0)
-  1323			return ret;
-  1324	
-  1325		tmp = cpu_to_vringh16(vrh, val);
-  1326	
-  1327		if (vrh->use_va) {
-  1328			ret = __put_user(tmp, (__virtio16 __user *)ivec.iov.iovec[0].iov_base);
-  1329			if (ret)
-  1330				return ret;
-  1331		} else {
-> 1332			__virtio16 *to = kmap_local_page(&ivec.iov.bvec[0]);
-  1333	
-  1334			WRITE_ONCE(*to, tmp);
-  1335			kunmap_local(to);
-  1336		}
-  1337	
-  1338		return 0;
-  1339	}
-  1340	
+    20	
+    21	const struct rz_sysc_init_data rzg3s_sysc_init_data __initconst = {
+    22		.soc_id_init_data = &rzg3s_sysc_soc_id_init_data,
+  > 23		.max_register_offset = 0xe28,
 
 -- 
 0-DAY CI Kernel Test Service
