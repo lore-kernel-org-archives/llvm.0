@@ -1,59 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB4A4A3C;
-	Thu,  1 May 2025 04:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C186C23183C;
+	Thu,  1 May 2025 07:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746074932; cv=none; b=FtdvJw9u3/x9VnQI4FY1kxP5t0U9g/BZydXOGWznIiH+OUlim7XFD/5FIO+4G7g2Ik/P6SNJnROqAQtFpnftMzdn2krwrH5rR1yiP8ZXdT1GLq0eMIan8llsBvAZB4bm/7E2clOziA1Birrn1hW7p6uA7Y7/JuyZkDF5iXqXyyk=
+	t=1746083917; cv=none; b=N4dCyTAi7FzYFTknkpy0Au8XgR2hKBWFURpGKPRS/teVXzy6IL+S6Dww7iS3wZDEfrLHNN3sNGriYXOnmdWHVGhhiHRtFVm6zD9C1AHdAe8V0jf5Jlhz+NxneKZ7LNP4Ub2cPZqYALobVy5sdCzMh415noqp+jHpocQaKafkPDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746074932; c=relaxed/simple;
-	bh=5+aFCGN9TB7JY5KX5yGLtqrOMpZk6lqFKaV399kXqus=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AS/yxl/UAg9HJDod5ynI+Nzje7BJbjejcgLntZSl/B3sS0hjRSPjIdMWW6ZMN85pZCQdhVisuFfU2U1nLlUvQG+LlF773ZZvc2H++DdquztPy0DVALfoRle7KFbdvqGuWJghaGFKIqn0NR4SSTrJB/CB+22cZyfNlCJDJZTNFDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j+K+Lk5P; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746083917; c=relaxed/simple;
+	bh=su7Ol8QR1fuFy/VFNGr36BLKigm4/e1vZx94ZJZJg38=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MZhuhOu117thaXJQZkTJ/e61FAj0NVkae/MZcg6O++mknv3TD2g+Rb4E2CUbsuqZQxCOQRTM/m4LA/Te33m7MoG0VRdxc9/HDftU6VuxsRrwfX4yH9LRLRiXIF0YeOfYpE/djRnr0gC9n+xLhBrAF92DY+fVn20WzetdWpfZMi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rPJcbEsX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j+K+Lk5P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746074930; x=1777610930;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5+aFCGN9TB7JY5KX5yGLtqrOMpZk6lqFKaV399kXqus=;
-  b=j+K+Lk5PKzogCbHjVKlYAJ4MnkoQ5WPKulXiJkSdiwS9THsi2qWRoZIB
-   4vLb5dS89F9j0EYrbe+8W3h6fbV72w5paGmP/TaXw78k/0382DHdt5O5f
-   hgBSe7/Jc7+IWBcj68SyPGKDAQeg/phygZd5fHH2MOCimXq70dOvBVhoA
-   a28TlZQyC1mC2+ZIfkz82p++J5JM0waLk6Re5kw17obi+fEEue/CZScQT
-   tqZVoIsRKsAy69sEgB26H15hVBqYeeq86p62dG2oRIGRQ46jDNJ3noXU2
-   +0bClvZiIn8xPckGmuKtaBB57Nu0jGv/sW08Ill7RUodV/UQ6C/3+67Ta
-   A==;
-X-CSE-ConnectionGUID: c0JA6lpsRtGLcsWEdLdBwA==
-X-CSE-MsgGUID: viXhHATiRlO/4q6l3JE2+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="58737848"
-X-IronPort-AV: E=Sophos;i="6.15,253,1739865600"; 
-   d="scan'208";a="58737848"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 21:48:49 -0700
-X-CSE-ConnectionGUID: F/01aXNnSl2NiGAbAKVA6Q==
-X-CSE-MsgGUID: MkSyn08WTiqDjsJLTtKZSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,253,1739865600"; 
-   d="scan'208";a="171538080"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 30 Apr 2025 21:48:48 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uALqn-0003yF-07;
-	Thu, 01 May 2025 04:48:45 +0000
-Date: Thu, 1 May 2025 12:47:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:for-kernelci 13/21]
- drivers/net/ethernet/airoha/airoha_npu.c:430:65: error: expected ';' after
- expression
-Message-ID: <202505011210.wdGfu0Ii-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rPJcbEsX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF92C4CEE3;
+	Thu,  1 May 2025 07:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1746083916;
+	bh=su7Ol8QR1fuFy/VFNGr36BLKigm4/e1vZx94ZJZJg38=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rPJcbEsXhGMC0dq469bmaLlkkVmpTUn3Tb0S6zGu3+bqDNRihHhQAt0pboiT/Bfnn
+	 oDLbw5I2ui5R8d5zxjLUmtpyyQ/Ql3Q2drqkJMJTROy9N0EmaHutplO2D6U4sEAGcu
+	 61EjbwYysFa7sycvpKmbswX/b8m0KRwA739rNN6k=
+Date: Thu, 1 May 2025 09:18:32 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Matthew Rosato <mjrosato@linux.ibm.com>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org, akpm@linux-foundation.org,
+	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
+	hargar@microsoft.com, broonie@kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
+	io-uring@vger.kernel.org, virtualization@lists.linux.dev,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [PATCH 6.1 000/167] 6.1.136-rc1 review
+Message-ID: <2025050118-glade-lunchroom-927f@gregkh>
+References: <20250429161051.743239894@linuxfoundation.org>
+ <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
+ <c8e88c29-e1bb-4845-a362-dc352d690508@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,123 +57,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <c8e88c29-e1bb-4845-a362-dc352d690508@linux.ibm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
-head:   3474fc53f28d0824c7020ddffc8559e8302f7415
-commit: 187439642c68be0ad8084f0156064c4fa443225c [13/21] net: Use of_reserved_mem_region_to_resource{_byname}() for "memory-region"
-config: i386-buildonly-randconfig-003-20250501 (https://download.01.org/0day-ci/archive/20250501/202505011210.wdGfu0Ii-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250501/202505011210.wdGfu0Ii-lkp@intel.com/reproduce)
+On Wed, Apr 30, 2025 at 11:54:49AM -0400, Matthew Rosato wrote:
+> 
+> > 2)
+> > Regressions on s390 with defconfig builds with gcc-13, gcc-8 and
+> > clang-20 and clang-nightly toolchains on the stable-rc 6.1.136-rc1.
+> > 
+> > * s390, build
+> >   - clang-20-defconfig
+> >   - clang-nightly-defconfig
+> >   - gcc-13-allmodconfig
+> >   - gcc-13-defconfig
+> >   - gcc-8-defconfig-fe40093d
+> > 
+> > Regression Analysis:
+> >  - New regression? Yes
+> >  - Reproducibility? Yes
+> > 
+> ...
+> > drivers/s390/virtio/virtio_ccw.c:88:9: error: unknown type name 'dma64_t'
+> >    88 |         dma64_t queue;
+> >       |         ^~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c:95:9: error: unknown type name 'dma64_t'
+> >    95 |         dma64_t desc;
+> >       |         ^~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c:99:9: error: unknown type name 'dma64_t'
+> >    99 |         dma64_t avail;
+> >       |         ^~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c:100:9: error: unknown type name 'dma64_t'
+> >   100 |         dma64_t used;
+> >       |         ^~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c:109:9: error: unknown type name 'dma64_t'
+> >   109 |         dma64_t summary_indicator;
+> >       |         ^~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c:110:9: error: unknown type name 'dma64_t'
+> >   110 |         dma64_t indicator;
+> >       |         ^~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_drop_indicator':
+> > drivers/s390/virtio/virtio_ccw.c:370:25: error: implicit declaration
+> > of function 'virt_to_dma64'; did you mean 'virt_to_page'?
+> > [-Werror=implicit-function-declaration]
+> >   370 |                         virt_to_dma64(get_summary_indicator(airq_info));
+> >       |                         ^~~~~~~~~~~~~
+> >       |                         virt_to_page
+> > drivers/s390/virtio/virtio_ccw.c:374:28: error: implicit declaration
+> > of function 'virt_to_dma32'; did you mean 'virt_to_page'?
+> > [-Werror=implicit-function-declaration]
+> >   374 |                 ccw->cda = virt_to_dma32(thinint_area);
+> >       |                            ^~~~~~~~~~~~~
+> >       |                            virt_to_page
+> > drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_setup_vq':
+> > drivers/s390/virtio/virtio_ccw.c:552:45: error: implicit declaration
+> > of function 'u64_to_dma64' [-Werror=implicit-function-declaration]
+> >   552 |                 info->info_block->l.queue = u64_to_dma64(queue);
+> >       |                                             ^~~~~~~~~~~~
+> > drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_find_vqs':
+> > drivers/s390/virtio/virtio_ccw.c:654:9: error: unknown type name 'dma64_t'
+> >   654 |         dma64_t *indicatorp = NULL;
+> >       |         ^~~~~~~
+> > cc1: some warnings being treated as errors
+> 
+> The virtio_ccw errors are caused by '[PATCH 6.1 033/167] s390/virtio_ccw: fix virtual vs physical address confusion'
+> 
+> Picking the following 2 dependencies would resolve the build error:
+> 
+> 1bcf7f48b7d4 s390/cio: use bitwise types to allow for type checking
+> 8b19e145e82f s390/cio: introduce bitwise dma types and helper functions
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505011210.wdGfu0Ii-lkp@intel.com/
+I'm just going to drop all of these now and wait for a tested series to
+be sent.
 
-All errors (new ones prefixed by >>):
+thanks,
 
->> drivers/net/ethernet/airoha/airoha_npu.c:430:65: error: expected ';' after expression
-     430 |         err = of_reserved_mem_region_to_resource(dev->of_node, 0, &res)
-         |                                                                        ^
-         |                                                                        ;
->> drivers/net/ethernet/airoha/airoha_npu.c:465:43: error: use of undeclared identifier 'rmem'
-     465 |         err = airoha_npu_run_firmware(dev, base, rmem);
-         |                                                  ^
-   2 errors generated.
-
-
-vim +430 drivers/net/ethernet/airoha/airoha_npu.c
-
-   403	
-   404	static int airoha_npu_probe(struct platform_device *pdev)
-   405	{
-   406		struct device *dev = &pdev->dev;
-   407		struct airoha_npu *npu;
-   408		struct resource res;
-   409		void __iomem *base;
-   410		int i, irq, err;
-   411	
-   412		base = devm_platform_ioremap_resource(pdev, 0);
-   413		if (IS_ERR(base))
-   414			return PTR_ERR(base);
-   415	
-   416		npu = devm_kzalloc(dev, sizeof(*npu), GFP_KERNEL);
-   417		if (!npu)
-   418			return -ENOMEM;
-   419	
-   420		npu->dev = dev;
-   421		npu->ops.ppe_init = airoha_npu_ppe_init;
-   422		npu->ops.ppe_deinit = airoha_npu_ppe_deinit;
-   423		npu->ops.ppe_flush_sram_entries = airoha_npu_ppe_flush_sram_entries;
-   424		npu->ops.ppe_foe_commit_entry = airoha_npu_foe_commit_entry;
-   425	
-   426		npu->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
-   427		if (IS_ERR(npu->regmap))
-   428			return PTR_ERR(npu->regmap);
-   429	
- > 430		err = of_reserved_mem_region_to_resource(dev->of_node, 0, &res)
-   431		if (err)
-   432			return err;
-   433	
-   434		irq = platform_get_irq(pdev, 0);
-   435		if (irq < 0)
-   436			return irq;
-   437	
-   438		err = devm_request_irq(dev, irq, airoha_npu_mbox_handler,
-   439				       IRQF_SHARED, "airoha-npu-mbox", npu);
-   440		if (err)
-   441			return err;
-   442	
-   443		for (i = 0; i < ARRAY_SIZE(npu->cores); i++) {
-   444			struct airoha_npu_core *core = &npu->cores[i];
-   445	
-   446			spin_lock_init(&core->lock);
-   447			core->npu = npu;
-   448	
-   449			irq = platform_get_irq(pdev, i + 1);
-   450			if (irq < 0)
-   451				return irq;
-   452	
-   453			err = devm_request_irq(dev, irq, airoha_npu_wdt_handler,
-   454					       IRQF_SHARED, "airoha-npu-wdt", core);
-   455			if (err)
-   456				return err;
-   457	
-   458			INIT_WORK(&core->wdt_work, airoha_npu_wdt_work);
-   459		}
-   460	
-   461		err = dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
-   462		if (err)
-   463			return err;
-   464	
- > 465		err = airoha_npu_run_firmware(dev, base, rmem);
-   466		if (err)
-   467			return dev_err_probe(dev, err, "failed to run npu firmware\n");
-   468	
-   469		regmap_write(npu->regmap, REG_CR_NPU_MIB(10),
-   470			     res.start + NPU_EN7581_FIRMWARE_RV32_MAX_SIZE);
-   471		regmap_write(npu->regmap, REG_CR_NPU_MIB(11), 0x40000); /* SRAM 256K */
-   472		regmap_write(npu->regmap, REG_CR_NPU_MIB(12), 0);
-   473		regmap_write(npu->regmap, REG_CR_NPU_MIB(21), 1);
-   474		msleep(100);
-   475	
-   476		/* setting booting address */
-   477		for (i = 0; i < NPU_NUM_CORES; i++)
-   478			regmap_write(npu->regmap, REG_CR_BOOT_BASE(i), res.start);
-   479		usleep_range(1000, 2000);
-   480	
-   481		/* enable NPU cores */
-   482		/* do not start core3 since it is used for WiFi offloading */
-   483		regmap_write(npu->regmap, REG_CR_BOOT_CONFIG, 0xf7);
-   484		regmap_write(npu->regmap, REG_CR_BOOT_TRIGGER, 0x1);
-   485		msleep(100);
-   486	
-   487		platform_set_drvdata(pdev, npu);
-   488	
-   489		return 0;
-   490	}
-   491	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+greg k-h
