@@ -1,199 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133631EFFB9;
-	Fri,  2 May 2025 19:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A3D2DC78C;
+	Fri,  2 May 2025 19:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746212493; cv=none; b=GiPxur3aLVJ/cYld5z+k6uYPeYXpeN+PKUZy1OnHqMgzwHp8IoSdv0kTmy2tuREWFWGhOdOK1EQyn0HfVUk6FP4VOWob3hWf+Py3s6dPSitkUwCXC7RU+AlGOHi6OfUUwT9wx0TjOiQR7g/T2YM79X+/ifWCu/mLq399TKa1JO8=
+	t=1746214272; cv=none; b=UMzC4QeoXuOcttgJE1AtLdqqQxdqTx3DF3qUlFwMPgd5TgnGKtbEA55bDYfnK24MOFo0l8GQ9gp+78PIr+Cgi+NjYyLJTn12BObYHDej+/MZF20KHW98c7WzQqUOrEYWbBJKqmGzC15+2q7A9ITbq10qGxTQ5PUWdv+RTuwDdGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746212493; c=relaxed/simple;
-	bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OyK38LUdMSeADJotum82NgzCMrBGwTMw/Hpp2DN7U0Lbce6fJqRp0JJD/eRhaCUjn/xqulfWZsC9TrDfb/D8K1sxvPJ7N+gcI5vg5dB8rc361AjOH/vg5SS1jq5R6/xq4hDu0tvYmueZaJKXHSqDZNVCAS4nc6zmRklUS4vJ94k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jB1YOX/W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746214272; c=relaxed/simple;
+	bh=30ckmPs5c8CuQmg05iN/O3hdiLvVkEwypWvV4skJLfk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aj51lbbpm3L8LZplN9RRUhe6fN+SMm/g+rqPFMbrXbh77CheIMaV6DR+IXK6rPJm9T3WqiuhwKeSz/Pv3MXhYDHRgPf+m/y/k4Qnkrlh0utXcVowD2AEjSSEKO9B9Q4MkT5krINpSik3nX0lVYvcbfC+/wgXgP62Z0MUC9UgVyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LnVhLMoi; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jB1YOX/W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA19C4CEED;
-	Fri,  2 May 2025 19:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746212492;
-	bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jB1YOX/WblarlM1ru+chkUcRI7n9ViNaZEATHHCcZU9HKHkXtQaiFa1ADnnNSHEfn
-	 pxV/EexqPW/iO2BUs8r2oHGwy/9Wh+oNp1A5atSmV+xAncgPjqT8RJGnFSSHtmQkzE
-	 UPmqFqbQ6KKii/W31CNxWg7FeU4snGvlYrWtTP21uUUHLpcqwPtQxofl5x4yxEQWCa
-	 HwLSZcaV963TrPrvt3cOAxbzFvO38HxPRoaEke92VS2avjAcALnb+UJqHMA74Tz/D8
-	 JUZIkKnmwrX/2Jemco5btqwU2P3ADx4coHH+136JT/FvbSfjWd+ts9cd4ecXPSUgg3
-	 HONZP1ma8mZfQ==
-From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <kees@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Kai Huang <kai.huang@intel.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kbuild@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH RFC 4/4] stackleak: Support Clang stack depth tracking
-Date: Fri,  2 May 2025 12:01:27 -0700
-Message-Id: <20250502190129.246328-4-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250502185834.work.560-kees@kernel.org>
-References: <20250502185834.work.560-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LnVhLMoi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746214269; x=1777750269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=30ckmPs5c8CuQmg05iN/O3hdiLvVkEwypWvV4skJLfk=;
+  b=LnVhLMoinwmjNj93EK3wODNLVD5WVTcCxRU2wBoo4RaXoU3uUtqM2oAm
+   lvlhLvTFLtZx8/eDD29XfgKTqNHc8oYQN94daeL2P705mdSNwnUpBmr2z
+   3Own4nP/VUEUGLYyS0iu5w4QX1Aj0JjWhHK7+rszKvGCIjkTqQEOioAtM
+   W/TgEYHJG8AG+Ogv6xGm4vBQXrttD5qKkJxQA26l+AkvaWuEex+CXpYp0
+   gM1AeqJcCdeVZkoijO+j4T5nC00H/Gya9bidMNFOEgeuHV0OtOy1WW9a2
+   95MmPyQ4CXQCH4PqGNTN8PEr2aBvSxDLH6kYOrp4THtQFxmjW+irkayTW
+   g==;
+X-CSE-ConnectionGUID: 2Z1j74BnT1OzXY1xHyaAkA==
+X-CSE-MsgGUID: 3R4MExuDRDWRgR3gizVmXw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="47160410"
+X-IronPort-AV: E=Sophos;i="6.15,257,1739865600"; 
+   d="scan'208";a="47160410"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 12:31:08 -0700
+X-CSE-ConnectionGUID: cX+aVK6mQQes1Ws1gAtmgA==
+X-CSE-MsgGUID: 2EC6mBFjTlai4bsL7tUwGg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,257,1739865600"; 
+   d="scan'208";a="134608190"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 02 May 2025 12:31:08 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uAw6C-0004yj-2n;
+	Fri, 02 May 2025 19:31:04 +0000
+Date: Sat, 3 May 2025 03:30:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC, PATCH 04/12] x86/virt/tdx: Account PAMT memory and print
+ if in /proc/meminfo
+Message-ID: <202505030244.P6vk3r5v-lkp@intel.com>
+References: <20250502130828.4071412-5-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4716; i=kees@kernel.org; h=from:subject; bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmiYm0eHYd/KD+/YrfhHLPdHAslHi9Fd//IiqqD/4I25 j38J1nZUcrCIMbFICumyBJk5x7n4vG2Pdx9riLMHFYmkCEMXJwCMBGBJYwMGxO93eMPrlt+5Jzt Oot7p+4nLPDlKnhnYFtxdhXvk+VS/Ax/Bd/vvaSguOh3WEFqRfyd1+x1/pxfFHj2REh++SY+fVI 9DwA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250502130828.4071412-5-kirill.shutemov@linux.intel.com>
 
-Wire up stackleak to Clang's proposed[1] stack depth tracking callback
-option. While __noinstr already contained __no_sanitize_coverage, it was
-still needed for __init and __head section markings. This is needed to
-make sure the callback is not executed in unsupported contexts.
+Hi Kirill,
 
-Link: https://github.com/llvm/llvm-project/pull/138323 [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: <x86@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Marco Elver <elver@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Kai Huang <kai.huang@intel.com>
-Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: <linux-kbuild@vger.kernel.org>
-Cc: <kasan-dev@googlegroups.com>
-Cc: <linux-hardening@vger.kernel.org>
-Cc: <linux-security-module@vger.kernel.org>
----
- arch/x86/include/asm/init.h |  2 +-
- include/linux/init.h        |  4 +++-
- scripts/Makefile.ubsan      | 12 ++++++++++++
- security/Kconfig.hardening  |  5 ++++-
- 4 files changed, 20 insertions(+), 3 deletions(-)
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
-index 8b1b1abcef15..6bfdaeddbae8 100644
---- a/arch/x86/include/asm/init.h
-+++ b/arch/x86/include/asm/init.h
-@@ -5,7 +5,7 @@
- #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
- #define __head	__section(".head.text") __no_sanitize_undefined __no_stack_protector
- #else
--#define __head	__section(".head.text") __no_sanitize_undefined
-+#define __head	__section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
- #endif
- 
- struct x86_mapping_info {
-diff --git a/include/linux/init.h b/include/linux/init.h
-index ee1309473bc6..c65a050d52a7 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -49,7 +49,9 @@
- 
- /* These are for everybody (although not all archs will actually
-    discard it in modules) */
--#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline
-+#define __init		__section(".init.text") __cold __latent_entropy	\
-+						__noinitretpoline	\
-+						__no_sanitize_coverage
- #define __initdata	__section(".init.data")
- #define __initconst	__section(".init.rodata")
- #define __exitdata	__section(".exit.data")
-diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-index 9e35198edbf0..cfb3ecde07dd 100644
---- a/scripts/Makefile.ubsan
-+++ b/scripts/Makefile.ubsan
-@@ -22,3 +22,15 @@ ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=	\
- 	-fsanitize=implicit-unsigned-integer-truncation		\
- 	-fsanitize-ignorelist=$(srctree)/scripts/integer-wrap-ignore.scl
- export CFLAGS_UBSAN_INTEGER_WRAP := $(ubsan-integer-wrap-cflags-y)
-+
-+ifdef CONFIG_CC_IS_CLANG
-+stackleak-cflags-$(CONFIG_STACKLEAK)	+=	\
-+	-fsanitize-coverage=stack-depth		\
-+	-fsanitize-coverage-stack-depth-callback-min=$(CONFIG_STACKLEAK_TRACK_MIN_SIZE)
-+export STACKLEAK_CFLAGS := $(stackleak-cflags-y)
-+ifdef CONFIG_STACKLEAK
-+    DISABLE_STACKLEAK		:= -fno-sanitize-coverage=stack-depth
-+endif
-+export DISABLE_STACKLEAK
-+KBUILD_CFLAGS += $(STACKLEAK_CFLAGS)
-+endif
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index edcc489a6805..e86b61e44b33 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -158,10 +158,13 @@ config GCC_PLUGIN_STRUCTLEAK_VERBOSE
- 	  initialized. Since not all existing initializers are detected
- 	  by the plugin, this can produce false positive warnings.
- 
-+config CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
-+	def_bool $(cc-option,-fsanitize-coverage-stack-depth-callback-min=1)
-+
- config STACKLEAK
- 	bool "Poison kernel stack before returning from syscalls"
- 	depends on HAVE_ARCH_STACKLEAK
--	depends on GCC_PLUGINS
-+	depends on GCC_PLUGINS || CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
- 	help
- 	  This option makes the kernel erase the kernel stack before
- 	  returning from system calls. This has the effect of leaving
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next next-20250502]
+[cannot apply to tip/x86/tdx tip/x86/mm kvm/linux-next linus/master v6.15-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/x86-virt-tdx-Allocate-page-bitmap-for-Dynamic-PAMT/20250502-211346
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20250502130828.4071412-5-kirill.shutemov%40linux.intel.com
+patch subject: [RFC, PATCH 04/12] x86/virt/tdx: Account PAMT memory and print if in /proc/meminfo
+config: i386-buildonly-randconfig-001-20250502 (https://download.01.org/0day-ci/archive/20250503/202505030244.P6vk3r5v-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505030244.P6vk3r5v-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505030244.P6vk3r5v-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/i915/gt/intel_ggtt.c:6:
+>> arch/x86/include/asm/set_memory.h:93:34: warning: declaration of 'struct seq_file' will not be visible outside of this function [-Wvisibility]
+      93 | void direct_pages_meminfo(struct seq_file *m);
+         |                                  ^
+   1 warning generated.
+
+
+vim +93 arch/x86/include/asm/set_memory.h
+
+    92	
+  > 93	void direct_pages_meminfo(struct seq_file *m);
+    94	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
