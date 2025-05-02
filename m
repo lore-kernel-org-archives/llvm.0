@@ -1,59 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0BF25D20C;
-	Fri,  2 May 2025 16:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F43D3C465;
+	Fri,  2 May 2025 16:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746202714; cv=none; b=pqkL5EW9LHESSWIUPp0HrDXHlXcRbXbGewGdFUSwE/6BAuhPB1sQrij1t2Lc6gL8Gew/bNfCfhnija8pzUpLZWpl3xrGz1dDx9H3dOS1k+fEdNwcEYOVxs+10fm6q/P+8xiHtSX8tQWupBkaLbjHmI33deA/or387LgxNt+hQqk=
+	t=1746203147; cv=none; b=qd1oJkhfvMXXL9uqRC/ubZGLTCuyaDIlUrzZdOET8DQ9jXx96aJ2Yt1IyfxGlFl6bq4kZIDVPVb7nnC0c3OjRDSl1Drg0qXpIraoRKqu5RzwY8+bHuRJetFMTgxC2hxsXHj79vRmxY6UK+DdjiuyvMMG1AnmnLzDhvN5FKqAwBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746202714; c=relaxed/simple;
-	bh=wKed2HEAAjpuypB5+YOAKBXs7whMew/LNAhyMdJvcFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bfLH58rp7aVnePLop+wo+0D3jd59jToIzzQz7+RyKqpNTmxWi66Jjx6cgIJ7hdVlXQC3y8MdgvbJtVdJ6/qkhEbUVddWT/wO/sud9dxiXMj+wtZx/WFhciyT0Pw7ujjnXzT2O0aY01OX0jNUNUm4IoBemUrXJIrM0Ps2YPCtots=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLh9Xpc7; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746203147; c=relaxed/simple;
+	bh=SoYH9fAelyV/OGDhVqF4z37NINCFU2ZaE+FhKzVeIgA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GJbWBrs2DhECXLW7VKSDmGzoQo4JMaHXs4hTfTyyVILPJLbMDHoiIaAs2IQ/H1mjbktAWQYRg+VXrMWXCImvk4n1uCcUuBQ/2MS3SBhAzPL16cvgz/5DJYBveDGHlXB2aKa/JVySa/+ZiVsqOc/+6jrf3lmYSZP+2EeQJZpUgss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3aZWnUC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLh9Xpc7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746202713; x=1777738713;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wKed2HEAAjpuypB5+YOAKBXs7whMew/LNAhyMdJvcFs=;
-  b=XLh9Xpc7+STg9/DOr+MKSsuVpH14/8eSyV2+SEAeAIXZyF7T2Fmn7TFZ
-   CW8LHwmHG6CtaaEbngHX4cvQ8Xa7/0Yq7AJFncLwatBIvCND/Y0HFviQu
-   MjrQu0l0wnnZzv5QwR27AhjJ1Vnv2eXfKYNfGNjjIWSaGKAcmfaaHpF4S
-   mdEIipRj8006x8NC+zPvLi78OMdNXMW1RHBZpT+DYb2d1SxHV96/YnJa9
-   2krWLN+QKxwhlDETcduFz0H0diLeVj4IRfq/im+TV2NxtCLc62ncFnJJX
-   Frvxlw19IsGY4Z2rgnSlXGN/+iC1FFi1eQI7Dhff1cpTmsDeuDLNvfd9E
-   A==;
-X-CSE-ConnectionGUID: 9eAwUi4+SvW+5tSWr6jHEA==
-X-CSE-MsgGUID: WYXEIS+ASBynAZlGygYqfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="50544617"
-X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
-   d="scan'208";a="50544617"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 09:18:31 -0700
-X-CSE-ConnectionGUID: zC6GMzWhQXictq70mrtGgw==
-X-CSE-MsgGUID: ZbWOpGvmQ9mwbCEQ7fL82Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
-   d="scan'208";a="135660257"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 02 May 2025 09:18:30 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAt5n-0004t7-0A;
-	Fri, 02 May 2025 16:18:27 +0000
-Date: Sat, 3 May 2025 00:18:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-github:work.coredump.socket 12/14] fs/pidfs.c:597:24:
- error: incomplete definition of type 'const struct coredump_params'
-Message-ID: <202505030032.TDuMOCCn-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3aZWnUC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E031EC4CEE4;
+	Fri,  2 May 2025 16:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746203146;
+	bh=SoYH9fAelyV/OGDhVqF4z37NINCFU2ZaE+FhKzVeIgA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m3aZWnUC7rLjBGOG9+KQzip5059CX5+9VT5bsv/KBfc4elrFh/gzXzTK3m2E2QQiz
+	 fbjvGUiHQay8r796UJYOfLqaIEbfmV+6ESJDNghy8HQbO2RYxTwyOk98ZDgDaCfUqq
+	 LZXftpF9Bq07uj9d7RLg4yrgtBfhSVyabZU0dW19Kw/+9rLizT5rGAXKj5rVyuyTfF
+	 JbNkDDj082obrn6ccHXC4ghILL+t7IHORhDnE3MK392SNO4IedGTxBgzBMyi3eIqBG
+	 n4E/Q2kn2FAYOvxOI7Oy6ez03U7rxWCbeb5Cu4pBgaivkDzLQYEYwdJQ7ttWIkHfb1
+	 2UDsTPggFuylQ==
+Date: Fri, 2 May 2025 09:25:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	justinstitt@google.com, broonie@kernel.org, maz@kernel.org,
+	oliver.upton@linux.dev, frederic@kernel.org, joey.gouly@arm.com,
+	james.morse@arm.com, hardevsinh.palaniya@siliconsignals.io,
+	shameerali.kolothum.thodi@huawei.com, ardb@kernel.org,
+	ryan.roberts@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] arm64/cpufeature: annotate arm64_use_ng_mappings with
+ ro_after_init to prevent wrong idmap generation
+Message-ID: <20250502162540.GB2850065@ax162>
+References: <20250502145755.3751405-1-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,65 +50,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250502145755.3751405-1-yeoreum.yun@arm.com>
 
-tree:   https://github.com/brauner/linux.git work.coredump.socket
-head:   fed163064146d254b65f674b2072bf51bc26bbfa
-commit: 745300388cabf3ae30ad74c7d35f563adab09d30 [12/14] pidfs, coredump: add PIDFD_INFO_COREDUMP
-config: hexagon-randconfig-002-20250502 (https://download.01.org/0day-ci/archive/20250503/202505030032.TDuMOCCn-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505030032.TDuMOCCn-lkp@intel.com/reproduce)
+Hi Yeoreum,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505030032.TDuMOCCn-lkp@intel.com/
+On Fri, May 02, 2025 at 03:57:55PM +0100, Yeoreum Yun wrote:
+> create_init_idmap() could be called before .bss section initialization
+> which is done in early_map_kernel() since data/test_prot could be set
+> wrong for PTE_MAYBE_NG macro.
+> 
+> PTE_MAYBE_NG macro is set according to value of "arm64_use_ng_mappings".
+> and this variable is located in .bss section.
+> 
+>    # llvm-objdump-21 --syms vmlinux-gcc | grep arm64_use_ng_mappings
+>      ffff800082f242a8 g O .bss    0000000000000001 arm64_use_ng_mappings
+> 
+> If .bss section doesn't initialized, "arm64_use_ng_mappings" would be set
+> with garbage value ant then the text_prot or data_prot could be set
+> with garbgae value.
+> 
+> Here is what i saw with kernel compiled via llvm-21
+> 
+>   // create_init_idmap()
+>   ffff80008255c058: d10103ff     	sub	sp, sp, #0x40
+>   ffff80008255c05c: a9017bfd     	stp	x29, x30, [sp, #0x10]
+>   ffff80008255c060: a90257f6     	stp	x22, x21, [sp, #0x20]
+>   ffff80008255c064: a9034ff4     	stp	x20, x19, [sp, #0x30]
+>   ffff80008255c068: 910043fd     	add	x29, sp, #0x10
+>   ffff80008255c06c: 90003fc8     	adrp	x8, 0xffff800082d54000
+>   ffff80008255c070: d280e06a     	mov	x10, #0x703     // =1795
+>   ffff80008255c074: 91400409     	add	x9, x0, #0x1, lsl #12 // =0x1000
+>   ffff80008255c078: 394a4108     	ldrb	w8, [x8, #0x290] ------------- (1)
+>   ffff80008255c07c: f2e00d0a     	movk	x10, #0x68, lsl #48
+>   ffff80008255c080: f90007e9     	str	x9, [sp, #0x8]
+>   ffff80008255c084: aa0103f3     	mov	x19, x1
+>   ffff80008255c088: aa0003f4     	mov	x20, x0
+>   ffff80008255c08c: 14000000     	b	0xffff80008255c08c <__pi_create_init_idmap+0x34>
+>   ffff80008255c090: aa082d56     	orr	x22, x10, x8, lsl #11 -------- (2)
+> 
+> Note (1) is load the arm64_use_ng_mappings value in w8.
+> and (2) is set the text or data prot with the w8 value to set PTE_NG bit.
+> If .bss section doesn't initialized, x8 can include garbage value
+> -- In case of some platform, x8 loaded with 0xcf -- it could generate
+> wrong mapping. (i.e) text_prot is expected with
+> PAGE_KERNEL_ROX(0x0040000000000F83) but
+> with garbage x8 -- 0xcf, it sets with (0x0040000000067F83)
+> and This makes boot failure with translation fault.
+> 
+> This error cannot happen according to code generated by compiler.
+> here is the case of gcc:
+> 
+>    ffff80008260a940 <__pi_create_init_idmap>:
+>    ffff80008260a940: d100c3ff      sub     sp, sp, #0x30
+>    ffff80008260a944: aa0003ed      mov     x13, x0
+>    ffff80008260a948: 91400400      add     x0, x0, #0x1, lsl #12 // =0x1000
+>    ffff80008260a94c: a9017bfd      stp     x29, x30, [sp, #0x10]
+>    ffff80008260a950: 910043fd      add     x29, sp, #0x10
+>    ffff80008260a954: f90017e0      str     x0, [sp, #0x28]
+>    ffff80008260a958: d00048c0      adrp    x0, 0xffff800082f24000 <reset_devices>
+>    ffff80008260a95c: 394aa000      ldrb    w0, [x0, #0x2a8]
+>    ffff80008260a960: 37000640      tbnz    w0, #0x0, 0xffff80008260aa28 <__pi_create_init_idmap+0xe8> ---(3)
+>    ffff80008260a964: d280f060      mov     x0, #0x783      // =1923
+>    ffff80008260a968: d280e062      mov     x2, #0x703      // =1795
+>    ffff80008260a96c: f2e00800      movk    x0, #0x40, lsl #48
+>    ffff80008260a970: f2e00d02      movk    x2, #0x68, lsl #48
+>    ffff80008260a974: aa2103e4      mvn     x4, x1
+>    ffff80008260a978: 8a210049      bic     x9, x2, x1
+>    ...
+>    ffff80008260aa28: d281f060      mov     x0, #0xf83      // =3971
+>    ffff80008260aa2c: d281e062      mov     x2, #0xf03      // =3843
+>    ffff80008260aa30: f2e00800      movk    x0, #0x40, lsl #48
+> 
+> In case of gcc, according to value of arm64_use_ng_mappings (annoated as(3)),
+> it branches to each prot settup code.
 
-All errors (new ones prefixed by >>):
+> However this is also problem since it branches according to garbage
+> value too -- idmapping with wrong pgprot.
+> 
+> To resolve this, annotate arm64_use_ng_mappings as ro_after_init.
+> 
+> Fixes: 84b04d3e6bdb ("arm64: kernel: Create initial ID map from C code")
+> Cc: <stable@vger.kernel.org> # 6.9.x
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
 
->> fs/pidfs.c:597:24: error: incomplete definition of type 'const struct coredump_params'
-     597 |         struct pid *pid = cprm->pid;
-         |                           ~~~~^
-   include/linux/pidfs.h:5:8: note: forward declaration of 'struct coredump_params'
-       5 | struct coredump_params;
-         |        ^
-   fs/pidfs.c:610:42: error: incomplete definition of type 'const struct coredump_params'
-     610 |         coredump_mask = pidfs_coredump_mask(cprm->mm_flags);
-         |                                             ~~~~^
-   include/linux/pidfs.h:5:8: note: forward declaration of 'struct coredump_params'
-       5 | struct coredump_params;
-         |        ^
-   2 errors generated.
+This appears to resolve the issue that I reported to LLVM upstream:
 
+https://github.com/llvm/llvm-project/issues/138019
 
-vim +597 fs/pidfs.c
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-   594	
-   595	void pidfs_coredump(const struct coredump_params *cprm)
-   596	{
- > 597		struct pid *pid = cprm->pid;
-   598		struct pidfs_exit_info *exit_info;
-   599		struct dentry *dentry;
-   600		struct inode *inode;
-   601		__u32 coredump_mask = 0;
-   602	
-   603		dentry = stashed_dentry_get(&pid->stashed);
-   604		if (WARN_ON_ONCE(!dentry))
-   605			return;
-   606	
-   607		inode = d_inode(dentry);
-   608		exit_info = &pidfs_i(inode)->__pei;
-   609		/* Note how we were coredumped. */
-   610		coredump_mask = pidfs_coredump_mask(cprm->mm_flags);
-   611		/* Note that we actually did coredump. */
-   612		coredump_mask |= PIDFD_COREDUMPED;
-   613		/* If coredumping is set to skip we should never end up here. */
-   614		VFS_WARN_ON_ONCE(coredump_mask & PIDFD_COREDUMP_SKIP);
-   615		smp_store_release(&exit_info->coredump_mask, coredump_mask);
-   616		/* Fwiw, this cannot be the last reference. */
-   617		dput(dentry);
-   618	}
-   619	
+It does not look like there is anything for the compiler to fix in this
+case, correct?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  arch/arm64/kernel/cpufeature.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index d2104a1e7843..967ffb1cbd52 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -114,7 +114,7 @@ static struct arm64_cpu_capabilities const __ro_after_init *cpucap_ptrs[ARM64_NC
+> 
+>  DECLARE_BITMAP(boot_cpucaps, ARM64_NCAPS);
+> 
+> -bool arm64_use_ng_mappings = false;
+> +bool arm64_use_ng_mappings __ro_after_init = false;
+>  EXPORT_SYMBOL(arm64_use_ng_mappings);
+> 
+>  DEFINE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector) = vectors;
+> --
+> LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+> 
+> 
