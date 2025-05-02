@@ -1,156 +1,127 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B51B156C63
-	for <llvm@lists.linux.dev>; Fri,  2 May 2025 14:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100F925D1E2
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 16:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746197884; cv=none; b=p3Sw2VMdUqHW+trdIuOuM6CYDo0ORA82ZMfPgSOApRsxb/UkwagYqAfJ/K8+gQv6YKZTs+PcPL+e7tLp2b+HKGZS4FBYXS4CKuTngT62E5zj678TSBHrKl+rVzXMayrKS8tND09EMhJ23CBcKDf9z4B7b/6Sq1OOHSMKeTLlTUY=
+	t=1746201840; cv=none; b=dCWKY+KR5FjTaw5kU4AL1ss4w1e8uujIS2oRUqWYsNYjGFmY7ZGAGF+yOke4HEwWmI+FIszMh1KsOXHZpxs7gq+SLroqETDbR9VN3FACdbN65bd302ZnmnLSsmYcJJkJ6LPvJAdRgzHHcBtVN13Bdw4oEfBXnKWArCxpKG5APdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746197884; c=relaxed/simple;
-	bh=joLM/u39YqBQ3W0TxpsBGRYa+ZZYfB/buBDGV5XcTuI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gBNwFz4Qa8RiY5oq2R4H0vpyd8wM1q3y8VtHEK0DmBql0xbjKmlT5yfqnp2AHjF4vPPkZJq5iPUvTAoE/IQ7ipKsfmgYP25EJ+joMFc88xWfcPwG1/MP5zLqr7a2u94IZ05pfIzYrv0ULIJO4QHltRA8lcX7IN8iCF3/7xw+PwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66A701688;
-	Fri,  2 May 2025 07:57:52 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 78B843F66E;
-	Fri,  2 May 2025 07:57:57 -0700 (PDT)
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	broonie@kernel.org,
-	maz@kernel.org,
-	oliver.upton@linux.dev,
-	frederic@kernel.org,
-	joey.gouly@arm.com,
-	james.morse@arm.com,
-	hardevsinh.palaniya@siliconsignals.io,
-	shameerali.kolothum.thodi@huawei.com,
-	ardb@kernel.org,
-	ryan.roberts@arm.com
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] arm64/cpufeature: annotate arm64_use_ng_mappings with ro_after_init to prevent wrong idmap generation
-Date: Fri,  2 May 2025 15:57:55 +0100
-Message-Id: <20250502145755.3751405-1-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1746201840; c=relaxed/simple;
+	bh=/Ir9RUZPJNowHtDjB8+O6p57Zsy6wW7vA4h0CW+yCQs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tbthRLVGZ6NT7xBlGSMDSLAd9QU8VbSuCDV8PA+oEz1M2S5nRx90ll/QWf+AvDfwZBgoJ1rQsn3Rp0T54phLmvVw7ORnuk7kewDHZzZDFY1tRUEbATbzf/ERrccj051MlaSh7zeAo0J0h4mQfvCnnZXDb8MRdr8NUQQM4389Iuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7L6jZqw; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7L6jZqw"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b03bc416962so1664804a12.0
+        for <llvm@lists.linux.dev>; Fri, 02 May 2025 09:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746201838; x=1746806638; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gDaKrXtDcJswvbEwS8wGTnCooDFXgZ8JEIYZCAsVSDU=;
+        b=B7L6jZqwcgOqFyb3BngZRmczFNK66obxPGJdeVw8F70RSItU5jqvDX25nIP8ueLn/s
+         blLzvA0HrhlLkGl2MjYDHKLRdg3bIvpE8vufdaeWFPYe5TAtG06BfiUkOgtj2fLEn4Sm
+         9rcCpnsi1OPtEDfdjWO29S4jkWyLK1OSLZQ6+NepcHIy6QgNQedBSQOnu60flhzNjsLI
+         jR27iqkqDlWmKgVL4ZPlLjsC+kCMkRzSKdYUQzvbzqjK9FkcTSjymiG1Cw03qJ66vzsz
+         zngRRFl5fErzWDKlxFEvCzzYQH7ygn/ioNxEN/FRAFe7booiFo/ZWDFGt2w3ZL5MueIt
+         kUHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746201838; x=1746806638;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gDaKrXtDcJswvbEwS8wGTnCooDFXgZ8JEIYZCAsVSDU=;
+        b=rhk4RVqjWTtykQcicXqx1g4vgio+xhZpPp9oBW4tOn+ZlD3VBXNR3XswQ3PQr32y/f
+         S7Xw0pRxbyNV1BpE7LV8LYRm7DKDRPMvwE6bjMG6mk7zGPxWfH7fijgZKeQ0n4NaemOO
+         OIkSwpMBxe7Oti8W9LuHQz57rhbtQVeth0JHmJV5ZIRk9nZhRmPf+qNtHoyTFAfrboVB
+         GHYM1LXTDhdQV5swFBMOPMBe9ygz2oNSFB5W4ljDUZRNcc0wLCbJLZbKoCC65w5Ndak0
+         FG2obHypdwSu6ILsvMvzjvRNs/ZrDfA2WPnK9LG7am1r+UPImZKX0AfOpaUyiWnQACMg
+         XTIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW+JELq7LzBN3iqCDo2Mqfm6cbELvU/5I4COTX5AjB15gGnkZD5D5qYQy9oAK86KWXwWOw9@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz6y25Hm0TwWMXQuzPiHiBqI5vkEX+SVWNfjZt36rRZwTuKYBQJ
+	qsivWP6kX8+xogZN97y8HsxxMFxu8lP/dN7pnXqOlTR/tPorqCzb
+X-Gm-Gg: ASbGnct80Neted7KW2uaXc1ICjHBq6q30vVvHkLRclVQqBHSFnV8msD5eIlMmzMBMLZ
+	a0pJ9i/LvgQN2i1bpro9wKp/7yMUTxiKK/PB2yw3Glc7RukM79OJNIVnp9k4VCELJpIWb/UM6gU
+	yVF1A7d3Fe2xz/lX0scDRuiyOum3Tm3Gqzqpj2hoinu3O/QvlxyqbLmXjDlHe6Jig2TE+22SbxW
+	NxysaB9WB2KSbTlEI6GsBP4GMVYdJcVuLUB5Ym40lECgSyNVjpuDSjTBIwZ3DfkBS1Ja9rVEOt+
+	i2flN8+pYS3c2gudPLxZr26SNqAQMv71lKbFo8ur
+X-Google-Smtp-Source: AGHT+IHjbc82WPFLFYJqUcclQhm+5J20tGWB4R4jo77r5H5Zl7NTJpo1SEIdn4FVH/XUTu4IGCJZHw==
+X-Received: by 2002:a17:90b:3c4e:b0:2ff:796b:4d05 with SMTP id 98e67ed59e1d1-30a4e5ae12amr5825968a91.11.1746201838224;
+        Fri, 02 May 2025 09:03:58 -0700 (PDT)
+Received: from localhost ([216.228.127.130])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a3471ef7asm5916080a91.9.2025.05.02.09.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 09:03:57 -0700 (PDT)
+Date: Fri, 2 May 2025 12:03:55 -0400
+From: Yury Norov <yury.norov@gmail.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Leo Yan <leo.yan@arm.com>
+Subject: Re: [PATCH v2 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
+Message-ID: <aBTs6yvKlCYYgU2O@yury>
+References: <20250430171534.132774-1-irogers@google.com>
+ <20250430171534.132774-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250430171534.132774-3-irogers@google.com>
 
-create_init_idmap() could be called before .bss section initialization
-which is done in early_map_kernel() since data/test_prot could be set
-wrong for PTE_MAYBE_NG macro.
+Hi Ian,
 
-PTE_MAYBE_NG macro is set according to value of "arm64_use_ng_mappings".
-and this variable is located in .bss section.
+On Wed, Apr 30, 2025 at 10:15:31AM -0700, Ian Rogers wrote:
+> The clang warning -Wshorten-64-to-32 can be useful to catch
+> inadvertent truncation. In some instances this truncation can lead to
+> changing the sign of a result, for example, truncation to return an
+> int to fit a sort routine. Silence the warning by making the implicit
+> truncation explicit. This isn't to say the code is currently incorrect
+> but without silencing the warning it is hard to spot the erroneous
+> cases.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  include/linux/bitmap.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+> index 595217b7a6e7..4395e0a618f4 100644
+> --- a/include/linux/bitmap.h
+> +++ b/include/linux/bitmap.h
+> @@ -442,7 +442,7 @@ static __always_inline
+>  unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
+>  {
+>  	if (small_const_nbits(nbits))
+> -		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
+> +		return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
 
-   # llvm-objdump-21 --syms vmlinux-gcc | grep arm64_use_ng_mappings
-     ffff800082f242a8 g O .bss    0000000000000001 arm64_use_ng_mappings
+This should return unsigned int, I guess?
 
-If .bss section doesn't initialized, "arm64_use_ng_mappings" would be set
-with garbage value ant then the text_prot or data_prot could be set
-with garbgae value.
+Also, most of the functions you touch here have their copies in tools.
+Can you please keep them synchronized?
 
-Here is what i saw with kernel compiled via llvm-21
+Thanks,
+Yury
 
-  // create_init_idmap()
-  ffff80008255c058: d10103ff     	sub	sp, sp, #0x40
-  ffff80008255c05c: a9017bfd     	stp	x29, x30, [sp, #0x10]
-  ffff80008255c060: a90257f6     	stp	x22, x21, [sp, #0x20]
-  ffff80008255c064: a9034ff4     	stp	x20, x19, [sp, #0x30]
-  ffff80008255c068: 910043fd     	add	x29, sp, #0x10
-  ffff80008255c06c: 90003fc8     	adrp	x8, 0xffff800082d54000
-  ffff80008255c070: d280e06a     	mov	x10, #0x703     // =1795
-  ffff80008255c074: 91400409     	add	x9, x0, #0x1, lsl #12 // =0x1000
-  ffff80008255c078: 394a4108     	ldrb	w8, [x8, #0x290] ------------- (1)
-  ffff80008255c07c: f2e00d0a     	movk	x10, #0x68, lsl #48
-  ffff80008255c080: f90007e9     	str	x9, [sp, #0x8]
-  ffff80008255c084: aa0103f3     	mov	x19, x1
-  ffff80008255c088: aa0003f4     	mov	x20, x0
-  ffff80008255c08c: 14000000     	b	0xffff80008255c08c <__pi_create_init_idmap+0x34>
-  ffff80008255c090: aa082d56     	orr	x22, x10, x8, lsl #11 -------- (2)
-
-Note (1) is load the arm64_use_ng_mappings value in w8.
-and (2) is set the text or data prot with the w8 value to set PTE_NG bit.
-If .bss section doesn't initialized, x8 can include garbage value
--- In case of some platform, x8 loaded with 0xcf -- it could generate
-wrong mapping. (i.e) text_prot is expected with
-PAGE_KERNEL_ROX(0x0040000000000F83) but
-with garbage x8 -- 0xcf, it sets with (0x0040000000067F83)
-and This makes boot failure with translation fault.
-
-This error cannot happen according to code generated by compiler.
-here is the case of gcc:
-
-   ffff80008260a940 <__pi_create_init_idmap>:
-   ffff80008260a940: d100c3ff      sub     sp, sp, #0x30
-   ffff80008260a944: aa0003ed      mov     x13, x0
-   ffff80008260a948: 91400400      add     x0, x0, #0x1, lsl #12 // =0x1000
-   ffff80008260a94c: a9017bfd      stp     x29, x30, [sp, #0x10]
-   ffff80008260a950: 910043fd      add     x29, sp, #0x10
-   ffff80008260a954: f90017e0      str     x0, [sp, #0x28]
-   ffff80008260a958: d00048c0      adrp    x0, 0xffff800082f24000 <reset_devices>
-   ffff80008260a95c: 394aa000      ldrb    w0, [x0, #0x2a8]
-   ffff80008260a960: 37000640      tbnz    w0, #0x0, 0xffff80008260aa28 <__pi_create_init_idmap+0xe8> ---(3)
-   ffff80008260a964: d280f060      mov     x0, #0x783      // =1923
-   ffff80008260a968: d280e062      mov     x2, #0x703      // =1795
-   ffff80008260a96c: f2e00800      movk    x0, #0x40, lsl #48
-   ffff80008260a970: f2e00d02      movk    x2, #0x68, lsl #48
-   ffff80008260a974: aa2103e4      mvn     x4, x1
-   ffff80008260a978: 8a210049      bic     x9, x2, x1
-   ...
-   ffff80008260aa28: d281f060      mov     x0, #0xf83      // =3971
-   ffff80008260aa2c: d281e062      mov     x2, #0xf03      // =3843
-   ffff80008260aa30: f2e00800      movk    x0, #0x40, lsl #48
-
-In case of gcc, according to value of arm64_use_ng_mappings (annoated as(3)),
-it branches to each prot settup code.
-However this is also problem since it branches according to garbage
-value too -- idmapping with wrong pgprot.
-
-To resolve this, annotate arm64_use_ng_mappings as ro_after_init.
-
-Fixes: 84b04d3e6bdb ("arm64: kernel: Create initial ID map from C code")
-Cc: <stable@vger.kernel.org> # 6.9.x
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
----
-There is another way to solve this problem by setting
-test/data_prot with _PAGE_DEFAULT which doesn't include PTE_MAYBE_NG
-with constanst check in create_init_idmap() to be free from
-arm64_use_ng_mappings. but i think it would be better to change
-arm64_use_ng_mappings as ro_after_init because it doesn't change after
-init phase and solve this problem too.
----
- arch/arm64/kernel/cpufeature.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index d2104a1e7843..967ffb1cbd52 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -114,7 +114,7 @@ static struct arm64_cpu_capabilities const __ro_after_init *cpucap_ptrs[ARM64_NC
-
- DECLARE_BITMAP(boot_cpucaps, ARM64_NCAPS);
-
--bool arm64_use_ng_mappings = false;
-+bool arm64_use_ng_mappings __ro_after_init = false;
- EXPORT_SYMBOL(arm64_use_ng_mappings);
-
- DEFINE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector) = vectors;
---
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
-
+>  	return __bitmap_weight(src, nbits);
+>  }
+>  
+> -- 
+> 2.49.0.906.g1f30a19c02-goog
