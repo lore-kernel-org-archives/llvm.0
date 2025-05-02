@@ -1,135 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90315376;
-	Fri,  2 May 2025 21:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C921E32D5;
+	Fri,  2 May 2025 22:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746219647; cv=none; b=phzoEtbcGEGn3mUDUBB7FwD/KfaAWIwxUUTuIKSBWSpeiufcXldLRtVGCIur6591Hm9az0EGrbVAAXAo1besStUOWwAQwktSGpkEJbDxHBCOcX/ACqL45TGQ2W+T8LF56OcdBKha0BKJD32TvmjRkCNaIksPQkfR7KP/NkvjiCs=
+	t=1746224494; cv=none; b=ENsJvfuGfx47nrvkGzl1yMbq90Y18WSqQ73GHU+Zi3JGdzVf0j565JEYKI27a4l+7ia1mnKB7RMn/v4FF6rzHxlVkYLZUFqk31fOok8AZ5O6mPiC6zwZgSXyMwhGOry63IejXq7n2r6rQUQJaHlXfMNurp3G4A7ed2TsSMOzlR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746219647; c=relaxed/simple;
-	bh=QV74l1IOGVbOqoSkpgRlO6NEjTmym0E/wjU2qkQ32fw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KO0Zaakx+DGRRTjtd+4TylIF+aoWeOynM2ZrvbgROptKx2KbvkZMV5B6R0SDbL1L63EJuIGE5f+RbFgh1B4t3B8Fw4yNcCuaudHf3EIFNmTCl6YwQha9XUu3tsNJnZmFecTN8i4ECzrpt4KRS1/cLZQ0dzWbsMk5XzYY3pkIpCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ExgqAER2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746224494; c=relaxed/simple;
+	bh=fG3d8Fg02oXt1YvEIlNOJZJDDmmHsyAC/nldx3bMtys=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Gkxj8GPVaqzbZoruzWbmtLZvssTOVYbrrdGo815gRS70UprpWVu6GuW5xUD0Clcv4RxW+oHzbhyR2OKepwPGGmW3j6CK3hc1pdZsxdQb1tY1Z5Uih/9dSWQncEyi/DFuQ3VzRr6j2PwnI7fZMrM3p5ELAa+0u7hjrX3yu2e093g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a+AE/QWq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ExgqAER2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCBAC4CEE4;
-	Fri,  2 May 2025 21:00:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a+AE/QWq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB8EC4CEED;
+	Fri,  2 May 2025 22:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746219647;
-	bh=QV74l1IOGVbOqoSkpgRlO6NEjTmym0E/wjU2qkQ32fw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ExgqAER2CsxrCnnAMm6jRg6gINgp9LGlOtbpHezQgKA+SlqChKBhWB5JTT3F8BKcz
-	 WyBu8J75GKcBiBoM493HVF8pnLHXaYp6WJzC0Sbxf8kv72/jKkJsmWg37D3/E6DH9x
-	 AVMJ/pp3eIG8LdZs9D/W1CiAOFAC3NhB8+3+QS2zaYnHn+HpmNaNfYeALRPcqkW/8K
-	 dVgYMpGiSWtxAIENr8F9WMYO1YCTIdNL3WBIxgpMQPFCzktf4xO/PaZtyphqAiNU9n
-	 3OzuLYfo5zx6WMa/dh7nLZo3pf9Love+B/Ys5wJLPmSUhMMraXMrOReDrSZuvwz5Li
-	 L/yI/DomKf2lw==
-From: KP Singh <kpsingh@kernel.org>
-To: bboscaccy@linux.microsoft.com
-Cc: James.Bottomley@hansenpartnership.com,
-	bpf@vger.kernel.org,
-	code@tyhicks.com,
-	corbet@lwn.net,
-	davem@davemloft.net,
-	dhowells@redhat.com,
-	gnoack@google.com,
-	herbert@gondor.apana.org.au,
-	jarkko@kernel.org,
-	jmorris@namei.org,
-	jstancek@redhat.com,
-	justinstitt@google.com,
-	keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev,
-	masahiroy@kernel.org,
-	mic@digikod.net,
-	morbo@google.com,
-	nathan@kernel.org,
-	neal@gompa.dev,
-	nick.desaulniers+lkml@gmail.com,
-	nicolas@fjasle.eu,
-	nkapron@google.com,
-	paul@paul-moore.com,
-	roberto.sassu@huawei.com,
-	serge@hallyn.com,
-	shuah@kernel.org,
-	teknoraver@meta.com,
-	xiyou.wangcong@gmail.com,
-	KP Singh <kpsingh@kernel.org>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-Date: Fri,  2 May 2025 23:00:34 +0200
-Message-ID: <20250502210034.284051-1-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-In-Reply-To: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+	s=k20201202; t=1746224493;
+	bh=fG3d8Fg02oXt1YvEIlNOJZJDDmmHsyAC/nldx3bMtys=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=a+AE/QWqp48WrIEZhiOtaMhrcmSKcsN4ugRZFeXcq+pSqDawvHs5UjmckxRI+8JC0
+	 ONAOJ7u8NjwogtHjdHgwtye/gQgITGDJZTiszeXjoe6vrYDTmI/K0G599D9UfYDTDY
+	 GE0HpB601Z1xIpLd+izhLBxS6n30NYnjzs6M3mxBRUGqlKiR9PdyZD7+WOv9hOWEuy
+	 chlf3xA7zlLQuaU5EP5pQ7bCbSV5o0HPnfR8dqRlr4W3Wcxlsw9lFteFNRRFP1xapB
+	 OOR4w2BEXw+bMdiylcQih1v5Vbr2tbgNij6POYtkwmMyn6J73nuX3ogJZvb0SqJQ+u
+	 Nqmb+nNUFfEPw==
+From: Mark Brown <broonie@kernel.org>
+To: Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>, 
+ Baojun Xu <baojun.xu@ti.com>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Srinivas Kandagatla <srini@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: kernel test robot <lkp@intel.com>, Dmitry Baryshkov <lumag@kernel.org>
+In-Reply-To: <20250427105105.18164-3-krzysztof.kozlowski@linaro.org>
+References: <20250427105105.18164-3-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] ASoC: codecs: wsa88xx/wcd938x: Drop kerneldoc
+ marker from inner comment
+Message-Id: <174622448885.4079618.3910091697301287558.b4-ty@kernel.org>
+Date: Sat, 03 May 2025 07:21:28 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-> This patch series introduces the Hornet LSM. The goal of Hornet is to provide
-> a signature verification mechanism for eBPF programs.
->
+On Sun, 27 Apr 2025 12:51:06 +0200, Krzysztof Kozlowski wrote:
+> Drop the kerneldoc marker from a comment within a function:
+> 
+>   wsa883x.c:1402: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> 
+> 
 
-[...]
+Applied to
 
->
-> References: [1]
-> https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@gmail.com/
-> [2]
-> https://lore.kernel.org/bpf/CAADnVQ+wPK1KKZhCgb-Nnf0Xfjk8M1UpX5fnXC=cBzdEYbv_kg@mail.gmail.com/
->
-> Change list: - v2 -> v3 - Remove any and all usage of proprietary bpf APIs
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-BPF APIs are not proprietary, but you cannot implement BPF program signing
-for BPF users without aligning with the BPF maintainers and the community.
-Signed programs are a UAPI and a key part of how developers experience BPF
-and this is not how we would like signing to be experienced by BPF users.
+Thanks!
 
-Some more feedback (which should be pretty obvious) but explicitly:
+[1/2] ASoC: codecs: wsa88xx/wcd938x: Drop kerneldoc marker from inner comment
+      commit: 9cd54a6bf119891711b281fb45789f66255c892d
+[2/2] ASoC: codecs: tas2764: Fix Wvoid-pointer-to-enum-cast warning
+      commit: c23c7c60711e34963c78f18fc3b9aaa313b6c8ce
 
-* Hacks like if (current->pid == 1) return 0; also break your threat model
-  about root being untrusted. This is all the more reason I think signing
-  should be integrated into other LSMs, only a proper LSM policy can breathe
-  life into the root / kernel boundary. 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-* You also did not take the feedback into account:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-   new = map->ops->map_lookup_elem(map, &key);
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-  This is not okay without having the BPF maintainers aligned, the same way as 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-  https://patchwork.kernel.org/project/netdevbpf/patch/20240629084331.3807368-4-kpsingh@kernel.org/#25928981
-
-  was not okay. Let's not have double standards.
-
-* And you copy pasted tools/testing/selftests/hornet/frozen_skel.h which
-  is what you expect users to do? Not acceptable either.
-
-So for this approach, it's a:
-
-Nacked-by: KP Singh <kpsingh@kernel.org>
-
-Now if you really care about the use-case and want to work with the maintainers
-and implement signing for the community, here's how we think it should be done:
-
-* The core signing logic and the tooling stays in BPF, something that the users
-  are already using. No new tooling.
-* The policy decision on the effect of signing can be built into various
-  existing LSMs. I don't think we need a new LSM for it.
-* A simple UAPI (emphasis on UAPI!) change to union bpf_attr in uapi/bpf.h in
-  the BPF_PROG_LOAD command:
-
-__aligned_u64 signature; 
-__u32 signature_size;
+Thanks,
+Mark
 
