@@ -1,64 +1,116 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0494518E3F;
-	Fri,  2 May 2025 14:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373A9256C81
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 14:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746196270; cv=none; b=ldBO2DC5ec2TTnH1LSABcWabIxCm/7ZFde0Tnv6cniHmT5IG5Aojen8g293RR8TzaM9NyRGa4ltk6YZ4fFMfB5IHa1bF5luw0hF9lObaBpnVztQlhKQcugiVIEzK/XxuGLOtYU2I++rYlD3RcVm2a567BDk8WN5J8ZnchCa7DZE=
+	t=1746197098; cv=none; b=Ij+d29v4aiGlouDd67T5ClqByZWs2OxclKZYgJPtn3802iwHxhfOQmId/wHWeEc0a+JxAdX7mVUSjeJQpclrJm2VDu/IgUKMVnBMA2h5rYvcJYl+ldKurSwcAkbGByiHYVXwFNy6UorRUJG2lZnYZPWSQThezrIaAhClDWWadlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746196270; c=relaxed/simple;
-	bh=mf8XsoB1aBck5+SO7c7/AHeQPBhCUYYifaR1NSzuvH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N/+GZUrLRepXgCwEnsHNdM+rD4A65lZPKppWfpjh38Dhw2TQrUjDWxRp3gVhK3Tae87iKD35QSAvcwvOjeYfNmPmuQUmjQ+4ZPo8OOiANCONIA9kVa7hMonbHMZmt0DckBNbYioGIMw2PIyml789RsJ2F8o9d9u/v3nrN+EnyvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=E5iEluk6; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1746197098; c=relaxed/simple;
+	bh=K2v+V9BeNPO6z1mSHU2f46T3osTrV14m8I6JlOMOUTc=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ruK34Dmi6Q7sH6Vrx4TI2FWucfIlRsxZcz3ZdzJfyl/GIT9IF6CkLZyCMeQHhJjYWgmSwFEmxsMvqNZkrWchKUkGXk5pni+JtFPny1XTQHnqrT1pC05a32VH4GnYoes3E8jkHfx8/4hHj6MaNxhTM7SjY9oqUu4cojOAMww5Hfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fPjT/MkK; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="E5iEluk6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=eaJRhq/LPWLeRV5AAUAremjdu0Wx7433M8VtPQ7w/9s=; b=E5iEluk6H0WmxRNwWdAC1xnKq5
-	nR1JWqWonmSreVtsOdrEBqSanhpaGILnf8nAEW0w7uT4OSjElNq//ut1RHHU/dHZ233kIgSg5hIR9
-	UsZXcVd1hbKY/cgwy/5HW2lPvZzVkfO5+dbUpt7dLL7HJ9OMZR0/BUKwnbwKLDsBzblQzGt15G2vn
-	SdkkFRWNvIqoF7czceiaqZT+ZdN/lccPUfXz+SN77w/rez6Bhxtuhp54H9CHQxZRf/G9wtm/QVEaO
-	2hJfmzI1pinUeTsAb0TxyJ6QwvQZsSp5nmfrxAJ4ZVaRJPC5JlNBFc0I8WT9Vctan0jFaejPLdd1J
-	I314kHMg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uArPm-0000000EzXZ-2mbl;
-	Fri, 02 May 2025 14:30:59 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3706330035E; Fri,  2 May 2025 16:30:58 +0200 (CEST)
-Date: Fri, 2 May 2025 16:30:58 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fPjT/MkK"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c7913bab2cso228062385a.0
+        for <llvm@lists.linux.dev>; Fri, 02 May 2025 07:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746197096; x=1746801896; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:feedback-id:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y1D5cABUWl03Gb3dEb9Zn/xPv0rDHSpYAcBsKyT8bso=;
+        b=fPjT/MkKbdfe9cUHP7gNSfqbsbtvW1mbZ/T6JfXyvoT6rJkZbL2T+LmAh3BZSE38kF
+         hOc6QQ0d8jUJsDiDo3NYSM1P+LPPbcsDV243mwFNSCjU/RHC/4zgU/ghy5wuTbmmVA3N
+         lr6wbBf68yAS9ETbGJbR2aLiGpGFqbrvhEb4+Y9n5syyxv1QStlX2DAlGxiQ6Vy6VnYl
+         aJiIFB2hsMFPHzZsNPhA9kIbmCchXgu+J98vUShAmn5XMgUyVacvau75oTghTdf0Ub5b
+         L22aVT/+BpG7bIyQ2WAKIPbgb8X/t+SvluXDmNYC1WxC7THPRbgLOdzUKqyQwbxWi0eN
+         fFPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746197096; x=1746801896;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:feedback-id:message-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y1D5cABUWl03Gb3dEb9Zn/xPv0rDHSpYAcBsKyT8bso=;
+        b=sBmpLI1cDdW3W8lqaZ6kIEyLRCFGq1Tr+JP2RZ9W6YR9++wC+OWafr152DLGMx/hN7
+         741VnnLVMi1tWCQ7b/MEYFWFt8YTUL8AULj8SzO2t8TQnVrPpeZa/47EFaMaz3YygXw2
+         ZGHbk/pLveZU8dPjsO+erQ2LMl4+gND0ONc9A5NIn7wKK8FPsvqHFPV5dak0iJFWJ0Tr
+         nF21wqd3mWJ5+Iq5TLH0Pr7yKA21CWSU7EgyEMw1PcBOcPlBgzGL3oyFQjWDZX8jlcJ4
+         hvlv6l20Ev1TGcTlgm1SStmrfw6SXouK3Bhq+/GbwY0DSav8EUD9T0FO0Wgz0LqMr95S
+         z46A==
+X-Forwarded-Encrypted: i=1; AJvYcCVoe1t2qHuWUj1RcQmaZVgnTCnNdoEhM6MM899Qa4I070DuycAMXPWnDGFipCHKQA2y3nn3@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywe2GYiO1VUhjtWLPuc5SmYtJr6a9Ytrv9JEphEW/lMzwpp+jt1
+	gHgPpuiNwWKF+rNvlkVRtiSFsN3KZyip6lyOnEHkXMygFJobqhCF
+X-Gm-Gg: ASbGnctcKZKz8rl4VRkPYM+a4mNM3NByolNX8rLIIUq/iP31q/kKB++tQEsdzgE1dFM
+	R9gey/R91A3BLXkTls1tOI6/xwjKVN+/OYJ5PGS53phNuB5mazVPAB45caMOVPUycXyqcf1MxGc
+	JdfU3B8vvu0NqJVzX9/Hm8LiyAWEZYDTui/QhfAuNtutOQF0PmtninF1WgFDLEnM7/2JeyO6H6k
+	0u/wffnhAR8fyB4sjpCuT//P4YvCtssuvMAJjJWQv2G1MkGNJVLLIwMcwx4xJeltFy5itYdqc6h
+	yqHXZ8ZqgWXBMMICDUmIqdtJG8WuFyG1NxLY5PAPc6hAGeNkWmhLSVf8V+JJJTyYNvsPOFoqUfs
+	3+uJCxxUblll5fT7H8vzVtBZVgu8Kjak=
+X-Google-Smtp-Source: AGHT+IHRPivqnggcPnth+cCtUlU5ktQEZ68fxYNwiRGEvvMI6JWX9VzuD4MXwQqFgO70AGZX+P3yaQ==
+X-Received: by 2002:a05:620a:1a9e:b0:7c7:bb3f:fd40 with SMTP id af79cd13be357-7cad5b2383emr418969385a.5.1746197095964;
+        Fri, 02 May 2025 07:44:55 -0700 (PDT)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cad23d0d0fsm189599885a.50.2025.05.02.07.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 07:44:55 -0700 (PDT)
+Message-ID: <6814da67.050a0220.2f3283.cdc1@mx.google.com>
+X-Google-Original-Message-ID: <aBTaZbjRBhRl7mDS@winterfell.>
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 0EDF21200043;
+	Fri,  2 May 2025 10:44:55 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Fri, 02 May 2025 10:44:55 -0400
+X-ME-Sender: <xms:ZtoUaHvANPzb0oMXyUaUUbvZer1Qt2-dLwySerQz7pmaYVQKqdy9pQ>
+    <xme:ZtoUaIeSvirOVsOwHJBs7DuaKe5rsRVY3U4oZC_m5ad1Ng--Wv30Fd1hZdzbz_3qV
+    oJDIY7uHahqT7ayTg>
+X-ME-Received: <xmr:ZtoUaKwFnohi7sgoHTCIucE4KPLorIxgmI8iH_LCfO_zQ4eK-On72pDn5iQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjedvjedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
+    hlrdgtohhmqeenucggtffrrghtthgvrhhnpefhtedvgfdtueekvdekieetieetjeeihedv
+    teehuddujedvkedtkeefgedvvdehtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhu
+    nhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqdduje
+    ejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdr
+    nhgrmhgvpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpth
+    htoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtgho
+    mhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphht
+    thhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehmihhngh
+    hosehrvgguhhgrthdrtghomhdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhonhhgmhgrnhesrhgvughhrghtrdgtohhmpdhrtghpthhtohepnh
+    grthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihgtkhdruggvshgruhhl
+    nhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:ZtoUaGNe1Mu8wfVu8CTHH9LCHKLyYxsXz9SOJ--aWi_9AyGtYZE_jw>
+    <xmx:ZtoUaH_mwK8azKp1HllcyJC66m8qPsryEX2dja-9RL-71VRnMwU3dQ>
+    <xmx:ZtoUaGXaMkRsonYzmvw8dMOu5aksFuwaqDvT_yRsy7fjff1-yE0x-g>
+    <xmx:ZtoUaIdMlxeymlj3_FZFsirwcAxVKnXIqvP1dFwzi8h4SuivDFozuw>
+    <xmx:Z9oUaFesUaE_dn_vLVrg6F7MIorzBO9-4lWvzZ3QYq1oCOoJmM4hR6XI>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 2 May 2025 10:44:54 -0400 (EDT)
+Date: Fri, 2 May 2025 07:44:53 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v2 1/1] x86/reboot: KVM: Guard
- nmi_shootdown_cpus_on_restart() with ifdeffery
-Message-ID: <20250502143058.GV4439@noisy.programming.kicks-ass.net>
-References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
- <ZwbazZpTSAn9aAC7@google.com>
- <ZwcT149jx-iOmEfl@surfacebook.localdomain>
- <ZykbvVZ32FKCRT_q@smile.fi.intel.com>
- <Z_UUXOe61BwVkGob@smile.fi.intel.com>
- <f670905f-f14b-4482-83ee-568234647f46@intel.com>
- <Z_U0Vn0V18KYGjkP@smile.fi.intel.com>
- <d40efb68-eb4e-4158-9dc6-5de101adefd1@intel.com>
- <aBTQ7-L-bUwzYbKM@smile.fi.intel.com>
- <ba00197d-dc21-47bd-b183-4971038d9a8d@intel.com>
+Subject: Re: [PATCH v1 1/1] lockdep: Move hlock_equal() to the respective
+ ifdeffery
+References: <20250415085857.495543-1-andriy.shevchenko@linux.intel.com>
+ <aBTP9AaJ0uyzAjxG@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,19 +119,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ba00197d-dc21-47bd-b183-4971038d9a8d@intel.com>
+In-Reply-To: <aBTP9AaJ0uyzAjxG@smile.fi.intel.com>
 
-On Fri, May 02, 2025 at 07:24:37AM -0700, Dave Hansen wrote:
-> On 5/2/25 07:04, Andy Shevchenko wrote:
-> > Can it be applied, please? The problem still persists as of today (v6.15-rc4).
-> 
-> I fundamentally disagree with the idea that the kernel programmer should
-> be doing the work of telling the compiler *exactly* when a static inline
-> function is unused. Compilers are good at that, humans are not.
-> 
-> The "fixes" for these issues generally make the code worse, not better.
-> 
-> I'd frankly rather have a kernel with some unused 'static inline'
-> functions in .c files than one filled with #ifdefs to shut up the compiler.
+Hi Andy,
 
-Yeah, this unused function warning nonsense is terribly annoying :/
+On Fri, May 02, 2025 at 05:00:20PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 15, 2025 at 11:58:56AM +0300, Andy Shevchenko wrote:
+> > When hlock_equal() is unused, it prevents kernel builds with clang,
+> > `make W=1` and CONFIG_WERROR=y, CONFIG_LOCKDEP=y and
+> > CONFIG_LOCKDEP_SMALL=n:
+> > 
+> >   lockdep.c:2005:20: error: unused function 'hlock_equal' [-Werror,-Wunused-function]
+> > 
+> > Fix this by moving the function to the respective existing ifdeffery
+> > for its the only user.
+> > 
+> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > inline functions for W=1 build").
+> 
+> Any news here, please? The problem still exists in v6.15-rc4.
+> 
+
+This is in my radar, so it will be in a PR to tip soon. I didn't reply
+earlier because I meant to find a whole cleanup for ifdefferies in
+lockdep:
+
+	https://lore.kernel.org/lkml/Z46BJ8FhWCIXbM7p@boqun-archlinux/
+
+to avoid whack-a-mole fixes. I never found time so I have to postpone
+that. Thanks!
+
+Regards,
+Boqun
+
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
