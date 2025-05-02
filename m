@@ -1,80 +1,59 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100F925D1E2
-	for <llvm@lists.linux.dev>; Fri,  2 May 2025 16:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0BF25D20C;
+	Fri,  2 May 2025 16:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746201840; cv=none; b=dCWKY+KR5FjTaw5kU4AL1ss4w1e8uujIS2oRUqWYsNYjGFmY7ZGAGF+yOke4HEwWmI+FIszMh1KsOXHZpxs7gq+SLroqETDbR9VN3FACdbN65bd302ZnmnLSsmYcJJkJ6LPvJAdRgzHHcBtVN13Bdw4oEfBXnKWArCxpKG5APdU=
+	t=1746202714; cv=none; b=pqkL5EW9LHESSWIUPp0HrDXHlXcRbXbGewGdFUSwE/6BAuhPB1sQrij1t2Lc6gL8Gew/bNfCfhnija8pzUpLZWpl3xrGz1dDx9H3dOS1k+fEdNwcEYOVxs+10fm6q/P+8xiHtSX8tQWupBkaLbjHmI33deA/or387LgxNt+hQqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746201840; c=relaxed/simple;
-	bh=/Ir9RUZPJNowHtDjB8+O6p57Zsy6wW7vA4h0CW+yCQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tbthRLVGZ6NT7xBlGSMDSLAd9QU8VbSuCDV8PA+oEz1M2S5nRx90ll/QWf+AvDfwZBgoJ1rQsn3Rp0T54phLmvVw7ORnuk7kewDHZzZDFY1tRUEbATbzf/ERrccj051MlaSh7zeAo0J0h4mQfvCnnZXDb8MRdr8NUQQM4389Iuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7L6jZqw; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746202714; c=relaxed/simple;
+	bh=wKed2HEAAjpuypB5+YOAKBXs7whMew/LNAhyMdJvcFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bfLH58rp7aVnePLop+wo+0D3jd59jToIzzQz7+RyKqpNTmxWi66Jjx6cgIJ7hdVlXQC3y8MdgvbJtVdJ6/qkhEbUVddWT/wO/sud9dxiXMj+wtZx/WFhciyT0Pw7ujjnXzT2O0aY01OX0jNUNUm4IoBemUrXJIrM0Ps2YPCtots=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLh9Xpc7; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7L6jZqw"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b03bc416962so1664804a12.0
-        for <llvm@lists.linux.dev>; Fri, 02 May 2025 09:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746201838; x=1746806638; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gDaKrXtDcJswvbEwS8wGTnCooDFXgZ8JEIYZCAsVSDU=;
-        b=B7L6jZqwcgOqFyb3BngZRmczFNK66obxPGJdeVw8F70RSItU5jqvDX25nIP8ueLn/s
-         blLzvA0HrhlLkGl2MjYDHKLRdg3bIvpE8vufdaeWFPYe5TAtG06BfiUkOgtj2fLEn4Sm
-         9rcCpnsi1OPtEDfdjWO29S4jkWyLK1OSLZQ6+NepcHIy6QgNQedBSQOnu60flhzNjsLI
-         jR27iqkqDlWmKgVL4ZPlLjsC+kCMkRzSKdYUQzvbzqjK9FkcTSjymiG1Cw03qJ66vzsz
-         zngRRFl5fErzWDKlxFEvCzzYQH7ygn/ioNxEN/FRAFe7booiFo/ZWDFGt2w3ZL5MueIt
-         kUHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746201838; x=1746806638;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gDaKrXtDcJswvbEwS8wGTnCooDFXgZ8JEIYZCAsVSDU=;
-        b=rhk4RVqjWTtykQcicXqx1g4vgio+xhZpPp9oBW4tOn+ZlD3VBXNR3XswQ3PQr32y/f
-         S7Xw0pRxbyNV1BpE7LV8LYRm7DKDRPMvwE6bjMG6mk7zGPxWfH7fijgZKeQ0n4NaemOO
-         OIkSwpMBxe7Oti8W9LuHQz57rhbtQVeth0JHmJV5ZIRk9nZhRmPf+qNtHoyTFAfrboVB
-         GHYM1LXTDhdQV5swFBMOPMBe9ygz2oNSFB5W4ljDUZRNcc0wLCbJLZbKoCC65w5Ndak0
-         FG2obHypdwSu6ILsvMvzjvRNs/ZrDfA2WPnK9LG7am1r+UPImZKX0AfOpaUyiWnQACMg
-         XTIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+JELq7LzBN3iqCDo2Mqfm6cbELvU/5I4COTX5AjB15gGnkZD5D5qYQy9oAK86KWXwWOw9@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz6y25Hm0TwWMXQuzPiHiBqI5vkEX+SVWNfjZt36rRZwTuKYBQJ
-	qsivWP6kX8+xogZN97y8HsxxMFxu8lP/dN7pnXqOlTR/tPorqCzb
-X-Gm-Gg: ASbGnct80Neted7KW2uaXc1ICjHBq6q30vVvHkLRclVQqBHSFnV8msD5eIlMmzMBMLZ
-	a0pJ9i/LvgQN2i1bpro9wKp/7yMUTxiKK/PB2yw3Glc7RukM79OJNIVnp9k4VCELJpIWb/UM6gU
-	yVF1A7d3Fe2xz/lX0scDRuiyOum3Tm3Gqzqpj2hoinu3O/QvlxyqbLmXjDlHe6Jig2TE+22SbxW
-	NxysaB9WB2KSbTlEI6GsBP4GMVYdJcVuLUB5Ym40lECgSyNVjpuDSjTBIwZ3DfkBS1Ja9rVEOt+
-	i2flN8+pYS3c2gudPLxZr26SNqAQMv71lKbFo8ur
-X-Google-Smtp-Source: AGHT+IHjbc82WPFLFYJqUcclQhm+5J20tGWB4R4jo77r5H5Zl7NTJpo1SEIdn4FVH/XUTu4IGCJZHw==
-X-Received: by 2002:a17:90b:3c4e:b0:2ff:796b:4d05 with SMTP id 98e67ed59e1d1-30a4e5ae12amr5825968a91.11.1746201838224;
-        Fri, 02 May 2025 09:03:58 -0700 (PDT)
-Received: from localhost ([216.228.127.130])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a3471ef7asm5916080a91.9.2025.05.02.09.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 09:03:57 -0700 (PDT)
-Date: Fri, 2 May 2025 12:03:55 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Leo Yan <leo.yan@arm.com>
-Subject: Re: [PATCH v2 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
-Message-ID: <aBTs6yvKlCYYgU2O@yury>
-References: <20250430171534.132774-1-irogers@google.com>
- <20250430171534.132774-3-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLh9Xpc7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746202713; x=1777738713;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wKed2HEAAjpuypB5+YOAKBXs7whMew/LNAhyMdJvcFs=;
+  b=XLh9Xpc7+STg9/DOr+MKSsuVpH14/8eSyV2+SEAeAIXZyF7T2Fmn7TFZ
+   CW8LHwmHG6CtaaEbngHX4cvQ8Xa7/0Yq7AJFncLwatBIvCND/Y0HFviQu
+   MjrQu0l0wnnZzv5QwR27AhjJ1Vnv2eXfKYNfGNjjIWSaGKAcmfaaHpF4S
+   mdEIipRj8006x8NC+zPvLi78OMdNXMW1RHBZpT+DYb2d1SxHV96/YnJa9
+   2krWLN+QKxwhlDETcduFz0H0diLeVj4IRfq/im+TV2NxtCLc62ncFnJJX
+   Frvxlw19IsGY4Z2rgnSlXGN/+iC1FFi1eQI7Dhff1cpTmsDeuDLNvfd9E
+   A==;
+X-CSE-ConnectionGUID: 9eAwUi4+SvW+5tSWr6jHEA==
+X-CSE-MsgGUID: WYXEIS+ASBynAZlGygYqfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="50544617"
+X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
+   d="scan'208";a="50544617"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 09:18:31 -0700
+X-CSE-ConnectionGUID: zC6GMzWhQXictq70mrtGgw==
+X-CSE-MsgGUID: ZbWOpGvmQ9mwbCEQ7fL82Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
+   d="scan'208";a="135660257"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 02 May 2025 09:18:30 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uAt5n-0004t7-0A;
+	Fri, 02 May 2025 16:18:27 +0000
+Date: Sat, 3 May 2025 00:18:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:work.coredump.socket 12/14] fs/pidfs.c:597:24:
+ error: incomplete definition of type 'const struct coredump_params'
+Message-ID: <202505030032.TDuMOCCn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,45 +62,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250430171534.132774-3-irogers@google.com>
 
-Hi Ian,
+tree:   https://github.com/brauner/linux.git work.coredump.socket
+head:   fed163064146d254b65f674b2072bf51bc26bbfa
+commit: 745300388cabf3ae30ad74c7d35f563adab09d30 [12/14] pidfs, coredump: add PIDFD_INFO_COREDUMP
+config: hexagon-randconfig-002-20250502 (https://download.01.org/0day-ci/archive/20250503/202505030032.TDuMOCCn-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505030032.TDuMOCCn-lkp@intel.com/reproduce)
 
-On Wed, Apr 30, 2025 at 10:15:31AM -0700, Ian Rogers wrote:
-> The clang warning -Wshorten-64-to-32 can be useful to catch
-> inadvertent truncation. In some instances this truncation can lead to
-> changing the sign of a result, for example, truncation to return an
-> int to fit a sort routine. Silence the warning by making the implicit
-> truncation explicit. This isn't to say the code is currently incorrect
-> but without silencing the warning it is hard to spot the erroneous
-> cases.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  include/linux/bitmap.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> index 595217b7a6e7..4395e0a618f4 100644
-> --- a/include/linux/bitmap.h
-> +++ b/include/linux/bitmap.h
-> @@ -442,7 +442,7 @@ static __always_inline
->  unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
->  {
->  	if (small_const_nbits(nbits))
-> -		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
-> +		return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505030032.TDuMOCCn-lkp@intel.com/
 
-This should return unsigned int, I guess?
+All errors (new ones prefixed by >>):
 
-Also, most of the functions you touch here have their copies in tools.
-Can you please keep them synchronized?
+>> fs/pidfs.c:597:24: error: incomplete definition of type 'const struct coredump_params'
+     597 |         struct pid *pid = cprm->pid;
+         |                           ~~~~^
+   include/linux/pidfs.h:5:8: note: forward declaration of 'struct coredump_params'
+       5 | struct coredump_params;
+         |        ^
+   fs/pidfs.c:610:42: error: incomplete definition of type 'const struct coredump_params'
+     610 |         coredump_mask = pidfs_coredump_mask(cprm->mm_flags);
+         |                                             ~~~~^
+   include/linux/pidfs.h:5:8: note: forward declaration of 'struct coredump_params'
+       5 | struct coredump_params;
+         |        ^
+   2 errors generated.
 
-Thanks,
-Yury
 
->  	return __bitmap_weight(src, nbits);
->  }
->  
-> -- 
-> 2.49.0.906.g1f30a19c02-goog
+vim +597 fs/pidfs.c
+
+   594	
+   595	void pidfs_coredump(const struct coredump_params *cprm)
+   596	{
+ > 597		struct pid *pid = cprm->pid;
+   598		struct pidfs_exit_info *exit_info;
+   599		struct dentry *dentry;
+   600		struct inode *inode;
+   601		__u32 coredump_mask = 0;
+   602	
+   603		dentry = stashed_dentry_get(&pid->stashed);
+   604		if (WARN_ON_ONCE(!dentry))
+   605			return;
+   606	
+   607		inode = d_inode(dentry);
+   608		exit_info = &pidfs_i(inode)->__pei;
+   609		/* Note how we were coredumped. */
+   610		coredump_mask = pidfs_coredump_mask(cprm->mm_flags);
+   611		/* Note that we actually did coredump. */
+   612		coredump_mask |= PIDFD_COREDUMPED;
+   613		/* If coredumping is set to skip we should never end up here. */
+   614		VFS_WARN_ON_ONCE(coredump_mask & PIDFD_COREDUMP_SKIP);
+   615		smp_store_release(&exit_info->coredump_mask, coredump_mask);
+   616		/* Fwiw, this cannot be the last reference. */
+   617		dput(dentry);
+   618	}
+   619	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
