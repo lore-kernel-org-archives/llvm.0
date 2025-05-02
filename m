@@ -1,142 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E25822CBD9;
-	Fri,  2 May 2025 09:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4ED1E47A8
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 09:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746178008; cv=none; b=mAOlYq/6cNo7Cx7ZmMPo+HdtbT/ytHbpLqcEF2KPbBSu02xrw7ETmPy6T5v0f1CxG3wgPep7OirrOV54ih5vFb+hTcNlDVhhdUC4+a724DM9bovBNow1tc3EpJtWheK98MQzKpGf8OkyFoivcNpcSSOlaf2UuNV9kws6yP5XagA=
+	t=1746178481; cv=none; b=QZCZrjDq4+lY/ZN2sqcPLMokL4pjy6cbgsX+Y4Y9lXXg7TdF1lGkC9/4LPTTYlIdtZpCx3g7TRCUWCLkPz4F9HBgz8C8KjPm9upt1vfqRQluII2MQuWzXE3qWtMQ2x6aqpwUcv3lZ7FKrUMM+n/6PLov0g0j3vZFPSarMJwSwWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746178008; c=relaxed/simple;
-	bh=6FdHTRx1UiloRdlH6bvvRzKQC8CVFYEozsMwMjInFUk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zc9m1zkP8HnJayWKgOGfTcD6Xmu+djTAwZec5Cx2j2qfnK/ItOD+Zv+q/DIG8OtlD0LEMSJcrVQsHoCG7i7lnmoMYTZtLdmF99RJ3y+zkItZIeh458OxY3Ttj9v80HDGjLxYnAaTgzstZFxGfxMgVrT53rVKC6yLj44c1ghU5UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mQMMkEqv; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746178481; c=relaxed/simple;
+	bh=UPSCyMMfuVANy8PSXUYucve1oVzm165bjFjIAed6SPw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T4rxrKXAXQsVKiwsYkAMbZKBPuQ34LkJ2NGERLB+gS1zRWxryC94nZyCLYbkTIIPB1fEE5jm3u++G8OmcionodCn77XU6/21QmcRu8EERlOJrZZQIbsEPs8x1bkjmPeNrgPifJ6rEhLYT+4Q6QUDCBt1wAjcRaElKgDqygrm8qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NGoienxs; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mQMMkEqv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746178007; x=1777714007;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6FdHTRx1UiloRdlH6bvvRzKQC8CVFYEozsMwMjInFUk=;
-  b=mQMMkEqvyADCr09NN7jGgUKS6ArXxj+RWQz1yxrtgtxlf96OipZXhjYc
-   cFy9kqxqBR4azyHs4lUgN14o53nHhbkhffJWEROBZF44tfrRa/yMxnQym
-   YyjsxyenurSEBHWAdJJXeLT4HQpUgw1mHh6dKqNfIaZ6eXbUopBW+87+b
-   sRT2Hj5S8V2eM2jalabZU6IB93fRLirFjqP60CNUAaMPLkblZXxf0TGVB
-   06RN+y9IFweFfYnntmwC29XlXw8l6k5eN4HrBfb13cNtjxUlbmIXOpYmM
-   GRDyTko7xl1OGUr/eQ6h/cuesGyKYBEsv8pKXMoeecYkbZfUA4C/rOwPs
-   w==;
-X-CSE-ConnectionGUID: 7/Sxi0QqRxWhCH+2FasUmA==
-X-CSE-MsgGUID: y4pjmr58Sj27D8FTY1AjhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="58849705"
-X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
-   d="scan'208";a="58849705"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 02:26:46 -0700
-X-CSE-ConnectionGUID: hQ8g4joASo6VeFIcx1oIaQ==
-X-CSE-MsgGUID: r77zWQUXS6yP+/2d9K9t3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
-   d="scan'208";a="139407646"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 02 May 2025 02:26:43 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAmfJ-0004dd-0l;
-	Fri, 02 May 2025 09:26:41 +0000
-Date: Fri, 2 May 2025 17:25:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Andreatta <thomasandreatta2000@gmail.com>, dpenkler@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	Thomas Andreatta <thomas.andreatta2000@gmail.com>
-Subject: Re: [PATCH 2/8] Staging: gpib: Updated return type
- `request_system_control`
-Message-ID: <202505021632.3PmPalr1-lkp@intel.com>
-References: <28632a0bf5275553e929e8699830377069e921fa.1746133676.git.thomas.andreatta2000@gmail.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NGoienxs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1746178477;
+	bh=UPSCyMMfuVANy8PSXUYucve1oVzm165bjFjIAed6SPw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NGoienxsBw2Sbv3RD9NHv2tN3toXv6loIQQG5F8HVubwH0xW5dJJDrl5NtWWKy4sj
+	 W8t/9w4tjyHQE/ddFJwZrXfpT82M44VIrwN6U8yjP5Y4FbhNXrmrbqvlV7VcAgCDDX
+	 PxS0ZSm5s030UNRWeVq29D+83NM28maTOPxH00F5cqXV0IlzXTMgszm1hdydKO2yxB
+	 FSqxADI/4tsQ4hZ0iKYngunbkm+FXhdQKaGZqcpPaItj9/xK0SmD08BtmYK9NrUuAS
+	 ayBO4YxSv9fHT15h+SZ9aJtsXcvTWgu7404PminYdzqmvMqe+6zxbQAu0Yg6DW/PSp
+	 3dMPI3+FpQoNw==
+Received: from [IPV6:2a05:1141:1cc:8600:1cd7:9a7e:17d7:cd2c] (unknown [IPv6:2a05:1141:1cc:8600:1cd7:9a7e:17d7:cd2c])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mriesch)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id C343F17E0649;
+	Fri,  2 May 2025 11:34:36 +0200 (CEST)
+Message-ID: <3ea152ad-100d-4931-a149-19f24381e463@collabora.com>
+Date: Fri, 2 May 2025 11:34:35 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28632a0bf5275553e929e8699830377069e921fa.1746133676.git.thomas.andreatta2000@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] clang-format: format short enums and macro
+ definitions correctly
+To: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Collabora Kernel Team <kernel@collabora.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Michael Riesch <michael.riesch@wolfvision.net>
+References: <20250210-clang-format-fixes-v2-0-37894413bbee@collabora.com>
+Content-Language: en-US
+From: Michael Riesch <michael.riesch@collabora.com>
+In-Reply-To: <20250210-clang-format-fixes-v2-0-37894413bbee@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Thomas,
+Hi all,
 
-kernel test robot noticed the following build errors:
+On 4/10/25 22:58, Michael Riesch via B4 Relay wrote:
+> Habidere,
+> 
+> These patches set two previously unset clang-format options to
+> (hopefully) sane values.
+> 
+> Looking forward to your comments!
+> 
+> Best regards,
+> Michael
+> 
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
+> ---
+> Changes in v2:
+> - collected Nathan's Reviewed-by
+> - rebased onto v6.15-rc1
+> - Link to v1: https://lore.kernel.org/r/20250210-clang-format-fixes-v1-0-9bcf43a4b4b2@wolfvision.net
+> 
+> ---
+> Michael Riesch (2):
+>       clang-format: do not allow short enums on a single line
+>       clang-format: align consecutive macros
+> 
+>  .clang-format | 2 ++
+>  1 file changed, 2 insertions(+)
+> ---
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> change-id: 20250210-clang-format-fixes-914ded0e682d
+> 
+> Best regards,
 
-[auto build test ERROR on staging/staging-linus]
-[also build test ERROR on linus/master v6.15-rc4]
-[cannot apply to staging/staging-testing staging/staging-next next-20250501]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Gentle ping.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Andreatta/Staging-gpib-agilent_82357a-changing-return-type-void-in-int/20250502-053306
-base:   staging/staging-linus
-patch link:    https://lore.kernel.org/r/28632a0bf5275553e929e8699830377069e921fa.1746133676.git.thomas.andreatta2000%40gmail.com
-patch subject: [PATCH 2/8] Staging: gpib: Updated return type `request_system_control`
-config: arm-randconfig-004-20250502 (https://download.01.org/0day-ci/archive/20250502/202505021632.3PmPalr1-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505021632.3PmPalr1-lkp@intel.com/reproduce)
+Can these patches be applied?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505021632.3PmPalr1-lkp@intel.com/
+Thanks and best regards,
+Michael
 
-All errors (new ones prefixed by >>):
-
->> drivers/staging/gpib/eastwood/fluke_gpib.c:710:28: error: incompatible function pointer types initializing 'int (*)(struct gpib_board *, int)' with an expression of type 'void (struct gpib_board *, int)' [-Wincompatible-function-pointer-types]
-     710 |         .request_system_control = fluke_request_system_control,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/gpib/eastwood/fluke_gpib.c:745:28: error: incompatible function pointer types initializing 'int (*)(struct gpib_board *, int)' with an expression of type 'void (struct gpib_board *, int)' [-Wincompatible-function-pointer-types]
-     745 |         .request_system_control = fluke_request_system_control,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/gpib/eastwood/fluke_gpib.c:772:28: error: incompatible function pointer types initializing 'int (*)(struct gpib_board *, int)' with an expression of type 'void (struct gpib_board *, int)' [-Wincompatible-function-pointer-types]
-     772 |         .request_system_control = fluke_request_system_control,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
-
-
-vim +710 drivers/staging/gpib/eastwood/fluke_gpib.c
-
-55936779f49612 Dave Penkler 2024-09-18  700  
-95cfc75234534b Dave Penkler 2025-01-11  701  static gpib_interface_t fluke_unaccel_interface = {
-95cfc75234534b Dave Penkler 2025-01-11  702  	.name = "fluke_unaccel",
-95cfc75234534b Dave Penkler 2025-01-11  703  	.attach = fluke_attach_holdoff_all,
-95cfc75234534b Dave Penkler 2025-01-11  704  	.detach = fluke_detach,
-95cfc75234534b Dave Penkler 2025-01-11  705  	.read = fluke_read,
-95cfc75234534b Dave Penkler 2025-01-11  706  	.write = fluke_write,
-95cfc75234534b Dave Penkler 2025-01-11  707  	.command = fluke_command,
-95cfc75234534b Dave Penkler 2025-01-11  708  	.take_control = fluke_take_control,
-95cfc75234534b Dave Penkler 2025-01-11  709  	.go_to_standby = fluke_go_to_standby,
-95cfc75234534b Dave Penkler 2025-01-11 @710  	.request_system_control = fluke_request_system_control,
-95cfc75234534b Dave Penkler 2025-01-11  711  	.interface_clear = fluke_interface_clear,
-95cfc75234534b Dave Penkler 2025-01-11  712  	.remote_enable = fluke_remote_enable,
-95cfc75234534b Dave Penkler 2025-01-11  713  	.enable_eos = fluke_enable_eos,
-95cfc75234534b Dave Penkler 2025-01-11  714  	.disable_eos = fluke_disable_eos,
-95cfc75234534b Dave Penkler 2025-01-11  715  	.parallel_poll = fluke_parallel_poll,
-95cfc75234534b Dave Penkler 2025-01-11  716  	.parallel_poll_configure = fluke_parallel_poll_configure,
-95cfc75234534b Dave Penkler 2025-01-11  717  	.parallel_poll_response = fluke_parallel_poll_response,
-95cfc75234534b Dave Penkler 2025-01-11  718  	.line_status = fluke_line_status,
-95cfc75234534b Dave Penkler 2025-01-11  719  	.update_status = fluke_update_status,
-95cfc75234534b Dave Penkler 2025-01-11  720  	.primary_address = fluke_primary_address,
-95cfc75234534b Dave Penkler 2025-01-11  721  	.secondary_address = fluke_secondary_address,
-95cfc75234534b Dave Penkler 2025-01-11  722  	.serial_poll_response = fluke_serial_poll_response,
-95cfc75234534b Dave Penkler 2025-01-11  723  	.serial_poll_status = fluke_serial_poll_status,
-95cfc75234534b Dave Penkler 2025-01-11  724  	.t1_delay = fluke_t1_delay,
-95cfc75234534b Dave Penkler 2025-01-11  725  	.return_to_local = fluke_return_to_local,
-55936779f49612 Dave Penkler 2024-09-18  726  };
-55936779f49612 Dave Penkler 2024-09-18  727  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
