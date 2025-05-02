@@ -1,65 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1594A15E90;
-	Fri,  2 May 2025 01:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99EDC8DC;
+	Fri,  2 May 2025 01:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746148525; cv=none; b=Pmtl+SqIFBDZWCCuNtsAxy+Cl2CGwgLAqGj/zMrk6Abnmupq6ud3YEBhQbcPmEkxPlXp6Nnb9PTPXmR9xnY3Zi4ZkwnvDyC/zbhC5X6RPMFBEkmrM0363wYR/LS16kX324OQqbYB7ycdzNlHwBJjsDunZRS00gPpLwWkGH7Zaao=
+	t=1746149098; cv=none; b=pIhUlzOlqymN2cDSRSWa846jDEuhUoO++UPuyRpMOXaK0MOO6qp0TLSXjix6K6AXSiexXJS2XHOyOLzzXDhVsE0nzTFHrmIqFs85I/lx7e+LDjmyfs+WQbnvxbL3wavdGBaokFHc9TLBj/dY2Az6Dz0Eml4kWkb+iUxb2gHR/pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746148525; c=relaxed/simple;
-	bh=qThFo2OyaWAGrkhYOPTL+nS7FbwT7IFHPxUakidufl0=;
+	s=arc-20240116; t=1746149098; c=relaxed/simple;
+	bh=af7HpQ3v0hPoGlXDCTIrLUkdmd3jd6lgFoK/XGJ1cFA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LUZ6A6UllFirtHlMuzbAhoABaNG4qsRpa2jCpPeCcBg+m2fR0fXY54HDeH1fZeOxbj2F4hjf7Ki9GijdSSZgAGHUf2xC06wE/Z+1p/rX1TwwNm9nWig/oAb7yIE9QpKvPGq3Qnd6c0BQ4n2XwCcBqkRzBk8JIqLYFaFNcROM/lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NmF6rFeK; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=WRAh9W6flrXwqXRhdsdK1MoJkfrYd5QT9g05KN49q0yeadbpw9PQ1v9lyR+xBV4ihWedgPXMyOQX0OHpHX9zPoN9z0XEDLrb91gG1XHzqrwqXgP0ONzqS/do/YyvfbYT+xRuhU4flGM5RNmu5Af14m+MUdaz/b3GXbg3WJyy1G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOA5IYgV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NmF6rFeK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746148523; x=1777684523;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qThFo2OyaWAGrkhYOPTL+nS7FbwT7IFHPxUakidufl0=;
-  b=NmF6rFeKBY9CNjI0Z0NPwzcVlDkpDafQU7rapl/UbzwXcS7yNjCT9tx0
-   UWySqAaXwo0JE6a/rftV8Pw+u5j0nYXTZ039gWIK3nhJIVdMssIOzV37K
-   3MTdhO7Ozu4kbIDIKS/uPVBpQebi9L4YiP3NcZsWn18HRWZmbTwAA+u87
-   ZI3BWzadVWmYKgi03dLGvj6GR+ol1TGI0sorUzG4xhr8XOhpzUS/AI0kx
-   p9TcrpdwuU/DDcmMShNdpbfIQhtrSj8Eiv1/gevr2gnHcCYWO68S9JRLO
-   feAkS/NAq0EUi051JT9DdkrDRTVSyNy4b9e1NTBzZFp25umYDtDlku5B4
-   w==;
-X-CSE-ConnectionGUID: 57DyjjW/QtaYFY6qnzjhFw==
-X-CSE-MsgGUID: JONZz5OqS1WFdOwwFyZhGA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="47971665"
-X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
-   d="scan'208";a="47971665"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 18:15:22 -0700
-X-CSE-ConnectionGUID: ZfraKh0PRFOMDsr38cEUQw==
-X-CSE-MsgGUID: kBNYggXVSX2+8kIxNTZoNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
-   d="scan'208";a="134420606"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 01 May 2025 18:15:20 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAezk-0004U1-2q;
-	Fri, 02 May 2025 01:15:16 +0000
-Date: Fri, 2 May 2025 09:15:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>,
-	thierry.bultel@linatsea.fr
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
-	paul.barker.ct@bp.renesas.com,
-	Thierry Bultel <thierry.bultel.yh@bp.renesas.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v8 08/11] serial: sh-sci: Add support for RZ/T2H SCI
-Message-ID: <202505020836.WBkjrl7J-lkp@intel.com>
-References: <20250429081956.3804621-9-thierry.bultel.yh@bp.renesas.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOA5IYgV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C14C4CEE3;
+	Fri,  2 May 2025 01:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746149095;
+	bh=af7HpQ3v0hPoGlXDCTIrLUkdmd3jd6lgFoK/XGJ1cFA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YOA5IYgVSCHIwwDgrz52mGuA7Y+xbenqnZVL7DZxOwLwD+hCrYPnhXNeRxyM3a/X/
+	 KUz3NKnbR1e8/36/H/E632jPbzESpm2egxlzjL2ZABuLaKeEMQicsTp1G0BNOVCrVJ
+	 8mKIr87E9PrppWV0447NPoJqZyZ9Px0ZkuPe2aHvE9NrimxbtQWrDwin2TLUNrfQLG
+	 gjR0HZ2YZGWwfzltOiID65eYnMWgD4YYYt5In9LzM1AISG/vjVmfyKcwIMazzE/i+Y
+	 3bu42B0hn99buqPQhcVgnlqzOvO4tevzdBK6RdwnLcnQtwI3NFd6JJN4vEZRrfBAiy
+	 0aWIG6+a63BYw==
+Date: Thu, 1 May 2025 18:24:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, stable@vger.kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Marcus Seyfarth <m.seyfarth@gmail.com>,
+	Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 2/2] include/linux/typecheck.h: Zero initialize dummy
+ variables
+Message-ID: <20250502012449.GA1744689@ax162>
+References: <20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org>
+ <20250501-default-const-init-clang-v1-2-3d2c6c185dbb@kernel.org>
+ <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,46 +54,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250429081956.3804621-9-thierry.bultel.yh@bp.renesas.com>
+In-Reply-To: <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
 
-Hi Thierry,
+On Thu, May 01, 2025 at 04:28:25PM -0700, Linus Torvalds wrote:
+> On Thu, 1 May 2025 at 16:00, Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > +({     type __dummy = {}; \
+> > +       typeof(x) __dummy2 = {}; \
+> 
+> I'm actually surprised that this doesn't cause warnings in itself.
+> 
+> The types in question are not necessarily compound types, and can be
+> simple types like 'int'.
+> 
+> The fact that you can write
+> 
+>        int x = {};
+> 
+> without the compiler screaming bloody murder about that insanity blows
+> my mind, but it does seem to be valid C (*).
 
-kernel test robot noticed the following build errors:
+I thought the same thing but I tend to trust people who are smarter than
+I am :)
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on tty/tty-next]
-[cannot apply to geert-renesas-drivers/renesas-clk tty/tty-linus geert-renesas-devel/next linus/master v6.15-rc4 next-20250501]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> How long has that been valid? Because this is certainly new to the
+> kernel, and sparse does complain about this initializer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thierry-Bultel/dt-bindings-soc-Add-Renesas-RZ-T2H-R9A09G077-SoC/20250429-172052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20250429081956.3804621-9-thierry.bultel.yh%40bp.renesas.com
-patch subject: [PATCH v8 08/11] serial: sh-sci: Add support for RZ/T2H SCI
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250502/202505020836.WBkjrl7J-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505020836.WBkjrl7J-lkp@intel.com/reproduce)
+As you noted, brace initialization for scalars appears to always be
+valid (at least in my testing) but as Al points out, empty braces for
+scalars is only supported in GCC 13+ and Clang 17+ (I think [1] was the
+clang commit), so that is not going to fly...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505020836.WBkjrl7J-lkp@intel.com/
+> So honestly, this will just cause endless sparse warnings instead. I
+> think disabling this warning for now is likely the right thing to do.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+but '= {0}' appears to work: https://godbolt.org/z/x7eae5vex
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/tty/serial/rsci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/rsci.o
->> ERROR: modpost: "sci_port_enable" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_port_disable" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_release_port" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_shutdown" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_startup" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_verify_port" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_request_port" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_config_port" [drivers/tty/serial/rsci.ko] undefined!
->> ERROR: modpost: "sci_pm" [drivers/tty/serial/rsci.ko] undefined!
+If using that instead upsets sparse still, then I can just abandon this
+change and update the other patch to disable -Wdefault-const-init-unsafe
+altogether (rather than just the field variant) but it seems like you
+were not entirely opposed to this even in spite of sparse not supporting
+it. If that does work, I will send a v2 tomorrow.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1]: https://github.com/llvm/llvm-project/commit/5d8aaad4452f60ba8902e921d9bed606713a8f26
+
+Cheers,
+Nathan
