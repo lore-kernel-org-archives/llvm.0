@@ -1,290 +1,132 @@
-Received: from mx10.gouders.net (mx10.gouders.net [202.61.206.94])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FAB256C99
-	for <llvm@lists.linux.dev>; Fri,  2 May 2025 14:15:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.206.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FA023A562
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 14:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746195313; cv=none; b=W5AosREdoXanf88UIsBT3nCdeR3yMFnO5WUFNvZ0fb+1lUpR3F4l2ZXvSuwCX8PZ9sMdKzcYI25a1dV1hw9Rc/zf59jUJ4UB5zFU1egMYPCw9Z7Eax7WJPVTCxouUVY/1JveZA08FcQjI5oPGqXVp6NqH/z1h+ouU0c3gJABDTA=
+	t=1746195882; cv=none; b=GxMswGWxkZKcQjnaiVPZFV9NtyOtiJXU+n6WyV1Aj4QSMbAuN2vzOSq/ONTyAaBtMtsbueZS29ws9+44caqndyFxSjswlMQxJyeDmk20VOshcxW3KZ/vg6MJua4Ybz6oSwtEmzv1PGwFfHBbhwyt7w/coSMpjZwmYpPWdYZPaQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746195313; c=relaxed/simple;
-	bh=RIfl0KP/59TNe/iVyeBl8pr/SbLz3bMSndMSKx1wQno=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=F8lTvBLY4iFAvJbWHNIw5dM+MzPoQUMzTvwNDhuhDq+pbeF2kViR7DHisyUWcNX0gfEBfgbQL45a649QZm3nHKURkb0u27pxovaVsCCnJKqleALWrtiTXZ9bJrsuQ+Rke5yjKF64hu9mZhI6iG3x74JDVk5erWbuhKNBkzOWdgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net; spf=pass smtp.mailfrom=gouders.net; dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b=M0Rm0Utu; arc=none smtp.client-ip=202.61.206.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gouders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gouders.net
+	s=arc-20240116; t=1746195882; c=relaxed/simple;
+	bh=+nr420i55zPpmB6yVTs9qvlZltVoZDTWeixXQDZ69jo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=le/a+bFrQFf1vU2GMxTY+s3rIlStOI1+DDYPjwZHA4LtxHBzvxHQfX9FXEeLWr9BfL/3aXOtsh6ZSJc6tB9+JMJavUtcB2fzHeqCOv1vgsqZz2rFeKMwznVcUpUK+aGJKUJU6nYKMZh9wx0zt85oD9kE/jxOGghlcRrRn/iwMEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpDFsRnG; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gouders.net header.i=@gouders.net header.b="M0Rm0Utu"
-Received: from localhost (ip-109-42-178-232.web.vodafone.de [109.42.178.232])
-	(authenticated bits=0)
-	by mx10.gouders.net (8.17.1.9/8.17.1.9) with ESMTPSA id 542ECN3D018135
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Fri, 2 May 2025 16:12:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
-	t=1746195150; bh=RIfl0KP/59TNe/iVyeBl8pr/SbLz3bMSndMSKx1wQno=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=M0Rm0Utu/TA2y8kZiW08P3Cgiuaax8JfSfxIwXqqooqPhwOr8Bpi/Jb3TLK7pgqfm
-	 KbQQiTcYThGkvg6sL/020Hd0jaVImhPZpGJISGUu0KVPALipjhyGr1ajO3V3h4L2xW
-	 dc5lu0Qx5QjKk/I9i5VwVAlb/nnSWbZmHoCcezSQ=
-From: Dirk Gouders <dirk@gouders.net>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo
- <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mark Rutland
- <mark.rutland@arm.com>,
-        Alexander Shishkin
- <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang
- <kan.liang@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus
- Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner
- <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr
- Bueso <dave@stgolabs.net>,
-        =?utf-8?Q?Andr=C3=A9?= Almeida
- <andrealmeid@igalia.com>,
-        John
- Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-        James
- Clark <james.clark@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>, Leo
- Yan <leo.yan@linux.dev>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Nathan Chancellor
- <nathan@kernel.org>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt
- <justinstitt@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Al Viro
- <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
-        Ben Gainey
- <ben.gainey@arm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Kajol
- Jain <kjain@linux.ibm.com>,
-        Aditya Gupta <adityag@linux.ibm.com>,
-        Eder
- Zulian <ezulian@redhat.com>,
-        Dapeng Mi <dapeng1.mi@linux.intel.com>,
-        Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Ravi Bangoria
- <ravi.bangoria@amd.com>,
-        Howard Chu <howardchu95@gmail.com>,
-        Charlie
- Jenkins <charlie@rivosinc.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jann Horn
- <jannh@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd
- Bergmann <arnd@arndb.de>, Yang Jihong <yangjihong@bytedance.com>,
-        Dmitry
- Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-        Graham
- Woodward <graham.woodward@arm.com>,
-        Ilkka Koskinen
- <ilkka@os.amperecomputing.com>,
-        Anshuman Khandual
- <anshuman.khandual@arm.com>,
-        Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
-        Tengda Wu <wutengda@huaweicloud.com>,
-        Gabriele Monaco <gmonaco@redhat.com>,
-        Chun-Tse Shao <ctshao@google.com>, Casey Chen <cachen@purestorage.com>,
-        "Dr. David Alan Gilbert"
- <linux@treblig.org>,
-        Li Huafei <lihuafei1@huawei.com>,
-        "Steinar H.
- Gunderson" <sesse@google.com>,
-        Levi Yun <yeoreum.yun@arm.com>, Weilin
- Wang <weilin.wang@intel.com>,
-        Thomas Falcon <thomas.falcon@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Andrew Kreimer
- <algonell@gmail.com>,
-        Krzysztof =?utf-8?Q?=C5=81opatowski?=
- <krzysztof.m.lopatowski@gmail.com>,
-        Christophe Leroy
- <christophe.leroy@csgroup.eu>,
-        Jean-Philippe Romain
- <jean-philippe.romain@foss.st.com>,
-        Junhao He <hejunhao3@huawei.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Xu Yang
- <xu.yang_2@nxp.com>,
-        Steve Clevenger
- <scclevenger@os.amperecomputing.com>,
-        Zixian Cai <fzczx123@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Yujie Liu
- <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2 04/47] perf bench: Silence -Wshorten-64-to-32 warnings
-In-Reply-To: <20250502130635.0eabb190@pumpkin> (David Laight's message of
-	"Fri, 2 May 2025 13:06:35 +0100")
-References: <20250430175036.184610-1-irogers@google.com>
-	<20250430175036.184610-5-irogers@google.com>
-	<gho6wdh00l.fsf@gouders.net>
-	<CAP-5=fUdpa40MDNu0aDBO7o8H3YMe-cYsg-YfqUUZUY4M4XLeA@mail.gmail.com>
-	<ghecx9guoj.fsf@gouders.net>
-	<CAP-5=fXJpD_f6dUqroVpqe-OX5kyOPc1zpbyOZoQtqvQWBGr=Q@mail.gmail.com>
-	<gha57xgs8b.fsf@gouders.net> <20250502130635.0eabb190@pumpkin>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-Date: Fri, 02 May 2025 16:12:17 +0200
-Message-ID: <ghfrhnaypq.fsf@gouders.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpDFsRnG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746195881; x=1777731881;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+nr420i55zPpmB6yVTs9qvlZltVoZDTWeixXQDZ69jo=;
+  b=bpDFsRnGMdp10WS3eV7ax3m6AENk/4eGJikxYE+dxI5DCTaH1cGlHtnX
+   AePMIPpt+AbuOUsQKyxLJTskJUZtdg91jPINLadgPwZyApv5B1bGY9U2Z
+   nvq2A5s9tnZuvVsy7aczSquvU+z+gxvsa9jkf2LwRE247Qys61y1zs+1Q
+   i2PEZ6y+QQmQ1h7a1KKARilJ4fX8+iL+9JJ0RaQ0pPEwfPseIg74xKMf8
+   +KoAAsiHbbthWrQDHqJTHxw530q8HK4r+7Vx5BljE4bs+s3pXN8zVaU13
+   121elrnWSrXvxRybZd2pcPq/vyRg25u1XKX7JWUDs1O7Ea/w+Se01rqVv
+   w==;
+X-CSE-ConnectionGUID: 5LiLob40S8GDd+c7pE+RUA==
+X-CSE-MsgGUID: rkhOwkiKQ4um8DZTBoPnyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="59261664"
+X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
+   d="scan'208";a="59261664"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 07:24:40 -0700
+X-CSE-ConnectionGUID: c2m9Fg14RNCQI2xdwCYaYg==
+X-CSE-MsgGUID: scgs1ZAeQVypORdo7fBLdA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
+   d="scan'208";a="139796474"
+Received: from bjrankin-mobl3.amr.corp.intel.com (HELO [10.124.220.153]) ([10.124.220.153])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 07:24:39 -0700
+Message-ID: <ba00197d-dc21-47bd-b183-4971038d9a8d@intel.com>
+Date: Fri, 2 May 2025 07:24:37 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] x86/reboot: KVM: Guard
+ nmi_shootdown_cpus_on_restart() with ifdeffery
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
+ <ZwbazZpTSAn9aAC7@google.com> <ZwcT149jx-iOmEfl@surfacebook.localdomain>
+ <ZykbvVZ32FKCRT_q@smile.fi.intel.com> <Z_UUXOe61BwVkGob@smile.fi.intel.com>
+ <f670905f-f14b-4482-83ee-568234647f46@intel.com>
+ <Z_U0Vn0V18KYGjkP@smile.fi.intel.com>
+ <d40efb68-eb4e-4158-9dc6-5de101adefd1@intel.com>
+ <aBTQ7-L-bUwzYbKM@smile.fi.intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <aBTQ7-L-bUwzYbKM@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-David Laight <david.laight.linux@gmail.com> writes:
+On 5/2/25 07:04, Andy Shevchenko wrote:
+> Can it be applied, please? The problem still persists as of today (v6.15-rc4).
 
-> On Thu, 01 May 2025 01:11:16 +0200
-> Dirk Gouders <dirk@gouders.net> wrote:
->
->> Ian Rogers <irogers@google.com> writes:
->>=20
->> > On Wed, Apr 30, 2025 at 3:19=E2=80=AFPM Dirk Gouders <dirk@gouders.net=
-> wrote:=20=20
->> >>
->> >> Ian Rogers <irogers@google.com> writes:
->> >>=20=20
->> >> > On Wed, Apr 30, 2025 at 1:23=E2=80=AFPM Dirk Gouders <dirk@gouders.=
-net> wrote:=20=20
->> >> >>
->> >> >> Hi Ian,
->> >> >>
->> >> >> considering so many eyes looking at this, I am probably wrong.
->> >> >>
->> >> >> So, this is only a "gauge reply" to see if it's worth I really read
->> >> >> through all the commits ;-)
->> >> >>
->> >> >> Ian Rogers <irogers@google.com> writes:
->> >> >>
->> >> >> [SNIP]
->> >> >>=20=20
->> >> >> > diff --git a/tools/perf/bench/sched-pipe.c b/tools/perf/bench/sc=
-hed-pipe.c
->> >> >> > index 70139036d68f..b847213fd616 100644
->> >> >> > --- a/tools/perf/bench/sched-pipe.c
->> >> >> > +++ b/tools/perf/bench/sched-pipe.c
->> >> >> > @@ -102,7 +102,8 @@ static const char * const bench_sched_pipe_u=
-sage[] =3D {
->> >> >> >  static int enter_cgroup(int nr)
->> >> >> >  {
->> >> >> >       char buf[32];
->> >> >> > -     int fd, len, ret;
->> >> >> > +     int fd;
->> >> >> > +     ssize_t ret, len;
->> >> >> >       int saved_errno;
->> >> >> >       struct cgroup *cgrp;
->> >> >> >       pid_t pid;
->> >> >> > @@ -118,7 +119,7 @@ static int enter_cgroup(int nr)
->> >> >> >       cgrp =3D cgrps[nr];
->> >> >> >
->> >> >> >       if (threaded)
->> >> >> > -             pid =3D syscall(__NR_gettid);
->> >> >> > +             pid =3D (pid_t)syscall(__NR_gettid);
->> >> >> >       else
->> >> >> >               pid =3D getpid();
->> >> >> >
->> >> >> > @@ -172,23 +173,25 @@ static void exit_cgroup(int nr)
->> >> >> >
->> >> >> >  static inline int read_pipe(struct thread_data *td)
->> >> >> >  {
->> >> >> > -     int ret, m;
->> >> >> > +     ssize_t ret;
->> >> >> > +     int m;
->> >> >> >  retry:
->> >> >> >       if (nonblocking) {
->> >> >> >               ret =3D epoll_wait(td->epoll_fd, &td->epoll_ev, 1,=
- -1);=20=20
->> >> >>
->> >> >> The epoll_wait(), I know of, returns an int and not ssize_t.
->> >> >>
->> >> >> That shouldn't show up, because it doesn't cause real problems...=
-=20=20
->> >> >
->> >> > So the function is read_pipe so it should probably return a ssize_t=
-. I
->> >> > stopped short of that but made ret a ssize_t to silence the truncat=
-ion
->> >> > warning on the read call. Assigning smaller to bigger is of course =
-not
->> >> > an issue for epoll_wait.=20=20
->> >>
->> >> Oh yes, I missed that ret is also used for the result of read().
->> >>
->> >> Some lines down there is also a combination of
->> >>
->> >> ret =3D enter_cgroup() (which is int)
->> >>
->> >> and
->> >>
->> >> ret =3D write()
->> >>
->> >>
->> >> Just confusing but yes, because ret is also used for read() and write=
-()
->> >> in those cases it should be ssize_t.
->> >>
->> >> I'm sorry for the noise.=20=20
->> >
->> > No worries, I'm appreciative of the eyes. I suspect we'll only pick up
->> > the first patches in this series to fix what is a bug on ARM. I think
->> > I'm responsible for too much noise here ;-)=20=20
->>=20
->> A final thought (in case this patch will also be picked):
->>=20
->> Why not, in case of read_pipe() and worker_thread() just cast
->> read() and write() to int?  Both get counts of sizeof(int) and
->> it would clearly show: we know the result fits into an int.
->
-> This is an obvious case of the entire insanity of these changes.
+I fundamentally disagree with the idea that the kernel programmer should
+be doing the work of telling the compiler *exactly* when a static inline
+function is unused. Compilers are good at that, humans are not.
 
-You mean, because there is still the -1 case where the sign-lost can
-happen?
+The "fixes" for these issues generally make the code worse, not better.
 
-I guess your reply is in combination with your replies to another thread
-to this subject.  As far as I understood, Ian also has problems with
-full understanding and I wonder if it helps to talk about a real
-example.  As far as I understood you say that code like this
-(from tools/perf/bench/sched-pipe.c) is simply wrong:
+I'd frankly rather have a kernel with some unused 'static inline'
+functions in .c files than one filled with #ifdefs to shut up the compiler.
 
-static inline int read_pipe(struct thread_data *td)
-{
-	int ret, m;
-retry:
-	if (nonblocking) {
-		ret =3D epoll_wait(td->epoll_fd, &td->epoll_ev, 1, -1);
-		if (ret < 0)
-			return ret;
-	}
-	ret =3D read(td->pipe_read, &m, sizeof(int));
-	if (nonblocking && ret < 0 && errno =3D=3D EWOULDBLOCK)
-		goto retry;
-	return ret;
-}
-
-And from your reply I understand that casting the read() explicitely to
-int is insane.  And now, I wonder what you would suggest -- honestly, I
-am expecting to learn something, here.
-
-Best regards,
-
-Dirk
