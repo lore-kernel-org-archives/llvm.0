@@ -1,59 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F6918024;
-	Fri,  2 May 2025 02:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB48F266B72;
+	Fri,  2 May 2025 06:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746154034; cv=none; b=dAHnzJRJyV/VrMG1beXGmd5BVcOLknh7zYEhePxslCE6PleFslF0ReH8N/JzSNobfVi1upIOOt8U/EcRC0ixstyVwGDZiOQY7yzHhJxTCAmlwtVa+kN+1/l1NK0tRbNQ4xQ25M+D+KPkhfCCV12gquMgtWqH+/GHcfDcZYPDPDA=
+	t=1746169042; cv=none; b=S1eHCzPiMpuEIQxiSmDhWcJsxFmXzaH69z2PXKqwcQwSw6UOIpAba7q8JZmPByUKin7AJEWRqMcyPrdU+efDKCBuOGHc7gfGHw7NDuGuy/feO7q/pGxHdmfqclrWCQUCkZ6b8FJ3QLEmWlzeQDa5qY1OTjs3ibg0pE4dB6uFexU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746154034; c=relaxed/simple;
-	bh=ZcrEOSeShKonEhORLGziksZdgqn06Ovdo46FOTtiIT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t5xMcZzBHWpi5W9ZMgrZMBp9AYXc9FvasV0n2gzzMsgGCl8Wh5xGoMZ3tm1dsXom4a5t44h1kGZyiXTvqExKoguWdmNlACWLeb97rw+47ewG3MkcfSxYOaACtZ3gi1m1AWjpjSwiHfl8ZoruGZIKYF7VjQg9OW/u08pldXJTLpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LO6JcfOh; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1746169042; c=relaxed/simple;
+	bh=PC/SkbQ3dEFx2r3i8iXi2iBiLScHRC0ulOjTIrsQSig=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hd9WIw9F4S8WnAsA7T8WjpXEzwVrBiP5WjAMX+jFUuY2RHyEA4hBQMPh02DiUipBHusZ/1AK4n/r4Bioce6/AV8MKWIdmORDPCs5eED2KnollsZFFpdAJe6E06F7IaIMI07dFaOEGZT5mx+6uKhwUKJe06huwdK8FEcO63oIGSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B2paXCik; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LO6JcfOh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B2paXCik"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746154033; x=1777690033;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZcrEOSeShKonEhORLGziksZdgqn06Ovdo46FOTtiIT0=;
-  b=LO6JcfOh4kglD524B4ucdIMcIDpPUqyffJ7sfsp28j1wJNVxMNiZvJ+f
-   YrPX6yBfnWZ4j+VqdO/6HfmwE5trBYMctw7VioXEMl1vRyBOtgYXJnO/L
-   5bcR7eQxSNW6/r8wptE09756q9bFOx1KX07SPj7qdiOU+z0N5baOrAMCt
-   Ch/10dWY50CKkZHrtrltuYZ+cw0R1yvWHLs9FbXPWFQxrHWVHGyyGhNAC
-   YtyXXcWEqs1PivcgaYkRGmsYwBmgvx6bUskUal/tsP1u3eq+9fWgeu4qO
-   XTxZ6+GHMSUcHj4IrC76uaf6RQZjhlEKZFZM3l1I3lUsdX0+bv9SJT7p3
+  t=1746169040; x=1777705040;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=PC/SkbQ3dEFx2r3i8iXi2iBiLScHRC0ulOjTIrsQSig=;
+  b=B2paXCikQ+Ocx//aIPUdtFfBQdsb22uJ+eEbiuNwreNiyIBrzZ/7kR7D
+   jF6UbGldwYYCdjd/NC/Ih1WQro6yYV+Q36A0uDoInrhKqZ3Hn1RMYxYgd
+   MzaS0OKAXJAx/rvmeYxKyOBFsqgg1jJ7sBZpNdnpUqlUaF33ScVOuHtsc
+   gJjjJ75vYG4yuN72XguwJIw/EJmlQIjxBkDL5c9YEEXuiLwQsXqgEgvWH
+   9zlt8Q59aScT95dV5c5vsTDxXtwnpt58paH3SOSp9mdUU4NKgSrTUGB1c
+   5EeMXJnhBXvsjpUqWqdQclbM7WSaOv662Qm3lM4qibMHdkDlMuhWxG+lq
    g==;
-X-CSE-ConnectionGUID: w+wLtiZYTmqpvYjlGFgc9w==
-X-CSE-MsgGUID: 1HfgPhJPT96W0yJMCRt7Eg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="50491180"
+X-CSE-ConnectionGUID: TSpZJvtwTvG+KgKAT1yd6g==
+X-CSE-MsgGUID: pxqatJ7VSL6R0HM8cyBPZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="65379535"
 X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
-   d="scan'208";a="50491180"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 19:47:12 -0700
-X-CSE-ConnectionGUID: hjegM+moQu+QzBqPylGS5w==
-X-CSE-MsgGUID: MHrlycdsQA2qSm4IPmmAkg==
+   d="scan'208";a="65379535"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 23:57:19 -0700
+X-CSE-ConnectionGUID: H3ajTV8KQ1GZrBrpI31nzA==
+X-CSE-MsgGUID: iCdGPl4ERaub7nMTOOwb9g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
-   d="scan'208";a="165592299"
+   d="scan'208";a="139722926"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 01 May 2025 19:47:11 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 01 May 2025 23:57:18 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uAgQf-0004Vf-0M;
-	Fri, 02 May 2025 02:47:09 +0000
-Date: Fri, 2 May 2025 10:46:29 +0800
+	id 1uAkKh-0004an-2y;
+	Fri, 02 May 2025 06:57:15 +0000
+Date: Fri, 2 May 2025 14:57:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot/v6.15-rc3 95/110]
- drivers/platform/arm64/mpam/mpam_resctrl.c:851:3: warning: variable 'dom' is
- uninitialized when used here
-Message-ID: <202505021036.gkL450hb-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] randstruct: Force full rebuild when seed changes
+Message-ID: <202505021409.yC9C70lH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,59 +60,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.15-rc3
-head:   2cc3eff27207d40f181a59f04660a1e8e9746ff8
-commit: 5da9bac0425744000799212790168eaf91203c23 [95/110] arm_mpam: resctrl: Call resctrl_exit() in the event of errors
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250502/202505021036.gkL450hb-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505021036.gkL450hb-lkp@intel.com/reproduce)
+In-Reply-To: <20250501194826.2947101-2-kees@kernel.org>
+References: <20250501194826.2947101-2-kees@kernel.org>
+TO: Kees Cook <kees@kernel.org>
+
+Hi Kees,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kees/for-next/hardening]
+[also build test ERROR on masahiroy-kbuild/for-next masahiroy-kbuild/fixes kees/for-next/pstore linus/master v6.15-rc4 next-20250501]
+[cannot apply to kees/for-next/kspp]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kees-Cook/gcc-plugins-Force-full-rebuild-when-plugins-change/20250502-035038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+patch link:    https://lore.kernel.org/r/20250501194826.2947101-2-kees%40kernel.org
+patch subject: [PATCH 2/3] randstruct: Force full rebuild when seed changes
+config: arm64-randconfig-001-20250502 (https://download.01.org/0day-ci/archive/20250502/202505021409.yC9C70lH-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505021409.yC9C70lH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505021036.gkL450hb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505021409.yC9C70lH-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/platform/arm64/mpam/mpam_resctrl.c:339:10: warning: enumeration value 'QOS_NUM_EVENTS' not handled in switch [-Wswitch]
-     339 |         switch (evtid) {
-         |                 ^~~~~
->> drivers/platform/arm64/mpam/mpam_resctrl.c:851:3: warning: variable 'dom' is uninitialized when used here [-Wuninitialized]
-     851 |                 dom->mbm_local_evt_cfg = 0;
-         |                 ^~~
-   drivers/platform/arm64/mpam/mpam_resctrl.c:845:30: note: initialize the variable 'dom' to silence this warning
-     845 |         struct mpam_resctrl_dom *dom;
-         |                                     ^
-         |                                      = NULL
-   drivers/platform/arm64/mpam/mpam_resctrl.c:864:3: warning: variable 'dom' is uninitialized when used here [-Wuninitialized]
-     864 |                 dom->mbm_local_evt_cfg = 0;
-         |                 ^~~
-   drivers/platform/arm64/mpam/mpam_resctrl.c:861:30: note: initialize the variable 'dom' to silence this warning
-     861 |         struct mpam_resctrl_dom *dom;
-         |                                     ^
-         |                                      = NULL
-   3 warnings generated.
-
-
-vim +/dom +851 drivers/platform/arm64/mpam/mpam_resctrl.c
-
-   842	
-   843	void resctrl_arch_mon_event_config_write(void *info)
-   844	{
-   845		struct mpam_resctrl_dom *dom;
-   846		struct resctrl_mon_config_info *mon_info = info;
-   847	
-   848		WARN_ON_ONCE(mon_info->mon_config & ~MPAM_RESTRL_EVT_CONFIG_VALID);
-   849	
-   850		if (!mpam_is_enabled()) {
- > 851			dom->mbm_local_evt_cfg = 0;
-   852			return;
-   853		}
-   854	
-   855		dom = container_of(mon_info->d, struct mpam_resctrl_dom, resctrl_mon_dom);
-   856		dom->mbm_local_evt_cfg = mon_info->mon_config & MPAM_RESTRL_EVT_CONFIG_VALID;
-   857	}
-   858	
+>> clang: error: cannot specify -o when generating multiple output files
+   make[3]: *** [scripts/Makefile.build:203: arch/arm64/kernel/vdso/vgettimeofday.o] Error 1 shuffle=1172004315
+>> clang: error: cannot specify -o when generating multiple output files
+   make[3]: *** [scripts/Makefile.build:203: arch/arm64/kernel/vdso/vgetrandom.o] Error 1 shuffle=1172004315
+   make[3]: Target 'arch/arm64/kernel/vdso/vdso.so' not remade because of errors.
+   make[3]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
+   make[2]: *** [arch/arm64/Makefile:224: vdso_prepare] Error 2 shuffle=1172004315
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1172004315
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1172004315
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
