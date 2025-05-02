@@ -1,110 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A3D2DC78C;
-	Fri,  2 May 2025 19:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFF4BA50
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 20:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746214272; cv=none; b=UMzC4QeoXuOcttgJE1AtLdqqQxdqTx3DF3qUlFwMPgd5TgnGKtbEA55bDYfnK24MOFo0l8GQ9gp+78PIr+Cgi+NjYyLJTn12BObYHDej+/MZF20KHW98c7WzQqUOrEYWbBJKqmGzC15+2q7A9ITbq10qGxTQ5PUWdv+RTuwDdGw=
+	t=1746218464; cv=none; b=e/gxlXS3cvjyUbw9pemoqG+Mv/OK36jMuxqOShBfEtlEtKuX7e4bp4k78X1SUkJoxsCevJ8GXlbQctcCqGUJzUzIh19khQ83qdB82j5OTD4vllvHQuUe35CPDGAKpDT9Tl3OQKhwif69o5JsW7Ki99nMIsi+f9in1lX3tKpNsVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746214272; c=relaxed/simple;
-	bh=30ckmPs5c8CuQmg05iN/O3hdiLvVkEwypWvV4skJLfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Aj51lbbpm3L8LZplN9RRUhe6fN+SMm/g+rqPFMbrXbh77CheIMaV6DR+IXK6rPJm9T3WqiuhwKeSz/Pv3MXhYDHRgPf+m/y/k4Qnkrlh0utXcVowD2AEjSSEKO9B9Q4MkT5krINpSik3nX0lVYvcbfC+/wgXgP62Z0MUC9UgVyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LnVhLMoi; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746218464; c=relaxed/simple;
+	bh=jzPS1MIJa+RhF/d+gPQtAnLrbpRnCK0ZcoiHsJ+4FnA=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=Ya7LBQSWqlpDXp2yx3OOB0KTsXw1EuIErph/0VF5Fm9kVssdVFyRXisoGFy1DXLU/+yAGi1lh7fiYC40l4TfyZN6Va/Z6ZBFZUoqZzJfybLdf4dz+IQDEo9G+dglcU5exV21qRwO5zURgBDZlaX0UlZGqeS170Z8D/ztiwpgV08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qiSfLHEK; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LnVhLMoi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746214269; x=1777750269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=30ckmPs5c8CuQmg05iN/O3hdiLvVkEwypWvV4skJLfk=;
-  b=LnVhLMoinwmjNj93EK3wODNLVD5WVTcCxRU2wBoo4RaXoU3uUtqM2oAm
-   lvlhLvTFLtZx8/eDD29XfgKTqNHc8oYQN94daeL2P705mdSNwnUpBmr2z
-   3Own4nP/VUEUGLYyS0iu5w4QX1Aj0JjWhHK7+rszKvGCIjkTqQEOioAtM
-   W/TgEYHJG8AG+Ogv6xGm4vBQXrttD5qKkJxQA26l+AkvaWuEex+CXpYp0
-   gM1AeqJcCdeVZkoijO+j4T5nC00H/Gya9bidMNFOEgeuHV0OtOy1WW9a2
-   95MmPyQ4CXQCH4PqGNTN8PEr2aBvSxDLH6kYOrp4THtQFxmjW+irkayTW
-   g==;
-X-CSE-ConnectionGUID: 2Z1j74BnT1OzXY1xHyaAkA==
-X-CSE-MsgGUID: 3R4MExuDRDWRgR3gizVmXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="47160410"
-X-IronPort-AV: E=Sophos;i="6.15,257,1739865600"; 
-   d="scan'208";a="47160410"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 12:31:08 -0700
-X-CSE-ConnectionGUID: cX+aVK6mQQes1Ws1gAtmgA==
-X-CSE-MsgGUID: 2EC6mBFjTlai4bsL7tUwGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,257,1739865600"; 
-   d="scan'208";a="134608190"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 02 May 2025 12:31:08 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uAw6C-0004yj-2n;
-	Fri, 02 May 2025 19:31:04 +0000
-Date: Sat, 3 May 2025 03:30:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC, PATCH 04/12] x86/virt/tdx: Account PAMT memory and print
- if in /proc/meminfo
-Message-ID: <202505030244.P6vk3r5v-lkp@intel.com>
-References: <20250502130828.4071412-5-kirill.shutemov@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qiSfLHEK"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39c266c2dd5so2687370f8f.3
+        for <llvm@lists.linux.dev>; Fri, 02 May 2025 13:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746218460; x=1746823260; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=u8XfeSUI4BPeTYflOCv4ZSZhLhhpIW3GFvzhIR0YrNM=;
+        b=qiSfLHEKc4ChxocTCY86xBM4Giy0JmLThVYXfv+xFsQgEByAlla9d4EK2WG77IwOOr
+         MODnyGK/3hqxStC10haN6DXN2umWyHdbmc1jp0umskr9M0l0zJtIDvM3zRXjNmKyBYRm
+         Cc7O59YkqZaD8OyjN829Rd/xU0AeBigdACWHWNxXv2+0Hu57i5jx/MLL2DNBZpbtofn3
+         FnBldHym1lfoVC6CSJoxnntzJEe+vwdYOtBRw7fYMh7GzWjlLSZOLZTVTCRPil4tErUS
+         vpVXNfVkYjZqzuWWHCk/SXnkyVFXkUcEPhARoosRKIAHtI1nA+R/pNaFMA4E+AJ6DcHK
+         gTug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746218460; x=1746823260;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8XfeSUI4BPeTYflOCv4ZSZhLhhpIW3GFvzhIR0YrNM=;
+        b=d86XdkCNgAEi28ufT5sR7BDUvQjkK5/0Ah06q840nxl0Zbo2dMG/d9MFTyat+Wz4Ex
+         ZyjoXYXAY1CRqhvCKWnQGN7683zNCIfKDLnEFAcSHQB1sWDOsmYHGKXRigXa5vSexDvm
+         xU4RMYHQETxGzUWvh+UqRyXWvoEK+twgVq0VW6R2clJv+nIj/S8bRprM369QC0E5PwFy
+         ruuHTjm16BjLANoQMrYehtZHWIs/iUgSuY0ZTUUsFZwYgmaxim/AR7IrgpcPpYKukPDG
+         j/eyd8yfod7XpuUz9nUV/gefb4vcI4R3/3NCssKpqwkZWkjswyIOC59M0UYoesLD/EuO
+         dwDQ==
+X-Gm-Message-State: AOJu0Yzk1MChR41NhgiWcJoxjKf/uy/3fLQbR6sC89Ab/TTE476mO6G8
+	D+KvbfLCwkkXgWn+hLdaCjwe8VAtS4arlLeTQZLHi3udCPXE+MQS4h2GBq2xmiSg8WPdeZ2FEk3
+	h
+X-Gm-Gg: ASbGncstKSwtj/k/9lKpF3ijrP25VwxKtgg/Etz1kCBnbH6omaCYJQ/Vu+b8AcMXEQ/
+	JbF4I/I62b4nRkIYbetGZX6lBrkibYLad09JgUQQwvX199JFePUcuRHquGbsj5aIZOQVKVkL8h5
+	HWxy6urnHQHJx852xLF3a2swnYDkv40EdyIMBaYLbNsoXh+l78wfX06gH5N5U0Wpyy5gUYU/8uZ
+	IOjpQ428e4RTSAKm4TBi2CIvd6CqZ6fD+S9Z/c2+GYWt770zLApcMpv3ykRTdcgRMUuvhzLeDLB
+	btrrUwsHXXCalzwW/yldBLPONZXp29pHBw/SnJnUV550mc4e5wVxJNzuzDz9uWlJ7wycnPdHz0f
+	9r5HKnm9pKv1f
+X-Google-Smtp-Source: AGHT+IEcEmKdrtMpcRKT32Brv9qEexQAyw1FY9Dd75mXBHtZftB7XSIHGBoQMEzK+a1EWXKijjnSyw==
+X-Received: by 2002:a05:6000:40e1:b0:38f:2413:2622 with SMTP id ffacd0b85a97d-3a099aee21bmr3697088f8f.47.1746218460393;
+        Fri, 02 May 2025 13:41:00 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae344esm2971855f8f.25.2025.05.02.13.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 13:40:59 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Fri, 2 May 2025 20:40:58 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <28506718.2850.1746218459923@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-21-init-10348-ge8ae77947154: Failure on
+ arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250502130828.4071412-5-kirill.shutemov@linux.intel.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_2849_1068567117.1746218459097"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-stable-allmodconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Kirill,
+------=_Part_2849_1068567117.1746218459097
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Dear contributor,
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on kvm/next next-20250502]
-[cannot apply to tip/x86/tdx tip/x86/mm kvm/linux-next linus/master v6.15-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/x86-virt-tdx-Allocate-page-bitmap-for-Dynamic-PAMT/20250502-211346
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20250502130828.4071412-5-kirill.shutemov%40linux.intel.com
-patch subject: [RFC, PATCH 04/12] x86/virt/tdx: Account PAMT memory and print if in /proc/meminfo
-config: i386-buildonly-randconfig-001-20250502 (https://download.01.org/0day-ci/archive/20250503/202505030244.P6vk3r5v-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505030244.P6vk3r5v-lkp@intel.com/reproduce)
+In tcwg_kernel/llvm-master-arm-stable-allmodconfig, after:
+  | commit llvmorg-21-init-10348-ge8ae77947154
+  | Author: Aaron Ballman <aaron@aaronballman.com>
+  | Date:   Wed Apr 30 10:14:18 2025 -0400
+  | 
+  |     [C] Add diagnostic + attr for unterminated strings (#137829)
+  |     
+  |     This introduces three things related to intialization like:
+  |     
+  |     char buf[3] = "foo";
+  | ... 16 lines of the commit log omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505030244.P6vk3r5v-lkp@intel.com/
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23152
+  | # First few build errors in logs:
+  | # 00:09:17 arch/arm/mach-bcm/platsmp-brcmstb.c:110:11: error: default initialization of an object of type 'typeof (timeo)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:09:17 make[3]: *** [scripts/Makefile.build:207: arch/arm/mach-bcm/platsmp-brcmstb.o] Error 1
+  | # 00:09:21 make[2]: *** [scripts/Makefile.build:465: arch/arm/mach-bcm] Error 2
+  | # 00:09:21 ./include/net/ip.h:484:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:09:21 make[4]: *** [scripts/Makefile.build:207: security/selinux/avc.o] Error 1
+  | # 00:09:25 ./include/net/ip.h:484:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:09:26 ./include/net/ip6_fib.h:271:10: error: default initialization of an object of type 'typeof (f6i->expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:09:26 ./include/net/ip.h:484:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+  | # 00:09:27 make[4]: *** [scripts/Makefile.build:207: security/selinux/hooks.o] Error 1
+  | # 00:09:27 make[3]: *** [scripts/Makefile.build:207: io_uring/io_uring.o] Error 1
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23196
 
-All warnings (new ones prefixed by >>):
+Used configuration :
+ tcwg_kernel/llvm-master-arm-stable-allmodconfig
 
-   In file included from drivers/gpu/drm/i915/gt/intel_ggtt.c:6:
->> arch/x86/include/asm/set_memory.h:93:34: warning: declaration of 'struct seq_file' will not be visible outside of this function [-Wvisibility]
-      93 | void direct_pages_meminfo(struct seq_file *m);
-         |                                  ^
-   1 warning generated.
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-1674. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +93 arch/x86/include/asm/set_memory.h
 
-    92	
-  > 93	void direct_pages_meminfo(struct seq_file *m);
-    94	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allmodconfig-build/283/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allmodconfig-build/282/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/e8ae77947154e10dbc05cbb95ec9e10d3b0be13e/tcwg_kernel/llvm-master-arm-stable-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/e8ae77947154e10dbc05cbb95ec9e10d3b0be13e
+------=_Part_2849_1068567117.1746218459097--
