@@ -1,106 +1,126 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BA2265607
-	for <llvm@lists.linux.dev>; Thu,  1 May 2025 23:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE6828E7;
+	Fri,  2 May 2025 00:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746142697; cv=none; b=JmGEoC3URsHviAG3WLlB9Sf7fCNEPriQ9aIzyqoucuMe+0osLQu5/Y5bnwmNyeLAqryQF4tcrSakQDEAsj/ZzZVkDVisSUz5/L24Gxlo0B4yIfhXgqJOMjfm46kAJNCd9OMhflHASfqMGpEvgV71RTSyUnSyGjvo5w5C+lU/kgY=
+	t=1746144798; cv=none; b=f5R2Gdc7ciWR/QECZ//RuQJCiy0B2CDvbfks+ls/h0KTBUGeCPycWwZhwbI88polnXf6rZi75uRL8bS2CGcnLWoPpKa9yPAC8oGbhm8TdrG1y4dOKPM0G5UcUn2x8OC9mHuXNcdEzdnsivkqyokBRXWXJefYMRBSaWIb5+O13Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746142697; c=relaxed/simple;
-	bh=0bE9+sg8qqZlZPymEWPsuaZnLc6tICoEgjFXMIsxwYc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hee+x0B0x4w+ZZtRT2sC1ntXEdOzZBhTRaNhnRdd03YhOtWE0iDam0z4MfcsmVRjsGHEVV3cdKKcjSWwBBBINvP2V95Hh+QhaC1o6C2SEMhXjLEd0WVMy5Wv+jLSysDnrtxslltb9hzAq85NQ1nGhPZODi5a9xdNTjuSREm04m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cWOnesyZ; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1746144798; c=relaxed/simple;
+	bh=oILweB5MWjR4gCqurfHJnLwkzN4AFItWOqmt0+mfcgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CCN6OCMsBn3vAyjsGKIBMCjuIsgKh+6UueAYBCkoJcyiwpAnzkCV7t03PNZ9M74oAP70frQ48QCWH+woc7zD3iLgkz9BR2l9Dc5eaGnJECL427Xs0UF5vi5H1QPXOd4NjqjTNZPdF0xhzLylJzHwbs1LgqnSiuyRxcPGQTvr0KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ms/cpwT7; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cWOnesyZ"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso222474266b.1
-        for <llvm@lists.linux.dev>; Thu, 01 May 2025 16:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1746142693; x=1746747493; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gOH+RLxLUbard4BV8J+6a/3tBBv1bO45LVfQDoB6LRw=;
-        b=cWOnesyZoMqUuZsL1ozWk9M8xfZmyhLodSsV8MB4f0SVgTkbFAKtycUu/cJUoClakK
-         26mWBiOe2e+KNkND/3Rv4KJbl2Oj76jvgMw2JQk2bhyLgZbQou7yMkuEAfGtmvSm1Cwt
-         G+HpLENrZhC6IW7+d45uheH26Ua8Mzb4Y6Aek=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746142693; x=1746747493;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gOH+RLxLUbard4BV8J+6a/3tBBv1bO45LVfQDoB6LRw=;
-        b=c+xtus+xpLV2w22hXx5/XVSebZg589CJIUyRTEvh98W3L19WSrrSmbFZx4mGAT28qD
-         4O59KRo3esZpaD3gKvWASqR9JEPfm+agMQ+gKw8xj+TzoNqwhwC6Rm4L8xi7c0nOkE7Y
-         x2fXuEgrP8/QVK/SEqL4LGYvHeh+cgLrW4iprND45pwviNrLCAB6yR4yWn3vlgZ7Dkqf
-         tuO/Af0jYOQ0OaCAeWPPyHSrqW1B3CwLpwkLveX/Di3mG1fLUqC7Gu5OPuSRZQpIX6vd
-         CQqQtOUdxtx2q419QyASTBsrzRI2G+gTwykB7x//LebQ7g2jVyZD/le2iSA2jB2wIaVE
-         hq2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUryKUXRGknUOrZEveALHirDK5GdsjB311WZEvdSgyJ9G2FPJSQ40g8W1srhG8WUrglUD2X@lists.linux.dev
-X-Gm-Message-State: AOJu0YzLgM6Mo53iPgK0KONtxjA/RuqwQxRmJT0zZxPXcAMhZclKmOeM
-	HVWmxSpOSOzGRA8Mvxa0hCLbZRhQe4JJnmJ7F2h80vQfKS0/TispT6VAztp8e+DdGJO354ZdlJb
-	eH00=
-X-Gm-Gg: ASbGncsIvsalyAEmo0a4GUJW87Yy6NOjlXmOddZw8Jjsy8Lrlcw/vMzuA5KBcAsI+iv
-	pQi+hLmWTNUV3vuW8nY9b2myFYRV/TEwxOlR7qyQfN/ym4hXSQ/ZoGE7NlfSZRpKLDsc8S62yGR
-	dFOEoTFfndUPADlFSe8iPgg35MuSID7OXQYAARGCM1k5MYYI9gQVb3ePaX4vCid/ZEFqHvVjgCs
-	h3MCsdz3diLkeK9UaJXU91Ka0/pen5KCUlcCG0RJGqaATaNYF+jFs+3x09HYkQ4O/fHtUjVtmZV
-	+6RTN3BeSZ1rOwFz/EP1AhcZSlP5tHRjyN8dyNj/VG/UhuUbdz3GZquAX/HfzRiM9RDZ3GBEMdG
-	n8TcwY3SWbc9NJaNwfbMwsPLMeQ==
-X-Google-Smtp-Source: AGHT+IEw/8GBGUMUKMk/QJ+WexEseOQBFNcDX7NzcFepe6/DHRKQQj39QHZb3ybMwRovUHxJktAMLQ==
-X-Received: by 2002:a17:907:9718:b0:ac7:f00d:52ec with SMTP id a640c23a62f3a-ad17b00da23mr87995466b.58.1746142692847;
-        Thu, 01 May 2025 16:38:12 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad0da55b0f0sm109385566b.150.2025.05.01.16.38.11
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 May 2025 16:38:11 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac2ab99e16eso308185966b.0
-        for <llvm@lists.linux.dev>; Thu, 01 May 2025 16:38:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWEA08IgtTG4+p5Ad97NHbxx5A1HRy7E0FnvORWDjx6Ks/bua9AQMYBxB/BZahQkjzsOymr@lists.linux.dev
-X-Received: by 2002:a17:907:3c92:b0:ace:c225:c723 with SMTP id
- a640c23a62f3a-ad17ad1a245mr90568166b.12.1746142690891; Thu, 01 May 2025
- 16:38:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ms/cpwT7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746144796; x=1777680796;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oILweB5MWjR4gCqurfHJnLwkzN4AFItWOqmt0+mfcgk=;
+  b=ms/cpwT7zDCW+/BtmFHGmzQrFloiLXv27nfMr965t6lXVP56OPtemqQC
+   EXoku1gUtEwHy0Pmfoan7ugkO3iS4IHgdMqViY1BMv/Mz/ABGQ5MszWRT
+   plIpjo6ORgH9U6MlIulwshkbZZdYfkO3mLr3eTaQEpD5091JpsQBVYcMd
+   a+xXYyWSa0LOgRA2PoiC5cv8gvOjQJONuaaOFSDHpDJtOl9U0lGZeAfoa
+   PLKRhlsdPlQa2MTYCqUjeYhzgxuTrVtcu0QUhEVzzDeS/LdLFSkayqG7j
+   vlYUYogZQX2zLYE3D7O41yGYOKcQw0/ZGHcN/INOkdYuxLVbWWPutRwii
+   w==;
+X-CSE-ConnectionGUID: RGdKULikRZqRuyFHn5OIUA==
+X-CSE-MsgGUID: RDR3I3o3TuqXZGbPlTrLGA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="58817679"
+X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
+   d="scan'208";a="58817679"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 17:13:13 -0700
+X-CSE-ConnectionGUID: Hi7CC0WETIW+hCkQdKU8Jg==
+X-CSE-MsgGUID: G1dF+kboTja9v5SBM+h+Kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
+   d="scan'208";a="134829377"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 01 May 2025 17:13:12 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uAe1e-0004SL-0t;
+	Fri, 02 May 2025 00:13:10 +0000
+Date: Fri, 2 May 2025 08:12:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.15-rc3 92/110]
+ drivers/platform/arm64/mpam/mpam_resctrl.c:326:10: warning: enumeration
+ value 'QOS_NUM_EVENTS' not handled in switch
+Message-ID: <202505020820.skhaveyd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org>
- <20250501-default-const-init-clang-v1-2-3d2c6c185dbb@kernel.org> <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
-In-Reply-To: <CAHk-=whL8rmneKbrXpccouEN1LYDtEX3L6xTr20rkn7O_XT4uw@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 1 May 2025 16:37:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wikfj_JLqDQCc+AsymUije3Sm8h30zQeT4yieqRicFOzg@mail.gmail.com>
-X-Gm-Features: ATxdqUFyafpfCSgNRMdjOdlgLHXvb-kQiDBd8FWFkiq24cJvTKf1aNAAYT-juyY
-Message-ID: <CAHk-=wikfj_JLqDQCc+AsymUije3Sm8h30zQeT4yieqRicFOzg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] include/linux/typecheck.h: Zero initialize dummy variables
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	stable@vger.kernel.org, Linux Kernel Functional Testing <lkft@linaro.org>, 
-	Marcus Seyfarth <m.seyfarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 1 May 2025 at 16:28, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> How long has that been valid? Because this is certainly new to the
-> kernel, and sparse does complain about this initializer.
+Hi James,
 
-Sparse is clearly wrong.
+First bad commit (maybe != root cause):
 
-I went back to my old K&R book, and the "perhaps in braces" languager
-is there in that original (ok, so I only have the "newer" ANSI version
-of K&R, so I'm not checking the _original_ original).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.15-rc3
+head:   2cc3eff27207d40f181a59f04660a1e8e9746ff8
+commit: a72f3a3a6232e93a4ff7ac9036df24fc15157fee [92/110] arm64: mpam: Select ARCH_HAS_CPU_RESCTRL
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250502/202505020820.skhaveyd-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250502/202505020820.skhaveyd-lkp@intel.com/reproduce)
 
-I guess we might as well ignore the sparse problem, since sparse ends
-up having issues with so many other newer things we're doing, and we
-don't have anybody maintaining it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505020820.skhaveyd-lkp@intel.com/
 
-             Linus
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/arm64/mpam/mpam_resctrl.c:326:10: warning: enumeration value 'QOS_NUM_EVENTS' not handled in switch [-Wswitch]
+     326 |         switch (evtid) {
+         |                 ^~~~~
+   1 warning generated.
+
+
+vim +/QOS_NUM_EVENTS +326 drivers/platform/arm64/mpam/mpam_resctrl.c
+
+ab494c1ab56754 James Morse 2021-06-25  312  
+ab494c1ab56754 James Morse 2021-06-25  313  void resctrl_arch_mon_ctx_free(struct rdt_resource *r,
+ab494c1ab56754 James Morse 2021-06-25  314  			       enum resctrl_event_id evtid, void *arch_mon_ctx)
+ab494c1ab56754 James Morse 2021-06-25  315  {
+ab494c1ab56754 James Morse 2021-06-25  316  	struct mpam_resctrl_res *res;
+ab494c1ab56754 James Morse 2021-06-25  317  	u32 mon = *(u32 *)arch_mon_ctx;
+ab494c1ab56754 James Morse 2021-06-25  318  
+ab494c1ab56754 James Morse 2021-06-25  319  	if (mon == USE_RMID_IDX)
+ab494c1ab56754 James Morse 2021-06-25  320  		return;
+ab494c1ab56754 James Morse 2021-06-25  321  	kfree(arch_mon_ctx);
+ab494c1ab56754 James Morse 2021-06-25  322  	arch_mon_ctx = NULL;
+ab494c1ab56754 James Morse 2021-06-25  323  
+ab494c1ab56754 James Morse 2021-06-25  324  	res = container_of(r, struct mpam_resctrl_res, resctrl_res);
+ab494c1ab56754 James Morse 2021-06-25  325  
+ab494c1ab56754 James Morse 2021-06-25 @326  	switch (evtid) {
+ab494c1ab56754 James Morse 2021-06-25  327  	case QOS_L3_OCCUP_EVENT_ID:
+ab494c1ab56754 James Morse 2021-06-25  328  		mpam_free_csu_mon(res->class, mon);
+ab494c1ab56754 James Morse 2021-06-25  329  		wake_up(&resctrl_mon_ctx_waiters);
+ab494c1ab56754 James Morse 2021-06-25  330  		return;
+ab494c1ab56754 James Morse 2021-06-25  331  	case QOS_L3_MBM_TOTAL_EVENT_ID:
+ab494c1ab56754 James Morse 2021-06-25  332  	case QOS_L3_MBM_LOCAL_EVENT_ID:
+ab494c1ab56754 James Morse 2021-06-25  333  		return;
+ab494c1ab56754 James Morse 2021-06-25  334  	}
+ab494c1ab56754 James Morse 2021-06-25  335  }
+ab494c1ab56754 James Morse 2021-06-25  336  
+
+:::::: The code at line 326 was first introduced by commit
+:::::: ab494c1ab56754729b57617a5f5f40c64c954521 arm_mpam: resctrl: Allow resctrl to allocate monitors
+
+:::::: TO: James Morse <james.morse@arm.com>
+:::::: CC: James Morse <james.morse@arm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
