@@ -1,77 +1,77 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B43248F4E
-	for <llvm@lists.linux.dev>; Fri,  2 May 2025 12:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB92119E97B
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 13:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746189374; cv=none; b=EhuRK2srhbnvuZ6ja1hr1WoLA9b++l1ZdQHdo5M49tqkFICYAw6m5s++npxBw1noi6ONLwxxgqFUwflzlZ2AeFnYop65dXd9PfVGAeplTEpWSkyVKy1RACWx4TlnNtWG1XKWfBALbJt5eDaiYCyVisg1BwIr0nqgnPQ5ZXhXinM=
+	t=1746193659; cv=none; b=iPEUjjJnRK7BfFC7V+ExE+ny1KD4cqXPj+p2rEZR50FZHygMd1bPojGUszeusu8LpscbVml9fRddvtAFiYhohQrigLOHZNbmGF6k+WvXJ5Ew8zsFMW+ujXGAahC83vN+/sdisLuyP69PN3Jq4Jyuzy1QcaI8d11myMvz+X9DOZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746189374; c=relaxed/simple;
-	bh=JT+qr01uZcVOJZP4RQusBZiCCpnCtGRxDlD4tTq126I=;
+	s=arc-20240116; t=1746193659; c=relaxed/simple;
+	bh=YO7DeRcZqOkyyJp/N9tF4f54dRAU+mGMvwJb68kNOUs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=juu45RBeqOMAa6vExwaLnElJVJ9eNpAEbZ7nToqFmB4NF+ULYt3pdIYxKX7dRyXTJpd5CZYDTPeeE8zxETwzBku8qK4L56AjhqDalzZ9cYBCg7FEQRJaBjHFHG7gJ6//17TDtSmulN61VPD+u57Ngb/vh0LA0FGQHgiMoTK1LqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i07aYiJI; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=foN2BiBH01lImjVtlJLzDdfpWp+nhGa4r0V7/aryAjYMyF/OBBGZRCoty9+VKdqSXPJ0DK37UgZ5O+LCi9SYSb9JdaHBYghJeXe4hy5elqvbEkXLwZcsw6ny5WAgbFH/wQraIrVT5DE8thxNaiqr/la5pEJu8yNJXHJ9m0M7bgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z54ovY+R; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i07aYiJI"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b041afe0ee1so1885776a12.1
-        for <llvm@lists.linux.dev>; Fri, 02 May 2025 05:36:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z54ovY+R"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22c50beb0d5so3569215ad.3
+        for <llvm@lists.linux.dev>; Fri, 02 May 2025 06:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746189372; x=1746794172; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1746193657; x=1746798457; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2bWVNZpDPjN8he9HssEtQl6bUgAXH/F4pjykOH4GCkk=;
-        b=i07aYiJIw3JLzvzYrPTwBiDn+NY8PbMLKzf2cFgNSB7EjLu1Odg2QZDwmVgTYE9mMP
-         Hek/oesLkaGICv5nAD9f6G5gyIpeBBHI4bOtnzDJjzdvRcZi/vCBMiH3ZNffx4giItPK
-         9nXFs+Jxi4Kuvl3PfpCkkE0Z5i1BbsjoH1S6iC2UnWyNhj8Ziew+bUFauHUbNFNThXb5
-         SUTpYpBiAXvzXkfMrVf6sPdQ7WxPQK4uxmbvu7yxu2cFhvql9CAqpE5NaWrhkDWCiAaw
-         r6nS2mLowYQ8KzHQMt/Xw+G7kocGWv1OGQvNGzKOxNIHIwuHMtn2IW0jxea9sEj7QYD7
-         CHFQ==
+        bh=YO7DeRcZqOkyyJp/N9tF4f54dRAU+mGMvwJb68kNOUs=;
+        b=Z54ovY+Rr+1ZNEXoMWpe0X3QSv7HYuVEHTQsFQV0cpkw2CJfJ6HUWoYSVHuHhy13gg
+         uNF+oSELtlxFnzwwkxo94OY82h8tL7mph5f7KIQ6cKSPGWE1wcFs7GLMnd2wT5UactNA
+         KTzCc3kpMwTUmO+uk23+yh5mDh2fwXZcTpkLowry/vyuyueFZEWZg9M9156Oysu6vz8v
+         6iXin6KAlKj/WDvEOBZnmDjWUNilV9WM+iKd2gFSBLykQCRN83GAH9ZoggJlrBkEON2e
+         Zk/x7FhVHiUVn2xGB0XKSWosH4J93fwJrsUTKH+IIYnq2rNlaMzvnSQksxS0uKq19xHD
+         5RMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746189372; x=1746794172;
+        d=1e100.net; s=20230601; t=1746193657; x=1746798457;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2bWVNZpDPjN8he9HssEtQl6bUgAXH/F4pjykOH4GCkk=;
-        b=O/EkYGQyXNDRCfEpRzG4ovHvL2fZDfELUeGHjoZ0RkC3rPoLXB5ml+wlqHrmiRkTxM
-         8ZzXNwpbP0UeNL34TalnhM2E+/s2oJPNDClqjPvl/lZbafZskelzZP0v6ktsHYaJcCfz
-         91WYHogumHLUI9WCog3yaz06wVLTcJPodYYdmW09guqC+AnWzEnOB/qfArswSqYy0wta
-         SGA8KPMrj99wpkXCrBslrr6sTwrd0atAxQfpMSQI6dLUazp5K1msnlRCKv1+LXMGa8uG
-         ktBuXKHJ/wMUJqBZ1C9SsXbyGFcu0sHFAxAgf+gHjN/UFp38UDhc9c+oh1mMHSnzS/Zx
-         zu7w==
-X-Forwarded-Encrypted: i=1; AJvYcCV57291mt00oF5UCB5jMQHs2G+tO3Mozv19cIau1j8mB2T9zIjvn0/MGw9wEetn0FDhsuKz@lists.linux.dev
-X-Gm-Message-State: AOJu0YyVSMz8jWOs5+N1+v20vnPh9WK5QmL/tN9MunvtdPyN/PA846Pw
-	gmQtVMWFtJr1KgZVdtsrlQd25f8EwgmV61bqCqeEGFeUeyBRSjcjcBV1DiT6i3v3LYmNu4qQROM
-	Gfz35msu5mo9MxFEDWko4d1lwBOvnRChsIEDE
-X-Gm-Gg: ASbGnctzOBTMgMSyv+qZ+i57gf4sltj7Upze3P45dDMGXTVaRY6gpoemYvPtz5WXkXY
-	4F2L7G8iAUjumOPCEyK0+JAmb3XwVf01uL+lH4V6cIxhQzNTHYdBUc8cP5mDhWadO54kBk4jGPa
-	9mJ8lhQKrbk6uFCrftAWKQY076lesOUW8uNRooqnLVf6EYcWGARFE=
-X-Google-Smtp-Source: AGHT+IF2hAF0/clS4lwwEOMq806j1cV+S29WAOdC4HnfL8cwFDY1AIdDC0g10UG7zShMqw7pJ2uU170Vz680MxOUfJs=
-X-Received: by 2002:a17:90b:544c:b0:2fe:a79e:f56f with SMTP id
- 98e67ed59e1d1-30a4e5aa034mr3940014a91.13.1746189371395; Fri, 02 May 2025
- 05:36:11 -0700 (PDT)
+        bh=YO7DeRcZqOkyyJp/N9tF4f54dRAU+mGMvwJb68kNOUs=;
+        b=T3aE1pee5Eu+HxRR6uKl5xiU3+gb3hgoXKD7Vu4DGV+qT8VU5mYJwV91gqzdN6uiI4
+         aG72KxEZBKVepG4BrpwjdwI7vKmLN3OSN3OrK5wR/WHYhkLT3e6BA5pnSvT8hMWwwpvP
+         +VHcEo2epZmWrqwfVsgfuNmLWBbPMiV2MwPIriBkaKqJDy4eDgpb+2AOeAXTir4Bv8Kp
+         DcTrR1B9/zO6Pahp0qlciR/HOitJE1FF6qL0kPrcuCfzjSQkYTwI6bE3ORBJcHQN1aF0
+         0ov67OwBcxO73rb57OPcWerwnXRyFEdxELGUiJP1I1e7ubb283H8/EHdwU7wJ49LcdbG
+         ajPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGWnIkGwmmHpy+aKn9ydFaNMBfpsYIWpJh9ZFcBvs3nMZWzRevkvm8v6UHIu7lVCUU1fmz@lists.linux.dev
+X-Gm-Message-State: AOJu0YwV/H04J0+bI1F+rSwh5itTkeuLTgFGS2UnLA9uUyafqqfNTK0m
+	5WvuCsoZ7cqHGHh1r838lL01j/oEEHwMw+jFxhdqX5WuH+ab0nlr6/p6l5lzbvu6MP14xusT9Fl
+	r3nDPiPQh8kGSNxNShrdk5f1u2ws=
+X-Gm-Gg: ASbGncshuZdIH/7tQZAtQ/cr8Kvuacgf0lYJjGGWsOr8w/r0kvVsY1ihK4D1J0PdC9F
+	PMQdXf7l1q+sSHMMWb2pSRYT8nY3zaX26NpTmNnIkLwRitNPkV0tNma7ONAFGifeuPYFzR1Bz76
+	lCRkcXomF7e9yMEGnXfjSfiw==
+X-Google-Smtp-Source: AGHT+IGvS8ysehRTmkpn/MLH73wWVl8uhQ2dVyiEZQB9+BX+Cc/I214Nibn1sSJ0p2PSB3EHImIX9TR/DCb1IZQeD1I=
+X-Received: by 2002:a17:903:2f45:b0:22c:336f:cb5c with SMTP id
+ d9443c01a7336-22e1031f5a7mr16755265ad.6.1746193657040; Fri, 02 May 2025
+ 06:47:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
-In-Reply-To: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Fri, 2 May 2025 14:36:00 +0200
-X-Gm-Features: ATxdqUEo80l6Wmog53pGJlK7MMSvohTGvruUy1uyoixwHojHfstDErpJeGH-R1I
-Message-ID: <CANp29Y41LKZg-kSP+j5hjUKMNeWnPsVd8VvDnOpN8+4WHHjEgQ@mail.gmail.com>
+References: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com> <CANp29Y41LKZg-kSP+j5hjUKMNeWnPsVd8VvDnOpN8+4WHHjEgQ@mail.gmail.com>
+In-Reply-To: <CANp29Y41LKZg-kSP+j5hjUKMNeWnPsVd8VvDnOpN8+4WHHjEgQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 2 May 2025 15:47:24 +0200
+X-Gm-Features: ATxdqUHPzjJxM4ztTNooAwhiGBxmesfG9DnCr-xy_d1ASwZ94NEytM0G2eVkbK0
+Message-ID: <CANiq72m7GAZ4gfgiU5bXSb86R3-UMG2vsvi5J1Ua1EpVV5EdAQ@mail.gmail.com>
 Subject: Re: [PATCH v2] kcov: rust: add flags for KCOV with Rust
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+To: Aleksandr Nogikh <nogikh@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
 	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
@@ -82,105 +82,20 @@ Cc: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 1, 2025 at 2:16=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> wr=
-ote:
+On Fri, May 2, 2025 at 2:36=E2=80=AFPM Aleksandr Nogikh <nogikh@google.com>=
+ wrote:
 >
-> Rust code is currently not instrumented properly when KCOV is enabled.
-> Thus, add the relevant flags to perform instrumentation correctly. This
-> is necessary for efficient fuzzing of Rust code.
+> Thanks for incorporating the core.o change!
+> I've tested the v2 patch on my local setup and it works well.
 >
-> The sanitizer-coverage features of LLVM have existed for long enough
-> that they are available on any LLVM version supported by rustc, so we do
-> not need any Kconfig feature detection. The coverage level is set to 3,
-> as that is the level needed by trace-pc.
->
-> We do not instrument `core` since when we fuzz the kernel, we are
-> looking for bugs in the kernel, not the Rust stdlib.
->
-> Co-developed-by: Matthew Maurer <mmaurer@google.com>
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> Reviewed-by: Alexander Potapenko <glider@google.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
-> I did not pick up the Tested-by due to the changes. I verified that it
-> looks right under objdump, but I don't have a syzkaller setup I can try
-> it with.
+> Tested-by: Aleksandr Nogikh <nogikh@google.com>
 
-Thanks for incorporating the core.o change!
-I've tested the v2 patch on my local setup and it works well.
+Thanks for testing, very much appreciated.
 
-Tested-by: Aleksandr Nogikh <nogikh@google.com>
+Dmitry/Andrey: I guess you may want this to go through your tree
+(although I don't see a `M:` there), but if not, please let me know:
 
-> ---
-> Changes in v2:
-> - Ignore `core` in KCOV.
-> - Link to v1: https://lore.kernel.org/r/20250430-rust-kcov-v1-1-b9ae94148=
-175@google.com
-> ---
->  rust/Makefile         | 1 +
->  scripts/Makefile.kcov | 6 ++++++
->  scripts/Makefile.lib  | 3 +++
->  3 files changed, 10 insertions(+)
->
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 3aca903a7d08cfbf4d4e0f172dab66e9115001e3..80c84749d734842774a3ac2aa=
-bbc944a68d02484 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -492,6 +492,7 @@ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs \
->  ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
->  $(obj)/core.o: scripts/target.json
->  endif
-> +KCOV_INSTRUMENT_core.o :=3D n
->
->  $(obj)/compiler_builtins.o: private skip_gendwarfksyms =3D 1
->  $(obj)/compiler_builtins.o: private rustc_objcopy =3D -w -W '__*'
-> diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
-> index 67e8cfe3474b7dcf7552e675cffe356788e6c3a2..ddcc3c6dc513e1988aeaf07b8=
-efa106e8dffa640 100644
-> --- a/scripts/Makefile.kcov
-> +++ b/scripts/Makefile.kcov
-> @@ -3,4 +3,10 @@ kcov-flags-$(CONFIG_CC_HAS_SANCOV_TRACE_PC)    +=3D -fsa=
-nitize-coverage=3Dtrace-pc
->  kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)   +=3D -fsanitize-coverage=
-=3Dtrace-cmp
->  kcov-flags-$(CONFIG_GCC_PLUGIN_SANCOV)         +=3D -fplugin=3D$(objtree=
-)/scripts/gcc-plugins/sancov_plugin.so
->
-> +kcov-rflags-y                                  +=3D -Cpasses=3Dsancov-mo=
-dule
-> +kcov-rflags-y                                  +=3D -Cllvm-args=3D-sanit=
-izer-coverage-level=3D3
-> +kcov-rflags-y                                  +=3D -Cllvm-args=3D-sanit=
-izer-coverage-trace-pc
-> +kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)  +=3D -Cllvm-args=3D-sanit=
-izer-coverage-trace-compares
-> +
->  export CFLAGS_KCOV :=3D $(kcov-flags-y)
-> +export RUSTFLAGS_KCOV :=3D $(kcov-rflags-y)
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 2fe73cda0bddb9dcf709d0a9ae541318d54754d2..520905f19a9b19631394cfb5e=
-129effb8846d5b8 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -169,6 +169,9 @@ ifeq ($(CONFIG_KCOV),y)
->  _c_flags +=3D $(if $(patsubst n%,, \
->         $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-ke=
-rnel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
->         $(CFLAGS_KCOV))
-> +_rust_flags +=3D $(if $(patsubst n%,, \
-> +       $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-ke=
-rnel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
-> +       $(RUSTFLAGS_KCOV))
->  endif
->
->  #
->
-> ---
-> base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
-> change-id: 20250430-rust-kcov-6c74fd0f1f06
->
-> Best regards,
-> --
-> Alice Ryhl <aliceryhl@google.com>
->
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+
+Cheers,
+Miguel
