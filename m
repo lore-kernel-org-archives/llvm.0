@@ -1,152 +1,80 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFF4BA50
-	for <llvm@lists.linux.dev>; Fri,  2 May 2025 20:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEFD20127D
+	for <llvm@lists.linux.dev>; Fri,  2 May 2025 21:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746218464; cv=none; b=e/gxlXS3cvjyUbw9pemoqG+Mv/OK36jMuxqOShBfEtlEtKuX7e4bp4k78X1SUkJoxsCevJ8GXlbQctcCqGUJzUzIh19khQ83qdB82j5OTD4vllvHQuUe35CPDGAKpDT9Tl3OQKhwif69o5JsW7Ki99nMIsi+f9in1lX3tKpNsVw=
+	t=1746219605; cv=none; b=XA4D3szLmLNuLTGoSGDETSPxY6ZnEd1TurSE5r5WPwm+YQ9YF8+TeI4FF6jGTgsv8c3pq1hsFwbbb+4cBJhKeecx6XeD1hCEaTCSxKYhHn1RU5eRAPjxD067NAXwSLnsm2Z1sDwZUkLCr6i52ntJWL92+eufkHLlrFGbQeStjEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746218464; c=relaxed/simple;
-	bh=jzPS1MIJa+RhF/d+gPQtAnLrbpRnCK0ZcoiHsJ+4FnA=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=Ya7LBQSWqlpDXp2yx3OOB0KTsXw1EuIErph/0VF5Fm9kVssdVFyRXisoGFy1DXLU/+yAGi1lh7fiYC40l4TfyZN6Va/Z6ZBFZUoqZzJfybLdf4dz+IQDEo9G+dglcU5exV21qRwO5zURgBDZlaX0UlZGqeS170Z8D/ztiwpgV08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qiSfLHEK; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1746219605; c=relaxed/simple;
+	bh=YxnTM7JeQrOkS6HQh6jSfucSjgaZdpxVqr2SngmdD+w=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=KGUQ4HReDluR6LRfne4c9BkC/X8/EmrUks6Jal7xCH8F5ohWf2GuL+EIzQfqW0k1ESMBjtBM7JCSdYPpzIlCHI10+lBf+Uv0j9rEz9D1cu9OOoOwaL1uZFLTqHDa7NM9QmOBLy1P7wrt5xgNJ4rcrricfaMLlwqN2ZWwM94RALc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=QbngnwCF; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qiSfLHEK"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39c266c2dd5so2687370f8f.3
-        for <llvm@lists.linux.dev>; Fri, 02 May 2025 13:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746218460; x=1746823260; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=u8XfeSUI4BPeTYflOCv4ZSZhLhhpIW3GFvzhIR0YrNM=;
-        b=qiSfLHEKc4ChxocTCY86xBM4Giy0JmLThVYXfv+xFsQgEByAlla9d4EK2WG77IwOOr
-         MODnyGK/3hqxStC10haN6DXN2umWyHdbmc1jp0umskr9M0l0zJtIDvM3zRXjNmKyBYRm
-         Cc7O59YkqZaD8OyjN829Rd/xU0AeBigdACWHWNxXv2+0Hu57i5jx/MLL2DNBZpbtofn3
-         FnBldHym1lfoVC6CSJoxnntzJEe+vwdYOtBRw7fYMh7GzWjlLSZOLZTVTCRPil4tErUS
-         vpVXNfVkYjZqzuWWHCk/SXnkyVFXkUcEPhARoosRKIAHtI1nA+R/pNaFMA4E+AJ6DcHK
-         gTug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746218460; x=1746823260;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8XfeSUI4BPeTYflOCv4ZSZhLhhpIW3GFvzhIR0YrNM=;
-        b=d86XdkCNgAEi28ufT5sR7BDUvQjkK5/0Ah06q840nxl0Zbo2dMG/d9MFTyat+Wz4Ex
-         ZyjoXYXAY1CRqhvCKWnQGN7683zNCIfKDLnEFAcSHQB1sWDOsmYHGKXRigXa5vSexDvm
-         xU4RMYHQETxGzUWvh+UqRyXWvoEK+twgVq0VW6R2clJv+nIj/S8bRprM369QC0E5PwFy
-         ruuHTjm16BjLANoQMrYehtZHWIs/iUgSuY0ZTUUsFZwYgmaxim/AR7IrgpcPpYKukPDG
-         j/eyd8yfod7XpuUz9nUV/gefb4vcI4R3/3NCssKpqwkZWkjswyIOC59M0UYoesLD/EuO
-         dwDQ==
-X-Gm-Message-State: AOJu0Yzk1MChR41NhgiWcJoxjKf/uy/3fLQbR6sC89Ab/TTE476mO6G8
-	D+KvbfLCwkkXgWn+hLdaCjwe8VAtS4arlLeTQZLHi3udCPXE+MQS4h2GBq2xmiSg8WPdeZ2FEk3
-	h
-X-Gm-Gg: ASbGncstKSwtj/k/9lKpF3ijrP25VwxKtgg/Etz1kCBnbH6omaCYJQ/Vu+b8AcMXEQ/
-	JbF4I/I62b4nRkIYbetGZX6lBrkibYLad09JgUQQwvX199JFePUcuRHquGbsj5aIZOQVKVkL8h5
-	HWxy6urnHQHJx852xLF3a2swnYDkv40EdyIMBaYLbNsoXh+l78wfX06gH5N5U0Wpyy5gUYU/8uZ
-	IOjpQ428e4RTSAKm4TBi2CIvd6CqZ6fD+S9Z/c2+GYWt770zLApcMpv3ykRTdcgRMUuvhzLeDLB
-	btrrUwsHXXCalzwW/yldBLPONZXp29pHBw/SnJnUV550mc4e5wVxJNzuzDz9uWlJ7wycnPdHz0f
-	9r5HKnm9pKv1f
-X-Google-Smtp-Source: AGHT+IEcEmKdrtMpcRKT32Brv9qEexQAyw1FY9Dd75mXBHtZftB7XSIHGBoQMEzK+a1EWXKijjnSyw==
-X-Received: by 2002:a05:6000:40e1:b0:38f:2413:2622 with SMTP id ffacd0b85a97d-3a099aee21bmr3697088f8f.47.1746218460393;
-        Fri, 02 May 2025 13:41:00 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae344esm2971855f8f.25.2025.05.02.13.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 13:40:59 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Fri, 2 May 2025 20:40:58 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <28506718.2850.1746218459923@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-21-init-10348-ge8ae77947154: Failure on
- arm
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="QbngnwCF"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 542KxVIc2187021
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 2 May 2025 13:59:32 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 542KxVIc2187021
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1746219572;
+	bh=YxnTM7JeQrOkS6HQh6jSfucSjgaZdpxVqr2SngmdD+w=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=QbngnwCFPSxTRFnW0X8pVNAgJDyCHfml+j1WtUg1fzuYDa8gJlrLGZYJDnR38L/Q1
+	 trln/4gE+cU0XMuji4wIbGsFa2bf3xgqJw2B2NPB+bnCzxYlGVldWJx70dC88d6zFL
+	 OxUByEOFpLQjZPoVUbxQM3081te7CM4C4g1FEITNmrkdI5EXM3asFEaZBDapSrQ8HJ
+	 b0TMHH3EHciLnLwpuGAEAuHP8kWND9wXxdjnGbuZdp4XrlgB3jdDJ31dszNJsJn/fn
+	 uS98Y6IRgCmFwwnspuNOJFqL4dPTKyZ3Grme4gmQ8RsRNKO1gAYN7cpdZkd+ssi3Av
+	 /QQsmNFHQpcqg==
+Date: Fri, 02 May 2025 13:59:30 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Dave Hansen <dave.hansen@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/1=5D_x86/reboot=3A_KVM=3A_Guard_nm?=
+ =?US-ASCII?Q?i=5Fshootdown=5Fcpus=5Fon=5Frestart=28=29_with_ifdeffery?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ba00197d-dc21-47bd-b183-4971038d9a8d@intel.com>
+References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com> <ZwbazZpTSAn9aAC7@google.com> <ZwcT149jx-iOmEfl@surfacebook.localdomain> <ZykbvVZ32FKCRT_q@smile.fi.intel.com> <Z_UUXOe61BwVkGob@smile.fi.intel.com> <f670905f-f14b-4482-83ee-568234647f46@intel.com> <Z_U0Vn0V18KYGjkP@smile.fi.intel.com> <d40efb68-eb4e-4158-9dc6-5de101adefd1@intel.com> <aBTQ7-L-bUwzYbKM@smile.fi.intel.com> <ba00197d-dc21-47bd-b183-4971038d9a8d@intel.com>
+Message-ID: <2F60FA75-E4F4-41F3-BD5D-EAECBE57A3A4@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_2849_1068567117.1746218459097"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-stable-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-------=_Part_2849_1068567117.1746218459097
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On May 2, 2025 7:24:37 AM PDT, Dave Hansen <dave=2Ehansen@intel=2Ecom> wrot=
+e:
+>On 5/2/25 07:04, Andy Shevchenko wrote:
+>> Can it be applied, please? The problem still persists as of today (v6=
+=2E15-rc4)=2E
+>
+>I fundamentally disagree with the idea that the kernel programmer should
+>be doing the work of telling the compiler *exactly* when a static inline
+>function is unused=2E Compilers are good at that, humans are not=2E
+>
+>The "fixes" for these issues generally make the code worse, not better=2E
+>
+>I'd frankly rather have a kernel with some unused 'static inline'
+>functions in =2Ec files than one filled with #ifdefs to shut up the compi=
+ler=2E
+>
 
-Dear contributor,
-
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
-
-In tcwg_kernel/llvm-master-arm-stable-allmodconfig, after:
-  | commit llvmorg-21-init-10348-ge8ae77947154
-  | Author: Aaron Ballman <aaron@aaronballman.com>
-  | Date:   Wed Apr 30 10:14:18 2025 -0400
-  | 
-  |     [C] Add diagnostic + attr for unterminated strings (#137829)
-  |     
-  |     This introduces three things related to intialization like:
-  |     
-  |     char buf[3] = "foo";
-  | ... 16 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23152
-  | # First few build errors in logs:
-  | # 00:09:17 arch/arm/mach-bcm/platsmp-brcmstb.c:110:11: error: default initialization of an object of type 'typeof (timeo)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:09:17 make[3]: *** [scripts/Makefile.build:207: arch/arm/mach-bcm/platsmp-brcmstb.o] Error 1
-  | # 00:09:21 make[2]: *** [scripts/Makefile.build:465: arch/arm/mach-bcm] Error 2
-  | # 00:09:21 ./include/net/ip.h:484:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:09:21 make[4]: *** [scripts/Makefile.build:207: security/selinux/avc.o] Error 1
-  | # 00:09:25 ./include/net/ip.h:484:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:09:26 ./include/net/ip6_fib.h:271:10: error: default initialization of an object of type 'typeof (f6i->expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:09:26 ./include/net/ip.h:484:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
-  | # 00:09:27 make[4]: *** [scripts/Makefile.build:207: security/selinux/hooks.o] Error 1
-  | # 00:09:27 make[3]: *** [scripts/Makefile.build:207: io_uring/io_uring.o] Error 1
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23196
-
-Used configuration :
- tcwg_kernel/llvm-master-arm-stable-allmodconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1674. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
-
-
-
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allmodconfig-build/283/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allmodconfig-build/282/artifact/artifacts
-
-Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/e8ae77947154e10dbc05cbb95ec9e10d3b0be13e/tcwg_kernel/llvm-master-arm-stable-allmodconfig/reproduction_instructions.txt
-
-Full commit : https://github.com/llvm/llvm-project/commit/e8ae77947154e10dbc05cbb95ec9e10d3b0be13e
-------=_Part_2849_1068567117.1746218459097--
+__attribute__((unused)) if they don't need to be inlined?
