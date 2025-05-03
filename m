@@ -1,174 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F1318C332;
-	Sat,  3 May 2025 04:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37451624E9
+	for <llvm@lists.linux.dev>; Sat,  3 May 2025 05:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746246999; cv=none; b=qgi7saygtgONsvDhkvSQmgPNvyZb/QqL4QLMYBXht3MXnvoyaCdM8SEpvuq94RHE8QjrAcw8297MwMNdlA5HkQWnwGGyw2cLP2zQjiICjKrxxyA9liQnBx5zd9fM4Ud72w9aiqDyciPh9pLfKFCJC10HW/TZr9kjvNSrI+IUgls=
+	t=1746250388; cv=none; b=o68d5Nbi6oDa4Tu/adZ6kpC/vKtziyp7VyqU2yTKIZQcsSrCqeLR/QpZZ4sHo0CdtuwuMebLQRLmbw8iOzbmYEuzWsWxl6yfzcEkL+Ef4Ynu7foQWH4f0HUjuuDvldEtJCa7214fqzfEh2sKwIgzdmWUn+owSInGXawLXjyoiF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746246999; c=relaxed/simple;
-	bh=ge0MxYCjlv/d6KCBzZjehBZaE/6ME8+3TaGWiefnB90=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HbGV+Sshq+lw+EdFni7+KJy3hx6FTLASsaUoU/pPoXr+oOuSHUdNMdhmsHZGsXyCMW+KqhZxxyfoQ+ZXIeGE5FdfVQh5mupm2xMsZKiNzCXXAFq+y2oyWSzOmTRhcFshpj4DhHqwSO++VmEdiCvfQMsx0jmTI6O9LNylM0QCEc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RBkJ4SDt; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746250388; c=relaxed/simple;
+	bh=ARPCXqlwCBJMUXEwjdLiVkMGRTuC0dmsfvhg0FhPEe0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=T2//6E6Pvk0L9oIjiuTtMFmV/1L9EhQ9vBJVOMj9ObcNHrns976dHWefULnycLnOvldfRehz/8PJYYsc0vv5vH8yBuRy+peYyghpfjnm2Fds+125gGi/Q92XA4Vzu0u5sHA0rXtrM2oNcuQ/C7nt2VhwvggyawoeC6WCiWP1q5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c08g7pCo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RBkJ4SDt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746246998; x=1777782998;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ge0MxYCjlv/d6KCBzZjehBZaE/6ME8+3TaGWiefnB90=;
-  b=RBkJ4SDtTozi+Q2OdMPpWmBE36Tqvkp84ZcPxgeKyBanlIWuvR+kQ3vx
-   LX6Vfi9kfAI8DTty9PzD4zsrBIwNKiUo5yVd3IylB7GnAv/RWs8jPJO3x
-   lmDRN+IwSAAHEEtjOyClGHggATJEYLCr7VyEeTzuh78F9y7hY4nB+x4QW
-   wlcwfAOLW1X1QVXNNYGSIyHNosnVclmwawr57gKPpw2x6vFAwcau/xhAY
-   LPpn9+04oK13pNoaWiKo7HCMnOR59NSGxtYoycPSgydpk9EzAH6AtPtk9
-   bF91TN0UrnnnchxEBodspqcARQR3DSiDG43rSkUt7DavYPa2WztQhGU7s
-   Q==;
-X-CSE-ConnectionGUID: H8UPU/L0SK+n+7iyl2+vfQ==
-X-CSE-MsgGUID: Eke6kaMgT6qS33ooItOqyw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="48017066"
-X-IronPort-AV: E=Sophos;i="6.15,258,1739865600"; 
-   d="scan'208";a="48017066"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 21:36:34 -0700
-X-CSE-ConnectionGUID: QEGDFEk7RQyvlnTn/rg8kg==
-X-CSE-MsgGUID: c7uF0dNQQXegVhpWrka6Zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,258,1739865600"; 
-   d="scan'208";a="172046021"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 02 May 2025 21:36:33 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uB4c2-0005C8-14;
-	Sat, 03 May 2025 04:36:30 +0000
-Date: Sat, 3 May 2025 12:35:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org
-Subject: [geert-renesas-drivers:topic/msiof-fifo 23/24]
- sound/soc/renesas/rcar/msiof.c:137:9: error: call to undeclared function
- 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202505031216.aUF2iRLT-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c08g7pCo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746250384;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bnJD9G73fbpRUlEOK4ZPbyIgsAPRcqipZ4h3oefl+7Y=;
+	b=c08g7pCow60zuYAjjlyLHwGEJOhMdRxpCLVFhcKKo48uiHnnQwNfTjx4c6g2DVeZZN/JNu
+	QwtWErgQPFNIU/zmRauLa2OE/PK8ive8Em+Bb/ISUqt3eU75nbCaL5/GnaTI6KKkACjTLA
+	zLZupPzW3MO63sa00djpqAjdcgRKbK0=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-176-dF9HYBuqMZCdhmbQalY68Q-1; Sat,
+ 03 May 2025 01:33:03 -0400
+X-MC-Unique: dF9HYBuqMZCdhmbQalY68Q-1
+X-Mimecast-MFC-AGG-ID: dF9HYBuqMZCdhmbQalY68Q_1746250382
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3E97D19560A0
+	for <llvm@lists.linux.dev>; Sat,  3 May 2025 05:33:02 +0000 (UTC)
+Received: from [172.20.251.156] (unknown [10.30.44.99])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BF80B1800352;
+	Sat,  3 May 2025 05:33:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
+ upstream-mainline, 95d3481a)
+Date: Sat, 03 May 2025 05:33:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <74119.125050301330300139@us-mta-176.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: UPSvF3ylcu-NXDnnMqJRdQh5mGSA9nsy65LHb9pRQTk_1746250382
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git topic/msiof-fifo
-head:   7b93d38b35516004a8e0863475297a7b47e7eec1
-commit: d8dfe7cdd8980e08b9fae51ff9fcddac20eca22b [23/24] ASoC: renesas: msiof: Convert to <linux/spi/sh_msiof.h>
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250503/202505031216.aUF2iRLT-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505031216.aUF2iRLT-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505031216.aUF2iRLT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> sound/soc/renesas/rcar/msiof.c:137:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     137 |                       FIELD_PREP(SIMDR1_SYNCMD, SIMDR1_SYNCMD_LR) |
-         |                       ^
-   sound/soc/renesas/rcar/msiof.c:151:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     151 |                 val = FIELD_PREP(SIMDR1_SYNCMD, SIMDR1_SYNCMD_LR) |
-         |                       ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/FIELD_PREP +137 sound/soc/renesas/rcar/msiof.c
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.15-rc4' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/broonie/spi
 
-   107	
-   108	static int msiof_hw_start(struct snd_soc_component *component,
-   109				  struct snd_pcm_substream *substream, int cmd)
-   110	{
-   111		struct msiof_priv *priv = snd_soc_component_get_drvdata(component);
-   112		struct snd_pcm_runtime *runtime = substream->runtime;
-   113		int is_play = msiof_is_play(substream);
-   114		int width = snd_pcm_format_width(runtime->format);
-   115		u32 val;
-   116	
-   117		/*
-   118		 * see
-   119		 *	[NOTE] on top of this driver
-   120		 */
-   121		/*
-   122		 * see
-   123		 *	Datasheet 109.3.6 [Transmit and Receive Procedures]
-   124		 *
-   125		 *	TX: Fig 109.14	- Fig 109.23
-   126		 *	RX: Fig 109.15
-   127		 */
-   128	
-   129		/* reset errors */
-   130		priv->err_syc[substream->stream] =
-   131		priv->err_ovf[substream->stream] =
-   132		priv->err_udf[substream->stream] = 0;
-   133	
-   134		/* SITMDRx */
-   135		if (is_play) {
-   136			val = SITMDR1_PCON |
- > 137			      FIELD_PREP(SIMDR1_SYNCMD, SIMDR1_SYNCMD_LR) |
-   138			      SIMDR1_SYNCAC | SIMDR1_XXSTP;
-   139			if (msiof_flag_has(priv, MSIOF_FLAGS_NEED_DELAY))
-   140				val |= FIELD_PREP(SIMDR1_DTDL, 1);
-   141	
-   142			msiof_write(priv, SITMDR1, val);
-   143	
-   144			val = FIELD_PREP(SIMDR2_BITLEN1, width - 1);
-   145			msiof_write(priv, SITMDR2, val | FIELD_PREP(SIMDR2_GRP, 1));
-   146			msiof_write(priv, SITMDR3, val);
-   147	
-   148		}
-   149		/* SIRMDRx */
-   150		else {
-   151			val = FIELD_PREP(SIMDR1_SYNCMD, SIMDR1_SYNCMD_LR) |
-   152			      SIMDR1_SYNCAC;
-   153			if (msiof_flag_has(priv, MSIOF_FLAGS_NEED_DELAY))
-   154				val |= FIELD_PREP(SIMDR1_DTDL, 1);
-   155	
-   156			msiof_write(priv, SIRMDR1, val);
-   157	
-   158			val = FIELD_PREP(SIMDR2_BITLEN1, width - 1);
-   159			msiof_write(priv, SIRMDR2, val | FIELD_PREP(SIMDR2_GRP, 1));
-   160			msiof_write(priv, SIRMDR3, val);
-   161		}
-   162	
-   163		/* SIIER */
-   164		if (is_play)
-   165			val = SIIER_TDREQE | SIIER_TDMAE | SISTR_ERR_TX;
-   166		else
-   167			val = SIIER_RDREQE | SIIER_RDMAE | SISTR_ERR_RX;
-   168		msiof_update(priv, SIIER, val, val);
-   169	
-   170		/* SICTR */
-   171		if (is_play)
-   172			val = SICTR_TXE | SICTR_TEDG;
-   173		else
-   174			val = SICTR_RXE | SICTR_REDG;
-   175		msiof_update_and_wait(priv, SICTR, val, val, val);
-   176	
-   177		msiof_status_clear(priv);
-   178	
-   179		/* Start DMAC */
-   180		snd_dmaengine_pcm_trigger(substream, cmd);
-   181	
-   182		return 0;
-   183	}
-   184	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1798376387
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1798376387-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
