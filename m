@@ -1,99 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37451624E9
-	for <llvm@lists.linux.dev>; Sat,  3 May 2025 05:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E102B78F43;
+	Sat,  3 May 2025 05:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746250388; cv=none; b=o68d5Nbi6oDa4Tu/adZ6kpC/vKtziyp7VyqU2yTKIZQcsSrCqeLR/QpZZ4sHo0CdtuwuMebLQRLmbw8iOzbmYEuzWsWxl6yfzcEkL+Ef4Ynu7foQWH4f0HUjuuDvldEtJCa7214fqzfEh2sKwIgzdmWUn+owSInGXawLXjyoiF4=
+	t=1746251711; cv=none; b=OC25hsxlkfL+c0Fy+1fQzK8xE18DXzAB60HEVWKxS27thXVN8WsB3W3T1Lml4rN44r3tuC7AMtxrLH9I6KxcO1UZ4us+EPytAUuCieNeZkJgSVqlynqlK9JWTUJpqiP3iU2DLjf8AOJ+Qv/Rnfjjik86tlGLf7QhY5U1HkcZTeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746250388; c=relaxed/simple;
-	bh=ARPCXqlwCBJMUXEwjdLiVkMGRTuC0dmsfvhg0FhPEe0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=T2//6E6Pvk0L9oIjiuTtMFmV/1L9EhQ9vBJVOMj9ObcNHrns976dHWefULnycLnOvldfRehz/8PJYYsc0vv5vH8yBuRy+peYyghpfjnm2Fds+125gGi/Q92XA4Vzu0u5sHA0rXtrM2oNcuQ/C7nt2VhwvggyawoeC6WCiWP1q5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c08g7pCo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746251711; c=relaxed/simple;
+	bh=tSZgN38GyZ/t3oOtfszD05d8YL3guqdlHqC0NDAIMVw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RWe1yQWnJ8JgdcbeEII48c/VzbewVO80Q920kGzDI3GAFO5/95RR1sbcX5hnvAHigpMfv9N7d+31gi+xFt3YHR3ere5H6vhimLe6khxbi40lCe9stQqjuE0gpbc7UKfE/jazxsV+K5JRPC38c/qdcM6H7tDOGQg6KMAFnXi7bRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ALJjU6oD; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c08g7pCo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746250384;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bnJD9G73fbpRUlEOK4ZPbyIgsAPRcqipZ4h3oefl+7Y=;
-	b=c08g7pCow60zuYAjjlyLHwGEJOhMdRxpCLVFhcKKo48uiHnnQwNfTjx4c6g2DVeZZN/JNu
-	QwtWErgQPFNIU/zmRauLa2OE/PK8ive8Em+Bb/ISUqt3eU75nbCaL5/GnaTI6KKkACjTLA
-	zLZupPzW3MO63sa00djpqAjdcgRKbK0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-176-dF9HYBuqMZCdhmbQalY68Q-1; Sat,
- 03 May 2025 01:33:03 -0400
-X-MC-Unique: dF9HYBuqMZCdhmbQalY68Q-1
-X-Mimecast-MFC-AGG-ID: dF9HYBuqMZCdhmbQalY68Q_1746250382
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3E97D19560A0
-	for <llvm@lists.linux.dev>; Sat,  3 May 2025 05:33:02 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BF80B1800352;
-	Sat,  3 May 2025 05:33:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc4,
- upstream-mainline, 95d3481a)
-Date: Sat, 03 May 2025 05:33:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ALJjU6oD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746251710; x=1777787710;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tSZgN38GyZ/t3oOtfszD05d8YL3guqdlHqC0NDAIMVw=;
+  b=ALJjU6oD6X64sm5GUGjAL3dZbpjJfkuEBmKZnYFcIyojDiHxWot6jita
+   Jhhpy5qJWOwtH7iwy9aRfWTVhXQsR5hCQ4MIAf2wUrNPvMHWLz9PJQTpz
+   PjlYJtZ2rp7a1x0wdp2Snzw1NJwmCKWKfyPFLfHV7Oqs/l1LRVGJYTP3x
+   gjhpKriJF7sloAqt0x8vrPwY194XxMbvce/hd5t9ZFyoKN8B/4uFv1oGR
+   EVNfbd0OGCiCxW1V3fx9yEcgOT/xy1PYZkCJ3GIxAK4gyQLIQKY0qyJl8
+   8MJde0a5N/tjgFTjjeU4d+ReqsPsBIEN59GNak3E8JZ7SrAUerHxhsS3G
+   g==;
+X-CSE-ConnectionGUID: 3DhvX4YjSTuZvFA3WA6wUw==
+X-CSE-MsgGUID: 55rKbi2VSxC0jULdw2Uf4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="70438296"
+X-IronPort-AV: E=Sophos;i="6.15,258,1739865600"; 
+   d="scan'208";a="70438296"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 22:55:10 -0700
+X-CSE-ConnectionGUID: n/mMcwarR2SZ4r5/MN4qvg==
+X-CSE-MsgGUID: r2tKxmIVS4edHOFYga10Xg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,258,1739865600"; 
+   d="scan'208";a="139974074"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 02 May 2025 22:55:05 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uB5q2-0005DV-2i;
+	Sat, 03 May 2025 05:55:02 +0000
+Date: Sat, 3 May 2025 13:54:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paresh Bhagat <p-bhagat@ti.com>, nm@ti.com, vigneshr@ti.com,
+	praneeth@ti.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kristo@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, khasim@ti.com, v-singh1@ti.com,
+	afd@ti.com
+Subject: Re: [PATCH v2 3/3] arm64: dts: ti: Add support for AM62D2-EVM
+Message-ID: <202505031327.h8w4ttsK-lkp@intel.com>
+References: <20250502153915.734932-4-p-bhagat@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <74119.125050301330300139@us-mta-176.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: UPSvF3ylcu-NXDnnMqJRdQh5mGSA9nsy65LHb9pRQTk_1746250382
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250502153915.734932-4-p-bhagat@ti.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Paresh,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.15-rc4 next-20250502]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6.15-rc4' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/broonie/spi
+url:    https://github.com/intel-lab-lkp/linux/commits/Paresh-Bhagat/dt-bindings-arm-ti-Add-bindings-for-AM62D2-SoC/20250502-234223
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250502153915.734932-4-p-bhagat%40ti.com
+patch subject: [PATCH v2 3/3] arm64: dts: ti: Add support for AM62D2-EVM
+config: arm64-randconfig-003-20250503 (https://download.01.org/0day-ci/archive/20250503/202505031327.h8w4ttsK-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505031327.h8w4ttsK-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1798376387
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505031327.h8w4ttsK-lkp@intel.com/
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1798376387-x86_64-kernel-debug
+All errors (new ones prefixed by >>):
 
+>> Error: arch/arm64/boot/dts/ti/k3-am62d2-evm.dts:409.1-13 Label or path wkup_r5fss0 not found
+>> Error: arch/arm64/boot/dts/ti/k3-am62d2-evm.dts:413.1-19 Label or path wkup_r5fss0_core0 not found
+>> Error: arch/arm64/boot/dts/ti/k3-am62d2-evm.dts:419.1-12 Label or path mcu_r5fss0 not found
+>> Error: arch/arm64/boot/dts/ti/k3-am62d2-evm.dts:423.1-18 Label or path mcu_r5fss0_core0 not found
+>> Error: arch/arm64/boot/dts/ti/k3-am62d2-evm.dts:429.1-7 Label or path c7x_0 not found
+   FATAL ERROR: Syntax error parsing input tree
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
