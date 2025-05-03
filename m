@@ -1,141 +1,91 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484C31552FD
-	for <llvm@lists.linux.dev>; Sat,  3 May 2025 10:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7031EB1AE
+	for <llvm@lists.linux.dev>; Sat,  3 May 2025 11:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746268393; cv=none; b=g1unPfh5twaPfhylQJQ1SCzODjFALIb9SwMMmbHy59P/L+gXX+TYAWMjiA9cNaCB+uSRRKMKa3KAhoHNkvvzCxnMlFSZu6hbnPuiQDfZfRwvbiuCbTUDVm/33rn5OqP/cWZ+NcZh8rg178jUFW9jmdJ4Ql0+g9PGydvEYj4ka6c=
+	t=1746271372; cv=none; b=EkJO1fr9bDHAghXMhOmEIgfg2v8FeVGKgbrS4c4ZHIGDGGz/n4cLmWtYSte7KzI+6r8WLSW8GiG6mv4BJ8mc1zuoLFxkbwG5QCj2VcnGbuKH/rfvlc65UYYiS6QemJbqQzyANcdbaqD3akQKGVCjtELbrmP80DsQ5zxMVDzvXO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746268393; c=relaxed/simple;
-	bh=Af5eJ9491V7Rdra5LfIAJarCq2ooV8hQqIHvng7TBnI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XsUMY3I4m/NzRvYi5hqWvVnzHUEwYQSJZZaxVjJ/lv04kFp+SheVifaMyCLUQw1Tk/1Y9qMIjtAm4JUbWAbx1xVf2aF2I0AhqPnUEPHeBD1QkK9CtwiuJ0szFR+yMoRo4yd/Kf6xWxiSKWcPY1XP64wCLvQDDSxupOuzZiH8E+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FOhw7HEm; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746271372; c=relaxed/simple;
+	bh=6njSZpjLFFK801EujEb3cuL3VrsBnFkcO396PYwdH7w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g+uA3sRZw1hm2iy3tgOWspVS44O0evoPE8IE+yCE6l4JTp3kiBDDrjhs1ttYjSayVzaz1PCwIkf++G0kpAMnvfA7SQ/3JvVQBY87o346PFi9AYu/7uvpfF771kV7Bb6pHfjUXMQ/fjvuhT70zUg0xfxef962gKbaCGC4qHOd9xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7WpISdG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FOhw7HEm"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso15904245e9.0
-        for <llvm@lists.linux.dev>; Sat, 03 May 2025 03:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746268389; x=1746873189; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YBV2rGv2S1NcPt4tVHRfpNM/jvRNqsvpOuHIr/RLX3s=;
-        b=FOhw7HEmcZ0fbQsF8/qU0NyIgGzF96kWk7pPo22pAlMBR/CPTVDo24BGlgHixnSKjg
-         TiM+/8ks9iyrlMfz6UVc4gulGta5tik7BMamqgrTllMVcg5qWOwVhHgROFlbyElCR0Ja
-         +HRoPlW/gGqGTY057JS2lvdyM9+BhvvrPCi9gu4xnLxA4+z8nWp7yeZETPxUbBIEq3kn
-         /zGPPnxgAzPqBIV9WfxXknqepah6MjSakm5DzT2RL/rae1JpStJHSW7MDNn9aoKc6EXI
-         Bo0Pb4cZqf+8NC8AQkheK20YEVUWSbC6Hnb9Y25IWGLwlL4D39bZOx5lytdx7qSFuDgA
-         SgSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746268389; x=1746873189;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YBV2rGv2S1NcPt4tVHRfpNM/jvRNqsvpOuHIr/RLX3s=;
-        b=SZxE7dt+LJBGOA4m9QKbGKB1FrhfjNRLUA2Lf33zYi7ZIwV+jTQ3J8Eu0omLM2MK5A
-         GhH742C4BzkneKpyoITwENElPTV4JsI8vtljrmPgEqjy7gHclhtjcBqHIYIsbiARjJvu
-         vrv8AReDAljhZSyEYuguqR/QD33urr9MDJyCFOL6sATuM8/6EGTgIe83CMjqxKc/+QaK
-         xlDvrt0A5l6nXxp98hpiYYOmt+RVd04UQKcXX4tyvbZREP5CGAyxBJ5xUHczuv4Epb/w
-         jsTwQateg0IqJhSGW1edMGquyf3JZGI7aMbz05k9CITS9s0AmojIeiI1JwsoISHk9gLx
-         jLuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+fxxNvSqCpp6oGUXgqsYqRVDTM+mB4MfL5ToKIaqE27oSv73YzGTTnCtGsGI+eio9TRWz@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzewt6DajhzlcgKWm+epk0DlMAqslCT5zAo1YheISgBX+kCT2k+
-	3/ZML/qUyWhvj9wzD72PIpOdTylR3H1/rden7bxdE0vV9T67tg02
-X-Gm-Gg: ASbGnctjNhcTTGpsrivkp5RkFsUiThINxtBud75xxOHw4kRs4bY/4BMi3KvxpHNj5XX
-	GeD3Y7Ih2wcx3b6afWSOTMr1i1kF7W8Xh06Mum3S2AHTaXrZZ7ftrmd8sQ7Q/czZ4tkMFL9URTC
-	Ngsefv8ufz4uh1sREkjPMjmgWsSIpE7iGm2cpDFN/O95i0TlGt6ymyjVHU6V0OuOpMWyzz5ya3s
-	jre2fJxvk/B5Q0sGepjoK9wy1xNo+GEfA5FzdIJeSk5OXBJmFWrzVScNorKLkk4ZJs5d3C0Ce23
-	bx/ggpEbZsXDE94bzgJ0nOmsk/1sy8nG4eJr1f7gpma+4yGI+RZPs47jzlZeZcHZQUWw+283ex2
-	/ECE=
-X-Google-Smtp-Source: AGHT+IEnmj/wELsmjhFnfT6qGiVRS7j7iGSP1/hYYVfSSSPQpy4IlL0h4sVcusqZ7jCZSfWHVvIyUg==
-X-Received: by 2002:a05:600c:4f51:b0:43e:afca:808f with SMTP id 5b1f17b1804b1-441c494870cmr5137755e9.31.1746268389399;
-        Sat, 03 May 2025 03:33:09 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b89cc480sm72235925e9.2.2025.05.03.03.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 May 2025 03:33:08 -0700 (PDT)
-Date: Sat, 3 May 2025 11:33:07 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Jakub Kicinski <kuba@kernel.org>,
- Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan
- <leo.yan@arm.com>
-Subject: Re: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32
- warning
-Message-ID: <20250503113307.37b71fdf@pumpkin>
-In-Reply-To: <20250430171534.132774-2-irogers@google.com>
-References: <20250430171534.132774-1-irogers@google.com>
-	<20250430171534.132774-2-irogers@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7WpISdG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D91AC4CEF1
+	for <llvm@lists.linux.dev>; Sat,  3 May 2025 11:22:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746271371;
+	bh=6njSZpjLFFK801EujEb3cuL3VrsBnFkcO396PYwdH7w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=m7WpISdGGO3sg0pkZySqZVxhQXOrOO9sPlkZ9W5OhO0eUNb0quPvXWkiK0vca30C4
+	 ZRnYFSOa2Wkz0dwE4z6Fjs3+G6MnlmmFd0qpxz4TTnKfBslQkMezvu8eFYWRwpE5lu
+	 e5+AeZ3FIO5J2ejNLWWWITtCFNFxiF8JNABEJenWMHmJm04pcgjGRb5+2DGhMOt0d5
+	 gvDo6p+v9mum5Bk8GcMv1YAjfOJkh0SC2760HjyaVHDVm5Woa1F6ML+R1uSM14SHsi
+	 A+8taaKnDq1hWiNWgBof3ltLwLjqzUyegfdAAPgSHP4HlnhTvhdl/hU6iWV5wAwh6x
+	 jalm5zxtdKmuA==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-54d65cb6e8aso3743795e87.1
+        for <llvm@lists.linux.dev>; Sat, 03 May 2025 04:22:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVw48fYhc1qPDmYnIcycKsrcMMMJ5aFzFuABCk5VacRqkRNR9i7N1Zsj4l/xWONELswLoHv@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzz6YrTwnw3cpw5vNT53FpvpIYnV9SsSaaR3qp/AJx5l89gNuCr
+	+vNH/ovy3E5jtGjvQkVQPB8nYKVzjB4+1gdJoC42/2GnhmPoNAHAJSbeCHldF2Yj67sNzJeqN25
+	0jXpci3HaozHhWRnnA/Bff41IvVo=
+X-Google-Smtp-Source: AGHT+IG/LZhJuYwd6BT5g/YapcupnN/sQf19+E1GsW+tcerWCF3qKkEN4dkhge9FjiQ1f4Ybup6+9GqTT5D7d0ujND0=
+X-Received: by 2002:a05:6512:108e:b0:549:8f4a:6baa with SMTP id
+ 2adb3069b0e04-54eb24390c2mr671056e87.27.1746271369757; Sat, 03 May 2025
+ 04:22:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250502145755.3751405-1-yeoreum.yun@arm.com> <CAMj1kXEoYcS6YPU0mBdvijDRK6ZVB7mPYZsCVpz7sYotabrxtQ@mail.gmail.com>
+ <aBUHlGvZuI2O0bbs@arm.com> <aBULdGn+klwp8CEu@e129823.arm.com> <aBXqi4XpCsN3otHe@arm.com>
+In-Reply-To: <aBXqi4XpCsN3otHe@arm.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sat, 3 May 2025 13:22:37 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHL5_2TM1ZTaPEgGm9uU7xvFpRxxarKpOTr=YVvj+72cQ@mail.gmail.com>
+X-Gm-Features: ATxdqUG1fvw_z6UhDYuaA_GkP9ybtJKQQ9wqgeSGK9OYj_TYO1ZfClLHhMe7z3g
+Message-ID: <CAMj1kXHL5_2TM1ZTaPEgGm9uU7xvFpRxxarKpOTr=YVvj+72cQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64/cpufeature: annotate arm64_use_ng_mappings with
+ ro_after_init to prevent wrong idmap generation
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>, will@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	broonie@kernel.org, maz@kernel.org, oliver.upton@linux.dev, 
+	frederic@kernel.org, joey.gouly@arm.com, james.morse@arm.com, 
+	hardevsinh.palaniya@siliconsignals.io, shameerali.kolothum.thodi@huawei.com, 
+	ryan.roberts@arm.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 30 Apr 2025 10:15:30 -0700
-Ian Rogers <irogers@google.com> wrote:
+On Sat, 3 May 2025 at 12:06, Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Fri, May 02, 2025 at 07:14:12PM +0100, Yeoreum Yun wrote:
+> > > On Fri, May 02, 2025 at 06:41:33PM +0200, Ard Biesheuvel wrote:
+> > > > Making arm64_use_ng_mappings __ro_after_init seems like a useful
+> > > > change by itself, so I am not objecting to that. But we don't solve it
+> > > > more fundamentally, please at least add a big fat comment why it is
+> > > > important that the variable remains there.
+> > >
+> > > Maybe something like the section reference checker we use for __init -
+> > > verify that the early C code does not refer anything in the BSS section.
+> >
+> > Maybe but it would be better to be checked at compile time (I don't
+> > know it's possible) otherwise, early C code writer should check
+> > mandatroy by calling is_kernel_bss_data() (not exist) for data it refers.
+>
+> This would be compile time (or rather final link time). See
+> scripts/mod/modpost.c (the sectioncheck[] array) on how we check if, for
+> example, a .text section references a .init one. We could move the whole
+> pi code to its own section (e.g. .init.nommu.*) and add modpost checks
+> for references to the bss or other sections.
+>
 
-> The clang warning -Wshorten-64-to-32 can be useful to catch
-> inadvertent truncation. In some instances this truncation can lead to
-> changing the sign of a result, for example, truncation to return an
-> int to fit a sort routine. Silence the warning by making the implicit
-> truncation explicit. This isn't to say the code is currently incorrect
-> but without silencing the warning it is hard to spot the erroneous
-> cases.
+We can take care of this locally in image-vars.h, where each variable
+used by the startup code is made available to it explicitly.
 
-I suspect that is going to add an explicit mask in many cases.
-Probably for u8, u16 and u32 if the return value from the old
-code would return a u64 and the value is assigned to a u64.
-
-Now if 'field_mask()' and 'field_multiplier()' are constants
-then the compiler might optimise away the extra mask.
-But in that case it shouldn't be bleating about the truncation
-because it knows it can't happen.
-
-So get the compiler fixed to do proper 'value tracking' and only
-report about truncation when the high bits might be non-zero.
-It also needs to not warn when the high bits are saved separately
-(int h = v64 >> 32, l = v64;).
-
-Then you have to worry about stopping the compiler bleating
-for the return values of read (and similar).
-
-Once you've got the compiler fixed to remove most of the false
-positives worry about the Linux code.
-
-	David
-
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  include/linux/bitfield.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> index 63928f173223..cc5cfed041bb 100644
-> --- a/include/linux/bitfield.h
-> +++ b/include/linux/bitfield.h
-> @@ -176,7 +176,7 @@ static __always_inline __##type type##_encode_bits(base v, base field)	\
->  {									\
->  	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
->  		__field_overflow();					\
-> -	return to((v & field_mask(field)) * field_multiplier(field));	\
-> +	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
->  }									\
->  static __always_inline __##type type##_replace_bits(__##type old,	\
->  					base val, base field)		\
-
+Sending out a separate series shortly.
