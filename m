@@ -1,90 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4524219EED2;
-	Sun,  4 May 2025 09:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD7D3595B
+	for <llvm@lists.linux.dev>; Sun,  4 May 2025 15:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746352299; cv=none; b=aH8iNnWzt36znixb2Oltyl0La2w8Omy7GG4Sy+Oth2ffuLR3dZTaruI5OO5wxgqcd2Dpz9u1L0dAW594cZLsZZCGswZSfHFMBiKnBynydzuCR/0AA/D7xkL4mj1PuXZCTLiJwzyim4vp7ofqrdNMcG70NxexSxVBDeNUqaqPgWU=
+	t=1746370987; cv=none; b=t8fVY6JVGEfFAEpCFBMdBnaPCSfsJhIJ1ntkVB+EJRQaCTDCQ6XsRP9iIvVdX+uGkjfJNP7ynRtIJj3cIQwT6SSjes6+Ky5MbUeGOo9PfYnYGmasaOT/BNqXH2ZfM4kehdm8fh655P352Qbbeg4RP6tcFjkTreGYpLUzgndJVss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746352299; c=relaxed/simple;
-	bh=muQRDpDkvQ3yr7wM6RRqm9LFsCCKkEzqPpd6l/TYDwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IbemeLq9R7x5Jo1CbRPmCA4xUqUfgt6ba5lvgZHQpsthGL0eHw8BKvOjDir4lLL2sJb5zj8IkJI78+Tp1lhj+9J7sRcvU++lzzTA9HD0Iejr+QYS2zzPGAfz3dvKk1n7DbrcIK6ahxI1mZWz16wE2+Xv0Cvfl18yFwPhkKmNkWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mzo9TFLF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746370987; c=relaxed/simple;
+	bh=N4cxeiFuZJq4ZkwPC0chJf/hRnNW/GZ4UmSHUGiYz/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NBOwI74XT0VTFTC8sKEBkg0yOZKMDuyKgTEn4HhwyHj7hROLZaOFVVvCQAFPKu1Ams1WL7D9MSaJlclumx22/JoRv5nDznPMaYsDPWAV4xTn3oKWL9vwMfxogdbiqeRBqL6hS/8JZwl5cAPa1HEasotoAauXUNIOm7Tugdt44Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=brrgOyvx; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mzo9TFLF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26524C4CEE9;
-	Sun,  4 May 2025 09:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746352298;
-	bh=muQRDpDkvQ3yr7wM6RRqm9LFsCCKkEzqPpd6l/TYDwk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mzo9TFLFWxqIRdkMawjsHqpMv2Dnksm4QDpBBlVSpx6RuhhjMi4nZ1N4or4OSZhh1
-	 fP/d9pA2Ic8Co6Ox7cqc1ufmi2igiIJDuKthJmoZ7/KXRKfoS8D8P35cheGHxzt/LF
-	 7fJUnomSWCbs+t5PHzLeQM2htkTo0xc49WL+EfzBR9QT81EYH0IA1x4ype1yE3rEWb
-	 V+QnxXGjHj6jTTIacL33DuLEv/STEwPpRQyn1mwVfSpCYg7BKgDGvV19qZs5D1CXB4
-	 hqaL48a3iMkcZDJuLNApvZSfGbdWAfVSHXQlywyjZdh+6Qwb6Hhu3rI2W9Fy1LtXLq
-	 5q8qNGss+vYcw==
-Date: Sun, 4 May 2025 11:51:04 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [tip:timers/urgent 3/3] llvm-readelf: warning:
- 'arch/riscv/kernel/vdso/hwprobe.o': bitcode files are not supported
-Message-ID: <aBc4iLZoH1cFzM96@gmail.com>
-References: <aBb6nudVcs+cqRyZ@rli9-mobl>
- <20250504113922-5cc48741-0c27-4384-a77f-c088050bc747@linutronix.de>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="brrgOyvx"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-707d3c12574so28826517b3.1
+        for <llvm@lists.linux.dev>; Sun, 04 May 2025 08:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1746370983; x=1746975783; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bFW+c/pzu01ksPogBDsF0yztuQICEpFi/6JnX1ys5aQ=;
+        b=brrgOyvxqXNJ8dpRtBOQ6YiaNZ+/FMbq9VY+/DZ2qbzQ0ErOry12NxuCVb3pQECOl4
+         knhVJK3Vy7diVL7HKF0qMjea6wgCFFlD/IwjgpZzQCPJBvxf3oZ3vWk9SyJbvVRmrh5b
+         /0Dx0gGLnJcExJyekh+tEAhAfcO8ounVW95L8M0PZscSqjtrv7XaDhmipxZrcL9+OHA7
+         twMzmRaLiQxQGOVxnkfLyLAjhMG5sfRx6S/u5TOrFT/4jiKInmWkl6Yomi6GzvyOSCm1
+         XgPuio6CUdbMKWMtTpp+aHjENdhrtcyTmTuMjtaHiI1Yo6VEeEK0lns/4o6gS4YzQCmn
+         EIlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746370983; x=1746975783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bFW+c/pzu01ksPogBDsF0yztuQICEpFi/6JnX1ys5aQ=;
+        b=oY312geleHfYuKw/qZLUQE99QbamPcLoZ0Pf72L/b/J7QtdsCcP69BlIjBGwT/kLo8
+         Dc4VtfruBv3q9uTPl6SvlDU7gsPuePlkW6VUA9enVqf//c1JxVU27Cjlb320cHyg7pdn
+         RH+AN+awANBb8++RCUfoK83cWzkr0guyWijv5WCNIa4LfdJZ8UjVcF2uOWx9qcwFBFka
+         oUECOxSkycHyoffKw1lWJTsNknKGXwOEq7B4/wRcSGdThSOdX/VYbb7LnrL2J1zq3Kll
+         af+RgpgcNZPzL7ozl3otKfaEmFK89KlzusGgGgEueL0N7Yf6guZGHu9c/mKT4aDQZKjS
+         cFdg==
+X-Forwarded-Encrypted: i=1; AJvYcCVLexDpFXMIwqM0D9W5jNPDzhTXrRhJ4pSlXNAO1/Gb+IJr4UdA9eZDD38e7ibkze51skE4@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywhu/JIZs5tHUMU5EudxkA/Sa0XLZOxCigY6BWfPXxbK9cWCYDu
+	RLz2O9qFobvzj+MxNArnvM6VPBnJXZsiC9etCYvDfPnI4ysXWXNlroFTNYC+5zGWFYkymCGWWkY
+	CFFQ6Ybpl7KPuyAT2VOfwj3n/smkcVwMiQ6To
+X-Gm-Gg: ASbGncvA+1LDknWEGnHx5pT7z+t5nwaQATlNkVHBNiqwRulwdl2UW9RqMY+GydHmGYu
+	HwTxp6SbE6FJXQ+hK1271x5MEW2O3hEelJoHGNGXPiNaQLK9vw+EAlzAUrTITBw4gyRDANsRF15
+	OiVWZoc10ogh15MJgozgqUkw==
+X-Google-Smtp-Source: AGHT+IGh+tKAyMeigoarPIi+V1deYWycva3XdHdZPQu9YAQ/LoyQ/7QaDDfIn1SlXnCdq3yX/3xBVxLxcxwerl1v8k0=
+X-Received: by 2002:a05:690c:3682:b0:705:edab:f36d with SMTP id
+ 00721157ae682-708bcf63de9mr169594707b3.16.1746370983565; Sun, 04 May 2025
+ 08:03:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250504113922-5cc48741-0c27-4384-a77f-c088050bc747@linutronix.de>
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com> <20250502184421.1424368-2-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20250502184421.1424368-2-bboscaccy@linux.microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Sun, 4 May 2025 11:02:52 -0400
+X-Gm-Features: ATxdqUF_SJM_Ksnl9ID37yfRWwOX1K9UN729WFbsKoyMwbuKaeF0TYKGFD4cZ_k
+Message-ID: <CAHC9VhQi2m19pJvUiTbzaNqh3omYGCVC43_G7H8EvZsPaOzevQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] security: Hornet LSM
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, nkapron@google.com, 
+	teknoraver@meta.com, roberto.sassu@huawei.com, xiyou.wangcong@gmail.com, 
+	Tyler Hicks <code@tyhicks.com>, James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, May 2, 2025 at 2:44=E2=80=AFPM Blaise Boscaccy
+<bboscaccy@linux.microsoft.com> wrote:
+>
+> This adds the Hornet Linux Security Module which provides signature
+> verification of eBPF programs. This allows users to continue to
+> maintain an invariant that all code running inside of the kernel has
+> been signed.
+>
+> The primary target for signature verification is light-skeleton based
+> eBPF programs which was introduced here:
+> https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@gma=
+il.com/
+>
+> eBPF programs, before loading, undergo a complex set of operations
+> which transform pseudo-values within the immediate operands of
+> instructions into concrete values based on the running
+> system. Typically, this is done by libbpf in
+> userspace. Light-skeletons were introduced in order to support
+> preloading of bpf programs and user-mode-drivers by removing the
+> dependency on libbpf and userspace-based operations.
+>
+> Userpace modifications, which may change every time a program gets
+> loaded or runs on a slightly different kernel, break known signature
+> verification algorithms. A method is needed for passing unadulterated
+> binary buffers into the kernel in-order to use existing signature
+> verification algorithms. Light-skeleton loaders with their support of
+> only in-kernel relocations fit that constraint.
+>
+> Hornet employs a signature verification scheme similar to that of
+> kernel modules. A signature is appended to the end of an
+> executable file. During an invocation of the BPF_PROG_LOAD subcommand,
+> a signature is extracted from the current task's executable file. That
+> signature is used to verify the integrity of the bpf instructions and
+> maps which were passed into the kernel. Additionally, Hornet
+> implicitly trusts any programs which were loaded from inside kernel
+> rather than userspace, which allows BPF_PRELOAD programs along with
+> outputs for BPF_SYSCALL programs to run.
+>
+> The validation check consists of checking a PKCS#7 formatted signature
+> against a data buffer containing the raw instructions of an eBPF
+> program, followed by the initial values of any maps used by the
+> program. Maps are verified to be frozen before signature verification
+> checking to stop TOCTOU attacks.
+>
+> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+> ---
+>  Documentation/admin-guide/LSM/Hornet.rst |  65 ++++++
+>  Documentation/admin-guide/LSM/index.rst  |   1 +
+>  MAINTAINERS                              |   9 +
+>  crypto/asymmetric_keys/pkcs7_verify.c    |  10 +
+>  include/linux/kernel_read_file.h         |   1 +
+>  include/linux/verification.h             |   1 +
+>  include/uapi/linux/lsm.h                 |   1 +
+>  security/Kconfig                         |   3 +-
+>  security/Makefile                        |   1 +
+>  security/hornet/Kconfig                  |  24 +++
+>  security/hornet/Makefile                 |   4 +
+>  security/hornet/hornet_lsm.c             | 250 +++++++++++++++++++++++
+>  security/selinux/hooks.c                 |  12 +-
+>  security/selinux/include/classmap.h      |   2 +-
+>  14 files changed, 380 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+>  create mode 100644 security/hornet/Kconfig
+>  create mode 100644 security/hornet/Makefile
+>  create mode 100644 security/hornet/hornet_lsm.c
 
-* Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de> wrote:
+...
 
-> Hi Ingo,
-> 
-> On Sun, May 04, 2025 at 01:26:54PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
-> > head:   7aeb1538be5df3efa1d799e5428ac3a0ae802293
-> > commit: 7aeb1538be5df3efa1d799e5428ac3a0ae802293 [3/3] vdso: Reject absolute relocations during build
-> > :::::: branch date: 4 hours ago
-> > :::::: commit date: 4 hours ago
-> > config: riscv-randconfig-001-20250503 (https://download.01.org/0day-ci/archive/20250503/202505030636.3ExDB8O2-lkp@intel.com/config)
-> > compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250503/202505030636.3ExDB8O2-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/r/202505030636.3ExDB8O2-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> llvm-readelf: warning: 'arch/riscv/kernel/vdso/hwprobe.o': bitcode files are not supported
-> > --
-> > >> llvm-readelf: warning: 'arch/riscv/kernel/vdso/hwprobe.o': bitcode files are not supported
-> 
-> Could you drop "vdso: Reject absolute relocations during build" from the "urgent"
-> branch for now? It is not necessary for the actual bugfix.
+> +Configuration Options
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Hornet provides a kconfig knob
+> +CONFIG_SECURITY_HORNET_WHITELIST_PID_ONE.  Enabling this will allow
+> +bpf programs to be loaded from pid 1 without undergoing a signature
+> +verification check. This option is not recommened for production
+> +systems.
 
-Done.
+...
 
-> I have an idea on how to fix the issue found by 0day but those 
-> patches can then go through the normal process.
+> +config SECURITY_HORNET_WHITELIST_PID_ONE
+> +       bool "Whiltelist unsigned eBPF programs from PID 1"
+> +       depends on SECURITY_HORNET
+> +       default n
+> +       help
+> +         Selecting this will configure Hornet to allow eBPF loaded from =
+pid 1
+> +         to load without a verification check.
+> +         Further information can be found in
+> +         Documentation/admin-guide/LSM/Hornet.rst.
+> +
+> +         If you are unsure how to answer this question, answer N.
 
-Thanks!
+...
 
-I'd still prefer to delay the other timers/urgent fixes to be on the 
-safe side and send them in a day or two, but it's up to Thomas.
+> +static int hornet_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *a=
+ttr,
+> +                               struct bpf_token *token, bool is_kernel)
+> +{
+> +       if (is_kernel)
+> +               return 0;
+> +#ifdef CONFIG_SECURITY_HORNET_WHITELIST_PID_ONE
+> +       if (current->pid =3D=3D 1)
+> +               return 0;
+> +#endif
 
-	Ingo
+Two quick comments on the build-time conditional above.  First, unless
+there is some subtle reason why you only want the exception above to
+apply to a single thread in the init process, I would suggest using
+task_tgid_nr() instead of current->pid as I believe you want the init
+exception to apply to all threads running within the init process.
+Second, I think it would be helpful to rename the Kconfig knob to
+CONFIG_SECURITY_HORNET_PIDONE_TRANSITION, or similar, to help indicate
+that this is a transitional configuration option designed to make it
+easier for developers to move to a system with signed BPF programs
+without excessive warnings/errors from systemd in the beginning.  I
+would highlight the transitory intent of this Kconfig knob both in the
+Kconfig description as well as the Hornet.rst doc, a brief explanation
+of the drawback for enabling this long term or on "production" systems
+in the Hornet.rst section would also be a good idea.
+
+--=20
+paul-moore.com
