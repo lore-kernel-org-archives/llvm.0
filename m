@@ -1,98 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E0E28EC
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 00:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99A61B87D9
+	for <llvm@lists.linux.dev>; Mon,  5 May 2025 05:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746404534; cv=none; b=f2HFGQ0IL7fxnSm/6vsh+AH67KfeTebpt3bBJ/XNII6443ZLXGdccTyFEl2upcGxOVRN5Gn+A9BWf5OuI6tCdto9WVpY0CvAWTyUdChJGV664BRLB0ftmiLJHxmTbdWEIAPQDQ10DlfWA/cHcTYGAc5IWSun3yEHV7lXViOmS6I=
+	t=1746424773; cv=none; b=U7rUoFHwH1e8PFktaAmBd+U1WbnJ1UZ/fX9q8bv0+oowb4GvI/elPWaLI8wNCR0gW4xIGZbIncmtqJIybT3Db6wQiRgUv39zmiwJ1Odfbj99YNwZ47tU8nkp6bI8oJOP/Cr0nH8lS95BeDrG0NBzpjewJTJLAH/6P9gRC/IEcG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746404534; c=relaxed/simple;
-	bh=KdZ2skIzzAntbihevMqXJAiwKGTh/F1pAYl9HbfOIHc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kr6M4hTWDN9EaTaI5Bi5jWoBkoD35KdDfOTk6iDUP4TNK+XGzWL5rgQ8isCXdVD4K4Mob2QrzUfBH6iNShhx7Dx8xYItNwjnwccMssi9C0HluFZrUXuhjxPMR2IV6+cXxFUthCd30wxjR+BGp7shWczh/UKrJpty24NB/76cTHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LxBy3QpT; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746424773; c=relaxed/simple;
+	bh=dKbHiB4RZA41z9Ie8R/mefcD/M19yRwwyT/XOpBK3WM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ro6zlcbW/QOXS8JLOrbVV4rvhpndfehPTt+1CBGbOFGCNK2y3Dfl2NA0jLdXIkT7qttl57N7ZkLj7f7gKDAZig56hHKplJTwEnkcoNGJZcvypiCaTjWHX+K7fPE4WyWucmbGWrr/VDNvmtMNEr4GOHDyhUXVcYeTg+qnyAQ70kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QPEUXRzg; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LxBy3QpT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746404531;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FDyO5ELMuNs0xfF6zAGnuIgCYKNxqxZgb1wiW5Z0kNk=;
-	b=LxBy3QpTiDnuEHVQdbN2WZeiHe1WL+Zz2xwRVQPYwizYFnlpgh3RfD6GswOLBeJ4BVhxCp
-	qPJrfhBvuiQyXhBgeAl7VZ4XgQrzRNT/QPxtvelVWSYpCMyjbQbmTHIYw8yhJHbE0F8bgY
-	EjLWACILGwVOeqLXtzxl2xAyit1tNdQ=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-341-wIl1CdocPD6T2hZq9hAkig-1; Sun,
- 04 May 2025 20:22:08 -0400
-X-MC-Unique: wIl1CdocPD6T2hZq9hAkig-1
-X-Mimecast-MFC-AGG-ID: wIl1CdocPD6T2hZq9hAkig_1746404526
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25D0719560AE
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 00:22:06 +0000 (UTC)
-Received: from [172.20.251.156] (unknown [10.30.44.99])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A9C9E1956096;
-	Mon,  5 May 2025 00:22:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
- upstream-mainline, 92a09c47)
-Date: Mon, 05 May 2025 00:22:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QPEUXRzg"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30bfc8faef9so33502891fa.1
+        for <llvm@lists.linux.dev>; Sun, 04 May 2025 22:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746424769; x=1747029569; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dKbHiB4RZA41z9Ie8R/mefcD/M19yRwwyT/XOpBK3WM=;
+        b=QPEUXRzgSSnTy2HewQvWpiLpwCziL/JWwS3tcKfjSOX2atkVK42YDduCbaS+qQ44fB
+         Iw/DB0Uq2782WMEcS9Fk6gVrmDZOT/F/sHyngLSLGZnfd/8OQ0gRv4h7P9kMlljT4GoS
+         qkhKD3HJ7mOttEEyhteWLoNUdTse8jqupWREGO+LGS3fQdrOYe0+Otg4T0P8rSxs1h+/
+         5pebvG3N5dwfR1ngdhhjU3MgFWkzE0Je3oJcw3lwWzmZ21XDc6STM/c2F4B0kPKr2viI
+         zoEoPM96MHq8b2TbPwcJuH4KAV1Z1o+HqN7vb+iusBO1hJnmOhfWNnLa/WiZ/tSytcqy
+         pwgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746424769; x=1747029569;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dKbHiB4RZA41z9Ie8R/mefcD/M19yRwwyT/XOpBK3WM=;
+        b=M576+zYoEVasAbnAICw4jrimLxXVLgJYxu8bxxaigOV45Dyqk0EQhrUlh3KtXUwxjk
+         5kmJ+Z2cD2zYgNGgcswKWjXauXDfzxG80OY+d+DYX0rJy5VcEZfGcCODZ8yggX/itTSu
+         EKxwnSDK/ycTm5kd786i24PZ3sVFaTnmTYQIGJ7riYzZBC9QjI2aptOVeZ++8pRUbGYj
+         XuOLFb95+lFTzjP+WeGw/h6AAVO+38mtIgYpaGTfXSLxTOpmCfLlLWxuuZ5RYOBB63VZ
+         wsmoknTKZx62WNcN0FSt8LEqktYcopABIGcmZCViA/8rZYAL+LrE0hplV0eg9Liohtct
+         kO+w==
+X-Forwarded-Encrypted: i=1; AJvYcCV+cFCkEteEL116cc1pQVyOb20xYaF1VWLaCX7q5DGmzP+lZq9rKRUxQquJLSBnICX4zpbq@lists.linux.dev
+X-Gm-Message-State: AOJu0YxS9j9EVq+dEH6GyyDzPHEq+UC3NdlaWl2EXMfMJqSThdVI9EeI
+	TikDyjxdb6PyBXjKC7d1qRJ1FnD6rgRPFr31b5BMu31liivkzE6MjzsacBUTWNyJ9DDW3LY84hY
+	lv9H2kNpwWUhcV6PcEZfiK4u8m8F7O53DpdNp
+X-Gm-Gg: ASbGncvjO854PE2YIqUzwS3Q8Ib84zVo8wLrMizn6gfDJpFGdlHA3zufouvNk7rFE2X
+	Hi3oTROOMk8r2jwIDFeXHcUn2UQFtTBhWi1jsAPYeofVfj2ugqRh8NGNpvHt4D2GFvnSod472nR
+	Q0VIip1MvNt43r2RTVRX4sNN8qFkQNT3pErOL28pm6Bh/Yt1wryYpEgQ==
+X-Google-Smtp-Source: AGHT+IFD2StGXXU4LRBTieMiBl1477i7opw2k6zaQzZpZT7Xzqji9FSBQHuj++vQYVldHnNlC03ywPxgJw7rDH3n0w8=
+X-Received: by 2002:a2e:a585:0:b0:30c:12b8:fb8a with SMTP id
+ 38308e7fff4ca-3233ebe48fdmr15610161fa.0.1746424768540; Sun, 04 May 2025
+ 22:59:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <00920.125050420220800289@us-mta-341.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: kr8Bd-5pg6O5Mcx9q-fSJr19RJQIM2wvkORbnYhW9wM_1746404526
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
+ <CANp29Y41LKZg-kSP+j5hjUKMNeWnPsVd8VvDnOpN8+4WHHjEgQ@mail.gmail.com> <CANiq72m7GAZ4gfgiU5bXSb86R3-UMG2vsvi5J1Ua1EpVV5EdAQ@mail.gmail.com>
+In-Reply-To: <CANiq72m7GAZ4gfgiU5bXSb86R3-UMG2vsvi5J1Ua1EpVV5EdAQ@mail.gmail.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Mon, 5 May 2025 07:59:17 +0200
+X-Gm-Features: ATxdqUE_jDd0HC0IONKRAtQ24jV76OHs3LwnQnbNgHzz6cgeJxyFcYPBg_mcEL4
+Message-ID: <CACT4Y+Yavh4GkocO01GSP+0hWXZNVBEaD4-9W2V452Z5+C+kZA@mail.gmail.com>
+Subject: Re: [PATCH v2] kcov: rust: add flags for KCOV with Rust
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Aleksandr Nogikh <nogikh@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Fri, 2 May 2025 at 15:47, Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Fri, May 2, 2025 at 2:36=E2=80=AFPM Aleksandr Nogikh <nogikh@google.co=
+m> wrote:
+> >
+> > Thanks for incorporating the core.o change!
+> > I've tested the v2 patch on my local setup and it works well.
+> >
+> > Tested-by: Aleksandr Nogikh <nogikh@google.com>
+>
+> Thanks for testing, very much appreciated.
+>
+> Dmitry/Andrey: I guess you may want this to go through your tree
+> (although I don't see a `M:` there), but if not, please let me know:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Linux 6.15-rc5
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1799695672
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1799695672-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+KCOV does not have its own tree, it's merged via MM tree with MM
+maintainers effectively serving as final accepting maintainers.
