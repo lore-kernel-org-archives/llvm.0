@@ -1,147 +1,341 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD31E1FDD;
-	Mon,  5 May 2025 13:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746453297; cv=none; b=JFuT6fYPCGZHkKFKuw5kbrgUBesPK3OMgMEV7iFeLn2fi6eOT/MvWgThnN+3zqJgqvCT1chZ8I7PjalP4mtU5vS5uy3g1LczGCZ9tm0QOLoQxbYni0FbF7NgUgBWS6/l6fwuNmOrLY/boSQfedzoNLJ5jPEg2ZdGd9evoO7g5ns=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746453297; c=relaxed/simple;
-	bh=mT9cqDmKVvE5D+3NHWI+X4Bdzp3kYBbGRt9lXt3Jz/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HIisJYE31BT+pwQqqCRf1W/avLzMfWA2Un4w6kRSsEsIjj/XWsLJBYvDy/F1/swyPZ3z9ZtzfrTDEGl0U4Fxuft7KELztwuahklsVAYCBV19HWGMNgT7BEsKk9PVi6Yu1q0DciVlPefJrv1noVZi+RS2pGSRR4Gw56jPzdQUkYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QPIcj5NU; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6F32505D6;
+	Mon,  5 May 2025 14:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746454732; cv=fail; b=WyK2yQtR44PKfNCsbT85MxeWIeewWciEwy9bM9MIjtQD6A6MPPqaQK+j8Y5ZizHILcR1snMdOSKczW+CcE3pYOf/SBw+a1v0jSCNSmyLAyrVL7alq3Me5DTCToYMmgHjT82ITOWergjXpL6dqeFtfvjl8X97ARqn7FyCYEwfOcs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746454732; c=relaxed/simple;
+	bh=CPBpfG1vjcL5lAS3F5ge0NrbKeS1HzNpQxlVskB2Iqo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ax/4morgnWobG9YA6tVlYPbmB9xwtFbQo0ov7S4ZQVgcBT03O1s4dxlblgkKBe5i3AKAcWJZP2NnGdisgZxUlEWGOV50j14tb8NACwTRj+P97Q3bu5u4GIBa9PO550os88e5N/4e0fbMawEH5MYQGHwMi8zmWtBNaDjN3s4QELY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=QUYcKePT; arc=fail smtp.client-ip=40.107.94.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QPIcj5NU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746453296; x=1777989296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mT9cqDmKVvE5D+3NHWI+X4Bdzp3kYBbGRt9lXt3Jz/E=;
-  b=QPIcj5NUEgk0gPoO+V76ADmWh7eIFjktLqz35TSE0b2SBe9Z4zv/EcdI
-   FjCcZs6k61cn3YDMFm3sK5d1p2JgxIi2nPJCaCJh6otMeC8XNE+S63xx2
-   854S5y4RViXQMWCLTxD7nPFVDiLbl+NSgMqNQX61J0ulGKyqSFnW1WAqC
-   +lZanA2MrHSbsOlQBtuIzD5AyKmMryn5qLytjTxUZ5J5f7Lb8NEhSlVFD
-   bMfWPgP95ZtY46kz47jffR/411imzcRQO72p2OPEQLdVywy+og3SDij4v
-   yZubGNENnV8S03X8iPOTHNE1M79s2tenq+L0vaJKRubhRgEEAeaed7kH7
-   Q==;
-X-CSE-ConnectionGUID: ibMvM8QBR9CbgXXFwlsPTw==
-X-CSE-MsgGUID: F4fCwcdgSKCdTj/A+HcdNA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11423"; a="51881701"
-X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
-   d="scan'208";a="51881701"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 06:54:56 -0700
-X-CSE-ConnectionGUID: ED7z6mKXR3ymkA6cXhGR6w==
-X-CSE-MsgGUID: NwDLqtlJTHuYGEq/aEHKpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
-   d="scan'208";a="166307889"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 May 2025 06:54:53 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uBwHS-0005mH-1C;
-	Mon, 05 May 2025 13:54:50 +0000
-Date: Mon, 5 May 2025 21:54:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb+git@google.com>,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, will@kernel.org,
-	catalin.marinas@arm.com, mark.rutland@arm.com,
-	Ard Biesheuvel <ardb@kernel.org>, Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: Re: [PATCH 1/3] arm64/boot: Move init_pgdir[] into __pi_ namespace
-Message-ID: <202505052102.U2NQHrS4-lkp@intel.com>
-References: <20250503112137.1962910-6-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="QUYcKePT"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b1sn0dkZPgUa4sW97gu/8kmcBaB8m3wU5FGsmAAVQ7GlW674zxYQ4lKTKm4NKI6rOr+cySMpp37FmA63ZoH57DZe49i/mjYxRkONKCsoRM6fcWFoAjbcJgCmRgv1jla6GQGpeStytSG5chCDqBkjRFOeKbP+9We7wZQfIivR9D+sQonmUqH4eWftzvSlzmzZUy0ouG4jZf6hjsSdt2S2YGs7wZ42rZWFwTQNcJzCHP8uXxIOyXyV8oEYEIdKKNMc3HNT4yMxk1yJ5jofjCtRu3sWzWHZ/G6ZFvwdBY7EfZHf9YB3P1YJjyTXzwB+MiXio9TOgAhLEWpiDPIMe64xNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0KXYfufYZDLhloU/wy33KO59zTq3HUu43do6ma2xPNs=;
+ b=tJTFs5uxLw5kFoK/dzlTY3dtc2l/BN7H5PV39oSgRXtym7S+ilMRV01C7GHwa7iGqyTg8SYbal9+nGoFY2671eNruSo/Zlph+tYIKHnVG/OPYekDLjrSZm8+Uou5ir9+h+XvFd+VdXH1QDH2yaKfRynPTCA+l+mrAqYKc21ecYb/QieZfpWt5FGa+PjZfb7LS8wdvQpVNrE7hb6O1bYgBwvaYmGTLq9YEiHvll+mYCAc2egluBKw2ub/eWMcKzRSljspvJEZ8kf9c+OYQcZiB0Q3i6ghwfo+7izLW2dtd0m3p+NU+3GW2XnOh6DeJdj9VlEhznAS3ywCTBRPqj4Vbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0KXYfufYZDLhloU/wy33KO59zTq3HUu43do6ma2xPNs=;
+ b=QUYcKePTTB2kKZ6IGs3XXA1vHCp8g80rmI9b6THVP7TIRHcNw+EEV0kTd4hIOxUELDB58eRIkmQVng0/zdgEdP2wxlMlbp5HWzQUQtf9pOTcrnjJdjz4BU1J4x06BpxSC0maoOZ7oRPLgBIzC4BgSvLp7boKpSulZZNfZxYLJwX3s26SPO78p8RVUnmfAjG2sYSlKUyt2jq84QwspBGewa2lkCeWgmCgxvP/UYDduNwpveLsskMMLCx3JGl8pqt0m7TbgzMEMlSPUVCeXF5Iu9wk4X4AWSuBWMNyQli4y3eR3pWSfmKrDaRGD0cArGBQ0JYAT2kh/DuzbKg16Iy1bg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by SA1PR12MB7444.namprd12.prod.outlook.com (2603:10b6:806:2b3::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.22; Mon, 5 May
+ 2025 14:18:46 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%6]) with mapi id 15.20.8699.026; Mon, 5 May 2025
+ 14:18:46 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	patches@lists.linux.dev
+Subject: [PATCH v2 05/15] iommupt: Add iova_to_phys op
+Date: Mon,  5 May 2025 11:18:35 -0300
+Message-ID: <5-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0155.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::10) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250503112137.1962910-6-ardb+git@google.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SA1PR12MB7444:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4dc1ba4-5528-423a-08e1-08dd8bdfbf75
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8ZhW/yQ0NknXOwFnj5Cn6b1lss9k3KChAlbD3IYKeoi/YPd2euSu5KSUyUP6?=
+ =?us-ascii?Q?cTfLQXlHbRAYTVev8Eg4Vkop2y64lKsHZIe5VjvObw7NO74n3i2q86rOo/mI?=
+ =?us-ascii?Q?i+G/vYfAxDcPp8qwcv3dcicVez3qSqcblZ8T42SnhZl5vtwdkZBCtVkpRSlL?=
+ =?us-ascii?Q?N82kayWhDXR/FqGmhaW6cZM1R+GKWEaympl+2OZDZwO8ljqBGgLrBeKiZRga?=
+ =?us-ascii?Q?zHq8tZ7wvkHbYPP4C7yF6Ll4c02SN1A9Xn3pBq3lUD9q10tgaljc5EbdDUz3?=
+ =?us-ascii?Q?4xZh2q3F+70oyg+tagHWXgBJLj+6WMOdzQ7EsckvbAuJQsSUrOzzR5bRPyjA?=
+ =?us-ascii?Q?feogmxneV8pOrSZGxk5cQEqHMvTQdMVmTeIjJm5msy+kX3ny3rH+btR0dlw+?=
+ =?us-ascii?Q?mPP3ZjhFvoqJfBLtY86dbbO2WZ/qYKRuD/OYaRmYazfyokqUIl4/gDP4wF9I?=
+ =?us-ascii?Q?v2y578qqKax1duZ/az5ImtJhDScwZ80oARCvkSHucOViVggJifhXedt71Cx3?=
+ =?us-ascii?Q?MQBNDClAj8CDYvYgEJMC94ghy32H4tq/LzBsx/93OK9PR3JJ1L4WYGN79N5W?=
+ =?us-ascii?Q?fAr4n0Hessz6WekB1zbz5Zh/AGo1DpQNmYnFMhSXQMPDcnzwBqBkq8EXPfNL?=
+ =?us-ascii?Q?5pKpgtl+iIT5avIqAVZ//xKfa+UWcfs0E5NkwGmJbUS1jhwONu0LZzwJLEFn?=
+ =?us-ascii?Q?q8oxnj3eoEAGMYcm9mV62HyEDgHEIUlF08nTL/30/ijco6iFeIcNDlzAefic?=
+ =?us-ascii?Q?pIqVzIFYvlRtUTs0sWC/msE+vrxU8yJB238w+cbIDC4XnCt2//547TXrstVU?=
+ =?us-ascii?Q?oqtOV08CM/Hcgzp2Ga4YrLUEDoBWjskIWe8ME8zRKI1qpHnS4THT/tbE4jvc?=
+ =?us-ascii?Q?px9Awl62l/QuawjWGEphD76IcXxIStuBr8lxD7a+zNXuLK1syaeg+3ut0VcR?=
+ =?us-ascii?Q?lIOttWkL3NupXTKbPKsi8aXVq55BXEBo1bLVQB6GgQ2G1g7aBmlMkxzm+MKc?=
+ =?us-ascii?Q?aHHb17hVPn+VlNpTcdlKx2qeSg3PxT/L3+UwNJvWJRSC2TLLu0/G4oMcZBJC?=
+ =?us-ascii?Q?Iorit64o4HMaP1OIYaK91seMqtk2Jij6z1U+Vg1/SIiYo3qNVz8LCXOG1caS?=
+ =?us-ascii?Q?3oA9v+NH0b+FvDlWgVHb8VS1M6LBH7FbTrL1pSX5gU8mJwePjtDN2ZXZCrH/?=
+ =?us-ascii?Q?Hc03rSrGoGLFnosMZG94vB1PY+V5ryXMN+1eJ1bqou7Wx+brY9OeR+fcEn1w?=
+ =?us-ascii?Q?IQms+DTOupwM/ex8dzxJcCjgDtZPKA2mtUKlagLfzx958/ZwGKl+X4FbrUH0?=
+ =?us-ascii?Q?rWpGDXZUieoQ96CErY+UHyVkkOcJoHnxEXZfBRfr+qxjnfSiOoKZllBpHGtd?=
+ =?us-ascii?Q?WZcaGNAVSfoaMDzYi0BL1cieKqA0ae34Q+/o6H29oCkN/8oBBV7uOr93OkUo?=
+ =?us-ascii?Q?T86C98GM/KIxTUk2du2lHxNJWh5q+iiu?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Rzad22vSpF6V6gTppOiSCcd0FZmTjaGtF5KeQMFPSIttbHKdRkehmDhXapfM?=
+ =?us-ascii?Q?SU7aQGF8/8KnpRzvKefTDdXI0xfzE4BJj9gdniduZ0h6KgufLbI+KyhSS+UC?=
+ =?us-ascii?Q?l/hwFKcnLd/SXOPSbagkuXQ8r1J1ybIJ8668J8OQA/71PONxj0cXQ85R23GR?=
+ =?us-ascii?Q?Jy7MZy15rwVg2RIS/YkG2j5hEroEj/zabSxkQ5WDOEWH5LLDOr4j2+DMxA4D?=
+ =?us-ascii?Q?dSWmsyfw87CvB8yux1rmh58G78O6Yf0ZDpW7NZaKTgvDOdR0W7DXJgCcGatr?=
+ =?us-ascii?Q?iJZU88JXL9sEgM7Vu9W5nnkERqaAaVBSZ/0YBWkuoZP7npqU2EF+3fI8a2ga?=
+ =?us-ascii?Q?nzvoyVeHamUbXNSgXgEHFF4b6E8PkZPYBAcM/65yS0GaqmnqIV4MzEhmakdR?=
+ =?us-ascii?Q?64ajQAJg52YepliyhupVL7jhjviCAVSZ5lIIErl/R5Fo7HqjE1B+ySTbYx1D?=
+ =?us-ascii?Q?LlyMsWgemRwbpjQY/DdoIsouocG96ytbbeiT5XjFsk2LfaIpaBda4tVxzrc8?=
+ =?us-ascii?Q?F1+d0u6SI0CpXQkfdm/olkt48JdDitTjIXxTzi3igy7qTuI9OCw8Ubq9tdYq?=
+ =?us-ascii?Q?nzBiSpmy2AWK+1WR4IyHsU/w741HTX6K5g4Hf07N3jfzl4hSg810bJNloOur?=
+ =?us-ascii?Q?RoYBBJLLgrqzgN8pt4cQpkeCRL3+urUsJ26TVWYCGeniV9mgQXYQj3XHDgaV?=
+ =?us-ascii?Q?jKkTqYQ27bLBwDR9cXtH1ekB+y/A86yLlNJtjdEAzMF4CX191m2oS4cj3/9C?=
+ =?us-ascii?Q?SUtdBpn6Movkiv3tFhZ8wWK6ePN2vjdn+CDHJcHbovlhTZVBmXpo8jKBDScw?=
+ =?us-ascii?Q?eRryXgV1jLDHoy2iMQT4+gQs7uxejMoM1iAujMR0WOMjx+g8dMV/dstN+kk7?=
+ =?us-ascii?Q?fYIEWiL23nDOMPXbOlOlydz8hzq3LpZdIQzZgT+beSRuKP6KvAlI0hOYUu6O?=
+ =?us-ascii?Q?RlaI8pS5fG/yw8Wp1gqzs6+HFZPqGg0AzHy60k1qw8ZFX9vQ0ww2lsV9hl4i?=
+ =?us-ascii?Q?MBXIQ/5+9CUPyAXlvGCr7tURiasgpKGJK/rcUOO+7y0jNZQPCfIYzMkAtQ9N?=
+ =?us-ascii?Q?wBfIUIcJQW1ogYsN/kkcQYdGpBwaFwq4SqLhTZdhu66sbKCRdoKKILLQxhRC?=
+ =?us-ascii?Q?nnNGaKO4YekEYtibaZijgrqPaxr6Z3ZrOzLr02bE6s/vxCMLhUDfwsy4t3NT?=
+ =?us-ascii?Q?EvqtabiCWZzncPjaH8hvE3NU5aprhq+Rb8PfK36wKqAQ+TKHennZtDXfNSSm?=
+ =?us-ascii?Q?Lh1Xlcor2XVkzaQsKO6Ed332rK/+X0EKxho/kla1RGDKeT1gDlE/5Dx8Mhv9?=
+ =?us-ascii?Q?D7r+P+Ggd+Tl2Nu/zjwTMht3NyCqgKF7wrUdX5LW0INoE9QzG/YG8zvR1v3p?=
+ =?us-ascii?Q?sl/l29aTTay/ywX1/pzu67/pl2kOz21sU1pTZ04JPLXDR0RuN8YwheHnaR1I?=
+ =?us-ascii?Q?md5okifMwyzdozexn7OMpqwE7uj0o9t10GZIMnHD8IfmUJOTXGpnT4wyiC7T?=
+ =?us-ascii?Q?Jgron7pMJ7/tfM2ngkX0Eq+JfhR5o6xO871WD66nPhpwkDq3qi5sgjLbgATr?=
+ =?us-ascii?Q?iQOD9v85RfbgW3xhcsw6/QWIipsefy9xeWh7pM8J?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4dc1ba4-5528-423a-08e1-08dd8bdfbf75
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 14:18:46.4942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o59msw5O2dF/3ucZ2pEXVa1Erwx1yt2SJhKagL9khWfbq1+Op3uYy0n7z7VP9iv8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7444
 
-Hi Ard,
+iova_to_phys is a performance path for the DMA API and iommufd, implement
+it using an unrolled get_user_pages() like function waterfall scheme.
 
-kernel test robot noticed the following build errors:
+The implementation itself is fairly trivial.
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on linus/master v6.15-rc5 next-20250505]
-[cannot apply to arm64/for-next/core kvmarm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/iommu/generic_pt/iommu_pt.h | 105 ++++++++++++++++++++++++++++
+ include/linux/generic_pt/iommu.h    |  34 +++++++--
+ 2 files changed, 134 insertions(+), 5 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/arm64-boot-Move-init_pgdir-into-__pi_-namespace/20250503-192534
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20250503112137.1962910-6-ardb%2Bgit%40google.com
-patch subject: [PATCH 1/3] arm64/boot: Move init_pgdir[] into __pi_ namespace
-config: arm64-randconfig-001-20250505 (https://download.01.org/0day-ci/archive/20250505/202505052102.U2NQHrS4-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250505/202505052102.U2NQHrS4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505052102.U2NQHrS4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/arm64/kernel/pi/map_kernel.c:191:30: error: use of undeclared identifier 'init_pg_end'
-     191 |         memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
-         |                                     ^
-   arch/arm64/kernel/pi/map_kernel.c:222:30: error: use of undeclared identifier 'init_pg_end'
-     222 |         memset(__bss_start, 0, (u64)init_pg_end - (u64)__bss_start);
-         |                                     ^
-   2 errors generated.
-
-
-vim +/init_pg_end +191 arch/arm64/kernel/pi/map_kernel.c
-
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  158  
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  159  static void __init remap_idmap_for_lpa2(void)
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  160  {
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  161  	/* clear the bits that change meaning once LPA2 is turned on */
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  162  	pteval_t mask = PTE_SHARED;
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  163  
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  164  	/*
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  165  	 * We have to clear bits [9:8] in all block or page descriptors in the
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  166  	 * initial ID map, as otherwise they will be (mis)interpreted as
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  167  	 * physical address bits once we flick the LPA2 switch (TCR.DS). Since
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  168  	 * we cannot manipulate live descriptors in that way without creating
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  169  	 * potential TLB conflicts, let's create another temporary ID map in a
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  170  	 * LPA2 compatible fashion, and update the initial ID map while running
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  171  	 * from that.
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  172  	 */
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  173  	create_init_idmap(init_pg_dir, mask);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  174  	dsb(ishst);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  175  	set_ttbr0_for_lpa2((u64)init_pg_dir);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  176  
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  177  	/*
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  178  	 * Recreate the initial ID map with the same granularity as before.
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  179  	 * Don't bother with the FDT, we no longer need it after this.
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  180  	 */
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  181  	memset(init_idmap_pg_dir, 0,
-ecc54006f158ae0 Zenghui Yu     2024-06-21  182  	       (u64)init_idmap_pg_end - (u64)init_idmap_pg_dir);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  183  
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  184  	create_init_idmap(init_idmap_pg_dir, mask);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  185  	dsb(ishst);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  186  
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  187  	/* switch back to the updated initial ID map */
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  188  	set_ttbr0_for_lpa2((u64)init_idmap_pg_dir);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  189  
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  190  	/* wipe the temporary ID map from memory */
-9684ec186f8fadd Ard Biesheuvel 2024-02-14 @191  	memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  192  }
-9684ec186f8fadd Ard Biesheuvel 2024-02-14  193  
-
+diff --git a/drivers/iommu/generic_pt/iommu_pt.h b/drivers/iommu/generic_pt/iommu_pt.h
+index 4c228689b0a3d0..f66de4f6de6647 100644
+--- a/drivers/iommu/generic_pt/iommu_pt.h
++++ b/drivers/iommu/generic_pt/iommu_pt.h
+@@ -17,6 +17,111 @@
+ 
+ #define DOMAIN_NS(op) CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), op)
+ 
++static int make_range_ul(struct pt_common *common, struct pt_range *range,
++			 unsigned long iova, unsigned long len)
++{
++	unsigned long last;
++
++	if (unlikely(len == 0))
++		return -EINVAL;
++
++	if (check_add_overflow(iova, len - 1, &last))
++		return -EOVERFLOW;
++
++	*range = pt_make_range(common, iova, last);
++	if (sizeof(iova) > sizeof(range->va)) {
++		if (unlikely(range->va != iova || range->last_va != last))
++			return -EOVERFLOW;
++	}
++	return 0;
++}
++
++static __maybe_unused int make_range_u64(struct pt_common *common,
++					 struct pt_range *range, u64 iova,
++					 u64 len)
++{
++	if (unlikely(iova > ULONG_MAX || len > ULONG_MAX))
++		return -EOVERFLOW;
++	return make_range_ul(common, range, iova, len);
++}
++
++/*
++ * Some APIs use unsigned long some use dma_addr_t as the type. Dispatch to the
++ * correct validation based on the type.
++ */
++#define make_range_no_check(common, range, iova, len)                   \
++	({                                                              \
++		int ret;                                                \
++		if (sizeof(iova) > sizeof(unsigned long) ||             \
++		    sizeof(len) > sizeof(unsigned long))                \
++			ret = make_range_u64(common, range, iova, len); \
++		else                                                    \
++			ret = make_range_ul(common, range, iova, len);  \
++		ret;                                                    \
++	})
++
++#define make_range(common, range, iova, len)                             \
++	({                                                               \
++		int ret = make_range_no_check(common, range, iova, len); \
++		if (!ret)                                                \
++			ret = pt_check_range(range);                     \
++		ret;                                                     \
++	})
++
++static __always_inline int __do_iova_to_phys(struct pt_range *range, void *arg,
++					     unsigned int level,
++					     struct pt_table_p *table,
++					     pt_level_fn_t descend_fn)
++{
++	struct pt_state pts = pt_init(range, level, table);
++	pt_oaddr_t *res = arg;
++
++	switch (pt_load_single_entry(&pts)) {
++	case PT_ENTRY_EMPTY:
++		return -ENOENT;
++	case PT_ENTRY_TABLE:
++		return pt_descend(&pts, arg, descend_fn);
++	case PT_ENTRY_OA:
++		*res = pt_entry_oa_full(&pts);
++		return 0;
++	}
++	return -ENOENT;
++}
++PT_MAKE_LEVELS(__iova_to_phys, __do_iova_to_phys);
++
++/**
++ * iova_to_phys() - Return the output address for the given IOVA
++ * @iommu_table: Table to query
++ * @iova: IO virtual address to query
++ *
++ * Determine the output address from the given IOVA. @iova may have any
++ * alignment, the returned physical will be adjusted with any sub page offset.
++ *
++ * Context: The caller must hold a read range lock that includes @iova.
++ *
++ * Return: 0 if there is no translation for the given iova.
++ */
++phys_addr_t DOMAIN_NS(iova_to_phys)(struct iommu_domain *domain,
++				    dma_addr_t iova)
++{
++	struct pt_iommu *iommu_table =
++		container_of(domain, struct pt_iommu, domain);
++	struct pt_range range;
++	pt_oaddr_t res;
++	int ret;
++
++	ret = make_range(common_from_iommu(iommu_table), &range, iova, 1);
++	if (ret)
++		return ret;
++
++	ret = pt_walk_range(&range, __iova_to_phys, &res);
++	/* PHYS_ADDR_MAX would be a better error code */
++	if (ret)
++		return 0;
++	return res;
++}
++EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(iova_to_phys), "GENERIC_PT_IOMMU");
++
+ struct pt_iommu_collect_args {
+ 	struct iommu_pages_list free_list;
+ 	u8 ignore_mapped : 1;
+diff --git a/include/linux/generic_pt/iommu.h b/include/linux/generic_pt/iommu.h
+index f454680027659d..6fe52d6fc8fe87 100644
+--- a/include/linux/generic_pt/iommu.h
++++ b/include/linux/generic_pt/iommu.h
+@@ -110,11 +110,13 @@ struct pt_iommu_cfg {
+ };
+ 
+ /* Generate the exported function signatures from iommu_pt.h */
+-#define IOMMU_PROTOTYPES(fmt)                                             \
+-	int pt_iommu_##fmt##_init(struct pt_iommu_##fmt *table,           \
+-				  const struct pt_iommu_##fmt##_cfg *cfg, \
+-				  gfp_t gfp);                             \
+-	void pt_iommu_##fmt##_hw_info(struct pt_iommu_##fmt *table,       \
++#define IOMMU_PROTOTYPES(fmt)                                                  \
++	phys_addr_t pt_iommu_##fmt##_iova_to_phys(struct iommu_domain *domain, \
++						  dma_addr_t iova);            \
++	int pt_iommu_##fmt##_init(struct pt_iommu_##fmt *table,                \
++				  const struct pt_iommu_##fmt##_cfg *cfg,      \
++				  gfp_t gfp);                                  \
++	void pt_iommu_##fmt##_hw_info(struct pt_iommu_##fmt *table,            \
+ 				      struct pt_iommu_##fmt##_hw_info *info)
+ #define IOMMU_FORMAT(fmt, member)       \
+ 	struct pt_iommu_##fmt {         \
+@@ -123,6 +125,28 @@ struct pt_iommu_cfg {
+ 	};                              \
+ 	IOMMU_PROTOTYPES(fmt)
+ 
++/*
++ * A driver uses IOMMU_PT_DOMAIN_OPS to populate the iommu_domain_ops for the
++ * iommu_pt
++ */
++#define IOMMU_PT_DOMAIN_OPS(fmt) \
++	.iova_to_phys = &pt_iommu_##fmt##_iova_to_phys,
++
++/*
++ * The driver should setup its domain struct like
++ *	union {
++ *		struct iommu_domain domain;
++ *		struct pt_iommu_xxx xx;
++ *	};
++ * PT_IOMMU_CHECK_DOMAIN(struct mock_iommu_domain, xx.iommu, domain);
++ *
++ * Which creates an alias between driver_domain.domain and
++ * driver_domain.xx.iommu.domain. This is to avoid a mass rename of existing
++ * driver_domain.domain users.
++ */
++#define PT_IOMMU_CHECK_DOMAIN(s, pt_iommu_memb, domain_memb) \
++	static_assert(offsetof(s, pt_iommu_memb.domain) ==   \
++		      offsetof(s, domain_memb))
+ 
+ struct pt_iommu_amdv1_cfg {
+ 	struct pt_iommu_cfg common;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
