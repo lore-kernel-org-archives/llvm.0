@@ -1,58 +1,58 @@
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCF215E90
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 18:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A70217333F
+	for <llvm@lists.linux.dev>; Mon,  5 May 2025 18:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746469034; cv=none; b=fPf2UZxBGeo460wX8brz3qssroYTKVbsAZipryKnB4icbk1n4SmXCncd0BAIg0GJZn4OYszDFrX8JRn9157uwkaljg+wAffldKeaoKCP9J2wzgWTV9R/sluRySoUFWzwU0tufjNBMIZMo5ScjBH++4SYsWraZN3AFDiRQsQkeUY=
+	t=1746469131; cv=none; b=U8L3AfALa9l/njWkM79957t/Z5P1QkT2OesX2Lw7+19kStxftWtrxtEgoh5sbdx7p4K1o711iyrPbvS+vdP7yBso2cZRpw6h2TZ9wY/UvpqPqBAfRl1IljCk0FCW6WRH/i6RzvaeTRZbhFZyEVmbai+qaBBaajBipoKcIOaOURg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746469034; c=relaxed/simple;
-	bh=ebM4dpi9tTj1/J6Zu4pVcvgIwpnGYs8XJ6sG1Hbq8m4=;
+	s=arc-20240116; t=1746469131; c=relaxed/simple;
+	bh=Llxn6P3yNGX+p+iXcZW9OKjTiI6ZeRsyDmIcIgvUVHc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hs2nEegXsFXIdXc9kshnox5M+wwf+y8fjc53gy1r4JvWy9mkJJJDaTxkwZ0trwdg2RV19ULP71mBUbhyMTvUNktAORCIF4J1+PYyxCnatBBS3RvjUVrDp/rayg7/EfapfzdUWEO4abdRZzgKnIO5xvbacnlXljwvhnvIP7M+HiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EjZdWWj2; arc=none smtp.client-ip=209.85.217.41
+	 To:Cc:Content-Type; b=U/9mlelfeGN1I9V4O8ELr4yoDCeJYTtK8TiPhBqR0vzxCzyAc3v8tZPuG4g4fqXvcH0+wpAmJD2gcFs6rGdZmDy6ifM5mhKndGIB8gvdHFT3RN6dLtFrYabeT/ATRygJNbORzNLHSUMOqfdatrWDuUjRCvgSfwhgC4oiSPkUhmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=37WmGim+; arc=none smtp.client-ip=209.85.222.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EjZdWWj2"
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4c32f1f7801so1329735137.2
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 11:17:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="37WmGim+"
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-86fea8329cdso2920958241.1
+        for <llvm@lists.linux.dev>; Mon, 05 May 2025 11:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746469031; x=1747073831; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746469128; x=1747073928; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6RdDSV3C1kkoxQpJwSli9pdvJprdzRDcGLg/gY+ewYo=;
-        b=EjZdWWj2xiAf0nbW027Gtz1Mtn1UivwpJeGT+ZFEYgXS9DsgZub7S/qqVX9FAIghKl
-         uxJ9WCRpP9BK3hu3H389jTVuGDx6R/ovnf60WXThaWLrgPH9ny0LjAAyd8HUgQJ0iVnv
-         0tXmiKdXW1tQFkoyGbiTa5/z7PauwTjNEYOauCAKbLkrNP8yhdUR9BaRuR905dNkS3KC
-         WevQCETrUmQUL41ar/3Pj+9JVw3X/6KtfYXtrsQkhVjy/rZC4qY9csgBt+f1DagwXh+e
-         nWCoZVxj7MSvMmmtsfdjpVqWaT7n1IwQkvph4hZs1wrEqaDtOCjlMwBaIdUcpDCxTC03
-         tp9g==
+        bh=v+HucxVqpGIDINeSE6fmLZw1CWi4pwr8swaylTY9CLM=;
+        b=37WmGim+Ci5cL6uwme65K4Dgt9VDKsL3fqt+ujYr/PeZOklCFB72o7MrpnWD3Mie5F
+         SxoQ7pK9v5LeRXYTwX/0FcVBW406pw9Stpu35ONx+voXgokjif3nlcWpvfSrPKrz5j58
+         O4aZ3gbqFzN/qAl3Z3SDm/WEpCPLd+YHjQI/SvBgmu5H3KZAvuBbdxhV4+YseeV3ytBe
+         S/0nMHapiXxWW+kEEUvy4iUm4JcwbrDdY6YhzSHtGK31rjU+f6d5jYRRWXgb6E+LfU4e
+         wv/jtVGVDIl1qZUGzvwCi8XknetlmIBhdvHpyXFx5TXfLyiUhaLIlATi3jL6SBE+autt
+         TbZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746469031; x=1747073831;
+        d=1e100.net; s=20230601; t=1746469128; x=1747073928;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6RdDSV3C1kkoxQpJwSli9pdvJprdzRDcGLg/gY+ewYo=;
-        b=SfsjDJXpsYurlNgJ70lOgyLZf2mG2oWn6XGYYh1VR1UbPYeDjgYveLSH3t7hKDJtUh
-         xBZCwyMPakw7FOqwY0O9x3Ybi7QYUh8JCt2uuaXlrvnNCnWaxgWg1QwnbYzrnmWrrh/g
-         R8ZMmm/ZOxkx+nDVZs8vIsLMaS8Kf4QAx7T4c79wqRPod1722p+lsK7BOzvzUzaoKdJI
-         k8bEuZ8hiAYeXag9Xy+U1HwSRhGfdriNZzFj6PuIIXpIB7jbCg7pTfuIVlwcvhfukqsi
-         swl5EwAKExc4pQC06q1BRh7lJtpWVsFXrv3W2xuJl2d+W3Q2UjtlGQ8Jfg8khsOAps10
-         mU0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXobAAR/mUIreP8RES0tNuQiVqNTC/SyZsvoS93IgNo3TqbkigKY1Z25c2ndmMknQJ7S/wK@lists.linux.dev
-X-Gm-Message-State: AOJu0YybRF4VdagXNBy66GZH5k7lmLKHle/fPyRGBErEfUt/H7zATJAu
-	6X/BU1pzNvr9yxH5yUyNwvAaWi/dKDpfiZJLGvX/uiNt7rZfjr1IHu1XpU1R4r7WxREokGAH5Uy
-	bk6Dyrat1y8bC+oTJH3EAdQ6AE9B1EWeWlBh4
-X-Gm-Gg: ASbGncvaFAT2O/4iV0loaL8VW72aPlVU+6JG5OefpbpcKrHXY/c7S35km1OqjZ8d7Gm
-	puhUIhIlRZVAZkwI9TW1amJFeKBkAkGua5Sw2s6u8DhGsYKA0LRO3Ki7S6chtjGJR6ZaPqOxEmO
-	txP6/3G9pNToHwSPIOGG53
-X-Google-Smtp-Source: AGHT+IF/v/NhUlwDl+Ul0geebRYwa8/EIVndjMjgtVnXrErs28xqOVyt7NYHnyhn7xzOG/mZcLIcvccqpB89VJSlcqA=
-X-Received: by 2002:a05:6102:158d:b0:4c4:dead:59ab with SMTP id
- ada2fe7eead31-4db14781447mr4073359137.5.1746469031346; Mon, 05 May 2025
- 11:17:11 -0700 (PDT)
+        bh=v+HucxVqpGIDINeSE6fmLZw1CWi4pwr8swaylTY9CLM=;
+        b=WYL47IebPROhd6ljl/aLZUtvwgKhMheQjGnWj3PLsSSqlbo48r4zql+Bkvm+8cJ798
+         KGRF3xrZ7i59MyuHxzR5r2s6BQFTgcrDoR3hhJOqebFj4nj3innT1wPbBsKlS2Q3OvN/
+         pQnqghEudygAlVDvR7L7XeDMlIahP5cneDtRBbh+2IRbI+/JVqctWbi6kYtyhqduQBjW
+         kYexIdbN2nqb5Ahj06cZP05CMF/lv2AqBtN0pA/2njPiFbpKzzjzRyXuUUCuo7PkTR0+
+         v/3EgIkyoaBGMdlnXEy35KtccUq5FpEKSKo1gktTI9IJnbg/BhreaXW0uFxYU11fUSEM
+         4ZqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOEFX/Mt9l6uRC9P/TfBSWf5mZP8F1udGBg0Ty5GjLp3RH4rxL/UgCV1bgYQdBt1rxD08i@lists.linux.dev
+X-Gm-Message-State: AOJu0YxdG9go67QU7q4/BVautdqP11Qbf3kue6zCz0AhDXd31rX34S53
+	TMK18fjTKCfKR3LS2NJ9rXvCfX31ImsVRWsAY5W9tBz8SCkE76aOV8XO7G7dpVv4+7FACaUC/Au
+	VeU1HqDoX18RJZL2kDcK4q960zhCox3lGkF6k
+X-Gm-Gg: ASbGnct1XaaVsO/EAHFIlW4H4Ct52zrp1sddf/ujXYx/UjRteMVJLJXcTItsfg1dWwb
+	ene/KBW9cyZzf7IBlBemv4VzvbKfsEqqqEo9wq1uZIRF+DARzxYsCULu3p1tBxkeDhBsFMUm1ed
+	7c55UCCBu82F+1DcMjrkKjo48KRPLgEW8=
+X-Google-Smtp-Source: AGHT+IH/iz9okaO1cuwqrJo1Rt3kARxWxf3EeTirkMuCQivHqoWZrf+JzbjS35sokHVGuLKGArF4jDrp3RM0JQB3qww=
+X-Received: by 2002:a05:6102:3c8e:b0:4da:e6e1:c343 with SMTP id
+ ada2fe7eead31-4db0c401beamr5914771137.23.1746469128196; Mon, 05 May 2025
+ 11:18:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,11 +60,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250503184001.make.594-kees@kernel.org> <20250503184623.2572355-3-kees@kernel.org>
-In-Reply-To: <20250503184623.2572355-3-kees@kernel.org>
+ <CAFhGd8rGJcveDn4g1nS=tURe-uT1+PFm2EQeWpUrH_oy763yFg@mail.gmail.com>
+In-Reply-To: <CAFhGd8rGJcveDn4g1nS=tURe-uT1+PFm2EQeWpUrH_oy763yFg@mail.gmail.com>
 From: Justin Stitt <justinstitt@google.com>
-Date: Mon, 5 May 2025 11:16:58 -0700
-X-Gm-Features: ATxdqUG-8XZR84SCa_hy8LufhE4gnWyYrv86WHg4i3ik94ojF9GAbNyF1NZH5uE
-Message-ID: <CAFhGd8rGJcveDn4g1nS=tURe-uT1+PFm2EQeWpUrH_oy763yFg@mail.gmail.com>
+Date: Mon, 5 May 2025 11:18:34 -0700
+X-Gm-Features: ATxdqUErCVMDsByK3bWIsvMoTcLY1TL44fldHiGpe0ueZmfJS819NKbT_lTgAuc
+Message-ID: <CAFhGd8qL8ttBaPGH5Cx39MN46OgxsLSgqhWN4rwCwf9bn33NHg@mail.gmail.com>
 Subject: Re: [PATCH v3 3/3] integer-wrap: Force full rebuild when .scl file changes
 To: Kees Cook <kees@kernel.org>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
@@ -77,82 +78,93 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 3, 2025 at 11:46=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+On Mon, May 5, 2025 at 11:16=E2=80=AFAM Justin Stitt <justinstitt@google.co=
+m> wrote:
 >
-> Since the integer wrapping sanitizer's behavior depends on its associated
-> .scl file, we must force a full rebuild if the file changes. If not,
-> instrumentation may differ between targets based on when they were built.
+> On Sat, May 3, 2025 at 11:46=E2=80=AFAM Kees Cook <kees@kernel.org> wrote=
+:
+> >
+> > Since the integer wrapping sanitizer's behavior depends on its associat=
+ed
+> > .scl file, we must force a full rebuild if the file changes. If not,
+> > instrumentation may differ between targets based on when they were buil=
+t.
+> >
+> > Generate a new header file, integer-wrap.h, any time the Clang .scl
+> > file changes. Include the header file in compiler-version.h when its
+> > associated feature name, INTEGER_WRAP, is defined. This will be picked
+> > up by fixdep and force rebuilds where needed.
+> >
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Justin Stitt <justinstitt@google.com>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Nicolas Schier <nicolas.schier@linux.dev>
+> > Cc: Marco Elver <elver@google.com>
+> > Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> > Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> > Cc: <linux-kbuild@vger.kernel.org>
+> > Cc: <kasan-dev@googlegroups.com>
+> > Cc: <linux-hardening@vger.kernel.org>
+> > ---
+> >  include/linux/compiler-version.h | 3 +++
+> >  scripts/Makefile.ubsan           | 1 +
+> >  scripts/basic/Makefile           | 5 +++++
+> >  3 files changed, 9 insertions(+)
+> >
+> > diff --git a/include/linux/compiler-version.h b/include/linux/compiler-=
+version.h
+> > index 69b29b400ce2..187e749f9e79 100644
+> > --- a/include/linux/compiler-version.h
+> > +++ b/include/linux/compiler-version.h
+> > @@ -19,3 +19,6 @@
+> >  #ifdef RANDSTRUCT
+> >  #include <generated/randstruct_hash.h>
+> >  #endif
+> > +#ifdef INTEGER_WRAP
+> > +#include <generated/integer-wrap.h>
+> > +#endif
+> > diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+> > index 9e35198edbf0..653f7117819c 100644
+> > --- a/scripts/Makefile.ubsan
+> > +++ b/scripts/Makefile.ubsan
+> > @@ -15,6 +15,7 @@ ubsan-cflags-$(CONFIG_UBSAN_TRAP)             +=3D $(=
+call cc-option,-fsanitize-trap=3Dundefined
+> >  export CFLAGS_UBSAN :=3D $(ubsan-cflags-y)
+> >
+> >  ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=3D  \
+> > +       -DINTEGER_WRAP                                          \
+> >         -fsanitize-undefined-ignore-overflow-pattern=3Dall        \
+> >         -fsanitize=3Dsigned-integer-overflow                      \
+> >         -fsanitize=3Dunsigned-integer-overflow                    \
+> > diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
+> > index dd289a6725ac..fb8e2c38fbc7 100644
+> > --- a/scripts/basic/Makefile
+> > +++ b/scripts/basic/Makefile
+> > @@ -14,3 +14,8 @@ cmd_create_randstruct_seed =3D \
+> >  $(obj)/randstruct.seed: $(gen-randstruct-seed) FORCE
+> >         $(call if_changed,create_randstruct_seed)
+> >  always-$(CONFIG_RANDSTRUCT) +=3D randstruct.seed
+> > +
+> > +# integer-wrap: if the .scl file changes, we need to do a full rebuild=
+.
+> > +$(obj)/../../include/generated/integer-wrap.h: $(srctree)/scripts/inte=
+ger-wrap-ignore.scl FORCE
+> > +       $(call if_changed,touch)
+> > +always-$(CONFIG_UBSAN_INTEGER_WRAP) +=3D ../../include/generated/integ=
+er-wrap.h
 >
-> Generate a new header file, integer-wrap.h, any time the Clang .scl
-> file changes. Include the header file in compiler-version.h when its
-> associated feature name, INTEGER_WRAP, is defined. This will be picked
-> up by fixdep and force rebuilds where needed.
->
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nicolas Schier <nicolas.schier@linux.dev>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: <linux-kbuild@vger.kernel.org>
-> Cc: <kasan-dev@googlegroups.com>
-> Cc: <linux-hardening@vger.kernel.org>
-> ---
->  include/linux/compiler-version.h | 3 +++
->  scripts/Makefile.ubsan           | 1 +
->  scripts/basic/Makefile           | 5 +++++
->  3 files changed, 9 insertions(+)
->
-> diff --git a/include/linux/compiler-version.h b/include/linux/compiler-ve=
-rsion.h
-> index 69b29b400ce2..187e749f9e79 100644
-> --- a/include/linux/compiler-version.h
-> +++ b/include/linux/compiler-version.h
-> @@ -19,3 +19,6 @@
->  #ifdef RANDSTRUCT
->  #include <generated/randstruct_hash.h>
->  #endif
-> +#ifdef INTEGER_WRAP
-> +#include <generated/integer-wrap.h>
-> +#endif
-> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-> index 9e35198edbf0..653f7117819c 100644
-> --- a/scripts/Makefile.ubsan
-> +++ b/scripts/Makefile.ubsan
-> @@ -15,6 +15,7 @@ ubsan-cflags-$(CONFIG_UBSAN_TRAP)             +=3D $(ca=
-ll cc-option,-fsanitize-trap=3Dundefined
->  export CFLAGS_UBSAN :=3D $(ubsan-cflags-y)
->
->  ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=3D  \
-> +       -DINTEGER_WRAP                                          \
->         -fsanitize-undefined-ignore-overflow-pattern=3Dall        \
->         -fsanitize=3Dsigned-integer-overflow                      \
->         -fsanitize=3Dunsigned-integer-overflow                    \
-> diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
-> index dd289a6725ac..fb8e2c38fbc7 100644
-> --- a/scripts/basic/Makefile
-> +++ b/scripts/basic/Makefile
-> @@ -14,3 +14,8 @@ cmd_create_randstruct_seed =3D \
->  $(obj)/randstruct.seed: $(gen-randstruct-seed) FORCE
->         $(call if_changed,create_randstruct_seed)
->  always-$(CONFIG_RANDSTRUCT) +=3D randstruct.seed
-> +
-> +# integer-wrap: if the .scl file changes, we need to do a full rebuild.
-> +$(obj)/../../include/generated/integer-wrap.h: $(srctree)/scripts/intege=
-r-wrap-ignore.scl FORCE
-> +       $(call if_changed,touch)
-> +always-$(CONFIG_UBSAN_INTEGER_WRAP) +=3D ../../include/generated/integer=
--wrap.h
+> I'm not sure how this fake header stuff works to ensure builds deps
+> are tracked properly but we do need scl files to be considered as part
+> of complete builds, so:
 
-I'm not sure how this fake header stuff works to ensure builds deps
-are tracked properly but we do need scl files to be considered as part
-of complete builds, so:
+As in, I'm sure it works but have personally never written or reviewed
+a Makefile+generated header snippet like that before :)
 
-Acked-by: Justin Stitt <justinstitt@google.com>
-
-> --
-> 2.34.1
 >
+> Acked-by: Justin Stitt <justinstitt@google.com>
+>
+> > --
+> > 2.34.1
+> >
