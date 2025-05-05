@@ -1,132 +1,81 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7397262FCB
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 17:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1179626B978;
+	Mon,  5 May 2025 17:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746466209; cv=none; b=gkdzIXxMmHH/iFY11c/1tHzGeiK1CgGKWpdn6RqBZt3La/0bpSY7o073uLbs4+4N1gmDYGbrvqJ/tmPTEAcBiuBVmgirKwfxVixuqXmboOPCaM4WgddEMI6KpjqlNJPcw4xT8bfMBDAP38BPiiTziYMYlSEtk2FrV+hOVTZBWC8=
+	t=1746467105; cv=none; b=BqY4/j2IJyla4ab5eRY2PcM06RcFXZZ0y9f36dHe2VOLDFfQ0mBb7Oqil+akaM75YMtdt07bfzpUP2ybXP/1focJX9KoOC1NvhztIuARtWsIpYtbKQbn3reAk/SOdYIz1ZLiVYMW7TzBdY8C9Pkn7mfG9XOybpQL4ZuMCeb2HpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746466209; c=relaxed/simple;
-	bh=R+GwlfGZoPlwh3YnWX8HPEVZTkofAG51fiG2PtNEH88=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Zn56ai+URqSKDxhppg1FKTtIfObTBWCuNCvpzMtYwTETffr1K7Ds+xQsOLOcdLkfR9JYUhxoOm2QAZRtu3BQNDNevBiYq4nVKVJ+zxNa19wFaBqdIv9G1V5igVuQbuXR9P2JOdSOnc62dAjT9vjNlh7H1hheZrPXLT7kphS5OGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=kOvVcZpQ; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1746467105; c=relaxed/simple;
+	bh=tk7U1ZYOt9dOOZMnnMpk17Wvn2aRgYFBIaSakS84d4o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NYaQZWkAyMVbiD5Zq2FNAXbituCd8khwgIxVW8Zcp7PyI9B7Uy218tEcBflUAAh+KVNj+wYiJ5fN0ja8LUQXrw7elHaOJyYafk0K/WVYIznOip+Vw2d2WcVugTjgG5HTRWBPCdFoY8utumMUztNhXtN1zOibeNMlGtAsuXPWTRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fAtZ7ffp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="kOvVcZpQ"
-Received: from narnia (unknown [40.78.12.133])
-	by linux.microsoft.com (Postfix) with ESMTPSA id E0D5F2115DC3;
-	Mon,  5 May 2025 10:30:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E0D5F2115DC3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1746466207;
-	bh=L5eUFsHvaH45uDsjDJjMZQptT9OSECb9z18nACTP45M=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kOvVcZpQ3T9sSH7pJ/HqSNP3wky0HxKFyWnu3+U7tjF1uLifCwAjeQCk7o7kn4hxM
-	 TFP3TzAMaTUbH/qAfIWuql1lE8KMJwB3+zRXEdgn3Dflf/I2scqy3aWQzbYogVDthy
-	 x3GkXKAcpGXd74KgoFzFnVhX8w1D1WUABHFiQ5dY=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: KP Singh <kpsingh@kernel.org>
-Cc: James.Bottomley@hansenpartnership.com, bpf@vger.kernel.org,
- code@tyhicks.com, corbet@lwn.net, davem@davemloft.net,
- dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au,
- jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com,
- justinstitt@google.com, keyrings@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org,
- llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net,
- morbo@google.com, nathan@kernel.org, neal@gompa.dev,
- nick.desaulniers+lkml@gmail.com, nicolas@fjasle.eu, nkapron@google.com,
- paul@paul-moore.com, roberto.sassu@huawei.com, serge@hallyn.com,
- shuah@kernel.org, teknoraver@meta.com, xiyou.wangcong@gmail.com, KP Singh
- <kpsingh@kernel.org>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-In-Reply-To: <20250502210034.284051-1-kpsingh@kernel.org>
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org>
-Date: Mon, 05 May 2025 10:30:03 -0700
-Message-ID: <87o6w7ge3o.fsf@microsoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fAtZ7ffp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC6DC4CEE4;
+	Mon,  5 May 2025 17:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746467104;
+	bh=tk7U1ZYOt9dOOZMnnMpk17Wvn2aRgYFBIaSakS84d4o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fAtZ7ffpayHrfo5skM+RXAF7CKeDQkgDBUvzBGEZWc3APg/G2/CDXhqZodgNJW6T2
+	 +p0DnskLEc+bjm2BqJcDFHeaOykHmsIvhHJgHUInAXfny0FPYbxIZbON2XyUKxlFDc
+	 TxzNcr6xu56fdS/Af4ksJPDteOqDg/NZtXuBCdD//bqqs+4HMUKio7h7bMAzyuw3bz
+	 LNjvgm9P5XIqnynn+B7oqPyJTNgA5za5ykuFNhRIFwpslO08+2OifTa2pTY5VeSNZ+
+	 6jMOkvS4Jwz4i8VPAOg+4Yjn6rAwto0gdnriS3SK/hG2lkVsDEycJNJjPP6N89Rpnl
+	 8eARugLl26RXA==
+Date: Mon, 5 May 2025 10:44:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v2 15/15] iommupt: Add a kunit test for the IOMMU
+ implementation
+Message-ID: <20250505174458.GA226031@ax162>
+References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <15-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
 
-KP Singh <kpsingh@kernel.org> writes:
+On Mon, May 05, 2025 at 11:18:45AM -0300, Jason Gunthorpe wrote:
+> This intends to have high coverage of the page table format functions and
+> the IOMMU implementation itself, exercising the various corner cases.
+> 
+> The kunit can be run in the kunit framework, using commands like:
+> 
+> tools/testing/kunit/kunit.py run --build_dir build_kunit_arm64 --arch arm64 --make_options LLVM=1 --make_options LLVM_SUFFIX=-19 --kunitconfig ./drivers/iommu/generic_pt/.kunitconfig
 
-[...]
+Just a small comment about the command:
 
-> Now if you really care about the use-case and want to work with the maintainers
-> and implement signing for the community, here's how we think it should be done:
->
-> * The core signing logic and the tooling stays in BPF, something that the users
->   are already using. No new tooling.
-> * The policy decision on the effect of signing can be built into various
->   existing LSMs. I don't think we need a new LSM for it.
-> * A simple UAPI (emphasis on UAPI!) change to union bpf_attr in uapi/bpf.h in
->   the BPF_PROG_LOAD command:
->
-> __aligned_u64 signature; 
-> __u32 signature_size;
+  --make_options LLVM=1 --make_options LLVM_SUFFIX=-19
 
-I think having some actual details on the various parties' requirements
-here would be helpful. KP, I do look forward to seeing your design;
-however, having code signing proposals where the capabilities are
-dictated from above and any dissent is dismissed as "you're doing it
-wrong" isn't going to be helpful to anyone that needs to use this in
-practice.
+can be simplified to just
 
-Also, I don't think anyone actually cares, at least I don't, who calls
-verify_pkcs7_signature or whatnot. Verifying signed binary blobs with a
-private key is a solved problem and isn't really interesting.
+  --make_options LLVM=-19
 
-Our requirements for code signing are just an extension of secure boot
-and module signing logic:
+You should never need to specify either LLVM_SUFFIX or LLVM_PREFIX.
 
-* Prove all code running in ring zero has been signed
-* Not trivially defeatable by root
-* Ultimately, no trusted userspace components
-* Secure from and not vulnerable to TOCTOU attacks
-* Shouldn't be overly vulnerable to supply-chain attacks
-* The signature checking logic and control paths should be human-readable
-* Work easily and be backportable to stable kernels
-* There should be a simple kconfig option to turn this on or off
-* This solution needs to be in the mainline kernel
-
-Hornet was implemented to meet those requirements, living in the LSM
-subsystem, written in C. As of today, one cannot accomplish those
-requirements via BPF-LSM, which is why C was chosen.
-
-One can easily realize there is absolutely no way to have a single
-one-size-fits-all signing solution for everything listed in
-https://ebpf.io/applications/.
-
-If you want to go the UAPI route, I would wholeheartedly recommend
-making it extensible and having this data be available to the policy
-LSMs.
-
-enum bpf_signature_type {
-  /* x509 signature check against program instructions only */
-  BPF_SIGNATURE_PROG_ONLY = 0,
-  /* x509 combined signature check against program instructions and used maps */
-  BPF_SIGNATURE_PROG_USED_MAPS = 1,
-  /* more of these to be determined via usage */ 
-  ...
-};
-
-_aligned_u64 signature; 
-__u32 signature_size;
-__u32 signature_type;
-
-The other option for solving this in the general is in-kernel
-loaders. That's gotten pushback as well. 
-
--blaise
-
-
-
-
-
+Cheers,
+Nathan
