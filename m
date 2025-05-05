@@ -1,103 +1,158 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99A61B87D9
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 05:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A499D1F5413;
+	Mon,  5 May 2025 09:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746424773; cv=none; b=U7rUoFHwH1e8PFktaAmBd+U1WbnJ1UZ/fX9q8bv0+oowb4GvI/elPWaLI8wNCR0gW4xIGZbIncmtqJIybT3Db6wQiRgUv39zmiwJ1Odfbj99YNwZ47tU8nkp6bI8oJOP/Cr0nH8lS95BeDrG0NBzpjewJTJLAH/6P9gRC/IEcG4=
+	t=1746436999; cv=none; b=kqGRtBQm3Tn22ApiEuAnZYyOiZ66oVa8G0YFH95mhmbiCpvAxpMZ1Eos58VD/pPASKbYwbDxO19OlCBjVYQP14XGCvTdw9BGMOGlzQLLJ6H6WsPVoRQVKIbNP3WG5jrTPItQ/um4t4dhA3GS78r5P6aw9lmT5yat2dsVwIOuAUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746424773; c=relaxed/simple;
-	bh=dKbHiB4RZA41z9Ie8R/mefcD/M19yRwwyT/XOpBK3WM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ro6zlcbW/QOXS8JLOrbVV4rvhpndfehPTt+1CBGbOFGCNK2y3Dfl2NA0jLdXIkT7qttl57N7ZkLj7f7gKDAZig56hHKplJTwEnkcoNGJZcvypiCaTjWHX+K7fPE4WyWucmbGWrr/VDNvmtMNEr4GOHDyhUXVcYeTg+qnyAQ70kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QPEUXRzg; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1746436999; c=relaxed/simple;
+	bh=vZVzH8G42DQbwrgI28bPyvXwEgyT2x3kpEopLCUdVVY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d425GNyvatjkO8L4haVreAJdE1PRKQHhmE6gfj/UYBmhvqEZINuoKdnA5hEvbqwqVX78fczZD2vrK3B7mdBFC915dJR/jTQIiwdRUKMT3UHmVxL6Y+2QRvRO09s+/l53QjTdGH0s8LtNos6k2ouGzsEbf2loHg75XRoUYStJeh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=IV0dlq6a; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QPEUXRzg"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30bfc8faef9so33502891fa.1
-        for <llvm@lists.linux.dev>; Sun, 04 May 2025 22:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746424769; x=1747029569; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dKbHiB4RZA41z9Ie8R/mefcD/M19yRwwyT/XOpBK3WM=;
-        b=QPEUXRzgSSnTy2HewQvWpiLpwCziL/JWwS3tcKfjSOX2atkVK42YDduCbaS+qQ44fB
-         Iw/DB0Uq2782WMEcS9Fk6gVrmDZOT/F/sHyngLSLGZnfd/8OQ0gRv4h7P9kMlljT4GoS
-         qkhKD3HJ7mOttEEyhteWLoNUdTse8jqupWREGO+LGS3fQdrOYe0+Otg4T0P8rSxs1h+/
-         5pebvG3N5dwfR1ngdhhjU3MgFWkzE0Je3oJcw3lwWzmZ21XDc6STM/c2F4B0kPKr2viI
-         zoEoPM96MHq8b2TbPwcJuH4KAV1Z1o+HqN7vb+iusBO1hJnmOhfWNnLa/WiZ/tSytcqy
-         pwgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746424769; x=1747029569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dKbHiB4RZA41z9Ie8R/mefcD/M19yRwwyT/XOpBK3WM=;
-        b=M576+zYoEVasAbnAICw4jrimLxXVLgJYxu8bxxaigOV45Dyqk0EQhrUlh3KtXUwxjk
-         5kmJ+Z2cD2zYgNGgcswKWjXauXDfzxG80OY+d+DYX0rJy5VcEZfGcCODZ8yggX/itTSu
-         EKxwnSDK/ycTm5kd786i24PZ3sVFaTnmTYQIGJ7riYzZBC9QjI2aptOVeZ++8pRUbGYj
-         XuOLFb95+lFTzjP+WeGw/h6AAVO+38mtIgYpaGTfXSLxTOpmCfLlLWxuuZ5RYOBB63VZ
-         wsmoknTKZx62WNcN0FSt8LEqktYcopABIGcmZCViA/8rZYAL+LrE0hplV0eg9Liohtct
-         kO+w==
-X-Forwarded-Encrypted: i=1; AJvYcCV+cFCkEteEL116cc1pQVyOb20xYaF1VWLaCX7q5DGmzP+lZq9rKRUxQquJLSBnICX4zpbq@lists.linux.dev
-X-Gm-Message-State: AOJu0YxS9j9EVq+dEH6GyyDzPHEq+UC3NdlaWl2EXMfMJqSThdVI9EeI
-	TikDyjxdb6PyBXjKC7d1qRJ1FnD6rgRPFr31b5BMu31liivkzE6MjzsacBUTWNyJ9DDW3LY84hY
-	lv9H2kNpwWUhcV6PcEZfiK4u8m8F7O53DpdNp
-X-Gm-Gg: ASbGncvjO854PE2YIqUzwS3Q8Ib84zVo8wLrMizn6gfDJpFGdlHA3zufouvNk7rFE2X
-	Hi3oTROOMk8r2jwIDFeXHcUn2UQFtTBhWi1jsAPYeofVfj2ugqRh8NGNpvHt4D2GFvnSod472nR
-	Q0VIip1MvNt43r2RTVRX4sNN8qFkQNT3pErOL28pm6Bh/Yt1wryYpEgQ==
-X-Google-Smtp-Source: AGHT+IFD2StGXXU4LRBTieMiBl1477i7opw2k6zaQzZpZT7Xzqji9FSBQHuj++vQYVldHnNlC03ywPxgJw7rDH3n0w8=
-X-Received: by 2002:a2e:a585:0:b0:30c:12b8:fb8a with SMTP id
- 38308e7fff4ca-3233ebe48fdmr15610161fa.0.1746424768540; Sun, 04 May 2025
- 22:59:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="IV0dlq6a"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=iW4CW4d4XumMRURh9YquH3q5TrxPfyHgHt8LotFCrM4=; b=IV0dlq6aSyJKCBOUMDtmCvZzdj
+	Y21rxQ7blv8W9CdEGp7pPqOVCrFyQDgbnyM0Vp2qhfRZjwcDtFn4EeZXAIOF8NggSR/ENxCTNywZU
+	pP1Ceoni69JiHhK+67DMiNZMFz6FGfxRlDO4tRW/j8sd8U+M0JRAVVtjwaQYLhTRWkthXd+sga8RJ
+	LIXR7kRMffpdYis5SPTDrwn8CvVkOnnhFho+WjoG7kAJOyNhcxCOsspOO5dDzAooZSp6b2WW7U0SM
+	SSy4NA2EJYj/FKh6WI0b/mEgyIhDUwPc9lryS4yrurhXK7dnpcLWMsBwb/6wx6pVi0it7rwgmM0oz
+	2V3PEYKA==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uBs1z-000G4i-1V;
+	Mon, 05 May 2025 11:22:35 +0200
+Received: from [85.195.247.12] (helo=[192.168.1.114])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uBs1x-000Hhr-1M;
+	Mon, 05 May 2025 11:22:34 +0200
+Message-ID: <798dba24-b5a7-4584-a1f6-793883fe9b5e@iogearbox.net>
+Date: Mon, 5 May 2025 11:22:33 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
- <CANp29Y41LKZg-kSP+j5hjUKMNeWnPsVd8VvDnOpN8+4WHHjEgQ@mail.gmail.com> <CANiq72m7GAZ4gfgiU5bXSb86R3-UMG2vsvi5J1Ua1EpVV5EdAQ@mail.gmail.com>
-In-Reply-To: <CANiq72m7GAZ4gfgiU5bXSb86R3-UMG2vsvi5J1Ua1EpVV5EdAQ@mail.gmail.com>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Mon, 5 May 2025 07:59:17 +0200
-X-Gm-Features: ATxdqUE_jDd0HC0IONKRAtQ24jV76OHs3LwnQnbNgHzz6cgeJxyFcYPBg_mcEL4
-Message-ID: <CACT4Y+Yavh4GkocO01GSP+0hWXZNVBEaD4-9W2V452Z5+C+kZA@mail.gmail.com>
-Subject: Re: [PATCH v2] kcov: rust: add flags for KCOV with Rust
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Aleksandr Nogikh <nogikh@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Matthew Maurer <mmaurer@google.com>, Alexander Potapenko <glider@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: Paul Moore <paul@paul-moore.com>, KP Singh <kpsingh@kernel.org>
+Cc: bboscaccy@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+ bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net,
+ dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au,
+ jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com,
+ justinstitt@google.com, keyrings@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org,
+ llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net,
+ morbo@google.com, nathan@kernel.org, neal@gompa.dev,
+ nick.desaulniers+lkml@gmail.com, nicolas@fjasle.eu, nkapron@google.com,
+ roberto.sassu@huawei.com, serge@hallyn.com, shuah@kernel.org,
+ teknoraver@meta.com, xiyou.wangcong@gmail.com
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org>
+ <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27628/Sun May  4 10:34:32 2025)
 
-On Fri, 2 May 2025 at 15:47, Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Fri, May 2, 2025 at 2:36=E2=80=AFPM Aleksandr Nogikh <nogikh@google.co=
-m> wrote:
-> >
-> > Thanks for incorporating the core.o change!
-> > I've tested the v2 patch on my local setup and it works well.
-> >
-> > Tested-by: Aleksandr Nogikh <nogikh@google.com>
->
-> Thanks for testing, very much appreciated.
->
-> Dmitry/Andrey: I guess you may want this to go through your tree
-> (although I don't see a `M:` there), but if not, please let me know:
+On 5/4/25 7:36 PM, Paul Moore wrote:
+> On Fri, May 2, 2025 at 5:00 PM KP Singh <kpsingh@kernel.org> wrote:
+[...]
+>  From what I've seen in Blaise's efforts to implement BPF signature
+> validation in the upstream kernel he has been working in good faith
+> and has been trying to work with the greater BPF community at each
+> step along the way.  He attempted to learn from previously rejected
+> attempts with his first patchset, however, that too was rejected, but
+> with feedback on how he might proceed.  Blaise took that feedback and
+> implemented Hornet, traveling to LSFMMBPF to present his idea to the
+> BPF community, as well as the usual mailing list postings.  When there
+> was feedback that certain APIs would not be permitted, despite being
+> EXPORT_SYMBOL'd, Blaise made some adjustments and came back to the
+> lists with an updated version.  You are obviously free to object to
+> portions of Hornet, but I don't believe you can claim Blaise isn't
+> trying to work with the BPF community on this effort.
 
-KCOV does not have its own tree, it's merged via MM tree with MM
-maintainers effectively serving as final accepting maintainers.
+We also discussed at LSFMMBPF that the current approach taken addresses
+only a tiny fraction of BPF programs out there, meaning it will not be
+applicable to 99% of projects utilizing BPF (e.g. for a OSS listing see
+https://ebpf.io/applications/). What guidance would you provide to these
+projects once this is set in place? "Please do a full rewrite (iff even
+feasible) or accept user space breakage if some distro sets this generally
+in place (wrongly assuming this provides a generic solution for all BPF)?"
+
+In the presentation it was mentioned that you need something like Hornet
+for your Azure Smart NICs in order to utilize BPF for livesite investigation
+which is fine ofc, but given this only addresses a *tiny niche* of use cases,
+the guidance given at the LSFMMBPF conference was to go via BPF LSM route
+and implement it this way instead which Blaise agreed to look into. Given
+this is a niche use case it is exactly the fit for BPF LSM.
+
+>> So for this approach, it's a:
+>>
+>> Nacked-by: KP Singh <kpsingh@kernel.org>
+> 
+> Noted.
+
+Nacked-by: Daniel Borkmann <daniel@iogearbox.net>
