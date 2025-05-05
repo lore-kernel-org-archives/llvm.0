@@ -1,120 +1,147 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6589613AA53
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 13:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD31E1FDD;
+	Mon,  5 May 2025 13:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746452681; cv=none; b=FsRyPAdRAqFPcGYE0Db/C0f9IX/9lActXu2ima9mbq05fOjOPBM7NcOsp3Vr89IAQerjIbqpyLr71DA3kKoh0qlEOIBUYC9Er3sEGem9eACK18JDk02DsdTg5cDKd/erka5LWP0nXTZlE7ELeQnB96Gu2d9ceNXFUpQBHSnXfIE=
+	t=1746453297; cv=none; b=JFuT6fYPCGZHkKFKuw5kbrgUBesPK3OMgMEV7iFeLn2fi6eOT/MvWgThnN+3zqJgqvCT1chZ8I7PjalP4mtU5vS5uy3g1LczGCZ9tm0QOLoQxbYni0FbF7NgUgBWS6/l6fwuNmOrLY/boSQfedzoNLJ5jPEg2ZdGd9evoO7g5ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746452681; c=relaxed/simple;
-	bh=6QvOvRZ/UbJMoeXSAGC96rle7AjVbTvBrmnBuUaYf68=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lg8rRaWC54MpbVMo0NUE9kY/RQUqkGPrac+gPZv5WR4lwX2xnlkOQS2I1u2eYoNK+pINYGxpGNcv0El/T9Pg2aRR//vE4nKnrfEGuIf3wXBYzD6g47pOCGBnqGjTUmWni7WS+VLm5+xx935SuJo74G1kQ+7ENVO96N3kDzYqiTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WmOUjkp2; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1746453297; c=relaxed/simple;
+	bh=mT9cqDmKVvE5D+3NHWI+X4Bdzp3kYBbGRt9lXt3Jz/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HIisJYE31BT+pwQqqCRf1W/avLzMfWA2Un4w6kRSsEsIjj/XWsLJBYvDy/F1/swyPZ3z9ZtzfrTDEGl0U4Fxuft7KELztwuahklsVAYCBV19HWGMNgT7BEsKk9PVi6Yu1q0DciVlPefJrv1noVZi+RS2pGSRR4Gw56jPzdQUkYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QPIcj5NU; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WmOUjkp2"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-30572effb26so4122051a91.0
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 06:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746452679; x=1747057479; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kdmoNVQsFUVQTwbN99dic1kL41z+dsPAJ4dCN1KXOY=;
-        b=WmOUjkp2rjBjlhyoXxQE+kQFoROFadaPr1xOkHERTUyBMv+Dun3ryFCSLrfOGH22eJ
-         pQgVAcQ3GSJup10mCmHdqxrSjaGxT2mxdTjVJMPLYGjNVdILNoe964nN0ajqv5LDoUNs
-         z0n8nP1mruIigkuf0n9AqxheCz6BaVPUFhgE1+ge6R+avRnPElTQ+rNEcIeILinjx0dR
-         V96yr5+JmqFtKz4eRkrFukB+O4FSYcTePbratOzVn9DwJie8Z++hq+TNE+/RYLyv6AhS
-         f1lyXNKU2DergUUXEXFSbrK1aDz1499c55aZvlT9aDXccvpP7DQZ70YIuheM/GZFGfoB
-         nzLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746452679; x=1747057479;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5kdmoNVQsFUVQTwbN99dic1kL41z+dsPAJ4dCN1KXOY=;
-        b=m9S9xnk4WY4Ul56O9x7O/SWXSay84dX+tRTu6jlTr49D2PQQkDKzZDdagkoKqDRDCs
-         cPamRqAvDKUeGKdMS/UseNRC2Vti0rr8uAjD4vmT20hSpltdQqUCFb8dM5ugeSre5+6I
-         mlCDv9IfquT6cGjrdHMhXynaIzRYKcFBkK2EFBP88/HUOVwMykMJKOJNHaM/7th6vOZF
-         Z2DFBBUaYALPxnu8qMk2yc4UEKx9KU91ioEWMUPVa437MGagMITVWHBBM7c+fbh99yuV
-         aScWq2XYczvuUVd8C/gn0Wsp1EKPtgl170mkks6q1+DM9bJ0njOPdFzMDclPYMN6v8B2
-         qOHg==
-X-Forwarded-Encrypted: i=1; AJvYcCVvziB4/n+AV+gLuwvWOu0M9du97Z2FWgWMgNgbPXASoLHhrluRt9sMcDA4mpxTGO7W8wi9@lists.linux.dev
-X-Gm-Message-State: AOJu0YzjLeINnibX0juR8Ej1rkKYVanFnwkoMsjNYU53DNAR//Rq+dGH
-	5YYrQ6NsM5KndNAJwOJxFf6dLe75SIVZtMFx/+iQJFU1oIri5A8X00zUV4CevIah4vh+jJNaZIP
-	77qwDlznNxqZK11Ey6ZHWQQxB4raXwTWMHAa5
-X-Gm-Gg: ASbGncuKVMpg3yob/QsJsvF+cKJkB7LeNisCZ8wwVSzNWSIRcL20XOUSRCIXddH6Unp
-	8dX2hfT++7Sj3H+fIa1t2GRngusfZws6Ds0VKkEUSgeknZ3kJxdnkxqr4v+Gg7PowKisKYY7v/X
-	j9/wiE6cGafMnUim7QskCX32s7T1pNxOSDih2ke5FQlJ6/PctTgAHL
-X-Google-Smtp-Source: AGHT+IH4SDdrgJH/FtIz5aeqL7ez9i18S6l2SrxSxbmU1fmlnWmrTrBModPKlAVnmRmQ6xD60Cl5qdGHyjSc3yUk/8M=
-X-Received: by 2002:a17:90b:4c12:b0:305:2d68:8d91 with SMTP id
- 98e67ed59e1d1-30a4e622226mr19074154a91.28.1746452679338; Mon, 05 May 2025
- 06:44:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QPIcj5NU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746453296; x=1777989296;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mT9cqDmKVvE5D+3NHWI+X4Bdzp3kYBbGRt9lXt3Jz/E=;
+  b=QPIcj5NUEgk0gPoO+V76ADmWh7eIFjktLqz35TSE0b2SBe9Z4zv/EcdI
+   FjCcZs6k61cn3YDMFm3sK5d1p2JgxIi2nPJCaCJh6otMeC8XNE+S63xx2
+   854S5y4RViXQMWCLTxD7nPFVDiLbl+NSgMqNQX61J0ulGKyqSFnW1WAqC
+   +lZanA2MrHSbsOlQBtuIzD5AyKmMryn5qLytjTxUZ5J5f7Lb8NEhSlVFD
+   bMfWPgP95ZtY46kz47jffR/411imzcRQO72p2OPEQLdVywy+og3SDij4v
+   yZubGNENnV8S03X8iPOTHNE1M79s2tenq+L0vaJKRubhRgEEAeaed7kH7
+   Q==;
+X-CSE-ConnectionGUID: ibMvM8QBR9CbgXXFwlsPTw==
+X-CSE-MsgGUID: F4fCwcdgSKCdTj/A+HcdNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11423"; a="51881701"
+X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
+   d="scan'208";a="51881701"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 06:54:56 -0700
+X-CSE-ConnectionGUID: ED7z6mKXR3ymkA6cXhGR6w==
+X-CSE-MsgGUID: NwDLqtlJTHuYGEq/aEHKpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
+   d="scan'208";a="166307889"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 05 May 2025 06:54:53 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uBwHS-0005mH-1C;
+	Mon, 05 May 2025 13:54:50 +0000
+Date: Mon, 5 May 2025 21:54:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb+git@google.com>,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, will@kernel.org,
+	catalin.marinas@arm.com, mark.rutland@arm.com,
+	Ard Biesheuvel <ardb@kernel.org>, Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: Re: [PATCH 1/3] arm64/boot: Move init_pgdir[] into __pi_ namespace
+Message-ID: <202505052102.U2NQHrS4-lkp@intel.com>
+References: <20250503112137.1962910-6-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
-In-Reply-To: <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Mon, 5 May 2025 15:44:02 +0200
-X-Gm-Features: ATxdqUFs6K5fsi07mj5QPnDApYO8Y4Qv6bhjBbyuo9NyPdbmUWE265bDD9qpTfw
-Message-ID: <CANpmjNPRgUz9oX0H8kza2sB847Bai4rLtqfOnUSLmqt2Zm_pqA@mail.gmail.com>
-Subject: Re: Thread Safety Analysis and the Linux kernel
-To: linux-toolchains@vger.kernel.org, llvm@lists.linux.dev
-Cc: aaron.puchert@sap.com, Aaron Ballman <aaron@aaronballman.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Bart Van Assche <bvanassche@acm.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250503112137.1962910-6-ardb+git@google.com>
 
-On Wed, 5 Mar 2025 at 12:47, Marco Elver <elver@google.com> wrote:
-[...]
-> 1. Re-entrant acquires: rcu_read_lock(), preempt_disable(), etc. are
-> all re-entrant locks. My proposal is to introduce an attribute that
-> can be added to "ACQUIRE(..)" annotated functions to indicate they are
-> re-entrant. Release-count needs to then match acquire-count to fully
-> release a capability.
+Hi Ard,
 
-FTR, reentrant locking support is taken care of:
-https://github.com/llvm/llvm-project/pull/137133 (should land soon).
+kernel test robot noticed the following build errors:
 
-But I think we need at least #2 (basic alias analysis) as well for
-things to become tolerable for the kernel side. And that one looks a
-bit harder to implement in Clang, so it'll be a while.
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v6.15-rc5 next-20250505]
+[cannot apply to arm64/for-next/core kvmarm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
--- Marco
+url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/arm64-boot-Move-init_pgdir-into-__pi_-namespace/20250503-192534
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20250503112137.1962910-6-ardb%2Bgit%40google.com
+patch subject: [PATCH 1/3] arm64/boot: Move init_pgdir[] into __pi_ namespace
+config: arm64-randconfig-001-20250505 (https://download.01.org/0day-ci/archive/20250505/202505052102.U2NQHrS4-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250505/202505052102.U2NQHrS4-lkp@intel.com/reproduce)
 
-> 2. Basic alias analysis, e.g. when storing a pointer to a lock in a
-> function-local variable. [Complaint in:
-> https://lore.kernel.org/all/569186c5-8663-43df-a01c-d543f57ce5ca@kernel.org/
-> -- quote: "Fix the analyzer instead."]
->
-> 3. Ability to refer to locks in returned reference/pointer. For example:
->     struct foo *ret_lock_struct(void) ACQUIRE(return->somelock);
->     struct foo *try_ret_lock_struct(void) TRY_ACQUIRE(1,
-> return->somelock); // locked if non-NULL
-> I expect this also requires basic alias analysis to work so that
-> assigning the returned pointer to a function-local variable and then
-> later use in an unlock function works as expected.
->
-> More complex requests:
->
-> 4. The ability to deal with conditional locking with return values
-> that are not just true/non-zero and false/zero. A concrete case here
-> is that a lot of functions return error codes, and if the error code
-> is < 0, no lock is taken. If the error code is >= 0, the lock is
-> taken. [ Source:
-> https://lore.kernel.org/all/569186c5-8663-43df-a01c-d543f57ce5ca@kernel.org/
-> ]
->
-> 5. Better control-flow handling. Basic understanding of conditional
-> locking, which is explicitly ruled out in:
-> https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#conditional-locks
-> - however, if there's some way to even get basic support, would vastly
-> improve things for the kernel.
-[...]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505052102.U2NQHrS4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/kernel/pi/map_kernel.c:191:30: error: use of undeclared identifier 'init_pg_end'
+     191 |         memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
+         |                                     ^
+   arch/arm64/kernel/pi/map_kernel.c:222:30: error: use of undeclared identifier 'init_pg_end'
+     222 |         memset(__bss_start, 0, (u64)init_pg_end - (u64)__bss_start);
+         |                                     ^
+   2 errors generated.
+
+
+vim +/init_pg_end +191 arch/arm64/kernel/pi/map_kernel.c
+
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  158  
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  159  static void __init remap_idmap_for_lpa2(void)
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  160  {
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  161  	/* clear the bits that change meaning once LPA2 is turned on */
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  162  	pteval_t mask = PTE_SHARED;
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  163  
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  164  	/*
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  165  	 * We have to clear bits [9:8] in all block or page descriptors in the
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  166  	 * initial ID map, as otherwise they will be (mis)interpreted as
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  167  	 * physical address bits once we flick the LPA2 switch (TCR.DS). Since
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  168  	 * we cannot manipulate live descriptors in that way without creating
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  169  	 * potential TLB conflicts, let's create another temporary ID map in a
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  170  	 * LPA2 compatible fashion, and update the initial ID map while running
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  171  	 * from that.
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  172  	 */
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  173  	create_init_idmap(init_pg_dir, mask);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  174  	dsb(ishst);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  175  	set_ttbr0_for_lpa2((u64)init_pg_dir);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  176  
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  177  	/*
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  178  	 * Recreate the initial ID map with the same granularity as before.
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  179  	 * Don't bother with the FDT, we no longer need it after this.
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  180  	 */
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  181  	memset(init_idmap_pg_dir, 0,
+ecc54006f158ae0 Zenghui Yu     2024-06-21  182  	       (u64)init_idmap_pg_end - (u64)init_idmap_pg_dir);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  183  
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  184  	create_init_idmap(init_idmap_pg_dir, mask);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  185  	dsb(ishst);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  186  
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  187  	/* switch back to the updated initial ID map */
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  188  	set_ttbr0_for_lpa2((u64)init_idmap_pg_dir);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  189  
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  190  	/* wipe the temporary ID map from memory */
+9684ec186f8fadd Ard Biesheuvel 2024-02-14 @191  	memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  192  }
+9684ec186f8fadd Ard Biesheuvel 2024-02-14  193  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
