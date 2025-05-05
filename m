@@ -1,59 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A2A1F3D20;
-	Mon,  5 May 2025 09:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C9F2288C3;
+	Mon,  5 May 2025 12:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746438549; cv=none; b=SHSM6bpG9hsmDNcxCK3VHNgShVy3rAZcZXTCEHfdTSHHrNKYqCLoaq+C+iKA8ejVXDm0Bb14gyBD11rVV66qK7syHiEfQDqUUO6SlfYwBABEkMrPHKzenTOK86jPK9+I9mLmUm45yKgZlIrrzBvMxsMeIlFBtVslYfM5/5O/VJo=
+	t=1746447086; cv=none; b=Axg/c3+xOeW8N+vzsYeFku6721RjXYgYu+lDZFKQpOsv/N8NDTx/Ldwk/FzwXdHS4xzYuop3CCzfKoh/IB3T0CHsu9QLQb1uxbzPl47WJtSB3JMFjiChjfr1aU5gXoWHx5JGhrocSxLT15GFbSp1qcetkCd0+XDTKtE077XIx8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746438549; c=relaxed/simple;
-	bh=20U5Vqcd31KT5n6e9P0Gpgbwk4Vk4y8DzFmo1LZnmW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PqKES2Pj5UDqy5zt/f2B2Bc16s0WliIad6Uf0/lCQLYhX6Pu7k3URvuZzrK3VB9w8U325X056RURX+wWP3/IMBmRAWUFxJpS4HoJ5ROfJq251sQVzLKRyw8rS8R9iMp1bWI5JDR4302dCRpXOWvDLqbw0IlwQQDDhQzlNXxW6M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LNBdcLH5; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1746447086; c=relaxed/simple;
+	bh=bxaZJKzN4o4K93+jRibQUfVTUKlyCaXeSBSGun1gpoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUWxVeTQtrG9QqWwZnP1JBav0VEqHSICqQFdHz7IJ50jMu7p9KgiKk8bZRS+6320OH/2uMKLP8MR0D009E44UhpjzFT8W8+de6VoeLBSLKarzogqHm04vf5V8KSOKGkFSetGXeUO9/PESaHiWbCjMhzCdAUJSc++QA+hh0pZUb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMNwABUi; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LNBdcLH5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMNwABUi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746438547; x=1777974547;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=20U5Vqcd31KT5n6e9P0Gpgbwk4Vk4y8DzFmo1LZnmW8=;
-  b=LNBdcLH5fVBRaCT8veonxiU3S+l9s5fg0oOazZj4mNb42f9R1AiI4np/
-   NmE1m7mHjfFLCZKsVYPz2RzVx5kD/q3hwKMcWFMBAt56Avk8Xev6GlJTm
-   BC5GwGMGZ1KUh4JQwEa8aT0wd5JWgpdchGXKbpFyqt0A7AVdqbGKBks4C
-   9j2u2KRzh7B/y+Z9Hz0FBaqjpB3FMfKfJPU1Dq88zgULlxEPkvjyychVe
-   qVXBFz6SWIvWbB5z7cKpzziv6NqH2BdIwaqA6/9l2PX3f1lT0CJJ4zYPY
-   cfk9OzoMqAeYMygEIYbkgoVHAWpONU8fe23JeocDe5nQAG49pYNiV4xVw
-   w==;
-X-CSE-ConnectionGUID: oUZqTtJTSUiOcqMgjJhwvQ==
-X-CSE-MsgGUID: IJ2cXOPARki7mY3WxKGhEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11423"; a="58699644"
+  t=1746447083; x=1777983083;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bxaZJKzN4o4K93+jRibQUfVTUKlyCaXeSBSGun1gpoI=;
+  b=SMNwABUiv/8d047WG8IhnvQ3qp45KngqMjnnlq0XfBlp9iLEV5mOsryN
+   LO6zP7ySPiT0NxGH+lIpULi2qXjUWynMxxwQos9sQ0su+NaeHKjVSYZk3
+   KnwX7W0IXwVqFP0kd0X7SHtYQZiwY5xsQW47xYHuRcnGdfH4J06flXtQW
+   Kjg8bYqmOwuyPINAYPWNIPxj9+rF4XZmaxwvk2ZuX4HIHUMmDWBIb6BUo
+   Kb5J9kPXJ+U541iBrSiZyjrYgl5kSLUbmVSQ/YCyRfiPurNorqS5dtTOZ
+   Tgyrfw+UHpKkUxi9kzTGxke/Ssvegq72a17/RMnCFUOYfTwPcID7OU/7U
+   A==;
+X-CSE-ConnectionGUID: ZY5R3kBUTQ+vR44+kkDMeA==
+X-CSE-MsgGUID: 0u/E2BgXSo6PyInacGn/xQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11423"; a="73445523"
 X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
-   d="scan'208";a="58699644"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 02:49:06 -0700
-X-CSE-ConnectionGUID: dTpOWSRlQKmUwaQ+8X7jXw==
-X-CSE-MsgGUID: 4NWx5T6SQv616YArODmx4Q==
+   d="scan'208";a="73445523"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 05:11:22 -0700
+X-CSE-ConnectionGUID: O7eKqblEQhGvMWo4WbvYxw==
+X-CSE-MsgGUID: VA9AJlB/RGuacaen0jP/NQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
-   d="scan'208";a="135717043"
+   d="scan'208";a="136182857"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 05 May 2025 02:49:05 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 05 May 2025 05:11:20 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uBsRa-0005f8-2P;
-	Mon, 05 May 2025 09:49:02 +0000
-Date: Mon, 5 May 2025 17:48:33 +0800
+	id 1uBufG-0005hx-0U;
+	Mon, 05 May 2025 12:11:18 +0000
+Date: Mon, 5 May 2025 20:11:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/stats_pointer 1/1]
- arch/riscv/kvm/../../../virt/kvm/binary_stats.c:56: warning: Function
- parameter or struct member 'ext' not described in 'kvm_stats_read'
-Message-ID: <202505051701.mjetMlOh-lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH 09/12] tracing: branch: Use trace_tracing_is_on_cpu()
+ instead of "disabled" field
+Message-ID: <202505051827.xKU53TzL-lkp@intel.com>
+References: <20250502205349.299144667@goodmis.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,78 +69,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250502205349.299144667@goodmis.org>
 
-tree:   https://github.com/sean-jc/linux x86/stats_pointer
-head:   b9a199c65702bb4d0d6bc77c88198df60cdd940f
-commit: b9a199c65702bb4d0d6bc77c88198df60cdd940f [1/1] KVM: x86: PoC for shoving a subset of stats into a pointer
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250505/202505051701.mjetMlOh-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250505/202505051701.mjetMlOh-lkp@intel.com/reproduce)
+Hi Steven,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.15-rc5 next-20250502]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-mmiotrace-Remove-reference-to-unused-per-CPU-data-pointer/20250503-050317
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250502205349.299144667%40goodmis.org
+patch subject: [PATCH 09/12] tracing: branch: Use trace_tracing_is_on_cpu() instead of "disabled" field
+config: i386-buildonly-randconfig-002-20250505 (https://download.01.org/0day-ci/archive/20250505/202505051827.xKU53TzL-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250505/202505051827.xKU53TzL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505051701.mjetMlOh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505051827.xKU53TzL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/../../../virt/kvm/binary_stats.c:56: warning: Function parameter or struct member 'ext' not described in 'kvm_stats_read'
->> arch/riscv/kvm/../../../virt/kvm/binary_stats.c:56: warning: Function parameter or struct member 'size_ext' not described in 'kvm_stats_read'
+>> kernel/trace/trace_branch.c:56:36: error: call to undeclared function 'raw_smp_process_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      56 |         if (!tracer_tracing_is_on_cpu(tr, raw_smp_process_id()))
+         |                                           ^
+   kernel/trace/trace_branch.c:56:36: note: did you mean 'safe_smp_processor_id'?
+   arch/x86/include/asm/smp.h:140:12: note: 'safe_smp_processor_id' declared here
+     140 | extern int safe_smp_processor_id(void);
+         |            ^
+   1 error generated.
 
 
-vim +56 arch/riscv/kvm/../../../virt/kvm/binary_stats.c
+vim +/raw_smp_process_id +56 kernel/trace/trace_branch.c
 
-cb082bfab59a22 Jing Zhang          2021-06-18  12  
-cb082bfab59a22 Jing Zhang          2021-06-18  13  /**
-cb082bfab59a22 Jing Zhang          2021-06-18  14   * kvm_stats_read() - Common function to read from the binary statistics
-cb082bfab59a22 Jing Zhang          2021-06-18  15   * file descriptor.
-cb082bfab59a22 Jing Zhang          2021-06-18  16   *
-cb082bfab59a22 Jing Zhang          2021-06-18  17   * @id: identification string of the stats
-cb082bfab59a22 Jing Zhang          2021-06-18  18   * @header: stats header for a vm or a vcpu
-cb082bfab59a22 Jing Zhang          2021-06-18  19   * @desc: start address of an array of stats descriptors for a vm or a vcpu
-cb082bfab59a22 Jing Zhang          2021-06-18  20   * @stats: start address of stats data block for a vm or a vcpu
-cb082bfab59a22 Jing Zhang          2021-06-18  21   * @size_stats: the size of stats data block pointed by @stats
-cb082bfab59a22 Jing Zhang          2021-06-18  22   * @user_buffer: start address of userspace buffer
-cb082bfab59a22 Jing Zhang          2021-06-18  23   * @size: requested read size from userspace
-cb082bfab59a22 Jing Zhang          2021-06-18  24   * @offset: the start position from which the content will be read for the
-cb082bfab59a22 Jing Zhang          2021-06-18  25   *          corresponding vm or vcp file descriptor
-cb082bfab59a22 Jing Zhang          2021-06-18  26   *
-cb082bfab59a22 Jing Zhang          2021-06-18  27   * The file content of a vm/vcpu file descriptor is now defined as below:
-cb082bfab59a22 Jing Zhang          2021-06-18  28   * +-------------+
-cb082bfab59a22 Jing Zhang          2021-06-18  29   * |   Header    |
-cb082bfab59a22 Jing Zhang          2021-06-18  30   * +-------------+
-cb082bfab59a22 Jing Zhang          2021-06-18  31   * |  id string  |
-cb082bfab59a22 Jing Zhang          2021-06-18  32   * +-------------+
-cb082bfab59a22 Jing Zhang          2021-06-18  33   * | Descriptors |
-cb082bfab59a22 Jing Zhang          2021-06-18  34   * +-------------+
-cb082bfab59a22 Jing Zhang          2021-06-18  35   * | Stats Data  |
-cb082bfab59a22 Jing Zhang          2021-06-18  36   * +-------------+
-cb082bfab59a22 Jing Zhang          2021-06-18  37   * Although this function allows userspace to read any amount of data (as long
-cb082bfab59a22 Jing Zhang          2021-06-18  38   * as in the limit) from any position, the typical usage would follow below
-cb082bfab59a22 Jing Zhang          2021-06-18  39   * steps:
-cb082bfab59a22 Jing Zhang          2021-06-18  40   * 1. Read header from offset 0. Get the offset of descriptors and stats data
-cb082bfab59a22 Jing Zhang          2021-06-18  41   *    and some other necessary information. This is a one-time work for the
-cb082bfab59a22 Jing Zhang          2021-06-18  42   *    lifecycle of the corresponding vm/vcpu stats fd.
-cb082bfab59a22 Jing Zhang          2021-06-18  43   * 2. Read id string from its offset. This is a one-time work for the lifecycle
-cb082bfab59a22 Jing Zhang          2021-06-18  44   *    of the corresponding vm/vcpu stats fd.
-cb082bfab59a22 Jing Zhang          2021-06-18  45   * 3. Read descriptors from its offset and discover all the stats by parsing
-cb082bfab59a22 Jing Zhang          2021-06-18  46   *    descriptors. This is a one-time work for the lifecycle of the
-cb082bfab59a22 Jing Zhang          2021-06-18  47   *    corresponding vm/vcpu stats fd.
-cb082bfab59a22 Jing Zhang          2021-06-18  48   * 4. Periodically read stats data from its offset using pread.
-cb082bfab59a22 Jing Zhang          2021-06-18  49   *
-cb082bfab59a22 Jing Zhang          2021-06-18  50   * Return: the number of bytes that has been successfully read
-cb082bfab59a22 Jing Zhang          2021-06-18  51   */
-cb082bfab59a22 Jing Zhang          2021-06-18  52  ssize_t kvm_stats_read(char *id, const struct kvm_stats_header *header,
-cb082bfab59a22 Jing Zhang          2021-06-18  53  		       const struct _kvm_stats_desc *desc,
-b9a199c65702bb Sean Christopherson 2025-04-30  54  		       void *stats, size_t size_stats, void *ext, size_t size_ext,
-cb082bfab59a22 Jing Zhang          2021-06-18  55  		       char __user *user_buffer, size_t size, loff_t *offset)
-cb082bfab59a22 Jing Zhang          2021-06-18 @56  {
-
-:::::: The code at line 56 was first introduced by commit
-:::::: cb082bfab59a224a49ae803fed52cd03e8d6b5e0 KVM: stats: Add fd-based API to read binary stats data
-
-:::::: TO: Jing Zhang <jingzhangos@google.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+    29	
+    30	static void
+    31	probe_likely_condition(struct ftrace_likely_data *f, int val, int expect)
+    32	{
+    33		struct trace_array *tr = branch_tracer;
+    34		struct trace_buffer *buffer;
+    35		struct ring_buffer_event *event;
+    36		struct trace_branch *entry;
+    37		unsigned long flags;
+    38		unsigned int trace_ctx;
+    39		const char *p;
+    40	
+    41		if (current->trace_recursion & TRACE_BRANCH_BIT)
+    42			return;
+    43	
+    44		/*
+    45		 * I would love to save just the ftrace_likely_data pointer, but
+    46		 * this code can also be used by modules. Ugly things can happen
+    47		 * if the module is unloaded, and then we go and read the
+    48		 * pointer.  This is slower, but much safer.
+    49		 */
+    50	
+    51		if (unlikely(!tr))
+    52			return;
+    53	
+    54		raw_local_irq_save(flags);
+    55		current->trace_recursion |= TRACE_BRANCH_BIT;
+  > 56		if (!tracer_tracing_is_on_cpu(tr, raw_smp_process_id()))
+    57			goto out;
+    58	
+    59		trace_ctx = tracing_gen_ctx_flags(flags);
+    60		buffer = tr->array_buffer.buffer;
+    61		event = trace_buffer_lock_reserve(buffer, TRACE_BRANCH,
+    62						  sizeof(*entry), trace_ctx);
+    63		if (!event)
+    64			goto out;
+    65	
+    66		entry	= ring_buffer_event_data(event);
+    67	
+    68		/* Strip off the path, only save the file */
+    69		p = f->data.file + strlen(f->data.file);
+    70		while (p >= f->data.file && *p != '/')
+    71			p--;
+    72		p++;
+    73	
+    74		strscpy(entry->func, f->data.func);
+    75		strscpy(entry->file, p);
+    76		entry->constant = f->constant;
+    77		entry->line = f->data.line;
+    78		entry->correct = val == expect;
+    79	
+    80		trace_buffer_unlock_commit_nostack(buffer, event);
+    81	
+    82	 out:
+    83		current->trace_recursion &= ~TRACE_BRANCH_BIT;
+    84		raw_local_irq_restore(flags);
+    85	}
+    86	
 
 -- 
 0-DAY CI Kernel Test Service
