@@ -1,93 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBBD25C837;
-	Mon,  5 May 2025 18:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCF215E90
+	for <llvm@lists.linux.dev>; Mon,  5 May 2025 18:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746468017; cv=none; b=ksonnV3TrrfwnnkK5IOSiBlOK6xEQthB6c/8GXQ75a2aPBnFYfSPcJ9dQYM/O2ahjlFWcT4lW3eL6puMJl02TTRmwKZuuviFcYdR7k1wfm23/aLOKa4ow83PwQ3bcG1n8Xwqro79zmXWa5S37CnidOVJQycYxsXVgVfIeRxRmVc=
+	t=1746469034; cv=none; b=fPf2UZxBGeo460wX8brz3qssroYTKVbsAZipryKnB4icbk1n4SmXCncd0BAIg0GJZn4OYszDFrX8JRn9157uwkaljg+wAffldKeaoKCP9J2wzgWTV9R/sluRySoUFWzwU0tufjNBMIZMo5ScjBH++4SYsWraZN3AFDiRQsQkeUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746468017; c=relaxed/simple;
-	bh=SyuJCXGPY7uJmZfwK1Q4fdOdbczqIsfd1IX1yjE334I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jBwCEWx5kXCUQMflvuE5+3dWjY2sFsP+FeKput0TMQZqPqYKLqu2UpM80ShFkoSeJn+8ZZoUu6yG34TFfS7593IdgV2kJXJVrfaq3W+uUFRQ1FNLtRDd6HzhwywaD8KV0hF02pjrUftwWNeHOw8kWY7L8ctAUN3TcsOQSr+qpXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOwcUnrq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746469034; c=relaxed/simple;
+	bh=ebM4dpi9tTj1/J6Zu4pVcvgIwpnGYs8XJ6sG1Hbq8m4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hs2nEegXsFXIdXc9kshnox5M+wwf+y8fjc53gy1r4JvWy9mkJJJDaTxkwZ0trwdg2RV19ULP71mBUbhyMTvUNktAORCIF4J1+PYyxCnatBBS3RvjUVrDp/rayg7/EfapfzdUWEO4abdRZzgKnIO5xvbacnlXljwvhnvIP7M+HiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EjZdWWj2; arc=none smtp.client-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOwcUnrq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D10C4CEE4;
-	Mon,  5 May 2025 18:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746468016;
-	bh=SyuJCXGPY7uJmZfwK1Q4fdOdbczqIsfd1IX1yjE334I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kOwcUnrq5q/mg7rpZyKzvtUhwljlt1z2mV7oyMHdrSa+bRJh6J7TUnDkQg+/sY3Le
-	 VznN/o9/v5135pCRacF9yohdN1gx729n/IC8ni+VZRIMIjB6KliYiwfzhFQKmKi9O9
-	 DwbkN8Th/Al/LCHPmrQ7hLxrjocoFALtovqhMc1nAESdI1QR/kEbnnIm/mGoPZeogF
-	 gZg1EmQQ+/wrPZGqsW3wJWbAC/bkUOvcBCt1auOJB1+VztIFFHNLcV1n1gHlWcq3km
-	 m+NZ7pNXaQpWjBMlyKnX/0gi+9dXmY9jm7ID+uvPzP0lhiYRSYhfJOn6ZfhcNBX3l7
-	 wKsbUJ5k/N3lQ==
-Date: Mon, 5 May 2025 11:00:09 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 15/15] iommupt: Add a kunit test for the IOMMU
- implementation
-Message-ID: <20250505180009.GA717568@ax162>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <15-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <20250505174458.GA226031@ax162>
- <20250505174747.GA4155135@nvidia.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EjZdWWj2"
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4c32f1f7801so1329735137.2
+        for <llvm@lists.linux.dev>; Mon, 05 May 2025 11:17:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746469031; x=1747073831; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6RdDSV3C1kkoxQpJwSli9pdvJprdzRDcGLg/gY+ewYo=;
+        b=EjZdWWj2xiAf0nbW027Gtz1Mtn1UivwpJeGT+ZFEYgXS9DsgZub7S/qqVX9FAIghKl
+         uxJ9WCRpP9BK3hu3H389jTVuGDx6R/ovnf60WXThaWLrgPH9ny0LjAAyd8HUgQJ0iVnv
+         0tXmiKdXW1tQFkoyGbiTa5/z7PauwTjNEYOauCAKbLkrNP8yhdUR9BaRuR905dNkS3KC
+         WevQCETrUmQUL41ar/3Pj+9JVw3X/6KtfYXtrsQkhVjy/rZC4qY9csgBt+f1DagwXh+e
+         nWCoZVxj7MSvMmmtsfdjpVqWaT7n1IwQkvph4hZs1wrEqaDtOCjlMwBaIdUcpDCxTC03
+         tp9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746469031; x=1747073831;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6RdDSV3C1kkoxQpJwSli9pdvJprdzRDcGLg/gY+ewYo=;
+        b=SfsjDJXpsYurlNgJ70lOgyLZf2mG2oWn6XGYYh1VR1UbPYeDjgYveLSH3t7hKDJtUh
+         xBZCwyMPakw7FOqwY0O9x3Ybi7QYUh8JCt2uuaXlrvnNCnWaxgWg1QwnbYzrnmWrrh/g
+         R8ZMmm/ZOxkx+nDVZs8vIsLMaS8Kf4QAx7T4c79wqRPod1722p+lsK7BOzvzUzaoKdJI
+         k8bEuZ8hiAYeXag9Xy+U1HwSRhGfdriNZzFj6PuIIXpIB7jbCg7pTfuIVlwcvhfukqsi
+         swl5EwAKExc4pQC06q1BRh7lJtpWVsFXrv3W2xuJl2d+W3Q2UjtlGQ8Jfg8khsOAps10
+         mU0w==
+X-Forwarded-Encrypted: i=1; AJvYcCXobAAR/mUIreP8RES0tNuQiVqNTC/SyZsvoS93IgNo3TqbkigKY1Z25c2ndmMknQJ7S/wK@lists.linux.dev
+X-Gm-Message-State: AOJu0YybRF4VdagXNBy66GZH5k7lmLKHle/fPyRGBErEfUt/H7zATJAu
+	6X/BU1pzNvr9yxH5yUyNwvAaWi/dKDpfiZJLGvX/uiNt7rZfjr1IHu1XpU1R4r7WxREokGAH5Uy
+	bk6Dyrat1y8bC+oTJH3EAdQ6AE9B1EWeWlBh4
+X-Gm-Gg: ASbGncvaFAT2O/4iV0loaL8VW72aPlVU+6JG5OefpbpcKrHXY/c7S35km1OqjZ8d7Gm
+	puhUIhIlRZVAZkwI9TW1amJFeKBkAkGua5Sw2s6u8DhGsYKA0LRO3Ki7S6chtjGJR6ZaPqOxEmO
+	txP6/3G9pNToHwSPIOGG53
+X-Google-Smtp-Source: AGHT+IF/v/NhUlwDl+Ul0geebRYwa8/EIVndjMjgtVnXrErs28xqOVyt7NYHnyhn7xzOG/mZcLIcvccqpB89VJSlcqA=
+X-Received: by 2002:a05:6102:158d:b0:4c4:dead:59ab with SMTP id
+ ada2fe7eead31-4db14781447mr4073359137.5.1746469031346; Mon, 05 May 2025
+ 11:17:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250505174747.GA4155135@nvidia.com>
+References: <20250503184001.make.594-kees@kernel.org> <20250503184623.2572355-3-kees@kernel.org>
+In-Reply-To: <20250503184623.2572355-3-kees@kernel.org>
+From: Justin Stitt <justinstitt@google.com>
+Date: Mon, 5 May 2025 11:16:58 -0700
+X-Gm-Features: ATxdqUG-8XZR84SCa_hy8LufhE4gnWyYrv86WHg4i3ik94ojF9GAbNyF1NZH5uE
+Message-ID: <CAFhGd8rGJcveDn4g1nS=tURe-uT1+PFm2EQeWpUrH_oy763yFg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] integer-wrap: Force full rebuild when .scl file changes
+To: Kees Cook <kees@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Marco Elver <elver@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-hardening@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 05, 2025 at 02:47:47PM -0300, Jason Gunthorpe wrote:
-> On Mon, May 05, 2025 at 10:44:58AM -0700, Nathan Chancellor wrote:
-> > On Mon, May 05, 2025 at 11:18:45AM -0300, Jason Gunthorpe wrote:
-> > > This intends to have high coverage of the page table format functions and
-> > > the IOMMU implementation itself, exercising the various corner cases.
-> > > 
-> > > The kunit can be run in the kunit framework, using commands like:
-> > > 
-> > > tools/testing/kunit/kunit.py run --build_dir build_kunit_arm64 --arch arm64 --make_options LLVM=1 --make_options LLVM_SUFFIX=-19 --kunitconfig ./drivers/iommu/generic_pt/.kunitconfig
-> > 
-> > Just a small comment about the command:
-> > 
-> >   --make_options LLVM=1 --make_options LLVM_SUFFIX=-19
-> > 
-> > can be simplified to just
-> > 
-> >   --make_options LLVM=-19
-> > 
-> > You should never need to specify either LLVM_SUFFIX or LLVM_PREFIX.
-> 
-> Oh wow, I had no idea. Can I encourage you to send a patch for 'make
-> help' to explain how to use it?
+On Sat, May 3, 2025 at 11:46=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>
+> Since the integer wrapping sanitizer's behavior depends on its associated
+> .scl file, we must force a full rebuild if the file changes. If not,
+> instrumentation may differ between targets based on when they were built.
+>
+> Generate a new header file, integer-wrap.h, any time the Clang .scl
+> file changes. Include the header file in compiler-version.h when its
+> associated feature name, INTEGER_WRAP, is defined. This will be picked
+> up by fixdep and force rebuilds where needed.
+>
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nicolas Schier <nicolas.schier@linux.dev>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: <linux-kbuild@vger.kernel.org>
+> Cc: <kasan-dev@googlegroups.com>
+> Cc: <linux-hardening@vger.kernel.org>
+> ---
+>  include/linux/compiler-version.h | 3 +++
+>  scripts/Makefile.ubsan           | 1 +
+>  scripts/basic/Makefile           | 5 +++++
+>  3 files changed, 9 insertions(+)
+>
+> diff --git a/include/linux/compiler-version.h b/include/linux/compiler-ve=
+rsion.h
+> index 69b29b400ce2..187e749f9e79 100644
+> --- a/include/linux/compiler-version.h
+> +++ b/include/linux/compiler-version.h
+> @@ -19,3 +19,6 @@
+>  #ifdef RANDSTRUCT
+>  #include <generated/randstruct_hash.h>
+>  #endif
+> +#ifdef INTEGER_WRAP
+> +#include <generated/integer-wrap.h>
+> +#endif
+> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+> index 9e35198edbf0..653f7117819c 100644
+> --- a/scripts/Makefile.ubsan
+> +++ b/scripts/Makefile.ubsan
+> @@ -15,6 +15,7 @@ ubsan-cflags-$(CONFIG_UBSAN_TRAP)             +=3D $(ca=
+ll cc-option,-fsanitize-trap=3Dundefined
+>  export CFLAGS_UBSAN :=3D $(ubsan-cflags-y)
+>
+>  ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=3D  \
+> +       -DINTEGER_WRAP                                          \
+>         -fsanitize-undefined-ignore-overflow-pattern=3Dall        \
+>         -fsanitize=3Dsigned-integer-overflow                      \
+>         -fsanitize=3Dunsigned-integer-overflow                    \
+> diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
+> index dd289a6725ac..fb8e2c38fbc7 100644
+> --- a/scripts/basic/Makefile
+> +++ b/scripts/basic/Makefile
+> @@ -14,3 +14,8 @@ cmd_create_randstruct_seed =3D \
+>  $(obj)/randstruct.seed: $(gen-randstruct-seed) FORCE
+>         $(call if_changed,create_randstruct_seed)
+>  always-$(CONFIG_RANDSTRUCT) +=3D randstruct.seed
+> +
+> +# integer-wrap: if the .scl file changes, we need to do a full rebuild.
+> +$(obj)/../../include/generated/integer-wrap.h: $(srctree)/scripts/intege=
+r-wrap-ignore.scl FORCE
+> +       $(call if_changed,touch)
+> +always-$(CONFIG_UBSAN_INTEGER_WRAP) +=3D ../../include/generated/integer=
+-wrap.h
 
-I will see if I can come up with something concise for 'make help' but
-we have it written up in Documentation/kbuild/llvm.rst:
+I'm not sure how this fake header stuff works to ensure builds deps
+are tracked properly but we do need scl files to be considered as part
+of complete builds, so:
 
-https://docs.kernel.org/kbuild/llvm.html
+Acked-by: Justin Stitt <justinstitt@google.com>
 
-Cheers,
-Nathan
+> --
+> 2.34.1
+>
