@@ -1,126 +1,116 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C355825C825
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 16:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37B21F2BAB
+	for <llvm@lists.linux.dev>; Mon,  5 May 2025 16:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746461010; cv=none; b=NauTRru2jkurdU91xMMYic4d6Nckxr1NO5sQPlu4NoWu3PAn/5uImwvd6uq6d3NZzlUFfkIQvGMaMYcI+l/n5ksDypjHJI85KK3BiMEMcegSv34CkHo2MmlyY9GYNb2PlWJmMcBRPhHeYyDFlM+sqtvBoNpFeCdNUi+sKOUgir4=
+	t=1746462140; cv=none; b=QIuy8ag7okutKVRuSp++jwL8fwF2b685Xe6Oc3LODOFlTVF3D+gemkxGtWc+lIQHvPB54P6WofeD2VObqKQKtjPxtT1CugFOelhgCCEAGnAz0JBYtKC/or1h2L+WuBJJF+FE0eBBVQ6TzpxQb4N6c+Opo/C01Z7eJpQFZwLoD+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746461010; c=relaxed/simple;
-	bh=UftVvy8RC4icpI3AhefASAQZ/iEzxTAxJn3EY71RiK4=;
+	s=arc-20240116; t=1746462140; c=relaxed/simple;
+	bh=dx+0A0+zGYkg14I6OBkj3/ss6kuJ7p0HznjIA0M5sBw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rEW6CYHQZzuGHWVhn55kBEJgtwhYmeaqLw2kX4BAC+jWVNvDRzE8Ofq1MTZdezJoHa/2Drz7hp9ambwK3WapuydYGvg0nP3STM4H+UhKNSPByjzJPlTHeO0MPHYlIeqNIb/WD0Qvn8AHP2WNRXRLeqcMwrOeZI7MlSSS7bOiE94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=hK95QTfj; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 To:Cc:Content-Type; b=MRAdQjkM/NpqxfeXLHvw2bieI0YrElFZDep+swhm0vabYlz0WntwJGkke4z5OUlq0nSvKFQWTxPT+1Me1+rcmh+s7ufaQ6n0cxk8P2kqG+udTtGzLRH1jz3Wp3g/IqnhhEAG0RfGDiSjfWzZGI67gNnVIw18E4l9+tKOdFYVbX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=JFsVKSzg; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="hK95QTfj"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-acb415dd8faso693430166b.2
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 09:03:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JFsVKSzg"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-708154c2a80so33660317b3.1
+        for <llvm@lists.linux.dev>; Mon, 05 May 2025 09:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1746461007; x=1747065807; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h01CWeWtSOhKaIqy3G/6IN778pW2sxnxWWRyeifkMkg=;
-        b=hK95QTfjzyxSSC3pSlcV4tucsO9AqR9KuDyU311N/JORb8eWW5rOy4sbae//YoyJn4
-         pft7VlAVUBdZksKQMtlfhaztepm7D8ivJHPbcSA8Ww1Bnn4MrJMI1BGaeWXmoTdV+W2Y
-         ZqutgtVqlCwYHdy2MhFwyMpLu91RqyQXMsM1o=
+        d=paul-moore.com; s=google; t=1746462137; x=1747066937; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BUSGTKlbA5H24+yBQN4jIkG58T5ExeiJA4eFJ+JNTtQ=;
+        b=JFsVKSzgnBDOqt9of+8oxqbCXAoyUvEZH0zBEjaYZQg8BgqrqcHw1QNAmn8L5W9BvD
+         G1mQrINJYBw3nmSW+fqU5mkEisKPgzSkrVo8Fjz/DeaUUza2NAf0Yb93luvsTEUZw/2x
+         ddLbWjDFSUkLeKwaSqia7dwyBqyAXO0Zbk2tssuWRHC7uJqsfkhkeow1ojvpoITED6dp
+         UfwvpkT7fcsOafG26Oc7D1nFIO38Q3Wl7Wg3dDu/K51AQQOgCVYoIN32t1n5EgGkGf3K
+         GghfW2QWSvDfLtCghZW24LnUDjzDwk1IJRmNfac2bst+ufj4YY4yRusWmfVcw2mxQ6Qv
+         cmVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746461007; x=1747065807;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h01CWeWtSOhKaIqy3G/6IN778pW2sxnxWWRyeifkMkg=;
-        b=r9BXjqlgVYWkJXvwoxHQwTImzroCkuPfEZ6JmCO8PCYBj9FoMUIRhyGCzc1EgnCmUc
-         lcumqEDZqhWBKXdD61bsju3RTcUK0z7A5yAu1e152+6BkFXpBN4dpQY+5IZjOTH5lozS
-         lU2UUD0kIu13xBjAv6TJR1VxWCz+eU5NqRsTXhxTTO/6Ho/2j1M5HCu2KssTDHso1ae2
-         Z6npWGYLXS+UGFiHNOOl/EZFJ9lWTOcvU15KAqzQWYh5EqwUqO5GIBISg1Cpr8a2Dfvv
-         oHYK2nKmsVBsFC//TLh4U3BWbpdySa4RYY2Sjc6jzme+nXgvpYifji2buX7K+tDh5F1Q
-         BGbg==
-X-Forwarded-Encrypted: i=1; AJvYcCU75d/7GJFhAkf1SxlWQ3BJVihvDl7cMwFCfDkoppwx5YgZfrfpkIN6/1XJC4cqLkDvjeDz@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxw8hU1PXYp5O1zHC3qtWR5qhtP2JbYwpnJ7M/aq09jjxROHKVu
-	8aCxpzIXrFRDcUE97ppzAPGZ4UuJIr+rk3CYJSJEo6c3iweT4XOpZLAmWr1UVdA1nPI/700nZss
-	zIkg=
-X-Gm-Gg: ASbGncunqPqEdLEb3RcKCMqUGnJuWrHNPxiiWssZMsddm8btxxssCw5hlA9z13zpwmG
-	GM6pyvPyil45xsjSKsaZ9XC/eXv8TjBILCtp7/pPYTd4Qxe40y9+9sJkHM1UwdMN1GYuCeD5Rof
-	YoBHGaM8Xv81oDygqE6cfgdOrh+Y45NAuI2awqsLtA5rYvJ2k1Xt9VbSlSL/37ZSopFlSZ9ly2C
-	glGl4aIgPDi3ba1mT23tvF9Eqnyql8TbPqD58ljNS4Xmz++IFVuztsXFrXVn5BmfRd2QnrAHw1U
-	8icyf6gtxfprxXrQcYKVSyLkInW5GaWj/9IZxJeNunn80cmbGkJ06+nZX0ftmZ9Sq+O0Z/sA2/Q
-	KAbt+X2oQecczsME=
-X-Google-Smtp-Source: AGHT+IEbIPTMeE+wZKZZBCBFTBNh4eg7T8dZAmOZibGnT+Ns7OBw8SV2e1rNv7bjO4efUz2NDuOsWg==
-X-Received: by 2002:a17:906:6d8b:b0:acb:126f:5315 with SMTP id a640c23a62f3a-ad1a4acf970mr549488066b.37.1746461006715;
-        Mon, 05 May 2025 09:03:26 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1891a6868sm514007266b.70.2025.05.05.09.03.26
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 09:03:26 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5f624291db6so6920544a12.3
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 09:03:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWyG0kRrCuTpFJ+YP5dsigMgVWE0rDcMmelyt0mKl7/IburDeZbgCYCMIUr4zz8SE5OWueJ@lists.linux.dev
-X-Received: by 2002:a05:6402:90a:b0:5f4:d60f:93f0 with SMTP id
- 4fb4d7f45d1cf-5fab05e0b12mr6165955a12.31.1746461005714; Mon, 05 May 2025
- 09:03:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1746462137; x=1747066937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BUSGTKlbA5H24+yBQN4jIkG58T5ExeiJA4eFJ+JNTtQ=;
+        b=Zjo7XZH9yFq2ckecyn5bRi/yVTT0U/UggyhafAUkkBZQlBDVR3PAMC4GDFXnsKcpJB
+         avqaWacDOsAso8YQYxLWlezrCmaT2s4QuC8hGMrzkluLfUhR5lMv0qzGiQVGWRXwDJy/
+         SjW0gkX78jPJ4g073/hX8Eir4C7aSzJ3FJoC7tQaw0EIc6rEzXX4lpx4pfxukaV9Dmzr
+         4MdvLEVGXYitKyLKZALeyoNQJpwKpeuR7M16D0AjVTBJUzAcKem+96mtkmttYlciysjD
+         hXLR+Mm0GCmV01CVYiO4BkGLJWgeYoJ51LvyhpOhX4xIWGFWdKkMSFWZQZVUbSMGOUAA
+         rAKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVo0ep1Syi7Uw5wCi2hXskwAnhW20x4+RWeVLhZ8fDqfsw68KtmBQOPeCdLSCkUizvFVP0q@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy8ZrRURvkupnd3b4mxWmdqyfxx001upBXMb/EMWaTn3tBOBqBu
+	meMfWamgJ63jQelDCCHxXDD9xYfMxMe6dwzunQ1cY1dcoBZL6eq//0be+3DY7ral+XwRHloCITU
+	2bcTDk9u9VKEndzHW6oz+x5uycJw2Qv5UrT3k
+X-Gm-Gg: ASbGncsBHZ+la5lHekRPhmXIU2b0JSmhbQd2XwWvdlqWiqYCTnT5/kuejfFx536OYix
+	wRaC/4tNJ+AJKyDzsHIyIX7rfWrkP+qPCoHUbpy/cRGL/qOeE46gvoDx/tUZm3BLvPWtld0ki6l
+	36i+QMkcVxo/lfXDXoEonROA==
+X-Google-Smtp-Source: AGHT+IH2DUE5HVNEg2bSjlLOWtDIRC8IZyXb2mE2mCyNBUhFsO4FmPL69/3p57Fob2eoRjHd/ddHHp962kCkNWER8p8=
+X-Received: by 2002:a05:690c:6504:b0:702:537b:dca8 with SMTP id
+ 00721157ae682-708e119b266mr116732617b3.4.1746462136818; Mon, 05 May 2025
+ 09:22:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250425003342.GA795313@ax162> <CAHk-=whfT3A8K2Z+WbieGG5Hhc9QAT5s3qsbB19O0Roj2G5tfA@mail.gmail.com>
- <20250425021138.GA3800209@ax162> <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
- <alpine.DEB.2.21.2505051543470.31828@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2505051543470.31828@angie.orcam.me.uk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 5 May 2025 09:03:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiQN=jqK9n-mUEAD1Q36t-6d589M_rAG568pLq2KysJ5w@mail.gmail.com>
-X-Gm-Features: ATxdqUF6pY-99F2WQNkeFTpXwDSx0anOhOWjLVNn7A_NmLH1XNT6o446qEa5uEM
-Message-ID: <CAHk-=wiQN=jqK9n-mUEAD1Q36t-6d589M_rAG568pLq2KysJ5w@mail.gmail.com>
-Subject: Re: Adding __popcountsi2 and __popcountdi2
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+In-Reply-To: <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 5 May 2025 12:22:05 -0400
+X-Gm-Features: ATxdqUHVSCLwU25t9Nh-Eb-QNfhRN532QIA5RHPtIkiKO7hREbMXnOdoRrxJisQ
+Message-ID: <CAHC9VhRf2gBDGFBW1obwCaGzK4RdH+ft_J-HXV6U7x7yiCJn5g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: KP Singh <kpsingh@kernel.org>
+Cc: bboscaccy@linux.microsoft.com, James.Bottomley@hansenpartnership.com, 
+	bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, 
+	dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au, 
+	jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com, 
+	justinstitt@google.com, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
+	nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
+	nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com, 
+	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
+	xiyou.wangcong@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 5 May 2025 at 08:05, Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> On Thu, 24 Apr 2025, Linus Torvalds wrote:
->
-> > > I will test declaring __popcount{s,d}i2() as aliases of
-> > > __sw_hweight{32,64}() to see what effect that has but I figured that
-> > > calling the __arch_hweight variants was more correct because some
-> > > architectures (at least RISC-V and x86 when I looked) use alternatives
-> > > in that path to use hardware instructions and avoid the software path
-> > > altogether. While there would still be the overhead from the function
-> > > call, I figured not using the software fallback would at least soften
-> > > that blow.
+On Sun, May 4, 2025 at 7:25=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote:
+> On Sun, May 4, 2025 at 7:36=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+> > On Fri, May 2, 2025 at 5:00=E2=80=AFPM KP Singh <kpsingh@kernel.org> wr=
+ote:
+
+...
+
+> > > ... here's how we think it should be done:
+> > >
+> > > * The core signing logic and the tooling stays in BPF, something that=
+ the users
+> > >   are already using. No new tooling.
 > >
-> > Once you have the overhead of a function call - and all the register
-> > games etc that involves, you're almost certainly better off with the
-> > simple unconditional bitwise games.
+> > I think we need a more detailed explanation of this approach on-list.
+> > There has been a lot of vague guidance on BPF signature validation
+> > from the BPF community which I believe has partly led us into the
+> > situation we are in now.  If you are going to require yet another
+> > approach, I think we all need to see a few paragraphs on-list
+> > outlining the basic design.
 >
->  Unless optimising for size, which we do support.
+> Definitely, happy to share design / code.
 
-I think you missed the part where I said
+At this point I think a quick paragraph or two on how you believe the
+design should work would be a good start, I don't think code is
+necessary unless you happen to already have something written.
 
- "But if you want to do this, put the damn thing as an alias on the code
-  that actually *does* the SW fallback in lib/hweight.c."
-
-IOW, what I object to is being *stupid* and doing *two* function
-calls. It sure as hell doesn't optimize for size.
-
-If you want to optimize for size, just call the existing SW fallback
-in lib/hweight.c.
-
-Don't call a *new* function that then calls the existing SW fallback
-as another fallback level.
-
-Because that just makes me go "Eww".
-
-Honestly, from a performance standpoint absolutely none of this
-matters. Unless you *inline* the bit scanning as a single instruction
-- which this is *NOT* about - you have already lost.
-
-So at that point, it's a question of just how pointless you want the code to be.
-
-             Linus
+--=20
+paul-moore.com
