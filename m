@@ -1,130 +1,95 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997F5270555
-	for <llvm@lists.linux.dev>; Mon,  5 May 2025 21:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3951425C836;
+	Mon,  5 May 2025 22:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746479101; cv=none; b=qieSQ+ZYBr+rN6FrLarD9DIzH/8wY9LElCooosQtToJkFrjN56VT0pmfg3amQaipFPwBfViMfFmviQsphgXje5bhTEG7FSCkjt/2GJe+7o78woE9XbIcZMBJ+Zh3T5p7JSlTqdkQt8CvRA1iP5DkYCIxNYgbwniImaFpTVF660k=
+	t=1746482961; cv=none; b=cSRqSF5AOanx9/wTL21VxknJUj1by2WlV/gkOo52dwVRxpv/usGowZMzbQLY7I9KbTIp/zayve7YZePadohrguoxlKGMG7834ULuL5Qo/SkcmyLS6lpJaU92UkUHLhCCk9Pmpl6Pe+UTN179GkciKM/fJQoh1hFx08QMXFZYwSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746479101; c=relaxed/simple;
-	bh=pvJm4iJToWGX01vWFAWNiClNkhuZHWWKlI9oy7VPwrk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j0E4dXJcGEFeFnM64IqjO5kkRpQ/kSjEU7IIcCrm4mKbcc7d7DJsroJXGqIXjNGl+UgoOuaUO9kFrz7mrq1U6Yu4AG4lJ5FswVOHl4OPGUN4GlZvO7VKoKSPMGwZyrY0nFDaATFRXPZSXdM+wP7n0uaq+OMvwAJFiUoB4wtHBug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WLn6PzoI; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1746482961; c=relaxed/simple;
+	bh=5V6Q0IybOsq/r0l9ElfoRFpy+R+LZ1dRja9/RKg+xqI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BK5zZidbpwXDj7uabHczHaqNwLzegPgHAfhgHylbX7UAuKjBIuyEHE8xP7qJ9G27YqVw/edm6glslHoHVYAjLKCPgHkQeAroIvg/d4gpNjdi5J/avT5UycXgDOSL8QRV/oEdxd7CkpDl3/kWpfBJveTZRRaAvP44rS+rcug2hR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GJrcor2G; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WLn6PzoI"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7080dd5fe92so41027037b3.3
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 14:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1746479098; x=1747083898; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qV6Ehr5flIzxPNkBJYbjhBPm/Nie/yPzlaQWxf1OGLY=;
-        b=WLn6PzoIU3wYONY9NqCoywFLMoye9M5b+1rW3iaGWzaDlIbEVGzQdfJQ7hFV55xrk4
-         vSDLNMq8393o0CcmXc1A+UnEM1rKdudV4W55GN7/3/+TYmJwQPqKDT7FX3DF3eyXM+qJ
-         asUV4nGP1/B9+Y0auf56hGv0NOhAxTSBewltXDcSuBe42Yy75CLYYXbOrEnvIN9NSlNA
-         z0iT6Zl9JaUlV2wIpI2lcCaFji7ed+gT2mqsr0HoQ7VAFURi/diH27goQBpitmQShTjw
-         QeOJsNfrnJtwtRZAZM1rFJwnFmwqXhd7AW/AaP+3gayQ3sle5hQLsGKpOaKaz7QL7MIK
-         Ar+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746479098; x=1747083898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qV6Ehr5flIzxPNkBJYbjhBPm/Nie/yPzlaQWxf1OGLY=;
-        b=jxpSNShMAT+3iJw/JKuE+EMkVto5hsFYXFw4wxs8E7N79DcmlocTxzwpJLfTL896ZS
-         comxrUoCRVZziSzTgec1p6xL15oVdk0AkJ/5ZDYVWsUj7l4jz3DMy9iLGzT74Yy2noNl
-         Mc0LbsvwWFqU0zHYegp+CvUPpHDflmqsqIp5iR105r2FsOI4P3p7yREqhflCe5Tp5/vZ
-         xpU50KCan9KQBJOly2OK2Tc4o1Y4i0JI30w1KCNY49rHCHHL9yx/jb2eSFMuDyoT8fhP
-         wINiMsnMbBTZVt5kNgRHzvtbjMhZWpX4QaLsysxaZZzn7Q01iKpF3lk4Tgw+uvI2pZSl
-         Rc6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUb5UqJvnJAKb1LhCbJPGv6BQ/IysN0emBuspWXcAdhAi3AhdWdOYu3NBwLUz64WxWN9VsE@lists.linux.dev
-X-Gm-Message-State: AOJu0YyeyokvToTJ2NchWJ3VL51NpHO2p9bqdvKkPAPxYUJEz6Wmv1/u
-	RoRuNPhOrP2lZtaKBOTKWV4HZdWQJZXvo8O4qlb6kHm0WqiPhob5RteF3f+Gl/g2CakhjBUiJHk
-	K11vYe2fNDcZMwaVtJaqgxaDUSKMjHdCJGi5o
-X-Gm-Gg: ASbGncus43H4rQEuFrvlqXYXhQTvsMjGiM83p2m1oB14xZPmkEg0+5n8qEM8Rjkow7m
-	/dvppKOJxqYblrGtOGIognSowwPNUSvThApwwODfpoOKLUGE5C5RaRDztlR+QjQWa13IqvajiDC
-	xSGv0bi88Ayuf6xoXHqFq6rw==
-X-Google-Smtp-Source: AGHT+IFmAkNEdgI8Usf/OOS6czpCIUfjzjMmDrrLFeB8TbVt16spO751vhSxBgmbdO5FhYFLhIwyiyfP8SeItQ5Z+90=
-X-Received: by 2002:a05:690c:368b:b0:703:c3ed:1f61 with SMTP id
- 00721157ae682-708eaeef043mr127166017b3.20.1746479098491; Mon, 05 May 2025
- 14:04:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GJrcor2G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746482960; x=1778018960;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5V6Q0IybOsq/r0l9ElfoRFpy+R+LZ1dRja9/RKg+xqI=;
+  b=GJrcor2GBjvPz2lhlmlZt3R8uJphuZLGDds0D2RP3h6TZH8WcUtfUcEa
+   5oPgkOCxi1ZhB7uQARYemN5MU5KurMvEgyFWC4PFNZG6efP7Z45nSOoy5
+   +RCOq0GOcqomcRzJ6XmLTVNcjFTMkWe+X5fiOk6UlPpzTl8Nt5mRTeWfe
+   riLO+JvZcBec3LWZb3LoO+tRitEMrx4ZS4SwsodnMxwJSm256L4SE0pt9
+   3tRAmogNdG5jkZxMLaIbU9b8xeTIzF2b9gwYX65bxdBf1HcKCBf6f9Q3z
+   zbiK60iFh8pa+j1LT3nlhleQLXX4Lezb+US9F68fAHMQ/QofzJFLAB6EZ
+   g==;
+X-CSE-ConnectionGUID: cGbwc1w5TqyugaICdCDIJA==
+X-CSE-MsgGUID: VbZWQxDTQI+YUAbAAO4+Iw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11424"; a="48201466"
+X-IronPort-AV: E=Sophos;i="6.15,264,1739865600"; 
+   d="scan'208";a="48201466"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 15:09:19 -0700
+X-CSE-ConnectionGUID: amafLmUoQBSAbn1nimBBQA==
+X-CSE-MsgGUID: dWWysA5+TsiLU9C8oF/cDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,264,1739865600"; 
+   d="scan'208";a="158621951"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 05 May 2025 15:09:17 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uC3zu-00066P-31;
+	Mon, 05 May 2025 22:09:14 +0000
+Date: Tue, 6 May 2025 06:08:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vitaly Wool <vitaly.wool@konsulko.se>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] mm/zblock: use vmalloc for page allocations
+Message-ID: <202505060531.xpSLGaPO-lkp@intel.com>
+References: <20250502080156.1672957-1-vitaly.wool@konsulko.se>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <87o6w7ge3o.fsf@microsoft.com> <CACYkzJ7Ur4kFaGZTDvcFJpn0ZwJ9V+=3ZefUURtkrQGfa68zLg@mail.gmail.com>
-In-Reply-To: <CACYkzJ7Ur4kFaGZTDvcFJpn0ZwJ9V+=3ZefUURtkrQGfa68zLg@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 5 May 2025 17:04:47 -0400
-X-Gm-Features: ATxdqUH7QOdmAmbomuCBMV4FUrVw8a-HbJeWUtKQ1wX8nnex6ppuCCrqNPrIXY8
-Message-ID: <CAHC9VhRwpvQQyMmFTeiQaos0+yJDkuCkt03QcYdnsxUvBXAtVA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: KP Singh <kpsingh@kernel.org>
-Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, James.Bottomley@hansenpartnership.com, 
-	bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, 
-	dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au, 
-	jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com, 
-	justinstitt@google.com, keyrings@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
-	nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
-	nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com, 
-	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
-	xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250502080156.1672957-1-vitaly.wool@konsulko.se>
 
-On Mon, May 5, 2025 at 4:41=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote:
-> On Mon, May 5, 2025 at 7:30=E2=80=AFPM Blaise Boscaccy
-> <bboscaccy@linux.microsoft.com> wrote:
-> >
-> > KP Singh <kpsingh@kernel.org> writes:
-> >
-> > [...]
-> >
-> > > Now if you really care about the use-case and want to work with the m=
-aintainers
-> > > and implement signing for the community, here's how we think it shoul=
-d be done:
-> > >
-> > > * The core signing logic and the tooling stays in BPF, something that=
- the users
-> > >   are already using. No new tooling.
-> > > * The policy decision on the effect of signing can be built into vari=
-ous
-> > >   existing LSMs. I don't think we need a new LSM for it.
-> > > * A simple UAPI (emphasis on UAPI!) change to union bpf_attr in uapi/=
-bpf.h in
-> > >   the BPF_PROG_LOAD command:
-> > >
-> > > __aligned_u64 signature;
-> > > __u32 signature_size;
-> >
-> > I think having some actual details on the various parties' requirements
-> > here would be helpful. KP, I do look forward to seeing your design;
-> > however, having code signing proposals where the capabilities are
-> > dictated from above and any dissent is dismissed as "you're doing it
-> > wrong" isn't going to be helpful to anyone that needs to use this in
-> > practice.
->
-> Please don't misrepresent the facts ...
+Hi Vitaly,
 
-KP, I believe the most constructive thing at this point is to share
-your design idea with this thread as previously requested so everyone
-can review it.  We can continue to argue about how we got to where we
-are at if you like, but that isn't likely to help us move towards a
-solution.  If you are unable to share your design idea, either in a
-couple of paragraphs or in some form of PoC, please let us know.
+kernel test robot noticed the following build errors:
 
---=20
-paul-moore.com
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vitaly-Wool/mm-zblock-use-vmalloc-for-page-allocations/20250502-160411
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250502080156.1672957-1-vitaly.wool%40konsulko.se
+patch subject: [PATCH] mm/zblock: use vmalloc for page allocations
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250506/202505060531.xpSLGaPO-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250506/202505060531.xpSLGaPO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505060531.xpSLGaPO-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+mm/zblock.c:176: warning: Excess function parameter 'ops' description in 'zblock_create_pool'
+>> mm/zblock.c:221: warning: Function parameter or struct member 'nid' not described in 'zblock_alloc'
+--
+>> ERROR: modpost: "try_alloc_pages_noprof" [mm/zblock.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
