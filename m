@@ -1,119 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DF842AA5;
-	Mon,  5 May 2025 14:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20E3258CCA
+	for <llvm@lists.linux.dev>; Mon,  5 May 2025 15:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746457040; cv=none; b=uzZsLr7F0t8zeT4L1vtfOVsAn/1VGhiP1xT3cVglOvCHHq0cHW6+WJ/8J0zeU4aYMOQCM/HnYQC70i4BqTERQWGqosolrhjoKfi5A8Snpcld4vYuhzmJBcc8o/nYi8+4AqMoqfyh0oeixOZOlaL+HhZdIuzo3k1kI4z/OFby+gE=
+	t=1746457509; cv=none; b=Fe2v45GK1lbhjlc/QrgbHJQguoCirBYIRZvBacygDDEUEAg1GNdraITjSd2t/1/JtK2k1NuZut23LsIRxjC6o6rz2RiSRXGAMFa8kcD08VHgDTC+vrQkiEa1z/a/h+u8C0IpILpXqSN+SjZ66LdxtZgB1Gky1RBL85dmAO9rEXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746457040; c=relaxed/simple;
-	bh=Sip1PnDID2/ngnatk9xALApIFhWqepNEXsu98AyzCMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hgepqhrq/MnDU/3jLTAhnoBOAq4eO7az6DvdcMUbHH+IBZoq0f/DO/8uSdmmOQeEGFN3VL+eAwwryaJvTytor8F2xjb66nHfe3wqSmltg8VG+VfiGng3OK4iesNxVdmGWwsgLQFPOzvYWaXqyJ9NcFqkvMJ/w84a/hCmCR0CfZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U6WlL0uR; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U6WlL0uR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746457037; x=1777993037;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sip1PnDID2/ngnatk9xALApIFhWqepNEXsu98AyzCMU=;
-  b=U6WlL0uR5/QutGcgQlaIrVnfououjOem7VMgFR4MxhlZtJCL9on97s4E
-   suI0MPdrPx8nBq0hPT293f1D+s35tNzqHhdcEyW6ztImnNyVkZdDjrW09
-   FveWz1i922n4P5/VN3esMXftBG/P6QClaVHd01MkzyOXXeGmG7XmemA6/
-   +jA5fWK8OilzmPPFe1KkHsHih9Nt9+GiBHk9PuuMTq2Egu3sVIGHsrLF2
-   CNFjPpqZbTNISeYmcGh2y9TyEPwZWGweWWZTKKO2jcB006VGwCjC8ofG3
-   7dxrwKehOvPnEu2Gc1VAfs+ewxemMEXh3JkbUDY4kPf77u78D9EAX/o+k
-   w==;
-X-CSE-ConnectionGUID: IaOptzIhSmWeMKNggBRTvQ==
-X-CSE-MsgGUID: xTIvEWpESOqHZBFshKAeKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11424"; a="65475572"
-X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
-   d="scan'208";a="65475572"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 07:57:16 -0700
-X-CSE-ConnectionGUID: dwURUL9HRTS3RSrgxuYveg==
-X-CSE-MsgGUID: aIp5ZAbNRyWXPZsDXP5leQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
-   d="scan'208";a="172499800"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 May 2025 07:57:13 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uBxFn-0005qL-22;
-	Mon, 05 May 2025 14:57:11 +0000
-Date: Mon, 5 May 2025 22:56:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: T Pratham <t-pratham@ti.com>, Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Kamlesh Gurudasani <kamlesh@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Praneeth Bajjuri <praneeth@ti.com>,
-	Manorit Chawdhry <m-chawdhry@ti.com>, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] crypto: ti: Add driver for DTHE V2 AES Engine
- (ECB, CBC)
-Message-ID: <202505052251.UeYNEjXC-lkp@intel.com>
-References: <20250502121253.456974-4-t-pratham@ti.com>
+	s=arc-20240116; t=1746457509; c=relaxed/simple;
+	bh=FV8Tejqc6V6+uOqyC0GpdhpV7MI/2Ee8pALjv1APlhw=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Um5ImZDYZi2qMkt6pA48EvtLZQJe+lCikC6Gq1BHNlJ0uPN4gxTIom6DdzeT8Wv2tywOB2ERHDxngqW8CwVrfdnZ8lu/bGGSYiAVrhmDTQDmrE1ZZKoiB5kE3hOUKDd222RAptIQwi2QvqTzBFcHNmzjj+I3YYwBC/KNyoqYHsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 5014492009C; Mon,  5 May 2025 17:05:06 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 4904692009B;
+	Mon,  5 May 2025 16:05:06 +0100 (BST)
+Date: Mon, 5 May 2025 16:05:06 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+cc: Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+    linux-kernel@vger.kernel.org
+Subject: Re: Adding __popcountsi2 and __popcountdi2
+In-Reply-To: <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2505051543470.31828@angie.orcam.me.uk>
+References: <20250425003342.GA795313@ax162> <CAHk-=whfT3A8K2Z+WbieGG5Hhc9QAT5s3qsbB19O0Roj2G5tfA@mail.gmail.com> <20250425021138.GA3800209@ax162> <CAHk-=wjDV3nOK34rbU8bdo6OjM=KYoCN92=1eVEVFu=FQr8TNA@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250502121253.456974-4-t-pratham@ti.com>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Pratham,
+On Thu, 24 Apr 2025, Linus Torvalds wrote:
 
-kernel test robot noticed the following build warnings:
+> > I will test declaring __popcount{s,d}i2() as aliases of
+> > __sw_hweight{32,64}() to see what effect that has but I figured that
+> > calling the __arch_hweight variants was more correct because some
+> > architectures (at least RISC-V and x86 when I looked) use alternatives
+> > in that path to use hardware instructions and avoid the software path
+> > altogether. While there would still be the overhead from the function
+> > call, I figured not using the software fallback would at least soften
+> > that blow.
+> 
+> Once you have the overhead of a function call - and all the register
+> games etc that involves, you're almost certainly better off with the
+> simple unconditional bitwise games.
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on next-20250505]
-[cannot apply to herbert-crypto-2.6/master robh/for-next linus/master v6.15-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ Unless optimising for size, which we do support.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/T-Pratham/dt-bindings-crypto-Add-binding-for-TI-DTHE-V2/20250502-201653
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20250502121253.456974-4-t-pratham%40ti.com
-patch subject: [PATCH v3 2/2] crypto: ti: Add driver for DTHE V2 AES Engine (ECB, CBC)
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250505/202505052251.UeYNEjXC-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250505/202505052251.UeYNEjXC-lkp@intel.com/reproduce)
+ Adding another function call to a non-leaf function is usually cheap on 
+RISC platforms as a stack frame must have been created already, so the 
+instructions required have taken their space anyway.  For a leaf function 
+-- it depends, but in the cheapest case it's 5 instructions total: 2 pairs 
+to adjust SP both ways and to save/restore the link register respectively, 
+plus one for the actual call.  The result may still be smaller than an 
+open-coded variant.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505052251.UeYNEjXC-lkp@intel.com/
+ I have no opinion though on providing libgcc replacement functions to 
+satisfy libcalls for -Os builds.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/crypto/ti/dthev2-common.c:15:
->> drivers/crypto/ti/dthev2-common.h:9:9: warning: '__TI_DTHEV2_H__' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
-       9 | #ifndef __TI_DTHEV2_H__
-         |         ^~~~~~~~~~~~~~~
-   drivers/crypto/ti/dthev2-common.h:10:9: note: '__TI_DTHE2V_H__' is defined here; did you mean '__TI_DTHEV2_H__'?
-      10 | #define __TI_DTHE2V_H__
-         |         ^~~~~~~~~~~~~~~
-         |         __TI_DTHEV2_H__
-   1 warning generated.
-
-
-vim +/__TI_DTHEV2_H__ +9 drivers/crypto/ti/dthev2-common.h
-
-   > 9	#ifndef __TI_DTHEV2_H__
-    10	#define __TI_DTHE2V_H__
-    11	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  Maciej
