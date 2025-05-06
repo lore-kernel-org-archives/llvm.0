@@ -1,99 +1,99 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101C9225415
-	for <llvm@lists.linux.dev>; Tue,  6 May 2025 04:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0F2227BA4
+	for <llvm@lists.linux.dev>; Tue,  6 May 2025 04:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746507536; cv=none; b=GMjupUk3g3Ta8bgw1Krl0HU3hgs25XlVyZtKuT5GZCxoFVNZ8IQ/F+QIo+YItMEuq7F+R4Mdv07vWHNSt9fivXrEVkXIggy9VRpCI/TkYzXMB31htz563szBFUPguPYkbCrmzFM3VltmvZspXFNzQy2Ik3MObGOKvi0IViCTS/k=
+	t=1746507537; cv=none; b=JNSMgL15pWazR5HwVk4cPHeWYdZ+Oz+s6cX4rGRchD0ukSyhbZlQdkMVoa3tAGaGrWV9uUw1FggU25bkWAII7tHh2bruHaUHDDnvIE0oSi1F9AhJqdKh3PWy1PCdqQpUYegMvpkykRdlnUEiId6Xl77jSFJKaeZQW+CPXBJUICQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746507536; c=relaxed/simple;
-	bh=DZPx48zTDYNX5AKa48yQp9oTWkNFvmRP5adzWyGYmmQ=;
+	s=arc-20240116; t=1746507537; c=relaxed/simple;
+	bh=36Nh2klYydSaF1etucQ5T7fKCi92RTp8ELWrFJG81Ks=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JZpfwU4oZnOt5xWUfQCq918+88MzOsBNRtHfGBaNs3Uf+BuAOU9ryhUfqQ6IX2LLOsD/vGs5TzdGe88TAq0+TtyvW8L28gL+94fjNSph23HP5u/T6R2X+nyZNdBy0V4Dp5zM/NGzGS4a7lxDBinyQrwNkCxtotu6GIOXFFGUbYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Thzq0PWL; arc=none smtp.client-ip=209.85.222.176
+	 MIME-Version; b=eD9Q3seDnw0nNxKOrOdMtXBsQ842tCYab7VAimLqIlM9sY8WBhGH/owC43DeONMBaJywVdpeLiR0gpwbfm8y/RRNhiEJhSqv8c2bA1o/ByIGBm5twQBNHkSAcWevhfbzJTY3X1K5vDHgOAo+cgtF+XQ4yLK9HmKFN0YWENDUfoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nFDjpqwI; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Thzq0PWL"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c54a9d3fcaso565035285a.2
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 21:58:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nFDjpqwI"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7cad57f88eeso228187885a.2
+        for <llvm@lists.linux.dev>; Mon, 05 May 2025 21:58:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746507533; x=1747112333; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1746507534; x=1747112334; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=x0uhFJxbTknYVv8H2dzluonrWfElV8YvZk9w6Cc8W4w=;
-        b=Thzq0PWLUyUjHPWm59XLKGN7cyS1ASwH9xhLgDq+wmSA1+VbgsrTjJenl5qImFrVgK
-         Qd7OKHw0IjyN/XwYO94GbYMmmxNkTRuwdqjYvMKaS0qP66/bn7cmiH0N2HH9Q38IKJUG
-         WqKMrVPCIFZxrZQ8RHUrPbhh5a80whX3tL+reYFzz6HLKHg8hsyaAArGQesTEk30VKiC
-         ToOdOnblEUlvIxCKUYKC0NCu22n4XPi+NzjvM8qC8sbBn6CXiT5OJn5U+3w39jtLD3qK
-         5tZBujht2NCLtPJQwpSXRTRI03+9ooyqptqDOfOIpCcRbekjS7bZ0l371NmB+voRqSCv
-         zE/A==
+        bh=W1AOmIGSmcpEzj8NNVdx1CCoiyiTrBHzIt96cBaZ5Jw=;
+        b=nFDjpqwIiF0616m1WyGAVq1Z/xvk7/TZ3Puf7/VvfhlXH4IUQB+nv2FQmXzyIcyJ+E
+         +RFzga0E5dmz5Ql1kteyn0aanlXYvVT55+K33ZslfSKUug7+EmO5BwVSz4RvJZbieV0A
+         HfQKyUtTlHABX36JrlTQxLDnnphxNva06UpMEWj+wCeLM3L+hyOv89VzwxMWZ25byHmp
+         gDjweAPMVCj7PDlGGDdvpZQF2KGDndR8BrRx9GpoxfFoU7O9+d1xjs3Xb+vcmD6irt2E
+         ZKuWGIKrlmNkzOrxmdulb0R2PBJsdKZD9bUpXSVR/aynTkI7pu0JKKgtDuO1JnxvdSu0
+         NFGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746507533; x=1747112333;
+        d=1e100.net; s=20230601; t=1746507534; x=1747112334;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=x0uhFJxbTknYVv8H2dzluonrWfElV8YvZk9w6Cc8W4w=;
-        b=Hi6zDL+9iz4utq6El2ofdp3t0TPnL3lAIXOxTf4AmQmlc7iFDElZkmxfrZvllCB+I2
-         bEYQ/LY8pzZn1c04ZdzPrZUSDGmLzPhrQRCH8Fnl+UHV4A3zBKYPLjpRcU0HqTXyT5ld
-         cVyROqTBhaAfZh9pdBc2hJUvCauZjuBKnHne9z0JsDvdHe8P6NQJT9hd+26dGeSWXtx+
-         +BrGEjNCqb0T7oh951KQDMbKdmi/qPA+toOx5aHubBq/kQgndvvG8D/I/yIR17eWBkEt
-         KiH9/QcQDNJEzUZp5/H/WghqCuIr0XH1vhP+4Sjto8qOF8zWeH9OiswNLlMcu+Unmim4
-         Fg4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWzhWdi1jDtQ98IhN8SfYMVCn3zDlAqLT9VWS15oUgQwpq/CIhoJTqRbx94LqFp6/sjL7/d@lists.linux.dev
-X-Gm-Message-State: AOJu0YxYHZGACdenI12v3FqG15JXC5maABBAPZ7w1yVb/6zwPeJlWDmF
-	VagVUvRJ9OsVxWW3IThBmb0UQDYtoJXwwgEL0tVnf7hXptKE+pyt
-X-Gm-Gg: ASbGncscpsqVdCspaiQcQn4hn6PcAHqZUIifHLy++VS+0fD6Z1SL3UBHgC1nZ+Czyo8
-	DAwy57lDRm0bX/4Ra6e13J22ub7EA+w8IJ3Bnasps6dpM/XftsZSC3ueCdHebevHcREkHOfCGvB
-	3XFnMKKWsjTKYcWezO4vf7uZsZ0HcM4eVQrNcjGOUb66BrHkqrLz2JXgzHDF5ozCQziQtx7W6Qb
-	4vRPEL001qcBzCWqU+oSC8g7YprFxH3TFC+B/FWGc8TEXoK077leV/woVHZyLmX4Zvsxqk/h+cu
-	Ygy+r3EzjUNBWD9OvVBf28BA+beeG9uufFDMBFZFcedqcWMGuYHdop488uM1t8AWyzOQ2Dny1Re
-	lG2MqB0yHQZ4WOxgP63E+W5zjBEIB+CM=
-X-Google-Smtp-Source: AGHT+IGN3zEftKt67K/xoaMzkYgh96JRnQbI7cLMPphRjpCglGYRvDGswaB/FJEuaLY1BuA6/neAmg==
-X-Received: by 2002:a05:620a:400c:b0:7c5:6410:3a6 with SMTP id af79cd13be357-7cae3ab386bmr1512267585a.27.1746507532781;
-        Mon, 05 May 2025 21:58:52 -0700 (PDT)
+        bh=W1AOmIGSmcpEzj8NNVdx1CCoiyiTrBHzIt96cBaZ5Jw=;
+        b=o3gg/t2zrEcdhMnwkHc4l14eKQUN+xjMcAmQKb1FZyzTyXXJK8cLlApspx+VtUevZG
+         zRksWe2earpbgz/SsbOyRUYkNCK5tHlyeD4Nnrd06/2GnL1wB08urZsyeYj7sGzBBgF/
+         vK9nnJ/Q/36FzIAUNOrnC+cleYKImLNi563+NTJa4CbaZCZ1xvDskDg7Ypsw+QdUm+t8
+         ItJswT798OXAglsYA6x+F9E07YzSPeE+KGmvqghw4+z7qP31JOj3XJmF95Ni871BsdwJ
+         4icurcBX6Cl/Acx07JEJz469WIY880Fi5bENSxqQATy9+A9I68jK1zoWjvAH646L3RhS
+         9wkA==
+X-Forwarded-Encrypted: i=1; AJvYcCXWzSijfi8PRqFBO1ft57STWBoWNNuzULlW3DELkFkypqThgq7o2jVQUKM6wXArL2mJMXV6@lists.linux.dev
+X-Gm-Message-State: AOJu0YwZisBeDV2X9WMIKNNVMcTobIeYTwIU3JXUaoSvl+ptE8x38H9g
+	LjQcuQ6Mb+/r/RFbbljq3YOK+OTlfeDhpRUZYnFYBDZ8qxtiMVje
+X-Gm-Gg: ASbGncsDMy5HsBN3rLKlhutUq+ZpdCqYgczb4sOaKgSQthFJF31HWolKzyQl7RT9W0L
+	/taNE/rzpqdEaJJOtrCjpv9Bdwmxw2z6dM+m5doj8w0XaFKHs101v4NFDfP76FJ53+qKdtH9Y8A
+	3nnhCaSIdw79Ph9Jd8zS6E9DD+8M81B8Hz4mXB+UkGPhFoY/63N6h4FTfHNqMdONHYA5LZSEyAO
+	urQE9DQ6SH8Wt7fpnJgp2PaXeMcqUG9ejgZZ2cYTASOFaWN9dHcP+YEfVJ2mX2+XqTu6lrVh7CR
+	CaF1ocEDC/IxOqWL36uGubC7tqi0LX/fMjOJrIfoWrZsVgtZ9FVJvALcwfpAC7ZgHYuqom3+Fir
+	10wUOFqU5ACELoCE8UbpOIVFAMVoDRaU=
+X-Google-Smtp-Source: AGHT+IFiAI5riZ5rOB1hBWWRNaW43PgfIcr0N4slt18rdztpZEgQos+K1pQsIKNodZQQdE44hEQ30w==
+X-Received: by 2002:a05:620a:800b:b0:7ca:cd16:8f52 with SMTP id af79cd13be357-7cae3a88450mr1410067785a.12.1746507533966;
+        Mon, 05 May 2025 21:58:53 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cad243f46bsm661511285a.91.2025.05.05.21.58.51
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cad23c48ffsm658912085a.45.2025.05.05.21.58.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 21:58:52 -0700 (PDT)
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 472A11200043;
-	Tue,  6 May 2025 00:58:51 -0400 (EDT)
+        Mon, 05 May 2025 21:58:53 -0700 (PDT)
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id BCE711200066;
+	Tue,  6 May 2025 00:58:52 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Tue, 06 May 2025 00:58:51 -0400
-X-ME-Sender: <xms:C5cZaKWk_-S0RPi1FpaUvgrPoDRn5XqxOGmi_g9orw6iHOLMq5TG9w>
-    <xme:C5cZaGl011T8YBoUeSpj3A4NbgDvF0X87jv-eC_0e9CBILXLP8cYwQlk3BQW8xAWn
-    lIL0TjtUF1J-CmlQQ>
-X-ME-Received: <xmr:C5cZaOY-fwjOfb_BeH8-GvXC7jke3n9UwgWEyEN2YwI1HUOdB00Z9sdX>
+  by phl-compute-08.internal (MEProxy); Tue, 06 May 2025 00:58:52 -0400
+X-ME-Sender: <xms:DJcZaBTz2QIJA4pudix58YgHht3bXfnjpFxXzrf7yt1vgVKlR3Z7Qg>
+    <xme:DJcZaKyTlr0Hwpnk7vtu3UzYYz23upWDKAonxi__dZsbUyLAwPGdhDHynrTieUQUO
+    Z0ZQFFwYCyTWrxNvA>
+X-ME-Received: <xmr:DJcZaG3AuUM9pJkwLEYgKWG9_PTp__5DcqvXX2bFS9lEKpPlpvMcY6s8>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeftdekucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
     gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
     tdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
-    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeekteetjeegudeikedujeefvddvtdeigfei
-    ffffleejfeeiheeiffefvdeffffgteenucffohhmrghinhepghhithhhuhgsrdgtohhmpd
-    hkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqd
-    eiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhl
-    rdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepfeeipdhmohguvgepsh
-    hmthhpohhuthdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehmihhngh
-    hosehrvgguhhgrthdrtghomhdprhgtphhtthhopehjuhhrihdrlhgvlhhlihesrhgvughh
-    rghtrdgtohhmpdhrtghpthhtohepvhhinhgtvghnthdrghhuihhtthhotheslhhinhgrrh
-    hordhorhhgpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmhgrnhhnsegrrhhmrdgt
-    ohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtth
-    hopegsshgvghgrlhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmghhorhhmrghn
-    sehsuhhsvgdruggv
-X-ME-Proxy: <xmx:C5cZaBXYm6Wv8qxnM7-ECRh-u5QSgVGsggkz9ktiFy5GkOsKG3ygSg>
-    <xmx:C5cZaEmjHS3cGZl9yy2pILovn8Oj4g4GJH48McYWr-vCbfWiguMMYA>
-    <xmx:C5cZaGe4hCwOG1awbKmZWLzkvFffrYeL7aHXxTsQ3ceOEREPlLpGTw>
-    <xmx:C5cZaGGfwPV8A3kRxhrjVqFQcwLHdu5cIbJDI18H2bLyM7naGi8yfg>
-    <xmx:C5cZaCnPUcbgLXZVDLmLfxlPFmeSpds-Myln6o8WbfEEPPKgYi7AOgg5>
+    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeetjeeuueegfeeihfeihfdtueekgedvkedv
+    ueefvdduheeugeehlefhvdduueegffenucffohhmrghinhepghhithhhuhgsrdgtohhmpd
+    hkvghrnhgvlhdrohhrghdptggrshhtrdgrshenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrsh
+    honhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghn
+    gheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepfe
+    ejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtph
+    htthhopehmihhnghhosehrvgguhhgrthdrtghomhdprhgtphhtthhopehjuhhrihdrlhgv
+    lhhlihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepvhhinhgtvghnthdrghhuihhtth
+    hotheslhhinhgrrhhordhorhhgpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmhgr
+    nhhnsegrrhhmrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdroh
+    hrghdprhgtphhtthhopegsshgvghgrlhhlsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehmghhorhhmrghnsehsuhhsvgdruggv
+X-ME-Proxy: <xmx:DJcZaJBIWOgEhjKo3CKuCuAGgEt6lAMjVuCMW0DVz9Xe5GY1tsh6KQ>
+    <xmx:DJcZaKgJzD_oyx_cwlVJTKIG7hQF-5FTVPyHtjgRn7_YmsAJU-g8GQ>
+    <xmx:DJcZaNqoU5I4w9plrd3xOwqjWLPCUMArHb-8BkJeCGMh1jSX7QSbGw>
+    <xmx:DJcZaFhS6J5tmR2C_MnAChk2JdZZ3I2eB33aRVJlNlxKeYgfIs5n9A>
+    <xmx:DJcZaFTstqR0Ld12x1sqnLwQPwXUaZY6oEKqVLdUq_jBvr7I4w83NLYl>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 May 2025 00:58:50 -0400 (EDT)
+ 6 May 2025 00:58:52 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Ingo Molnar <mingo@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>
@@ -120,10 +120,11 @@ Cc: Ingo Molnar <mingo@redhat.com>,	Juri Lelli <juri.lelli@redhat.com>,
 	Christian Brauner <brauner@kernel.org>,
 	Panagiotis Foliadis <pfoliadis@posteo.net>,	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,	llvm@lists.linux.dev,
-	Grace Deng <Grace.Deng006@Gmail.com>
-Subject: [PATCH 2/5] rust: sync: Mark PollCondVar::drop() inline
-Date: Mon,  5 May 2025 21:58:40 -0700
-Message-Id: <20250506045843.51258-3-boqun.feng@gmail.com>
+	Christian Schrefl <chrisi.schrefl@gmail.com>,
+	Charalampos Mitrodimas <charmitro@posteo.net>
+Subject: [PATCH 3/5] rust: task: Mark Task methods inline
+Date: Mon,  5 May 2025 21:58:41 -0700
+Message-Id: <20250506045843.51258-4-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20250506045843.51258-1-boqun.feng@gmail.com>
 References: <20250506045843.51258-1-boqun.feng@gmail.com>
@@ -135,48 +136,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Kunwu Chan <kunwu.chan@hotmail.com>
+From: Panagiotis Foliadis <pfoliadis@posteo.net>
 
 When building the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-with ARCH=arm64, the following symbols are generated:
+toolchain provided by kernel.org, the following symbols are generated:
 
-$nm vmlinux | grep ' _R'.*PollCondVar  | rustfilt
-... T <kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop
-...
+$ nm vmlinux | grep ' _R'.*Task | rustfilt
+... T <kernel::task::Task>::get_pid_ns
+... T <kernel::task::Task>::tgid_nr_ns
+... T <kernel::task::Task>::current_pid_ns
+... T <kernel::task::Task>::signal_pending
+... T <kernel::task::Task>::uid
+... T <kernel::task::Task>::euid
+... T <kernel::task::Task>::current
+... T <kernel::task::Task>::wake_up
+... T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
+... T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
 
-This Rust symbol is trivial wrappers around the C functions
-__wake_up_pollfree() and synchronize_rcu(). It doesn't make sense to go
-through a trivial wrapper for its functions, so mark it inline.
+These Rust symbols are trivial wrappers around the C functions. It
+doesn't make sense to go through a trivial wrapper for these functions,
+so mark them inline.
 
-[boqun: Reword the commit title and re-format the commit log per tip
-tree's requirement, remove unnecessary information from "nm vmlinux"
-result.]
+[boqun: Capitalize the title, reword a bit to avoid listing all the C
+functions as the code already shows them and remove the addresses of the
+symbols in the commit log as they are different from build to build.]
 
 Link: https://github.com/Rust-for-Linux/linux/issues/1145
-Suggested-by: Alice Ryhl <aliceryhl@google.com>
-Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
-Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
-Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Reviewed-by: Christian Schrefl <chrisi.schrefl@gmail.com>
+Reviewed-by: Charalampos Mitrodimas <charmitro@posteo.net>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Link: https://lore.kernel.org/r/20250317025205.2366518-1-kunwu.chan@linux.dev
+Link: https://lore.kernel.org/r/20250315-inline-c-wrappers-v3-1-048e43fcef7d@posteo.net
 ---
- rust/kernel/sync/poll.rs | 1 +
- 1 file changed, 1 insertion(+)
+ rust/kernel/task.rs | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/rust/kernel/sync/poll.rs b/rust/kernel/sync/poll.rs
-index d7e6e59e124b..7b973d72229b 100644
---- a/rust/kernel/sync/poll.rs
-+++ b/rust/kernel/sync/poll.rs
-@@ -107,6 +107,7 @@ fn deref(&self) -> &CondVar {
- 
- #[pinned_drop]
- impl PinnedDrop for PollCondVar {
+diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+index 9e6f6854948d..0bf5fdf75c37 100644
+--- a/rust/kernel/task.rs
++++ b/rust/kernel/task.rs
+@@ -134,6 +134,7 @@ pub fn current_raw() -> *mut bindings::task_struct {
+     /// # Safety
+     ///
+     /// Callers must ensure that the returned object doesn't outlive the current task/thread.
 +    #[inline]
-     fn drop(self: Pin<&mut Self>) {
-         // Clear anything registered using `register_wait`.
-         //
+     pub unsafe fn current() -> impl Deref<Target = Task> {
+         struct TaskRef<'a> {
+             task: &'a Task,
+@@ -168,6 +169,7 @@ fn deref(&self) -> &Self::Target {
+     /// # Safety
+     ///
+     /// Callers must ensure that the returned object doesn't outlive the current task/thread.
++    #[inline]
+     pub unsafe fn current_pid_ns() -> impl Deref<Target = PidNamespace> {
+         struct PidNamespaceRef<'a> {
+             task: &'a PidNamespace,
+@@ -275,24 +277,28 @@ pub fn pid(&self) -> Pid {
+     }
+ 
+     /// Returns the UID of the given task.
++    #[inline]
+     pub fn uid(&self) -> Kuid {
+         // SAFETY: It's always safe to call `task_uid` on a valid task.
+         Kuid::from_raw(unsafe { bindings::task_uid(self.as_ptr()) })
+     }
+ 
+     /// Returns the effective UID of the given task.
++    #[inline]
+     pub fn euid(&self) -> Kuid {
+         // SAFETY: It's always safe to call `task_euid` on a valid task.
+         Kuid::from_raw(unsafe { bindings::task_euid(self.as_ptr()) })
+     }
+ 
+     /// Determines whether the given task has pending signals.
++    #[inline]
+     pub fn signal_pending(&self) -> bool {
+         // SAFETY: It's always safe to call `signal_pending` on a valid task.
+         unsafe { bindings::signal_pending(self.as_ptr()) != 0 }
+     }
+ 
+     /// Returns task's pid namespace with elevated reference count
++    #[inline]
+     pub fn get_pid_ns(&self) -> Option<ARef<PidNamespace>> {
+         // SAFETY: By the type invariant, we know that `self.0` is valid.
+         let ptr = unsafe { bindings::task_get_pid_ns(self.as_ptr()) };
+@@ -308,6 +314,7 @@ pub fn get_pid_ns(&self) -> Option<ARef<PidNamespace>> {
+ 
+     /// Returns the given task's pid in the provided pid namespace.
+     #[doc(alias = "task_tgid_nr_ns")]
++    #[inline]
+     pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+         let pidns = match pidns {
+             Some(pidns) => pidns.as_ptr(),
+@@ -321,6 +328,7 @@ pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+     }
+ 
+     /// Wakes up the task.
++    #[inline]
+     pub fn wake_up(&self) {
+         // SAFETY: It's always safe to call `wake_up_process` on a valid task, even if the task
+         // running.
+@@ -330,11 +338,13 @@ pub fn wake_up(&self) {
+ 
+ // SAFETY: The type invariants guarantee that `Task` is always refcounted.
+ unsafe impl crate::types::AlwaysRefCounted for Task {
++    #[inline]
+     fn inc_ref(&self) {
+         // SAFETY: The existence of a shared reference means that the refcount is nonzero.
+         unsafe { bindings::get_task_struct(self.as_ptr()) };
+     }
+ 
++    #[inline]
+     unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
+         // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+         unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
 -- 
 2.39.5 (Apple Git-154)
 
