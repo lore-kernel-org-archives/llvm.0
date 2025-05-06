@@ -1,202 +1,179 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFE024166D
-	for <llvm@lists.linux.dev>; Tue,  6 May 2025 17:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD7019AA63;
+	Tue,  6 May 2025 21:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746553925; cv=none; b=dD8gJlgYLR5VYX9y9qWeRQUpxk5y0Z7fQab7UCgE1h0sH1vXF5aAJwues76Tt8cSvRlmJR4hw5CMRPWsi1gUy7bnhMaP/l6YA0xvOmXzqHIIWre+rfe0QyUbGhIzP89UWd5BLCVGJwQ1zvL1zWRvAVqZf0Y3/2G/uf0RDgk0Nos=
+	t=1746565594; cv=none; b=e584S1sf13TAX3RmP3elSrbzKIIBPxPdStLg5ivkqkZStpwFO2QtyxRLn0TKCvTu5Vuvr05T5zFMBDU/vWmYSv2mNi7vW2QnS97Gvcl46gMAL7hhMaq3GtJIHecqHaRbV+BOJwiDnNQX0w7iW81xdTNPVkVd0ZwN/eR7fRE69zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746553925; c=relaxed/simple;
-	bh=p3w/St0kW8fKa76Db7E8rYhh3MsgIDsElDGzAXP9C8A=;
-	h=Date:From:To:Subject:Cc:In-Reply-To:References:MIME-Version:
-	 Message-ID:Content-Type; b=sI828eUw8kw6RQmNeF3IoReoHXUOJXZWrFL+HqD5FiiCNLEm9uKEHroGJJF1ctyrwplzpoM2USfZ//QqGLsgcJ5c8v3BEQ61nqEmCogVUwaW2VzBLI599CHn2RN7m/FwhizUUYp7VlOIsRU1/LkgsiH6a86ISUd2v+sEND76900=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Mvh2BHX+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pkvLNqVg; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1746565594; c=relaxed/simple;
+	bh=74lje376FlTSuXCICkSnr8qOkLged5xjB5xPmh1n+yc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=X2J3wRhGWt6f655dEY/1GoAwSM3frx0tvzGXug/UBmA+J7CMkU/HyfBv4pJD2EIQ5/4oCGVHthSKdRsugzfgk0TPmUbqQ6a3+ckjZBKuiB9iUgXoV0eK1Ol37jj11eilIZxOStMnI4yjFbD3Q5YPjsLed9uSSrSZ38lFdQIyD3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVl+SE4T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Mvh2BHX+";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pkvLNqVg"
-Date: Tue, 06 May 2025 17:52:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1746553922;
-	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5hp2iDlvZc776exwlwCKdQCJZrhOKa0RLDTpLaBIuAs=;
-	b=Mvh2BHX+OWGB6ERtP1WY0BFwGF50Ju/KV9tk1/KYd2fyOVWv0qQWiXkeFusJ/HnTHQ7nMQ
-	Gc+NyoD/kknF6Y0wdHidcBr8+5rksd//wp5MaYgn9lfbuTV8Wt5dzKfcm1f0QOhet7GdC8
-	Y9hrHZqGz0Jw9AoZllZZ0xXlBta5LzzhkLeTQrRVe9/Up2RnS6scA3/gwQFiwxWNafEdoO
-	+VxRcTKAk2XBnnCG1hlxgDWeBZJm7dodwqfpPFdkg9/3QZy5zOjfNcxJt1ExsKOtK56y9m
-	VPokfxf8YxQkO+7MyY6UifPvm3uVQSDm5veb834NWjdMHGSeJSdzjEzoD/m4XQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1746553922;
-	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5hp2iDlvZc776exwlwCKdQCJZrhOKa0RLDTpLaBIuAs=;
-	b=pkvLNqVg5bOusrc/LcyBM6jZYnIYJNBK16qNOg/6vX00/Px53TjlwePyBBpmwyk+LkL/Of
-	FnrvT+BTYsz3aODA==
-From: "tip-bot2 for Andy Shevchenko" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To: linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/lockdep: Move hlock_equal() to the
- respective #ifdeffery
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Waiman Long <longman@redhat.com>,
- Will Deacon <will@kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
- linux-kernel@vger.kernel.org
-In-Reply-To: <20250506042049.50060-2-boqun.feng@gmail.com>
-References: <20250506042049.50060-2-boqun.feng@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVl+SE4T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAF1C4CEE4;
+	Tue,  6 May 2025 21:06:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746565593;
+	bh=74lje376FlTSuXCICkSnr8qOkLged5xjB5xPmh1n+yc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=aVl+SE4TL/+aQ4RxUww9NntBllXCHmZe2GcxFp1ljeqowgPN7Wue3GOb+J/bndWNZ
+	 Pox0FmI+TlEN6PEeQjzjedMI6kRLJZMj7pDK0J2yw1GItskOI2cIt35pvlIdNQazgZ
+	 nnJYdHPhEEFHVIkRCXNvwEaOd8mG47+yvE2XzZrzkf8loaPPBGmMvX1CjX/EyRpZJB
+	 OXAXKDjqKQ9KTvzp4gijrXrk09lWY7Um+bTYvn1StVp6t+e0ya9FUyOlrDYpWlJmWZ
+	 DPQSuGPOlL7ZuqwjexXQO6csbMBePfW9d8a4sv0bqPPRg4Dcm5UxktiLXWpJn9/qfa
+	 6nf4BMfYHtlBg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 06 May 2025 14:02:01 -0700
+Subject: [PATCH v2] kbuild: Disable -Wdefault-const-init-unsafe
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-ID: <174655392101.406.10520586528110757948.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe:
- Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Precedence: bulk
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250506-default-const-init-clang-v2-1-fcfb69703264@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMh4GmgC/3WNyw6CMBBFf4XM2jF9CCGu/A/CgrYDTCStaZFoS
+ P/dimt3c27uPbNDosiU4FrtEGnjxMEXUKcK7Dz4iZBdYVBC1eKiBToah+eyog0+rciey7mUIpq
+ GlDStE9o0UOaPSCO/DnXXF545rSG+j0+b/KY/aS3kf+kmUaB2yjZWtrUz5nan6Gk5hzhBn3P+A
+ P1JxFLBAAAA
+X-Change-ID: 20250430-default-const-init-clang-b6e21b8d03b6
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Marcus Seyfarth <m.seyfarth@gmail.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6468; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=74lje376FlTSuXCICkSnr8qOkLged5xjB5xPmh1n+yc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBlSlddEjFj3Top9qLKz+JuF2bVnW4yWNRUvtF/qnr4vc
+ bLpNN9dHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiDnKMDIv81zbtfiQ2Wb2E
+ Lc1V/df79pNTnO4/r71TdnEnY49W2n2G/xFMhfnaF6ZP0e7QftXdNqsw/eGJ/sTInkPnU6z0bjy
+ 0YwAA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-The following commit has been merged into the locking/core branch of tip:
+A new on by default warning in clang [1] aims to flags instances where
+const variables without static or thread local storage or const members
+in aggregate types are not initialized because it can lead to an
+indeterminate value. This is quite noisy for the kernel due to
+instances originating from header files such as:
 
-Commit-ID:     96ca1830e1219eda431702eb9a74225e8fe3ccc0
-Gitweb:        https://git.kernel.org/tip/96ca1830e1219eda431702eb9a74225e8fe3ccc0
-Author:        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-AuthorDate:    Mon, 05 May 2025 21:20:47 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 06 May 2025 18:34:31 +02:00
+  drivers/gpu/drm/i915/gt/intel_ring.h:62:2: error: default initialization of an object of type 'typeof (ring->size)' (aka 'const unsigned int') leaves the object uninitialized [-Werror,-Wdefault-const-init-var-unsafe]
+     62 |         typecheck(typeof(ring->size), next);
+        |         ^
+  include/linux/typecheck.h:10:9: note: expanded from macro 'typecheck'
+     10 | ({      type __dummy; \
+        |              ^
 
-locking/lockdep: Move hlock_equal() to the respective #ifdeffery
+  include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized [-Werror,-Wdefault-const-init-var-unsafe]
+    478 |                 if (mtu && time_before(jiffies, rt->dst.expires))
+        |                            ^
+  include/linux/jiffies.h:138:26: note: expanded from macro 'time_before'
+    138 | #define time_before(a,b)        time_after(b,a)
+        |                                 ^
+  include/linux/jiffies.h:128:3: note: expanded from macro 'time_after'
+    128 |         (typecheck(unsigned long, a) && \
+        |          ^
+  include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+     11 |         typeof(x) __dummy2; \
+        |                   ^
 
-When hlock_equal() is unused, it prevents kernel builds with clang,
-`make W=1` and CONFIG_WERROR=y, CONFIG_LOCKDEP=y and
-CONFIG_LOCKDEP_SMALL=n:
+  include/linux/list.h:409:27: warning: default initialization of an object of type 'union (unnamed union at include/linux/list.h:409:27)' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+    409 |         struct list_head *next = smp_load_acquire(&head->next);
+        |                                  ^
+  include/asm-generic/barrier.h:176:29: note: expanded from macro 'smp_load_acquire'
+    176 | #define smp_load_acquire(p) __smp_load_acquire(p)
+        |                             ^
+  arch/arm64/include/asm/barrier.h:164:59: note: expanded from macro '__smp_load_acquire'
+    164 |         union { __unqual_scalar_typeof(*p) __val; char __c[1]; } __u;   \
+        |                                                                  ^
+  include/linux/list.h:409:27: note: member '__val' declared 'const' here
 
-  lockdep.c:2005:20: error: unused function 'hlock_equal' [-Werror,-Wunused-function]
+  crypto/scatterwalk.c:66:22: error: default initialization of an object of type 'struct scatter_walk' with const member leaves the object uninitialized [-Werror,-Wdefault-const-init-field-unsafe]
+     66 |         struct scatter_walk walk;
+        |                             ^
+  include/crypto/algapi.h:112:15: note: member 'addr' declared 'const' here
+    112 |                 void *const addr;
+        |                             ^
 
-Fix this by moving the function to the respective existing ifdeffery
-for its the only user.
+  fs/hugetlbfs/inode.c:733:24: error: default initialization of an object of type 'struct vm_area_struct' with const member leaves the object uninitialized [-Werror,-Wdefault-const-init-field-unsafe]
+    733 |         struct vm_area_struct pseudo_vma;
+        |                               ^
+  include/linux/mm_types.h:803:20: note: member 'vm_flags' declared 'const' here
+    803 |                 const vm_flags_t vm_flags;
+        |                                  ^
 
-See also:
+Silencing the instances from typecheck.h is difficult because '= {}' is
+not available in older but supported compilers and '= {0}' would cause
+warnings about a literal 0 being treated as NULL. While it might be
+possible to come up with a local hack to silence the warning for
+clang-21+, it may not be worth it since -Wuninitialized will still
+trigger if an uninitialized const variable is actually used.
 
-  6863f5643dd7 ("kbuild: allow Clang to find unused static inline functions for W=1 build")
+In all audited cases of the "field" variant of the warning, the members
+are either not used in the particular call path, modified through other
+means such as memset() / memcpy() because the containing object is not
+const, or are within a union with other non-const members.
 
-Fixes: 68e305678583 ("lockdep: Adjust check_redundant() for recursive read change")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: llvm@lists.linux.dev
-Link: https://lore.kernel.org/r/20250506042049.50060-2-boqun.feng@gmail.com
+Since this warning does not appear to have a high signal to noise ratio,
+just disable it.
+
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/commit/576161cb6069e2c7656a8ef530727a0f4aefff30 [1]
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Closes: https://lore.kernel.org/CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com/
+Reported-by: Marcus Seyfarth <m.seyfarth@gmail.com>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2088
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- kernel/locking/lockdep.c | 70 +++++++++++++++++++--------------------
- 1 file changed, 35 insertions(+), 35 deletions(-)
+Changes in v2:
+- Disable -Wdefault-const-init-var-unsafe as well, as '= {}' does not
+  work in typecheck() for all supported compilers and it may not be
+  worth a local hack.
+- Link to v1: https://lore.kernel.org/r/20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org
+---
+ scripts/Makefile.extrawarn | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 58d78a3..546e928 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -1977,41 +1977,6 @@ print_circular_bug_header(struct lock_list *entry, unsigned int depth,
- }
- 
- /*
-- * We are about to add A -> B into the dependency graph, and in __bfs() a
-- * strong dependency path A -> .. -> B is found: hlock_class equals
-- * entry->class.
-- *
-- * If A -> .. -> B can replace A -> B in any __bfs() search (means the former
-- * is _stronger_ than or equal to the latter), we consider A -> B as redundant.
-- * For example if A -> .. -> B is -(EN)-> (i.e. A -(E*)-> .. -(*N)-> B), and A
-- * -> B is -(ER)-> or -(EN)->, then we don't need to add A -> B into the
-- * dependency graph, as any strong path ..-> A -> B ->.. we can get with
-- * having dependency A -> B, we could already get a equivalent path ..-> A ->
-- * .. -> B -> .. with A -> .. -> B. Therefore A -> B is redundant.
-- *
-- * We need to make sure both the start and the end of A -> .. -> B is not
-- * weaker than A -> B. For the start part, please see the comment in
-- * check_redundant(). For the end part, we need:
-- *
-- * Either
-- *
-- *     a) A -> B is -(*R)-> (everything is not weaker than that)
-- *
-- * or
-- *
-- *     b) A -> .. -> B is -(*N)-> (nothing is stronger than this)
-- *
-- */
--static inline bool hlock_equal(struct lock_list *entry, void *data)
--{
--	struct held_lock *hlock = (struct held_lock *)data;
--
--	return hlock_class(hlock) == entry->class && /* Found A -> .. -> B */
--	       (hlock->read == 2 ||  /* A -> B is -(*R)-> */
--		!entry->only_xr); /* A -> .. -> B is -(*N)-> */
--}
--
--/*
-  * We are about to add B -> A into the dependency graph, and in __bfs() a
-  * strong dependency path A -> .. -> B is found: hlock_class equals
-  * entry->class.
-@@ -2916,6 +2881,41 @@ static inline bool usage_skip(struct lock_list *entry, void *mask)
- 
- #ifdef CONFIG_LOCKDEP_SMALL
- /*
-+ * We are about to add A -> B into the dependency graph, and in __bfs() a
-+ * strong dependency path A -> .. -> B is found: hlock_class equals
-+ * entry->class.
-+ *
-+ * If A -> .. -> B can replace A -> B in any __bfs() search (means the former
-+ * is _stronger_ than or equal to the latter), we consider A -> B as redundant.
-+ * For example if A -> .. -> B is -(EN)-> (i.e. A -(E*)-> .. -(*N)-> B), and A
-+ * -> B is -(ER)-> or -(EN)->, then we don't need to add A -> B into the
-+ * dependency graph, as any strong path ..-> A -> B ->.. we can get with
-+ * having dependency A -> B, we could already get a equivalent path ..-> A ->
-+ * .. -> B -> .. with A -> .. -> B. Therefore A -> B is redundant.
-+ *
-+ * We need to make sure both the start and the end of A -> .. -> B is not
-+ * weaker than A -> B. For the start part, please see the comment in
-+ * check_redundant(). For the end part, we need:
-+ *
-+ * Either
-+ *
-+ *     a) A -> B is -(*R)-> (everything is not weaker than that)
-+ *
-+ * or
-+ *
-+ *     b) A -> .. -> B is -(*N)-> (nothing is stronger than this)
-+ *
-+ */
-+static inline bool hlock_equal(struct lock_list *entry, void *data)
-+{
-+	struct held_lock *hlock = (struct held_lock *)data;
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index d88acdf40855..fd649c68e198 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -37,6 +37,18 @@ KBUILD_CFLAGS += -Wno-gnu
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
 +
-+	return hlock_class(hlock) == entry->class && /* Found A -> .. -> B */
-+	       (hlock->read == 2 ||  /* A -> B is -(*R)-> */
-+		!entry->only_xr); /* A -> .. -> B is -(*N)-> */
-+}
-+
-+/*
-  * Check that the dependency graph starting at <src> can lead to
-  * <target> or not. If it can, <src> -> <target> dependency is already
-  * in the graph.
++# Clang may emit a warning when a const variable, such as the dummy variables
++# in typecheck(), or const member of an aggregate type are not initialized,
++# which can result in unexpected behavior. However, in many audited cases of
++# the "field" variant of the warning, this is intentional because the field is
++# never used within a particular call path, the field is within a union with
++# other non-const members, or the containing object is not const so the field
++# can be modified via memcpy() / memset(). While the variable warning also gets
++# disabled with this same switch, there should not be too much coverage lost
++# because -Wuninitialized will still flag when an uninitialized const variable
++# is used.
++KBUILD_CFLAGS += $(call cc-disable-warning, default-const-init-unsafe)
+ else
+ 
+ # gcc inanely warns about local variables called 'main'
+
+---
+base-commit: 92a09c47464d040866cf2b4cd052bc60555185fb
+change-id: 20250430-default-const-init-clang-b6e21b8d03b6
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
