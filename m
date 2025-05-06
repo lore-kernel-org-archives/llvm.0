@@ -1,119 +1,128 @@
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019DC29B209;
-	Tue,  6 May 2025 02:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA8828AB0A;
+	Tue,  6 May 2025 04:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746499294; cv=none; b=hiwDGSjGimlEC5S3dFTplyrF0d1U9LLZ4cgtHMMbpOp522Vxm9GmS3hF5DMC8QAwg+RHVokwYp9cqij8pGYoFevxUs6Iwqe5WdNT/K9a1g2ltFP8Pf4NByfm/Vk6gET51V9u39Xf6Em98PvOpuiF/tRN6vIdVNUyeCQorTNS7PA=
+	t=1746504392; cv=none; b=SOASXqoQugQDtXcFHMMktAoTaG1P+PDkSCCnM4Lt84vFmj2My9vFBp0y05owmYXc/gb0HqNrOagWwbeqa5Z4U+5ViNzgapYgGU4e9D44Zzum+Zt9z9mvv3M8dxdjr6MlrNQPZYJ9LN6xH70mrdqbFJ1N+s28JoRBOeD5pZMxJUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746499294; c=relaxed/simple;
-	bh=dDn4W5v9t6AyHBHxLWO7FuLjj98KbpZnLxWf1Zria3s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DdAkXFQIXhWHZHecHGbIIoZOFoTcIMjYdvboOhg9D7AvOYz52uD4f0FzE8LIcaE+xBgESfFBZfP/dlWasEE4B/db9gz3025dY23GfvxIS9EkrWM7EdAXcbjBOEHVjXk8fxe6gHDcRkujmE5q5XwF4mBt/CIYDGRDK0VFsVikvic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=n8r4R3u7; arc=none smtp.client-ip=54.207.19.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1746504392; c=relaxed/simple;
+	bh=5bSdKrca0B+MqKH2cCE5XiY+9NnwJXX3thCEdAlNIdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZM/V/G2hMGPrU0bXAhmlcReBGWSvhwMdss7QANyijN2yLwuc4ASBbVCXcP7tW7PX/dkZddEUleW5Rof5GCxnmeUbMmBFuR3q7q88XIu3Wl2HLYUVDFmsZ8Hqhq2CPykDGqeNYt3BJdiqOE8nvHhPJVvUAPltuh2fLCjfWM6Blj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AAIxDj1Y; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="n8r4R3u7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1746499275;
-	bh=dDn4W5v9t6AyHBHxLWO7FuLjj98KbpZnLxWf1Zria3s=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=n8r4R3u7gzqMxHc2aQ3peYjPOWOKjtBW9b6RgtRAJNk6dHbpxJUR6DPrZeBXWPSF+
-	 GczkkIOhC7KbRR9T2Skwi+6r4ccDpcJQF645RYV3AIcSq6bm92mzpeTq02mh5qfw7h
-	 qDLlodeU0Vqb3lAfPTGJoozZFJW/oNaQXlsuI5BE=
-X-QQ-mid: esmtpgz15t1746499273tdd5e21f0
-X-QQ-Originating-IP: DFv7BP+NKyrh1LeMtPooqfMTkzgahDsoi4kuhzdZXsY=
-Received: from mail-yb1-f178.google.com ( [209.85.219.178])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 06 May 2025 10:41:11 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13048494023631488846
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e75607fe4ceso3133291276.3;
-        Mon, 05 May 2025 19:41:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVdph4jO2iasaQjQES+9zjFdZy1bFM5gX0YMv9JUS0PmT+mXP5R7ejsbb12wobg0xLDHksD@lists.linux.dev, AJvYcCXkxpIfomL4VQ7uJtVpDxnycUUhqdk668P1yuSoD1HsG7AIAX96/RQeuVJzjOGz5FW++nD5/9FGf8h3HGSbAp0=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzXrMBjjQBfPLgq6BMYwYR59LB/3qHTD7D61B3rH8vn390BHVqw
-	0S0kDf4Es62AQkQPTI7lESo0VGkzv052nRzz9oxAm5lUi/YZevxxH+XllpB6X/yJo0qV6yuMS7P
-	8P+hLClweg2gb61V4/7mIhmwRF9g=
-X-Google-Smtp-Source: AGHT+IFgFFlMacdloLtgDC8BYlif3b1M5uLk0pWcJg25Fujp9vccWuhfsfXobAggGBnTnNta+8cIxYeCcW4lzf1hqZQ=
-X-Received: by 2002:a05:6902:1ac5:b0:e6d:f3ca:3e15 with SMTP id
- 3f1490d57ef6-e75c08b698bmr1960395276.3.1746499270786; Mon, 05 May 2025
- 19:41:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AAIxDj1Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746504391; x=1778040391;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5bSdKrca0B+MqKH2cCE5XiY+9NnwJXX3thCEdAlNIdQ=;
+  b=AAIxDj1YWpX+oTkT14VAlConURRQAWzA59TRD7o0XyP+jjRasqXRQylL
+   oZIFXRaiwiz1hpRKeSwZX0kCnWu/Gki2xaoigwpo17cLP2ZQo1+GgAlQy
+   30sEYBBFi0iVa9YgeUz+5s7TUxDBPlhDlHIsSoDU0YCq+8msRsJNBkmhh
+   EKhhkAF307uNk6SBDwKztl+GZyuLlc3QMlVx3cLlwt6aDB8Ho1eb0LOwZ
+   EIGeBa67+L99YZHpjH2lODwPa6fD1OcQvhZFSsjg8WirXz8LojC6Zo5pi
+   KSV1oNT9SoTl/o2qKXbj+XT7wtEXMSjS63m3b+GmhXBoeCzrDQRqMCGGo
+   A==;
+X-CSE-ConnectionGUID: c26IAkNXRlqxPCXf9+Lu3Q==
+X-CSE-MsgGUID: y1LvkxLeTniP2H+pmSbFIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11424"; a="48023076"
+X-IronPort-AV: E=Sophos;i="6.15,265,1739865600"; 
+   d="scan'208";a="48023076"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 21:06:30 -0700
+X-CSE-ConnectionGUID: 7cvG7Ba/Rg+xmRjtXGhGcg==
+X-CSE-MsgGUID: JNAeArKSSgGVJNMsuspAZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,265,1739865600"; 
+   d="scan'208";a="135186188"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 05 May 2025 21:06:29 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uC9ZZ-0006F7-2u;
+	Tue, 06 May 2025 04:06:25 +0000
+Date: Tue, 6 May 2025 12:06:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kevin Tian <kevin.tian@intel.com>
+Subject: [sean-jc:sink 54/177] drivers/vhost/vdpa.c:219:32: error: no member
+ named 'token' in 'struct irq_bypass_producer'
+Message-ID: <202505061105.pA1KZRCK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
- <20250429123504.GA13093@lst.de> <D9KW1QQR88EY.2TOSTVYZZH5KN@google.com>
- <20250501150229.GU4439@noisy.programming.kicks-ass.net> <D9KXE2YX8R2M.3L7Q6NVIXKPE9@google.com>
- <08163d8b-4056-4b84-82a1-3dd553ee6468@acm.org>
-In-Reply-To: <08163d8b-4056-4b84-82a1-3dd553ee6468@acm.org>
-From: Chen Linxuan <chenlinxuan@uniontech.com>
-Date: Tue, 6 May 2025 10:40:59 +0800
-X-Gmail-Original-Message-ID: <973B455678FC1BDD+CAC1kPDM2pUEwFRiUZFHKq_7sYpjARkFczJnp_FRu+r9-xYdgKg@mail.gmail.com>
-X-Gm-Features: ATxdqUHhA0M6lhr1xavQzClQ8qzartLkG1qHh9aYbVlX-6LFgZ39KxjHPoTQnkI
-Message-ID: <CAC1kPDM2pUEwFRiUZFHKq_7sYpjARkFczJnp_FRu+r9-xYdgKg@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 0/8] kernel-hacking: introduce CONFIG_NO_AUTO_INLINE
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Brendan Jackman <jackmanb@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Christoph Hellwig <hch@lst.de>, chenlinxuan@uniontech.com, Keith Busch <kbusch@kernel.org>, 
-	Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>, 
-	Andrew Morton <akpm@linux-foundation.org>, Yishai Hadas <yishaih@nvidia.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>, 
-	Kevin Tian <kevin.tian@intel.com>, Alex Williamson <alex.williamson@redhat.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, linux-nvme@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-integrity@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	Winston Wen <wentao@uniontech.com>, kasan-dev@googlegroups.com, 
-	xen-devel@lists.xenproject.org, Changbin Du <changbin.du@intel.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: OC0Q7tWN8iCR54FjnsmfdJ1xcoyNokmxFwaP34rbXfXhOfLZKkofMTV2
-	qNbnwReHm4XIOm2QVhV99csUe3C542cc5e9KpTeUaoS4Z2GNgh69OFdGddHoY2axm05J1PG
-	LyM/GbATayh8up36KXEajUA42srohAguDZJSolXvhm9bwdN1fbRUuq8qRoUHC6WrvjgpfI8
-	eRrlCWO1ExYFmkTikni1CAPyZUZjsIYKxYpK2SjpEc3uQwX5pbZRZQi0u4hagftgI19wd3L
-	YBp1S38Ztz5QDxRzOxQL952aV2LcHVShBWNZ03bxwwHy4L9jFbowMzOaL67ia6ZTVJAXxvP
-	OKCgO9ZYJV7ExI2gtHweCtosZHQSUa+Wq8hGFgPwDhnr14whnCyGAxHNwwe5oet5tPunu6u
-	6I2Q1HZdMNSHjIwZ6dY9kYKqH8ms7gIVmhn8yMcCdP3I23XMvt0htJOcGdp68TWEXkNG01o
-	pkuOFzBZKnh/6bkMnF4wvEpNn38d+873pmXp9fqbymzYyNrNiWBmkQgeDUdgWaolB5S/z3J
-	BlphZVZwQlfnlGXtPElGUfQqUV7B8sOT/0FNikKDyBPbS3DvUt6+WBpIs+26BYXwLbwSOkk
-	h8hNyU8WqFDq3P/u3zG/gSlzvV4CxLn1jXo8Vmmx2xHofWNfJ1j/QRDwB41KwOVE2pCj8OO
-	DhV4FcU5jlkcJAk89muUrPjBsrB1zu4XO2XVtU1Na+Yhf5hghnVPxub74M6bsQgT6JCtxm3
-	n7OYx19Aq/Su/oAAkgfqPq+uDKLu8s0y0aes9KGV7WWwLRIVPJ0MEft7uAMaXASpEmK0FSV
-	peLg5HMzbWz5d6p+0Q09If7iEEfiAuPl5o5CWtN1NqpgKWiL7UK6OUy9nXQD+Tso06P4N/A
-	fvJHOokU1Q7xvNVcpbxJuYF1T3d6lFSOyqRm/8F+dkrNM40O1R873G1qPDJ2sZqCFVrT6hT
-	P90Z/ZSApanLi9cJw0s0Bvmth2LQu8ifAlHTKd0WZLi2ykt/p2goQ+b+t7J5xfOOoZbBrOK
-	7Ha95qJKr/0Vc/dUoDkIv8tvs5sP6QnMMu0nqBFosUPvslD1PkPau3qtdvRK9UX6cELPCGq
-	w==
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, May 4, 2025 at 3:14=E2=80=AFAM Bart Van Assche <bvanassche@acm.org>=
- wrote:
+tree:   https://github.com/sean-jc/linux sink
+head:   b64923e38c20d35f52d3e78fe87993306d912851
+commit: 55503e04dc3db68bfba5486acee4a8baa0ef8765 [54/177] irqbypass: Take ownership of producer/consumer token tracking
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250506/202505061105.pA1KZRCK-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250506/202505061105.pA1KZRCK-lkp@intel.com/reproduce)
 
-> If this is for test builds only, has it been consider to add
-> -fno-inline-functions as a local change in the top-level Makefile?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505061105.pA1KZRCK-lkp@intel.com/
 
-The issue here is that the current kernel cannot be compiled when
-these compiler options that reduce inlining behavior are added.
+All errors (new ones prefixed by >>):
+
+>> drivers/vhost/vdpa.c:219:32: error: no member named 'token' in 'struct irq_bypass_producer'
+     219 |                          qid, vq->call_ctx.producer.token, ret);
+         |                               ~~~~~~~~~~~~~~~~~~~~~ ^
+   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   1 error generated.
+
+
+vim +219 drivers/vhost/vdpa.c
+
+776f395004d829 Zhu Lingshan        2020-06-05  197  
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  198  static void vhost_vdpa_setup_vq_irq(struct vhost_vdpa *v, u16 qid)
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  199  {
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  200  	struct vhost_virtqueue *vq = &v->vqs[qid];
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  201  	const struct vdpa_config_ops *ops = v->vdpa->config;
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  202  	struct vdpa_device *vdpa = v->vdpa;
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  203  	int ret, irq;
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  204  
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  205  	if (!ops->get_vq_irq)
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  206  		return;
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  207  
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  208  	irq = ops->get_vq_irq(vdpa, qid);
+cce0ab2b2a3907 Zhu Lingshan        2022-02-22  209  	if (irq < 0)
+cce0ab2b2a3907 Zhu Lingshan        2022-02-22  210  		return;
+cce0ab2b2a3907 Zhu Lingshan        2022-02-22  211  
+cce0ab2b2a3907 Zhu Lingshan        2022-02-22  212  	if (!vq->call_ctx.ctx)
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  213  		return;
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  214  
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  215  	vq->call_ctx.producer.irq = irq;
+55503e04dc3db6 Sean Christopherson 2025-04-04  216  	ret = irq_bypass_register_producer(&vq->call_ctx.producer, vq->call_ctx.ctx);
+e01afe36df1a9e Zhu Lingshan        2020-10-23  217  	if (unlikely(ret))
+e01afe36df1a9e Zhu Lingshan        2020-10-23  218  		dev_info(&v->dev, "vq %u, irq bypass producer (token %p) registration fails, ret =  %d\n",
+e01afe36df1a9e Zhu Lingshan        2020-10-23 @219  			 qid, vq->call_ctx.producer.token, ret);
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  220  }
+2cf1ba9a4d15cb Zhu Lingshan        2020-07-31  221  
+
+:::::: The code at line 219 was first introduced by commit
+:::::: e01afe36df1a9e42cacdb9c5b99512ec69a6f14b vdpa: handle irq bypass register failure case
+
+:::::: TO: Zhu Lingshan <lingshan.zhu@intel.com>
+:::::: CC: Michael S. Tsirkin <mst@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
