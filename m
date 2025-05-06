@@ -1,117 +1,126 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF70290DB5
-	for <llvm@lists.linux.dev>; Tue,  6 May 2025 04:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233B621C174
+	for <llvm@lists.linux.dev>; Tue,  6 May 2025 04:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746505262; cv=none; b=Hwt4DCCK8v/8C/dWg5qS3lp65M+nFKZssuQr70o7n8krpX8GAyXGB4TIgopLKdtV5Adc0dbQ6EfyXxt+1NtsfPtqBRkzlbcdFMO377pPhiD4cNpsGNEbKHtgBus6kxhVu4m2gSgQaOq6jCccJKo4IvYlAz5j4sm2ym3etGPBo2U=
+	t=1746507533; cv=none; b=DOobqQoz2PHse/sHZmYUsAyhwqs0CBqjF6R2oV3VhOrpzPGTEfyJQ82FKjq7sOEv+ijqZboMkuA12l1etq18AfsaK8jsz2r5+srAqVpXV4CbAmAKBrodLEZ/HvKqGUiqhbCIDJQY+y9CBNYGblFKJVvu0arLhmMQ61OSmwWzAsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746505262; c=relaxed/simple;
-	bh=DNwVyTCcOjrl4kbNqvDRwjBggTFRm5nqgPRq9w9xVEA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Dsf71Otr2nVGdGOnKBeKs9RMi7A6ccBgTJMdIYHuxrpakixeF4OXoUvG6oagYxB1VcHTU9UocvBpScSP/ABxGqkM+5xqHRd5+pJVTd9H4WR1dOX8PkrYTVwfIWH986uqv2jy1lUJkfB6pa1UpyhqA6/Px0QW545JsnfGXoba0lI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mb+QAeYG; arc=none smtp.client-ip=209.85.219.45
+	s=arc-20240116; t=1746507533; c=relaxed/simple;
+	bh=iaNVSgDCQj15CHSQ2v2yVRpMKdCiSOhrKe5fSMNYPi4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XikQyZZnEZYNrEUtSrOFLm1k/l6HPJ7H/0ZvOacxTL08WDZ8uSLRjAFeA3WjfUVHLPta+ssbrLVtK1+v4Q25w5OsRFOq9uX5h+yiyDluhYJy0IN1FJJ/pyd4RciT5gYKkPx7yEtMXYdntDVSUCOtqukk809g/w6hQH4q8ln7GJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EvyMDixn; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mb+QAeYG"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6f53d271b7cso39136d6.2
-        for <llvm@lists.linux.dev>; Mon, 05 May 2025 21:21:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EvyMDixn"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6f0ad744811so43528556d6.1
+        for <llvm@lists.linux.dev>; Mon, 05 May 2025 21:58:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746505259; x=1747110059; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3OUeV+ysAiL6au/JA8NItOuHiGPdhnma0mnX2ERy5dE=;
-        b=mb+QAeYGYxnH5sqT5U6ODUgJGZy5MgOevzP9TEJgZqyOwD+Pki26J/70kopH83ww74
-         C/h07Fm1gw5QSlr/dYk2r+ssRgt18DqG0a1/Cu55/Pb57hGcT6HWr3bDmfrVZcIlYmZ+
-         WgUBuIkjrCNlD5LZBDebD6hoJYbKjR2d5c9o5mX+/RKmimosF0WVwAtlstzKQcFHdth6
-         PTicIspu851DY9ZCf9DbNFNCXtZwem7COCsyrtOcXzT6/Xvo9ETiVtEYiSSfYBkdxCUa
-         ZUvr34bn0s2a5ENCCeE/vJ8OI/FGQAMOB9jPp6yJeN2bMoexnPyPizGj43qdVexdPHru
-         LWvg==
+        d=gmail.com; s=20230601; t=1746507530; x=1747112330; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Gjy7wHD2gdMjWH59c+YHYGV73Erg1xjJd+iSiyjF5g=;
+        b=EvyMDixnkMQnRlPQFlZIyZHiHrsPTegqi2Crk2JcAVRkJRHOStsiRSdWCedHL3weMQ
+         ueuUoL8zp0ODZK6IKIUmTLcY0IEmOctqbB9T+jZf3PvPCj3SW15j5/dhptDwKiOCVVIt
+         POUn08IeFfQK0tSEZ7kUjbXbitr0uRk8ud+gz9dZ/obunUUILwKUqcVZLQUTkj8UW+W/
+         2TAQFRni0PIqyiL1430nOkl4lJNx3dzPE/xj2mcpDaSLAQ7JA77ATBY7HFz8d+ob9ysb
+         bzjuddbMg9EzWZjJhZQ+p6kM1QuLnl0wQA1SwdNLQlCzS6KKtv1646CBYvbioJ97l6t9
+         bTsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746505259; x=1747110059;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3OUeV+ysAiL6au/JA8NItOuHiGPdhnma0mnX2ERy5dE=;
-        b=jvhmWSw9o5uEcn46t92f7Vy3JIDcU7Q1Do8ZNUW9BCbTOg6wU5thLXWnGbjbZ7yYq5
-         IjifSilRYy9WFF9a1vXguHAECINljjBizOeBFey9nRUQb3BtNQBJNGe1+cbDdzp1lAQq
-         cIafK3by50Xm5T59GZvD+wSyLWV0CwBO+O2rovCs0BLw0ufOBIeU5O5neWA9LFPyvtCC
-         ZYWLhTjfsRDp7XqhtRV273LAXRkRD9A1lRTMMsKg/wzeN7sngdC+tJejBDASC3RbLuM6
-         MIDydHm2BaFy8s4tOnuApp25xS2Wpe8ozZ6MydMEvJNveN0xOFaKNb0is2EzMAoxHVHE
-         nzsA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmljix8bixsVU4NYjWABkDJA/lukx5NXjeSeAx/5oHOsfr7UM47n04Uca6v14QKyMeXiU5@lists.linux.dev
-X-Gm-Message-State: AOJu0YxzFr0G7kvforkoEBcnbk8kUP0LNDi0zOoDOBIhypjQjgZzz/MN
-	KzfnOAdt8oy2NeyQh5GRxxZX1giTOAIRCtnW9pjQ1Ceq33N9NcSU7/aCkA==
-X-Gm-Gg: ASbGncuymQeDHp8xIlp63lu5Cq8KnfopwJF6vXxKmxxRB42D7mEkYGvd50E+F33tmgP
-	/AkCXD96u92w9zcEaHB3x70HS/FVJTPQPw7ucFXeiB1ZwzrPtaqPcaJalaY9rGIGOP0UwkWMeo9
-	HJgLKnyiTj/ebOAV70yv66VGeVG6Pj3jNJVE2AeSNiq/LUXO0yc7iIdkTg3FpYW710n4UMZtpDM
-	Uv1UVa5FlAUyX3+9hcfQMJiEt6egny10pF0qU8T13+n4WAz64XSKlSS2lAc2OiaM0S+U898ZaoM
-	nPIlcqYbCI8XPNLOFx/5ATOCS0GlgktY68sPSlG+fworT7Y/M0kGh7xsOwUUz58DX3AVe4DBgey
-	84zGw9FOCwZsK8/lVX9febSDOKCn8e9o=
-X-Google-Smtp-Source: AGHT+IH+kp9foAY4t6M00GAm1xmuSa34/5hEqfuNRr7JNPk7Jcnx40ELv8vv/dVN+mrv6oEHsbe73w==
-X-Received: by 2002:a05:6214:b6e:b0:6f4:d60d:dd29 with SMTP id 6a1803df08f44-6f5157301d3mr260126456d6.5.1746505259319;
-        Mon, 05 May 2025 21:20:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1746507530; x=1747112330;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Gjy7wHD2gdMjWH59c+YHYGV73Erg1xjJd+iSiyjF5g=;
+        b=TxRgXhDkI2lPCsGvkbmjgjvTlnB4ZzW2L2Rbind2zxAvFZOb1E8cT//HZty5DSL1Xb
+         w3zsCVxjae7yvAgvB5DthfIW3b/AY5kCHA9Udka73zdReG0znrba9eUyiNVSi2Cjt/Pq
+         u4rNkCfsPjUNb/UP1ubOQKeEFyG1uYmd/DeoN47+bQvX2biEeKXVXQz8ZMuvlP9YvhsE
+         zs/qZM4VMlR89DNgdw6Sren5szoszvor73WlIxBLpQAaTjOOIoRxDEeRWDyHQs8w8fNS
+         ydkWWa8JrDTBBxvJOeA9lE1JrhWuTj3QmHzemH1eOAVTYCaiAm5HzMdvdydpIdgOkkm8
+         eGxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqRr4uOjPX0lrXYsG8TkUPVStJAGMcYFcIlUdOQj2vmRk4RNtuNkrCF9QsfBBZHtnb9Z+q@lists.linux.dev
+X-Gm-Message-State: AOJu0YwFINSPSC9z6Jnd8x/ZyJ8hW70sdA3SNPIaCCc0MMJhdr788ri8
+	MP2zgVStWfVeX0T/VgMNL6dE4bE/s2ItKzxT4E2b7Z4rLNN6Uqrx
+X-Gm-Gg: ASbGncu5P8pkL/9PRDV6eRrCtpBvvimQleSPo9LMBGXTOeEPUSHD2vV5eajGK94Necf
+	+K4k4eBIgnYdq0qVNfQuMdo+oTaBreaTw2kXBwbgk31JFmQUajNuwBJOtNZ54T69M1vMfCjVcWL
+	Kg5iunw3RH5gkWGlEMHcSgINcaRPUukKhUH9Ida+BsMMCV0nUIE8tuq1UFzqcGP5cH568+L4n8Z
+	eO+vXD6iPpXi4TvlAvdQushYqru6Af0ha5nCeGyGFtICWo98KRfBsVFvXDwHmmoA/pG2GJvomIA
+	vuxW1bNBw5qyq2WgQFHtyrCDZLYhHstRF2eC/Aq7RoFGe627xWxFlvZf+7Jyc+U3IGqG1KgGEu5
+	CYZ0jmNdlGDAQuikwyluvvEUCCSABQHc=
+X-Google-Smtp-Source: AGHT+IHmqmyhFPsYZOGGgZ+qmzjAMvLVm3KY6FwdbAELaUAP0rH9KHOuC2xx39O3u7L8PVLff4IqrQ==
+X-Received: by 2002:a05:6214:252f:b0:6d8:9d81:2107 with SMTP id 6a1803df08f44-6f528c7968cmr149742266d6.20.1746507529777;
+        Mon, 05 May 2025 21:58:49 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f50f44f5a2sm64779936d6.78.2025.05.05.21.20.58
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f50f44f4c5sm64768586d6.93.2025.05.05.21.58.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 21:20:58 -0700 (PDT)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 7F2881200068;
-	Tue,  6 May 2025 00:20:58 -0400 (EDT)
+        Mon, 05 May 2025 21:58:49 -0700 (PDT)
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 6BB431200043;
+	Tue,  6 May 2025 00:58:48 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Tue, 06 May 2025 00:20:58 -0400
-X-ME-Sender: <xms:Ko4ZaMgPP7XTm9JDldWMUtgjftDrs8gC-yE4y0ESDWEH9rGUqukB2A>
-    <xme:Ko4ZaFCEXRj7l8iIGSjmNvtN7TQeMyre3tkYb7QqdOf_LvDVAP8Q_6lLkTY-CmQ3b
-    B2D-jBnp6MLWN923g>
-X-ME-Received: <xmr:Ko4ZaEGO0bW6YE_H3opl61GqDgZ6mWsdvqLqlbJvW--_qUkvO0wHiX0w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeftdduucetufdoteggodetrf
+  by phl-compute-01.internal (MEProxy); Tue, 06 May 2025 00:58:48 -0400
+X-ME-Sender: <xms:CJcZaHwD2LPWqQQMMaxwUGgQM4qy9vfaZIua6xIjzdZNCZavxGFJKw>
+    <xme:CJcZaPT_YKxWUqV8zzS84VISVmvKUdKqC-EP6ecOhy1jazm-tAAk6MS97WggfZOjm
+    Samv2Z7kasZp5-raw>
+X-ME-Received: <xmr:CJcZaBWLkg9WDAM5IH3nP5LiuIlCBEp90JYRDeFyhL41zG_KnG8IBuGn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeftdekucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
-    tdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
-    hlrdgtohhmqeenucggtffrrghtthgvrhhnpefghfffvefhhfdvgfejgfekvdelgfekgeev
-    ueehlefhiedvgeffjefgteeugfehieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhu
-    nhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqdduje
-    ejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdr
-    nhgrmhgvpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpth
-    htohepmhhinhhgoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehi
-    nhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtoh
-    hmpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsohhq
-    uhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehlohhnghhmrghnsehrvg
-    guhhgrthdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtg
-    homhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:Ko4ZaNRj13baRJ_Y0SrYnJp1h3QVytSxLtgxhQtjF1B2oOtEtQfd3Q>
-    <xmx:Ko4ZaJy9GTmMM16Z28MiViZInBXNKHMQuTHapAJwkPvurvjtZlXIiQ>
-    <xmx:Ko4ZaL5_BgXp-twMn4bztYu_84W_8pRdj4rnld8k1W9ercNjmH-d7A>
-    <xmx:Ko4ZaGypTvSW0kYqtJT5LHQ64RjlWkbd0gy6XkpNnjH8uKg8LwCPeg>
-    <xmx:Ko4ZaNj39ZFunV5MCxjUmt5oTu7iwaNuTFK_KqJZt8o6ptkSL25zbmx9>
+    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttden
+    ucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrd
+    gtohhmqeenucggtffrrghtthgvrhhnpeeggeeukeeghfevudektdevjeehhfekffevueef
+    udeivdelteeltdekheejgfeiveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdo
+    mhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejke
+    ehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgr
+    mhgvpdhnsggprhgtphhtthhopeefhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    epmhhinhhgoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehinhhf
+    rhgruggvrggurdhorhhgpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpd
+    hrtghpthhtohepjhhurhhirdhlvghllhhisehrvgguhhgrthdrtghomhdprhgtphhtthho
+    pehvihhntggvnhhtrdhguhhithhtohhtsehlihhnrghrohdrohhrghdprhgtphhtthhope
+    guihgvthhmrghrrdgvghhgvghmrghnnhesrghrmhdrtghomhdprhgtphhtthhopehrohhs
+    thgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohepsghsvghgrghllhesghhooh
+    hglhgvrdgtohhmpdhrtghpthhtohepmhhgohhrmhgrnhesshhushgvrdguvg
+X-ME-Proxy: <xmx:CJcZaBiCmfy30MmopBUmb_RLYPzUzMMYeBsbVhtciL5JCPIPH0x1rw>
+    <xmx:CJcZaJC4oXJgoooMMB-BpAnBzo2hyyqP9GQi2vF8cQznLjNjf9V7mA>
+    <xmx:CJcZaKKRU6AXGFM6LIdlteYgXdw0ssY_VsDFN8S926lwegxSk4zuYQ>
+    <xmx:CJcZaIAfYogi2PNCNYMZhd14u-NfH3TgEH82Ik9h4JkGhmOrkHVEMg>
+    <xmx:CJcZaFw2xUwRAZjywJH6D-xaLER3YXIVSkDdSljhimLoYjqdWAdX7lJt>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 May 2025 00:20:57 -0400 (EDT)
+ 6 May 2025 00:58:47 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Ingo Molnar <mingo@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Waiman Long <longman@redhat.com>,
+Cc: Ingo Molnar <mingo@redhat.com>,	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 3/3] locking/lockdep: Add # of dynamic keys stat to /proc/lockdep_stats
-Date: Mon,  5 May 2025 21:20:49 -0700
-Message-Id: <20250506042049.50060-4-boqun.feng@gmail.com>
+	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Tamir Duberstein <tamird@gmail.com>,	Kunwu Chan <kunwu.chan@hotmail.com>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+	Borys Tyran <borys.tyran@protonmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Panagiotis Foliadis <pfoliadis@posteo.net>,	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,	llvm@lists.linux.dev
+Subject: [GIT PULL] [PATCH 0/5] rust: Task & schedule related changes for v6.16
+Date: Mon,  5 May 2025 21:58:38 -0700
+Message-Id: <20250506045843.51258-1-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250506042049.50060-1-boqun.feng@gmail.com>
-References: <20250506042049.50060-1-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -120,79 +129,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Waiman Long <longman@redhat.com>
+Hi Ingo & Peter,
 
-There have been recent reports about running out of lockdep keys
-(MAX_LOCKDEP_KEYS too low!). One possible reason is that too many
-dynamic keys have been registered. A possible culprit is the
-lockdep_register_key() call in qdisc_alloc() of net/sched/sch_generic.c.
+Here are the Rust changes related to task and schedule, I figure the
+best route would be via tip/sched/core hence I send this pull request.
+Let me know if you want to do this differently.
 
-Currently, there is no way to find out how many dynamic keys have been
-registered. Add such a stat to the /proc/lockdep_stats to get better
-clarity.
+Same as lockdep changes, I send this pull request in the format of
+patchset, but here are also the tag and pull-request message.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Link: https://lore.kernel.org/r/20250425001155.775458-1-longman@redhat.com
----
- kernel/locking/lockdep.c           | 3 +++
- kernel/locking/lockdep_internals.h | 1 +
- kernel/locking/lockdep_proc.c      | 2 ++
- 3 files changed, 6 insertions(+)
+Regards,
+Boqun
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 58883c8375d1..e7166ff64681 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -219,6 +219,7 @@ static DECLARE_BITMAP(list_entries_in_use, MAX_LOCKDEP_ENTRIES);
- static struct hlist_head lock_keys_hash[KEYHASH_SIZE];
- unsigned long nr_lock_classes;
- unsigned long nr_zapped_classes;
-+unsigned long nr_dynamic_keys;
- unsigned long max_lock_class_idx;
- struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
- DECLARE_BITMAP(lock_classes_in_use, MAX_LOCKDEP_KEYS);
-@@ -1238,6 +1239,7 @@ void lockdep_register_key(struct lock_class_key *key)
- 			goto out_unlock;
- 	}
- 	hlist_add_head_rcu(&key->hash_entry, hash_head);
-+	nr_dynamic_keys++;
- out_unlock:
- 	graph_unlock();
- restore_irqs:
-@@ -6606,6 +6608,7 @@ void lockdep_unregister_key(struct lock_class_key *key)
- 		pf = get_pending_free();
- 		__lockdep_free_key_range(pf, key, 1);
- 		need_callback = prepare_call_rcu_zapped(pf);
-+		nr_dynamic_keys--;
- 	}
- 	lockdep_unlock();
- 	raw_local_irq_restore(flags);
-diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
-index 20f9ef58d3d0..82156caf77d1 100644
---- a/kernel/locking/lockdep_internals.h
-+++ b/kernel/locking/lockdep_internals.h
-@@ -138,6 +138,7 @@ extern unsigned long nr_lock_classes;
- extern unsigned long nr_zapped_classes;
- extern unsigned long nr_zapped_lock_chains;
- extern unsigned long nr_list_entries;
-+extern unsigned long nr_dynamic_keys;
- long lockdep_next_lockchain(long i);
- unsigned long lock_chain_count(void);
- extern unsigned long nr_stack_trace_entries;
-diff --git a/kernel/locking/lockdep_proc.c b/kernel/locking/lockdep_proc.c
-index 6db0f43fc4df..b52c07c4707c 100644
---- a/kernel/locking/lockdep_proc.c
-+++ b/kernel/locking/lockdep_proc.c
-@@ -286,6 +286,8 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
- #endif
- 	seq_printf(m, " lock-classes:                  %11lu [max: %lu]\n",
- 			nr_lock_classes, MAX_LOCKDEP_KEYS);
-+	seq_printf(m, " dynamic-keys:                  %11lu\n",
-+			nr_dynamic_keys);
- 	seq_printf(m, " direct dependencies:           %11lu [max: %lu]\n",
- 			nr_list_entries, MAX_LOCKDEP_ENTRIES);
- 	seq_printf(m, " indirect dependencies:         %11lu\n",
+The following changes since commit c70fc32f44431bb30f9025ce753ba8be25acbba3:
+
+  sched/fair: Adhere to place_entity() constraints (2025-04-16 21:09:12 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git tags/rust-sched.2025.05.05
+
+for you to fetch changes up to d131cde69445b8a9a01ef1cbeed7232e171d4bd0:
+
+  rust: task: Add Rust version of might_sleep() (2025-05-04 20:12:12 -0700)
+
+----------------------------------------------------------------
+Rust task & schedule changes for v6.16:
+
+- Make Task, CondVar and PollCondVar methods inline to avoid unnecessary
+  function calls
+
+- Add might_sleep() support for Rust code: Rust's "#[track_caller]"
+  mechanism is used so that Rust's might_sleep() doesn't need to be
+  defined as a macro.
+
+----------------------------------------------------------------
+FUJITA Tomonori (2):
+  sched/core: Add __might_sleep_precision()
+  rust: task: Add Rust version of might_sleep()
+
+Kunwu Chan (2):
+  rust: sync: Mark CondVar::notify_*() inline
+  rust: sync: Mark PollCondVar::drop() inline
+
+Panagiotis Foliadis (1):
+  rust: task: Mark Task methods inline
+
+ include/linux/kernel.h      |  2 ++
+ kernel/sched/core.c         | 62 ++++++++++++++++++++++++-------------
+ rust/helpers/task.c         |  6 ++++
+ rust/kernel/sync/condvar.rs |  3 ++
+ rust/kernel/sync/poll.rs    |  1 +
+ rust/kernel/task.rs         | 38 +++++++++++++++++++++++
+ 6 files changed, 91 insertions(+), 21 deletions(-)
+
 -- 
 2.39.5 (Apple Git-154)
 
