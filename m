@@ -1,179 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD7019AA63;
-	Tue,  6 May 2025 21:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291C222E403;
+	Tue,  6 May 2025 21:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746565594; cv=none; b=e584S1sf13TAX3RmP3elSrbzKIIBPxPdStLg5ivkqkZStpwFO2QtyxRLn0TKCvTu5Vuvr05T5zFMBDU/vWmYSv2mNi7vW2QnS97Gvcl46gMAL7hhMaq3GtJIHecqHaRbV+BOJwiDnNQX0w7iW81xdTNPVkVd0ZwN/eR7fRE69zI=
+	t=1746567424; cv=none; b=FhB/dCjzRQRx2rJQnaFgPxiRnExGHap5YxBC3atXYt/Mc+7aKHuzfEaGoxAi0qdx23UsZn1FFksJ2clKAl9m6fqwIVbSP9Hm3yCrd07sP+H/sRDE5oqwrrVElut5bP/DrSrwYeF9DJn71VRXJwjaBF2njxp1UAh/Kmafhs/UGPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746565594; c=relaxed/simple;
-	bh=74lje376FlTSuXCICkSnr8qOkLged5xjB5xPmh1n+yc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=X2J3wRhGWt6f655dEY/1GoAwSM3frx0tvzGXug/UBmA+J7CMkU/HyfBv4pJD2EIQ5/4oCGVHthSKdRsugzfgk0TPmUbqQ6a3+ckjZBKuiB9iUgXoV0eK1Ol37jj11eilIZxOStMnI4yjFbD3Q5YPjsLed9uSSrSZ38lFdQIyD3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVl+SE4T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746567424; c=relaxed/simple;
+	bh=Mkxfq40uOp1DtnT/M1FvUaSwTGLEUUCvGkiQiobOm90=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=czRiv9aP180lceGQkwFb3mvwrVRsSvjaFm0SPORGKxqRsufclk8H5O5kEFF0szSgwGS/+VTn7xpKZJWp3uYuCJBCogfOVTKG9av46LUW+QwHt2s/f3760kP4sdjDO+KQPozl0pjFjnJn9VMLqLZhFnT+/Kk5JMOIK9Ar8JcgfEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HODyON9x; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVl+SE4T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAF1C4CEE4;
-	Tue,  6 May 2025 21:06:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746565593;
-	bh=74lje376FlTSuXCICkSnr8qOkLged5xjB5xPmh1n+yc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=aVl+SE4TL/+aQ4RxUww9NntBllXCHmZe2GcxFp1ljeqowgPN7Wue3GOb+J/bndWNZ
-	 Pox0FmI+TlEN6PEeQjzjedMI6kRLJZMj7pDK0J2yw1GItskOI2cIt35pvlIdNQazgZ
-	 nnJYdHPhEEFHVIkRCXNvwEaOd8mG47+yvE2XzZrzkf8loaPPBGmMvX1CjX/EyRpZJB
-	 OXAXKDjqKQ9KTvzp4gijrXrk09lWY7Um+bTYvn1StVp6t+e0ya9FUyOlrDYpWlJmWZ
-	 DPQSuGPOlL7ZuqwjexXQO6csbMBePfW9d8a4sv0bqPPRg4Dcm5UxktiLXWpJn9/qfa
-	 6nf4BMfYHtlBg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 06 May 2025 14:02:01 -0700
-Subject: [PATCH v2] kbuild: Disable -Wdefault-const-init-unsafe
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HODyON9x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746567422; x=1778103422;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Mkxfq40uOp1DtnT/M1FvUaSwTGLEUUCvGkiQiobOm90=;
+  b=HODyON9xMScPpPYAgPgqwAioGwPv/8dOrUT/biKe2QFE5LJlIs4vHMsI
+   RQKpsYeRXuQiZ6ycyxlgHgEHAMbPUitFUOYwlTuJVvmXTtRqDutQyPiX7
+   KbzNCqqFwQyQIYmbKFz+yBWOTvW2Ixc172E+Dx83k5ZqeU0mt9mcrQW4d
+   GcucDbdHq2b/3NbUMLPzrKQ4QM4CkrfyWhyhXIv2JPN8CSYhgxmEgKCt2
+   o7evZ3qYIA1U85uFdEk68a8ysJJBZWtcAenPn7GaKOaE27fpJsQroP9Ut
+   fIhbs9DQda2f6B+24xoWxmaLpsIKXelEOFofb+P+SQTuW3pduMYUuhZGG
+   g==;
+X-CSE-ConnectionGUID: e1z5qQOxRe+Z7FCjhaCi1Q==
+X-CSE-MsgGUID: xI9mjsXZQgelh33oeWNayg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="48169074"
+X-IronPort-AV: E=Sophos;i="6.15,267,1739865600"; 
+   d="scan'208";a="48169074"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 14:37:00 -0700
+X-CSE-ConnectionGUID: DREOEUahTYekRim7H4OKGA==
+X-CSE-MsgGUID: l48NYzENQA+JNUKYsWiTcQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,267,1739865600"; 
+   d="scan'208";a="135460905"
+Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
+  by orviesa009.jf.intel.com with ESMTP; 06 May 2025 14:36:58 -0700
+Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCPyC-00005q-0b;
+	Tue, 06 May 2025 21:36:56 +0000
+Date: Wed, 7 May 2025 05:36:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:for-kernelci 13/21]
+ drivers/net/ethernet/airoha/airoha_npu.c:430:65: error: expected ';' after
+ expression
+Message-ID: <202505070505.K7VO14tM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250506-default-const-init-clang-v2-1-fcfb69703264@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMh4GmgC/3WNyw6CMBBFf4XM2jF9CCGu/A/CgrYDTCStaZFoS
- P/dimt3c27uPbNDosiU4FrtEGnjxMEXUKcK7Dz4iZBdYVBC1eKiBToah+eyog0+rciey7mUIpq
- GlDStE9o0UOaPSCO/DnXXF545rSG+j0+b/KY/aS3kf+kmUaB2yjZWtrUz5nan6Gk5hzhBn3P+A
- P1JxFLBAAAA
-X-Change-ID: 20250430-default-const-init-clang-b6e21b8d03b6
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas.schier@linux.dev>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Linus Torvalds <torvalds@linux-foundation.org>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
- Linux Kernel Functional Testing <lkft@linaro.org>, 
- Marcus Seyfarth <m.seyfarth@gmail.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6468; i=nathan@kernel.org;
- h=from:subject:message-id; bh=74lje376FlTSuXCICkSnr8qOkLged5xjB5xPmh1n+yc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlSlddEjFj3Top9qLKz+JuF2bVnW4yWNRUvtF/qnr4vc
- bLpNN9dHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiDnKMDIv81zbtfiQ2Wb2E
- Lc1V/df79pNTnO4/r71TdnEnY49W2n2G/xFMhfnaF6ZP0e7QftXdNqsw/eGJ/sTInkPnU6z0bjy
- 0YwAA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A new on by default warning in clang [1] aims to flags instances where
-const variables without static or thread local storage or const members
-in aggregate types are not initialized because it can lead to an
-indeterminate value. This is quite noisy for the kernel due to
-instances originating from header files such as:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
+head:   c9f24a593a0afe40f6b37f868ce7d6453c97839b
+commit: 187439642c68be0ad8084f0156064c4fa443225c [13/21] net: Use of_reserved_mem_region_to_resource{_byname}() for "memory-region"
+config: i386-buildonly-randconfig-2002-20250506 (https://download.01.org/0day-ci/archive/20250507/202505070505.K7VO14tM-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505070505.K7VO14tM-lkp@intel.com/reproduce)
 
-  drivers/gpu/drm/i915/gt/intel_ring.h:62:2: error: default initialization of an object of type 'typeof (ring->size)' (aka 'const unsigned int') leaves the object uninitialized [-Werror,-Wdefault-const-init-var-unsafe]
-     62 |         typecheck(typeof(ring->size), next);
-        |         ^
-  include/linux/typecheck.h:10:9: note: expanded from macro 'typecheck'
-     10 | ({      type __dummy; \
-        |              ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505070505.K7VO14tM-lkp@intel.com/
 
-  include/net/ip.h:478:14: error: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized [-Werror,-Wdefault-const-init-var-unsafe]
-    478 |                 if (mtu && time_before(jiffies, rt->dst.expires))
-        |                            ^
-  include/linux/jiffies.h:138:26: note: expanded from macro 'time_before'
-    138 | #define time_before(a,b)        time_after(b,a)
-        |                                 ^
-  include/linux/jiffies.h:128:3: note: expanded from macro 'time_after'
-    128 |         (typecheck(unsigned long, a) && \
-        |          ^
-  include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-     11 |         typeof(x) __dummy2; \
-        |                   ^
+All errors (new ones prefixed by >>):
 
-  include/linux/list.h:409:27: warning: default initialization of an object of type 'union (unnamed union at include/linux/list.h:409:27)' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
-    409 |         struct list_head *next = smp_load_acquire(&head->next);
-        |                                  ^
-  include/asm-generic/barrier.h:176:29: note: expanded from macro 'smp_load_acquire'
-    176 | #define smp_load_acquire(p) __smp_load_acquire(p)
-        |                             ^
-  arch/arm64/include/asm/barrier.h:164:59: note: expanded from macro '__smp_load_acquire'
-    164 |         union { __unqual_scalar_typeof(*p) __val; char __c[1]; } __u;   \
-        |                                                                  ^
-  include/linux/list.h:409:27: note: member '__val' declared 'const' here
+>> drivers/net/ethernet/airoha/airoha_npu.c:430:65: error: expected ';' after expression
+     430 |         err = of_reserved_mem_region_to_resource(dev->of_node, 0, &res)
+         |                                                                        ^
+         |                                                                        ;
+>> drivers/net/ethernet/airoha/airoha_npu.c:465:43: error: use of undeclared identifier 'rmem'
+     465 |         err = airoha_npu_run_firmware(dev, base, rmem);
+         |                                                  ^
+   2 errors generated.
 
-  crypto/scatterwalk.c:66:22: error: default initialization of an object of type 'struct scatter_walk' with const member leaves the object uninitialized [-Werror,-Wdefault-const-init-field-unsafe]
-     66 |         struct scatter_walk walk;
-        |                             ^
-  include/crypto/algapi.h:112:15: note: member 'addr' declared 'const' here
-    112 |                 void *const addr;
-        |                             ^
 
-  fs/hugetlbfs/inode.c:733:24: error: default initialization of an object of type 'struct vm_area_struct' with const member leaves the object uninitialized [-Werror,-Wdefault-const-init-field-unsafe]
-    733 |         struct vm_area_struct pseudo_vma;
-        |                               ^
-  include/linux/mm_types.h:803:20: note: member 'vm_flags' declared 'const' here
-    803 |                 const vm_flags_t vm_flags;
-        |                                  ^
+vim +430 drivers/net/ethernet/airoha/airoha_npu.c
 
-Silencing the instances from typecheck.h is difficult because '= {}' is
-not available in older but supported compilers and '= {0}' would cause
-warnings about a literal 0 being treated as NULL. While it might be
-possible to come up with a local hack to silence the warning for
-clang-21+, it may not be worth it since -Wuninitialized will still
-trigger if an uninitialized const variable is actually used.
+   403	
+   404	static int airoha_npu_probe(struct platform_device *pdev)
+   405	{
+   406		struct device *dev = &pdev->dev;
+   407		struct airoha_npu *npu;
+   408		struct resource res;
+   409		void __iomem *base;
+   410		int i, irq, err;
+   411	
+   412		base = devm_platform_ioremap_resource(pdev, 0);
+   413		if (IS_ERR(base))
+   414			return PTR_ERR(base);
+   415	
+   416		npu = devm_kzalloc(dev, sizeof(*npu), GFP_KERNEL);
+   417		if (!npu)
+   418			return -ENOMEM;
+   419	
+   420		npu->dev = dev;
+   421		npu->ops.ppe_init = airoha_npu_ppe_init;
+   422		npu->ops.ppe_deinit = airoha_npu_ppe_deinit;
+   423		npu->ops.ppe_flush_sram_entries = airoha_npu_ppe_flush_sram_entries;
+   424		npu->ops.ppe_foe_commit_entry = airoha_npu_foe_commit_entry;
+   425	
+   426		npu->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
+   427		if (IS_ERR(npu->regmap))
+   428			return PTR_ERR(npu->regmap);
+   429	
+ > 430		err = of_reserved_mem_region_to_resource(dev->of_node, 0, &res)
+   431		if (err)
+   432			return err;
+   433	
+   434		irq = platform_get_irq(pdev, 0);
+   435		if (irq < 0)
+   436			return irq;
+   437	
+   438		err = devm_request_irq(dev, irq, airoha_npu_mbox_handler,
+   439				       IRQF_SHARED, "airoha-npu-mbox", npu);
+   440		if (err)
+   441			return err;
+   442	
+   443		for (i = 0; i < ARRAY_SIZE(npu->cores); i++) {
+   444			struct airoha_npu_core *core = &npu->cores[i];
+   445	
+   446			spin_lock_init(&core->lock);
+   447			core->npu = npu;
+   448	
+   449			irq = platform_get_irq(pdev, i + 1);
+   450			if (irq < 0)
+   451				return irq;
+   452	
+   453			err = devm_request_irq(dev, irq, airoha_npu_wdt_handler,
+   454					       IRQF_SHARED, "airoha-npu-wdt", core);
+   455			if (err)
+   456				return err;
+   457	
+   458			INIT_WORK(&core->wdt_work, airoha_npu_wdt_work);
+   459		}
+   460	
+   461		err = dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
+   462		if (err)
+   463			return err;
+   464	
+ > 465		err = airoha_npu_run_firmware(dev, base, rmem);
+   466		if (err)
+   467			return dev_err_probe(dev, err, "failed to run npu firmware\n");
+   468	
+   469		regmap_write(npu->regmap, REG_CR_NPU_MIB(10),
+   470			     res.start + NPU_EN7581_FIRMWARE_RV32_MAX_SIZE);
+   471		regmap_write(npu->regmap, REG_CR_NPU_MIB(11), 0x40000); /* SRAM 256K */
+   472		regmap_write(npu->regmap, REG_CR_NPU_MIB(12), 0);
+   473		regmap_write(npu->regmap, REG_CR_NPU_MIB(21), 1);
+   474		msleep(100);
+   475	
+   476		/* setting booting address */
+   477		for (i = 0; i < NPU_NUM_CORES; i++)
+   478			regmap_write(npu->regmap, REG_CR_BOOT_BASE(i), res.start);
+   479		usleep_range(1000, 2000);
+   480	
+   481		/* enable NPU cores */
+   482		/* do not start core3 since it is used for WiFi offloading */
+   483		regmap_write(npu->regmap, REG_CR_BOOT_CONFIG, 0xf7);
+   484		regmap_write(npu->regmap, REG_CR_BOOT_TRIGGER, 0x1);
+   485		msleep(100);
+   486	
+   487		platform_set_drvdata(pdev, npu);
+   488	
+   489		return 0;
+   490	}
+   491	
 
-In all audited cases of the "field" variant of the warning, the members
-are either not used in the particular call path, modified through other
-means such as memset() / memcpy() because the containing object is not
-const, or are within a union with other non-const members.
-
-Since this warning does not appear to have a high signal to noise ratio,
-just disable it.
-
-Cc: stable@vger.kernel.org
-Link: https://github.com/llvm/llvm-project/commit/576161cb6069e2c7656a8ef530727a0f4aefff30 [1]
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Closes: https://lore.kernel.org/CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com/
-Reported-by: Marcus Seyfarth <m.seyfarth@gmail.com>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2088
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Disable -Wdefault-const-init-var-unsafe as well, as '= {}' does not
-  work in typecheck() for all supported compilers and it may not be
-  worth a local hack.
-- Link to v1: https://lore.kernel.org/r/20250501-default-const-init-clang-v1-0-3d2c6c185dbb@kernel.org
----
- scripts/Makefile.extrawarn | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index d88acdf40855..fd649c68e198 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -37,6 +37,18 @@ KBUILD_CFLAGS += -Wno-gnu
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
- KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
- KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
-+
-+# Clang may emit a warning when a const variable, such as the dummy variables
-+# in typecheck(), or const member of an aggregate type are not initialized,
-+# which can result in unexpected behavior. However, in many audited cases of
-+# the "field" variant of the warning, this is intentional because the field is
-+# never used within a particular call path, the field is within a union with
-+# other non-const members, or the containing object is not const so the field
-+# can be modified via memcpy() / memset(). While the variable warning also gets
-+# disabled with this same switch, there should not be too much coverage lost
-+# because -Wuninitialized will still flag when an uninitialized const variable
-+# is used.
-+KBUILD_CFLAGS += $(call cc-disable-warning, default-const-init-unsafe)
- else
- 
- # gcc inanely warns about local variables called 'main'
-
----
-base-commit: 92a09c47464d040866cf2b4cd052bc60555185fb
-change-id: 20250430-default-const-init-clang-b6e21b8d03b6
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
