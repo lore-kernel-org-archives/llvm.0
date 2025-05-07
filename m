@@ -1,60 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771553D994;
-	Tue,  6 May 2025 23:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D752149C55;
+	Wed,  7 May 2025 01:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746575007; cv=none; b=LMnGMvePfSPG2f9ijQ+cN2bbe5cXWG5qRxpPgWPJmyuwxbOqTPSlpCI6Hlk3dK0oAnqFXaJlr+iCfTkV4SEd57X6Zw1xrzifUHO+zcUtwefKrWDAb7siUCrTO49NvgeHGGniISbT7HAbxR1AaTexkigPtyto/2jHxjlk+i179RQ=
+	t=1746582123; cv=none; b=aBz3Vuzrdx4s58QjDG3pscCblSToyzfJNSGDYKg0K+E53U7IgKPtDu36LJM5gHwqpOHK0Pov9fgTwgf24UlXbhJc7VW5+D1xL3FaKslxseELTsixgCgKjnErLiUg+gEjBohFHrQvCtdLQlZhhHtxlmNQlIr5N9ceHMRJNtwWYgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746575007; c=relaxed/simple;
-	bh=HrwlCSbJxv5DjArbahiDnGf3mxYBeVnGOUEOq2uKMgo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NlnUy8Pmesz+qlJQsMaOmU0AH4ei4xUrx8O2fUu+NF1AJK2H1WRgxO98YptHVRAnvWwceyFTYHmX0RWvzPpBJy+rIAVeDDSzT6D2YTcUZWk0xNPnTlK0Hw5DODEp2EttRDRv5bIG+J3PS3MB6WKnUAeWOexUMqV5meLcqrA2ljs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EwDAWF2U; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746582123; c=relaxed/simple;
+	bh=qs4Q9hRdyQqHCJ/m3kq7Qdz4g8t65SKuAV3aUXmA3RY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a235a5yMrCscu0aSrQBN93b4yO8DfIH8/v/gi4U8l4GQmTjgu/EpJRIFtKoKP1NEo7SFzuXlXOcEopgN+/PIg827umeOdz6QLFM2MIKDwMn+y72DxTAs33ZS8UcXAgeyDdCzxiGN3cfKtJJaYGrDW+FN2SvlzjsFnQ4Q3j1t6gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=OddfQllT; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EwDAWF2U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746575005; x=1778111005;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HrwlCSbJxv5DjArbahiDnGf3mxYBeVnGOUEOq2uKMgo=;
-  b=EwDAWF2UDAKv1Hy6322IneObBdjDc2/ncpmjdQMVxWqJDdCkoggr4qFf
-   tvPDPxJu+2zfH59uZ2nV75uvHdRZzuBLVxVspLgNVpnBDbidGS5+8UoKV
-   XPYho6WLxgnn+09QdNQ1H37StZqOqnxAMPdK9rdfDW3WD0frMXZqddahQ
-   5KQX3XJ4KQqZ6ZL/kNmOPDXXuWDQzPL1W7+T67v3/i5hqGJCuHtfWKkcZ
-   7+4t4wl279OXsyRS3lRQOCfP2BhAUWIu7tqybIOz2+lFXKbFnzxjF5Y79
-   Yt5e6BxCFxRQxLuntwKxY1M6Ek9OXLhqYNX+yM1NzhmosmZFj1JxrROMM
-   A==;
-X-CSE-ConnectionGUID: HSfTPQYnS4ix/8IBCMnP2g==
-X-CSE-MsgGUID: /X+UXGLuRM2vZFjEWquZmQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="59262799"
-X-IronPort-AV: E=Sophos;i="6.15,267,1739865600"; 
-   d="scan'208";a="59262799"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 16:43:24 -0700
-X-CSE-ConnectionGUID: M8jOJpX5QmCPQXmGOJBe0A==
-X-CSE-MsgGUID: tcE55+YJQc+/AYfYsY+JWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,267,1739865600"; 
-   d="scan'208";a="136288905"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 06 May 2025 16:43:23 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCRwW-0006vn-1G;
-	Tue, 06 May 2025 23:43:20 +0000
-Date: Wed, 7 May 2025 07:43:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="OddfQllT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=1LAjmB/BuVJhNma0CNS0ZtI4c20tsdSol77PmLcH6eY=; b=OddfQllTz1VCGdH1DC80AhtUTj
+	U6FW8c5ZWAC7ure5nx1gtrPgd+TAmQb0hJHi3p6QbulxogVmqvMk2UcXWtJfcX5y/oitHXbM0ht7o
+	uiGxNKho6OzxhM7bFJ03FWds1Ys8eMFKI3KE4B+8irwgZTkc20jajPvfTmf+tImmK6SZl8jVjhLC2
+	wM4EsuTBCbDoLdpBCOmCm3ktcwHMZt5Anvx8qqwT1Tgeh9XJwRYEfVvukbDNjeb8wUgVDwwIiJswp
+	P4XSNQD3c6JRR/QhO3nrFuu7q0YNaZNpJVa7FZKmITCdKoOT07xxZAffA4KrU6xiO24RjMviJhLgZ
+	JKAxbzpQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uCTnD-0046hM-2g;
+	Wed, 07 May 2025 09:41:52 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 07 May 2025 09:41:51 +0800
+Date: Wed, 7 May 2025 09:41:51 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers
- during register allocation in function 'hyperv_flush_guest_mapping'
-Message-ID: <202505070733.osOoFQSe-lkp@intel.com>
+	linux-crypto@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	linux-um@lists.infradead.org
+Subject: [PATCH] um: Include linux/types.h in asm/fpu/api.h
+Message-ID: <aBq6X-UYlQG9HUQd@gondor.apana.org.au>
+References: <202505070045.vWc04ygs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,42 +52,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202505070045.vWc04ygs-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0d8d44db295ccad20052d6301ef49ff01fb8ae2d
-commit: cacd22ce69585a91c386243cd662ada962431e63 kbuild: make all file references relative to source root
-date:   6 weeks ago
-config: i386-buildonly-randconfig-006-20250506 (https://download.01.org/0day-ci/archive/20250507/202505070733.osOoFQSe-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505070733.osOoFQSe-lkp@intel.com/reproduce)
+On Wed, May 07, 2025 at 12:25:45AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+> head:   9b9d4ef0cf750c514735bfd77745387b95cbddda
+> commit: 5b90a779bc547939421bfeb333e470658ba94fb6 [50/70] crypto: lib/sha256 - Add helpers for block-based shash
+> config: um-randconfig-001-20250506 (https://download.01.org/0day-ci/archive/20250507/202505070045.vWc04ygs-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505070045.vWc04ygs-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505070045.vWc04ygs-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from lib/crypto/sha256.c:14:
+>    In file included from include/crypto/internal/sha2.h:6:
+>    In file included from include/crypto/internal/simd.h:9:
+>    In file included from arch/x86/include/asm/simd.h:5:
+> >> arch/um/include/asm/fpu/api.h:14:15: error: unknown type name 'bool'
+>       14 | static inline bool irq_fpu_usable(void)
+>          |               ^
+> >> arch/um/include/asm/fpu/api.h:16:9: error: use of undeclared identifier 'true'
+>       16 |         return true;
+>          |                ^
+>    2 errors generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505070733.osOoFQSe-lkp@intel.com/
+I'll add this to the crypto tree if it's OK with the UML maintainers.
 
-All errors (new ones prefixed by >>):
+Thanks,
 
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hyperv_flush_guest_mapping'
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hyperv_flush_guest_mapping_range'
-   2 errors generated.
---
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hv_get_partition_id'
-   1 error generated.
---
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hv_unmap_ioapic_interrupt'
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hv_map_ioapic_interrupt'
-   2 errors generated.
---
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hyperv_flush_tlb_multi'
-   1 error generated.
---
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hv_post_message'
-   1 error generated.
---
->> error: arch/x86/include/asm/mshyperv.h:108:2: ran out of registers during register allocation in function 'hv_query_ext_cap'
-   1 error generated.
+---8<---
+Include linux/types.h before using bool.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202505070045.vWc04ygs-lkp@intel.com/
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/arch/um/include/asm/fpu/api.h b/arch/um/include/asm/fpu/api.h
+index 71bfd9ef3938..3abf67c83c40 100644
+--- a/arch/um/include/asm/fpu/api.h
++++ b/arch/um/include/asm/fpu/api.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_UM_FPU_API_H
+ #define _ASM_UM_FPU_API_H
+ 
++#include <linux/types.h>
++
+ /* Copyright (c) 2020 Cambridge Greys Ltd
+  * Copyright (c) 2020 Red Hat Inc.
+  * A set of "dummy" defines to allow the direct inclusion
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
