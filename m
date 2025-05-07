@@ -1,58 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEA1221288;
-	Wed,  7 May 2025 07:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C51F221720;
+	Wed,  7 May 2025 07:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746603897; cv=none; b=JXOUUL02IkozYSUVd1Q9k3csw5mKd3ZLTc8EsaJ8qdUGlWupSTm+nPiKnwgb5iVnxxh94p8HNCK/xV4uUCols8J0p0znBThg9tYbUrG91AP6RYE1D1qBOnv2sGhovgokiJQD/MCXxXV7hD+4hwwBxMG9Qr7lO2w4mDsR0nXDE0s=
+	t=1746603906; cv=none; b=XUHVrrgYa3KNL9kjgYNeVdP8a+ao4qxtviCb3PwYb7F3TQ9qKIotIF/XPRrROIgfO/BB7cVtMksyBzgIm4XXEyOFeU/RpnlsZDEpKhPklYaTaea/4GVuFGNTe8/R5CKyj+WiBQTygQc5bNmr8xzLasURSouQ5E6YhHguvwhD+Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746603897; c=relaxed/simple;
-	bh=L5tux9jpe/E/uV0eLE1RMXcbc4onH7mMxwRoWsmlcXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HADiJvVOxZ71Skv/z4jnpwXc1RhqTfuQ0RVZmsD/Bm94vbkaSwNa+Ko848sjP5WIHtNbtSaXu7mQMOfhTTjXEeut4uy6xWQZuK6cd5phtYDxkRp/zrHmDmHkqsEDU3+ofha5maFyxAbK0iWzjBbVKQc/NaANbgfXpNcQ73DyWdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q+uDjHig; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1746603906; c=relaxed/simple;
+	bh=i3iNoejldEwfu1pudT27J8wiNZ81ZODfSVYRzrrKNjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ya0bmp1HDzp3v6bCuc1zoyWiegVVI+wrxGx2fnFtcKVSxM57Nc/nhEzZ8zEDlBl1aKU1U/tjHJr0VF+CmgZCBtFvqtbtSVj/YPOv64MdHWW6FRp84XvPdtY324oq2oJ/wd2v420RR04FONYF6jZrgwy0Pn5AJv45g9EHXTPKmQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CkUSnFZT; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q+uDjHig"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CkUSnFZT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746603896; x=1778139896;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L5tux9jpe/E/uV0eLE1RMXcbc4onH7mMxwRoWsmlcXk=;
-  b=Q+uDjHiguP/oaI9DrleCOkaGjAySZYOtXCCAl+07xn4ZQRiFpmgPwQG0
-   uDFHb37gn74Ikd7TWiXth71snQ7EpM//dwGcIciMx+Z5Cfb7HpE3DXupW
-   O7ainlc4uXk/8bhjI7EKik4je+HdPEBpUGumr/InC23CkegDQIOV7DZ6y
-   nccK60Y5p44LADXazBgIkaRqQlpkXnog9kf5DsXgEIP04oLiDP9AVbWAs
-   S5EGrPW3nPYsA/d3MBqgZn6N6Q+BGqYmt02AWEn6iAgPLvwMllcsqAGeV
-   tI3a+j79urVtwgRjyozk+JhL5W8lpn+N/lDc1xpZh+v7VWj37dAZOG6Gf
+  t=1746603904; x=1778139904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i3iNoejldEwfu1pudT27J8wiNZ81ZODfSVYRzrrKNjg=;
+  b=CkUSnFZT/DaADNKaxvT6YQHqPi/RDLubMlwbG/tuq3TltxlEIbFpE3d8
+   VboZF8dBunoF8KLto5/nSgPyWSssQn5fFauAUBvsavUgpFzMwycB3CJop
+   qhcOV/r25fDlzEM9cD5nqbr0s2Z8G63/tWcUWn/Do5Bc1JZwVspZAE5tP
+   7GxBWWDKHWSyGlMwTDJ0qlKegnv0dPGUTZn2FW9IpNdGNTLc2wG1+Owv0
+   b/Theq1wgsV/VUoP3FxCrmT5tCmfZeD2YEzGLgvV6gykBpZMz/cLK5Btt
+   yS4iYhuywAzBvS6bNnFzPyy3rGMA3I0pNz+7QPY1b08n6XuBdCi0UjkLG
    A==;
-X-CSE-ConnectionGUID: vlArd0niREeouMnCYpVmeg==
-X-CSE-MsgGUID: c+3iNRNWTsSEC4ZXCjpgXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="52133179"
+X-CSE-ConnectionGUID: KswyX90cSwCTNfF6Cw5pXg==
+X-CSE-MsgGUID: ts7/TFiqQDm7Cxe5VsIJhw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="52133200"
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="52133179"
+   d="scan'208";a="52133200"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 00:44:53 -0700
-X-CSE-ConnectionGUID: Tig9GanzS2uG6aA89nMkTA==
-X-CSE-MsgGUID: dwJa1RDHSyiZr/Ra0FYC1g==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 00:45:03 -0700
+X-CSE-ConnectionGUID: wbFxOg/ZReaIggV/UXRZwg==
+X-CSE-MsgGUID: FGKt83fsS+24ZPRJt8PinQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="135875083"
+   d="scan'208";a="135875088"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
   by fmviesa007.fm.intel.com with ESMTP; 07 May 2025 00:44:52 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCZSU-0007LZ-0F;
-	Wed, 07 May 2025 07:44:50 +0000
-Date: Wed, 7 May 2025 15:44:00 +0800
+	id 1uCZST-0007LP-3C;
+	Wed, 07 May 2025 07:44:49 +0000
+Date: Wed, 7 May 2025 15:44:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:klp-build 6/38] arch/arm/vdso/note.c:14:1: error: a
- parameter list without types is only allowed in a function definition
-Message-ID: <202505071526.fS9tpdhX-lkp@intel.com>
+To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
+	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PM: hibernate: Explicitly set PM_SUSPEND_MAX at
+ hibernate entry
+Message-ID: <202505071516.juQNugSC-lkp@intel.com>
+References: <20250501215838.2501827-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,89 +65,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250501215838.2501827-1-superm1@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git klp-build
-head:   efc6506f59755cae4a370a151466c8d3e9e63fa4
-commit: a9935a943de283a32d11dbdbc95da2af1b9768c3 [6/38] elfnote: Use __UNIQUE_ID() for note symbols
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20250507/202505071526.fS9tpdhX-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071526.fS9tpdhX-lkp@intel.com/reproduce)
+Hi Mario,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on amd-pstate/linux-next]
+[also build test ERROR on amd-pstate/bleeding-edge linus/master v6.15-rc5 next-20250506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-hibernate-Explicitly-set-PM_SUSPEND_MAX-at-hibernate-entry/20250502-060011
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/20250501215838.2501827-1-superm1%40kernel.org
+patch subject: [PATCH] PM: hibernate: Explicitly set PM_SUSPEND_MAX at hibernate entry
+config: x86_64-randconfig-071-20250502 (https://download.01.org/0day-ci/archive/20250507/202505071516.juQNugSC-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071516.juQNugSC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071526.fS9tpdhX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071516.juQNugSC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   arch/arm/vdso/note.c:14:1: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
-      14 | ELFNOTE32("Linux", 0, LINUX_VERSION_CODE);
-         | ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:70:9: note: expanded from macro 'ELFNOTE'
-      70 |         static const struct {                                           \
-         |                ^
->> arch/arm/vdso/note.c:14:1: error: a parameter list without types is only allowed in a function definition
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:16: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |                       ^
->> arch/arm/vdso/note.c:14:1: error: illegal initializer (only variables can be initialized)
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:4: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |           ^
-   arch/arm/vdso/note.c:15:1: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
-      15 | BUILD_SALT;
-         | ^
-   include/linux/build-salt.h:16:8: note: expanded from macro 'BUILD_SALT'
-      16 |        ELFNOTE32("Linux", LINUX_ELFNOTE_BUILD_SALT, CONFIG_BUILD_SALT)
-         |        ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:70:9: note: expanded from macro 'ELFNOTE'
-      70 |         static const struct {                                           \
-         |                ^
-   arch/arm/vdso/note.c:15:1: error: a parameter list without types is only allowed in a function definition
-   include/linux/build-salt.h:16:8: note: expanded from macro 'BUILD_SALT'
-      16 |        ELFNOTE32("Linux", LINUX_ELFNOTE_BUILD_SALT, CONFIG_BUILD_SALT)
-         |        ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:16: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |                       ^
-   arch/arm/vdso/note.c:15:1: error: illegal initializer (only variables can be initialized)
-   include/linux/build-salt.h:16:8: note: expanded from macro 'BUILD_SALT'
-      16 |        ELFNOTE32("Linux", LINUX_ELFNOTE_BUILD_SALT, CONFIG_BUILD_SALT)
-         |        ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:4: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |           ^
-   2 warnings and 4 errors generated.
+>> kernel/power/hibernate.c:775:26: error: expression is not assignable
+     775 |         pm_suspend_target_state = PM_SUSPEND_MAX;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~ ^
+   kernel/power/hibernate.c:856:26: error: expression is not assignable
+     856 |         pm_suspend_target_state = PM_SUSPEND_ON;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~ ^
+   2 errors generated.
 
 
-vim +14 arch/arm/vdso/note.c
+vim +775 kernel/power/hibernate.c
 
-20e2fc42312f96 Vincenzo Frascino 2019-11-04  13  
-20e2fc42312f96 Vincenzo Frascino 2019-11-04 @14  ELFNOTE32("Linux", 0, LINUX_VERSION_CODE);
-
-:::::: The code at line 14 was first introduced by commit
-:::::: 20e2fc42312f960f497ac2d617e3742754e1fa5e ARM: 8930/1: Add support for generic vDSO
-
-:::::: TO: Vincenzo Frascino <vincenzo.frascino@arm.com>
-:::::: CC: Russell King <rmk+kernel@armlinux.org.uk>
+   741	
+   742	/**
+   743	 * hibernate - Carry out system hibernation, including saving the image.
+   744	 */
+   745	int hibernate(void)
+   746	{
+   747		bool snapshot_test = false;
+   748		unsigned int sleep_flags;
+   749		int error;
+   750	
+   751		if (!hibernation_available()) {
+   752			pm_pr_dbg("Hibernation not available.\n");
+   753			return -EPERM;
+   754		}
+   755	
+   756		/*
+   757		 * Query for the compression algorithm support if compression is enabled.
+   758		 */
+   759		if (!nocompress) {
+   760			strscpy(hib_comp_algo, hibernate_compressor, sizeof(hib_comp_algo));
+   761			if (!crypto_has_acomp(hib_comp_algo, 0, CRYPTO_ALG_ASYNC)) {
+   762				pr_err("%s compression is not available\n", hib_comp_algo);
+   763				return -EOPNOTSUPP;
+   764			}
+   765		}
+   766	
+   767		sleep_flags = lock_system_sleep();
+   768		/* The snapshot device should not be opened while we're running */
+   769		if (!hibernate_acquire()) {
+   770			error = -EBUSY;
+   771			goto Unlock;
+   772		}
+   773	
+   774		pr_info("hibernation entry\n");
+ > 775		pm_suspend_target_state = PM_SUSPEND_MAX;
+   776		pm_prepare_console();
+   777		error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
+   778		if (error)
+   779			goto Restore;
+   780	
+   781		ksys_sync_helper();
+   782	
+   783		error = freeze_processes();
+   784		if (error)
+   785			goto Exit;
+   786	
+   787		lock_device_hotplug();
+   788		/* Allocate memory management structures */
+   789		error = create_basic_memory_bitmaps();
+   790		if (error)
+   791			goto Thaw;
+   792	
+   793		error = hibernation_snapshot(hibernation_mode == HIBERNATION_PLATFORM);
+   794		if (error || freezer_test_done)
+   795			goto Free_bitmaps;
+   796	
+   797		if (in_suspend) {
+   798			unsigned int flags = 0;
+   799	
+   800			if (hibernation_mode == HIBERNATION_PLATFORM)
+   801				flags |= SF_PLATFORM_MODE;
+   802			if (nocompress) {
+   803				flags |= SF_NOCOMPRESS_MODE;
+   804			} else {
+   805			        flags |= SF_CRC32_MODE;
+   806	
+   807				/*
+   808				 * By default, LZO compression is enabled. Use SF_COMPRESSION_ALG_LZ4
+   809				 * to override this behaviour and use LZ4.
+   810				 *
+   811				 * Refer kernel/power/power.h for more details
+   812				 */
+   813	
+   814				if (!strcmp(hib_comp_algo, COMPRESSION_ALGO_LZ4))
+   815					flags |= SF_COMPRESSION_ALG_LZ4;
+   816				else
+   817					flags |= SF_COMPRESSION_ALG_LZO;
+   818			}
+   819	
+   820			pm_pr_dbg("Writing hibernation image.\n");
+   821			error = swsusp_write(flags);
+   822			swsusp_free();
+   823			if (!error) {
+   824				if (hibernation_mode == HIBERNATION_TEST_RESUME)
+   825					snapshot_test = true;
+   826				else
+   827					power_down();
+   828			}
+   829			in_suspend = 0;
+   830			pm_restore_gfp_mask();
+   831		} else {
+   832			pm_pr_dbg("Hibernation image restored successfully.\n");
+   833		}
+   834	
+   835	 Free_bitmaps:
+   836		free_basic_memory_bitmaps();
+   837	 Thaw:
+   838		unlock_device_hotplug();
+   839		if (snapshot_test) {
+   840			pm_pr_dbg("Checking hibernation image\n");
+   841			error = swsusp_check(false);
+   842			if (!error)
+   843				error = load_image_and_restore();
+   844		}
+   845		thaw_processes();
+   846	
+   847		/* Don't bother checking whether freezer_test_done is true */
+   848		freezer_test_done = false;
+   849	 Exit:
+   850		pm_notifier_call_chain(PM_POST_HIBERNATION);
+   851	 Restore:
+   852		pm_restore_console();
+   853		hibernate_release();
+   854	 Unlock:
+   855		unlock_system_sleep(sleep_flags);
+   856		pm_suspend_target_state = PM_SUSPEND_ON;
+   857		pr_info("hibernation exit\n");
+   858	
+   859		return error;
+   860	}
+   861	
 
 -- 
 0-DAY CI Kernel Test Service
