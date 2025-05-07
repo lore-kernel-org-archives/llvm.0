@@ -1,94 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E2DE1714B3;
-	Wed,  7 May 2025 19:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0623B28FA9A;
+	Wed,  7 May 2025 20:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746646798; cv=none; b=P+loQ7Rf3ixmUZRyh/pMNnaegh7deQENdXfqFOamWbN/NyvTxXfsmJNVcW+h3kp0CCs6JmfwBTTvZstPP0gpgXYopmUZGLOMtDDy6jC6F7td4VlKhqV1utT5kvEIc0wpa/mVW18jYKLnRXhx3WPN2cxT0DTT/xVlzfM4yRA/UDU=
+	t=1746650876; cv=none; b=YQ64Pmbw9Ot1yAdoh+nsgnQrBOQTeg+acr+sbA1pXNt5ginPe8DSZRlij0bMwXZNDwoTThZuJ46BfWk9AWCNUBfBiPAkes8Ne5FOj74y4wxwub22Ca/iVlV4KX9WquOlzk/5/Tu1O4YCnHuX54AaGDo/iFa5aOPThGIYZF2hJ14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746646798; c=relaxed/simple;
-	bh=5I7Y42gv0Xc24O6cWYZHG0MvTqIyPfed5hpojVV46Cs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jXPW9zEpl8KlEWWKnwa5MunoNr+YZgmHiqsk0Ui/hwgw274qZ78fegm0CKnlrFyQihtWK8UzLCHiUc1j2pdVap2FMdUBBP4xD6dqYzZuRkpep0RdmreV2Oowf4VLp7v4cn/pm+oXxg5vFtYei3N8Bs218H19sVFLiuZedKHLYuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1SqsDxB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746650876; c=relaxed/simple;
+	bh=ErbIIg8tFdaFpJqMqrCwmVzq5QfpdM9matIuxyQO7IU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HuslQsrBQnzxbUjoQ6TmF/siqeHJH+ijmU3rO0m0sD3egjJMuGUlhjtWSaTVAAT0msE38Ic2yKUiu9hNetpRsUuo3rTc8LhguBYOpTIRoJxKa6lVKZu19EnTiRQswd0HcsQ/VDfa+Bx8smKy3Db3zK7lmU2FgMt4hPynYDYItHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SmO5wMf2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1SqsDxB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DA0C4CEE2;
-	Wed,  7 May 2025 19:39:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SmO5wMf2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF80AC4CEE7;
+	Wed,  7 May 2025 20:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746646796;
-	bh=5I7Y42gv0Xc24O6cWYZHG0MvTqIyPfed5hpojVV46Cs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u1SqsDxB/g600BTu4sky4DKUVjfl1oDoOHSjos3OglBUO3r5ziZEUSYrGhQEJbIGc
-	 /hgDGGywWZjMgVHBWxIKFxid7W3NlXGhudDVowJiD8A7xtMyHlDtVXGX4dR2D++Xv3
-	 BSgZR4gzpPkvKRUJ3mqOJY76mhFzdikOJ1pam4u+BpTPzRaGrv+6RT1oIQ2SfBv0eK
-	 6yflLpCPdfQXrNcxLl52iB/aS5GNE124Nm8Llx95t7b46xZUQIJi/xCMvyN/LsRTGn
-	 zqQ1gCN6R7qB0uIhywhZ7QC1LmeWo55N1MJoJW7lvm+Lhk4UkrEorBUDm9BVmEvaZj
-	 /eDEXU4AwO0ng==
-Date: Wed, 7 May 2025 21:39:48 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 3/8] stackleak: Rename CONFIG_GCC_PLUGIN_STACKLEAK to
- CONFIG_STACKLEAK
-Message-ID: <aBu3BNS60PEw5Uwu@gmail.com>
-References: <20250507180852.work.231-kees@kernel.org>
- <20250507181615.1947159-3-kees@kernel.org>
- <aBuqO9BVlIV3oA2M@gmail.com>
- <202505071236.AC25A6CC2@keescook>
+	s=k20201202; t=1746650875;
+	bh=ErbIIg8tFdaFpJqMqrCwmVzq5QfpdM9matIuxyQO7IU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=SmO5wMf20L521OhV4fbfgBID3lGNlu/rTKRiN574Gcs4ADnbwRsoScZzUzZYPMSMp
+	 AY2M2tfmSxIzFLr5qJywqkNxlDGFWVU4UG8/TUT/ucqH4JzP/1GUbVN5aGFewKXJh9
+	 uVBbTlfopPuDuGz66M86xbGonMjd9qdKjk+A320+g49z98cIbNzH3gcp40Knkb0+dd
+	 9XfmBdEvwJRqgYclSMLrG6SHpUh/dWoXlxlQeqwQ1Z52J60avek9xWn4ZTyTxuK9yK
+	 +kBN/VfW6PDtD2Ep0CGKRAnY8bVlDXqCOSu9upGis0sm+5WuHl/QDASQjZoIfkmU+j
+	 08uWc7+cI5+4Q==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 07 May 2025 21:47:45 +0100
+Subject: [PATCH net] net: qede: Initialize qede_ll_ops with designated
+ initializer
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202505071236.AC25A6CC2@keescook>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250507-qede-fix-clang-randstruct-v1-1-5ccc15626fba@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPDGG2gC/x2MQQqEMAxFryJZT6AqRcerDLPQNGpAOk5aRRDvb
+ nD5+O+/ExKrcIKuOEF5lyS/aFC+CqC5jxOjBGOoXOWddw3+OTCOciAtNqP2MaSsG2Us69CSf9c
+ 0+Bbsvyqb97Q/EDnD97puhzeF7XAAAAA=
+X-Change-ID: 20250507-qede-fix-clang-randstruct-13d8c593cb58
+To: Manish Chopra <manishc@marvell.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Kees Cook <kees@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1518; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ErbIIg8tFdaFpJqMqrCwmVzq5QfpdM9matIuxyQO7IU=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnSx35cjmb/GXoui+vDpzDlY38mXClU/MsUuricIWrb5
+ riFzVvfdZSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJGM9mZNjy6vqtDRNKinha
+ dkvdOpSbkMEdV2X7RPZiWrb68YLp8XEM/1MWz7FdWPH987GdF9u33eAtTZVbVvrBeIbFI09WnZh
+ n7/gB
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
+After a recent change [1] in clang's randstruct implementation to
+randomize structures that only contain function pointers, there is an
+error because qede_ll_ops get randomized but does not use a designated
+initializer for the first member:
 
-* Kees Cook <kees@kernel.org> wrote:
+  drivers/net/ethernet/qlogic/qede/qede_main.c:206:2: error: a randomized struct can only be initialized with a designated initializer
+    206 |         {
+        |         ^
 
-> On Wed, May 07, 2025 at 08:45:15PM +0200, Ingo Molnar wrote:
-> > 
-> > * Kees Cook <kees@kernel.org> wrote:
-> > 
-> > > -	  The STACKLEAK gcc plugin instruments the kernel code for tracking
-> > > +	  The STACKLEAK options instruments the kernel code for tracking
-> > 
-> > speling.
-> 
-> Thanks!
-> 
-> > Also, any chance to fix this terrible name? Should be something like 
-> > KSTACKZERO or KSTACKCLEAR, to tell people that it doesn't leak the 
-> > stack but prevents leaks on the stack by clearing it, and that it's 
-> > about the kernel stack, not any other stack.
-> 
-> Yeah, better to name it for what it does rather than want to protects
-> against. The internal naming for what it does is "stack erase", so
-> perhaps KSTACK_ERASE ?
+Explicitly initialize the common member using a designated initializer
+to fix the build.
 
-That's even better, and I like the word separation as well. Thanks!
+Cc: stable@vger.kernel.org
+Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
+Link: https://github.com/llvm/llvm-project/commit/04364fb888eea6db9811510607bed4b200bcb082 [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/ethernet/qlogic/qede/qede_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	Ingo
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
+index 99df00c30b8c..b5d744d2586f 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_main.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
+@@ -203,7 +203,7 @@ static struct pci_driver qede_pci_driver = {
+ };
+ 
+ static struct qed_eth_cb_ops qede_ll_ops = {
+-	{
++	.common = {
+ #ifdef CONFIG_RFS_ACCEL
+ 		.arfs_filter_op = qede_arfs_filter_op,
+ #endif
+
+---
+base-commit: 9540984da649d46f699c47f28c68bbd3c9d99e4c
+change-id: 20250507-qede-fix-clang-randstruct-13d8c593cb58
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
