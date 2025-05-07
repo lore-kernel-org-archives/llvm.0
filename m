@@ -1,82 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDF6286436;
-	Wed,  7 May 2025 16:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F464289E21;
+	Wed,  7 May 2025 16:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746635364; cv=none; b=UeMqpmbTzOl/S8ZmgGHQXPi7YoKE/yo/pj16bYhZSumwVda9Kko5c6aBplgz0LXM5akZ6hVn5jyvYi8mYkDT2EorSypjwiIv7NdmF9omjq4KkXIliErkaOwaC7sh2SKuih9lJw/ZW25bHokmyi8BTaawZEBI9IVHJT9HMSt+L0c=
+	t=1746636082; cv=none; b=bneHtSLWM8QWKk9PXVo15ZcTnwhzt3q7j7oPxNocbOFjPFj66X41y0jvJ3SQxAdzRUOY7Ea76MQnlp9b4dUcbb7umNaGmxKKSFjLrvxmsYDUm4HAAm979S/2rweM68IDzjnSfn9SoIWl4GxHrekU3F5VEu8QwAF2hSFE0cFqpM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746635364; c=relaxed/simple;
-	bh=LjPYYfMdxis7ITOMKVHr/CAOCVAW0IbwVEhXnZ55sxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aiCkSymYBwhEpBRdf16jS2CuWuJxfLBU4nTniqmkTJa8W4h5hUkZY8lXdwetz9YRQFl9sPiK53RjBnk/QPRg/bs7dNKVMaDe86nLw7gF30XPdxXX7vjRowxH/M6sbFu3NCJPNklEmCZ4BUzgVnIeEKhPrSM2Hxrp6cTqhED5ZCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gEU8Fffk; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1746636082; c=relaxed/simple;
+	bh=bWuCgjApe52tcbee1hI767dDid6NpL9hvhp5c7jcVTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MVNgv3Hi6+dZyWKo8SWiWmumjQ1HTWmuNSPg731JXID7PcQkOhPkmm5kBN5DXMMCCv9VBeG8D/dxagEVEmvgFdvyf51BpzVPk5LRwwr4memjXHbDJSqrUlJpVhE7yLqP21c/RYk8TQ+hNrjtCi4VYCetqJe+2O5oN1mfQSUDV1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UEu7SxF8; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gEU8Fffk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UEu7SxF8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746635363; x=1778171363;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LjPYYfMdxis7ITOMKVHr/CAOCVAW0IbwVEhXnZ55sxo=;
-  b=gEU8FffkmbhHbSNC5TcWOrtyETQHVIzGyNrkiJwr5CTFH9ASAHEPMckD
-   cSDvJJL3H0sy6REDaoP1dT21KyUaOlrV1feQ1YtlfOI+r4x0Q1HtpesGo
-   e5HdZPrnIQZ7lvoDauDEYYC7VpqWv+YX5e1kn9zDp9A7WLrpAJ1muIV5u
-   T6xZjCBks4bq870OZ/1AN72LAm0nctVhnMXvpzIxjGSy5dikg/F9+uASf
-   H1L0l4XsDXDU9rfCRUhI5r8n2zLmrBnj83fCBg99T9FCDkiPY23/JB5o5
-   WetBkqCacPHyuZ/cVqFGbcBpZUyrBF4TlAXlymkumYqGY/cQZkqUqlDK2
-   A==;
-X-CSE-ConnectionGUID: VF3d5ckeTDWVpBYVdI/ahg==
-X-CSE-MsgGUID: cGhvZ/YERda1DRQi9Xyygg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48536573"
+  t=1746636080; x=1778172080;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bWuCgjApe52tcbee1hI767dDid6NpL9hvhp5c7jcVTk=;
+  b=UEu7SxF8bxd0Jzii4tz5XMygHjLo6+QhkJQjz4A6kQ6HSUybc9li8S2a
+   9FqI43YxIZYoLEMlhWsEjMvjsXrLc/mGzwDwMdAvkjN/vUYiejObcIw4l
+   /45dd4cCBJzLoaO520e5At/MZZxUGJnHr0KTq97rYmZHKhdYH6zycM4/L
+   /0RqR26CVPBa+KZMUcCV+ldAOjZpkReB5HbVmVyXG1pvqbULeaYwqKTDV
+   tNRedo8IdHB1y/d+6zSaErtRdOTDr8o1kwQ1USoG1N13WKvaRlFeFFCVL
+   2C+mOVvTXLGuMefe31DBLDPT/ACPLAS5eM2QF60f28BeeOuXLi8v8sWUQ
+   w==;
+X-CSE-ConnectionGUID: jkBHGiw9QkCNooQ7oZWGNQ==
+X-CSE-MsgGUID: upi26x/fQ36p++bJqzFPfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="36012811"
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="48536573"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 09:29:22 -0700
-X-CSE-ConnectionGUID: /qLkKdV/RSK4Bax55Pv+ug==
-X-CSE-MsgGUID: q2i/ICsATHi57GGk/T2P3g==
+   d="scan'208";a="36012811"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 09:41:19 -0700
+X-CSE-ConnectionGUID: 71dd/4i8QfWC29XWaGV1vg==
+X-CSE-MsgGUID: 1yJ3PHiERCamBSTxFOr7rg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="141201293"
+   d="scan'208";a="136530567"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 May 2025 09:29:16 -0700
+  by orviesa007.jf.intel.com with ESMTP; 07 May 2025 09:41:17 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uChdx-0008AL-1P;
-	Wed, 07 May 2025 16:29:13 +0000
-Date: Thu, 8 May 2025 00:28:49 +0800
+	id 1uChpa-0008Av-1q;
+	Wed, 07 May 2025 16:41:14 +0000
+Date: Thu, 8 May 2025 00:41:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shradha Gupta <shradhagupta@linux.microsoft.com>,
-	linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nipun Gupta <nipun.gupta@amd.com>,
-	Yury Norov <yury.norov@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jonathan Cameron <Jonathan.Cameron@huwei.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Shivamurthy Shastri <shivamurthy.shastri@linutronix.de>,
-	Kevin Tian <kevin.tian@intel.com>, Long Li <longli@microsoft.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Bjorn Helgaas <helgaas@kernel.org>, Rob Herring <robh@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Konstantin Taranov <kotaranov@microsoft.com>,
-	Simon Horman <horms@kernel.org>
+To: "Xin Li (Intel)" <xin3.li@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: mana: Allow MANA driver to allocate PCI vector
- dynamically
-Message-ID: <202505080049.7AvfzOGc-lkp@intel.com>
-References: <1744817781-3243-1-git-send-email-shradhagupta@linux.microsoft.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>
+Subject: [tip:x86/msr 5/19]
+ drivers/accel/habanalabs/common/habanalabs_ioctl.c:326:23: error: call to
+ undeclared function 'rdtsc'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202505080003.0t7ewxGp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,126 +65,134 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1744817781-3243-1-git-send-email-shradhagupta@linux.microsoft.com>
 
-Hi Shradha,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.15-rc5 next-20250507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shradha-Gupta/PCI-hv-enable-pci_hyperv-to-allow-dynamic-vector-allocation/20250416-233828
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/1744817781-3243-1-git-send-email-shradhagupta%40linux.microsoft.com
-patch subject: [PATCH 2/2] net: mana: Allow MANA driver to allocate PCI vector dynamically
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250508/202505080049.7AvfzOGc-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505080049.7AvfzOGc-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/msr
+head:   570d58b12fbf7bae0ba72d929ccf914a4df5ca7c
+commit: efef7f184f2eaf29a1ca676712d0e6e851cd0191 [5/19] x86/msr: Add explicit includes of <asm/msr.h>
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250508/202505080003.0t7ewxGp-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505080003.0t7ewxGp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505080049.7AvfzOGc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505080003.0t7ewxGp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/microsoft/mana/gdma_main.c:500:2: warning: variable 'gic' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-     500 |         list_for_each(pos, &gc->irq_contexts) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:687:27: note: expanded from macro 'list_for_each'
-     687 |         for (pos = (head)->next; !list_is_head(pos, (head)); pos = pos->next)
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:510:7: note: uninitialized use occurs here
-     510 |         if (!gic)
-         |              ^~~
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:500:2: note: remove the condition if it is always true
-     500 |         list_for_each(pos, &gc->irq_contexts) {
-         |         ^
-   include/linux/list.h:687:27: note: expanded from macro 'list_for_each'
-     687 |         for (pos = (head)->next; !list_is_head(pos, (head)); pos = pos->next)
-         |                                  ^
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:475:30: note: initialize the variable 'gic' to silence this warning
-     475 |         struct gdma_irq_context *gic;
-         |                                     ^
-         |                                      = NULL
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:541:2: warning: variable 'gic' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-     541 |         list_for_each(pos, &gc->irq_contexts) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:687:27: note: expanded from macro 'list_for_each'
-     687 |         for (pos = (head)->next; !list_is_head(pos, (head)); pos = pos->next)
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:551:7: note: uninitialized use occurs here
-     551 |         if (!gic)
-         |              ^~~
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:541:2: note: remove the condition if it is always true
-     541 |         list_for_each(pos, &gc->irq_contexts) {
-         |         ^
-   include/linux/list.h:687:27: note: expanded from macro 'list_for_each'
-     687 |         for (pos = (head)->next; !list_is_head(pos, (head)); pos = pos->next)
-         |                                  ^
-   drivers/net/ethernet/microsoft/mana/gdma_main.c:523:30: note: initialize the variable 'gic' to silence this warning
-     523 |         struct gdma_irq_context *gic;
-         |                                     ^
-         |                                      = NULL
-   2 warnings generated.
+   In file included from drivers/accel/habanalabs/common/habanalabs_ioctl.c:11:
+   In file included from drivers/accel/habanalabs/common/habanalabs.h:11:
+   In file included from include/linux/habanalabs/cpucp_if.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/accel/habanalabs/common/habanalabs_ioctl.c:11:
+   In file included from drivers/accel/habanalabs/common/habanalabs.h:11:
+   In file included from include/linux/habanalabs/cpucp_if.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/accel/habanalabs/common/habanalabs_ioctl.c:11:
+   In file included from drivers/accel/habanalabs/common/habanalabs.h:11:
+   In file included from include/linux/habanalabs/cpucp_if.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/accel/habanalabs/common/habanalabs_ioctl.c:326:23: error: call to undeclared function 'rdtsc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     326 |         time_sync.tsc_time = rdtsc();
+         |                              ^
+   12 warnings and 1 error generated.
 
 
-vim +500 drivers/net/ethernet/microsoft/mana/gdma_main.c
+vim +/rdtsc +326 drivers/accel/habanalabs/common/habanalabs_ioctl.c
 
-   470	
-   471	static int mana_gd_register_irq(struct gdma_queue *queue,
-   472					const struct gdma_queue_spec *spec)
-   473	{
-   474		struct gdma_dev *gd = queue->gdma_dev;
-   475		struct gdma_irq_context *gic;
-   476		struct gdma_context *gc;
-   477		unsigned int msi_index;
-   478		struct list_head *pos;
-   479		unsigned long flags, flag_irq;
-   480		struct device *dev;
-   481		int err = 0, count;
-   482	
-   483		gc = gd->gdma_context;
-   484		dev = gc->dev;
-   485		msi_index = spec->eq.msix_index;
-   486	
-   487		if (msi_index >= gc->num_msix_usable) {
-   488			err = -ENOSPC;
-   489			dev_err(dev, "Register IRQ err:%d, msi:%u nMSI:%u",
-   490				err, msi_index, gc->num_msix_usable);
-   491	
-   492			return err;
-   493		}
-   494	
-   495		queue->eq.msix_index = msi_index;
-   496	
-   497		/* get the msi_index value from the list*/
-   498		count = 0;
-   499		spin_lock_irqsave(&gc->irq_ctxs_lock, flag_irq);
- > 500		list_for_each(pos, &gc->irq_contexts) {
-   501			if (count == msi_index) {
-   502				gic = list_entry(pos, struct gdma_irq_context, gic_list);
-   503				break;
-   504			}
-   505	
-   506			count++;
-   507		}
-   508		spin_unlock_irqrestore(&gc->irq_ctxs_lock, flag_irq);
-   509	
-   510		if (!gic)
-   511			return -1;
-   512	
-   513		spin_lock_irqsave(&gic->lock, flags);
-   514		list_add_rcu(&queue->entry, &gic->eq_list);
-   515		spin_unlock_irqrestore(&gic->lock, flags);
-   516	
-   517		return 0;
-   518	}
-   519	
+52c01b0137193ab drivers/misc/habanalabs/habanalabs_ioctl.c         Moti Haimovski 2019-11-03  314  
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  315  static int time_sync_info(struct hl_device *hdev, struct hl_info_args *args)
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  316  {
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  317  	struct hl_info_time_sync time_sync = {0};
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  318  	u32 max_size = args->return_size;
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  319  	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  320  
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  321  	if ((!max_size) || (!out))
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  322  		return -EINVAL;
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  323  
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  324  	time_sync.device_time = hdev->asic_funcs->get_device_time(hdev);
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  325  	time_sync.host_time = ktime_get_raw_ns();
+0648c4d0806fe16 drivers/accel/habanalabs/common/habanalabs_ioctl.c Hen Alon       2023-08-09 @326  	time_sync.tsc_time = rdtsc();
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  327  
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  328  	return copy_to_user(out, &time_sync,
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  329  		min((size_t) max_size, sizeof(time_sync))) ? -EFAULT : 0;
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  330  }
+25e7aeba601c177 drivers/misc/habanalabs/habanalabs_ioctl.c         Tomer Tayar    2020-03-31  331  
+
+:::::: The code at line 326 was first introduced by commit
+:::::: 0648c4d0806fe167fe699299573100507ae99502 accel/habanalabs: add tsc clock sampling to clock sync info
+
+:::::: TO: Hen Alon <halon@habana.ai>
+:::::: CC: Oded Gabbay <ogabbay@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
