@@ -1,113 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AC820D51E;
-	Wed,  7 May 2025 11:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE18D1FA178
+	for <llvm@lists.linux.dev>; Wed,  7 May 2025 12:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746618813; cv=none; b=Uoq4uIBqzrQ5rZudgRlW+Ly9N1MTV4MwQ79UsXtSZqV21LRQh5NOszB2d5+sN729py+WTMIOl0lnVv5luppA00DoTUaeWPaLL01Xaz69nT6Ej1NV+n+eETzsAGnrwVolwGhSnqwZLy63CEBxBdJJ87lnuei81+sv62R1tUGiYN0=
+	t=1746619290; cv=none; b=Hl+sbBW/dZedWOKccMAjHBF0nJ0IEEb9/a2vJveGUF3dcOYzshKoY0f5veumYlORdVtljtLTjJpHHgrCnzBxc0qT+1zqkQmH1NLpbin4eb13xcETXaA/9MK8f0emePfPK6bsWTMMYGx5l+TzQ9gPcL6xkEji9hFkqPSOU7qabXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746618813; c=relaxed/simple;
-	bh=72Scb1V0hycsXKAsGR/ifXYu2GLLvEtvC8pJoVQX4Zo=;
+	s=arc-20240116; t=1746619290; c=relaxed/simple;
+	bh=aH4+3i8OZH7nxCS1kUVDJOYoGbnWmIhuHdgXBFhNqkU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cPubLWfX2Vk7dCbGaXsSWZetyNVdl1PH/sqmwobQRaaPuzgYOEqnbT2n7Nj7/HSEvry7LkSOHiqPvb4/xd7hvdJdWKKg/oFLXtfUkuMRW2y5NDexWxy8zX7n7bZKmsV9qcmSqcukz/6JCjzFwQj23JbV58AEPk1kiO/Qg2oTR6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9bCLrVa; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cpp+dHnvjZiJgQCiedIixlspaNoDBh2QLWi0uqvK//zdAdsVpbimegyaAW8ffrsRAb/AOdpiD4aq27zeapqkKFZX73kvlNMx6l/iPXt+BxeVyxGVcA6PCdGaJx8RTqG4xOTK3PEsfutLkVNTieu8x9i/7p9qRglC52xcyXwkJPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KqvLLeaW; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9bCLrVa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746618812; x=1778154812;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=72Scb1V0hycsXKAsGR/ifXYu2GLLvEtvC8pJoVQX4Zo=;
-  b=X9bCLrVaCEUoWxEmuawXzMYgtXljye6KTmlAw+zjgBK6dpYL/u0pUKMW
-   fgkguzz3y5W2orZ7cRY4lkYie4Ueitdzh2t2I8iG/c20aRxwghs9az+qg
-   XB73ldASnmfyM0dZENYxbomxiPUayQs2O5H74cAvleWTTFOUgN9ivhvm8
-   1rnp+M8SmLk/YAiZf48lqGozCVBBRtjxOWfC8HoyFWk6hrhswlOtja6hf
-   FwqMSXjvqGrdYajPcEY1imNfhMlWtFB1Rcp1NqYfL21Z9MDCyqgG58JAb
-   wGyffljPkVEz6pEwAA/njaOnVXLVzQsPIHYeWyWWLaAYoyH1krsbc8tNQ
-   Q==;
-X-CSE-ConnectionGUID: +1T+Z1QPQlijZRSYhGyVRA==
-X-CSE-MsgGUID: BgClpzG8SHujIa+aqrTpfw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59332538"
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="59332538"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 04:53:31 -0700
-X-CSE-ConnectionGUID: LhlCLecGS0Kjox3SYmsO2w==
-X-CSE-MsgGUID: pWiazrmQTcC6g3fF7eWhUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="135898621"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 07 May 2025 04:53:28 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCdL4-0007il-1W;
-	Wed, 07 May 2025 11:53:26 +0000
-Date: Wed, 7 May 2025 19:52:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>, mpe@ellerman.id.au,
-	christophe.leroy@csgroup.eu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, npiggin@gmail.com,
-	naveen@kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: Re: [PATCH 3/6] powerpc/perf:make isa207_pmu_format_group struct
- static
-Message-ID: <202505071909.iZZsdCTI-lkp@intel.com>
-References: <20250422131040.374427-4-maddy@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KqvLLeaW"
+Date: Wed, 7 May 2025 14:01:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1746619284;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RL2wxXAmed+PI/IjubgKwat4E+CcspkAjjt3L6RhK6w=;
+	b=KqvLLeaW68RPJ4At5QovaE5Sva77KYzEOsefT5qStixFTp6/uBdnq3GpuKrkvHotSROeBA
+	5QutOvgN6WqN4SLtjNl+PFwFXj1rxFGP91Sh5jNEqs8ZLG8e1KVLiAuFZO36KU+vE6MyZ/
+	HzVoE17P6zQf4aIJ4ugp1eqpwyFQe5g=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Nicolas Schier <nicolas.schier@linux.dev>
+To: Kees Cook <kees@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 1/3] gcc-plugins: Force full rebuild when plugins
+ change
+Message-ID: <20250507-emerald-lyrebird-of-advertising-e86beb@l-nschier-aarch64>
+References: <20250503184001.make.594-kees@kernel.org>
+ <20250503184623.2572355-1-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250422131040.374427-4-maddy@linux.ibm.com>
+In-Reply-To: <20250503184623.2572355-1-kees@kernel.org>
+Organization: AVM GmbH
+X-Migadu-Flow: FLOW_OUT
 
-Hi Madhavan,
+On Sat, 03 May 2025, Kees Cook wrote:
 
-kernel test robot noticed the following build warnings:
+> There was no dependency between the plugins changing and the rest of the
+> kernel being built. This could cause strange behaviors as instrumentation
+> could vary between targets depending on when they were built.
+> 
+> Generate a new header file, gcc-plugins.h, any time the GCC plugins
+> change. Include the header file in compiler-version.h when its associated
+> feature name, GCC_PLUGINS, is defined. This will be picked up by fixdep
+> and force rebuilds where needed.
+> 
+> Add a generic "touch" kbuild command, which will be used again in
+> a following patch. Add a "normalize_path" string helper to make the
+> "TOUCH" output less ugly.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nicolas Schier <nicolas.schier@linux.dev>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: <linux-hardening@vger.kernel.org>
+> Cc: <linux-kbuild@vger.kernel.org>
+> ---
+>  include/linux/compiler-version.h |  4 ++++
+>  scripts/Makefile.gcc-plugins     |  2 +-
+>  scripts/Makefile.lib             | 18 ++++++++++++++++++
+>  scripts/gcc-plugins/Makefile     |  4 ++++
+>  4 files changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/compiler-version.h b/include/linux/compiler-version.h
+> index 573fa85b6c0c..74ea11563ce3 100644
+> --- a/include/linux/compiler-version.h
+> +++ b/include/linux/compiler-version.h
+> @@ -12,3 +12,7 @@
+>   * and add dependency on include/config/CC_VERSION_TEXT, which is touched
+>   * by Kconfig when the version string from the compiler changes.
+>   */
+> +
+> +#ifdef GCC_PLUGINS
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes powerpc/topic/ppc-kvm linus/master v6.15-rc5 next-20250507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Out of curiousity:  Why can't we use CONFIG_GCC_PLUGINS here?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Madhavan-Srinivasan/powerpc-kvm-Fix-sparse-warning/20250422-211309
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20250422131040.374427-4-maddy%40linux.ibm.com
-patch subject: [PATCH 3/6] powerpc/perf:make isa207_pmu_format_group struct static
-config: powerpc64-randconfig-002-20250424 (https://download.01.org/0day-ci/archive/20250507/202505071909.iZZsdCTI-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071909.iZZsdCTI-lkp@intel.com/reproduce)
+> +#include <generated/gcc-plugins.h>
+> +#endif
+> diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
+> index 5b8a8378ca8a..e50dc931be49 100644
+> --- a/scripts/Makefile.gcc-plugins
+> +++ b/scripts/Makefile.gcc-plugins
+> @@ -38,7 +38,7 @@ export DISABLE_STACKLEAK_PLUGIN
+>  
+>  # All the plugin CFLAGS are collected here in case a build target needs to
+>  # filter them out of the KBUILD_CFLAGS.
+> -GCC_PLUGINS_CFLAGS := $(strip $(addprefix -fplugin=$(objtree)/scripts/gcc-plugins/, $(gcc-plugin-y)) $(gcc-plugin-cflags-y))
+> +GCC_PLUGINS_CFLAGS := $(strip $(addprefix -fplugin=$(objtree)/scripts/gcc-plugins/, $(gcc-plugin-y)) $(gcc-plugin-cflags-y)) -DGCC_PLUGINS
+>  export GCC_PLUGINS_CFLAGS
+>  
+>  # Add the flags to the build!
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 2fe73cda0bdd..6fc2a82ee3bb 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -296,6 +296,19 @@ $(foreach m, $1, \
+>  	$(addprefix $(obj)/, $(call suffix-search, $(patsubst $(obj)/%,%,$m), $2, $3))))
+>  endef
+>  
+> +# Remove ".." and "." from a path, without using "realpath"
+> +# Usage:
+> +#   $(call normalize_path,path/to/../file)
+> +define normalize_path
+> +$(strip $(eval elements :=) \
+> +$(foreach elem,$(subst /, ,$1), \
+> +	$(if $(filter-out .,$(elem)), \
+> +	     $(if $(filter ..,$(elem)), \
+> +		  $(eval elements := $(wordlist 2,$(words $(elements)),x $(elements))), \
+> +		  $(eval elements := $(elements) $(elem))))) \
+> +$(subst $(space),/,$(elements)))
+> +endef
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071909.iZZsdCTI-lkp@intel.com/
+Nice :)
 
-All warnings (new ones prefixed by >>):
+> +
+>  # Build commands
+>  # ===========================================================================
+>  # These are shared by some Makefile.* files.
+> @@ -343,6 +356,11 @@ quiet_cmd_copy = COPY    $@
+>  $(obj)/%: $(src)/%_shipped
+>  	$(call cmd,copy)
+>  
+> +# Touch a file
+> +# ===========================================================================
+> +quiet_cmd_touch = TOUCH   $(call normalize_path,$@)
+> +      cmd_touch = touch $@
+> +
+>  # Commands useful for building a boot image
+>  # ===========================================================================
+>  #
+> diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
+> index 320afd3cf8e8..05b14aba41ef 100644
+> --- a/scripts/gcc-plugins/Makefile
+> +++ b/scripts/gcc-plugins/Makefile
+> @@ -66,3 +66,7 @@ quiet_cmd_plugin_cxx_o_c = HOSTCXX $@
+>  
+>  $(plugin-objs): $(obj)/%.o: $(src)/%.c FORCE
+>  	$(call if_changed_dep,plugin_cxx_o_c)
+> +
+> +$(obj)/../../include/generated/gcc-plugins.h: $(plugin-single) $(plugin-multi) FORCE
+> +	$(call if_changed,touch)
+> +always-y += ../../include/generated/gcc-plugins.h
+> -- 
+> 2.34.1
+> 
 
->> arch/powerpc/perf/isa207-common.c:40:37: warning: unused variable 'isa207_pmu_format_group' [-Wunused-const-variable]
-      40 | static const struct attribute_group isa207_pmu_format_group = {
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Tested-by: Nicolas Schier <n.schier@avm.de>
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
 
-
-vim +/isa207_pmu_format_group +40 arch/powerpc/perf/isa207-common.c
-
-    39	
-  > 40	static const struct attribute_group isa207_pmu_format_group = {
-    41		.name = "format",
-    42		.attrs = isa207_pmu_format_attr,
-    43	};
-    44	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
