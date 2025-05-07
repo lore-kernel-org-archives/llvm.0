@@ -1,58 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A535620F09A;
-	Wed,  7 May 2025 08:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09F620CCCC;
+	Wed,  7 May 2025 08:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746607138; cv=none; b=iMzLAlJEoVzxDDi/1Q3X8PoHq+hhX53aRxUXOa/l4GDMqNjQdId4neWm9ADLkrpsTKzuntgW30syPuAbAeXdI+xvMQfyj1OePYS/qL6FKQcIw3JXqVm+JPdw2y2kMOCcFK+AJdcinQLOzFBSa8mNtzPclvwLfBw2ShbXB4imW74=
+	t=1746607141; cv=none; b=moYuWOAMi1VF2EYC+2BPNMOz+rqMkmEwGWLXQ+sOzfgWZqWuSxzhF+lNd35fIHXqlbMGsXezmHKe3WlfeC42sAI+d06QlkOnWLoZ+98bqxz8eetQQ2nvLGfDP65+mM0RGfOo1Tc7RgyEezTYuD8FvxA4BhIUHH9Q7qtqvkNNJCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746607138; c=relaxed/simple;
-	bh=Snd0wkSnZnhVXjWzUJSbm+GuJ/pgit7McFGo4WJceXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pIQ11SpIxkPOmrJlpGy/SWe7DniUDrjskui/RXK656FpzXCpDmdLjQKgqfKslju1pPl+CUOErF3tR/82rco7/wxRNFQKgvGmYlOYkASB5yJb7TS6RjmOfyD+lTzFe3U9aioSy2guE1HsRR/8gn9+kUryn2j36+KUdEITCDK3ND0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ApJGjHeY; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1746607141; c=relaxed/simple;
+	bh=sfIRBWz57bESN0N5rP5vLWqllCJK87/7X7U2QAb9P2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rY+oom7eRX+GFHqLoc2C0O/bZ+cM/TJGwi/BIO3qAl62mCH37ISYqn9f/l14AFy/JghuwnYzPykB8dB18sPwMs66N/9qncnVEPrIsGMMYoWXBWPxYuEqhLM56F+7TOaUcg8m/se/rPa+bdRbquis0mU6gwBcdEpAylTDeZWWm8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6P0hepD; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ApJGjHeY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6P0hepD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746607136; x=1778143136;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Snd0wkSnZnhVXjWzUJSbm+GuJ/pgit7McFGo4WJceXo=;
-  b=ApJGjHeYfW3zXM6ndeYhqcRQGDvliTXYAw8LM1QjOxnfAmmbvEdToCSt
-   JBNGQjGrWhhp32Nj0MVelvPID9j30Ed0n625qkTHEQlIIpNyl6aBNQtVT
-   icX3qJLFtr0Wg1Z2AcxkqjaXJu1ZFifTpv/P32N6SuT71VqAci6z2VAPW
-   r7B9fxuacVKMGz/R/F/VUpTL+1Ajv78d0BaMJsE4ZKzTIlDUqDzB0taa6
-   /oVpUnDPrPvVeAkqdeDG4X9S11XT3IPcUiM8730tTlurX+c07G6gTDWWg
-   rXfWvE7hxhI5JIsb3NIXl2xY8XCPZEMGq/f/+HHkMgyTDxLYPN70AiZFB
-   g==;
-X-CSE-ConnectionGUID: 8aqDKkm4SW2XHJcTgKIKtA==
-X-CSE-MsgGUID: 02DLg2EkQPyjIJX3PGA1jQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="48335016"
+  t=1746607139; x=1778143139;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sfIRBWz57bESN0N5rP5vLWqllCJK87/7X7U2QAb9P2Y=;
+  b=O6P0hepD8bjcxmcnAfpF+qktukv3FvlmlOTTdHrUyrchG85ueFj0Bqbu
+   EAN/+VfEG2lmjrs+Qp52e4ZHzLQovVWQFBdkNzuijnxKY5z4yl3s64+jp
+   WJcOrk8HVC7vmj/dc+Fm3X2DZFPdlzYY5v1FWzaxLOlufEj5NXDSaj1lb
+   k6JnAhGYpM3VOUDBksJ7ZqVBJCWm2GnGC57F0egT+Huuomd4H8DpdeDPv
+   7kto4LJ/XyTUUzPP/VCALpF/s4v/RtpAnt/2iGgqQ8Q1Kvif29XRnEJ2Y
+   HzUXhKq9wQZTEqoQArYIab34R84PuvMzqbSh8Z3rd4+bnlvNWAZRqvnXg
+   w==;
+X-CSE-ConnectionGUID: F5PN+puQTYKeP1uLdGI9iQ==
+X-CSE-MsgGUID: 3sQGJC/QRBGYZKRavUp3KQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="48195748"
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="48335016"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 01:38:55 -0700
-X-CSE-ConnectionGUID: koY5pgF3RoW5D+Psn0n7Jw==
-X-CSE-MsgGUID: WmNkc8cwQUGr7JGL7Td2Bg==
+   d="scan'208";a="48195748"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 01:38:58 -0700
+X-CSE-ConnectionGUID: u15cOkStSwm3lq+agpMLpw==
+X-CSE-MsgGUID: REPlWn1oT96BVJFOJC63Vw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="141007273"
+   d="scan'208";a="136410621"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 07 May 2025 01:38:54 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 07 May 2025 01:38:53 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCaIl-0007QR-19;
+	id 1uCaIl-0007QF-04;
 	Wed, 07 May 2025 08:38:51 +0000
-Date: Wed, 7 May 2025 16:37:54 +0800
+Date: Wed, 7 May 2025 16:38:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:irq/core 31/47] kernel/irq/manage.c:2651:3: error:
- cannot jump from this goto statement to its label
-Message-ID: <202505071620.Cn0x5EZu-lkp@intel.com>
+To: Ian Rogers <irogers@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Leo Yan <leo.yan@arm.com>
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32
+ warning
+Message-ID: <202505071638.ZLhUrspy-lkp@intel.com>
+References: <20250430171534.132774-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,152 +75,203 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250430171534.132774-2-irogers@google.com>
 
-Hi Thomas,
+Hi Ian,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
-head:   b8203edb7846253466282425b6009c20a4c85eb8
-commit: 936031eb6f97c198231aa2de74c052c5c06b3177 [31/47] genirq/manage: Convert to lock guards
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20250507/202505071620.Cn0x5EZu-lkp@intel.com/config)
+[auto build test WARNING on arnd-asm-generic/master]
+[also build test WARNING on soc/for-next linus/master v6.15-rc5 next-20250506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Rogers/bitfield-Silence-a-clang-Wshorten-64-to-32-warning/20250501-011830
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20250430171534.132774-2-irogers%40google.com
+patch subject: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32 warning
+config: mips-randconfig-r111-20250501 (https://download.01.org/0day-ci/archive/20250507/202505071638.ZLhUrspy-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071620.Cn0x5EZu-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20250507/202505071638.ZLhUrspy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071620.Cn0x5EZu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071638.ZLhUrspy-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+   lib/bitfield_kunit.c: note: in included file (through include/linux/fortify-string.h, include/linux/string.h, include/linux/bitmap.h, ...):
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+   lib/bitfield_kunit.c: note: in included file (through include/linux/thread_info.h, include/asm-generic/preempt.h, arch/mips/include/generated/asm/preempt.h, ...):
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (8000000000000000 becomes 0)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (8000000000000000 becomes 0)
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (7f00000000000000 becomes 0)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (7f00000000000000 becomes 0)
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (1800000000000 becomes 0)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (1800000000000 becomes 0)
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (1f8000000 becomes f8000000)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (1f8000000 becomes f8000000)
 
->> kernel/irq/manage.c:2651:3: error: cannot jump from this goto statement to its label
-    2651 |                 goto err_irq_setup;
-         |                 ^
-   kernel/irq/manage.c:2653:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2653 |         guard(raw_spinlock_irqsave)(&desc->lock);
-         |         ^
-   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
-     319 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:96:1: note: expanded from here
-      96 | __UNIQUE_ID_guard270
-         | ^
-   kernel/irq/manage.c:2647:3: error: cannot jump from this goto statement to its label
-    2647 |                 goto err_out;
-         |                 ^
-   kernel/irq/manage.c:2653:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2653 |         guard(raw_spinlock_irqsave)(&desc->lock);
-         |         ^
-   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
-     319 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:96:1: note: expanded from here
-      96 | __UNIQUE_ID_guard270
-         | ^
-   2 errors generated.
+vim +200 include/linux/bitfield.h
 
-
-vim +2651 kernel/irq/manage.c
-
-1b7047edfcfb257 Marc Zyngier    2015-03-18  2591  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2592  /**
-4b078c3f1a26487 Julien Thierry  2019-01-31  2593   * request_percpu_nmi - allocate a percpu interrupt line for NMI delivery
-4b078c3f1a26487 Julien Thierry  2019-01-31  2594   * @irq:	Interrupt line to allocate
-4b078c3f1a26487 Julien Thierry  2019-01-31  2595   * @handler:	Function to be called when the IRQ occurs.
-4b078c3f1a26487 Julien Thierry  2019-01-31  2596   * @name:	An ascii name for the claiming device
-4b078c3f1a26487 Julien Thierry  2019-01-31  2597   * @dev_id:	A percpu cookie passed back to the handler function
-4b078c3f1a26487 Julien Thierry  2019-01-31  2598   *
-4b078c3f1a26487 Julien Thierry  2019-01-31  2599   * This call allocates interrupt resources for a per CPU NMI. Per CPU NMIs
-a51866946c0aa0b Julien Thierry  2019-02-13  2600   * have to be setup on each CPU by calling prepare_percpu_nmi() before
-a51866946c0aa0b Julien Thierry  2019-02-13  2601   * being enabled on the same CPU by using enable_percpu_nmi().
-4b078c3f1a26487 Julien Thierry  2019-01-31  2602   *
-38caf05690922d5 Thomas Gleixner 2025-03-13  2603   * @dev_id must be globally unique. It is a per-cpu variable, and the
-38caf05690922d5 Thomas Gleixner 2025-03-13  2604   * handler gets called with the interrupted CPU's instance of that
-38caf05690922d5 Thomas Gleixner 2025-03-13  2605   * variable.
-4b078c3f1a26487 Julien Thierry  2019-01-31  2606   *
-4b078c3f1a26487 Julien Thierry  2019-01-31  2607   * Interrupt lines requested for NMI delivering should have auto enabling
-4b078c3f1a26487 Julien Thierry  2019-01-31  2608   * setting disabled.
-4b078c3f1a26487 Julien Thierry  2019-01-31  2609   *
-4b078c3f1a26487 Julien Thierry  2019-01-31  2610   * If the interrupt line cannot be used to deliver NMIs, function
-4b078c3f1a26487 Julien Thierry  2019-01-31  2611   * will fail returning a negative value.
-4b078c3f1a26487 Julien Thierry  2019-01-31  2612   */
-4b078c3f1a26487 Julien Thierry  2019-01-31  2613  int request_percpu_nmi(unsigned int irq, irq_handler_t handler,
-4b078c3f1a26487 Julien Thierry  2019-01-31  2614  		       const char *name, void __percpu *dev_id)
-4b078c3f1a26487 Julien Thierry  2019-01-31  2615  {
-4b078c3f1a26487 Julien Thierry  2019-01-31  2616  	struct irqaction *action;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2617  	struct irq_desc *desc;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2618  	int retval;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2619  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2620  	if (!handler)
-4b078c3f1a26487 Julien Thierry  2019-01-31  2621  		return -EINVAL;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2622  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2623  	desc = irq_to_desc(irq);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2624  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2625  	if (!desc || !irq_settings_can_request(desc) ||
-4b078c3f1a26487 Julien Thierry  2019-01-31  2626  	    !irq_settings_is_per_cpu_devid(desc) ||
-4b078c3f1a26487 Julien Thierry  2019-01-31  2627  	    irq_settings_can_autoenable(desc) ||
-4b078c3f1a26487 Julien Thierry  2019-01-31  2628  	    !irq_supports_nmi(desc))
-4b078c3f1a26487 Julien Thierry  2019-01-31  2629  		return -EINVAL;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2630  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2631  	/* The line cannot already be NMI */
-6678ae1918ff554 Jinjie Ruan     2024-04-23  2632  	if (irq_is_nmi(desc))
-4b078c3f1a26487 Julien Thierry  2019-01-31  2633  		return -EINVAL;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2634  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2635  	action = kzalloc(sizeof(struct irqaction), GFP_KERNEL);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2636  	if (!action)
-4b078c3f1a26487 Julien Thierry  2019-01-31  2637  		return -ENOMEM;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2638  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2639  	action->handler = handler;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2640  	action->flags = IRQF_PERCPU | IRQF_NO_SUSPEND | IRQF_NO_THREAD
-4b078c3f1a26487 Julien Thierry  2019-01-31  2641  		| IRQF_NOBALANCING;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2642  	action->name = name;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2643  	action->percpu_dev_id = dev_id;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2644  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2645  	retval = irq_chip_pm_get(&desc->irq_data);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2646  	if (retval < 0)
-4b078c3f1a26487 Julien Thierry  2019-01-31  2647  		goto err_out;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2648  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2649  	retval = __setup_irq(irq, desc, action);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2650  	if (retval)
-4b078c3f1a26487 Julien Thierry  2019-01-31 @2651  		goto err_irq_setup;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2652  
-936031eb6f97c19 Thomas Gleixner 2025-03-13  2653  	guard(raw_spinlock_irqsave)(&desc->lock);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2654  	desc->istate |= IRQS_NMI;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2655  	return 0;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2656  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2657  err_irq_setup:
-4b078c3f1a26487 Julien Thierry  2019-01-31  2658  	irq_chip_pm_put(&desc->irq_data);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2659  err_out:
-4b078c3f1a26487 Julien Thierry  2019-01-31  2660  	kfree(action);
-4b078c3f1a26487 Julien Thierry  2019-01-31  2661  
-4b078c3f1a26487 Julien Thierry  2019-01-31  2662  	return retval;
-4b078c3f1a26487 Julien Thierry  2019-01-31  2663  }
-4b078c3f1a26487 Julien Thierry  2019-01-31  2664  
-
-:::::: The code at line 2651 was first introduced by commit
-:::::: 4b078c3f1a26487c39363089ba0d5c6b09f2a89f genirq: Provide NMI management for percpu_devid interrupts
-
-:::::: TO: Julien Thierry <julien.thierry@arm.com>
-:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
+e2192de59e457a Johannes Berg   2023-01-18  120  
+e2192de59e457a Johannes Berg   2023-01-18  121  /**
+e2192de59e457a Johannes Berg   2023-01-18  122   * FIELD_PREP_CONST() - prepare a constant bitfield element
+e2192de59e457a Johannes Berg   2023-01-18  123   * @_mask: shifted mask defining the field's length and position
+e2192de59e457a Johannes Berg   2023-01-18  124   * @_val:  value to put in the field
+e2192de59e457a Johannes Berg   2023-01-18  125   *
+e2192de59e457a Johannes Berg   2023-01-18  126   * FIELD_PREP_CONST() masks and shifts up the value.  The result should
+e2192de59e457a Johannes Berg   2023-01-18  127   * be combined with other fields of the bitfield using logical OR.
+e2192de59e457a Johannes Berg   2023-01-18  128   *
+e2192de59e457a Johannes Berg   2023-01-18  129   * Unlike FIELD_PREP() this is a constant expression and can therefore
+e2192de59e457a Johannes Berg   2023-01-18  130   * be used in initializers. Error checking is less comfortable for this
+e2192de59e457a Johannes Berg   2023-01-18  131   * version, and non-constant masks cannot be used.
+e2192de59e457a Johannes Berg   2023-01-18  132   */
+e2192de59e457a Johannes Berg   2023-01-18  133  #define FIELD_PREP_CONST(_mask, _val)					\
+e2192de59e457a Johannes Berg   2023-01-18  134  	(								\
+e2192de59e457a Johannes Berg   2023-01-18  135  		/* mask must be non-zero */				\
+e2192de59e457a Johannes Berg   2023-01-18  136  		BUILD_BUG_ON_ZERO((_mask) == 0) +			\
+e2192de59e457a Johannes Berg   2023-01-18  137  		/* check if value fits */				\
+e2192de59e457a Johannes Berg   2023-01-18  138  		BUILD_BUG_ON_ZERO(~((_mask) >> __bf_shf(_mask)) & (_val)) + \
+e2192de59e457a Johannes Berg   2023-01-18  139  		/* check if mask is contiguous */			\
+e2192de59e457a Johannes Berg   2023-01-18  140  		__BF_CHECK_POW2((_mask) + (1ULL << __bf_shf(_mask))) +	\
+e2192de59e457a Johannes Berg   2023-01-18  141  		/* and create the value */				\
+e2192de59e457a Johannes Berg   2023-01-18  142  		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask))	\
+e2192de59e457a Johannes Berg   2023-01-18  143  	)
+e2192de59e457a Johannes Berg   2023-01-18  144  
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  145  /**
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  146   * FIELD_GET() - extract a bitfield element
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  147   * @_mask: shifted mask defining the field's length and position
+7240767450d6d8 Masahiro Yamada 2017-10-03  148   * @_reg:  value of entire bitfield
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  149   *
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  150   * FIELD_GET() extracts the field specified by @_mask from the
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  151   * bitfield passed in as @_reg by masking and shifting it down.
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  152   */
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  153  #define FIELD_GET(_mask, _reg)						\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  154  	({								\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  155  		__BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");	\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  156  		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask));	\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  157  	})
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  158  
+e7d4a95da86e0b Johannes Berg   2018-06-20  159  extern void __compiletime_error("value doesn't fit into mask")
+00b0c9b82663ac Al Viro         2017-12-14  160  __field_overflow(void);
+00b0c9b82663ac Al Viro         2017-12-14  161  extern void __compiletime_error("bad bitfield mask")
+00b0c9b82663ac Al Viro         2017-12-14  162  __bad_mask(void);
+00b0c9b82663ac Al Viro         2017-12-14  163  static __always_inline u64 field_multiplier(u64 field)
+00b0c9b82663ac Al Viro         2017-12-14  164  {
+00b0c9b82663ac Al Viro         2017-12-14  165  	if ((field | (field - 1)) & ((field | (field - 1)) + 1))
+00b0c9b82663ac Al Viro         2017-12-14  166  		__bad_mask();
+00b0c9b82663ac Al Viro         2017-12-14  167  	return field & -field;
+00b0c9b82663ac Al Viro         2017-12-14  168  }
+00b0c9b82663ac Al Viro         2017-12-14  169  static __always_inline u64 field_mask(u64 field)
+00b0c9b82663ac Al Viro         2017-12-14  170  {
+00b0c9b82663ac Al Viro         2017-12-14  171  	return field / field_multiplier(field);
+00b0c9b82663ac Al Viro         2017-12-14  172  }
+e31a50162feb35 Alex Elder      2020-03-12  173  #define field_max(field)	((typeof(field))field_mask(field))
+00b0c9b82663ac Al Viro         2017-12-14  174  #define ____MAKE_OP(type,base,to,from)					\
+00b0c9b82663ac Al Viro         2017-12-14  175  static __always_inline __##type type##_encode_bits(base v, base field)	\
+00b0c9b82663ac Al Viro         2017-12-14  176  {									\
+e7d4a95da86e0b Johannes Berg   2018-06-20  177  	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
+00b0c9b82663ac Al Viro         2017-12-14  178  		__field_overflow();					\
+38e224b77cde3b Ian Rogers      2025-04-30  179  	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
+00b0c9b82663ac Al Viro         2017-12-14  180  }									\
+00b0c9b82663ac Al Viro         2017-12-14  181  static __always_inline __##type type##_replace_bits(__##type old,	\
+00b0c9b82663ac Al Viro         2017-12-14  182  					base val, base field)		\
+00b0c9b82663ac Al Viro         2017-12-14  183  {									\
+00b0c9b82663ac Al Viro         2017-12-14  184  	return (old & ~to(field)) | type##_encode_bits(val, field);	\
+00b0c9b82663ac Al Viro         2017-12-14  185  }									\
+00b0c9b82663ac Al Viro         2017-12-14  186  static __always_inline void type##p_replace_bits(__##type *p,		\
+00b0c9b82663ac Al Viro         2017-12-14  187  					base val, base field)		\
+00b0c9b82663ac Al Viro         2017-12-14  188  {									\
+00b0c9b82663ac Al Viro         2017-12-14  189  	*p = (*p & ~to(field)) | type##_encode_bits(val, field);	\
+00b0c9b82663ac Al Viro         2017-12-14  190  }									\
+00b0c9b82663ac Al Viro         2017-12-14  191  static __always_inline base type##_get_bits(__##type v, base field)	\
+00b0c9b82663ac Al Viro         2017-12-14  192  {									\
+00b0c9b82663ac Al Viro         2017-12-14  193  	return (from(v) & field)/field_multiplier(field);		\
+00b0c9b82663ac Al Viro         2017-12-14  194  }
+00b0c9b82663ac Al Viro         2017-12-14  195  #define __MAKE_OP(size)							\
+00b0c9b82663ac Al Viro         2017-12-14  196  	____MAKE_OP(le##size,u##size,cpu_to_le##size,le##size##_to_cpu)	\
+00b0c9b82663ac Al Viro         2017-12-14  197  	____MAKE_OP(be##size,u##size,cpu_to_be##size,be##size##_to_cpu)	\
+00b0c9b82663ac Al Viro         2017-12-14  198  	____MAKE_OP(u##size,u##size,,)
+37a3862e123826 Johannes Berg   2018-06-20  199  ____MAKE_OP(u8,u8,,)
+00b0c9b82663ac Al Viro         2017-12-14 @200  __MAKE_OP(16)
+00b0c9b82663ac Al Viro         2017-12-14 @201  __MAKE_OP(32)
+00b0c9b82663ac Al Viro         2017-12-14 @202  __MAKE_OP(64)
+00b0c9b82663ac Al Viro         2017-12-14  203  #undef __MAKE_OP
+00b0c9b82663ac Al Viro         2017-12-14  204  #undef ____MAKE_OP
+00b0c9b82663ac Al Viro         2017-12-14  205  
 
 -- 
 0-DAY CI Kernel Test Service
