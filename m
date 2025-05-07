@@ -1,57 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BAE289359;
-	Wed,  7 May 2025 13:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89549287513;
+	Wed,  7 May 2025 13:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746623326; cv=none; b=SJ06VuN0su2J5VSbwBXyp6Mb9DKNZoArdmi6ZH5LbpXq7/AUYmxuGnZdsxUoxjFy714weo24KZueFJdHOIVtbaoo11UL0z31Jvwxo6rrwWM6DfgO+MQCx8BXXoCpu2Z3l8SvM7/DTbs1RfaAGr9eIXjGW1Gv4u/ZoObhHgHgMXU=
+	t=1746623383; cv=none; b=SGuoEPxNDPG5nd/aYri/KOXAtdBwloz4QzdbEHZ3opew2QEoFGv9J2EKDedLYVAHJtbxkTlA21cma3uvf1LOQJ/+wiUkDNSPOVDRogWpD/Pewix6F6GMDf7mTaYZ2PdNDF66oTKzn+0XqQ0BvhvWHAdJurenD+auosvWNO15tLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746623326; c=relaxed/simple;
-	bh=0V6PsA6OKEUwAIFmKPDnV9GnyRDcR5icGG8yoibio3w=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rjEmSvn6OThxn+1IeMmGhDUe4ZhDUWBt/SAC6r6mD+6Z0wxnR/XoFqb8DUXjqHlPmT39sVBBxtWSGtF3sQQvpEDxinFsWjnIeapbNauIqKx5O6GQ/4RoTW/L0R/m4WPKdxUUfXgUJkZ7nph4wZRMovhmR03gKM6Xeo76PJzCBb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EH30KePZ; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1746623383; c=relaxed/simple;
+	bh=sUsJqVsBiX36KFyM8w57PKkgxwx4UZqG6pHyRD50O4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cnm7eNcm+kaouPcY4rmdfXgwxJb2vTdvD7FNR8bm0JvbqE+7RjmADx0xZrSelyp0ihJ6Psop8ASBVxHRZ9oFO6sNbirD1q/UA7U1kAW8VDDH8DsaFgz3wUlnzbzhEQFxyLEKe9UufYMWqD7LjhrhFFRfs0wZAtSqyxg056JFXUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QhF5GLBS; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EH30KePZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QhF5GLBS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746623324; x=1778159324;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=0V6PsA6OKEUwAIFmKPDnV9GnyRDcR5icGG8yoibio3w=;
-  b=EH30KePZhkk2jJHyyjkurEv4F8UaAwKZV4lPaSkDIHYcGIR6ui6olBvA
-   9ogDh5k87LfHBa/qjs4fkN3NNX164eiGl3UkZlRhQng4Ti6300/8eLrFX
-   PYWXXSpXl/oTaSJh4PJrDHY8c8uIDSJNT5AJhT++MvLVkMNxd7BWyFU+n
-   U8kcZRYvrNdv3pacp9M2hmtRj2LaqBCvnCnBMWBvPTYTpQb0k3JIlsEow
-   rxlzJymXVPuNG65bW1Um/hBd+NRDPl3/W4FWrCuJp8TYosFut6I2v1slg
-   79wY8VpPv2e166bjzCkalxA3RMxBOLMh0Lr12uFprCLT4/1i67XxBDgxd
-   w==;
-X-CSE-ConnectionGUID: kdMFlAlpQhqEYyb0GXIOmg==
-X-CSE-MsgGUID: sYoTIjcnQ4yauJB3OeuIuA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48464751"
+  t=1746623381; x=1778159381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sUsJqVsBiX36KFyM8w57PKkgxwx4UZqG6pHyRD50O4w=;
+  b=QhF5GLBS4vvVB4ImNoDGqxpUmRVW0KxTgQzws5zRQ12ahVTtzh909PDj
+   8yzvfY4wzdExoJfm0bN5cv/Zn4UeCve9za4g/eUHuP5VehLWF0h/UQEKw
+   asAGZPNVilUhQHqHaiwAXLimHL+QYrzMsAgIWvcVHJhwckJ0X9Hw45WeZ
+   JgMyajdhxXJWw6oLG9fjYGIHByAX9jOaC5eWIfjRJ0fdoPk7ux+Ww8Tq0
+   E+sHhYSu1VrpGiWpcy3jo3zqoEjMlE5kDUyWwoVnri1p/C8DeavFuvhZn
+   i6lKjjDBFzbPbPbgUgCRFUII2seyUannhOgC8Z9gdUpP7xJ+o+VHCD4sD
+   g==;
+X-CSE-ConnectionGUID: bMlKqg8fQaOR9GncXUJMUA==
+X-CSE-MsgGUID: 5wePYllzQVuJltABuqmXZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48253255"
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="48464751"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 06:08:38 -0700
-X-CSE-ConnectionGUID: 66ssoZaMRru29laYE60TKw==
-X-CSE-MsgGUID: rRm+V/osQGK694Dq2cJRAA==
+   d="scan'208";a="48253255"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 06:09:41 -0700
+X-CSE-ConnectionGUID: q5wI3BwXRXyQdAVvtwKEpQ==
+X-CSE-MsgGUID: JANjWtvwTiC1od6Y+mQvbA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="140907168"
+   d="scan'208";a="136346223"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 07 May 2025 06:08:37 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 07 May 2025 06:09:38 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCeVm-0007q1-2J;
-	Wed, 07 May 2025 13:08:34 +0000
-Date: Wed, 7 May 2025 21:08:15 +0800
+	id 1uCeWl-0007qb-0v;
+	Wed, 07 May 2025 13:09:35 +0000
+Date: Wed, 7 May 2025 21:08:36 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH 14/14] RDMA/ionic: Add Makefile/Kconfig to kernel build
- environment
-Message-ID: <202505072012.NkkKd0ba-lkp@intel.com>
+To: Taehee Yoo <ap420073@gmail.com>, davem@davemloft.net, kuba@kernel.org,
+	pabeni@redhat.com, edumazet@google.com, andrew+netdev@lunn.ch,
+	horms@kernel.org, almasrymina@google.com, sdf@fomichev.me,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	asml.silence@gmail.com, dw@davidwei.uk, skhawaja@google.com,
+	willemb@google.com, jdamato@fastly.com, ap420073@gmail.com
+Subject: Re: [PATCH net v2] net: devmem: fix kernel panic when socket close
+ after module unload
+Message-ID: <202505072001.RHUTj8Jo-lkp@intel.com>
+References: <20250506140858.2660441-1-ap420073@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,165 +68,154 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250506140858.2660441-1-ap420073@gmail.com>
 
-In-Reply-To: <20250423102913.438027-15-abhijit.gangurde@amd.com>
-References: <20250423102913.438027-15-abhijit.gangurde@amd.com>
-TO: Abhijit Gangurde <abhijit.gangurde@amd.com>
-TO: shannon.nelson@amd.com
-TO: brett.creeley@amd.com
-TO: davem@davemloft.net
-TO: edumazet@google.com
-TO: kuba@kernel.org
-TO: pabeni@redhat.com
-TO: corbet@lwn.net
-TO: jgg@ziepe.ca
-TO: leon@kernel.org
-TO: andrew+netdev@lunn.ch
-CC: allen.hubbe@amd.com
-CC: nikhil.agarwal@amd.com
-CC: linux-rdma@vger.kernel.org
-CC: netdev@vger.kernel.org
-CC: linux-doc@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: Abhijit Gangurde <abhijit.gangurde@amd.com>
+Hi Taehee,
 
-Hi Abhijit,
+kernel test robot noticed the following build errors:
 
-kernel test robot noticed the following build warnings:
+[auto build test ERROR on net/main]
 
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.15-rc5 next-20250507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Abhijit-Gangurde/net-ionic-Rename-neqs_per_lif-to-reflect-rdma-capability/20250423-185723
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250423102913.438027-15-abhijit.gangurde%40amd.com
-patch subject: [PATCH 14/14] RDMA/ionic: Add Makefile/Kconfig to kernel build environment
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250507/202505072012.NkkKd0ba-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Taehee-Yoo/net-devmem-fix-kernel-panic-when-socket-close-after-module-unload/20250506-221010
+base:   net/main
+patch link:    https://lore.kernel.org/r/20250506140858.2660441-1-ap420073%40gmail.com
+patch subject: [PATCH net v2] net: devmem: fix kernel panic when socket close after module unload
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20250507/202505072001.RHUTj8Jo-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072012.NkkKd0ba-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072001.RHUTj8Jo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505072012.NkkKd0ba-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505072001.RHUTj8Jo-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/infiniband/hw/ionic/ionic_datapath.c:898:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     898 |                 wqe->base.op = IONIC_OP(dev->rdma_version, SEND);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:901:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     901 |                 wqe->base.op = IONIC_OP(dev->rdma_version, SEND_IMM);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:905:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     905 |                 wqe->base.op = IONIC_OP(dev->rdma_version, SEND_INV);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:942:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     942 |                 wqe->base.op = IONIC_OP(dev->rdma_version, SEND);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:945:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     945 |                 wqe->base.op = IONIC_OP(dev->rdma_version, SEND_IMM);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:974:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     974 |                 wqe->base.op = IONIC_OP(dev->rdma_version, RDMA_READ);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:979:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     979 |                 wqe->base.op = IONIC_OP(dev->rdma_version, RDMA_WRITE);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:982:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-     982 |                 wqe->base.op = IONIC_OP(dev->rdma_version, RDMA_WRITE_IMM);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:1019:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-    1019 |                 wqe->base.op = IONIC_OP(dev->rdma_version, ATOMIC_CS);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:1027:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-    1027 |                 wqe->base.op = IONIC_OP(dev->rdma_version, ATOMIC_FA);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:1062:17: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-    1062 |         wqe->base.op = IONIC_OP(dev->rdma_version, LOCAL_INV);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:1097:17: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
-    1097 |         wqe->base.op = IONIC_OP(dev->rdma_version, REG_MR);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
-      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   12 warnings generated.
+>> net/core/netdev-genl.c:879:60: error: too many arguments to function call, expected 3, have 4
+     879 |         binding = net_devmem_bind_dmabuf(netdev, dmabuf_fd, priv, info->extack);
+         |                   ~~~~~~~~~~~~~~~~~~~~~~                          ^~~~~~~~~~~~
+   net/core/devmem.h:132:1: note: 'net_devmem_bind_dmabuf' declared here
+     132 | net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+         | ^                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     133 |                        struct netlink_ext_ack *extack)
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +898 drivers/infiniband/hw/ionic/ionic_datapath.c
+vim +879 net/core/netdev-genl.c
 
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  881  
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  882  static int ionic_prep_send(struct ionic_qp *qp,
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  883  			   const struct ib_send_wr *wr)
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  884  {
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  885  	struct ionic_ibdev *dev = to_ionic_ibdev(qp->ibqp.device);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  886  	struct ionic_sq_meta *meta;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  887  	struct ionic_v1_wqe *wqe;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  888  
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  889  	meta = &qp->sq_meta[qp->sq.prod];
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  890  	wqe = ionic_queue_at_prod(&qp->sq);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  891  
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  892  	ionic_prep_sq_wqe(qp, wqe);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  893  
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  894  	meta->ibop = IB_WC_SEND;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  895  
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  896  	switch (wr->opcode) {
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  897  	case IB_WR_SEND:
-0c894fc5e53316 Abhijit Gangurde 2025-04-23 @898  		wqe->base.op = IONIC_OP(dev->rdma_version, SEND);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  899  		break;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  900  	case IB_WR_SEND_WITH_IMM:
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  901  		wqe->base.op = IONIC_OP(dev->rdma_version, SEND_IMM);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  902  		wqe->base.imm_data_key = wr->ex.imm_data;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  903  		break;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  904  	case IB_WR_SEND_WITH_INV:
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  905  		wqe->base.op = IONIC_OP(dev->rdma_version, SEND_INV);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  906  		wqe->base.imm_data_key =
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  907  			cpu_to_be32(wr->ex.invalidate_rkey);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  908  		break;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  909  	default:
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  910  		return -EINVAL;
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  911  	}
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  912  
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  913  	return ionic_prep_common(qp, wr, meta, wqe);
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  914  }
-0c894fc5e53316 Abhijit Gangurde 2025-04-23  915  
+   827	
+   828	int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+   829	{
+   830		struct nlattr *tb[ARRAY_SIZE(netdev_queue_id_nl_policy)];
+   831		struct net_devmem_dmabuf_binding *binding;
+   832		u32 ifindex, dmabuf_fd, rxq_idx;
+   833		struct netdev_nl_sock *priv;
+   834		struct net_device *netdev;
+   835		struct sk_buff *rsp;
+   836		struct nlattr *attr;
+   837		int rem, err = 0;
+   838		void *hdr;
+   839	
+   840		if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_DEV_IFINDEX) ||
+   841		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_DMABUF_FD) ||
+   842		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_DMABUF_QUEUES))
+   843			return -EINVAL;
+   844	
+   845		ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
+   846		dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_DMABUF_FD]);
+   847	
+   848		priv = genl_sk_priv_get(&netdev_nl_family, NETLINK_CB(skb).sk);
+   849		if (IS_ERR(priv))
+   850			return PTR_ERR(priv);
+   851	
+   852		rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+   853		if (!rsp)
+   854			return -ENOMEM;
+   855	
+   856		hdr = genlmsg_iput(rsp, info);
+   857		if (!hdr) {
+   858			err = -EMSGSIZE;
+   859			goto err_genlmsg_free;
+   860		}
+   861	
+   862		err = 0;
+   863		netdev = netdev_get_by_index_lock(genl_info_net(info), ifindex);
+   864		if (!netdev) {
+   865			err = -ENODEV;
+   866			goto err_genlmsg_free;
+   867		}
+   868		if (!netif_device_present(netdev))
+   869			err = -ENODEV;
+   870		else if (!netdev_need_ops_lock(netdev))
+   871			err = -EOPNOTSUPP;
+   872		if (err) {
+   873			NL_SET_BAD_ATTR(info->extack,
+   874					info->attrs[NETDEV_A_DEV_IFINDEX]);
+   875			goto err_unlock;
+   876		}
+   877	
+   878		mutex_lock(&priv->lock);
+ > 879		binding = net_devmem_bind_dmabuf(netdev, dmabuf_fd, priv, info->extack);
+   880		if (IS_ERR(binding)) {
+   881			err = PTR_ERR(binding);
+   882			goto err_unlock_sock;
+   883		}
+   884	
+   885		nla_for_each_attr_type(attr, NETDEV_A_DMABUF_QUEUES,
+   886				       genlmsg_data(info->genlhdr),
+   887				       genlmsg_len(info->genlhdr), rem) {
+   888			err = nla_parse_nested(
+   889				tb, ARRAY_SIZE(netdev_queue_id_nl_policy) - 1, attr,
+   890				netdev_queue_id_nl_policy, info->extack);
+   891			if (err < 0)
+   892				goto err_unbind;
+   893	
+   894			if (NL_REQ_ATTR_CHECK(info->extack, attr, tb, NETDEV_A_QUEUE_ID) ||
+   895			    NL_REQ_ATTR_CHECK(info->extack, attr, tb, NETDEV_A_QUEUE_TYPE)) {
+   896				err = -EINVAL;
+   897				goto err_unbind;
+   898			}
+   899	
+   900			if (nla_get_u32(tb[NETDEV_A_QUEUE_TYPE]) != NETDEV_QUEUE_TYPE_RX) {
+   901				NL_SET_BAD_ATTR(info->extack, tb[NETDEV_A_QUEUE_TYPE]);
+   902				err = -EINVAL;
+   903				goto err_unbind;
+   904			}
+   905	
+   906			rxq_idx = nla_get_u32(tb[NETDEV_A_QUEUE_ID]);
+   907	
+   908			err = net_devmem_bind_dmabuf_to_queue(netdev, rxq_idx, binding,
+   909							      info->extack);
+   910			if (err)
+   911				goto err_unbind;
+   912		}
+   913	
+   914		list_add(&binding->list, &priv->bindings);
+   915	
+   916		nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+   917		genlmsg_end(rsp, hdr);
+   918	
+   919		err = genlmsg_reply(rsp, info);
+   920		if (err)
+   921			goto err_unbind;
+   922	
+   923		mutex_unlock(&priv->lock);
+   924		netdev_unlock(netdev);
+   925	
+   926		return 0;
+   927	
+   928	err_unbind:
+   929		net_devmem_unbind_dmabuf(binding);
+   930	err_unlock_sock:
+   931		mutex_unlock(&priv->lock);
+   932	err_unlock:
+   933		netdev_unlock(netdev);
+   934	err_genlmsg_free:
+   935		nlmsg_free(rsp);
+   936		return err;
+   937	}
+   938	
 
 -- 
 0-DAY CI Kernel Test Service
