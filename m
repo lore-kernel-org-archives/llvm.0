@@ -1,239 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFF825E828;
-	Wed,  7 May 2025 12:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA011221FB3
+	for <llvm@lists.linux.dev>; Wed,  7 May 2025 12:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746619618; cv=none; b=E5ywFyQqOhSApTHwevxK2ropG0KGcKZAe0R93E7Zturr+/P3b/lWMSX5EFNtGp0zp/wwLjreMDuk0ZF+hHkZZzIcfvD950GdPO1QWQEiAaCnM+aAEqGYzpFslXlUAW5/NwX66tG7Be9tNtMxQkdV1ohnbH1iMLof1pK2prGUisU=
+	t=1746619870; cv=none; b=I0rXJNCu4sflNSzZsisl8kjU+VYzN2xDZjfsHb1sif93ebeHQZ81fpC19wY2eV0Xhn0KZXUfnCn9bURtkvuDAqQq4OlUAot8IBD/8tswkCgwE1VKbhb4Acjw69weW+zYg5Xb5SGr7TQw+E9NEVFsHngAh9HD3bQZF7tLoOeYXvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746619618; c=relaxed/simple;
-	bh=oOoppb62PQ4xraIkA9sXFx2EHtxHdAikQDEjmQ8i2oU=;
+	s=arc-20240116; t=1746619870; c=relaxed/simple;
+	bh=ZwMl1jmbgmzYrhfYTpZjT1qj6wac4wSVs91SQ8cjA7o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uFSipYn/ERfNTrfAHL2Ke+OaExJTS/3CVlEUGrkKkLdXhEuUbos1ubkgqh1f/LUtTXjprEDE6yETTB/KafpO/LoarEZBSykq2b+Ndw7QLA8mJYnMYDZMlQ2V38A1VwFx7kBOno3pqDblNf5pg4IH2UcDWdWfrbc30o0v4R9wqtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fWdgst08; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hyA7zZz/J3V/N9TbYbyDOcXBvlBapS3NbSIIo/ekm42JtvuoPdIVuElJ1/sFT2Huj+LLUHA4GWjymBRYIx9vS3N5WjcfygJz9kIggezmgSifPH8l5+q3kO4b9KFyETsGnhT3ObDd3UjMl1F/fTL7/au7U0Nj+5h5qO94YjebCSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xjwuKz9r; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fWdgst08"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746619617; x=1778155617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oOoppb62PQ4xraIkA9sXFx2EHtxHdAikQDEjmQ8i2oU=;
-  b=fWdgst08zi0pq52F1Ofk9+vZf0rze7iay1nshwn5GslpEER8gR6Ivn9A
-   lFEkeVMc/iuHzjXpq65tBz/D0ns1VjHHz9SDeHneotnRHCFH25BHHiOTl
-   lsosyTpXLgwqm+MDC5vHd2XoSvuzc21tfguzXeBFDyPKaaUEmI9dAxRp1
-   M023XILN3+719spNAS+Z0WvbOZuXl7HRzJe0unQLcdJ904Az7jbABrKNP
-   DdVgPYLjBv15bpV2YUAb3G/RVxW8cf2sDDnHXHW0IJ2ACf0whd9kgsLcT
-   GPjwoEwyTXZ2GdjIh5RGMlPpBU0sJvsiIp9KlU4SlMrYGuPSulB0AogIA
-   A==;
-X-CSE-ConnectionGUID: ZyD/5h/mSkyFFmGOTb4nhg==
-X-CSE-MsgGUID: t9vNmUggSiK/hA+KP6PUmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="58541807"
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="58541807"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 05:06:56 -0700
-X-CSE-ConnectionGUID: qk9P2QjsTSeJSqhGWoPnZA==
-X-CSE-MsgGUID: 6xQvtvMMRae34H0jNAHM8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="136450457"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 07 May 2025 05:05:34 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCdWl-0007kD-2G;
-	Wed, 07 May 2025 12:05:31 +0000
-Date: Wed, 7 May 2025 20:04:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tanmay Jagdale <tanmay@marvell.com>, bbrezillon@kernel.org,
-	arno@natisbad.org, schalla@marvell.com, herbert@gondor.apana.org.au,
-	davem@davemloft.net, sgoutham@marvell.com, lcherian@marvell.com,
-	gakula@marvell.com, jerinj@marvell.com, hkelam@marvell.com,
-	sbhatta@marvell.com, andrew+netdev@lunn.ch, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, bbhushan2@marvell.com,
-	bhelgaas@google.com, pstanner@redhat.com,
-	gregkh@linuxfoundation.org, linux@treblig.org,
-	krzysztof.kozlowski@linaro.org, giovanni.cabiddu@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, rkannoth@marvell.com, sumang@marvell.com,
-	gcherian@marvell.com, Tanmay Jagdale <tanmay@marvell.com>
-Subject: Re: [net-next PATCH v1 11/15] octeontx2-pf: ipsec: Handle NPA
- threshold interrupt
-Message-ID: <202505071904.TWc5095k-lkp@intel.com>
-References: <20250502132005.611698-12-tanmay@marvell.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xjwuKz9r"
+Date: Wed, 7 May 2025 14:10:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1746619865;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=U24XQpAOzVn9OeiX2WXRKmdViNITlRLJUufl1hqU+7o=;
+	b=xjwuKz9rinwdzzhVqNnlMxNciaX3Kc9S07w8Xu5j+TKTlQIE0EraBQvW7SyAW8/aCP3oXO
+	xK+q07svcAmdGlOvay907f7wIinAGGMa1CNKwofQ7NxQTMSCDSjiqxm1g6ggK77CRwa3bs
+	lbQUUB3zYjo18Ben9b+GtAGrwB6IYuo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Nicolas Schier <nicolas.schier@linux.dev>
+To: Kees Cook <kees@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 1/3] gcc-plugins: Force full rebuild when plugins
+ change
+Message-ID: <20250507-overjoyed-coucal-from-betelgeuse-4eaa7b@l-nschier-aarch64>
+References: <20250503184001.make.594-kees@kernel.org>
+ <20250503184623.2572355-1-kees@kernel.org>
+ <20250507-emerald-lyrebird-of-advertising-e86beb@l-nschier-aarch64>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250502132005.611698-12-tanmay@marvell.com>
+In-Reply-To: <20250507-emerald-lyrebird-of-advertising-e86beb@l-nschier-aarch64>
+Organization: AVM GmbH
+X-Migadu-Flow: FLOW_OUT
 
-Hi Tanmay,
+On Wed, 07 May 2025, Nicolas Schier wrote:
 
-kernel test robot noticed the following build warnings:
+> On Sat, 03 May 2025, Kees Cook wrote:
+> 
+> > There was no dependency between the plugins changing and the rest of the
+> > kernel being built. This could cause strange behaviors as instrumentation
+> > could vary between targets depending on when they were built.
+> > 
+> > Generate a new header file, gcc-plugins.h, any time the GCC plugins
+> > change. Include the header file in compiler-version.h when its associated
+> > feature name, GCC_PLUGINS, is defined. This will be picked up by fixdep
+> > and force rebuilds where needed.
+> > 
+> > Add a generic "touch" kbuild command, which will be used again in
+> > a following patch. Add a "normalize_path" string helper to make the
+> > "TOUCH" output less ugly.
+> > 
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Nicolas Schier <nicolas.schier@linux.dev>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: <linux-hardening@vger.kernel.org>
+> > Cc: <linux-kbuild@vger.kernel.org>
+> > ---
+> >  include/linux/compiler-version.h |  4 ++++
+> >  scripts/Makefile.gcc-plugins     |  2 +-
+> >  scripts/Makefile.lib             | 18 ++++++++++++++++++
+> >  scripts/gcc-plugins/Makefile     |  4 ++++
+> >  4 files changed, 27 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/compiler-version.h b/include/linux/compiler-version.h
+> > index 573fa85b6c0c..74ea11563ce3 100644
+> > --- a/include/linux/compiler-version.h
+> > +++ b/include/linux/compiler-version.h
+> > @@ -12,3 +12,7 @@
+> >   * and add dependency on include/config/CC_VERSION_TEXT, which is touched
+> >   * by Kconfig when the version string from the compiler changes.
+> >   */
+> > +
+> > +#ifdef GCC_PLUGINS
+> 
+> Out of curiousity:  Why can't we use CONFIG_GCC_PLUGINS here?
 
-[auto build test WARNING on net-next/main]
+... because compiler-version.h is included before kconfig.h (which 
+includes autoconf.h).  Sorry for the noise.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tanmay-Jagdale/crypto-octeontx2-Share-engine-group-info-with-AF-driver/20250502-213203
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250502132005.611698-12-tanmay%40marvell.com
-patch subject: [net-next PATCH v1 11/15] octeontx2-pf: ipsec: Handle NPA threshold interrupt
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250507/202505071904.TWc5095k-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071904.TWc5095k-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071904.TWc5095k-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:488:6: warning: variable 'pool' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     488 |         if (err)
-         |             ^~~
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:512:23: note: uninitialized use occurs here
-     512 |         qmem_free(pfvf->dev, pool->stack);
-         |                              ^~~~
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:488:2: note: remove the 'if' if its condition is always false
-     488 |         if (err)
-         |         ^~~~~~~~
-     489 |                 goto pool_fail;
-         |                 ~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:466:24: note: initialize the variable 'pool' to silence this warning
-     466 |         struct otx2_pool *pool;
-         |                               ^
-         |                                = NULL
->> drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:528:20: warning: variable 'qset' set but not used [-Wunused-but-set-variable]
-     528 |         struct otx2_qset *qset = NULL;
-         |                           ^
->> drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:591:8: warning: variable 'ptr' set but not used [-Wunused-but-set-variable]
-     591 |         void *ptr;
-         |               ^
-   3 warnings generated.
-
-
-vim +/qset +528 drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c
-
-   521	
-   522	static void cn10k_ipsec_npa_refill_inb_ipsecq(struct work_struct *work)
-   523	{
-   524		struct cn10k_ipsec *ipsec = container_of(work, struct cn10k_ipsec,
-   525							 refill_npa_inline_ipsecq);
-   526		struct otx2_nic *pfvf = container_of(ipsec, struct otx2_nic, ipsec);
-   527		struct otx2_pool *pool = NULL;
- > 528		struct otx2_qset *qset = NULL;
-   529		u64 val, *ptr, op_int = 0, count;
-   530		int err, pool_id, idx;
-   531		dma_addr_t bufptr;
-   532	
-   533		qset = &pfvf->qset;
-   534	
-   535		val = otx2_read64(pfvf, NPA_LF_QINTX_INT(0));
-   536		if (!(val & 1))
-   537			return;
-   538	
-   539		ptr = otx2_get_regaddr(pfvf, NPA_LF_AURA_OP_INT);
-   540		val = otx2_atomic64_add(((u64)pfvf->ipsec.inb_ipsec_pool << 44), ptr);
-   541	
-   542		/* Error interrupt bits */
-   543		if (val & 0xff)
-   544			op_int = (val & 0xff);
-   545	
-   546		/* Refill buffers on a Threshold interrupt */
-   547		if (val & (1 << 16)) {
-   548			/* Get the current number of buffers consumed */
-   549			ptr = otx2_get_regaddr(pfvf, NPA_LF_AURA_OP_CNT);
-   550			count = otx2_atomic64_add(((u64)pfvf->ipsec.inb_ipsec_pool << 44), ptr);
-   551			count &= GENMASK_ULL(35, 0);
-   552	
-   553			/* Refill */
-   554			pool_id = pfvf->ipsec.inb_ipsec_pool;
-   555			pool = &pfvf->qset.pool[pool_id];
-   556	
-   557			for (idx = 0; idx < count; idx++) {
-   558				err = otx2_alloc_rbuf(pfvf, pool, &bufptr, pool_id, idx);
-   559				if (err) {
-   560					netdev_err(pfvf->netdev,
-   561						   "Insufficient memory for IPsec pool buffers\n");
-   562					break;
-   563				}
-   564				pfvf->hw_ops->aura_freeptr(pfvf, pool_id,
-   565							    bufptr + OTX2_HEAD_ROOM);
-   566			}
-   567	
-   568			op_int |= (1 << 16);
-   569		}
-   570	
-   571		/* Clear/ACK Interrupt */
-   572		if (op_int)
-   573			otx2_write64(pfvf, NPA_LF_AURA_OP_INT,
-   574				     ((u64)pfvf->ipsec.inb_ipsec_pool << 44) | op_int);
-   575	}
-   576	
-   577	static irqreturn_t cn10k_ipsec_npa_inb_ipsecq_intr_handler(int irq, void *data)
-   578	{
-   579		struct otx2_nic *pf = data;
-   580	
-   581		schedule_work(&pf->ipsec.refill_npa_inline_ipsecq);
-   582	
-   583		return IRQ_HANDLED;
-   584	}
-   585	
-   586	static int cn10k_inb_cpt_init(struct net_device *netdev)
-   587	{
-   588		struct otx2_nic *pfvf = netdev_priv(netdev);
-   589		int ret = 0, vec;
-   590		char *irq_name;
- > 591		void *ptr;
-   592		u64 val;
-   593	
-   594		ret = cn10k_ipsec_setup_nix_rx_hw_resources(pfvf);
-   595		if (ret) {
-   596			netdev_err(netdev, "Failed to setup NIX HW resources for IPsec\n");
-   597			return ret;
-   598		}
-   599	
-   600		/* Work entry for refilling the NPA queue for ingress inline IPSec */
-   601		INIT_WORK(&pfvf->ipsec.refill_npa_inline_ipsecq,
-   602			  cn10k_ipsec_npa_refill_inb_ipsecq);
-   603	
-   604		/* Register NPA interrupt */
-   605		vec = pfvf->hw.npa_msixoff;
-   606		irq_name = &pfvf->hw.irq_name[vec * NAME_SIZE];
-   607		snprintf(irq_name, NAME_SIZE, "%s-npa-qint", pfvf->netdev->name);
-   608	
-   609		ret = request_irq(pci_irq_vector(pfvf->pdev, vec),
-   610				  cn10k_ipsec_npa_inb_ipsecq_intr_handler, 0,
-   611				  irq_name, pfvf);
-   612		if (ret) {
-   613			dev_err(pfvf->dev,
-   614				"RVUPF%d: IRQ registration failed for NPA QINT%d\n",
-   615				rvu_get_pf(pfvf->pcifunc), 0);
-   616			return ret;
-   617		}
-   618	
-   619		/* Enable NPA threshold interrupt */
-   620		ptr = otx2_get_regaddr(pfvf, NPA_LF_AURA_OP_INT);
-   621		val = BIT_ULL(43) | BIT_ULL(17);
-   622		otx2_write64(pfvf, NPA_LF_AURA_OP_INT,
-   623			     ((u64)pfvf->ipsec.inb_ipsec_pool << 44) | val);
-   624	
-   625		/* Enable interrupt */
-   626		otx2_write64(pfvf, NPA_LF_QINTX_ENA_W1S(0), BIT_ULL(0));
-   627	
-   628		return ret;
-   629	}
-   630	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
