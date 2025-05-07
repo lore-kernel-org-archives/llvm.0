@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A6038F9C;
-	Wed,  7 May 2025 10:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E48C2144DA;
+	Wed,  7 May 2025 10:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746612646; cv=none; b=IxETBMVuZ1P7K5UPvQT4AsinVTy1nunVdvDhTzm3bnicyb6gGnq9dzK/y4nMjt4AY49UifL9/LVQVNpFNCuAiJnTxXBxXD32KUTUkULe5so8dtcHJXLW2odjfvkQEQGMLPSfRRGGvY05BsXHxNfJr6KaVGvJ1ocgaWPpvS23LII=
+	t=1746613597; cv=none; b=po65BTe941JyBYj1nIfDH1HJifAV2zmk4wO88i7q/iK/dG0o7DoQzMaZWCA8F9qdxg3+/DXW2sy+CVhhYX+HN43EL8TRNduIGlwzt7LFerz5CO87dYKFpfGjXNy8U/zgZLb+rMlip/zl3L945Fry6Arp3/oQgVHiXljQG9tqjj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746612646; c=relaxed/simple;
-	bh=QQuveKrdIvX29dkM3sz/2QYrmyxDqNTRLbzhCXA+7K8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=STGW9Iojx5kg/wyq6TnQnPahd4ZvBmhaaauaGIGmCa/rS+lTLXdbsF4ofbGtOv1AzqwVP0MzA2gDs/5d4OCwFpOlzl6MfeZyKR/8CFS0XGrK+89BGnMcHfE52Chtp0Qwr5MtLC8AhBCcDDT500eo2bwbkUArzrX7QNZE24w0kgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k3lXRI/1; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1746613597; c=relaxed/simple;
+	bh=uhD1R3I5pwgpMN7Ur9rxpZ0IIUo9wWe23aBJHhwCY7o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IylcCjpCtj4+qNP66ERArYlZUV4CXKVPYs0zAugXeAflZDO75dOp8F2+WY9jYBK4J1aXmpFmUkvodyaC/kTFTRVIt3lYunzH/xM37hqRpC6OAMTJSXSRqhMHn0RtBHmqYfR97V/cykVEcy58GEBkgvHFndGWQEKEzYbbV57WOaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XeV7+rB8; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k3lXRI/1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XeV7+rB8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746612645; x=1778148645;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QQuveKrdIvX29dkM3sz/2QYrmyxDqNTRLbzhCXA+7K8=;
-  b=k3lXRI/1TX450EjZEThbqjRa2OkUfBTk/Qq97kBk9kBflWOqP3qx4kPT
-   kpDNdSLtNpdIiyReuZMpNKSflFnpqdEX2+F54OYbo0pmrucnzpT173+4G
-   OUf9TsuiRkpOdb9sVBHUs00PzIVc3N9B4LEqB7YTFa4xWHmIYW9UTr+2u
-   1Pafa8+N2rDU87+Qgx4WgdA0fcwUX7w2XQgAJeqrONyobGm+5eIOIdVJY
-   1pfMGrpzhlNqfKYQGMxLYzS/T4s95XfHWXnTv6rlVsPtUHmCZ1JIQHHNg
-   Wy6e5Qmoq0z3HxGCaQHmz3nD3Bf9d3dS48eUxUgtOJCxsbb7KxRyXEn8B
-   g==;
-X-CSE-ConnectionGUID: Ov1OsEAHSwWayVTR8saEdg==
-X-CSE-MsgGUID: j5L8FJgcQGei6PivmkFgkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="59685705"
+  t=1746613596; x=1778149596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uhD1R3I5pwgpMN7Ur9rxpZ0IIUo9wWe23aBJHhwCY7o=;
+  b=XeV7+rB8AGYXw4wXpaFOqLli1BZtHkdTKQ7+R9gmgmIJFwMbcv+D3ACq
+   vcuK44B0zREUFdou8ChOEV8rHdl7Txm1v8AdfQqGZg+d44xKo0TSG7l6U
+   PGPlkfFHy4rOSoowIMefVcXQ4fLGgcqgR074oqkWPlQDHIs4+W/bfMzIL
+   28EbVrG/BrEpjCsvm15hFbG5YhwbIErvq2pYiBydxygS2A4Idjzq2TPsk
+   75xX8ZUplA+I7fcPZJSekVa0C6mZQrPjiCeJlFWGDgY2n2XNo/eOqJjkB
+   yeJWlxjtYRSfUfkK5kldk72hVDoGZ6dLdFgtAbCOya+KOyFlkQ7OIGyWR
+   w==;
+X-CSE-ConnectionGUID: uYkTLKHTScCPNOdt8/C5dw==
+X-CSE-MsgGUID: YrsZXoLKSqafdesIs2dcOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="48484141"
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="59685705"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 03:10:44 -0700
-X-CSE-ConnectionGUID: iRYjX5/AQNGPjGzmGyDFtw==
-X-CSE-MsgGUID: 5EiSBSp1SGKSgZ+zHKssUg==
+   d="scan'208";a="48484141"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 03:26:14 -0700
+X-CSE-ConnectionGUID: Qrvahdx2QqCT1oHwrs8g0A==
+X-CSE-MsgGUID: BvMPVd1xRbqKH5Hx4eW6EA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="139962334"
-Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 May 2025 03:10:43 -0700
-Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
+   d="scan'208";a="135819759"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 07 May 2025 03:26:13 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCbjc-00009O-1N;
-	Wed, 07 May 2025 10:10:40 +0000
-Date: Wed, 7 May 2025 18:09:56 +0800
+	id 1uCbyc-0007az-1x;
+	Wed, 07 May 2025 10:26:10 +0000
+Date: Wed, 7 May 2025 18:25:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
+To: Roman Kisel <romank@linux.microsoft.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:irq/core 31/47] kernel/irq/manage.c:2651:3: error:
- cannot jump from this goto statement to its label
-Message-ID: <202505071809.ajpPxfoZ-lkp@intel.com>
+Subject: Re: [PATCH hyperv-next v3] arch/x86: Provide the CPU number in the
+ wakeup AP callback
+Message-ID: <202505071859.8y4PxgRA-lkp@intel.com>
+References: <20250430204720.108962-1-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,152 +63,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250430204720.108962-1-romank@linux.microsoft.com>
 
-Hi Thomas,
+Hi Roman,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
-head:   b8203edb7846253466282425b6009c20a4c85eb8
-commit: 7db00b4a32292d301893cacde7226830d9aae6d6 [31/47] genirq/manage: Convert to lock guards
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250507/202505071809.ajpPxfoZ-lkp@intel.com/config)
+[auto build test ERROR on 628cc040b3a2980df6032766e8ef0688e981ab95]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/arch-x86-Provide-the-CPU-number-in-the-wakeup-AP-callback/20250501-044909
+base:   628cc040b3a2980df6032766e8ef0688e981ab95
+patch link:    https://lore.kernel.org/r/20250430204720.108962-1-romank%40linux.microsoft.com
+patch subject: [PATCH hyperv-next v3] arch/x86: Provide the CPU number in the wakeup AP callback
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250507/202505071859.8y4PxgRA-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071809.ajpPxfoZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071859.8y4PxgRA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071809.ajpPxfoZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071859.8y4PxgRA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/irq/manage.c:2651:3: error: cannot jump from this goto statement to its label
-    2651 |                 goto err_irq_setup;
-         |                 ^
-   kernel/irq/manage.c:2653:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2653 |         guard(raw_spinlock_irqsave)(&desc->lock);
-         |         ^
-   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
-     319 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:122:1: note: expanded from here
-     122 | __UNIQUE_ID_guard575
-         | ^
-   kernel/irq/manage.c:2647:3: error: cannot jump from this goto statement to its label
-    2647 |                 goto err_out;
-         |                 ^
-   kernel/irq/manage.c:2653:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2653 |         guard(raw_spinlock_irqsave)(&desc->lock);
-         |         ^
-   include/linux/cleanup.h:319:15: note: expanded from macro 'guard'
-     319 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:122:1: note: expanded from here
-     122 | __UNIQUE_ID_guard575
-         | ^
+>> arch/x86/kernel/apic/apic_numachip.c:228:27: error: incompatible function pointer types initializing 'int (*)(u32, unsigned long, unsigned int)' (aka 'int (*)(unsigned int, unsigned long, unsigned int)') with an expression of type 'int (u32, unsigned long)' (aka 'int (unsigned int, unsigned long)') [-Wincompatible-function-pointer-types]
+     228 |         .wakeup_secondary_cpu           = numachip_wakeup_secondary,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/apic/apic_numachip.c:262:27: error: incompatible function pointer types initializing 'int (*)(u32, unsigned long, unsigned int)' (aka 'int (*)(unsigned int, unsigned long, unsigned int)') with an expression of type 'int (u32, unsigned long)' (aka 'int (unsigned int, unsigned long)') [-Wincompatible-function-pointer-types]
+     262 |         .wakeup_secondary_cpu           = numachip_wakeup_secondary,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
    2 errors generated.
 
 
-vim +2651 kernel/irq/manage.c
+vim +228 arch/x86/kernel/apic/apic_numachip.c
 
-1b7047edfcfb25 Marc Zyngier    2015-03-18  2591  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2592  /**
-4b078c3f1a2648 Julien Thierry  2019-01-31  2593   * request_percpu_nmi - allocate a percpu interrupt line for NMI delivery
-4b078c3f1a2648 Julien Thierry  2019-01-31  2594   * @irq:	Interrupt line to allocate
-4b078c3f1a2648 Julien Thierry  2019-01-31  2595   * @handler:	Function to be called when the IRQ occurs.
-4b078c3f1a2648 Julien Thierry  2019-01-31  2596   * @name:	An ascii name for the claiming device
-4b078c3f1a2648 Julien Thierry  2019-01-31  2597   * @dev_id:	A percpu cookie passed back to the handler function
-4b078c3f1a2648 Julien Thierry  2019-01-31  2598   *
-4b078c3f1a2648 Julien Thierry  2019-01-31  2599   * This call allocates interrupt resources for a per CPU NMI. Per CPU NMIs
-a51866946c0aa0 Julien Thierry  2019-02-13  2600   * have to be setup on each CPU by calling prepare_percpu_nmi() before
-a51866946c0aa0 Julien Thierry  2019-02-13  2601   * being enabled on the same CPU by using enable_percpu_nmi().
-4b078c3f1a2648 Julien Thierry  2019-01-31  2602   *
-ee62e6fda10079 Thomas Gleixner 2025-03-13  2603   * @dev_id must be globally unique. It is a per-cpu variable, and the
-ee62e6fda10079 Thomas Gleixner 2025-03-13  2604   * handler gets called with the interrupted CPU's instance of that
-ee62e6fda10079 Thomas Gleixner 2025-03-13  2605   * variable.
-4b078c3f1a2648 Julien Thierry  2019-01-31  2606   *
-4b078c3f1a2648 Julien Thierry  2019-01-31  2607   * Interrupt lines requested for NMI delivering should have auto enabling
-4b078c3f1a2648 Julien Thierry  2019-01-31  2608   * setting disabled.
-4b078c3f1a2648 Julien Thierry  2019-01-31  2609   *
-4b078c3f1a2648 Julien Thierry  2019-01-31  2610   * If the interrupt line cannot be used to deliver NMIs, function
-4b078c3f1a2648 Julien Thierry  2019-01-31  2611   * will fail returning a negative value.
-4b078c3f1a2648 Julien Thierry  2019-01-31  2612   */
-4b078c3f1a2648 Julien Thierry  2019-01-31  2613  int request_percpu_nmi(unsigned int irq, irq_handler_t handler,
-4b078c3f1a2648 Julien Thierry  2019-01-31  2614  		       const char *name, void __percpu *dev_id)
-4b078c3f1a2648 Julien Thierry  2019-01-31  2615  {
-4b078c3f1a2648 Julien Thierry  2019-01-31  2616  	struct irqaction *action;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2617  	struct irq_desc *desc;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2618  	int retval;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2619  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2620  	if (!handler)
-4b078c3f1a2648 Julien Thierry  2019-01-31  2621  		return -EINVAL;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2622  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2623  	desc = irq_to_desc(irq);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2624  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2625  	if (!desc || !irq_settings_can_request(desc) ||
-4b078c3f1a2648 Julien Thierry  2019-01-31  2626  	    !irq_settings_is_per_cpu_devid(desc) ||
-4b078c3f1a2648 Julien Thierry  2019-01-31  2627  	    irq_settings_can_autoenable(desc) ||
-4b078c3f1a2648 Julien Thierry  2019-01-31  2628  	    !irq_supports_nmi(desc))
-4b078c3f1a2648 Julien Thierry  2019-01-31  2629  		return -EINVAL;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2630  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2631  	/* The line cannot already be NMI */
-6678ae1918ff55 Jinjie Ruan     2024-04-23  2632  	if (irq_is_nmi(desc))
-4b078c3f1a2648 Julien Thierry  2019-01-31  2633  		return -EINVAL;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2634  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2635  	action = kzalloc(sizeof(struct irqaction), GFP_KERNEL);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2636  	if (!action)
-4b078c3f1a2648 Julien Thierry  2019-01-31  2637  		return -ENOMEM;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2638  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2639  	action->handler = handler;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2640  	action->flags = IRQF_PERCPU | IRQF_NO_SUSPEND | IRQF_NO_THREAD
-4b078c3f1a2648 Julien Thierry  2019-01-31  2641  		| IRQF_NOBALANCING;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2642  	action->name = name;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2643  	action->percpu_dev_id = dev_id;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2644  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2645  	retval = irq_chip_pm_get(&desc->irq_data);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2646  	if (retval < 0)
-4b078c3f1a2648 Julien Thierry  2019-01-31  2647  		goto err_out;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2648  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2649  	retval = __setup_irq(irq, desc, action);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2650  	if (retval)
-4b078c3f1a2648 Julien Thierry  2019-01-31 @2651  		goto err_irq_setup;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2652  
-7db00b4a32292d Thomas Gleixner 2025-03-13  2653  	guard(raw_spinlock_irqsave)(&desc->lock);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2654  	desc->istate |= IRQS_NMI;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2655  	return 0;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2656  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2657  err_irq_setup:
-4b078c3f1a2648 Julien Thierry  2019-01-31  2658  	irq_chip_pm_put(&desc->irq_data);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2659  err_out:
-4b078c3f1a2648 Julien Thierry  2019-01-31  2660  	kfree(action);
-4b078c3f1a2648 Julien Thierry  2019-01-31  2661  
-4b078c3f1a2648 Julien Thierry  2019-01-31  2662  	return retval;
-4b078c3f1a2648 Julien Thierry  2019-01-31  2663  }
-4b078c3f1a2648 Julien Thierry  2019-01-31  2664  
-
-:::::: The code at line 2651 was first introduced by commit
-:::::: 4b078c3f1a26487c39363089ba0d5c6b09f2a89f genirq: Provide NMI management for percpu_devid interrupts
-
-:::::: TO: Julien Thierry <julien.thierry@arm.com>
-:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
+d9d4dee6cedfa1 Daniel J Blueman 2015-09-21  204  
+db1003a719d75c Daniel J Blueman 2015-09-21  205  static const struct apic apic_numachip1 __refconst = {
+44b111b519160e Steffen Persvold 2011-12-06  206  	.name				= "NumaConnect system",
+db1003a719d75c Daniel J Blueman 2015-09-21  207  	.probe				= numachip1_probe,
+db1003a719d75c Daniel J Blueman 2015-09-21  208  	.acpi_madt_oem_check		= numachip1_acpi_madt_oem_check,
+44b111b519160e Steffen Persvold 2011-12-06  209  
+8c44963b603db7 Thomas Gleixner  2020-10-24  210  	.dest_mode_logical		= false,
+44b111b519160e Steffen Persvold 2011-12-06  211  
+44b111b519160e Steffen Persvold 2011-12-06  212  	.disable_esr			= 0,
+44b111b519160e Steffen Persvold 2011-12-06  213  
+44b111b519160e Steffen Persvold 2011-12-06  214  	.cpu_present_to_apicid		= default_cpu_present_to_apicid,
+44b111b519160e Steffen Persvold 2011-12-06  215  
+d92e5e7cf580ac Thomas Gleixner  2023-08-08  216  	.max_apic_id			= UINT_MAX,
+db1003a719d75c Daniel J Blueman 2015-09-21  217  	.get_apic_id			= numachip1_get_apic_id,
+44b111b519160e Steffen Persvold 2011-12-06  218  
+9f9e3bb1cf2ecb Thomas Gleixner  2017-09-13  219  	.calc_dest_apicid		= apic_default_calc_apicid,
+44b111b519160e Steffen Persvold 2011-12-06  220  
+c61a0d31ba0ce7 Thomas Gleixner  2015-11-04  221  	.send_IPI			= numachip_send_IPI_one,
+44b111b519160e Steffen Persvold 2011-12-06  222  	.send_IPI_mask			= numachip_send_IPI_mask,
+44b111b519160e Steffen Persvold 2011-12-06  223  	.send_IPI_mask_allbutself	= numachip_send_IPI_mask_allbutself,
+44b111b519160e Steffen Persvold 2011-12-06  224  	.send_IPI_allbutself		= numachip_send_IPI_allbutself,
+44b111b519160e Steffen Persvold 2011-12-06  225  	.send_IPI_all			= numachip_send_IPI_all,
+44b111b519160e Steffen Persvold 2011-12-06  226  	.send_IPI_self			= numachip_send_IPI_self,
+44b111b519160e Steffen Persvold 2011-12-06  227  
+44b111b519160e Steffen Persvold 2011-12-06 @228  	.wakeup_secondary_cpu		= numachip_wakeup_secondary,
+44b111b519160e Steffen Persvold 2011-12-06  229  
+44b111b519160e Steffen Persvold 2011-12-06  230  	.read				= native_apic_mem_read,
+44b111b519160e Steffen Persvold 2011-12-06  231  	.write				= native_apic_mem_write,
+185c8f33a048bd Thomas Gleixner  2023-08-08  232  	.eoi				= native_apic_mem_eoi,
+44b111b519160e Steffen Persvold 2011-12-06  233  	.icr_read			= native_apic_icr_read,
+44b111b519160e Steffen Persvold 2011-12-06  234  	.icr_write			= native_apic_icr_write,
+44b111b519160e Steffen Persvold 2011-12-06  235  };
+44b111b519160e Steffen Persvold 2011-12-06  236  
 
 -- 
 0-DAY CI Kernel Test Service
