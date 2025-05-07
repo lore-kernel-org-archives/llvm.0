@@ -1,67 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C3121322F;
-	Wed,  7 May 2025 07:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA34A1D63FC;
+	Wed,  7 May 2025 07:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746601656; cv=none; b=XTLicYKWCeRSepiXaiqcmAkkrpJ1ksh+mVWg8bveS6lcpH+6UZadd3HQtbJdzpsyF/1+SWQJZl83Ksawp35CJmLLkhFqGbGO58ovUcM0AMqLQSuYZl0VnRa3es2CtWuBQ4ACMtqpW+PhwBge7I2U3cliVthwZ7/mMRjUL/m7keE=
+	t=1746603106; cv=none; b=uvHTNOjCDSvAbq6XfDuGhCmbdwIt1YDLYqS7gsjzU9Y4dKcNvtl5mzRp1FJVO85HPveTVUDT2MlIdKaXNWeVnzZJWtgDhgNPc8us+ddrgsB9uASU8UrGIcACr4owqpZ9N81kUnIh01YZapaI4T8Sn28WS/ll28Io+Bfq6RFAKs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746601656; c=relaxed/simple;
-	bh=MLmA2L5chrHPgpCD3BRZ1TXnu2+lCd8+i3p3+R3Fc6M=;
+	s=arc-20240116; t=1746603106; c=relaxed/simple;
+	bh=Mf0/NTdLflpKY9HJGuJz66HrwG9/gdraGlu5PKzoIz0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BD1IlS9dYtcmX54hsnT6DFyQv/uGemqa4ToNkgQvq39wsz6fnW7nh7CjJ06hxrEcrxKBqVvGPETW7UJv3Pg8veEpUmUX8h0nVikjiBwlzLysBUd0Zl3cOMCA9TQFbMaCSiyPl1YG9iBCFTtJrv45Ayp9DjS7FbFf4ioQY6N3FSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uh/0T31z; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=q8eG2ZBd9SU2TAGh2lpoj+pScd0OEnBboWTt0r7Z4f3eMUcFMKB2sbS2CnfwiM31NUR4WqDCLyaxjkE82Q5qPH8l+RkFypqnlTXSDFJ83uWmII1QUnRaNfH9im9JhRvhdRreCYdoDgzBAMzkzsPp9KT1ObaiiL4R6ZPNYrghBGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X+peTK0u; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uh/0T31z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X+peTK0u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746601654; x=1778137654;
+  t=1746603104; x=1778139104;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MLmA2L5chrHPgpCD3BRZ1TXnu2+lCd8+i3p3+R3Fc6M=;
-  b=Uh/0T31zqcF4tB6VkqwOUd7/rVgiwdmrpLjdbAynreuP+3Rk0BG8BquA
-   2J1Bx0EGXLPjENy/SDksn9o9r4bDbrBc132bx/eKQ6AaEk9MoMYj9EFgA
-   vGpDMZ5Fi+Kmc2KvRQEFx0XfK1Vzta2pD94ghR4Q/X9peGXGQ5WhPqsw/
-   s9DLUrVwsmyzpvVxlsDrNflmYlj9NOwG4CeftCc1qJBmsTPOPmGXSpsuA
-   Q8msU+tbJlRUYmduoDbBg3M/llS3oMEdU58W3Qxe08f54DFNYWYI9pa/b
-   47U9mRknZAdC4OSptTlwlJU+k7vcY6ITzSIfmWKfoasOz4pCxH57Rsapw
+  bh=Mf0/NTdLflpKY9HJGuJz66HrwG9/gdraGlu5PKzoIz0=;
+  b=X+peTK0uZpzL8Rld3nJfcx16zg/xsbww8qIa/Q8scw21lLHrvO9fvo00
+   GxjUpmizU8Qe3DxWrflBuwvR+nxL4Uj/kErSlsxtYYlKhyEjPFZHipAtv
+   5mPgdc/TfSHUW+riL39DAi2Xuy2Ce/nUg1oDf9ZpPg9yoaE4DKnAiejQb
+   addNxdoVXCEV5i/7RLBp6kDY5mWqJmQtw71d8hwD5xn7CgDmnij6gQsbC
+   j6Vo7Qvk31OIcm8+59fYOGmmPfQMGisbMpbcqi9oB0GV6SwEzU06/BP86
+   DkMVSDu00SrtrAAgZkufVhnETwRyRfn0XOKyqab59laB3Pv3uGCbAAjG1
    A==;
-X-CSE-ConnectionGUID: uRw50dPlQ8qTIOMBTZ0Clg==
-X-CSE-MsgGUID: Y0n8Q9OIRge+c96sXcrFTg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="52127893"
+X-CSE-ConnectionGUID: +NipHfzJQbCUrd21A7Uy3w==
+X-CSE-MsgGUID: mWjIoFwURtaGzU61ynjSjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="35944812"
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="52127893"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 00:07:34 -0700
-X-CSE-ConnectionGUID: qQ+yodlfTgSzrmo4bM+ONg==
-X-CSE-MsgGUID: 2X6Lp8LYSQW8ClLCjAtpDw==
+   d="scan'208";a="35944812"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 00:31:42 -0700
+X-CSE-ConnectionGUID: IPsiTQDpT8+gsIw+kHhSig==
+X-CSE-MsgGUID: m13zcm6iTVSwIp6EYCwMxw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
-   d="scan'208";a="135865532"
+   d="scan'208";a="173064109"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 07 May 2025 00:07:31 -0700
+  by orviesa001.jf.intel.com with ESMTP; 07 May 2025 00:31:40 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCYsK-0007GD-25;
-	Wed, 07 May 2025 07:07:28 +0000
-Date: Wed, 7 May 2025 15:07:15 +0800
+	id 1uCZFi-0007JV-1K;
+	Wed, 07 May 2025 07:31:38 +0000
+Date: Wed, 7 May 2025 15:31:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sascha Hauer <s.hauer@pengutronix.de>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kernel@pengutronix.de,
-	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v4 3/3] clk: add TI CDCE6214 clock driver
-Message-ID: <202505071411.GB5uyv3w-lkp@intel.com>
-References: <20250430-clk-cdce6214-v4-3-9f15e7126ac6@pengutronix.de>
+To: Maxim Levitsky <mlevitsk@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 1/5] locking/mutex: implement mutex_trylock_nested
+Message-ID: <202505071523.2k7QnWJd-lkp@intel.com>
+References: <20250430203013.366479-2-mlevitsk@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,105 +62,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250430-clk-cdce6214-v4-3-9f15e7126ac6@pengutronix.de>
+In-Reply-To: <20250430203013.366479-2-mlevitsk@redhat.com>
 
-Hi Sascha,
+Hi Maxim,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 0af2f6be1b4281385b618cb86ad946eded089ac8]
+[auto build test ERROR on kvmarm/next]
+[also build test ERROR on kvm/queue kvm/next tip/locking/core linus/master v6.15-rc5 next-20250506]
+[cannot apply to kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sascha-Hauer/clk-make-determine_rate-optional-for-non-reparenting-clocks/20250430-170445
-base:   0af2f6be1b4281385b618cb86ad946eded089ac8
-patch link:    https://lore.kernel.org/r/20250430-clk-cdce6214-v4-3-9f15e7126ac6%40pengutronix.de
-patch subject: [PATCH v4 3/3] clk: add TI CDCE6214 clock driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250507/202505071411.GB5uyv3w-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071411.GB5uyv3w-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxim-Levitsky/locking-mutex-implement-mutex_trylock_nested/20250501-043418
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git next
+patch link:    https://lore.kernel.org/r/20250430203013.366479-2-mlevitsk%40redhat.com
+patch subject: [PATCH v4 1/5] locking/mutex: implement mutex_trylock_nested
+config: x86_64-randconfig-072-20250501 (https://download.01.org/0day-ci/archive/20250507/202505071523.2k7QnWJd-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071523.2k7QnWJd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505071411.GB5uyv3w-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071523.2k7QnWJd-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/clk-cdce6214.c:319:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     319 |                            FIELD_PREP(R2_REFSEL_SW, 2));
-         |                            ^
->> drivers/clk/clk-cdce6214.c:333:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     333 |         div = FIELD_GET(R25_IP_RDIV, val);
-         |               ^
-   drivers/clk/clk-cdce6214.c:362:53: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     362 |                 regmap_update_bits(priv->regmap, 25, R25_IP_RDIV, FIELD_PREP(R25_IP_RDIV, 0));
-         |                                                                   ^
-   drivers/clk/clk-cdce6214.c:370:52: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     370 |         regmap_update_bits(priv->regmap, 25, R25_IP_RDIV, FIELD_PREP(R25_IP_RDIV, div));
-         |                                                           ^
-   drivers/clk/clk-cdce6214.c:383:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     383 |         idx = FIELD_GET(R2_REFSEL_SW, val);
-         |               ^
-   drivers/clk/clk-cdce6214.c:406:55: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     406 |         regmap_update_bits(priv->regmap, 25, R25_REF_CH_MUX, FIELD_PREP(R25_REF_CH_MUX, index));
-         |                                                              ^
-   drivers/clk/clk-cdce6214.c:480:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     480 |                 div = FIELD_GET(R56_CH1_DIV, val);
-         |                       ^
-   drivers/clk/clk-cdce6214.c:535:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     535 |                                    FIELD_PREP(R56_CH1_DIV, div));
-         |                                    ^
-   drivers/clk/clk-cdce6214.c:563:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     563 |                 idx = FIELD_GET(R56_CH1_MUX, val);
-         |                       ^
-   drivers/clk/clk-cdce6214.c:589:53: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     589 |                 regmap_update_bits(priv->regmap, 56, R56_CH1_MUX, FIELD_PREP(R56_CH1_MUX, index));
-         |                                                                   ^
-   drivers/clk/clk-cdce6214.c:643:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     643 |         ndiv = FIELD_GET(R30_PLL_NDIV, val);
-         |                ^
-   drivers/clk/clk-cdce6214.c:755:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     755 |                            FIELD_PREP(R34_PLL_DEN_23_16, den >> 16));
-         |                            ^
-   drivers/clk/clk-cdce6214.c:842:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     842 |                 div = psx[FIELD_GET(R47_PLL_PSA, val)];
-         |                           ^
-   drivers/clk/clk-cdce6214.c:883:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     883 |                                    FIELD_PREP(R47_PLL_PSA, div));
-         |                                    ^
-   drivers/clk/clk-cdce6214.c:998:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     998 |                            FIELD_PREP(R24_IP_XO_CLOAD, i));
-         |                            ^
-   15 errors generated.
-
-
-vim +/FIELD_PREP +319 drivers/clk/clk-cdce6214.c
-
-   315	
-   316	static int cdce6214_configure(struct cdce6214 *priv)
-   317	{
-   318		regmap_update_bits(priv->regmap, 2, R2_REFSEL_SW,
- > 319				   FIELD_PREP(R2_REFSEL_SW, 2));
-   320	
-   321		return 0;
-   322	}
-   323	
-   324	static unsigned long cdce6214_clk_out0_recalc_rate(struct clk_hw *hw,
-   325							   unsigned long parent_rate)
-   326	{
-   327		struct cdce6214_clock *clock = hw_to_cdce6214_clk(hw);
-   328		struct cdce6214 *priv = clock->priv;
-   329		unsigned int val, div;
-   330	
-   331		regmap_read(priv->regmap, 25, &val);
-   332	
- > 333		div = FIELD_GET(R25_IP_RDIV, val);
-   334	
-   335		if (!div)
-   336			return parent_rate * 2;
-   337	
-   338		return DIV_ROUND_UP_ULL((u64)parent_rate, div);
-   339	}
-   340	
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 20.1.2
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+>> error[E0425]: cannot find function `mutex_trylock` in crate `bindings`
+   --> rust/kernel/sync/lock/mutex.rs:129:41
+   |
+   129 |         let result = unsafe { bindings::mutex_trylock(ptr) };
+   |                                         ^^^^^^^^^^^^^ help: a function with a similar name exists: `mutex_lock`
+   |
+   ::: rust/bindings/bindings_helpers_generated.rs:181:5
+   |
+   181 |     pub fn mutex_lock(lock: *mut mutex);
+   |     ----------------------------------- similarly named function `mutex_lock` defined here
 
 -- 
 0-DAY CI Kernel Test Service
