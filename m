@@ -1,115 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDDA770E2;
-	Thu,  8 May 2025 04:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E6E15B102
+	for <llvm@lists.linux.dev>; Thu,  8 May 2025 06:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746677444; cv=none; b=GmyMCT1F+i0Bp10NyVC3ulFpcFpp+LehVu/vkFnTMbvN6rrVKrqB/xVLKO+PMdQoWarFbCigwI3f5VY5pQJkZJJBnuNLWCr3kXQSu+azGiz4YUpRmiA6hZQohDJ/UqpofJWDqwWy7ushOozFUkjOpSPWjXlk6uWGlOHpKg/4hvs=
+	t=1746684897; cv=none; b=MSU60S9+e8FBh3l0NW5b0yl0wSURGprvy0WaEJoVjS0g60KcQELgBEfXPD3SR/fzV0Fra7lJUF9TicJEnIPq9aSa/sOjBkX/IK5DERTTKUQSG/3HdjxtZpDbx4uulo9i9aQQyTay24kotrv9QqT+Jir78vn2x/jct4y/Uf5Cuk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746677444; c=relaxed/simple;
-	bh=4t0VL9wIhyMoUDpMaY3vKPF5EPbXzkRT87RGiJt5LO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mRks5APvUvnqiWZhzX2nxYVuQ8FqMK1Eg/8sgLofZstqUgb1UM07LDROQgq+XOPD7GxgErwFSf8duXM080ncjogWEnvcLGCqsIjQAYtfO1BU0sUW/g8NmoDS8zEXOq+RGLincpAKdXm9+C1uMm6KuZH+QH1MioHct5QgngngSPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QHBl9B5h; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746684897; c=relaxed/simple;
+	bh=wXgy+XuLnjFIqewOwsE4Lm/BrXyMhV6/acAcCIAyJYQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=RHtm1fLDx6cjdwBomqfZnnoUfSZUIG/vKV0HUDoH4mtt72FsFkQcIJgg5O1WyuCOIGXt39QDRhvfirva9PdmauqiHK2zcsRZ3OQBC2gj8VNQr+s9794T4lx9+GYi/D6WOIdg6MCjZfKnJJPByE6+FNR28neiTPVFCqWAES/caHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMnBO1rF; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QHBl9B5h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746677443; x=1778213443;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4t0VL9wIhyMoUDpMaY3vKPF5EPbXzkRT87RGiJt5LO0=;
-  b=QHBl9B5hIdMZc/qBSYC1o1HcVgNDpOTmkMe7uarHsE4ArLvRdBNhxwm9
-   ImrtEDHeziyA9NFxf83SAtyZUs0Xb8ZlcR0d3QYRDgug9TkNaIdLdMgmr
-   eT2qsu7XeG7hMb1mA0jA30343nC9+qeD/8i99ULzt4qZBgN24WJ+wKMFe
-   VI8+HUMSzEBH+9aKrqaD8G0JENPLuglv5/iz76SZQNXWUVkzk116X1G6N
-   D6qOPi4kuMzm4VIonvA5UugJkj+Yf9Q/EccdzwhoCsJ9P/eeZfygvzZ/t
-   EWhU0xFDCUBbOScQj2Lh0us2vcJ2Ktgug+1R+/+xpOb0HGQyQ6mXJh25q
-   w==;
-X-CSE-ConnectionGUID: tO3wYq/UQ7m711SwdclwLA==
-X-CSE-MsgGUID: VByuMBmCQ3Gtlt7vo5UPQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48348661"
-X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="48348661"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 21:10:42 -0700
-X-CSE-ConnectionGUID: ag5YoI4LQxWU0p7NVqgzzw==
-X-CSE-MsgGUID: X/nnoFYxTgiCfx3a/XUv7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="137089745"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 07 May 2025 21:10:37 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCsag-0009xr-1I;
-	Thu, 08 May 2025 04:10:34 +0000
-Date: Thu, 8 May 2025 12:09:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Elder <elder@riscstar.com>, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-	p.zabel@pengutronix.de, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	dlan@gentoo.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, heylenay@4d2.org,
-	inochiama@outlook.com, guodong@riscstar.com,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/6] clk: spacemit: set up reset auxiliary devices
-Message-ID: <202505081113.CwKtDYbs-lkp@intel.com>
-References: <20250506210638.2800228-4-elder@riscstar.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMnBO1rF"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac29fd22163so100470566b.3
+        for <llvm@lists.linux.dev>; Wed, 07 May 2025 23:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746684894; x=1747289694; darn=lists.linux.dev;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hkZltZOQqnYsCEsxFuK/qAjYLT5r6t+NrYMqhOg1WBw=;
+        b=QMnBO1rF2ZaKtcbceHVZ6rYvSNxPmKvtVtSfB0mxKzas+CzcfoxcyFxbDl+oBoCclE
+         dSczqiuyZhvrnc8RQCMHFKFJuLYXhfrDjY/QUKbb///WHI1cdeuAOwO4rn3JBZMnIq7Q
+         h9KMovpQhdvPqTAv6s6i1LrGQ8BwX15EudDXKaQEBtxUZgg74tzJKxqLp8Lzre8fouDO
+         CxujoRPO1ZpLhoYs2r36L30MbdS9QpKMqfIEFU9FkPtp9TWg8fiRBu0QFSyh2sL/cPtp
+         WpgzbMddv2U85VeBuxgoLlfXWAnDahqKdiISGrzGh5rPACWwNF6WDWfm1QD36nasD8/O
+         X72Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746684894; x=1747289694;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hkZltZOQqnYsCEsxFuK/qAjYLT5r6t+NrYMqhOg1WBw=;
+        b=dGhYS4mFvSu3C90Wl34XEqX5NVk24FqiTYDdOEQSvoNdBNALqnZuaP/Xl2gWrzDy8d
+         DaUAl4hQ4cw01OXvazPgQa0m4XZv8mFSreQS+gogxWas1igSOnJViBPwiblcmzyLiYLY
+         Z70ltUNN6D1P+MoiTofwSEnvSATY8x+jhDcBPaSg5YatJL3zbC9I/+4l8XYubdL1tj6r
+         bm4LSWEQHedXZCemK+RpOHQ/sRMU6VKfXB/c7GBlSgUBYkeT0otAE/JLhBkutCtR4xGx
+         hkwGrHZxXswjtif5a3KoBe6TZ7KHBwxlg7h0o5INNztIAF4/Cpl0MaTpIWpPbRJAz1FU
+         s2kA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKQClWBWbMuQ0FJ226Jcu+yk+EvmpTcw4kAaFaNh2d6E5NOEVonfNd113aQDa2Vqw0Rj5O@lists.linux.dev
+X-Gm-Message-State: AOJu0YyzAWnLxi1VhLJR2LHAzPos9WQqN2qLtCGnN9mK3N3OS9G746c0
+	iuogZzpqMlZXvryokiGhWFVfKE9BK3DFEuFLaIUW4AA/He+J32ajTAWRU3mHEtukGXYljlCh4in
+	sAa1f9GuOXmQOzkvMx3NNZxNMJi8=
+X-Gm-Gg: ASbGncuxRIEJ3m1GV4EE1PehzAUyRHB4iAzKkcDMEzfC2TV21EnoInSPjYPRzTsdRMG
+	kUVKtptlmKGi7WgWjNu4xbDfeD57rD7NnmNey6jXHYOqeDW+Fx8w7e1QShiVed7Pgo/aWLMhwqW
+	53V+qaxUmvWvD3py1yxLQR
+X-Google-Smtp-Source: AGHT+IHwxIKpfiu4tWWg3RXYDruBytSXJ3/SIIjPMara76cnzmnUoPQULY0baE/CdfVeC/fMbdZDia8dnddDyX35xNY=
+X-Received: by 2002:a17:907:803:b0:ac7:e815:6e12 with SMTP id
+ a640c23a62f3a-ad1fe83286cmr181604566b.33.1746684893426; Wed, 07 May 2025
+ 23:14:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250506210638.2800228-4-elder@riscstar.com>
+References: <20250430123306.15072-1-linux.amoon@gmail.com>
+In-Reply-To: <20250430123306.15072-1-linux.amoon@gmail.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 8 May 2025 11:44:35 +0530
+X-Gm-Features: ATxdqUFnCUlYgpyjo3kkzKj_fP_Vo0jZohWv6em6rAowUWUDTJ21AX7A3N5yL0k
+Message-ID: <CANAwSgSXNuNFQ6RiqiLEBY3eCmxz2hQYfWTFij=Vi8S7rS-_TA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alex,
+Hi All,
 
-kernel test robot noticed the following build errors:
+On Wed, 30 Apr 2025 at 18:03, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> Hi All,
+>
+> This patch series is a rework of my previous patch series [1],
+> where the code changes were not adequately justified.
+>
+> In this new series, I have improved the commit subject
+> and commit message to better explain the changes.
+>
+> v6: Add new patch to use devm_clk_get_enabled
+>     and Fix few typo in subject as suggested by Daniel.
+> v5: Drop the guard mutex patch
+> v4: Tried to address Lukasz review comments.
+>
+> Tested on Odroid U3 amd XU4 SoC boards.
+> Build with clang with W=1 enable.
+>
 
-[auto build test ERROR on cb9c3aeae509b36afbdf46942a7a0a0dfc856ce7]
+Genital Ping!!!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Elder/dt-bindings-soc-spacemit-define-spacemit-k1-ccu-resets/20250507-051019
-base:   cb9c3aeae509b36afbdf46942a7a0a0dfc856ce7
-patch link:    https://lore.kernel.org/r/20250506210638.2800228-4-elder%40riscstar.com
-patch subject: [PATCH v6 3/6] clk: spacemit: set up reset auxiliary devices
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250508/202505081113.CwKtDYbs-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505081113.CwKtDYbs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505081113.CwKtDYbs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/spacemit/ccu-k1.c:998:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     998 |         kfree(to_spacemit_ccu_adev(adev));
-         |         ^
-   1 error generated.
-
-
-vim +/kfree +998 drivers/clk/spacemit/ccu-k1.c
-
-   993	
-   994	static void spacemit_cadev_release(struct device *dev)
-   995	{
-   996		struct auxiliary_device *adev = to_auxiliary_dev(dev);
-   997	
- > 998		kfree(to_spacemit_ccu_adev(adev));
-   999	}
-  1000	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+-Anand
