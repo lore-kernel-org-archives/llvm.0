@@ -1,340 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA14223324;
-	Thu,  8 May 2025 12:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF99225414
+	for <llvm@lists.linux.dev>; Thu,  8 May 2025 12:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746705661; cv=none; b=OMvpXrZF3BJ5bQp1JD96yjzy1DX3CXY6koLs8hzQjl3gDrttGl1gegbD+X7C73uMpIZkfzfVAIilt24BsBMZgPyToVW/O8H59bKkXwaG1/9LUmNb8FQcmCar5105y1dL0tc7ypKb8wRpEcgp92BdCTp47XTVAXY5DYabuR0/Afw=
+	t=1746707007; cv=none; b=N4X0xi23+vJIOXpxYB6Mxc5hT6JQUsG/QWKUhWxOcQMvx5xWcUS8gGvu8dyNiai8jVgJ6hqE9joXzXy2QDsRYK4F44iBUW2H1z0YHGyQqdX0mIT8v+otqnvm2UUZkVzzKNHORwCRTZbek8wMeOhoZNvD6alDG7iBsdKqyEHhFEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746705661; c=relaxed/simple;
-	bh=Be14sYMJgqDSXAsAhFgXHfZ88JPBtCSTFdWjm1mWUPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=us63yS++LE4NJpdqEAzY6reLFM9NIMQG3fcSuKG/w/2o8bLtC3B1dER1MbNrW8d+KkUtWymh5RLQ5x1srQFb8S3qpZhELvwkz02STE44FB0CAne6Ksi0DTcdPPywAPFD5O9hVerWRlQ6KsrY6S4l9x/y0ra73KOYuDS8SQs+D2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L2JbgdHE; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746707007; c=relaxed/simple;
+	bh=n1DaNBSAbwSjqMNiKl3ZhnzGUtTOnVJb3kD0pUQSCf4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oCmWPKbJIivNsnYjeCh+cl1ZvrXFYJsQV4xn7IYngagCeweEj92Z1ujMg2RUbSn45ha3/hZYDWkLpZ1gO90uKpBSAJ/bHNMOcz/MMiFE9BOyKUFZxB6yUDiiGTuER3+8DtZq7AI4taNFCICoFo1t6fgUe/YQbHc8zxbMV6LtFnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0p5Dg6hu; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L2JbgdHE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746705658; x=1778241658;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Be14sYMJgqDSXAsAhFgXHfZ88JPBtCSTFdWjm1mWUPg=;
-  b=L2JbgdHENvDiR/qNlSFlt37syqCuXVSv5zHBGiNyqY+UEoNt0/FAauvd
-   pcZlkut9TalUUIpUhP8nKBKVPHQSfe1kjCn14+wv+qm8msh+rLMf3Z1E1
-   617OuaB+/67FbmN79YV0uhsCsjHYoyJY6jusBAzEJqXF3vMC6oJN259Jr
-   8qGwjoS5OOxF5ARYfW6zfwV4IP+fxmD6KFQznn5n5FyzPesGBlpSdLSp4
-   I5iX/IEITkwKCWIJx0NrPSTYT9TRBoooIw1bcK7VsK5Rl5sBZ/E/Nv287
-   jwtUJSSAN82ufmx5JVJ3M0gT3unD6CMlCbKrdN+k/ZMk9J5C9RKqJcsFp
-   g==;
-X-CSE-ConnectionGUID: oajLIJjXQ362TOftzKYLew==
-X-CSE-MsgGUID: 37Qb/bwfQVSSifseujEIJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59880232"
-X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
-   d="scan'208";a="59880232"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 05:00:58 -0700
-X-CSE-ConnectionGUID: hECwaveLTE6gYFrxQeV4jw==
-X-CSE-MsgGUID: cPqddmc2T9SDuQ91hM42Ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
-   d="scan'208";a="141226677"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 08 May 2025 05:00:54 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCzvn-000Aw3-2H;
-	Thu, 08 May 2025 12:00:51 +0000
-Date: Thu, 8 May 2025 20:00:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jon Kohler <jon@nutanix.com>, "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Jon Kohler <jon@nutanix.com>
-Subject: Re: [PATCH net-next] vhost/net: align variable names with XDP
- terminology
-Message-ID: <202505081920.FOOj1Z0e-lkp@intel.com>
-References: <20250507160206.3267692-1-jon@nutanix.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0p5Dg6hu"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b1fcb97d209so1841967a12.1
+        for <llvm@lists.linux.dev>; Thu, 08 May 2025 05:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746707004; x=1747311804; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YHzGR2TH3f5PkiaDuIeNupqLtaLoSxh32TBcttsiE58=;
+        b=0p5Dg6huF5N2a1dQpdqXUiJF5o8s9FiHWh1WYwyc4Wu//c4qiydZQ9wfK1Oz1kkAYS
+         ASN6jaY8GVS8IH47Q6RDyXKq994g6Mp7OwgKcgQ7C9sYZo0tfs1p/cB61MSNm2n+z+kS
+         uF2jOfRvKZp8C/fyJbyaYivIs6eWMxYkJoBm744b1PsJZRrue7oQodE+A6OQHNsRFvQr
+         xjIUaSJ3BDsMSWWBKT4kqezsvd9+t1nmbl9en276s2lWbCKFcNRs+EkxuaQqEj8du7XR
+         zT4H6Ws9QAuiBpapfOChC9sWjf96ZWvm1Ucu7xpxOHtTILMxLCVT4W796VmCFa6uUxvv
+         lpbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746707004; x=1747311804;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YHzGR2TH3f5PkiaDuIeNupqLtaLoSxh32TBcttsiE58=;
+        b=drlp0Byh8gY1Mu2xFNPzjTcf2m5yzdF1wOBFF71iw7U9ikcclvRET8HfS1VCR6jWxz
+         PtRlaNU3/7GtRmP1NEfRreWNeeur2g9NW/OrNuUh4175Q1xQsBJw7kCZGiWTQbvXO3Xq
+         +GhmBJtAnuX4uhS30ArqLATDGA6h7x2Dgtb9PKUWGkpjLMcmeLrNp3J2z5SoqtMWY9uy
+         NDZJdV9epo9Ha+1w7FftEZDJNCMqiIXluHUnRoCEHzAOwhf5o0h6QH2qdBY4ia1Ntotb
+         urOw6f2znFDwkMCscL3nXmCtXIXYSvHmQ0mYQws9muekiaHI++WH82M7dwElyPlPswZ9
+         /40Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXvjDZu6zPKpQV0b/8brRXF/Ju0VhgqccJEU8Mugfw/5MWXpz1YiBLpZrtrgXFBuvwdmjzO@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz4H+k8eEd5p51Cbj3NDrWd1nNpndZAibYagw2J/R5D5HZpFeWG
+	afI9Boa1wWXLdtAvsMbgGReM6CFL8kJf/54hrtASo3VSfW+ziY/UIKEY95BNIFH8ZgtvEvuQNX7
+	NdGyoTA43jsJ/c5FvzxiWTNaKhe+5x9lapij7
+X-Gm-Gg: ASbGncsEPWof3ZQp4MbIV5PlwuNdfEtYgltfWX0x2WMIZmv8vFBprv1qMyUt6uGwVK8
+	jnOC4O6+LLnCHBHqMdkp33j+ciu56n7zY3wieo9F5kxFnLASRn++OiNZgqY7XKF+h65vbz8wrCd
+	rHW0m1LXOqcWvvdM++EJ+53VfSSoKy+qSlpk/r+a57g5YL5aK8Z3ITxpBKWueuQNg=
+X-Google-Smtp-Source: AGHT+IGuazhS9joimxHTMGiamVK9GxUm2CRwvQi3+Gq6fqxsbfAnr7up4McbBtUROkgn62zEFRcy/K/C2EzHqfHG+xw=
+X-Received: by 2002:a17:90b:4b8c:b0:2fa:1d9f:c80 with SMTP id
+ 98e67ed59e1d1-30adbf6d05amr4939913a91.17.1746707003520; Thu, 08 May 2025
+ 05:23:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507160206.3267692-1-jon@nutanix.com>
+References: <20250507180852.work.231-kees@kernel.org> <20250507181615.1947159-2-kees@kernel.org>
+In-Reply-To: <20250507181615.1947159-2-kees@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Thu, 8 May 2025 14:22:47 +0200
+X-Gm-Features: ATxdqUHttH2gHvJKzLvMz7fkEuSC2xFFktBrniyRJYj71k93n_Rm8LTTobDJ7fU
+Message-ID: <CANpmjNPcYPvnQzMT3p+Vc2=EiEbR1WnykUEjuYc0bH2HOFi6HQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] init.h: Disable sanitizer coverage for __init and __head
+To: Kees Cook <kees@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Alexander Potapenko <glider@google.com>, Aleksandr Nogikh <nogikh@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Hou Wenlong <houwenlong.hwl@antgroup.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	kasan-dev@googlegroups.com, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Christoph Hellwig <hch@lst.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	sparclinux@vger.kernel.org, llvm@lists.linux.dev, 
+	syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jon,
++Cc KCOV maintainers
 
-kernel test robot noticed the following build warnings:
+On Wed, 7 May 2025 at 20:16, Kees Cook <kees@kernel.org> wrote:
+>
+> While __noinstr already contained __no_sanitize_coverage, it needs to
+> be added to __init and __head section markings to support the Clang
+> implementation of CONFIG_STACKLEAK. This is to make sure the stack depth
+> tracking callback is not executed in unsupported contexts.
+>
+> The other sanitizer coverage options (trace-pc and trace-cmp) aren't
+> needed in __head nor __init either ("We are interested in code coverage
+> as a function of a syscall inputs"[1]), so this appears safe to disable
+> for them as well.
 
-[auto build test WARNING on net-next/main]
+@ Dmitry, Aleksandr - Will this produce some unwanted side-effects for
+syzbot? I also think it's safe, but just double checking.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jon-Kohler/vhost-net-align-variable-names-with-XDP-terminology/20250507-233429
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250507160206.3267692-1-jon%40nutanix.com
-patch subject: [PATCH net-next] vhost/net: align variable names with XDP terminology
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250508/202505081920.FOOj1Z0e-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505081920.FOOj1Z0e-lkp@intel.com/reproduce)
+> Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kcov.c?h=v6.14#n179 [1]
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505081920.FOOj1Z0e-lkp@intel.com/
+Acked-by: Marco Elver <elver@google.com>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/vhost/net.c:681:28: warning: operator '?:' has lower precedence than '+'; '+' will be evaluated first [-Wparentheses]
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:51: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/const.h:49:41: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                            ^
-   drivers/vhost/net.c:681:28: note: place parentheses around the '+' expression to silence this warning
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:51: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/const.h:49:41: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                            ^
-   drivers/vhost/net.c:681:28: note: place parentheses around the '?:' expression to evaluate it first
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:51: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/const.h:49:41: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                            ^
->> drivers/vhost/net.c:681:28: warning: operator '?:' has lower precedence than '+'; '+' will be evaluated first [-Wparentheses]
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:66: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/uapi/linux/const.h:49:47: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                  ^~~~
-   drivers/vhost/net.c:681:28: note: place parentheses around the '+' expression to silence this warning
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:66: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/uapi/linux/const.h:49:47: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                  ^~~~
-   drivers/vhost/net.c:681:28: note: place parentheses around the '?:' expression to evaluate it first
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:66: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/uapi/linux/const.h:49:47: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                  ^~~~
->> drivers/vhost/net.c:681:28: warning: operator '?:' has lower precedence than '+'; '+' will be evaluated first [-Wparentheses]
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:66: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/uapi/linux/const.h:49:58: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                             ^~~~
-   drivers/vhost/net.c:681:28: note: place parentheses around the '+' expression to silence this warning
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:66: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/uapi/linux/const.h:49:58: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                             ^~~~
-   drivers/vhost/net.c:681:28: note: place parentheses around the '?:' expression to evaluate it first
-     680 |         headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     681 |                                   vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:256:33: note: expanded from macro 'SKB_DATA_ALIGN'
-     256 | #define SKB_DATA_ALIGN(X)       ALIGN(X, SMP_CACHE_BYTES)
-         |                                 ~~~~~~^~~~~~~~~~~~~~~~~~~
-   include/vdso/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ~~~~~~~~~~~~~~~~^~~~~~~~
-   include/uapi/linux/const.h:48:66: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/uapi/linux/const.h:49:58: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                             ^~~~
-   3 warnings generated.
-
-
-vim +681 drivers/vhost/net.c
-
-   661	
-   662	static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
-   663				       struct iov_iter *from)
-   664	{
-   665		struct vhost_virtqueue *vq = &nvq->vq;
-   666		struct vhost_net *net = container_of(vq->dev, struct vhost_net,
-   667						     dev);
-   668		int copied, headroom, ret, sock_hlen = nvq->sock_hlen;
-   669		struct xdp_buff *xdp = &nvq->xdp[nvq->batched_xdp];
-   670		struct socket *sock = vhost_vq_get_backend(vq);
-   671		size_t data_len = iov_iter_count(from);
-   672		struct virtio_net_hdr *gso;
-   673		struct tun_xdp_hdr *hdr;
-   674		void *hard_start;
-   675		u32 frame_sz;
-   676	
-   677		if (unlikely(data_len < sock_hlen))
-   678			return -EFAULT;
-   679	
-   680		headroom = SKB_DATA_ALIGN(VHOST_NET_RX_PAD + sock_hlen +
- > 681					  vhost_sock_xdp(sock) ? XDP_PACKET_HEADROOM : 0);
-   682	
-   683		frame_sz = SKB_HEAD_ALIGN(headroom + data_len);
-   684	
-   685		if (frame_sz > PAGE_SIZE)
-   686			return -ENOSPC;
-   687	
-   688		hard_start = page_frag_alloc_align(&net->pf_cache, frame_sz,
-   689						   GFP_KERNEL, SMP_CACHE_BYTES);
-   690		if (unlikely(!hard_start))
-   691			return -ENOMEM;
-   692	
-   693		copied = copy_from_iter(hard_start + offsetof(struct tun_xdp_hdr, gso),
-   694					sock_hlen, from);
-   695		if (copied != sock_hlen) {
-   696			ret = -EFAULT;
-   697			goto err;
-   698		}
-   699	
-   700		hdr = hard_start;
-   701		gso = &hdr->gso;
-   702	
-   703		if (!sock_hlen)
-   704			memset(hard_start, 0, headroom);
-   705	
-   706		if ((gso->flags & VIRTIO_NET_HDR_F_NEEDS_CSUM) &&
-   707		    vhost16_to_cpu(vq, gso->csum_start) +
-   708		    vhost16_to_cpu(vq, gso->csum_offset) + 2 >
-   709		    vhost16_to_cpu(vq, gso->hdr_len)) {
-   710			gso->hdr_len = cpu_to_vhost16(vq,
-   711				       vhost16_to_cpu(vq, gso->csum_start) +
-   712				       vhost16_to_cpu(vq, gso->csum_offset) + 2);
-   713	
-   714			if (vhost16_to_cpu(vq, gso->hdr_len) > data_len) {
-   715				ret = -EINVAL;
-   716				goto err;
-   717			}
-   718		}
-   719	
-   720		data_len -= sock_hlen;
-   721		copied = copy_from_iter(hard_start + headroom, data_len, from);
-   722		if (copied != data_len) {
-   723			ret = -EFAULT;
-   724			goto err;
-   725		}
-   726	
-   727		xdp_init_buff(xdp, frame_sz, NULL);
-   728		xdp_prepare_buff(xdp, hard_start, headroom, data_len, true);
-   729		hdr->buflen = frame_sz;
-   730	
-   731		++nvq->batched_xdp;
-   732	
-   733		return 0;
-   734	
-   735	err:
-   736		page_frag_free(hard_start);
-   737		return ret;
-   738	}
-   739	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Cc: Marco Elver <elver@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: <x86@kernel.org>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: <kasan-dev@googlegroups.com>
+> ---
+>  arch/x86/include/asm/init.h | 2 +-
+>  include/linux/init.h        | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+> index 8b1b1abcef15..6bfdaeddbae8 100644
+> --- a/arch/x86/include/asm/init.h
+> +++ b/arch/x86/include/asm/init.h
+> @@ -5,7 +5,7 @@
+>  #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
+>  #define __head __section(".head.text") __no_sanitize_undefined __no_stack_protector
+>  #else
+> -#define __head __section(".head.text") __no_sanitize_undefined
+> +#define __head __section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
+>  #endif
+>
+>  struct x86_mapping_info {
+> diff --git a/include/linux/init.h b/include/linux/init.h
+> index ee1309473bc6..c65a050d52a7 100644
+> --- a/include/linux/init.h
+> +++ b/include/linux/init.h
+> @@ -49,7 +49,9 @@
+>
+>  /* These are for everybody (although not all archs will actually
+>     discard it in modules) */
+> -#define __init         __section(".init.text") __cold  __latent_entropy __noinitretpoline
+> +#define __init         __section(".init.text") __cold __latent_entropy \
+> +                                               __noinitretpoline       \
+> +                                               __no_sanitize_coverage
+>  #define __initdata     __section(".init.data")
+>  #define __initconst    __section(".init.rodata")
+>  #define __exitdata     __section(".exit.data")
+> --
+> 2.34.1
+>
