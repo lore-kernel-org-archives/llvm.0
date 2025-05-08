@@ -1,57 +1,57 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF99225414
-	for <llvm@lists.linux.dev>; Thu,  8 May 2025 12:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E7622425B
+	for <llvm@lists.linux.dev>; Thu,  8 May 2025 12:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746707007; cv=none; b=N4X0xi23+vJIOXpxYB6Mxc5hT6JQUsG/QWKUhWxOcQMvx5xWcUS8gGvu8dyNiai8jVgJ6hqE9joXzXy2QDsRYK4F44iBUW2H1z0YHGyQqdX0mIT8v+otqnvm2UUZkVzzKNHORwCRTZbek8wMeOhoZNvD6alDG7iBsdKqyEHhFEQ=
+	t=1746707130; cv=none; b=MVN6dpnFK5A1G90CiYFOeWRzFKxEXJd6ma1RAE0iR4gAH81XDKcgxpleV0kKqrdMduaycbLTj1/Ji8azEPN+CMxmrqjG4nXVmndPmEWjX+/sGW/0ZHks+8ZIHyQbTIv7/63iTy7+ruRRjy8z5N3gxSY5wZCR/ZXPVhg60VdsJNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746707007; c=relaxed/simple;
-	bh=n1DaNBSAbwSjqMNiKl3ZhnzGUtTOnVJb3kD0pUQSCf4=;
+	s=arc-20240116; t=1746707130; c=relaxed/simple;
+	bh=GSPlMkE9xl1CKG6+aR4Lnpqmp6kkUaBOsXBjm7FdCs8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oCmWPKbJIivNsnYjeCh+cl1ZvrXFYJsQV4xn7IYngagCeweEj92Z1ujMg2RUbSn45ha3/hZYDWkLpZ1gO90uKpBSAJ/bHNMOcz/MMiFE9BOyKUFZxB6yUDiiGTuER3+8DtZq7AI4taNFCICoFo1t6fgUe/YQbHc8zxbMV6LtFnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0p5Dg6hu; arc=none smtp.client-ip=209.85.215.174
+	 To:Cc:Content-Type; b=Xtqi3woBKbMqmFlcwjGsLJjMXp/NLdG7emAF1YOy/2k3j9ugWQ4Extlbs1LYC8wlYMbt5HzimNha9WYfrCNDbCDEKkCzzk7wNmEpu5r6rkhADR498JRulf7a/ZnLFH8nFOeHGa9wlQS7z/FYvG7WNhWOs5OYyaiWwSgkXcmTUbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZDcAlmCH; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0p5Dg6hu"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b1fcb97d209so1841967a12.1
-        for <llvm@lists.linux.dev>; Thu, 08 May 2025 05:23:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZDcAlmCH"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30c461a45f8so6686391fa.1
+        for <llvm@lists.linux.dev>; Thu, 08 May 2025 05:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746707004; x=1747311804; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1746707126; x=1747311926; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YHzGR2TH3f5PkiaDuIeNupqLtaLoSxh32TBcttsiE58=;
-        b=0p5Dg6huF5N2a1dQpdqXUiJF5o8s9FiHWh1WYwyc4Wu//c4qiydZQ9wfK1Oz1kkAYS
-         ASN6jaY8GVS8IH47Q6RDyXKq994g6Mp7OwgKcgQ7C9sYZo0tfs1p/cB61MSNm2n+z+kS
-         uF2jOfRvKZp8C/fyJbyaYivIs6eWMxYkJoBm744b1PsJZRrue7oQodE+A6OQHNsRFvQr
-         xjIUaSJ3BDsMSWWBKT4kqezsvd9+t1nmbl9en276s2lWbCKFcNRs+EkxuaQqEj8du7XR
-         zT4H6Ws9QAuiBpapfOChC9sWjf96ZWvm1Ucu7xpxOHtTILMxLCVT4W796VmCFa6uUxvv
-         lpbQ==
+        bh=SGXUIdTFQac7mJFRH+e+84EpMzV6neC01o/VEUKascg=;
+        b=ZDcAlmCHuNbTyfxTi0Mxek1FQHVRgCm6oH6UggdhD5fQ5Si0t0hQnxLOgKhO27Vlv4
+         84sn4tyRXGJhHWtE4M/L+aXSSNHxN6pw7oyS5q/Ky7ptSDZsx92hg3/NSSHuD9sJolgX
+         xZcUHNPAYaXBQet60yY5LEhgyckuWICRtJKFM4WiL9OnJZ0P1Fjve8BKWhK2Iuq7FN5f
+         e60xx3gsN7SdnnKoFZfxfDOULirByeJta4+dqnCJ2E6s3Bi0PCYJMLU+QozzD/1fyY2i
+         6S9CBf0ZC147CU/275kUVTcQAhG6n9h032J+4XsnVtwZ+xpL1oUIzfQDM7AGK0I4Lvo+
+         YF4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746707004; x=1747311804;
+        d=1e100.net; s=20230601; t=1746707126; x=1747311926;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YHzGR2TH3f5PkiaDuIeNupqLtaLoSxh32TBcttsiE58=;
-        b=drlp0Byh8gY1Mu2xFNPzjTcf2m5yzdF1wOBFF71iw7U9ikcclvRET8HfS1VCR6jWxz
-         PtRlaNU3/7GtRmP1NEfRreWNeeur2g9NW/OrNuUh4175Q1xQsBJw7kCZGiWTQbvXO3Xq
-         +GhmBJtAnuX4uhS30ArqLATDGA6h7x2Dgtb9PKUWGkpjLMcmeLrNp3J2z5SoqtMWY9uy
-         NDZJdV9epo9Ha+1w7FftEZDJNCMqiIXluHUnRoCEHzAOwhf5o0h6QH2qdBY4ia1Ntotb
-         urOw6f2znFDwkMCscL3nXmCtXIXYSvHmQ0mYQws9muekiaHI++WH82M7dwElyPlPswZ9
-         /40Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXvjDZu6zPKpQV0b/8brRXF/Ju0VhgqccJEU8Mugfw/5MWXpz1YiBLpZrtrgXFBuvwdmjzO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz4H+k8eEd5p51Cbj3NDrWd1nNpndZAibYagw2J/R5D5HZpFeWG
-	afI9Boa1wWXLdtAvsMbgGReM6CFL8kJf/54hrtASo3VSfW+ziY/UIKEY95BNIFH8ZgtvEvuQNX7
-	NdGyoTA43jsJ/c5FvzxiWTNaKhe+5x9lapij7
-X-Gm-Gg: ASbGncsEPWof3ZQp4MbIV5PlwuNdfEtYgltfWX0x2WMIZmv8vFBprv1qMyUt6uGwVK8
-	jnOC4O6+LLnCHBHqMdkp33j+ciu56n7zY3wieo9F5kxFnLASRn++OiNZgqY7XKF+h65vbz8wrCd
-	rHW0m1LXOqcWvvdM++EJ+53VfSSoKy+qSlpk/r+a57g5YL5aK8Z3ITxpBKWueuQNg=
-X-Google-Smtp-Source: AGHT+IGuazhS9joimxHTMGiamVK9GxUm2CRwvQi3+Gq6fqxsbfAnr7up4McbBtUROkgn62zEFRcy/K/C2EzHqfHG+xw=
-X-Received: by 2002:a17:90b:4b8c:b0:2fa:1d9f:c80 with SMTP id
- 98e67ed59e1d1-30adbf6d05amr4939913a91.17.1746707003520; Thu, 08 May 2025
- 05:23:23 -0700 (PDT)
+        bh=SGXUIdTFQac7mJFRH+e+84EpMzV6neC01o/VEUKascg=;
+        b=rqa2FdZOoA8M+eBgsjsXkPArkYIarmCMbTeAEmzPKDa3chks0by9TVRtmuWJA2AXeb
+         5XBCHEMEwsKiCuz15IjeGnWubJlXjMo5yN4T83rooH9qEmeThDgpGGW/hfviQPACn5f8
+         MIBf0S08t6/lam51ft2fZNw/ZUA0SZPw0NmXG2HyDIt2k3sxq98B0yX8KToq9yJ47thV
+         msv5wrAJInhf05VjG0K9+ylV45imnWEsTuw8PmLxjIGO/aUH5gisM5RgYr1uOUupaDyn
+         jZd0xVL9TQoyLG6VfHIYeTlXhna9qyW1ORv4YRPLYdGX1BnQiJwZo+TLKhXkYbEANqQD
+         xlCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAdPAtZaFT7G+VmQgtgWOqwS3sGwQ+FjAce+m0vkjWrz+h3XG8eCRUkhUnkIdp2EFe2oOe@lists.linux.dev
+X-Gm-Message-State: AOJu0YyAtxixwDytJZc5dELplUQc8TAZxkLT5qsvBqIYhKpCRN1uvTgn
+	oKPvyLXKP5idaE0ezXzm/kNpiBot8dVLBth2tDClreGr+kBIxDBi69ifsjkBd/RKPdginhWJ4Gl
+	osSMHIsMI6HEPTwdq91+9s1GpMxoFeRzIdf9y
+X-Gm-Gg: ASbGnctEHZOjHXZE4RAS3vIcwEVYxeChp7UVZFXzPyl4ImjGP9Wid6flbVoYyU8WoFD
+	a2a9bD4jVx17SRt9tEvvuonIKlWFyuLAX46z9RLm33ONbJn/s4LNknFf2ZGV29JIjeirtEmvTvw
+	fU/m+tXKYQsrD7sSaJqJ2RdVSwyHEqkRb5Wf6IJFvsBBFB3t6jgygH
+X-Google-Smtp-Source: AGHT+IHELJP6PjDmjgnoQ+DcewZezMvkPDTBk3DlAEgOIW2HtUu14uSoRBVrm2tBSd/cEMjU36ADUjG1Ap9y8UFRrr8=
+X-Received: by 2002:a05:651c:b11:b0:30b:f006:3f5 with SMTP id
+ 38308e7fff4ca-326b87dacdfmr7793251fa.15.1746707125568; Thu, 08 May 2025
+ 05:25:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,17 +59,18 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250507180852.work.231-kees@kernel.org> <20250507181615.1947159-2-kees@kernel.org>
-In-Reply-To: <20250507181615.1947159-2-kees@kernel.org>
-From: Marco Elver <elver@google.com>
-Date: Thu, 8 May 2025 14:22:47 +0200
-X-Gm-Features: ATxdqUHttH2gHvJKzLvMz7fkEuSC2xFFktBrniyRJYj71k93n_Rm8LTTobDJ7fU
-Message-ID: <CANpmjNPcYPvnQzMT3p+Vc2=EiEbR1WnykUEjuYc0bH2HOFi6HQ@mail.gmail.com>
+ <CANpmjNPcYPvnQzMT3p+Vc2=EiEbR1WnykUEjuYc0bH2HOFi6HQ@mail.gmail.com>
+In-Reply-To: <CANpmjNPcYPvnQzMT3p+Vc2=EiEbR1WnykUEjuYc0bH2HOFi6HQ@mail.gmail.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Thu, 8 May 2025 14:25:13 +0200
+X-Gm-Features: ATxdqUEOMWVMkXbvXQaHqruZq4t8-pmXFLrRyvMg5ohXOpGrzDC1z300bwlcEE0
+Message-ID: <CACT4Y+betRmieWEHBdEf=gOLhWiNVRH5CSDeN6ykBtoP1GrzLA@mail.gmail.com>
 Subject: Re: [PATCH 2/8] init.h: Disable sanitizer coverage for __init and __head
-To: Kees Cook <kees@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
-	Alexander Potapenko <glider@google.com>, Aleksandr Nogikh <nogikh@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+To: Marco Elver <elver@google.com>
+Cc: Kees Cook <kees@kernel.org>, Alexander Potapenko <glider@google.com>, 
+	Aleksandr Nogikh <nogikh@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
 	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, 
 	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Hou Wenlong <houwenlong.hwl@antgroup.com>, 
@@ -90,82 +91,86 @@ Cc: Arnd Bergmann <arnd@arndb.de>, Andrey Konovalov <andreyknvl@gmail.com>,
 	syzkaller <syzkaller@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 
-+Cc KCOV maintainers
+On Thu, 8 May 2025 at 14:23, Marco Elver <elver@google.com> wrote:
+>
+> +Cc KCOV maintainers
+>
+> On Wed, 7 May 2025 at 20:16, Kees Cook <kees@kernel.org> wrote:
+> >
+> > While __noinstr already contained __no_sanitize_coverage, it needs to
+> > be added to __init and __head section markings to support the Clang
+> > implementation of CONFIG_STACKLEAK. This is to make sure the stack depth
+> > tracking callback is not executed in unsupported contexts.
+> >
+> > The other sanitizer coverage options (trace-pc and trace-cmp) aren't
+> > needed in __head nor __init either ("We are interested in code coverage
+> > as a function of a syscall inputs"[1]), so this appears safe to disable
+> > for them as well.
+>
+> @ Dmitry, Aleksandr - Will this produce some unwanted side-effects for
+> syzbot? I also think it's safe, but just double checking.
 
-On Wed, 7 May 2025 at 20:16, Kees Cook <kees@kernel.org> wrote:
->
-> While __noinstr already contained __no_sanitize_coverage, it needs to
-> be added to __init and __head section markings to support the Clang
-> implementation of CONFIG_STACKLEAK. This is to make sure the stack depth
-> tracking callback is not executed in unsupported contexts.
->
-> The other sanitizer coverage options (trace-pc and trace-cmp) aren't
-> needed in __head nor __init either ("We are interested in code coverage
-> as a function of a syscall inputs"[1]), so this appears safe to disable
-> for them as well.
+I do not see any problems with this.
 
-@ Dmitry, Aleksandr - Will this produce some unwanted side-effects for
-syzbot? I also think it's safe, but just double checking.
-
-> Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kcov.c?h=v6.14#n179 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-
-Acked-by: Marco Elver <elver@google.com>
-
-> ---
-> Cc: Marco Elver <elver@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: <x86@kernel.org>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: <kasan-dev@googlegroups.com>
-> ---
->  arch/x86/include/asm/init.h | 2 +-
->  include/linux/init.h        | 4 +++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+> > Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kcov.c?h=v6.14#n179 [1]
+> > Signed-off-by: Kees Cook <kees@kernel.org>
 >
-> diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
-> index 8b1b1abcef15..6bfdaeddbae8 100644
-> --- a/arch/x86/include/asm/init.h
-> +++ b/arch/x86/include/asm/init.h
-> @@ -5,7 +5,7 @@
->  #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
->  #define __head __section(".head.text") __no_sanitize_undefined __no_stack_protector
->  #else
-> -#define __head __section(".head.text") __no_sanitize_undefined
-> +#define __head __section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
->  #endif
+> Acked-by: Marco Elver <elver@google.com>
 >
->  struct x86_mapping_info {
-> diff --git a/include/linux/init.h b/include/linux/init.h
-> index ee1309473bc6..c65a050d52a7 100644
-> --- a/include/linux/init.h
-> +++ b/include/linux/init.h
-> @@ -49,7 +49,9 @@
->
->  /* These are for everybody (although not all archs will actually
->     discard it in modules) */
-> -#define __init         __section(".init.text") __cold  __latent_entropy __noinitretpoline
-> +#define __init         __section(".init.text") __cold __latent_entropy \
-> +                                               __noinitretpoline       \
-> +                                               __no_sanitize_coverage
->  #define __initdata     __section(".init.data")
->  #define __initconst    __section(".init.rodata")
->  #define __exitdata     __section(".exit.data")
-> --
-> 2.34.1
->
+> > ---
+> > Cc: Marco Elver <elver@google.com>
+> > Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> > Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: <x86@kernel.org>
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Sami Tolvanen <samitolvanen@google.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Cc: <kasan-dev@googlegroups.com>
+> > ---
+> >  arch/x86/include/asm/init.h | 2 +-
+> >  include/linux/init.h        | 4 +++-
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+> > index 8b1b1abcef15..6bfdaeddbae8 100644
+> > --- a/arch/x86/include/asm/init.h
+> > +++ b/arch/x86/include/asm/init.h
+> > @@ -5,7 +5,7 @@
+> >  #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
+> >  #define __head __section(".head.text") __no_sanitize_undefined __no_stack_protector
+> >  #else
+> > -#define __head __section(".head.text") __no_sanitize_undefined
+> > +#define __head __section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
+> >  #endif
+> >
+> >  struct x86_mapping_info {
+> > diff --git a/include/linux/init.h b/include/linux/init.h
+> > index ee1309473bc6..c65a050d52a7 100644
+> > --- a/include/linux/init.h
+> > +++ b/include/linux/init.h
+> > @@ -49,7 +49,9 @@
+> >
+> >  /* These are for everybody (although not all archs will actually
+> >     discard it in modules) */
+> > -#define __init         __section(".init.text") __cold  __latent_entropy __noinitretpoline
+> > +#define __init         __section(".init.text") __cold __latent_entropy \
+> > +                                               __noinitretpoline       \
+> > +                                               __no_sanitize_coverage
+> >  #define __initdata     __section(".init.data")
+> >  #define __initconst    __section(".init.rodata")
+> >  #define __exitdata     __section(".exit.data")
+> > --
+> > 2.34.1
+> >
