@@ -1,65 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783942641F9;
-	Thu,  8 May 2025 09:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF7886352;
+	Thu,  8 May 2025 10:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746697366; cv=none; b=b2FJ15FbVL32fdSLvFHh0pJ9J+QVMQhBNRzydJFjyS4CYRiS7lTRMdRef1z7ZT7oJp4tR/dRwhYDzJFSdGDIyi+tYWY1ml83u11hQKxqHUplrN48hIPKr1/xCP5M6r9UnIm+a+kHlb9SmEt+RVzWUr59rgSvaiYDSSwklAIxmQ4=
+	t=1746699292; cv=none; b=Zkcpyi4/dJT7Ah1D/rzWtd55qjlxgSqySxolE0qRAYplb2sij5ubUEiuzkoxQko7n6tsRab7++PHB3bDLlriBQ9RIQWJcGEuXcZ/WYf34Bi3WT2XZ3Ms5FwB5Um6xiKYesOQW+rJYc5PYE7J5/5MYONQ77vtItAHK0iL4Rx2A1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746697366; c=relaxed/simple;
-	bh=H7pF8pup0KLFwqbZMxrCJyXkzmhQcxeYeiaFzud/wsY=;
+	s=arc-20240116; t=1746699292; c=relaxed/simple;
+	bh=PMqBEi28bw1727cbSbRMVXRM1MWzZoOLPDAhbfMUrI0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p56596FaUOl68FttI2l6Sif8aL+gqvswGOQR23ZnD8+5zo+Sj+aoIhJ1ubFfD+nGYZYANFQhLfO5as40BCGBkNQ2Lem1VRR0uvOdXcLMXXNJ82zO6BsVoxXWcwrvuE6x7W9mThSw8SfpPy62my5MbcqqmoP3Jma9hYYOaRonCkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M14sG9Fd; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=sINOtOhN6Lc1Q/LLWT8VU3IJo8ep9SEQq7Zw6nuuy9CwITEkIN26SuK5rjjcwouQVt9vg3feqNiODtMbI2NUR5D5ZlikVabsGOTc4Wb/hdojHIZz4E3IlJWP3KzsfgQfrRhEoPrd7yWYh6nwy9Iqc1ktGpqhXs3mqiPzzzQS3CQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TlnZTc4O; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M14sG9Fd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TlnZTc4O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746697364; x=1778233364;
+  t=1746699288; x=1778235288;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=H7pF8pup0KLFwqbZMxrCJyXkzmhQcxeYeiaFzud/wsY=;
-  b=M14sG9FdsxZ6vCPgiv3uetPkTDHnuherVHWP++w3sbHiyT7usItuzu6L
-   0V7wZHPJabqrHUHojbTBv3uVFcOxKQu+WCGhXbEEl7Yk0/a3QvQGxEfNR
-   cCi5VYjvPDUAok0S7+fWLFO6vE864tUrRr40+q4tcKTxTEOdRUss6BylM
-   T/rc7QuyAdGgydsy42k/nFfeDFKpoXme8YX1sDIe84mXbMtstT7JAAHv9
-   8teLFwkNsGjFC7SKd8peVnKms4CPX3d2BPJOJwibwnLnBNlIGolWilNjA
-   BMRQJMRJUvtYIBivxVw9QfR1r183a8dU0BU+oxIorM6Wc/i2VI+/GLAut
+  bh=PMqBEi28bw1727cbSbRMVXRM1MWzZoOLPDAhbfMUrI0=;
+  b=TlnZTc4OlUoDenB1MMouFCVzL15aRRvH/OZxTKNvyCEwlDCjiH32R4H7
+   kfNqAPSqG51WicqvXp2jT6YA08ZVAE07brxT0B13MAStx0rndgWIFytdF
+   GZwz6XXmCpf8bwz2Ew9Q/wWtwPr/DSPtPn7AnHPiP34/pGx0sL3Quxy/y
+   2kdLesR8PLSnxMNsX/LmNcf37btoiGSn+NWgBTaFsuLSFCJvuvTlIaf3l
+   G/68ody9JTsVVIKIQAZtSjimOG8fXWIIRA7jBAwDubvhrguM8imsXd+R3
+   c8CzaI2QjHXAzuJnCjfzSp75qD333P5yrFbP7rfXe7RDMiTGpReKOwQ3d
    A==;
-X-CSE-ConnectionGUID: f4pgH7BNQlCYjr1CPSVUYw==
-X-CSE-MsgGUID: zaA4A7SVS82jFXdxleUqJg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59100305"
+X-CSE-ConnectionGUID: RCeVXGU2QcapN1qLlVlwHA==
+X-CSE-MsgGUID: ln7PUUmcTfmAstjZjRnKTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48180686"
 X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="59100305"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 02:42:44 -0700
-X-CSE-ConnectionGUID: qXwDo7gpTReLzfRYELq/+A==
-X-CSE-MsgGUID: vZ2h6x+xS4KgOX5/yH/MVQ==
+   d="scan'208";a="48180686"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 03:14:47 -0700
+X-CSE-ConnectionGUID: SRXa/LJyS4eksKzRF5G2TA==
+X-CSE-MsgGUID: y5al3j0FSKmBtexD1DSqeA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="140278515"
+   d="scan'208";a="141145247"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 08 May 2025 02:42:41 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 08 May 2025 03:14:44 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uCxm3-000Apr-0g;
-	Thu, 08 May 2025 09:42:39 +0000
-Date: Thu, 8 May 2025 17:42:18 +0800
+	id 1uCyH3-000Ar9-2W;
+	Thu, 08 May 2025 10:14:41 +0000
+Date: Thu, 8 May 2025 18:13:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>, Chuck Lever <chuck.lever@oracle.com>,
-	Trond Myklebust <trondmy@kernel.org>
+To: Binbin Zhou <zhoubinbin@loongson.cn>,
+	Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anna Schumaker <anna@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>, linux-nfs@vger.kernel.org,
-	kernel-tls-handshake <kernel-tls-handshake@lists.linux.dev>,
-	keyrings@vger.kernel.org
-Subject: Re: [PATCH 2/2] nfs: create a kernel keyring
-Message-ID: <202505081720.vtCPwAc0-lkp@intel.com>
-References: <20250507080944.3947782-3-hch@lst.de>
+	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] mmc: loongson2: Add Loongson-2K SD/SDIO
+ controller driver
+Message-ID: <202505081845.0NQYX2nS-lkp@intel.com>
+References: <1308b6ca9ffc2674cc0f089cfd163da87e53a8cd.1746581751.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,138 +71,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250507080944.3947782-3-hch@lst.de>
+In-Reply-To: <1308b6ca9ffc2674cc0f089cfd163da87e53a8cd.1746581751.git.zhoubinbin@loongson.cn>
 
-Hi Christoph,
+Hi Binbin,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on linus/master v6.15-rc5 next-20250507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 9e12816f9a6195f1f5b7c5dc2e388c2458411b97]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/nfs-create-a-kernel-keyring/20250507-171041
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20250507080944.3947782-3-hch%40lst.de
-patch subject: [PATCH 2/2] nfs: create a kernel keyring
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20250508/202505081720.vtCPwAc0-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505081720.vtCPwAc0-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/dt-bindings-mmc-Add-Loongson-2K-SD-SDIO-eMMC-controller-binding/20250507-153435
+base:   9e12816f9a6195f1f5b7c5dc2e388c2458411b97
+patch link:    https://lore.kernel.org/r/1308b6ca9ffc2674cc0f089cfd163da87e53a8cd.1746581751.git.zhoubinbin%40loongson.cn
+patch subject: [PATCH v2 2/4] mmc: loongson2: Add Loongson-2K SD/SDIO controller driver
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20250508/202505081845.0NQYX2nS-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505081845.0NQYX2nS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505081720.vtCPwAc0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505081845.0NQYX2nS-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/nfs/inode.c:2584:17: error: call to undeclared function 'keyring_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2584 |                 nfs_keyring = keyring_alloc(".nfs",
-         |                               ^
->> fs/nfs/inode.c:2587:11: error: use of undeclared identifier 'KEY_POS_ALL'
-    2587 |                                      (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-         |                                       ^
->> fs/nfs/inode.c:2587:26: error: use of undeclared identifier 'KEY_POS_SETATTR'
-    2587 |                                      (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-         |                                                      ^
->> fs/nfs/inode.c:2588:11: error: use of undeclared identifier 'KEY_USR_ALL'
-    2588 |                                      (KEY_USR_ALL & ~KEY_USR_SETATTR),
-         |                                       ^
->> fs/nfs/inode.c:2588:26: error: use of undeclared identifier 'KEY_USR_SETATTR'
-    2588 |                                      (KEY_USR_ALL & ~KEY_USR_SETATTR),
-         |                                                      ^
->> fs/nfs/inode.c:2589:10: error: use of undeclared identifier 'KEY_ALLOC_NOT_IN_QUOTA'
-    2589 |                                      KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
-         |                                      ^
-   6 errors generated.
+>> drivers/mmc/host/loongson2-mmc.c:605:20: error: initializer element is not a compile-time constant
+           .regmap_config          = ls2k1000_regmap_config,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/loongson2-mmc.c:637:20: error: initializer element is not a compile-time constant
+           .regmap_config          = ls2k1000_regmap_config,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/loongson2-mmc.c:684:39: warning: shift count >= width of type [-Wshift-count-overflow]
+           ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+                                                ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
 
 
-vim +/keyring_alloc +2584 fs/nfs/inode.c
+vim +605 drivers/mmc/host/loongson2-mmc.c
 
-  2575	
-  2576	/*
-  2577	 * Initialize NFS
-  2578	 */
-  2579	static int __init init_nfs_fs(void)
-  2580	{
-  2581		int err;
-  2582	
-  2583		if (IS_ENABLED(CONFIG_NFS_V4)) {
-> 2584			nfs_keyring = keyring_alloc(".nfs",
-  2585					     GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
-  2586					     current_cred(),
-> 2587					     (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-> 2588					     (KEY_USR_ALL & ~KEY_USR_SETATTR),
-> 2589					     KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
-  2590			if (IS_ERR(nfs_keyring))
-  2591				return PTR_ERR(nfs_keyring);
-  2592		}
-  2593	
-  2594		err = nfs_sysfs_init();
-  2595		if (err < 0)
-  2596			goto out10;
-  2597	
-  2598		err = register_pernet_subsys(&nfs_net_ops);
-  2599		if (err < 0)
-  2600			goto out9;
-  2601	
-  2602		err = nfsiod_start();
-  2603		if (err)
-  2604			goto out7;
-  2605	
-  2606		err = nfs_fs_proc_init();
-  2607		if (err)
-  2608			goto out6;
-  2609	
-  2610		err = nfs_init_nfspagecache();
-  2611		if (err)
-  2612			goto out5;
-  2613	
-  2614		err = nfs_init_inodecache();
-  2615		if (err)
-  2616			goto out4;
-  2617	
-  2618		err = nfs_init_readpagecache();
-  2619		if (err)
-  2620			goto out3;
-  2621	
-  2622		err = nfs_init_writepagecache();
-  2623		if (err)
-  2624			goto out2;
-  2625	
-  2626		err = nfs_init_directcache();
-  2627		if (err)
-  2628			goto out1;
-  2629	
-  2630		err = register_nfs_fs();
-  2631		if (err)
-  2632			goto out0;
-  2633	
-  2634		return 0;
-  2635	out0:
-  2636		nfs_destroy_directcache();
-  2637	out1:
-  2638		nfs_destroy_writepagecache();
-  2639	out2:
-  2640		nfs_destroy_readpagecache();
-  2641	out3:
-  2642		nfs_destroy_inodecache();
-  2643	out4:
-  2644		nfs_destroy_nfspagecache();
-  2645	out5:
-  2646		nfs_fs_proc_exit();
-  2647	out6:
-  2648		nfsiod_stop();
-  2649	out7:
-  2650		unregister_pernet_subsys(&nfs_net_ops);
-  2651	out9:
-  2652		nfs_sysfs_exit();
-  2653	out10:
-  2654		return err;
-  2655	}
-  2656	
+   603	
+   604	static struct loongson2_mmc_pdata ls2k0500_mmc_pdata = {
+ > 605		.regmap_config		= ls2k1000_regmap_config,
+   606		.reorder_cmd_data	= loongson2_mmc_reorder_cmd_data,
+   607		.setting_dma		= ls2k0500_mmc_set_external_dma,
+   608		.prepare_dma		= loongson2_mmc_prepare_external_dma,
+   609		.release_dma		= loongson2_mmc_release_external_dma,
+   610	};
+   611	
 
 -- 
 0-DAY CI Kernel Test Service
