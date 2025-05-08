@@ -1,99 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D98A214A8A
-	for <llvm@lists.linux.dev>; Thu,  8 May 2025 21:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF001224FD;
+	Thu,  8 May 2025 22:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746740590; cv=none; b=RQZubkAHtl3Mo/ga24kw+6NTxWqMgA2Fr/4bQcI0DnhtEQ4qXAIwyDVveowoLnxcb9RqgUK6NVDsj+zd/zWfnfoVqiLVu6B6cNffHMAtTZ/LApLsTDUfFN7wzF7T7rfSeJ9/PPcUA8eEpMNS9K528fsFoZgFRXyoiuukFnqUhIY=
+	t=1746744477; cv=none; b=CPqpQlg3bkny35uP780Syp/7G4erxQSiR0r5w+a1oHGTEwHygxPCyopFt09AcoIwm0gKdrDGFnHIoAObkat7lV+EuBd+MTwVYP3f8o1WjFD2h1HlZtreVJxJDANXRHCAoBuukLn4eaHfpZobz0w/JW3U36i9ltgEesnT4RWtrWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746740590; c=relaxed/simple;
-	bh=cTu5oRmvcsJa3hojLcu6gHKXEx2wguBAPdHLfqZwEh4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mVPj4+5tHtyJfcykYmXQy1WVn2n+3GaCNntYz9RMa5qYCERmJlMzXYiOLcSkGoWSsWXBF7wKY65uRNFigGJozewehlxKiwPknr108Q4jGRwehvdk2RSlUbf3GM4DVITprF+fU8LutoslpfkoDZ5jLRw4YPq47/+UydgzH9rJPnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PbvhI8wQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746744477; c=relaxed/simple;
+	bh=K9RKEqzFTtllR796q7SanQZnve1DXiKY0QZo4VMInBg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fO1LRRO344higUk8tTElE5drtjWvTVRtInVGfpbgjOYbY9TIz2kKfSt/iLqdxvwid3vtqSN1+qJWa+BxQG/R9hvKnLPQRwQH+60V10+LUGv3geUnioajd+/TaZMB7fn6IfSgpLN9A7TThaqPfEurF1W8BBjsiznRHItGxYxQ1gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C5eh6MRv; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PbvhI8wQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746740587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HJvaLyaB5BYmMjodTeanZOYeEvJIhVC//hOenSpaHS4=;
-	b=PbvhI8wQGj2Tj0JcMKv3+I6PziNu2s5F6iule+fLu5/sys49ow5WqQPbO8eRTkx2ueTueo
-	UlhNCA+QfVk7haxCGEg6u4fUWJ6Icrda/FayEvll04Unc+T475tA8sYr/Cv81beVvoIS4n
-	mR495YWGWnsOFpghXSLOxwFRvh7+ybI=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-402-K7eaHw9POn60RG97AC5rSg-1; Thu,
- 08 May 2025 17:43:06 -0400
-X-MC-Unique: K7eaHw9POn60RG97AC5rSg-1
-X-Mimecast-MFC-AGG-ID: K7eaHw9POn60RG97AC5rSg_1746740585
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 44B501800446
-	for <llvm@lists.linux.dev>; Thu,  8 May 2025 21:43:05 +0000 (UTC)
-Received: from [172.20.110.75] (unknown [10.30.44.189])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1052B1953B85;
-	Thu,  8 May 2025 21:43:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
- upstream-mainline, acaa3e72)
-Date: Thu, 08 May 2025 21:43:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C5eh6MRv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746744476; x=1778280476;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K9RKEqzFTtllR796q7SanQZnve1DXiKY0QZo4VMInBg=;
+  b=C5eh6MRvxogiunpO6qq/rsp+g3WDDZTXtOYDHN/OPPp9uR/8Ghfz0m8h
+   +gZwMxwexXFcD3hJYumuP4kDXgE3BmYjUN7zUTRuessQn1Zoaff1ld8uB
+   aR6O3Atg4gh9+doXj8N6l58c6voYFQGbdWGnX/iEO/3Fa6ph+VncVp29V
+   rSXMDjRyrkqKaXcZQfIHn1z1W6xRUSwX8QgEpBbuRk4bvLO03HnQqs9Ix
+   kgu473dNCNcLBJ61ag8Tk+1kaNAI8XLtVa032rmEAokha3lRa1dCickHJ
+   xQAWmHhc8ASNFHK+OIhErUjWNmXdDhAbBzbloB/0RyIdatbge/EEeCZE2
+   w==;
+X-CSE-ConnectionGUID: FWm5KfDHSresxywCvrO47g==
+X-CSE-MsgGUID: KYIvLIehSbi6swWNfLvg1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="52207025"
+X-IronPort-AV: E=Sophos;i="6.15,273,1739865600"; 
+   d="scan'208";a="52207025"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 15:47:56 -0700
+X-CSE-ConnectionGUID: nZE5L5ggSOWMPSkOGJ8RKw==
+X-CSE-MsgGUID: Kw2y1zmOSdqhDbd7FCUvXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,273,1739865600"; 
+   d="scan'208";a="141345648"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 08 May 2025 15:47:54 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uDA1w-000BRJ-1i;
+	Thu, 08 May 2025 22:47:52 +0000
+Date: Fri, 9 May 2025 06:47:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 6484/9729] error[E0432]: unresolved import
+ `crate::clk`
+Message-ID: <202505090616.2BrTjCYF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <50877.125050817430600187@us-mta-402.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: eBY9yAKmzYYReSsITE0DzRkcV8f5tr7h3eekn4-HoKA_1746740585
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f48887a98b78880b7711aca311fbbbcaad6c4e3b
+commit: 4eb3c0cfd2b267d208286ba435f90535fdb08b9f [6484/9729] rust: opp: Add initial abstractions for OPP framework
+config: x86_64-buildonly-randconfig-003-20250509 (https://download.01.org/0day-ci/archive/20250509/202505090616.2BrTjCYF-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505090616.2BrTjCYF-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505090616.2BrTjCYF-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'vfio-v6.15-rc6' of https://github.com/awilli=
-am/linux-vfio
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 20.1.2
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+>> error[E0432]: unresolved import `crate::clk`
+   --> rust/kernel/opp.rs:12:5
+   |
+   12 |     clk::Hertz,
+   |     ^^^ could not find `clk` in the crate root
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1808157571
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1808157571-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
