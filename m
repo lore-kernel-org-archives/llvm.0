@@ -1,60 +1,41 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA67B28313E;
-	Thu,  8 May 2025 16:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C295672624;
+	Thu,  8 May 2025 16:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746721226; cv=none; b=UMmtjUOKdWpvpkS02daqrWL1GCF3S2x+POD6oYcgs4d+MDtcgDB89eyd5ln+8mekV6wRV6U5PdSum89xeoO56iwabjJy1xI79LEL4jria2+nbM0Ume4wAnWgn0kvPTdVaBu9Eua8i9hdqL2miM37cE+KlOVZJX2hvNsnM/IRkBo=
+	t=1746721999; cv=none; b=D2stcuRUuQDw5XbIEQifmSSUmQkm+iJb6WA7eSo4KiH19UcTGyzc4G8EEZ4J7Z4jqOXUcJrJ5WiRVOnjFmPhHcDlKGlNdVrdslQj2w3Sht7FXI55jz32a1pRVehDfFgjUJ3eIKF10+pc6bw6QbmmwbaxZ7rnwf4VusXIwhLbh9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746721226; c=relaxed/simple;
-	bh=FwoSkUBSJYB9+k3u1OJ8N4yNvaswt3iX28KiEnbUyZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=A/Pj+0c+1k+YeWhY3/EDgAwzhca3gF+Rzwkk8W365wAzU0tX8K0Q08iiSY+B2XoSBXFmqfcmF5hIPzAJS3rRDANAX4p4gKn0M7TXFgPSVF/lSAh86OLwBZ03hKa0xOXXDs7kRhRIeNtnudggiN55Kop8pe8jQtxySQXl+sythcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C87eObR3; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746721999; c=relaxed/simple;
+	bh=PYSdcj57vJVlGHaQhVhkwKge5Y4uulI4s6/PntA46Qk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aU0NiInEDfnI9z+VcVHRCcb+4Ju79jMADdBf5s724QATioE/aU/mHIUQpxRUhDZsQyX0AiuOyVKLGX1NsFsEJ6E1I+AJLM0m3ibHvGHPOCw2+V80Nx2jHxcuouPAmkbcHTyDdjO2mA8aNk2z5qXiF2MPRVf2MY4dOJGH8gut8WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRJzsZ1O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C87eObR3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746721225; x=1778257225;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FwoSkUBSJYB9+k3u1OJ8N4yNvaswt3iX28KiEnbUyZ4=;
-  b=C87eObR3DyPo2mnNa1SSwI0usus7oqO64BGABFdj+ZOMrD0aHwviJ9VW
-   zyj8T57U4xnEkdiIzDLbq36Au/tHSID0haq7eQX16CpfZxwcU9ORHjJrH
-   BHNebGo96qyzJqjgv1cQOL4GWIhB+5wfj1XhGryXGklBBQh+QcjSiPgVl
-   652RWcwB9sCE3v56eic+vSfSsmgijLwZLhf1EZbUwED9SVAfM9OH8RPnx
-   hhYcveNtIYyFxJ8CiQcyV0OFBwnGVlbk8jri2aa8A03LfN9XXWVPBnr1J
-   g7zGFQrhu3Oq30Pcdd5SrZnQnsqquzcaVjsdtoY9tiMrjAVnSDMxUR2Hq
-   Q==;
-X-CSE-ConnectionGUID: 4FiYt8QUSOuSId//32gaDA==
-X-CSE-MsgGUID: djsWENx8Tr+gy7udUZ+3ZA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="59863414"
-X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
-   d="scan'208";a="59863414"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 09:20:20 -0700
-X-CSE-ConnectionGUID: qFPGCJq/R5qdx5LdXt2XJA==
-X-CSE-MsgGUID: 5vWi38+KTU6fUep0fxVIIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
-   d="scan'208";a="136056693"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 May 2025 09:20:19 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uD3yq-000B9v-1k;
-	Thu, 08 May 2025 16:20:16 +0000
-Date: Fri, 9 May 2025 00:19:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:for-kernelci 15/18]
- arch/x86/boot/startup/sev-startup.c:141:15: error: '__section__' attribute
- only applies to functions, global variables, Objective-C methods, and
- Objective-C properties
-Message-ID: <202505090001.FS7smjqJ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRJzsZ1O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E52EC4CEE7;
+	Thu,  8 May 2025 16:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746721998;
+	bh=PYSdcj57vJVlGHaQhVhkwKge5Y4uulI4s6/PntA46Qk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nRJzsZ1OdT1EjkPOLAzmBVQmg6M8/OGj1D98vy1njEqXYgMktTNVDUC0mVk/Lf5ix
+	 KJMUH0aoAP4JvpqJTjemGsr7ru9Arqf7qeqyMk+HLjEc+833FOrp4bkrbInQl4K2fT
+	 zodoj99SJ91dNtPA+jL4ieGc7KihaGg/2d/M8lkti4YIwVILInzRv8dQrqeo9wYAZF
+	 tvdoUnuaqUfTfgO45MpNr2PTKZl8cIFisJrGGA9wtAmjFsSxjZi68PKaym6U8QB3P5
+	 FF7JCrtX0QcvdrBOtylj9ZnMurmMEBGdCP/hPGD9tq7R8iLwW35p3hOz+Zo4Z6cqdf
+	 6KJMPabH663jw==
+Date: Thu, 8 May 2025 17:33:14 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Xi Ruoyao <xry111@xry111.site>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [linux-next:master 3551/8679]
+ arch/riscv/kernel/compat_signal.c:220:28: error: use of undeclared
+ identifier 'compat__vdso_rt_sigreturn_offset'
+Message-ID: <20250508163314.GB834338@ax162>
+References: <202505071542.jdBqsSPB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,83 +44,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202505071542.jdBqsSPB-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   f309d115ff0674e0ce4fe010e587d40bfb5b6e4e
-commit: 54ae382c92b4521365fde402a792038b968188f8 [15/18] x86/boot: Move startup code out of __head section
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250509/202505090001.FS7smjqJ-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505090001.FS7smjqJ-lkp@intel.com/reproduce)
+On Wed, May 07, 2025 at 03:31:13PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   0a00723f4c2d0b273edd0737f236f103164a08eb
+> commit: 89079520cef65d6da1e864eab4464effe5396e23 [3551/8679] RISC-V: vDSO: Wire up getrandom() vDSO implementation
+> config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250507/202505071542.jdBqsSPB-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071542.jdBqsSPB-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505071542.jdBqsSPB-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> arch/riscv/kernel/compat_signal.c:220:28: error: use of undeclared identifier 'compat__vdso_rt_sigreturn_offset'
+>      220 |         regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
+>          |                                   ^
+>    arch/riscv/include/asm/vdso.h:29:42: note: expanded from macro 'COMPAT_VDSO_SYMBOL'
+>       29 |         (void __user *)((unsigned long)(base) + compat__vdso_##name##_offset)
+>          |                                                 ^
+>    <scratch space>:315:1: note: expanded from here
+>      315 | compat__vdso_rt_sigreturn_offset
+>          | ^
+>    1 error generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505090001.FS7smjqJ-lkp@intel.com/
+I think this happens because the compat vDSO errored earlier, it should
+be fixed with
 
-All error/warnings (new ones prefixed by >>):
+  https://lore.kernel.org/20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org/
 
->> arch/x86/boot/startup/sev-startup.c:141:15: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-     141 | static struct __init cc_blob_sev_info *find_cc_blob(struct boot_params *bp)
-         |               ^
-   include/linux/init.h:52:17: note: expanded from macro '__init'
-      52 | #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-         |                         ^
-   include/linux/compiler_attributes.h:321:56: note: expanded from macro '__section'
-     321 | #define __section(section)              __attribute__((__section__(section)))
-         |                                                        ^
->> arch/x86/boot/startup/sev-startup.c:141:15: warning: '__cold__' attribute only applies to functions [-Wignored-attributes]
-   include/linux/init.h:52:41: note: expanded from macro '__init'
-      52 | #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-         |                                                 ^
-   include/linux/compiler_types.h:113:34: note: expanded from macro '__cold'
-     113 | #define __cold                          __attribute__((__cold__))
-         |                                                        ^
-   1 warning and 1 error generated.
-
-
-vim +/__section__ +141 arch/x86/boot/startup/sev-startup.c
-
-   127	
-   128	/*
-   129	 * Initial set up of SNP relies on information provided by the
-   130	 * Confidential Computing blob, which can be passed to the kernel
-   131	 * in the following ways, depending on how it is booted:
-   132	 *
-   133	 * - when booted via the boot/decompress kernel:
-   134	 *   - via boot_params
-   135	 *
-   136	 * - when booted directly by firmware/bootloader (e.g. CONFIG_PVH):
-   137	 *   - via a setup_data entry, as defined by the Linux Boot Protocol
-   138	 *
-   139	 * Scan for the blob in that order.
-   140	 */
- > 141	static struct __init cc_blob_sev_info *find_cc_blob(struct boot_params *bp)
-   142	{
-   143		struct cc_blob_sev_info *cc_info;
-   144	
-   145		/* Boot kernel would have passed the CC blob via boot_params. */
-   146		if (bp->cc_blob_address) {
-   147			cc_info = (struct cc_blob_sev_info *)(unsigned long)bp->cc_blob_address;
-   148			goto found_cc_info;
-   149		}
-   150	
-   151		/*
-   152		 * If kernel was booted directly, without the use of the
-   153		 * boot/decompression kernel, the CC blob may have been passed via
-   154		 * setup_data instead.
-   155		 */
-   156		cc_info = find_cc_blob_setup_data(bp);
-   157		if (!cc_info)
-   158			return NULL;
-   159	
-   160	found_cc_info:
-   161		if (cc_info->magic != CC_BLOB_SEV_HDR_MAGIC)
-   162			snp_abort();
-   163	
-   164		return cc_info;
-   165	}
-   166	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
