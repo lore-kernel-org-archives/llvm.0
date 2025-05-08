@@ -1,41 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C295672624;
-	Thu,  8 May 2025 16:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4680578F32;
+	Thu,  8 May 2025 16:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746721999; cv=none; b=D2stcuRUuQDw5XbIEQifmSSUmQkm+iJb6WA7eSo4KiH19UcTGyzc4G8EEZ4J7Z4jqOXUcJrJ5WiRVOnjFmPhHcDlKGlNdVrdslQj2w3Sht7FXI55jz32a1pRVehDfFgjUJ3eIKF10+pc6bw6QbmmwbaxZ7rnwf4VusXIwhLbh9Q=
+	t=1746722593; cv=none; b=FauLUuMc3th7jQbH1eJPBVX82NHLPAVATTVHl740gBzUvhkb1Bfh7zPq7pyTfbe8tNS5ji+DpPZJomWsx2IW64XQ49CDkeSFgt+H2k3OJ5P8hNT8blyvB7+BmSHZ7DaZi1wGsEuK2H2H7fU4p8veVs7PD7sdzLvkmnTLYELcYe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746721999; c=relaxed/simple;
-	bh=PYSdcj57vJVlGHaQhVhkwKge5Y4uulI4s6/PntA46Qk=;
+	s=arc-20240116; t=1746722593; c=relaxed/simple;
+	bh=YnMHvZ7LtKUPsdXREYb6lUhWJXrjWM660J4wNG5LMiM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aU0NiInEDfnI9z+VcVHRCcb+4Ju79jMADdBf5s724QATioE/aU/mHIUQpxRUhDZsQyX0AiuOyVKLGX1NsFsEJ6E1I+AJLM0m3ibHvGHPOCw2+V80Nx2jHxcuouPAmkbcHTyDdjO2mA8aNk2z5qXiF2MPRVf2MY4dOJGH8gut8WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRJzsZ1O; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=r2BZuWMNi3V8UwWFX89IVWxc6x2u+mpLhBkU5qYBpyoNEqn3xUlxThJsNrY31yvekIm/1mFe6IQ3u5wD2H4094jlyclhyzfz3vp+Bm+7aHmyUNMAqzVgojYKjgUfNr3IBuatqTSfKQ33Lh7RmXelWkTUNxZoTvgptxSX+rm5G1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jt/ZE1v7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRJzsZ1O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E52EC4CEE7;
-	Thu,  8 May 2025 16:33:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jt/ZE1v7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B8EC4CEE7;
+	Thu,  8 May 2025 16:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746721998;
-	bh=PYSdcj57vJVlGHaQhVhkwKge5Y4uulI4s6/PntA46Qk=;
+	s=k20201202; t=1746722592;
+	bh=YnMHvZ7LtKUPsdXREYb6lUhWJXrjWM660J4wNG5LMiM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nRJzsZ1OdT1EjkPOLAzmBVQmg6M8/OGj1D98vy1njEqXYgMktTNVDUC0mVk/Lf5ix
-	 KJMUH0aoAP4JvpqJTjemGsr7ru9Arqf7qeqyMk+HLjEc+833FOrp4bkrbInQl4K2fT
-	 zodoj99SJ91dNtPA+jL4ieGc7KihaGg/2d/M8lkti4YIwVILInzRv8dQrqeo9wYAZF
-	 tvdoUnuaqUfTfgO45MpNr2PTKZl8cIFisJrGGA9wtAmjFsSxjZi68PKaym6U8QB3P5
-	 FF7JCrtX0QcvdrBOtylj9ZnMurmMEBGdCP/hPGD9tq7R8iLwW35p3hOz+Zo4Z6cqdf
-	 6KJMPabH663jw==
-Date: Thu, 8 May 2025 17:33:14 +0100
+	b=Jt/ZE1v7/rWv43PyOIt/WBf/KQULNFAOI4Rya7qDVuMezC3AyqjYcPD5JW0xgQP0o
+	 tYWA7Exmd9cf+QbolYjp3YZVM7rPCDMiHvUdlCI/gdqucD6OZZzTfu5v24AEHo+LzB
+	 HxOVgVf36Cd6fXU5Qk9c1T5BkaaOPwszoIKZYuceoiEv0mcjWYLs4L+11Ocj2yCLta
+	 3ea3S983RtuSzkzfEY8OoKHZe/lvbpm1wsVF3eAK+y9gxftWeS46hNYr3tm4V77+jH
+	 M4jasLzFrWb7T119WVZDnGnkaL5S5xkjHFAdY/TBGCTl/uOwFa+jpRwbO22nvLnkdQ
+	 VcYWO6vG+lXog==
+Date: Thu, 8 May 2025 17:43:08 +0100
 From: Nathan Chancellor <nathan@kernel.org>
 To: kernel test robot <lkp@intel.com>
-Cc: Xi Ruoyao <xry111@xry111.site>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [linux-next:master 3551/8679]
- arch/riscv/kernel/compat_signal.c:220:28: error: use of undeclared
- identifier 'compat__vdso_rt_sigreturn_offset'
-Message-ID: <20250508163314.GB834338@ax162>
-References: <202505071542.jdBqsSPB-lkp@intel.com>
+Cc: Marco Crivellari <marco.crivellari@suse.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>
+Subject: Re: [linux-next:master 5904/8679] <instantiation>:7:11: error:
+ expected an immediate
+Message-ID: <20250508164308.GC834338@ax162>
+References: <202505071331.Z0N2eSkr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,38 +45,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202505071542.jdBqsSPB-lkp@intel.com>
+In-Reply-To: <202505071331.Z0N2eSkr-lkp@intel.com>
 
-On Wed, May 07, 2025 at 03:31:13PM +0800, kernel test robot wrote:
+On Wed, May 07, 2025 at 01:49:02PM +0800, kernel test robot wrote:
 > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 > head:   0a00723f4c2d0b273edd0737f236f103164a08eb
-> commit: 89079520cef65d6da1e864eab4464effe5396e23 [3551/8679] RISC-V: vDSO: Wire up getrandom() vDSO implementation
-> config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250507/202505071542.jdBqsSPB-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071542.jdBqsSPB-lkp@intel.com/reproduce)
+> commit: 56651128e2fbad80f632f388d6bf1f39c928267a [5904/8679] MIPS: Fix idle VS timer enqueue
+> config: mips-gpr_defconfig (https://download.01.org/0day-ci/archive/20250507/202505071331.Z0N2eSkr-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071331.Z0N2eSkr-lkp@intel.com/reproduce)
 > 
 > If you fix the issue in a separate patch/commit (i.e. not just a new version of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505071542.jdBqsSPB-lkp@intel.com/
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505071331.Z0N2eSkr-lkp@intel.com/
 > 
 > All errors (new ones prefixed by >>):
 > 
-> >> arch/riscv/kernel/compat_signal.c:220:28: error: use of undeclared identifier 'compat__vdso_rt_sigreturn_offset'
->      220 |         regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
->          |                                   ^
->    arch/riscv/include/asm/vdso.h:29:42: note: expanded from macro 'COMPAT_VDSO_SYMBOL'
->       29 |         (void __user *)((unsigned long)(base) + compat__vdso_##name##_offset)
->          |                                                 ^
->    <scratch space>:315:1: note: expanded from here
->      315 | compat__vdso_rt_sigreturn_offset
->          | ^
->    1 error generated.
+> >> <instantiation>:7:11: error: expected an immediate
+>     ori $26, r4k_wait_idle_size - 2
+>              ^
+>    <instantiation>:10:13: error: expected an immediate
+>     addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                ^
+>    <instantiation>:10:29: error: expected an immediate
+>     addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                                ^
+> >> <instantiation>:7:11: error: expected an immediate
+>     ori $26, r4k_wait_idle_size - 2
+>              ^
+>    <instantiation>:10:13: error: expected an immediate
+>     addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                ^
+>    <instantiation>:10:29: error: expected an immediate
+>     addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                                ^
 
-I think this happens because the compat vDSO errored earlier, it should
-be fixed with
+I do not see this with tip of tree LLVM. It seems this was only recently
+supported in the integrated assembler:
 
-  https://lore.kernel.org/20250423-riscv-fix-compat_vdso-lld-v2-1-b7bbbc244501@kernel.org/
+https://github.com/llvm/llvm-project/commit/b65e0947cade9bd39036a7700b54c1df4ec00756
+
+If it is not easy to work around, we can probably just leave it broken
+and tell anybody who notices to upgrade their compiler.
 
 Cheers,
 Nathan
