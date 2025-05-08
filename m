@@ -1,111 +1,99 @@
-Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B5822129F;
-	Thu,  8 May 2025 23:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCBF22D78C
+	for <llvm@lists.linux.dev>; Thu,  8 May 2025 23:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746747624; cv=none; b=jhWBFUM9zIU6JT78O2eJVvJFwwwFg2PhVuszA1MTf60gfR+52Nv+SBSsorO/FaPfctMM/bMEIfXdXFu4dYXaZQHwIF1JbTEa2OSbawWiVrPJCQ0cMWh69Bktn1RVA3OXS3OVGgdVhTV1Sosjyvg6Bd1iMNzT1PKG2Q8e/M0SSyU=
+	t=1746747730; cv=none; b=edcHo4BzoL+PgA6rjZj0keAsOz2sAAI82PNiaQq+sw5r4wYP4pRJ8QWuTrzTcAV9lJbWdvWUWhVTJjE3H8zu/J5+o4nis2FgLJ10eY5D6HInc7k4894F9UreXY2TIr0mWluOVisJiqx1/3Oj5I1uXV3k95y/XWT76+lDpd+3jg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746747624; c=relaxed/simple;
-	bh=UUWwBn0rncdSTvqDy6og+SIyhjFFbURwK0mnp5D1754=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LBpgGYJYqBPYIZYxC0Gba9oep1J5hIhMAv41/DGQcuswrywTEPg9aN8h+F0TIgpYcxGXRiAud5UpNYuXuUxp/vDyNOeOPJ+Wn8jIvIB7zzluBsIvrPBWmVqnl3ZeMtIB6RJyrEpS1gyM0XLQCTVQ9egjUSmqxuVm5dlmqsyNgL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GshmrQna; arc=none smtp.client-ip=209.85.218.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746747730; c=relaxed/simple;
+	bh=09YVLbyo9KwNZrWmbD5Ua1zn9xs89/kupG4sTwq072g=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XC/I0wh/By8859Jgoy96iH27IUf6IDqTj4h4BoPSXrn9BQqyc8vl0s/2eLLTVxCs+VVYJjLz5tiivVLALBo2xjjRMq5PiOVmN3TRhIz/RcCRwmT6k9UIMKGzMWZvEHnFKzu37J1P2WYRQ85+yAJ+REC3VdPlJbkgQptJGhVCZLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g4zaaCe3; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GshmrQna"
-Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-ace333d5f7bso259090766b.3;
-        Thu, 08 May 2025 16:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746747621; x=1747352421; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4XCAHAZpzbjMjFqk38iU3CCdfAml8ce6xfHMngiKe84=;
-        b=GshmrQna2SeM+fv70jzymKpO7DG7GJmOhHZjF1WGSeg6MOHIzXII3kNFD/cZFNY/YE
-         ESWnih9KX5I/D3LG1SE57P2qh7IZNcW/i4g4zOucaYlhzxVMiKpoNR15e2B3DmTFJo3w
-         DS32K4IC7QnCNdfwq0KAIRxsWCorr+Wfq6D6levVdIWWjZAe/xyrlNvYbR9nnhVM/0h2
-         qg8GjcNynw8Ywei1OdygfNsf1McfGtLrAO7iGaZIjFua9cyrLSll32XlsMQo9ddQmy1m
-         jNgN/LVLKPOqS8gatl6icly55f1AVDNNLwUgXFqGuUs88oe1B9oy44oH+ksPeeIKGmtO
-         njjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746747621; x=1747352421;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4XCAHAZpzbjMjFqk38iU3CCdfAml8ce6xfHMngiKe84=;
-        b=vVkgbz1jMSWwsM1ZCvSyQpySUIJoN/QCdkXoVFwUa6PWN17Ju7dUJjN+cI83rq4sYx
-         u5sVyVWP29Cfz7HdKG22w7IFVh4x1dwvgkLkb+8uIkcDYGpk64RpRGvB96An4P/GKEsp
-         ECBXYg7LO0de1AJjeRMVUgKym4SqwuFh3uhB0lBNaSSqDQZUAmkWDZsbELtoOBQeHnCH
-         i5z0E5ilSvhSiPZRc0sCWVAahnlzHEEtBa3bFv9LXosQod62f5zwtZwWx/hPSNM5afQk
-         kG2FAAqNYz0rduc5kJe85AyBCOOyo9Ft7Sn3ro+Tu+WJ2G9vSEq5mgqfoppbEdvGe4WG
-         ibQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJxU5N+2NemdfOur2pKME8Em9d2ETABxnFt197DZe9DdoDMX8O14K3+Pc8TufylMaAQH3EeYuo0uEZuGAEJg==@lists.linux.dev, AJvYcCXhm8EMkwT4e//bkDqTR0e8sYeSfym54R9c1kJYCGAFCAlWIAaIAYvj+BFetAb3amcZBRVn@lists.linux.dev
-X-Gm-Message-State: AOJu0YzWbzaSpDU99jRZuAIrpftyJZiz5t7OeJA/8ro8XSGJGxEuRFX7
-	w1etWtVkKokd5/+zJohzV/w1PSTxs4BqzYjN7upy6z+jKcuE/mgbFH1wu3KfxPaDynIvAklEfS1
-	29U+47iaCA2XaerTg3UUSyZ+prGY=
-X-Gm-Gg: ASbGncvo24WTVwvt747UwcUKYrAaIEeiURi+/05PtJFmwpbrZflSTapvdElLXiPOZ8B
-	8pcuq6DdDdES8unki6jURvdVJVDhej5e/YF6wsGBDdrv5RvBSka/CgAfkItt1lhpwfxIV8NTsnX
-	M94deHupU2+ncYMOlD4lF9zNQFaUsEtCO6OuoYCrGQmxtunBdSwnX0nKnKiO8fYBPiAzU=
-X-Google-Smtp-Source: AGHT+IHApQ5OFCfaQS1mUn74daoOJX19yzwZ3sgdO7xX9LpbyPb3Jm1cvNGKxG3HLWErcANGLvfkwfd4xsmogUZmAeU=
-X-Received: by 2002:a17:907:8b8b:b0:ace:6fa7:5ed3 with SMTP id
- a640c23a62f3a-ad218ea5b8emr158033066b.4.1746747621004; Thu, 08 May 2025
- 16:40:21 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g4zaaCe3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746747727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FqULkA9q1j2yoI6UDkOgzBFqyrCUQaN8mUUun6Dm0nQ=;
+	b=g4zaaCe3bqbU+rdK92AmFAm8H5yh60aZGx+GgHFQIEcKiCZ/mXVL1Ke0cUhxdJCC2UbXYr
+	rp1I8yn3rfdajtShWuD3PiUOz5yqP+fVeSH2uByDcLa6a2VLxZGIcY+AYDbHp6Nz4s28+X
+	RpCk/sg+kF5MNDEk+EMCznLe4ai2LLw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-617-k7NrTSnxNJOxrwC1LJb_3g-1; Thu,
+ 08 May 2025 19:42:05 -0400
+X-MC-Unique: k7NrTSnxNJOxrwC1LJb_3g-1
+X-Mimecast-MFC-AGG-ID: k7NrTSnxNJOxrwC1LJb_3g_1746747725
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E8FD8180056F
+	for <llvm@lists.linux.dev>; Thu,  8 May 2025 23:42:04 +0000 (UTC)
+Received: from [172.20.110.75] (unknown [10.30.44.189])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E2DB30001AA;
+	Thu,  8 May 2025 23:42:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
+ upstream-mainline, 9c69f888)
+Date: Thu, 08 May 2025 23:42:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000adb08b061413919e@google.com> <681c597f.050a0220.a19a9.00bd.GAE@google.com>
-In-Reply-To: <681c597f.050a0220.a19a9.00bd.GAE@google.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 9 May 2025 01:39:44 +0200
-X-Gm-Features: AX0GCFuVY9CBMsQxhMgZpZ1X-fEBQ2fptYrxdbELCJogxYT5Wfp2wwF916mNEpY
-Message-ID: <CAP01T7525zDpL8nhsLLULCK1Qzw8wVCmHuCX_81Z_HaQAs-q4g@mail.gmail.com>
-Subject: Re: [syzbot] [bpf?] possible deadlock in trie_delete_elem
-To: syzbot <syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, elic@nvidia.com, haoluo@google.com, 
-	hdanton@sina.com, jasowang@redhat.com, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	lkp@intel.com, llvm@lists.linux.dev, martin.lau@linux.dev, 
-	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, 
-	michal.kukowski@infogain.com, michal.switala@infogain.com, mst@redhat.com, 
-	netdev@vger.kernel.org, norbert.kaminski@igglobal.com, 
-	norbert.kaminski@infogain.com, norkam41@gmail.com, 
-	oe-kbuild-all@lists.linux.dev, parav@nvidia.com, rostedt@goodmis.org, 
-	sdf@fomichev.me, sdf@google.com, song@kernel.org, songliubraving@fb.com, 
-	syzkaller-bugs@googlegroups.com, wojciech.gladysz@infogain.com, yhs@fb.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <62991.125050819420502822@us-mta-617.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: xHxXDTpPaRc4WaB9d7g_mIcod7-9Qe_y5Q2YTrOtlEQ_1746747725
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-#syz fix: bpf: Convert lpm_trie.c to rqspinlock
+Hi, we tested your kernel and here are the results:
 
-On Thu, 8 May 2025 at 09:21, syzbot
-<syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 47979314c0fe245ed54306e2f91b3f819c7c0f9f
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Date:   Sun Mar 16 04:05:37 2025 +0000
->
->     bpf: Convert lpm_trie.c to rqspinlock
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140598f4580000
-> start commit:   c2933b2befe2 Merge tag 'net-6.14-rc1' of git://git.kernel...
-> git tree:       net-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d033b14aeef39158
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9d95beb2a3c260622518
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108e1724580000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177035f8580000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: bpf: Convert lpm_trie.c to rqspinlock
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'bcachefs-2025-05-08' of git://evilpiepirate.=
+org/bcachefs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1808271334
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1808271334-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
