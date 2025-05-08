@@ -1,121 +1,125 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9DC27E1D0;
-	Thu,  8 May 2025 18:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F73B2222DD;
+	Thu,  8 May 2025 18:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746727230; cv=none; b=Ndg01qai3F1/g5YcFtmrYZkxVqbpKN/jqi3zzJhedDCmnsL6958rsrhsTUKAC0Py1Ii4MdYFYbLrt3pxP8lkj25vmvF1sbFcDs4VBorhM2deYUqEXAscKD1IlpNy4tCe9tToNIvu9yaybubn2SC1UZDsK1qKeosv8gGZ8uejGBQ=
+	t=1746729455; cv=none; b=PQU0G56NLP7CT1n1HrqB38JmA1uI5OqRFj1M8NhPBZoB73yBS7h+NtWvviwijvJTfnMNNXY7m4BrERGDIn8jFVO3HW4nukzFQKSQSJ5Metdg8jy3fyKi60e9WKJ5l5Hadgjn65UI80RKQ/84nZDi2yBSUu9mJzhlpbx9J6lIOJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746727230; c=relaxed/simple;
-	bh=2OWGWC+dP0dKojtoPDjkn+UmT2pXXCdVjZjDutcVEEc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HIavvwSvS1nEilAerVCHd6v9yS6r0muzP+iUz6XZgpVw4UDWJAIaD4miRr8pA1zGkcQO17DbF/YQGTE9XZib402iCFW/EqNTWQBo5iGA0yKSZgxZjvuOAgOiqVd41QMn+kxFl/vPiVad4nlFLP/7ow5wft3ObS9FSwKoM8iLWrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KaGZuEY8; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746729455; c=relaxed/simple;
+	bh=EoIQ+cqAfiB7251AtfH+yl08bQmIgz6Fipk58bk8xJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WR+HzljlMJK0Ksq60Ot+HeWz+tIkmyMguBftzY8XuF/xqvu9O+gpMR7wZR7Q4DTR1QeP0TsSM4M2xq9MjleKhW/U4eNnhhxZIFmEJsBnzb3FJSdqibB6TF9hQrgcU2I4AMJAnuOMn6BAPq7uRIa5I+ACc/Uh4bLknkoBPuJf758=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lLz0ueFf; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KaGZuEY8"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cf680d351so13847115e9.0;
-        Thu, 08 May 2025 11:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746727227; x=1747332027; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s8OzbUVZza1sG9/bcAYaixiPxApsdaZfuysNbzaB9K0=;
-        b=KaGZuEY8KWVXxfh5P5Fvzl7mE4sIf3FmF7vv1dgxEQrAsZ/DoBDDXToLem/fxRgoJ2
-         71hV2Txwtbe2t6n8CXf506NJUQPz0oc10AXeeRyPTLF9IZrffEx24HdFKA7rk84WS7DC
-         mKsW/atdIDYWMXx5VjQdbm0SRc+UGyVYYZFe5u/nesNTP2KUV5O6sd5Usqo5YghEFH+x
-         xW1Cs46Dtj4Az8IT7a5j0ppVN1kPCkII1sfhKeu9SBN3Ppy6ZHrv5Jkq99UTGbOrYGPB
-         QNujfRU3wbnm8vW+3MlThjK5we3/9bKTN8hw/fC5/4P68i+Gfs0x61BkG7cKbiduMzW2
-         zf9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746727227; x=1747332027;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s8OzbUVZza1sG9/bcAYaixiPxApsdaZfuysNbzaB9K0=;
-        b=HZvkygEZvvrBBYv2DSxZFKfkgLC2fjBO+Z9Dlq6Er7U4e+7R1kdyy5omjz8Sy/RTob
-         PESaqElSdtwto+3VvIlNPv4hdgXc52ImuGKhHrDD96+iDyc22H74vc23dMX7sAaPddIB
-         oHFJRzq7JvV8vWoqMV0hwSymYKiWJ5jyqTfLnOHSfGXw5Qf9Gzaa2dA2CNckuuJBep4A
-         CsFbcBTp2t+YfUyF9U5HLfyhq5zjuB3sMNNEUxY8YEmgOukngAf0UaZzDPbfc+OXqScj
-         c9Ol2o4KVNSeJlz1jDYevYp7oPRAVecuJyMDDGHk8/2fXV7txoeJqBDG66pP97k7wNmz
-         hteQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUIGM8AzZ4W7UMJ+CJAstDS/oQDnLL1IB3W1FWxRRC4ss00V8G2RsHFa4DB5PpSL5XOokwe@lists.linux.dev, AJvYcCXkxkgy9KeZ26jBhdosniGawHSiRHyi6win0U44l+4ZpOx+eVBhDswkiTC/PgLEnQ4swq81/GXa5G6zMc78rw==@lists.linux.dev
-X-Gm-Message-State: AOJu0YxA7v+ejmcyr48mkY61gG/2VnDBANGZ5+ho4z1eywwTXs5fOgea
-	1kT4kp0syf78yy0bSgHTCa6u1kLcKe15CQPclnc/oEsk/Hx8QwpL1SYFvIj8gg23nGmjaZaGKHF
-	vt6wexkXMncaGtCIc/gknluR5XEg=
-X-Gm-Gg: ASbGncsNtaiHAicihprjPoru7X7QSJPLzSsl/k4vgw2QHK0SclXSoApHczt89coealV
-	Jk4cJihipRyqedEUoGCc+dNKxzICAO/Abyo8VZ1z5zyx138Obtupem7V7xLqp+UZZTcLMEBGi0P
-	itj+ZrdsHjh8najhNmP3AW4Zpz40TcLAJOCg/QKQ==
-X-Google-Smtp-Source: AGHT+IEutKBReXc/JF0L32VsIMrtixijgJVzJAL0lR8pjAQZNt/yCBZuqbqZ6pmFsmAhXU/Aot3H54T+8SiQBmMlyjU=
-X-Received: by 2002:a05:6000:144f:b0:39c:30f7:b6ad with SMTP id
- ffacd0b85a97d-3a1f6c984a1mr218850f8f.18.1746727226602; Thu, 08 May 2025
- 11:00:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lLz0ueFf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746729453; x=1778265453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EoIQ+cqAfiB7251AtfH+yl08bQmIgz6Fipk58bk8xJ4=;
+  b=lLz0ueFfMLzjNe1QY79uwr7yQGwFQkmwtTTZrn7vTAEHy/QJLQXs21c9
+   bYHPIdLHvA7T1MCg9tqPdt3A2uRCSrxZm8w9F+vsswZ5n2BcJJNg/AzlD
+   szfyzhbmnL58+cbprWxqb6/MMqKStCgdQYVqe9DOM1wG7ztT2uoQSa0gJ
+   cnbJ47PRhom3B3GVpUUIfqBwyZDCB+D6Nxo0xLz0qOfpdZySzhf0PvpOW
+   Az5DhMR82n2b5W96hgbKB3w/VGGn7PyiLhMK4GLSl5KYPF+sL5eBaUt1i
+   uiYLZOIvMhj8yblUOlD19sD0czOn3ZrUeiBD6ir80Xvhl/YZLrURUQnqJ
+   g==;
+X-CSE-ConnectionGUID: 4EaNvknzTY+dhCvb+lMvCA==
+X-CSE-MsgGUID: qzFVk6FpRdmDXoDkdRt9GQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="47637339"
+X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
+   d="scan'208";a="47637339"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 11:37:32 -0700
+X-CSE-ConnectionGUID: nr0z77mySvOfWRBnD3WebQ==
+X-CSE-MsgGUID: NWT9aWVlSpysfV+lEtCAUA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
+   d="scan'208";a="136262559"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 08 May 2025 11:37:31 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uD67d-000BGZ-1A;
+	Thu, 08 May 2025 18:37:29 +0000
+Date: Fri, 9 May 2025 02:37:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:klp-build 40/57] arch/arm/include/asm/jump_label.h:46:8:
+ error: redefinition of 'jump_entry'
+Message-ID: <202505090246.h9Z2HgQ4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000adb08b061413919e@google.com> <681c597f.050a0220.a19a9.00bd.GAE@google.com>
-In-Reply-To: <681c597f.050a0220.a19a9.00bd.GAE@google.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 8 May 2025 11:00:15 -0700
-X-Gm-Features: ATxdqUG6Mkg4Ho6RZmO8HnmSlk8KmcFHKHxysJft20HZr0IOkm_SdwFkRH0L4Ws
-Message-ID: <CAADnVQ+cu2yt8v=8KE32Kymw_c-KLFUmbxZMxxjqBksafyNHiA@mail.gmail.com>
-Subject: Re: [syzbot] [bpf?] possible deadlock in trie_delete_elem
-To: syzbot <syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, elic@nvidia.com, 
-	Hao Luo <haoluo@google.com>, Hillf Danton <hdanton@sina.com>, Jason Wang <jasowang@redhat.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Martin KaFai Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, kbuild test robot <lkp@intel.com>, 
-	clang-built-linux <llvm@lists.linux.dev>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, michal.kukowski@infogain.com, 
-	Michal Switala <michal.switala@infogain.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Network Development <netdev@vger.kernel.org>, norbert.kaminski@igglobal.com, 
-	norbert.kaminski@infogain.com, norkam41@gmail.com, 
-	oe-kbuild-all@lists.linux.dev, parav@nvidia.com, 
-	Steven Rostedt <rostedt@goodmis.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Stanislav Fomichev <sdf@google.com>, Song Liu <song@kernel.org>, Song Liu <songliubraving@fb.com>, 
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, 
-	=?UTF-8?Q?Wojciech_G=C5=82adysz?= <wojciech.gladysz@infogain.com>, 
-	Yonghong Song <yhs@fb.com>, Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, May 8, 2025 at 12:13=E2=80=AFAM syzbot
-<syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 47979314c0fe245ed54306e2f91b3f819c7c0f9f
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Date:   Sun Mar 16 04:05:37 2025 +0000
->
->     bpf: Convert lpm_trie.c to rqspinlock
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D140598f458=
-0000
-> start commit:   c2933b2befe2 Merge tag 'net-6.14-rc1' of git://git.kernel=
-...
-> git tree:       net-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd033b14aeef39=
-158
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D9d95beb2a3c2606=
-22518
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D108e1724580=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D177035f858000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git klp-build
+head:   a756ad343c6f178683f423165424a8b5b8048da8
+commit: 076ba887573130fab206095fc9371b6b7727fb22 [40/57] x86/bug: Define ELF section entry size for __jump_table
+config: arm-randconfig-003-20250508 (https://download.01.org/0day-ci/archive/20250509/202505090246.h9Z2HgQ4-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505090246.h9Z2HgQ4-lkp@intel.com/reproduce)
 
-yes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505090246.h9Z2HgQ4-lkp@intel.com/
 
-#syz fix: bpf: Convert lpm_trie.c to rqspinlock
+All errors (new ones prefixed by >>):
+
+   In file included from scripts/mod/devicetable-offsets.c:3:
+   In file included from include/linux/mod_devicetable.h:14:
+   In file included from include/linux/uuid.h:11:
+   In file included from include/linux/string.h:392:
+   In file included from include/linux/fortify-string.h:6:
+   In file included from include/linux/bug.h:5:
+   In file included from arch/arm/include/asm/bug.h:60:
+   In file included from include/asm-generic/bug.h:22:
+   In file included from include/linux/printk.h:616:
+   In file included from include/linux/dynamic_debug.h:6:
+   In file included from include/linux/jump_label.h:122:
+>> arch/arm/include/asm/jump_label.h:46:8: error: redefinition of 'jump_entry'
+      46 | struct jump_entry {
+         |        ^
+   include/linux/jump_label.h:116:8: note: previous definition is here
+     116 | struct jump_entry {
+         |        ^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:98: scripts/mod/devicetable-offsets.s] Error 1 shuffle=1368264795
+   make[3]: Target 'scripts/mod/' not remade because of errors.
+   make[2]: *** [Makefile:1274: prepare0] Error 2 shuffle=1368264795
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1368264795
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1368264795
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/jump_entry +46 arch/arm/include/asm/jump_label.h
+
+09f05d8529ff4aa Rabin Vincent 2012-02-18  45  
+09f05d8529ff4aa Rabin Vincent 2012-02-18 @46  struct jump_entry {
+09f05d8529ff4aa Rabin Vincent 2012-02-18  47  	jump_label_t code;
+09f05d8529ff4aa Rabin Vincent 2012-02-18  48  	jump_label_t target;
+09f05d8529ff4aa Rabin Vincent 2012-02-18  49  	jump_label_t key;
+09f05d8529ff4aa Rabin Vincent 2012-02-18  50  };
+09f05d8529ff4aa Rabin Vincent 2012-02-18  51  
+
+:::::: The code at line 46 was first introduced by commit
+:::::: 09f05d8529ff4aa92311c1a55ce35ac98cb59b8c ARM: 7334/1: add jump label support
+
+:::::: TO: Rabin Vincent <rabin@rab.in>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
