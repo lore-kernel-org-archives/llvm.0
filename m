@@ -1,111 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91AD86358;
-	Thu,  8 May 2025 00:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDDA770E2;
+	Thu,  8 May 2025 04:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746665909; cv=none; b=YvAtZT0DDcSWwdEueApy7O6/xdNkUSTvG4F0D2aMyLDTUKrEdaaLD3vd1JXcjQmI/cfd/vsHzCPTQ3Cmx9ASyeCXJn1U/Q5juhmkl75nqr30/oxCSNRZ36OXiI6FiaUWu7QFV2G+KvP9I6puUUNcE5nVIa76oBZGnX/2WXrwhv0=
+	t=1746677444; cv=none; b=GmyMCT1F+i0Bp10NyVC3ulFpcFpp+LehVu/vkFnTMbvN6rrVKrqB/xVLKO+PMdQoWarFbCigwI3f5VY5pQJkZJJBnuNLWCr3kXQSu+azGiz4YUpRmiA6hZQohDJ/UqpofJWDqwWy7ushOozFUkjOpSPWjXlk6uWGlOHpKg/4hvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746665909; c=relaxed/simple;
-	bh=QtKwOdcIyTG+SJjJmvHcWjDBvCE4AwX6cnVmpWUWvN8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=WvFe4ELWOfOl5Eht6t58fpbZlaruO0CFAp5MaNPTxuNBZTEfHZeLK+j/M9R35byw1cH4ichuV0/ll5IRsmLyQRdOCARtQw/Nx5BVopwDKInbTsxPGqaVfgGAZ9t2cFWbYrbunUnDV2xPE4118sGURaeprWcgs9X6+4V64U8J+c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fg51x28b; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746677444; c=relaxed/simple;
+	bh=4t0VL9wIhyMoUDpMaY3vKPF5EPbXzkRT87RGiJt5LO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mRks5APvUvnqiWZhzX2nxYVuQ8FqMK1Eg/8sgLofZstqUgb1UM07LDROQgq+XOPD7GxgErwFSf8duXM080ncjogWEnvcLGCqsIjQAYtfO1BU0sUW/g8NmoDS8zEXOq+RGLincpAKdXm9+C1uMm6KuZH+QH1MioHct5QgngngSPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QHBl9B5h; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fg51x28b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7ADC4CEE2;
-	Thu,  8 May 2025 00:58:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746665909;
-	bh=QtKwOdcIyTG+SJjJmvHcWjDBvCE4AwX6cnVmpWUWvN8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=Fg51x28bfL/qRAoMP7ryxkvmaNX0sD8/esq3nYN19gpK37BEn3nA/RPbjoVpAi0AM
-	 t5Vinlfo7KuS4wgv3SdWsOjfIesmjvl4KNHXy0vD5muJ6dUdmeFR2JA2taL5Wkppdt
-	 jGU4hTEQgxhTECc7dUp2UF1vSN3FpvIeq7QF7OZGsfXJ6xAu4ruPKr0V/uN21E9aKj
-	 f/22SpKOZP3QT/oRCYOYoU03neXaHRJFZfhCrlycNT2JOWw3Q0tHf1ylZFmcf4ydF8
-	 MaZoX5c5IkDvuPRgr8EzuHogCybX0H3MPB8WgatGGehVDwpQ4OVYUwUAqimk98cAjj
-	 UGy1b8KKaR++A==
-Date: Wed, 07 May 2025 17:58:26 -0700
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Manish Chopra <manishc@marvell.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-CC: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- stable@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net=5D_net=3A_qede=3A_Initialize_?=
- =?US-ASCII?Q?qede=5Fll=5Fops_with_designated_initializer?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250507-qede-fix-clang-randstruct-v1-1-5ccc15626fba@kernel.org>
-References: <20250507-qede-fix-clang-randstruct-v1-1-5ccc15626fba@kernel.org>
-Message-ID: <198CC0C3-5009-47B5-AE6A-B43A9D2EB126@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QHBl9B5h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746677443; x=1778213443;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4t0VL9wIhyMoUDpMaY3vKPF5EPbXzkRT87RGiJt5LO0=;
+  b=QHBl9B5hIdMZc/qBSYC1o1HcVgNDpOTmkMe7uarHsE4ArLvRdBNhxwm9
+   ImrtEDHeziyA9NFxf83SAtyZUs0Xb8ZlcR0d3QYRDgug9TkNaIdLdMgmr
+   eT2qsu7XeG7hMb1mA0jA30343nC9+qeD/8i99ULzt4qZBgN24WJ+wKMFe
+   VI8+HUMSzEBH+9aKrqaD8G0JENPLuglv5/iz76SZQNXWUVkzk116X1G6N
+   D6qOPi4kuMzm4VIonvA5UugJkj+Yf9Q/EccdzwhoCsJ9P/eeZfygvzZ/t
+   EWhU0xFDCUBbOScQj2Lh0us2vcJ2Ktgug+1R+/+xpOb0HGQyQ6mXJh25q
+   w==;
+X-CSE-ConnectionGUID: tO3wYq/UQ7m711SwdclwLA==
+X-CSE-MsgGUID: VByuMBmCQ3Gtlt7vo5UPQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48348661"
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="48348661"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 21:10:42 -0700
+X-CSE-ConnectionGUID: ag5YoI4LQxWU0p7NVqgzzw==
+X-CSE-MsgGUID: X/nnoFYxTgiCfx3a/XUv7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="137089745"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 07 May 2025 21:10:37 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCsag-0009xr-1I;
+	Thu, 08 May 2025 04:10:34 +0000
+Date: Thu, 8 May 2025 12:09:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Elder <elder@riscstar.com>, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+	p.zabel@pengutronix.de, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	dlan@gentoo.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, heylenay@4d2.org,
+	inochiama@outlook.com, guodong@riscstar.com,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/6] clk: spacemit: set up reset auxiliary devices
+Message-ID: <202505081113.CwKtDYbs-lkp@intel.com>
+References: <20250506210638.2800228-4-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250506210638.2800228-4-elder@riscstar.com>
+
+Hi Alex,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on cb9c3aeae509b36afbdf46942a7a0a0dfc856ce7]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Elder/dt-bindings-soc-spacemit-define-spacemit-k1-ccu-resets/20250507-051019
+base:   cb9c3aeae509b36afbdf46942a7a0a0dfc856ce7
+patch link:    https://lore.kernel.org/r/20250506210638.2800228-4-elder%40riscstar.com
+patch subject: [PATCH v6 3/6] clk: spacemit: set up reset auxiliary devices
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250508/202505081113.CwKtDYbs-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250508/202505081113.CwKtDYbs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505081113.CwKtDYbs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/spacemit/ccu-k1.c:998:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     998 |         kfree(to_spacemit_ccu_adev(adev));
+         |         ^
+   1 error generated.
 
 
+vim +/kfree +998 drivers/clk/spacemit/ccu-k1.c
 
-On May 7, 2025 1:47:45 PM PDT, Nathan Chancellor <nathan@kernel=2Eorg> wro=
-te:
->After a recent change [1] in clang's randstruct implementation to
->randomize structures that only contain function pointers, there is an
->error because qede_ll_ops get randomized but does not use a designated
->initializer for the first member:
->
->  drivers/net/ethernet/qlogic/qede/qede_main=2Ec:206:2: error: a randomiz=
-ed struct can only be initialized with a designated initializer
->    206 |         {
->        |         ^
->
->Explicitly initialize the common member using a designated initializer
->to fix the build=2E
->
->Cc: stable@vger=2Ekernel=2Eorg
->Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
->Link: https://github=2Ecom/llvm/llvm-project/commit/04364fb888eea6db98115=
-10607bed4b200bcb082 [1]
->Signed-off-by: Nathan Chancellor <nathan@kernel=2Eorg>
->---
-> drivers/net/ethernet/qlogic/qede/qede_main=2Ec | 2 +-
+   993	
+   994	static void spacemit_cadev_release(struct device *dev)
+   995	{
+   996		struct auxiliary_device *adev = to_auxiliary_dev(dev);
+   997	
+ > 998		kfree(to_spacemit_ccu_adev(adev));
+   999	}
+  1000	
 
-Oops, I missed this one with its 1-character different filename=2E =F0=9F=
-=98=85
-
-Reviewed-by: Kees Cook <kees@kernel=2Eorg>
-
-
-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/net/ethernet/qlogic/qede/qede_main=2Ec b/drivers/net=
-/ethernet/qlogic/qede/qede_main=2Ec
->index 99df00c30b8c=2E=2Eb5d744d2586f 100644
->--- a/drivers/net/ethernet/qlogic/qede/qede_main=2Ec
->+++ b/drivers/net/ethernet/qlogic/qede/qede_main=2Ec
->@@ -203,7 +203,7 @@ static struct pci_driver qede_pci_driver =3D {
-> };
->=20
-> static struct qed_eth_cb_ops qede_ll_ops =3D {
->-	{
->+	=2Ecommon =3D {
-> #ifdef CONFIG_RFS_ACCEL
-> 		=2Earfs_filter_op =3D qede_arfs_filter_op,
-> #endif
->
->---
->base-commit: 9540984da649d46f699c47f28c68bbd3c9d99e4c
->change-id: 20250507-qede-fix-clang-randstruct-13d8c593cb58
->
->Best regards,
-
---=20
-Kees Cook
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
