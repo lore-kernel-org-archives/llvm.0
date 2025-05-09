@@ -1,93 +1,91 @@
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1B4230981
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 16:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0EC23717F
+	for <llvm@lists.linux.dev>; Fri,  9 May 2025 18:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746809437; cv=none; b=LBeT08Vfkc/g0SROOxt5MLE1pRbURx51UkGr2RCGhgjDC21YOYoP2M/ItV6wCmwRzeKG1cLzeNyC8sujjiJZ+XCVn3JvHAiAac2hS1VAJwUEAyI8uPbdhEYrsvZMW3JmuTcnyBb7AfiQEu4tC6XyPQD7uhDncTANmMyLycFjJXg=
+	t=1746815317; cv=none; b=Ra0EpZqbRHlMoyaNsJCR1B4ibPw3ccipiMbgDffoisPgwVavrAAgFp5bLIyHqMN6asQrnJs4UYfsO/az4VIqXrIvXSHCXJHX6eUVbqs7yABTrsC6ee3v7pJmI+gIZkUsVUAkviBEUk4dHibzChlKSxGl9xxTsSu6IjWvVIjeeiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746809437; c=relaxed/simple;
-	bh=1jT1yorK6spsB2LsqYn5aVHCdjls6dUPcNPyt5eG2BY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n9n6gD+PuqM1SeDABmX7wOGLJ7LCJqUwwMwS0KdHZMilcpFpuEdI91t+Sy8hkxFJEpzgxKCpnCIsMZ4Quwwj+2smD2kSF2mCTUvjUF9iEHYJLvWascXoCYBEgnMBoADnjF+Z+Z0KmI1QS+YKIC6T/x1oDgwfQOTmTS3fBMeUeLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4ZvDfC6QXQz9s36;
-	Fri,  9 May 2025 18:16:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bmZ_rCyi93iu; Fri,  9 May 2025 18:16:51 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4ZvDfC5bgPz9s2l;
-	Fri,  9 May 2025 18:16:51 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id B57FD8B776;
-	Fri,  9 May 2025 18:16:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id tsIaKHYPXzrZ; Fri,  9 May 2025 18:16:51 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 353888B768;
-	Fri,  9 May 2025 18:16:51 +0200 (CEST)
-Message-ID: <40ccd7fb-a1c8-4fb0-8813-0575c4afe505@csgroup.eu>
-Date: Fri, 9 May 2025 18:16:50 +0200
+	s=arc-20240116; t=1746815317; c=relaxed/simple;
+	bh=10fWKQkNnHsqIbf/pw3ZTsZtcdW11Mi85qpJNxHdr28=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DfBGKGNd8s302tXyk3PHyaXhAO2qtJbQxa/vQOJyNSG/s89sTbICUVYWRBBLJkBXkDNPG3VdS3Qh0IlnHO0jzzt85G5Vquq3WsdTDSmmzJDyBYRLUxXvIaDGsF3U/V93nEx5B8LqThoCtCEdBxooI67VDvXYLuIM2ZhXboISfV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=d8XBYHmL; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="d8XBYHmL"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22e033a3a07so27254175ad.0
+        for <llvm@lists.linux.dev>; Fri, 09 May 2025 11:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1746815315; x=1747420115; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AVjmITvg5xwQUhBH3cPWu+1Rci6sKZeIVD+X8Tz7B6Y=;
+        b=d8XBYHmLDHznNpBP0HzgH5Nz53Lei6wbmCzl49PCCS2AZ4b2cs+uDyfp7+UunrpoJ0
+         lYgP9PR6Xiqz1b57/NdBqLezV+iC+5ApwmIwwAc4pzNg3sh7CIiklb2V7Dt9mcPKxW4B
+         PCxYqM99wmU/RGtn/+HPbt/Efl7ecrob8o3dxq3Tn0fXZumtmEpismJyft5Mj30id7hm
+         KNNhmknunzOyKpShMlWZDcZ3pn4dIBMqi+wswusuwhtOmhwuLmTrwB41gqEpd8JCdNhg
+         eJ63GdPwd93H2xwecNgoWQ+zDRozhSEgoBjvLjiqH2n2FLhx8LglP2tPlCwXucmo9EWJ
+         SJ2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746815315; x=1747420115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AVjmITvg5xwQUhBH3cPWu+1Rci6sKZeIVD+X8Tz7B6Y=;
+        b=QRisWpgSsjYyCSKK9o98HwlUonVF+C86n4ioyg0rhIpJNDQucITa8eu0nAK4P/uigV
+         Et/561qT0uurBejmaRpB9CPlwJ+dJcH5fmctuNGIPv4e/g0ffyAgnX9V7J6CvfAuO58l
+         s/yZAUC328CPa4xrTxLBb79A+30ee/Ny4dtN0VGs9C9mrn7X+fBEUCZmVIhqoIc8Stes
+         bssBnKOWcQurhNJoJ89xu+2nIWYVJh3x5EqzcwOCFWpz+cb3st/Oon0bviaNJk8ZPG2T
+         S9NpCPcIDvDeaLHuDgzhf4D/nzbSTBYmFiSuCcOO7PvyXz1Pb8kRvU2bpFrfMsnWN+Rn
+         nSEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqZDCxHgTGp3aDa+P+NVsdZpmpGk26qNgFbi+sb9Xoj3qjIbm2vd8M73CFMPFgBACP0Wbr@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz3PaPvB4RY2XmlBIWFzvFe+XMaikRJiHdZA8QxaXvtWdxOszV2
+	qHqq6MvGXY1E6LuxfZ64mEqCX4jobnSoaa+kywTtdiQQ1qWCJKX/5Q0cCeUALriVUBjKnwPtAlf
+	BqQm3JWS8G226xP+3wGnnpcQxHpw=
+X-Gm-Gg: ASbGnctFwcF9FIS9evI1RM+PLlrP1/pjUYqhEIB5/l5cgTJ0cdrN9DEbZp/xlP/y5YY
+	n76yJE8mNXrrRr7Vv0sGuaDG+J5pFbdbyAzEF5/fDX/bnfSAFs+Ozh+QgNCd8b7Zn9zPgemb/CO
+	pHl2IE8QN5sY8O9Rof27ey5CEk5Bj3f9SV5OV7HS1lrLhZh9T96FVRwTCkuSbnnI9nJw==
+X-Google-Smtp-Source: AGHT+IEwd7AiDoJxpDhyTHw6FTDd796IjH1JzgkpmVh4628MtJYKSWng6hqIPivs5wHI5s0eCiBfNcWPOBCx0dc2UHI=
+X-Received: by 2002:a17:902:f70a:b0:225:abd2:5e39 with SMTP id
+ d9443c01a7336-22fc8c8eac0mr65654585ad.30.1746815315465; Fri, 09 May 2025
+ 11:28:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] soc: fsl: qe: remove unused qe_ic_from_irq function
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, qiang.zhao@nxp.com,
- leoyang.li@nxp.com, nathan@kernel.org,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Tom Rix <trix@redhat.com>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230320125202.1721775-1-trix@redhat.com>
- <174680087395.258053.1870729490363422870.b4-ty@linaro.org>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <174680087395.258053.1870729490363422870.b4-ty@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250509150114.299962-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250509150114.299962-2-krzysztof.kozlowski@linaro.org>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Fri, 9 May 2025 20:28:24 +0200
+X-Gm-Features: AX0GCFt7pQHVyrf4n1xvCNGZ9D5D94k38mJZKPZaIgxrW2CstAdBDU6m2wUQANg
+Message-ID: <CAFBinCDt1jDv=jhDoW3UtBUL8BuLL8PpJPKjpC1Sf5fifnw+6g@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: meson: Drop unused aml_pctl_find_group_by_name()
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Xianwei Zhao <xianwei.zhao@amlogic.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Jerome Brunet <jbrunet@baylibre.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-amlogic@lists.infradead.org, 
+	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-Le 09/05/2025 à 16:28, Krzysztof Kozlowski a écrit :
-> 
-> On Mon, 20 Mar 2023 08:52:02 -0400, Tom Rix wrote:
->> clang with W=1 reports
->> drivers/soc/fsl/qe/qe_ic.c:235:29: error: unused function
->>    'qe_ic_from_irq' [-Werror,-Wunused-function]
->> static inline struct qe_ic *qe_ic_from_irq(unsigned int virq)
->>                              ^
->> The use of this function was removed with
->> commit d7c2878cfcfa ("soc: fsl: qe: remove unused qe_ic_set_* functions")
->>
->> [...]
-> 
-> 
-> Commit from 2021:
-> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F1619002613-18216-1-git-send-email-jiapeng.chong%40linux.alibaba.com%2F&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7Cd5ee085f1ff64e69aec608dd8f05d608%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638823977413929827%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=kaeZGwikWMhIhz9iC6ZEVs%2Ffbd9UsZHJz7vBbODUHgg%3D&reserved=0
-> 
-> did not apply, but this applies.
-> 
-> I am annoying hitting this warning on every W=1 build, so:
-
-
-Acked-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-
-
-> 
-> Applied, thanks!
-> 
-> [1/1] soc: fsl: qe: remove unused qe_ic_from_irq function
->        https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fkrzk%2Flinux-dt%2Fc%2Fd47f1233374597c348696c3da2142cc92a36fc90&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7Cd5ee085f1ff64e69aec608dd8f05d608%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638823977413952218%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=HzwgkKFqffwtkmoskS9Y1OhlXShSW%2B%2BZLKxc3k3fCpA%3D&reserved=0
-> 
-> Best regards,
-
+On Fri, May 9, 2025 at 5:01=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> aml_pctl_find_group_by_name() is not used anywhere, as reported by W=3D1
+> clang build:
+>
+>   pinctrl-amlogic-a4.c:600:2: error: unused function 'aml_pctl_find_group=
+_by_name' [-Werror,-Wunused-function]
+>
+> Fixes: 6e9be3abb78c ("pinctrl: Add driver support for Amlogic SoCs")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
