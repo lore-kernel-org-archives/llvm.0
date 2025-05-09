@@ -1,59 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E221628E576;
-	Fri,  9 May 2025 09:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFB428E5E4;
+	Fri,  9 May 2025 10:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746784798; cv=none; b=s52OBVIaSz4RLIVS2+s/AoNKN6GEuzkqdz75WZvPnMZT1crqJccTrlDw4QbePOD152bac0Rq65b+wYEK+EnIzsjJy/ekIs9kAmvoXwnUQSlILulUlTjvJOggNH+aFFFbOReeHn31fR0nef5TekK2W35kKJ/Se8gxbu86azyoLvg=
+	t=1746785464; cv=none; b=LRozuY400hYPU/s19EY8I11ykBmKD2eLYS7BL6cs3jkcT4nC85ZA91UExja5VfBZejFTxnu05prv/XtuO3LEW+SIszPMlinnmbc0p5k5HriStQtzGFuZaNElVQnBF+rhr874vVx2TJT4qvC/eNe27Ab7HfC+0+47G8IX+yq6ly8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746784798; c=relaxed/simple;
-	bh=LShhiRFXIcvNwUm+mQaBWcaa0guFdmwRR/J/HFYDPJ0=;
+	s=arc-20240116; t=1746785464; c=relaxed/simple;
+	bh=Qaky7RedrcOMmPqHtyjf5ffJQToE+TYbiEAJfJ73Rmg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kdMyMTeKdGyq1bUj+6cNszo+sQKBQnAGUxzus5TnoE0uNrk+c+DptCpprp9hnHLwwrI+rh4IhgXUm33Cvy73ATGYhidF+/1JYxOq89Ob2v2BH+2BjXo7V7MRRQa8QufvDXGqZoV4o46B2bRdjQOt72+zWVPC5wifFZN+sECyzik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k9ZYkHed; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=B2tYdTvFE5U+rx4wpK9pMolRMwc4FPUkzTEpkAopo7liQRaABiYA/4iB/OQVpr4wAnGqIlBtLGWXk/E1/DqwvmeL3chTbTNntgxJKpmYUVFWsGUA8nAy0F/g5JhA/ztKhGBQYp+EfjcHUu7xvGnujIqb5nUHm/LACk0ac7Fw4RU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MHg2lNQf; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k9ZYkHed"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MHg2lNQf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746784797; x=1778320797;
+  t=1746785463; x=1778321463;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LShhiRFXIcvNwUm+mQaBWcaa0guFdmwRR/J/HFYDPJ0=;
-  b=k9ZYkHednPbGDfoMEdUpTwgoMRHAXDFzXAVdlI+alEhK+9y5iixhzxbR
-   syqhA+qUlG0dbklrQcqpM9HzoaFMK9qDGHfosgp8NagYNLbL2LVFs+FbR
-   7UGatE703m7u+bb0AC4k03epQyFS2J9JwGoRb8jWdy9BE6garsjcM4SgT
-   dXiJqcY7fwYvZOOUTbX2rQrff2mhy3SqSSWzdm+T70l4COyElPBlKtLU0
-   f87UMDP7FdRb9/gYI5Vq5hgxaisB4LdQvMEx0RvlTA3uqBP1YAc43us7d
-   LirM0ytUluMCg0sVsi5FzVOTmErPT1eXfpFtNEpIwGqd1jet15lS7M2EM
-   Q==;
-X-CSE-ConnectionGUID: Hq4Gtc6jS26J/VGwdgYpMA==
-X-CSE-MsgGUID: a3UoXX7pRE+1nmGAB4FOkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="66140879"
+  bh=Qaky7RedrcOMmPqHtyjf5ffJQToE+TYbiEAJfJ73Rmg=;
+  b=MHg2lNQfLvhoVD84XC/DB05qi8ogPm1od98d+BgCaAT3JGtDWkINBFjE
+   sqFxFNilv5bpNoYQwXMZ1K9ocyWbPpvqYTHLLd910YDqIqv5/QcL1q3au
+   OI7EUjRstByc54v4NNfh4Z+74oFDUi/L4m8YhmT1pg1MhVg51y2CzdbXq
+   V5TvVgAIvDj+LSGBdwW/DNqdKdNuNNV+spAHleJSe6Q6TzbJqXe3maUHH
+   fXWyG3t8W/4V3MGMzmRSL9cAGhp1HdKOXTp6NLlBoVkciTViRjNyRzcMr
+   Y/UuZFHBwuh4TPXfxeLRCYMgs18Njgb/2Cd5wuwGloqxlW8GMrCxVuCYK
+   A==;
+X-CSE-ConnectionGUID: 5hko+nCARMyavWkRmDHoCg==
+X-CSE-MsgGUID: NvwBidJMSf+K3PudKAf8hg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48724840"
 X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="66140879"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 02:59:56 -0700
-X-CSE-ConnectionGUID: 60gwdfL7SzmaxgrqztiWug==
-X-CSE-MsgGUID: ABf9rHPfRQmjycpCj43isQ==
+   d="scan'208";a="48724840"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 03:11:02 -0700
+X-CSE-ConnectionGUID: HqY9jbtzSteBKacvM4ethg==
+X-CSE-MsgGUID: kPZ4jp7LTgSjyqipK5/yuA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="141351939"
+   d="scan'208";a="137075540"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 09 May 2025 02:59:56 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 09 May 2025 03:10:56 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uDKWG-000BuH-22;
-	Fri, 09 May 2025 09:59:52 +0000
-Date: Fri, 9 May 2025 17:59:39 +0800
+	id 1uDKgv-000Bv5-32;
+	Fri, 09 May 2025 10:10:53 +0000
+Date: Fri, 9 May 2025 18:10:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ignacio Moreno Gonzalez via B4 Relay <devnull+Ignacio.MorenoGonzalez.kuka.com@kernel.org>
+To: Pop Ioan Daniel <pop.ioan-daniel@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
+	Dragos Bogdan <dragos.bogdan@analog.com>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Tobias Sperling <tobias.sperling@softing.com>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Alisa-Dariana Roman <alisadariana@gmail.com>,
+	Ramona Alexandra Nechita <ramona.nechita@analog.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] mm: madvise: make MADV_NOHUGEPAGE a no-op if !THP
-Message-ID: <202505091740.BC3ad4im-lkp@intel.com>
-References: <20250508-madvise-nohugepage-noop-without-thp-v1-1-e7ceffb197f3@kuka.com>
+Subject: Re: [PATCH v2 1/4] iio: backend: update
+ iio_backend_oversampling_ratio_set
+Message-ID: <202505091706.owR2rZED-lkp@intel.com>
+References: <20250508123107.3797042-2-pop.ioan-daniel@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,130 +84,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250508-madvise-nohugepage-noop-without-thp-v1-1-e7ceffb197f3@kuka.com>
+In-Reply-To: <20250508123107.3797042-2-pop.ioan-daniel@analog.com>
 
-Hi Ignacio,
+Hi Pop,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on fc96b232f8e7c0a6c282f47726b2ff6a5fb341d2]
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.15-rc5 next-20250508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ignacio-Moreno-Gonzalez-via-B4-Relay/mm-madvise-make-MADV_NOHUGEPAGE-a-no-op-if-THP/20250508-182107
-base:   fc96b232f8e7c0a6c282f47726b2ff6a5fb341d2
-patch link:    https://lore.kernel.org/r/20250508-madvise-nohugepage-noop-without-thp-v1-1-e7ceffb197f3%40kuka.com
-patch subject: [PATCH] mm: madvise: make MADV_NOHUGEPAGE a no-op if !THP
-config: s390-randconfig-002-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091740.BC3ad4im-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091740.BC3ad4im-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pop-Ioan-Daniel/iio-backend-update-iio_backend_oversampling_ratio_set/20250508-203339
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20250508123107.3797042-2-pop.ioan-daniel%40analog.com
+patch subject: [PATCH v2 1/4] iio: backend: update iio_backend_oversampling_ratio_set
+config: arm-randconfig-004-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091706.owR2rZED-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091706.owR2rZED-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505091740.BC3ad4im-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505091706.owR2rZED-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/s390/kvm/gaccess.c:321:2: error: expected identifier
-     321 |         PROT_NONE,
-         |         ^
-   include/uapi/asm-generic/mman-common.h:16:19: note: expanded from macro 'PROT_NONE'
-      16 | #define PROT_NONE       0x0             /* page can not be accessed */
-         |                         ^
->> arch/s390/kvm/gaccess.c:344:8: error: duplicate case value: '0' and 'PROT_TYPE_LA' both equal '0'
-     344 |                 case PROT_TYPE_LA:
-         |                      ^
-   arch/s390/kvm/gaccess.c:337:8: note: previous case defined here
-     337 |                 case PROT_NONE:
-         |                      ^
-   include/uapi/asm-generic/mman-common.h:16:19: note: expanded from macro 'PROT_NONE'
-      16 | #define PROT_NONE       0x0             /* page can not be accessed */
-         |                         ^
-   2 errors generated.
+>> drivers/iio/adc/ad4851.c:324:53: error: incompatible pointer to integer conversion passing 'const struct iio_chan_spec *' to parameter of type 'unsigned int' [-Wint-conversion]
+     324 |         ret = iio_backend_oversampling_ratio_set(st->back, chan, osr);
+         |                                                            ^~~~
+   include/linux/iio/backend.h:212:25: note: passing argument to parameter 'chan' here
+     212 |                                        unsigned int chan,
+         |                                                     ^
+   1 error generated.
 
 
-vim +321 arch/s390/kvm/gaccess.c
+vim +324 drivers/iio/adc/ad4851.c
 
-664b49735370684 Alexander Yarygin        2015-03-09  313  
-d03193de30e6d99 David Hildenbrand        2016-05-31  314  enum prot_type {
-d03193de30e6d99 David Hildenbrand        2016-05-31  315  	PROT_TYPE_LA   = 0,
-d03193de30e6d99 David Hildenbrand        2016-05-31  316  	PROT_TYPE_KEYC = 1,
-d03193de30e6d99 David Hildenbrand        2016-05-31  317  	PROT_TYPE_ALC  = 2,
-d03193de30e6d99 David Hildenbrand        2016-05-31  318  	PROT_TYPE_DAT  = 3,
-6ae1574c2a24eec Christian Borntraeger    2017-06-07  319  	PROT_TYPE_IEP  = 4,
-b3cefd6bf16e723 Janis Schoetterl-Glausch 2022-08-25  320  	/* Dummy value for passing an initialized value when code != PGM_PROTECTION */
-b3cefd6bf16e723 Janis Schoetterl-Glausch 2022-08-25 @321  	PROT_NONE,
-d03193de30e6d99 David Hildenbrand        2016-05-31  322  };
-d03193de30e6d99 David Hildenbrand        2016-05-31  323  
-c783631b0bffe60 Janis Schoetterl-Glausch 2022-05-12  324  static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
-c783631b0bffe60 Janis Schoetterl-Glausch 2022-05-12  325  			    enum gacc_mode mode, enum prot_type prot, bool terminate)
-d03193de30e6d99 David Hildenbrand        2016-05-31  326  {
-d03193de30e6d99 David Hildenbrand        2016-05-31  327  	struct kvm_s390_pgm_info *pgm = &vcpu->arch.pgm;
-44ae766353af6eb Heiko Carstens           2023-10-12  328  	union teid *teid;
-d03193de30e6d99 David Hildenbrand        2016-05-31  329  
-d03193de30e6d99 David Hildenbrand        2016-05-31  330  	memset(pgm, 0, sizeof(*pgm));
-d03193de30e6d99 David Hildenbrand        2016-05-31  331  	pgm->code = code;
-44ae766353af6eb Heiko Carstens           2023-10-12  332  	teid = (union teid *)&pgm->trans_exc_code;
-d03193de30e6d99 David Hildenbrand        2016-05-31  333  
-d03193de30e6d99 David Hildenbrand        2016-05-31  334  	switch (code) {
-c14b88d76624e02 Janosch Frank            2016-07-29  335  	case PGM_PROTECTION:
-c14b88d76624e02 Janosch Frank            2016-07-29  336  		switch (prot) {
-b3cefd6bf16e723 Janis Schoetterl-Glausch 2022-08-25  337  		case PROT_NONE:
-b3cefd6bf16e723 Janis Schoetterl-Glausch 2022-08-25  338  			/* We should never get here, acts like termination */
-b3cefd6bf16e723 Janis Schoetterl-Glausch 2022-08-25  339  			WARN_ON_ONCE(1);
-b3cefd6bf16e723 Janis Schoetterl-Glausch 2022-08-25  340  			break;
-6ae1574c2a24eec Christian Borntraeger    2017-06-07  341  		case PROT_TYPE_IEP:
-44ae766353af6eb Heiko Carstens           2023-10-12  342  			teid->b61 = 1;
-3b684a420bd8a26 Joe Perches              2020-03-10  343  			fallthrough;
-a679c547d19ded9 Christian Borntraeger    2016-12-15 @344  		case PROT_TYPE_LA:
-44ae766353af6eb Heiko Carstens           2023-10-12  345  			teid->b56 = 1;
-a679c547d19ded9 Christian Borntraeger    2016-12-15  346  			break;
-a679c547d19ded9 Christian Borntraeger    2016-12-15  347  		case PROT_TYPE_KEYC:
-44ae766353af6eb Heiko Carstens           2023-10-12  348  			teid->b60 = 1;
-a679c547d19ded9 Christian Borntraeger    2016-12-15  349  			break;
-c14b88d76624e02 Janosch Frank            2016-07-29  350  		case PROT_TYPE_ALC:
-44ae766353af6eb Heiko Carstens           2023-10-12  351  			teid->b60 = 1;
-3b684a420bd8a26 Joe Perches              2020-03-10  352  			fallthrough;
-c14b88d76624e02 Janosch Frank            2016-07-29  353  		case PROT_TYPE_DAT:
-44ae766353af6eb Heiko Carstens           2023-10-12  354  			teid->b61 = 1;
-c14b88d76624e02 Janosch Frank            2016-07-29  355  			break;
-c14b88d76624e02 Janosch Frank            2016-07-29  356  		}
-c783631b0bffe60 Janis Schoetterl-Glausch 2022-05-12  357  		if (terminate) {
-44ae766353af6eb Heiko Carstens           2023-10-12  358  			teid->b56 = 0;
-44ae766353af6eb Heiko Carstens           2023-10-12  359  			teid->b60 = 0;
-44ae766353af6eb Heiko Carstens           2023-10-12  360  			teid->b61 = 0;
-c783631b0bffe60 Janis Schoetterl-Glausch 2022-05-12  361  		}
-3b684a420bd8a26 Joe Perches              2020-03-10  362  		fallthrough;
-d03193de30e6d99 David Hildenbrand        2016-05-31  363  	case PGM_ASCE_TYPE:
-d03193de30e6d99 David Hildenbrand        2016-05-31  364  	case PGM_PAGE_TRANSLATION:
-d03193de30e6d99 David Hildenbrand        2016-05-31  365  	case PGM_REGION_FIRST_TRANS:
-d03193de30e6d99 David Hildenbrand        2016-05-31  366  	case PGM_REGION_SECOND_TRANS:
-d03193de30e6d99 David Hildenbrand        2016-05-31  367  	case PGM_REGION_THIRD_TRANS:
-d03193de30e6d99 David Hildenbrand        2016-05-31  368  	case PGM_SEGMENT_TRANSLATION:
-d03193de30e6d99 David Hildenbrand        2016-05-31  369  		/*
-d03193de30e6d99 David Hildenbrand        2016-05-31  370  		 * op_access_id only applies to MOVE_PAGE -> set bit 61
-d03193de30e6d99 David Hildenbrand        2016-05-31  371  		 * exc_access_id has to be set to 0 for some instructions. Both
-c14b88d76624e02 Janosch Frank            2016-07-29  372  		 * cases have to be handled by the caller.
-d03193de30e6d99 David Hildenbrand        2016-05-31  373  		 */
-44ae766353af6eb Heiko Carstens           2023-10-12  374  		teid->addr = gva >> PAGE_SHIFT;
-44ae766353af6eb Heiko Carstens           2023-10-12  375  		teid->fsi = mode == GACC_STORE ? TEID_FSI_STORE : TEID_FSI_FETCH;
-44ae766353af6eb Heiko Carstens           2023-10-12  376  		teid->as = psw_bits(vcpu->arch.sie_block->gpsw).as;
-3b684a420bd8a26 Joe Perches              2020-03-10  377  		fallthrough;
-d03193de30e6d99 David Hildenbrand        2016-05-31  378  	case PGM_ALEN_TRANSLATION:
-d03193de30e6d99 David Hildenbrand        2016-05-31  379  	case PGM_ALE_SEQUENCE:
-d03193de30e6d99 David Hildenbrand        2016-05-31  380  	case PGM_ASTE_VALIDITY:
-d03193de30e6d99 David Hildenbrand        2016-05-31  381  	case PGM_ASTE_SEQUENCE:
-d03193de30e6d99 David Hildenbrand        2016-05-31  382  	case PGM_EXTENDED_AUTHORITY:
-c14b88d76624e02 Janosch Frank            2016-07-29  383  		/*
-c14b88d76624e02 Janosch Frank            2016-07-29  384  		 * We can always store exc_access_id, as it is
-c14b88d76624e02 Janosch Frank            2016-07-29  385  		 * undefined for non-ar cases. It is undefined for
-c14b88d76624e02 Janosch Frank            2016-07-29  386  		 * most DAT protection exceptions.
-c14b88d76624e02 Janosch Frank            2016-07-29  387  		 */
-d03193de30e6d99 David Hildenbrand        2016-05-31  388  		pgm->exc_access_id = ar;
-d03193de30e6d99 David Hildenbrand        2016-05-31  389  		break;
-d03193de30e6d99 David Hildenbrand        2016-05-31  390  	}
-d03193de30e6d99 David Hildenbrand        2016-05-31  391  	return code;
-d03193de30e6d99 David Hildenbrand        2016-05-31  392  }
-d03193de30e6d99 David Hildenbrand        2016-05-31  393  
+   295	
+   296	static int ad4851_set_oversampling_ratio(struct iio_dev *indio_dev,
+   297						 const struct iio_chan_spec *chan,
+   298						 unsigned int osr)
+   299	{
+   300		struct ad4851_state *st = iio_priv(indio_dev);
+   301		int val, ret;
+   302	
+   303		guard(mutex)(&st->lock);
+   304	
+   305		if (osr == 1) {
+   306			ret = regmap_clear_bits(st->regmap, AD4851_REG_OVERSAMPLE,
+   307						AD4851_OS_EN_MSK);
+   308			if (ret)
+   309				return ret;
+   310		} else {
+   311			val = ad4851_osr_to_regval(osr);
+   312			if (val < 0)
+   313				return -EINVAL;
+   314	
+   315			ret = regmap_update_bits(st->regmap, AD4851_REG_OVERSAMPLE,
+   316						 AD4851_OS_EN_MSK |
+   317						 AD4851_OS_RATIO_MSK,
+   318						 FIELD_PREP(AD4851_OS_EN_MSK, 1) |
+   319						 FIELD_PREP(AD4851_OS_RATIO_MSK, val));
+   320			if (ret)
+   321				return ret;
+   322		}
+   323	
+ > 324		ret = iio_backend_oversampling_ratio_set(st->back, chan, osr);
+   325		if (ret)
+   326			return ret;
+   327	
+   328		switch (st->info->resolution) {
+   329		case 20:
+   330			switch (osr) {
+   331			case 0:
+   332				return -EINVAL;
+   333			case 1:
+   334				val = 20;
+   335				break;
+   336			default:
+   337				val = 24;
+   338				break;
+   339			}
+   340			break;
+   341		case 16:
+   342			val = 16;
+   343			break;
+   344		default:
+   345			return -EINVAL;
+   346		}
+   347	
+   348		ret = iio_backend_data_size_set(st->back, val);
+   349		if (ret)
+   350			return ret;
+   351	
+   352		if (osr == 1 || st->info->resolution == 16) {
+   353			ret = regmap_clear_bits(st->regmap, AD4851_REG_PACKET,
+   354						AD4851_PACKET_FORMAT_MASK);
+   355			if (ret)
+   356				return ret;
+   357	
+   358			st->resolution_boost_enabled = false;
+   359		} else {
+   360			ret = regmap_update_bits(st->regmap, AD4851_REG_PACKET,
+   361						 AD4851_PACKET_FORMAT_MASK,
+   362						 FIELD_PREP(AD4851_PACKET_FORMAT_MASK, 1));
+   363			if (ret)
+   364				return ret;
+   365	
+   366			st->resolution_boost_enabled = true;
+   367		}
+   368	
+   369		if (st->osr != osr) {
+   370			ret = ad4851_scale_fill(indio_dev);
+   371			if (ret)
+   372				return ret;
+   373	
+   374			st->osr = osr;
+   375		}
+   376	
+   377		return 0;
+   378	}
+   379	
 
 -- 
 0-DAY CI Kernel Test Service
