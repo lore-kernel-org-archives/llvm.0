@@ -1,154 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C51A28EA44;
-	Fri,  9 May 2025 10:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BF9269AEE;
+	Fri,  9 May 2025 10:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746787386; cv=none; b=PM7Bs8YB+NVBOLdRiHTS63qliDCka4TNqYUhPMXQttbcAgddnIPRqC+h+Bk1GBrlwJWQGqjxyoMlt5g+JXrmQYq8E4a5ueAFysJ0qvFDZ7Mnpx3sRhZ4hm1Rid/DgqxSi7Xt+lVJbQkEt8v7tQiIQTA9Q4nNCP8s/zf7ZR3BKBc=
+	t=1746788287; cv=none; b=OJN+wSE0Kmz8HG0fbGqhC7NalYaW/RfVtpCRB/JXsYLlh447Y/bQIIZtusaEFbVnSmJhFgG2xaUj+9ypqZWH5vzDk6TBfjdytHbMStTeZFIt0IveHi4Eyvm/USQoPGAcSrB2xJERynkV8050U0mmB1D9sUqAS1INExgMAMRDQkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746787386; c=relaxed/simple;
-	bh=ahUuwjqGna+vJo0oCKdBCeSVplQwA69T4/kkfII8pms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e5E0JxJaI/IrOBrgQxhXDr7jvFXLbtXXXVAAPZWLVIZh1BwK9E4U6P3Zvr+Rwxbpq+kPAjI/cPXKNcrZsrHrYUvXYTTVM1bRC1Z3stT5H5dVp6oEHd8PU2qTSM0UAeOKjDN3VPTb0AuUvrNuzQ0uy4UypByTXGlOnYCBObitxvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jFsaMByV; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746788287; c=relaxed/simple;
+	bh=Ob37pOMqnXBZIHadN4tX/Ro7PwfUMbXIaw5YzlFxD6k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uSqsmhpAJ/dm7aoLuDN67Unfdl1jMLE5qKD2Ubk2QF/qpOEwwyVVIhUkTp3B+XkzjSD1QgkD6iHs6WmVv0b0xRhaXKRrjKbkx/0Yb/oRe004ciskJLl3k0mBk0AjwGCQNUOaUyCpoA3hsGLaDIHlINPfVymQKH5+RHMA41MEjKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOH4Ha+b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jFsaMByV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746787385; x=1778323385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ahUuwjqGna+vJo0oCKdBCeSVplQwA69T4/kkfII8pms=;
-  b=jFsaMByVmooNQjZ700lTpeu/B8E8Ggt4oJIvPlCS4Ei6uxUP3k2qPNPs
-   dyZda5U8JOZLmcEd3/2QsqRU7McWIEl11pI7FVkTIIXecxaeezCgsbSDK
-   57Zg/8nFdTZPiStrc2tOtDLJ+P8tNyiOP672h2gDpTd8gCcPx/foPItaq
-   P8JcOtKFzU3ua50dVOxnv6/Em6mTHaYOtRlDKkun4jVdIIdN7CYA6tjVM
-   hgpUBbHU3q7/7/I/yVp76l9TkT7JMSqwKC5EAvIGKSme+fMAqNCClRJmG
-   oIeLIVKxNEujbuAhb6NS39DWhgGv6QN23L9fvKZnmbsMVf/WtPzeteXMx
-   w==;
-X-CSE-ConnectionGUID: jRvdTxKvS6aP9be4IA354A==
-X-CSE-MsgGUID: H9HjYFtTTua8Fat1JMIDog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48524510"
-X-IronPort-AV: E=Sophos;i="6.15,275,1739865600"; 
-   d="scan'208";a="48524510"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 03:43:04 -0700
-X-CSE-ConnectionGUID: hIbvSYa8Q6a0Ki5hm2amaA==
-X-CSE-MsgGUID: UUXzAwMPTbeMMK3KQMIW6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,275,1739865600"; 
-   d="scan'208";a="136288448"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 09 May 2025 03:43:00 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uDLBx-000BxX-2k;
-	Fri, 09 May 2025 10:42:57 +0000
-Date: Fri, 9 May 2025 18:42:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zongmin Zhou <min_halo@163.com>, gregkh@linuxfoundation.org,
-	rafael@kernel.org, dakr@kernel.org, markgross@kernel.org,
-	arnd@arndb.de, eric.piel@tremplin-utc.net,
-	valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: Re: [PATCH 2/2] usbip: convert to use faux_device
-Message-ID: <202505091836.sxOEZiIt-lkp@intel.com>
-References: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOH4Ha+b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8D4C4CEE4;
+	Fri,  9 May 2025 10:58:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746788287;
+	bh=Ob37pOMqnXBZIHadN4tX/Ro7PwfUMbXIaw5YzlFxD6k=;
+	h=From:Date:Subject:To:Cc:From;
+	b=KOH4Ha+bXDRPcAccfce8JgYpzjoB9IckPltJqufP6ipaYC7wV2znMKVDfSWxpB2X4
+	 aP+nREyXBRC8wgB4TeWgNzvF+zJQgx3BBOAvlggQPGcKcUL0obkiznaY7Tu2oUjxJl
+	 oW1+DyJo4+FeSmliyd57DtJ6pSvET01XOEKk0L9E5+0DYYxjqEQgFsfRrRVggn/Dsu
+	 tCc/IoLuAfVN1kJrkgiicKrV5DNEpAXHo5vOKEYsXPh2T9Cv3Mvl40ri6cMFALetuh
+	 vebZmGXf+UFUEStB+ev3JxhFOP/BO9T31Uxk4Z4UVg7x1bCzpzYhT3xE7Wu/pR+NVp
+	 06rSPppUH+X6g==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 09 May 2025 11:58:01 +0100
+Subject: [PATCH] platform: mellanox: nvsw-sn2200: Fix .items in
+ nvsw_sn2201_busbar_hotplug
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin@kylinos.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250509-nvsw-sn2200-fix-items-busbar-hotplug-v1-1-8844fff38dc8@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALnfHWgC/x2NQQqDQAwAvyI5NxBDt7V+pXhYNWrArrJRK4h/d
+ /E4MMwcYBJVDMrsgCibmk4hQf7IoBl86AW1TQxM7MjRB8Nmf7TATISd7qiL/Azr1WofcZiWeVx
+ 7fPPLEZEvnm0HKTVHSe69+VbneQHKAcObdgAAAA==
+X-Change-ID: 20250509-nvsw-sn2200-fix-items-busbar-hotplug-7265000a84df
+To: Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Vadim Pasternak <vadimp@nvidia.com>
+Cc: Michael Shych <michaelsh@nvidia.com>, 
+ platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1716; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Ob37pOMqnXBZIHadN4tX/Ro7PwfUMbXIaw5YzlFxD6k=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBmy9/eyhrKrSD968/nb4dx0b+6z6pPyfJnzxBc3z3jqP
+ 0Xl34XzHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiM+cyMry7/ObnNMmcG5/+
+ 7/qTy6K00WmeHcPafTuuMaia3e08HybF8E9ldu0Dk+s/tk5jyTRe9pzrA+8Knd/uAYt+KByX87D
+ lC2MFAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Zongmin,
+Clang warns (or errors with CONFIG_WERROR=y):
 
-kernel test robot noticed the following build warnings:
+  drivers/platform/mellanox/nvsw-sn2201.c:531:32: error: variable 'nvsw_sn2201_busbar_items' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+    531 | static struct mlxreg_core_item nvsw_sn2201_busbar_items[] = {
+        |                                ^~~~~~~~~~~~~~~~~~~~~~~~
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.15-rc5 next-20250508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+nvsw_sn2201_busbar_items is only used in ARRAY_SIZE(), which uses
+sizeof(), so this variable is only used at compile time. It appears that
+this may be a copy and paste issue, so use nvsw_sn2201_busbar_items as
+the .items member in nvsw_sn2201_busbar_hotplug, clearing up the
+warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zongmin-Zhou/driver-core-add-device-s-platform_data-set-for-faux-device/20250508-171441
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/2a327b520760271471717fff9b222cdc34967489.1746662386.git.zhouzongmin%40kylinos.cn
-patch subject: [PATCH 2/2] usbip: convert to use faux_device
-config: x86_64-randconfig-002-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091836.sxOEZiIt-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091836.sxOEZiIt-lkp@intel.com/reproduce)
+Fixes: 56b0bb7f9069 ("platform: mellanox: nvsw-sn2200: Add support for new system flavour")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/platform/mellanox/nvsw-sn2201.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505091836.sxOEZiIt-lkp@intel.com/
+diff --git a/drivers/platform/mellanox/nvsw-sn2201.c b/drivers/platform/mellanox/nvsw-sn2201.c
+index 8c31189a94dd..db31c8bf2255 100644
+--- a/drivers/platform/mellanox/nvsw-sn2201.c
++++ b/drivers/platform/mellanox/nvsw-sn2201.c
+@@ -551,7 +551,7 @@ static struct mlxreg_core_item nvsw_sn2201_busbar_items[] = {
+ 
+ static
+ struct mlxreg_core_hotplug_platform_data nvsw_sn2201_busbar_hotplug = {
+-	.items = nvsw_sn2201_items,
++	.items = nvsw_sn2201_busbar_items,
+ 	.count = ARRAY_SIZE(nvsw_sn2201_busbar_items),
+ 	.cell = NVSW_SN2201_SYS_INT_STATUS_OFFSET,
+ 	.mask = NVSW_SN2201_CPLD_AGGR_BUSBAR_MASK_DEF,
 
-All warnings (new ones prefixed by >>):
+---
+base-commit: 3c415b1df95c06ae4f9bdb166541ab366b862cc2
+change-id: 20250509-nvsw-sn2200-fix-items-busbar-hotplug-7265000a84df
 
->> drivers/usb/usbip/vhci_hcd.c:1531:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-    1531 |         return ret;
-         |                ^~~
-   drivers/usb/usbip/vhci_hcd.c:1501:12: note: initialize the variable 'ret' to silence this warning
-    1501 |         int i, ret;
-         |                   ^
-         |                    = 0
-   drivers/usb/usbip/vhci_hcd.c:1418:12: warning: unused function 'vhci_hcd_suspend' [-Wunused-function]
-    1418 | static int vhci_hcd_suspend(struct faux_device *fdev, pm_message_t state)
-         |            ^~~~~~~~~~~~~~~~
-   drivers/usb/usbip/vhci_hcd.c:1462:12: warning: unused function 'vhci_hcd_resume' [-Wunused-function]
-    1462 | static int vhci_hcd_resume(struct faux_device *fdev)
-         |            ^~~~~~~~~~~~~~~
-   3 warnings generated.
-
-
-vim +/ret +1531 drivers/usb/usbip/vhci_hcd.c
-
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1498  
-0392bbb6f6af31 drivers/staging/usbip/vhci_hcd.c matt mooney        2011-05-19  1499  static int __init vhci_hcd_init(void)
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1500  {
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1501  	int i, ret;
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1502  
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1503  	if (usb_disabled())
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1504  		return -ENODEV;
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1505  
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1506  	if (vhci_num_controllers < 1)
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1507  		vhci_num_controllers = 1;
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1508  
-89a73d281fa4f5 drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1509  	vhcis = kcalloc(vhci_num_controllers, sizeof(struct vhci), GFP_KERNEL);
-89a73d281fa4f5 drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1510  	if (vhcis == NULL)
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1511  		return -ENOMEM;
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1512  
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1513  	for (i = 0; i < vhci_num_controllers; i++) {
-17d6b82d2d6d46 drivers/usb/usbip/vhci_hcd.c     Hongren Zheng      2023-10-14  1514  		void *vhci = &vhcis[i];
-1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1515  		char vhci_name[16];
-1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1516  
-1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1517  		snprintf(vhci_name, 16, "%s.%d", driver_name, i);
-b8aaf639b403f0 drivers/usb/usbip/vhci_hcd.c     Andy Shevchenko    2023-10-06  1518  
-1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1519  		vhcis[i].fdev = faux_device_create_with_groups(vhci_name, NULL, &vhci_driver, NULL, vhci);
-1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1520  		if (!vhcis[i].fdev) {
-b8aaf639b403f0 drivers/usb/usbip/vhci_hcd.c     Andy Shevchenko    2023-10-06  1521  			while (i--)
-1bcae4465d2818 drivers/usb/usbip/vhci_hcd.c     Zongmin Zhou       2025-05-08  1522  				faux_device_destroy(vhcis[i].fdev);
-dff3565b8e1c0b drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1523  			goto err_add_hcd;
-dff3565b8e1c0b drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1524  		}
-0775a9cbc694e8 drivers/usb/usbip/vhci_hcd.c     Nobuo Iwata        2016-06-13  1525  	}
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1526  
-b8aaf639b403f0 drivers/usb/usbip/vhci_hcd.c     Andy Shevchenko    2023-10-06  1527  	return 0;
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1528  
-dff3565b8e1c0b drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1529  err_add_hcd:
-89a73d281fa4f5 drivers/usb/usbip/vhci_hcd.c     Yuyang Du          2017-06-08  1530  	kfree(vhcis);
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09 @1531  	return ret;
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1532  }
-04679b3489e048 drivers/staging/usbip/vhci_hcd.c Takahiro Hirofuchi 2008-07-09  1533  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
