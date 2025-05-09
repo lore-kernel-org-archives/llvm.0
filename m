@@ -1,99 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCBF22D78C
-	for <llvm@lists.linux.dev>; Thu,  8 May 2025 23:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7303A13E02D;
+	Fri,  9 May 2025 02:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746747730; cv=none; b=edcHo4BzoL+PgA6rjZj0keAsOz2sAAI82PNiaQq+sw5r4wYP4pRJ8QWuTrzTcAV9lJbWdvWUWhVTJjE3H8zu/J5+o4nis2FgLJ10eY5D6HInc7k4894F9UreXY2TIr0mWluOVisJiqx1/3Oj5I1uXV3k95y/XWT76+lDpd+3jg8=
+	t=1746757789; cv=none; b=FCfKjUiAz+Bo/cYMKesBbD9TvsUk3bB/5RMshjNqtozSQlwgP21qOYmDiui7/dCMTtggs41CLArEL+IWhWNMWa72uKnen8mCG0O5OU66ihx/TQPRSlzZdkMxSIRddGQJcKfaBUoZ0z2UCw+g8RWaWeBuXmvmrqbHrnhD4vmtpyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746747730; c=relaxed/simple;
-	bh=09YVLbyo9KwNZrWmbD5Ua1zn9xs89/kupG4sTwq072g=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XC/I0wh/By8859Jgoy96iH27IUf6IDqTj4h4BoPSXrn9BQqyc8vl0s/2eLLTVxCs+VVYJjLz5tiivVLALBo2xjjRMq5PiOVmN3TRhIz/RcCRwmT6k9UIMKGzMWZvEHnFKzu37J1P2WYRQ85+yAJ+REC3VdPlJbkgQptJGhVCZLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g4zaaCe3; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746757789; c=relaxed/simple;
+	bh=ruRY58xeWEGRGJE+Dan+m3v9azmAAyvJZ5rGtjAokdk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jNJrWDhh+4DKaKh5T9i3Tm6ycwA4Z/GfcEa1RXJ+wEGK0BbBwSHGFLDwyeNPoaOoisy8+9gvJYlBtDnk7jJBK/uZmtoY1yufDfuLgJfT/E7ByGrdjd3SmIpub9EwfUVjSvrYLEV7EdZkNoAJDL1ymMV117eEmn0JH5TLp3m/xcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qriJcg6U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g4zaaCe3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746747727;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FqULkA9q1j2yoI6UDkOgzBFqyrCUQaN8mUUun6Dm0nQ=;
-	b=g4zaaCe3bqbU+rdK92AmFAm8H5yh60aZGx+GgHFQIEcKiCZ/mXVL1Ke0cUhxdJCC2UbXYr
-	rp1I8yn3rfdajtShWuD3PiUOz5yqP+fVeSH2uByDcLa6a2VLxZGIcY+AYDbHp6Nz4s28+X
-	RpCk/sg+kF5MNDEk+EMCznLe4ai2LLw=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-617-k7NrTSnxNJOxrwC1LJb_3g-1; Thu,
- 08 May 2025 19:42:05 -0400
-X-MC-Unique: k7NrTSnxNJOxrwC1LJb_3g-1
-X-Mimecast-MFC-AGG-ID: k7NrTSnxNJOxrwC1LJb_3g_1746747725
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E8FD8180056F
-	for <llvm@lists.linux.dev>; Thu,  8 May 2025 23:42:04 +0000 (UTC)
-Received: from [172.20.110.75] (unknown [10.30.44.189])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E2DB30001AA;
-	Thu,  8 May 2025 23:42:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
- upstream-mainline, 9c69f888)
-Date: Thu, 08 May 2025 23:42:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qriJcg6U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3EFC4CEE7;
+	Fri,  9 May 2025 02:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746757788;
+	bh=ruRY58xeWEGRGJE+Dan+m3v9azmAAyvJZ5rGtjAokdk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=qriJcg6UBDa+DAJFcCtM3wux3JQZKRLoXWwwgzHSkjMVVhyrASw9Zr+/wQ81Hxyk2
+	 La2pb0ZOpt8uE1pU4tzOZkPYtySBTHy5Oc03d8yf7ZDFDtKQYIUXxek5X8YHCT9BDK
+	 Cdq3+zzrRoeQsoGQ8Ox/m9tbGajMUyHyfN6rCpC+B5O6VMmwrYeCrifUBM+Vahqw4/
+	 YfgMqYx1aR5gnZhuPZTMV9vV23Y4RdLMFjmyoEzHIx150qu56ynpz+Og2zTUVGUmDz
+	 4+0SE9cpt+6kjdnczbrsMFTt/fqHgF729+TLtfJ5E6ysoxNmKu6gTUoV/3L+6Idjt8
+	 IS5O5rM2rGNIA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADBB3380AA7D;
+	Fri,  9 May 2025 02:30:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <62991.125050819420502822@us-mta-617.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: xHxXDTpPaRc4WaB9d7g_mIcod7-9Qe_y5Q2YTrOtlEQ_1746747725
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: qede: Initialize qede_ll_ops with designated
+ initializer
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174675782750.3105310.13342921805980013362.git-patchwork-notify@kernel.org>
+Date: Fri, 09 May 2025 02:30:27 +0000
+References: <20250507-qede-fix-clang-randstruct-v1-1-5ccc15626fba@kernel.org>
+In-Reply-To: <20250507-qede-fix-clang-randstruct-v1-1-5ccc15626fba@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: manishc@marvell.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, kees@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ stable@vger.kernel.org
 
-Hi, we tested your kernel and here are the results:
+Hello:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
+On Wed, 07 May 2025 21:47:45 +0100 you wrote:
+> After a recent change [1] in clang's randstruct implementation to
+> randomize structures that only contain function pointers, there is an
+> error because qede_ll_ops get randomized but does not use a designated
+> initializer for the first member:
+> 
+>   drivers/net/ethernet/qlogic/qede/qede_main.c:206:2: error: a randomized struct can only be initialized with a designated initializer
+>     206 |         {
+>         |         ^
+> 
+> [...]
 
-Kernel information:
-    Commit message: Merge tag 'bcachefs-2025-05-08' of git://evilpiepirate.=
-org/bcachefs
+Here is the summary with links:
+  - [net] net: qede: Initialize qede_ll_ops with designated initializer
+    https://git.kernel.org/netdev/net/c/6b3ab7f2cbfa
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1808271334
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1808271334-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
