@@ -1,186 +1,129 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132AD277037
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 09:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9E127F4F5;
+	Fri,  9 May 2025 09:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746782450; cv=none; b=KRlfDNfpcWgbr6S32jfc/FWUXRS2JCr/6yBOCxO6S/JQpHrKQjE9PQymtC6eq5i5Iow+E7cfksUqRsEhcNocDbOmTxxOfj+D0TLUcN+UEyR0GjZ+rTZxD/LBxwGs8/bvRiocwoivDAiEXtEOIjtiBV3yZ4N7Rvexl6Msr90RmX0=
+	t=1746783159; cv=none; b=kE8/YlX2WvftwwA1DwrjyDOr/6nDyLgsOeesnOwcA1jzpUSF7yGSdQPRbsrXJRTZ2fCU1QrurUZKXakEJJhJRHcpNSXBFu2xDbi7iNreLjS/fc+nOtiANuRlZSHHhBUQF7hKuVgZTfADvhftJ8RpvF40OyQyY4LEPBdQp0o9Rzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746782450; c=relaxed/simple;
-	bh=92OJhgzUjFkOtbE9HWjk9mos4q0J9p13l5+gly9O6B4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DGx1zPtRRxbtFOqPXy61wuIYJu2/XAj7/wrB5RQviSzSnz0/61Tx2yV0ckV8kwSAdenqLuZHmALvc4dMSckBPwB3uLr+7V7sZ/r5Xjdz59Z9NaQ4jSZOXQ6yiX1krR7i/VxAoIwXHFksm1OhowiCRmsq2JUEJr4IeOvNVHIqCD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lEnVrqcq; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1746783159; c=relaxed/simple;
+	bh=to0QosEpmvybTJC1yRuEMhfxmYNuDdgWm2IfnbeRBfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eoCDrETK2FOXiBwQP8eyXnY93LW/obQ4l//cKgejBCR4loO/Qaba+mmxYqpD/rYh4M9/oPzHg0jZ2qBAv90FeLhoJcRv+L3DkIuCMZNUw1fc1MIET6X/x9E7+vpPngdRm7el7rgOPo2FzuM6QhsUJ7RNlPYI5ziP7fT3kbJREfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WDJuBhNk; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lEnVrqcq"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43f405810b4so9566795e9.1
-        for <llvm@lists.linux.dev>; Fri, 09 May 2025 02:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746782445; x=1747387245; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xse/MuumvZWNGL7RhYB2Lqx5Phv6lYmDCP0vNNVPW4s=;
-        b=lEnVrqcqkL1+EkRQTRkH+ANQBy8GseA6Wd90VFcHYzUuObmPXnsT10pxYcx9QNZ7QZ
-         E1C2C5DbkrZN2gnrGUwEQ1L9VRnwGKoXcLu3Z1EPxKmwRoRkLbqZROzGuK7L9i+JDmiL
-         5LrVCUz/X4vS3RkwPvjv9vXI3JaPzEG8IByKynQc3tRPBbioVPKrKrbxzIPcQUaw92tl
-         eP8GDhYdaE9/cI5U2fNB31H0xkHG7I3AqTF1spFWeva6jNFI/fQ+uWZgL4QxnIVMDcLN
-         sBmMKdp2G8AnW9gZVAVEEdvO0Tidk92jNSBoJ9rxqt0e1+wKBIbCHB/PdKdl3+zWvLxl
-         XzHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746782445; x=1747387245;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xse/MuumvZWNGL7RhYB2Lqx5Phv6lYmDCP0vNNVPW4s=;
-        b=f2ZHpfPOEcKFbRSzm+7CmxEdpGqskl7tbTVBbu9EkSia//MCL68UybA8P6efMGHY5Z
-         XZP/2xQ/zlo7xsin2YVzKFiY3Ot3vCCSl5Q6x/Aor2yhgAkimQAGfwgW/n6BpHbosctj
-         ecaZhhR6/pydYOTKY4Yi9+Yw6aKaun4mHkkbBEVcUhvbBLs2XzfTwKZTamQHL3VekG7w
-         4hnPxfuu6m2etPZvfcHsmV9+Z+6B9sC4HN9+OJAEzZhhohGvHpQLJnfiBsBMLG3VEQ+t
-         ucFcRRh+bcOWJ6J+2J+WWoiwhU/HNPEJn86j0tsJ6vMqF6+fztJlIRqjNjt917DR1eU5
-         1TgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8k4TZ87iqfwDBI8XROUGaHblkh9Y20NVHK0kpKYDSfWnGW1VfaWQAXIj+l/HQAlRRqvLZ@lists.linux.dev
-X-Gm-Message-State: AOJu0YyT5uFNfLFIKvi6ec7OhDjv+FM4fl+NaV+5y2Wb3iT8NzjDh+qR
-	7558cuZjdOX9oYN4ioLkyKmtT8avF8wwRKsQbt4l/XYSgyW5a/rX/QfDIzatcKHBetz8UuEpwES
-	O2tcVIPXuvpytVw==
-X-Google-Smtp-Source: AGHT+IEfB4RX5z3hIuO5Du+V62ZdH6yKf3Q/8br7x4OG7oxYICZrWu8v/yGtMoMSgvs+ViJU/R9zsW+6x08prmc=
-X-Received: from wmbfk10.prod.google.com ([2002:a05:600c:cca:b0:440:5d4e:87])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:6612:b0:440:54ef:dfdc with SMTP id 5b1f17b1804b1-442d6d448c9mr18690195e9.8.1746782445453;
- Fri, 09 May 2025 02:20:45 -0700 (PDT)
-Date: Fri, 9 May 2025 09:20:43 +0000
-In-Reply-To: <aB2aAEELa3253nBh@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WDJuBhNk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746783158; x=1778319158;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=to0QosEpmvybTJC1yRuEMhfxmYNuDdgWm2IfnbeRBfE=;
+  b=WDJuBhNkdAD+XGqgrPC74d67cRSy5oG0J5tVOx7AZxu6ce64JYyiAqPE
+   rijNU+IQymXNIKRpAhGyVIIBwNFNQV/FnBSRsUSm7RkZgK/Q5uF1HInWy
+   JoJG3BdA1jRXbnyxxPehNRFADDPWnw2/7dJqf42ELgey2EbJ4bKKd3Y7r
+   oykiHwfG5NpL5LiT16Re/i+OpAOvksbpdo/ik1+TRd7b45kIIuzdufY2c
+   K4eEr5YBrxclPnsNR8YyNWC8dkv6s8j6TjzF9YxtLMHaDtSK9z/J1XOBN
+   muv48wbosw94FXIYjWVEWrSYVVBdCpXhs7E/qepm7UVozTHSXGxMMWEAq
+   w==;
+X-CSE-ConnectionGUID: JSANPgfvQJiK+IX1vCX9qA==
+X-CSE-MsgGUID: kIqBTn85TrOS6GwdSBl4jw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48760833"
+X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
+   d="scan'208";a="48760833"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 02:32:33 -0700
+X-CSE-ConnectionGUID: qYhfYHRTRX68KnPrmQpElQ==
+X-CSE-MsgGUID: Z+LC82ZOSt+ptAI2k7+Piw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
+   d="scan'208";a="141779040"
+Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
+  by fmviesa004.fm.intel.com with ESMTP; 09 May 2025 02:32:31 -0700
+Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uDK5k-0000VK-2u;
+	Fri, 09 May 2025 09:32:28 +0000
+Date: Fri, 9 May 2025 17:32:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [linux-next:master 8072/9729] drivers/i2c/busses/i2c-i801.c:1180:49:
+ error: no member named 'mux_pdev' in 'struct i801_priv'
+Message-ID: <202505091734.6Y3SNpzo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250506045843.51258-1-boqun.feng@gmail.com> <20250506045843.51258-5-boqun.feng@gmail.com>
- <aB2aAEELa3253nBh@gmail.com>
-Message-ID: <aB3I62o8hWSULGBm@google.com>
-Subject: Re: [PATCH 4/5] sched/core: Add __might_sleep_precision()
-From: Alice Ryhl <aliceryhl@google.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Tamir Duberstein <tamird@gmail.com>, Kunwu Chan <kunwu.chan@hotmail.com>, 
-	Mitchell Levy <levymitchell0@gmail.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Borys Tyran <borys.tyran@protonmail.com>, Christian Brauner <brauner@kernel.org>, 
-	Panagiotis Foliadis <pfoliadis@posteo.net>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Daniel Almeida <daniel.almeida@collabora.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, May 09, 2025 at 08:00:32AM +0200, Ingo Molnar wrote:
-> 
-> * Boqun Feng <boqun.feng@gmail.com> wrote:
-> 
-> > From: FUJITA Tomonori <fujita.tomonori@gmail.com>
-> > 
-> > Add __might_sleep_precision(), Rust friendly version of
-> > __might_sleep(), which takes a pointer to a string with the length
-> > instead of a null-terminated string.
-> > 
-> > Rust's core::panic::Location::file(), which gives the file name of a
-> > caller, doesn't provide a null-terminated
-> > string. __might_sleep_precision() uses a precision specifier in the
-> > printk format, which specifies the length of a string; a string
-> > doesn't need to be a null-terminated.
-> > 
-> > Modify __might_sleep() to call __might_sleep_precision() but the
-> > impact should be negligible. When printing the error (sleeping
-> > function called from invalid context), the precision string format is
-> > used instead of the simple string format; the precision specifies the
-> > the maximum length of the displayed string.
-> > 
-> > Note that Location::file() providing a null-terminated string for
-> > better C interoperability is under discussion [1].
-> > 
-> > [1]: https://github.com/rust-lang/libs-team/issues/466
-> > 
-> > Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
-> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> > Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > Link: https://lore.kernel.org/r/20250410225623.152616-2-fujita.tomonori@gmail.com
-> > ---
-> >  include/linux/kernel.h |  2 ++
-> >  kernel/sched/core.c    | 62 ++++++++++++++++++++++++++++--------------
-> >  2 files changed, 43 insertions(+), 21 deletions(-)
-> > 
-> > diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-> > index be2e8c0a187e..086ee1dc447e 100644
-> > --- a/include/linux/kernel.h
-> > +++ b/include/linux/kernel.h
-> > @@ -87,6 +87,7 @@ extern int dynamic_might_resched(void);
-> >  #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
-> >  extern void __might_resched(const char *file, int line, unsigned int offsets);
-> >  extern void __might_sleep(const char *file, int line);
-> > +extern void __might_sleep_precision(const char *file, int len, int line);
-> 
-> Ugh.
-> 
-> Firstly, '_precision' is really ambiguous in this context and suggests 
-> 'precise sleep' or something like that, which this is not about at all. 
-> So the naming here is all sorts of bad already.
-> 
-> But more importantly, this is really a Rust problem. Does Rust really 
-> have no NUL-terminated strings? It should hide them in shame and 
-> construct proper, robust strings, instead of spreading this disease to 
-> the rest of the kernel, IMHO ...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f48887a98b78880b7711aca311fbbbcaad6c4e3b
+commit: 27f4a0d6938a5cd3c30701f12c7454048800dbba [8072/9729] i2c: i801: don't instantiate spd5118 under SPD Write Disable
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250509/202505091734.6Y3SNpzo-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091734.6Y3SNpzo-lkp@intel.com/reproduce)
 
-Rust does have NUL-terminated strings, but they aren't the default. In
-most circumstances, obtaining a NUL-terminated string is possible, but
-we can't do it in this particular case.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505091734.6Y3SNpzo-lkp@intel.com/
 
-Specifically, it's because we're relying on the #[track_caller] language
-feature. When this annotation is placed on a function, it implicitly
-adds an extra hidden argument to the function signature containing a
-pointer to a location struct that holds the file, line, and column of
-the caller. This works recursively until it hits a function without the
-annotation, so code like this:
+Note: the linux-next/master HEAD f48887a98b78880b7711aca311fbbbcaad6c4e3b builds fine.
+      It may have been fixed somewhere.
 
-#[track_caller]
-fn schedule() {
-     might_sleep();
-     // Call into C implementation of schedule.
-     unsafe { bindings::schedule() };
-}
+All errors (new ones prefixed by >>):
 
-would report a line number in the *caller* of schedule() rather than
-just reporting the line number inside the schedule() function.
+>> drivers/i2c/busses/i2c-i801.c:1180:49: error: no member named 'mux_pdev' in 'struct i801_priv'
+    1180 |         if (!IS_ENABLED(CONFIG_I2C_I801_MUX) || !priv->mux_pdev) {
+         |                                                  ~~~~  ^
+   1 error generated.
 
-The problem is that the location struct is generated by the compiler,
-and we don't have any control over how its generated. Unfortunately, the
-compiler does not place a NUL terminator in the file name.
 
-> Rust is supposed to be about increased security, right? How does extra, 
-> nonsensical complexity for simple concepts such as strings achieve 
-> that? If the Rust runtime wants to hook into debug facilities of the 
-> Linux kernel then I have bad news: almost all strings used by kernel 
-> debugging facilities are NUL-terminated.
-> 
-> So I really don't like this patch. Is there no other way to do this?
+vim +1180 drivers/i2c/busses/i2c-i801.c
 
-I filed a proposal to add a NUL-terminator to the file names used by
-rustc-generated location structs:
+  1159	
+  1160	/* Register optional targets */
+  1161	static void i801_probe_optional_targets(struct i801_priv *priv)
+  1162	{
+  1163		/* Only register targets on main SMBus channel */
+  1164		if (priv->features & FEATURE_IDF)
+  1165			return;
+  1166	
+  1167		if (apanel_addr) {
+  1168			struct i2c_board_info info = {
+  1169				.addr = apanel_addr,
+  1170				.type = "fujitsu_apanel",
+  1171			};
+  1172	
+  1173			i2c_new_client_device(&priv->adapter, &info);
+  1174		}
+  1175	
+  1176		if (dmi_name_in_vendors("FUJITSU"))
+  1177			dmi_walk(dmi_check_onboard_devices, &priv->adapter);
+  1178	
+  1179		/* Instantiate SPD EEPROMs unless the SMBus is multiplexed */
+> 1180		if (!IS_ENABLED(CONFIG_I2C_I801_MUX) || !priv->mux_pdev) {
+  1181			if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
+  1182				i2c_register_spd_write_disable(&priv->adapter);
+  1183			else
+  1184				i2c_register_spd_write_enable(&priv->adapter);
+  1185		}
+  1186	}
+  1187	#else
+  1188	static void __init input_apanel_init(void) {}
+  1189	static void i801_probe_optional_targets(struct i801_priv *priv) {}
+  1190	#endif	/* CONFIG_X86 && CONFIG_DMI */
+  1191	
 
-https://github.com/rust-lang/libs-team/issues/466
-
-But I have not had success with landing it, unfortunately.
-
-Alice
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
