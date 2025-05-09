@@ -1,103 +1,99 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DDC23E338;
-	Fri,  9 May 2025 21:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B6C1372
+	for <llvm@lists.linux.dev>; Fri,  9 May 2025 23:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746827495; cv=none; b=VYtnQzWcG3O9v8h1sy5auslUW0Rsnbm/bo9kHHAfLLoqxHgVwNySHTsERxYCCIpqrTBl+SF6v5QZxdXakFmZU5lkcKMBxqO0e9+FuVCmG+MPGbum0qzwBqRRAzGLM6unvjln/txTJVCxoj+LOD/gaprmeriqYiqKwdkqo9Mg7GQ=
+	t=1746831789; cv=none; b=IPlAjKCyjIDdGEC3UemXsBuUfYNjpnQjphhUdjC+bfvrIwq6Ln5bW7+xZP+Rj5VxRN4SllU7Yq6gBhIgeQiRPKDFFoUjoN8N+B8gBxjRzx/zOfX6mIOjkwzLbDGgRUmlDtqVpERmJaJ0K5EG5nbQFzEIFyyJqcxLoVgYYii+Tvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746827495; c=relaxed/simple;
-	bh=6rbW+FJviCVwHyCgr8LfThWuC1PBVM/HlsNFVPdZMBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dEstOMQ/k020O1xwSKoJavChjfV3O3izC7q1ixBprJdW0KYwfir6J4gasBCfbEyvrjNRIiPffZsm2TN0JaLvayXBtPP+nA9O71iHclU9g8CrRe2DVvpTCW2nI3G6Y+G29Ow2obS7fv1zQg7I1FoH257TWe19kzF8o/Z22GyzBYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dR5lJQB2; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746831789; c=relaxed/simple;
+	bh=aGDrreVeCZDyhsdwTC8i1SbQteK+PpBXgS2eN1apcZc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Vpf2e8PivKHJnmvnkH+FWbhM5VplcHhCxR1Q5Bp648I1/V+ydKR8n+Y/fABFne+TDv17EG3BOoEnSgkxPtUGPQkARFUnjO4rLhLna5AspwnLIAvDprJ/KxcnJFWSQSWl62amK9D7RbGb3hz5VrdWyOKm9GLGiB3uCt8wcleo/ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DbjsC4Z7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dR5lJQB2"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a1fa0d8884so654975f8f.3;
-        Fri, 09 May 2025 14:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746827492; x=1747432292; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GXz86XrTySFK/5HrFM2uARRr8eXxPZL+3FIhyg3Mrkc=;
-        b=dR5lJQB2ubBRhcmhdGI1pyuMYeKrHNhu6UhPYNQ6ffr1+wTF0iQnyGB8d5U4aG6/Ns
-         nLjUVTS4cDItQIw46Guq76Gc98EHfqD5AtsE0VkKHq0f3hHKiqV5rSaTG1GRKt2Zrxhl
-         f7xcniv0AB0kWkifwQZoU5Fd6BA7y/VP7NtoxT0GDMPXBSM0fKXT32h/tM/7/nNZaCjS
-         sks0GcuxPql/vxzi58YJRiYQD+tGsbLptUKjfNsYR6BEFJzzRI3YFBTU2AAKjzUiHaI+
-         fnnDVExtRADdvDGkd+Y0L7I6xvZz3zFAfBmh0QtFOaLBNcGoqXOQpgmbea57hyeeaL/3
-         J7Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746827492; x=1747432292;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GXz86XrTySFK/5HrFM2uARRr8eXxPZL+3FIhyg3Mrkc=;
-        b=UZfAOmT8VenC9dWQUY7nCEoo7qRPUewkBFXdtLdl7u8ymN17nTOyg/dIUONr8E1Sp7
-         3vPy3n8MF8mi9BuZ+rAn0Y4rY02pKSw7fjbdXm89K9yUeJvYybcmRDf8W+PzNPJM+VOI
-         wGnVGIdB16YkyB69gzSYdohk0heZR1BlCBImbRAzjHZQirrt1oVrhQtF2465ftzG0Az/
-         oaXeCzNowLSh/PiWN4SStJXBDE+bW3RNhofWz4SpHxVTjUiV/hQfAlYG9+al8MkOACNR
-         NM9leKyplfg/Qev/HV0wncnZ7YS+kD0zOCFOGMSL1Bnc7bbXzSclpJd8bfXPNJUb2gm5
-         UtOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUIx6ia0bQaBkCMGNK9RmXGrf2INBVGKmWRxFVIG81Kgr8jgbKGQD39/0CBlk2YGtWlXdjAYentcZc1DEAY@lists.linux.dev
-X-Gm-Message-State: AOJu0YwwhJfyE84dvt9bYMsw97RFAloXLF7UgheKNA1A2mEj/2Z8GBwk
-	jY/g0wNPxO4dnMEZkAjB3xvNjEgZF6qyapHd09uK4N0BdLeNDjESVJV9sA==
-X-Gm-Gg: ASbGncseUbDp889h3ReiQUfqXbzQ7I9JEkmyqypLw807MTkC3P1AsAa1iKHdcliT8PO
-	CorWIm/DFQMl/ugEBJ0nEv1inhyAZc9zq+uzVwcFb83rWwtCHKl4s1q15uNuBmbQAbDiHdIJ097
-	GUp7RGJhLyAXFIq0lV3KQEyC/IFUtddDIAKL8MwZvt5DH4l3OHwbQbgOLiKn5Dn5aaaUZBadAIF
-	VyECGrJPJFTyDx4GmT4quNqjBE50YQzsdH0+iktj4xeTjE08Y6OP5eCoHtInSXPGrrsN/lVT+kp
-	iL3CTG9W4qG9qjEGTbFvo8rE1nrkPyHs5vqRjTnPHEqCdKpwrWLBUy3DXZHRk5opkBmZ78BO
-X-Google-Smtp-Source: AGHT+IG4nvzxsNyZEg+e8uhRVmt1RgZs9nJgdtk+9Mi05ch5zO1SPlbUVPNQ+qf8GUqjGGylts9yfg==
-X-Received: by 2002:a05:6000:2481:b0:3a1:f535:e9be with SMTP id ffacd0b85a97d-3a1f642a621mr4376602f8f.7.1746827491669;
-        Fri, 09 May 2025 14:51:31 -0700 (PDT)
-Received: from [192.168.8.100] ([148.252.145.197])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58f2fe6sm4536183f8f.58.2025.05.09.14.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 14:51:31 -0700 (PDT)
-Message-ID: <4103341c-1d86-4d78-ab74-c16c3c6570f6@gmail.com>
-Date: Fri, 9 May 2025 22:52:42 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DbjsC4Z7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746831786;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VmUv5wx04fv3iymfi5moLTLaHGYKZ/3IvuFKHK2ptd0=;
+	b=DbjsC4Z7TDdya/sjzlvml9jjne0E5QragnvVi5SncgvV69qNNmpIAT9ejHwdSnwISokMIU
+	KCvuGP4WsVc74+CSHoZZkgixjVmIP9H+orqetPPZ6eOVh5FTzoBVnlIwXwPvKkoWMwpIBN
+	dcPFnQkVxkGBpkfcl8MXd3N7TlmpvMw=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-68-TABn8ZeJM3OaFn-en7WSeQ-1; Fri,
+ 09 May 2025 19:03:04 -0400
+X-MC-Unique: TABn8ZeJM3OaFn-en7WSeQ-1
+X-Mimecast-MFC-AGG-ID: TABn8ZeJM3OaFn-en7WSeQ_1746831784
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CFD1E195607B
+	for <llvm@lists.linux.dev>; Fri,  9 May 2025 23:03:03 +0000 (UTC)
+Received: from [172.20.110.75] (unknown [10.30.44.189])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 610701953B8B;
+	Fri,  9 May 2025 23:03:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
+ upstream-mainline, ea34704d)
+Date: Fri, 09 May 2025 23:03:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [axboe-block:for-6.16/io_uring 40/40] io_uring/io_uring.c:1656:6:
- warning: variable 'nr' set but not used
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jens Axboe <axboe@kernel.dk>
-References: <202505100200.cyy3V6oJ-lkp@intel.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <202505100200.cyy3V6oJ-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <55035.125050919030500109@us-mta-68.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: DqPHRUJ9D0jY1GTPQRVgnvo2Bg44AvuSISYBNb0wiF4_1746831784
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/9/25 19:59, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.16/io_uring
-> head:   55c28f431651973385c17081bdcdadf8b5c6da91
-> commit: 55c28f431651973385c17081bdcdadf8b5c6da91 [40/40] io_uring: drain based on allocates reqs
-> config: s390-randconfig-002-20250510 (https://download.01.org/0day-ci/archive/20250510/202505100200.cyy3V6oJ-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250510/202505100200.cyy3V6oJ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505100200.cyy3V6oJ-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> io_uring/io_uring.c:1656:6: warning: variable 'nr' set but not used [-Wunused-but-set-variable]
->      1656 |         int nr = 0;
+Hi, we tested your kernel and here are the results:
 
-It'a dead code that was replaced with a helper, I'll send the change
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
--- 
-Pavel Begunkov
+
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2025-05-10' of https://gitlab.free=
+desktop.org/drm/kernel
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1810089785
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1810089785-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
