@@ -1,119 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90816274653;
-	Fri,  9 May 2025 08:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132AD277037
+	for <llvm@lists.linux.dev>; Fri,  9 May 2025 09:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746780893; cv=none; b=HizoGc0bTWsqf5fGtS9ZR82BxRPWYrrY/wiV9J5HpHnm/kYF5I+v+nG9np4IR2jvYHxTXsQI0Ic41JMqRfyZ2EMOO+98ntUDvyg02CR15woExmY2+zyH3ZMClX+Ly85abH9J85pmD2WA+4H1Su/fbQiqKLU4cBrFlL58G/d7zsA=
+	t=1746782450; cv=none; b=KRlfDNfpcWgbr6S32jfc/FWUXRS2JCr/6yBOCxO6S/JQpHrKQjE9PQymtC6eq5i5Iow+E7cfksUqRsEhcNocDbOmTxxOfj+D0TLUcN+UEyR0GjZ+rTZxD/LBxwGs8/bvRiocwoivDAiEXtEOIjtiBV3yZ4N7Rvexl6Msr90RmX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746780893; c=relaxed/simple;
-	bh=oepDtHzajxH/jtKxGYRJsypIYPhpsvGjOf7cGD1TEyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MMe5Rh+l5hfq4bSx3fsrAACODLM97NBNV/XTu/9dPhlNmPGEK2lX6FL2yxA7zlyP4WYP1yXnEoJ7X0g1MCG+I33CmIMyVEuppg3Oo+JalI+J7PEX2oestZtP7N77DRDiZfuNZAQjGD8B3Kvp93jVByQ2sSGF5i08BopF5WHeobg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UlaLZQaP; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746782450; c=relaxed/simple;
+	bh=92OJhgzUjFkOtbE9HWjk9mos4q0J9p13l5+gly9O6B4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=DGx1zPtRRxbtFOqPXy61wuIYJu2/XAj7/wrB5RQviSzSnz0/61Tx2yV0ckV8kwSAdenqLuZHmALvc4dMSckBPwB3uLr+7V7sZ/r5Xjdz59Z9NaQ4jSZOXQ6yiX1krR7i/VxAoIwXHFksm1OhowiCRmsq2JUEJr4IeOvNVHIqCD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lEnVrqcq; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UlaLZQaP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746780891; x=1778316891;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oepDtHzajxH/jtKxGYRJsypIYPhpsvGjOf7cGD1TEyY=;
-  b=UlaLZQaPEzjCCf5oDflvv7Tmf+1z0z/6nrXh38fRLw1G6znhs4WkvPbQ
-   H7eheFrB8qQFZdqmaL2YQ3kTOVqRs7LqmJ9aLFImWwzItzS66Rlp0s8zN
-   Vc5//JPwUajVzm79N62PKqPP/nEHRDfSJfpLh+p4Hre0ShYcuOTOabIts
-   bdO9/H9nwJuyuhNpaMD1EMlsv0i5HIiZMoSxRWCF3uOyA0Y2rD3LsgvJH
-   ZjAJXdu1aW3Fr5ES3HlCz2iI2SYXIk2MrApxVQwViSZE29KQcJAQ8TAPw
-   PATgvOFT0ZM3jVCX1pvkcinNjkWYiH1T8Bn8Wmob1NEQXGfFsJTxkWWNV
-   Q==;
-X-CSE-ConnectionGUID: TeSr6QnZTcSld6Y3ey/LUQ==
-X-CSE-MsgGUID: 4HcEqaLdSVqG5X9uyuIHhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="47708660"
-X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="47708660"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 01:54:50 -0700
-X-CSE-ConnectionGUID: xLlKLPs9S2yw7cHFFTC1/g==
-X-CSE-MsgGUID: 5gtTs8nWQpqsgidedIDJrA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="141334172"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 09 May 2025 01:54:49 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uDJVF-000BqR-2n;
-	Fri, 09 May 2025 08:54:45 +0000
-Date: Fri, 9 May 2025 16:54:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
-	Damien Le Moal <dlemoal@kernel.org>
-Subject: [linux-nvme:nvme-6.16 11/14] drivers/nvme/target/core.c:1018:10:
- warning: variable 'ret' is uninitialized when used here
-Message-ID: <202505091619.QFU1fxsd-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lEnVrqcq"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43f405810b4so9566795e9.1
+        for <llvm@lists.linux.dev>; Fri, 09 May 2025 02:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746782445; x=1747387245; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xse/MuumvZWNGL7RhYB2Lqx5Phv6lYmDCP0vNNVPW4s=;
+        b=lEnVrqcqkL1+EkRQTRkH+ANQBy8GseA6Wd90VFcHYzUuObmPXnsT10pxYcx9QNZ7QZ
+         E1C2C5DbkrZN2gnrGUwEQ1L9VRnwGKoXcLu3Z1EPxKmwRoRkLbqZROzGuK7L9i+JDmiL
+         5LrVCUz/X4vS3RkwPvjv9vXI3JaPzEG8IByKynQc3tRPBbioVPKrKrbxzIPcQUaw92tl
+         eP8GDhYdaE9/cI5U2fNB31H0xkHG7I3AqTF1spFWeva6jNFI/fQ+uWZgL4QxnIVMDcLN
+         sBmMKdp2G8AnW9gZVAVEEdvO0Tidk92jNSBoJ9rxqt0e1+wKBIbCHB/PdKdl3+zWvLxl
+         XzHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746782445; x=1747387245;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xse/MuumvZWNGL7RhYB2Lqx5Phv6lYmDCP0vNNVPW4s=;
+        b=f2ZHpfPOEcKFbRSzm+7CmxEdpGqskl7tbTVBbu9EkSia//MCL68UybA8P6efMGHY5Z
+         XZP/2xQ/zlo7xsin2YVzKFiY3Ot3vCCSl5Q6x/Aor2yhgAkimQAGfwgW/n6BpHbosctj
+         ecaZhhR6/pydYOTKY4Yi9+Yw6aKaun4mHkkbBEVcUhvbBLs2XzfTwKZTamQHL3VekG7w
+         4hnPxfuu6m2etPZvfcHsmV9+Z+6B9sC4HN9+OJAEzZhhohGvHpQLJnfiBsBMLG3VEQ+t
+         ucFcRRh+bcOWJ6J+2J+WWoiwhU/HNPEJn86j0tsJ6vMqF6+fztJlIRqjNjt917DR1eU5
+         1TgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8k4TZ87iqfwDBI8XROUGaHblkh9Y20NVHK0kpKYDSfWnGW1VfaWQAXIj+l/HQAlRRqvLZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YyT5uFNfLFIKvi6ec7OhDjv+FM4fl+NaV+5y2Wb3iT8NzjDh+qR
+	7558cuZjdOX9oYN4ioLkyKmtT8avF8wwRKsQbt4l/XYSgyW5a/rX/QfDIzatcKHBetz8UuEpwES
+	O2tcVIPXuvpytVw==
+X-Google-Smtp-Source: AGHT+IEfB4RX5z3hIuO5Du+V62ZdH6yKf3Q/8br7x4OG7oxYICZrWu8v/yGtMoMSgvs+ViJU/R9zsW+6x08prmc=
+X-Received: from wmbfk10.prod.google.com ([2002:a05:600c:cca:b0:440:5d4e:87])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:6612:b0:440:54ef:dfdc with SMTP id 5b1f17b1804b1-442d6d448c9mr18690195e9.8.1746782445453;
+ Fri, 09 May 2025 02:20:45 -0700 (PDT)
+Date: Fri, 9 May 2025 09:20:43 +0000
+In-Reply-To: <aB2aAEELa3253nBh@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <20250506045843.51258-1-boqun.feng@gmail.com> <20250506045843.51258-5-boqun.feng@gmail.com>
+ <aB2aAEELa3253nBh@gmail.com>
+Message-ID: <aB3I62o8hWSULGBm@google.com>
+Subject: Re: [PATCH 4/5] sched/core: Add __might_sleep_precision()
+From: Alice Ryhl <aliceryhl@google.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Tamir Duberstein <tamird@gmail.com>, Kunwu Chan <kunwu.chan@hotmail.com>, 
+	Mitchell Levy <levymitchell0@gmail.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
+	Borys Tyran <borys.tyran@protonmail.com>, Christian Brauner <brauner@kernel.org>, 
+	Panagiotis Foliadis <pfoliadis@posteo.net>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Daniel Almeida <daniel.almeida@collabora.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
 
-tree:   git://git.infradead.org/nvme.git nvme-6.16
-head:   a0136c6ac4a9aba90a47b9c691bc299a113b5259
-commit: 206372d7c565174e6b8289dac03077b23b8369c9 [11/14] nvmet: support completion queue sharing
-config: s390-randconfig-002-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091619.QFU1fxsd-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091619.QFU1fxsd-lkp@intel.com/reproduce)
+On Fri, May 09, 2025 at 08:00:32AM +0200, Ingo Molnar wrote:
+> 
+> * Boqun Feng <boqun.feng@gmail.com> wrote:
+> 
+> > From: FUJITA Tomonori <fujita.tomonori@gmail.com>
+> > 
+> > Add __might_sleep_precision(), Rust friendly version of
+> > __might_sleep(), which takes a pointer to a string with the length
+> > instead of a null-terminated string.
+> > 
+> > Rust's core::panic::Location::file(), which gives the file name of a
+> > caller, doesn't provide a null-terminated
+> > string. __might_sleep_precision() uses a precision specifier in the
+> > printk format, which specifies the length of a string; a string
+> > doesn't need to be a null-terminated.
+> > 
+> > Modify __might_sleep() to call __might_sleep_precision() but the
+> > impact should be negligible. When printing the error (sleeping
+> > function called from invalid context), the precision string format is
+> > used instead of the simple string format; the precision specifies the
+> > the maximum length of the displayed string.
+> > 
+> > Note that Location::file() providing a null-terminated string for
+> > better C interoperability is under discussion [1].
+> > 
+> > [1]: https://github.com/rust-lang/libs-team/issues/466
+> > 
+> > Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
+> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> > Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > Link: https://lore.kernel.org/r/20250410225623.152616-2-fujita.tomonori@gmail.com
+> > ---
+> >  include/linux/kernel.h |  2 ++
+> >  kernel/sched/core.c    | 62 ++++++++++++++++++++++++++++--------------
+> >  2 files changed, 43 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+> > index be2e8c0a187e..086ee1dc447e 100644
+> > --- a/include/linux/kernel.h
+> > +++ b/include/linux/kernel.h
+> > @@ -87,6 +87,7 @@ extern int dynamic_might_resched(void);
+> >  #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
+> >  extern void __might_resched(const char *file, int line, unsigned int offsets);
+> >  extern void __might_sleep(const char *file, int line);
+> > +extern void __might_sleep_precision(const char *file, int len, int line);
+> 
+> Ugh.
+> 
+> Firstly, '_precision' is really ambiguous in this context and suggests 
+> 'precise sleep' or something like that, which this is not about at all. 
+> So the naming here is all sorts of bad already.
+> 
+> But more importantly, this is really a Rust problem. Does Rust really 
+> have no NUL-terminated strings? It should hide them in shame and 
+> construct proper, robust strings, instead of spreading this disease to 
+> the rest of the kernel, IMHO ...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505091619.QFU1fxsd-lkp@intel.com/
+Rust does have NUL-terminated strings, but they aren't the default. In
+most circumstances, obtaining a NUL-terminated string is possible, but
+we can't do it in this particular case.
 
-All warnings (new ones prefixed by >>):
+Specifically, it's because we're relying on the #[track_caller] language
+feature. When this annotation is placed on a function, it implicitly
+adds an extra hidden argument to the function signature containing a
+pointer to a location struct that holds the file, line, and column of
+the caller. This works recursively until it hits a function without the
+annotation, so code like this:
 
->> drivers/nvme/target/core.c:1018:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-    1018 |                 return ret;
-         |                        ^~~
-   drivers/nvme/target/core.c:1015:9: note: initialize the variable 'ret' to silence this warning
-    1015 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+#[track_caller]
+fn schedule() {
+     might_sleep();
+     // Call into C implementation of schedule.
+     unsafe { bindings::schedule() };
+}
 
+would report a line number in the *caller* of schedule() rather than
+just reporting the line number inside the schedule() function.
 
-vim +/ret +1018 drivers/nvme/target/core.c
+The problem is that the location struct is generated by the compiler,
+and we don't have any control over how its generated. Unfortunately, the
+compiler does not place a NUL terminator in the file name.
 
-  1012	
-  1013	int nvmet_sq_init(struct nvmet_sq *sq, struct nvmet_cq *cq)
-  1014	{
-  1015		int ret;
-  1016	
-  1017		if (!nvmet_cq_get(cq))
-> 1018			return ret;
-  1019	
-  1020		ret = percpu_ref_init(&sq->ref, nvmet_sq_free, 0, GFP_KERNEL);
-  1021		if (ret) {
-  1022			pr_err("percpu_ref init failed!\n");
-  1023			nvmet_cq_put(cq);
-  1024			return ret;
-  1025		}
-  1026		init_completion(&sq->free_done);
-  1027		init_completion(&sq->confirm_done);
-  1028		nvmet_auth_sq_init(sq);
-  1029		sq->cq = cq;
-  1030	
-  1031		return 0;
-  1032	}
-  1033	EXPORT_SYMBOL_GPL(nvmet_sq_init);
-  1034	
+> Rust is supposed to be about increased security, right? How does extra, 
+> nonsensical complexity for simple concepts such as strings achieve 
+> that? If the Rust runtime wants to hook into debug facilities of the 
+> Linux kernel then I have bad news: almost all strings used by kernel 
+> debugging facilities are NUL-terminated.
+> 
+> So I really don't like this patch. Is there no other way to do this?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I filed a proposal to add a NUL-terminator to the file names used by
+rustc-generated location structs:
+
+https://github.com/rust-lang/libs-team/issues/466
+
+But I have not had success with landing it, unfortunately.
+
+Alice
