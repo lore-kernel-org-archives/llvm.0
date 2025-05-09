@@ -1,60 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9E127F4F5;
-	Fri,  9 May 2025 09:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A02727604E;
+	Fri,  9 May 2025 09:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746783159; cv=none; b=kE8/YlX2WvftwwA1DwrjyDOr/6nDyLgsOeesnOwcA1jzpUSF7yGSdQPRbsrXJRTZ2fCU1QrurUZKXakEJJhJRHcpNSXBFu2xDbi7iNreLjS/fc+nOtiANuRlZSHHhBUQF7hKuVgZTfADvhftJ8RpvF40OyQyY4LEPBdQp0o9Rzs=
+	t=1746783489; cv=none; b=ZDhJ8o0Z4ewu3FCXx8FUD7WqplNRZ7FUduGrQKZNhQyHPzSXL7FeJTDiZNhBd22Q06Db285aehF/VbbS3WBVsFz5SJtDsFCq2/p5OegWlpqEjU3Vmeo2UqO9kmvIXWj75UTbO67BPn/XD7V/71B3WU2R1LwPjn2mo/1uMK8IpI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746783159; c=relaxed/simple;
-	bh=to0QosEpmvybTJC1yRuEMhfxmYNuDdgWm2IfnbeRBfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eoCDrETK2FOXiBwQP8eyXnY93LW/obQ4l//cKgejBCR4loO/Qaba+mmxYqpD/rYh4M9/oPzHg0jZ2qBAv90FeLhoJcRv+L3DkIuCMZNUw1fc1MIET6X/x9E7+vpPngdRm7el7rgOPo2FzuM6QhsUJ7RNlPYI5ziP7fT3kbJREfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WDJuBhNk; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1746783489; c=relaxed/simple;
+	bh=GKyHnY3Ghu2yiVf36Y/TrJp84COCpEcwGhvyMsI/YG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TICtB1Oe+fopwb7yo8Bz7JnbuWRPgMIVjzIIP3+cUkYp4Osj64XggrPhiJUlU7WALgV5ZpBFwN5LJGnb25GB55Hq2VUUR+uONYwtANUNTC52mrLJ2JV7hHXCljYBia86bH390xSdmPYlAQhKQh0KL+eMM/GVS9x1qyk/ScevoHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ik3mPqeL; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WDJuBhNk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ik3mPqeL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746783158; x=1778319158;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=to0QosEpmvybTJC1yRuEMhfxmYNuDdgWm2IfnbeRBfE=;
-  b=WDJuBhNkdAD+XGqgrPC74d67cRSy5oG0J5tVOx7AZxu6ce64JYyiAqPE
-   rijNU+IQymXNIKRpAhGyVIIBwNFNQV/FnBSRsUSm7RkZgK/Q5uF1HInWy
-   JoJG3BdA1jRXbnyxxPehNRFADDPWnw2/7dJqf42ELgey2EbJ4bKKd3Y7r
-   oykiHwfG5NpL5LiT16Re/i+OpAOvksbpdo/ik1+TRd7b45kIIuzdufY2c
-   K4eEr5YBrxclPnsNR8YyNWC8dkv6s8j6TjzF9YxtLMHaDtSK9z/J1XOBN
-   muv48wbosw94FXIYjWVEWrSYVVBdCpXhs7E/qepm7UVozTHSXGxMMWEAq
-   w==;
-X-CSE-ConnectionGUID: JSANPgfvQJiK+IX1vCX9qA==
-X-CSE-MsgGUID: kIqBTn85TrOS6GwdSBl4jw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48760833"
+  t=1746783487; x=1778319487;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GKyHnY3Ghu2yiVf36Y/TrJp84COCpEcwGhvyMsI/YG8=;
+  b=ik3mPqeLNpQHns/JSK/lLniI2htObWmhm/T8j+897Tu46JV4mDSgDECI
+   2c/3FBnE4RC/ZJ9P8qk72+dVUQCLdsfM2szj0A6VqH9FzAkKSDRk8wsUJ
+   aFfg3BXJKCPFxim+0+Mxq68rxlMgtQjEM4Xua6inDkiS4ksVIXbXQH1lx
+   0jN8DVTD5GxKI9RUIJVQft5TRxKpKsBz+gEn5CNZ/fSz3b+hk/nK3u9VP
+   GLLteY4q7mzy2hee3+4FPs5X+29STxsfqRF6BPw60+mMcOaSkaKVwU/p3
+   R4jsDJyfhuAb86vnGf7EMnzVQNytMhFUzDimgiNnaHy7cGSeyfnhykLsb
+   g==;
+X-CSE-ConnectionGUID: XH8iIgWjSrSRv3HEQzVieA==
+X-CSE-MsgGUID: Ccfh9neoRg6quGb5+vFadg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="59268837"
 X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="48760833"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 02:32:33 -0700
-X-CSE-ConnectionGUID: qYhfYHRTRX68KnPrmQpElQ==
-X-CSE-MsgGUID: Z+LC82ZOSt+ptAI2k7+Piw==
+   d="scan'208";a="59268837"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 02:38:06 -0700
+X-CSE-ConnectionGUID: 0/Te/Uk2TmuNkEJfgpnkUA==
+X-CSE-MsgGUID: qb8DGivuQBW3TKbXJfOpfw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="141779040"
-Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
-  by fmviesa004.fm.intel.com with ESMTP; 09 May 2025 02:32:31 -0700
-Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
+   d="scan'208";a="136959750"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 May 2025 02:37:51 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uDK5k-0000VK-2u;
-	Fri, 09 May 2025 09:32:28 +0000
-Date: Fri, 9 May 2025 17:32:23 +0800
+	id 1uDKAv-000BsO-1B;
+	Fri, 09 May 2025 09:37:49 +0000
+Date: Fri, 9 May 2025 17:37:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+To: Markus Burri <markus.burri@mt.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [linux-next:master 8072/9729] drivers/i2c/busses/i2c-i801.c:1180:49:
- error: no member named 'mux_pdev' in 'struct i801_priv'
-Message-ID: <202505091734.6Y3SNpzo-lkp@intel.com>
+	Markus Burri <markus.burri@mt.com>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Maciej Falkowski <maciej.falkowski@linux.intel.com>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Nuno Sa <nuno.sa@analog.com>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, linuxppc-dev@lists.ozlabs.org,
+	dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] gpio: fix potential out-of-bound write
+Message-ID: <202505091754.285hHbr2-lkp@intel.com>
+References: <20250508130612.82270-5-markus.burri@mt.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,66 +80,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250508130612.82270-5-markus.burri@mt.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f48887a98b78880b7711aca311fbbbcaad6c4e3b
-commit: 27f4a0d6938a5cd3c30701f12c7454048800dbba [8072/9729] i2c: i801: don't instantiate spd5118 under SPD Write Disable
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250509/202505091734.6Y3SNpzo-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+Hi Markus,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on b4432656b36e5cc1d50a1f2dc15357543add530e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Burri/iio-backend-fix-out-of-bound-write/20250508-211644
+base:   b4432656b36e5cc1d50a1f2dc15357543add530e
+patch link:    https://lore.kernel.org/r/20250508130612.82270-5-markus.burri%40mt.com
+patch subject: [PATCH v4 4/6] gpio: fix potential out-of-bound write
+config: x86_64-buildonly-randconfig-003-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091754.285hHbr2-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
 rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091734.6Y3SNpzo-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091754.285hHbr2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505091734.6Y3SNpzo-lkp@intel.com/
-
-Note: the linux-next/master HEAD f48887a98b78880b7711aca311fbbbcaad6c4e3b builds fine.
-      It may have been fixed somewhere.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505091754.285hHbr2-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-i801.c:1180:49: error: no member named 'mux_pdev' in 'struct i801_priv'
-    1180 |         if (!IS_ENABLED(CONFIG_I2C_I801_MUX) || !priv->mux_pdev) {
-         |                                                  ~~~~  ^
+>> drivers/gpio/gpio-virtuser.c:404:6: error: use of undeclared identifier 'size'; did you mean 'ksize'?
+     404 |         if (size >= sizeof(buf))
+         |             ^~~~
+         |             ksize
+   include/linux/slab.h:491:8: note: 'ksize' declared here
+     491 | size_t ksize(const void *objp);
+         |        ^
    1 error generated.
 
 
-vim +1180 drivers/i2c/busses/i2c-i801.c
+vim +404 drivers/gpio/gpio-virtuser.c
 
-  1159	
-  1160	/* Register optional targets */
-  1161	static void i801_probe_optional_targets(struct i801_priv *priv)
-  1162	{
-  1163		/* Only register targets on main SMBus channel */
-  1164		if (priv->features & FEATURE_IDF)
-  1165			return;
-  1166	
-  1167		if (apanel_addr) {
-  1168			struct i2c_board_info info = {
-  1169				.addr = apanel_addr,
-  1170				.type = "fujitsu_apanel",
-  1171			};
-  1172	
-  1173			i2c_new_client_device(&priv->adapter, &info);
-  1174		}
-  1175	
-  1176		if (dmi_name_in_vendors("FUJITSU"))
-  1177			dmi_walk(dmi_check_onboard_devices, &priv->adapter);
-  1178	
-  1179		/* Instantiate SPD EEPROMs unless the SMBus is multiplexed */
-> 1180		if (!IS_ENABLED(CONFIG_I2C_I801_MUX) || !priv->mux_pdev) {
-  1181			if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
-  1182				i2c_register_spd_write_disable(&priv->adapter);
-  1183			else
-  1184				i2c_register_spd_write_enable(&priv->adapter);
-  1185		}
-  1186	}
-  1187	#else
-  1188	static void __init input_apanel_init(void) {}
-  1189	static void i801_probe_optional_targets(struct i801_priv *priv) {}
-  1190	#endif	/* CONFIG_X86 && CONFIG_DMI */
-  1191	
+   393	
+   394	static ssize_t gpio_virtuser_direction_do_write(struct file *file,
+   395							const char __user *user_buf,
+   396							size_t count, loff_t *ppos,
+   397							bool atomic)
+   398	{
+   399		struct gpio_virtuser_line_data *data = file->private_data;
+   400		struct gpio_desc *desc = data->ad.desc;
+   401		char buf[32], *trimmed;
+   402		int ret, dir, val = 0;
+   403	
+ > 404		if (size >= sizeof(buf))
+   405			return -EINVAL;
+   406	
+   407		ret = simple_write_to_buffer(buf, sizeof(buf) - 1, ppos, user_buf, count);
+   408		if (ret < 0)
+   409			return ret;
+   410	
+   411		buf[ret] = '\0';
+   412	
+   413		trimmed = strim(buf);
+   414	
+   415		if (strcmp(trimmed, "input") == 0) {
+   416			dir = 1;
+   417		} else if (strcmp(trimmed, "output-high") == 0) {
+   418			dir = 0;
+   419			val = 1;
+   420		} else if (strcmp(trimmed, "output-low") == 0) {
+   421			dir = val = 0;
+   422		} else {
+   423			return -EINVAL;
+   424		}
+   425	
+   426		if (!atomic)
+   427			ret = gpio_virtuser_set_direction(desc, dir, val);
+   428		else
+   429			ret = gpio_virtuser_set_direction_atomic(desc, dir, val);
+   430		if (ret)
+   431			return ret;
+   432	
+   433		return count;
+   434	}
+   435	
 
 -- 
 0-DAY CI Kernel Test Service
