@@ -1,144 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C2711CBA;
-	Fri,  9 May 2025 06:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2FE1C2324;
+	Fri,  9 May 2025 07:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746770443; cv=none; b=JAchwb+ztLo6HvYazQr7sRtTomRuzJzWl6H6NlDwH2niAWOn6X+G0UT4bMIrGVWvXQhw1KN5KaJRrYP4BkHOVf55CWwOz/mhdQ6GAH9b3k4yjI4xRiRdXAZz2Fn97MtYVXBDqoK/h3bLXq1MXQUKMy6+FEloGnMU9K1jOIKURPE=
+	t=1746774374; cv=none; b=pU/zBp+lCBZ/0NNc64o8ooZRQu+xAw7w1b+uNOJEmsPuP3NOHQXQ2t+BzuW6rJuGR7hg/K+cdX4N9KuhrQDjbYZBTRjqVmp7lmgE7eJDglqdZNnE1E2x+LauZ/Ib5ASJxdqDXwFnHP8uS+94rObJEu4GAW3MGPOP1N3y+fuceME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746770443; c=relaxed/simple;
-	bh=2F9C7tIL0E1UVn2MTuipbuWXEc0JNCxH2nHehw68R0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qjvphs9mPurMLxxHCLYi0soAVblhP/DvgwE2FnGDWzjlMPEhQdiSCWwhGxtIMzZFTIjUkf1w2IE+vL1sOBrrarLBAAPEUWrJi74cf3JcTxnUMxSoLsIFNx0ilzYcTE7Rlf85Il2NM7vLGI6DNm+fNdh5+EFZh+L9dt6Nl2wRG9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwRtefw7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746774374; c=relaxed/simple;
+	bh=oku0r/Ayq+YtBcuqgLmPUgKTINLSv48UB3ues+qQLaE=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=EJfeEwDfVJ2NvRNEhPvBnWWhmn/WOzQl3rbp5cOFOnbw9WyDEfEYm6kNOL9+z2hwkPUGZdfPL2Mj3kyu4XReH9+ToOitrN9rBjHC2JfRAMNB8FJU3NabaK0Ggo6905UB9QRaQX65RWkBD15rzUgrVFZTI2eyzkR5WVExuXn5VT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzsfT0tl; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwRtefw7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E85C4CEED;
-	Fri,  9 May 2025 06:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746770443;
-	bh=2F9C7tIL0E1UVn2MTuipbuWXEc0JNCxH2nHehw68R0M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iwRtefw71D3zLS7KhS59GNlxf0NDjxLfSFg3UDnGLi82Bdt9bcuUsHDxgLpjVHYTt
-	 2sTBwATargPCOdzsUo7jUtkIYVhKBZUF1lKX93oLY2OzZFwPH4WIT1QpvdDhAwJF3f
-	 lQaGRFapkRKzfLU6I646LD/XcWUOidIy0GSso1yk4JgR0+TATk+8xe2LeHmehitf3k
-	 nkyhQbPaf1MuYANTzoUkYBrLSit4RWFuM6hEiNekBAz7oK9+qHr7siu6DGt+s/A2K/
-	 DZAHG5zw3u1tAnHCHcm98AOtz3ifAY43sQt6ZU0s1+9pm+7fjZkFj4H/D2+skPNFT+
-	 I0NuuhQ9nZ9/A==
-Date: Fri, 9 May 2025 08:00:32 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Kunwu Chan <kunwu.chan@hotmail.com>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Borys Tyran <borys.tyran@protonmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Panagiotis Foliadis <pfoliadis@posteo.net>,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev, Daniel Almeida <daniel.almeida@collabora.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 4/5] sched/core: Add __might_sleep_precision()
-Message-ID: <aB2aAEELa3253nBh@gmail.com>
-References: <20250506045843.51258-1-boqun.feng@gmail.com>
- <20250506045843.51258-5-boqun.feng@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzsfT0tl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746774372; x=1778310372;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=oku0r/Ayq+YtBcuqgLmPUgKTINLSv48UB3ues+qQLaE=;
+  b=UzsfT0tlP/yyqbQmTfw+bjoNpkAcmXPLLn6jgMkhAjmxCnO/b/zzx+5l
+   D+2fyBJqWjZw5zPyg6SRy018b/6p25hUOACtXWhmy80yaBusvJoKZ9WOl
+   lVQZ6ZVok29KhT7p6RYI3uPIicPbCN+L9e0JXORU8jhR/CuNvQKQ/dlOn
+   8CEk/mAbt92i1DPmloy8cyZ+soR7Kzu8cSU+rxYRNHxTZdZBuAxrGxEdH
+   dQv5oPfAJCvXPIS8vHSvsyIkmehJkAHCq/c+bT+8uS2NdNZ3x2LupSikh
+   pPBq3qTutsHR+0XHYQgmRAPDdSINa3RlNoGTJlPe9XgWS+1wItnlw+czn
+   Q==;
+X-CSE-ConnectionGUID: KIkA/IdOSbyHP7AlUVqgVw==
+X-CSE-MsgGUID: Vi8G9YBsTLuLp8UVqh4ABg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="65996126"
+X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
+   d="scan'208";a="65996126"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 00:06:11 -0700
+X-CSE-ConnectionGUID: ZOlALN0/Q56SGDAcaUaw2w==
+X-CSE-MsgGUID: fsARGzI1TQKg7upLIE8XVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
+   d="scan'208";a="136456946"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.123])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 00:06:08 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 9 May 2025 10:06:04 +0300 (EEST)
+To: kernel test robot <lkp@intel.com>
+cc: "Luke D. Jones" <luke@ljones.dev>, llvm@lists.linux.dev, 
+    oe-kbuild-all@lists.linux.dev, 
+    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+    Hans de Goede <hdegoede@redhat.com>, 
+    Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [pdx86-platform-drivers-x86:review-ilpo-next 74/89]
+ drivers/platform/x86/asus-wmi.c:5028:35: error: variable has incomplete type
+ 'struct acpi_s2idle_dev_ops'
+In-Reply-To: <202505090418.DaeaXe4i-lkp@intel.com>
+Message-ID: <83e5ee5d-de9d-51c5-457e-803b0b7a57cd@linux.intel.com>
+References: <202505090418.DaeaXe4i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250506045843.51258-5-boqun.feng@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
 
+On Fri, 9 May 2025, kernel test robot wrote:
 
-* Boqun Feng <boqun.feng@gmail.com> wrote:
-
-> From: FUJITA Tomonori <fujita.tomonori@gmail.com>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-ilpo-next
+> head:   83579675331059689e2869bf752ca9e17fadbd82
+> commit: feea7bd6b02d43a794e3f065650d89cf8d8e8e59 [74/89] platform/x86: asus-wmi: Refactor Ally suspend/resume
+> config: x86_64-buildonly-randconfig-004-20250509 (https://download.01.org/0day-ci/archive/20250509/202505090418.DaeaXe4i-lkp@intel.com/config)
+> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505090418.DaeaXe4i-lkp@intel.com/reproduce)
 > 
-> Add __might_sleep_precision(), Rust friendly version of
-> __might_sleep(), which takes a pointer to a string with the length
-> instead of a null-terminated string.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505090418.DaeaXe4i-lkp@intel.com/
 > 
-> Rust's core::panic::Location::file(), which gives the file name of a
-> caller, doesn't provide a null-terminated
-> string. __might_sleep_precision() uses a precision specifier in the
-> printk format, which specifies the length of a string; a string
-> doesn't need to be a null-terminated.
+> All errors (new ones prefixed by >>):
 > 
-> Modify __might_sleep() to call __might_sleep_precision() but the
-> impact should be negligible. When printing the error (sleeping
-> function called from invalid context), the precision string format is
-> used instead of the simple string format; the precision specifies the
-> the maximum length of the displayed string.
+> >> drivers/platform/x86/asus-wmi.c:5028:35: error: variable has incomplete type 'struct acpi_s2idle_dev_ops'
+>     5028 | static struct acpi_s2idle_dev_ops asus_ally_s2idle_dev_ops = {
+>          |                                   ^
+>    drivers/platform/x86/asus-wmi.c:5028:15: note: forward declaration of 'struct acpi_s2idle_dev_ops'
+>     5028 | static struct acpi_s2idle_dev_ops asus_ally_s2idle_dev_ops = {
+>          |               ^
+> >> drivers/platform/x86/asus-wmi.c:5063:8: error: call to undeclared function 'acpi_register_lps0_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     5063 |         ret = acpi_register_lps0_dev(&asus_ally_s2idle_dev_ops);
+>          |               ^
+> >> drivers/platform/x86/asus-wmi.c:5099:2: error: call to undeclared function 'acpi_unregister_lps0_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     5099 |         acpi_unregister_lps0_dev(&asus_ally_s2idle_dev_ops);
+>          |         ^
+>    3 errors generated.
 > 
-> Note that Location::file() providing a null-terminated string for
-> better C interoperability is under discussion [1].
 > 
-> [1]: https://github.com/rust-lang/libs-team/issues/466
+> vim +5028 drivers/platform/x86/asus-wmi.c
 > 
-> Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Link: https://lore.kernel.org/r/20250410225623.152616-2-fujita.tomonori@gmail.com
-> ---
->  include/linux/kernel.h |  2 ++
->  kernel/sched/core.c    | 62 ++++++++++++++++++++++++++++--------------
->  2 files changed, 43 insertions(+), 21 deletions(-)
-> 
-> diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-> index be2e8c0a187e..086ee1dc447e 100644
-> --- a/include/linux/kernel.h
-> +++ b/include/linux/kernel.h
-> @@ -87,6 +87,7 @@ extern int dynamic_might_resched(void);
->  #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
->  extern void __might_resched(const char *file, int line, unsigned int offsets);
->  extern void __might_sleep(const char *file, int line);
-> +extern void __might_sleep_precision(const char *file, int len, int line);
+>   5026	
+>   5027	/* Use only for Ally devices due to the wake_on_ac */
+> > 5028	static struct acpi_s2idle_dev_ops asus_ally_s2idle_dev_ops = {
+>   5029		.restore = asus_ally_s2idle_restore,
+>   5030	};
+>   5031	
 
-Ugh.
+> > 5063		ret = acpi_register_lps0_dev(&asus_ally_s2idle_dev_ops);
 
-Firstly, '_precision' is really ambiguous in this context and suggests 
-'precise sleep' or something like that, which this is not about at all. 
-So the naming here is all sorts of bad already.
+> > 5099		acpi_unregister_lps0_dev(&asus_ally_s2idle_dev_ops);
 
-But more importantly, this is really a Rust problem. Does Rust really 
-have no NUL-terminated strings? It should hide them in shame and 
-construct proper, robust strings, instead of spreading this disease to 
-the rest of the kernel, IMHO ...
+Hi Luke,
 
-Rust is supposed to be about increased security, right? How does extra, 
-nonsensical complexity for simple concepts such as strings achieve 
-that? If the Rust runtime wants to hook into debug facilities of the 
-Linux kernel then I have bad news: almost all strings used by kernel 
-debugging facilities are NUL-terminated.
+It seems CONFIG_SUSPEND is not defined in this config leading to the 
+failure. Can you please look at this as I was slight unsure what way the 
+fix should go although it looked like some ifdeffery is necessary and 
+probably wrapping those register/unregister functions.
 
-So I really don't like this patch. Is there no other way to do this?
+-- 
+ i.
 
-Thanks,
-
-	Ingo
