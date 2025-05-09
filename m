@@ -1,91 +1,120 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0EC23717F
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 18:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5298F2405FD;
+	Fri,  9 May 2025 18:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746815317; cv=none; b=Ra0EpZqbRHlMoyaNsJCR1B4ibPw3ccipiMbgDffoisPgwVavrAAgFp5bLIyHqMN6asQrnJs4UYfsO/az4VIqXrIvXSHCXJHX6eUVbqs7yABTrsC6ee3v7pJmI+gIZkUsVUAkviBEUk4dHibzChlKSxGl9xxTsSu6IjWvVIjeeiM=
+	t=1746817189; cv=none; b=r5ypADS5DdX++TS05K5oYq7e8f5wMtaSK5qo69vPLq9W4a8LLciMj8q/2DYg3chiEfssQCd5tmjQtL8159Ds7lZLQK2cP/0sSefsr4gjiZqY3k5g5ERuyk8kiimdWRp6Cn6Nr5M3qR7xSkNCB849mWUe66nsyintuv/Wj+Pbanw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746815317; c=relaxed/simple;
-	bh=10fWKQkNnHsqIbf/pw3ZTsZtcdW11Mi85qpJNxHdr28=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DfBGKGNd8s302tXyk3PHyaXhAO2qtJbQxa/vQOJyNSG/s89sTbICUVYWRBBLJkBXkDNPG3VdS3Qh0IlnHO0jzzt85G5Vquq3WsdTDSmmzJDyBYRLUxXvIaDGsF3U/V93nEx5B8LqThoCtCEdBxooI67VDvXYLuIM2ZhXboISfV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=d8XBYHmL; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+	s=arc-20240116; t=1746817189; c=relaxed/simple;
+	bh=WnKiHbyUvsdpJKSsb1l4VLkU0mUsFfnZsu14FYlH4QU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VUOYVYFfahFowe4vqm6ntpv5q6cYZh0tNZRU2FTp6Rr7GxUP4xJc0ScsirZLvW8YrGHEuR1g/Ff7GvJoZtHbBTV5lOyjFgiDWNn7uaYJgOP3UwfKNh4BOYlOrRllh84/1UXm6k3Gey3bAlAEp7K1nybr7bivAisVRtxi0HDP2PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eK0Wr8uI; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="d8XBYHmL"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22e033a3a07so27254175ad.0
-        for <llvm@lists.linux.dev>; Fri, 09 May 2025 11:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1746815315; x=1747420115; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AVjmITvg5xwQUhBH3cPWu+1Rci6sKZeIVD+X8Tz7B6Y=;
-        b=d8XBYHmLDHznNpBP0HzgH5Nz53Lei6wbmCzl49PCCS2AZ4b2cs+uDyfp7+UunrpoJ0
-         lYgP9PR6Xiqz1b57/NdBqLezV+iC+5ApwmIwwAc4pzNg3sh7CIiklb2V7Dt9mcPKxW4B
-         PCxYqM99wmU/RGtn/+HPbt/Efl7ecrob8o3dxq3Tn0fXZumtmEpismJyft5Mj30id7hm
-         KNNhmknunzOyKpShMlWZDcZ3pn4dIBMqi+wswusuwhtOmhwuLmTrwB41gqEpd8JCdNhg
-         eJ63GdPwd93H2xwecNgoWQ+zDRozhSEgoBjvLjiqH2n2FLhx8LglP2tPlCwXucmo9EWJ
-         SJ2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746815315; x=1747420115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AVjmITvg5xwQUhBH3cPWu+1Rci6sKZeIVD+X8Tz7B6Y=;
-        b=QRisWpgSsjYyCSKK9o98HwlUonVF+C86n4ioyg0rhIpJNDQucITa8eu0nAK4P/uigV
-         Et/561qT0uurBejmaRpB9CPlwJ+dJcH5fmctuNGIPv4e/g0ffyAgnX9V7J6CvfAuO58l
-         s/yZAUC328CPa4xrTxLBb79A+30ee/Ny4dtN0VGs9C9mrn7X+fBEUCZmVIhqoIc8Stes
-         bssBnKOWcQurhNJoJ89xu+2nIWYVJh3x5EqzcwOCFWpz+cb3st/Oon0bviaNJk8ZPG2T
-         S9NpCPcIDvDeaLHuDgzhf4D/nzbSTBYmFiSuCcOO7PvyXz1Pb8kRvU2bpFrfMsnWN+Rn
-         nSEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqZDCxHgTGp3aDa+P+NVsdZpmpGk26qNgFbi+sb9Xoj3qjIbm2vd8M73CFMPFgBACP0Wbr@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz3PaPvB4RY2XmlBIWFzvFe+XMaikRJiHdZA8QxaXvtWdxOszV2
-	qHqq6MvGXY1E6LuxfZ64mEqCX4jobnSoaa+kywTtdiQQ1qWCJKX/5Q0cCeUALriVUBjKnwPtAlf
-	BqQm3JWS8G226xP+3wGnnpcQxHpw=
-X-Gm-Gg: ASbGnctFwcF9FIS9evI1RM+PLlrP1/pjUYqhEIB5/l5cgTJ0cdrN9DEbZp/xlP/y5YY
-	n76yJE8mNXrrRr7Vv0sGuaDG+J5pFbdbyAzEF5/fDX/bnfSAFs+Ozh+QgNCd8b7Zn9zPgemb/CO
-	pHl2IE8QN5sY8O9Rof27ey5CEk5Bj3f9SV5OV7HS1lrLhZh9T96FVRwTCkuSbnnI9nJw==
-X-Google-Smtp-Source: AGHT+IEwd7AiDoJxpDhyTHw6FTDd796IjH1JzgkpmVh4628MtJYKSWng6hqIPivs5wHI5s0eCiBfNcWPOBCx0dc2UHI=
-X-Received: by 2002:a17:902:f70a:b0:225:abd2:5e39 with SMTP id
- d9443c01a7336-22fc8c8eac0mr65654585ad.30.1746815315465; Fri, 09 May 2025
- 11:28:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eK0Wr8uI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746817188; x=1778353188;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WnKiHbyUvsdpJKSsb1l4VLkU0mUsFfnZsu14FYlH4QU=;
+  b=eK0Wr8uIlSS569C5skxKaGKD9mFuluyLOZZTBp9B5q/1qIzS0J9nWndg
+   dqOIUTrgzYZslXrgtedhfYrViPm5IeJ8527bkY8SW4dmizOymlxMHCD8p
+   AQ1XeiUNUVCk7XIEAs+uYg59WXcNOhEJBPbJcqGrLPwHMy9hX0YAc/w5K
+   SSDwCigiKPEH/mNVOal7sWxVMkWE1qqYFZWq1OJ9nItYgOGWdmxnl9NrW
+   YiYo8nizN9ophh7HqXS2Qt1WTahFlfypr2ZZI/C0XqJPz7pgx1kSq1bi4
+   DWyulfRTDXQ3WbXtMJtJkZiaAjGsDuR3QvU7tgbm0zJ3KMoUdUJeAU40X
+   A==;
+X-CSE-ConnectionGUID: kfRu82X3Qkqu+jIMh0jKfQ==
+X-CSE-MsgGUID: 4aolMa1CSRiW8Lj6INwq2A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="71166493"
+X-IronPort-AV: E=Sophos;i="6.15,276,1739865600"; 
+   d="scan'208";a="71166493"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 11:59:47 -0700
+X-CSE-ConnectionGUID: 0PmyxdnxRmm6JSPHvu3m3Q==
+X-CSE-MsgGUID: pGKXJMC3QeCvrOXiAjJ8Ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,276,1739865600"; 
+   d="scan'208";a="137091795"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 May 2025 11:59:45 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uDSwh-000CNn-1d;
+	Fri, 09 May 2025 18:59:43 +0000
+Date: Sat, 10 May 2025 02:59:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [axboe-block:for-6.16/io_uring 40/40] io_uring/io_uring.c:1656:6:
+ warning: variable 'nr' set but not used
+Message-ID: <202505100200.cyy3V6oJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250509150114.299962-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20250509150114.299962-2-krzysztof.kozlowski@linaro.org>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Fri, 9 May 2025 20:28:24 +0200
-X-Gm-Features: AX0GCFt7pQHVyrf4n1xvCNGZ9D5D94k38mJZKPZaIgxrW2CstAdBDU6m2wUQANg
-Message-ID: <CAFBinCDt1jDv=jhDoW3UtBUL8BuLL8PpJPKjpC1Sf5fifnw+6g@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: meson: Drop unused aml_pctl_find_group_by_name()
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Xianwei Zhao <xianwei.zhao@amlogic.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-amlogic@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, May 9, 2025 at 5:01=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> aml_pctl_find_group_by_name() is not used anywhere, as reported by W=3D1
-> clang build:
->
->   pinctrl-amlogic-a4.c:600:2: error: unused function 'aml_pctl_find_group=
-_by_name' [-Werror,-Wunused-function]
->
-> Fixes: 6e9be3abb78c ("pinctrl: Add driver support for Amlogic SoCs")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.16/io_uring
+head:   55c28f431651973385c17081bdcdadf8b5c6da91
+commit: 55c28f431651973385c17081bdcdadf8b5c6da91 [40/40] io_uring: drain based on allocates reqs
+config: s390-randconfig-002-20250510 (https://download.01.org/0day-ci/archive/20250510/202505100200.cyy3V6oJ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250510/202505100200.cyy3V6oJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505100200.cyy3V6oJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> io_uring/io_uring.c:1656:6: warning: variable 'nr' set but not used [-Wunused-but-set-variable]
+    1656 |         int nr = 0;
+         |             ^
+   1 warning generated.
+
+
+vim +/nr +1656 io_uring/io_uring.c
+
+  1648	
+  1649	static __cold void io_drain_req(struct io_kiocb *req)
+  1650		__must_hold(&ctx->uring_lock)
+  1651	{
+  1652		struct io_ring_ctx *ctx = req->ctx;
+  1653		bool drain = req->flags & IOSQE_IO_DRAIN;
+  1654		struct io_defer_entry *de;
+  1655		struct io_kiocb *tmp;
+> 1656		int nr = 0;
+  1657	
+  1658		de = kmalloc(sizeof(*de), GFP_KERNEL_ACCOUNT);
+  1659		if (!de) {
+  1660			io_req_defer_failed(req, -ENOMEM);
+  1661			return;
+  1662		}
+  1663	
+  1664		io_for_each_link(tmp, req)
+  1665			nr++;
+  1666		io_prep_async_link(req);
+  1667		trace_io_uring_defer(req);
+  1668		de->req = req;
+  1669	
+  1670		ctx->nr_drained += io_linked_nr(req);
+  1671		list_add_tail(&de->list, &ctx->defer_list);
+  1672		io_queue_deferred(ctx);
+  1673		if (!drain && list_empty(&ctx->defer_list))
+  1674			ctx->drain_active = false;
+  1675	}
+  1676	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
