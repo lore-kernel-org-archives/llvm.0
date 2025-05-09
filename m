@@ -1,61 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8B826A1DA;
-	Fri,  9 May 2025 07:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503EA270559;
+	Fri,  9 May 2025 08:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746777588; cv=none; b=hcmhSnx9TyNhTi+eY+SvJA5fGIthZV/5UOr69qG18ZvUsUBVtEe9uRRxuUnmIlvhNUMyHfeqP6lQAhQOYRdZquPlw3dxLeLkARGP1OZFHwhxREjd/JnA9NXgK8QU8TBkxea3lVzvi3dKodPWCxDk5sDj/YuyYCQChcm2+QpV+Gw=
+	t=1746778969; cv=none; b=rOaWT+REYXMJz8Fc7GR5CDNYyJT9W6GYrIx9pEQhpLGmusTNQRCmyKhN+Z9LLTd5E1z7G03YIZ2+/RMWVrRbfBNv8t3RMLCSVtL/V6fci3qUEF2ut8vnKiMCpCDODM/+XmObAkGF0HIHQM6TRcAR5aibwdEGxY+e1Syp+9kTgcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746777588; c=relaxed/simple;
-	bh=XH5qgIiNV8vC+T96lEpPKyjg4glmUUOxb/545SRV5hU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bwvoL3f+gQVPaL0qk1DY9zsL3ZUZXmZubnyCxpoOINzW454GhvnZo7V5/OivnD+tjxrOOBpGUv4q7pzkWupDCijs4neiPD+Bl4xet/Wdi9wcgqbwtlpW6wu8hpnUFXz9vufeyqXPIwkTEXsiP4U2qXUnhPvEQZmjZF7fyiJfmNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HEJHRgyv; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1746778969; c=relaxed/simple;
+	bh=J2TFGJagph/ta7MoJmHwiVacD4SN5gx283HD/y3mKqY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=APHReLLpmlWJ2eYdMrr1Xff/V91ZSv+48pxX1fdXRsX93ptza6ovqOB8ZgXDbdqjjGaNWxmgt+Xi4Xj7+JXkBWXuTvAtCq7WR59+6rFLFZXssp4+T+20DO6bhjDWkyvCn4O5qddsPT/IIdpTtO04ZNOEYmO9Bw8T1gFdQnRbPrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M11fC+79; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HEJHRgyv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M11fC+79"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746777586; x=1778313586;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XH5qgIiNV8vC+T96lEpPKyjg4glmUUOxb/545SRV5hU=;
-  b=HEJHRgyvHdCBOrpfYnvi/40BTMsTa0237tTWc6anvHAo9/Mt5F0Kg5zu
-   LfZ+dUvrJvD+WhWjUo+Za4rECMw/7JungfpuLZnqBUxAUs47ZLqJ+4MPH
-   cc8au2Ma94o/7LsRP6FkTC3Bj0SWn7ZR0h2s6QivlEohHhFgHsZir96Rr
-   aP6oB7HFwnXprXDKlV+TvlEzhweJ3WI+WYGcWdp5NgZ16I/Ji8XSRhl3k
-   onlugT55DV+UmXPzZ9mtBDuD+L98NsHfbRUJR4lhSGGXQWinBy+8AaSGe
-   7NOVZIEsNVBWkZKtW17RXOZelw1KMxjdHzdUMP+wmypH2mrkUeHzrvwf1
-   A==;
-X-CSE-ConnectionGUID: nFDDaohZT4+EvumLj95OVw==
-X-CSE-MsgGUID: kNBnMPLCQG2rqbEXBTOz7Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48503481"
+  t=1746778967; x=1778314967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J2TFGJagph/ta7MoJmHwiVacD4SN5gx283HD/y3mKqY=;
+  b=M11fC+790rn+MCXCCwUq0Q1yMt64ncp8Eq0FmxIHwRi1KzcMAw5785+X
+   cVKwAvjR02kmEnUpthVc6Ab1YRx5DVedgnTI1A/JnY36raauZeXlJ2WZY
+   Rqd9cLiEUmmUP3Rqkc9x6+KDOexAsuCPC8y7sbdQyhTpYOCvGWdp/oO1F
+   j/P/i4Tt2KWDIKVov8Nxl3W1MFE+ImqTmGJgh0hfxSd7L/Bkb86EeD4QT
+   ePwmkJcJP6FrlrBPvWHplNfXg7u2xEqGG6jLOy8TKSsHV3t7DKyJ0TH98
+   W5wmSk0AsvRqDS2VDjdNUsy7S414djZxejjUts5/g/mvVk0X6/6nd5tcQ
+   Q==;
+X-CSE-ConnectionGUID: K3BOqPLjQEi7NQ00y+p91Q==
+X-CSE-MsgGUID: CNXVsl0mTRaDlW7OzWSbWw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="48712605"
 X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="48503481"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 00:59:44 -0700
-X-CSE-ConnectionGUID: 3SgJZi6zTPqzTElo4P98vw==
-X-CSE-MsgGUID: UIKOL4kQQqW9ZW8fJsa1+w==
+   d="scan'208";a="48712605"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 01:22:46 -0700
+X-CSE-ConnectionGUID: NVHTGny5TAiqKijxBMtofQ==
+X-CSE-MsgGUID: zejCw9eqRNapVYavtfyugQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
-   d="scan'208";a="173708327"
+   d="scan'208";a="136439359"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 09 May 2025 00:59:42 -0700
+  by orviesa010.jf.intel.com with ESMTP; 09 May 2025 01:22:45 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uDIdw-000BnP-0y;
-	Fri, 09 May 2025 07:59:40 +0000
-Date: Fri, 9 May 2025 15:59:18 +0800
+	id 1uDJ0E-000Bod-0p;
+	Fri, 09 May 2025 08:22:42 +0000
+Date: Fri, 9 May 2025 16:22:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>
+To: Mario Limonciello <superm1@kernel.org>, mario.limonciello@amd.com,
+	rafael@kernel.org, pavel@kernel.org, len.brown@intel.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Cyril Bur <cyrilbur@tenstorrent.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [palmer:for-next 10/25] include/linux/fs.h:3921:15: warning: label
- followed by a declaration is a C23 extension
-Message-ID: <202505091520.cze8wv81-lkp@intel.com>
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] PM: hibernate: Explicitly set `PM_SUSPEND_MAX` at
+ hibernate entry
+Message-ID: <202505091658.9UZSCXpa-lkp@intel.com>
+References: <20250508211822.2698678-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,376 +65,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250508211822.2698678-1-superm1@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git for-next
-head:   1a3f6980889df3fc90ad3e4a525061d2c138adba
-commit: f6bff7827a48e59cff1ef98aae72452d65174e0c [10/25] riscv: uaccess: use 'asm_goto_output' for get_user()
-config: riscv-randconfig-002-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091520.cze8wv81-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091520.cze8wv81-lkp@intel.com/reproduce)
+Hi Mario,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on amd-pstate/linux-next]
+[also build test ERROR on amd-pstate/bleeding-edge linus/master v6.15-rc5 next-20250508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-hibernate-Explicitly-set-PM_SUSPEND_MAX-at-hibernate-entry/20250509-051901
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/20250508211822.2698678-1-superm1%40kernel.org
+patch subject: [PATCH v2] PM: hibernate: Explicitly set `PM_SUSPEND_MAX` at hibernate entry
+config: i386-buildonly-randconfig-004-20250509 (https://download.01.org/0day-ci/archive/20250509/202505091658.9UZSCXpa-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250509/202505091658.9UZSCXpa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505091520.cze8wv81-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505091658.9UZSCXpa-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/riscv/kernel/asm-offsets.c:8:
-   In file included from include/linux/mm.h:1221:
-   In file included from include/linux/huge_mm.h:7:
->> include/linux/fs.h:3921:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3921 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
+>> kernel/power/main.c:23:17: error: expected ')'
+      23 | suspend_state_t pm_suspend_target_state;
          |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:51: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                                            ^
+   kernel/power/main.c:23:17: note: to match this '('
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:24: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                 ^
+>> kernel/power/main.c:23:17: error: redefinition of 'suspend_state_t' as different kind of symbol
+      23 | suspend_state_t pm_suspend_target_state;
          |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:34: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                           ^
+   include/linux/suspend.h:34:23: note: previous definition is here
+      34 | typedef int __bitwise suspend_state_t;
+         |                       ^
+   kernel/power/main.c:24:19: error: expected ')'
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         |                   ^
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:51: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                                            ^
+   kernel/power/main.c:24:19: note: to match this '('
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:24: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                 ^
+   kernel/power/main.c:24:19: error: redefinition of 'suspend_state_t' as different kind of symbol
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         |                   ^
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:34: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                           ^
+   include/linux/suspend.h:34:23: note: previous definition is here
+      34 | typedef int __bitwise suspend_state_t;
+         |                       ^
+>> kernel/power/main.c:24:1: error: pasting formed '__addressable_(', an invalid preprocessing token
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         | ^
+   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^
+   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
+      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                         ^
+   include/linux/export.h:71:2: note: expanded from macro '__EXPORT_SYMBOL'
+      71 |         __ADDRESSABLE(sym)                                      \
          |         ^
-   1 warning generated.
---
-   In file included from fs/ioctl.c:8:
-   In file included from include/linux/syscalls.h:83:
-   In file included from include/uapi/linux/aio_abi.h:31:
->> include/linux/fs.h:3921:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3921 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> fs/ioctl.c:69:10: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-      69 |         error = get_user(ur_block, p);
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   fs/ioctl.c:346:10: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     346 |         error = get_user(on, argp);
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   fs/ioctl.c:370:10: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     370 |         error = get_user(on, argp);
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   fs/ioctl.c:424:6: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     424 |         if (get_user(count, &argp->dest_count)) {
-         |             ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   fs/ioctl.c:723:8: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     723 |         err = get_user(flags, argp);
-         |               ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   6 warnings generated.
---
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:83:
-   In file included from include/uapi/linux/aio_abi.h:31:
->> include/linux/fs.h:3921:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3921 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> fs/namespace.c:4097:7: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    4097 |                 if (get_user(c, (const char __user *)data + offset))
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:286:14: note: expanded from macro '___ADDRESSABLE'
+     286 |         __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
          |                     ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   fs/namespace.c:5942:8: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    5942 |         ret = get_user(usize, &req->size);
-         |               ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   3 warnings generated.
---
-   In file included from fs/read_write.c:14:
-   In file included from include/linux/fsnotify.h:15:
-   In file included from include/linux/fsnotify_backend.h:14:
->> include/linux/fs.h:3921:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3921 |         if (unlikely(get_user(c, path)))
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
          |                      ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
+   include/linux/compiler_types.h:83:24: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                        ^
+   kernel/power/main.c:24:19: error: expected ')'
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         |                   ^
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:51: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                                            ^
+   kernel/power/main.c:24:19: note: to match this '('
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:24: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                 ^
+>> kernel/power/main.c:24:1: error: pasting formed ')417', an invalid preprocessing token
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         | ^
+   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^
+   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
+      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                         ^
+   include/linux/export.h:71:2: note: expanded from macro '__EXPORT_SYMBOL'
+      71 |         __ADDRESSABLE(sym)                                      \
          |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> fs/read_write.c:1403:16: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    1403 |                 if (unlikely(get_user(off, offset)))
-         |                              ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   2 warnings generated.
---
-   In file included from fs/select.c:18:
-   In file included from include/linux/compat.h:17:
->> include/linux/fs.h:3921:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3921 |         if (unlikely(get_user(c, path)))
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
          |                      ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
+   include/linux/compiler_types.h:83:24: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                        ^
+>> kernel/power/main.c:24:19: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         |                   ^
+   include/linux/suspend.h:148:34: note: expanded from macro 'pm_suspend_target_state'
+     148 | #define pm_suspend_target_state (PM_SUSPEND_ON)
+         |                                  ^
+   include/linux/suspend.h:36:34: note: expanded from macro 'PM_SUSPEND_ON'
+      36 | #define PM_SUSPEND_ON           ((__force suspend_state_t) 0)
+         |                                           ^
+>> kernel/power/main.c:24:1: error: expected function body after function declarator
+      24 | EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+         | ^
+   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^
+   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
+      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                         ^
+   include/linux/export.h:71:2: note: expanded from macro '__EXPORT_SYMBOL'
+      71 |         __ADDRESSABLE(sym)                                      \
          |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:286:2: note: expanded from macro '___ADDRESSABLE'
+     286 |         __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
          |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> fs/select.c:783:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     783 |                 unsafe_get_user(to->p, &from->p, Efault);
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:449:2: note: expanded from macro 'unsafe_get_user'
-     449 |         __get_user_nocheck(__gu_val, (ptr), label);                     \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   fs/select.c:784:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     784 |                 unsafe_get_user(to->size, &from->size, Efault);
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:449:2: note: expanded from macro 'unsafe_get_user'
-     449 |         __get_user_nocheck(__gu_val, (ptr), label);                     \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   3 warnings generated.
---
-   In file included from fs/namei.c:22:
->> include/linux/fs.h:3921:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3921 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> fs/namei.c:231:6: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     231 |         if (get_user(c, pathname))
-         |             ^
-   arch/riscv/include/asm/uaccess.h:263:3: note: expanded from macro 'get_user'
-     263 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:233:2: note: expanded from macro '__get_user'
-     233 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:2: note: expanded from macro '__get_user_error'
-     196 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:185:3: note: expanded from macro '__get_user_nocheck'
-     185 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   2 warnings generated.
-..
+   include/linux/compiler.h:166:68: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                                                                    ^
+   <scratch space>:210:1: note: expanded from here
+     210 | 417
+         | ^
+>> kernel/power/main.c:24:1: error: pasting formed '__export_symbol_(', an invalid preprocessing token
+   include/linux/export.h:84:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+      84 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^
+   include/linux/export.h:80:38: note: expanded from macro '_EXPORT_SYMBOL'
+      80 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                         ^
+   include/linux/export.h:73:18: note: expanded from macro '__EXPORT_SYMBOL'
+      73 |         asm(__stringify(___EXPORT_SYMBOL(sym, license, ns)))
+         |                         ^
+   include/linux/export.h:29:18: note: expanded from macro '___EXPORT_SYMBOL'
+      29 |         __export_symbol_##sym:                  ASM_NL  \
+         |                         ^
+   10 errors generated.
 
 
-vim +3921 include/linux/fs.h
+vim +23 kernel/power/main.c
 
-90f8572b0f021fd Eric W. Biederman 2015-06-29  3903  
-45cd0faae3715e3 Amir Goldstein    2018-08-27  3904  /* mm/fadvise.c */
-45cd0faae3715e3 Amir Goldstein    2018-08-27  3905  extern int vfs_fadvise(struct file *file, loff_t offset, loff_t len,
-45cd0faae3715e3 Amir Goldstein    2018-08-27  3906  		       int advice);
-cf1ea0592dbf109 Jan Kara          2019-08-29  3907  extern int generic_fadvise(struct file *file, loff_t offset, loff_t len,
-cf1ea0592dbf109 Jan Kara          2019-08-29  3908  			   int advice);
-45cd0faae3715e3 Amir Goldstein    2018-08-27  3909  
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3910  static inline bool vfs_empty_path(int dfd, const char __user *path)
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3911  {
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3912  	char c;
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3913  
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3914  	if (dfd < 0)
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3915  		return false;
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3916  
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3917  	/* We now allow NULL to be used for empty path. */
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3918  	if (!path)
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3919  		return true;
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3920  
-1bc6d4452d5c91b Christian Brauner 2024-04-30 @3921  	if (unlikely(get_user(c, path)))
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3922  		return false;
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3923  
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3924  	return !c;
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3925  }
-1bc6d4452d5c91b Christian Brauner 2024-04-30  3926  
-
-:::::: The code at line 3921 was first introduced by commit
-:::::: 1bc6d4452d5c91beb09e37a98a590808e1997b79 fs: new helper vfs_empty_path()
-
-:::::: TO: Christian Brauner <brauner@kernel.org>
-:::::: CC: Christian Brauner <brauner@kernel.org>
+    22	
+  > 23	suspend_state_t pm_suspend_target_state;
+  > 24	EXPORT_SYMBOL_GPL(pm_suspend_target_state);
+    25	
 
 -- 
 0-DAY CI Kernel Test Service
