@@ -1,99 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7B523CEF8
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 19:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540B623E342;
+	Fri,  9 May 2025 20:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746820333; cv=none; b=ZEmUBxip+7ldVpbagMKCJSGOJzwFwzDCdVmXKCgXdviNzdaO5/O209P+dyD/y3uUZuBSiaMHQwf/Zz9xkO2Y0Xa9InS0KQq1ibSzEhCNOsIzYQl23ljCnLqU61EXPSWttqbwW5y1JSozBDklf2H20K55COpy6n0hL/95Fo1ejyw=
+	t=1746821029; cv=none; b=tp7aUPiVuo1gFKyInyVnUdSx1akLY0n5iXCbNSv1GNn77eA9/wcgLVc1LvaasCOcQDm2Cu0bRaOTC8qYwsBxlE4hL6rWA6RM7XvsHuIgIzbxMjk8KF8x1UpM9hYDm6QsRCSyfaMKDYsg8ZgHiw9sIY1ulH5ZPiPGbGiljTEX5v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746820333; c=relaxed/simple;
-	bh=KKywKoKJDqQBxA/Z8witldaXxdxZlxP+mHpV5Nsz0ys=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=tzhCyCv7TEW0Bn8R0uBJQ1EEkan0RHE8chqVFcGVViYXmowIHLldxDgilNXKs0PsxtpryL2R+3Id7SZ0tv1nj/MuIky9h/py48rfn3TjGdrXPqM+WUI8S5QbNV1d76W5h+Yq/TULQhJM3ocXfH4Isf79nJsgvuduwbY5QxhgzdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vfbuf7Ah; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746821029; c=relaxed/simple;
+	bh=Tlb5MDgotIsmFC5l0enuv4HrkZGo1UYHZBpeu4qlZeE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S+T4McVwDcQZl0CdrDP0WRJKYKWcuxVomZrqYSkZEe+hUUZ9QCrFaBGrvCUn+QzCCJ4hgMfRyq3pHInKx/x3F4mSAmw6X8Y/8VoTuQuXsf6BOOknkqttFAnpV3IG3ivC9+lD4Q6vhVZdYPVTHhcmy6a6MUeZYaBoBUvl8ITZXkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pvGlyerw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vfbuf7Ah"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746820329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yMg4hFfhBKNZpncAwx9F4r+8RTMgbOG1Bs0ycipagoY=;
-	b=Vfbuf7AhWqtHOtGVSRUToKXjItIn9pmqi7UljzhYIWWG5GHgk7vXis9dDfUZdOytoHiEab
-	RLs1nTAhF1YkXmuGsjrTyN2CCnRQJUZcOhEBV8eikvnacKQyGpHM+z1rY87s7ZLDv4VJIj
-	u3j5jc1lp+lHiJtZ6Ow1lRgi6GmawCo=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-526-zHiK9XNqOsWaDcEpqiVjwg-1; Fri,
- 09 May 2025 15:52:07 -0400
-X-MC-Unique: zHiK9XNqOsWaDcEpqiVjwg-1
-X-Mimecast-MFC-AGG-ID: zHiK9XNqOsWaDcEpqiVjwg_1746820326
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AB09818004A7
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 19:52:06 +0000 (UTC)
-Received: from [172.20.110.75] (unknown [10.30.44.189])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0BE4B195607A;
-	Fri,  9 May 2025 19:52:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
- upstream-mainline, 3013c33d)
-Date: Fri, 09 May 2025 19:52:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pvGlyerw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C93EC4CEE4;
+	Fri,  9 May 2025 20:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746821028;
+	bh=Tlb5MDgotIsmFC5l0enuv4HrkZGo1UYHZBpeu4qlZeE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pvGlyerwXRkpmzHnBUeKJCpK7IgRxYieKDXWZmfUv9CHHNUsCb3nkvKF/XJDfrQWF
+	 3wgyQenDD0gaD/MlO4dJQsuhnPfIpkktj/eIJJI2iJHaRj9yX4HxjJnFRgjp01Qc9X
+	 yGP70dk5ivyzPzXzv4//Q4p/psZm/EjidykT8dC+Ib/EwPVYuxdqZmQyEfNMXYQ7Y2
+	 zxIqeW5PzHb7mTFRNUJXk6wqM6MB3B+ncevEScmIOSkcM6LH1ntjkbFw3+v4r1myTL
+	 ybqP1/yuWmHJ/XlorLsIJ36Jw7TNYOR9NOxAlnYJDJxtOdmkCFU2AR58L3Gchw9LeC
+	 DmwGIhDobDmtg==
+Date: Fri, 9 May 2025 17:03:46 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	James Clark <james.clark@linaro.org>,
+	Howard Chu <howardchu95@gmail.com>,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+	Daniel Xu <dxu@dxuuu.xyz>, Ariel Ben-Yehuda <ariel.byd@gmail.com>
+Subject: Re: [PATCH v2 0/6] Use rustc-demangle for Rust demangling
+Message-ID: <aB5fog7c-Ucs6dAN@x1>
+References: <20250430004128.474388-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <70895.125050915520703508@us-mta-526.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 3N6lsb4AYUl9ql5vz65Shh2nZGfSIHMnAr63NTVRPK0_1746820326
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250430004128.474388-1-irogers@google.com>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Apr 29, 2025 at 05:41:22PM -0700, Ian Rogers wrote:
+> Discussion of improved Rust demangling started with:
+> https://lore.kernel.org/lkml/jgxfnphfo3nzlfipnuuzdlfc4ehbr2tnh2evz3mdhynd6wvrsu@fcz6vrvepybb/
+> that led to implementing a Rust v0 demangler:
+> https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com/
+> Discussion on that patch series led to the rust-lang issue:
+> https://github.com/rust-lang/rust/issues/60705
+> where the pre-existing Rust C demangler, authored by Ariel Ben-Yehuda
+>  <ariel.byd@gmail.com>, was mentioned. There wasn't progress on that
+> issue and so I've pulled that work into perf as discussed on the
+> issue.
+> 
+> v2: Changes to references from arielb1 to "Ariel Ben Yehuda
+>     <ariel.byd@gmail.com>", license tidying as suggested by Miguel
+>     Ojeda" <ojeda@kernel.org>. Don't change from alternate demangling
+>     flag from false to true in the test change, make it true from the
+>     beginning (patch 2).
+> 
+> Ian Rogers (6):
+>   perf demangle-rust: Add rustc-demangle C demangler
+>   perf symbol-elf: Integrate rust-v0 demangling
+>   perf demangle-rust: Remove previous legacy rust decoder
+>   perf test demangle-rust: Add Rust demangling test
+>   perf test demangle-java: Switch to using dso__demangle_sym
+>   perf test demangle-ocaml: Switch to using dso__demangle_sym
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+I'm fixing these up, ok?
 
+  ✗ BADSIG: DKIM/google.com
+---
+Total patches: 6
+---
+Cover: ./v2_20250429_irogers_use_rustc_demangle_for_rust_demangling.cover
+ Link: https://lore.kernel.org/r/20250430004128.474388-1-irogers@google.com
+ Base: applies clean to current tree
+       git checkout -b v2_20250429_irogers_google_com HEAD
+       git am ./v2_20250429_irogers_use_rustc_demangle_for_rust_demangling.mbx
+⬢ [acme@toolbx perf-tools-next]$        git am ./v2_20250429_irogers_use_rustc_demangle_for_rust_demangling.mbx
+Applying: perf demangle-rust: Add rustc-demangle C demangler
+.git/rebase-apply/patch:1098: trailing whitespace.
+    
+.git/rebase-apply/patch:1363: trailing whitespace.
+    
+.git/rebase-apply/patch:1474: trailing whitespace.
+    default: 
+.git/rebase-apply/patch:1791: trailing whitespace.
+        { NULL }, 
+.git/rebase-apply/patch:1814: trailing whitespace.
+        // From here on, inner contains a pointer to the next element, rest[:len] to the current one        
+warning: squelched 4 whitespace errors
+warning: 9 lines add whitespace errors.
+Applying: perf symbol-elf: Integrate rust-v0 demangling
+Applying: perf demangle-rust: Remove previous legacy rust decoder
+Applying: perf test demangle-rust: Add Rust demangling test
+Applying: perf test demangle-java: Switch to using dso__demangle_sym
+Applying: perf test demangle-ocaml: Switch to using dso__demangle_sym
+⬢ [acme@toolbx perf-tools-next]$
 
-Kernel information:
-    Commit message: Merge tag 'riscv-for-linus-6.15-rc6' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/riscv/linux
+Applied.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1809886420
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1809886420-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+- Arnaldo
