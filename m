@@ -1,33 +1,64 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9B51F0E53
-	for <llvm@lists.linux.dev>; Sat, 10 May 2025 08:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC2D1EA7FF
+	for <llvm@lists.linux.dev>; Sat, 10 May 2025 09:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746867367; cv=none; b=FS+P1tdAKki0wESbG5wLxcH9YMRtdyn3FLP5i5Jl5YPbbwysorSCeDvuIBN2LUDSkoTSS0NSADQX/DxEyYetHI3pR0cluHBUm645JHx7UJOff3FcBtWNyHfxo6pF9WUCZkOpYkZYIK+zBEyEq5ashHjqFEs3knXAGk5KjR+koZw=
+	t=1746869588; cv=none; b=gliIL4St0lCppQRPeexkc/kKo2DZyegSQEAjov+at5HUFRFvyYf1TaUYRu5Ey30qQ2dG9cukQoUFao5Bqmhw6FegME4NSOBvly/Vt2yHqfBfctomSfR/KpCGHhJKXJePE76rVc8cL0i0pnsnoJ/RMg99pHzNnn4s/qvAb6tMhWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746867367; c=relaxed/simple;
-	bh=q/6kjsQl8uKq9Wxv4d5NoqfXaQibiCuO98lH0DMSwKg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=k/MKNcApB/FtLf+d8AqDzIIChMmVCmQBPDHtN38BXyDXNop7SLA7hazgaqdGGCgZhNZ1AKjDz4KOG4u3CshYzfmfjxBD3PfIsu9Si5XZTR5+4MDRG/6Ne80ubn0i6/SIugWkSsCkOVLnbPq2NBay8RZBLM2K4mN4N8cDuq0TQo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=schKhCH4; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1746869588; c=relaxed/simple;
+	bh=d/Q2dqkM3hGIa7pRJKatBlt0uQwkDzQUldsLHN8FByw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FsLcDsu1IKejTw2xEVPQ5uLDPJ+FU9bAT5Nh5UvUaArMvClZcemj53rep3NbOLm6GyjcMe5lLdkDUThefuq/hYJ7vAqafB/dLgp/G/9rsweo3gQDUcrkLHPwtHztMvLd223Z72f4zziVU261zLfhVB+eQsKpkjYKSvQfKTIM8LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzHy6HXD; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="schKhCH4"
-Received: from [192.168.1.192] (unknown [IPv6:2001:861:3a80:3300:7c3b:c7bf:b733:fa1b])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4C4998BE;
-	Sat, 10 May 2025 10:49:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1746866947;
-	bh=q/6kjsQl8uKq9Wxv4d5NoqfXaQibiCuO98lH0DMSwKg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=schKhCH4BhD7cBov6CrVJMMtTPNDslcANcECxmMn/AGdQD72+XXZVs27fjQNmL8Gz
-	 jsmEE2wHcTGPw0D4lZdfzsAJkuMbXHLIZC518mBmVjcEnHzTl7O1noLqvj3LBYZjXs
-	 IzwRxWg5LvFgVfDA/I9W2a2GvypUuG50HTwKOUZ0=
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Date: Sat, 10 May 2025 10:48:52 +0200
-Subject: [PATCH] media: amlogic: c3-mipi-csi2: Handle 64-bits division
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzHy6HXD"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a0ba0b6b76so1902615f8f.1
+        for <llvm@lists.linux.dev>; Sat, 10 May 2025 02:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746869585; x=1747474385; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0zBTUK9ila/Am76tfftf45UmHXE5OHX/2meSQDmacZw=;
+        b=JzHy6HXDctrA3GV+7cqQ2sazFHNXSkoj0kCBDXbRkseoQYrYY4jOLKxjd3N25V6apc
+         VertPXY1l2xK3ND+aFOTvrHfKLjtQJrTb1G3A5NlNn4KsKyDW24AJ2YrsxMNQDp/6ntP
+         tFvQMwLU/kR+JeMKLi73r7uUvCDeOnT6fyL+H94UBcKFRgN+STtq+NTYwogopkBQilqB
+         k1EMS6n6tsUjbe99q/r3I0Ca83s06sQ1pNutgQfMn5Vk4WgsgjnKVgTRUWdy2B7Zryin
+         UCGWd5dMKaVMMwnBhWJypXrhQ6q5/8KxFF05tw8KhNNGrdU2aW8xB6LDgTq00rJJ/mRQ
+         gPzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746869585; x=1747474385;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0zBTUK9ila/Am76tfftf45UmHXE5OHX/2meSQDmacZw=;
+        b=BbFbkYWuouVasxgTpTvKF9/w113MpbnR+N89Dj/eTMPf1RBF0sD9OTjU59qk4cr9so
+         Ui+47NzF6nNG2M5m2TASPslEST82NaALCZaHrLt0vq8iVj0ndieynDKKVjTxYC63vjm9
+         IFfuZIYCMaVze5AQ8uAP+npdGy9LCYWCUUkWxU0U02SdS9iN1aW0o/h+F+LZ6UrlBGgK
+         DpoUt2bEA0JLpKvBSErLSpD9IY8tYU+e1IBewMndzre4GSDXnE6d5M1DCmTgOxWQbjRr
+         PkjubGO2ezJneZLgPLoET1u60Oelf10967D4XUwYn8iEqOoWaT4R9nLvl1g/7TMLkiE1
+         epTg==
+X-Forwarded-Encrypted: i=1; AJvYcCX4j4XYkiLTCfFPiB9tu2caVKmSwyV68B1G1MIRLiog3vru3P2Kw4FUCVTsMjxRAtf8WtU2@lists.linux.dev
+X-Gm-Message-State: AOJu0YwuDIfjgK/xd+y5EaLBhx2OHYzJx1183FNDFMyiQU8bejrzvafe
+	PhLQd5I0rell7x7+YICPpC8RyIZp9ejbxttB3RaOf2Az4g+pRPp/
+X-Gm-Gg: ASbGncv9OptAo/usSaaPmlOkpiWj9KIO3X1e7L4NTpp6smynKdaYt8x05VjTxQoxC9q
+	m6q7G9dUrNDjy8VPGn6GgY/QKJ6oSNEYqW+ENUU89umfSzjbaX1+SFpY5W1+td0+VAW2NzfnSP+
+	fzI1ON/mTWriLhfyptcyxr5qSRkOsZV1CB/OqcSM7uPvhHM0d++Vjz9Kf1uYbn6H3UvvvWTzezl
+	yxXoXICTdIr/hKYHdg4L8x+ffgUY7IHW2Ax72AwCZ/PUQ2CxGakCh+KTTHRS5jd734XcIi0JUOQ
+	BzFo1asmeMgxoWe7TDRMbvN0LU6M9qe9u0n2hWg=
+X-Google-Smtp-Source: AGHT+IHnyP/lG7e9Gb+RWekvJAvxRIKIlVbkfvcf+0TPVjM7e8MKuRrz5aPODf9+w4RcEhWogWlIhA==
+X-Received: by 2002:a05:6000:2502:b0:3a0:aed9:e39 with SMTP id ffacd0b85a97d-3a1f646c6e3mr5519558f8f.28.1746869585084;
+        Sat, 10 May 2025 02:33:05 -0700 (PDT)
+Received: from [10.0.1.56] ([2001:871:22a:99c5::1ad1])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a1f57ddde0sm5981485f8f.14.2025.05.10.02.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 May 2025 02:33:04 -0700 (PDT)
+From: Christian Schrefl <chrisi.schrefl@gmail.com>
+Subject: [PATCH v3 0/3] rust: add `UnsafePinned` type
+Date: Sat, 10 May 2025 11:32:25 +0200
+Message-Id: <20250510-rust_unsafe_pinned-v3-0-57ce151123f9@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,93 +67,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250510-amlogic-div64-div-v1-1-e475d4de721f@ideasonboard.com>
-X-B4-Tracking: v=1; b=H4sIAPMSH2gC/x2MQQqAIBAAvxJ7TtDIPfSV6CC62UJpKEgg/j3rM
- jCHmQqZElOGZaiQqHDmGLqocQB7mOBJsOsOk5y01EoKc53RsxWOC84fBTrptEGyGhF6dyfa+fm
- f69baC0jhFchjAAAA
-X-Change-ID: 20250510-amlogic-div64-div-6d0d5a6ec566
-To: Hans Verkuil <hverkuil@xs4all.nl>, 
- Daniel Scally <dan.scally@ideasonboard.com>, Keke Li <keke.li@amlogic.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
+X-B4-Tracking: v=1; b=H4sIACkdH2gC/32PQQ6DIBBFr2JYlwYQK3bVezSNITAoSUULStoY7
+ 160Xbhounwz+W/+zCiAtxDQOZuRh2iD7V2C/JAh1UrXALY6MWKEFYRTgf0UxnpyQRqoB+scaCw
+ qqhWwMq01SsHBg7HPTXq9JW5tGHv/2m5Euk7/6iLFFCuuyqIQeVUZcWk6ae9H1Xdo1UW2U+Tkp
+ 4Jhgo0SJ1rKkhPG94rlU9HDY0rvjt+ey/IGjbyv7gwBAAA=
+X-Change-ID: 20250418-rust_unsafe_pinned-891dce27418d
+To: Sky <sky@sky9.dev>, Miguel Ojeda <ojeda@kernel.org>, 
+ Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+ =?utf-8?q?Gerald_Wisb=C3=B6ck?= <gerald.wisboeck@feather.ink>, 
  Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2033;
- i=jacopo.mondi@ideasonboard.com; h=from:subject:message-id;
- bh=q/6kjsQl8uKq9Wxv4d5NoqfXaQibiCuO98lH0DMSwKg=;
- b=owEBbQKS/ZANAwAIAXI0Bo8WoVY8AcsmYgBoHxMQni3gctpxjnJp7HRE1q9UclpkdGWgMCuMv
- t3130s/096JAjMEAAEIAB0WIQS1xD1IgJogio9YOMByNAaPFqFWPAUCaB8TEAAKCRByNAaPFqFW
- PHhyEACR6wdeKnDVSiCu8+jYJFfMjhCWyNm/d1GBLwaHmjxAndaZZqzRRGT8ZhCml75tl822Yv1
- PKzyKHBlnLeQ3voqyzvffQSmximA8PeFplezYPnSadE3hiw5XK6Y/ffQfFq9YJGUo/cHZdj3A6P
- IVqnUOOC8GU1fkoOVvqF5OgYDBR90N58Xc+4azjhIhMwCFs9TB9W+gHtBAvvEDnvJrG9crkRUin
- 25HCuUknJXanDwWxunaNeY6XMuIpa21xEtjUiPdGawvjnvWDp4rtUxgWxlroWb2843TUNhiBJrC
- yadkobl0fTLk7FLYHUysbv49FYxyDNZm6uSTWyPq5DOohMqi2klGQ4cNsrg9slvTxbFJFKpcuKQ
- LoDwhs6xAO5g1NE0Nm3qZ02eIQP7FKmyeOP53p+pkJBtgGkW3QIMkHf22Tw19e8/liEgSaDOYll
- 4dNWJ/+2rvbsratDM5sb/nYP+//ELTp9APjiRdGPRUO5E+K8OOYbYA2EYiAkcoyuWxloJhfrSYd
- T+V3y/qdoxJxzgHiAqWT2dHGu7P178D3uLzdG5fE9vNxFWLAgy3zpdpZZN2nAdNF4Tup8Jixt2h
- 4SSRWCYx0QK+vH4UWJuz7e+T6+U/Ed4fZZ268VS/llB7DRux4SHmb7b8T+P1nKo3DvnXELHZJqv
- 1jXZ8hHZAV5NZdw==
-X-Developer-Key: i=jacopo.mondi@ideasonboard.com; a=openpgp;
- fpr=72392EDC88144A65C701EA9BA5826A2587AD026B
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ llvm@lists.linux.dev, Christian Schrefl <chrisi.schrefl@gmail.com>, 
+ Benno Lossin <lossin@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746869583; l=1940;
+ i=chrisi.schrefl@gmail.com; s=20250119; h=from:subject:message-id;
+ bh=d/Q2dqkM3hGIa7pRJKatBlt0uQwkDzQUldsLHN8FByw=;
+ b=fNIBzCK2rGyd0yhyM0HMpRMGdhkLEIhOldzeweIjdz3SN+t28c+wI5mzpIAbYaJpghqDYUfAh
+ R7+Mt6jIIYDCc7DYjz6ZSlOkGo3rZKoTob44KU4i16mJdT30+95EDrq
+X-Developer-Key: i=chrisi.schrefl@gmail.com; a=ed25519;
+ pk=EIyitYCrzxWlybrqoGqiL2jyvO7Vp9X40n0dQ6HE4oU=
 
-The kernel test robot reports the following error when building on
-Hexagon with hexagon-allmodconfig.
+This version now only has the kernel implementation without the
+config flag for using the upstream version. Additionally now
+commits for using `UnsafePinned` in `Opaque` were added.
 
-ERROR: modpost: "__hexagon_divdi3"
-[drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.ko] undefined!
+Checkpatch warns about `rust/kernel/types/unsafe_pinned.rs`
+missing a MAINTAINERS entry. This should be fine because it
+will be included in the RUST entry.
 
-The error is caused by using DIV_ROUND_UP() with a 64 bits divisor with
-a 32-bit dividend, which on Hexagon and clang-17 is resolved with a call
-to the __hexagon_divdi3() helper function, part of the compiler support
-library and not available when building Linux.
+This patchset is based on the pin-init-next branch.
 
-Use DIV_ROUND_UP_ULL() to fix the build error and avoid calling the
-__hexagon_divdi3() helper function.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202505101334.UHxNcUUO-lkp@intel.com/
-Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Signed-off-by: Christian Schrefl <chrisi.schrefl@gmail.com>
 ---
-Hi Hans,
-   this should likely be fast-tracked to land in v6.16 with the Amlogic
-C3 ISP support.
+Changes in v3:
+- Dropped CONFIG_RUSTC_HAS_UNSAFE_PINNED and feature(unsafe_pinned) (Alice)
+- Add comment to `Opaque` reasoning about included `UnsafeCell` (Benno)
+- Small changes in commit message of Patch 3 (Benno)
+- Removed docs mentioning not included functions (Benno)
+- Removed docs mentioning implementation details and added that as
+    comment instead (Benno)
+- Link to v2: https://lore.kernel.org/r/20250430-rust_unsafe_pinned-v2-0-fc8617a74024@gmail.com
 
-Thanks
----
- drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c b/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
-index f92815ffa4ae..1011ab3ebac7 100644
---- a/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
-+++ b/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
-@@ -5,6 +5,7 @@
- 
- #include <linux/clk.h>
- #include <linux/device.h>
-+#include <linux/math.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/platform_device.h>
-@@ -321,7 +322,7 @@ static void c3_mipi_csi_cfg_dphy(struct c3_csi_device *csi, s64 rate)
- 	u32 settle;
- 
- 	/* Calculate the high speed settle */
--	val = DIV_ROUND_UP(1000000000, rate);
-+	val = DIV_ROUND_UP_ULL(1000000000, rate);
- 	settle = (16 * val + 230) / 10;
- 
- 	c3_mipi_csi_write(csi, MIPI_PHY_CLK_LANE_CTRL,
+Changes in v2:
+- Expanded `UnsafePinned` documentation to describe differences
+    with upstream rust implementation.
+- Removed config flag for using upstream `UnsafePinned` type.
+- Add patch implementing `Wrapper` for `Opaque`
+- Add patch for using `UnsafePinned` internally in `Opaque`
+- Link to v1: https://lore.kernel.org/r/20250418-rust_unsafe_pinned-v1-1-c4c7558399f8@gmail.com
 
 ---
-base-commit: 3328eb4dfec23cb3055cda24087cd1cdee925676
-change-id: 20250510-amlogic-div64-div-6d0d5a6ec566
+Christian Schrefl (3):
+      rust: add UnsafePinned type
+      rust: implement `Wrapper<T>` for `Opaque<T>`
+      rust: use `UnsafePinned` in the implementation of `Opaque`
+
+ rust/kernel/revocable.rs           |   2 +
+ rust/kernel/types.rs               |  45 ++++++++-------
+ rust/kernel/types/unsafe_pinned.rs | 113 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 140 insertions(+), 20 deletions(-)
+---
+base-commit: 9de1a293c8ece00d226b21a35751ec178be2a9fa
+change-id: 20250418-rust_unsafe_pinned-891dce27418d
 
 Best regards,
 -- 
-Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Christian Schrefl <chrisi.schrefl@gmail.com>
 
