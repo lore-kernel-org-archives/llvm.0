@@ -1,99 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B621223717F
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 23:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7FB189BAC;
+	Sat, 10 May 2025 03:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746834187; cv=none; b=q1U4OtjzQQZqPJJHHpDrB4J0HB02h6T7585n+ICnJ2jPwZwt2bfFycmkttfrmveuCn4b6lkpTUNDYN/m+sudYrXNwHvKA2JRjNYsA52i7d19/ZnKEAXAqdXh8WMXcCQ6cl5amwFPkWfdGyJeX7zhSDHY4eHcgpQSnCxq1Fmxjwk=
+	t=1746847775; cv=none; b=RtqO6aZmu8oe+V9RsbqlSLGuCPazkT4UqW/zCB7Mk74B683BObaUI7lo8hEgDnhOkvryFbCfYvnKaeKpRAwofTVyF8pHXVMSdKfuGTFLnqBjtiYlAT16aKlmXmVeEcKZhGaShVOKXxu0iWk/XAjS45OvEtN7mjjK5eODaWI8n9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746834187; c=relaxed/simple;
-	bh=fpwCG+IWhM+ZsyMgbAojaD2TukcZ5dPnS0N62CI/igI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=LruNSy2YMxP8QqBlb/kgrZ2l0rDqLwy7DENyo11GIV/EnpzIqlWJidMxPLtzia8XjdvwoMYgDv5IvT2p+qqRNkQtDMXpiXIcP8qx0WrdiYxyofIAGDWi/bh87TdCpnFDAPdz8X7aqPrFq1rNpVgTSPm/hW/eL/35eGOCFjlpgao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=clCRC4XH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1746847775; c=relaxed/simple;
+	bh=HslIg/mgDg1Ug19oPvJQt5WyPJMqULS/mzJzvPcq5A4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NnYAenB2BYZS5bUfTfwPT0DYxYNLX9ZF1ZdXExrgnXGX3zSLZMQ3OWMdw+DY13YnA6uzRzKjAIZRhk1WGwv/Oxswet1Ova5fbh6XT3Xxm0E1r0wYZ+gpqViQP7xtRS5cm+ZCt1KREzkLyOlMFh1kkQCQBKsDnm8APG5HF8yjiQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ARnEvHiT; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="clCRC4XH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746834184;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cLOYWBX1wvpH8ARPwhwCVOXX3b28FQcmgF/elZmsRxU=;
-	b=clCRC4XHJp0/F/+pFhXOihhMxZ/zNqlP7UjQ71Vx4o0aHYqafnyKISHbvu5Izzo6DcqQxX
-	LruSIQFY/9dAlBDIuNMu8222dSXN+WDSITnO2FtUY9wJu+mmhVSzTa1Fud4zebmY+T1w8f
-	nJ6sM1DSAzPug55sVfWU/YnBZSbEjU4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-18-pk9vr6PDPLSqtwGUkzoeEA-1; Fri,
- 09 May 2025 19:43:03 -0400
-X-MC-Unique: pk9vr6PDPLSqtwGUkzoeEA-1
-X-Mimecast-MFC-AGG-ID: pk9vr6PDPLSqtwGUkzoeEA_1746834182
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 29372180045B
-	for <llvm@lists.linux.dev>; Fri,  9 May 2025 23:43:02 +0000 (UTC)
-Received: from [172.20.110.75] (unknown [10.30.44.189])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A8ABE19560B0;
-	Fri,  9 May 2025 23:43:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc5,
- upstream-mainline, 0e1329d4)
-Date: Fri, 09 May 2025 23:43:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ARnEvHiT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746847771; x=1778383771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HslIg/mgDg1Ug19oPvJQt5WyPJMqULS/mzJzvPcq5A4=;
+  b=ARnEvHiTuJpqwc+GrcYIjYwE/ufG9GvkacgOEavW++/9A0xsoN6RoFNr
+   plJ2PPV3cndYrZjFHCH63yB9TnuQaQuADycIX8xp63kOCelOwEZFyGnDX
+   OPvEgN5kF3pPty1XWsTriHzMhKnGJxSQgZstr+x4ZITzs9+Lq68peI71w
+   RDWYpufMLQueLp8DIXg2AhmpgW/6D6pfNVwQ1K7m0OVen+pvyZr9bNMp0
+   SPPEJB4pw1PhdShz2a1iKnVE611UNnLL66F9caqLslMWzIKR8qhNvtgZW
+   jord3oQkDaZXDpue2QnwH+lVujaByzZek4CxbSPGZrSKxcC7rwuO4qPvV
+   Q==;
+X-CSE-ConnectionGUID: QV63lP/QQmuMLYDOy2AWnA==
+X-CSE-MsgGUID: 4y16AcpfST+mJ6DGyqWkNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="51347002"
+X-IronPort-AV: E=Sophos;i="6.15,276,1739865600"; 
+   d="scan'208";a="51347002"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2025 20:29:30 -0700
+X-CSE-ConnectionGUID: yOZh1DFFQyacKfMO6DcbmQ==
+X-CSE-MsgGUID: 1pZduCpWQUShVv3MRxAa3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,276,1739865600"; 
+   d="scan'208";a="136716747"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 09 May 2025 20:29:29 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uDatz-000Ckl-0Z;
+	Sat, 10 May 2025 03:29:27 +0000
+Date: Sat, 10 May 2025 11:29:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul@sk.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 13/19] page_pool: expand scope of is_pp_{netmem,page}() to
+ global
+Message-ID: <202505101158.3gT6t67h-lkp@intel.com>
+References: <20250509115126.63190-14-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <72374.125050919430300183@us-mta-18.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: oVag_KZIBY8l8kYaX1oq4S9BMKmUoc_QUmedS4VnVoE_1746834182
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250509115126.63190-14-byungchul@sk.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Byungchul,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on fd93b3350b4314eebd8fbf0fea3ca7fe48d777e3]
 
-Kernel information:
-    Commit message: Merge tag 'rust-fixes-6.15-2' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/ojeda/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/netmem-rename-struct-net_iov-to-struct-netmem_desc/20250509-195458
+base:   fd93b3350b4314eebd8fbf0fea3ca7fe48d777e3
+patch link:    https://lore.kernel.org/r/20250509115126.63190-14-byungchul%40sk.com
+patch subject: [RFC 13/19] page_pool: expand scope of is_pp_{netmem,page}() to global
+config: x86_64-buildonly-randconfig-001-20250510 (https://download.01.org/0day-ci/archive/20250510/202505101158.3gT6t67h-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250510/202505101158.3gT6t67h-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1810138081
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505101158.3gT6t67h-lkp@intel.com/
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1810138081-x86_64-kernel-debug
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: is_pp_netmem
+   >>> referenced by skbuff.c:1040 (net/core/skbuff.c:1040)
+   >>>               net/core/skbuff.o:(skb_pp_frag_ref) in archive vmlinux.a
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
