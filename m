@@ -1,197 +1,268 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957EA25E44B
-	for <llvm@lists.linux.dev>; Sun, 11 May 2025 18:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963401A317E
+	for <llvm@lists.linux.dev>; Sun, 11 May 2025 20:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746987719; cv=none; b=Ins+btLXW8avPSicndUeBnPPR8tRZSg3v5ZGHyzpGdf2AOqBtwANkf060IBRQzcYhNTFSjxIlDS13hWiIPsIKDyhROFBXeHHU6tTgh/mvw3bJ0fbmAklUcbTd4135W+lypqef//Xdbo131ZwP4fKKaD2Qb3k/cKW7psHwg03URg=
+	t=1746994404; cv=none; b=ehZuZ5G/L9/FpoyKj1+rnOEcsuCMGo+o+tSkWuQ0+m5KRiDCzruhIpUPu4BYwN81MQ1b7yeApOlcSWQhoBspF+xaYCd0vnCFzFg3230i5IBVNf4R/lBXU3VQH1bygPAcCPhPII5BWUEhhdZAcR/2lpesR1I1ZWqszqnf11t/jNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746987719; c=relaxed/simple;
-	bh=5KT6o4PwmqhxLMTqeLgps9jLONAfkvBGP8fVPNwouPw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sWmfymmrv49D3T2xKyXtavri03lNvwPOAll6IkvewSy+kofDvOY83ZeYkBuR29qK3ErXZ4ogmErAjs/0oaOksIRDvJRPRrbTgXcm6JielLZ02Q5bJIJhetPAtygDSJHWv+MWpTUpv+aCMTriHB1IQotU2pxc72R3NEz5HHspffg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gc5n6noa; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1746994404; c=relaxed/simple;
+	bh=dbzfp//VkOlTcDUuZ1Iq1EBVhPZUpGEIiSSwXuigwzI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=HJBOi+QcFeHGwtwGdIXgso2RcGI3eMjvKMMr2F+iJXo82LnmDVM9cS7o3CLYZEfPGo+/Uk7mn06nb0LdHsfDkHpZDqRXBCf0wLdUsmDeumRqtoVWJegN93t5ww6pc/OSI9ncqyucVzXdLXpHd3Hl9nAkMOJoNt56zB/Z/KG8yMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dL5msPyV; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gc5n6noa"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cf257158fso24788845e9.2
-        for <llvm@lists.linux.dev>; Sun, 11 May 2025 11:21:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dL5msPyV"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cf680d351so27641805e9.0
+        for <llvm@lists.linux.dev>; Sun, 11 May 2025 13:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746987716; x=1747592516; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CJGae8ej3sDPBpz6YOCR1Ed8bJvIS2qRuUE9rFXc47Y=;
-        b=Gc5n6noayzH+iCWn8ZE9rFiJ/JqUnJCm7WdW3klTylZMWNzCxcRjYGX7n+xw33k6tr
-         EHLm0J9kUOVF/5iwOQ+9GFHnhmNhRIDnPwEABXe7Zv1sQbi8yAaIwvlxo4mXNsL3wcTs
-         7pZ6BuDUxU0MZlY8BqsZdo80/cPoKQ2rM1tIgn9tMW3XSjKjZikN9SHiYL6LL47kxAVs
-         j3vdZfAL4yxnjLkZguQI5t2T0otuVR/OXi/etLgwF+wCRbVyRymRjwLsxXkWwxjks7FE
-         79wHNZj8V0QC1+hw9XsjL/+QQIPVycXwMX4SBGva6Uqu7hr+us2JTmZw35gopEChdmdL
-         wn7g==
+        d=gmail.com; s=20230601; t=1746994400; x=1747599200; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRQTyAD6/LtJP1mViFxGTV7MWeC7Erzm+rbDZD3bI7g=;
+        b=dL5msPyVEUTLx+VLQcyVMENmVMAnzt0ABy5RJ2HhxDhN9sP/Kj9mQydJdNKkyhvuJE
+         kub3Vp7xiy5BPsNSZ1NqlMGSKQvjW32S801obv8SYK7t5pSEtfX7IHV4/Yrq7oapeJPL
+         O4wnlR2jcRSc+CZjeUfJrSPlsiuyrGt4xwBseJgkxF7dnolmkeg9qreabtoWRWQwaTWQ
+         +EUVawMkUIOP9zPY72Tr4F7Ih2ZmI79+p3kvdzP1BrdUeQ1ZFQ8lE4uTVCl3eHHTUR+g
+         UidQHdnT5mgICM4pk869f+4nnebMv7Tc/syvSQO2lQ96c/Pgg1SWCpAVHeRBYKX/emCc
+         7xVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746987716; x=1747592516;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CJGae8ej3sDPBpz6YOCR1Ed8bJvIS2qRuUE9rFXc47Y=;
-        b=DWi9AYtkP2OfIME/c5+sX6zQBXxGO8K4D3EUEmcbjMLQCsYz+QmqgTZJ0dhcpZBRNB
-         IBdTGIZIqDxove6hI0dqX2epVbaKxCqJ8F8GsaHBuOA1D3xLzwVH5F5mnrep+vTzEWPP
-         mBU8UmcgunVeG3J6IFLtjbAwTijnZ8Ff94JcO0ydJ2/W+v/Zuldcx9Vubd8a+1aNYMfl
-         E3WzdR7M6+36f7Jl9WLr4uQc4gYro7tC38DCxYd8sMrAT5Y6zDUt/xkKzR47UI9LJVZg
-         R9Ye4uaLs7LcoQYbB9iiqJ5ItK90l4I2/8FkwqGGHwAruIfkw/2XtXAcG1Ps0E0lX23b
-         1TPA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqLtecU2yuXH9k0Z1MzLtHEg8FqBEc9gfcxHjNINplXrYrTgiCt1heyRZ0lxEiiuBM+NeN@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy2M8h/26nmc8fxvJi33OI42fTvEKWSreOSu0aXlV3Hy6JNbWqD
-	APygBXZr3ahieZetikEgCAdexctNQNeHXSBGot0YkONL4g+Kl7OCcQWLU6Gs
-X-Gm-Gg: ASbGnctclOykphYomYChc2bX/JaN0Z1WBHr4qFi5/uqcFDBQuAHPp24l50GcfGszDPf
-	YYM5BwYGTmhR0dD9GGUHIo9QalEPT2Jh7kGvpJb4Div/J+40+gMcqYWwJrU9OpwojtFDJRzFbXC
-	sD9+v/rrOLbYYPPuIh8sC1JljCln1w7Ud5hDYgWLNsq4FoxxIIqVOsO2yD1XYLUMRPFu5svJU1t
-	qGaBdn2+ZFDll7JAcT83s+Fo2NGPtNv+lTqwGa3N2AE1arTb+m4e1SeQCeGneN7/6H9aXUrP/AR
-	F1Z+K7oJVxOPcn460ut9b87oSP0sOd8umESUV/it1JcK9vRGEg==
-X-Google-Smtp-Source: AGHT+IGBoxlvzaPApRkL7T3N31oDhgngmd2RjXxOhYwOHe2lszSJdIdNonaizWEVQD1usNSLeu057A==
-X-Received: by 2002:a05:600c:6095:b0:43c:f629:66f4 with SMTP id 5b1f17b1804b1-442d6c3a186mr103848115e9.0.1746987715563;
-        Sun, 11 May 2025 11:21:55 -0700 (PDT)
-Received: from [10.0.1.56] ([2001:871:22a:99c5::1ad1])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-442d67d5c7bsm100418495e9.4.2025.05.11.11.21.54
+        d=1e100.net; s=20230601; t=1746994400; x=1747599200;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRQTyAD6/LtJP1mViFxGTV7MWeC7Erzm+rbDZD3bI7g=;
+        b=JfpthL2kZ/gpIXfbR+bIoit2LGj2NPJDJgVdBmxFUaEJyqQJxBzldauUhdEAiPf29N
+         grWekqueOUKYq+g0og+pwQi8FDhhQpZqi1KQZMdFU39j8pzzuisnebAEk+LIuUS5urfw
+         6Gc90iW0T9B0TG1Isr7sRkhgPx65cC7S0uAx08UXfYbYFZypRkj1pCqCL7KS+3hQaAJe
+         7fornU1NyX2LMc+M9HX+/7i39YvMQWbXm+p/9LvAfDD8rjNjhJWPsHvzVsN+kjC0Bicj
+         xmiNPjruHvB/rbn35CMYUwh76IgUg+bXRfDQrEOYmFdxyaCirpw6V5r7pT70/QJC+68l
+         xfwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+8pfF0DMhu1GZgajUthNCuaEmvwd90ku5nfyC59XR0RHateadvT24ijAYg8SEUML2moWn@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw0HxoEd8jTTp2HzIxpwDN89eOFAXYw+Xu2Y8bno8Nhm7aU7dQP
+	3crEX92XMjjrPKvxqu2yEX6tykGOnIEmSPKRPsLaR8Jat/3p4v4R
+X-Gm-Gg: ASbGnct5/WNLY8Eomi18T/4Y1HThQz5wW7V+3gTZ42G6FmK2JtbRn800u0/81/tjf5C
+	yqCK/RAbkuJ3/uVlfpBMPfk/UWFzq4Fn33Pb2Wd5m238jOzakw35YrRDN67rZz5iLu249fM3RzD
+	P71iU10uv3hc1GQOK63mgKsSx0W7IgJ9QcuUDm2ED8HebXRhOo5FscIAsx1I3FUupKoGdbLdbI1
+	DjbUhKnSWMMZn0luvkPyiYsV7V4EeUJa2G5g6Sm+CBQG10HEgLZd5dT6P9yt5n/qdLc70J2/qCW
+	5ckC+Goe60XR3qTGqwI0mszC0+fn4ZtmCbpTvjLkvi+DZkGdST0A3a/NzUH6VpBB03VztUdyGcs
+	CklhH1LQfomnSMAyTcuk9Lsyg1RGnUKc=
+X-Google-Smtp-Source: AGHT+IGefwAiFZcWgg17TvQ1kAB3qdQoikkJRf7xlh5CqFYtfFSxmQQSC9lri+IHaKSlJy1iOEhTeQ==
+X-Received: by 2002:a05:600c:1c9e:b0:441:bbe5:f562 with SMTP id 5b1f17b1804b1-442d032fc29mr118863085e9.16.1746994399418;
+        Sun, 11 May 2025 13:13:19 -0700 (PDT)
+Received: from localhost.localdomain (93-34-88-225.ip49.fastwebnet.it. [93.34.88.225])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-442d67ee275sm100615165e9.19.2025.05.11.13.13.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 May 2025 11:21:55 -0700 (PDT)
-From: Christian Schrefl <chrisi.schrefl@gmail.com>
-Date: Sun, 11 May 2025 20:21:40 +0200
-Subject: [PATCH v4 3/3] rust: use `UnsafePinned` in the implementation of
- `Opaque`
+        Sun, 11 May 2025 13:13:18 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Daniel Golle <daniel@makrotopia.org>,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [net-next PATCH v4 00/11] net: pcs: Introduce support for fwnode PCS
+Date: Sun, 11 May 2025 22:12:26 +0200
+Message-ID: <20250511201250.3789083-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250511-rust_unsafe_pinned-v4-3-a86c32e47e3d@gmail.com>
-References: <20250511-rust_unsafe_pinned-v4-0-a86c32e47e3d@gmail.com>
-In-Reply-To: <20250511-rust_unsafe_pinned-v4-0-a86c32e47e3d@gmail.com>
-To: Sky <sky@sky9.dev>, Miguel Ojeda <ojeda@kernel.org>, 
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
- =?utf-8?q?Gerald_Wisb=C3=B6ck?= <gerald.wisboeck@feather.ink>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- llvm@lists.linux.dev, Christian Schrefl <chrisi.schrefl@gmail.com>, 
- Benno Lossin <lossin@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746987711; l=3832;
- i=chrisi.schrefl@gmail.com; s=20250119; h=from:subject:message-id;
- bh=5KT6o4PwmqhxLMTqeLgps9jLONAfkvBGP8fVPNwouPw=;
- b=6DGEo06Gy8SeTNomTbvBz9mPO1ZJQ5zJq9ikIniy/ZM3/jsHbTpA8LvsMkyK1iRXrGw6kfpy1
- +09e2BHcPDBArwvHC3PP8xtc4+PtGIEnI8chobLj75cwhXJsxkhvEoz
-X-Developer-Key: i=chrisi.schrefl@gmail.com; a=ed25519;
- pk=EIyitYCrzxWlybrqoGqiL2jyvO7Vp9X40n0dQ6HE4oU=
 
-Make the semantics of the `Opaque` implementation clearer and prepare
-for the switch to the upstream rust `UnsafePinned` type in the future.
+This series introduce a most awaited feature that is correctly
+provide PCS with fwnode without having to use specific export symbol
+and additional handling of PCS in phylink.
 
-`Opaque` still uses `UnsafeCell` even though the kernel implementation
-of `UnsafePinned` already includes it, since the current upstream
-version does not.
+There is currently an equivalent series for this feature where
+a wrapper implementation is proposed. I honestly don't really like
+introducing layer of layer of wrapping to workaround stuff, so
+this is my attempt at giving a more direct approach to this.
 
-Reviewed-by: Gerald Wisböck <gerald.wisboeck@feather.ink>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Benno Lossin <lossin@kernel.org>
-Signed-off-by: Christian Schrefl <chrisi.schrefl@gmail.com>
 ---
- rust/kernel/types.rs | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+First the PCS fwnode:
 
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index f06e8720e012102e5c41e79fd97b0607e927d71c..e32905c42453132fbea49d37a6457547d42465ce 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -4,12 +4,12 @@
- 
- use core::{
-     cell::UnsafeCell,
--    marker::{PhantomData, PhantomPinned},
-+    marker::PhantomData,
-     mem::{ManuallyDrop, MaybeUninit},
-     ops::{Deref, DerefMut},
-     ptr::NonNull,
- };
--use pin_init::{PinInit, Wrapper, Zeroable};
-+use pin_init::{cast_pin_init, PinInit, Wrapper, Zeroable};
- 
- /// Used to transfer ownership to and from foreign (non-Rust) languages.
- ///
-@@ -308,8 +308,10 @@ fn drop(&mut self) {
- /// ```
- #[repr(transparent)]
- pub struct Opaque<T> {
--    value: UnsafeCell<MaybeUninit<T>>,
--    _pin: PhantomPinned,
-+    // The kernel implementation of `UnsafePinned` uses `UnsafeCell` internally, but the
-+    // upstream rust `UnsafePinned` will not. So to make sure this is compatible with
-+    // the upstream version use `UnsafeCell` here.
-+    value: UnsafePinned<UnsafeCell<MaybeUninit<T>>>,
- }
- 
- // SAFETY: `Opaque<T>` allows the inner value to be any bit pattern, including all zeros.
-@@ -319,16 +321,14 @@ impl<T> Opaque<T> {
-     /// Creates a new opaque value.
-     pub const fn new(value: T) -> Self {
-         Self {
--            value: UnsafeCell::new(MaybeUninit::new(value)),
--            _pin: PhantomPinned,
-+            value: UnsafePinned::new(UnsafeCell::new(MaybeUninit::new(value))),
-         }
-     }
- 
-     /// Creates an uninitialised value.
-     pub const fn uninit() -> Self {
-         Self {
--            value: UnsafeCell::new(MaybeUninit::uninit()),
--            _pin: PhantomPinned,
-+            value: UnsafePinned::new(UnsafeCell::new(MaybeUninit::uninit())),
-         }
-     }
- 
-@@ -371,7 +371,7 @@ pub fn try_ffi_init<E>(
- 
-     /// Returns a raw pointer to the opaque data.
-     pub const fn get(&self) -> *mut T {
--        UnsafeCell::get(&self.value).cast::<T>()
-+        UnsafeCell::raw_get(self.value.get()).cast::<T>()
-     }
- 
-     /// Gets the value behind `this`.
-@@ -384,14 +384,12 @@ pub const fn raw_get(this: *const Self) -> *mut T {
- }
- impl<T> Wrapper<T> for Opaque<T> {
-     /// Create an opaque pin-initializer from the given pin-initializer.
--    fn pin_init<E>(slot: impl PinInit<T, E>) -> impl PinInit<Self, E> {
--        Self::try_ffi_init(|ptr: *mut T| {
--            // SAFETY:
--            //   - `ptr` is a valid pointer to uninitialized memory,
--            //   - `slot` is not accessed on error; the call is infallible,
--            //   - `slot` is pinned in memory.
--            unsafe { PinInit::<T, E>::__pinned_init(slot, ptr) }
--        })
-+    fn pin_init<E>(value_init: impl PinInit<T, E>) -> impl PinInit<Self, E> {
-+        let value_init =
-+            UnsafePinned::pin_init(UnsafeCell::pin_init(MaybeUninit::pin_init(value_init)));
-+        // SAFETY: `Opaque<T>` is a `repr(transparent)` wrapper around
-+        // `UnsafePinned<UnsafeCell<MabeUninit<T>>>` so the memory representation is compatible.
-+        unsafe { cast_pin_init(value_init) }
-     }
- }
- 
+The concept is to implement a producer-consumer API similar to other
+subsystem like clock or PHY.
+
+That seems to be the best solution to the problem as PCS driver needs
+to be detached from phylink and implement a simple way to provide a
+PCS while maintaining support for probe defer or driver removal.
+
+To keep the implementation simple, the PCS driver devs needs some
+collaboration to correctly implement this. This is O.K. as helper
+to correctly implement this are provided hence it's really a matter
+of following a pattern to correct follow removal of a PCS driver.
+
+A PCS provider have to implement and call fwnode_pcs_add_provider() in
+probe function and define an xlate function to define how the PCS
+should be provided based on the requested interface and phandle spec
+defined in fwnode (based on the #pcs-cells)
+
+fwnode_pcs_get() is provided to provide a specific PCS declared in
+fwnode at index.
+
+A simple xlate function is provided for simple single PCS
+implementation, fwnode_pcs_simple_get.
+
+A PCS provider on driver removal should first call
+fwnode_pcs_del_provider() to delete itself as a provider and then
+release the PCS from phylink with phylink_release_pcs() under rtnl
+lock.
+
+---
+Second PCS handling in phylink:
+
+We have the PCS problem for the only reason that in initial
+implementation, we permitted way too much flexibility to MAC driver
+and things started to deviate. At times we couldn't think SoC
+would start to put PCS outside the MAC hence it was OK to assume
+they would live in the same driver. With the introduction of
+10g in more consumer devices, we are observing a rapid growth
+of this pattern with multiple PCS external to MAC.
+
+To put a stop on this, the only solution is to give back to phylink
+control on PCS handling and enforce more robust supported interface
+definition from both MAC and PCS side.
+
+It's suggested to read patch 0003 of this series for more info, here
+a brief explaination of the idea:
+
+This series introduce handling of PCS in phylink and try to deprecate
+.mac_select_pcs.
+
+Phylink now might contain a linked list of available PCS and
+those will be used for PCS selection on phylink_major_config.
+
+MAC driver needs to define pcs_interfaces mask in phylink_config
+for every interface that needs a dedicated PCS.
+
+These PCS needs to be provided to phylink at phylink_create time
+by setting the available_pcs and num_available_pcs in phylink_config.
+A helper to parse PCS from fwnode is provided
+fwnode_phylink_pcs_parse() that will fill a preallocated array of
+PCS. (the same function can be used to get the number of PCS
+defined in DT, more info in patch 0005)
+
+phylink_create() will fill the internal PCS list with the passed
+array of PCS. phylink_major_config and other user of .mac_select_pcs
+are adapted to make use of this new PCS list.
+
+The supported interface value is also moved internally to phylink
+struct. This is to handle late removal and addition of PCS.
+(the bonus effect to this is giving phylink a clear idea of what
+is actually supported by the MAC and his constraint with PCS)
+
+The supported interface mask in phylink is done by OR the
+supported_interfaces in phylink_config with every PCS in PCS list.
+
+PCS removal is supported by forcing a mac_config, refresh the
+supported interfaces and run a phy_resolve().
+
+PCS late addition is supported by introducing a global notifier
+for PCS provider. If a phylink have the pcs_interfaces mask not
+zero, it's registered to this notifier.
+
+PCS provider will emit a global PCS add event to signal any
+interface that a new PCS might be avialable.
+
+The function will then check if the PCS is related to the MAC
+fwnode and add it accordingly.
+
+A user for this new implementation is provided as an Airoha PCS
+driver. This was also tested downstream with the IPQ95xx QCOM SoC
+and with the help of Daniel also on the various Mediatek MT7988
+SoC with both SFP cage implementation and DSA attached.
+
+Lots of tests were done with driver unbind/bind and with interface
+up/down also by adding print to make sure major_config_fail gets
+correctly triggered and reset once the PCS comes back.
+
+The dedicated commits have longer description on the implementation
+so it's suggested to also check there for additional info.
+
+---
+
+Changes v4:
+- Move patch 0002 phy_interface_copy to 0002 (fix bisectability
+  problem)
+- Address review from Lorenzo for Airoha ethernet driver
+- Fix kdoc error with missing Return (actually missing : before Return)
+- Fix UNMET dependency reported error for CONFIG_FWNODE_PCS
+- Revert to pcs.c instead of core.c (due to name conflict with other kmod)
+- Fix clang compilation error for Airoha PCS driver
+- Add missing inline function to pcs.h function
+Changes v3:
+- Out of RFC
+- Fix various spelling mistake
+- Drop circular dependency patch
+- Complete Airoha Ethernet phylink integration
+- Introduce .pcs_link_down PCS OP
+Changes v2:
+- Switch to fwnode
+- Implement PCS provider notifier
+- Better split changes
+- Move supported_interfaces to phylink
+- Add circular dependency patch
+- Rework handling with indirect addition/removal and
+  trigger of phylink_resolve()
+
+Christian Marangi (11):
+  net: phy: introduce phy_interface_copy helper
+  net: phylink: keep and use MAC supported_interfaces in phylink struct
+  net: phylink: introduce internal phylink PCS handling
+  net: phylink: add phylink_release_pcs() to externally release a PCS
+  net: pcs: implement Firmware node support for PCS driver
+  net: phylink: support late PCS provider attach
+  dt-bindings: net: ethernet-controller: permit to define multiple PCS
+  net: phylink: add .pcs_link_down PCS OP
+  dt-bindings: net: pcs: Document support for Airoha Ethernet PCS
+  net: pcs: airoha: add PCS driver for Airoha SoC
+  net: airoha: add phylink support for GDM2/3/4
+
+ .../bindings/net/ethernet-controller.yaml     |    2 -
+ .../bindings/net/pcs/airoha,pcs.yaml          |  112 +
+ drivers/net/ethernet/airoha/airoha_eth.c      |  155 +-
+ drivers/net/ethernet/airoha/airoha_eth.h      |    3 +
+ drivers/net/ethernet/airoha/airoha_regs.h     |   12 +
+ drivers/net/pcs/Kconfig                       |   13 +
+ drivers/net/pcs/Makefile                      |    2 +
+ drivers/net/pcs/pcs-airoha.c                  | 2921 +++++++++++++++++
+ drivers/net/pcs/pcs.c                         |  241 ++
+ drivers/net/phy/phylink.c                     |  287 +-
+ include/linux/pcs/pcs-provider.h              |   41 +
+ include/linux/pcs/pcs.h                       |  104 +
+ include/linux/phy.h                           |    5 +
+ include/linux/phylink.h                       |   14 +
+ 14 files changed, 3883 insertions(+), 29 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/airoha,pcs.yaml
+ create mode 100644 drivers/net/pcs/pcs-airoha.c
+ create mode 100644 drivers/net/pcs/pcs.c
+ create mode 100644 include/linux/pcs/pcs-provider.h
+ create mode 100644 include/linux/pcs/pcs.h
 
 -- 
-2.49.0
+2.48.1
 
