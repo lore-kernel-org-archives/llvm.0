@@ -1,85 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85F9EAFA;
-	Sun, 11 May 2025 01:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C00AEEA8;
+	Sun, 11 May 2025 01:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746928128; cv=none; b=HmzkT+/oUhYtVIFuMZdc25oPT7o2Gn+rlp/EJLD/daS35STGX6TFbSvKouMRvQxiaRl1Bw6rUhtEgH5kVxq0ACPqs0fJfsiHSCN32RwKmEDaOE4UCYI0X6kVyu1okjYdkMxSjsEJtHPjwsZRZP/A5Q6VxODdijIxtwPA1pih2GM=
+	t=1746928497; cv=none; b=iO4K+ScDWYOBYzRm0lyHSGGGR97uyhcp6zfn7ij5jrr3+STTyoUObInANfTmclI2j7PzJwDvopVYdeptOsKURQZUB8RkcJYI0l2qS8xc5S5wDSvQhJkPfwdiCS15V5N/kUhZrSQbkqvKIuO1Ffqd8oKf2e2SjoBvCbUMEqFUy9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746928128; c=relaxed/simple;
-	bh=sto49xYoMbjPYVeX2JVNPzeBFY+055O3s4vBRnfo7B0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YVVNmPyr28g5n//ofhEFFpX7Y3qalLraNVUAt09TQpIwAa3qM3gRw8e73M9LGVQAFjO1NgvzAu9uAIx6Y/yV7EIj0uRbZvn55Vk6r9Mba2poOKq8BGjHEBTXw4DbaKOfIOT1i5L63WoHnBKq01C68+qU77+1N3WgPnZaySrt4Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aiCgYJY6; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1746928497; c=relaxed/simple;
+	bh=8YytFU4uQiyuY7JM+uMHnHtT1fzQtqRL8205N8QruuA=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=OamW3gKbgY47x8G/A3upfvqYj1IdCfo4OMCqNWHmDTon+ENAaXoUU/5Xv4bOHK/KhEKJeggvqQua/huMWs12Kc1+6yK46UKfTaRhW/Csw6RmNduAN+3bub0RmJbxAv23qAU/HuoZEqFF9w7jTiflAbcC6r5iMq1tyQK6V7iYrtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZeN8YQxG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aiCgYJY6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746928126; x=1778464126;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sto49xYoMbjPYVeX2JVNPzeBFY+055O3s4vBRnfo7B0=;
-  b=aiCgYJY6xi/apkoi87jykM7vcohcx72s1LOkD75/Sjlr4uyA5QPmhfsS
-   FLGsxMN1Jsd21ixDFo9ziTomNSJZXVAV5jgoJ4FBQXqTEPXuhwiWb5nGz
-   7hbt2hJuPPkFtUqmDr2fuoFWyM72k19OI3QcKFRddKwMlQ9NhSmjYDLcM
-   /UMmBe3Q4tz12laqrtkRQioFQfSuBcl/G/7W2kOlV4IU+MMYT/tV4vlF+
-   yj4PNGnXUwo1sKg9BxOnkOjrHwsEdFXVfw53V75haD6RquKZVUkwpEeCI
-   Dl2nUUBW48F4nY7rY05di0/sVOMrODEa4imgGVU8N+MaKBTncQrccXs1x
-   A==;
-X-CSE-ConnectionGUID: I9cByHijRD+70imNjpEaiA==
-X-CSE-MsgGUID: 0x0Pn/mwTzqp84f8FyFF2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11429"; a="48661832"
-X-IronPort-AV: E=Sophos;i="6.15,278,1739865600"; 
-   d="scan'208";a="48661832"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2025 18:48:45 -0700
-X-CSE-ConnectionGUID: D9w9r3/MSfm5KafviECJWQ==
-X-CSE-MsgGUID: wy57fVWvTnSWa4qhVXbn+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,278,1739865600"; 
-   d="scan'208";a="174180918"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 10 May 2025 18:48:44 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uDvo1-000DWl-2M;
-	Sun, 11 May 2025 01:48:41 +0000
-Date: Sun, 11 May 2025 09:48:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:work.coredump.socket 12/17] ld.lld: error: call to
- __compiletime_assert_395 marked "dontcall-error": Need native word sized
- stores/loads for atomicity.
-Message-ID: <202505110941.IvT43R4y-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZeN8YQxG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29020C4CEE2;
+	Sun, 11 May 2025 01:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746928496;
+	bh=8YytFU4uQiyuY7JM+uMHnHtT1fzQtqRL8205N8QruuA=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=ZeN8YQxG3gxC5+AQDelL8F3QKALlFm32st5qp9we+RBTJfnIVW3f245aUQdzd3x89
+	 VWo79ay8Def62RdmImND8uqEuufca4SwIKhB+3HSTkI1SLpZGPWJI7l12kF4YyN96e
+	 cQMO5HxHAJHdnt/kMdi2NCL5Yhuxa5nLrZTJjSho++av+CMyrSN6lzjH9oyVJQiTOa
+	 AibEpOf0zH/jmUzVRRz5VouduoNELXrKGNchpHyk+stEZPTnQTLS13UQQXj3lpltUm
+	 HB5q+S/J7KvhevsPCXpk40cRpzc9U8F2KnWm2n7BqfMn86pdyZi5Y88JZ0o8I1Rd8D
+	 EXAF8x2sQFi/Q==
+From: Mark Brown <broonie@kernel.org>
+To: Support Opensource <support.opensource@diasemi.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250509142448.257199-2-krzysztof.kozlowski@linaro.org>
+References: <20250509142448.257199-2-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] regulator: da9121: Fix Wvoid-pointer-to-enum-cast
+ warning
+Message-Id: <174692849329.61218.3724088610251570929.b4-ty@kernel.org>
+Date: Sun, 11 May 2025 10:54:53 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.coredump.socket
-head:   4c247245ad525a7db1b1a5cbb5bdfc1a32b87d83
-commit: 9528b1626a4416807ce96a4a592f5340bd043e1d [12/17] pidfs, coredump: add PIDFD_INFO_COREDUMP
-config: i386-buildonly-randconfig-005-20250511 (https://download.01.org/0day-ci/archive/20250511/202505110941.IvT43R4y-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250511/202505110941.IvT43R4y-lkp@intel.com/reproduce)
+On Fri, 09 May 2025 16:24:49 +0200, Krzysztof Kozlowski wrote:
+> 'subvariant_id' is an enum, thus cast of pointer on 64-bit compile test
+> with clang and W=1 causes:
+> 
+>   da9121-regulator.c:1132:24: error: cast to smaller integer type 'enum da9121_subvariant' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> 
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505110941.IvT43R4y-lkp@intel.com/
+Applied to
 
-All errors (new ones prefixed by >>):
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
->> ld.lld: error: call to __compiletime_assert_395 marked "dontcall-error": Need native word sized stores/loads for atomicity.
+Thanks!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1/1] regulator: da9121: Fix Wvoid-pointer-to-enum-cast warning
+      commit: d5cc09847fa0df4034076f884de5957ec816dc52
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
