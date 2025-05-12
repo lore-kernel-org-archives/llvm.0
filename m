@@ -1,262 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BF8255F3E;
-	Mon, 12 May 2025 12:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FADB219E4
+	for <llvm@lists.linux.dev>; Mon, 12 May 2025 13:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747054401; cv=none; b=BXtQC+d7elY8fsmxTjLfM7GLfpkZO+cvnDRkNnAgtSd1IPyXarcIDMRU6HR67QuJDcfIeI52ugZERiKFKraEofRrjCT/uf8D6HNIk3X5KMjFqDVVK4NKxIlcuiH45Z+tTrzyqTzsDJjBy1zfc7DFBDaEvWGoj0y33CEtxvX6zDI=
+	t=1747057657; cv=none; b=KoEgBSamxJ2TZ/l9GuRdXEm7i7GSr31ABqUqj3tFOYL6seQtlN4dY/hUQ928+0OUXjRJnoXxmQldUS+TUKFxojq+4rrbK9qyB0Y5bkmL7PjUDSQcNy7X/l1lurljyRE1FVickLQUOrNEVD/SuvCNPlfJDVGO4l+LN5BFRWMa3u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747054401; c=relaxed/simple;
-	bh=bGEl/N/Mj0l0P5OgWd/MVZto+HVhtJO0kIfC1NcF2TE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qHaSkrQ9GZqBtx53qHRBReQ1odMkaFjc5LyCOEj4L1gRlN0flxvxfK8Neb2hbJ1/CTIjiteKNvV0lpvTCzg51dtpa+YOkSPNoxNN56upVgRdK+uiK/li2GYZZ47eQ6GpdV7Nj0ms151XVjSb8xKe+M9FIY1Ph4SmisEvv8/2FIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3fRCOyL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747057657; c=relaxed/simple;
+	bh=ff/BkoK0UAKrKgoa/SVlnryGs4F19dLoJj5SVwSUo4Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ddrXT1ReUPcEaSW7+EGfnACSjpXLqcI/acdpSGgJWjqwaAtrXpabcScg6QASBqT6u9/y1KXJma/A7yQ+2j2JfNQ89UETQvMqXVHX4T0rjziVSRrLj9IGfiKRhyb1YX4bBPItvgaQx/HjGecF7lil6lKNPsPRqRq2u4lqJihu7QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lp2xWcU/; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3fRCOyL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F74CC4CEE7;
-	Mon, 12 May 2025 12:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747054400;
-	bh=bGEl/N/Mj0l0P5OgWd/MVZto+HVhtJO0kIfC1NcF2TE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a3fRCOyLPT0vjKRO5zR3VuRX900CG3fKPgscz7YdQspH2GDbSo3AYbupGLL8zQFqL
-	 3m+b7CxaUycY5DapAxsIgnmn/UwywUPYkN4qYNQWFmnFXgT3KEoDZYD9iCdmh26/Ms
-	 PPxj4I3EYeoSxnCv1zD61T/Aik0T0c5cPb5xi8WRqPoePZZ/Z+DFRGT/ud0ZDrbY5l
-	 S0rMfC04JTcp4qh+aYv5n+AkIUe5fIWoNfmR4LFuvgP5h2ce6pLDyU+ySdOvEb5eJk
-	 mRBmHURhaRMZ7sZK6efFPXOjND4wZxNOpmvkjD9z2XP4Z4uV8wcheCQoVRQshxozuU
-	 dUyajsHSr/8kA==
-Date: Mon, 12 May 2025 14:53:18 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [net-next PATCH v4 11/11] net: airoha: add phylink support for
- GDM2/3/4
-Message-ID: <aCHvPoZDGUrCVif1@lore-desk>
-References: <20250511201250.3789083-1-ansuelsmth@gmail.com>
- <20250511201250.3789083-12-ansuelsmth@gmail.com>
- <aCG9q6i7HomgilI6@lore-desk>
- <6821bef5.5d0a0220.319347.d533@mx.google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lp2xWcU/"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b1faa09bae7so650739a12.1
+        for <llvm@lists.linux.dev>; Mon, 12 May 2025 06:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747057655; x=1747662455; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nSSN0QVCB0auKOlByp57Ot7u5PowxUCeUXro48vkcbw=;
+        b=Lp2xWcU/KhsCGhZ6/in3lLUiO4tjYvHOBaPJawEC9l/GebndbMXgMRCJKDNK8mYC2J
+         rc1WhC3xWkn6RawHyP0DOZdipruR3VGXiWI860D7KqG+TE1sc+n/6GAIbdlrOLjpd9jP
+         7N7ino8Tlb8of1TmT1quX5bNscnAu0HpYOCaI9F45UGxHY/JIeid0nPfYGG8aBJaqGsx
+         3gfCY1saYDEZ1hqdTuRdnAaiNsp+jPrhuBpLpFKnYYn4L2spjnx0sJklxUSb9QfmA5aU
+         /zdtGbpo5xLAiUtHjMNVb5NOcDEvsU3JB9vhVEMVlLHCCQfdFWBRjClgmhDoNeqmJUnZ
+         Hgmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747057655; x=1747662455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nSSN0QVCB0auKOlByp57Ot7u5PowxUCeUXro48vkcbw=;
+        b=FEJzYEMIRR/FdDsmFFSDJK+ujndMfn83S9hQdFWmxQWadxL8nVYSOl8/EG5WVfu/Zi
+         EQpUkpNpfcA2ma9QJlwoturYFypIvENrDXd7DjhlHOXVqSt3NUfCxA5EjdRKYuJmKs/v
+         qR6SNcBmmC05I3njpxP7vRi6rwuqCTE8YY4LsGCDeGDdfUSFKEuWeWd8XX/ku+9r0CZP
+         WsKdH+XMbY0FldzSXFIOJjbMhQOyomwarI5SyYUFfpFRBh9wvKyzX9FLvMNSf2FEpGwT
+         oxXdemwihKoXb+UPfgRj1URtfSWM8TX/wgaRKgj4g5lwlVm8WDMrDUxT53FwK1Zzu0t+
+         dsXA==
+X-Forwarded-Encrypted: i=1; AJvYcCXv3h4tJydZB9vnJCuObgiVrmWXGn6Z/4l5l+8GV6OtV6jfZ1KatXca2C9hpMXmAXITFMkf@lists.linux.dev
+X-Gm-Message-State: AOJu0YwsBaKp84VmsQZIRGoTbRSSGu/bLc42KtnaSwWzgPTmBYDxDcnd
+	vtdQ2C14s5pa2WB0oDznTWlaW+FfBjcAhdcqAYN/NB8Y/j1edlpAlncKgbNuLOwERBf6pcSBnKK
+	B1MFLE4RGHFT5CbhevwNw5D7iMY8=
+X-Gm-Gg: ASbGncs157krIRg1vL3ywokvlJ/rC4ZusNicCvmHVcU9022kGb4Jv2WeUReoGNC7d0J
+	oCD2BDETFeQerXfIxpGZvSBQ1vLwe/5qv6wRxFR5/vdyYHljhdbHR1G2pAjobRMpBErOyBhZQ4g
+	pa5dKGXzBhhWvDjF751veZWOeN95SF5YwK
+X-Google-Smtp-Source: AGHT+IHicxSAY2ahCa82NqPdRsKS2nLtw4K9WryM+tvkR9Vd6fIZ0xjbPPFQnJMiW6iVED0G6oSwMwOYHzh4pwOBru8=
+X-Received: by 2002:a17:903:2984:b0:22e:62c3:8c5d with SMTP id
+ d9443c01a7336-22fc8c8c1bcmr74033075ad.8.1747057655140; Mon, 12 May 2025
+ 06:47:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qLFnU5peW7PO9M+h"
-Content-Disposition: inline
-In-Reply-To: <6821bef5.5d0a0220.319347.d533@mx.google.com>
-
-
---qLFnU5peW7PO9M+h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250321080124.484647-1-kunwu.chan@linux.dev>
+In-Reply-To: <20250321080124.484647-1-kunwu.chan@linux.dev>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 12 May 2025 15:47:23 +0200
+X-Gm-Features: AX0GCFtjrAQIZQvRJ49eTgAfdFwyQYEsuDLwSVRff4tQTTKSn5Eq48N-yLr6Y1U
+Message-ID: <CANiq72nQuRr0+U9QkAx_d01hymgwsor3SQKQFNt0Y3SStFOfDw@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: page:: optimize rust symbol generation for Page
+To: Kunwu Chan <kunwu.chan@linux.dev>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
+	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
+	dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	morbo@google.com, justinstitt@google.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-[...]
-> >=20
-> > I guess you can use devm_kcalloc() and get rid of kfree() here.
-> >
->=20
-> I forgot to answer to this in the previous revision. No devm can't be
-> used there available_pcs is just an array allocated for phylink_config.
->=20
-> Phylink then copy the data in it and doesn't use it anymore hence it
-> just needs to be allocated here and doesn't need to stay till the driver
-> gets removed.
+On Fri, Mar 21, 2025 at 9:02=E2=80=AFAM Kunwu Chan <kunwu.chan@linux.dev> w=
+rote:
+>
+> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+> with ARCH=3Darm64, the following symbols are generated:
+>
+> $nm vmlinux | grep ' _R'.*Page | rustfilt
+> ffff8000805b6f98 T <kernel::page::Page>::alloc_page
+> ffff8000805b715c T <kernel::page::Page>::fill_zero_raw
+> ffff8000805b720c T <kernel::page::Page>::copy_from_user_slice_raw
+> ffff8000805b6fb4 T <kernel::page::Page>::read_raw
+> ffff8000805b7088 T <kernel::page::Page>::write_raw
+> ffff8000805b72fc T <kernel::page::Page as core::ops::drop::Drop>::drop
+>
+> These Rust symbols(alloc_page and drop) are trivial wrappers around the C
+> functions alloc_pages and __free_pages. It doesn't make sense to go
+> through a trivial wrapper for these functions, so mark them inline.
+>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
 
-I guess this is exactly the point. Since available_pcs is used just here and
-this is not a hot-path, I think the code would be simpler, but I do not have
-a strong opinion about it.
+Applied to `rust-next` -- thanks!
 
->=20
-> > > +	if (!available_pcs)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	err =3D fwnode_phylink_pcs_parse(dev_fwnode(&dev->dev), available_p=
-cs,
-> > > +				       &num_pcs);
-> > > +	if (err)
-> > > +		goto out;
-> > > +
-> > > +	port->phylink_config.available_pcs =3D available_pcs;
-> > > +	port->phylink_config.num_available_pcs =3D num_pcs;
-> > > +
-> > > +	__set_bit(PHY_INTERFACE_MODE_SGMII,
-> > > +		  port->phylink_config.supported_interfaces);
-> > > +	__set_bit(PHY_INTERFACE_MODE_1000BASEX,
-> > > +		  port->phylink_config.supported_interfaces);
-> > > +	__set_bit(PHY_INTERFACE_MODE_2500BASEX,
-> > > +		  port->phylink_config.supported_interfaces);
-> > > +	__set_bit(PHY_INTERFACE_MODE_USXGMII,
-> > > +		  port->phylink_config.supported_interfaces);
-> > > +
-> > > +	phy_interface_copy(port->phylink_config.pcs_interfaces,
-> > > +			   port->phylink_config.supported_interfaces);
-> > > +
-> > > +	phylink =3D phylink_create(&port->phylink_config,
-> > > +				 of_fwnode_handle(np),
-> > > +				 phy_mode, &airoha_phylink_ops);
-> > > +	if (IS_ERR(phylink)) {
-> > > +		err =3D PTR_ERR(phylink);
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	port->phylink =3D phylink;
-> > > +out:
-> > > +	kfree(available_pcs);
-> > > +
-> > > +	return err;
-> > > +}
-> > > +
-> > >  static int airoha_alloc_gdm_port(struct airoha_eth *eth,
-> > >  				 struct device_node *np, int index)
-> > >  {
-> > > @@ -2873,7 +3004,23 @@ static int airoha_alloc_gdm_port(struct airoha=
-_eth *eth,
-> > >  	if (err)
-> > >  		return err;
-> > > =20
-> > > -	return register_netdev(dev);
-> > > +	if (airhoa_is_phy_external(port)) {
-> > > +		err =3D airoha_setup_phylink(dev);
-> >=20
-> > This will re-introduce the issue reported here:
-> > https://lore.kernel.org/netdev/5c94b9b3850f7f29ed653e2205325620df28c3ff=
-=2E1746715755.git.christophe.jaillet@wanadoo.fr/
-> >=20
->=20
-> I'm confused about this. The suggestion wasn't that register_netdev
-> might fail and I need to destroy phylink? Or the linked patch was merged
-> and I need to rebase on top of net-next?
+    [ Removed spurious colon in title. - Miguel ]
 
-what I mean here is if register_netdev() or airoha_setup_phylink() fails, we
-should free metadata_dst running airoha_metadata_dst_free() as pointed out =
-by
-Christophe. I think this path depends on Christophe's one.
-
-Regards,
-Lorenzo
-
->=20
-> I didn't include that change to not cause conflicts but once it's merged
-> I will rebase and include that fix.
->=20
-> > > +		if (err)
-> > > +			return err;
-> > > +	}
-> > > +
-> > > +	err =3D register_netdev(dev);
-> > > +	if (err)
-> > > +		goto free_phylink;
-> > > +
-> > > +	return 0;
-> > > +
-> > > +free_phylink:
-> > > +	if (airhoa_is_phy_external(port))
-> > > +		phylink_destroy(port->phylink);
-> > > +
-> > > +	return err;
-> > >  }
-> > > =20
-> > >  static int airoha_probe(struct platform_device *pdev)
-> > > @@ -2967,6 +3114,9 @@ static int airoha_probe(struct platform_device =
-*pdev)
-> > >  		struct airoha_gdm_port *port =3D eth->ports[i];
-> > > =20
-> > >  		if (port && port->dev->reg_state =3D=3D NETREG_REGISTERED) {
-> > > +			if (airhoa_is_phy_external(port))
-> > > +				phylink_destroy(port->phylink);
-> > > +
-> > >  			unregister_netdev(port->dev);
-> > >  			airoha_metadata_dst_free(port);
-> > >  		}
-> > > @@ -2994,6 +3144,9 @@ static void airoha_remove(struct platform_devic=
-e *pdev)
-> > >  			continue;
-> > > =20
-> > >  		airoha_dev_stop(port->dev);
-> > > +		if (airhoa_is_phy_external(port))
-> > > +			phylink_destroy(port->phylink);
-> > > +
-> > >  		unregister_netdev(port->dev);
-> > >  		airoha_metadata_dst_free(port);
-> > >  	}
-> > > diff --git a/drivers/net/ethernet/airoha/airoha_eth.h b/drivers/net/e=
-thernet/airoha/airoha_eth.h
-> > > index 53f39083a8b0..73a500474076 100644
-> > > --- a/drivers/net/ethernet/airoha/airoha_eth.h
-> > > +++ b/drivers/net/ethernet/airoha/airoha_eth.h
-> > > @@ -498,6 +498,9 @@ struct airoha_gdm_port {
-> > >  	struct net_device *dev;
-> > >  	int id;
-> > > =20
-> > > +	struct phylink *phylink;
-> > > +	struct phylink_config phylink_config;
-> > > +
-> > >  	struct airoha_hw_stats stats;
-> > > =20
-> > >  	DECLARE_BITMAP(qos_sq_bmap, AIROHA_NUM_QOS_CHANNELS);
-> > > diff --git a/drivers/net/ethernet/airoha/airoha_regs.h b/drivers/net/=
-ethernet/airoha/airoha_regs.h
-> > > index d931530fc96f..54f7079b28b0 100644
-> > > --- a/drivers/net/ethernet/airoha/airoha_regs.h
-> > > +++ b/drivers/net/ethernet/airoha/airoha_regs.h
-> > > @@ -357,6 +357,18 @@
-> > >  #define IP_FRAGMENT_PORT_MASK		GENMASK(8, 5)
-> > >  #define IP_FRAGMENT_NBQ_MASK		GENMASK(4, 0)
-> > > =20
-> > > +#define REG_GDMA4_TMBI_FRAG		0x2028
-> > > +#define GDMA4_SGMII1_TX_WEIGHT_MASK	GENMASK(31, 26)
-> > > +#define GDMA4_SGMII1_TX_FRAG_SIZE_MASK	GENMASK(25, 16)
-> > > +#define GDMA4_SGMII0_TX_WEIGHT_MASK	GENMASK(15, 10)
-> > > +#define GDMA4_SGMII0_TX_FRAG_SIZE_MASK	GENMASK(9, 0)
-> > > +
-> > > +#define REG_GDMA4_RMBI_FRAG		0x202c
-> > > +#define GDMA4_SGMII1_RX_WEIGHT_MASK	GENMASK(31, 26)
-> > > +#define GDMA4_SGMII1_RX_FRAG_SIZE_MASK	GENMASK(25, 16)
-> > > +#define GDMA4_SGMII0_RX_WEIGHT_MASK	GENMASK(15, 10)
-> > > +#define GDMA4_SGMII0_RX_FRAG_SIZE_MASK	GENMASK(9, 0)
-> > > +
-> > >  #define REG_MC_VLAN_EN			0x2100
-> > >  #define MC_VLAN_EN_MASK			BIT(0)
-> > > =20
-> > > --=20
-> > > 2.48.1
-> > >=20
->=20
->=20
->=20
-> --=20
-> 	Ansuel
-
---qLFnU5peW7PO9M+h
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaCHvPQAKCRA6cBh0uS2t
-rCKKAQDoo1Ic7QM4rc/5oU7UWhtoTcWdR7rS8tHWdV+0UgkdMgEA3gSouVvqUpuL
-PLyVAXcTL1u29P6WuHKZvkQmExHFyAU=
-=1tGU
------END PGP SIGNATURE-----
-
---qLFnU5peW7PO9M+h--
+Cheers,
+Miguel
