@@ -1,101 +1,107 @@
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473C1258CFC;
-	Mon, 12 May 2025 22:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC8B24DFFD;
+	Mon, 12 May 2025 22:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747087849; cv=none; b=fo1i3yAesY5v+61tYVXDEdPxYtDk4F/hLVVtb99b4/ftO0iQwt938Sznv9yh4aWlURcpTZ9F8HQmynENYqSSIB1R4B+vy7zHB9ecJYRcreellvXNIy46tUHvXWnRb59h5epAzijlWdSFI2FcbWPjbo3gQ5oGprAgbXYh5hWkodQ=
+	t=1747088234; cv=none; b=c2RV/5jJwVbjHP9D8Vsn+Nnjyup4pBUo4WRoNy9MqJB4Rt7AceNOUf03PvwVZ43KR/rizdMvN1D1wyEBJqwpKUrdTGkr/ffoin4YcYdH9GUebLGNTdZUKFa25Ja2URNackNOD6z8ILuHP9JoayhOwxEWAkW5tRYXuGg+NdInBb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747087849; c=relaxed/simple;
-	bh=Tw9uGkMbDXao8DIVFN7rA2XNqQCc+VGWbBiGjIYgypk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iP4Z+GmCIZ9cYdZkKT16XMT4W4hKGVI/xFt4KOLEZo27nl5vSv1CJAnnt4KGDogKrsPAviIq0FcMrMvBdCHh+4fEcNmYYo7pugrkUOHOUrJ/AEJ/4uKtiqLNGzKtFVMzoKDwmzeamffjd9roSPGSBovHSYA+Z4QymxAOtoqN9PU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=iPCQP+Lx; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1747088234; c=relaxed/simple;
+	bh=V2RN0phQQ4I6fxeWpbMqgRtPQ1lwTUdTOKAtatK8rtk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fWO36MYr7QQuZ3h0UXmK2MhSa7aCtquY2g6L4AxdCyje7EItQ3c8C0FmDy+NaLVIo9+dT7+TfjRpbY9oywmW36jbJ01My8A5gOf7mO8C5rGfCuDSj0xASA4bDTbwzbztjXOCZjAB4+DytLliluvUy+H/w85mlRQ0PC24PSSCeOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFhXpCK8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="iPCQP+Lx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1747087848; x=1778623848;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7tN0DJOjCDbYyLG3fBURerzunikZ2GPsRRAIeI9irw8=;
-  b=iPCQP+LxBYb7wAjnnNnv/yDijmUFzAxn18VHr3wO8YF6M74XQZ3pMBwf
-   QnkgkWCPE5bQPdd6Aqw409DiO9y+VbypZ8XUlTPpsWhJMRvGhb5szwXmR
-   hd445yEUR0sJFnhopKeb+LHcDgaMAdjtzIxpKvYoFV9D63q9lFz+4/QGH
-   tOAh2Nfz10iVp6+T3WiDAGrgch5MWsvyH04iEo0VKujC/gdqRdyEBe6Ug
-   S5XH+dXV3i9hHi2jmzT9w7GqW++fJF+EawTy4M8PPwRpMNIJFRhv5+siJ
-   mKI7DneLySAEEkCkdrLnKkayiqYSQi/L1AuWiPM5y7vw/JQGZFx3ktPiP
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.15,283,1739836800"; 
-   d="scan'208";a="92404891"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 22:10:43 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:17316]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.68:2525] with esmtp (Farcaster)
- id dc358a6f-7c1b-414a-9827-10a9fec784f8; Mon, 12 May 2025 22:10:42 +0000 (UTC)
-X-Farcaster-Flow-ID: dc358a6f-7c1b-414a-9827-10a9fec784f8
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Mon, 12 May 2025 22:10:41 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.187.170.42) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Mon, 12 May 2025 22:10:37 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <syzbot+e953a8f3071f5c0a28fd@syzkaller.appspotmail.com>
-CC: <alibuda@linux.alibaba.com>, <danielyang32@g.ucla.edu>,
-	<danielyangkang@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
-	<guwen@linux.alibaba.com>, <hdanton@sina.com>, <jaka@linux.ibm.com>,
-	<kuba@kernel.org>, <kuniyu@amazon.com>, <laforge@gnumonks.org>,
-	<linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-	<lkp@intel.com>, <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
-	<oe-kbuild-all@lists.linux.dev>,
-	<osmocom-net-gprs-bounces@lists.osmocom.org>,
-	<osmocom-net-gprs@lists.osmocom.org>, <pabeni@redhat.com>,
-	<pablo@netfilter.org>, <syzkaller-bugs@googlegroups.com>,
-	<tonylu@linux.alibaba.com>, <wenjia@linux.ibm.com>
-Subject: Re: [syzbot] [net?] possible deadlock in gtp_encap_enable_socket
-Date: Mon, 12 May 2025 15:10:26 -0700
-Message-ID: <20250512221029.56357-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <68221ce4.050a0220.f2294.0070.GAE@google.com>
-References: <68221ce4.050a0220.f2294.0070.GAE@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFhXpCK8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0353AC4CEE7;
+	Mon, 12 May 2025 22:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747088234;
+	bh=V2RN0phQQ4I6fxeWpbMqgRtPQ1lwTUdTOKAtatK8rtk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=FFhXpCK82kRf8eK/WzKD0IeqVtLK/1q7ThAGAfoP3K+vCD/ZAUWawRP5+Hbq6UNqc
+	 /iXECd67SpUj9e5wTtxbdlRsLW97qFEc0/dkukhvZLIkydmqKvRfeQ0rKQYzBjCDXC
+	 5o+BRGT5jUTe/bvpQxNfJ4GUxuqY8bg85l4BATNkdzSOMpNZTHMZxsEqb/DoWSXamx
+	 eFGK93te7sGc3grV+nxdZcgrCvaw/7diIOXg6Q9aRhIhR2DIsV9gS8/T/P47yZ8hAg
+	 qVExCteZmUJutC8uNser/IhIUVA1bY7DN/sVfRzvu6NYDXWypj4QlCKJDvIwFQRNBj
+	 yrmWbnOXMVt4w==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 13 May 2025 00:16:55 +0200
+Subject: [PATCH] genirq: Ensure flags in lock guard is consistently
+ initialized
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D041UWB002.ant.amazon.com (10.13.139.179) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250513-irq-guards-fix-flags-init-v1-1-1dca3f5992d6@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFZzImgC/x2MQQqAMAzAviI9W9imXvyKeJiuzoJMbVUE8e8Oj
+ 4EkDygJk0JbPCB0sfKaMtiygHH2KRJyyAzOuMY01iHLjvH0EhQnvnFafFTkxAdaV1fkB6pqYyH
+ 3m1A2/nfXv+8H0JYo/msAAAA=
+X-Change-ID: 20250512-irq-guards-fix-flags-init-1243eabe3401
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1792; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=V2RN0phQQ4I6fxeWpbMqgRtPQ1lwTUdTOKAtatK8rtk=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBlKxRnFHEqvjYKm3PvAJfRUX+PSNLEHrfnTk2pf/oy0W
+ HOGU4Sto5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkhQfDP7Omfdefpl/UrOJo
+ 13rVwvVj25YvDfI81W/M97Vb1GaFlTL8s78Vf8Ywov/jCWsHfRnNlEWNco0zz6g9rhfp+XU24Js
+ DFwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: syzbot <syzbot+e953a8f3071f5c0a28fd@syzkaller.appspotmail.com>
-Date: Mon, 12 May 2025 09:08:04 -0700
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit 752e2217d789be2c6a6ac66554b981cd71cd9f31
-> Author: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Date:   Mon Apr 7 17:03:17 2025 +0000
-> 
->     smc: Fix lockdep false-positive for IPPROTO_SMC.
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140462f4580000
-> start commit:   9410645520e9 Merge tag 'net-next-6.12' of git://git.kernel..
-> git tree:       net-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=37c006d80708398d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e953a8f3071f5c0a28fd
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16215ca9980000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110c6c27980000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
-> 
-> #syz fix: smc: Fix lockdep false-positive for IPPROTO_SMC.
+After the conversion to locking guards within the interrupt core code,
+several builds with clang show the "Interrupts were enabled early"
+WARN() in start_kernel() on boot.
 
-#syz fix: smc: Fix lockdep false-positive for IPPROTO_SMC.
+In class_irqdesc_lock_constructor(), _t.flags is initialized via
+__irq_get_desc_lock() within the _t initializer list. However, the C11
+standard 6.7.9.23 states that the evaluation of the initialization list
+expressions are indeterminately sequenced relative to one another,
+meaning _t.flags could be initialized by __irq_get_desc_lock() then be
+initialized to zero due to flags being absent from the initializer list.
+
+To ensure _t.flags is consistently initialized, move the call to
+__irq_get_desc_lock() and the assignment of its result to _t.lock out of
+the designated initializer.
+
+Fixes: 0f70a49f3fa3 ("genirq: Provide conditional lock guards")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ kernel/irq/internals.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index bd2db6ebb98e..476a20fd9bfc 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -176,10 +176,10 @@ __DEFINE_UNLOCK_GUARD(irqdesc_lock, struct irq_desc,
+ static inline class_irqdesc_lock_t class_irqdesc_lock_constructor(unsigned int irq, bool bus,
+ 								  unsigned int check)
+ {
+-	class_irqdesc_lock_t _t = {
+-		.bus	= bus,
+-		.lock	= __irq_get_desc_lock(irq, &_t.flags, bus, check),
+-	};
++	class_irqdesc_lock_t _t = { .bus = bus, };
++
++	_t.lock = __irq_get_desc_lock(irq, &_t.flags, bus, check);
++
+ 	return _t;
+ }
+ 
+
+---
+base-commit: c1ab449df871d6ce9189cb0a9efcd37d2ead10f0
+change-id: 20250512-irq-guards-fix-flags-init-1243eabe3401
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
