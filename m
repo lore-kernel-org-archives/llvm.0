@@ -1,90 +1,68 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B396525B668
-	for <llvm@lists.linux.dev>; Mon, 12 May 2025 09:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573131A239B;
+	Mon, 12 May 2025 09:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747042043; cv=none; b=XExfYOx1B870tgT9fONyzJA9Ijsolyew9J01HNJkv7v07vdVERwxrhZMSbC77JGSBeMo1GvTwLnpgkDeg4QEoCSajHIi5sjKMhrPQ4R7UMR14fNzZlovO2F+40EWvBWlwiFfs/Yp46QzYZ+fIpW0O2jovloBm2d5QbO6zxudPtc=
+	t=1747043846; cv=none; b=Xg6Efg3YlOUnyiKwM5AeUgvlYUaR/UZkyayu9Er2ZUfs+xlMZiSbR6hRtrZ41F+HcTz2Lun6BrVzkhDbfG+ij23vLA95ChrIUjeZRYF3kZHKb+aw0hzweGnLeyKJxdAurF7nMZLGF5Et0Jfkj8PKEtohzYLvx2xdWsfW/rEQpD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747042043; c=relaxed/simple;
-	bh=tOe2lgKCbgqYYIMOtKeKhAwAOjWlZcBSaNqvUehU9UQ=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j6p8I+cUU5brPmx9am+fvUELFnNQJAM6vjykXqrSqZPz62tbdwQ3YJoveR2frxla21EhV7gCa6ckDeQtupC19TwIsRsiRrY9Q6hfjFpbFsB7UDvu8VilSefLvnFMo0n5A4RoXsg9yJqax/xiJmm7eOk13tAHb6IyKwUaCads62I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJSYaRID; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747043846; c=relaxed/simple;
+	bh=OVrrVmmE+WpbFZ1HWOWb7g8y+PYT8XxY5T8O7Y6OWRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a3YjUAs8WMnNnx7Meo7xRb511l0SxQFdYYD8iOpjEAFvyKXmyzco53362WZnWjnay/ZhriN8zqflK6Lem3sqGtt7PMyDySEsZun1swxoOMBF3kzFPSRSCiQ0Tjdo8vrtvlNK0XGXa9Y/jvsRCEloDKfKwuUXyA2dVoj3ROIkfLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KPQD7xuC; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJSYaRID"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a064a3e143so2318727f8f.3
-        for <llvm@lists.linux.dev>; Mon, 12 May 2025 02:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747042039; x=1747646839; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=EP5ciUrJhx2qjL/YTEW+Ro+6nfUBpD7HupJKLYyZ5WU=;
-        b=IJSYaRIDsGrj73RXoDJeZ7dNUohoaLfST+PtqtP3bIfNcssqeg68Qse3Km7/xBFfo8
-         CeYHiTHaYSseu4JpHop6jLzPE4NRzGnsBpQ2DBAYX1vpMhwGktOTQhvRgc1tSleG4FIS
-         tAooXQWjT+oihEoK2nqQC2Ib5k6xtFd6zxN+O7nm/wZAOw8IM2xQO1wHyJdm+a6aME+M
-         wUARaRcOXtleuZzIX8NKwWsX57uTyZZMNeHn2YsCfmBPD3k8FDKzZNfxo9W0NZdz6h7z
-         ARPo7aJoUg3g6E2cYCrw3V8iyTaV+lUbBTpi4pLpVDs2rxdZmBqz3+QgUVrdffvDE6VO
-         NA/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747042039; x=1747646839;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EP5ciUrJhx2qjL/YTEW+Ro+6nfUBpD7HupJKLYyZ5WU=;
-        b=a+M1b8io9d7roYKM7ig9VgFkFkV70QZR6Mc+Np5+2+E9vyvrdaqFLdPFyAre3iDCzp
-         yavZ0fyp5HEJe1LjBd61pJub1Zcfat2C+8dCJ1KYZKSbaVt/mlBuhCXPopo6KYEYORL2
-         F33xHEadgEDlnNA6PaZM75orRWgPLHc4mPZSZUH/3FhzeK+a/zQqA6gdT8+EC5ODoL2I
-         LRfN49PhIPOx+Cn2h7dsMXMq+LtiZyeXETwiMpw3WBFIndI7W3v/Ew144+3j2/W0TTTO
-         CdKw27ePmjfmJ9GOgsk8I4DS8NhryBKIv03toR6hcEq/gSUJoZEHF6p7M5T7KWmNaP/a
-         /QNw==
-X-Forwarded-Encrypted: i=1; AJvYcCXXVRpagmH1K8TdKJechur2zLrqO9xkVLjgTEbVgp2as+ylBGGhkfBD289+NBMWdiFbmCir@lists.linux.dev
-X-Gm-Message-State: AOJu0YzYiI+oU2cPbz6etJk41/qrpLJ7ifgSi48Da506wMtfzNQhANef
-	4RJOpHmxqB3HKCzV72UiKozbE46bkigOspoSHryLSgkYGitIn42l
-X-Gm-Gg: ASbGncvVb5JFCEL27xhHLoXtYtcjKfEaHOndgo7ACUHt+3d0iODSiRo5UPWX1jWAlTY
-	9lPPyWfQZWODQuTa9ILUEIrLIASARP05jc0e4TZU28g1bmmzQoQg6IY87bMSq/cnssd32yqMj/N
-	YOJk1ggXiPtyaP9m82HKw/hMZP0+Q65ZdLz4AP97RU2Sk69VrMgcnUhw8GTWDMHlz38aPN9GlnI
-	sbbcSxQ18dAka8IhYXrPJv6v1lqwALscGaYzIJWOXwyurJKqIMkKco2SlG3+G/VtJCUqoXEzy3/
-	b0peuXS0UnFXSm5aQf3uK/OFTju4t5MBkVMjozFkFykKOuVZDO9R0PC/E2HGq4Nc1ImoGOurGIx
-	uzV/YvzQ=
-X-Google-Smtp-Source: AGHT+IEIx2dngjb6axDv4lWuQJCqhwKHcwmf+wk9ypXMGeGlR42a1KIrb2TLCO+LYY/WGRgWY7SQ1Q==
-X-Received: by 2002:a05:6000:430d:b0:3a0:b378:a4eb with SMTP id ffacd0b85a97d-3a1f6487e1amr9306477f8f.40.1747042038492;
-        Mon, 12 May 2025 02:27:18 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-88-225.ip49.fastwebnet.it. [93.34.88.225])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f5a2d96csm11933224f8f.69.2025.05.12.02.27.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 May 2025 02:27:17 -0700 (PDT)
-Message-ID: <6821bef5.5d0a0220.319347.d533@mx.google.com>
-X-Google-Original-Message-ID: <aCG-8mJYlQoa_4ls@Ansuel-XPS.>
-Date: Mon, 12 May 2025 11:27:14 +0200
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KPQD7xuC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747043845; x=1778579845;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OVrrVmmE+WpbFZ1HWOWb7g8y+PYT8XxY5T8O7Y6OWRs=;
+  b=KPQD7xuCWVrHAqoPXlln22QylRDvxOEuQZVYXDO4wNfUVNp2PzgQadUP
+   ehJ/T91x7pZCv0CYB3ArGMseBKL6t60m/ft+Pt8LJxFEPzA2Py5JN5rFd
+   iWrkXK9Kap59VOfx/Wi/wwhmvkGGtb9es1e2UYSTFIYOdUcuDaBmk5X7D
+   zuuJauUo9lJFYuYStvliNbx3ygKj7lGGmoa6LxgA3myQTw+SO+pYt36pP
+   WEeFZgijVKgayaK9UjwEeLk6vnwkhXInmPXsfghLEGFtUioXp1+NmGLyu
+   kp1rBHtRZixQIinVhS8tTHl9wfzwt+oePceh6uAqqA1ii0qcmyRizE+jx
+   Q==;
+X-CSE-ConnectionGUID: AizSVMusQwOXtvwzg5S4FA==
+X-CSE-MsgGUID: N8ljzdIRRqKSpEuW3QXoyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11430"; a="59833520"
+X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
+   d="scan'208";a="59833520"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 02:57:24 -0700
+X-CSE-ConnectionGUID: /4gs+ntqQIWpW1pN6xvDAw==
+X-CSE-MsgGUID: rXSkwKtQS7mezoUXuArdLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
+   d="scan'208";a="168393831"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 12 May 2025 02:57:20 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uEPuQ-000ELv-0M;
+	Mon, 12 May 2025 09:57:18 +0000
+Date: Mon, 12 May 2025 17:57:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: zakkemble@gmail.com, Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [net-next PATCH v4 11/11] net: airoha: add phylink support for
- GDM2/3/4
-References: <20250511201250.3789083-1-ansuelsmth@gmail.com>
- <20250511201250.3789083-12-ansuelsmth@gmail.com>
- <aCG9q6i7HomgilI6@lore-desk>
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Zak Kemble <zakkemble@gmail.com>
+Subject: Re: [PATCH] net: bcmgenet: tidy up stats, expose more stats in
+ ethtool
+Message-ID: <202505121424.5NKdmAPP-lkp@intel.com>
+References: <20250511214037.2805-1-zakkemble@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -93,318 +71,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aCG9q6i7HomgilI6@lore-desk>
+In-Reply-To: <20250511214037.2805-1-zakkemble@gmail.com>
 
-On Mon, May 12, 2025 at 11:21:47AM +0200, Lorenzo Bianconi wrote:
-> > Add phylink support for GDM2/3/4 port that require configuration of the
-> > PCS to make the external PHY or attached SFP cage work.
-> > 
-> > These needs to be defined in the GDM port node using the pcs-handle
-> > property.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/net/ethernet/airoha/airoha_eth.c  | 155 +++++++++++++++++++++-
-> >  drivers/net/ethernet/airoha/airoha_eth.h  |   3 +
-> >  drivers/net/ethernet/airoha/airoha_regs.h |  12 ++
-> >  3 files changed, 169 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/ethernet/airoha/airoha_eth.c b/drivers/net/ethernet/airoha/airoha_eth.c
-> > index 16c7896f931f..3be1ae077a76 100644
-> > --- a/drivers/net/ethernet/airoha/airoha_eth.c
-> > +++ b/drivers/net/ethernet/airoha/airoha_eth.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/of_net.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/tcp.h>
-> > +#include <linux/pcs/pcs.h>
-> >  #include <linux/u64_stats_sync.h>
-> >  #include <net/dst_metadata.h>
-> >  #include <net/page_pool/helpers.h>
-> > @@ -79,6 +80,11 @@ static bool airhoa_is_lan_gdm_port(struct airoha_gdm_port *port)
-> >  	return port->id == 1;
-> >  }
-> >  
-> > +static bool airhoa_is_phy_external(struct airoha_gdm_port *port)
-> > +{
-> > +	return port->id != 1;
-> > +}
-> > +
-> >  static void airoha_set_macaddr(struct airoha_gdm_port *port, const u8 *addr)
-> >  {
-> >  	struct airoha_eth *eth = port->qdma->eth;
-> > @@ -1613,6 +1619,17 @@ static int airoha_dev_open(struct net_device *dev)
-> >  	struct airoha_gdm_port *port = netdev_priv(dev);
-> >  	struct airoha_qdma *qdma = port->qdma;
-> >  
-> > +	if (airhoa_is_phy_external(port)) {
-> > +		err = phylink_of_phy_connect(port->phylink, dev->dev.of_node, 0);
-> 
-> nit: even if it is not strictly required, in order to align with the rest of the
-> codebase, can you please stay below 79 columns?
-> 
-> > +		if (err) {
-> > +			netdev_err(dev, "%s: could not attach PHY: %d\n", __func__,
-> > +				   err);
-> 
-> same here
-> 
-> > +			return err;
-> > +		}
-> > +
-> > +		phylink_start(port->phylink);
-> > +	}
-> > +
-> >  	netif_tx_start_all_queues(dev);
-> >  	err = airoha_set_vip_for_gdm_port(port, true);
-> >  	if (err)
-> > @@ -1665,6 +1682,11 @@ static int airoha_dev_stop(struct net_device *dev)
-> >  		}
-> >  	}
-> >  
-> > +	if (airhoa_is_phy_external(port)) {
-> > +		phylink_stop(port->phylink);
-> > +		phylink_disconnect_phy(port->phylink);
-> > +	}
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > @@ -2795,6 +2817,115 @@ bool airoha_is_valid_gdm_port(struct airoha_eth *eth,
-> >  	return false;
-> >  }
-> >  
-> > +static void airoha_mac_link_up(struct phylink_config *config, struct phy_device *phy,
-> > +			       unsigned int mode, phy_interface_t interface,
-> > +			       int speed, int duplex, bool tx_pause, bool rx_pause)
-> 
-> ditto.
-> 
-> > +{
-> > +	struct airoha_gdm_port *port = container_of(config, struct airoha_gdm_port,
-> > +						    phylink_config);
-> 
-> ditto.
-> 
-> > +	struct airoha_qdma *qdma = port->qdma;
-> > +	struct airoha_eth *eth = qdma->eth;
-> > +	u32 frag_size_tx, frag_size_rx;
-> > +
-> > +	if (port->id != 4)
-> > +		return;
-> > +
-> > +	switch (speed) {
-> > +	case SPEED_10000:
-> > +	case SPEED_5000:
-> > +		frag_size_tx = 8;
-> > +		frag_size_rx = 8;
-> > +		break;
-> > +	case SPEED_2500:
-> > +		frag_size_tx = 2;
-> > +		frag_size_rx = 1;
-> > +		break;
-> > +	default:
-> > +		frag_size_tx = 1;
-> > +		frag_size_rx = 0;
-> > +	}
-> > +
-> > +	/* Configure TX/RX frag based on speed */
-> > +	airoha_fe_rmw(eth, REG_GDMA4_TMBI_FRAG,
-> > +		      GDMA4_SGMII0_TX_FRAG_SIZE_MASK,
-> > +		      FIELD_PREP(GDMA4_SGMII0_TX_FRAG_SIZE_MASK,
-> > +				 frag_size_tx));
-> > +
-> > +	airoha_fe_rmw(eth, REG_GDMA4_RMBI_FRAG,
-> > +		      GDMA4_SGMII0_RX_FRAG_SIZE_MASK,
-> > +		      FIELD_PREP(GDMA4_SGMII0_RX_FRAG_SIZE_MASK,
-> > +				 frag_size_rx));
-> > +}
-> > +
-> > +static const struct phylink_mac_ops airoha_phylink_ops = {
-> > +	.mac_link_up = airoha_mac_link_up,
-> > +};
-> > +
-> > +static int airoha_setup_phylink(struct net_device *dev)
-> > +{
-> > +	struct airoha_gdm_port *port = netdev_priv(dev);
-> > +	struct device_node *np = dev->dev.of_node;
-> > +	struct phylink_pcs **available_pcs;
-> > +	phy_interface_t phy_mode;
-> > +	struct phylink *phylink;
-> > +	unsigned int num_pcs;
-> > +	int err;
-> > +
-> > +	err = of_get_phy_mode(np, &phy_mode);
-> > +	if (err) {
-> > +		dev_err(&dev->dev, "incorrect phy-mode\n");
-> > +		return err;
-> > +	}
-> > +
-> > +	port->phylink_config.dev = &dev->dev;
-> > +	port->phylink_config.type = PHYLINK_NETDEV;
-> > +	port->phylink_config.mac_capabilities = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
-> > +						MAC_10 | MAC_100 | MAC_1000 | MAC_2500FD |
-> > +						MAC_5000FD | MAC_10000FD;
-> 
-> over 79 columns
-> 
-> > +
-> > +	err = fwnode_phylink_pcs_parse(dev_fwnode(&dev->dev), NULL, &num_pcs);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	available_pcs = kcalloc(num_pcs, sizeof(*available_pcs), GFP_KERNEL);
-> 
-> I guess you can use devm_kcalloc() and get rid of kfree() here.
->
+Hi,
 
-I forgot to answer to this in the previous revision. No devm can't be
-used there available_pcs is just an array allocated for phylink_config.
+kernel test robot noticed the following build warnings:
 
-Phylink then copy the data in it and doesn't use it anymore hence it
-just needs to be allocated here and doesn't need to stay till the driver
-gets removed.
+[auto build test WARNING on net-next/main]
+[also build test WARNING on net/main linus/master v6.15-rc6 next-20250509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > +	if (!available_pcs)
-> > +		return -ENOMEM;
-> > +
-> > +	err = fwnode_phylink_pcs_parse(dev_fwnode(&dev->dev), available_pcs,
-> > +				       &num_pcs);
-> > +	if (err)
-> > +		goto out;
-> > +
-> > +	port->phylink_config.available_pcs = available_pcs;
-> > +	port->phylink_config.num_available_pcs = num_pcs;
-> > +
-> > +	__set_bit(PHY_INTERFACE_MODE_SGMII,
-> > +		  port->phylink_config.supported_interfaces);
-> > +	__set_bit(PHY_INTERFACE_MODE_1000BASEX,
-> > +		  port->phylink_config.supported_interfaces);
-> > +	__set_bit(PHY_INTERFACE_MODE_2500BASEX,
-> > +		  port->phylink_config.supported_interfaces);
-> > +	__set_bit(PHY_INTERFACE_MODE_USXGMII,
-> > +		  port->phylink_config.supported_interfaces);
-> > +
-> > +	phy_interface_copy(port->phylink_config.pcs_interfaces,
-> > +			   port->phylink_config.supported_interfaces);
-> > +
-> > +	phylink = phylink_create(&port->phylink_config,
-> > +				 of_fwnode_handle(np),
-> > +				 phy_mode, &airoha_phylink_ops);
-> > +	if (IS_ERR(phylink)) {
-> > +		err = PTR_ERR(phylink);
-> > +		goto out;
-> > +	}
-> > +
-> > +	port->phylink = phylink;
-> > +out:
-> > +	kfree(available_pcs);
-> > +
-> > +	return err;
-> > +}
-> > +
-> >  static int airoha_alloc_gdm_port(struct airoha_eth *eth,
-> >  				 struct device_node *np, int index)
-> >  {
-> > @@ -2873,7 +3004,23 @@ static int airoha_alloc_gdm_port(struct airoha_eth *eth,
-> >  	if (err)
-> >  		return err;
-> >  
-> > -	return register_netdev(dev);
-> > +	if (airhoa_is_phy_external(port)) {
-> > +		err = airoha_setup_phylink(dev);
-> 
-> This will re-introduce the issue reported here:
-> https://lore.kernel.org/netdev/5c94b9b3850f7f29ed653e2205325620df28c3ff.1746715755.git.christophe.jaillet@wanadoo.fr/
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/zakkemble-gmail-com/net-bcmgenet-tidy-up-stats-expose-more-stats-in-ethtool/20250512-054217
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250511214037.2805-1-zakkemble%40gmail.com
+patch subject: [PATCH] net: bcmgenet: tidy up stats, expose more stats in ethtool
+config: x86_64-buildonly-randconfig-003-20250512 (https://download.01.org/0day-ci/archive/20250512/202505121424.5NKdmAPP-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250512/202505121424.5NKdmAPP-lkp@intel.com/reproduce)
 
-I'm confused about this. The suggestion wasn't that register_netdev
-might fail and I need to destroy phylink? Or the linked patch was merged
-and I need to rebase on top of net-next?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505121424.5NKdmAPP-lkp@intel.com/
 
-I didn't include that change to not cause conflicts but once it's merged
-I will rebase and include that fix.
+All warnings (new ones prefixed by >>):
 
-> > +		if (err)
-> > +			return err;
-> > +	}
-> > +
-> > +	err = register_netdev(dev);
-> > +	if (err)
-> > +		goto free_phylink;
-> > +
-> > +	return 0;
-> > +
-> > +free_phylink:
-> > +	if (airhoa_is_phy_external(port))
-> > +		phylink_destroy(port->phylink);
-> > +
-> > +	return err;
-> >  }
-> >  
-> >  static int airoha_probe(struct platform_device *pdev)
-> > @@ -2967,6 +3114,9 @@ static int airoha_probe(struct platform_device *pdev)
-> >  		struct airoha_gdm_port *port = eth->ports[i];
-> >  
-> >  		if (port && port->dev->reg_state == NETREG_REGISTERED) {
-> > +			if (airhoa_is_phy_external(port))
-> > +				phylink_destroy(port->phylink);
-> > +
-> >  			unregister_netdev(port->dev);
-> >  			airoha_metadata_dst_free(port);
-> >  		}
-> > @@ -2994,6 +3144,9 @@ static void airoha_remove(struct platform_device *pdev)
-> >  			continue;
-> >  
-> >  		airoha_dev_stop(port->dev);
-> > +		if (airhoa_is_phy_external(port))
-> > +			phylink_destroy(port->phylink);
-> > +
-> >  		unregister_netdev(port->dev);
-> >  		airoha_metadata_dst_free(port);
-> >  	}
-> > diff --git a/drivers/net/ethernet/airoha/airoha_eth.h b/drivers/net/ethernet/airoha/airoha_eth.h
-> > index 53f39083a8b0..73a500474076 100644
-> > --- a/drivers/net/ethernet/airoha/airoha_eth.h
-> > +++ b/drivers/net/ethernet/airoha/airoha_eth.h
-> > @@ -498,6 +498,9 @@ struct airoha_gdm_port {
-> >  	struct net_device *dev;
-> >  	int id;
-> >  
-> > +	struct phylink *phylink;
-> > +	struct phylink_config phylink_config;
-> > +
-> >  	struct airoha_hw_stats stats;
-> >  
-> >  	DECLARE_BITMAP(qos_sq_bmap, AIROHA_NUM_QOS_CHANNELS);
-> > diff --git a/drivers/net/ethernet/airoha/airoha_regs.h b/drivers/net/ethernet/airoha/airoha_regs.h
-> > index d931530fc96f..54f7079b28b0 100644
-> > --- a/drivers/net/ethernet/airoha/airoha_regs.h
-> > +++ b/drivers/net/ethernet/airoha/airoha_regs.h
-> > @@ -357,6 +357,18 @@
-> >  #define IP_FRAGMENT_PORT_MASK		GENMASK(8, 5)
-> >  #define IP_FRAGMENT_NBQ_MASK		GENMASK(4, 0)
-> >  
-> > +#define REG_GDMA4_TMBI_FRAG		0x2028
-> > +#define GDMA4_SGMII1_TX_WEIGHT_MASK	GENMASK(31, 26)
-> > +#define GDMA4_SGMII1_TX_FRAG_SIZE_MASK	GENMASK(25, 16)
-> > +#define GDMA4_SGMII0_TX_WEIGHT_MASK	GENMASK(15, 10)
-> > +#define GDMA4_SGMII0_TX_FRAG_SIZE_MASK	GENMASK(9, 0)
-> > +
-> > +#define REG_GDMA4_RMBI_FRAG		0x202c
-> > +#define GDMA4_SGMII1_RX_WEIGHT_MASK	GENMASK(31, 26)
-> > +#define GDMA4_SGMII1_RX_FRAG_SIZE_MASK	GENMASK(25, 16)
-> > +#define GDMA4_SGMII0_RX_WEIGHT_MASK	GENMASK(15, 10)
-> > +#define GDMA4_SGMII0_RX_FRAG_SIZE_MASK	GENMASK(9, 0)
-> > +
-> >  #define REG_MC_VLAN_EN			0x2100
-> >  #define MC_VLAN_EN_MASK			BIT(0)
-> >  
-> > -- 
-> > 2.48.1
-> > 
+>> drivers/net/ethernet/broadcom/genet/bcmgenet.c:3552:31: warning: variable 'broadcast' set but not used [-Wunused-but-set-variable]
+    3552 |         unsigned long multicast = 0, broadcast = 0;
+         |                                      ^
+   1 warning generated.
 
 
+vim +/broadcast +3552 drivers/net/ethernet/broadcom/genet/bcmgenet.c
+
+  3541	
+  3542	static struct net_device_stats *bcmgenet_get_stats(struct net_device *dev)
+  3543	{
+  3544		struct bcmgenet_priv *priv = netdev_priv(dev);
+  3545		unsigned long tx_bytes = 0, tx_packets = 0;
+  3546		unsigned long tx_errors = 0, tx_dropped = 0;
+  3547		unsigned long rx_bytes = 0, rx_packets = 0;
+  3548		unsigned long rx_errors = 0, rx_dropped = 0;
+  3549		unsigned long rx_missed = 0, rx_length_errors = 0;
+  3550		unsigned long rx_over_errors = 0, rx_crc_errors = 0;
+  3551		unsigned long rx_frame_errors = 0, rx_fragmented_errors = 0;
+> 3552		unsigned long multicast = 0, broadcast = 0;
+  3553		struct bcmgenet_tx_ring *tx_ring;
+  3554		struct bcmgenet_rx_ring *rx_ring;
+  3555		unsigned int q;
+  3556	
+  3557		for (q = 0; q <= priv->hw_params->tx_queues; q++) {
+  3558			tx_ring = &priv->tx_rings[q];
+  3559			tx_bytes += tx_ring->bytes;
+  3560			tx_packets += tx_ring->packets;
+  3561			tx_errors += tx_ring->errors;
+  3562			tx_dropped += tx_ring->dropped;
+  3563		}
+  3564	
+  3565		for (q = 0; q <= priv->hw_params->rx_queues; q++) {
+  3566			rx_ring = &priv->rx_rings[q];
+  3567	
+  3568			rx_bytes += rx_ring->bytes;
+  3569			rx_packets += rx_ring->packets;
+  3570			rx_errors += rx_ring->errors;
+  3571			rx_dropped += rx_ring->dropped;
+  3572			rx_missed += rx_ring->missed;
+  3573			rx_length_errors += rx_ring->length_errors;
+  3574			rx_over_errors += rx_ring->over_errors;
+  3575			rx_crc_errors += rx_ring->crc_errors;
+  3576			rx_frame_errors += rx_ring->frame_errors;
+  3577			rx_fragmented_errors += rx_ring->fragmented_errors;
+  3578			multicast += rx_ring->multicast;
+  3579			broadcast += rx_ring->broadcast;
+  3580		}
+  3581	
+  3582		rx_errors += rx_length_errors;
+  3583		rx_errors += rx_crc_errors;
+  3584		rx_errors += rx_frame_errors;
+  3585		rx_errors += rx_fragmented_errors;
+  3586	
+  3587		dev->stats.tx_bytes = tx_bytes;
+  3588		dev->stats.tx_packets = tx_packets;
+  3589		dev->stats.tx_errors = tx_errors;
+  3590		dev->stats.tx_dropped = tx_dropped;
+  3591		dev->stats.rx_bytes = rx_bytes;
+  3592		dev->stats.rx_packets = rx_packets;
+  3593		dev->stats.rx_errors = rx_errors;
+  3594		dev->stats.rx_dropped = rx_dropped;
+  3595		dev->stats.rx_missed_errors = rx_missed;
+  3596		dev->stats.rx_length_errors = rx_length_errors;
+  3597		dev->stats.rx_over_errors = rx_over_errors;
+  3598		dev->stats.rx_crc_errors = rx_crc_errors;
+  3599		dev->stats.rx_frame_errors = rx_frame_errors;
+  3600		dev->stats.multicast = multicast;
+  3601		return &dev->stats;
+  3602	}
+  3603	
 
 -- 
-	Ansuel
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
