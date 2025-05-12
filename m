@@ -1,83 +1,99 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B79821770B
-	for <llvm@lists.linux.dev>; Mon, 12 May 2025 16:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E1D14F117
+	for <llvm@lists.linux.dev>; Mon, 12 May 2025 19:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747066086; cv=none; b=ePrnkjCo5OPPQragGrjtD508q7F+7wiojBxkFq+tdNmC7EZcBDjkSDo09WZzS++83zo8L86wXgkiSbupi/uEAJ/uxlO8yCvzCRdJfN1uatYM9339NYRz50UGhrHce1OEqdmIkglSjdxlf/A/sh1FiJuQ72Al0WUznPTO+PIJLOg=
+	t=1747076590; cv=none; b=Ak0ZIEwXJl19+z8elarToPD9zAcD2w4EWAn6KYUUWKR6n6HApE7dJCeUQEfuyL+SwMZnmPfDCPxa/qqJ5kuCKyTmcyZYK+tVFZE4FHjDoC/md5YbROvxEnItOYI+l5jZXf0u4/fbmYt/7tZ7CegBfq61wQoRq6MbW8JUQIJ4GGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747066086; c=relaxed/simple;
-	bh=xf2gk/7HejFkj/yUD8Rcn/c3OEV9aXKrIeQoQwgUpxI=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=qLpeQsjmmDFh40V6qeBh5V6Bg+oahTqXKiIZ/I98H7qiHLzuj2CzSD4cjbXTa1jk8mJhY28LMlJEajw3Fs0qwOxczVGmgnjyxRVhC0RI4SUHJg/YqPwZ3iRxTLDKTlPTry7FWKm5z6RW2M0SbyC27UJG/7AdCodrnx3r11/YgME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3da76423b9cso53286515ab.0
-        for <llvm@lists.linux.dev>; Mon, 12 May 2025 09:08:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747066084; x=1747670884;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gt5URQSkZsJi8HYjVkWgqYk5S7TJ2AVMXcD4Cuf60ao=;
-        b=Dc0Di9UoGZGQqbVolUtXFHTYGPMeiFkhUS+by7U55KhmMEmIBD9uE6RrgSkhfIctfS
-         gusoVuxQhOo3fjOB/famOnSf/Qz5Qhpt6UlQXTFMvlY5AvWuDlEV+QcS8XJCfHy+8aFL
-         jYCkRllJsLrItrEig3X8AiqVH5PUCE/cocBzuS1gdmz06Y45qZH/Dz7JR/4lNYMUppNG
-         ibuJuLEAVRDjIs2JWHrrQM0F2TRDxAKyTlIGJPBA1GP2+3KIQsBFeCdFYTxY8vzNWJKj
-         hYrzvZGq4V8+oI8pjlZJjZFWtG394vpAAWEsU/jf/BADk/oj61CZfq3A4lW51jM2+p01
-         /Ekw==
-X-Forwarded-Encrypted: i=1; AJvYcCX017qs5vVhzT/M4+xoVkN2dWt7T8U+0pZRsJlqjx+Ln0O8v+/5vfZtVzCm0WWncy4bOFXO@lists.linux.dev
-X-Gm-Message-State: AOJu0YyccRU/jbLrf5SJiVf1VR0Z/hpp17X9u2VYKF0/lt80r3hXAQMr
-	DkKsbUUbAob6Lb41wJatezPBs69iZtu6Xthmb6gSbKjV4vhpsiOdyre1nqiFeKiD9dJT9JeYKYl
-	6ZiWHGK+kdK1hPAfisojVFq9d+LTUkgE2Ce4OuQgRCQsELYtc2xV3/fE=
-X-Google-Smtp-Source: AGHT+IGcj7hDDUl63wjXEO3+XruwNefnp47j4mhldFaZGFjrTH4hft3gln2ARkheFl41Vx6lpdU5XxwDw+Z9Lo0NO1Q33wHkRMQH
+	s=arc-20240116; t=1747076590; c=relaxed/simple;
+	bh=O3xnDzkOnnFLPvM6ysr9dJBetqk/nIbcUWqJLiIcIsA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mlzM+kYvohv9uUMCYNi2hqsb239RLjLjw1u50dPdxLeSlEWS85B7B0qiBlOJqNyjhIa1xWk2sdk8IiHxZZ8Xo5TzbhxVjL1qYqegRPWnVwylcyzRHTBmCIdG+s1zRfbhiMC4lYg9UnckH0LQcjd7CM27CrgCvRgsO66EaH/km24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aQ/RuscH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aQ/RuscH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747076587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oX7xS8kchwdr34Mh4c2lnwTE88flc6OUyctx/Z95Cww=;
+	b=aQ/RuscH88S/QCeLvXhkpLfZqpiR4G7o1jDt1TWcM+odAjKTCS6ttbuIpkv945LCIAHOmA
+	PDQ/UdrYstZNT/MzFBZ7aGz6wJBGvPVzq2/eziN57IzzaPSbWYEhFqsI0htSTNF3rETNo5
+	3APntw6IkFalrqVNYJqYjvo6bBOZnY0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-237-OTSaR3D0MT6mkySoCB60iQ-1; Mon,
+ 12 May 2025 15:03:05 -0400
+X-MC-Unique: OTSaR3D0MT6mkySoCB60iQ-1
+X-Mimecast-MFC-AGG-ID: OTSaR3D0MT6mkySoCB60iQ_1747076584
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30F48180010A
+	for <llvm@lists.linux.dev>; Mon, 12 May 2025 19:03:04 +0000 (UTC)
+Received: from [172.20.141.161] (unknown [10.30.44.25])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C71221800359;
+	Mon, 12 May 2025 19:03:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc6,
+ upstream-mainline, 627277ba)
+Date: Mon, 12 May 2025 19:03:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1fc6:b0:3da:7161:23ec with SMTP id
- e9e14a558f8ab-3da7e1e1a63mr160273105ab.3.1747066084202; Mon, 12 May 2025
- 09:08:04 -0700 (PDT)
-Date: Mon, 12 May 2025 09:08:04 -0700
-In-Reply-To: <66f18d50.050a0220.c23dd.0012.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68221ce4.050a0220.f2294.0070.GAE@google.com>
-Subject: Re: [syzbot] [net?] possible deadlock in gtp_encap_enable_socket
-From: syzbot <syzbot+e953a8f3071f5c0a28fd@syzkaller.appspotmail.com>
-To: alibuda@linux.alibaba.com, danielyang32@g.ucla.edu, 
-	danielyangkang@gmail.com, davem@davemloft.net, edumazet@google.com, 
-	guwen@linux.alibaba.com, hdanton@sina.com, jaka@linux.ibm.com, 
-	kuba@kernel.org, kuniyu@amazon.com, laforge@gnumonks.org, 
-	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, lkp@intel.com, 
-	llvm@lists.linux.dev, netdev@vger.kernel.org, oe-kbuild-all@lists.linux.dev, 
-	osmocom-net-gprs-bounces@lists.osmocom.org, 
-	osmocom-net-gprs@lists.osmocom.org, pabeni@redhat.com, pablo@netfilter.org, 
-	syzkaller-bugs@googlegroups.com, tonylu@linux.alibaba.com, 
-	wenjia@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <16816.125051215030502401@us-mta-237.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 5X_WN1726om9QDMhSm3Nl6vMOXvrDqIgrUtHBCdwd3I_1747076584
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot suspects this issue was fixed by commit:
+Hi, we tested your kernel and here are the results:
 
-commit 752e2217d789be2c6a6ac66554b981cd71cd9f31
-Author: Kuniyuki Iwashima <kuniyu@amazon.com>
-Date:   Mon Apr 7 17:03:17 2025 +0000
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-    smc: Fix lockdep false-positive for IPPROTO_SMC.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140462f4580000
-start commit:   9410645520e9 Merge tag 'net-next-6.12' of git://git.kernel..
-git tree:       net-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=37c006d80708398d
-dashboard link: https://syzkaller.appspot.com/bug?extid=e953a8f3071f5c0a28fd
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16215ca9980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110c6c27980000
+Kernel information:
+    Commit message: Merge tag 'arm64_cbpf_mitigation_2025_05_08' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/arm64/linux
 
-If the result looks correct, please mark the issue as fixed by replying with:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1813519952
 
-#syz fix: smc: Fix lockdep false-positive for IPPROTO_SMC.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1813519952-x86_64-kernel-debug
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
