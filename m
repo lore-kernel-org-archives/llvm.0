@@ -1,103 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C53299AA4;
-	Mon, 12 May 2025 21:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473C1258CFC;
+	Mon, 12 May 2025 22:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747085351; cv=none; b=gDzKdUhlkLGi8E1wfx6sVJIzBPHzuz9ATH+ifXBWppTew/YbNkMTxSuIyFQsGEpqBHwA693zv4mDnOZXOmMQognFTm/+/RxYw4Gi/5s2s//MmVveLprvCQRTBrm7MR04W8NcxdCxnowgqAvcbC/3qR+4pwYXgwn3EWJFNqHfzNY=
+	t=1747087849; cv=none; b=fo1i3yAesY5v+61tYVXDEdPxYtDk4F/hLVVtb99b4/ftO0iQwt938Sznv9yh4aWlURcpTZ9F8HQmynENYqSSIB1R4B+vy7zHB9ecJYRcreellvXNIy46tUHvXWnRb59h5epAzijlWdSFI2FcbWPjbo3gQ5oGprAgbXYh5hWkodQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747085351; c=relaxed/simple;
-	bh=awwXn2TAbBoaYGo+e+KQV3s1Vl5rprM8b1Qcv70cHOc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LI04Uu38G4/utUrdlCvfaABq4wK0MmoI94UYCRCPIKSCryL5S9/VORuToj0iHTLFD26NOIVBbdxjEikrlrCCION1OsdBqkK9P+PAInmBaGP9FBqvZ8GFXXXHIq4zIB/5e+knIwUjd+1sbufTnFioRhkMca/Q8BWlUdmHa5+B5hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ke/5ibqI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747087849; c=relaxed/simple;
+	bh=Tw9uGkMbDXao8DIVFN7rA2XNqQCc+VGWbBiGjIYgypk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iP4Z+GmCIZ9cYdZkKT16XMT4W4hKGVI/xFt4KOLEZo27nl5vSv1CJAnnt4KGDogKrsPAviIq0FcMrMvBdCHh+4fEcNmYYo7pugrkUOHOUrJ/AEJ/4uKtiqLNGzKtFVMzoKDwmzeamffjd9roSPGSBovHSYA+Z4QymxAOtoqN9PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=iPCQP+Lx; arc=none smtp.client-ip=52.119.213.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ke/5ibqI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFB8C4CEF4;
-	Mon, 12 May 2025 21:29:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747085351;
-	bh=awwXn2TAbBoaYGo+e+KQV3s1Vl5rprM8b1Qcv70cHOc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ke/5ibqIxWZIGCfnstPdWuLJxGt6VqLdV8S7+5X6WU/w7r27Y8KBN0COjW3baioVk
-	 Z7ENjzNHG5U01R5BRxaA1sHeFzAl7IU3HZqRJLanE357WZ/1v9Xl+EuH3Sjj/Uncsu
-	 cfWS7GCGlRjtItjKVGmZ9FxgnHU3wwOdQxwPODB9ZDx4tXbmq+os8i8+tk87wzqOUU
-	 URUdK2ggwfgWZmaDZy7x/0ASlyIVSctQL84AZ7xnpPSqsb5AOUB8TB8taFtY5SrpAN
-	 JuJrLtxl54sILH7N9vCsgjDREL5fljH1ko7dhcByEu+eew3wpW2FhFapjh79UCu06W
-	 IA/J6wAnJbXlQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 12 May 2025 23:28:55 +0200
-Subject: [PATCH] cpufreq/amd-pstate: Avoid shadowing ret in
- amd_pstate_ut_check_driver()
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="iPCQP+Lx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1747087848; x=1778623848;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7tN0DJOjCDbYyLG3fBURerzunikZ2GPsRRAIeI9irw8=;
+  b=iPCQP+LxBYb7wAjnnNnv/yDijmUFzAxn18VHr3wO8YF6M74XQZ3pMBwf
+   QnkgkWCPE5bQPdd6Aqw409DiO9y+VbypZ8XUlTPpsWhJMRvGhb5szwXmR
+   hd445yEUR0sJFnhopKeb+LHcDgaMAdjtzIxpKvYoFV9D63q9lFz+4/QGH
+   tOAh2Nfz10iVp6+T3WiDAGrgch5MWsvyH04iEo0VKujC/gdqRdyEBe6Ug
+   S5XH+dXV3i9hHi2jmzT9w7GqW++fJF+EawTy4M8PPwRpMNIJFRhv5+siJ
+   mKI7DneLySAEEkCkdrLnKkayiqYSQi/L1AuWiPM5y7vw/JQGZFx3ktPiP
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.15,283,1739836800"; 
+   d="scan'208";a="92404891"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 22:10:43 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:17316]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.68:2525] with esmtp (Farcaster)
+ id dc358a6f-7c1b-414a-9827-10a9fec784f8; Mon, 12 May 2025 22:10:42 +0000 (UTC)
+X-Farcaster-Flow-ID: dc358a6f-7c1b-414a-9827-10a9fec784f8
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Mon, 12 May 2025 22:10:41 +0000
+Received: from 6c7e67bfbae3.amazon.com (10.187.170.42) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Mon, 12 May 2025 22:10:37 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <syzbot+e953a8f3071f5c0a28fd@syzkaller.appspotmail.com>
+CC: <alibuda@linux.alibaba.com>, <danielyang32@g.ucla.edu>,
+	<danielyangkang@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
+	<guwen@linux.alibaba.com>, <hdanton@sina.com>, <jaka@linux.ibm.com>,
+	<kuba@kernel.org>, <kuniyu@amazon.com>, <laforge@gnumonks.org>,
+	<linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+	<lkp@intel.com>, <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
+	<oe-kbuild-all@lists.linux.dev>,
+	<osmocom-net-gprs-bounces@lists.osmocom.org>,
+	<osmocom-net-gprs@lists.osmocom.org>, <pabeni@redhat.com>,
+	<pablo@netfilter.org>, <syzkaller-bugs@googlegroups.com>,
+	<tonylu@linux.alibaba.com>, <wenjia@linux.ibm.com>
+Subject: Re: [syzbot] [net?] possible deadlock in gtp_encap_enable_socket
+Date: Mon, 12 May 2025 15:10:26 -0700
+Message-ID: <20250512221029.56357-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <68221ce4.050a0220.f2294.0070.GAE@google.com>
+References: <68221ce4.050a0220.f2294.0070.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250512-amd-pstate-ut-uninit-ret-v1-1-fcb4104f502e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIABZoImgC/x3MQQ4CIQxA0auQrqcJoKDOVSYuGqnahTiBYkwId
- 5e4fIv/O1QuwhVW06HwR6q884RbDNyelB+MkqbBWx9scB7plXCvSsrYFFuWLIqFFY+R/IHcJcT
- zCWa+F77L97/ermP8ACZKtfdqAAAA
-X-Change-ID: 20250512-amd-pstate-ut-uninit-ret-46a23a195687
-To: Huang Rui <ray.huang@amd.com>, 
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
- Mario Limonciello <mario.limonciello@amd.com>, 
- Perry Yuan <perry.yuan@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Swapnil Sapkal <swapnil.sapkal@amd.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1520; i=nathan@kernel.org;
- h=from:subject:message-id; bh=awwXn2TAbBoaYGo+e+KQV3s1Vl5rprM8b1Qcv70cHOc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlKGSq/J7pqtxw/uqaAVcJYSjhjpztfTHfd3ya2WcZbr
- 18MOfqro5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEyk8BbD/wIxRt+1yqsWee5c
- UDw363DGh3tLEudPf/d6lp336xXzzm1h+F+4o8ZLzbf/I7dz6iz59F9RSl/fhIVwbDwh0R2p3tl
- 2hQcA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D041UWB002.ant.amazon.com (10.13.139.179) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-Clang warns (or errors with CONFIG_WERROR=y):
+From: syzbot <syzbot+e953a8f3071f5c0a28fd@syzkaller.appspotmail.com>
+Date: Mon, 12 May 2025 09:08:04 -0700
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit 752e2217d789be2c6a6ac66554b981cd71cd9f31
+> Author: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Date:   Mon Apr 7 17:03:17 2025 +0000
+> 
+>     smc: Fix lockdep false-positive for IPPROTO_SMC.
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140462f4580000
+> start commit:   9410645520e9 Merge tag 'net-next-6.12' of git://git.kernel..
+> git tree:       net-next
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=37c006d80708398d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e953a8f3071f5c0a28fd
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16215ca9980000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110c6c27980000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
+> 
+> #syz fix: smc: Fix lockdep false-positive for IPPROTO_SMC.
 
-  drivers/cpufreq/amd-pstate-ut.c:262:6: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-    262 |         if (ret)
-        |             ^~~
-
-ret is declared at the top of the function and in the for loop so the
-initialization of ret is local to the loop. Remove the declaration in
-the for loop so that ret is always used initialized.
-
-Fixes: d26d16438bc5 ("amd-pstate-ut: Reset amd-pstate driver mode after running selftests")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202505072226.g2QclhaR-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/cpufreq/amd-pstate-ut.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index 30835d0e4994..65f9d2bae2d3 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -246,7 +246,7 @@ static int amd_pstate_ut_check_driver(u32 index)
- 	int ret;
- 
- 	for (mode1 = AMD_PSTATE_DISABLE; mode1 < AMD_PSTATE_MAX; mode1++) {
--		int ret = amd_pstate_set_mode(mode1);
-+		ret = amd_pstate_set_mode(mode1);
- 		if (ret)
- 			return ret;
- 		for (mode2 = AMD_PSTATE_DISABLE; mode2 < AMD_PSTATE_MAX; mode2++) {
-
----
-base-commit: b01fc4eca73cbd7946181255a95dbe64ff83bc5f
-change-id: 20250512-amd-pstate-ut-uninit-ret-46a23a195687
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+#syz fix: smc: Fix lockdep false-positive for IPPROTO_SMC.
 
