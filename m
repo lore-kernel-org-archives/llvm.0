@@ -1,99 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E1D14F117
-	for <llvm@lists.linux.dev>; Mon, 12 May 2025 19:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C53299AA4;
+	Mon, 12 May 2025 21:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747076590; cv=none; b=Ak0ZIEwXJl19+z8elarToPD9zAcD2w4EWAn6KYUUWKR6n6HApE7dJCeUQEfuyL+SwMZnmPfDCPxa/qqJ5kuCKyTmcyZYK+tVFZE4FHjDoC/md5YbROvxEnItOYI+l5jZXf0u4/fbmYt/7tZ7CegBfq61wQoRq6MbW8JUQIJ4GGw=
+	t=1747085351; cv=none; b=gDzKdUhlkLGi8E1wfx6sVJIzBPHzuz9ATH+ifXBWppTew/YbNkMTxSuIyFQsGEpqBHwA693zv4mDnOZXOmMQognFTm/+/RxYw4Gi/5s2s//MmVveLprvCQRTBrm7MR04W8NcxdCxnowgqAvcbC/3qR+4pwYXgwn3EWJFNqHfzNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747076590; c=relaxed/simple;
-	bh=O3xnDzkOnnFLPvM6ysr9dJBetqk/nIbcUWqJLiIcIsA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mlzM+kYvohv9uUMCYNi2hqsb239RLjLjw1u50dPdxLeSlEWS85B7B0qiBlOJqNyjhIa1xWk2sdk8IiHxZZ8Xo5TzbhxVjL1qYqegRPWnVwylcyzRHTBmCIdG+s1zRfbhiMC4lYg9UnckH0LQcjd7CM27CrgCvRgsO66EaH/km24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aQ/RuscH; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1747085351; c=relaxed/simple;
+	bh=awwXn2TAbBoaYGo+e+KQV3s1Vl5rprM8b1Qcv70cHOc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LI04Uu38G4/utUrdlCvfaABq4wK0MmoI94UYCRCPIKSCryL5S9/VORuToj0iHTLFD26NOIVBbdxjEikrlrCCION1OsdBqkK9P+PAInmBaGP9FBqvZ8GFXXXHIq4zIB/5e+knIwUjd+1sbufTnFioRhkMca/Q8BWlUdmHa5+B5hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ke/5ibqI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aQ/RuscH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747076587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oX7xS8kchwdr34Mh4c2lnwTE88flc6OUyctx/Z95Cww=;
-	b=aQ/RuscH88S/QCeLvXhkpLfZqpiR4G7o1jDt1TWcM+odAjKTCS6ttbuIpkv945LCIAHOmA
-	PDQ/UdrYstZNT/MzFBZ7aGz6wJBGvPVzq2/eziN57IzzaPSbWYEhFqsI0htSTNF3rETNo5
-	3APntw6IkFalrqVNYJqYjvo6bBOZnY0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-237-OTSaR3D0MT6mkySoCB60iQ-1; Mon,
- 12 May 2025 15:03:05 -0400
-X-MC-Unique: OTSaR3D0MT6mkySoCB60iQ-1
-X-Mimecast-MFC-AGG-ID: OTSaR3D0MT6mkySoCB60iQ_1747076584
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30F48180010A
-	for <llvm@lists.linux.dev>; Mon, 12 May 2025 19:03:04 +0000 (UTC)
-Received: from [172.20.141.161] (unknown [10.30.44.25])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C71221800359;
-	Mon, 12 May 2025 19:03:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc6,
- upstream-mainline, 627277ba)
-Date: Mon, 12 May 2025 19:03:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ke/5ibqI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFB8C4CEF4;
+	Mon, 12 May 2025 21:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747085351;
+	bh=awwXn2TAbBoaYGo+e+KQV3s1Vl5rprM8b1Qcv70cHOc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ke/5ibqIxWZIGCfnstPdWuLJxGt6VqLdV8S7+5X6WU/w7r27Y8KBN0COjW3baioVk
+	 Z7ENjzNHG5U01R5BRxaA1sHeFzAl7IU3HZqRJLanE357WZ/1v9Xl+EuH3Sjj/Uncsu
+	 cfWS7GCGlRjtItjKVGmZ9FxgnHU3wwOdQxwPODB9ZDx4tXbmq+os8i8+tk87wzqOUU
+	 URUdK2ggwfgWZmaDZy7x/0ASlyIVSctQL84AZ7xnpPSqsb5AOUB8TB8taFtY5SrpAN
+	 JuJrLtxl54sILH7N9vCsgjDREL5fljH1ko7dhcByEu+eew3wpW2FhFapjh79UCu06W
+	 IA/J6wAnJbXlQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 12 May 2025 23:28:55 +0200
+Subject: [PATCH] cpufreq/amd-pstate: Avoid shadowing ret in
+ amd_pstate_ut_check_driver()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <16816.125051215030502401@us-mta-237.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 5X_WN1726om9QDMhSm3Nl6vMOXvrDqIgrUtHBCdwd3I_1747076584
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250512-amd-pstate-ut-uninit-ret-v1-1-fcb4104f502e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABZoImgC/x3MQQ4CIQxA0auQrqcJoKDOVSYuGqnahTiBYkwId
+ 5e4fIv/O1QuwhVW06HwR6q884RbDNyelB+MkqbBWx9scB7plXCvSsrYFFuWLIqFFY+R/IHcJcT
+ zCWa+F77L97/ermP8ACZKtfdqAAAA
+X-Change-ID: 20250512-amd-pstate-ut-uninit-ret-46a23a195687
+To: Huang Rui <ray.huang@amd.com>, 
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+ Mario Limonciello <mario.limonciello@amd.com>, 
+ Perry Yuan <perry.yuan@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Swapnil Sapkal <swapnil.sapkal@amd.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1520; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=awwXn2TAbBoaYGo+e+KQV3s1Vl5rprM8b1Qcv70cHOc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBlKGSq/J7pqtxw/uqaAVcJYSjhjpztfTHfd3ya2WcZbr
+ 18MOfqro5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEyk8BbD/wIxRt+1yqsWee5c
+ UDw363DGh3tLEudPf/d6lp336xXzzm1h+F+4o8ZLzbf/I7dz6iz59F9RSl/fhIVwbDwh0R2p3tl
+ 2hQcA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Clang warns (or errors with CONFIG_WERROR=y):
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+  drivers/cpufreq/amd-pstate-ut.c:262:6: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    262 |         if (ret)
+        |             ^~~
 
+ret is declared at the top of the function and in the for loop so the
+initialization of ret is local to the loop. Remove the declaration in
+the for loop so that ret is always used initialized.
 
-Kernel information:
-    Commit message: Merge tag 'arm64_cbpf_mitigation_2025_05_08' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/arm64/linux
+Fixes: d26d16438bc5 ("amd-pstate-ut: Reset amd-pstate driver mode after running selftests")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202505072226.g2QclhaR-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/cpufreq/amd-pstate-ut.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1813519952
+diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
+index 30835d0e4994..65f9d2bae2d3 100644
+--- a/drivers/cpufreq/amd-pstate-ut.c
++++ b/drivers/cpufreq/amd-pstate-ut.c
+@@ -246,7 +246,7 @@ static int amd_pstate_ut_check_driver(u32 index)
+ 	int ret;
+ 
+ 	for (mode1 = AMD_PSTATE_DISABLE; mode1 < AMD_PSTATE_MAX; mode1++) {
+-		int ret = amd_pstate_set_mode(mode1);
++		ret = amd_pstate_set_mode(mode1);
+ 		if (ret)
+ 			return ret;
+ 		for (mode2 = AMD_PSTATE_DISABLE; mode2 < AMD_PSTATE_MAX; mode2++) {
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1813519952-x86_64-kernel-debug
+---
+base-commit: b01fc4eca73cbd7946181255a95dbe64ff83bc5f
+change-id: 20250512-amd-pstate-ut-uninit-ret-46a23a195687
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
