@@ -1,71 +1,58 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAFA20B7F3;
-	Tue, 13 May 2025 22:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A331A3BD8;
+	Tue, 13 May 2025 23:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747176622; cv=none; b=gnIIzPOgjqXVjonial2DZ7OdZp2M94pohrORX4Aw/AZB0Hb7dRpL1lNZYxv+6CULoA5zeTTI5F+aj6dJ9BOxD6IGHfEtXXQwOffs6+VYukUlG0xb1OO/hD5GJpYNTdp4ZEIsvFvu4ZllT+fp57rFWxgnb0lu1KqqjxCWLw+5GZM=
+	t=1747178548; cv=none; b=RPeLQ2ZWYND4fFLE65m7OoyFCNZusN2ChgetfQxt1vdTUu+2oS8aPHHLBX63Mcrm0oQon0/vScG1h3wzaPzVnk5HGMrDTJ948x4aZiLUP4o+MdseMvIkxrBbDZ2VTTSsGztI+wG4WA9KmiWUEewXTbhGfTq9k4itDdKInIw9LqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747176622; c=relaxed/simple;
-	bh=YOm9j2GGESAbT4Kw5OSrV1pC85uJg3KLTfhUK9HOpsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GlOg8CW5U2MlrACpGNuRsDORRMZixVhG3f5Rk+4aILNIWVrL5jQ90UpsMm+DGyKf9FH6W4EIZc5J9jCdJCtkkczNI7Yqjb/Zl8vP5SVTsj0u8QCeJJW3Pfx8JKcvhSTL+4ubVv23KWfsAh33aiCoWdN9NIln/3uHSkCvQ42sERQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ejae8Xw/; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1747178548; c=relaxed/simple;
+	bh=DD80lgnAJgtEE17Fzouqlxmw5KRDy7CU5SNjZD28qJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dvdo1K4JMcejfT+fy62TzM65aoJoM7zxmUaG6Zva1L52YYU7PCHvNVtjgPt2b2xAFe2wofIlQuQiXq6sFGkoiJ3f2ifOXGxP0rUsurfhTcEoJY8jcKnbtqCTvYAUr4F6eXjM6dx4wDGrWvLH7LeYkFiXR4XMXVIqH9CPLLXMndo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ifM5N6Wg; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejae8Xw/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ifM5N6Wg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747176621; x=1778712621;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YOm9j2GGESAbT4Kw5OSrV1pC85uJg3KLTfhUK9HOpsc=;
-  b=ejae8Xw/fku34DEr3ClrGnI0i2aZKfoBCLhasf3zIsLHsEYYzBwPNKsW
-   paKn9gMkZQdVyFgEGoy6BlK3XUFEg2kMZ8V1M34XVQBTaW8qcDB+zSwFM
-   D2ycYKaLl/n7s+nkFnZnu3nHwjJAFZG7ppBkuDT5Vh63kGuLlcKiXAGZp
-   dD8luUaf5swSq8g6P6cKPCCGN+2GqLsD9HCGTaNdHTP7mX1P1n/n532AG
-   ciMj1VV9wAMHIyrYNG0OJA4Fg8LNApPRX1KQEHIhYI68zpDxlORqngCQI
-   XjsKyvz2N92o6vHVnhb2jzWZosboKP9pfylyh474An7oqnN+JAm43wWNt
-   Q==;
-X-CSE-ConnectionGUID: oX4Lwe5sTqCZfjubR83QZg==
-X-CSE-MsgGUID: u0PS6E/USdynA8PXh90+Tg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="48303098"
+  t=1747178547; x=1778714547;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DD80lgnAJgtEE17Fzouqlxmw5KRDy7CU5SNjZD28qJ8=;
+  b=ifM5N6WgdJAqSbOmw9Yp8W9fuijyEZKXE9TUkYSq7WIocKrh813s0iNV
+   eoH6h6N23bi2kZNL/l0VTRLDBA3jD0ibheyTkqDiUM/7nRz/PoAsiW/de
+   CtV/ZySKRFs1UZP27KMrXhg1gPJEN8nOacjB9iNBHDg6cLcSoENkNVSKI
+   N8UQSC/rumljeu5BN8LX6TMaj70PyO72IH0oFhBiEExcTbB1KeHh1ylGT
+   t8wzK19lrGASE1Z09b3xCGXBMkMK8uvI4wHz3OzbvENzGlAx8Ac81C5wP
+   FXUEwA7/AwcVvveM4Nlwc0PSmmu9ZS2FifVU8EgzMZJfgM/79hmIUpP9Y
+   A==;
+X-CSE-ConnectionGUID: gluykwsJQEmsuwh0h23n/A==
+X-CSE-MsgGUID: k5dZeTFySuC4PhweifaS3w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="48305068"
 X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
-   d="scan'208";a="48303098"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 15:50:20 -0700
-X-CSE-ConnectionGUID: wHziW06rRHShu89ZmiEO1Q==
-X-CSE-MsgGUID: LxdgacP5Ql+b1a9n6NGwPw==
+   d="scan'208";a="48305068"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 16:22:26 -0700
+X-CSE-ConnectionGUID: 48bMmYhRRT2ihLCZUKQBYg==
+X-CSE-MsgGUID: LM5KCJvvTmyLnbkYKIHhYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
-   d="scan'208";a="138832650"
+   d="scan'208";a="141882623"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 13 May 2025 15:50:13 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 13 May 2025 16:22:17 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uEyRu-000GTD-38;
-	Tue, 13 May 2025 22:50:10 +0000
-Date: Wed, 14 May 2025 06:49:42 +0800
+	id 1uEyww-000GUl-2j;
+	Tue, 13 May 2025 23:22:14 +0000
+Date: Wed, 14 May 2025 07:21:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel_team@skhynix.com, torvalds@linux-foundation.org,
-	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-	mingo@redhat.com, peterz@infradead.org, will@kernel.org,
-	tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
-	sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
-	johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-	willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
-	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
-	hannes@cmpxchg.org, vdavydov.dev@gmail.com
-Subject: Re: [PATCH v15 33/43] dept: assign unique dept_key to each distinct
- dma fence caller
-Message-ID: <202505140631.FOWO8B5L-lkp@intel.com>
-References: <20250513100730.12664-34-byungchul@sk.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:migration 22/22] include/linux/mm.h:2161:47:
+ error: use of undeclared identifier 'PAGE_MAPPING_FLAGS'
+Message-ID: <202505140705.prYAlYt7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,79 +61,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250513100730.12664-34-byungchul@sk.com>
 
-Hi Byungchul,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/llist-move-llist_-head-node-definition-to-types-h/20250513-181346
-base:   82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
-patch link:    https://lore.kernel.org/r/20250513100730.12664-34-byungchul%40sk.com
-patch subject: [PATCH v15 33/43] dept: assign unique dept_key to each distinct dma fence caller
-config: arm-randconfig-002-20250514 (https://download.01.org/0day-ci/archive/20250514/202505140631.FOWO8B5L-lkp@intel.com/config)
+tree:   https://github.com/davidhildenbrand/linux migration
+head:   e21c02eb687873041b47954e3fc7b47e9d3d3675
+commit: e21c02eb687873041b47954e3fc7b47e9d3d3675 [22/22] mm: rename PAGE_MAPPING_* to FOLIO_MAPPING_*
+config: arm-randconfig-002-20250514 (https://download.01.org/0day-ci/archive/20250514/202505140705.prYAlYt7-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250514/202505140631.FOWO8B5L-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250514/202505140705.prYAlYt7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505140631.FOWO8B5L-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505140705.prYAlYt7-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/dma-buf/dma-fence.c:503: warning: expecting prototype for dma_fence_wait_timeout(). Prototype was for __dma_fence_wait_timeout() instead
->> drivers/dma-buf/dma-fence.c:763: warning: expecting prototype for dma_fence_default_wait(). Prototype was for __dma_fence_default_wait() instead
->> drivers/dma-buf/dma-fence.c:853: warning: expecting prototype for dma_fence_wait_any_timeout(). Prototype was for __dma_fence_wait_any_timeout() instead
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+>> include/linux/mm.h:2161:47: error: use of undeclared identifier 'PAGE_MAPPING_FLAGS'
+    2161 |         } else if (!((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS)) {
+         |                                                      ^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:98: arch/arm/kernel/asm-offsets.s] Error 1 shuffle=2209529806
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1275: prepare0] Error 2 shuffle=2209529806
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=2209529806
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=2209529806
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +503 drivers/dma-buf/dma-fence.c
+vim +/PAGE_MAPPING_FLAGS +2161 include/linux/mm.h
 
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  482  
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  483  /**
-f54d1867005c33 drivers/dma-buf/dma-fence.c Chris Wilson      2016-10-25  484   * dma_fence_wait_timeout - sleep until the fence gets signaled
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  485   * or until timeout elapses
-4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  486   * @fence: the fence to wait on
-4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  487   * @intr: if true, do an interruptible wait
-4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  488   * @timeout: timeout value in jiffies, or MAX_SCHEDULE_TIMEOUT
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  489   *
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  490   * Returns -ERESTARTSYS if interrupted, 0 if the wait timed out, or the
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  491   * remaining timeout in jiffies on success. Other error values may be
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  492   * returned on custom implementations.
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  493   *
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  494   * Performs a synchronous wait on this fence. It is assumed the caller
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  495   * directly or indirectly (buf-mgr between reservation and committing)
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  496   * holds a reference to the fence, otherwise the fence might be
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  497   * freed before return, resulting in undefined behavior.
-4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  498   *
-4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  499   * See also dma_fence_wait() and dma_fence_wait_any_timeout().
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  500   */
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  501  signed long
-15fe92c1e1cf69 drivers/dma-buf/dma-fence.c Byungchul Park    2025-05-13  502  __dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01 @503  {
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  504  	signed long ret;
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  505  
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  506  	if (WARN_ON(timeout < 0))
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  507  		return -EINVAL;
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  508  
-ef8255506f6682 drivers/dma-buf/dma-fence.c Simona Vetter     2020-05-19  509  	might_sleep();
-ef8255506f6682 drivers/dma-buf/dma-fence.c Simona Vetter     2020-05-19  510  
-5fbff813a4a328 drivers/dma-buf/dma-fence.c Simona Vetter     2020-07-07  511  	__dma_fence_might_wait();
-5fbff813a4a328 drivers/dma-buf/dma-fence.c Simona Vetter     2020-07-07  512  
-b96fb1e724ae68 drivers/dma-buf/dma-fence.c Arvind Yadav      2022-09-14  513  	dma_fence_enable_sw_signaling(fence);
-b96fb1e724ae68 drivers/dma-buf/dma-fence.c Arvind Yadav      2022-09-14  514  
-f54d1867005c33 drivers/dma-buf/dma-fence.c Chris Wilson      2016-10-25  515  	trace_dma_fence_wait_start(fence);
-418cc6ca06071e drivers/dma-buf/dma-fence.c Simona Vetter     2018-05-03  516  	if (fence->ops->wait)
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  517  		ret = fence->ops->wait(fence, intr, timeout);
-418cc6ca06071e drivers/dma-buf/dma-fence.c Simona Vetter     2018-05-03  518  	else
-418cc6ca06071e drivers/dma-buf/dma-fence.c Simona Vetter     2018-05-03  519  		ret = dma_fence_default_wait(fence, intr, timeout);
-f54d1867005c33 drivers/dma-buf/dma-fence.c Chris Wilson      2016-10-25  520  	trace_dma_fence_wait_end(fence);
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  521  	return ret;
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  522  }
-15fe92c1e1cf69 drivers/dma-buf/dma-fence.c Byungchul Park    2025-05-13  523  EXPORT_SYMBOL(__dma_fence_wait_timeout);
-e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  524  
+fa4e3f5ffa5e6e Vishal Moola (Oracle  2023-01-30  2116) 
+e6f83630b79ed4 Shivank Garg          2025-04-30  2117  /**
+e6f83630b79ed4 Shivank Garg          2025-04-30  2118   * folio_expected_ref_count - calculate the expected folio refcount
+e6f83630b79ed4 Shivank Garg          2025-04-30  2119   * @folio: the folio
+e6f83630b79ed4 Shivank Garg          2025-04-30  2120   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2121   * Calculate the expected folio refcount, taking references from the pagecache,
+e6f83630b79ed4 Shivank Garg          2025-04-30  2122   * swapcache, PG_private and page table mappings into account. Useful in
+e6f83630b79ed4 Shivank Garg          2025-04-30  2123   * combination with folio_ref_count() to detect unexpected references (e.g.,
+e6f83630b79ed4 Shivank Garg          2025-04-30  2124   * GUP or other temporary references).
+e6f83630b79ed4 Shivank Garg          2025-04-30  2125   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2126   * Does currently not consider references from the LRU cache. If the folio
+e6f83630b79ed4 Shivank Garg          2025-04-30  2127   * was isolated from the LRU (which is the case during migration or split),
+e6f83630b79ed4 Shivank Garg          2025-04-30  2128   * the LRU cache does not apply.
+e6f83630b79ed4 Shivank Garg          2025-04-30  2129   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2130   * Calling this function on an unmapped folio -- !folio_mapped() -- that is
+e6f83630b79ed4 Shivank Garg          2025-04-30  2131   * locked will return a stable result.
+e6f83630b79ed4 Shivank Garg          2025-04-30  2132   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2133   * Calling this function on a mapped folio will not result in a stable result,
+e6f83630b79ed4 Shivank Garg          2025-04-30  2134   * because nothing stops additional page table mappings from coming (e.g.,
+e6f83630b79ed4 Shivank Garg          2025-04-30  2135   * fork()) or going (e.g., munmap()).
+e6f83630b79ed4 Shivank Garg          2025-04-30  2136   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2137   * Calling this function without the folio lock will also not result in a
+e6f83630b79ed4 Shivank Garg          2025-04-30  2138   * stable result: for example, the folio might get dropped from the swapcache
+e6f83630b79ed4 Shivank Garg          2025-04-30  2139   * concurrently.
+e6f83630b79ed4 Shivank Garg          2025-04-30  2140   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2141   * However, even when called without the folio lock or on a mapped folio,
+e6f83630b79ed4 Shivank Garg          2025-04-30  2142   * this function can be used to detect unexpected references early (for example,
+e6f83630b79ed4 Shivank Garg          2025-04-30  2143   * if it makes sense to even lock the folio and unmap it).
+e6f83630b79ed4 Shivank Garg          2025-04-30  2144   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2145   * The caller must add any reference (e.g., from folio_try_get()) it might be
+e6f83630b79ed4 Shivank Garg          2025-04-30  2146   * holding itself to the result.
+e6f83630b79ed4 Shivank Garg          2025-04-30  2147   *
+e6f83630b79ed4 Shivank Garg          2025-04-30  2148   * Returns the expected folio refcount.
+e6f83630b79ed4 Shivank Garg          2025-04-30  2149   */
+e6f83630b79ed4 Shivank Garg          2025-04-30  2150  static inline int folio_expected_ref_count(const struct folio *folio)
+e6f83630b79ed4 Shivank Garg          2025-04-30  2151  {
+e6f83630b79ed4 Shivank Garg          2025-04-30  2152  	const int order = folio_order(folio);
+e6f83630b79ed4 Shivank Garg          2025-04-30  2153  	int ref_count = 0;
+e6f83630b79ed4 Shivank Garg          2025-04-30  2154  
+e6f83630b79ed4 Shivank Garg          2025-04-30  2155  	if (WARN_ON_ONCE(folio_test_slab(folio)))
+e6f83630b79ed4 Shivank Garg          2025-04-30  2156  		return 0;
+e6f83630b79ed4 Shivank Garg          2025-04-30  2157  
+e6f83630b79ed4 Shivank Garg          2025-04-30  2158  	if (folio_test_anon(folio)) {
+e6f83630b79ed4 Shivank Garg          2025-04-30  2159  		/* One reference per page from the swapcache. */
+e6f83630b79ed4 Shivank Garg          2025-04-30  2160  		ref_count += folio_test_swapcache(folio) << order;
+e6f83630b79ed4 Shivank Garg          2025-04-30 @2161  	} else if (!((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS)) {
+e6f83630b79ed4 Shivank Garg          2025-04-30  2162  		/* One reference per page from the pagecache. */
+e6f83630b79ed4 Shivank Garg          2025-04-30  2163  		ref_count += !!folio->mapping << order;
+e6f83630b79ed4 Shivank Garg          2025-04-30  2164  		/* One reference from PG_private. */
+e6f83630b79ed4 Shivank Garg          2025-04-30  2165  		ref_count += folio_test_private(folio);
+e6f83630b79ed4 Shivank Garg          2025-04-30  2166  	}
+e6f83630b79ed4 Shivank Garg          2025-04-30  2167  
+e6f83630b79ed4 Shivank Garg          2025-04-30  2168  	/* One reference per page table mapping. */
+e6f83630b79ed4 Shivank Garg          2025-04-30  2169  	return ref_count + folio_mapcount(folio);
+e6f83630b79ed4 Shivank Garg          2025-04-30  2170  }
+e6f83630b79ed4 Shivank Garg          2025-04-30  2171  
+
+:::::: The code at line 2161 was first introduced by commit
+:::::: e6f83630b79ed43763cd19a20f80885f568b8991 mm: add folio_expected_ref_count() for reference count calculation
+
+:::::: TO: Shivank Garg <shivankg@amd.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
