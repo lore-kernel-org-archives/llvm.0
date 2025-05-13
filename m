@@ -1,91 +1,153 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908661547E7
-	for <llvm@lists.linux.dev>; Tue, 13 May 2025 22:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAFA20B7F3;
+	Tue, 13 May 2025 22:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747175627; cv=none; b=JNTCnblLqF3LLavTkLwqG+jv5aFQq8biHEk8gdr2X67Amr6k+sLDxG2H0DYxGnprdAdcaRxxoaqM542GWKviAZ9Tt4A2CWPDXMxNGTuACXyVLPQ5LSYW7J6TIW7iZ1OrDFMbZXDs/ea6nyf6WGalKk041XNYqUvZn8BaiuAIxQ4=
+	t=1747176622; cv=none; b=gnIIzPOgjqXVjonial2DZ7OdZp2M94pohrORX4Aw/AZB0Hb7dRpL1lNZYxv+6CULoA5zeTTI5F+aj6dJ9BOxD6IGHfEtXXQwOffs6+VYukUlG0xb1OO/hD5GJpYNTdp4ZEIsvFvu4ZllT+fp57rFWxgnb0lu1KqqjxCWLw+5GZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747175627; c=relaxed/simple;
-	bh=YUNyQIe2U9PIChTRWi/w1n2BI+PrjEJrqXJnOcNN0QI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Xpy49KPKywiCoU6N1yColfsWQqEiN9oQSOOM/UyZPfycpRMwFage52oIISp4fC4NZEZgIGzlTLDbCGapj9ytj+A5AS9Gcek+CN9tn2wl1bd+qZ7NVKbo4txnC5sdzPVZiXztTOg5VjRDVsTgs5AKiIGR7+mfLszynZ3EMB8WMvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Xgmm++rC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ylCeGvmb; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1747176622; c=relaxed/simple;
+	bh=YOm9j2GGESAbT4Kw5OSrV1pC85uJg3KLTfhUK9HOpsc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GlOg8CW5U2MlrACpGNuRsDORRMZixVhG3f5Rk+4aILNIWVrL5jQ90UpsMm+DGyKf9FH6W4EIZc5J9jCdJCtkkczNI7Yqjb/Zl8vP5SVTsj0u8QCeJJW3Pfx8JKcvhSTL+4ubVv23KWfsAh33aiCoWdN9NIln/3uHSkCvQ42sERQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ejae8Xw/; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Xgmm++rC";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ylCeGvmb"
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1747175623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SBu6jOiYhKDCfpRwEEfnOMMozIrEopxusl8R7L65TRE=;
-	b=Xgmm++rCS5or8sQP/V7FV/7I+gu417wa64wrkUW9S4eApJbYYv5izpvXL5MMT+OVgLxsP6
-	hDkmUzmeK3eLTvoiMSQQYCUnGC948WCuRu8UAb9upD9pyHiKqPqktl0O79sKs61w+rUCg0
-	b575qo2yKoIvXORefoPqA1FnlvXXUf7ZzTwRZj44JIEfraet4gt/DwlEgxNoKpPkVW09mH
-	wfJULnEir8zySqw/lrsdqdthDup5E+ALI0F1awUycTjZnj6lpZJ9hodhQIh/6+nAxwx4nj
-	CiBFGwYAI/4os7x/QlrEn7RkuQuCgDEyxWrnx7ioVUyXcqkszJwgG57LI/92oQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1747175623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SBu6jOiYhKDCfpRwEEfnOMMozIrEopxusl8R7L65TRE=;
-	b=ylCeGvmb66S/kbdelfb34eDz/rLFmMWgKMuM+s29oM1cPIpq4R3C1s5iqkgKhT3zueuwrC
-	Tkpj96byw+nnTjDw==
-To: Bert Karwatzki <spasswolf@web.de>, linux-kernel@vger.kernel.org
-Cc: Bert Karwatzki <spasswolf@web.de>, linux-next@vger.kernel.org,
- llvm@lists.linux.dev, Johannes Berg <johannes.berg@intel.com>
-Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
- compiled with clang
-In-Reply-To: <20250513164807.51780-1-spasswolf@web.de>
-References: <20250513164807.51780-1-spasswolf@web.de>
-Date: Wed, 14 May 2025 00:33:39 +0200
-Message-ID: <87h61ojg3g.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejae8Xw/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747176621; x=1778712621;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YOm9j2GGESAbT4Kw5OSrV1pC85uJg3KLTfhUK9HOpsc=;
+  b=ejae8Xw/fku34DEr3ClrGnI0i2aZKfoBCLhasf3zIsLHsEYYzBwPNKsW
+   paKn9gMkZQdVyFgEGoy6BlK3XUFEg2kMZ8V1M34XVQBTaW8qcDB+zSwFM
+   D2ycYKaLl/n7s+nkFnZnu3nHwjJAFZG7ppBkuDT5Vh63kGuLlcKiXAGZp
+   dD8luUaf5swSq8g6P6cKPCCGN+2GqLsD9HCGTaNdHTP7mX1P1n/n532AG
+   ciMj1VV9wAMHIyrYNG0OJA4Fg8LNApPRX1KQEHIhYI68zpDxlORqngCQI
+   XjsKyvz2N92o6vHVnhb2jzWZosboKP9pfylyh474An7oqnN+JAm43wWNt
+   Q==;
+X-CSE-ConnectionGUID: oX4Lwe5sTqCZfjubR83QZg==
+X-CSE-MsgGUID: u0PS6E/USdynA8PXh90+Tg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="48303098"
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="48303098"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 15:50:20 -0700
+X-CSE-ConnectionGUID: wHziW06rRHShu89ZmiEO1Q==
+X-CSE-MsgGUID: LxdgacP5Ql+b1a9n6NGwPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="138832650"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 13 May 2025 15:50:13 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uEyRu-000GTD-38;
+	Tue, 13 May 2025 22:50:10 +0000
+Date: Wed, 14 May 2025 06:49:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel_team@skhynix.com, torvalds@linux-foundation.org,
+	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+	mingo@redhat.com, peterz@infradead.org, will@kernel.org,
+	tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+	sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
+	johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+	willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
+	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
+	hannes@cmpxchg.org, vdavydov.dev@gmail.com
+Subject: Re: [PATCH v15 33/43] dept: assign unique dept_key to each distinct
+ dma fence caller
+Message-ID: <202505140631.FOWO8B5L-lkp@intel.com>
+References: <20250513100730.12664-34-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250513100730.12664-34-byungchul@sk.com>
 
-On Tue, May 13 2025 at 18:48, Bert Karwatzki wrote:
->> 
->> I'll now start a bisection where I revert 76a853f86c97 where possible in
->> order to find the remaining bugs.
->
-> The second bisection (from v6.15-rc6 to next-20250512) is finished now:
->
-> This commit leads to lockups and kernel panics after
-> watching ~5-10min of a youtube video while compiling a kernel,
-> reverting it in next-20250512 is possible:
-> 76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
-> This commit leads to the boot failure, reverting leads to the
-> compile error it is supposed to fix:
-> 97f4b999e0c8 ("genirq: Use scoped_guard() to shut clang up")
+Hi Byungchul,
 
-I really have a hard time to understand what you are trying to explain
-here. 'This commit leads..' is so unspecified that I can't make any
-sense of it.
+kernel test robot noticed the following build warnings:
 
-Also please make sure that you have commit b5fcb6898202 ("genirq: Ensure
-flags in lock guard is consistently initialized") in your tree when
-re-testing. That's fixing another subtle (AFAICT clang only) problem in
-the guard conversion. If it's not in next yet, you can just merge
+[auto build test WARNING on 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3]
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/llist-move-llist_-head-node-definition-to-types-h/20250513-181346
+base:   82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
+patch link:    https://lore.kernel.org/r/20250513100730.12664-34-byungchul%40sk.com
+patch subject: [PATCH v15 33/43] dept: assign unique dept_key to each distinct dma fence caller
+config: arm-randconfig-002-20250514 (https://download.01.org/0day-ci/archive/20250514/202505140631.FOWO8B5L-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250514/202505140631.FOWO8B5L-lkp@intel.com/reproduce)
 
-into next or wait for the next next integration.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505140631.FOWO8B5L-lkp@intel.com/
 
-Thanks
+All warnings (new ones prefixed by >>):
 
-        tglx
+>> drivers/dma-buf/dma-fence.c:503: warning: expecting prototype for dma_fence_wait_timeout(). Prototype was for __dma_fence_wait_timeout() instead
+>> drivers/dma-buf/dma-fence.c:763: warning: expecting prototype for dma_fence_default_wait(). Prototype was for __dma_fence_default_wait() instead
+>> drivers/dma-buf/dma-fence.c:853: warning: expecting prototype for dma_fence_wait_any_timeout(). Prototype was for __dma_fence_wait_any_timeout() instead
 
 
+vim +503 drivers/dma-buf/dma-fence.c
 
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  482  
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  483  /**
+f54d1867005c33 drivers/dma-buf/dma-fence.c Chris Wilson      2016-10-25  484   * dma_fence_wait_timeout - sleep until the fence gets signaled
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  485   * or until timeout elapses
+4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  486   * @fence: the fence to wait on
+4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  487   * @intr: if true, do an interruptible wait
+4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  488   * @timeout: timeout value in jiffies, or MAX_SCHEDULE_TIMEOUT
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  489   *
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  490   * Returns -ERESTARTSYS if interrupted, 0 if the wait timed out, or the
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  491   * remaining timeout in jiffies on success. Other error values may be
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  492   * returned on custom implementations.
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  493   *
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  494   * Performs a synchronous wait on this fence. It is assumed the caller
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  495   * directly or indirectly (buf-mgr between reservation and committing)
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  496   * holds a reference to the fence, otherwise the fence might be
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  497   * freed before return, resulting in undefined behavior.
+4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  498   *
+4dd3cdb281f7a3 drivers/dma-buf/dma-fence.c Simona Vetter     2018-07-04  499   * See also dma_fence_wait() and dma_fence_wait_any_timeout().
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  500   */
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  501  signed long
+15fe92c1e1cf69 drivers/dma-buf/dma-fence.c Byungchul Park    2025-05-13  502  __dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01 @503  {
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  504  	signed long ret;
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  505  
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  506  	if (WARN_ON(timeout < 0))
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  507  		return -EINVAL;
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  508  
+ef8255506f6682 drivers/dma-buf/dma-fence.c Simona Vetter     2020-05-19  509  	might_sleep();
+ef8255506f6682 drivers/dma-buf/dma-fence.c Simona Vetter     2020-05-19  510  
+5fbff813a4a328 drivers/dma-buf/dma-fence.c Simona Vetter     2020-07-07  511  	__dma_fence_might_wait();
+5fbff813a4a328 drivers/dma-buf/dma-fence.c Simona Vetter     2020-07-07  512  
+b96fb1e724ae68 drivers/dma-buf/dma-fence.c Arvind Yadav      2022-09-14  513  	dma_fence_enable_sw_signaling(fence);
+b96fb1e724ae68 drivers/dma-buf/dma-fence.c Arvind Yadav      2022-09-14  514  
+f54d1867005c33 drivers/dma-buf/dma-fence.c Chris Wilson      2016-10-25  515  	trace_dma_fence_wait_start(fence);
+418cc6ca06071e drivers/dma-buf/dma-fence.c Simona Vetter     2018-05-03  516  	if (fence->ops->wait)
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  517  		ret = fence->ops->wait(fence, intr, timeout);
+418cc6ca06071e drivers/dma-buf/dma-fence.c Simona Vetter     2018-05-03  518  	else
+418cc6ca06071e drivers/dma-buf/dma-fence.c Simona Vetter     2018-05-03  519  		ret = dma_fence_default_wait(fence, intr, timeout);
+f54d1867005c33 drivers/dma-buf/dma-fence.c Chris Wilson      2016-10-25  520  	trace_dma_fence_wait_end(fence);
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  521  	return ret;
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  522  }
+15fe92c1e1cf69 drivers/dma-buf/dma-fence.c Byungchul Park    2025-05-13  523  EXPORT_SYMBOL(__dma_fence_wait_timeout);
+e941759c74a44d drivers/dma-buf/fence.c     Maarten Lankhorst 2014-07-01  524  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
