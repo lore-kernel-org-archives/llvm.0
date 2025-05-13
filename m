@@ -1,290 +1,209 @@
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E76238C3F
-	for <llvm@lists.linux.dev>; Tue, 13 May 2025 10:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6FD269D1B;
+	Tue, 13 May 2025 11:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747132873; cv=none; b=jX7Tf7PmbaC4MjIcduxmLKzRzba7JzilOFajXV8FKJ9/yx7IgUhgh8ub8jjF6Vcvtb2Pv0APkBrpUgjY+7mpv+nFtJU8WDf9cLfD0vDwqgoOVrEiJnx0ATQ6Ra4jpdzntMVN5kyo2MZ2EK/T44qxTH4lLIeRD0N1JxtoIcDcLQo=
+	t=1747137208; cv=none; b=AgMD5wQbuAJjIh3YIgsQbVubO9HwKc9ATKZAb+5TBCYTpe/AY7G7OWAQqX/NajVux5GfroZ7VnqGK7Bf+yPBpyp4SwXKlzmOGsQkIpgPxI0QerPZsypsQA/GKt3i41R8Fbsxs3kXpXUFbPBxiTcvyIsfW95g0LR0ttNFrH6Tf7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747132873; c=relaxed/simple;
-	bh=CTQckT2HZmRFkfxw8ncpe6Y+0P+Hov7ABUwiXyl5W1U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KuIGACqAAJbHnUTuoh0nHCQWygW5wd6c09NaIcDpRbJPN+be96+lWE/SvufBl4cadf+17/qOP8Cr2yqa40/7EynMQILuZ3/Pt1VbfIgz9ELlEYo5G8K5IG5w/mRV6zgE+LCd6QFnXuT1UXCvyeHDL6u7yCFMXjpiPKF3S4yFpiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uLY9VaqA; arc=none smtp.client-ip=209.85.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1747137208; c=relaxed/simple;
+	bh=ymyhCeXbSWn3XGyJdVpxrSZ9u388hotAQ2d6VE4lzOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=M8I/YhxmIeBTEG0VM3NGt2ZNY71DdSjN1k31Is0LbyH5Iq6A8hLeqmuPhsbqhNBErJKYlcwzEVwgN7/xtY6neOxJDaOiYnyT3BBqIk3QLZTGoUlFymwLTncKp4Q9e/fobG+ovcukUvuwzlfc0yV0fzJzAf3JoAUrYi9N1g4JAJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rv/ezBbf; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uLY9VaqA"
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-525b44ec88aso2081461e0c.3
-        for <llvm@lists.linux.dev>; Tue, 13 May 2025 03:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747132869; x=1747737669; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mfQ9neFs/KkQwu/rsyvkIG7pZfzGZt+yMbnSNAfCILM=;
-        b=uLY9VaqAVou3L0owLAJv2u4ixn9vKfBC6i/8rb8PLb3DWgt5RueCPjF5QUq6vSGz3z
-         d5hggxdxr+4KIFX7TryGWQDXvhSByfdmN2CUX9JjcZD6z78CY1tAKqo1b0W356GtcsaT
-         jR+AqVHvpExD7UDLIYp+qefK3gHUNzr+YgDJVeHGrYJGjJOExAPk9zQZlMLMkKPnR0+o
-         df4kLpUxUqfXmJ99T/rm1oomNFN29WyN8xJ0KIkYE+Tez4Kg6ilwcd1L6EpnkwtDxahf
-         Bgf2K1z+D97Rj80iYg3pQ/BaYiBpoe+J78kBhO+iE25TmRcjyEnCDCvwtvLSQ2LlFtNX
-         WbJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747132869; x=1747737669;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mfQ9neFs/KkQwu/rsyvkIG7pZfzGZt+yMbnSNAfCILM=;
-        b=A65rlg9wldGfcsXgd/R6Pue9+vukIudQXL/bLKCyXts7G5S+zoFoKFFhgbOQr7x9JS
-         XCh0ZmY/6Xu1cdN4n7aP01FFQkWCu32NRqBf2kMayMV8rcIUM8mTSxTEBDKEp4+FHOdN
-         ico8/ubt/gxZupovOGFYvs59G+4lfD/3vIBZgk/ePnRCM1xctIe7rqd8Zs1m7HZrecgv
-         J0D9VfjK+4vKRo1MKQjdsclR9N1c2G6zIUspv5D4FStgT8ycuuXnukq+ZwXjAuYHn9Aq
-         DKNcTEh+RthXa+oInpGVuND+eNjUh695bKE+QEcp6lMxYGMOM9pzZT6StXN8lsxpSMjy
-         b5jA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNT4d2TyCzucY475mjVUrxAFRx7k5MT3Vz1GvdNaKphuTmhaAEM4go8Du8nuVsj20LrgZ9@lists.linux.dev
-X-Gm-Message-State: AOJu0YyUuY6PJDPa14LbBoJlggm56bboX0Bc58xjbyvIuj7XlMAiShsv
-	pw4WPE3mI2tHd7I5vBifPjQLAr4GOui1Cc4NFOwf0DEdPrPFr7y9jjZe2pe8p1c+NUeuyEgNws7
-	IT0ZGvQ9wmoFOk3pIrbezAq7JeCoI8ToDD1JAHQ==
-X-Gm-Gg: ASbGncuED28BleHiGLhkpVzZ9Vo6geLU+CHZSHZbsgYsRq2FxVMrzo/rbqQR/tpZKKd
-	m6RFeyVJ2gc0GdjsZiR3yJG7tK+AUYTiWznX9C1VPwctjJty/o8XbD4i/LzxzQ6lb7v7db+AIH2
-	2jk/7QqyMf9LTiGsKTA+3M9oL2yC0V9Wmz3jLml2GPcg==
-X-Google-Smtp-Source: AGHT+IEaQC1x5Zb/J9SdhWkKAIbBENy/MyS503LgRLTtCaHBPpm2j0RzkOlAC+ryGomdrOxBtkoL+cOeZMHd5BxZ2s8=
-X-Received: by 2002:a05:6122:3d0d:b0:52b:789:cf93 with SMTP id
- 71dfb90a1353d-52c53c769a4mr9774991e0c.5.1747132869155; Tue, 13 May 2025
- 03:41:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rv/ezBbf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747137206; x=1778673206;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ymyhCeXbSWn3XGyJdVpxrSZ9u388hotAQ2d6VE4lzOk=;
+  b=Rv/ezBbffC7asjyYK3Jt6su6X9IoHwzwuxt9in/iEHdEsQJTQo2nf7Jr
+   VYmoHUjRVB3JavWlYZ27qGpEyWEQiB9/JHbhwj92xJP6xW/d9wjh1VC6I
+   Q6SB+YSqO2YlO6s5V6LJXzcauiI/8Fn0HPie7au0z46AignHqVMhqHnbF
+   o66tMlcH9kWG/u3qLETjbrcymFjnzw7/bjPjdfmc9Ltjck+ANUGedMNUZ
+   VH57SWoC0oDDDyuwop7i+V1Kq82W49FjHLLJPvOfHf8Uh+WJL1YjBGYY7
+   DbkSneAGRm3A5L0DNEo3cpKRb0Dd+UZ/iVNMIo6ayHA9WNudfiJNc9hpe
+   A==;
+X-CSE-ConnectionGUID: bj9t51n+T+uv+1uoCDxGow==
+X-CSE-MsgGUID: /21ZQ9iSQd+4pWKbopSBhA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="49095120"
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="49095120"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 04:53:23 -0700
+X-CSE-ConnectionGUID: QhDnc8Q+TaCarXNyX91zqA==
+X-CSE-MsgGUID: aZXh+6nwSka0ypetIm6e2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="142805012"
+Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
+  by orviesa005.jf.intel.com with ESMTP; 13 May 2025 04:53:21 -0700
+Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uEoCE-0000xy-1X;
+	Tue, 13 May 2025 11:53:18 +0000
+Date: Tue, 13 May 2025 19:52:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+	Chen-Yu Tsai <wens@csie.org>
+Subject: [chanwoo:devfreq-next 1/1] drivers/devfreq/sun8i-a33-mbus.c:384:50:
+ error: too few arguments to function call, expected 2, have 1
+Message-ID: <202505131950.YgTPTbPS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250512172044.326436266@linuxfoundation.org>
-In-Reply-To: <20250512172044.326436266@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 13 May 2025 11:40:57 +0100
-X-Gm-Features: AX0GCFvABlwvpsFejGmvR-D-CDsu0dVnQstgEoue8lMI6NadE8n39FU2E5xrTaQ
-Message-ID: <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
-Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
-	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
-	linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.14.7 release.
-> There are 197 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-next
+head:   bc253b28a365cf6f3dc066f2607d516eb6ef930e
+commit: bc253b28a365cf6f3dc066f2607d516eb6ef930e [1/1] PM / devfreq: sun8i-a33-mbus: Simplify by using more devm functions
+config: i386-buildonly-randconfig-2001-20250513 (https://download.01.org/0day-ci/archive/20250513/202505131950.YgTPTbPS-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250513/202505131950.YgTPTbPS-lkp@intel.com/reproduce)
 
-Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
-clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
-But, builds pass with gcc-13.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505131950.YgTPTbPS-lkp@intel.com/
 
-* mips, build
-  - clang-20-allnoconfig
-  - clang-20-defconfig
-  - clang-20-tinyconfig
-  - korg-clang-20-lkftconfig-hardening
-  - korg-clang-20-lkftconfig-lto-full
-  - korg-clang-20-lkftconfig-lto-thing
+All errors (new ones prefixed by >>):
 
-Regression Analysis:
- - New regression? Yes
- - Reproducibility? Yes
-
-Build regression: mips defconfig clang-20 instantiation error expected
-an immediate
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build error mips
-<instantiation>:7:11: error: expected an immediate
- ori $26, r4k_wait_idle_size - 2
-          ^
-<instantiation>:10:13: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-            ^
-<instantiation>:10:29: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-                            ^
-<instantiation>:7:11: error: expected an immediate
- ori $26, r4k_wait_idle_size - 2
-          ^
-<instantiation>:10:13: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-            ^
-<instantiation>:10:29: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-                            ^
-arch/mips/kernel/genex.S:531:2: warning: macro defined with named
-parameters which are not used in macro body, possible positional
-parameter found in body which will have no effect
- .macro __BUILD_verbose nexception
- ^
-
-## Build mips
-* Build log: https://qa-reports.linaro.org/api/testruns/28409657/log_file/
-* Build history:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.14.y/build/v6.14.6-198-g4f7f8fb4f8e3/testrun/28409667/suite/build/test/clang-20-defconfig/history/
-* Build details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.14.y/build/v6.14.6-198-g4f7f8fb4f8e3/testrun/28409657/suite/build/test/clang-20-defconfig/details/
-* Build link: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/2x0SR9ZL9r6xvF3HT3UgkQA9ebC
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2x0SR9ZL9r6xvF3HT3UgkQA9ebC/config
-* Toolchain: clang-20
-
-## Steps to reproduce
- -  tuxmake --runtime podman --target-arch mips --toolchain clang-20
---kconfig defconfig LLVM=1 LLVM_IAS=1
-
-## Build
-* kernel: 6.14.7-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-* git commit: 4f7f8fb4f8e35798b197be0b6b13229aa1864da1
-* git describe: v6.14.6-198-g4f7f8fb4f8e3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.14.y/build/v6.14.6-198-g4f7f8fb4f8e3
-
-## Test Regressions (compared to v6.14.5-184-ga33747967783)
-* mips, build
-  - clang-20-allnoconfig
-  - clang-20-defconfig
-  - clang-20-tinyconfig
-  - korg-clang-20-lkftconfig-hardening
-  - korg-clang-20-lkftconfig-lto-full
-  - korg-clang-20-lkftconfig-lto-thing
+>> drivers/devfreq/sun8i-a33-mbus.c:384:50: error: too few arguments to function call, expected 2, have 1
+     384 |         ret = devm_clk_rate_exclusive_get(priv->clk_mbus);
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~               ^
+   include/linux/clk.h:214:5: note: 'devm_clk_rate_exclusive_get' declared here
+     214 | int devm_clk_rate_exclusive_get(struct device *dev, struct clk *clk);
+         |     ^                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-## Metric Regressions (compared to v6.14.5-184-ga33747967783)
+vim +384 drivers/devfreq/sun8i-a33-mbus.c
 
-## Test Fixes (compared to v6.14.5-184-ga33747967783)
+   330	
+   331	static int sun8i_a33_mbus_probe(struct platform_device *pdev)
+   332	{
+   333		const struct sun8i_a33_mbus_variant *variant;
+   334		struct device *dev = &pdev->dev;
+   335		struct sun8i_a33_mbus *priv;
+   336		unsigned long base_freq;
+   337		unsigned int max_state;
+   338		const char *err;
+   339		int i, ret;
+   340	
+   341		variant = device_get_match_data(dev);
+   342		if (!variant)
+   343			return -EINVAL;
+   344	
+   345		max_state = variant->max_dram_divider - variant->min_dram_divider + 1;
+   346	
+   347		priv = devm_kzalloc(dev, struct_size(priv, freq_table, max_state), GFP_KERNEL);
+   348		if (!priv)
+   349			return -ENOMEM;
+   350	
+   351		platform_set_drvdata(pdev, priv);
+   352	
+   353		priv->variant = variant;
+   354	
+   355		priv->reg_dram = devm_platform_ioremap_resource_byname(pdev, "dram");
+   356		if (IS_ERR(priv->reg_dram))
+   357			return PTR_ERR(priv->reg_dram);
+   358	
+   359		priv->reg_mbus = devm_platform_ioremap_resource_byname(pdev, "mbus");
+   360		if (IS_ERR(priv->reg_mbus))
+   361			return PTR_ERR(priv->reg_mbus);
+   362	
+   363		priv->clk_bus = devm_clk_get_enabled(dev, "bus");
+   364		if (IS_ERR(priv->clk_bus))
+   365			return dev_err_probe(dev, PTR_ERR(priv->clk_bus),
+   366					     "failed to get bus clock\n");
+   367	
+   368		priv->clk_dram = devm_clk_get(dev, "dram");
+   369		if (IS_ERR(priv->clk_dram))
+   370			return dev_err_probe(dev, PTR_ERR(priv->clk_dram),
+   371					     "failed to get dram clock\n");
+   372	
+   373		priv->clk_mbus = devm_clk_get(dev, "mbus");
+   374		if (IS_ERR(priv->clk_mbus))
+   375			return dev_err_probe(dev, PTR_ERR(priv->clk_mbus),
+   376					     "failed to get mbus clock\n");
+   377	
+   378		/* Lock the DRAM clock rate to keep priv->nominal_bw in sync. */
+   379		ret = devm_clk_rate_exclusive_get(dev, priv->clk_dram);
+   380		if (ret)
+   381			return dev_err_probe(dev, ret, "failed to lock dram clock rate\n");
+   382	
+   383		/* Lock the MBUS clock rate to keep MBUS_TMR_PERIOD in sync. */
+ > 384		ret = devm_clk_rate_exclusive_get(priv->clk_mbus);
+   385		if (ret)
+   386			return dev_err_probe(dev, ret, "failed to lock mbus clock rate\n");
+   387	
+   388		priv->gov_data.upthreshold	= 10;
+   389		priv->gov_data.downdifferential	=  5;
+   390	
+   391		priv->profile.initial_freq	= clk_get_rate(priv->clk_dram);
+   392		priv->profile.polling_ms	= 1000;
+   393		priv->profile.target		= sun8i_a33_mbus_set_dram_target;
+   394		priv->profile.get_dev_status	= sun8i_a33_mbus_get_dram_status;
+   395		priv->profile.freq_table	= priv->freq_table;
+   396		priv->profile.max_state		= max_state;
+   397	
+   398		ret = devm_pm_opp_set_clkname(dev, "dram");
+   399		if (ret)
+   400			return dev_err_probe(dev, ret, "failed to add OPP table\n");
+   401	
+   402		base_freq = clk_get_rate(clk_get_parent(priv->clk_dram));
+   403		for (i = 0; i < max_state; ++i) {
+   404			unsigned int div = variant->max_dram_divider - i;
+   405	
+   406			priv->freq_table[i] = base_freq / div;
+   407	
+   408			ret = dev_pm_opp_add(dev, priv->freq_table[i], 0);
+   409			if (ret) {
+   410				err = "failed to add OPPs\n";
+   411				goto err_remove_opps;
+   412			}
+   413		}
+   414	
+   415		ret = sun8i_a33_mbus_hw_init(dev, priv, priv->profile.initial_freq);
+   416		if (ret) {
+   417			err = "failed to init hardware\n";
+   418			goto err_remove_opps;
+   419		}
+   420	
+   421		priv->devfreq_dram = devfreq_add_device(dev, &priv->profile,
+   422							DEVFREQ_GOV_SIMPLE_ONDEMAND,
+   423							&priv->gov_data);
+   424		if (IS_ERR(priv->devfreq_dram)) {
+   425			ret = PTR_ERR(priv->devfreq_dram);
+   426			err = "failed to add devfreq device\n";
+   427			goto err_remove_opps;
+   428		}
+   429	
+   430		/*
+   431		 * This must be set manually after registering the devfreq device,
+   432		 * because there is no way to select a dynamic OPP as the suspend OPP.
+   433		 */
+   434		priv->devfreq_dram->suspend_freq = priv->freq_table[0];
+   435	
+   436		return 0;
+   437	
+   438	err_remove_opps:
+   439		dev_pm_opp_remove_all_dynamic(dev);
+   440	
+   441		return dev_err_probe(dev, ret, err);
+   442	}
+   443	
 
-## Metric Fixes (compared to v6.14.5-184-ga33747967783)
-
-## Test result summary
-total: 155299, pass: 129321, fail: 5951, skip: 19411, xfail: 616
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 139 total, 137 passed, 2 failed
-* arm64: 56 total, 55 passed, 1 failed
-* i386: 18 total, 16 passed, 2 failed
-* mips: 34 total, 27 passed, 7 failed
-* parisc: 4 total, 4 passed, 0 failed
-* powerpc: 40 total, 40 passed, 0 failed
-* riscv: 25 total, 22 passed, 3 failed
-* s390: 22 total, 22 passed, 0 failed
-* sh: 5 total, 5 passed, 0 failed
-* sparc: 4 total, 3 passed, 1 failed
-* x86_64: 49 total, 42 passed, 7 failed
-
-## Test suites summary
-* boot
-* commands
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-mincore
-* kselftest-mm
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-mptcp
-* kselftest-openat2
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-rust
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-tc-testing
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-x86
-* kunit
-* kvm-unit-tests
-* lava
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-build-clang
-* log-parser-build-gcc
-* log-parser-test
-* ltp-capability
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-hugetlb
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* perf
-* rcutorture
-* rt-tests-cyclicdeadline
-* rt-tests-pi-stress
-* rt-tests-pmqtest
-* rt-tests-rt-migrate-test
-* rt-tests-signaltest
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
