@@ -1,104 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4492B24C67B;
-	Tue, 13 May 2025 12:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF87D28DB63
+	for <llvm@lists.linux.dev>; Tue, 13 May 2025 13:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747138825; cv=none; b=YdJfwTEtHio3kXM4CKb487yIel6VqVDMq+KRjDAbACSfjbMrTGmoRQC69sWBHTOEeAG04uy4ZmHl3qytfI6ug9lMC5yNMGSfTAne9K8VKTxxM2QntmzT+xW1Mk8fHbsVmTa7vl8aD6cWp4t9WOSUrwCo3KPy1Jodpdf4PVsuK/0=
+	t=1747142974; cv=none; b=J9jyi9up7NjA3CziJ0cf1MrH1alz5HKF2ZqlOV3a+6DakpRZEpjQHau7PcV0ay1YO/u14hwCD9j5MVhOkhjEF4agDA6IH2W7J+wFbwFX7hrC5cP9+tkSQsrKq6SgBJfnx3CVtRfDXJE21QIROEvFsAxlyim4xYlHbVnYhv26fDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747138825; c=relaxed/simple;
-	bh=Ybutf2ZA0+rRTJ80CH2hJeSazzgT4qAWA0r4s/tfjQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HLRssLz7VGI+O8xfAr6ZgGEhdfoHiVOKRNsrQ34pHAd+H4RFm0rmLNxEIL+QNZGIJ7wKimUF7BYxsIYFG5mXb/D6Saqss/cZjzTz3pWyomETwciJIASBOPmSIsxnuCZz0XtST+Q7FkTbCA0Z+4jq767143uS3PkRo71mllw6JjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+ZqZwsl; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747142974; c=relaxed/simple;
+	bh=pIZnqAbvKi6g6bM9xBkbfMYNKRFSU6d2NCIENbAWFOs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dwi4AdomN6DYW/Xprggmgfnef3tyXJAzAiXqYcZ4vE8U6mN3S+xpvoQN64fT84MLnOPHp8ItDTUVzWju+LB6j6+Wx8gKNF1Nk9bV3I69KKLkxXi+tbeOygBVqpZzuGZHH4R1njJMGALUQ2iULxpjX1UEbewuQ3xy2J9cI7G7IWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nifmLZU5; arc=none smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+ZqZwsl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747138824; x=1778674824;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ybutf2ZA0+rRTJ80CH2hJeSazzgT4qAWA0r4s/tfjQM=;
-  b=m+ZqZwslcyNlvgBgcbbmbClZ/gt1VxbGMSFo7O9+AhvudeYwCXqBKiJg
-   5IYBEy5FvLk7t7UjhufIFJvlnPbqxseFMioR+Sbad1f+L6Rlc06FgNWiX
-   H1j1LyLG+hzxZxqdyQliKRbszmE8mMncQnEzft4bXzL+Yrp4wySfevm4Z
-   YAHzvWx8lsY2RUhx8gxgxSFV0AdjgTPKiAJ+hPgBZKNzoZxKaClolA6FG
-   A7exEk9Igj+mJpiUGKhcByTX1BTgv6Uv4XVp1aL7itZhi0gtEpBTBMA+M
-   BMOmLWtbHMkMT5YGIuG0piOwBNTwQutrI0YR5FXm0Vy3aUnwp1GucPQ5x
-   g==;
-X-CSE-ConnectionGUID: 63PkRt6ORCWKg7+KQPtqDg==
-X-CSE-MsgGUID: pMQQkAS+TS+bJgaUzSZ0BQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="49127384"
-X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
-   d="scan'208";a="49127384"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 05:20:24 -0700
-X-CSE-ConnectionGUID: 5o298X1LR6iFqCuV/bBBtg==
-X-CSE-MsgGUID: gYqTXkO0RfeLl189ltJQGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
-   d="scan'208";a="137578854"
-Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
-  by fmviesa006.fm.intel.com with ESMTP; 13 May 2025 05:20:22 -0700
-Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uEocO-0000yM-0Z;
-	Tue, 13 May 2025 12:20:20 +0000
-Date: Tue, 13 May 2025 20:20:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hongbo Li <lihongbo22@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Eric Sandeen <sandeen@redhat.com>
-Subject: [jaegeuk-f2fs:dev-test 188/191] fs/f2fs/super.c:5283:6: warning:
- unused variable 'i'
-Message-ID: <202505132038.wjQGfZCG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nifmLZU5"
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4ddb7ddfb76so3769799137.1
+        for <llvm@lists.linux.dev>; Tue, 13 May 2025 06:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1747142971; x=1747747771; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LZEie1OhAZfjtagVfLYxTcaBKPW2X7YkdVD9WseQzgE=;
+        b=nifmLZU53DomkzKHAve3ShVvfVAHFOLQnvdfyS086xCv1Er9qdgdvxkOwXqCfnUvJi
+         DXRwWZaabUUoES69jLeIN4dFR8PLVjCIeFB5a3pDsUgL/KGiJqQVd0kCbnPBO66j3GPG
+         roWI5OvP7v/WTN9Q5YQuFNVF7M9KSVWiAiuQbNSad18xsPDW6PSiFr7f1yQ9V+9JtdZB
+         WyoHzzbaDnx306Q8bvDdUaNwjEqN0LXt80BDSkVkByXEY3jPktm2kKcbXw0I+GO5nCTx
+         WsnzyKfmhacXXgiTdynEohaq+iKfuwLSzgSemEEwCBZePV72JCsWS1zE8IV8eghJAd4J
+         UAXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747142971; x=1747747771;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LZEie1OhAZfjtagVfLYxTcaBKPW2X7YkdVD9WseQzgE=;
+        b=CLQfxA+QWYceTI5tjKqoOLXs2CDJBGbof9FT8OPh8ehnJO4sW7heyZJr9UHb0O7Z+g
+         EA2D1NmHqx1/fjR4GyNW3IEXwGwKnlEILj4yb8Dp6VzJoeaLK4dGS5q6cPmCByl3sL3r
+         ioYQRtAtCtE7iVldgUeNuLWjJOd9ndxC6jlZCEdM8I94VV7hxIarUr5eVgDDtfrYERUO
+         nJxW4LIvYclzOCoMLiOOXgZl+pfPXQYwwag+fmRT8R7ZalGXJwnuNJm3q2pptPyJx6mP
+         +MnI6J/TfZ6GBkgLoloZsRSY2uscmGHOjgWwUl0YTa3RueWQgcYcbSGgeD2cVwksLi2N
+         4UcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUn4p+Es1hpW9laKAIvevDEnhjsrbuf7LB8F2X15Hp4k4/Q3geYnINTCi6PyHPb2GICZKP+@lists.linux.dev
+X-Gm-Message-State: AOJu0YxLjP1OjKNUiSdz63GZGa28smTWLcPm2qKXgwsxkh6tzBNzD2Yj
+	IGF8ZTWzSOO+WJn1AZQJ4Vwb2ie7cbQ9NuUOLxXZ6kpaC66o1NpM4EIYdW5IW/BJPQUMe5KmSFl
+	v7r1wiKx/iVMts9vXKhMv3DAnlU7haKXjsVhtBQ==
+X-Gm-Gg: ASbGnctdYcqSUqpKs3gXMhuM6bAtii9weyQPtZGyiFz5r+pjkCpOCIP4b/qvQ22nWy4
+	ys6bPoFA2IPHCVtNPvZhIoVmS7AHSww6N/kGcNHMumSnUxk9emZiq3psOVbKlmkB8aEBxVHNFtD
+	7+m6NKEVARJ9Yj/Pr/yh2XFUFUsQXBJQ8=
+X-Google-Smtp-Source: AGHT+IHlbMMFq5nAfSA83CCKmxe6r5lw+vXbf9voMmrMRSDCezf0HsCPwNDvoXL3icNnJqJh9L6Y0Q0gPm4WwUngrEA=
+X-Received: by 2002:a05:6102:2c08:b0:4c1:9b88:5c30 with SMTP id
+ ada2fe7eead31-4deed3d3870mr14789892137.19.1747142971375; Tue, 13 May 2025
+ 06:29:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250512172044.326436266@linuxfoundation.org> <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
+In-Reply-To: <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 13 May 2025 14:29:20 +0100
+X-Gm-Features: AX0GCFvoub22XkeGUwB2DkAUVguhCcizeWQN8lgksWkCPZabNB8ZW-3lo3CS3bQ
+Message-ID: <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
+Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
+	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Marco Crivellari <marco.crivellari@suse.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
+	linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-head:   7274f75b0d876f1cc87349fe8e5c8b45f90695c5
-commit: 33605141d92b1eb2a5e625a79abe35856a588662 [188/191] f2fs: switch to the new mount api
-config: i386-buildonly-randconfig-2003-20250513 (https://download.01.org/0day-ci/archive/20250513/202505132038.wjQGfZCG-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250513/202505132038.wjQGfZCG-lkp@intel.com/reproduce)
+On Tue, 13 May 2025 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 6.14.7 release.
+> > There are 197 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+>
+> Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
+> clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
+> But, builds pass with gcc-13.
+>
+> * mips, build
+>   - clang-20-allnoconfig
+>   - clang-20-defconfig
+>   - clang-20-tinyconfig
+>   - korg-clang-20-lkftconfig-hardening
+>   - korg-clang-20-lkftconfig-lto-full
+>   - korg-clang-20-lkftconfig-lto-thing
+>
+> Regression Analysis:
+>  - New regression? Yes
+>  - Reproducibility? Yes
+>
+> Build regression: mips defconfig clang-20 instantiation error expected
+> an immediate
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> ## Build error mips
+> <instantiation>:7:11: error: expected an immediate
+>  ori $26, r4k_wait_idle_size - 2
+>           ^
+> <instantiation>:10:13: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>             ^
+> <instantiation>:10:29: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                             ^
+> <instantiation>:7:11: error: expected an immediate
+>  ori $26, r4k_wait_idle_size - 2
+>           ^
+> <instantiation>:10:13: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>             ^
+> <instantiation>:10:29: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                             ^
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505132038.wjQGfZCG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+The bisection found this as first bad commit,
 
->> fs/f2fs/super.c:5283:6: warning: unused variable 'i' [-Wunused-variable]
-    5283 |         int i;
-         |             ^
-   fs/f2fs/super.c:370:20: warning: unused function 'ctx_set_flags' [-Wunused-function]
-     370 | static inline void ctx_set_flags(struct f2fs_fs_context *ctx,
-         |                    ^~~~~~~~~~~~~
-   2 warnings generated.
+    MIPS: Fix idle VS timer enqueue
 
+    [ Upstream commit 56651128e2fbad80f632f388d6bf1f39c928267a ]
 
-vim +/i +5283 fs/f2fs/super.c
-
-  5279	
-  5280	static void f2fs_fc_free(struct fs_context *fc)
-  5281	{
-  5282		struct f2fs_fs_context *ctx = fc->fs_private;
-> 5283		int i;
-  5284	
-  5285		if (!ctx)
-  5286			return;
-  5287	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Naresh Kamboju
