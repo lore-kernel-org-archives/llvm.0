@@ -1,107 +1,107 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A881C2437;
-	Tue, 13 May 2025 02:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD47A46426;
+	Tue, 13 May 2025 04:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747104545; cv=none; b=de2ZZkEdSl3cTr73EmPhXWHZjIGEDc3XwX8fhtV+/V+9YuOQ2vmyBMUwJATcPrMOqoj+jDPq2jAFNm3WgQ6rH50RZmyyAvpYr75AQR0j8PCUOcyFo6W/Vx7uzvH1vjCWk52H/Y6Z/DW6sKTvq4Q/DiR39FsusFfbtX27E3zVoHA=
+	t=1747109106; cv=none; b=MJVIkYixq4L9JhNNg75675VDtvVBFNhm0o4EONPoOXp2fD0MaSD8CAZU0arH0vekovprgbN/r/SK3yoI0YDl8EhL8eATlgEt6rinR20ZnCFKPJA8GmFZBjjt0cJ9s+UWUUkT0FnRSVVdxP+WKZ+sbnKHBzOa4qUOeu6MTJIv6pI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747104545; c=relaxed/simple;
-	bh=qg88ZZVxpFt8GgXZhKrergpXPJ98ycQczjU8aRH0/Zw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CVzJU+wzJWn1ELKUD4r+UBRB0Wc7DcM2L5l/geq6P8tZwdkKaXuY/tnnwzjBkoXiZ6RmuDbbbKkC0r3Mu9YB2Z+X8UxNnN/cFYBrE1XY2QXMH2bkJfsF+ew0xB102+ZBbIfX8nwQDky59VxYQHdwukdWJpHzfhRrpycJWeZe80c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=n3Lksjlq; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1747109106; c=relaxed/simple;
+	bh=W2gamIQfxe7mPdviO9TnmkklckNqnKKbQSW3CGImP+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iS+NmhYsZKkr6HS4btWIm3We9jUge3XIwI9GGWdxcDaLqxSb2EK+7HGUJY2J4ZYaO9CidrlHofvFmErnJD0dVEoRhNgfl+8GMPPjZe9WTPAQULZYqFBSbioBTV0HoYO8px1E7cINEpL9DvVqxTJkhmydxQjIbFPZIfq7qCapKKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aLUUHS6m; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="n3Lksjlq"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54D1BuA9007570;
-	Tue, 13 May 2025 02:49:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=kG78jM8gUMf0ii/e4dbCJc7ii/b1TnYWDx6NeWCpJ2w=; b=
-	n3LksjlqzEra0BQ84azNRkvBjeSkwsbiqth8jAv97T2sloJE91ENbROmLNoFY7zg
-	v6SHCHvNTDGZ7+LKaojEBJskWKPJ20BLPXzydP5SF+W2IHoswe+54X+qHeu7V5CF
-	8q1OGn/VQ3HdwgPmu8GO3ZzGNQkGFdsjYSWs8w2JLAo1pI75dT3MRwdhZL3VpCsG
-	2Q0PkH696luUPYYBdSNrbVIf8iZVHILTE5ytyF29uzc0cECiIfjI7c6IelDNi6yJ
-	ixvNdIPIGfX+IUD7IL2eN2rEdiMs78rGS1Pc1FGekKXC2mMbHpeJ+ADaaUzu4Ww3
-	TpKYGQtvszo30ZAo6a568Q==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46j1663uuq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 May 2025 02:49:00 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54D2gEDR016012;
-	Tue, 13 May 2025 02:49:00 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 46hw8841hn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 May 2025 02:49:00 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 54D2muXA003994;
-	Tue, 13 May 2025 02:48:59 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 46hw8841cw-4;
-	Tue, 13 May 2025 02:48:59 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Oliver Neukum <oneukum@suse.com>, Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Colin Ian King <colin.i.king@gmail.com>, linux-scsi@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] scsi: dc395x: Remove leftover if statement in reselect()
-Date: Mon, 12 May 2025 22:48:13 -0400
-Message-ID: <174710241019.4089939.13582359968111970288.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250429-scsi-dc395x-fix-uninit-var-v1-1-25215d481020@kernel.org>
-References: <20250429-scsi-dc395x-fix-uninit-var-v1-1-25215d481020@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aLUUHS6m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747109104; x=1778645104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W2gamIQfxe7mPdviO9TnmkklckNqnKKbQSW3CGImP+o=;
+  b=aLUUHS6miq/8xcDebxehXQK2Nvo+Ub6PtWzCA9HqAGxWfBlTVBNq1Amq
+   cVBVycsz7pkI5i3JqAVXrHMLZKQk1XiUe6AXEgicHrqCy/w227DyaGBOj
+   AErfaMYDVquioUfV6Qx5Ms+8bTcx5hvoUIpR+zCKV5qduUhWb7iaQC9jW
+   cnvX5JTePhM45R1O88y+1+XkDejo7c7L1yiML6JlehRItE3OVL27MKZNr
+   sOU2JmJlC55rPGU65nq3941dW7Cpm45Pso1yjLqu3hBnzL+D42KGwORtQ
+   SwaPwcUGn/CrVWvoB2SADzjDl5t8C4YhtBGtnDxbcefg/X1WZVwQEQsUD
+   g==;
+X-CSE-ConnectionGUID: 1P5yMGIuQLWaVV0DSs9SDg==
+X-CSE-MsgGUID: 2DdmkmxJSj2Q8IFklsN4GQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="36560159"
+X-IronPort-AV: E=Sophos;i="6.15,284,1739865600"; 
+   d="scan'208";a="36560159"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 21:05:03 -0700
+X-CSE-ConnectionGUID: /892fIn1QRuLjYwLPPRaTQ==
+X-CSE-MsgGUID: 1fEZnNeUTxO0E6OytlCC+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,284,1739865600"; 
+   d="scan'208";a="160851486"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 12 May 2025 21:05:02 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uEgt2-000FdT-08;
+	Tue, 13 May 2025 04:05:00 +0000
+Date: Tue, 13 May 2025 12:04:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [net-next PATCH v4 10/11] net: pcs: airoha: add PCS driver for
+ Airoha SoC
+Message-ID: <202505131153.guojEpVn-lkp@intel.com>
+References: <20250511201250.3789083-11-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-12_07,2025-05-09_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2504070000 definitions=main-2505130025
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTEzMDAyNCBTYWx0ZWRfX0w66UhKiW5vU Vhv3BXCSQZMQj3MiTY/yJ+njyTAfR9hE1y6zgiNVvBBKywAHJD1M79AMMMaQ/xZDk0XPTtRQKqd cKaRL3dlF/eW/BekBvDewr6s8+snEAlSzZRtsqs8DpKWXq/bASLQq/lI9s9AOXDF5qMZ+zE/snF
- 7d0aIlOg7RLE8sK9paeHJrN2NW5NIACttoIiqT0SMnFJF3hB86Qf+CERwQodlZgOq4/vCAPwzD8 MrawQiCcjqXIdOvOTwt4Z+/ehshzp5tVqfWzAC2Ha/bTjo8jSzg6PBsZ4k8gRhdkCCJRRfGPlJk 8OCaSD7bRlUu5AnyeIkaFUWn+i5+djy6eNjUmNi5KWBn6Yho2QrRHnhfQJ3w0zsYDZfWv0Egr28
- FeumjUB57nZxgOVQu/a2aqbAexrrj1uym7ai5TjJKHPQcl+xLW9vlS9jP/uCov/ZtJlvgsWj
-X-Authority-Analysis: v=2.4 cv=VMDdn8PX c=1 sm=1 tr=0 ts=6822b31c cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=nScL1aOB0x_2kgwzweYA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: ezbPkgPuUCRHnAxAh80yvmh2xOy9neC3
-X-Proofpoint-GUID: ezbPkgPuUCRHnAxAh80yvmh2xOy9neC3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250511201250.3789083-11-ansuelsmth@gmail.com>
 
-On Tue, 29 Apr 2025 17:46:49 -0700, Nathan Chancellor wrote:
+Hi Christian,
 
-> Clang warns (or errors with CONFIG_WERROR=y):
-> 
->   drivers/scsi/dc395x.c:2553:6: error: variable 'id' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->    2553 |         if (!(rsel_tar_lun_id & (IDENTIFY_BASE << 8)))
->         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/scsi/dc395x.c:2556:22: note: uninitialized use occurs here
->    2556 |         dcb = find_dcb(acb, id, lun);
->         |                             ^~
->   drivers/scsi/dc395x.c:2553:2: note: remove the 'if' if its condition is always true
->    2553 |         if (!(rsel_tar_lun_id & (IDENTIFY_BASE << 8)))
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    2554 |         id = rsel_tar_lun_id & 0xff;
-> 
-> [...]
+kernel test robot noticed the following build errors:
 
-Applied to 6.16/scsi-queue, thanks!
+[auto build test ERROR on net-next/main]
 
-[1/1] scsi: dc395x: Remove leftover if statement in reselect()
-      https://git.kernel.org/mkp/scsi/c/bf6971a2b3ee
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-phy-introduce-phy_interface_copy-helper/20250512-041835
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250511201250.3789083-11-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH v4 10/11] net: pcs: airoha: add PCS driver for Airoha SoC
+config: x86_64-randconfig-001-20250512 (https://download.01.org/0day-ci/archive/20250513/202505131153.guojEpVn-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250513/202505131153.guojEpVn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505131153.guojEpVn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: phylink_mii_c22_pcs_decode_state
+   >>> referenced by pcs-airoha.c:2314 (drivers/net/pcs/pcs-airoha.c:2314)
+   >>>               vmlinux.o:(airoha_pcs_get_state)
+--
+>> ld.lld: error: undefined symbol: phylink_decode_usxgmii_word
+   >>> referenced by pcs-airoha.c:2333 (drivers/net/pcs/pcs-airoha.c:2333)
+   >>>               vmlinux.o:(airoha_pcs_get_state)
+--
+>> ld.lld: error: undefined symbol: phylink_mii_c22_pcs_encode_advertisement
+   >>> referenced by pcs-airoha.c:2485 (drivers/net/pcs/pcs-airoha.c:2485)
+   >>>               vmlinux.o:(airoha_pcs_config)
+--
+>> ld.lld: error: undefined symbol: phylink_release_pcs
+   >>> referenced by pcs-airoha.c:2890 (drivers/net/pcs/pcs-airoha.c:2890)
+   >>>               vmlinux.o:(airoha_pcs_remove)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
