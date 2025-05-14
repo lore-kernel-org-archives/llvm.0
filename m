@@ -1,215 +1,206 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02275156F45;
-	Wed, 14 May 2025 09:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747214656; cv=fail; b=SRCz5WJ5mXcDIkTzDxIKkGSP2lBnqP7DiJ67dXU97Vs/uQXvSDGl606XQGLterigdzn+82whvVZjWry4tA1C7LaukpWgaL+mGchNS2sySw+8c/Wcb6OohQOPXawMJAOIm5xthUSTGLeXCcwSqY30sKZcHOaikix/y5rROT+a9F0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747214656; c=relaxed/simple;
-	bh=r8qCjqGK7UBWIEVW/ygwW947PP3Gz+pckem7sHnuOqg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=svNI1o2JTXz0YvVrvKV713QzudUynxTIonTPVQwGH3NWUNX1HJSeVt1tzWPY15kMHW61R0KGpcW2tTSfOajULl8BugaW8qeH0eSTJra9UegPXcZZVXmlSnrUqp8xgeoLJwW3Qa5FIH4aQLX+h7oTQ570dQO569zHWcqSnn6i7+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=u2fez/Mn; arc=fail smtp.client-ip=40.107.237.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0548621CC5C
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 09:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747215190; cv=none; b=FxzPi9Y+JXFZUwdrZ1nSUwyEpjJkrlBxn71AzDacvrWn9CxNKeC3dFiRB/eTUosPmQEdpWJJymWbv+aQjQ4oJEb1joS/iH1GQeLo4W2IkqF+s9EOFO7RidnM3jN9YgJN4ZRX+Sh6/yzKjGAXj0UUz8P0B8t5d0DauYr8qtyE314=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747215190; c=relaxed/simple;
+	bh=miHtmJi2alTOxp0GJupuQfr9NbRVcfj7t9qbEt+CkuA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=T+IviAb7ocs7oi3k8EltM8liWNA+iUEq1zVacFACRgaxyaKbSfT84VHZ342shAtd4Qt7ySJ11tAEGxBCGd0iw+RSE3o33YyeFt8B2ZgkMcrvQB+11RuKPgZCS7SXHs6RAs4wfuk0POPOcyQuPBv9QeTyN6W4fyVDf6rZS4sSjt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=V1y2U95H; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="u2fez/Mn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=x3D2+DFidbYCgt7igl/u5NxzKRnlEx0LwuEPYw0WmJC56nPh8A3g3oORC/4rDXiZaWIt6QjszYxgK1smLUqjMdSdtiRubXoOM5/XIFZsDNlofZeKLgc5jzQBLAKsXThmx9+4Lhy4tfOW6Wc2q4ZAc5aiWrU3pD6w4lea3tFbHhZ/phD6YdEdqcGMPAVp9WL16v/FZL9AzfBFAFdxIkb9Dpz9IiZsxaKjwJx7E4yaU736AoHzNzJBrcXOd7vpwwtawNEVRjbtB/CZgM3gGnzVPyJB9Qv1EXDxDzrWEAXxreHOrInC964ZaczuCiaHTny7GLXQl6/ZNY0dQcYy2jk5wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XzqHf4w0uK1VjCpHR4KSwE2yYkhk+dmnpGCjNx8ggTM=;
- b=RfkGKqUWAybazZ/PaSegUcpHikwV92GfMvceYuCqvK0SWABeos5CAllWgza3nQRoilyAc49pF5SI9PlOsJbobtEKhFlyRPKFgJKZ9c+xgvAkBYe2222Zrmi/57dj+wPQwO2mzMwvpLws83g4Nlg0l9fs1bWKL5TgUu5rCPMqTHiyTqYEdpM+ITC1EQ3U9qxChRZjRBqGh69a+7wXR95jhA4lOMVmbQRDK+thlcJviC1BZ68tUbKhNTO3vL23e2hEcn9l7/KUnmo3Ytza7if1F0JBRy70OE9BAlAod3IQ5KQeM1rNDDn5GAzAT3JYFm+2qFjbCAluI3dqnHTzVpYBEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=nvidia.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XzqHf4w0uK1VjCpHR4KSwE2yYkhk+dmnpGCjNx8ggTM=;
- b=u2fez/MnaUa537aQ27aWwKlPi6llSEnjexZPbS4vDXVuhV4U9TYYkRb9JLGXzkWFQIUzZgLDPw9ahdVFCelVV95t8km+oTxiZAXk+G81CsFfFUNQnmcMDOGgP7K1K0Y808miVhXtQvIBYtdOp7vbuUVqv1jzmDgcEHGOCiLV9Fs=
-Received: from PH7P220CA0149.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:327::19)
- by SJ0PR12MB6685.namprd12.prod.outlook.com (2603:10b6:a03:478::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.29; Wed, 14 May
- 2025 09:24:08 +0000
-Received: from CY4PEPF0000E9D7.namprd05.prod.outlook.com
- (2603:10b6:510:327:cafe::95) by PH7P220CA0149.outlook.office365.com
- (2603:10b6:510:327::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.16 via Frontend Transport; Wed,
- 14 May 2025 09:24:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9D7.mail.protection.outlook.com (10.167.241.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8722.18 via Frontend Transport; Wed, 14 May 2025 09:24:08 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 14 May
- 2025 04:24:07 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 14 May
- 2025 04:24:07 -0500
-Received: from amd.com (10.180.168.240) by SATLEXMB04.amd.com (10.181.40.145)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39 via Frontend
- Transport; Wed, 14 May 2025 04:24:00 -0500
-Date: Wed, 14 May 2025 09:23:49 +0000
-From: Ankit Soni <Ankit.Soni@amd.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Jonathan Corbet <corbet@lwn.net>, <iommu@lists.linux.dev>, Joerg Roedel
-	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
-	<kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>, Bill Wendling
-	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
- Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
- Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon
-	<will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
-	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
- Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
-	<patches@lists.linux.dev>
-Subject: Re: [PATCH v2 03/15] iommupt: Add the basic structure of the iommu
- implementation
-Message-ID: <pntkuh63y26rygrkxegbzncvc3shtplucrnzkkz2dimpkfyn75@uekvyuz5kred>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <3-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="V1y2U95H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1747215180; x=1747819980; i=spasswolf@web.de;
+	bh=oyBnmSlIzSUHnd09jKaBmwrBIv2Cq1rU0CHAjzlgAyw=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=V1y2U95HGYfu/cQpTOdJXGPWSL2E10jbckhTgMqY3pryySWPGB8RuF5bb384n9Ln
+	 EM+Qx80dwHfG97Uf7zKqpbk/YB2dwd5ZxqL2lVfUk8mJNFvVvsZAO6J5oz96YU6Bf
+	 nVLV3NRTg/p7qpuj2y+R7grZ9svrDoPPNPuJ5SyZlZY9ekLIVuqm0EFdiJouhSjJ9
+	 qUtMa/gy6cfdrrkobE8WCcrANI23T2DdtaaciuwgAXBn4IDBYnjeLupGcQz++8qWg
+	 EYfNxqhXYulpnl9nrr7k4nL+QUIiYXHUG0JHG0fQDUBJxUBk8DVNe5vSZ27H0CZvB
+	 CFuVpv1Qfw4GktmMsg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N7QUJ-1v2yI50YEH-0180wd; Wed, 14
+ May 2025 11:33:00 +0200
+Message-ID: <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
+Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
+ compiled with clang
+From: Bert Karwatzki <spasswolf@web.de>
+To: linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org, llvm@lists.linux.dev, Johannes Berg	
+ <johannes.berg@intel.com>, spasswolf@web.de, Thomas Gleixner
+ <tglx@linutronix.de>
+Date: Wed, 14 May 2025 11:32:58 +0200
+In-Reply-To: <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
+	 <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D7:EE_|SJ0PR12MB6685:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81913992-9910-4663-53f1-08dd92c9144f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?owSStQRqWZN8xQvaYi7qtIWEptXJ2BDOKowZgLnFz8w5WmlTx47B027GAgWd?=
- =?us-ascii?Q?H2jHyyCurS7T1SNH7QEi7LJ4np2ZzCek1/UMDnoCaepMSwe97v7PjnZk+l3I?=
- =?us-ascii?Q?ArieQh+oGaOsiaSQeZ1Vpfga35mqpCO58mDRwhmRxGEmTS+z1boczly3ztN2?=
- =?us-ascii?Q?LlJNZBdaTbJ0atChtrdGEWGIr4gzRNikxYREMLMq3B6AOjPvMsyjIzOXGU25?=
- =?us-ascii?Q?wsQyZnodKVzUzCQOZRyW1CpsA5Ky1mboyMGXCuhRJikpvXY37KQSgAXtrCTH?=
- =?us-ascii?Q?VSeS1IoBGuP+BUFLf+Urk1flwBdh/qkymiUXKIlj41k8r4/UTu+EY8iZ3XTJ?=
- =?us-ascii?Q?iAr7jsLz9A9h1l32G47cV5LvATmAGewP0sumykwogJ8n7XruNpbptIc5lWiW?=
- =?us-ascii?Q?2uYmqVuy+azUihcFHzdPXKs0ckhxIjn/lzAXbTTUeJ+Z6KO6LWbkr7kf9wh4?=
- =?us-ascii?Q?9o9pmU35AxRm9ffFfkmuUiRd2D5JicLfOE8iISj0XE21hO4cQhfcbJSkk7PM?=
- =?us-ascii?Q?ogKJ7B/WS984sBGiVmiZK89BnEewUoB9WhLPyjoWsNAjyuTytOh+uyWieRyB?=
- =?us-ascii?Q?1FCByieIEs2nJg1awoowSSBGXK+YvKQxfrbwetuydp2qFh+ry1iQeDIzRISJ?=
- =?us-ascii?Q?H1ZCPa8FV194fnexmWHPG21Zfdtekvq0xOFyeaFb9ETngGVmEgvKG7enQO+I?=
- =?us-ascii?Q?KGpLqu1YDcDGC1IUIqP10hYzEGRLuNhLRalEvwrEQtNl6s0Hnal0U4gSrCQD?=
- =?us-ascii?Q?xmK08HScCrZJqyWyLCa2yDKSK4p0KnTw4/zXlwsyt0qCiNg+ChfTOSTRi73M?=
- =?us-ascii?Q?ZicuTXVciqbDsfqnJjskcK8g9jvpqkcyA4B9LfEBBXNFy1HUZTxpaxf7fdda?=
- =?us-ascii?Q?qo3e9oclO+GY80YUl+yeOMySPdQJUmf/HWZwT6qbSZtguAPVUmC0k2VYJCWc?=
- =?us-ascii?Q?YoUHnudIUAidCJPumr1iILZQRexQ+GEvM5sNP08lauYXpvcNrywOew+H/475?=
- =?us-ascii?Q?lkCE9d4QXHVlI0FVUd5QxcklCa8T9MhDI5hJGtfsUCgrtKAB2lgRJ6loZsRU?=
- =?us-ascii?Q?Bu8i/6xCX578lnaiVdh/1OT0ceXTs72+lz/Uko6C9EOKB5aleO/0L1E+Twka?=
- =?us-ascii?Q?5I4OR/f6mlJ2bzNRSFtDLWiaHFFWJ/H0MMwKbWC3Gttz7gkUX58kIsVRIAK6?=
- =?us-ascii?Q?delzTO02INb5PfikwBuqwHT4UnUQm1NcgbjQEAOq3bpumpdl5hqbF6NPRCPv?=
- =?us-ascii?Q?flN3NTehN33TcsCLjW2EXcNdpnLJa05JS9U8wHy7ypvhp4IF3oqX9N/DCBSS?=
- =?us-ascii?Q?/9pRcQAWE4p8aKQ45VwAwvgg3EwsgQEmkVEgUHB34Dil2lcxRKa+t03O1Xql?=
- =?us-ascii?Q?dCR/LaqxHPIZ9sd/HnSAsTyITpx0zDUvPBQybEzb5Rpt5TRMzpQxezWqZ8qJ?=
- =?us-ascii?Q?6hmog6uxQCyAvNXhFOLg6TCc2rDsdVZVH0qW09XIiqjfYA6/S+FshgNhaKBU?=
- =?us-ascii?Q?DDXBWxB/P+E1eOIBvdvxyE34AyI7NW4tpRhX?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 09:24:08.2308
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81913992-9910-4663-53f1-08dd92c9144f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D7.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6685
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Z9f+FBmpI6CKPZ4U3J4iY7BOuQWizzUEw39fK2w6yLquPr4XJlH
+ 3sjGwlUhRWwd0ppHynUUIf+p6YFaJTojRUbmRvqUP7WeHYdfWw6Gm45NZEHUOHB/QkVY5L/
+ duy3k9mvGe8YUXSH8McsJgD2jXpl4q5mdYPXgUZCaEXMbJyQwBNNPF3RwwmEhWNCuac5X62
+ BIRA3oInY35aplzMLq/kA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:r87TRTUMPKE=;VLAAbX6nMiBvVz78pNITpFcja2w
+ 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
 
-Hi Jason,
+Am Mittwoch, dem 14.05.2025 um 02:11 +0200 schrieb Bert Karwatzki:
+> Am Mittwoch, dem 14.05.2025 um 00:33 +0200 schrieb Thomas Gleixner:
+> > On Tue, May 13 2025 at 18:48, Bert Karwatzki wrote:
+> > > >=20
+> > > > I'll now start a bisection where I revert 76a853f86c97 where possi=
+ble in
+> > > > order to find the remaining bugs.
+> > >=20
+> > > The second bisection (from v6.15-rc6 to next-20250512) is finished n=
+ow:
+> > >=20
+> > > This commit leads to lockups and kernel panics after
+> > > watching ~5-10min of a youtube video while compiling a kernel,
+> > > reverting it in next-20250512 is possible:
+> > > 76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
+> > > This commit leads to the boot failure, reverting leads to the
+> > > compile error it is supposed to fix:
+> > > 97f4b999e0c8 ("genirq: Use scoped_guard() to shut clang up")
+> >=20
+> > I really have a hard time to understand what you are trying to explain
+> > here. 'This commit leads..' is so unspecified that I can't make any
+> > sense of it.
+> >=20
+> > Also please make sure that you have commit b5fcb6898202 ("genirq: Ensu=
+re
+> > flags in lock guard is consistently initialized") in your tree when
+> > re-testing. That's fixing another subtle (AFAICT clang only) problem i=
+n
+> > the guard conversion. If it's not in next yet, you can just merge
+> >=20
+> >    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+> >=20
+> > into next or wait for the next next integration.
+> >=20
+> > Thanks
+> >=20
+> >         tglx
+>=20
+>=20
+> I merged git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/c=
+ore into
+> next-20250513 and this fixes the boot failure but the system still locks=
+ up
+> after a few minutes (with flashing capslock). To solve this I need to re=
+vert=20
+> 76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
+>=20
+> Also commit 97f4b999e0c8 did not actually cause the boot failure that wa=
+s a
+> bisection error.
+>=20
+> Bert Karwatzki
 
-On Mon, May 05, 2025 at 11:18:33AM -0300, Jason Gunthorpe wrote:
-> +static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
-> +				struct iommu_domain *domain)
-> +{
-> +	struct pt_common *common = common_from_iommu(iommu_table);
-> +	struct pt_iommu_info info;
-> +	struct pt_range range;
-> +
-> +	NS(get_info)(iommu_table, &info);
-> +
-> +	domain->type = __IOMMU_DOMAIN_PAGING;
-> +	domain->pgsize_bitmap = info.pgsize_bitmap;
-> +
-> +	if (pt_feature(common, PT_FEAT_DYNAMIC_TOP))
-> +		range = _pt_top_range(common,
-> +				      _pt_top_set(NULL, PT_MAX_TOP_LEVEL));
-> +	else
-> +		range = pt_top_range(common);
-> +
-> +	/*
-> +	 * A 64 bit high address space table on a 32 bit system cannot work.
-> +	 */
-> +	domain->geometry.aperture_start = (unsigned long)range.va;
-> +	if ((pt_vaddr_t)domain->geometry.aperture_start != range.va ||
-> +	    range.va > ULONG_MAX)
-> +		return -EOVERFLOW;
-> +
-> +	/*
-> +	 * The aperture is limited to what the API can do after considering all
-> +	 * the different types dma_addr_t/unsigned long/pt_vaddr_t that are used
-> +	 * to store a VA. Set the aperture to something that is valid for all
-> +	 * cases. Saturate instead of truncate the end if the types are smaller
-> +	 * than the top range. aperture_end is a last.
-> +	 */
-> +	domain->geometry.aperture_end = (unsigned long)range.last_va;
+To investigate the problem with commit 76a853f86c97 ("wifi: free
+SKBTX_WIFI_STATUS skb tx_flags flag") I used next-20250513 with irq/core m=
+erged
+to fix the boot issue and the reverted commit 76a853f86c97.=20
 
-I am experiencing a system hang with a 5-level v2 page table mode, on boot.
-The NVMe boot drive is not initializing.
-Below are the relevant dmesg logs with some prints i had added:
+$ git log --oneline
+bb3ff0e21a16 Revert "wifi: free SKBTX_WIFI_STATUS skb tx_flags flag"
+28d1f7734aa3 Merge branch 'irq/core' into clang_panic
+aa94665adc28 (tag: next-20250513, origin/master, origin/HEAD, master) Add =
+linux-
+next specific files for 20250513
 
-[    6.386439] AMD-Vi v2 domain init
-[    6.390132] AMD-Vi v2 pt init
-[    6.390133] AMD-Vi aperture end last va ffffffffffffff
-...
-[   10.315372] AMD-Vi gen pt MAP PAGES iova ffffffffffffe000 paddr 19351b000
-...
-[   72.171930] nvme nvme0: I/O tag 0 (0000) QID 0 timeout, disable controller
-[   72.179618] nvme nvme1: I/O tag 24 (0018) QID 0 timeout, disable controller
-[   72.197176] nvme nvme0: Identify Controller failed (-4)
-[   72.203063] nvme nvme1: Identify Controller failed (-4)
-[   72.209237] nvme 0000:05:00.0: probe with driver nvme failed with error -5
-[   72.209336] nvme 0000:44:00.0: probe with driver nvme failed with error -5
-...
-Timed out waiting for the udev queue to be empty.
+Then I reapplied commit 76a853f86c97 hunk by hunk and found the one hunk t=
+hat
+causes the problem:
 
-According to the dmesg logs above, the IOVA for the v2 page table appears 
-incorrect and is not aligned with domain->geometry.aperture_end. Which
-requires domain->geometry.force_aperture = true; to be added at the
-appropriate location. Proabably here!
+diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
+index 3e751dd3ae7b..63df21228029 100644
+=2D-- a/net/mac80211/tx.c
++++ b/net/mac80211/tx.c
+@@ -4648,8 +4648,7 @@ static void ieee80211_8023_xmit(struct
+ieee80211_sub_if_data *sdata,
+                        memcpy(IEEE80211_SKB_CB(seg), info, sizeof(*info))=
+;
+        }
+=20
+-       if (unlikely(skb->sk &&
+-                    skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS)) {
++       if (unlikely(skb->sk && sock_flag(skb->sk, SOCK_WIFI_STATUS))) {
+                info->status_data =3D ieee80211_store_ack_skb(local, skb,
+                                                            &info->flags, =
+NULL);
+                if (info->status_data)
 
-- Ankit
+This is enough to cause a kernel panic when compiled with clang (clang-19.=
+1.7
+from debian sid). Compiling the same kernel with gcc (gcc-14.2.0 from debi=
+an
+sid) shows no problem.
 
-> +	if ((pt_vaddr_t)domain->geometry.aperture_end != range.last_va) {
-> +		domain->geometry.aperture_end = ULONG_MAX;
-> +		domain->pgsize_bitmap &= ULONG_MAX;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
+The wifi card used is
+04:00.0 Network controller [0280]: MEDIATEK Corp. MT7921K (RZ608) Wi-Fi 6E=
+ 80MHz
+[14c3:0608]
+
+Bert Karwatzki
