@@ -1,154 +1,232 @@
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD8D163
-	for <llvm@lists.linux.dev>; Wed, 14 May 2025 00:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDB81805B;
+	Wed, 14 May 2025 00:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747181481; cv=none; b=M4uU8jCbR6j47/dhNEKgVXT2/C1wTRvg/Msuh5FzZMNGWl3G39T4ITH2jxufVxzlG81nbwRLtNbfn2rv1rMMevHfZGYObe8Nc1NqG7OcVeFITi2bWl07rQ9yCOyxMt9TEgRvMXz279AAEvsDAcfqFJWXffC3FxVm4FRgpJyGR5k=
+	t=1747182792; cv=none; b=mftsKOV3rkxIZzuom5ksV57djA3hXUQMKItxdtCc+lzFeWcNBoBkmmNCXyRKftm/LgugwOcqFPX920JeC4TP+XmENYryEG89vnbpuqcWqGIDJLqFOjmfRMwh5I4GadBBqVodt13o1ehCk4Ev97hzypA+jxrQ1IAg7gp8+oOwL0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747181481; c=relaxed/simple;
-	bh=wkfDB2oVIWKK1a5eXkQoWzJ/nlBkrw3GK1U6oYBNAQ8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Y/p+Gaj6QyCkJ9XhvdD8G9S/A2nKiIvzlDFfIvNXdXtsnMMpdn9OPwHrK7GCpjJBkWUlBr0uX2xK7Pv4805QEjoGj+Vps1ctBaU4QTHtwIsZuTbJDdIKcCUWC4TP7whz3vKpxqrf9avEXfTdkFGL7hx+VgjkMOs6EJjfyoUCtwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=A4eu4F4u; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1747182792; c=relaxed/simple;
+	bh=1vJvmLvi+mxlYx8WJgBTZ5zuIG9H+L1BmUSpkDVN5vc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pPVgppXBA36MQfjfFIdYUbAL6iEOYpi15QLGHFbpL64TQOIx5mmZlvuwp9ERfQcMScDeL3XIurNnBMyUYfLvfWs/0LhNzJcBw9PGPUmOxuFD+ulojtcHSxtCwdZ3XRKdjb9dTvru9ZwAWXh6HIdHMS1qbS8V+2yEeVwXpzdOEIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ExIClnRY; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="A4eu4F4u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1747181467; x=1747786267; i=spasswolf@web.de;
-	bh=op1KZQkRCtc3+W3fATc0uPEXHj/b7P0Lr/rtvLPmTPU=;
-	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=A4eu4F4u1O16nrMqsqe6e9WO88QQRZIF8yaEzmoXMWG0cwkW1NkO5udkFzRPXcZP
-	 KDw0IutqvA5tyzcDgsWOo9b+lN71C4nVU+gB87NJN0QgUZ+gzWf0X0pYWEPsMU0Pe
-	 /VDN6bNnbQt/p3tXIxgA6Ns+RngP2WbiCekhEa9IzzKkvald6klTq41tFe2DWLNB3
-	 DVx56trOOk/Kl28CxJJoTciPclV28HCiS7avoiz6faZazmP2S8j6VVy6d1VgJbVvu
-	 KdlaGCjlrgjckCemMe/5NjmnD2D7HIvP4luJdnhdD37TZifI1FNXTAAqPgkAbel01
-	 HwY3/R//5IRd2Xf11g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MjxeO-1uhTqV0nrE-00ndWS; Wed, 14
- May 2025 02:11:07 +0200
-Message-ID: <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
-Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
- compiled with clang
-From: Bert Karwatzki <spasswolf@web.de>
-To: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc: linux-next@vger.kernel.org, llvm@lists.linux.dev, Johannes Berg
-	 <johannes.berg@intel.com>, spasswolf@web.de
-Date: Wed, 14 May 2025 02:11:05 +0200
-In-Reply-To: <87h61ojg3g.ffs@tglx>
-References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.56.1-1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ExIClnRY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747182789; x=1778718789;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1vJvmLvi+mxlYx8WJgBTZ5zuIG9H+L1BmUSpkDVN5vc=;
+  b=ExIClnRYzdmI09BCauC7JmxFla40APObUhzDAKFwDkSvLj0Vqks55iX+
+   QxPyGrsXIl6ZSyJVc2PJZIoVvcjqupAapXaW6Iu17H4gWgie60r1+4kE9
+   1MrZQSMgGkGaXOrBJ7bSLZq5CZIqR9ldng36P/ymUngCn02aOCxGzVS7J
+   GgDrtphlqt0y/fSK/z8WWiYaa32NWSBaLh3AzA8MewkvTg850djmD7qU7
+   VSOUYBwWHuwxf0qtybME9zWvo7Egg3BS3NqBKR/ueTD+yfKmjB4FF+PZH
+   ivH1vij7+fVqCSxcshD/EIap6lvw2W6OUlilt3Fn8zgkTWPsi7Z6J1xZ8
+   g==;
+X-CSE-ConnectionGUID: v7iBMfWKSOWtVt/kml8neA==
+X-CSE-MsgGUID: WxUCEa72Sw+pkYVx95079Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="49129746"
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="49129746"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 17:33:08 -0700
+X-CSE-ConnectionGUID: wCKlU88zRiSN0m9dKT4f/g==
+X-CSE-MsgGUID: xV0xB62ASK+JA40ho1M0Ew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="138387890"
+Received: from igk-lkp-server01.igk.intel.com (HELO b9ffd1689040) ([10.211.3.150])
+  by orviesa007.jf.intel.com with ESMTP; 13 May 2025 17:33:06 -0700
+Received: from kbuild by b9ffd1689040 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uF03U-00014M-10;
+	Wed, 14 May 2025 00:33:04 +0000
+Date: Wed, 14 May 2025 08:32:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yu Kuai <yukuai3@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Xiao Ni <xni@redhat.com>
+Subject: [mdraid:md-6.16 9/9] drivers/md/raid10.c:2440:7: warning: variable
+ 'd' set but not used
+Message-ID: <202505140829.IBSUJ1wx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:oPtwMikyUfZ7uvY4o2qRU0Hn/RpJAD9cDevhup5xGQepFv6jujd
- k+K2uv5LgzgIuo6gF6NZcAQ1WGBoS9WAeGwRD9W+qPfc8y66foFFjsZF6OqdjKno1E1HKn5
- lO6AMZzZSqz0fym+JRnSG0e7YcZyS7ZQUQOARJg85gYolBBFcTtZjflgMOVu5/x48rxLUuY
- RKn6eauM58n8PZvNW1uyA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:6H6/ew3cfHk=;Cc/dGYOQdL+WFhwqQKouJIiYS14
- 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
- aT8tyxcrwvObM=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Am Mittwoch, dem 14.05.2025 um 00:33 +0200 schrieb Thomas Gleixner:
-> On Tue, May 13 2025 at 18:48, Bert Karwatzki wrote:
-> > >=20
-> > > I'll now start a bisection where I revert 76a853f86c97 where possibl=
-e in
-> > > order to find the remaining bugs.
-> >=20
-> > The second bisection (from v6.15-rc6 to next-20250512) is finished now=
-:
-> >=20
-> > This commit leads to lockups and kernel panics after
-> > watching ~5-10min of a youtube video while compiling a kernel,
-> > reverting it in next-20250512 is possible:
-> > 76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
-> > This commit leads to the boot failure, reverting leads to the
-> > compile error it is supposed to fix:
-> > 97f4b999e0c8 ("genirq: Use scoped_guard() to shut clang up")
->=20
-> I really have a hard time to understand what you are trying to explain
-> here. 'This commit leads..' is so unspecified that I can't make any
-> sense of it.
->=20
-> Also please make sure that you have commit b5fcb6898202 ("genirq: Ensure
-> flags in lock guard is consistently initialized") in your tree when
-> re-testing. That's fixing another subtle (AFAICT clang only) problem in
-> the guard conversion. If it's not in next yet, you can just merge
->=20
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
->=20
-> into next or wait for the next next integration.
->=20
-> Thanks
->=20
->         tglx
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mdraid/linux md-6.16
+head:   752d0464b78a5b28682256ed7a057106119e1d1a
+commit: 752d0464b78a5b28682256ed7a057106119e1d1a [9/9] md: clean up accounting for issued sync IO
+config: mips-randconfig-2004-20250513 (https://download.01.org/0day-ci/archive/20250514/202505140829.IBSUJ1wx-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250514/202505140829.IBSUJ1wx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505140829.IBSUJ1wx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/md/raid10.c:2440:7: warning: variable 'd' set but not used [-Wunused-but-set-variable]
+    2440 |                 int d;
+         |                     ^
+   1 warning generated.
 
 
-I merged git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/cor=
-e into
-next-20250513 and this fixes the boot failure but the system still locks u=
-p
-after a few minutes (with flashing capslock). To solve this I need to reve=
-rt=20
-76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
+vim +/d +2440 drivers/md/raid10.c
 
-Also commit 97f4b999e0c8 did not actually cause the boot failure that was =
-a
-bisection error.
+5e5702898e93ee NeilBrown         2011-07-28  2325  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2326  /*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2327   * Note: sync and recover and handled very differently for raid10
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2328   * This code is for resync.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2329   * For resync, we read through virtual addresses and read all blocks.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2330   * If there is any error, we schedule a write.  The lowest numbered
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2331   * drive is authoritative.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2332   * However requests come for physical address, so we need to map.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2333   * For every physical address there are raid_disks/copies virtual addresses,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2334   * which is always are least one, but is not necessarly an integer.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2335   * This means that a physical address can span multiple chunks, so we may
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2336   * have to submit multiple io requests for a single sync request.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2337   */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2338  /*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2339   * We check if all blocks are in-sync and only write to blocks that
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2340   * aren't in sync
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2341   */
+9f2c9d12bcc53f NeilBrown         2011-10-11  2342  static void sync_request_write(struct mddev *mddev, struct r10bio *r10_bio)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2343  {
+e879a8793f915a NeilBrown         2011-10-11  2344  	struct r10conf *conf = mddev->private;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2345  	int i, first;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2346  	struct bio *tbio, *fbio;
+f4380a915823db majianpeng        2012-04-12  2347  	int vcnt;
+cdb76be3156860 Ming Lei          2017-03-17  2348  	struct page **tpages, **fpages;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2349  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2350  	atomic_set(&r10_bio->remaining, 1);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2351  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2352  	/* find the first device with a block */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2353  	for (i=0; i<conf->copies; i++)
+4e4cbee93d5613 Christoph Hellwig 2017-06-03  2354  		if (!r10_bio->devs[i].bio->bi_status)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2355  			break;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2356  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2357  	if (i == conf->copies)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2358  		goto done;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2359  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2360  	first = i;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2361  	fbio = r10_bio->devs[i].bio;
+cc57858831e3e9 Artur Paszkiewicz 2015-12-18  2362  	fbio->bi_iter.bi_size = r10_bio->sectors << 9;
+cc57858831e3e9 Artur Paszkiewicz 2015-12-18  2363  	fbio->bi_iter.bi_idx = 0;
+cdb76be3156860 Ming Lei          2017-03-17  2364  	fpages = get_resync_pages(fbio)->pages;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2365  
+f4380a915823db majianpeng        2012-04-12  2366  	vcnt = (r10_bio->sectors + (PAGE_SIZE >> 9) - 1) >> (PAGE_SHIFT - 9);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2367  	/* now find blocks with errors */
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2368  	for (i=0 ; i < conf->copies ; i++) {
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2369  		int  j, d;
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2370  		struct md_rdev *rdev;
+f0250618361db1 Ming Lei          2017-03-17  2371  		struct resync_pages *rp;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2372  
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2373  		tbio = r10_bio->devs[i].bio;
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2374  
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2375  		if (tbio->bi_end_io != end_sync_read)
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2376  			continue;
+0eb3ff12aa8a12 NeilBrown         2006-01-06  2377  		if (i == first)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2378  			continue;
+cdb76be3156860 Ming Lei          2017-03-17  2379  
+cdb76be3156860 Ming Lei          2017-03-17  2380  		tpages = get_resync_pages(tbio)->pages;
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2381  		d = r10_bio->devs[i].devnum;
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2382  		rdev = conf->mirrors[d].rdev;
+4e4cbee93d5613 Christoph Hellwig 2017-06-03  2383  		if (!r10_bio->devs[i].bio->bi_status) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2384  			/* We know that the bi_io_vec layout is the same for
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2385  			 * both 'first' and 'i', so we just compare them.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2386  			 * All vec entries are PAGE_SIZE;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2387  			 */
+7bb23c4934059c NeilBrown         2013-07-16  2388  			int sectors = r10_bio->sectors;
+7bb23c4934059c NeilBrown         2013-07-16  2389  			for (j = 0; j < vcnt; j++) {
+7bb23c4934059c NeilBrown         2013-07-16  2390  				int len = PAGE_SIZE;
+7bb23c4934059c NeilBrown         2013-07-16  2391  				if (sectors < (len / 512))
+7bb23c4934059c NeilBrown         2013-07-16  2392  					len = sectors * 512;
+cdb76be3156860 Ming Lei          2017-03-17  2393  				if (memcmp(page_address(fpages[j]),
+cdb76be3156860 Ming Lei          2017-03-17  2394  					   page_address(tpages[j]),
+7bb23c4934059c NeilBrown         2013-07-16  2395  					   len))
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2396  					break;
+7bb23c4934059c NeilBrown         2013-07-16  2397  				sectors -= len/512;
+7bb23c4934059c NeilBrown         2013-07-16  2398  			}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2399  			if (j == vcnt)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2400  				continue;
+7f7583d420231b Jianpeng Ma       2012-10-11  2401  			atomic64_add(r10_bio->sectors, &mddev->resync_mismatches);
+18f08819f42b64 NeilBrown         2006-01-06  2402  			if (test_bit(MD_RECOVERY_CHECK, &mddev->recovery))
+18f08819f42b64 NeilBrown         2006-01-06  2403  				/* Don't fix anything. */
+18f08819f42b64 NeilBrown         2006-01-06  2404  				continue;
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2405  		} else if (test_bit(FailFast, &rdev->flags)) {
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2406  			/* Just give up on this device */
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2407  			md_error(rdev->mddev, rdev);
+8d3ca83dcf9ca3 NeilBrown         2016-11-18  2408  			continue;
+f84ee364dd15af NeilBrown         2011-07-28  2409  		}
+f84ee364dd15af NeilBrown         2011-07-28  2410  		/* Ok, we need to write this bio, either to correct an
+f84ee364dd15af NeilBrown         2011-07-28  2411  		 * inconsistency or to correct an unreadable block.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2412  		 * First we need to fixup bv_offset, bv_len and
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2413  		 * bi_vecs, as the read request might have corrupted these
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2414  		 */
+f0250618361db1 Ming Lei          2017-03-17  2415  		rp = get_resync_pages(tbio);
+a7c50c940477ba Christoph Hellwig 2022-01-24  2416  		bio_reset(tbio, conf->mirrors[d].rdev->bdev, REQ_OP_WRITE);
+8be185f2c9d54d Kent Overstreet   2012-09-06  2417  
+fb0eb5df093076 Ming Lei          2017-07-14  2418  		md_bio_reset_resync_pages(tbio, rp, fbio->bi_iter.bi_size);
+fb0eb5df093076 Ming Lei          2017-07-14  2419  
+f0250618361db1 Ming Lei          2017-03-17  2420  		rp->raid_bio = r10_bio;
+f0250618361db1 Ming Lei          2017-03-17  2421  		tbio->bi_private = rp;
+4f024f3797c43c Kent Overstreet   2013-10-11  2422  		tbio->bi_iter.bi_sector = r10_bio->devs[i].addr;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2423  		tbio->bi_end_io = end_sync_write;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2424  
+c31df25f20e35a Kent Overstreet   2015-05-06  2425  		bio_copy_data(tbio, fbio);
+c31df25f20e35a Kent Overstreet   2015-05-06  2426  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2427  		atomic_inc(&conf->mirrors[d].rdev->nr_pending);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2428  		atomic_inc(&r10_bio->remaining);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2429  
+1919cbb23bf1b3 NeilBrown         2016-11-18  2430  		if (test_bit(FailFast, &conf->mirrors[d].rdev->flags))
+1919cbb23bf1b3 NeilBrown         2016-11-18  2431  			tbio->bi_opf |= MD_FAILFAST;
+4f024f3797c43c Kent Overstreet   2013-10-11  2432  		tbio->bi_iter.bi_sector += conf->mirrors[d].rdev->data_offset;
+ed00aabd5eb9fb Christoph Hellwig 2020-07-01  2433  		submit_bio_noacct(tbio);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2434  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2435  
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2436  	/* Now write out to any replacement devices
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2437  	 * that are active
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2438  	 */
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2439  	for (i = 0; i < conf->copies; i++) {
+c31df25f20e35a Kent Overstreet   2015-05-06 @2440  		int d;
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2441  
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2442  		tbio = r10_bio->devs[i].repl_bio;
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2443  		if (!tbio || !tbio->bi_end_io)
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2444  			continue;
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2445  		if (r10_bio->devs[i].bio->bi_end_io != end_sync_write
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2446  		    && r10_bio->devs[i].bio != fbio)
+c31df25f20e35a Kent Overstreet   2015-05-06  2447  			bio_copy_data(tbio, fbio);
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2448  		d = r10_bio->devs[i].devnum;
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2449  		atomic_inc(&r10_bio->remaining);
+ed00aabd5eb9fb Christoph Hellwig 2020-07-01  2450  		submit_bio_noacct(tbio);
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2451  	}
+9ad1aefc8ae8d2 NeilBrown         2011-12-23  2452  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2453  done:
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2454  	if (atomic_dec_and_test(&r10_bio->remaining)) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2455  		md_done_sync(mddev, r10_bio->sectors, 1);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2456  		put_buf(r10_bio);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2457  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2458  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2459  
 
-Bert Karwatzki
+:::::: The code at line 2440 was first introduced by commit
+:::::: c31df25f20e35add6a453328c61eca15434fae18 md/raid10: make sync_request_write() call bio_copy_data()
+
+:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
+:::::: CC: NeilBrown <neilb@suse.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
