@@ -1,190 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643CE27AC25;
-	Wed, 14 May 2025 16:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E9D275853
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 17:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747239658; cv=none; b=QKYvh19KA+1FLo0urcIn3S/+brDD4UmiJXcFnkBH6mJfNSq1sjclrcw7VCfbFMEb/KUb9i/PaUlYTQUeXSQgBUed3M1JKo5EH+lGZ5AFAFTGvShif0Uk4qDjeLHxhoaMNZ6frJ7ceXtaUGnbHYc9rZ2JR63pJkKosEWif2HCsfk=
+	t=1747243058; cv=none; b=DrtGvYRuANI4Ir6UPXgsQAai33a+FIE2xWTjw9ng+Id8jpssnkQ3XIeyeO0bXDQS0KA40rtc4leqi+mgWTJ2yC/Nd4TOZ8cjU4y8N2XUDJa9iaueT5wrLNkWhpgtAJx0kRl8EE0p3xHyhVcm88hE2acLYMh86hRRboYmmyUg92Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747239658; c=relaxed/simple;
-	bh=Y8GIyFWlbCJO3k6maUmLChS3pM+763sRG0puUGzYrtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nSL8lZmqP4tUncatThYEj2eUWy8UZopHbUTrJyu/+WaLVnQV0BWS4PCSEeexe/G2aX9RcJ2eUjaxZwYb3RVo73CZjFhI8PMaxswheg5shcDM3kxWTrGyHYNxWY0tF30xCTCR9NdrVk3az1NPlWS3/LWfzh4qA0N5rnG+UQINU0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdKYknY2; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747243058; c=relaxed/simple;
+	bh=FDhdtyxCTap+04aKrlvv+t4yDmBNbsQsV62cqYnEcWQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O9ILbhnNyh2Ky6xlhGlAoTlA056dV0DxNd4E7YNtVKDiE7ROAp7FFfn+rH3KTZrbp0BMdiE+gXt2L9/xVQvC00r+58NvutiCehgbDNY7bkDb+i1gaE2drl64+Xe462L8GxXXV+0Ax7WYwp9CFf2peeaWt4tPON6tyEaVceAci7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxVmr/ft; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdKYknY2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747239655; x=1778775655;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y8GIyFWlbCJO3k6maUmLChS3pM+763sRG0puUGzYrtQ=;
-  b=UdKYknY2Ym3ZxA9mqHq8svOo3PctvZEOurbJKelMu4J3uNVdl+NPjPYc
-   9oDR2kJ8XS9oSmk82rPw3eviHLpgkyjA99KlwPyxQ9EBNdn5w4TVhzEmB
-   CkhU6KCOoaxQTAMD7e5RM06uc4a0Q4M654i1HiSD86zSOPHK7EFUJLKr+
-   MO6OPZoiSJtfFk9FyEe9J/LdW5BF2wb2AGF6FouM6qks8W9dyHAjLq1v8
-   Suj2d8XUASd4LTD2vmhYTbZ6WYTY6Z5tB98Nz7Q4Yd10ghgPH3lvmiRQ7
-   K9NsNbCgOvIjLoAMihqR8y3QWRJ4qYO+SXY1Y0mxqTQyS28LkA7LJgch8
-   w==;
-X-CSE-ConnectionGUID: Nv34rLeGS82G/XnCMXwX0A==
-X-CSE-MsgGUID: Uh/CTJjjQveiVGjD73xgPQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49128376"
-X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
-   d="scan'208";a="49128376"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 09:20:54 -0700
-X-CSE-ConnectionGUID: f1OrtovNTi+KcOkAyn5WJw==
-X-CSE-MsgGUID: SPG5zt9qSfe+SvhPmtgPhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
-   d="scan'208";a="142973150"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 14 May 2025 09:20:48 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uFEqb-000HKl-1F;
-	Wed, 14 May 2025 16:20:45 +0000
-Date: Thu, 15 May 2025 00:20:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel_team@skhynix.com, torvalds@linux-foundation.org,
-	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-	mingo@redhat.com, peterz@infradead.org, will@kernel.org,
-	tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
-	sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
-	johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-	willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
-	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
-	hannes@cmpxchg.org, vdavydov.dev@gmail.com
-Subject: Re: [PATCH v15 34/43] dept: make dept aware of
- lockdep_set_lock_cmp_fn() annotation
-Message-ID: <202505150014.6SbTtVaA-lkp@intel.com>
-References: <20250513100730.12664-35-byungchul@sk.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxVmr/ft"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34E2C4CEF5
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 17:17:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747243057;
+	bh=FDhdtyxCTap+04aKrlvv+t4yDmBNbsQsV62cqYnEcWQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GxVmr/ftS93uarBMKzJWceF4i9WcC7bKkCJh8F6Nhk59cFukYASZ88mOuaxpNBYKj
+	 xD1zOe+mXSuBIXQjSjIg8ZUWQRWkLb2GQWLUbD0qmprod5Qoc5C4FmNwZty0XAV8rv
+	 LoHWK9XhMs5fGj79eLOUvSiiiLzqeZmpUSkiwBv1Bj7kbhniF7c5+k5A2JBXOyS+Q7
+	 YvqzPZYjq0KOnnqvvCiyUyKEfiLf0qqAyUGACDO7AIQwCYWB6rApq9vWnkJ7Ysf5L9
+	 URg/w2CjDBbpfqq3YcE+ivuaZsXk/L6ulnw9KwYBHASfYyCiAYu+yeUtuns0F3NQq8
+	 YKIQlC8ao2elg==
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5fbdf6973e7so62181a12.2
+        for <llvm@lists.linux.dev>; Wed, 14 May 2025 10:17:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUvmPclNzWCatV8lchJ736k1BXWD4E73sD5pnmGiR8XYizMfi49d3f/y2wYpsTydDgrbOV5@lists.linux.dev
+X-Gm-Message-State: AOJu0YxiPtW/mWuvHjciVhJEF6FwDf6e8lqqeJ3yjidGEFDEokkWIN7i
+	JsfpTE5LJrujKXhioN1nh9UigFiqr9Zdta4CwXVkGhw/Y9mpZ6g6kXy4U6k/IU/y8rrvPGPfp/a
+	NEgUTFE2OBfXDHttuwD/mXgLoGmk+cDeVFfyd
+X-Google-Smtp-Source: AGHT+IEOVd6ylZgHdYkHjW+kgS0JvvQJmlojiJ55yxngXk0tGlu2ur8qbDKzXcFMtelFrk1TuWFTRE31C+Kg7x92aJA=
+X-Received: by 2002:a05:6402:238f:b0:5ff:b606:930b with SMTP id
+ 4fb4d7f45d1cf-5ffb6069372mr1068438a12.12.1747243056124; Wed, 14 May 2025
+ 10:17:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250513100730.12664-35-byungchul@sk.com>
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com> <beaa81748cf1325df67930bf74ea87e6cdcb3e46.camel@HansenPartnership.com>
+In-Reply-To: <beaa81748cf1325df67930bf74ea87e6cdcb3e46.camel@HansenPartnership.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Wed, 14 May 2025 19:17:25 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ5XJOj08+hKheWDcqbPrFAwa+fFvOw+4QPAHBz1u2HgAg@mail.gmail.com>
+X-Gm-Features: AX0GCFsMtrdPzfS33E-5H3itP3YDxJJoQNEUvaPpI7wNO1nxLfvV3IZXpPdMWT8
+Message-ID: <CACYkzJ5XJOj08+hKheWDcqbPrFAwa+fFvOw+4QPAHBz1u2HgAg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Paul Moore <paul@paul-moore.com>, bboscaccy@linux.microsoft.com, bpf@vger.kernel.org, 
+	code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, dhowells@redhat.com, 
+	gnoack@google.com, herbert@gondor.apana.org.au, jarkko@kernel.org, 
+	jmorris@namei.org, jstancek@redhat.com, justinstitt@google.com, 
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, llvm@lists.linux.dev, 
+	masahiroy@kernel.org, mic@digikod.net, morbo@google.com, nathan@kernel.org, 
+	neal@gompa.dev, nick.desaulniers+lkml@gmail.com, nicolas@fjasle.eu, 
+	nkapron@google.com, roberto.sassu@huawei.com, serge@hallyn.com, 
+	shuah@kernel.org, teknoraver@meta.com, xiyou.wangcong@gmail.com, 
+	kysrinivasan@gmail.com, Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Byungchul,
+On Wed, May 14, 2025 at 5:39=E2=80=AFPM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Sun, 2025-05-11 at 04:01 +0200, KP Singh wrote:
+> [...]
+> > >
+> > For this specific BPF case, we will directly sign a composite of the
+> > first message and the hash of the second. Let H_meta =3D H(M_metadata).
+> > The block to be signed is effectively:
+> >
+> >     B_signed =3D I_loader || H_meta
+> >
+> > The signature generated is Sig(B_signed).
+> >
+> > The process then follows a similar pattern to the Alice and Bob
+> > model,
+> > where the kernel (Bob) verifies I_loader and H_meta using the
+> > signature. Then, the trusted I_loader is responsible for verifying
+> > M_metadata against the trusted H_meta.
+> >
+> > From an implementation standpoint:
+> >
+> > # Build
+> >
+> > bpftool (or some other tool in the user's build environment) knows
+> > about the metadata (M_metadata) and the loader program (I_loader). It
+> > first calculates H_meta =3D H(M_metadata). Then it constructs the
+> > object
+> > to be signed and computes the signature:
+> >
+> >     Sig(I_loader || H_meta)
+> >
+> > # Loader
+> >
+> > bpftool generates the loader program. The initial instructions of
+> > this loader program are designed to verify the SHA256 hash of the
+> > metadata (M_metadata) that will be passed in a map. These
+> > instructions effectively embed the precomputed H_meta as immediate
+> > values.
+> >
+> >     ld_imm64 r1, const_ptr_to_map // insn[0].src_reg =3D=3D
+> > BPF_PSEUDO_MAP_IDX
+> >     r2 =3D *(u64 *)(r1 + 0);
+> >     ld_imm64 r3, sha256_of_map_part1 // constant precomputed by
+> > bpftool (part of H_meta)
+> >     if r2 !=3D r3 goto out;
+> >
+> >     r2 =3D *(u64 *)(r1 + 8);
+> >     ld_imm64 r3, sha256_of_map_part2 // (part of H_meta)
+> >     if r2 !=3D r3 goto out;
+> >
+> >     r2 =3D *(u64 *)(r1 + 16);
+> >     ld_imm64 r3, sha256_of_map_part3 // (part of H_meta)
+> >     if r2 !=3D r3 goto out;
+> >
+> >     r2 =3D *(u64 *)(r1 + 24);
+> >     ld_imm64 r3, sha256_of_map_part4 // (part of H_meta)
+> >     if r2 !=3D r3 goto out;
+> >     ...
+> >
+> > This implicitly makes the payload equivalent to the signed block
+> > (B_signed)
+> >
+> >     I_loader || H_meta
+> >
+> > bpftool then generates the signature of this I_loader payload (which
+> > now contains the expected H_meta) using a key (system or user) with
+> > new flags that work in combination with bpftool -L
+>
+> Could I just push back a bit on this.  The theory of hash chains (which
+> I've cut to shorten) is about pure data structures.  The reason for
+> that is that the entire hash chain is supposed to be easily
+> independently verifiable in any environment because anything can
+> compute the hashes of the blocks and links.  This independent
+> verification of the chain is key to formally proving hash chains to be
+> correct.  In your proposal we lose the easy verifiability because the
+> link hash is embedded in the ebpf loader program which has to be
+> disassembled to do the extraction of the hash and verify the loader is
+> actually checking it.
 
-kernel test robot noticed the following build warnings:
+I am not sure I understand your concern. This is something that can
+easily be built into tooling / annotations.
 
-[auto build test WARNING on 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3]
+    bpftool -S -v <verification_key> <loader> <metadata>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/llist-move-llist_-head-node-definition-to-types-h/20250513-181346
-base:   82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
-patch link:    https://lore.kernel.org/r/20250513100730.12664-35-byungchul%40sk.com
-patch subject: [PATCH v15 34/43] dept: make dept aware of lockdep_set_lock_cmp_fn() annotation
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250515/202505150014.6SbTtVaA-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505150014.6SbTtVaA-lkp@intel.com/reproduce)
+Could you explain what's the use-case for "easy verifiability".
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505150014.6SbTtVaA-lkp@intel.com/
+>
+> I was looking at ways we could use a pure hash chain (i.e. signature
+> over loader and real map hash) and it does strike me that the above
+> ebpf hash verification code is pretty invariant and easy to construct,
+> so it could run as a separate BPF fragment that then jumps to the real
+> loader.  In that case, it could be constructed on the fly in a trusted
+> environment, like the kernel, from the link hash in the signature and
+> the signature could just be Sig(loader || map hash) which can then be
 
-All warnings (new ones prefixed by >>):
+The design I proposed does the same thing:
 
-   In file included from drivers/net/ethernet/microchip/vcap/vcap_api.c:3610:
->> drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c:1921:13: warning: stack frame size (2104) exceeds limit (2048) in 'vcap_api_next_lookup_advanced_test' [-Wframe-larger-than]
-    1921 | static void vcap_api_next_lookup_advanced_test(struct kunit *test)
-         |             ^
-   1 warning generated.
+    Sig(loader || H_metadata)
 
+metadata is actually the data (programs, context etc) that's passed in
+the map. The verification just happens in the loader program and the
+loader || H_metadata is implemented elegantly to avoid any separate
+payloads.
 
-vim +/vcap_api_next_lookup_advanced_test +1921 drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-
-c956b9b318d903 Steen Hegelund 2022-11-09  1920  
-c956b9b318d903 Steen Hegelund 2022-11-09 @1921  static void vcap_api_next_lookup_advanced_test(struct kunit *test)
-c956b9b318d903 Steen Hegelund 2022-11-09  1922  {
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1923  	struct vcap_admin admin[] = {
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1924  	{
-c956b9b318d903 Steen Hegelund 2022-11-09  1925  		.vtype = VCAP_TYPE_IS0,
-c956b9b318d903 Steen Hegelund 2022-11-09  1926  		.vinst = 0,
-c956b9b318d903 Steen Hegelund 2022-11-09  1927  		.first_cid = 1000000,
-c956b9b318d903 Steen Hegelund 2022-11-09  1928  		.last_cid =  1199999,
-c956b9b318d903 Steen Hegelund 2022-11-09  1929  		.lookups = 6,
-c956b9b318d903 Steen Hegelund 2022-11-09  1930  		.lookups_per_instance = 2,
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1931  	}, {
-c956b9b318d903 Steen Hegelund 2022-11-09  1932  		.vtype = VCAP_TYPE_IS0,
-c956b9b318d903 Steen Hegelund 2022-11-09  1933  		.vinst = 1,
-c956b9b318d903 Steen Hegelund 2022-11-09  1934  		.first_cid = 1200000,
-c956b9b318d903 Steen Hegelund 2022-11-09  1935  		.last_cid =  1399999,
-c956b9b318d903 Steen Hegelund 2022-11-09  1936  		.lookups = 6,
-c956b9b318d903 Steen Hegelund 2022-11-09  1937  		.lookups_per_instance = 2,
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1938  	}, {
-c956b9b318d903 Steen Hegelund 2022-11-09  1939  		.vtype = VCAP_TYPE_IS0,
-c956b9b318d903 Steen Hegelund 2022-11-09  1940  		.vinst = 2,
-c956b9b318d903 Steen Hegelund 2022-11-09  1941  		.first_cid = 1400000,
-c956b9b318d903 Steen Hegelund 2022-11-09  1942  		.last_cid =  1599999,
-c956b9b318d903 Steen Hegelund 2022-11-09  1943  		.lookups = 6,
-c956b9b318d903 Steen Hegelund 2022-11-09  1944  		.lookups_per_instance = 2,
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1945  	}, {
-c956b9b318d903 Steen Hegelund 2022-11-09  1946  		.vtype = VCAP_TYPE_IS2,
-c956b9b318d903 Steen Hegelund 2022-11-09  1947  		.vinst = 0,
-c956b9b318d903 Steen Hegelund 2022-11-09  1948  		.first_cid = 8000000,
-c956b9b318d903 Steen Hegelund 2022-11-09  1949  		.last_cid = 8199999,
-c956b9b318d903 Steen Hegelund 2022-11-09  1950  		.lookups = 4,
-c956b9b318d903 Steen Hegelund 2022-11-09  1951  		.lookups_per_instance = 2,
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1952  	}, {
-c956b9b318d903 Steen Hegelund 2022-11-09  1953  		.vtype = VCAP_TYPE_IS2,
-c956b9b318d903 Steen Hegelund 2022-11-09  1954  		.vinst = 1,
-c956b9b318d903 Steen Hegelund 2022-11-09  1955  		.first_cid = 8200000,
-c956b9b318d903 Steen Hegelund 2022-11-09  1956  		.last_cid = 8399999,
-c956b9b318d903 Steen Hegelund 2022-11-09  1957  		.lookups = 4,
-c956b9b318d903 Steen Hegelund 2022-11-09  1958  		.lookups_per_instance = 2,
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1959  	}
-c956b9b318d903 Steen Hegelund 2022-11-09  1960  	};
-c956b9b318d903 Steen Hegelund 2022-11-09  1961  	bool ret;
-c956b9b318d903 Steen Hegelund 2022-11-09  1962  
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1963  	vcap_test_api_init(&admin[0]);
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1964  	list_add_tail(&admin[1].list, &test_vctrl.list);
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1965  	list_add_tail(&admin[2].list, &test_vctrl.list);
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1966  	list_add_tail(&admin[3].list, &test_vctrl.list);
-129ff4de58ff0c Arnd Bergmann  2023-02-17  1967  	list_add_tail(&admin[4].list, &test_vctrl.list);
-c956b9b318d903 Steen Hegelund 2022-11-09  1968  
-c956b9b318d903 Steen Hegelund 2022-11-09  1969  	ret = vcap_is_next_lookup(&test_vctrl, 1000000, 1001000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1970  	KUNIT_EXPECT_EQ(test, false, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1971  	ret = vcap_is_next_lookup(&test_vctrl, 1000000, 1101000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1972  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1973  
-c956b9b318d903 Steen Hegelund 2022-11-09  1974  	ret = vcap_is_next_lookup(&test_vctrl, 1100000, 1201000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1975  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1976  	ret = vcap_is_next_lookup(&test_vctrl, 1100000, 1301000);
-784c3067d094dd Steen Hegelund 2023-01-14  1977  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1978  	ret = vcap_is_next_lookup(&test_vctrl, 1100000, 8101000);
-784c3067d094dd Steen Hegelund 2023-01-14  1979  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1980  	ret = vcap_is_next_lookup(&test_vctrl, 1300000, 1401000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1981  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1982  	ret = vcap_is_next_lookup(&test_vctrl, 1400000, 1501000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1983  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1984  	ret = vcap_is_next_lookup(&test_vctrl, 1500000, 8001000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1985  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1986  
-c956b9b318d903 Steen Hegelund 2022-11-09  1987  	ret = vcap_is_next_lookup(&test_vctrl, 8000000, 8001000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1988  	KUNIT_EXPECT_EQ(test, false, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1989  	ret = vcap_is_next_lookup(&test_vctrl, 8000000, 8101000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1990  	KUNIT_EXPECT_EQ(test, true, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1991  
-c956b9b318d903 Steen Hegelund 2022-11-09  1992  	ret = vcap_is_next_lookup(&test_vctrl, 8300000, 8301000);
-c956b9b318d903 Steen Hegelund 2022-11-09  1993  	KUNIT_EXPECT_EQ(test, false, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1994  	ret = vcap_is_next_lookup(&test_vctrl, 8300000, 8401000);
-784c3067d094dd Steen Hegelund 2023-01-14  1995  	KUNIT_EXPECT_EQ(test, false, ret);
-c956b9b318d903 Steen Hegelund 2022-11-09  1996  }
-c956b9b318d903 Steen Hegelund 2022-11-09  1997  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> easily verified without having to disassemble ebpf code.  So we get the
+> formal provability benefits of using a real hash chain while still
+> keeping your verification in BPF.
+>
+> Regards,
+>
+> James
+>
+>
