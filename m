@@ -1,132 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F096325E827;
-	Wed, 14 May 2025 09:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F774200B99;
+	Wed, 14 May 2025 10:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747216512; cv=none; b=AOxvzlqS0ntHxaYwUpYRm49jOV8r05WVoeY3mLrwS20jhUezDktTYRJMcP4e+CDSWizfPTYX5e4V8fMWPKf4iiPHrE4TPVo8RnYzCJLtDdsLKyyrIAbN8k/UnNn/FTWqiaAXmJIHCZbDWnq/aBozi4x6gXd/AZIpXIxvBuxL35g=
+	t=1747218229; cv=none; b=kF1NpyMjR6Y3FIPFVVm6gmdKCw/E5WV8TsG+Qx+IDH8tY1Rn2KkFZhNSCV3X+u73qUmNGpJu3KeKfZbknubEOhB4hJPlUdbwhrFzBYWwGzJMfCvE8pcEm8qcsY/1Wu1FJ/QSorbfzX0/OGTRHRQ3hasDLxIm4VnIvKd4lBy6oKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747216512; c=relaxed/simple;
-	bh=NU0/laBLJ5U/Z61R8LdAMhWaqpI9feJPmdaQdzlsQqc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vB3Mf4Y+igvLoEMk0vdyqxzAx5vSkviGoZCuLNhgHBWwqSch4IXylE0AkJhqs1rH0d26F3TcQ/AYYqPF5znXLI0waaEn4ghVAZqKmi0nsAGaHOE0Vk7Fdotwt7XiLhT3P6/8qA7b0Lv8e3RwaI+BD7Yq6R6OIxZGpTBQRVxHt60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=belB5YVB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747218229; c=relaxed/simple;
+	bh=9GksAIdQB0QDXvTcF8Ed529ZYyZ0F8mk1QWoA1ETKJ8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=S5G5GbiuWIppyhCpyDiWfJThJU26Q4UsIAAX81IHhNSsYDb3cpPXAtJWGxYd8HhtD9V+jyRXJPz+xdIWf2i0crcAXUm3DuZFEIM5k6ARS8AEogcspd+2ASGtQRUR94Nb7C2idf6p7kzxvhUuhNMg44XBjKrVcvB/xtGeEBkZh+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=xD7KrzMt; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="belB5YVB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A49C4CEE9;
-	Wed, 14 May 2025 09:55:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747216511;
-	bh=NU0/laBLJ5U/Z61R8LdAMhWaqpI9feJPmdaQdzlsQqc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=belB5YVBvtc5H3/w8UjIZtr7Ri7Fe0orS+bV9pxjvY2IKtEBsSqdynxckERS+mIDo
-	 nZ8By2eA/s7IehP+5jFrpV3EgjTy1aRm6EtX0Qe5UeMaiSe56Tm5GogTQFYGGqz3UB
-	 w9+Du91MUj57+iGJ4bh334CDWjlAKxuNRdfA7rl0=
-Date: Wed, 14 May 2025 11:53:23 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-	conor@kernel.org, hargar@microsoft.com, broonie@kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Thorsten Blum <thorsten.blum@linux.dev>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
-Message-ID: <2025051415-unloader-likely-b0e6@gregkh>
-References: <20250512172044.326436266@linuxfoundation.org>
- <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
- <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="xD7KrzMt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=LFkjPzGUqtk8aAnu6OMUu1Xl2FUkPFvXEy6O5US/TFU=;
+	t=1747218228; x=1748427828; b=xD7KrzMtaOGalPR+ovK2UJH9ovKcDC/8koWae9xmHBAQwwY
+	ErYZ4eoU+6gcnxVRMrh/LbcglE7hu3ddPhQ5qy2TnKojadZA6vUIpomFFkDC/nyXsDOwr/NXopNG4
+	9uHKriMZ7yU07WQ9xc6WI8EhGgXkVhYt7wsq7NIiitfwTkDRP18BATXs92gH15kbsDqLJBrcJYvCY
+	viLvtiSulb3PCElxn50tkb1M+vsVMOwxA7jFk/PDE0Qh4nSP4J7eKlUR9h8ad6Sf5WMoY5Uhwi8Aa
+	ZD9eKGR2/SM7lOppulHwNoPOsJ/2gcEBpqkyVDWVU773JMvhvNK1zv5hBrs9FHgQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.1)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uF9H1-00000007wIL-2gG8;
+	Wed, 14 May 2025 12:23:39 +0200
+Message-ID: <2d8c1929bf5ab5260dacf9aa390456b3b49ce465.camel@sipsolutions.net>
+Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
+ compiled with clang
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Bert Karwatzki <spasswolf@web.de>, "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>
+Cc: "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>, 
+ "llvm@lists.linux.dev"
+	 <llvm@lists.linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-wireless@vger.kernel.org
+Date: Wed, 14 May 2025 12:23:38 +0200
+In-Reply-To: <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
+References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
+		 <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+	 <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
+X-malware-bazaar: not-scanned
 
-On Tue, May 13, 2025 at 02:29:20PM +0100, Naresh Kamboju wrote:
-> On Tue, 13 May 2025 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 6.14.7 release.
-> > > There are 197 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
-> > clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
-> > But, builds pass with gcc-13.
-> >
-> > * mips, build
-> >   - clang-20-allnoconfig
-> >   - clang-20-defconfig
-> >   - clang-20-tinyconfig
-> >   - korg-clang-20-lkftconfig-hardening
-> >   - korg-clang-20-lkftconfig-lto-full
-> >   - korg-clang-20-lkftconfig-lto-thing
-> >
-> > Regression Analysis:
-> >  - New regression? Yes
-> >  - Reproducibility? Yes
-> >
-> > Build regression: mips defconfig clang-20 instantiation error expected
-> > an immediate
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > ## Build error mips
-> > <instantiation>:7:11: error: expected an immediate
-> >  ori $26, r4k_wait_idle_size - 2
-> >           ^
-> > <instantiation>:10:13: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >             ^
-> > <instantiation>:10:29: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >                             ^
-> > <instantiation>:7:11: error: expected an immediate
-> >  ori $26, r4k_wait_idle_size - 2
-> >           ^
-> > <instantiation>:10:13: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >             ^
-> > <instantiation>:10:29: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >                             ^
-> 
-> 
-> The bisection found this as first bad commit,
-> 
->     MIPS: Fix idle VS timer enqueue
-> 
->     [ Upstream commit 56651128e2fbad80f632f388d6bf1f39c928267a ]
++ linux-wireless
 
-Thanks, now dropped from all queues.
+On Wed, 2025-05-14 at 09:32 +0000, Bert Karwatzki wrote:
 
-greg k-h
+> Then I reapplied commit 76a853f86c97 hunk by hunk and found the one hunk =
+that
+> causes the problem:
+>=20
+> diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
+> index 3e751dd3ae7b..63df21228029 100644
+> --- a/net/mac80211/tx.c
+> +++ b/net/mac80211/tx.c
+> @@ -4648,8 +4648,7 @@ static void ieee80211_8023_xmit(struct
+> ieee80211_sub_if_data *sdata,
+>                         memcpy(IEEE80211_SKB_CB(seg), info, sizeof(*info)=
+);
+>         }
+>=20
+> -       if (unlikely(skb->sk &&
+> -                    skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS)) {
+> +       if (unlikely(skb->sk && sock_flag(skb->sk, SOCK_WIFI_STATUS))) {
+>                 info->status_data =3D ieee80211_store_ack_skb(local, skb,
+>                                                             &info->flags,=
+ NULL);
+>                 if (info->status_data)
+
+I think it crashed later on the status, but this inserts the skb into
+the IDR so the status can pick it up to return the status and afaict
+_that's_ where it crashed.
+
+Still I don't really know what could go wrong? The (copied) skb should
+still have been keeping the socket alive.
+
+> This is enough to cause a kernel panic when compiled with clang (clang-19=
+.1.7
+> from debian sid). Compiling the same kernel with gcc (gcc-14.2.0 from deb=
+ian
+> sid) shows no problem.
+
+Right, even stranger. But I can't even say you should look at this place
+(which inserts) or the other (which takes it out again and crashed) to
+compare the code :-/
+
+
+johannes
