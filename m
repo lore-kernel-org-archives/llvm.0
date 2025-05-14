@@ -1,153 +1,263 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD3342A82
-	for <llvm@lists.linux.dev>; Wed, 14 May 2025 11:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EA92798E6;
+	Wed, 14 May 2025 12:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747221838; cv=none; b=hnEAp9srsxFYg4xYtc+CnqjhKrfD9jYNIjpzCTzaXIiweJxP6u+YbPi9HejmxDoemhRruSMGFI9EyUSbrTYNfelf5CbLtWrHg1SSNXHnVPAAKQp3h8ikBKv/LpjmZUFL90HwPWCPbx6wJUIYxWXFY6VnP9zR02Yln2a4UVxFo94=
+	t=1747226792; cv=none; b=j0EU7WDLp5pf50ncgaTWmGRUEbLK2ZSfdY8WF12yPYhdgrir18R3xuncxScmqlUsBrRgEF7ZyX8K0L6RSNR0N5pCCRSj3WGVav/8AtnTvFyd3hhdIEO4OnRw7caFzg54I2k4V1WKQHN3m+xJndHf6wP9NNJGWiBrFIi5/fHKJ3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747221838; c=relaxed/simple;
-	bh=tx8YzHNBUj2kXpeOe64RZVIheqYx8JBL48xF8A/l0Vg=;
+	s=arc-20240116; t=1747226792; c=relaxed/simple;
+	bh=BUgSEOK7zJn4CATqu59tiupdNB3czkL+OCUJvfXe/1U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o9ZKp/M98ih1N+5p7ZDV0KFqimbHCBekX2PiaoazHvwvf0Hn2gcI/UaElgoKnafnB/O6aS9mMqwVGpnkTZu2H1jZ0M1vxnboZ49nhr/s5uCVLQv12nuIz0r8xhSZOhBYJYJzy6jb9KlXCqJwN3b7xJEJLn8UWN4bjyC8N9EK0x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=O/R27MrK; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=FR1lbkYXYAy/qt3mNxmttKbcqChYrJrWFDiS+aQSZeNY4dxusIdrqaz8mzTGNqOGMYgkqjSAGXad6QSU2rrsZQ+BRu5m+lwS1EaEksc6z81ouKIdBSGhxtU7FSXleTGrO51c/sZ6zN/VewxuKdplsvH56FsOTsfbbE9bHOv8urY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d6UbKUSJ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O/R27MrK"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a0ebf39427so5549893f8f.3
-        for <llvm@lists.linux.dev>; Wed, 14 May 2025 04:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747221834; x=1747826634; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PqwsD7WCcNuEv2WTK4iZPHlU9QaOgxXWeL2peqyTOEE=;
-        b=O/R27MrKZahNgW40ULDcGE0KRvcCcK0s59NUHa9YWk+kQ89QefSO0KZ8vrqAZ9g1r/
-         3nmHt6DKndOW5f/3jU0aYKh+FG+8Ixuwuk4BaU9GJ8/u0jve2/9XmZHRRfJPzHZHA2Fy
-         Vwaqi1DqR9MuVUByaj4/gFIjKQ49Jbtbo9CuExV0iUv+X9kPMEk4A/VAnE1nd3oOcRZh
-         l3rlUHtGkGX7fPjkPfJ5Gj5kVfY6bnHadg/RBMF9gC2veO/rJBQi0culFymvjH/G9s1I
-         kptcpcmK8HnygIZwu+7XJZHeGZL5ZM3qvHjDuNUklIY5miga/D4yRAhXeEG1Jy2DAw0x
-         v7bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747221834; x=1747826634;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PqwsD7WCcNuEv2WTK4iZPHlU9QaOgxXWeL2peqyTOEE=;
-        b=RuLZbFFx2PBnKghoMs/ZXcfpsIoiA9Dv8d31bd8z4AOwo9aduwFPxs2rcKnF2K4SUs
-         71QqNHgNVVy6onqTFXi5u6r2efrixCuMylJrqx+3Mdss9d/Z7zT4v/K+ZUag4w/ZbCeN
-         cXhjrNf3SQ64P6m0iik3wMzfHH6dU7p9lZhImP2oo1f4+16ubTfRwpwBkkqy8kYKmTPJ
-         h1eRLQQyk3DwN3xCFVg/FeE3FA6PQw0Zw9JVzenIPNb/6NYz0dWmZXwH/JoGvBWpTo77
-         Zjip6fvOIlwlg4Wu28AtNLVMQTg2eWCJJdkG/GsfFY0Vnxtcp1KXpwpBD34iYmsS+y8P
-         kmBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7BZr3nDA7JIjor6qIzFVtKTSdpqSA0yN3Fmj5b09roz5HA3yuDZPQj98nm75SpwxocR5K@lists.linux.dev
-X-Gm-Message-State: AOJu0YyDwWbfQmsxNW0n7iRPqEGj8mU03YK9FI0u2tVMSu3VmQYNsapf
-	d2GIDPXXlrwheTrlt/4WinoDDZWTd5EAu4Q4iWKfUZt/f10PB7TXFle9xmwXUnI=
-X-Gm-Gg: ASbGncvJsaTPYsQpbiYBpkxzFcx3+A9+QQKsurJrvZW39ttJKj+vj5Igop4guDLVqN3
-	8weKqCzUQDunmC6oIW6+ScbyRXMJfQLi0tX+Ni/hyp4lgdOUWhUx+sFTVOBhWoXy0u0JfdPe0f/
-	4ENZPn+XD2j/NPT6CM0X2fw5dU9xh6ceu3twJt0G2sLKB7uni0LPrpr54Al6LwOndpsCo9UG2Ct
-	urN8cxlGH76QrQsO5zIVDO8KWHnE2yrfff71v6K7QNN0xZNLcE3BVbV6GeTMmhxk5DiLqe6n+wS
-	ulDwHm5S6dGHPcIzxhMmbUVFSh70vQKOXF1IPryN4AKFklS1c6wHAj60vrrtVp7WYCAsmSCipxz
-	wKBGEe9Sv3y+99Q==
-X-Google-Smtp-Source: AGHT+IHd28mYJHFkZ2YC/3FfmJfsWok8nxf/8sbB3FWwSEaJKR0MYxIrlFfEdGODFNdqer26tUf9qA==
-X-Received: by 2002:a05:6000:2506:b0:39c:13f5:dba0 with SMTP id ffacd0b85a97d-3a3496a48a7mr1875484f8f.13.1747221834230;
-        Wed, 14 May 2025 04:23:54 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58f2b02sm19714077f8f.51.2025.05.14.04.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 May 2025 04:23:53 -0700 (PDT)
-Date: Wed, 14 May 2025 13:23:51 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
-	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
-Message-ID: <aCR9RzGMWEuI0pxS@mai.linaro.org>
-References: <20250430123306.15072-1-linux.amoon@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d6UbKUSJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747226790; x=1778762790;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BUgSEOK7zJn4CATqu59tiupdNB3czkL+OCUJvfXe/1U=;
+  b=d6UbKUSJB5yEbfk3ajTt+aG8p79O8YOeHbgtRrQm8YZU04YQ3ki6BSls
+   KH5YeNH2WUaJghnQ2IbySabcgMnwOtVeYmih4V+kp/SKv1no2KkAYmooH
+   VTWZc8UouJKIhxsSOsZcOZgKmNaeafPJq5S/7i+73GK8QeJgcvqYo8TsR
+   ftde1PWJZ08cKI59qKxos7QcWoecJrGKLqu3TrkMW7/9PDoWklyin/P0G
+   kLQi83+kDOIVvMZalCKjKqrs0R8Px+gozBEwxNWONyYOR19gMqUH9jvC6
+   3Rr8g4EY9Vl2KpXyqBbACoLaqR5pt9DJPN3oGINd2U7sPaX3Ae+xOeF5m
+   A==;
+X-CSE-ConnectionGUID: TfB99MAxQ9WR2MUhz2uRCQ==
+X-CSE-MsgGUID: q/j1lW0JQNeTcwSH3pP1bQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="48992243"
+X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
+   d="scan'208";a="48992243"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 05:46:29 -0700
+X-CSE-ConnectionGUID: rUXdi+5SR7qQyzL3Wy2ykQ==
+X-CSE-MsgGUID: x2SA57B0SQaTgc5J+7zhNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
+   d="scan'208";a="169118792"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 14 May 2025 05:46:23 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uFBV6-000H7N-2B;
+	Wed, 14 May 2025 12:46:20 +0000
+Date: Wed, 14 May 2025 20:46:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel_team@skhynix.com, torvalds@linux-foundation.org,
+	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+	mingo@redhat.com, peterz@infradead.org, will@kernel.org,
+	tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+	sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
+	johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+	willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
+	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
+	hannes@cmpxchg.org, vdavydov.dev@gmail.com
+Subject: Re: [PATCH v15 33/43] dept: assign unique dept_key to each distinct
+ dma fence caller
+Message-ID: <202505142049.8vYH34nZ-lkp@intel.com>
+References: <20250513100730.12664-34-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250430123306.15072-1-linux.amoon@gmail.com>
+In-Reply-To: <20250513100730.12664-34-byungchul@sk.com>
 
-On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
-> Hi All,
+Hi Byungchul,
 
-Hi Anand,
+kernel test robot noticed the following build errors:
 
-if the goal of the changes is to do cleanups, I recommend to rework
-how the code is organized. Instead of having the data->soc check all
-around the functions, write per platform functions and store them in
-struct of_device_id data field instead of the soc version.
+[auto build test ERROR on 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3]
 
-Basically get rid of exynos_map_dt_data by settings the different ops
-in a per platform structure.
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/llist-move-llist_-head-node-definition-to-types-h/20250513-181346
+base:   82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
+patch link:    https://lore.kernel.org/r/20250513100730.12664-34-byungchul%40sk.com
+patch subject: [PATCH v15 33/43] dept: assign unique dept_key to each distinct dma fence caller
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250514/202505142049.8vYH34nZ-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250514/202505142049.8vYH34nZ-lkp@intel.com/reproduce)
 
-Then the initialization routine would be simpler to clean.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505142049.8vYH34nZ-lkp@intel.com/
 
-> This patch series is a rework of my previous patch series [1],
-> where the code changes were not adequately justified.
-> 
-> In this new series, I have improved the commit subject
-> and commit message to better explain the changes.
-> 
-> v6: Add new patch to use devm_clk_get_enabled
->     and Fix few typo in subject as suggested by Daniel.
-> v5: Drop the guard mutex patch
-> v4: Tried to address Lukasz review comments.
-> 
-> Tested on Odroid U3 amd XU4 SoC boards.
-> Build with clang with W=1 enable.
-> 
-> [4] https://lore.kernel.org/all/20250410063754.5483-2-linux.amoon@gmail.com/
-> [3] https://lore.kernel.org/all/20250310143450.8276-2-linux.amoon@gmail.com/
-> [2] https://lore.kernel.org/all/20250216195850.5352-2-linux.amoon@gmail.com/
-> [1] https://lore.kernel.org/all/20220515064126.1424-1-linux.amoon@gmail.com/
-> [0] https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#m77e57120d230d57f34c29e1422d7fc5f5587ac30
-> 
-> Thanks
-> -Anand
-> 
-> Anand Moon (4):
->   thermal/drivers/exynos: Refactor clk_sec initialization inside
->     SOC-specific case
->   thermal/drivers/exynos: Use devm_clk_get_enabled() helpers
->   thermal/drivers/exynos: Remove redundant IS_ERR() checks for clk_sec
->     clock
->   thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
-> 
->  drivers/thermal/samsung/exynos_tmu.c | 100 ++++++++++-----------------
->  1 file changed, 35 insertions(+), 65 deletions(-)
-> 
-> 
-> base-commit: b6ea1680d0ac0e45157a819c41b46565f4616186
-> -- 
-> 2.49.0
-> 
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:1372:3: error: cannot jump from this indirect goto statement to one of its possible targets
+    1372 |                 drm_exec_retry_on_contention(&exec);
+         |                 ^
+   include/drm/drm_exec.h:123:4: note: expanded from macro 'drm_exec_retry_on_contention'
+     123 |                         goto *__drm_exec_retry_ptr;             \
+         |                         ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:1399:2: note: possible target of indirect goto statement
+    1399 |         dma_fence_wait(fence, false);
+         |         ^
+   include/linux/dma-fence.h:679:2: note: expanded from macro 'dma_fence_wait'
+     679 |         sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);      \
+         |         ^
+   include/linux/dept_sdt.h:45:45: note: expanded from macro 'sdt_might_sleep_start_timeout'
+      45 |                 dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__, t);\
+         |                                                           ^
+   include/linux/instruction_pointer.h:10:41: note: expanded from macro '_THIS_IP_'
+      10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+         |                                         ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:1399:2: note: jump enters a statement expression
+   include/linux/dma-fence.h:679:2: note: expanded from macro 'dma_fence_wait'
+     679 |         sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);      \
+         |         ^
+   include/linux/dept_sdt.h:45:45: note: expanded from macro 'sdt_might_sleep_start_timeout'
+      45 |                 dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__, t);\
+         |                                                           ^
+   include/linux/instruction_pointer.h:10:20: note: expanded from macro '_THIS_IP_'
+      10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+         |                    ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:1399:2: note: jump enters a statement expression
+   include/linux/dma-fence.h:675:38: note: expanded from macro 'dma_fence_wait'
+     675 | #define dma_fence_wait(f, intr)                                         \
+         |                                                                         ^
+   1 error generated.
+--
+>> drivers/gpu/drm/xe/xe_svm.c:807:3: error: cannot jump from this indirect goto statement to one of its possible targets
+     807 |                 drm_exec_retry_on_contention(&exec);
+         |                 ^
+   include/drm/drm_exec.h:123:4: note: expanded from macro 'drm_exec_retry_on_contention'
+     123 |                         goto *__drm_exec_retry_ptr;             \
+         |                         ^
+   drivers/gpu/drm/xe/xe_svm.c:831:2: note: possible target of indirect goto statement
+     831 |         dma_fence_wait(fence, false);
+         |         ^
+   include/linux/dma-fence.h:679:2: note: expanded from macro 'dma_fence_wait'
+     679 |         sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);      \
+         |         ^
+   include/linux/dept_sdt.h:45:45: note: expanded from macro 'sdt_might_sleep_start_timeout'
+      45 |                 dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__, t);\
+         |                                                           ^
+   include/linux/instruction_pointer.h:10:41: note: expanded from macro '_THIS_IP_'
+      10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+         |                                         ^
+   drivers/gpu/drm/xe/xe_svm.c:831:2: note: jump enters a statement expression
+   include/linux/dma-fence.h:679:2: note: expanded from macro 'dma_fence_wait'
+     679 |         sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);      \
+         |         ^
+   include/linux/dept_sdt.h:45:45: note: expanded from macro 'sdt_might_sleep_start_timeout'
+      45 |                 dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__, t);\
+         |                                                           ^
+   include/linux/instruction_pointer.h:10:20: note: expanded from macro '_THIS_IP_'
+      10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+         |                    ^
+   drivers/gpu/drm/xe/xe_svm.c:831:2: note: jump enters a statement expression
+   include/linux/dma-fence.h:675:38: note: expanded from macro 'dma_fence_wait'
+     675 | #define dma_fence_wait(f, intr)                                         \
+         |                                                                         ^
+   1 error generated.
+--
+>> drivers/gpu/drm/xe/xe_gt_pagefault.c:164:3: error: cannot jump from this indirect goto statement to one of its possible targets
+     164 |                 drm_exec_retry_on_contention(&exec);
+         |                 ^
+   include/drm/drm_exec.h:123:4: note: expanded from macro 'drm_exec_retry_on_contention'
+     123 |                         goto *__drm_exec_retry_ptr;             \
+         |                         ^
+   drivers/gpu/drm/xe/xe_gt_pagefault.c:181:2: note: possible target of indirect goto statement
+     181 |         dma_fence_wait(fence, false);
+         |         ^
+   include/linux/dma-fence.h:679:2: note: expanded from macro 'dma_fence_wait'
+     679 |         sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);      \
+         |         ^
+   include/linux/dept_sdt.h:45:45: note: expanded from macro 'sdt_might_sleep_start_timeout'
+      45 |                 dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__, t);\
+         |                                                           ^
+   include/linux/instruction_pointer.h:10:41: note: expanded from macro '_THIS_IP_'
+      10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+         |                                         ^
+   drivers/gpu/drm/xe/xe_gt_pagefault.c:181:2: note: jump enters a statement expression
+   include/linux/dma-fence.h:679:2: note: expanded from macro 'dma_fence_wait'
+     679 |         sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);      \
+         |         ^
+   include/linux/dept_sdt.h:45:45: note: expanded from macro 'sdt_might_sleep_start_timeout'
+      45 |                 dept_stage_wait(__m, __m ? NULL : &__key, _THIS_IP_, __func__, t);\
+         |                                                           ^
+   include/linux/instruction_pointer.h:10:20: note: expanded from macro '_THIS_IP_'
+      10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+         |                    ^
+   drivers/gpu/drm/xe/xe_gt_pagefault.c:181:2: note: jump enters a statement expression
+   include/linux/dma-fence.h:675:38: note: expanded from macro 'dma_fence_wait'
+     675 | #define dma_fence_wait(f, intr)                                         \
+         |                                                                         ^
+   1 error generated.
+
+
+vim +1372 drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c
+
+f1d93c9c2722a2 Jack Xiao       2020-03-27  1357  
+737dad0b5d609f Jack Xiao       2020-09-09  1358  int amdgpu_mes_ctx_unmap_meta_data(struct amdgpu_device *adev,
+737dad0b5d609f Jack Xiao       2020-09-09  1359  				   struct amdgpu_mes_ctx_data *ctx_data)
+737dad0b5d609f Jack Xiao       2020-09-09  1360  {
+737dad0b5d609f Jack Xiao       2020-09-09  1361  	struct amdgpu_bo_va *bo_va = ctx_data->meta_data_va;
+737dad0b5d609f Jack Xiao       2020-09-09  1362  	struct amdgpu_bo *bo = ctx_data->meta_data_obj;
+737dad0b5d609f Jack Xiao       2020-09-09  1363  	struct amdgpu_vm *vm = bo_va->base.vm;
+2acc73f81f2500 Christian König 2022-08-16  1364  	struct dma_fence *fence;
+2acc73f81f2500 Christian König 2022-08-16  1365  	struct drm_exec exec;
+2acc73f81f2500 Christian König 2022-08-16  1366  	long r;
+2acc73f81f2500 Christian König 2022-08-16  1367  
+05d249352f1ae9 Rob Clark       2023-11-20  1368  	drm_exec_init(&exec, 0, 0);
+2acc73f81f2500 Christian König 2022-08-16  1369  	drm_exec_until_all_locked(&exec) {
+2acc73f81f2500 Christian König 2022-08-16  1370  		r = drm_exec_lock_obj(&exec,
+2acc73f81f2500 Christian König 2022-08-16  1371  				      &ctx_data->meta_data_obj->tbo.base);
+2acc73f81f2500 Christian König 2022-08-16 @1372  		drm_exec_retry_on_contention(&exec);
+2acc73f81f2500 Christian König 2022-08-16  1373  		if (unlikely(r))
+2acc73f81f2500 Christian König 2022-08-16  1374  			goto out_unlock;
+737dad0b5d609f Jack Xiao       2020-09-09  1375  
+2acc73f81f2500 Christian König 2022-08-16  1376  		r = amdgpu_vm_lock_pd(vm, &exec, 0);
+2acc73f81f2500 Christian König 2022-08-16  1377  		drm_exec_retry_on_contention(&exec);
+2acc73f81f2500 Christian König 2022-08-16  1378  		if (unlikely(r))
+2acc73f81f2500 Christian König 2022-08-16  1379  			goto out_unlock;
+737dad0b5d609f Jack Xiao       2020-09-09  1380  	}
+737dad0b5d609f Jack Xiao       2020-09-09  1381  
+737dad0b5d609f Jack Xiao       2020-09-09  1382  	amdgpu_vm_bo_del(adev, bo_va);
+737dad0b5d609f Jack Xiao       2020-09-09  1383  	if (!amdgpu_vm_ready(vm))
+737dad0b5d609f Jack Xiao       2020-09-09  1384  		goto out_unlock;
+737dad0b5d609f Jack Xiao       2020-09-09  1385  
+2acc73f81f2500 Christian König 2022-08-16  1386  	r = dma_resv_get_singleton(bo->tbo.base.resv, DMA_RESV_USAGE_BOOKKEEP,
+2acc73f81f2500 Christian König 2022-08-16  1387  				   &fence);
+737dad0b5d609f Jack Xiao       2020-09-09  1388  	if (r)
+737dad0b5d609f Jack Xiao       2020-09-09  1389  		goto out_unlock;
+737dad0b5d609f Jack Xiao       2020-09-09  1390  	if (fence) {
+737dad0b5d609f Jack Xiao       2020-09-09  1391  		amdgpu_bo_fence(bo, fence, true);
+737dad0b5d609f Jack Xiao       2020-09-09  1392  		fence = NULL;
+737dad0b5d609f Jack Xiao       2020-09-09  1393  	}
+737dad0b5d609f Jack Xiao       2020-09-09  1394  
+737dad0b5d609f Jack Xiao       2020-09-09  1395  	r = amdgpu_vm_clear_freed(adev, vm, &fence);
+737dad0b5d609f Jack Xiao       2020-09-09  1396  	if (r || !fence)
+737dad0b5d609f Jack Xiao       2020-09-09  1397  		goto out_unlock;
+737dad0b5d609f Jack Xiao       2020-09-09  1398  
+737dad0b5d609f Jack Xiao       2020-09-09  1399  	dma_fence_wait(fence, false);
+737dad0b5d609f Jack Xiao       2020-09-09  1400  	amdgpu_bo_fence(bo, fence, true);
+737dad0b5d609f Jack Xiao       2020-09-09  1401  	dma_fence_put(fence);
+737dad0b5d609f Jack Xiao       2020-09-09  1402  
+737dad0b5d609f Jack Xiao       2020-09-09  1403  out_unlock:
+737dad0b5d609f Jack Xiao       2020-09-09  1404  	if (unlikely(r < 0))
+737dad0b5d609f Jack Xiao       2020-09-09  1405  		dev_err(adev->dev, "failed to clear page tables (%ld)\n", r);
+2acc73f81f2500 Christian König 2022-08-16  1406  	drm_exec_fini(&exec);
+737dad0b5d609f Jack Xiao       2020-09-09  1407  
+737dad0b5d609f Jack Xiao       2020-09-09  1408  	return r;
+737dad0b5d609f Jack Xiao       2020-09-09  1409  }
+737dad0b5d609f Jack Xiao       2020-09-09  1410  
 
 -- 
-
- <http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
