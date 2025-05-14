@@ -1,273 +1,215 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B991F4177;
-	Wed, 14 May 2025 06:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747204016; cv=none; b=JuJJ9geKBJsjg3/azOq2M/Mu7ubBdbWbr/I47wvuubSjxzb83PInMOm0xaRdaUqXmV2KH7CZkO2IiqkDPeYJjLisHHJWf0NTxBHwSP5EY92L5m+LgPqP3ZkDUYcGuxTqH/Rbo1vKcXaCIw8HWf+D75+ajdv5RsMrSsOwCMVWQkI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747204016; c=relaxed/simple;
-	bh=3r1iajkAvBe7hoDipEvS1N56ma07v5tuBZbqYRFx+CM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G4sqYQG1A8QPhy8Ej0tCc6SiJW5DBasJJPoLT/nzRVoEPvggwbXj2Xj6zesmcP9SfWRQ35Gg+vGNPm5hx9Gs9YieFr2Hcb4KMIAuGGxO3OvQ2yMJNIOzq9Fs7nMOGn1ZG9jGXVicvFV5yUei99BsvOMgy+aybHtQk6C7ZzbwVtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XkqdK+rw; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02275156F45;
+	Wed, 14 May 2025 09:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747214656; cv=fail; b=SRCz5WJ5mXcDIkTzDxIKkGSP2lBnqP7DiJ67dXU97Vs/uQXvSDGl606XQGLterigdzn+82whvVZjWry4tA1C7LaukpWgaL+mGchNS2sySw+8c/Wcb6OohQOPXawMJAOIm5xthUSTGLeXCcwSqY30sKZcHOaikix/y5rROT+a9F0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747214656; c=relaxed/simple;
+	bh=r8qCjqGK7UBWIEVW/ygwW947PP3Gz+pckem7sHnuOqg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=svNI1o2JTXz0YvVrvKV713QzudUynxTIonTPVQwGH3NWUNX1HJSeVt1tzWPY15kMHW61R0KGpcW2tTSfOajULl8BugaW8qeH0eSTJra9UegPXcZZVXmlSnrUqp8xgeoLJwW3Qa5FIH4aQLX+h7oTQ570dQO569zHWcqSnn6i7+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=u2fez/Mn; arc=fail smtp.client-ip=40.107.237.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XkqdK+rw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747204014; x=1778740014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3r1iajkAvBe7hoDipEvS1N56ma07v5tuBZbqYRFx+CM=;
-  b=XkqdK+rwtqFKpFFeaRd3YPSb6UbWz6lyx2Fpizbjw2duaPbvVnZPxXZi
-   lAEqmzTMs56pRVPOfuQ6m2su0SIoqbmfvZVSVTpdtBzfY00nGOV3+9qjf
-   hvmNtYHg1geZrFrgHHKyuTWFyCBShENMNctU64JaNVxmffeou8oTRpbtV
-   EL9Guj3jqWt+BzcbtIY5zuuLOAyXDN4WLBGYQCN1LXr9v/3z43HCBZz5P
-   kzSYec2FbU7BshMY7YE8z28TvWSDF29r/knPU6yjhQr3Uyp2ONPf+H5rN
-   2Xu/qKq7soaFmHQOidTAVyGoJzFKFBCUYJCj4vvhq3ipn4xSkx+NxnfNA
-   Q==;
-X-CSE-ConnectionGUID: QsBnllbdT3iyi8rkyGxjcQ==
-X-CSE-MsgGUID: Lk9h+EXkQCuNLDHpVErsHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="71583279"
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="71583279"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 23:26:54 -0700
-X-CSE-ConnectionGUID: bYggJomJT2SOAn9fIfk12g==
-X-CSE-MsgGUID: MVlOMMPZSmyzsC6sHHCLyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="169040772"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 May 2025 23:26:50 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uF5Zo-000GkN-22;
-	Wed, 14 May 2025 06:26:48 +0000
-Date: Wed, 14 May 2025 14:26:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Esben Haabendal <esben@geanix.com>, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] pinctrl: freescale: Enable driver if platform is
- enabled.
-Message-ID: <202505141431.u1F01XNs-lkp@intel.com>
-References: <20250513150010.600656-1-alexander.stein@ew.tq-group.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="u2fez/Mn"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=x3D2+DFidbYCgt7igl/u5NxzKRnlEx0LwuEPYw0WmJC56nPh8A3g3oORC/4rDXiZaWIt6QjszYxgK1smLUqjMdSdtiRubXoOM5/XIFZsDNlofZeKLgc5jzQBLAKsXThmx9+4Lhy4tfOW6Wc2q4ZAc5aiWrU3pD6w4lea3tFbHhZ/phD6YdEdqcGMPAVp9WL16v/FZL9AzfBFAFdxIkb9Dpz9IiZsxaKjwJx7E4yaU736AoHzNzJBrcXOd7vpwwtawNEVRjbtB/CZgM3gGnzVPyJB9Qv1EXDxDzrWEAXxreHOrInC964ZaczuCiaHTny7GLXQl6/ZNY0dQcYy2jk5wQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XzqHf4w0uK1VjCpHR4KSwE2yYkhk+dmnpGCjNx8ggTM=;
+ b=RfkGKqUWAybazZ/PaSegUcpHikwV92GfMvceYuCqvK0SWABeos5CAllWgza3nQRoilyAc49pF5SI9PlOsJbobtEKhFlyRPKFgJKZ9c+xgvAkBYe2222Zrmi/57dj+wPQwO2mzMwvpLws83g4Nlg0l9fs1bWKL5TgUu5rCPMqTHiyTqYEdpM+ITC1EQ3U9qxChRZjRBqGh69a+7wXR95jhA4lOMVmbQRDK+thlcJviC1BZ68tUbKhNTO3vL23e2hEcn9l7/KUnmo3Ytza7if1F0JBRy70OE9BAlAod3IQ5KQeM1rNDDn5GAzAT3JYFm+2qFjbCAluI3dqnHTzVpYBEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=nvidia.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XzqHf4w0uK1VjCpHR4KSwE2yYkhk+dmnpGCjNx8ggTM=;
+ b=u2fez/MnaUa537aQ27aWwKlPi6llSEnjexZPbS4vDXVuhV4U9TYYkRb9JLGXzkWFQIUzZgLDPw9ahdVFCelVV95t8km+oTxiZAXk+G81CsFfFUNQnmcMDOGgP7K1K0Y808miVhXtQvIBYtdOp7vbuUVqv1jzmDgcEHGOCiLV9Fs=
+Received: from PH7P220CA0149.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:327::19)
+ by SJ0PR12MB6685.namprd12.prod.outlook.com (2603:10b6:a03:478::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.29; Wed, 14 May
+ 2025 09:24:08 +0000
+Received: from CY4PEPF0000E9D7.namprd05.prod.outlook.com
+ (2603:10b6:510:327:cafe::95) by PH7P220CA0149.outlook.office365.com
+ (2603:10b6:510:327::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.16 via Frontend Transport; Wed,
+ 14 May 2025 09:24:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D7.mail.protection.outlook.com (10.167.241.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8722.18 via Frontend Transport; Wed, 14 May 2025 09:24:08 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 14 May
+ 2025 04:24:07 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 14 May
+ 2025 04:24:07 -0500
+Received: from amd.com (10.180.168.240) by SATLEXMB04.amd.com (10.181.40.145)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39 via Frontend
+ Transport; Wed, 14 May 2025 04:24:00 -0500
+Date: Wed, 14 May 2025 09:23:49 +0000
+From: Ankit Soni <Ankit.Soni@amd.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Jonathan Corbet <corbet@lwn.net>, <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
+	<kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>, Bill Wendling
+	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
+ Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon
+	<will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
+	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
+ Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+	<patches@lists.linux.dev>
+Subject: Re: [PATCH v2 03/15] iommupt: Add the basic structure of the iommu
+ implementation
+Message-ID: <pntkuh63y26rygrkxegbzncvc3shtplucrnzkkz2dimpkfyn75@uekvyuz5kred>
+References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <3-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20250513150010.600656-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <3-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D7:EE_|SJ0PR12MB6685:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81913992-9910-4663-53f1-08dd92c9144f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?owSStQRqWZN8xQvaYi7qtIWEptXJ2BDOKowZgLnFz8w5WmlTx47B027GAgWd?=
+ =?us-ascii?Q?H2jHyyCurS7T1SNH7QEi7LJ4np2ZzCek1/UMDnoCaepMSwe97v7PjnZk+l3I?=
+ =?us-ascii?Q?ArieQh+oGaOsiaSQeZ1Vpfga35mqpCO58mDRwhmRxGEmTS+z1boczly3ztN2?=
+ =?us-ascii?Q?LlJNZBdaTbJ0atChtrdGEWGIr4gzRNikxYREMLMq3B6AOjPvMsyjIzOXGU25?=
+ =?us-ascii?Q?wsQyZnodKVzUzCQOZRyW1CpsA5Ky1mboyMGXCuhRJikpvXY37KQSgAXtrCTH?=
+ =?us-ascii?Q?VSeS1IoBGuP+BUFLf+Urk1flwBdh/qkymiUXKIlj41k8r4/UTu+EY8iZ3XTJ?=
+ =?us-ascii?Q?iAr7jsLz9A9h1l32G47cV5LvATmAGewP0sumykwogJ8n7XruNpbptIc5lWiW?=
+ =?us-ascii?Q?2uYmqVuy+azUihcFHzdPXKs0ckhxIjn/lzAXbTTUeJ+Z6KO6LWbkr7kf9wh4?=
+ =?us-ascii?Q?9o9pmU35AxRm9ffFfkmuUiRd2D5JicLfOE8iISj0XE21hO4cQhfcbJSkk7PM?=
+ =?us-ascii?Q?ogKJ7B/WS984sBGiVmiZK89BnEewUoB9WhLPyjoWsNAjyuTytOh+uyWieRyB?=
+ =?us-ascii?Q?1FCByieIEs2nJg1awoowSSBGXK+YvKQxfrbwetuydp2qFh+ry1iQeDIzRISJ?=
+ =?us-ascii?Q?H1ZCPa8FV194fnexmWHPG21Zfdtekvq0xOFyeaFb9ETngGVmEgvKG7enQO+I?=
+ =?us-ascii?Q?KGpLqu1YDcDGC1IUIqP10hYzEGRLuNhLRalEvwrEQtNl6s0Hnal0U4gSrCQD?=
+ =?us-ascii?Q?xmK08HScCrZJqyWyLCa2yDKSK4p0KnTw4/zXlwsyt0qCiNg+ChfTOSTRi73M?=
+ =?us-ascii?Q?ZicuTXVciqbDsfqnJjskcK8g9jvpqkcyA4B9LfEBBXNFy1HUZTxpaxf7fdda?=
+ =?us-ascii?Q?qo3e9oclO+GY80YUl+yeOMySPdQJUmf/HWZwT6qbSZtguAPVUmC0k2VYJCWc?=
+ =?us-ascii?Q?YoUHnudIUAidCJPumr1iILZQRexQ+GEvM5sNP08lauYXpvcNrywOew+H/475?=
+ =?us-ascii?Q?lkCE9d4QXHVlI0FVUd5QxcklCa8T9MhDI5hJGtfsUCgrtKAB2lgRJ6loZsRU?=
+ =?us-ascii?Q?Bu8i/6xCX578lnaiVdh/1OT0ceXTs72+lz/Uko6C9EOKB5aleO/0L1E+Twka?=
+ =?us-ascii?Q?5I4OR/f6mlJ2bzNRSFtDLWiaHFFWJ/H0MMwKbWC3Gttz7gkUX58kIsVRIAK6?=
+ =?us-ascii?Q?delzTO02INb5PfikwBuqwHT4UnUQm1NcgbjQEAOq3bpumpdl5hqbF6NPRCPv?=
+ =?us-ascii?Q?flN3NTehN33TcsCLjW2EXcNdpnLJa05JS9U8wHy7ypvhp4IF3oqX9N/DCBSS?=
+ =?us-ascii?Q?/9pRcQAWE4p8aKQ45VwAwvgg3EwsgQEmkVEgUHB34Dil2lcxRKa+t03O1Xql?=
+ =?us-ascii?Q?dCR/LaqxHPIZ9sd/HnSAsTyITpx0zDUvPBQybEzb5Rpt5TRMzpQxezWqZ8qJ?=
+ =?us-ascii?Q?6hmog6uxQCyAvNXhFOLg6TCc2rDsdVZVH0qW09XIiqjfYA6/S+FshgNhaKBU?=
+ =?us-ascii?Q?DDXBWxB/P+E1eOIBvdvxyE34AyI7NW4tpRhX?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 09:24:08.2308
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81913992-9910-4663-53f1-08dd92c9144f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D7.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6685
 
-Hi Alexander,
+Hi Jason,
 
-kernel test robot noticed the following build errors:
+On Mon, May 05, 2025 at 11:18:33AM -0300, Jason Gunthorpe wrote:
+> +static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
+> +				struct iommu_domain *domain)
+> +{
+> +	struct pt_common *common = common_from_iommu(iommu_table);
+> +	struct pt_iommu_info info;
+> +	struct pt_range range;
+> +
+> +	NS(get_info)(iommu_table, &info);
+> +
+> +	domain->type = __IOMMU_DOMAIN_PAGING;
+> +	domain->pgsize_bitmap = info.pgsize_bitmap;
+> +
+> +	if (pt_feature(common, PT_FEAT_DYNAMIC_TOP))
+> +		range = _pt_top_range(common,
+> +				      _pt_top_set(NULL, PT_MAX_TOP_LEVEL));
+> +	else
+> +		range = pt_top_range(common);
+> +
+> +	/*
+> +	 * A 64 bit high address space table on a 32 bit system cannot work.
+> +	 */
+> +	domain->geometry.aperture_start = (unsigned long)range.va;
+> +	if ((pt_vaddr_t)domain->geometry.aperture_start != range.va ||
+> +	    range.va > ULONG_MAX)
+> +		return -EOVERFLOW;
+> +
+> +	/*
+> +	 * The aperture is limited to what the API can do after considering all
+> +	 * the different types dma_addr_t/unsigned long/pt_vaddr_t that are used
+> +	 * to store a VA. Set the aperture to something that is valid for all
+> +	 * cases. Saturate instead of truncate the end if the types are smaller
+> +	 * than the top range. aperture_end is a last.
+> +	 */
+> +	domain->geometry.aperture_end = (unsigned long)range.last_va;
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next linus/master v6.15-rc6 next-20250513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I am experiencing a system hang with a 5-level v2 page table mode, on boot.
+The NVMe boot drive is not initializing.
+Below are the relevant dmesg logs with some prints i had added:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/pinctrl-freescale-Enable-driver-if-platform-is-enabled/20250513-230259
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20250513150010.600656-1-alexander.stein%40ew.tq-group.com
-patch subject: [PATCH v2 1/1] pinctrl: freescale: Enable driver if platform is enabled.
-config: i386-buildonly-randconfig-004-20250514 (https://download.01.org/0day-ci/archive/20250514/202505141431.u1F01XNs-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250514/202505141431.u1F01XNs-lkp@intel.com/reproduce)
+[    6.386439] AMD-Vi v2 domain init
+[    6.390132] AMD-Vi v2 pt init
+[    6.390133] AMD-Vi aperture end last va ffffffffffffff
+...
+[   10.315372] AMD-Vi gen pt MAP PAGES iova ffffffffffffe000 paddr 19351b000
+...
+[   72.171930] nvme nvme0: I/O tag 0 (0000) QID 0 timeout, disable controller
+[   72.179618] nvme nvme1: I/O tag 24 (0018) QID 0 timeout, disable controller
+[   72.197176] nvme nvme0: Identify Controller failed (-4)
+[   72.203063] nvme nvme1: Identify Controller failed (-4)
+[   72.209237] nvme 0000:05:00.0: probe with driver nvme failed with error -5
+[   72.209336] nvme 0000:44:00.0: probe with driver nvme failed with error -5
+...
+Timed out waiting for the udev queue to be empty.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505141431.u1F01XNs-lkp@intel.com/
+According to the dmesg logs above, the IOVA for the v2 page table appears 
+incorrect and is not aligned with domain->geometry.aperture_end. Which
+requires domain->geometry.force_aperture = true; to be added at the
+appropriate location. Proabably here!
 
-All errors (new ones prefixed by >>):
+- Ankit
 
->> drivers/pinctrl/freescale/pinctrl-imx.c:262:9: error: call to undeclared function 'pinmux_generic_get_function'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     262 |         func = pinmux_generic_get_function(pctldev, selector);
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:262:9: note: did you mean 'pinmux_generic_free_functions'?
-   drivers/pinctrl/freescale/../pinmux.h:178:20: note: 'pinmux_generic_free_functions' declared here
-     178 | static inline void pinmux_generic_free_functions(struct pinctrl_dev *pctldev)
-         |                    ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:262:7: error: incompatible integer to pointer conversion assigning to 'struct function_desc *' from 'int' [-Wint-conversion]
-     262 |         func = pinmux_generic_get_function(pctldev, selector);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/pinctrl/freescale/pinctrl-imx.c:269:7: error: incomplete definition of type 'struct function_desc'
-     269 |                 func->func.name, grp->grp.name);
-         |                 ~~~~^
-   include/linux/dev_printk.h:171:49: note: expanded from macro 'dev_dbg'
-     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~~~~~
-   include/linux/dev_printk.h:139:35: note: expanded from macro 'dev_no_printk'
-     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
-         |                                                        ^~~~~~~~~~~
-   drivers/pinctrl/freescale/pinctrl-imx.c:248:9: note: forward declaration of 'struct function_desc'
-     248 |         struct function_desc *func;
-         |                ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:289:25: error: use of undeclared identifier 'pinmux_generic_get_function_count'; did you mean 'pinmux_generic_free_functions'?
-     289 |         .get_functions_count = pinmux_generic_get_function_count,
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                pinmux_generic_free_functions
-   drivers/pinctrl/freescale/../pinmux.h:178:20: note: 'pinmux_generic_free_functions' declared here
-     178 | static inline void pinmux_generic_free_functions(struct pinctrl_dev *pctldev)
-         |                    ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:290:23: error: use of undeclared identifier 'pinmux_generic_get_function_name'; did you mean 'pinmux_generic_free_functions'?
-     290 |         .get_function_name = pinmux_generic_get_function_name,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                              pinmux_generic_free_functions
-   drivers/pinctrl/freescale/../pinmux.h:178:20: note: 'pinmux_generic_free_functions' declared here
-     178 | static inline void pinmux_generic_free_functions(struct pinctrl_dev *pctldev)
-         |                    ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:291:25: error: use of undeclared identifier 'pinmux_generic_get_function_groups'; did you mean 'pinmux_generic_free_functions'?
-     291 |         .get_function_groups = pinmux_generic_get_function_groups,
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                pinmux_generic_free_functions
-   drivers/pinctrl/freescale/../pinmux.h:178:20: note: 'pinmux_generic_free_functions' declared here
-     178 | static inline void pinmux_generic_free_functions(struct pinctrl_dev *pctldev)
-         |                    ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:289:25: error: incompatible function pointer types initializing 'int (*)(struct pinctrl_dev *)' with an expression of type 'void (struct pinctrl_dev *)' [-Wincompatible-function-pointer-types]
-     289 |         .get_functions_count = pinmux_generic_get_function_count,
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/pinctrl/freescale/pinctrl-imx.c:290:23: error: incompatible function pointer types initializing 'const char *(*)(struct pinctrl_dev *, unsigned int)' with an expression of type 'void (struct pinctrl_dev *)' [-Wincompatible-function-pointer-types]
-     290 |         .get_function_name = pinmux_generic_get_function_name,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/pinctrl/freescale/pinctrl-imx.c:291:25: error: incompatible function pointer types initializing 'int (*)(struct pinctrl_dev *, unsigned int, const char *const **, unsigned int *)' with an expression of type 'void (struct pinctrl_dev *)' [-Wincompatible-function-pointer-types]
-     291 |         .get_function_groups = pinmux_generic_get_function_groups,
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/freescale/pinctrl-imx.c:590:9: error: call to undeclared function 'pinmux_generic_get_function'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     590 |         func = pinmux_generic_get_function(pctl, index);
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:590:7: error: incompatible integer to pointer conversion assigning to 'struct function_desc *' from 'int' [-Wint-conversion]
-     590 |         func = pinmux_generic_get_function(pctl, index);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/freescale/pinctrl-imx.c:595:6: error: incomplete definition of type 'struct function_desc'
-     595 |         func->func.name = np->name;
-         |         ~~~~^
-   drivers/pinctrl/freescale/pinctrl-imx.c:583:9: note: forward declaration of 'struct function_desc'
-     583 |         struct function_desc *func;
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:596:6: error: incomplete definition of type 'struct function_desc'
-     596 |         func->func.ngroups = of_get_child_count(np);
-         |         ~~~~^
-   drivers/pinctrl/freescale/pinctrl-imx.c:583:9: note: forward declaration of 'struct function_desc'
-     583 |         struct function_desc *func;
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:597:10: error: incomplete definition of type 'struct function_desc'
-     597 |         if (func->func.ngroups == 0) {
-         |             ~~~~^
-   drivers/pinctrl/freescale/pinctrl-imx.c:583:9: note: forward declaration of 'struct function_desc'
-     583 |         struct function_desc *func;
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:602:45: error: incomplete definition of type 'struct function_desc'
-     602 |         group_names = devm_kcalloc(ipctl->dev, func->func.ngroups,
-         |                                                ~~~~^
-   drivers/pinctrl/freescale/pinctrl-imx.c:583:9: note: forward declaration of 'struct function_desc'
-     583 |         struct function_desc *func;
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:603:20: error: incomplete definition of type 'struct function_desc'
-     603 |                                    sizeof(*func->func.groups), GFP_KERNEL);
-         |                                            ~~~~^
-   drivers/pinctrl/freescale/pinctrl-imx.c:583:9: note: forward declaration of 'struct function_desc'
-     583 |         struct function_desc *func;
-         |                ^
-   drivers/pinctrl/freescale/pinctrl-imx.c:609:6: error: incomplete definition of type 'struct function_desc'
-     609 |         func->func.groups = group_names;
-         |         ~~~~^
-   drivers/pinctrl/freescale/pinctrl-imx.c:583:9: note: forward declaration of 'struct function_desc'
-     583 |         struct function_desc *func;
-         |                ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:675:45: error: invalid application of 'sizeof' to an incomplete type 'struct function_desc'
-     675 |                 function = devm_kzalloc(&pdev->dev, sizeof(*function),
-         |                                                           ^~~~~~~~~~~
-   drivers/pinctrl/freescale/pinctrl-imx.c:673:10: note: forward declaration of 'struct function_desc'
-     673 |                 struct function_desc *function;
-         |                        ^
->> drivers/pinctrl/freescale/pinctrl-imx.c:681:28: error: no member named 'pin_function_tree' in 'struct pinctrl_dev'
-     681 |                 radix_tree_insert(&pctl->pin_function_tree, i, function);
-         |                                    ~~~~  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PINCTRL_IMX
-   Depends on [n]: PINCTRL [=y] && OF [=n]
-   Selected by [y]:
-   - PINCTRL_IMX_SCU [=y] && PINCTRL [=y] && (IMX_SCU [=y] || COMPILE_TEST [=y])
-
-
-vim +/pinmux_generic_get_function +262 drivers/pinctrl/freescale/pinctrl-imx.c
-
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  242  
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  243  static int imx_pmx_set(struct pinctrl_dev *pctldev, unsigned selector,
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  244  		       unsigned group)
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  245  {
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  246  	struct imx_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  247  	const struct imx_pinctrl_soc_info *info = ipctl->info;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  248  	struct function_desc *func;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  249  	struct group_desc *grp;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  250  	struct imx_pin *pin;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  251  	unsigned int npins;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  252  	int i, err;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  253  
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  254  	/*
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  255  	 * Configure the mux mode for each pin in the group for a specific
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  256  	 * function.
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  257  	 */
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  258  	grp = pinctrl_generic_get_group(pctldev, group);
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  259  	if (!grp)
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  260  		return -EINVAL;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  261  
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30 @262  	func = pinmux_generic_get_function(pctldev, selector);
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  263  	if (!func)
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  264  		return -EINVAL;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  265  
-390270f25b414fd drivers/pinctrl/freescale/pinctrl-imx.c Andy Shevchenko 2023-12-11  266  	npins = grp->grp.npins;
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  267  
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  268  	dev_dbg(ipctl->dev, "enable function %s group %s\n",
-f3e0473aa834f0b drivers/pinctrl/freescale/pinctrl-imx.c Andy Shevchenko 2024-05-30 @269  		func->func.name, grp->grp.name);
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  270  
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  271  	for (i = 0; i < npins; i++) {
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  272  		/*
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  273  		 * For IMX_USE_SCU case, we postpone the mux setting
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  274  		 * until config is set as we can set them together
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  275  		 * in one IPC call
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  276  		 */
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  277  		pin = &((struct imx_pin *)(grp->data))[i];
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  278  		if (!(info->flags & IMX_USE_SCU)) {
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  279  			err = imx_pmx_set_one_pin_mmio(ipctl, pin);
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  280  			if (err)
-b96eea718bf697e drivers/pinctrl/freescale/pinctrl-imx.c A.s. Dong       2018-10-30  281  				return err;
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  282  		}
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  283  	}
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  284  
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  285  	return 0;
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  286  }
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  287  
-3be6f65102a859d drivers/pinctrl/freescale/pinctrl-imx.c Dong Aisheng    2017-07-25  288  struct pinmux_ops imx_pmx_ops = {
-3fd6d6ad73af905 drivers/pinctrl/freescale/pinctrl-imx.c Gary Bisson     2017-01-02 @289  	.get_functions_count = pinmux_generic_get_function_count,
-3fd6d6ad73af905 drivers/pinctrl/freescale/pinctrl-imx.c Gary Bisson     2017-01-02 @290  	.get_function_name = pinmux_generic_get_function_name,
-3fd6d6ad73af905 drivers/pinctrl/freescale/pinctrl-imx.c Gary Bisson     2017-01-02 @291  	.get_function_groups = pinmux_generic_get_function_groups,
-03e9f0cac5da6af drivers/pinctrl/pinctrl-imx.c           Linus Walleij   2014-09-03  292  	.set_mux = imx_pmx_set,
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  293  };
-ae75ff814538400 drivers/pinctrl/pinctrl-imx.c           Dong Aisheng    2012-04-27  294  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +	if ((pt_vaddr_t)domain->geometry.aperture_end != range.last_va) {
+> +		domain->geometry.aperture_end = ULONG_MAX;
+> +		domain->pgsize_bitmap &= ULONG_MAX;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
