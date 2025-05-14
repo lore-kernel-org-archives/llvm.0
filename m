@@ -1,139 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCD5289809
-	for <llvm@lists.linux.dev>; Wed, 14 May 2025 18:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4A52741A0;
+	Wed, 14 May 2025 18:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747248517; cv=none; b=h5Fybq210Lrqx5QpD8r/IQ7gc5K/1JpTMxr4iIuXg//OmG2Tcj0hBoXzZOlgghOvxenGgLWkUAAeW7Irch4vWMfSzsORRFIsZrJMtvR+R6Q0lwArYJLQhou6Oq/PHkRt7QT3BT8s7tU+5JXXfKZBy0osUk4RUIGKXTCZB2+8ASY=
+	t=1747249018; cv=none; b=fthvCwxnkMdvHV32fOgjsQHQ2e05Gywv4pyFLehZKzwgYZgJzCOFO3cU8PE69Cjvj5F4LY8Gp/dbiWRhz9vri5joBFAH2qwBA4Pic1JQOfDzRR7Ec/QA7sPhYB2d7rfXfcaFSxdpm4+/2TIUPyt50MyPboiB4cDIYeOWNKHTANI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747248517; c=relaxed/simple;
-	bh=1dL3jkRxFC0P91egx6YqWf3eBdBVV0GfaxQZDGn2glA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QPinDklVP/0r8QHa3+E//SI0ohdAHMRQP7VKsu53baAhIei+0hVwTXkB3CDp14GBbqlZh9S2yKoqlxA2qeqjogO9agff5Kf1Hzr8lHZcjnxQWkf0zUknHdhaOHV1SZQOUiFC/CGJhpQ4Lo22kE8vCgIdVcPQMUNMLXYpQXWHzIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mg0Eqts1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747249018; c=relaxed/simple;
+	bh=KKvM3hBd7nGNbOxN+FBIYvDoZnjs3M9pvChXhh0uJdY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Piq0HhldovosrW6Qskw2fx7vdkhtMqaFZi/Mw//fP25ZGUrv6e6Y7VktrcAVzBXbtpkZmHS0UYqoNwzP1dAqdTvZkUDkVtWZAFxRyvDaLudvT1qu/9z3Y3trUlOArNSF6IILQEuCNLzhIOBljeXkQDdOmZF3vbmDeftOr5V/ebY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=fhr8Yem1; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mg0Eqts1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DCBC4CEEF
-	for <llvm@lists.linux.dev>; Wed, 14 May 2025 18:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747248516;
-	bh=1dL3jkRxFC0P91egx6YqWf3eBdBVV0GfaxQZDGn2glA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Mg0Eqts14L0guJ1PrWLkAfuX/ZsaMTsrYXMFSHFlNruLkORmCsrtCY27SoCSv+jcI
-	 3nWIW/6lqTJ9yMqMA9edrIqDNSVgX15wVLZY3tuaR7FXreCx0G+UFG9C+uItT+oNvg
-	 qQcslNN7F0tjiJcbmW1jqYLf+hw6wPCqFTbUDKP+S1Wtfn5Sjy5N5opXjhL1V0OeHu
-	 FQUu5eAdGWpW3o5Ew42+l6LrC1bB8ryawB9yzrw9aLuWKlr5cNce0KJF2lovkbfzba
-	 1Xp5XRsSP8XD1aZcjL83xxac4Vqh0dcNm2z9rRlYZyrjGI8SOdbZn/GNVahMsv0iR4
-	 5l9PTkoPx6H+w==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5fc8c68dc9fso299913a12.1
-        for <llvm@lists.linux.dev>; Wed, 14 May 2025 11:48:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVV4mGnkHWQIOD9vfobatC/sFtH4DGpD1AXCP2ONnmAI1k2eCGylIIQgS8yd8i9oCq8M+bW@lists.linux.dev
-X-Gm-Message-State: AOJu0YzH9CgsgvKqSMQB51rex9ftBk+OF56U+ygx7HAW35QgfDujDhTS
-	SUy8IgAKuBZLUtA/EHLEdrib+vd1dwpeq7py3Fk8RZDYk7Po4HFYoyzmFSNors1RdSi9k8Wh+7Y
-	yLvXKZVq1tbHnO1TfT0ImunWL1SMiJqn+6F3I
-X-Google-Smtp-Source: AGHT+IEwYBrqLp5B8yM7DCtv9E2xaKltpmN2IE70cuY0GgkncCn02p6VNhOoZ0q8F3xgtHCoLYzieRnXkf+m1JsA3pw=
-X-Received: by 2002:a05:6402:2709:b0:5e7:8501:8c86 with SMTP id
- 4fb4d7f45d1cf-5ff989141c5mr3783098a12.22.1747248514758; Wed, 14 May 2025
- 11:48:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="fhr8Yem1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=KKvM3hBd7nGNbOxN+FBIYvDoZnjs3M9pvChXhh0uJdY=;
+	t=1747249017; x=1748458617; b=fhr8Yem12lVE49MtBkHcpjMN12ZLa2IpM1LysnNxRBi9Rh5
+	QCs5O3+bDicDW5gL+Bw98GG2XgEeG0+S6kalHjreXu+0sTTRZBK9StpN2O7mgPmEoIz4+YJuUBLOL
+	4ybjcTE8KNWvNIIFAW7vSsA+rAmiHmOO/YdQeIWQ2dOEByazWismWHhmRDwak9m05domEcinWrXZu
+	aP/0SKdLkD4dEhSzYFhFI0fEEewhrODZ/rAt+IU+RB9YcPyBvLnlch9oJVPpdwSBjmik1AqjKtta8
+	OfP2P5g+T1RRm4qWkt+UQXZtGFQ4vM4MDgaS53fA+6QN6jJTDbqCjoKgMYNXZkKQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.1)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uFHHi-00000008e1l-26qY;
+	Wed, 14 May 2025 20:56:54 +0200
+Message-ID: <a12c82c394e9676e32ede6b8312f821a16fef94b.camel@sipsolutions.net>
+Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
+ compiled with clang
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Bert Karwatzki <spasswolf@web.de>, "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>
+Cc: "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>, 
+ "llvm@lists.linux.dev"
+	 <llvm@lists.linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-wireless@vger.kernel.org
+Date: Wed, 14 May 2025 20:56:53 +0200
+In-Reply-To: <2cad838b39f00d93319509d2a6a77a4c42c7fa92.camel@web.de>
+References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
+				 <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+			 <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
+		 <2d8c1929bf5ab5260dacf9aa390456b3b49ce465.camel@sipsolutions.net>
+	 <2cad838b39f00d93319509d2a6a77a4c42c7fa92.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
- <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
- <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com> <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
-In-Reply-To: <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Wed, 14 May 2025 20:48:23 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
-X-Gm-Features: AX0GCFuIZdNpfAM0OCZ1PfMQ_hYGIe9IvTF-jFPpzRbhWO4tNX6gFXEj5lMCve4
-Message-ID: <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Paul Moore <paul@paul-moore.com>
-Cc: bboscaccy@linux.microsoft.com, James.Bottomley@hansenpartnership.com, 
-	bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, 
-	dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au, 
-	jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com, 
-	justinstitt@google.com, keyrings@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
-	nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
-	nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com, 
-	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
-	xiyou.wangcong@gmail.com, kysrinivasan@gmail.com, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-malware-bazaar: not-scanned
 
-On Wed, May 14, 2025 at 5:06=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Sat, May 10, 2025 at 10:01=E2=80=AFPM KP Singh <kpsingh@kernel.org> wr=
-ote:
-> >
->
-> ...
->
-> > The signature check in the verifier (during BPF_PROG_LOAD):
-> >
-> >     verify_pkcs7_signature(prog->aux->sha, sizeof(prog->aux->sha),
-> > sig_from_bpf_attr, =E2=80=A6);
->
-> I think we still need to clarify the authorization aspect of your
-> proposed design.
->
-> Working under the assumption that the core BPF kernel code doesn't
-> want to enforce any restrictions, or at least as few as possible, I'm
+>=20
+> I've split off the problematic piece of code into an noinline function to=
+ simplify the disassembly:
+>=20
 
-The assumption is not true, I should have clarified it in the original
-design. With the UAPI / bpf_attr the bpf syscall is simply denied if
-the signature does not verify, so we don't need any LSM logic for
-this. There is really no point in continuing as signature verification
-is a part of the API contract when the user passes the sig, keyring in
-the bpf syscall.
+Oh and also, does it even still crash with that? :)
 
-Also, since we have a solid grasp on the design and its implementation
-being contained, it will be much simpler for us to actually implement
-the patches. We will keep you posted.
+Still I feel it's possibly some kind of weird side-effect and not
+strictly a compiler issue? But I don't see anything so far.
 
-- KP
-
-> expecting that the BPF kernel code would want to adopt an "allow all"
-> policy when it comes to authorizing signed and unsigned BPF programs,
-> delegating any additional restrictions to the LSM.  With that in mind
-> I think we need to agree on a way for the BPF verifier to indicate
-> that it has verified the signature is correct to the LSM, and we need
-> a new LSM hook which runs *after* the verifier so that it can inspect
-> the results of the signature verification.  While it might be tempting
-> to relocate the existing security_bpf_prog_load() hook, I believe it
-> makes sense to leave that hook before the verifier for those LSMs that
-> wish control access prior to the verifier's inspection using criteria
-> other than signatures.
->
-> With respect to the LSM hook, since it appears that the signature is
-> going to be included in the bpf_attr struct, and I'm *guessing* the
-> best way for the verifier to indicate the result of the signature
-> verification is via a field inside bpf_prog_aux, this means the hook
-> could look something like this:
->
->   int security_bpf_prog_verified(bpf_prog, bpf_attr);
->
-> ... and be called immediately after bpf_check() in bpf_prog_load().
-> As far as the new field in bpf_prog_aux is concerned, I think we can
-> probably start off with a simple bool to indicate whether a signature
-> was verified or not, with an understanding that we can move to a
-> richer construct in the future if we find it necessary.  Neither of
-> these are directly visible to userspace so we have the ability to
-> start simple and modify as needed.
->
-> Does this sound reasonable to everyone?  Does anyone have any other
-> thoughts on the authorization aspect of BPF signature verification?
->
-> --
-> paul-moore.com
+johannes
