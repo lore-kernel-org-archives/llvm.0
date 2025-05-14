@@ -1,167 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4B2297B67;
-	Wed, 14 May 2025 20:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B810D296175
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 20:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747253956; cv=none; b=cTYfEVXDX/EX8Nwdoaqg/OXAjrAKY2vB8o19tde+FpPY7jOR2qEzY1Ic91qlvT6//CGLP1YD2+GSfPx9rxnmTFgSSncFy+d376uvFbaGGL65os+wHk5Mwt7yqmKCpa/hjgzh79FACO7P6w4tw3uoV/EePVL0qj7hnIuQRowVasQ=
+	t=1747254130; cv=none; b=RQ/eGzb9FYF6bHg6meSPPgQhlG9Se0/fd+bGGlyMbXZvWfJeLN8eP8FkjnbUcs52VuNl8U8enaf6/3RFBdT/jYk5BCW7quxN2vEzyGg3Cncd99cLYoONZznk1P3MgrFJJkMNRMdqKwrcgNGc6UF9ESRumQto8tTVtjrOatZEF6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747253956; c=relaxed/simple;
-	bh=hYrU9RvV+4y2DHFLaQiCECHzjwEV+OkrnWnu8hwtrgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iWrInO6x2H9b0gn3AGxsnG8oFx210UazMW94Sl3TcJcCBsW2EeOq1Jq76R1hsIh4wwA7C7MdvhGt3VJW9xxfvosv9aP48AXOAryEa12v8k+b/SuVTlHS2ACNJC97kybmaeBTb0Hr67UdkSNLlHCG3a8Dq46dZW4FAzAGr4fv2/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W5A4U/Mu; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747254130; c=relaxed/simple;
+	bh=qtEH3N7yYwdDW9w69VRhWPifwVYAlFNdhXhEbA6MfFE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XJzG2r122SWeKq5R5Q4XaLGnZoRieZ1srqraB0R9wzR3S5Qap8fVjrqMahqHBVhDLbqgAya1FDLv8O2yQQLxg3oZrU7dI4JiUL8llmaAQC8TTVstl2OF2JXf6y21Ir35Q6wQAJoRk4c2eCtjbhfq+K1rVNRv4FT/eqN8YmRpKgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HznwA2XV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W5A4U/Mu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747253954; x=1778789954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hYrU9RvV+4y2DHFLaQiCECHzjwEV+OkrnWnu8hwtrgU=;
-  b=W5A4U/MuznMYUwssUybHr6Rm/LiqYcRbcNvoGaVrM0pMreeuwRcSJ8Ka
-   84wBWgCnBpmzoL4ysw+gfyJlXo1Hqi1/wC7cgo/3j9fnTCCn1vG7uzFWD
-   D/iq/HDdKCuxjsMvnHPZjla4jtDtYm9cDkvkW2IKpvDl4Jj86amqx6BcK
-   8U7whg80bbHgzJrj6dHAvem/AMlFbgAtMYXesN8Q7ExgLZ8logmU9r2tb
-   pQGMO7Spj/C0Rcwg4YwWjlhMEXntykI3xoonrVhoMMM7mJXTCpFyJdRNK
-   mPtmNXNDE5VBkY52/svEXTCCvTzFEf7N1M/boNYR/0+CRRM+cEDXwQhaz
-   g==;
-X-CSE-ConnectionGUID: GilWXcYKRqGd4jCHJOvroQ==
-X-CSE-MsgGUID: mE/U+rkLQ+2Zr+1V5FDqMA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="71677946"
-X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
-   d="scan'208";a="71677946"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 13:19:14 -0700
-X-CSE-ConnectionGUID: aoXVi9WcQ9WWpZlstv9FhA==
-X-CSE-MsgGUID: c9k03sXERRO7riqhJkfvNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
-   d="scan'208";a="169084389"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 14 May 2025 13:19:10 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uFIZH-000HWZ-2b;
-	Wed, 14 May 2025 20:19:07 +0000
-Date: Thu, 15 May 2025 04:18:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-amlogic@lists.infradead.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>
-Subject: Re: [PATCH 5/8] pinctrl: meson: support amlogic S6/S7/S7D SoC
-Message-ID: <202505150408.vMuuQH5G-lkp@intel.com>
-References: <20250514-s6-s7-pinctrl-v1-5-39d368cad250@amlogic.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HznwA2XV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747254127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gPeLcbmdCMBaNe6B0vFryVOf33iSAaAUUFL3aJiDj04=;
+	b=HznwA2XVXBE9tf9yUOaO9iXSRnuk0jdBKRYXd9YDQCknVGAHW40dndMzP7ixBBxCbDSVSg
+	keY4mXNfEs36bUbh0ldLYCny0b0PLYmviZ8Lhu2x754x+tMK3DRLeIzTw+1nVWpiL3wQXx
+	TCDsM9f2COZb6XuV+JfZayhHZOErmCQ=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-94-JE96m9l6OA67jtnfn7FzrA-1; Wed,
+ 14 May 2025 16:22:05 -0400
+X-MC-Unique: JE96m9l6OA67jtnfn7FzrA-1
+X-Mimecast-MFC-AGG-ID: JE96m9l6OA67jtnfn7FzrA_1747254124
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2518F19560A1
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 20:22:04 +0000 (UTC)
+Received: from [172.20.90.206] (unknown [10.30.45.71])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A970D1800359;
+	Wed, 14 May 2025 20:22:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc6,
+ upstream-mainline, c94d59a1)
+Date: Wed, 14 May 2025 20:22:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250514-s6-s7-pinctrl-v1-5-39d368cad250@amlogic.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <75863.125051416220500557@us-mta-94.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: hLYnn40aErC7IgkY6WcehZrkIZbWJSj-IeHLmz2ek7s_1747254124
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xianwei,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on aa94665adc28f3fdc3de2979ac1e98bae961d6ca]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xianwei-Zhao-via-B4-Relay/dt-bindings-pinctl-amlogic-pinctrl-a4-Add-compatible-string-for-S7/20250514-150438
-base:   aa94665adc28f3fdc3de2979ac1e98bae961d6ca
-patch link:    https://lore.kernel.org/r/20250514-s6-s7-pinctrl-v1-5-39d368cad250%40amlogic.com
-patch subject: [PATCH 5/8] pinctrl: meson: support amlogic S6/S7/S7D SoC
-config: arm64-randconfig-004-20250514 (https://download.01.org/0day-ci/archive/20250515/202505150408.vMuuQH5G-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505150408.vMuuQH5G-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505150408.vMuuQH5G-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pinctrl/meson/pinctrl-amlogic-a4.c:128:13: error: designator into flexible array member subobject
-     128 |         .multi_data[0] = {
-         |                    ^~~~~~~
-     129 |                 .m_bank_id = AMLOGIC_GPIO_CC,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                 .m_bit_offs = 24,
-         |                 ~~~~~~~~~~~~~~~~~
-     131 |                 .sid = (AMLOGIC_GPIO_X << 8) + 16,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     132 |                 .eid = (AMLOGIC_GPIO_X << 8) + 19,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     133 |         },
-         |         ~
-   drivers/pinctrl/meson/pinctrl-amlogic-a4.c:69:19: note: initialized flexible array member 'multi_data' is here
-      69 |         struct multi_mux multi_data[];
-         |                          ^
-   drivers/pinctrl/meson/pinctrl-amlogic-a4.c:138:13: error: designator into flexible array member subobject
-     138 |         .multi_data[0] = {
-         |                    ^~~~~~~
-     139 |                 .m_bank_id = AMLOGIC_GPIO_CC,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     140 |                 .m_bit_offs = 24,
-         |                 ~~~~~~~~~~~~~~~~~
-     141 |                 .sid = (AMLOGIC_GPIO_X << 8) + 16,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     142 |                 .eid = (AMLOGIC_GPIO_X << 8) + 19,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     143 |         },
-         |         ~
-   drivers/pinctrl/meson/pinctrl-amlogic-a4.c:69:19: note: initialized flexible array member 'multi_data' is here
-      69 |         struct multi_mux multi_data[];
-         |                          ^
-   drivers/pinctrl/meson/pinctrl-amlogic-a4.c:144:13: error: designator into flexible array member subobject
-     144 |         .multi_data[1] = {
-         |                    ^~~~~~~
-     145 |                 .m_bank_id = AMLOGIC_GPIO_F,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     146 |                 .m_bit_offs = 4,
-         |                 ~~~~~~~~~~~~~~~~
-     147 |                 .sid = (AMLOGIC_GPIO_D << 8) + 6,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     148 |                 .eid = (AMLOGIC_GPIO_D << 8) + 6,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     149 |         },
-         |         ~
-   drivers/pinctrl/meson/pinctrl-amlogic-a4.c:69:19: note: initialized flexible array member 'multi_data' is here
-      69 |         struct multi_mux multi_data[];
-         |                          ^
-   3 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +128 drivers/pinctrl/meson/pinctrl-amlogic-a4.c
+Kernel information:
+    Commit message: Merge tag 'trace-v6.15-rc6' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/trace/linux-trace
 
-   125	
-   126	const struct aml_pctl_data s7_priv_data = {
-   127		.number = 1,
- > 128		.multi_data[0] = {
-   129			.m_bank_id = AMLOGIC_GPIO_CC,
-   130			.m_bit_offs = 24,
-   131			.sid = (AMLOGIC_GPIO_X << 8) + 16,
-   132			.eid = (AMLOGIC_GPIO_X << 8) + 19,
-   133		},
-   134	};
-   135	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1817826708
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1817826708-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
