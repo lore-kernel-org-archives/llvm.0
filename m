@@ -1,173 +1,178 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7544E194A44;
-	Wed, 14 May 2025 17:54:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446AF287514
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 18:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747245300; cv=none; b=UrheSVXHNiXFnPRFiprY4Dax6onu/PfGuKhs7tFmgtju8ebje+Adhd7jHEYUZbCeeAkVMAH0j5+BsNAqaSlZqPmURe9Ac648NWr5FZWvs8N2AXECiAP3mXgY9uAKfxAD1glEkWYgLL+Rc7+U9AKQ8+MCIohd/da5dhfES4nrQSI=
+	t=1747247753; cv=none; b=PF/SvATzyBEGsm3lFOlg1tX4cJTzIOQ/AZsFjtDrrcU8B+Uhjc7PUaV6gkfVAMFu+g1ZgaM1CwLNd6OcERLOLphGpYIz8FMuhKBWLUw/FR22687XFXc/EbFKuuVSzjQev6Cg65tLqjtzHlUenPNRmDlzW9fjJGKdtZAHrDBSLLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747245300; c=relaxed/simple;
-	bh=QuwXOW+bPbr+c/N3MgIMBMJ3gYGLGrCnOuRpDAxpyCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZA9/xGO5o5hxFACMnC59tC6bvUb6c9inEvUNgpXVD17d6p+K8ZJmL9uc6Mr4I6t0mvuh2hTwQ4dHzCtIR+d5Y9QZoGJICB8A1kH/zAYK1R/0Vptjo5RpqUJZltd+A+SNFsEsqvTlPmchKr9XNDBU+WBcMjuCr/df+ooQzwah4i4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EBYiUVu0; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747247753; c=relaxed/simple;
+	bh=FXR+yoHky+nwxXWGDuzeNtD0Pl66EDMCJYYq1hhFKLE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bBEeJYvGf3yRIZPDbFQ7K8k8e/AeyENauxGkgVIELhNRRJfQM26eWSIolXM/8mJRcJnCCMjnvQej1EoqPfrSUoepsi7QYyCYqCJIJ/MfEuvwIy1AMjXOwS8pFMKivk2B0eFmkN+kL7gph/Bh/GViGoW1IjL518FQxZUlhqhTOqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHrzO6R/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EBYiUVu0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747245299; x=1778781299;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QuwXOW+bPbr+c/N3MgIMBMJ3gYGLGrCnOuRpDAxpyCo=;
-  b=EBYiUVu01FXNeCI7JXNjFaPBSKIbSpWAqlEUcC36eSqDAxrnk+xHypFK
-   c7bo3Kgxbi5kGuXCXl6ZwSn0y4MXU82emGP2WKBJc0z0d5UZ8e+5RKesH
-   MHUI4ZPihzK3o9oUmw/r5kLwaF1tZrojO6PJOzenoPcOuiewBLctPYacm
-   lFLL6JJpiZKqvDWbfgko4jM6qigPPZfasGmmUgYWgOBE9XpJo2a4cIVxE
-   1Q5H08vuke5WFW4Jo8aPSkCtVCSMoLGIInF0sOCrU/oJZwDAdMbG0Kz5s
-   JD01z76ghmuoZwF6V/PO5rhPgOJ+vuIldMc4osONWzn2PeOWuAEBBs8yy
-   w==;
-X-CSE-ConnectionGUID: yTiEMk5qRh6TX8ORTfB1gw==
-X-CSE-MsgGUID: WrPGCr9PSZulewo0veVT8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="48409102"
-X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
-   d="scan'208";a="48409102"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 10:54:58 -0700
-X-CSE-ConnectionGUID: s1vqdcwFQkeGehkzAL9m8Q==
-X-CSE-MsgGUID: j3qPMOXwRLugPYoU1XiJQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
-   d="scan'208";a="161399910"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 14 May 2025 10:54:56 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uFGJi-000HQ7-17;
-	Wed, 14 May 2025 17:54:54 +0000
-Date: Thu, 15 May 2025 01:53:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/mediated_pmu 77/104] arch/arm64/kvm/arm.c:2356:30:
- error: too many arguments to function call, expected 0, have 1
-Message-ID: <202505150150.ncs78yPq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHrzO6R/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26662C4CEF5
+	for <llvm@lists.linux.dev>; Wed, 14 May 2025 18:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747247753;
+	bh=FXR+yoHky+nwxXWGDuzeNtD0Pl66EDMCJYYq1hhFKLE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MHrzO6R/jlcm/U9VBQLypeL+rhvaJfakcODA0beofFNiiSCsgh8krFOC3X60C69u0
+	 3jjFZqa/fQv76F36KeqTdttHsjnwBXw5kUNWm1VsBYwmHalLW6lh6m3740WoSjaf49
+	 QmCanYEQ8nURu2CViU+7kLPBkTLlOGUWYgNK4I8H3G64/EnBFg9AEdVvp83oaSfrxG
+	 xd78cVFxnLFdY7rZv8JIJ5l+p4zSc+dMh5r2cpJk23GjE03iW6mJLIWLav5aK2l64n
+	 fQnI/6sIEfnfvhNGd+642+lEI2o9GC5gqXqI+BxYF09i2r6By207+XWpJp7U5OJcIK
+	 2rwGEIY8qUtaQ==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac2bb7ca40bso18760366b.3
+        for <llvm@lists.linux.dev>; Wed, 14 May 2025 11:35:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV4tfcwjk48Or07V4kLQjH+OU23guQujQUm7BxXSTjgK6kGrUU3SFJVR7jHpnG9aVeBGGko@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy03ZwI9SOCMbxDZLyjK6dJDPCxoZq1qPT7Ijmi2T7hbd4To2lP
+	azWUyoUivH7Co0fpZXY6yLSfHIwFrCc34MgPq5JXY6YTUXEeFTKtiUDeaQget2RX1gMoALS7C6g
+	jig+6SAwih4uuf7acFJRYZAKljsM27SL2/Z8o
+X-Google-Smtp-Source: AGHT+IFtQMXy9LFulSzKje1GuSuGBtYynlXEWPAAMjiUP2194GFK8Vq6VYTuT87LMKZh7Uff3AMO5FsjIgB/BYZJ9Bw=
+X-Received: by 2002:a05:6402:2553:b0:5fc:3f48:a673 with SMTP id
+ 4fb4d7f45d1cf-5ff98897f75mr3681731a12.2.1747247739543; Wed, 14 May 2025
+ 11:35:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
+ <beaa81748cf1325df67930bf74ea87e6cdcb3e46.camel@HansenPartnership.com>
+ <CACYkzJ5XJOj08+hKheWDcqbPrFAwa+fFvOw+4QPAHBz1u2HgAg@mail.gmail.com> <4f92fcfaeffd179ff6ae265822dc79856310d6a3.camel@HansenPartnership.com>
+In-Reply-To: <4f92fcfaeffd179ff6ae265822dc79856310d6a3.camel@HansenPartnership.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Wed, 14 May 2025 20:35:28 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7Oh62u7bHwQ_nOLG54qnhyNU9msF5mWV_vFrBXw1oZqw@mail.gmail.com>
+X-Gm-Features: AX0GCFu6wgKt8ns7B4WmAYl1fFIsHpTPOSXa547IdWuqOMoeu6YVbaSdA5YH5n0
+Message-ID: <CACYkzJ7Oh62u7bHwQ_nOLG54qnhyNU9msF5mWV_vFrBXw1oZqw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Paul Moore <paul@paul-moore.com>, bboscaccy@linux.microsoft.com, bpf@vger.kernel.org, 
+	code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, dhowells@redhat.com, 
+	gnoack@google.com, herbert@gondor.apana.org.au, jarkko@kernel.org, 
+	jmorris@namei.org, jstancek@redhat.com, justinstitt@google.com, 
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, llvm@lists.linux.dev, 
+	masahiroy@kernel.org, mic@digikod.net, morbo@google.com, nathan@kernel.org, 
+	neal@gompa.dev, nick.desaulniers+lkml@gmail.com, nicolas@fjasle.eu, 
+	nkapron@google.com, roberto.sassu@huawei.com, serge@hallyn.com, 
+	shuah@kernel.org, teknoraver@meta.com, xiyou.wangcong@gmail.com, 
+	kysrinivasan@gmail.com, Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/sean-jc/linux x86/mediated_pmu
-head:   ab0311cfb61696f3d4cbf9ce764d057ff40d98f0
-commit: 2c1ab50147cdb81f59f64e8696594d343ec6a9e3 [77/104] KVM: Add a simplified wrapper for registering perf callbacks
-config: arm64-randconfig-001-20250514 (https://download.01.org/0day-ci/archive/20250515/202505150150.ncs78yPq-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505150150.ncs78yPq-lkp@intel.com/reproduce)
+On Wed, May 14, 2025 at 7:45=E2=80=AFPM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Wed, 2025-05-14 at 19:17 +0200, KP Singh wrote:
+> > On Wed, May 14, 2025 at 5:39=E2=80=AFPM James Bottomley
+> > <James.Bottomley@hansenpartnership.com> wrote:
+> > > On Sun, 2025-05-11 at 04:01 +0200, KP Singh wrote:
+> [...]
+> > > > This implicitly makes the payload equivalent to the signed block
+> > > > (B_signed)
+> > > >
+> > > >     I_loader || H_meta
+> > > >
+> > > > bpftool then generates the signature of this I_loader payload
+> > > > (which now contains the expected H_meta) using a key (system or
+> > > > user) with new flags that work in combination with bpftool -L
+> > >
+> > > Could I just push back a bit on this.  The theory of hash chains
+> > > (which I've cut to shorten) is about pure data structures.  The
+> > > reason for that is that the entire hash chain is supposed to be
+> > > easily independently verifiable in any environment because anything
+> > > can compute the hashes of the blocks and links.  This independent
+> > > verification of the chain is key to formally proving hash chains to
+> > > be correct.  In your proposal we lose the easy verifiability
+> > > because the link hash is embedded in the ebpf loader program which
+> > > has to be disassembled to do the extraction of the hash and verify
+> > > the loader is actually checking it.
+> >
+> > I am not sure I understand your concern. This is something that can
+> > easily be built into tooling / annotations.
+> >
+> >     bpftool -S -v <verification_key> <loader> <metadata>
+> >
+> > Could you explain what's the use-case for "easy verifiability".
+>
+> I mean verifiability of the hash chain link.  Given a signed program,
+> (i.e. a .h file which is generated by bpftool) which is a signature
+> over the loader only how would one use simple cryptographic operations
+> to verify it?
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505150150.ncs78yPq-lkp@intel.com/
+I literally just said it above the hash can be extracted if you really
+want offline verification. Are you saying this code is hard to write?
+or is the tooling hard to write? Do you have some definition of
+"simple cryptographic operations".  All operations use tooling.
 
-All errors (new ones prefixed by >>):
+>
+> >
+> > > I was looking at ways we could use a pure hash chain (i.e.
+> > > signature over loader and real map hash) and it does strike me that
+> > > the above ebpf hash verification code is pretty invariant and easy
+> > > to construct, so it could run as a separate BPF fragment that then
+> > > jumps to the real loader.  In that case, it could be constructed on
+> > > the fly in a trusted environment, like the kernel, from the link
+> > > hash in the signature and the signature could just be Sig(loader ||
+> > > map hash) which can then be
+> >
+> > The design I proposed does the same thing:
+> >
+> >     Sig(loader || H_metadata)
+> >
+> > metadata is actually the data (programs, context etc) that's passed
+> > in the map. The verification just happens in the loader program and
+> > the loader || H_metadata is implemented elegantly to avoid any
+> > separate payloads.
+>
+> OK, so I think this is the crux of the problem:  In formal methods
+> proving the validity of a data based hash link is an easy set of
+> cryptographic operations.  You can assert that's equivalent to a
+> signature over a program that verifies the hash, but formally proving
+> it requires a formal analysis of the program to show that 1) it
+> contains the correct hash and 2) it correctly checks the hash against
+> the map.  That makes the task of someone receiving the .h file
+> containing the signed skeleton way harder: it's easy to prove the
+> signature matches the loader instructions, but they still have to prove
+> the instructions contain and verify the correct map hash.
+>
 
->> arch/arm64/kvm/arm.c:2356:30: error: too many arguments to function call, expected 0, have 1
-    2356 |         kvm_register_perf_callbacks(NULL);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-   include/linux/kvm_host.h:1754:20: note: 'kvm_register_perf_callbacks' declared here
-    1754 | static inline void kvm_register_perf_callbacks(void)
-         |                    ^
-   1 error generated.
+I don't see this as a problem for 2 reasons:
 
+1. It's not hard
+2. Your typical user does not want to do formal verification and
+extract signatures etc.
 
-vim +2356 arch/arm64/kvm/arm.c
+[1] alone is enough.
 
-eeeee7193df015 arch/arm64/kvm/arm.c David Brazdil       2020-12-02  2297  
-53bf620a2cdfbc arch/arm64/kvm/arm.c Sean Christopherson 2022-11-30  2298  static int __init init_subsystems(void)
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2299  {
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2300  	int err = 0;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2301  
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2302  	/*
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2303  	 * Enable hardware so that subsystem initialisation can access EL2.
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2304  	 */
-733c758e509b86 arch/arm64/kvm/arm.c Oliver Upton        2023-07-19  2305  	on_each_cpu(cpu_hyp_init, NULL, 1);
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2306  
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2307  	/*
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2308  	 * Register CPU lower-power notifier
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2309  	 */
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2310  	hyp_cpu_pm_init();
-5f5560b1c5f3a8 arch/arm/kvm/arm.c   James Morse         2016-03-30  2311  
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2312  	/*
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2313  	 * Init HYP view of VGIC
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2314  	 */
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2315  	err = kvm_vgic_hyp_init();
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2316  	switch (err) {
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2317  	case 0:
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2318  		vgic_present = true;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2319  		break;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2320  	case -ENODEV:
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2321  	case -ENXIO:
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2322  		/*
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2323  		 * No VGIC? No pKVM for you.
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2324  		 *
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2325  		 * Protected mode assumes that VGICv3 is present, so no point
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2326  		 * in trying to hobble along if vgic initialization fails.
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2327  		 */
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2328  		if (is_protected_kvm_enabled())
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2329  			goto out;
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2330  
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2331  		/*
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2332  		 * Otherwise, userspace could choose to implement a GIC for its
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2333  		 * guest on non-cooperative hardware.
-32392e04cb50d8 arch/arm64/kvm/arm.c Oliver Upton        2025-02-03  2334  		 */
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2335  		vgic_present = false;
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2336  		err = 0;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2337  		break;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2338  	default:
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2339  		goto out;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2340  	}
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2341  
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2342  	if (kvm_mode == KVM_MODE_NV &&
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2343  	   !(vgic_present && kvm_vgic_global_state.type == VGIC_V3)) {
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2344  		kvm_err("NV support requires GICv3, giving up\n");
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2345  		err = -EINVAL;
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2346  		goto out;
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2347  	}
-83c6cb20147b5e arch/arm64/kvm/arm.c Marc Zyngier        2025-02-25  2348  
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2349  	/*
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2350  	 * Init HYP architected timer support
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2351  	 */
-f384dcfe4d918c virt/kvm/arm/arm.c   Marc Zyngier        2017-12-07  2352  	err = kvm_timer_hyp_init(vgic_present);
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2353  	if (err)
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2354  		goto out;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2355  
-17ed14eba22b3a arch/arm64/kvm/arm.c Sean Christopherson 2021-11-11 @2356  	kvm_register_perf_callbacks(NULL);
-17ed14eba22b3a arch/arm64/kvm/arm.c Sean Christopherson 2021-11-11  2357  
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2358  out:
-78b3bf485d5cb5 arch/arm64/kvm/arm.c Sean Christopherson 2022-11-30  2359  	if (err)
-78b3bf485d5cb5 arch/arm64/kvm/arm.c Sean Christopherson 2022-11-30  2360  		hyp_cpu_pm_exit();
-78b3bf485d5cb5 arch/arm64/kvm/arm.c Sean Christopherson 2022-11-30  2361  
-fa8c3d65538aa1 arch/arm64/kvm/arm.c David Brazdil       2020-12-02  2362  	if (err || !is_protected_kvm_enabled())
-733c758e509b86 arch/arm64/kvm/arm.c Oliver Upton        2023-07-19  2363  		on_each_cpu(cpu_hyp_uninit, NULL, 1);
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2364  
-67f6919766620e arch/arm/kvm/arm.c   AKASHI Takahiro     2016-04-27  2365  	return err;
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2366  }
-1e947bad0b63b3 arch/arm/kvm/arm.c   Marc Zyngier        2015-01-29  2367  
+The key user journey is:
 
-:::::: The code at line 2356 was first introduced by commit
-:::::: 17ed14eba22b3a86e82fb6df28af00fb4cadfd77 KVM: arm64: Drop perf.c and fold its tiny bits of code into arm.c
+* Build the program and the metadata
+* Sign the blob once (as explained)
+* A simple API to verify the sequence of operations.
 
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
+The user builds a program and signs the blob, they sign it because it
+contains the hash of the metadata. It seems like you are optimizing
+for the formal researcher but not for the tooling. The user just needs
+good tooling and a simple API which is exactly what was proposed.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- KP
+
+> Regards,
+>
+> James
+>
+>
