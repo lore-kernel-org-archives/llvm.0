@@ -1,112 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB1E298C12;
-	Thu, 15 May 2025 11:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF4A1F16B
+	for <llvm@lists.linux.dev>; Thu, 15 May 2025 12:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747310199; cv=none; b=un/PSrmq/DRD6JnJEqfTlMTXD+lneALpK4ILJBP8w7ot/mtOOv+KIMsKajr2UHBXWIWi+8R0I5c0fG4IBR9toAnn+xwm4GfwnJs1+tiyocAnXxRKrGumlboHFIB3t9r4h+YVqboa4djHOTRtw9RzDWX//KCvlJWV7OGnbrpesiw=
+	t=1747310515; cv=none; b=Ir4gLBTBG4ntdfGlKmmllLulFqCKXqcTDpDIzbfcAOB+q9Ybw1DuhwWsOnxKotaqGXv8E4qJBZZ/Sh/pJYmxWDhyRqk0KS6uscs3Di9UlppBkOOjCVSVr6rvDU+67MfcjSkTS/NRZlMiyL7qlKJmM0VMKqhn3t3gg9knOmHGm0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747310199; c=relaxed/simple;
-	bh=4OMtFolFinzHjPn84LWrbolxTZ1uAQxqAFjktiYUlmA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KdgyxIfP/NUBwFxHGLncy3A32iMxLfNKzZ81q6XNEyZGRrv8h2H1ozgAoZFMgpREKA2hNKLSA8K8EF0NQqqHwKA3UL7v1QnOUGaVfQZMTK2Noh6LftEbYAP0pocGBS5pArLa0325tNe8+ln9KKxSNn6LxpSV1EIHM2ImzaSob74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XOmWOguC; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747310515; c=relaxed/simple;
+	bh=Fdp7xVM18mo3Yqt6zkHyz5SyCalDrq40OIWz1NE2ywo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iQwmLUlCaPWnFX//B9Ym4hH9em40VIEVhUKdCDAkgX/vnO5Ie1YfKtHMrQFlN/IS1b22rpYy+g9UZfcNVvoWvw+rNNkFotmmXMM8qXpi2qSUpxuU7skRMUlPfxmN8p1E5aCZUTG5yfqhQRaqWjhxZcL/+c5OOHgCul8sx4VQ/t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=106s+6j8; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XOmWOguC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747310197; x=1778846197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4OMtFolFinzHjPn84LWrbolxTZ1uAQxqAFjktiYUlmA=;
-  b=XOmWOguCa80NJ/fRzIBiFI4WeIbiNsHee7bzyv17cRB7CYDrxIu6dm8P
-   VYugrrbk4mtp2LyxXtHxSh8n4cweHy6UXo/m9DVI8SVVI8ZaEFPMe3+xX
-   +IX8ZAlLr8AMkDLMNknukKpLO4a6VqT7qxesjSJj+O6MLmS3qk+ojI6Dl
-   +AOuss6g9cKJ3ev7Uzq0i/WC52C1vh3ignXMQt1ZmL9FaFOJJBkZg3PvP
-   1KtfMyvz/5ioubqqKgWmudCkYIGBxXOoF8CAdLPGD40gGXArvpIr4xuIv
-   9o1y/uzdZuwFh4IUokajnV+rLwEE4K9/w/1k5cIuENvZlFRt0ui2/9FMl
-   A==;
-X-CSE-ConnectionGUID: thDdjwfIQkyvkoS1P13kiw==
-X-CSE-MsgGUID: jr84m3EkQyeF2xanATJ2BQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="71751075"
-X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
-   d="scan'208";a="71751075"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 04:56:35 -0700
-X-CSE-ConnectionGUID: Ks7bc7QnQ2afVXoKwHVa6w==
-X-CSE-MsgGUID: c2s/ErsQR3O0ZPXF80q0AQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
-   d="scan'208";a="143454434"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 15 May 2025 04:56:34 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uFXCR-000IL9-2n;
-	Thu, 15 May 2025 11:56:31 +0000
-Date: Thu, 15 May 2025 19:55:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gabriele Monaco <gmonaco@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 12/12] rv: Add opid per-cpu monitor
-Message-ID: <202505151926.d7bhoonn-lkp@intel.com>
-References: <20250514084314.57976-13-gmonaco@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="106s+6j8"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-326b5dce9ffso4885711fa.0
+        for <llvm@lists.linux.dev>; Thu, 15 May 2025 05:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747310511; x=1747915311; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SnTjnlgUmpVWJ6YWjJU//zRxWhIuxh7JMTjWe20f0OY=;
+        b=106s+6j8T1T37QAFOHeyB7VoApsA6GmvXTemvT5SNOSPvifZx5A7iB8rkxkKplL+8F
+         FQ+UkowYlSnS03c8Eu2SReGz+Fjdvkw/OP09tyR/l2TpEMnCqIISAdIJLgjkZCX+cCfe
+         fInXy/ARSfiXIe/len/QTibXmLjiMyowWrJEks3yKn9FKJe4of21qPFvixpx0x7enc7T
+         NJJwcryyVofFJ8c1e4YWDHGMzhrtYOeWBag/WQ78S91lgfEbNDSXewQmc/u7l3sHCZnd
+         mGmBIuN0+9JI0NjKIQwx6GrtheQVzooqsymMM+jJp15ai/bMh1yJJ42rP5fkwoytHJoK
+         BFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747310511; x=1747915311;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SnTjnlgUmpVWJ6YWjJU//zRxWhIuxh7JMTjWe20f0OY=;
+        b=P9ZhW1sY/qhzGTqZ7D5T+N3q7o0xBlDB0kqoaBHNqAu5axmtwb4pGmLna7+R80ZDoz
+         o3wQpLlrB9HzWXdn8jOePVq/x7sfsAYnfj6fqv2gOfucENP7S/+ODRwO6GefXeC4X1W7
+         IBnbZfR0OoVnLxzlRb7zN9qlIGhLqgnHX4x+O6KC8gsSWuoaAojW7XstdZ1NFbXnfLaN
+         LcfQIOJo9NE1WYPe9b+8FIr6EQBwma7ar+MJbmmCh+s1DNi4/8dA5DipopkFIBxU6tAy
+         fAZcdFz1nPc+JyI40N4YRvd9+kUM0Yer/+OVYQNR45el6fLBnRlbSvabqc3GWK7l1c5a
+         YF5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUy1F2CEXp27UnKTfx4H8XZmBZu6ydu0j75A1gGGBNVV2wk/pENqCCGIHDDUVMtnBZVHTPA@lists.linux.dev
+X-Gm-Message-State: AOJu0YyfL170F/c8hScwrwsZHPW+nbszft/IiNzDBh44wZbPKvLTtQ5N
+	NKxcnn7VBVfbGR+55+YiiJZcXjYTNpnrYOXN4yp+1k3k38KhbLwD7fydITctzMsIU9XvLnJZNgh
+	LUEAqx+CPeBidEZ0Zm1Gz9MzCVsCVUs8my6lI
+X-Gm-Gg: ASbGnct6vHCdwBCTKd3UjX2v4gVTk5nRQbGzEnNGeRKHj0KDdEoh8MqZ65pq1QwkD10
+	5iFcc572iyWT4SNnwKQ26apNfIcIVT+lQqqFWMtOg4mzX5j6WivD+81VlZp82Ae2FHSVvUfmIbF
+	WH1pJ8bjauBVYhaa1N/at1HoN6SB+D+e600zfs+YcPWWetb51HGaD7OlQvzBKwF6OniA==
+X-Google-Smtp-Source: AGHT+IEH96IKGmX2cAO3uTh1/QBEiqEJWRHviVXK7nh1F5DrmoVawhFe8JJNtch0htaUl2OJIB1mEZGGUPXNBHxisBM=
+X-Received: by 2002:a2e:a542:0:b0:326:c07e:b0a4 with SMTP id
+ 38308e7fff4ca-327ed0de53bmr28047271fa.11.1747310510182; Thu, 15 May 2025
+ 05:01:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250514084314.57976-13-gmonaco@redhat.com>
+References: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
+In-Reply-To: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Thu, 15 May 2025 14:01:39 +0200
+X-Gm-Features: AX0GCFuQowmy9iaNX31ALvCLpL5T4nDokRyS7Qih7uVxXxqrT3ubbzv9Q8-xB8w
+Message-ID: <CACT4Y+Yzmd7BtrpqUPrbXAAGzMnO0YKZnhVxLgyyXEftscEUnQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kcov: rust: add flags for KCOV with Rust
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Aleksandr Nogikh <nogikh@google.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Gabriele,
+On Thu, 1 May 2025 at 14:16, Alice Ryhl <aliceryhl@google.com> wrote:
+>
+> Rust code is currently not instrumented properly when KCOV is enabled.
+> Thus, add the relevant flags to perform instrumentation correctly. This
+> is necessary for efficient fuzzing of Rust code.
+>
+> The sanitizer-coverage features of LLVM have existed for long enough
+> that they are available on any LLVM version supported by rustc, so we do
+> not need any Kconfig feature detection. The coverage level is set to 3,
+> as that is the level needed by trace-pc.
+>
+> We do not instrument `core` since when we fuzz the kernel, we are
+> looking for bugs in the kernel, not the Rust stdlib.
+>
+> Co-developed-by: Matthew Maurer <mmaurer@google.com>
+> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> Reviewed-by: Alexander Potapenko <glider@google.com>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-[auto build test ERROR on aa94665adc28f3fdc3de2979ac1e98bae961d6ca]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gabriele-Monaco/tools-rv-Do-not-skip-idle-in-trace/20250514-164745
-base:   aa94665adc28f3fdc3de2979ac1e98bae961d6ca
-patch link:    https://lore.kernel.org/r/20250514084314.57976-13-gmonaco%40redhat.com
-patch subject: [RFC PATCH v2 12/12] rv: Add opid per-cpu monitor
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250515/202505151926.d7bhoonn-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505151926.d7bhoonn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505151926.d7bhoonn-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/trace/rv/monitors/opid/opid.c:42:30: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-      42 | static void attach_vector_irq() { }
-         |                              ^
-         |                               void
-   kernel/trace/rv/monitors/opid/opid.c:43:30: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-      43 | static void detach_vector_irq() { }
-         |                              ^
-         |                               void
-   2 errors generated.
-
-
-vim +42 kernel/trace/rv/monitors/opid/opid.c
-
-    39	
-    40	#else
-    41	/* We assume irq_entry tracepoints are sufficient on other architectures */
-  > 42	static void attach_vector_irq() { }
-    43	static void detach_vector_irq() { }
-    44	#endif
-    45	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> I did not pick up the Tested-by due to the changes. I verified that it
+> looks right under objdump, but I don't have a syzkaller setup I can try
+> it with.
+> ---
+> Changes in v2:
+> - Ignore `core` in KCOV.
+> - Link to v1: https://lore.kernel.org/r/20250430-rust-kcov-v1-1-b9ae94148175@google.com
+> ---
+>  rust/Makefile         | 1 +
+>  scripts/Makefile.kcov | 6 ++++++
+>  scripts/Makefile.lib  | 3 +++
+>  3 files changed, 10 insertions(+)
+>
+> diff --git a/rust/Makefile b/rust/Makefile
+> index 3aca903a7d08cfbf4d4e0f172dab66e9115001e3..80c84749d734842774a3ac2aabbc944a68d02484 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -492,6 +492,7 @@ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs \
+>  ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
+>  $(obj)/core.o: scripts/target.json
+>  endif
+> +KCOV_INSTRUMENT_core.o := n
+>
+>  $(obj)/compiler_builtins.o: private skip_gendwarfksyms = 1
+>  $(obj)/compiler_builtins.o: private rustc_objcopy = -w -W '__*'
+> diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
+> index 67e8cfe3474b7dcf7552e675cffe356788e6c3a2..ddcc3c6dc513e1988aeaf07b8efa106e8dffa640 100644
+> --- a/scripts/Makefile.kcov
+> +++ b/scripts/Makefile.kcov
+> @@ -3,4 +3,10 @@ kcov-flags-$(CONFIG_CC_HAS_SANCOV_TRACE_PC)    += -fsanitize-coverage=trace-pc
+>  kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)   += -fsanitize-coverage=trace-cmp
+>  kcov-flags-$(CONFIG_GCC_PLUGIN_SANCOV)         += -fplugin=$(objtree)/scripts/gcc-plugins/sancov_plugin.so
+>
+> +kcov-rflags-y                                  += -Cpasses=sancov-module
+> +kcov-rflags-y                                  += -Cllvm-args=-sanitizer-coverage-level=3
+> +kcov-rflags-y                                  += -Cllvm-args=-sanitizer-coverage-trace-pc
+> +kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)  += -Cllvm-args=-sanitizer-coverage-trace-compares
+> +
+>  export CFLAGS_KCOV := $(kcov-flags-y)
+> +export RUSTFLAGS_KCOV := $(kcov-rflags-y)
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 2fe73cda0bddb9dcf709d0a9ae541318d54754d2..520905f19a9b19631394cfb5e129effb8846d5b8 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -169,6 +169,9 @@ ifeq ($(CONFIG_KCOV),y)
+>  _c_flags += $(if $(patsubst n%,, \
+>         $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
+>         $(CFLAGS_KCOV))
+> +_rust_flags += $(if $(patsubst n%,, \
+> +       $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
+> +       $(RUSTFLAGS_KCOV))
+>  endif
+>
+>  #
+>
+> ---
+> base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
+> change-id: 20250430-rust-kcov-6c74fd0f1f06
+>
+> Best regards,
+> --
+> Alice Ryhl <aliceryhl@google.com>
+>
