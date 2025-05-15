@@ -1,70 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B8635970;
-	Thu, 15 May 2025 10:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFC8223DE2;
+	Thu, 15 May 2025 11:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747305213; cv=none; b=QcSKmdwFqtelVT+DsGnjUYlJZnzK1PLKQvQbT7bnl92ZGGLxp5CKE38q3QEFrrp4cHXF92k1aq7GTKaoeJtn6DhQawbUlrBBvWCbISX9VB/M2bfZWUo8vW5NEb+CCLWUsrCd1I8OJm2SVa5EDMO1qIaW0+XAB0VgLns1CN+iQaQ=
+	t=1747307075; cv=none; b=D0rDO6i4D0j48qT7jau/BYqmsGo1hAB5Yoq1b4KTqXuqQZrx/UW4fjlyGcXbcZc3I5slC4QYley5BQVF0UnbSNtz512O+HbrO0ZYCRnz0WlAyaf9B9T2jTefKw/tyVBcVfH8ixQhffHg5CwMkEBBx2ZRNlp0OSlMeOzKWdawq2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747305213; c=relaxed/simple;
-	bh=xCYQ6WOiz9cUOPIBQEVZI/wwHsBuLl5q9YtMNp2XXEw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lgkHv95XtHJ95ag0Se8LjlU3z0O7kZp5k/RlOgc11XNgvn8La+LiLpmmRC5gnhTCSd7bCNR4dcxS/0gTSmiLy17Lm1rjpz3ScJf29rXGmMudShom6rJJL+e1uCGS1Tpw38i3e9hGZmO0fLHq99sg7q0E6sfBWFdhcRJaHfl4GRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YcHwxIi9; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1747307075; c=relaxed/simple;
+	bh=/AGqmI6YQsQWWPC4epgFkZ4hgo+SZOT+cLfsDITz764=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cEJJdrLDcmlolGXflqJkFcj15OazlO4m3xap9YYa/LN4oHwt1H7WdEYmNHaZgUq9AB+6SnUqWJU/tGDejGYzOstwEJFcqBVUVuWdQhwWhRJoJdFDxgi9nh9B5HkkyI3LHIMVwqxZ4IHZ56t2XXu23BUkSLqckbHJzYA+yxQ1Wgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CHM+9WPK; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YcHwxIi9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHM+9WPK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747305211; x=1778841211;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xCYQ6WOiz9cUOPIBQEVZI/wwHsBuLl5q9YtMNp2XXEw=;
-  b=YcHwxIi9/dJww3sYc3YUHGi7WV/Ii4Nu4Qthvj2PR8X4+rez1zJmlbYR
-   6FcwnC8GXrux0AM9fcCsQTcKrStuzMiSWAoU4Nwez4nLrJvOdmRkx416m
-   p9MRouPOARzsi+mIe9NHQvDdgwBZm5rAhpB+m2OhvtSM9TTMTWWJ5QoDC
-   rvaZ6WKIjBWTP0Yni71BXGaxQ5be3RWVFGnwt8LxDFb7v6fAXo/OpB4Is
-   8XZk57mP2I1hyc5KhAO7jU3nwiyHgYaDF2yXsnJiUD5AqqN7dQulPonUD
-   zoKaMWi8LInQGLBz1D+0cWpZ5CSnIfvdZjZIXMYOHZyPppohAx1YlPo73
-   g==;
-X-CSE-ConnectionGUID: zJOmsNz0TH+qDp8aoZwi2w==
-X-CSE-MsgGUID: vLHNddixSEKUtv4nC9hNiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="48351615"
-X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
-   d="scan'208";a="48351615"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 03:33:30 -0700
-X-CSE-ConnectionGUID: isaNyDEPQLy1etpJfSyzrw==
-X-CSE-MsgGUID: qKdApXCJTRCaDS+AROvpwg==
+  t=1747307074; x=1778843074;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/AGqmI6YQsQWWPC4epgFkZ4hgo+SZOT+cLfsDITz764=;
+  b=CHM+9WPK24uIUxHlLcIW23a9OOIqQHf4S+7dtsjnMvZb23TMC22Mi4ud
+   TxwLQE/UL4gtmDlyV9Lz6/lkQpJaYtX1A6nWAgrSFJ+OF/r2iA6wCcH0B
+   f1ydApPdtfOOGJj/RBcolFZLYBuK4tnlzhbXaBcwOlePJgn/UGjNp2oUx
+   OBA12KYUX3/9EAjjCrLDJufbBfUAkNLDUcO8987AOrKMNDV/GhrE5P3Wv
+   XXK7vjAribIbFOYeCWzpG7omi/1E7tFBHBVmFx5+5kBs0drVZXDseLux4
+   MUh3itm+O6ldZdlkMQr2ppDlAMS9K3/lIOtX5JAAcNKY5bPBW9f2tNCqF
+   w==;
+X-CSE-ConnectionGUID: 52+PYY0cRN+d58fX/PgLDA==
+X-CSE-MsgGUID: v5v+6gHWQaywt5l7a7b8xg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="60573543"
+X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
+   d="scan'208";a="60573543"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 04:04:31 -0700
+X-CSE-ConnectionGUID: EHZn6GfgSCa8UqxUkSWaYA==
+X-CSE-MsgGUID: JXgKmvYATfG7d5/geoIlQQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
-   d="scan'208";a="138733577"
+X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
+   d="scan'208";a="143444360"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 15 May 2025 03:33:27 -0700
+  by orviesa005.jf.intel.com with ESMTP; 15 May 2025 04:04:30 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uFVu1-000IHP-13;
-	Thu, 15 May 2025 10:33:25 +0000
-Date: Thu, 15 May 2025 18:32:52 +0800
+	id 1uFWO3-000IIV-28;
+	Thu, 15 May 2025 11:04:27 +0000
+Date: Thu, 15 May 2025 19:04:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Akhil P Oommen <quic_akhilpo@quicinc.com>,
-	Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: Re: [PATCH RFT v2 03/15] drm/msm: Use the central UBWC config
- database
-Message-ID: <202505151822.QNn0FQXs-lkp@intel.com>
-References: <20250514-topic-ubwc_central-v2-3-09ecbc0a05ce@oss.qualcomm.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:kdevops 35/41] ld.lld: error: undefined symbol:
+ nfsd_handle_dir_event
+Message-ID: <202505151907.LkW9rsjr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,37 +61,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250514-topic-ubwc_central-v2-3-09ecbc0a05ce@oss.qualcomm.com>
 
-Hi Konrad,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on edef457004774e598fc4c1b7d1d4f0bcd9d0bb30]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/soc-qcom-Add-UBWC-config-provider/20250514-231354
-base:   edef457004774e598fc4c1b7d1d4f0bcd9d0bb30
-patch link:    https://lore.kernel.org/r/20250514-topic-ubwc_central-v2-3-09ecbc0a05ce%40oss.qualcomm.com
-patch subject: [PATCH RFT v2 03/15] drm/msm: Use the central UBWC config database
-config: arm64-randconfig-002-20250515 (https://download.01.org/0day-ci/archive/20250515/202505151822.QNn0FQXs-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505151822.QNn0FQXs-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   320d6bdec4f569941d0c7ebd1f7b9e5951c18454
+commit: 53211d47195dbe072e2ae078acb0d83fb51de74a [35/41] nfsd: add notification handlers for dir events
+config: i386-randconfig-017-20250515 (https://download.01.org/0day-ci/archive/20250515/202505151907.LkW9rsjr-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505151907.LkW9rsjr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505151822.QNn0FQXs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505151907.LkW9rsjr-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> drivers/soc/qcom/ubwc_config.c:41:40: warning: unused variable 'sar2130p_data' [-Wunused-const-variable]
-41 | static const struct qcom_ubwc_cfg_data sar2130p_data = {
-|                                        ^~~~~~~~~~~~~
-1 warning generated.
---
-ERROR: modpost: missing MODULE_LICENSE() in drivers/soc/qcom/ubwc_config.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/qcom/ubwc_config.o
->> ERROR: modpost: "qcom_ubwc_config_get_data" [drivers/gpu/drm/msm/msm.ko] undefined!
+>> ld.lld: error: undefined symbol: nfsd_handle_dir_event
+   >>> referenced by filecache.c:746 (fs/nfsd/filecache.c:746)
+   >>>               vmlinux.o:(nfsd_file_fsnotify_handle_event)
 
 -- 
 0-DAY CI Kernel Test Service
