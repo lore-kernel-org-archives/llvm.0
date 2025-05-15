@@ -1,139 +1,176 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A02D1DDD1
-	for <llvm@lists.linux.dev>; Thu, 15 May 2025 17:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052C0218592
+	for <llvm@lists.linux.dev>; Thu, 15 May 2025 18:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747329725; cv=none; b=thTdybL8LKSTT3iNH+NbTwCLPCbL9x/nAPOG9gB131HLiYeN7QM0Zh/6ju5u8PFW21QAt+PXgkN3kWHh73B/ZdlfYvCendXPJQWtiH4LW5eFm5Gz596l7qO4GMoUWyPS+odRykysZ/GkF2lCvUntw3jPCvtAAnj3E1YskLKFpLE=
+	t=1747332132; cv=none; b=YG+Uvmj+f1L3WYE0Dju7pOC93OLvzeAT20QDgUsYjWrLG/SyyQimNjPhCtamuUAKAJtMrVgI2m3vgXW0bKhU3IJ/niLWZ2Fzfbv7pqIjrjI8ZEO+f3czgz5EENtNr6xZe8bT5AChre6m++Sx2Hntg9RQhYflwjbi558JvjKOu1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747329725; c=relaxed/simple;
-	bh=mfCeoOfwRJ2IubXApVWQduxn7NdySIMTBa5CH/dXP+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eX3vu0FC374Lyi4pqRGoMgto4Vc6n3g9wMyVhZCTq85a3wszSOAR5ZfJ0XbS8Dbvex6irRpVfB0NOkBbOXaz3HpJOe8okokggMig/SB8Dr2hwApT9Ihtw5n1MtexbFH+rwyznOZb1sTnVAT83M5y3tpLWAtkr6OZpCc0xnRcLdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Dlf2q3Z5; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1747332132; c=relaxed/simple;
+	bh=xYxE3KmAJuDBwEUTV/7JBSyd7GH9iHMFGQRs1lUAZlc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QgKXzeBV/tgDxLGJOx+tea9/HxzvrI0vPQRPDAX0w92GkQCNn4gk3V5sWVyUVwmhHuMVLl1cstdCluDEQ08QB8pX2toTLnpTUY5wQs6LxgwqyTQcDJ+1sT/sFzjtSdCWvS5vBpfGlAzr86xwwWdKQIUoitzEkYPlgNeUFd4xigw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQ6Ll2wz; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Dlf2q3Z5"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7424c24f88bso1673813b3a.1
-        for <llvm@lists.linux.dev>; Thu, 15 May 2025 10:22:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQ6Ll2wz"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-600210e4219so793018a12.0
+        for <llvm@lists.linux.dev>; Thu, 15 May 2025 11:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1747329722; x=1747934522; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZkQs5Y9+0MeoeQo27zBlTtClsZ5pt01lNLAK9VkB3I=;
-        b=Dlf2q3Z58slqJ784LGNZr8b7ZVG901XoCGrZXls1DIGM6sx5FRGs0dPuYxm4ckRPg6
-         gaiVHbA/zqiRvURgMu/xzQkvPSfhonxKNe7Y4/FxtomMOaapyfVribZXkeGOF9+cALwY
-         oVpHxrDX7ZqUgb3YktV007zt0JD3tdM8BaQYg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747329722; x=1747934522;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1747332129; x=1747936929; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AZkQs5Y9+0MeoeQo27zBlTtClsZ5pt01lNLAK9VkB3I=;
-        b=YDXFCkLxDN2607JL/mc93qC/C1ixqBcUxLGftW8ztNbyXtVDMdiAmoO4S1xEho5vso
-         wEzDiVgKVDXq3dDZLPkJWO/cPy54omyOLwygpLw1tVlQVw6y5kulrtjfDiDbiTaYOxWT
-         XhIzouNj+DD289npCQg68pdu4n5SeR4e+foqiKMNQ2ftHlsW+Gm+OVKXdq5Nk2M+0o3i
-         puNDvb7o1TaV9/NbcCSTLyGK3Be67oKo/KK9dHc+1lSzzCDS4eDXtXJLPzAIITYjl3bg
-         6dC9JJlqn2FT/WLX63e5PAfR/FXkKzQhjageJiUfJSbpCvNFlFCVOQ1EiPM7nD+R0Kz8
-         A/aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDijVX9TpYQFxChYMAEOtSoV7zIiHSED5Pxl1XzhU0kiWXlP5IA8lbgRvAU926V+HpgyUS@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy3AMGWtoeMKgauKXnU6pG5JXwgUo3n2vt24XOvwjokYr02yO77
-	Tfp6xp4XT1780Cg7a1wIHdvy2ja5P+Qfyri5upM/iku65vu1pp97S3CbyUaHbLzKlg==
-X-Gm-Gg: ASbGnct+PWENbx+LPpKdamfvwMn9baRDBBV8YBUbja9zXLMzE6zYnYL/dCLbQitphvq
-	4wbvrHv1P0I+U2WO8j0VxbZ/iVy1hzg+UoJMP27ULQZBiLAu11WryESA7FA9T29hHdsyN4Nkx1w
-	UZwPmBocqyVpWeO4SLhj6lyniqMTmM+ifb8HeGkcUyN5u0orWjMmLc1z3rO6NvvdwmY5cIpQuXq
-	aStisCk81cBjWMbwSac4zHQMC7NdOM8joZ4zHrGqb8QjBtwjB8IYLvLfbtZIpHSNJx9WZ5QalQT
-	z8yO7rnkBkeUluBR/pznUz8lLfNNiINDa3S1j1YjGLZRM9+obnTZgnOaHya0J6BPonaZaqeQe4O
-	BbSFjr3XoYcQaRQ==
-X-Google-Smtp-Source: AGHT+IGoidqfL8uEq7VTSHRz9j2OBbBO6mNxzWcPuV572jAmJW70jDu4s7p58cVo+XRQEqjyzJkCSw==
-X-Received: by 2002:a05:6a00:1822:b0:740:a879:4f7b with SMTP id d2e1a72fcca58-742a98a0cc1mr245972b3a.18.1747329722449;
-        Thu, 15 May 2025 10:22:02 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e14:7:cd06:335b:936a:7dc1])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-742a973a261sm69730b3a.84.2025.05.15.10.22.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 May 2025 10:22:01 -0700 (PDT)
-Date: Thu, 15 May 2025 10:21:59 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Tsai Sung-Fu <danielsftsai@google.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 2/2] genirq: Add kunit tests for depth counts
-Message-ID: <aCYit48N85WpjmiN@google.com>
-References: <20250514201353.3481400-3-briannorris@chromium.org>
- <202505152136.y04AHovS-lkp@intel.com>
+        bh=bNN+vfuMJJgSzRBBX1dcv69JrH0Sd8EtzpYEboDV/q8=;
+        b=MQ6Ll2wzD47j4QPBTnXAlKoyDavy6g3u9gV9DbNk4QLg88McDxX94Sfbn8ApP0h60N
+         /w7YtX8OaUxr3RkOAz5ch296Q2FgTM3vPQlKuOsewa18pEqzro8r+lICAI6gQIs25XBm
+         oszE8qJNGbjLyavIZAOAWLbdmDTdiBV3laDI8CVBF+fyoWz12/CeT0LljWVmRvrlEgxF
+         oZaq5eheasTKyKCE+VOCt3ihQlZ1YOGNUR+tmII4ErPR+ZWIcbFA/YDzJKdRbQwdjnnF
+         Whrp225cWApdKGWftqFE+7Datv8t51LK1Plo0ZdD00psguHUEa9ZNqOcep+zzME0mStG
+         tiEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747332129; x=1747936929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bNN+vfuMJJgSzRBBX1dcv69JrH0Sd8EtzpYEboDV/q8=;
+        b=R0AFWQ6g7aze8wuBMvurhAlcGWokHnMlyrscsGNQRsO6nx9J1QUbmnuSOjdDqzVNZp
+         iFd8rJQdXTwK0D/6vGEvPz89yk3yJyYke7EontApL+CA8Oa5xlEEV95TGuaRiLwTa2JD
+         ff70DNRn61XI4HHuacamSs5q0zsK4CO4TQ0yVkBkVwzjzoaqQKvwUdWH2GnPzuC7r/5u
+         xRWsK2TUxXroX/hp38eqOUUCj1OZAR5T2B6DhOjuxmWYorOVXnvzCS6k7iTpkREBt7Tf
+         R1fAmr8yKbsSyJbSXxCEK2V/tCb1IpiheFjOhGN0J/fgg1lX4J3RhNuRlzkOXHqbg9S3
+         dRdA==
+X-Forwarded-Encrypted: i=1; AJvYcCWTzAhnLVtEuOObL5tHchnL40cqcA9Kuj9e++c5ULieTOFTdKhYO5e6iXFj1M3B1jmlJ8Hd@lists.linux.dev
+X-Gm-Message-State: AOJu0YwtHqYRgIyG08ibH0ZxqIApLcJMm3pDEnM0Vrm+eBK9sYeYjVVq
+	952522CdMG8dpHTqED4uIehZTrZVvzgaKTbbI4jppFXikG6BUxlypDTHxIdcdOySuQuWB4DGNjZ
+	2MF7kvW0b+RtD4b0goMCKAZ4fTEvrdTE=
+X-Gm-Gg: ASbGncupxLDYJGz69KEfz++s/EIJzjcUE0u97hbO35AaxfvBhY89ev/2DNP0vnf/Nzt
+	xqnfeH2rnQAi54bqL3l71oT7aU3YVUYVzgiFrhSwnpYod9Z8zpJlED5WFLFcsw7XNcDTvkce9Vp
+	xcxqcB9j+yxGemONfUhZ2eDFeVhRuvVHU=
+X-Google-Smtp-Source: AGHT+IGJ3VLgyC5oRyYT9SJhjLgRqlja96rlJ3f3rzeXshYp1J9lbgDhqI7B6B7Y0eDrmuUni3A/DX8mMtH0+4aqo58=
+X-Received: by 2002:a17:907:980f:b0:ad2:41ae:a1e4 with SMTP id
+ a640c23a62f3a-ad50f7c4f3dmr407267966b.24.1747332128837; Thu, 15 May 2025
+ 11:02:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202505152136.y04AHovS-lkp@intel.com>
+References: <20250430123306.15072-1-linux.amoon@gmail.com> <aCR9RzGMWEuI0pxS@mai.linaro.org>
+ <CANAwSgSA-JHMRD7-19wijOY=TSWD-sv6yyrT=mH+wkUJuvxFAw@mail.gmail.com> <92c2949e-2fc1-40e9-9dea-e3d9f7aa571d@linaro.org>
+In-Reply-To: <92c2949e-2fc1-40e9-9dea-e3d9f7aa571d@linaro.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 15 May 2025 23:31:50 +0530
+X-Gm-Features: AX0GCFsEAXplwRDB3NXZqHZ-d-ohJ2IJuxMQMC4KvVGNnVidBm-TZoRYGMggWAM
+Message-ID: <CANAwSgQryVLdRVd9KRBnaUcjtX8xR9w9BBTCvoqKH6funkj=2A@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+Hi Daniel,
 
-On Thu, May 15, 2025 at 10:01:18PM +0800, kernel test robot wrote:
-> patch link:    https://lore.kernel.org/r/20250514201353.3481400-3-briannorris%40chromium.org
-> patch subject: [PATCH v2 2/2] genirq: Add kunit tests for depth counts
+On Thu, 15 May 2025 at 18:59, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
+ote:
+>
+> On 5/15/25 13:10, Anand Moon wrote:
+> > Hi Daniel,
+> >
+> > On Wed, 14 May 2025 at 16:53, Daniel Lezcano <daniel.lezcano@linaro.org=
+> wrote:
+> >>
+> >> On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
+> >>> Hi All,
+> >>
+> >> Hi Anand,
+> >>
+> >> if the goal of the changes is to do cleanups, I recommend to rework
+> >> how the code is organized. Instead of having the data->soc check all
+> >> around the functions, write per platform functions and store them in
+> >> struct of_device_id data field instead of the soc version.
+> >>
+> >> Basically get rid of exynos_map_dt_data by settings the different ops
+> >> in a per platform structure.
+> >>
+> >> Then the initialization routine would be simpler to clean.
+> >>
+> >
+> > Thanks, I had previously attempted this approach.
+> > The goal is to split the exynos_tmu_data structure to accommodate
+> > SoC-specific callbacks for initialization and configuration.
+> >
+> > In my earlier attempt, I tried to refactor the code to achieve this.
+> > However, the main challenge I encountered was that the
+> > exynos_sensor_ops weren=E2=80=99t being correctly mapped for each SoC.
+> >
+> > Some SoC have multiple sensor
+> > exynos4x12
+> >                      tmu: tmu@100c0000
+> > exynos5420
+> >                  tmu_cpu0: tmu@10060000
+> >                  tmu_cpu1: tmu@10064000
+> >                  tmu_cpu2: tmu@10068000
+> >                  tmu_cpu3: tmu@1006c000
+> >                  tmu_gpu: tmu@100a0000
+> >   exynos5433
+> >                  tmu_atlas0: tmu@10060000
+> >                  tmu_atlas1: tmu@10068000
+> >                  tmu_g3d: tmu@10070000
+> > exynos7
+> >                  tmu@10060000
+> >
+> > It could be a design issue of the structure.or some DTS issue.
+> > So what I found in debugging it is not working correctly.
+> >
+> > static const struct thermal_zone_device_ops exynos_sensor_ops =3D {
+> >          .get_temp =3D exynos_get_temp,
+> >          .set_emul_temp =3D exynos_tmu_set_emulation,
+> >          .set_trips =3D exynos_set_trips,
+> > };
+> >
+> > The sensor callback will not return a valid pointer and soc id for the =
+get_temp.
+> >
+> > Here is my earlier version of local changes.
+> > [1] https://pastebin.com/bbEP04Zh exynos_tmu.c
+> > [2] https://pastebin.com/PzNz5yve Odroid U3 dmesg.log
+> > [3] https://pastebin.com/4Yjt2d2u    Odroid Xu4 dmesg.log
+> >
+> > I want to re-model the structure to improve the code.
+> > Once Its working condition I will send this for review.
+> >
+> > If you have some suggestions please let me know.
+>
+> I suggest to do the conversion step by step beginning by
+> exynos4210_tmu_clear_irqs, then by exynos_map_dt_data as the first
+> cleanup iteration
+>
+Ok you want IRQ handle per SoC call back functions?
+so on all the changes depending on SoC id should be moved to
+respective callback functions to reduce the code.
 
-First of all, thanks for the help, and for applying patch 1. I see that:
-1) this bot noticed a trivial problem with patch 2; and
-2) I received notification that patch 2 was applied to tip/irq/core, but
-3) I can't find it there any more.
+Thank  you for having a look into my changes
 
-I'm not sure if #3 is because you dropped it (e.g., due to #1's report)
-or some other reason, so I'm not sure what to do next. Possibilities:
-
-(a) send the trivial fix separately, as a fixup (against what tree?)
-(b) resend an improved patch 2 on its own, against tip/irq/core
-(c) just drop it, because you have deeper reasons to not want these
-    tests.
-
-I'm fine with anything you'd like, although I do think there's value in
-providing unit tests for corner cases like this.
-
-See below for the trivial fix, for the record. I can send it separately
-if you'd like.
-
-> config: i386-buildonly-randconfig-004-20250515 (https://download.01.org/0day-ci/archive/20250515/202505152136.y04AHovS-lkp@intel.com/config)
-> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505152136.y04AHovS-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505152136.y04AHovS-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ucs2_string.o
-> ERROR: modpost: "irq_domain_alloc_descs" [kernel/irq/irq_test.ko] undefined!
-> ERROR: modpost: "irq_to_desc" [kernel/irq/irq_test.ko] undefined!
-> ERROR: modpost: "irq_shutdown_and_deactivate" [kernel/irq/irq_test.ko] undefined!
-> >> ERROR: modpost: "irq_activate" [kernel/irq/irq_test.ko] undefined!
-> >> ERROR: modpost: "irq_startup_managed" [kernel/irq/irq_test.ko] undefined!
-
-The test Kconfig symbol should be bool, not tristate. Some of the
-functions required for the test are non-modular.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202505152136.y04AHovS-lkp@intel.com/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-
---- a/kernel/irq/Kconfig
-+++ b/kernel/irq/Kconfig
-@@ -145,7 +145,7 @@ config GENERIC_IRQ_KEXEC_CLEAR_VM_FORWARD
- 	bool
- 
- config IRQ_KUNIT_TEST
--	tristate "KUnit tests for IRQ management APIs" if !KUNIT_ALL_TESTS
-+	bool "KUnit tests for IRQ management APIs" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
- 	default KUNIT_ALL_TESTS
- 	imply SMP
+Thanks
+-Anand
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
