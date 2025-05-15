@@ -1,189 +1,171 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FB82253B5
-	for <llvm@lists.linux.dev>; Thu, 15 May 2025 12:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB26B72622
+	for <llvm@lists.linux.dev>; Thu, 15 May 2025 13:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747310628; cv=none; b=N14hw+mIPZ1v5MvILdct/PtUpX9CsRCV7ElSXGXn0edjcfHDQlJz9+bfe5XxbcjcL87zMcaAOMdwIvCx67QFmfXTjE4siHqoPwgwF+huZDOWuBK3mpUcEA6dah+v3HNZmRLr0RKtz1mO2A2v4fxOxu1Dwz+nuIg5y3EZaTUmIyA=
+	t=1747315744; cv=none; b=clI1Jy+KCL5zDvlfZSvFGRnAAIGW6kYO2TkoXZhboseWv/0XO9hx2dMU7z5/cphrSlaPUHKm2lEfGsT+zm6EC4vhagdGwhOHAZTd2taTqCZhZIXi6AqDz68dbC+4TQT1nbDTlUHiEaoKTMJl2E06dggIPeuGG7C0PffNnXGW+Aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747310628; c=relaxed/simple;
-	bh=nExWvVFyM7jIQZsP9axMrOTccp1iIIx/OKJJCBIt83A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mm4TI6mmG/mGlMaSGed3CfkOIh7iAidc4dyU66TcgpqpT8HSGbYF/4yji1Q15+BuQvu286CU/rWy3KRpTh/eaVGuKwpnQGnq1swnMsYi0nWEhXucWttw944J3kpZdPqqRF4nprzdNsxzzOaR5Ndfs9lrHBxSD0RIaGslsCijqFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kAyic64g; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1747315744; c=relaxed/simple;
+	bh=0OxqwkoXyk4pMEZB+3Be/QzVD7EbaVm3mM/XisR5KNc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cUs+b9bWeh9e/MLVDWkqNWaOY4zDrNYGcEKQCiM2eY8TZp1OobY0jtSuj9GCpymElQrSDcaYCO7fwBllbWvlgaLODLnlSqzC5zAMslqu3H6uJglcXebQO1oI/U9xB0vH7b98wjcDo43ZVUhSe+02CqroGkewzgc/UEcl3rUKOWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q2aZPB1V; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kAyic64g"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7c9677cd6d7so84014785a.3
-        for <llvm@lists.linux.dev>; Thu, 15 May 2025 05:03:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q2aZPB1V"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43cfebc343dso6877265e9.2
+        for <llvm@lists.linux.dev>; Thu, 15 May 2025 06:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747310626; x=1747915426; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3wJvNJM3iWYUox8bI9g2NYJL06xVVnQ0A08ak76PpHM=;
-        b=kAyic64gm65zyYCU+EV4pv46FMR7I/nPTA5z+/XSCrMjepZHeC8jENB9V9rdhfqS1b
-         Jz2TqUubGVLVg2NUe0nNMlQy/8ecA3I9By/0Cx3GZjuBqX5mnrEcYAb42SD5nxNiA3Kf
-         1phd65BJX8wih+uidqlnb5dN3I9FjC2wkYGRI8iJsRzM48ocaKSpZ242cwW1mKXjiaM6
-         dI/iA+5sgT5NDxKuh7hJuop4GWPMuHJLnc0JSPl4QjfdMybVc0rN3Rk9eIB7JDRUn59l
-         qnS4sZOiRIDp8EtLyJBLo5owqPhFqI9yajvx5NtSw9g1Iufp116I6IEtnoz1bT0a3g2a
-         0dfA==
+        d=linaro.org; s=google; t=1747315741; x=1747920541; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gXeqa887aZIuoR48uoN7BEsLTRu+NlEEvV/bSAfKqmQ=;
+        b=Q2aZPB1VWUWWltfOzFFYZl8FhLbzkySX7i0HX78Un4ntcSkTezVkt6wm1qwKC3WOE8
+         5cION4EaYcWOf2mbFff3pCopPAswdcREJ+Bj/UDAzaNQWGE24iKnIxYpMkIUIX4deORg
+         QViwHYqal+Iigynt1k+nKqPKwXRaBnECHRXnkWVF7cjhRmDCEufVQodbLMz+Wr1VzWs3
+         9bqxi/z7uaVH0TmxWMjeI4UsXDV3Lz0wBBikDYvY2j+iM3vFvvRsXmm4iQDucRG71BqK
+         8K1HHai2mB0vD2rvvipX0BTU4RRWkiZi2JX/L+KwZo7mVf/6zXw6N7eAyoe41CePfmoY
+         coxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747310626; x=1747915426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3wJvNJM3iWYUox8bI9g2NYJL06xVVnQ0A08ak76PpHM=;
-        b=gPH3sv2fgpctcu0dVhQRNKlN+6O1nWucow79VJVnjeCJaWAD7NOTr+B1OGFWPTWpAJ
-         3sC7tLGbJvoFl3Bug1+W0mpddqWm59zvH9sQ6wZcukxodjJ0CFROIfDjRDuE+M9/QkDr
-         KPSu41WxKJX3WjZRcJB+mcWDrbzUwfA/oD+Khw+dGibgr66I3vh9/hmuxhGdkq2cFelF
-         GOaN+95EcOJiOfNILwJudGzBJ7RMY2GkBwqzIvz6qVpYu6BNRh+YY0C83ux6AVpVzOnV
-         tcXlTiWttsHUzFPYcOFIKPtYih2QrYRPSn+9fGD62MssdLsrkO0Fq2/eEmcuHM+qjvzu
-         Vhhg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8w3NqaCi9iT52oyIrimn94R8fpa+DoeI7lyUC71KM+7SwSofLybU06laFNV+pWAnmGWzt@lists.linux.dev
-X-Gm-Message-State: AOJu0YwfyaMpetCf6R0DTLEAkdEg11Et3nsAlIf/3xHVGFsI2W994HLD
-	EGFjI++4YZiNtLQQYpHLi4dqzbQ8op3f+TWWYWAhVF4Kh6Vn30FgP8sXVVxfvVmRRzTi/3GK+sM
-	b8WVW4zNRuGsixo0kv8owJozJVXormRT2biIy3eklUSRoH70Eg0Gr
-X-Gm-Gg: ASbGncub9RIDg6bl8TVdHl9ai+92FcVEFX5wfXV3C/AM0sydKP3Ou4d0nlIDm0LT9Yg
-	e+/Y5PkXxveo1+GxcX5snnjH3Qyg2MTkReKApEDFUO13tXp4NGsM13H3p+2+fuEJHbd1H4fA0BK
-	5aZGj/UUzi9ZVLtJ675e/PLNAJBZhXqLu/3HUqP9AS6pNYS+fWNjYhj6niCBelFVA=
-X-Google-Smtp-Source: AGHT+IH+MpBYSUJL7HryIdxv6rUra/ypIaLr4RiTqen/uVAAbevecSAeC/xuuasQV/4uRe2a/wkkAc0De5YPFRPk/B4=
-X-Received: by 2002:a17:903:1b0f:b0:22e:3b65:9265 with SMTP id
- d9443c01a7336-2319810fdcbmr77926775ad.8.1747310614801; Thu, 15 May 2025
- 05:03:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747315741; x=1747920541;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXeqa887aZIuoR48uoN7BEsLTRu+NlEEvV/bSAfKqmQ=;
+        b=nBTSMd/jbJIR6+CUf4hJaGkNQIrXDTL8PdNJ2dQKaaFSQy/xkkk4DNPrh08O/Vbl/6
+         H7jxBRcUglSH5r4t97cCHYDFUrpjXAHHeMmqLDxxEixAtbISuODgQmhPy5+w8NpwvxqY
+         wQ4VEqCg+eaPK7DSMN8Z+B7LK5jSii4Q1earPwtU1a5CWSCE01JaZDum7nszrpf4vfxR
+         kUZ2onK+F5oBBJCG+yL3U+gJUhbiv9Jv3aNxeletWCMGwcYWH40hVbhClUNqar/wW7kk
+         Y1S/sAC9pfrIXKREXbb4lORj1AfTGZp8WJ4Sbsbmy9WBHkt6e9/WfOvrY7z5IGiXOYl7
+         NRfw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHYrp/0PezUa2SP87JlA4No9KVYSOFdKD4QZ73em/dNrfd0Pp9Hs3Lubiko7Zy9VKjQPvk@lists.linux.dev
+X-Gm-Message-State: AOJu0YxzhBKVvAxDkRfzy3PdwtJESzjakP2l98UGdqXIzF6ZuW9KAMf1
+	fzrN4PzQHsPXPfICyCBQLOZ+lRPIPQ22wZ+ZfIwMMSdA0DGsHn6zgcX8cnY6aDI=
+X-Gm-Gg: ASbGncuUlosgnHa2a3Ec/XvP98bEZC2ApytEaw9dVQATT3KcSE4xoaP3D66mXcFn32J
+	rKuEqVKnuQIqvjDDQ+uHnQLbBVTGWT/pU+K3RVDQAua6nnCqgjBOgSA82joVvcN5RDTFcgblWSG
+	VHC8ZzmPteydCt2fngQ8WcoJNzbAndGEqOPqHHUPAkryk9JGLI7z4W/bsfGKKk1PkbkMZYE8CuM
+	3IK06u7XI5v9M8GUdPgd9msoWAZlGaJkXcTCBmLxYXt6tdTxjQaaUq9szIogYTYXgcDCd+U3S4i
+	iAkYg+1daoxDkXdsirtazdUJnOLSGcC4Y3iJrko5hBJtDcqE1mhKAHlE8QlQJ589fbNlfas0tD0
+	nLVmObOQAR5ZE6jc0TmUcLZw=
+X-Google-Smtp-Source: AGHT+IEjQRVUhGojBwI+97YBtdmsQnt5mRPLvJ6XJl4UcLoxhfGfGLJJ2ddgeOKQqlG0CKXA5mxG9g==
+X-Received: by 2002:a05:600c:348a:b0:43c:fa0e:4713 with SMTP id 5b1f17b1804b1-442f20bb25dmr78852185e9.2.1747315741090;
+        Thu, 15 May 2025 06:29:01 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-442f3368d1csm73524575e9.8.2025.05.15.06.28.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 May 2025 06:28:59 -0700 (PDT)
+Message-ID: <92c2949e-2fc1-40e9-9dea-e3d9f7aa571d@linaro.org>
+Date: Thu, 15 May 2025 15:28:55 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250501-rust-kcov-v2-1-b71e83e9779f@google.com> <CACT4Y+Yzmd7BtrpqUPrbXAAGzMnO0YKZnhVxLgyyXEftscEUnQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+Yzmd7BtrpqUPrbXAAGzMnO0YKZnhVxLgyyXEftscEUnQ@mail.gmail.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Thu, 15 May 2025 14:03:22 +0200
-X-Gm-Features: AX0GCFstD_4uJYWfNb5g_AdONBqYpFEcU11UPC3GcRCSjJ-WcVpH60WtoBj7ozc
-Message-ID: <CANp29Y7+7Fa5_rAEwJYoWnKHXy+BS4mFWoMe=1J4ocnCuqYtfQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kcov: rust: add flags for KCOV with Rust
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Matthew Maurer <mmaurer@google.com>, Alexander Potapenko <glider@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ "open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+ "open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
+ "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES"
+ <linux-arm-kernel@lists.infradead.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
+ <llvm@lists.linux.dev>
+References: <20250430123306.15072-1-linux.amoon@gmail.com>
+ <aCR9RzGMWEuI0pxS@mai.linaro.org>
+ <CANAwSgSA-JHMRD7-19wijOY=TSWD-sv6yyrT=mH+wkUJuvxFAw@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CANAwSgSA-JHMRD7-19wijOY=TSWD-sv6yyrT=mH+wkUJuvxFAw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-+mm
+On 5/15/25 13:10, Anand Moon wrote:
+> Hi Daniel,
+> 
+> On Wed, 14 May 2025 at 16:53, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
+>>> Hi All,
+>>
+>> Hi Anand,
+>>
+>> if the goal of the changes is to do cleanups, I recommend to rework
+>> how the code is organized. Instead of having the data->soc check all
+>> around the functions, write per platform functions and store them in
+>> struct of_device_id data field instead of the soc version.
+>>
+>> Basically get rid of exynos_map_dt_data by settings the different ops
+>> in a per platform structure.
+>>
+>> Then the initialization routine would be simpler to clean.
+>>
+> 
+> Thanks, I had previously attempted this approach.
+> The goal is to split the exynos_tmu_data structure to accommodate
+> SoC-specific callbacks for initialization and configuration.
+> 
+> In my earlier attempt, I tried to refactor the code to achieve this.
+> However, the main challenge I encountered was that the
+> exynos_sensor_ops weren’t being correctly mapped for each SoC.
+> 
+> Some SoC have multiple sensor
+> exynos4x12
+>                      tmu: tmu@100c0000
+> exynos5420
+>                  tmu_cpu0: tmu@10060000
+>                  tmu_cpu1: tmu@10064000
+>                  tmu_cpu2: tmu@10068000
+>                  tmu_cpu3: tmu@1006c000
+>                  tmu_gpu: tmu@100a0000
+>   exynos5433
+>                  tmu_atlas0: tmu@10060000
+>                  tmu_atlas1: tmu@10068000
+>                  tmu_g3d: tmu@10070000
+> exynos7
+>                  tmu@10060000
+> 
+> It could be a design issue of the structure.or some DTS issue.
+> So what I found in debugging it is not working correctly.
+> 
+> static const struct thermal_zone_device_ops exynos_sensor_ops = {
+>          .get_temp = exynos_get_temp,
+>          .set_emul_temp = exynos_tmu_set_emulation,
+>          .set_trips = exynos_set_trips,
+> };
+> 
+> The sensor callback will not return a valid pointer and soc id for the get_temp.
+> 
+> Here is my earlier version of local changes.
+> [1] https://pastebin.com/bbEP04Zh exynos_tmu.c
+> [2] https://pastebin.com/PzNz5yve Odroid U3 dmesg.log
+> [3] https://pastebin.com/4Yjt2d2u    Odroid Xu4 dmesg.log
+> 
+> I want to re-model the structure to improve the code.
+> Once Its working condition I will send this for review.
+> 
+> If you have some suggestions please let me know.
 
-On Thu, May 15, 2025 at 2:01=E2=80=AFPM Dmitry Vyukov <dvyukov@google.com> =
-wrote:
->
-> On Thu, 1 May 2025 at 14:16, Alice Ryhl <aliceryhl@google.com> wrote:
-> >
-> > Rust code is currently not instrumented properly when KCOV is enabled.
-> > Thus, add the relevant flags to perform instrumentation correctly. This
-> > is necessary for efficient fuzzing of Rust code.
-> >
-> > The sanitizer-coverage features of LLVM have existed for long enough
-> > that they are available on any LLVM version supported by rustc, so we d=
-o
-> > not need any Kconfig feature detection. The coverage level is set to 3,
-> > as that is the level needed by trace-pc.
-> >
-> > We do not instrument `core` since when we fuzz the kernel, we are
-> > looking for bugs in the kernel, not the Rust stdlib.
-> >
-> > Co-developed-by: Matthew Maurer <mmaurer@google.com>
-> > Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> > Reviewed-by: Alexander Potapenko <glider@google.com>
-> > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
->
-> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
->
-> > ---
-> > I did not pick up the Tested-by due to the changes. I verified that it
-> > looks right under objdump, but I don't have a syzkaller setup I can try
-> > it with.
-> > ---
-> > Changes in v2:
-> > - Ignore `core` in KCOV.
-> > - Link to v1: https://lore.kernel.org/r/20250430-rust-kcov-v1-1-b9ae941=
-48175@google.com
-> > ---
-> >  rust/Makefile         | 1 +
-> >  scripts/Makefile.kcov | 6 ++++++
-> >  scripts/Makefile.lib  | 3 +++
-> >  3 files changed, 10 insertions(+)
-> >
-> > diff --git a/rust/Makefile b/rust/Makefile
-> > index 3aca903a7d08cfbf4d4e0f172dab66e9115001e3..80c84749d734842774a3ac2=
-aabbc944a68d02484 100644
-> > --- a/rust/Makefile
-> > +++ b/rust/Makefile
-> > @@ -492,6 +492,7 @@ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs \
-> >  ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
-> >  $(obj)/core.o: scripts/target.json
-> >  endif
-> > +KCOV_INSTRUMENT_core.o :=3D n
-> >
-> >  $(obj)/compiler_builtins.o: private skip_gendwarfksyms =3D 1
-> >  $(obj)/compiler_builtins.o: private rustc_objcopy =3D -w -W '__*'
-> > diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
-> > index 67e8cfe3474b7dcf7552e675cffe356788e6c3a2..ddcc3c6dc513e1988aeaf07=
-b8efa106e8dffa640 100644
-> > --- a/scripts/Makefile.kcov
-> > +++ b/scripts/Makefile.kcov
-> > @@ -3,4 +3,10 @@ kcov-flags-$(CONFIG_CC_HAS_SANCOV_TRACE_PC)    +=3D -f=
-sanitize-coverage=3Dtrace-pc
-> >  kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)   +=3D -fsanitize-coverag=
-e=3Dtrace-cmp
-> >  kcov-flags-$(CONFIG_GCC_PLUGIN_SANCOV)         +=3D -fplugin=3D$(objtr=
-ee)/scripts/gcc-plugins/sancov_plugin.so
-> >
-> > +kcov-rflags-y                                  +=3D -Cpasses=3Dsancov-=
-module
-> > +kcov-rflags-y                                  +=3D -Cllvm-args=3D-san=
-itizer-coverage-level=3D3
-> > +kcov-rflags-y                                  +=3D -Cllvm-args=3D-san=
-itizer-coverage-trace-pc
-> > +kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)  +=3D -Cllvm-args=3D-san=
-itizer-coverage-trace-compares
-> > +
-> >  export CFLAGS_KCOV :=3D $(kcov-flags-y)
-> > +export RUSTFLAGS_KCOV :=3D $(kcov-rflags-y)
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index 2fe73cda0bddb9dcf709d0a9ae541318d54754d2..520905f19a9b19631394cfb=
-5e129effb8846d5b8 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -169,6 +169,9 @@ ifeq ($(CONFIG_KCOV),y)
-> >  _c_flags +=3D $(if $(patsubst n%,, \
-> >         $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-=
-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
-> >         $(CFLAGS_KCOV))
-> > +_rust_flags +=3D $(if $(patsubst n%,, \
-> > +       $(KCOV_INSTRUMENT_$(target-stem).o)$(KCOV_INSTRUMENT)$(if $(is-=
-kernel-object),$(CONFIG_KCOV_INSTRUMENT_ALL))), \
-> > +       $(RUSTFLAGS_KCOV))
-> >  endif
-> >
-> >  #
-> >
-> > ---
-> > base-commit: 9c32cda43eb78f78c73aee4aa344b777714e259b
-> > change-id: 20250430-rust-kcov-6c74fd0f1f06
-> >
-> > Best regards,
-> > --
-> > Alice Ryhl <aliceryhl@google.com>
-> >
+I suggest to do the conversion step by step beginning by 
+exynos4210_tmu_clear_irqs, then by exynos_map_dt_data as the first 
+cleanup iteration
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
