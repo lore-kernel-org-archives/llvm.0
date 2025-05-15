@@ -1,136 +1,174 @@
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931BE268FDD;
-	Thu, 15 May 2025 05:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987661F30A4;
+	Thu, 15 May 2025 06:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747288422; cv=none; b=rTda/1X4n9lr393WafxGQtT9jAKifv5IJUqJRlSVWhRleiRTS8UCeO5WzrXK8LfQhgJfSXzjA9+05DmS4BCXejGfSnFFyCZSEvxj+aVmHsEBoVF+j5ks7UJScTWu00pxrlFT4j4OaeRxprZLTu7eXmEUvJdx7tiaQLJmikJaCfI=
+	t=1747290067; cv=none; b=G6Mx2Pdng+TlYt3M13SeEkikY4+fIBEQ6qZtRCSxE8j9t9U1FyLQrkB3HddUmVMvfv5YadLzXHHoYZh4DihFvQMBC2srIyc+QmSZOD5B6ZzESTjRG5CTUe75JiJtgLQbgYo1kN/S4U3y91hm2Zh830QPTr4FnPnPXTKAVRJ6V2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747288422; c=relaxed/simple;
-	bh=QRe32xatwTRsoz+wj88ZVHN17zQOUDN3VJmsCT3pC6w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sF9B4Q9tdtd9VDqVlO/OJBnqraclrFsrpuZ/4VdX+gW3HrboFhYJdqzvSBaRywp8MCJGNX1qeVJtpvcTWfPRFt20C4t2EPQKQDYmyboRxv55mIIeapDFH9WBcUbyE+ZvWp/Tk61uE8d15hGZzkJ3JAy6kCU1/RI3GyYCL9FN/0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1747290067; c=relaxed/simple;
+	bh=Y0utQwgG+0/00zaY4pvw7rTT02GtDjLu32klA2peLHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RlP9dpipO97e3JTKoazK6Z2j2WMSeHS0bZh6heXJ6JNfPE5lxW63COt2/iLb0xjeHkyN8E//2cDPSakxT+5CYP4m1Qoqi87vQU+CNG4U0W/yX+/JAzra/YPDjbmVkfeueqZ79EuI7m1K7dRbMVYN/4+/aV1fvRXwI90K1UGjfGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1GNEpLW; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4ddbb0fc1e7so159272137.2;
-        Wed, 14 May 2025 22:53:40 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1GNEpLW"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74267c68c11so532576b3a.0;
+        Wed, 14 May 2025 23:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747290065; x=1747894865; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rX9E2fNDjY1FkX+1lQiyuuYgRxE42Kp5wv+1x2j0YrU=;
+        b=j1GNEpLWWuVw2K1NmOGP1rKaEOGdOwOugXtmheIz97weQqmbrQIEksR421eh9zsnzY
+         IL9XOhIMHFUdbEvliQNShJZ2sPEt2loYgF7kbEhXGrnH4S0WH2kSTlq2SjdfV5NqG7WQ
+         7JGrRLIzyf/Fphhrzkqy00pkrC9uDotL69JVAW+bxz9dAHmn+mfkKJeuaCIdYLyA4HZW
+         0GnCDRSEKI5Y4QQlSO8CF4IUu6hqQNsb+5FoIfMBX7eM29ePg6o6sKoJZGq1AyTcZsaf
+         IfxQddZxIyq468rnKBhGdD089WJycNmb6dhDBIi8pQ9/KpzrgDTR6KToSjUzLDnJ+/uD
+         xgbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747288418; x=1747893218;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rPyG0mlit4Fqvc3ieiHFbClT0DklwqbFDL/14cm9a+o=;
-        b=kubT95dPb+Qlqi9JEH3QoS15Qtcu6DCWFZyci+KFEC/NINc3yZY58FrMc6wGI0XdZT
-         gwiz3ZCkPF8aPSN3Znq+pwlTedqESgN/G7ljt5D6LoKLLeX5P5T14hjuzK5XYUm8ULQf
-         G10GFstXTWhoBAH0RJfTkP/tV4zcr8L7na3M7IDTXYEPU0lSCEAQZExTGwIY1N6D0sBk
-         i1D++t8JjUoKnX+FGMVEyl3y+4UW0TRkLRpQiPKSTR4teiuzD7pWJ6J01AVyKj46VMEB
-         H3mVnUYNYIpZpGMVRpVZNnGdgA9KagC2XQ3hvIwq8fi9+LklAhzgzRMeDAlLH/jB74ak
-         qQNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVQKo280uAGjI+vUxYfccVq6m3M4b5QK8zCw3mgpw7G9B0Aw1d6y7pyUGC6/yKPVgVVc733@lists.linux.dev, AJvYcCXdq1k3Q6W0mHr7fVkUY6WHTU7yEwMxTZEfg/AEthr49EVuofh5NbJ5RbbeQqL30wjmfmfMGeCAa/Vi4yI5aA==@lists.linux.dev
-X-Gm-Message-State: AOJu0YzDADLQiSu7qATweEp7D1M0ICeiZEXQdgYkItUu01OwCeGX7CY+
-	zAkqRX0sJdXARlhvs3Guk4/ExXvXlTt6h3iUUoi3qYR2SGh6/lGFa4wHFVcz
-X-Gm-Gg: ASbGncuUBe+gnzBkLtMP2udtF8GAXKCPplyJHTtm4gE34jdxw9zUskTkSq9SHijKnPo
-	h5aUC79MIMcp2lMB8BzFaMLnmhrl6e46swv9e+pX1BtkBGKlUVLDnwXFjTAqAogz5suz21spc6X
-	f1zKgAi2MQTn1k2FHeS81h14HIz4g54t6IL49KASiqm7NEryEZPKj4+1Ho1y3eVKf8BHo4upqqd
-	YParPavTQW7zFiyP+2+Ta8LzkcsxheREctHvzzY5Vmtsz7NJe80JzSpY1J8vbzGfmefzaedAxV8
-	TFxv7Z2QyfnO3jGAF6+oKfsfZUlNPfB5h+GbUsjklnk5F6VSVHLy3K52TlFSrHW7IHiKShmkY4u
-	OYr62phKes6jfGLXNzvs+78SVH0LE
-X-Google-Smtp-Source: AGHT+IGTE9UJLKHDa96X0IXu2Iuz7ncG5+0klioSEXx36Gsl3BqGznA1xnc2NELkBwByNWyBKW4pHA==
-X-Received: by 2002:a05:6102:3ca9:b0:4bb:eb4a:f9ec with SMTP id ada2fe7eead31-4df7dda5c42mr5857372137.16.1747288418164;
-        Wed, 14 May 2025 22:53:38 -0700 (PDT)
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-879f613b5d0sm9873231241.6.2025.05.14.22.53.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 May 2025 22:53:37 -0700 (PDT)
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-52c764e94adso185204e0c.1;
-        Wed, 14 May 2025 22:53:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVF/AW0FgILRM7r9XariZqIIWqVzQ2pkcWLMfzdLaGBqSiDpoj5gGK7xNl/p8OglwgNXdkK@lists.linux.dev, AJvYcCVybkgS0WkavMUHV0DxUVVCUuaCnjJmvRTEhbcfGKMQLo9QO57Z3rEo7KLd+GGR3qlYYoJ6l+hCcyrdJZYCzQ==@lists.linux.dev
-X-Received: by 2002:a05:6102:3e0b:b0:4b6:d108:cac1 with SMTP id
- ada2fe7eead31-4df7dcb5c78mr6484774137.9.1747288417074; Wed, 14 May 2025
- 22:53:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747290065; x=1747894865;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rX9E2fNDjY1FkX+1lQiyuuYgRxE42Kp5wv+1x2j0YrU=;
+        b=ujnV+by3GMGKVucWgWuUwa26kFfP6NLiLNpurQu1xhjkc8+d/AFOr6xhf+cNSSuyDd
+         bbhkbMMpY49LM2ciu7ZTGcq/T70Pi1mn1zu6lWV2T+sREvO95MKgfsBh4LiBBVvuIlsd
+         BqzjJKrshTQPB11WXSSwYz0ifRAI8LP4QwWJX+dvVo3HP2kkQc2Wd5GdNz1haAgrtJEM
+         5HqwWdq9Hp3s7HOLl5VCc1vrc1RzCRG6/iuODlWswqmtWFTSAel/ib6nVJeQPPEBYbne
+         xH43USTWBj1zSYd1Czy2rpEbJu9ou5TQxtmCS2sdde4hUhNXsVngSrOKtcmLTNX/bzaH
+         hjIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUGdXbi8AJDVEIXD+eK+C3GFBB86xqYV6YufBybN0JE3Suo94r48AzYakx9CBeOXqPbUJ4KrQ==@lists.linux.dev, AJvYcCVHjdiOpKH9mIBbZg2qSBYy6HnmCkpP/5zyf3km8awb09mqBydQi2axCy4dgkJUCWbGWUuoccjTvw==@lists.linux.dev, AJvYcCWcMangC4XF1DDnEdBw+E9dEZrV67oq4AktD2XXzggQHDFTzt+kvJWdcyPrGOlEHZpZ/flfsw==@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHmyO2wvlYfm2KKDHEf+hLsWxQEmCx/h4+HstTYbByfbmqD+fS
+	rzP15/Esh82z/w5BrTB3K2pICn3aZQcnqUZcI1TI1mRNr9uLVaTt
+X-Gm-Gg: ASbGncsQOuA+LqxvSWyntv8Hriw1O3lkzryT1m4WC+i7n1b2TnZc/6rjTydaSIcHX7d
+	2FW97E3KXk85DPZDI7IFDkpQX35i30sCrqXwHHdoc2RRUS8YFnHMY/Vh36rHW/J7u0Lx+o2mvDg
+	HNzvmOvqpH1+OMbob5rFHGDNUAINX1FbnFrAtXgGkE9R9OmeWqTJ/gOuKRV5oir5jRcUxhCKEOB
+	4nPtyd2eBQEKlRNIDewCvcR4y77b2YjsLEOAoKyybh2a3s3WY9lcn/HKxYsOsCi8u23v3E1KUHY
+	bJhsrW8NdmtXmVBv6EC1xXombrME1GwqmVDbgpIhairyrqb9hiRxiSwWd2VtMA==
+X-Google-Smtp-Source: AGHT+IGC9DxnW6VX8KRj7lnR0AoZt7AFYBd/MB5hYLPAc8e+rz+OD5MDD15P8NLcNibjdHchDrUuSg==
+X-Received: by 2002:a05:6a00:1389:b0:736:8c0f:7758 with SMTP id d2e1a72fcca58-742984de2a5mr1750626b3a.10.1747290064582;
+        Wed, 14 May 2025 23:21:04 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b234ab52345sm9796290a12.33.2025.05.14.23.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 23:21:03 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 842B9409AAD9; Thu, 15 May 2025 13:21:00 +0700 (WIB)
+Date: Thu, 15 May 2025 13:21:00 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v2 02/15] genpt: Add Documentation/ files
+Message-ID: <aCWHzFZWzeO_9HYe@archie.me>
+References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <2-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <aBrHU-OGbfqk1DSq@archie.me>
+ <20250513185310.GA451051@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250506103152.109525-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <202505151255.rCHp8Bvu-lkp@intel.com>
-In-Reply-To: <202505151255.rCHp8Bvu-lkp@intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 15 May 2025 07:53:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUh3oXniR3b_g+SuqXXeB=3YRFSVOONOth7XRNpHC=a8A@mail.gmail.com>
-X-Gm-Features: AX0GCFvo3GnsTZII4bhG8cXLylyB93OgSRrkVG13kj0dt4dQMBXBbYjIu4GDk6M
-Message-ID: <CAMuHMdUh3oXniR3b_g+SuqXXeB=3YRFSVOONOth7XRNpHC=a8A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] clocksource/drivers/renesas-ostm: Unconditionally
- enable reprobe support
-To: kernel test robot <lkp@intel.com>
-Cc: Prabhakar <prabhakar.csengg@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Chris Brandt <chris.brandt@renesas.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="f31gHTPz9TUWOOq1"
+Content-Disposition: inline
+In-Reply-To: <20250513185310.GA451051@nvidia.com>
 
-On Thu, 15 May 2025 at 07:04, kernel test robot <lkp@intel.com> wrote:
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on tip/timers/core]
-> [also build test WARNING on robh/for-next linus/master v6.15-rc6 next-20250514]
-> [cannot apply to daniel-lezcano/clockevents/next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Prabhakar/dt-bindings-timer-renesas-ostm-Document-RZ-V2N-R9A09G056-support/20250506-223636
-> base:   tip/timers/core
-> patch link:    https://lore.kernel.org/r/20250506103152.109525-3-prabhakar.mahadev-lad.rj%40bp.renesas.com
-> patch subject: [PATCH v3 2/2] clocksource/drivers/renesas-ostm: Unconditionally enable reprobe support
-> config: hexagon-randconfig-001-20250513 (https://download.01.org/0day-ci/archive/20250515/202505151255.rCHp8Bvu-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505151255.rCHp8Bvu-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505151255.rCHp8Bvu-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/clocksource/renesas-ostm.c:235:34: warning: unused variable 'ostm_of_table' [-Wunused-const-variable]
->      235 | static const struct of_device_id ostm_of_table[] = {
->          |                                  ^~~~~~~~~~~~~
->    1 warning generated.
->
->
-> vim +/ostm_of_table +235 drivers/clocksource/renesas-ostm.c
->
-> 3a3e9f23c2cae9 Biju Das 2021-11-12  234
-> 3a3e9f23c2cae9 Biju Das 2021-11-12 @235  static const struct of_device_id ostm_of_table[] = {
-> 3a3e9f23c2cae9 Biju Das 2021-11-12  236         { .compatible = "renesas,ostm", },
-> 3a3e9f23c2cae9 Biju Das 2021-11-12  237         { /* sentinel */ }
-> 3a3e9f23c2cae9 Biju Das 2021-11-12  238  };
-> 3a3e9f23c2cae9 Biju Das 2021-11-12  239
 
-The table is unused if CONFIG_OF=n due to
+--f31gHTPz9TUWOOq1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-                .of_match_table = of_match_ptr(ostm_of_table),
+On Tue, May 13, 2025 at 03:53:10PM -0300, Jason Gunthorpe wrote:
+> On Wed, May 07, 2025 at 09:37:07AM +0700, Bagas Sanjaya wrote:
+> > On Mon, May 05, 2025 at 11:18:32AM -0300, Jason Gunthorpe wrote:
+> > > +Since each compilation unit can only access one underlying format at=
+ a time,
+> > > +code that is intended to be generic across multiple formats has to c=
+ompile
+> > > +itself multiple times.
+> > > +
+> > > +In an implementation compilation unit the headers would normally be =
+included as
+> > > +follows::
+> > > +
+> > > +	#include <linux/generic_pt/common.h>
+> > > +	#include "fmt/defs_amdv1.h"
+> > > +	#include "pt_defs.h"
+> > > +	#include "fmt/amdv1.h"
+> > > +	#include "pt_common.h"
+> > > +	#include "pt_iter.h"
+> >=20
+> > What do you mean by compiling generic code multiple times? Including
+> > their headers at multiple places like above?
+>=20
+> How about like this:
+>=20
+> Instead the function pointers can end up at the higher level API (ie map/=
+unmap,
+> etc) and the per-format code can be directly inlined into the per-format
+> compilation unit. For something like iommu each format will be compiled i=
+nto a
+> per-format iommu operations kernel module.
+>=20
+> For this to work the .c file for each compilation unit will include both =
+the
+> format headers and the generic code for the implementation. For instance =
+in an
+> implementation compilation unit the headers would normally be included as
+> follows::
+>=20
+> 	#include <linux/generic_pt/common.h>
+> 	#include "fmt/defs_amdv1.h"
+> 	#include "pt_defs.h"
+> 	#include "fmt/amdv1.h"
+> 	#include "pt_common.h"
+> 	#include "pt_iter.h"
+> 	#include "iommut_pt.h"  /* The iommu implementation */
+>=20
+> iommu_pt.h includes definitions that will generate the operations functio=
+ns for
+> map/unmap/etc using the definitions provided by AMDv1. The resulting modu=
+le
+> will have exported symbols named like pt_iommu_amdv1_init().
 
-Gr{oetje,eeting}s,
+Looks good.
 
-                        Geert
+Thanks.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--=20
+An old man doll... just what I always wanted! - Clara
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--f31gHTPz9TUWOOq1
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaCWHxQAKCRD2uYlJVVFO
+o0FXAP4iCmmk84hht6kf2sEA0RKGTnBFYncYtLLZAzm6KR5/XQD+JRx9nw4yvScz
+7ofsZTjk1W1XHG86xjzZZfrMX+rmDQQ=
+=YGBK
+-----END PGP SIGNATURE-----
+
+--f31gHTPz9TUWOOq1--
