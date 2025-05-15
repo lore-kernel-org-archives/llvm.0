@@ -1,151 +1,112 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FF9297B86
-	for <llvm@lists.linux.dev>; Thu, 15 May 2025 11:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB1E298C12;
+	Thu, 15 May 2025 11:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747307449; cv=none; b=fvN9WBKYEzJsr4roo7QEyeM+AjiAfsPqhOGwJYMU0M6dDibQUDg3o3QNe1XdbkCov71QqNq0aglWCrGjx00zEtvXTxInzHq/+cry9/HvoBhJMoXgvS7bdDx1HHCh7kNXTig8/nKENfVu1sqNb9cKR5EEasaWK5Amzf6/o2eHWBM=
+	t=1747310199; cv=none; b=un/PSrmq/DRD6JnJEqfTlMTXD+lneALpK4ILJBP8w7ot/mtOOv+KIMsKajr2UHBXWIWi+8R0I5c0fG4IBR9toAnn+xwm4GfwnJs1+tiyocAnXxRKrGumlboHFIB3t9r4h+YVqboa4djHOTRtw9RzDWX//KCvlJWV7OGnbrpesiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747307449; c=relaxed/simple;
-	bh=8MM7pRUzi/+tIllmEpUGU5whAaivVspfR2Lc0gn83vM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hipGmudiU4ASbTeZuOQkkuJRo8MdaSsrZHJX2XWwdxM0TgK/Rd+fwTEEokA7H+EnbK3fgqgghKBytHay7/k3HtSE2/Tl57zkymdKpwgLNjNOcIp3Ggwybc98dNHvsBciDK9VBQI0XiOPKsQpL7frXv/+hCBCtcChugEGlHAy0u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ViW8klSl; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747310199; c=relaxed/simple;
+	bh=4OMtFolFinzHjPn84LWrbolxTZ1uAQxqAFjktiYUlmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KdgyxIfP/NUBwFxHGLncy3A32iMxLfNKzZ81q6XNEyZGRrv8h2H1ozgAoZFMgpREKA2hNKLSA8K8EF0NQqqHwKA3UL7v1QnOUGaVfQZMTK2Noh6LftEbYAP0pocGBS5pArLa0325tNe8+ln9KKxSNn6LxpSV1EIHM2ImzaSob74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XOmWOguC; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ViW8klSl"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ad21c5d9db2so134531366b.3
-        for <llvm@lists.linux.dev>; Thu, 15 May 2025 04:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747307446; x=1747912246; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wH93pyrIEPQfVMzkjhmhq8lcyU/jh4Z97QhhnrcpdMM=;
-        b=ViW8klSl8FUfz3y4nQdSM/mEXo6DS2iRg0V8xiMgRFfEIkSIe96FXarRbpdBCUkvAd
-         vLsw2wnZDv2LJXCGQSHLg4JPzPlI2wFVmk77cdavLTI4AgBtUY6iEIyA1SEp8eaxwJYb
-         O9Sdi90uJ5wv14ZfrMHncj8AjC4Ku6HDfUc6BX6NAbLeTUCEMrSMJZPxcWEv3Qv93wyn
-         WMcACsxP2OqyCVJgACcY6bau7BQ/0PI4xEMwr3F8aFH3TGC+uapnMoVwdtDSAWIzBWIo
-         MC+ssGiRm5l5+3s1KFGBANH6zIZvAQ2rLGX+lnlERlM4ZKUvYflk8Wj6qKu9Tc2+SXDB
-         hx4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747307446; x=1747912246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wH93pyrIEPQfVMzkjhmhq8lcyU/jh4Z97QhhnrcpdMM=;
-        b=BbOZdRAsI63glQ9Cflz1k5wVKyYV9ZAkZnPaW3LUWedY+bTv9SPvZ+ysIMvth7L9/K
-         NK5o4YxGI7OuxQDbhtJGPj6SHA8ThcTmSxMQyboTjKOg4nB6e4jYn+VuwxR8Tvr5xxyW
-         Ax+E9IBO1F9c1I4IAdF5vQtzLDpaqgcOf/8dWLLQZwEkLYErIto+uv/ouBQYG8XcIf9S
-         FjcPlH/nXZVS3OisVvt3wBzIzO9tNarJfUz/AlKC0DE9BbIPeCuQcgvyDFWyd8FDS17G
-         OgrJygm/1yxZE7FQRCauLC6OhZg0C/xY4XtBvJeolKl34f3NLkkgqUuWgFsAlEMQBAP7
-         3pXg==
-X-Forwarded-Encrypted: i=1; AJvYcCWOJLiqVy1HVG+lIBF25yQPA2z6L79cHm4O4B/S1M8up8NGVkXP2UeYr64bikf59JzxJyD0@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx03KJW3RldBxo9TNn7wko1eD0qgQVpBA8yqKbcoZp9fBzUt2XQ
-	+XlZw+l5RghwJ8l48Lu1OhlVrCS1Gn8EbyEoGz8DthkuZKFvmh+h96/T7nExZl8kYrUilTNyHGw
-	TGriBFOwTX4hAVPS4P3/aP5PFeiQ=
-X-Gm-Gg: ASbGncuEc3j1Y5BulzKfC1U/sc7H2U0QtTalJVLu5obEwffTydi/cFbarpekIza5b1d
-	ZKwlz1h3gioCYpBIGbJgSXq6CIR8FYHm8j1Ei3pHfZMjqcZk/ZHLyoiYsciloR2QU7PEI4/dVe4
-	2yae5vTiqQTJX/UqNwxRUKKpuTnaY9ssQf7R00KKCRKw==
-X-Google-Smtp-Source: AGHT+IE0xGxRoRc2hiMiqEaYs/R8BerbabBDK4/6SGlmW7kn9vsBtzHGwphHTBRO8aoYTAxznhm63Sb3LeSpgXFd/NQ=
-X-Received: by 2002:a17:906:730e:b0:ac7:e815:6e12 with SMTP id
- a640c23a62f3a-ad4f717d80dmr692300366b.33.1747307445484; Thu, 15 May 2025
- 04:10:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XOmWOguC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747310197; x=1778846197;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4OMtFolFinzHjPn84LWrbolxTZ1uAQxqAFjktiYUlmA=;
+  b=XOmWOguCa80NJ/fRzIBiFI4WeIbiNsHee7bzyv17cRB7CYDrxIu6dm8P
+   VYugrrbk4mtp2LyxXtHxSh8n4cweHy6UXo/m9DVI8SVVI8ZaEFPMe3+xX
+   +IX8ZAlLr8AMkDLMNknukKpLO4a6VqT7qxesjSJj+O6MLmS3qk+ojI6Dl
+   +AOuss6g9cKJ3ev7Uzq0i/WC52C1vh3ignXMQt1ZmL9FaFOJJBkZg3PvP
+   1KtfMyvz/5ioubqqKgWmudCkYIGBxXOoF8CAdLPGD40gGXArvpIr4xuIv
+   9o1y/uzdZuwFh4IUokajnV+rLwEE4K9/w/1k5cIuENvZlFRt0ui2/9FMl
+   A==;
+X-CSE-ConnectionGUID: thDdjwfIQkyvkoS1P13kiw==
+X-CSE-MsgGUID: jr84m3EkQyeF2xanATJ2BQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="71751075"
+X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
+   d="scan'208";a="71751075"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 04:56:35 -0700
+X-CSE-ConnectionGUID: Ks7bc7QnQ2afVXoKwHVa6w==
+X-CSE-MsgGUID: c2s/ErsQR3O0ZPXF80q0AQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
+   d="scan'208";a="143454434"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 15 May 2025 04:56:34 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uFXCR-000IL9-2n;
+	Thu, 15 May 2025 11:56:31 +0000
+Date: Thu, 15 May 2025 19:55:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2 12/12] rv: Add opid per-cpu monitor
+Message-ID: <202505151926.d7bhoonn-lkp@intel.com>
+References: <20250514084314.57976-13-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250430123306.15072-1-linux.amoon@gmail.com> <aCR9RzGMWEuI0pxS@mai.linaro.org>
-In-Reply-To: <aCR9RzGMWEuI0pxS@mai.linaro.org>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Thu, 15 May 2025 16:40:27 +0530
-X-Gm-Features: AX0GCFs2e1Pkh4MEeMLO4mfbxvj7Hh0TOcnvMLseg8q2U30qPhgLXLwcneYB4S8
-Message-ID: <CANAwSgSA-JHMRD7-19wijOY=TSWD-sv6yyrT=mH+wkUJuvxFAw@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] Exynos Thermal code improvement
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
-	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250514084314.57976-13-gmonaco@redhat.com>
 
-Hi Daniel,
+Hi Gabriele,
 
-On Wed, 14 May 2025 at 16:53, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
-ote:
->
-> On Wed, Apr 30, 2025 at 06:02:56PM +0530, Anand Moon wrote:
-> > Hi All,
->
-> Hi Anand,
->
-> if the goal of the changes is to do cleanups, I recommend to rework
-> how the code is organized. Instead of having the data->soc check all
-> around the functions, write per platform functions and store them in
-> struct of_device_id data field instead of the soc version.
->
-> Basically get rid of exynos_map_dt_data by settings the different ops
-> in a per platform structure.
->
-> Then the initialization routine would be simpler to clean.
->
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Thanks, I had previously attempted this approach.
-The goal is to split the exynos_tmu_data structure to accommodate
-SoC-specific callbacks for initialization and configuration.
+[auto build test ERROR on aa94665adc28f3fdc3de2979ac1e98bae961d6ca]
 
-In my earlier attempt, I tried to refactor the code to achieve this.
-However, the main challenge I encountered was that the
-exynos_sensor_ops weren=E2=80=99t being correctly mapped for each SoC.
+url:    https://github.com/intel-lab-lkp/linux/commits/Gabriele-Monaco/tools-rv-Do-not-skip-idle-in-trace/20250514-164745
+base:   aa94665adc28f3fdc3de2979ac1e98bae961d6ca
+patch link:    https://lore.kernel.org/r/20250514084314.57976-13-gmonaco%40redhat.com
+patch subject: [RFC PATCH v2 12/12] rv: Add opid per-cpu monitor
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250515/202505151926.d7bhoonn-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250515/202505151926.d7bhoonn-lkp@intel.com/reproduce)
 
-Some SoC have multiple sensor
-exynos4x12
-                    tmu: tmu@100c0000
-exynos5420
-                tmu_cpu0: tmu@10060000
-                tmu_cpu1: tmu@10064000
-                tmu_cpu2: tmu@10068000
-                tmu_cpu3: tmu@1006c000
-                tmu_gpu: tmu@100a0000
- exynos5433
-                tmu_atlas0: tmu@10060000
-                tmu_atlas1: tmu@10068000
-                tmu_g3d: tmu@10070000
-exynos7
-                tmu@10060000
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505151926.d7bhoonn-lkp@intel.com/
 
-It could be a design issue of the structure.or some DTS issue.
-So what I found in debugging it is not working correctly.
+All errors (new ones prefixed by >>):
 
-static const struct thermal_zone_device_ops exynos_sensor_ops =3D {
-        .get_temp =3D exynos_get_temp,
-        .set_emul_temp =3D exynos_tmu_set_emulation,
-        .set_trips =3D exynos_set_trips,
-};
+>> kernel/trace/rv/monitors/opid/opid.c:42:30: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+      42 | static void attach_vector_irq() { }
+         |                              ^
+         |                               void
+   kernel/trace/rv/monitors/opid/opid.c:43:30: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+      43 | static void detach_vector_irq() { }
+         |                              ^
+         |                               void
+   2 errors generated.
 
-The sensor callback will not return a valid pointer and soc id for the get_=
-temp.
 
-Here is my earlier version of local changes.
-[1] https://pastebin.com/bbEP04Zh exynos_tmu.c
-[2] https://pastebin.com/PzNz5yve Odroid U3 dmesg.log
-[3] https://pastebin.com/4Yjt2d2u    Odroid Xu4 dmesg.log
+vim +42 kernel/trace/rv/monitors/opid/opid.c
 
-I want to re-model the structure to improve the code.
-Once Its working condition I will send this for review.
+    39	
+    40	#else
+    41	/* We assume irq_entry tracepoints are sufficient on other architectures */
+  > 42	static void attach_vector_irq() { }
+    43	static void detach_vector_irq() { }
+    44	#endif
+    45	
 
-If you have some suggestions please let me know.
-
-Thanks
--Anand
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
