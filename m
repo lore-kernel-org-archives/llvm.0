@@ -1,174 +1,141 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987661F30A4;
-	Thu, 15 May 2025 06:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D8E1CFBC;
+	Thu, 15 May 2025 06:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747290067; cv=none; b=G6Mx2Pdng+TlYt3M13SeEkikY4+fIBEQ6qZtRCSxE8j9t9U1FyLQrkB3HddUmVMvfv5YadLzXHHoYZh4DihFvQMBC2srIyc+QmSZOD5B6ZzESTjRG5CTUe75JiJtgLQbgYo1kN/S4U3y91hm2Zh830QPTr4FnPnPXTKAVRJ6V2c=
+	t=1747290655; cv=none; b=Q0nm3hC1JnNYxWi01CLjkvDTMxoE828AvpFV6HHDTZT3llOPAkkzdENFeSsoHx7DOlbkfBOUdbVV7fXDLpwuBt6q5DBjC7lKmMnYya+LpoooSySj807Bphe7loNgHzOeqcGXNVPgLcOPk1NIZWoOjRvhSZ7mt1TI2j6vPsiXF68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747290067; c=relaxed/simple;
-	bh=Y0utQwgG+0/00zaY4pvw7rTT02GtDjLu32klA2peLHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RlP9dpipO97e3JTKoazK6Z2j2WMSeHS0bZh6heXJ6JNfPE5lxW63COt2/iLb0xjeHkyN8E//2cDPSakxT+5CYP4m1Qoqi87vQU+CNG4U0W/yX+/JAzra/YPDjbmVkfeueqZ79EuI7m1K7dRbMVYN/4+/aV1fvRXwI90K1UGjfGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1GNEpLW; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747290655; c=relaxed/simple;
+	bh=jCueH2glao7FduKYS1PWXqjnvP3c1zoAtFN+O1aO+Xs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Qxb4DKuO77aHwx7AbsrLMzocJwmlLK2WG50vbWcxUf/2IrfC9qejezrIM1FLECmp+jdXD1eTztpN/OBwnIkKSBSRtf95SYJxhPxjs8hM094WT87s6cs0eUQWIyZ3EU7y+rvHjUHpnhnstPPaGgQkyATPeOMyLd+fzVUQatQbu4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=Y1hna2Vo; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1GNEpLW"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74267c68c11so532576b3a.0;
-        Wed, 14 May 2025 23:21:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747290065; x=1747894865; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rX9E2fNDjY1FkX+1lQiyuuYgRxE42Kp5wv+1x2j0YrU=;
-        b=j1GNEpLWWuVw2K1NmOGP1rKaEOGdOwOugXtmheIz97weQqmbrQIEksR421eh9zsnzY
-         IL9XOhIMHFUdbEvliQNShJZ2sPEt2loYgF7kbEhXGrnH4S0WH2kSTlq2SjdfV5NqG7WQ
-         7JGrRLIzyf/Fphhrzkqy00pkrC9uDotL69JVAW+bxz9dAHmn+mfkKJeuaCIdYLyA4HZW
-         0GnCDRSEKI5Y4QQlSO8CF4IUu6hqQNsb+5FoIfMBX7eM29ePg6o6sKoJZGq1AyTcZsaf
-         IfxQddZxIyq468rnKBhGdD089WJycNmb6dhDBIi8pQ9/KpzrgDTR6KToSjUzLDnJ+/uD
-         xgbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747290065; x=1747894865;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rX9E2fNDjY1FkX+1lQiyuuYgRxE42Kp5wv+1x2j0YrU=;
-        b=ujnV+by3GMGKVucWgWuUwa26kFfP6NLiLNpurQu1xhjkc8+d/AFOr6xhf+cNSSuyDd
-         bbhkbMMpY49LM2ciu7ZTGcq/T70Pi1mn1zu6lWV2T+sREvO95MKgfsBh4LiBBVvuIlsd
-         BqzjJKrshTQPB11WXSSwYz0ifRAI8LP4QwWJX+dvVo3HP2kkQc2Wd5GdNz1haAgrtJEM
-         5HqwWdq9Hp3s7HOLl5VCc1vrc1RzCRG6/iuODlWswqmtWFTSAel/ib6nVJeQPPEBYbne
-         xH43USTWBj1zSYd1Czy2rpEbJu9ou5TQxtmCS2sdde4hUhNXsVngSrOKtcmLTNX/bzaH
-         hjIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGdXbi8AJDVEIXD+eK+C3GFBB86xqYV6YufBybN0JE3Suo94r48AzYakx9CBeOXqPbUJ4KrQ==@lists.linux.dev, AJvYcCVHjdiOpKH9mIBbZg2qSBYy6HnmCkpP/5zyf3km8awb09mqBydQi2axCy4dgkJUCWbGWUuoccjTvw==@lists.linux.dev, AJvYcCWcMangC4XF1DDnEdBw+E9dEZrV67oq4AktD2XXzggQHDFTzt+kvJWdcyPrGOlEHZpZ/flfsw==@lists.linux.dev
-X-Gm-Message-State: AOJu0YxHmyO2wvlYfm2KKDHEf+hLsWxQEmCx/h4+HstTYbByfbmqD+fS
-	rzP15/Esh82z/w5BrTB3K2pICn3aZQcnqUZcI1TI1mRNr9uLVaTt
-X-Gm-Gg: ASbGncsQOuA+LqxvSWyntv8Hriw1O3lkzryT1m4WC+i7n1b2TnZc/6rjTydaSIcHX7d
-	2FW97E3KXk85DPZDI7IFDkpQX35i30sCrqXwHHdoc2RRUS8YFnHMY/Vh36rHW/J7u0Lx+o2mvDg
-	HNzvmOvqpH1+OMbob5rFHGDNUAINX1FbnFrAtXgGkE9R9OmeWqTJ/gOuKRV5oir5jRcUxhCKEOB
-	4nPtyd2eBQEKlRNIDewCvcR4y77b2YjsLEOAoKyybh2a3s3WY9lcn/HKxYsOsCi8u23v3E1KUHY
-	bJhsrW8NdmtXmVBv6EC1xXombrME1GwqmVDbgpIhairyrqb9hiRxiSwWd2VtMA==
-X-Google-Smtp-Source: AGHT+IGC9DxnW6VX8KRj7lnR0AoZt7AFYBd/MB5hYLPAc8e+rz+OD5MDD15P8NLcNibjdHchDrUuSg==
-X-Received: by 2002:a05:6a00:1389:b0:736:8c0f:7758 with SMTP id d2e1a72fcca58-742984de2a5mr1750626b3a.10.1747290064582;
-        Wed, 14 May 2025 23:21:04 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b234ab52345sm9796290a12.33.2025.05.14.23.21.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 May 2025 23:21:03 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 842B9409AAD9; Thu, 15 May 2025 13:21:00 +0700 (WIB)
-Date: Thu, 15 May 2025 13:21:00 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 02/15] genpt: Add Documentation/ files
-Message-ID: <aCWHzFZWzeO_9HYe@archie.me>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <2-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <aBrHU-OGbfqk1DSq@archie.me>
- <20250513185310.GA451051@nvidia.com>
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="Y1hna2Vo"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=KvqrPFnT/M5tUerhMwh3HKF/Af24Nx/5fyc2diEVnYs=;
+	t=1747290653; x=1748500253; b=Y1hna2Vo12IOysARB+aeIsGu8tgh46IQLs7jlsh20eYFjUH
+	cqmfhFR8T/pXi+xJbhXz2mqZTzyuu7mTFL4E9dU3sUMZALAv/WNQFIVL6oBV2XoWlWDDXGoHWbz6l
+	f5TiBLrcFdywdX7zbfoICfjriY44wC+t7CUHpWtQ8Ypgf9qW46Po8Urk7okEQRj/MKZKjhojh0O86
+	z+wk8DgCS74GEKtm4Iu2wtfPLmcfE5JT1Fq4GUySt96I1YQ5a1TUI9jfiM7QiITL/aRFkkBHexz1c
+	I7Q+BN565TWQuGukilGPg+6OmmcZeq83PDp/n4t5Fnb5FEB4KMQ88bhZClApPcog==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.1)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uFS7H-0000000AUU1-0IvF;
+	Thu, 15 May 2025 08:30:51 +0200
+Message-ID: <8684a2b4bf367e2e2a97e2b52356ffe5436a8270.camel@sipsolutions.net>
+Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
+ compiled with clang
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Bert Karwatzki <spasswolf@web.de>, "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>
+Cc: "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>, 
+ "llvm@lists.linux.dev"
+	 <llvm@lists.linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-wireless@vger.kernel.org
+Date: Thu, 15 May 2025 08:30:50 +0200
+In-Reply-To: <f8552d41fb7eae286803b78302390614179b33b0.camel@web.de>
+References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
+								 <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+							 <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
+						 <2d8c1929bf5ab5260dacf9aa390456b3b49ce465.camel@sipsolutions.net>
+					 <2cad838b39f00d93319509d2a6a77a4c42c7fa92.camel@web.de>
+				 <a12c82c394e9676e32ede6b8312f821a16fef94b.camel@sipsolutions.net>
+	 <f8552d41fb7eae286803b78302390614179b33b0.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="f31gHTPz9TUWOOq1"
-Content-Disposition: inline
-In-Reply-To: <20250513185310.GA451051@nvidia.com>
+X-malware-bazaar: not-scanned
 
-
---f31gHTPz9TUWOOq1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 13, 2025 at 03:53:10PM -0300, Jason Gunthorpe wrote:
-> On Wed, May 07, 2025 at 09:37:07AM +0700, Bagas Sanjaya wrote:
-> > On Mon, May 05, 2025 at 11:18:32AM -0300, Jason Gunthorpe wrote:
-> > > +Since each compilation unit can only access one underlying format at=
- a time,
-> > > +code that is intended to be generic across multiple formats has to c=
-ompile
-> > > +itself multiple times.
-> > > +
-> > > +In an implementation compilation unit the headers would normally be =
-included as
-> > > +follows::
-> > > +
-> > > +	#include <linux/generic_pt/common.h>
-> > > +	#include "fmt/defs_amdv1.h"
-> > > +	#include "pt_defs.h"
-> > > +	#include "fmt/amdv1.h"
-> > > +	#include "pt_common.h"
-> > > +	#include "pt_iter.h"
+On Thu, 2025-05-15 at 00:27 +0200, Bert Karwatzki wrote:
+> Am Mittwoch, dem 14.05.2025 um 20:56 +0200 schrieb Johannes Berg:
+> > >=20
+> > > I've split off the problematic piece of code into an noinline functio=
+n to simplify the disassembly:
+> > >=20
 > >=20
-> > What do you mean by compiling generic code multiple times? Including
-> > their headers at multiple places like above?
+> > Oh and also, does it even still crash with that? :)
 >=20
-> How about like this:
->=20
-> Instead the function pointers can end up at the higher level API (ie map/=
-unmap,
-> etc) and the per-format code can be directly inlined into the per-format
-> compilation unit. For something like iommu each format will be compiled i=
-nto a
-> per-format iommu operations kernel module.
->=20
-> For this to work the .c file for each compilation unit will include both =
-the
-> format headers and the generic code for the implementation. For instance =
-in an
-> implementation compilation unit the headers would normally be included as
-> follows::
->=20
-> 	#include <linux/generic_pt/common.h>
-> 	#include "fmt/defs_amdv1.h"
-> 	#include "pt_defs.h"
-> 	#include "fmt/amdv1.h"
-> 	#include "pt_common.h"
-> 	#include "pt_iter.h"
-> 	#include "iommut_pt.h"  /* The iommu implementation */
->=20
-> iommu_pt.h includes definitions that will generate the operations functio=
-ns for
-> map/unmap/etc using the definitions provided by AMDv1. The resulting modu=
-le
-> will have exported symbols named like pt_iommu_amdv1_init().
+> Yes, it still crashes when compiled with clang.
 
-Looks good.
+OK, just checking. :)
 
-Thanks.
+FWIW, I'm not convinced at all that the code you were looking at is
+really the problem. The crash (see below) is happening on the status
+side. Of course it cannot crash on the status side if on the TX side we
+never enter anything into the IDR data structure, and never tag the SKB
+to look up in the IDR and therefore never try to create the status
+report on the status side.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Basically what happens is this:
 
---f31gHTPz9TUWOOq1
-Content-Type: application/pgp-signature; name=signature.asc
+- on TX, if we have a socket requesting status, create a copy of the
+  SKB, put it into the IDR, and put the IDR index into the original
+  skb->cb
+- then transmit the original skb, of course
+- on TX status report from the driver, see if the skb->cb is tagged with
+  the IDR value, if so, report the copy of the SKB back to the socket
+  with the status information
 
------BEGIN PGP SIGNATURE-----
+(The reason we need to make a copy is that the SKB could be encrypted or
+otherwise modified in flight, and we don't want to undo that, rather
+keeping a copy for the report.)
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaCWHxQAKCRD2uYlJVVFO
-o0FXAP4iCmmk84hht6kf2sEA0RKGTnBFYncYtLLZAzm6KR5/XQD+JRx9nw4yvScz
-7ofsZTjk1W1XHG86xjzZZfrMX+rmDQQ=
-=YGBK
------END PGP SIGNATURE-----
+>  [  267.339591][  T575] BUG: unable to handle page fault for address: fff=
+fffff51e080b0
+>  [  267.339598][  T575] #PF: supervisor write access in kernel mode
+>  [  267.339602][  T575] #PF: error_code(0x0002) - not-present page
+>  [  267.339606][  T575] PGD f1cc3c067 P4D f1cc3c067 PUD 0=20
+>  [  267.339613][  T575] Oops: Oops: 0002 [#1] SMP NOPTI
+>  [  267.339622][  T575] CPU: 0 UID: 0 PID: 575 Comm: napi/phy0-0 Not tain=
+ted
+> 6.15.0-rc6-next-20250513-llvm-00009-gec34cd07a425 #968 PREEMPT_{RT,(full)=
+}=20
+>  [  267.339629][  T575] Hardware name: Micro-Star International Co., Ltd.=
+ Alpha
+> 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
+>  [  267.339632][  T575] RIP: 0010:queued_spin_lock_slowpath+0x120/0x1c0
+...
+> [  267.339692][  T575] Call Trace:
+>  [  267.339701][  T575]  <TASK>
+>  [  267.339705][  T575]  _raw_spin_lock_irqsave+0x57/0x60
+>  [  267.339714][  T575]  rt_spin_lock+0x73/0xa0
+>  [  267.339720][  T575]  sock_queue_err_skb+0xdc/0x140
+>  [  267.339727][  T575]  skb_complete_wifi_ack+0xa9/0x120
+>  [  267.339737][  T575]  ieee80211_report_used_skb+0x541/0x6e0 [mac80211]
+>  [  267.339799][  T575]  ? srso_alias_return_thunk+0x5/0xfbef5
+>  [  267.339804][  T575]  ? start_dl_timer+0xcf/0x110
+>  [  267.339814][  T575]  ieee80211_tx_status_ext+0x3b3/0x870 [mac80211]
+>  [  267.339851][  T575]  ? raw_spin_rq_lock_nested+0x15/0x80
+>  [  267.339862][  T575]  ? srso_alias_return_thunk+0x5/0xfbef5
+>  [  267.339866][  T575]  ? rt_spin_lock+0x3d/0xa0
+>  [  267.339873][  T575]  ? mt76_tx_status_unlock+0x38/0x230 [mt76]
+>  [  267.339886][  T575]  mt76_tx_status_unlock+0x1e0/0x230 [mt76]
 
---f31gHTPz9TUWOOq1--
+Yeah so that's the crash on the status report as explained above, it
+kind of looks almost like the skb->sk was freed and somehow invalid now?
+But I don't see a general issue here (will keep digging), and how come
+it only shows up with clang?
+
+Since it reproduces pretty reliably, maybe you could do with KASAN?
+
+Also could be interesting - what userspace are you running with wifi?
+What tool is even setting up the wifi status? If you don't really know
+maybe just put WARN_ON(1) into net/core/sock.s where SO_WIFI_STATUS is
+written (sk_setsockopt).
+
+johannes
