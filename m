@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B80F22F76B;
-	Fri, 16 May 2025 09:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A25C1FFC77;
+	Fri, 16 May 2025 10:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747388053; cv=none; b=BXejlTKjacv1S7+goI0of4cY0KU25kHa814NbIA3KOWDZ20EARSpCcd3fVO7h2UyY4i0yv0FNm9zjyBs0m4CGNIm4Fs3JJ3p5UugcgZAd+cWLipGkguFk1RPaeUqh6QHalnf4/wuodzHG92L3JG87ncZkS6DskcO+TY3qOHsVKQ=
+	t=1747391796; cv=none; b=dM0SRQBgy7yAvuLHqObJeQhE68iPd0v3MmHZU/HsTTC9mFZc5LCrnXOsbFTxEqZGcte2Uqn9Y0R1CDMRuAI+71MddENPh96HKsmIwPkxfySvTrdt37EY4mkUl5YbXKaK9ACYV+iLVCd0aQ2O5shTiFSmLr3s9ghZZ9ioWvhDYCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747388053; c=relaxed/simple;
-	bh=r/PSjbXy9CjaxKxTjIH4c/qfPkOWog12QPV34Z0bSMM=;
+	s=arc-20240116; t=1747391796; c=relaxed/simple;
+	bh=jgVpL2kojiH7bm46Jld8D85YYTbY0kw/r105XuXS+K8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MomC6UmcHhSMKjCJXVh3yekG24MQfnwAoH192IHLaDqXISm8HAIhm/oiebNyt+L2aRe87YJuEx+97q9i5siv6iFrK9it10ln+UQZJJ99+5w1bIFtjCC6skoLoYsSYuG0OJvPL8MWWwVk+3/NpXU+GRRjr2hQtfmcVOqKnjGon+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpTEnYeu; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7ZdkWDUGOtP1OWJp5+5+xY4SDFbZCzQeMErLYdxVF+XWXp3A5x7gL6jVoPDl+oqJ/4jriAUKL/10qjA2GwTCgKJLHi5qWpZEQxQYtZpdxcrvtfYdq6OJ1jye6zknhNqjumylOQBvsp9jerM1BdqYhuy8B2QGzwAzbd40RReiGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVguL4tZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpTEnYeu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02BDC4CEE4;
-	Fri, 16 May 2025 09:34:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVguL4tZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560C6C4CEE4;
+	Fri, 16 May 2025 10:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747388052;
-	bh=r/PSjbXy9CjaxKxTjIH4c/qfPkOWog12QPV34Z0bSMM=;
+	s=k20201202; t=1747391795;
+	bh=jgVpL2kojiH7bm46Jld8D85YYTbY0kw/r105XuXS+K8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YpTEnYeuhHxbdhFVuXDvyL0PIDev3vH8B4dnA6upfTyc7gxbf/RfhLS7A6Ds6zvhy
-	 m14B0coZz+9+SRL8MyFmjZewoRkAZ5AX5FP+zfulLt86kDgGe1TQuuEOJSNApjeM6s
-	 lxqFVuhkUtISatnD5TAwBP6NFU7tP2HyRuRz9M95U8nlvSji7Z8P5Y+UkBIpsvgm7T
-	 0Y8wOPRcQnnPBPlqK3IKPmOqT4kJUtCT9aD909F7yfc6jJGCFYII/nZA7Zy7tKsOVN
-	 oNRB93UqBkJasekS6ig9e7n2f/qAM8E+cgZaJkfSHMhZ0tW18HrATYe3BI1UjdKpW1
-	 HXrA3RPPiz+Og==
-Date: Fri, 16 May 2025 11:34:08 +0200
-From: Niklas Cassel <cassel@kernel.org>
-To: Krzysztof =?utf-8?B?V2lsY3p577+977+9c2tp?= <kwilczynski@kernel.org>
+	b=hVguL4tZyjFIsIcQZk4hmgGoVVxYo/WHfCUILoi3R/DCTpDnv3o9PiuWo+NZX4Bc1
+	 kpU44F4ySgUBQKFVcvF2fN+BEmY7pfrvMcFdOXlGLXMscSOiR+DsRbbGYc56WVabV+
+	 BaU1MYUiY8Z/7tz35yTmyCMXqKmV0sAh7PktCpNp2rZU2Q5kcwbquL1WEA+akpBs5J
+	 JZIGra8owWaACG4jaKY/zxaalwY7KodlvFXsS18pa7eNKuJKMdYpJJj6AT3OHcXIRy
+	 n12ufnFFze5Jos7z9RI7pRklfSEsfDan6ZFgSFoTjG6G/NHZuxuq3G2VNYQedixaB4
+	 odP13CWqiw/OA==
+Date: Fri, 16 May 2025 19:36:33 +0900
+From: Krzysztof =?utf-8?B?V2lsY3p577+977+9c2tp?= <kwilczynski@kernel.org>
+To: Niklas Cassel <cassel@kernel.org>
 Cc: Hans Zhang <Hans.Zhang@cixtech.com>, kernel test robot <lkp@intel.com>,
 	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	Wilfred Mallawa <wilfred.mallawa@wdc.com>,
@@ -39,135 +39,45 @@ Subject: Re: =?utf-8?B?5Zue5aSNOiBbcGNpOnNsb3QtcmVz?=
  =?utf-8?Q?et_1=2F1=5D_drivers=2Fpci=2Fcontroller=2Fdwc=2Fpcie-dw-rockchip?=
  =?utf-8?Q?=2Ec=3A721=3A58=3A_error?= =?utf-8?Q?=3A?= use of undeclared
  identifier 'PCIE_CLIENT_GENERAL_CON'
-Message-ID: <aCcGkN-9pN-jUwkS@ryzen>
+Message-ID: <20250516103633.GA448167@rocinante>
 References: <202505152337.AoKvnBmd-lkp@intel.com>
  <KL1PR0601MB4726782470E271865672B2079D90A@KL1PR0601MB4726.apcprd06.prod.outlook.com>
  <20250515162405.GA511285@rocinante>
+ <aCcGkN-9pN-jUwkS@ryzen>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250515162405.GA511285@rocinante>
-
-Hello Krzysztof,
-
-
-FYI: your name appears corrupted in my inbox.
-
-From: Krzysztof Wilczy��ski <your-email-address>
-
-Perhaps because:
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aCcGkN-9pN-jUwkS@ryzen>
 
-instead of UTF-8?
+Hello,
 
+[...]
+> Comparing the commit that landed on the branch, with Wilfred's patch on the
+> mailing list, I did notice this diff:
 
-On Fri, May 16, 2025 at 01:24:05AM +0900, Krzysztof Wilczy��ski wrote:
-> (+Cc Mani for visibility)
+[...]
+> Reviewing the diff, the changes looks fine to me, but I strongly think
+> that if the actual code is modified from the submission (rather than
+> just fixing some minor grammar in the commit message), the (unwritten?)
+> rule is that the person should add a:
 > 
-> Hello,
-> 
-> > Please merge it into the following branch; otherwise, this compilation error will occur.
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/log/?h=controller/dw-rockchip
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> drivers/pci/controller/dwc/pcie-dw-rockchip.c:721:58: error: use of undeclared identifier 'PCIE_CLIENT_GENERAL_CON'
-> >      721 |         rockchip_pcie_writel_apb(rockchip, PCIE_CLIENT_RC_MODE, PCIE_CLIENT_GENERAL_CON);
-> >          |                                                                 ^
-> >    1 error generated.
-> 
-> Sorry about this!
-> 
-> I moved changes from the slot-reset to the controller/dw-rockchip branch,
-> to make sure everything has proper dependencies now.  Hopefully, there
-> won't be any more issues.
+> [person: describe modifications from the original submission]
 
+Sorry about that.  I did forgot to add this.  Good catch.
 
-Comparing the commit that landed on the branch, with Wilfred's patch on the
-mailing list, I did notice this diff:
+That said, a single single line with a nudge or a reminder would suffice.
 
+There is no need for a condescending tone and the lecturing and such.
 
-diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-index 9a952871e4d0..c4bd7e0abdf0 100644
---- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-+++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-@@ -556,7 +556,7 @@ static int rockchip_pcie_configure_rc(struct platform_device *pdev,
-                return ret;
-        }
- 
--       /* unmask DLL up/down indicator and hot reset/link-down reset irq */
-+       /* Unmask DLL up/down indicator and hot reset/link-down reset IRQ. */
-        val = HIWORD_UPDATE(PCIE_RDLH_LINK_UP_CHGED | PCIE_LINK_REQ_RST_NOT_INT, 0);
-        rockchip_pcie_writel_apb(rockchip, val, PCIE_CLIENT_INTR_MASK_MISC);
- 
-@@ -747,11 +747,11 @@ static int rockchip_pcie_rc_reset_slot(struct pci_host_bridge *bridge,
- 
-        ret = pp->ops->init(pp);
-        if (ret) {
--               dev_err(dev, "Host init failed: %d\n", ret);
-+               dev_err(dev, "host init failed: %d\n", ret);
-                goto deinit_clk;
-        }
- 
--       /* LTSSM enable control mode */
-+       /* LTSSM enable control mode. */
-        val = HIWORD_UPDATE_BIT(PCIE_LTSSM_ENABLE_ENHANCE);
-        rockchip_pcie_writel_apb(rockchip, val, PCIE_CLIENT_HOT_RESET_CTRL);
- 
-@@ -762,11 +762,11 @@ static int rockchip_pcie_rc_reset_slot(struct pci_host_bridge *bridge,
- 
-        ret = dw_pcie_setup_rc(pp);
-        if (ret) {
--               dev_err(dev, "Failed to setup RC: %d\n", ret);
-+               dev_err(dev, "failed to setup RC: %d\n", ret);
-                goto deinit_clk;
-        }
- 
--       /* unmask DLL up/down indicator and hot reset/link-down reset irq */
-+       /* Unmask DLL up/down indicator and hot reset/link-down reset IRQ. */
-        val = HIWORD_UPDATE(PCIE_RDLH_LINK_UP_CHGED | PCIE_LINK_REQ_RST_NOT_INT, 0);
-        rockchip_pcie_writel_apb(rockchip, val, PCIE_CLIENT_INTR_MASK_MISC);
- 
-@@ -774,9 +774,9 @@ static int rockchip_pcie_rc_reset_slot(struct pci_host_bridge *bridge,
-        if (ret)
-                goto deinit_clk;
- 
--       /* Ignore errors, the link may come up later */
-+       /* Ignore errors, the link may come up later. */
-        dw_pcie_wait_for_link(pci);
--       dev_dbg(dev, "Slot reset completed\n");
-+       dev_dbg(dev, "slot reset completed\n");
-        return ret;
- 
- deinit_clk:
+You have been doing this for a while now, and if you continue doing this,
+I will have no choice but to start to ignore submissions from you, I do not
+have the time to deal with any forms of such passive-aggressive attitude.
 
+Thank you!
 
-
-Reviewing the diff, the changes looks fine to me, but I strongly think
-that if the actual code is modified from the submission (rather than
-just fixing some minor grammar in the commit message), the (unwritten?)
-rule is that the person should add a:
-
-[person: describe modifications from the original submission]
-
-line after the Signed-off-by of the original submission, such that,
-e.g. if there is a bug in one of the lines that were changed, the
-original author does not unfairly get blamed for some code that he
-didn't write.
-
-When only modifying the commit log, there is no possibility that a
-functional change was introduced, but as soon as the code/diff is
-changed, there is a change that a functional change is introduced
-(intentional or not), so there is a big difference between the cases
-(in my humble opinion).
-
-
-Kind regards,
-Niklas
+	Krzysztof
