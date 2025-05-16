@@ -1,196 +1,172 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA3D1DE4E3;
-	Fri, 16 May 2025 05:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.88
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747371779; cv=fail; b=aAAq77v/P+ed4S2RI5V4mc1C6VkESYPSFT7jD0JWZVY4E5QAfY3+3NCzfVbclMgoSzEzCShCAYrIteV00wb0XT52Qtq9TTdc6WwtlTHBLBcUzD6m3i7jBwdQolsOL8D6jFYwnHIx8BN0UZ45F4UFIl1Gj4hQYqdczb7pVyiT/AM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747371779; c=relaxed/simple;
-	bh=/4y3zP2y84tpSM2BpMC77OGt5aKtKoGTugu4gstjiYk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uvHkMQZ88wIW3PXOs0pQEdhqkVeSaBxiMft16TohkhqV3qX7rSVir1VgX9bqtPQNEmNkERBBKGZRm4sPRB9+XRJMevc77NQhO9QQ0uxzLFOrC/TrwAO0qwvcjQpmUhNeIWrhxCPXbmLwcZkwNKjP3gcHhg4i1zjvUQX/eNqh/ZY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=afY7gQ3M; arc=fail smtp.client-ip=40.107.223.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6000B17E4;
+	Fri, 16 May 2025 05:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747373470; cv=none; b=Yu+wiw0cPtQQwiWk1GF9ZnYfg3dawuUhMogwX6EZzqI+UYjNfdHsnpxX/2yeavH6HnrT07y7/a5Caz2XC4BSHn5m3iph55lcKVWRJyjZnQI8UV3VqfA6CveY1xbMLiWFWLrB1EE0lcGrKHOJOyORIRM0Dys0XBodhDmkbW5N/FA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747373470; c=relaxed/simple;
+	bh=toxGotdghsHUab1+RRGl3zwSsX4qzYDutwY3v4Z9C+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S+7KBxD4OArOOmtT9wnhpQ4zwWwejXyS5CRhgv9gzVnowdnMCk9PCIlGjm4QP8+CsG91yaHHevN4CdBkhMHhbbxzsEFNvua3SVPEiOjnYX6t6ZPOUogq0dX/SLRb3F3ZK9pquOT7ByRSJ8e6J9XZo/NUso+n8pZEMBmJLz1vubs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=flChyQuo; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="afY7gQ3M"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Jkhbd8mAN+3jm+5lG74E5Hgik5sjJFqhQSQAsymogzhq78pSC+aw8doJJQuAOZltg3/Ej38GmpH7GW3cx0AUhWTHPlZWsBlLDYWu/0RvNjH9JkGRZMXj8b2ovsbp5hs5oy0ApK9E1C95hs97cIPhIWQAnvXPZ4d2dshml2ZiPUi+KAgYR2klQvBn68XP2V2iU/6x3EY4UfR0buiCWq6ww/CGD3Gqsbs2MgB5ovZZc0M9c7xarnP6yljwzMqWq2wUNlY12aKz6CXVN98ViEweCBKgzr7Q7LHdKNg7ithhMIbmKdgseEWpVhMfDE2LWpmNW8tg57j10YfbQA5SCeAVIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kJZptlc3kZXrcsg6ti8YR4h6ZA+kKFubq/vK1GxtPoc=;
- b=U0SVOfG+/UA7uY0tK+6czig352FbrRBWXPDPq0G3uMim/OxivoZ5Z1mc5Yeu0KdE+oQtWmcXQV1olHB7SiyHv5ZbDojWZ6ogcm73vua5KO4RxsW7TpdubEtDARmJ3E7Cpq0a7NyNlUFWpNhg2X9cDrR/lku6VXENLY1L4SfJDDxtaIKZbB0GHRjS/Qk39o7ghIh6GGfvyfDQn0ZYJohMnLoVuAnx8iCepndovXIIOcq3Y+9tz+0pkXHzSn2GuJS93+3jJIGylCaSea1ID7vjUIoaDBeN3eEoMOo+vovoApuMWQPC6fi7i0sa9Gz6aL956cDGIsa6znITv/2fXuYNDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=oracle.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kJZptlc3kZXrcsg6ti8YR4h6ZA+kKFubq/vK1GxtPoc=;
- b=afY7gQ3M24vWSbchn+0tD9626WkbsM2677B/BEiIWppO8lG6H0Tl/+ak1NTSTjwYcx2OrHVNGAL8LDA+0NdsYRa1dtnqNDYl8l4bu9ID6EkCLF9EYzsS9Nbt+8KepjyYcFLJNDnQxpCnqR+Duk3USIDDE/sFmRJHSFGKmkhFpZE=
-Received: from BN9PR03CA0947.namprd03.prod.outlook.com (2603:10b6:408:108::22)
- by SN7PR12MB7228.namprd12.prod.outlook.com (2603:10b6:806:2ab::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.33; Fri, 16 May
- 2025 05:02:53 +0000
-Received: from BL6PEPF00022571.namprd02.prod.outlook.com
- (2603:10b6:408:108:cafe::99) by BN9PR03CA0947.outlook.office365.com
- (2603:10b6:408:108::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.16 via Frontend Transport; Fri,
- 16 May 2025 05:02:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL6PEPF00022571.mail.protection.outlook.com (10.167.249.39) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8722.18 via Frontend Transport; Fri, 16 May 2025 05:02:52 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 16 May
- 2025 00:02:52 -0500
-Received: from amd.com (10.180.168.240) by SATLEXMB03.amd.com (10.181.40.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39 via Frontend
- Transport; Fri, 16 May 2025 00:02:45 -0500
-Date: Fri, 16 May 2025 05:02:10 +0000
-From: Ankit Soni <Ankit.Soni@amd.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-CC: Jason Gunthorpe <jgg@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
-	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>, Justin Stitt
-	<justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, "Shuah
- Khan" <shuah@kernel.org>, Suravee Suthikulpanit
-	<suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>, "Alexey
- Kardashevskiy" <aik@amd.com>, James Gowans <jgowans@amazon.com>, Michael Roth
-	<michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
-	<patches@lists.linux.dev>
-Subject: Re: [PATCH v2 03/15] iommupt: Add the basic structure of the iommu
- implementation
-Message-ID: <rvrpqwvrrqkledbftjzhgprowwc5sulngs32vkurb3oxk7c2fg@5qnorfs4vzyr>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <3-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <pntkuh63y26rygrkxegbzncvc3shtplucrnzkkz2dimpkfyn75@uekvyuz5kred>
- <20250514155411.GC382960@nvidia.com>
- <2459f14b-4f4e-47b4-8f79-6af784ef6686@oracle.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="flChyQuo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747373468; x=1778909468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=toxGotdghsHUab1+RRGl3zwSsX4qzYDutwY3v4Z9C+g=;
+  b=flChyQuoqj295K+RgewPDDaIjgM3ItSaWcqmxjP9gGn/m/PrSLYNHqxc
+   XSCMgMYto6DFTYvfgaaCqhyPFUc/kEVjqv+FHcbQocbH97qZZR9dDgdYC
+   KGZn0P4jb1C4A+4eBAA1wZpyRTk/nNDan2pheGv9wnusy+0y/i/VnkGb1
+   7KFPq/58i8f6i++6akaaSV1BmLN+JWbMyOB7AntuBxBExpx1ZmxeYVm69
+   bAMeky8OOpZ4NIJSKHUO3TkHkDJ+8FjRt9TOry6tyHiUEzpH4IwkAftM3
+   YVm/O22OPacryPgxlvi3z+Hlaf9c2M6t37MGRqU0wHnpqeCvJXgJh/oQo
+   Q==;
+X-CSE-ConnectionGUID: t2Lexd+fTECpme0TfQDQ/g==
+X-CSE-MsgGUID: leH2roEETxG7yr7kmgDRhg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="74734090"
+X-IronPort-AV: E=Sophos;i="6.15,293,1739865600"; 
+   d="scan'208";a="74734090"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 22:31:08 -0700
+X-CSE-ConnectionGUID: XDTdNfeGSuG7gBpjsL5y9w==
+X-CSE-MsgGUID: m0RU7hrdT9K3M202SrKrLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,293,1739865600"; 
+   d="scan'208";a="138979538"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 15 May 2025 22:31:04 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uFnew-000J1T-0H;
+	Fri, 16 May 2025 05:31:02 +0000
+Date: Fri, 16 May 2025 13:30:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chiang Brian <chiang.brian@inventec.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chiang Brian <chiang.brian@inventec.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 2/2] hwmon: (pmbus/tps53679) Add support for TPS53685
+Message-ID: <202505161242.oQFhPxZ9-lkp@intel.com>
+References: <20250515081449.1433772-3-chiang.brian@inventec.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2459f14b-4f4e-47b4-8f79-6af784ef6686@oracle.com>
-Received-SPF: None (SATLEXMB04.amd.com: Ankit.Soni@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00022571:EE_|SN7PR12MB7228:EE_
-X-MS-Office365-Filtering-Correlation-Id: d0b478bb-18d4-4abe-c67b-08dd9436e9e6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|7416014|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?duTNEsRAX5Nb4WUlg1vwMDPuVqfdIU6YmXskaKAOnPCrba5PTp7NvjbQ4cr8?=
- =?us-ascii?Q?XjnEvZCv8/rB9qbj4JF7nHEMyk8/NJinNtB1MSmlJWAeAed+qnWmRTuHzfT/?=
- =?us-ascii?Q?znj//MqA5uFj/qbWwSrazCb1AhckwEG7cgJwDtbAoCWTYwxUv3m93j6HAXqw?=
- =?us-ascii?Q?/38ogDyBL+o7xO2YzRX0Li/J/sOkpv5/W4gxweav4Efktd5Aa6WE5uC7/1p+?=
- =?us-ascii?Q?HEAOOsQo0phzXXNbtd6wkX8yRhWAEuD4cWn+vzIK9vLtvXlP1MqnYybnIxby?=
- =?us-ascii?Q?xw2d8kSt+AdS5VDT9wvTe74D1pCqZRvqbsMFW36navaJPo+XK6VX4c9QTzkR?=
- =?us-ascii?Q?q+fdTst02ZGkk+uT+p5GpTR1x9v46JsXKJrsuC00CVfJsLuSZdF+ycnEkRaJ?=
- =?us-ascii?Q?Nhap06liAfii4Yd7tqUE90T1JWlFOFIG7n52cpwaDtAes8830b8Dy31Ooo6X?=
- =?us-ascii?Q?cV6ND7GbkRcTDMZbirYYgFJhwrVQynWYEUdK/lNCvA1E6vQ9mjr0JEg+MuAz?=
- =?us-ascii?Q?Gf+86/NWkZEOdvl3O8/dwyMS6VAWkQSygtSQjj3MJUajbToMrTxhtWE5yOgD?=
- =?us-ascii?Q?+EwmCLFAiE6YyNZ22f599Xjsq8n7S9VPrgqTkGkvN4wlO48bpZuFLvEOJJ8I?=
- =?us-ascii?Q?9bxOYZGZnCmjhBV7mPs93PwFnW9ZMK7DUoHAXAqv2AmSAX95Ai9217VdfWu/?=
- =?us-ascii?Q?M1mGj2eoM9D3B51etyioSrw292Xmxl83AQOBMOdvpkp1BMDDpix93jfdfIrG?=
- =?us-ascii?Q?4+yziKaKvwbyNEJu9aDAEUEXWOAted4LcwMebClFOp6XKiFSAgmWYvFQ9FLY?=
- =?us-ascii?Q?MWe5Pi5PolURrGIcFGeHLAn+OvIX+RoN9ci47EvD5j1sLGjz4Nl2NoAGOriA?=
- =?us-ascii?Q?0tT7XzAAQB6oUiMLRiYH0lXxV1uzK87NYRm6JJTReQ4aEBLhWve6YzyMaljR?=
- =?us-ascii?Q?RZ1C7RIXZma6ZyyJxM12bCIC+BZSwycQ3s1j0jpjC0knNVS0Gqbo/F5MTyOr?=
- =?us-ascii?Q?2p7jwclhJrNdE0vMHL4pppvSO6QDNNu1+ZwQEGM61eSpzHnvRRkEa3bj/ICq?=
- =?us-ascii?Q?FtaSwAynAApr53xyOzG5aWbd3DGmiUaARgOFVOgbN2PbYEYRTIkGJ+d+7d+3?=
- =?us-ascii?Q?lcGVLLBNrVIB4f31mN3Uy/dRSCiBJ3D6hYULcuo3SrLE+sHFRozriN/T4pef?=
- =?us-ascii?Q?qYf0ksMnvvh7HxGiw7WS/wLMuJXM7OnVCiBrCAkshyfhnRO17HWTAjRS9NSY?=
- =?us-ascii?Q?p7UkCxMJJJc15eZMZPlEruanfeWnRvZkHInHp1msI/HMdp+dfPShiMyhE5p4?=
- =?us-ascii?Q?xCxLmL6BWq2GkUAvSNXv+IHQEGuCI4uwCcCCGLFv5Ljzo1+3TRabiYQArP+k?=
- =?us-ascii?Q?eTseJ5AhYZAcIlGZY3Cv1RWH+/ANMEKV0xocKU06bV/Nfmo+lnjdmPV+XfvP?=
- =?us-ascii?Q?2s+KEbu+lXw2mRz7FL49o9CN50ltpwapjW3i2i9D1gyYA4vSqkxSVsp/4dF3?=
- =?us-ascii?Q?0m4jVpOqqxG6n+8x80qlp1h50M8byHiG+qcq?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(7416014)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2025 05:02:52.9396
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0b478bb-18d4-4abe-c67b-08dd9436e9e6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00022571.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7228
+In-Reply-To: <20250515081449.1433772-3-chiang.brian@inventec.com>
 
-On Wed, May 14, 2025 at 04:08:09PM -0400, Alejandro Jimenez wrote:
-> 
-> 
-> On 5/14/25 11:54 AM, Jason Gunthorpe wrote:
-> > On Wed, May 14, 2025 at 09:23:49AM +0000, Ankit Soni wrote:
-> > > I am experiencing a system hang with a 5-level v2 page table mode, on boot.
-> > > The NVMe boot drive is not initializing.
-> > > Below are the relevant dmesg logs with some prints i had added:
-> > > 
-> > > [    6.386439] AMD-Vi v2 domain init
-> > > [    6.390132] AMD-Vi v2 pt init
-> > > [    6.390133] AMD-Vi aperture end last va ffffffffffffff
-> > > ...
-> > > [   10.315372] AMD-Vi gen pt MAP PAGES iova ffffffffffffe000 paddr 19351b000
-> > > ...
-> > > [   72.171930] nvme nvme0: I/O tag 0 (0000) QID 0 timeout, disable controller
-> > > [   72.179618] nvme nvme1: I/O tag 24 (0018) QID 0 timeout, disable controller
-> > > [   72.197176] nvme nvme0: Identify Controller failed (-4)
-> > > [   72.203063] nvme nvme1: Identify Controller failed (-4)
-> > > [   72.209237] nvme 0000:05:00.0: probe with driver nvme failed with error -5
-> > > [   72.209336] nvme 0000:44:00.0: probe with driver nvme failed with error -5
-> > > ...
-> > > Timed out waiting for the udev queue to be empty.
-> > > 
-> > > According to the dmesg logs above, the IOVA for the v2 page table appears
-> > > incorrect and is not aligned with domain->geometry.aperture_end. Which
-> > > requires domain->geometry.force_aperture = true; to be added at the
-> > > appropriate location. Proabably here!
-> 
-> Thank you for pointing out this issue and its cause. I originally tested on
-> a host with SCSI storage, and after your report I tried but couldn't
-> reproduce the hang on a Zen4 host with an nvme boot drive. I wanted to see
-> if it was a pattern common to NVME, but I suppose it depends on the DMA mask
-> chosen by the specific driver.
-> 
-> Alejandro
-> 
+Hi Chiang,
 
-Hi,
-Can you try with below command line?
-"amd_iommu=pgtbl_v2 iommu.forcedac=1"
-Indeed it depends on DMA Mask chose by nvme driver. if force_aperture is
-not true, iommu driver will use dma_mask in place of end_aperture.
+kernel test robot noticed the following build errors:
 
--Ankit
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next krzk-dt/for-next linus/master v6.15-rc6 next-20250515]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chiang-Brian/hwmon-pmbus-tps53679-Add-support-for-TPS53685/20250515-171511
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250515081449.1433772-3-chiang.brian%40inventec.com
+patch subject: [PATCH v7 2/2] hwmon: (pmbus/tps53679) Add support for TPS53685
+config: i386-buildonly-randconfig-001-20250516 (https://download.01.org/0day-ci/archive/20250516/202505161242.oQFhPxZ9-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250516/202505161242.oQFhPxZ9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505161242.oQFhPxZ9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/tps53679.c:133:50: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'char *' [-Wint-conversion]
+     133 |         ret = tps53679_identify_chip(client, pmbus_rev, device_id);
+         |                                                         ^~~~~~~~~
+   drivers/hwmon/pmbus/tps53679.c:90:26: note: passing argument to parameter 'id' here
+      90 |                                   u8 revision, char *id)
+         |                                                      ^
+>> drivers/hwmon/pmbus/tps53679.c:165:10: error: incompatible pointer to integer conversion passing 'char[2]' to parameter of type 'int' [-Wint-conversion]
+     165 |                                             TPS53681_DEVICE_ID);
+         |                                             ^~~~~~~~~~~~~~~~~~
+   drivers/hwmon/pmbus/tps53679.c:34:32: note: expanded from macro 'TPS53681_DEVICE_ID'
+      34 | #define TPS53681_DEVICE_ID     "\x81"
+         |                                ^~~~~~
+   drivers/hwmon/pmbus/tps53679.c:129:25: note: passing argument to parameter 'device_id' here
+     129 |                                         int pmbus_rev, int device_id)
+         |                                                            ^
+   2 errors generated.
 
 
-> > 
-> > Yes! It got lost, thanks alot!
-> > 
-> > Jason
-> 
+vim +133 drivers/hwmon/pmbus/tps53679.c
+
+53030bcc87e4a4b Guenter Roeck 2020-01-20  120  
+53030bcc87e4a4b Guenter Roeck 2020-01-20  121  /*
+53030bcc87e4a4b Guenter Roeck 2020-01-20  122   * Common identification function for chips with multi-phase support.
+53030bcc87e4a4b Guenter Roeck 2020-01-20  123   * Since those chips have special configuration registers, we want to have
+53030bcc87e4a4b Guenter Roeck 2020-01-20  124   * some level of reassurance that we are really talking with the chip
+53030bcc87e4a4b Guenter Roeck 2020-01-20  125   * being probed. Check PMBus revision and chip ID.
+53030bcc87e4a4b Guenter Roeck 2020-01-20  126   */
+53030bcc87e4a4b Guenter Roeck 2020-01-20  127  static int tps53679_identify_multiphase(struct i2c_client *client,
+53030bcc87e4a4b Guenter Roeck 2020-01-20  128  					struct pmbus_driver_info *info,
+53030bcc87e4a4b Guenter Roeck 2020-01-20  129  					int pmbus_rev, int device_id)
+53030bcc87e4a4b Guenter Roeck 2020-01-20  130  {
+53030bcc87e4a4b Guenter Roeck 2020-01-20  131  	int ret;
+53030bcc87e4a4b Guenter Roeck 2020-01-20  132  
+53030bcc87e4a4b Guenter Roeck 2020-01-20 @133  	ret = tps53679_identify_chip(client, pmbus_rev, device_id);
+53030bcc87e4a4b Guenter Roeck 2020-01-20  134  	if (ret < 0)
+53030bcc87e4a4b Guenter Roeck 2020-01-20  135  		return ret;
+53030bcc87e4a4b Guenter Roeck 2020-01-20  136  
+53030bcc87e4a4b Guenter Roeck 2020-01-20  137  	ret = tps53679_identify_mode(client, info);
+53030bcc87e4a4b Guenter Roeck 2020-01-20  138  	if (ret < 0)
+53030bcc87e4a4b Guenter Roeck 2020-01-20  139  		return ret;
+53030bcc87e4a4b Guenter Roeck 2020-01-20  140  
+53030bcc87e4a4b Guenter Roeck 2020-01-20  141  	return tps53679_identify_phases(client, info);
+53030bcc87e4a4b Guenter Roeck 2020-01-20  142  }
+53030bcc87e4a4b Guenter Roeck 2020-01-20  143  
+53030bcc87e4a4b Guenter Roeck 2020-01-20  144  static int tps53679_identify(struct i2c_client *client,
+53030bcc87e4a4b Guenter Roeck 2020-01-20  145  			     struct pmbus_driver_info *info)
+53030bcc87e4a4b Guenter Roeck 2020-01-20  146  {
+53030bcc87e4a4b Guenter Roeck 2020-01-20  147  	return tps53679_identify_mode(client, info);
+53030bcc87e4a4b Guenter Roeck 2020-01-20  148  }
+53030bcc87e4a4b Guenter Roeck 2020-01-20  149  
+340e957083852e1 Chiang Brian  2025-05-15  150  static int tps53685_identify(struct i2c_client *client,
+340e957083852e1 Chiang Brian  2025-05-15  151  				 struct pmbus_driver_info *info)
+340e957083852e1 Chiang Brian  2025-05-15  152  {
+340e957083852e1 Chiang Brian  2025-05-15  153  	info->func[1] |= PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+340e957083852e1 Chiang Brian  2025-05-15  154  			 PMBUS_HAVE_STATUS_INPUT;
+340e957083852e1 Chiang Brian  2025-05-15  155  	info->format[PSC_VOLTAGE_OUT] = linear;
+340e957083852e1 Chiang Brian  2025-05-15  156  	return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
+340e957083852e1 Chiang Brian  2025-05-15  157  					   TPS53685_DEVICE_ID);
+340e957083852e1 Chiang Brian  2025-05-15  158  }
+340e957083852e1 Chiang Brian  2025-05-15  159  
+53030bcc87e4a4b Guenter Roeck 2020-01-20  160  static int tps53681_identify(struct i2c_client *client,
+53030bcc87e4a4b Guenter Roeck 2020-01-20  161  			     struct pmbus_driver_info *info)
+53030bcc87e4a4b Guenter Roeck 2020-01-20  162  {
+53030bcc87e4a4b Guenter Roeck 2020-01-20  163  	return tps53679_identify_multiphase(client, info,
+53030bcc87e4a4b Guenter Roeck 2020-01-20  164  					    TPS53681_PMBUS_REVISION,
+53030bcc87e4a4b Guenter Roeck 2020-01-20 @165  					    TPS53681_DEVICE_ID);
+53030bcc87e4a4b Guenter Roeck 2020-01-20  166  }
+53030bcc87e4a4b Guenter Roeck 2020-01-20  167  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
