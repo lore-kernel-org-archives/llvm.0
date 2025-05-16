@@ -1,144 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40C818D656;
-	Fri, 16 May 2025 17:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED7A25D54A
+	for <llvm@lists.linux.dev>; Fri, 16 May 2025 18:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747417696; cv=none; b=bVuJnEBC9zJwDIKtiK5Nlh0BkY/TYxpIULLw1ZeM0Y8V0EfbFxTb43kd2Act3cinRiTS2ronV0AoBMurOnnPFmHed8TDbve99bNGWtECU3WYCgLKZ0drBp4xC8LsJxoLAaAV0YeHa2CjQkQBEiS85APXES7EZnAYbhgm2arjf1I=
+	t=1747419131; cv=none; b=YlZsM1+lFzMfwquZvdzwRVWQGV+5L3g8cNbJvcsqPDk9/lLMzIGU8/UlZMmHzxWrB65bL5UbZ0R8fexqgpXRS4indlCYYccISg3/StUf4AXaptb6lh6HuZSHavsdLstKSIexv7FszG1BdDdmBHtcZFFtX832ycyr3AtVi2xpGFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747417696; c=relaxed/simple;
-	bh=SVUyvFc0fOQh8zVf1bYdRXhbpwwB58SaAA9VZ6xwr+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WZsoIk2LkmjTVAzm+tNefrk8G7gFnucpXN3rAjIddAHit+6DUvL+cjl9YAkPnPRue3K/aHcklWIT+rrVxrBKGmtjVmEExWBZFsEJh43KH15rMluPP9XVaTbsPCH1XD7JWrY/ygomspSK2Q8T6P+M6gNbwcmLL7gMkSu6LEhTp5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M+aRvozF; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747419131; c=relaxed/simple;
+	bh=7DDcYMJbo5107TIEhXGeRNYb6rwSBCeTy6398j6nQw8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=k7uiNtMRss1T0yVXX2DmD7HUVN3i/LdBNthg8+YTpQl2eMERca7Ob7AFggXOjNAdlGnpwQae6mJ+8e9599PWntchCZOe3ki/fCtPmTv5CLdsTp3gtq4O/VfN4XLBTyf4tm7E152U2Wz699SSglWH0lorf0PqW0b0rTrTg6LTuZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U2vLY7Bm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M+aRvozF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747417694; x=1778953694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SVUyvFc0fOQh8zVf1bYdRXhbpwwB58SaAA9VZ6xwr+c=;
-  b=M+aRvozF2NvoR80miGaIZDxgKWS/lPoObvXPFdA7w4wzQZBxIwlcLGjy
-   Rq0N6GXEiB8RVl1jwt9BYW7wcF3HeWJVSCuaQkgOzS/6j8aiZtHrSR7DC
-   DiaveAst7MyKmf5vzoOY57qvr/RLnSL1Id/mnX6znCQsPbFEZJDpfbrhB
-   Jz3P0+6n/h1Znimr5A3lYzZodYQA4s6gnhF95FDgxcGFG4ZwZALOP8hwB
-   RgP2aKLassD2mjzXGQAUBudttW683wu1PTrIq+62LJ1+27dNNjGzTv85e
-   QaXDP0FdYjeIgAW4oitOUjOCna642lEqv6fNg/PIYPVJv2kKi55cW+9cW
-   A==;
-X-CSE-ConnectionGUID: 2Ko3VsuMTKGB9LVYqNpqzw==
-X-CSE-MsgGUID: APQysOWeSrSbgX9jrpf/Hg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="53069832"
-X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
-   d="scan'208";a="53069832"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 10:48:14 -0700
-X-CSE-ConnectionGUID: I5IyDPRQRgiAeo8QeQG/9A==
-X-CSE-MsgGUID: 2VXXDIuERBSSiHMtCIEi/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
-   d="scan'208";a="139640812"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 16 May 2025 10:48:11 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uFzAG-000Jad-1I;
-	Fri, 16 May 2025 17:48:08 +0000
-Date: Sat, 17 May 2025 01:47:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: adrianhoyin.ng@altera.com, dinguyen@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org,
-	Eugeniy.Paltsev@synopsys.com, vkoul@kernel.org,
-	dmaengine@vger.kernel.org, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	adrianhoyin.ng@altera.com,
-	Matthew Gerlach <matthew.gerlach@altrera.com>
-Subject: Re: [PATCH 4/4] dma: dw-axi-dmac: Add support for dma-bit-mask
- property
-Message-ID: <202505170130.I0p9B66f-lkp@intel.com>
-References: <a10c000b7c8301018eb2b0a20fbf2d2d10e74a02.1747367749.git.adrianhoyin.ng@altera.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U2vLY7Bm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747419128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=T4XstYXvdPhzHplFNlIElK67XNVu7iVWYM7zUcXqF6M=;
+	b=U2vLY7BmtY6cNDwyTQgih6WsIrv11DILcy5vf2X0xpVjuQ83NK/NsJkglBRvO3XrnZ2TjP
+	f/R2bciZHhRao9D1uNj7D5gbBikr89b22OZLvoE4IW1g2L3yUb9/YgMDc1V0IRyqxjcQNO
+	vN5ItUaCAp29z87FDGUPxeSjw+0Q8uM=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-127-aGiD00iNOb-sDlv09aUVEA-1; Fri,
+ 16 May 2025 14:12:07 -0400
+X-MC-Unique: aGiD00iNOb-sDlv09aUVEA-1
+X-Mimecast-MFC-AGG-ID: aGiD00iNOb-sDlv09aUVEA_1747419126
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5BD6118004A7
+	for <llvm@lists.linux.dev>; Fri, 16 May 2025 18:12:06 +0000 (UTC)
+Received: from [172.20.77.114] (unknown [10.30.44.38])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E40F3195608D;
+	Fri, 16 May 2025 18:12:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc6,
+ upstream-mainline, 3c21441e)
+Date: Fri, 16 May 2025 18:12:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a10c000b7c8301018eb2b0a20fbf2d2d10e74a02.1747367749.git.adrianhoyin.ng@altera.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <84539.125051614120700245@us-mta-127.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 3sVDp-EEyjGZjZAoDAsvHvsnXKP_JurtXDyworS2ano_1747419126
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on vkoul-dmaengine/next mtd/mtd/next mtd/mtd/fixes linus/master v6.15-rc6]
-[cannot apply to next-20250516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/adrianhoyin-ng-altera-com/dt-bindings-dma-snps-dw-axi-dmac-Add-iommus-dma-coherent-and-dma-bit-mask-quirk/20250516-120810
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/a10c000b7c8301018eb2b0a20fbf2d2d10e74a02.1747367749.git.adrianhoyin.ng%40altera.com
-patch subject: [PATCH 4/4] dma: dw-axi-dmac: Add support for dma-bit-mask property
-config: arm-randconfig-001-20250517 (https://download.01.org/0day-ci/archive/20250517/202505170130.I0p9B66f-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505170130.I0p9B66f-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505170130.I0p9B66f-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c:275:33: error: use of undeclared identifier 'dev'
-     275 |         ret = device_property_read_u32(dev, "snps,dma-bit-mask", &tmp);
-         |                                        ^
-   drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c:277:46: warning: shift count >= width of type [-Wshift-count-overflow]
-     277 |                 ret = dma_set_mask_and_coherent(chip->dev, DMA_BIT_MASK(64));
-         |                                                            ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
-      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
->> drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c:279:23: warning: shift count >= width of type [-Wshift-count-overflow]
-     279 |                 if (tmp == 0 || tmp << 32 || tmp > 64)
-         |                                     ^  ~~
-   2 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/dev +275 drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+Kernel information:
+    Commit message: Merge tag 'acpi-6.15-rc7' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/rafael/linux-pm
 
-   264	
-   265	static void axi_dma_hw_init(struct axi_dma_chip *chip)
-   266	{
-   267		int ret;
-   268		u32 i, tmp;
-   269	
-   270		for (i = 0; i < chip->dw->hdata->nr_channels; i++) {
-   271			axi_chan_irq_disable(&chip->dw->chan[i], DWAXIDMAC_IRQ_ALL);
-   272			axi_chan_disable(&chip->dw->chan[i]);
-   273		}
-   274	
- > 275		ret = device_property_read_u32(dev, "snps,dma-bit-mask", &tmp);
-   276		if (ret)
-   277			ret = dma_set_mask_and_coherent(chip->dev, DMA_BIT_MASK(64));
-   278		else {
- > 279			if (tmp == 0 || tmp << 32 || tmp > 64)
-   280				dev_err(chip->dev, "Invalid dma bit mask\n");
-   281	
-   282			ret = dma_set_mask_and_coherent(chip->dev, DMA_BIT_MASK(tmp));
-   283		}
-   284	
-   285		if (ret)
-   286			dev_warn(chip->dev, "Unable to set coherent mask\n");
-   287	}
-   288	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1821711767
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1821711767-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
