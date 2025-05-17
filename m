@@ -1,289 +1,161 @@
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBBD1922FA
-	for <llvm@lists.linux.dev>; Sat, 17 May 2025 11:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C701DEFDC
+	for <llvm@lists.linux.dev>; Sat, 17 May 2025 11:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747481679; cv=none; b=NyKf0L7bz5idD9D/9pTX39zExf7faMZc5xNwMa0NOSv8TJ48x3nyrfV1+1jVkCMmL3dDX/8Ma9PTduoHbh8S50x81PNeyxM8kRGcvz+WD2KqElDJ9bfRd/eJ/6G4QxkW3u+i8m9Vx+HPa00yfD2v2bY9yMvklRULIQNr69QPSrA=
+	t=1747481815; cv=none; b=UDr3DeyswPEm57OEw8M4OwBN8KLZorylel4SC33fa7Dn/3PnED8fTDwqPaXXYOg/5sjF2BY7NdK+rIH9RNMkyVY7gGQdYHjCwCRQiosI/MNXOQB7zWZzMVCeOLL1HDuerL2WPtExEfJaD88LCXcMukIjqXagt07Od7Xh/fqGl5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747481679; c=relaxed/simple;
-	bh=x9WQu15a0CvTyQ8NsF9ruE7Lf/UN/ZhXRTmMwm/a6PY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Mo919nl0bIJffVQPd+aaNwNe9OqFSQ5OTNtM6UawLmaaJYQTUmPjCZ4I3w1AT+xnAQfPLcvzE7SpcouCynBMgNVQYiXfAxM4pgvHJDmvFpVGQutxifr4ROxC0BKBHcislQCMdC5czB84t/krsFCZnZuG6Rav7eCfZnAdkdxCfMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=IO3ne5YO; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1747481815; c=relaxed/simple;
+	bh=pSoqKGnGc2p0krSYaAJD10+6QUEoAx6Simgs84ngQjE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZwskeTazZl8iau4xxbsc+PFtJxYKB9lprWM2LnlnUueuTJ6d8pNZmzvTC2I3yCbDKeZLEH/QrB11mLN8eAYeZmzQd2y4KPhD3WQWPnuzht5s+YofYD296KY6CeK6ngQaxjS+FqLvVTH89nWwBPj/C73btaB38Uyie9vIb8O41yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bz6j+qO9; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="IO3ne5YO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1747481653; x=1748086453; i=spasswolf@web.de;
-	bh=dadCyju+xeEXAIQZEjZo1Bn+Q8HMZfWwnjstkoQkIAE=;
-	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=IO3ne5YORWWpnGoWaxN/8RmNcPgMSMKfD1UChWqFqUDEqrGh97Xipwpg9scgoGFd
-	 wm6/GEtieIPx0B1RhEk5JXLth576mbKiWHa29sh2F0qPvlqP+tpA914sX9LscM7p5
-	 KkveTT0Dac6bJ1msHultkD8TQ3oQV/LHpPO9L1/f+0hcaJ1c23ujjc7SpZGP1iJjz
-	 ZeGG7B95bEwNmN/eC87X2Db5qC2yolH4oNjBqZKbvu+gIx8EAuPdYpH1pZ+v7e66n
-	 Bvai0c+9vn+IFfacYKkmAneIZbhFfTuKYMR209xT3Txe0RiRUJk656ddeGSyXn2In
-	 tXOkzLaPEzUxpamJJA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MgzaR-1ut9WT3pev-00ZRKw; Sat, 17
- May 2025 13:34:12 +0200
-Message-ID: <388bbc4c805ce029bbd08010fd30405494f998a9.camel@web.de>
-Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
- compiled with clang
-From: Bert Karwatzki <spasswolf@web.de>
-To: Johannes Berg <johannes@sipsolutions.net>,
- "linux-kernel@vger.kernel.org"	 <linux-kernel@vger.kernel.org>
-Cc: "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>, 
- "llvm@lists.linux.dev"
-	 <llvm@lists.linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
-	linux-wireless@vger.kernel.org, spasswolf@web.de
-Date: Sat, 17 May 2025 13:34:11 +0200
-In-Reply-To: <63cc1dbf07bde2c9d14e1f86ce2c2ce26a2a9936.camel@web.de>
-References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
-											 <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
-										 <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
-									 <2d8c1929bf5ab5260dacf9aa390456b3b49ce465.camel@sipsolutions.net>
-								 <2cad838b39f00d93319509d2a6a77a4c42c7fa92.camel@web.de>
-							 <a12c82c394e9676e32ede6b8312f821a16fef94b.camel@sipsolutions.net>
-				 <f8552d41fb7eae286803b78302390614179b33b0.camel@web.de>
-			 <8684a2b4bf367e2e2a97e2b52356ffe5436a8270.camel@sipsolutions.net>
-		 <ba97a2559cda1b14e0c9754523ff1152bdad90ef.camel@web.de>
-	 <63cc1dbf07bde2c9d14e1f86ce2c2ce26a2a9936.camel@web.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.56.1-1 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bz6j+qO9"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a206845eadso1866418f8f.3
+        for <llvm@lists.linux.dev>; Sat, 17 May 2025 04:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747481812; x=1748086612; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z/SBkgLGN/MrxOQ9/67Ws3va/xYrNBLPShBPDYKH95A=;
+        b=Bz6j+qO9MS+9jFuIV1gALrjQeBJKl/ksFKMkssOzxnPUFXxhmMa5jIY6WIi50CE2oO
+         Sxg8yOelwc5tiLlSh5GFcPxH65tT3u8uAe2WfZ5qFwKPU5VBQV4QyoDw/QOpzamniMD4
+         gcYQ8eKgmHoxcVZ5Of8lzd1gk/wm+OjalBa5ApSbT5wrEhQdYtpOPv5T+CLA0xM55wWn
+         NEZYtwAqs9bv4WIGpwYWsmBjNLIgVGwuIR/aymP1IfjWtk0yh5go9EXABni1PtuFoztX
+         WVg/dJd5lAuLWZb3bbCIBkWDzkeMDWN3gIff9jtYfvPUsvObq9XQD6sXO9O+giHygDKo
+         5Pcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747481812; x=1748086612;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z/SBkgLGN/MrxOQ9/67Ws3va/xYrNBLPShBPDYKH95A=;
+        b=vxeVbyXUkLv/qPb6VlZSNcINYmm0bV6I2OPd2LkJLwWg7KtsT7GPVfIVzELbKPT+yw
+         8ZwVJjJQudZH5U/vspi5JU5ygdDSPigKyAalM9vI8LDzVwRBgodCldIrEm0mwUq8fng/
+         op1SIf1NBdXzZtNu+YUM6ZQMYBOkbOjRcRAqIA4wfw+huV46BLKK6H6q+uKw9RTU+DEv
+         3Rkri9B0yyQ2Xzqim1xjv3C8L2z50ySrW9S4mXxuRZU9LYDUEANry/N1YpP/twa7RcYJ
+         t8R9NXkAuKmDxSu5UiLrfwyf5W+8VR7ykpTMDV79X59HjNFFR/lRdf/GADH3UfbhohV4
+         dKEA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTsCHZIF+lWxLY8TtYiXNcVV1kDvAC5NciinFMdDVBG8yeqINBrYQLHIyium4Geqhwflrn@lists.linux.dev
+X-Gm-Message-State: AOJu0YwqL9VzBwazzkoKia8No0CQ/+sekCgzzaYOhkVrlJjxqxTX9iMg
+	Wtj+JK2JQIF8t9pqeXigd05CtvW0beD1X/+GVWanoUMLTd8zvqMx6ZIO
+X-Gm-Gg: ASbGncvXa9OOUGXeS3bavPBqr8jx7ng2QayDslAPSkrXiGdiDEEHm1X6wTQjm9eTMmJ
+	628gmrLj6Hw6VfmV8fW5P+gvtIsai25yUPCc8k0CBCkzGhdCmU8smwfJJGYzEwMIpszAWXor0D6
+	QGXb7t6lx1Yg6CVLdqhBTBIcStvsgi6GsMg6wQw2RdkgUW7rC+47i0GYvHISnZ4y5dbykw4e/UO
+	X39UPc/abrbeWFl8tgBciXQvL9TvG1nQ2jUzkahSTB+WiEUGixzVien9AbGSVuhBpPO0Ng4REAl
+	0/in1KJych6PqVgK8NUosRAqghuW29ms/oqPedU24lazbuUc2iN+5LZKhXZn7i3v
+X-Google-Smtp-Source: AGHT+IHboaz6cQmQDpSINZLHFCnqDghYEBpSBtLox8/4UmeCSrlpNWFx/umCN9OyzxZOPBm2l3mORQ==
+X-Received: by 2002:a05:6000:1866:b0:3a3:4a1a:de6f with SMTP id ffacd0b85a97d-3a35feab1bdmr4932224f8f.26.1747481811545;
+        Sat, 17 May 2025 04:36:51 -0700 (PDT)
+Received: from ?IPV6:2001:871:22a:99c5::171c? ([2001:871:22a:99c5::171c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca8d005sm6063226f8f.90.2025.05.17.04.36.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 May 2025 04:36:51 -0700 (PDT)
+Message-ID: <19fc74f7-b292-404d-a48f-4dc3bcb5af3b@gmail.com>
+Date: Sat, 17 May 2025 13:36:49 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FRNQgOtzobnROA3s8DGrFucmEyfVDKJjuc6RLbOVOfy7sPFxp/G
- 7rLq/rpK50GzlZXa2J1tFEpdhnJ+qYCUtrNGLD5sUhbDv6P7Mx3kIF9zP1+z9xCAbzopePZ
- 9ETT62spdHptQBQI6k5sFz3Yv7qlyOOVIUbAiSqINEcCmrHq01YbmOTir5+/ol1hZ71mAlv
- E3/as/pKvRSOZZDwx6omw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:BICPyeDsVVE=;SrJ/Ofhtuu3j0XVjrcaPLZgmih/
- 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
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] rust: add UnsafePinned type
+To: Benno Lossin <lossin@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Sky <sky@sky9.dev>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ =?UTF-8?Q?Gerald_Wisb=C3=B6ck?= <gerald.wisboeck@feather.ink>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20250511-rust_unsafe_pinned-v4-0-a86c32e47e3d@gmail.com>
+ <20250511-rust_unsafe_pinned-v4-1-a86c32e47e3d@gmail.com>
+ <D9VBVURZLSNT.4BTQQ8UCTGPJ@kernel.org>
+Content-Language: en-US, de-DE
+From: Christian Schrefl <chrisi.schrefl@gmail.com>
+In-Reply-To: <D9VBVURZLSNT.4BTQQ8UCTGPJ@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Am Freitag, dem 16.05.2025 um 20:19 +0200 schrieb Bert Karwatzki:
-> I've added a debugging statement:
->=20
-> diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-> index 3bd5ee0995fe..853493eca4f5 100644
-> --- a/net/mac80211/tx.c
-> +++ b/net/mac80211/tx.c
-> @@ -4586,7 +4586,11 @@ static noinline void ieee80211_8023_xmit_clang_de=
-bug_helper(struct sk_buff *skb,
->                                                             struct ieee8=
-0211_local *local,
->                                                             struct ieee8=
-0211_tx_info *info)
->  {
-> -       if (unlikely(skb->sk && sock_flag(skb->sk, SOCK_WIFI_STATUS))) {
-> +       if (unlikely(skb->sk && ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI=
-_STATUS) ||
-> +                               sock_flag(skb->sk, SOCK_WIFI_STATUS)))) =
-{
-> +               if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^ so=
-ck_flag(skb->sk, SOCK_WIFI_STATUS))
-> +                       printk(KERN_INFO "%s: skb_shinfo(skb)->tx_flags =
-& SKBTX_WIFI_STATUS =3D %u sock_flag(skb->sk,
-> SOCK_WIFI_STATUS) =3D %u\n",
-> +                                       __func__, (skb_shinfo(skb)->tx_f=
-lags & SKBTX_WIFI_STATUS), sock_flag(skb->sk,
-> SOCK_WIFI_STATUS));
->                 info->status_data =3D ieee80211_store_ack_skb(local, skb=
-,
->                                                             &info->flags=
-, NULL);
->                 if (info->status_data)
->=20
-> This gives the following logoutput (and a lockup), indicating that sock_=
-flag(skb->sk, SOCK_WIFI_STATUS) and
-> (skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) are actually NOT equival=
-ent (when compiled with clang and
-> PREEMPT_RT=3Dy)
+Hi Benno,
 
-I've added more debugging output:
+On 13.05.25 10:51 PM, Benno Lossin wrote:
+> On Sun May 11, 2025 at 8:21 PM CEST, Christian Schrefl wrote:
+>> `UnsafePinned<T>` is useful for cases where a value might be shared with
+>> C code but not directly used by it. In particular this is added for
+>> storing additional data in the `MiscDeviceRegistration` which will be
+>> shared between `fops->open` and the containing struct.
+>>
+>> Similar to `Opaque` but guarantees that the value is always initialized
+>> and that the inner value is dropped when `UnsafePinned` is dropped.
+>>
+>> This was originally proposed for the IRQ abstractions [0] and is also
+>> useful for other where the inner data may be aliased, but is always
+>> valid and automatic `Drop` is desired.
+>>
+>> Since then the `UnsafePinned` type was added to upstream Rust [1] by Sky
+>> as a unstable feature, therefore this patch implements the subset of the
+>> upstream API for the `UnsafePinned` type required for additional data in
+>> `MiscDeviceRegistration` and in the implementation of the `Opaque` type.
+>>
+>> Some differences to the upstream type definition are required in the
+>> kernel implementation, because upstream type uses some compiler changes
+>> to opt out of certain optimizations, this is documented in the
+>> documentation and a comment on the `UnsafePinned` type.
+>>
+>> The documentation on is based on the upstream rust documentation with
+>> minor modifications for the kernel implementation.
+>>
+>> Link: https://lore.kernel.org/rust-for-linux/CAH5fLgiOASgjoYKFz6kWwzLaH07DqP2ph+3YyCDh2+gYqGpABA@mail.gmail.com [0]
+>> Link: https://github.com/rust-lang/rust/pull/137043 [1]
+>> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+>> Reviewed-by: Gerald Wisböck <gerald.wisboeck@feather.ink>
+>> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>> Co-developed-by: Sky <sky@sky9.dev>
+>> Signed-off-by: Sky <sky@sky9.dev>
+>> Signed-off-by: Christian Schrefl <chrisi.schrefl@gmail.com>
+> 
+> One nit below, with that fixed:
+> 
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> 
+>> ---
+>>  rust/kernel/types.rs               |   6 ++
+>>  rust/kernel/types/unsafe_pinned.rs | 111 +++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 117 insertions(+)
+>>
+>> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+>> index 9d0471afc9648f2973235488b441eb109069adb1..705f420fdfbc4a576de1c4546578f2f04cdf615e 100644
+>> --- a/rust/kernel/types.rs
+>> +++ b/rust/kernel/types.rs
+>> @@ -578,3 +581,6 @@ pub enum Either<L, R> {
+>>  /// [`NotThreadSafe`]: type@NotThreadSafe
+>>  #[allow(non_upper_case_globals)]
+>>  pub const NotThreadSafe: NotThreadSafe = PhantomData;
+>> +
+>> +mod unsafe_pinned;
+>> +pub use unsafe_pinned::UnsafePinned;
+> 
+> I would put `mod` to the top of the 
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index e223102337c7..e13560b5b7a8 100644
-=2D-- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2735,8 +2735,10 @@ static inline void _sock_tx_timestamp(struct sock *=
-sk,
- 				*tskey =3D atomic_inc_return(&sk->sk_tskey) - 1;
- 		}
- 	}
--	if (unlikely(sock_flag(sk, SOCK_WIFI_STATUS)))
-+	if (unlikely(sock_flag(sk, SOCK_WIFI_STATUS))) {
-+		printk(KERN_INFO "%s: setting SKBTX_WIFI_STATUS for sk =3D %px\n", __fu=
-nc__, sk);
- 		*tx_flags |=3D SKBTX_WIFI_STATUS;
-+	}
- }
-=20
- static inline void sock_tx_timestamp(struct sock *sk,
-diff --git a/net/core/sock.c b/net/core/sock.c
-index e02a78538e3e..f6589ad5ba36 100644
-=2D-- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1548,6 +1548,7 @@ int sk_setsockopt(struct sock *sk, int level, int op=
-tname,
- 		break;
-=20
- 	case SO_WIFI_STATUS:
-+		printk(KERN_INFO "%s: setting SOCK_WIFI_STATUS to %u for sk =3D %px\n",=
- __func__, valbool, sk);
- 		sock_valbool_flag(sk, SOCK_WIFI_STATUS, valbool);
- 		break;
-=20
-diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-index 853493eca4f5..eee2f80949c6 100644
-=2D-- a/net/mac80211/tx.c
-+++ b/net/mac80211/tx.c
-@@ -4588,9 +4588,12 @@ static noinline void ieee80211_8023_xmit_clang_debu=
-g_helper(struct sk_buff *skb,
- {
- 	if (unlikely(skb->sk && ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS)=
- ||
- 				sock_flag(skb->sk, SOCK_WIFI_STATUS)))) {
--		if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^ sock_flag(skb->sk=
-, SOCK_WIFI_STATUS))
-+		if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^ sock_flag(skb->sk=
-, SOCK_WIFI_STATUS)) {
- 			printk(KERN_INFO "%s: skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =
-=3D %u sock_flag(skb->sk, SOCK_WIFI_STATUS) =3D %u\n",
- 					__func__, (skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS), sock_flag=
-(skb->sk, SOCK_WIFI_STATUS));
-+			printk(KERN_INFO "%s: skb->sk =3D %px skb->sk->sk_flags =3D 0x%lx\n", =
-__func__, skb->sk, skb->sk->sk_flags);
-+			return; // This should make this case non-fatal.
-+		}
- 		info->status_data =3D ieee80211_store_ack_skb(local, skb,
- 							    &info->flags, NULL);
- 		if (info->status_data)
+Your sentence was cut off, I assume you mean:
 
+> I would put `mod` to the top of the file.
 
+I can do that, let me know if I should send a
+new version or if this will be fixed when applying.
 
-This gives after ~15min uptime
-
-[  189.337797] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  189.337803] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1b798c4e00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  191.325256] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  191.325259] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1b798c5a00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  257.591831] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  257.591844] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1baf3bca00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  301.786963] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  301.786967] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1c1bc40100 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  302.780881] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  302.780884] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1a44cf6000 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  482.792298] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  482.792304] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1da0f4de00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  482.806144] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  482.806148] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1da0f4c500 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  482.817280] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  482.817284] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1da0f4df00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  552.327291] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  552.327295] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1da0f4de00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-[  916.971599] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_shin=
-fo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI_S=
-TATUS) =3D 1
-[  916.971607] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->sk =
-=3D ffff8c1a62834000 skb->sk->sk_flags =3D 0xffffffffb4efe640
-
-The printk()s in sk_set_sockopt() and _sock_tx_timestamp() are not called =
-at all so the flag=C2=A0
-SOCK_WIFI_STATUS is actually nevers set! What is printed when printing skb=
-->sk->sk_flags looks
-suspiciously like a pointer, and as sk_flags is actually a member of a uni=
-on in struct sock_common
-it seems clang is using sk_flags for one of the other union members here
-
-struct sock_common {
-[...]
-	union {
-		unsigned long	skc_flags;
-		struct sock	*skc_listener; /* request_sock */
-		struct inet_timewait_death_row *skc_tw_dr; /* inet_timewait_sock */
-	};
-[...]
-}
-
-Bert Karwatzki
+Cheers
+Christian
