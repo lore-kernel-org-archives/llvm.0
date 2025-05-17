@@ -1,115 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152651F181F;
-	Sat, 17 May 2025 14:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D14188006
+	for <llvm@lists.linux.dev>; Sat, 17 May 2025 15:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747491706; cv=none; b=fRpMrrf4YsPLTiOySO7Kk8dOs0tSjo/Y2FMfe4NRhjtH+NqFdndyU/nHh4vNfHBanaRAP7S4xMWmPzyUouTovOWdpBcMA/sqB3ESnm/NFGF732dFnbFiC6B+0ZfFUnkWSiGSi/NRxzepavAEGanNN5ONwZM/9eK0sEA8eX3afy4=
+	t=1747494187; cv=none; b=ISjJ36tAaLt2xVsSvAEjaxDFZs//rHmJhU4maKYVPT67KxNAZKocfdC1G+l8bohI08baUU1vUSyU/D9TEmQn65FmGvMemNpkF2Q1dxDY1qn8KYqdaySAACh0NdNGu5ZrqifQNT0CQKueA24YKuhzyZLrKSXrWHu3i7eC/j7RXFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747491706; c=relaxed/simple;
-	bh=9leiPeZIa4vPhq0f2gDx3Y0sSzQI09KZY9Ls62CbR+k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aPX5WTXYno750zXJhZvZagCUCmCwzJmuDIVThpuAQGzc13+TIOU7rZsnbkbiahZzoawwz6Up3dNLEEHBhSPgRTyF3v5hhImkmy/9y1xGG6aBZ6m3EH7dn4vEyt489BmdzDCR5zKh/UKGPDvN4vpWtv+YpgJ+3vTOAJdqzo9PhzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ACLkp0Bp; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747494187; c=relaxed/simple;
+	bh=0I1eiVOJEdVLLXIohuqFusEWQMPeVi5Dp73/GaN/bZ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C6CBLF9Il68Cnfs782kckM7bMnEvFYE6hCjzbT9ks91psSwQ/8PKLvmaZ3P6XMlJ+hEt3HDTAcDQrmLKRgBzfauBfE/TZrwwJ68eQtwjprVfW5qc1PHxDUBUA9pnky1a2sZ4kkwegQHot9ICFzBPhEhOXO444yAU24A71SveyFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PNP6gNw3; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ACLkp0Bp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747491705; x=1779027705;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9leiPeZIa4vPhq0f2gDx3Y0sSzQI09KZY9Ls62CbR+k=;
-  b=ACLkp0BpYZnv6Tt97RP6BAH2qdTy8/escKnAp8NKMYYp8cP0ZMdpMsnz
-   IyWTjV1KRDK2T9RlXDFTh0Hy9/PGMMayP/O4FHPGnn38sJyemZzmftGfg
-   YbbvLohnRj0fFsmxCGNwyd/C0ekfWCs0A3kae6a9fB/ko2KZu1Z6SGs/n
-   qXYn1Rm3EXTSc/TNVNaxi9qaKIx8BOok4vSulyeQNNskrs96l5NeV3xpD
-   pxTI3fpGt7TboMgxqA/cu3o4plvFW3R/rQzVJk1IkfoVToetuHy3YKRBj
-   er9v4tpL5MWd/xci4r/Nheq3z6+ujYcuHYaRBIyV+oTA+DKGI1sI7HI/k
-   g==;
-X-CSE-ConnectionGUID: YCcw9D68SfmIp7AK7Fp4jA==
-X-CSE-MsgGUID: 60C8zeFdSeGIOpR3fIgvfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49377823"
-X-IronPort-AV: E=Sophos;i="6.15,296,1739865600"; 
-   d="scan'208";a="49377823"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2025 07:21:44 -0700
-X-CSE-ConnectionGUID: bpcq+TdCRNCPJ09gvYN0Kw==
-X-CSE-MsgGUID: JV57oDTETWORM2dTX86Ceg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,296,1739865600"; 
-   d="scan'208";a="138874383"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 17 May 2025 07:21:43 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uGIQ1-000KAa-0q;
-	Sat, 17 May 2025 14:21:41 +0000
-Date: Sat, 17 May 2025 22:21:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/mediated_pmu 66/109] arch/x86/kvm/svm/svm.c:149:15:
- error: static assertion failed due to requirement '(sizeof
- (direct_access_msrs) / sizeof ((direct_access_msrs)[0]) +
- ((int)sizeof(struct (unnamed at arch/x86/kvm/svm/svm.c:149:1)))) == 47':
- ARRAY_SIZE(direct_access_msrs) == ...
-Message-ID: <202505172232.LdWP0Wjp-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PNP6gNw3"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-708ac7dfc19so28581217b3.3
+        for <llvm@lists.linux.dev>; Sat, 17 May 2025 08:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1747494185; x=1748098985; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6NTpCRL9xhCjiiet8qAMOfllcsVau1k8+ucYSc+O5KM=;
+        b=PNP6gNw3YkzmXgW6ruNltemrbzCwBSHTHG61X0CoF53XmkqdewPmAZ4Q4fqpubsCAE
+         gCAqWqFxQS1h6+oBEeLF+Mfrx/b4yBqZ0ZI9zaGyEzYKPh65A56Max0vZKIK8yTaehP0
+         46zvPCtQF4MaZ+eB55iw7+RFLu6UaNvsj8zzjcdMFXw7B4Xs3M/+i6sGIDxV1tYczOlQ
+         5RMSMxn/xPnT+LFNQ1fjkg38E5ADAWbEMTgeyw96Qo4PFw8QYk1qPjW2wSxI8bXeB1Yi
+         37I2WoCWNVpB+Kz46vm6i6fWaorZw3DEGWmouxVD6lk4VOeJXLC06cTDtO/pmZYFtGBQ
+         +mxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747494185; x=1748098985;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6NTpCRL9xhCjiiet8qAMOfllcsVau1k8+ucYSc+O5KM=;
+        b=Rpn884ynqzHcUL9efVqzAT3o9BNxYfTHW6fynwl/8EWqccsVLK37bh51nng0M3xbzf
+         EvaOS+fXvR0dwAGaujfmDYDMTYivtvPY00NL3j9Oyqcu9t5X+204HST5qpsa2JvsQpOo
+         jyB7WDhU4yof7Kzo35NspoWr9U08fR7Y6lrvOIbGry3gCP8qsoAke+7I1LVm5C6S4cW8
+         qASnG7RwwFCXtjPNeCspFlyMl5fRSjlRHt6fsKnUb+mlbK1LDNFz9R3cuIvbGI9IA5LI
+         wsuuuWizJgZq2E1ntoNWwQD3hldKS6o+i3fZEyOpxvvoMglV+paNhkRZSU/31vnJwi6V
+         Btbg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/e5+lnf6/tin5cBY2L4YBZMq7G0BxWPgSGVz8DQIIdEs8L7e6nKmrn3VvS1bhKu5Hs8b+@lists.linux.dev
+X-Gm-Message-State: AOJu0YyhP09nN92ACNUs40OCyuh8UpYvnbBYEuIhcdS7VkR3adNsYDRh
+	ad1dNpkCqALHAzAwNG/Ir1kapizAGNV/sjtxz0mAwmUUqzgvfVOp/nXKk0Dg3+fmSa15TsRd26Z
+	7+LUMyWkPDBlQgfoRIP35Vn5JseDP78cTlCJluahD
+X-Gm-Gg: ASbGncsbpeqbB8g2YRk1EXaEgyI8oYwDHFZLNGVjDBqm/x0lC1tf7FQ3NowqAhdfu5o
+	HbuwyNkscPC7wze5UFKvdUjcxZY82KnIlMn8heEqtnNrN0GSfeZRsVyinqFozfIPkCxicGR80zP
+	SZbUHf+POcMYXKGzFE+JzvuzwpTkRbSHfl
+X-Google-Smtp-Source: AGHT+IH4cvXZ2A6B3NQOnryIolvKUjfmtGf2pZQLNvPvX7nedF6oJ2mP2HSmm3dkkvdcM65QuaIOMlI3AMimnH5TpLo=
+X-Received: by 2002:a05:690c:3749:b0:70c:b882:2f3 with SMTP id
+ 00721157ae682-70cb882052emr47413877b3.4.1747494184512; Sat, 17 May 2025
+ 08:03:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
+ <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
+ <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
+ <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com> <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
+In-Reply-To: <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Sat, 17 May 2025 11:02:53 -0400
+X-Gm-Features: AX0GCFuTvPgKKVsi_C1ZZBN1jNV8jcEHmfkcEtykXlcuzLm0gL1ZiUersRDfwfQ
+Message-ID: <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
+	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
+	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
+	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
+	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/sean-jc/linux x86/mediated_pmu
-head:   4cc8b36f2f60e45223b6ad98c22b31dec0d65022
-commit: 2f97b58b68724b4ed0c528535d29d58ee0d695f4 [66/109] KVM: SVM: Use ARRAY_SIZE() to iterate over direct_access_msrs
-config: i386-buildonly-randconfig-001-20250517 (https://download.01.org/0day-ci/archive/20250517/202505172232.LdWP0Wjp-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505172232.LdWP0Wjp-lkp@intel.com/reproduce)
+On Fri, May 16, 2025 at 7:49=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
+ wrote:
+> >
+> > I think we need some clarification on a few of these details, it would
+> > be good if you could answer the questions below about the
+> > authorization aspects of your design?
+> >
+> > * Is the signature validation code in the BPF verifier *always* going
+> > to be enforced when a signature is passed in from userspace?  In other
+> > words, in your design is there going to be either a kernel build time
+> > or runtime configuration knob that could selectively enable (or
+> > disable) signature verification in the BPF verifier?
+>
+> If there is a signature in union bpf_attr and it's incorrect
+> the prog_load command will be rejected.
+> No point in adding a knob to control that.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505172232.LdWP0Wjp-lkp@intel.com/
+I agree that when a signature is provided and that signature check
+fails, the BPF load should be rejected.  I'm simply trying to
+understand how you envision your design handling all of the cases, not
+just this one, as well as what build and runtime options you expect
+for controlling various aspects of this behavior.
 
-All errors (new ones prefixed by >>):
+> > * In the case where the signature validation code in the BPF verifier
+> > is active, what happens when a signature is *not* passed in from
+> > userspace?  Will the BPF verifier allow the program load to take
+> > place?  Will the load operation be blocked?  Will the load operation
+> > be subject to a more granular policy, and if so, how do you plan to
+> > incorporate that policy decision into the BPF program load path?
+>
+> If there is no signature the existing loading semantics will remain intac=
+t.
+> We can discuss whether to add a sysctl or cgroup knob to disallow
+> loading when signature is not present ...
 
->> arch/x86/kvm/svm/svm.c:149:15: error: static assertion failed due to requirement '(sizeof (direct_access_msrs) / sizeof ((direct_access_msrs)[0]) + ((int)sizeof(struct (unnamed at arch/x86/kvm/svm/svm.c:149:1)))) == 47': ARRAY_SIZE(direct_access_msrs) == MAX_DIRECT_ACCESS_MSRS
-     149 | static_assert(ARRAY_SIZE(direct_access_msrs) == MAX_DIRECT_ACCESS_MSRS);
-         | ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:25: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                         ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   arch/x86/kvm/svm/svm.c:149:46: note: expression evaluates to '41 == 47'
-     149 | static_assert(ARRAY_SIZE(direct_access_msrs) == MAX_DIRECT_ACCESS_MSRS);
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   1 error generated.
+As mentioned earlier this week, if the BPF verifier is performing the
+signature verification as KP described, we will need a LSM hook after
+the verifier to serve as an access control point.  Of course that
+doesn't preclude the addition of some type of sysctl/cgroup/whatever
+based access control, but the LSM hook would be needed regardless.
 
+> but it probably should be a job of trivial LSM ...
 
-vim +149 arch/x86/kvm/svm/svm.c
+Exactly.  If the LSM is simply verifying the signature validation
+state of the BPF program being loaded it seems like an addition to IPE
+would be the best option from an upstream, in-tree perspective.
+However, with the post verifier LSM hook in place, one could also
+supply a BPF LSM to do something similar.
 
-   148	
- > 149	static_assert(ARRAY_SIZE(direct_access_msrs) == MAX_DIRECT_ACCESS_MSRS);
-   150	#undef MAX_DIRECT_ACCESS_MSRS
-   151	
+It sounds like we are in agreement on the desirability and need for a
+post verifier LSM hook; we'll keep moving forward with this idea
+despite KP's earlier objections to the hook.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Note that the prog verification itself is independent of the signature.
+> If prog fails to pass safety checks it will still be rejected
+> even if signature is ok.
+
+There is plenty of precedence for a kernel subsystem rejecting a
+security relevant operation before a LSM access control hook is
+called; the reasons range from discretionary access control issues to
+simple matters of resource exhaustion.  The possibility of the BPF
+verifier rejecting the program load due to verifier constraints is
+reasonable and expected.
+
+> We're not going to do a verifier bypass.
+
+Agreed.  I don't recall anyone ever suggesting that as part of this
+recent BPF signature verification effort.
+
+--=20
+paul-moore.com
