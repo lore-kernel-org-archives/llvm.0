@@ -1,161 +1,180 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C701DEFDC
-	for <llvm@lists.linux.dev>; Sat, 17 May 2025 11:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561BA1F4601;
+	Sat, 17 May 2025 11:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747481815; cv=none; b=UDr3DeyswPEm57OEw8M4OwBN8KLZorylel4SC33fa7Dn/3PnED8fTDwqPaXXYOg/5sjF2BY7NdK+rIH9RNMkyVY7gGQdYHjCwCRQiosI/MNXOQB7zWZzMVCeOLL1HDuerL2WPtExEfJaD88LCXcMukIjqXagt07Od7Xh/fqGl5s=
+	t=1747483180; cv=none; b=RVg3ip6ucSvTrWXv1kxOAv2MfULGb4mNMEZOxdmz2EL/OKjGisbvflu1tFC9C8GqWnm39lRaBAG0k71igiAhGlrXWVveyJ7zzzQrez8KYIj05phiXfZgFlOC82SJbmhOEkpTC2z86aFGxzDN07EJwtPQV4px02tac8FiOpp6Fyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747481815; c=relaxed/simple;
-	bh=pSoqKGnGc2p0krSYaAJD10+6QUEoAx6Simgs84ngQjE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZwskeTazZl8iau4xxbsc+PFtJxYKB9lprWM2LnlnUueuTJ6d8pNZmzvTC2I3yCbDKeZLEH/QrB11mLN8eAYeZmzQd2y4KPhD3WQWPnuzht5s+YofYD296KY6CeK6ngQaxjS+FqLvVTH89nWwBPj/C73btaB38Uyie9vIb8O41yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bz6j+qO9; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747483180; c=relaxed/simple;
+	bh=xXSu6JbmrTcQ/+2pTjJReOP2K/NKOeJrKNa7BRWA3WM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cBjfBkeoxL1l1BbpRD0Y26bjheBtf1JxxET5iwcdlgeBWbmv0FZaE+pyFV4dg7NT9dRAAmBJ8IglCjCqovU73skkFDK/0aWIknq3ymWxU8Zo7n9fYUVQ+2KeBUHE+P5J3ooAmvoJTUYCbJjtacc/nNJEMV15dHU4ZtR1PsXeDPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ku05dS+X; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bz6j+qO9"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a206845eadso1866418f8f.3
-        for <llvm@lists.linux.dev>; Sat, 17 May 2025 04:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747481812; x=1748086612; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z/SBkgLGN/MrxOQ9/67Ws3va/xYrNBLPShBPDYKH95A=;
-        b=Bz6j+qO9MS+9jFuIV1gALrjQeBJKl/ksFKMkssOzxnPUFXxhmMa5jIY6WIi50CE2oO
-         Sxg8yOelwc5tiLlSh5GFcPxH65tT3u8uAe2WfZ5qFwKPU5VBQV4QyoDw/QOpzamniMD4
-         gcYQ8eKgmHoxcVZ5Of8lzd1gk/wm+OjalBa5ApSbT5wrEhQdYtpOPv5T+CLA0xM55wWn
-         NEZYtwAqs9bv4WIGpwYWsmBjNLIgVGwuIR/aymP1IfjWtk0yh5go9EXABni1PtuFoztX
-         WVg/dJd5lAuLWZb3bbCIBkWDzkeMDWN3gIff9jtYfvPUsvObq9XQD6sXO9O+giHygDKo
-         5Pcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747481812; x=1748086612;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/SBkgLGN/MrxOQ9/67Ws3va/xYrNBLPShBPDYKH95A=;
-        b=vxeVbyXUkLv/qPb6VlZSNcINYmm0bV6I2OPd2LkJLwWg7KtsT7GPVfIVzELbKPT+yw
-         8ZwVJjJQudZH5U/vspi5JU5ygdDSPigKyAalM9vI8LDzVwRBgodCldIrEm0mwUq8fng/
-         op1SIf1NBdXzZtNu+YUM6ZQMYBOkbOjRcRAqIA4wfw+huV46BLKK6H6q+uKw9RTU+DEv
-         3Rkri9B0yyQ2Xzqim1xjv3C8L2z50ySrW9S4mXxuRZU9LYDUEANry/N1YpP/twa7RcYJ
-         t8R9NXkAuKmDxSu5UiLrfwyf5W+8VR7ykpTMDV79X59HjNFFR/lRdf/GADH3UfbhohV4
-         dKEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTsCHZIF+lWxLY8TtYiXNcVV1kDvAC5NciinFMdDVBG8yeqINBrYQLHIyium4Geqhwflrn@lists.linux.dev
-X-Gm-Message-State: AOJu0YwqL9VzBwazzkoKia8No0CQ/+sekCgzzaYOhkVrlJjxqxTX9iMg
-	Wtj+JK2JQIF8t9pqeXigd05CtvW0beD1X/+GVWanoUMLTd8zvqMx6ZIO
-X-Gm-Gg: ASbGncvXa9OOUGXeS3bavPBqr8jx7ng2QayDslAPSkrXiGdiDEEHm1X6wTQjm9eTMmJ
-	628gmrLj6Hw6VfmV8fW5P+gvtIsai25yUPCc8k0CBCkzGhdCmU8smwfJJGYzEwMIpszAWXor0D6
-	QGXb7t6lx1Yg6CVLdqhBTBIcStvsgi6GsMg6wQw2RdkgUW7rC+47i0GYvHISnZ4y5dbykw4e/UO
-	X39UPc/abrbeWFl8tgBciXQvL9TvG1nQ2jUzkahSTB+WiEUGixzVien9AbGSVuhBpPO0Ng4REAl
-	0/in1KJych6PqVgK8NUosRAqghuW29ms/oqPedU24lazbuUc2iN+5LZKhXZn7i3v
-X-Google-Smtp-Source: AGHT+IHboaz6cQmQDpSINZLHFCnqDghYEBpSBtLox8/4UmeCSrlpNWFx/umCN9OyzxZOPBm2l3mORQ==
-X-Received: by 2002:a05:6000:1866:b0:3a3:4a1a:de6f with SMTP id ffacd0b85a97d-3a35feab1bdmr4932224f8f.26.1747481811545;
-        Sat, 17 May 2025 04:36:51 -0700 (PDT)
-Received: from ?IPV6:2001:871:22a:99c5::171c? ([2001:871:22a:99c5::171c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca8d005sm6063226f8f.90.2025.05.17.04.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 May 2025 04:36:51 -0700 (PDT)
-Message-ID: <19fc74f7-b292-404d-a48f-4dc3bcb5af3b@gmail.com>
-Date: Sat, 17 May 2025 13:36:49 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ku05dS+X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747483178; x=1779019178;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xXSu6JbmrTcQ/+2pTjJReOP2K/NKOeJrKNa7BRWA3WM=;
+  b=Ku05dS+XxBVZb4UCeQfgGtFfwDARb8kE9SY+rqDeGAx0PG8uae1Ant9C
+   JDhbwx0Q+mtyfA/SSpoPjXpkM4HsjzrP5poIIW99jf2jyHH1TxEOmd/q4
+   W89nmH1tctliUORcze533eXdS4orlruZcFKXw2tfCC03MPHaPWVvNWOOR
+   e6Fwv0wm29Z6UnqHHVheWig+4l1PRcDqR30R71eq5RBCuv3klaWCVnK5m
+   XP4G6pZPORL1my/PEfLialWx+3S6muViWI8OX/+VCml6qs1r6V/LpY3YB
+   JooUDeekqvcKjdy3R5sF2dQCCO1mrZPnJsseFOIcU0txVuruUx4IGevR2
+   A==;
+X-CSE-ConnectionGUID: WaTSR6bKSEmdHpkE6Ldf6Q==
+X-CSE-MsgGUID: jScjdLWJRtiO279u/Bw9pQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="60471859"
+X-IronPort-AV: E=Sophos;i="6.15,296,1739865600"; 
+   d="scan'208";a="60471859"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2025 04:59:35 -0700
+X-CSE-ConnectionGUID: q2mnjH0xRwKpHQWl/2RpqA==
+X-CSE-MsgGUID: 5vB52mVPRg2Zz4RVLpS7uw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,296,1739865600"; 
+   d="scan'208";a="139951236"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 17 May 2025 04:59:33 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uGGCR-000K6h-0L;
+	Sat, 17 May 2025 11:59:31 +0000
+Date: Sat, 17 May 2025 19:59:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 226/227]
+ fs/bcachefs/recovery_passes.c:332:6: warning: variable 'in_recovery' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202505171930.jZF5fGGX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] rust: add UnsafePinned type
-To: Benno Lossin <lossin@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Sky <sky@sky9.dev>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- =?UTF-8?Q?Gerald_Wisb=C3=B6ck?= <gerald.wisboeck@feather.ink>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20250511-rust_unsafe_pinned-v4-0-a86c32e47e3d@gmail.com>
- <20250511-rust_unsafe_pinned-v4-1-a86c32e47e3d@gmail.com>
- <D9VBVURZLSNT.4BTQQ8UCTGPJ@kernel.org>
-Content-Language: en-US, de-DE
-From: Christian Schrefl <chrisi.schrefl@gmail.com>
-In-Reply-To: <D9VBVURZLSNT.4BTQQ8UCTGPJ@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Benno,
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   18721b36f18669525c303bf447446e4e9b15e0cc
+commit: 5a3a12453df5915843cabc5b95d71fceba433fc7 [226/227] bcachefs: Run recovery passes asynchronously
+config: riscv-randconfig-002-20250517 (https://download.01.org/0day-ci/archive/20250517/202505171930.jZF5fGGX-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505171930.jZF5fGGX-lkp@intel.com/reproduce)
 
-On 13.05.25 10:51 PM, Benno Lossin wrote:
-> On Sun May 11, 2025 at 8:21 PM CEST, Christian Schrefl wrote:
->> `UnsafePinned<T>` is useful for cases where a value might be shared with
->> C code but not directly used by it. In particular this is added for
->> storing additional data in the `MiscDeviceRegistration` which will be
->> shared between `fops->open` and the containing struct.
->>
->> Similar to `Opaque` but guarantees that the value is always initialized
->> and that the inner value is dropped when `UnsafePinned` is dropped.
->>
->> This was originally proposed for the IRQ abstractions [0] and is also
->> useful for other where the inner data may be aliased, but is always
->> valid and automatic `Drop` is desired.
->>
->> Since then the `UnsafePinned` type was added to upstream Rust [1] by Sky
->> as a unstable feature, therefore this patch implements the subset of the
->> upstream API for the `UnsafePinned` type required for additional data in
->> `MiscDeviceRegistration` and in the implementation of the `Opaque` type.
->>
->> Some differences to the upstream type definition are required in the
->> kernel implementation, because upstream type uses some compiler changes
->> to opt out of certain optimizations, this is documented in the
->> documentation and a comment on the `UnsafePinned` type.
->>
->> The documentation on is based on the upstream rust documentation with
->> minor modifications for the kernel implementation.
->>
->> Link: https://lore.kernel.org/rust-for-linux/CAH5fLgiOASgjoYKFz6kWwzLaH07DqP2ph+3YyCDh2+gYqGpABA@mail.gmail.com [0]
->> Link: https://github.com/rust-lang/rust/pull/137043 [1]
->> Suggested-by: Alice Ryhl <aliceryhl@google.com>
->> Reviewed-by: Gerald Wisböck <gerald.wisboeck@feather.ink>
->> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
->> Co-developed-by: Sky <sky@sky9.dev>
->> Signed-off-by: Sky <sky@sky9.dev>
->> Signed-off-by: Christian Schrefl <chrisi.schrefl@gmail.com>
-> 
-> One nit below, with that fixed:
-> 
-> Reviewed-by: Benno Lossin <lossin@kernel.org>
-> 
->> ---
->>  rust/kernel/types.rs               |   6 ++
->>  rust/kernel/types/unsafe_pinned.rs | 111 +++++++++++++++++++++++++++++++++++++
->>  2 files changed, 117 insertions(+)
->>
->> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
->> index 9d0471afc9648f2973235488b441eb109069adb1..705f420fdfbc4a576de1c4546578f2f04cdf615e 100644
->> --- a/rust/kernel/types.rs
->> +++ b/rust/kernel/types.rs
->> @@ -578,3 +581,6 @@ pub enum Either<L, R> {
->>  /// [`NotThreadSafe`]: type@NotThreadSafe
->>  #[allow(non_upper_case_globals)]
->>  pub const NotThreadSafe: NotThreadSafe = PhantomData;
->> +
->> +mod unsafe_pinned;
->> +pub use unsafe_pinned::UnsafePinned;
-> 
-> I would put `mod` to the top of the 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505171930.jZF5fGGX-lkp@intel.com/
 
-Your sentence was cut off, I assume you mean:
+All warnings (new ones prefixed by >>):
 
-> I would put `mod` to the top of the file.
+>> fs/bcachefs/recovery_passes.c:332:6: warning: variable 'in_recovery' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     332 |         if (!__recovery_pass_needs_set(c, pass, flags)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/recovery_passes.c:371:7: note: uninitialized use occurs here
+     371 |         if (!in_recovery) {
+         |              ^~~~~~~~~~~
+   fs/bcachefs/recovery_passes.c:332:2: note: remove the 'if' if its condition is always false
+     332 |         if (!__recovery_pass_needs_set(c, pass, flags)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     333 |                 r->passes_ratelimiting &= ~BIT_ULL(pass);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     334 |                 goto run_async;
+         |                 ~~~~~~~~~~~~~~~
+     335 |         }
+         |         ~
+   fs/bcachefs/recovery_passes.c:337:2: note: variable 'in_recovery' is declared here
+     337 |         bool in_recovery = test_bit(BCH_FS_in_recovery, &c->flags);
+         |         ^
+   1 warning generated.
 
-I can do that, let me know if I should send a
-new version or if this will be fixed when applying.
 
-Cheers
-Christian
+vim +332 fs/bcachefs/recovery_passes.c
+
+   309	
+   310	/*
+   311	 * For when we need to rewind recovery passes and run a pass we skipped:
+   312	 */
+   313	int __bch2_run_explicit_recovery_pass(struct bch_fs *c,
+   314					      struct printbuf *out,
+   315					      enum bch_recovery_pass pass,
+   316					      enum bch_run_recovery_pass_flags flags)
+   317	{
+   318		struct bch_fs_recovery *r = &c->recovery;
+   319		int ret = 0;
+   320	
+   321		lockdep_assert_held(&c->sb_lock);
+   322	
+   323		bch2_printbuf_make_room(out, 1024);
+   324		out->atomic++;
+   325	
+   326		unsigned long lockflags;
+   327		spin_lock_irqsave(&r->lock, lockflags);
+   328	
+   329		if (!recovery_pass_needs_set(c, pass, flags))
+   330			goto out;
+   331	
+ > 332		if (!__recovery_pass_needs_set(c, pass, flags)) {
+   333			r->passes_ratelimiting &= ~BIT_ULL(pass);
+   334			goto run_async;
+   335		}
+   336	
+   337		bool in_recovery = test_bit(BCH_FS_in_recovery, &c->flags);
+   338		bool rewind = in_recovery && r->curr_pass > pass;
+   339	
+   340		if ((flags & RUN_RECOVERY_PASS_nopersistent) && in_recovery) {
+   341			r->passes_to_run |= BIT_ULL(pass);
+   342		} else {
+   343			struct bch_sb_field_ext *ext = bch2_sb_field_get(c->disk_sb.sb, ext);
+   344			__set_bit_le64(bch2_recovery_pass_to_stable(pass), ext->recovery_passes_required);
+   345		}
+   346	
+   347		if (pass < BCH_RECOVERY_PASS_set_may_go_rw &&
+   348		    (!in_recovery || r->curr_pass >= BCH_RECOVERY_PASS_set_may_go_rw)) {
+   349			prt_printf(out, "need recovery pass %s (%u), but already rw\n",
+   350				   bch2_recovery_passes[pass], pass);
+   351			ret = -BCH_ERR_cannot_rewind_recovery;
+   352			goto out;
+   353		}
+   354	
+   355		prt_printf(out, "running recovery pass %s (%u), currently at %s (%u)%s\n",
+   356			   bch2_recovery_passes[pass], pass,
+   357			   bch2_recovery_passes[r->curr_pass], r->curr_pass,
+   358			   rewind ? " - rewinding" : "");
+   359	
+   360		if (test_bit(BCH_FS_in_recovery, &c->flags))
+   361			r->passes_to_run |= BIT_ULL(pass);
+   362		else if (flags & RUN_RECOVERY_PASS_ratelimit)
+   363			r->passes_ratelimiting |= BIT_ULL(pass);
+   364	
+   365		if (rewind) {
+   366			r->next_pass = pass;
+   367			r->passes_complete &= (1ULL << pass) >> 1;
+   368			ret = -BCH_ERR_restart_recovery;
+   369		}
+   370	run_async:
+   371		if (!in_recovery) {
+   372			struct recovery_pass_fn *p = recovery_pass_fns + pass;
+   373			if (p->when & PASS_ONLINE)
+   374				bch2_run_async_recovery_passes(c);
+   375		}
+   376	out:
+   377		spin_unlock_irqrestore(&r->lock, lockflags);
+   378		--out->atomic;
+   379		return ret;
+   380	}
+   381	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
