@@ -1,66 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0E57D07D;
-	Sat, 17 May 2025 05:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55551D5AB7;
+	Sat, 17 May 2025 07:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747459752; cv=none; b=cjWXN7oGLlBc7VOeW/lpDd46A6GMzga478B6LRndgg4tUG2zN8Nzz63jKGY3l8gw55sZGspdoPAPaYU5v62oDypmKRTMOzOO6bjMgrRPJ7N1xbjGjz8uY3Yvi6A82Olo+5YZ3gYDFTmXUMC2S0ynpNM02RKDEbODL7LTLnO2swc=
+	t=1747468402; cv=none; b=Cf7FJArZHkOcIB6btimqqvBpGuqOBw2goUkntWhvO91BMsv+bijWcfOV/6AmSxTul07lH9U4BpbnAfDe956Ezeo6uNPex3v3+GyCETQu/WLDdz4yMPy3nk7f7/WBnZWdKXEeIiSceX9kRj7A1M1Ocyzl+06sgRA0yKm8lwvfOtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747459752; c=relaxed/simple;
-	bh=QHtTyWCABC/4jueRIsDSnE4V++TqQGVuI532zaEvZmk=;
+	s=arc-20240116; t=1747468402; c=relaxed/simple;
+	bh=ItwpPKfVSEeImSexWi39aLRAw1v2H4b0otzybWAJT4Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GWFfxSM+W5td2+pbY4jCGnyezyI5+KdafrsMla61QwCixI6+2WpB20YGlM6Pi6YNQ2TjsylFab7j67rcOfce+pqrCA+0RWuEJGX6gi3fbn/FtRD+qU/JLtkEohwtG3mS+tPJ3Idx2HjAin5yWnoL/vQ5oLvfdWzymg8FUuowjBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oIHWcGrC; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=m/Q3u0UYYZlStRaSjtl2mZ0CikluUFCwc7t0DsIVgx7q6sbh9MeOeBDPKykczYzwyQhdAJFprktPnAm+UlZFjNlwCsiW5lnmR7EhkwH5ToOBnUu31rw87/bF3oCyZOrhiG7baY4Q/U21oby70CBXOyXpn2RvcVtRl5vEzerpZjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eC0TQGG7; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oIHWcGrC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eC0TQGG7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747459750; x=1778995750;
+  t=1747468401; x=1779004401;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QHtTyWCABC/4jueRIsDSnE4V++TqQGVuI532zaEvZmk=;
-  b=oIHWcGrC47r2PNuTWI39aG/42Nb9faZ0hM5hSVKSgeG6xEnEEUETXZxg
-   PcGKXmjjM5vOteoQffea+6eEvzO025rxb2yBlmHqKb9iMiaGgXTiwdTxv
-   O5lp/3XlJvXiI6YtCiAd+LJqT1GMed9vJb0baAiYcLFIRCU4PUUVdSFZs
-   wh2IoMFRJpeA+rSbs3Dzd/sRpu5OqkzAoCAQksFId7Ru+6k0OHVlSjeUu
-   XecS2yGkpdLl2fXtrx80K22oAmGOVBL9AGhvpBrev+QgokusDkJEigq2+
-   67Ao5fUFD/l+ebQmgPSyfCZLHl+kNfDOk8tMg9K96zB8Tg6s59upF2Mly
-   A==;
-X-CSE-ConnectionGUID: f5/RjgmjTD233Z4PLa560g==
-X-CSE-MsgGUID: RR5214nYRMiOw4dQfL+LqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="60092156"
+  bh=ItwpPKfVSEeImSexWi39aLRAw1v2H4b0otzybWAJT4Y=;
+  b=eC0TQGG7LWj8jHuGp8gpisPAvQ7gezNUK9dzACVXW/fwn+0eYDIxVW1S
+   0gna04qznF3SRrk1Kwg/6995nbd6M/Ud+6cIfcoov3OMpoIRV0QCfn3mn
+   TejbDNETc22ZW5YS9wBx6EU0sVhprWH+03Jp8p5EGMSgB5XDljdynIuo0
+   FGDp7GHVzIaQExEqokeMkxMktUfzkQZD1InJjRA/egFxyiSJfkWdKo+bT
+   CwXrmtd+GEM9VdDdAp4UoOt8ey3USjf4MWaNxvzLzPhUbtdQ60oZ1/fOs
+   9vFjiz6OI3pPLSd/b4r+ntkftXMAaL1360t3yXo6YjsnousPLpQia280Y
+   w==;
+X-CSE-ConnectionGUID: vYlyxAZmStyUg5zEo9uiCA==
+X-CSE-MsgGUID: 8U25qyqvQKuIJHwQRKncbA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="60779424"
 X-IronPort-AV: E=Sophos;i="6.15,296,1739865600"; 
-   d="scan'208";a="60092156"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 22:29:09 -0700
-X-CSE-ConnectionGUID: ZHnUcQmRQ56m+ohm6iOk/w==
-X-CSE-MsgGUID: TyCXuBZvQSyTPLBA1ZStDA==
+   d="scan'208";a="60779424"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2025 00:53:19 -0700
+X-CSE-ConnectionGUID: +pK88K8pTwW/UZxE/SqQdA==
+X-CSE-MsgGUID: mFYPdnawS9SumkTzJMkc0A==
+X-Ironport-Invalid-End-Of-Message: True
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,296,1739865600"; 
-   d="scan'208";a="143864931"
+   d="scan'208";a="138808540"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 16 May 2025 22:29:06 -0700
+  by orviesa006.jf.intel.com with ESMTP; 17 May 2025 00:53:16 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uGA6Z-000Jx5-2E;
-	Sat, 17 May 2025 05:29:03 +0000
-Date: Sat, 17 May 2025 13:28:22 +0800
+	id 1uGCM5-000K0X-2C;
+	Sat, 17 May 2025 07:53:13 +0000
+Date: Sat, 17 May 2025 15:53:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: "ping.gao" <ping.gao@samsung.com>, alim.akhtar@samsung.com,
-	avri.altman@wdc.com, bvanassche@acm.org,
-	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
-	peter.wang@mediatek.com, minwoo.im@samsung.com,
-	manivannan.sadhasivam@linaro.org, chenyuan0y@gmail.com,
-	cw9316.lee@samsung.com, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] scsi: ufs: mcq: delete ufshcd_release_scsi_cmd in
- ufshcd_mcq_abort
-Message-ID: <202505171237.VZSTTv75-lkp@intel.com>
-References: <20250516083812.3894396-1-ping.gao@samsung.com>
+To: Lukas Zapolskas <lukas.zapolskas@arm.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	=?iso-8859-1?Q?Adri=E1n?= Larumbe <adrian.larumbe@collabora.com>,
+	Lukas Zapolskas <lukas.zapolskas@arm.com>
+Subject: Re: [PATCH v4 4/7] drm/panthor: Introduce sampling sessions to
+ handle userspace clients
+Message-ID: <202505171509.6i95NZ0n-lkp@intel.com>
+References: <0319137f966f2dbffc54e51f7a2a3cbac837507b.1747148172.git.lukas.zapolskas@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,56 +74,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250516083812.3894396-1-ping.gao@samsung.com>
+In-Reply-To: <0319137f966f2dbffc54e51f7a2a3cbac837507b.1747148172.git.lukas.zapolskas@arm.com>
 
-Hi ping.gao,
+Hi Lukas,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master v6.15-rc6 next-20250516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 96c85e428ebaeacd2c640eba075479ab92072ccd]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ping-gao/scsi-ufs-mcq-delete-ufshcd_release_scsi_cmd-in-ufshcd_mcq_abort/20250516-163807
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20250516083812.3894396-1-ping.gao%40samsung.com
-patch subject: [PATCH] scsi: ufs: mcq: delete ufshcd_release_scsi_cmd in ufshcd_mcq_abort
-config: arm-randconfig-004-20250517 (https://download.01.org/0day-ci/archive/20250517/202505171237.VZSTTv75-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505171237.VZSTTv75-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Zapolskas/drm-panthor-Add-performance-counter-uAPI/20250517-000257
+base:   96c85e428ebaeacd2c640eba075479ab92072ccd
+patch link:    https://lore.kernel.org/r/0319137f966f2dbffc54e51f7a2a3cbac837507b.1747148172.git.lukas.zapolskas%40arm.com
+patch subject: [PATCH v4 4/7] drm/panthor: Introduce sampling sessions to handle userspace clients
+config: i386-buildonly-randconfig-002-20250517 (https://download.01.org/0day-ci/archive/20250517/202505171509.6i95NZ0n-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505171509.6i95NZ0n-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505171237.VZSTTv75-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505171509.6i95NZ0n-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/ufs/core/ufs-mcq.c:677:16: warning: unused variable 'flags' [-Wunused-variable]
-     677 |         unsigned long flags;
-         |                       ^~~~~
-   1 warning generated.
+>> drivers/gpu/drm/panthor/panthor_perf.c:189:8: error: redefinition of 'panthor_perf_counter_block'
+     189 | struct panthor_perf_counter_block {
+         |        ^
+   drivers/gpu/drm/panthor/panthor_perf.c:47:8: note: previous definition is here
+      47 | struct panthor_perf_counter_block {
+         |        ^
+   drivers/gpu/drm/panthor/panthor_perf.c:233:29: error: call to undeclared function 'GPU_MEM_FEATURES_L2_SLICES'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     233 |         perf_info->memsys_blocks = GPU_MEM_FEATURES_L2_SLICES(ptdev->gpu_info.mem_features);
+         |                                    ^
+   2 errors generated.
 
 
-vim +/flags +677 drivers/ufs/core/ufs-mcq.c
+vim +/panthor_perf_counter_block +189 drivers/gpu/drm/panthor/panthor_perf.c
 
-f1304d4420777f Bao D. Nguyen   2023-05-29  663  
-f1304d4420777f Bao D. Nguyen   2023-05-29  664  /**
-f1304d4420777f Bao D. Nguyen   2023-05-29  665   * ufshcd_mcq_abort - Abort the command in MCQ.
-317a38045ab763 Yang Li         2023-07-12  666   * @cmd: The command to be aborted.
-f1304d4420777f Bao D. Nguyen   2023-05-29  667   *
-3a17fefe0f1960 Bart Van Assche 2023-07-27  668   * Return: SUCCESS or FAILED error codes
-f1304d4420777f Bao D. Nguyen   2023-05-29  669   */
-f1304d4420777f Bao D. Nguyen   2023-05-29  670  int ufshcd_mcq_abort(struct scsi_cmnd *cmd)
-f1304d4420777f Bao D. Nguyen   2023-05-29  671  {
-f1304d4420777f Bao D. Nguyen   2023-05-29  672  	struct Scsi_Host *host = cmd->device->host;
-f1304d4420777f Bao D. Nguyen   2023-05-29  673  	struct ufs_hba *hba = shost_priv(host);
-f1304d4420777f Bao D. Nguyen   2023-05-29  674  	int tag = scsi_cmd_to_rq(cmd)->tag;
-f1304d4420777f Bao D. Nguyen   2023-05-29  675  	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
-f1304d4420777f Bao D. Nguyen   2023-05-29  676  	struct ufs_hw_queue *hwq;
-27900d7119c464 Peter Wang      2023-11-06 @677  	unsigned long flags;
+05182d1d6cff3c7 Lukas Zapolskas 2025-05-16  188  
+1c26af93f15f9e2 Lukas Zapolskas 2025-05-16 @189  struct panthor_perf_counter_block {
+1c26af93f15f9e2 Lukas Zapolskas 2025-05-16  190  	struct drm_panthor_perf_block_header header;
+1c26af93f15f9e2 Lukas Zapolskas 2025-05-16  191  	u64 counters[];
+1c26af93f15f9e2 Lukas Zapolskas 2025-05-16  192  };
+1c26af93f15f9e2 Lukas Zapolskas 2025-05-16  193  
 
 -- 
 0-DAY CI Kernel Test Service
