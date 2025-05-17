@@ -1,162 +1,143 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B37223C519
-	for <llvm@lists.linux.dev>; Fri, 16 May 2025 23:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226BB4B1E72;
+	Sat, 17 May 2025 00:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747439364; cv=none; b=W+AcEjAh4lmYIRy1KAetKUo+EdDx4Z2KPGVHz9iiWGxK83+YtN1ckGB5Cqm+5z+jAzlmvCumvS4+HkHkbASV5xKSE3L/65vThwRPHjc0MHlKJNR9xYU2lsw2h4CK1r7rS4e5OzIEK8Y5WcRMjRq65DEriGffDhdOyShmWDUqQJ8=
+	t=1747443348; cv=none; b=ewnhfE501sIKALVqFvKY93eBVEniS0Ti6Gpt415X7+QVsG1C0BcnBYRegCqFTYbVV6DG3YNwWvjPmGb6SRZJTG9t4Bl7VLamZKUbgRcPuNVDl8MS9QowFdWed2VrWyKNYvI+/ZEWUZwaOicCg6qwQ5tGWDRQ1bsKdodJ2szVIJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747439364; c=relaxed/simple;
-	bh=JynXQczZCmV7Hl5daVJbPr86DC3r593cY6JyojI2h9E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bejp73J3Ow1F22pPpN08eUE2dpK9c8c/yszJn+/nCoANrPoyAjpjIhnPnSrpfVlOgWvKQvarQRgXwTlkFsuibFZPYc2NOPhvyH9zUS3s+2RB+g7/6LfidJ6pgOPgqLmb1Ujfg06eC34LWyOJBYvOJaIpr3DW/D13Nzc9U36j86g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5WHggY1; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747443348; c=relaxed/simple;
+	bh=RHhuhR+FP5u8M7v03KY8KIM+tNaWIiJTr7ZQW826tfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SM+EDtygjANeTzbA4062MFii3oErlnhrhVua8IlQkv2B0NVrfUmIlo7vAShzj2BZE99u27CsovlSmUHSiGQkWmf8fsAYTRxMfNg+H8IbFFkZ2vd9bHW7gTRYyMjb1wVlrh+Lw0AJoACIqEmYxZEAre+FUi2okpIdGMYEfKo0Ses=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fLNDxv1R; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5WHggY1"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a361b8a664so1025447f8f.3
-        for <llvm@lists.linux.dev>; Fri, 16 May 2025 16:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747439361; x=1748044161; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yLNmQk56WXrXrbrs+Rd+UwZYq2EuCmP2+ysJch2Gqcc=;
-        b=b5WHggY1sE6acz10aWAhT5AMxaWZmeyaE1+WNjStd+eWqlD2RuOf99so95d3ojl2r1
-         4AZAi7VTlyu53o6W8EeWgUMthGXXtdEoH46BSYJBsvwx5kfgTdOd5JyiUCZ7WVfk3W6k
-         UddYi4CGhzB5letDEXdo9INhtrTYpU21eeRX3qiLbtk+xlo6D7MX9BMaXJsMkEXwcg5n
-         4UiSUBo9oIPIDQJ+0VNDkH76fk+yJ7/IoDvnKlpwdXXo6i1LR2MAyD27MXYGX1eF0Ng1
-         PAfCbXAQ0sL3aET0o2DS6VpbX71Xe02JKr6PVehFDabcmKUgy62c4qiZ7D6S6NF99ySB
-         /yeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747439361; x=1748044161;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yLNmQk56WXrXrbrs+Rd+UwZYq2EuCmP2+ysJch2Gqcc=;
-        b=bKZX/grIvcXZ6u4C1c825u50aAu1ylXBDgpUnVP/17Upy38gcnnRPJ1nVPHdfbcxV4
-         iMKTwv2NOVBrz6pMFVVLzV4vQjyRC+WuG7ptF21ccrqu3maqbLv5DwKpF7HgY1mipj6Q
-         VHipq2Z/52CJlVOZp37rV0SYyDadjkuU4c5OsR7/GEkmby2piYXPWr9cPeERsZujwn4u
-         etHuFR7iDhUtYFLmwD/NLywSmjaTDGHLu1k0sbkR1gxgRMp0X9WJzgH0t3vzVxeXxCb9
-         nLDQlUWx+wwoW61TPpdOJgBm8Y/KWlwi/pQwHshM2Y5iWu05hNrU4LIp1XOAnm4o02Ls
-         rZtg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrRI5dPMTpYXg9GN9sfHm/+FAPBDZMzJBsz14g7axooVTmOAh9Qe+mbNgQjrkDY3BVs80A@lists.linux.dev
-X-Gm-Message-State: AOJu0YwkxIJbNqNkFRrZs9RFY6tyPV9VgLC9BcKshyNy8/A6EV5bZw/b
-	knuMsxgGYCwhNUNsVP9wupkqtS1VO8OQCIHocVE8G9sO1/r80jgCFaiTeEqSC7BcKTS8J0RtV7b
-	Bpj/XaqrrOcTEf9/9XHsyjHWLRRqrURs=
-X-Gm-Gg: ASbGnctkgAgUheBpzVTwa5WgQUm/giprA85rj8XM2OSFSLj0j/MhKr4tePMjMY8kMdr
-	duDHDPRvJ2Idm6MkbJToHpBY5ptZQymddvhbPQG4q/I9l//LhUZ6ilHfSdnuqVqW+gtetnDNEcX
-	+Y9BZQE2tcgHRF2Ix0k3XQdb67Dbjh63+2aX0b4Co16XUWibdeoVIXYioiayvgJilRAFinUATy
-X-Google-Smtp-Source: AGHT+IEt13ebOwzpc+kY0WsGrWXwVoXKnKPvRfcOK4btMC7AsUlFZwn4kwFfwxO5xffregucUV2pzpgY8z4kdU24ZPU=
-X-Received: by 2002:adf:f50b:0:b0:3a3:5c97:d756 with SMTP id
- ffacd0b85a97d-3a35c97d8aamr4266342f8f.17.1747439361049; Fri, 16 May 2025
- 16:49:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fLNDxv1R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747443347; x=1778979347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RHhuhR+FP5u8M7v03KY8KIM+tNaWIiJTr7ZQW826tfg=;
+  b=fLNDxv1RVcvLgqpwH8dNKpXeOwwtZY4ZQkBQ30IaYDkwSzoEIoU2Pnxy
+   7lFcIV0JTn415CkJmkUh4lOMPKOe9V5BpNC48YBhquzzQLTefyzPK4AlJ
+   QFcgCopkWF5z1dq/C3XDCBg1FQi4O6xk7ySauKlGjoOXrqUvryRnbm/J7
+   nL0yJBL3rk4iF88d1Au4SfTP2ZdF2X+fyAoMtqkWFtGNNS86wH3XqSYH3
+   7abMN/jiFPxq5dx4PhDopxrY7+bP/dVOI+9NQPO8MRfP85JOJLpJBVrqV
+   XDQWUgK3eFyUQOOfnJvu+Ep8PFHTn1vUPzVBW8d+FtYbvRDMb2tGV9tVn
+   A==;
+X-CSE-ConnectionGUID: 5rZGmX+ESKGSC8kz3ylx7g==
+X-CSE-MsgGUID: qrA5O1eISteszV9ZOTjpSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49301251"
+X-IronPort-AV: E=Sophos;i="6.15,295,1739865600"; 
+   d="scan'208";a="49301251"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 17:55:46 -0700
+X-CSE-ConnectionGUID: mKpPBynuRC2gS4co1ezakg==
+X-CSE-MsgGUID: zAys8K5eR/eJ7KGEnAU69g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,295,1739865600"; 
+   d="scan'208";a="143959535"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 16 May 2025 17:55:46 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uG5q3-000JpT-0Z;
+	Sat, 17 May 2025 00:55:43 +0000
+Date: Sat, 17 May 2025 08:54:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pankaj Raghav <p.raghav@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 2/3] block: use LARGE_ZERO_PAGE in
+ __blkdev_issue_zero_pages()
+Message-ID: <202505170820.pZo55E1i-lkp@intel.com>
+References: <20250516101054.676046-3-p.raghav@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
- <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
- <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
- <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
- <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com> <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
-In-Reply-To: <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 16 May 2025 16:49:09 -0700
-X-Gm-Features: AX0GCFuvvvJ18JnaOTj0Zx7VVAejABXpQG7xGivhE2V41LonoDOtxmhIAAR39TA
-Message-ID: <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Paul Moore <paul@paul-moore.com>
-Cc: KP Singh <kpsingh@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
-	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
-	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
-	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250516101054.676046-3-p.raghav@samsung.com>
 
-On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
-rote:
->
-> On Wed, May 14, 2025 at 2:48=E2=80=AFPM KP Singh <kpsingh@kernel.org> wro=
-te:
-> > On Wed, May 14, 2025 at 5:06=E2=80=AFAM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On Sat, May 10, 2025 at 10:01=E2=80=AFPM KP Singh <kpsingh@kernel.org=
-> wrote:
-> > > >
-> > >
-> > > ...
-> > >
-> > > > The signature check in the verifier (during BPF_PROG_LOAD):
-> > > >
-> > > >     verify_pkcs7_signature(prog->aux->sha, sizeof(prog->aux->sha),
-> > > > sig_from_bpf_attr, =E2=80=A6);
-> > >
-> > > I think we still need to clarify the authorization aspect of your
-> > > proposed design.
-> > >
-> > > Working under the assumption that the core BPF kernel code doesn't
-> > > want to enforce any restrictions, or at least as few as possible ...
-> >
-> > The assumption is not true, I should have clarified it in the original
-> > design. With the UAPI / bpf_attr the bpf syscall is simply denied if
-> > the signature does not verify, so we don't need any LSM logic for
-> > this. There is really no point in continuing as signature verification
-> > is a part of the API contract when the user passes the sig, keyring in
-> > the bpf syscall.
->
-> I think we need some clarification on a few of these details, it would
-> be good if you could answer the questions below about the
-> authorization aspects of your design?
->
-> * Is the signature validation code in the BPF verifier *always* going
-> to be enforced when a signature is passed in from userspace?  In other
-> words, in your design is there going to be either a kernel build time
-> or runtime configuration knob that could selectively enable (or
-> disable) signature verification in the BPF verifier?
+Hi Pankaj,
 
-If there is a signature in union bpf_attr and it's incorrect
-the prog_load command will be rejected.
-No point in adding a knob to control that.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-> * In the case where the signature validation code in the BPF verifier
-> is active, what happens when a signature is *not* passed in from
-> userspace?  Will the BPF verifier allow the program load to take
-> place?  Will the load operation be blocked?  Will the load operation
-> be subject to a more granular policy, and if so, how do you plan to
-> incorporate that policy decision into the BPF program load path?
+[auto build test ERROR on 9e619cd4fefd19cdce16e169d5827bc64ae01aa1]
 
-If there is no signature the existing loading semantics will remain intact.
-We can discuss whether to add a sysctl or cgroup knob to disallow
-loading when signature is not present, but it probably should be
-a job of trivial LSM:
-if (prog_attr doesn't have signature &&
-   (task =3D=3D .. || task is under certain cgroup || whatever))
-  disallow.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/mm-add-large-zero-page-for-efficient-zeroing-of-larger-segments/20250516-181327
+base:   9e619cd4fefd19cdce16e169d5827bc64ae01aa1
+patch link:    https://lore.kernel.org/r/20250516101054.676046-3-p.raghav%40samsung.com
+patch subject: [RFC 2/3] block: use LARGE_ZERO_PAGE in __blkdev_issue_zero_pages()
+config: arm-randconfig-001-20250517 (https://download.01.org/0day-ci/archive/20250517/202505170820.pZo55E1i-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505170820.pZo55E1i-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505170820.pZo55E1i-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> block/blk-lib.c:214:5: error: use of undeclared identifier 'ZERO_LARGE_PAGE_SIZE'
+     214 |                                 ZERO_LARGE_PAGE_SIZE, nr_sects << SECTOR_SHIFT);
+         |                                 ^
+>> block/blk-lib.c:215:30: error: call to undeclared function 'ZERO_LARGE_PAGE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     215 |                         added = bio_add_page(bio, ZERO_LARGE_PAGE(0), len, 0);
+         |                                                   ^
+>> block/blk-lib.c:215:30: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct page *' [-Wint-conversion]
+     215 |                         added = bio_add_page(bio, ZERO_LARGE_PAGE(0), len, 0);
+         |                                                   ^~~~~~~~~~~~~~~~~~
+   include/linux/bio.h:412:61: note: passing argument to parameter 'page' here
+     412 | int __must_check bio_add_page(struct bio *bio, struct page *page, unsigned len,
+         |                                                             ^
+   3 errors generated.
 
 
-Note that the prog verification itself is independent of the signature.
-If prog fails to pass safety checks it will still be rejected
-even if signature is ok.
-We're not going to do a verifier bypass.
+vim +/ZERO_LARGE_PAGE_SIZE +214 block/blk-lib.c
+
+   194	
+   195	static void __blkdev_issue_zero_pages(struct block_device *bdev,
+   196			sector_t sector, sector_t nr_sects, gfp_t gfp_mask,
+   197			struct bio **biop, unsigned int flags)
+   198	{
+   199		while (nr_sects) {
+   200			unsigned int nr_vecs = __blkdev_sectors_to_bio_pages(nr_sects);
+   201			struct bio *bio;
+   202	
+   203			bio = bio_alloc(bdev, nr_vecs, REQ_OP_WRITE, gfp_mask);
+   204			bio->bi_iter.bi_sector = sector;
+   205	
+   206			if ((flags & BLKDEV_ZERO_KILLABLE) &&
+   207			    fatal_signal_pending(current))
+   208				break;
+   209	
+   210			do {
+   211				unsigned int len, added;
+   212	
+   213				len = min_t(sector_t,
+ > 214					ZERO_LARGE_PAGE_SIZE, nr_sects << SECTOR_SHIFT);
+ > 215				added = bio_add_page(bio, ZERO_LARGE_PAGE(0), len, 0);
+   216				if (added < len)
+   217					break;
+   218				nr_sects -= added >> SECTOR_SHIFT;
+   219				sector += added >> SECTOR_SHIFT;
+   220			} while (nr_sects);
+   221	
+   222			*biop = bio_chain_and_submit(*biop, bio);
+   223			cond_resched();
+   224		}
+   225	}
+   226	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
