@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226BB4B1E72;
-	Sat, 17 May 2025 00:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB903522A;
+	Sat, 17 May 2025 01:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747443348; cv=none; b=ewnhfE501sIKALVqFvKY93eBVEniS0Ti6Gpt415X7+QVsG1C0BcnBYRegCqFTYbVV6DG3YNwWvjPmGb6SRZJTG9t4Bl7VLamZKUbgRcPuNVDl8MS9QowFdWed2VrWyKNYvI+/ZEWUZwaOicCg6qwQ5tGWDRQ1bsKdodJ2szVIJ4=
+	t=1747444553; cv=none; b=maEKQOhnGUe5KW6i7l6XXpG2PZOJodvhKz2yZXi4UUlfvV9J888t+ds7OXqVb/xbqAIcdcSHdO/XACEUyIZcvfcZdYKLI4nROzo8vxV0ablF/BpYb5EqQvNeup77uu5uC8tQf4JU+tIjYgohvjsGAWm+ie3Fk1UNKI63H2Mxz/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747443348; c=relaxed/simple;
-	bh=RHhuhR+FP5u8M7v03KY8KIM+tNaWIiJTr7ZQW826tfg=;
+	s=arc-20240116; t=1747444553; c=relaxed/simple;
+	bh=XEliipcAij5i/dpOQOsz2I+6Dbet09GKfYxkCjvWp68=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SM+EDtygjANeTzbA4062MFii3oErlnhrhVua8IlQkv2B0NVrfUmIlo7vAShzj2BZE99u27CsovlSmUHSiGQkWmf8fsAYTRxMfNg+H8IbFFkZ2vd9bHW7gTRYyMjb1wVlrh+Lw0AJoACIqEmYxZEAre+FUi2okpIdGMYEfKo0Ses=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fLNDxv1R; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=TzTNoZJ+PxgxdIFEyM9Bn74qjB0KXuMD/QGZhGZ32RG3x3QDwK0PKjQrJkQJI7zGZhqIDLo/bipSwQX2Lq0uWKyCm6buoFlNvHy0W3MgOnaUkZ4ulom2ERioWaIecLLrOu6AnPqHwwhMNI51s8cPdCqf+YyGhpbdXCrZCofmM0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L/SBOHUi; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fLNDxv1R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L/SBOHUi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747443347; x=1778979347;
+  t=1747444551; x=1778980551;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RHhuhR+FP5u8M7v03KY8KIM+tNaWIiJTr7ZQW826tfg=;
-  b=fLNDxv1RVcvLgqpwH8dNKpXeOwwtZY4ZQkBQ30IaYDkwSzoEIoU2Pnxy
-   7lFcIV0JTn415CkJmkUh4lOMPKOe9V5BpNC48YBhquzzQLTefyzPK4AlJ
-   QFcgCopkWF5z1dq/C3XDCBg1FQi4O6xk7ySauKlGjoOXrqUvryRnbm/J7
-   nL0yJBL3rk4iF88d1Au4SfTP2ZdF2X+fyAoMtqkWFtGNNS86wH3XqSYH3
-   7abMN/jiFPxq5dx4PhDopxrY7+bP/dVOI+9NQPO8MRfP85JOJLpJBVrqV
-   XDQWUgK3eFyUQOOfnJvu+Ep8PFHTn1vUPzVBW8d+FtYbvRDMb2tGV9tVn
-   A==;
-X-CSE-ConnectionGUID: 5rZGmX+ESKGSC8kz3ylx7g==
-X-CSE-MsgGUID: qrA5O1eISteszV9ZOTjpSw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49301251"
+  bh=XEliipcAij5i/dpOQOsz2I+6Dbet09GKfYxkCjvWp68=;
+  b=L/SBOHUipxE1jM/Mgb06s7lcB/gvjiFv08YePH3eYRWpXQ/RfsPTfY8w
+   SEF6F3B61+Z75U07tKxwNVmpKTk/70GylO4XUlrs8hV7btqPHqK3AdZN9
+   wNAYo1ohh/h4TmNI7dIGna54RBM/l3MeMKzNsngNk9FCKP2yq0Af0uRIm
+   JaCSVK2KVB6IGacCBaNMm6TVs/O1ob4fWpjgbTH3xukDTSJFOgIDoOeTe
+   T/9jtmNM2v5s7jlqy/sN3TNE9q6FaRCOOW24m13JIbXlsv+w5uzknpKP6
+   3pHbxbNKSXet58k/L3fTophpo/txAJ3UDPRczhnSKBG4xFLZPndlCuXzg
+   Q==;
+X-CSE-ConnectionGUID: tQ0iYAYWStCH4gZ/xrCT/Q==
+X-CSE-MsgGUID: A01OczTlTyK9rHuKihrDSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49329585"
 X-IronPort-AV: E=Sophos;i="6.15,295,1739865600"; 
-   d="scan'208";a="49301251"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 17:55:46 -0700
-X-CSE-ConnectionGUID: mKpPBynuRC2gS4co1ezakg==
-X-CSE-MsgGUID: zAys8K5eR/eJ7KGEnAU69g==
+   d="scan'208";a="49329585"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 18:15:50 -0700
+X-CSE-ConnectionGUID: 65PPEcbGRyiYqMAWDp2HvQ==
+X-CSE-MsgGUID: +cHO9/wNSZuZSymM+wcWsA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,295,1739865600"; 
-   d="scan'208";a="143959535"
+   d="scan'208";a="143721661"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 16 May 2025 17:55:46 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 16 May 2025 18:15:47 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uG5q3-000JpT-0Z;
-	Sat, 17 May 2025 00:55:43 +0000
-Date: Sat, 17 May 2025 08:54:47 +0800
+	id 1uG69Q-000Jq3-1a;
+	Sat, 17 May 2025 01:15:44 +0000
+Date: Sat, 17 May 2025 09:15:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pankaj Raghav <p.raghav@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 2/3] block: use LARGE_ZERO_PAGE in
- __blkdev_issue_zero_pages()
-Message-ID: <202505170820.pZo55E1i-lkp@intel.com>
-References: <20250516101054.676046-3-p.raghav@samsung.com>
+To: zhangsenchuan@eswincomputing.com, gregkh@linuxfoundation.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+	p.zabel@pengutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	yangwei1@eswincomputing.com,
+	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
+Subject: Re: [PATCH v1 2/2] usb: dwc3: eic7700: Add EIC7700 usb driver
+Message-ID: <202505170848.MGykwPlY-lkp@intel.com>
+References: <20250516095408.704-1-zhangsenchuan@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,80 +69,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250516101054.676046-3-p.raghav@samsung.com>
+In-Reply-To: <20250516095408.704-1-zhangsenchuan@eswincomputing.com>
 
-Hi Pankaj,
+Hi,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 9e619cd4fefd19cdce16e169d5827bc64ae01aa1]
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus robh/for-next westeri-thunderbolt/next linus/master v6.15-rc6 next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/mm-add-large-zero-page-for-efficient-zeroing-of-larger-segments/20250516-181327
-base:   9e619cd4fefd19cdce16e169d5827bc64ae01aa1
-patch link:    https://lore.kernel.org/r/20250516101054.676046-3-p.raghav%40samsung.com
-patch subject: [RFC 2/3] block: use LARGE_ZERO_PAGE in __blkdev_issue_zero_pages()
-config: arm-randconfig-001-20250517 (https://download.01.org/0day-ci/archive/20250517/202505170820.pZo55E1i-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/zhangsenchuan-eswincomputing-com/dt-bindings-usb-Add-Eswin-EIC7700-Usb-controller/20250516-175800
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250516095408.704-1-zhangsenchuan%40eswincomputing.com
+patch subject: [PATCH v1 2/2] usb: dwc3: eic7700: Add EIC7700 usb driver
+config: arm-randconfig-004-20250517 (https://download.01.org/0day-ci/archive/20250517/202505170848.MGykwPlY-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505170820.pZo55E1i-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250517/202505170848.MGykwPlY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505170820.pZo55E1i-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505170848.MGykwPlY-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> block/blk-lib.c:214:5: error: use of undeclared identifier 'ZERO_LARGE_PAGE_SIZE'
-     214 |                                 ZERO_LARGE_PAGE_SIZE, nr_sects << SECTOR_SHIFT);
-         |                                 ^
->> block/blk-lib.c:215:30: error: call to undeclared function 'ZERO_LARGE_PAGE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     215 |                         added = bio_add_page(bio, ZERO_LARGE_PAGE(0), len, 0);
-         |                                                   ^
->> block/blk-lib.c:215:30: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct page *' [-Wint-conversion]
-     215 |                         added = bio_add_page(bio, ZERO_LARGE_PAGE(0), len, 0);
-         |                                                   ^~~~~~~~~~~~~~~~~~
-   include/linux/bio.h:412:61: note: passing argument to parameter 'page' here
-     412 | int __must_check bio_add_page(struct bio *bio, struct page *page, unsigned len,
-         |                                                             ^
-   3 errors generated.
-
-
-vim +/ZERO_LARGE_PAGE_SIZE +214 block/blk-lib.c
-
-   194	
-   195	static void __blkdev_issue_zero_pages(struct block_device *bdev,
-   196			sector_t sector, sector_t nr_sects, gfp_t gfp_mask,
-   197			struct bio **biop, unsigned int flags)
-   198	{
-   199		while (nr_sects) {
-   200			unsigned int nr_vecs = __blkdev_sectors_to_bio_pages(nr_sects);
-   201			struct bio *bio;
-   202	
-   203			bio = bio_alloc(bdev, nr_vecs, REQ_OP_WRITE, gfp_mask);
-   204			bio->bi_iter.bi_sector = sector;
-   205	
-   206			if ((flags & BLKDEV_ZERO_KILLABLE) &&
-   207			    fatal_signal_pending(current))
-   208				break;
-   209	
-   210			do {
-   211				unsigned int len, added;
-   212	
-   213				len = min_t(sector_t,
- > 214					ZERO_LARGE_PAGE_SIZE, nr_sects << SECTOR_SHIFT);
- > 215				added = bio_add_page(bio, ZERO_LARGE_PAGE(0), len, 0);
-   216				if (added < len)
-   217					break;
-   218				nr_sects -= added >> SECTOR_SHIFT;
-   219				sector += added >> SECTOR_SHIFT;
-   220			} while (nr_sects);
-   221	
-   222			*biop = bio_chain_and_submit(*biop, bio);
-   223			cond_resched();
-   224		}
-   225	}
-   226	
+>> WARNING: modpost: vmlinux: section mismatch in reference: dwc3_eswin_probe+0x3c4 (section: .text) -> dwc3_eswin_deassert (section: .init.text)
 
 -- 
 0-DAY CI Kernel Test Service
