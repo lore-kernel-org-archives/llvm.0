@@ -1,99 +1,144 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CD62D052
-	for <llvm@lists.linux.dev>; Sat, 17 May 2025 18:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE5519CC27;
+	Sat, 17 May 2025 19:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747506189; cv=none; b=sGMg9JX+h63n8ozjHx/w9Z4VbCEMZOLIUJ1lfRQM59H3AdHAr7fjdkqiqTwaGvy5JLJpZ8JSKAd+MXuT51kmCOsn4Ky7pVHbp/AZatdX1GUm+S1ardeQPG9n+4t+tymSF4ffLPR8DFvAl2y0Ck7zMoYzgY08+woZ9LJivPJ8G78=
+	t=1747509086; cv=none; b=L981M3Mwbnp2JZoKFmh5W/T8Qt0ogeX7WPdP2ipSKFuDgz+q4zuput4riVjsc/MYx5T0E9PyZZnNT9gjR8MsZgiz8BnM2dMeMMhPPhxL0LtOuLOe/C6C77mDKJNAbXlEUqb7pW7c6og2tWl4ZsL2Bv+yDh0EApfZKW7NP3UdiTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747506189; c=relaxed/simple;
-	bh=+Qb8TBZOncOFHmJ5pI6sEOxZXHHZvti2roRlzB8CN8g=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eRw0l5LlQjdlM6dym1+gvjH4hoLk85pDWh5mAnro5A6LStxWaalpzpKCUdoYWpWKy5cJ1C4w9hbKFkdycyD/cJSZRfOw/VKz2ObnOdQH7Erq3NUNcZ483efuaLA28HMk5PSKHLQV6KJL1UZo9JAkgfUA9MFHRlwM463fgQJ+Q/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GF9oTz+A; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1747509086; c=relaxed/simple;
+	bh=SNOwVK1Y2LypwvVxIgQyb4CvbacAABjnIU/eHeRg25g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=lxXbGbAR13W87aIs+nWjWLg0tDds6LBb9xONstew2GarsiiToC+zGEUl6H8W8YPm8v421+Mf00OhRn6uI93KXqP40+iALsJJFlmtkHF+pLKzx6Wt8Uyrr/TU4sSFgWXcDQIdUs6OO+MGxX/4gFOzQAbIvlAa5ScH3zqUQ6kKXTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iRCfJxI4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GF9oTz+A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747506185;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oZg69pHyeL//UYQ+gHhJCj/VEYfp2jYeoK8CWurKfn8=;
-	b=GF9oTz+ALzyN0wKhIDUU0yhLvxHGrBmu0U0T1K8xVIPMXCA0ItOJm6rPeKDRtpHWJWm9Kb
-	bTY9qsqAfrNzWMclrBcnex4UAL5OHdXKUmmGK0kzJLGL/q2+ktasQXf09E8jUmpb4ZyWdk
-	W12Zk1QdJPFvvxo1zIvHpAp2q8k0ei8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-339-53uIplSxPBujC7CKAKA6FA-1; Sat,
- 17 May 2025 14:23:04 -0400
-X-MC-Unique: 53uIplSxPBujC7CKAKA6FA-1
-X-Mimecast-MFC-AGG-ID: 53uIplSxPBujC7CKAKA6FA_1747506183
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7F84718003FC
-	for <llvm@lists.linux.dev>; Sat, 17 May 2025 18:23:03 +0000 (UTC)
-Received: from [172.20.77.114] (unknown [10.30.44.38])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3291E19560AB;
-	Sat, 17 May 2025 18:23:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc6,
- upstream-mainline, 205b2bd7)
-Date: Sat, 17 May 2025 18:23:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iRCfJxI4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49096C4CEE3;
+	Sat, 17 May 2025 19:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747509085;
+	bh=SNOwVK1Y2LypwvVxIgQyb4CvbacAABjnIU/eHeRg25g=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=iRCfJxI4KSPufPFqOJDn7Y1XbUdLmJLOuZEtfFtBB9+sD7FqaZxsA/5hWlIQVrRqj
+	 jr6k51V0/8N+ElibXBUKP3xKMuCfceXaK2wqYA8vIl1HB3QWnsUkBSlWvsAoVRARDX
+	 W5TvFVGFJBZUt0dJoazJbHXrzcGF4rCprpihj5ZkGm2XPugQDXBezQ8AhWXIBeKrwb
+	 EqqTtO2iOFLZ/B4llC2Jn8NxeixHndU6GKoXEOVNhAHWv4O7NzC96t2yyZu1qU/U3f
+	 LkuxJFd3pr32CNIzTeuScusmr81e6y5J9OlZssg6fpjUKS/NhvdDrnFDQoFejcyA60
+	 SUE57/Eq8b4fg==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <27210.125051714230400495@us-mta-339.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: -1B3AuSixm_m0Jsaz82R-8Wxp3IDKqfYPrl7cZIM7sc_1747506183
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 17 May 2025 21:11:20 +0200
+Message-Id: <D9YO9OZ5X83E.2DOL82V16Z8QK@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH v4 1/3] rust: add UnsafePinned type
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Christian Schrefl" <chrisi.schrefl@gmail.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Sky" <sky@sky9.dev>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <benno.lossin@proton.me>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl"
+ <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, =?utf-8?q?Gerald_Wisb=C3=B6ck?=
+ <gerald.wisboeck@feather.ink>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
+ <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+X-Mailer: aerc 0.20.1
+References: <20250511-rust_unsafe_pinned-v4-0-a86c32e47e3d@gmail.com>
+ <20250511-rust_unsafe_pinned-v4-1-a86c32e47e3d@gmail.com>
+ <D9VBVURZLSNT.4BTQQ8UCTGPJ@kernel.org>
+ <19fc74f7-b292-404d-a48f-4dc3bcb5af3b@gmail.com>
+In-Reply-To: <19fc74f7-b292-404d-a48f-4dc3bcb5af3b@gmail.com>
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'irq-urgent-2025-05-17' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1822956208
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1822956208-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
+On Sat May 17, 2025 at 1:36 PM CEST, Christian Schrefl wrote:
+> Hi Benno,
+>
+> On 13.05.25 10:51 PM, Benno Lossin wrote:
+>> On Sun May 11, 2025 at 8:21 PM CEST, Christian Schrefl wrote:
+>>> `UnsafePinned<T>` is useful for cases where a value might be shared wit=
+h
+>>> C code but not directly used by it. In particular this is added for
+>>> storing additional data in the `MiscDeviceRegistration` which will be
+>>> shared between `fops->open` and the containing struct.
+>>>
+>>> Similar to `Opaque` but guarantees that the value is always initialized
+>>> and that the inner value is dropped when `UnsafePinned` is dropped.
+>>>
+>>> This was originally proposed for the IRQ abstractions [0] and is also
+>>> useful for other where the inner data may be aliased, but is always
+>>> valid and automatic `Drop` is desired.
+>>>
+>>> Since then the `UnsafePinned` type was added to upstream Rust [1] by Sk=
+y
+>>> as a unstable feature, therefore this patch implements the subset of th=
 e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+>>> upstream API for the `UnsafePinned` type required for additional data i=
+n
+>>> `MiscDeviceRegistration` and in the implementation of the `Opaque` type=
+.
+>>>
+>>> Some differences to the upstream type definition are required in the
+>>> kernel implementation, because upstream type uses some compiler changes
+>>> to opt out of certain optimizations, this is documented in the
+>>> documentation and a comment on the `UnsafePinned` type.
+>>>
+>>> The documentation on is based on the upstream rust documentation with
+>>> minor modifications for the kernel implementation.
+>>>
+>>> Link: https://lore.kernel.org/rust-for-linux/CAH5fLgiOASgjoYKFz6kWwzLaH=
+07DqP2ph+3YyCDh2+gYqGpABA@mail.gmail.com [0]
+>>> Link: https://github.com/rust-lang/rust/pull/137043 [1]
+>>> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+>>> Reviewed-by: Gerald Wisb=C3=B6ck <gerald.wisboeck@feather.ink>
+>>> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>>> Co-developed-by: Sky <sky@sky9.dev>
+>>> Signed-off-by: Sky <sky@sky9.dev>
+>>> Signed-off-by: Christian Schrefl <chrisi.schrefl@gmail.com>
+>>=20
+>> One nit below, with that fixed:
+>>=20
+>> Reviewed-by: Benno Lossin <lossin@kernel.org>
+>>=20
+>>> ---
+>>>  rust/kernel/types.rs               |   6 ++
+>>>  rust/kernel/types/unsafe_pinned.rs | 111 +++++++++++++++++++++++++++++=
+++++++++
+>>>  2 files changed, 117 insertions(+)
+>>>
+>>> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+>>> index 9d0471afc9648f2973235488b441eb109069adb1..705f420fdfbc4a576de1c45=
+46578f2f04cdf615e 100644
+>>> --- a/rust/kernel/types.rs
+>>> +++ b/rust/kernel/types.rs
+>>> @@ -578,3 +581,6 @@ pub enum Either<L, R> {
+>>>  /// [`NotThreadSafe`]: type@NotThreadSafe
+>>>  #[allow(non_upper_case_globals)]
+>>>  pub const NotThreadSafe: NotThreadSafe =3D PhantomData;
+>>> +
+>>> +mod unsafe_pinned;
+>>> +pub use unsafe_pinned::UnsafePinned;
+>>=20
+>> I would put `mod` to the top of the=20
+>
+> Your sentence was cut off, I assume you mean:
+>
+>> I would put `mod` to the top of the file.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Oh yeah sorry about that.
 
+> I can do that, let me know if I should send a
+> new version or if this will be fixed when applying.
+
+I think Miguel can do this when picking the patch :)
+
+---
+Cheers,
+Benno
