@@ -1,427 +1,198 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18222CA8
-	for <llvm@lists.linux.dev>; Sun, 18 May 2025 01:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747531847; cv=none; b=l0tpQ/jbxOa+iwag2XqHpCYg2r23NlKQ5izHTZsC0veYlC401hXJjTUyh39LuZDCAyHATX6qPgvwC+HiLAFgJu0GugGkVu1/LUxbt97TAw39BET6/biFJ4TeDCXvpAI0x6Fwe7FmYQQg3RKJS8NOeUcK25s562tmzEmt6rEXqj8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747531847; c=relaxed/simple;
-	bh=MmON3q5i6J4IArmTHUtVwfD2eTxirSwy3bB/aHW08Gk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gk4EAbhHu3qbVgNOC0DfKa3nXM9xqTJaJbZRO5GgJJ1C+Cp8q0G2QqSFz/glCDMgin3TcHZJfXC/aRbWK8hY5O0rLw25u8mv3+8iWiDpceJPHNkIw27lTqhPcCyiSjphXvG3hmIPFYQ9PEaUoo3lfroIV9kFujZ1H7/UCD1EAEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jnQbh2gg; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16871F507;
+	Sun, 18 May 2025 02:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747535136; cv=fail; b=TlhD+02uH0WwyvajBz1Jq/CY+gI9egYigDVxIjmFsS2tShB5d91YG8HT1RBpicjzxeE+DLuSeibJMqmuXZqGvBpOIge4KtRAQMKUsA/S8LXDdVoPNVHImlUMv6jiXdUoRjDKpAUvl/AQMy9qlkEZMTdaONdnXmP3egAnhTv++0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747535136; c=relaxed/simple;
+	bh=H4g2U94NxZvpCjN8kQiQIW6l4LCnjW/E2bODfXM8Xe4=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:MIME-Version; b=A1+xc2opAIP2dfCman+l3pjGSXHWE15FSWa0PiJICxx85SD89n5NfWfI3Xq6DufNgk1Y5QTCVVx7NlPKs0hjZGOosb2PeE3kARvh8L6Oz7PDgnkdeH9csRpfieYgTZQWCb5WL+eh8yfCW4y6kXO7k0GZSwlBCnP1QDuq4XIU3gQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uyra/Su0; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jnQbh2gg"
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-85e15dc8035so97200139f.0
-        for <llvm@lists.linux.dev>; Sat, 17 May 2025 18:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747531845; x=1748136645; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sWe4uhrqQ6kYTV+uYSNoRxMT3RAe8ziimxoaSj21SIg=;
-        b=jnQbh2ggHcBURcXR9qK7BHDTETWhUpWWK7jGBKtcXWhXB4Vaxvw7kTq+R4yOCHNWKs
-         JhStt3e9AGWBbiuUUSEQOaUZ5C7VOtFj1AZmjnrF7lyV47Tu+X+7qn82Ej8LfF+uVt7W
-         fzJ9S3z2etsJlGf7jq7/gSyKjwHPL9mbFEIMBKpiCjhBMh/TPI5+0aii34kKov38df6L
-         XE/zpsbywMzLgs0Z+WH/UXpVNQ6/D5sjs0Fy6Ml58pOWoByvZNO7uQAkpdYxwM3KTvPy
-         PxJKHe1KM29Fr+7QjPJnpizzSlXd4Qw7A2pj2mEaYzVsSKm4wDDdDhrM5swqbBgIvD6B
-         KBtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747531845; x=1748136645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sWe4uhrqQ6kYTV+uYSNoRxMT3RAe8ziimxoaSj21SIg=;
-        b=OqLVD7L55vRoP/P+yRtjlTRb9zdNU3VS3PPjt433C9WnGAO/X9ewbwrpZaRJUD0fnW
-         LI9NdVFL+HKXfRyXt5U23dNBPNvSiBHdxC/a9J7hcQm2YmTKboYFmLIU0t92Mzjk1sq3
-         O2mhdQnDKj4vLelH3jVWZ47Qr8FbhEKjACoZwjur2p6RWuFc8CsMTIJUU4Dnv4ZsPiSx
-         fu18XifY2GGrjUVNB9fybAAIPWD8Dd2VlojP+HPevUXKXOUtZHr+fqRFIZVIQIdzeAjI
-         gqL1v20Yhasn2HObezZ6sA31Ntm3FIqTYGhyJVud7mrsz+D7gRFAJ4ssBAZjGeyEAhhM
-         gouw==
-X-Forwarded-Encrypted: i=1; AJvYcCVKaHhv0auVgEdY+7XP/EAsR/k8SV3qGMq2yJmixp61QMVpl3VaftDH0Vu1ewghPc4bhGJf@lists.linux.dev
-X-Gm-Message-State: AOJu0YxsxMtgw63CZl31skCQ6YQ2DdvA/djO8I0B+uCtciXQtDrPfMbH
-	HF6x/ic3ZSk61Oty5etgda+61Eyx9W7P7RcFFr9GDjbQ5X8nkDuCMMzEnc0uO2NncTT1Pxr+A0I
-	BSqKA6uPySmXkYUnlOP0TLWXu2eNxR5M=
-X-Gm-Gg: ASbGncuWbp/mPMshlgryaMB4j1XUzVjbD4FBU47rkL9zQUJySYcuE+15EU7gTIb61Ya
-	AA69+9aTiZEnnPTK3DirAoF2yXuvQcRGcsHxnFR5NfHFRH4DFttzSySBCMscMraxhAWYea64HrD
-	zy+nSvcfUuylf1bW3hEqIaU5pfzCHmChKz
-X-Google-Smtp-Source: AGHT+IF0AX8mqYNeSwGFaoY/T1VTx7e1a9qCdM4HH+LTc4XsEuTMgi9t54I95IeQ+E1OZjiYIg/TgWjB6VvVC6P0WFI=
-X-Received: by 2002:a05:6602:3f0c:b0:86a:93c:a721 with SMTP id
- ca18e2360f4ac-86a24bbb754mr1018463339f.2.1747531844798; Sat, 17 May 2025
- 18:30:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uyra/Su0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747535134; x=1779071134;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=H4g2U94NxZvpCjN8kQiQIW6l4LCnjW/E2bODfXM8Xe4=;
+  b=Uyra/Su0OosI/BSz30GaUXEu+IaTtimVYniccCQoHXAb0EbfWfujVAqX
+   Fg451ct7pZO7pm+ja17UByQ+MwTvkMWmE0oJv3SQxbof94XeZHeor9oEW
+   6eAbnLYkk3QvqOC8N0u4OXVMQ8xc7nYU1L6b8ESdAmx8YcmfZjn2iN4s5
+   pjIjdMIkBv6i2J8CphvEF9IvPL3cFMQ29TOhDAqsEO/vgHVR84JUclQKC
+   kCq26Mg7jCzHQjwinR7gn/cRjlCmXG1ly29pE7/4aMT0zwlvkfplUibaI
+   rwtfQvMJ47GoTfdxL36EkGb26kwI370BzrwVUKmt742UUgd5+6UppvA8H
+   Q==;
+X-CSE-ConnectionGUID: 6i50IelsTB6CpsvEz86Nog==
+X-CSE-MsgGUID: xrZsY3EATKObA6EQzNS6cw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11436"; a="67019267"
+X-IronPort-AV: E=Sophos;i="6.15,298,1739865600"; 
+   d="scan'208";a="67019267"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2025 19:25:33 -0700
+X-CSE-ConnectionGUID: kMg1OZNbTIO7+cjtvnKiww==
+X-CSE-MsgGUID: H89UA1wYTte84NYO9UjTmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,298,1739865600"; 
+   d="scan'208";a="139088886"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2025 19:25:33 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Sat, 17 May 2025 19:25:32 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14 via Frontend Transport; Sat, 17 May 2025 19:25:32 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Sat, 17 May 2025 19:25:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=B6q+7GIfac9PKpTwoO0KSsqknmzhdltSGQpXctC8SrM+E6eO8RBB3tMk/tTP7dSQiB05Y/ockrZwnUJDKWbJp6hDnvhbTgoo8Ug56Rb6yszWEXI+qO0tgJQzOfGBtyuZw7jII0IdfHT3WDWlfHP+tRPsbzsEQn4pJ45m0nDmF7JT1h2UMtrViPfKsr4GVGN22vhjwm5I1yCZ46yCQQQpN7lw89KAJUtQLw7VE4DnnwRmcmHChk1qs6/mhOW7m/wKJmMi49kyu6ejHHzcjVGq0BV6uFjQKPqlikfiVIfnD2Q5ubKnJ4MT0Ws3U0WwprDzJQEyYJns75kWr9b5pgyWcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9wF4Y4Osb4K4/dXDIhtx6rlmjZliTPHnrSobZE94+F8=;
+ b=YEarLTCjbfm6WbEnwQB+y5yjR8xhDcDtHg+Dg0dokSaT8LZyl8aYw+Xnb7K1FLPUJSnpZhoX7Hy0NAtsVdABGvlyKcvpw1YjPW7T2sogdLgYkmbPOd9A6ntjhHdFfjh8KojgMCxIpWiv/7J7Xnr3iu62Vyg/1Hyi6r0gCO4OdSrPDASON2EQZVTG5QGMIDDQiOzHPGlOe7vUrrJ04iYHYkc4KEiwIGt95biAlO9TTpzSqoNrhP66eOVRfRXU94HLvFUUoH6czHpljUBkJ00came5+9TVqZS8axB4d86hCw6Kn0Z4LeVe2OBnWFUa7YU4VBLWs/xPS8dkvdtwaMQwgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB5674.namprd11.prod.outlook.com (2603:10b6:510:ec::10)
+ by MW5PR11MB5764.namprd11.prod.outlook.com (2603:10b6:303:197::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.26; Sun, 18 May
+ 2025 02:25:30 +0000
+Received: from PH0PR11MB5674.namprd11.prod.outlook.com
+ ([fe80::77d3:dfb2:3bd:e02a]) by PH0PR11MB5674.namprd11.prod.outlook.com
+ ([fe80::77d3:dfb2:3bd:e02a%6]) with mapi id 15.20.8722.031; Sun, 18 May 2025
+ 02:25:29 +0000
+Date: Sun, 18 May 2025 10:25:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rolf Eike Beer <eb@emlix.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Joerg Roedel
+	<jroedel@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [iommu:core 48/49] ERROR: modpost: "arm_smmu_make_bypass_ste"
+ [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+Message-ID: <aClFEHZVgV2etESx@rli9-mobl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SG2PR04CA0173.apcprd04.prod.outlook.com (2603:1096:4::35)
+ To PH0PR11MB5674.namprd11.prod.outlook.com (2603:10b6:510:ec::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
- <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de> <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
- <2d8c1929bf5ab5260dacf9aa390456b3b49ce465.camel@sipsolutions.net>
- <2cad838b39f00d93319509d2a6a77a4c42c7fa92.camel@web.de> <a12c82c394e9676e32ede6b8312f821a16fef94b.camel@sipsolutions.net>
- <f8552d41fb7eae286803b78302390614179b33b0.camel@web.de> <8684a2b4bf367e2e2a97e2b52356ffe5436a8270.camel@sipsolutions.net>
- <ba97a2559cda1b14e0c9754523ff1152bdad90ef.camel@web.de> <63cc1dbf07bde2c9d14e1f86ce2c2ce26a2a9936.camel@web.de>
- <388bbc4c805ce029bbd08010fd30405494f998a9.camel@web.de> <15f3633cbd08b30475d5b76c5cc9180fbf17a12f.camel@web.de>
-In-Reply-To: <15f3633cbd08b30475d5b76c5cc9180fbf17a12f.camel@web.de>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sun, 18 May 2025 09:30:08 +0800
-X-Gm-Features: AX0GCFv06TkGJgkKvaRslc77U1xmPTSHqh40F7JbBNWrPHJVJHUeMNiX2GPPk-Y
-Message-ID: <CAL+tcoA3d-EdoGjei7aeyuA3zmj955uYkXf1wCAUy8iP3BxUjg@mail.gmail.com>
-Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when compiled
- with clang
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: Johannes Berg <johannes@sipsolutions.net>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-next@vger.kernel.org" <linux-next@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	Thomas Gleixner <tglx@linutronix.de>, linux-wireless@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB5674:EE_|MW5PR11MB5764:EE_
+X-MS-Office365-Filtering-Correlation-Id: a52d0f1b-33d5-4607-da03-08dd95b341cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?xNRrfFuB8jukVmC7SdIe+i9DvcO8guJlWvoZHEUMnp+sDQc71pH5/hezWSaG?=
+ =?us-ascii?Q?aZg1EHAp39EQvOlTf8ugyWSiI+zdl0SR0EiUJ1JstNVmTx0LWadDjlfSMTlb?=
+ =?us-ascii?Q?zWW8VUASCh6hXA0/4IHU/8FgwtSm3DtfjaDEZCntTbVl86PAuxTJeNqxMYn+?=
+ =?us-ascii?Q?lAPjUlQUnS/DvdyKVcKtoGpUUIaaoqse3RYK7h5JgefjqNTd+uGmlYnUOaks?=
+ =?us-ascii?Q?l2wS93jC308tomh6R2nL7Io3qB85H3DjKQfC4pWhUU71viTU6hqYfx7ZfOkg?=
+ =?us-ascii?Q?rPepWf9S5eVO56qiMAM5FE8lVEI56EtrE1/J2yOXtIUyfs9wHkqnBXyse9rV?=
+ =?us-ascii?Q?1avnwqlz1IOJcrjR3Y2O0P+yKBm4Gtm9RwZIAOR3faTffr6FoWJn4I9u5TUW?=
+ =?us-ascii?Q?uwwT9jukKt/oxAQjhEnB9Cf08puy/177OpYp+pFU8JaQqq5AtqfGBSc2KNU1?=
+ =?us-ascii?Q?UzfEPBZI1RRyR83vXFIBxy/SQxyNDMSO9fxS07b/g6o4jVbQ++Nzf/5xpi+r?=
+ =?us-ascii?Q?pKvJOgHZ+oMNGp4NaTC1fdWkL/WRYG9ZL/6HoSO9J/hGne8jDoRnewCr2+GX?=
+ =?us-ascii?Q?ro2FATmlH2yYyYVPthUco3y02c/4a43v+mfgoy3Br9kusFr5tJ05dbss/9cI?=
+ =?us-ascii?Q?oe31Sfq4DKSZYyLTtLfGZgApvrSNTeV8B0vLfsxQRj63YCJDIsJ4v5sU4fkP?=
+ =?us-ascii?Q?QwZUQ0FlV37Ie2Cws7p/JZRLwCBJXR+Kldhrm1xVdbOj3oJw8TvnDUzmF1VX?=
+ =?us-ascii?Q?0fqV2R++P6SzwdRptEpQQAWcKiyWQNrQ2dWr5d9M/b5p0BoVRlyoZFzvg32X?=
+ =?us-ascii?Q?odYZlfzY/ZKIyhF6gcbwgWG1IPqrN87d5spNUh+3Cu3ui9+LYJS6LsNNsEPV?=
+ =?us-ascii?Q?e0cn7XTpwKpW3LMdLvjexhnCfbfLwy63sQYb3KcRQXGQ4l4xj/vaBsX1a+xN?=
+ =?us-ascii?Q?TCLKQOrP1BTMbhJC0JbLfQy1ydAJCQKW3co50vnIy6STVnabWTWMbNnYLGAN?=
+ =?us-ascii?Q?puFFjVifOCTnoZCi831z8/RWBGUFhkWuYPnnq+SkacYpFH42smqWb2ON3ZEE?=
+ =?us-ascii?Q?ptaalSMZKyAQQYYVkvPjQtCFauJZSJhdRuXUCv5Rhy/0abLOFdz8UPCPNyKY?=
+ =?us-ascii?Q?/8ClJgDGoTjUFJfrpE/ZpSv4ESJoags7eu6AvurGWwx1Szh8p5VV40qOD8Dc?=
+ =?us-ascii?Q?472I9zFEa1Yzrlzai5GdN6Z2/mdutFacZDmM5HjF+toqUT6XRvS2lpAIlvSK?=
+ =?us-ascii?Q?McOTpWxS4KO1g63yRQzfebpijyArmLTS2zxp/dOqq8Qcu5ZFKJuGKopNQaiY?=
+ =?us-ascii?Q?0ZJDpzNoj4YrGbQ5Q543cqqFBbA50ChsF6RhAonSR4r1N5oGX2IueWrHDTt4?=
+ =?us-ascii?Q?6VJx3h3jCH8PYxCCGNDmd7Np96Fl?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5674.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LX2tXrBjIEsSW9Ser4ARVzu79oESzzzC7AsTn1zvjQjW6BAy2VG6BUt2KloH?=
+ =?us-ascii?Q?ARu2m3rseLEGJI+VPJl/obLnSlGpqqQumSZpm2ce8xLhX+Du4tdYQBhjob29?=
+ =?us-ascii?Q?U2iaiL/5uV8kSdF0NCHTbRVPYhgX0tloNYDTk7jyEOLQczFN7CjrO0WkkmKk?=
+ =?us-ascii?Q?Ndpq5pTN3cZ1GubjycM+QtmXls64lbV9IJko5ydaHEkjHyIQj2loQ+CL9MTG?=
+ =?us-ascii?Q?6z1qaMER9c0GA8YbtZiisDYV98UeTVv52MZTc/iluakhyoaAW8uyGCuIOC1z?=
+ =?us-ascii?Q?s7jOm7iEL4R+R1MiV9091KzA7rNKG5012HY92hv4I4uh6fEmUm0I0UsXrqRt?=
+ =?us-ascii?Q?lQetj207NSk3lDOTfd143j7PgLYIDQxolPijfDpqHQzCbPo0N2xDou+JbzSF?=
+ =?us-ascii?Q?FDNLpfrh/MBO7Cp7paT7DFranxUsTCqnoEeA6hLE/bFGvOOSNEyHJkR4A6Ln?=
+ =?us-ascii?Q?tzKbTmdNdD1bCHrAQJbs59XdTVdsUxP3oZNvm4wFyq9L53IigO4YPKGylyq0?=
+ =?us-ascii?Q?oJRDtcweVIr0SkpmqgZiK01QtutX6PCmiWL2tHeRJUiqDSYf0DCC35SNqKRQ?=
+ =?us-ascii?Q?cVR45L8n5pu5nsKnwEyvZT1GupJ7XCULfNov2T82bWdXk/+uuo9wLMnJSx3/?=
+ =?us-ascii?Q?Fe1Hx4sskoO3LVbL71DsoiHWNtPTlNfWQltAPnaXUkSqTj8yqxGu2xYsQd0N?=
+ =?us-ascii?Q?3i63AcGwh2ucjfh6RytLiJ8Kdw2HK7Nu4FE9j45PbKbS0jL2jK7AMbSIGlOW?=
+ =?us-ascii?Q?xuZqqy1nK5GUiu2aRRfNUyO/4NETrz3ou/+76qyF4DpHi9pf/A2ydPvH9OXM?=
+ =?us-ascii?Q?XuYbQRMku6vNpUHJhkDVt5g5idrAvZQF301//KMUS9elQV8mEl14uTIykfBc?=
+ =?us-ascii?Q?h8lxpUeXedGqVqpN8aec5JXcwtw/YZG5bigtTIhbtZ7SyXxX3VLq5HWqYLqL?=
+ =?us-ascii?Q?7CiOheo1rrdD9ahQJdB2vsepRDDPGA5Sig8shvjtbVpgDq8iSQMFqDRyP50f?=
+ =?us-ascii?Q?4KQjklqmPh5YoLeo/Lzt8Dw6webBNDYrXv0dLdvW82ay7uV9oaZ3jemL41LN?=
+ =?us-ascii?Q?VQLfcZJLQBASG6kzDllUkGI3J7hNIKfPK+jiOD0kTnacxQlsviEQe8l0tSuE?=
+ =?us-ascii?Q?3+geGaRD4RLDFGQiE1Azgua5o44wVBNcuTFQyRKLETvJEqQDdH5ThLQrXpUd?=
+ =?us-ascii?Q?1zLuaq0yNxyxqGhftumSjGYY3rXKzSLi9U+bZCSMkzDYL/H2gB4U3pb7n+wR?=
+ =?us-ascii?Q?o4c8JRulw45tQ0Bzbr4HXciJ0kRa7pDNykO8sgY+iCwfWaXasmIo/A553Nxl?=
+ =?us-ascii?Q?R6ndWvEW03MO+PlmcjPV0688SJlwHOFm1VbNSiNzw/CuMd4X4egkf/BScX/c?=
+ =?us-ascii?Q?OLjkPGZhKjqZXryFqqDeAihITYnkZUptBJICiPkxY+/YMxD/fKgMyIEZbi8C?=
+ =?us-ascii?Q?/LddzVX+/Rl+WzScY80wp6e2pBW6KTFX0ANvI8dnbrmyrfmjvdaGegUqAJJW?=
+ =?us-ascii?Q?+8aRCjDWvbPIJJdfT/r/M0CBCtHfp69OuBkJvIYBI9TBQ6ZbyIQRts65FOkp?=
+ =?us-ascii?Q?XGsdrNtuiRNSuJR8Jc80Z835GZnuudw2+Nz0xGya?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a52d0f1b-33d5-4607-da03-08dd95b341cd
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5674.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2025 02:25:29.6886
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bdOWvZGkyC6968Ni+6nvZ3lLukZ6y9sXkKiHTvatQhhW25qLtLpXX9pWJ/dh9/mIlWQA8WckLJJeWFQLrPPnUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5764
+X-OriginatorOrg: intel.com
 
-Hi Bert,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git core
+head:   5e2ff240b31a37226260587e33707efc3c41e451
+commit: e436576b0231542f6f233279f0972989232575a8 [48/49] iommu: make inclusion of arm/arm-smmu-v3 directory conditional
+:::::: branch date: 30 hours ago
+:::::: commit date: 2 days ago
+config: arm64-randconfig-002-20250517 (https://download.01.org/0day-ci/archive/20250518/202505180231.YmCBcToL-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250518/202505180231.YmCBcToL-lkp@intel.com/reproduce)
 
-Thanks for your report and analysis!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/r/202505180231.YmCBcToL-lkp@intel.com/
 
-On Sun, May 18, 2025 at 3:49=E2=80=AFAM Bert Karwatzki <spasswolf@web.de> w=
-rote:
->
-> Am Samstag, dem 17.05.2025 um 13:34 +0200 schrieb Bert Karwatzki:
-> > Am Freitag, dem 16.05.2025 um 20:19 +0200 schrieb Bert Karwatzki:
-> > > I've added a debugging statement:
-> > >
-> > > diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-> > > index 3bd5ee0995fe..853493eca4f5 100644
-> > > --- a/net/mac80211/tx.c
-> > > +++ b/net/mac80211/tx.c
-> > > @@ -4586,7 +4586,11 @@ static noinline void ieee80211_8023_xmit_clang=
-_debug_helper(struct sk_buff *skb,
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-What is the caller of it? It's the function that you customized?
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_inflate/zlib_inflate.o
+>> ERROR: modpost: "arm_smmu_make_bypass_ste" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_make_abort_ste" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_make_cdtable_ste" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_make_s2_domain_ste" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_make_s1_cd" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_make_sva_cd" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_write_entry" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_get_ste_used" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
+>> ERROR: modpost: "arm_smmu_get_cd_used" [drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.ko] undefined!
 
-> > >                                                             struct ie=
-ee80211_local *local,
-> > >                                                             struct ie=
-ee80211_tx_info *info)
-> > >  {
-> > > -       if (unlikely(skb->sk && sock_flag(skb->sk, SOCK_WIFI_STATUS))=
-) {
-> > > +       if (unlikely(skb->sk && ((skb_shinfo(skb)->tx_flags & SKBTX_W=
-IFI_STATUS) ||
-> > > +                               sock_flag(skb->sk, SOCK_WIFI_STATUS))=
-)) {
-> > > +               if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^=
- sock_flag(skb->sk, SOCK_WIFI_STATUS))
-> > > +                       printk(KERN_INFO "%s: skb_shinfo(skb)->tx_fla=
-gs & SKBTX_WIFI_STATUS =3D %u sock_flag(skb->sk,
-> > > SOCK_WIFI_STATUS) =3D %u\n",
-> > > +                                       __func__, (skb_shinfo(skb)->t=
-x_flags & SKBTX_WIFI_STATUS), sock_flag(skb->sk,
-> > > SOCK_WIFI_STATUS));
-> > >                 info->status_data =3D ieee80211_store_ack_skb(local, =
-skb,
-> > >                                                             &info->fl=
-ags, NULL);
-> > >                 if (info->status_data)
-> > >
-> > > This gives the following logoutput (and a lockup), indicating that so=
-ck_flag(skb->sk, SOCK_WIFI_STATUS) and
-> > > (skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) are actually NOT equi=
-valent (when compiled with clang and
-> > > PREEMPT_RT=3Dy)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
-Moving skc_flags out of the union can solve the issue, right? Simple
-modification looks like this:
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 3e15d7105ad2..5810c7b80507 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -189,13 +189,13 @@ struct sock_common {
-
-        atomic64_t              skc_cookie;
-
-+       unsigned long   skc_flags;
-        /* following fields are padding to force
-         * offset(struct sock, sk_refcnt) =3D=3D 128 on 64bit arches
-         * assuming IPV6 is enabled. We use this padding differently
-         * for different kind of 'sockets'
-         */
-        union {
--               unsigned long   skc_flags;
-                struct sock     *skc_listener; /* request_sock */
-                struct inet_timewait_death_row *skc_tw_dr; /*
-inet_timewait_sock */
-        };
-
-Can you give it a try?
-
-> >
-> > I've added more debugging output:
-> >
-> > diff --git a/include/net/sock.h b/include/net/sock.h
-> > index e223102337c7..e13560b5b7a8 100644
-> > --- a/include/net/sock.h
-> > +++ b/include/net/sock.h
-> > @@ -2735,8 +2735,10 @@ static inline void _sock_tx_timestamp(struct soc=
-k *sk,
-> >                               *tskey =3D atomic_inc_return(&sk->sk_tske=
-y) - 1;
-> >               }
-> >       }
-> > -     if (unlikely(sock_flag(sk, SOCK_WIFI_STATUS)))
-> > +     if (unlikely(sock_flag(sk, SOCK_WIFI_STATUS))) {
-> > +             printk(KERN_INFO "%s: setting SKBTX_WIFI_STATUS for sk =
-=3D %px\n", __func__, sk);
-> >               *tx_flags |=3D SKBTX_WIFI_STATUS;
-> > +     }
-> >  }
-> >
-> >  static inline void sock_tx_timestamp(struct sock *sk,
-> > diff --git a/net/core/sock.c b/net/core/sock.c
-> > index e02a78538e3e..f6589ad5ba36 100644
-> > --- a/net/core/sock.c
-> > +++ b/net/core/sock.c
-> > @@ -1548,6 +1548,7 @@ int sk_setsockopt(struct sock *sk, int level, int=
- optname,
-> >               break;
-> >
-> >       case SO_WIFI_STATUS:
-> > +             printk(KERN_INFO "%s: setting SOCK_WIFI_STATUS to %u for =
-sk =3D %px\n", __func__, valbool, sk);
-> >               sock_valbool_flag(sk, SOCK_WIFI_STATUS, valbool);
-> >               break;
-> >
-> > diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-> > index 853493eca4f5..eee2f80949c6 100644
-> > --- a/net/mac80211/tx.c
-> > +++ b/net/mac80211/tx.c
-> > @@ -4588,9 +4588,12 @@ static noinline void ieee80211_8023_xmit_clang_d=
-ebug_helper(struct sk_buff *skb,
-> >  {
-> >       if (unlikely(skb->sk && ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_=
-STATUS) ||
-> >                               sock_flag(skb->sk, SOCK_WIFI_STATUS)))) {
-> > -             if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^ soc=
-k_flag(skb->sk, SOCK_WIFI_STATUS))
-> > +             if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^ soc=
-k_flag(skb->sk, SOCK_WIFI_STATUS)) {
-> >                       printk(KERN_INFO "%s: skb_shinfo(skb)->tx_flags &=
- SKBTX_WIFI_STATUS =3D %u sock_flag(skb->sk, SOCK_WIFI_STATUS) =3D %u\n",
-> >                                       __func__, (skb_shinfo(skb)->tx_fl=
-ags & SKBTX_WIFI_STATUS), sock_flag(skb->sk, SOCK_WIFI_STATUS));
-> > +                     printk(KERN_INFO "%s: skb->sk =3D %px skb->sk->sk=
-_flags =3D 0x%lx\n", __func__, skb->sk, skb->sk->sk_flags);
-> > +                     return; // This should make this case non-fatal.
-> > +             }
-> >               info->status_data =3D ieee80211_store_ack_skb(local, skb,
-> >                                                           &info->flags,=
- NULL);
-> >               if (info->status_data)
-> >
-> >
-> >
-> > This gives after ~15min uptime
-> >
-> > [  189.337797] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  189.337803] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1b798c4e00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  191.325256] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  191.325259] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1b798c5a00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  257.591831] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  257.591844] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1baf3bca00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  301.786963] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  301.786967] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1c1bc40100 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  302.780881] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  302.780884] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1a44cf6000 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  482.792298] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  482.792304] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1da0f4de00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  482.806144] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  482.806148] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1da0f4c500 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  482.817280] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  482.817284] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1da0f4df00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  552.327291] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  552.327295] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1da0f4de00 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> > [  916.971599] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb_s=
-hinfo(skb)->tx_flags & SKBTX_WIFI_STATUS =3D 0 sock_flag(skb->sk, SOCK_WIFI=
-_STATUS) =3D 1
-> > [  916.971607] [    T576] ieee80211_8023_xmit_clang_debug_helper: skb->=
-sk =3D ffff8c1a62834000 skb->sk->sk_flags =3D 0xffffffffb4efe640
-> >
-> > The printk()s in sk_set_sockopt() and _sock_tx_timestamp() are not call=
-ed at all so the flag
-> > SOCK_WIFI_STATUS is actually nevers set! What is printed when printing =
-skb->sk->sk_flags looks
-> > suspiciously like a pointer, and as sk_flags is actually a member of a =
-union in struct sock_common
-> > it seems clang is using sk_flags for one of the other union members her=
-e
-> >
-> > struct sock_common {
-> > [...]
-> >       union {
-> >               unsigned long   skc_flags;
-> >               struct sock     *skc_listener; /* request_sock */
-> >               struct inet_timewait_death_row *skc_tw_dr; /* inet_timewa=
-it_sock */
-> >       };
-> > [...]
-> > }
-> >
-> > Bert Karwatzki
->
-> I added even more debugging output and found out why commit 76a853f86c97 =
-(" wifi: free
-> SKBTX_WIFI_STATUS skb tx_flags flag") does not work.
->
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index e13560b5b7a8..6e1291d2e5a1 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -2738,6 +2738,8 @@ static inline void _sock_tx_timestamp(struct sock *=
-sk,
->         if (unlikely(sock_flag(sk, SOCK_WIFI_STATUS))) {
->                 printk(KERN_INFO "%s: setting SKBTX_WIFI_STATUS for sk =
-=3D %px\n", __func__, sk);
->                 *tx_flags |=3D SKBTX_WIFI_STATUS;
-> +       } else {
-> +               printk(KERN_INFO "%s: NOT setting SKBTX_WIFI_STATUS for s=
-k =3D %px\n", __func__, sk);
->         }
->  }
->
-> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
-ock.c
-> index 20915895bdaa..4913b09c0617 100644
-> --- a/net/ipv4/inet_connection_sock.c
-> +++ b/net/ipv4/inet_connection_sock.c
-> @@ -912,6 +912,7 @@ reqsk_alloc_noprof(const struct request_sock_ops *ops=
-, struct sock *sk_listener,
->                         return NULL;
->                 }
->                 req->rsk_listener =3D sk_listener;
-> +               printk(KERN_INFO "%s: sk_listener =3D %px\n", __func__, s=
-k_listener);
->         }
->         req->rsk_ops =3D ops;
->         req_to_sk(req)->sk_prot =3D sk_listener->sk_prot;
-> @@ -986,6 +987,7 @@ static struct request_sock *inet_reqsk_clone(struct r=
-equest_sock *req,
->         nreq_sk->sk_incoming_cpu =3D req_sk->sk_incoming_cpu;
->
->         nreq->rsk_listener =3D sk;
-> +       printk(KERN_INFO "%s: rsk_listener =3D%px\n", __func__, sk);
->
->         /* We need not acquire fastopenq->lock
->          * because the child socket is locked in inet_csk_listen_stop().
-> diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.=
-c
-> index 67efe9501581..1a3108ec7503 100644
-> --- a/net/ipv4/inet_timewait_sock.c
-> +++ b/net/ipv4/inet_timewait_sock.c
-> @@ -190,6 +190,7 @@ struct inet_timewait_sock *inet_twsk_alloc(const stru=
-ct sock *sk,
->                 const struct inet_sock *inet =3D inet_sk(sk);
->
->                 tw->tw_dr           =3D dr;
-> +               printk(KERN_INFO "%s: sk =3D %px tw_dr =3D %px\n", __func=
-__, sk, dr);
->                 /* Give us an identity. */
->                 tw->tw_daddr        =3D inet->inet_daddr;
->                 tw->tw_rcv_saddr    =3D inet->inet_rcv_saddr;
-> diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-> index eee2f80949c6..227b86427e06 100644
-> --- a/net/mac80211/tx.c
-> +++ b/net/mac80211/tx.c
-> @@ -4586,6 +4586,8 @@ static noinline void ieee80211_8023_xmit_clang_debu=
-g_helper(struct sk_buff *skb,
->                                                             struct ieee80=
-211_local *local,
->                                                             struct ieee80=
-211_tx_info *info)
->  {
-> +       if (skb->sk)
-> +               printk(KERN_INFO "%s: skb->sk =3D %px skb->sk->sk_flags =
-=3D 0x%lx\n", __func__, skb->sk, skb->sk->sk_flags);
->         if (unlikely(skb->sk && ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_=
-STATUS) ||
->                                 sock_flag(skb->sk, SOCK_WIFI_STATUS)))) {
->                 if ((skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ^ soc=
-k_flag(skb->sk, SOCK_WIFI_STATUS)) {
->
->
-> This monitor the value of skb->sk->sk_flags not only in the error case bu=
-t in all cases, and also monitors
-> the places where the other members of the sk_flags union are set. The err=
-or occurs when at the start
-> of ieee80211_8023_xmit_clang_debug_helper() sk_flags is not actually the =
-skc_flags member of the union
-> but insted is skc_tw_dr which is only interpreted is flags.
->  So why does it work with gcc but fail with clang? sock_flag(skb->sk, SOC=
-K_WIFI_STATUS) test bit 19 of
-> skb->sk->sk_flags
-
-Could you say more about this? I don't follow it. Why does the gcc
-test just miss the crash issue? Is there anything (like call trace)
-different between them?
-
-My worry is that all the callers calling sock_flag might have such
-potential risk...
-
-Thanks,
-Jason
-
->
-> Here are the important snippets of debug output:
->
-> clang:
-> [  T575] ieee80211_8023_xmit_clang_debug_helper: skb->sk =3D ffff8f1bebba=
-4300 skb->sk->sk_flags =3D 0xffffffffa16fe640
->
-> Here test_bit(0xffffffffa16fe640, SOCK_WIFI_STATUS) is 1.
->
-> gcc:
-> [  T600] ieee80211_8023_xmit_clang_debug_helper: skb->sk =3D ffff8d3506be=
-c700 skb->sk->sk_flags =3D 0xffffffff93d40100
-> Here test_bit(0xffffffff93d40100, SOCK_WIFI_STATUS) is 0.
->
-> So that this works with gcc just seems like luck. I've not yet test why i=
-t works with clang when PREEMPT_RT is not
-> enabled but my guess is that in that case we have a tw_dr pointer which f=
-ails the test_bit().
->
-> Bert Karwatzki
->
->
->
->
->
->
->
