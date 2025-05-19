@@ -1,227 +1,159 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351D3227E86
-	for <llvm@lists.linux.dev>; Mon, 19 May 2025 23:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5330B2206B3
+	for <llvm@lists.linux.dev>; Mon, 19 May 2025 23:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747697327; cv=none; b=dRF5UZ+hPKVtCAfXRHkP8CwmT1oMvoeXJlIRq69b40MaKytJEd4o5EobCYI0Tu85jfc7HK7K4McMG+h5Xyolvwa0ym3l69wEqFm4uF8zizNZXPAgqEjBTDTRdI8izEiTGUMhy2fGWJ4OELrDBeY1UQtUsWFatYyY7sCzX/9zXGY=
+	t=1747698139; cv=none; b=FiTO7fvaWMrGFroEZkZ1wiyMWqXI20y1JEzBDgBGTJLDxNpTXGGjft8o0IBpGI5no1k1XQ9gqfewbiO8PHrRvSoLfltZzOBMyCGAKki6026NDWQqyS496Y0IZFpIBAnVin4BK38c0DgPW2B/Qwd5744/iMwE+EgtfxMB5zrHQpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747697327; c=relaxed/simple;
-	bh=O04m3lkWw9OEhzrv+D5kOETrkaKagJf3ljfVlUQ/u7A=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=S6Cy5VmOr9zX3bUK1mdj3fHfk0tGMIL6W/UcCfp8ykGzqtz5HTJBoa6DOSA59rI5gllzEn5MMBKInhEzMhKT7uoEMsljgODKS5kzDt5aFPcKJ1o1lhbohEwB/Btv/+3WeXQeCV12qa7OfOs+3xvTf6jAcvgRr06qXjnwd+RDu+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w9wOR6Ra; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1747698139; c=relaxed/simple;
+	bh=ZKYV4DZqCzOu7XtrDoRxpxOQ2X8r++kTwWByKtXDhrI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XIJujlfHopqEFX0DE5UreU4hoNMFwCiPBcCB6J5cfjD8SLKyUGKhcWbVwe3fssTDFj5cIistV9IEGQ6ZwDqpz3N2b6JCP4MG7TXHVnmCb2EMAQlQmr19uQhIgCxgth0gZgCnD0npFN4jxAo4nBNt7a7ouzs5S1j05U6RrmJscRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcQWP80d; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w9wOR6Ra"
-Message-ID: <7bb37bea-917c-4082-9eaa-063c4d97833b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1747697320;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YN4/HEa9sDxP2Z7RL5+mxoGiZVvfCkU7xA6VooLndAc=;
-	b=w9wOR6RaiLyWj5YbX8yxLIvDgvwTh7Jq0WreayRD2rt1JAzgyn53ikzJwG70M1wq8Q5U4a
-	P/2WI6G41QCFTI0nPDQeR0I0YDRMCc85FCJIGg11Njaz8Hcg7ygbTCSJEIZuezMWiSe2p8
-	+IenDzDtW6ALs7mEOpXIGiRzzE0xdX0=
-Date: Mon, 19 May 2025 19:28:34 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcQWP80d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E5BC4CEF5
+	for <llvm@lists.linux.dev>; Mon, 19 May 2025 23:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747698139;
+	bh=ZKYV4DZqCzOu7XtrDoRxpxOQ2X8r++kTwWByKtXDhrI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TcQWP80dqZf6wsvV46hfhbTO/IwcHkluZg9gwlAJFqA4nPRc6j1YFLmQJtaAY+re1
+	 r6KwA0YpngRxsaYwDegU8IRBmfb2DX/xHbQYWRDtiZtUMl3K0+wv3kCs/BNHL8XKVo
+	 ygRM0Dj8edMrC3lEXrMqVpKFHE8jPUzI9twSqdjyHF1ekm8EtSeC/ylD8vXIwTpwnm
+	 AaqU/swIMCkJHDGVuJ7yxk/8AYDS6T7xHiBImEzyOo11qLtzeZOlZAjh8G94L8btBT
+	 OaXfds5P5StEhfx+AaUM5UvfuSIhfq6IckwMm2CLKYDJSF2XVgUha6NZ5uurJ7VCWV
+	 ++9nrEevi9YKw==
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-47662449055so27404091cf.1
+        for <llvm@lists.linux.dev>; Mon, 19 May 2025 16:42:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUQBoIF7eYu/nCI9Sv2+RPwo3fcXdsWMtDoBJsecqaDDexJ1SoxLV90MYUvF/Lc4g/3L3zE@lists.linux.dev
+X-Gm-Message-State: AOJu0YwQRprEoJvPjnoUI26kBHWJyZC0FW5UqdijViOjD4CawYz1SjiQ
+	9FeOFnQF/GxtvE0jSPjIamY/nwam/aak3LNJSka6xWJpAGUZsOuwAc5kGvwTMyy/Cm4nKGv787l
+	id4+BZXTWPfwxPsbCBx4t+INDZ7eC5YWtvEPOT5fs
+X-Google-Smtp-Source: AGHT+IF3yXeBG7TOl1OWLmx6UHDF/3YbnaTG/HjinvwYXZmduyt29cvicBww1a9vAZvlcO0xk5OSvjlLpQi0hnBcD0E=
+X-Received: by 2002:ac8:5654:0:b0:494:af82:7804 with SMTP id
+ d75a77b69052e-494af8278f4mr201668631cf.29.1747698137942; Mon, 19 May 2025
+ 16:42:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [net-next PATCH v4 03/11] net: phylink: introduce internal
- phylink PCS handling
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-To: Daniel Golle <daniel@makrotopia.org>
-Cc: Christian Marangi <ansuelsmth@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Heiner Kallweit <hkallweit1@gmail.com>, Russell King
- <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-References: <20250511201250.3789083-1-ansuelsmth@gmail.com>
- <20250511201250.3789083-4-ansuelsmth@gmail.com>
- <5d004048-ef8f-42ad-8f17-d1e4d495f57f@linux.dev>
- <aCOXfw-krDZo9phk@makrotopia.org>
- <7b50d202-e7f6-41cb-b868-6e6b33d4a2b9@linux.dev>
- <aCQHZnAstBXbYzgy@makrotopia.org>
- <cdfbbdca-001b-4ed5-92ff-40fd3a8e3341@linux.dev>
-Content-Language: en-US
-In-Reply-To: <cdfbbdca-001b-4ed5-92ff-40fd3a8e3341@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
+ <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
+ <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
+ <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
+ <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
+ <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
+ <CAADnVQ+wE5cGhy6tgmWgUwkNutueEsrhh6UR8N2fzrZjt-vb4g@mail.gmail.com>
+ <196e1f03128.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
+ <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com>
+ <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com> <CAC1LvL2F_WbObrdcumVZCKc7yLeq4e9PQhYHrLiyVzpzf=V_Xg@mail.gmail.com>
+In-Reply-To: <CAC1LvL2F_WbObrdcumVZCKc7yLeq4e9PQhYHrLiyVzpzf=V_Xg@mail.gmail.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Tue, 20 May 2025 01:42:06 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ43yJRMS+e-7LefYts_v2ZH7_FCbw_LfG3mYfu6q6VD0g@mail.gmail.com>
+X-Gm-Features: AX0GCFuKLMZDwuoCJgohVN01wRXVU9M-dpj2qXdRHi2W4iwOU0W5kASpMuAgI_I
+Message-ID: <CACYkzJ43yJRMS+e-7LefYts_v2ZH7_FCbw_LfG3mYfu6q6VD0g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: Zvi Effron <zeffron@riotgames.com>
+Cc: Paul Moore <paul@paul-moore.com>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
+	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
+	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
+	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
+	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 5/19/25 14:10, Sean Anderson wrote:
-> On 5/13/25 23:00, Daniel Golle wrote:
->> On Tue, May 13, 2025 at 03:23:32PM -0400, Sean Anderson wrote:
->>> On 5/13/25 15:03, Daniel Golle wrote:
->>> > just instead of having many
->>> > more or less identical implementations of .mac_select_pcs, this
->>> > functionality is moved into phylink. As a nice side-effect that also
->>> > makes managing the life-cycle of the PCS more easy, so we won't need all
->>> > the wrappers for all the PCS OPs.
->>> 
->>> I think the wrapper approach is very obviously correct. This way has me
->>> worried about exciting new concurrency bugs.
->> 
->> You may not be surprised to read that this was also our starting point 2
->> months ago, I had implemented support for standalone PCS very similar to
->> the approach you have published now, using refcnt'ed instances and
->> locked wrapper functions for all OPs. My approach, like yours, was to
->> create a new subsystem for standalone PCS drivers which is orthogonal to
->> phylink and only requires very few very small changes to phylink itself.
->> It was a draft and not as complete and well-documented like your series
->> now, of course.
->> 
->> I've then shared that implementation with Christian and some other
->> experienced OpenWrt developers and we concluded that having phylink handle
->> the PCS lifecycle and PCS selection would be the better and more elegant
->> approach for multiple reasons:
->>  - The lifetime management of the wrapper instances becomes tricky:
->>    We would either have to live with them being allocated by the
->>    MAC-driver (imagine test-case doing unbind and then bind in a loop
->>    for a while -- we would end up oom). Or we need some kind of garbage
->>    collecting mechanism which frees the wrapper once refcnt is zero --
->>    and as .select_pcs would 'get' the PCS (ie. bump refcnt) we'd need a
->>    'put' equivalent (eg. a .pcs_destroy() OP) in phylink.
->> 
->>    Russell repeatedly pointed me to the possibility of a PCS
->>    "disappearing" (and potentially "reappearing" some time later), and
->>    in this case it is unclear who would then ever call pcs_put(), or
->>    even notify the Ethernet driver or phylink about the PCS now being
->>    available (again). Using device_link_add(), like it is done in
->>    pcs-rzn1-miic.c, prevents the worst (ie. use-after-free), but also
->>    impacts all other netdevs exposed by the same Ethernet driver
->>    instance, and has a few other rather ugly implications.
-> 
-> SRCU neatly solves the lifetime management issues. The wrapper lives as
-> long as anyone (provider or user) holds a reference. A PCS can disappear
-> at any point and everything still works (although the link goes down).
-> Device links are only an optimization; they cannot be relied on for
-> correctness.
-> 
->>  - phylink currently expects .mac_select_pcs to never fail. But we may
->>    need a mechanism similar to probe deferral in case the PCS is not
->>    yet available.
-> 
-> Which is why you grab the PCS in probe. If you want to be more dynamic,
-> you can do it in netdev open like is done for PHYs.
-> 
->>    Your series partially solves this in patch 11/11 "of: property: Add
->>    device link support for PCS", but also that still won't make the link
->>    come back in case of a PCS showing up late to the party, eg. due to
->>    constraints such as phy drivers (drivers/phy, not drivers/net/phy)
->>    waiting for nvmem providers, or PCS instances "going away" and
->>    "coming back" later.
-> 
-> This all works correctly due to device links. The only case that doesn't
-> work automatically is something like
-> 
-> MAC built-in
->   MDIO built-in
->     PCS module
-> 
-> where the PCS module gets loaded late. In that case you have to manually
-> re-probe the MAC. I think the best way to address this would be to grab
-> the PCS in netdev open so that the MAC can probe without the PCS.
-> 
->>  - removal of a PCS instance (eg. via sysfs unbind) would still
->>    require changes to phylink. there is no phylink function to
->>    impair the link in this case, and using dev_close() is a bit ugly,
->>    and also won't bring the link back up once the PCS (re-)appears.
-> 
-> This works just fine. There are two cases:
-> 
-> - If the PCS has an IRQ, we notify phylink and then it polls the PCS
->   (see below).
-> - If the PCS is polled, phylink will call pcs_get_state and see that the
->   link is down.
-> 
-> Either way, the link goes down. But bringing the link back up is pretty
-> unusual anyway. Unlike PHYs (which theoretically can be on removable
-> busses) PCSs are generally permanently attached to their MACs. The only
-> removable scenario I can think of is if the PCS is on an FPGA and the
-> MAC is not.
-> 
-> So if the PCS goes away, the MAC is likely to follow shortly after
-> (since the whole thing is on a removable bus). Or someone has manually
-> removed the PCS, in which case I think it's reasonable to have them
-> manually remove the MAC as well. If you really want to support this,
-> then just grab the PCS in netdev open.
+> > > > > > No. New hook is not needed.
 
-So I had a closer look at this and unfortunately it isn't as easy as
-just grabbing the PCS in ndo_open. The problem is that we need to
-know the supported interfaces before phylink_create. The interfaces are
-validated and are visible to userspace as soon as the netdev is
-registered. And we can't just defer phylink_create to ndo_open because a
-lot of the ethtool ops are implemented with phylink. So this would
-probably need something like phylink_update_supported_interfaces().
+[...]
 
-But TBH I don't think this use case is very relevant. As I said above,
-it only affects FPGA reconfiguration and people manually unbinding
-drivers. Either way I think they are savvy enough to reprobe the netdev.
+> > > > >
+> > > > > It would be good for you to explain how the existing LSM hook is sufficient
+> > > > > to authorize the loading of a BPF program using the signature validation
+> > > > > state determined in the BPF verifier.
+> > > >
+> > > > I already explained:
+> > > > .. a job of trivial LSM:
+> > > > if (prog_attr doesn't have signature &&
+> > > >    (task == .. || task is under certain cgroup || whatever))
+> > > >   disallow.
+> > >
+> > > I read that earlier reply as an example that covers a sample use case,
+> > > I didn't realize you were asserting that was the only approach you
+> > > were considering.  Perhaps that was the source of confusion earlier,
+> > > we may disagree, but I don't intentionally "twist" words; not only is
+> > > that rude, it's just stupid in public, archived discussions.
+> > >
+> > > As I mentioned previously, we really need to see an explicit yes/no
+> > > flag from the BPF verifier to indicate that the signature on the BPF
+> > > program has been validated.  It really should be as simple as adding a
+> > > bool to bpf_prog_aux which the BPF verifier sets to true upon
+> > > successful signature validation, and then an LSM can use this flag as
+> > > input to an access control decision in a hook placed after the
+> > > verifier.  Are you objecting to the addition of a flag in the
+> > > bpf_prog_aux struct (or some other struct tightly coupled to the BPF
+> > > program), the LSM hook after the verifier, or both?  It would also be
+> > > helpful if you can elaborate on the technical reasons behind these
+> > > objections.
+> >
+> > Neither the aux field, nor the hook are required because:
+> >
+> > * If the signature is passed, it will be enforced, there are no
+> > "runtime aspects" that need to be configurable here.
+> > * What the LSM can specify a policy for is when a signature is not
+> > passed, for this, it does not need an aux field or a signature or the
+> > new hook, existing hooks are sufficient.
+> >
+>
+> What about wanting to create a policy that requires signatures under certain
+> situations and allowing the lack of a signature under others? How is that
+> implemented with the existing hooks?
+> As I understand it, all the existing hooks know (would know) is that _if_ there
+> is a signature _then_ it will be enforced. There is no way to know _whether_
+> there is a signature.
+>
 
---Sean
+The signature is passed in bpf_attr and if there is a signature the
+LSM's job is done.
 
->>  - phylink anyway is the only user of PCS drivers, and will very likely
->>    always be. So why create another subsystem?
-> 
-> To avoid adding overhead for the majority of PCSs where the PCS is built
-> into the MAC and literally can't be removed. We only pay the price for
-> dynamicism on the drivers where it matters.
-> 
->> All that being said I also see potential problems with Christians
->> current implementation as it doesn't prevent the Ethernet driver to
->> still store a pointer to struct phylink_pcs (returned eg. from
->> fwnode_pcs_get()).
->> 
->> Hence I would like to see an even more tight integration with phylink,
->> in the sense that pointers to 'struct phylink_pcs' should never be
->> exposed to the MAC driver, as only in that way we can be sure that
->> phylink, and only phylink, is responsible for reacting to a PCS "going
->> away".
-> 
-> OK, but then how does the MAC select the PCS? If there are multiple PCSs
-> then ultimately someone has to configure a mux somewhere.
-> 
->> Ie. instead of fwnode_phylink_pcs_parse() handing pointers to struct
->> phylink_pcs to the Ethernet driver, so it can use it to populate struct
->> phylink_config available_pcs member, this should be the responsibility
->> of phylink alltogether, directly populating the list of available PCS in
->> phylink's private structure.
->> 
->> Similarly, there should not be fwnode_pcs_get() but rather phylink
->> providing a function fwnode_phylink_pcs_register(phylink, fwnode) which
->> directly adds the PCS referenced to the internal list of available PCS.
-> 
-> This is difficult to work with for existing drivers. Many of them have
-> non-standard ways of looking up their PCS that they need to support for
-> backwards-compatibility. And some of them create the PCS themselves
-> (such as if they are PCI devices with internal MDIO busses). It's much
-> easier for the MAC to create or look up the PCS itself and then hand it
-> off to phylink.
-> 
->> I hope we can pick the best of all the suggested implementations, and
->> together come up with something even better.
-> 
-> Sure. And I think we were starting from a clean slate then this would be
-> the obvious way to do things. But we must support existing drivers and
-> provide an upgrade path for them. This is why I favor an incremental
-> approach.
-> 
-> --Sean
+   https://elixir.bootlin.com/linux/v6.14.7/source/kernel/bpf/syscall.c#L5771
+
+ It will be enforced.
+
+
+- KP
+
+> An example policy I can think of is that most users (with CAP_BPF) must submit
+> signed programs but some users are exempted. Would that policy be able to be
+> made with the current hooks?
+>
+> > - KP
+> >
+> > >
+> > > --
+> > > paul-moore.com
+> >
