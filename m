@@ -1,190 +1,239 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D66721D3F9
-	for <llvm@lists.linux.dev>; Mon, 19 May 2025 22:46:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B522E21D58C
+	for <llvm@lists.linux.dev>; Mon, 19 May 2025 22:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747694816; cv=none; b=sWhTPe8PbGeiA9cckYAmvkTwhEphKrRlt+zMgLl2VVhKQ3wa2HX1qQNofetqH2NsCki4zEb/4cyGVuieyWUlmDBC50QsiUJZ52lmhcMBFYag8E56PoIgTPWJqZLsqVga1nwE5AvdVMiUh8K8YDyiPbo5r5ReDKhj5VIJzlFYATQ=
+	t=1747695547; cv=none; b=Qtq3GucIGkKyVdM3AYeK29nkj3jE3SMsRF833OrGJjz4bMiV/0Rd4gKr3yhnxIUuVzt5+1Cq4TW+erFEQ/NxSrKS31rA1drW93hAwuLjGnP9tXsIQP4i1AxeF8+/ubnr3hYvoTTQ0KCAFMJOr+RAxhviORl2kNY5ftzJ0S8utgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747694816; c=relaxed/simple;
-	bh=y05FfKgWFu3KgBj64UzB40r9UGdYX68inbr1vvi1sS4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=Bl7OLEqzpXeKPV+HNOVgvHbQK3g7gW9kfugLia1fT94W6ROLcJUOKwQwx/kzrRnJtCAMvyT0vx1ECzrWQhbpdZiTqBRFJol57pUZdtSSAndZjvO/tGY0y1xfvS/+uXP1aysRal3cx3KOJ9zqqgA1XzOqoYzMJzu2qu8gQ2+72oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Udv2/5E6; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1747695547; c=relaxed/simple;
+	bh=kjwn2ds7cCMY6u8Wc4J5VzC7zaszlbkpn9nqAdYGxDc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XLi6Ui4Dubtz3FfIicQJicTdB2wdrNWWLamDYrDV1oAotUGuh5QI3bTTzQr0vLUnseJFniwfwitzxhIAvr4NcFGlfp068HGdVqV1DTQjDeQiMjqlG/mRvSH0O1h47BQxoIxBtZ35vkzN+cDET1yw3a7E5MLDjSjFTyUEMIOfFr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DpGiNMnh; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Udv2/5E6"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-6c8f99fef10so5314425a12.3
-        for <llvm@lists.linux.dev>; Mon, 19 May 2025 15:46:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DpGiNMnh"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-70ccb7effb0so13275277b3.0
+        for <llvm@lists.linux.dev>; Mon, 19 May 2025 15:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747694814; x=1748299614; darn=lists.linux.dev;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=chrPkT8MGy8AVje5FFeicTXRYmDpybHtRMitOIBF0/0=;
-        b=Udv2/5E6baxPwY13Vq6F2Jmvud2qIX6Op4NozpXP3uLeF9OEqKRNT26udr9M0MkDRO
-         M/V+WXnR9pzo4+Ef+gIcFpNrKq6E6Einpu1YPv1jUhwji5+bf1NyslZRTZm8bHNVWgRK
-         vU5oqRT1L9mzZaSvKY8+1PXHr3k0CrISrIUXc4BVFRzLMNs19/YdYfDFimMw3NeMcfay
-         oE2T4bA6JlnmuvlbLaZst1ZN0G1KqTm1oPlFVjqUyDwLLrBfxdkP6wTeUDWyH7WYC8PG
-         DqzK+YptXxzlMrcafKeoqIRsRYD/H2fxqH4QGsqCkqamNG5qsqKeqq32H+jVNVgaejyW
-         7eVQ==
+        d=paul-moore.com; s=google; t=1747695544; x=1748300344; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p/RrrGUvS6xBKIaPYnBpsLPZNCZLvh9OPRpykB0Ulvk=;
+        b=DpGiNMnhZBaeRiqjDS6TpkLsN/+GENV/44rox5zV0C0T+GdqsMOpmFAozUtZpvmK4f
+         TBLd+v5eZxBo0ngsOw1wisEhZ3JtpUZLwMMpMhEg+IHroyvhnXSlazB0sPwTWSJHuW2+
+         7e2hev5STC51pBzwW+lSJKmzlR7Qzbbp1Kl6p20C3IPO4hn1mH9hJIA65gIrDHR/uf++
+         7cQJ7albkHb42C5NPcCk1B7/wk6fPivp04pWHbQumSSxm6vBFex+GjoFPp4xjBqbU8sd
+         Hs4pO4RR+G+0+sG3fzd8hOqXyR6TPaSl7RprtA2J95Qv8LDG0aQa4rQI5JZ8RSiY8oSa
+         lBqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747694814; x=1748299614;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=chrPkT8MGy8AVje5FFeicTXRYmDpybHtRMitOIBF0/0=;
-        b=ny3D/073J64WsnJSEqKLsm4CxbYXjDpmiOV3W+ODI4/VURF3rzsn+BvL/IzD3GxNUp
-         K1E4QYRediZMHrsOWfTcC6/kRDnlGYZRj8QyB5gpVzN1FyCRlagWRp16Fz45zAxgDgQw
-         Z4KN3Z6OMujrGR7VHvDsZArPITSPMZ5zIdhJthSg2UdX56RgQSzwvJtPAwRWDX2ozBE1
-         DKcq3/GMOT5z6PG7CPpKxzJFTy8HyxujbMDGYVhgWH9+PZDpAgK+bPcm7BxBu+y20Gpv
-         cN7FVwYAJhlQfueo6Wd0N+oOOvmOuyj6ULnkUL9B2zDMbTXeKBrSBzjTbSynFpOSnctd
-         m12A==
-X-Forwarded-Encrypted: i=1; AJvYcCVrbusHi5s5+AUCYwBa0ryNbOyst3fIqdHQqbjSL0jan3Z9fBThlJqNoQIN5T1YfcIUcZMu@lists.linux.dev
-X-Gm-Message-State: AOJu0YxXO9JGthzsV5mpaoFFnfyMsY+05PKSrUwVln3jXp+zJRV1GdCc
-	Is2pSDetSXaCeHDeCFlqaPaXBu2JBDNhg/PwanCW70FHzT1ZiAVvMMuM40bgcqGGSn7v4iFG9uQ
-	S3Nv99jqIXQ==
-X-Google-Smtp-Source: AGHT+IGyuriEzu2LamxMhi26AQXGJxe9A9HPRgJn5zGx+Wzwu1rWLh0kU0BiA1CKQ9xLPP3PGdahUThWL/Cc
-X-Received: from pfbiv22.prod.google.com ([2002:a05:6a00:66d6:b0:740:b061:1007])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:9982:b0:215:d611:5d9b
- with SMTP id adf61e73a8af0-2170cb260bfmr19617474637.12.1747694813707; Mon, 19
- May 2025 15:46:53 -0700 (PDT)
-Date: Mon, 19 May 2025 15:46:45 -0700
-In-Reply-To: <20250519224645.1810891-1-irogers@google.com>
+        d=1e100.net; s=20230601; t=1747695544; x=1748300344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p/RrrGUvS6xBKIaPYnBpsLPZNCZLvh9OPRpykB0Ulvk=;
+        b=BEft/FzV/nP4WAblsyy8qGVLlIlJ/n1iJEB0gTwA1wzI6d1keMH9YW+dXZApKsFreS
+         vepKrd3Ik0PYmZpw790SPfPeN8FOy8wzKibrS/tjBK20jj5cdAR/vWs19GLRFdCXbt1q
+         0vXEEmAt0T3vxGoO5Kb6J9FSioV7HYWgZBf0SkPfQbdG4XHP8aytblvg31+fm2M/dAVb
+         g1iGgC5VhaYGk155XAS4u9jnADcvfu7DjlvDAYvuapR9JzT3mNRW1FeRdnERtZCAIerL
+         hX9ulgLfWXabXQjhaiNw7S49f1A6Inrw4Kpe1BM0LZ1jtGvFVz8Qv8N/AZqDxKPkKkmU
+         P2pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2zwIFVyU4m3DPNC6wVtsBPHh3bf1VHsP+PPp09QsKfPxb5fRp1TrwScUtq7bPVLDjX2xN@lists.linux.dev
+X-Gm-Message-State: AOJu0YwhptEfMZAJiWYberZ1ol7z24PjeENOCCFKk6nFXsOyanAam/oE
+	vni0nuBbG2BSqCgVp+SBO9YVOhgpcDYgTKpZa3EjblYOi3ZgAdokFa6PEBdhd4nvQICrhM4XpOe
+	ZDqrkh6UIFjMW9rv9M1SZXT8+4t/Sm2BZAlJxWeBc
+X-Gm-Gg: ASbGncsTuH766i6qSZfcQf6vZe2n7qrsfWMzQP1eK6yI7N/k9eCJvNleMXG1nOAGH20
+	BpM1+T3zMbV3Nmo2Bay6fw/ZPsJJ/U6FfDIFhrJRqMe4yYZ6DuwhXkbllUXqNDcRyjjSvjuZSBu
+	jALFNGStzDjOiwSqhZrcsR1empjeBDz4s+
+X-Google-Smtp-Source: AGHT+IFgdXMx0++rCnS34CKw8hZgyEs80zXpEEvuAIv/c65tdIdqmkcl1gyVl8f56p6dX5jzkRw5EVPCF2N2N1x3l0g=
+X-Received: by 2002:a05:690c:4910:b0:70c:cbef:df27 with SMTP id
+ 00721157ae682-70ccbefe1f2mr105461797b3.14.1747695544492; Mon, 19 May 2025
+ 15:59:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250519224645.1810891-1-irogers@google.com>
-X-Mailer: git-send-email 2.49.0.1101.gccaa498523-goog
-Message-ID: <20250519224645.1810891-3-irogers@google.com>
-Subject: [PATCH v1 3/3] perf thread: Ensure comm_lock held for comm_list
-From: Ian Rogers <irogers@google.com>
-To: langfei@huawei.com, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@linaro.org>, 
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Stephen Brennan <stephen.s.brennan@oracle.com>, Howard Chu <howardchu95@gmail.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
+MIME-Version: 1.0
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
+ <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
+ <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
+ <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
+ <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
+ <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
+ <CAADnVQ+wE5cGhy6tgmWgUwkNutueEsrhh6UR8N2fzrZjt-vb4g@mail.gmail.com>
+ <196e1f03128.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
+ <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com> <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com>
+In-Reply-To: <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 19 May 2025 18:58:53 -0400
+X-Gm-Features: AX0GCFuNK2GlgjCzp9NuXPlW8VAedGQJmwklDdgcpEoZxd4pfb2_T3t5Jc58lno
+Message-ID: <CAHC9VhQ7Rr1jJm=HY2ixUWpsRuwCxjOq5OTMfn5k5hRzxTCz-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: KP Singh <kpsingh@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
+	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
+	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
+	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
+	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
+	Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add thread safety annotations for comm_list and add locking for two
-instances where the list is accessed without the lock held (in
-contradiction to ____thread__set_comm).
+On Mon, May 19, 2025 at 6:20=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote=
+:
+> On Sun, May 18, 2025 at 11:34=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
+ wrote:
+> > On Sun, May 18, 2025 at 11:52=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > > On Sat, May 17, 2025 at 10:49=E2=80=AFPM Paul Moore <paul@paul-moore.=
+com> wrote:
+> > > > On May 17, 2025 12:13:50 PM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > On Sat, May 17, 2025 at 8:03=E2=80=AFAM Paul Moore <paul@paul-moo=
+re.com> wrote:
+> > > > >> On Fri, May 16, 2025 at 7:49=E2=80=AFPM Alexei Starovoitov
+> > > > >> <alexei.starovoitov@gmail.com> wrote:
+> > > > >>> On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-=
+moore.com> wrote:
+> > > > >>>>
+> > > > >>>> I think we need some clarification on a few of these details, =
+it would
+> > > > >>>> be good if you could answer the questions below about the
+> > > > >>>> authorization aspects of your design?
+> > > > >>>>
+> > > > >>>> * Is the signature validation code in the BPF verifier *always=
+* going
+> > > > >>>> to be enforced when a signature is passed in from userspace?  =
+In other
+> > > > >>>> words, in your design is there going to be either a kernel bui=
+ld time
+> > > > >>>> or runtime configuration knob that could selectively enable (o=
+r
+> > > > >>>> disable) signature verification in the BPF verifier?
+> > > > >>>
+> > > > >>> If there is a signature in union bpf_attr and it's incorrect
+> > > > >>> the prog_load command will be rejected.
+> > > > >>> No point in adding a knob to control that.
+> > > > >>
+> > > > >> I agree that when a signature is provided and that signature che=
+ck
+> > > > >> fails, the BPF load should be rejected.  I'm simply trying to
+> > > > >> understand how you envision your design handling all of the case=
+s, not
+> > > > >> just this one, as well as what build and runtime options you exp=
+ect
+> > > > >> for controlling various aspects of this behavior.
+> > > > >>
+> > > > >>>> * In the case where the signature validation code in the BPF v=
+erifier
+> > > > >>>> is active, what happens when a signature is *not* passed in fr=
+om
+> > > > >>>> userspace?  Will the BPF verifier allow the program load to ta=
+ke
+> > > > >>>> place?  Will the load operation be blocked?  Will the load ope=
+ration
+> > > > >>>> be subject to a more granular policy, and if so, how do you pl=
+an to
+> > > > >>>> incorporate that policy decision into the BPF program load pat=
+h?
+> > > > >>>
+> > > > >>> If there is no signature the existing loading semantics will re=
+main intact.
+> > > > >>> We can discuss whether to add a sysctl or cgroup knob to disall=
+ow
+> > > > >>> loading when signature is not present ...
+> > > > >>
+> > > > >> As mentioned earlier this week, if the BPF verifier is performin=
+g the
+> > > > >> signature verification as KP described, we will need a LSM hook =
+after
+> > > > >> the verifier to serve as an access control point.  Of course tha=
+t
+> > > > >> doesn't preclude the addition of some type of sysctl/cgroup/what=
+ever
+> > > > >> based access control, but the LSM hook would be needed regardles=
+s.
+> > > > >
+> > > > > No. New hook is not needed.
+> > > >
+> > > > It would be good for you to explain how the existing LSM hook is su=
+fficient
+> > > > to authorize the loading of a BPF program using the signature valid=
+ation
+> > > > state determined in the BPF verifier.
+> > >
+> > > I already explained:
+> > > .. a job of trivial LSM:
+> > > if (prog_attr doesn't have signature &&
+> > >    (task =3D=3D .. || task is under certain cgroup || whatever))
+> > >   disallow.
+> >
+> > I read that earlier reply as an example that covers a sample use case,
+> > I didn't realize you were asserting that was the only approach you
+> > were considering.  Perhaps that was the source of confusion earlier,
+> > we may disagree, but I don't intentionally "twist" words; not only is
+> > that rude, it's just stupid in public, archived discussions.
+> >
+> > As I mentioned previously, we really need to see an explicit yes/no
+> > flag from the BPF verifier to indicate that the signature on the BPF
+> > program has been validated.  It really should be as simple as adding a
+> > bool to bpf_prog_aux which the BPF verifier sets to true upon
+> > successful signature validation, and then an LSM can use this flag as
+> > input to an access control decision in a hook placed after the
+> > verifier.  Are you objecting to the addition of a flag in the
+> > bpf_prog_aux struct (or some other struct tightly coupled to the BPF
+> > program), the LSM hook after the verifier, or both?  It would also be
+> > helpful if you can elaborate on the technical reasons behind these
+> > objections.
+>
+> Neither the aux field, nor the hook are required because:
+>
+> * If the signature is passed, it will be enforced, there are no
+> "runtime aspects" that need to be configurable here.
+> * What the LSM can specify a policy for is when a signature is not
+> passed, for this, it does not need an aux field or a signature or the
+> new hook, existing hooks are sufficient.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/comm.c   |  2 ++
- tools/perf/util/thread.c | 17 +++++++++++++----
- tools/perf/util/thread.h |  9 +++++----
- 3 files changed, 20 insertions(+), 8 deletions(-)
+When the kernel performs a security relevant operation, such as
+verifying the signature on a BPF program, where the result of the
+operation serves as input to a policy decision, system measurement,
+audit event, etc. the LSM hook needs to be located after the security
+relevant operation takes place so that the hook is able to properly
+take into account the state of the event/system and record the actual
+result as opposed to an implied result (this is critical for auditing,
+measurement, attestation, etc.).
 
-diff --git a/tools/perf/util/comm.c b/tools/perf/util/comm.c
-index 8aa456d7c2cd..9880247a2c33 100644
---- a/tools/perf/util/comm.c
-+++ b/tools/perf/util/comm.c
-@@ -24,6 +24,7 @@ static struct comm_strs {
- static void comm_strs__remove_if_last(struct comm_str *cs);
- 
- static void comm_strs__init(void)
-+	NO_THREAD_SAFETY_ANALYSIS /* Inherently single threaded due to pthread_once. */
- {
- 	init_rwsem(&_comm_strs.lock);
- 	_comm_strs.capacity = 16;
-@@ -119,6 +120,7 @@ static void comm_strs__remove_if_last(struct comm_str *cs)
- }
- 
- static struct comm_str *__comm_strs__find(struct comm_strs *comm_strs, const char *str)
-+	SHARED_LOCKS_REQUIRED(comm_strs->lock)
- {
- 	struct comm_str **result;
- 
-diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
-index 415c0e5d1e75..c202b98b36c2 100644
---- a/tools/perf/util/thread.c
-+++ b/tools/perf/util/thread.c
-@@ -41,6 +41,7 @@ int thread__init_maps(struct thread *thread, struct machine *machine)
- }
- 
- struct thread *thread__new(pid_t pid, pid_t tid)
-+	NO_THREAD_SAFETY_ANALYSIS /* Allocation/creation is inherently single threaded. */
- {
- 	RC_STRUCT(thread) *_thread = zalloc(sizeof(*_thread));
- 	struct thread *thread;
-@@ -202,22 +203,29 @@ int thread__set_namespaces(struct thread *thread, u64 timestamp,
- 
- struct comm *thread__comm(struct thread *thread)
- {
--	if (list_empty(thread__comm_list(thread)))
--		return NULL;
-+	struct comm *res = NULL;
- 
--	return list_first_entry(thread__comm_list(thread), struct comm, list);
-+	down_read(thread__comm_lock(thread));
-+	if (!list_empty(thread__comm_list(thread)))
-+		res = list_first_entry(thread__comm_list(thread), struct comm, list);
-+	up_read(thread__comm_lock(thread));
-+	return res;
- }
- 
- struct comm *thread__exec_comm(struct thread *thread)
- {
- 	struct comm *comm, *last = NULL, *second_last = NULL;
- 
-+	down_read(thread__comm_lock(thread));
- 	list_for_each_entry(comm, thread__comm_list(thread), list) {
--		if (comm->exec)
-+		if (comm->exec) {
-+			up_read(thread__comm_lock(thread));
- 			return comm;
-+		}
- 		second_last = last;
- 		last = comm;
- 	}
-+	up_read(thread__comm_lock(thread));
- 
- 	/*
- 	 * 'last' with no start time might be the parent's comm of a synthesized
-@@ -233,6 +241,7 @@ struct comm *thread__exec_comm(struct thread *thread)
- 
- static int ____thread__set_comm(struct thread *thread, const char *str,
- 				u64 timestamp, bool exec)
-+	EXCLUSIVE_LOCKS_REQUIRED(thread__comm_lock(thread))
- {
- 	struct comm *new, *curr = thread__comm(thread);
- 
-diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
-index cd574a896418..56e08c8ae005 100644
---- a/tools/perf/util/thread.h
-+++ b/tools/perf/util/thread.h
-@@ -236,14 +236,15 @@ static inline struct rw_semaphore *thread__namespaces_lock(struct thread *thread
- 	return &RC_CHK_ACCESS(thread)->namespaces_lock;
- }
- 
--static inline struct list_head *thread__comm_list(struct thread *thread)
-+static inline struct rw_semaphore *thread__comm_lock(struct thread *thread)
- {
--	return &RC_CHK_ACCESS(thread)->comm_list;
-+	return &RC_CHK_ACCESS(thread)->comm_lock;
- }
- 
--static inline struct rw_semaphore *thread__comm_lock(struct thread *thread)
-+static inline struct list_head *thread__comm_list(struct thread *thread)
-+	SHARED_LOCKS_REQUIRED(thread__comm_lock(thread))
- {
--	return &RC_CHK_ACCESS(thread)->comm_lock;
-+	return &RC_CHK_ACCESS(thread)->comm_list;
- }
- 
- static inline u64 thread__db_id(const struct thread *thread)
--- 
-2.49.0.1101.gccaa498523-goog
+You explained why you believe the field/hook is not required, but I'm
+asking for your *technical*objections*.  I understand that you believe
+these changes are not required, but as described above, I happen to
+disagree and therefore it would be helpful to understand the technical
+reasons why you can't accept the field/hook changes.  Is there a
+technical reason which would prevent such changes, or is it simply a
+rejection of the use case and requirements above?
 
+--=20
+paul-moore.com
