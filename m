@@ -1,197 +1,157 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198CB1BD4F7
-	for <llvm@lists.linux.dev>; Sun, 18 May 2025 21:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C951FF1C7;
+	Mon, 19 May 2025 07:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747604059; cv=none; b=n6HC6e1n5X2kwxgKtzentlLfu/pz2yItluVFdP50f73z/rUO6qOt3Wq/O8sUDkzWzLM++cExFhxTmAszFnOBkrnnB5stIWvdpMs8UBullOROPSfIGns7z3APOlqA585vKbjr5iFVrrpSuB4/bGj/hUvy1OUbBBAodMMN/5dX43U=
+	t=1747638781; cv=none; b=Mz7C+D6PbUo8q9mgCOkJWem3w2khQvCTfI91jQfbNqXZS0WKOrSUWnrWZ8/9NMuhtuzJ82TxXxarMOTL+YN9FdyUDh5TQd45HN1GnA2mE6ZLkP+yANeiwRCpCdAVWJM6MrkbFTZf7n5E1KSJ0bIwOvmJvOV5RnczgFqmgg8QBZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747604059; c=relaxed/simple;
-	bh=MVyWvTH9jezrYGixpYmB8VcITaczqnk77BRhuiSVPIc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NGj9zUubSYoGjK2hgjP+EQSgANw//HRZMx4oagc/YOXd9OrBSsllbPFpc7f1mZuBskvbdhi5SOvcRLiiTkNcKJmL0U+SvY+EHLvNufZ6gSOF6LA9m6tlYa5lT89jNzDGOjaBak4+v7GEDTAgBVQ01hGVelLA2eRaNpbeVw/I6Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Z7UBHJ6Z; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1747638781; c=relaxed/simple;
+	bh=7/SWLXW5Hy6DaiAx0ceb1uY2JzdxPxmqQ8x1Y1jN5VE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jl5+E6k3qCWGAg+5A/fcSnqfm2QTrlrRdAfDoUWBR5V6cwMzNUqvcYEI+eFsERiKT8cwy/noWwfG12m+/IGiutbDqHFIctrmdlTpdDNhCiKtke1ew6WUB1bJvmHYcoLe2fJTJ5QtdmuxcihKNRtPY8kF7b6/2ddDaD3Hboiv/aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hmxJHsqX; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Z7UBHJ6Z"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-70ccf9a4ab3so4529217b3.1
-        for <llvm@lists.linux.dev>; Sun, 18 May 2025 14:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1747604056; x=1748208856; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQP7kiEFeXieUYHTQOWlMajO9SS2h9UcfNmGDRaBXeQ=;
-        b=Z7UBHJ6ZpsZL/0lS3/d54rpXBmYHVi379nl+CNlguJKd7Qpn1wWtpI7m2hernFZlZ+
-         CDzIJ1IuASh5bszZmKWWs13sDbKbXUxHTvwOo96K6qDyWS1FIY3jEpkwzT5X2eDHrlSn
-         +gFJKx/730GAA35PFaCOp8p+NqHivx4sRL0Ac73n1Q1pkm7FrptplNaQcpoHtRsNy/74
-         6HUhj2NxzyPEWZ3zqYX7LvFc5l1nWCm55EIHbAdh7q5QofLh0GAXonwNyTcGkdrz2End
-         ZJETb9fa8H8nqgjezD8JUeeiLZS++kQiLxhDQk5JgGMaYebXITA5P4w//1aJAp2rafGW
-         SwEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747604056; x=1748208856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LQP7kiEFeXieUYHTQOWlMajO9SS2h9UcfNmGDRaBXeQ=;
-        b=N8EuxBTHSDN9FCz6s8nA7nyHC8qM2MTUSczOvjGss8TvEhj4rutfsYUMhFsdJAw/kT
-         fDL7LpsTpS3eJiG/XuHeDRWD0QU54g4c2TJUYPUYZln0rEhfMC/JhSAqbyvl3Ou5Hnvo
-         F0iM0izDnBSdME4gtVnltWtO28MmH5un+joJDq0Y/DLNuVBQoSpcnJ5hTLzC/4L9Q7hD
-         etVodSX7sc1If/c5VoAAb0l2HhE91nSU461SgYq8oZFSObyVRcMNRVo3Mydl7ZOZQIMv
-         GjiB8Ajgwlb8KyFWiZh8XN7o4UG7XhubBQlkESeNNwxN0IT2BtLnOHF1rzd4jXtIJqks
-         t76w==
-X-Forwarded-Encrypted: i=1; AJvYcCUbtEpz2Us/IGKHxqneiOtTIqEZpCVM6wRVNptM7/sdrLfJrcwGgOk9LruOcygOQZwfad2i@lists.linux.dev
-X-Gm-Message-State: AOJu0YxTAi2QZgHPDv4XrXsD7+ZoFbXm0P6f4T2mU2YzQsQTSqk7LvFh
-	fCLoaChv6dw11cp6MqR9P6G2rw9sM9A6WrBF/zpNOkw2VYNa4x0aqakKtChl4CrYD6P2nRRZbzb
-	44tJOmetvjGRghIi4GgpSQ7t+4EvS89iJM+u8H1Cu
-X-Gm-Gg: ASbGncusQYlP/HmP6pR9Gpvb6A9Mt5+HTj3ZDFSpE7Uf5N4cUFrUvuMN5sJ0XExafR5
-	fP+9OgOEHS5CRQzzhdu2wTEUSY9lY03ghHUXySqgMERdp+pRfB9M0ykmwCEElhoe8mRcHL2IiF5
-	c+G3tY88fFFb5OuxS3NuboS6j8ixgPNBMZoiHJot5fZFQ=
-X-Google-Smtp-Source: AGHT+IE4xhc4enZwnp333lRGkDvOTlvAzIVwQODufuLGxxB3SU2BQ2IFplj8HM2L9kwEdXZjW5DSrE/jizotZyc82E8=
-X-Received: by 2002:a05:6902:1201:b0:e78:f901:6074 with SMTP id
- 3f1490d57ef6-e7b6d39c8e6mr13141403276.5.1747604055898; Sun, 18 May 2025
- 14:34:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hmxJHsqX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747638780; x=1779174780;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7/SWLXW5Hy6DaiAx0ceb1uY2JzdxPxmqQ8x1Y1jN5VE=;
+  b=hmxJHsqXrJwZV/ar1cPbNDdWTuz2eGKFeiuMN8+558eqJgnMrzkp7Iy4
+   9A5465w6nrEcP/0pyBpCZPQK8yFpRABlCcRF+wrJHqcF74YJRoUGAmpVB
+   nwkQUd6yBKcInW5UqVMKTcyDRO57woBRm3ZUzdEo9NIAmFvcC5ogQq8P2
+   yuB+7uVXEAVEQwKFE42/QcS93C2hiBYnNYRjVZTXJWndNM/CuutkSptz9
+   izzCMEnx0ZuFW76s0AkPbZuuhbI2qW2gevBWBgn3aM+uTkSIrjyMGEOIu
+   XN5WOg37q4qFC+HswLDYVhVZgeWX5jovAFbMi9ZuJ9t0M1EjY5hoP5s2L
+   A==;
+X-CSE-ConnectionGUID: /bDAjKOnT4OXEiLncUxX1g==
+X-CSE-MsgGUID: 5pgs4oPxTou6yO0xLfkWzw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="37142816"
+X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
+   d="scan'208";a="37142816"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 00:12:59 -0700
+X-CSE-ConnectionGUID: TPxZaDTwQjG4bRil4Fs00A==
+X-CSE-MsgGUID: 3XDW3SxGQiOJ1pnp0+rzZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
+   d="scan'208";a="139700215"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 19 May 2025 00:12:56 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uGugA-000LFH-0G;
+	Mon, 19 May 2025 07:12:54 +0000
+Date: Mon, 19 May 2025 15:12:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wentao Liang <vulab@iscas.ac.cn>, ajay.kathat@microchip.com,
+	claudiu.beznea@tuxon.dev, kvalo@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wentao Liang <vulab@iscas.ac.cn>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] wifi: wilc1000: Add error handling for
+ wilc_sdio_cmd52()
+Message-ID: <202505191448.OycntzLM-lkp@intel.com>
+References: <20250519014434.901-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
- <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
- <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
- <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
- <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
- <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
- <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
- <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
- <CAADnVQ+wE5cGhy6tgmWgUwkNutueEsrhh6UR8N2fzrZjt-vb4g@mail.gmail.com>
- <196e1f03128.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com> <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
-In-Reply-To: <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 18 May 2025 17:34:04 -0400
-X-Gm-Features: AX0GCFtLeZnisw8iWe1mhoQFds0HugDTz8gkrQRoSC4fm6wSRan9ZFZmtDGOv3w
-Message-ID: <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
-	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
-	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
-	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250519014434.901-1-vulab@iscas.ac.cn>
 
-On Sun, May 18, 2025 at 11:52=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Sat, May 17, 2025 at 10:49=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
- wrote:
-> > On May 17, 2025 12:13:50 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > On Sat, May 17, 2025 at 8:03=E2=80=AFAM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > >> On Fri, May 16, 2025 at 7:49=E2=80=AFPM Alexei Starovoitov
-> > >> <alexei.starovoitov@gmail.com> wrote:
-> > >>> On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-moor=
-e.com> wrote:
-> > >>>>
-> > >>>> I think we need some clarification on a few of these details, it w=
-ould
-> > >>>> be good if you could answer the questions below about the
-> > >>>> authorization aspects of your design?
-> > >>>>
-> > >>>> * Is the signature validation code in the BPF verifier *always* go=
-ing
-> > >>>> to be enforced when a signature is passed in from userspace?  In o=
-ther
-> > >>>> words, in your design is there going to be either a kernel build t=
-ime
-> > >>>> or runtime configuration knob that could selectively enable (or
-> > >>>> disable) signature verification in the BPF verifier?
-> > >>>
-> > >>> If there is a signature in union bpf_attr and it's incorrect
-> > >>> the prog_load command will be rejected.
-> > >>> No point in adding a knob to control that.
-> > >>
-> > >> I agree that when a signature is provided and that signature check
-> > >> fails, the BPF load should be rejected.  I'm simply trying to
-> > >> understand how you envision your design handling all of the cases, n=
-ot
-> > >> just this one, as well as what build and runtime options you expect
-> > >> for controlling various aspects of this behavior.
-> > >>
-> > >>>> * In the case where the signature validation code in the BPF verif=
-ier
-> > >>>> is active, what happens when a signature is *not* passed in from
-> > >>>> userspace?  Will the BPF verifier allow the program load to take
-> > >>>> place?  Will the load operation be blocked?  Will the load operati=
-on
-> > >>>> be subject to a more granular policy, and if so, how do you plan t=
-o
-> > >>>> incorporate that policy decision into the BPF program load path?
-> > >>>
-> > >>> If there is no signature the existing loading semantics will remain=
- intact.
-> > >>> We can discuss whether to add a sysctl or cgroup knob to disallow
-> > >>> loading when signature is not present ...
-> > >>
-> > >> As mentioned earlier this week, if the BPF verifier is performing th=
-e
-> > >> signature verification as KP described, we will need a LSM hook afte=
-r
-> > >> the verifier to serve as an access control point.  Of course that
-> > >> doesn't preclude the addition of some type of sysctl/cgroup/whatever
-> > >> based access control, but the LSM hook would be needed regardless.
-> > >
-> > > No. New hook is not needed.
-> >
-> > It would be good for you to explain how the existing LSM hook is suffic=
-ient
-> > to authorize the loading of a BPF program using the signature validatio=
-n
-> > state determined in the BPF verifier.
->
-> I already explained:
-> .. a job of trivial LSM:
-> if (prog_attr doesn't have signature &&
->    (task =3D=3D .. || task is under certain cgroup || whatever))
->   disallow.
+Hi Wentao,
 
-I read that earlier reply as an example that covers a sample use case,
-I didn't realize you were asserting that was the only approach you
-were considering.  Perhaps that was the source of confusion earlier,
-we may disagree, but I don't intentionally "twist" words; not only is
-that rude, it's just stupid in public, archived discussions.
+kernel test robot noticed the following build errors:
 
-As I mentioned previously, we really need to see an explicit yes/no
-flag from the BPF verifier to indicate that the signature on the BPF
-program has been validated.  It really should be as simple as adding a
-bool to bpf_prog_aux which the BPF verifier sets to true upon
-successful signature validation, and then an LSM can use this flag as
-input to an access control decision in a hook placed after the
-verifier.  Are you objecting to the addition of a flag in the
-bpf_prog_aux struct (or some other struct tightly coupled to the BPF
-program), the LSM hook after the verifier, or both?  It would also be
-helpful if you can elaborate on the technical reasons behind these
-objections.
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.15-rc7 next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---=20
-paul-moore.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/wifi-wilc1000-Add-error-handling-for-wilc_sdio_cmd52/20250519-094706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20250519014434.901-1-vulab%40iscas.ac.cn
+patch subject: [PATCH v2] wifi: wilc1000: Add error handling for wilc_sdio_cmd52()
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250519/202505191448.OycntzLM-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250519/202505191448.OycntzLM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505191448.OycntzLM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/microchip/wilc1000/sdio.c:789:2: error: use of undeclared identifier 'ret'
+     789 |         ret = wilc_sdio_cmd52(wilc, &cmd);
+         |         ^
+   drivers/net/wireless/microchip/wilc1000/sdio.c:790:6: error: use of undeclared identifier 'ret'
+     790 |         if (ret) {
+         |             ^
+   drivers/net/wireless/microchip/wilc1000/sdio.c:792:10: error: use of undeclared identifier 'ret'
+     792 |                 return ret;
+         |                        ^
+   drivers/net/wireless/microchip/wilc1000/sdio.c:798:2: error: use of undeclared identifier 'ret'
+     798 |         ret = wilc_sdio_cmd52(wilc, &cmd);
+         |         ^
+   drivers/net/wireless/microchip/wilc1000/sdio.c:799:6: error: use of undeclared identifier 'ret'
+     799 |         if (ret) {
+         |             ^
+   drivers/net/wireless/microchip/wilc1000/sdio.c:801:10: error: use of undeclared identifier 'ret'
+     801 |                 return ret;
+         |                        ^
+   6 errors generated.
+
+
+vim +/ret +789 drivers/net/wireless/microchip/wilc1000/sdio.c
+
+   774	
+   775	static int wilc_sdio_read_size(struct wilc *wilc, u32 *size)
+   776	{
+   777		u32 tmp;
+   778		struct sdio_cmd52 cmd;
+   779		struct sdio_func *func = dev_to_sdio_func(wilc->dev);
+   780	
+   781		/**
+   782		 *      Read DMA count in words
+   783		 **/
+   784		cmd.read_write = 0;
+   785		cmd.function = 0;
+   786		cmd.raw = 0;
+   787		cmd.address = WILC_SDIO_INTERRUPT_DATA_SZ_REG;
+   788		cmd.data = 0;
+ > 789		ret = wilc_sdio_cmd52(wilc, &cmd);
+   790		if (ret) {
+   791			dev_err(&func->dev, "Fail cmd 52, interrupt data register...\n");
+   792			return ret;
+   793		}
+   794		tmp = cmd.data;
+   795	
+   796		cmd.address = WILC_SDIO_INTERRUPT_DATA_SZ_REG + 1;
+   797		cmd.data = 0;
+   798		ret = wilc_sdio_cmd52(wilc, &cmd);
+   799		if (ret) {
+   800			dev_err(&func->dev, "Fail cmd 52, interrupt data register...\n");
+   801			return ret;
+   802		}
+   803		tmp |= (cmd.data << 8);
+   804	
+   805		*size = tmp;
+   806		return 0;
+   807	}
+   808	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
