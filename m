@@ -1,159 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5330B2206B3
-	for <llvm@lists.linux.dev>; Mon, 19 May 2025 23:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9252ABE5E;
+	Tue, 20 May 2025 03:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747698139; cv=none; b=FiTO7fvaWMrGFroEZkZ1wiyMWqXI20y1JEzBDgBGTJLDxNpTXGGjft8o0IBpGI5no1k1XQ9gqfewbiO8PHrRvSoLfltZzOBMyCGAKki6026NDWQqyS496Y0IZFpIBAnVin4BK38c0DgPW2B/Qwd5744/iMwE+EgtfxMB5zrHQpA=
+	t=1747710947; cv=none; b=A0xdkBRlwQaK1VoLnnF7NSHZwWMNNyqLjzeMtk85zPQXyH/zDveSmQNzQ77IcorqfSY7qNmqqIPCyikljqfpe4OOg0WXgPzE432WPK705yM3ZdL0mqVwNdORMsfJs6EUGV8csUS7nQqJTcEncdInoQrRG7akXKAu5RL0lO9Vwpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747698139; c=relaxed/simple;
-	bh=ZKYV4DZqCzOu7XtrDoRxpxOQ2X8r++kTwWByKtXDhrI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XIJujlfHopqEFX0DE5UreU4hoNMFwCiPBcCB6J5cfjD8SLKyUGKhcWbVwe3fssTDFj5cIistV9IEGQ6ZwDqpz3N2b6JCP4MG7TXHVnmCb2EMAQlQmr19uQhIgCxgth0gZgCnD0npFN4jxAo4nBNt7a7ouzs5S1j05U6RrmJscRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcQWP80d; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747710947; c=relaxed/simple;
+	bh=q51EOnqdejia0UPWxizJsJYHswGCudFJ4V+4N+eDIjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bLDFSHogVYZodCmppISBvUJH9V3ESeCoDnxrrk6Fs+HphlKdlVCkyJ1HU3jmYEv0oDl9udozoHI9oXPDzdmODNFXWZqwSD7u9ymGQ7lDI3Zq0sdhBTMxOHy3S1cLv7kDMqQXQeeZSsTNKxeQjwCyhkM6uole6mYLjoeudli4Pms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dgee1RF1; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcQWP80d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E5BC4CEF5
-	for <llvm@lists.linux.dev>; Mon, 19 May 2025 23:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747698139;
-	bh=ZKYV4DZqCzOu7XtrDoRxpxOQ2X8r++kTwWByKtXDhrI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TcQWP80dqZf6wsvV46hfhbTO/IwcHkluZg9gwlAJFqA4nPRc6j1YFLmQJtaAY+re1
-	 r6KwA0YpngRxsaYwDegU8IRBmfb2DX/xHbQYWRDtiZtUMl3K0+wv3kCs/BNHL8XKVo
-	 ygRM0Dj8edMrC3lEXrMqVpKFHE8jPUzI9twSqdjyHF1ekm8EtSeC/ylD8vXIwTpwnm
-	 AaqU/swIMCkJHDGVuJ7yxk/8AYDS6T7xHiBImEzyOo11qLtzeZOlZAjh8G94L8btBT
-	 OaXfds5P5StEhfx+AaUM5UvfuSIhfq6IckwMm2CLKYDJSF2XVgUha6NZ5uurJ7VCWV
-	 ++9nrEevi9YKw==
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-47662449055so27404091cf.1
-        for <llvm@lists.linux.dev>; Mon, 19 May 2025 16:42:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUQBoIF7eYu/nCI9Sv2+RPwo3fcXdsWMtDoBJsecqaDDexJ1SoxLV90MYUvF/Lc4g/3L3zE@lists.linux.dev
-X-Gm-Message-State: AOJu0YwQRprEoJvPjnoUI26kBHWJyZC0FW5UqdijViOjD4CawYz1SjiQ
-	9FeOFnQF/GxtvE0jSPjIamY/nwam/aak3LNJSka6xWJpAGUZsOuwAc5kGvwTMyy/Cm4nKGv787l
-	id4+BZXTWPfwxPsbCBx4t+INDZ7eC5YWtvEPOT5fs
-X-Google-Smtp-Source: AGHT+IF3yXeBG7TOl1OWLmx6UHDF/3YbnaTG/HjinvwYXZmduyt29cvicBww1a9vAZvlcO0xk5OSvjlLpQi0hnBcD0E=
-X-Received: by 2002:ac8:5654:0:b0:494:af82:7804 with SMTP id
- d75a77b69052e-494af8278f4mr201668631cf.29.1747698137942; Mon, 19 May 2025
- 16:42:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dgee1RF1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747710945; x=1779246945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q51EOnqdejia0UPWxizJsJYHswGCudFJ4V+4N+eDIjg=;
+  b=Dgee1RF1yeRFpFRDDFdQLriTESDgU+E/UsRU430HlgbhtddE5b7dkeER
+   PXSnY11L/sD6nm9WVdNPqeBYvP0DgqvsRLhk9eVDlsIBiQq5tSOWxl2U7
+   l9Xu6lNVJTiB7mOFP8a7gV/eLGcF1gbTouOKCI4lVHP+G5G02RgEVQ/AP
+   im/7Ti/dSlAtErPcISV45NYw5wszOn0uqOXQfmfGYdqXWHGDnHlpEATNH
+   M0fXj5kYLg89ZO5dbdUpEKNq2gDzuWPaQnXeEjwxMAX0cJTeBJtrq7dlE
+   1sq4TSww2BqOuzuCehC9KntkX3mOAG2VRiDqmk/BK0SfUc3AtA3fFJHHd
+   g==;
+X-CSE-ConnectionGUID: hsuAPy0wQ1uSRkEAhAUpeQ==
+X-CSE-MsgGUID: hSk6jo5cTB2yhqHDtj4ciw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="60284649"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="60284649"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 20:15:43 -0700
+X-CSE-ConnectionGUID: VFi0DubAS5KQfge3jMJGmg==
+X-CSE-MsgGUID: 2gSptPPyRNy2GVyFe/Uu3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="140064827"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 19 May 2025 20:15:42 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHDS7-000M7I-0W;
+	Tue, 20 May 2025 03:15:39 +0000
+Date: Tue, 20 May 2025 11:14:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gyeyoung Baek <gye976@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 7/9] iio: trigger: Add new API
+ iio_trigger_attach_timestamp()
+Message-ID: <202505201045.dS4OfoSM-lkp@intel.com>
+References: <20250519-timestamp-v1-7-fcb4f6c2721c@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
- <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
- <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
- <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
- <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
- <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
- <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
- <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
- <CAADnVQ+wE5cGhy6tgmWgUwkNutueEsrhh6UR8N2fzrZjt-vb4g@mail.gmail.com>
- <196e1f03128.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
- <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com>
- <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com> <CAC1LvL2F_WbObrdcumVZCKc7yLeq4e9PQhYHrLiyVzpzf=V_Xg@mail.gmail.com>
-In-Reply-To: <CAC1LvL2F_WbObrdcumVZCKc7yLeq4e9PQhYHrLiyVzpzf=V_Xg@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Tue, 20 May 2025 01:42:06 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ43yJRMS+e-7LefYts_v2ZH7_FCbw_LfG3mYfu6q6VD0g@mail.gmail.com>
-X-Gm-Features: AX0GCFuKLMZDwuoCJgohVN01wRXVU9M-dpj2qXdRHi2W4iwOU0W5kASpMuAgI_I
-Message-ID: <CACYkzJ43yJRMS+e-7LefYts_v2ZH7_FCbw_LfG3mYfu6q6VD0g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Zvi Effron <zeffron@riotgames.com>
-Cc: Paul Moore <paul@paul-moore.com>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
-	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
-	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
-	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250519-timestamp-v1-7-fcb4f6c2721c@gmail.com>
 
-> > > > > > No. New hook is not needed.
+Hi Gyeyoung,
 
-[...]
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-> > > > >
-> > > > > It would be good for you to explain how the existing LSM hook is sufficient
-> > > > > to authorize the loading of a BPF program using the signature validation
-> > > > > state determined in the BPF verifier.
-> > > >
-> > > > I already explained:
-> > > > .. a job of trivial LSM:
-> > > > if (prog_attr doesn't have signature &&
-> > > >    (task == .. || task is under certain cgroup || whatever))
-> > > >   disallow.
-> > >
-> > > I read that earlier reply as an example that covers a sample use case,
-> > > I didn't realize you were asserting that was the only approach you
-> > > were considering.  Perhaps that was the source of confusion earlier,
-> > > we may disagree, but I don't intentionally "twist" words; not only is
-> > > that rude, it's just stupid in public, archived discussions.
-> > >
-> > > As I mentioned previously, we really need to see an explicit yes/no
-> > > flag from the BPF verifier to indicate that the signature on the BPF
-> > > program has been validated.  It really should be as simple as adding a
-> > > bool to bpf_prog_aux which the BPF verifier sets to true upon
-> > > successful signature validation, and then an LSM can use this flag as
-> > > input to an access control decision in a hook placed after the
-> > > verifier.  Are you objecting to the addition of a flag in the
-> > > bpf_prog_aux struct (or some other struct tightly coupled to the BPF
-> > > program), the LSM hook after the verifier, or both?  It would also be
-> > > helpful if you can elaborate on the technical reasons behind these
-> > > objections.
-> >
-> > Neither the aux field, nor the hook are required because:
-> >
-> > * If the signature is passed, it will be enforced, there are no
-> > "runtime aspects" that need to be configurable here.
-> > * What the LSM can specify a policy for is when a signature is not
-> > passed, for this, it does not need an aux field or a signature or the
-> > new hook, existing hooks are sufficient.
-> >
->
-> What about wanting to create a policy that requires signatures under certain
-> situations and allowing the lack of a signature under others? How is that
-> implemented with the existing hooks?
-> As I understand it, all the existing hooks know (would know) is that _if_ there
-> is a signature _then_ it will be enforced. There is no way to know _whether_
-> there is a signature.
->
+[auto build test WARNING on 43a9eee06bf8a8535d8709b29379bec8cafcab56]
 
-The signature is passed in bpf_attr and if there is a signature the
-LSM's job is done.
+url:    https://github.com/intel-lab-lkp/linux/commits/Gyeyoung-Baek/iio-buffer-Fix-checkpatch-pl-warning/20250519-222930
+base:   43a9eee06bf8a8535d8709b29379bec8cafcab56
+patch link:    https://lore.kernel.org/r/20250519-timestamp-v1-7-fcb4f6c2721c%40gmail.com
+patch subject: [PATCH RFC 7/9] iio: trigger: Add new API iio_trigger_attach_timestamp()
+config: s390-randconfig-001-20250520 (https://download.01.org/0day-ci/archive/20250520/202505201045.dS4OfoSM-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250520/202505201045.dS4OfoSM-lkp@intel.com/reproduce)
 
-   https://elixir.bootlin.com/linux/v6.14.7/source/kernel/bpf/syscall.c#L5771
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505201045.dS4OfoSM-lkp@intel.com/
 
- It will be enforced.
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/industrialio-trigger.c:305:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     305 |         int ret;
+         |             ^
+   1 warning generated.
 
 
-- KP
+vim +/ret +305 drivers/iio/industrialio-trigger.c
 
-> An example policy I can think of is that most users (with CAP_BPF) must submit
-> signed programs but some users are exempted. Would that policy be able to be
-> made with the current hooks?
->
-> > - KP
-> >
-> > >
-> > > --
-> > > paul-moore.com
-> >
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  299  
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  300  static int iio_poll_func_register(struct iio_poll_func *pf,
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  301  				  struct iio_trigger *trig)
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  302  {
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  303  	irq_handler_t tophalf = NULL;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  304  	irq_handler_t bottomhalf = pf->thread;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19 @305  	int ret;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  306  
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  307  	/*
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  308  	 * The consumer does not need timestamp.
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  309  	 * Just request raw irq handler.
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  310  	 */
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  311  	if (!pf->timestamp_enabled)
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  312  		goto out_request_irq;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  313  
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  314  	/*
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  315  	 * The trigger supports grabbing timestamp.
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  316  	 * Just request raw irq handler.
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  317  	 */
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  318  	if (trig->early_timestamp) {
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  319  		ret = iio_trigger_attach_timestamp(trig, pf);
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  320  		pf->timestamp_type = IIO_TIMESTAMP_TYPE_TRIGGER;
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  321  		goto out_request_irq;
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  322  	}
+3138e8998dbd8f Gyeyoung Baek 2025-05-19  323  
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  324  	if (trig->trig_type & IIO_TRIG_TYPE_POLL_NESTED) {
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  325  		bottomhalf = iio_pollfunc_bottom_half_wrapper;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  326  		pf->timestamp_type = IIO_TIMESTAMP_TYPE_CONSUMER_BOTTOM_HALF;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  327  	} else if (trig->trig_type & IIO_TRIG_TYPE_POLL) {
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  328  		tophalf = iio_pollfunc_top_half_wrapper;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  329  		pf->timestamp_type = IIO_TIMESTAMP_TYPE_CONSUMER_TOP_HALF;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  330  	} else {
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  331  		pr_err("Trigger does not set valid trig_type.");
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  332  		return -EINVAL;
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  333  	}
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  334  
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  335  out_request_irq:
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  336  	return request_threaded_irq(pf->irq, tophalf, bottomhalf,
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  337  				    pf->type, pf->name, pf);
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  338  }
+b14e7f938a5fa7 Gyeyoung Baek 2025-05-19  339  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
