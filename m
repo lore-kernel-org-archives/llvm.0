@@ -1,69 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B98264FAC;
-	Tue, 20 May 2025 09:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F7D21019C;
+	Tue, 20 May 2025 10:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747734746; cv=none; b=qEsZxsLIPQJ8AVoYQPX5RE7LYL+px8oKsvuxJvWM3qhQgJsmYVig3RCXkM2kTh3H5eU10yN8c5FW/nf/lok9ClSgcm4ncrivMP5WUaGRyChn86jxoKTbhAVsSklMWQgnzXv46E+fFzlods9LrZp7QzIyPIYKRPowVS03MEVeYIM=
+	t=1747735402; cv=none; b=Ae4wTjmuEf0ANkzduLVcIdxDkApaO1GFSIxavKkpW6mlDJpVuZd63bpIRX7I/FV/9MRiPktE+UhKvupJQ4bDFJLlmsh1pkxu0wMu71yPVMXFPPQiWNF7nB6OxIWQzh2LKSz6sDfE6RuEuqGVo2SO7y8aOQWXONoV/K+e9vXlNvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747734746; c=relaxed/simple;
-	bh=h/h0dnmW+e8eb7BpFrGOs6KEuwxdMkbEf18N/8+UCyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etMtusBkI82omkJ/3Jk+34ttJPcq481jNh/CMLKJqVNbVt5HNHxFvPu4u4H/IX5FXEVrSek/432VXjTGTq4zEQZXF+wxu6jyO10t1xzsLazEHCWMnzxeVKBN11DpaSsXM+lcZtbvXyYFeTZj+06idvbAqOKtIkk7EM32Nu5xuLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCf4FFuy; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1747735402; c=relaxed/simple;
+	bh=7eqoc+veGPgqqU3GikScty5vCdbPEVkg1xlxjWedrMA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aDTaMS5Dw7pBEUM1PVqTHKqwb7ALJ473+F52dA/Npw0Uq06us/2db+EzpVomoUZwbeQhR8ys4e1pX3HJRLwr8busSTotVWOsAAWaJq314S3JJOaFmoZ+xVLfcfaJ53R5XCcHYdBX8bZdwVCqW+OpSLEwvjm9aD/65CG+5vMNGsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jJI7BClL; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCf4FFuy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJI7BClL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747734745; x=1779270745;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h/h0dnmW+e8eb7BpFrGOs6KEuwxdMkbEf18N/8+UCyU=;
-  b=eCf4FFuyCc+i+bVcUb/wsKzac3ST57HGtcOpmqlpYq+PnR5U+K0C46QW
-   +B7yU8kRw2wseBSfVZeGXF2EqJ64I3wfzK0IhraJ1cy7o9s6gASjgv6w8
-   HNWW5gm8H30JymFj10LjTkKJCkwNABiJYdgHVFs8wBf1fp1zp5mgYK+t4
-   cTRdis7xovowyWhtySKVxvmebjON2vZ/jxI+jyrI9Lfqr6hpz05vOoRlp
-   nQtoJg5zb6KiH3asl/4f9ZU2KY21AtIUlWuz1KJsgzSa7lM7/Ec3zvUrr
-   h0EHnkQwc7e2Ey5LVmI/izz83f+k0l4ejPwA8ME5j2rU8cBDlK1ZJKWsR
-   A==;
-X-CSE-ConnectionGUID: Q/hU4EqxTYKPMXIyzPPgfw==
-X-CSE-MsgGUID: nH9ueHMARZ2SYexP/o9Cdg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="49760570"
+  t=1747735400; x=1779271400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7eqoc+veGPgqqU3GikScty5vCdbPEVkg1xlxjWedrMA=;
+  b=jJI7BClLBJblqRAcX35yRTo3eRFalWzJpyhnShSIHPcBvT2uN3FS4uTP
+   tsdZKzrL+KaDKRR9P6TfAWKto2SAXjj/LlKVg3WkitBu1M4f6QEoE/xhA
+   H113nA73fMk/7nYBvB8Aed0jqjlQlUOo2jb6afnB/21S9lvGiTqw7uofS
+   Yh9/Jzpqj/bZW7hNwf3cP0y+GgsYdYTNYwvN09x+3ktXaoVre4i2gxnU6
+   1K5LKDBElewss+iSubRZfE/kCBtity52qjEEWaRZwbWa9wYClGVfcXASV
+   GulPRFVf+iWYNKK2Dp0s15j/oUUdyZ5VjYnpfYb6OEtKxUwlUb2TcfvNE
+   g==;
+X-CSE-ConnectionGUID: D3JjfugrRdm+EhWicvOF2A==
+X-CSE-MsgGUID: QJFEauksSeGps4XZz4h34w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="49563309"
 X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="49760570"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 02:52:23 -0700
-X-CSE-ConnectionGUID: 3qIB5naYSh6wPginL6Csgw==
-X-CSE-MsgGUID: 2CquOxyBQUSUf7T5Q6efTQ==
+   d="scan'208";a="49563309"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 03:03:20 -0700
+X-CSE-ConnectionGUID: ORDMWo8bQxur4KHHDjENag==
+X-CSE-MsgGUID: Sdgc2swOReGV8J2Aw96+Vw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="170531758"
+   d="scan'208";a="144897042"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 20 May 2025 02:52:18 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 20 May 2025 03:03:18 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uHJdv-000MPc-23;
-	Tue, 20 May 2025 09:52:15 +0000
-Date: Tue, 20 May 2025 17:51:26 +0800
+	id 1uHJoa-000MPs-1Q;
+	Tue, 20 May 2025 10:03:16 +0000
+Date: Tue, 20 May 2025 18:02:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Usama Arif <usamaarif642@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>, david@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	hannes@cmpxchg.org, shakeel.butt@linux.dev, riel@surriel.com,
-	ziy@nvidia.com, laoar.shao@gmail.com, baolin.wang@linux.alibaba.com,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	npache@redhat.com, ryan.roberts@arm.com, vbabka@suse.cz,
-	jannh@google.com, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kernel-team@meta.com, Usama Arif <usamaarif642@gmail.com>
-Subject: Re: [PATCH v3 1/7] mm: khugepaged: extract vm flag setting outside
- of hugepage_madvise
-Message-ID: <202505201734.8Fyk3qKi-lkp@intel.com>
-References: <20250519223307.3601786-2-usamaarif642@gmail.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:migration 18/22] mm/vmscan.c:1653:36: error: call
+ to undeclared function '__folio_test_movable'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202505201714.DV7tq1ks-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,72 +62,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250519223307.3601786-2-usamaarif642@gmail.com>
 
-Hi Usama,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on perf-tools-next/perf-tools-next tip/perf/core perf-tools/perf-tools linus/master acme/perf/core v6.15-rc7 next-20250516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/mm-khugepaged-extract-vm-flag-setting-outside-of-hugepage_madvise/20250520-063452
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250519223307.3601786-2-usamaarif642%40gmail.com
-patch subject: [PATCH v3 1/7] mm: khugepaged: extract vm flag setting outside of hugepage_madvise
-config: s390-randconfig-002-20250520 (https://download.01.org/0day-ci/archive/20250520/202505201734.8Fyk3qKi-lkp@intel.com/config)
+tree:   https://github.com/davidhildenbrand/linux migration
+head:   3cb1246117612eea7427990a681167665d573c5b
+commit: df51097eb85022ebeee826550b5af38af7f3e124 [18/22] mm: stop using page->mapping for non-folio migration
+config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20250520/202505201714.DV7tq1ks-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250520/202505201734.8Fyk3qKi-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250520/202505201714.DV7tq1ks-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505201734.8Fyk3qKi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505201714.DV7tq1ks-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/khugepaged.c:359:20: error: use of undeclared identifier 'vma'
-     359 |                 if (mm_has_pgste(vma->vm_mm))
-         |                                  ^
+>> mm/vmscan.c:1653:36: error: call to undeclared function '__folio_test_movable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1653 |                     !folio_test_dirty(folio) && !__folio_test_movable(folio) &&
+         |                                                  ^
    1 error generated.
 
 
-vim +/vma +359 mm/khugepaged.c
+vim +/__folio_test_movable +1653 mm/vmscan.c
 
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  348  
-d2a8f83f11a4ba Usama Arif         2025-05-19  349  int hugepage_set_vmflags(unsigned long *vm_flags, int advice)
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  350  {
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  351  	switch (advice) {
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  352  	case MADV_HUGEPAGE:
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  353  #ifdef CONFIG_S390
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  354  		/*
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  355  		 * qemu blindly sets MADV_HUGEPAGE on all allocations, but s390
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  356  		 * can't handle this properly after s390_enable_sie, so we simply
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  357  		 * ignore the madvise to prevent qemu from causing a SIGSEGV.
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  358  		 */
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26 @359  		if (mm_has_pgste(vma->vm_mm))
-d2a8f83f11a4ba Usama Arif         2025-05-19  360  			return -EPERM;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  361  #endif
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  362  		*vm_flags &= ~VM_NOHUGEPAGE;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  363  		*vm_flags |= VM_HUGEPAGE;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  364  		break;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  365  	case MADV_NOHUGEPAGE:
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  366  		*vm_flags &= ~VM_HUGEPAGE;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  367  		*vm_flags |= VM_NOHUGEPAGE;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  368  		/*
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  369  		 * Setting VM_NOHUGEPAGE will prevent khugepaged from scanning
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  370  		 * this vma even if we leave the mm registered in khugepaged if
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  371  		 * it got registered before VM_NOHUGEPAGE was set.
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  372  		 */
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  373  		break;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  374  	}
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  375  
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  376  	return 0;
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  377  }
-b46e756f5e4703 Kirill A. Shutemov 2016-07-26  378  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1637  
+730ec8c01a2bd6 Maninder Singh          2020-06-03  1638  unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1639) 					   struct list_head *folio_list)
+02c6de8d757cb3 Minchan Kim             2012-10-08  1640  {
+02c6de8d757cb3 Minchan Kim             2012-10-08  1641  	struct scan_control sc = {
+02c6de8d757cb3 Minchan Kim             2012-10-08  1642  		.gfp_mask = GFP_KERNEL,
+02c6de8d757cb3 Minchan Kim             2012-10-08  1643  		.may_unmap = 1,
+02c6de8d757cb3 Minchan Kim             2012-10-08  1644  	};
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1645  	struct reclaim_stat stat;
+730ec8c01a2bd6 Maninder Singh          2020-06-03  1646  	unsigned int nr_reclaimed;
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1647) 	struct folio *folio, *next;
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1648) 	LIST_HEAD(clean_folios);
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1649  	unsigned int noreclaim_flag;
+02c6de8d757cb3 Minchan Kim             2012-10-08  1650  
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1651) 	list_for_each_entry_safe(folio, next, folio_list, lru) {
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1652) 		if (!folio_test_hugetlb(folio) && folio_is_file_lru(folio) &&
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17 @1653) 		    !folio_test_dirty(folio) && !__folio_test_movable(folio) &&
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1654) 		    !folio_test_unevictable(folio)) {
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1655) 			folio_clear_active(folio);
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1656) 			list_move(&folio->lru, &clean_folios);
+02c6de8d757cb3 Minchan Kim             2012-10-08  1657  		}
+02c6de8d757cb3 Minchan Kim             2012-10-08  1658  	}
+02c6de8d757cb3 Minchan Kim             2012-10-08  1659  
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1660  	/*
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1661  	 * We should be safe here since we are only dealing with file pages and
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1662  	 * we are not kswapd and therefore cannot write dirty file pages. But
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1663  	 * call memalloc_noreclaim_save() anyway, just in case these conditions
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1664  	 * change in the future.
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1665  	 */
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1666  	noreclaim_flag = memalloc_noreclaim_save();
+49fd9b6df54e61 Matthew Wilcox (Oracle  2022-09-02  1667) 	nr_reclaimed = shrink_folio_list(&clean_folios, zone->zone_pgdat, &sc,
+7d709f49babc28 Gregory Price           2025-04-24  1668  					&stat, true, NULL);
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1669  	memalloc_noreclaim_restore(noreclaim_flag);
+2d2b8d2b67713d Yu Zhao                 2021-06-30  1670  
+b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1671) 	list_splice(&clean_folios, folio_list);
+2da9f6305f306f Nicholas Piggin         2020-11-13  1672  	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_FILE,
+2da9f6305f306f Nicholas Piggin         2020-11-13  1673  			    -(long)nr_reclaimed);
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1674  	/*
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1675  	 * Since lazyfree pages are isolated from file LRU from the beginning,
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1676  	 * they will rotate back to anonymous LRU in the end if it failed to
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1677  	 * discard so isolated count will be mismatched.
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1678  	 * Compensate the isolated count for both LRU lists.
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1679  	 */
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1680  	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_ANON,
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1681  			    stat.nr_lazyfree_fail);
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1682  	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_FILE,
+2da9f6305f306f Nicholas Piggin         2020-11-13  1683  			    -(long)stat.nr_lazyfree_fail);
+1f318a9b0dc399 Jaewon Kim              2020-06-03  1684  	return nr_reclaimed;
+02c6de8d757cb3 Minchan Kim             2012-10-08  1685  }
+02c6de8d757cb3 Minchan Kim             2012-10-08  1686  
+
+:::::: The code at line 1653 was first introduced by commit
+:::::: b8cecb9376b9d3031cf62b476a0db087b6b01072 mm/vmscan: convert reclaim_clean_pages_from_list() to folios
+
+:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
+:::::: CC: akpm <akpm@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
