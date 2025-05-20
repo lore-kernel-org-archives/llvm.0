@@ -1,78 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C94622D7A8;
-	Tue, 20 May 2025 14:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A80A25B1C4
+	for <llvm@lists.linux.dev>; Tue, 20 May 2025 15:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747750302; cv=none; b=iEI0epcolj6QoD+r/4AGzp3mlvLFLw7MSOC7xH4YrEBRmTlyvvg1xoJtvVnzLZcQs8DLZMaA59M7l5D/tr4gno6VOPeDONhvF3VjE2cfaJYIefHVSGBzxAt77AZJoSMNOlyjmypfqo3OmCUzHlfwbPzkeOTG8eGJGs9uvyn/mc4=
+	t=1747754344; cv=none; b=JH09hKgLwEo4PmR9f9fb0SSGGDsUBLiRBTp//gn2qn2wRXsEvy+vNtX4dgbJijudPc/+nih2Lxr/e0bXqolTzM+POxQLLLfO85aaR20V6bYCMc1Mg44USNwnjCcjpAZgFAna0ukhzpaYtcbUpo5F52fcoZaS7Nmv2vhr/OfCfuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747750302; c=relaxed/simple;
-	bh=7H0H5peD5j5PaLsy4ojWTCVVazkCP7uOufJFBtYwn4w=;
+	s=arc-20240116; t=1747754344; c=relaxed/simple;
+	bh=70BAyOFeZfWM41kAHLRdIU92GSfnWFH99n9UrsgwNlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IgvarYZx3kqW2DxNRWzJLuz83ZN1hz8hvPdcHewd2jABrVC07RZk+ogZHRDEv15h4RBSMZJUyRw0QTjl1wG2PKIHgzydCHvd+lkdMB5fXQ5pe+eS+x9cz2Llh16bWw+q5ipgeqAyVKllPINNh7Q/XsqbEdcM1BnTl6vJGhLvChY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uo/q2BaQ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=RirvANTOEiRD/lAjhiVSDxHxZkG2e2cgp93ToPS9tkrEMAdYwUqbJHZfwoHJPApi3IZvc4uNOIzjl4Q2dJk/3wwU2fwqJhXGbapZcCJSgdiyguQlHzIyZqQ020BDOXq6oSxvJGm9nB0OTyi7Wmg+8TySdngN9wLMk/flZcIGHOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WJIBO6F4; arc=none smtp.client-ip=45.157.188.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uo/q2BaQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1006C4CEE9;
-	Tue, 20 May 2025 14:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747750301;
-	bh=7H0H5peD5j5PaLsy4ojWTCVVazkCP7uOufJFBtYwn4w=;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WJIBO6F4"
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4b1yrL67zmz64G;
+	Tue, 20 May 2025 17:18:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1747754338;
+	bh=fpcq+IBeWj32z7gPBx92ypw/9OpgG/CmMTsCvhDLbdY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Uo/q2BaQbLDQDYWOHIR/wIbPmqGhlaMgw7JEobhcTwm8mhQYXMhTJmsZbtNwqfObz
-	 lNSLhYf0HJSb3BcQvl891i9J2/p30jZ6i3tlh/RzafnQh0fPhPgqFSk0JQ9DXsbcvz
-	 kf9FOcps1fZRzlalC73mOD1/xnGXQExvIkKLdf7ZQU0qmZCbLKevJ8OOM6jjSd1ASm
-	 ZlrUgzrGnoyHL3A2JZs6R0SfBW1uKXwwG4sQlmYaVjDB4JqUqyuaEnQ/bHz3ekNQM+
-	 hQfvUxNG+eVuYhUAivOpODVarYaoi/XvezLluIV5cpXT+RAU4Y1SmBfNQg5h42zNA7
-	 waXymr7+OdYQg==
-Date: Tue, 20 May 2025 10:11:40 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Brian Gerst <brgerst@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, nathan@kernel.org, ubizjak@gmail.com,
-	thomas.weissschuh@linutronix.de, llvm@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 6.14 400/642] x86/relocs: Handle
- R_X86_64_REX_GOTPCRELX relocations
-Message-ID: <aCyNnFdhBTOby6It@lappy>
-References: <20250505221419.2672473-1-sashal@kernel.org>
- <20250505221419.2672473-400-sashal@kernel.org>
- <CAMj1kXF6=t9NoH5Lsh4=RwhUTHtpBt9VmZr3bEVm6=1zGiOf2w@mail.gmail.com>
+	b=WJIBO6F4WWZKdj3YhVkk5wXJ/gzj3dr968LNvBwTBESVBEio3Vd7IWUNJcUaXA92y
+	 gU0iLGCGQmKXsRqqLFvvDyq4ZBD0aHlg1hrNG9jia1+sIitx77VFoic86WTH8h88Lq
+	 ILu9RMl3lFFDQLLqHcYQnrxtOXXYlXYfIoDrXfJE=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4b1yrJ5lpWzGb7;
+	Tue, 20 May 2025 17:18:56 +0200 (CEST)
+Date: Tue, 20 May 2025 17:18:56 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	"Dr. David Alan Gilbert" <linux@treblig.org>, Mark Brown <broonie@kernel.org>, 
+	WangYuli <wangyuli@uniontech.com>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Bill Wendling <morbo@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Justin Stitt <justinstitt@google.com>, Petr Mladek <pmladek@suse.com>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Tamir Duberstein <tamird@gmail.com>, 
+	Diego Vieira <diego.daniel.professional@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 0/3] randstruct: gcc-plugin: Remove bogus void member
+Message-ID: <20250520.Riene6ceesha@digikod.net>
+References: <20250427013604.work.926-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXF6=t9NoH5Lsh4=RwhUTHtpBt9VmZr3bEVm6=1zGiOf2w@mail.gmail.com>
+In-Reply-To: <20250427013604.work.926-kees@kernel.org>
+X-Infomaniak-Routing: alpha
 
-On Tue, May 06, 2025 at 12:32:05AM +0200, Ard Biesheuvel wrote:
->On Tue, 6 May 2025 at 00:30, Sasha Levin <sashal@kernel.org> wrote:
->>
->> From: Brian Gerst <brgerst@gmail.com>
->>
->> [ Upstream commit cb7927fda002ca49ae62e2782c1692acc7b80c67 ]
->>
->> Clang may produce R_X86_64_REX_GOTPCRELX relocations when redefining the
->> stack protector location.  Treat them as another type of PC-relative
->> relocation.
->>
->> Signed-off-by: Brian Gerst <brgerst@gmail.com>
->> Signed-off-by: Ingo Molnar <mingo@kernel.org>
->> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
->> Cc: Linus Torvalds <torvalds@linux-foundation.org>
->> Link: https://lore.kernel.org/r/20250123190747.745588-6-brgerst@gmail.com
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->This patch was one of a series of about 20 patches. Did you pick all of them?
+On Sat, Apr 26, 2025 at 06:38:32PM -0700, Kees Cook wrote:
+> Hi,
+> 
+> Okay, I've tracked down the problem with the randstruct GCC plugin,
+> and written a KUnit test to validate behaviors. This lets us add
+> it back the COMPILE_TEST builds.
+> 
+> No need for https://lore.kernel.org/all/20250421000854.work.572-kees@kernel.org/
 
-Should we pick them all up?
+Hi,
 
--- 
-Thanks,
-Sasha
+What is the status of this patch series?  Do you plan to send it for
+v6.15?
+
+> 
+> -Kees
+> 
+> Kees Cook (3):
+>   randstruct: gcc-plugin: Remove bogus void member
+>   lib/tests: Add randstruct KUnit test
+>   Revert "hardening: Disable GCC randstruct for COMPILE_TEST"
+> 
+>  MAINTAINERS                                   |   1 +
+>  lib/Kconfig.debug                             |   8 +
+>  lib/tests/Makefile                            |   1 +
+>  lib/tests/randstruct_kunit.c                  | 283 ++++++++++++++++++
+>  scripts/gcc-plugins/randomize_layout_plugin.c |  18 +-
+>  security/Kconfig.hardening                    |   2 +-
+>  6 files changed, 295 insertions(+), 18 deletions(-)
+>  create mode 100644 lib/tests/randstruct_kunit.c
+> 
+> -- 
+> 2.34.1
+> 
+> 
