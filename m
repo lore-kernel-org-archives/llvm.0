@@ -1,59 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F7D21019C;
-	Tue, 20 May 2025 10:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F6426B2A9;
+	Tue, 20 May 2025 12:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747735402; cv=none; b=Ae4wTjmuEf0ANkzduLVcIdxDkApaO1GFSIxavKkpW6mlDJpVuZd63bpIRX7I/FV/9MRiPktE+UhKvupJQ4bDFJLlmsh1pkxu0wMu71yPVMXFPPQiWNF7nB6OxIWQzh2LKSz6sDfE6RuEuqGVo2SO7y8aOQWXONoV/K+e9vXlNvM=
+	t=1747743097; cv=none; b=puiOWp0poBjr59yngriDnfSmBMfaIxpoayPdPUC7CH5TvGQjC0GLih7MNU28x452Mn5CGl4cMiFEkqwqPM3bt84r8+BqrKo3SDTBZgYw8cW6WnW1GJxL1pdoCuT14I0TrGUpKZ0Syx2bTt8JmvQ4BxgohX+YWkvd6UibTE+Q86A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747735402; c=relaxed/simple;
-	bh=7eqoc+veGPgqqU3GikScty5vCdbPEVkg1xlxjWedrMA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aDTaMS5Dw7pBEUM1PVqTHKqwb7ALJ473+F52dA/Npw0Uq06us/2db+EzpVomoUZwbeQhR8ys4e1pX3HJRLwr8busSTotVWOsAAWaJq314S3JJOaFmoZ+xVLfcfaJ53R5XCcHYdBX8bZdwVCqW+OpSLEwvjm9aD/65CG+5vMNGsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jJI7BClL; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1747743097; c=relaxed/simple;
+	bh=EHSvRNvgm+GaXbq1NtOZOkHkxxBeWpFGycrSmffCy+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dF9Wre/FIiyPKuz4YEcVo51Ad7zMu8smdazwJ+5+8GBreS0b9QFBV4cpcaVgwO2z/Fm7V7XQH5N4N7s/0o/VzYpIppa4fFOvm6vNwx1fil1kKaI/Y0Artcoe5KQOjXqU7P82RYkvGBXgnjKd2IqEI1Mf5GJ9YWdNMiQg4fqibhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ccpco1co; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJI7BClL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ccpco1co"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747735400; x=1779271400;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7eqoc+veGPgqqU3GikScty5vCdbPEVkg1xlxjWedrMA=;
-  b=jJI7BClLBJblqRAcX35yRTo3eRFalWzJpyhnShSIHPcBvT2uN3FS4uTP
-   tsdZKzrL+KaDKRR9P6TfAWKto2SAXjj/LlKVg3WkitBu1M4f6QEoE/xhA
-   H113nA73fMk/7nYBvB8Aed0jqjlQlUOo2jb6afnB/21S9lvGiTqw7uofS
-   Yh9/Jzpqj/bZW7hNwf3cP0y+GgsYdYTNYwvN09x+3ktXaoVre4i2gxnU6
-   1K5LKDBElewss+iSubRZfE/kCBtity52qjEEWaRZwbWa9wYClGVfcXASV
-   GulPRFVf+iWYNKK2Dp0s15j/oUUdyZ5VjYnpfYb6OEtKxUwlUb2TcfvNE
-   g==;
-X-CSE-ConnectionGUID: D3JjfugrRdm+EhWicvOF2A==
-X-CSE-MsgGUID: QJFEauksSeGps4XZz4h34w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="49563309"
+  t=1747743095; x=1779279095;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EHSvRNvgm+GaXbq1NtOZOkHkxxBeWpFGycrSmffCy+g=;
+  b=Ccpco1co7VwyRno66kxjwIntJhemTnOM1B5J7V8/vNEsO720ydOegrsr
+   AFPZ9mp5ok/AmIIyxVKPsWPcsb0zXLmRY5cEFAh8WlDeUNniZYFfQdgMZ
+   +RvEUQcDyDp3mQdtZaEZEjHxrAx6QLlEcBh5PLRxMbPNHS7xECcvfM569
+   jASe1R+S0+DpJTO9sJplZHm91Q/9IZr8W4hGFl6e2maK/aVekXcl4NcTX
+   7sIeU7r9GKZAOJxHpy5nJ7e7wKvYPhdLFVt7TlmxFQQXxO023Toq8hH3+
+   SquLmWgKAox5CGnTbyj6VxY3I4hp6eTRNg5uKW2CuvznVyfnB0RN+T87v
+   A==;
+X-CSE-ConnectionGUID: ddh4sSCzQi+J/SxlyOMPqA==
+X-CSE-MsgGUID: Zqtc1VT/QRizjZowBWD7Gw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="75075186"
 X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="49563309"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 03:03:20 -0700
-X-CSE-ConnectionGUID: ORDMWo8bQxur4KHHDjENag==
-X-CSE-MsgGUID: Sdgc2swOReGV8J2Aw96+Vw==
+   d="scan'208";a="75075186"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 05:11:34 -0700
+X-CSE-ConnectionGUID: lf+5YtciTJapDKPzB3o74w==
+X-CSE-MsgGUID: 6ODpm6GhQSiKKHgA6g363Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="144897042"
+   d="scan'208";a="162976147"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 20 May 2025 03:03:18 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 20 May 2025 05:11:32 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uHJoa-000MPs-1Q;
-	Tue, 20 May 2025 10:03:16 +0000
-Date: Tue, 20 May 2025 18:02:29 +0800
+	id 1uHLog-000MYa-06;
+	Tue, 20 May 2025 12:11:30 +0000
+Date: Tue, 20 May 2025 20:10:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:migration 18/22] mm/vmscan.c:1653:36: error: call
- to undeclared function '__folio_test_movable'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202505201714.DV7tq1ks-lkp@intel.com>
+To: Kassey Li <quic_yingangl@quicinc.com>, rostedt@goodmis.org,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	quic_yingangl@quicinc.com
+Subject: Re: [PATCH v3] scsi: trace: change the rtn log in string
+Message-ID: <202505201948.7kMKhg6W-lkp@intel.com>
+References: <20250520010405.3844511-1-quic_yingangl@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,85 +66,249 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250520010405.3844511-1-quic_yingangl@quicinc.com>
 
-tree:   https://github.com/davidhildenbrand/linux migration
-head:   3cb1246117612eea7427990a681167665d573c5b
-commit: df51097eb85022ebeee826550b5af38af7f3e124 [18/22] mm: stop using page->mapping for non-folio migration
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20250520/202505201714.DV7tq1ks-lkp@intel.com/config)
+Hi Kassey,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on trace/for-next]
+[also build test WARNING on jejb-scsi/for-next mkp-scsi/for-next linus/master v6.15-rc7 next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/scsi-trace-change-the-rtn-log-in-string/20250520-090745
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250520010405.3844511-1-quic_yingangl%40quicinc.com
+patch subject: [PATCH v3] scsi: trace: change the rtn log in string
+config: riscv-randconfig-002-20250520 (https://download.01.org/0day-ci/archive/20250520/202505201948.7kMKhg6W-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250520/202505201714.DV7tq1ks-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250520/202505201948.7kMKhg6W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505201714.DV7tq1ks-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505201948.7kMKhg6W-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/vmscan.c:1653:36: error: call to undeclared function '__folio_test_movable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1653 |                     !folio_test_dirty(folio) && !__folio_test_movable(folio) &&
-         |                                                  ^
-   1 error generated.
+   In file included from drivers/scsi/scsi.c:73:
+   In file included from include/trace/events/scsi.h:358:
+   In file included from include/trace/define_trace.h:132:
+   In file included from include/trace/trace_events.h:256:
+   include/trace/events/scsi.h:256:5: error: call to undeclared function 'show_rtn_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     256 |                   show_rtn_type(__entry->rtn)
+         |                   ^
+>> include/trace/events/scsi.h:256:5: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+     209 |                 __entry->prot_op        = scsi_get_prot_op(cmd);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     210 |                 memcpy(__get_dynamic_array(cmnd), cmd->cmnd, cmd->cmd_len);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     211 |         ),
+         |         ~~
+     212 | 
+     213 |         TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u" \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     214 |                   " prot_op=%s driver_tag=%d scheduler_tag=%d cmnd=(%s %s raw=%s)" \
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     215 |                   " rtn=%s",
+         |                   ~~~~~~~~~~
+         |                         %d
+     216 |                   __entry->host_no, __entry->channel, __entry->id,
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     217 |                   __entry->lun, __entry->data_sglen, __entry->prot_sglen,
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     218 |                   show_prot_op_name(__entry->prot_op), __entry->driver_tag,
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     219 |                   __entry->scheduler_tag, show_opcode_name(__entry->opcode),
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     220 |                   __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     221 |                   __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
+         |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     222 |                   show_rtn_type(__entry->rtn)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+     223 |           )
+         |           ~
+     224 | );
+         | ~
+   include/trace/stages/stage3_trace_output.h:9:43: note: expanded from macro 'TP_printk'
+       9 | #define TP_printk(fmt, args...) fmt "\n", args
+         |                                 ~~~       ^
+   include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
+      40 |         DECLARE_EVENT_CLASS(name,                              \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      41 |                              PARAMS(proto),                    \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      42 |                              PARAMS(args),                     \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      43 |                              PARAMS(tstruct),                  \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      44 |                              PARAMS(assign),                   \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      45 |                              PARAMS(print));                   \
+         |                              ~~~~~~~^~~~~~~
+   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
+     139 | #define PARAMS(args...) args
+         |                         ^~~~
+   include/trace/trace_events.h:219:27: note: expanded from macro 'DECLARE_EVENT_CLASS'
+     219 |         trace_event_printf(iter, print);                                \
+         |                                  ^~~~~
+   1 warning and 1 error generated.
 
 
-vim +/__folio_test_movable +1653 mm/vmscan.c
+vim +256 include/trace/events/scsi.h
 
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1637  
-730ec8c01a2bd6 Maninder Singh          2020-06-03  1638  unsigned int reclaim_clean_pages_from_list(struct zone *zone,
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1639) 					   struct list_head *folio_list)
-02c6de8d757cb3 Minchan Kim             2012-10-08  1640  {
-02c6de8d757cb3 Minchan Kim             2012-10-08  1641  	struct scan_control sc = {
-02c6de8d757cb3 Minchan Kim             2012-10-08  1642  		.gfp_mask = GFP_KERNEL,
-02c6de8d757cb3 Minchan Kim             2012-10-08  1643  		.may_unmap = 1,
-02c6de8d757cb3 Minchan Kim             2012-10-08  1644  	};
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1645  	struct reclaim_stat stat;
-730ec8c01a2bd6 Maninder Singh          2020-06-03  1646  	unsigned int nr_reclaimed;
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1647) 	struct folio *folio, *next;
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1648) 	LIST_HEAD(clean_folios);
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1649  	unsigned int noreclaim_flag;
-02c6de8d757cb3 Minchan Kim             2012-10-08  1650  
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1651) 	list_for_each_entry_safe(folio, next, folio_list, lru) {
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1652) 		if (!folio_test_hugetlb(folio) && folio_is_file_lru(folio) &&
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17 @1653) 		    !folio_test_dirty(folio) && !__folio_test_movable(folio) &&
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1654) 		    !folio_test_unevictable(folio)) {
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1655) 			folio_clear_active(folio);
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1656) 			list_move(&folio->lru, &clean_folios);
-02c6de8d757cb3 Minchan Kim             2012-10-08  1657  		}
-02c6de8d757cb3 Minchan Kim             2012-10-08  1658  	}
-02c6de8d757cb3 Minchan Kim             2012-10-08  1659  
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1660  	/*
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1661  	 * We should be safe here since we are only dealing with file pages and
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1662  	 * we are not kswapd and therefore cannot write dirty file pages. But
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1663  	 * call memalloc_noreclaim_save() anyway, just in case these conditions
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1664  	 * change in the future.
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1665  	 */
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1666  	noreclaim_flag = memalloc_noreclaim_save();
-49fd9b6df54e61 Matthew Wilcox (Oracle  2022-09-02  1667) 	nr_reclaimed = shrink_folio_list(&clean_folios, zone->zone_pgdat, &sc,
-7d709f49babc28 Gregory Price           2025-04-24  1668  					&stat, true, NULL);
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1669  	memalloc_noreclaim_restore(noreclaim_flag);
-2d2b8d2b67713d Yu Zhao                 2021-06-30  1670  
-b8cecb9376b9d3 Matthew Wilcox (Oracle  2022-06-17  1671) 	list_splice(&clean_folios, folio_list);
-2da9f6305f306f Nicholas Piggin         2020-11-13  1672  	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_FILE,
-2da9f6305f306f Nicholas Piggin         2020-11-13  1673  			    -(long)nr_reclaimed);
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1674  	/*
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1675  	 * Since lazyfree pages are isolated from file LRU from the beginning,
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1676  	 * they will rotate back to anonymous LRU in the end if it failed to
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1677  	 * discard so isolated count will be mismatched.
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1678  	 * Compensate the isolated count for both LRU lists.
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1679  	 */
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1680  	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_ANON,
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1681  			    stat.nr_lazyfree_fail);
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1682  	mod_node_page_state(zone->zone_pgdat, NR_ISOLATED_FILE,
-2da9f6305f306f Nicholas Piggin         2020-11-13  1683  			    -(long)stat.nr_lazyfree_fail);
-1f318a9b0dc399 Jaewon Kim              2020-06-03  1684  	return nr_reclaimed;
-02c6de8d757cb3 Minchan Kim             2012-10-08  1685  }
-02c6de8d757cb3 Minchan Kim             2012-10-08  1686  
-
-:::::: The code at line 1653 was first introduced by commit
-:::::: b8cecb9376b9d3031cf62b476a0db087b6b01072 mm/vmscan: convert reclaim_clean_pages_from_list() to folios
-
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: akpm <akpm@linux-foundation.org>
+   210	
+   211		TP_PROTO(struct scsi_cmnd *cmd, int rtn),
+   212	
+   213		TP_ARGS(cmd, rtn),
+   214	
+   215		TP_STRUCT__entry(
+   216			__field( unsigned int,	host_no	)
+   217			__field( unsigned int,	channel	)
+   218			__field( unsigned int,	id	)
+   219			__field( unsigned int,	lun	)
+   220			__field( int,		rtn	)
+   221			__field( unsigned int,	opcode	)
+   222			__field( unsigned int,	cmd_len )
+   223			__field( int,	driver_tag)
+   224			__field( int,	scheduler_tag)
+   225			__field( unsigned int,	data_sglen )
+   226			__field( unsigned int,	prot_sglen )
+   227			__field( unsigned char,	prot_op )
+   228			__dynamic_array(unsigned char,	cmnd, cmd->cmd_len)
+   229		),
+   230	
+   231		TP_fast_assign(
+   232			__entry->host_no	= cmd->device->host->host_no;
+   233			__entry->channel	= cmd->device->channel;
+   234			__entry->id		= cmd->device->id;
+   235			__entry->lun		= cmd->device->lun;
+   236			__entry->rtn		= rtn;
+   237			__entry->opcode		= cmd->cmnd[0];
+   238			__entry->cmd_len	= cmd->cmd_len;
+   239			__entry->driver_tag	= scsi_cmd_to_rq(cmd)->tag;
+   240			__entry->scheduler_tag	= scsi_cmd_to_rq(cmd)->internal_tag;
+   241			__entry->data_sglen	= scsi_sg_count(cmd);
+   242			__entry->prot_sglen	= scsi_prot_sg_count(cmd);
+   243			__entry->prot_op	= scsi_get_prot_op(cmd);
+   244			memcpy(__get_dynamic_array(cmnd), cmd->cmnd, cmd->cmd_len);
+   245		),
+   246	
+   247		TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u" \
+   248			  " prot_op=%s driver_tag=%d scheduler_tag=%d cmnd=(%s %s raw=%s)" \
+   249			  " rtn=%s",
+   250			  __entry->host_no, __entry->channel, __entry->id,
+   251			  __entry->lun, __entry->data_sglen, __entry->prot_sglen,
+   252			  show_prot_op_name(__entry->prot_op), __entry->driver_tag,
+   253			  __entry->scheduler_tag, show_opcode_name(__entry->opcode),
+   254			  __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
+   255			  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
+ > 256			  show_rtn_type(__entry->rtn)
+   257		  )
+   258	);
+   259	
+   260	DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
+   261	
+   262		TP_PROTO(struct scsi_cmnd *cmd),
+   263	
+   264		TP_ARGS(cmd),
+   265	
+   266		TP_STRUCT__entry(
+   267			__field( unsigned int,	host_no	)
+   268			__field( unsigned int,	channel	)
+   269			__field( unsigned int,	id	)
+   270			__field( unsigned int,	lun	)
+   271			__field( int,		result	)
+   272			__field( unsigned int,	opcode	)
+   273			__field( unsigned int,	cmd_len )
+   274			__field( int,	driver_tag)
+   275			__field( int,	scheduler_tag)
+   276			__field( unsigned int,	data_sglen )
+   277			__field( unsigned int,	prot_sglen )
+   278			__field( unsigned char,	prot_op )
+   279			__dynamic_array(unsigned char,	cmnd, cmd->cmd_len)
+   280			__field( u8, sense_key )
+   281			__field( u8, asc )
+   282			__field( u8, ascq )
+   283		),
+   284	
+   285		TP_fast_assign(
+   286			struct scsi_sense_hdr sshdr;
+   287	
+   288			__entry->host_no	= cmd->device->host->host_no;
+   289			__entry->channel	= cmd->device->channel;
+   290			__entry->id		= cmd->device->id;
+   291			__entry->lun		= cmd->device->lun;
+   292			__entry->result		= cmd->result;
+   293			__entry->opcode		= cmd->cmnd[0];
+   294			__entry->cmd_len	= cmd->cmd_len;
+   295			__entry->driver_tag	= scsi_cmd_to_rq(cmd)->tag;
+   296			__entry->scheduler_tag	= scsi_cmd_to_rq(cmd)->internal_tag;
+   297			__entry->data_sglen	= scsi_sg_count(cmd);
+   298			__entry->prot_sglen	= scsi_prot_sg_count(cmd);
+   299			__entry->prot_op	= scsi_get_prot_op(cmd);
+   300			memcpy(__get_dynamic_array(cmnd), cmd->cmnd, cmd->cmd_len);
+   301			if (cmd->sense_buffer && SCSI_SENSE_VALID(cmd) &&
+   302			    scsi_command_normalize_sense(cmd, &sshdr)) {
+   303				__entry->sense_key = sshdr.sense_key;
+   304				__entry->asc = sshdr.asc;
+   305				__entry->ascq = sshdr.ascq;
+   306			} else {
+   307				__entry->sense_key = 0;
+   308				__entry->asc = 0;
+   309				__entry->ascq = 0;
+   310			}
+   311		),
+   312	
+   313		TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u " \
+   314			  "prot_op=%s driver_tag=%d scheduler_tag=%d cmnd=(%s %s raw=%s) " \
+   315			  "result=(driver=%s host=%s message=%s status=%s) "
+   316			  "sense=(key=%#x asc=%#x ascq=%#x)",
+   317			  __entry->host_no, __entry->channel, __entry->id,
+   318			  __entry->lun, __entry->data_sglen, __entry->prot_sglen,
+   319			  show_prot_op_name(__entry->prot_op), __entry->driver_tag,
+   320			  __entry->scheduler_tag, show_opcode_name(__entry->opcode),
+   321			  __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
+   322			  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
+   323			  "DRIVER_OK",
+   324			  show_hostbyte_name(((__entry->result) >> 16) & 0xff),
+   325			  "COMMAND_COMPLETE",
+   326			  show_statusbyte_name(__entry->result & 0xff),
+   327			  __entry->sense_key, __entry->asc, __entry->ascq)
+   328	);
+   329	
+   330	DEFINE_EVENT(scsi_cmd_done_timeout_template, scsi_dispatch_cmd_done,
+   331		     TP_PROTO(struct scsi_cmnd *cmd),
+   332		     TP_ARGS(cmd));
+   333	
+   334	DEFINE_EVENT(scsi_cmd_done_timeout_template, scsi_dispatch_cmd_timeout,
+   335		     TP_PROTO(struct scsi_cmnd *cmd),
+   336		     TP_ARGS(cmd));
+   337	
+   338	TRACE_EVENT(scsi_eh_wakeup,
+   339	
+   340		TP_PROTO(struct Scsi_Host *shost),
+   341	
+   342		TP_ARGS(shost),
+   343	
+   344		TP_STRUCT__entry(
+   345			__field( unsigned int,	host_no	)
+   346		),
+   347	
+   348		TP_fast_assign(
+   349			__entry->host_no	= shost->host_no;
+   350		),
+   351	
+   352		TP_printk("host_no=%u", __entry->host_no)
+   353	);
+   354	
+   355	#endif /*  _TRACE_SCSI_H */
+   356	
+   357	/* This part must be outside protection */
+ > 358	#include <trace/define_trace.h>
 
 -- 
 0-DAY CI Kernel Test Service
