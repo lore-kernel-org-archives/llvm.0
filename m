@@ -1,91 +1,106 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA8925C827
-	for <llvm@lists.linux.dev>; Tue, 20 May 2025 19:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB4825C82B;
+	Tue, 20 May 2025 19:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747767960; cv=none; b=elbH6WFdLQ/1RSmoJOVzrc0sy8PxUThwXhluZZYn/rTptGoCs9ng7z3r2PTMquLQM1Xq2Iz+qcszNxDd3YF0zmEkfNz5gZnNfLA2w14+atKeCx0vrmRZD9CiGrn9w74jLAdC1gACzEFNDn1dmOGA1eypZJk7lA4K4/BvI30NIeg=
+	t=1747768769; cv=none; b=p55VOOfHLsUvsHl5qYLQrCZpfN69hCPyMphnjnau+RmmgMUTwaN15beEWgbHu/cNX1SUMpFXn6iV4YZB4CtVTUEjHFCo9CIsm2jJpvoN3c2dN9/+GctJCc2QrL3ixJnoPdX9XUKja6ntcdrL9mGUIdZemeqmUfpRencP3BsKWlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747767960; c=relaxed/simple;
-	bh=43bmD7mHFNYmUiQi6vbJY157cjm0h/yt/bIfQ57VGC4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n0YCtcVFjdfJ7+9ALW+qcVX/vrbnUIF+e44/NBjJzWf+9psuyXVn5Z0bTWrDuex4cwj5FzRNEC3+iwMA8HgY9ZsYZwCCknARovRHpxtOGuySfXN8WUbEV6cQp/3C3jNVRjEAB/wS3jktPXlbj5FT4HxPv1nA47wUgzrt+aS6EWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwWs6HEd; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747768769; c=relaxed/simple;
+	bh=9dyF/1WrQAjplPxdmFJJjkp2EcW47hvbjaoy4iQBplo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bo2ASf35DgoDiYzojZAG1QU0RsNyZfLndcOzwZl2OGptnxVfESVvOtS0g4whIqMpAiBdu2L/zA1LSEc4Skl+kA9aMzPhtnbxZ5p3ZHroLdgZ6G4m908X8pDoopi7SUfvfF9htSTdxiQZubmNw472TQVBdnxGOx4TPlf/p5/Cj0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jC3Uw9hs; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwWs6HEd"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b078bb16607so416718a12.2
-        for <llvm@lists.linux.dev>; Tue, 20 May 2025 12:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747767958; x=1748372758; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=43bmD7mHFNYmUiQi6vbJY157cjm0h/yt/bIfQ57VGC4=;
-        b=XwWs6HEd0oG237rDMnHrzklFfwbW/wcKF8MpV6u5MuLPRjQI6uK8ffwQN4Y0AoWe95
-         +vNruSwMCB2zffIKzOWcQ/tirHT+ti0+5boakgGLLydK2yeJYpT5DSdlknxYKUX2IYIJ
-         ibcLT3ufbAKdIiAL1De7aEHgwHkQWDOXcM5gE3Az/nDZqqX8ZiF3BquyAbHMF7OTA6Sc
-         XDyUSU6u+ewFw7GUCusT1YFEOt+zJKWOyyMaKomtAgVI2Teqia/Jj42U4h4gwyAAXgmn
-         Xs2h8gBPObsMDNfi0LC7R2zJp/faKcRecIui7xAjYMG6REuic9s+Ni0piYiaISXx4zY4
-         iB5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747767958; x=1748372758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=43bmD7mHFNYmUiQi6vbJY157cjm0h/yt/bIfQ57VGC4=;
-        b=ZEd/jo+Yse8QOWYSjE3Wdun8J7EO8/joBWBnDqSzJEU7vsEy6iLe/s6h86e6hdbxic
-         +muH33/l2ODegbdopTjflr+B0gFHVV/SOaKxqrt3XoDvUiEUol9Q2Fz7u5ePbDiqfqJW
-         hEUtvUyQE4pBVSQ735YZHOwp3aMbPFpydUjcjxlFHoXiuOOhiH0nVJLmh3mvT4tDwLVV
-         VCkHOkwatWKeSpuonCCAg8WcT+xer9j4BMMy5sufQ4KtK0wxl4CxyuGFQBiT+meIiut3
-         TCFRRGFHsvK4sFl5slVZer9gV2Tevvyis7I6xtnESul2xWmTg2MA4nnVuc/R+4m4O/TT
-         3a5g==
-X-Gm-Message-State: AOJu0Yw5N5BpBqE1W2mFaBE/nygsKGwyPK6TCkA+ikmO6Y9YwziqPIDn
-	t0hbW0g0VuZ1Q0b3xggb1/QaJ+x6n4UXWqYuYm57umb3Bb2t9d9zrXpdj1rML0u16kQJLfH708B
-	RTL4E877sDnwTo053vm3y0pji7FrHnFM=
-X-Gm-Gg: ASbGnctaJVAq6ySrbfe7IzjFn1wQr8SMPVt3Y65SRK/ja5CLtTENDtdR18dNlWRJYAJ
-	fEimidCkh5SbMT4OFXYyynlstNEljXjov9a90yv0ak4sQjWO+xAhRwBF+Xd+ChFhZfooUqvNbH9
-	mw797cbFFfdrMKGWmWusyfTOe5nU90Tn7K
-X-Google-Smtp-Source: AGHT+IG2wm9/NZvxACTJ6e77x+OgL20H5qaU+yjzTx5/knRlF5hFHybG1enNtB3KLpEw6+LHkwNeVttNsCTzr7y2Bow=
-X-Received: by 2002:a17:902:f791:b0:216:3dd1:5460 with SMTP id
- d9443c01a7336-231d437f031mr88495715ad.2.1747767958440; Tue, 20 May 2025
- 12:05:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jC3Uw9hs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747768767; x=1779304767;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9dyF/1WrQAjplPxdmFJJjkp2EcW47hvbjaoy4iQBplo=;
+  b=jC3Uw9hsWfqg00pXNXrTo8SH4lvRXltXizJ9O4EsdCQ5B/4KEq4fiaD8
+   hMVeJnPZMAwhP+KDYLm/s/cO/4I/iZc/l2FWLvLeLB9IsDHLPEmEACgQL
+   58bvwR6x85o0Ds+hYLVrg5G79j8TdW7O6e/TNxy5qZKEAuegD3yp6r5xg
+   /kfxKUnMahrJhEL6h1bozbHfXAlBcUqv1LOg9iUCjpCnEbgU03+B79Agw
+   KgUpn4n7W/BLVuSx2UGb3pu7PmtZVHfP1P6wpAiEkLJgy87S+rFXlcjsb
+   jX+l13bVTXvKkI2ZiH0sfESime5/SkdKdM5xHf+A/CYGfVpcXbyQbLCqH
+   w==;
+X-CSE-ConnectionGUID: FzuqQiNeTMieJQI5Tvod3Q==
+X-CSE-MsgGUID: d5olXf7mQkKNDb43YrdOQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="60759633"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="60759633"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 12:19:25 -0700
+X-CSE-ConnectionGUID: 1rNcApXTSmuSznMfK4hG5g==
+X-CSE-MsgGUID: w6xSQBGER0Ge5yeUFIs9AA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="140312313"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 20 May 2025 12:19:23 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHSUk-000NUQ-0g;
+	Tue, 20 May 2025 19:19:22 +0000
+Date: Wed, 21 May 2025 03:18:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+	Lifeng Zheng <zhenglifeng1@huawei.com>
+Subject: [chanwoo:devfreq-testing 5/5]
+ drivers/devfreq/hisi_uncore_freq.c:562:9: error: returning 'const struct
+ cpumask *' from a function with result type 'struct cpumask *' discards
+ qualifiers
+Message-ID: <202505210327.PWLD6OdP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250519175752.GA1041767@ax162>
-In-Reply-To: <20250519175752.GA1041767@ax162>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 20 May 2025 21:05:45 +0200
-X-Gm-Features: AX0GCFtrFY53UQEtkPuStb_FqRaQAKD8DfZGt-5G4wjY_Jtb6rmYtaS6kaUlUmo
-Message-ID: <CANiq72mQihFoZBhoCYhm_DXQnt_-MWw5dcq2k8pp=+DgSN-E2A@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 20.1.5 uploaded (and a note about older toolchains)
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 19, 2025 at 7:57=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> I have built and uploaded LLVM 20.1.5 to
-> https://mirrors.edge.kernel.org/pub/tools/llvm/.
->
-> If there are any issues found, please let us know via email or
-> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-> opportunity to get them fixed in main and backported before the 20.x
-> series is no longer supported.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
+head:   a4bcf6ccfb61f2e8354081ecc584c003d6b91c4e
+commit: a4bcf6ccfb61f2e8354081ecc584c003d6b91c4e [5/5] PM / devfreq: Add HiSilicon uncore frequency scaling driver
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250521/202505210327.PWLD6OdP-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210327.PWLD6OdP-lkp@intel.com/reproduce)
 
-Works for Rust:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505210327.PWLD6OdP-lkp@intel.com/
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+All errors (new ones prefixed by >>):
 
-Thanks!
+>> drivers/devfreq/hisi_uncore_freq.c:562:9: error: returning 'const struct cpumask *' from a function with result type 'struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     562 |         return topology_cluster_cpumask(cpu);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/topology.h:224:40: note: expanded from macro 'topology_cluster_cpumask'
+     224 | #define topology_cluster_cpumask(cpu)           cpumask_of(cpu)
+         |                                                 ^~~~~~~~~~~~~~~
+   include/linux/cpumask.h:880:25: note: expanded from macro 'cpumask_of'
+     880 | #define cpumask_of(cpu) (get_cpu_mask(cpu))
+         |                         ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-Cheers,
-Miguel
+
+vim +562 drivers/devfreq/hisi_uncore_freq.c
+
+   559	
+   560	static struct cpumask *get_cluster_cpumask(int cpu)
+   561	{
+ > 562		return topology_cluster_cpumask(cpu);
+   563	}
+   564	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
