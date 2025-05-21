@@ -1,192 +1,119 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C15425CC54
-	for <llvm@lists.linux.dev>; Wed, 21 May 2025 16:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA341FFC48;
+	Wed, 21 May 2025 21:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747846428; cv=none; b=fUTDJV171er7ZgDnZCwWpBCCGRqWA41mWG6Tko0QTGZLOp3PQOlD9I/OtJdBvRDY6wX1Q+Cu55Oi/m1sfij8y2ASI4zGHkAriDe06fjATkCTgsNwT6Z1qfDdaUHPtnOYKmWpYHSvirzBCYxe5E/24s7LtRH9gARxkMQ22bJEYJs=
+	t=1747863327; cv=none; b=Rso8653idd0Ix5bydkwuiRuIhF8hxdiIsqNhANRoJspO7ZUponLu9v+wQS/LrqHXkyBctsLH5Gz4jzkgNZSYIjRgGiCxOkHKY9E4JuzxiRl5wjmE36QwY2fW+We36yXQm8G+/s1y2mhe9OHK56lTF1bkLMBAjdjvJmaPQ4y/+0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747846428; c=relaxed/simple;
-	bh=qHopfEyt81fEf/y8iQKjmcmiqXO3gugN6MkVzAFAIFE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qAaDOxU3Gx0vJ5wlnkrZ0JgsO2P7fH9oNc8oBRuRsJmDnlnnSbyKk0QmufEq3nfsDsBvPYi1+iKH9FbjShwgkVAvBHliHD2NaXfjqoJbQNpAfmcE27CdfBF0P1iedKPr5tX3hN8R4CvOtR2/H7wIiKYuWcaQy/MUhbaqZ+zGdsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TRq8hpoQ; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1747863327; c=relaxed/simple;
+	bh=YZLxa21Ar6q84YL0TrLgO1kJWRoUTzRZEIr+JUaZ3Iw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MSbxsRMx5CG+Qy/wG4fa064u1ZR0j8Zj3+YYyuFuO6AEndlNSjklOnLOQ48NFkqtfNHLnUSgEV0YHe7VqI6UWqCDuTUORXhGXEKO/GuWRGN0pMv9sxRFKjikF0INzVX5wPPi7SrO7qVqBth5x9isVclXS7OteIT05TDg9GeQhu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J5XjaBj8; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TRq8hpoQ"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-601a67c6e61so35634a12.0
-        for <llvm@lists.linux.dev>; Wed, 21 May 2025 09:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747846423; x=1748451223; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gt2BJWIq8eUeGltZpFipvyHVPXsIRm7HCk10rPc4uGk=;
-        b=TRq8hpoQZnxgNGeeXPGR3dHWddR3hbtfnELPLNOvHc577GadrwCU5XkwfHrlbfvzlO
-         WV9GcI04cy1mRIozgLLsuGNEdbFa8o9JTk8W0YEwZR/AS1eajH79JKto2GzEN99K3f7q
-         6mjAzoItT55GRV0RZI02X61sy5PPpOhYnfUHD2tHAiPvqfg+jyeRseBmj5AoBwmASpPm
-         tJoBqPk1Wg/X1xwmVzRelvUhglf8FxWe7Qt5W7tMk+4NPnSBBNIC3ce98XZgu/maGrAw
-         djYeM9xtvhXQUG9FIEMkjt3kQCCd1GXElS/RdPO9msaoHSA9RPMsTwqZWyggMSlJw4u9
-         DG7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747846423; x=1748451223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gt2BJWIq8eUeGltZpFipvyHVPXsIRm7HCk10rPc4uGk=;
-        b=dCosCk3w9etPY1VYvf4OTDwwsYF74fi4LTPHl2pOib+Z22rvH65ujRsv7KMQ5vSojX
-         s1iKvkWv4k02oCmrCXBHUSSY0IfFM2w8bNV44Pb858STOIYVdcLGOchkjV8Oo+wxe/+H
-         e8vOrZMErz0PSzo4pEZXfWmpHCG9X6bkDjivpK+Bd2fMWJoKq3xKES3/d8Ri89gCTJeQ
-         QCS4W64wptQdDTsINdKNKfl5dTgQE1up1MoV12ARvRVRSDQswJjzIEnlfbgPqEe4l12e
-         jn+zlLeRVj0Tb1Q5VzIQEnIhyBCzuVqbnIhndqmJPu1JKqtYByYWpQbgFCw5NdS5zNz8
-         CPTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVqZ+CeRd9tz8aaR0VafvmXI3OaOi0ZAyMe+oz6d/sRZuWMlE5kNGmGnR9sIdt//CcMbsY7@lists.linux.dev
-X-Gm-Message-State: AOJu0YzdV8d7xOlkXpur1+mb2IVQF3InMAkHjfFGv/aynO/tJlZwREhS
-	UqfkgczhiO96ts9Gwl/Rel5lZ0+zu88C9ZTnGtvRPFvPRfdl0bABa+I31Zwfc/gaGOahooTImKK
-	+IEYPb6H4rXnnYPf6Vv23GfTrpzbEQ0PrK+OJrYUO
-X-Gm-Gg: ASbGncuiZz1vYZwUwb/gvO/k8mKLfnu4RtRDvEXUo5iSGIpkjSjCz9bXFg8d35qdp6D
-	eAOPyiPUCbzXO68DLXG549psSMJowi2Kj3vtfKUqToEFO/iz/aJO3k4fqBBGOycBj1FowwOwiVK
-	FzyfTRH7KPOlzrCcy1DrxLL1MvX0p4ckkiiO1cSJjE1See3c0mmg8f1oDWL6afHGwEsWAX44w9s
-	g==
-X-Google-Smtp-Source: AGHT+IEk1qK5pfCS9TiWiAJqcWHO+q4BDVFceePf5Pmj4GkZsf/xtSVgoYl2UGzFjXqYDQsYvRGQjsnQ0SmoCtpQU/I=
-X-Received: by 2002:aa7:cfc9:0:b0:602:3bf:ce73 with SMTP id
- 4fb4d7f45d1cf-60203bfcf5fmr309381a12.1.1747846423421; Wed, 21 May 2025
- 09:53:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5XjaBj8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747863326; x=1779399326;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YZLxa21Ar6q84YL0TrLgO1kJWRoUTzRZEIr+JUaZ3Iw=;
+  b=J5XjaBj8dGtgL+Hxl+Ms7JyTSw9YtlJThTbtQKdyKATQYcklxk6y251V
+   r97g2bmbIi1wdOWFZjbccQ06I6QXP8lAxk1Prj4zlGWvVcDM2R3Kr/adO
+   HeDafxkv7BzzKIKsqpcE1dMlmjKggjW9+VwSDCI+Ae2PHNRGLnJXYRs3f
+   eFzjsWyTziD/rILqq3xa/ZvEF+FhC6rQZPSv7j5HtxYPoHPM2BpXaLneP
+   h5VK2Jp7rMwKGT2KShXbAj/4Q7csLv5O2SXeQF7Qhy/qH8Iz9PDwvt9YC
+   kx9+K+1ed3elDXgGv1upLoLPZI6iP1htWI/ashpgcaiVw2oOJX10VSCdM
+   A==;
+X-CSE-ConnectionGUID: j/rOTiHiRYSpsK1moVHXsA==
+X-CSE-MsgGUID: kRhqMGegSWmzvAWGvcZIwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="61208573"
+X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
+   d="scan'208";a="61208573"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 14:35:23 -0700
+X-CSE-ConnectionGUID: r3/OdqIXRo6HroqyBfm0bQ==
+X-CSE-MsgGUID: Oc+ST89ATLKOARaVVf9qTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
+   d="scan'208";a="145393225"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 21 May 2025 14:35:18 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHr5n-000Oeg-2k;
+	Wed, 21 May 2025 21:35:15 +0000
+Date: Thu, 22 May 2025 05:34:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Remo Senekowitsch <remo@buenzli.dev>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Dirk Behme <dirk.behme@de.bosch.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v5 6/9] rust: device: Implement accessors for firmware
+ properties
+Message-ID: <202505220521.EPHBSqQg-lkp@intel.com>
+References: <20250520200024.268655-7-remo@buenzli.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250507205504.2017028-1-xur@google.com> <a2db22a3-6d66-481d-9432-b38b83e17183@cachyos.org>
- <CAF1bQ=Sh+N1ifCHK-15zeqt1tyzFtr-+nEJmSjEJOgfXgK9ufg@mail.gmail.com>
-In-Reply-To: <CAF1bQ=Sh+N1ifCHK-15zeqt1tyzFtr-+nEJmSjEJOgfXgK9ufg@mail.gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Wed, 21 May 2025 09:53:30 -0700
-X-Gm-Features: AX0GCFseOE_jhX8D3KglAvvruKoN_xZx_2C0u0wtd6LAGK11cpGwHfJ0lJ57Nkg
-Message-ID: <CAF1bQ=TQSQ75qCyQYegW7kq8WdyB-SNViraOuBvgGgAyUPS54Q@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: distributed build support for Clang ThinLTO
-To: Eric Naim <dnaim@cachyos.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
-	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520200024.268655-7-remo@buenzli.dev>
 
-On Wed, May 21, 2025 at 9:40=E2=80=AFAM Rong Xu <xur@google.com> wrote:
->
-> On Mon, May 19, 2025 at 10:22=E2=80=AFPM Eric Naim <dnaim@cachyos.org> wr=
-ote:
-> >
-> > Hi Rong Xu,
-> >
-> > On 5/8/25 04:55, xur@google.com wrote:
-> > > From: Rong Xu <xur@google.com>
-> > >
-> > > Add distributed ThinLTO build support for the Linux kernel.
-> > > This new mode offers several advantages: (1) Increased
-> > > flexibility in handling user-specified build options.
-> > > (2) Improved user-friendliness for developers. (3) Greater
-> > > convenience for integrating with objtool and livepatch.
-> > >
-> > > Note that "distributed" in this context refers to a term
-> > > that differentiates in-process ThinLTO builds by invoking
-> > > backend compilation through the linker, not necessarily
-> > > building in distributed environments.
-> > >
-> > > Distributed ThinLTO is enabled via the
-> > > `CONFIG_LTO_CLANG_THIN_DIST` Kconfig option. For example:
-> > >  > make LLVM=3D1 defconfig
-> > >  > scripts/config -e LTO_CLANG_THIN_DIST
-> > >  > make LLVM=3D1 oldconfig
-> > >  > make LLVM=3D1 vmlinux -j <..>
-> > >
-> > > The implementation changes the top-level Makefile with a
-> > > macro for generating `vmlinux.o` for distributed ThinLTO
-> > > builds. It uses the existing Kbuild infrastructure to
-> > > perform two recursive passes through the subdirectories.
-> > > The first pass generates LLVM IR object files, similar to
-> > > in-process ThinLTO. Following the thin-link stage, a second
-> > > pass compiles these IR files into the final native object
-> > > files. The build rules and actions for this two-pass process
-> > > are primarily implemented in `scripts/Makefile.build`.
-> > >
-> > > Currently, this patch focuses on building the main kernel
-> > > image (`vmlinux`) only. Support for building kernel modules
-> > > using this method is planned for a subsequent patch.
-> > >
-> > > Tested on the following arch: x86, arm64, loongarch, and
-> > > riscv.
-> > >
-> > > Some implementation details can be found here:
-> > > https://discourse.llvm.org/t/rfc-distributed-thinlto-build-for-kernel=
-/85934
-> > >
-> > > Signed-off-by: Rong Xu <xur@google.com>
-> > > ---
-> > > Changelog since v1:
-> > > - Updated the description in arch/Kconfig based on feedback
-> > >   from Nathan Chancellor
-> > > - Revised file suffixes: .final_o -> .o.thinlto.native, and
-> > >   .final_a -> .a.thinlto.native
-> > > - Updated list of ignored files in .gitignore
-> > > ---
-> > >  .gitignore                        |  2 ++
-> > >  MAINTAINERS                       |  5 +++
-> > >  Makefile                          | 40 ++++++++++++++++++++---
-> > >  arch/Kconfig                      | 19 +++++++++++
-> > >  scripts/Makefile.build            | 52 +++++++++++++++++++++++++++--=
--
-> > >  scripts/Makefile.lib              |  7 +++-
-> > >  scripts/Makefile.vmlinux_o        | 16 +++++++---
-> > >  scripts/Makefile.vmlinux_thinlink | 53 +++++++++++++++++++++++++++++=
-++
-> > >  scripts/head-object-list.txt      |  1 +
-> > >  9 files changed, 180 insertions(+), 15 deletions(-)
-> > >  create mode 100644 scripts/Makefile.vmlinux_thinlink
-> > >
-> >
-> > I noticed that both Makefile.autofdo and Makefile.propeller add extra l=
-inker flags when building with ThinLTO. Did you miss updating that or is th=
-e omission there intentional?
->
-> Thanks for catching this! One good aspect of distributed build mode is
-> that we no longer need the extra linker flags -- most of them are just
-> to pass the options to the BE compilation.
-> So this patch does not need these linker options.  But for the
-> Propeller build, we still need to pass one of the two profiles to the
-> final link, and I'll be sure to incorporate that into the patch.
+Hi Remo,
 
-One clarification: We don't need to change scripts/Makefile.propeller
-as the link
-ordering profile is already passed to the final link under
-CLANG_PROPELLER_PROFILE_PREFIX.
+kernel test robot noticed the following build errors:
 
-All the --lto-* options are only for in-process thinlto builds.
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus robh/for-next linus/master v6.15-rc7 next-20250521]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> However, I do need to make a change regarding file suffixes. The
-> is_kernel_obj macro in the Makefile.build uses the basename command.
-> The issue is that basename extracts everything before the last period
-> in a filename. So, for a file named "foo.o.thinlto.native", basename
-> returns "foo.o.thinlto", but kbuild expects it to return "foo".
->
-> To fix this, I'll adjust the suffixes to ".a_thinlto_native" and
-> ".o_thinlto_native". I'll send the patch v3 shortly.
->
-> Thanks,
->
-> -Rong
-> >
-> > --
-> > Regards,
-> >   Eric
+url:    https://github.com/intel-lab-lkp/linux/commits/Remo-Senekowitsch/rust-device-Create-FwNode-abstraction-for-accessing-device-properties/20250521-040612
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20250520200024.268655-7-remo%40buenzli.dev
+patch subject: [PATCH v5 6/9] rust: device: Implement accessors for firmware properties
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250522/202505220521.EPHBSqQg-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505220521.EPHBSqQg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505220521.EPHBSqQg-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0432]: unresolved import `crate::private`
+   --> rust/kernel/device/property.rs:14:5
+   |
+   14 |     private::Sealed,
+   |     ^^^^^^^
+   |     |
+   |     unresolved import
+   |     help: a similar path exists: `crate::device::private`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
