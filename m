@@ -1,99 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B1479CF
-	for <llvm@lists.linux.dev>; Wed, 21 May 2025 05:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D3F201266
+	for <llvm@lists.linux.dev>; Wed, 21 May 2025 06:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747806130; cv=none; b=eTxuaWlWtD7EoOxDqH4BCHK6qhAYoTQAF35BbVCrD+dzx3OGgY0QtAqv0jeGhpfxsAmnsUtA6zC8hUokkYFGyfecpCb5rbl32T03WUzV5rRplQ5YV/TEUZqc84WlTuZQRAkx+jBta9cHi6gbp3qaktHql3vA1wwFMVqSfdIjAmg=
+	t=1747808116; cv=none; b=K2SKVt6x2ofchw3DhWZazyOtin4ydEm/LLDM7OpqrYMEX+GVr9cTmmnasdU8aSJ66CJIDPOzkE5BZG1V2f6o3NZJqu9nkfygRlVgv1h+fL080zy8N0WSKRdKHgvXbX71gi8SFdEhyWtz+QyZE+qcYwzvzx5dyYJ6QCf1S3KfXsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747806130; c=relaxed/simple;
-	bh=wr3V7mrHs10XCq0zMPEy9CpqdIgwdYzyEs7X4JS8GaU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=bjacSQ9PT63YkDFD69Yw38oEgNI32tVlAxJCsRgPEJXLIFykYpIlzOAC9qXmNndyBQDYwWojVo7F5RaFUVKI1PZ/0mhDyZksf3OuSiX8VR90KC/G18iTNjfifkq50zbEVXbw8tXVGf8z6s+A0fNSZMmTkPEbLWXlhe4LSI2G6sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gImfbQD2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1747808116; c=relaxed/simple;
+	bh=sJx91BkV28GYjBSa+iSn7l8WuBagAfyq5b55RI7mlqo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k9sjVUuggjojzmWBRGIYVa5Yo4G4ZWB1qqtTaNmYEuK+4v7ard+oYN9wWFfgFkrNy04qqYMv3a4iXo9L8onz4O8rt30SwKDJ5hx/AAnJlZ3ecZpJ+CJazOueGN+/oghl+R/y6ylks57N8+KK9NvZwzbS0N3swnQ2rc55kJiUKOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IiDZO5sD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gImfbQD2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747806127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DSEhlFwCxotO09dHlS/HbNpcmQ/5OoVEBIwvGFTxUn8=;
-	b=gImfbQD22UCIFUA49Dva7W8LPgm6bVvAFkj/sSFskD/7BLzLj25/BkcrrYr8CawJh2hoA8
-	ZYUMg1zducnVYsPTh/MnltiHxCOT+sD0QuWBOOJQtFL/zrQn9/m5jwWnULDqDHr/T0+Cna
-	XpYEFtjHP++xvSG89hP+aQKV6iMOYUc=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-631-yzxiNgz1Os6yZSveBg0KxQ-1; Wed,
- 21 May 2025 01:42:05 -0400
-X-MC-Unique: yzxiNgz1Os6yZSveBg0KxQ-1
-X-Mimecast-MFC-AGG-ID: yzxiNgz1Os6yZSveBg0KxQ_1747806125
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09AA11956095
-	for <llvm@lists.linux.dev>; Wed, 21 May 2025 05:42:05 +0000 (UTC)
-Received: from [172.20.77.114] (unknown [10.30.44.38])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 90DF518003FC;
-	Wed, 21 May 2025 05:42:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc7,
- upstream-mainline, 4a95bc12)
-Date: Wed, 21 May 2025 05:42:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IiDZO5sD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1204DC4AF09
+	for <llvm@lists.linux.dev>; Wed, 21 May 2025 06:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747808116;
+	bh=sJx91BkV28GYjBSa+iSn7l8WuBagAfyq5b55RI7mlqo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IiDZO5sDENptMggY5XyI0I8C8XxozG9r+yNJM2a5KQAxiv4QHS1BnMrBQjAuqpBgJ
+	 Oz8OuiQTETZjal+MzFxwaNJSxBuPhrpUVsROPmSxJa/x79XWlhwHnVg580NRcOee6c
+	 7XiVibWU0e9aXI2t9QT9z4MKMr4H8S+tgJhKDbVEaiB4N8rSoI6pkHhZzXNQOObifB
+	 gRXK/PItFwD/pSA/Ey9qPr8b+ekloEJ1Ml2AW6x7j2tTOEML7A0Zmr7zKQwWwMJO2R
+	 b8E2wL2hxwE0334B3L3U6B7fz4fibjaExApU4ZhkRe22O8mkT4g5XX9mJhI2dBYXM2
+	 IgtWSvUYROowQ==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-317f68d0dffso77742011fa.2
+        for <llvm@lists.linux.dev>; Tue, 20 May 2025 23:15:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVle2r0ZF9lZSP6PWW7pdd2a20AYwr7nSns0qdpwS6mo642OGsnltjZ30SyHEoxXCZbIYDp@lists.linux.dev
+X-Gm-Message-State: AOJu0YzaqnZuIdRMqEbPTd5NKn5dW1TnYBM2BbNjXV47xLSxUvInnW8N
+	+b6R0aJwU0lPFmcSINebdsohIHTCb0BEbNkOZr9pMgNsl1+VLXusAgtSGtzuQq4magsV8vmFpii
+	1Yr5eCX7PxIS6YKtxhH1mi0+PmJT0Stg=
+X-Google-Smtp-Source: AGHT+IHKLowYz8Gj1JZtUk2LFvTmpyzqjMRzUEWGn1mH8p09HeNHaB4zZ9i/q4x2KqjrxIgDbp7asUplQHc85GLQLF8=
+X-Received: by 2002:a2e:b88e:0:b0:30d:e104:b795 with SMTP id
+ 38308e7fff4ca-328077d4cf2mr65272041fa.39.1747808114433; Tue, 20 May 2025
+ 23:15:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <51273.125052101420502245@us-mta-631.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: fX9V_S7UcEH3x4DJkz8PzErTTSvyPo8Az-vJVQvsF9Y_1747806125
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20250505221419.2672473-1-sashal@kernel.org> <20250505221419.2672473-400-sashal@kernel.org>
+ <CAMj1kXF6=t9NoH5Lsh4=RwhUTHtpBt9VmZr3bEVm6=1zGiOf2w@mail.gmail.com> <aCyNnFdhBTOby6It@lappy>
+In-Reply-To: <aCyNnFdhBTOby6It@lappy>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 21 May 2025 08:15:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGtasdqRPn8koNN095VEEU4K409QvieMdgGXNUK0kPgkw@mail.gmail.com>
+X-Gm-Features: AX0GCFvl7zwimDfYOXalOmlQSvkg7hQabYAoQkUZikZA7VlssPaTmLL912vRcT0
+Message-ID: <CAMj1kXGtasdqRPn8koNN095VEEU4K409QvieMdgGXNUK0kPgkw@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.14 400/642] x86/relocs: Handle
+ R_X86_64_REX_GOTPCRELX relocations
+To: Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Brian Gerst <brgerst@gmail.com>, Ingo Molnar <mingo@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, nathan@kernel.org, 
+	ubizjak@gmail.com, thomas.weissschuh@linutronix.de, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Tue, 20 May 2025 at 16:11, Sasha Levin <sashal@kernel.org> wrote:
+>
+> On Tue, May 06, 2025 at 12:32:05AM +0200, Ard Biesheuvel wrote:
+> >On Tue, 6 May 2025 at 00:30, Sasha Levin <sashal@kernel.org> wrote:
+> >>
+> >> From: Brian Gerst <brgerst@gmail.com>
+> >>
+> >> [ Upstream commit cb7927fda002ca49ae62e2782c1692acc7b80c67 ]
+> >>
+> >> Clang may produce R_X86_64_REX_GOTPCRELX relocations when redefining the
+> >> stack protector location.  Treat them as another type of PC-relative
+> >> relocation.
+> >>
+> >> Signed-off-by: Brian Gerst <brgerst@gmail.com>
+> >> Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> >> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+> >> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> >> Link: https://lore.kernel.org/r/20250123190747.745588-6-brgerst@gmail.com
+> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> >
+> >This patch was one of a series of about 20 patches. Did you pick all of them?
+>
+> Should we pick them all up?
+>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'rproc-v6.15-fixes' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/remoteproc/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1828365953
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1828365953-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+No, we should pick up none of them.
