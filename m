@@ -1,89 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F53239E9B;
-	Wed, 21 May 2025 22:44:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F1E1E489
+	for <llvm@lists.linux.dev>; Wed, 21 May 2025 22:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747867495; cv=none; b=E5twtJrzt3Dxp+aOpM5+DFRIfNE/HLz1DwiUIpWvpwPXT9UJNPKAu/YmMccd8kLEpiMhlqkg7aw5H5FAsKP0yzKHz1SWEdaaoL9FhTv4dLywdM4+Z3gAhYkT+9FKfEa9TB86jMayprgN6XfAGJygJFlaptBZNk8/qPXpsyn4ZNE=
+	t=1747868052; cv=none; b=YFIDg+bZCwsIj5y34Ql9SRgcMBjKH5tEh4oqmKhFoow6yMxoVUvN9ZNTQcHJjafNSuIyROH6l4/Sc4a0e2fC57Kepn1eV8WPSveqeCgKnLvQm7W3xni3I7aTc2dZkywjoTP2/RgOWAz9ttsVdpg+7RDUgNZwFT2dHRcE3OeVzZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747867495; c=relaxed/simple;
-	bh=RFci8NiCtNuJUGrSSysrHVigN36hprEjbgn8kcBN20I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hZroYqVRUASDMSLUu0Uk71hgWnX57jsLR+C+1YKsofCyFWsHaxd1xxOMuv4lT/6vCWsWIFQ46Xw+nq3NSB1SrSMdxgm+muup7gdAyTZFPrQDn+B9OtpRcRZig6nGTcEaZ1PNqD2e06HZsE3+fv4o09RF4xf+WuS20fHTz9aoHOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMKWrxAy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747868052; c=relaxed/simple;
+	bh=QAggP+lM/j8Yzi2qMtUyogpJwyHr1XRiUmUWlJAfYEw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=Ns8NIiFCCWYQul2ajornoLYM9qIFFiDbWk6+3jwYigMytN3FKHdWUoMK4NUEBTPSbCySmxG++ujIzmzwnCvGDBDtFqVPV3ShSOHo95YsHlVQwda3Ywcxi9RnM4+Hm6DvHGnV5jIXOJbhznULZ8PnMObtCaQFKM429n1zzuhjK+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuzhuo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gmAXsS9R; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuzhuo.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMKWrxAy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1F6C4CEE4;
-	Wed, 21 May 2025 22:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747867494;
-	bh=RFci8NiCtNuJUGrSSysrHVigN36hprEjbgn8kcBN20I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OMKWrxAy8kKFB5xKLhVcMtSwG2PQjvTSK9EwzeQ62FislyBlZcZn1lKJ45TzUp3yk
-	 NUhNbJc9I8ov786tLhYNuoVga0u6vkPk7pumpKeLxT/kuc3dSQ5LuCLaQ+M3hG3qbr
-	 v3FECu6pISOduDO2hX1oGz8MZbsU5WXiJfIPSvncrSRb/qU+m3ZCJjz1iTe6MMGywl
-	 eBeWwFRtfV0FGVqTgc9yvwRhtW5WC+QZsNCZdlzakkKXILaPEAFUvjlEPdof/HfwAF
-	 4RQtkONYQlVtkLfhB0e8aPSNwDw93CdBTrGDLf+avLoy7byVG1VZCkWa9QIS4Wxr4P
-	 1XfD3oWDUo+ag==
-Date: Wed, 21 May 2025 15:44:50 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	kernel test robot <lkp@intel.com>,
-	Marco Crivellari <marco.crivellari@suse.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [linux-next:master 5904/8679] <instantiation>:7:11: error:
- expected an immediate
-Message-ID: <20250521224450.GA2412476@ax162>
-References: <202505071331.Z0N2eSkr-lkp@intel.com>
- <20250508164308.GC834338@ax162>
- <aB0Lt7e4tnRK355u@alpha.franken.de>
- <alpine.DEB.2.21.2505121141400.46553@angie.orcam.me.uk>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gmAXsS9R"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7398d70abbfso9935307b3a.2
+        for <llvm@lists.linux.dev>; Wed, 21 May 2025 15:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747868050; x=1748472850; darn=lists.linux.dev;
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e5xiyzjaDsO3It6y2mmvth2hLq6HIh9F/ymtgdkp/7U=;
+        b=gmAXsS9RasJzwLRim59bQ2972HY+8mLv7whWFvx8rtwEqrK6GB7NBiihGV5YpqHmxy
+         0AVZptIywNKNA+YBh1IwJlZG4pM9Nhubx6hkIwxIciGVYrOkyKYmdEID8a0Mi8aSTY5J
+         3jpDI/zqrkh5ZmFNc2GhnbcBNAXmXLAzDM7Q9xNLwVmww7CbdStqKT1auwSyT5vdeCkM
+         1F08XDaUbcOimx+rSxzAMXSIXn9UQ3vucKrgeTpRlQYTVptzKoc42XJweldrmmXPrudB
+         7V0d4GHVp6gFd75rEKNRox6IeE7mze1NfXdartSnoemviUfYyR0UsKL3oTB/KOLlGSq2
+         zG8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747868050; x=1748472850;
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e5xiyzjaDsO3It6y2mmvth2hLq6HIh9F/ymtgdkp/7U=;
+        b=jAonWmj26SOUAUBSxNp6pchctBPhkW10SIZY4cDbZ//YqL9zTj2dBjrE/dJuoo3ge7
+         ZR9qqvZBAXFFMWWiaeONhhZYRMUQ3AhUXsMy8sIxr6pvSjb1gTFypYn11YNptDr9b9tq
+         cjqL3qcRnu7kyPenvCcwX+HfUFY1NOXwVGor3gxfLBxFmayZO8fHOFavVycrn1UZZpPN
+         aGyXzgrR1Y82BlQqRh631uuR423oDms9xsDWsT8+Q5U3lRgVn/3Un3DZSFkPKT2sHx+h
+         17Qjv3GKOEaSy+JDsQJ+MKcryMGfSFMDVlmYlE0gqM4hCOGhFReNT61yX0/PjzUPcqx0
+         Loyg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjEertgvt5iCIGtssg1vLRtakkWkTSZf40ekF163YbUeRR3xYaBfIMgKT64JJz2QjdQ9cB@lists.linux.dev
+X-Gm-Message-State: AOJu0YyKT6W0ggFwDF5m2XsvwZLq+oolEkKaKQJd6dmWliGc1Bw3OtiC
+	G+8lx0tCK5hzL1DKsHrt9NTxDLHi/XfGtlaO2QfKFsau4V9lgClq6VK+Wjf0dPN6frUu2QhqtML
+	UTWcEOg==
+X-Google-Smtp-Source: AGHT+IFFAeeYwZo8g7rnKGgMqq9ef4KSzj7XjVvtF1mrE7Ad+JDdHJD4QWr288U1fWDVQWnorSbC+q7HAbM=
+X-Received: from pfux21.prod.google.com ([2002:a05:6a00:bd5:b0:740:b53a:e67f])
+ (user=yuzhuo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3a14:b0:740:67ce:1d8b
+ with SMTP id d2e1a72fcca58-742a97b7a1bmr31736812b3a.7.1747868050314; Wed, 21
+ May 2025 15:54:10 -0700 (PDT)
+Date: Wed, 21 May 2025 15:53:03 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2505121141400.46553@angie.orcam.me.uk>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1164.gab81da1b16-goog
+Message-ID: <20250521225307.743726-1-yuzhuo@google.com>
+Subject: [PATCH v1 0/4] perf: Remove libcrypto dependency
+From: Yuzhuo Jing <yuzhuo@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Liang Kan <kan.liang@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
+	James Clark <james.clark@linaro.org>, Tomas Glozar <tglozar@redhat.com>, Leo Yan <leo.yan@arm.com>, 
+	Guilherme Amadio <amadio@gentoo.org>, Yuzhuo Jing <yuzhuo@google.com>, 
+	Yang Jihong <yangjihong@bytedance.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+	Wei Yang <richard.weiyang@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Aditya Gupta <adityag@linux.ibm.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, "Steinar H. Gunderson" <sesse@google.com>, 
+	"Dr. David Alan Gilbert" <linux@treblig.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, May 12, 2025 at 11:47:45AM +0100, Maciej W. Rozycki wrote:
-> On Thu, 8 May 2025, Thomas Bogendoerfer wrote:
-> 
-> > > If it is not easy to work around, we can probably just leave it broken
-> > > and tell anybody who notices to upgrade their compiler.
-> > 
-> > I wrapped my head around it today, but no idea how to solve it...
-> 
-> #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < vvv
-> #error Please upgrade to version vvv to build this source
-> #endif
-> 
-> -- or suchlike, I suppose.  Someone just needs to fill `vvv' in.
+Currently, genelf.c is the only file in the perf tool that depends on
+libcrypto (e.g. openssl), which only uses it to calculate a SHA1/MD5
+Build ID.  This patch series pulls in the SHA1 implementation from the
+kernel tree, and removes the libcrypto dependency from perf.  This also
+switches the default Build ID calculation method from MD5 to the more
+commonly used SHA1.
 
-Given this file is unconditionally compiled, we would be better served
-just adjusting min-tool-version.sh to show an error during configuration
-time. Technically, this is only needed with LLVM_IAS=1 but that is the
-default and adjusting as-version.sh to check the version would be a
-little difficult but I will try to think about it more in the next few
-days.
+Yuzhuo Jing (4):
+  perf utils: Add support functions for sha1 utils
+  perf tools: Add sha1 utils
+  perf genelf: Remove libcrypto dependency and use sha1 utils
+  tools: Remove libcrypto dependency
 
-Cheers,
-Nathan
+ tools/build/Makefile.feature            |   2 -
+ tools/build/feature/Makefile            |   4 -
+ tools/build/feature/test-all.c          |   5 -
+ tools/build/feature/test-libcrypto.c    |  25 -----
+ tools/include/linux/bitops.h            |  10 ++
+ tools/include/linux/compiler.h          |  17 ++++
+ tools/include/linux/string.h            |  22 +++++
+ tools/perf/Documentation/perf-check.txt |   1 -
+ tools/perf/Makefile.config              |  13 ---
+ tools/perf/Makefile.perf                |   3 -
+ tools/perf/builtin-check.c              |   1 -
+ tools/perf/tests/make                   |   4 +-
+ tools/perf/util/Build                   |   2 +
+ tools/perf/util/genelf.c                |  72 ++------------
+ tools/perf/util/sha1.c                  | 122 ++++++++++++++++++++++++
+ tools/perf/util/sha1.h                  |  41 ++++++++
+ tools/perf/util/sha1_base.h             | 103 ++++++++++++++++++++
+ tools/perf/util/sha1_generic.c          |  49 ++++++++++
+ 18 files changed, 373 insertions(+), 123 deletions(-)
+ delete mode 100644 tools/build/feature/test-libcrypto.c
+ create mode 100644 tools/perf/util/sha1.c
+ create mode 100644 tools/perf/util/sha1.h
+ create mode 100644 tools/perf/util/sha1_base.h
+ create mode 100644 tools/perf/util/sha1_generic.c
 
-diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-index 787868183b84..5f5176505665 100755
---- a/scripts/min-tool-version.sh
-+++ b/scripts/min-tool-version.sh
-@@ -30,6 +30,8 @@ llvm)
- 		echo 15.0.0
- 	elif [ "$SRCARCH" = loongarch ]; then
- 		echo 18.0.0
-+	elif [ "$SRCARCH" = mips ]; then
-+		echo 21.0.0
- 	else
- 		echo 13.0.1
- 	fi
+-- 
+2.49.0.1164.gab81da1b16-goog
+
