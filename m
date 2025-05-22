@@ -1,124 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5F0198E75;
-	Thu, 22 May 2025 18:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45D9268FF6;
+	Thu, 22 May 2025 22:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747938198; cv=none; b=UT4EO1Q5Yi6gmwksC9FEMxhXdmyh0LItre1De7XR23v48Mr92bs3f5TUOh74/Fgolx0b4Bmnb7lEe6vw7843oyLl+e2EZxlSZctzYsqxbasaASj2j/gqq9nQvYTxrBCedg1S8BOvQf+1kA2UHdW0u4Y5DvLb8hySZYzmaYYqN60=
+	t=1747952028; cv=none; b=uCJrPq198njdSNr90spp3Topavr+WBgj0drARfxA7WiIFcwc42u9iTqgU8ld3Hxk244uHP8bzJj1gk5veIqN+ddn9JmSOOmyVCsyCwsZ8T62mk9Gn8woDfeQtgnN3s5F7ACZUwvgobt/BvhtaD8T0S7lCrEYJbW+RSWAdtktbGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747938198; c=relaxed/simple;
-	bh=IPz6iHro3xzs3U8WhYMAIESZje4l1V6nQ/pXxbjhE/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uyuyd2X7Pi1AegrgvxKsH9ILWuNOfsiaVEVSHcWIksBPfwnUP2DaJuZow/8PBdPabm3M+hlvCPgLPvB0M0wXkiQb1ursPADO2/Mtbp7N4VoK6/We9w/DHAhCvjDTicHZ1P8KZLp3jnq7rKHOqFUZfv8tXC7TsunSy9S+WgT3FJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aLu55mq+; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747952028; c=relaxed/simple;
+	bh=5dENeOLtnJGFObbzdDXN0f5y5BtraJcblhTQRAod3S8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AuW06mELLhPVFcyjxN9m1hizufhBPdkfcGbUyOomk8+jTapJq7qiR1eSuEFmaNBhsJ+FBkuy/wjlc/gZHsP9ZBt4a0zgBqnPfTxIbGlUCif594TyttqMhsL6EfZxqqANIunza3p/KY6auwcV7ayuxgpOs9jS84bm/EjJ//bfAMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ha6OqUoJ; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aLu55mq+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747938197; x=1779474197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IPz6iHro3xzs3U8WhYMAIESZje4l1V6nQ/pXxbjhE/Y=;
-  b=aLu55mq+XjRpi3qVujC+5puuRZP4laB0RnUq2U2IiFSbeU4Ju357TGxD
-   QWGD4vnx5V7AIEDAzh75FFpfye6VWCGEGSmCG1tKn7kKY96w0n0C9oY+D
-   50vWL2hbp76gfvDVzD3MePdIVqRWiZZqPIOr82Da/+exhBUzkKCx52SFJ
-   6x4ZgB+mBNh7RxP/sgFFzeF/eMdioaZJW7OildLkpx/R2/OLOahjEtc7R
-   zE99+CLHjJt9BQI0WaZ+Wzsms6/Cqq/K5UMe5nR4Ilo5BuUUYsGLUbxGe
-   KFiCcdt8+j9wVfJN+gk9bMfGLoTjFTLavPuUgsnOsp78COnqKm8Fgnk8J
-   Q==;
-X-CSE-ConnectionGUID: NTmpHZMwSkq97kADAFo+SA==
-X-CSE-MsgGUID: g2bTgrBMQtmpCqB0+ze4xw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="72510106"
-X-IronPort-AV: E=Sophos;i="6.15,306,1739865600"; 
-   d="scan'208";a="72510106"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 11:23:17 -0700
-X-CSE-ConnectionGUID: 7fYqMXkFRhyO9qBsjd8dIA==
-X-CSE-MsgGUID: qgZNGhYgT9ukTIZ8jCM+Xg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,306,1739865600"; 
-   d="scan'208";a="141247235"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 22 May 2025 11:23:14 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uIAZU-000PbE-0a;
-	Thu, 22 May 2025 18:23:12 +0000
-Date: Fri, 23 May 2025 02:22:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nemesa Garg <nemesa.garg@intel.com>, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nemesa Garg <nemesa.garg@intel.com>,
-	Ankit Nautiyal <ankit.k.nautiyal@intel.com>
-Subject: Re: [PATCH 03/10] drm/i915/display: Add strength and winsize register
-Message-ID: <202505230242.YWyBlwSE-lkp@intel.com>
-References: <20250519122644.3685679-4-nemesa.garg@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ha6OqUoJ"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-23179999d4aso7850555ad.1;
+        Thu, 22 May 2025 15:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747952026; x=1748556826; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AMhz1MVSg+20hErSHEivJDb3RiqjMCis/42ObFUBGKI=;
+        b=Ha6OqUoJ84F3JymirMZuYEm2B3Rcl7rBLzUoJ320RufYycolOSutpnHoH0q9LcZQ8l
+         i4alcV1QUO6WgFOmccT/XoaRqaQJuJrlmSzgpP+laxbZps6vBNT+bNuTK8ZyiHATxlWC
+         zBSDOdBYeqXNohv6ymfUy3BZeoyTwKHygW58gk/tyLRT0fzGLOV+C/vY5/v2ezUhN6DF
+         dXXBqwqYDW999TZD7nGMr4+6lBnX546UDBi/S2wd5HOexD3gMbdzGeDHUUnU+hGNC4Fs
+         XAq6V7J8jFqr34ifqKpLo6TJbMp9bSRGytItjhhSmvDqE5P7YMDSV1iM1W85+2TP5lK+
+         ocbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747952026; x=1748556826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AMhz1MVSg+20hErSHEivJDb3RiqjMCis/42ObFUBGKI=;
+        b=bENB7D1omDXFL0P+duG92fqJzXtWMQ1PlBzuj7d0zJzArobvLI5scx7ogb3RsqUTAM
+         rcS7KkBNwXotDTMjbKK9AH+w+8sepZ47+dQIA8a8IEmlY5cBLs8tNESGH2C6tVRLBhvk
+         XYjfawv3QVMmPI9G7HslpO+eAkQVpb/x7mnVis8VnMEx1F1X9fTlEv5DgK5giMG5Yn7C
+         kVO6GlJP3AdUIfenVS6z3Nc35zuEV/+DVnNKfnTv+IrctDwg196AYWic32jyh9FYP15P
+         dLRIT0sEbKHfH6FSddCYjixkjxtAXeuE2kpe6fu79GiSy+n8keTa7c/PDH68yN6YS+VU
+         ZExw==
+X-Forwarded-Encrypted: i=1; AJvYcCVfnQkOx3oQqr2kNtfe49qvQmGaOdVs35w7J0uSL9jlZl0FPMJeijw0r9x5v/DsiN9csNsw@lists.linux.dev, AJvYcCWQ2OLBENnqg7RS1bd8xciyjbPxNSBpe+V2BHfUC8jcBD9gDaGQUBRofvlCdDOHH6vjyKs9joghxfc8hQE=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwEWlujTi4hZSs6sBTQrcXsJsKCSyKQaUB7pAesf6DSBT0Fy8BG
+	G7xObXiJKfgbSnHT9EmTaNbi2CrsP1Z3D5gCH5D9kDEfE5P8tVo1QpJIC5UuRInCVhyRGO+f/hh
+	i/dMyLhWvCXtR70VrAP41Duv++tut1BE=
+X-Gm-Gg: ASbGnctkgx7MG5HPx5+on4gbj+D6qcLHMRl1F+MQweNpmb1Do1XgJxfGRTncgqRgVA4
+	/PPbZeFguEg5p4ThD19yh6YSkJ4a3kqeX93d9rHX3FAaGKP0ELjLXuG1VYkP5VAaDZFbQFDxlgs
+	2R0Lq+qNok+EG0TWPpJzcNA7L7zrljBTHAHdkG8J74fUM=
+X-Google-Smtp-Source: AGHT+IFTyjvX9iO5arSB+Hrj2K8L6YOfX+CN4mhTlBRVV8gnFAIiCtQe8lkHwIlvRc1U3Eaocj5eWFvoqT3N1A2+8ZQ=
+X-Received: by 2002:a17:902:d4cd:b0:231:c9bb:6105 with SMTP id
+ d9443c01a7336-231d334d214mr141617365ad.0.1747952025723; Thu, 22 May 2025
+ 15:13:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250519122644.3685679-4-nemesa.garg@intel.com>
+References: <20250522-rust-mno-fdpic-arm-fix-v2-1-a6f691d9c198@gmail.com>
+In-Reply-To: <20250522-rust-mno-fdpic-arm-fix-v2-1-a6f691d9c198@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 23 May 2025 00:13:32 +0200
+X-Gm-Features: AX0GCFtr6WgCm1ku7z1BrqoxOWC4SJPyclrOJsw4oTJrTJaoW2ki_s3m3SE0AGg
+Message-ID: <CANiq72kHh9e-gB-b1udjJn07=ampsy+4dkTFgEeQ3VNUUw_7+A@mail.gmail.com>
+Subject: Re: [PATCH v2] arm: Fix rustgcc unknown argument '-mno-fdpic'
+To: Rudraksha Gupta <guptarud@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	torvalds@linux-foundation.org, Ben Wolsieffer <ben.wolsieffer@hefring.com>, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>, Christian Schrrefl <chrisi.schrefl@gmail.com>, 
+	Russell King <rmk+kernel@armlinux.org.uk>, Ard Biesheuvel <ardb@kernel.org>, anders.roxell@linaro.org, 
+	arnd@arndb.de, dan.carpenter@linaro.org, laura.nao@collabora.com, 
+	lkft-triage@lists.linaro.org, regressions@lists.linux.dev, 
+	Nick Clifton <nickc@redhat.com>, Richard Earnshaw <richard.earnshaw@arm.com>, 
+	Ramana Radhakrishnan <ramanara@nvidia.com>, Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nemesa,
+On Thu, May 22, 2025 at 2:02=E2=80=AFPM Rudraksha Gupta <guptarud@gmail.com=
+> wrote:
+>
+> Currently rust on arm fails to compile due to '-mno-fdpic'. This flag
+> disables a GCC feature that we don't want for kernel builds, so let's
+> skip it as it doesn't apply to Clang.
+>
+>     UPD     include/generated/asm-offsets.h
+>     CALL    scripts/checksyscalls.sh
+>     RUSTC L rust/core.o
+>     BINDGEN rust/bindings/bindings_generated.rs
+>     BINDGEN rust/bindings/bindings_helpers_generated.rs
+>     CC      rust/helpers/helpers.o
+>     Unable to generate bindings: clang diagnosed error: error: unknown ar=
+gument: '-mno-fdpic'
+>     make[2]: *** [rust/Makefile:369: rust/bindings/bindings_helpers_gener=
+ated.rs] Error 1
+>     make[2]: *** Deleting file 'rust/bindings/bindings_helpers_generated.=
+rs'
+>     make[2]: *** Waiting for unfinished jobs....
+>     Unable to generate bindings: clang diagnosed error: error: unknown ar=
+gument: '-mno-fdpic'
+>     make[2]: *** [rust/Makefile:349: rust/bindings/bindings_generated.rs]=
+ Error 1
+>     make[2]: *** Deleting file 'rust/bindings/bindings_generated.rs'
+>     make[1]: *** [/home/pmos/build/src/linux-next-next-20250521/Makefile:=
+1285: prepare] Error 2
+>     make: *** [Makefile:248: __sub-make] Error 2
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/all/CA+G9fYvOanQBYXKSg7C6EU30k8sTRC0JRPJX=
+Yu7wWK51w38QUQ@mail.gmail.com/
+> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+> Tested-by: Rudraksha Gupta <guptarud@gmail.com>
+> Acked-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
 
-kernel test robot noticed the following build errors:
+Applied to `rust-next` -- thanks everyone!
 
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on next-20250522]
-[cannot apply to linus/master drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.15-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    [ Naresh provided the draft diff [1].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nemesa-Garg/drm-i915-display-Introduce-sharpness-strength-property/20250519-203316
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20250519122644.3685679-4-nemesa.garg%40intel.com
-patch subject: [PATCH 03/10] drm/i915/display: Add strength and winsize register
-config: i386-randconfig-004-20250522 (https://download.01.org/0day-ci/archive/20250523/202505230242.YWyBlwSE-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250523/202505230242.YWyBlwSE-lkp@intel.com/reproduce)
+      Ben explained [2]:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505230242.YWyBlwSE-lkp@intel.com/
+        FDPIC is only relevant with no-MMU targets, and then only for users=
+pace.
+        When configured for the arm-*-uclinuxfdpiceabi target, GCC enables =
+FDPIC
+        by default to facilitate compiling userspace programs. FDPIC is nev=
+er
+        used for the kernel, and we pass -mno-fdpic when building the kerne=
+l to
+        override the default and make sure FDPIC is disabled.
 
-All errors (new ones prefixed by >>):
+      and [3]:
 
->> drivers/gpu/drm/i915/display/intel_casf.c:52:19: error: result of comparison of constant 2073600 with expression of type 'u16' (aka 'unsigned short') is always true [-Werror,-Wtautological-constant-out-of-range-compare]
-      52 |         if (total_pixels <= MAX_PIXELS_FOR_3_TAP_FILTER)
-         |             ~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_casf.c:54:24: error: result of comparison of constant 8294400 with expression of type 'u16' (aka 'unsigned short') is always true [-Werror,-Wtautological-constant-out-of-range-compare]
-      54 |         else if (total_pixels <= MAX_PIXELS_FOR_5_TAP_FILTER)
-         |                  ~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+        -mno-fdpic disables a GCC feature that we don't want for kernel bui=
+lds.
+        clang does not support this feature, so it always behaves as though
+        -mno-fdpic is passed. Therefore, it should be fine to mix the two, =
+at
+        least as far as FDPIC is concerned.
 
+      [1] https://lore.kernel.org/rust-for-linux/CA+G9fYt4otQK4pHv8pJBW9e28=
+yHSGCDncKquwuJiJ_1ou0pq0w@mail.gmail.com/
+      [2] https://lore.kernel.org/rust-for-linux/aAKrq2InExQk7f_k@dell-prec=
+ision-5540/
+      [3] https://lore.kernel.org/rust-for-linux/aAo_F_UP1Gd4jHlZ@dell-prec=
+ision-5540/
 
-vim +52 drivers/gpu/drm/i915/display/intel_casf.c
+        - Miguel ]
 
-    46	
-    47	static void intel_casf_compute_win_size(struct intel_crtc_state *crtc_state)
-    48	{
-    49		const struct drm_display_mode *mode = &crtc_state->hw.adjusted_mode;
-    50		u16 total_pixels = mode->hdisplay * mode->vdisplay;
-    51	
-  > 52		if (total_pixels <= MAX_PIXELS_FOR_3_TAP_FILTER)
-    53			crtc_state->hw.casf_params.win_size = SHARPNESS_FILTER_SIZE_3X3;
-    54		else if (total_pixels <= MAX_PIXELS_FOR_5_TAP_FILTER)
-    55			crtc_state->hw.casf_params.win_size = SHARPNESS_FILTER_SIZE_5X5;
-    56		else
-    57			crtc_state->hw.casf_params.win_size = SHARPNESS_FILTER_SIZE_7X7;
-    58	}
-    59	
+    [ Reworded title. - Miguel ]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
