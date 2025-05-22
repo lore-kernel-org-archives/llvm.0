@@ -1,62 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607444F5E0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7182222AF;
 	Thu, 22 May 2025 07:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747899382; cv=none; b=B+dUWtvzJTrRsZcZxH5dfPxXAB3kmcRqUFCWODxIiI3MXFOHBdqRi1o2nLXCLxZ8fCX88Oz8N7V5Fz4UOCjpewK9y2uzF2i4PiOr0DczJy0UxEHqOSmjaBnsUGk5CAXIa7k1jo9qvsAmbK9K/YEfm7bm4KERwzkdQTDBlRfbbt8=
+	t=1747899382; cv=none; b=GWs6NwhJ6N7l/FSzcg4aSITrf1Mp3o2jMFQ98l28eX61ZYKFQsIgFlpyppWIdg8Nh2Ray6dz/mNDqYCDnV9QYHQIX0WiUfbktX2jXr8+3jipg9iISgBmYqIQrSl1wiR7LnHt/XEzQot27elLeqZDO+3eIOBsHx59Ra+cXeXfkmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747899382; c=relaxed/simple;
-	bh=F4i3Fk1Idix54PmX458wB/iZLA9kMy518Cyiy+f/9Eg=;
+	bh=x5lf94K85T1c12UO+DHZgoiMv99MGjTfUZfEFKZhDSI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MuhCpdzX+WycsK0zlb4UXsC4o0jG8QWfGcXKkemEgChd7bMIniF966oqHyOAi1E04cOI3CEWrB55CB8MvrC5a+TgkEw5tM1ONZOOy81jfSOHW6TKs20FJ1AqLZx6uDxk0RLC6KprdvUdlLqRp8PGb8IJcwEroaq5DtaVdodb/10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZXuAoVVf; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=uAHsU6M3swMoRdycGvERcln5LNjr/Q4E5tIVHl1VOGg7JfpkUtVxMZ30QtoF8mrg+QMGkcI3K6bLtV1PyIzPeSsho3JcKIyyCDsphNrOqy2ztSNt6CET+8Xzn/JzaXYHfEFKT6G7le0eFeBh4F1ruk+yV0946kbo5qGkKsYeuoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ETH1usQb; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZXuAoVVf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ETH1usQb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1747899380; x=1779435380;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=F4i3Fk1Idix54PmX458wB/iZLA9kMy518Cyiy+f/9Eg=;
-  b=ZXuAoVVfY4nhXv6GyKdc/mzOx5wU2ixfDhw0x/wBewM1/pHunpO2HMUE
-   M9+SmpCOSkQTLZmzhWnq7zzjSo+w3iGQIB9pUHKlX8OBTLOGPKq5LFU0P
-   YQqGy/ZOr3WiiKkR/8VKmnNGyy75cjpFzLtm7FJuiKDKj2gXGb7Np3lR8
-   JeIFcaWyxVNWoCv0snJSBxoOL2QE5r9I56V31IOPrdwf2o3tC3x8gZ1RF
-   Dxsu7MPmxVk+WNvcFwQVNDS02xJxrfjjLU3v8U800mlHJVaz14eGw1Ed/
-   xU4jxWOm54vJ5mVWLzRLBfGl2EFbidrD3Jw8CnKFKt0SlSWXLQDkFG/Z+
-   w==;
-X-CSE-ConnectionGUID: KhyKjhL7QkaHRbFkwDkloQ==
-X-CSE-MsgGUID: T0Le+yGvQ5WkYQprA/cu2Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="60150990"
+  bh=x5lf94K85T1c12UO+DHZgoiMv99MGjTfUZfEFKZhDSI=;
+  b=ETH1usQbOHmrvU6XW9yFdUVHeYsX9ZymaNNKcnw3cs4SkrYOxzb1rqKr
+   CTl9aqo6gcgREDsyhqD5KHAyNciR+qaUQWkAsuHAkY0xJHHJBoiduKNtw
+   hHx+RzcVxNvUNthCeILEFezyzw2pJHiiNb1+KCr3SqgmAFmWPzGIEq88e
+   hIykWa47QMvYPE57KXt5xx8HfDnuwTEMXfuyKOz+0EF9wkSYLfnooJjVW
+   BWl4I/3vh6DuzV3rqIgTv/w8tsyUpx5p5/k5FGGV2d7NVAtI8wMCw6Drl
+   quwrnCibw/jjAEphBdRleFOCOhamMRy1LT8ljdzsf5o8bsqx0mAXP2/e+
+   Q==;
+X-CSE-ConnectionGUID: e3/nNm/GQV2LCorw8um2gg==
+X-CSE-MsgGUID: xdqqJcwlTFG8h1tDRkg1sw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="60546173"
 X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="60150990"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 00:36:19 -0700
-X-CSE-ConnectionGUID: rNnNqRNBRoe/uwtG46fbIg==
-X-CSE-MsgGUID: w1bwDTdSThC9NBAcrX3C7A==
+   d="scan'208";a="60546173"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 00:36:19 -0700
+X-CSE-ConnectionGUID: EePMjDCiQnCjK5q4l9XQrw==
+X-CSE-MsgGUID: rA69khqeRGKnuwOE+HAByg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="140989093"
+   d="scan'208";a="145613508"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 22 May 2025 00:36:16 -0700
+  by orviesa005.jf.intel.com with ESMTP; 22 May 2025 00:36:16 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uI0TN-000P34-2F;
+	id 1uI0TN-000P32-26;
 	Thu, 22 May 2025 07:36:13 +0000
-Date: Thu, 22 May 2025 15:36:01 +0800
+Date: Thu, 22 May 2025 15:36:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeremy Harris <jgh@exim.org>, netdev@vger.kernel.org
+To: Zhang Yi <zhangyi@everest-semi.com>, broonie@kernel.org,
+	robh@kernel.org, tiwai@suse.com, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, lgirdwood@gmail.com,
+	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
+	perex@perex.cz, krzk+dt@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-api@vger.kernel.org, edumazet@google.com,
-	ncardwell@google.com, Jeremy Harris <jgh@exim.org>
-Subject: Re: [PATCH net-next v2 1/6]     tcp: support writing to a socket in
- listening state
-Message-ID: <202505221529.hEVx1YPV-lkp@intel.com>
-References: <d3f47c9b5b08237b6e76f7b0739d59089683c86e.1747826775.git.jgh@exim.org>
+	amadeuszx.slawinski@linux.intel.com, krzk@kernel.org,
+	Zhang Yi <zhangyi@everest-semi.com>
+Subject: Re: [PATCH 2/2] ASoC: codecs: add support for ES8375
+Message-ID: <202505221528.nvWwf9kj-lkp@intel.com>
+References: <20250521104247.6595-3-zhangyi@everest-semi.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,100 +68,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d3f47c9b5b08237b6e76f7b0739d59089683c86e.1747826775.git.jgh@exim.org>
+In-Reply-To: <20250521104247.6595-3-zhangyi@everest-semi.com>
 
-Hi Jeremy,
+Hi Zhang,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on f685204c57e87d2a88b159c7525426d70ee745c9]
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on next-20250521]
+[cannot apply to tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.15-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Harris/tcp-support-writing-to-a-socket-in-listening-state/20250521-195234
-base:   f685204c57e87d2a88b159c7525426d70ee745c9
-patch link:    https://lore.kernel.org/r/d3f47c9b5b08237b6e76f7b0739d59089683c86e.1747826775.git.jgh%40exim.org
-patch subject: [PATCH net-next v2 1/6]     tcp: support writing to a socket in listening state
-config: i386-buildonly-randconfig-001-20250522 (https://download.01.org/0day-ci/archive/20250522/202505221529.hEVx1YPV-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Yi/ASoC-dt-bindings-Add-Everest-ES8375-audio-CODEC/20250521-184427
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20250521104247.6595-3-zhangyi%40everest-semi.com
+patch subject: [PATCH 2/2] ASoC: codecs: add support for ES8375
+config: x86_64-buildonly-randconfig-001-20250522 (https://download.01.org/0day-ci/archive/20250522/202505221528.nvWwf9kj-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505221529.hEVx1YPV-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505221528.nvWwf9kj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505221529.hEVx1YPV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505221528.nvWwf9kj-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/ipv4/tcp.c:1065:23: warning: variable 'sockc' set but not used [-Wunused-but-set-variable]
-    1065 |         struct sockcm_cookie sockc;
-         |                              ^
-   1 warning generated.
+>> sound/soc/codecs/es8375.c:706:7: error: use of undeclared identifier 'i'
+     706 |         for (i = 0; i < ARRAY_SIZE(es8375_core_supplies); i++)
+         |              ^
+   sound/soc/codecs/es8375.c:706:14: error: use of undeclared identifier 'i'
+     706 |         for (i = 0; i < ARRAY_SIZE(es8375_core_supplies); i++)
+         |                     ^
+   sound/soc/codecs/es8375.c:706:52: error: use of undeclared identifier 'i'
+     706 |         for (i = 0; i < ARRAY_SIZE(es8375_core_supplies); i++)
+         |                                                           ^
+   sound/soc/codecs/es8375.c:707:23: error: use of undeclared identifier 'i'
+     707 |                 es8375->core_supply[i].supply = es8375_core_supplies[i];
+         |                                     ^
+   sound/soc/codecs/es8375.c:707:56: error: use of undeclared identifier 'i'
+     707 |                 es8375->core_supply[i].supply = es8375_core_supplies[i];
+         |                                                                      ^
+   5 errors generated.
 
 
-vim +/sockc +1065 net/ipv4/tcp.c
+vim +/i +706 sound/soc/codecs/es8375.c
 
-  1059	
-  1060	/* Cut-down version of tcp_sendmsg_locked(), for writing on a listen socket
-  1061	 */
-  1062	static int tcp_sendmsg_preload(struct sock *sk, struct msghdr *msg)
-  1063	{
-  1064		struct sk_buff *skb;
-> 1065		struct sockcm_cookie sockc;
-  1066		int flags, err, copied = 0;
-  1067		int size_goal;
-  1068		int process_backlog = 0;
-  1069		long timeo;
-  1070	
-  1071		if (sk->sk_state != TCP_LISTEN)
-  1072			return -EINVAL;
-  1073	
-  1074		flags = msg->msg_flags;
-  1075	
-  1076		sockc = (struct sockcm_cookie){ .tsflags = READ_ONCE(sk->sk_tsflags) };
-  1077	
-  1078		timeo = sock_sndtimeo(sk, flags & MSG_DONTWAIT);
-  1079	
-  1080		/* Ok commence sending. */
-  1081	restart:
-  1082		/* Use a arbitrary "mss" value */
-  1083		size_goal = 1000;
-  1084	
-  1085		err = -EPIPE;
-  1086		if (sk->sk_err || (sk->sk_shutdown & SEND_SHUTDOWN))
-  1087			goto do_error;
-  1088	
-  1089		while (msg_data_left(msg)) {
-  1090			ssize_t copy = 0;
-  1091	
-  1092			skb = tcp_write_queue_tail(sk);
-  1093			if (skb)
-  1094				copy = size_goal - skb->len;
-  1095	
-  1096			trace_tcp_sendmsg_locked(sk, msg, skb, size_goal);
-  1097	
-  1098			if (copy <= 0 || !tcp_skb_can_collapse_to(skb)) {
-  1099				bool first_skb = !skb;
-  1100	
-  1101				/* Limit to only one skb on the sk write queue */
-  1102	
-  1103				if (!first_skb)
-  1104					goto out_nopush;
-  1105	
-  1106				if (!sk_stream_memory_free(sk))
-  1107					goto wait_for_space;
-  1108	
-  1109				if (unlikely(process_backlog >= 16)) {
-  1110					process_backlog = 0;
-  1111					if (sk_flush_backlog(sk))
-  1112						goto restart;
-  1113				}
-  1114	
-  1115				skb = tcp_stream_alloc_skb(sk, sk->sk_allocation,
-  1116							   first_skb);
-  1117				if (!skb)
-  1118					goto wait_for_space;
-  1119	
-  1120				process_backlog++;
-  1121	
+   691	
+   692	static int es8375_read_device_properities(struct device *dev, struct es8375_priv *es8375)
+   693	{
+   694		int ret;
+   695	
+   696		ret = device_property_read_u8(dev, "everest,mclk-src", &es8375->mclk_src);
+   697		if (ret != 0)
+   698			es8375->mclk_src = ES8375_MCLK_SOURCE;
+   699		dev_dbg(dev, "mclk-src %x", es8375->mclk_src);
+   700	
+   701		ret = device_property_read_u8(dev, "everest,dmic-pol", &es8375->dmic_pol);
+   702		if (ret != 0)
+   703			es8375->dmic_pol = DMIC_POL;
+   704		dev_dbg(dev, "dmic-pol %x", es8375->dmic_pol);
+   705	
+ > 706		for (i = 0; i < ARRAY_SIZE(es8375_core_supplies); i++)
+   707			es8375->core_supply[i].supply = es8375_core_supplies[i];
+   708		ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(es8375_core_supplies), es8375->core_supply);
+   709		if (ret) {
+   710			dev_err(dev, "Failed to request core supplies %d\n", ret);
+   711			return ret;
+   712		}
+   713	
+   714		es8375->mclk = devm_clk_get(dev, "mclk");
+   715		if (IS_ERR(es8375->mclk))
+   716			return dev_err_probe(dev, PTR_ERR(es8375->mclk), "unable to get mclk\n");
+   717	
+   718		if (!es8375->mclk)
+   719			dev_warn(dev, "assuming static mclk\n");
+   720	
+   721		ret = clk_prepare_enable(es8375->mclk);
+   722		if (ret) {
+   723			dev_err(dev, "unable to enable mclk\n");
+   724			return ret;
+   725		}
+   726		ret = regulator_bulk_enable(ARRAY_SIZE(es8375_core_supplies), es8375->core_supply);
+   727		if (ret) {
+   728			dev_err(dev, "Failed to enable core supplies: %d\n", ret);
+   729			clk_disable_unprepare(es8375->mclk);
+   730			return ret;
+   731		}
+   732	
+   733		return 0;
+   734	}
+   735	
 
 -- 
 0-DAY CI Kernel Test Service
