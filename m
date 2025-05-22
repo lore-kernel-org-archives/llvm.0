@@ -1,154 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC4723496B;
-	Thu, 22 May 2025 10:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B761DF965;
+	Thu, 22 May 2025 12:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747908273; cv=none; b=oabsjKefxANrrLSywUQnO3qFtRWElORPqu9sU1pJCHpqCwPt6qY6g3Han5dlTZKLa7uBnJnRSZdc+zFvLV2NMGEemNezWYzzMV/duJFxeNgY3PQeLXQvUuLFZhoRW6W9EZwIBbISgXyfY1VqqhqDI1NeEdv+jH7K5fRUxvwdLNA=
+	t=1747915356; cv=none; b=qF8Nfa3CCo1GhIL+3VNORsFHsdEuCv/bQivpzIiNv5mE/wPsh9Zd0gg8cpy4y5tBQY936jnym57UxaDCjnu8zyXelhPa+MAEvr/j1VnFKqf0SqzBPO5GRgbm46I1YNmLrBx6wOcXYpQf5RbGp5PRanXY0bjU8YfHEiCtXjGL3GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747908273; c=relaxed/simple;
-	bh=e4q4USOWC4kTCG4oKZoJVELWm/zy32zGiu+uPJ8gBTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OGY0lqG/LUQ6Cyg1fCLxr8qX3EW3yX6gDWJxeqbTfEOrz/bra5ZltKwZtiN7ZcFGDXQUjGBcDElmnzVTDpWDP1Tlz/1/QwnW1KILVsA49wjP2nluLG2C6inlZtnVY73XnQ9L6j1u2xhScVmmUI69CDwmknuaXGjQQktohdxV1IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fuRWi9br; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747915356; c=relaxed/simple;
+	bh=/vn8DZJJrQxpSvPyCXIYRYluHXY05MJLF9VTkT2YuLQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ERTRrnhNB+7oGIGyEGDXTGJ5mgqf4qmGlBLRhYOi7D6Pz8IzE8RLHQsvtBdG15I+CG3vR4DI+vtw/akkqTrkjdpISR+1eyWP0p+PxPEG29f5lbRKnDBE0EVVkHsjM5sXrqGRFJ+1gmXrYZn7PqP5HtF4CmtPGvg0T9WRwvSM92I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRIFRQPB; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fuRWi9br"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747908272; x=1779444272;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e4q4USOWC4kTCG4oKZoJVELWm/zy32zGiu+uPJ8gBTs=;
-  b=fuRWi9brYGbmaFN7oWDr0W7WTNq5XnbYIpSIMHjCXbJhYp/ZeKwp5mW1
-   EGtmIj/uDW0S3JTlLqCE6iM33SGjzbTKyojACQlYfgDDqLV80TtXqeked
-   +GsRrpNu9iKdKwe0RxHOBqGhwrUkfcE0YicwJcRCq9kRRo3SMIQZFo9M9
-   xovKPSPx5VCzPejOYy6dzOEHiH2wyjkkOBM4DwTzuE8d0SxyTdXXJ1tqK
-   RNjoQiFUTjwLohZzt8nxlHGo7QL9TFVRlA8Wj9PbqW3MWRLvbUIVebYN8
-   BseH/y4Fu7S8MPfv5e0PbQGVyIY65U3+DHRJPCbfRHUWVOJXVQgtYc8F6
-   w==;
-X-CSE-ConnectionGUID: qIwWW+oTTGWSPwMPKf1gHA==
-X-CSE-MsgGUID: yuWVfJAHRMOBTii021oe6A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="52550905"
-X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="52550905"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 03:04:31 -0700
-X-CSE-ConnectionGUID: ieyTy/dUQWixKmLebHzikw==
-X-CSE-MsgGUID: U1D0mFTwRAiyRLHzWLKeJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
-   d="scan'208";a="177668686"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 May 2025 03:04:30 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uI2mp-000PCW-29;
-	Thu, 22 May 2025 10:04:27 +0000
-Date: Thu, 22 May 2025 18:04:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/5] block: add support for copy offload
-Message-ID: <202505221702.EcgNFozB-lkp@intel.com>
-References: <20250521223107.709131-3-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRIFRQPB"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-742c5f3456fso3821994b3a.0;
+        Thu, 22 May 2025 05:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747915354; x=1748520154; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Js+VfP2B7Z0Aw6YScxCHyKm02Nvx6oGOp/8rmQrjYsE=;
+        b=mRIFRQPBDVWdtwdiNNwXp127r4I6qt+shjXqoJWktJyh9wK4iv1IhhMZ8UAf49mm70
+         9pBeKhS1cmY98i7Q72Dye3ElSILWX83aofn/W1x8I+9DvHx5FRXg7Ar3XOZ290QHqXKo
+         xUMh9Khnq4zESJiVboUPi1tp7GDjDs4dSEky5R1qOYNdQyIReJpFNqJKApjVJCzO4cxQ
+         xjcIuy+U+lGp3HZ4p511bfLOX3klSEpdPUGkwc6tL6wtURwTwAoDkV/PjfOGCdhA1TKK
+         9ojJf0dTXtuCEO1SNMS3ysreBE5V256D1qYojN2yrVyW9wMVPYGcnFN4mlkytLo8A9u9
+         CVuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747915354; x=1748520154;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Js+VfP2B7Z0Aw6YScxCHyKm02Nvx6oGOp/8rmQrjYsE=;
+        b=GosyrTRbaIBjENBZEl12nEwNCfn1PaXnxjvmLmpb1yZ9G6U6A5c9R7+qU2Cq9FqLNV
+         gIqsSTVDgz300vwAAi80gxvg9cy8600wgzIzicilysH7NjTbd7pX7ZQU7BiHWH0vXGnU
+         EvNfIjSLKo+DntVrY5+tXE5bO5OaWBn24d59e6VZi5uTfJ4nHrkVdBrI7eVtdEI0e5Zv
+         GI2vR8hJ9dFfLPunNodpNCp4WmbISCfWFzvrMk3JTAWCSGLJCxoV+G28PFJzsL5zH6ja
+         /7QP0wRL1kEjFlo9X6gmIbYcSHdXJ3AhVazdXsJhAb8o3wTLRhDydBBQYqixT7wley4V
+         R99A==
+X-Forwarded-Encrypted: i=1; AJvYcCU0p+XrRMEmnh2zk8ik2/Y14D/mqnAFLM3+mtEIAim4fMNnMj8uqkt7290p0NaUrIIUrnfJxOwi6L6ILno=@lists.linux.dev, AJvYcCVR2SJHhzu/xNNgBGiadPI42NF1vEqgbykFKrvt6rO5mi4Gjfd5QWN0qOoFpHbd1abCmIkK@lists.linux.dev
+X-Gm-Message-State: AOJu0YzdKDdWVp7yEFhO57SLyR7d1K9frs8qEZtjVCq7+1m9GI+67kVp
+	3WggoyE0Sqwk0hI4JSnFHgwFQEHUWVi9I3zLeqzHPoxbC6Ent7nuxwIW
+X-Gm-Gg: ASbGncvHSnCgnybKdzeXL5mwVfxCGWGDKQ1XUuaqHo1MuE6CFlwbL5O8fqilheb8K+a
+	mB21hfai2OAfRXRr0I7MK3QtHemN4Yt4xrjN2OB7q4028xJT8cKUBYZNa08EKCSAwbehGjqeUcB
+	dYNy+Pf4urlghRc8h46t0OHKj+EGHtggHNWHtkPEAC4VhNsJ1PrR5GRWslmktAhNajTQqlvUgIN
+	bJ60L7zSc75HhdqoKxaNtBJ107YxaQLXKOCRyyEWyvL61ezTzjIA+PG0N/rZXq+4s44yb6WRSpX
+	i+wO1U213kjDwJ8vZfndLY2CF3IBVxw/j68MGMGD/p4qbkAClozY
+X-Google-Smtp-Source: AGHT+IHL8lmwQMoIeewqAqmlRmPfaWEsz3sA9er2qdYUbDlBxZKAUMcpIg2/Hhh0Gm2uwtTFyFkVfA==
+X-Received: by 2002:a05:6a21:8cc1:b0:216:1ea0:a516 with SMTP id adf61e73a8af0-21621a0a546mr39814230637.41.1747915354092;
+        Thu, 22 May 2025 05:02:34 -0700 (PDT)
+Received: from [127.0.1.1] ([2601:644:8500:5dd0:5e58:eb16:57b7:87fc])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a987af30sm11038961b3a.156.2025.05.22.05.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 May 2025 05:02:33 -0700 (PDT)
+From: Rudraksha Gupta <guptarud@gmail.com>
+Date: Thu, 22 May 2025 05:02:31 -0700
+Subject: [PATCH v2] arm: Fix rustgcc unknown argument '-mno-fdpic'
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250521223107.709131-3-kbusch@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250522-rust-mno-fdpic-arm-fix-v2-1-a6f691d9c198@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAFYSL2gC/4WNQQ6CMBBFr0Jm7Zi2FBFX3sOwKDCFSSwlLRIN6
+ d2tXMDle8l/f4dIgSnCrdgh0MaR/ZxBnQroJzOPhDxkBiVUJSolMLziim72aIeFezTBoeU3Nlq
+ Y6trZRpcl5PESKOsj/GgzTxxXHz7HzyZ/9m9ykyhRa6prS5dOGXkfneHnufcO2pTSF/E2hL+8A
+ AAA
+X-Change-ID: 20250520-rust-mno-fdpic-arm-fix-940a58bf9433
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, torvalds@linux-foundation.org, 
+ Ben Wolsieffer <ben.wolsieffer@hefring.com>, 
+ Naresh Kamboju <naresh.kamboju@linaro.org>, 
+ Christian Schrrefl <chrisi.schrefl@gmail.com>, 
+ Russell King <rmk+kernel@armlinux.org.uk>, 
+ Rudraksha Gupta <guptarud@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
+ anders.roxell@linaro.org, arnd@arndb.de, dan.carpenter@linaro.org, 
+ laura.nao@collabora.com, lkft-triage@lists.linaro.org, 
+ regressions@lists.linux.dev, Nick Clifton <nickc@redhat.com>, 
+ Richard Earnshaw <richard.earnshaw@arm.com>, 
+ Ramana Radhakrishnan <ramanara@nvidia.com>, Miguel Ojeda <ojeda@kernel.org>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>
+X-Mailer: b4 0.15-dev-8865a
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747915351; l=2475;
+ i=guptarud@gmail.com; s=20250208; h=from:subject:message-id;
+ bh=/vn8DZJJrQxpSvPyCXIYRYluHXY05MJLF9VTkT2YuLQ=;
+ b=coR/zdEQa58AEoBLC80nMQKdtdLpLDptVLzgORI6Pao8YL65d8bAiz1dhRWoZnT7pBD+vubuX
+ JaNZHBfjNLmBnc7cWcCagHcM1Hd30mRKdEDdvl+T6f4oE5TXdfemizZ
+X-Developer-Key: i=guptarud@gmail.com; a=ed25519;
+ pk=5lJNaiR/Bu7edToWFLriO5zXOrVqSQWrBKbAKwuEw04=
 
-Hi Keith,
+Currently rust on arm fails to compile due to '-mno-fdpic'. This flag
+disables a GCC feature that we don't want for kernel builds, so let's
+skip it as it doesn't apply to Clang.
 
-kernel test robot noticed the following build warnings:
+    UPD     include/generated/asm-offsets.h
+    CALL    scripts/checksyscalls.sh
+    RUSTC L rust/core.o
+    BINDGEN rust/bindings/bindings_generated.rs
+    BINDGEN rust/bindings/bindings_helpers_generated.rs
+    CC      rust/helpers/helpers.o
+    Unable to generate bindings: clang diagnosed error: error: unknown argument: '-mno-fdpic'
+    make[2]: *** [rust/Makefile:369: rust/bindings/bindings_helpers_generated.rs] Error 1
+    make[2]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
+    make[2]: *** Waiting for unfinished jobs....
+    Unable to generate bindings: clang diagnosed error: error: unknown argument: '-mno-fdpic'
+    make[2]: *** [rust/Makefile:349: rust/bindings/bindings_generated.rs] Error 1
+    make[2]: *** Deleting file 'rust/bindings/bindings_generated.rs'
+    make[1]: *** [/home/pmos/build/src/linux-next-next-20250521/Makefile:1285: prepare] Error 2
+    make: *** [Makefile:248: __sub-make] Error 2
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on next-20250521]
-[cannot apply to linux-nvme/for-next brauner-vfs/vfs.all linus/master v6.15-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Closes: https://lore.kernel.org/all/CA+G9fYvOanQBYXKSg7C6EU30k8sTRC0JRPJXYu7wWK51w38QUQ@mail.gmail.com/
+Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+Tested-by: Rudraksha Gupta <guptarud@gmail.com>
+Acked-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+---
+Changes in v2:
+- Fixed patch formatting issues
+- Link to v1: https://lore.kernel.org/r/20250520-rust-mno-fdpic-arm-fix-v1-1-44e77fe6b2a1@gmail.com
+---
+ rust/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/block-new-sector-copy-api/20250522-063316
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20250521223107.709131-3-kbusch%40meta.com
-patch subject: [PATCH 2/5] block: add support for copy offload
-config: x86_64-buildonly-randconfig-001-20250522 (https://download.01.org/0day-ci/archive/20250522/202505221702.EcgNFozB-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505221702.EcgNFozB-lkp@intel.com/reproduce)
+diff --git a/rust/Makefile b/rust/Makefile
+index 3aca903a7d08..f207ba0ed466 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -273,7 +273,7 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
+ 	-fzero-call-used-regs=% -fno-stack-clash-protection \
+ 	-fno-inline-functions-called-once -fsanitize=bounds-strict \
+ 	-fstrict-flex-arrays=% -fmin-function-alignment=% \
+-	-fzero-init-padding-bits=% \
++	-fzero-init-padding-bits=% -mno-fdpic \
+ 	--param=% --param asan-%
+ 
+ # Derived from `scripts/Makefile.clang`.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505221702.EcgNFozB-lkp@intel.com/
+---
+base-commit: a5806cd506af5a7c19bcd596e4708b5c464bfd21
+change-id: 20250520-rust-mno-fdpic-arm-fix-940a58bf9433
 
-All warnings (new ones prefixed by >>):
-
->> block/blk-integrity.c:29:31: warning: suggest braces around initialization of subobject [-Wmissing-braces]
-      29 |         struct bio_vec iv, ivprv = { NULL };
-         |                                      ^~~~
-         |                                      {   }
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-   block/blk-integrity.c:69:31: warning: suggest braces around initialization of subobject [-Wmissing-braces]
-      69 |         struct bio_vec iv, ivprv = { NULL };
-         |                                      ^~~~
-         |                                      {   }
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +29 block/blk-integrity.c
-
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  18  
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  19  /**
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  20   * blk_rq_count_integrity_sg - Count number of integrity scatterlist elements
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  21   * @q:		request queue
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  22   * @bio:	bio with integrity metadata attached
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  23   *
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  24   * Description: Returns the number of elements required in a
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  25   * scatterlist corresponding to the integrity metadata in a bio.
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  26   */
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  27  int blk_rq_count_integrity_sg(struct request_queue *q, struct bio *bio)
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  28  {
-d57a5f7c6605f1 Kent Overstreet    2013-11-23 @29  	struct bio_vec iv, ivprv = { NULL };
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  30  	unsigned int segments = 0;
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  31  	unsigned int seg_size = 0;
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  32  	struct bvec_iter iter;
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  33  	int prev = 0;
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  34  
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  35  	bio_for_each_integrity_vec(iv, bio, iter) {
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  36  
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  37  		if (prev) {
-3dccdae54fe836 Christoph Hellwig  2018-09-24  38  			if (!biovec_phys_mergeable(q, &ivprv, &iv))
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  39  				goto new_segment;
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  40  			if (seg_size + iv.bv_len > queue_max_segment_size(q))
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  41  				goto new_segment;
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  42  
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  43  			seg_size += iv.bv_len;
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  44  		} else {
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  45  new_segment:
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  46  			segments++;
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  47  			seg_size = iv.bv_len;
-13f05c8d8e98bb Martin K. Petersen 2010-09-10  48  		}
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  49  
-d57a5f7c6605f1 Kent Overstreet    2013-11-23  50  		prev = 1;
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  51  		ivprv = iv;
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  52  	}
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  53  
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  54  	return segments;
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  55  }
-7ba1ba12eeef0a Martin K. Petersen 2008-06-30  56  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rudraksha Gupta <guptarud@gmail.com>
+
