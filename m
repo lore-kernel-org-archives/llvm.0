@@ -1,149 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561CC28C01E;
-	Thu, 22 May 2025 13:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB0028BAA5;
+	Thu, 22 May 2025 14:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747921952; cv=none; b=gmgG/nd+fxrQblo3CkHZx8J3wLwGHUXhX6xPVFMzHVbKmHKJ7LFexnvl6BWU/w9p32hIqVVRPFwLyy0kar1CmiFFvVeWvK5t+2p68Z3jJGf1/lfjhJtGMAFLnyKQhnAfLCFVSdtI4JvMauaKiLu40HhwTUtOE5WQcMLKjse5ivw=
+	t=1747924497; cv=none; b=cAWjTiOHZSFmvTzk2ft0YaEPDgbRXCQF2rt76rJBV6ShqNYy+Gz8NdmavXxrKRzmw8qKcsfOsmjWt0/TcSrh3zZWVKlUlyjUP73Rf27jkLwgekzoNxBjDLIBkAmNCsy7Lc8CyxsASQnIjBXrgdh+G11kh02P/RhB0AI4QAUU4Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747921952; c=relaxed/simple;
-	bh=AVAH27NqeLH5mBl5oK+jtXQeh7KTrCqY2h9XBlA2LcU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H/V9UAJc/P/+EdkojUt6uInP1q1q4kDyf259hREZBzCk6szzUmYFKgy52/1gXF8Z3rOkJhgcaigafopS/ZcUncuhCxXfqESTQvOk8MElT70vrDy4VRNhldHN+HpAHVHawaJh7V5BxFezuVPsR/mYTtUl4pc68Jl7eb58tLbOcpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QN3ZYteZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747924497; c=relaxed/simple;
+	bh=xqAqvgAubILWGhXACIlm432+BBt51LD8pVliVtzDTNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ms7I7yJ18JsWLHf1ZhYrmZRImrNTRySPHJf+26BRx4OzjvNPPXU1Aa1inDII9amjARS1lVOB0THwlrn7r3gj7t+yh65SlFceQUdNAoOGITc26IqOSdljNA2BE7wXpE4lgv+Ygvt/ZrWJ/rQYFUm3nDF+svt3va4MC0rsYQADsnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Us/6+8f6; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QN3ZYteZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF571C4CEEB;
-	Thu, 22 May 2025 13:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747921951;
-	bh=AVAH27NqeLH5mBl5oK+jtXQeh7KTrCqY2h9XBlA2LcU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QN3ZYteZNuUjo+AjWTm3zCfu5+fmCVMfMyyRXe6YXFyZsBOYyh9AcVU5c9RNvFCKR
-	 ZkmZx549zztApjactgnLJb81v0ShEnm788taPwpSiAgr1MvLKPOI08At4th0UJnoU6
-	 d+zKbO3plaKFQHZT8i8eMloca1Hn53DwghBHB6wNSh9u2+B9xEkuqh3IzWGdGbmH/U
-	 I7Xq6p5lZ335io/Wje25/HFGyOGEBsreIWS7NvbCDDoSJGZjGbm4UTii+iVpixGXTL
-	 puBKK5ko0jutCEEKGRPLCSE1eBmgzww/pG2y53yCUerXxCU+jPZxWbwNUmqIoDVjq0
-	 UggwAk3XYwVZw==
-Received: by venus (Postfix, from userid 1000)
-	id 9EDEB1807A4; Thu, 22 May 2025 15:52:29 +0200 (CEST)
-Date: Thu, 22 May 2025 15:52:29 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, 
-	Jelle van der Waa <jvanderwaa@redhat.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Armin Wolf <W_Armin@gmx.de>
-Subject: Re: [pdx86-platform-drivers-x86:review-ilpo-next 109/109]
- drivers/platform/x86/ideapad-laptop.c:2044:3: error: field designator
- 'charge_types' does not refer to any field in type 'const struct
- power_supply_ext'
-Message-ID: <ba4bcvf3tjqunxncrqeire4j257px4plbk5eew7sfbmycscbys@xymzswpfmadw>
-References: <202505221051.khDhUKJ0-lkp@intel.com>
- <f981b9ac-41cc-489a-9f37-c9e87e748c99@redhat.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Us/6+8f6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747924496; x=1779460496;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xqAqvgAubILWGhXACIlm432+BBt51LD8pVliVtzDTNI=;
+  b=Us/6+8f6pLC4+jCs6jsggpexx0QNZOdm+iM1nZLpRvwCanL6zZtgpAcx
+   AXBr66DtvwaiU5mMHus/88DTPewdN0PRhly8CNbaY3Jg9RPGd28Sydpgu
+   ZC0E2nlsmHCHoWIjGt+oMa7aQHrMRZHfjetKdx7wSWrATZ1PLWyI/st7k
+   326bbl0oXAC1HPTtPSRzkEVL6LkOyYiO9bWazupM3wXIhiF+kudrw1K2U
+   RK15iSQyLe7eX2SF52d1ddX2DdXg1vD/SFEld4/kv5ARwks0v5T53YPw+
+   fmOYtygmmQ+jgpyhds4PGFrkiJt6aVs7uJYA1KzvqfvKudu0wPMl3NZW8
+   Q==;
+X-CSE-ConnectionGUID: fGCdxv3ZTKCZ6XdE4mUeTg==
+X-CSE-MsgGUID: WsQD4/E/QimI2zDK93xOrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50115556"
+X-IronPort-AV: E=Sophos;i="6.15,306,1739865600"; 
+   d="scan'208";a="50115556"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 07:34:55 -0700
+X-CSE-ConnectionGUID: UN2ecM1vTgeSqkkQHGGHMA==
+X-CSE-MsgGUID: QTQ8cnZCTM2n1wIYlnU0jQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,306,1739865600"; 
+   d="scan'208";a="144589256"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 22 May 2025 07:34:53 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uI70V-000PQ5-24;
+	Thu, 22 May 2025 14:34:51 +0000
+Date: Thu, 22 May 2025 22:34:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 42/43] fs/nfsd/nfs4state.c:9707:56: warning:
+ format specifies type 'long' but the argument has type 'int'
+Message-ID: <202505222243.QDfjEgah-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lz7i3t6ajqoytaqn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f981b9ac-41cc-489a-9f37-c9e87e748c99@redhat.com>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   0c6668479bba48114e5031d6fb3db53d80d8d6ad
+commit: 1a1ed17116bff2122995a9a1f09e5c4df41b2997 [42/43] DEBUG: trace_printks all over the place
+config: i386-buildonly-randconfig-001-20250522 (https://download.01.org/0day-ci/archive/20250522/202505222243.QDfjEgah-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505222243.QDfjEgah-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505222243.QDfjEgah-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/nfsd/nfs4state.c:9707:56: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+    9707 |                         trace_printk("encoded remove4 is %ld bytes long\n", (u8 *)stream->p - p);
+         |                                                          ~~~                ^~~~~~~~~~~~~~~~~~~
+         |                                                          %d
+   include/linux/kernel.h:275:26: note: expanded from macro 'trace_printk'
+     275 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:286:37: note: expanded from macro 'do_trace_printk'
+     286 |         __trace_printk_check_format(fmt, ##args);                       \
+         |                                     ~~~    ^~~~
+   include/linux/kernel.h:238:40: note: expanded from macro '__trace_printk_check_format'
+     238 |                 ____trace_printk_check_format(fmt, ##args);             \
+         |                                               ~~~    ^~~~
+>> fs/nfsd/nfs4state.c:9707:56: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+    9707 |                         trace_printk("encoded remove4 is %ld bytes long\n", (u8 *)stream->p - p);
+         |                                                          ~~~                ^~~~~~~~~~~~~~~~~~~
+         |                                                          %d
+   include/linux/kernel.h:275:26: note: expanded from macro 'trace_printk'
+     275 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:291:36: note: expanded from macro 'do_trace_printk'
+     291 |                 __trace_printk(_THIS_IP_, fmt, ##args);                 \
+         |                                           ~~~    ^~~~
+   2 warnings generated.
 
 
---lz7i3t6ajqoytaqn
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [pdx86-platform-drivers-x86:review-ilpo-next 109/109]
- drivers/platform/x86/ideapad-laptop.c:2044:3: error: field designator
- 'charge_types' does not refer to any field in type 'const struct
- power_supply_ext'
-MIME-Version: 1.0
+vim +9707 fs/nfsd/nfs4state.c
 
-Hi,
+  9645	
+  9646	int
+  9647	nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
+  9648				  const struct qstr *name)
+  9649	{
+  9650		struct file_lock_context *ctx;
+  9651		struct file_lock_core *flc;
+  9652	
+  9653		trace_nfsd_file_fsnotify_handle_dir_event(inode, dir, mask);
+  9654	
+  9655		ctx = locks_inode_context(dir);
+  9656		if (!ctx || list_empty(&ctx->flc_lease)) {
+  9657			trace_printk("no ctx or list_empty\n");
+  9658			return 0;
+  9659		}
+  9660	
+  9661		/*
+  9662		 * Do getattr against @inode, and then generate an fattr4. Use that as the
+  9663		 * ne_attrs in the notify_entry4's.
+  9664		 */
+  9665		spin_lock(&ctx->flc_lock);
+  9666		list_for_each_entry(flc, &ctx->flc_lease, flc_list) {
+  9667			struct file_lease *fl = container_of(flc, struct file_lease, c);
+  9668			struct nfs4_delegation *dp = flc->flc_owner;
+  9669			struct nfsd4_cb_notify *ncn = &dp->dl_cb_notify;
+  9670			struct nfsd4_notify_spool *nns = ncn->ncn_gather;
+  9671			struct xdr_stream *stream = &nns->nns_stream;
+  9672			static uint32_t zerobm = 0;
+  9673	
+  9674			trace_printk("considering fl=%p\n", fl);
+  9675			if (fl->fl_lmops != &nfsd_dir_lease_mng_ops) {
+  9676				trace_printk("fl_lmops doesn't match\n");
+  9677				continue;
+  9678			}
+  9679	
+  9680			/* If no buffer or slots are available, give up and break the deleg */
+  9681			if (!nns || nns->nns_idx >= NFSD4_NOTIFY_SPOOL_SZ) {
+  9682				trace_printk("no buffer");
+  9683				nfsd_break_deleg_cb(fl);
+  9684				continue;
+  9685			}
+  9686	
+  9687			if (mask & FS_DELETE) {
+  9688				static uint32_t notify_remove_bitmap = BIT(NOTIFY4_REMOVE_ENTRY);
+  9689				struct notify4 *ent = &nns->nns_ent[nns->nns_idx];
+  9690				struct notify_remove4 nr = { };
+  9691				u8 *p = (u8 *)(stream->p);
+  9692	
+  9693				if (!(flc->flc_flags & FL_IGN_DIR_DELETE)) {
+  9694					trace_printk("FL_IGN_DIR_DELETE not set\n");
+  9695					continue;
+  9696				}
+  9697	
+  9698				nr.nrm_old_entry.ne_file.len = name->len;
+  9699				nr.nrm_old_entry.ne_file.data = (char *)name->name;
+  9700				nr.nrm_old_entry.ne_attrs.attrmask.count = 1;
+  9701				nr.nrm_old_entry.ne_attrs.attrmask.element = &zerobm;
+  9702				if (!xdrgen_encode_notify_remove4(stream, &nr)) {
+  9703					pr_warn("nfsd: unable to marshal notify_remove4 to xdr stream\n");
+  9704					continue;
+  9705				}
+  9706	
+> 9707				trace_printk("encoded remove4 is %ld bytes long\n", (u8 *)stream->p - p);
 
-On Thu, May 22, 2025 at 11:36:47AM +0200, Hans de Goede wrote:
-> On 22-May-25 4:39 AM, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-=
-drivers-x86.git review-ilpo-next
-> > head:   b2012b38080e2f92d43eca59e8249c174a27527c
-> > commit: b2012b38080e2f92d43eca59e8249c174a27527c [109/109] platform/x86=
-: ideapad: Expose charge_types
-> > config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/2=
-0250522/202505221051.khDhUKJ0-lkp@intel.com/config)
-> > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b=
-5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> > rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250522/202505221051.khDhUKJ0-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202505221051.khDhUKJ0-l=
-kp@intel.com/
-> >=20
-> > All errors (new ones prefixed by >>):
-> >=20
-> >>> drivers/platform/x86/ideapad-laptop.c:2044:3: error: field designator=
- 'charge_types' does not refer to any field in type 'const struct power_sup=
-ply_ext'
-> >     2044 |         .charge_types           =3D (BIT(POWER_SUPPLY_CHARGE=
-_TYPE_STANDARD) |
-> >          |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~
-> >     2045 |                                    BIT(POWER_SUPPLY_CHARGE_T=
-YPE_LONGLIFE)),
-> >          |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~
-> >    1 error generated.
-> >=20
-> >=20
-> > vim +2044 drivers/platform/x86/ideapad-laptop.c
->=20
-> Hmm, this patch depends on:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
-t/commit/?h=3Dfor-next&id=3Dc1f7375a246e5f810191a6c3031d2fa2b80e9f5e
-
-I should have merged that through an immutable branch :(
-
-> I guess that that patch is not in review-ilpo-next,
-> maybe Sebastian can take this patch instead of taking
-> it through pdx86-next ?  Or it can be merged after
-> 6.16-rc1?
-
-I will be on trekking trip for 3 weeks starting on Monday (more or
-less directly after sending my 6.16 PR), so I don't want to take any
-late patches as I cannot handle potential problems.
-
-Greetings,
-
--- Sebastian
-
---lz7i3t6ajqoytaqn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmgvLA8ACgkQ2O7X88g7
-+pqpSxAAoNyiJ2o+UAgvn8PFbmpeeq2Ka42dGr8s+ZOj1o/mFVf80IWYNFH4YVD6
-ZyRWztDP1oW4sWj1wMGZOHeAzq+wlvhVMDI/Z5KnybD2Y5vpkPL5rctTnQi+Vn59
-AaW90TxlSaWook+RutgyGY6Cuoe+Pwq/Uv9SrfUORYs6tKQKSkbWaAMDIt2iPgyJ
-WP8EohlWnXHm++vN7ezWPJ9IvLJVBW6Rgc4S6qGuu+NTeaCMgi5MfFqX/4S0K8kk
-DE0NWLqZC6oNiyEQ7B+hGQySF+GCeUvjMCqJmZ+rU26aL2sm+KDx0OXeXRFA91zg
-Q+10ldcOb8CziObCyCSwuqM+s3Vn4C7N7UdwEWrv5DPiN1fzDFI4XxcOVJZ7UOII
-m5Y6llUiy8wSvGSoAi02y6QXNdcMU7x5k47j/5l/fLxzTkWgVCKgUCmpoe8Q00Tw
-OpX/QYzxVfjkvhUdDH/McMXqp32UZmrw794GLZgGKX27iUVh//8IU2fEgspOScsx
-duCMGdiAz5P5neCBMDQ/8UNwj18SekIx7wkZt8yRRPms5HWdA+OlLamI4yH7HOQP
-iMur9pTarJ39q6SjrE2C2MPUHguQF2fGrxli6jqfiPuh6AqzkpYs60+oK+6Tb0Hc
-/bW6vy5PlNBKAwhHfTR5ypP7w5//QVfTO/XnjoDKrC9FYM26UDI=
-=uXm7
------END PGP SIGNATURE-----
-
---lz7i3t6ajqoytaqn--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
