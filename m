@@ -1,115 +1,111 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C9223C384;
-	Thu, 22 May 2025 13:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2EC3010C;
+	Thu, 22 May 2025 13:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747920458; cv=none; b=HcAiMidqOBmM+SjHSlVOk0eIRAd2A3X7N+NRgqjFe+0N08kNN4Ng4BY3DkS+7keMm5U6UdvgAeHaBoH9YQ+J4GMcZorhAoVMQPWlY4InpCSGCQsCjRlyI4Y7PfZzIpaE4RTECPPWsmqYWZ4D8LhKkq/5i/ciRVokkZkrv+yGAu8=
+	t=1747921373; cv=none; b=QQkkFn+x07pOkpzJikV3EhrNVZxmnRojSsNk4VqQT4uRVWJWDhBP/l15IjzQAwIKirJ+Efg53iInwfkLSX92HrQcev/0voBlW/YahcMhL8xhud0jyh5iPa4UeAEgBBvuFtfhtdIuldkpPRLjOXBbDRy0mucCtiFv0Y3i88+/pEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747920458; c=relaxed/simple;
-	bh=VON5sS8LJxFlkbqVCWCNdXM9FXCW8UNRgLDxNs7O+oY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e2h6+wexKodjk5dQmKo/PAujwFeiGIQ0I5yIpESCPDEFzZC84Rtha4sKMBZAKqkh+X4lSIKW3whqJkqZlQS53uAcw5K0qMfQ2CpXBYQIdToF2w0G6aIIbWJka5w3LhEWjDcTXRsmnmPDanK0K5HO2Jn2DoKchWilUaRMZLNOLjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqU/r//d; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747921373; c=relaxed/simple;
+	bh=fNBi/1K/biEGCgGnPuC1MqSThVx5X24AubHC3I7UEO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BhNKpQnP7u2X879EIFemZqbpZwAHWyl0qncbW6/1NU8nQx/FeLpD9wgPABc3CErt5HKvlJB2PqsJmBfx/oyAcq78QUw49l5/V7XU7xvcgTfWDb4vgO51jjJr+TtDU6BKqtLsxkIECVggG2NptZ6teXIiX372VR7ozc+6hZ80qlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QSoQq2x+; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqU/r//d"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-231f5a7baa2so45447485ad.0;
-        Thu, 22 May 2025 06:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747920456; x=1748525256; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VON5sS8LJxFlkbqVCWCNdXM9FXCW8UNRgLDxNs7O+oY=;
-        b=OqU/r//dtFSgmN2G9m14651q3lah/WcH+FKc3jj5Lg3Cxfml0n7NFPBTQceBKFldD5
-         FJGPW8G0LJMfuRWGYrmuDCEGqLBo2sngDn/N5U+NppE1tjN4V5UKT57uC15PzOF5jJ+J
-         8D6/Y5QK/D/r8MpaGmJksZgRRt88uokvL5CD3LoS7FVkF+4si/63dROS8EpkbTF8jtKz
-         H9Qfyj68lNkE1Bdwih7aJdt4LiFluKhn8G1saTdri69h2nyAdFAnOPp8ny4ANB/Vxs3T
-         XpNYLUYJFkWonEG0NDa3pzGtemlaFmc3xRE8cvcMMvmsqC7vi6hfuC+xnF/kaBlY7CdR
-         keGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747920456; x=1748525256;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VON5sS8LJxFlkbqVCWCNdXM9FXCW8UNRgLDxNs7O+oY=;
-        b=L/SipLw7adBiefO1v7v49ne44CfwRwpw5otSuMdISbRrNc0SCfhUQjrq96yFldo4H1
-         AAEpcOtsdYZZUoH6q08z+Z1OcMuF4sTWPRTTYqnwtAtPvsMhPPHxq2W5nVi4veB97LEW
-         rSqs522+OnOGcEDz2gDwXtTYARheKFljglTBGfofXNzj8fUt7boIU1JIyKjbwC4oUwq7
-         pNmhqDW1GDQc5i1Ruem3oteFimevzZYF67b7fZO7ucJDOH1KFoEX3o0+tHuwQAJWg6MF
-         UTZudmZPh/ALfa5pB/YZGsp6tbzYNuOz4/W4cNUMyS1N3ZdlQUjsFsl5PfwFwWKKkiRJ
-         AbpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVR+RLuFmgapct2162tD5L3KT+1qDIMtTpOazEuikTLEI72x76uR1Ki60qDQJCDIeQ0NbLR@lists.linux.dev, AJvYcCWComv1s0b6DF8YFFvYxrGvEIzpKB6OsLRbNlGl7UdtYDdY2zeeRPsfFFkzCBksQTrRes/nD4SaIX2Clys=@lists.linux.dev
-X-Gm-Message-State: AOJu0YwLm1ZnQRfxWuw354XEtRFeLFYJtXKES4KvcEkEJLhqGENTOHfQ
-	QNuEPCbnJ0FSWA2JpphN4Qme583h06vMvbPoKtvVGdLpQJkMCxHvfRzA
-X-Gm-Gg: ASbGncupUYD+TmJ5ZDPud39uQKOlmHQacGH+5Tn7zUSEoqe6yJ2YPaGUljJGPbDN3g4
-	4mPMI6K/Lu+1aambkycmKIBp6e270VbBPbFmKVzT9Fqz05uzrld/66BgOlUQANrV1XyiY0iVhpL
-	7MP7HzmUfCJlaZgqer61z/j6KyO4INjlGljjysi/UGHyrplq5xfufx39bER4DLrXDCZf6xX8dcN
-	fZBdZozJEpizBDNCrpJtNJEb/bvfpu/nkOSQ+1Or5NUtMEhpIovOtRjtdRLMLeGhIEwdRxYSOl6
-	Cw2VnXmNtF5sQB+uhrUEua4wDmkUVIpGtznBYV5/B2m0qXMjC3kr5Y3fK/s0QTiqhGTgxhck1AD
-	jEzIvMrZX3UF6RLgx1tJjrQ==
-X-Google-Smtp-Source: AGHT+IGoR0yoC9myMkoF0rgaolY05/kfvKBGhWLPHaRfhVOAZcjekosrdfYg+pqRVBmeDx2+U3UV+w==
-X-Received: by 2002:a17:902:ea0f:b0:22e:72fe:5f9c with SMTP id d9443c01a7336-231d454daabmr327119345ad.42.1747920456051;
-        Thu, 22 May 2025 06:27:36 -0700 (PDT)
-Received: from ?IPV6:2601:644:8500:5dd0:864b:f5ff:fe5c:59a5? ([2601:644:8500:5dd0:864b:f5ff:fe5c:59a5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4adba78sm108376655ad.65.2025.05.22.06.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 06:27:35 -0700 (PDT)
-Message-ID: <db93019f-0a57-4b1d-95a6-ed5a6ab9a989@gmail.com>
-Date: Thu, 22 May 2025 06:27:32 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QSoQq2x+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747921371; x=1779457371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fNBi/1K/biEGCgGnPuC1MqSThVx5X24AubHC3I7UEO8=;
+  b=QSoQq2x+t88Dc+vBHSqNrVHrO7zqAEvN/j2+/7dZXwC+aZiTPyaVzpQy
+   cstvBl0NLEIRbLL6UMwuI2w5DhaYLw/COQoN+PZ8gYB1TOL/G7mByuaaT
+   f85t5P5vOmVgXizAqTlQOYBokCZeHgzAtTJvn+/c1lSs+6iaRRZ0DQhJC
+   zLBB660vXs+J6AiLccyFhs4jwjxNTlbG08a0EI5n8Tqp60DX373B4uVU0
+   YLYYaU0gY2IPySB2e3RXICmCbZZVJEgTvmohyh7bBuNgIKWnLEaKx/TEm
+   iBl2b37txgyFIAPhpQfXI8ESeOiwcPc9kYGeBaA0sUMIS2I21sknUB3rX
+   Q==;
+X-CSE-ConnectionGUID: 6I68/NVoTuuuyRgrynp/gA==
+X-CSE-MsgGUID: ZyefvP0nSTK5T2EB0ZvmTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50105497"
+X-IronPort-AV: E=Sophos;i="6.15,306,1739865600"; 
+   d="scan'208";a="50105497"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 06:42:50 -0700
+X-CSE-ConnectionGUID: qfuo922ESK+IuglyUxfgiQ==
+X-CSE-MsgGUID: d6ESqaYGTjWnBjc80xPOSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,306,1739865600"; 
+   d="scan'208";a="145467000"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 22 May 2025 06:42:49 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uI6C7-000POC-1n;
+	Thu, 22 May 2025 13:42:47 +0000
+Date: Thu, 22 May 2025 21:42:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 32/43] fs/nfsd/nfs4callback.c:900:23: warning:
+ unused variable 'res'
+Message-ID: <202505222120.oaQu7cme-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] arm: Fix rustgcc unknown argument '-mno-fdpic'
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, torvalds@linux-foundation.org,
- Ben Wolsieffer <ben.wolsieffer@hefring.com>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Christian Schrrefl <chrisi.schrefl@gmail.com>,
- Russell King <rmk+kernel@armlinux.org.uk>, Ard Biesheuvel <ardb@kernel.org>,
- anders.roxell@linaro.org, arnd@arndb.de, dan.carpenter@linaro.org,
- laura.nao@collabora.com, lkft-triage@lists.linaro.org,
- regressions@lists.linux.dev, Nick Clifton <nickc@redhat.com>,
- Richard Earnshaw <richard.earnshaw@arm.com>,
- Ramana Radhakrishnan <ramanara@nvidia.com>,
- Linux Kernel Functional Testing <lkft@linaro.org>
-References: <20250522-rust-mno-fdpic-arm-fix-v2-1-a6f691d9c198@gmail.com>
- <CANiq72mh1h8d-EWrZef=BPPtadZyHG0B+tg9GgA_RnWiETWMkA@mail.gmail.com>
-Content-Language: en-US
-From: Rudraksha Gupta <guptarud@gmail.com>
-In-Reply-To: <CANiq72mh1h8d-EWrZef=BPPtadZyHG0B+tg9GgA_RnWiETWMkA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Thanks for sending a v2! I was going to fix it myself, but this is
-> even better :)
->
-> By the way, submitting a patch typically requires / generally implies
-> that you actually tested it, so your own Tested-by is usually not
-> provided.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   0c6668479bba48114e5031d6fb3db53d80d8d6ad
+commit: 118202ef11a34c160a4bb2a9bf78ddf8626b0ed3 [32/43] nfsd: add callback encoding and decoding linkages for CB_NOTIFY
+config: i386-buildonly-randconfig-001-20250522 (https://download.01.org/0day-ci/archive/20250522/202505222120.oaQu7cme-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505222120.oaQu7cme-lkp@intel.com/reproduce)
 
-Thanks! :D Happy to send in a v3 if needed
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505222120.oaQu7cme-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/nfsd/nfs4callback.c:900:23: warning: unused variable 'res' [-Wunused-variable]
+     900 |         struct CB_NOTIFY4res res;
+         |                              ^~~
+   1 warning generated.
 
 
-Rudraksha
+vim +/res +900 fs/nfsd/nfs4callback.c
 
->
-> Cheers,
-> Miguel
+   893	
+   894	static int nfs4_xdr_dec_cb_notify(struct rpc_rqst *rqstp,
+   895					  struct xdr_stream *xdr,
+   896					  void *data)
+   897	{
+   898		struct nfsd4_callback *cb = data;
+   899		struct nfs4_cb_compound_hdr hdr;
+ > 900		struct CB_NOTIFY4res res;
+   901		int status;
+   902	
+   903		status = decode_cb_compound4res(xdr, &hdr);
+   904		if (unlikely(status))
+   905			return status;
+   906	
+   907		status = decode_cb_sequence4res(xdr, cb);
+   908		if (unlikely(status || cb->cb_seq_status))
+   909			return status;
+   910	
+   911		return decode_cb_op_status(xdr, OP_CB_NOTIFY, &cb->cb_status);
+   912	}
+   913	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
