@@ -1,99 +1,89 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF3C2F4A
-	for <llvm@lists.linux.dev>; Thu, 22 May 2025 02:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52C07482;
+	Thu, 22 May 2025 04:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747882387; cv=none; b=FuoYv49Jl27LJPJSgzxNvD+7I0deyT0mgjnOMLntdo+589qzIEEmBaBQ5Bag9FmarR6+Viz9NOLgkJVCQ+c+iSj7yNJd4WD8ZY0loIhJf0xnJz687gNCNliyjd/6edm/a45haqtkQQQUP8aKt7RsBQL/fcDXnZECZRB2txcwx1c=
+	t=1747888697; cv=none; b=NkNdSAez2JRXuUHiNtBm3DynrhnS7xbsPun/b6dqRoGplmO8Clmz5PrMItzpwP4dJJl+fzr9iy+wDS2eJTgIAR4xSSXwvzsbO6xRMOTj38o84UoZxJZYwpQuXNAUbBHuCL6KmGlirbtYFdyWXvOsYrCp22xOdnpLcjJ7o5TbOTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747882387; c=relaxed/simple;
-	bh=3mzJRFNDJauigQ61tnVJaI+EOr1wHPUIN9X+YCIg6IM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I3E082B8DVPGrJYRrvLcKeqvt33rfZ/OyC75a+cRQw6nVKEeYWDeONCZby7l9BgS2UYpnzJ9kpn17sMOfR7+y2/M+weJIe7gs544URKrsAZ/v3FIMqJkH3PeO5HOJ1KEctXUpRFWVJC7O+NWxYoGeYXEImcYVASK+q9fqNo3qVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QpPrUUxz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1747888697; c=relaxed/simple;
+	bh=mjm+qbDlPKjFPQVScfn1BHIfcZdfts9WkUTzAzsXPH0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NlV1OZVmqvXWN9TbmBg7KvcLYNkCVF0lpiMobXm9TZbqDWJtvETTigcuz6s8rbJYRBd7yUcwJwro5FOCxYbTVH397GsG7btMLKnrN0qphMAwBrhncgXdnqv/tSeqrRZ1NZfx5L6biVnAGqTHjkdVlMbY8qvUqqd3vD27w+7S/Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gisjnxnt; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QpPrUUxz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747882384;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ciAZN1ZjYAYqq19cmHzEbucYfbalXKXO7J128cqNFVg=;
-	b=QpPrUUxzJQBBejCVqwL347soDrvH45E3zuzAZJjY8iEGUV+7Gzk4P0C9vOaJxxNHt86j2b
-	wHI8dw3PP8M0/kAxLViZNNOgUpN+FjOcjcJtZVc1x5OsSYA4ng4Ndc9pGCSzDXW1qiJZbN
-	fOszPuqRZvObCn44y86ys5b77UYs13A=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-529-DGJXCZ-yMX-anpe2hE08Dw-1; Wed,
- 21 May 2025 22:53:02 -0400
-X-MC-Unique: DGJXCZ-yMX-anpe2hE08Dw-1
-X-Mimecast-MFC-AGG-ID: DGJXCZ-yMX-anpe2hE08Dw_1747882382
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E04B3180034E
-	for <llvm@lists.linux.dev>; Thu, 22 May 2025 02:53:01 +0000 (UTC)
-Received: from [172.20.77.114] (unknown [10.30.44.38])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7586F19560AB;
-	Thu, 22 May 2025 02:53:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc7,
- upstream-mainline, d608703f)
-Date: Thu, 22 May 2025 02:53:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gisjnxnt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747888695; x=1779424695;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mjm+qbDlPKjFPQVScfn1BHIfcZdfts9WkUTzAzsXPH0=;
+  b=gisjnxntvTen7CJFjVj8OEexdulW5fwPxbKXS2I5dZk6ZXfwLfSG5kyL
+   fm5mYIMqP4ByxSo4iRB8UZScP9DwVq/R1QGnSJ2XvzJB1U0zJrbUUP4HS
+   gRJsuSRZaRqvtn/8Q+ajM8V03xlnt9pq0p9W2N3jrji8rVX5wMzqSJ75f
+   KYAXrCSwo2BWYli3Nm21+g8UhtdnMsore/HsQtxPq88EdMscB/eylWSpt
+   WWiYprddLWd+7aXLpWO/kj0WTnv4xJ5TDx2YpemtRa0Z503/1JlJqlCh4
+   i1BaGMZVfzxZYb2FXsmGaLVaPvv18KMhRTPDaJobFrP0pq+6rR40fj3px
+   A==;
+X-CSE-ConnectionGUID: 53rEkCz8TSOb1M9m1OlRRQ==
+X-CSE-MsgGUID: phUm6U4sQ4m3Zj70Wxk0Gw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="53691122"
+X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
+   d="scan'208";a="53691122"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 21:38:14 -0700
+X-CSE-ConnectionGUID: 5PKnwZ2hTBy395/FuYQDPw==
+X-CSE-MsgGUID: iujxd+FeRZGlpGFpKeimxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,305,1739865600"; 
+   d="scan'208";a="140926829"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 21 May 2025 21:37:58 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHxgq-000Oue-0P;
+	Thu, 22 May 2025 04:37:56 +0000
+Date: Thu, 22 May 2025 12:37:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:migration 15/22] ld.lld: error: undefined symbol:
+ zsmalloc_mops
+Message-ID: <202505221256.0yyRMtYR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <63548.125052122530200126@us-mta-529.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: CDll3UofOz55EihOckdfRcS7347Z2KHB7yFbNXCJV7Y_1747882382
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/davidhildenbrand/linux migration
+head:   d598167a1ec281079ea1f6a0f041fa2b1918001a
+commit: 0de34259230765111a99df3cc784279f07aa31df [15/22] mm: stop storing migration_ops in page->mapping
+config: i386-randconfig-005-20250522 (https://download.01.org/0day-ci/archive/20250522/202505221256.0yyRMtYR-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505221256.0yyRMtYR-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505221256.0yyRMtYR-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'clk-fixes-for-linus' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/clk/linux
+>> ld.lld: error: undefined symbol: zsmalloc_mops
+   >>> referenced by migrate.c:142 (mm/migrate.c:142)
+   >>>               mm/migrate.o:(isolate_non_folio_page) in archive vmlinux.a
+   >>> referenced by migrate.c:0 (mm/migrate.c:0)
+   >>>               mm/migrate.o:(putback_non_folio_page) in archive vmlinux.a
+   >>> referenced by migrate.c:0 (mm/migrate.c:0)
+   >>>               mm/migrate.o:(migrate_pages_batch) in archive vmlinux.a
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1830295311
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1830295311-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
