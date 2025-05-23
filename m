@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED47B1FF1CF;
-	Fri, 23 May 2025 21:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF0620C038;
+	Fri, 23 May 2025 22:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748036447; cv=none; b=htujYQqPNXURhetAHOw9K1ooMvCTrYDyRh6O6VhOzf6kM1iz99PsB0wSj56xh0mYml+cYP21PpOEA6mx3GTZVTs6BMzKTfkuok0xCJ1hePLsMD9Owafk4Y+SOWeufjjfIQ4kVHnqnx5V2JWRr+L1JYSUONn/lKcKsBBy9sfO5vc=
+	t=1748037942; cv=none; b=nixuc7gCgwa/j7dT44XHZ8IB+768BG44bPuRyMjTqfNBEIVLHgvxrynwCYePS9lS9eCBCmAKd/oVZbcjtP8JwFpZKuhs4PbuKrcQ89vFpjpAKXFXk7qVmBO7g+29O38ObtbvI8nBEYq0Qxv77Ejvu812YWHRZYRhtt6SHD0ZZaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748036447; c=relaxed/simple;
-	bh=FUUWILj8JyJGfLu9IfPs12LltzXfUTkwo5W9rzyaZFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FN3iLX7avrcUNduvLu4ZXdIKx3L4y+2/eWs+Wbmf0B+A1alkv/0dvQCcp4lErXIBpXnHUgQoNRrz+CDFY9MXZFBTleZjh+0ynKQe672Ng2QYcxXHvPLqo0jWIQSQpK3Z076O25Bi7OJUOzVlGHqDwcOz1fSaQgtY3Tqr2/vQgvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gYPwE8xv; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1748037942; c=relaxed/simple;
+	bh=3SQ4b9mvlcSn5gq02pzro1J5w5A8mstVDIuSThnUHIg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G+wWN24H4bYZhzAeAVqUcHUDfjm+/1M2lNZozQ4nrRo6a4yVLFHJCE22A/GUBw5owP94+9UX5eYFQXJyvIeJUAM0wXNtIXm0mNV1imFLWrva6NxDZIpfQVWZWgGnFHVogskbdd9hZ1pNoveRlMvbqr8mDF3VLH9ORD2SNLs8oMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qi9TNjH/; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gYPwE8xv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qi9TNjH/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748036446; x=1779572446;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FUUWILj8JyJGfLu9IfPs12LltzXfUTkwo5W9rzyaZFM=;
-  b=gYPwE8xvQXU3SAWZr/ARVzBwcKTps81Y7GdN9mKEPkQHOdOD8GZtppIG
-   aztJCeni/Z9DJu8TFamNO8yLUBeg0Cnyps7n3ANxudZEGV4mlXPa5wCSC
-   yMq+79IuHk+l/axbqnHNFGgIZTAZavshSMnMkHfgl2zkQqxKC8/H7Bufu
-   2Ju1Xar0Rz5u5WdK3boYjpHzn5kp3zcukDEUsJZpLqiIiqKoV6GZvzJQD
-   SUeB6FQyDdvCc1QQZeS6Il6SOJoiMJJtwuw5h4dMCJe/sjpqKzS8XL2xG
-   2ulHJN2oWCABzMxSYrAIC7LLJXiiTxDeexKgxN6dYer4uqAk8AsrRoV2Y
+  t=1748037941; x=1779573941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3SQ4b9mvlcSn5gq02pzro1J5w5A8mstVDIuSThnUHIg=;
+  b=Qi9TNjH/waw5f9ygMDq1s4SoY5KScswo1IfzIrXFFTwnlSNO/GLLQQ1j
+   FTDoO5a6vXrUQgF/ADLlPDJEzpjzDieEtovwxf+9m7yHWVBFKCi4p+4VS
+   1987U5RtQMxoirEM1Njwj8IL3eMUZBoz7J9O9aASBPj+2HJYGLM4bN7v4
+   XMnGSkkYccVSKaUZImfoQalEAGJSvjHyNgt33EdzFW0cWD7st8nRgOHBd
+   AhLpTno9iFiXfUsOR7VjSb2GBhtEY7M8HonEkfcf0JG6o1CHaX+60zX3u
+   +0Ky0wbmRF5c6tPC9d1fyZlVFcSKBfhQ6JIQadrAoB2CmRjl1vafl4PBD
    A==;
-X-CSE-ConnectionGUID: b+UH4ZAKTWWYA//BMKHQcQ==
-X-CSE-MsgGUID: ZG+AdT4xTRihGpoagwnD2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50023782"
+X-CSE-ConnectionGUID: 0HAPINIGSGOSDcBUn0AvGA==
+X-CSE-MsgGUID: aWGgxsY8RdWT6s2Si4dhQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="61153570"
 X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="50023782"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 14:40:45 -0700
-X-CSE-ConnectionGUID: G1AVr872Q6OakJyyWEgfsA==
-X-CSE-MsgGUID: WGSyuGMDTLmSlrKne2BMFg==
+   d="scan'208";a="61153570"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 15:05:41 -0700
+X-CSE-ConnectionGUID: 8TFKGq4FSIyyrHHqNIV5uA==
+X-CSE-MsgGUID: oZA2c1PyRUCo6iWAFdZKTA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="141164749"
-Received: from igk-lkp-server01.igk.intel.com (HELO a1decbf9c5f9) ([10.211.3.150])
-  by orviesa009.jf.intel.com with ESMTP; 23 May 2025 14:40:44 -0700
-Received: from kbuild by a1decbf9c5f9 with local (Exim 4.96)
+   d="scan'208";a="142274870"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 23 May 2025 15:05:37 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uIa89-0001ZU-0t;
-	Fri, 23 May 2025 21:40:41 +0000
-Date: Sat, 24 May 2025 05:40:15 +0800
+	id 1uIaWE-000Ql6-1e;
+	Fri, 23 May 2025 22:05:34 +0000
+Date: Sat, 24 May 2025 06:04:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kai Huang <kai.huang@intel.com>
+To: Badal Nilawar <badal.nilawar@intel.com>, intel-xe@lists.freedesktop.org,
+	linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Adrian Hunter <adrian.hunter@intel.com>
-Subject: [linux-next:master 517/13331] vmlinux.o: warning: objtool:
- tdh_vp_enter+0x8: call to tdx_tdvpr_pa() leaves .noinstr.text section
-Message-ID: <202505240530.5KktQ5mX-lkp@intel.com>
+	anshuman.gupta@intel.com, rafael@kernel.org, lenb@kernel.org,
+	bhelgaas@google.com, ilpo.jarvinen@linux.intel.com,
+	lucas.demarchi@intel.com, rodrigo.vivi@intel.com,
+	varun.gupta@intel.com, ville.syrjala@linux.intel.com,
+	uma.shankar@intel.com
+Subject: Re: [PATCH v3 07/11] drm/xe/vrsr: Enable VRSR on default VGA boot
+ device
+Message-ID: <202505240521.BnNwr31U-lkp@intel.com>
+References: <20250523190155.2623462-8-badal.nilawar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,22 +69,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250523190155.2623462-8-badal.nilawar@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   484803582c77061b470ac64a634f25f89715be3f
-commit: 69e23faf82b4e7efe3581f9055a9c29d8d6ff9af [517/13331] x86/virt/tdx: Add SEAMCALL wrapper to enter/exit TDX guest
-config: x86_64-buildonly-randconfig-2003-20250524 (https://download.01.org/0day-ci/archive/20250524/202505240530.5KktQ5mX-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240530.5KktQ5mX-lkp@intel.com/reproduce)
+Hi Badal,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on next-20250523]
+[cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge pci/next pci/for-linus linus/master v6.15-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Badal-Nilawar/PCI-ACPI-Add-D3cold-Aux-Power-Limit_DSM-method/20250524-030125
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20250523190155.2623462-8-badal.nilawar%40intel.com
+patch subject: [PATCH v3 07/11] drm/xe/vrsr: Enable VRSR on default VGA boot device
+config: s390-randconfig-001-20250524 (https://download.01.org/0day-ci/archive/20250524/202505240521.BnNwr31U-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240521.BnNwr31U-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505240530.5KktQ5mX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505240521.BnNwr31U-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: tdh_vp_enter+0x8: call to tdx_tdvpr_pa() leaves .noinstr.text section
+   In file included from drivers/gpu/drm/xe/xe_irq.c:12:
+>> drivers/gpu/drm/xe/display/xe_display.h:75:64: warning: non-void function does not return a value [-Wreturn-type]
+      75 | static inline bool xe_display_connected(struct xe_device *xe) {}
+         |                                                                ^
+   In file included from drivers/gpu/drm/xe/xe_irq.c:12:
+   In file included from drivers/gpu/drm/xe/display/xe_display.h:9:
+   In file included from drivers/gpu/drm/xe/xe_device.h:11:
+   In file included from drivers/gpu/drm/xe/xe_device_types.h:10:
+   include/linux/pci-acpi.h:143:12: warning: unused function 'pci_acpi_request_d3cold_aux_power' [-Wunused-function]
+     143 | static int pci_acpi_request_d3cold_aux_power(struct pci_dev *dev, u32 requested_power,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pci-acpi.h:149:12: warning: unused function 'pci_acpi_add_perst_assertion_delay' [-Wunused-function]
+     149 | static int pci_acpi_add_perst_assertion_delay(struct pci_dev *dev, u32 delay_us)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_pm.c:17:
+>> drivers/gpu/drm/xe/display/xe_display.h:75:64: warning: non-void function does not return a value [-Wreturn-type]
+      75 | static inline bool xe_display_connected(struct xe_device *xe) {}
+         |                                                                ^
+   1 warning generated.
+
+
+vim +75 drivers/gpu/drm/xe/display/xe_display.h
+
+    74	
+  > 75	static inline bool xe_display_connected(struct xe_device *xe) {}
 
 -- 
 0-DAY CI Kernel Test Service
