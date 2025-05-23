@@ -1,153 +1,148 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426932DCBE6;
-	Fri, 23 May 2025 05:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15312236EE;
+	Fri, 23 May 2025 06:29:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747977912; cv=none; b=pP4y9htkvXyk4i8zsqM2CQ3kqnd29bzxZ0sEJkZuYb8z1EK+U6K3+M93PHIcXIwehCBB5yNch6hPuztrePm0OVJgv+6beY1X82Kc73bRi2uovVMPYxHyi05vnLwPCPmJaa0wutKbbEhmDXz5HzfcSjJcbSWcBk2I4CfiyaMZkws=
+	t=1747981762; cv=none; b=JhcpGqpi1pfezjHw0VhLA2xqmMCZC/SL+DPdVaNodVHIUngFJgW8y92nXVYqOFAZ3N2MWK3i9qIQ8XM2FYKsiOdKNBGltMvQ2T0TdvvaHgv9LIVwEXS+LiSrVp9758btvFUbduL917is56LGFZnlcZ2hWta0qStkDYdjjMdBUTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747977912; c=relaxed/simple;
-	bh=sHCHau5V2Ia+Ul8jz8STWNXfBt/x/iwthPVTBpu6WaA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XAJ/AydgEIhyPHUs8wv3giw3gnXRPG6PwpZhwIAxKHvav5WuP5K9vIVMz4jKuX3BELjRb1kCkXCDd+FhXk8//moCTJ3g30lZcbSjNXjxdmBPKc8SxBLhjMqxSkKL0GCba135PzzA+EJoAKgQQ2HJE8OhGKNwBENF4RlC78+vFIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gkPzzSJS; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1747981762; c=relaxed/simple;
+	bh=RQ5KrYLB5wM0he00u4vva4Oc9ENN6xE57mG5WU5ptOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TTKZRXuK5++VwQ7BZQ7ab900SYSqZ7wA6tvVjK0SUBmmo2wz8mc9oLkbOGC9mkrD5bkcIodgoXdY0VFBR5I4kigEB1MaD+vhzCUUNWE18DAkp/r4TwRQhKx7k59xIus1nfJ0nyZYwBCDT64gUmlTZB2+P288WtCpHwiMjG6tuFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E1LYRhbN; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gkPzzSJS"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54MNWEn5006420;
-	Fri, 23 May 2025 05:24:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=T9QR0v
-	Rv/b0B11JDYax3wCR+tNiJcsp+EMocfpzOxi8=; b=gkPzzSJS3ymffrtpxcB5vm
-	v0s0Gt+0xedPFAF4Q0SBMgwUo01yMH5OqoDNtugNOwneyxcvMf5JVIm1y0T08Re7
-	EmJ6QdZ6GthLPsjQ11Y8uXW7sj+Eeyb8WqKlexTBXqcCpntaCyNC/X7hKpXH2JUj
-	tiWuD0uZqTjnvmBQRioWrY0breTha8OmZHdV8IDZEYMicTaNWm94EHTL/osOLYVd
-	iuLvSdTpZmyAtPpzaNMZw/bBFpt41IbV5Ua0ZuIpLPTk4wDsHISYTDhuqr1lanD2
-	vG9gQ6KwGs17vxJDgNiDQL5N9JmAxrZi3uqj2fVPEF8IGqrxh/bDnF+01ZlmwWWQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46t9m7t7sq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 May 2025 05:24:43 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54N5Ogd1008988;
-	Fri, 23 May 2025 05:24:42 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46t9m7t7sh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 May 2025 05:24:42 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54N1ugL2015431;
-	Fri, 23 May 2025 05:24:41 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 46rwnnn2at-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 May 2025 05:24:41 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54N5OdfJ51446136
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 May 2025 05:24:40 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DFC2C20043;
-	Fri, 23 May 2025 05:24:39 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6FB4920040;
-	Fri, 23 May 2025 05:24:39 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.63.197.14])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 May 2025 05:24:39 +0000 (GMT)
-Received: from jarvis.ozlabs.ibm.com (haven.au.ibm.com [9.63.198.114])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id A792F60213;
-	Fri, 23 May 2025 15:24:35 +1000 (AEST)
-Message-ID: <e50abba6c962772c73342bacf20fb87dc99dd542.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 08/14] powerpc: Handle KCOV __init vs inline
- mismatches
-From: Andrew Donnellan <ajd@linux.ibm.com>
-To: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman	
- <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy
-	 <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        "Ritesh
- Harjani (IBM)" <ritesh.list@gmail.com>,
-        "Aneesh Kumar K.V"
- <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton	 <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Gustavo A. R. Silva"
- <gustavoars@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Marco Elver
- <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey
- Ryabinin <ryabinin.a.a@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor
- <nathan@kernel.org>,
-        Nicolas Schier	 <nicolas.schier@linux.dev>,
-        Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling
- <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
-        llvm@lists.linux.dev
-Date: Fri, 23 May 2025 15:24:30 +1000
-In-Reply-To: <20250523043935.2009972-8-kees@kernel.org>
-References: <20250523043251.it.550-kees@kernel.org>
-	 <20250523043935.2009972-8-kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E1LYRhbN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747981760; x=1779517760;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RQ5KrYLB5wM0he00u4vva4Oc9ENN6xE57mG5WU5ptOM=;
+  b=E1LYRhbNGFrw93BVy2Eb1WlaA/Gw7Fnk30Okrl4E1oyJo4UST+t6iVAi
+   SBs6s3UE+BZYHK69OFfc+0SqlP9GSIop6d65BPyfFfHgvFmGSbVdB4Bkr
+   t+MMDDUDBzrk9oOrfK+B+5hMHcwdKSmWO4MAfWcHRehIenJGRc+OoHCFa
+   YoNoqNhPTZy7c6ZirNETAM1uNY5oZlgslPLanyHPhhbfdlZYU+pzEl1rb
+   JtsIgcvXlBwFyrwgU7MKu5mt5WfVVEWcVzXdtMWLWK0aXa8AlAxTHIrQ3
+   T2OhEMIXxPZ0neEMwuYA8+aJn6YjI7jkTXBY0qwcQxNWg4coyDL3+YO42
+   Q==;
+X-CSE-ConnectionGUID: YK1V5391RJuiQxk7piLEiA==
+X-CSE-MsgGUID: GZYw6T7ES2GY90lzq1qTug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="49283377"
+X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
+   d="scan'208";a="49283377"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 23:29:19 -0700
+X-CSE-ConnectionGUID: ZuuhH2FNQ221X/l7fPSaiA==
+X-CSE-MsgGUID: XWpiShhdRhKfi1ufUQi4NA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
+   d="scan'208";a="142034651"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 22 May 2025 23:29:18 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uILu7-000Q4y-2t;
+	Fri, 23 May 2025 06:29:15 +0000
+Date: Fri, 23 May 2025 14:28:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pankaj Raghav <p.raghav@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC v2 2/2] block: use mm_huge_zero_folio in
+ __blkdev_issue_zero_pages()
+Message-ID: <202505231432.NPt3C4sm-lkp@intel.com>
+References: <20250522090243.758943-3-p.raghav@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=SMZCVPvH c=1 sm=1 tr=0 ts=6830069b cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=REYBSQJbgk_QW_Jsg8sA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: oQb5v6M7wutfrMtk1qvZQMEXsUNMAS6C
-X-Proofpoint-ORIG-GUID: 5IyYPtP_M7W6sx6jcc6-H4GkEZFAEAEb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIzMDA0MyBTYWx0ZWRfX8CeyVmgZNEOz 8pmB+9RdT5ZsQ98qxplPqvRkrNpOOYwsSTFPDm5ofvI1Vh4bbudIby6HA8NmTGhtWKTGCbPb+Vc ncpDniBcH8eQ2V6TvH4/WOR7hWwc72H7W3tmeVLVHUbkift9S50W47R4EZG5vRt+eQh2UiWAsBK
- iE2vMgtZCKgIB8ryEScHd2O4ZVBu+fZQ71R6KP7ZepPiveo0szKoP5GtVDvnlETC92QyKZ6dJPA 9F354NXkUaazXC5GwoeLMpIeHZomJ+1xdeYZUMVAtJ78BfchmFk42UaDhV8BLvtV9oREWNDxTxG /JkwdDWhrq02gBuo/giLPxFbLNIIh1tgMIxMCWOWwczwEbDPV9zml+heRweY+Jd/oul5iu2Dl1O
- bQSsYl9qhOX4fnuFfAi63sra+qJkyo0qkV3/wv1tj0wVD9FBgFyh3pEhli53wYP0l6epaDcF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-23_02,2025-05-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=480 suspectscore=0 bulkscore=0 clxscore=1011 adultscore=0
- phishscore=0 mlxscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505230043
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250522090243.758943-3-p.raghav@samsung.com>
 
-On Thu, 2025-05-22 at 21:39 -0700, Kees Cook wrote:
-> When KCOV is enabled all functions get instrumented, unless
-> the __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we have to
-> handle differences in how GCC's inline optimizations get resolved.
-> For
-> s390 this requires forcing a couple functions to be inline with
+Hi Pankaj,
 
-I assume you mean powerpc here, though I'm sure my employer is happy
-that you're at least confusing us with IBM's other architecture :)
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+[auto build test ERROR on f1f6aceb82a55f87d04e2896ac3782162e7859bd]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/mm-add-THP_HUGE_ZERO_PAGE_ALWAYS-config-option/20250522-170442
+base:   f1f6aceb82a55f87d04e2896ac3782162e7859bd
+patch link:    https://lore.kernel.org/r/20250522090243.758943-3-p.raghav%40samsung.com
+patch subject: [RFC v2 2/2] block: use mm_huge_zero_folio in __blkdev_issue_zero_pages()
+config: arm-randconfig-001-20250523 (https://download.01.org/0day-ci/archive/20250523/202505231432.NPt3C4sm-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250523/202505231432.NPt3C4sm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505231432.NPt3C4sm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> block/blk-lib.c:201:15: error: call to undeclared function 'mm_get_huge_zero_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           zero_folio = mm_get_huge_zero_folio(NULL);
+                        ^
+   block/blk-lib.c:201:15: note: did you mean 'mm_put_huge_zero_folio'?
+   include/linux/huge_mm.h:644:20: note: 'mm_put_huge_zero_folio' declared here
+   static inline void mm_put_huge_zero_folio(struct mm_struct *mm)
+                      ^
+>> block/blk-lib.c:201:13: error: incompatible integer to pointer conversion assigning to 'struct folio *' from 'int' [-Wint-conversion]
+           zero_folio = mm_get_huge_zero_folio(NULL);
+                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/mm_get_huge_zero_folio +201 block/blk-lib.c
+
+   194	
+   195	static void __blkdev_issue_zero_pages(struct block_device *bdev,
+   196			sector_t sector, sector_t nr_sects, gfp_t gfp_mask,
+   197			struct bio **biop, unsigned int flags)
+   198	{
+   199		struct folio *zero_folio;
+   200	
+ > 201		zero_folio = mm_get_huge_zero_folio(NULL);
+   202		if (!zero_folio)
+   203			zero_folio = page_folio(ZERO_PAGE(0));
+   204	
+   205		while (nr_sects) {
+   206			unsigned int nr_vecs = __blkdev_sectors_to_bio_pages(nr_sects);
+   207			struct bio *bio;
+   208	
+   209			bio = bio_alloc(bdev, nr_vecs, REQ_OP_WRITE, gfp_mask);
+   210			bio->bi_iter.bi_sector = sector;
+   211	
+   212			if ((flags & BLKDEV_ZERO_KILLABLE) &&
+   213			    fatal_signal_pending(current))
+   214				break;
+   215	
+   216			do {
+   217				unsigned int len, added = 0;
+   218	
+   219				len = min_t(sector_t, folio_size(zero_folio),
+   220					    nr_sects << SECTOR_SHIFT);
+   221				if (bio_add_folio(bio, zero_folio, len, 0))
+   222					added = len;
+   223				if (added < len)
+   224					break;
+   225				nr_sects -= added >> SECTOR_SHIFT;
+   226				sector += added >> SECTOR_SHIFT;
+   227			} while (nr_sects);
+   228	
+   229			*biop = bio_chain_and_submit(*biop, bio);
+   230			cond_resched();
+   231		}
+   232	}
+   233	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
