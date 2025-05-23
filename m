@@ -1,135 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5152513DDAE;
-	Fri, 23 May 2025 09:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2757715990C;
+	Fri, 23 May 2025 09:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747993399; cv=none; b=ddmcpCStL7H+Cn8QvtCdDRzFFGoaOAmPNONgFWxxkbY4Uf1mD6LEvvLimWUknI0XyDjZ39oho8X91b1PjTecUEiwgORo84eNydYTtHjKUw+baXB+8Ld2E5lCBeK9eKEcsKKYbJRHYUjIB2lOsLsCRez6BnnE7ErTf9fxW4ro1z4=
+	t=1747993543; cv=none; b=AKCcZcAesy/Bnw/OC5/1GPyCjdXyrySb6nCh2Vjwvga7O2JiwcPCuY81TfED8oYgJqKWqaBK3D2ZKf9WpQeLRgAkyz3BtYFr7I8Z15ngGCrgq/I5E3o621BOML4+EbKojp6a2jO3e7beTNgely0sKaXFt9EYcDug3IUBzfWJGg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747993399; c=relaxed/simple;
-	bh=CEDCw79LJctjQpVZ3uZ8cM78GRz7tvEzFoYryRMdOrc=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=AyHUJzJ+y/RCnmyVfyOSCBuGTbcOaIAdgKIw2gJBdjTg607RcyokqFpOG9FtZD7n6ku5aLyVWhkQbyWXbG/eQnSsI0/P1ZB4riAXmZhwssTgnHKq1Ra+AMJ9gMwgNe5JluC5HUJSDFDwDfmYZ7E6CjfW3Gpfq5d7KJmbtuGn7fA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XSdLPQJq; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1747993543; c=relaxed/simple;
+	bh=nG88vYZabys4ZuUQnt2umFX7vl5FYzFeVs7uVcok0Ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fbqJUY0A1kkqo6PA14/tLXVflLw6Xu+MicWrsWi8DMY+BMMQaG4eTxxiOZ1DskEvUqJASoxgm5oiFA9T9NnLtARtTt4hb7BcVD85QEY6bD9hd1w7ueJYTNko5cgr4o5uI3VxVze90UBKfEyjL17JyQvuOObo4Q4m59XcTdA0wck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YaIGlC30; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XSdLPQJq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YaIGlC30"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747993397; x=1779529397;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=CEDCw79LJctjQpVZ3uZ8cM78GRz7tvEzFoYryRMdOrc=;
-  b=XSdLPQJqZdqRn7Mh94o1icxgGgrieH/R1T1E2COWc+WgzckfBlVZTnr1
-   lp1EOsHgoQJ7g3Vqr4a2jJ+7DbnHXJtHHJE6p9TBzhnpoaPikToBuWnme
-   JNZW0Gre+UXSvs6nZGMBcPHhL4trv7spoXAIzr6rmZ9kU5X3AsXD4bABa
-   kxC12Z5eQXu2dGVDA2YBm74pfT3TwPRWrXwBuhC+ta2SHPkQSfM8PRZRP
-   5Wo9hV5l1qJWfykyd9usqrBMf3dUkM5ZjRISyjUS6chWuMaVBhUGrcVKJ
-   d7m/wy1wlH1qKkwEGBw6ciB0XrUHwWR1LP4EAt6cWJMhPcSCwwNNlN9gs
-   Q==;
-X-CSE-ConnectionGUID: quH3kXBwTZmgGOd9Ljc7bg==
-X-CSE-MsgGUID: TZrfrqOQSNWIVKytYyGF8w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="37669140"
+  t=1747993542; x=1779529542;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nG88vYZabys4ZuUQnt2umFX7vl5FYzFeVs7uVcok0Ak=;
+  b=YaIGlC30B+1r7i27Ra4XUR6dW5kUqf5YpVifWSSVNsn15YQkIpiun6Bl
+   R42NOljPEbRks537bD6vKhy4ayypd8z5ZJazSwXDSJENIMbD3X0sZLTvm
+   nk5/Gjvx96iD8Ww6STxBK/POOe6NAcBJu2ZyBJQgM1ffLI1JcV8uKUUb8
+   4NPEox7fgG4VRZEnUCYsckwVM+wm6rezKdCMR1FGZwti2zUlG7uT9EhM1
+   tkNlXTDF4UJjyUv3+phKyy+/MzFWmxFR/h0bBuZbHwz2HizXgceVr82oa
+   5Ax8sRf/dFiSsDgBeKOa7Civolw2uqo4AapF+UFbCQMU+1OBC1rirmY2s
+   w==;
+X-CSE-ConnectionGUID: Nh7YCfKqRbOGmLG3Ep9gVw==
+X-CSE-MsgGUID: vTbVGn8CSMq6uR0/ZGHh7g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="53855536"
 X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
-   d="scan'208";a="37669140"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 02:43:16 -0700
-X-CSE-ConnectionGUID: ceSpxjaZRESIS9zExvfx7w==
-X-CSE-MsgGUID: QYXYHeU2QNuY0dZSF8wnWA==
+   d="scan'208";a="53855536"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 02:45:41 -0700
+X-CSE-ConnectionGUID: b57hpsxyT9qLeCy43FmWyQ==
+X-CSE-MsgGUID: 5ZikwWKkT0S+GHSPVkeX3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
-   d="scan'208";a="141634035"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.150])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 02:43:13 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 23 May 2025 12:43:10 +0300 (EEST)
-To: Hans de Goede <hdegoede@redhat.com>
-cc: Sebastian Reichel <sre@kernel.org>, kernel test robot <lkp@intel.com>, 
-    Jelle van der Waa <jvanderwaa@redhat.com>, llvm@lists.linux.dev, 
-    oe-kbuild-all@lists.linux.dev, 
-    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-    =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>, 
-    Armin Wolf <W_Armin@gmx.de>
-Subject: Re: [pdx86-platform-drivers-x86:review-ilpo-next 109/109]
- drivers/platform/x86/ideapad-laptop.c:2044:3: error: field designator
- 'charge_types' does not refer to any field in type 'const struct
- power_supply_ext'
-In-Reply-To: <85091184-1d5b-4a11-a940-2d818d46afef@redhat.com>
-Message-ID: <680a00ed-d701-4d5e-9195-af0b27f376b7@linux.intel.com>
-References: <202505221051.khDhUKJ0-lkp@intel.com> <f981b9ac-41cc-489a-9f37-c9e87e748c99@redhat.com> <ba4bcvf3tjqunxncrqeire4j257px4plbk5eew7sfbmycscbys@xymzswpfmadw> <85091184-1d5b-4a11-a940-2d818d46afef@redhat.com>
+   d="scan'208";a="140941571"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 23 May 2025 02:45:35 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uIOy5-000QGK-1l;
+	Fri, 23 May 2025 09:45:33 +0000
+Date: Fri, 23 May 2025 17:44:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus =?iso-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>,
+	bridge@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, openwrt-devel@lists.openwrt.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>, Ivan Vecera <ivecera@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Vladimir Oltean <olteanv@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>, Jonathan Corbet <corbet@lwn.net>,
+	Simon Horman <horms@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Xiao Liang <shaw.leon@gmail.com>,
+	Markus Stockhausen <markus.stockhausen@gmx.de>,
+	Jan Hoffmann <jan.christian.hoffmann@gmail.com>,
+	Birger Koblitz <git@birger-koblitz.de>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	Linus =?iso-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>
+Subject: Re: [PATCH net-next 1/5] net: bridge: mcast: explicitly track active
+ state
+Message-ID: <202505231710.LnCUsJMF-lkp@intel.com>
+References: <20250522195952.29265-2-linus.luessing@c0d3.blue>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250522195952.29265-2-linus.luessing@c0d3.blue>
 
-On Thu, 22 May 2025, Hans de Goede wrote:
-> On 22-May-25 3:52 PM, Sebastian Reichel wrote:
-> > Hi,
-> > 
-> > On Thu, May 22, 2025 at 11:36:47AM +0200, Hans de Goede wrote:
-> >> On 22-May-25 4:39 AM, kernel test robot wrote:
-> >>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-ilpo-next
-> >>> head:   b2012b38080e2f92d43eca59e8249c174a27527c
-> >>> commit: b2012b38080e2f92d43eca59e8249c174a27527c [109/109] platform/x86: ideapad: Expose charge_types
-> >>> config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250522/202505221051.khDhUKJ0-lkp@intel.com/config)
-> >>> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> >>> rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-> >>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250522/202505221051.khDhUKJ0-lkp@intel.com/reproduce)
-> >>>
-> >>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> >>> the same patch/commit), kindly add following tags
-> >>> | Reported-by: kernel test robot <lkp@intel.com>
-> >>> | Closes: https://lore.kernel.org/oe-kbuild-all/202505221051.khDhUKJ0-lkp@intel.com/
-> >>>
-> >>> All errors (new ones prefixed by >>):
-> >>>
-> >>>>> drivers/platform/x86/ideapad-laptop.c:2044:3: error: field designator 'charge_types' does not refer to any field in type 'const struct power_supply_ext'
-> >>>     2044 |         .charge_types           = (BIT(POWER_SUPPLY_CHARGE_TYPE_STANDARD) |
-> >>>          |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>>     2045 |                                    BIT(POWER_SUPPLY_CHARGE_TYPE_LONGLIFE)),
-> >>>          |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>>    1 error generated.
-> >>>
-> >>>
-> >>> vim +2044 drivers/platform/x86/ideapad-laptop.c
-> >>
-> >> Hmm, this patch depends on:
-> >>
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=for-next&id=c1f7375a246e5f810191a6c3031d2fa2b80e9f5e
-> > 
-> > I should have merged that through an immutable branch :(
-> >
-> >> I guess that that patch is not in review-ilpo-next,
-> >> maybe Sebastian can take this patch instead of taking
-> >> it through pdx86-next ?  Or it can be merged after
-> >> 6.16-rc1?
-> > 
-> > I will be on trekking trip for 3 weeks starting on Monday (more or
-> > less directly after sending my 6.16 PR), so I don't want to take any
-> > late patches as I cannot handle potential problems.
-> 
-> No worries, I guess we can just merge the patch after 6.16-rc1 then.
+Hi Linus,
 
-I'll handle it after 6.16-rc1.
+kernel test robot noticed the following build errors:
 
-It would be nice if the patch submitters would inform us maintainers about 
-such dependencies up front when submitting a patch.
+[auto build test ERROR on net/main]
+[also build test ERROR on linus/master v6.15-rc7 next-20250523]
+[cannot apply to net-next/main horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Have a nice time.
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-L-ssing/net-bridge-mcast-explicitly-track-active-state/20250523-040914
+base:   net/main
+patch link:    https://lore.kernel.org/r/20250522195952.29265-2-linus.luessing%40c0d3.blue
+patch subject: [PATCH net-next 1/5] net: bridge: mcast: explicitly track active state
+config: x86_64-buildonly-randconfig-004-20250523 (https://download.01.org/0day-ci/archive/20250523/202505231710.LnCUsJMF-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250523/202505231710.LnCUsJMF-lkp@intel.com/reproduce)
 
-> Enjoy your trekking trip.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505231710.LnCUsJMF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/bridge/br_multicast.c:1135:6: error: expected value in expression
+    1135 | #elif
+         |      ^
+>> net/bridge/br_multicast.c:1180:11: error: no member named 'ip6_active' in 'struct net_bridge_mcast'; did you mean 'ip4_active'?
+    1180 |                 brmctx->ip6_active = ip6_active;
+         |                         ^~~~~~~~~~
+         |                         ip4_active
+   include/trace/events/../../../net/bridge/br_private.h:161:10: note: 'ip4_active' declared here
+     161 |         bool                            ip4_active;
+         |                                         ^
+   2 errors generated.
+
+
+vim +1135 net/bridge/br_multicast.c
+
+  1122	
+  1123	static int br_ip6_multicast_check_active(struct net_bridge_mcast *brmctx,
+  1124						 bool *active)
+  1125	{
+  1126	#if IS_ENABLED(CONFIG_IPV6)
+  1127		if (!__br_multicast_querier_exists(brmctx, &brmctx->ip6_other_query,
+  1128						   true))
+  1129			*active = false;
+  1130	
+  1131		if (brmctx->ip6_active == *active)
+  1132			return false;
+  1133	
+  1134		return true;
+> 1135	#elif
+  1136		*active = false;
+  1137		return false;
+  1138	#endif
+  1139	}
+  1140	
+  1141	/**
+  1142	 * __br_multicast_update_active() - update mcast active state
+  1143	 * @brmctx: the bridge multicast context to check
+  1144	 * @force_inactive: forcefully deactivate mcast active state
+  1145	 * @extack: netlink extended ACK structure
+  1146	 *
+  1147	 * This (potentially) updates the IPv4/IPv6 multicast active state. And by
+  1148	 * that enables or disables snooping of multicast payload traffic in fast
+  1149	 * path.
+  1150	 *
+  1151	 * The multicast active state is set, per protocol family, if:
+  1152	 *
+  1153	 * - an IGMP/MLD querier is present
+  1154	 * - for own IPv6 MLD querier: an IPv6 address is configured on the bridge
+  1155	 *
+  1156	 * And is unset otherwise.
+  1157	 *
+  1158	 * This function should be called by anything that changes one of the
+  1159	 * above prerequisites.
+  1160	 *
+  1161	 * Return: 0 on success, a negative value otherwise.
+  1162	 */
+  1163	static int __br_multicast_update_active(struct net_bridge_mcast *brmctx,
+  1164						bool force_inactive,
+  1165						struct netlink_ext_ack *extack)
+  1166	{
+  1167		bool ip4_active, ip6_active, ip4_changed, ip6_changed;
+  1168		int ret = 0;
+  1169	
+  1170		lockdep_assert_held_once(&brmctx->br->multicast_lock);
+  1171	
+  1172		ip4_active = !force_inactive;
+  1173		ip6_active = !force_inactive;
+  1174		ip4_changed = br_ip4_multicast_check_active(brmctx, &ip4_active);
+  1175		ip6_changed = br_ip6_multicast_check_active(brmctx, &ip6_active);
+  1176	
+  1177		if (ip4_changed)
+  1178			brmctx->ip4_active = ip4_active;
+  1179		if (ip6_changed)
+> 1180			brmctx->ip6_active = ip6_active;
+  1181	
+  1182		return ret;
+  1183	}
+  1184	
 
 -- 
- i.
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
