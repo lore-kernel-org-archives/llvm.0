@@ -1,108 +1,115 @@
-Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63500220F46
-	for <llvm@lists.linux.dev>; Fri, 23 May 2025 07:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4B728750C;
+	Fri, 23 May 2025 08:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747985128; cv=none; b=noaAkSIAOl/olBHPgXBmmL66fm15ChP5BSDBid8bm3Fzsl7pYiHbdfqlXoJs19l9ezYXY/aSQ/EpBBH7sP7I6tc1UJZ2+2egjDrU6EFmCk9kF9ay4Bs/OBhHKTBdvi05sI0w9kmcDtb9dR9qduiKeR/bLeumf+OCXUFVSJVSozI=
+	t=1747988553; cv=none; b=Js2+l6hFyo4MLriEozDpvlaUWo4JrVX49R3DP2cG4fGWh9y7n0tTOvGiogQf/wyJ/fQEe3jyOEeVrnYMqqU5eSIK02pGEZ0BuRN8/VWtyg6w471V8ReUtRwDBBxSonzsaX9/qeKnER3B5ung1oULFEzmIPKlrx/LBA2uUCYFBQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747985128; c=relaxed/simple;
-	bh=L5hwYD2GMGyVP6SnLZsdCyv/4gTl9d7s2F5LvXkL4x0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=jaxG0FwuJIJhwdoaFR4ELOfALJqhGEZAZD21EJiB4Ujvham2G7i8OpQbryrDcun8BUVOmSY1BbFsJerM4Jxf3WF2RebwfJbfn+0zaJvz1yF1dQcww+16vvbBtUBEGU/zWqvOeajdHGt/0xCzYT8FZ9x4ThWHB0Ao+BaFW86Qa90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
-Received: from [IPV6:2a02:8084:255b:aa00:6055:15d5:ba02:27bb] (unknown [IPv6:2a02:8084:255b:aa00:6055:15d5:ba02:27bb])
-	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id C500940A0F;
-	Fri, 23 May 2025 07:15:23 +0000 (UTC)
-Authentication-Results: Plesk;
-        spf=pass (sender IP is 2a02:8084:255b:aa00:6055:15d5:ba02:27bb) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=[IPV6:2a02:8084:255b:aa00:6055:15d5:ba02:27bb]
-Received-SPF: pass (Plesk: connection is authenticated)
-Message-ID: <8ff76bf6-b5a5-4030-ad02-e0e56acdb730@arnaud-lcm.com>
-Date: Fri, 23 May 2025 08:15:25 +0100
+	s=arc-20240116; t=1747988553; c=relaxed/simple;
+	bh=UktUFNhQpzGrRsFIwIpfLH+M+oX8xvKnPJijRRpkYXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JBPA9wfYwySOrDcX1tsmgkpqeAszDiCBgFoHmNsMUdskS/ODH32Ka2Ok/f0YOemyepn6FrtMhj8rs3a3OJ4tUOwJ7gyxHtEp7XkrK6d/9eYKktjrg+1H8vLDqR8ed+zfHbPtCl4WRqGKrWHPd8h+e7hw5g7aijYzuAXzkOTUYCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Stt5DONs; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Stt5DONs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747988551; x=1779524551;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UktUFNhQpzGrRsFIwIpfLH+M+oX8xvKnPJijRRpkYXw=;
+  b=Stt5DONsvmIfK2WZG9FTPw2qyKadJxtgoahCGHecpBrD+z6xvmid6h0+
+   Hj20Xqh9A3w8kYbM0W4AblzKN8Ro+ZNmAJQ61pTrBICrLJuKKdh8Xp/R/
+   2oKFmBI1slTiuZHq9RFeCly40MX/v2myazl2MJy1YKC6BZa2bOmJ+QJSt
+   UKjs/v01N/0SaPM8fyKJ35VqB+F+wIHLHWRKLvAIlL+PH1ROOBm0ckU4I
+   63VdiXcRPbYG1phFh5hKBuRT7bKBHzkl5z+XlPnk5av4UuJEejWNgAe5e
+   o+5zrmoPqtvl0OJyMZxxrqRpmZxIrO4Rfl9tFQ45sGPOwzHblRXWJN1tp
+   Q==;
+X-CSE-ConnectionGUID: zfPz33c3QiSnTmvZb0dP8A==
+X-CSE-MsgGUID: 0Ougr7ZpSY2r1aITVir2Rw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="49958776"
+X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
+   d="scan'208";a="49958776"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 01:22:31 -0700
+X-CSE-ConnectionGUID: hbdtZnCZSp+nEANc3d6+Yw==
+X-CSE-MsgGUID: aGhX6r3rRwu6bK0N6bagxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
+   d="scan'208";a="146032463"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 23 May 2025 01:22:28 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uINfe-000QC8-0N;
+	Fri, 23 May 2025 08:22:26 +0000
+Date: Fri, 23 May 2025 16:21:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Alvin <alvin.paulp@amd.com>, michal.simek@amd.com,
+	adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+	alvin.paulp@amd.com, linux-arm-kernel@lists.infradead.org,
+	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mmc: sdhci-of-arasan: Add shutdown callback
+Message-ID: <202505231550.RaoPUrmq-lkp@intel.com>
+References: <20250522094932.4187301-1-alvin.paulp@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] checkpatch.pl: warn about // comments on private
- Rust items
-From: Arnaud Lecomte <contact@arnaud-lcm.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
- Dwaipayan Ray <dwaipayanray1@gmail.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev, skhan@linuxfoundation.org
-References: <20250422125633.30413-1-contact@arnaud-lcm.com>
- <20250422125824.30525-1-contact@arnaud-lcm.com>
- <CANiq72n41Oj4K-yZCWbNXJQEEjTqjXHYgrkffAg_mUg8dKLWQg@mail.gmail.com>
- <06dde2dd-5d88-49d4-9e46-72a2e12ab1c2@arnaud-lcm.com>
- <CANiq72=UOOyf-esnRUCR0_gxFptdpNOymCz02vgesdNL7zTvHg@mail.gmail.com>
- <32293daf-a6ce-49cc-b41d-1001037444da@arnaud-lcm.com>
-Content-Language: en-US
-In-Reply-To: <32293daf-a6ce-49cc-b41d-1001037444da@arnaud-lcm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <174798452510.11144.1771928608104289286@Plesk>
-X-PPP-Vhost: arnaud-lcm.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250522094932.4187301-1-alvin.paulp@amd.com>
 
-Hi everyone !
-Is there any update so far ?
+Hi Paul,
 
-Best regards,
-Arnaud
+kernel test robot noticed the following build errors:
 
-On 23/04/2025 12:33, Arnaud Lecomte wrote:
-> On 22/04/2025 17:32, Miguel Ojeda wrote:
->
->> On Tue, Apr 22, 2025 at 4:37 PM Arnaud Lecomte 
->> <contact@arnaud-lcm.com> wrote:
->>> As mentioned earlier, we can reduce the score of any heuristic which
->>> could lead to any important false positive.
->>> In my opinion, as long as the heuristic is relevant, we always have the
->>> possibility to diminish the score associated with the heuristic, hence
->>> preventing unnecessary false positives.
->> Definitely (my comment above for this one was just a note, i.e. there
->> may be nothing to change -- I just thought the commit message referred
->> to just checking "Return" and not "Returns", since it said
->> "imperative").
->>
->>> I think that you are definitely more experienced with what's done
->>> commonly in rust code. Let's maybe change this heuristic definition 
->>> with
->>> @ related to types or some other annotation. Do you have some example I
->>> could have a look to come in the next version with a relevant list of @
->>> we can encounter.
->> What does "references" mean in that heuristic? If you mean external
->> links to some URL, then we typically use Markdown for those. The
->> inline ones like `<https://...>`happen in both comments and docs. The
->> `[...]: https://...` ones are way less common in comments I think (I
->> can't find one).
-> We should then remove it. I'll wait for other reviewers for their 
-> feedback and then send a new version of the patch serie. Thanks :)
->> As for `@`, if you mean the actual character, I grepped for it in Rust
->> files with the /.*@ regex and found just ~13 matches, and all were the
->> emails and disambiguators I mentioned. So I don't think we really use
->> it for "references" (assuming I understand what that means).
->>
->> I guess you already looked in some `rust/kernel/` files -- some of
->> those are really the best examples of how docs and comments should
->> generally be written.
->> Thanks!
->>
->> Cheers,
->> Miguel
->>
+[auto build test ERROR on v6.15-rc7]
+[also build test ERROR on linus/master next-20250522]
+[cannot apply to xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Alvin/mmc-sdhci-of-arasan-Add-shutdown-callback/20250522-175110
+base:   v6.15-rc7
+patch link:    https://lore.kernel.org/r/20250522094932.4187301-1-alvin.paulp%40amd.com
+patch subject: [PATCH] mmc: sdhci-of-arasan: Add shutdown callback
+config: arm64-randconfig-002-20250523 (https://download.01.org/0day-ci/archive/20250523/202505231550.RaoPUrmq-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250523/202505231550.RaoPUrmq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505231550.RaoPUrmq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mmc/host/sdhci-of-arasan.c:2063:2: error: call to undeclared function 'sdhci_arasan_suspend'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           sdhci_arasan_suspend(dev);
+           ^
+   1 error generated.
+
+
+vim +/sdhci_arasan_suspend +2063 drivers/mmc/host/sdhci-of-arasan.c
+
+  2058	
+  2059	static void sdhci_arasan_shutdown(struct platform_device *pdev)
+  2060	{
+  2061		struct device *dev = &pdev->dev;
+  2062	
+> 2063		sdhci_arasan_suspend(dev);
+  2064	}
+  2065	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
