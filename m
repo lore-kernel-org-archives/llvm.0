@@ -1,148 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15312236EE;
-	Fri, 23 May 2025 06:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63500220F46
+	for <llvm@lists.linux.dev>; Fri, 23 May 2025 07:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747981762; cv=none; b=JhcpGqpi1pfezjHw0VhLA2xqmMCZC/SL+DPdVaNodVHIUngFJgW8y92nXVYqOFAZ3N2MWK3i9qIQ8XM2FYKsiOdKNBGltMvQ2T0TdvvaHgv9LIVwEXS+LiSrVp9758btvFUbduL917is56LGFZnlcZ2hWta0qStkDYdjjMdBUTc=
+	t=1747985128; cv=none; b=noaAkSIAOl/olBHPgXBmmL66fm15ChP5BSDBid8bm3Fzsl7pYiHbdfqlXoJs19l9ezYXY/aSQ/EpBBH7sP7I6tc1UJZ2+2egjDrU6EFmCk9kF9ay4Bs/OBhHKTBdvi05sI0w9kmcDtb9dR9qduiKeR/bLeumf+OCXUFVSJVSozI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747981762; c=relaxed/simple;
-	bh=RQ5KrYLB5wM0he00u4vva4Oc9ENN6xE57mG5WU5ptOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TTKZRXuK5++VwQ7BZQ7ab900SYSqZ7wA6tvVjK0SUBmmo2wz8mc9oLkbOGC9mkrD5bkcIodgoXdY0VFBR5I4kigEB1MaD+vhzCUUNWE18DAkp/r4TwRQhKx7k59xIus1nfJ0nyZYwBCDT64gUmlTZB2+P288WtCpHwiMjG6tuFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E1LYRhbN; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E1LYRhbN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747981760; x=1779517760;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RQ5KrYLB5wM0he00u4vva4Oc9ENN6xE57mG5WU5ptOM=;
-  b=E1LYRhbNGFrw93BVy2Eb1WlaA/Gw7Fnk30Okrl4E1oyJo4UST+t6iVAi
-   SBs6s3UE+BZYHK69OFfc+0SqlP9GSIop6d65BPyfFfHgvFmGSbVdB4Bkr
-   t+MMDDUDBzrk9oOrfK+B+5hMHcwdKSmWO4MAfWcHRehIenJGRc+OoHCFa
-   YoNoqNhPTZy7c6ZirNETAM1uNY5oZlgslPLanyHPhhbfdlZYU+pzEl1rb
-   JtsIgcvXlBwFyrwgU7MKu5mt5WfVVEWcVzXdtMWLWK0aXa8AlAxTHIrQ3
-   T2OhEMIXxPZ0neEMwuYA8+aJn6YjI7jkTXBY0qwcQxNWg4coyDL3+YO42
-   Q==;
-X-CSE-ConnectionGUID: YK1V5391RJuiQxk7piLEiA==
-X-CSE-MsgGUID: GZYw6T7ES2GY90lzq1qTug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="49283377"
-X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
-   d="scan'208";a="49283377"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2025 23:29:19 -0700
-X-CSE-ConnectionGUID: ZuuhH2FNQ221X/l7fPSaiA==
-X-CSE-MsgGUID: XWpiShhdRhKfi1ufUQi4NA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,308,1739865600"; 
-   d="scan'208";a="142034651"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 22 May 2025 23:29:18 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uILu7-000Q4y-2t;
-	Fri, 23 May 2025 06:29:15 +0000
-Date: Fri, 23 May 2025 14:28:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pankaj Raghav <p.raghav@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC v2 2/2] block: use mm_huge_zero_folio in
- __blkdev_issue_zero_pages()
-Message-ID: <202505231432.NPt3C4sm-lkp@intel.com>
-References: <20250522090243.758943-3-p.raghav@samsung.com>
+	s=arc-20240116; t=1747985128; c=relaxed/simple;
+	bh=L5hwYD2GMGyVP6SnLZsdCyv/4gTl9d7s2F5LvXkL4x0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=jaxG0FwuJIJhwdoaFR4ELOfALJqhGEZAZD21EJiB4Ujvham2G7i8OpQbryrDcun8BUVOmSY1BbFsJerM4Jxf3WF2RebwfJbfn+0zaJvz1yF1dQcww+16vvbBtUBEGU/zWqvOeajdHGt/0xCzYT8FZ9x4ThWHB0Ao+BaFW86Qa90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
+Received: from [IPV6:2a02:8084:255b:aa00:6055:15d5:ba02:27bb] (unknown [IPv6:2a02:8084:255b:aa00:6055:15d5:ba02:27bb])
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id C500940A0F;
+	Fri, 23 May 2025 07:15:23 +0000 (UTC)
+Authentication-Results: Plesk;
+        spf=pass (sender IP is 2a02:8084:255b:aa00:6055:15d5:ba02:27bb) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=[IPV6:2a02:8084:255b:aa00:6055:15d5:ba02:27bb]
+Received-SPF: pass (Plesk: connection is authenticated)
+Message-ID: <8ff76bf6-b5a5-4030-ad02-e0e56acdb730@arnaud-lcm.com>
+Date: Fri, 23 May 2025 08:15:25 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250522090243.758943-3-p.raghav@samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] checkpatch.pl: warn about // comments on private
+ Rust items
+From: Arnaud Lecomte <contact@arnaud-lcm.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+ Dwaipayan Ray <dwaipayanray1@gmail.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev, skhan@linuxfoundation.org
+References: <20250422125633.30413-1-contact@arnaud-lcm.com>
+ <20250422125824.30525-1-contact@arnaud-lcm.com>
+ <CANiq72n41Oj4K-yZCWbNXJQEEjTqjXHYgrkffAg_mUg8dKLWQg@mail.gmail.com>
+ <06dde2dd-5d88-49d4-9e46-72a2e12ab1c2@arnaud-lcm.com>
+ <CANiq72=UOOyf-esnRUCR0_gxFptdpNOymCz02vgesdNL7zTvHg@mail.gmail.com>
+ <32293daf-a6ce-49cc-b41d-1001037444da@arnaud-lcm.com>
+Content-Language: en-US
+In-Reply-To: <32293daf-a6ce-49cc-b41d-1001037444da@arnaud-lcm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: <174798452510.11144.1771928608104289286@Plesk>
+X-PPP-Vhost: arnaud-lcm.com
 
-Hi Pankaj,
+Hi everyone !
+Is there any update so far ?
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Best regards,
+Arnaud
 
-[auto build test ERROR on f1f6aceb82a55f87d04e2896ac3782162e7859bd]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/mm-add-THP_HUGE_ZERO_PAGE_ALWAYS-config-option/20250522-170442
-base:   f1f6aceb82a55f87d04e2896ac3782162e7859bd
-patch link:    https://lore.kernel.org/r/20250522090243.758943-3-p.raghav%40samsung.com
-patch subject: [RFC v2 2/2] block: use mm_huge_zero_folio in __blkdev_issue_zero_pages()
-config: arm-randconfig-001-20250523 (https://download.01.org/0day-ci/archive/20250523/202505231432.NPt3C4sm-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250523/202505231432.NPt3C4sm-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505231432.NPt3C4sm-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> block/blk-lib.c:201:15: error: call to undeclared function 'mm_get_huge_zero_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           zero_folio = mm_get_huge_zero_folio(NULL);
-                        ^
-   block/blk-lib.c:201:15: note: did you mean 'mm_put_huge_zero_folio'?
-   include/linux/huge_mm.h:644:20: note: 'mm_put_huge_zero_folio' declared here
-   static inline void mm_put_huge_zero_folio(struct mm_struct *mm)
-                      ^
->> block/blk-lib.c:201:13: error: incompatible integer to pointer conversion assigning to 'struct folio *' from 'int' [-Wint-conversion]
-           zero_folio = mm_get_huge_zero_folio(NULL);
-                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/mm_get_huge_zero_folio +201 block/blk-lib.c
-
-   194	
-   195	static void __blkdev_issue_zero_pages(struct block_device *bdev,
-   196			sector_t sector, sector_t nr_sects, gfp_t gfp_mask,
-   197			struct bio **biop, unsigned int flags)
-   198	{
-   199		struct folio *zero_folio;
-   200	
- > 201		zero_folio = mm_get_huge_zero_folio(NULL);
-   202		if (!zero_folio)
-   203			zero_folio = page_folio(ZERO_PAGE(0));
-   204	
-   205		while (nr_sects) {
-   206			unsigned int nr_vecs = __blkdev_sectors_to_bio_pages(nr_sects);
-   207			struct bio *bio;
-   208	
-   209			bio = bio_alloc(bdev, nr_vecs, REQ_OP_WRITE, gfp_mask);
-   210			bio->bi_iter.bi_sector = sector;
-   211	
-   212			if ((flags & BLKDEV_ZERO_KILLABLE) &&
-   213			    fatal_signal_pending(current))
-   214				break;
-   215	
-   216			do {
-   217				unsigned int len, added = 0;
-   218	
-   219				len = min_t(sector_t, folio_size(zero_folio),
-   220					    nr_sects << SECTOR_SHIFT);
-   221				if (bio_add_folio(bio, zero_folio, len, 0))
-   222					added = len;
-   223				if (added < len)
-   224					break;
-   225				nr_sects -= added >> SECTOR_SHIFT;
-   226				sector += added >> SECTOR_SHIFT;
-   227			} while (nr_sects);
-   228	
-   229			*biop = bio_chain_and_submit(*biop, bio);
-   230			cond_resched();
-   231		}
-   232	}
-   233	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 23/04/2025 12:33, Arnaud Lecomte wrote:
+> On 22/04/2025 17:32, Miguel Ojeda wrote:
+>
+>> On Tue, Apr 22, 2025 at 4:37 PM Arnaud Lecomte 
+>> <contact@arnaud-lcm.com> wrote:
+>>> As mentioned earlier, we can reduce the score of any heuristic which
+>>> could lead to any important false positive.
+>>> In my opinion, as long as the heuristic is relevant, we always have the
+>>> possibility to diminish the score associated with the heuristic, hence
+>>> preventing unnecessary false positives.
+>> Definitely (my comment above for this one was just a note, i.e. there
+>> may be nothing to change -- I just thought the commit message referred
+>> to just checking "Return" and not "Returns", since it said
+>> "imperative").
+>>
+>>> I think that you are definitely more experienced with what's done
+>>> commonly in rust code. Let's maybe change this heuristic definition 
+>>> with
+>>> @ related to types or some other annotation. Do you have some example I
+>>> could have a look to come in the next version with a relevant list of @
+>>> we can encounter.
+>> What does "references" mean in that heuristic? If you mean external
+>> links to some URL, then we typically use Markdown for those. The
+>> inline ones like `<https://...>`happen in both comments and docs. The
+>> `[...]: https://...` ones are way less common in comments I think (I
+>> can't find one).
+> We should then remove it. I'll wait for other reviewers for their 
+> feedback and then send a new version of the patch serie. Thanks :)
+>> As for `@`, if you mean the actual character, I grepped for it in Rust
+>> files with the /.*@ regex and found just ~13 matches, and all were the
+>> emails and disambiguators I mentioned. So I don't think we really use
+>> it for "references" (assuming I understand what that means).
+>>
+>> I guess you already looked in some `rust/kernel/` files -- some of
+>> those are really the best examples of how docs and comments should
+>> generally be written.
+>> Thanks!
+>>
+>> Cheers,
+>> Miguel
+>>
