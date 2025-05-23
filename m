@@ -1,87 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138AE29A332;
-	Fri, 23 May 2025 19:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6691D1AAE17
+	for <llvm@lists.linux.dev>; Fri, 23 May 2025 19:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748026896; cv=none; b=rTekAqGJilfvJyKSgkp6GMxyEbbj839xgxhKiy4y0+Sfa9EUeN+FxOL9gEK3FTw6FD1y6Ju3K/Ll4hyTgrPbfAorYgus6OiddEP+MkpNfzTHvprTfkT7pv0kvR/+xX5+YCj1VgtRrhBtB9PpJph6nu6RUdX6GhaW1WBg3K/CWzY=
+	t=1748028188; cv=none; b=tgYzZtWLV51K1lIMu6QQcILXG98i9LftShk2Oo+eVK12ZkFYM3NAwIp/qDekJzIAgf8LMz44WE8TScEx7ojtGaM9lnX8RWp0Da8QH7Q3IdlbTW30+4okMiG4FRfOHtcNkpyT7rPiFOHxLVOBuniiHzEwILqXpCiZWLblq/aE8w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748026896; c=relaxed/simple;
-	bh=v6wuUWJ+W348xqte7tCyyZAdylCLnHPtZVPokniv7RA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hkk/eCEutUm3KqfSW64338N+8C6EOxP1fGFrpU3GD7p6A5MQkjoCeDfiffFtyAUlW4jMxqkt061o18yQ39kLcXku5w890b3gkgFX3rmdtoybfg4T1GCsMqe2FgPBDfxggZ82hmMGNSPJ+toqLkJXve28Fe6f8OvI9bTiPpvY8f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bu9OeyH4; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1748028188; c=relaxed/simple;
+	bh=D29jrsj3sA87ADhhi9EuH0riuzbY/J/gOJEhJV4CTus=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=cpbbvJNCJvNGCIOIagX4186Z9mfMRR9PsiSuKdDZbRC/T/x/u/bHqXUNlNr6ioEgqJwtFup8rUVB9YgsM7MUrxHA4gugQ75wDRBTd0JisUwx+UOKQXm+2GTC07h4C01MiicaVZIV66Fp2jxg6AKT/LiOacyMB/ftyLYjvqfnadE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZEuTyvDy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bu9OeyH4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748026896; x=1779562896;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v6wuUWJ+W348xqte7tCyyZAdylCLnHPtZVPokniv7RA=;
-  b=bu9OeyH4dbojl9qfXwZ9rnXNDwfPy1UL1XVQ3+RF3+QdjX+mbpRtNaDi
-   4nLOdPyOkuzGaePZ6/ZEENtR/FLOhHsxY9VswikoPjXfy01q695mfBLe8
-   EfYtM43ywMIDbmluJOvV4Qt7BBzK63bsSm9jdFtcCH9gUSwFn19mzfQY1
-   NqUAqHMIRaxtDd5FrDbkvD2z/FCLxd8IlujLbwXqWEQD4kFx3vK0SSaWI
-   2l17kW9rzroZBGexn+gEESHef4tmXrQuP0A04JIA8xu1SHc8PDwPfYnng
-   KIep2E9lcm3Bpib/Q16F+Xx8p7Y3AkEULXE6YPdc+zgB4jr4gelwRJVjN
-   g==;
-X-CSE-ConnectionGUID: +q24gLG1QK6RTHrNa77wBg==
-X-CSE-MsgGUID: Mpwg3Dv9T6y/9XX99EN2XA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50146262"
-X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="50146262"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 12:01:35 -0700
-X-CSE-ConnectionGUID: vOBYePCRQEG5+oZNnfEVfw==
-X-CSE-MsgGUID: TMzonataQoiRMPut+0zC3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="164493992"
-Received: from igk-lkp-server01.igk.intel.com (HELO a1decbf9c5f9) ([10.211.3.150])
-  by fmviesa002.fm.intel.com with ESMTP; 23 May 2025 12:01:33 -0700
-Received: from kbuild by a1decbf9c5f9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uIXe7-0001Yk-1o;
-	Fri, 23 May 2025 19:01:31 +0000
-Date: Sat, 24 May 2025 03:00:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX
- permissions
-Message-ID: <202505240339.KSGJmZ2d-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZEuTyvDy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748028185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/p13mLGuyMVC9Bo4zq5ve7psm7hx5seL03o8zUyNK2M=;
+	b=ZEuTyvDypTZNUYIO5wFOaCw8GdFaO0DKz8f57Hf+Q4w25RgYfMvJB18QFaDCPixrupDS0p
+	gmY6bPdSB1hlDyXyGVySHUrwAJx4wTZvw5oqhSOjpYdB9kcIq7E30QUrFyElLhF4smNXJA
+	wHs6PsQiE1l4x8OuOnliyQbqE+Q5CAY=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-369-lrn5jqZsM_K2KhnTNO-KkA-1; Fri,
+ 23 May 2025 15:23:03 -0400
+X-MC-Unique: lrn5jqZsM_K2KhnTNO-KkA-1
+X-Mimecast-MFC-AGG-ID: lrn5jqZsM_K2KhnTNO-KkA_1748028183
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BE92E180048E
+	for <llvm@lists.linux.dev>; Fri, 23 May 2025 19:23:02 +0000 (UTC)
+Received: from [172.20.77.114] (unknown [10.30.44.38])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5439A195608F;
+	Fri, 23 May 2025 19:23:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0-rc7,
+ upstream-mainline, 7586ac7c)
+Date: Fri, 23 May 2025 19:23:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <99682.125052315230300394@us-mta-369.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 8bEvCEfJ0t0jjFu_VXDs3AOcfZUYrO1osrsOH-898d8_1748028183
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7586ac7c340c3672f116052c1d150f134810965b
-commit: b1a9a5e04767e2a78783e19c9e55c25812ceccc3 kbuild: merge temporary vmlinux for BTF and kallsyms
-date:   10 months ago
-config: um-randconfig-2006-20250515 (https://download.01.org/0day-ci/archive/20250524/202505240339.KSGJmZ2d-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240339.KSGJmZ2d-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505240339.KSGJmZ2d-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-All warnings (new ones prefixed by >>):
 
->> /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
->> /usr/bin/ld: warning: .tmp_vmlinux2 has a LOAD segment with RWX permissions
-   /usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
+Kernel information:
+    Commit message: Merge tag 'thermal-6.15-rc8' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/rafael/linux-pm
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1833750434
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1833750434-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
