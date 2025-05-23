@@ -1,61 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF084120B;
-	Fri, 23 May 2025 16:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB51F293736;
+	Fri, 23 May 2025 17:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748018310; cv=none; b=Y052z/yczU8NF8QlyaraElJNpti/Nk5SL/OAoYY/C4DUEinQdwLqvNHEFxvvKzkqx5soGXzKjR86mFbFR3+VsKOmWbzq/gyDQjbEjJhqhyhibchzIUHNwcLXQ9852aoDgeknrCVGgVG69nEY6P9tmpbr2JcwHBfbV7CfSuTmtlw=
+	t=1748022506; cv=none; b=ZIyf6oqN1bkPe7EonYTm7s5PbJgpL+2KOu1pl+H/BAjEGsXpY4mr++6HlGhOR1py87coxHbvCzYllf8FhDu4aWVjkcPY9qxY4HxeqAjcMePLerDxKOF7D8pVJWTxsOZuLXyb/Xc8YgvxAz5N5NFA1fE+iil2bL28PZM7eJTk6zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748018310; c=relaxed/simple;
-	bh=HrRqZ3z9algFA+rzVPcUIWUy8j5aB8T+U6MVf1o87+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jcMbZUcWTLik0Cshyz+MzT/qbeco5BAt1BVb3hEMkRlYnPlRaAQJv1RtGx7aDaAaRmgr1Vgb0QRlF+D1Lb8jeO+ohZWkZUk9REXVe9wKNcLH1kQm1O8mohl7Xv4Av5RK0ScabnpEOHOcZMXSGE0/Suril72OoCWwY2jpVLwSHD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VBlIl/hW; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1748022506; c=relaxed/simple;
+	bh=AqUynDC3Sw8C6ZtTMriTAeGFMTNBji4jXiQmc/rbw2o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b1yIC3caKW9BqaZjR2EMzdmTrPJIxNGgnPm5RSpE/YC29dyeng/CYNGgkrIdiwOVvzwGe318PmZIrGLlfCFUlTX7XEEyudse22VL0hkET/W5S8QFVTsgfVRYa0YmVd8uod6DFSRfy7aahh13zsDAQkKPwC5L25Ut9zTOgjs1Bgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uj1T2rMY; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VBlIl/hW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uj1T2rMY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748018308; x=1779554308;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HrRqZ3z9algFA+rzVPcUIWUy8j5aB8T+U6MVf1o87+w=;
-  b=VBlIl/hW7N/veh/mM0kvQ1rq7HIh6zW/zMok63Xkjl9i5xm5Xa9r7LrE
-   YKEbrl/4iq8rzzMVK+Uhe7+9Urwxj54O0dTaer78os43GLkfuTrPzsPNV
-   wBK0oCpoaVmcuWEG+D1al8qEpbthAY8YONR5Xz4UcNsdJ6tBObtKuYw6T
-   XNeJ7JmXt1CHqS8G5BLQOmXFKqTldaCra0hVDwzpEUqPZdNt01gAg1YzA
-   H8J3db+aRBpJ1pZtPVBIKukeyzyy8dQhJ/tt8SsmmsyDy8m1/uJgLQ73m
-   GS3I2ok3Sl3iG1IAXtwuQiXqxa5flf7BPKL1eXgpQ0/G3sm6M8xrr+HFh
+  t=1748022504; x=1779558504;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AqUynDC3Sw8C6ZtTMriTAeGFMTNBji4jXiQmc/rbw2o=;
+  b=Uj1T2rMYNnVhnHXtN/RnP04tZ1CWrrf6meRJMiClT/em1VWtJgTL9MDX
+   DYzGHU8S4kF5p6FvlsvT5KyQnsip+ucOzPvuvE7Ug/NXkWsOAcB7+sk2E
+   V3KM52bnREc+oTfqB3hB1II/GuECO/LFiUquQuKyhR8nbjUyvNb1lcg7K
+   6qKIoBcsLRQWZcuXncz3B1CUmW8ck63tvAsnn+cN8Ioaomh15KWwQp4qd
+   827m8XptPtTyysZtCOS17M2rZsxulhZqywvgHLra6x9iVR2+DnOIlbF7Z
+   4Vbk88w/ZXogxcAjJHCDCx9fpDbVhop8uW/lqA09aTJhbAJfS++vzNigE
    g==;
-X-CSE-ConnectionGUID: YbQkn3U9TdmlOrUN8goZTw==
-X-CSE-MsgGUID: j3htmVooQzaMbggOHHL1dA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="67642129"
+X-CSE-ConnectionGUID: aMoMDbmgRbCPDZA7ZeV01A==
+X-CSE-MsgGUID: FCcEIM5DR4qJNr8fWD6i2g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="37712260"
 X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="67642129"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 09:38:27 -0700
-X-CSE-ConnectionGUID: ee/54DF8S/mif2719jjHJA==
-X-CSE-MsgGUID: WgDBmkwsTVuUhtnD5QDUzA==
+   d="scan'208";a="37712260"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 10:48:24 -0700
+X-CSE-ConnectionGUID: lJrSde5yS5yz0+ah3FyjYQ==
+X-CSE-MsgGUID: VO9IXjEZT1W8X0PcYRPbOw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="172106683"
-Received: from igk-lkp-server01.igk.intel.com (HELO a1decbf9c5f9) ([10.211.3.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 May 2025 09:38:25 -0700
-Received: from kbuild by a1decbf9c5f9 with local (Exim 4.96)
+   d="scan'208";a="141740316"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 23 May 2025 10:48:18 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uIVPa-0001Xz-2p;
-	Fri, 23 May 2025 16:38:22 +0000
-Date: Sat, 24 May 2025 00:37:55 +0800
+	id 1uIWVD-000QdI-2N;
+	Fri, 23 May 2025 17:48:15 +0000
+Date: Sat, 24 May 2025 01:48:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Benjamin Berg <benjamin.berg@intel.com>
+To: Rajnesh Kanwal <rkanwal@rivosinc.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Atish Kumar Patra <atishp@rivosinc.com>,
+	Anup Patel <anup@brainfault.org>, Will Deacon <will@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Beeman Strong <beeman@rivosinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: arch/um/kernel/um_arch.c:336:16: warning: result of comparison of
- constant 4294967296 with expression of type 'typeof (task_size)' (aka
- 'unsigned long') is always false
-Message-ID: <202505240038.q8Dcx2LG-lkp@intel.com>
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	Rajnesh Kanwal <rkanwal@rivosinc.com>
+Subject: Re: [PATCH v3 5/7] riscv: pmu: Add driver for Control Transfer
+ Records Ext.
+Message-ID: <202505240131.OJkUGGvA-lkp@intel.com>
+References: <20250523-b4-ctr_upstream_v3-v3-5-ad355304ba1c@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,218 +84,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250523-b4-ctr_upstream_v3-v3-5-ad355304ba1c@rivosinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3d0ebc36b0b3e8486ceb6e08e8ae173aaa6d1221
-commit: 830003c73d190259e45d0a99a0e3d14cb73e0af0 um: Limit TASK_SIZE to the addressable range
-date:   8 months ago
-config: um-randconfig-2006-20250515 (https://download.01.org/0day-ci/archive/20250524/202505240038.q8Dcx2LG-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240038.q8Dcx2LG-lkp@intel.com/reproduce)
+Hi Rajnesh,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on e0200e37637e573cd68f522ecd550be87e304c6c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rajnesh-Kanwal/perf-Increase-the-maximum-number-of-branches-remove_loops-can-process/20250523-073341
+base:   e0200e37637e573cd68f522ecd550be87e304c6c
+patch link:    https://lore.kernel.org/r/20250523-b4-ctr_upstream_v3-v3-5-ad355304ba1c%40rivosinc.com
+patch subject: [PATCH v3 5/7] riscv: pmu: Add driver for Control Transfer Records Ext.
+config: riscv-randconfig-002-20250523 (https://download.01.org/0day-ci/archive/20250524/202505240131.OJkUGGvA-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240131.OJkUGGvA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505240038.q8Dcx2LG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505240131.OJkUGGvA-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/um/kernel/um_arch.c:9:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/um/kernel/um_arch.c:19:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/um/kernel/um_arch.c:19:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/um/kernel/um_arch.c:19:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/um/kernel/um_arch.c:336:16: warning: result of comparison of constant 4294967296 with expression of type 'typeof (task_size)' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-     336 |         if (task_size > (unsigned long long) PTRS_PER_PGD * PGDIR_SIZE)
-         |             ~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   14 warnings generated.
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from arch/riscv/include/asm/kvm_host.h:23:
+   In file included from arch/riscv/include/asm/kvm_vcpu_pmu.h:12:
+>> include/linux/perf/riscv_pmu.h:156:76: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+     156 | static inline void riscv_pmu_ctr_sched_task(struct perf_event_pmu_context *,
+         |                                                                            ^
+   include/linux/perf/riscv_pmu.h:158:13: warning: unused function 'riscv_pmu_ctr_add' [-Wunused-function]
+     158 | static void riscv_pmu_ctr_add(struct perf_event *event) { }
+         |             ^~~~~~~~~~~~~~~~~
+   include/linux/perf/riscv_pmu.h:159:13: warning: unused function 'riscv_pmu_ctr_del' [-Wunused-function]
+     159 | static void riscv_pmu_ctr_del(struct perf_event *event) { }
+         |             ^~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from arch/riscv/include/asm/kvm_host.h:23:
+   In file included from arch/riscv/include/asm/kvm_vcpu_pmu.h:12:
+>> include/linux/perf/riscv_pmu.h:156:76: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+     156 | static inline void riscv_pmu_ctr_sched_task(struct perf_event_pmu_context *,
+         |                                                                            ^
+   include/linux/perf/riscv_pmu.h:158:13: warning: unused function 'riscv_pmu_ctr_add' [-Wunused-function]
+     158 | static void riscv_pmu_ctr_add(struct perf_event *event) { }
+         |             ^~~~~~~~~~~~~~~~~
+   include/linux/perf/riscv_pmu.h:159:13: warning: unused function 'riscv_pmu_ctr_del' [-Wunused-function]
+     159 | static void riscv_pmu_ctr_del(struct perf_event *event) { }
+         |             ^~~~~~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +336 arch/um/kernel/um_arch.c
+vim +156 include/linux/perf/riscv_pmu.h
 
-   304	
-   305	int __init linux_main(int argc, char **argv)
-   306	{
-   307		unsigned long avail, diff;
-   308		unsigned long virtmem_size, max_physmem;
-   309		unsigned long stack;
-   310		unsigned int i;
-   311		int add;
-   312	
-   313		for (i = 1; i < argc; i++) {
-   314			if ((i == 1) && (argv[i][0] == ' '))
-   315				continue;
-   316			add = 1;
-   317			uml_checksetup(argv[i], &add);
-   318			if (add)
-   319				add_arg(argv[i]);
-   320		}
-   321		if (have_root == 0)
-   322			add_arg(DEFAULT_COMMAND_LINE_ROOT);
-   323	
-   324		if (have_console == 0)
-   325			add_arg(DEFAULT_COMMAND_LINE_CONSOLE);
-   326	
-   327		host_task_size = os_get_top_address();
-   328		/* reserve a few pages for the stubs */
-   329		stub_start = host_task_size - STUB_DATA_PAGES * PAGE_SIZE;
-   330		/* another page for the code portion */
-   331		stub_start -= PAGE_SIZE;
-   332		host_task_size = stub_start;
-   333	
-   334		/* Limit TASK_SIZE to what is addressable by the page table */
-   335		task_size = host_task_size;
- > 336		if (task_size > (unsigned long long) PTRS_PER_PGD * PGDIR_SIZE)
-   337			task_size = PTRS_PER_PGD * PGDIR_SIZE;
-   338	
-   339		/*
-   340		 * TASK_SIZE needs to be PGDIR_SIZE aligned or else exit_mmap craps
-   341		 * out
-   342		 */
-   343		task_size = task_size & PGDIR_MASK;
-   344	
-   345		/* OS sanity checks that need to happen before the kernel runs */
-   346		os_early_checks();
-   347	
-   348		get_host_cpu_features(parse_host_cpu_flags, parse_cache_line);
-   349	
-   350		brk_start = (unsigned long) sbrk(0);
-   351	
-   352		/*
-   353		 * Increase physical memory size for exec-shield users
-   354		 * so they actually get what they asked for. This should
-   355		 * add zero for non-exec shield users
-   356		 */
-   357	
-   358		diff = UML_ROUND_UP(brk_start) - UML_ROUND_UP(&_end);
-   359		if (diff > 1024 * 1024) {
-   360			os_info("Adding %ld bytes to physical memory to account for "
-   361				"exec-shield gap\n", diff);
-   362			physmem_size += UML_ROUND_UP(brk_start) - UML_ROUND_UP(&_end);
-   363		}
-   364	
-   365		uml_physmem = (unsigned long) __binary_start & PAGE_MASK;
-   366	
-   367		/* Reserve up to 4M after the current brk */
-   368		uml_reserved = ROUND_4M(brk_start) + (1 << 22);
-   369	
-   370		setup_machinename(init_utsname()->machine);
-   371	
-   372		physmem_size = (physmem_size + PAGE_SIZE - 1) & PAGE_MASK;
-   373		iomem_size = (iomem_size + PAGE_SIZE - 1) & PAGE_MASK;
-   374	
-   375		max_physmem = TASK_SIZE - uml_physmem - iomem_size - MIN_VMALLOC;
-   376	
-   377		if (physmem_size + iomem_size > max_physmem) {
-   378			physmem_size = max_physmem - iomem_size;
-   379			os_info("Physical memory size shrunk to %llu bytes\n",
-   380				physmem_size);
-   381		}
-   382	
-   383		high_physmem = uml_physmem + physmem_size;
-   384		end_iomem = high_physmem + iomem_size;
-   385		high_memory = (void *) end_iomem;
-   386	
-   387		start_vm = VMALLOC_START;
-   388	
-   389		virtmem_size = physmem_size;
-   390		stack = (unsigned long) argv;
-   391		stack &= ~(1024 * 1024 - 1);
-   392		avail = stack - start_vm;
-   393		if (physmem_size > avail)
-   394			virtmem_size = avail;
-   395		end_vm = start_vm + virtmem_size;
-   396	
-   397		if (virtmem_size < physmem_size)
-   398			os_info("Kernel virtual memory size shrunk to %lu bytes\n",
-   399				virtmem_size);
-   400	
-   401		os_flush_stdout();
-   402	
-   403		return start_uml();
-   404	}
-   405	
+   152	
+   153	static inline bool riscv_pmu_ctr_valid(struct perf_event *event) { return false; }
+   154	static inline void riscv_pmu_ctr_consume(struct cpu_hw_events *cpuc,
+   155					      struct perf_event *event) { }
+ > 156	static inline void riscv_pmu_ctr_sched_task(struct perf_event_pmu_context *,
+   157						    bool sched_in) { }
+   158	static void riscv_pmu_ctr_add(struct perf_event *event) { }
+   159	static void riscv_pmu_ctr_del(struct perf_event *event) { }
+   160	static inline void riscv_pmu_ctr_enable(struct perf_event *event) { }
+   161	static inline void riscv_pmu_ctr_disable(struct perf_event *event) { }
+   162	static inline void riscv_pmu_ctr_dying_cpu(void) { }
+   163	static inline void riscv_pmu_ctr_starting_cpu(void) { }
+   164	static inline int riscv_pmu_ctr_init(struct riscv_pmu *riscv_pmu) { return 0; }
+   165	static inline void riscv_pmu_ctr_finish(struct riscv_pmu *riscv_pmu) { }
+   166	
 
 -- 
 0-DAY CI Kernel Test Service
