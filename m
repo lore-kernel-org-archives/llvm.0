@@ -1,185 +1,246 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F7972636;
-	Sat, 24 May 2025 10:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337011A288;
+	Sat, 24 May 2025 11:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748081806; cv=none; b=QG6gcH+TKt/LfC5WFcemPXdA2+6xUdAvuRnqiCq3Ar9oRvvbYSJXNTvkoPSEaLS3et02ikno7hdn51iccd32kmvFqlnUf1hGBQDF0fWnh+6m2o0OGPImh8uSGKnHEcmGsjm2NbsI1GforECB6Mrj1ZZmWwHnVMz13PXPgVfNZ1M=
+	t=1748085559; cv=none; b=GHrNqzb4l29oTd0f1kAyRHGopq80MbzQ9DcZTDKJxZc6wSCPrZX7us+KqGOPc/+7i6zTmhLIu/e6BqQU3yxJI8RCVGtQqYcdjrTLoEnknpv/M7/uaPb5adq7dlvwuB4kIg6kPNRhpNqACcqD1CFPipkPiml8EQYXQOr/j2JwrlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748081806; c=relaxed/simple;
-	bh=tkgsikOFEBAvQEbcmRSmb8lXKUmtZtHNpC4Z2oD5TB8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tuDGr9dPZ+o0xcQ5SOnFZQ1HwncIfCaCl7RtCwtRuPkp3LrzRhL76PDhs6gAfm0vnIxkMywDA+J/QQwh1WDwqLQjgVul3k5gZxRCrXQcE5Cu3A0wFWAjzY1DaPeePs75vS/Ul/hEwG7PUgh1EERG/8CP2UJVgN1Iw9L5Kw4BJ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=crac2sEl; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1748085559; c=relaxed/simple;
+	bh=ZeM+da8JfZ8lnROmjH/nTyqDodwA3mKLYrHfnIhGZ/A=;
+	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
+	 MIME-Version:Content-Type; b=Q4YcaqGR9AsAwxBwdBVoukCH5mRYPUwenYLG8c0JxOHsrJlZ0xNxaJAaMvTyB6GUW6U6Te7DZ+Hghi0pGC29GOB4Nd2DsQg+9GcRayO/6G/awFgaBzOHE2DIUZCKWQQnHwpM5KIC6UpHf9MfCd5e/Yzlu8VjDxr63m/c8xfH0xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TFg84diE; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crac2sEl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748081805; x=1779617805;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tkgsikOFEBAvQEbcmRSmb8lXKUmtZtHNpC4Z2oD5TB8=;
-  b=crac2sElUDXoEQerxK020OIN7bhrYpVidZRWeP9PftFbLkmvjDxc7gPe
-   zHTPUodfUHi6EPoJtreqVlGtUa+1MMT6SICDExLpE4fO89zKehGoSWGIE
-   jesX1Q/9iXCHSKXBHq8tu6MOxrw3+cutVIR3szEnoUqrh2fK3x2DXBTcb
-   G8rUdTB06FCJBVaqrRi8R9XSgqYVqJWm00A4T3oWslozn1OpAByj0DqUO
-   J1Q47Ed2ODrVJdMGToMY5pcs7Z/CSufhy3/n6+j6OoO0AN+GTv9L/eNGu
-   LjR4lTX1OiNQhhkJwLnEV9pQ4sChSUhs+pz1azx37SXiAogzs9xMMB3yQ
-   A==;
-X-CSE-ConnectionGUID: 7+Yu/Mz1SvqCZF6E2njiUw==
-X-CSE-MsgGUID: 7oQ9ZuXBSu6wftryy5sE8A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="61478091"
-X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="61478091"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2025 03:16:44 -0700
-X-CSE-ConnectionGUID: pgbIEnXgSy29jOaEakjaoQ==
-X-CSE-MsgGUID: UScw3lF5QJibLUHEzTVxOA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="164742513"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 24 May 2025 03:16:43 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uIlvk-000R6q-2D;
-	Sat, 24 May 2025 10:16:40 +0000
-Date: Sat, 24 May 2025 18:16:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sharath Srinivasan <sharath.srinivasan@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	LUCI Bot <vijayendra.suman@oracle.com>,
-	Gerd Rausch <gerd.rausch@oracle.com>
-Subject: [jlayton:uek-localio 1954/2262] net/rds/rds.h:1279:41: warning:
- result of comparison of constant 9223372036854775807 with expression of type
- 'unsigned long' is always true
-Message-ID: <202505241812.Se3iJnIA-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TFg84diE"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7399838db7fso605986b3a.0;
+        Sat, 24 May 2025 04:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748085556; x=1748690356; darn=lists.linux.dev;
+        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rScpXVbASUqjAgnv8asCUXuGu69m7xK2h2FjiRqoUxs=;
+        b=TFg84diEAR06tPgIxhcxvKm84ho3pIz+clLDwwjNuq3tONEyRu6S64n5yOSGUQG5h/
+         E+c+SKJJKD+FnEgBns8u2xxMiIShj8lMIb8EgtFfP4QoDQjavRWgRTSwduoXAGqR0x+v
+         ttrYB+oYdmIwKd65zm65yfAVW2umaLWrQVQ+Eu9UQzJpsEenMFmRRJCmSkq9njTUtKiR
+         GemymKM7QcSVBwIYQ85xVkeq4negty+LQxAAOpcPzmUu8JNatDkvtzzFcor2awTtsS9H
+         k+dwny7PlCKWv3USb7ke1A9htTfPC31l7Q36wlf7MzqokCR1rIbz4ucwywTv+Qwg057r
+         O/Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748085556; x=1748690356;
+        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rScpXVbASUqjAgnv8asCUXuGu69m7xK2h2FjiRqoUxs=;
+        b=FzAwgXJ6g2pbpxDuntW2JYtzmxTMrwQfpQnpHK6jQuvwXUUdhDc/u7w4fHG4XEbOTk
+         lfITd9qe7ZEhIOJsJJf57NKmrVe2fHW4ZemeK7tNfzhRCV06pdYYGzCd92XA9lr7feHg
+         yd9fHoN07b38ZBDSOPZBa+pltLtALgKX+BeyG9nl8oABE39yDckX+JwUyteKBTXUpFnx
+         TUMzYTBSZukkFKpqmuy0kCUcxVdifAaOlrHYn1YW0OlTsSV3sYIdFYXtR2F4gycAv6C+
+         6+OlU8XiZ45E1uO2PLzYwUaLetxCY3VeOrT3/iIIN+7C4bwWa8hXu5xtsk99zeqQo42f
+         fQYA==
+X-Forwarded-Encrypted: i=1; AJvYcCUII0lfTP3HMHY+cj7JP/D5EZwjLPJmhgnAWMG8qZdaLnApe+DCXJeN26KHOcumQiqgQXwNHFM=@lists.linux.dev, AJvYcCWpNFM4OFEvhjq4pWkqf1JR5PMrecumN+so7GGmuATnMBbhUZIlUCENHewIHqIIKv/NHKCp/g==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw0YLvZpIxl8oRHEZeztJS3K5BpI9zG2gC13xr7eNDtBWuSLNB5
+	l+523/XkUoXeY33X8GRRsK4AzogX5nK2W1F6RsWin2VaeCIymWV/fEwMMMNnJQ==
+X-Gm-Gg: ASbGncvzuT7MFdNCjbfH3XPyLss1Ih4H6wkBYmXEDqzq5T0Xjt8mMmqSCXWqWk0Ybbo
+	dNDy4IUjOtYZxfei3hboCu100zcdA9XYs51iWgbn3NAkL5EJ9Kj2sX/IDlR3KuYZZuvwup+dVSD
+	s6lXvttmKpwHC3hFCh70yT+bHko8Wt5SRU9R7sKCiR7Mv0SKGfcyJ2HtQB1mvP1u5LSEOlvIwGd
+	tb7JVLMIX1HK3R7/avLgMj+nNJV8YmwKHHc9OFIN/KyPe6LQgy4mnukViyz0Xh5HW5MaKg9ua2p
+	5y08k/WDRsasBg7IIIpnrlDugdr1lvK9dQx3ZHaD8Bh4YLwjjADQZ5A=
+X-Google-Smtp-Source: AGHT+IHzgyF4RMk4/VcB/ult2huesDrd3BktU05/6T5tjhGyNb1hL3EGlpy4BVyGxnMoNfwEQoYJDQ==
+X-Received: by 2002:a05:6a00:1903:b0:73e:2367:c914 with SMTP id d2e1a72fcca58-745fe068d61mr3795551b3a.7.1748085556260;
+        Sat, 24 May 2025 04:19:16 -0700 (PDT)
+Received: from dw-tp ([49.205.218.89])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a96dfacesm14024380b3a.5.2025.05.24.04.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 May 2025 04:19:15 -0700 (PDT)
+From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+To: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <kees@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linuxppc-dev@lists.ozlabs.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 08/14] powerpc: Handle KCOV __init vs inline mismatches
+In-Reply-To: <20250523043935.2009972-8-kees@kernel.org>
+Date: Sat, 24 May 2025 16:13:02 +0530
+Message-ID: <87jz662ssp.fsf@gmail.com>
+References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-8-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git uek-localio
-head:   65b0dc6bb1f5c18e63d8ee9ea1cca997456a81a9
-commit: 73a9aa78a055a18eac4ee5e4b143b40a4e5e5fcc [1954/2262] net/rds: mod reconnect delay on sendmsg()
-config: arm-randconfig-003-20250524 (https://download.01.org/0day-ci/archive/20250524/202505241812.Se3iJnIA-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505241812.Se3iJnIA-lkp@intel.com/reproduce)
+Kees Cook <kees@kernel.org> writes:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505241812.Se3iJnIA-lkp@intel.com/
+> When KCOV is enabled all functions get instrumented, unless
+> the __no_sanitize_coverage attribute is used. To prepare for
+> __no_sanitize_coverage being applied to __init functions, we have to
+> handle differences in how GCC's inline optimizations get resolved. For
+> s390 this requires forcing a couple functions to be inline with
+> __always_inline.
+>
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Naveen N Rao <naveen@kernel.org>
+> Cc: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: <linuxppc-dev@lists.ozlabs.org>
+> ---
+>  arch/powerpc/mm/book3s64/hash_utils.c    | 2 +-
+>  arch/powerpc/mm/book3s64/radix_pgtable.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
+> index 5158aefe4873..93f1e1eb5ea6 100644
+> --- a/arch/powerpc/mm/book3s64/hash_utils.c
+> +++ b/arch/powerpc/mm/book3s64/hash_utils.c
+> @@ -409,7 +409,7 @@ static DEFINE_RAW_SPINLOCK(linear_map_kf_hash_lock);
+>  
+>  static phys_addr_t kfence_pool;
+>  
+> -static inline void hash_kfence_alloc_pool(void)
+> +static __always_inline void hash_kfence_alloc_pool(void)
+>  {
+>  	if (!kfence_early_init_enabled())
+>  		goto err;
+> diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
+> index 9f764bc42b8c..3238e9ed46b5 100644
+> --- a/arch/powerpc/mm/book3s64/radix_pgtable.c
+> +++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
+> @@ -363,7 +363,7 @@ static int __meminit create_physical_mapping(unsigned long start,
+>  }
+>  
+>  #ifdef CONFIG_KFENCE
+> -static inline phys_addr_t alloc_kfence_pool(void)
+> +static __always_inline phys_addr_t alloc_kfence_pool(void)
+>  {
+>  	phys_addr_t kfence_pool;
+>  
 
-All warnings (new ones prefixed by >>):
+I remember seeing a warning msg around .init.text section. Let me dig
+that...
 
-   In file included from net/rds/tcp_stats.c:37:
-   net/rds/rds.h:1034:22: error: no member named 'net' in 'possible_net_t'
-    1034 |                         return sk->sk_net.net->ns.inum;
-         |                                ~~~~~~~~~~ ^
->> net/rds/rds.h:1279:41: warning: result of comparison of constant 9223372036854775807 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-    1279 |                    (cp->cp_up_or_down_w.timer.expires < KTIME_MAX) &&
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   1 warning and 1 error generated.
---
-   In file included from net/rds/tcp.c:40:
-   net/rds/rds.h:1034:22: error: no member named 'net' in 'possible_net_t'
-    1034 |                         return sk->sk_net.net->ns.inum;
-         |                                ~~~~~~~~~~ ^
->> net/rds/rds.h:1279:41: warning: result of comparison of constant 9223372036854775807 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-    1279 |                    (cp->cp_up_or_down_w.timer.expires < KTIME_MAX) &&
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   In file included from net/rds/tcp.c:40:
-   In file included from net/rds/rds.h:12:
-   include/uapi/linux/rds.h:280:18: warning: field peer_addr within 'struct rds6_info_tcp_socket' is less aligned than 'struct in6_addr' and is usually due to 'struct rds6_info_tcp_socket' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     280 |         struct in6_addr peer_addr;
-         |                         ^
-   2 warnings and 1 error generated.
---
-   In file included from net/rds/cong.c:38:
-   net/rds/rds.h:1034:22: error: no member named 'net' in 'possible_net_t'
-    1034 |                         return sk->sk_net.net->ns.inum;
-         |                                ~~~~~~~~~~ ^
->> net/rds/rds.h:1279:41: warning: result of comparison of constant 9223372036854775807 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-    1279 |                    (cp->cp_up_or_down_w.timer.expires < KTIME_MAX) &&
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   net/rds/cong.c:264:21: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-     264 |                             virt_to_page(page_addrs[i]),
-         |                                          ^~~~~~~~~~~~~
-   arch/arm/include/asm/memory.h:384:53: note: expanded from macro 'virt_to_page'
-     384 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-         |                                                         ^~~~~
-   include/asm-generic/memory_model.h:52:27: note: expanded from macro '__pfn_to_page'
-      52 | ({      unsigned long __pfn = (pfn);                    \
-         |                                ^~~
-   arch/arm/include/asm/memory.h:290:53: note: passing argument to parameter 'p' here
-     290 | static inline unsigned long virt_to_pfn(const void *p)
-         |                                                     ^
-   1 warning and 2 errors generated.
---
-   In file included from net/rds/rdma.c:38:
-   In file included from net/rds/trace.h:19:
-   net/rds/rds.h:1034:22: error: no member named 'net' in 'possible_net_t'
-    1034 |                         return sk->sk_net.net->ns.inum;
-         |                                ~~~~~~~~~~ ^
->> net/rds/rds.h:1279:41: warning: result of comparison of constant 9223372036854775807 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-    1279 |                    (cp->cp_up_or_down_w.timer.expires < KTIME_MAX) &&
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   net/rds/rdma.c:603:27: warning: variable 'local_vec' set but not used [-Wunused-but-set-variable]
-     603 |         struct rds_iovec __user *local_vec;
-         |                                  ^
-   2 warnings and 1 error generated.
---
-   In file included from net/rds/send.c:38:
-   net/rds/rds.h:1034:22: error: no member named 'net' in 'possible_net_t'
-    1034 |                         return sk->sk_net.net->ns.inum;
-         |                                ~~~~~~~~~~ ^
->> net/rds/rds.h:1279:41: warning: result of comparison of constant 9223372036854775807 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-    1279 |                    (cp->cp_up_or_down_w.timer.expires < KTIME_MAX) &&
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   net/rds/send.c:1380:18: warning: variable 'rns' set but not used [-Wunused-but-set-variable]
-    1380 |         struct rds_net *rns;
-         |                         ^
-   2 warnings and 1 error generated.
+... Here it is: https://lore.kernel.org/oe-kbuild-all/202504190552.mnFGs5sj-lkp@intel.com/
+
+I am not sure why it only complains for hash_debug_pagealloc_alloc_slots().
+I believe there should me more functions to mark with __init here.
+Anyways, here is the patch of what I had in mind.. I am not a compiler expert,
+so please let me know your thoughts on this.
+
+-ritesh
 
 
-vim +1279 net/rds/rds.h
+From 59d64dc0014ccb4ae13ed08ab596738628ee23b1 Mon Sep 17 00:00:00 2001
+Message-Id: <59d64dc0014ccb4ae13ed08ab596738628ee23b1.1748084756.git.ritesh.list@gmail.com>
+From: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Date: Sat, 24 May 2025 16:14:08 +0530
+Subject: [RFC] powerpc/mm/book3s64: Move few kfence & debug_pagealloc
+ related calls to __init section
 
-  1267	
-  1268	static inline bool rds_cond_queue_reconnect_work(struct rds_conn_path *cp, unsigned long delay)
-  1269	{
-  1270		unsigned long mod_delay = max(delay,
-  1271					      msecs_to_jiffies(rds_sysctl_reconnect_max_jiffies));
-  1272	
-  1273		if (!test_and_set_bit(RDS_RECONNECT_PENDING, &cp->cp_flags)) {
-  1274			rds_queue_delayed_work(cp, cp->cp_wq, &cp->cp_up_or_down_w,
-  1275					       delay, "reconnect work");
-  1276			return true;
-  1277		} else if (!test_bit(RDS_SHUTDOWN_WORK_QUEUED, &cp->cp_flags) &&
-  1278			   (cp->cp_up_or_down_w.timer.expires > 0) &&
-> 1279			   (cp->cp_up_or_down_w.timer.expires < KTIME_MAX) &&
-  1280			   time_after(cp->cp_up_or_down_w.timer.expires,
-  1281				      jiffies + mod_delay)) {
-  1282			/* mod_delayed_work due to an immediate sendmsg()
-  1283			 * by always allowing shortening the delay,
-  1284			 * if the existing reconnect timer expires later
-  1285			 * than reconnect_max_delay_ms (1s).
-  1286			 */
-  1287			rds_mod_delayed_work(cp, cp->cp_wq, &cp->cp_up_or_down_w,
-  1288					     mod_delay, "reconnect work");
-  1289			return true;
-  1290		} else {
-  1291			return false;
-  1292		}
-  1293	}
-  1294	
+Move few kfence and debug_pagealloc related functions in hash_utils.c
+and radix_pgtable.c to __init sections since these are only invoked once
+by an __init function during system initialization.
 
+i.e.
+- hash_debug_pagealloc_alloc_slots()
+- hash_kfence_alloc_pool()
+- hash_kfence_map_pool()
+  The above 3 functions only gets called by __init htab_initialize().
+
+- alloc_kfence_pool()
+- map_kfence_pool()
+  The above 2 functions only gets called by __init radix_init_pgtable()
+
+This should also help fix warning msgs like:
+
+>> WARNING: modpost: vmlinux: section mismatch in reference:
+hash_debug_pagealloc_alloc_slots+0xb0 (section: .text) ->
+memblock_alloc_try_nid (section: .init.text)
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202504190552.mnFGs5sj-lkp@intel.com/
+Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+---
+ arch/powerpc/mm/book3s64/hash_utils.c    | 6 +++---
+ arch/powerpc/mm/book3s64/radix_pgtable.c | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
+index 5158aefe4873..4693c464fc5a 100644
+--- a/arch/powerpc/mm/book3s64/hash_utils.c
++++ b/arch/powerpc/mm/book3s64/hash_utils.c
+@@ -343,7 +343,7 @@ static inline bool hash_supports_debug_pagealloc(void)
+ static u8 *linear_map_hash_slots;
+ static unsigned long linear_map_hash_count;
+ static DEFINE_RAW_SPINLOCK(linear_map_hash_lock);
+-static void hash_debug_pagealloc_alloc_slots(void)
++static __init void hash_debug_pagealloc_alloc_slots(void)
+ {
+ 	if (!hash_supports_debug_pagealloc())
+ 		return;
+@@ -409,7 +409,7 @@ static DEFINE_RAW_SPINLOCK(linear_map_kf_hash_lock);
+ 
+ static phys_addr_t kfence_pool;
+ 
+-static inline void hash_kfence_alloc_pool(void)
++static __init void hash_kfence_alloc_pool(void)
+ {
+ 	if (!kfence_early_init_enabled())
+ 		goto err;
+@@ -445,7 +445,7 @@ static inline void hash_kfence_alloc_pool(void)
+ 	disable_kfence();
+ }
+ 
+-static inline void hash_kfence_map_pool(void)
++static __init void hash_kfence_map_pool(void)
+ {
+ 	unsigned long kfence_pool_start, kfence_pool_end;
+ 	unsigned long prot = pgprot_val(PAGE_KERNEL);
+diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
+index 311e2112d782..ed226ee1569a 100644
+--- a/arch/powerpc/mm/book3s64/radix_pgtable.c
++++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
+@@ -363,7 +363,7 @@ static int __meminit create_physical_mapping(unsigned long start,
+ }
+ 
+ #ifdef CONFIG_KFENCE
+-static inline phys_addr_t alloc_kfence_pool(void)
++static __init phys_addr_t alloc_kfence_pool(void)
+ {
+ 	phys_addr_t kfence_pool;
+ 
+@@ -393,7 +393,7 @@ static inline phys_addr_t alloc_kfence_pool(void)
+ 	return 0;
+ }
+ 
+-static inline void map_kfence_pool(phys_addr_t kfence_pool)
++static __init void map_kfence_pool(phys_addr_t kfence_pool)
+ {
+ 	if (!kfence_pool)
+ 		return;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
