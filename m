@@ -1,246 +1,150 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337011A288;
-	Sat, 24 May 2025 11:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5603199FA2;
+	Sat, 24 May 2025 13:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748085559; cv=none; b=GHrNqzb4l29oTd0f1kAyRHGopq80MbzQ9DcZTDKJxZc6wSCPrZX7us+KqGOPc/+7i6zTmhLIu/e6BqQU3yxJI8RCVGtQqYcdjrTLoEnknpv/M7/uaPb5adq7dlvwuB4kIg6kPNRhpNqACcqD1CFPipkPiml8EQYXQOr/j2JwrlM=
+	t=1748093102; cv=none; b=hUvmuwXuBjOu0+xeVCZ/ouGo9akQ1k8ij9wwEOekBdNy58/hjMIQQYggZWjwU8GF38GHSbimwgKEfUDwSOvS6eZe7bDzvnMrwnqzMs7WEfDOdGEhBdtBDTfZOsooL6fD3n/3IIdWUIqWAVv53bKIzjvMBX/Zc4fUoYsMSnZXfWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748085559; c=relaxed/simple;
-	bh=ZeM+da8JfZ8lnROmjH/nTyqDodwA3mKLYrHfnIhGZ/A=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=Q4YcaqGR9AsAwxBwdBVoukCH5mRYPUwenYLG8c0JxOHsrJlZ0xNxaJAaMvTyB6GUW6U6Te7DZ+Hghi0pGC29GOB4Nd2DsQg+9GcRayO/6G/awFgaBzOHE2DIUZCKWQQnHwpM5KIC6UpHf9MfCd5e/Yzlu8VjDxr63m/c8xfH0xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TFg84diE; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748093102; c=relaxed/simple;
+	bh=h1RtYF+5zEs27YqMEDsmMOWHEKpU9TcG8Q8KhjVJbSI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Pvrsjs2Eqec5a/jffRJ+ADAXDPLYsJJp72dlQgRVFAwsObzYo3z30wVuNGAqOqgNMPNOz+xliTNqW3che3Dqd38eE5fds6jJWivgP9yZbaoQIE7tHNlMFSPKF146oUr0Y4mCZ6ife0jzsQTtcE0UUuf8CZuif/bKrmZixKjgJrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fufhJtsf; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TFg84diE"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7399838db7fso605986b3a.0;
-        Sat, 24 May 2025 04:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748085556; x=1748690356; darn=lists.linux.dev;
-        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rScpXVbASUqjAgnv8asCUXuGu69m7xK2h2FjiRqoUxs=;
-        b=TFg84diEAR06tPgIxhcxvKm84ho3pIz+clLDwwjNuq3tONEyRu6S64n5yOSGUQG5h/
-         E+c+SKJJKD+FnEgBns8u2xxMiIShj8lMIb8EgtFfP4QoDQjavRWgRTSwduoXAGqR0x+v
-         ttrYB+oYdmIwKd65zm65yfAVW2umaLWrQVQ+Eu9UQzJpsEenMFmRRJCmSkq9njTUtKiR
-         GemymKM7QcSVBwIYQ85xVkeq4negty+LQxAAOpcPzmUu8JNatDkvtzzFcor2awTtsS9H
-         k+dwny7PlCKWv3USb7ke1A9htTfPC31l7Q36wlf7MzqokCR1rIbz4ucwywTv+Qwg057r
-         O/Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748085556; x=1748690356;
-        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rScpXVbASUqjAgnv8asCUXuGu69m7xK2h2FjiRqoUxs=;
-        b=FzAwgXJ6g2pbpxDuntW2JYtzmxTMrwQfpQnpHK6jQuvwXUUdhDc/u7w4fHG4XEbOTk
-         lfITd9qe7ZEhIOJsJJf57NKmrVe2fHW4ZemeK7tNfzhRCV06pdYYGzCd92XA9lr7feHg
-         yd9fHoN07b38ZBDSOPZBa+pltLtALgKX+BeyG9nl8oABE39yDckX+JwUyteKBTXUpFnx
-         TUMzYTBSZukkFKpqmuy0kCUcxVdifAaOlrHYn1YW0OlTsSV3sYIdFYXtR2F4gycAv6C+
-         6+OlU8XiZ45E1uO2PLzYwUaLetxCY3VeOrT3/iIIN+7C4bwWa8hXu5xtsk99zeqQo42f
-         fQYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUII0lfTP3HMHY+cj7JP/D5EZwjLPJmhgnAWMG8qZdaLnApe+DCXJeN26KHOcumQiqgQXwNHFM=@lists.linux.dev, AJvYcCWpNFM4OFEvhjq4pWkqf1JR5PMrecumN+so7GGmuATnMBbhUZIlUCENHewIHqIIKv/NHKCp/g==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw0YLvZpIxl8oRHEZeztJS3K5BpI9zG2gC13xr7eNDtBWuSLNB5
-	l+523/XkUoXeY33X8GRRsK4AzogX5nK2W1F6RsWin2VaeCIymWV/fEwMMMNnJQ==
-X-Gm-Gg: ASbGncvzuT7MFdNCjbfH3XPyLss1Ih4H6wkBYmXEDqzq5T0Xjt8mMmqSCXWqWk0Ybbo
-	dNDy4IUjOtYZxfei3hboCu100zcdA9XYs51iWgbn3NAkL5EJ9Kj2sX/IDlR3KuYZZuvwup+dVSD
-	s6lXvttmKpwHC3hFCh70yT+bHko8Wt5SRU9R7sKCiR7Mv0SKGfcyJ2HtQB1mvP1u5LSEOlvIwGd
-	tb7JVLMIX1HK3R7/avLgMj+nNJV8YmwKHHc9OFIN/KyPe6LQgy4mnukViyz0Xh5HW5MaKg9ua2p
-	5y08k/WDRsasBg7IIIpnrlDugdr1lvK9dQx3ZHaD8Bh4YLwjjADQZ5A=
-X-Google-Smtp-Source: AGHT+IHzgyF4RMk4/VcB/ult2huesDrd3BktU05/6T5tjhGyNb1hL3EGlpy4BVyGxnMoNfwEQoYJDQ==
-X-Received: by 2002:a05:6a00:1903:b0:73e:2367:c914 with SMTP id d2e1a72fcca58-745fe068d61mr3795551b3a.7.1748085556260;
-        Sat, 24 May 2025 04:19:16 -0700 (PDT)
-Received: from dw-tp ([49.205.218.89])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a96dfacesm14024380b3a.5.2025.05.24.04.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 May 2025 04:19:15 -0700 (PDT)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <kees@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	linuxppc-dev@lists.ozlabs.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 08/14] powerpc: Handle KCOV __init vs inline mismatches
-In-Reply-To: <20250523043935.2009972-8-kees@kernel.org>
-Date: Sat, 24 May 2025 16:13:02 +0530
-Message-ID: <87jz662ssp.fsf@gmail.com>
-References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-8-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fufhJtsf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748093101; x=1779629101;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h1RtYF+5zEs27YqMEDsmMOWHEKpU9TcG8Q8KhjVJbSI=;
+  b=fufhJtsfYQnygmSSoHkKtQUuozk1m18KvnE/+IYsf/PbREeWqqn3rKaZ
+   BbuNNSMJPeuYaQn5mxQiOlyKT0iAKwYx1LsMGqy0Y3IcXqCXL8EmdZ4kt
+   6wX5ZUGR5XSLANC+3oNh/acRMsjyuiIfG2vy/Bkp41rGzqu+RQ0mDZp5r
+   Vznb7Uz/1iAgkqiogSZpOvltDWt48Tz/pqi/WnxEDQBHpFVxbU6dgdbNB
+   tvXN2o0SSDRAjkmWYAg0BPuoLEddq7bzFbgP9xSDMWoPabesbdf1YDMY0
+   4lVvdGRh7V5nvD6xsxmkSu+6PnB4vTM/vREIbWIpTPYAEOGS9bEokSoza
+   A==;
+X-CSE-ConnectionGUID: JzuQzWY/Q7uYsnhYHY8wSw==
+X-CSE-MsgGUID: bxqLwgo3RAW/T154LbCA4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11443"; a="61182284"
+X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
+   d="scan'208";a="61182284"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2025 06:25:00 -0700
+X-CSE-ConnectionGUID: 7ZHrI35ISTqb5+399QgsBA==
+X-CSE-MsgGUID: 3iGCelAERKS7eSmyhnMR1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
+   d="scan'208";a="164795810"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 24 May 2025 06:24:58 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uIorv-000RDg-39;
+	Sat, 24 May 2025 13:24:55 +0000
+Date: Sat, 24 May 2025 21:24:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	LUCI Bot <vijayendra.suman@oracle.com>,
+	Konrad Wilk <Konrad.wilk@oracle.com>
+Subject: [jlayton:uek-localio 2182/2262] kernel/auditsc.c:827:13: warning:
+ unknown pragma ignored
+Message-ID: <202505242111.ChHzvXBl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Kees Cook <kees@kernel.org> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git uek-localio
+head:   65b0dc6bb1f5c18e63d8ee9ea1cca997456a81a9
+commit: ea8c1ee70f911f6b6fb7f9a0c99f02e6e515e67f [2182/2262] audit: Re-apply special optimizations
+config: arm-randconfig-003-20250524 (https://download.01.org/0day-ci/archive/20250524/202505242111.ChHzvXBl-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505242111.ChHzvXBl-lkp@intel.com/reproduce)
 
-> When KCOV is enabled all functions get instrumented, unless
-> the __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we have to
-> handle differences in how GCC's inline optimizations get resolved. For
-> s390 this requires forcing a couple functions to be inline with
-> __always_inline.
->
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Naveen N Rao <naveen@kernel.org>
-> Cc: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: <linuxppc-dev@lists.ozlabs.org>
-> ---
->  arch/powerpc/mm/book3s64/hash_utils.c    | 2 +-
->  arch/powerpc/mm/book3s64/radix_pgtable.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
-> index 5158aefe4873..93f1e1eb5ea6 100644
-> --- a/arch/powerpc/mm/book3s64/hash_utils.c
-> +++ b/arch/powerpc/mm/book3s64/hash_utils.c
-> @@ -409,7 +409,7 @@ static DEFINE_RAW_SPINLOCK(linear_map_kf_hash_lock);
->  
->  static phys_addr_t kfence_pool;
->  
-> -static inline void hash_kfence_alloc_pool(void)
-> +static __always_inline void hash_kfence_alloc_pool(void)
->  {
->  	if (!kfence_early_init_enabled())
->  		goto err;
-> diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
-> index 9f764bc42b8c..3238e9ed46b5 100644
-> --- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-> +++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-> @@ -363,7 +363,7 @@ static int __meminit create_physical_mapping(unsigned long start,
->  }
->  
->  #ifdef CONFIG_KFENCE
-> -static inline phys_addr_t alloc_kfence_pool(void)
-> +static __always_inline phys_addr_t alloc_kfence_pool(void)
->  {
->  	phys_addr_t kfence_pool;
->  
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505242111.ChHzvXBl-lkp@intel.com/
 
-I remember seeing a warning msg around .init.text section. Let me dig
-that...
+All warnings (new ones prefixed by >>):
 
-... Here it is: https://lore.kernel.org/oe-kbuild-all/202504190552.mnFGs5sj-lkp@intel.com/
-
-I am not sure why it only complains for hash_debug_pagealloc_alloc_slots().
-I believe there should me more functions to mark with __init here.
-Anyways, here is the patch of what I had in mind.. I am not a compiler expert,
-so please let me know your thoughts on this.
-
--ritesh
+   In file included from kernel/auditsc.c:48:
+   In file included from include/linux/netlink.h:7:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   include/linux/highmem.h:265:2: error: call to undeclared function 'clear_user_page_uncached'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     265 |         clear_user_page_uncached(addr, vaddr, page);
+         |         ^
+   include/linux/highmem.h:265:2: note: did you mean 'clear_user_highpage_uncached'?
+   include/linux/highmem.h:261:20: note: 'clear_user_highpage_uncached' declared here
+     261 | static inline void clear_user_highpage_uncached(struct page *page, unsigned long vaddr)
+         |                    ^
+     262 | {
+     263 |         void *addr = kmap_atomic(page);
+     264 | 
+     265 |         clear_user_page_uncached(addr, vaddr, page);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~
+         |         clear_user_highpage_uncached
+>> kernel/auditsc.c:827:13: warning: unknown pragma ignored [-Wunknown-pragmas]
+     827 | #pragma GCC optimize("unswitch-loops", "align-loops=16", "align-jumps=16")
+         |             ^
+   kernel/auditsc.c:848:13: warning: unknown pragma ignored [-Wunknown-pragmas]
+     848 | #pragma GCC reset_options
+         |             ^
+   2 warnings and 1 error generated.
 
 
-From 59d64dc0014ccb4ae13ed08ab596738628ee23b1 Mon Sep 17 00:00:00 2001
-Message-Id: <59d64dc0014ccb4ae13ed08ab596738628ee23b1.1748084756.git.ritesh.list@gmail.com>
-From: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Date: Sat, 24 May 2025 16:14:08 +0530
-Subject: [RFC] powerpc/mm/book3s64: Move few kfence & debug_pagealloc
- related calls to __init section
+vim +827 kernel/auditsc.c
 
-Move few kfence and debug_pagealloc related functions in hash_utils.c
-and radix_pgtable.c to __init sections since these are only invoked once
-by an __init function during system initialization.
+   812	
+   813	/**
+   814	 * __audit_filter_op - common filter helper for operations (syscall/uring/etc)
+   815	 * @tsk: associated task
+   816	 * @ctx: audit context
+   817	 * @list: audit filter list
+   818	 * @name: audit_name (can be NULL)
+   819	 * @op: current syscall/uring_op
+   820	 *
+   821	 * Run the udit filters specified in @list against @tsk using @ctx,
+   822	 * @name, and @op, as necessary; the caller is responsible for ensuring
+   823	 * that the call is made while the RCU read lock is held. The @name
+   824	 * parameter can be NULL, but all others must be specified.
+   825	 * Returns 1/true if the filter finds a match, 0/false if none are found.
+   826	 */
+ > 827	#pragma GCC optimize("unswitch-loops", "align-loops=16", "align-jumps=16")
+   828	static int __audit_filter_op(struct task_struct *tsk,
+   829				   struct audit_context *ctx,
+   830				   struct list_head *list,
+   831				   struct audit_names *name,
+   832				   unsigned long op)
+   833	{
+   834		struct audit_entry *e;
+   835		enum audit_state state;
+   836	
+   837		list_for_each_entry_rcu(e, list, list) {
+   838			if (unlikely(audit_in_mask(&e->rule, op))) {
+   839				if (audit_filter_rules(tsk, &e->rule, ctx, name,
+   840							&state, false)) {
+   841					ctx->current_state = state;
+   842					return 1;
+   843				}
+   844			}
+   845		}
+   846		return 0;
+   847	}
+   848	#pragma GCC reset_options
+   849	
 
-i.e.
-- hash_debug_pagealloc_alloc_slots()
-- hash_kfence_alloc_pool()
-- hash_kfence_map_pool()
-  The above 3 functions only gets called by __init htab_initialize().
-
-- alloc_kfence_pool()
-- map_kfence_pool()
-  The above 2 functions only gets called by __init radix_init_pgtable()
-
-This should also help fix warning msgs like:
-
->> WARNING: modpost: vmlinux: section mismatch in reference:
-hash_debug_pagealloc_alloc_slots+0xb0 (section: .text) ->
-memblock_alloc_try_nid (section: .init.text)
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202504190552.mnFGs5sj-lkp@intel.com/
-Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
----
- arch/powerpc/mm/book3s64/hash_utils.c    | 6 +++---
- arch/powerpc/mm/book3s64/radix_pgtable.c | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
-index 5158aefe4873..4693c464fc5a 100644
---- a/arch/powerpc/mm/book3s64/hash_utils.c
-+++ b/arch/powerpc/mm/book3s64/hash_utils.c
-@@ -343,7 +343,7 @@ static inline bool hash_supports_debug_pagealloc(void)
- static u8 *linear_map_hash_slots;
- static unsigned long linear_map_hash_count;
- static DEFINE_RAW_SPINLOCK(linear_map_hash_lock);
--static void hash_debug_pagealloc_alloc_slots(void)
-+static __init void hash_debug_pagealloc_alloc_slots(void)
- {
- 	if (!hash_supports_debug_pagealloc())
- 		return;
-@@ -409,7 +409,7 @@ static DEFINE_RAW_SPINLOCK(linear_map_kf_hash_lock);
- 
- static phys_addr_t kfence_pool;
- 
--static inline void hash_kfence_alloc_pool(void)
-+static __init void hash_kfence_alloc_pool(void)
- {
- 	if (!kfence_early_init_enabled())
- 		goto err;
-@@ -445,7 +445,7 @@ static inline void hash_kfence_alloc_pool(void)
- 	disable_kfence();
- }
- 
--static inline void hash_kfence_map_pool(void)
-+static __init void hash_kfence_map_pool(void)
- {
- 	unsigned long kfence_pool_start, kfence_pool_end;
- 	unsigned long prot = pgprot_val(PAGE_KERNEL);
-diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
-index 311e2112d782..ed226ee1569a 100644
---- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-+++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-@@ -363,7 +363,7 @@ static int __meminit create_physical_mapping(unsigned long start,
- }
- 
- #ifdef CONFIG_KFENCE
--static inline phys_addr_t alloc_kfence_pool(void)
-+static __init phys_addr_t alloc_kfence_pool(void)
- {
- 	phys_addr_t kfence_pool;
- 
-@@ -393,7 +393,7 @@ static inline phys_addr_t alloc_kfence_pool(void)
- 	return 0;
- }
- 
--static inline void map_kfence_pool(phys_addr_t kfence_pool)
-+static __init void map_kfence_pool(phys_addr_t kfence_pool)
- {
- 	if (!kfence_pool)
- 		return;
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
