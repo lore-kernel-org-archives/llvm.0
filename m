@@ -1,61 +1,77 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F437E9;
-	Sat, 24 May 2025 08:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328891C27;
+	Sat, 24 May 2025 08:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748074898; cv=none; b=P4FAh6MTa7EL6CQ+AUyrqTUgOUP5CZB3QB6eS2GlwaZjPQFffyN0msazCbE0P8POA7mxzN6hSQUQ4+xctPJkaebRQPj3wU9J+HYiI6SIglxUDxx3KYFa4TZaAiZONk4U/nYKFE1IXCO+3Ir3+MNTSdGnA8d+rqTgiAtDUWpTio8=
+	t=1748074902; cv=none; b=kuvmUJCN4kgEkbwPe1dqwCnifY06ZzphW6yPaIdMs29FmUk8sG3+WD0oRSXcumvMU7jFflro41qf+CJAHVVTnCguVMKZuQn3p+xYdqcY9zC5zxk3rsluFZFeyBVuWRKLqrK7pf3vzezRgmFmFtcKjWWfIk8zQtc35gK8tj6KdeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748074898; c=relaxed/simple;
-	bh=2HfHbAFa+MA/nfQ79YxX2caqzVg8CqZ+O+es5dEUMe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iSUdZFA0bJZcYgiOYFU8uPC3ABbSeyXANhcgQGiADjwE2J/BOjZmK7hhI4ckB2FAQ1ctM+XLzxGn+pQrM8ZXU+6tsDywH8rgz6yIYK7XhVAcSaD3oaZozvm4Lgoje8W9M5cuNPwS0JEx3ex4Uc406XRlFi97ksNX0DxcBBLXCPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g91w2Trv; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1748074902; c=relaxed/simple;
+	bh=f9sbU8KiPXi1mKYA5KacKV3bnw+W+YAO+AwFqrTYyvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qhs0NfhBXgJJaTjsg2Ml2tyLTPyrEdYOUov+U6yIKg4SS75ngwdqDrXhz68QRkT4sKfBGnoUEc4jsicc6AdtjRmqdam3twLxmmiZmfmzGcazaep4I5zQUS62ENTY75oIhQaFWjOpI6lT7JDp9nEu/dDr/1OHMcJmiyPi1IUqHg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CeUnZY/8; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g91w2Trv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CeUnZY/8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748074896; x=1779610896;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2HfHbAFa+MA/nfQ79YxX2caqzVg8CqZ+O+es5dEUMe4=;
-  b=g91w2TrvM4N6OKn9DHXQBV5y4e8/BZdMnj/1P1D5n4K+tYrDNCIvNRzY
-   PRr1vK4WEsjchcZCpDmmMBqgnqAGSO8R8OawLK0RT6ygmKNoBL3F4VlCG
-   o36p4IMt4KAWG4foLVNoH9D1RkaqiaAGRI7zyrM7jPFnhwcsthTWz7n6i
-   lRNTH9VsOaDY2KOFv+Fg2VwejBkhuChYE4rBTJU+F4eOQh0TQUhMP/5x6
-   7dV2imaR4W12Zq/mxl9zky5qKUZZPd4wfGLw08BqTO5EGlUqWszDnxyzO
-   s+7ywyRapZZEntUtQiAVGHXgIchk+SlkkRRJtr6KoMTu3qBCSgfYDqtBV
-   Q==;
-X-CSE-ConnectionGUID: Brj/P39VR923P47ERvnCpQ==
-X-CSE-MsgGUID: LfOu+ax2R+Gf82Sf7027bQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50005308"
+  t=1748074900; x=1779610900;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f9sbU8KiPXi1mKYA5KacKV3bnw+W+YAO+AwFqrTYyvQ=;
+  b=CeUnZY/8PpTOKnaNdE8AZpfw/A2RsTEQi420RR5unCQ1C2RtXsTHysMR
+   sWDdYEdB+TpoDsNJa2grKptebPIelHYcf2T1/hO5IUMjb6vi78NEmGr1g
+   GQSeawuu7PNFO9SOXH+4q19KGl6hi7DpQ1MX4XIW71E6ZgImEBrhvZdiF
+   5CExulT6yTPDnrAa9moBJkTvsIQ0Xr65N5kC847otJfBk9H/ICo3olrls
+   VBmt9h7x1J2ICUGfDvTeYDTtwhd1DEVz/lFDeWK6uowURv2g0GtLsr3ZX
+   dZRy7wKVBGRmfWL3sBoDJNXm2wDNQfCqqrdNgAm6YTp9VjWYFm1C4OVy9
+   w==;
+X-CSE-ConnectionGUID: thmxYI+3SRGLza44YSLGOA==
+X-CSE-MsgGUID: Vo1mW1z3QuulxdWBOlMmvw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50005309"
 X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="50005308"
+   d="scan'208";a="50005309"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2025 01:21:36 -0700
-X-CSE-ConnectionGUID: VJ3VjTwARASe5w6kfFfGHA==
-X-CSE-MsgGUID: 1+ZJHOCkSPu91eJWyBvGLQ==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2025 01:21:39 -0700
+X-CSE-ConnectionGUID: duR0nArKRb2BC59cL46Qaw==
+X-CSE-MsgGUID: BtDtXxCOQTezcn0WOZ8Fzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,311,1739865600"; 
-   d="scan'208";a="146205957"
+   d="scan'208";a="146205958"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
   by orviesa003.jf.intel.com with ESMTP; 24 May 2025 01:21:34 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uIk8K-000R3K-0f;
+	id 1uIk8K-000R3I-0b;
 	Sat, 24 May 2025 08:21:32 +0000
 Date: Sat, 24 May 2025 16:21:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gautham Ananthakrishna <gautham.ananthakrishna@oracle.com>
+To: Sean Anderson <sean.anderson@linux.dev>, netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	LUCI Bot <vijayendra.suman@oracle.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>
-Subject: [jlayton:uek-localio 2037/2262] fs/dcache.c:1531:15: error: call to
- undeclared function 'get_nr_dentry'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202505241641.cjNXyGVb-lkp@intel.com>
+	Lei Wei <quic_leiwei@quicinc.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Simon Horman <horms@kernel.org>,
+	Daniel Golle <daniel@makrotopia.org>,
+	Vineeth Karumanchi <vineeth.karumanchi@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Sean Anderson <sean.anderson@linux.dev>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>, imx@lists.linux.dev,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [net-next PATCH v5 05/10] net: pcs: lynx: Convert to an MDIO
+ driver
+Message-ID: <202505241550.xuPguGhB-lkp@intel.com>
+References: <20250523203339.1993685-6-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,142 +80,410 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250523203339.1993685-6-sean.anderson@linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git uek-localio
-head:   65b0dc6bb1f5c18e63d8ee9ea1cca997456a81a9
-commit: fbc8f7ca2ebf9db96aa3263c657ea2840840bdec [2037/2262] fs/dcache: Estimate the number of negative dentries to prune per filesystem
-config: hexagon-randconfig-002-20250524 (https://download.01.org/0day-ci/archive/20250524/202505241641.cjNXyGVb-lkp@intel.com/config)
+Hi Sean,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/dt-bindings-net-Add-Xilinx-PCS/20250524-043901
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250523203339.1993685-6-sean.anderson%40linux.dev
+patch subject: [net-next PATCH v5 05/10] net: pcs: lynx: Convert to an MDIO driver
+config: hexagon-randconfig-001-20250524 (https://download.01.org/0day-ci/archive/20250524/202505241550.xuPguGhB-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505241641.cjNXyGVb-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505241550.xuPguGhB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505241641.cjNXyGVb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505241550.xuPguGhB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/dcache.c:31:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:23:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   include/linux/highmem.h:265:2: error: call to undeclared function 'clear_user_page_uncached'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     265 |         clear_user_page_uncached(addr, vaddr, page);
+   In file included from drivers/i2c/i2c-core-base.c:24:
+   In file included from include/linux/i2c.h:21:
+   In file included from include/linux/irqdomain.h:36:
+>> include/linux/of.h:1616:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1616 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
          |         ^
-   include/linux/highmem.h:265:2: note: did you mean 'clear_user_highpage_uncached'?
-   include/linux/highmem.h:261:20: note: 'clear_user_highpage_uncached' declared here
-     261 | static inline void clear_user_highpage_uncached(struct page *page, unsigned long vaddr)
-         |                    ^
-     262 | {
-     263 |         void *addr = kmap_atomic(page);
-     264 | 
-     265 |         clear_user_page_uncached(addr, vaddr, page);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~
-         |         clear_user_highpage_uncached
-   fs/dcache.c:1530:19: error: call to undeclared function 'get_nr_dentry_negative'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1530 |         long count_neg = get_nr_dentry_negative();
-         |                          ^
->> fs/dcache.c:1531:15: error: call to undeclared function 'get_nr_dentry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1531 |         long count = get_nr_dentry();
-         |                      ^
-   fs/dcache.c:1531:15: note: did you mean 'retain_dentry'?
-   fs/dcache.c:944:20: note: 'retain_dentry' declared here
-     944 | static inline bool retain_dentry(struct dentry *dentry, bool locked)
-         |                    ^
-   fs/dcache.c:1616:10: error: call to undeclared function 'get_nr_dentry_negative'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1616 |         count = get_nr_dentry_negative();
-         |                 ^
-   fs/dcache.c:1610:7: warning: variable 'last_n_neg' set but not used [-Wunused-but-set-variable]
-    1610 |         long last_n_neg, excess, count;
+>> include/linux/of.h:1622:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1622 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1628:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1628 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1634:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1634 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1640:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1640 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^
+   5 errors generated.
+--
+   In file included from drivers/i2c/i2c-core-of-prober.c:14:
+   In file included from include/linux/i2c.h:21:
+   In file included from include/linux/irqdomain.h:36:
+>> include/linux/of.h:1616:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1616 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1622:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1622 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1628:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1628 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1634:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1634 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1640:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1640 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^
+>> drivers/i2c/i2c-core-of-prober.c:146:2: error: call to undeclared function 'of_get_next_child_with_prefix'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     146 |         for_each_child_of_node_with_prefix(i2c_node, node, type)
+         |         ^
+   include/linux/of.h:1478:7: note: expanded from macro 'for_each_child_of_node_with_prefix'
+    1478 |              of_get_next_child_with_prefix(parent, NULL, prefix);       \
          |              ^
-   1 warning and 4 errors generated.
+>> drivers/i2c/i2c-core-of-prober.c:146:47: error: incompatible integer to pointer conversion initializing 'struct device_node *' with an expression of type 'int' [-Wint-conversion]
+     146 |         for_each_child_of_node_with_prefix(i2c_node, node, type)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/of.h:1477:27: note: expanded from macro 'for_each_child_of_node_with_prefix'
+    1477 |         for (struct device_node *child __free(device_node) =            \
+         |                                  ^
+    1478 |              of_get_next_child_with_prefix(parent, NULL, prefix);       \
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/i2c/i2c-core-of-prober.c:146:2: error: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+     146 |         for_each_child_of_node_with_prefix(i2c_node, node, type)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/of.h:1480:13: note: expanded from macro 'for_each_child_of_node_with_prefix'
+    1480 |              child = of_get_next_child_with_prefix(parent, child, prefix))
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/i2c-core-of-prober.c:161:47: error: incompatible integer to pointer conversion initializing 'struct device_node *' with an expression of type 'int' [-Wint-conversion]
+     161 |         for_each_child_of_node_with_prefix(i2c_node, node, type) {
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/of.h:1477:27: note: expanded from macro 'for_each_child_of_node_with_prefix'
+    1477 |         for (struct device_node *child __free(device_node) =            \
+         |                                  ^
+    1478 |              of_get_next_child_with_prefix(parent, NULL, prefix);       \
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/i2c-core-of-prober.c:161:2: error: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+     161 |         for_each_child_of_node_with_prefix(i2c_node, node, type) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/of.h:1480:13: note: expanded from macro 'for_each_child_of_node_with_prefix'
+    1480 |              child = of_get_next_child_with_prefix(parent, child, prefix))
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   10 errors generated.
+--
+   In file included from drivers/spi/spi-bcm-qspi.c:17:
+>> include/linux/of.h:1616:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1616 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1622:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1622 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1628:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1628 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1634:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1634 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1640:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1640 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/spi/spi-bcm-qspi.c:21:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:35:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+--
+   In file included from drivers/spi/spi.c:25:
+   In file included from include/linux/of_irq.h:8:
+   In file included from include/linux/irqdomain.h:36:
+>> include/linux/of.h:1616:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1616 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1622:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1622 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1628:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1628 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1634:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1634 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1640:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1640 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^
+>> drivers/spi/spi.c:4806:9: error: call to undeclared function 'of_register_spi_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4806 |                 spi = of_register_spi_device(ctlr, rd->dn);
+         |                       ^
+   drivers/spi/spi.c:4806:9: note: did you mean 'of_register_spi_devices'?
+   drivers/spi/spi.c:2554:13: note: 'of_register_spi_devices' declared here
+    2554 | static void of_register_spi_devices(struct spi_controller *ctlr) { }
+         |             ^
+>> drivers/spi/spi.c:4806:7: error: incompatible integer to pointer conversion assigning to 'struct spi_device *' from 'int' [-Wint-conversion]
+    4806 |                 spi = of_register_spi_device(ctlr, rd->dn);
+         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 errors generated.
+--
+   In file included from drivers/dma/mmp_pdma.c:18:
+   In file included from include/linux/of_dma.h:13:
+>> include/linux/of.h:1616:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1616 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1622:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1622 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1628:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1628 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1634:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1634 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1640:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1640 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^
+   drivers/dma/mmp_pdma.c:1104:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1104 |                 dma_set_mask(pdev->dev, DMA_BIT_MASK(64));
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 5 errors generated.
+--
+   In file included from drivers/dma/altera-msgdma.c:22:
+   In file included from include/linux/of_dma.h:13:
+>> include/linux/of.h:1616:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1616 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1622:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1622 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1591:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1591 |         OF_RECONFIG_NO_CHANGE = 0,
+         |         ^
+>> include/linux/of.h:1628:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1628 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1634:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1634 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^
+>> include/linux/of.h:1640:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1640 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^
+   drivers/dma/altera-msgdma.c:895:46: warning: shift count >= width of type [-Wshift-count-overflow]
+     895 |         ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 5 errors generated.
+..
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OF_DYNAMIC
+   Depends on [n]: OF [=n]
+   Selected by [y]:
+   - FSL_FMAN [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_FREESCALE [=y] && (FSL_SOC || ARCH_LAYERSCAPE || COMPILE_TEST [=y])
 
 
-vim +/get_nr_dentry +1531 fs/dcache.c
+vim +1616 include/linux/of.h
 
-  1521	
-  1522	/*
-  1523	 * Prune dentries from a super block.
-  1524	 */
-  1525	static void prune_negative_one_sb(struct super_block *sb, void *arg)
-  1526	{
-  1527		unsigned long freed = 0, scan_once = 0, this_sb_freed = 0;
-  1528		long limit, lower_limit, this_sb_dentries, excess, prune_this_sb = 0;
-  1529		int this_sb_pc = 0;
-  1530		long count_neg = get_nr_dentry_negative();
-> 1531		long count = get_nr_dentry();
-  1532		struct prune_negative_ctrl *ctrl = arg;
-  1533		LIST_HEAD(dispose);
-  1534	
-  1535		limit = neg_dentry_nfree_init + ctrl->prune_ncpus * neg_dentry_percpu_limit;
-  1536	
-  1537		/*
-  1538		 * If the -ve dentry count is within the limit
-  1539		 * and a prune is not on then do nothing.
-  1540		 */
-  1541		if (limit >= count_neg && !(ndblk.nprune_on))
-  1542			return;
-  1543	
-  1544		/*
-  1545		 * Set the prune on when the -ve
-  1546		 * dentry count crosses the limit.
-  1547		 */
-  1548		if (!(ndblk.nprune_on) && (count_neg > limit))
-  1549			ndblk.nprune_on = 1;
-  1550	
-  1551		/*
-  1552		 * Add extra 30% so that once pruning starts,
-  1553		 * it continues until we reach 70% of the limit.
-  1554		 */
-  1555		lower_limit = ctrl->prune_ncpus * (neg_dentry_percpu_limit -
-  1556					((neg_dentry_percpu_limit * 30)/ 100));
-  1557		/*
-  1558		 * Set the prune off when the -ve dentry
-  1559		 * count reaches the lower limit.
-  1560		 */
-  1561		if (count_neg <= lower_limit) {
-  1562			ndblk.nprune_on = 0;
-  1563			return;
-  1564		}
-  1565	
-  1566		/*
-  1567		 * Dentry to prune from this super block's LRU should be
-  1568		 * proportional to the ratio of dentries present in this
-  1569		 * SB's LRU to the total dentries present in the system.
-  1570		 * Also, try to skip inmemory filesystems.
-  1571		 */
-  1572		this_sb_dentries = list_lru_elems(&sb->s_dentry_lru);
-  1573		if (!this_sb_dentries)
-  1574			return;
-  1575		this_sb_pc = (this_sb_dentries * 100) / count;
-  1576		if (!this_sb_pc)
-  1577			this_sb_pc = 1;
-  1578	
-  1579		excess = count_neg - lower_limit;
-  1580		prune_this_sb = (excess * this_sb_pc) / 100;
-  1581		if (!prune_this_sb)
-  1582			return; /* Negligible, skip this sb */
-  1583	
-  1584		if (ctrl->prune_percent) {
-  1585			if (prune_this_sb > NEG_WALKING_CAP)
-  1586				scan_once = NEG_WALKING_CAP;
-  1587			else
-  1588				scan_once = prune_this_sb;
-  1589	
-  1590			freed = list_lru_walk_all_nodes(&sb->s_dentry_lru,
-  1591						dentry_negative_lru_isolate,
-  1592						&dispose, this_sb_dentries, scan_once);
-  1593			if (freed) {
-  1594				shrink_dentry_list(&dispose);
-  1595				this_sb_freed += freed;
-  1596			}
-  1597			ctrl->prune_count += this_sb_freed;
-  1598		}
-  1599	}
-  1600	
+201c910bd6898d Pantelis Antoniou 2014-07-04  1589  
+b53a2340d0d304 Pantelis Antoniou 2014-10-28  1590  enum of_reconfig_change {
+b53a2340d0d304 Pantelis Antoniou 2014-10-28 @1591  	OF_RECONFIG_NO_CHANGE = 0,
+b53a2340d0d304 Pantelis Antoniou 2014-10-28  1592  	OF_RECONFIG_CHANGE_ADD,
+b53a2340d0d304 Pantelis Antoniou 2014-10-28  1593  	OF_RECONFIG_CHANGE_REMOVE,
+b53a2340d0d304 Pantelis Antoniou 2014-10-28  1594  };
+b53a2340d0d304 Pantelis Antoniou 2014-10-28  1595  
+2e8fff668dc14e Rob Herring       2023-03-29  1596  struct notifier_block;
+2e8fff668dc14e Rob Herring       2023-03-29  1597  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1598  #ifdef CONFIG_OF_DYNAMIC
+f6892d193fb9d6 Grant Likely      2014-11-21  1599  extern int of_reconfig_notifier_register(struct notifier_block *);
+f6892d193fb9d6 Grant Likely      2014-11-21  1600  extern int of_reconfig_notifier_unregister(struct notifier_block *);
+f5242e5a883bf1 Grant Likely      2014-11-24  1601  extern int of_reconfig_notify(unsigned long, struct of_reconfig_data *rd);
+f5242e5a883bf1 Grant Likely      2014-11-24  1602  extern int of_reconfig_get_state_change(unsigned long action,
+f5242e5a883bf1 Grant Likely      2014-11-24  1603  					struct of_reconfig_data *arg);
+f6892d193fb9d6 Grant Likely      2014-11-21  1604  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1605  extern void of_changeset_init(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1606  extern void of_changeset_destroy(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1607  extern int of_changeset_apply(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1608  extern int of_changeset_revert(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1609  extern int of_changeset_action(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1610  		unsigned long action, struct device_node *np,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1611  		struct property *prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1612  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1613  static inline int of_changeset_attach_node(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1614  		struct device_node *np)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1615  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1616  	return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1617  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1618  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1619  static inline int of_changeset_detach_node(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1620  		struct device_node *np)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1621  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1622  	return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1623  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1624  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1625  static inline int of_changeset_add_property(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1626  		struct device_node *np, struct property *prop)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1627  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1628  	return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1629  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1630  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1631  static inline int of_changeset_remove_property(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1632  		struct device_node *np, struct property *prop)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1633  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1634  	return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1635  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1636  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1637  static inline int of_changeset_update_property(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1638  		struct device_node *np, struct property *prop)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1639  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1640  	return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1641  }
+b544fc2b8606d7 Lizhi Hou         2023-08-15  1642  
 
 -- 
 0-DAY CI Kernel Test Service
