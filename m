@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1852D153800;
-	Sat, 24 May 2025 02:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B99119DF48;
+	Sat, 24 May 2025 04:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748053019; cv=none; b=jgDc40u7uAqCnlP5mjM9mxYqe46C5pcpFkfki6XqWiv1Md2p6mMNx+T7Vd807raDrej/BTo5WMWnDRLH3TLzhYycH4q61B4AV/B5QYre+2R9ERjro7uFaPRtZRVRRqZdT4Ur1z/0xtvjsFTSsLBGn9mjA7UYDKuo4GapU0YujeU=
+	t=1748061011; cv=none; b=ZWMOL0F1rkf/0ftK71YS3pe2t0JuznzrvwUc+cXev/ibuUGzj5LWOzqSRbMMdn8L1zaW/177BHB+Fee3F36lIbTs8+L2tf6PiThZv/NebGRRx8TC8vxJj1figlqA/wMQGEXdr2DXkJR31JE7KJggr2agZjTnwgTeqdFOcQgaodo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748053019; c=relaxed/simple;
-	bh=WOSGlihJtEU34U6O8NnLDz3j93syK8/QWXetIUc5s2Y=;
+	s=arc-20240116; t=1748061011; c=relaxed/simple;
+	bh=lmioRTC+vWdchSKwww8oJ8zM6TW/i18Dpt27s0mNqB4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ozPjfEkQrMOsLSiKWdXV2Ra0jMUmFXOaKgQRKTR3PbdlsPEIDv0EQUaj/zw89Z03mcaHB8xjeHdBb5rxJjB/ZMRUwDHsUIZuEDA9OuphnJaYi/pSg/x4C07i78WcTxRLFkYtMCwl1mi8cKy/EgSfpw6tGpM/aFEhUWqkw9RnkUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F7M35fs1; arc=none smtp.client-ip=192.198.163.17
+	 Content-Disposition; b=cnkBiRV/J4F4ky86bKnQdqihTfu/Utqli581TxnsH74kB1JlYlMLpHnZjtwTgalDMtMQT89mjjXkoNd/QTi+WQcvOHP+x/utf71TdkjOvvUfV0VCwnZVA5imk4hiTKTnyt+q+bRozuQ/nPexFDAV99lQxVGn4Zkn8JVaWh5Yz8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZGJPtwxv; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F7M35fs1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZGJPtwxv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748053017; x=1779589017;
+  t=1748061010; x=1779597010;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WOSGlihJtEU34U6O8NnLDz3j93syK8/QWXetIUc5s2Y=;
-  b=F7M35fs1raJH17x02rYHFNJWXnZvkQzgMQV1mQ/SObIfkkvFk/9vpTDa
-   Raq+xLRBD3OlKL8He7ZVjDk48ywT0wrKIawK4wMsb+Klfp9bfjJG/aWHR
-   2DDSzhRQpBVYX5mMntVbgmF269MUqAiadNvWrJ685TKoBFBW9ttKrqO/V
-   AZtcyYC/z3RFji/64rxPoBJF4FownOgxKgHe2z2LfuQazyUYgF2b0wcJq
-   YUzjQiY8TTZzx3zlkCkNfQpezJybJczIJsOitmi+L9oFz19KujPMJZNkp
-   d0kQOw9coXtQefi608HRT9Y7LC8vC2wn/VGhsM4XLzuP4HGQHsTXGPBv6
-   A==;
-X-CSE-ConnectionGUID: bg68hlvPSGq1o2sfGHfXuQ==
-X-CSE-MsgGUID: kM6xUe9KScG3hA/77GXuCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="50035651"
+  bh=lmioRTC+vWdchSKwww8oJ8zM6TW/i18Dpt27s0mNqB4=;
+  b=ZGJPtwxvR6jAclOnMwQ6YNkKxHKxRYWbPU5G6gMy1lWpZNjH5e9KIl6h
+   Iikf/TzzL66Gk58UHq7+mi4YcZabuT915lML1fttaN72BdRK3QnNvZnSj
+   zhWdMW7ftiZdspWXzPsUUkO5vF1KWZH6gDtwOH1eAzMxi5feJ4XZ5+ZMf
+   KIrtmci3QOwTpw4DbLnzQqfTKTdZaDgAX6lzMpTTwnsWLlEgrIfDe8dfQ
+   zw7FBbK+6qcg4Vl3rqLMw2JFADoAvegDg4zNf+83f6YV70eSoeabgTmxR
+   qBfKIyiDbl61PeEtF680tNdOHlio9/Bd3UU1vopGcc49n9fhfgv6W3kNy
+   g==;
+X-CSE-ConnectionGUID: +PU8tlPgS+uPLhQ2KW2qAA==
+X-CSE-MsgGUID: lgeQTWx5RoyUwXkJw1ACdQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="53924051"
 X-IronPort-AV: E=Sophos;i="6.15,310,1739865600"; 
-   d="scan'208";a="50035651"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 19:16:56 -0700
-X-CSE-ConnectionGUID: MEMxj/2NRcWZynUAqpnuIA==
-X-CSE-MsgGUID: FbJZDHNaTLiNQCpjOP64MQ==
+   d="scan'208";a="53924051"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 21:30:09 -0700
+X-CSE-ConnectionGUID: ZQ2VdN/YSCaZIOgrxE4LGQ==
+X-CSE-MsgGUID: 8xuFLMeuRy+ygcN15LXCYw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,310,1739865600"; 
-   d="scan'208";a="141249484"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 23 May 2025 19:16:55 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
+   d="scan'208";a="142370336"
+Received: from igk-lkp-server01.igk.intel.com (HELO a1decbf9c5f9) ([10.211.3.150])
+  by orviesa008.jf.intel.com with ESMTP; 23 May 2025 21:30:07 -0700
+Received: from kbuild by a1decbf9c5f9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uIeRQ-000Qse-3D;
-	Sat, 24 May 2025 02:16:53 +0000
-Date: Sat, 24 May 2025 10:16:45 +0800
+	id 1uIgWL-0001bM-1C;
+	Sat, 24 May 2025 04:30:05 +0000
+Date: Sat, 24 May 2025 12:30:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:container 5/15] <stdin>:1624:2: warning: syscall
- container_socket not implemented
-Message-ID: <202505241049.EEm4Y7WO-lkp@intel.com>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>
+Subject: drivers/gpu/drm/vc4/vc4_drv.c:303:8: warning: cast to smaller
+ integer type 'enum vc4_gen' from 'const void *'
+Message-ID: <202505241244.A9oll6Fa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,41 +63,154 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git container
-head:   e934156b00c64a64a048108513ab445a232c2120
-commit: b3035c6262433d8f174669c7b4bc48a03d119e86 [5/15] containers: Open a socket inside a container
-config: hexagon-randconfig-002-20250524 (https://download.01.org/0day-ci/archive/20250524/202505241049.EEm4Y7WO-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505241049.EEm4Y7WO-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4856ebd997159f198e3177e515bda01143727463
+commit: 56aa4c374dbf86d90b7c5aabdc8facbdd3321477 drm/vc4: Use of_device_get_match_data to set generation
+date:   6 months ago
+config: x86_64-buildonly-randconfig-2001-20250524 (https://download.01.org/0day-ci/archive/20250524/202505241244.A9oll6Fa-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505241244.A9oll6Fa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505241049.EEm4Y7WO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505241244.A9oll6Fa-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   <stdin>:1618:2: warning: syscall container_create not implemented [-W#warnings]
-    1618 | #warning syscall container_create not implemented
-         |  ^
-   <stdin>:1621:2: warning: syscall fork_into_container not implemented [-W#warnings]
-    1621 | #warning syscall fork_into_container not implemented
-         |  ^
->> <stdin>:1624:2: warning: syscall container_socket not implemented [-W#warnings]
-    1624 | #warning syscall container_socket not implemented
-         |  ^
-   3 warnings generated.
---
-   <stdin>:1618:2: warning: syscall container_create not implemented [-W#warnings]
-    1618 | #warning syscall container_create not implemented
-         |  ^
-   <stdin>:1621:2: warning: syscall fork_into_container not implemented [-W#warnings]
-    1621 | #warning syscall fork_into_container not implemented
-         |  ^
->> <stdin>:1624:2: warning: syscall container_socket not implemented [-W#warnings]
-    1624 | #warning syscall container_socket not implemented
-         |  ^
-   3 warnings generated.
+   In file included from drivers/gpu/drm/vc4/vc4_drv.c:27:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/vc4/vc4_drv.c:303:8: warning: cast to smaller integer type 'enum vc4_gen' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     303 |         gen = (enum vc4_gen)of_device_get_match_data(dev);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +303 drivers/gpu/drm/vc4/vc4_drv.c
+
+   288	
+   289	static int vc4_drm_bind(struct device *dev)
+   290	{
+   291		struct platform_device *pdev = to_platform_device(dev);
+   292		const struct drm_driver *driver;
+   293		struct rpi_firmware *firmware = NULL;
+   294		struct drm_device *drm;
+   295		struct vc4_dev *vc4;
+   296		struct device_node *node;
+   297		struct drm_crtc *crtc;
+   298		enum vc4_gen gen;
+   299		int ret = 0;
+   300	
+   301		dev->coherent_dma_mask = DMA_BIT_MASK(32);
+   302	
+ > 303		gen = (enum vc4_gen)of_device_get_match_data(dev);
+   304	
+   305		if (gen > VC4_GEN_4)
+   306			driver = &vc5_drm_driver;
+   307		else
+   308			driver = &vc4_drm_driver;
+   309	
+   310		node = of_find_matching_node_and_match(NULL, vc4_dma_range_matches,
+   311						       NULL);
+   312		if (node) {
+   313			ret = of_dma_configure(dev, node, true);
+   314			of_node_put(node);
+   315	
+   316			if (ret)
+   317				return ret;
+   318		}
+   319	
+   320		vc4 = devm_drm_dev_alloc(dev, driver, struct vc4_dev, base);
+   321		if (IS_ERR(vc4))
+   322			return PTR_ERR(vc4);
+   323		vc4->gen = gen;
+   324		vc4->dev = dev;
+   325	
+   326		drm = &vc4->base;
+   327		platform_set_drvdata(pdev, drm);
+   328	
+   329		if (gen == VC4_GEN_4) {
+   330			ret = drmm_mutex_init(drm, &vc4->bin_bo_lock);
+   331			if (ret)
+   332				goto err;
+   333	
+   334			ret = vc4_bo_cache_init(drm);
+   335			if (ret)
+   336				goto err;
+   337		}
+   338	
+   339		ret = drmm_mode_config_init(drm);
+   340		if (ret)
+   341			goto err;
+   342	
+   343		if (gen == VC4_GEN_4) {
+   344			ret = vc4_gem_init(drm);
+   345			if (ret)
+   346				goto err;
+   347		}
+   348	
+   349		node = of_find_compatible_node(NULL, NULL, "raspberrypi,bcm2835-firmware");
+   350		if (node) {
+   351			firmware = rpi_firmware_get(node);
+   352			of_node_put(node);
+   353	
+   354			if (!firmware) {
+   355				ret = -EPROBE_DEFER;
+   356				goto err;
+   357			}
+   358		}
+   359	
+   360		ret = aperture_remove_all_conflicting_devices(driver->name);
+   361		if (ret)
+   362			goto err;
+   363	
+   364		if (firmware) {
+   365			ret = rpi_firmware_property(firmware,
+   366						    RPI_FIRMWARE_NOTIFY_DISPLAY_DONE,
+   367						    NULL, 0);
+   368			if (ret)
+   369				drm_warn(drm, "Couldn't stop firmware display driver: %d\n", ret);
+   370	
+   371			rpi_firmware_put(firmware);
+   372		}
+   373	
+   374		ret = component_bind_all(dev, drm);
+   375		if (ret)
+   376			goto err;
+   377	
+   378		ret = devm_add_action_or_reset(dev, vc4_component_unbind_all, vc4);
+   379		if (ret)
+   380			goto err;
+   381	
+   382		ret = vc4_plane_create_additional_planes(drm);
+   383		if (ret)
+   384			goto err;
+   385	
+   386		ret = vc4_kms_load(drm);
+   387		if (ret < 0)
+   388			goto err;
+   389	
+   390		drm_for_each_crtc(crtc, drm)
+   391			vc4_crtc_disable_at_boot(crtc);
+   392	
+   393		ret = drm_dev_register(drm, 0);
+   394		if (ret < 0)
+   395			goto err;
+   396	
+   397		drm_client_setup_with_fourcc(drm, DRM_FORMAT_RGB565);
+   398	
+   399		return 0;
+   400	
+   401	err:
+   402		platform_set_drvdata(pdev, NULL);
+   403		return ret;
+   404	}
+   405	
 
 -- 
 0-DAY CI Kernel Test Service
