@@ -1,58 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE712BB04;
-	Sat, 24 May 2025 01:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3B739FCE;
+	Sat, 24 May 2025 01:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748049234; cv=none; b=caq5dcJxpcXsjYm9MfL9v+fWFVZvy8IMW/b5UaCUXCvx3v1J5phxL3FyyI29qj/Q+zWyf5RB1m6HGb3nHijhbrEMAnccuqwfcjblCE88S7jBMpIG1/xgIbtZdtW7MZyXz3B/68MBgOfqrTNO1EheAnn2tanMeM/kiQCnQR2Mig0=
+	t=1748049236; cv=none; b=qLsSAZstl/uZHgB3T2Ie0Beez14AemQNNMc36GNJlWAkl/ArNCjPBRZwu+qoqNKKHcOH4BE2RWpiROXCr5jo3ZL76lyBs64qN5eBUnEhaKLlTifSU5gvlOq1msAHbFvzyD4wNwlCGCPagkfJgkcYI/chggrCXlKBvpejgXm3r3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748049234; c=relaxed/simple;
-	bh=teAmctQEEI3GPZ/QSD3a2qMWBxHEKxxxo1ztoWuEIVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=W7KAW5JbS4loUuM3OaqEhLrqZnVc+hTWeRjwNa6Vcby60CGPNCO0lHTr76IUFTAEIBXY3RNmw6OpVME6Ks7zpzZdYHlAo1r3VmPXHhCLT/+su4lzldTFeyZu59VILPW/hInLy7ULDdWmoZICx5IleJyl9hZNiVdOMyUdjX+X4/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WcfxdarE; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1748049236; c=relaxed/simple;
+	bh=DcRHlwSA2+s3xYX3BAXgtlItCgPVhGyTrbfO54P/d5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LjMsNnwVcQ12hzbkl48RQxaU9kMHIjxRuZJOcnUudqb2T/C8uI8LBtSG3fhtdIxekUGGCsY5kUp1kMIwRPHs16KjsALrsSipeBHL3TXgZnHfcGGzOwcCve16Pw+dDaz5MSVjpWyUR+WWSKs8PEe21nFsh1GFb0LZmYBx/P/woAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BDgOZqm9; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WcfxdarE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BDgOZqm9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748049233; x=1779585233;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=teAmctQEEI3GPZ/QSD3a2qMWBxHEKxxxo1ztoWuEIVo=;
-  b=WcfxdarEhrhz3eFykOB6XWq+x7RjBYRkYLaSW8KS3jGQiwHhl+ffbsLS
-   +X/FP9MWFuOwFaA97axXmvwD0fEB/ZuYh8bRskMRdPOhMKrdqcey25hou
-   NvnhCwjL6s2FpqlwuleRMq+LJaZjzZig4Bw7OZooy1qqhuO52+Bm5cTHS
-   F83y4G5TaRwWMJRk27IsikvkRC2KgAczakVQDzif27rXpMCnxGY1awmIc
-   oTKCS6Li+TrKXVxUu3IZvr7q+6xRI+A+7Cv8x19p4fDJMprXVrsDWN9nG
-   4NXAzlrfVJfL238vgAexYGpuQMMvCdb3pAi9aHQz2fX5v9xhQDhm7FboZ
-   A==;
-X-CSE-ConnectionGUID: CJ6Jw3D6TaGPBuj2hWW1tQ==
-X-CSE-MsgGUID: nvLOIGKhRPqt5EvE5imGCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="61517170"
+  t=1748049235; x=1779585235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DcRHlwSA2+s3xYX3BAXgtlItCgPVhGyTrbfO54P/d5I=;
+  b=BDgOZqm9a5i2I0WIjUOW+zazIWe/u/GaXqK0FFuLgsWs8fBI8Y5hbdBX
+   F2hGR0ry1PWxgQzVDquAhy249LwL0vvPd8hIL20qS9mt1u+akHRLEDpd5
+   VXvF7+vZ2hxVjPy/r6GOUa0t0sWveY6Zs041dnXgcPiIqZ3Fkw9tpwcxA
+   vIJ8SRXZ1/XB9GakjswiPNk4j7u4qgDyCrHp3veuvabOx9PuN775zfgcI
+   KAr6W81DkNsL+QrHTbZjyBSytKqhImNgP6Qz78SGwMEqVIn/fSzKqfePy
+   4MWtWLSS6mzJGKdOInXuc1KrGpn6nR4EbZ3z5505X61bF3J6ElbDDirDJ
+   Q==;
+X-CSE-ConnectionGUID: kgk9FzcXS4OdmN5g5Hw68A==
+X-CSE-MsgGUID: aISANqumQ++scBsRtLEUWg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="61517173"
 X-IronPort-AV: E=Sophos;i="6.15,310,1739865600"; 
-   d="scan'208";a="61517170"
+   d="scan'208";a="61517173"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 18:13:52 -0700
-X-CSE-ConnectionGUID: sGwsxCuaRAmGvk8EgBYGsA==
-X-CSE-MsgGUID: 8Re+33FLTjOLhChCeMlF+g==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 18:13:54 -0700
+X-CSE-ConnectionGUID: Ay/9QGA9QCG27gyR0MUNtw==
+X-CSE-MsgGUID: cYxAC2IPQlu3YCG6GvZrsg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,310,1739865600"; 
-   d="scan'208";a="142391927"
+   d="scan'208";a="142391928"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
   by fmviesa009.fm.intel.com with ESMTP; 23 May 2025 18:13:50 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uIdSO-000Qqk-1s;
+	id 1uIdSO-000Qqi-1o;
 	Sat, 24 May 2025 01:13:48 +0000
-Date: Sat, 24 May 2025 09:13:28 +0800
+Date: Sat, 24 May 2025 09:13:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:container 2/15] <stdin>:1618:2: warning: syscall
- container_create not implemented
-Message-ID: <202505240927.xGjX0Qgj-lkp@intel.com>
+To: Ye Bin <yebin@huaweicloud.com>, rostedt@goodmis.org,
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+	mark.rutland@arm.com, linux-trace-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, yebin10@huawei.com
+Subject: Re: [PATCH 2/2] ftrace: don't allocate  ftrace module map
+Message-ID: <202505240845.ACz1UFaT-lkp@intel.com>
+References: <20250523083945.3390587-3-yebin@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,30 +65,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250523083945.3390587-3-yebin@huaweicloud.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git container
-head:   e934156b00c64a64a048108513ab445a232c2120
-commit: 61e7b03ab06fef4e10ee9f799118ed4a648e9823 [2/15] containers: Implement containers as kernel objects
-config: hexagon-randconfig-002-20250524 (https://download.01.org/0day-ci/archive/20250524/202505240927.xGjX0Qgj-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240927.xGjX0Qgj-lkp@intel.com/reproduce)
+Hi Ye,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.15-rc7 next-20250523]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Bin/ftrace-fix-UAF-when-lookup-kallsym-after-ftrace-disabled/20250523-164234
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250523083945.3390587-3-yebin%40huaweicloud.com
+patch subject: [PATCH 2/2] ftrace: don't allocate  ftrace module map
+config: s390-randconfig-001-20250524 (https://download.01.org/0day-ci/archive/20250524/202505240845.ACz1UFaT-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250524/202505240845.ACz1UFaT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505240927.xGjX0Qgj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505240845.ACz1UFaT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> <stdin>:1618:2: warning: syscall container_create not implemented [-W#warnings]
-    1618 | #warning syscall container_create not implemented
-         |  ^
-   1 warning generated.
---
->> <stdin>:1618:2: warning: syscall container_create not implemented [-W#warnings]
-    1618 | #warning syscall container_create not implemented
-         |  ^
-   1 warning generated.
+>> kernel/trace/ftrace.c:7825:37: error: incomplete definition of type 'struct module'
+    7825 |         if (ftrace_disabled || (mod && !mod->num_ftrace_callsites)) {
+         |                                         ~~~^
+   include/linux/printk.h:400:8: note: forward declaration of 'struct module'
+     400 | struct module;
+         |        ^
+   1 error generated.
+
+
+vim +7825 kernel/trace/ftrace.c
+
+  7806	
+  7807	void ftrace_free_mem(struct module *mod, void *start_ptr, void *end_ptr)
+  7808	{
+  7809		unsigned long start = (unsigned long)(start_ptr);
+  7810		unsigned long end = (unsigned long)(end_ptr);
+  7811		struct ftrace_page **last_pg = &ftrace_pages_start;
+  7812		struct ftrace_page *tmp_page = NULL;
+  7813		struct ftrace_page *pg;
+  7814		struct dyn_ftrace *rec;
+  7815		struct dyn_ftrace key;
+  7816		struct ftrace_mod_map *mod_map = NULL;
+  7817		struct ftrace_init_func *func, *func_next;
+  7818		LIST_HEAD(clear_hash);
+  7819	
+  7820		key.ip = start;
+  7821		key.flags = end;	/* overload flags, as it is unsigned long */
+  7822	
+  7823		mutex_lock(&ftrace_lock);
+  7824	
+> 7825		if (ftrace_disabled || (mod && !mod->num_ftrace_callsites)) {
+  7826			mutex_unlock(&ftrace_lock);
+  7827			return;
+  7828		}
+  7829	
+  7830		/*
+  7831		 * If we are freeing module init memory, then check if
+  7832		 * any tracer is active. If so, we need to save a mapping of
+  7833		 * the module functions being freed with the address.
+  7834		 */
+  7835		if (mod && ftrace_ops_list != &ftrace_list_end)
+  7836			mod_map = allocate_ftrace_mod_map(mod, start, end);
+  7837	
+  7838		for (pg = ftrace_pages_start; pg; last_pg = &pg->next, pg = *last_pg) {
+  7839			if (end < pg->records[0].ip ||
+  7840			    start >= (pg->records[pg->index - 1].ip + MCOUNT_INSN_SIZE))
+  7841				continue;
+  7842	 again:
+  7843			rec = bsearch(&key, pg->records, pg->index,
+  7844				      sizeof(struct dyn_ftrace),
+  7845				      ftrace_cmp_recs);
+  7846			if (!rec)
+  7847				continue;
+  7848	
+  7849			/* rec will be cleared from hashes after ftrace_lock unlock */
+  7850			add_to_clear_hash_list(&clear_hash, rec);
+  7851	
+  7852			if (mod_map)
+  7853				save_ftrace_mod_rec(mod_map, rec);
+  7854	
+  7855			pg->index--;
+  7856			ftrace_update_tot_cnt--;
+  7857			if (!pg->index) {
+  7858				*last_pg = pg->next;
+  7859				pg->next = tmp_page;
+  7860				tmp_page = pg;
+  7861				pg = container_of(last_pg, struct ftrace_page, next);
+  7862				if (!(*last_pg))
+  7863					ftrace_pages = pg;
+  7864				continue;
+  7865			}
+  7866			memmove(rec, rec + 1,
+  7867				(pg->index - (rec - pg->records)) * sizeof(*rec));
+  7868			/* More than one function may be in this block */
+  7869			goto again;
+  7870		}
+  7871		mutex_unlock(&ftrace_lock);
+  7872	
+  7873		list_for_each_entry_safe(func, func_next, &clear_hash, list) {
+  7874			clear_func_from_hashes(func);
+  7875			kfree(func);
+  7876		}
+  7877		/* Need to synchronize with ftrace_location_range() */
+  7878		if (tmp_page) {
+  7879			synchronize_rcu();
+  7880			ftrace_free_pages(tmp_page);
+  7881		}
+  7882	}
+  7883	
 
 -- 
 0-DAY CI Kernel Test Service
