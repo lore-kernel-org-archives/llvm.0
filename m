@@ -1,98 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487042DCBF0
-	for <llvm@lists.linux.dev>; Mon, 26 May 2025 01:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385E281741;
+	Mon, 26 May 2025 02:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748221994; cv=none; b=X9g5trlYgoUWRvgKHCSuADw5043maEc02IYNk0QLUN4W2MghAseKHPxqVnlEfc2SxvtXg+ulFtBhZNXhVdpz0L9nxJDjgDG3/XmGGOAcfQ+ceAPigtwhLwoZs/K60LQcJsRw1QKSRGSSG17hEK/E2hE0P+oRXOwScsTbMyBmwzY=
+	t=1748225991; cv=none; b=b00WLSykMvECx6HgPUu8t1JvleFOaGqklKOcnuXUFSy9rs9jtQcrjWXPHoreYf+NGwBil3vTUNq5fbgwgPH6W3ZYcdSpy0QumuOs/oC6T3PMU37CGe6xMsoS/+GgkqV6WmQi6UZiH5BpINrRp9KDmDJFtswsggHgjEVJOMskQr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748221994; c=relaxed/simple;
-	bh=oQJM7dZPhlcxzqFpU3OxeYTFw+ad2gMFi1uRw9YlVUU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iRoByZ/SCSLUBPxZ1LVAYnAQP3e2YezpoTLegVnxpwPKtQK5TWIMHsejJYRYpnCcUFn+hNzDP0MkIg+h23d36t3EfeEw6hBfW3SSp9Kaq0niMvJhK6XqJPk/Wkvapsu77TBWAvDINSp0qC5UvABqCGkwp2qPD+VZwUUrcg9v7yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XPMu651N; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1748225991; c=relaxed/simple;
+	bh=GVc5dxDRX0yqjt6/WPm0WwGy+XnILKQ+76BXNP6znE4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bnAatnNElZAygID8fjJH/pIrmpWD8L14t2nIDXv1r0BoFDbYw1e9FalOtCebS9ikTnDX/KveBglDklXm/Pb5+Uy/77UDDI0nC1jp+al2g+GlZRJ2hJZY9Y0P8E9llKRlvKBQYJ4HcRGfE82O+qWPHvCx6Aq4xeqx+PVWrOa7/C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JGv5OjbX; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XPMu651N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748221990;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Rl4wpF6KNdpFyClj7PQIHAE7hMx2wCg/+RucCaUc1ck=;
-	b=XPMu651Nf8LGrB/qXjbn2rIA13dy+jac/knuxpXSiKsefOsTvhrR6oYkgmqrTEHUK/oqJh
-	8aQHYxXG2V+tisnk5D92irLlgVkVf16s9Msk8iEtX0caueGMg1mwf/D3eM1UZ5noizQlSY
-	FDDFHvnHMDB7wwpsQuEFHXwFzu3H4+w=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-13-Tqn2_LrhNLC-akeRFrOaEQ-1; Sun,
- 25 May 2025 21:13:07 -0400
-X-MC-Unique: Tqn2_LrhNLC-akeRFrOaEQ-1
-X-Mimecast-MFC-AGG-ID: Tqn2_LrhNLC-akeRFrOaEQ_1748221986
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3D2121800447
-	for <llvm@lists.linux.dev>; Mon, 26 May 2025 01:13:06 +0000 (UTC)
-Received: from [172.20.77.114] (unknown [10.30.44.38])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C4F7318003FD;
-	Mon, 26 May 2025 01:13:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0,
- upstream-mainline, 0ff41df1)
-Date: Mon, 26 May 2025 01:13:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JGv5OjbX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748225990; x=1779761990;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GVc5dxDRX0yqjt6/WPm0WwGy+XnILKQ+76BXNP6znE4=;
+  b=JGv5OjbX9GylMWEtKa6Gx+G4iddnl5kK1bXqgzk6YhzzJ3h6j4YalwlN
+   N0TkZOEv/QDGMqlWFHtedeGmY4D1cNaTtpaurJ7QI69cE9IP55f1DdYRg
+   L4TElRINqRkc6QJaI2jOSHKzLRd3+y81bg9GnrkqX1pBuk6rrGlcszvgM
+   XSrq5WfZ0BYk13RFGk1I2S/Ak97JB7ykCNR72JZ3xTXVRVT7QJTc5uU7e
+   KZu1FbnwlIbrzC34QN6t/gh13sYYnM1+QMNLh458M1UlAV3qqJk+ED7+z
+   qBBSLAFBhLtENGweiBOPSilPZSOZgW0DuPoUgbtyY4cjFllWOU3u+jnGw
+   g==;
+X-CSE-ConnectionGUID: C/LvwLauQ2eKZbOI+VFbJw==
+X-CSE-MsgGUID: mQXBuZYDTZGvM6lcsAwG9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11444"; a="50189575"
+X-IronPort-AV: E=Sophos;i="6.15,315,1739865600"; 
+   d="scan'208";a="50189575"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2025 19:19:50 -0700
+X-CSE-ConnectionGUID: 6pNlnsGSSnihBsCyJ2PvHA==
+X-CSE-MsgGUID: 8OeHmIprQP6X8MK3oQ7nJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,315,1739865600"; 
+   d="scan'208";a="165352601"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 25 May 2025 19:19:48 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uJNRJ-000S5U-2H;
+	Mon, 26 May 2025 02:19:45 +0000
+Date: Mon, 26 May 2025 10:19:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Will Deacon <will@kernel.org>, Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [linux-next:master 10876/13331] ld.lld: error: Cannot export BSS
+ symbol _ctype to startup code
+Message-ID: <202505261019.OUlitN6m-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <73830.125052521130700535@us-mta-13.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: zYew0oeoaQCeOfwM4UA0eHGJZozJgRYk9vpiN310l_A_1748221986
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   176e917e010cb7dcc605f11d2bc33f304292482b
+commit: 90530521079eec58b574341032a77746838874ee [10876/13331] arm64/boot: Disallow BSS exports to startup code
+config: arm64-randconfig-002-20250526 (https://download.01.org/0day-ci/archive/20250526/202505261019.OUlitN6m-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250526/202505261019.OUlitN6m-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505261019.OUlitN6m-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Linux 6.15
+   ld.lld: error: Cannot export BSS symbol arm64_use_ng_mappings to startup code
+   ld.lld: error: Cannot export BSS symbol arm64_use_ng_mappings to startup code
+   ld.lld: error: Cannot export BSS symbol arm64_use_ng_mappings to startup code
+   ld.lld: error: Cannot export BSS symbol cavium_erratum_27456_cpus to startup code
+>> ld.lld: error: Cannot export BSS symbol _ctype to startup code
+>> ld.lld: error: Cannot export BSS symbol swapper_pg_dir to startup code
+>> ld.lld: error: Cannot export BSS symbol _etext to startup code
+>> ld.lld: error: Cannot export BSS symbol __start_rodata to startup code
+>> ld.lld: error: Cannot export BSS symbol __inittext_begin to startup code
+>> ld.lld: error: Cannot export BSS symbol __inittext_end to startup code
+>> ld.lld: error: Cannot export BSS symbol __initdata_begin to startup code
+   ld.lld: error: Cannot export BSS symbol arm64_use_ng_mappings to startup code
+   ld.lld: error: Cannot export BSS symbol arm64_use_ng_mappings to startup code
+   ld.lld: error: Cannot export BSS symbol arm64_use_ng_mappings to startup code
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1835967382
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1835967382-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
