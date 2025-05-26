@@ -1,58 +1,58 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57E919CD07
-	for <llvm@lists.linux.dev>; Mon, 26 May 2025 22:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A7C198E91
+	for <llvm@lists.linux.dev>; Mon, 26 May 2025 22:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748298626; cv=none; b=jjAauo9v9+/q7rnWrjk8K/tZOqb+uiJQ9oVFDCQ1A0VHpb+q1u0zdAc4ddtlWcclsYzrNISjQmfvNICjx+w0LFofk4EnyzygEUFLXEmcpOd1Jf7UijDrLjD38Jk5bw4uZ5qsLCt/WL4Nce3eCea4AZR2UmQ4KwuqdXazrtfLtcQ=
+	t=1748298695; cv=none; b=INOcOl393l4OHPtOZnO+a8cEo8TM3mZ6xkSinUtyd0znYyQXdyVxKIL7Cwau+eBG8QjITYR181UYUTOJj4eksJxQfu/cR9R6eLEltGhXP2A5KeaYpBl+Dhoyb+B5kyA0D0wcHbGHlLxYqF64WqP8rPA58pxSIm217Bn1IgOxnDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748298626; c=relaxed/simple;
-	bh=P7IpezzEQW0J+xvr79pZ7xwPmXCfC2utnBP44H5MHuU=;
+	s=arc-20240116; t=1748298695; c=relaxed/simple;
+	bh=P4mDwunV/VK6ZdqBCM8ixj0ovsAxRm+C2bbqZqX2aJA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CNeYaYPDbveNfjoS72xn5ElAZH5jMYNRWoAXpJS6BrFrVtAomR8JhOXhG/qVgnNnMMW1At7Bf9VF70kMswyJAREV6LygdHBOtbCSqiYErO7L5+vXvlqw8/8OY4NwKsl1YBALS6vsQcmZjBnE+udp8LXqDgF+quFpOABfRpi6LHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zic2pVCZ; arc=none smtp.client-ip=209.85.208.174
+	 To:Cc:Content-Type; b=HPyeZyNYMxwXHU1wJjfgaDNP1AaM1I1oz0HZ//kvhHBs/Y4YtTG2eNUohGvmjv6UNhn5fpDM4lPpdtxgoVNLXmUhdZwDC8e/e0MwIH58TnNtBEkO8x+jDv5fiOvxa/KnP9y2YlVv6Qieoz/pDFDTNGsTes7LhNLfeHuZOPLCDKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G0vW3enX; arc=none smtp.client-ip=209.85.208.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zic2pVCZ"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-31062172698so26343851fa.0
-        for <llvm@lists.linux.dev>; Mon, 26 May 2025 15:30:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G0vW3enX"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-310447fe59aso28850411fa.0
+        for <llvm@lists.linux.dev>; Mon, 26 May 2025 15:31:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748298623; x=1748903423; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1748298692; x=1748903492; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DeRtQfopGgqdSMrju5Mssh4B08QuGYql7A9ITbZgjgA=;
-        b=Zic2pVCZMQWo+lms5pAFfyUy2Aq3kEjG6TTyVU9iIVHND3U4kocsAe/Yc+RaXZ4tit
-         H3zWKRM46ws6y3y1RHT9Kuayse44ZbcdS3tX6r4CmrPBXgwON+agbqQqF5pSPfBUUAsN
-         2FsoV4rVUblovqs9Xd0Olr27GioRM6cOa0TrOG9FTL4Itaf+mwOJKb48GJ/LZuOfqp52
-         9lESaQHUDC5de6pKx8hzvm6JXldBqcbc5YP2qoCluCBuT80rgl7TDVEOGy2cr7GSNC70
-         Yp8+K0yP8YLqSXomK/Mlo97yoJ9yUYVStp9jZRrffMADdRb9/vGr+L5OVaH5I1RbgoKv
-         SD9g==
+        bh=jvLHYVJDLL1tRu00kxb4TV63RHH86AdnGIzbeTcCyBM=;
+        b=G0vW3enXre9BwtSW51csD7Co1y9S98ZI6i/nJDJWGxXwVRuB+9krZVrx2nI4yFYIUJ
+         bhKa8ELPoU5Q8yZ+gEJAO47thHkMR+7aUijAXvBDqjvPoQDZB8vr5snRj74K4oqy8DJE
+         FaMyZBDLnD83YldQ3rjnUwHxfx8dClEExI7bIetVt4fRgh8AFQ/VHWXrdcN1zBx6PdJ5
+         5VfWfgcvw8tgHnHZcaEjwq24fcmfmVOEO1oVfXLeOBjtDkzl0J5kuzPt9w6Ye8hlcuhO
+         jqJHhMOCgqImojrfFuy8FMMdeR+1HXpnMraJWY0aHn9+hY1i8r7be4YZwT8mXMEmevVr
+         QpZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748298623; x=1748903423;
+        d=1e100.net; s=20230601; t=1748298692; x=1748903492;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DeRtQfopGgqdSMrju5Mssh4B08QuGYql7A9ITbZgjgA=;
-        b=qVa6pgm5c8QYnOvdTrwgCVV8rNyFnA4FgODLyKMGQYDz2MpW9P7pE7r31akGk7PvIE
-         Hoff8hrIyhdnQk4asmwJZIAMglblDUHzDmZZklYlzDWjsTnFhuK9nu6wyoJueEWEhrHh
-         cgcSCXTFRI2L/6M5mbOVQx5EJwkpEFELStlQtk6tmxCjUlbBR/ddDMern6tAoYZJ1wtE
-         vtRmTZCTqPgsGUoEsMGE/xQWNUoOGnRM49eOMw0SNJ9Toe/mmE3FrUadOvgN3hZ1R4tb
-         MYsUk2ZSIcuP4eqzk8y9WPeQ8W9NNSNJi1fBOJ2jWehQdTgt5lQIlVszfU3CmOdaaMN8
-         Bz5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVQt4omxdB9BDJ0fxiCKbcouHJDXIVpZFFF58uhjJqOao0cpBZmCISK8dvQSkINTIhup7qf@lists.linux.dev
-X-Gm-Message-State: AOJu0YwGE1AV41F9xb4cCuDrRrEz6rJai9xsbfhykccNRfu/zHv2S5ay
-	tA7IInthTHSiqO/Cy/ySyxPoXMY12ARA267xiXOeSJmF1qJvc0COrPWaaOY5Quzdp6YjO36Ut/s
-	0250f6N4Ltv5oYjlWpTl8CkEii/pqODc=
-X-Gm-Gg: ASbGnctX3isn8ZdkJ06o0d0HybDCHXd6J2ryFgCpK2yq4kcVBzwADRsZ3TFcXDiTf5L
-	2JkY4d5lPsKWKfYA8jBNzERzmCZe207c5oA9tCNpU7XPN4kE/xt3XJ18o6GX4iJe6OMNoYhVc9Q
-	+TIdijn1V5WnBewEJKq6InZseHTHbAOxbPMj1qL3HjtGXdmcdNmyJxnT2/zJ6paT7P7mw=
-X-Google-Smtp-Source: AGHT+IHobXPM6nV57q0LkxjWMI5y+a9fqFFRAaaAVdT/IiyU5kBtoHLbzkKYgFh6GOZFHTnYbitctcnCYMHIu3rZzy0=
-X-Received: by 2002:a05:651c:1b11:b0:32a:6bef:7587 with SMTP id
- 38308e7fff4ca-32a6bef7741mr3018881fa.20.1748298622556; Mon, 26 May 2025
- 15:30:22 -0700 (PDT)
+        bh=jvLHYVJDLL1tRu00kxb4TV63RHH86AdnGIzbeTcCyBM=;
+        b=VRMCnDU4oEckO5riiRxfTYt2sSmM5AB1i1jRrkIlIaXd32KeJ4eaYMaXPPM0nhoOK3
+         hnYEowsIcDDjB1jpb9kKXcgoTRfZi0SGJ1AtHTvRqiRlIJE0vrtzTVgSk78L/favZuH/
+         byCF9qt5AuhiZrtiT1hodB5Ui4zeebLPAN1zIgHEvreKd7SNS1FNSEeTVZZuY0U0LWgH
+         Z7L8fBmvVT1cWg8+FDDl1eUqSeJl2iipY+5rbl+Ox48XyxaIeVzfR2O9P0OwYzfgDsUV
+         UPwkdLgxaUMyIPCxSJWjUZITiJMpqpcVM1chvQ9ZqErJCkey6gY9xlgl7C/FlaU96tnm
+         v/Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmIPCvPB8pm9dOiUHhofs/vluYWUaQioDlL5J+M9M8hAQxQonApssKsToS754DlohRq+k3@lists.linux.dev
+X-Gm-Message-State: AOJu0YwRWB6V4O6//qAnmk51CY8OedIG8mn+3ByIqP95VCELrGyfPOMJ
+	LXn5S+9eYMfqduB33OPtuAtZHnpNwMmH4H0Es6wZi4gjV2EtJnoV/IRAHdeFnffmi9ycjs6wkYF
+	8InJVX6P232HTk9O28DeerYZe2dPcEpE=
+X-Gm-Gg: ASbGnctLOD3qB45R3tO97S+kT1Y/Pw4nW7of+uZ6md9z6YyH6k7expA+yTnrInQYgJ9
+	H6h9nJ0HGZ6yPR+1cb++346AQm8xHaBQws7CCW7j2tfxmtHfYtUGd7n/ij0srRb8GduLgQfO2cv
+	yrgFdsF5/IvmnUskfuiK7H/uP3xGo/9m/Gb+MR00ecaxLV85R1PTouZZakYvHOPsCTazE=
+X-Google-Smtp-Source: AGHT+IEJfWzc6VPUDuyUq0aTn+WE4sTfnbgvmOYP1K86Po8lb+CyhSBKVylPu7Ej7IoVB3uFqztWGvTQz/dCfNqAd+Q=
+X-Received: by 2002:a05:651c:f01:b0:32a:664e:a923 with SMTP id
+ 38308e7fff4ca-32a664ea9e0mr10313091fa.22.1748298691742; Mon, 26 May 2025
+ 15:31:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,13 +60,13 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-4-6412a94d9d75@gmail.com> <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
-In-Reply-To: <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
+ <20250524-cstr-core-v10-5-6412a94d9d75@gmail.com> <DA66OFXQCWUK.31LM78DIVABZV@kernel.org>
+In-Reply-To: <DA66OFXQCWUK.31LM78DIVABZV@kernel.org>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 26 May 2025 18:29:46 -0400
-X-Gm-Features: AX0GCFuvvdq9fWPFcsB31U1UA0LVEWVFnDG5B-zpmEiF_aWL5P9UrGYE0gqlG8U
-Message-ID: <CAJ-ks9nd6_iGK+ie-f+F0x4kwpyEGJ-kQiQGt-ffdbVN5S6kOg@mail.gmail.com>
-Subject: Re: [PATCH v10 4/5] rust: replace `kernel::c_str!` with C-Strings
+Date: Mon, 26 May 2025 18:30:55 -0400
+X-Gm-Features: AX0GCFuHGuPmwsi9tWeeUypjxRW1UrvRCX_LVo0C-ggOVzUmGabC1z1bBuoaiZU
+Message-ID: <CAJ-ks9m=okC9_K2MJU80xbnO+3+Z0hvC_FYzCtzW9pD=WA_xqQ@mail.gmail.com>
+Subject: Re: [PATCH v10 5/5] rust: remove core::ffi::CStr reexport
 To: Benno Lossin <lossin@kernel.org>
 Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
 	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -97,49 +97,43 @@ Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 26, 2025 at 11:04=E2=80=AFAM Benno Lossin <lossin@kernel.org> w=
+On Mon, May 26, 2025 at 11:05=E2=80=AFAM Benno Lossin <lossin@kernel.org> w=
 rote:
 >
 > On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
-> > +macro_rules! c_str_avoid_literals {
+> > Clean up references to `kernel::str::CStr`.
+> >
+> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> > ---
+> >  drivers/gpu/drm/drm_panic_qr.rs   |  3 ++-
+> >  drivers/gpu/nova-core/firmware.rs |  2 +-
+> >  drivers/net/phy/ax88796b_rust.rs  |  1 +
+> >  drivers/net/phy/qt2025.rs         |  1 +
+> >  rust/kernel/device.rs             |  3 +--
+> >  rust/kernel/driver.rs             |  4 ++--
+> >  rust/kernel/error.rs              |  6 ++----
+> >  rust/kernel/faux.rs               |  5 ++++-
+> >  rust/kernel/firmware.rs           | 15 ++++-----------
+> >  rust/kernel/kunit.rs              |  6 +++---
+> >  rust/kernel/lib.rs                |  2 +-
+> >  rust/kernel/miscdevice.rs         |  3 +--
+> >  rust/kernel/net/phy.rs            |  4 +++-
+> >  rust/kernel/of.rs                 |  3 ++-
+> >  rust/kernel/pci.rs                |  2 +-
+> >  rust/kernel/platform.rs           |  2 +-
+> >  rust/kernel/prelude.rs            |  5 +----
+> >  rust/kernel/str.rs                | 22 ++++++++++------------
+> >  rust/kernel/sync/condvar.rs       |  4 ++--
+> >  rust/kernel/sync/lock.rs          |  4 ++--
+> >  rust/kernel/sync/lock/global.rs   |  5 +++--
+> >  rust/kernel/sync/poll.rs          |  1 +
+> >  rust/kernel/workqueue.rs          |  1 +
+> >  rust/macros/module.rs             |  2 +-
+> >  24 files changed, 51 insertions(+), 55 deletions(-)
 >
-> I don't like this name, how about `concat_to_c_str` or
-> `concat_with_nul`?
->
-> This macro also is useful from macros that have a normal string literal,
-> but can't turn it into a `c""` one.
+> Haven't compile tested this series yet, but this commit seems to suggest
+> to me that some of the previous commits introduced code that doesn't
+> compile or emits warnings? If so that needs to be fixed.
 
-Uh, can you give an example? I'm not attached to the name.
-
->
-> > +    // NB: we could write `($str:lit) =3D> compile_error!("use a C str=
-ing literal instead");` here but
-> > +    // that would trigger when the literal is at the top of several ma=
-cro expansions. That would be
-> > +    // too limiting to macro authors, so we rely on the name as a hint=
- instead.
-> >      ($str:expr) =3D> {{
-> > -        const S: &str =3D concat!($str, "\0");
-> > -        const C: &$crate::str::CStr =3D match $crate::str::CStr::from_=
-bytes_with_nul(S.as_bytes()) {
-> > -            Ok(v) =3D> v,
-> > -            Err(_) =3D> panic!("string contains interior NUL"),
-> > -        };
-> > +        const S: &'static str =3D concat!($str, "\0");
-> > +        const C: &'static $crate::str::CStr =3D
-> > +            match $crate::str::CStr::from_bytes_with_nul(S.as_bytes())=
- {
->
-> Why is this still our CStr?
-
-Good question. I'll just revert all the changes here, I don't need to
-touch this.
-
->
-> > +                Ok(v) =3D> v,
-> > +                Err(err) =3D> {
-> > +                    let _: core::ffi::FromBytesWithNulError =3D err;
->
-> Is this really necessary?
-
-No. Reverted in v11.
+That's not the case. There are no warnings and no compilation failures
+in prior commits.
