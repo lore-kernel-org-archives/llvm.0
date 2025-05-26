@@ -1,183 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9F77262D;
-	Sun, 25 May 2025 21:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF7B136E;
+	Mon, 26 May 2025 00:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748210015; cv=none; b=mSEPmm4Jjlnlo1Tqrphlq8aCTHWadcFVyjaKeQu+hV7EtLJS4KkUMQi/+DGphSacqnVcOPEuYWuMGnTXsuOs2qreM/JRz8eFq0GIisjqLq/Sw9OkJJ/ybdUzs5SQjEXC/LbkDo32/KBji46736+ERETKDqby/qE4F73LwsmWsSs=
+	t=1748219804; cv=none; b=ZzXWb5Yrl+ScqVhDdq2yXTlZrxbg+975ekj9iZX+DN+fqPOSkDzSNXAW3EJoLGIX55Uh7SvdBYjmhqq3yiwIwTjsp+B5I9fIfvy+WpEqQ4Qm6yhSq5Bm2I7cWYIt6CYfuMWZJwhZjTARrsw140Us7ezFr+ziNeun11wW5JBbt0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748210015; c=relaxed/simple;
-	bh=y5rT2ewj429hL1YZNClBKAuoapp2CjjiHYqsoHYBDa8=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ivfXgqeQQawE+Act3qu6cJPHXlg2C9Rr1WGWgN2cmDTcH+gUfTWq62Qp8eMh/+ZnjW7AXEjyT46xzM9pNAuFWqcxakVkLnSozkfH4KzYT5OBLjeHBpSkk+9kYid/0nB+RzdPGzEQq3Gr4+SkcwfTCUC29R/FajMtoLLjIhKMqyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ceT//yHx; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1748219804; c=relaxed/simple;
+	bh=wl/rwo4cvQ99cnE05I2raSPH9l4FYD/NCeJACTJObSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WhiI/SkjryBi/LsnPAZV4j3m6yT2vEMHgu2WJcZBh2sn0sihqGbQYawhbWooSSQp894K2qWpWKBrq52bvkbr2ql9+ykzqbXdJ9QJeJoCwntY579IBCj92vGZ0QGhvh0w9AZOcsunDgAtqNZiD+ZXI3+ep28wO/eaPQd7Mlwm72k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Izl+UCqh; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ceT//yHx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Izl+UCqh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748210014; x=1779746014;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=y5rT2ewj429hL1YZNClBKAuoapp2CjjiHYqsoHYBDa8=;
-  b=ceT//yHx7F0JqM4+bzORHTA3Hi0DK9vzfTD1ChrJRaNLXIhJqaQrPXuV
-   jeTpNhnEGDPaw8H78PwGHktNfpPl6dAdZnMrVh6xm1h0OeNOrtjXYgAQP
-   HYJvVZ8LewX/ce74CBC3V2xjHqrvNUpVDNL6sJy8F3rmaul/SA3qqMHai
-   2894vABY/4tUZ5uOvuNyUXGwk9+lY+VakC1LK4rQ/xwTjuuYThHsIEazu
-   MYeuZPolTV3eA+ejC3fihWhKEDYqtSrkTEPhz6SgE0HplDA2/xcMU0C6H
-   ve00bhfgJ3wnSFXHsbgX+rFdoGEUqCKzyEaz8CigT+qrPQKOHfw4ry55i
-   A==;
-X-CSE-ConnectionGUID: lVEBEug4TD2lqwrcwdtnEw==
-X-CSE-MsgGUID: jVyRsAJzSY6v2jv/s2QIug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11444"; a="60435789"
+  t=1748219803; x=1779755803;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wl/rwo4cvQ99cnE05I2raSPH9l4FYD/NCeJACTJObSY=;
+  b=Izl+UCqh5ulXZXt6rTPoOPAAkD0auYZs3Q27Xmk5NmHDdmI9I0GIBcN5
+   UPIF0qN2PQxWugVncT2fKMSbcwl8YZ9V46qoKogHFRt0aOYEbxIRXygCm
+   bEjRQ8SuLfYBj48Bc4dbl0w2AK8TpdDzMkYkAj2uzCzFECUVRxCIF0tMX
+   kX+6t0LpZdqYOEUG3VSoXET6sDWF9fNjU0Es2rSEe9NC6EGGbMmEiwVed
+   tTxSNNzzwKQWqsZwJMBrFRJlWSbxF8vXU/1qtQYkOFj3V/WpO3sORK/Tb
+   PTcSTBtR6a0z7qLW8yow6ZY3WEJrw8QA5T7hFSn81vRTCFFjpqe0Oe3wG
+   g==;
+X-CSE-ConnectionGUID: he5heWQtQI+kkaIMqhXwZw==
+X-CSE-MsgGUID: Kd3FouSMRMmS+ijPFucxkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11444"; a="49436904"
 X-IronPort-AV: E=Sophos;i="6.15,314,1739865600"; 
-   d="scan'208";a="60435789"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2025 14:53:32 -0700
-X-CSE-ConnectionGUID: srkUUk2LSiS9AVRoLfAP+A==
-X-CSE-MsgGUID: abYToWTKQVe6L6ZrKUUaNQ==
+   d="scan'208";a="49436904"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2025 17:36:40 -0700
+X-CSE-ConnectionGUID: oeiHjjWpSW+3wNom9pM9gg==
+X-CSE-MsgGUID: k1c2gdXkRJ2f/1FEj8LT/A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,314,1739865600"; 
-   d="scan'208";a="141991367"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.99])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2025 14:53:16 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 26 May 2025 00:53:13 +0300 (EEST)
-To: Kees Cook <kees@kernel.org>
-cc: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>, 
-    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-    Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-    "H. Peter Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-    Vitaly Kuznetsov <vkuznets@redhat.com>, 
-    Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
-    Mike Rapoport <rppt@kernel.org>, 
-    Michal Wilczynski <michal.wilczynski@intel.com>, 
-    Juergen Gross <jgross@suse.com>, 
-    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-    "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
-    Roger Pau Monne <roger.pau@citrix.com>, 
-    David Woodhouse <dwmw@amazon.co.uk>, Usama Arif <usama.arif@bytedance.com>, 
-    "Guilherme G. Piccoli" <gpiccoli@igalia.com>, 
-    Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>, 
-    kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net, 
-    platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org, 
-    linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org, 
-    linux-mm@kvack.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-    Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, 
-    Andrey Konovalov <andreyknvl@gmail.com>, 
-    Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-    Masahiro Yamada <masahiroy@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nicolas Schier <nicolas.schier@linux.dev>, 
-    Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    LKML <linux-kernel@vger.kernel.org>, kasan-dev@googlegroups.com, 
-    linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    kvmarm@lists.linux.dev, linux-riscv@lists.infradead.org, 
-    linux-s390@vger.kernel.org, linux-hardening@vger.kernel.org, 
-    linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
-    llvm@lists.linux.dev
-Subject: Re: [PATCH v2 04/14] x86: Handle KCOV __init vs inline mismatches
-In-Reply-To: <20250523043935.2009972-4-kees@kernel.org>
-Message-ID: <ba4f4fd0-1bcf-3d84-c08e-ba0dd040af16@linux.intel.com>
-References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-4-kees@kernel.org>
+   d="scan'208";a="143074889"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 25 May 2025 17:36:39 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uJLpU-000S34-3C;
+	Mon, 26 May 2025 00:36:36 +0000
+Date: Mon, 26 May 2025 08:36:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 11584/13331] error[E0599]: no function or
+ associated item named `from_of_cpumask` found for struct
+ `rust_doctest_kernel_alloc_kbox_rs_4::kernel::opp::Table` in the current
+ scope
+Message-ID: <202505260856.ZQWHW2xT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-965883235-1748206555=:933"
-Content-ID: <8656ab6c-8f8d-81d1-5dfa-740e7f21544c@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   176e917e010cb7dcc605f11d2bc33f304292482b
+commit: 2207856ff0bc8d953d6e89bda70b8978c2de8bab [11584/13331] rust: cpufreq: Add initial abstractions for cpufreq framework
+config: x86_64-buildonly-randconfig-003-20250526 (https://download.01.org/0day-ci/archive/20250526/202505260856.ZQWHW2xT-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250526/202505260856.ZQWHW2xT-lkp@intel.com/reproduce)
 
---8323328-965883235-1748206555=:933
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <fa62886f-fdfb-f2a5-84db-475ce3a46169@linux.intel.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505260856.ZQWHW2xT-lkp@intel.com/
 
-On Thu, 22 May 2025, Kees Cook wrote:
+Note: the linux-next/master HEAD 176e917e010cb7dcc605f11d2bc33f304292482b builds fine.
+      It may have been fixed somewhere.
 
-> When KCOV is enabled all functions get instrumented, unless the
-> __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we have to
-> handle differences in how GCC's inline optimizations get resolved. For
-> x86 this means forcing several functions to be inline with
-> __always_inline.
->=20
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: <x86@kernel.org>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Cc: Henrique de Moraes Holschuh <hmh@hmh.eng.br>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: "Ilpo J=E4rvinen" <ilpo.jarvinen@linux.intel.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Michal Wilczynski <michal.wilczynski@intel.com>
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Cc: Roger Pau Monne <roger.pau@citrix.com>
-> Cc: David Woodhouse <dwmw@amazon.co.uk>
-> Cc: Usama Arif <usama.arif@bytedance.com>
-> Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-> Cc: Thomas Huth <thuth@redhat.com>
-> Cc: Brian Gerst <brgerst@gmail.com>
-> Cc: <kvm@vger.kernel.org>
-> Cc: <ibm-acpi-devel@lists.sourceforge.net>
-> Cc: <platform-driver-x86@vger.kernel.org>
-> Cc: <linux-acpi@vger.kernel.org>
-> Cc: <linux-trace-kernel@vger.kernel.org>
-> Cc: <linux-efi@vger.kernel.org>
-> Cc: <linux-mm@kvack.org>
-> ---
+All errors (new ones prefixed by >>):
 
-> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/=
-thinkpad_acpi.c
-> index e7350c9fa3aa..0518d5b1f4ec 100644
-> --- a/drivers/platform/x86/thinkpad_acpi.c
-> +++ b/drivers/platform/x86/thinkpad_acpi.c
-> @@ -559,12 +559,12 @@ static unsigned long __init tpacpi_check_quirks(
->  =09return 0;
->  }
-> =20
-> -static inline bool __pure __init tpacpi_is_lenovo(void)
-> +static __always_inline bool __pure tpacpi_is_lenovo(void)
->  {
->  =09return thinkpad_id.vendor =3D=3D PCI_VENDOR_ID_LENOVO;
->  }
-> =20
-> -static inline bool __pure __init tpacpi_is_ibm(void)
-> +static __always_inline bool __pure tpacpi_is_ibm(void)
->  {
->  =09return thinkpad_id.vendor =3D=3D PCI_VENDOR_ID_IBM;
->  }
+>> error[E0599]: no function or associated item named `from_of_cpumask` found for struct `rust_doctest_kernel_alloc_kbox_rs_4::kernel::opp::Table` in the current scope
+   --> rust/doctests_kernel_generated.rs:4025:32
+   |
+   4025 |     let mut opp_table = Table::from_of_cpumask(dev, mask)?;
+   |                                ^^^^^^^^^^^^^^^ function or associated item not found in `Table`
+   |
+   note: if you're trying to build a new `rust_doctest_kernel_alloc_kbox_rs_4::kernel::opp::Table` consider using one of the following associated functions:
+   rust_doctest_kernel_alloc_kbox_rs_4::kernel::opp::Table::from_raw_table
+   rust_doctest_kernel_alloc_kbox_rs_4::kernel::opp::Table::from_dev
+   --> rust/kernel/opp.rs:559:5
 
-Hi Kees,
-
-What's your plan on upstreaming route/timeline for this? I'd prefer to=20
-retain full control over this file as we were planning on some=20
-reorganization of files into lenovo/ subdir.
-
-
---=20
- i.
---8323328-965883235-1748206555=:933--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
