@@ -1,111 +1,230 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D93BA2D
-	for <llvm@lists.linux.dev>; Mon, 26 May 2025 09:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695AC7082D;
+	Mon, 26 May 2025 09:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748250926; cv=none; b=I3e4S7qIKZKZXayd3TapQ1dFraQd7pkpQwJznj9Ea55DbNanpmSqCPVjoOXxuArFHyaeWrkC4kXbVRnu4nA45IMuJzOoJbEZERZ2SXuv2yi7xPyWUEShSjZymQfXMPtqIcibP6EviMGHad2tpP1t6xFnawt+ccMHeGLiTeJNBt0=
+	t=1748253033; cv=none; b=RrljF/CexShG+UG+I80wApOloszCoEMhuQTtq4S9ft95FXv/d4M+uVMS0PBYZFsxCiHGB9p9+HB54Qqt1bmkAmex6rSBkb8YbjKrtwBaEUmhL7P8jTU9T4tk/QF/zUqMB7QcB+iBXSuThlLtHTA4cQ8SQx9zoTXAIhmOgdpQjqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748250926; c=relaxed/simple;
-	bh=RcV0qtMVDeWuRTQZCyCWKIuHoaHolysHZXhbzn702yk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qf4OSqmwFJN+XcK0zhIe54Nx5AZeifDlZ/SJKyoKArvISAltPq9GegBipRcXWRmMzecw5QLdAyeBI2EVkuFWc7rGdgUKTuUXGm3tYQbWSMUvpCSpmFwkCilV4VvZHavFUGYBIRaTjzPp11w9C61rmPiHrhUQYC/fgOemaureb7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=FzCA+JDg; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1748253033; c=relaxed/simple;
+	bh=k8W9IMWqlg3awBaLy/B4M+WCIrs4yjbjsrjIkPtZEqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f3YwQQ81VNUJG5bShBB8OMCEgkd6t/9EKrx3B7Ru72urCfASkTc9flnEoCr+WGk9z2UL5vet+prDeG2fY5b8i1vgcO12iyckFnj+2o5EOnPRWok1Qoz9AQD/gklGn+pwuUht5MuosjZAi5PSh4sBAcVKzrhbUD8Jy9aDtNes9uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JGQyd2ay; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="FzCA+JDg"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54Q1D5PU028926;
-	Mon, 26 May 2025 02:15:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=77kYee0Z5IdZcMXbAYyH3uUjY
-	FG8JhyjDjN8zCwtD1Y=; b=FzCA+JDgKQj2rBQeRhpjpbcSOXdr2I1s/Hf9acqHr
-	SQRhfCPzZQ7LGjgZaRCdDJ0iT2iCZFDzW6At4pGaEHL5Tc3K27LgD5cYhYSJLSMa
-	kGn1CBPoGxKugPVRISmW6cVxh+uGkryZ9keOr0ISVtODwyeGuXC9bwfJap/AAqZ3
-	w2EL8WKK6dQM7NYzQpkMXAmgi3PZkT2oNmiTDXoAIJ1bNM32xRmzqzPYgUB0WPK6
-	F5xWF1aBukcY+Q9qQiuS2KbErxVxTlIEygDoYVOfoemld8ZldWFyDAQZC0gBTr4h
-	6R5BNh61vXaNC7wCbLF/subf9hAI017eTpY+yizhB3s4w==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 46veebgr00-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 May 2025 02:15:14 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 26 May 2025 02:15:12 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Mon, 26 May 2025 02:15:12 -0700
-Received: from 928cf0ec7572 (HY-LT91368.marvell.com [10.29.24.116])
-	by maili.marvell.com (Postfix) with SMTP id 68F3E3F7063;
-	Mon, 26 May 2025 02:15:06 -0700 (PDT)
-Date: Mon, 26 May 2025 09:15:04 +0000
-From: Subbaraya Sundeep <sbhatta@marvell.com>
-To: Andrew Lunn <andrew@lunn.ch>
-CC: Sai Krishna <saikrishnag@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sgoutham@marvell.com>, <gakula@marvell.com>, <lcherian@marvell.com>,
-        <jerinj@marvell.com>, <hkelam@marvell.com>, <andrew+netdev@lunn.ch>,
-        <bbhushan2@marvell.com>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <morbo@google.com>,
-        <justinstitt@google.com>, <llvm@lists.linux.dev>, <horms@kernel.org>
-Subject: Re: [net-next PATCH v3 2/2] octeontx2-af: fix compiler warnings
- flagged by Sparse
-Message-ID: <aDQxGAxAMRrYHk2-@928cf0ec7572>
-References: <20250311182631.3224812-1-saikrishnag@marvell.com>
- <20250311182631.3224812-3-saikrishnag@marvell.com>
- <3bc07f4f-73b4-4d34-98cb-79e84d9f1493@lunn.ch>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JGQyd2ay"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748253032; x=1779789032;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k8W9IMWqlg3awBaLy/B4M+WCIrs4yjbjsrjIkPtZEqs=;
+  b=JGQyd2aySsQUUbsbYe/RXMM+5awI02pYLTF6LCvgAlFWb7wAj63ND1h+
+   tDp4GE8tdPwhPO/zoThWmOG8us04xsRCqtD3GoO/kxmybr/rV8zF9+YK8
+   PRF6dsfZCjXWfLsiJpv8z9Ri8L18Ps5xXQmgMxjfacdYhFTxZ8ADziZK/
+   bCzudKhXT4ic33fclcyfdkCxSbm9GqX4s2giqZ44w8soSZ0L5EexUGMzd
+   oL9RRGZIvgHbkMcZL3BLg+A5EMUFdPIw+uvonJWosx68fbJGv5+27L72Z
+   zTTnJ2bWPRAbCo74j/YtpoVsb0QfBKkqZILi71SRRfApoEv4nJvv3RIlU
+   A==;
+X-CSE-ConnectionGUID: fMKHE0xRReuimaUEgaxVrA==
+X-CSE-MsgGUID: yhaGy5QuQxOo+6IjQJGJtw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11444"; a="60881383"
+X-IronPort-AV: E=Sophos;i="6.15,315,1739865600"; 
+   d="scan'208";a="60881383"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2025 02:50:31 -0700
+X-CSE-ConnectionGUID: /5J6CnMpQbeq8ptkzvtP9Q==
+X-CSE-MsgGUID: 8o5re7M0REW+IMUDEjJ8Sg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,315,1739865600"; 
+   d="scan'208";a="147526393"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 26 May 2025 02:50:27 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uJUTQ-000SHY-0V;
+	Mon, 26 May 2025 09:50:24 +0000
+Date: Mon, 26 May 2025 17:49:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: yangtengteng@bytedance.com, edumazet@google.com, kuniyu@amazon.com,
+	pabeni@redhat.com, willemb@google.com, davem@davemloft.net,
+	kuba@kernel.org, horms@kernel.org, wuyun.abel@bytedance.com,
+	shakeel.butt@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	zhoufeng.zf@bytedance.com, wangdongdong.6@bytedance.com,
+	zhangrui.rod@bytedance.com, yangzhenze@bytedance.com,
+	yangtengteng@bytedance.com
+Subject: Re: [PATCH net-next] Fix sock_exceed_buf_limit not being triggered
+ in __sk_mem_raise_allocated
+Message-ID: <202505261743.n48LBgti-lkp@intel.com>
+References: <20250526064619.5412-1-yangtengteng@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3bc07f4f-73b4-4d34-98cb-79e84d9f1493@lunn.ch>
-X-Proofpoint-ORIG-GUID: -waQTk1gsQhSsnxd1mu0NI2cXCZZEcZP
-X-Authority-Analysis: v=2.4 cv=TJ9FS0la c=1 sm=1 tr=0 ts=68343122 cx=c_pps a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17 a=kj9zAlcOel0A:10 a=dt9VzEwgFbYA:10 a=jtlm59152YgxJQHRqcEA:9 a=CjuIK1q_8ugA:10 a=quENcT-jsP8hFS3YNsuE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI2MDA3OCBTYWx0ZWRfX+uLKSgjLSQhW xoiiOdMvntTlrX7H/j3S24IFPf+9jOlxCXqYt9JN+6/rKGpKcPYnlv3uK1SC8pj+4yBBAvoOqwE 6Eb6asdmCqo6xuQRIbtq5tfUCLChk/F/aTaO3ZVYVNk1GYOZS8A3X9MjcrkFtwyC3J6tEU0kuT6
- gdzzRQ3yG94gDbQeoYkcA2oUuHLfd78QYLUftzykcdo32aEfyuSMVqg+DohXvvCXFN4L23EnEXC XIYtfo7M+2YSH/tF5/+v6qPT+hLBkg6ZoBazwP0f4L0VIZO5toEjv0F3Kcw45uWqFvQkcSUk0QL 5qzBRfsO4B8Gi1XmGuj8NLIh6m9FU8k6Vy5atqx5yvYRwfAiFJyvqmM+uQiw2VIhVUloNDwmcXn
- xtYIt71PW5Y2gFVmruy6WwJaLivtdohQa3Xkx1JLBSrIJBVPPDgLrBLWFp1fCGoWXpmn6h2L
-X-Proofpoint-GUID: -waQTk1gsQhSsnxd1mu0NI2cXCZZEcZP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-26_05,2025-05-22_01,2025-03-28_01
+In-Reply-To: <20250526064619.5412-1-yangtengteng@bytedance.com>
 
-On 2025-03-11 at 21:32:12, Andrew Lunn (andrew@lunn.ch) wrote:
-> On Tue, Mar 11, 2025 at 11:56:31PM +0530, Sai Krishna wrote:
-> > Sparse flagged a number of warnings while typecasting iomem
-> > type to required data type.
->  
-> > For example, fwdata is just a shared memory data structure used
-> > between firmware and kernel, thus remapping and typecasting
-> > to required data type may not cause issue.
-> 
-> This is generally wrong. __iomem is there for a reason. If you are
-> removing it, it suggests what you do next with the pointer is wrong.
-> 
->     Andrew
-Hi Andrew,
+Hi,
 
-Sorry for delay in response. To provide some information, firmware sets
-aside some DDR memory region for firmware and kernel communication.
-Kernel ioremaps that space and typecasts to fwdata structure and uses it.
-Agree that ioremap is for io device's csr space but since we know that it
-is not really a register space but DDR we are ioremapping, typecasting
-and using it. We assumed __force is there for these kind of exceptions.
-Please suggest how to proceed with this. memcpy_fromio can done for fwdata
-but this fwdata is NOT read only once structure, firmware keeps updating it in
-cases like link speed changes and ethtool eeprom info changes. So everytime
-we have to ioremap, memcpy_fromio and iounmap which we want to avoid.
+kernel test robot noticed the following build errors:
 
-Thanks.
-Sundeep
-> 
-> ---
-> pw-bot: cr
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/yangtengteng-bytedance-com/Fix-sock_exceed_buf_limit-not-being-triggered-in-__sk_mem_raise_allocated/20250526-144725
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250526064619.5412-1-yangtengteng%40bytedance.com
+patch subject: [PATCH net-next] Fix sock_exceed_buf_limit not being triggered in __sk_mem_raise_allocated
+config: i386-buildonly-randconfig-002-20250526 (https://download.01.org/0day-ci/archive/20250526/202505261743.n48LBgti-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250526/202505261743.n48LBgti-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505261743.n48LBgti-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/core/sock.c:3284:67: error: expected ')'
+    3284 |                 charged = mem_cgroup_charge_skmem(memcg, amt, gfp_memcg_charge();
+         |                                                                                 ^
+   net/core/sock.c:3284:36: note: to match this '('
+    3284 |                 charged = mem_cgroup_charge_skmem(memcg, amt, gfp_memcg_charge();
+         |                                                  ^
+   1 error generated.
+
+
+vim +3284 net/core/sock.c
+
+  3257	
+  3258	/**
+  3259	 *	__sk_mem_raise_allocated - increase memory_allocated
+  3260	 *	@sk: socket
+  3261	 *	@size: memory size to allocate
+  3262	 *	@amt: pages to allocate
+  3263	 *	@kind: allocation type
+  3264	 *
+  3265	 *	Similar to __sk_mem_schedule(), but does not update sk_forward_alloc.
+  3266	 *
+  3267	 *	Unlike the globally shared limits among the sockets under same protocol,
+  3268	 *	consuming the budget of a memcg won't have direct effect on other ones.
+  3269	 *	So be optimistic about memcg's tolerance, and leave the callers to decide
+  3270	 *	whether or not to raise allocated through sk_under_memory_pressure() or
+  3271	 *	its variants.
+  3272	 */
+  3273	int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
+  3274	{
+  3275		struct mem_cgroup *memcg = mem_cgroup_sockets_enabled ? sk->sk_memcg : NULL;
+  3276		struct proto *prot = sk->sk_prot;
+  3277		bool charged = true;
+  3278		long allocated;
+  3279	
+  3280		sk_memory_allocated_add(sk, amt);
+  3281		allocated = sk_memory_allocated(sk);
+  3282	
+  3283		if (memcg) {
+> 3284			charged = mem_cgroup_charge_skmem(memcg, amt, gfp_memcg_charge();
+  3285			if (!charged)
+  3286				goto suppress_allocation;
+  3287		}
+  3288	
+  3289		/* Under limit. */
+  3290		if (allocated <= sk_prot_mem_limits(sk, 0)) {
+  3291			sk_leave_memory_pressure(sk);
+  3292			return 1;
+  3293		}
+  3294	
+  3295		/* Under pressure. */
+  3296		if (allocated > sk_prot_mem_limits(sk, 1))
+  3297			sk_enter_memory_pressure(sk);
+  3298	
+  3299		/* Over hard limit. */
+  3300		if (allocated > sk_prot_mem_limits(sk, 2))
+  3301			goto suppress_allocation;
+  3302	
+  3303		/* Guarantee minimum buffer size under pressure (either global
+  3304		 * or memcg) to make sure features described in RFC 7323 (TCP
+  3305		 * Extensions for High Performance) work properly.
+  3306		 *
+  3307		 * This rule does NOT stand when exceeds global or memcg's hard
+  3308		 * limit, or else a DoS attack can be taken place by spawning
+  3309		 * lots of sockets whose usage are under minimum buffer size.
+  3310		 */
+  3311		if (kind == SK_MEM_RECV) {
+  3312			if (atomic_read(&sk->sk_rmem_alloc) < sk_get_rmem0(sk, prot))
+  3313				return 1;
+  3314	
+  3315		} else { /* SK_MEM_SEND */
+  3316			int wmem0 = sk_get_wmem0(sk, prot);
+  3317	
+  3318			if (sk->sk_type == SOCK_STREAM) {
+  3319				if (sk->sk_wmem_queued < wmem0)
+  3320					return 1;
+  3321			} else if (refcount_read(&sk->sk_wmem_alloc) < wmem0) {
+  3322					return 1;
+  3323			}
+  3324		}
+  3325	
+  3326		if (sk_has_memory_pressure(sk)) {
+  3327			u64 alloc;
+  3328	
+  3329			/* The following 'average' heuristic is within the
+  3330			 * scope of global accounting, so it only makes
+  3331			 * sense for global memory pressure.
+  3332			 */
+  3333			if (!sk_under_global_memory_pressure(sk))
+  3334				return 1;
+  3335	
+  3336			/* Try to be fair among all the sockets under global
+  3337			 * pressure by allowing the ones that below average
+  3338			 * usage to raise.
+  3339			 */
+  3340			alloc = sk_sockets_allocated_read_positive(sk);
+  3341			if (sk_prot_mem_limits(sk, 2) > alloc *
+  3342			    sk_mem_pages(sk->sk_wmem_queued +
+  3343					 atomic_read(&sk->sk_rmem_alloc) +
+  3344					 sk->sk_forward_alloc))
+  3345				return 1;
+  3346		}
+  3347	
+  3348	suppress_allocation:
+  3349	
+  3350		if (kind == SK_MEM_SEND && sk->sk_type == SOCK_STREAM) {
+  3351			sk_stream_moderate_sndbuf(sk);
+  3352	
+  3353			/* Fail only if socket is _under_ its sndbuf.
+  3354			 * In this case we cannot block, so that we have to fail.
+  3355			 */
+  3356			if (sk->sk_wmem_queued + size >= sk->sk_sndbuf) {
+  3357				/* Force charge with __GFP_NOFAIL */
+  3358				if (memcg && !charged) {
+  3359					mem_cgroup_charge_skmem(memcg, amt,
+  3360						gfp_memcg_charge() | __GFP_NOFAIL);
+  3361				}
+  3362				return 1;
+  3363			}
+  3364		}
+  3365	
+  3366		if (kind == SK_MEM_SEND || (kind == SK_MEM_RECV && charged))
+  3367			trace_sock_exceed_buf_limit(sk, prot, allocated, kind);
+  3368	
+  3369		sk_memory_allocated_sub(sk, amt);
+  3370	
+  3371		if (memcg && charged)
+  3372			mem_cgroup_uncharge_skmem(memcg, amt);
+  3373	
+  3374		return 0;
+  3375	}
+  3376	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
