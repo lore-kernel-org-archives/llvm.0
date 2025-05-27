@@ -1,271 +1,259 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B0674420
-	for <llvm@lists.linux.dev>; Tue, 27 May 2025 20:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D5520C48D;
+	Tue, 27 May 2025 20:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748378736; cv=none; b=QiU3fDbXiCCDebD13Mv14+WpFbvHTFvnwLBcm1PXHEd/Ktpr1O0FFJH5w3/iKeF2wSwTYHG6AmLOBAp/f466lANgQPt3mAmwXmdHVMTMkG098BqLNsFZCyJJcipyxVz2ZF+7pjxEm24onV8KI1scV5mqw1eEhqW4AuVFgXxGeos=
+	t=1748378989; cv=none; b=a9d/+pNEMA0ffKJsr4TGJm2vZpMd17BR1jK+sTWs52sJXlLY0oHCupzSeEXpNyC+kgeofUsuxHTis4bDjaXrRQfJRSx8EPFOottVDFBU6U9v7t7LvPGZBuwa/doSz+LShq+lmU51XCm6Fy8iPOJW3w5XZKrZQReF0igFPGhQSAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748378736; c=relaxed/simple;
-	bh=ojQuWHvF8rZEVY+sEWY4ziynivY/y9i+cK6pzvUTgW8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZsskURkFhbxsikNrZEUdJePQbHOBu8RB2mbbzjm5ekhLKnDN1IGybweBcAT1obQtBJQAYbfiln11/R9NqZgxCGKUku2l02L6otEVms4QmPFNr1GE+M/xjTecKeCYPmwVoWG2L/3bpLyY7wtQ0KGVdddFnB0Dt26/dtSKlr7nURs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XfW8btGM; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1748378989; c=relaxed/simple;
+	bh=AU9LU7Nfj9orPVkMVTA/U57FFt4iUo111sXVjNeMwhA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=TmzW9J53YcyJkfpPhzh+9+U74GOtRw3GOd0YLQaAx/WqFPfd1VUohIc9yei/6Jp7A84LrtPExhLvTuJ+kAY/bZieQM2NEfEE7Bc5JDZS30KSyziuVYqqvAtwf50vxyyIwSgH67KWp8flCrypk5MCp01eu/2PRjDKV3hh/Q5IIaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZrC8roU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XfW8btGM"
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3dd745f8839so41035ab.0
-        for <llvm@lists.linux.dev>; Tue, 27 May 2025 13:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748378733; x=1748983533; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1lZ4BzKKyegj1CKtUN+j6GoUwIXKlqYC5bRVEDeUlo=;
-        b=XfW8btGMC9squc8kA6r1c6dMCK73IphzYT8+sYfmrSKkfAUXR2NbhSeAwH3m8MRWjl
-         gCBiMx5gx80jHhzYoUsTPVVd+d8gI+ZmVRWxgVQqYrKf7QYyXJaDh28Ua29NXNs5bkK5
-         wFIRdr32fBQ3AW/7dm9B4vqfShtSGysU8bcJusg+iU+30n5UNSGULkQgs59cSkpQrk/z
-         CkG98z5K/7xvutTR5osssphxsCzO33JFyXwIEzols9x8H7+/P9bRRAO9jG6NrVZ4xzAz
-         G/fbc+hDYPLM5Hnt5Nz94zgPtfaplf2ffmzzHDUifdYhSZJO2n00/AS/+LHUf32jsN3A
-         eUvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748378733; x=1748983533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1lZ4BzKKyegj1CKtUN+j6GoUwIXKlqYC5bRVEDeUlo=;
-        b=qYjxGampzm3qNNR977xb0SAVhjPd2iqjgZIdDjl9u/c4tWd++O/pYxgLBKDamC+3k7
-         UeYr/oKME+/G9EP2F8nZBVMHVyG9pKN51ng4tkECISIeszMypErpEt+4YJTJFO2aDTlA
-         C6Ax6cCo5fjvIq//1Fr+gvAbyoOodblqikSWeTHSBedXdl7vd3TxmtRYj+giCgBlKRDV
-         RvssYqpQv42OGGngg/pT3y2Pz0PuRm+OfP9NdUuPnNp09FJ3zISJjlVxbolWYlMraOAa
-         HeRGrmckm3YNlp3lNhpWp0JKFI1bzMrkTshxAFv8NoPqL48hxO6YE2kYJXN/Vb3bVywG
-         Onkw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmSc33DvaCAm5iYjRHxRYLRuGbcXRTgCIjiUpt0GqJ8nv1c0+kIPwKaMSCYcQ2kc4+rQmM@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywnj4fIZnRwCRlzYB8QHnjtQdsVv7LC8WahZChhnv6uqU8AEI8N
-	b/7HnnEabTZ3m2FzFU7if2lU6fis6WFruLZPwgK+a+1oiUCZEolVIcWTD+1MPDgQvAH4Gec8c5+
-	zpI9cdub8hVV7ZMopxY1UTSrn37D1PXiRPCTbP+MB
-X-Gm-Gg: ASbGncv3vNxkWSEHUARSMS1KP7GxMetGsAHF0Qg+zVA97kRmT5eX2UdAgdAazptNqv/
-	8U7+i146tzL0iwAunfeiGWwcPqljIq+4CvTy3EgFZEuKeSCuWyhH7G+ieV3isWQWcN0Tnda08ZA
-	NhB3p14fcg99Brg3nxZqR2C9LYdfeUl3yGj+oACSMugGHP3tO4wlMvbwgD/tohzmcRCW4jOrGq
-X-Google-Smtp-Source: AGHT+IFSL3ZJyOANkTfPxEJgTNnLrNpIdtJ2QMzX6+Wau8QZq/ah6u3mzrUVj58Gw+dM1WJPIpKoo+5FqJUpCU90q78=
-X-Received: by 2002:a05:6e02:3cc9:b0:3dc:7ffe:33e4 with SMTP id
- e9e14a558f8ab-3dd89c00b72mr185645ab.5.1748378733286; Tue, 27 May 2025
- 13:45:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZrC8roU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926C0C4CEE9;
+	Tue, 27 May 2025 20:49:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748378989;
+	bh=AU9LU7Nfj9orPVkMVTA/U57FFt4iUo111sXVjNeMwhA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=fZrC8roUMokBYhflU/jyR8KKzKXFLL0o3LZTrRmKy1rZn7MPtTMJKlmei9wGWFtKx
+	 awwyhFAbRLFB/rdLuB9QzwI5TrILJVlQ3x8gcyZw2qp4xV9pc6qacWH7KVoRDzn21O
+	 AuqlrgQPpPJPQqS48ObY/2BDrx2trlDnhwFnd3NytpV9aPvnv5KIJF50yMGDeTrhc1
+	 L/zRSIE1TY3Vtv6/1CaynsrFDTRo4pc3C0ObsCZrtks1PVTGAwp4yg6FCH6oBHDIUb
+	 9ALlGXQbcEWzWDDjL7+aE7/dbeemgdE984ysWfkZWCXv4hSv6k2Bra0ejPACNkkFNY
+	 ggYxYHyAsAymw==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20250417230740.86048-1-irogers@google.com> <aALEI7glqsWmUygQ@x1>
- <CAP-5=fVk7=XFeRRSmYLqHHvExe1fFoQCGd+Q66ocx2qgBCKQQA@mail.gmail.com> <CA+JHD93NCu5VeP9b+DzMm0f0YHwJLRFJeHNtWogx6wKFrHi8Yw@mail.gmail.com>
-In-Reply-To: <CA+JHD93NCu5VeP9b+DzMm0f0YHwJLRFJeHNtWogx6wKFrHi8Yw@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 27 May 2025 13:45:22 -0700
-X-Gm-Features: AX0GCFsWkue9inLpSDMgM9Vnozkj8_2G75sGaHwPk9aryEiNHgPATyoUNyr4DSg
-Message-ID: <CAP-5=fW-irofVnuops6+6va9Y5_mA7fXT665TTw8Yjic+boAwA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/19] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	linux-perf-users <linux-perf-users@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 May 2025 22:49:36 +0200
+Message-Id: <DA78MDRNCNB8.X69904APMYCB@kernel.org>
+Cc: "Michal Rostecki" <vadorovsky@protonmail.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
+ <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Brendan Higgins"
+ <brendan.higgins@linux.dev>, "David Gow" <davidgow@google.com>, "Rae Moar"
+ <rmoar@google.com>, "Danilo Krummrich" <dakr@kernel.org>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
+ <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
+ Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Russ Weight"
+ <russ.weight@linux.dev>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>,
+ "Rob Herring" <robh@kernel.org>, "Saravana Kannan" <saravanak@google.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Will Deacon" <will@kernel.org>, "Waiman Long" <longman@redhat.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>,
+ "Heiner Kallweit" <hkallweit1@gmail.com>, "Russell King"
+ <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Bjorn Helgaas" <bhelgaas@google.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Jens Axboe" <axboe@kernel.dk>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
+ <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+ <linux-block@vger.kernel.org>
+Subject: Re: [PATCH v10 2/5] rust: support formatting of foreign types
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Tamir Duberstein" <tamird@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
+ <20250524-cstr-core-v10-2-6412a94d9d75@gmail.com>
+ <DA66BBX1PDGI.10NHLG3D4CIT7@kernel.org>
+ <CAJ-ks9m48gmar0WWP9WknV2JLqkKNU0X4nwXaQ+JdG+b-EcVxA@mail.gmail.com>
+ <DA6GSMHMLRFM.YH9RGZWLY2X4@kernel.org>
+ <CAJ-ks9nTf4dCoDdg4+YSkXM1sJsZ-0vuSC7wybc2JMAoGemhXQ@mail.gmail.com>
+In-Reply-To: <CAJ-ks9nTf4dCoDdg4+YSkXM1sJsZ-0vuSC7wybc2JMAoGemhXQ@mail.gmail.com>
 
-On Sat, Apr 19, 2025 at 3:31=E2=80=AFAM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
->
->
-> On Sat, Apr 19, 2025, 1:23=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
-te:
+On Tue May 27, 2025 at 5:02 PM CEST, Tamir Duberstein wrote:
+> On Mon, May 26, 2025 at 7:01=E2=80=AFPM Benno Lossin <lossin@kernel.org> =
+wrote:
+>> On Tue May 27, 2025 at 12:17 AM CEST, Tamir Duberstein wrote:
+>> > On Mon, May 26, 2025 at 10:48=E2=80=AFAM Benno Lossin <lossin@kernel.o=
+rg> wrote:
+>> >> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
+>> >> > +impl_display_forward!(
+>> >> > +    bool,
+>> >> > +    char,
+>> >> > +    core::panic::PanicInfo<'_>,
+>> >> > +    crate::str::BStr,
+>> >> > +    fmt::Arguments<'_>,
+>> >> > +    i128,
+>> >> > +    i16,
+>> >> > +    i32,
+>> >> > +    i64,
+>> >> > +    i8,
+>> >> > +    isize,
+>> >> > +    str,
+>> >> > +    u128,
+>> >> > +    u16,
+>> >> > +    u32,
+>> >> > +    u64,
+>> >> > +    u8,
+>> >> > +    usize,
+>> >> > +    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>: =
+fmt::Display},
+>> >> > +    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::Un=
+iqueArc<T>: fmt::Display},
+>> >> > +);
+>> >>
+>> >> If we use `{}` instead of `()`, then we can format the contents
+>> >> differently:
+>> >>
+>> >>     impl_display_forward! {
+>> >>         i8, i16, i32, i64, i128, isize,
+>> >>         u8, u16, u32, u64, u128, usize,
+>> >>         bool, char, str,
+>> >>         crate::str::BStr,
+>> >>         fmt::Arguments<'_>,
+>> >>         core::panic::PanicInfo<'_>,
+>> >>         {<T: ?Sized>} crate::sync::Arc<T> {where Self: fmt::Display},
+>> >>         {<T: ?Sized>} crate::sync::UniqueArc<T> {where Self: fmt::Dis=
+play},
+>> >>     }
+>> >
+>> > Is that formatting better? rustfmt refuses to touch it either way.
 >>
->> On Fri, Apr 18, 2025 at 2:29=E2=80=AFPM Arnaldo Carvalho de Melo
->> <acme@kernel.org> wrote:
->> >
->> > On Thu, Apr 17, 2025 at 04:07:21PM -0700, Ian Rogers wrote:
->> > > Linking against libcapstone and libLLVM can be a significant increas=
-e
->> > > in dependencies and file size if building statically. For something
->> > > like `perf record` the disassembler and addr2line functionality won'=
-t
->> > > be used. Support dynamically loading these libraries using dlopen an=
-d
->> > > then calling the appropriate functions found using dlsym.
->> > >
->> > > BUILD_NONDISTRO is used to build perf against the license incompatib=
-le
->> > > libbfd and libiberty libraries. As this has been opt-in for nearly 2
->> > > years, commit dd317df07207 ("perf build: Make binutil libraries opt
->> > > in"), remove the code to simplify the code base.
->> > >
->> > > The patch series:
->> > > 1) does some initial clean up;
->> > > 2) moves the capstone and LLVM code to their own C files,
->> > > 3) simplifies a little the capstone code;
->> > > 4) adds perf_ variants of the functions that will either directly ca=
-ll
->> > >    the function or use dlsym to discover it;
->> > > 5) adds BPF JIT disassembly support to LLVM and capstone disassembly=
-;
->> > > 6) removes the BUILD_NONDISTRO code, reduces scope and removes what'=
-s possible;
->> > > 7) adds fallback to srcline's addr2line so that llvm_addr2line is
->> > >    tried first and then the forked command tried next, moving the co=
-de
->> > >    for forking out of the main srcline.c file in the process.
->> > >
->> > > The addr2line LLVM functionality is written in C++. To avoid linking
->> > > against libLLVM for this, a new LIBLLVM_DYNAMIC option is added wher=
-e
->> > > the C++ code with the libLLVM dependency will be built into a
->> > > libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
->> > > would extend their C API to avoid this.
->> > >
->> > > The libbfd BPF disassembly supported source lines, this wasn't porte=
-d
->> > > to the capstone and LLVM disassembly.
->> >
->> > Doing the build tests I noticed, so far:
->> >
->> >   29    58.92 opensuse:15.4                 : FAIL gcc version 7.5.0 (=
-SUSE Linux)
->> > <SNIP>
->> > + make NO_LIBTRACEEVENT=3D1 ARCH=3D CROSS_COMPILE=3D EXTRA_CFLAGS=3D N=
-O_LIBBPF=3D1 -C tools/perf O=3D/tmp/build/perf
->> > make: Entering directory '/git/perf-6.15.0-rc2/tools/perf'
->> >   BUILD:   Doing 'make -j32' parallel build
->> > Warning: Skipped check-headers due to missing ../../include
->> > Makefile.config:560: No elfutils/debuginfod.h found, no debuginfo serv=
-er support, please install libdebuginfod-dev/elfutils-debuginfod-client-dev=
-el or equivalent
->> > Makefile.config:687: Warning: Disabled BPF skeletons as libbpf is requ=
-ired
->> > Makefile.config:1039: No libbabeltrace found, disables 'perf data' CTF=
- format support, please install libbabeltrace-dev[el]/libbabeltrace-ctf-dev
->> > update-alternatives: error: no alternatives for java
->> > update-alternatives: error: no alternatives for java
->> > Makefile.config:1100: No openjdk development package found, please ins=
-tall JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
->> > Makefile.config:1113: libpfm4 not found, disables libpfm4 support. Ple=
-ase install libpfm4-dev
->> >
->> > Auto-detecting system features:
->> > ...                                   libdw: [ on  ]
->> > ...                                   glibc: [ on  ]
->> > ...                                  libelf: [ on  ]
->> > ...                                 libnuma: [ on  ]
->> > ...                  numa_num_possible_cpus: [ on  ]
->> > ...                                 libperl: [ on  ]
->> > ...                               libpython: [ on  ]
->> > ...                               libcrypto: [ on  ]
->> > ...                             libcapstone: [ on  ]
->> > ...                               llvm-perf: [ on  ]
->> > ...                                    zlib: [ on  ]
->> > ...                                    lzma: [ on  ]
->> > ...                               get_cpuid: [ on  ]
->> > ...                                     bpf: [ on  ]
->> > ...                                  libaio: [ on  ]
->> > ...                                 libzstd: [ on  ]
->> >
->> >   PERF_VERSION =3D 6.15.rc2.gfbcac9367d45
->> >   GEN     /tmp/build/perf/common-cmds.h
->> >   GEN     /tmp/build/perf/arch/arm64/include/generated/asm/sysreg-defs=
-.h
->> >   GEN     perf-archive
->> >   GEN     perf-iostat
->> >   CC      /tmp/build/perf/dlfilters/dlfilter-test-api-v0.o
->> >   CC      /tmp/build/perf/dlfilters/dlfilter-test-api-v2.o
->> >   CC      /tmp/build/perf/dlfilters/dlfilter-show-cycles.o
->> >   INSTALL /tmp/build/perf/libapi/include/api/cpu.h
->> >   INSTALL /tmp/build/perf/libapi/include/api/debug.h
->> >   INSTALL /tmp/build/perf/libapi/include/api/io.h
->> >   MKDIR   /tmp/build/perf/libapi/fd/
->> >   INSTALL /tmp/build/perf/libapi/include/api/io_dir.h
->> >   CC      /tmp/build/perf/libapi/cpu.o
->> >   MKDIR   /tmp/build/perf/libapi/fs/
->> >   INSTALL /tmp/build/perf/libapi/include/api/fd/array.h
->> >   CC      /tmp/build/perf/libapi/debug.o
->> >   MKDIR   /tmp/build/perf/libapi/fs/
->> >   MKDIR   /tmp/build/perf/libapi/fs/
->> >   CC      /tmp/build/perf/libapi/fd/array.o
->> >   INSTALL /tmp/build/perf/libapi/include/api/fs/tracing_path.h
->> >   CC      /tmp/build/perf/libapi/str_error_r.o
->> >   INSTALL /tmp/build/perf/libapi/include/api/fs/fs.h
->> >   CC      /tmp/build/perf/libapi/fs/tracing_path.o
->> >   CC      /tmp/build/perf/libapi/fs/fs.o
->> >   CC      /tmp/build/perf/libapi/fs/cgroup.o
->> >   INSTALL libapi_headers
->> >   INSTALL /tmp/build/perf/libperf/include/perf/bpf_perf.h
->> >   INSTALL /tmp/build/perf/libperf/include/perf/core.h
->> >   INSTALL /tmp/build/perf/libperf/include/perf/cpumap.h
->> >   INSTALL /tmp/build/perf/libperf/include/perf/threadmap.h
->> >   CC      /tmp/build/perf/libperf/core.o
->> >   CC      /tmp/build/perf/libperf/cpumap.o
->> >   CC      /tmp/build/perf/libperf/threadmap.o
->> >   INSTALL /tmp/build/perf/libperf/include/perf/evlist.h
->> >   CC      /tmp/build/perf/libperf/evlist.o
->> >   CC      /tmp/build/perf/libperf/evsel.o
->> >   CC      /tmp/build/perf/libperf/mmap.o
->> >   CC      /tmp/build/perf/libperf/zalloc.o
->> >   INSTALL /tmp/build/perf/libsubcmd/include/subcmd/exec-cmd.h
->> >   INSTALL /tmp/build/perf/libperf/include/perf/evsel.h
->> >   CC      /tmp/build/perf/libperf/xyarray.o
->> >   CC      /tmp/build/perf/libperf/lib.o
->> >   INSTALL /tmp/build/perf/libsubcmd/include/subcmd/help.h
->> >   INSTALL /tmp/build/perf/libsubcmd/include/subcmd/pager.h
->> >   LINK    /tmp/build/perf/dlfilters/dlfilter-test-api-v0.so
->> >   INSTALL /tmp/build/perf/libsubcmd/include/subcmd/parse-options.h
->> >   LD      /tmp/build/perf/libapi/fd/libapi-in.o
->> >   INSTALL /tmp/build/perf/libsubcmd/include/subcmd/run-command.h
->> >   INSTALL libsubcmd_headers
->> >   LINK    /tmp/build/perf/dlfilters/dlfilter-test-api-v2.so
->> >   INSTALL /tmp/build/perf/libperf/include/perf/event.h
->> >   INSTALL /tmp/build/perf/libsymbol/include/symbol/kallsyms.h
->> >   CC      /tmp/build/perf/libsymbol/kallsyms.o
->> >   INSTALL /tmp/build/perf/libperf/include/perf/mmap.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/cpumap.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/evlist.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/evsel.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/rc_check.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/mmap.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/threadmap.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/lib.h
->> >   INSTALL /tmp/build/perf/libperf/include/internal/xyarray.h
->> >   LINK    /tmp/build/perf/dlfilters/dlfilter-show-cycles.so
->> >   LD      /tmp/build/perf/libapi/fs/libapi-in.o
->> > evlist.c:28:6: error: no previous prototype for 'perf_evlist__init' [-=
-Werror=3Dmissing-prototypes]
->> >  void perf_evlist__init(struct perf_evlist *evlist)
->> >       ^~~~~~~~~~~~~~~~~
->>
->> Hmm.. but on line 8 of tools/lib/perf/evlist.c is:
->> #include <internal/evlist.h>
->> is there a libperf installed somewhere? I thought we were just
->> statically linking currently. I'm not sure what I can do to resolve
->> this, it seems like a set up issue.
+>> Yeah rustfmt doesn't touch macro parameters enclosed in `{}`. I think
+>> it's better.
 >
->
-> I'll investigate and report back.
+> OK, but why? This seems entirely subjective.
 
-Ping. Thanks,
-Ian
+If more types are added to the list, it will grow over one screen size.
+With my formatting, leaving related types on a single line, that will
+only happen much later.
 
-> - Arnaldo
->
+>> >> > +/// Please see [`crate::fmt`] for documentation.
+>> >> > +pub(crate) fn fmt(input: TokenStream) -> TokenStream {
+>> >> > +    let mut input =3D input.into_iter();
+>> >> > +
+>> >> > +    let first_opt =3D input.next();
+>> >> > +    let first_owned_str;
+>> >> > +    let mut names =3D BTreeSet::new();
+>> >> > +    let first_lit =3D {
+>> >> > +        let Some((mut first_str, first_lit)) =3D (match first_opt.=
+as_ref() {
+>> >> > +            Some(TokenTree::Literal(first_lit)) =3D> {
+>> >> > +                first_owned_str =3D first_lit.to_string();
+>> >> > +                Some(first_owned_str.as_str()).and_then(|first| {
+>> >> > +                    let first =3D first.strip_prefix('"')?;
+>> >> > +                    let first =3D first.strip_suffix('"')?;
+>> >> > +                    Some((first, first_lit))
+>> >> > +                })
+>> >> > +            }
+>> >> > +            _ =3D> None,
+>> >> > +        }) else {
+>> >> > +            return first_opt.into_iter().chain(input).collect();
+>> >> > +        };
+>> >>
+>> >> This usage of let-else + match is pretty confusing and could just be =
+a
+>> >> single match statement.
+>> >
+>> > I don't think so. Can you try rewriting it into the form you like?
 >>
+>>     let (mut first_str, first_lit) match first_opt.as_ref() {
+>>         Some(TokenTree::Literal(lit)) if lit.to_string().starts_with('"'=
+) =3D> {
+>>             let contents =3D lit.to_string();
+>>             let contents =3D contents.strip_prefix('"').unwrap().strip_s=
+uffix('"').unwrap();
+>>             ((contents, lit))
+>>         }
+>>         _ =3D> return first_opt.into_iter().chain(input).collect(),
+>>     };
+>
+> What happens if the invocation is utterly malformed, e.g.
+> `fmt!("hello)`? You're unwrapping here, which I intentionally avoid.
+
+That example won't even survive lexing (macros always will get valid
+rust tokens as input). If a literal begins with a `"`, it also will end
+with one AFAIK.
+
+>> Yes it will error like that, but if we do the replacement only when the
+>> syntax is correct, there also will be compile errors because of a
+>> missing `Display` impl, or is that not the case?
+>
+> I'm not sure - I would guess syntax errors "mask" typeck errors.
+
+I checked and it seems to be so, that's good.
+
+>> >> > +                    first_str =3D rest;
+>> >> > +                    continue;
+>> >> > +                }
+>> >> > +                let name =3D name.split_once(':').map_or(name, |(n=
+ame, _)| name);
+>> >> > +                if !name.is_empty() && !name.chars().all(|c| c.is_=
+ascii_digit()) {
+>> >> > +                    names.insert(name);
+>> >> > +                }
+>> >> > +                break;
+>> >> > +            }
+>> >> > +        }
+>> >> > +        first_lit
+>> >>
+>> >> `first_lit` is not modified, so could we just the code above it into =
+a
+>> >> block instead of keeping it in the expr for `first_lit`?
+>> >
+>> > As above, can you suggest the alternate form you like better? The
+>> > gymnastics here are all in service of being able to let malformed
+>> > input fall through to core::format_args which will do the hard work of
+>> > producing good diagnostics.
+>>
+>> I don't see how this is hard, just do:
+>>
+>>     let (first_str, first_lit) =3D ...;
+>
+> It requires you to unwrap, like you did above, which is what I'm
+> trying to avoid.
+
+How so? What do you need to unwrap?
+
+>> >> > +    };
+>> >> > +
+>> >> > +    let first_span =3D first_lit.span();
+>> >> > +    let adapt =3D |expr| {
+>> >> > +        let mut borrow =3D
+>> >> > +            TokenStream::from_iter([TokenTree::Punct(Punct::new('&=
+', Spacing::Alone))]);
+>> >> > +        borrow.extend(expr);
+>> >> > +        make_ident(first_span, ["kernel", "fmt", "Adapter"])
+>> >> > +            .chain([TokenTree::Group(Group::new(Delimiter::Parenth=
+esis, borrow))])
+>> >>
+>> >> This should be fine with using `quote!`:
+>> >>
+>> >>     quote!(::kernel::fmt::Adapter(&#expr))
+>> >
+>> > Yeah, I have a local commit that uses quote_spanned to remove all the
+>> > manual constructions.
+>>
+>> I don't think that you need `quote_spanned` here at all. If you do, then
+>> let me know, something weird with spans is going on then.
+>
+> You need to give idents a span, so each of `kernel`, `fmt`, and
+> `adapter` need a span. I *could* use `quote!` and get whatever span it
+> uses (mixed_site) but I'd rather retain control.
+
+Please use `quote!` if it works. No need to make this more complex than
+it already is. If it doesn't work then that's another story.
+
+---
+Cheers,
+Benno
