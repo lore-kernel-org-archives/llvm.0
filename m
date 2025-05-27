@@ -1,58 +1,58 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2026327AC3F
-	for <llvm@lists.linux.dev>; Tue, 27 May 2025 15:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32A327CB0A
+	for <llvm@lists.linux.dev>; Tue, 27 May 2025 15:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748359904; cv=none; b=qTwuget1CTp4dteHEOuLnO19ehH7IZivpW5NTGLlcOlNB0S3/tg1qQlvs+J1yUW32NibGZqp/1yRq2PVehVTZja+e5see+iZRz0pJjuKwB7iHhZ/+y6V36S47RGHj1l6bX6ZKuz7xp/5TyoDwuHeqG2yC/ZIps2gGM0QwN3uTKY=
+	t=1748359932; cv=none; b=f3XyDCsBVMSwSZ0qnsxnc4zmu5JNmZpiOjbkGWjCnbDadsN/LvrOpRBYfWMUCFUnN+28oU7GDNeiLBiMzcOm3HcIVE6kzX3nTv5u7iL7Fz5v28xXrMiT6pfyStzjMr+JCbKOwPXqjp1fguy+dBzadraFe4CplDFiGRm3UN/TdvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748359904; c=relaxed/simple;
-	bh=iznhlCHEPeP5gtUawFfO/CMtIcM+gezphiFD8zog8f4=;
+	s=arc-20240116; t=1748359932; c=relaxed/simple;
+	bh=UE1f648Va6HLI8/Jhdv9ETvSve+kkYfIA2LFmifxheE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K0jr/POZGk/GGXE2D/JuI+f6ZPykgJgXolFo8+ECWiZVyPyzxu/UKlmtzSIeBWCRfSKbiMQv+McoYQ2RDcdX77I9A+BLjkBXvRLTEHSaEfseoOmS6Hybsjr8qBHUrY0eUmBpoixgL97PyY9xXm74FpJN9VfHWw1py9uZr7NjGCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j8Pb9yEf; arc=none smtp.client-ip=209.85.208.172
+	 To:Cc:Content-Type; b=By5yXHNKEsHVhZvprw3dwCkBEt9rty5ZsVbGVGtdZOlKDZ+vYMppmPI3sE8XwvC3psJBfglg2RMrVmZI50tefcPiyL57jl+WpXF/OEurtEflBfa2DkjOzIPKt+SMq7EQfX0RXegvx296GsTwm6bSZMTkHSbrzE76IX4yEbjO2aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R9nbbbVZ; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j8Pb9yEf"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30bf7d0c15eso30767741fa.0
-        for <llvm@lists.linux.dev>; Tue, 27 May 2025 08:31:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R9nbbbVZ"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-54b0d638e86so5774858e87.1
+        for <llvm@lists.linux.dev>; Tue, 27 May 2025 08:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748359901; x=1748964701; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1748359929; x=1748964729; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iznhlCHEPeP5gtUawFfO/CMtIcM+gezphiFD8zog8f4=;
-        b=j8Pb9yEflD4+gtfjEipsyk4eXN7QoS4cUl6H8WZcYPrrJQf5myuIx2BFqXsZwLcXo/
-         WSiFfRMr9NtEcGqTVDiPYjEzwP7M65nJkD7T6wpX+S+LP4/v7c+W1D5CBQk2nVU2xH9I
-         bv2Pog8s6vnIKC+iBx82uvIEv06geCoLHJNg/9ZOKTV4T0vIPWjx/h1IT6fmdtAOVq6o
-         ATEPRP1/xBPRzSVss8NBXcXCzE7Ddfdoo+kx6Z0fjFEGUrFkDdCDFOBcddyWmW6XpG+r
-         ymmXuStGqGFnzAZb9KOhuxA2xWx4FYklFii6POLjlEgNNguCn+BNuzW9yarMGtLERdK/
-         +IQw==
+        bh=6xak8pIYLubcnK6pBqvVQcKCjzEoRL1YIbbP2xw0LEs=;
+        b=R9nbbbVZm0GdJ77r50RHcpq0Kw1u18+F7bob3CXN+TGz0Io77TOxrWt0GGnEt9EDev
+         gq15zFwzq6Oh0PpNMynn4QFH+77ZrDBLJkvJ26Zcn2LdWXC0eilURDjQdWhpRG4Q6Ta6
+         eU37k0xrmQnX9+CY70lbmswKucf8Dlc3V7aRWwV7wLDutdUbaI9lvh3vND0QNpdZ19Jd
+         QvfJFS1yCj6wBz5cyCTjs9kwhk6jZ8xddo7NSr6RHepPBl8Y3gXLEiHiKkYLS91O1IlL
+         VaxKN67hHser+yJU3QiYNnOuvP4L5NpZ+FUIh9c62PZn8Kn1Jpu5EU2hGVTChRNHbb+Y
+         7i+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748359901; x=1748964701;
+        d=1e100.net; s=20230601; t=1748359929; x=1748964729;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iznhlCHEPeP5gtUawFfO/CMtIcM+gezphiFD8zog8f4=;
-        b=h/JfsIGuz5SSfnB8P0fzemN/uGluTOsguGHk+HiotVCadbgBWYu+Qg7kYRuN4hLd3/
-         YpfngqwDDNuscn5ePAoMDQ16nTUKmQ6g91Gp7dFQx+OQ6HDVeI2W1uEFuFtMtOTzdSuH
-         HvXcpTiCc6VF+TFAxDuvZacYtAU205o3BhFHHCJOlsUvNU7rdOPjLXTNvjVmjdsgVMDT
-         dVheH5WoOECfxRftrvJI5NcZU6q55Bxa1gJECZmJv1JgTKwxZTm+mwC4ZDBMBj45AJLf
-         pRodAeBHlVcyZcdb/igKZMw1ZA6pBBXjtq5ZxnqIYuih6VafK6Ud+Yju6ILdGFD2Eljp
-         Uw0A==
-X-Forwarded-Encrypted: i=1; AJvYcCWo59MEI4ou2nTKd4GlIzUKgrItcpqGqcH1XUrNDKyNwMu9P4hTzrYpNCfM9bYdCzS5mO1d@lists.linux.dev
-X-Gm-Message-State: AOJu0YwOJIpIbETpxrOlfwVcJMSVcEQGAhSWnmsBTgh849JrbyTvnzw6
-	IM6dcih7xfwVrIu9aofDsBQHXpUmmO4GEKlAaKyPCe7uHr/MWvWtDPvOm4CQc8dxm1AFzFIp4Wc
-	smwtqIm8sjnGkeV4FnZTv9JRWSqmyQNU=
-X-Gm-Gg: ASbGncsXFXV1nNIEymjTmXeoMsc8mvrBs0ZCkKTNmG6BYtG/ejpnVw/xtgqlsbb6f6z
-	BML+hd+rE6T+bHx5vLx18M2KNoyhKiP3KIpsK3mT5tCCCagDwJ56o8XfRAE2loyROsE60hELqUG
-	1Ea16jbGuhb6KP/f9Rv7j7sp33GaMr0Oi1n1LLLM9ejCWj2XWa
-X-Google-Smtp-Source: AGHT+IGh7j3R2Lz5ku1NP2jO6jmUvppwAP/M8QfRt/BCMIbepGXx0xkMd+/B+0FfsH2Ts/09nLW8pSm9EZf3hMbUgb0=
-X-Received: by 2002:a05:651c:304c:b0:30d:895d:2fa5 with SMTP id
- 38308e7fff4ca-3295ba248d3mr26953991fa.14.1748359900905; Tue, 27 May 2025
- 08:31:40 -0700 (PDT)
+        bh=6xak8pIYLubcnK6pBqvVQcKCjzEoRL1YIbbP2xw0LEs=;
+        b=qVyFO+nMSuWoNrkuQ4bRbGl9rCxPfjWnJOm4cXFR01W6kUJW4K8h4PZH9lxHbVQ/0w
+         xXZ8VWKu/5VJKN0XWXreT0Gi38CxPubbuxsqaoKTWGTNX+fUuUk5djk602m4L+ltuBGS
+         OoJd/r4DY4ajkXU93RjYQgiH5kiPrwGYFKRQ5qKl+rrH1d/GPVj4MCD0NCbDxC7CcrQA
+         JllPe9Zux2JG8j2oAWs+OXkPk5U/lq0VkVZefUdDpBr9fuP9jFxSXa5IfdLQF+h14yoU
+         8ANRzJnAqwQ3apYd01Qh8V9HoXXWNBShuWxjXSRfgQbvifW6YcvUtfxjpvAq4Ybd2dRs
+         +seg==
+X-Forwarded-Encrypted: i=1; AJvYcCWIYiilWjsIVLN2kASF2ct7xKIvmXH1bYqpaofaWBHdDVP1DyfMWwVTsp3pnt4bHzF4LLoo@lists.linux.dev
+X-Gm-Message-State: AOJu0YyZ7SOtqOasryAHoMfVXGI7d+rP+tjg1IgezYhnm0WvetQOwdNw
+	ceUXjBNxE73EMSDxsnvYYWJKUSk8CZJUjgzGPMvmM4G/gcjLyFVsQ5J1suOYjo4GY3352eO4kbh
+	dTAo7C7uEu4p6fFvE5zwReePM/U3LZ1I=
+X-Gm-Gg: ASbGncuUbvk+cfB5SxKKLpJwlv5UqMhKByh3CG/zqKR6R5NZp+K3rZ3/NyHsWLkrzJt
+	kMFpUPIoQSSnQvjPxeLwSgXhqBg78d04m5/xiZimYwM7dXqsRk46PD9BXD7SlDAcFofz5pLWhgd
+	f7LlY+k2KA8q5oTVs2mQ2oObuJJE0XWtPMnANAjS0Vc77AHmA1
+X-Google-Smtp-Source: AGHT+IGvM6m4b/lOw7Cp3xhdEUvITDXLXKyTA8U5LnOCkoop3fcnfDwhYylu9Lc+nCvgTUxjeVkZb8rgZTfeSHv0dQ4=
+X-Received: by 2002:ac2:4c41:0:b0:549:38d5:8853 with SMTP id
+ 2adb3069b0e04-5521c7addf9mr4617901e87.17.1748359928583; Tue, 27 May 2025
+ 08:32:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,14 +60,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-3-6412a94d9d75@gmail.com> <DA66HHUA8ANF.BI2FH7POFSRJ@kernel.org>
- <CAJ-ks9kmDiOV_qH_s-r4Z4iQf2k6H7ZnqOf5okaQxWWxrj5Deg@mail.gmail.com> <DA6GUB3YOVBD.RWGBCC8CTE7K@kernel.org>
-In-Reply-To: <DA6GUB3YOVBD.RWGBCC8CTE7K@kernel.org>
+ <20250524-cstr-core-v10-4-6412a94d9d75@gmail.com> <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
+ <CAJ-ks9nd6_iGK+ie-f+F0x4kwpyEGJ-kQiQGt-ffdbVN5S6kOg@mail.gmail.com> <DA6GWYHOSTWH.1OBQV7XCU2643@kernel.org>
+In-Reply-To: <DA6GWYHOSTWH.1OBQV7XCU2643@kernel.org>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 27 May 2025 11:31:04 -0400
-X-Gm-Features: AX0GCFt3TZm7A3lWw22HaGxbcPpRtWDbLI6U-f3H-j7VP2POqxnjTzuj9-Y7MDw
-Message-ID: <CAJ-ks9mCZ5rKUFmkM=KPdw=gALjCjdMrMzedu89w7TxwvPyREg@mail.gmail.com>
-Subject: Re: [PATCH v10 3/5] rust: replace `CStr` with `core::ffi::CStr`
+Date: Tue, 27 May 2025 11:31:32 -0400
+X-Gm-Features: AX0GCFuUtwm-Eot6MMjkQOKkHLHoljek9W49DxDhFIb7DRDERITQ1VimQxG0kN0
+Message-ID: <CAJ-ks9=gW_viqDMQwyVeGfT9821tfZ7w-4Tycd7e7bZ3xKwXRw@mail.gmail.com>
+Subject: Re: [PATCH v10 4/5] rust: replace `kernel::c_str!` with C-Strings
 To: Benno Lossin <lossin@kernel.org>
 Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
 	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -98,43 +98,38 @@ Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 26, 2025 at 7:03=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
+On Mon, May 26, 2025 at 7:07=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
 ote:
 >
-> On Tue May 27, 2025 at 12:24 AM CEST, Tamir Duberstein wrote:
-> > On Mon, May 26, 2025 at 10:56=E2=80=AFAM Benno Lossin <lossin@kernel.or=
+> On Tue May 27, 2025 at 12:29 AM CEST, Tamir Duberstein wrote:
+> > On Mon, May 26, 2025 at 11:04=E2=80=AFAM Benno Lossin <lossin@kernel.or=
 g> wrote:
-> >>
 > >> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
-> >> > `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64. Replac=
-e
-> >> > `kernel::str::CStr` with `core::ffi::CStr` now that we can.
+> >> > +macro_rules! c_str_avoid_literals {
 > >>
-> >> What's this supposed to mean?
-> >
-> > It means that kernel::str::CStr was introduced before core::ffi:CStr
-> > was available. I didn't check this before, but it is indeed true - see
-> > https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f8e43f1=
-d8d5c0860d98a23f.
->
-> I see, then just write that and mention the commit.
-
-=F0=9F=91=8D
-
-> >> > C-String literals were added in Rust 1.77. Opportunistically replace
-> >> > instances of `kernel::c_str!` with C-String literals where other cod=
-e
-> >> > changes were already necessary; the rest will be done in a later com=
-mit.
+> >> I don't like this name, how about `concat_to_c_str` or
+> >> `concat_with_nul`?
 > >>
-> >> Similarly this, the message should explain the motivation for the
-> >> change, the change itself and can include additional information.
+> >> This macro also is useful from macros that have a normal string litera=
+l,
+> >> but can't turn it into a `c""` one.
 > >
-> > The motivation is implied (that using standard types is preferable to
-> > having custom ones; this is also implicit rather than explicit in
-> > https://github.com/Rust-for-Linux/linux/issues/1075), but I can
-> > sharpen it.
+> > Uh, can you give an example? I'm not attached to the name.
 >
-> Please add this information to the commit message.
+> There is one in this patch (:
+>
+>     diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+>     index e5621d596ed3..09148e982f48 100644
+>     --- a/rust/kernel/kunit.rs
+>     +++ b/rust/kernel/kunit.rs
+>     @@ -58,9 +58,10 @@ macro_rules! kunit_assert {
+>                      break 'out;
+>                  }
+>
+>     -            static FILE: &'static $crate::str::CStr =3D $crate::c_st=
+r!($file);
+>     +            static FILE: &'static $crate::str::CStr =3D $crate::c_st=
+r_avoid_literals!($file);
 
-=F0=9F=91=8D
+Great point, and an easy one to replace with a c-string literal. Done in v1=
+1.
