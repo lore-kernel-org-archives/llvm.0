@@ -1,99 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F87E20C005
-	for <llvm@lists.linux.dev>; Tue, 27 May 2025 20:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC6E2135A0
+	for <llvm@lists.linux.dev>; Tue, 27 May 2025 21:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748379188; cv=none; b=QIdeaA/94sJ02j5camLIprXAWCWGnjch2Wq53qGHLUgS0ytfrzU+KlwDenls2tnYky7LBgh0KxYQSB1LwbDvd8SvDLvsCS5WaUHMmcG7EDWGkU2v8/BekdW+akioEAE7uETQiOTcIsiGVH0/kXmrUzbS547xdoJGyvGGy/Gx+aM=
+	t=1748379928; cv=none; b=a/yjWVrCB234joihhwzAriOsuF5z1WFx9enloAnuikIrSwUsADmJ9354/VLNWTKmQG8Fws9IVk7SKsa2VkEUM3d26fhGf4rsB8MPNoih6i3jmdaJKS7ix+Q22sR8bweev7qAWtfv9EnsDr7SQRwqTwQA0dKKEXiwT36hkrAFm24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748379188; c=relaxed/simple;
-	bh=3JaG1dlS2lbMSJ9RZBNf5ZlKT60h7P3c0JTibmcAIG4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gKPpYkpngpHaBYzU7F0TxTMvODQPNAp5VuZput8ieQQ3TOuj7hkaLGCw+SPiV7bfmM5V1Q/0P721B2vFHNl2D+HpJUdfIcwZdjTD7thkfje9ElvN2eB81WmsAtXwgp+O9xWqUJQzyK7S1IQ06FZJ9Zk71sGskR2eKR9hZnJTonY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q5Ik6gSb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1748379928; c=relaxed/simple;
+	bh=bz+yRo2oGbcYSM3SQKPoZPrFgXJE5pB0qPTQ1/jIu4Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WFegL43NOQZYOGa+1wu1ZHvop0Ud2oQ+HTAN4r1Coxs/3oWKLl4E/TFeRog76ZXbMOnsrxvtmgCJat9PiYM9/iTMnJsabq3bPJpvL1CuCQvMJ1on3asixQu61BS9UXQUeddaG4RrKebNX4wkNt1vbEv4iAGTlekQifJCtEH78Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UNDeOm0y; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q5Ik6gSb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748379185;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ulKfXOMSNSWSb5oDWs/aCYvwCveIf6cyzFGoZJ8KQcU=;
-	b=Q5Ik6gSbrdwdZcr0+KMZJcSmSSi2HZ7HCTzzZ2sd/6Iuktxhy35iW/R0MMKudFwaSCQUMZ
-	Kvx3rVUZs9xMGkBEg0L9s0IyiOqcJkJXi5zCOu7KeTHggd97qqK8divUQvT2FYRUMg6uDU
-	2+xfi3xn+CGW3H8w69vIYlrXKN/77wE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-624-hicqbQR2PcuRMnmIx4TVKg-1; Tue,
- 27 May 2025 16:53:03 -0400
-X-MC-Unique: hicqbQR2PcuRMnmIx4TVKg-1
-X-Mimecast-MFC-AGG-ID: hicqbQR2PcuRMnmIx4TVKg_1748379182
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C016B18002A5
-	for <llvm@lists.linux.dev>; Tue, 27 May 2025 20:53:02 +0000 (UTC)
-Received: from [172.20.48.73] (unknown [10.30.45.91])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 73F3618003FC;
-	Tue, 27 May 2025 20:53:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0,
- upstream-mainline, 015a99fa)
-Date: Tue, 27 May 2025 20:53:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UNDeOm0y"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5f438523d6fso1134a12.1
+        for <llvm@lists.linux.dev>; Tue, 27 May 2025 14:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748379924; x=1748984724; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BKtvW3dZYOqtpkcAOmcODBWBULhW16t8c1u7HWAgqLc=;
+        b=UNDeOm0yq1us4T5okvfImkFstjPijtByUd6d+Anjrdhv658fGXx3vyYRRXcN1+0QoA
+         IbBpaHFMEo+iEU1yotdSqcymuvBzVuu6H6IrlNeAguDkZHwzdd5Gx0CTKafYKzLh15F5
+         U6oc48gNWBPLeRZkjurXSd3PsgjyPKKQLjzo/iLLPyE1nu5hsSKQMnuvr9/o0/9o9TN+
+         zYs4m8AF4U4evfFv5qUrr+SCn6kD+s/id/4nZ35s/bk6IWpyftv8lv06Ano/07NY7b2H
+         9UK2jCibwcqZ0bibZOhYeBS02huUuBxnupSJ3S6GU0qQq9uk3PO9aILe/PUXglSx/fYB
+         VO8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748379924; x=1748984724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BKtvW3dZYOqtpkcAOmcODBWBULhW16t8c1u7HWAgqLc=;
+        b=FFrIkblkQTn+HelfpCDruanmmDzauobmSKBGAOPWNy/ZI0Wd+zEC0qhkB8kFKSdT7i
+         jqSR2SWAsI2MxCs7Ynt1VDTdq/7qo+UcSu4U/vpIBox5e3yal+hH8zPT2CxTa+9UT4E8
+         gh6p8gfCIZVKqA0dR3ASJ/FsdZAMwlNQEX7a8rObdaXKbVZ3RD4zFRGrnT9ckmKipNOB
+         H92tUM3siwMd6FfN+YKxqJ79SziygPk1/RvOCtKzLQ6MO6n2YEm+3gxdirO9yiBYuUih
+         y3yWYU75GNzKJuyRTmZZ1HqV25xxD1MIxWVG2WzYOP4GkFOpqJHk2WnGOlsZqKuN5nDN
+         82CA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwQFnXOZGSCbqrp9q+zdhjGNqVex6xJw8yAwPw29XTZb+MovKgFDaq6Qr6oEFF4htwnEsZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxJmL1Ihh/TIOiRrhIQJ05TVyfjG52qWS1Kn7CWs8w6PK4j/d4L
+	8faZXGhPc73M/euw2fd16UcEmbJexBpHmT39ukBB4bKBU/DOFF3xJGnEvNKp1xlLXuMsxjZqGWk
+	Bm6xtX1CKdthS8Qs8HoDbGRU2IJxAQPRa5nLLK3s/
+X-Gm-Gg: ASbGnctX1PbrYSkejyN3RJVYCugcYGL/wByGSwjUgCnsTcPozRu/+vYDCTJ03z8Zpl5
+	yMgYf0dpRAgH5WLOoa4Rc4LyKktzdvlbIe/7WDKz6YWMyztvqpE+2NPdfxt/v0sxFkdInhljhHD
+	CUG4+ZUaenN2fVsgEJDV0vvHJSuL19gbKl5Hl0zkTglq4J2kCgVIbrBJTnLjPgFnoNj5Rz49dR/
+	G83wQJThKpb
+X-Google-Smtp-Source: AGHT+IFF1vl5A5Fcq1slU6dJ5UaS32+sup4jgzdgF+dhO5+2Dxb7O+Fh9c5qPFDtQxrwQVjIZ37LY6nT5l8eYgtVN1k=
+X-Received: by 2002:a05:6402:1656:b0:5fc:e6a6:6a34 with SMTP id
+ 4fb4d7f45d1cf-6051592fcf5mr24677a12.6.1748379924399; Tue, 27 May 2025
+ 14:05:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <79984.125052716530302429@us-mta-624.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AhUuLyR3hL059F5u2c_EKdiiA5iQHAhYtjMHltebGrA_1748379182
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20250521213534.3159514-1-xur@google.com> <CAK7LNAS4Ys-ekzjrRdfwKh5tEU=FKe1tE2-orj6LTs7EknZCZg@mail.gmail.com>
+In-Reply-To: <CAK7LNAS4Ys-ekzjrRdfwKh5tEU=FKe1tE2-orj6LTs7EknZCZg@mail.gmail.com>
+From: Rong Xu <xur@google.com>
+Date: Tue, 27 May 2025 14:05:12 -0700
+X-Gm-Features: AX0GCFteXY5Ez1dVPy7R7VdFZUcsPzfpgROhNb1gEyg3aZh1_cPdf0dwqSuiy74
+Message-ID: <CAF1bQ=QSBOdvqqBPPv70z1hLX4echmfzBDCu5o4LtKrZEaAJUw@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: distributed build support for Clang ThinLTO
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Eric Naim <dnaim@cachyos.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, May 26, 2025 at 6:12=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Thu, May 22, 2025 at 6:35=E2=80=AFAM <xur@google.com> wrote:
+> >
+> > From: Rong Xu <xur@google.com>
+> >
+> > Add distributed ThinLTO build support for the Linux kernel.
+> > This new mode offers several advantages: (1) Increased
+> > flexibility in handling user-specified build options.
+> > (2) Improved user-friendliness for developers. (3) Greater
+> > convenience for integrating with objtool and livepatch.
+> >
+> > Note that "distributed" in this context refers to a term
+> > that differentiates in-process ThinLTO builds by invoking
+> > backend compilation through the linker, not necessarily
+> > building in distributed environments.
+> >
+> > Distributed ThinLTO is enabled via the
+> > `CONFIG_LTO_CLANG_THIN_DIST` Kconfig option. For example:
+> >  > make LLVM=3D1 defconfig
+> >  > scripts/config -e LTO_CLANG_THIN_DIST
+> >  > make LLVM=3D1 oldconfig
+> >  > make LLVM=3D1 vmlinux -j <..>
+> >
+> > The implementation changes the top-level Makefile with a
+> > macro for generating `vmlinux.o` for distributed ThinLTO
+> > builds. It uses the existing Kbuild infrastructure to
+> > perform two recursive passes through the subdirectories.
+> > The first pass generates LLVM IR object files, similar to
+> > in-process ThinLTO. Following the thin-link stage, a second
+> > pass compiles these IR files into the final native object
+> > files. The build rules and actions for this two-pass process
+> > are primarily implemented in `scripts/Makefile.build`.
+> >
+> > Currently, this patch focuses on building the main kernel
+> > image (`vmlinux`) only. Support for building kernel modules
+> > using this method is planned for a subsequent patch.
+> >
+> > Tested on the following arch: x86, arm64, loongarch, and
+> > riscv.
+> >
+> > Some implementation details can be found here:
+> > https://discourse.llvm.org/t/rfc-distributed-thinlto-build-for-kernel/8=
+5934
+> >
+> > Signed-off-by: Rong Xu <xur@google.com>
+> > ---
+> > Changelog since v1:
+> > - Updated the description in arch/Kconfig based on feedback
+> >   from Nathan Chancellor
+> > - Revised file suffixes: .final_o -> .o.thinlto.native, and
+> >   .final_a -> .a.thinlto.native
+> > - Updated list of ignored files in .gitignore
+> >
+> > Changelog since v2:
+> > - Changed file suffixes: .o.thinlto.native -> .o_thinlto_native,
+> >   and .a.thinlto.native -> .a_thinlto_native so that basename
+> >   works as intended.
+> > - Tested the patch with AutoFDO and Propeller.
+> > ---
+> >  .gitignore                        |  3 ++
+> >  MAINTAINERS                       |  5 +++
+> >  Makefile                          | 40 ++++++++++++++++++++---
+> >  arch/Kconfig                      | 19 +++++++++++
+> >  scripts/Makefile.build            | 52 +++++++++++++++++++++++++++---
+> >  scripts/Makefile.lib              |  7 +++-
+> >  scripts/Makefile.vmlinux_o        | 16 +++++++---
+> >  scripts/Makefile.vmlinux_thinlink | 53 +++++++++++++++++++++++++++++++
+> >  scripts/head-object-list.txt      |  1 +
+> >  9 files changed, 181 insertions(+), 15 deletions(-)
+> >  create mode 100644 scripts/Makefile.vmlinux_thinlink
+>
+> I re-implemented the Makefiles to avoid
+> the second recursion and hacky ifdefs.
+> Attached.
+>
+> The topic branch is available in
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> thinlto-dist-refactor
+>
+> I only compile and boot tested on x86 QEMU.
+This implementation does look cleaner. But with one issue: it has a
+unified cflags for
+all the BE compilations. This means per-file flags, such as
+CFLAGS_fork.o =3D -fabc,
+are lost during the BE compilation for fork.thinlto_native.o.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+This exact issue was what I aimed to prevent with the two-recursion approac=
+h.
+If we must avoid two recursions, perhaps we could leverage the saved per-fi=
+le
+pre-link commands (i.e., .*.o.cmd)?
 
+Regards,
 
-Kernel information:
-    Commit message: Merge tag 'nolibc-20250526-for-6.16-1' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/nolibc/linux-nolibc
+-Rong
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1839515949
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1839515949-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
