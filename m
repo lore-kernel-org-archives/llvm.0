@@ -1,128 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C97414830A;
-	Mon, 26 May 2025 23:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA32BA33;
+	Tue, 27 May 2025 01:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748301470; cv=none; b=RuLSdEQ8WXJUab1mzmS8hBZCsgbIMqeegDV65vYJyfFghxdJZd+8XqxIJETkCitE57AcckSca09JUlbREfLuQxqGRUvp7vSG02gaEDVkJjCzsPCXc/U1qcFKE/w2MyH0yBALJe79R0KVMUCefoVlFRVxmMMn6BXummUlTBIIAQM=
+	t=1748308329; cv=none; b=dRbzMxWhHz1F6O06ZFow1kj9sKZe3gqWSNwY+Cra1z10Qd/EkJ5OFfwoJWc8E0AXyf07tlmQBVeC3nHdlJPVe5nrChg2BZF8RQgixk0oSc3r0biluZX+34/wf79SGqd/ONfj2a0JvkQZAEo9XK2A41T5obFk1tGyFOU1tUnwgPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748301470; c=relaxed/simple;
-	bh=/j09BPeE3E/NiK7v4LnFTp0Eilk8zqqtlKV3xNNcsj0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=UAnHw0p8s6IR2xzFoHmWzNgl/EqtlYuOD2JQklrEQVYVKGnsOrOSvgvM1Rrck2LVylh3p1m4OPLtHxefqZxk1HM3d8zsx6wa3WSpmG2AWu5kI4lrNwjOKrNz7qNZ1jt6PiX/IWh84y6+5OvtJhM5gpnoRl0Vwm/wnj89HLjAqWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Toydrlzg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748308329; c=relaxed/simple;
+	bh=y9GvpIRBn7kmBz25CTFgEA3AEIlgz7nYnr+CJJJWYZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NHPIOsGAUAxM4Qg/KtsaAzIek+yKc1vqUyk3aFToTENxHUF3XCYqlB6SfKn+7kEemOgbycjvCUjH3cQYKJv7x4A6vVUq2Ye/EvXbTKrzq4jf98Net2MxHoG4RJ0ayxZmJHQYms5A14Een9e3KeX8MLeMVTxwwaAg2ZdrS8LAauY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mJEj1MLo; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Toydrlzg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B731DC4CEE7;
-	Mon, 26 May 2025 23:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748301470;
-	bh=/j09BPeE3E/NiK7v4LnFTp0Eilk8zqqtlKV3xNNcsj0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=ToydrlzgB4/AD3R5ylHQaqRl4ZwuDOd8XUO/vXyOQKaD+BNCEtkjvG30nQds8Kcck
-	 uxdM/EeTv80EfppD02Kl6C4PUw9tRq4C88IoPUPfvt/PChD2VVh0+gtYApq3ptma4t
-	 cEdfN2IMxVM0k1m6aAi0zb+s8pLJHC5osqxdDw/6IMPNdy6DC9O+rKe9eu4uqd2Td7
-	 bE9wD58tojx1yvua91L7DXNa+w4Fh3QxrkOeGSwJOPO6S4rjmraVwPGsIRDR5Ole7k
-	 SA0EGxWootSi2CsKpF8BX6pAT9QrnmKEXZrDlS9l1Wkjkd55uY+PVvKLL7Hqoy2VsH
-	 siNYX66Wiwi7Q==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mJEj1MLo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748308328; x=1779844328;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y9GvpIRBn7kmBz25CTFgEA3AEIlgz7nYnr+CJJJWYZY=;
+  b=mJEj1MLobUe+dTtgf1VNEocvZZlyVinr9NULjgOIcXNAm7bVWLHgHFU0
+   FIE4Njeoohz4jmn/S1TBrGJJD3mvByHRhWjOGM053U6fcT0i5MZJMImri
+   etzCT9qo4nBvic1/ZDvaiW+h8sAJPVwDNOuWzlsleqjCwBK/uWUsrAuiR
+   PbbuBovaP9WMU9mzzuAnsDEFTdRri/ncrDWLAQPYLSfdux2H/9zp20CDB
+   VzZvLxE+Ou48oL5um1FeP1xG2FemaEsfontkEFAVr7nkjmwWKomvH3BSa
+   CwS9SBI+LQL2SvwRCgOHMtemoqFqb6lGN7YILh8BTjW21lkmebMHs94hB
+   Q==;
+X-CSE-ConnectionGUID: LOllKE73SE2jBBhsJtKY6g==
+X-CSE-MsgGUID: KPThFHEoQVybeKi/nhszkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11445"; a="50441032"
+X-IronPort-AV: E=Sophos;i="6.15,317,1739865600"; 
+   d="scan'208";a="50441032"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2025 18:12:06 -0700
+X-CSE-ConnectionGUID: vV/vUU52RJ6pZvx7trGeuw==
+X-CSE-MsgGUID: rqd1VMf7S0u0g4KBh/ELnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,317,1739865600"; 
+   d="scan'208";a="143026311"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 26 May 2025 18:12:04 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uJirK-000Smg-1n;
+	Tue, 27 May 2025 01:12:02 +0000
+Date: Tue, 27 May 2025 09:11:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_sbi_mpxy_mailbox_v4 31/34] ERROR: modpost:
+ "imsic_acpi_get_fwnode" [drivers/mailbox/riscv-sbi-mpxy-mbox.ko] undefined!
+Message-ID: <202505270926.WHRRht1e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 May 2025 01:17:37 +0200
-Message-Id: <DA6H562MA3LJ.25NISAF9FT1ZD@kernel.org>
-Cc: "Michal Rostecki" <vadorovsky@protonmail.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Brendan Higgins"
- <brendan.higgins@linux.dev>, "David Gow" <davidgow@google.com>, "Rae Moar"
- <rmoar@google.com>, "Danilo Krummrich" <dakr@kernel.org>, "Maarten
- Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
- <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
- Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Russ Weight"
- <russ.weight@linux.dev>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>,
- "Rob Herring" <robh@kernel.org>, "Saravana Kannan" <saravanak@google.com>,
- "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Will Deacon" <will@kernel.org>, "Waiman Long" <longman@redhat.com>,
- "Nathan Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>,
- "Heiner Kallweit" <hkallweit1@gmail.com>, "Russell King"
- <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Bjorn Helgaas" <bhelgaas@google.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Jens Axboe" <axboe@kernel.dk>,
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
- <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <linux-block@vger.kernel.org>
-Subject: Re: [PATCH v10 5/5] rust: remove core::ffi::CStr reexport
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Tamir Duberstein" <tamird@gmail.com>
-X-Mailer: aerc 0.20.1
-References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-5-6412a94d9d75@gmail.com>
- <DA66OFXQCWUK.31LM78DIVABZV@kernel.org>
- <CAJ-ks9m=okC9_K2MJU80xbnO+3+Z0hvC_FYzCtzW9pD=WA_xqQ@mail.gmail.com>
-In-Reply-To: <CAJ-ks9m=okC9_K2MJU80xbnO+3+Z0hvC_FYzCtzW9pD=WA_xqQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue May 27, 2025 at 12:30 AM CEST, Tamir Duberstein wrote:
-> On Mon, May 26, 2025 at 11:05=E2=80=AFAM Benno Lossin <lossin@kernel.org>=
- wrote:
->>
->> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
->> > Clean up references to `kernel::str::CStr`.
->> >
->> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
->> > ---
->> >  drivers/gpu/drm/drm_panic_qr.rs   |  3 ++-
->> >  drivers/gpu/nova-core/firmware.rs |  2 +-
->> >  drivers/net/phy/ax88796b_rust.rs  |  1 +
->> >  drivers/net/phy/qt2025.rs         |  1 +
->> >  rust/kernel/device.rs             |  3 +--
->> >  rust/kernel/driver.rs             |  4 ++--
->> >  rust/kernel/error.rs              |  6 ++----
->> >  rust/kernel/faux.rs               |  5 ++++-
->> >  rust/kernel/firmware.rs           | 15 ++++-----------
->> >  rust/kernel/kunit.rs              |  6 +++---
->> >  rust/kernel/lib.rs                |  2 +-
->> >  rust/kernel/miscdevice.rs         |  3 +--
->> >  rust/kernel/net/phy.rs            |  4 +++-
->> >  rust/kernel/of.rs                 |  3 ++-
->> >  rust/kernel/pci.rs                |  2 +-
->> >  rust/kernel/platform.rs           |  2 +-
->> >  rust/kernel/prelude.rs            |  5 +----
->> >  rust/kernel/str.rs                | 22 ++++++++++------------
->> >  rust/kernel/sync/condvar.rs       |  4 ++--
->> >  rust/kernel/sync/lock.rs          |  4 ++--
->> >  rust/kernel/sync/lock/global.rs   |  5 +++--
->> >  rust/kernel/sync/poll.rs          |  1 +
->> >  rust/kernel/workqueue.rs          |  1 +
->> >  rust/macros/module.rs             |  2 +-
->> >  24 files changed, 51 insertions(+), 55 deletions(-)
->>
->> Haven't compile tested this series yet, but this commit seems to suggest
->> to me that some of the previous commits introduced code that doesn't
->> compile or emits warnings? If so that needs to be fixed.
->
-> That's not the case. There are no warnings and no compilation failures
-> in prior commits.
+tree:   https://github.com/avpatel/linux.git riscv_sbi_mpxy_mailbox_v4
+head:   a96afd809e1e11e31357e8936c5ba98e4b18f402
+commit: fe469c80e363d4ba72ebe2689227b6fc00895cf3 [31/34] mailbox/riscv-sbi-mpxy: Add ACPI support
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250527/202505270926.WHRRht1e-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250527/202505270926.WHRRht1e-lkp@intel.com/reproduce)
 
-Ah it's because of the `pub use`... I tested it both with 1.86 and 1.78
-and aside from the `use<>` error reported by the bot everything worked.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505270926.WHRRht1e-lkp@intel.com/
 
----
-Cheers,
-Benno
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "imsic_acpi_get_fwnode" [drivers/mailbox/riscv-sbi-mpxy-mbox.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
