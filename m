@@ -1,135 +1,254 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32A327CB0A
-	for <llvm@lists.linux.dev>; Tue, 27 May 2025 15:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0135627F73D;
+	Tue, 27 May 2025 16:41:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748359932; cv=none; b=f3XyDCsBVMSwSZ0qnsxnc4zmu5JNmZpiOjbkGWjCnbDadsN/LvrOpRBYfWMUCFUnN+28oU7GDNeiLBiMzcOm3HcIVE6kzX3nTv5u7iL7Fz5v28xXrMiT6pfyStzjMr+JCbKOwPXqjp1fguy+dBzadraFe4CplDFiGRm3UN/TdvY=
+	t=1748364103; cv=none; b=i8CZPQ9EobYLi8lJ+VQzJgBptvX0mf3Ea7Hj73COloveIixPRImsWP/jKaXbygfBRIAMcB4R2Gw6q4OhwmIrIPVWdKd1GoqJS82jDLl+USnj7/XXyOKifcAPWLtPwYfcf0UpmR1wY5p7nA7hNwi4mcvBbfaLftWFBuMiu/ByJKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748359932; c=relaxed/simple;
-	bh=UE1f648Va6HLI8/Jhdv9ETvSve+kkYfIA2LFmifxheE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=By5yXHNKEsHVhZvprw3dwCkBEt9rty5ZsVbGVGtdZOlKDZ+vYMppmPI3sE8XwvC3psJBfglg2RMrVmZI50tefcPiyL57jl+WpXF/OEurtEflBfa2DkjOzIPKt+SMq7EQfX0RXegvx296GsTwm6bSZMTkHSbrzE76IX4yEbjO2aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R9nbbbVZ; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748364103; c=relaxed/simple;
+	bh=ukJPA0XtU32Ecq35Tu9JsOdKWxywwRz0NHZNFe5yJx8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7KfmB82+BxSlv/uQWzjrBc5J7AzQ8BoYqHS61J8L4g05y6leHdfvMi7b9onzCLyhKs/J5b2hd5DpkcUGuT242knkHrYo+L+sw4Z3jZjxqoAe49t0MntFgWo5JtC7gFsFYm2Qh6KGhiWgd1PCbJL8bZH+UcTm1isHTf7wZuXDf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JbmMUYcz; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R9nbbbVZ"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-54b0d638e86so5774858e87.1
-        for <llvm@lists.linux.dev>; Tue, 27 May 2025 08:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748359929; x=1748964729; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6xak8pIYLubcnK6pBqvVQcKCjzEoRL1YIbbP2xw0LEs=;
-        b=R9nbbbVZm0GdJ77r50RHcpq0Kw1u18+F7bob3CXN+TGz0Io77TOxrWt0GGnEt9EDev
-         gq15zFwzq6Oh0PpNMynn4QFH+77ZrDBLJkvJ26Zcn2LdWXC0eilURDjQdWhpRG4Q6Ta6
-         eU37k0xrmQnX9+CY70lbmswKucf8Dlc3V7aRWwV7wLDutdUbaI9lvh3vND0QNpdZ19Jd
-         QvfJFS1yCj6wBz5cyCTjs9kwhk6jZ8xddo7NSr6RHepPBl8Y3gXLEiHiKkYLS91O1IlL
-         VaxKN67hHser+yJU3QiYNnOuvP4L5NpZ+FUIh9c62PZn8Kn1Jpu5EU2hGVTChRNHbb+Y
-         7i+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748359929; x=1748964729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6xak8pIYLubcnK6pBqvVQcKCjzEoRL1YIbbP2xw0LEs=;
-        b=qVyFO+nMSuWoNrkuQ4bRbGl9rCxPfjWnJOm4cXFR01W6kUJW4K8h4PZH9lxHbVQ/0w
-         xXZ8VWKu/5VJKN0XWXreT0Gi38CxPubbuxsqaoKTWGTNX+fUuUk5djk602m4L+ltuBGS
-         OoJd/r4DY4ajkXU93RjYQgiH5kiPrwGYFKRQ5qKl+rrH1d/GPVj4MCD0NCbDxC7CcrQA
-         JllPe9Zux2JG8j2oAWs+OXkPk5U/lq0VkVZefUdDpBr9fuP9jFxSXa5IfdLQF+h14yoU
-         8ANRzJnAqwQ3apYd01Qh8V9HoXXWNBShuWxjXSRfgQbvifW6YcvUtfxjpvAq4Ybd2dRs
-         +seg==
-X-Forwarded-Encrypted: i=1; AJvYcCWIYiilWjsIVLN2kASF2ct7xKIvmXH1bYqpaofaWBHdDVP1DyfMWwVTsp3pnt4bHzF4LLoo@lists.linux.dev
-X-Gm-Message-State: AOJu0YyZ7SOtqOasryAHoMfVXGI7d+rP+tjg1IgezYhnm0WvetQOwdNw
-	ceUXjBNxE73EMSDxsnvYYWJKUSk8CZJUjgzGPMvmM4G/gcjLyFVsQ5J1suOYjo4GY3352eO4kbh
-	dTAo7C7uEu4p6fFvE5zwReePM/U3LZ1I=
-X-Gm-Gg: ASbGncuUbvk+cfB5SxKKLpJwlv5UqMhKByh3CG/zqKR6R5NZp+K3rZ3/NyHsWLkrzJt
-	kMFpUPIoQSSnQvjPxeLwSgXhqBg78d04m5/xiZimYwM7dXqsRk46PD9BXD7SlDAcFofz5pLWhgd
-	f7LlY+k2KA8q5oTVs2mQ2oObuJJE0XWtPMnANAjS0Vc77AHmA1
-X-Google-Smtp-Source: AGHT+IGvM6m4b/lOw7Cp3xhdEUvITDXLXKyTA8U5LnOCkoop3fcnfDwhYylu9Lc+nCvgTUxjeVkZb8rgZTfeSHv0dQ4=
-X-Received: by 2002:ac2:4c41:0:b0:549:38d5:8853 with SMTP id
- 2adb3069b0e04-5521c7addf9mr4617901e87.17.1748359928583; Tue, 27 May 2025
- 08:32:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JbmMUYcz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748364102; x=1779900102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ukJPA0XtU32Ecq35Tu9JsOdKWxywwRz0NHZNFe5yJx8=;
+  b=JbmMUYczHbFHGYIWD/HSI+sEX5giZ+m8Q2bAzeT6Nn5nkYTRDmJBFlzO
+   Mi3v7muNF8l64jxGoIatr6z6O5Pi3/e5YN+wODtjsYCJUhrct7g8jLvR2
+   HKbNva6looji4svNj0ssgRD3J2MM8I/66IrG+927d5KSJPXxamsZh08vH
+   7XR7Bqt0D/3jgr9z8VhlogrFihf9J/1dytIqfId8Qz0rejlXL80q02Tcy
+   d1jl91OSW38DVf/MmN5dzl81GrwHYwrC7qOPByefjAGCItm0BYRmltTET
+   +Yvx9Xt3NZett910T9isLtREEoDaCBVr+vhAeaIyi15QgDuTDnwpB1/Mj
+   w==;
+X-CSE-ConnectionGUID: OMGOOR0kQSqZ0CtptSZsjA==
+X-CSE-MsgGUID: HKZcLOpCTwaCITsD9ZZCMA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11446"; a="75753533"
+X-IronPort-AV: E=Sophos;i="6.15,318,1739865600"; 
+   d="scan'208";a="75753533"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2025 09:41:40 -0700
+X-CSE-ConnectionGUID: DUtYUoYfTRmWnZZqVBzNsA==
+X-CSE-MsgGUID: J7RjXSH3Qi+n5+GKbPS0xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,318,1739865600"; 
+   d="scan'208";a="148028416"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 27 May 2025 09:41:37 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uJxMs-000TLs-2K;
+	Tue, 27 May 2025 16:41:34 +0000
+Date: Wed, 28 May 2025 00:41:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chaoyi Chen <kernel@airkyi.com>, Sandy Huang <hjc@rock-chips.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Subject: Re: [PATCH v3] drm/rockchip: cdn-dp: Convert to drm bridge
+Message-ID: <202505280026.8VDl0TWN-lkp@intel.com>
+References: <20250527081447.304-1-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-4-6412a94d9d75@gmail.com> <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
- <CAJ-ks9nd6_iGK+ie-f+F0x4kwpyEGJ-kQiQGt-ffdbVN5S6kOg@mail.gmail.com> <DA6GWYHOSTWH.1OBQV7XCU2643@kernel.org>
-In-Reply-To: <DA6GWYHOSTWH.1OBQV7XCU2643@kernel.org>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 27 May 2025 11:31:32 -0400
-X-Gm-Features: AX0GCFuUtwm-Eot6MMjkQOKkHLHoljek9W49DxDhFIb7DRDERITQ1VimQxG0kN0
-Message-ID: <CAJ-ks9=gW_viqDMQwyVeGfT9821tfZ7w-4Tycd7e7bZ3xKwXRw@mail.gmail.com>
-Subject: Re: [PATCH v10 4/5] rust: replace `kernel::c_str!` with C-Strings
-To: Benno Lossin <lossin@kernel.org>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250527081447.304-1-kernel@airkyi.com>
 
-On Mon, May 26, 2025 at 7:07=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
-ote:
->
-> On Tue May 27, 2025 at 12:29 AM CEST, Tamir Duberstein wrote:
-> > On Mon, May 26, 2025 at 11:04=E2=80=AFAM Benno Lossin <lossin@kernel.or=
-g> wrote:
-> >> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
-> >> > +macro_rules! c_str_avoid_literals {
-> >>
-> >> I don't like this name, how about `concat_to_c_str` or
-> >> `concat_with_nul`?
-> >>
-> >> This macro also is useful from macros that have a normal string litera=
-l,
-> >> but can't turn it into a `c""` one.
-> >
-> > Uh, can you give an example? I'm not attached to the name.
->
-> There is one in this patch (:
->
->     diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
->     index e5621d596ed3..09148e982f48 100644
->     --- a/rust/kernel/kunit.rs
->     +++ b/rust/kernel/kunit.rs
->     @@ -58,9 +58,10 @@ macro_rules! kunit_assert {
->                      break 'out;
->                  }
->
->     -            static FILE: &'static $crate::str::CStr =3D $crate::c_st=
-r!($file);
->     +            static FILE: &'static $crate::str::CStr =3D $crate::c_st=
-r_avoid_literals!($file);
+Hi Chaoyi,
 
-Great point, and an easy one to replace with a c-string literal. Done in v1=
-1.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on linus/master v6.15 next-20250527]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chaoyi-Chen/drm-rockchip-cdn-dp-Convert-to-drm-bridge/20250527-161941
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/20250527081447.304-1-kernel%40airkyi.com
+patch subject: [PATCH v3] drm/rockchip: cdn-dp: Convert to drm bridge
+config: i386-buildonly-randconfig-002-20250527 (https://download.01.org/0day-ci/archive/20250528/202505280026.8VDl0TWN-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505280026.8VDl0TWN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505280026.8VDl0TWN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:783:17: error: incompatible pointer types passing 'struct drm_device *' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
+     783 |                 DRM_DEV_ERROR(bridge->dev, "Invalid format %d\n", daifmt->fmt);
+         |                               ^~~~~~~~~~~
+   include/drm/drm_print.h:504:17: note: expanded from macro 'DRM_DEV_ERROR'
+     504 |         drm_dev_printk(dev, KERN_ERR, "*ERROR* " fmt, ##__VA_ARGS__)
+         |                        ^~~
+   include/drm/drm_print.h:488:42: note: passing argument to parameter 'dev' here
+     488 | void drm_dev_printk(const struct device *dev, const char *level,
+         |                                          ^
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:844:3: error: field designator 'dp_audio_prepare' does not refer to any field in type 'const struct drm_bridge_funcs'; did you mean 'hdmi_audio_prepare'?
+     844 |         .dp_audio_prepare = cdn_dp_audio_prepare,
+         |          ^~~~~~~~~~~~~~~~
+         |          hdmi_audio_prepare
+   include/drm/drm_bridge.h:702:8: note: 'hdmi_audio_prepare' declared here
+     702 |         int (*hdmi_audio_prepare)(struct drm_connector *connector,
+         |               ^
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:845:3: error: field designator 'dp_audio_mute_stream' does not refer to any field in type 'const struct drm_bridge_funcs'; did you mean 'hdmi_audio_mute_stream'?
+     845 |         .dp_audio_mute_stream = cdn_dp_audio_mute_stream,
+         |          ^~~~~~~~~~~~~~~~~~~~
+         |          hdmi_audio_mute_stream
+   include/drm/drm_bridge.h:728:8: note: 'hdmi_audio_mute_stream' declared here
+     728 |         int (*hdmi_audio_mute_stream)(struct drm_connector *connector,
+         |               ^
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:846:3: error: field designator 'dp_audio_shutdown' does not refer to any field in type 'const struct drm_bridge_funcs'; did you mean 'hdmi_audio_shutdown'?
+     846 |         .dp_audio_shutdown = cdn_dp_audio_shutdown,
+         |          ^~~~~~~~~~~~~~~~~
+         |          hdmi_audio_shutdown
+   include/drm/drm_bridge.h:716:9: note: 'hdmi_audio_shutdown' declared here
+     716 |         void (*hdmi_audio_shutdown)(struct drm_connector *connector,
+         |                ^
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:1011:4: error: use of undeclared identifier 'DRM_BRIDGE_OP_DP_AUDIO'
+    1011 |                         DRM_BRIDGE_OP_DP_AUDIO;
+         |                         ^
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:1046:9: error: use of undeclared label 'err_free_connector'
+    1046 |                         goto err_free_connector;
+         |                              ^
+   drivers/gpu/drm/rockchip/cdn-dp-core.c:1114:7: error: call to undeclared function 'devm_drm_bridge_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1114 |         dp = devm_drm_bridge_alloc(dev, struct cdn_dp_device, bridge,
+         |              ^
+   drivers/gpu/drm/rockchip/cdn-dp-core.c:1114:7: note: did you mean 'devm_drm_bridge_add'?
+   include/drm/drm_bridge.h:945:5: note: 'devm_drm_bridge_add' declared here
+     945 | int devm_drm_bridge_add(struct device *dev, struct drm_bridge *bridge);
+         |     ^
+   drivers/gpu/drm/rockchip/cdn-dp-core.c:1114:34: error: expected expression
+    1114 |         dp = devm_drm_bridge_alloc(dev, struct cdn_dp_device, bridge,
+         |                                         ^
+   drivers/gpu/drm/rockchip/cdn-dp-core.c:1114:56: error: use of undeclared identifier 'bridge'
+    1114 |         dp = devm_drm_bridge_alloc(dev, struct cdn_dp_device, bridge,
+         |                                                               ^
+   9 errors generated.
+
+
+vim +783 drivers/gpu/drm/rockchip/cdn-dp-core.c
+
+   755	
+   756	static int cdn_dp_audio_prepare(struct drm_connector *connector,
+   757					struct drm_bridge *bridge,
+   758					struct hdmi_codec_daifmt *daifmt,
+   759					struct hdmi_codec_params *params)
+   760	{
+   761		struct cdn_dp_device *dp = bridge_to_dp(bridge);
+   762		struct audio_info audio = {
+   763			.sample_width = params->sample_width,
+   764			.sample_rate = params->sample_rate,
+   765			.channels = params->channels,
+   766		};
+   767		int ret;
+   768	
+   769		mutex_lock(&dp->lock);
+   770		if (!dp->active) {
+   771			ret = -ENODEV;
+   772			goto out;
+   773		}
+   774	
+   775		switch (daifmt->fmt) {
+   776		case HDMI_I2S:
+   777			audio.format = AFMT_I2S;
+   778			break;
+   779		case HDMI_SPDIF:
+   780			audio.format = AFMT_SPDIF;
+   781			break;
+   782		default:
+ > 783			DRM_DEV_ERROR(bridge->dev, "Invalid format %d\n", daifmt->fmt);
+   784			ret = -EINVAL;
+   785			goto out;
+   786		}
+   787	
+   788		ret = cdn_dp_audio_config(dp, &audio);
+   789		if (!ret)
+   790			dp->audio_info = audio;
+   791	
+   792	out:
+   793		mutex_unlock(&dp->lock);
+   794		return ret;
+   795	}
+   796	
+   797	static void cdn_dp_audio_shutdown(struct drm_connector *connector,
+   798					  struct drm_bridge *bridge)
+   799	{
+   800		struct cdn_dp_device *dp = bridge_to_dp(bridge);
+   801		int ret;
+   802	
+   803		mutex_lock(&dp->lock);
+   804		if (!dp->active)
+   805			goto out;
+   806	
+   807		ret = cdn_dp_audio_stop(dp, &dp->audio_info);
+   808		if (!ret)
+   809			dp->audio_info.format = AFMT_UNUSED;
+   810	out:
+   811		mutex_unlock(&dp->lock);
+   812	}
+   813	
+   814	static int cdn_dp_audio_mute_stream(struct drm_connector *connector,
+   815					    struct drm_bridge *bridge,
+   816					    bool enable, int direction)
+   817	{
+   818		struct cdn_dp_device *dp = bridge_to_dp(bridge);
+   819		int ret;
+   820	
+   821		mutex_lock(&dp->lock);
+   822		if (!dp->active) {
+   823			ret = -ENODEV;
+   824			goto out;
+   825		}
+   826	
+   827		ret = cdn_dp_audio_mute(dp, enable);
+   828	
+   829	out:
+   830		mutex_unlock(&dp->lock);
+   831		return ret;
+   832	}
+   833	
+   834	static const struct drm_bridge_funcs cdn_dp_bridge_funcs = {
+   835		.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+   836		.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+   837		.atomic_reset = drm_atomic_helper_bridge_reset,
+   838		.detect = cdn_dp_bridge_detect,
+   839		.edid_read = cdn_dp_bridge_edid_read,
+   840		.atomic_enable = cdn_dp_bridge_atomic_enable,
+   841		.atomic_disable = cdn_dp_bridge_atomic_disable,
+   842		.mode_valid = cdn_dp_bridge_mode_valid,
+   843	
+ > 844		.dp_audio_prepare = cdn_dp_audio_prepare,
+ > 845		.dp_audio_mute_stream = cdn_dp_audio_mute_stream,
+ > 846		.dp_audio_shutdown = cdn_dp_audio_shutdown,
+   847	};
+   848	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
