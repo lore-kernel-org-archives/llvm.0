@@ -1,113 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251212750E8;
-	Wed, 28 May 2025 15:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA95D28C855;
+	Wed, 28 May 2025 15:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748446506; cv=none; b=HGyuyk4sxvMcSIledlf903uwqXotRZ3eLj7cNyIT1nWHPAlcjcQhgx0Rjus7VEic/Nl2PruKBE08X6u1uamcEIX7kDX/i4W6WuCr1MqTpI/BRRtmaf4OOih5tMhw0yeosR8omN9WwvOlT0GfcP/DFbF3HpzOWu+mIlVypCfJ20A=
+	t=1748447911; cv=none; b=Yh+7uPSDYxElEsjSWjl659pjSWbQz1C9xjvyC9fAGO/g2CskW4smmfi7Mv4xm6NE6zsRjDfNH3Y+wtaBjtKt0y+LUB5XokcQpRn877AoPwOBAqfuWvSzSt3EqU78JAAZHadhO2b5LJ1/rLNP7sVz3UrsjnKN56lP/SZ/9SKv6pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748446506; c=relaxed/simple;
-	bh=zB7eSGVJ68Jl0gMC9+d7mPya9pfNddYzQqEMb7NDisM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=bfP+XXmzZwosfYyV1htHeT21FYHH7Gu4L91xrysMa0SMI71/hWzz5AGNs03PY+24WJ+ffjMfEdFUILt5FsY6lqTkBxhy2pGs3tF7sBC4zS6q2YjkEw6/qlBFQGH9V6JuobNfGRoXbnvw8AmBJE7SB1fr0saBHYeim9Rh1NfJc9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kVPnqshC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748447911; c=relaxed/simple;
+	bh=jQ1GOT+yh1Z61cRE9ycQmcM+5PDeTXfT6DSI9iMG7MA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7WTWVTS8Y5CI6NPMM1yJ293604tPtaXuqA8Q38vOv+b34EnG86Nxk8mFpEZxOJAGyPI71+wRaSidV8TZ4H/N7pRjkGhnVzPzbMvJ1kJ2gKpjanCfaDgqxs9nh8tITYHERqTy0hgh5vUb2u9jb9fpwsLpFCBdTRUT1U0VQKxgnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EW3dVrLt; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kVPnqshC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B031C4CEE3;
-	Wed, 28 May 2025 15:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748446506;
-	bh=zB7eSGVJ68Jl0gMC9+d7mPya9pfNddYzQqEMb7NDisM=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=kVPnqshCxEe5Da+hatugp5jpRO+YqdxnSK8hHV9/MuHaeYogJc8HUNfD+v7Y7oNnd
-	 ajTOOvKZaF0AWykZCZmwO7rAa8WJYeT6DIdhhnZOGCLAyadkSOftnheVVRR4FwmZLb
-	 wINaZlL/et1WxglyVXp6Bdc2km89Q4hZ8nTMOxo7LZNYnc6ZSms6wti8wzmuvtyWSz
-	 Ytq92scLm0QqesXBybdXA+fa1nRyGQudkluYwUXFNmEW9Vvt+RNGG7P+2+BjFDmGjt
-	 0jtso4IYLC52ByJ/P3KhBshux6a8WckGKiCjTxpDWhMHWsCdgKZeCnAhtK1FWUAVGf
-	 4ZiszX0mmUL+w==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EW3dVrLt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748447910; x=1779983910;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jQ1GOT+yh1Z61cRE9ycQmcM+5PDeTXfT6DSI9iMG7MA=;
+  b=EW3dVrLtbpUPzSO7v+1XHiRsjEIiMuOAztH+3s07Y+nnrIdE/QDAtNEi
+   yVutIGP7eXbWheH2dOlTFcMsKEsEojriyrHZYIxXO7a4Qh3AkagxlHEM9
+   Bb+uZcL4M0exKq2bHp7DKxr1Cu0ADi5M6eRX2FJCKfC5uGjVU8cMO1jEo
+   htSLDkJ+59MQJm2Jdhh37PmHpRYWsIAFS4Q/H2KmqpVGbQdMu8yWUonbq
+   y+z/kA20UHF+VuLTwIziP+Czo5HcUUy2UZgws7AsBMe6c5uyhfHuINMvQ
+   9GrdEPlDrnEEfF51leDkVj2SeGH4z1Gu9H+iczukRBx3uW+6mfrDJKDiw
+   w==;
+X-CSE-ConnectionGUID: JHCCY25QRCaC1REkmVFThg==
+X-CSE-MsgGUID: iy+uxIUoRayfiYAjxULNMg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="60740119"
+X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
+   d="scan'208";a="60740119"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 08:58:29 -0700
+X-CSE-ConnectionGUID: 7vNOD3ErRAaVAEJcQ5OGBA==
+X-CSE-MsgGUID: DTfw/s/YRguYfCNhsp5rkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
+   d="scan'208";a="148140975"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 May 2025 08:58:22 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uKJAZ-000Vow-2h;
+	Wed, 28 May 2025 15:58:19 +0000
+Date: Wed, 28 May 2025 23:57:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul@sk.com>, willy@infradead.org,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kernel_team@skhynix.com, kuba@kernel.org, almasrymina@google.com,
+	ilias.apalodimas@linaro.org, harry.yoo@oracle.com, hawk@kernel.org,
+	akpm@linux-foundation.org, davem@davemloft.net,
+	john.fastabend@gmail.com, andrew+netdev@lunn.ch,
+	asml.silence@gmail.com, toke@redhat.com, tariqt@nvidia.com,
+	edumazet@google.com, pabeni@redhat.com, saeedm@nvidia.com,
+	leon@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	david@redhat.com, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com
+Subject: Re: [PATCH v2 16/16] mt76: use netmem descriptor and APIs for page
+ pool
+Message-ID: <202505282311.lZqpYSc9-lkp@intel.com>
+References: <20250528022911.73453-17-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 May 2025 17:34:53 +0200
-Message-Id: <DA7WJYNAN5AI.2HE6B953GR16A@kernel.org>
-Subject: Re: [PATCH v10 4/5] rust: replace `kernel::c_str!` with C-Strings
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Alice Ryhl" <aliceryhl@google.com>, "Tamir Duberstein"
- <tamird@gmail.com>
-Cc: "Michal Rostecki" <vadorovsky@protonmail.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Danilo Krummrich"
- <dakr@kernel.org>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Maxime Ripard" <mripard@kernel.org>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "FUJITA
- Tomonori" <fujita.tomonori@gmail.com>, "Rob Herring" <robh@kernel.org>,
- "Saravana Kannan" <saravanak@google.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Will Deacon"
- <will@kernel.org>, "Waiman Long" <longman@redhat.com>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt"
- <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>, "Heiner Kallweit"
- <hkallweit1@gmail.com>, "Russell King" <linux@armlinux.org.uk>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Bjorn
- Helgaas" <bhelgaas@google.com>, "Arnd Bergmann" <arnd@arndb.de>, "Jens
- Axboe" <axboe@kernel.dk>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, <dri-devel@lists.freedesktop.org>,
- <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <llvm@lists.linux.dev>, <linux-pci@vger.kernel.org>,
- <nouveau@lists.freedesktop.org>, <linux-block@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-4-6412a94d9d75@gmail.com>
- <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
- <CAJ-ks9nd6_iGK+ie-f+F0x4kwpyEGJ-kQiQGt-ffdbVN5S6kOg@mail.gmail.com>
- <aDbnLzPIGiAZISOq@google.com>
-In-Reply-To: <aDbnLzPIGiAZISOq@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250528022911.73453-17-byungchul@sk.com>
 
-On Wed May 28, 2025 at 12:36 PM CEST, Alice Ryhl wrote:
-> On Mon, May 26, 2025 at 06:29:46PM -0400, Tamir Duberstein wrote:
->> On Mon, May 26, 2025 at 11:04=E2=80=AFAM Benno Lossin <lossin@kernel.org=
-> wrote:
->> >
->> > On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
->> > > +macro_rules! c_str_avoid_literals {
->> >
->> > I don't like this name, how about `concat_to_c_str` or
->> > `concat_with_nul`?
->> >
->> > This macro also is useful from macros that have a normal string litera=
-l,
->> > but can't turn it into a `c""` one.
->>=20
->> Uh, can you give an example? I'm not attached to the name.
->
-> I also think it should be renamed. Right now it sounds like it creates a
-> c string while avoiding literals in the input ... whatever that means.
+Hi Byungchul,
 
-Yeah that's a good way to put why the name is weird.
+kernel test robot noticed the following build errors:
 
-> I like Benno's suggestions, but str_to_cstr! could also work?
+[auto build test ERROR on d09a8a4ab57849d0401d7c0bc6583e367984d9f7]
 
-Hmm, I think then people won't know that it can also concat? I don't
-think it matters too much, the macro probably won't be used that often
-and if someone needs to use it, they probably wouldn't fine it by name
-alone.
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/netmem-introduce-struct-netmem_desc-struct_group_tagged-ed-on-struct-net_iov/20250528-103136
+base:   d09a8a4ab57849d0401d7c0bc6583e367984d9f7
+patch link:    https://lore.kernel.org/r/20250528022911.73453-17-byungchul%40sk.com
+patch subject: [PATCH v2 16/16] mt76: use netmem descriptor and APIs for page pool
+config: i386-buildonly-randconfig-004-20250528 (https://download.01.org/0day-ci/archive/20250528/202505282311.lZqpYSc9-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505282311.lZqpYSc9-lkp@intel.com/reproduce)
 
----
-Cheers,
-Benno
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505282311.lZqpYSc9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/mediatek/mt76/sdio_txrx.c:74:3: error: must use 'struct' tag to refer to type 'page'
+      74 |                 page = netmem_compound_head(virt_to_netmem(data));
+         |                 ^
+         |                 struct 
+>> drivers/net/wireless/mediatek/mt76/sdio_txrx.c:74:8: error: expected identifier or '('
+      74 |                 page = netmem_compound_head(virt_to_netmem(data));
+         |                      ^
+   2 errors generated.
+
+
+vim +74 drivers/net/wireless/mediatek/mt76/sdio_txrx.c
+
+    58	
+    59	static struct sk_buff *
+    60	mt76s_build_rx_skb(void *data, int data_len, int buf_len)
+    61	{
+    62		int len = min_t(int, data_len, MT_SKB_HEAD_LEN);
+    63		struct sk_buff *skb;
+    64	
+    65		skb = alloc_skb(len, GFP_KERNEL);
+    66		if (!skb)
+    67			return NULL;
+    68	
+    69		skb_put_data(skb, data, len);
+    70		if (data_len > len) {
+    71			netmem_ref netmem;
+    72	
+    73			data += len;
+  > 74			page = netmem_compound_head(virt_to_netmem(data));
+    75			skb_add_rx_frag_netmem(skb, skb_shinfo(skb)->nr_frags,
+    76					       netmem, data - netmem_address(netmem),
+    77					       data_len - len, buf_len);
+    78			get_netmem(netmem);
+    79		}
+    80	
+    81		return skb;
+    82	}
+    83	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
