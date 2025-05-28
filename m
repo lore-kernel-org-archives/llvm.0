@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB1919343B;
-	Wed, 28 May 2025 11:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0645202C26;
+	Wed, 28 May 2025 11:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748430774; cv=none; b=AZE0ZO9CavfpQ2XCd6g+OBraakr+6VoHs/N1xjH9U1UQ24dln7nSgaPjCIIyzLwMXaqo/yWk3TKoTy22ZCv8+rJW4Tvx0UrDZ5TtJ/tVnIcjgeGiJ0t1ZGC5loHRk34gnDKLv/cGS4YHecLEZQIFXxhgPuKyRn18npSa1+7o0sQ=
+	t=1748432097; cv=none; b=px0Cz0aLE+dYZhgdHKPtWIzRHdfUzEt+i1KU3OhhXOn6sUBPtIKkLAx6T903YdSdIhrHAsdKqMlxbn4ACdIcM5/RESjuxYHa2SNwZuIiJ1qAVp+JAxzEZG5z62SysVicjrC4AMKvjP0OWV8XQEnKWkKLyh57r1xHygRNseeJxHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748430774; c=relaxed/simple;
-	bh=c6XCpPi3M9BjDPmcDyl0ht/M9nZpoLiGCe0c8n7fGEs=;
+	s=arc-20240116; t=1748432097; c=relaxed/simple;
+	bh=HSxCbgRLZhJCIcQQOJEc5MtOOGLMy3xGR4PMKG3DHvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TRzK2HxH42TgI/ypi3ud7YuZev2E4CRvNyBttTno6NlBUzH5Qadrx1+phcQs+0TYg4pNjaGWQ3A3mdR85VEqPc4Ac+/uHXQsNU7d6GBJfKrrX5y1ZNKv4UeoVwwxtKe05hbEOGcg7zjmF07O1K+G/hCeDPNCtfEJaoOdEFfK6eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KVSF8Ill; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=pIc8kAKys4DXy9AXqqHkBcgq0zw3shGPknULi3XCsEBX8BcrO/grfb24D9XTjo39y7HB2OJ9gy+Sheaolsygu3UNM2pDLnGR7fwJWcUcF6BmscddR3pgSSUXgNW7MpQcVZeOr2t/TIlFUZMtdX8ejsO19bfOqU+1u5jRrq0yp6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ULHOQ+80; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KVSF8Ill"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ULHOQ+80"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748430773; x=1779966773;
+  t=1748432096; x=1779968096;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=c6XCpPi3M9BjDPmcDyl0ht/M9nZpoLiGCe0c8n7fGEs=;
-  b=KVSF8IlljaT1L1pTAyK8oDSSPU/zWyB1XtSaxNQH54O6ik/Y+FuWfxPp
-   KuOl23uOTm/cR35WHNIGMKoq2QF8GH8okHSZTCFtvvIh7wTTAWLYbZ0nd
-   eT8VE/9ieYHHhTYj6SD1G/Qoo5hsAoy0G0wTwyeOHbBkvOHuS6SQ545xI
-   T7uOJUi7J1Iq1EcOo+gxD97XWZtdUjY5i5rKLvZdGarGwRTvINw5TpThB
-   IkT/NAqKB7ziKOSKlVzs6lIKlW3hrJOj343vaH2DJIWP3SZxhW5uP7BWp
-   FTL+ZmE2wKD254/utJH6KwnSomm6j4kMz3U85FZAxjC+j4qRjV6DLWn8F
-   g==;
-X-CSE-ConnectionGUID: d/0C1PelS6+sMoTjEoaD3A==
-X-CSE-MsgGUID: dg7UDaCbSuiRrO1f1+SkeQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11446"; a="67865580"
+  bh=HSxCbgRLZhJCIcQQOJEc5MtOOGLMy3xGR4PMKG3DHvg=;
+  b=ULHOQ+80tetHTnpZPtjnLc0M30Ar3/v/USsIGMgo3zdgJ75ofW9x+y8w
+   VZLhEWHCOE8UN440lRtGQy3xtjjz1qXd2ZFjnt91hLd7Z7IuXrqAOzfaH
+   uezoU1u8rqpGqTv+WGjRvvFbAsn7ck4yeTV40xfa9VeytSLFXvq/AMhlv
+   ljvcah/vKyTLKFKzHDPr7l1nTfh1eukMKz9nxlbut7URh36odIc5HVLuq
+   lCRRiskDrR+/aPHL4hL5l4HdHGtiVunMeMWc+MEupxlaRoQMiGVNOqVNC
+   n4jwzGqfSL0lMBh9ALccQ/MSN4iWFk5xxbjHs7LZwAn1dmt+xaiQkzXyg
+   A==;
+X-CSE-ConnectionGUID: 91olu1NySWCTtOrUYxrvVQ==
+X-CSE-MsgGUID: jmUO7K+VQyGmN+qbfbLrcw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="50152789"
 X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
-   d="scan'208";a="67865580"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 04:12:53 -0700
-X-CSE-ConnectionGUID: Z5GF7ThkQ/2fRNHoz4p8Bw==
-X-CSE-MsgGUID: TctObnezS36UB8YJTadhng==
+   d="scan'208";a="50152789"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 04:34:56 -0700
+X-CSE-ConnectionGUID: gOecNs2RRlqmVkcs8m6llw==
+X-CSE-MsgGUID: BHUyzIPHSy6OcTM3fSV+GQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
-   d="scan'208";a="147966943"
+   d="scan'208";a="174209022"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 28 May 2025 04:12:50 -0700
+  by orviesa002.jf.intel.com with ESMTP; 28 May 2025 04:34:53 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uKEiF-000VbA-11;
-	Wed, 28 May 2025 11:12:47 +0000
-Date: Wed, 28 May 2025 19:12:41 +0800
+	id 1uKF3a-000VcS-22;
+	Wed, 28 May 2025 11:34:50 +0000
+Date: Wed, 28 May 2025 19:34:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aditya Kumar Singh <aditya.kumar.singh@oss.qualcomm.com>,
-	Johannes Berg <johannes@sipsolutions.net>
+To: Menglong Dong <menglong8.dong@gmail.com>, alexei.starovoitov@gmail.com,
+	rostedt@goodmis.org, jolsa@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH wireless-next] wifi: mac80211: consider links for
- validating SCAN_FLAG_AP in scan request during MLO
-Message-ID: <202505281853.CBjCB3yV-lkp@intel.com>
-References: <20250528-fix_scan_ap_flag_requirement_during_mlo-v1-1-35ac0e3a2f7b@oss.qualcomm.com>
+	bpf@vger.kernel.org, Menglong Dong <dongml2@chinatelecom.cn>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 14/25] bpf: tracing: add multi-link support
+Message-ID: <202505281947.qIShGsJU-lkp@intel.com>
+References: <20250528034712.138701-15-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,115 +65,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250528-fix_scan_ap_flag_requirement_during_mlo-v1-1-35ac0e3a2f7b@oss.qualcomm.com>
+In-Reply-To: <20250528034712.138701-15-dongml2@chinatelecom.cn>
 
-Hi Aditya,
+Hi Menglong,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on ea15e046263b19e91ffd827645ae5dfa44ebd044]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Kumar-Singh/wifi-mac80211-consider-links-for-validating-SCAN_FLAG_AP-in-scan-request-during-MLO/20250528-113350
-base:   ea15e046263b19e91ffd827645ae5dfa44ebd044
-patch link:    https://lore.kernel.org/r/20250528-fix_scan_ap_flag_requirement_during_mlo-v1-1-35ac0e3a2f7b%40oss.qualcomm.com
-patch subject: [PATCH wireless-next] wifi: mac80211: consider links for validating SCAN_FLAG_AP in scan request during MLO
-config: arm-randconfig-003-20250528 (https://download.01.org/0day-ci/archive/20250528/202505281853.CBjCB3yV-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505281853.CBjCB3yV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/add-per-function-metadata-storage-support/20250528-115819
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20250528034712.138701-15-dongml2%40chinatelecom.cn
+patch subject: [PATCH bpf-next 14/25] bpf: tracing: add multi-link support
+config: arm-randconfig-002-20250528 (https://download.01.org/0day-ci/archive/20250528/202505281947.qIShGsJU-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505281947.qIShGsJU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505281853.CBjCB3yV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505281947.qIShGsJU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/mac80211/cfg.c:2953:16: error: call to undeclared function 'cfg80211_get_radio_idx_by_chan'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2953 |                         radio_idx = cfg80211_get_radio_idx_by_chan(wiphy, chan);
-         |                                     ^
->> net/mac80211/cfg.c:2955:8: error: call to undeclared function 'ieee80211_is_radio_idx_in_scan_req'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2955 |                         if (ieee80211_is_radio_idx_in_scan_req(wiphy, req,
-         |                             ^
-   2 errors generated.
+>> kernel/bpf/syscall.c:3727:2: error: call to undeclared function 'bpf_gtrampoline_unlink_prog'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3727 |         bpf_gtrampoline_unlink_prog(&multi_link->link);
+         |         ^
+   kernel/bpf/syscall.c:3727:2: note: did you mean 'bpf_trampoline_unlink_prog'?
+   include/linux/bpf.h:1492:19: note: 'bpf_trampoline_unlink_prog' declared here
+    1492 | static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+         |                   ^
+>> kernel/bpf/syscall.c:3995:8: error: call to undeclared function 'bpf_gtrampoline_link_prog'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3995 |         err = bpf_gtrampoline_link_prog(&link->link);
+         |               ^
+   kernel/bpf/syscall.c:3995:8: note: did you mean 'bpf_trampoline_link_prog'?
+   include/linux/bpf.h:1486:19: note: 'bpf_trampoline_link_prog' declared here
+    1486 | static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+         |                   ^
+   kernel/bpf/syscall.c:4001:3: error: call to undeclared function 'bpf_gtrampoline_unlink_prog'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4001 |                 bpf_gtrampoline_unlink_prog(&link->link);
+         |                 ^
+   3 errors generated.
 
 
-vim +/cfg80211_get_radio_idx_by_chan +2953 net/mac80211/cfg.c
+vim +/bpf_gtrampoline_unlink_prog +3727 kernel/bpf/syscall.c
 
-  2895	
-  2896	static int ieee80211_scan(struct wiphy *wiphy,
-  2897				  struct cfg80211_scan_request *req)
-  2898	{
-  2899		struct ieee80211_sub_if_data *sdata;
-  2900		struct ieee80211_link_data *link;
-  2901		struct ieee80211_channel *chan;
-  2902		int radio_idx;
-  2903		u8 link_id;
-  2904	
-  2905		sdata = IEEE80211_WDEV_TO_SUB_IF(req->wdev);
-  2906	
-  2907		switch (ieee80211_vif_type_p2p(&sdata->vif)) {
-  2908		case NL80211_IFTYPE_STATION:
-  2909		case NL80211_IFTYPE_ADHOC:
-  2910		case NL80211_IFTYPE_MESH_POINT:
-  2911		case NL80211_IFTYPE_P2P_CLIENT:
-  2912		case NL80211_IFTYPE_P2P_DEVICE:
-  2913			break;
-  2914		case NL80211_IFTYPE_P2P_GO:
-  2915			if (sdata->local->ops->hw_scan)
-  2916				break;
-  2917			/*
-  2918			 * FIXME: implement NoA while scanning in software,
-  2919			 * for now fall through to allow scanning only when
-  2920			 * beaconing hasn't been configured yet
-  2921			 */
-  2922			fallthrough;
-  2923		case NL80211_IFTYPE_AP:
-  2924			/*
-  2925			 * If the scan has been forced (and the driver supports
-  2926			 * forcing), don't care about being beaconing already.
-  2927			 * This will create problems to the attached stations (e.g. all
-  2928			 * the frames sent while scanning on other channel will be
-  2929			 * lost)
-  2930			 */
-  2931			for (link_id = 0; link_id < IEEE80211_MLD_MAX_NUM_LINKS;
-  2932			     link_id++) {
-  2933				link = sdata_dereference(sdata->link[link_id], sdata);
-  2934				if (!link)
-  2935					continue;
-  2936	
-  2937				/* if the link is not beaconing, ignore it */
-  2938				if (!sdata_dereference(link->u.ap.beacon, sdata))
-  2939					continue;
-  2940	
-  2941				/* If we are here then at least one of the link is
-  2942				 * beaconing and since radio level information is
-  2943				 * not present or single underlying radio is present,
-  2944				 * no point in checking further and hence return if
-  2945				 * flag requirements are not met.
-  2946				 */
-  2947				if (wiphy->n_radio < 2 &&
-  2948				    (!(wiphy->features & NL80211_FEATURE_AP_SCAN) ||
-  2949				     !(req->flags & NL80211_SCAN_FLAG_AP)))
-  2950					return -EOPNOTSUPP;
-  2951	
-  2952				chan = link->conf->chanreq.oper.chan;
-> 2953				radio_idx = cfg80211_get_radio_idx_by_chan(wiphy, chan);
-  2954	
-> 2955				if (ieee80211_is_radio_idx_in_scan_req(wiphy, req,
-  2956								       radio_idx) &&
-  2957				    (!(wiphy->features & NL80211_FEATURE_AP_SCAN) ||
-  2958				     !(req->flags & NL80211_SCAN_FLAG_AP)))
-  2959					return -EOPNOTSUPP;
-  2960			}
-  2961			break;
-  2962		case NL80211_IFTYPE_NAN:
-  2963		default:
-  2964			return -EOPNOTSUPP;
-  2965		}
-  2966	
-  2967		return ieee80211_request_scan(sdata, req);
-  2968	}
-  2969	
+  3721	
+  3722	static void bpf_tracing_multi_link_release(struct bpf_link *link)
+  3723	{
+  3724		struct bpf_tracing_multi_link *multi_link =
+  3725			container_of(link, struct bpf_tracing_multi_link, link.link);
+  3726	
+> 3727		bpf_gtrampoline_unlink_prog(&multi_link->link);
+  3728		__bpf_tracing_multi_link_release(multi_link);
+  3729	}
+  3730	
 
 -- 
 0-DAY CI Kernel Test Service
