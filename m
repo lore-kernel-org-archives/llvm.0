@@ -1,115 +1,177 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB2421322F
-	for <llvm@lists.linux.dev>; Wed, 28 May 2025 14:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A63D13EFF3;
+	Wed, 28 May 2025 15:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748441449; cv=none; b=lvlw4yyoJ5bpPullfAZ+TX/CjI1ygFcc++LpvWVYmWmFLIaZvrjrEqwtT3smonjaeoca/o+y4KP5Rafkag/MgBWw2GPXUtKZ3pDn6pEV77phkEiT4S79VqbQRIcaCBdno6Ys5ui+ncqwLEXGon/2JQzsYL3YKB3bL/+Tr6YhVwM=
+	t=1748444733; cv=none; b=QDBgQYKWV6AUtaX9nRe0E1QWoYYxqhgQuVyn8SvVEYYLRfrIWWAywKVKYReh9ew4WB6gRbseYqJCmlMm9F8Uu7i0qx8CNmnOZDaHNmGXP3SeSynvEURUCc2gIava3HefkAwZQQgNZPB7PJdRnTmx3DKEX9zlU95q5mxIdX1bB20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748441449; c=relaxed/simple;
-	bh=SH5cP+3YWmXs8/zc7fXq9BP075bBVMwRnqEHsDoMzq4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SYF43egu2qr9kEwlc55+Wij9uDd6wJJbH3DI8IcFEj1NJ25jOPkm+xbASfXCCytTyYROyQVwaB4OJgTbsZy9Ow7IUfImE/dgFxDdaRXrUEO7LN6dl02nUYhdyoSL7VjrcUNaqR7jJeQIG8xe+hNV8lptqPMY7GEnBr4gtodTIgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lFBoPNYw; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748444733; c=relaxed/simple;
+	bh=zhvyuzLrK5n6OUVbI62QSy1rb7U3esqo/4EEAEHM8SA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EgnN0F5inn+CiqaUnb/XQOJ1f1zarr4Tq7FtbL1ulLuYLp+rOLQz5KeKek9EIbV6+y2yh6fZeikSze1yxKaFyr7MKVDhXt3MSJr7jpKm7USqbQRQ7ozMozw+3UtVVR1DuwhuX2bZ0PTkhJyuFhgBZOagSrwZHhg+Li1OyXDG7FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cIlBl5EC; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lFBoPNYw"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30db1bd3bddso42670761fa.3
-        for <llvm@lists.linux.dev>; Wed, 28 May 2025 07:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748441446; x=1749046246; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SH5cP+3YWmXs8/zc7fXq9BP075bBVMwRnqEHsDoMzq4=;
-        b=lFBoPNYw0S1LmIGGUPntwfCkcJXOGH7inN7aUAkeYGgGVhrGCEYCdT5oOgNvQou2Ih
-         MFqeSwjYDNuhI9nY0T06XgOjdnsUaTGfHWy10SFLlLOBFDizm12KfFymQJPTBXVkPIpF
-         /J7tAR/YBy2qDCBPSNGy/kuKPR1zX4v3e+1VNSK1vQiExvrBE+L2Hopyi4eNwXMHPP/v
-         YDvNXrvDfDAeEPTXnMaPCrdBq0ZylAUznjhOksjTrPz+ijuUlxdokfb/AEbgQFKCO8jM
-         2xyRsHxlfUXaPh2J9eHoKhV1aNq9uPuG1vpEmqNwkB5w1IvxaF9mgEO9ENf8v9q4qYUM
-         nqAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748441446; x=1749046246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SH5cP+3YWmXs8/zc7fXq9BP075bBVMwRnqEHsDoMzq4=;
-        b=c0J9B5jRd1wJD1dRhCUd+4T2gVpQJF5i7/bLNx7k2EByaVQi9WvP0Mz92nSAvsLdRu
-         bEW0h0y4Vf4ueYEoWBSDT3wBh+qfYud8m3DjZgA33WyxdwWeMxjEkket20f1753Dk+5X
-         SWJpdhRnfZ0RMXXyRQDG3ztqPink/M0O+5ynW8uFxloQmcrHMPayaVnqNR5g0+okPW5r
-         J6i+RCwnm+OWGoVgQJ6qdJSurPVQkX59LqubFa2eS6jaX1dAf5TyZGCZ2gr9EepNca6Z
-         pfiqV5mQUTxNc8Abh+xgr9Q/nZWNesEpEGQZx2Xnf00vBnPmnhHt3YI1qAyZ5frfFQOk
-         RZGg==
-X-Forwarded-Encrypted: i=1; AJvYcCXh1hM8grzA3s+QXmZ1sxAeLYh0uDCIcO6Omxm7BHlXgIXIpoNTcYOhVJ7lbtdkQ+R0Nhcn@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx10+ijmnVd8BLmywqQWEM1s4x1vg/sv38GXCzhrjLfgyXIDFVD
-	wwbED9lWWCsAMrOfVMIa83AKWK+pONd9sXt+5CKhZHXAyhxm6587CQTOdtAHGps+tnwbJ8JV4fT
-	0maHx0ZvNQj22esbQpFKf1DdS884fodU=
-X-Gm-Gg: ASbGncsJs7q/tajaRZQnRlPiYkX0XTMMPGbZ5pkXbhJbhblPSHV2UTzAm0S7kfIFfju
-	T6p0n70UbjntPEi0T2jRkdrB0Rja2e0m768eEuHT2BMXNyPUCQ4K7LvSHE66CL/CQFiG8jdTuCM
-	oq3kOyILedKxwkJ5TfZ1JdPWFqEZeEyKnVf2pgVJwNZ4VieblG
-X-Google-Smtp-Source: AGHT+IG3dTRzhOJeaA21sQ8Cl6CUs5QffL1O5Hi46hlWsg6xnHSKewHgYxirdmC8QSEO4fDwgYnRgzhaJUbQ8K+6RKc=
-X-Received: by 2002:a05:651c:1469:b0:32a:7122:58cc with SMTP id
- 38308e7fff4ca-32a71225a60mr20885251fa.6.1748441445644; Wed, 28 May 2025
- 07:10:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cIlBl5EC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748444732; x=1779980732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zhvyuzLrK5n6OUVbI62QSy1rb7U3esqo/4EEAEHM8SA=;
+  b=cIlBl5EC8QRdG0tif0/DYurN+oCjbYaKAw67aH0j2LE7HDsEhGilWjLq
+   GtdFvAt76FO/qdW1k8+BT39V4oFzmea8rJThVcG9EbHbs3B6TfRvHclA7
+   JeguBZqh6/bFNUB4WpqCOsjjLDhicjmkmVG2XeoswSDsqcNR081eu+tCb
+   FxxnrmbM+V73+ADh/Gw9O+ingxXgrnWDhxbXiw4Yi6LFVI5IksB+cSOci
+   P10+fG6iJDBZgSTtSGVW+rtpo9XKCgfKpr8P9Y1TUpMsTraXnNsqQj7nu
+   uorcZ2hnr/IHdkIhMhkOGoy6CCO0OVhxjMHUHIJg1POTF9rNYXNiNpD+Q
+   w==;
+X-CSE-ConnectionGUID: P4nasgOmTaiJJbvna72DoA==
+X-CSE-MsgGUID: 2ob1UNqQSaCIwLijYXkuyw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="54271013"
+X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
+   d="scan'208";a="54271013"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 08:05:30 -0700
+X-CSE-ConnectionGUID: H2diCw0jSpqy65KQgLimxw==
+X-CSE-MsgGUID: pVfdUDaYRI6hPQWbpUbzEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
+   d="scan'208";a="144235065"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 28 May 2025 08:05:17 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uKILC-000Vmu-24;
+	Wed, 28 May 2025 15:05:14 +0000
+Date: Wed, 28 May 2025 23:04:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Wang <jasowang@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH V2 19/19] virtio_ring: add in order support
+Message-ID: <202505282256.MVII3mpu-lkp@intel.com>
+References: <20250528064234.12228-20-jasowang@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com> <aDbniZzL1ZOSnfVi@google.com>
-In-Reply-To: <aDbniZzL1ZOSnfVi@google.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 28 May 2025 10:10:09 -0400
-X-Gm-Features: AX0GCFtCzkUkdNofO07GNzu_PibpIwzD2C0rC3Syu4m48_lWgFYSC9rhS2sdGcs
-Message-ID: <CAJ-ks9mcPd+-tFRuhxVGrYRPFEtJa3nQTdkvTtzLppqitVfaLg@mail.gmail.com>
-Subject: Re: [PATCH v10 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250528064234.12228-20-jasowang@redhat.com>
 
-On Wed, May 28, 2025 at 6:38=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> w=
-rote:
->
-> On Sat, May 24, 2025 at 04:33:00PM -0400, Tamir Duberstein wrote:
-> > This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-> > have omitted Co-authored tags, as the end result is quite different.
-> >
-> > Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vad=
-orovsky@protonmail.com/t/#u [0]
-> > Closes: https://github.com/Rust-for-Linux/linux/issues/1075
-> >
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
->
-> Overall LGTM, thanks! Left a few comments on individual patches, but I
-> can probably give a RB when those a fixed. :)
+Hi Jason,
 
-Thanks for looking! You say a few comments, but I only saw one. Did
-some get lost?
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.15 next-20250528]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Wang/virtio_ring-rename-virtqueue_reinit_xxx-to-virtqueue_reset_xxx/20250528-144806
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20250528064234.12228-20-jasowang%40redhat.com
+patch subject: [PATCH V2 19/19] virtio_ring: add in order support
+config: arm-randconfig-002-20250528 (https://download.01.org/0day-ci/archive/20250528/202505282256.MVII3mpu-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505282256.MVII3mpu-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505282256.MVII3mpu-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/virtio/virtio_ring.c:2109:40: warning: variable 'id' is uninitialized when used here [-Wuninitialized]
+    2109 |                 BAD_RING(vq, "id %u out of range\n", id);
+         |                                                      ^~
+   drivers/virtio/virtio_ring.c:60:32: note: expanded from macro 'BAD_RING'
+      60 |                         "%s:"fmt, (_vq)->vq.name, ##args);      \
+         |                                                     ^~~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/virtio/virtio_ring.c:2075:19: note: initialize the variable 'id' to silence this warning
+    2075 |         u16 last_used, id, last_used_idx;
+         |                          ^
+         |                           = 0
+   1 warning generated.
+
+
+vim +/id +2109 drivers/virtio/virtio_ring.c
+
+  2069	
+  2070	static void *virtqueue_get_buf_ctx_packed_in_order(struct vring_virtqueue *vq,
+  2071							   unsigned int *len,
+  2072							   void **ctx)
+  2073	{
+  2074		unsigned int num = vq->packed.vring.num;
+  2075		u16 last_used, id, last_used_idx;
+  2076		bool used_wrap_counter;
+  2077		void *ret;
+  2078	
+  2079		START_USE(vq);
+  2080	
+  2081		if (unlikely(vq->broken)) {
+  2082			END_USE(vq);
+  2083			return NULL;
+  2084		}
+  2085	
+  2086		last_used_idx = vq->last_used_idx;
+  2087		used_wrap_counter = packed_used_wrap_counter(last_used_idx);
+  2088		last_used = packed_last_used(last_used_idx);
+  2089	
+  2090		if (vq->batch_head == num) {
+  2091			if (!__more_used_packed(vq)) {
+  2092				pr_debug("No more buffers in queue\n");
+  2093				END_USE(vq);
+  2094				return NULL;
+  2095			}
+  2096			/* Only get used elements after they have been exposed by host. */
+  2097			virtio_rmb(vq->weak_barriers);
+  2098			vq->batch_head = le16_to_cpu(vq->packed.vring.desc[last_used].id);
+  2099			vq->batch_len = le32_to_cpu(vq->packed.vring.desc[last_used].len);
+  2100		}
+  2101	
+  2102		if (vq->batch_head == last_used) {
+  2103			vq->batch_head = num;
+  2104			*len = vq->batch_len;
+  2105		} else
+  2106			*len = vq->packed.desc_state[last_used].total_len;
+  2107	
+  2108		if (unlikely(last_used >= num)) {
+> 2109			BAD_RING(vq, "id %u out of range\n", id);
+  2110			return NULL;
+  2111		}
+  2112		if (unlikely(!vq->packed.desc_state[last_used].data)) {
+  2113			BAD_RING(vq, "id %u is not a head!\n", id);
+  2114			return NULL;
+  2115		}
+  2116	
+  2117		/* detach_buf_packed clears data, so grab it now. */
+  2118		ret = vq->packed.desc_state[last_used].data;
+  2119		detach_buf_packed_in_order(vq, last_used, ctx);
+  2120	
+  2121		update_last_used_idx_packed(vq, last_used, last_used,
+  2122					    used_wrap_counter);
+  2123	
+  2124		LAST_ADD_TIME_INVALID(vq);
+  2125	
+  2126		END_USE(vq);
+  2127		return ret;
+  2128	}
+  2129	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
