@@ -1,105 +1,180 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AE9279903
-	for <llvm@lists.linux.dev>; Wed, 28 May 2025 10:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB1919343B;
+	Wed, 28 May 2025 11:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748428687; cv=none; b=UcqWm+JvxRbl6RANlBfzZAxyBMyCyN4AZDGy3z9wY8/spz3AKbFQNZfY9sXe6614A72ICzS7TT8nXiW5nZQ8VVJYU9cKWmnU14TtA3yFqeedbW2nxm4FTeMaaPfan023WBkC7XyvYaFIrmyGv023CSzXf7nx6IChOdzZ9nUx9rA=
+	t=1748430774; cv=none; b=AZE0ZO9CavfpQ2XCd6g+OBraakr+6VoHs/N1xjH9U1UQ24dln7nSgaPjCIIyzLwMXaqo/yWk3TKoTy22ZCv8+rJW4Tvx0UrDZ5TtJ/tVnIcjgeGiJ0t1ZGC5loHRk34gnDKLv/cGS4YHecLEZQIFXxhgPuKyRn18npSa1+7o0sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748428687; c=relaxed/simple;
-	bh=f88538q2yu07+QCvEaeEz9oVquJwFySRVSt/ENxM+xU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MqnPO76f8UuVV6bvIZs4/hMrzqbVbUrbCTyewKNaCn3toke0QmVgLQM2nsGj5Kh91djV8NaoVvc68NcofFzYDrfN1gcHa3FrsahurZBZnHc0bZeHdXXPPIwiqH7cozWvng4+n4RicmvKbKUMAW7qxFfVM1W8H5vswKSEq+W6iww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OHS6y4oy; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1748430774; c=relaxed/simple;
+	bh=c6XCpPi3M9BjDPmcDyl0ht/M9nZpoLiGCe0c8n7fGEs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TRzK2HxH42TgI/ypi3ud7YuZev2E4CRvNyBttTno6NlBUzH5Qadrx1+phcQs+0TYg4pNjaGWQ3A3mdR85VEqPc4Ac+/uHXQsNU7d6GBJfKrrX5y1ZNKv4UeoVwwxtKe05hbEOGcg7zjmF07O1K+G/hCeDPNCtfEJaoOdEFfK6eQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KVSF8Ill; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OHS6y4oy"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3a4e1c6c68bso1293883f8f.0
-        for <llvm@lists.linux.dev>; Wed, 28 May 2025 03:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748428684; x=1749033484; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IeeR9yH0GpAyOFZydrFxToBZKNrKT1e0eUyjOqJKqG0=;
-        b=OHS6y4oysf5kjAXxKrehnNHcGEuOo7Qx+WjXVqvUQpNp6Gx2LTNKrgY8mlpz2kf4B2
-         6QhUFQ0qTWHeyu/iyccAy4NyVDeNP5L3ABR4YYzzSwit90Us3hnb/T7ULj/kDF2CVmcl
-         NmJ6kUp3gnuUdM5hiXH2K+vrJPVioEz3HeafkaFkYERqc7YbiaYn3XtvzbZ7mMTTfo4a
-         LkXfwZkELGsu1qxF6obTxTDAuMRP0eIgfmSpN2UbXJ0I9KHDY3mBtWzzBT/PNRCU7HhY
-         lja8R/+c3ieotC4gwuXNyxqhpz3bhJ8I3kiCpBH55sqGZSzU+h5MBubOZK96a06Vx78e
-         JU4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748428684; x=1749033484;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IeeR9yH0GpAyOFZydrFxToBZKNrKT1e0eUyjOqJKqG0=;
-        b=mpGdQ3UL3eELK1WKKYXMM4i/dpitgRps0ZbmJv5FBeSGdw/wA3F+bLaJqfU3dNxqSB
-         PW9vU5o2/16ApL7DNzthhTRVI1hRhm4WaZaULlBBQgOoWXGFyzL0Rf9Ii58lpLMKASCT
-         Yh6R5eGDaLZ8kr6Rqq4BV3ck3xH8+39dk3owr981gQmXY47d877J0UkidEUKML0q01Hk
-         Mt2bYtxCxfRY4ARxY2/HxcqfTVh3KE3d+QlkfUv7hHmiAEKmtPuwtU2lhM3eZzf/wasF
-         TouwM0yaYs98NlmzfNCWUuxI1ftP3te865ZcHg0RTf0ljckhwRDpiMzHt8RR6cAVT2WB
-         2qiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0TjxR0qvnNM44cz3p+kkWPBacDDMfhNluFzBthkYfCwO68IGNf90+e9GDs7/jEokFssPq@lists.linux.dev
-X-Gm-Message-State: AOJu0YxHATenodKTQcbkb/+NpVQqPJiv0ttc6Yu6FkDG8pZYBATzx0Ez
-	hyVU+vp+UrPQkA1y4L9sXjIk/qSXsrjH49CCD40we7ZvzwUNqr63klg5GlGDXqZo/326d3F2oPO
-	Lgjug7e/nQe16OwyQLg==
-X-Google-Smtp-Source: AGHT+IEQyiB/rjNjbMrROAYgPHAOQltkjwgoUsDbxSNhCEmiFFBD4KxkcRnm6cL1n1mzqucg+R5Lc+Nr+C90dyo=
-X-Received: from wmbdv21.prod.google.com ([2002:a05:600c:6215:b0:450:5dbe:5f11])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a5d:5f8b:0:b0:3a4:c95f:c1d1 with SMTP id ffacd0b85a97d-3a4cb428313mr13345804f8f.4.1748428683991;
- Wed, 28 May 2025 03:38:03 -0700 (PDT)
-Date: Wed, 28 May 2025 10:38:01 +0000
-In-Reply-To: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KVSF8Ill"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748430773; x=1779966773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c6XCpPi3M9BjDPmcDyl0ht/M9nZpoLiGCe0c8n7fGEs=;
+  b=KVSF8IlljaT1L1pTAyK8oDSSPU/zWyB1XtSaxNQH54O6ik/Y+FuWfxPp
+   KuOl23uOTm/cR35WHNIGMKoq2QF8GH8okHSZTCFtvvIh7wTTAWLYbZ0nd
+   eT8VE/9ieYHHhTYj6SD1G/Qoo5hsAoy0G0wTwyeOHbBkvOHuS6SQ545xI
+   T7uOJUi7J1Iq1EcOo+gxD97XWZtdUjY5i5rKLvZdGarGwRTvINw5TpThB
+   IkT/NAqKB7ziKOSKlVzs6lIKlW3hrJOj343vaH2DJIWP3SZxhW5uP7BWp
+   FTL+ZmE2wKD254/utJH6KwnSomm6j4kMz3U85FZAxjC+j4qRjV6DLWn8F
+   g==;
+X-CSE-ConnectionGUID: d/0C1PelS6+sMoTjEoaD3A==
+X-CSE-MsgGUID: dg7UDaCbSuiRrO1f1+SkeQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11446"; a="67865580"
+X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
+   d="scan'208";a="67865580"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 04:12:53 -0700
+X-CSE-ConnectionGUID: Z5GF7ThkQ/2fRNHoz4p8Bw==
+X-CSE-MsgGUID: TctObnezS36UB8YJTadhng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
+   d="scan'208";a="147966943"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 28 May 2025 04:12:50 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uKEiF-000VbA-11;
+	Wed, 28 May 2025 11:12:47 +0000
+Date: Wed, 28 May 2025 19:12:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aditya Kumar Singh <aditya.kumar.singh@oss.qualcomm.com>,
+	Johannes Berg <johannes@sipsolutions.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH wireless-next] wifi: mac80211: consider links for
+ validating SCAN_FLAG_AP in scan request during MLO
+Message-ID: <202505281853.CBjCB3yV-lkp@intel.com>
+References: <20250528-fix_scan_ap_flag_requirement_during_mlo-v1-1-35ac0e3a2f7b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
-Message-ID: <aDbniZzL1ZOSnfVi@google.com>
-Subject: Re: [PATCH v10 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
-From: Alice Ryhl <aliceryhl@google.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
-	"Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=" <kwilczynski@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250528-fix_scan_ap_flag_requirement_during_mlo-v1-1-35ac0e3a2f7b@oss.qualcomm.com>
 
-On Sat, May 24, 2025 at 04:33:00PM -0400, Tamir Duberstein wrote:
-> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-> have omitted Co-authored tags, as the end result is quite different.
-> 
-> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
-> 
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+Hi Aditya,
 
-Overall LGTM, thanks! Left a few comments on individual patches, but I
-can probably give a RB when those a fixed. :)
+kernel test robot noticed the following build errors:
 
-Alice
+[auto build test ERROR on ea15e046263b19e91ffd827645ae5dfa44ebd044]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Kumar-Singh/wifi-mac80211-consider-links-for-validating-SCAN_FLAG_AP-in-scan-request-during-MLO/20250528-113350
+base:   ea15e046263b19e91ffd827645ae5dfa44ebd044
+patch link:    https://lore.kernel.org/r/20250528-fix_scan_ap_flag_requirement_during_mlo-v1-1-35ac0e3a2f7b%40oss.qualcomm.com
+patch subject: [PATCH wireless-next] wifi: mac80211: consider links for validating SCAN_FLAG_AP in scan request during MLO
+config: arm-randconfig-003-20250528 (https://download.01.org/0day-ci/archive/20250528/202505281853.CBjCB3yV-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505281853.CBjCB3yV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505281853.CBjCB3yV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/mac80211/cfg.c:2953:16: error: call to undeclared function 'cfg80211_get_radio_idx_by_chan'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2953 |                         radio_idx = cfg80211_get_radio_idx_by_chan(wiphy, chan);
+         |                                     ^
+>> net/mac80211/cfg.c:2955:8: error: call to undeclared function 'ieee80211_is_radio_idx_in_scan_req'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2955 |                         if (ieee80211_is_radio_idx_in_scan_req(wiphy, req,
+         |                             ^
+   2 errors generated.
+
+
+vim +/cfg80211_get_radio_idx_by_chan +2953 net/mac80211/cfg.c
+
+  2895	
+  2896	static int ieee80211_scan(struct wiphy *wiphy,
+  2897				  struct cfg80211_scan_request *req)
+  2898	{
+  2899		struct ieee80211_sub_if_data *sdata;
+  2900		struct ieee80211_link_data *link;
+  2901		struct ieee80211_channel *chan;
+  2902		int radio_idx;
+  2903		u8 link_id;
+  2904	
+  2905		sdata = IEEE80211_WDEV_TO_SUB_IF(req->wdev);
+  2906	
+  2907		switch (ieee80211_vif_type_p2p(&sdata->vif)) {
+  2908		case NL80211_IFTYPE_STATION:
+  2909		case NL80211_IFTYPE_ADHOC:
+  2910		case NL80211_IFTYPE_MESH_POINT:
+  2911		case NL80211_IFTYPE_P2P_CLIENT:
+  2912		case NL80211_IFTYPE_P2P_DEVICE:
+  2913			break;
+  2914		case NL80211_IFTYPE_P2P_GO:
+  2915			if (sdata->local->ops->hw_scan)
+  2916				break;
+  2917			/*
+  2918			 * FIXME: implement NoA while scanning in software,
+  2919			 * for now fall through to allow scanning only when
+  2920			 * beaconing hasn't been configured yet
+  2921			 */
+  2922			fallthrough;
+  2923		case NL80211_IFTYPE_AP:
+  2924			/*
+  2925			 * If the scan has been forced (and the driver supports
+  2926			 * forcing), don't care about being beaconing already.
+  2927			 * This will create problems to the attached stations (e.g. all
+  2928			 * the frames sent while scanning on other channel will be
+  2929			 * lost)
+  2930			 */
+  2931			for (link_id = 0; link_id < IEEE80211_MLD_MAX_NUM_LINKS;
+  2932			     link_id++) {
+  2933				link = sdata_dereference(sdata->link[link_id], sdata);
+  2934				if (!link)
+  2935					continue;
+  2936	
+  2937				/* if the link is not beaconing, ignore it */
+  2938				if (!sdata_dereference(link->u.ap.beacon, sdata))
+  2939					continue;
+  2940	
+  2941				/* If we are here then at least one of the link is
+  2942				 * beaconing and since radio level information is
+  2943				 * not present or single underlying radio is present,
+  2944				 * no point in checking further and hence return if
+  2945				 * flag requirements are not met.
+  2946				 */
+  2947				if (wiphy->n_radio < 2 &&
+  2948				    (!(wiphy->features & NL80211_FEATURE_AP_SCAN) ||
+  2949				     !(req->flags & NL80211_SCAN_FLAG_AP)))
+  2950					return -EOPNOTSUPP;
+  2951	
+  2952				chan = link->conf->chanreq.oper.chan;
+> 2953				radio_idx = cfg80211_get_radio_idx_by_chan(wiphy, chan);
+  2954	
+> 2955				if (ieee80211_is_radio_idx_in_scan_req(wiphy, req,
+  2956								       radio_idx) &&
+  2957				    (!(wiphy->features & NL80211_FEATURE_AP_SCAN) ||
+  2958				     !(req->flags & NL80211_SCAN_FLAG_AP)))
+  2959					return -EOPNOTSUPP;
+  2960			}
+  2961			break;
+  2962		case NL80211_IFTYPE_NAN:
+  2963		default:
+  2964			return -EOPNOTSUPP;
+  2965		}
+  2966	
+  2967		return ieee80211_request_scan(sdata, req);
+  2968	}
+  2969	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
