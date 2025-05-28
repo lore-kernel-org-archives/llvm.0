@@ -1,66 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257EE21A453;
-	Wed, 28 May 2025 20:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C592DCC07;
+	Wed, 28 May 2025 21:32:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748463054; cv=none; b=LpwgyVScnveDXdNuSxa86DqipZCyJNlv1a6hPUH5c3eLxWX6Y5L6IWALH0dcj3s+uI2FyrO1HDZTiG8wQp1SSgBlIHw9HGnZn36evYMxTtxCPXdutO9+dCssM0VO8cgmDBhDb7CMq8S7QnW2fTFQ7zEn/qR3cESzTLN+qjXrf78=
+	t=1748467949; cv=none; b=sz8HHGfDS8MaGYcY0IO173TEOFNdeWcW5sJtv+mvLnlvhAlxkYouf0vz+fPrm9+szRcyK60YYh3YGc+obP0UwFdXdMeEnWPNoIjFWWwUZudQmHP0fl39ovToP3dIl4NSNE9az5y9vFVLDrxI0xL75E4d0U41bPGHJOJKK63bPFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748463054; c=relaxed/simple;
-	bh=cpQv2RNGwGH1nuOhlVXlmsBuGPn/vBpGaWEuwJmQePs=;
+	s=arc-20240116; t=1748467949; c=relaxed/simple;
+	bh=k1uGfz08eTAbpykTbdoMZWrusskWSVO4QedSWOoPJLA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i9INGi0jFdnZPy61+lW0FzP/uBrGauq7rrUvDLAqNs7HfXjBQ08vEDk87xWMr3D79vyGYDOgzXEH08KD4d5TtlhgGoNmB3VwkDyhn1kDE+DHCMZrV3bXdFyE33efxB9cyog6I7wXxCAPvOu9bRjPTGQTV+YPoTq+iigX8lqwZMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aKuGxL9i; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rKs0CkDPOnit6qQkJgQQyN6NmsHH+Y9l/86cbPLfNnDt7DyCZ7wIt5jn8kgvJ2TjKdZKo1TY0IeUBkiQmMrGPqPgV4DLhV5eb21ur9qW3tO0SiF29Bgzy3qSdIHUQsaAIeLzAFXzCDbQDHNteOXQSw6cXcvvc0oJEEB2bszkxXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ph16VZd8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aKuGxL9i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748463049; x=1779999049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cpQv2RNGwGH1nuOhlVXlmsBuGPn/vBpGaWEuwJmQePs=;
-  b=aKuGxL9iWW5W7v07rGzoBCqVgbgvdv6k+C6n6+nRpkZg8kmoV7BUl3rf
-   Q7HNNGNRnLnjoUtzd+llagsdyj9hFq1t+LWBuDcQ8Spr+REiislFeb1yN
-   CTbcpBS3nXZKscjx+NiOh0gmGukBCwhR3o7LUqggcUgbgq3QUQiGRHwAs
-   cIooMl50NjfxiwDmBKw6djs2Yu2GbUse44d3dOLOx36sBO8L8hxRi3ORW
-   INTzUG8EvT5osZgcqxMU0gWKF3XgcO/diZKFUU236S59adyw7g/cZoE1u
-   Ra7el3RJa6oet97hqOaPt4oKeC3MdU2nkXj0eeNKdoGEHLddtbP/Oc5XM
-   w==;
-X-CSE-ConnectionGUID: 3DIVMntZQrub68DB1BZT/w==
-X-CSE-MsgGUID: dCn5xR5RRS+KulBRdFt7Rw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="67923183"
-X-IronPort-AV: E=Sophos;i="6.15,322,1739865600"; 
-   d="scan'208";a="67923183"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 13:10:48 -0700
-X-CSE-ConnectionGUID: rum74yynRJOvUDwtQKpswg==
-X-CSE-MsgGUID: yL91wdbxS2OBj5xMho8yaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,322,1739865600"; 
-   d="scan'208";a="143801283"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 28 May 2025 13:10:46 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uKN6q-000W2O-0U;
-	Wed, 28 May 2025 20:10:44 +0000
-Date: Thu, 29 May 2025 04:10:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Simona Vetter <simona.vetter@ffwll.ch>,
-	DRI Development <dri-devel@lists.freedesktop.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-xe@lists.freedesktop.org,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Rob Clark <robdclark@chromium.org>,
-	Emil Velikov <emil.l.velikov@gmail.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/8] drm/fdinfo: Switch to idr_for_each() in
- drm_show_memory_stats()
-Message-ID: <202505290334.GjoY9qsk-lkp@intel.com>
-References: <20250528091307.1894940-3-simona.vetter@ffwll.ch>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ph16VZd8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F59C4CEE3;
+	Wed, 28 May 2025 21:32:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748467948;
+	bh=k1uGfz08eTAbpykTbdoMZWrusskWSVO4QedSWOoPJLA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ph16VZd8x8KAjTQxonH/32Sn9Kljc1Y6K57i6hLtxNo4oVq7ZyqTKMTXTczXruzze
+	 8uOfAJUhfhp7+3DUgNFDNh6fiY0SCitmoEIzhBuIRgY/BgUSZjQZxo0hWNitQCMIzi
+	 4RTncsQS3mPzASM/SmvoerbWeooZZwiBr/cynaenmV94bAqZdRvN5kxSb4kLajD75B
+	 33GC9EDLd0zeZX9FhNAYUfpX5s8UpSY5EgCoyZ5euOkI3AJkViQKXXibKYMki5XjUT
+	 FAwg0j+UZMbYfHj06LRsoPqtkFLQcV6YMx0waQ/ypJqScvU2J4O/px4GvqwzIYs8Vu
+	 NOpsb7NXXEXqg==
+Date: Wed, 28 May 2025 14:32:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Justin Stitt <justinstitt@google.com>,
+	Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jann Horn <jannh@google.com>, Marco Elver <elver@google.com>,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ubsan: integer-overflow: depend on BROKEN to keep this
+ out of CI
+Message-ID: <20250528213223.GA3885532@ax162>
+References: <20250528182616.work.296-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,95 +46,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250528091307.1894940-3-simona.vetter@ffwll.ch>
+In-Reply-To: <20250528182616.work.296-kees@kernel.org>
 
-Hi Simona,
+On Wed, May 28, 2025 at 11:26:22AM -0700, Kees Cook wrote:
+> Depending on !COMPILE_TEST isn't sufficient to keep this feature out of
+> CI because we can't stop it from being included in randconfig builds.
+> This feature is still highly experimental, and is developed in lock-step
+> with Clang's Overflow Behavior Types[1]. Depend on BROKEN to keep it
+> from being enabled by anyone not expecting it.
+> 
+> Link: https://discourse.llvm.org/t/rfc-v2-clang-introduce-overflowbehaviortypes-for-wrapping-and-non-wrapping-arithmetic/86507 [1]
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-kernel test robot noticed the following build warnings:
+Should this have a 'Cc: stable@vger.kernel.org' on it? There might not
+be much randconfig testing on stable but it is still very much possible
+for some random user to turn this on and report problems.
 
-[auto build test WARNING on next-20250527]
-[also build test WARNING on linus/master v6.15]
-[cannot apply to v6.15 v6.15-rc7 v6.15-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Regardless of that though, I think this is a good idea with how much of
+this feature is still being ironed out.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Simona-Vetter/drm-gem-Fix-race-in-drm_gem_handle_create_tail/20250528-171524
-base:   next-20250527
-patch link:    https://lore.kernel.org/r/20250528091307.1894940-3-simona.vetter%40ffwll.ch
-patch subject: [PATCH 2/8] drm/fdinfo: Switch to idr_for_each() in drm_show_memory_stats()
-config: riscv-randconfig-001-20250529 (https://download.01.org/0day-ci/archive/20250529/202505290334.GjoY9qsk-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250529/202505290334.GjoY9qsk-lkp@intel.com/reproduce)
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505290334.GjoY9qsk-lkp@intel.com/
+Once this lands, I plan to mark all issues in the CBL issue tracker that
+came about from UBSAN_INTEGER_WRAP as 'have a workaround applied' since
+it will not be possible for regular users to hit them but you may
+consider notating them in case they need to be addressed before the
+feature can be reenabled.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_file.c:916:3: warning: variable 'drm_data' is uninitialized when used here [-Wuninitialized]
-     916 |                 drm_data->supported_status |= s;
-         |                 ^~~~~~~~
-   drivers/gpu/drm/drm_file.c:903:36: note: initialize the variable 'drm_data' to silence this warning
-     903 |         struct drm_bo_print_data *drm_data;
-         |                                           ^
-         |                                            = NULL
-   1 warning generated.
-
-
-vim +/drm_data +916 drivers/gpu/drm/drm_file.c
-
-   899	
-   900	static int
-   901	drm_bo_memory_stats(int id, void *ptr, void *data)
-   902	{
-   903		struct drm_bo_print_data *drm_data;
-   904		struct drm_gem_object *obj = ptr;
-   905		enum drm_gem_object_status s = 0;
-   906		size_t add_size;
-   907	
-   908		if (!obj)
-   909			return 0;
-   910	
-   911		add_size = (obj->funcs && obj->funcs->rss) ?
-   912			obj->funcs->rss(obj) : obj->size;
-   913	
-   914		if (obj->funcs && obj->funcs->status) {
-   915			s = obj->funcs->status(obj);
- > 916			drm_data->supported_status |= s;
-   917		}
-   918	
-   919		if (drm_gem_object_is_shared_for_memory_stats(obj))
-   920			drm_data->status.shared += obj->size;
-   921		else
-   922			drm_data->status.private += obj->size;
-   923	
-   924		if (s & DRM_GEM_OBJECT_RESIDENT) {
-   925			drm_data->status.resident += add_size;
-   926		} else {
-   927			/* If already purged or not yet backed by pages, don't
-   928			 * count it as purgeable:
-   929			 */
-   930			s &= ~DRM_GEM_OBJECT_PURGEABLE;
-   931		}
-   932	
-   933		if (!dma_resv_test_signaled(obj->resv, dma_resv_usage_rw(true))) {
-   934			drm_data->status.active += add_size;
-   935			drm_data->supported_status |= DRM_GEM_OBJECT_ACTIVE;
-   936	
-   937			/* If still active, don't count as purgeable: */
-   938			s &= ~DRM_GEM_OBJECT_PURGEABLE;
-   939		}
-   940	
-   941		if (s & DRM_GEM_OBJECT_PURGEABLE)
-   942			drm_data->status.purgeable += add_size;
-   943	
-   944		return 0;
-   945	}
-   946	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: llvm@lists.linux.dev
+> Cc: <linux-hardening@vger.kernel.org>
+> ---
+>  lib/Kconfig.ubsan | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index f6ea0c5b5da3..96cd89668467 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -118,6 +118,8 @@ config UBSAN_UNREACHABLE
+>  
+>  config UBSAN_INTEGER_WRAP
+>  	bool "Perform checking for integer arithmetic wrap-around"
+> +	# This is very experimental so drop the next line if you really want it
+> +	depends on BROKEN
+>  	depends on !COMPILE_TEST
+>  	depends on $(cc-option,-fsanitize-undefined-ignore-overflow-pattern=all)
+>  	depends on $(cc-option,-fsanitize=signed-integer-overflow)
+> -- 
+> 2.34.1
+> 
+> 
