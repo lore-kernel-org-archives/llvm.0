@@ -1,44 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCF620B806;
-	Wed, 28 May 2025 23:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3551A94F;
+	Thu, 29 May 2025 00:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748473206; cv=none; b=AkVu7UVm5ueEBY0iA52rZV6yC/NShh487Td68xzecKnXTVPPNZivyHT+vGNo/Vayau330/ou/Mqz7shUrYLiFY1pN9dhZo6fSNVdwT/bW7oevVvS+JpzZqkKX3+Tqp62T1vYz0oS9YOLxGvK549KZb0sE9UWmIrttnuR8Yuh6mk=
+	t=1748478313; cv=none; b=lQoiYsP3Tx8Qud/QoVuRfYk2ID23pLi4VlVY60k9ttaXC91+VREsqiiQaW9+cJshZedK5vlaZKZmgJoe+pw+K51jVms+tLA5TVwzG5BxgBy4BYuGuFhhnCH25EYImljLTIX59+X9HZzdy+fOZoNaIUHX+Pcb5DQyppR42+luuog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748473206; c=relaxed/simple;
-	bh=xugXewHqc3q1cop251f4ND/MS9iKw3qYkpWghA2m+i8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CazvFX/ibk0Oj39rJ/uACIQ0lxBqzy8tLJgP1Os2oQ8dnxoImPM91gMK3XUTkgve2OlljNO92AHLPpvSmbByJ6dohZ9sh6V8pEru992zOKBFytRK0dJ9D0Yx7aJfOz8UQqwdUi4z9ETOlvAAqS/rbPREHgCWJJOkS+aqrqjBAd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pRzJuyXv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748478313; c=relaxed/simple;
+	bh=ECHdWWZKvm0KJzc6AblTSgqQuj41CrYftt18OEBTeh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l+pEduXXgvknDxt+rXfF08XZC+2OBOPC0HOENe39YlICouWdGddW9ECTQiTzCD/qjl4Lnixst7c014o01WY6WK5AvzP76zsoHtLhebveZhGvsDvYNWDqtiNvyBRcfYlX0frvj+BRucU9nidBIigJGORNJQH2IDY2riQ0vOPzZ4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KP+DqqoU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pRzJuyXv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2701C4CEE3;
-	Wed, 28 May 2025 23:00:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KP+DqqoU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF7DC4CEE3;
+	Thu, 29 May 2025 00:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748473206;
-	bh=xugXewHqc3q1cop251f4ND/MS9iKw3qYkpWghA2m+i8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pRzJuyXvagDUNcrsTFHDUikt4P4Njr2MVvdguw+JE2AlCrSGxMo+//0IY6DE+j1Xk
-	 pugrmgZeUFJx5i3+QpsnIOnacLsPLt08TY2f0CvCBSvmumy5TiWwgnTRKSH5876Nug
-	 5dK6uTFGYlVQ7G1r+9eJfCBw6x9OHkt4dNqEAqBdj4rpXHidKCMK/7VYTjfCGo/JLH
-	 d9RbQ+QoU0NAzjuz8gvAH47xzHFAkisipD1Wax/oEykrajdzgU4aVl5SVbas1QDOxX
-	 zitEbrzUVMHRucafzPdStW0S4UQuEZ1ULpzmSnlQ0B9vk9nimKJiIeRCcSqAvrmvKQ
-	 I19N1dHDDtHeQ==
-Date: Wed, 28 May 2025 16:00:03 -0700
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Justin Stitt <justinstitt@google.com>,
-	Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jann Horn <jannh@google.com>, Marco Elver <elver@google.com>,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ubsan: integer-overflow: depend on BROKEN to keep this
- out of CI
-Message-ID: <202505281559.FD37A978F@keescook>
-References: <20250528182616.work.296-kees@kernel.org>
- <20250528213223.GA3885532@ax162>
+	s=k20201202; t=1748478313;
+	bh=ECHdWWZKvm0KJzc6AblTSgqQuj41CrYftt18OEBTeh0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=KP+DqqoUGqpai39Q1CmpI1Xjhiv96ATYJjWkyk6Ehpll8U9hs6AESVXgTo3J3z5bC
+	 OA2YMSgUD3fK58z+LTLja8q5o4twmxTokv2y4kmh+o8Sn9aAvdXHwwLDyQozvlsTGN
+	 p/sZjvuOyK0IfLH5G68rEweX/cyG6jXdNgNsYbeNUeVU3vyH3965dn45Te9UCXakan
+	 iN73VEXwpuB0yEyc6sFo2ARn3hnN48cj/uoJ2WQiCtvHVVYhc2KWZgBE6zZDvgOD92
+	 oL245IMY6srQw9rkKLb2Vmg2ayac4B8D1pnnw5l6X1FKQuvSlr9wuoZM5kYgFD4jo5
+	 2g3ujmXRcmjPA==
+Date: Wed, 28 May 2025 17:25:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 20.1.6 uploaded
+Message-ID: <20250529002509.GA161456@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,43 +40,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250528213223.GA3885532@ax162>
 
-On Wed, May 28, 2025 at 02:32:23PM -0700, Nathan Chancellor wrote:
-> On Wed, May 28, 2025 at 11:26:22AM -0700, Kees Cook wrote:
-> > Depending on !COMPILE_TEST isn't sufficient to keep this feature out of
-> > CI because we can't stop it from being included in randconfig builds.
-> > This feature is still highly experimental, and is developed in lock-step
-> > with Clang's Overflow Behavior Types[1]. Depend on BROKEN to keep it
-> > from being enabled by anyone not expecting it.
-> > 
-> > Link: https://discourse.llvm.org/t/rfc-v2-clang-introduce-overflowbehaviortypes-for-wrapping-and-non-wrapping-arithmetic/86507 [1]
-> > Signed-off-by: Kees Cook <kees@kernel.org>
-> 
-> Should this have a 'Cc: stable@vger.kernel.org' on it? There might not
-> be much randconfig testing on stable but it is still very much possible
-> for some random user to turn this on and report problems.
+Hi all,
 
-Ah yeah, I should probably do this via a proper Fixes: tag. I'll add
-this.
+I have built and uploaded LLVM 20.1.6 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-> Regardless of that though, I think this is a good idea with how much of
-> this feature is still being ironed out.
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 20.x
+series is no longer supported.
 
-Thanks!
-
-> 
-> Once this lands, I plan to mark all issues in the CBL issue tracker that
-> came about from UBSAN_INTEGER_WRAP as 'have a workaround applied' since
-> it will not be possible for regular users to hit them but you may
-> consider notating them in case they need to be addressed before the
-> feature can be reenabled.
-
-Sounds good!
-
--Kees
-
--- 
-Kees Cook
+Cheers,
+Nathan
