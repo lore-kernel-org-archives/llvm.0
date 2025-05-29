@@ -1,125 +1,108 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97BB42561DD
-	for <llvm@lists.linux.dev>; Thu, 29 May 2025 06:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36381C8616
+	for <llvm@lists.linux.dev>; Thu, 29 May 2025 07:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748500612; cv=none; b=ZT0k73R0pl9hvTBmIFVNUKvZwS5oQ2g85a+pTymOVzwy6f21qEfXC61VXHK9xHaV+qjdDe/cddl0pjr4AOFZi3h/7IM9nT0YQi+nHzuTJZpM1XhfQ/veYB8mkWRLPiiPCht5tBgHk6VFok3gaxbX3rwB31GsjGghIxmsxrAv0l0=
+	t=1748504116; cv=none; b=sxaNhATyMYNkxUMQpsJR4YdaRWVZhbdLxbgXmqhtogm7VsL9g15U00ZqHLh5IbKfgec4neMFhic0NQd5FTg4ApvUrMUYrlqZFQN6ECtC2w/+IFDuuR0qT6rY3DJI4GBEnd8gUOmTFUW6coHSLeA4fna1pg6ZdQYoj4lA3YjXDAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748500612; c=relaxed/simple;
-	bh=B3JaLtFtqu40LGnOcKtzZBziOjGYImFrUGlkaaAIyRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=abSW4HiOsMVuwL/Ngyj2uEefTNnghn9tSYiuVTZUo8aPXDe7mHFB8DhWAOH7ft41bPDsAl6jjm/aM/lmIBDVL1NFTRjQrVyrhGdnpkmSo/lYB3BZz1PrFPpLJF5K/E+3raWapYypF22w7ZISREDMVx3hZMOd7aao8uYK5zvxJBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uKWse-00053S-PV; Thu, 29 May 2025 08:36:44 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uKWsd-000iG1-35;
-	Thu, 29 May 2025 08:36:43 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 2F11A41BE59;
-	Thu, 29 May 2025 06:36:43 +0000 (UTC)
-Date: Thu, 29 May 2025 08:36:41 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-can@vger.kernel.org
-Subject: Re: [mkl-can-next:b4/can-xl 6/11]
- drivers/net/can/xilinx_can.c:518:7: error: call to undeclared function
- 'can_tdc_is_enabled'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <20250529-tactful-placid-bullfinch-e5e792-mkl@pengutronix.de>
-References: <202505291443.O21tBseZ-lkp@intel.com>
+	s=arc-20240116; t=1748504116; c=relaxed/simple;
+	bh=FxiGK0m4sF+Iy0qaP75FOEtroibjZfeuWs5XT7JobEk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=D95mZ2bH4yKfn6vz/5zytVibh/seGGUg3hd5r8ad/sqsarh3kC2k0nE/Vfs8ZNs4Gp1bXyxgFRrn2faOR8R5OvXn6YNGlHbzLuacP1npE3kQnGwoGaAXsqf2DTphoCWnG8I+2jlPctpPG0XI12zB9jPXny4ts5yivYmOuUB6bXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vvqv+3R3; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vvqv+3R3"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-441c122fa56so3103205e9.2
+        for <llvm@lists.linux.dev>; Thu, 29 May 2025 00:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748504113; x=1749108913; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lcQZPNOwVritWIDtMp41b7bB5T4gHCJ575UDlNYCGTU=;
+        b=vvqv+3R3MkOlu0hy45rA/xY3lu084pn9begzRJFXvwUTTGUkGav6+CbAt+6MQPCI7O
+         ACrjL1EWVErbhnwv2wUgnKnqnufpBROkwann4cVejblRW5zm4XTE093iCDoASeHVFSpa
+         +CaS4lo9n2RZIa5KmT32a4lVISkQizzjErEbUZ4QAuhjGEfOL0GA6ufcrgWbkA85sE9P
+         ve5zvgCoe0q3u4LK7bX5OwLakH7hQDcFPRaK9YL0pyrhj3QG/mYl8TDH2Rai0an/LUZw
+         QLC/fDdHo1PU2Sl54EGL6OqBp2jT7Wyf41jrl5uypqNh+4seZkGlI1bnThFQY8m1m14H
+         HJSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748504113; x=1749108913;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lcQZPNOwVritWIDtMp41b7bB5T4gHCJ575UDlNYCGTU=;
+        b=kb9i9jmUyx2nTb+rfr1ClbC6tIBXUXuswKGtJvDa9hG9NGT0Jwl6FBEKRh5A1/vTLo
+         re20CbChQ1poMQcrwQcmnbgHFl7kZTxDuNfozXMYRh9UEvF45dttl55iMj4qOmlRgem8
+         ydW3kbu/EQc/yp8aFPMtxDY+of8C8sUkdZEj81NOQCd1bNE0qpVtp+pdNrnrfFUhPR0D
+         xg8/fwsPrbzqLZsrZT449Dy5YefWYoVnrfJ5XV+dI0h3yGUv3fMKoeAGhhv5mvMAtkqP
+         JkRKAGf3bVga+7PoakoojbN5EZdcqmxdgdKgrNDVzxR4nL2ASjg0VxzPkowP/jFMsAO+
+         Xw4A==
+X-Gm-Message-State: AOJu0YySCFW2BgJPr4N9X8sRo/L2q6zU/5ukmj08+lDsYgLpJSTM+O0B
+	NZDyICoAa/NLmB48LTTLNfdOEY8uzvN7lHLv+64Swb759VJUkqm86dFMlpMvA/TUQPcZ62rDqw=
+	=
+X-Google-Smtp-Source: AGHT+IEjieu1PVP6lrScJ37wIH5pXuxZNzIy4/yXl2IhlnKgrGkcAzIB+hUnC+Uf0+4+b4ccTu67Tb52
+X-Received: from wrbgz6.prod.google.com ([2002:a05:6000:4806:b0:3a3:62c7:3b9b])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:430a:b0:3a4:e6e4:6ee7
+ with SMTP id ffacd0b85a97d-3a4f35e1c93mr941938f8f.45.1748504113015; Thu, 29
+ May 2025 00:35:13 -0700 (PDT)
+Date: Thu, 29 May 2025 09:35:08 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6sjjnrsshstua36b"
-Content-Disposition: inline
-In-Reply-To: <202505291443.O21tBseZ-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1145; i=ardb@kernel.org;
+ h=from:subject; bh=H0IRuCkh1pL6XzUoM1zoycMKPDG3rt06UIiGp6YYXNM=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIcOCT+eV/PQbb3Y++uR4799xfrUfRzZNiU+7XO/WWWp0d
+ 8/fkxOEOkpZGMQ4GGTFFFkEZv99t/P0RKla51myMHNYmUCGMHBxCsBEBK0Z/vArbN31x7K9yT7k
+ bpuPGof5t4qK/96T/HY2X4j6tcGa5RAjw3e1WIdvL0sM/Lcc/5fEaTU7Yu2zFQf2S7cz7lrX6JI 3lQsA
+X-Mailer: git-send-email 2.49.0.1238.gf8c92423fb-goog
+Message-ID: <20250529073507.2984959-2-ardb+git@google.com>
+Subject: [PATCH] arm64: Disable LLD linker ASSERT()s for the time being
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, will@kernel.org, 
+	catalin.marinas@arm.com, nathan@kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+From: Ard Biesheuvel <ardb@kernel.org>
 
---6sjjnrsshstua36b
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [mkl-can-next:b4/can-xl 6/11]
- drivers/net/can/xilinx_can.c:518:7: error: call to undeclared function
- 'can_tdc_is_enabled'; ISO C99 and later do not support implicit function
- declarations
-MIME-Version: 1.0
+It turns out that the way LLD handles ASSERT()s in the linker script can
+result in spurious failures, so disable them for the newly introduced
+BSS symbol export checks.
 
-On 29.05.2025 14:15:06, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-nex=
-t.git b4/can-xl
-> head:   7861c36608b1d1f26b010a9c465c048137d9d156
-> commit: 48f48b8238cc98e533eaeda03271a101ccdac359 [6/11] can: netlink: add=
- CAN XL support
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/202=
-50529/202505291443.O21tBseZ-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009=
-708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250529/202505291443.O21tBseZ-lkp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505291443.O21tBseZ-lkp=
-@intel.com/
->=20
-> All errors (new ones prefixed by >>):
->=20
-> >> drivers/net/can/xilinx_can.c:518:7: error: call to undeclared function=
- 'can_tdc_is_enabled'; ISO C99 and later do not support implicit function d=
-eclarations [-Wimplicit-function-declaration]
->      518 |                 if (can_tdc_is_enabled(&priv->can)) {
->          |                     ^
+Link: https://github.com/ClangBuiltLinux/linux/issues/2094
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ arch/arm64/kernel/image-vars.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Good bot! Fixed.
+diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
+index c5266430284b..86f088a16147 100644
+--- a/arch/arm64/kernel/image-vars.h
++++ b/arch/arm64/kernel/image-vars.h
+@@ -10,6 +10,10 @@
+ #error This file should only be included in vmlinux.lds.S
+ #endif
+ 
++#if defined(CONFIG_LD_IS_LLD) && CONFIG_LLD_VERSION < 210000
++#define ASSERT(...)
++#endif
++
+ #define PI_EXPORT_SYM(sym)		\
+ 	__PI_EXPORT_SYM(sym, __pi_ ## sym, Cannot export BSS symbol sym to startup code)
+ #define __PI_EXPORT_SYM(sym, pisym, msg)\
+@@ -142,4 +146,6 @@ KVM_NVHE_ALIAS(kvm_protected_mode_initialized);
+ _kernel_codesize = ABSOLUTE(__inittext_end - _text);
+ #endif
+ 
++#undef ASSERT
++
+ #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
+-- 
+2.49.0.1238.gf8c92423fb-goog
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---6sjjnrsshstua36b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmg4AHYACgkQDHRl3/mQ
-kZw+WggAlQUVs6jJjVer7DADb/otS6dO2Z6g15x+532y0FySPB4Lczrp8gcjkAYD
-Db8A58d7loL0PDqncIF2gXk/+biJ1su+fOrloqJ7XdlbwTsXSfZwwmzEULzaN45K
-yxNyqT9vRrTfXAZswfDCGJMUd3aGOCKLq24m0MYv80hwbgdWWXWPmouPzd95AuT/
-c5x2VbnvkNR7AAv7R2hBLK4Gto/NXBWGDHrlM+pQeALmKi6GPuIC8Pnv+g3gyViT
-tN0fN9hTD7pxSZKMnCQoxeAUbL4dSQK+Sc2sUkski27pvQ9ua5M30QMUORmAdf50
-z9pSdmTDWuSfrIecZfYaUTEiIC6Qbw==
-=3WNM
------END PGP SIGNATURE-----
-
---6sjjnrsshstua36b--
