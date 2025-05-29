@@ -1,116 +1,272 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68DC202C3A
-	for <llvm@lists.linux.dev>; Thu, 29 May 2025 06:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358B61F4717;
+	Thu, 29 May 2025 06:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748498467; cv=none; b=Y7fkNREJOrG+I0b9cTIwI9zDkDd6JpZ3jVdQNkIOtA4UhIh2pro8/pns+YSEz4eHsWg4jtyOjzc+eekmVwC0Lvne5BvSGGBXDBeIR6Nq1PDrRYnhmiA85jqRWkgh0hN0Rxz2j7koFORMIfrqo8AuUj7SrTStzkiU9FZJkT/JX5E=
+	t=1748499340; cv=none; b=D0qeGROmnx3aQXiAnL8vhNQVrSj+qU6NOmctrZB4qdfQfx0IvfvtcGq4YqOT01WG7Q2BDR454GN3T695OwBbhuskjaruFfl6F9/8pD265Ed/vpRylZpM0sqqDL0oq2RxeKX8yODRTzOeEvpHgSOwKi8enT6TjLNeuryIhra2sZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748498467; c=relaxed/simple;
-	bh=ee6dPxxgizLJ75Ie6rGuft7Nj+pZxFsrYqyEC9SjHbk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ww04affTy2TONnEvMVIGxgXknhDlEsOpOkR5n//QQrmlX281zVwQwiQRjFNj+OOQ9ehD/fk6rInwfIhiGNi43IpaaZKOSEwOXJFAiOx3/i6zeHvaYbXjnxlSWkxx6VFaXmalq9dffOpMq4rZ3nsnd5CiSdLzKduo4sdHgMP6d9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EPiKvJm3; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1748499340; c=relaxed/simple;
+	bh=ohjCYPOzZJeoiC8Htfdxwlv23aNNYpgAYFa2HZhhkzU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=swKXZExv3LAlZ4FCAXB9XSeau9MQ7E98NI9n5XUQfpuGhQfbxyLObboxN9WL/G1GJcv7m5FiGJ7MojFRsXtVLbP7Hd7oCQUpjvlo1QzDEIVpKXUCSgkL7KNu+m4JxbbfzbCLv8S9i7Lr0W4OfaFQdLlpmcfTC4G4iU9u35Gjvvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hu5NDYU1; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EPiKvJm3"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3081f72c271so381892a91.0
-        for <llvm@lists.linux.dev>; Wed, 28 May 2025 23:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748498465; x=1749103265; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vaz1+/ZzyNRFGMST7layMZzaN7+WIlAIP9tFziyB+WI=;
-        b=EPiKvJm3MMMfBTYSKqoagk5KrkS1dCA2zZSK+eEaLOT1vpDJJIWeawGgwuQ/8BCooo
-         6gAWt/VwrRYQFw4+0feV3SIBrKtwNIuny9mp0ytLB9aq+X1LIzrMGldzhAgnSbORUpXA
-         orkEl1fKl3/lBhF0QfPYABk72TqfJFCxVAIr17dfgW+z4wlsG1nEpc/utBVSQoLbl0V8
-         BuL5jYWcnjoEk4ANrghnOfHSf8AE/uJeKR04onXJpQ8+gJk3NqsgaXTNMNdo1uY0Qv7d
-         L1Si1tDH1FbMrv5ZgAmLz9mTrWDJOTIQ/C0t/p6YHbR3HMpXHaN0P6ZBTVldN6z2kPfu
-         nusQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748498465; x=1749103265;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vaz1+/ZzyNRFGMST7layMZzaN7+WIlAIP9tFziyB+WI=;
-        b=Wj3TV1TGgd7IbLaH0fWE+L5SyLGpVIX6TvXmGnTztedMIbgoQyxjrlBHp3BrubXgvt
-         p6kcSLeU5Qw0WR+npAlMb4E/vI/l5q2CRlNiUux9ypQA6j8vi538/VotKGx95zyX3rGX
-         BD3ceq2ld4ttU3WGieOqksO2cINrc+LZGOn1s8dgBX9r2nDFWNSazVJIIPq4sP93yh6X
-         W6VBEGNuQyoFYR9/vHeiz3wQg6HO/fB1rajvdN+2yir4dYd1FeF1fe9F9LyTDtpzJkjm
-         reRUhWcT+NLgtquL9Pe+XfWmT6ixMKLu2XB9cxkiiXHxbLDzR9nYpiDYfCAZhUcn08I1
-         yGfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX0eIUaxkc/2yOfrLAmLiMllvWsYJKe5BsNS7lyB6r3Kas3c5o7/l9l+StWwTIaP6KauYWG@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz8XE6lW7DnJcU1PsDUM/aq9SbIMacT21iuDoOBcsKyAgy4hP11
-	2LtMbQKulrI+/OsNw9mjj2LjGJSreqPxd54x3HUc6S8lccNE8MuCMmwkF34+YtslMvNpgMZ9slG
-	ossgsM/qt2p1OnsTYlogqwVFLO7K3TSF5ATZ8CfWF
-X-Gm-Gg: ASbGncv/sNQE5s5d2/I/seoKTBv2Dt7DhwTj4qV2E4JJTHzkRJwKiIHMWrBXdlpKcn5
-	+C6BCExRk5BCGIbSQuAws7JKowzEcJddG76SXXe4i53RJlQqM7rbDTLUs6PCgWf4UZJJbhTBRPd
-	EQm0Mx9Wf442bAcr9tOhIQR9Bb4RrftKqoywiWV26sS4/V0hVzmXpYsxyRQFgc80mBtf3+RFLoV
-	3yrUQDmL3ZjTg==
-X-Google-Smtp-Source: AGHT+IHjuvTVAXJCwbM+CJ0cJqVVQmFtXnQG4j1KUBe5D8/pDzRiNN6zp0kn7i3urzRkLpnfLornO0snBlrTDyUNKi0=
-X-Received: by 2002:a17:90b:2f08:b0:312:1dc9:9f67 with SMTP id
- 98e67ed59e1d1-3121dc9a0a5mr1652394a91.2.1748498464732; Wed, 28 May 2025
- 23:01:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hu5NDYU1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748499338; x=1780035338;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ohjCYPOzZJeoiC8Htfdxwlv23aNNYpgAYFa2HZhhkzU=;
+  b=hu5NDYU1U1FgLTzznHoy2NltiFFkliIv97Djgr+yWR3jVWLBj12f+ed8
+   4F7Fl4aKWiHN1vG3mPk/K9e16hupiQ6qcLgFxQX7vFZRrv4oeu1HSlN9e
+   8SS6tDib+AoneR0dhRYwLy/8dXMYj8jKWNg6StIqh/+FzqPN6DQlg++CF
+   Q3PrSFraACDVGmoHsFBiFYbkq6yLetuEHk3r8U8nZzgZHV/MQlgu3694Q
+   1M4B5BhPF4eFSgbXDkMZCgD1W9BxVPJSv+cW+yhZGyaTmUPI4DpTIIzaB
+   7ElDnxk7zjVJxeoErLC0w594F8myomWFxQT8kcJKZnYpkgQl0iJx0QPng
+   g==;
+X-CSE-ConnectionGUID: 7HXesufgSG2ugzDejh5y5A==
+X-CSE-MsgGUID: I/eTMuUUQKKZmZWdgeT+aw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="68096922"
+X-IronPort-AV: E=Sophos;i="6.15,323,1739865600"; 
+   d="scan'208";a="68096922"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 23:15:37 -0700
+X-CSE-ConnectionGUID: nI4yorGdQrmbHtzmXC3Y1w==
+X-CSE-MsgGUID: jHw2CYS+QZuu5cbqWuXbjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,323,1739865600"; 
+   d="scan'208";a="143453048"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 28 May 2025 23:15:36 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uKWY9-000WNo-2b;
+	Thu, 29 May 2025 06:15:33 +0000
+Date: Thu, 29 May 2025 14:15:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [mkl-can-next:b4/can-xl 6/11] drivers/net/can/xilinx_can.c:518:7:
+ error: call to undeclared function 'can_tdc_is_enabled'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202505291443.O21tBseZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250528182616.work.296-kees@kernel.org>
-In-Reply-To: <20250528182616.work.296-kees@kernel.org>
-From: Marco Elver <elver@google.com>
-Date: Thu, 29 May 2025 08:00:00 +0200
-X-Gm-Features: AX0GCFv05dumQmD3kZlNkUj0qoKmc2PEwVW3_kOZBhYxH81s34wEweRfqQ1cmc0
-Message-ID: <CANpmjNPpyJn++DVZmO89ms_HkJ0OvQzkps0GjCFbWkk0F+_8Xg@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: integer-overflow: depend on BROKEN to keep this
- out of CI
-To: Kees Cook <kees@kernel.org>
-Cc: Justin Stitt <justinstitt@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 28 May 2025 at 20:26, Kees Cook <kees@kernel.org> wrote:
->
-> Depending on !COMPILE_TEST isn't sufficient to keep this feature out of
-> CI because we can't stop it from being included in randconfig builds.
-> This feature is still highly experimental, and is developed in lock-step
-> with Clang's Overflow Behavior Types[1]. Depend on BROKEN to keep it
-> from being enabled by anyone not expecting it.
->
-> Link: https://discourse.llvm.org/t/rfc-v2-clang-introduce-overflowbehaviortypes-for-wrapping-and-non-wrapping-arithmetic/86507 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git b4/can-xl
+head:   7861c36608b1d1f26b010a9c465c048137d9d156
+commit: 48f48b8238cc98e533eaeda03271a101ccdac359 [6/11] can: netlink: add CAN XL support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250529/202505291443.O21tBseZ-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250529/202505291443.O21tBseZ-lkp@intel.com/reproduce)
 
-Acked-by: Marco Elver <elver@google.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505291443.O21tBseZ-lkp@intel.com/
 
-> ---
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Marco Elver <elver@google.com>
-> Cc: llvm@lists.linux.dev
-> Cc: <linux-hardening@vger.kernel.org>
-> ---
->  lib/Kconfig.ubsan | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index f6ea0c5b5da3..96cd89668467 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -118,6 +118,8 @@ config UBSAN_UNREACHABLE
->
->  config UBSAN_INTEGER_WRAP
->         bool "Perform checking for integer arithmetic wrap-around"
-> +       # This is very experimental so drop the next line if you really want it
-> +       depends on BROKEN
->         depends on !COMPILE_TEST
->         depends on $(cc-option,-fsanitize-undefined-ignore-overflow-pattern=all)
->         depends on $(cc-option,-fsanitize=signed-integer-overflow)
-> --
-> 2.34.1
->
+All errors (new ones prefixed by >>):
+
+>> drivers/net/can/xilinx_can.c:518:7: error: call to undeclared function 'can_tdc_is_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     518 |                 if (can_tdc_is_enabled(&priv->can)) {
+         |                     ^
+>> drivers/net/can/xilinx_can.c:520:55: error: no member named 'tdc' in 'struct can_priv'
+     520 |                                 btr0 |= FIELD_PREP(XCAN_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+         |                                                                         ~~~~~~~~~ ^
+   include/linux/bitfield.h:115:33: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:68:41: note: expanded from macro '__BF_FIELD_CHECK'
+      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                                                       ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:557:22: note: expanded from macro 'compiletime_assert'
+     557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:545:23: note: expanded from macro '_compiletime_assert'
+     545 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:537:9: note: expanded from macro '__compiletime_assert'
+     537 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/can/xilinx_can.c:520:55: error: no member named 'tdc' in 'struct can_priv'
+     520 |                                 btr0 |= FIELD_PREP(XCAN_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+         |                                                                         ~~~~~~~~~ ^
+   include/linux/bitfield.h:115:33: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:70:12: note: expanded from macro '__BF_FIELD_CHECK'
+      70 |                                         (0 + (_val)) : 0,               \
+         |                                               ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:557:22: note: expanded from macro 'compiletime_assert'
+     557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:545:23: note: expanded from macro '_compiletime_assert'
+     545 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:537:9: note: expanded from macro '__compiletime_assert'
+     537 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/can/xilinx_can.c:520:55: error: no member named 'tdc' in 'struct can_priv'
+     520 |                                 btr0 |= FIELD_PREP(XCAN_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+         |                                                                         ~~~~~~~~~ ^
+   include/linux/bitfield.h:116:20: note: expanded from macro 'FIELD_PREP'
+     116 |                 ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);   \
+         |                                  ^~~~
+   drivers/net/can/xilinx_can.c:523:57: error: no member named 'tdc' in 'struct can_priv'
+     523 |                                 btr0 |= FIELD_PREP(XCAN_2_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+         |                                                                           ~~~~~~~~~ ^
+   include/linux/bitfield.h:115:33: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:68:41: note: expanded from macro '__BF_FIELD_CHECK'
+      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                                                       ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:557:22: note: expanded from macro 'compiletime_assert'
+     557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:545:23: note: expanded from macro '_compiletime_assert'
+     545 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:537:9: note: expanded from macro '__compiletime_assert'
+     537 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/net/can/xilinx_can.c:523:57: error: no member named 'tdc' in 'struct can_priv'
+     523 |                                 btr0 |= FIELD_PREP(XCAN_2_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+         |                                                                           ~~~~~~~~~ ^
+   include/linux/bitfield.h:115:33: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:70:12: note: expanded from macro '__BF_FIELD_CHECK'
+      70 |                                         (0 + (_val)) : 0,               \
+         |                                               ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:557:22: note: expanded from macro 'compiletime_assert'
+     557 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:545:23: note: expanded from macro '_compiletime_assert'
+     545 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:537:9: note: expanded from macro '__compiletime_assert'
+     537 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/net/can/xilinx_can.c:523:57: error: no member named 'tdc' in 'struct can_priv'
+     523 |                                 btr0 |= FIELD_PREP(XCAN_2_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+         |                                                                           ~~~~~~~~~ ^
+   include/linux/bitfield.h:116:20: note: expanded from macro 'FIELD_PREP'
+     116 |                 ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);   \
+         |                                  ^~~~
+>> drivers/net/can/xilinx_can.c:1972:13: error: no member named 'tdc_const' in 'struct can_priv'
+    1972 |                 priv->can.tdc_const = &xcan_tdc_const_canfd;
+         |                 ~~~~~~~~~ ^
+   drivers/net/can/xilinx_can.c:1978:13: error: no member named 'tdc_const' in 'struct can_priv'
+    1978 |                 priv->can.tdc_const = &xcan_tdc_const_canfd2;
+         |                 ~~~~~~~~~ ^
+>> drivers/net/can/xilinx_can.c:1985:13: error: no member named 'do_get_auto_tdcv' in 'struct can_priv'
+    1985 |                 priv->can.do_get_auto_tdcv = xcan_get_auto_tdcv;
+         |                 ~~~~~~~~~ ^
+   10 errors generated.
+
+
+vim +/can_tdc_is_enabled +518 drivers/net/can/xilinx_can.c
+
+   472	
+   473	/**
+   474	 * xcan_set_bittiming - CAN set bit timing routine
+   475	 * @ndev:	Pointer to net_device structure
+   476	 *
+   477	 * This is the driver set bittiming  routine.
+   478	 * Return: 0 on success and failure value on error
+   479	 */
+   480	static int xcan_set_bittiming(struct net_device *ndev)
+   481	{
+   482		struct xcan_priv *priv = netdev_priv(ndev);
+   483		struct can_bittiming *bt = &priv->can.bittiming;
+   484		struct can_bittiming *dbt = &priv->can.fd.data_bittiming;
+   485		u32 btr0, btr1;
+   486		u32 is_config_mode;
+   487	
+   488		/* Check whether Xilinx CAN is in configuration mode.
+   489		 * It cannot set bit timing if Xilinx CAN is not in configuration mode.
+   490		 */
+   491		is_config_mode = priv->read_reg(priv, XCAN_SR_OFFSET) &
+   492					XCAN_SR_CONFIG_MASK;
+   493		if (!is_config_mode) {
+   494			netdev_alert(ndev,
+   495				     "BUG! Cannot set bittiming - CAN is not in config mode\n");
+   496			return -EPERM;
+   497		}
+   498	
+   499		/* Setting Baud Rate prescaler value in BRPR Register */
+   500		btr0 = (bt->brp - 1);
+   501	
+   502		/* Setting Time Segment 1 in BTR Register */
+   503		btr1 = (bt->prop_seg + bt->phase_seg1 - 1);
+   504	
+   505		/* Setting Time Segment 2 in BTR Register */
+   506		btr1 |= (bt->phase_seg2 - 1) << priv->devtype.btr_ts2_shift;
+   507	
+   508		/* Setting Synchronous jump width in BTR Register */
+   509		btr1 |= (bt->sjw - 1) << priv->devtype.btr_sjw_shift;
+   510	
+   511		priv->write_reg(priv, XCAN_BRPR_OFFSET, btr0);
+   512		priv->write_reg(priv, XCAN_BTR_OFFSET, btr1);
+   513	
+   514		if (priv->devtype.cantype == XAXI_CANFD ||
+   515		    priv->devtype.cantype == XAXI_CANFD_2_0) {
+   516			/* Setting Baud Rate prescaler value in F_BRPR Register */
+   517			btr0 = dbt->brp - 1;
+ > 518			if (can_tdc_is_enabled(&priv->can)) {
+   519				if (priv->devtype.cantype == XAXI_CANFD)
+ > 520					btr0 |= FIELD_PREP(XCAN_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+   521						XCAN_BRPR_TDC_ENABLE;
+   522				else
+   523					btr0 |= FIELD_PREP(XCAN_2_BRPR_TDCO_MASK, priv->can.tdc.tdco) |
+   524						XCAN_BRPR_TDC_ENABLE;
+   525			}
+   526	
+   527			/* Setting Time Segment 1 in BTR Register */
+   528			btr1 = dbt->prop_seg + dbt->phase_seg1 - 1;
+   529	
+   530			/* Setting Time Segment 2 in BTR Register */
+   531			btr1 |= (dbt->phase_seg2 - 1) << priv->devtype.btr_ts2_shift;
+   532	
+   533			/* Setting Synchronous jump width in BTR Register */
+   534			btr1 |= (dbt->sjw - 1) << priv->devtype.btr_sjw_shift;
+   535	
+   536			priv->write_reg(priv, XCAN_F_BRPR_OFFSET, btr0);
+   537			priv->write_reg(priv, XCAN_F_BTR_OFFSET, btr1);
+   538		}
+   539	
+   540		netdev_dbg(ndev, "BRPR=0x%08x, BTR=0x%08x\n",
+   541			   priv->read_reg(priv, XCAN_BRPR_OFFSET),
+   542			   priv->read_reg(priv, XCAN_BTR_OFFSET));
+   543	
+   544		return 0;
+   545	}
+   546	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
