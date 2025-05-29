@@ -1,58 +1,58 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2001BEAD7
-	for <llvm@lists.linux.dev>; Thu, 29 May 2025 22:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A471219303
+	for <llvm@lists.linux.dev>; Thu, 29 May 2025 22:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748556514; cv=none; b=hQDBP/03gh1SXOHKufr/f3BP5DeWd2bd0Q55j5mjg0yLroXJJXfvhpx8xtSUdQ3es2obdZuZhMWuTBb7wi9ehqK4645Fc6Xec+LFAhaLbUVBgMlvKOCYUdDN8TjPMyGRb8ztAMWxGwWI1pZSGHlGQo0cepf2lARLRSywoU3m/Ds=
+	t=1748557333; cv=none; b=pY9IXLYcsem3PCgXPCj/ZTIvSJxgPdgKoxX7CzdAzLgxmo6BGx+78YOCVIvbfQE9BtHjui0gL8qrdK78zDWQwv8ivOBckOHDOGQm7QcOOJTpNyQ/TSXYrez18EzQlzc8jOU9CXiH3+bHqFq7khrNrnGTnCOZgaP5xiwOHNxIWPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748556514; c=relaxed/simple;
-	bh=M0tbtdLApdJAq/4ogJahNv+Hgt/JeFqIHwEJhoEDBdQ=;
+	s=arc-20240116; t=1748557333; c=relaxed/simple;
+	bh=h+uxh98nAg0a8/1S0TuqkdF8yPeO03QyPmf3K/bLIm4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MVmz9HmiT+sgf8tbwc0112YWqfKwRwcFmKVJe3DsJWvRZYJ63jy42mqf/tstQU4zrHsXJpmcU8ibN4Bw0Omj+4rqUWcb6NZn/I2jQxz0kcpwSgtJrnAeT7xPehNPkhOaHcvPxP+zRSSODWeI+14Gtc473aiyWCE/SPZmxkm5rxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fiBgG6B1; arc=none smtp.client-ip=209.85.208.169
+	 To:Cc:Content-Type; b=ajpTsAtsPNY2AJtdnuqYJBouMU1tjYFF0Z7nZR52qLq2j65ti2yDJfDcw6lcj+n5h6O9cGvfWFzKJF2Mi2lD/ACfsz8oo2aiRHo+vy/2SM2JXQ4cRc7ZSCGtS4+WbfGe8IHozTCeyUG/vQvOxkoXcucBvLzNLXpWom10g0OaPxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KBeEptZI; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fiBgG6B1"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-32a63ff3bdfso10096981fa.3
-        for <llvm@lists.linux.dev>; Thu, 29 May 2025 15:08:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KBeEptZI"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ad8a6c202ffso269202466b.3
+        for <llvm@lists.linux.dev>; Thu, 29 May 2025 15:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748556510; x=1749161310; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1748557330; x=1749162130; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rpJVcptDcpTpszgwiBlbfF17mFy9KW509xkzZ9NUjik=;
-        b=fiBgG6B18vjE1Ll6VAR/4CbLp0F42c/zOWi2ZIsmXQk84NgVRQLTc/0wLSx8eEWnsi
-         45iSRX+rr/fQGyo7j5u4cG0Cd0N+oJBSgZ3Q+LFO5rLiAm6ErL5N+lL3+UZMeGEPH1d/
-         N4eEser7VntnhOq8axrdy5ouPX8WyZwztqHUIrYVnAuBnDFLhWpAtWWom6DHlIPVil8e
-         v7S603mcUJAe92V65VCAWvhem04myRRe8CILH7ns4BBYT/Nt4DhcypcFOH9j56FZuouj
-         VFhEomMiN674g4WDK8gFGzSXrY90RFpdf32SEKTIs4mTolhNwc86sGeaQy8iKubcJLWq
-         nyBA==
+        bh=kzt/MQxcUpDWFeSkaHOplUQ43G4Uz/X3hb9h5NpZQYg=;
+        b=KBeEptZIJmSQusjNBYFJiDWONhh8Dy3HlrEU2x2RBzd3tjiyz05N0qtql3nqQLS2c3
+         yMyn+rw+TvxoR3SfaM84VacrG/0J6pZ6YBnw2bH15Jwyy1yJhrjJQ+cy0WOPLzwpRZQX
+         ANofWIIgKWR/l/hcYjUsZ28tKvh6cxFq/w1zLlBvo8iHaTjSyB4APFcq/atWwKp7VCH7
+         8+7a9lKUaewx4N6Z7rfkBg7d21kMVd2GHA01dEjD0UvV931nX7pMQLSK8DL2BymmMTgn
+         rA8OhYe/4g7+1vpCAa/sSc2+v2mUZ0tTaGXTC5R0HNUY8VI1XuOMD/9D3YrM1KrbLHjm
+         CHbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748556510; x=1749161310;
+        d=1e100.net; s=20230601; t=1748557330; x=1749162130;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rpJVcptDcpTpszgwiBlbfF17mFy9KW509xkzZ9NUjik=;
-        b=l5zXZIb3Qw0T6mABwQy8SYy5jqchXD1+/eQN01UjmOxkeYruHKZ2P54GOZTwYnJV3I
-         +PI9VtArzpT/1zoHyoFq3FLBr5hJhQo69/02KVLw9UYQyVSX23YBom2ZFHIaX+8nONRw
-         TrsD8hbrZoJn+DzaleCAFUgl6aBGe2MUo+D4Iv/bOjvXITaVdJ/6TgBC4v/i/tJlnFn+
-         /ZCaoRCWQauG7kQ4p5t33icD6ZoHD3f9359tU6zTOsX7XUhT2IYHL2KmXlabOsJfGfM7
-         sTnRufTeW7CoqjjH5ovTDpE3VFoo7mt1Gcti+usEzSpfLHQuMpZCN45JwT2Hy8qgna2r
-         q8PA==
-X-Forwarded-Encrypted: i=1; AJvYcCWZ0+gZCmaSoDNa5vn2rxOegruxN31YvJO7rt9sOrUjcrHfWd0d+xKBM35e+XC1wjJaHfyB@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3hxVMXXxgcvGMqeP1yH1eB8ZpMgdMuDZ+Ihlxnm3mjHYp6FG8
-	3yVue/dBaRgXUpbE/WUqROWBgX/ASbahTq03lohnqjVZ18aam4h7XC+e80L7IfAoP+SKVipwRoK
-	w7jwYWSrqQYeecugWJE+pSRxhBKXquUg=
-X-Gm-Gg: ASbGnctsC92MSaa/D6ekLrN8AJ7eTpddx6MVeA1KfOYwvmHnvQxnl3G9y0VAD+OZcjw
-	OGMtGc4UcdkzAqiCeG6vsgkQv+m9oSuVNYBTtt8kkC+OyPPnh60cpWtsJfQ6o3NiNVIoecbviaC
-	AnxKQbGSyAV3xuNqAQmeuGc/P/QJtPQj05tELryXHVkzmOAXEM4MsdeYFF+1Nh+iBrwg==
-X-Google-Smtp-Source: AGHT+IF7xscUHJvyGi+GvuMMKxSnSgP5AcyU3GpJtxmnO/5KSLUzYGntXscHYyM85fadDL0Kyjmy6YDgmBtNFpFE8dI=
-X-Received: by 2002:a2e:b8c6:0:b0:32a:8916:55a1 with SMTP id
- 38308e7fff4ca-32a8cd3fd89mr5150041fa.7.1748556509725; Thu, 29 May 2025
- 15:08:29 -0700 (PDT)
+        bh=kzt/MQxcUpDWFeSkaHOplUQ43G4Uz/X3hb9h5NpZQYg=;
+        b=IjvcE8GEgj92/vf3C/AyMIrhfLWAR0c/FpGw9xYb7WE3rMShi1lqPmt8VfhqtPbbrb
+         gwHsuUnWv9MyHsUIzHGP+gH1IKO03SvDYwoemsQoANc9QwPApJgpaIN+FCNSn9NcA6Mi
+         sXEmfNHwYNyec7qQXnSjmCt2RDB514OF1FDIMwJZ+ov5yhEOMj5nZ84spbvLip9QoVuV
+         DIiIKEaXRU38QZTtQutpAZQrBGEJrdlmRwl78a9pX3JsEARxAP8x4KWHgms+4ym8n+w0
+         EbOLqYrjGJ9sgXWRvDYcr1jmbDYffL+SzBHmPrI4MTvtONBQF7AbXOOFoYlcJmjQqKDR
+         iIRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXIyJ9znq/4bMZlw4VR9uU+04U5lQJD1SPEKH7+tSVaBJcw7P+PqGPLO2hDDeu6jSVpgci0@lists.linux.dev
+X-Gm-Message-State: AOJu0YwTEViUdFZFv486frrwjYEza6KMyZE6MmpNf4zP7Kbb+1DV637B
+	Wdo+HQtnx/HDc44n9yjV6n2oij4EBEd1pp+UtWonVvHbxEGsSVnbZE5X8mHFNrwFfnQBbXZJYkn
+	9LgltjEJdrz4npl9uMwAc3wxaYce6qZs=
+X-Gm-Gg: ASbGncu1Il1g1ihS84resXWfxbFiuUWvGFa6vkA9f75m3lnDashzlzJx0X2ZcPzngBU
+	rMDb5M9sZx5ui9kTjnXO3F+n9PwYxOZsU+/plK1f8H7fqgIr8+3A9WV92BPDDsPmtKavbHtwq7O
+	dKifNbjdcA/F/ykwYbJPROzQFrA1+C4TYeKqMYIC5lmtAqgSI9RDpJr+U4RWwRA2zvAg==
+X-Google-Smtp-Source: AGHT+IFIWF7by3gTs9nskHKuDrd5DhLirM+9vmkqnyJc8DqSb/t3iOg3xoZJQ/VvsEAFPlJfLOTUIKCA5jn+ma8BioI=
+X-Received: by 2002:a17:907:72ca:b0:adb:229a:f8bd with SMTP id
+ a640c23a62f3a-adb322fcfebmr110658666b.29.1748557329539; Thu, 29 May 2025
+ 15:22:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,26 +60,25 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-2-6412a94d9d75@gmail.com> <DA66BBX1PDGI.10NHLG3D4CIT7@kernel.org>
- <CAJ-ks9m48gmar0WWP9WknV2JLqkKNU0X4nwXaQ+JdG+b-EcVxA@mail.gmail.com>
- <DA6GSMHMLRFM.YH9RGZWLY2X4@kernel.org> <CAJ-ks9nTf4dCoDdg4+YSkXM1sJsZ-0vuSC7wybc2JMAoGemhXQ@mail.gmail.com>
- <DA78MDRNCNB8.X69904APMYCB@kernel.org>
-In-Reply-To: <DA78MDRNCNB8.X69904APMYCB@kernel.org>
+ <20250524-cstr-core-v10-4-6412a94d9d75@gmail.com> <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
+ <CAJ-ks9nd6_iGK+ie-f+F0x4kwpyEGJ-kQiQGt-ffdbVN5S6kOg@mail.gmail.com>
+ <aDbnLzPIGiAZISOq@google.com> <DA7WJYNAN5AI.2HE6B953GR16A@kernel.org>
+In-Reply-To: <DA7WJYNAN5AI.2HE6B953GR16A@kernel.org>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 29 May 2025 18:07:52 -0400
-X-Gm-Features: AX0GCFu41pC0z7_KQ2CYQPyB1pil2qNhuH6L70S1ECJZkmQT9P0P8s6oLTTUl3c
-Message-ID: <CAJ-ks9=OsopMhr6Ui3PLD-ZkBo736ha9Ltkw=0ZaBzrQLC60Eg@mail.gmail.com>
-Subject: Re: [PATCH v10 2/5] rust: support formatting of foreign types
+Date: Thu, 29 May 2025 18:21:33 -0400
+X-Gm-Features: AX0GCFuFM8jRq3YcmcHlgxg8fSyonDU9gdfdyymDZiM0nf24_ZjIqY6KX4ZOh1M
+Message-ID: <CAJ-ks9nmxdSKtEuzT=yBU-WEuZXBupr5N6tainzrk=w3U_enXw@mail.gmail.com>
+Subject: Re: [PATCH v10 4/5] rust: replace `kernel::c_str!` with C-Strings
 To: Benno Lossin <lossin@kernel.org>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+Cc: Alice Ryhl <aliceryhl@google.com>, Michal Rostecki <vadorovsky@protonmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
 	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
 	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
@@ -100,192 +99,43 @@ Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 27, 2025 at 4:49=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
-ote:
+On Wed, May 28, 2025 at 11:35=E2=80=AFAM Benno Lossin <lossin@kernel.org> w=
+rote:
 >
-> On Tue May 27, 2025 at 5:02 PM CEST, Tamir Duberstein wrote:
-> > On Mon, May 26, 2025 at 7:01=E2=80=AFPM Benno Lossin <lossin@kernel.org=
-> wrote:
-> >> On Tue May 27, 2025 at 12:17 AM CEST, Tamir Duberstein wrote:
-> >> > On Mon, May 26, 2025 at 10:48=E2=80=AFAM Benno Lossin <lossin@kernel=
-.org> wrote:
-> >> >> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
-> >> >> > +impl_display_forward!(
-> >> >> > +    bool,
-> >> >> > +    char,
-> >> >> > +    core::panic::PanicInfo<'_>,
-> >> >> > +    crate::str::BStr,
-> >> >> > +    fmt::Arguments<'_>,
-> >> >> > +    i128,
-> >> >> > +    i16,
-> >> >> > +    i32,
-> >> >> > +    i64,
-> >> >> > +    i8,
-> >> >> > +    isize,
-> >> >> > +    str,
-> >> >> > +    u128,
-> >> >> > +    u16,
-> >> >> > +    u32,
-> >> >> > +    u64,
-> >> >> > +    u8,
-> >> >> > +    usize,
-> >> >> > +    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>=
-: fmt::Display},
-> >> >> > +    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::=
-UniqueArc<T>: fmt::Display},
-> >> >> > +);
-> >> >>
-> >> >> If we use `{}` instead of `()`, then we can format the contents
-> >> >> differently:
-> >> >>
-> >> >>     impl_display_forward! {
-> >> >>         i8, i16, i32, i64, i128, isize,
-> >> >>         u8, u16, u32, u64, u128, usize,
-> >> >>         bool, char, str,
-> >> >>         crate::str::BStr,
-> >> >>         fmt::Arguments<'_>,
-> >> >>         core::panic::PanicInfo<'_>,
-> >> >>         {<T: ?Sized>} crate::sync::Arc<T> {where Self: fmt::Display=
-},
-> >> >>         {<T: ?Sized>} crate::sync::UniqueArc<T> {where Self: fmt::D=
-isplay},
-> >> >>     }
+> On Wed May 28, 2025 at 12:36 PM CEST, Alice Ryhl wrote:
+> > On Mon, May 26, 2025 at 06:29:46PM -0400, Tamir Duberstein wrote:
+> >> On Mon, May 26, 2025 at 11:04=E2=80=AFAM Benno Lossin <lossin@kernel.o=
+rg> wrote:
 > >> >
-> >> > Is that formatting better? rustfmt refuses to touch it either way.
-> >>
-> >> Yeah rustfmt doesn't touch macro parameters enclosed in `{}`. I think
-> >> it's better.
-> >
-> > OK, but why? This seems entirely subjective.
->
-> If more types are added to the list, it will grow over one screen size.
-> With my formatting, leaving related types on a single line, that will
-> only happen much later.
->
-> >> >> > +/// Please see [`crate::fmt`] for documentation.
-> >> >> > +pub(crate) fn fmt(input: TokenStream) -> TokenStream {
-> >> >> > +    let mut input =3D input.into_iter();
-> >> >> > +
-> >> >> > +    let first_opt =3D input.next();
-> >> >> > +    let first_owned_str;
-> >> >> > +    let mut names =3D BTreeSet::new();
-> >> >> > +    let first_lit =3D {
-> >> >> > +        let Some((mut first_str, first_lit)) =3D (match first_op=
-t.as_ref() {
-> >> >> > +            Some(TokenTree::Literal(first_lit)) =3D> {
-> >> >> > +                first_owned_str =3D first_lit.to_string();
-> >> >> > +                Some(first_owned_str.as_str()).and_then(|first| =
-{
-> >> >> > +                    let first =3D first.strip_prefix('"')?;
-> >> >> > +                    let first =3D first.strip_suffix('"')?;
-> >> >> > +                    Some((first, first_lit))
-> >> >> > +                })
-> >> >> > +            }
-> >> >> > +            _ =3D> None,
-> >> >> > +        }) else {
-> >> >> > +            return first_opt.into_iter().chain(input).collect();
-> >> >> > +        };
-> >> >>
-> >> >> This usage of let-else + match is pretty confusing and could just b=
-e a
-> >> >> single match statement.
+> >> > On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
+> >> > > +macro_rules! c_str_avoid_literals {
 > >> >
-> >> > I don't think so. Can you try rewriting it into the form you like?
-> >>
-> >>     let (mut first_str, first_lit) match first_opt.as_ref() {
-> >>         Some(TokenTree::Literal(lit)) if lit.to_string().starts_with('=
-"') =3D> {
-> >>             let contents =3D lit.to_string();
-> >>             let contents =3D contents.strip_prefix('"').unwrap().strip=
-_suffix('"').unwrap();
-> >>             ((contents, lit))
-> >>         }
-> >>         _ =3D> return first_opt.into_iter().chain(input).collect(),
-> >>     };
-> >
-> > What happens if the invocation is utterly malformed, e.g.
-> > `fmt!("hello)`? You're unwrapping here, which I intentionally avoid.
->
-> That example won't even survive lexing (macros always will get valid
-> rust tokens as input). If a literal begins with a `"`, it also will end
-> with one AFAIK.
->
-> >> Yes it will error like that, but if we do the replacement only when th=
-e
-> >> syntax is correct, there also will be compile errors because of a
-> >> missing `Display` impl, or is that not the case?
-> >
-> > I'm not sure - I would guess syntax errors "mask" typeck errors.
->
-> I checked and it seems to be so, that's good.
-
-=F0=9F=91=8D
-
->
-> >> >> > +                    first_str =3D rest;
-> >> >> > +                    continue;
-> >> >> > +                }
-> >> >> > +                let name =3D name.split_once(':').map_or(name, |=
-(name, _)| name);
-> >> >> > +                if !name.is_empty() && !name.chars().all(|c| c.i=
-s_ascii_digit()) {
-> >> >> > +                    names.insert(name);
-> >> >> > +                }
-> >> >> > +                break;
-> >> >> > +            }
-> >> >> > +        }
-> >> >> > +        first_lit
-> >> >>
-> >> >> `first_lit` is not modified, so could we just the code above it int=
-o a
-> >> >> block instead of keeping it in the expr for `first_lit`?
+> >> > I don't like this name, how about `concat_to_c_str` or
+> >> > `concat_with_nul`?
 > >> >
-> >> > As above, can you suggest the alternate form you like better? The
-> >> > gymnastics here are all in service of being able to let malformed
-> >> > input fall through to core::format_args which will do the hard work =
-of
-> >> > producing good diagnostics.
+> >> > This macro also is useful from macros that have a normal string lite=
+ral,
+> >> > but can't turn it into a `c""` one.
 > >>
-> >> I don't see how this is hard, just do:
-> >>
-> >>     let (first_str, first_lit) =3D ...;
+> >> Uh, can you give an example? I'm not attached to the name.
 > >
-> > It requires you to unwrap, like you did above, which is what I'm
-> > trying to avoid.
+> > I also think it should be renamed. Right now it sounds like it creates =
+a
+> > c string while avoiding literals in the input ... whatever that means.
 >
-> How so? What do you need to unwrap?
-
-I was referring to your unwraps above.
-
-> >> >> > +    };
-> >> >> > +
-> >> >> > +    let first_span =3D first_lit.span();
-> >> >> > +    let adapt =3D |expr| {
-> >> >> > +        let mut borrow =3D
-> >> >> > +            TokenStream::from_iter([TokenTree::Punct(Punct::new(=
-'&', Spacing::Alone))]);
-> >> >> > +        borrow.extend(expr);
-> >> >> > +        make_ident(first_span, ["kernel", "fmt", "Adapter"])
-> >> >> > +            .chain([TokenTree::Group(Group::new(Delimiter::Paren=
-thesis, borrow))])
-> >> >>
-> >> >> This should be fine with using `quote!`:
-> >> >>
-> >> >>     quote!(::kernel::fmt::Adapter(&#expr))
-> >> >
-> >> > Yeah, I have a local commit that uses quote_spanned to remove all th=
-e
-> >> > manual constructions.
-> >>
-> >> I don't think that you need `quote_spanned` here at all. If you do, th=
-en
-> >> let me know, something weird with spans is going on then.
-> >
-> > You need to give idents a span, so each of `kernel`, `fmt`, and
-> > `adapter` need a span. I *could* use `quote!` and get whatever span it
-> > uses (mixed_site) but I'd rather retain control.
+> Yeah that's a good way to put why the name is weird.
 >
-> Please use `quote!` if it works. No need to make this more complex than
-> it already is. If it doesn't work then that's another story.
+> > I like Benno's suggestions, but str_to_cstr! could also work?
+>
+> Hmm, I think then people won't know that it can also concat? I don't
+> think it matters too much, the macro probably won't be used that often
+> and if someone needs to use it, they probably wouldn't fine it by name
+> alone.
 
-Let's adjudicate that on v11, where you can see the code.
+What do you mean by "it can also concat"? This macro by itself doesn't
+concat, it takes only a single expr. The example in the docs
+illustrates:
+
+    const MY_CSTR: &CStr =3D c_str_avoid_literals!(concat!(...));
+
+I think str_to_cstr is ok - I'll do that in v11.
