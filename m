@@ -1,148 +1,217 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219051372
-	for <llvm@lists.linux.dev>; Fri, 30 May 2025 00:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E916B8F40;
+	Fri, 30 May 2025 00:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748563613; cv=none; b=f+MOa8lbd47dTxFTQaqrcaMBiluqQGIilwj91X8J2fiQn+Yg9YJvwsmA76452+anL+JWVn7FiXeecj9NaRx71yX6CUQgEW+/VhIGL7kld3ZUkoUkuuLFcgrqKcUwJGra48er6uDn7cxYKVzm/3E0OeESXNQXAxa77yndxIz/efw=
+	t=1748564478; cv=none; b=Kk1yGAZ/ugdO1gAwo92aSU/jAfU3vjUCU8AT7ooLzh+sISL56JCXTMbv7FgnVMsGsRvGD9vc7+6oaO2mhSrKhwY6HsDfu+3lfSF+zJhFFb+B1mKAZFhrtH5RE/kSxvQitqYCoBUVPct8Cf6pG+B8TLApHtZqb+3hxgU8/eoNiMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748563613; c=relaxed/simple;
-	bh=Qs3fKJz8kaIyTjSI+VH+mg1a+38N08rlUGlC+WiuByA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xree6lAnQzfPYcEldszVtfAtCwA+qLjuaID44jLlntL6TEuLCqk7URMWQmhLbG4r/s6McT8XXaT2q0v2WCt1vjNRXOUGx+DTRb68uhA3oVjeaGPKu+XeHR2/FndcGWPd9ckscRmK0IN4/UKgQuJAIdz9MiXYseD6QAoMIGcwFzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UZmsyRif; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1748564478; c=relaxed/simple;
+	bh=QCJGh2gpvjzWowZKYSIeJr94U1LVQOCrLrk7Waw0xQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cbJPRzvRJLeEmbNkwVA0aJdOOXoDbNU5iNPxnIxPjR9psRUQjiiD45TQkurNOmr2MsLeWWS/BIeUZWXSMXlZaEvrIrSgNNDBjhpuQf2VkjiCyDwiy2o1RLep+ZlvxNxyFkWovjlggBBcuV/ZKaeyrgGFj7Vu+fz/ZRNQpIaHtv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AbpjgXnG; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UZmsyRif"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-73712952e1cso1121517b3a.1
-        for <llvm@lists.linux.dev>; Thu, 29 May 2025 17:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748563609; x=1749168409; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JaOyXlzy8Vkp255k6mJVMg/BC/f2o1qDq99ujzTjjD8=;
-        b=UZmsyRif1j1t8DehcxLiZIO3Kd8rGEyq1qzzLsEbxkYRfBdZUFYwhfGjWOStiaeYe0
-         D6W8Nan4HMOD5qL5CCE++8jW33u8IAUbcj1fEDptgM0xC3SapnNfiTraICBkKae+m0cC
-         smM2xGaXXDYRcpw1vgmI4D+2ObESX9etzChPi6nDh8dlMnUgmr9AFqOc2VXFZp3Y9wqv
-         IOMtndYpTGten7TUV1DGtrNsBd3OQalWkorNcMgGyG2uY0ijoGVDDMBq0dLIz0WAtRbp
-         rqelyPn1btUHrwm4ZTzDl6tI+dQG3haDEzsdJkCwQIjBZoCcz3z477NUYXWJKldh8qJI
-         hAFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748563609; x=1749168409;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JaOyXlzy8Vkp255k6mJVMg/BC/f2o1qDq99ujzTjjD8=;
-        b=WIjq/7+94+OZ1K5lGOXa+kDhZ/3ORnkuNz0NuH90DSrRrmv3S6ZXXY35hZ41q6yTf7
-         ssxQeIz3lMeWpYcBxCKTVJu0c5OlmxoUZg1tvXV9f+OrNwNeBFJiNMxs5xNT0fRJgrgI
-         NS2lfMSr2y907A6iT2t6HQSpLieCaTAj3ZVPxhXV5hFOoyzZfc6GlegnUsWTzQ4jia9t
-         tsSSP7W/+Su1PMtQ+kuSltGPPirQ/t7fB0vWUWoArdy1ynkSlkJj3rWQzhpLYQ1f/2cu
-         gqGDvKD6ULZ07FLRuvoxi3PMJIS1TyH97NUWtcUxZ0r2Kg/gwsCeaBealx3YT4tabsZe
-         dvoA==
-X-Forwarded-Encrypted: i=1; AJvYcCVF1Z5BQ+VIXkEwFxJZS4WNyhripRV1NbQOzYvgo8KJeBNJPlzb3/FkzB/Q+8GM7d/zGohG@lists.linux.dev
-X-Gm-Message-State: AOJu0YwV1IFE7NSvm9iwIduQd9nNdJtHxCoWdnhddJdW+U5cNPJ4elxD
-	xrRuvoIuVt1mYyrfplkd7yZsWup8FxXGzcxo6SLfbKaeeztak63CEeo1MlKlfEg58u4=
-X-Gm-Gg: ASbGncvKIOqJBUnFEO4ils1I2b7NFfkZQUe/iIi9oSzt1zX0BrR/803A832jagxnvsw
-	pYTT4RE4ztXkBBbYWQINCoYKRdW2ZW/Ua4WR4S41cf2UNKGxaxZKxrHDPWz1zLfWyIrr2x7wEeo
-	Z0TZnLSEirwUvuyThdne/UW9nxMZWpvKgEDI6vvqkW6FVPXNWAu+K7miSLfgUwoDd0/gUIksPW3
-	nPlDyMzcGyqxbDyQCRhKfqJ+jqog9l+ah9tHgStYqmeWy8uogYfXPTjLqXY11cc1LdELaAJbB0q
-	D+rnYx8SSS04AuNY93cwvHhPOrOKWoKrLcyH2scEywJGzvlxy68R5R+J3sKEZoPmmdXUEQ==
-X-Google-Smtp-Source: AGHT+IHYOsFk2zcF1gLH1VRU+irYg1/F2TFp50LC35CUJj4OwIZqUaVrXo0NvOsbYcPu1XpBkFVZUg==
-X-Received: by 2002:a05:6a00:189b:b0:736:8c0f:7758 with SMTP id d2e1a72fcca58-747c1a7f839mr253775b3a.10.1748563609262;
-        Thu, 29 May 2025 17:06:49 -0700 (PDT)
-Received: from localhost ([2804:14d:7e39:88d6:4b9a:64e:e01:2c33])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afe967easm1894641b3a.21.2025.05.29.17.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 17:06:48 -0700 (PDT)
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: kees@kernel.org
-Cc: akpm@linux-foundation.org,
-	arnd@arndb.de,
-	broonie@kernel.org,
-	davidgow@google.com,
-	diego.daniel.professional@gmail.com,
-	gnoack@google.com,
-	gustavoars@kernel.org,
-	jmorris@namei.org,
-	justinstitt@google.com,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux@treblig.org,
-	llvm@lists.linux.dev,
-	mcgrof@kernel.org,
-	mic@digikod.net,
-	morbo@google.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	paul@paul-moore.com,
-	pmladek@suse.com,
-	rmoar@google.com,
-	serge@hallyn.com,
-	tamird@gmail.com,
-	wangyuli@uniontech.com
-Subject: Re: [PATCH 3/3] Revert "hardening: Disable GCC randstruct for COMPILE_TEST"
-Date: Thu, 29 May 2025 21:06:46 -0300
-Message-ID: <20250530000646.104457-1-thiago.bauermann@linaro.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250427013836.877214-3-kees@kernel.org>
-References: <20250427013836.877214-3-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AbpjgXnG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748564477; x=1780100477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QCJGh2gpvjzWowZKYSIeJr94U1LVQOCrLrk7Waw0xQk=;
+  b=AbpjgXnGLpFRbx+5KJBW2lwjO9W/Y5t8+dUGtdm+PS/ABzCr87Ulsw4V
+   Op/N5BIczIjiqcz6fk1DLy6vUJc3v5AO60rZj/wnzn7OdPtQhoMuVzvjb
+   SnkWT/2jyFipbsWr1lYWpnz2WboP6te5IGJpGMZB58qtU1YUGS1oXxgaB
+   vCZbFkbhmx1nvm000IWk05ubYydDs7yjNn0acc+LgdvVjbW6C1X8zcyID
+   E22c7W6VFkXQRNDavvyRVNKTmYi7uS11bofHn7kyT6pdN+nMi2GdapXdn
+   Hr9XyNiY2dlDFJMClK+QTPfZTyFHxN/fabip7M1Ue4EVKgoZZ+Peb5SZu
+   A==;
+X-CSE-ConnectionGUID: Ar7J7sGNSXikueEYy0X4EQ==
+X-CSE-MsgGUID: 8WP+NuvGRPa3cMh1yFw9rA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11448"; a="60909383"
+X-IronPort-AV: E=Sophos;i="6.16,194,1744095600"; 
+   d="scan'208";a="60909383"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2025 17:21:16 -0700
+X-CSE-ConnectionGUID: XGuUdJJUToCEHhToPx17FQ==
+X-CSE-MsgGUID: E9SzGb0jR62AuTCLx2SkLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,194,1744095600"; 
+   d="scan'208";a="144699021"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 29 May 2025 17:21:13 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uKnUl-000XDU-0j;
+	Fri, 30 May 2025 00:21:11 +0000
+Date: Fri, 30 May 2025 08:20:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Binbin Zhou <zhoubinbin@loongson.cn>,
+	Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Adrian Hunter <adrian.hunter@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mmc@vger.kernel.org,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Hu Ziji <huziji@marvell.com>
+Subject: Re: [PATCH v2 32/35] mmc: sdhci-xenon: Drop the use of
+ sdhci_pltfm_free()
+Message-ID: <202505300815.tjQRQD6z-lkp@intel.com>
+References: <b79920fa8bff8f7cf2f407863846446344d2eab7.1748515612.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b79920fa8bff8f7cf2f407863846446344d2eab7.1748515612.git.zhoubinbin@loongson.cn>
 
-Hello,
+Hi Binbin,
 
-This commit was reported by our CI as breaking the allmodconfig build for
-the arm and arm64 architectures when using GCC 15. This is due to
-https://github.com/KSPP/linux/issues/367 :
+kernel test robot noticed the following build warnings:
 
--00:05:08 *** WARNING *** there are active plugins, do not report this as a bug unless you can reproduce it without enabling any plugins.
-00:05:08 Event                            | Plugins
-00:05:08 PLUGIN_FINISH_TYPE               | randomize_layout_plugin
-00:05:08 PLUGIN_FINISH_DECL               | randomize_layout_plugin
-00:05:08 PLUGIN_ATTRIBUTES                | latent_entropy_plugin randomize_layout_plugin
-00:05:08 PLUGIN_START_UNIT                | latent_entropy_plugin stackleak_plugin
-00:05:08 PLUGIN_ALL_IPA_PASSES_START      | randomize_layout_plugin
-00:05:08 arch/arm64/kernel/kexec_image.c:132:14: internal compiler error: in comptypes_check_enum_int, at c/c-typeck.cc:1519
-00:05:08   132 | const struct kexec_file_ops kexec_image_ops = {
-00:05:08       |              ^~~~~~~~~~~~~~
-00:05:08 0x225bdff internal_error(char const*, ...)
-00:05:08 	../../../../../../gcc/gcc/diagnostic-global-context.cc:517
-00:05:08 0x7cb197 fancy_abort(char const*, int, char const*)
-00:05:08 	../../../../../../gcc/gcc/diagnostic.cc:1803
-00:05:08 0x81f0e7 comptypes_check_enum_int(tree_node*, tree_node*, bool*)
-00:05:08 	../../../../../../gcc/gcc/c/c-typeck.cc:1519
-00:05:08 0x81f0e7 comptypes_check_enum_int(tree_node*, tree_node*, bool*)
-00:05:08 	../../../../../../gcc/gcc/c/c-typeck.cc:1513
-00:05:08 0x7e3b83 diagnose_mismatched_decls
-00:05:08 	../../../../../../gcc/gcc/c/c-decl.cc:2170
-00:05:08 0x7e64f3 duplicate_decls
-00:05:08 	../../../../../../gcc/gcc/c/c-decl.cc:3169
-00:05:08 0x7ea1eb pushdecl(tree_node*)
-00:05:08 	../../../../../../gcc/gcc/c/c-decl.cc:3376
-00:05:08 0x803c03 start_decl(c_declarator*, c_declspecs*, bool, tree_node*, bool, unsigned long*)
-00:05:08 	../../../../../../gcc/gcc/c/c-decl.cc:5755
-00:05:08 0x864c67 c_parser_declaration_or_fndef
-00:05:08 	../../../../../../gcc/gcc/c/c-parser.cc:2851
-00:05:08 0x8a7b33 c_parser_external_declaration
-00:05:08 	../../../../../../gcc/gcc/c/c-parser.cc:2110
-00:05:08 0x8a8ba3 c_parser_translation_unit
-00:05:08 	../../../../../../gcc/gcc/c/c-parser.cc:1964
-00:05:08 0x8a8ba3 c_parse_file()
-00:05:08 	../../../../../../gcc/gcc/c/c-parser.cc:29839
-00:05:08 0x931eff c_common_parse_file()
-00:05:08 	../../../../../../gcc/gcc/c-family/c-opts.cc:1385
-00:05:08 Please submit a full bug report, with preprocessed source (by using -freport-bug).
-00:05:08 Please include the complete backtrace with any bug report.
-00:05:08 See <https://gcc.gnu.org/bugs/> for instructions.
-00:05:08 make[4]: *** [scripts/Makefile.build:203: arch/arm64/kernel/kexec_image.o] Error 1
+[auto build test WARNING on d2c6acff6386f43ed307822454b970c831c48f1b]
 
-The same error repeats for several other source files.
+url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/mmc-sdhci-Use-devm_mmc_alloc_host-helper/20250529-212928
+base:   d2c6acff6386f43ed307822454b970c831c48f1b
+patch link:    https://lore.kernel.org/r/b79920fa8bff8f7cf2f407863846446344d2eab7.1748515612.git.zhoubinbin%40loongson.cn
+patch subject: [PATCH v2 32/35] mmc: sdhci-xenon: Drop the use of sdhci_pltfm_free()
+config: arm-randconfig-004-20250530 (https://download.01.org/0day-ci/archive/20250530/202505300815.tjQRQD6z-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250530/202505300815.tjQRQD6z-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505300815.tjQRQD6z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mmc/host/sdhci-xenon.c:536:59: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+     536 |                         dev_err(&pdev->dev, "Failed to setup input clk: %d\n", err);
+         |                                                                                ^~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/mmc/host/sdhci-xenon.c:515:9: note: initialize the variable 'err' to silence this warning
+     515 |         int err;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +/err +536 drivers/mmc/host/sdhci-xenon.c
+
+3a3748dba881ed Hu Ziji         2017-03-30  508  
+3a3748dba881ed Hu Ziji         2017-03-30  509  static int xenon_probe(struct platform_device *pdev)
+3a3748dba881ed Hu Ziji         2017-03-30  510  {
+3a3748dba881ed Hu Ziji         2017-03-30  511  	struct sdhci_pltfm_host *pltfm_host;
+1542488031deed Marcin Wojtas   2020-12-04  512  	struct device *dev = &pdev->dev;
+3a3748dba881ed Hu Ziji         2017-03-30  513  	struct sdhci_host *host;
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  514  	struct xenon_priv *priv;
+3a3748dba881ed Hu Ziji         2017-03-30  515  	int err;
+3a3748dba881ed Hu Ziji         2017-03-30  516  
+3a3748dba881ed Hu Ziji         2017-03-30  517  	host = sdhci_pltfm_init(pdev, &sdhci_xenon_pdata,
+3a3748dba881ed Hu Ziji         2017-03-30  518  				sizeof(struct xenon_priv));
+3a3748dba881ed Hu Ziji         2017-03-30  519  	if (IS_ERR(host))
+3a3748dba881ed Hu Ziji         2017-03-30  520  		return PTR_ERR(host);
+3a3748dba881ed Hu Ziji         2017-03-30  521  
+3a3748dba881ed Hu Ziji         2017-03-30  522  	pltfm_host = sdhci_priv(host);
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  523  	priv = sdhci_pltfm_priv(pltfm_host);
+3a3748dba881ed Hu Ziji         2017-03-30  524  
+f75fda3730728e Marcin Wojtas   2020-12-04  525  	priv->hw_version = (unsigned long)device_get_match_data(&pdev->dev);
+f75fda3730728e Marcin Wojtas   2020-12-04  526  
+3a3748dba881ed Hu Ziji         2017-03-30  527  	/*
+3a3748dba881ed Hu Ziji         2017-03-30  528  	 * Link Xenon specific mmc_host_ops function,
+3a3748dba881ed Hu Ziji         2017-03-30  529  	 * to replace standard ones in sdhci_ops.
+3a3748dba881ed Hu Ziji         2017-03-30  530  	 */
+3a3748dba881ed Hu Ziji         2017-03-30  531  	xenon_replace_mmc_host_ops(host);
+3a3748dba881ed Hu Ziji         2017-03-30  532  
+1542488031deed Marcin Wojtas   2020-12-04  533  	if (dev->of_node) {
+3a3748dba881ed Hu Ziji         2017-03-30  534  		pltfm_host->clk = devm_clk_get(&pdev->dev, "core");
+3a3748dba881ed Hu Ziji         2017-03-30  535  		if (IS_ERR(pltfm_host->clk)) {
+3a3748dba881ed Hu Ziji         2017-03-30 @536  			dev_err(&pdev->dev, "Failed to setup input clk: %d\n", err);
+6773eb1cf68bcb Binbin Zhou     2025-05-29  537  			return PTR_ERR(pltfm_host->clk);
+3a3748dba881ed Hu Ziji         2017-03-30  538  		}
+3a3748dba881ed Hu Ziji         2017-03-30  539  		err = clk_prepare_enable(pltfm_host->clk);
+3a3748dba881ed Hu Ziji         2017-03-30  540  		if (err)
+6773eb1cf68bcb Binbin Zhou     2025-05-29  541  			return err;
+3a3748dba881ed Hu Ziji         2017-03-30  542  
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  543  		priv->axi_clk = devm_clk_get(&pdev->dev, "axi");
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  544  		if (IS_ERR(priv->axi_clk)) {
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  545  			err = PTR_ERR(priv->axi_clk);
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  546  			if (err == -EPROBE_DEFER)
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  547  				goto err_clk;
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  548  		} else {
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  549  			err = clk_prepare_enable(priv->axi_clk);
+3a3748dba881ed Hu Ziji         2017-03-30  550  			if (err)
+3a3748dba881ed Hu Ziji         2017-03-30  551  				goto err_clk;
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  552  		}
+1542488031deed Marcin Wojtas   2020-12-04  553  	}
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  554  
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  555  	err = mmc_of_parse(host->mmc);
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  556  	if (err)
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  557  		goto err_clk_axi;
+3a3748dba881ed Hu Ziji         2017-03-30  558  
+f29bf660bf4137 Marcin Wojtas   2020-12-04  559  	sdhci_get_property(pdev);
+3a3748dba881ed Hu Ziji         2017-03-30  560  
+3a3748dba881ed Hu Ziji         2017-03-30  561  	xenon_set_acg(host, false);
+3a3748dba881ed Hu Ziji         2017-03-30  562  
+f29bf660bf4137 Marcin Wojtas   2020-12-04  563  	/* Xenon specific parameters parse */
+f29bf660bf4137 Marcin Wojtas   2020-12-04  564  	err = xenon_probe_params(pdev);
+3a3748dba881ed Hu Ziji         2017-03-30  565  	if (err)
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  566  		goto err_clk_axi;
+3a3748dba881ed Hu Ziji         2017-03-30  567  
+3a3748dba881ed Hu Ziji         2017-03-30  568  	err = xenon_sdhc_prepare(host);
+3a3748dba881ed Hu Ziji         2017-03-30  569  	if (err)
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  570  		goto err_clk_axi;
+3a3748dba881ed Hu Ziji         2017-03-30  571  
+a027b2c5fed788 Zhoujie Wu      2017-08-29  572  	pm_runtime_get_noresume(&pdev->dev);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  573  	pm_runtime_set_active(&pdev->dev);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  574  	pm_runtime_set_autosuspend_delay(&pdev->dev, 50);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  575  	pm_runtime_use_autosuspend(&pdev->dev);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  576  	pm_runtime_enable(&pdev->dev);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  577  	pm_suspend_ignore_children(&pdev->dev, 1);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  578  
+3a3748dba881ed Hu Ziji         2017-03-30  579  	err = sdhci_add_host(host);
+3a3748dba881ed Hu Ziji         2017-03-30  580  	if (err)
+3a3748dba881ed Hu Ziji         2017-03-30  581  		goto remove_sdhc;
+3a3748dba881ed Hu Ziji         2017-03-30  582  
+a027b2c5fed788 Zhoujie Wu      2017-08-29  583  	pm_runtime_put_autosuspend(&pdev->dev);
+5d40213347480e Elad Nachman    2024-01-04  584  	/*
+5d40213347480e Elad Nachman    2024-01-04  585  	 * If we previously detected AC5 with over 2GB of memory,
+5d40213347480e Elad Nachman    2024-01-04  586  	 * then we disable ADMA and 64-bit DMA.
+5d40213347480e Elad Nachman    2024-01-04  587  	 * This means generic SDHCI driver has set the DMA mask to
+5d40213347480e Elad Nachman    2024-01-04  588  	 * 32-bit. Since DDR starts at 0x2_0000_0000, we must use
+5d40213347480e Elad Nachman    2024-01-04  589  	 * 34-bit DMA mask to access this DDR memory:
+5d40213347480e Elad Nachman    2024-01-04  590  	 */
+5d40213347480e Elad Nachman    2024-01-04  591  	if (priv->hw_version == XENON_AC5 &&
+5d40213347480e Elad Nachman    2024-01-04  592  	    host->quirks2 & SDHCI_QUIRK2_BROKEN_64_BIT_DMA)
+5d40213347480e Elad Nachman    2024-01-04  593  		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
+a027b2c5fed788 Zhoujie Wu      2017-08-29  594  
+3a3748dba881ed Hu Ziji         2017-03-30  595  	return 0;
+3a3748dba881ed Hu Ziji         2017-03-30  596  
+3a3748dba881ed Hu Ziji         2017-03-30  597  remove_sdhc:
+a027b2c5fed788 Zhoujie Wu      2017-08-29  598  	pm_runtime_disable(&pdev->dev);
+a027b2c5fed788 Zhoujie Wu      2017-08-29  599  	pm_runtime_put_noidle(&pdev->dev);
+3a3748dba881ed Hu Ziji         2017-03-30  600  	xenon_sdhc_unprepare(host);
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  601  err_clk_axi:
+bb16ea1742c8f3 Gregory CLEMENT 2017-10-02  602  	clk_disable_unprepare(priv->axi_clk);
+3a3748dba881ed Hu Ziji         2017-03-30  603  err_clk:
+3a3748dba881ed Hu Ziji         2017-03-30  604  	clk_disable_unprepare(pltfm_host->clk);
+3a3748dba881ed Hu Ziji         2017-03-30  605  	return err;
+3a3748dba881ed Hu Ziji         2017-03-30  606  }
+3a3748dba881ed Hu Ziji         2017-03-30  607  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
