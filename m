@@ -1,92 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A44827B51A;
-	Fri, 30 May 2025 19:37:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC382405F5
+	for <llvm@lists.linux.dev>; Fri, 30 May 2025 19:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748633830; cv=none; b=nBlvEvM0LHro/c9ZPvFAONhAcRwbiv6euBNJuzW5IbAYnc6bEod6favbOXJjXZyEQr/n0pXtNMWx7BAarMNWYIFRUWWepCIxluhs17SnZbeE1+SVZ9n1ibUtpD8BeeisaERMWvE2CaEN/hiBXNLZNtzyRiE5G9Z1HBw4mCThC2I=
+	t=1748634131; cv=none; b=eRfM4nkOVQgq5taZ8kJxG4k77ZscjzcgU25Y2Bsp9tF0KiabCUp2Zj7kB2zcg/vfMMUbZurphgArzYfyq+cKCcJhxrBz//CGKSUfIOgyKsQuuX9NWm/e3ywlo9duyVvyYWgG4UdZdIIUmtEBZT48I7DuTEeaaBLhBAaFB/1Ra8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748633830; c=relaxed/simple;
-	bh=Z8/s+ELGWRd8al7z8iP6qbpzkL0lbCsk9LHxUuaiOhg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JnXBkR7U2W4B/+IFKkc2xW8y7ar1+YTv6dRmMzlGyYL/udSV+PJt+SlLYOXEF6P16kwBdrCJiTWml3iyIQNRCFASMTddS6AaDNUHyWmVhsWIAMy6m6JxdRhMsSwXOejQzlTBLjSDHRuOg8ZwtdrM6MzzQFQWfX6LTIhtHv47cRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UyUx0JXo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748634131; c=relaxed/simple;
+	bh=FRn9gDhNwJV4LMhx1+UPbq2nwQkCF4Wkhc2iBdpCrlQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ooOfg3SH6nrnOlrlidLNBPRUF0u1Tfvqx0CWSJcW0JuhpkXZDMzLD9WXNApabd+wt4qn4GhRmkZLUfG/NrV/f0gwqYVISS6yt/A0GVk9uAsEIU/VaDqVsdOUR6bpNW3lrSJwZPht1R5skeeu+zSwghpra81xOP8c66aWveTOHMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e2lmTdUb; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UyUx0JXo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D1FC4CEE9;
-	Fri, 30 May 2025 19:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748633830;
-	bh=Z8/s+ELGWRd8al7z8iP6qbpzkL0lbCsk9LHxUuaiOhg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UyUx0JXo4MJhrWOO+tQKZ+8X2pqucj1ZCZUOgMkv8+odPfAuMj2HMuM+qGhLw+P0s
-	 QFj1b54h/4670eh3wDCF7zsSy6ofDE8kYsA9MxDKQ/EYHMjPpEZL2IKRsSbEF1Jv0Z
-	 cTaZCdPqhQveNjHZSr3pIz+fS6FEuvfQKD1VavpKLMt1Oj0Yo7656dmW0rBDGmPb7j
-	 yidzInEQXkTdY74ormGhnY9eKJZo8aGCKbuMytSeUg8ZW7ga55COe/wln4sNSIFbRF
-	 i0RMnoaQqu+J6sWRLfWDMyT873j/xfTYHkt0kltClTJ5YxNbITwP8/jVjxpncT1cAY
-	 r89CuKUpIppLw==
-Date: Fri, 30 May 2025 12:37:06 -0700
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	akpm@linux-foundation.org, arnd@arndb.de, broonie@kernel.org,
-	davidgow@google.com, diego.daniel.professional@gmail.com,
-	gnoack@google.com, gustavoars@kernel.org, jmorris@namei.org,
-	justinstitt@google.com, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux@treblig.org, llvm@lists.linux.dev, mcgrof@kernel.org,
-	mic@digikod.net, morbo@google.com, nick.desaulniers+lkml@gmail.com,
-	paul@paul-moore.com, pmladek@suse.com, rmoar@google.com,
-	serge@hallyn.com, tamird@gmail.com, wangyuli@uniontech.com
-Subject: Re: [PATCH 3/3] Revert "hardening: Disable GCC randstruct for
- COMPILE_TEST"
-Message-ID: <202505301234.4F2C365F@keescook>
-References: <20250427013836.877214-3-kees@kernel.org>
- <20250530000646.104457-1-thiago.bauermann@linaro.org>
- <202505292153.14B0A688F8@keescook>
- <20250530190904.GA1159814@ax162>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e2lmTdUb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748634128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GwKBukChZEAm6EaGNV9J4OP3d2m8EuXRCikyY8mXxRY=;
+	b=e2lmTdUbmcm8mN8gUC0G0x8ivriX5pUBMAqWnnw/QGibu4jgCbEJ8K9svskxCoD3u2MEUb
+	NmjzqvoRY6IavN4Ce+V1EDQ3o1c9quRWthKcp321/jAB9gppX3+1dtJDGLKGuIrGYi8V10
+	cNddoKCpMsfNYSbFMjNmh/zEJV6SGvA=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-226-aUoPfcXEMUW5s5M21EnC3Q-1; Fri,
+ 30 May 2025 15:42:07 -0400
+X-MC-Unique: aUoPfcXEMUW5s5M21EnC3Q-1
+X-Mimecast-MFC-AGG-ID: aUoPfcXEMUW5s5M21EnC3Q_1748634126
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70A221956095
+	for <llvm@lists.linux.dev>; Fri, 30 May 2025 19:42:06 +0000 (UTC)
+Received: from [172.20.48.73] (unknown [10.30.45.91])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 46244180049D;
+	Fri, 30 May 2025 19:42:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 100): Test report for master
+ (6.15.0, upstream-mainline, f66bc387)
+Date: Fri, 30 May 2025 19:42:04 -0000
+To: fmaurer@redhat.com, omosnace@redhat.com, ftjahjad@redhat.com,
+ mmalik@redhat.com, bgoncalv@redhat.com, haliu@redhat.com,
+ llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250530190904.GA1159814@ax162>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <81822.125053015420700385@us-mta-226.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: xCxYhobPnHJDpVPW90DJMxQwS6ayXo8aMhPqAFnXQ_w_1748634126
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 30, 2025 at 12:09:04PM -0700, Nathan Chancellor wrote:
-> On Thu, May 29, 2025 at 10:12:22PM -0700, Kees Cook wrote:
-> > On Thu, May 29, 2025 at 09:06:46PM -0300, Thiago Jung Bauermann wrote:
-> > > This commit was reported by our CI as breaking the allmodconfig build for
-> > > the arm and arm64 architectures when using GCC 15. This is due to
-> > > https://github.com/KSPP/linux/issues/367 :
-> > > 
-> > > 00:05:08 arch/arm64/kernel/kexec_image.c:132:14: internal compiler error: in comptypes_check_enum_int, at c/c-typeck.cc:1519
-> > > 00:05:08   132 | const struct kexec_file_ops kexec_image_ops = {
-> > > 00:05:08       |              ^~~~~~~~~~~~~~
-> > 
-> > I'm not able to reproduce this. Which specific version of GCC 15 and
-> > on what distro are you seeing this?
-> 
-> It looks like this was also reported to Debian (I originally noticed it
-> in the #gcc channel on OFTC a couple of weeks ago but forgot to mention
-> it):
-> 
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1104745
-> 
-> It looks like the difference might be whether GCC was built with
-> additional checks or not based on the last couple of comments in that
-> bug.
+Hi, we tested your kernel and here are the results:
 
-Ah, thanks for the additional pointer! Yeah, discussion has continued
-on https://github.com/KSPP/linux/issues/367 which shows it's a problem
-for GCC builds configured with "--enable-checking=yes"
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-It seems like this check is overly strict? I'm building GCC now to see
-which aspect of the plugin is tripping it... I assume its decl
-finalization, but we'll see.
 
--- 
-Kees Cook
+Kernel information:
+    Commit message: Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/jejb/scsi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1844097049
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1844097049-x86_64-kernel-debug_upt_4
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        kselftest build - bpf
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1844097049-x86_64-kernel-debug_selftest_bpf
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1844097049-x86_64-kernel-debug_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        selinux-policy: serge-testsuite
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1844097049-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+
+
+Tests that were not ran because of internal issues:
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
