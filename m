@@ -1,155 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E69219A70;
-	Fri, 30 May 2025 15:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3041FBE80
+	for <llvm@lists.linux.dev>; Fri, 30 May 2025 15:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748617592; cv=none; b=ofCJSHJF8p+2pr4Fi/eH6jvztX9mcBaIwUwVASTjGznOmWKORmdT9FUXPaaTkNyTPsCVltRfsvPwUtgVEyCBcgaTFYt/RXI5+HmJqspBSKYx0AR3pAu7LveqaZZPLDXSSZOfV7SNint+QDwhoFJUsJ3rmc+ePAbDTC18+ZKFSPM=
+	t=1748619792; cv=none; b=uemorCC3YhATgCXRQPJ3FtK4AqETAj7WiH7ckFBaEs5S8g5f0dfpPRR8bMk8jD2kg4x2O7tTkt6+dY/ILIdleH7UjHZ3Q/Vu5Om5dHeO7UYIV+8ItLmnSY+qZ+nUS6Y2AKeet2yh81ySmRSCpLs1qO9phDRcygV27dGeDZA+cqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748617592; c=relaxed/simple;
-	bh=ZCvmrxN0r+pSdIzQoEagLM/oBx7scbk+wpbnyKhTWFI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nb65heyEGBuSQKOBm7D9vQ7BIt4p1OZh+wUqPtCsKi1ZFFDr2vzwgbO4eS2QQSwcDWYhnvtrqsE4wkdnQNPUA7xcdXoNAilDQHjOuxwlYha7HriQ22tp5U8bybeA07E19RFO/YgLLEgL2eyQEZ96VbGX+hmMBwpzgsggr3gEUzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DeCLZUuh; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1748619792; c=relaxed/simple;
+	bh=0JHgklpRhtuIwAd54gC9dD/ZEHgdU2UMGhoKMJcXscI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=l/gGbK5yQV2tdFLV+H8DdLZAFtrCmt1qVKkBlL3bBC/KnefhYy/DiMW5m50pwA0OEbYtg0KUPdTNeSssOOG2PAMTwheo3MGiQvN4rktAUCy0Ye1sQb4iS+BE+4gZMR7MyL6YucArnley2WTL4g9tLb5bBHDCxNhlLi+QgBjimmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AVsYbpQl; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DeCLZUuh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748617592; x=1780153592;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZCvmrxN0r+pSdIzQoEagLM/oBx7scbk+wpbnyKhTWFI=;
-  b=DeCLZUuhHLsQHZtJK5owsr+yp/w6c44EjQ5PTzkh5XEnlLNtRaea3COe
-   5uuouwj+q/9/YkT3uwBrirI07Y7Mf7bxW2JgAIwcJLHJ4cNT+S/SHgrj8
-   rm3qTDtapUDFXhQ2HJL9k0GgWXH8RpQkViAFfJpJDSYfFEUDiRhw5Zzz0
-   VhqMqw6Rp3wb1zXVE4B02Gr8qzPsId0NQKyIQ2M1wp0BglYKz1GH9opNL
-   v1ji/KnsTZnq2obNkKjPmsDpU8qRtFk3rxwSIM2O+MCkJvCQsJ/gTf8Ge
-   NMvdcLE77uDriLv2iwJXlfHF4MC+7QeQND46cq5vwlmMMdkdmv3AQluea
-   w==;
-X-CSE-ConnectionGUID: 0p01rt2FRV2yrgaN+5Zfvw==
-X-CSE-MsgGUID: mV/PaNiPQP61BVjNldZ9Cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11449"; a="54511351"
-X-IronPort-AV: E=Sophos;i="6.16,196,1744095600"; 
-   d="scan'208";a="54511351"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2025 08:06:31 -0700
-X-CSE-ConnectionGUID: hsejwFi4S9+9nDb9Y6uGBw==
-X-CSE-MsgGUID: Qd5osiNhSbaf69bqLl4g8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,196,1744095600"; 
-   d="scan'208";a="143735986"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 30 May 2025 08:06:27 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uL1JR-000Xic-0p;
-	Fri, 30 May 2025 15:06:25 +0000
-Date: Fri, 30 May 2025 23:06:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Adrian Hunter <adrian.hunter@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Haibo Chen <haibo.chen@nxp.com>,
-	Aubin Constans <aubin.constans@microchip.com>,
-	Eugen Hristev <eugen.hristev@collabora.com>,
-	Karel Balej <balejk@matfyz.cz>, Ben Dooks <ben-linux@fluff.org>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Hu Ziji <huziji@marvell.com>, Judith Mendez <jm@ti.com>,
-	Andrew Davis <afd@ti.com>, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH] mmc: sdhci: Return void from
- sdhci_runtime_suspend_host() and sdhci_runtime_resume_host()
-Message-ID: <202505302212.ZprBxoVy-lkp@intel.com>
-References: <20250530122018.37250-1-adrian.hunter@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AVsYbpQl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748619788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pCfAKOrCS6JJY1hCe4WDcD1OH8I4lkOSr9KWCUGBEtY=;
+	b=AVsYbpQlzD3yOpLaOHPMsAZuNlMJ4uDudrAHTHeJR7Wu+Tz6W0el7pnOdzkX61Jxk4Vi9i
+	dYJqpvdMZM8AvRdgmi6jMqRx+8DdMUUfbmgBVy7REfY3immalNO7QQ3MxqnXuWcxhVa4xS
+	/U8ZpHOGaDamuE3MqnOTlto9ePl4QAs=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-452-VbI-UuIvM8yGybb7VzLdVw-1; Fri,
+ 30 May 2025 11:43:07 -0400
+X-MC-Unique: VbI-UuIvM8yGybb7VzLdVw-1
+X-Mimecast-MFC-AGG-ID: VbI-UuIvM8yGybb7VzLdVw_1748619786
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D091B1956094
+	for <llvm@lists.linux.dev>; Fri, 30 May 2025 15:43:06 +0000 (UTC)
+Received: from [172.20.48.73] (unknown [10.30.45.91])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1F0F430001B7;
+	Fri, 30 May 2025 15:43:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 100): Test report for master
+ (6.15.0, upstream-mainline, 9d230d50)
+Date: Fri, 30 May 2025 15:43:05 -0000
+To: fmaurer@redhat.com, omosnace@redhat.com, ftjahjad@redhat.com,
+ mmalik@redhat.com, bgoncalv@redhat.com, haliu@redhat.com,
+ llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250530122018.37250-1-adrian.hunter@intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <02491.125053011430700950@us-mta-452.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: R44MPb0CIINZeEwU6-oFBmkMH2b8h_Hk9kkXt6FXAOs_1748619786
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Adrian,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on ulf-hansson-mmc-mirror/next v6.15 next-20250530]
-[cannot apply to shawnguo/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Adrian-Hunter/mmc-sdhci-Return-void-from-sdhci_runtime_suspend_host-and-sdhci_runtime_resume_host/20250530-202113
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250530122018.37250-1-adrian.hunter%40intel.com
-patch subject: [PATCH] mmc: sdhci: Return void from sdhci_runtime_suspend_host() and sdhci_runtime_resume_host()
-config: i386-buildonly-randconfig-002-20250530 (https://download.01.org/0day-ci/archive/20250530/202505302212.ZprBxoVy-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250530/202505302212.ZprBxoVy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505302212.ZprBxoVy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mmc/host/sdhci-esdhc-imx.c:2103:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2103 |         if (host->mmc->caps2 & MMC_CAP2_CQE) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/host/sdhci-esdhc-imx.c:2123:9: note: uninitialized use occurs here
-    2123 |         return ret;
-         |                ^~~
-   drivers/mmc/host/sdhci-esdhc-imx.c:2103:2: note: remove the 'if' if its condition is always true
-    2103 |         if (host->mmc->caps2 & MMC_CAP2_CQE) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/host/sdhci-esdhc-imx.c:2101:9: note: initialize the variable 'ret' to silence this warning
-    2101 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +2103 drivers/mmc/host/sdhci-esdhc-imx.c
+Kernel information:
+    Commit message: Merge tag 'driver-core-6.16-rc1' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/driver-core/driver-core
 
-04143fbaeb5799 Dong Aisheng      2016-07-12  2094  
-2788ed42cdd755 Ulf Hansson       2016-07-27  2095  #ifdef CONFIG_PM
-89d7e5c131228a Dong Aisheng      2013-11-04  2096  static int sdhci_esdhc_runtime_suspend(struct device *dev)
-89d7e5c131228a Dong Aisheng      2013-11-04  2097  {
-89d7e5c131228a Dong Aisheng      2013-11-04  2098  	struct sdhci_host *host = dev_get_drvdata(dev);
-89d7e5c131228a Dong Aisheng      2013-11-04  2099  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-070e6d3ff5a696 Jisheng Zhang     2016-02-16  2100  	struct pltfm_imx_data *imx_data = sdhci_pltfm_priv(pltfm_host);
-89d7e5c131228a Dong Aisheng      2013-11-04  2101  	int ret;
-89d7e5c131228a Dong Aisheng      2013-11-04  2102  
-bb6e358169bf62 BOUGH CHEN        2019-01-07 @2103  	if (host->mmc->caps2 & MMC_CAP2_CQE) {
-bb6e358169bf62 BOUGH CHEN        2019-01-07  2104  		ret = cqhci_suspend(host->mmc);
-bb6e358169bf62 BOUGH CHEN        2019-01-07  2105  		if (ret)
-bb6e358169bf62 BOUGH CHEN        2019-01-07  2106  			return ret;
-bb6e358169bf62 BOUGH CHEN        2019-01-07  2107  	}
-bb6e358169bf62 BOUGH CHEN        2019-01-07  2108  
-5ef4a6a3b9ceac Adrian Hunter     2025-05-30  2109  	sdhci_runtime_suspend_host(host);
-89d7e5c131228a Dong Aisheng      2013-11-04  2110  
-d38dcad4e7b48f Adrian Hunter     2017-03-20  2111  	if (host->tuning_mode != SDHCI_TUNING_MODE_3)
-d38dcad4e7b48f Adrian Hunter     2017-03-20  2112  		mmc_retune_needed(host->mmc);
-d38dcad4e7b48f Adrian Hunter     2017-03-20  2113  
-3602785b341a95 Michael Trimarchi 2018-01-04  2114  	imx_data->actual_clock = host->mmc->actual_clock;
-3602785b341a95 Michael Trimarchi 2018-01-04  2115  	esdhc_pltfm_set_clock(host, 0);
-89d7e5c131228a Dong Aisheng      2013-11-04  2116  	clk_disable_unprepare(imx_data->clk_per);
-89d7e5c131228a Dong Aisheng      2013-11-04  2117  	clk_disable_unprepare(imx_data->clk_ipg);
-89d7e5c131228a Dong Aisheng      2013-11-04  2118  	clk_disable_unprepare(imx_data->clk_ahb);
-89d7e5c131228a Dong Aisheng      2013-11-04  2119  
-1c4989b000aeac BOUGH CHEN        2019-04-29  2120  	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
-d1b98305916bc0 Rafael J. Wysocki 2020-02-12  2121  		cpu_latency_qos_remove_request(&imx_data->pm_qos_req);
-1c4989b000aeac BOUGH CHEN        2019-04-29  2122  
-89d7e5c131228a Dong Aisheng      2013-11-04  2123  	return ret;
-89d7e5c131228a Dong Aisheng      2013-11-04  2124  }
-89d7e5c131228a Dong Aisheng      2013-11-04  2125  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1843339406
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1843339406-x86_64-kernel-debug_upt_4
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        kselftest build - bpf
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1843339406-x86_64-kernel-debug_selftest_bpf
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1843339406-x86_64-kernel-debug_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        selinux-policy: serge-testsuite
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1843339406-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+
+
+Tests that were not ran because of internal issues:
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
