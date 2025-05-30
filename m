@@ -1,114 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A4D188A0E
-	for <llvm@lists.linux.dev>; Fri, 30 May 2025 14:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1BE19DFA2
+	for <llvm@lists.linux.dev>; Fri, 30 May 2025 15:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748615010; cv=none; b=ZVeYrIcWWfxqtrhVEOQhlshaHz0F7v3CXweDL2RjKPjSf8XO2H52ZSJWgyCKFD0boQdhheMRkUohi2iCHxjZam3p0kRN9e0MRCDIrqsPtWKVM4yBKhMl5GY+W6EJoTJgfSbUJjRm/eDGUmnqhhMY5Px4gtN7yVmg1qdvpjxIMIw=
+	t=1748617453; cv=none; b=X2nMSG7IgakIulHR8Wuf6GuvGIrbCmSTET0U6ReITh8zgrEhp9Hn771DJLpUVuyzflT/yiJV4zYwYBL4HAVGdrhAeWacLnjP1+1dkPWRKfGYOiYTQry9uom1xbV4ZvSQsLudpL2NzwpE7xmTV8vJPZsf8cM2/K3t5seFclhl7oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748615010; c=relaxed/simple;
-	bh=G1DHqL85O4M7V9gqQeeeLVXS9o1JqvnLgjJ0b/R3998=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FVmK8j79Ud/dkBzEfVK0HtIzd7S8/wV+ajUNHaUI9B4LMKxsD3PaO14SsDygCjKzD/62O2u4qUHI58v6Hma1mMwV0A3bbWflxuKam0CUzSzRNohCmWBXwFg5XJ7DERoBCp+F3UaGjUpVaBrAtUJAmhS0UyF6qKg7klixLlDJqh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kh+0GJAZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748617453; c=relaxed/simple;
+	bh=KALkRHWr2x7oc2NfUJmDl9Xk3d9z8IS4JawLoIptgoU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=U3Qdre4rLMclwngU7T37IqOq5lwQoSUWdVkAdnZDdCriKeoXa+AfYo6TiKTXLewheHP/R2+M2eaMS4tAeWDkunSbn0jrGrbN2du6bz+DvlyvMClGbCyV4DwVVvGbbSFAE6Kb32VyJ3hpOuaHSbCZcUPZcVlqlRe7FIx+nt2aBdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=QBtOCxq9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jU7y2yoS; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kh+0GJAZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCBBC4CEF0
-	for <llvm@lists.linux.dev>; Fri, 30 May 2025 14:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748615009;
-	bh=G1DHqL85O4M7V9gqQeeeLVXS9o1JqvnLgjJ0b/R3998=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Kh+0GJAZgF9ocuGGvCpcj14yF/KsAoPDFdkcNZTBX11vSxNlxEVpWvxlhIY/pNRww
-	 KKLMXmTOaOG4JfN/kjaQydvmwzMSgbw5O3na6AwKMq7kqap9t0YaWI+dtdC2gIER4J
-	 ufOLi4JGLxgnZbAyWisY8tMNSNk5QQ8m7TjMxNHGDTfZuzeofdl2kDIf8D5P5/caVL
-	 XekITB6/ZmkITNSae0qeCdR7iz19oUGV1oJsIc5o7y79nTz4MbgjDW61ApyW0xx3nH
-	 eQXkqs8HWsCfTTzXEua71lmzYCbznr9wfAa6+nK5VEboNJX0+MoCgBlOMqyY4MjXSD
-	 nphD72Vpp7TPw==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-552206ac67aso2521139e87.2
-        for <llvm@lists.linux.dev>; Fri, 30 May 2025 07:23:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVfgZequySBHR9WspItr9lkx8EyHyMQ9RFkh5kquBxYd9XTW2BWYn0IVlx706p0aO/OiS9B@lists.linux.dev
-X-Gm-Message-State: AOJu0YysovMt30684xvJ30T+42ZlIXDo6T/P0NDMFARuqJhe23x+Rs2p
-	AYWW4p4x2IPSwm27nTE1Y1N1yFw6Vbwp4n8KbrtFBZgllshfbHPtcrcDEmQW6fNLhkLu/9CN/h9
-	vt9INPPMnaPOLszYg77fGY24MiK0Wgyg=
-X-Google-Smtp-Source: AGHT+IGt/ob5oIdyFBNz3BNQJMytXMyiUKhYop+0LOnh+OuVTmEFUuUGiES8anXXR0vfHxL+cc3/rDK2U4LsEG3cMBU=
-X-Received: by 2002:a05:6512:1150:b0:553:2a2f:22eb with SMTP id
- 2adb3069b0e04-5533d1ab3d4mr864981e87.36.1748615007973; Fri, 30 May 2025
- 07:23:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QBtOCxq9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jU7y2yoS"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 1813F1140178;
+	Fri, 30 May 2025 11:04:10 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Fri, 30 May 2025 11:04:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1748617449;
+	 x=1748703849; bh=KALkRHWr2x7oc2NfUJmDl9Xk3d9z8IS4JawLoIptgoU=; b=
+	QBtOCxq9do11N460argK6gxYJQQgamiGMYhP+WkMtjou6hdHaZId5Lji4cGBvJTs
+	qByRoPnSmF7ts1QIXMKdVCEN9ZfqAXWm8JRCJeOaBv1Sl5f9G9v8qCuOTQFc5JnX
+	mBV5mrAW8GZyg+3DMwygiXrBCHDGmOij2HI6sVwarFi++OoOKgb5he//21XgHspd
+	ovzb0eWMMYxNzMRHkjku4IoV3+xfXwLs7j1GJpYCGnYNeDh7EqwMRr3A90bsLBmL
+	ywDuo7cQuv3b04JnrncZW6pbt8oteGrvJ0K7k7iBHzHATy6gSpDkJ3L4ny7TI5D9
+	Xne4oaShLbQ95ho3eOzPDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1748617449; x=
+	1748703849; bh=KALkRHWr2x7oc2NfUJmDl9Xk3d9z8IS4JawLoIptgoU=; b=j
+	U7y2yoS+dyun7wHJ6cLzj4vifsyBwIFjOBpTMa6i5nsrKSVqB55zTqtp0zinMbn0
+	0SZYVz9/AoOtEYI82YqeMj8ROlvFl+1rD2/BTzpjkSna+/5uQE+s/Arl/6XRve9x
+	u5I6JbCOWL13OBhzhcPy/9RdQiDvrrH6SN3vlcZvycaq8JC2ts73ra35C7/wuZ6C
+	6lUR9GLhDM18gFUw+HFoZOObrFBUmn6TOZZsuP9n6wqbylmoJ7STLinbFUpdMmK4
+	xmjNvMqys0o9e5cpUOla8LLeKo84AYajjKfus5+rIXDIkNxkybwZpfM8db+LbVhC
+	eveGlG2pxJ8Z2xCdJxwbA==
+X-ME-Sender: <xms:6cg5aFq57vf4FojijZQkOTa3L-su3drEJpN3nTF-6O1DlncF2-yq5A>
+    <xme:6cg5aHrjGT4ZanblcA1S-fOESExth9HFvvusYohN-YJF-OyxTsxH1aB_N9uBXexx3
+    6VcT_oJfGuKrh7BfpA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgddvleeffeculddtuddrgeefvddrtd
+    dtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggft
+    fghnshhusghstghrihgsvgdpuffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftd
+    dtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefk
+    jghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfd
+    cuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpefhfeejhfevudeg
+    keekjeevgeetgfevfefgueegtdekudfhgedtgeegtdfgheffkeenucffohhmrghinhepgh
+    hithhhuhgsrdgtohhmpdhllhhvmhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtph
+    htthhopeekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhm
+    rghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtoheprghruggsodhgihhtsehgohhogh
+    hlvgdrtghomhdprhgtphhtthhopegrrhgusgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    ohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeifihhllheskhgvrh
+    hnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhs
+    thhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrd
+    hlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdr
+    khgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:6cg5aCPPPSuQPYWQYAyNuIW6hNzIlvl_JHjTVJFd8dbo695Oq3ZZQQ>
+    <xmx:6cg5aA4QkoRfDrBZTcEBMWYBNvE1k2JL51BICdjV-Nbsj4W3JuSAJw>
+    <xmx:6cg5aE4uydm8M5CyBeFYHp13m3t6cwb7-07tjkqP5ZDhshX09_so_A>
+    <xmx:6cg5aIhnEU_CWBGCEtINzFb7M2GOpwsGc8Zo-Cu3HTqK-_4rDxvNdQ>
+    <xmx:6cg5aK_Sc856ITTyjWvdzqWctIyz-i-Zoh5H7CwSeb2UeGjD1mVu0VOf>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 748F3700061; Fri, 30 May 2025 11:04:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250529073507.2984959-2-ardb+git@google.com> <20250530133811.GB30622@willie-the-truck>
-In-Reply-To: <20250530133811.GB30622@willie-the-truck>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 30 May 2025 16:23:16 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHypqdC9O+8WH7n1=aDOySMScZc2y526S3gc_-QNpqO=w@mail.gmail.com>
-X-Gm-Features: AX0GCFv9Ullf4B8cpH7c41fIue3JQUkh9LV84qL1g7sdVxmnSnjW5Ar7V20Dwwk
-Message-ID: <CAMj1kXHypqdC9O+8WH7n1=aDOySMScZc2y526S3gc_-QNpqO=w@mail.gmail.com>
+X-ThreadId: T5be5ebf0a6c00b33
+Date: Fri, 30 May 2025 17:03:29 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Ard Biesheuvel" <ardb+git@google.com>,
+ linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "Will Deacon" <will@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Message-Id: <35249898-a48f-4a9d-b586-2c6231136b6e@app.fastmail.com>
+In-Reply-To: <20250529073507.2984959-2-ardb+git@google.com>
+References: <20250529073507.2984959-2-ardb+git@google.com>
 Subject: Re: [PATCH] arm64: Disable LLD linker ASSERT()s for the time being
-To: Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, 
-	nathan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, 30 May 2025 at 15:38, Will Deacon <will@kernel.org> wrote:
+On Thu, May 29, 2025, at 09:35, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
 >
-> On Thu, May 29, 2025 at 09:35:08AM +0200, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > It turns out that the way LLD handles ASSERT()s in the linker script can
-> > result in spurious failures, so disable them for the newly introduced
-> > BSS symbol export checks.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/2094
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/arm64/kernel/image-vars.h | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
-> > index c5266430284b..86f088a16147 100644
-> > --- a/arch/arm64/kernel/image-vars.h
-> > +++ b/arch/arm64/kernel/image-vars.h
-> > @@ -10,6 +10,10 @@
-> >  #error This file should only be included in vmlinux.lds.S
-> >  #endif
-> >
-> > +#if defined(CONFIG_LD_IS_LLD) && CONFIG_LLD_VERSION < 210000
-> > +#define ASSERT(...)
-> > +#endif
-> > +
-> >  #define PI_EXPORT_SYM(sym)           \
-> >       __PI_EXPORT_SYM(sym, __pi_ ## sym, Cannot export BSS symbol sym to startup code)
-> >  #define __PI_EXPORT_SYM(sym, pisym, msg)\
-> > @@ -142,4 +146,6 @@ KVM_NVHE_ALIAS(kvm_protected_mode_initialized);
-> >  _kernel_codesize = ABSOLUTE(__inittext_end - _text);
-> >  #endif
-> >
-> > +#undef ASSERT
+> It turns out that the way LLD handles ASSERT()s in the linker script can
+> result in spurious failures, so disable them for the newly introduced
+> BSS symbol export checks.
 >
-> What about the ASSERT()s at the end of vmlinux.lds.S? Are they not
-> affected by the bug, for some reason?
->
-> Also, even with this patch applied, I still see a link failure:
->
->   | ld.lld: error: assignment to symbol __init_end does not converge
->
-> with the .config you sent me off-list.
->
+> Link: https://github.com/ClangBuiltLinux/linux/issues/2094
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-That is a different error that has been lurking for a while now; Arnd
-occasionally hits it but I haven't seen any other reports of it. AIUI,
-the issue is that INIT_IDMAP_DIR_PAGES and INIT_DIR_SIZE are defined
-in terms of (_end - KIMAGE_VADDR), resulting in a circular dependency.
+I have lld-21 from apt.llvm.org, though with a slightly
+older version at the moment:
 
-The config in the kernel test robot's report [0] appears to build fine
-with this patch applied.
+1:21~++20250418112422+c609cd2df981-1~exp1~20250418112440.1395
 
+this version still hits the assertions on the bss symbols, but
+I guess we don't really have to worry about pre-release builds.
 
-[0] https://lore.kernel.org/all/202505261019.OUlitN6m-lkp@intel.com/T/#u
+I checked your patch with the latest ld.ldd-21 and an earlier ld.lld-20,
+both work fine.
+
+Tested-by: Arnd Bergmann <arnd@arndb.de>
