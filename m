@@ -1,49 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0873718991E;
-	Fri, 30 May 2025 05:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC4F1E51FE;
+	Fri, 30 May 2025 05:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748581947; cv=none; b=aEiTyQpz4Y8Nsym1zEWaPbe66vE9xj9lBdTFb8/gat3UpkyIjRLuEOVGHF6+q7eOv/zNAPvpwHx1NkmLCbQo3CNR/ZpHoMgDrVDupe0Q7UHvgjtoAT36K7LBkvNfs8NfRBQdghKjo06z1pgELvgJkbaBvoNRyv1X5jmCbBXMTNY=
+	t=1748583765; cv=none; b=H7JBbAdMULcQCTEeFddSf2T2BT21g5/UW4CI3dZJfeoLRTauqouOqTtLmV5vzSU0bWwtlCiVNCpJY49ESa/FDrERH1QsYKOJvUxS2IkpBzfamhDgYtuR6sGgdGWUBQLM81o2AqxP0zntwDm4f7CKCJIVf6ishR/mGLwx0vxSILY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748581947; c=relaxed/simple;
-	bh=HtH9UrXXUqLFmGSWe/vDckMHlRYEnS2W+1K5vek19d8=;
+	s=arc-20240116; t=1748583765; c=relaxed/simple;
+	bh=um2I7wsc+Y+LhdZesChGyt1Roi+eBMGAXobRf8Bg0cU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3P3NtMTLnpN4vpNuWhuLO9s91brsQ9Yvw902VSV/Pt07/BQEfMTcbhFXo9XEnVtidaL+7cnjWzCm3N72+2tJQnT4vGZZQYiaYOyA0EWdAlVQZFgyuh4hvs4VJ4qBFvZM1ghoIttDmIFpowgTVlVnF/cQUCCsCu4ikS88zmXbcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+0g+mc9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=C1R3Txyy4BzokLg0S7GoczErw3gIl1+0KarDxwcvcFUqrdoKCsfDgrkrn9lDe0wFHLmXA+XMnuL5iG606sSm5xoqZd2aGGrmuLjiNKHYvpjSSIlP4dcpqe2+N0rUreSdw5d855MYlgKj5nL+DobPc3M2zXC5mbHjNNtM8/xxPVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fh8Vc3RZ; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+0g+mc9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 688F5C4CEE9;
-	Fri, 30 May 2025 05:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748581946;
-	bh=HtH9UrXXUqLFmGSWe/vDckMHlRYEnS2W+1K5vek19d8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I+0g+mc9stSvads61VU+EWCCKmJZBv+FWE3/q4OfviImpz/dbtV2EJo7GgtbAFWKG
-	 W0f7mmmlUiRKL9cO9Vy3gQsY/DRqw9m4pmahObHh23M4KvLjCGIXx9vEAb4CwmJzal
-	 GlisZ/IXRbEIE4J+AjfCULM4zaShxF8kKV0HpbL62iTsJw/ausgevlrG6INpK+EQib
-	 MtFqdwdhVUJ2scdEk1UZ6lHROjDkCEbwEtk5eG9y86fnWzTQk0PTjn2RiPhQX9qG6T
-	 NbC6CdpvnVe865BimHtTXHw/uaPJXoQ78HMyh9qbQbGuCIxlD8KKYGcvj/isP0HbES
-	 4QDwb37r3iFng==
-Date: Thu, 29 May 2025 22:12:22 -0700
-From: Kees Cook <kees@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: akpm@linux-foundation.org, arnd@arndb.de, broonie@kernel.org,
-	davidgow@google.com, diego.daniel.professional@gmail.com,
-	gnoack@google.com, gustavoars@kernel.org, jmorris@namei.org,
-	justinstitt@google.com, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux@treblig.org, llvm@lists.linux.dev, mcgrof@kernel.org,
-	mic@digikod.net, morbo@google.com, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, paul@paul-moore.com,
-	pmladek@suse.com, rmoar@google.com, serge@hallyn.com,
-	tamird@gmail.com, wangyuli@uniontech.com
-Subject: Re: [PATCH 3/3] Revert "hardening: Disable GCC randstruct for
- COMPILE_TEST"
-Message-ID: <202505292153.14B0A688F8@keescook>
-References: <20250427013836.877214-3-kees@kernel.org>
- <20250530000646.104457-1-thiago.bauermann@linaro.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fh8Vc3RZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748583764; x=1780119764;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=um2I7wsc+Y+LhdZesChGyt1Roi+eBMGAXobRf8Bg0cU=;
+  b=fh8Vc3RZ93mUDR2n9UxquiqQLASNBWfoxDD/smbIWX78QgUp2fHh8od6
+   Bzv43FiB+vZiTyQrP9MMpSF10POmwWrYIxng9zT3bi4/uL2OVAuQxb7W3
+   1eao47YRNojbr39UKbZBrCMvTgmg9O3n1H69EYc8sQX1ccxy3EDMhOiMq
+   8WzsPSSSd+UGHTlMjRZF8cphu4Km0jzpqxHs6yJq3/F5Pt6U3s8uN730D
+   +cLesWB21/SbaW7J7KI2lTyuNqIXt1rqwtybei83AxXcU53zNGyijFMEG
+   7xYZTFSXXqz59kYLIvMru2wRFjI2ueqQWhP7rlnxkJxPJ3o4asT5hstIp
+   w==;
+X-CSE-ConnectionGUID: OSSNtUqNQuSARx7xsbTt2Q==
+X-CSE-MsgGUID: PUoxhbERSOilUMm3atuupQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11448"; a="50365165"
+X-IronPort-AV: E=Sophos;i="6.16,195,1744095600"; 
+   d="scan'208";a="50365165"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2025 22:42:41 -0700
+X-CSE-ConnectionGUID: 9BBdUUU7SmeQ6qK0tWhqhA==
+X-CSE-MsgGUID: XTDiaUxAS3+XmH09wtRdfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,195,1744095600"; 
+   d="scan'208";a="174666167"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 29 May 2025 22:42:40 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uKsVp-000XNQ-37;
+	Fri, 30 May 2025 05:42:37 +0000
+Date: Fri, 30 May 2025 13:41:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 4/4] Input: Add TouchNetix aXiom I2C Touchscreen
+ support
+Message-ID: <202505301320.Bx7BEpW2-lkp@intel.com>
+References: <20250529-v6-10-topic-touchscreen-axiom-v2-4-a5edb105a600@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,47 +63,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250530000646.104457-1-thiago.bauermann@linaro.org>
+In-Reply-To: <20250529-v6-10-topic-touchscreen-axiom-v2-4-a5edb105a600@pengutronix.de>
 
-On Thu, May 29, 2025 at 09:06:46PM -0300, Thiago Jung Bauermann wrote:
-> This commit was reported by our CI as breaking the allmodconfig build for
-> the arm and arm64 architectures when using GCC 15. This is due to
-> https://github.com/KSPP/linux/issues/367 :
-> 
-> 00:05:08 arch/arm64/kernel/kexec_image.c:132:14: internal compiler error: in comptypes_check_enum_int, at c/c-typeck.cc:1519
-> 00:05:08   132 | const struct kexec_file_ops kexec_image_ops = {
-> 00:05:08       |              ^~~~~~~~~~~~~~
+Hi Marco,
 
-I'm not able to reproduce this. Which specific version of GCC 15 and
-on what distro are you seeing this?
+kernel test robot noticed the following build errors:
 
-This is Fedora 42 for me:
+[auto build test ERROR on 38fec10eb60d687e30c8c6b5420d86e8149f7557]
 
-$ aarch64-linux-gnu-gcc --version
-aarch64-linux-gnu-gcc (GCC) 15.1.1 20250425 (Red Hat Cross 15.1.1-1)
-...
-$ make O=gcc-arm64 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- allmodconfig
-$ grep RANDSTRUCT gcc-arm64/.config
-# CONFIG_RANDSTRUCT_NONE is not set
-CONFIG_RANDSTRUCT_FULL=y
-# CONFIG_RANDSTRUCT_PERFORMANCE is not set
-CONFIG_RANDSTRUCT=y
-CONFIG_GCC_PLUGIN_RANDSTRUCT=y
-CONFIG_RANDSTRUCT_KUNIT_TEST=m
-$ make O=gcc-arm64 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- all -s
-$ file gcc-arm64/vmlinux
-gcc-arm64/vmlinux: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), statically linked, BuildID[sha1]=b53656cb73bb82f4e19edbfa54241c203daa3fed, not stripped
+url:    https://github.com/intel-lab-lkp/linux/commits/Marco-Felsch/firmware_loader-expand-firmware-error-codes-with-skip-error/20250529-061458
+base:   38fec10eb60d687e30c8c6b5420d86e8149f7557
+patch link:    https://lore.kernel.org/r/20250529-v6-10-topic-touchscreen-axiom-v2-4-a5edb105a600%40pengutronix.de
+patch subject: [PATCH v2 4/4] Input: Add TouchNetix aXiom I2C Touchscreen support
+config: x86_64-randconfig-072-20250530 (https://download.01.org/0day-ci/archive/20250530/202505301320.Bx7BEpW2-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250530/202505301320.Bx7BEpW2-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505301320.Bx7BEpW2-lkp@intel.com/
 
-And the new KUnit randstruct selftests all pass as well:
+All errors (new ones prefixed by >>):
 
-$ ./tools/testing/kunit/kunit.py run \
-	--arch arm64 --cross_compile aarch64-linux-gnu- \
-	--kconfig_add CONFIG_RANDSTRUCT_FULL=y randstruct
-...
-# Totals: pass:5 fail:0 skip:0 total:5
-
-
+>> ld.lld: error: undefined symbol: devm_drm_panel_add_follower
+   >>> referenced by touchnetix_axiom.c:2834 (drivers/input/touchscreen/touchnetix_axiom.c:2834)
+   >>>               drivers/input/touchscreen/touchnetix_axiom.o:(axiom_register_panel_follower) in archive vmlinux.a
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
