@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF1319B5B4;
-	Fri, 30 May 2025 06:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7A58834;
+	Fri, 30 May 2025 08:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748587603; cv=none; b=RcMjTwU01sbsZTYYSOyGuY1Gc5w0F4KOB03xUxpoP0UaMc8A5Ilr50gv3zGCIABwK2zbc9FKQxfHPQaWMEEipOtAnOxWV1hUYS1L8IvC0frD788Et3WvMhM1Yser+2nRqWbiO0VjL6DJ3saOtWzZSHXIcGMherk7H2reh+ueSvw=
+	t=1748593730; cv=none; b=sKV8pSHOmbmmPAYjoJ/aYQpLhWo8D4r8W78sDs5R8z7HFR0H89tj70UXq+Y/JsHd8lU08b5AyIwjkenutnUi0cLUD+/SjvC+p6Lg4DHuE8cxVGstAwz81kYXnmpIKd7kHjInMazO5tfbY0zGnJrX87CuBuLvniGFugkEcfWcOeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748587603; c=relaxed/simple;
-	bh=GUJR9nbyGJ8lYC5hJXcMMoDjs2R2zeY1mx2UdApjUEw=;
+	s=arc-20240116; t=1748593730; c=relaxed/simple;
+	bh=WsGvXelSUoPxGUHO+lDdSWhLukmWqhdEjmRJrS37UuA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uoYYI5onMi68CNpbmxRWsUM23EfW14+AkasGvN3mQJuxv/LHugda4gyf4T6iw7rezj/yOxA6kkSwCitqfTqYhwSdzno7cvUMso+d7xEie8BWaypEdsYah//u/7BbXRbm64DtfUhyGMRSJ5LQHtJTdGRjLQvlIFaR0Fg2HLya+wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FPJ07Fmu; arc=none smtp.client-ip=198.175.65.15
+	 Content-Disposition; b=NhkgdJX9kSq85t54I2ViA4SEXOB0bYfpaG+I9mrZ7aimMU+/fi1uen+QPbjpZV6aHRDKfiT68gnhkSCXXoL93Xd1czmKPxKPL6iaMh+xSRQpdsQ4wkX4x1VjcNSRnxb4tM+kGk9qUXkFeUNQtbTcHV6FHe01SUxdrCcNzx14Yk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NydVyiSY; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FPJ07Fmu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NydVyiSY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748587601; x=1780123601;
+  t=1748593729; x=1780129729;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GUJR9nbyGJ8lYC5hJXcMMoDjs2R2zeY1mx2UdApjUEw=;
-  b=FPJ07FmuO/y3DROtSceTW2qG77E6j9vrUXA0WkqCJNzlYq+oTFJlf1ni
-   XadP4tAGGMAEDWsFok6pzOnkOr8iKjCrUt8sV6YLaWO0Z5G2jzfOn0c4C
-   9LcbdaU5oAzkPJEXZc3ak8C4srfZzPmZh1zW4Tuq3eX4upZHKZv1MhDzx
-   3xxmdKCVYbvc4RLRvNIR2nXHb2Jqqr/fWyDJ2wIQIMHZjPhZ6ISnEBzEa
-   cjgGwd9VxvahrdutHT9qU9F1/UoJQ+cQgNMMR5/hKkzupbzJD6ugpBPFo
-   nrcmAAszMrmnBEq6BWEhvG1sMRiz76vFNiqVmQ68JJzDOuJJaYAn53pzO
-   A==;
-X-CSE-ConnectionGUID: xeVWiaF1SWGrmW0+dY0W5g==
-X-CSE-MsgGUID: Dg0mOLlXRbqn/YC936VFjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11448"; a="54335410"
+  bh=WsGvXelSUoPxGUHO+lDdSWhLukmWqhdEjmRJrS37UuA=;
+  b=NydVyiSY1evWIIfdP3JmB/dGJxsyuaesSI1Ca9230MdqTp83o7K2vP6u
+   C8b6ILX7AZMzvtyl6hv/MuRV8P5/CVg8xrDrlG1GRIhsmlR6vY8NEEnOs
+   p2JiccboaQTpehyudeixs8DsyTyiAMywiKwfPyEZ7DBBZSB9VP+zQbgJs
+   CrOuA0Cai/uVNDCSAoaN6MBG1/pdt/RoyyDbEDIOhH6/Q9gP6/rzi12ut
+   hl6T6oPY0WK+Ddrj6s2+u1p2xGAezNQDYMkbYL5ziTLla8LTB+tQXjv5s
+   Iu6CNyGr6A23YCdExtPcHm+fAgqPxLmz90CS66kOAdj8V3UmLOGwG35L7
+   w==;
+X-CSE-ConnectionGUID: kwUHWIUHRZeIVuzAHPWKtg==
+X-CSE-MsgGUID: MxAkGkr+TU6ecJPHH2/LEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11448"; a="50828389"
 X-IronPort-AV: E=Sophos;i="6.16,195,1744095600"; 
-   d="scan'208";a="54335410"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2025 23:46:40 -0700
-X-CSE-ConnectionGUID: wqB8Q+eDTVWVaXdpZwFCyQ==
-X-CSE-MsgGUID: wD5teb9kTYOr5e9BVYUY+Q==
+   d="scan'208";a="50828389"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2025 01:28:48 -0700
+X-CSE-ConnectionGUID: fMGqZXp1Tk+28oRPOSOdbg==
+X-CSE-MsgGUID: ErrnlQouRLCBqzE9Rq+pwA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,195,1744095600"; 
-   d="scan'208";a="144773649"
+   d="scan'208";a="149084363"
 Received: from igk-lkp-server01.igk.intel.com (HELO b69e6467d450) ([10.211.3.150])
-  by orviesa008.jf.intel.com with ESMTP; 29 May 2025 23:46:39 -0700
+  by orviesa005.jf.intel.com with ESMTP; 30 May 2025 01:28:47 -0700
 Received: from kbuild by b69e6467d450 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uKtVl-0000qe-0H;
-	Fri, 30 May 2025 06:46:37 +0000
-Date: Fri, 30 May 2025 14:45:51 +0800
+	id 1uKv6a-0000rG-0y;
+	Fri, 30 May 2025 08:28:44 +0000
+Date: Fri, 30 May 2025 16:28:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jack Yu <jack.yu@realtek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: sound/soc/codecs/rt1318.c:1149:34: warning: unused variable
- 'rt1318_of_match'
-Message-ID: <202505301432.PXdO6rap-lkp@intel.com>
+To: Sven Peter <sven@svenpeter.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:sven/atcphy 30/31] ld.lld: error: undefined symbol:
+ drm_connector_oob_hotplug_event
+Message-ID: <202505301647.5wyXKscs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,46 +62,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f66bc387efbee59978e076ce9bf123ac353b389c
-commit: fe1ff61487ace69cd4e680e36169c90667eb9624 ASoC: rt1318: Add RT1318 audio amplifier driver
-date:   12 months ago
-config: x86_64-buildonly-randconfig-2003-20250530 (https://download.01.org/0day-ci/archive/20250530/202505301432.PXdO6rap-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux sven/atcphy
+head:   bb58cc6399a58218b8b5204a9fadf26f07c7f0f3
+commit: 10afb98e90699baea02c783a19381cb8b81c6af8 [30/31] usb: typec: tipd: Forward DP hotplug events to DRM
+config: x86_64-buildonly-randconfig-2004-20250530 (https://download.01.org/0day-ci/archive/20250530/202505301647.5wyXKscs-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250530/202505301432.PXdO6rap-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250530/202505301647.5wyXKscs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505301432.PXdO6rap-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505301647.5wyXKscs-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from sound/soc/codecs/rt1318.c:18:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> sound/soc/codecs/rt1318.c:1149:34: warning: unused variable 'rt1318_of_match' [-Wunused-const-variable]
-    1149 | static const struct of_device_id rt1318_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +/rt1318_of_match +1149 sound/soc/codecs/rt1318.c
-
-  1148	
-> 1149	static const struct of_device_id rt1318_of_match[] = {
-  1150		{ .compatible = "realtek,rt1318", },
-  1151		{},
-  1152	};
-  1153	MODULE_DEVICE_TABLE(of, rt1318_of_match);
-  1154	
+>> ld.lld: error: undefined symbol: drm_connector_oob_hotplug_event
+   >>> referenced by core.c:793 (drivers/usb/typec/tipd/core.c:793)
+   >>>               drivers/usb/typec/tipd/core.o:(cd321x_update_work) in archive vmlinux.a
+   >>> referenced by core.c:853 (drivers/usb/typec/tipd/core.c:853)
+   >>>               drivers/usb/typec/tipd/core.o:(cd321x_update_work) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
