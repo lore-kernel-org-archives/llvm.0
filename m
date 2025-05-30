@@ -1,65 +1,66 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAB922ACE7
-	for <llvm@lists.linux.dev>; Fri, 30 May 2025 12:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9A922C331
+	for <llvm@lists.linux.dev>; Fri, 30 May 2025 12:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748608072; cv=none; b=WvEzlEqHtOjVkmQojGUWaVgX439ZVGhbOyhx9yb3F2SjAuKth0p7CNwDBtSAoUn08vd12PxoM7VdzlxiVzQxxO/Xoh0AoDJaGAmEvvyvda6YiXJcS+Bkl3dit4/47bmL68X/Yi/1/SX803Ilsda83Maz+HqBGBGDRSPhOJsNEqU=
+	t=1748608075; cv=none; b=N01G6AORDa0aVNfPqPw/YyI8tu9F/jDT+o4NzgXjszKdXkZFVavwUz00WuVFaUAUKQx9yJQ5eEhnmxUeRxwMV6XD2Y2k72ds47PaZkviezSu8+2l+A+etT0VZx9AFyuYXnKuUgl7KX6SHOXCmnPOC+LkztH9IZzdgJacMJpWRYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748608072; c=relaxed/simple;
-	bh=5NRw2BPuzd4CaSoFhQyS92NyyJZbEuiSnoR6lbAl7A4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uQzJ30FA101TFGS+FQhbVKfaK9sBRKuG7lconKZb/UUocDElN3oVrSFB/4z+/RXx3a6uSLEEchWVId07FwpdADC7Ce8K4LNh488yVNzdpL8m6dSnVr/4G1hDepSBTHc5QETfUUEsblWCD7JHiCOWve9Sz5/zUULIpQF8ovAN1cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f9IiTmSR; arc=none smtp.client-ip=209.85.160.171
+	s=arc-20240116; t=1748608075; c=relaxed/simple;
+	bh=9dXcwGXSiqi61IuPuRDyaiSGPTkK4qFseGaro6fNzdw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jNBaxEt/oFLnHo9aCpPjDtJsNKIjJ4CsbCtYHI8m3ZdNYvrebEn5zlDoMP2f323rMZ5w/DqqtQi1NHB5hbgdQvzN8AUNVU0bxeBJGDC0fQlO+NxRvjelTfyAMa7tAzLtEirTc7clR7fDBVY+BBak5RbiheBnTFuyxluX3AldMIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SBiBj82a; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f9IiTmSR"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-477296dce8dso19228551cf.3
-        for <llvm@lists.linux.dev>; Fri, 30 May 2025 05:27:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SBiBj82a"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4774d68c670so27713171cf.0
+        for <llvm@lists.linux.dev>; Fri, 30 May 2025 05:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748608069; x=1749212869; darn=lists.linux.dev;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjF77eIXn5rbCgQ6Jld+tzlhhos22ijDGstzJKXraFM=;
-        b=f9IiTmSRNRCPP7j/Nv7QfwAwD8jjv55YVKbMlI+oHmoHDeVur+pW3dCChjbv9TVIj7
-         pmgjq1cZ81ZZnqFVS4Et9hPbYu8N4qGLyc/7tFmZrkAGroxIL/JKBlHD0/KWZnompPXV
-         h1Pdsep6e60XObdQY7sPR+aJWbDuIh0HLGrFDpXBkeX+YEv2AXHR8l/aDclGrIF0m8sS
-         IzkAKLstxlOPddwdmHUXR3lc2/uVatK4AD4HLw2aeQ+87/IssJX8IRgKCJXX8DT39eM7
-         7dp+QQFGsi7bW2mwH9LxuuUQ+XGMxynwvOmBdBKNNFwDHSBa2cQCW+7evPBv2AM1PAPm
-         cV6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748608069; x=1749212869;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1748608072; x=1749212872; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EjF77eIXn5rbCgQ6Jld+tzlhhos22ijDGstzJKXraFM=;
-        b=AKDAvz0vPGVZWto7wRi6LERizn1gszi466WIOcKxWxhq2argIXqEsAmdAX39vUA1BR
-         oxPVcbV389U6HsuhgV1Ar86/G4z6sN9FGI2X2E8jYQ5IpNZho22ai+EXnVfZ3xLHcfSG
-         i8EK0rphFSKmU7WPK15OVtGpg/647Z8rbtcsdn0ifIiymCb+uGE4VsAjB22CcOX1iyRh
-         XQOyLVEg5OtttL6bStXN3dbSEgWFhd6Wftdm5vJdVpfAu49F3dXD7K2G2/jfbZcKtqRO
-         7LEqsJOHvEDRXxeUK7YsYyfRNXxZMQStmd16fEb1v54m2bRmt0rUyibXB4iPiMR+np07
-         1g0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW2kQOobOpuzSi4WDI+xytIIs1S9lYMl9aPhwLE0C9TexMYmL4AcQ8NoX4hN79v4oDjo2k4@lists.linux.dev
-X-Gm-Message-State: AOJu0YyrL7SqkJrs2bHqM+vvZdYFgV7vy1YOm9/pPVx3uboxJMKz54X8
-	4RaGq26xoaql7RWsS4txcyBcrkvZCsUeunWrHPJcWO7wH0w26BzxGAab
-X-Gm-Gg: ASbGncuv/ci96O45h6A2RyDJ4T+ZNzPApSNcQEdVmCgHl+264fXI4Gc02qEj04Hag8e
-	daoKkX2nfQzZ0pKZOv/kPemgnZEacwvwpOAlG5nY2Pp4ofOHjCdM6PpUBio2Pi86+X+N36MF4ee
-	gnbsdQ+jJhI+PXpqLZB/YVsjten0DVi92fCaqe85UZKl/+0kQCiqQhoX297xgrnBN6m5Uj4OG9X
-	Mz2KIFTbsIS5XdFYOkL7f+rOmx7+3+jOyGEGvsTj85gDJrC0D9BCe10/gDKuu3wwAQ13pbY+L+h
-	ZR8W+xu5cvAheogxg0pG4INmqfY72FoMmmUTyLzJ/MBFRE9v3a8OsgfGIuVyncmKxwu9dcFvI/Y
-	sdwKxRdtg/xzup4pe8RJnT5B09roh8BstpOXDMeNzKdMeqiGOkOsGzAQ2+WC4
-X-Google-Smtp-Source: AGHT+IGfjgQI2SYiqTDZZqtk6xAv1YDFCzHe/hIZJctpyviQ3ufizyFRYxRIuu0rnsdysg0lQBJL9A==
-X-Received: by 2002:a05:622a:1f0f:b0:494:adde:e3f4 with SMTP id d75a77b69052e-4a44005415bmr52541221cf.25.1748608069240;
-        Fri, 30 May 2025 05:27:49 -0700 (PDT)
+        bh=c+wMSD1Dwm7glxPAzfDIlQ5fBj5tVpqxlsikhfI0xG8=;
+        b=SBiBj82aTL+0bFZE5xZuh+/QfNv2AnOtfToz5+vq9ylVRdmyXfirK8fn59vcC5mRmS
+         LITPvFTh5bEVZfHLvCpDMBkW94f+L7oSnqxfrRAEvm8sVE788oBgkbZQP2DhkcruiBVz
+         5aaPw9XWAquFB2BUHxXIIpG27OzYd4W3Dim4dqVOZk8pR+ir7+JxGgJ109UaNiGKD+ki
+         sdPwM+9F8p/+OovLe5dkXirX0r1favaczs5TVOchE9tBRsLQARy7RXKiegrZLCdkD+cH
+         s/UF3l37axDtBi+reSGGt69N3uCbUGob6xfx0mU7ZT5p3MazUIHWXgxVyZGkFveKooGW
+         AzCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748608072; x=1749212872;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c+wMSD1Dwm7glxPAzfDIlQ5fBj5tVpqxlsikhfI0xG8=;
+        b=GsSSADSOlY4mmx/xLr0B0JjaIvim9YHXEfXfZpmVYlj/EkIFi5GqQADDoAV/7kwKSo
+         HG66jza4WNugncpf0zahInq4ZzdozEsgkQkVSkrm16QZLZBJkf6P/V/InjRG/pwEue+e
+         9NPnjM2m4xIZtMst5ypJ78ImXObxIWXCzF/4DwdCXFNXkRMnW4bZIBE0EYP6/C9P/LJu
+         +Z47uLFG6Bl1Z6kYqiPDYZSqwkdGZH4ju5x79ilI8k587lOmmyzU/PjxeKgZzaO4RREE
+         y6keP+2ydUwxswztvS0ja6yZ/SQCjtOhdJ8yBu1ToPYqf4Hjp9ezp405O3OhLByOE3CL
+         Zu9g==
+X-Forwarded-Encrypted: i=1; AJvYcCVVpEZI9dAYVv/9C/PaxKyK5xdkwax/6VOpDSuW+HFUkVMV21sK0m+rBafUjuslQO3MdEIP@lists.linux.dev
+X-Gm-Message-State: AOJu0YzMNjV7GWuKKh5UH3vlPqBJNbWCXr3MDcNuRNXeZyKMBIr/4v7I
+	dfDa+mdDQCfs/0F9LNoy+fGsztoFwIubEEYif31CszQy3dgP5h4PS4MI
+X-Gm-Gg: ASbGncthP8B78lFbfHckv+EtP5Ro6cOsXKkef/3GfavETibySVCOmN4bq9L0b2Xoqqu
+	GqNCwVy9Ip2vFs9w7w69IdlKyBymrW4Uy9zBl5zcC3d1RY8HV9vXza9vVJU9tURfELqrnDgNXLD
+	HWOYHVKhYIcEiaGV2fyYusrhlgXZ/7Fz7lXVAWyMvTy/676cR7UbxjYL71RT6ra29O/iKCtTna3
+	UxZXIaa0xgfxLANGEQbMoEiN1c2qyb00lzaiD4MpidA04lQ7wVQbETHcLPDVE0LrLYwflrnczBg
+	03wYQbstOVckUEYd535BvLGuePT3B9urCWXTqZMc42OSKfU5UVhlpffSsIMm8TcKB5fud9r7NQF
+	Y9mUeOjN4NTt5D4HmazGTQCebZD8s+ix0cw2U0eDEn8BeIWWCFvmNXUZpMuYY/0fSE4AoT34=
+X-Google-Smtp-Source: AGHT+IHllZwMW953zKjfQoM/7NDgz/SVcSwbgf6gKReVIC7BGucY1R0y5SR3FN4Y+Ww2STJYdoUfQg==
+X-Received: by 2002:a05:622a:4d4b:b0:477:4df:9a58 with SMTP id d75a77b69052e-4a443c6ef39mr34511191cf.18.1748608072168;
+        Fri, 30 May 2025 05:27:52 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:fbe8])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a4358ad334sm19700201cf.27.2025.05.30.05.27.46
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a4358ad334sm19700201cf.27.2025.05.30.05.27.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 May 2025 05:27:47 -0700 (PDT)
+        Fri, 30 May 2025 05:27:50 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Subject: [PATCH v11 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
-Date: Fri, 30 May 2025 08:27:41 -0400
-Message-Id: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
+Date: Fri, 30 May 2025 08:27:42 -0400
+Subject: [PATCH v11 1/5] rust: macros: reduce collections in `quote!` macro
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,12 +69,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAD6kOWgC/3XOy27DIBAF0F+JvC4RjGGArvIfVReYR4zamAgs1
- CjyvxdHSmNZ6nIe5+reu+Jz9KV7P9y77GssMU1tYOzt0NnRTGdPomuLDigICpQRW+ZMbMqeOD7
- oATUDakPX/q/Zh/jzCPv4bHPI6ULmMXvzTOBUMc1EjwKPoBSVBEg1LuVUy9ftdM1pTtPFxO+jT
- Zc1coxlTvn2qFdxDX4WgU2RioQSxVFbhw50cKfzX8hapMp/pWzSGabaCSjv1V6qrey3UjVphz4
- AeqlQ4V7ql+yZ3ErdpGAOrRUAAWEvGX1RAXxLGW0WOQOjudNOiq1dluUXREeHvdABAAA=
-X-Change-ID: 20250201-cstr-core-d4b9b69120cf
+Message-Id: <20250530-cstr-core-v11-1-cd9c0cbcb902@gmail.com>
+References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
+In-Reply-To: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
 To: Michal Rostecki <vadorovsky@protonmail.com>, 
  Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
  Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
@@ -111,155 +109,202 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-have omitted Co-authored tags, as the end result is quite different.
+Remove a handful of unncessary intermediate vectors and token streams;
+mainly the top-level stream can be directly extended with the notable
+exception of groups.
 
-Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
-Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+Remove an unnecessary `#[allow(dead_code)]` added in commit dbd5058ba60c
+("rust: make pin-init its own crate").
 
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
-Changes in v11:
-- Use `quote_spanned!` to avoid `use<'a, T>` and generally reduce manual
-  token construction.
-- Add a commit to simplify `quote_spanned!`.
-- Drop first commit in favor of
-  https://lore.kernel.org/rust-for-linux/20240906164448.2268368-1-paddymills@proton.me/.
-  (Miguel Ojeda)
-- Correctly handle expressions such as `pr_info!("{a}", a = a = a)`.
-  (Benno Lossin)
-- Avoid dealing with `}}` escapes, which is not needed. (Benno Lossin)
-- Revert some unnecessary changes. (Benno Lossin)
-- Rename `c_str_avoid_literals!` to `str_to_cstr!`. (Benno Lossin &
-  Alice Ryhl).
-- Link to v10: https://lore.kernel.org/r/20250524-cstr-core-v10-0-6412a94d9d75@gmail.com
+ rust/macros/quote.rs | 104 ++++++++++++++++++++++++---------------------------
+ 1 file changed, 49 insertions(+), 55 deletions(-)
 
-Changes in v10:
-- Rebase on cbeaa41dfe26b72639141e87183cb23e00d4b0dd.
-- Implement Alice's suggestion to use a proc macro to work around orphan
-  rules otherwise preventing `core::ffi::CStr` to be directly printed
-  with `{}`.
-- Link to v9: https://lore.kernel.org/r/20250317-cstr-core-v9-0-51d6cc522f62@gmail.com
+diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+index 92cacc4067c9..acc140c18653 100644
+--- a/rust/macros/quote.rs
++++ b/rust/macros/quote.rs
+@@ -2,7 +2,6 @@
+ 
+ use proc_macro::{TokenStream, TokenTree};
+ 
+-#[allow(dead_code)]
+ pub(crate) trait ToTokens {
+     fn to_tokens(&self, tokens: &mut TokenStream);
+ }
+@@ -47,121 +46,116 @@ fn to_tokens(&self, tokens: &mut TokenStream) {
+ /// `quote` crate but provides only just enough functionality needed by the current `macros` crate.
+ macro_rules! quote_spanned {
+     ($span:expr => $($tt:tt)*) => {{
+-        let mut tokens: ::std::vec::Vec<::proc_macro::TokenTree>;
+-        #[allow(clippy::vec_init_then_push)]
++        let mut tokens = ::proc_macro::TokenStream::new();
+         {
+-            tokens = ::std::vec::Vec::new();
+             let span = $span;
+             quote_spanned!(@proc tokens span $($tt)*);
+         }
+-        ::proc_macro::TokenStream::from_iter(tokens)
++        tokens
+     }};
+     (@proc $v:ident $span:ident) => {};
+     (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) => {
+-        let mut ts = ::proc_macro::TokenStream::new();
+-        $crate::quote::ToTokens::to_tokens(&$id, &mut ts);
+-        $v.extend(ts);
++        $crate::quote::ToTokens::to_tokens(&$id, &mut $v);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) => {
+         for token in $id {
+-            let mut ts = ::proc_macro::TokenStream::new();
+-            $crate::quote::ToTokens::to_tokens(&token, &mut ts);
+-            $v.extend(ts);
++            $crate::quote::ToTokens::to_tokens(&token, &mut $v);
+         }
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) => {
+         #[allow(unused_mut)]
+-        let mut tokens = ::std::vec::Vec::<::proc_macro::TokenTree>::new();
++        let mut tokens = ::proc_macro::TokenStream::new();
+         quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+             ::proc_macro::Delimiter::Parenthesis,
+-            ::proc_macro::TokenStream::from_iter(tokens)
+-        )));
++            tokens,
++        ))]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) => {
+-        let mut tokens = ::std::vec::Vec::new();
++        let mut tokens = ::proc_macro::TokenStream::new();
+         quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+             ::proc_macro::Delimiter::Bracket,
+-            ::proc_macro::TokenStream::from_iter(tokens)
+-        )));
++            tokens,
++        ))]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) => {
+-        let mut tokens = ::std::vec::Vec::new();
++        let mut tokens = ::proc_macro::TokenStream::new();
+         quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+             ::proc_macro::Delimiter::Brace,
+-            ::proc_macro::TokenStream::from_iter(tokens)
+-        )));
++            tokens,
++        ))]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident :: $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Joint)
+-        ));
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::Spacing::Joint, ::proc_macro::Spacing::Alone].map(|spacing| {
++            ::proc_macro::TokenTree::Punct(::proc_macro::Punct::new(':', spacing))
++        }));
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident : $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident , $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident @ $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident ! $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident ; $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident + $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident = $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident # $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident _ $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new("_", $span)));
++        $v.extend([::proc_macro::TokenTree::Ident(
++            ::proc_macro::Ident::new("_", $span),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident $id:ident $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(stringify!($id), $span)));
++        $v.extend([::proc_macro::TokenTree::Ident(
++            ::proc_macro::Ident::new(stringify!($id), $span),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+ }
 
-Changes in v9:
-- Rebase on rust-next.
-- Restore `impl Display for BStr` which exists upstream[1].
-- Link: https://doc.rust-lang.org/nightly/std/bstr/struct.ByteStr.html#impl-Display-for-ByteStr [1]
-- Link to v8: https://lore.kernel.org/r/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com
-
-Changes in v8:
-- Move `{from,as}_char_ptr` back to `CStrExt`. This reduces the diff
-  some.
-- Restore `from_bytes_with_nul_unchecked_mut`, `to_cstring`.
-- Link to v7: https://lore.kernel.org/r/20250202-cstr-core-v7-0-da1802520438@gmail.com
-
-Changes in v7:
-- Rebased on mainline.
-- Restore functionality added in commit a321f3ad0a5d ("rust: str: add
-  {make,to}_{upper,lower}case() to CString").
-- Used `diff.algorithm patience` to improve diff readability.
-- Link to v6: https://lore.kernel.org/r/20250202-cstr-core-v6-0-8469cd6d29fd@gmail.com
-
-Changes in v6:
-- Split the work into several commits for ease of review.
-- Restore `{from,as}_char_ptr` to allow building on ARM (see commit
-  message).
-- Add `CStrExt` to `kernel::prelude`. (Alice Ryhl)
-- Remove `CStrExt::from_bytes_with_nul_unchecked_mut` and restore
-  `DerefMut for CString`. (Alice Ryhl)
-- Rename and hide `kernel::c_str!` to encourage use of C-String
-  literals.
-- Drop implementation and invocation changes in kunit.rs. (Trevor Gross)
-- Drop docs on `Display` impl. (Trevor Gross)
-- Rewrite docs in the style of the standard library.
-- Restore the `test_cstr_debug` unit tests to demonstrate that the
-  implementation has changed.
-
-Changes in v5:
-- Keep the `test_cstr_display*` unit tests.
-
-Changes in v4:
-- Provide the `CStrExt` trait with `display()` method, which returns a
-   `CStrDisplay` wrapper with `Display` implementation. This addresses
-   the lack of `Display` implementation for `core::ffi::CStr`.
-- Provide `from_bytes_with_nul_unchecked_mut()` method in `CStrExt`,
-   which might be useful and is going to prevent manual, unsafe casts.
-- Fix a typo (s/preffered/prefered/).
-
-Changes in v3:
-- Fix the commit message.
-- Remove redundant braces in `use`, when only one item is imported.
-
-Changes in v2:
-- Do not remove `c_str` macro. While it's preferred to use C-string
-   literals, there are two cases where `c_str` is helpful:
-   - When working with macros, which already return a Rust string literal
-     (e.g. `stringify!`).
-   - When building macros, where we want to take a Rust string literal as an
-     argument (for caller's convenience), but still use it as a C-string
-     internally.
-- Use Rust literals as arguments in macros (`new_mutex`, `new_condvar`,
-   `new_mutex`). Use the `c_str` macro to convert these literals to C-string
-   literals.
-- Use `c_str` in kunit.rs for converting the output of `stringify!` to a
-   `CStr`.
-- Remove `DerefMut` implementation for `CString`.
-
----
-Tamir Duberstein (5):
-      rust: macros: reduce collections in `quote!` macro
-      rust: support formatting of foreign types
-      rust: replace `CStr` with `core::ffi::CStr`
-      rust: replace `kernel::c_str!` with C-Strings
-      rust: remove core::ffi::CStr reexport
-
- drivers/block/rnull.rs               |   4 +-
- drivers/gpu/drm/drm_panic_qr.rs      |   5 +-
- drivers/gpu/nova-core/driver.rs      |   2 +-
- drivers/gpu/nova-core/firmware.rs    |   2 +-
- drivers/net/phy/ax88796b_rust.rs     |   8 +-
- drivers/net/phy/qt2025.rs            |   6 +-
- rust/kernel/block/mq.rs              |   2 +-
- rust/kernel/device.rs                |   9 +-
- rust/kernel/devres.rs                |   2 +-
- rust/kernel/driver.rs                |   4 +-
- rust/kernel/error.rs                 |  10 +-
- rust/kernel/faux.rs                  |   5 +-
- rust/kernel/firmware.rs              |  16 +-
- rust/kernel/fmt.rs                   |  77 ++++++
- rust/kernel/kunit.rs                 |  21 +-
- rust/kernel/lib.rs                   |   3 +-
- rust/kernel/miscdevice.rs            |   5 +-
- rust/kernel/net/phy.rs               |  12 +-
- rust/kernel/of.rs                    |   5 +-
- rust/kernel/pci.rs                   |   2 +-
- rust/kernel/platform.rs              |   6 +-
- rust/kernel/prelude.rs               |   5 +-
- rust/kernel/print.rs                 |   4 +-
- rust/kernel/seq_file.rs              |   6 +-
- rust/kernel/str.rs                   | 443 ++++++++++-------------------------
- rust/kernel/sync.rs                  |   7 +-
- rust/kernel/sync/condvar.rs          |   4 +-
- rust/kernel/sync/lock.rs             |   4 +-
- rust/kernel/sync/lock/global.rs      |   6 +-
- rust/kernel/sync/poll.rs             |   1 +
- rust/kernel/workqueue.rs             |   9 +-
- rust/macros/fmt.rs                   |  99 ++++++++
- rust/macros/kunit.rs                 |  10 +-
- rust/macros/lib.rs                   |  19 ++
- rust/macros/module.rs                |   2 +-
- rust/macros/quote.rs                 | 111 ++++-----
- samples/rust/rust_driver_faux.rs     |   4 +-
- samples/rust/rust_driver_pci.rs      |   4 +-
- samples/rust/rust_driver_platform.rs |   4 +-
- samples/rust/rust_misc_device.rs     |   3 +-
- scripts/rustdoc_test_gen.rs          |   6 +-
- 41 files changed, 485 insertions(+), 472 deletions(-)
----
-base-commit: 7a17bbc1d952057898cb0739e60665908fbb8c72
-change-id: 20250201-cstr-core-d4b9b69120cf
-
-Best regards,
 -- 
-Tamir Duberstein <tamird@gmail.com>
+2.49.0
 
