@@ -1,123 +1,180 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9087262C
-	for <llvm@lists.linux.dev>; Sat, 31 May 2025 06:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B26D134BD
+	for <llvm@lists.linux.dev>; Sat, 31 May 2025 06:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748673733; cv=none; b=g2v8kzk4QuPFtO/zLaeiO4I9NrwLevDS4q9P8p2ZVBpT2MFjryWr8kVI974JaiCiBLj5a85MIQrC4AG/DR0rHrYN6JP3hDdC/3labgzwMvay1z3lyBX9uoEZ4W9JeG2lsR0HhNLQ+GYK6J82WwCZ+SSpztrlrQeAixZPphmD1CQ=
+	t=1748674119; cv=none; b=sHIK6cwwnxeyWslgTb553RzEzMZHUxHx9bKUR1oNEZFWFylAjpETlDWAD4OiSG6vRQbQhIzYSqajvvXleMIKfyBpO9Y2vlZNDveVtUpgGDiPjaN90SN9KEtPs3QGS7eTjP0YnJa89+xI4cfVlTZO54v8YMG/xwlHzPB4NsWzfLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748673733; c=relaxed/simple;
-	bh=WiLo7Q7YJB9uS/UIck4rcmc7LsCQFLC/8K04G5slRDc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=baFKaaw2bxms/wQj00GXnVSY0IKFVSfBcecRpzIAWNjNiX3mCa1cQKgLz7Ua1TYS4mSr+uAzQX53Hmr1w+jDsQ1lTVTuKswQcBqrSFDFx18Ye8imSWDCqg1+n2ya2L6cfq+6iXNiJIE4S7B8W8GBHzKm0Yi3fH/e5UnCHLGR3HE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bIEbgekY; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1748674119; c=relaxed/simple;
+	bh=B3GbeJ1XJrb185C/zHJTLjOvmuDOX4UvvOLiqb9V+MQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B6mu2VAPwg/PO8YUqy8XfG5wLGwG+VunAAMYTNUq7114+7qR8lNZCVEsxbpf4aCATd1QYU4V9Co3J7KwfbWJdpTgeP6kRpCaGI8hMrLv5owlad7E7GhcNjNG6l91GetgKfvgCJJO7FQLXDubzZAG57RtQiCM71ctZOPWQqEhqgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ejRYP1l4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bIEbgekY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748673730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CprwUlkv/TQoat5U5d34bvVT9g5oVeoFqh0GOWtktG4=;
-	b=bIEbgekY717Co3q2acDCvqINJXsd5wOYe8hDtrTfBoxMe5woEAUnliu5ntY2xrI8AoIkfr
-	ib8gbfec5uTqNsSZCrd+BTKFvbLM5IMm2mY1yStLCDZSZXwYd0pAEuLfbeLDlvz0pK+fon
-	P7Jp/v4ilw2ZocT3zlticJBo+yq9VNg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-399-C4xXLaUrOPq86ElxuCiPew-1; Sat,
- 31 May 2025 02:42:08 -0400
-X-MC-Unique: C4xXLaUrOPq86ElxuCiPew-1
-X-Mimecast-MFC-AGG-ID: C4xXLaUrOPq86ElxuCiPew_1748673728
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C90B4180048E
-	for <llvm@lists.linux.dev>; Sat, 31 May 2025 06:42:07 +0000 (UTC)
-Received: from [172.20.48.73] (unknown [10.30.45.91])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE3FF1956066;
-	Sat, 31 May 2025 06:42:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 1 of 79): Test report for master
- (6.15.0, upstream-mainline, dd91b5e1)
-Date: Sat, 31 May 2025 06:42:06 -0000
-To: mmalik@redhat.com, fmaurer@redhat.com, haliu@redhat.com,
- omosnace@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ejRYP1l4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B3FC4CEF1
+	for <llvm@lists.linux.dev>; Sat, 31 May 2025 06:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748674118;
+	bh=B3GbeJ1XJrb185C/zHJTLjOvmuDOX4UvvOLiqb9V+MQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ejRYP1l4KjT091+TB47yDw7J5/2LYXOzuBOxSjRx+d/nLWrIBnSdwm2TqlB+R03Ap
+	 T7pd0LHPMmJjvdd7njpz+T9VsF/W2pETUluteMjCFH9vOZUUd4tLXug6ElQ/KzCKXt
+	 aGTMgAacnmqL15TttwPq8NGxdAAes6fY5R/VPIzNZtyiq/GfYIGDj6z9rJF2+ZSGHv
+	 fhIKG+LyM4OG9DHwrTfrGyCKBss/vrpfS1qu+dSxshn5wGTXeHBXWFkbE+oHdSSKPJ
+	 rNXCoYqRZ5Xpb3gnPyxOLEEde5afIi1pV1wk2aWSM2vzkVLAp8P1zPp8XYVhThkt88
+	 3WHuWX2Xr4zUw==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5532f9ac219so3319292e87.1
+        for <llvm@lists.linux.dev>; Fri, 30 May 2025 23:48:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXbW2p6tABUJuazsEQ2StTkSsWytRypD/bUCDuLdNJYpfN86w9EJbzIf5/lSnGaZPoxsw4X@lists.linux.dev
+X-Gm-Message-State: AOJu0YzvEAJLbXDR4ZE/1c8Rf8yMz4ZBPkSSpHAWmKT1qJdr9yYXxS04
+	2C9EAShwe69i1b2B9newkPhx3yiK90ZujksO0rNbN3Wv3pmxc/jkDkXlx3S6d9rQH40FUx3F0ZC
+	kBw8TnKqui5Oosl9kNaCLW7GoZWsTJT8=
+X-Google-Smtp-Source: AGHT+IF6yitFVg7GKxP/v4EKNZcDDTDd3ajAPLZuHsZowDvCSn6hV5B23MZ5yJXYTwrz8XA0ys6Bu5NnYURoaa7aWt0=
+X-Received: by 2002:a05:6512:22c9:b0:553:2bf2:e30a with SMTP id
+ 2adb3069b0e04-5533b8f4120mr1438868e87.21.1748674117297; Fri, 30 May 2025
+ 23:48:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <05476.125053102420800821@us-mta-399.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 22OF3mAXKBiWKdO8--nYQiDzQe1kNUyZq16juV6cE-4_1748673728
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20250521213534.3159514-1-xur@google.com> <CAK7LNAS4Ys-ekzjrRdfwKh5tEU=FKe1tE2-orj6LTs7EknZCZg@mail.gmail.com>
+ <CAF1bQ=QSBOdvqqBPPv70z1hLX4echmfzBDCu5o4LtKrZEaAJUw@mail.gmail.com>
+In-Reply-To: <CAF1bQ=QSBOdvqqBPPv70z1hLX4echmfzBDCu5o4LtKrZEaAJUw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 31 May 2025 15:48:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAThpMaDDfBD6jQzPZ==X-EngwoirFy9AAML9se-36L3ig@mail.gmail.com>
+X-Gm-Features: AX0GCFvuHS6FuAkNmaMskDcnmnMTkwQh5nnPvYwqzs7y4ypqeNVaYWLWbyguYKA
+Message-ID: <CAK7LNAThpMaDDfBD6jQzPZ==X-EngwoirFy9AAML9se-36L3ig@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: distributed build support for Clang ThinLTO
+To: Rong Xu <xur@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Eric Naim <dnaim@cachyos.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Wed, May 28, 2025 at 6:05=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> On Mon, May 26, 2025 at 6:12=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > On Thu, May 22, 2025 at 6:35=E2=80=AFAM <xur@google.com> wrote:
+> > >
+> > > From: Rong Xu <xur@google.com>
+> > >
+> > > Add distributed ThinLTO build support for the Linux kernel.
+> > > This new mode offers several advantages: (1) Increased
+> > > flexibility in handling user-specified build options.
+> > > (2) Improved user-friendliness for developers. (3) Greater
+> > > convenience for integrating with objtool and livepatch.
+> > >
+> > > Note that "distributed" in this context refers to a term
+> > > that differentiates in-process ThinLTO builds by invoking
+> > > backend compilation through the linker, not necessarily
+> > > building in distributed environments.
+> > >
+> > > Distributed ThinLTO is enabled via the
+> > > `CONFIG_LTO_CLANG_THIN_DIST` Kconfig option. For example:
+> > >  > make LLVM=3D1 defconfig
+> > >  > scripts/config -e LTO_CLANG_THIN_DIST
+> > >  > make LLVM=3D1 oldconfig
+> > >  > make LLVM=3D1 vmlinux -j <..>
+> > >
+> > > The implementation changes the top-level Makefile with a
+> > > macro for generating `vmlinux.o` for distributed ThinLTO
+> > > builds. It uses the existing Kbuild infrastructure to
+> > > perform two recursive passes through the subdirectories.
+> > > The first pass generates LLVM IR object files, similar to
+> > > in-process ThinLTO. Following the thin-link stage, a second
+> > > pass compiles these IR files into the final native object
+> > > files. The build rules and actions for this two-pass process
+> > > are primarily implemented in `scripts/Makefile.build`.
+> > >
+> > > Currently, this patch focuses on building the main kernel
+> > > image (`vmlinux`) only. Support for building kernel modules
+> > > using this method is planned for a subsequent patch.
+> > >
+> > > Tested on the following arch: x86, arm64, loongarch, and
+> > > riscv.
+> > >
+> > > Some implementation details can be found here:
+> > > https://discourse.llvm.org/t/rfc-distributed-thinlto-build-for-kernel=
+/85934
+> > >
+> > > Signed-off-by: Rong Xu <xur@google.com>
+> > > ---
+> > > Changelog since v1:
+> > > - Updated the description in arch/Kconfig based on feedback
+> > >   from Nathan Chancellor
+> > > - Revised file suffixes: .final_o -> .o.thinlto.native, and
+> > >   .final_a -> .a.thinlto.native
+> > > - Updated list of ignored files in .gitignore
+> > >
+> > > Changelog since v2:
+> > > - Changed file suffixes: .o.thinlto.native -> .o_thinlto_native,
+> > >   and .a.thinlto.native -> .a_thinlto_native so that basename
+> > >   works as intended.
+> > > - Tested the patch with AutoFDO and Propeller.
+> > > ---
+> > >  .gitignore                        |  3 ++
+> > >  MAINTAINERS                       |  5 +++
+> > >  Makefile                          | 40 ++++++++++++++++++++---
+> > >  arch/Kconfig                      | 19 +++++++++++
+> > >  scripts/Makefile.build            | 52 +++++++++++++++++++++++++++--=
+-
+> > >  scripts/Makefile.lib              |  7 +++-
+> > >  scripts/Makefile.vmlinux_o        | 16 +++++++---
+> > >  scripts/Makefile.vmlinux_thinlink | 53 +++++++++++++++++++++++++++++=
+++
+> > >  scripts/head-object-list.txt      |  1 +
+> > >  9 files changed, 181 insertions(+), 15 deletions(-)
+> > >  create mode 100644 scripts/Makefile.vmlinux_thinlink
+> >
+> > I re-implemented the Makefiles to avoid
+> > the second recursion and hacky ifdefs.
+> > Attached.
+> >
+> > The topic branch is available in
+> >
+> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.gi=
+t
+> > thinlto-dist-refactor
+> >
+> > I only compile and boot tested on x86 QEMU.
+> This implementation does look cleaner. But with one issue: it has a
+> unified cflags for
+> all the BE compilations. This means per-file flags, such as
+> CFLAGS_fork.o =3D -fabc,
+> are lost during the BE compilation for fork.thinlto_native.o.
+>
+> This exact issue was what I aimed to prevent with the two-recursion appro=
+ach.
+> If we must avoid two recursions, perhaps we could leverage the saved per-=
+file
+> pre-link commands (i.e., .*.o.cmd)?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+How important is this?
+
+I do not know which compiler flags are consumed in the
+distributed thin lto stage.
+
+Are only compiler flags starting "-f" relevant?
+
+In your implementation, you filter-out many compiler flags.
 
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/rdma/rdma
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1845144688
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1845144688-x86_64-kernel-debug
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        selinux-policy: serge-testsuite
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1845144688-ppc64le-kernel_upt_5
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:
-    kselftests upstream - bpf [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+Best Regards
+Masahiro Yamada
