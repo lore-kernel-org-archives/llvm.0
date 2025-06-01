@@ -1,103 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C5817583;
-	Sun,  1 Jun 2025 19:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36C923370C
+	for <llvm@lists.linux.dev>; Sun,  1 Jun 2025 19:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748804919; cv=none; b=m0dai3Y8BWG0iOQI8MRdO3CGJvdF3pU0pwrhZmdhVyPR43F5Rv2kelHnvxI7Ne5BzrqaTi8cEy37UzqrPDBAfDP68rcQ4Twbc/xHc+p2zltgzBs0GuA//oA1aDUPKOVBqsQu3cAcE+kBr9qg6ab7c272qa0uhrw5v50rAWS0CJU=
+	t=1748806991; cv=none; b=jtLKDyCWz5dIYPSk/CLa+KqAu6MSJD00gw6O+u+ZmYuRqhJ+nJfQ4I79TCCn6+3o3RshzcM5+/s0blZ8p1fzl7zti5U5armnqGKOqLbO+r9M4sTeE7GzatNWXxsucJoJ4Ky+4dRSaTkUnZyHULj5IBoJc+xjQjPmB6kXtN02WEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748804919; c=relaxed/simple;
-	bh=UiqFkRJHcT8DPeZkuAiWHo+vqYhuEHnbhl+/D9aoIXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aTUaNieMgoaC7xgdDCnyy3RxpG1vEdwiiXn18f/ZyXhnKhBQBVcftbzbJjFpK2nCyoYA1dTrvcq+zcySFDgMcPNz+az63Hadt7ojqi4vlKyH9Aj3m9lD+A39fNctScDez1a3uY0BAEr4ZKn2TvPyYLcKRptG6mfk1HftWXVXgLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fqhTT7wy; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1748806991; c=relaxed/simple;
+	bh=zlttJep6rq3I8+o8EQ7DmNCSKFq6mJq8IUZsLPjanpw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B2PTK5G1eNNnh0FyOPGL5z5AsfEqH2BeehgVbEB2ICByL8THO4Psirm3c5xMG69WuystQAUN050HFl8dTb+eXeOQPhXtBIpdT+aFYmfDBY77sK1IcZPd60o99/Gps9jzn9DHx20RiXIi3Hd6wl9OFn0MY6LH7Xl/Cj5MfNjOdh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EWVK29SC; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fqhTT7wy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748804918; x=1780340918;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UiqFkRJHcT8DPeZkuAiWHo+vqYhuEHnbhl+/D9aoIXE=;
-  b=fqhTT7wyqQKomRi8+sI7fqY0GzVZ1pS4TR53IR1T1ilircY+XW4N+yAq
-   3LTEkiVT5TsiaY0DzV0AQC1yMgDeFDtvRF4wDsGdctClwy+Q7njOh/heJ
-   uX8oUvi86rtiU5b0Da7K0o6yLBdWs+H8DPeRRvloq0pkpStPNJnlpm7bY
-   4Kr2iqVMMKvKXbBHp5cTmJpIFZq+wKqYH+W7i+U94QHDJ05ZHPvW5jHId
-   PdgPD6oJ2oI4TC6bSsRR1asdK3SI8Xda2aJ3viUyKsuRHjaUjDuwv7RG8
-   r/JpPFS6QZZrDL8FaOOTFR5HzAC0CJr2cSL4P4QG+JgzrvbbDeOJqM1Av
-   A==;
-X-CSE-ConnectionGUID: aZrjgm6hSDmX7ILqyNS/zQ==
-X-CSE-MsgGUID: PJczBD9wQZS0DO+KuqLPKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11450"; a="54623484"
-X-IronPort-AV: E=Sophos;i="6.16,201,1744095600"; 
-   d="scan'208";a="54623484"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2025 12:08:37 -0700
-X-CSE-ConnectionGUID: UbQAz712Sjar7uVspjiSqg==
-X-CSE-MsgGUID: 0XUCBc3NQ0Sg7oFeDvZtmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,201,1744095600"; 
-   d="scan'208";a="144332817"
-Received: from igk-lkp-server01.igk.intel.com (HELO b69e6467d450) ([10.211.3.150])
-  by fmviesa007.fm.intel.com with ESMTP; 01 Jun 2025 12:08:36 -0700
-Received: from kbuild by b69e6467d450 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uLo2r-0001BW-3B;
-	Sun, 01 Jun 2025 19:08:33 +0000
-Date: Mon, 2 Jun 2025 03:08:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [agd5f:kq_resets 7/28]
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:774: warning: Function parameter
- or struct member 'seq' not described in
- 'amdgpu_fence_driver_seq_force_completion'
-Message-ID: <202506020336.FFIzr004-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EWVK29SC"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5532f6d184eso4693946e87.0
+        for <llvm@lists.linux.dev>; Sun, 01 Jun 2025 12:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748806988; x=1749411788; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zlttJep6rq3I8+o8EQ7DmNCSKFq6mJq8IUZsLPjanpw=;
+        b=EWVK29SCmhX9bUsScLBBRi9Tae0wlcB9ccMfKnXCIPldOWmVFdNysbW8dC9Qn2q/cw
+         o+NkCseauyfh5uKgzuf/Cd+9UfmGFH1j1TUcgXylL7R7IA5VhxhbX12gzWYTs82mvzm/
+         M+jVgUw7lGc8opev/AV7AaA7T+MbJ4QvEDTmsKD/lFyS0ORpQm9A8zkEZ50IgJg5vdg+
+         zsUtKn/J9ppGXCHjE9kd4kdLXAKu7Lqh93a9NF9/gy9gdQ0Sl2n5gGGvxWAy6mo8lzZL
+         RwYjAO0ecOWZtXtKhWgFx4ynBg61PdcfeExEwjT0UpIbuoQ6tDXYlU1pNeVvP7PMmRbB
+         +KUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748806988; x=1749411788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zlttJep6rq3I8+o8EQ7DmNCSKFq6mJq8IUZsLPjanpw=;
+        b=sPnRKVesqHqrwGJ8EAn3F5QMTO9hJ5nAlk2orpreorQYcKvFO4gaoklcyg+cxB4kYc
+         JYbdLJnx34XCK9KPDdFIK2ZKMS276X3uHc70xbpDsL8+Vs2PlsSMesGNny1wZYLbRm9A
+         Uz/vzEJN883A2WAdz0vqLxGMF58aGggYcUmoXzJF/LRf3wywR8Ah9WFble6RrwarnaCO
+         JN6XO3gRQAJhb4r/4MBwNTCJ0LPU/N1GUFAHbgj5xcqTkO8KMuo9l065PmCKmCLQxzXN
+         rQzekioZTvrAXa0f9F5OJMPsSNOSUcnyjtilathJ78pAUmd2bDClRa7aVYo/w+ABsf/f
+         mB0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVYxu54vS8YPhin2skZPQeJkN5DZmD2MC2iVzN8gzSciJs6CDSvS9xDQTVo1WKPcFquHL1K@lists.linux.dev
+X-Gm-Message-State: AOJu0YytszjNq6FnpiXFt4G3Qljm0kgvgPKycDUPQrT1uwQ1E4jQlvcu
+	qHLYriDd+RuYNPrqYQNmz+FNKNEcs1Sng+cu9vz2M+HxwWFn7gT65OetpJrXoChQnU4NF7YdkTC
+	BDzBcTVjk+gDelcrMu8hQj8ZnylDb68o=
+X-Gm-Gg: ASbGncu360evXl9C1Z9H7ebT4KDHwUeBH8gFjtlS+oscPxJ72EgpdSAhI2B2ZeBoyJ2
+	UzZT9Ukyei0a3LyadPxOrdBsr53I9abX9CCmX1N9J4NKw/y5jbQTQehSYDxQszRE8SHLkJ1mSg0
+	3ozDgT3HxA7wLc4k0i8qhA3ZvfWPgslAhjBf5IcJedjZ45RSVE10kFUDjfC5eFdO0RICY=
+X-Google-Smtp-Source: AGHT+IHtRgXkoammUnbUpN1dYXGck9bKGEUGn5GT5cV3fPbuB+pGOqAmc7vwPC05DiWkj0JlBHypesZfOXv6vLdnG6Q=
+X-Received: by 2002:a05:6512:3d28:b0:553:2c58:f967 with SMTP id
+ 2adb3069b0e04-5533b93b8f9mr3282822e87.56.1748806987505; Sun, 01 Jun 2025
+ 12:43:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
+ <20250530-cstr-core-v11-1-cd9c0cbcb902@gmail.com> <DABC3ZAQ01GG.1VT5NL7PIMTEO@kernel.org>
+In-Reply-To: <DABC3ZAQ01GG.1VT5NL7PIMTEO@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Sun, 1 Jun 2025 15:42:30 -0400
+X-Gm-Features: AX0GCFsKjS9hgEwmEsRuHll_MOXzoBWv1p_-8FxpcxZc3tsgxztATvJimliHSmg
+Message-ID: <CAJ-ks9=awTggTjr-_dkaWLQRkQVwkBQKiJzdP9dA7_=zFKRY+g@mail.gmail.com>
+Subject: Re: [PATCH v11 1/5] rust: macros: reduce collections in `quote!` macro
+To: Benno Lossin <lossin@kernel.org>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git kq_resets
-head:   0cb5804810f5e8aef9503d3d50c98a02a26f9216
-commit: 5a61fa3e46a6b799d013c560d2b90d4e8b78cbbb [7/28] drm/amdgpu: track ring state associated with a job
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250602/202506020336.FFIzr004-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250602/202506020336.FFIzr004-lkp@intel.com/reproduce)
+On Sun, Jun 1, 2025 at 12:24=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
+ote:
+>
+> On Fri May 30, 2025 at 2:27 PM CEST, Tamir Duberstein wrote:
+> > Remove a handful of unncessary intermediate vectors and token streams;
+> > mainly the top-level stream can be directly extended with the notable
+> > exception of groups.
+>
+> What's the motivation for this?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506020336.FFIzr004-lkp@intel.com/
+I was squinting at the macro to understand how it worked and spotted
+these oddities.
 
-All warnings (new ones prefixed by >>):
+> I wouldn't spend much effort on this file, as it'll go away when we add t=
+he `quote` crate.
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:774: warning: Function parameter or struct member 'seq' not described in 'amdgpu_fence_driver_seq_force_completion'
-
-
-vim +774 drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-
-   766	
-   767	/**
-   768	 * amdgpu_fence_driver_seq_force_completion - force signal of specified sequence
-   769	 *
-   770	 * @ring: fence of the ring to signal
-   771	 *
-   772	 */
-   773	void amdgpu_fence_driver_seq_force_completion(struct amdgpu_ring *ring, u32 seq)
- > 774	{
-   775		amdgpu_fence_write(ring, seq);
-   776		amdgpu_fence_process(ring);
-   777	}
-   778	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Eh, this seems to be in the "I'll believe it when I see it" category.
