@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F55D26C398;
-	Sun,  1 Jun 2025 23:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3482D271478;
+	Sun,  1 Jun 2025 23:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748821058; cv=none; b=TB/POjr4MK/ragAEmH1kd4NC/THhQ+b6Kaur6i/e6vYaPFfDTFaGaW9fw2JI24rfAVEyJn0Ov6NIJcGzy4+owbSUmsZqQRI2XrafpkH5SyLiZj9/php2ccLrCWorrpAsWyeaRreO2VjWuelaTJMOfj7xKsA1jh1ugwc00BL5Rac=
+	t=1748821206; cv=none; b=IgwiqnrLqWDG++0GXn7++vV52ZMDIMGWE0kBeMk96C1BYQmAPLL4MPskOvzW10xz8z4/HavKr4s7KVtHPKlKEcIYeEfR5hKCpmH+0ce84preZmrC3hvAxPXD15uqYUTUQ2OG5lQylNAav342OdxYP/qeZtbz09+C6Tnj1HvEonA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748821058; c=relaxed/simple;
-	bh=PZXekloZst164va3gdtMUsb5TqdDdEpP6i7c1kQ7+HI=;
+	s=arc-20240116; t=1748821206; c=relaxed/simple;
+	bh=+ZH6OTkRxGA/CUXwXFSQTiU9wUtruA/4MRlla24b+Pg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L1EdY+c1/G84skT6G+X5iCBKlbwpAC0OzqZeaBc2LyzQeRolkmIHgwMW4TQqRccbAoh/X8nEmoN+P1xNlNPNIMWbuGjXMysLguTGQgX7r+QFG6jagC/QhW2+OEynnQJJrKyNxrSSy6gluGyQbVcWMDMhqggo30p5YZddocLbnyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cRGhZZlX; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=acUvXZW8ct02vm7KaevCh3Y7rEL+kBuH2fWXgh27sggGHk8wRrVUpMAKmMLpAbwtc32MzBCDeERQBb6E9VMDaF+CMNdP/+MZPFk4PKmVqGFeN/uNIk+nTg4rzWPYw28j3FIUN6fVMTkmGdDVs+a3qYssJx6jre/w/opj8U/j+Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9E4k074; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRGhZZlX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E809C4CEF2;
-	Sun,  1 Jun 2025 23:37:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9E4k074"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1437CC4CEF1;
+	Sun,  1 Jun 2025 23:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748821058;
-	bh=PZXekloZst164va3gdtMUsb5TqdDdEpP6i7c1kQ7+HI=;
+	s=k20201202; t=1748821206;
+	bh=+ZH6OTkRxGA/CUXwXFSQTiU9wUtruA/4MRlla24b+Pg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cRGhZZlXs1D1N6XH286C9atz8pnVG9CywB5JZYCEuXqLyYRIc+4nk0QuZyvnlleLZ
-	 yZISdfhhnHRK7ZrQX3SKZgMv8RlK+CDclhxSTnyMDusVlB6Qve+eqw6J+ysEpKuAzL
-	 /dio175dPD645a8DO0+pDd9Q2EttMToBQ21hO81SEQi/NR2pDASATuENcj0bGdqlgS
-	 gnbCwh4fceLQ+/PlWrUN5TvLPOAYl4JHIxLv8gxgUEHZK3wYOaBVZD7wmZW9UKHEUO
-	 GRVbUq92M9ochrPcs2j+YEwq4jVRKH/Lx28GlUQALs1YLlFdRRyFKTYooIPWcynA6v
-	 n+X1Usb4w6Dsw==
+	b=u9E4k074F1ARIe6YJsNyQViFqwReTkgWph7P1gMnHrKy1RZCIse7C8b7kn7eyj1tU
+	 lr3y+zeZhS+jo1tFRbPMZZ/LgM94gejf1d/kbQUzaAJE8VrlXUZnTBA5U0RJRrGcit
+	 BDZADTsKjrMnzYM0BBaZihF/bSw3MGIOoVJ4lLD5AX0HTkHOnmRhL013tuJifb9srq
+	 ILw2GzfSrJEAW19rmvzX225UXbbgOk8xQVySSdZLy+iuJab57TEjZPEEAICvRTrtlg
+	 vThVL8f+eQXdVTjFie7hlhxdr9t3J23c2PcEiUaeSICnUKp97pFonCLFPkcXELBWIf
+	 LIrMYNbu410bw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	nathan@kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.12 91/93] tools/nolibc: use intmax definitions from compiler
-Date: Sun,  1 Jun 2025 19:33:58 -0400
-Message-Id: <20250601233402.3512823-91-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 64/66] tools/nolibc: use intmax definitions from compiler
+Date: Sun,  1 Jun 2025 19:37:41 -0400
+Message-Id: <20250601233744.3514795-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250601233402.3512823-1-sashal@kernel.org>
-References: <20250601233402.3512823-1-sashal@kernel.org>
+In-Reply-To: <20250601233744.3514795-1-sashal@kernel.org>
+References: <20250601233744.3514795-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +51,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.31
+X-stable-base: Linux 6.6.92
 Content-Transfer-Encoding: 8bit
 
 From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
@@ -122,7 +122,7 @@ combinations, which is essential for kernel development infrastructure.
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-index cd79ddd6170e0..b052ad6303c38 100644
+index 6665e272e2132..87a2b09e2dda5 100644
 --- a/tools/include/nolibc/stdint.h
 +++ b/tools/include/nolibc/stdint.h
 @@ -39,8 +39,8 @@ typedef   size_t      uint_fast32_t;
