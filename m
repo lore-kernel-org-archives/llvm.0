@@ -1,116 +1,137 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36C923370C
-	for <llvm@lists.linux.dev>; Sun,  1 Jun 2025 19:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F432CCA5;
+	Sun,  1 Jun 2025 20:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748806991; cv=none; b=jtLKDyCWz5dIYPSk/CLa+KqAu6MSJD00gw6O+u+ZmYuRqhJ+nJfQ4I79TCCn6+3o3RshzcM5+/s0blZ8p1fzl7zti5U5armnqGKOqLbO+r9M4sTeE7GzatNWXxsucJoJ4Ky+4dRSaTkUnZyHULj5IBoJc+xjQjPmB6kXtN02WEo=
+	t=1748809968; cv=none; b=ldRjrm1qCk4aj6TI5Y5VHujkF7xvsz3bkAhXfHCcttNYNrUFW1K4RXsJDhy1XI07NxsY+naVCqMwlgyuLuHpUnam44Orcm0WN/7K6qZYTRRj+sLTni5luBrSPK8/q2LUCjuOtpkagLrW74s+1MkYi8A8Lvfn/p1Ce+jj+LwA028=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748806991; c=relaxed/simple;
-	bh=zlttJep6rq3I8+o8EQ7DmNCSKFq6mJq8IUZsLPjanpw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B2PTK5G1eNNnh0FyOPGL5z5AsfEqH2BeehgVbEB2ICByL8THO4Psirm3c5xMG69WuystQAUN050HFl8dTb+eXeOQPhXtBIpdT+aFYmfDBY77sK1IcZPd60o99/Gps9jzn9DHx20RiXIi3Hd6wl9OFn0MY6LH7Xl/Cj5MfNjOdh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EWVK29SC; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748809968; c=relaxed/simple;
+	bh=sAS4cGxaZgiOsC64Zak7rasJeWYwfPJCCuZP7TENQnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=M7cq9qVulX+WSJQRdMp30CzTk+W54U1NkLcgvPqPDygOrR/ksztyRk6UUTmbpuSoinIarzWqWi+u9+xIYefP5K1tRV8RBNlIXc4c3UzmUbpavBQp9VUWlSAJpX/kGn+PjjJlsaqOK5csaI7vBMonMbSdyu/yZtFf6kiHtSnn0oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fOvhCoWn; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EWVK29SC"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5532f6d184eso4693946e87.0
-        for <llvm@lists.linux.dev>; Sun, 01 Jun 2025 12:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748806988; x=1749411788; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zlttJep6rq3I8+o8EQ7DmNCSKFq6mJq8IUZsLPjanpw=;
-        b=EWVK29SCmhX9bUsScLBBRi9Tae0wlcB9ccMfKnXCIPldOWmVFdNysbW8dC9Qn2q/cw
-         o+NkCseauyfh5uKgzuf/Cd+9UfmGFH1j1TUcgXylL7R7IA5VhxhbX12gzWYTs82mvzm/
-         M+jVgUw7lGc8opev/AV7AaA7T+MbJ4QvEDTmsKD/lFyS0ORpQm9A8zkEZ50IgJg5vdg+
-         zsUtKn/J9ppGXCHjE9kd4kdLXAKu7Lqh93a9NF9/gy9gdQ0Sl2n5gGGvxWAy6mo8lzZL
-         RwYjAO0ecOWZtXtKhWgFx4ynBg61PdcfeExEwjT0UpIbuoQ6tDXYlU1pNeVvP7PMmRbB
-         +KUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748806988; x=1749411788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zlttJep6rq3I8+o8EQ7DmNCSKFq6mJq8IUZsLPjanpw=;
-        b=sPnRKVesqHqrwGJ8EAn3F5QMTO9hJ5nAlk2orpreorQYcKvFO4gaoklcyg+cxB4kYc
-         JYbdLJnx34XCK9KPDdFIK2ZKMS276X3uHc70xbpDsL8+Vs2PlsSMesGNny1wZYLbRm9A
-         Uz/vzEJN883A2WAdz0vqLxGMF58aGggYcUmoXzJF/LRf3wywR8Ah9WFble6RrwarnaCO
-         JN6XO3gRQAJhb4r/4MBwNTCJ0LPU/N1GUFAHbgj5xcqTkO8KMuo9l065PmCKmCLQxzXN
-         rQzekioZTvrAXa0f9F5OJMPsSNOSUcnyjtilathJ78pAUmd2bDClRa7aVYo/w+ABsf/f
-         mB0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVYxu54vS8YPhin2skZPQeJkN5DZmD2MC2iVzN8gzSciJs6CDSvS9xDQTVo1WKPcFquHL1K@lists.linux.dev
-X-Gm-Message-State: AOJu0YytszjNq6FnpiXFt4G3Qljm0kgvgPKycDUPQrT1uwQ1E4jQlvcu
-	qHLYriDd+RuYNPrqYQNmz+FNKNEcs1Sng+cu9vz2M+HxwWFn7gT65OetpJrXoChQnU4NF7YdkTC
-	BDzBcTVjk+gDelcrMu8hQj8ZnylDb68o=
-X-Gm-Gg: ASbGncu360evXl9C1Z9H7ebT4KDHwUeBH8gFjtlS+oscPxJ72EgpdSAhI2B2ZeBoyJ2
-	UzZT9Ukyei0a3LyadPxOrdBsr53I9abX9CCmX1N9J4NKw/y5jbQTQehSYDxQszRE8SHLkJ1mSg0
-	3ozDgT3HxA7wLc4k0i8qhA3ZvfWPgslAhjBf5IcJedjZ45RSVE10kFUDjfC5eFdO0RICY=
-X-Google-Smtp-Source: AGHT+IHtRgXkoammUnbUpN1dYXGck9bKGEUGn5GT5cV3fPbuB+pGOqAmc7vwPC05DiWkj0JlBHypesZfOXv6vLdnG6Q=
-X-Received: by 2002:a05:6512:3d28:b0:553:2c58:f967 with SMTP id
- 2adb3069b0e04-5533b93b8f9mr3282822e87.56.1748806987505; Sun, 01 Jun 2025
- 12:43:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fOvhCoWn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748809967; x=1780345967;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sAS4cGxaZgiOsC64Zak7rasJeWYwfPJCCuZP7TENQnk=;
+  b=fOvhCoWnIuCrgWtaGS5cVbx51ZX9GEPN+J6XMUBJBQog7TVBYoAXFeBB
+   3o9aw1t8G5Z05l54/Ls6TPavr6B8K64n3NZYDqQcurQzKROimrLd48LC/
+   6YY/STZuj5XwIdiLOTRbWQ8YkbqoNiw/5VvSbYK4JFezjpKehQMEUjAZU
+   yj2ouB2Y4xeFKyNk4S/C637mSQGGQrBBM+oDknw7RIbGI/smkrG0g3bCG
+   xOQ+cp46khyUkGTa/Zo8YEfkHJN2EUYO2nIe8BOx1V3i4GhxmdKhp/nAg
+   j0q94949Meyw0lfBKDTwZgn/aweud/sE0+FL6WNtXNvmyEWG5sPISXlol
+   g==;
+X-CSE-ConnectionGUID: Yzccdlf/S3ymNYzPGqUdxA==
+X-CSE-MsgGUID: rE03S5ezTVmz8wi3jkYCUA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11450"; a="62178513"
+X-IronPort-AV: E=Sophos;i="6.16,201,1744095600"; 
+   d="scan'208";a="62178513"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2025 13:32:45 -0700
+X-CSE-ConnectionGUID: PAMWnestS8OmeYWzWlZEaw==
+X-CSE-MsgGUID: MnL3RPxWTt6sv5TlhnDxbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,201,1744095600"; 
+   d="scan'208";a="144257945"
+Received: from igk-lkp-server01.igk.intel.com (HELO b69e6467d450) ([10.211.3.150])
+  by orviesa006.jf.intel.com with ESMTP; 01 Jun 2025 13:32:44 -0700
+Received: from kbuild by b69e6467d450 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uLpMH-0001CI-26;
+	Sun, 01 Jun 2025 20:32:41 +0000
+Date: Mon, 2 Jun 2025 04:31:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 331/338] fs/dcache.c:3223: warning:
+ Function parameter or struct member 'dentry' not described in
+ 'd_casefold_disabled_put'
+Message-ID: <202506020428.aKtBuNbS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
- <20250530-cstr-core-v11-1-cd9c0cbcb902@gmail.com> <DABC3ZAQ01GG.1VT5NL7PIMTEO@kernel.org>
-In-Reply-To: <DABC3ZAQ01GG.1VT5NL7PIMTEO@kernel.org>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Sun, 1 Jun 2025 15:42:30 -0400
-X-Gm-Features: AX0GCFsKjS9hgEwmEsRuHll_MOXzoBWv1p_-8FxpcxZc3tsgxztATvJimliHSmg
-Message-ID: <CAJ-ks9=awTggTjr-_dkaWLQRkQVwkBQKiJzdP9dA7_=zFKRY+g@mail.gmail.com>
-Subject: Re: [PATCH v11 1/5] rust: macros: reduce collections in `quote!` macro
-To: Benno Lossin <lossin@kernel.org>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Jun 1, 2025 at 12:24=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
-ote:
->
-> On Fri May 30, 2025 at 2:27 PM CEST, Tamir Duberstein wrote:
-> > Remove a handful of unncessary intermediate vectors and token streams;
-> > mainly the top-level stream can be directly extended with the notable
-> > exception of groups.
->
-> What's the motivation for this?
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   ac9cb68e998c4a17159a05fb750fc7e9f3850c41
+commit: 520ad9104545fd112f172076b4ed10797c1cc8da [331/338] fs: dcache exlusion between overlayfs, casefolding
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250602/202506020428.aKtBuNbS-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250602/202506020428.aKtBuNbS-lkp@intel.com/reproduce)
 
-I was squinting at the macro to understand how it worked and spotted
-these oddities.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506020428.aKtBuNbS-lkp@intel.com/
 
-> I wouldn't spend much effort on this file, as it'll go away when we add t=
-he `quote` crate.
+All warnings (new ones prefixed by >>):
 
-Eh, this seems to be in the "I'll believe it when I see it" category.
+>> fs/dcache.c:3223: warning: Function parameter or struct member 'dentry' not described in 'd_casefold_disabled_put'
+>> fs/dcache.c:3247: warning: Function parameter or struct member 'dentry' not described in 'd_casefold_disabled_get'
+
+
+vim +3223 fs/dcache.c
+
+  3216	
+  3217	/**
+  3218	 * d_casefold_disabled_put - drop a "casefold disabled" ref
+  3219	 *
+  3220	 * Only for overlayfs.
+  3221	 */
+  3222	void d_casefold_disabled_put(struct dentry *dentry)
+> 3223	{
+  3224		struct super_block *sb = dentry->d_sb;
+  3225	
+  3226		if (!(sb->s_flags & SB_CASEFOLD))
+  3227			return;
+  3228	
+  3229		guard(mutex)(&sb->s_casefold_enable_lock);
+  3230		no_casefold_dentry_put(dentry, ref_casefold_disable);
+  3231	}
+  3232	EXPORT_SYMBOL_GPL(d_casefold_disabled_put);
+  3233	
+  3234	/**
+  3235	 * d_casefold_disabled_get - attempt to disable casefold on a tree
+  3236	 *
+  3237	 * Only for overlayfs.
+  3238	 *
+  3239	 * Returns -EINVAL if casefolding is in use on any subdirectory; this must be
+  3240	 * tracked by the filesystem.
+  3241	 *
+  3242	 * On success, returns with a reference held that must be released by
+  3243	 * d_casefold_disabled_put(); this ref blocks casefold from being enabled
+  3244	 * by d_casefold_enable().
+  3245	 */
+  3246	int d_casefold_disabled_get(struct dentry *dentry)
+> 3247	{
+  3248		struct super_block *sb = dentry->d_sb;
+  3249	
+  3250		if (!(sb->s_flags & SB_CASEFOLD))
+  3251			return 0;
+  3252	
+  3253		guard(mutex)(&sb->s_casefold_enable_lock);
+  3254	
+  3255		if (!(dentry->d_inode->i_flags & S_NO_CASEFOLD))
+  3256			return -EINVAL;
+  3257	
+  3258		return no_casefold_dentry_get(dentry, ref_casefold_disable);
+  3259	}
+  3260	EXPORT_SYMBOL_GPL(d_casefold_disabled_get);
+  3261	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
