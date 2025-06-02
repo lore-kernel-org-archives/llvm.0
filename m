@@ -1,89 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E383B4C85;
-	Mon,  2 Jun 2025 18:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14DD2C3253;
+	Mon,  2 Jun 2025 19:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748889699; cv=none; b=gmmQ+eHalLAEtgV8FdbGxOtXDJnyQ4pGDw+W57pEobEg0e3FT2HtiXYBDUGjEw3wVAXBd2Tddy768LwzbVerCfR1Y7bsv5pjR+PAUqQHRw24nSKGXFvZvr/DsnGMXQdGjrMU0z7jHD8w++5i8zYJQsCwy10cRzpLnd3K0Pb3o2s=
+	t=1748893043; cv=none; b=Uj6f9r3DayaFBHkkTiUxtVoGQ96GsA+XFJIfNtl8vPJQCJerl1AN3m+HWrqAEvFUmN3ow84DnBhFcDRw5u2F+ALN2eSghAThgt+4MFZ50t/Es8STQpyNPE3Y4cSL9Jw5loouU/p9gkuC4aXsa+TjhsIA60ogpp3GDORN2vRd6pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748889699; c=relaxed/simple;
-	bh=cZ5XLxx7Nplm0ahA0hMamO8OlS+P3dRSreXWXQu/n3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eFhJlcoEwoaxjmg4sR/LxL9UlahabYQDpUKSqOirtIPc0BRIzXBCAFIDHA9/VWrP2aNRTiYv33y6uKZUMGzzk1FIunLvrBTxhjPXCHDEq13qGBO0TRRbvtM+ro881O6VE/9bzVY3I3Tt3uh2KqVOQQ2hl35gWbipW8xI4u4KTmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CHjzdIO8; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1748893043; c=relaxed/simple;
+	bh=XyBUMdc8BNgiW/6GsAohYe2BT+yj7XsDCeo0Ex9PN1Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=usW9MFNy5OkQa8vX8NzuImI1DBwhooX+lsAW4uaZPhJKT8PpEfZu77eYCLTcXOtOaOwJppPtlHrik6pfW2D87fVOTJuetW/WrKriSutMehp3f63NZxHSRKbphesxXOwGzEAXecol5U3HopCoYJbo9/E/2gDChXQOv177/PJt8ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xoeu36Q0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHjzdIO8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748889698; x=1780425698;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cZ5XLxx7Nplm0ahA0hMamO8OlS+P3dRSreXWXQu/n3o=;
-  b=CHjzdIO8c746HS9e9pTe19nV7znheo8AiPeqaA8aGs9r4dvAUApvjd3Z
-   TDqbY5MS/dpGH3EyWAM6Gwp3KF/+VeSA2HKAEIejnB7Ks9Qfq3ZmIgl3h
-   5HoDlT4j8KXNrUg2L6yEJ60fYkypftM8Wv8U8DwiG6wNDUEAGaw0v3N8s
-   7AJizkzsBZmq58jBmFGAlPtqVcG7VUU4TLIfm0tXoP8d6O1FaAS/Ro3kR
-   wCBhJ68t0lmYW6AR6W8QRxVD/NLEbd+QlSXvdhtFo3bLVkUQIy4EMSKJq
-   KsA7AVMX1aWC4cTwdQhxEF/wmlor+TVKWRU3ftv7L739YP+H2I7Rjgzt+
-   Q==;
-X-CSE-ConnectionGUID: NoPqQyRYQmyXpyMcrsh/xw==
-X-CSE-MsgGUID: BZJOy9gDSNGHx1Ca8IYBvg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11451"; a="61524970"
-X-IronPort-AV: E=Sophos;i="6.16,204,1744095600"; 
-   d="scan'208";a="61524970"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2025 11:41:37 -0700
-X-CSE-ConnectionGUID: xsNFipGJTQq+iA/Q5SiAsg==
-X-CSE-MsgGUID: gtnb/+ftSTSFpHxTqLDbUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,204,1744095600"; 
-   d="scan'208";a="148476176"
-Received: from igk-lkp-server01.igk.intel.com (HELO b69e6467d450) ([10.211.3.150])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Jun 2025 11:41:36 -0700
-Received: from kbuild by b69e6467d450 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uMA6H-0001M6-2w;
-	Mon, 02 Jun 2025 18:41:33 +0000
-Date: Tue, 3 Jun 2025 02:41:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alistair Popple <apopple@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Joel Fernandes <joelagnelf@nvidia.com>
-Subject: [jfern:nova/sequencer 20/47]
- drivers/gpu/nova-core/nvfw/r570_144_bindings.h: warning: ignored by one of
- the .gitignore files
-Message-ID: <202506030217.sVACHrbY-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xoeu36Q0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1107C4CEEB;
+	Mon,  2 Jun 2025 19:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748893043;
+	bh=XyBUMdc8BNgiW/6GsAohYe2BT+yj7XsDCeo0Ex9PN1Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xoeu36Q0WQdCvy2wAxU5k22bfDSzMz30EG8Q4P5fqDF14gC3i6XakT0uIZFA+BEwn
+	 x2LfgtgIPzlTLv9t1CzVlM1iyb3+q7DY/9591Kk/uYGZ1hCGUpVxsjG3GUvHotZRH5
+	 Wy81BNPvj1GOpD1CICkhfrvcAgBPAcxqkcyybrVmv5pKuyHk+5oSYAlaTceFGCE42F
+	 ZN4Hz6xP4z0Qs6riXnTciiP7nYGLM6fyfO4mTbE8qkLp5qyFb4hWTfhs2qTVzwUXCF
+	 Y2Cc/Arjb/pw12pLvphNWwGjfO8kSO68hF6o4Pi+QHPK9Ix6RKRdLpnzFTxXsuDm5h
+	 JFBUvwe45XllQ==
+Date: Mon, 2 Jun 2025 12:37:18 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [BUG?] clang miscompilation of inline ASM with overlapping
+ input/output registers
+Message-ID: <20250602193718.GA915101@ax162>
+References: <20250602102825-42aa84f0-23f1-4d10-89fc-e8bbaffd291a@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250602102825-42aa84f0-23f1-4d10-89fc-e8bbaffd291a@linutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git nova/sequencer
-head:   29f49c4178307cb46780fb8c476783697ed3b99d
-commit: cc942b8c926b7693617473716a627e102c422070 [20/47] [Nova] Generate Rust bindings from OpenRM or Nouveau headers
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250603/202506030217.sVACHrbY-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250603/202506030217.sVACHrbY-lkp@intel.com/reproduce)
+Hi Thomas,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506030217.sVACHrbY-lkp@intel.com/
+On Mon, Jun 02, 2025 at 10:29:30AM +0200, Thomas Weißschuh wrote:
+> I observed a surprising behavior of clang around inline assembly and register
+> variables, differing from GCC.
+> 
+> Consider the following snippet:
+> 
+> 	$ cat repro.c
+> 	int main(void)
+> 	{
+> 		register long in asm("eax");
+> 		register long out asm("eax");
+> 
+> 		in = 0;
+> 		asm volatile("nop" : "+r" (out) : "r" (in));
+> 
+> 		return out;
+> 	}
+> 
+> The relevant part is that the inline ASM has input and output register
+> variables both using the same register and the input one is assigned to.
+> 
+> 
+> Compile with clang (19.1.7, tested on godbolt.org with trunk):
+> 
+> 	$ clang -O2 repro.c
+> 	$ llvm-objdump --disassemble-symbols=main a.out
+> 	0000000000001120 <main>:
+> 	    1120: 90                           	nop
+> 	    1121: c3                           	retq
+> 
+> The store of the variable "in" has been optimized away.
+> 
+> 
+> Compile with gcc (15.1.1, also tested on godbolt.org with trunk):
+> 
+> 	$ gcc -O2 repro.c
+> 	$ llvm-objdump --disassemble-symbols=main a.out
+> 	0000000000001020 <main>:
+> 	    1020: 31 c0                        	xorl	%eax, %eax
+> 	    1022: 90                           	nop
+> 	    1023: c3                           	retq
+> 	    1024: 66 2e 0f 1f 84 00 00 00 00 00	nopw	%cs:(%rax,%rax)
+> 	    102e: 66 90                        	nop
+> 
+> The store to "eax" is preserved.
+> 
+> 
+> As far as I can see gcc is correct here. As the variable is used as an input to
+> ASM the compiler can not optimize away.
+> On other architectures the same effect can be observed.
+> 
+> 
+> The real kernel example for this issue is in the loongarch vDSO code from
+> arch/loongarch/include/asm/vdso/gettimeofday.h:
+> 
+> 	static __always_inline long clock_gettime_fallback(
+> 						clockid_t _clkid,
+> 						struct __kernel_timespec *_ts)
+> 	{
+> 		register clockid_t clkid asm("a0") = _clkid;
+> 		register struct __kernel_timespec *ts asm("a1") = _ts;
+> 		register long nr asm("a7") = __NR_clock_gettime;
+> 		register long ret asm("a0");
+> 
+> 		asm volatile(
+> 		"       syscall 0\n"
+> 		: "+r" (ret)
+> 		: "r" (nr), "r" (clkid), "r" (ts)
+> 		: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+> 		 "$t8", "memory");
+> 
+> 		return ret;
+> 	}
+> 
+> Here both "clkid" and "ret" are stored in "a0". I can't point to the concrete
+> disassembly here because it is inlined into a much larger block of code
+> and removing the inlining hides the bug.
+> Also in my tests the bug only manifests for "_clkid" in the interval [16, 23].
+> Other values work by chance.
+> Removing the aliasing by dropping "ret" and using "clkid" for both input and
+> output produces correct results.
+> 
+> Is this a clang bug, is the code broken or am I missing something?
 
-All warnings (new ones prefixed by >>):
+For the record, inline assembly semantics are a little out of my
+wheelhouse. Bill can probably comment more on what might be happening
+internally within clang/LLVM here but it does seem like there could be a
+clang code generation bug. Looking at the example you provided and GCC's
+assembly and local register documentation, which has a very similar
+example, it looks like the issue disappears when using "=r" for the
+output constaint instead of "+r".
 
-   compile_commands.json: warning: ignored by one of the .gitignore files
->> drivers/gpu/nova-core/nvfw/r570_144_bindings.h: warning: ignored by one of the .gitignore files
-   rust-project.json: warning: ignored by one of the .gitignore files
-   scripts/target.json: warning: ignored by one of the .gitignore files
+https://godbolt.org/z/jo3T8o3hj
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Looking at the constraint string in both the unoptimized and optimized
+IR, it looks like eax appears an input twice in the list for broken(),
+likely because "+r" was internally expanded to "=r" for the output and
+"r" for the input. In the optimized IR, we can see that the first eax
+will be the 2 that was assigned but the second eax is "undef"
+(undefined), which follows from the unoptimized IR. What I am guessing
+happens based on my investigation with '-mllvm -opt-bisect-limit=' on
+x86 is the second eax "wins" over the first one that has the actual
+value. Using an undef value is UB so the backend removes the initial
+write to eax altogether.
+
+It definitely seems like this could be handled better on the clang side
+but I do think that switching the constraints to "=r" would be a proper
+fix, as "+r" is really an overspecification and that matches an almost
+identical example in the GCC local register documentation:
+
+https://gcc.gnu.org/onlinedocs/gcc-15.1.0/gcc/Local-Register-Variables.html
+
+Cheers,
+Nathan
