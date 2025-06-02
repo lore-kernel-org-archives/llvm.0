@@ -1,141 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3482D271478;
-	Sun,  1 Jun 2025 23:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8851A1917ED
+	for <llvm@lists.linux.dev>; Mon,  2 Jun 2025 00:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748821206; cv=none; b=IgwiqnrLqWDG++0GXn7++vV52ZMDIMGWE0kBeMk96C1BYQmAPLL4MPskOvzW10xz8z4/HavKr4s7KVtHPKlKEcIYeEfR5hKCpmH+0ce84preZmrC3hvAxPXD15uqYUTUQ2OG5lQylNAav342OdxYP/qeZtbz09+C6Tnj1HvEonA=
+	t=1748824393; cv=none; b=LtuJ3NRJP4NUb3KOO1A0B5WHNK4TLK/2+5LBA1Dyv6CUAvhHmIhYb0ocfT9N/MoyfusscCMh0rU9UzvgLx/m66E5qZu2s1cbiyBns1TF8JebjLC+ZWaV8rSjYrfiRAv5uFyYGoMxGk970vN/5qu9WRp6HVpelRweQp+zRQIkK68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748821206; c=relaxed/simple;
-	bh=+ZH6OTkRxGA/CUXwXFSQTiU9wUtruA/4MRlla24b+Pg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=acUvXZW8ct02vm7KaevCh3Y7rEL+kBuH2fWXgh27sggGHk8wRrVUpMAKmMLpAbwtc32MzBCDeERQBb6E9VMDaF+CMNdP/+MZPFk4PKmVqGFeN/uNIk+nTg4rzWPYw28j3FIUN6fVMTkmGdDVs+a3qYssJx6jre/w/opj8U/j+Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9E4k074; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748824393; c=relaxed/simple;
+	bh=ulFzi8Vf8DDF3XP6kujUVftQGfuUBi4eoz2hS+MaPSg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XxPOnEE6WShknosin7yL7AUSEi76eoRC9Q++yBgTOPwLW2BPaZA241u9i4KBxWDrc4svdiamNW+uQbYoWCcMyzUVHCeGZEPXq9qRAdX+R2MV6mli/PJlQMxBEsFaOhg2G53A6jr/RQdwfEUasCuAXtl+OqRaheJnoEgEYkckIXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gKqKxY1q; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9E4k074"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1437CC4CEF1;
-	Sun,  1 Jun 2025 23:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748821206;
-	bh=+ZH6OTkRxGA/CUXwXFSQTiU9wUtruA/4MRlla24b+Pg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u9E4k074F1ARIe6YJsNyQViFqwReTkgWph7P1gMnHrKy1RZCIse7C8b7kn7eyj1tU
-	 lr3y+zeZhS+jo1tFRbPMZZ/LgM94gejf1d/kbQUzaAJE8VrlXUZnTBA5U0RJRrGcit
-	 BDZADTsKjrMnzYM0BBaZihF/bSw3MGIOoVJ4lLD5AX0HTkHOnmRhL013tuJifb9srq
-	 ILw2GzfSrJEAW19rmvzX225UXbbgOk8xQVySSdZLy+iuJab57TEjZPEEAICvRTrtlg
-	 vThVL8f+eQXdVTjFie7hlhxdr9t3J23c2PcEiUaeSICnUKp97pFonCLFPkcXELBWIf
-	 LIrMYNbu410bw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Willy Tarreau <w@1wt.eu>,
-	Sasha Levin <sashal@kernel.org>,
-	linux@weissschuh.net,
-	nathan@kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 64/66] tools/nolibc: use intmax definitions from compiler
-Date: Sun,  1 Jun 2025 19:37:41 -0400
-Message-Id: <20250601233744.3514795-64-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250601233744.3514795-1-sashal@kernel.org>
-References: <20250601233744.3514795-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gKqKxY1q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748824387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=h69hrukmk7dCmTgGHdXd6zOvi734L2E5NAlNtAkwRIg=;
+	b=gKqKxY1qCjCJmbchWZWGYl8H4iB170jKvV3kKKWiPreZYCRFsYL2bgajKRcA8w9CX6nqkb
+	LniCVAjI5UfFXvLuTfdGIbCJLL2q3763Rr2coaxIb7W523E3R30ep4K4n/Me+v9IcmKx6Z
+	C/D4gA5hLVyhdxXUBrInRBLB2GDAhrU=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-149-q7RkLc8aPv2Diw0VdOhCaQ-1; Sun,
+ 01 Jun 2025 20:33:06 -0400
+X-MC-Unique: q7RkLc8aPv2Diw0VdOhCaQ-1
+X-Mimecast-MFC-AGG-ID: q7RkLc8aPv2Diw0VdOhCaQ_1748824385
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2D38B1955DAB
+	for <llvm@lists.linux.dev>; Mon,  2 Jun 2025 00:33:05 +0000 (UTC)
+Received: from [172.20.48.73] (unknown [10.30.45.91])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CC94019560A7;
+	Mon,  2 Jun 2025 00:33:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.15.0,
+ upstream-mainline, bb1556ec)
+Date: Mon, 02 Jun 2025 00:33:03 -0000
+To: mmalik@redhat.com, fmaurer@redhat.com, haliu@redhat.com,
+ omosnace@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.92
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <08095.125060120330600283@us-mta-149.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vpQA6ukquNiT9iLN_RYUJOU15O24hLDtJEXqIhFGn3g_1748824385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Hi, we tested your kernel and here are the results:
 
-[ Upstream commit e5407c0820ea5fa7117b85ed32b724af73156d63 ]
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-The printf format checking in the compiler uses the intmax types from
-the compiler, not libc. This can lead to compiler errors.
 
-Instead use the types already provided by the compiler.
+Kernel information:
+    Commit message: Merge tag 'linux-watchdog-6.16-rc1' of git://www.linux-=
+watchdog.org/linux-watchdog
 
-Example issue with clang 19 for arm64:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1847708441
 
-nolibc-test.c:30:2: error: format specifies type 'uintmax_t' (aka 'unsigned long') but the argument has type 'uintmax_t' (aka 'unsigned long long') [-Werror,-Wformat]
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kselftest build - bpf
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1847708441-x86_64-kernel-debug_selftest_bpf
+        selinux-policy: serge-testsuite
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1847708441-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Acked-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-**YES** This commit should be backported to stable kernel trees. Here's
-my extensive analysis: ## Analysis of the Code Changes The commit makes
-a targeted fix to resolve compiler format checking errors by changing
-the intmax type definitions in `tools/include/nolibc/stdint.h`: ```c
--typedef int64_t intmax_t; -typedef uint64_t uintmax_t; +typedef
-__INTMAX_TYPE__ intmax_t; +typedef __UINTMAX_TYPE__ uintmax_t; ``` ##
-Why This Should Be Backported ### 1. **Fixes Real Compilation Errors**
-The commit addresses actual compiler errors that prevent successful
-builds, as demonstrated by the clang 19 error message: ``` nolibc-
-test.c:30:2: error: format specifies type 'uintmax_t' (aka 'unsigned
-long') but the argument has type 'uintmax_t' (aka 'unsigned long long')
-[-Werror,-Wformat] ``` This is a critical build breakage, not just a
-warning. ### 2. **Small, Contained, Low-Risk Change** - Only changes 2
-lines of code in a single header file - Does not modify any algorithms
-or control flow - Uses well-established compiler built-ins that have
-been available for decades - No risk of behavioral changes beyond fixing
-the type compatibility issue ### 3. **Follows Established Pattern** The
-change aligns with existing practice in the same file, which already
-uses `__SIZE_TYPE__` for `size_t` definition. This demonstrates that
-using compiler built-ins for fundamental types is the established
-approach in nolibc. ### 4. **Cross-Platform Compatibility Fix** The
-issue particularly affects: - Different compiler backends (GCC vs Clang)
-- Different architectures where `long` vs `long long` sizes vary
-(especially arm64) - Cross-compilation scenarios - Builds with strict
-format checking enabled (`-Wformat -Werror`) ### 5. **Comparison with
-Similar Commits** Looking at the reference commits provided: - **Similar
-Commit #4** (Status: YES): Also fixes integer type issues in nolibc for
-platform compatibility - **Similar Commit #5** (Status: YES): Also fixes
-printf format mismatches with explicit stable tree marking (`Cc:
-stable@vger.kernel.org`) This commit follows the same pattern of fixing
-type/format compatibility issues that have been deemed worthy of
-backporting. ### 6. **Tools Subsystem Stability** While this is in the
-tools directory, nolibc is used for: - Kernel testing infrastructure -
-Minimal userspace environments - Cross-compilation toolchains - Kernel
-selftests Breaking builds in these contexts can impact kernel
-development workflows across different platforms. ### 7. **No
-Architectural Changes** The commit: - Doesn't introduce new features -
-Doesn't change APIs - Doesn't modify kernel core functionality - Simply
-ensures type consistency between compiler and library definitions ##
-Conclusion This is exactly the type of targeted bug fix that stable
-trees are designed for: it fixes a real compilation issue that affects
-users, uses a minimal and safe approach, follows established patterns,
-and has no risk of introducing regressions. The fix ensures that nolibc
-can be compiled successfully across different compiler/architecture
-combinations, which is essential for kernel development infrastructure.
 
- tools/include/nolibc/stdint.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-index 6665e272e2132..87a2b09e2dda5 100644
---- a/tools/include/nolibc/stdint.h
-+++ b/tools/include/nolibc/stdint.h
-@@ -39,8 +39,8 @@ typedef   size_t      uint_fast32_t;
- typedef  int64_t       int_fast64_t;
- typedef uint64_t      uint_fast64_t;
- 
--typedef  int64_t           intmax_t;
--typedef uint64_t          uintmax_t;
-+typedef __INTMAX_TYPE__    intmax_t;
-+typedef __UINTMAX_TYPE__  uintmax_t;
- 
- /* limits of integral types */
- 
--- 
-2.39.5
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
