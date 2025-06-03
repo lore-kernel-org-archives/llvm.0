@@ -1,142 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A3C7262A;
-	Tue,  3 Jun 2025 00:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE1D79EA
+	for <llvm@lists.linux.dev>; Tue,  3 Jun 2025 03:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748911811; cv=none; b=fToIP5q4LeKp6Jp8gGr4TkPatk1eHEAFf6DzU5WDwdlyudrmGvU4CnYx79YhwPrIthTg6YXxEPpuCRyDoNT0X6JIqtftRssX7UjWCW4yHZIuseQlNLLgRFUsxbxoIE7Kk4l8gkkIVBA3bfiNOHz4vQSqIbp0dIgdLDJBFNB8PGc=
+	t=1748922532; cv=none; b=IYVw/ghNfKcvbXb0Ay18z55ioo16+jzi3Z3sMCxHF78+aH+5hpfZJd8FoPqqMHBNV3HsO4ze8Npku8MFBXlpNVrzxH65/XYhO7693qAAP/RCMN2Y5LbubGaeDqN70r0x2uj88VvF+nzlYZjZAM8FjvcYp1xjCmwxjvflEEgcQUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748911811; c=relaxed/simple;
-	bh=AUYmy3MR11EakJLB44RL4VR3uijKAeLXkFyj4B57fvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mCowsepzs9kc9SxmdUjGX/JYwSEytGMlxBNTHtk1vMOM/IuXtOTKWYenKdwnY1wH4ZD/F4hdPuNj6rp7upsyGICDcJJf4gNYkRg9X3Sd4/QzXwsSOkm/zpTaqSB5NgY7eUuEg0zL90KY1tvLbmAliqE07+rDd7tYCzL7OeOLGjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jj1yiECk; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jj1yiECk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748911810; x=1780447810;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AUYmy3MR11EakJLB44RL4VR3uijKAeLXkFyj4B57fvA=;
-  b=Jj1yiECkye/0dURcH6foe14P6UDQLLaTelInyk2hCCtRD/6UQ+n3jZRh
-   B78ydS488i6VBjQ/ePpmxWKRdXJ4llDNQrFiO/dqbQpnEeCU8/fGUNMTY
-   PwdQE42Yy56KlBqYyvOJyHrPFeexmUn4sXGXklw7XaZcAWwzpp/bo1aRQ
-   UU2svxcXQLtF4LwwtBHhNHm4K7bZq278zBRmwZ6o+CCO1HWGEQWGsPL6N
-   nUxceOJz9KIrZfK4zyt4/KFcZz3xksU8GiRt5anOBwXfZl+xqlftPblZP
-   UT2Lxw4BGinUBkLa2FEMwe76OoZ73QxPwxxHqaAd3IPACmQY+k/jxNelY
-   w==;
-X-CSE-ConnectionGUID: OE3qUhGLRK2LKLw6l2H5Bw==
-X-CSE-MsgGUID: g1fH/1FmT5ClTg+QG1pHgQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11451"; a="68488111"
-X-IronPort-AV: E=Sophos;i="6.16,204,1744095600"; 
-   d="scan'208";a="68488111"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2025 17:50:09 -0700
-X-CSE-ConnectionGUID: zp2kJ9MfRRiZHeqHUnA1wQ==
-X-CSE-MsgGUID: P5rWScFHR5S0QvxwZB0phw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,204,1744095600"; 
-   d="scan'208";a="145309463"
-Received: from igk-lkp-server01.igk.intel.com (HELO b69e6467d450) ([10.211.3.150])
-  by orviesa007.jf.intel.com with ESMTP; 02 Jun 2025 17:50:08 -0700
-Received: from kbuild by b69e6467d450 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uMFqv-0001OY-1R;
-	Tue, 03 Jun 2025 00:50:05 +0000
-Date: Tue, 3 Jun 2025 08:50:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stephen Bates <sbates@raithlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sbates130272-p2pmem:dev/amd-dma-buf 3/3]
- drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:412: warning: Function parameter
- or struct member 'dmabuf' not described in 'amdgpu_dma_buf_rw_file'
-Message-ID: <202506030816.1uTP3kcg-lkp@intel.com>
+	s=arc-20240116; t=1748922532; c=relaxed/simple;
+	bh=bWBEuRcbXq8aJsRkCOuRq3h3zFdmbbpqBSOVwmVgcyc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pKZaQVo4o/N+o9l0XPMZsMXSjpYR5eacnZ98lLt0w9IeqXFJkxFfrLbRCjVWGMiP6x503nE76NO06dEH0nIhUVDDC5KekGghKy0slzIx+GpErdgruUvqw1W/wMKERkd3V9je7oAAr8S8DsaVcx4gAeswc+baUO7fU8I0WQKG9yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maskray.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maskray.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6062e41916dso2378385eaf.1
+        for <llvm@lists.linux.dev>; Mon, 02 Jun 2025 20:48:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748922530; x=1749527330;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZdL6Pc63Mfaws2Erg/4lSldp2avlQyahxxSrxGNP9Ww=;
+        b=tiu4LP1wulFdxjnAFydLEjfqZZHiNyrMAAquWlj51uN5qlu3GacE8KJqJcb7yVpsof
+         kcgXxMkOzjDvvi6hr/53U4mZoXAFECWJRCmnXHdQNbZ0YWBm49J6Ho0VLwEiGZDpyuhn
+         hPEjrV6bRBZnSBzc9JOXKMW2xAjAKPd5pM1ScNaTOPkO8OKbRSIEI/wVgmQImAxpaoWU
+         nrNWQZapeoI7jvG0j4VoW5V/IaK7m58GA571qqnmY2gd8WbXojaY12QviyodKVl+GGu2
+         rKtcQwnW7bRn0TzkPczP3KR8f+ww8SDc4QFXjjbiiMuK6m1GCMlF7P6RHwsIFXsKhSPL
+         Lsow==
+X-Forwarded-Encrypted: i=1; AJvYcCV0U2Iu3M1SAa3fqVYBtTPGi2BSdkWdSI9wJCj3HAn2pnDhMZCmQhVD3y5VfqiZewa61VtR@lists.linux.dev
+X-Gm-Message-State: AOJu0YyR3U6W3eaCBl8mgUWPUAwv6S6t9XcZxt0UR59ngJRMtSOpAREn
+	gAGOF9Y99uJMjmhCspQVBtiYkR3w1p0HqATJshDOiAffNiQphJDObaLb
+X-Gm-Gg: ASbGnctukyJ8XdVZqvjOj5OrgKKfiiugE0+Sl30z3DycyLDjQULpJ/Q+fctA6gSAzc2
+	Wi7GzsFvcPot4Dql87w1qqle+34WzWKXnmaoAi+luMfoXrfvL69ldZRCbJGY1z+r88CyQuP3+JP
+	uVtqGuQ5vrmWCNv1kBHS42HWSdacMDAYwcKRB4mVz37MAFoIHMWFNmyOgmszEhM6fJRlniwIrM8
+	T5MLp8pYxPiLpupb68jJDntGPprfHYfeJ0RvhMmRweWg1qa0hJoZeGnWtMIpc4aRpuEk+V1DnEX
+	i4h0IZ254RLdinRED1g0NoweEtvfEVhs+AqpF7TEVMqmAkGDZKPv7++SB6IZphSDsYcbOdzfRsZ
+	YhkGWZVwLjJvbNuY=
+X-Google-Smtp-Source: AGHT+IFJ0a0/7zpdoajtkBcLg0pJalyYk1624WDxYssQNRcHtUpuFOsvwX5Z/G9JDfUurD4GyikbgQ==
+X-Received: by 2002:a05:6820:2782:b0:60b:aeb2:988c with SMTP id 006d021491bc7-60d52db217dmr7757340eaf.1.1748922530242;
+        Mon, 02 Jun 2025 20:48:50 -0700 (PDT)
+Received: from localhost (37-72-172-174.static.hvvc.us. [37.72.172.174])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-60c14c7122bsm1740655eaf.14.2025.06.02.20.48.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jun 2025 20:48:49 -0700 (PDT)
+From: Fangrui Song <i@maskray.me>
+Date: Mon, 02 Jun 2025 20:48:44 -0700
+Subject: [PATCH] riscv: vdso: Exclude .rodata from the PT_DYNAMIC segment
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250602-riscv-vdso-v1-1-0620cf63cff0@maskray.me>
+X-B4-Tracking: v=1; b=H4sIAJtwPmgC/x3MTQqAIBBA4avIrBP8q0VXiRaiY81GwwEJxLsnL
+ b/Fex0YKyHDLjpUbMRU8oReBITb5wslxWkwyqxqU0ZW4tBki1yktpgionXeOJjBUzHR+8+Oc4w
+ P+u4HylwAAAA=
+X-Change-ID: 20250602-riscv-vdso-13efdee34a24
+To: Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Fangrui Song <i@maskray.me>
+X-Mailer: b4 0.14.2
 
-tree:   https://github.com/sbates130272/linux-p2pmem.git dev/amd-dma-buf
-head:   bbb07dc00a3bb220aa0570177a0716d7b48bac7e
-commit: bbb07dc00a3bb220aa0570177a0716d7b48bac7e [3/3] amdgpu_dma_buf: Add a rwfile dma_buf callback for file IO.
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250603/202506030816.1uTP3kcg-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250603/202506030816.1uTP3kcg-lkp@intel.com/reproduce)
+.rodata is implicitly included in the PT_DYNAMIC segment due to
+inheriting the segment of the preceding .dynamic section (in both GNU ld
+and LLD).  When the .rodata section's size is not a multiple of 16
+bytes on riscv64, llvm-readelf will report a "PT_DYNAMIC dynamic table
+is invalid" warning.  Note: in the presence of the .dynamic section, GNU
+readelf and llvm-readelf's -d option decodes the dynamic section using
+the section.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506030816.1uTP3kcg-lkp@intel.com/
+This issue arose after commit 8f8c1ff879fab60f80f3a7aec3000f47e5b03ba9
+("riscv: vdso.lds.S: remove hardcoded 0x800 .text start addr"), which
+placed .rodata directly after .dynamic by removing .eh_frame.
 
-All warnings (new ones prefixed by >>):
+This patch resolves the implicit inclusion into PT_DYNAMIC by explicitly
+specifying the :text output section phdr.
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:412: warning: Function parameter or struct member 'dmabuf' not described in 'amdgpu_dma_buf_rw_file'
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:412: warning: Function parameter or struct member 'back' not described in 'amdgpu_dma_buf_rw_file'
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:412: warning: Excess function parameter 'dma_buf' description in 'amdgpu_dma_buf_rw_file'
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:412: warning: Excess function parameter 'dma_buf_rw_file' description in 'amdgpu_dma_buf_rw_file'
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2093
+Signed-off-by: Fangrui Song <i@maskray.me>
+---
+ arch/riscv/kernel/vdso/vdso.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/vdso.lds.S
+index abc69cda0445b1f500a89b47deefa31349103f08..62e0410f69f09e2bbf27101c000d604193f525cb 100644
+--- a/arch/riscv/kernel/vdso/vdso.lds.S
++++ b/arch/riscv/kernel/vdso/vdso.lds.S
+@@ -30,7 +30,7 @@ SECTIONS
+ 		*(.data .data.* .gnu.linkonce.d.*)
+ 		*(.dynbss)
+ 		*(.bss .bss.* .gnu.linkonce.b.*)
+-	}
++	}						:text
+ 
+ 	.note		: { *(.note.*) }		:text	:note
+ 
 
-vim +412 drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+---
+base-commit: 1a3f6980889df3fc90ad3e4a525061d2c138adba
+change-id: 20250602-riscv-vdso-13efdee34a24
 
-   395	
-   396	/**
-   397	 * amdgpu_dma_buf_rw_file - &dma_buf_ops.rw_file implementation
-   398	 * @dma_buf: Shared DMA buffer
-   399	 * @dma_buf_rw_file: Struct with info on backing file
-   400	 *
-   401	 * This is a callback to enable both buffered and O_DIRECT IO between
-   402	 * an AMD GPU generated dma_buf and a file on any standard (VFS
-   403	 * supported) filesystem. Note that the backing-object associated with
-   404	 * the dma-buf is managed by this driver and thus this driver has full
-   405	 * control over the location and mappings.
-   406	 *
-   407	 * Returns:
-   408	 * 0 on success or a negative error code on failure.
-   409	 */
-   410	static int amdgpu_dma_buf_rw_file(struct dma_buf *dmabuf,
-   411	                                  struct dma_buf_rw_file *back)
- > 412	{
-   413		int ret = 0;
-   414		__u32 op = back->flags & DMA_BUF_RW_FLAGS_OP_MASK;
-   415		bool direct_io = back->flags & DMA_BUF_RW_FLAGS_DIRECT;
-   416		struct file *filp;
-   417	
-   418		if (op != DMA_BUF_RW_FLAGS_READ && op != DMA_BUF_RW_FLAGS_WRITE)
-   419			return -EINVAL;
-   420		if (direct_io) {
-   421			if (!PAGE_ALIGNED(back->file_offset) ||
-   422			    !PAGE_ALIGNED(back->buf_offset) ||
-   423			    !PAGE_ALIGNED(back->buf_len))
-   424				return -EINVAL;
-   425		}
-   426		if (!back->buf_len || back->buf_len > dmabuf->size ||
-   427			back->buf_offset >= dmabuf->size ||
-   428			back->buf_offset + back->buf_len > dmabuf->size)
-   429			return -EINVAL;
-   430		if (back->file_offset + back->buf_len < back->file_offset)
-   431			return -EINVAL;
-   432	
-   433		filp = fget(back->fd);
-   434		if (!filp)
-   435			return -EBADF;
-   436	
-   437		ret = amdgpu_rw_file(dmabuf, op == DMA_BUF_RW_FLAGS_READ,
-   438				     direct_io, filp, back->file_offset,
-   439				     back->buf_offset, back->buf_len);
-   440	
-   441		fput(filp);
-   442		return ret;
-   443	}
-   444	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Fangrui Song <i@maskray.me>
+
