@@ -1,140 +1,219 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C1823BCE4;
-	Tue,  3 Jun 2025 21:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642174C98;
+	Tue,  3 Jun 2025 22:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748987674; cv=none; b=KOF/jZi2qkRTwI7sKn59TnpR9fib86xH7ivjBkFTWYGFI/mzYdKgltmLy0fiB6zwKx01T7QMyJMLZaD2rG5W1dyNutOp/P9NwzsvdjhKUC0YtH1ei+uFOUgzJOueTsHqe4ddhyBH+0NMAz1BLKgMYIT3Z2XSIYAd0NFf6O888Rw=
+	t=1748988593; cv=none; b=Qbtc7iXiAwm9+xa9kkC+DqpeoXPOU3lhkwprKfrKd4rJtAbozmdo1lepKdmiXsZh8z8r69B6wxvoPtoKUjfa1Wr1f45RmUvdBOzVFZsYyEDsn4w9bUmGeb3rhv9aM4+/yFQIIs7sZX8/kD5Is1iK2HE+P7I6N2hu7COPTa+E8uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748987674; c=relaxed/simple;
-	bh=zZE3sqGdwymSsm8+G9zuai/4BA8hi6aRGnzezn7VdJ4=;
+	s=arc-20240116; t=1748988593; c=relaxed/simple;
+	bh=S0c47ppm0drVdO4jAjCQHwJvNJsQNG50GQKepxniEQo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QAznPn4jGw3PqLzfksQAfLE9ZdYGzXqa4dzYEc6OuLgItxZT3hUcUVmnSAilQUJ7GPY4nNfwIelLcktrxlrIPHxfJiEG+QeVuHu1cYyVjwU6ZbniE4Pg8h2SO+enVeGHdqKv/eJErK8wPLrqHdTgp0lirWeWxlk9MA+sHWdEB1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYClOzA/; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=fjUGcRGPiWb3dKCwD2kdX3MYLw8hO2zhq4XlB50QLo91UQLihTrGk9g5yRlkkyc6Y2e05qbge5It7OJJcMbBLS46hFMfLBmYObhA+LwHN/cSZYHtvgcuQAJjEjTNgNVSIB47LHUgJ7488q1LV+DztO+nfbp+e6R158S9FM85q1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RbjoMTCa; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYClOzA/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02954C4CEED;
-	Tue,  3 Jun 2025 21:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748987673;
-	bh=zZE3sqGdwymSsm8+G9zuai/4BA8hi6aRGnzezn7VdJ4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hYClOzA/a9OT+R6dBzOMSbI5dMErWu7R/kDsvMsAQYMoNrBrvaXnUHokvssDKwCRd
-	 nDA7KtQmADZUVCuu06x0sa/NtSgtwO8t97nhzCI5ly21Tpcnofs0eynZcSbnXYURA3
-	 X9gNoXcU7q9AmP8DY6ybe92149TdmM4e6TsEF9cQnHXCfmvbqOoESC6Du/Swh7iKnH
-	 tx3tPBjSmPXOmvv3FGOmY2SfLQSliUmzRmYHLzDlXXEYNlUGeM+Xg2Wh/t/2/TB+s4
-	 PN8by/Z6/Y3h6siNP2SpPNFG8GbLMxAtNqR2mnwWnTjrFF0OKIRUOcXDrvuvM5B0zl
-	 K66u0FRPFlRcw==
-Date: Tue, 3 Jun 2025 14:54:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-	Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in syscall
- wrappers
-Message-ID: <20250603215427.GB3631276@ax162>
-References: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RbjoMTCa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748988592; x=1780524592;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S0c47ppm0drVdO4jAjCQHwJvNJsQNG50GQKepxniEQo=;
+  b=RbjoMTCaMe0G4Qv+1L+j3wNSJQf3/AYqTjhhHAu/p2Vw6JfLXfbFWbTM
+   bLMyb8ojt0Jg89GqzjqOs6p2oyETqkO0rLND4/kcODf6UGVO1KW7Ez7qi
+   LUPWtld5QGaiEJNTL/Ku6PXKQ41bMfcH1G5YPTafhKbcDjTVFJ8eYP+8J
+   svk0e3sdvINgw6Up9139KVo7OCmgv58Smky42EtXBfttD5Q8Zdhb99oT/
+   SFofL53OkPR+JSWCJTsRP2fAzma5Qs/bG1soGkh9D4tFdf26v/9Wqokdv
+   nbZr9lG2q0g9OZ4uqacBGNG7iKVDKF3YibfTb4dS3Yi8JYRW4uzH5Gz46
+   A==;
+X-CSE-ConnectionGUID: Ia219uXrSS2uEDBzkm7Sig==
+X-CSE-MsgGUID: NrnRF8WfS++qZB2vJ2cipw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11453"; a="54840720"
+X-IronPort-AV: E=Sophos;i="6.16,207,1744095600"; 
+   d="scan'208";a="54840720"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 15:09:51 -0700
+X-CSE-ConnectionGUID: uXDwbOKqSaqNgJYSUub+BQ==
+X-CSE-MsgGUID: pmasmQ4sQfmqqaQU15SoOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,207,1744095600"; 
+   d="scan'208";a="168152739"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Jun 2025 15:09:46 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uMZpH-0002kP-3D;
+	Tue, 03 Jun 2025 22:09:43 +0000
+Date: Wed, 4 Jun 2025 06:08:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, nfraprado@collabora.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	angelogioacchino.delregno@collabora.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	Irving lin <irving-ch.lin@mediatek.corp-partner.google.com>
+Subject: Re: [1/5] clk: mt8189: Porting driver for clk
+Message-ID: <202506040506.Hrl72R0Q-lkp@intel.com>
+References: <20250602083624.1849719-1-irving-ch.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
+In-Reply-To: <20250602083624.1849719-1-irving-ch.lin@mediatek.com>
 
-On Tue, Jun 03, 2025 at 01:48:54PM +0200, Thomas Weiﬂschuh wrote:
-> The syscall wrappers use the "a0" register for two different register
-> variables, both the first argument and the return value. The "ret"
-> variable is used as both input and output while the argument register is
-> only used as input. Clang treats the conflicting input parameters as
-> undefined behaviour and optimizes away the argument assignment.
-> 
-> The code seems to work by chance for the most part today but that may
-> change in the future. Specifically clock_gettime_fallback() fails with
-> clockids from 16 to 23, as implemented by the upcoming auxiliary clocks.
-> 
-> Switch the "ret" register variable to a pure output, similar to the other
-> architectures' vDSO code. This works in both clang and GCC.
-> 
-> Link: https://lore.kernel.org/lkml/20250602102825-42aa84f0-23f1-4d10-89fc-e8bbaffd291a@linutronix.de/
-> Link: https://lore.kernel.org/lkml/20250519082042.742926976@linutronix.de/
-> Fixes: c6b99bed6b8f ("LoongArch: Add VDSO and VSYSCALL support")
-> Fixes: 18efd0b10e0f ("LoongArch: vDSO: Wire up getrandom() vDSO implementation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+Hi irving.ch.lin,
 
-This is definitely an odd interaction because of the register variables
-using the same value.
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.15 next-20250530]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
->  arch/loongarch/include/asm/vdso/getrandom.h    | 2 +-
->  arch/loongarch/include/asm/vdso/gettimeofday.h | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/vdso/getrandom.h b/arch/loongarch/include/asm/vdso/getrandom.h
-> index 48c43f55b039b42168698614d0479b7a872d20f3..a81724b69f291ee49dd1f46b12d6893fc18442b8 100644
-> --- a/arch/loongarch/include/asm/vdso/getrandom.h
-> +++ b/arch/loongarch/include/asm/vdso/getrandom.h
-> @@ -20,7 +20,7 @@ static __always_inline ssize_t getrandom_syscall(void *_buffer, size_t _len, uns
->  
->  	asm volatile(
->  	"      syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->  	: "r" (nr), "r" (buffer), "r" (len), "r" (flags)
->  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", "$t8",
->  	  "memory");
-> diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
-> index 88cfcf13311630ed5f1a734d23a2bc3f65d79a88..f15503e3336ca1bdc9675ec6e17bbb77abc35ef4 100644
-> --- a/arch/loongarch/include/asm/vdso/gettimeofday.h
-> +++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
-> @@ -25,7 +25,7 @@ static __always_inline long gettimeofday_fallback(
->  
->  	asm volatile(
->  	"       syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->  	: "r" (nr), "r" (tv), "r" (tz)
->  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->  	  "$t8", "memory");
-> @@ -44,7 +44,7 @@ static __always_inline long clock_gettime_fallback(
->  
->  	asm volatile(
->  	"       syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->  	: "r" (nr), "r" (clkid), "r" (ts)
->  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->  	  "$t8", "memory");
-> @@ -63,7 +63,7 @@ static __always_inline int clock_getres_fallback(
->  
->  	asm volatile(
->  	"       syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->  	: "r" (nr), "r" (clkid), "r" (ts)
->  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->  	  "$t8", "memory");
-> 
-> ---
-> base-commit: 546b1c9e93c2bb8cf5ed24e0be1c86bb089b3253
-> change-id: 20250603-loongarch-vdso-syscall-f585a99bea03
-> 
-> Best regards,
-> -- 
-> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/irving-ch-lin/clk-mt8189-Porting-driver-for-clk/20250603-105623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20250602083624.1849719-1-irving-ch.lin%40mediatek.com
+patch subject: [1/5] clk: mt8189: Porting driver for clk
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250604/202506040506.Hrl72R0Q-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250604/202506040506.Hrl72R0Q-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506040506.Hrl72R0Q-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/mediatek/clk-mt8189.c:22:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      22 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-bringup.c:18:43: error: incomplete definition of type 'struct platform_device'
+      18 |         clk_con = of_count_phandle_with_args(pdev->dev.of_node, "clocks",
+         |                                              ~~~~^
+   include/linux/of_platform.h:14:8: note: forward declaration of 'struct platform_device'
+      14 | struct platform_device;
+         |        ^
+   drivers/clk/mediatek/clk-bringup.c:22:24: error: incomplete definition of type 'struct platform_device'
+      22 |                 clk = of_clk_get(pdev->dev.of_node, i);
+         |                                  ~~~~^
+   include/linux/of_platform.h:14:8: note: forward declaration of 'struct platform_device'
+      14 | struct platform_device;
+         |        ^
+   drivers/clk/mediatek/clk-bringup.c:48:33: error: incomplete definition of type 'struct platform_device'
+      48 |         struct device_node *node = pdev->dev.of_node;
+         |                                    ~~~~^
+   include/linux/of_platform.h:14:8: note: forward declaration of 'struct platform_device'
+      14 | struct platform_device;
+         |        ^
+   drivers/clk/mediatek/clk-bringup.c:78:44: error: incomplete definition of type 'struct platform_device'
+      78 |         clk_probe = of_device_get_match_data(&pdev->dev);
+         |                                               ~~~~^
+   include/linux/of_platform.h:14:8: note: forward declaration of 'struct platform_device'
+      14 | struct platform_device;
+         |        ^
+>> drivers/clk/mediatek/clk-bringup.c:84:3: error: call to undeclared function 'dev_err'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      84 |                 dev_err(&pdev->dev,
+         |                 ^
+   drivers/clk/mediatek/clk-bringup.c:84:16: error: incomplete definition of type 'struct platform_device'
+      84 |                 dev_err(&pdev->dev,
+         |                          ~~~~^
+   include/linux/of_platform.h:14:8: note: forward declaration of 'struct platform_device'
+      14 | struct platform_device;
+         |        ^
+   drivers/clk/mediatek/clk-bringup.c:86:8: error: incomplete definition of type 'struct platform_device'
+      86 |                         pdev->name, r);
+         |                         ~~~~^
+   include/linux/of_platform.h:14:8: note: forward declaration of 'struct platform_device'
+      14 | struct platform_device;
+         |        ^
+>> drivers/clk/mediatek/clk-bringup.c:96:31: error: variable has incomplete type 'struct platform_driver'
+      96 | static struct platform_driver bring_up = {
+         |                               ^
+   drivers/clk/mediatek/clk-bringup.c:96:15: note: forward declaration of 'struct platform_driver'
+      96 | static struct platform_driver bring_up = {
+         |               ^
+>> drivers/clk/mediatek/clk-bringup.c:106:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     106 | module_platform_driver(bring_up);
+         | ^
+         | int
+>> drivers/clk/mediatek/clk-bringup.c:106:24: error: a parameter list without types is only allowed in a function definition
+     106 | module_platform_driver(bring_up);
+         |                        ^
+   10 errors generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-adsp.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-cam.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-mmsys.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-img.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-iic.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-bus.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-mdpsys.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-mfg.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt8189-scp.c:15:10: fatal error: 'dt-bindings/clock/mt8189-clk.h' file not found
+      15 | #include <dt-bindings/clock/mt8189-clk.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+..
+
+
+vim +22 drivers/clk/mediatek/clk-mt8189.c
+
+    21	
+  > 22	#include <dt-bindings/clock/mt8189-clk.h>
+    23	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
