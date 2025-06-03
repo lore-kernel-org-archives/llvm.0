@@ -1,100 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57791C3BEB;
-	Tue,  3 Jun 2025 21:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C1823BCE4;
+	Tue,  3 Jun 2025 21:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748987544; cv=none; b=UpWEx+Cl1jSwcZRMQfldi8pDK2CjPsQbqcFeZ1RQLv2fdoxbYbfRaNLlV1xrYyET+C3QJPRRyzNjisgPJ54hOOAJ0+e8hcfqWB0GfeQYKZNIVYpgsuN0MIZCFP21YkXfzVvFghwu6nEvUeNf4csG4zGLKHnLhxgOgRtQKo7wbQ8=
+	t=1748987674; cv=none; b=KOF/jZi2qkRTwI7sKn59TnpR9fib86xH7ivjBkFTWYGFI/mzYdKgltmLy0fiB6zwKx01T7QMyJMLZaD2rG5W1dyNutOp/P9NwzsvdjhKUC0YtH1ei+uFOUgzJOueTsHqe4ddhyBH+0NMAz1BLKgMYIT3Z2XSIYAd0NFf6O888Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748987544; c=relaxed/simple;
-	bh=Hd230v7UYvXFWhsu9Ll50VumM2+7mBmKgU8gOgz4uMU=;
+	s=arc-20240116; t=1748987674; c=relaxed/simple;
+	bh=zZE3sqGdwymSsm8+G9zuai/4BA8hi6aRGnzezn7VdJ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ry3M4tmTdFP/hgW1HzvuZrPF2yfv0u0hDTkZTH2zePr1TkOr9Y9yGs44U4g8DDP7dCSsnF/C0nerDRmVzrneiREajvKVCOre6A/Q+DWoTHOZ5an77wVeOoamZRJnUqX1zO8We/sJ4FHn4mJtK+H2pYbxhTL9KoG6Bi/mdrjBR98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SKNXXsHZ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=QAznPn4jGw3PqLzfksQAfLE9ZdYGzXqa4dzYEc6OuLgItxZT3hUcUVmnSAilQUJ7GPY4nNfwIelLcktrxlrIPHxfJiEG+QeVuHu1cYyVjwU6ZbniE4Pg8h2SO+enVeGHdqKv/eJErK8wPLrqHdTgp0lirWeWxlk9MA+sHWdEB1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYClOzA/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SKNXXsHZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1E3C4CEED;
-	Tue,  3 Jun 2025 21:52:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYClOzA/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02954C4CEED;
+	Tue,  3 Jun 2025 21:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748987544;
-	bh=Hd230v7UYvXFWhsu9Ll50VumM2+7mBmKgU8gOgz4uMU=;
+	s=k20201202; t=1748987673;
+	bh=zZE3sqGdwymSsm8+G9zuai/4BA8hi6aRGnzezn7VdJ4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SKNXXsHZZPss1CqcoHEt1E33Ml7MwCPs9Y6UkucIcgHQ8tgfi8hn8A17nNevgaFBb
-	 P/nuRMqz2epHfEypVkuLj+B5Y7H2gtJCyh2+pc73HTSruyOOSDDks6wyPTm8vG+Y9B
-	 Cze9mj3gQXchkrWY/gVNrB21yNaEx8LRHvzhmfq0Fff9UX88M3o7BtTbq+UzkMPOIX
-	 P0URTvafvziugJMadTz5djFv7hqmoD7L+O6ddzdD+26K7mAt/qWl/BNoIMBRL/o67c
-	 OkqkndZPea1do65OnYH4SKZieFCklxPLHdzauER6B6I9a4QY8fYdkoqzzEc5lLQv3C
-	 QsV8SVA8P/YkQ==
-Date: Tue, 3 Jun 2025 14:52:18 -0700
+	b=hYClOzA/a9OT+R6dBzOMSbI5dMErWu7R/kDsvMsAQYMoNrBrvaXnUHokvssDKwCRd
+	 nDA7KtQmADZUVCuu06x0sa/NtSgtwO8t97nhzCI5ly21Tpcnofs0eynZcSbnXYURA3
+	 X9gNoXcU7q9AmP8DY6ybe92149TdmM4e6TsEF9cQnHXCfmvbqOoESC6Du/Swh7iKnH
+	 tx3tPBjSmPXOmvv3FGOmY2SfLQSliUmzRmYHLzDlXXEYNlUGeM+Xg2Wh/t/2/TB+s4
+	 PN8by/Z6/Y3h6siNP2SpPNFG8GbLMxAtNqR2mnwWnTjrFF0OKIRUOcXDrvuvM5B0zl
+	 K66u0FRPFlRcw==
+Date: Tue, 3 Jun 2025 14:54:27 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Fangrui Song <i@maskray.me>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+	Theodore Ts'o <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] riscv: vdso: Exclude .rodata from the PT_DYNAMIC segment
-Message-ID: <20250603215218.GA3631276@ax162>
-References: <20250602-riscv-vdso-v1-1-0620cf63cff0@maskray.me>
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in syscall
+ wrappers
+Message-ID: <20250603215427.GB3631276@ax162>
+References: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250602-riscv-vdso-v1-1-0620cf63cff0@maskray.me>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
 
-On Mon, Jun 02, 2025 at 08:48:44PM -0700, Fangrui Song wrote:
-> .rodata is implicitly included in the PT_DYNAMIC segment due to
-> inheriting the segment of the preceding .dynamic section (in both GNU ld
-> and LLD).  When the .rodata section's size is not a multiple of 16
-> bytes on riscv64, llvm-readelf will report a "PT_DYNAMIC dynamic table
-> is invalid" warning.  Note: in the presence of the .dynamic section, GNU
-> readelf and llvm-readelf's -d option decodes the dynamic section using
-> the section.
+On Tue, Jun 03, 2025 at 01:48:54PM +0200, Thomas Weiﬂschuh wrote:
+> The syscall wrappers use the "a0" register for two different register
+> variables, both the first argument and the return value. The "ret"
+> variable is used as both input and output while the argument register is
+> only used as input. Clang treats the conflicting input parameters as
+> undefined behaviour and optimizes away the argument assignment.
 > 
-> This issue arose after commit 8f8c1ff879fab60f80f3a7aec3000f47e5b03ba9
-> ("riscv: vdso.lds.S: remove hardcoded 0x800 .text start addr"), which
-> placed .rodata directly after .dynamic by removing .eh_frame.
+> The code seems to work by chance for the most part today but that may
+> change in the future. Specifically clock_gettime_fallback() fails with
+> clockids from 16 to 23, as implemented by the upcoming auxiliary clocks.
 > 
-> This patch resolves the implicit inclusion into PT_DYNAMIC by explicitly
-> specifying the :text output section phdr.
+> Switch the "ret" register variable to a pure output, similar to the other
+> architectures' vDSO code. This works in both clang and GCC.
 > 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2093
-> Signed-off-by: Fangrui Song <i@maskray.me>
+> Link: https://lore.kernel.org/lkml/20250602102825-42aa84f0-23f1-4d10-89fc-e8bbaffd291a@linutronix.de/
+> Link: https://lore.kernel.org/lkml/20250519082042.742926976@linutronix.de/
+> Fixes: c6b99bed6b8f ("LoongArch: Add VDSO and VSYSCALL support")
+> Fixes: 18efd0b10e0f ("LoongArch: vDSO: Wire up getrandom() vDSO implementation")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+This is definitely an odd interaction because of the register variables
+using the same value.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  arch/riscv/kernel/vdso/vdso.lds.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/loongarch/include/asm/vdso/getrandom.h    | 2 +-
+>  arch/loongarch/include/asm/vdso/gettimeofday.h | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/vdso.lds.S
-> index abc69cda0445b1f500a89b47deefa31349103f08..62e0410f69f09e2bbf27101c000d604193f525cb 100644
-> --- a/arch/riscv/kernel/vdso/vdso.lds.S
-> +++ b/arch/riscv/kernel/vdso/vdso.lds.S
-> @@ -30,7 +30,7 @@ SECTIONS
->  		*(.data .data.* .gnu.linkonce.d.*)
->  		*(.dynbss)
->  		*(.bss .bss.* .gnu.linkonce.b.*)
-> -	}
-> +	}						:text
+> diff --git a/arch/loongarch/include/asm/vdso/getrandom.h b/arch/loongarch/include/asm/vdso/getrandom.h
+> index 48c43f55b039b42168698614d0479b7a872d20f3..a81724b69f291ee49dd1f46b12d6893fc18442b8 100644
+> --- a/arch/loongarch/include/asm/vdso/getrandom.h
+> +++ b/arch/loongarch/include/asm/vdso/getrandom.h
+> @@ -20,7 +20,7 @@ static __always_inline ssize_t getrandom_syscall(void *_buffer, size_t _len, uns
 >  
->  	.note		: { *(.note.*) }		:text	:note
+>  	asm volatile(
+>  	"      syscall 0\n"
+> -	: "+r" (ret)
+> +	: "=r" (ret)
+>  	: "r" (nr), "r" (buffer), "r" (len), "r" (flags)
+>  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", "$t8",
+>  	  "memory");
+> diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
+> index 88cfcf13311630ed5f1a734d23a2bc3f65d79a88..f15503e3336ca1bdc9675ec6e17bbb77abc35ef4 100644
+> --- a/arch/loongarch/include/asm/vdso/gettimeofday.h
+> +++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
+> @@ -25,7 +25,7 @@ static __always_inline long gettimeofday_fallback(
 >  
+>  	asm volatile(
+>  	"       syscall 0\n"
+> -	: "+r" (ret)
+> +	: "=r" (ret)
+>  	: "r" (nr), "r" (tv), "r" (tz)
+>  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+>  	  "$t8", "memory");
+> @@ -44,7 +44,7 @@ static __always_inline long clock_gettime_fallback(
+>  
+>  	asm volatile(
+>  	"       syscall 0\n"
+> -	: "+r" (ret)
+> +	: "=r" (ret)
+>  	: "r" (nr), "r" (clkid), "r" (ts)
+>  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+>  	  "$t8", "memory");
+> @@ -63,7 +63,7 @@ static __always_inline int clock_getres_fallback(
+>  
+>  	asm volatile(
+>  	"       syscall 0\n"
+> -	: "+r" (ret)
+> +	: "=r" (ret)
+>  	: "r" (nr), "r" (clkid), "r" (ts)
+>  	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+>  	  "$t8", "memory");
 > 
 > ---
-> base-commit: 1a3f6980889df3fc90ad3e4a525061d2c138adba
-> change-id: 20250602-riscv-vdso-13efdee34a24
+> base-commit: 546b1c9e93c2bb8cf5ed24e0be1c86bb089b3253
+> change-id: 20250603-loongarch-vdso-syscall-f585a99bea03
 > 
 > Best regards,
 > -- 
-> Fangrui Song <i@maskray.me>
+> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 > 
