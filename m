@@ -1,139 +1,149 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F3C3FB1B
-	for <llvm@lists.linux.dev>; Wed,  4 Jun 2025 01:51:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CBD2144C4;
+	Wed,  4 Jun 2025 03:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749001898; cv=none; b=eqdx1/phsopYG2iKSLcOre58smvjNLJ1/de75u7jw7rv/iyVFaM6D0wRckGDg+yvv0xjZuhQHkTDku0vuiyJ4TJDILvxqAucHH6ZVb5ywzE15fBEZbPicP7nnwjVJo8SStsigTNUKpzLtuMkbmVTgtdyM6gjJyP8hsC2CwwzlVo=
+	t=1749006207; cv=none; b=CWj6J4EhymKBOivxOo551xYO4HuRjS9eg8kdKSpG9XsfeAC0DrUGQaf5dm1F0y/oreZoEglw3rmCnjx77bSgCzamBCdRX1dM/cf8mUzqqcqYOxRN3xI2L7ZpkmIw9ncPrnCJ4cHZdPHv3cEkXa1QCMi92IW6o3teTOx/r0GtVTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749001898; c=relaxed/simple;
-	bh=DjrbL93m1FlADAq7GP6a6Oe+jV5ga9pRcrA1cKeDBE8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=egKvFwD0+wk5j8JRVmWDqybHbXJi6N7a3XimE/gR4v7KIB1RFFkWMYtpBvrL4dQAZCYbsOww3mcRllOw05lvBCnYG2EjqzdMxTtvjaEdUvW2gItBSEhAamONn0tVaZp6kr+/CEFP/e+18It4g6bbTJDsKN+7IoDZDYALrOiWoMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CaIYC9zf; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1749006207; c=relaxed/simple;
+	bh=Lc7q5SYnuaN72jkUB0tCM1UzpbvcjvERtfpqMepqY7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=b4SbHXqv0EwIaNq1LKqpxgOB1pOVn01izUjG+Q8UVhoZXI2Pxg3frufQCiWuQobpJXVeK4feSPzbIZ5SMBXq66H9/dsPRFukpyK5nbvqq8X/TpvDVMzIlj9CyRgKnjTqFUJSVv9aJRt5/3ZSAVxVcgvr6wn5AbnheUv6gUVWc78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LEWZFzbg; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CaIYC9zf"
-Message-ID: <f661db68-4271-4fea-8309-47aa83c1078a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749001894;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uNkTgxFuYHAfdqRxN2GV5weXMJ1rFGnyltVUWaIL2Ug=;
-	b=CaIYC9zfnmLYSixTyDznsJnXDHRzhcrJoS5Zl22p2NS+d/1RH03HmjL2ZLv96zA4tAi1Da
-	qCHFyyMAeDH9hyyboHgXNhZOOElavcy0XmyHfP40RJ+mytNbNOxCJwEzXMmmWQKv9X1aQ4
-	PeFR99OC4LWtNtEWw/lwKxr9oTtZ/4k=
-Date: Wed, 4 Jun 2025 09:51:17 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LEWZFzbg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749006205; x=1780542205;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Lc7q5SYnuaN72jkUB0tCM1UzpbvcjvERtfpqMepqY7A=;
+  b=LEWZFzbgeQ7QjlDU0SK3DwxlTbOR3CTzXOiEXUjHUCOfmmnU2otnczhX
+   55Bcfiep+n+DmgPr1mNiu09g3HXADxFbtE8APGSJwa3EaynDHSionVSwt
+   tcs6Jxwiu/mh7FChntyggXlMyrUJ90RRkeaip7m/50qjvYqeDeU389cj4
+   RsT+pGrYedfCTpv4aJjn+C5j3R/UWgZ5qY43cyikqAgrePN2D8qGXdo2M
+   S0FVosE2O58T6/pCU4KfK3dHB+l3Y0WCn9Q0E/RyPKRezi1MTMMjEBx4v
+   OvrSTsnAo/h5Jd2W6WaT4ioL1BMt5sH+FvwQ36TpTPFRsS468/s2i1LDP
+   w==;
+X-CSE-ConnectionGUID: LiySJaPAQxmdSA/1h+Fbxw==
+X-CSE-MsgGUID: gQFKjqh8RUKGcN4iMKNxwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11453"; a="38700352"
+X-IronPort-AV: E=Sophos;i="6.16,208,1744095600"; 
+   d="scan'208";a="38700352"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 20:03:23 -0700
+X-CSE-ConnectionGUID: BDYuDxPVSOae2/n1SQQpqg==
+X-CSE-MsgGUID: cz4Q63VaSqe7sYSgq36gwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,208,1744095600"; 
+   d="scan'208";a="145066014"
+Received: from igk-lkp-server01.igk.intel.com (HELO b69e6467d450) ([10.211.3.150])
+  by orviesa009.jf.intel.com with ESMTP; 03 Jun 2025 20:03:22 -0700
+Received: from kbuild by b69e6467d450 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uMePP-0001cI-1M;
+	Wed, 04 Jun 2025 03:03:19 +0000
+Date: Wed, 4 Jun 2025 11:03:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [frederic-dynticks:kthread/core 2/23] ld.lld: error: duplicate
+ symbol: housekeeping_flags
+Message-ID: <202506041147.p4x5Ttp4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in syscall
- wrappers
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Xi Ruoyao <xry111@xry111.site>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, stable@vger.kernel.org
-References: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yanteng Si <si.yanteng@linux.dev>
-In-Reply-To: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-在 6/3/25 7:48 PM, Thomas WeiÃschuh 写道:
-> The syscall wrappers use the "a0" register for two different register
-> variables, both the first argument and the return value. The "ret"
-> variable is used as both input and output while the argument register is
-> only used as input. Clang treats the conflicting input parameters as
-> undefined behaviour and optimizes away the argument assignment.
-> 
-> The code seems to work by chance for the most part today but that may
-> change in the future. Specifically clock_gettime_fallback() fails with
-> clockids from 16 to 23, as implemented by the upcoming auxiliary clocks.
-> 
-> Switch the "ret" register variable to a pure output, similar to the other
-> architectures' vDSO code. This works in both clang and GCC.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git kthread/core
+head:   e8fa9a06cde680668da6763227a83c50ddac8b6b
+commit: 3cabc4d30cdfa8b518ced3c6b8901e5905bc8489 [2/23] sched/isolation: Remove housekeeping static key
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250604/202506041147.p4x5Ttp4-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250604/202506041147.p4x5Ttp4-lkp@intel.com/reproduce)
 
-I don't know Clang and GCC, but I think it's great to do so.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506041147.p4x5Ttp4-lkp@intel.com/
 
-Reviewed-by: Yanteng Si <si.yanteng@linux.dev>
+All errors (new ones prefixed by >>):
 
-Thanks,
-Yanteng
-> 
-> Link: https://lore.kernel.org/lkml/20250602102825-42aa84f0-23f1-4d10-89fc-e8bbaffd291a@linutronix.de/
-> Link: https://lore.kernel.org/lkml/20250519082042.742926976@linutronix.de/
-> Fixes: c6b99bed6b8f ("LoongArch: Add VDSO and VSYSCALL support")
-> Fixes: 18efd0b10e0f ("LoongArch: vDSO: Wire up getrandom() vDSO implementation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->   arch/loongarch/include/asm/vdso/getrandom.h    | 2 +-
->   arch/loongarch/include/asm/vdso/gettimeofday.h | 6 +++---
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/vdso/getrandom.h b/arch/loongarch/include/asm/vdso/getrandom.h
-> index 48c43f55b039b42168698614d0479b7a872d20f3..a81724b69f291ee49dd1f46b12d6893fc18442b8 100644
-> --- a/arch/loongarch/include/asm/vdso/getrandom.h
-> +++ b/arch/loongarch/include/asm/vdso/getrandom.h
-> @@ -20,7 +20,7 @@ static __always_inline ssize_t getrandom_syscall(void *_buffer, size_t _len, uns
->   
->   	asm volatile(
->   	"      syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->   	: "r" (nr), "r" (buffer), "r" (len), "r" (flags)
->   	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", "$t8",
->   	  "memory");
-> diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
-> index 88cfcf13311630ed5f1a734d23a2bc3f65d79a88..f15503e3336ca1bdc9675ec6e17bbb77abc35ef4 100644
-> --- a/arch/loongarch/include/asm/vdso/gettimeofday.h
-> +++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
-> @@ -25,7 +25,7 @@ static __always_inline long gettimeofday_fallback(
->   
->   	asm volatile(
->   	"       syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->   	: "r" (nr), "r" (tv), "r" (tz)
->   	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->   	  "$t8", "memory");
-> @@ -44,7 +44,7 @@ static __always_inline long clock_gettime_fallback(
->   
->   	asm volatile(
->   	"       syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->   	: "r" (nr), "r" (clkid), "r" (ts)
->   	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->   	  "$t8", "memory");
-> @@ -63,7 +63,7 @@ static __always_inline int clock_getres_fallback(
->   
->   	asm volatile(
->   	"       syscall 0\n"
-> -	: "+r" (ret)
-> +	: "=r" (ret)
->   	: "r" (nr), "r" (clkid), "r" (ts)
->   	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->   	  "$t8", "memory");
-> 
-> ---
-> base-commit: 546b1c9e93c2bb8cf5ed24e0be1c86bb089b3253
-> change-id: 20250603-loongarch-vdso-syscall-f585a99bea03
-> 
-> Best regards,
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_sched.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_proto_ah_esp.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_nfct.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_proto_udp.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_proto_sctp.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_est.o:(.bss+0x8)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_xmit.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_proto_tcp.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_pe.o:(.bss+0x0)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_proto.o:(.bss+0x100)
+--
+>> ld.lld: error: duplicate symbol: housekeeping_flags
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_conn.o:(housekeeping_flags)
+   >>> defined at isolation.h:28 (include/linux/sched/isolation.h:28)
+   >>>            net/netfilter/ipvs/ip_vs_ctl.o:(.bss+0x1000)
+..
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
