@@ -1,162 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E30151C5A;
-	Wed,  4 Jun 2025 11:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7414D28D8ED;
+	Wed,  4 Jun 2025 12:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749037771; cv=none; b=W5C6hCwgyps8d4KNKmGq64neDdzTL5SLhT1XaY2JoY+IUGM2xZBCx3zpnAstFTHYi7Cbflm+PVnFS8BGAMOWyenM0MzTESnl4TAe4s5h8Fc9jfGpEAYltfmCP9fCcqrsXIeOcb23Oik0417chX8vE2+oMvLBd5TSzRXlI07Az4Y=
+	t=1749039876; cv=none; b=mDhi+JiP/F6Ioj05YEu1kEAAmG6BDzASR0NUGwTl2+8UYck+qMXiNUVkqnlk3BLT+5pQ18cSX3Yk5dxkvr0aYQtHdyHTd46hNABDJ+9kfn3MusJLyqBO7Kuo7BgLOFwt1SfrjjPoqIGdxquEcQNI2bOBai9+k5kahILI1QgwRyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749037771; c=relaxed/simple;
-	bh=fb4lRrc5lL2UWvGPozqwLNQGjc6zQAOjqCRgSjVn+bE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bSGnwVirwya1zvFmrvjjh1c7QJcy3V4l20A4eJt1i6W+19813BfDZYqXOLfWhSjbpx29dOM37nBqfBSC884bW3piTvJgCtHAoltFJ/Y5p+lepXaa+/1rQwwDtqjkO//YA3qN8VWXDxi2duPJIuF6op26c7XTMBzV/gHnTEamDvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQXa/58F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749039876; c=relaxed/simple;
+	bh=X5HoV4A18Es6cQsPxWdpN/6HMNSRex6GTYKxJ1FSTdI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u0w38aqnCbCE/fPCJJr8/eCDD0GhqXkFuFDS0i+Ilrs5eEI3/eWPHzOgh9dLfLh2oDjDatAVDUUzowwD1/6dJeMHNRLDLONIQUDH422tNxqaAAKo51vmDlGwWea0/bPzaekQB/5xyOvk7RkHezZB+BcE6AS5Z66glNOKHnCdIZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmpgWISn; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQXa/58F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255D1C4CEE7;
-	Wed,  4 Jun 2025 11:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749037771;
-	bh=fb4lRrc5lL2UWvGPozqwLNQGjc6zQAOjqCRgSjVn+bE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WQXa/58FYN8DcRXvajo324X+NZV2qs+xb5qYBG4+LuM4KRMRQwv1mTYJfijnLFs3e
-	 oOHq7qcbHxjLjGzwblY8TCZY0VDBRuKEf9a8vZBMIpMLkk5HFdGIRynJ1D5IZcSt28
-	 Fd+Y3z+/fLOmy/yrpg27zd3zlDZ+SvytmdMAhlPmLpJxiOSduPvHeakzpG8TRPsFtY
-	 iMmJmA8hWlYTKzRCrmIXFDdbsEHyVTYQorUYIVxxiXEFnMnNuWRCtLyM42g71FUqqU
-	 JvE2PZN2wa4LWdbSSljNStt+rHakrPG1AEi8WrMboWxwMLKzpCGIu+2ryf42Z8n1sG
-	 FAATnRFis3AdQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	johannes.berg@intel.com,
-	miriam.rachel.korenblit@intel.com,
-	emmanuel.grumbach@intel.com,
-	yedidya.ben.shimol@intel.com,
-	shaul.triebitz@intel.com,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.15 2/9] wifi: iwlwifi: mld: Work around Clang loop unrolling bug
-Date: Wed,  4 Jun 2025 07:49:15 -0400
-Message-Id: <20250604114923.208380-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604114923.208380-1-sashal@kernel.org>
-References: <20250604114923.208380-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmpgWISn"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-312f53d0609so189804a91.1;
+        Wed, 04 Jun 2025 05:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749039875; x=1749644675; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X5HoV4A18Es6cQsPxWdpN/6HMNSRex6GTYKxJ1FSTdI=;
+        b=KmpgWISnG0vuacOBzsuZxqGI5dsogH/IgIvONxs9QuW5e1L9hKPJaOA5AnGdRbudJ9
+         qE/a2ZvODQ+/tOsNObb5YO7utXjifP5xXqkInod/n0WJhM41sXivpKL8MSuUTRmPXqjC
+         yWSkJFA+7jWN/sOKO/vgUWyeRyqTqYHpBA7QImRi3yyzcs/xwUHopIxQu6lA5g6SPGrk
+         EZu7rgmfm+wcps5WZ8yc5VH+aS2ju0uemo6vH1lAm4fTssTNLlU9YZ2f+gBoJaTgiNLA
+         u6IuQOfk2KF9MqrflT+g5pcefejPFSBAFXZg3unhf3g8RmdfMlC9bwtalITIlRx8HcS9
+         hjgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749039875; x=1749644675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X5HoV4A18Es6cQsPxWdpN/6HMNSRex6GTYKxJ1FSTdI=;
+        b=f4pqPufIY9hk6FolWA1/XUntJ+JwCQCKyIqEs0QYDrO1X/OpkAuCvSFdhnVgqB4r5v
+         kklG4Z4ccvKPyWylfaEYpqhXsalaEPJFETmokrmX1okUZRY7fFlHEaNS3gnwDUX9czmx
+         chZj6Q7rMEzY8wh6q/P/SVKg3H5QFD+LW8pnY93ZEwOHhU+hk7B6G14Lx8hI6xtju+5F
+         9XRlcbD0WDJlhjMHTO8EByUl1h8JBmISrCnDqrBEoj3quGwLQQPp143opJ9wXkNarJiD
+         bew8hj2j++fR4vC0h1U8vNv6gcAKIiV7EOWmRC9uGA2Db7Wm8TKTxv+66PAeYTOmfef2
+         tGBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXSzemh49tPfBQYUT+AxLANz455+ru8TcwbEqIqhc2Yhf5REvZ8IQJJG0sU7kYsl+kkSzkd@lists.linux.dev
+X-Gm-Message-State: AOJu0YzhtiG3lz0lRfg0GPdERLmB3eOe2JcDuVlsgW9jJgxVPApAe7eB
+	owl1//OHC3OfPA+SI9nb3Nb4/w79BsEDPbps+m3DiWjffnbknMOzzvZE40MkKMnlmBXIzHgQvQP
+	TVFinzi4AJg1skq3XkqRT2xHKVB74obw=
+X-Gm-Gg: ASbGncspp5dIesUv8iWyTyCPuH35YmSIIdnNEwyoRJIELc75wUD+1GHnO2Pqn6xbXN5
+	uYBKDgfIGTRVtXDad+AlzAWCnmFRJpDwT5zCheuswf/SBa4zkKSwQSCVGZvL+tzfpYptQuC7eFf
+	fQM4i3nBmvR6bAu7sN8NRZMsQeRBqSpPj9
+X-Google-Smtp-Source: AGHT+IErLwtGSYQMv8xDY353kuF+fsT1I4lfY5UDw62Z+Lk5yJh2j12Usxk6xWco51Ijg6BndcQq9Kq/vDbhiZClOm0=
+X-Received: by 2002:a17:90b:1b42:b0:312:ec:411a with SMTP id
+ 98e67ed59e1d1-3130cd3ce2dmr1484250a91.3.1749039874684; Wed, 04 Jun 2025
+ 05:24:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15
-Content-Transfer-Encoding: 8bit
+References: <20250604114923.208380-1-sashal@kernel.org> <20250604114923.208380-2-sashal@kernel.org>
+In-Reply-To: <20250604114923.208380-2-sashal@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 4 Jun 2025 14:24:22 +0200
+X-Gm-Features: AX0GCFsrP9iFTYtJTClz9rDnEXWcTEpyeBtPkQnKTXB_q9gbKp89nIFoYXOWykw
+Message-ID: <CANiq72n8oZGOkUVU4MAjDb0W+OwX8PuEykA_2Z=DY+onvj-T8A@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.15 2/9] wifi: iwlwifi: mld: Work around Clang
+ loop unrolling bug
+To: Sasha Levin <sashal@kernel.org>
+Cc: patches@lists.linux.dev, stable@vger.kernel.org, 
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, johannes.berg@intel.com, 
+	miriam.rachel.korenblit@intel.com, emmanuel.grumbach@intel.com, 
+	yedidya.ben.shimol@intel.com, shaul.triebitz@intel.com, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Kees Cook <kees@kernel.org>
+On Wed, Jun 4, 2025 at 1:49=E2=80=AFPM Sasha Levin <sashal@kernel.org> wrot=
+e:
+>
+> Now let me analyze the similar commits to understand the backporting
 
-[ Upstream commit 368556dd234dc4a506a35a0c99c0eee2ab475c77 ]
+I think this ate the newlines from the AI... :)
 
-The nested loop in iwl_mld_send_proto_offload() confuses Clang into
-thinking there could be a final loop iteration past the end of the
-"nsc" array (which is only 4 entries). The FORTIFY checking in memcmp()
-(via ipv6_addr_cmp()) notices this (due to the available bytes in the
-out-of-bounds position of &nsc[4] being 0), and errors out, failing
-the build. For some reason (likely due to architectural loop unrolling
-configurations), this is only exposed on ARM builds currently. Due to
-Clang's lack of inline tracking[1], the warning is not very helpful:
-
-include/linux/fortify-string.h:719:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-  719 |                         __read_overflow();
-      |                         ^
-1 error generated.
-
-But this was tracked down to iwl_mld_send_proto_offload()'s
-ipv6_addr_cmp() call.
-
-An upstream Clang bug has been filed[2] to track this. For now fix the
-build by explicitly bounding the inner loop by "n_nsc", which is what
-"c" is already limited to.
-
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2076
-Link: https://github.com/llvm/llvm-project/pull/73552 [1]
-Link: https://github.com/llvm/llvm-project/issues/136603 [2]
-Link: https://lore.kernel.org/r/20250421204153.work.935-kees@kernel.org
-Signed-off-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-Now let me analyze the similar commits to understand the backporting
-patterns: **YES** This commit should be backported to stable kernel
-trees. ## Extensive Analysis ### Code Change Analysis The commit
-modifies a single line in `drivers/net/wireless/intel/iwlwifi/mld/d3.c`,
-changing: ```c for (j = 0; j < c; j++) ``` to: ```c for (j = 0; j <
-n_nsc && j < c; j++) ``` This change adds an explicit upper bound
-(`n_nsc`) to prevent the loop iterator `j` from exceeding the size of
-the `nsc` array (which has 4 entries). ### Why This Should Be Backported
-**1. Build Failure Fix**: This commit fixes a concrete build failure
-when using Clang compiler with ARM architecture and
-`CONFIG_FORTIFY_SOURCE=y`. Build failures are critical issues that
-prevent kernel compilation entirely. **2. Compiler Support**: The fix
-enables Clang compilation support for the iwlwifi driver, which is
-important for kernel diversity and CI/build systems that use Clang. **3.
-Minimal Risk**: The change is extremely small and contained: - Only adds
-an additional bounds check (`j < n_nsc`) - No functional logic changes -
-The added check is logically correct and safe - Cannot introduce
-regressions as it only makes the loop more restrictive **4. Pattern
-Matches "YES" Commits**: This fix aligns closely with similar commits
-marked as "YES": - **Similar Commit #2** (wil6210 fortify warnings):
-Fixed FORTIFY warnings with struct_group, minimal risk - **Similar
-Commit #3** (mlxsw LLVM workaround): Explicitly worked around LLVM/Clang
-compiler issues - **Similar Commit #4** (ath9k fortify warnings): Fixed
-fortify warnings with struct_group - **Similar Commit #5** (plfxlc clang
-fortify): Fixed clang-specific fortify warning **5. Architecture-
-Specific but Affects Real Users**: While currently only exposed on ARM
-builds with Clang, this affects legitimate build configurations used in
-production environments. **6. No Side Effects**: The fix purely
-constrains loop bounds without changing algorithmic behavior. The
-original code was functionally correct but triggered false positive
-compiler analysis. ### Technical Justification **Bug Analysis**: Clang's
-loop unrolling optimization incorrectly analyzes that the variable `c`
-could reach 4, making the inner loop potentially access `nsc[4]` (out of
-bounds). The kernel's FORTIFY_SOURCE checking detects this theoretical
-overflow and fails the build. **Fix Correctness**: The added bound `j <
-n_nsc` is mathematically correct since: - `n_nsc` represents the actual
-size of the `nsc` array (4 entries) - `c` is already bounded by `n_nsc`
-in the outer loop condition - Adding `j < n_nsc` makes this constraint
-explicit to the compiler **No Functional Impact**: Since `c` never
-exceeds `n_nsc` in correct execution, the additional check `j < n_nsc`
-never actually triggers - it exists purely to satisfy the compiler's
-static analysis. ### Comparison to "NO" Reference Unlike **Similar
-Commit #1** (iwlwifi fall-through warnings) which was marked "NO"
-because it only addressed code style/warning improvements without fixing
-actual bugs, this commit fixes a real build failure that prevents
-compilation. ### Conclusion This is a textbook example of a good stable
-backport candidate: it fixes a concrete build issue with minimal risk,
-follows established patterns for compiler workarounds, and has zero
-functional impact on runtime behavior. The fix enables continued Clang
-compiler support for a critical wireless driver without introducing any
-regression risk.
-
- drivers/net/wireless/intel/iwlwifi/mld/d3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/mld/d3.c b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-index ee99298eebf59..7ce01ad3608e1 100644
---- a/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mld/d3.c
-@@ -1757,7 +1757,7 @@ iwl_mld_send_proto_offload(struct iwl_mld *mld,
- 
- 		addrconf_addr_solict_mult(&wowlan_data->target_ipv6_addrs[i],
- 					  &solicited_addr);
--		for (j = 0; j < c; j++)
-+		for (j = 0; j < n_nsc && j < c; j++)
- 			if (ipv6_addr_cmp(&nsc[j].dest_ipv6_addr,
- 					  &solicited_addr) == 0)
- 				break;
--- 
-2.39.5
-
+Cheers,
+Miguel
