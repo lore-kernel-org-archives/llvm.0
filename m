@@ -1,157 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E67E28F53F;
-	Wed,  4 Jun 2025 14:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8623BBE67;
+	Wed,  4 Jun 2025 14:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749045952; cv=none; b=t50tOZu0ftmpvjlU5xIcBOwBYWktx9axzSXQ+f8DdEC6vSpdm38M0wOxsMjLVGyaAlPU1tvoecxORffrbVbqBMHzo9x37AZsZu4F17z6oY/2ET+/FLTD0uGL9+aT3iG9gzQ3SXzxZ+e3ONJVemcRYP8x4uQ6NvwZaypDPXr2SJA=
+	t=1749047469; cv=none; b=V267i9as7ub9LUQaUoLx9qh/CYqIm6dvkjjpg4S5HNiTdl0yN3+aqi434kEbmaTT5Gmjn0JFqrLL0RkZ50lDKe+KXo5MQcqGUsbs9BT5rRwHD7+dKOUrsKGW4SA3Z6BfUtYpztnsZpiv/GcU4VDHREgeyAlTPnK8H4YZiEWfY8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749045952; c=relaxed/simple;
-	bh=IIEwGMNU/iJrUu7/3CwdVOUWTk7lAwMeHyQc/py9Ccg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UPkMg4FOtMNv0UrQPYHkfA5YROY5kzo8s5otfIOLlnwdT/Pxd6+chJSrrKCihokwCorBZrGOZRHUY7f6iy6OVKEK4BUDIjdeTe/0/92hwGTzDBgsNBW578e3Ax0rCS9RBLx9+qR2o6CpFueZU1RabN2HiZKk95aG2WT2P1479D4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXv44fZ0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749047469; c=relaxed/simple;
+	bh=szGzg1VWdLNaQhzap8mRj1Cx9myok4IZd5/gZyF9eLY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=czIUJzm5oBDF39E5vHrxhknAN0lbGz8cnTS/Y6OMvyJkZ/Xtg4xPDUtDrDmF/5p2qQzGZjDko9988tobkeEp8KdxNQnROozl+uQFt/BJIC+HDDPNJMWxpne+KyD1M5J1f3dNWdx1aQCLQlefcP+oPiU+uXGj9cbhM5bLQ0NSpqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=R+xeHyZt; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXv44fZ0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6682C4CEE7;
-	Wed,  4 Jun 2025 14:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749045951;
-	bh=IIEwGMNU/iJrUu7/3CwdVOUWTk7lAwMeHyQc/py9Ccg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YXv44fZ0Sr4s/P77xwDWM3bl+et2NQKht5j2jXoEX7yG3Eb/UtkVmKaiHHWaUB9v8
-	 pJXXUkBke75VXdJPUmIfxipVu2+83CiMConF36hFMxRKyHRv0QCZA+JIwmG3dQRuVA
-	 8kZdxz6G/aiqVvfTX1Aq0GmkXa7fPXDY6Qt39+1VB7XnuKf6KyD28IGbCpp50cL2XD
-	 lsqvyCGCnbs5z+dx7GYJ6ZxRvM4Y+jmot4hjUu7Y2/vdmkEBUq/PdCfg8GdtunYAd2
-	 +WCBSbOFnVHpLgVnXQByT23u1jd31PlAqg5NZbDroRwqAgNwoduwYrZong1X+jdoQx
-	 PnsL1rGIH027A==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-602346b1997so11826169a12.3;
-        Wed, 04 Jun 2025 07:05:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUTfUsOcypZkcZxWZ9wpSGkAck8ILHQXSjJA2fAzewiphoQWX9tDq27N8vNCPdu8RPP3sVmUNZFl7tA@lists.linux.dev, AJvYcCVv1/rVMNUQkKR7xoGL8ZNQA4VTcXN7Jpdh0TdC+5+zqgQnt5QCGLq9rZf+gwS1vvGr7via@lists.linux.dev
-X-Gm-Message-State: AOJu0YyrQMFV8galdwVX4wR926HALFBORJdbgquVNCy1x2ivNLsMuCkz
-	Rwsq1XO8L827ChEUakOW5toGWweDKpsq5y1BB4b8pvg8ixb2SbIr63oXVJbkGzIMMfqdqd6tqr4
-	wM9uihDtEdpCpXCDmXZDzFdCsio6W4dE=
-X-Google-Smtp-Source: AGHT+IHzLrFJ0tDCiOZ2aUxsctyLKXzDo7JOd/wEZA10wfKlrAyYi5vIntUo8b7ssgCiiur5CYeoKuJbXK6hT8b9IDw=
-X-Received: by 2002:a05:6402:2351:b0:607:1973:2082 with SMTP id
- 4fb4d7f45d1cf-6071973209cmr498604a12.11.1749045950321; Wed, 04 Jun 2025
- 07:05:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="R+xeHyZt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1749047460;
+	bh=BN1yZiR+/rn2XlLp429yT8gjgjOJLYeI4IJXSvPwvg0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=R+xeHyZtmJ35nzniBZYxy1o5fen5ftCDTSL9p2CTl2fdc3BAmsCAoF+KqluKg1g0g
+	 8mqtABzO3jFZwy1KO7ys+jf8BWDX2uYWUYsv6VuITEtHUm/mznuL383T01T2e44pHY
+	 SJLxYop6m+LUrn4tGhxE/B1o9x68EgAPA/GHWxJg=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id AA7A865F62;
+	Wed,  4 Jun 2025 10:30:57 -0400 (EDT)
+Message-ID: <5a5329feaab84acb91bbb4f48ea548b3fb4eab0f.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in
+ syscall wrappers
+From: Xi Ruoyao <xry111@xry111.site>
+To: Huacai Chen <chenhuacai@kernel.org>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
+	 <thomas.weissschuh@linutronix.de>
+Cc: WANG Xuerui <kernel@xen0n.name>, Theodore Ts'o <tytso@mit.edu>, "Jason
+ A. Donenfeld" <Jason@zx2c4.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers	 <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>, 	loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 	stable@vger.kernel.org
+Date: Wed, 04 Jun 2025 22:30:55 +0800
+In-Reply-To: <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
+References: 
+	<20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
+	 <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
-In-Reply-To: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 4 Jun 2025 22:05:37 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
-X-Gm-Features: AX0GCFvKA_KKer2m4iG2-t1TsphfY807WvqIwtlUIzYSRATglAOWgOM5PL3hSDQ
-Message-ID: <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in syscall wrappers
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: WANG Xuerui <kernel@xen0n.name>, "Theodore Ts'o" <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 3, 2025 at 7:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> The syscall wrappers use the "a0" register for two different register
-> variables, both the first argument and the return value. The "ret"
-> variable is used as both input and output while the argument register is
-> only used as input. Clang treats the conflicting input parameters as
-> undefined behaviour and optimizes away the argument assignment.
->
-> The code seems to work by chance for the most part today but that may
-> change in the future. Specifically clock_gettime_fallback() fails with
-> clockids from 16 to 23, as implemented by the upcoming auxiliary clocks.
->
-> Switch the "ret" register variable to a pure output, similar to the other
-> architectures' vDSO code. This works in both clang and GCC.
-Hmmm, at first the constraint is "=3Dr", during the progress of
-upstream, Xuerui suggested me to use "+r" instead [1].
-[1]  https://lore.kernel.org/linux-arch/5b14144a-9725-41db-7179-c059c41814c=
-f@xen0n.name/
+On Wed, 2025-06-04 at 22:05 +0800, Huacai Chen wrote:
+> On Tue, Jun 3, 2025 at 7:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
+> <thomas.weissschuh@linutronix.de> wrote:
+> >=20
+> > The syscall wrappers use the "a0" register for two different register
+> > variables, both the first argument and the return value. The "ret"
+> > variable is used as both input and output while the argument register i=
+s
+> > only used as input. Clang treats the conflicting input parameters as
+> > undefined behaviour and optimizes away the argument assignment.
+> >=20
+> > The code seems to work by chance for the most part today but that may
+> > change in the future. Specifically clock_gettime_fallback() fails with
+> > clockids from 16 to 23, as implemented by the upcoming auxiliary clocks=
+.
+> >=20
+> > Switch the "ret" register variable to a pure output, similar to the oth=
+er
+> > architectures' vDSO code. This works in both clang and GCC.
+> Hmmm, at first the constraint is "=3Dr", during the progress of
+> upstream, Xuerui suggested me to use "+r" instead [1].
+> [1]=C2=A0 https://lore.kernel.org/linux-arch/5b14144a-9725-41db-7179-c059=
+c41814cf@xen0n.name/
 
-Huacai
+Based on the example at
+https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html:
 
->
-> Link: https://lore.kernel.org/lkml/20250602102825-42aa84f0-23f1-4d10-89fc=
--e8bbaffd291a@linutronix.de/
-> Link: https://lore.kernel.org/lkml/20250519082042.742926976@linutronix.de=
-/
-> Fixes: c6b99bed6b8f ("LoongArch: Add VDSO and VSYSCALL support")
-> Fixes: 18efd0b10e0f ("LoongArch: vDSO: Wire up getrandom() vDSO implement=
-ation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> ---
->  arch/loongarch/include/asm/vdso/getrandom.h    | 2 +-
->  arch/loongarch/include/asm/vdso/gettimeofday.h | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/vdso/getrandom.h b/arch/loongarch=
-/include/asm/vdso/getrandom.h
-> index 48c43f55b039b42168698614d0479b7a872d20f3..a81724b69f291ee49dd1f46b1=
-2d6893fc18442b8 100644
-> --- a/arch/loongarch/include/asm/vdso/getrandom.h
-> +++ b/arch/loongarch/include/asm/vdso/getrandom.h
-> @@ -20,7 +20,7 @@ static __always_inline ssize_t getrandom_syscall(void *=
-_buffer, size_t _len, uns
->
->         asm volatile(
->         "      syscall 0\n"
-> -       : "+r" (ret)
-> +       : "=3Dr" (ret)
->         : "r" (nr), "r" (buffer), "r" (len), "r" (flags)
->         : "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", "$t8",
->           "memory");
-> diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loonga=
-rch/include/asm/vdso/gettimeofday.h
-> index 88cfcf13311630ed5f1a734d23a2bc3f65d79a88..f15503e3336ca1bdc9675ec6e=
-17bbb77abc35ef4 100644
-> --- a/arch/loongarch/include/asm/vdso/gettimeofday.h
-> +++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
-> @@ -25,7 +25,7 @@ static __always_inline long gettimeofday_fallback(
->
->         asm volatile(
->         "       syscall 0\n"
-> -       : "+r" (ret)
-> +       : "=3Dr" (ret)
->         : "r" (nr), "r" (tv), "r" (tz)
->         : "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->           "$t8", "memory");
-> @@ -44,7 +44,7 @@ static __always_inline long clock_gettime_fallback(
->
->         asm volatile(
->         "       syscall 0\n"
-> -       : "+r" (ret)
-> +       : "=3Dr" (ret)
->         : "r" (nr), "r" (clkid), "r" (ts)
->         : "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->           "$t8", "memory");
-> @@ -63,7 +63,7 @@ static __always_inline int clock_getres_fallback(
->
->         asm volatile(
->         "       syscall 0\n"
-> -       : "+r" (ret)
-> +       : "=3Dr" (ret)
->         : "r" (nr), "r" (clkid), "r" (ts)
->         : "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
->           "$t8", "memory");
->
-> ---
-> base-commit: 546b1c9e93c2bb8cf5ed24e0be1c86bb089b3253
-> change-id: 20250603-loongarch-vdso-syscall-f585a99bea03
->
-> Best regards,
-> --
-> Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
->
+   To force an operand into a register, create a local variable and specify
+   the register name after the variable=E2=80=99s declaration. Then use the=
+ local
+   variable for the asm operand and specify any constraint letter that
+   matches the register:
+  =20
+   register int *p1 asm ("r0") =3D =E2=80=A6;
+   register int *p2 asm ("r1") =3D =E2=80=A6;
+   register int *result asm ("r0");
+   asm ("sysint" : "=3Dr" (result) : "0" (p1), "r" (p2));
+  =20
+I think this should actually be written
+
+ 	asm volatile(
+ 	"      syscall 0\n"
+	: "=3Dr" (ret)
+ 	: "r" (nr), "0" (buffer), "r" (len), "r" (flags)
+ 	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+"$t8",
+ 	  "memory");
+
+i.e. "=3D" should be used for the output operand 0, and "0" should be used
+for the input operand 2 (buffer) to emphasis the same register as
+operand 0 is used.
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
