@@ -1,86 +1,120 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7414D28D8ED;
-	Wed,  4 Jun 2025 12:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC2728E5F4;
+	Wed,  4 Jun 2025 12:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749039876; cv=none; b=mDhi+JiP/F6Ioj05YEu1kEAAmG6BDzASR0NUGwTl2+8UYck+qMXiNUVkqnlk3BLT+5pQ18cSX3Yk5dxkvr0aYQtHdyHTd46hNABDJ+9kfn3MusJLyqBO7Kuo7BgLOFwt1SfrjjPoqIGdxquEcQNI2bOBai9+k5kahILI1QgwRyo=
+	t=1749040560; cv=none; b=gCl7MF3vlftzAERZ+jfh0uU35Rvs/HZlV4sc6mvJMmhz4LwzC/VASdegcW/mPP9mnf556hkXBi9N7D4tfRkOjVugJultq/JlJGa2TqoBdu+2h/OnXEnNb4zaARl0gKMK9+7DyHZCsYIkSxoHZm+x5nDQYt6jHjL6mCixjFG5S9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749039876; c=relaxed/simple;
-	bh=X5HoV4A18Es6cQsPxWdpN/6HMNSRex6GTYKxJ1FSTdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u0w38aqnCbCE/fPCJJr8/eCDD0GhqXkFuFDS0i+Ilrs5eEI3/eWPHzOgh9dLfLh2oDjDatAVDUUzowwD1/6dJeMHNRLDLONIQUDH422tNxqaAAKo51vmDlGwWea0/bPzaekQB/5xyOvk7RkHezZB+BcE6AS5Z66glNOKHnCdIZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmpgWISn; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749040560; c=relaxed/simple;
+	bh=jJ4ZwWax3vKYqqRhw91Dy/rAfyzNtvRQbgFkhNRfsXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=s7z/xlUNqCidNlDl2CuHrYrQ8RUlsjISk2smRY/jK8QnM08+6Ayx2Ah6ecl5Hah2/mw5O56E/NtNkLCZ1tZOcryO43SbVTDtrAtLQDvbWPw/ekYP2qdyqAvbtSGgkoaaa4TGbGKBt9vTRWR/rNOawLQiOL6aEKLmCanv5tvTXwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OGJxRVpR; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmpgWISn"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-312f53d0609so189804a91.1;
-        Wed, 04 Jun 2025 05:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749039875; x=1749644675; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X5HoV4A18Es6cQsPxWdpN/6HMNSRex6GTYKxJ1FSTdI=;
-        b=KmpgWISnG0vuacOBzsuZxqGI5dsogH/IgIvONxs9QuW5e1L9hKPJaOA5AnGdRbudJ9
-         qE/a2ZvODQ+/tOsNObb5YO7utXjifP5xXqkInod/n0WJhM41sXivpKL8MSuUTRmPXqjC
-         yWSkJFA+7jWN/sOKO/vgUWyeRyqTqYHpBA7QImRi3yyzcs/xwUHopIxQu6lA5g6SPGrk
-         EZu7rgmfm+wcps5WZ8yc5VH+aS2ju0uemo6vH1lAm4fTssTNLlU9YZ2f+gBoJaTgiNLA
-         u6IuQOfk2KF9MqrflT+g5pcefejPFSBAFXZg3unhf3g8RmdfMlC9bwtalITIlRx8HcS9
-         hjgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749039875; x=1749644675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X5HoV4A18Es6cQsPxWdpN/6HMNSRex6GTYKxJ1FSTdI=;
-        b=f4pqPufIY9hk6FolWA1/XUntJ+JwCQCKyIqEs0QYDrO1X/OpkAuCvSFdhnVgqB4r5v
-         kklG4Z4ccvKPyWylfaEYpqhXsalaEPJFETmokrmX1okUZRY7fFlHEaNS3gnwDUX9czmx
-         chZj6Q7rMEzY8wh6q/P/SVKg3H5QFD+LW8pnY93ZEwOHhU+hk7B6G14Lx8hI6xtju+5F
-         9XRlcbD0WDJlhjMHTO8EByUl1h8JBmISrCnDqrBEoj3quGwLQQPp143opJ9wXkNarJiD
-         bew8hj2j++fR4vC0h1U8vNv6gcAKIiV7EOWmRC9uGA2Db7Wm8TKTxv+66PAeYTOmfef2
-         tGBw==
-X-Forwarded-Encrypted: i=1; AJvYcCXSzemh49tPfBQYUT+AxLANz455+ru8TcwbEqIqhc2Yhf5REvZ8IQJJG0sU7kYsl+kkSzkd@lists.linux.dev
-X-Gm-Message-State: AOJu0YzhtiG3lz0lRfg0GPdERLmB3eOe2JcDuVlsgW9jJgxVPApAe7eB
-	owl1//OHC3OfPA+SI9nb3Nb4/w79BsEDPbps+m3DiWjffnbknMOzzvZE40MkKMnlmBXIzHgQvQP
-	TVFinzi4AJg1skq3XkqRT2xHKVB74obw=
-X-Gm-Gg: ASbGncspp5dIesUv8iWyTyCPuH35YmSIIdnNEwyoRJIELc75wUD+1GHnO2Pqn6xbXN5
-	uYBKDgfIGTRVtXDad+AlzAWCnmFRJpDwT5zCheuswf/SBa4zkKSwQSCVGZvL+tzfpYptQuC7eFf
-	fQM4i3nBmvR6bAu7sN8NRZMsQeRBqSpPj9
-X-Google-Smtp-Source: AGHT+IErLwtGSYQMv8xDY353kuF+fsT1I4lfY5UDw62Z+Lk5yJh2j12Usxk6xWco51Ijg6BndcQq9Kq/vDbhiZClOm0=
-X-Received: by 2002:a17:90b:1b42:b0:312:ec:411a with SMTP id
- 98e67ed59e1d1-3130cd3ce2dmr1484250a91.3.1749039874684; Wed, 04 Jun 2025
- 05:24:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OGJxRVpR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749040558; x=1780576558;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jJ4ZwWax3vKYqqRhw91Dy/rAfyzNtvRQbgFkhNRfsXA=;
+  b=OGJxRVpRsfMAyNeM0p8YccJQbxjskFRlQNqc12DTjr2/unDjFtXdeMEn
+   ddY6rZWGNKF4ZwPpX+ZIA4oQ9k8rFEXDmMAHb0gfIW5zdUhNbBT/3q4SO
+   D2ljio1OXr9IB5EdmR4YsjyWC+byvvL1L0ZapXh4HuJHw74t5rfOTBX1X
+   gLwL3OLmLAq30Rq+vQqpgSflodGIrihMnMOuGelHJQ8ylmXYLLPsfaPvV
+   zvJx/nFScEw835jzMIEC9dU0Sawwxg1aUfyPuB6rahA8xyIZ7y5VQo+0j
+   uKyMXwI88psM6tN7DX+w+72fvN2EbYqkPcjVOELEPI5d0BQkcDJseVau9
+   g==;
+X-CSE-ConnectionGUID: sUMIs5ElTGa8sqjv4mpSyw==
+X-CSE-MsgGUID: 15Y/oJThTKq6AbC0/lKtPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11454"; a="50359158"
+X-IronPort-AV: E=Sophos;i="6.16,209,1744095600"; 
+   d="scan'208";a="50359158"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2025 05:35:57 -0700
+X-CSE-ConnectionGUID: CBnKa+3ZQz6Yl1GMDtsN+g==
+X-CSE-MsgGUID: fVyPFQqvQheDG5kMssUg3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,209,1744095600"; 
+   d="scan'208";a="146147627"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 04 Jun 2025 05:35:52 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uMnLN-00037t-0S;
+	Wed, 04 Jun 2025 12:35:45 +0000
+Date: Wed, 4 Jun 2025 20:35:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oscar Salvador <osalvador@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Harry Yoo <harry.yoo@oracle.com>, Vlastimil Babka <vbabka@suse.cz>
+Subject: [akpm-mm:mm-new 33/59] kernel/cgroup/cpuset.c:4054:undefined
+ reference to `register_node_notifier'
+Message-ID: <202506042006.QuupA03H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250604114923.208380-1-sashal@kernel.org> <20250604114923.208380-2-sashal@kernel.org>
-In-Reply-To: <20250604114923.208380-2-sashal@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 4 Jun 2025 14:24:22 +0200
-X-Gm-Features: AX0GCFsrP9iFTYtJTClz9rDnEXWcTEpyeBtPkQnKTXB_q9gbKp89nIFoYXOWykw
-Message-ID: <CANiq72n8oZGOkUVU4MAjDb0W+OwX8PuEykA_2Z=DY+onvj-T8A@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.15 2/9] wifi: iwlwifi: mld: Work around Clang
- loop unrolling bug
-To: Sasha Levin <sashal@kernel.org>
-Cc: patches@lists.linux.dev, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, johannes.berg@intel.com, 
-	miriam.rachel.korenblit@intel.com, emmanuel.grumbach@intel.com, 
-	yedidya.ben.shimol@intel.com, shaul.triebitz@intel.com, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jun 4, 2025 at 1:49=E2=80=AFPM Sasha Levin <sashal@kernel.org> wrot=
-e:
->
-> Now let me analyze the similar commits to understand the backporting
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+head:   80bb0b2983e95be26d929303d589276875c8900a
+commit: 24bc7e1b9a3e0062e4bcde941a76c7dbe5516401 [33/59] mm,memory_hotplug: implement numa node notifier
+config: s390-randconfig-001-20250604 (https://download.01.org/0day-ci/archive/20250604/202506042006.QuupA03H-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250604/202506042006.QuupA03H-lkp@intel.com/reproduce)
 
-I think this ate the newlines from the AI... :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506042006.QuupA03H-lkp@intel.com/
 
-Cheers,
-Miguel
+All errors (new ones prefixed by >>):
+
+   s390x-linux-ld: kernel/cgroup/cpuset.o: in function `cpuset_init_smp':
+>> kernel/cgroup/cpuset.c:4054:(.init.text+0x402): undefined reference to `register_node_notifier'
+   s390x-linux-ld: mm/memory_hotplug.o: in function `online_pages':
+>> mm/memory_hotplug.c:1243:(.text+0x6928): undefined reference to `node_notify'
+   s390x-linux-ld: mm/slub.o: in function `kmem_cache_init':
+>> mm/slub.c:6300:(.init.text+0x506): undefined reference to `register_node_notifier'
+
+
+vim +4054 kernel/cgroup/cpuset.c
+
+  4036	
+  4037	/**
+  4038	 * cpuset_init_smp - initialize cpus_allowed
+  4039	 *
+  4040	 * Description: Finish top cpuset after cpu, node maps are initialized
+  4041	 */
+  4042	void __init cpuset_init_smp(void)
+  4043	{
+  4044		/*
+  4045		 * cpus_allowd/mems_allowed set to v2 values in the initial
+  4046		 * cpuset_bind() call will be reset to v1 values in another
+  4047		 * cpuset_bind() call when v1 cpuset is mounted.
+  4048		 */
+  4049		top_cpuset.old_mems_allowed = top_cpuset.mems_allowed;
+  4050	
+  4051		cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
+  4052		top_cpuset.effective_mems = node_states[N_MEMORY];
+  4053	
+> 4054		hotplug_node_notifier(cpuset_track_online_nodes, CPUSET_CALLBACK_PRI);
+  4055	
+  4056		cpuset_migrate_mm_wq = alloc_ordered_workqueue("cpuset_migrate_mm", 0);
+  4057		BUG_ON(!cpuset_migrate_mm_wq);
+  4058	}
+  4059	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
