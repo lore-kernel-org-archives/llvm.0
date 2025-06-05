@@ -1,144 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AA919E971;
-	Thu,  5 Jun 2025 11:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2C2214813
+	for <llvm@lists.linux.dev>; Thu,  5 Jun 2025 12:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749122335; cv=none; b=Th238j3xChZhCk7tPRaI5mJL2jwiuTYQjSvSKtdn3oBLnZITT0Mt4+j1qtaHQi567ZMmm4J+/aYJvaFsxlOMvTJnw40eT280jwUhrwjSTNJWRJ8Ch2DSJjl/luqpeOI8bd+PJoc/k+SGgZ3ich4vDi0YRTZLGhoABb286O3UXUw=
+	t=1749125476; cv=none; b=PrqPan8TatzLAmUIitFulXjI+mEUDrP+UkETwH70HroqYA3fzYl0i3rCRIweYHuSxIYALjkd1s44soh6myKE6my6c0r6EfezpCUqRUiJuZ/ZsYb/suotz8cdKq8ARFZGuW4+M1M8y2W6qIKZU8x1QwlO3Au1iCImHXK2a5kJQyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749122335; c=relaxed/simple;
-	bh=sEF2Wh91g+2MAiwlPUrHuJSSHBGA3izZZAqjWgbw5vk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ADJK8t2JG0RmwirOoTpwYi8ukcVEOdqDJzKdhPp9WrHpJD9+FfKha/n1YINPv2hO5+qAwznlBZgadLRpmPfZpRn8iliAV7iTKJKV7e1GgGz5DhRpRfzBYivvBD6nXtogqARRZjTouMGRAoQS2+Sh9yKTFsY29dzzmpPcUypnBOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnaInRd9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749125476; c=relaxed/simple;
+	bh=MW3N16/x4ORzkYHJazCJmRwnbO4hITQcNKVwQrY/7gQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=UoL+yqKZBMXiQ/1yeyT78N7BjuQTmlMulfY9dcvOnZDrfZ0L39VoL8ySxY8VpyNzYczdwibDbh0Bi+DkGr9r5bwOYFzZIL0lYuKezKJQM2ixLqjh8O1JXFWsiI8IFSQCdOWjH3PmJhad1knvLYRJ6KEfv0u3Z2Z1GAfBhdbvd1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CBSCDG2N; arc=none smtp.client-ip=209.85.222.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnaInRd9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C7DC4CEEF;
-	Thu,  5 Jun 2025 11:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749122335;
-	bh=sEF2Wh91g+2MAiwlPUrHuJSSHBGA3izZZAqjWgbw5vk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nnaInRd9srmOfTHdxWD5f9eq81ZcmX83BJ7FI82YSPRwojBRZ4PBYy4vBKnkIrB3a
-	 WT6cQvaa8rzhz8cK4Zg64j/U7S0O0804nH4J2pyDMGfwvGO1CRw1TzlfzQYP5oixcD
-	 yduoW9hTv0PqncUMAghXjTwYKekK7+HST8UhGSVN6vcONWnuYSD86dtp5ju/gOH0el
-	 rM290P3ry7FMXYwmVYq8I7N50RY3ZT2beUV04fDLYwUD8rnzC7kS3+sgVw7s20u6P/
-	 Rv04LPevSRGSEhBLvRytmf47+rrNu6iJpJIHWmaPfHN3wE2+0Ubr0pThPPZ+EO0VXx
-	 G+TqdW6MkPPkA==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-604b9c53f6fso1673521a12.2;
-        Thu, 05 Jun 2025 04:18:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWigqsXaaElZ5U3YhqTrs4XZKHbdQzr6oAkJdIz1PP7kG/c5sCrEoO6hqlQ7n2At6XP8xstYvxH+wt7@lists.linux.dev, AJvYcCXIRD+BMWlXnwabXcji6kIKGwb6LTOeIGOv7mhVNwwmwlBijzg8zRzTudXA4zgGNFzqfBsu@lists.linux.dev
-X-Gm-Message-State: AOJu0YxtSkqf5whAyZp5NtF+kC0LEgPFWdL+0UeWU1PwEADQGj3B/5kN
-	+8KvFyJLzDu9/5tNayDqTQHrBbndSSN+4mme8+ix5v1zsqdRSux9X2lxIi8fdvpQr5zevXP7tTz
-	OxDIFOg556i9Q3P64OER+qognrWCVWtM=
-X-Google-Smtp-Source: AGHT+IGC5Decy1JDZOZPWzuYA+Z4FxX8IFqU5x0RGGVN+b3H9/e4EjYtTrXycJOoTxMxkeqG3JLtTqu/qlQohmyQy/Q=
-X-Received: by 2002:a17:907:3da3:b0:ad8:a41a:3cdc with SMTP id
- a640c23a62f3a-addf8c98fbbmr637680066b.2.1749122333746; Thu, 05 Jun 2025
- 04:18:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CBSCDG2N"
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-87ded9c6eb4so673996241.0
+        for <llvm@lists.linux.dev>; Thu, 05 Jun 2025 05:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749125473; x=1749730273; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OgmiEXi0A20P8LTwFGfS1KsXpM+N3sq3vnKks2IxAc0=;
+        b=CBSCDG2N5DTPfDuzRfMMZ0iv9oa03QcCus6aAKv+w+kFe8fILu08lpIvnmDy7DsgCy
+         JnhOrZa7tDIMi1eN9MoAxgBublnD1D/PlpX8YghvPEHKJfug4DuHTNwbrBDXFwMfF6FF
+         AXBWMDDIQkpN2BCzfPHKZTT6GMQKjclTHb4rImjFiFIW9pIX3bkx3mjIg7BCM/y3VnfO
+         Pz860vnfQfU0RLLVnVrqR1Qi1WVp795b5I7d7nRP1u1qojqOiWdlvWg5U4lIW3zJYN9P
+         LTZTBP0zlK2iH/IY8THKZf03DBfhij5iObjDt+zqeMh/feyN6Hal/H7s884/OaLodGpc
+         NR8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749125473; x=1749730273;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgmiEXi0A20P8LTwFGfS1KsXpM+N3sq3vnKks2IxAc0=;
+        b=JKYgw7NXUvrnFHxHpdcHlcH1pCOzEKOhs0fhLyzWj7p+vuYC4rj4B8rdeWSO67o4id
+         lVHwBqQCze+tAv7+ntcIOx4r4naqx2yntKPZRKt+4VaAC5v5y6Oyjd/iHe2CRLbwkIAb
+         CJCOZZRmzFjOdFCULGShGhAkLBt55aaG9RFfcmTszR9ANaWk/LIX0y1q5cpr4LJFCHFz
+         UwUhfXI7Ctir/EvsRAV2MB6g3alMNxPxvFAIK1AqxaPF+JP/DmLJmrJnlIIshX3IsE7n
+         oeZAJ7UE86eFeE7rq97jkBz97zgnbTtQEw/v+MPY3zH1WoWIhpSeSwiTxWATkcsiG136
+         AqIw==
+X-Gm-Message-State: AOJu0Yw9i9vKy6izg1mSGnKpNaAoRH5wg0y4nKb9sI8AlVsVDI9hoT8r
+	oE1AnEklAOn8Zjr/5skYa8aKcQOJyByNB9GlhyJh+LtlQornbX5tUamVooirx/ud1TFDShn7aw4
+	pmKXZeR0CK7rDpw1IS5yHuEGpCpPhobAGGBg419FdtWLzUHftr7WNG9mIag==
+X-Gm-Gg: ASbGncs5XbnV+T3k7tZMvvRjDweybCLFmVIceCs3J68D475OLjQTkBNQVL3ILqbDf1Q
+	uHj4WuePYMjdEhUBrWtN7mvWJ4ZdKJd2Vdm26JGuZsDMtf9IiAjNwTTfWLQZqEfojDdf24Yt8F8
+	VCe7OLQCmm0qctGOGE4qmW5aqZnEOjBtQQDBH4RgE+LWX7rAD+3rffwglX7798Pbl6JtEVQY6iF
+	aRr
+X-Google-Smtp-Source: AGHT+IF2aumGdZUdL8u076i5ZOYIyzoO7Q7yA+GrS7FD0Blk3+o8CgZgvUcGhew/xxle19ewVkjFe1PCU2oG2AHumNI=
+X-Received: by 2002:a67:f995:0:b0:4e2:b21b:2cbc with SMTP id
+ ada2fe7eead31-4e758a62aa2mr2243810137.3.1749125472722; Thu, 05 Jun 2025
+ 05:11:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
- <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
- <5a5329feaab84acb91bbb4f48ea548b3fb4eab0f.camel@xry111.site> <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
-In-Reply-To: <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 5 Jun 2025 19:18:42 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H68vDzU7XPefDYG+MRMs560q8o2GhiqYRm1hsA+3DND3A@mail.gmail.com>
-X-Gm-Features: AX0GCFtDn_nikl0og6nMjd-vJWnNxYltI6wUf_W_Ll6MRRjnSmv1DM1kurWk8GI
-Message-ID: <CAAhV-H68vDzU7XPefDYG+MRMs560q8o2GhiqYRm1hsA+3DND3A@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in syscall wrappers
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>, "Theodore Ts'o" <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	stable@vger.kernel.org
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 5 Jun 2025 17:41:01 +0530
+X-Gm-Features: AX0GCFt1mMqSdas5kTm6Jze2KjPhrZRGcVrdJh8UaX_gHiGLSsKT2XiJF6iZ_Zc
+Message-ID: <CA+G9fYt-CMBGCFxV5ziP98upkeK2LBxkZRo7-0XN1G+zLtWK4A@mail.gmail.com>
+Subject: selftests/filesystem: clang warning null passed to a callee that
+ requires a non-null argument [-Wnonnull]
+To: clang-built-linux <llvm@lists.linux.dev>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Sasha Levin <sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 5, 2025 at 3:37=E2=80=AFPM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> On Wed, Jun 04, 2025 at 10:30:55PM +0800, Xi Ruoyao wrote:
-> > On Wed, 2025-06-04 at 22:05 +0800, Huacai Chen wrote:
-> > > On Tue, Jun 3, 2025 at 7:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
-> > > <thomas.weissschuh@linutronix.de> wrote:
-> > > >
-> > > > The syscall wrappers use the "a0" register for two different regist=
-er
-> > > > variables, both the first argument and the return value. The "ret"
-> > > > variable is used as both input and output while the argument regist=
-er is
-> > > > only used as input. Clang treats the conflicting input parameters a=
-s
-> > > > undefined behaviour and optimizes away the argument assignment.
-> > > >
-> > > > The code seems to work by chance for the most part today but that m=
-ay
-> > > > change in the future. Specifically clock_gettime_fallback() fails w=
-ith
-> > > > clockids from 16 to 23, as implemented by the upcoming auxiliary cl=
-ocks.
-> > > >
-> > > > Switch the "ret" register variable to a pure output, similar to the=
- other
-> > > > architectures' vDSO code. This works in both clang and GCC.
-> > > Hmmm, at first the constraint is "=3Dr", during the progress of
-> > > upstream, Xuerui suggested me to use "+r" instead [1].
-> > > [1]  https://lore.kernel.org/linux-arch/5b14144a-9725-41db-7179-c059c=
-41814cf@xen0n.name/
-> >
-> > Based on the example at
-> > https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html:
-> >
-> >    To force an operand into a register, create a local variable and spe=
-cify
-> >    the register name after the variable=E2=80=99s declaration. Then use=
- the local
-> >    variable for the asm operand and specify any constraint letter that
-> >    matches the register:
-> >
-> >    register int *p1 asm ("r0") =3D =E2=80=A6;
-> >    register int *p2 asm ("r1") =3D =E2=80=A6;
-> >    register int *result asm ("r0");
-> >    asm ("sysint" : "=3Dr" (result) : "0" (p1), "r" (p2));
-> >
-> > I think this should actually be written
-> >
-> >       asm volatile(
-> >       "      syscall 0\n"
-> >       : "=3Dr" (ret)
-> >       : "r" (nr), "0" (buffer), "r" (len), "r" (flags)
-> >       : "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
-> > "$t8",
-> >         "memory");
-> >
-> > i.e. "=3D" should be used for the output operand 0, and "0" should be u=
-sed
-> > for the input operand 2 (buffer) to emphasis the same register as
-> > operand 0 is used.
->
-> I would have expected that matching constraints ("0") would only really m=
-ake
-> sense if the compiler selects the specific register to use. When the regi=
-ster is
-> already selected manually it seems redundant.
-> But my inline ASM knowledge is limited and this is a real example from th=
-e GCC
-> docs, so it is probably more correct.
-> On the other hand all the other vDSO implementations use "r" over "0" for=
- the
-> input operand 2 and I'd like to keep them consistent.
-OK, if there are no objections, I will take this patch.
+Regressions found on arm, arm64 and x86_64 building warnings with clang-20
+and clang-nightly started from Linux next-20250603
 
-Huacai
+Regressions found on arm, arm64 and x86_64
+ - selftests/filesystem
 
->
->
-> Thomas
+Regression Analysis:
+ - New regression? Yes
+ - Reproducible? Yes
+
+First seen on the next-20250603
+Good: next-20250530
+Bad:  next-20250603
+
+Test regression: arm arm64 x86_64 clang warning null passed to a
+callee that requires a non-null argument [-Wnonnull]
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build warnings
+make[4]: Entering directory '/builds/linux/tools/testing/selftests/filesystems'
+  CC       devpts_pts
+  CC       file_stressor
+  CC       anon_inode_test
+anon_inode_test.c:45:37: warning: null passed to a callee that
+requires a non-null argument [-Wnonnull]
+   45 |         ASSERT_LT(execveat(fd_context, "", NULL, NULL,
+AT_EMPTY_PATH), 0);
+      |                                            ^~~~
+
+## Source
+* Kernel version: 6.15.0-next-20250605
+* Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+* Git sha: a0bea9e39035edc56a994630e6048c8a191a99d8
+* Toolchain: Debian clang version 21.0.0
+(++20250529012636+c474f8f2404d-1~exp1~20250529132821.1479)
+
+## Build
+* Test log: https://qa-reports.linaro.org/api/testruns/28651387/log_file/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2xzM4wMl8SvuLKE3mw3csiuv3Jz/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2xzM4wMl8SvuLKE3mw3csiuv3Jz/config
+
+--
+Linaro LKFT
+https://lkft.linaro.org
