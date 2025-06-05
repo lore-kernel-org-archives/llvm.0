@@ -1,105 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295F1566A;
-	Thu,  5 Jun 2025 09:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AA919E971;
+	Thu,  5 Jun 2025 11:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749115409; cv=none; b=uc7ltj2iCnk0i3aN26Qwks3WcpsLUpFyaCAWCDC0tM0+PWNzfKJQRSa29AsAqPJ8eWuQ6/7XBopvqfAAABO7DppMjPb7N8unAGw54loScHzjlHDdlRhVB4krd0v9os7Hy5LVDqXXiyZWgw2OHZuYS77X/csW/XqNya5ceIlUxCQ=
+	t=1749122335; cv=none; b=Th238j3xChZhCk7tPRaI5mJL2jwiuTYQjSvSKtdn3oBLnZITT0Mt4+j1qtaHQi567ZMmm4J+/aYJvaFsxlOMvTJnw40eT280jwUhrwjSTNJWRJ8Ch2DSJjl/luqpeOI8bd+PJoc/k+SGgZ3ich4vDi0YRTZLGhoABb286O3UXUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749115409; c=relaxed/simple;
-	bh=I+kE3/Px+SSn48ljQajBM6l/xv/Hgd66cC2Mhxzpf4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=j7rTvk/qeupDxBvoheAx9lCo3LG0+1puvrDl28Jgl/HaSYHlVvMTYFBL3mJr695Kh48MPW92mgFUa63CKwSnp3CeqFesv+bi2xQtXX4ZetYI7w5V7LEkcFMWTcIAjFdnqAjclLaZL7OMxtlu5+g68GtpkqxhE7TLv3k5UNGB+cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZuzL8s/7; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749122335; c=relaxed/simple;
+	bh=sEF2Wh91g+2MAiwlPUrHuJSSHBGA3izZZAqjWgbw5vk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ADJK8t2JG0RmwirOoTpwYi8ukcVEOdqDJzKdhPp9WrHpJD9+FfKha/n1YINPv2hO5+qAwznlBZgadLRpmPfZpRn8iliAV7iTKJKV7e1GgGz5DhRpRfzBYivvBD6nXtogqARRZjTouMGRAoQS2+Sh9yKTFsY29dzzmpPcUypnBOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnaInRd9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZuzL8s/7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749115408; x=1780651408;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I+kE3/Px+SSn48ljQajBM6l/xv/Hgd66cC2Mhxzpf4w=;
-  b=ZuzL8s/7U7JXTsELx6XBqvJfmgEIGjyGABIkdYmZ8vGAb91N//kDfGxF
-   cg1nXbCmLbXBmmp0+gK8Mm+9mvPgwmTTsRfqkF0PRoeC0T0XkjirwOqvD
-   dGzz2bnR1kHl4At9QlNdcssHaFCoDfsVp/Le5emJv2DdLZXf6UeTKxi9d
-   oR5Wc/CmfcuDtmf59rqcxWhvt6z+ZKiqiBfTyRd1qlTszDcnKNrKcLd8c
-   0tMqv+dZKTlzAUsFzWLbs0jiDPnRE0sehKxSZ0zyGGq+ec2dPS+rSD/St
-   sX9Vm2LIpyOAc1GvfdHs9O43s1L/ZxEbx4g/iAjIL7O50748fZp4+ZKY6
-   A==;
-X-CSE-ConnectionGUID: YmmSlpXCQVOPUcbF6RDRlQ==
-X-CSE-MsgGUID: U/d5BIacQtSdm63btW4CdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11454"; a="51141644"
-X-IronPort-AV: E=Sophos;i="6.16,211,1744095600"; 
-   d="scan'208";a="51141644"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 02:23:27 -0700
-X-CSE-ConnectionGUID: qjPQuT/FQEmGWBhcxBQEcg==
-X-CSE-MsgGUID: 8ecH5uogSQ+pUJx0OQcg4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,211,1744095600"; 
-   d="scan'208";a="176318504"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Jun 2025 02:23:26 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uN6ol-0003xJ-2P;
-	Thu, 05 Jun 2025 09:23:23 +0000
-Date: Thu, 5 Jun 2025 17:22:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Igor Belousov <igor.b@beldev.am>
-Subject: [akpm-mm:mm-new 57/59] mm/zblock.h:24:2: warning: This PAGE_SIZE is
- not quite supported yet
-Message-ID: <202506051739.ZMRkokhj-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnaInRd9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C7DC4CEEF;
+	Thu,  5 Jun 2025 11:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749122335;
+	bh=sEF2Wh91g+2MAiwlPUrHuJSSHBGA3izZZAqjWgbw5vk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nnaInRd9srmOfTHdxWD5f9eq81ZcmX83BJ7FI82YSPRwojBRZ4PBYy4vBKnkIrB3a
+	 WT6cQvaa8rzhz8cK4Zg64j/U7S0O0804nH4J2pyDMGfwvGO1CRw1TzlfzQYP5oixcD
+	 yduoW9hTv0PqncUMAghXjTwYKekK7+HST8UhGSVN6vcONWnuYSD86dtp5ju/gOH0el
+	 rM290P3ry7FMXYwmVYq8I7N50RY3ZT2beUV04fDLYwUD8rnzC7kS3+sgVw7s20u6P/
+	 Rv04LPevSRGSEhBLvRytmf47+rrNu6iJpJIHWmaPfHN3wE2+0Ubr0pThPPZ+EO0VXx
+	 G+TqdW6MkPPkA==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-604b9c53f6fso1673521a12.2;
+        Thu, 05 Jun 2025 04:18:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWigqsXaaElZ5U3YhqTrs4XZKHbdQzr6oAkJdIz1PP7kG/c5sCrEoO6hqlQ7n2At6XP8xstYvxH+wt7@lists.linux.dev, AJvYcCXIRD+BMWlXnwabXcji6kIKGwb6LTOeIGOv7mhVNwwmwlBijzg8zRzTudXA4zgGNFzqfBsu@lists.linux.dev
+X-Gm-Message-State: AOJu0YxtSkqf5whAyZp5NtF+kC0LEgPFWdL+0UeWU1PwEADQGj3B/5kN
+	+8KvFyJLzDu9/5tNayDqTQHrBbndSSN+4mme8+ix5v1zsqdRSux9X2lxIi8fdvpQr5zevXP7tTz
+	OxDIFOg556i9Q3P64OER+qognrWCVWtM=
+X-Google-Smtp-Source: AGHT+IGC5Decy1JDZOZPWzuYA+Z4FxX8IFqU5x0RGGVN+b3H9/e4EjYtTrXycJOoTxMxkeqG3JLtTqu/qlQohmyQy/Q=
+X-Received: by 2002:a17:907:3da3:b0:ad8:a41a:3cdc with SMTP id
+ a640c23a62f3a-addf8c98fbbmr637680066b.2.1749122333746; Thu, 05 Jun 2025
+ 04:18:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
+ <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
+ <5a5329feaab84acb91bbb4f48ea548b3fb4eab0f.camel@xry111.site> <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
+In-Reply-To: <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 5 Jun 2025 19:18:42 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H68vDzU7XPefDYG+MRMs560q8o2GhiqYRm1hsA+3DND3A@mail.gmail.com>
+X-Gm-Features: AX0GCFtDn_nikl0og6nMjd-vJWnNxYltI6wUf_W_Ll6MRRjnSmv1DM1kurWk8GI
+Message-ID: <CAAhV-H68vDzU7XPefDYG+MRMs560q8o2GhiqYRm1hsA+3DND3A@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in syscall wrappers
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>, "Theodore Ts'o" <tytso@mit.edu>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
-head:   574966cc970ddc4ec6fb435bbbca9804d92e4953
-commit: 8666580be1b209caae87288805cda74dc347440a [57/59] mm-zblock-avoid-failing-the-build-fix
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250605/202506051739.ZMRkokhj-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250605/202506051739.ZMRkokhj-lkp@intel.com/reproduce)
+On Thu, Jun 5, 2025 at 3:37=E2=80=AFPM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> On Wed, Jun 04, 2025 at 10:30:55PM +0800, Xi Ruoyao wrote:
+> > On Wed, 2025-06-04 at 22:05 +0800, Huacai Chen wrote:
+> > > On Tue, Jun 3, 2025 at 7:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
+> > > <thomas.weissschuh@linutronix.de> wrote:
+> > > >
+> > > > The syscall wrappers use the "a0" register for two different regist=
+er
+> > > > variables, both the first argument and the return value. The "ret"
+> > > > variable is used as both input and output while the argument regist=
+er is
+> > > > only used as input. Clang treats the conflicting input parameters a=
+s
+> > > > undefined behaviour and optimizes away the argument assignment.
+> > > >
+> > > > The code seems to work by chance for the most part today but that m=
+ay
+> > > > change in the future. Specifically clock_gettime_fallback() fails w=
+ith
+> > > > clockids from 16 to 23, as implemented by the upcoming auxiliary cl=
+ocks.
+> > > >
+> > > > Switch the "ret" register variable to a pure output, similar to the=
+ other
+> > > > architectures' vDSO code. This works in both clang and GCC.
+> > > Hmmm, at first the constraint is "=3Dr", during the progress of
+> > > upstream, Xuerui suggested me to use "+r" instead [1].
+> > > [1]  https://lore.kernel.org/linux-arch/5b14144a-9725-41db-7179-c059c=
+41814cf@xen0n.name/
+> >
+> > Based on the example at
+> > https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html:
+> >
+> >    To force an operand into a register, create a local variable and spe=
+cify
+> >    the register name after the variable=E2=80=99s declaration. Then use=
+ the local
+> >    variable for the asm operand and specify any constraint letter that
+> >    matches the register:
+> >
+> >    register int *p1 asm ("r0") =3D =E2=80=A6;
+> >    register int *p2 asm ("r1") =3D =E2=80=A6;
+> >    register int *result asm ("r0");
+> >    asm ("sysint" : "=3Dr" (result) : "0" (p1), "r" (p2));
+> >
+> > I think this should actually be written
+> >
+> >       asm volatile(
+> >       "      syscall 0\n"
+> >       : "=3Dr" (ret)
+> >       : "r" (nr), "0" (buffer), "r" (len), "r" (flags)
+> >       : "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+> > "$t8",
+> >         "memory");
+> >
+> > i.e. "=3D" should be used for the output operand 0, and "0" should be u=
+sed
+> > for the input operand 2 (buffer) to emphasis the same register as
+> > operand 0 is used.
+>
+> I would have expected that matching constraints ("0") would only really m=
+ake
+> sense if the compiler selects the specific register to use. When the regi=
+ster is
+> already selected manually it seems redundant.
+> But my inline ASM knowledge is limited and this is a real example from th=
+e GCC
+> docs, so it is probably more correct.
+> On the other hand all the other vDSO implementations use "r" over "0" for=
+ the
+> input operand 2 and I'd like to keep them consistent.
+OK, if there are no objections, I will take this patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506051739.ZMRkokhj-lkp@intel.com/
+Huacai
 
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/zblock.c:28:
->> mm/zblock.h:24:2: warning: This PAGE_SIZE is not quite supported yet [-W#warnings]
-      24 | #warning This PAGE_SIZE is not quite supported yet
-         |  ^
-   1 warning generated.
-
-
-vim +24 mm/zblock.h
-
-    16	
-    17	#if PAGE_SIZE == 0x1000
-    18	/* max 128 slots per block, max table size 32 */
-    19	#define SLOT_BITS 7
-    20	#elif PAGE_SIZE == 0x4000
-    21	/* max 256 slots per block, max table size 64 */
-    22	#define SLOT_BITS 8
-    23	#else
-  > 24	#warning This PAGE_SIZE is not quite supported yet
-    25	#define SLOT_BITS 8
-    26	#endif
-    27	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>
+> Thomas
