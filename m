@@ -1,92 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D969F27EC74
-	for <llvm@lists.linux.dev>; Thu,  5 Jun 2025 20:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7CC27AC48;
+	Thu,  5 Jun 2025 21:04:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749156045; cv=none; b=IwD9AaIONPv/Jt32Lwo3EKwTi14tzMUC5U8KBh4XEJfMa5RAa4mbDUqEtlawXLQS0Sdr38kGRz8zkdsvnPkJ1oaGSDNcKV5gFlmWw/Z4Sy/GXTD7WphwJYNwgKg/3/KRL0KP80cOY2q9LR6NU/5L3ipXxFGj5QeLXZ0KNSd2RVA=
+	t=1749157448; cv=none; b=e2ATYI2lORvTE5eMgORlc5VCzLeNKe2zHekf/RYBUe1Qxl5wJBzIr2WiEITI7z9ptK4GwKdxIs/2BIpl3Q9R7UX3rY7oEG/RXPpZR6CM7Y5Ch7gJdKAWEvfBubC6SXCEQV+7DssJTjQdvwDNEQiry4IHRGk0nGv+I2TuU0jssRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749156045; c=relaxed/simple;
-	bh=Lg5UIiyH4Q57G7NQW5CuP/nO05aREMz8djr/XFdo9/g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NTLxztgaHQd/3osKRArDIMeikL4zECzGqcRVNDlo7vVX7lvRWk8GOVLLQhXFO0uiTLhVKZoG4ujO+e7UyFqd0JesVGoKGMbB9acs8WtDzBL/LB97fcI1UwxSl4/UAht09rt3aS8IRgqbYxsl5zdXa/Cj7os1HbJshfmqY/S6568=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkF/+GGw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749157448; c=relaxed/simple;
+	bh=5z4lyN6eFPIUIuW6ETWM+sIFBqvUb6kdsqF23bzMXIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Dx9MWYnh8TJkgyXsnR8JlBij0O0tl+mnZTxvbBjymSoCKCGiQw2jG53Jp2QiTxULSRt+XDGTHIbnU+Bn/uzxRywK1cp63+v2jt3QMxbZH/CtRi9G+rXieOvHiZ4Y/QnqMZLpOSRGViFA/xqG9OB9TInUBk399cMqgUc6zn6Y75M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cD7s8vD0; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkF/+GGw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55978C4CEF0
-	for <llvm@lists.linux.dev>; Thu,  5 Jun 2025 20:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749156045;
-	bh=Lg5UIiyH4Q57G7NQW5CuP/nO05aREMz8djr/XFdo9/g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KkF/+GGwLW0TepEFsLiW7W1Buc2uiNdU3NRiLKIVfE1s4rjel+GvEP5PCHvlyu8Jb
-	 MJ1IA892P7VEWQRVmanOhpZcKTvsvWJ/tS+iV/o/kbFKIVos6dbJusHX/1fNDpbSjF
-	 8yDE76w8GZEn4decr8p/LH4wLmY3lk5wDrIUInwKHs96db0KVwVU20hdxcJR0TVb8T
-	 JBketqPIuqRjfdvYa4Tg99NOlIK5P85hJyyehhoojh5kFECme8nlQrdKTIngerZiRA
-	 uIfzc5VBW3BrNd4g0XfXzd3GnqysR3z6bOH4o3vlygQ9hEE/kfnprckYGfQyGmhCUs
-	 6BfHzrOJjy0Pw==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-551ed563740so1757377e87.2
-        for <llvm@lists.linux.dev>; Thu, 05 Jun 2025 13:40:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXrkSxRKQ9Ql2hzgMFVVaOr6KNO8WUarfeyH5OX/6zxxv0S0B1A02KoKSsjEd9pWau+w+dZ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3PdmaTxseRl2EWSZGjBmkFLq+ukC5sDlfI5JOPw6vTy2b/DaO
-	tesJQ6OOYRkf/dhG/mBk8pL2U2SFLa68lO32gF4l5JuXnPpwkqhceFk3ZNp2aAzbPhb47rvMIji
-	1ftyf/TtwCePW936PQW5HR66IrZdPuUk=
-X-Google-Smtp-Source: AGHT+IEatRbFM/FmKCWy9sKO5xpdDCj/tNnQHiDrUQYz8fuR33yez6OUj1Z5K59hVMJyG3Fb7IDbo4lIbOuCbrIEPwM=
-X-Received: by 2002:a05:6512:15a9:b0:550:dee7:54b5 with SMTP id
- 2adb3069b0e04-55366c356e4mr166663e87.41.1749156043998; Thu, 05 Jun 2025
- 13:40:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cD7s8vD0"
+Received: from DESKTOP-0403QTC. (unknown [40.65.108.177])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 8450D210D0C2;
+	Thu,  5 Jun 2025 14:04:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8450D210D0C2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1749157441;
+	bh=Gund+dK5aJW6UtaEJ+x2rgplZpVnxwe1S5F5gyh6HAA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Reply-To:From;
+	b=cD7s8vD0a0AfPh3ebIr231hpAoYtxnmr5f0EAkqfQvSQ1jXXObO60Olle7BNyh26Y
+	 PQSAfLA3l+EG5LI4UboSinv7mYXWDeCbzO5VLzMylLYL36WykSm86yqe0ISRwemYjE
+	 RuzFbs8q4U3a2qW3X85abq+4uV8QpooHP9orWnmw=
+Date: Thu, 5 Jun 2025 14:03:58 -0700
+From: Jacob Pan <jacob.pan@linux.microsoft.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, Joerg Roedel
+ <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
+ <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, Bill Wendling
+ <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Robin
+ Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Suravee
+ Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon
+ <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
+ <alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>,
+ Michael Roth <michael.roth@amd.com>, Pasha Tatashin
+ <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+ jacob.pan@linux.microsoft.com
+Subject: Re: [PATCH v2 12/15] iommupt: Add the x86 64 bit page table format
+Message-ID: <20250605140358.2dd6c083@DESKTOP-0403QTC.>
+In-Reply-To: <12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+	<12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+Reply-To: jacob.pan@linux.microsoft.com
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250525112833.3808220-1-masahiroy@kernel.org> <20250527221637.GA2566504@ax162>
-In-Reply-To: <20250527221637.GA2566504@ax162>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 6 Jun 2025 05:40:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARTm2jftn6dDu1rCAYK7TdLKUHEhXc-LzYgGmu9GfU-AA@mail.gmail.com>
-X-Gm-Features: AX0GCFst7UEbP3DBeMZgZHIuRIETd3mCYHRutM9dfMKKcIhExiu0grYGX_VCSrI
-Message-ID: <CAK7LNARTm2jftn6dDu1rCAYK7TdLKUHEhXc-LzYgGmu9GfU-AA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: replace deprecated T option with --thin for $(AR)
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 28, 2025 at 7:16=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Sun, May 25, 2025 at 08:28:31PM +0900, Masahiro Yamada wrote:
-> > According to 'man ar':
-> >
-> >     T   Deprecated alias for --thin.  T is not recommended because in
-> >         many ar implementations T has a different meaning, as specified
-> >         by X/Open System Interface.
-> >
-> > 'man llvm-ar' also states:
-> >
-> >     T   Alias for --thin. In many ar implementations T has a different
-> >         meaning, as specified by X/Open System interface.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
->
-> Yeah, seems reasonable to get ahead of the curve in case either
-> implementation decides to drop it.
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Hi Jason,
 
+On Mon,  5 May 2025 11:18:42 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-I gave up due to this report:
-
-https://lore.kernel.org/all/20250603163933.4df366ff@canb.auug.org.au/
-
-
---=20
-Best Regards
-Masahiro Yamada
+> +config IOMMU_PT_X86_64
+> +       tristate "IOMMU page table for x86 64 bit, 4/5 levels"
+> +	depends on !GENERIC_ATOMIC64 # for cmpxchg64
+> +	default n
+> +	help
+> +	  iommu_domain implementation for the x86 64 bit 4/5 level
+> page table.
+> +	  It supports 4K/2M/1G page sizes and can decode a sign
+> extended
+> +	  portion of the 64 bit IOVA space.
+> +
+> +	  Selected automatically by an IOMMU driver that uses this
+> format. +
+>  config IOMMU_PT_KUNIT_TEST
+>  	tristate "IOMMU Page Table KUnit Test" if !KUNIT_ALL_TESTS
+>  	depends on KUNIT
+>  	depends on IOMMU_PT_AMDV1 || !IOMMU_PT_AMDV1
+> +	depends on IOMMU_PT_X86_64 || !IOMMU_PT_X86_64
+Is this intended? or you mean:
+depends on IOMMU_PT_X86_64 || IOMMU_PT_AMDV1
