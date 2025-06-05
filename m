@@ -1,123 +1,199 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBED1B3930
-	for <llvm@lists.linux.dev>; Thu,  5 Jun 2025 12:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7B31E1DE2;
+	Thu,  5 Jun 2025 16:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749127486; cv=none; b=CFboG+EYHYKdnXlBDR7cS7yu22lDfn+TTrXcXn3jdKZpWwVREA6xkDGPdFZC0cVhBc9uxBgzg+qQzrN8wh0eQJw3NWm/hkijI5BO9kzi09Wz6x7lrAP1Uvhn8MnpyZj11ShNP2HOre8bWWuaUnPDH6YOPmfq5kHnwFhTXJ5Gw/A=
+	t=1749139204; cv=none; b=mqWu8ovqjwC1uD3zryN8JNgxnGx0+UKQ/1+KKZAa0+vH2I4gbXx3wFDFYYLu0E5SPlBSnKVkcvBCLwdktUzu6cRS9UccX1YaVVOI2PlL6ncw3BhTz4lnU5WMQkquV9HkvN6k2dXHZ5vcITiLGkPV5MGT8EZPw3riHFnoLMZ6rAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749127486; c=relaxed/simple;
-	bh=LPjSqd1arO3ae+RE2dI6IlsG2/fm+cR8j1uycGYsSxU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nNLolQpzS1+OdAkV9AXTrkPVmozqOBFTjfCQGv2l0z/lvyNXC2RYHruSmtlJxB7lHbrmVSLJVn5rlLz3xDawZ8evT/j0dP+fJxMAmvsJ1cWFfeXYiFnTMX9yzEifPLYMz7hYfhKzX06167ATKQJXk8Kj7p8eIQfUXCTTdv0W0v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CLNll78i; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1749139204; c=relaxed/simple;
+	bh=RRz7YiPhyPTQ22ArkvymjhdfeIHClOipkpfMkO35EZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZcQnrm+fGmmLBz6mEa3ku1ZABMvU+ndh9QYEpbAoK1rGUwwYnIrM3k4Aqb0m4+3NbK0kE9v/bzvhag5SWz5Vu44hYwP5MADZvYayB0ARDrBp9WU2+ZSz1pkcO5Dnnp3W1QalQrabo91/0UJOZLDrmVB7ZM70AU4GqDjHsQFpes8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l6fO/TMU; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CLNll78i"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b2c4e46a89fso686069a12.2
-        for <llvm@lists.linux.dev>; Thu, 05 Jun 2025 05:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749127484; x=1749732284; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RmtZfxKybWvYJ6qI7WFSQXtodHIM/sbfg14YLjJ49tU=;
-        b=CLNll78iczdi8xQ9rb/ukBAd1MqKJF2zODvKHaxOTRgyE7x96jfJO7HoCyZtxW9ClT
-         XDZ1/nX9OssSlWO4a35BCGUMkZ4Wt66Vz9DddmhCANjX+DhpfA5x04qeloNUUUziLv55
-         XCnYFfAvFLPzArWmBwhi79770rPdbenn3oQPewvi7ZocMW6QYIk1HAhlgE/WuZpVyyqv
-         pudcqunsxuOdPu9zJlkHx22h7scv4301Yr1dK1kjOZE3OFCuX1BAzLFdpUiwmE/tXADb
-         14Jm93Q5jAeRfsMth48nSdeg1vrOH1wpSgjK96iJhVDxwDIegYCXgxuDc8nEdKZ1Ss9+
-         6+cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749127484; x=1749732284;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RmtZfxKybWvYJ6qI7WFSQXtodHIM/sbfg14YLjJ49tU=;
-        b=sKX3KtHorNTegVRvRI4RVq6MVYalrmutNs/FmRURT5X5arotTM62jVO6gdvL71Vbva
-         /TOti8Pe/WdBEcAbE1pTHo2NWYOUsMbWY9C9GBif81Ys8zKz0CnjF5KryDO1BwT9GUq+
-         pQFlBrvxdtJQPMlE4VYynFya7sSqA/NfELsCDitTrPraldB1hWSvZmsIWXuYtxpqvdNI
-         vICI75tR+aNsqDAuxx/F6wDcsIjFg10eO8UuJZSIU7U8A8WPYtBo8T+ePyR8Tqb6L1fJ
-         97mOrFLWvz56azIudnlfZVVN3IMDGydiUbrhTmBGKJDHr+aIPkyRDLu3x9839Tvk+JkI
-         EN6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUhbFK5XWJqdvyq50ezQ3n0NarXkkMQcAwJ9n1sQsnMzdVSnF9TOVDmcaNFyMtaFSSwvvEM@lists.linux.dev
-X-Gm-Message-State: AOJu0YxE9d3MTlrrT9mkET3x+IQN5HZP3f7nEbxtw7XFmua6yevS2wEV
-	GTIE5GZCIgpkZst0SsohVLFp74uhwzH3fCdC2aGSah1SbI3s9uDIjuAu6PpHGmCTFiTtTRDZo3y
-	1yghyFWLv1WIV2k8grERwmUoxJylio5cVHR7eF8yI
-X-Gm-Gg: ASbGncsuxENQe+/XyS8Zjvsb9WOHqwXmAawoCvCC5UEBU1zP2UtPw4w0NZsFwpLNUMl
-	pH/Sq7h5+o7Klvz1xNg7ug86KAnVq5tINw6sfd5VlVytVdLkWRF/qyi2POmq9IdRDKRV0fFSUp+
-	/8gqeX4aLtJqUVM0NOBGwdhNCK3GqOVXutyKBQvfyWfdvoOdN0w80omBI2+l7Ks118X9mkZ24m
-X-Google-Smtp-Source: AGHT+IFrgP9X9ALH2S2djXK6f+vb0Dbemd6I7i8tj8MWm6LWG8Gqeabg5N2rlzpVYabY7V+2PYpkeB6rtMbEMrIrjoY=
-X-Received: by 2002:a17:90b:48cc:b0:311:2f5:6b1 with SMTP id
- 98e67ed59e1d1-3130cd3c193mr8192812a91.22.1749127483946; Thu, 05 Jun 2025
- 05:44:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l6fO/TMU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749139201; x=1780675201;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RRz7YiPhyPTQ22ArkvymjhdfeIHClOipkpfMkO35EZM=;
+  b=l6fO/TMU6lF7r4mNoC561ba2FYM0sb7OFmue5z0shRPpAlyIo1CGPhXp
+   SdEkI8VbsFkkU6omV6x9DZJSl2Cpt0E+DVRZBzEJmKmKC97hUFgd+2oe4
+   zavjg3Nn+5cvlSeoawlageYdZVh4ne4Sq+xbjszggyHAGNrFWQDDUJ66h
+   kjv1RsIdcTDcMoQ1/v4O9djEfabCepfzhpZkofNuc38jUuTF9bHGIeaVX
+   f0K+NmHXfxzsQz+WQWzVb+qChxfc/swuJIpDbbZcVvfyeSvX2XvLJCydy
+   w7mrHw1rJYg75jWnlDwYNixbavQxAc7WXMb1yEhkJfRlyGS02ff9lDpUt
+   Q==;
+X-CSE-ConnectionGUID: ueRbVvf6SO2LqBwhkKUXGQ==
+X-CSE-MsgGUID: P00CrEzNSBuYhV2+NayeFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="61886188"
+X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
+   d="scan'208";a="61886188"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 09:00:01 -0700
+X-CSE-ConnectionGUID: v0/PGK0lRouERhntos4ZtA==
+X-CSE-MsgGUID: Lvt/OwDyTLSQbKeDu4fzcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
+   d="scan'208";a="145510428"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 05 Jun 2025 08:59:58 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uND0V-0004F7-0s;
+	Thu, 05 Jun 2025 15:59:55 +0000
+Date: Thu, 5 Jun 2025 23:59:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lukas Timmermann <linux@timmermann.space>, lee@kernel.org,
+	pavel@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@timmermann.space
+Subject: Re: [PATCH v3 1/2] leds: as3668: Driver for the ams Osram 4-channel
+ i2c LED driver
+Message-ID: <202506052351.GK29s0TN-lkp@intel.com>
+References: <20250604225838.102910-2-linux@timmermann.space>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
- <CANpmjNPRgUz9oX0H8kza2sB847Bai4rLtqfOnUSLmqt2Zm_pqA@mail.gmail.com>
-In-Reply-To: <CANpmjNPRgUz9oX0H8kza2sB847Bai4rLtqfOnUSLmqt2Zm_pqA@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Thu, 5 Jun 2025 14:44:07 +0200
-X-Gm-Features: AX0GCFttp5SAAv40grFvfCdhHPY0bJ6ZOySNqoem4diDwmODqns97rIqyF8XWIo
-Message-ID: <CANpmjNMCY94VxH1Qo802pPjZ6X5i22sL9CO0ChFLS=q3Rx4CAA@mail.gmail.com>
-Subject: Re: Thread Safety Analysis and the Linux kernel
-To: linux-toolchains@vger.kernel.org, llvm@lists.linux.dev
-Cc: aaron.puchert@sap.com, Aaron Ballman <aaron@aaronballman.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Bart Van Assche <bvanassche@acm.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250604225838.102910-2-linux@timmermann.space>
 
-On Mon, 5 May 2025 at 15:44, Marco Elver <elver@google.com> wrote:
-> On Wed, 5 Mar 2025 at 12:47, Marco Elver <elver@google.com> wrote:
-> [...]
-> > 1. Re-entrant acquires: rcu_read_lock(), preempt_disable(), etc. are
-> > all re-entrant locks. My proposal is to introduce an attribute that
-> > can be added to "ACQUIRE(..)" annotated functions to indicate they are
-> > re-entrant. Release-count needs to then match acquire-count to fully
-> > release a capability.
->
-> FTR, reentrant locking support is taken care of:
-> https://github.com/llvm/llvm-project/pull/137133 (should land soon).
->
-> But I think we need at least #2 (basic alias analysis) as well for
-> things to become tolerable for the kernel side. And that one looks a
-> bit harder to implement in Clang, so it'll be a while.
-[..]
-> > 2. Basic alias analysis, e.g. when storing a pointer to a lock in a
-> > function-local variable. [Complaint in:
-> > https://lore.kernel.org/all/569186c5-8663-43df-a01c-d543f57ce5ca@kernel.org/
-> > -- quote: "Fix the analyzer instead."]
+Hi Lukas,
 
-There is hope: https://github.com/llvm/llvm-project/pull/142955 - but
-it turned out to be "too easy to be true", so who knows if that'll
-stick.
+kernel test robot noticed the following build errors:
 
-> > 3. Ability to refer to locks in returned reference/pointer. For example:
-> >     struct foo *ret_lock_struct(void) ACQUIRE(return->somelock);
-> >     struct foo *try_ret_lock_struct(void) TRY_ACQUIRE(1,
-> > return->somelock); // locked if non-NULL
-> > I expect this also requires basic alias analysis to work so that
-> > assigning the returned pointer to a function-local variable and then
-> > later use in an unlock function works as expected.
-> >
-> > More complex requests:
-> >
-> > 4. The ability to deal with conditional locking with return values
-> > that are not just true/non-zero and false/zero. A concrete case here
-> > is that a lot of functions return error codes, and if the error code
-> > is < 0, no lock is taken. If the error code is >= 0, the lock is
-> > taken. [ Source:
-> > https://lore.kernel.org/all/569186c5-8663-43df-a01c-d543f57ce5ca@kernel.org/
-> > ]
-> >
-> > 5. Better control-flow handling. Basic understanding of conditional
-> > locking, which is explicitly ruled out in:
-> > https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#conditional-locks
-> > - however, if there's some way to even get basic support, would vastly
-> > improve things for the kernel.
-> [...]
+[auto build test ERROR on lee-leds/for-leds-next]
+[also build test ERROR on linus/master v6.15 next-20250605]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Timmermann/leds-as3668-Driver-for-the-ams-Osram-4-channel-i2c-LED-driver/20250605-112204
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20250604225838.102910-2-linux%40timmermann.space
+patch subject: [PATCH v3 1/2] leds: as3668: Driver for the ams Osram 4-channel i2c LED driver
+config: x86_64-kexec (attached as .config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250605/202506052351.GK29s0TN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506052351.GK29s0TN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/leds/Kconfig:116: syntax error
+   drivers/leds/Kconfig:116: unknown statement "The"
+   drivers/leds/Kconfig:117:warning: ignoring unsupported character '.'
+   drivers/leds/Kconfig:117: unknown statement "the"
+   drivers/leds/Kconfig:118:warning: ignoring unsupported character ','
+   drivers/leds/Kconfig:118:warning: ignoring unsupported character '.'
+   drivers/leds/Kconfig:118: unknown statement "channel"
+   drivers/leds/Kconfig:121:warning: ignoring unsupported character ','
+   drivers/leds/Kconfig:121:warning: ignoring unsupported character ':'
+   drivers/leds/Kconfig:121: unknown statement "To"
+   drivers/leds/Kconfig:122:warning: ignoring unsupported character '.'
+   drivers/leds/Kconfig:122: unknown statement "will"
+   make[3]: *** [scripts/kconfig/Makefile:85: oldconfig] Error 1
+   make[2]: *** [Makefile:731: oldconfig] Error 2
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'oldconfig' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'oldconfig' not remade because of errors.
+--
+>> drivers/leds/Kconfig:116: syntax error
+   drivers/leds/Kconfig:116: unknown statement "The"
+   drivers/leds/Kconfig:117:warning: ignoring unsupported character '.'
+   drivers/leds/Kconfig:117: unknown statement "the"
+   drivers/leds/Kconfig:118:warning: ignoring unsupported character ','
+   drivers/leds/Kconfig:118:warning: ignoring unsupported character '.'
+   drivers/leds/Kconfig:118: unknown statement "channel"
+   drivers/leds/Kconfig:121:warning: ignoring unsupported character ','
+   drivers/leds/Kconfig:121:warning: ignoring unsupported character ':'
+   drivers/leds/Kconfig:121: unknown statement "To"
+   drivers/leds/Kconfig:122:warning: ignoring unsupported character '.'
+   drivers/leds/Kconfig:122: unknown statement "will"
+   make[3]: *** [scripts/kconfig/Makefile:85: olddefconfig] Error 1
+   make[2]: *** [Makefile:731: olddefconfig] Error 2
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'olddefconfig' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'olddefconfig' not remade because of errors.
+
+
+vim +116 drivers/leds/Kconfig
+
+    66	
+    67	config LEDS_88PM860X
+    68		tristate "LED Support for Marvell 88PM860x PMIC"
+    69		depends on LEDS_CLASS
+    70		depends on MFD_88PM860X
+    71		help
+    72		  This option enables support for on-chip LED drivers found on Marvell
+    73		  Semiconductor 88PM8606 PMIC.
+    74	
+    75	config LEDS_AN30259A
+    76		tristate "LED support for Panasonic AN30259A"
+    77		depends on LEDS_CLASS && I2C && OF
+    78		help
+    79		  This option enables support for the AN30259A 3-channel
+    80		  LED driver.
+    81	
+    82		  To compile this driver as a module, choose M here: the module
+    83		  will be called leds-an30259a.
+    84	
+    85	config LEDS_APU
+    86		tristate "Front panel LED support for PC Engines APU/APU2/APU3 boards"
+    87		depends on LEDS_CLASS
+    88		depends on X86 && DMI
+    89		help
+    90		  This driver makes the PC Engines APU1 front panel LEDs
+    91		  accessible from userspace programs through the LED subsystem.
+    92	
+    93		  If you're looking for APU2/3, use the pcengines-apu2 driver.
+    94		  (symbol CONFIG_PCENGINES_APU2)
+    95	
+    96		  To compile this driver as a module, choose M here: the
+    97		  module will be called leds-apu.
+    98	
+    99	config LEDS_ARIEL
+   100		tristate "Dell Wyse 3020 status LED support"
+   101		depends on LEDS_CLASS
+   102		depends on (MACH_MMP3_DT && MFD_ENE_KB3930) || COMPILE_TEST
+   103		help
+   104		  This driver adds support for controlling the front panel status
+   105		  LEDs on Dell Wyse 3020 (Ariel) board via the KB3930 Embedded
+   106		  Controller.
+   107	
+   108		  Say Y to if your machine is a Dell Wyse 3020 thin client.
+   109	
+   110	config LEDS_AS3668
+   111		tristate "LED support for AMS AS3668"
+   112		depends on LEDS_CLASS
+   113		depends on I2C
+   114		help
+   115			 This option enables support for the AMS AS3668 LED controller.
+ > 116			The AS3668 provides up to four LED channels and is controlled via
+   117			the I2C bus. This driver offers basic brightness control for each
+   118			channel, without support for blinking or other advanced features.
+   119	
+   120	
+   121			To compile this driver as a module, choose M here: the module
+   122			will be called leds-as3668.
+   123	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
