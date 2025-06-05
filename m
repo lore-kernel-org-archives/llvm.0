@@ -1,84 +1,87 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7CC27AC48;
-	Thu,  5 Jun 2025 21:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF2B20FA8B;
+	Thu,  5 Jun 2025 22:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749157448; cv=none; b=e2ATYI2lORvTE5eMgORlc5VCzLeNKe2zHekf/RYBUe1Qxl5wJBzIr2WiEITI7z9ptK4GwKdxIs/2BIpl3Q9R7UX3rY7oEG/RXPpZR6CM7Y5Ch7gJdKAWEvfBubC6SXCEQV+7DssJTjQdvwDNEQiry4IHRGk0nGv+I2TuU0jssRQ=
+	t=1749162097; cv=none; b=CSZra4fJtlhptIxrFLi1ROzDaCdzDOCytVKWvZPL8JsaftO24HWVfSoZ3uwyLy2TUvkO0E8d0ksYyNlX0HxlGVJwKd4rTrSt/q8I1o1Vw3cXucguaWCZE+BOJdAK1i4s5wJolyeBj4qDb96Y+8dLy9ty0CsW6q/WylZ1WkLYiO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749157448; c=relaxed/simple;
-	bh=5z4lyN6eFPIUIuW6ETWM+sIFBqvUb6kdsqF23bzMXIQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Dx9MWYnh8TJkgyXsnR8JlBij0O0tl+mnZTxvbBjymSoCKCGiQw2jG53Jp2QiTxULSRt+XDGTHIbnU+Bn/uzxRywK1cp63+v2jt3QMxbZH/CtRi9G+rXieOvHiZ4Y/QnqMZLpOSRGViFA/xqG9OB9TInUBk399cMqgUc6zn6Y75M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cD7s8vD0; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1749162097; c=relaxed/simple;
+	bh=5Rz5qcm+DQp0PQcRDY+At3gmN7yKbD5lAwd7JQc9Kbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eMwm+sgAxnEHqG7OHoquSBqLg/zOozyZTWaSFhfcGRYcasTBIAJttuz1mVyLlbmdl08Mnk9KaWZytQ0DTWndofNWDluLAINIDuqO5Onn59iyX6B1Ogt1K5rALt4qOTAI9As5Pr1wKWGTXCsdmqaZdAYFRx+cSbb8rvKkmqwrD50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4Nkv5iX; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cD7s8vD0"
-Received: from DESKTOP-0403QTC. (unknown [40.65.108.177])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 8450D210D0C2;
-	Thu,  5 Jun 2025 14:04:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8450D210D0C2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1749157441;
-	bh=Gund+dK5aJW6UtaEJ+x2rgplZpVnxwe1S5F5gyh6HAA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Reply-To:From;
-	b=cD7s8vD0a0AfPh3ebIr231hpAoYtxnmr5f0EAkqfQvSQ1jXXObO60Olle7BNyh26Y
-	 PQSAfLA3l+EG5LI4UboSinv7mYXWDeCbzO5VLzMylLYL36WykSm86yqe0ISRwemYjE
-	 RuzFbs8q4U3a2qW3X85abq+4uV8QpooHP9orWnmw=
-Date: Thu, 5 Jun 2025 14:03:58 -0700
-From: Jacob Pan <jacob.pan@linux.microsoft.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, Joerg Roedel
- <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
- <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, Bill Wendling
- <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Robin
- Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Suravee
- Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon
- <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
- <alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>,
- Michael Roth <michael.roth@amd.com>, Pasha Tatashin
- <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
- jacob.pan@linux.microsoft.com
-Subject: Re: [PATCH v2 12/15] iommupt: Add the x86 64 bit page table format
-Message-ID: <20250605140358.2dd6c083@DESKTOP-0403QTC.>
-In-Reply-To: <12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-	<12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-Reply-To: jacob.pan@linux.microsoft.com
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4Nkv5iX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749162096; x=1780698096;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5Rz5qcm+DQp0PQcRDY+At3gmN7yKbD5lAwd7JQc9Kbc=;
+  b=Z4Nkv5iXB1ml1ABBIJc6X6KC7bdGNMTrmB3/j//FHNwGthi0ZIS98Uay
+   mfD7+63fW7DOFg3ueASL2mGwMQo8hgJ7zfyURwWuDTfUNJEVrspGKChPR
+   nfXaAPHKS53ArmmNhU4H0uOQctrZ8gvGNpFJs1S+5EXMEGVZUOjU7DpBK
+   9bZ7nJerQEIyLl78wGEeOuLcY1iy+Xfr7MHwPgP0qXzsFq1mnhnhHekD5
+   gW4IkOFOc6MXMn0WJZqyGcqufiT1OTMNi/Z2PYgniv8I2yYQ9AO9j2xgd
+   TPrGF7PplB35BUU4lPnclgm9MqpqEhFH7UY49DVB1fBoHeE3mt2gEMF/G
+   A==;
+X-CSE-ConnectionGUID: rc3Ehy7fR82Z0tsl7/+Aqw==
+X-CSE-MsgGUID: zySWpwELSuGCtbKmrgpy5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51399154"
+X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
+   d="scan'208";a="51399154"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 15:21:35 -0700
+X-CSE-ConnectionGUID: N/D9bld5RhC3/hF0nKTlCw==
+X-CSE-MsgGUID: 0qJz7KWaTeK+CL+oeh2yMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
+   d="scan'208";a="145590735"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 05 Jun 2025 15:21:34 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uNIxo-0004Vt-14;
+	Thu, 05 Jun 2025 22:21:32 +0000
+Date: Fri, 6 Jun 2025 06:21:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Romanovsky <leonro@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [leon-rdma:move-drivers 10/14] ERROR: modpost:
+ "mlx5e_arfs_destroy_tables" [drivers/infiniband/hw/mlx5/mlx5_ib.ko]
+ undefined!
+Message-ID: <202506060608.Z6ts2Mn1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Jason,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git move-drivers
+head:   7c037ebae89e2ccf00fd35276d97b5a2fa113e27
+commit: de2172556640f73cd0cdae776f54ffa0ecd673bb [10/14] RDMA/mlx5: Move IPoIB to relevant subsystem
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250606/202506060608.Z6ts2Mn1-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506060608.Z6ts2Mn1-lkp@intel.com/reproduce)
 
-On Mon,  5 May 2025 11:18:42 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506060608.Z6ts2Mn1-lkp@intel.com/
 
-> +config IOMMU_PT_X86_64
-> +       tristate "IOMMU page table for x86 64 bit, 4/5 levels"
-> +	depends on !GENERIC_ATOMIC64 # for cmpxchg64
-> +	default n
-> +	help
-> +	  iommu_domain implementation for the x86 64 bit 4/5 level
-> page table.
-> +	  It supports 4K/2M/1G page sizes and can decode a sign
-> extended
-> +	  portion of the 64 bit IOVA space.
-> +
-> +	  Selected automatically by an IOMMU driver that uses this
-> format. +
->  config IOMMU_PT_KUNIT_TEST
->  	tristate "IOMMU Page Table KUnit Test" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
->  	depends on IOMMU_PT_AMDV1 || !IOMMU_PT_AMDV1
-> +	depends on IOMMU_PT_X86_64 || !IOMMU_PT_X86_64
-Is this intended? or you mean:
-depends on IOMMU_PT_X86_64 || IOMMU_PT_AMDV1
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "mlx5e_arfs_destroy_tables" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+>> ERROR: modpost: "mlx5e_arfs_create_tables" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+ERROR: modpost: "mlx5e_ethtool_cleanup_steering" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+ERROR: modpost: "mlx5e_ethtool_init_steering" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
