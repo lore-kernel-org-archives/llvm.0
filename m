@@ -1,61 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5F127A915;
-	Thu,  5 Jun 2025 19:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6A41FC0FC;
+	Thu,  5 Jun 2025 20:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749151403; cv=none; b=Yy8IcCi6ICHtw7Hdvw3GQJrsLWewgjs5vYPjkAZkpKVpij+KzlP3nQiSEtRoRdfPVT2OoCZPx7GJ/hrg4KJiInywA83JVQPedkwzJMlWBKYea1xZsFUPTZQH74A8+AErwFUCryhewBRp2LdPob5BF/oAXQCT4n5g1nBcO8JD3rU=
+	t=1749154588; cv=none; b=YRv/wexjnoeUbh0Zv9lxqPnIRvDQzKX3QfhQf/2yY/GUfusdsUm+UDBlbM38Aj9FfVmrcuwdW7P7p7KB/LYj1gkSAZJGbyMmFlCll8C8Gs4tWYQIdBhq6CNw2pXkse4pl4uej2jTE8QjHb5ASn7Y4knX0M87Lbaqlga5Jij/0g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749151403; c=relaxed/simple;
-	bh=fNUPHy1GkKj9GHy8djJTbawJhLN5lKKQY4/+nWFYzV0=;
+	s=arc-20240116; t=1749154588; c=relaxed/simple;
+	bh=ojVH6uCn2lJ1DNDC1gzMWHYwUVpXyMFhNnk4gf9i7r0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=auQ0oauADl3hXLxXzAnAmAOrVEk87S6PcuCZFZIShdlL+Xzx0RlMIpsD2t+yx0gToSI/yedIuoQEsLNNtFBkB/Yg7ZE51OYtTEjlzWjtpCUl5Ooi3Zt7izBJqaAxb2ibeYtv80gl1aAvvmB/hNE/cUmc3HlFgjsyzjpS76PEcLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PpQ1IrRD; arc=none smtp.client-ip=198.175.65.12
+	 Content-Disposition; b=ugVZFeufGGSGcngxFrf2s5VxmK0JIXWrJTYSKfZWZEATO7o3KvEuWP9RSxqoEiR6r3HgNAvdiebkhsIOsM3POgcUHzn/DOoUEq4vzFpAxfsCmU7IKvTYDvawsWzgKWR9oAzhKXhhY9BIMBiq52UmgDpqAFMvA6KQWvljDtX10HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yd67XoBB; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PpQ1IrRD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yd67XoBB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749151401; x=1780687401;
+  t=1749154587; x=1780690587;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fNUPHy1GkKj9GHy8djJTbawJhLN5lKKQY4/+nWFYzV0=;
-  b=PpQ1IrRD6TixE6DGES/RwVPpc0cYN7Ura5QGGX4hz8q7OCRzpMERFEZH
-   tPOnRhBM4NXujpoieZnaatxwbDvOvso6vqVzxTIaI/bP7d1bcCAOHj90Z
-   UgTdjsktYtsxU+DRh3kzBQ3lSZKtJ+bTadFhedWMUeqHnob0b4VUwHDSu
-   L/5q0tjF+p8IsB2Pb+H6f/zsaL6Hy0/lZdOraP3m8UkHXOtwbW5Oh8c0/
-   tn9hwNzGgkyz0sJHXQenEfB7vTbskobQBHn2nKVf7cqcRvKZmG0ZP3KNA
-   23+GuvEeUj0w7iDoRnuigJPuR78kvOJPGecJjkCQfi34VytWsRVYQszhV
-   Q==;
-X-CSE-ConnectionGUID: 1t9dG3/rSSuMKuYKoLms1A==
-X-CSE-MsgGUID: ciEEXLaUTdmGLDXJa8CJBQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="62686693"
-X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="62686693"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 12:23:20 -0700
-X-CSE-ConnectionGUID: b313nIXjSxOk7K87+E+oZQ==
-X-CSE-MsgGUID: dPqlZMzHTDCzeUECH7M/nA==
+  bh=ojVH6uCn2lJ1DNDC1gzMWHYwUVpXyMFhNnk4gf9i7r0=;
+  b=Yd67XoBBmtw9R3MuEkAENFZ+rr3GnVSxT9rqsQF+uNKbfDLofeMcWs4n
+   pOlyoFpLqI9UsNgXWRLF7E+6eF62R9VXp686+P8n43eYOuy/kkV3EvgL8
+   zrlYAYIcw2wY1suGV7onLs5w5npcne6L86P3LOYebgjuMctSSsZQSVUj0
+   4D2ulsVA8RZo+PSy6tS3R/Lyl+dZ0BdJCdHr0/dYaP1EWlbAauKZaCX+U
+   KvktLtYnw/railEhPjtlEvj8gYL9Ub1xhfIL0WW5YrcGTgR9bWhfYwOXQ
+   XCtpVskijeXH0WshFR4zwWNikMg9qswxe2hR5hWILuA2iDK7/kplB2rKB
+   w==;
+X-CSE-ConnectionGUID: 8Jpg9fZVTLWa84+DV6yrTQ==
+X-CSE-MsgGUID: MMsVPiDBRTWle/dx4YPJJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51148270"
+X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
+   d="scan'208";a="51148270"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 13:16:26 -0700
+X-CSE-ConnectionGUID: 5cROk8j0QTGx4B/0m9WK9w==
+X-CSE-MsgGUID: 95MHOMmMSkmm836EdKVS9A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,212,1744095600"; 
-   d="scan'208";a="150762619"
+X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
+   d="scan'208";a="176473922"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 05 Jun 2025 12:23:18 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 05 Jun 2025 13:16:25 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uNGBJ-0004P7-0h;
-	Thu, 05 Jun 2025 19:23:17 +0000
-Date: Fri, 6 Jun 2025 03:23:09 +0800
+	id 1uNH0g-0004Rp-24;
+	Thu, 05 Jun 2025 20:16:22 +0000
+Date: Fri, 6 Jun 2025 04:15:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Nikolay Borisov <nik.borisov@suse.com>
-Subject: [peterz-queue:x86/urgent 4/5] arch/x86/kernel/alternative.c:264:14:
- error: call to undeclared function 'its_alloc'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202506060355.7UJHIyDa-lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:io_uring-handle 3/3] io_uring/openclose.c:587:9: error:
+ use of undeclared identifier 'IOU_OK'
+Message-ID: <202506060420.OZdcUHlj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,62 +62,61 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/urgent
-head:   e87348e4a2daaf44da409991ca751e8844b27ef8
-commit: 01c48b9466bf0ecf95821e3ea1a58b876c4e8aaf [4/5] x86/its: explicitly manage permissions for ITS pages
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250606/202506060355.7UJHIyDa-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-handle
+head:   7a590a5963086085ce58fee4cdf920e8fdd049f4
+commit: 7a590a5963086085ce58fee4cdf920e8fdd049f4 [3/3] io_uring: add support for IORING_OP_OPEN_BY_HANDLE
+config: s390-randconfig-002-20250606 (https://download.01.org/0day-ci/archive/20250606/202506060420.OZdcUHlj-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506060355.7UJHIyDa-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506060420.OZdcUHlj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506060355.7UJHIyDa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506060420.OZdcUHlj-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/alternative.c:264:14: error: call to undeclared function 'its_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     264 |                 its_page = its_alloc();
-         |                            ^
->> arch/x86/kernel/alternative.c:264:12: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-     264 |                 its_page = its_alloc();
-         |                          ^ ~~~~~~~~~~~
-   2 errors generated.
+>> io_uring/openclose.c:587:9: error: use of undeclared identifier 'IOU_OK'
+     587 |         return IOU_OK;
+         |                ^
+   1 error generated.
 
 
-vim +/its_alloc +264 arch/x86/kernel/alternative.c
+vim +/IOU_OK +587 io_uring/openclose.c
 
-e52c1dc7455d32 Peter Zijlstra 2025-04-23  262  
-872df34d7c51a7 Peter Zijlstra 2024-10-14  263  	if (!its_page || (its_offset + size - 1) >= PAGE_SIZE) {
-872df34d7c51a7 Peter Zijlstra 2024-10-14 @264  		its_page = its_alloc();
-872df34d7c51a7 Peter Zijlstra 2024-10-14  265  		if (!its_page) {
-872df34d7c51a7 Peter Zijlstra 2024-10-14  266  			pr_err("ITS page allocation failed\n");
-872df34d7c51a7 Peter Zijlstra 2024-10-14  267  			return NULL;
-872df34d7c51a7 Peter Zijlstra 2024-10-14  268  		}
-872df34d7c51a7 Peter Zijlstra 2024-10-14  269  		memset(its_page, INT3_INSN_OPCODE, PAGE_SIZE);
-872df34d7c51a7 Peter Zijlstra 2024-10-14  270  		its_offset = 32;
-872df34d7c51a7 Peter Zijlstra 2024-10-14  271  	}
-872df34d7c51a7 Peter Zijlstra 2024-10-14  272  
-872df34d7c51a7 Peter Zijlstra 2024-10-14  273  	/*
-872df34d7c51a7 Peter Zijlstra 2024-10-14  274  	 * If the indirect branch instruction will be in the lower half
-872df34d7c51a7 Peter Zijlstra 2024-10-14  275  	 * of a cacheline, then update the offset to reach the upper half.
-872df34d7c51a7 Peter Zijlstra 2024-10-14  276  	 */
-872df34d7c51a7 Peter Zijlstra 2024-10-14  277  	if ((its_offset + size - 1) % 64 < 32)
-872df34d7c51a7 Peter Zijlstra 2024-10-14  278  		its_offset = ((its_offset - 1) | 0x3F) + 33;
-872df34d7c51a7 Peter Zijlstra 2024-10-14  279  
-872df34d7c51a7 Peter Zijlstra 2024-10-14  280  	thunk = its_page + its_offset;
-872df34d7c51a7 Peter Zijlstra 2024-10-14  281  	its_offset += size;
-872df34d7c51a7 Peter Zijlstra 2024-10-14  282  
-872df34d7c51a7 Peter Zijlstra 2024-10-14  283  	return its_init_thunk(thunk, reg);
-872df34d7c51a7 Peter Zijlstra 2024-10-14  284  }
-872df34d7c51a7 Peter Zijlstra 2024-10-14  285  
-
-:::::: The code at line 264 was first introduced by commit
-:::::: 872df34d7c51a79523820ea6a14860398c639b87 x86/its: Use dynamic thunks for indirect branches
-
-:::::: TO: Peter Zijlstra <peterz@infradead.org>
-:::::: CC: Dave Hansen <dave.hansen@linux.intel.com>
+   555	
+   556	int io_open_by_handle(struct io_kiocb *req, unsigned int issue_flags)
+   557	{
+   558		struct io_open_handle *h = io_kiocb_to_cmd(req, struct io_open_handle);
+   559		const struct export_operations *eops;
+   560		int ret;
+   561	
+   562		ret = get_path_from_fd(h->dirfd, &h->ctx.root);
+   563		if (ret < 0)
+   564			goto err;
+   565	
+   566		eops = h->ctx.root.mnt->mnt_sb->s_export_op;
+   567		if (eops && eops->permission)
+   568			ret = eops->permission(&h->ctx, h->open_flags);
+   569		else
+   570			ret = may_decode_fh(&h->ctx, h->open_flags);
+   571		if (ret) {
+   572			path_put(&h->ctx.root);
+   573			goto err;
+   574		}
+   575	
+   576		ret = __io_open_by_handle(req, issue_flags, eops);
+   577		io_req_set_res(req, ret, 0);
+   578		if (ret < 0) {
+   579	err:
+   580			req_set_fail(req);
+   581			return ret;
+   582		}
+   583	
+   584		kfree(req->async_data);
+   585		req->async_data = NULL;
+   586		req->flags &= ~REQ_F_ASYNC_DATA;
+ > 587		return IOU_OK;
 
 -- 
 0-DAY CI Kernel Test Service
