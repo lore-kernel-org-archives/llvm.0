@@ -1,77 +1,143 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F01265CC5;
-	Fri,  6 Jun 2025 08:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EA628640C;
+	Fri,  6 Jun 2025 09:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749199818; cv=none; b=P7iYUzECfyEZAJf33e+gNostH6//7bLj8Er51V51av8SL87g96jTi1uvy6SihxUkMnMJcVlLD5B/UZ+La+X0HzxpoIWili7hCsYfsSKGEXDPv6e25ncCb2Mk8YReW544MRS4YFG6ec3EDb55cME0+mTZPeyfuRFBhIbiHZ73BKg=
+	t=1749201241; cv=none; b=AoSsrkaW07XhBmPreHFf/Yi39VbCcMVn1gFiictcaL8/69oy+x5V4f5iUZVvPu04nxZzgAL+nMOpz5aYQxp1Uc1ZaU9tpLc7mxunf0tQQVIn1yDiK2L5GIDBiMhEnIIK5Rf0sbJPevBdJ7qNVZa3JJ6IfION03pusvQp7EDJqVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749199818; c=relaxed/simple;
-	bh=88yyzmoVei/0kAR59Zn18QJmxgJ+Psm3nVy5MwV12t8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KY2qs5oYp1n3WhrCULo+22KLK7RA2Y86wCq9UdaaP0m/jJBzAImdEloCdcyznooMVfq/vW+cMXu00PLVqUoPh8O6qRxE8mA24GnVEti906PvxQCiVcb7geJgom+Gjc/5UO9nDgRbDWrW4mn6P0QTUDzc9zcmUyzbTc50qyEuwlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jpGKPZsa; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1749201241; c=relaxed/simple;
+	bh=8AzNZ4la2PoPmxTh0qvOadpjPianLkUkYxBsjSoIfoM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JBim0rD+xS3fZz1gl4mlEacHC5ljwoZ8DFZ9VF/y77PRyX90/Xz0oAIzFJd8hpGbXiWXpOEHQGYA68r5ge74q9glltF8pAuTvzqbidtPDvPFcvK43Ghu6kMh6+QB7B/XoeLlEbGCQEuU1h+VFth3kjaipFMXV1dEykIzCw4G5jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=N6bY10+K; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jpGKPZsa"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=g2mmM0Hm8i0Nmu2E8MI7iFNf1jatd3lN0x3ayh1jAbI=; b=jpGKPZsa9kmzqX4RXlyPJI8Bq9
-	DB/X8lxFPshdGE2cqCHgZCHDBKiwfMZv7zx1lXvbBztH4JWYv3vYm37WseTVfC27mbybE8zr8vOQc
-	84n1pMkUHraoJ2TgbfbMvSGY/Ng2f/rsul9Z+srptUitqPpgxxnYUb3/7ORkOfLlLsSzUqGre/+pZ
-	PZPHOb3RI7rZdNvvDVxO5v5MTmdW6PtN9cc5ros/aYhgK+X/Qq2oWZ/F9i6gZMaU0bZNA8ulAVzXl
-	9yFSsMk7vhGoyzrCQmMbzAPMNrLSZrAonGf/4ew6ceAkns8zWqJ1/8FzGebo27npq/82bfOYqPeIa
-	3zOZAf4Q==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uNSmE-00000001Fjl-1Q7u;
-	Fri, 06 Jun 2025 08:50:14 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6F44F30078B; Fri,  6 Jun 2025 10:50:13 +0200 (CEST)
-Date: Fri, 6 Jun 2025 10:50:13 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Nikolay Borisov <nik.borisov@suse.com>
-Subject: Re: [peterz-queue:x86/urgent 4/5]
- arch/x86/kernel/alternative.c:264:14: error: call to undeclared function
- 'its_alloc'; ISO C99 and later do not support implicit function declarations
-Message-ID: <20250606085013.GX39944@noisy.programming.kicks-ass.net>
-References: <202506060355.7UJHIyDa-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="N6bY10+K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1749201229;
+	bh=HQ4lHEPmIHw9cneR2PlF0QPtXcQfPGIV8GSmE9YMTkU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=N6bY10+Kk0WxoqAfmlihmF2xdiA8O9584b5lKeU3vxuVh5CokRiOc+fFAC6Dzdp7U
+	 84izpGR5FOAvvpndZozSMK5woPm8xNFVJQBQ2kTr1h7kOl9jkYpMyRKBfFwlvuXzTt
+	 xwSWTgYrBRbErFjHPYLfcDTm+hjHKmNBAkkvdYok=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id F10D865992;
+	Fri,  6 Jun 2025 05:13:46 -0400 (EDT)
+Message-ID: <06e4746ade602f42907aed82c16826230a8ff80e.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in
+ syscall wrappers
+From: Xi Ruoyao <xry111@xry111.site>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Theodore Ts'o	 <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Nathan Chancellor	 <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>,  Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>, 	loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 	stable@vger.kernel.org
+Date: Fri, 06 Jun 2025 17:13:45 +0800
+In-Reply-To: <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
+References: 
+	<20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
+	 <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
+	 <5a5329feaab84acb91bbb4f48ea548b3fb4eab0f.camel@xry111.site>
+	 <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202506060355.7UJHIyDa-lkp@intel.com>
 
-On Fri, Jun 06, 2025 at 03:23:09AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/urgent
-> head:   e87348e4a2daaf44da409991ca751e8844b27ef8
-> commit: 01c48b9466bf0ecf95821e3ea1a58b876c4e8aaf [4/5] x86/its: explicitly manage permissions for ITS pages
-> config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250606/202506060355.7UJHIyDa-lkp@intel.com/config)
-> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506060355.7UJHIyDa-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202506060355.7UJHIyDa-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/x86/kernel/alternative.c:264:14: error: call to undeclared function 'its_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      264 |                 its_page = its_alloc();
->          |                            ^
+On Thu, 2025-06-05 at 09:37 +0200, Thomas Wei=C3=9Fschuh wrote:
+> On Wed, Jun 04, 2025 at 10:30:55PM +0800, Xi Ruoyao wrote:
+> > On Wed, 2025-06-04 at 22:05 +0800, Huacai Chen wrote:
+> > > On Tue, Jun 3, 2025 at 7:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
+> > > <thomas.weissschuh@linutronix.de> wrote:
+> > > >=20
+> > > > The syscall wrappers use the "a0" register for two different regist=
+er
+> > > > variables, both the first argument and the return value. The "ret"
+> > > > variable is used as both input and output while the argument regist=
+er is
+> > > > only used as input. Clang treats the conflicting input parameters a=
+s
+> > > > undefined behaviour and optimizes away the argument assignment.
+> > > >=20
+> > > > The code seems to work by chance for the most part today but that m=
+ay
+> > > > change in the future. Specifically clock_gettime_fallback() fails w=
+ith
+> > > > clockids from 16 to 23, as implemented by the upcoming auxiliary cl=
+ocks.
+> > > >=20
+> > > > Switch the "ret" register variable to a pure output, similar to the=
+ other
+> > > > architectures' vDSO code. This works in both clang and GCC.
+> > > Hmmm, at first the constraint is "=3Dr", during the progress of
+> > > upstream, Xuerui suggested me to use "+r" instead [1].
+> > > [1]=C2=A0 https://lore.kernel.org/linux-arch/5b14144a-9725-41db-7179-=
+c059c41814cf@xen0n.name/
+> >=20
+> > Based on the example at
+> > https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html:
+> >=20
+> > =C2=A0=C2=A0 To force an operand into a register, create a local variab=
+le and specify
+> > =C2=A0=C2=A0 the register name after the variable=E2=80=99s declaration=
+. Then use the local
+> > =C2=A0=C2=A0 variable for the asm operand and specify any constraint le=
+tter that
+> > =C2=A0=C2=A0 matches the register:
+> > =C2=A0=C2=A0=20
+> > =C2=A0=C2=A0 register int *p1 asm ("r0") =3D =E2=80=A6;
+> > =C2=A0=C2=A0 register int *p2 asm ("r1") =3D =E2=80=A6;
+> > =C2=A0=C2=A0 register int *result asm ("r0");
+> > =C2=A0=C2=A0 asm ("sysint" : "=3Dr" (result) : "0" (p1), "r" (p2));
+> > =C2=A0=C2=A0=20
+> > I think this should actually be written
+> >=20
+> > =C2=A0	asm volatile(
+> > =C2=A0	"=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 syscall 0\n"
+> > 	: "=3Dr" (ret)
+> > =C2=A0	: "r" (nr), "0" (buffer), "r" (len), "r" (flags)
+> > =C2=A0	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
+> > "$t8",
+> > =C2=A0	=C2=A0 "memory");
+> >=20
+> > i.e. "=3D" should be used for the output operand 0, and "0" should be u=
+sed
+> > for the input operand 2 (buffer) to emphasis the same register as
+> > operand 0 is used.
+>=20
+> I would have expected that matching constraints ("0") would only really m=
+ake
+> sense if the compiler selects the specific register to use. When the regi=
+ster is
+> already selected manually it seems redundant.
+> But my inline ASM knowledge is limited and this is a real example from th=
+e GCC
+> docs, so it is probably more correct.
+> On the other hand all the other vDSO implementations use "r" over "0" for=
+ the
+> input operand 2 and I'd like to keep them consistent.
 
-*sigh*... obviously I failed both typing and compiling before pushing
-things out. Lets try this again ;-)
+Per https://gcc.gnu.org/pipermail/gcc-help/2025-June/144261.html and
+https://gcc.gnu.org/pipermail/gcc-help/2025-June/144266.html it should
+be fine to just use "r".
+
+Reviewed-by: Xi Ruoyao <xry111@xry111.site>
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
