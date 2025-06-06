@@ -1,281 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1D27FD;
-	Fri,  6 Jun 2025 20:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6B51E231D;
+	Fri,  6 Jun 2025 21:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749241058; cv=none; b=XQdBklY0Q8Iqpu30uWbC2uYlHeYO/w94IHz44WyE+B4k/L98DCsglFEQP3Z4iQSUY3ryKz+CsVJNBP2tuzRduQi+1GqSYWeLcvMXqnH6b7TqoH9UYhKDYuh+fF/3eJk+9w/wT+IK/1ejP5WnF6vnprX8oN2g+0H1Ie5H3Sf0G/k=
+	t=1749244235; cv=none; b=isQW0tCjCUU2pNg41pQSrTdirv4yeQP7Uie8MBWxuBsOaqHDM45aR1lmMQpYXL+Lqk0w1bVB+cKhgHQcfIjgGxIy5YZr7TjzW9RdR7TCM6uK4tnW+CGyZzFlkepzy0enRBefJUE4VGGZW/dZjGA3IT2ZduIhBjJVNG11uE3iMy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749241058; c=relaxed/simple;
-	bh=xo8VKm0/2nL/L70Nvv0cwJxphDlhCnT+pw1XJfzarG8=;
+	s=arc-20240116; t=1749244235; c=relaxed/simple;
+	bh=y2vtspK8CJxI3MpPLgfdlVOZRYupmnSMVie6NjOCH5A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iyets9b9Zyhz7uLV3nkh/5PRms/KV/StdKzvRNCbi0xtWrYBrOt6CqUNVdgIGHmvJzjE1WFVEQfxQ+HDaXqlhk4vx5VI30zWmco+qtBNUL7J4gppShJvTuBfRqUHFBuHRwq+0LgkpDUDiuhsFdHCbYV3S8UYJm2MWCJuTmdI1i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VtD3Hipr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gnqSOaprkV0tTpgmG8TjJn/qfeoHAiHAdayxvN5AtIIrp1xoOlEWo01C0bptkzf4tSbkdJUATEsbLNFzBqy3m9De63xc3d9S9+8AlaiyHCuHVhNaCC8gmsKlGIwKs23OB51LL2815tMYMDs2HXhSYox2sOoGkhnNbv5EXTMcPTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hB6mPt9c; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtD3Hipr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAEDC4CEEB;
-	Fri,  6 Jun 2025 20:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749241058;
-	bh=xo8VKm0/2nL/L70Nvv0cwJxphDlhCnT+pw1XJfzarG8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VtD3Hiprq5zyy8Swg6g7TrobqWadI0b4cz8odsJy85UXU2VI1zgBM8nAWGPgvfnyn
-	 skJmqELd9u7fwcinw0xLEzdY6VrMbaDhbFfCvx70x5aYJOReFQtuMrle084jFBjXOX
-	 qQfzZBByGsfkjCchGRwp6ypUQjLwxvvsGV+PpmvDeaD6uMWAjudkxOM79PPv6jvhEj
-	 z+R5qDJc/bFEUPNYcYr2TO2sT8KJdTaJ455KjQEyCPBPH4a0wA3j86GKuOrnuF2PCX
-	 KmBUFmFG140RMan874RKdYg7IWMCShutjm6v1GsVZ8/v3OwftRm7AenBAUNkRsRZ9i
-	 CG58aku5AqCMQ==
-Date: Fri, 6 Jun 2025 17:17:35 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Yuzhuo Jing <yuzhuo@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Eric Biggers <ebiggers@google.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hB6mPt9c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749244233; x=1780780233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y2vtspK8CJxI3MpPLgfdlVOZRYupmnSMVie6NjOCH5A=;
+  b=hB6mPt9crLaZaLsp9sACufhyIa7Q8xhrnGGq0cuQgGKcLCKvoXgVgUMj
+   TRo31ANDqR0FQZua/yBnVas2l6Azevd3T7K7/OxH3zzkMn5xPCiBBwD3G
+   cEdH0R0zn8WcJ5wS+h9QfCzRYy96n2GUFOm7xeCMcI9uAXH84WCzpYQwp
+   +ui7Q0p8nAJoZxOJc34dXuiDjSGlwLnAFuAW70pKWsSYnm2av0K9jrjKA
+   jeaVo+fUMuUB4k8ZP9CnopfOriJvV1y3FpAFdCcKDFkQ20gI6p65vN4Du
+   CV5nN3HlQTYEbd6YXMiJmqSTKnAo88DIOy1pF6KBCSQZzthwdWNlOB5kp
+   w==;
+X-CSE-ConnectionGUID: ve52BNEuQyiMqt703l0R2g==
+X-CSE-MsgGUID: fXKZVFONThSmJZs7raI6bw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="54033924"
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="54033924"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 14:10:33 -0700
+X-CSE-ConnectionGUID: RutrD3OaR2ye8qmGShGcXQ==
+X-CSE-MsgGUID: nBgAzcy7TrSK6DM00i/rwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="145854439"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Jun 2025 14:10:27 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uNeKX-0005HB-23;
+	Fri, 06 Jun 2025 21:10:25 +0000
+Date: Sat, 7 Jun 2025 05:09:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Liang Kan <kan.liang@linux.intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	James Clark <james.clark@linaro.org>,
-	Tomas Glozar <tglozar@redhat.com>, Leo Yan <leo.yan@arm.com>,
-	Guilherme Amadio <amadio@gentoo.org>,
-	Yang Jihong <yangjihong@bytedance.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 2/4] perf tools: Add sha1 utils
-Message-ID: <aENM39y1XBf6ajKi@x1>
-References: <20250521225307.743726-1-yuzhuo@google.com>
- <20250521225307.743726-3-yuzhuo@google.com>
- <aC9lXhPFcs5fkHWH@x1>
- <CADQikVDs3msXqZ6tyoXR0WeN4D_9snxWyk2kXeDw5iAs+BHFuw@mail.gmail.com>
- <CAP-5=fV11L=5cBaYcd0ftVyk8=Tm4+NWCoTG+MBnAwjEogS5iA@mail.gmail.com>
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Kees Cook <kees@kernel.org>,
+	Joel Granados <joel.granados@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Konstantin Khorenko <khorenko@virtuozzo.com>,
+	Denis Lunev <den@virtuozzo.com>,
+	Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	kernel@openvz.org
+Subject: Re: [PATCH] locking: detect spin_lock_irq() call with disabled
+ interrupts
+Message-ID: <202506070405.MCweX7O0-lkp@intel.com>
+References: <20250606095741.46775-1-ptikhomirov@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fV11L=5cBaYcd0ftVyk8=Tm4+NWCoTG+MBnAwjEogS5iA@mail.gmail.com>
+In-Reply-To: <20250606095741.46775-1-ptikhomirov@virtuozzo.com>
 
-On Fri, Jun 06, 2025 at 11:27:28AM -0700, Ian Rogers wrote:
-> On Wed, Jun 4, 2025 at 11:17 AM Yuzhuo Jing <yuzhuo@google.com> wrote:
-> > Thanks for testing the patches!
+Hi Pavel,
 
-You're welcome!
+kernel test robot noticed the following build warnings:
 
-> > > In file included from util/sha1_generic.c:18:
-> > > util/sha1_base.h: In function ‘sha1_base_do_finalize’:
-> > > util/sha1_base.h:77:21: error: comparison of integer expressions of different signedness: ‘unsigned int’ and ‘int’ [-Werror=sign-compare]
-> > >    77 |         if (partial > bit_offset) {
-> > >       |                     ^
-> > > cc1: all warnings being treated as errors
-> >
-> > Oh, I didn't see that on my GCC 14.2.  A quick fix would work:
-> >
-> > --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
-> > +++ tools/perf/util/sha1_base.h 2025-06-03 15:43:39.194036707 -0700
-> > @@ -71,7 +69,7 @@
-> >  static inline int sha1_base_do_finalize(struct sha1_state *sctx,
-> >                                         sha1_block_fn *block_fn)
-> >  {
-> > -       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
-> > +       const unsigned int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
-> >         __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
-> >         unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
-> >
-> >
-> > To test it, I added -Werror=sign-compare to my local Makefile.config to
-> > force the error.
-> >
-> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > index d19d1f132726..9909611be301 100644
-> > --- a/tools/perf/Makefile.config
-> > +++ b/tools/perf/Makefile.config
-> > @@ -225,9 +225,9 @@ endif
-> >
-> >  # Treat warnings as errors unless directed not to
-> >  ifneq ($(WERROR),0)
-> > -  CORE_CFLAGS += -Werror
-> > -  CXXFLAGS += -Werror
-> > -  HOSTCFLAGS += -Werror
-> > +  CORE_CFLAGS += -Werror=sign-compare -Werror
-> > +  CXXFLAGS += -Werror=sign-compare -Werror
-> > +  HOSTCFLAGS += -Werror=sign-compare -Werror
-> >  endif
+[auto build test WARNING on tip/locking/core]
+[also build test WARNING on sysctl/sysctl-next akpm-mm/mm-nonmm-unstable tip/master linus/master v6.15 next-20250606]
+[cannot apply to mcgrof/sysctl-next tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> >  ifndef DEBUG
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Tikhomirov/locking-detect-spin_lock_irq-call-with-disabled-interrupts/20250606-175911
+base:   tip/locking/core
+patch link:    https://lore.kernel.org/r/20250606095741.46775-1-ptikhomirov%40virtuozzo.com
+patch subject: [PATCH] locking: detect spin_lock_irq() call with disabled interrupts
+config: arm-randconfig-003-20250606 (https://download.01.org/0day-ci/archive/20250607/202506070405.MCweX7O0-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070405.MCweX7O0-lkp@intel.com/reproduce)
 
-> > While testing with "make -C tools/perf -f tests/make make_debug", I saw
-> > similar compile errors in libjvmti.c:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506070405.MCweX7O0-lkp@intel.com/
 
-> > jvmti/libjvmti.c: In function ‘copy_class_filename’:
-> > jvmti/libjvmti.c:148:39: error: comparison of integer expressions of
-> > different signedness: ‘int’ and ‘long unsigned int’
-> > [-Werror=sign-compare]
-> >   148 |                         for (i = 0; i < (size_t)(p - class_sign); i++)
-> >       |                                       ^
-> > jvmti/libjvmti.c:155:31: error: comparison of integer expressions of
-> > different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’}
-> > [-Werror=sign-compare]
-> >   155 |                 for (j = 0; i < (max_length - 1) && file_name
-> > && j < strlen(file_name); j++, i++)
-> >       |                               ^
-> > jvmti/libjvmti.c:155:68: error: comparison of integer expressions of
-> > different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’}
-> > [-Werror=sign-compare]
-> >   155 |                 for (j = 0; i < (max_length - 1) && file_name
-> > && j < strlen(file_name); j++, i++)
-> >       |                                                                    ^
-> >
-> > I've just sent a separate patch to the mailing list:
-> > https://lore.kernel.org/lkml/20250604173632.2362759-1-yuzhuo@google.com/T/
+All warnings (new ones prefixed by >>):
 
-> Thanks Yuzhuo! I guess this happened because jvmti.h is missing in the
-> test container. It seems to make sense to add -Wsign-compare to the
-> standard CFLAGS to lower the chance of breaking this container again.
+   In file included from arch/arm/plat-orion/irq.c:13:
+   In file included from include/linux/irq.h:14:
+   include/linux/spinlock.h:375:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     375 | DECLARE_STATIC_KEY_MAYBE(CONFIG_DEBUG_SPINLOCK_IRQ_WITH_DISABLED_INTERRUPTS_BY_DEFAULT,
+         | ^
+         | int
+   include/linux/spinlock.h:375:26: error: a parameter list without types is only allowed in a function definition
+     375 | DECLARE_STATIC_KEY_MAYBE(CONFIG_DEBUG_SPINLOCK_IRQ_WITH_DISABLED_INTERRUPTS_BY_DEFAULT,
+         |                          ^
+   include/linux/spinlock.h:382:6: error: call to undeclared function 'static_branch_unlikely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     382 |         if (static_branch_unlikely(&debug_spin_lock_irq_with_disabled_interrupts)) {
+         |             ^
+   include/linux/spinlock.h:382:30: error: use of undeclared identifier 'debug_spin_lock_irq_with_disabled_interrupts'
+     382 |         if (static_branch_unlikely(&debug_spin_lock_irq_with_disabled_interrupts)) {
+         |                                     ^
+   include/linux/spinlock.h:384:4: error: call to undeclared function 'static_branch_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     384 |                         static_branch_disable(&debug_spin_lock_irq_with_disabled_interrupts);
+         |                         ^
+   include/linux/spinlock.h:384:27: error: use of undeclared identifier 'debug_spin_lock_irq_with_disabled_interrupts'
+     384 |                         static_branch_disable(&debug_spin_lock_irq_with_disabled_interrupts);
+         |                                                ^
+   include/linux/spinlock.h:415:6: error: call to undeclared function 'static_branch_unlikely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     415 |         if (static_branch_unlikely(&debug_spin_lock_irq_with_disabled_interrupts)) {
+         |             ^
+   include/linux/spinlock.h:415:30: error: use of undeclared identifier 'debug_spin_lock_irq_with_disabled_interrupts'
+     415 |         if (static_branch_unlikely(&debug_spin_lock_irq_with_disabled_interrupts)) {
+         |                                     ^
+   include/linux/spinlock.h:417:4: error: call to undeclared function 'static_branch_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     417 |                         static_branch_disable(&debug_spin_lock_irq_with_disabled_interrupts);
+         |                         ^
+   include/linux/spinlock.h:417:27: error: use of undeclared identifier 'debug_spin_lock_irq_with_disabled_interrupts'
+     417 |                         static_branch_disable(&debug_spin_lock_irq_with_disabled_interrupts);
+         |                                                ^
+>> arch/arm/plat-orion/irq.c:37:29: warning: shift count >= width of type [-Wshift-count-overflow]
+      37 |         irq_setup_generic_chip(gc, IRQ_MSK(32), IRQ_GC_INIT_MASK_CACHE,
+         |                                    ^~~~~~~~~~~
+   include/linux/irq.h:1223:41: note: expanded from macro 'IRQ_MSK'
+    1223 | #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
+         |                                         ^  ~~~
+   1 warning and 10 errors generated.
 
-> > > Humm that part is the same as in the kernel...
-> > >
-> > > ⬢ [acme@toolbx perf-tools-next]$ line=$(ctags -x --c-kinds=f include/crypto/sha1_base.h | awk '$1 == "sha1_base_do_finalize" {print $3}')
-> > > ⬢ [acme@toolbx perf-tools-next]$ sed -n $line,\$p include/crypto/sha1_base.h | awk '{print} /\{/ {c++} /\}/ {c--; if (c==0) exit}' > /tmp/original
-> > > ⬢ [acme@toolbx perf-tools-next]$ line=$(ctags -x --c-kinds=f tools/perf/util/sha1_base.h | awk '$1 == "sha1_base_do_finalize" {print $3}')
-> > > ⬢ [acme@toolbx perf-tools-next]$ sed -n $line,\$p include/crypto/sha1_base.h | awk '{print} /\{/ {c++} /\}/ {c--; if (c==0) exit}' > /tmp/copy
-> > > ⬢ [acme@toolbx perf-tools-next]$ diff -u /tmp/original /tmp/copy
-> > > --- /tmp/original       2025-05-22 14:48:31.338406860 -0300
-> > > +++ /tmp/copy   2025-05-22 14:48:58.401603439 -0300
-> > > @@ -1,3 +1,7 @@
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > >  static inline int sha1_base_do_finalize(struct shash_desc *desc,
-> > >                                         sha1_block_fn *block_fn)
-> > >  {
-> > > @@ -13,10 +17,3 @@
-> > >
-> > >                 block_fn(sctx, sctx->buffer, 1);
-> > >         }
-> > > -
-> > > -       memset(sctx->buffer + partial, 0x0, bit_offset - partial);
-> > > -       *bits = cpu_to_be64(sctx->count << 3);
-> > > -       block_fn(sctx, sctx->buffer, 1);
-> > > -
-> > > -       return 0;
-> > > -}
-> > > ⬢ [acme@toolbx perf-tools-next]$
-> >
-> > There were some other fixes that I made only to the perf tree version,
-> > while maintaining verbatim for other parts.  Here's a script that
-> > retains and compares only the copied parts.
-> >
-> >   # Ignore everything after sha1_transform
-> >   diff -u -B -I "^#include " <(sed -n
-> > '/EXPORT_SYMBOL(sha1_transform)/q;p' lib/crypto/sha1.c)
-> > tools/perf/util/sha1.c
-> >   diff -u -B -I "^#include " -I "sha1_zero_message_hash" -I "^struct
-> > sha1_state;$" -I "^void sha1_init(__u32 \*buf);$" \
-> >       <(sed 's/shash_desc/sha1_state/g;' include/crypto/sha1.h)
-> > tools/perf/util/sha1.h
-> >   diff -u -B -I "^EXPORT_SYMBOL" -I "^#include " \
-> >       <(sed 's/shash_desc \*desc/sha1_state *sctx/g;
-> > /shash_desc_ctx(desc)/d' include/crypto/sha1_base.h)
-> > tools/perf/util/sha1_base.h
-> >   # Ignore everything after crypto_sha1_finup
-> >   diff -u -B -I "^EXPORT_SYMBOL" -I "^#include " \
-> >       <(sed -n -e '/const u8
-> > sha1_zero_message_hash/,/EXPORT_SYMBOL_GPL(sha1_zero_message_hash)/d'
-> > \
-> >                -e 's/shash_desc/sha1_state/g;
-> > /EXPORT_SYMBOL(crypto_sha1_finup)/q;p' crypto/sha1_generic.c) \
-> >       tools/perf/util/sha1_generic.c
-> >
-> > And the changes are as below (including the quick fix above), with one
-> > changing the sign and integer type and another fixing type mismatch from
-> > const u8 * to const char *.
-> >
-> > Should we send another patch to the kernel tree version to fix the sign
-> > error, or we add rules to allow perf tree only changes?
-> 
-> I believe there will need to be a set of patches for the kernel sha1
-> code (fixing -Wsign-compare, any other typing issues) and a set of
-> patches for perf with the check-headers.sh updated as your scripts
-> check above.
 
-Right, we try to reuse bits from the kernel as there are more people
-working there and its a more critical piece of software than tooling
-like perf, so when we notice something in the copies we carry, we better
-fix it first in the origin.
+vim +37 arch/arm/plat-orion/irq.c
 
-> The perf patches shouldn't assume kernel patches have
-> landed. The perf check-headers.sh produces a warning but doesn't stop
-> the perf build. When the kernel changes land we can update the perf
-> check-headers.sh expectations.
+f28d7de6bd4d41 Sebastian Hesselbarth 2014-01-16  21  
+01eb569823792a Lennert Buytenhek     2008-03-27  22  void __init orion_irq_init(unsigned int irq_start, void __iomem *maskaddr)
+01eb569823792a Lennert Buytenhek     2008-03-27  23  {
+e59347a1d15c0b Thomas Gleixner       2011-04-14  24  	struct irq_chip_generic *gc;
+e59347a1d15c0b Thomas Gleixner       2011-04-14  25  	struct irq_chip_type *ct;
+01eb569823792a Lennert Buytenhek     2008-03-27  26  
+01eb569823792a Lennert Buytenhek     2008-03-27  27  	/*
+01eb569823792a Lennert Buytenhek     2008-03-27  28  	 * Mask all interrupts initially.
+01eb569823792a Lennert Buytenhek     2008-03-27  29  	 */
+01eb569823792a Lennert Buytenhek     2008-03-27  30  	writel(0, maskaddr);
+01eb569823792a Lennert Buytenhek     2008-03-27  31  
+e59347a1d15c0b Thomas Gleixner       2011-04-14  32  	gc = irq_alloc_generic_chip("orion_irq", 1, irq_start, maskaddr,
+f38c02f3b33865 Thomas Gleixner       2011-03-24  33  				    handle_level_irq);
+e59347a1d15c0b Thomas Gleixner       2011-04-14  34  	ct = gc->chip_types;
+e59347a1d15c0b Thomas Gleixner       2011-04-14  35  	ct->chip.irq_mask = irq_gc_mask_clr_bit;
+e59347a1d15c0b Thomas Gleixner       2011-04-14  36  	ct->chip.irq_unmask = irq_gc_mask_set_bit;
+e59347a1d15c0b Thomas Gleixner       2011-04-14 @37  	irq_setup_generic_chip(gc, IRQ_MSK(32), IRQ_GC_INIT_MASK_CACHE,
 
-Right,
-
-Thanks,
-
-- Arnaldo
- 
-> Thanks,
-> Ian
-> 
-> > --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
-> > +++ tools/perf/util/sha1_base.h 2025-06-03 15:43:39.194036707 -0700
-> > @@ -71,7 +69,7 @@
-> >  static inline int sha1_base_do_finalize(struct sha1_state *sctx,
-> >                                         sha1_block_fn *block_fn)
-> >  {
-> > -       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
-> > +       const unsigned int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
-> >         __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
-> >         unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
-> >
-> > @@ -95,7 +93,7 @@
-> >         __be32 *digest = (__be32 *)out;
-> >         int i;
-> >
-> > -       for (i = 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
-> > +       for (i = 0; i < SHA1_DIGEST_SIZE / (int)sizeof(__be32); i++)
-> >                 put_unaligned_be32(sctx->state[i], digest++);
-> >
-> >         memzero_explicit(sctx, sizeof(*sctx));
-> > --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
-> > +++ tools/perf/util/sha1_generic.c      2025-05-16 10:52:59.219531034 -0700
-> > @@ -27,7 +23,7 @@
-> >         u32 temp[SHA1_WORKSPACE_WORDS];
-> >
-> >         while (blocks--) {
-> > -               sha1_transform(sst->state, src, temp);
-> > +               sha1_transform(sst->state, (const char *)src, temp);
-> >                 src += SHA1_BLOCK_SIZE;
-> >         }
-> >         memzero_explicit(temp, sizeof(temp));
-> >
-> > Thanks!
-> >
-> > Best regards,
-> > Yuzhuo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
