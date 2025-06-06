@@ -1,143 +1,174 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EA628640C;
-	Fri,  6 Jun 2025 09:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71F21CAA62;
+	Fri,  6 Jun 2025 09:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749201241; cv=none; b=AoSsrkaW07XhBmPreHFf/Yi39VbCcMVn1gFiictcaL8/69oy+x5V4f5iUZVvPu04nxZzgAL+nMOpz5aYQxp1Uc1ZaU9tpLc7mxunf0tQQVIn1yDiK2L5GIDBiMhEnIIK5Rf0sbJPevBdJ7qNVZa3JJ6IfION03pusvQp7EDJqVQ=
+	t=1749203920; cv=none; b=oL6tmCuETuWh8Z/Vr3EJ/G1BykAsw6EfZefth44SMsM0IdTkdTfFK5+AOJp1BJd9VqBPMbKoKlPCtrAk7kOIN5hZYOvrqg9gVdXXNQcnulZ5AYPgerP5Pl26biMlj0DQQ+npfgKdeq104VJhzYnjEfqdH+9MGh3Z/yor7G0SzJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749201241; c=relaxed/simple;
-	bh=8AzNZ4la2PoPmxTh0qvOadpjPianLkUkYxBsjSoIfoM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JBim0rD+xS3fZz1gl4mlEacHC5ljwoZ8DFZ9VF/y77PRyX90/Xz0oAIzFJd8hpGbXiWXpOEHQGYA68r5ge74q9glltF8pAuTvzqbidtPDvPFcvK43Ghu6kMh6+QB7B/XoeLlEbGCQEuU1h+VFth3kjaipFMXV1dEykIzCw4G5jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=N6bY10+K; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1749203920; c=relaxed/simple;
+	bh=U95hSfjSxKU8Mrr+Q+iu2SL32xjHNdq6Oy0UV7wpoEI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GNcguCK/6oP70Zo4DNHnCemE1jHcfkuN/+5wMLMLbk5UYC+N414NwvNT+1G3NVJAFN2K91dpq0/8l9mTcsSs6g2T5YbXn6rkKI7JVbeQBlUkNawf4KNLI5Q/YdHx2+xkYS0wOOoc7q1HVXMxaaCjqQfc4cbEI0uXGYpxqYVUtDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XDKFGZnH; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="N6bY10+K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1749201229;
-	bh=HQ4lHEPmIHw9cneR2PlF0QPtXcQfPGIV8GSmE9YMTkU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=N6bY10+Kk0WxoqAfmlihmF2xdiA8O9584b5lKeU3vxuVh5CokRiOc+fFAC6Dzdp7U
-	 84izpGR5FOAvvpndZozSMK5woPm8xNFVJQBQ2kTr1h7kOl9jkYpMyRKBfFwlvuXzTt
-	 xwSWTgYrBRbErFjHPYLfcDTm+hjHKmNBAkkvdYok=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id F10D865992;
-	Fri,  6 Jun 2025 05:13:46 -0400 (EDT)
-Message-ID: <06e4746ade602f42907aed82c16826230a8ff80e.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: vDSO: correctly use asm parameters in
- syscall wrappers
-From: Xi Ruoyao <xry111@xry111.site>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Theodore Ts'o	 <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Nathan Chancellor	 <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>,  Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, 	loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 	stable@vger.kernel.org
-Date: Fri, 06 Jun 2025 17:13:45 +0800
-In-Reply-To: <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
-References: 
-	<20250603-loongarch-vdso-syscall-v1-1-6d12d6dfbdd0@linutronix.de>
-	 <CAAhV-H4Ba7DMV6AvGnvNBJ8FL_YcHjeeHYZWw2NG6JHL=X4PkQ@mail.gmail.com>
-	 <5a5329feaab84acb91bbb4f48ea548b3fb4eab0f.camel@xry111.site>
-	 <20250605092735-bd76e803-e896-4d4c-a1f1-c30f8d321a9a@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XDKFGZnH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749203918; x=1780739918;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U95hSfjSxKU8Mrr+Q+iu2SL32xjHNdq6Oy0UV7wpoEI=;
+  b=XDKFGZnHWekomi6BvUkD3Gj89I6j3Ht7JdMG6dLoFMNiVfYDPZmeFpZE
+   WwHCr4XO0TW2vwx9cAQbJXKwzCcHaDScc9g6FPV8K4c7Zm+osO+wQdlpH
+   Yt3vaK6biLOVFn5ifB5oWGcJc5kkmukFcOFkraP0yzGcZQIBtBmvW6daP
+   2+P6Od8sax7pz+CRPbmJhylZLvPUKFz4VZMfQvs9z0LBgpskXdhK7KVBt
+   Y8VliAwmINahEmNdJ/FAzegrquVPFEeYoEuiOt3aQ9p+UdikWrMIWlRj+
+   ihY31/cgtOhj3b5mRB5+qyW1zwaYix/1j59yfQPNiVKtshO31CAj8jILY
+   g==;
+X-CSE-ConnectionGUID: 3M5IXP0kQdel7YcIRdxoRg==
+X-CSE-MsgGUID: e1b/cDstRoqefUquYAt3iw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="55158105"
+X-IronPort-AV: E=Sophos;i="6.16,214,1744095600"; 
+   d="scan'208";a="55158105"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 02:58:37 -0700
+X-CSE-ConnectionGUID: ybNLIoauTK6E6oM5rpJACA==
+X-CSE-MsgGUID: rB5H5TO0RbSYvHrgesocLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,214,1744095600"; 
+   d="scan'208";a="146756643"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 06 Jun 2025 02:58:34 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uNTqJ-0004u5-11;
+	Fri, 06 Jun 2025 09:58:31 +0000
+Date: Fri, 6 Jun 2025 17:58:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dionna Glaze <dionnaglaze@google.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-coco@lists.linux.dev, Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Lendacky <Thomas.Lendacky@amd.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+	Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>,
+	Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v6 1/2] kvm: sev: Add SEV-SNP guest request throttling
+Message-ID: <202506061922.q7OljdiN-lkp@intel.com>
+References: <20250605150236.3775954-2-dionnaglaze@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250605150236.3775954-2-dionnaglaze@google.com>
 
-On Thu, 2025-06-05 at 09:37 +0200, Thomas Wei=C3=9Fschuh wrote:
-> On Wed, Jun 04, 2025 at 10:30:55PM +0800, Xi Ruoyao wrote:
-> > On Wed, 2025-06-04 at 22:05 +0800, Huacai Chen wrote:
-> > > On Tue, Jun 3, 2025 at 7:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
-> > > <thomas.weissschuh@linutronix.de> wrote:
-> > > >=20
-> > > > The syscall wrappers use the "a0" register for two different regist=
-er
-> > > > variables, both the first argument and the return value. The "ret"
-> > > > variable is used as both input and output while the argument regist=
-er is
-> > > > only used as input. Clang treats the conflicting input parameters a=
-s
-> > > > undefined behaviour and optimizes away the argument assignment.
-> > > >=20
-> > > > The code seems to work by chance for the most part today but that m=
-ay
-> > > > change in the future. Specifically clock_gettime_fallback() fails w=
-ith
-> > > > clockids from 16 to 23, as implemented by the upcoming auxiliary cl=
-ocks.
-> > > >=20
-> > > > Switch the "ret" register variable to a pure output, similar to the=
- other
-> > > > architectures' vDSO code. This works in both clang and GCC.
-> > > Hmmm, at first the constraint is "=3Dr", during the progress of
-> > > upstream, Xuerui suggested me to use "+r" instead [1].
-> > > [1]=C2=A0 https://lore.kernel.org/linux-arch/5b14144a-9725-41db-7179-=
-c059c41814cf@xen0n.name/
-> >=20
-> > Based on the example at
-> > https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html:
-> >=20
-> > =C2=A0=C2=A0 To force an operand into a register, create a local variab=
-le and specify
-> > =C2=A0=C2=A0 the register name after the variable=E2=80=99s declaration=
-. Then use the local
-> > =C2=A0=C2=A0 variable for the asm operand and specify any constraint le=
-tter that
-> > =C2=A0=C2=A0 matches the register:
-> > =C2=A0=C2=A0=20
-> > =C2=A0=C2=A0 register int *p1 asm ("r0") =3D =E2=80=A6;
-> > =C2=A0=C2=A0 register int *p2 asm ("r1") =3D =E2=80=A6;
-> > =C2=A0=C2=A0 register int *result asm ("r0");
-> > =C2=A0=C2=A0 asm ("sysint" : "=3Dr" (result) : "0" (p1), "r" (p2));
-> > =C2=A0=C2=A0=20
-> > I think this should actually be written
-> >=20
-> > =C2=A0	asm volatile(
-> > =C2=A0	"=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 syscall 0\n"
-> > 	: "=3Dr" (ret)
-> > =C2=A0	: "r" (nr), "0" (buffer), "r" (len), "r" (flags)
-> > =C2=A0	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
-> > "$t8",
-> > =C2=A0	=C2=A0 "memory");
-> >=20
-> > i.e. "=3D" should be used for the output operand 0, and "0" should be u=
-sed
-> > for the input operand 2 (buffer) to emphasis the same register as
-> > operand 0 is used.
->=20
-> I would have expected that matching constraints ("0") would only really m=
-ake
-> sense if the compiler selects the specific register to use. When the regi=
-ster is
-> already selected manually it seems redundant.
-> But my inline ASM knowledge is limited and this is a real example from th=
-e GCC
-> docs, so it is probably more correct.
-> On the other hand all the other vDSO implementations use "r" over "0" for=
- the
-> input operand 2 and I'd like to keep them consistent.
+Hi Dionna,
 
-Per https://gcc.gnu.org/pipermail/gcc-help/2025-June/144261.html and
-https://gcc.gnu.org/pipermail/gcc-help/2025-June/144266.html it should
-be fine to just use "r".
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Xi Ruoyao <xry111@xry111.site>
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.15 next-20250606]
+[cannot apply to kvm/queue kvm/next kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+url:    https://github.com/intel-lab-lkp/linux/commits/Dionna-Glaze/kvm-sev-Add-SEV-SNP-guest-request-throttling/20250605-230536
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20250605150236.3775954-2-dionnaglaze%40google.com
+patch subject: [PATCH v6 1/2] kvm: sev: Add SEV-SNP guest request throttling
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250606/202506061922.q7OljdiN-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506061922.q7OljdiN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506061922.q7OljdiN-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kvm/svm/sev.c:376:6: warning: variable 'throttle_interval' set but not used [-Wunused-but-set-variable]
+     376 |         u64 throttle_interval;
+         |             ^
+   1 warning generated.
+
+
+vim +/throttle_interval +376 arch/x86/kvm/svm/sev.c
+
+   334	
+   335	/*
+   336	 * This sets up bounce buffers/firmware pages to handle SNP Guest Request
+   337	 * messages (e.g. attestation requests). See "SNP Guest Request" in the GHCB
+   338	 * 2.0 specification for more details.
+   339	 *
+   340	 * Technically, when an SNP Guest Request is issued, the guest will provide its
+   341	 * own request/response pages, which could in theory be passed along directly
+   342	 * to firmware rather than using bounce pages. However, these pages would need
+   343	 * special care:
+   344	 *
+   345	 *   - Both pages are from shared guest memory, so they need to be protected
+   346	 *     from migration/etc. occurring while firmware reads/writes to them. At a
+   347	 *     minimum, this requires elevating the ref counts and potentially needing
+   348	 *     an explicit pinning of the memory. This places additional restrictions
+   349	 *     on what type of memory backends userspace can use for shared guest
+   350	 *     memory since there is some reliance on using refcounted pages.
+   351	 *
+   352	 *   - The response page needs to be switched to Firmware-owned[1] state
+   353	 *     before the firmware can write to it, which can lead to potential
+   354	 *     host RMP #PFs if the guest is misbehaved and hands the host a
+   355	 *     guest page that KVM might write to for other reasons (e.g. virtio
+   356	 *     buffers/etc.).
+   357	 *
+   358	 * Both of these issues can be avoided completely by using separately-allocated
+   359	 * bounce pages for both the request/response pages and passing those to
+   360	 * firmware instead. So that's what is being set up here.
+   361	 *
+   362	 * Guest requests rely on message sequence numbers to ensure requests are
+   363	 * issued to firmware in the order the guest issues them, so concurrent guest
+   364	 * requests generally shouldn't happen. But a misbehaved guest could issue
+   365	 * concurrent guest requests in theory, so a mutex is used to serialize
+   366	 * access to the bounce buffers.
+   367	 *
+   368	 * [1] See the "Page States" section of the SEV-SNP Firmware ABI for more
+   369	 *     details on Firmware-owned pages, along with "RMP and VMPL Access Checks"
+   370	 *     in the APM for details on the related RMP restrictions.
+   371	 */
+   372	static int snp_guest_req_init(struct kvm *kvm)
+   373	{
+   374		struct kvm_sev_info *sev = to_kvm_sev_info(kvm);
+   375		struct page *req_page;
+ > 376		u64 throttle_interval;
+   377	
+   378		req_page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+   379		if (!req_page)
+   380			return -ENOMEM;
+   381	
+   382		sev->guest_resp_buf = snp_alloc_firmware_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+   383		if (!sev->guest_resp_buf) {
+   384			__free_page(req_page);
+   385			return -EIO;
+   386		}
+   387	
+   388		sev->guest_req_buf = page_address(req_page);
+   389		mutex_init(&sev->guest_req_mutex);
+   390	
+   391		throttle_interval = ((u64)sev_snp_request_ratelimit_khz * HZ) / HZ_PER_KHZ;
+   392		ratelimit_state_init(&sev->snp_guest_msg_rs, sev_snp_request_ratelimit_khz, 1);
+   393	
+   394		return 0;
+   395	}
+   396	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
