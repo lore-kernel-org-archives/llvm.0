@@ -1,102 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56262629F;
-	Fri,  6 Jun 2025 01:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82B31DDC23
+	for <llvm@lists.linux.dev>; Fri,  6 Jun 2025 05:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749173333; cv=none; b=maSxUcFrkP/odA5caNz7v8Y4Wnr7pnIvdhBnlja2v2fKgUMx0Ddvx2sCbCQZ1niEiVuvYBCMeOsogYy/Oq2ytNa7AfCa5OfHjFm3ntz9wu3byNDMAVHbwHWMEsiRf5XIVXPu3ggaQMiXy6Pd1EATog924Wwy2egqNSSh/oWoVDE=
+	t=1749187437; cv=none; b=XdxvOD5LQqeMryEE0ZY4VDJVFynV/FF2CP4L0GGAc3qHw+LGsQ1XlP6Fxyv/T1xnYD3Pj0kgCSHhHFvFYtnUmIAsSdFJMrtEa+khqFB/ykOGdCTNEMDafHpAT+9/1nz71aIGhQ3/cpD1BpZWNvpMMhVShm7BH+os4lfzcQKphaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749173333; c=relaxed/simple;
-	bh=mmO6t2nxNp7O6T3etaZF1E1QaseaqFlqJHGPybmOXdA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t7YTSTN+0/YqudIxSI2yzbmOeg8KQxQnaau9ufGEixkEqI/H0zMNZPEsawQaWtKvCvoeGL59NaAmTjle5bQiOyhSLJVN9c816lIOxgOebtG6qVqvCOGXSHGjCJ3LY856IAAb4VDOsoyYfJJdLY6vA5TlbkDw2SYWmKHYVuw2/e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iEzUVX7I; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749187437; c=relaxed/simple;
+	bh=0LcugX7pIJqi20ylrFfW2GJHIIOk7YhX5V657AkjHuo=;
+	h=Date:Message-Id:Mime-Version:Subject:From:To:Cc:Content-Type; b=DFu4xzyGbpOQ7GAMOZhBiIWgp/qffEcex0xE6k1BnPCS2XIdQmfrPpuLg8KWcK9Wo5dgQrAs5nSnI10mdyKVjS4V/x7yxApyWsLKRdYsuY85DyBU0CoSB0RKtr/amoXv6woK4ottqISyLFDosL6+flLCccLhJ4GlA3H8CnKsYNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--suleiman.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uCTbpRlT; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--suleiman.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEzUVX7I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749173332; x=1780709332;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mmO6t2nxNp7O6T3etaZF1E1QaseaqFlqJHGPybmOXdA=;
-  b=iEzUVX7IaUTew/6QmktRC5vcRnQG3MHrPkb4zOrDCijBP4I4r1nwU7mQ
-   TCwAinVqIQUPXavhnRZNTpfeQqW3NqvpJS4Hb4sBHzXlWX2BGCK1rWUli
-   IaIzzbp2QupgLcMNhUOto0pVKjpFFagRWzqdwPlFHlF3xWVRPmZ8GWBQG
-   GEcbAYXiiQsVPgj6xpBPdNFJYNeVDcmzDrWzCfa35GIpW4Cp1+MjJnfoT
-   76T0CwyvcGwYZR1JyLTiecRWfXub37Ww2UgvW6Inoaq04ulEFSw0Ie0kR
-   r4eGJstCDrqFwMAOHSNCO+V69XfPumz6xl+2ijCAzNnem8qdEWC7XzfuG
-   w==;
-X-CSE-ConnectionGUID: i8YPmZosSImCfjqWOdt97w==
-X-CSE-MsgGUID: Digc6UgZQsawKmMn3I8bDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11455"; a="51197055"
-X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
-   d="scan'208";a="51197055"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2025 18:28:51 -0700
-X-CSE-ConnectionGUID: 4yeMr70GQ/yKyOMGEsDEbg==
-X-CSE-MsgGUID: LpHLK8swSy+l0X9Vw0hXuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,213,1744095600"; 
-   d="scan'208";a="176536453"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Jun 2025 18:28:49 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uNLt1-0004cP-04;
-	Fri, 06 Jun 2025 01:28:47 +0000
-Date: Fri, 6 Jun 2025 09:28:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, arthurgrillo@riseup.net,
-	jose.exposito89@gmail.com, javierm@redhat.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 3/3] drm/format-helper: Move drm_fb_build_fourcc_list()
- to sysfb helpers
-Message-ID: <202506060951.1Ad66SUT-lkp@intel.com>
-References: <20250604154844.28995-4-tzimmermann@suse.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uCTbpRlT"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-70e4269deb2so20512557b3.3
+        for <llvm@lists.linux.dev>; Thu, 05 Jun 2025 22:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749187434; x=1749792234; darn=lists.linux.dev;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xPdemEaGJWvzsN6Iuk80gCcUSIvsiiSoKmwg/dFuW0k=;
+        b=uCTbpRlTXSpuUVzrb8dtPOAzz/s/FSITiEuUIVjRRED1zsKlbjeO3gxKeQt7Q0VSQe
+         2w08IW1RJyOs3L9+UVbPoJ32BehRv6qM56E2sAxjKJcPIWrZqL5j4ReGqHfciUbsTIKv
+         /9V3ZiDpBOQjdIhr+E1IBx37DtsKelm02vjjpkyAoZsds43eLBcDYH5+G2Czd6Uqd2+g
+         2+gM39LE/VW+ChLpArtn+481tmhwl1RhzkczNDQA9CO9qQk35i+UB79Vvm2FzULcM0xH
+         DXLr1Vx7aMGTeHd7WYG0iHr88Ug2hMZwEKN1YpGe+qOfrQFrdgPPMSbFk0QfTAwEu7Mj
+         B9zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749187434; x=1749792234;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xPdemEaGJWvzsN6Iuk80gCcUSIvsiiSoKmwg/dFuW0k=;
+        b=jMOq5t7WDZXYJZhMfYkvrtuNMhM2TH+vSd6uOI9qU9kUHxuU20yRNqmHdDEd5+1KXC
+         c65ec0PrMiaGHJshninhtyulBU6p2FIehzcRRif9KZz8hwjY7tPpfejLU4OnPDblen9a
+         v4ClF8Vs9zB6KhdAiwPPf3JonuGQMyJ2x3OsJFGfrhfy7/Rkszg1V0K5kq5awpliqwmR
+         d5ntclRUq7Ui8Cak3Gt5nD8Ln0tGsr21g8KYyE6E1bPZnzfj3cZZgE6KsIh+z9rQjXS3
+         0mtenuHDQsZX/iFyWKHGeBwiA/xrxOL7TCMw5mbZjLU/eGyg26fPGh9tfEvQ3KXlhu1A
+         K8EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVXH2O40vUTUPKyRiToXMZDjFwnFrP76SYC6RePlOkFCkVZrwt6XCLnNFOXn+OMZ/mTdwee@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz13sutvEWsyCpbbIrWl4kAP/MhhgjF0mgDajesds2bcmfLG4Jh
+	VMpTU+9kTbDnDNSsC8Yrta6FFrpGD9TRd5So9aVGsJQKssE+9+GGb7tN8GGQtfLSdH0Ge2ar8G4
+	lpuOlcRV3DSNKtw==
+X-Google-Smtp-Source: AGHT+IGM/2zgkKAi8l8Bv5Y3g3HKlCcWzySlnqdZP8vCaBlczO4XnsaCrkzqSdd8WqbJpXkzwLkHLILC/I6frg==
+X-Received: from suleiman1.tok.corp.google.com ([2401:fa00:8f:203:b09c:3d84:6735:a65])
+ (user=suleiman job=sendgmr) by 2002:a05:690c:8e0d:b0:70e:458:874a with SMTP
+ id 00721157ae682-710f7533fb3mr8927b3.0.1749187433661; Thu, 05 Jun 2025
+ 22:23:53 -0700 (PDT)
+Date: Fri,  6 Jun 2025 14:23:01 +0900
+Message-Id: <20250606052301.810338-1-suleiman@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250604154844.28995-4-tzimmermann@suse.de>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc0.642.g800a2b2222-goog
+Subject: [PATCH] tools/resolve_btfids: Fix build when cross compiling kernel
+ with clang.
+From: Suleiman Souhlal <suleiman@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Ian Rogers <irogers@google.com>, 
+	ssouhlal@freebsd.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Suleiman Souhlal <suleiman@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Thomas,
+When cross compiling the kernel with clang, we need to override
+CLANG_CROSS_FLAGS when preparing the step libraries for
+resolve_btfids.
 
-kernel test robot noticed the following build errors:
+Prior to commit d1d096312176 ("tools: fix annoying "mkdir -p ..." logs
+when building tools in parallel"), MAKEFLAGS would have been set to a
+value that wouldn't set a value for CLANG_CROSS_FLAGS, hiding the
+fact that we weren't properly overriding it.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on next-20250605]
-[cannot apply to drm-exynos/exynos-drm-next drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip v6.15]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cc: stable@vger.kernel.org
+Fixes: 56a2df7615fa ("tools/resolve_btfids: Compile resolve_btfids as host program")
+Signed-of-by: Suleiman Souhlal <suleiman@google.com>
+---
+ tools/bpf/resolve_btfids/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-tests-Do-not-use-drm_fb_blit-in-format-helper-tests/20250604-235451
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250604154844.28995-4-tzimmermann%40suse.de
-patch subject: [PATCH 3/3] drm/format-helper: Move drm_fb_build_fourcc_list() to sysfb helpers
-config: arm-randconfig-003-20250606 (https://download.01.org/0day-ci/archive/20250606/202506060951.1Ad66SUT-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506060951.1Ad66SUT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506060951.1Ad66SUT-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "drm_sysfb_build_fourcc_list" [drivers/gpu/drm/tests/drm_sysfb_helper_test.ko] undefined!
-
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index afbddea3a39c..ce1b556dfa90 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -17,7 +17,7 @@ endif
+ 
+ # Overrides for the prepare step libraries.
+ HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+-		  CROSS_COMPILE="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
++		  CROSS_COMPILE="" CLANG_CROSS_FLAGS="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
+ 
+ RM      ?= rm
+ HOSTCC  ?= gcc
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.0.rc0.642.g800a2b2222-goog
+
