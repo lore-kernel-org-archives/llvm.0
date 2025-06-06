@@ -1,186 +1,121 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38CAE286D59;
-	Fri,  6 Jun 2025 11:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749210207; cv=fail; b=tC5YySqMcgSFvcJsyl5/Lbm6GFfFfN1khh5Rsf0jSRlW2Lb6DLwadU3otlTTQkR5GoaU91xFyzvu/oopm6bnphhhoh+UaN8plH1O8NT7FRZC5qhixKPv0YPcTwkkATCJZ8E4U38C7tegyms2KZvLRUW2zYG01xygcKvZLVSi45s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749210207; c=relaxed/simple;
-	bh=hnLLtBR1Ol4+6Zgmuz+9lAfRGnGmLwXjz91K1EeIjcs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=MdoPDojy0VI+Qg5uL1XuD8/PmaM0BSeVfwg49rIrPMZ+S39PKwm8JjeqckSsAjbki5qIlahBDgN9wUZO3cHJAtnm8+P0mSnyFOEDkdgifgQIE6HXLquBMKaO70jiFfxz1H7+eKUpmB/YknTupDrKTTtwDIsVC9e8YNztdA+0ifo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OJvy/Dth; arc=fail smtp.client-ip=40.107.93.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE1F28750A
+	for <llvm@lists.linux.dev>; Fri,  6 Jun 2025 12:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749211991; cv=none; b=N5maZTquGpsvBy0i2mZzJBp/qRKOMTMjexEzY4mi6Hq1u3EeiMLUJYQRmyqAW2Q/NL1IIqsizsxihrAGgYofJKFb/ybh8jLXbyVLA4jK8X92v4A9aL4zCYL0c/COV3LRSRDnWhna5fkf/Xx+MwrgZcfz08on6JDP/tb1m+vq03M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749211991; c=relaxed/simple;
+	bh=wyMfHWCntFzsAnYQn8GivbKA8MgPNEB662kYcFzSn6Y=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MiLZe+OdMPwF3FKwJSsDWVem8wE7AAt5EBsHPn2sA6UZ6A2EXs3fNd2eMkSiuBlo9OeoFSIDwv/kRHNQh886YsTuZQLs0KdBgld/0Yhc6Q0IsnEUUuzXlsOVOTUklgtlQQ7TtspgBirEeqxDXCfykj6oFspxIaROlqVABjdJyNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dXg2WLTQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OJvy/Dth"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lgpKB4kkytS2Nu+ZV/yo3u/NaRPOiFKwhs5iaXlhGoNQnaKgojrdUgX7Toqy7G6JpYmn/4MB3eyq65zVjcFuvirF3tidKAnqnjtX7QYtCKHOWi9yGwUfqEYoObT12+DQZkDZJDv+ShMDpw2PldbPDS73JIllXwPIfGNgQlCEQzlwtFxlvkz2D5DsZ1BOTJdyyiKlIozyUibx4lcrYNTPylA+6cwdkvbb2Qpj4Dj4h2e/eqBlKTAgjHmBd2JvrZFdQzizgYqi0vMyFqWyeeqhiuOnH18J0XEkDcgDBvo1gJ3/VcoUdXq3qIALpzuAb/0I+plmJLXOlJklVBOZOhlNHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HQ7spYhjdaAUJTIxrVVhOJIWwc706I5bUDFAI6ertE0=;
- b=I1iqKzovIQlJNl2fKxjForkN4qBMX90pgY3srK0TjxnA2g1HAQoAMwPmbzp4vTqChfS1gRZrDuBAaxchV6sys8+zzCBIzsyJz4Q7UdsnQf08KynzSvkMuQjYCDPeQlaSbhryT62cAfXq4niA2B4njiNhS9naUeL9TAHtPXOAtK0sJXurZXR8c8a7XqITfNQ5ZvXOpnzVhy1v4e21RGi+XU7clbd27TE2Mhnur61KbSF3Y3XsBEohh2QA+QF8ha9QQFQODWEdic2ONj8On92c7To1mjwAw3f5fWoPCbP7WT+vn5AbYrjapD22+MZgiM0JRQ1XErDLxZr5KeVpuDYoaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HQ7spYhjdaAUJTIxrVVhOJIWwc706I5bUDFAI6ertE0=;
- b=OJvy/Dthdyko08xPFEh9VSJVFutmp1PCCA/W9KIma34G7tMCqX9yzrRyZXJ9MCxSIzi+XGKekZRwNARoGKrQkKuaYf16IvGpMWRggqyo4afRS621GbCxDal0gqQdp0g9Gi/UjV18MEJ0UMhN83N2nrUNlspCENSXHLiFFdD5jXKYqG5Z7nAisN+qJ6+/T3GccxdjMjh+e+5mNbv8X3PEjPbGuK8aCDB4/D+0NAGLjRFZ3tjZ1FogTp6sg00oAjDNbTZhY/X1M/RSwpzl50aE+eiJwSOsfra2sVP+z+hG/qMjzEKBPwbdh+OJ2bn9RoiKRhF6GmKWHhg8gtWsmIoVtg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by CH3PR12MB8509.namprd12.prod.outlook.com (2603:10b6:610:157::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.34; Fri, 6 Jun
- 2025 11:43:20 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%6]) with mapi id 15.20.8792.038; Fri, 6 Jun 2025
- 11:43:20 +0000
-Date: Fri, 6 Jun 2025 08:43:19 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Jacob Pan <jacob.pan@linux.microsoft.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 12/15] iommupt: Add the x86 64 bit page table format
-Message-ID: <20250606114319.GG19710@nvidia.com>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
- <20250605140358.2dd6c083@DESKTOP-0403QTC.>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250605140358.2dd6c083@DESKTOP-0403QTC.>
-X-ClientProxiedBy: YT4PR01CA0106.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d7::12) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dXg2WLTQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749211988;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=K9Us9lJdZny0Q8pXwd7F87lmBdStX34MeC5qBUDHDxk=;
+	b=dXg2WLTQocrUcT0reZFsspSgj4BnXwC3Bs+xeUYmP7wji5/1gQuc7AFigUXSIf+utUS7f1
+	V9/Iyy1jdeIicy0pmSoK+CHlg0cWsyUwC3I7UxYtCh2weUrGembwxQLJGT0+5PYavqPmmn
+	m1uJDOsd9vmRyWKx53xzcJ+m+v3VKWw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-480-iw27p-PqM-q_Nzl8QYDkAA-1; Fri,
+ 06 Jun 2025 08:13:07 -0400
+X-MC-Unique: iw27p-PqM-q_Nzl8QYDkAA-1
+X-Mimecast-MFC-AGG-ID: iw27p-PqM-q_Nzl8QYDkAA_1749211986
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D6681800772
+	for <llvm@lists.linux.dev>; Fri,  6 Jun 2025 12:13:06 +0000 (UTC)
+Received: from [172.20.188.120] (unknown [10.30.45.122])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B6D9F30001BD;
+	Fri,  6 Jun 2025 12:13:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 8 of 100): Test report for master
+ (6.15.0, upstream-mainline, ec7714e4)
+Date: Fri, 06 Jun 2025 12:13:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CH3PR12MB8509:EE_
-X-MS-Office365-Filtering-Correlation-Id: 756b446d-73d7-4f90-daae-08dda4ef55ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?oiIqFVIhuAoi10OqgvqK0SCTnwkN+heoXXKq+hKwAitLyLG9p3tIU6r5TgIb?=
- =?us-ascii?Q?VytGTC4V05aOZ8wwF+UnZGLPtW6lhaH25PeZAKU8UJt47bKyJZ061V7sTqYp?=
- =?us-ascii?Q?ze8eqUbcPgfDRcEHUvMeJoyl5Run/5tc4mnIRsJ9hwgVUHxThg9sc9vr7QEC?=
- =?us-ascii?Q?lGCfUuhI5uYAQMi/95VFVgxXZwWKNgLua17UUZtvNV9YP7ufsHnSlFi2/sdY?=
- =?us-ascii?Q?CEpfSNDnM1E69nUkzJlshucL7saTEsuzVcet3uGQrD2A/vq1thgcAQhOV/US?=
- =?us-ascii?Q?rifSmPaI25ie6YerLQfIenn+TpJfz+cImQ9gkVoViGnDxyz5FDFYd+h+zKvP?=
- =?us-ascii?Q?MGlzLGnts8mRlOGVcCurAq14pHE3bAAviJgX+DwenP1MF9ts45aGZaBqOdhP?=
- =?us-ascii?Q?ydM2+1xkhBN2t/5p4babAYpE9Kq8BZ0WdCbeXI8QhPqN3pEvm+kL4VbRVPVr?=
- =?us-ascii?Q?i098sVDtbVsqWu3UV3fK16KfELu/lGbLXRG5soshOdHd+CjVIR5Snijnsdyj?=
- =?us-ascii?Q?8ypOvZHPhp9i0n6IH6gkdPpFQesLbhMrH5DRc/74EtdEos/p8ZDA42ZWkt2W?=
- =?us-ascii?Q?oen4TZUMou8egZ7WkkJpgcAO3tD6+XNWx8zI0niUsJXMl83o8Ndl/jd6/rnp?=
- =?us-ascii?Q?FDqg+Cc9g8hW+QeiiBissMS67OMFW6S5cq+wlOePxMHeDS6IHXhVXVyNkq/d?=
- =?us-ascii?Q?ULesMGjMe/aoEHR7h1ZnxyuNd7/yEKWexrPxV/CSSqkF5IFpoLPe9GJ0mJHl?=
- =?us-ascii?Q?54JoTasdth7LT0P4YOhqwhrcr+Nqcr+siIvmOkYYwcyHdPbEw+xnGkpiEBz8?=
- =?us-ascii?Q?0GY8Xzq317r/QrGXQbqZVMYcNfEGLDqfjUlZMlxVqqFipLZnXdtCUfCyJQME?=
- =?us-ascii?Q?rzz573Wdqrp7QfmdtnYdCrDI1yL7DrvsmorxScYm8RDz+0hkQsBM0T0n7QQh?=
- =?us-ascii?Q?M2Nh98jnfOqKuRmQesZ8gxjUBrx3rqQEbTboj6furh2AGjPtNEVhsPzk4Veb?=
- =?us-ascii?Q?NCSsB8mqPyTpVEN5agvYZDYlINmzzt8tTo/KE0SLOj9z6poXIYzI1PVAu7yu?=
- =?us-ascii?Q?lgHSj/BOY9Cpi2PZOJLX/vURJ+DMP/N+wmpR8m4FGOkY3CmSswY0NtOJw89V?=
- =?us-ascii?Q?cvdd1WUs6wom/eN1gFZ6zGWMQrpRxCDeMdzZvEaqG9PcmwBksaJHghGYlURz?=
- =?us-ascii?Q?q3SKLcuAvLqlnfGBEnFAprrDEmWXZu35fV2LC1+4wOjJkynX0e5yaCjxJjEf?=
- =?us-ascii?Q?NxhfYUTTAGnVwt+8+mUm9e38ppCsgi5Y6oeGW4I5T7Wbdmad8xUe8xmL0KLA?=
- =?us-ascii?Q?qEt09Ye1fsxvRzu6MbSL6bk6z7DK/8AR0gj6WXdeXEYZ24eino0lxuJKrYe6?=
- =?us-ascii?Q?pZGTCMyIb3Y3ZSdVmx643J23cX/VFsTXPpn/BhYf5JP7J7ODJQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?FOi2aQx9gDXelF6X0LLEWvXTdLgis+HKxBW48675hqMRG7pgQIJsd1D2cmVl?=
- =?us-ascii?Q?XaetRPiVSVcvZJAlO8vIyTAFdPsC3f8PfoKADLNcDuZnzv2AZiNvNLEMgBA3?=
- =?us-ascii?Q?ABdQcc9/D6XONj0rrT32jp/kNy9UoJd4RHc7IZ6MtJE8skFfb0mIuWZOaMCE?=
- =?us-ascii?Q?6huqqRg8MacOktYup9EOz86A5lcgUyqtW9BgUdUZokGWxjGN8RSNpgrzmLxr?=
- =?us-ascii?Q?nbZkz49XYNGLqr3inMh6caJH0u3KT3Navy3nyg4PO1L0wiHnvIW/R+o5snEA?=
- =?us-ascii?Q?YF3MaM/ROhT9Zmq12c65pWYso9yJOpDVtDW2EyKDrirtxTC8DzbONlQMF/oz?=
- =?us-ascii?Q?dCLkKEdNqln6T1aPqkxrCzAmRDs8eo+1B6Ere6D6u804+f/MFUESZxXbF3U7?=
- =?us-ascii?Q?v/ImpjM9UahFT7atn3u4RNNSURSt0A+fAqM34cZZLPkKW3lBKUsJpmO9jUQA?=
- =?us-ascii?Q?qafvWHTun1zrtwg2zWY2Ba3jfVPGH8gONRJwWAsYoj4YxBQ0rBzJz6ZouTEe?=
- =?us-ascii?Q?zZpT6aOl5h7TVADmK44kKX/LPCDKC9L2SIIPpaYbp0yQLJtkPdBJicsudXf8?=
- =?us-ascii?Q?ciNlr9xS7rh8ettFF1xK6eE2Bbnn1/4WcKEToTqQjOaJMi3lz9Ecyz3GLWrc?=
- =?us-ascii?Q?efzKuP4exG0xSAXwgTgoGbav7LXNU6rYQMdXlPQ4L+EO/cpc7RQxLloBN3ji?=
- =?us-ascii?Q?22N0Ernuf4TsmILjvKDkjc1PJXYr4RkQwcW/PNvFN3oEM14uJMDB/NgtRG5I?=
- =?us-ascii?Q?i2HuxZaKKGCeMGgubhVsqWlMgneRvJd5AjaZkocxvjqd7upOAzkjc9NQMZy5?=
- =?us-ascii?Q?wI5hCXUV7iT2SpYdZij8ekZ7E1fHZn8kr8XH8/QoMIe3o40X8DRj68ZQ0fTk?=
- =?us-ascii?Q?zIHNBywVc2AAqDsQ0x8isaS/mRaarg9+2kqEncQgtJeLu1hpdZJkqFRmbaR6?=
- =?us-ascii?Q?RqKBq7hN+v/IB9z44LuLPmnnH3E47x8rDLwAvbS8Tk6iMlwq38MUWtfkIvU6?=
- =?us-ascii?Q?Q43ElTihBd1fvo222XoKWWqRD8Nv3uJWteU0GllNvqnFUvfPNhBtmQY1dXxz?=
- =?us-ascii?Q?dFipHnC3BAvCPEpX3z4YE1ek0VGISt1GHoTh0yc1z0/1hzKspWi/tKhCGJ5G?=
- =?us-ascii?Q?giXLdL4NWvl6yuffNqQoo6suwNLzMBMRwVE393BGk8Admxm9vbHFITOfdoak?=
- =?us-ascii?Q?cCUwiCmWimQtWUCpBEaaPhwYRNMbM3pGXCpnTruNUpIHdknBL7wFJQZ4O5IH?=
- =?us-ascii?Q?H4KjsSjKRcFgvZ3f9hpFVFEAgrEytUGVz/0GEsmSToK6OoaO2a6k6N4FnYix?=
- =?us-ascii?Q?rNMpACtlO2JkQRELY7Jd3js9QEBme7/aBWY1VvTyXmkl/QyFpUUpybU54Qq3?=
- =?us-ascii?Q?GGuqpW6HL28IsadSjy64u49Ndjx2WemmyLEo1/3iJIDZXocMQBSg5U1tA7v5?=
- =?us-ascii?Q?XtF0dtD841bSOgjyL3rNyu4LP6yKBJXSznhHK4lrjzGzowIMAwedWL75tZw/?=
- =?us-ascii?Q?oF+k2ezG93cDjcuirTnnMAfr/u1vSzy3LOpkw+T9+eLwS3cqFGFbpszk5I/o?=
- =?us-ascii?Q?8Kf1VVFT00nDDaXIj1Nsi8HaDVPaGUVncToPRugL?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 756b446d-73d7-4f90-daae-08dda4ef55ec
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2025 11:43:20.5931
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WS8Vzzl/v2GZ74lXiRqhjwJJIWcklLNuZ0aLIlRaXxvSDsWuYTXhZGyyY0aXZB7a
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8509
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <52188.125060608130700372@us-mta-480.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: u41v5WW5oVZ5P0DRkCECQzmtwIFkqq98ZWO3YrAzYN4_1749211986
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 05, 2025 at 02:03:58PM -0700, Jacob Pan wrote:
-> Hi Jason,
-> 
-> On Mon,  5 May 2025 11:18:42 -0300
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
-> > +config IOMMU_PT_X86_64
-> > +       tristate "IOMMU page table for x86 64 bit, 4/5 levels"
-> > +	depends on !GENERIC_ATOMIC64 # for cmpxchg64
-> > +	default n
-> > +	help
-> > +	  iommu_domain implementation for the x86 64 bit 4/5 level
-> > page table.
-> > +	  It supports 4K/2M/1G page sizes and can decode a sign
-> > extended
-> > +	  portion of the 64 bit IOVA space.
-> > +
-> > +	  Selected automatically by an IOMMU driver that uses this
-> > format. +
-> >  config IOMMU_PT_KUNIT_TEST
-> >  	tristate "IOMMU Page Table KUnit Test" if !KUNIT_ALL_TESTS
-> >  	depends on KUNIT
-> >  	depends on IOMMU_PT_AMDV1 || !IOMMU_PT_AMDV1
-> > +	depends on IOMMU_PT_X86_64 || !IOMMU_PT_X86_64
-> Is this intended? or you mean:
-> depends on IOMMU_PT_X86_64 || IOMMU_PT_AMDV1
+Hi, we tested your kernel and here are the results:
 
-It is intended, this is the kconfig pattern that says if
-IOMMU_PT_X86_64 is enabled and modular then IOMMU_PT_KUNIT_TEST must
-also be modular.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Jason
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'rust-6.16' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/ojeda/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1854464961
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    kselftests upstream - bpf_test_progs [x86_64]
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
