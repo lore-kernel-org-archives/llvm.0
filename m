@@ -1,121 +1,105 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE1F28750A
-	for <llvm@lists.linux.dev>; Fri,  6 Jun 2025 12:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287642882D0;
+	Fri,  6 Jun 2025 12:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749211991; cv=none; b=N5maZTquGpsvBy0i2mZzJBp/qRKOMTMjexEzY4mi6Hq1u3EeiMLUJYQRmyqAW2Q/NL1IIqsizsxihrAGgYofJKFb/ybh8jLXbyVLA4jK8X92v4A9aL4zCYL0c/COV3LRSRDnWhna5fkf/Xx+MwrgZcfz08on6JDP/tb1m+vq03M=
+	t=1749214431; cv=none; b=OxOg7/7xHauG22SE8Dv/MSL9dpHWiCYxjWi7ytBNsUUYRHnWMFCPTrkG1wQctDKLiv39lhLlFj0y50u239tuODhUbVXncvK0Ftn8uwVwIYAcnXaL0dqDpScLeIBrrkhHcSYvPYFTlYj0l9TOLhFD48tssAx3lbDTA+08eKtSt1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749211991; c=relaxed/simple;
-	bh=wyMfHWCntFzsAnYQn8GivbKA8MgPNEB662kYcFzSn6Y=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MiLZe+OdMPwF3FKwJSsDWVem8wE7AAt5EBsHPn2sA6UZ6A2EXs3fNd2eMkSiuBlo9OeoFSIDwv/kRHNQh886YsTuZQLs0KdBgld/0Yhc6Q0IsnEUUuzXlsOVOTUklgtlQQ7TtspgBirEeqxDXCfykj6oFspxIaROlqVABjdJyNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dXg2WLTQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1749214431; c=relaxed/simple;
+	bh=n1wykN0q4zEYvLq7DTQo3g0PyzEzM3Sutii1zJAfHIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=InpUKbp4fLtzOMyuB386Zd3CmdD62t44IEppyNowJAaWMs/w6SR0vJWvm/1JuFflZMVOKmq/t56+WO+K6gjJ6JKjIvveIu+ILlDSVRiKwXYSmLCI923rItxnunWcjPOHVZ2yJR/SXyMMXgliYHsxiIWSuhKj9GrGM7JRBRrVMIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WluuDH+C; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dXg2WLTQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749211988;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=K9Us9lJdZny0Q8pXwd7F87lmBdStX34MeC5qBUDHDxk=;
-	b=dXg2WLTQocrUcT0reZFsspSgj4BnXwC3Bs+xeUYmP7wji5/1gQuc7AFigUXSIf+utUS7f1
-	V9/Iyy1jdeIicy0pmSoK+CHlg0cWsyUwC3I7UxYtCh2weUrGembwxQLJGT0+5PYavqPmmn
-	m1uJDOsd9vmRyWKx53xzcJ+m+v3VKWw=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-480-iw27p-PqM-q_Nzl8QYDkAA-1; Fri,
- 06 Jun 2025 08:13:07 -0400
-X-MC-Unique: iw27p-PqM-q_Nzl8QYDkAA-1
-X-Mimecast-MFC-AGG-ID: iw27p-PqM-q_Nzl8QYDkAA_1749211986
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D6681800772
-	for <llvm@lists.linux.dev>; Fri,  6 Jun 2025 12:13:06 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B6D9F30001BD;
-	Fri,  6 Jun 2025 12:13:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 8 of 100): Test report for master
- (6.15.0, upstream-mainline, ec7714e4)
-Date: Fri, 06 Jun 2025 12:13:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WluuDH+C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749214429; x=1780750429;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n1wykN0q4zEYvLq7DTQo3g0PyzEzM3Sutii1zJAfHIY=;
+  b=WluuDH+CPB477xP4ido3tnucJrMFa3GY47k/qn+O5i2UlMJdpo5IvcVw
+   C6cric8SLZgRPXjJVj/n1jhPRE0+mo7yrU50REj/sar4QpSgROzgaUbQx
+   KbsHUmQURLiPUdkBuf7cZ6fObrdmcFpP//DM/HG3PqwFzwCvdchtypYFC
+   Dj+m33JbfQFkNzE5tFtxOIsJgX0id6V43a3yawSHpBcpYjqGbKEfL64Tl
+   enwqHyLtHS+Khn8amTuvMklq6UzSGUQeC42IAYYM7Vj+5l+llnH0e7QdJ
+   P6f1CBUEPaYmkU49y8yqi2vAJEU8wEW1Fkb0nDBlRAQJaRTuINTrLCOfR
+   A==;
+X-CSE-ConnectionGUID: exidaisQTRSpDri5BufqHw==
+X-CSE-MsgGUID: zhaQTuYzStqG5JOHSQozaw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="62409314"
+X-IronPort-AV: E=Sophos;i="6.16,215,1744095600"; 
+   d="scan'208";a="62409314"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 05:53:49 -0700
+X-CSE-ConnectionGUID: PBzPIMJlR4+S61gzOioHKA==
+X-CSE-MsgGUID: yWnVIu1CTEK2prYn7GVKXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,215,1744095600"; 
+   d="scan'208";a="176771560"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 06 Jun 2025 05:53:46 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uNWZr-0004zB-32;
+	Fri, 06 Jun 2025 12:53:43 +0000
+Date: Fri, 6 Jun 2025 20:53:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Alexey Gladkov <legion@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 3/4] kbuild: keep .modinfo section in vmlinux.unstripped
+Message-ID: <202506062053.zbkFBEnJ-lkp@intel.com>
+References: <20250606041029.614348-4-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <52188.125060608130700372@us-mta-480.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: u41v5WW5oVZ5P0DRkCECQzmtwIFkqq98ZWO3YrAzYN4_1749211986
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250606041029.614348-4-masahiroy@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+Hi Masahiro,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on masahiroy-kbuild/for-next]
+[also build test WARNING on masahiroy-kbuild/fixes linus/master v6.15 next-20250606]
+[cannot apply to herbert-cryptodev-2.6/master herbert-crypto-2.6/master arnd-asm-generic/master mcgrof/modules-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'rust-6.16' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/ojeda/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/module-remove-meaningless-name-parameter-from-__MODULE_INFO/20250606-121255
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+patch link:    https://lore.kernel.org/r/20250606041029.614348-4-masahiroy%40kernel.org
+patch subject: [PATCH 3/4] kbuild: keep .modinfo section in vmlinux.unstripped
+config: s390-randconfig-002-20250606 (https://download.01.org/0day-ci/archive/20250606/202506062053.zbkFBEnJ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250606/202506062053.zbkFBEnJ-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1854464961
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506062053.zbkFBEnJ-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All warnings (new ones prefixed by >>):
 
+>> s390x-linux-ld: .tmp_vmlinux1: warning: allocated section `.modinfo' not in segment
+>> s390x-linux-ld: .tmp_vmlinux2: warning: allocated section `.modinfo' not in segment
+>> s390x-linux-ld: vmlinux.unstripped: warning: allocated section `.modinfo' not in segment
 
-Tests that were not ran because of internal issues:
-    kselftests upstream - bpf_test_progs [x86_64]
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
