@@ -1,108 +1,300 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1C214AD2B;
-	Fri,  6 Jun 2025 16:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8A41EFF8F
+	for <llvm@lists.linux.dev>; Fri,  6 Jun 2025 18:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749228805; cv=none; b=IhfSnQGUs46I75QUBevjUeBxbvUgyiJZea4+ipjjyeV3nHZ98Pw0+JxRuI7d1pdtEKFo0Dn+WVi5SRnv+yCyBXkRTIkvv3rkEcG5/IMH0Qf4WIcXQl+Bq54eYJ5/21pphL4mp2M5+nSwGEijS/iCzDKaEnbZ544H0axHAxwvtSk=
+	t=1749234463; cv=none; b=bo82/qaFNG7mMYumrDWdfEk8/QenRVEkv7j0PQ9O1p6k5+Qddoj0AA0X1XIQPQ6mq4rpE8H+aFn2LFuxcleLDq7Au2DAie/aINhh18r8cvF/qMxIY1+E40paJoVVVAq8p0GQOCfDsajUJBVXUA02ihzEei9m+b896UTCGBJpD5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749228805; c=relaxed/simple;
-	bh=87KZKukrg49ert97Lcx0HLmqACRfuwZpRY6i5mUhJyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hXGH/N9a+oGp2lDkmKP/v09DRtPG8Ju1Ey50vvL6eeiKAxrDYPLijqNzc92EHNVJwtKFp/ueub8YrTJ89LbXLBNB9dbo+aIxW2mvp7k54tgGTq3vlz+OivLITC4Ti7Zvffs+sqWfSTIo2cl2nux81TX1P1aYgeO0lyhUU7QYdRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1CKskOl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749234463; c=relaxed/simple;
+	bh=7Mrtp/ujC7IUUY/xhLK4hRCZlis7yEUVD6oZar6upKw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rIkUV6MgDVHfIZfS1b1rmEiQYew+TaZjH9XAiMzho/VQChhUXsOQJfH7bPawjsNELkT3m/YbLRVoykaW1ugWCjPuKPtOiQWmn9em8R6Y9chRlSsTDbQomT7W6SRk3kG1JE9P+t60q/SSCIxBTpsbr+IrD9G8YjPK3btNCSIAv+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yLx1cl5T; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1CKskOl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 836BAC4CEEB;
-	Fri,  6 Jun 2025 16:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749228804;
-	bh=87KZKukrg49ert97Lcx0HLmqACRfuwZpRY6i5mUhJyI=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=D1CKskOlZr5Y7dYfQtYg+PaUdzeERrLIxZM+rb08qw2hoM6TShht6C0meakNN7hYx
-	 DbsUYwhKUikG1XxZF0KUUeIPtoxyUG78gJ14R6xxcV82Du/7V8UqHbhGppKO7am2xC
-	 OnqQpbXCi20I9AiuJ243x6ONkadmbolWN8M/4w4IOtyEow7BN9hoZ7t/iOMXEYD9pZ
-	 VAlvTN0+75VXFBp/4/UIboqHNFTOt062MXMxsL9MWNGe+NON8v77RTP/Op2lMXyXyd
-	 TbbCvqVG1zh/ZiAtK9xrMzy7jkRQbttNWcOVUZ8tR50aiMmow+ZSfx6YcvZ2aJc4Kq
-	 t+2VbvdoqPjAg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 216CBCE054A; Fri,  6 Jun 2025 09:53:24 -0700 (PDT)
-Date: Fri, 6 Jun 2025 09:53:24 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [paulmckrcu:dev.2025.06.04b 18/36]
- lib/tests/test_ratelimit.c:98:18: error: call to undeclared function
- 'ratelimit_state_reset_miss'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <72cced7b-7cbd-4b62-a1c9-88d3960c6a89@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202506070040.aFxmm3vX-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yLx1cl5T"
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3ddc10f09easo22985ab.0
+        for <llvm@lists.linux.dev>; Fri, 06 Jun 2025 11:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749234460; x=1749839260; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UH9iNsg9TJrDDcNjF332Ex2YPRc93vYZGAZZ8zWp6+s=;
+        b=yLx1cl5TcajCdysRiXv8azBE5NzG5wVwrlDhVmGT1jeLh/MOWyBQAwlz9d6iP5Y6j/
+         WK5Z3GjPULXT8/GE3M5h/KfsxWxPTnxgE4S3vRDuXxLxUS54TbGc+9HFFaYulBtyNHLe
+         qobWwlZEdmBMoPoKhlF026tQXGeEitYjwiroIXcKHa6AiVaojqiKbAGHaxEXtObhQZLJ
+         3YaobybC1zV0pKYEDfz+U09P8ZNFkU8+iGdBQAdq5wjM7TiFsQnk3YhCjtsKY8PJRCD+
+         ks+8bbW++eNT3eiEGFkdk1/Ef73YkNpA29aJaG8YXyT6cYkrxFabvjxqbZVF+WQ3oqSz
+         QxnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749234460; x=1749839260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UH9iNsg9TJrDDcNjF332Ex2YPRc93vYZGAZZ8zWp6+s=;
+        b=hSBmCsPa86ftHI5GlZ9lQFoX9bqOFZ9pAH+VXIjTGuRBWUux+gkpWzZCl5SMxUs+r+
+         /e16KkhfcLmhQRjFqBLCmjhtvB/6r2BzpjTNVWk5GQVhqwIIowlNBP3fHIIGef9jzs7j
+         5SY6vLhnhxawPORfU4vOAOThgcpmySrHlRwWqwcYhvtliBF1M/iRG0qkiVSKLq1K/zK9
+         IE4tpdDnmw8R+P99PlgMcH4hiAakeiJAi/X+b8w6a88ZyGkAM5m1o4enzcu9x0nWDxqO
+         WNagYmjjq055Syf8RpufeXldPezAETN0/Yg3KYq372lU3lA0vPHG4ZL5fu+yOub1XdQw
+         hITg==
+X-Forwarded-Encrypted: i=1; AJvYcCXumE9eEF0bmZlZe0baBD1+H9TF+TBd9HN877akqZvH9pIgbN4A/2Ob7RvA4SeVv0qfE8ay@lists.linux.dev
+X-Gm-Message-State: AOJu0YweuaCCKxVpumWb95gSG+g7jRSoxnJlDo6e7sUW/Mu8jdW3Bs/l
+	OxDqj/P/8RBNMCnkUhCSnB/HC2fVBLntfFvFZLxV8Kuw+EJ0mhce/Bn4d77qAXRcXd93WxdhVQF
+	WJx1ZjBykiEx5n0lr6IvgcY7WYCVgawwHj4yABZAl
+X-Gm-Gg: ASbGncsvGu1bQ5szAXhdR/e0y36w8csKjel+mHiNecS0YZxCIfcFiDiVAudggrmsttx
+	EZISxT0MBnxPMyo6RISb3pgBsS5IwkKuJvtzis00mVEJ1nCROFZkR3gMsj9F0DME/vJAc9nOBVY
+	mcfm7J+thOjcLU+RcSeB63qnz4ZyNfCo8ZHeEoQV9LkCRt
+X-Google-Smtp-Source: AGHT+IEJXe0nz5dAwhgVL5WD4u2+k2DG6pcgtJF8RoF6Fyj1dX4bmbkKisdB8JLUuxOTTt9TvaiXB+XWXumzd7r17lQ=
+X-Received: by 2002:a05:6e02:398c:b0:3dc:670e:ad5f with SMTP id
+ e9e14a558f8ab-3ddd74d763dmr339265ab.14.1749234460177; Fri, 06 Jun 2025
+ 11:27:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202506070040.aFxmm3vX-lkp@intel.com>
+References: <20250521225307.743726-1-yuzhuo@google.com> <20250521225307.743726-3-yuzhuo@google.com>
+ <aC9lXhPFcs5fkHWH@x1> <CADQikVDs3msXqZ6tyoXR0WeN4D_9snxWyk2kXeDw5iAs+BHFuw@mail.gmail.com>
+In-Reply-To: <CADQikVDs3msXqZ6tyoXR0WeN4D_9snxWyk2kXeDw5iAs+BHFuw@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 6 Jun 2025 11:27:28 -0700
+X-Gm-Features: AX0GCFsJf9BoOQBJo9u8SiBY-wGn-QaijMbtUCmBq-anRCNCzEGR20_B5-Gw7iw
+Message-ID: <CAP-5=fV11L=5cBaYcd0ftVyk8=Tm4+NWCoTG+MBnAwjEogS5iA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/4] perf tools: Add sha1 utils
+To: Yuzhuo Jing <yuzhuo@google.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Eric Biggers <ebiggers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Liang Kan <kan.liang@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>, James Clark <james.clark@linaro.org>, 
+	Tomas Glozar <tglozar@redhat.com>, Leo Yan <leo.yan@arm.com>, 
+	Guilherme Amadio <amadio@gentoo.org>, Yang Jihong <yangjihong@bytedance.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+	Wei Yang <richard.weiyang@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Aditya Gupta <adityag@linux.ibm.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, "Steinar H. Gunderson" <sesse@google.com>, 
+	"Dr. David Alan Gilbert" <linux@treblig.org>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 07, 2025 at 12:50:39AM +0800, kernel test robot wrote:
-> tree:   https://github.com/paulmckrcu/linux dev.2025.06.04b
-> head:   12a2f572c0040895409bbf5773f80fa08586c01a
-> commit: f1d79747fb507820229adfd6f042b9b094a0c75b [18/36] lib: Add stress test for ratelimit
-> config: arm-randconfig-001-20250606 (https://download.01.org/0day-ci/archive/20250607/202506070040.aFxmm3vX-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070040.aFxmm3vX-lkp@intel.com/reproduce)
+On Wed, Jun 4, 2025 at 11:17=E2=80=AFAM Yuzhuo Jing <yuzhuo@google.com> wro=
+te:
+>
+> Hi Arnaldo,
+>
+> Thanks for testing the patches!
+>
+> > In file included from util/sha1_generic.c:18:
+> > util/sha1_base.h: In function =E2=80=98sha1_base_do_finalize=E2=80=99:
+> > util/sha1_base.h:77:21: error: comparison of integer expressions of dif=
+ferent signedness: =E2=80=98unsigned int=E2=80=99 and =E2=80=98int=E2=80=99=
+ [-Werror=3Dsign-compare]
+> >    77 |         if (partial > bit_offset) {
+> >       |                     ^
+> > cc1: all warnings being treated as errors
+>
+> Oh, I didn't see that on my GCC 14.2.  A quick fix would work:
+>
+> --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
+> +++ tools/perf/util/sha1_base.h 2025-06-03 15:43:39.194036707 -0700
+> @@ -71,7 +69,7 @@
+>  static inline int sha1_base_do_finalize(struct sha1_state *sctx,
+>                                         sha1_block_fn *block_fn)
+>  {
+> -       const int bit_offset =3D SHA1_BLOCK_SIZE - sizeof(__be64);
+> +       const unsigned int bit_offset =3D SHA1_BLOCK_SIZE - sizeof(__be64=
+);
+>         __be64 *bits =3D (__be64 *)(sctx->buffer + bit_offset);
+>         unsigned int partial =3D sctx->count % SHA1_BLOCK_SIZE;
+>
+>
+> To test it, I added -Werror=3Dsign-compare to my local Makefile.config to
+> force the error.
+>
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index d19d1f132726..9909611be301 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -225,9 +225,9 @@ endif
+>
+>  # Treat warnings as errors unless directed not to
+>  ifneq ($(WERROR),0)
+> -  CORE_CFLAGS +=3D -Werror
+> -  CXXFLAGS +=3D -Werror
+> -  HOSTCFLAGS +=3D -Werror
+> +  CORE_CFLAGS +=3D -Werror=3Dsign-compare -Werror
+> +  CXXFLAGS +=3D -Werror=3Dsign-compare -Werror
+> +  HOSTCFLAGS +=3D -Werror=3Dsign-compare -Werror
+>  endif
+>
+>  ifndef DEBUG
+>
+>
+> While testing with "make -C tools/perf -f tests/make make_debug", I saw
+> similar compile errors in libjvmti.c:
+>
+> jvmti/libjvmti.c: In function =E2=80=98copy_class_filename=E2=80=99:
+> jvmti/libjvmti.c:148:39: error: comparison of integer expressions of
+> different signedness: =E2=80=98int=E2=80=99 and =E2=80=98long unsigned in=
+t=E2=80=99
+> [-Werror=3Dsign-compare]
+>   148 |                         for (i =3D 0; i < (size_t)(p - class_sign=
+); i++)
+>       |                                       ^
+> jvmti/libjvmti.c:155:31: error: comparison of integer expressions of
+> different signedness: =E2=80=98int=E2=80=99 and =E2=80=98size_t=E2=80=99 =
+{aka =E2=80=98long unsigned int=E2=80=99}
+> [-Werror=3Dsign-compare]
+>   155 |                 for (j =3D 0; i < (max_length - 1) && file_name
+> && j < strlen(file_name); j++, i++)
+>       |                               ^
+> jvmti/libjvmti.c:155:68: error: comparison of integer expressions of
+> different signedness: =E2=80=98int=E2=80=99 and =E2=80=98size_t=E2=80=99 =
+{aka =E2=80=98long unsigned int=E2=80=99}
+> [-Werror=3Dsign-compare]
+>   155 |                 for (j =3D 0; i < (max_length - 1) && file_name
+> && j < strlen(file_name); j++, i++)
+>       |                                                                  =
+  ^
+>
+> I've just sent a separate patch to the mailing list:
+> https://lore.kernel.org/lkml/20250604173632.2362759-1-yuzhuo@google.com/T=
+/
 
-This was me failing to incorporate the lib/ratelimit.c commits,
-apologies!
+Thanks Yuzhuo! I guess this happened because jvmti.h is missing in the
+test container. It seems to make sense to add -Wsign-compare to the
+standard CFLAGS to lower the chance of breaking this container again.
 
-							Thanx, Paul
+> > Humm that part is the same as in the kernel...
+> >
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ line=3D$(ctags -x --c-kinds=3D=
+f include/crypto/sha1_base.h | awk '$1 =3D=3D "sha1_base_do_finalize" {prin=
+t $3}')
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ sed -n $line,\$p include/crypt=
+o/sha1_base.h | awk '{print} /\{/ {c++} /\}/ {c--; if (c=3D=3D0) exit}' > /=
+tmp/original
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ line=3D$(ctags -x --c-kinds=3D=
+f tools/perf/util/sha1_base.h | awk '$1 =3D=3D "sha1_base_do_finalize" {pri=
+nt $3}')
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ sed -n $line,\$p include/crypt=
+o/sha1_base.h | awk '{print} /\{/ {c++} /\}/ {c--; if (c=3D=3D0) exit}' > /=
+tmp/copy
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ diff -u /tmp/original /tmp/cop=
+y
+> > --- /tmp/original       2025-05-22 14:48:31.338406860 -0300
+> > +++ /tmp/copy   2025-05-22 14:48:58.401603439 -0300
+> > @@ -1,3 +1,7 @@
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static inline int sha1_base_do_finalize(struct shash_desc *desc,
+> >                                         sha1_block_fn *block_fn)
+> >  {
+> > @@ -13,10 +17,3 @@
+> >
+> >                 block_fn(sctx, sctx->buffer, 1);
+> >         }
+> > -
+> > -       memset(sctx->buffer + partial, 0x0, bit_offset - partial);
+> > -       *bits =3D cpu_to_be64(sctx->count << 3);
+> > -       block_fn(sctx, sctx->buffer, 1);
+> > -
+> > -       return 0;
+> > -}
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+>
+> There were some other fixes that I made only to the perf tree version,
+> while maintaining verbatim for other parts.  Here's a script that
+> retains and compares only the copied parts.
+>
+>   # Ignore everything after sha1_transform
+>   diff -u -B -I "^#include " <(sed -n
+> '/EXPORT_SYMBOL(sha1_transform)/q;p' lib/crypto/sha1.c)
+> tools/perf/util/sha1.c
+>   diff -u -B -I "^#include " -I "sha1_zero_message_hash" -I "^struct
+> sha1_state;$" -I "^void sha1_init(__u32 \*buf);$" \
+>       <(sed 's/shash_desc/sha1_state/g;' include/crypto/sha1.h)
+> tools/perf/util/sha1.h
+>   diff -u -B -I "^EXPORT_SYMBOL" -I "^#include " \
+>       <(sed 's/shash_desc \*desc/sha1_state *sctx/g;
+> /shash_desc_ctx(desc)/d' include/crypto/sha1_base.h)
+> tools/perf/util/sha1_base.h
+>   # Ignore everything after crypto_sha1_finup
+>   diff -u -B -I "^EXPORT_SYMBOL" -I "^#include " \
+>       <(sed -n -e '/const u8
+> sha1_zero_message_hash/,/EXPORT_SYMBOL_GPL(sha1_zero_message_hash)/d'
+> \
+>                -e 's/shash_desc/sha1_state/g;
+> /EXPORT_SYMBOL(crypto_sha1_finup)/q;p' crypto/sha1_generic.c) \
+>       tools/perf/util/sha1_generic.c
+>
+> And the changes are as below (including the quick fix above), with one
+> changing the sign and integer type and another fixing type mismatch from
+> const u8 * to const char *.
+>
+> Should we send another patch to the kernel tree version to fix the sign
+> error, or we add rules to allow perf tree only changes?
 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202506070040.aFxmm3vX-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> lib/tests/test_ratelimit.c:98:18: error: call to undeclared function 'ratelimit_state_reset_miss'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->       98 |         sktp->nmissed = ratelimit_state_reset_miss(&stressrl);
->          |                         ^
->    lib/tests/test_ratelimit.c:98:18: note: did you mean 'ratelimit_state_exit'?
->    include/linux/ratelimit.h:25:20: note: 'ratelimit_state_exit' declared here
->       25 | static inline void ratelimit_state_exit(struct ratelimit_state *rs)
->          |                    ^
->    1 error generated.
-> 
-> 
-> vim +/ratelimit_state_reset_miss +98 lib/tests/test_ratelimit.c
-> 
->     81	
->     82	static int test_ratelimit_stress_child(void *arg)
->     83	{
->     84		struct stress_kthread *sktp = arg;
->     85	
->     86		set_user_nice(current, MAX_NICE);
->     87		WARN_ON_ONCE(!sktp->tp);
->     88	
->     89		while (!READ_ONCE(doneflag)) {
->     90			sktp->nattempts++;
->     91			if (___ratelimit(&stressrl, __func__))
->     92				sktp->nunlimited++;
->     93			else
->     94				sktp->nlimited++;
->     95			cond_resched();
->     96		}
->     97	
->   > 98		sktp->nmissed = ratelimit_state_reset_miss(&stressrl);
->     99		return 0;
->    100	}
->    101	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+I believe there will need to be a set of patches for the kernel sha1
+code (fixing -Wsign-compare, any other typing issues) and a set of
+patches for perf with the check-headers.sh updated as your scripts
+check above. The perf patches shouldn't assume kernel patches have
+landed. The perf check-headers.sh produces a warning but doesn't stop
+the perf build. When the kernel changes land we can update the perf
+check-headers.sh expectations.
+
+Thanks,
+Ian
+
+> --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
+> +++ tools/perf/util/sha1_base.h 2025-06-03 15:43:39.194036707 -0700
+> @@ -71,7 +69,7 @@
+>  static inline int sha1_base_do_finalize(struct sha1_state *sctx,
+>                                         sha1_block_fn *block_fn)
+>  {
+> -       const int bit_offset =3D SHA1_BLOCK_SIZE - sizeof(__be64);
+> +       const unsigned int bit_offset =3D SHA1_BLOCK_SIZE - sizeof(__be64=
+);
+>         __be64 *bits =3D (__be64 *)(sctx->buffer + bit_offset);
+>         unsigned int partial =3D sctx->count % SHA1_BLOCK_SIZE;
+>
+> @@ -95,7 +93,7 @@
+>         __be32 *digest =3D (__be32 *)out;
+>         int i;
+>
+> -       for (i =3D 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
+> +       for (i =3D 0; i < SHA1_DIGEST_SIZE / (int)sizeof(__be32); i++)
+>                 put_unaligned_be32(sctx->state[i], digest++);
+>
+>         memzero_explicit(sctx, sizeof(*sctx));
+> --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
+> +++ tools/perf/util/sha1_generic.c      2025-05-16 10:52:59.219531034 -07=
+00
+> @@ -27,7 +23,7 @@
+>         u32 temp[SHA1_WORKSPACE_WORDS];
+>
+>         while (blocks--) {
+> -               sha1_transform(sst->state, src, temp);
+> +               sha1_transform(sst->state, (const char *)src, temp);
+>                 src +=3D SHA1_BLOCK_SIZE;
+>         }
+>         memzero_explicit(temp, sizeof(temp));
+>
+> Thanks!
+>
+> Best regards,
+> Yuzhuo
