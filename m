@@ -1,141 +1,281 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E29323D;
-	Fri,  6 Jun 2025 19:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1D27FD;
+	Fri,  6 Jun 2025 20:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749239248; cv=none; b=f3w6YNP7TvgcMdrvFtJeK7liLGBI4WMiJ/TqY6jWFCbPqKtp9sk3I1xuaKTHeMZs+CIP2bgQZxuvIVcukstLpmQlZJl1gusb+VcBiiG3lBr/tf2wqLXHPJ5j7YRBMIc38MWSuVq1RTb0RFsa1oV/BuY5/xn4EcxofT6+zcr3YI0=
+	t=1749241058; cv=none; b=XQdBklY0Q8Iqpu30uWbC2uYlHeYO/w94IHz44WyE+B4k/L98DCsglFEQP3Z4iQSUY3ryKz+CsVJNBP2tuzRduQi+1GqSYWeLcvMXqnH6b7TqoH9UYhKDYuh+fF/3eJk+9w/wT+IK/1ejP5WnF6vnprX8oN2g+0H1Ie5H3Sf0G/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749239248; c=relaxed/simple;
-	bh=waQvTFW1Tv1+HpQpBDsNKSK2lSYc7esWz0DnZzD7BfE=;
+	s=arc-20240116; t=1749241058; c=relaxed/simple;
+	bh=xo8VKm0/2nL/L70Nvv0cwJxphDlhCnT+pw1XJfzarG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CpAXFLL/jlNhTbGDpF51EpGQxghgCpzcao3SemZWW7TIrD0JVIN406lSVCnQrPh59rmbDkz7lHMMkdBuDogxQHxDkWc7QFCVSjHZNURLvJ80Cq/9StEOsLGxYtOOfwEjPnRT/c7s4limQzeKbmtYXUfo9wgvGbHglC38hLymIrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XRF5+ni5; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iyets9b9Zyhz7uLV3nkh/5PRms/KV/StdKzvRNCbi0xtWrYBrOt6CqUNVdgIGHmvJzjE1WFVEQfxQ+HDaXqlhk4vx5VI30zWmco+qtBNUL7J4gppShJvTuBfRqUHFBuHRwq+0LgkpDUDiuhsFdHCbYV3S8UYJm2MWCJuTmdI1i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VtD3Hipr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XRF5+ni5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749239247; x=1780775247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=waQvTFW1Tv1+HpQpBDsNKSK2lSYc7esWz0DnZzD7BfE=;
-  b=XRF5+ni57zsDuhXYJVPx4y5MjTmDRt0RyjKT2+Yh2/aj4WtqAqdmRYWZ
-   wRfWapxpXKFP4Q6szVEdfP3JxrrXhCgy89pff1lJC8lFqVJVeX+l/jwKd
-   VL/6Eynzl5s+6VL5EZf8lwsbOqnP08p5OKp2xAxBbVxBt5kvTkLXuWxfT
-   fpa4AQDUU/WTvvfgd7p2pml+9sNLugP/N2cY+VS8f6DY737KxTRGa9uxZ
-   OaDb7meroAJcNELvJwqK4hWPWelIZq7APQ+gpo1DOMzg7kKabhPtjkuoo
-   PcPeJ0KFHfUQXavz08t2LYs4+IvIIdrk0oy7/1/UG6S6MFOfNN6sNBgPi
-   Q==;
-X-CSE-ConnectionGUID: E5jkCmFmQlSwjhp86taGHQ==
-X-CSE-MsgGUID: aw/jV+zoTBCKJjNu4L8EyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="61665403"
-X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
-   d="scan'208";a="61665403"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 12:47:27 -0700
-X-CSE-ConnectionGUID: IjxxRQuWQ+q54FJCWZ6g+g==
-X-CSE-MsgGUID: vgUl0eiYTQuEPBq2cfEHlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
-   d="scan'208";a="150925381"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Jun 2025 12:47:22 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uNd27-0005FJ-17;
-	Fri, 06 Jun 2025 19:47:19 +0000
-Date: Sat, 7 Jun 2025 03:46:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jocelyn Falempe <jfalempe@redhat.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Christian Koenig <christian.koenig@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jocelyn Falempe <jfalempe@redhat.com>
-Subject: Re: [PATCH v8 4/9] drm/ttm: Add ttm_bo_kmap_try_from_panic()
-Message-ID: <202506070340.P5oZoRwh-lkp@intel.com>
-References: <20250606120519.753928-5-jfalempe@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtD3Hipr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAEDC4CEEB;
+	Fri,  6 Jun 2025 20:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749241058;
+	bh=xo8VKm0/2nL/L70Nvv0cwJxphDlhCnT+pw1XJfzarG8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VtD3Hiprq5zyy8Swg6g7TrobqWadI0b4cz8odsJy85UXU2VI1zgBM8nAWGPgvfnyn
+	 skJmqELd9u7fwcinw0xLEzdY6VrMbaDhbFfCvx70x5aYJOReFQtuMrle084jFBjXOX
+	 qQfzZBByGsfkjCchGRwp6ypUQjLwxvvsGV+PpmvDeaD6uMWAjudkxOM79PPv6jvhEj
+	 z+R5qDJc/bFEUPNYcYr2TO2sT8KJdTaJ455KjQEyCPBPH4a0wA3j86GKuOrnuF2PCX
+	 KmBUFmFG140RMan874RKdYg7IWMCShutjm6v1GsVZ8/v3OwftRm7AenBAUNkRsRZ9i
+	 CG58aku5AqCMQ==
+Date: Fri, 6 Jun 2025 17:17:35 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Yuzhuo Jing <yuzhuo@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Eric Biggers <ebiggers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Liang Kan <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	James Clark <james.clark@linaro.org>,
+	Tomas Glozar <tglozar@redhat.com>, Leo Yan <leo.yan@arm.com>,
+	Guilherme Amadio <amadio@gentoo.org>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 2/4] perf tools: Add sha1 utils
+Message-ID: <aENM39y1XBf6ajKi@x1>
+References: <20250521225307.743726-1-yuzhuo@google.com>
+ <20250521225307.743726-3-yuzhuo@google.com>
+ <aC9lXhPFcs5fkHWH@x1>
+ <CADQikVDs3msXqZ6tyoXR0WeN4D_9snxWyk2kXeDw5iAs+BHFuw@mail.gmail.com>
+ <CAP-5=fV11L=5cBaYcd0ftVyk8=Tm4+NWCoTG+MBnAwjEogS5iA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250606120519.753928-5-jfalempe@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fV11L=5cBaYcd0ftVyk8=Tm4+NWCoTG+MBnAwjEogS5iA@mail.gmail.com>
 
-Hi Jocelyn,
+On Fri, Jun 06, 2025 at 11:27:28AM -0700, Ian Rogers wrote:
+> On Wed, Jun 4, 2025 at 11:17 AM Yuzhuo Jing <yuzhuo@google.com> wrote:
+> > Thanks for testing the patches!
 
-kernel test robot noticed the following build warnings:
+You're welcome!
 
-[auto build test WARNING on 7247efca0dcbc8ac6147db9200ed1549c0662465]
+> > > In file included from util/sha1_generic.c:18:
+> > > util/sha1_base.h: In function ‘sha1_base_do_finalize’:
+> > > util/sha1_base.h:77:21: error: comparison of integer expressions of different signedness: ‘unsigned int’ and ‘int’ [-Werror=sign-compare]
+> > >    77 |         if (partial > bit_offset) {
+> > >       |                     ^
+> > > cc1: all warnings being treated as errors
+> >
+> > Oh, I didn't see that on my GCC 14.2.  A quick fix would work:
+> >
+> > --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
+> > +++ tools/perf/util/sha1_base.h 2025-06-03 15:43:39.194036707 -0700
+> > @@ -71,7 +69,7 @@
+> >  static inline int sha1_base_do_finalize(struct sha1_state *sctx,
+> >                                         sha1_block_fn *block_fn)
+> >  {
+> > -       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+> > +       const unsigned int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+> >         __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
+> >         unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
+> >
+> >
+> > To test it, I added -Werror=sign-compare to my local Makefile.config to
+> > force the error.
+> >
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index d19d1f132726..9909611be301 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -225,9 +225,9 @@ endif
+> >
+> >  # Treat warnings as errors unless directed not to
+> >  ifneq ($(WERROR),0)
+> > -  CORE_CFLAGS += -Werror
+> > -  CXXFLAGS += -Werror
+> > -  HOSTCFLAGS += -Werror
+> > +  CORE_CFLAGS += -Werror=sign-compare -Werror
+> > +  CXXFLAGS += -Werror=sign-compare -Werror
+> > +  HOSTCFLAGS += -Werror=sign-compare -Werror
+> >  endif
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-i915-fbdev-Add-intel_fbdev_get_map/20250606-200804
-base:   7247efca0dcbc8ac6147db9200ed1549c0662465
-patch link:    https://lore.kernel.org/r/20250606120519.753928-5-jfalempe%40redhat.com
-patch subject: [PATCH v8 4/9] drm/ttm: Add ttm_bo_kmap_try_from_panic()
-config: x86_64-buildonly-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506070340.P5oZoRwh-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070340.P5oZoRwh-lkp@intel.com/reproduce)
+> >  ifndef DEBUG
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506070340.P5oZoRwh-lkp@intel.com/
+> > While testing with "make -C tools/perf -f tests/make make_debug", I saw
+> > similar compile errors in libjvmti.c:
 
-All warnings (new ones prefixed by >>):
+> > jvmti/libjvmti.c: In function ‘copy_class_filename’:
+> > jvmti/libjvmti.c:148:39: error: comparison of integer expressions of
+> > different signedness: ‘int’ and ‘long unsigned int’
+> > [-Werror=sign-compare]
+> >   148 |                         for (i = 0; i < (size_t)(p - class_sign); i++)
+> >       |                                       ^
+> > jvmti/libjvmti.c:155:31: error: comparison of integer expressions of
+> > different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’}
+> > [-Werror=sign-compare]
+> >   155 |                 for (j = 0; i < (max_length - 1) && file_name
+> > && j < strlen(file_name); j++, i++)
+> >       |                               ^
+> > jvmti/libjvmti.c:155:68: error: comparison of integer expressions of
+> > different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’}
+> > [-Werror=sign-compare]
+> >   155 |                 for (j = 0; i < (max_length - 1) && file_name
+> > && j < strlen(file_name); j++, i++)
+> >       |                                                                    ^
+> >
+> > I've just sent a separate patch to the mailing list:
+> > https://lore.kernel.org/lkml/20250604173632.2362759-1-yuzhuo@google.com/T/
 
->> drivers/gpu/drm/ttm/ttm_bo_util.c:381: warning: Cannot understand  *
-    on line 381 - I thought it was a doc line
+> Thanks Yuzhuo! I guess this happened because jvmti.h is missing in the
+> test container. It seems to make sense to add -Wsign-compare to the
+> standard CFLAGS to lower the chance of breaking this container again.
 
+> > > Humm that part is the same as in the kernel...
+> > >
+> > > ⬢ [acme@toolbx perf-tools-next]$ line=$(ctags -x --c-kinds=f include/crypto/sha1_base.h | awk '$1 == "sha1_base_do_finalize" {print $3}')
+> > > ⬢ [acme@toolbx perf-tools-next]$ sed -n $line,\$p include/crypto/sha1_base.h | awk '{print} /\{/ {c++} /\}/ {c--; if (c==0) exit}' > /tmp/original
+> > > ⬢ [acme@toolbx perf-tools-next]$ line=$(ctags -x --c-kinds=f tools/perf/util/sha1_base.h | awk '$1 == "sha1_base_do_finalize" {print $3}')
+> > > ⬢ [acme@toolbx perf-tools-next]$ sed -n $line,\$p include/crypto/sha1_base.h | awk '{print} /\{/ {c++} /\}/ {c--; if (c==0) exit}' > /tmp/copy
+> > > ⬢ [acme@toolbx perf-tools-next]$ diff -u /tmp/original /tmp/copy
+> > > --- /tmp/original       2025-05-22 14:48:31.338406860 -0300
+> > > +++ /tmp/copy   2025-05-22 14:48:58.401603439 -0300
+> > > @@ -1,3 +1,7 @@
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > >  static inline int sha1_base_do_finalize(struct shash_desc *desc,
+> > >                                         sha1_block_fn *block_fn)
+> > >  {
+> > > @@ -13,10 +17,3 @@
+> > >
+> > >                 block_fn(sctx, sctx->buffer, 1);
+> > >         }
+> > > -
+> > > -       memset(sctx->buffer + partial, 0x0, bit_offset - partial);
+> > > -       *bits = cpu_to_be64(sctx->count << 3);
+> > > -       block_fn(sctx, sctx->buffer, 1);
+> > > -
+> > > -       return 0;
+> > > -}
+> > > ⬢ [acme@toolbx perf-tools-next]$
+> >
+> > There were some other fixes that I made only to the perf tree version,
+> > while maintaining verbatim for other parts.  Here's a script that
+> > retains and compares only the copied parts.
+> >
+> >   # Ignore everything after sha1_transform
+> >   diff -u -B -I "^#include " <(sed -n
+> > '/EXPORT_SYMBOL(sha1_transform)/q;p' lib/crypto/sha1.c)
+> > tools/perf/util/sha1.c
+> >   diff -u -B -I "^#include " -I "sha1_zero_message_hash" -I "^struct
+> > sha1_state;$" -I "^void sha1_init(__u32 \*buf);$" \
+> >       <(sed 's/shash_desc/sha1_state/g;' include/crypto/sha1.h)
+> > tools/perf/util/sha1.h
+> >   diff -u -B -I "^EXPORT_SYMBOL" -I "^#include " \
+> >       <(sed 's/shash_desc \*desc/sha1_state *sctx/g;
+> > /shash_desc_ctx(desc)/d' include/crypto/sha1_base.h)
+> > tools/perf/util/sha1_base.h
+> >   # Ignore everything after crypto_sha1_finup
+> >   diff -u -B -I "^EXPORT_SYMBOL" -I "^#include " \
+> >       <(sed -n -e '/const u8
+> > sha1_zero_message_hash/,/EXPORT_SYMBOL_GPL(sha1_zero_message_hash)/d'
+> > \
+> >                -e 's/shash_desc/sha1_state/g;
+> > /EXPORT_SYMBOL(crypto_sha1_finup)/q;p' crypto/sha1_generic.c) \
+> >       tools/perf/util/sha1_generic.c
+> >
+> > And the changes are as below (including the quick fix above), with one
+> > changing the sign and integer type and another fixing type mismatch from
+> > const u8 * to const char *.
+> >
+> > Should we send another patch to the kernel tree version to fix the sign
+> > error, or we add rules to allow perf tree only changes?
+> 
+> I believe there will need to be a set of patches for the kernel sha1
+> code (fixing -Wsign-compare, any other typing issues) and a set of
+> patches for perf with the check-headers.sh updated as your scripts
+> check above.
 
-vim +381 drivers/gpu/drm/ttm/ttm_bo_util.c
+Right, we try to reuse bits from the kernel as there are more people
+working there and its a more critical piece of software than tooling
+like perf, so when we notice something in the copies we carry, we better
+fix it first in the origin.
 
-   379	
-   380	/**
- > 381	 *
-   382	 * ttm_bo_kmap_try_from_panic
-   383	 *
-   384	 * @bo: The buffer object
-   385	 * @page: The page to map
-   386	 *
-   387	 * Sets up a kernel virtual mapping using kmap_local_page_try_from_panic().
-   388	 * This can safely be called from the panic handler, if you make sure the bo
-   389	 * is the one being displayed, so is properly allocated, and won't be modified.
-   390	 *
-   391	 * Returns the vaddr, that you can use to write to the bo, and that you should
-   392	 * pass to kunmap_local() when you're done with this page, or NULL if the bo
-   393	 * is in iomem.
-   394	 */
-   395	void *ttm_bo_kmap_try_from_panic(struct ttm_buffer_object *bo, unsigned long page)
-   396	{
-   397		if (page + 1 > PFN_UP(bo->resource->size))
-   398			return NULL;
-   399	
-   400		if (!bo->resource->bus.is_iomem && bo->ttm->pages && bo->ttm->pages[page])
-   401			return kmap_local_page_try_from_panic(bo->ttm->pages[page]);
-   402	
-   403		return NULL;
-   404	}
-   405	EXPORT_SYMBOL(ttm_bo_kmap_try_from_panic);
-   406	
+> The perf patches shouldn't assume kernel patches have
+> landed. The perf check-headers.sh produces a warning but doesn't stop
+> the perf build. When the kernel changes land we can update the perf
+> check-headers.sh expectations.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Right,
+
+Thanks,
+
+- Arnaldo
+ 
+> Thanks,
+> Ian
+> 
+> > --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
+> > +++ tools/perf/util/sha1_base.h 2025-06-03 15:43:39.194036707 -0700
+> > @@ -71,7 +69,7 @@
+> >  static inline int sha1_base_do_finalize(struct sha1_state *sctx,
+> >                                         sha1_block_fn *block_fn)
+> >  {
+> > -       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+> > +       const unsigned int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+> >         __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
+> >         unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
+> >
+> > @@ -95,7 +93,7 @@
+> >         __be32 *digest = (__be32 *)out;
+> >         int i;
+> >
+> > -       for (i = 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
+> > +       for (i = 0; i < SHA1_DIGEST_SIZE / (int)sizeof(__be32); i++)
+> >                 put_unaligned_be32(sctx->state[i], digest++);
+> >
+> >         memzero_explicit(sctx, sizeof(*sctx));
+> > --- /dev/fd/63  2025-06-04 09:54:42.344516115 -0700
+> > +++ tools/perf/util/sha1_generic.c      2025-05-16 10:52:59.219531034 -0700
+> > @@ -27,7 +23,7 @@
+> >         u32 temp[SHA1_WORKSPACE_WORDS];
+> >
+> >         while (blocks--) {
+> > -               sha1_transform(sst->state, src, temp);
+> > +               sha1_transform(sst->state, (const char *)src, temp);
+> >                 src += SHA1_BLOCK_SIZE;
+> >         }
+> >         memzero_explicit(temp, sizeof(temp));
+> >
+> > Thanks!
+> >
+> > Best regards,
+> > Yuzhuo
