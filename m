@@ -1,58 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FBA1311AC;
-	Fri,  6 Jun 2025 18:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E29323D;
+	Fri,  6 Jun 2025 19:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749236121; cv=none; b=Qk9xaMuqukBnnn5Xbmbp9uDGUdxRGHBMpHMkfG4k5tOAXvF6aMKnZSyT+oLta4VYLHHHhA48QqZfX4XGK6+EGDCktgvsUTCqI+ltMKGf9oeBYFlRe3um/zm4Gmas9M6ujqzFejpZx1//aabKRhmhwsB/TpsiZTqDu/g26JyvWtw=
+	t=1749239248; cv=none; b=f3w6YNP7TvgcMdrvFtJeK7liLGBI4WMiJ/TqY6jWFCbPqKtp9sk3I1xuaKTHeMZs+CIP2bgQZxuvIVcukstLpmQlZJl1gusb+VcBiiG3lBr/tf2wqLXHPJ5j7YRBMIc38MWSuVq1RTb0RFsa1oV/BuY5/xn4EcxofT6+zcr3YI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749236121; c=relaxed/simple;
-	bh=1IMoyRzLGzbb04P9DNLNBD4tHsslCbUQNRADFJ1YlWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N24LX1C6z5AEP+xTTEIeL2Ehyrj3lfbx7mli+Dk4nrDEYhRj/KmzkJ26wV0qsVfh13X1awokIzJ3o7M8HMix2vCoSK/1QEFJ0z4vjR1RqlBcUb2vPHOnM28VHhycCq0PweJgKLDXu2ONLNSHqEpDijMS3HEq0XXQWnmcE8fQ4Yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gF7jHHIs; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1749239248; c=relaxed/simple;
+	bh=waQvTFW1Tv1+HpQpBDsNKSK2lSYc7esWz0DnZzD7BfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CpAXFLL/jlNhTbGDpF51EpGQxghgCpzcao3SemZWW7TIrD0JVIN406lSVCnQrPh59rmbDkz7lHMMkdBuDogxQHxDkWc7QFCVSjHZNURLvJ80Cq/9StEOsLGxYtOOfwEjPnRT/c7s4limQzeKbmtYXUfo9wgvGbHglC38hLymIrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XRF5+ni5; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gF7jHHIs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XRF5+ni5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749236119; x=1780772119;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1IMoyRzLGzbb04P9DNLNBD4tHsslCbUQNRADFJ1YlWg=;
-  b=gF7jHHIsyCA/kQFU+mf6welTlnisGNQSrPJFAeFqj9y/btb7MAxrdUdd
-   A4flR/1vkUg7Q8bg5iAXT8ZIiU+mmAMkLX6/EsYTDEaNxXo3gQOXHtxrH
-   +kYcOfrYsBEIfuawKt689J9J4gkGAsx2z9XIkvpaoC8Q/PNkW/5xORB4P
-   bP077l/Jo6ohAGJUx9ZRx8cXm3DEBDFBRL6aJvV62MCaIUjpFnJwpj8qV
-   5MRp/K7zo6ce39MIGxOjh4KkgVIFlxSjy7ybO3jxuj9vRFOhtLPYYYHuq
-   ZatQoPXZoG4p3a8zX/A26hdWZCDpwkyqF/yjNSKCKuh5WnSvRM1zCBJCb
-   w==;
-X-CSE-ConnectionGUID: r3L8tto7QVKdliMQu9Kuug==
-X-CSE-MsgGUID: YtD36K48S2q/xqujtzTFCg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="51303636"
-X-IronPort-AV: E=Sophos;i="6.16,215,1744095600"; 
-   d="scan'208";a="51303636"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 11:55:19 -0700
-X-CSE-ConnectionGUID: 1qrPTeL/RJ+GINH1BawHeg==
-X-CSE-MsgGUID: HSn89/1dQ8+oQ8AkF/IL2Q==
+  t=1749239247; x=1780775247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=waQvTFW1Tv1+HpQpBDsNKSK2lSYc7esWz0DnZzD7BfE=;
+  b=XRF5+ni57zsDuhXYJVPx4y5MjTmDRt0RyjKT2+Yh2/aj4WtqAqdmRYWZ
+   wRfWapxpXKFP4Q6szVEdfP3JxrrXhCgy89pff1lJC8lFqVJVeX+l/jwKd
+   VL/6Eynzl5s+6VL5EZf8lwsbOqnP08p5OKp2xAxBbVxBt5kvTkLXuWxfT
+   fpa4AQDUU/WTvvfgd7p2pml+9sNLugP/N2cY+VS8f6DY737KxTRGa9uxZ
+   OaDb7meroAJcNELvJwqK4hWPWelIZq7APQ+gpo1DOMzg7kKabhPtjkuoo
+   PcPeJ0KFHfUQXavz08t2LYs4+IvIIdrk0oy7/1/UG6S6MFOfNN6sNBgPi
+   Q==;
+X-CSE-ConnectionGUID: E5jkCmFmQlSwjhp86taGHQ==
+X-CSE-MsgGUID: aw/jV+zoTBCKJjNu4L8EyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="61665403"
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="61665403"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 12:47:27 -0700
+X-CSE-ConnectionGUID: IjxxRQuWQ+q54FJCWZ6g+g==
+X-CSE-MsgGUID: vgUl0eiYTQuEPBq2cfEHlg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,215,1744095600"; 
-   d="scan'208";a="145797818"
+X-IronPort-AV: E=Sophos;i="6.16,216,1744095600"; 
+   d="scan'208";a="150925381"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 06 Jun 2025 11:55:18 -0700
+  by orviesa004.jf.intel.com with ESMTP; 06 Jun 2025 12:47:22 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uNcDj-0005DP-1t;
-	Fri, 06 Jun 2025 18:55:15 +0000
-Date: Sat, 7 Jun 2025 02:55:04 +0800
+	id 1uNd27-0005FJ-17;
+	Fri, 06 Jun 2025 19:47:19 +0000
+Date: Sat, 7 Jun 2025 03:46:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:sink 118/119] ld.lld: error: undefined symbol:
- amd_iommu_fake_irte
-Message-ID: <202506070221.yxM0Cj4z-lkp@intel.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Christian Koenig <christian.koenig@amd.com>,
+	Huang Rui <ray.huang@amd.com>,
+	Matthew Auld <matthew.auld@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH v8 4/9] drm/ttm: Add ttm_bo_kmap_try_from_panic()
+Message-ID: <202506070340.P5oZoRwh-lkp@intel.com>
+References: <20250606120519.753928-5-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,29 +77,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250606120519.753928-5-jfalempe@redhat.com>
 
-tree:   https://github.com/sean-jc/linux sink
-head:   da3200e59044a5d92a82cc535b7f3ad95fde9af4
-commit: 6721af488c95e838ad32a3b0286b39a23d0ae9e4 [118/119] *** DO NOT MERGE *** iommu/amd: Hack to fake IRQ posting support
-config: x86_64-randconfig-005-20250606 (https://download.01.org/0day-ci/archive/20250607/202506070221.yxM0Cj4z-lkp@intel.com/config)
+Hi Jocelyn,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 7247efca0dcbc8ac6147db9200ed1549c0662465]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-i915-fbdev-Add-intel_fbdev_get_map/20250606-200804
+base:   7247efca0dcbc8ac6147db9200ed1549c0662465
+patch link:    https://lore.kernel.org/r/20250606120519.753928-5-jfalempe%40redhat.com
+patch subject: [PATCH v8 4/9] drm/ttm: Add ttm_bo_kmap_try_from_panic()
+config: x86_64-buildonly-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506070340.P5oZoRwh-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070221.yxM0Cj4z-lkp@intel.com/reproduce)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506070340.P5oZoRwh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506070221.yxM0Cj4z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506070340.P5oZoRwh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: amd_iommu_fake_irte
-   >>> referenced by avic.c:1108 (arch/x86/kvm/svm/avic.c:1108)
-   >>>               vmlinux.o:(avic_pi_handler)
-   >>> referenced by spinlock.h:0 (include/linux/spinlock.h:0)
-   >>>               vmlinux.o:(avic_pi_handler)
-   >>> referenced by avic.c:1130 (arch/x86/kvm/svm/avic.c:1130)
-   >>>               vmlinux.o:(avic_pi_handler)
-   >>> referenced 7 more times
+>> drivers/gpu/drm/ttm/ttm_bo_util.c:381: warning: Cannot understand  *
+    on line 381 - I thought it was a doc line
+
+
+vim +381 drivers/gpu/drm/ttm/ttm_bo_util.c
+
+   379	
+   380	/**
+ > 381	 *
+   382	 * ttm_bo_kmap_try_from_panic
+   383	 *
+   384	 * @bo: The buffer object
+   385	 * @page: The page to map
+   386	 *
+   387	 * Sets up a kernel virtual mapping using kmap_local_page_try_from_panic().
+   388	 * This can safely be called from the panic handler, if you make sure the bo
+   389	 * is the one being displayed, so is properly allocated, and won't be modified.
+   390	 *
+   391	 * Returns the vaddr, that you can use to write to the bo, and that you should
+   392	 * pass to kunmap_local() when you're done with this page, or NULL if the bo
+   393	 * is in iomem.
+   394	 */
+   395	void *ttm_bo_kmap_try_from_panic(struct ttm_buffer_object *bo, unsigned long page)
+   396	{
+   397		if (page + 1 > PFN_UP(bo->resource->size))
+   398			return NULL;
+   399	
+   400		if (!bo->resource->bus.is_iomem && bo->ttm->pages && bo->ttm->pages[page])
+   401			return kmap_local_page_try_from_panic(bo->ttm->pages[page]);
+   402	
+   403		return NULL;
+   404	}
+   405	EXPORT_SYMBOL(ttm_bo_kmap_try_from_panic);
+   406	
 
 -- 
 0-DAY CI Kernel Test Service
