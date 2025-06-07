@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FCD1F4CB7;
-	Sat,  7 Jun 2025 10:29:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8022066F7;
+	Sat,  7 Jun 2025 11:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749292183; cv=none; b=EvNmdJ7aEt/sG+Q08d+E1+w40As1XSkOY9nSp+uISW1aQbHyBm/8K9NcK7Iw09tC/VHAk5uYL/GdInBJISN5J1L7t7MfB+DRAQL+f9IMsSznJJR+kkqB09OziahUJ1u6ZU9nLIjeGIQ1Dt0GcMiusB8rbT2CKG5pmc8AtgU/Das=
+	t=1749296626; cv=none; b=Y3pH7vmg6dpMRXmBw6WZ1mFNvgOFHHOCHBiWwqIL/ZqeMlDlyWzymPJpXApmJ9e5sU24Xx+GrQClSfrpCELZJUpyOtFZ+NYG43fl37DbMHue6sMUXMllw+H51MZAKmbBqMQYVb0gk59olIQ3b7lvNtSJwrboI4Y06y1eGvm2nJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749292183; c=relaxed/simple;
-	bh=HUErItk+IykV8jb9k+DxC8wOGdpP83t+IkeVHoy1mbE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GW4U0GtoSC19Vn8e4ngQNQxu+jjHy4TqN67RHiTToG7sXsefvaMNVn23Jtf31Ot8R3udYnzg7YCtJqgSYO/dKVEpO6XMWQoYdDxSKi7F7qKx1KJYYDQ2n02ttwMErV1/rXgajTEITHvp8MX/X+NC8uWRG8Avu8wH9ofpU8Wcf9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FsZSWq4m; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1749296626; c=relaxed/simple;
+	bh=MpHxAOm2WC5jWD0JtXMTtZBYf9ezqU0mCXhlf3fca8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dQuskvHCMJUsNfeUne6Pn0WeV9eEosjtRp6PJjUdnFzrJqtutwrt0zlaC9wS5EIJaqAJswOxYoyYo35zWNmMLyy4BzuJl4/pAyU0zZXHkZ1yrVBqnEu7PWXynxIqAtsY6b8suWH+IKu4Ip23xentt06HGWRks9Q859NQ0kq1krg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WjS9nHbg; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FsZSWq4m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WjS9nHbg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749292182; x=1780828182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HUErItk+IykV8jb9k+DxC8wOGdpP83t+IkeVHoy1mbE=;
-  b=FsZSWq4mn3Up4nOpSt3PSFYWW0a7Fv14gYkTWQ5Qcb3sY7nHY88cpL5Y
-   YJQU/3YSPNKW3l5LoTfAsTojNU/HQey9xRHVPvAz/J11aA1hLAMixdrAR
-   b4pCM1vT40wspJWMQ8DP+c6dEDaggdb95YmRMIIzKybueIVDE7xNPUQxK
-   V8l2OpTWFYDMzNxxtiUK/OcMCqi31wOrvYY5On5l5LBkJ/hOyYq21hopi
-   7RJ9sNG1TYGAzpbOEeN5Aku79xFSFWCn0oinya+ySXJ3imfnlHmSx48ua
-   eQMQaXKdNspkpbPGw4lRx/74GQhJO7C1NrznK1EMBn2NDKES5hGTYShHO
-   w==;
-X-CSE-ConnectionGUID: 8pprPZoYT2OQvdfQvf7CIQ==
-X-CSE-MsgGUID: x/AeWwlbTheNkOEZVv0RWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="51430859"
-X-IronPort-AV: E=Sophos;i="6.16,217,1744095600"; 
-   d="scan'208";a="51430859"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 03:29:41 -0700
-X-CSE-ConnectionGUID: //5h4T4EQHy8JqBmwILrZg==
-X-CSE-MsgGUID: cSCGMFoJQxaOHhvnzWtjPw==
+  t=1749296625; x=1780832625;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MpHxAOm2WC5jWD0JtXMTtZBYf9ezqU0mCXhlf3fca8E=;
+  b=WjS9nHbgz27km75fRo8GV0Ai405usLO0W92aacpXqFk3xye6sa8Um7lp
+   oDV+CMzQDv6imI8hj2lD92QLnP5OHpGf4TVWFpn41RdeOCtRZzBOduxv2
+   BzPdt7ep27tTS3cnG268aH9C2xokVDm5Idc8cF8nn/IcDM/BA0JGISMai
+   1hT/htEvaR4iOjQyB04lz0IJD908eeUPL/jubxJ4ncNjpuGjg8V4otgbg
+   kv/4AciU/iNZFEyNtkqLW2USJkfh0D1TEnJ9agfgLdSZrwWgNMMTXg+pv
+   +G2vk7tbC0XVSz1ywLWZ//rUvC6aPNADVoXjGkbBdWvmEpYBlmyxWr3c5
+   g==;
+X-CSE-ConnectionGUID: fewbuc97T229oClPHy5w5w==
+X-CSE-MsgGUID: jW6DXa/WQu+K3LnvPzVkww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11457"; a="62056024"
+X-IronPort-AV: E=Sophos;i="6.16,218,1744095600"; 
+   d="scan'208";a="62056024"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 04:43:44 -0700
+X-CSE-ConnectionGUID: 949zoHYoTjKsQ7Wcuj+5mg==
+X-CSE-MsgGUID: BCTDUDKESzyhP5VH0Ml/Zg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,217,1744095600"; 
-   d="scan'208";a="146401279"
+X-IronPort-AV: E=Sophos;i="6.16,218,1744095600"; 
+   d="scan'208";a="145982363"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Jun 2025 03:29:38 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 07 Jun 2025 04:43:44 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uNqnv-0005in-2o;
-	Sat, 07 Jun 2025 10:29:35 +0000
-Date: Sat, 7 Jun 2025 18:29:34 +0800
+	id 1uNrxd-0005lL-1c;
+	Sat, 07 Jun 2025 11:43:41 +0000
+Date: Sat, 7 Jun 2025 19:43:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: wangfushuai <wangfushuai@baidu.com>, akpm@linux-foundation.org,
-	david@redhat.com, andrii@kernel.org, osalvador@suse.de,
-	Liam.Howlett@oracle.com, christophe.leroy@csgroup.eu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	wangfushuai <wangfushuai@baidu.com>
-Subject: Re: [PATCH] fs/proc/task_mmu: add VM_SHADOW_STACK for arm64 when
- support GCS
-Message-ID: <202506071806.mshFK42h-lkp@intel.com>
-References: <20250607060741.69902-1-wangfushuai@baidu.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:vm_normal_page_pud 14/15]
+ fs/proc/task_mmu.c:2945:39: error: too many arguments to function call,
+ expected 2, have 3
+Message-ID: <202506071913.HCEFicv7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,139 +62,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250607060741.69902-1-wangfushuai@baidu.com>
 
-Hi wangfushuai,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on akpm-mm/mm-everything linus/master v6.15 next-20250606]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/wangfushuai/fs-proc-task_mmu-add-VM_SHADOW_STACK-for-arm64-when-support-GCS/20250607-141047
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250607060741.69902-1-wangfushuai%40baidu.com
-patch subject: [PATCH] fs/proc/task_mmu: add VM_SHADOW_STACK for arm64 when support GCS
-config: x86_64-buildonly-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506071806.mshFK42h-lkp@intel.com/config)
+tree:   https://github.com/davidhildenbrand/linux vm_normal_page_pud
+head:   5e55c4b55694005e4fb9300605ca3723623a61f9
+commit: d4c2804ff0a82674ac79ddb5d6d7e3f77f814255 [14/15] mm: drop addr parameter from vm_normal_*_pmd() and vm_normal_*_pud()
+config: x86_64-buildonly-randconfig-003-20250607 (https://download.01.org/0day-ci/archive/20250607/202506071913.HCEFicv7-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506071806.mshFK42h-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506071913.HCEFicv7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506071806.mshFK42h-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506071913.HCEFicv7-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/proc/task_mmu.c:994:42: warning: extra tokens at end of #ifdef directive [-Wextra-tokens]
-     994 | #ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK || defined(CONFIG_ARM64_GCS)
-         |                                          ^
-         |                                          //
-   1 warning generated.
+>> fs/proc/task_mmu.c:2945:39: error: too many arguments to function call, expected 2, have 3
+    2945 |         page = vm_normal_page_pmd(vma, addr, pmd);
+         |                ~~~~~~~~~~~~~~~~~~            ^~~
+   include/linux/mm.h:2363:14: note: 'vm_normal_page_pmd' declared here
+    2363 | struct page *vm_normal_page_pmd(struct vm_area_struct *vma, pmd_t pmd);
+         |              ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +994 fs/proc/task_mmu.c
+vim +2945 fs/proc/task_mmu.c
 
-   920	
-   921	static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
-   922	{
-   923		/*
-   924		 * Don't forget to update Documentation/ on changes.
-   925		 *
-   926		 * The length of the second argument of mnemonics[]
-   927		 * needs to be 3 instead of previously set 2
-   928		 * (i.e. from [BITS_PER_LONG][2] to [BITS_PER_LONG][3])
-   929		 * to avoid spurious
-   930		 * -Werror=unterminated-string-initialization warning
-   931		 *  with GCC 15
-   932		 */
-   933		static const char mnemonics[BITS_PER_LONG][3] = {
-   934			/*
-   935			 * In case if we meet a flag we don't know about.
-   936			 */
-   937			[0 ... (BITS_PER_LONG-1)] = "??",
-   938	
-   939			[ilog2(VM_READ)]	= "rd",
-   940			[ilog2(VM_WRITE)]	= "wr",
-   941			[ilog2(VM_EXEC)]	= "ex",
-   942			[ilog2(VM_SHARED)]	= "sh",
-   943			[ilog2(VM_MAYREAD)]	= "mr",
-   944			[ilog2(VM_MAYWRITE)]	= "mw",
-   945			[ilog2(VM_MAYEXEC)]	= "me",
-   946			[ilog2(VM_MAYSHARE)]	= "ms",
-   947			[ilog2(VM_GROWSDOWN)]	= "gd",
-   948			[ilog2(VM_PFNMAP)]	= "pf",
-   949			[ilog2(VM_LOCKED)]	= "lo",
-   950			[ilog2(VM_IO)]		= "io",
-   951			[ilog2(VM_SEQ_READ)]	= "sr",
-   952			[ilog2(VM_RAND_READ)]	= "rr",
-   953			[ilog2(VM_DONTCOPY)]	= "dc",
-   954			[ilog2(VM_DONTEXPAND)]	= "de",
-   955			[ilog2(VM_LOCKONFAULT)]	= "lf",
-   956			[ilog2(VM_ACCOUNT)]	= "ac",
-   957			[ilog2(VM_NORESERVE)]	= "nr",
-   958			[ilog2(VM_HUGETLB)]	= "ht",
-   959			[ilog2(VM_SYNC)]	= "sf",
-   960			[ilog2(VM_ARCH_1)]	= "ar",
-   961			[ilog2(VM_WIPEONFORK)]	= "wf",
-   962			[ilog2(VM_DONTDUMP)]	= "dd",
-   963	#ifdef CONFIG_ARM64_BTI
-   964			[ilog2(VM_ARM64_BTI)]	= "bt",
-   965	#endif
-   966	#ifdef CONFIG_MEM_SOFT_DIRTY
-   967			[ilog2(VM_SOFTDIRTY)]	= "sd",
-   968	#endif
-   969			[ilog2(VM_MIXEDMAP)]	= "mm",
-   970			[ilog2(VM_HUGEPAGE)]	= "hg",
-   971			[ilog2(VM_NOHUGEPAGE)]	= "nh",
-   972			[ilog2(VM_MERGEABLE)]	= "mg",
-   973			[ilog2(VM_UFFD_MISSING)]= "um",
-   974			[ilog2(VM_UFFD_WP)]	= "uw",
-   975	#ifdef CONFIG_ARM64_MTE
-   976			[ilog2(VM_MTE)]		= "mt",
-   977			[ilog2(VM_MTE_ALLOWED)]	= "",
-   978	#endif
-   979	#ifdef CONFIG_ARCH_HAS_PKEYS
-   980			/* These come out via ProtectionKey: */
-   981			[ilog2(VM_PKEY_BIT0)]	= "",
-   982			[ilog2(VM_PKEY_BIT1)]	= "",
-   983			[ilog2(VM_PKEY_BIT2)]	= "",
-   984	#if VM_PKEY_BIT3
-   985			[ilog2(VM_PKEY_BIT3)]	= "",
-   986	#endif
-   987	#if VM_PKEY_BIT4
-   988			[ilog2(VM_PKEY_BIT4)]	= "",
-   989	#endif
-   990	#endif /* CONFIG_ARCH_HAS_PKEYS */
-   991	#ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-   992			[ilog2(VM_UFFD_MINOR)]	= "ui",
-   993	#endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
- > 994	#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK || defined(CONFIG_ARM64_GCS)
-   995			[ilog2(VM_SHADOW_STACK)] = "ss",
-   996	#endif
-   997	#if defined(CONFIG_64BIT) || defined(CONFIG_PPC32)
-   998			[ilog2(VM_DROPPABLE)] = "dp",
-   999	#endif
-  1000	#ifdef CONFIG_64BIT
-  1001			[ilog2(VM_SEALED)] = "sl",
-  1002	#endif
-  1003		};
-  1004		size_t i;
-  1005	
-  1006		seq_puts(m, "VmFlags: ");
-  1007		for (i = 0; i < BITS_PER_LONG; i++) {
-  1008			if (!mnemonics[i][0])
-  1009				continue;
-  1010			if (vma->vm_flags & (1UL << i))
-  1011				seq_printf(m, "%s ", mnemonics[i]);
-  1012		}
-  1013		seq_putc(m, '\n');
-  1014	}
-  1015	
+3200a8aaab0c9c Dave Hansen     2011-09-20  2933  
+28093f9f34cede Gerald Schaefer 2016-04-28  2934  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+28093f9f34cede Gerald Schaefer 2016-04-28  2935  static struct page *can_gather_numa_stats_pmd(pmd_t pmd,
+28093f9f34cede Gerald Schaefer 2016-04-28  2936  					      struct vm_area_struct *vma,
+28093f9f34cede Gerald Schaefer 2016-04-28  2937  					      unsigned long addr)
+28093f9f34cede Gerald Schaefer 2016-04-28  2938  {
+28093f9f34cede Gerald Schaefer 2016-04-28  2939  	struct page *page;
+28093f9f34cede Gerald Schaefer 2016-04-28  2940  	int nid;
+28093f9f34cede Gerald Schaefer 2016-04-28  2941  
+28093f9f34cede Gerald Schaefer 2016-04-28  2942  	if (!pmd_present(pmd))
+28093f9f34cede Gerald Schaefer 2016-04-28  2943  		return NULL;
+28093f9f34cede Gerald Schaefer 2016-04-28  2944  
+28093f9f34cede Gerald Schaefer 2016-04-28 @2945  	page = vm_normal_page_pmd(vma, addr, pmd);
+28093f9f34cede Gerald Schaefer 2016-04-28  2946  	if (!page)
+28093f9f34cede Gerald Schaefer 2016-04-28  2947  		return NULL;
+28093f9f34cede Gerald Schaefer 2016-04-28  2948  
+28093f9f34cede Gerald Schaefer 2016-04-28  2949  	if (PageReserved(page))
+28093f9f34cede Gerald Schaefer 2016-04-28  2950  		return NULL;
+28093f9f34cede Gerald Schaefer 2016-04-28  2951  
+28093f9f34cede Gerald Schaefer 2016-04-28  2952  	nid = page_to_nid(page);
+28093f9f34cede Gerald Schaefer 2016-04-28  2953  	if (!node_isset(nid, node_states[N_MEMORY]))
+28093f9f34cede Gerald Schaefer 2016-04-28  2954  		return NULL;
+28093f9f34cede Gerald Schaefer 2016-04-28  2955  
+28093f9f34cede Gerald Schaefer 2016-04-28  2956  	return page;
+28093f9f34cede Gerald Schaefer 2016-04-28  2957  }
+28093f9f34cede Gerald Schaefer 2016-04-28  2958  #endif
+28093f9f34cede Gerald Schaefer 2016-04-28  2959  
+
+:::::: The code at line 2945 was first introduced by commit
+:::::: 28093f9f34cedeaea0f481c58446d9dac6dd620f numa: fix /proc/<pid>/numa_maps for THP
+
+:::::: TO: Gerald Schaefer <gerald.schaefer@de.ibm.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
