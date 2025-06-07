@@ -1,68 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D881494D8;
-	Sat,  7 Jun 2025 06:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FCD1F4CB7;
+	Sat,  7 Jun 2025 10:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749277762; cv=none; b=soQ1nLam8xr/j3e/zuKPMgo75gNwRsxYjED1ArvgJO5Y+QiOsu9weUOCWoglfAXGIeljsJ1d2/EQ9hkOwYITXYwWVKSOWXvTiVJkoAhC3EknRV9fSyl6lcmWe++Ko8L9dYVZ4LlDW2PXcbMZrIkjAPP7f93CEdagSROLFTJnzhI=
+	t=1749292183; cv=none; b=EvNmdJ7aEt/sG+Q08d+E1+w40As1XSkOY9nSp+uISW1aQbHyBm/8K9NcK7Iw09tC/VHAk5uYL/GdInBJISN5J1L7t7MfB+DRAQL+f9IMsSznJJR+kkqB09OziahUJ1u6ZU9nLIjeGIQ1Dt0GcMiusB8rbT2CKG5pmc8AtgU/Das=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749277762; c=relaxed/simple;
-	bh=KhvKf0Okp3+QNBDD1wYxSwtwa9jnFP0ZRb0MhxFICkI=;
+	s=arc-20240116; t=1749292183; c=relaxed/simple;
+	bh=HUErItk+IykV8jb9k+DxC8wOGdpP83t+IkeVHoy1mbE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PeE0O/bIKGHTD/cH4kkgbNPfa0fPRPhp5MSqNOcvYcEMtT67bsbQJGieReXJak63xt9BaKgIoGOdnEB8spfAQFEyAeCPHaFCzfs+9TniE18scxH/m5IeuQ00o7C65oWd/evJcZwxK43+7rr2wdvRMST5TjqrdC3CJ1JAdfuN9hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=no19+9x/; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=GW4U0GtoSC19Vn8e4ngQNQxu+jjHy4TqN67RHiTToG7sXsefvaMNVn23Jtf31Ot8R3udYnzg7YCtJqgSYO/dKVEpO6XMWQoYdDxSKi7F7qKx1KJYYDQ2n02ttwMErV1/rXgajTEITHvp8MX/X+NC8uWRG8Avu8wH9ofpU8Wcf9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FsZSWq4m; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="no19+9x/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FsZSWq4m"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749277761; x=1780813761;
+  t=1749292182; x=1780828182;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KhvKf0Okp3+QNBDD1wYxSwtwa9jnFP0ZRb0MhxFICkI=;
-  b=no19+9x/smLMeEg9UWKTMN14yOPnm+TohXyjoBGXTHnOZW848Jsz0m/D
-   kUvqmYcA8Au0ExBd+ru30GSsAzhL3kkVSF+CJc23XmKsqq4BGSCYQ9jSX
-   nSm0cZGRrVSQfNYVDJ6V3CsNFTXSeAr2WdHYsWIBhaOeThsU3DKxv1A7I
-   Ot6a5lU0ntRujDaWXPMGYQTaVefwVJM1Yz0dstFXS7gJ9pmSPUSr/3RUv
-   J0XZOurSxw9bGzM5EvctWOHJnpQcWToCIVyPu/Zh2mBjfW2PwR7XvYrtl
-   JS806qox96C/yaevWEnqJYJ/2lmyCNqCpnl34rHA+M5eWDNRPoYFr0HZz
-   g==;
-X-CSE-ConnectionGUID: VtY7XRa5RjWP9cGlaVkz8A==
-X-CSE-MsgGUID: S1FwQAEDRwuG1HP8Q3OCFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="62467109"
+  bh=HUErItk+IykV8jb9k+DxC8wOGdpP83t+IkeVHoy1mbE=;
+  b=FsZSWq4mn3Up4nOpSt3PSFYWW0a7Fv14gYkTWQ5Qcb3sY7nHY88cpL5Y
+   YJQU/3YSPNKW3l5LoTfAsTojNU/HQey9xRHVPvAz/J11aA1hLAMixdrAR
+   b4pCM1vT40wspJWMQ8DP+c6dEDaggdb95YmRMIIzKybueIVDE7xNPUQxK
+   V8l2OpTWFYDMzNxxtiUK/OcMCqi31wOrvYY5On5l5LBkJ/hOyYq21hopi
+   7RJ9sNG1TYGAzpbOEeN5Aku79xFSFWCn0oinya+ySXJ3imfnlHmSx48ua
+   eQMQaXKdNspkpbPGw4lRx/74GQhJO7C1NrznK1EMBn2NDKES5hGTYShHO
+   w==;
+X-CSE-ConnectionGUID: 8pprPZoYT2OQvdfQvf7CIQ==
+X-CSE-MsgGUID: x/AeWwlbTheNkOEZVv0RWQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11456"; a="51430859"
 X-IronPort-AV: E=Sophos;i="6.16,217,1744095600"; 
-   d="scan'208";a="62467109"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2025 23:29:21 -0700
-X-CSE-ConnectionGUID: jSw2Kz1UTMKFrurAeGYqiw==
-X-CSE-MsgGUID: fzAZ/6riTQ+nfI23zMxFBw==
+   d="scan'208";a="51430859"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 03:29:41 -0700
+X-CSE-ConnectionGUID: //5h4T4EQHy8JqBmwILrZg==
+X-CSE-MsgGUID: cSCGMFoJQxaOHhvnzWtjPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,217,1744095600"; 
-   d="scan'208";a="146534373"
+   d="scan'208";a="146401279"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Jun 2025 23:29:16 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 07 Jun 2025 03:29:38 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uNn3J-0005VN-0f;
-	Sat, 07 Jun 2025 06:29:13 +0000
-Date: Sat, 7 Jun 2025 14:28:37 +0800
+	id 1uNqnv-0005in-2o;
+	Sat, 07 Jun 2025 10:29:35 +0000
+Date: Sat, 7 Jun 2025 18:29:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Igor Korotin <igor.korotin.linux@gmail.com>, ojeda@kernel.org,
-	alex.gaynor@gmail.com, rafael@kernel.org,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-acpi@vger.kernel.org
+To: wangfushuai <wangfushuai@baidu.com>, akpm@linux-foundation.org,
+	david@redhat.com, andrii@kernel.org, osalvador@suse.de,
+	Liam.Howlett@oracle.com, christophe.leroy@csgroup.eu
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
-	benno.lossin@proton.me, a.hindborg@kernel.org, aliceryhl@google.com,
-	tmgross@umich.edu, dakr@kernel.org, lenb@kernel.org,
-	wedsonaf@gmail.com, viresh.kumar@linaro.org, alex.hung@amd.com,
-	dingxiangfei2009@gmail.com
-Subject: Re: [PATCH v3 3/4] rust: platform: Add ACPI match table support to
- `Driver` trait
-Message-ID: <202506071640.KIUrSBGt-lkp@intel.com>
-References: <20250606170905.3881900-1-igor.korotin.linux@gmail.com>
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	wangfushuai <wangfushuai@baidu.com>
+Subject: Re: [PATCH] fs/proc/task_mmu: add VM_SHADOW_STACK for arm64 when
+ support GCS
+Message-ID: <202506071806.mshFK42h-lkp@intel.com>
+References: <20250607060741.69902-1-wangfushuai@baidu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,35 +67,139 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250606170905.3881900-1-igor.korotin.linux@gmail.com>
+In-Reply-To: <20250607060741.69902-1-wangfushuai@baidu.com>
 
-Hi Igor,
+Hi wangfushuai,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 9857af0fcff385c75433f2162c30c62eb912ef6d]
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on akpm-mm/mm-everything linus/master v6.15 next-20250606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Korotin/rust-acpi-add-acpi-DeviceId-abstraction/20250607-011123
-base:   9857af0fcff385c75433f2162c30c62eb912ef6d
-patch link:    https://lore.kernel.org/r/20250606170905.3881900-1-igor.korotin.linux%40gmail.com
-patch subject: [PATCH v3 3/4] rust: platform: Add ACPI match table support to `Driver` trait
-config: x86_64-buildonly-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506071640.KIUrSBGt-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/wangfushuai/fs-proc-task_mmu-add-VM_SHADOW_STACK-for-arm64-when-support-GCS/20250607-141047
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250607060741.69902-1-wangfushuai%40baidu.com
+patch subject: [PATCH] fs/proc/task_mmu: add VM_SHADOW_STACK for arm64 when support GCS
+config: x86_64-buildonly-randconfig-001-20250607 (https://download.01.org/0day-ci/archive/20250607/202506071806.mshFK42h-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
 rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506071640.KIUrSBGt-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250607/202506071806.mshFK42h-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506071640.KIUrSBGt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506071806.mshFK42h-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error[E0425]: cannot find value `ACPI_TABLE` in this scope
-   --> rust/doctests_kernel_generated.rs:3527:71
-   |
-   3527 |      const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> = Some(&ACPI_TABLE);
-   |                                                                       ^^^^^^^^^^ not found in this scope
+>> fs/proc/task_mmu.c:994:42: warning: extra tokens at end of #ifdef directive [-Wextra-tokens]
+     994 | #ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK || defined(CONFIG_ARM64_GCS)
+         |                                          ^
+         |                                          //
+   1 warning generated.
+
+
+vim +994 fs/proc/task_mmu.c
+
+   920	
+   921	static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+   922	{
+   923		/*
+   924		 * Don't forget to update Documentation/ on changes.
+   925		 *
+   926		 * The length of the second argument of mnemonics[]
+   927		 * needs to be 3 instead of previously set 2
+   928		 * (i.e. from [BITS_PER_LONG][2] to [BITS_PER_LONG][3])
+   929		 * to avoid spurious
+   930		 * -Werror=unterminated-string-initialization warning
+   931		 *  with GCC 15
+   932		 */
+   933		static const char mnemonics[BITS_PER_LONG][3] = {
+   934			/*
+   935			 * In case if we meet a flag we don't know about.
+   936			 */
+   937			[0 ... (BITS_PER_LONG-1)] = "??",
+   938	
+   939			[ilog2(VM_READ)]	= "rd",
+   940			[ilog2(VM_WRITE)]	= "wr",
+   941			[ilog2(VM_EXEC)]	= "ex",
+   942			[ilog2(VM_SHARED)]	= "sh",
+   943			[ilog2(VM_MAYREAD)]	= "mr",
+   944			[ilog2(VM_MAYWRITE)]	= "mw",
+   945			[ilog2(VM_MAYEXEC)]	= "me",
+   946			[ilog2(VM_MAYSHARE)]	= "ms",
+   947			[ilog2(VM_GROWSDOWN)]	= "gd",
+   948			[ilog2(VM_PFNMAP)]	= "pf",
+   949			[ilog2(VM_LOCKED)]	= "lo",
+   950			[ilog2(VM_IO)]		= "io",
+   951			[ilog2(VM_SEQ_READ)]	= "sr",
+   952			[ilog2(VM_RAND_READ)]	= "rr",
+   953			[ilog2(VM_DONTCOPY)]	= "dc",
+   954			[ilog2(VM_DONTEXPAND)]	= "de",
+   955			[ilog2(VM_LOCKONFAULT)]	= "lf",
+   956			[ilog2(VM_ACCOUNT)]	= "ac",
+   957			[ilog2(VM_NORESERVE)]	= "nr",
+   958			[ilog2(VM_HUGETLB)]	= "ht",
+   959			[ilog2(VM_SYNC)]	= "sf",
+   960			[ilog2(VM_ARCH_1)]	= "ar",
+   961			[ilog2(VM_WIPEONFORK)]	= "wf",
+   962			[ilog2(VM_DONTDUMP)]	= "dd",
+   963	#ifdef CONFIG_ARM64_BTI
+   964			[ilog2(VM_ARM64_BTI)]	= "bt",
+   965	#endif
+   966	#ifdef CONFIG_MEM_SOFT_DIRTY
+   967			[ilog2(VM_SOFTDIRTY)]	= "sd",
+   968	#endif
+   969			[ilog2(VM_MIXEDMAP)]	= "mm",
+   970			[ilog2(VM_HUGEPAGE)]	= "hg",
+   971			[ilog2(VM_NOHUGEPAGE)]	= "nh",
+   972			[ilog2(VM_MERGEABLE)]	= "mg",
+   973			[ilog2(VM_UFFD_MISSING)]= "um",
+   974			[ilog2(VM_UFFD_WP)]	= "uw",
+   975	#ifdef CONFIG_ARM64_MTE
+   976			[ilog2(VM_MTE)]		= "mt",
+   977			[ilog2(VM_MTE_ALLOWED)]	= "",
+   978	#endif
+   979	#ifdef CONFIG_ARCH_HAS_PKEYS
+   980			/* These come out via ProtectionKey: */
+   981			[ilog2(VM_PKEY_BIT0)]	= "",
+   982			[ilog2(VM_PKEY_BIT1)]	= "",
+   983			[ilog2(VM_PKEY_BIT2)]	= "",
+   984	#if VM_PKEY_BIT3
+   985			[ilog2(VM_PKEY_BIT3)]	= "",
+   986	#endif
+   987	#if VM_PKEY_BIT4
+   988			[ilog2(VM_PKEY_BIT4)]	= "",
+   989	#endif
+   990	#endif /* CONFIG_ARCH_HAS_PKEYS */
+   991	#ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+   992			[ilog2(VM_UFFD_MINOR)]	= "ui",
+   993	#endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+ > 994	#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK || defined(CONFIG_ARM64_GCS)
+   995			[ilog2(VM_SHADOW_STACK)] = "ss",
+   996	#endif
+   997	#if defined(CONFIG_64BIT) || defined(CONFIG_PPC32)
+   998			[ilog2(VM_DROPPABLE)] = "dp",
+   999	#endif
+  1000	#ifdef CONFIG_64BIT
+  1001			[ilog2(VM_SEALED)] = "sl",
+  1002	#endif
+  1003		};
+  1004		size_t i;
+  1005	
+  1006		seq_puts(m, "VmFlags: ");
+  1007		for (i = 0; i < BITS_PER_LONG; i++) {
+  1008			if (!mnemonics[i][0])
+  1009				continue;
+  1010			if (vma->vm_flags & (1UL << i))
+  1011				seq_printf(m, "%s ", mnemonics[i]);
+  1012		}
+  1013		seq_putc(m, '\n');
+  1014	}
+  1015	
 
 -- 
 0-DAY CI Kernel Test Service
