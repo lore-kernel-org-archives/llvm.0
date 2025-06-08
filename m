@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712E820AF62;
-	Sun,  8 Jun 2025 12:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC48920AF62;
+	Sun,  8 Jun 2025 12:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749387297; cv=none; b=YySakVvzMzUrOHQIzF4wpOT/g2qtRXcl0C2XbEqwJ3iJD44EzbSy+UBcbHYx8y27lMfIYKMyzXjfAw/fK1/jZs10eGzX86HoPX1K8RxKozMkaS1tEx4lO+iwb0h932U0SZfjr4kkPYRNcbnT7L89pF7GhcAnAy1gLUqpiyOhYFY=
+	t=1749387316; cv=none; b=eZIz5Um4Xktci977bhLnrY1mL7Hqiw2qL1xkmECE/xA0a9I137zuQeHB5dns1V0rzL+oLycjCM6JePybsLiZ8SvokoSHph+J/4dGQbBIh1tmeYuM9X7AdwgHJLa4G1kirg7rxuo5EGdSRSRHYuWpm/5nLeBWLaDMc4Am3QnrOVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749387297; c=relaxed/simple;
-	bh=LBTJXmlrYsDcfFHxuwx1fzWjfL7JKqlsW9s7XolAjqg=;
+	s=arc-20240116; t=1749387316; c=relaxed/simple;
+	bh=OylT/Edd6UyE3JXirgm+eMBQfijOUvLplVyRV8YhPl0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s0GZuJfP5wQTAdyklFYRwQRz/U+IUp33rqgvulPoYZ5uTXHqkY0/Ne6Mm9T+gnPPuoT0hBQdDu/zYJyISnMdhjAOsoKi+3MZLYSDfGJL9YFiA2YcLsjcqh4WhcZP3CvHrgOuGflOFamu7X92t7L2Jp36P74ORea2jyTQPItxeJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtohAMLn; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=nAy5JRIc7FWw6iwii3GDdHOcM2jqnoZbA72BzygHB0xKBGRy0ihB0Ol4xX48tTEPo5o/CRb0T/I/LB5G88Te3X5wSRr9gY9Tts/cIrTg0KpQrVQWRyAFLdH89/ckkxOwL9/ea6mn8i9VsUj4hwPj0jHuduKQos0Lxo1f0ql8dog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZBePvvac; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtohAMLn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D845DC4CEF4;
-	Sun,  8 Jun 2025 12:54:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZBePvvac"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 935E9C4CEEE;
+	Sun,  8 Jun 2025 12:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749387296;
-	bh=LBTJXmlrYsDcfFHxuwx1fzWjfL7JKqlsW9s7XolAjqg=;
+	s=k20201202; t=1749387315;
+	bh=OylT/Edd6UyE3JXirgm+eMBQfijOUvLplVyRV8YhPl0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mtohAMLnNbroWezimQunEdl5ayIANs16s9LAuC+ONFBFeFPVO2M5ayEknvASoTUbi
-	 1iECbipajPloFNH3aaLnpFai2Dy5jLeVxQ8P7IvsUc6+4lXE/+OqNUML2Lf/3WvoCj
-	 GSVJ7imEPkTZY06G3CaNhz025DbmTpPhDtVUbF6TwldP2fjwhlsz/tu0MLo7S4sPR4
-	 g76maTEFmmQ17PWtU7tVfDuPG5cOECmNZVNk+dZfckqLsiJMMZY7W8Fhv0FFzcdbGR
-	 m7wulSEy4x3hNxQeqi4sOYSVI2gXqjoN/rrb8fb2Pe2El+wY19an9sr1bIZMmvervJ
-	 YjgRwohQ5AM2w==
+	b=ZBePvvacOaUXNWig/TbVuCa3uxLIoguzMMI+Q7vzL1RO9Fs/6LU/Nqt6aOniAenCJ
+	 DLE8V1MqPPIC7oYR0HpTgbAE+S+C3i2U0WvNNa6LgpP9Mql+bqOxAytu5R9LbByrGL
+	 Xk27ddrZrp8rKRWM2q9pWtdZoNhVquLlvt7dytcqt4ReaEXrlGzisi5xO0DBmne3zN
+	 tLrVn3IZOVhequothPb39zJWrNveLT05ROS7eE2rjoNE/vMURqSEcBtqzVxx2HTtP0
+	 s8WXNItii7bMfddSqLznty6rKvy7VWok4ULCeO+2ZTyeoB0NkYAOzuzYT9M/Ols8OW
+	 Y95gy0FxUdoeA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -38,12 +38,12 @@ Cc: Rudraksha Gupta <guptarud@gmail.com>,
 	nathan@kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.14 04/10] rust: arm: fix unknown (to Clang) argument '-mno-fdpic'
-Date: Sun,  8 Jun 2025 08:54:41 -0400
-Message-Id: <20250608125447.933686-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 04/10] rust: arm: fix unknown (to Clang) argument '-mno-fdpic'
+Date: Sun,  8 Jun 2025 08:55:01 -0400
+Message-Id: <20250608125507.934032-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250608125447.933686-1-sashal@kernel.org>
-References: <20250608125447.933686-1-sashal@kernel.org>
+In-Reply-To: <20250608125507.934032-1-sashal@kernel.org>
+References: <20250608125507.934032-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.10
+X-stable-base: Linux 6.12.32
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -199,10 +199,10 @@ GCC/Clang toolchain compatibility for Rust builds.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/rust/Makefile b/rust/Makefile
-index a84c6d4b6ca21..5d33c812835fc 100644
+index 1b00e16951eeb..cf47a67cc5e7a 100644
 --- a/rust/Makefile
 +++ b/rust/Makefile
-@@ -245,7 +245,7 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
+@@ -236,7 +236,7 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
  	-fzero-call-used-regs=% -fno-stack-clash-protection \
  	-fno-inline-functions-called-once -fsanitize=bounds-strict \
  	-fstrict-flex-arrays=% -fmin-function-alignment=% \
