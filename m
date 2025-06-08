@@ -1,127 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC37A11187
-	for <llvm@lists.linux.dev>; Sat,  7 Jun 2025 19:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28848CA5A;
+	Sun,  8 Jun 2025 03:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749322992; cv=none; b=mURQjc1Jo19DwZNPsOo3zifgtMtJ530AghxHBljmlHSjlVq1bTEMKsJjnAL9K1JfcCYw1jekVs8dOiHeI31Ot07+YdaF1+N4TfvUCbfkBCX6zK/xltTa04LwMjZ2VEFHVM6TFT5ojobLIdnK9u7Mk1VWHaHlovRrcLqqwnJUnj8=
+	t=1749355100; cv=none; b=pfSuufCF1oiKzpB6C33eYLbuGwF+75Xa5Or2iC8UwMEu8WVjs3nYG90xapny3+11t0OcZX8pAm5R+v6VwmWpmy3mxZIle6HRqkpa9EXRvAie0GNlMX7R4tKMdU+fZY4h0UobMnDk3SC7B4kcnvJfPmRsZHYCT0KjiK5ch8naTE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749322992; c=relaxed/simple;
-	bh=3lT2p3xkcghYJmF/QHUDtLYPcDkHG+Fy1ug+m9diSoY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=T/gqDMk0k0AUuw/gbSQ1INANFyhqT1USbA8+1pLdrq222m3WookpcoJtQfjyZ8JJYO54Pe8WyDWqL3gU9P7jFEBIFF4Uf3N4J74WinDCydgG7h1mtoGIYFxnK0COsaf9wdJ+aZrd7n4Qs5jJ9EtwpgfHnyb4s/NVFHLyP0Aycv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NatJX2yi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1749355100; c=relaxed/simple;
+	bh=PInxxN2Up7nqTaB6cQMm0LVMwOpZMHT2Hv7BlPX7VCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jCs4Cn0WXr0snL87CEs03A+X6AHnUeKay6+OGtKkTi3DMb2VdhDstLgEW0tzoO0N2+Rz0cfD5D6T36CyDfn+7JLz255z3RwnphDsTSoOV9/i3tAKAIpEud/p7mukJAlroh/VNbOiqLFh0RNhC5Cn9ZBwrtL4AsNbfZKL82s8MCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PitN+Xno; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NatJX2yi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749322986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cVTO6euGQ9QBnhnrwUSdqinDJpFF8o9KgMHbU4r3ewk=;
-	b=NatJX2yiUoluPMe28qOzqdrEKiD5tVO03uNgBkxNL8ARWv98KYwHop+4vF7jhVOokwARfv
-	byAbhGlfwFnXRRMmAdYyfuXyOLxkOB1mVr5DFKEl45Yk1OPSGWVtU0OegVWG6J8DDtRz9e
-	bSHnphq3wKyWqtY0+SFxH76ofD0/65c=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-590-yFR-NlJ4OtWekP3GY0VXMg-1; Sat,
- 07 Jun 2025 15:03:05 -0400
-X-MC-Unique: yFR-NlJ4OtWekP3GY0VXMg-1
-X-Mimecast-MFC-AGG-ID: yFR-NlJ4OtWekP3GY0VXMg_1749322984
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 779EF19560BD
-	for <llvm@lists.linux.dev>; Sat,  7 Jun 2025 19:03:04 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0EA001800368;
-	Sat,  7 Jun 2025 19:03:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 6 of 100): Test report for master
- (6.15.0, upstream-mainline, cfc4ca89)
-Date: Sat, 07 Jun 2025 19:03:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PitN+Xno"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749355098; x=1780891098;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PInxxN2Up7nqTaB6cQMm0LVMwOpZMHT2Hv7BlPX7VCA=;
+  b=PitN+Xnogns9z+p3U6R30Rm/0FQrcd/V8F3uZKgAy8+W7OI1A6E9pKmk
+   7TnygCY517fXPxbzoS2gR+Hrd5BEqO1/Hl5Wqz+rn7BnBpew0HJyQJBQQ
+   Y2N4XZO2IZwEMZkyROXGcv7vTk0dEmBhODDRAbJG+T+k5TInRBueA9m5P
+   RMLTBWAiXoBNPRc5HSDvDBtSRqk/1VlhM9W5Eaue3J0akJs04caDaMr1+
+   bI0LgYXrv+2NuxcBoLvubXEa/hI1ySgJrwYo9i4q0SQfHwNpD3wGxajy3
+   nK4fjzazEdXaOgXC4L1679hHD4BPmv0xFPUbPsoMHd5ajKJNNbdC3GseN
+   A==;
+X-CSE-ConnectionGUID: y1RbdfLgR+i0Nl9Ip7EHyA==
+X-CSE-MsgGUID: IFFXZdC6SeCWrvF4bwysCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11457"; a="54093946"
+X-IronPort-AV: E=Sophos;i="6.16,219,1744095600"; 
+   d="scan'208";a="54093946"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 20:58:15 -0700
+X-CSE-ConnectionGUID: c2sj0iqtQP2I911SyGH+JQ==
+X-CSE-MsgGUID: at918i/GT9Sx+f3ushhWtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,219,1744095600"; 
+   d="scan'208";a="146113495"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 07 Jun 2025 20:58:14 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uO7Ai-0006BP-1E;
+	Sun, 08 Jun 2025 03:58:12 +0000
+Date: Sun, 8 Jun 2025 11:57:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [trace:sorttable/core 2/3] warning: tracepoint 'pelt_hw_tp' is
+ unused.
+Message-ID: <202506081104.qw9HfZkV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <66500.125060715030500565@us-mta-590.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: k-J5iAu9Wm0hrFgOlTOwFc4tRMVtOmUbjX2NbrGsVTs_1749322984
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace sorttable/core
+head:   6ff69a9fcc809b9fe23a55e798f1d8fa96cd618c
+commit: 2c3b6203399993766be7756222c812e1b63e84f2 [2/3] tracing: sorttable: Add a tracepoint verification check at build time
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250608/202506081104.qw9HfZkV-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250608/202506081104.qw9HfZkV-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506081104.qw9HfZkV-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'uml-for-linux-6.16-rc1' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/uml/linux
+>> warning: tracepoint 'pelt_hw_tp' is unused.
+>> warning: tracepoint 'pelt_irq_tp' is unused.
+>> warning: tracepoint 'ipi_raise' is unused.
+>> warning: tracepoint 'ipi_entry' is unused.
+>> warning: tracepoint 'ipi_exit' is unused.
+>> warning: tracepoint 'alarmtimer_suspend' is unused.
+>> warning: tracepoint 'ftrace_test_filter' is unused.
+>> warning: tracepoint 'cpu_idle_miss' is unused.
+>> warning: tracepoint 'psci_domain_idle_enter' is unused.
+>> warning: tracepoint 'psci_domain_idle_exit' is unused.
+>> warning: tracepoint 'powernv_throttle' is unused.
+>> warning: tracepoint 'pstate_sample' is unused.
+>> warning: tracepoint 'cpu_frequency' is unused.
+>> warning: tracepoint 'cpu_frequency_limits' is unused.
+>> warning: tracepoint 'device_pm_callback_start' is unused.
+>> warning: tracepoint 'device_pm_callback_end' is unused.
+>> warning: tracepoint 'wakeup_source_activate' is unused.
+>> warning: tracepoint 'wakeup_source_deactivate' is unused.
+>> warning: tracepoint 'clock_enable' is unused.
+>> warning: tracepoint 'clock_disable' is unused.
+   warning: tracepoint 'clock_set_rate' is unused.
+   warning: tracepoint 'power_domain_target' is unused.
+   warning: tracepoint 'pm_qos_add_request' is unused.
+   warning: tracepoint 'pm_qos_update_request' is unused.
+   warning: tracepoint 'pm_qos_remove_request' is unused.
+   warning: tracepoint 'dev_pm_qos_add_request' is unused.
+   warning: tracepoint 'dev_pm_qos_update_request' is unused.
+   warning: tracepoint 'dev_pm_qos_remove_request' is unused.
+   warning: tracepoint 'guest_halt_poll_ns' is unused.
+   warning: tracepoint 'xdp_bulk_tx' is unused.
+   warning: tracepoint 'xdp_redirect_map' is unused.
+   warning: tracepoint 'xdp_redirect_map_err' is unused.
+   warning: tracepoint 'vma_mas_szero' is unused.
+   warning: tracepoint 'vma_store' is unused.
+   warning: tracepoint 'tlb_flush' is unused.
+   warning: tracepoint 'hugepage_set_pmd' is unused.
+   warning: tracepoint 'hugepage_set_pud' is unused.
+   warning: tracepoint 'hugepage_update_pmd' is unused.
+   warning: tracepoint 'hugepage_update_pud' is unused.
+   warning: tracepoint 'set_migration_pmd' is unused.
+   warning: tracepoint 'remove_migration_pmd' is unused.
+   warning: tracepoint 'block_rq_remap' is unused.
+   warning: tracepoint 'dma_fence_emit' is unused.
+   warning: tracepoint 'thermal_power_cpu_get_power_simple' is unused.
+   warning: tracepoint 'thermal_power_cpu_limit' is unused.
+   warning: tracepoint 'mc_event' is unused.
+   warning: tracepoint 'binder_lock' is unused.
+   warning: tracepoint 'binder_locked' is unused.
+   warning: tracepoint 'binder_unlock' is unused.
+   warning: tracepoint 'tcp_ao_wrong_maclen' is unused.
+   warning: tracepoint 'tcp_ao_mismatch' is unused.
+   warning: tracepoint 'tcp_ao_key_not_found' is unused.
+   warning: tracepoint 'tcp_ao_rnext_request' is unused.
+   warning: tracepoint 'tcp_ao_synack_no_key' is unused.
+   warning: tracepoint 'tcp_ao_snd_sne_update' is unused.
+   warning: tracepoint 'tcp_ao_rcv_sne_update' is unused.
+   warning: tracepoint 'br_fdb_add' is unused.
+   warning: tracepoint 'br_fdb_external_learn_add' is unused.
+   warning: tracepoint 'fdb_delete' is unused.
+   warning: tracepoint 'br_fdb_update' is unused.
+   warning: tracepoint 'br_mdb_full' is unused.
+   warning: tracepoint 'devlink_hwmsg' is unused.
+   warning: tracepoint 'devlink_hwerr' is unused.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1855850055
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                Boot test [aarch64]
-                Reboot test [aarch64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
