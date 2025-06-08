@@ -1,68 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BDF254861;
-	Sun,  8 Jun 2025 21:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE2D267AF4;
+	Sun,  8 Jun 2025 23:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749419112; cv=none; b=TqO4dxEqR5xGDVkMVKj8d99XBtD1qPgwC+mV5YivhDBatm/oRBcnA+swUa/ZWWHgyMWSYK4pz/YsbKF2kI90HKqNVI2LfldrvbkGjiTPtXeMk699RSQMpuUvIDFRL6frdHMuw9oI9mqK5SOTdRT6gOqRXdJy+El195sQb5u6DaU=
+	t=1749426560; cv=none; b=pWaGzkbuZEwHUdldUduVmhglS0qsoIJlucBUuvr4RRLub8pwwBstUR5ZXQXTNN6Q8FtQE8KeWDWgIN3boiLkOFxsEdxFo13g4u3lJew6VTbhQsgv2V+uJwYJf8Y5JzpeTle9ClyjY+Htg9Bk/67+Jrg8SBB2tswxPFI/LkWODBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749419112; c=relaxed/simple;
-	bh=GeLqfCISxlJ35ItAVg3veXROlWc+r3oA703qOErV10o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T3PDtP2eiW/0E6WaPNW/qBOCyocBgEX5bzuPaRf2MAM2+BLHjYH9qAojZZkv7iNKNf6D/lHa05O8DIbxYfzrYAUqFYwZ5YQc7n3vtgbLCiT8YXDXfW5Hbf0v4mffKZjMJ1Xe5HnMJaGnaq4OXHoccc1rq4aqSp++dAL1bFVElO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kLDxULPD; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1749426560; c=relaxed/simple;
+	bh=YR2/9ArncA/4YVfIxi3YvnkWZ11EK5r4Ilksbc8qbK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VKFln2/r1B6L4+kQVilJTPfjoltAMsvw5wMLaNmOKs+6mzqdVfkel1o86ILRWGrIc+tUPLtee+vnmyTgZjEHWJidezLTMuBBs/fy9FMUlU2Szf4fTKMGocuiRQGD6/bgM9o333eP8q5rju3JpoyszINBKCev8RPCy/QIXyDtp7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gz2NLe6a; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kLDxULPD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gz2NLe6a"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749419111; x=1780955111;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GeLqfCISxlJ35ItAVg3veXROlWc+r3oA703qOErV10o=;
-  b=kLDxULPDuZYSUduQJCkHJ32GOohTtK/t2fqf0DlbuxI4duuEr/9UwHGZ
-   g/1EnsjXQzijKy5wbOS51xFelGYZiZFWgvsUjjpBl+7hRsRUAPuxWVI2X
-   M1/0IvuRTuw4MpLSPlGr4HKaFQ5Y+aXdOkfK3Y4PCHsOZfih+cdyM0nKz
-   05EzgWMXdT/+z7mXYlBD+PQTd/BDNV8lUuXKOAnRfDNYCLRLXtWaxnSVM
-   IyVyUGGIjyGlBfQcE9PILS/m1Tq8lDgbBvtWxQbDZlZKMAgyU9xBhsZTA
-   H7R46iNoKX3mkdQ+QuMFNZvpEaMyN3B/NbXBZXfcziC3M8NIWkA88uQBs
-   Q==;
-X-CSE-ConnectionGUID: T4R3HuJRRGWW+zS6dji91Q==
-X-CSE-MsgGUID: WflGPsRGToCeC2I7gTvBwg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="51355938"
+  t=1749426558; x=1780962558;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YR2/9ArncA/4YVfIxi3YvnkWZ11EK5r4Ilksbc8qbK0=;
+  b=Gz2NLe6avUxylqkc2rdFrXwyOU0cj4nKOxnIfMnk1l5Vkb/GDKb0myeJ
+   rdEhq+KieFPeLHsLpkVXwJNbqyv8Vo0Q75bHTKCzt1VG7+3mB8B+t+NsZ
+   dXMxaafaiYAnOf93wxkQ3Sgq2TMdlzQR0wM5Jk+OwSKBzqdpPd+fRXddn
+   mOfR+3/KDwQRupwQkPBy7/RZs1PWj0DR305nkjx+5gBXn6RPNINXvR5/m
+   TfUJbpkNiFJm0xJ3DWc6wkHwHe32GE82ktpwoU6uivHiyjEy2KQK7Q7nc
+   Co3DshgdjLeDIjZtuGILkO/qlpzUg8y63Uv9fMWK9uVinpkusN1D9jmYN
+   g==;
+X-CSE-ConnectionGUID: 2LPx46y+SXKqK8g5IYAG8g==
+X-CSE-MsgGUID: yOSROyOVT5W9Zk6ezpnS5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="51494572"
 X-IronPort-AV: E=Sophos;i="6.16,221,1744095600"; 
-   d="scan'208";a="51355938"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2025 14:45:08 -0700
-X-CSE-ConnectionGUID: SciDia4PTMyFaiAXJKGB+g==
-X-CSE-MsgGUID: wIB1hRdLQCe/LQAewrz24Q==
+   d="scan'208";a="51494572"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2025 16:49:17 -0700
+X-CSE-ConnectionGUID: vz2PVR/MQryD2sSf/SEaRg==
+X-CSE-MsgGUID: ABWGZFkiTRSIYZn9o/r+Ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,221,1744095600"; 
-   d="scan'208";a="150161632"
+   d="scan'208";a="151352313"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 08 Jun 2025 14:45:04 -0700
+  by orviesa004.jf.intel.com with ESMTP; 08 Jun 2025 16:49:16 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uONp8-0006ZP-0a;
-	Sun, 08 Jun 2025 21:45:02 +0000
-Date: Mon, 9 Jun 2025 05:44:47 +0800
+	id 1uOPlJ-0006dt-1L;
+	Sun, 08 Jun 2025 23:49:13 +0000
+Date: Mon, 9 Jun 2025 07:48:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
-	Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>,
-	Usama Arif <usamaarif642@gmail.com>, linux-kernel@vger.kernel.org,
-	Kairui Song <kasong@tencent.com>
-Subject: Re: [PATCH] mm/shmem, swap: fix softlockup with mTHP swapin
-Message-ID: <202506090525.yM9XIl8O-lkp@intel.com>
-References: <20250608192713.95875-1-ryncsn@gmail.com>
+	Yu-Chun Lin <eleanor15x@gmail.com>
+Subject: [akpm-mm:mm-nonmm-unstable 32/32] ({ BUILDclang diag:
+ _include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is
+ already applied with different arguments [-Wignored-attributes]B
+Message-ID: <202506090716.JryOipkx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,302 +65,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250608192713.95875-1-ryncsn@gmail.com>
 
-Hi Kairui,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-shmem-swap-fix-softlockup-with-mTHP-swapin/20250609-032924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250608192713.95875-1-ryncsn%40gmail.com
-patch subject: [PATCH] mm/shmem, swap: fix softlockup with mTHP swapin
-config: arm-randconfig-003-20250609 (https://download.01.org/0day-ci/archive/20250609/202506090525.yM9XIl8O-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506090525.yM9XIl8O-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   8172857ac52869c411762ce86802d127b0bb7546
+commit: 8172857ac52869c411762ce86802d127b0bb7546 [32/32] riscv: optimize gcd() performance on RISC-V without Zbb extension
+config: x86_64-buildonly-randconfig-001-20250609 (https://download.01.org/0day-ci/archive/20250609/202506090716.JryOipkx-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506090716.JryOipkx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506090525.yM9XIl8O-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506090716.JryOipkx-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-         |                          ^
-   include/linux/huge_mm.h:108:28: note: expanded from macro 'HPAGE_PMD_SHIFT'
-     108 | #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
-         |                            ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   In file included from mm/shmem.c:24:
-   In file included from include/linux/fs.h:7:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:7:
-   include/linux/list.h:37:2: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
-      37 |         WRITE_ONCE(list->next, list);
-         |         ^
-   include/asm-generic/rwonce.h:60:2: note: expanded from macro 'WRITE_ONCE'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^
-   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   mm/shmem.c:1904:20: note: previous attribute is here
-    1904 |                                 count_vm_event(THP_FILE_FALLBACK);
-         |                                                ^
-   include/linux/vm_event_item.h:196:30: note: expanded from macro 'THP_FILE_FALLBACK'
-     196 | #define THP_FILE_FALLBACK ({ BUILD_BUG(); 0; })
-         |                              ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-      59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-         |                     ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   In file included from mm/shmem.c:24:
-   In file included from include/linux/fs.h:7:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:7:
-   include/linux/list.h:37:2: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
-      37 |         WRITE_ONCE(list->next, list);
-         |         ^
-   include/asm-generic/rwonce.h:60:2: note: expanded from macro 'WRITE_ONCE'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^
-   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   mm/shmem.c:1905:20: note: previous attribute is here
-    1905 |                                 count_vm_event(THP_FILE_FALLBACK_CHARGE);
-         |                                                ^
-   include/linux/vm_event_item.h:197:37: note: expanded from macro 'THP_FILE_FALLBACK_CHARGE'
-     197 | #define THP_FILE_FALLBACK_CHARGE ({ BUILD_BUG(); 0; })
-         |                                     ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-      59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-         |                     ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
->> mm/shmem.c:2003:7: error: call to undeclared function 'non_swapcache_batch'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2003 |                 if (non_swapcache_batch(entry, nr_pages) != nr_pages)
-         |                     ^
-   In file included from mm/shmem.c:24:
-   In file included from include/linux/fs.h:7:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:7:
-   include/linux/list.h:37:2: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
-      37 |         WRITE_ONCE(list->next, list);
-         |         ^
-   include/asm-generic/rwonce.h:60:2: note: expanded from macro 'WRITE_ONCE'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^
-   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   mm/shmem.c:2531:20: note: previous attribute is here
-    2531 |                                 count_vm_event(THP_FILE_ALLOC);
-         |                                                ^
-   include/linux/vm_event_item.h:195:27: note: expanded from macro 'THP_FILE_ALLOC'
-     195 | #define THP_FILE_ALLOC ({ BUILD_BUG(); 0; })
-         |                           ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-      59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-         |                     ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   In file included from mm/shmem.c:24:
-   In file included from include/linux/fs.h:7:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:7:
-   include/linux/list.h:37:2: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
-      37 |         WRITE_ONCE(list->next, list);
-         |         ^
-   include/asm-generic/rwonce.h:60:2: note: expanded from macro 'WRITE_ONCE'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^
-   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   mm/shmem.c:2790:15: note: previous attribute is here
-    2790 |         hpage_size = HPAGE_PMD_SIZE;
-         |                      ^
-   include/linux/huge_mm.h:115:34: note: expanded from macro 'HPAGE_PMD_SIZE'
-     115 | #define HPAGE_PMD_SIZE  ((1UL) << HPAGE_PMD_SHIFT)
-         |                                   ^
-   include/linux/huge_mm.h:108:28: note: expanded from macro 'HPAGE_PMD_SHIFT'
-     108 | #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
-         |                            ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-      59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-         |                     ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
-     565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
-     547 |                         __compiletime_error(msg);                       \
-         |                         ^
-   include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
-     138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
-         |                                                        ^
-   In file included from mm/shmem.c:24:
-   In file included from include/linux/fs.h:7:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:7:
-   include/linux/list.h:37:2: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
-      37 |         WRITE_ONCE(list->next, list);
-         |         ^
-   include/asm-generic/rwonce.h:60:2: note: expanded from macro 'WRITE_ONCE'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^
-   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
-
-
-vim +/non_swapcache_batch +2003 mm/shmem.c
-
-  1954	
-  1955	static struct folio *shmem_swap_alloc_folio(struct inode *inode,
-  1956			struct vm_area_struct *vma, pgoff_t index,
-  1957			swp_entry_t entry, int order, gfp_t gfp)
-  1958	{
-  1959		struct shmem_inode_info *info = SHMEM_I(inode);
-  1960		struct folio *new;
-  1961		void *shadow;
-  1962		int nr_pages;
-  1963	
-  1964		/*
-  1965		 * We have arrived here because our zones are constrained, so don't
-  1966		 * limit chance of success with further cpuset and node constraints.
-  1967		 */
-  1968		gfp &= ~GFP_CONSTRAINT_MASK;
-  1969		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && order > 0) {
-  1970			gfp_t huge_gfp = vma_thp_gfp_mask(vma);
-  1971	
-  1972			gfp = limit_gfp_mask(huge_gfp, gfp);
-  1973		}
-  1974	
-  1975		new = shmem_alloc_folio(gfp, order, info, index);
-  1976		if (!new)
-  1977			return ERR_PTR(-ENOMEM);
-  1978	
-  1979		nr_pages = folio_nr_pages(new);
-  1980		if (mem_cgroup_swapin_charge_folio(new, vma ? vma->vm_mm : NULL,
-  1981						   gfp, entry)) {
-  1982			folio_put(new);
-  1983			return ERR_PTR(-ENOMEM);
-  1984		}
-  1985	
-  1986		/*
-  1987		 * Prevent parallel swapin from proceeding with the swap cache flag.
-  1988		 *
-  1989		 * Of course there is another possible concurrent scenario as well,
-  1990		 * that is to say, the swap cache flag of a large folio has already
-  1991		 * been set by swapcache_prepare(), while another thread may have
-  1992		 * already split the large swap entry stored in the shmem mapping.
-  1993		 * In this case, shmem_add_to_page_cache() will help identify the
-  1994		 * concurrent swapin and return -EEXIST.
-  1995		 */
-  1996		if (swapcache_prepare(entry, nr_pages)) {
-  1997			folio_put(new);
-  1998	
-  1999			/*
-  2000			 * A smaller folio is in the swap cache, mTHP swapin will always fail
-  2001			 * until it's gone. Return -EINVAL to fallback to order 0.
-  2002			 */
-> 2003			if (non_swapcache_batch(entry, nr_pages) != nr_pages)
-  2004				return ERR_PTR(-EINVAL);
-  2005	
-  2006			return ERR_PTR(-EEXIST);
-  2007		}
-  2008	
-  2009		__folio_set_locked(new);
-  2010		__folio_set_swapbacked(new);
-  2011		new->swap = entry;
-  2012	
-  2013		memcg1_swapin(entry, nr_pages);
-  2014		shadow = get_shadow_from_swap_cache(entry);
-  2015		if (shadow)
-  2016			workingset_refault(new, shadow);
-  2017		folio_add_lru(new);
-  2018		swap_read_folio(new, NULL);
-  2019		return new;
-  2020	}
-  2021	
+   clang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]182
+   | #defclang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]i
+   ne __clang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   raw_cpclang diag: uinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   _read_coclang diag: ninclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]s
+   t(pcpclang diag: )include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+>> ({ BUILDclang diag: _include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]B
+   UG(); (tyclang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   peof(clang diag: pinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]c
+   p))0; })clang diag:
+   include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   |                                            ^
+   clang diag: include/linux/build_bug.hinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   :59:21: note: expanded from macro 'BUILD_BUG'
+   clang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   clang diag: 59include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes] |
+   #defclang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]i
+   ne BUILclang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]D
+   _BUG() clang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]B
+   UILclang diag: Dinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   _BUG_clang diag: Oinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   N_MSG(clang diag: 1include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes],
+>> "BUILDclang diag: _include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]B
+   UG faileclang diag: dinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]"
+   )
+   |                     ^
+   note: clang diag: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   include/linux/compiler_types.h:565clang diag: :include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]2
+   : note: clang diag: expanded from macro 'compiletime_assert'include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+--
+   clang diag: 547include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes] |
+   __comclang diag: pinclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]i
+   letimclang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]e
+>> _error(clang diag: minclude/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]s
+   g);       clang diag: include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   clang diag:       include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   |                         ^
+   clang diag: include/linux/compiler_attributes.h:include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
+   138:56: note: clang diag: expanded from macro '__compiletime_error'include/linux/compiler_attributes.h:138:56: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
 
 -- 
 0-DAY CI Kernel Test Service
