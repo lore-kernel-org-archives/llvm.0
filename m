@@ -1,95 +1,94 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85F32459F7
-	for <llvm@lists.linux.dev>; Mon,  9 Jun 2025 13:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732031D6187;
+	Mon,  9 Jun 2025 13:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749477086; cv=none; b=EmpsXQyu2ikZxmyW6WTgJFftJ8G2gS+yD45yFCYSKUvASkcehizdiq6HDfEGktyec7zyA8ny3EBSGDajAl96CQnpDKm+N6UiPiOKRlJ6p4jqdMmrtrqnNaVret1D4QeQhkSwzBMJBqRg2rIm0/+QNw33LhfvI/Rwi8shnHycv7s=
+	t=1749477209; cv=none; b=forOdMAunzhF/Zq89Zc8pTRPbUnhz/v/H/FgEhkeiiT2YCzkaWz5QTT34k/pzB9E8z1hgSDQoIs1V+CN9coEZrBCIjI5M8MQxegdwcOwnvN2A89onTG+7TwushIo06qK8/jLSRXdCzPNtCHZUfv915vm/C1h60DoekRNR12cc0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749477086; c=relaxed/simple;
-	bh=eACaxt02WUWamov4/PRFJ2M1YIB5DvQrMTadVks0Ha0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fnJk7ZkMVU1QAtMYbVQL836Y/qIRnGSq9XcpERiLmhCTl5mC0xZXGGoKnFnCH8hnWCY67ohiT0/jMDVoQX4pQ3u2+z8JDdnCTyYotqnMA0aI9ptsqgRIXYLh4ypBTonG0wiqiQL32tm+8W7MR14MiCw0mbdlRthdjDlL/cK2Trs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bq/FKNG+; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749477209; c=relaxed/simple;
+	bh=T3sqKukzXDr9hOyP9SoVz9qsR+9q2tdxwgiv0BMU1pk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=RI0TWHmOOM+TUEIAa/EDW51f9KAgCOG69vs4qorgihpf40PgHeHwZSjEAW729YjlKtDV3jJWQoTByAYGfFgCkMg01GEBfUwh2C7NqUIyHlMgEKLVWXf+7F8iAdOxH767nPIMlOwBipXVoRDb9lCvQzVY7qGDgQmsXk1sCxHL80k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVIPHuYT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bq/FKNG+"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3131aa07b50so574514a91.1
-        for <llvm@lists.linux.dev>; Mon, 09 Jun 2025 06:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749477084; x=1750081884; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eACaxt02WUWamov4/PRFJ2M1YIB5DvQrMTadVks0Ha0=;
-        b=Bq/FKNG+N16hvDbLfztfZjmmEcHog+ApJCEj3ceV1x5qs8DIepmx5RbXyDIOaTjg5w
-         cElzNvQU/VwmCG8WjVZlM0M4OzEhaR3DJzRUgG98b3g65CPqFV9+WGX39Dm6BVyJ65tv
-         LMMpV3TlB4ZCgQpawU+cS31xE2xqCO2MRrUD/t86/HAmoxXU5p2BP7GboVpyZY+I7cuV
-         VgywCK442lJSI2M8oD3R6A4JDGhE2aorgFjUND+xZ8jYn5wvPfb1SwBq9EnXn9UAHvc+
-         4A2nY4OsXOq9UxNssOKfWewDwdIs3N6BCXicneZT5iEq2KtsVktw9zt6aLLZjZBS3h9/
-         T9ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749477084; x=1750081884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eACaxt02WUWamov4/PRFJ2M1YIB5DvQrMTadVks0Ha0=;
-        b=G/zgLxAT1JRuDfljl3DV7CFsZn2qQFZJFSjCNGYLhDnGRrxFuVVwOyw52/aIv5THP3
-         uRJz+X/jtK/3P/KtE8ZaamrKCQI2kcTV1whyanbN4SA2RYonzmEPSBzYALJh3cY0QjgF
-         7Q/RbPl4C2oR5Ol820aWZ4vU8Vz7mUaQ2hP2WBTNiPWTGZ/EDvwtDURf8i4cAJmVFVSo
-         7lOHKnx/d24AKiLUFhZBMxKqZIeuve+VS8IHZaEfhMDsVm5B6w+p5gQ5imaw9SaTq8hw
-         3DJlRzuXXBA6vSsbxM73LNtK6yHuNobsbyD4SChWX4gHM08HruseVu89x0q6IA0vWYEz
-         Ee4g==
-X-Forwarded-Encrypted: i=1; AJvYcCVIYX+EDdauyoLt4VY/YJP3TsyByOMAVnsw3+vLlyL2HjXYRT9cfsqKvYCrgKscor1ODMOj@lists.linux.dev
-X-Gm-Message-State: AOJu0YybyXUKFuwmxP6CMSH6DkhVYAoI4VRcuUZo3wFyBmdgBZsjNcWk
-	f5amP19cA/7Eovc/qcfxIzbE8JOwhabWh0nLZd8AjFO55Hj+si+4n+lxA6gACS6jkCJeFiwTtVZ
-	3wakSCzdxm7stpfqVKKjjm9EYf61is2M=
-X-Gm-Gg: ASbGncvNOXwJN+9rl4VA9D9oiAOG/ssfQJTCF31QAaU5AH+Tn10K3sFsC7M6rGllbnz
-	oe2IoCSoo4dM5oLNJmI84ZABpjuDJHvJvQz3EF3tlWRkNbjMp1529pp9iqY6k4qr2nAnZJ/CxEE
-	fKzUMODMPzpHHwGy3682ciwbwVqkV1dV5B8bKNj4hYFvo=
-X-Google-Smtp-Source: AGHT+IGkkCxVNET2hTnCQKkB5ht2XhMJXmVkVA6QMXG//p+Iy2xKOFDBp1eOArmCKNe88x3UOn8NtAfKsUQfancfTHU=
-X-Received: by 2002:a17:90b:1801:b0:313:2f9a:13c0 with SMTP id
- 98e67ed59e1d1-3134e2b90f8mr6572065a91.1.1749477084002; Mon, 09 Jun 2025
- 06:51:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVIPHuYT"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C750C4CEF2;
+	Mon,  9 Jun 2025 13:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749477209;
+	bh=T3sqKukzXDr9hOyP9SoVz9qsR+9q2tdxwgiv0BMU1pk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=cVIPHuYTIgbscIhYiAzeDYrgKtbbRexlf5FArOd1ipzLppYy35e8mF5vX8tCUJceI
+	 5lDzcg84Q9l5gIEqjfcM5/vgfeDCS17oIZtcFtxO5wjn69rSytq+fqFr0kSx+wBYQ3
+	 8JRqV1jprj6PWkOaUeL4AGaKQ83TyfHgfIbdrhIHjSvmLImXmeK6U2Eu5/xe6zITf9
+	 wKwTIqk77dypjAWl7nkets0l3fD6yziTaLrpfAXqg9eWKXqJ1DlVkFLlKEN28lU2hT
+	 Z0wtXDVHdO04mW5cHW9JMSahx8AgCzOkcLCKvb+OOFzgJfUdEYent6Bhes9IN+TO7V
+	 TvqR3P2UEuqFg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0917FC71131;
+	Mon,  9 Jun 2025 13:53:29 +0000 (UTC)
+From: Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org>
+Date: Mon, 09 Jun 2025 20:53:12 +0700
+Subject: [PATCH 2/2] sparc/module: Make it clear that relocation numbers
+ are shown in hex
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241029140036.577804-1-kernel@jfarr.cc> <20241029140036.577804-2-kernel@jfarr.cc>
- <paezt3cuux5kwv7dvyuo4rrff2felwzmjunkdpyxqjp3fbnyzn@rcdj4xq6djio>
-In-Reply-To: <paezt3cuux5kwv7dvyuo4rrff2felwzmjunkdpyxqjp3fbnyzn@rcdj4xq6djio>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 9 Jun 2025 15:51:12 +0200
-X-Gm-Features: AX0GCFs-AANvO4jrbUE-NjAZoTdqBDYVE5mIEuWtE19UmN1xM-LkNwTb5ope6jY
-Message-ID: <CANiq72=kjk5Kkebz2-QrOuwRKENAziTXhXrnKNL4eoOo4diO3A@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Compiler Attributes: disable __counted_by for clang < 19.1.3
-To: Dafna Hirschfeld <dafna.hirschfeld@intel.com>
-Cc: Jan Hendrik Farr <kernel@jfarr.cc>, kees@kernel.org, nathan@kernel.org, ojeda@kernel.org, 
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
-	thorsten.blum@toblux.com, ardb@kernel.org, oliver.sang@intel.com, 
-	gustavoars@kernel.org, kent.overstreet@linux.dev, arnd@arndb.de, 
-	gregkh@linuxfoundation.org, akpm@linux-foundation.org, 
-	tavianator@tavianator.com, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250609-b4-sparc-relocs-v1-2-aa52631735af@protonmail.com>
+References: <20250609-b4-sparc-relocs-v1-0-aa52631735af@protonmail.com>
+In-Reply-To: <20250609-b4-sparc-relocs-v1-0-aa52631735af@protonmail.com>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Koakuma <koachan@protonmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749477207; l=784;
+ i=koachan@protonmail.com; s=20240620; h=from:subject:message-id;
+ bh=7SKx1LyVSxb9rnPPXP8b4RhjM/ieyIDEQGTuXHHGuv0=;
+ b=7wx6sVYWxVRMZKF1bCXsTh6PwiVpWEyHcpD7XVsKksAbsttXnXku6ruD/sZvYyV3JbeaW8z2W
+ nVXopwnT6LFCTJSTfvAdw+TKa0kXc+dB2AxFV+Y5Uj9WJPMrNaP5xNS
+X-Developer-Key: i=koachan@protonmail.com; a=ed25519;
+ pk=UA59FS3yiAA1cnAAUZ1rehTmr6skh95PgkNRBLcoKCg=
+X-Endpoint-Received: by B4 Relay for koachan@protonmail.com/20240620 with
+ auth_id=174
+X-Original-From: Koakuma <koachan@protonmail.com>
+Reply-To: koachan@protonmail.com
 
-On Mon, Jun 9, 2025 at 3:14=E2=80=AFPM Dafna Hirschfeld
-<dafna.hirschfeld@intel.com> wrote:
->
-> Why is the define of __counted_by moved from here (compiler_attributes.h)
-> to a different location (compiler_types.h) ?
+From: Koakuma <koachan@protonmail.com>
 
-`compiler_attributes.h` is supposed to have only things that do not
-depend on the kernel configuration and so on.
+This is to ease debugging by removing the ambiguity of the shown
+number base.
 
-It sounds like those out-of-tree headers should be fixed.
+Signed-off-by: Koakuma <koachan@protonmail.com>
+---
+ arch/sparc/kernel/module.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I hope that helps.
+diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
+index 6e3d4dde4f9ab33040b300c40d5fd5d0584e166d..49740450a6859fda566459ee4679869f9854b760 100644
+--- a/arch/sparc/kernel/module.c
++++ b/arch/sparc/kernel/module.c
+@@ -142,7 +142,7 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
+ 			break;
+ 
+ 		default:
+-			printk(KERN_ERR "module %s: Unknown relocation: %x\n",
++			printk(KERN_ERR "module %s: Unknown relocation: 0x%x\n",
+ 			       me->name,
+ 			       (int) (ELF_R_TYPE(rel[i].r_info) & 0xff));
+ 			return -ENOEXEC;
 
-Cheers,
-Miguel
+-- 
+2.49.0
+
+
