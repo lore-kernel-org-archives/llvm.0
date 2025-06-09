@@ -1,122 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE471DB346;
-	Mon,  9 Jun 2025 22:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F8922A4FA;
+	Mon,  9 Jun 2025 23:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749509139; cv=none; b=qAdzPfSQb/hmJF1Pky6OOjt/PnBFe/mWVKj123XLiHbuwvHeuJdvSo64E40GaTN8J/WJtkNQYBOATefHv29r/3R/0RolZrKSXmyGPYVWR0JAqcmZSWjy02cjjlhFyItrLfVSVTvSqH/PU0lx+51zGM+yihmHbv/pjp1W0ALuIIo=
+	t=1749511399; cv=none; b=KdTUhTm75uQlbJs11N6Xa+k2AWj1YctmyxMZ0PO6hif697+xWAmFhoEYnipx8OR1KiXu/xYbDMxJrrCele+ZHz/LgcHkmOOoThXKqhB2svRaC2zZitmxASHjGn+3N4kwf76YpUub0cnk3O1K3ycsYuxtZc5KjJQLjnA1cE6xHY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749509139; c=relaxed/simple;
-	bh=WFQYQD8RAjjcA8Sk2MicveepzUETmW1VGCWSzHQgapQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DT3FdTjzGGffCCczP8HbtsQ1Cyo1YwjVHO9uH8M1JqApA4aUY9LEfD0gndPzIS1M4hKO7WaIQt1oYfVPfjgrJBvisM4KW0WivpMisD2LGobVhk1gmvln1HTKqh/33M7O1zDsxo1PU4zamK68fXi8SLHbptx9ZwOzibMVLKlkHeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EZB3Oltx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749511399; c=relaxed/simple;
+	bh=SodzVzd/dy3fVY28H5PbgVki2bKFD3jp9tNeLI1aFg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TZgNhe2jgX94Ui3Fi5zhSOWUThEOnVQzUlLSCbkSnFWClxT7l0a1IJCQXHOCEutYQw7WFTR1l8tp/3CB3D5nsjEk6MUWxiivwRoLYQmm5X2uOaJRlZZfHqF2T3tzH0mElDCOwJKoLVNkhLRWLz7DsPl7RUGA19ICOkPG0dkZ0+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XszQCCjI; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EZB3Oltx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EEB2C4CEEB;
-	Mon,  9 Jun 2025 22:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749509139;
-	bh=WFQYQD8RAjjcA8Sk2MicveepzUETmW1VGCWSzHQgapQ=;
-	h=From:Date:Subject:To:Cc:From;
-	b=EZB3OltxnH29a1ZJADXn4iEaWBi2PYdgKJL9Cm8Iv+9TP5bYzP/f0wivBAiuRSXkz
-	 /WqE4ecGaw4+IZZzTcHQ5O4lEduvbzsj6YYIWFNzBreF0zwtLG9ZEo+2bMs5v2EebS
-	 VGFK3o3QkZSDKH6pdUBnJ31RMvQNiHJzPQZmD1ROSclVqlvXTimTphUvgLte4S0Y0B
-	 8Ajh4VNNaLCos2ZNd8KfTkDV5UB3rNXKZ6WrwPC12IBMF/RtDEct2dZBJmVD/wy0Xf
-	 F5J+NAJ24rCjNyYOc5asRBcKONn5IVSf6bZ+LKMNsGTuEtjnnaiBfrMK57XFfDkP18
-	 GuradEParqlZQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 09 Jun 2025 15:45:20 -0700
-Subject: [PATCH] crypto: lib/curve25519-hacl64 - Disable KASAN with
- clang-17 and older
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XszQCCjI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749511398; x=1781047398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SodzVzd/dy3fVY28H5PbgVki2bKFD3jp9tNeLI1aFg8=;
+  b=XszQCCjIy9IXn6GfoHrawvM3XXauF5PyfDp3cQTJnkwCvHAs1iiNQOG5
+   QGTJNEQ4stJd1dZvyBUy2EUPl6lFRhBqU4BuR+aLtuTwwUjHyzDtcz6gx
+   xZVlJbucxK9hAG4ufeGSgYe2hh43G8kYtarNEOXcxBosnf1BxYK7BwrvW
+   qypTaiPBZkDL8q31sL/8UzR7GYpORm7c/RWmHTaXODGmuckwIJTe3zLAk
+   k1gRU7V8FKW9EN4Rw8+BiwoVtNyvcNWZapr03Vr69PyLkH8lZxmwu0jVx
+   pya9P7OwDGIp2Gm6Nli3WT75hGeSwe3bOZlqgsjHBzgsYRnqXKuyVku9Q
+   g==;
+X-CSE-ConnectionGUID: SYVVtUvYSGq72RelQ9oDwg==
+X-CSE-MsgGUID: ZIdHLox8Qk+0JeVGPK0DxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="51594759"
+X-IronPort-AV: E=Sophos;i="6.16,223,1744095600"; 
+   d="scan'208";a="51594759"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 16:23:18 -0700
+X-CSE-ConnectionGUID: hvrmWd1WTxiZ4LdyJauPwg==
+X-CSE-MsgGUID: tm1WvLkSQJefGulOu2XGfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,223,1744095600"; 
+   d="scan'208";a="151654521"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 09 Jun 2025 16:23:12 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uOlpd-0007VJ-36;
+	Mon, 09 Jun 2025 23:23:09 +0000
+Date: Tue, 10 Jun 2025 07:22:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Almeida <daniel.almeida@collabora.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Benno Lossin <lossin@kernel.org>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Subject: Re: [PATCH v4 6/6] rust: pci: add irq accessors
+Message-ID: <202506100619.ZG8fk4Yz-lkp@intel.com>
+References: <20250608-topics-tyr-request_irq-v4-6-81cb81fb8073@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250609-curve25519-hacl64-disable-kasan-clang-v1-1-08ea0ac5ccff@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAP9jR2gC/x2NQQrDIBAAvxL23AW10WK/UnrYmrVZKra4JBRC/
- h7JcQ4zs4FyE1a4Dxs0XkXlWzvYywBppvpmlKkzOOO8CSZiWtrKznsbcaZUwoiTKL0K44eUKqb
- SLcyUA8fb1Xoeobd+jbP8z8/jue8HpD1xfXcAAAA=
-X-Change-ID: 20250609-curve25519-hacl64-disable-kasan-clang-faf6e97315e4
-To: Eric Biggers <ebiggers@kernel.org>, 
- "Jason A. Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-crypto@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2678; i=nathan@kernel.org;
- h=from:subject:message-id; bh=WFQYQD8RAjjcA8Sk2MicveepzUETmW1VGCWSzHQgapQ=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBnuKYIeZy0/z2New7rglMrVzLVsx20Wt7glbzo0ITfkH
- LP17BvJHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi5XcYGV5Lfkrlv7pivXV8
- w8XE7pvb+fMP8zLYPVQ8/k0gpNF3ngkjw0MjCb1PJRL70pOvOb2qXXrpsH2t4K198z4tNlt44nC
- 6FjMA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250608-topics-tyr-request_irq-v4-6-81cb81fb8073@collabora.com>
 
-After commit 6f110a5e4f99 ("Disable SLUB_TINY for build testing"), which
-causes CONFIG_KASAN to be enabled in allmodconfig again, arm64
-allmodconfig builds with clang-17 and older show an instance of
--Wframe-larger-than (which breaks the build with CONFIG_WERROR=y):
+Hi Daniel,
 
-  lib/crypto/curve25519-hacl64.c:757:6: error: stack frame size (2336) exceeds limit (2048) in 'curve25519_generic' [-Werror,-Wframe-larger-than]
-    757 | void curve25519_generic(u8 mypublic[CURVE25519_KEY_SIZE],
-        |      ^
+kernel test robot noticed the following build errors:
 
-When KASAN is disabled, the stack usage is roughly quartered:
+[auto build test ERROR on e271ed52b344ac02d4581286961d0c40acc54c03]
 
-  lib/crypto/curve25519-hacl64.c:757:6: error: stack frame size (608) exceeds limit (128) in 'curve25519_generic' [-Werror,-Wframe-larger-than]
-    757 | void curve25519_generic(u8 mypublic[CURVE25519_KEY_SIZE],
-        |      ^
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Almeida/rust-irq-add-irq-module/20250609-065947
+base:   e271ed52b344ac02d4581286961d0c40acc54c03
+patch link:    https://lore.kernel.org/r/20250608-topics-tyr-request_irq-v4-6-81cb81fb8073%40collabora.com
+patch subject: [PATCH v4 6/6] rust: pci: add irq accessors
+config: x86_64-randconfig-005-20250610 (https://download.01.org/0day-ci/archive/20250610/202506100619.ZG8fk4Yz-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250610/202506100619.ZG8fk4Yz-lkp@intel.com/reproduce)
 
-Using '-Rpass-analysis=stack-frame-layout' shows the following variables
-and many, many 8-byte spills when KASAN is enabled:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506100619.ZG8fk4Yz-lkp@intel.com/
 
-  Offset: [SP-144], Type: Variable, Align: 8, Size: 40
-  Offset: [SP-464], Type: Variable, Align: 8, Size: 320
-  Offset: [SP-784], Type: Variable, Align: 8, Size: 320
-  Offset: [SP-864], Type: Variable, Align: 32, Size: 80
-  Offset: [SP-896], Type: Variable, Align: 32, Size: 32
-  Offset: [SP-1016], Type: Variable, Align: 8, Size: 120
+All errors (new ones prefixed by >>):
 
-When KASAN is disabled, there are still spills but not at many and the
-variables list is smaller:
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 20.1.2
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+>> error[E0425]: cannot find function `pci_irq_vector` in crate `crate::bindings`
+   --> rust/kernel/pci.rs:409:49
+   |
+   409 |               let irq = unsafe { crate::bindings::pci_irq_vector(self.as_raw(), index) };
+   |                                                   ^^^^^^^^^^^^^^ not found in `crate::bindings`
+   ...
+   443 | /     gen_irq_accessor!(
+   444 | |         /// Returns a [`kernel::irq::Registration`] for the IRQ vector at the given index.
+   445 | |         irq_by_index, Registration, Handler
+   446 | |     );
+   | |_____- in this macro invocation
+   |
+   = note: this error originates in the macro `gen_irq_accessor` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find function `pci_irq_vector` in crate `crate::bindings`
+   --> rust/kernel/pci.rs:409:49
+   |
+   409 |               let irq = unsafe { crate::bindings::pci_irq_vector(self.as_raw(), index) };
+   |                                                   ^^^^^^^^^^^^^^ not found in `crate::bindings`
+   ...
+   447 | /     gen_irq_accessor!(
+   448 | |         /// Returns a [`kernel::irq::ThreadedRegistration`] for the IRQ vector at the given index.
+   449 | |         threaded_irq_by_index, ThreadedRegistration, ThreadedHandler
+   450 | |     );
+   | |_____- in this macro invocation
+   |
+   = note: this error originates in the macro `gen_irq_accessor` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-  Offset: [SP-192], Type: Variable, Align: 32, Size: 80
-  Offset: [SP-224], Type: Variable, Align: 32, Size: 32
-  Offset: [SP-344], Type: Variable, Align: 8, Size: 120
-
-Disable KASAN for this file when using clang-17 or older to avoid
-blowing out the stack, clearing up the warning.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- lib/crypto/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index 3e79283b617d..18664127ecd6 100644
---- a/lib/crypto/Makefile
-+++ b/lib/crypto/Makefile
-@@ -35,6 +35,10 @@ obj-$(CONFIG_CRYPTO_LIB_CURVE25519_GENERIC)	+= libcurve25519-generic.o
- libcurve25519-generic-y				:= curve25519-fiat32.o
- libcurve25519-generic-$(CONFIG_ARCH_SUPPORTS_INT128)	:= curve25519-hacl64.o
- libcurve25519-generic-y				+= curve25519-generic.o
-+# clang versions prior to 18 may blow out the stack with KASAN
-+ifeq ($(call clang-min-version, 180000),)
-+KASAN_SANITIZE_curve25519-hacl64.o := n
-+endif
- 
- obj-$(CONFIG_CRYPTO_LIB_CURVE25519)		+= libcurve25519.o
- libcurve25519-y					+= curve25519.o
-
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250609-curve25519-hacl64-disable-kasan-clang-faf6e97315e4
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
