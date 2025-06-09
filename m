@@ -1,164 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD11881E;
-	Mon,  9 Jun 2025 08:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784D725A2A4
+	for <llvm@lists.linux.dev>; Mon,  9 Jun 2025 10:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749457845; cv=none; b=QeudpX3drshd/wihWg6ubQ1l+qRoFjQEzFY2bADGdl1A7nmGMqqH82sqCAuFgqeEsGMmP+N9vJM1i2mV4GRDhZ/vOk+Si6OZEN6gMwUMxhMVpyTKP5WK7/nqtV4Bv+RzncJTFJSIoAy0ZNdegCNHu76H71hcO+lWKyvhKjVy61k=
+	t=1749466333; cv=none; b=qoMH83T+fwQ/RripGoNmfhCco7voCdDLxnScFfelONazeqt6Rs/n13VzLTodU8PnozvNofsJueEk+KCHJAu6nrtPtJA8B37lHEX7NmEZFbc3LKOmaUwCGPyCiVu2UaTC5zTJAf+HSqE6NbGdWBY/KsJ9oWFlf4Q+SftI55WRyJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749457845; c=relaxed/simple;
-	bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lx3d/pxYLx5RwHK6adrhB34k8lzmmj1zcwLECrbRGerL4YwAskkuP9+KwzM8+geIPMGpuojW2jZiH3EudI+vvoegXJkYh9Kh0uR7pk/cFtQNyU+y5cLzGhmbpZFd5RRYbv2CBuIYMsfNzv4rafIA4CHQUi6dCOC9i2bnli1vShg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=edm/kAxs; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749466333; c=relaxed/simple;
+	bh=AytQaUqjbYECxpBYQxUoGj1AuJwuoHeA3d1v5QmTXVI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=oY3PYuxw+7t5W1tUu/jNwX/QgDinRrsnfNKJHDQPfXdKJM4HMbqzg+Av3d4MMrb2fSrHeFxg4XUHjG24NJD8HNmkYx23YqrrT41EWLMzYymRf1rhMF84byY56OUNGtOwiYO6n/xdLag1HdMT775046rQDh8SZAzNOMavQspaGI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b2UnK+gY; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="edm/kAxs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749457844; x=1780993844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ensT7p+N/ywee7KLRyYcOmYZaATuuZJ+u1tIIRo0PZs=;
-  b=edm/kAxssvUiFX2AcN+EAlNgiGMoSEqPkcBZtMlOhpUwUXLrUuj7mzzw
-   COAFDJK46yujl/+lQuGZo7lQhVdJRENo0wf5r8lHxQTHi83ACMsmJQTG1
-   JR0psujnKpCBT3TRqoVCFZIZ5p1uaDPt8EdqVF1q4V0RjA+gVAqAMOV4D
-   rPhfLUU7oZRnzX6m/nUwHM0byacBMDnQEKb4a/NVHZCtYDNzzx/hf4Gpw
-   +pJZ7AiWgT7rKZV9p+dJDcTDs/rYQekVeC/Y3EahooJEd4ofKpQznAOYU
-   niSDK5EDgQiiZdrB5Q0pr8DfpbCwNDchmYge14oYb+L/ZMmwRoQS11KRY
-   Q==;
-X-CSE-ConnectionGUID: yYjkQu3gSx+22ZuPisiNFw==
-X-CSE-MsgGUID: 6ZwbQ8JVQG+uJN+NuY8RMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="76921924"
-X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="76921924"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 01:30:43 -0700
-X-CSE-ConnectionGUID: 5Pkjg0zRSoW7rgRyVlx9Gg==
-X-CSE-MsgGUID: h31gkaVcRXapdesgq+80fQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="147382809"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 09 Jun 2025 01:30:38 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uOXts-0006t3-0L;
-	Mon, 09 Jun 2025 08:30:36 +0000
-Date: Mon, 9 Jun 2025 16:29:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org,
-	"(open list:HIBERNATION (aka Software Suspend, aka swsusp))" <linux-pm@vger.kernel.org>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Denis Benato <benato.denis96@gmail.com>,
-	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>
-Subject: Re: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into
- D3 at hibernate
-Message-ID: <202506091639.HaxwbWtd-lkp@intel.com>
-References: <20250609024619.407257-3-superm1@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b2UnK+gY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749466330;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MjLK8UsohdJ3DqsnHMUrA13GKJOyZN/qS+METe+6Fs8=;
+	b=b2UnK+gY2PJpPj+VWFzDmUkThCymKtVvNNvyoyt5vlIK+QtAZU/EjX9aQi9mvWVJ9jb1ty
+	SdvjnkzFguJcWwANU0xgQLb5VFUrMvl44JUmYdnywhS/bzGtIcfWQM4HMY2JXtXQHQq0E1
+	2rmADli2MRQC1tb9Pib7WfOkgf9V+Ak=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-422-zi3XH29oOrOgALq1nfTaBQ-1; Mon,
+ 09 Jun 2025 06:52:07 -0400
+X-MC-Unique: zi3XH29oOrOgALq1nfTaBQ-1
+X-Mimecast-MFC-AGG-ID: zi3XH29oOrOgALq1nfTaBQ_1749466326
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 354EE1808985
+	for <llvm@lists.linux.dev>; Mon,  9 Jun 2025 10:52:06 +0000 (UTC)
+Received: from [172.20.188.120] (unknown [10.30.45.122])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DEEC619560A7;
+	Mon,  9 Jun 2025 10:52:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 8 of 100): Test report for master
+ (6.15.0, upstream-mainline, c0c9379f)
+Date: Mon, 09 Jun 2025 10:52:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250609024619.407257-3-superm1@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <95356.125060906520700308@us-mta-422.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: k74r4uRb7JuLa2hwkuF8QDaF8l08qqMwkE_pIYYuKjo_1749466326
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge mkp-scsi/for-next jejb-scsi/for-next linus/master v6.16-rc1 next-20250606]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-Use-hibernate-flows-for-system-power-off/20250609-105658
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250609024619.407257-3-superm1%40kernel.org
-patch subject: [PATCH v3 2/5] PCI: Put PCIe ports with downstream devices into D3 at hibernate
-config: i386-buildonly-randconfig-003-20250609 (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506091639.HaxwbWtd-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'usb-6.16-rc1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/gregkh/usb
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506091639.HaxwbWtd-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1857960931
 
-All errors (new ones prefixed by >>):
-
->> drivers/pci/pci-driver.c:1221:7: error: call to undeclared function 'pci_pm_set_prepare_bus_pm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1221 |         if (!pci_pm_set_prepare_bus_pm(pci_dev))
-         |              ^
-   1 error generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
 
-vim +/pci_pm_set_prepare_bus_pm +1221 drivers/pci/pci-driver.c
+Tests that were not ran because of internal issues:
+    kselftests upstream - bpf_test_progs [x86_64]
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
 
-  1195	
-  1196	static int pci_pm_poweroff_noirq(struct device *dev)
-  1197	{
-  1198		struct pci_dev *pci_dev = to_pci_dev(dev);
-  1199		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
-  1200	
-  1201		if (dev_pm_skip_suspend(dev))
-  1202			return 0;
-  1203	
-  1204		if (pci_has_legacy_pm_support(pci_dev))
-  1205			return pci_legacy_suspend_late(dev);
-  1206	
-  1207		if (!pm) {
-  1208			pci_fixup_device(pci_fixup_suspend_late, pci_dev);
-  1209			return 0;
-  1210		}
-  1211	
-  1212		if (pm->poweroff_noirq) {
-  1213			int error;
-  1214	
-  1215			error = pm->poweroff_noirq(dev);
-  1216			suspend_report_result(dev, pm->poweroff_noirq, error);
-  1217			if (error)
-  1218				return error;
-  1219		}
-  1220	
-> 1221		if (!pci_pm_set_prepare_bus_pm(pci_dev))
-  1222			goto Fixup;
-  1223	
-  1224		/*
-  1225		 * The reason for doing this here is the same as for the analogous code
-  1226		 * in pci_pm_suspend_noirq().
-  1227		 */
-  1228		if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
-  1229			pci_write_config_word(pci_dev, PCI_COMMAND, 0);
-  1230	
-  1231	Fixup:
-  1232		pci_fixup_device(pci_fixup_suspend_late, pci_dev);
-  1233	
-  1234		return 0;
-  1235	}
-  1236	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
