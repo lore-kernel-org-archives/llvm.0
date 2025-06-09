@@ -1,110 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB9414B959
-	for <llvm@lists.linux.dev>; Mon,  9 Jun 2025 15:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F172F3D544;
+	Mon,  9 Jun 2025 16:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749482591; cv=none; b=BlRlVgt+iGvknnyOVebr+/LV17Xjic7n6PCUip7VJtW87pAsZUq7agQh0iaxurjo1FomiCoJgsMk2uM7nv8JqbPIzxLIcRLaW77GLBdNnDloSUgrTYC2KgyxDBPZBTbkJHU+5w36UYLLUtxJmZvY2fyB/wP4UPbqNgmO8KdXUCQ=
+	t=1749485632; cv=none; b=Ng7V/ySW+iqC1luZsdydXl/S3QtLpX/F8lJ0WjGzlchpP7UOA3SxZEQEkXgB6Qz24vmRZMdqYd9B28Ut1D0TwC4eZ5fJkjKP+yDMAsZk3E5jpZ4M/R+CX3VtoBF9QL4kUnJDU5lFkZzLT83dK8znnMwF7iGs/YdwBpJ7Fnq+Ebk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749482591; c=relaxed/simple;
-	bh=O1XutNxQp3cMMJZWpNXrBgb0aR/rKta+1KtO9F2vhwE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mC9DWetdBwoK2XW3PKdlk7j01FMAl6eMAI03cmFQBRPZULFK05UVN/4l1s8Bl+KBCDaGxM++0I+o+p/fENSbicpY9jIcQ1WOu8fOogAofCTZilHjZVtCFc5isd+KFGk9my/EC5TM7Wbl+C05OFT93R5eeg0ZYyiG4dW6YRaTga8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ma2U3xJV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1749485632; c=relaxed/simple;
+	bh=rR5X4MhdvIVyHHfn1QvZMTSQHbXFh8cct9zLuRjGhQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d62NtTEswnkGXWyUAgKeXFxLQcqt4Ao38BFPpfSRT5ilRPv7CYGRWSCO8rWKSUY2UMqi6jLN4V+sLWnfUdXHoZeZ/PDhY031VuYjrFiz6aRKMfxn9mq2utxrVRk8hPXjB/e70bhOCUMFv0BGoeQc6A1lGelaoRa/K0uNkusiuiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UOUsrjpi; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ma2U3xJV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749482589;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7Stkv4zYiIdJOA/P6fXWFvmc34iMjYC6AEKShKvXYCI=;
-	b=Ma2U3xJVGAC5LvQuUhUORgKqPe1y+9gJhX3cAsQwmrnn8nSSi7fdKfpNCm1j+3mEAECnq0
-	ML/FmrekMCvYfuAG1wg8jJ1iOiJZk0lj5QtcaAgcC9jxzFcP1ZLH+Uvvu9/3Wm0jiMcfVV
-	GehCE7nDZygB32HNNjqYyoJ4EM5wkmI=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-351-tA2wIoU4OOGy2EDKjLcZGA-1; Mon,
- 09 Jun 2025 11:23:07 -0400
-X-MC-Unique: tA2wIoU4OOGy2EDKjLcZGA-1
-X-Mimecast-MFC-AGG-ID: tA2wIoU4OOGy2EDKjLcZGA_1749482587
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2BFF518089B8
-	for <llvm@lists.linux.dev>; Mon,  9 Jun 2025 15:23:07 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9308919560AB;
-	Mon,  9 Jun 2025 15:23:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 3 of 100): Test report for master
- (6.16.0-rc1, upstream-mainline, 19272b37)
-Date: Mon, 09 Jun 2025 15:23:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UOUsrjpi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749485631; x=1781021631;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rR5X4MhdvIVyHHfn1QvZMTSQHbXFh8cct9zLuRjGhQ8=;
+  b=UOUsrjpi3SFIbMIaReuqmteUp8Xd77U6f/PTX0W/oCK/fdJRfZlJPflr
+   sprO1ONI83bI0N9kid/F/+tVjNE+VuRBVX2THhx3ryNuiCbRpWOqt3hcy
+   TPrIRTd6xqYaRSFq/623XMv0/rsGdgSRTegZaoFTpDUBtUNxiYWP0kd7n
+   tbRxd5+k87N4k0koujCeHocLPmlHekWikFXHOH8gFnLO63AXhpV+YCVoj
+   PyOzQ1NUiJDEUWajjmT3RJZ/2Joh7x/1Vf3XkIvQf0Ux4VgZMrDXMHMhG
+   uJJjS1FNBypRO1iQOs8pj8wNqBUk85U6nQupiLRYJkamuCOYRiaPVEImi
+   w==;
+X-CSE-ConnectionGUID: /yCVKWb5R3K992Rb3HfzVA==
+X-CSE-MsgGUID: pmKgwZ+eRwyDkbxZkmutZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="69016322"
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="69016322"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 09:13:21 -0700
+X-CSE-ConnectionGUID: /cCuLQ/jTAaOqFSimUqDtw==
+X-CSE-MsgGUID: ixdbVnAARwS6dpIYTG0jBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="147519132"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 09 Jun 2025 09:13:19 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uOf7b-0007BH-2c;
+	Mon, 09 Jun 2025 16:13:15 +0000
+Date: Tue, 10 Jun 2025 00:13:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: add mmap_prepare() compatibility layer for nested
+ file systems
+Message-ID: <202506100000.34KZcoZ5-lkp@intel.com>
+References: <20250609092413.45435-1-lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <98437.125060911230702907@us-mta-351.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Odvocr7vwQXyb9wj-pU0X4x0a-zgVN8a6lm3e_UkVRE_1749482587
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250609092413.45435-1-lorenzo.stoakes@oracle.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Lorenzo,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Kernel information:
-    Commit message: Linux 6.16-rc1
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-add-mmap_prepare-compatibility-layer-for-nested-file-systems/20250609-172628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250609092413.45435-1-lorenzo.stoakes%40oracle.com
+patch subject: [PATCH] mm: add mmap_prepare() compatibility layer for nested file systems
+config: arm-randconfig-002-20250609 (https://download.01.org/0day-ci/archive/20250610/202506100000.34KZcoZ5-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250610/202506100000.34KZcoZ5-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1859594038
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506100000.34KZcoZ5-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: compat_vma_mmap_prepare
+   >>> referenced by shm.c
+   >>>               ipc/shm.o:(shm_mmap) in archive vmlinux.a
+   >>> referenced by backing-file.c
+   >>>               fs/backing-file.o:(backing_file_mmap) in archive vmlinux.a
+   >>> referenced by nommu.c
+   >>>               mm/nommu.o:(do_mmap) in archive vmlinux.a
+   >>> referenced 2 more times
 
-Tests that were not ran because of internal issues:
-    Reboot test [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
