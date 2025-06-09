@@ -1,71 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774041D6AA;
-	Mon,  9 Jun 2025 00:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30E9157A67;
+	Mon,  9 Jun 2025 02:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749430287; cv=none; b=YCXN1TjDtJyJDDp5sl3b5mxHNysxFsizsOnafW20nNIicBYEEFt+LXKG9rFjUwOdt9UL2pbUGqpTVSoAVovUAD/WNFO2aSctO9nEqe5y2HuN58zCYLgbkTrIBrKNf0xpaQC3tS+V3lq0yJL3zN4US8oPvqSdXR4xeriote3s0nQ=
+	t=1749436537; cv=none; b=ACwHYYPFY4xfpdX+tzuzRDoWQuBiPnGsnROsMHy45JjiKQKSkWEj3Pk+GPYZNlLMrKUbkcBZXWfUgrtnSZK3Y3UlXvS4G7eS/6Tt0ljkhwMWmdtqrTlK1rktZ/0NV/q/uUWcflDoYy9RhCvHjMnEPnvArQJzlBqWpps/ot30MMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749430287; c=relaxed/simple;
-	bh=8S6HYzYYfdFc2GH1aog83DGprnavF4jGjecrMy7dxN0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C3n8MeQQ8zLpmJ5RPWoym9kCxcOqUDJPd3bZKDNdgTHNXy9AqOc34y8N/z48+XPaGRPu3ZLJjkVVY5YaLtJi96OSor/PtC3X2uZnqMRxZ6dbUJNJrMdAr5fM4DvNBg9C8fcLIp1L+O7JFSXX63nVZRT3jBxRKGygHtB8TK+JvEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MkORAGaF; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1749436537; c=relaxed/simple;
+	bh=xKMYj937iHvtVNeHWyYP3/MrdkI4JHPSk8bThsmDkRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mCdWGDyPsi2ZFVxPqwVddidRgAjS9MB4BH5gdXFUhPB589sTy0vmw38r/H/vtUybx4+riL5IE8cpUH1CQAml7QZSAW5ckCBWU6hcZ0pb4aBPD5rT1AREZpAT0hawsSagzEJk485C1niqrgc+94K6kzm4f7l6tqO1LFYbI0CsIzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GiJZWRzp; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MkORAGaF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GiJZWRzp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749430284; x=1780966284;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8S6HYzYYfdFc2GH1aog83DGprnavF4jGjecrMy7dxN0=;
-  b=MkORAGaFpdUSR/t2ltshL+G5FFAuYTPNS4d5NgL2WZrVnu0yWoA+BzEz
-   ZU+MHlr5xyOLrq6nu40+EB3WCyij0yBmR9oTJofdiiJfsLcFUVmT22aZ7
-   yEHjKyHyEA9lO2s+nvbY7QDZ1RHQDUtxruc+4lIedeaamS17o/iqPmLh5
-   sKxsWJygiYjNVgE12Ov2dK+ZgKMLXiNvNXBa/Av4R/BUtOULocBN38h/g
-   AkJu94x/9mxXEd+rTdnihNoqLy2tXzsV4o4+c5XgjYaKReqwAa3UvO6qv
-   zW+U1D0WzFpTCEOUkTWw+we1JBuImFP6iyBOEj33udrBfVLajiFlWe7bh
-   A==;
-X-CSE-ConnectionGUID: +rtO0xbsSSiF8qr2vwMBPw==
-X-CSE-MsgGUID: ErPRUsI8SJKkAYLQpmY7yQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="51497136"
+  t=1749436535; x=1780972535;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xKMYj937iHvtVNeHWyYP3/MrdkI4JHPSk8bThsmDkRY=;
+  b=GiJZWRzp/Xy3psgqaJ90kUWf1T91Vhk+H/mpAFbsVuYCiGyxEZJ/9GoF
+   3ugApZ1kaGrZjtFy1g4yHaFwyFRbpYw+HF13biMxbZD0I48lKPIjAAZ6F
+   XuoXgjJB2J1nWhlsUimrm7zfmBn/5Sl/YUyW+ekIdMbH0ZJYauZpZsWjj
+   +1doeUDB6HCT859sOJ7uzcJ19ZTAytEwOLVu40d9dfJjlnDVb/qZD/88o
+   7BbDWiwmjTIGRGDZo7Wkhf3Ym66N5vbBkCHBer/6KkoIfNniXazsg1uXu
+   fFghTpqgd8k22pJKnyDYqUxNMtIjbguPjrWRKtswlOFlBPMTbvZt98ZFz
+   w==;
+X-CSE-ConnectionGUID: lHPCsBw7R+uIlXtnZRproQ==
+X-CSE-MsgGUID: 1lXScn0iQOyEMomAIUaRJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="62860831"
 X-IronPort-AV: E=Sophos;i="6.16,221,1744095600"; 
-   d="scan'208";a="51497136"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2025 17:51:23 -0700
-X-CSE-ConnectionGUID: totC/warQ+CwtLHNkTLCeQ==
-X-CSE-MsgGUID: ZiNGWszkTN26BRDe8LU63A==
+   d="scan'208";a="62860831"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2025 19:35:33 -0700
+X-CSE-ConnectionGUID: uPhRchAyQQGutS3BUhT+9w==
+X-CSE-MsgGUID: UF33dw+RSBu5v28ODxCs8Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,221,1744095600"; 
-   d="scan'208";a="151605279"
+   d="scan'208";a="151537186"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Jun 2025 17:51:20 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 08 Jun 2025 19:35:32 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uOQjN-0006fF-0l;
-	Mon, 09 Jun 2025 00:51:17 +0000
-Date: Mon, 9 Jun 2025 08:51:10 +0800
+	id 1uOSMC-0006jl-1X;
+	Mon, 09 Jun 2025 02:35:28 +0000
+Date: Mon, 9 Jun 2025 10:35:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marek Vasut <marek.vasut+renesas@mailbox.org>,
-	David Airlie <airlied@gmail.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>, Simona Vetter <simona@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 4/4] drm/rcar-du: dsi: Implement DSI command support
-Message-ID: <202506090832.Vo4IJeD2-lkp@intel.com>
-References: <20250608142636.54033-5-marek.vasut+renesas@mailbox.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [trace:sorttable/core 2/3] ld.lld: error: undefined symbol:
+ __tracepoint_swiotlb_bounced
+Message-ID: <202506091015.7zd87kI7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,161 +61,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250608142636.54033-5-marek.vasut+renesas@mailbox.org>
 
-Hi Marek,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on geert-renesas-devel/next]
-[also build test WARNING on drm-exynos/exynos-drm-next linus/master v6.16-rc1 next-20250606]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/drm-rcar-du-dsi-Convert-register-bits-to-BIT-macro/20250609-054641
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-patch link:    https://lore.kernel.org/r/20250608142636.54033-5-marek.vasut%2Brenesas%40mailbox.org
-patch subject: [PATCH 4/4] drm/rcar-du: dsi: Implement DSI command support
-config: i386-buildonly-randconfig-005-20250609 (https://download.01.org/0day-ci/archive/20250609/202506090832.Vo4IJeD2-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace sorttable/core
+head:   6ff69a9fcc809b9fe23a55e798f1d8fa96cd618c
+commit: 2c3b6203399993766be7756222c812e1b63e84f2 [2/3] tracing: sorttable: Add a tracepoint verification check at build time
+config: i386-randconfig-006-20250609 (https://download.01.org/0day-ci/archive/20250609/202506091015.7zd87kI7-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506090832.Vo4IJeD2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506091015.7zd87kI7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506090832.Vo4IJeD2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506091015.7zd87kI7-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c:1064:11: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    1063 |                                          "Long Packet Response longer than RX buffer (%d), limited to %ld Bytes\n",
-         |                                                                                                       ~~~
-         |                                                                                                       %zu
-    1064 |                                          wc, msg->rx_len);
-         |                                              ^~~~~~~~~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c:1090:7: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    1089 |                                          "Expected Short Packet Response too long (%ld), limited to 2 Bytes\n",
-         |                                                                                    ~~~
-         |                                                                                    %zu
-    1090 |                                          msg->rx_len);
-         |                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +1064 drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c
-
-  1020	
-  1021	static ssize_t rcar_mipi_dsi_host_rx_transfer(struct mipi_dsi_host *host,
-  1022						      const struct mipi_dsi_msg *msg)
-  1023	{
-  1024		struct rcar_mipi_dsi *dsi = host_to_rcar_mipi_dsi(host);
-  1025		u8 *rx_buf = (u8 *)(msg->rx_buf);
-  1026		u32 reg, data, status, wc;
-  1027		int i, ret;
-  1028	
-  1029		/* RX transfer received data validation and parsing starts here. */
-  1030		reg = rcar_mipi_dsi_read(dsi, TOSR);
-  1031		if (reg & TOSR_TATO) {	/* Turn-Around TimeOut. */
-  1032			/* Clear TATO Turn-Around TimeOut bit. */
-  1033			rcar_mipi_dsi_write(dsi, TOSR, TOSR_TATO);
-  1034			return -ETIMEDOUT;
-  1035		}
-  1036	
-  1037		reg = rcar_mipi_dsi_read(dsi, RXPSR);
-  1038	
-  1039		if (msg->flags & MIPI_DSI_MSG_REQ_ACK) {
-  1040			/* Transfer with zero-length RX */
-  1041			if (!(reg & RXPSR_RCVACK)) {
-  1042				/* No ACK on RX response received */
-  1043				return -EINVAL;
-  1044			}
-  1045		} else {
-  1046			/* Transfer with non-zero-length RX */
-  1047			if (!(reg & RXPSR_RCVRESP)) {
-  1048				/* No packet header of RX response received */
-  1049				return -EINVAL;
-  1050			}
-  1051	
-  1052			if (reg & (RXPSR_CRCERR | RXPSR_WCERR | RXPSR_AXIERR | RXPSR_OVRERR)) {
-  1053				/* Incorrect response payload */
-  1054				return -ENODATA;
-  1055			}
-  1056	
-  1057			data = rcar_mipi_dsi_read(dsi, RXPHDR);
-  1058			if (data & RXPHDR_FMT) {	/* Long Packet Response */
-  1059				/* Read Long Packet Response length from packet header. */
-  1060				wc = data & 0xffff;
-  1061				if (wc > msg->rx_len) {
-  1062					dev_warn(dsi->dev,
-  1063						 "Long Packet Response longer than RX buffer (%d), limited to %ld Bytes\n",
-> 1064						 wc, msg->rx_len);
-  1065					wc = msg->rx_len;
-  1066				}
-  1067	
-  1068				if (wc > 16) {
-  1069					dev_warn(dsi->dev,
-  1070						 "Long Packet Response too long (%d), limited to 16 Bytes\n",
-  1071						 wc);
-  1072					wc = 16;
-  1073				}
-  1074	
-  1075				for (i = 0; i < msg->rx_len; i++) {
-  1076					if (!(i % 4))
-  1077						data = rcar_mipi_dsi_read(dsi, RXPPD0R + i);
-  1078	
-  1079					rx_buf[i] = data & 0xff;
-  1080					data >>= 8;
-  1081				}
-  1082			} else {	/* Short Packet Response */
-  1083				if (msg->rx_len >= 1)
-  1084					rx_buf[0] = data & 0xff;
-  1085				if (msg->rx_len >= 2)
-  1086					rx_buf[1] = (data >> 8) & 0xff;
-  1087				if (msg->rx_len >= 3) {
-  1088					dev_warn(dsi->dev,
-  1089						 "Expected Short Packet Response too long (%ld), limited to 2 Bytes\n",
-  1090						 msg->rx_len);
-  1091				}
-  1092			}
-  1093		}
-  1094	
-  1095		if (reg & RXPSR_RCVAKE) {
-  1096			/* Acknowledge and Error report received */
-  1097			return -EFAULT;
-  1098		}
-  1099	
-  1100		ret = read_poll_timeout(rcar_mipi_dsi_read, status,
-  1101					!(status & PPIDL0SR_DIR),
-  1102					2000, 10000, false, dsi, PPIDL0SR);
-  1103		if (ret < 0) {
-  1104			dev_err(dsi->dev, "Command RX DIR timeout (0x%08x)\n", status);
-  1105			return ret;
-  1106		}
-  1107	
-  1108		ret = read_poll_timeout(rcar_mipi_dsi_read, status,
-  1109					status & PPIDL0SR_STPST,
-  1110					2000, 10000, false, dsi, PPIDL0SR);
-  1111		if (ret < 0) {
-  1112			dev_err(dsi->dev, "Command RX STPST timeout (0x%08x)\n", status);
-  1113			return ret;
-  1114		}
-  1115	
-  1116		return 0;
-  1117	}
-  1118	
+>> ld.lld: error: undefined symbol: __tracepoint_swiotlb_bounced
+   >>> referenced by dma-iommu.c
+   >>>               drivers/iommu/dma-iommu.o:(__do_trace_swiotlb_bounced.__trace_check) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
