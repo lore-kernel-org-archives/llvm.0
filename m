@@ -1,77 +1,69 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F1F171092;
-	Mon,  9 Jun 2025 14:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8FF1A2872;
+	Mon,  9 Jun 2025 15:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749479305; cv=none; b=P6x6Jl9hir9RQAbt1c27h+SZLJNUMHQ03sGHb45K3OEN2caqVm87j6eelH8puF+tZR/NzPpjoCcuESuUIJOipUX27ViVIaOZUMsPgRJ6XwrGBiuU7yBJJANBUQUH3ctHg+Aqt4zdE18I6SHz/lRDfV24q9TzYLeLaMwloUtl/3Y=
+	t=1749482420; cv=none; b=lgxj+gpBr+ixhmz581bBwEL0Dp7VVHq2Ffh+YNyk6Gq+pSw3QZJfKAhiLOzOnHCBhdUt93Nom5zIUe1HjRdPEiSkUFEddGh3nXxj5+PljFMOdAoL18Bts11xFGde7bJWnIOCFer5PpCl13iGA8HwCuPTBdB405x0OeHIGGKhbdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749479305; c=relaxed/simple;
-	bh=olvsDFUTNHbjjliVmNre4tAB0dGuQ3Kltdr8ZQ8ZoHA=;
+	s=arc-20240116; t=1749482420; c=relaxed/simple;
+	bh=v+qNLhObMXgfKH7cBPQ5CCrdeTCsLTz3+1rD022Ddq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FoX2nxxV54/DfYMZeEzXAVPYBPX7oT9ye6lt/vk7QZsC9YNR3VerMUzP5oqUeoLtQFtDmNkslzu6zsZV0bl43O9/bqezsZUY7F9dXfrSGqYARuMUnwVF1AOh06fXkIipiRT44Atcye7SfDMkDw9f34Qm9GKweUzzjobh0gzT7fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l17rLrzu; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dSmpv7DDELLWBSC9J15+ShoLSIgcsmC2JeNrQmX9SZd8Bsfu5DAOoemL+u9YJmDpyfQVVswFZof/+vQ/oMHsgM5mPHaTJY3taPPdowBJVG20XrjkYlrW5xSHJKksRfxBLndGMFBzyQHpKDWvcig1iWIem1XFmB8F5vod80W4iQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fZlFRcxc; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l17rLrzu"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-70a57a8ffc3so42017197b3.0;
-        Mon, 09 Jun 2025 07:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749479303; x=1750084103; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULBgHgW55K4uCky/f5KUdZJE/tyMyCrzkPdUsTZnDnM=;
-        b=l17rLrzuwLYnih9AFVANxWvUEJeOsJ7SzIeLeCyVPlFriUyAd/aG/UQD5qi6rywW1P
-         Lk+WEg5jGcjUmXOJ7zcOZVyMXqpCU339bTvffE8b6mrvJTWUQI7QpX/FqUp8xp947Anf
-         wn2ksY78045fOw5Jjhj+WkFP1kxW+fjFT30e9IJwCwH/B4FXHymS62IAuW3w87mjcHYf
-         EQHVjf55sXhvd7qHx7/ihf/1kRw7dQbzsUsrDbcv++72AWkMc67ZkNnHwzM96QPMRAiF
-         kXoTFGHA0D07TY7Cm2oSwxcTiNNpI0el3NHJTF+p1hn0h+wbebAxWuF/YZB1ytRNSqLj
-         +8hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749479303; x=1750084103;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ULBgHgW55K4uCky/f5KUdZJE/tyMyCrzkPdUsTZnDnM=;
-        b=LtqSWFE06Q7WdI+FIaqpp2BFYW1fov0Dg73FG7ysUBAGv79oTbiSjmszBm89MS9tzc
-         1j8m+SBYLO9R26gDux+priOt0Gba+ZudZwxspFZlqxgYre9k6da1w2Wk8/juVnhllNEF
-         PZZoVZ3KKUurqqhoSGeBV6kRe3J5Uy7g2ul/FjkcLGtU+qFCTXoBcHUKzHm6GBgXXYvj
-         0kgiaisAqa7oG/wiOY6vAALqzuyBizwoMTXAV/teuYYKQITEyfoWnW+1z+Vd5dvbvIvt
-         WtcluSn6S66qNS5f/iTOdF/7jesWlZP38tbJ3kid4+Nqg64LNaU+Nsz7I4EIf+e6v/R/
-         BK0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUR5J/+CwsJjHMvyhpKGDXlfoeezKIZLOdRDVq/0Ybqbkaeo8WSaCkmKpB3ADmdtALPM/DG@lists.linux.dev, AJvYcCUV+cKIGdlOOa1cwiMfyyg6vVUArywuO/1h8fQQ5d9208kKgu18B16tViqMqDm1Rz7I6fELSeXegdtkJqLHIg==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy114seJh9YGUit/k9BK9DX5Zkio9eSLTZ+lmFhww9ui12mk/Vt
-	fXMQYKEoyaxxTtCTjjWo88h21DH8T5ti57ynFk38Kr6GIE8a+6Qg67PB
-X-Gm-Gg: ASbGnctg9/znv0sto11rz1Tfs+QTfogLHeLiA8wdCOoSgXTRGb98HkolvGpc30EubtA
-	cm/oftSkwxBT/LWa+lrv9TN+bgzA8xPINDPg2as+1m3rzJAEJuJkKKsSyiCu9Iv/vEB3uxeTZKJ
-	P9RUBIHzK4yCY1rsDcdnQdPhslBME5fFeIcQVn2PP8qSEhTb/GLRBECm3zE/DxS7sIlbFb6wUpE
-	s12gN7aoZfVk8voSLCHCpiahz52bxKwwC2CbE6byb0qBsFcGOlflALD/y7G07UYewxXfc0ZzD3/
-	idWL3gst3oA1AQPlNLgFpX534cpMVwMY2q0yuELXp+lwcFBnagb5quySa2SqOwkf8HtIv5Y2lDy
-	tzbcMRdnl734=
-X-Google-Smtp-Source: AGHT+IE7x/r83CjR/wFN75taS22AA4M8aAtcLjlNxIoyzoAwTuVKwgHMLdfLcGW/eUK9jarXCVZw1A==
-X-Received: by 2002:a05:690c:6408:b0:70e:5eda:4940 with SMTP id 00721157ae682-710f77106a1mr185615697b3.25.1749479302621;
-        Mon, 09 Jun 2025 07:28:22 -0700 (PDT)
-Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-710f99141bbsm12528847b3.54.2025.06.09.07.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 07:28:22 -0700 (PDT)
-Date: Mon, 9 Jun 2025 10:28:21 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kernel@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	John Stultz <jstultz@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH 1/3] bitmap: generalize node_random()
-Message-ID: <aEbvhXP__dGv35kp@yury>
-References: <20250608194536.28130-2-yury.norov@gmail.com>
- <202506090550.y3ypu2EO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZlFRcxc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749482417; x=1781018417;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v+qNLhObMXgfKH7cBPQ5CCrdeTCsLTz3+1rD022Ddq8=;
+  b=fZlFRcxcVtcdHI48NSXZ+qnBr2CuVzSxpmuCwa6kv51rWdOzS75vuy7L
+   Svvj+7KHz+gE9b1YdswaSLrWPHyMDfWvGXbU4G1OIqyuwD+GqPGRM63eT
+   2MpEZkvFRgg4UNuY0lEAHJMDKBg5iv4+lEDMztsIm0sKy0WHSACTO7r9Z
+   7qmAxsAhDoA7cj9YhwS7lL1DMCnzVWvfSbkCYHxrVPLRedLoADuONVBUK
+   /b2f1UnWqMoYWO0ucPXfElejD/7iB8zSZSM5ase7XSFtHpSCTCck5lsc3
+   NPwzd0Q58i/Ga+KGMz3IiFjOlpb36v3iYJ7C9Lu+uL+fSz6aDxGLO9yMJ
+   Q==;
+X-CSE-ConnectionGUID: V71ROKckTQ61Y2O3zKegWw==
+X-CSE-MsgGUID: QRy8ZmuWSbSVyLSHBbQKEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="62218020"
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="62218020"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 08:20:17 -0700
+X-CSE-ConnectionGUID: Fv1ZiFD1Si6u1CUusduqvg==
+X-CSE-MsgGUID: R/zDx6RHRxKuta3nM1KO5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="151540730"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 09 Jun 2025 08:20:13 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uOeIE-000781-1B;
+	Mon, 09 Jun 2025 15:20:10 +0000
+Date: Mon, 9 Jun 2025 23:20:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Richard <thomas.richard@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Kees Cook <kees@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com, DanieleCleri@aaeon.eu,
+	GaryWang@aaeon.com.tw, linux-hardening@vger.kernel.org,
+	Thomas Richard <thomas.richard@bootlin.com>
+Subject: Re: [PATCH v7 06/10] gpio: aggregator: export symbols of the GPIO
+ forwarder library
+Message-ID: <202506092324.XqSwWl1z-lkp@intel.com>
+References: <20250609-aaeon-up-board-pinctrl-support-v7-6-1ab73ec0cb98@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,137 +72,231 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202506090550.y3ypu2EO-lkp@intel.com>
+In-Reply-To: <20250609-aaeon-up-board-pinctrl-support-v7-6-1ab73ec0cb98@bootlin.com>
 
-On Mon, Jun 09, 2025 at 05:44:47AM +0800, kernel test robot wrote:
-> Hi Yury,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-> [also build test ERROR on tip/timers/core akpm-mm/mm-everything linus/master v6.15 next-20250606]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov/bitmap-generalize-node_random/20250609-034657
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-> patch link:    https://lore.kernel.org/r/20250608194536.28130-2-yury.norov%40gmail.com
-> patch subject: [PATCH 1/3] bitmap: generalize node_random()
-> config: arm-randconfig-002-20250609 (https://download.01.org/0day-ci/archive/20250609/202506090550.y3ypu2EO-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506090550.y3ypu2EO-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202506090550.y3ypu2EO-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from ./arch/arm/include/generated/asm/preempt.h:1:
->    In file included from include/asm-generic/preempt.h:5:
->    In file included from include/linux/thread_info.h:27:
->    In file included from include/linux/bitops.h:29:
->    include/asm-generic/bitops/generic-non-atomic.h:140:16: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
->      140 |         return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
->          |                       ^
->    include/asm-generic/barrier.h:204:37: note: expanded from macro 'smp_load_acquire'
->      204 |         __unqual_scalar_typeof(*p) ___p1 = READ_ONCE(*p);               \
->          |                                            ^
->    include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
->       49 |         compiletime_assert_rwonce_type(x);                              \
->          |         ^
->    include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
->       36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
->          |         ^
->    include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
->      565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->          |         ^
->    include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
->      547 |                         __compiletime_error(msg);                       \
->          |                         ^
->    include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
->      138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
->          |                                                        ^
->    include/linux/mm.h:2618:9: note: previous attribute is here
->     2618 |         return max(mm->hiwater_rss, get_mm_rss(mm));
->          |                ^
->    include/linux/minmax.h:112:19: note: expanded from macro 'max'
->      112 | #define max(x, y)       __careful_cmp(max, x, y)
->          |                         ^
->    include/linux/minmax.h:98:2: note: expanded from macro '__careful_cmp'
->       98 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
->          |         ^
->    include/linux/minmax.h:93:2: note: expanded from macro '__careful_cmp_once'
->       93 |         BUILD_BUG_ON_MSG(!__types_ok(ux, uy),           \
->          |         ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
->      565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->          |         ^
->    include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
->      547 |                         __compiletime_error(msg);                       \
->          |                         ^
->    include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
->      138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
->          |                                                        ^
->    In file included from crypto/krb5/rfc8009_aes2.c:10:
->    In file included from include/linux/slab.h:16:
->    In file included from include/linux/gfp.h:7:
->    In file included from include/linux/mmzone.h:8:
->    In file included from include/linux/spinlock.h:56:
->    In file included from include/linux/preempt.h:79:
->    In file included from ./arch/arm/include/generated/asm/preempt.h:1:
->    In file included from include/asm-generic/preempt.h:5:
->    In file included from include/linux/thread_info.h:27:
->    In file included from include/linux/bitops.h:29:
->    include/asm-generic/bitops/generic-non-atomic.h:140:16: warning: attribute 'error' is already applied with different arguments [-Wignored-attributes]
->      140 |         return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
->          |                       ^
->    include/asm-generic/barrier.h:204:37: note: expanded from macro 'smp_load_acquire'
->      204 |         __unqual_scalar_typeof(*p) ___p1 = READ_ONCE(*p);               \
->          |                                            ^
->    include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
->       49 |         compiletime_assert_rwonce_type(x);                              \
->          |         ^
->    include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
->       36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
->          |         ^
->    include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
->      565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->          |         ^
->    include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
->      547 |                         __compiletime_error(msg);                       \
->          |                         ^
->    include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
->      138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
->          |                                                        ^
->    include/linux/mm.h:2623:9: note: previous attribute is here
->     2623 |         return max(mm->hiwater_vm, mm->total_vm);
->          |                ^
->    include/linux/minmax.h:112:19: note: expanded from macro 'max'
->      112 | #define max(x, y)       __careful_cmp(max, x, y)
->          |                         ^
->    include/linux/minmax.h:98:2: note: expanded from macro '__careful_cmp'
->       98 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
->          |         ^
->    include/linux/minmax.h:93:2: note: expanded from macro '__careful_cmp_once'
->       93 |         BUILD_BUG_ON_MSG(!__types_ok(ux, uy),           \
->          |         ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:565:2: note: expanded from macro 'compiletime_assert'
->      565 |         __compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->          |         ^
->    include/linux/compiler_types.h:547:4: note: expanded from macro '__compiletime_assert'
->      547 |                         __compiletime_error(msg);                       \
->          |                         ^
->    include/linux/compiler_attributes.h:138:56: note: expanded from macro '__compiletime_error'
->      138 | # define __compiletime_error(msg)       __attribute__((__error__(msg)))
->          |                                                        ^
-> >> crypto/krb5/rfc8009_aes2.c:209:3: error: call to undeclared function 'get_random_bytes'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      209 |                 get_random_bytes(buffer, krb5->conf_len);
->          |                 ^
->    27 warnings and 1 error generated.
+Hi Thomas,
 
-OK, I'll enable those locally, buld-test and send a v3. 
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on d9946fe286439c2aeaa7953b8c316efe5b83d515]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Richard/gpiolib-add-support-to-register-sparse-pin-range/20250609-175445
+base:   d9946fe286439c2aeaa7953b8c316efe5b83d515
+patch link:    https://lore.kernel.org/r/20250609-aaeon-up-board-pinctrl-support-v7-6-1ab73ec0cb98%40bootlin.com
+patch subject: [PATCH v7 06/10] gpio: aggregator: export symbols of the GPIO forwarder library
+config: i386-buildonly-randconfig-001-20250609 (https://download.01.org/0day-ci/archive/20250609/202506092324.XqSwWl1z-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250609/202506092324.XqSwWl1z-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506092324.XqSwWl1z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/dma/dw-edma/dw-edma-core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/dw/acpi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/dw/core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/dw/dw.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/dw/idma32.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/fsl-dpaa2-qdma/dpdmai.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/fsldma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/hsu/hsu.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/idxd/bus.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/idxd/cdev.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/idxd/device.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/idxd/dma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/idxd/submit.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/mcf-edma-main.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/of-dma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/ppc4xx/adma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/qcom/hidma_mgmt.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/qcom/hidma_mgmt_sys.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/sh/shdma-base.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/ti/k3-psil.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/ti/k3-udma-glue.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/ti/k3-udma-private.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/virt-dma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/xilinx/xdma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dma/xilinx/xilinx_dma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dpll/dpll_core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/dpll/dpll_netlink.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/debugfs.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/edac_device.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/edac_mc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/edac_module.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/edac_pci.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/edac_pci_sysfs.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/mce_amd.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/mem_repair.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/skx_common.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/edac/wq.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/eisa/eisa-bus.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/extcon/devres.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/extcon/extcon.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firewire/core-card.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firewire/core-device.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firewire/core-topology.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firewire/core-transaction.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/arm_ffa/bus.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/arm_scmi/bus.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/broadcom/bcm47xx_nvram.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/broadcom/tee_bnxt_fw.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/cirrus/cs_dsp.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/cirrus/test/cs_dsp_mock_bin.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/cirrus/test/cs_dsp_mock_mem_maps.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/cirrus/test/cs_dsp_mock_regmap.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/cirrus/test/cs_dsp_mock_wmfw.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/dmi_scan.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/capsule.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/cper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/efi-init.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/efi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/embedded-firmware.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/tpm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/efi/vars.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/google/coreboot_table.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/google/memconsole.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/imx-dsp.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/imx-scu-irq.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/imx-scu.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/misc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/rm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/sm-cpu.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/sm-lmm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/imx/sm-misc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/iscsi_ibft_find.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/meson/meson_sm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/mtk-adsp-ipc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/qcom/qcom_tzmem.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/raspberrypi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/samsung/exynos-acpm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/smccc/kvm_guest.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/smccc/smccc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/stratix10-svc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/sysfb.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/tegra/bpmp.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/tegra/ivc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/thead,th1520-aon.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/firmware/xilinx/zynqmp.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/altera-pr-ip-core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/dfl.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/fpga-bridge.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/fpga-mgr.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/fpga-region.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/lattice-sysconfig.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fpga/xilinx-core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fsi/fsi-core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fsi/fsi-master-i2cr.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fsi/fsi-occ.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fsi/fsi-sbefifo.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/fwctl/main.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gnss/core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gnss/serial.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/dev-sync-probe.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+>> drivers/gpio/gpio-aggregator.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpio-aspeed.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpio-cs5535.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpio-max730x.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpio-mmio.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpio-regmap.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpiolib-of.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpiolib-sysfs.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpio/gpiolib.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/amd/amdgpu/amdgpu_object.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/amd/amdxcp/amdgpu_xcp_drv.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/analogix/analogix-i2c-dptx.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/analogix/analogix_dp_core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/aux-bridge.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/aux-hpd-bridge.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/imx/imx-legacy-bridge.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/panel.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/samsung-dsim.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/synopsys/dw-hdmi-qp.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/clients/drm_client_setup.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_bridge_connector.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_dp_aux_bus.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_dp_cec.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_dp_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_dp_mst_topology.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_dp_tunnel.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_dsc_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_hdmi_audio_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_hdmi_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_hdmi_state_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/display/drm_scdc_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_atomic.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_atomic_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_atomic_state_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_atomic_uapi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_auth.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_bridge.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_bridge_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_buddy.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_client.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_client_event.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_client_modeset.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_color_mgmt.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_connector.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_damage_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_debugfs_crc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_drv.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_edid.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_exec.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_fb_dma_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_fb_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_fbdev_dma.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_fbdev_shmem.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_fbdev_ttm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_file.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_flip_work.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_format_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gem.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gem_atomic_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gem_framebuffer_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gem_ttm_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gem_vram_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gpusvm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_gpuvm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_managed.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_mipi_dbi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_mipi_dsi.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_mode_config.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_modeset_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_modeset_lock.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_panel.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_panel_backlight_quirks.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_panel_orientation_quirks.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_panic.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_plane.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_plane_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_print.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_privacy_screen.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_self_refresh_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_simple_kms_helper.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_suballoc.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_syncobj.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_vblank_work.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_vma_manager.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/drm_writeback.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/i915/gt/intel_rps.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/i915/intel_gvt.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/i915/intel_gvt_mmio_table.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/imx/ipuv3/imx-drm-core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/lib/drm_random.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/mcde/mcde_display.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/mediatek/mtk_cec.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/nouveau/dispnv04/nouveau_i2c_encoder.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/panel/panel-samsung-s6e63m0.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/pl111/pl111_nomadik.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/pl111/pl111_versatile.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/renesas/rcar-du/rcar_cmm.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+   drivers/gpu/drm/renesas/rcar-du/rcar_lvds.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
