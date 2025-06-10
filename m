@@ -1,81 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F3E1FAC34;
-	Tue, 10 Jun 2025 17:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B221617597;
+	Tue, 10 Jun 2025 17:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749575399; cv=none; b=EQDT6mXzhGrRmzb2YHGKCcWK20RN1Q99eEc+TDhX6+TaoQ+BNFSMOcaL5lYcK9cDYlC260ylmiS+SFfjcsI9peu3qTwZraD8qUw3mKnv8XKHZDc1DFZ5I1TeKXS/NzeQAxVt+R7s9LCa9iFFaEjfMFcupMDTojBbDN2hxXJX+Io=
+	t=1749577307; cv=none; b=DdSu4+Vlgk0z2gWxPrqD/T0CS38KPArk5w4Zk8RtX97k0nR/NCFVMAq5BxPAE9OuEdtxCKLR1E93xf8QTia4yIWm1iLsCzq9VKT9jvKnyl19gdxi+Up3BTQCXnxbIuKGPi54Y6K1Ts18TSanXGyp/U5jjRKQhW2SNCL0RpYj764=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749575399; c=relaxed/simple;
-	bh=92Pz6pj4TO5Cq4bz9dNFnrb+WOjBbXMZF/wKtdVuqQk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=O2DA6fBrUWFqcfzUHyh7DC4Gm3mxXNVBexL9mrMo4jgZoMZkQlS2qpD2RTcN64pQhHiWUGQCY6S+eb2H/FSVn84YnoOt59VcdZreMFwH53T8cX0POnyxb4LNeg4RTL4IP5hE68isRZJ/GsTK348wpxFk9KMjC2L9SRKGLkRTRTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVhf44G4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749577307; c=relaxed/simple;
+	bh=ShmDIz4IjwxKgsDsXKxC8zACRiS6yn9HJIhe64Yor0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pusGzm/oSie2HsWiG9Z3ZNyzibS8SCPAWRjZNd8oi8YW2TMVKnDx9Vhacv/BrA7ei3B5QoW7euvq/FfWt7JWr3KHa1Xxn9Sh7yh66MlknPS70IoVcvPGtbWxxKiiubZNeRn4Bfq27vtSvI7WRae3OgWWBIylkEwV03b2GUY/6ZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=DHvk4QeI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVhf44G4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED4CC4CEED;
-	Tue, 10 Jun 2025 17:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749575398;
-	bh=92Pz6pj4TO5Cq4bz9dNFnrb+WOjBbXMZF/wKtdVuqQk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BVhf44G47lIsVjLvYmZ61KEvvflS7qCVvIRoJYpxmCjwQUqo13vaKXl0N8Y7X1CgW
-	 BTrW2Y35i8D9UmC26pw/kFAbMNf46fG/5CIL1MX+PKyH9teYOh3n7JkJzDpJg4RvMt
-	 /HmaIHKpR4A74Kvbc8afLr74AH9e4UTcZS0Lbs2nLooQObwHdYxhUurS2MrPJOWMOq
-	 yT7LtQeEci1Je+MjVImCZRQMqr+tltQsPCcgfOQRrgTsnOhx8SWf3oumvuHZ3MTkO5
-	 D/Rqau3np3piUyDLv8vrgcYpkOkHVO1JVoipQjF8uYEPl04m0Q4wExyTTsGFfo4OpN
-	 T0WXFSwX4UutA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C1839D6540;
-	Tue, 10 Jun 2025 17:10:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DHvk4QeI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 993A6C4CEED;
+	Tue, 10 Jun 2025 17:41:46 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DHvk4QeI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1749577305;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BXpIwPYy6cKJGLdxGbZzzWU5aohYEOBWm6g1ETEEBYI=;
+	b=DHvk4QeIYgo8A6Xd5xEeAxl/GthpmjmXXtZQMUFUIxjy9iM7x5u24YSessQzufsLsBdvZ1
+	ssbFbJfb/6q0chwVAsdeCjyXXncq1PrByld/UDKaVReTU/bIh5TUPyNhSEOjLtNQE6f6LT
+	1ruS4PvxGND0eZWR0v44w11sf1KkiwM=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd2a51a7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Tue, 10 Jun 2025 17:41:45 +0000 (UTC)
+Date: Tue, 10 Jun 2025 11:41:43 -0600
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Eric Biggers <ebiggers@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	linux-crypto@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] crypto: lib/curve25519-hacl64 - Disable KASAN with
+ clang-17 and older
+Message-ID: <aEhuVwzeY1LwxCNh@zx2c4.com>
+References: <20250609-curve25519-hacl64-disable-kasan-clang-v1-1-08ea0ac5ccff@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] tools/resolve_btfids: Fix build when cross compiling
- kernel with clang.
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174957542901.2523637.9194820826653322315.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Jun 2025 17:10:29 +0000
-References: <20250606074538.1608546-1-suleiman@google.com>
-In-Reply-To: <20250606074538.1608546-1-suleiman@google.com>
-To: Suleiman Souhlal <suleiman@google.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, masahiroy@kernel.org,
- irogers@google.com, ssouhlal@freebsd.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250609-curve25519-hacl64-disable-kasan-clang-v1-1-08ea0ac5ccff@kernel.org>
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Fri,  6 Jun 2025 16:45:38 +0900 you wrote:
-> When cross compiling the kernel with clang, we need to override
-> CLANG_CROSS_FLAGS when preparing the step libraries.
+On Mon, Jun 09, 2025 at 03:45:20PM -0700, Nathan Chancellor wrote:
+> After commit 6f110a5e4f99 ("Disable SLUB_TINY for build testing"), which
+> causes CONFIG_KASAN to be enabled in allmodconfig again, arm64
+> allmodconfig builds with clang-17 and older show an instance of
+> -Wframe-larger-than (which breaks the build with CONFIG_WERROR=y):
 > 
-> Prior to commit d1d096312176 ("tools: fix annoying "mkdir -p ..." logs
-> when building tools in parallel"), MAKEFLAGS would have been set to a
-> value that wouldn't set a value for CLANG_CROSS_FLAGS, hiding the
-> fact that we weren't properly overriding it.
+>   lib/crypto/curve25519-hacl64.c:757:6: error: stack frame size (2336) exceeds limit (2048) in 'curve25519_generic' [-Werror,-Wframe-larger-than]
+>     757 | void curve25519_generic(u8 mypublic[CURVE25519_KEY_SIZE],
+>         |      ^
 > 
-> [...]
+> When KASAN is disabled, the stack usage is roughly quartered:
+> 
+>   lib/crypto/curve25519-hacl64.c:757:6: error: stack frame size (608) exceeds limit (128) in 'curve25519_generic' [-Werror,-Wframe-larger-than]
+>     757 | void curve25519_generic(u8 mypublic[CURVE25519_KEY_SIZE],
+>         |      ^
+> 
+> Using '-Rpass-analysis=stack-frame-layout' shows the following variables
+> and many, many 8-byte spills when KASAN is enabled:
+> 
+>   Offset: [SP-144], Type: Variable, Align: 8, Size: 40
+>   Offset: [SP-464], Type: Variable, Align: 8, Size: 320
+>   Offset: [SP-784], Type: Variable, Align: 8, Size: 320
+>   Offset: [SP-864], Type: Variable, Align: 32, Size: 80
+>   Offset: [SP-896], Type: Variable, Align: 32, Size: 32
+>   Offset: [SP-1016], Type: Variable, Align: 8, Size: 120
+> 
+> When KASAN is disabled, there are still spills but not at many and the
+> variables list is smaller:
+> 
+>   Offset: [SP-192], Type: Variable, Align: 32, Size: 80
+>   Offset: [SP-224], Type: Variable, Align: 32, Size: 32
+>   Offset: [SP-344], Type: Variable, Align: 8, Size: 120
+> 
+> Disable KASAN for this file when using clang-17 or older to avoid
+> blowing out the stack, clearing up the warning.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  lib/crypto/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
+> index 3e79283b617d..18664127ecd6 100644
+> --- a/lib/crypto/Makefile
+> +++ b/lib/crypto/Makefile
+> @@ -35,6 +35,10 @@ obj-$(CONFIG_CRYPTO_LIB_CURVE25519_GENERIC)	+= libcurve25519-generic.o
+>  libcurve25519-generic-y				:= curve25519-fiat32.o
+>  libcurve25519-generic-$(CONFIG_ARCH_SUPPORTS_INT128)	:= curve25519-hacl64.o
+>  libcurve25519-generic-y				+= curve25519-generic.o
+> +# clang versions prior to 18 may blow out the stack with KASAN
+> +ifeq ($(call clang-min-version, 180000),)
+> +KASAN_SANITIZE_curve25519-hacl64.o := n
+> +endif
 
-Here is the summary with links:
-  - [v2] tools/resolve_btfids: Fix build when cross compiling kernel with clang.
-    https://git.kernel.org/bpf/bpf/c/a298bbab903e
+Seems reasonable. We've had a hassle with this for a while.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+    Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
