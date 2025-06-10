@@ -1,88 +1,81 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E05F23717C;
-	Tue, 10 Jun 2025 16:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F3E1FAC34;
+	Tue, 10 Jun 2025 17:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749571737; cv=none; b=aEvYy5qrJtfHCfmIl0Hw3mFe5S6YtmTpVPYZp9A6UzPYU9nS3l3ZRlhXHZk36SrVyNnkdAv3gnFoUbyuJsUT4tjoqvUJvWJSB46hpWiIUDpXWjtPOVvPS/T5pyCYLmyNy6SW9E64n2wIfTM2+LiwkWeS6+S2yUZYsDW5aGhwmqw=
+	t=1749575399; cv=none; b=EQDT6mXzhGrRmzb2YHGKCcWK20RN1Q99eEc+TDhX6+TaoQ+BNFSMOcaL5lYcK9cDYlC260ylmiS+SFfjcsI9peu3qTwZraD8qUw3mKnv8XKHZDc1DFZ5I1TeKXS/NzeQAxVt+R7s9LCa9iFFaEjfMFcupMDTojBbDN2hxXJX+Io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749571737; c=relaxed/simple;
-	bh=oy3R+OQN5lqjjHR2lh3SlkiG+2hGqOcM7G7q89F8AvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcFfn3a5gitqIw/xycwSTY+QeoTGDEA20Z86bTeVQNA6dvVtMvQ4eHqJu6cZeyAL82THK9CJ5JOLXUtOylbnj1+20Ic8d34BhBiYbpq7bg8tH7AHfRkc0Hu5r4VQPfH4LvfofD/SICVJXKEdN0BMvzq159i/6xoEFyTXsK4ittc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=uqL934Hs; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1749575399; c=relaxed/simple;
+	bh=92Pz6pj4TO5Cq4bz9dNFnrb+WOjBbXMZF/wKtdVuqQk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=O2DA6fBrUWFqcfzUHyh7DC4Gm3mxXNVBexL9mrMo4jgZoMZkQlS2qpD2RTcN64pQhHiWUGQCY6S+eb2H/FSVn84YnoOt59VcdZreMFwH53T8cX0POnyxb4LNeg4RTL4IP5hE68isRZJ/GsTK348wpxFk9KMjC2L9SRKGLkRTRTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVhf44G4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="uqL934Hs"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=52NYi1mWALW3LxhXJD+hvsQNqhKYCgbOKqMlh/SaiCI=; b=uqL934HsMkGWVZvayAg2oMaWkx
-	qArXYPOpKJznKIL77OaHLjhHHL1T1SvPYzYmMEmWlumLrCcuUiWbqFN4M+rIHVqKTLqC+Zefjt/Mf
-	pk/qZzeIkIun4qysFTD3q+PMOBZG7UNysaw5M2YPlQEuKpXivrbCedoBr/g/COpsBXRw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uP1Wj-00FIOW-NL; Tue, 10 Jun 2025 18:08:41 +0200
-Date: Tue, 10 Jun 2025 18:08:41 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Jian Shen <shenjian15@huawei.com>, Salil Mehta <salil.mehta@huawei.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Hao Lan <lanhao@huawei.com>,
-	Guangwei Zhang <zhangwangwei6@huawei.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] hns3: work around stack size warning
-Message-ID: <2a565f22-b8ba-409a-8551-91cf86788657@lunn.ch>
-References: <20250610092113.2639248-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVhf44G4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED4CC4CEED;
+	Tue, 10 Jun 2025 17:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749575398;
+	bh=92Pz6pj4TO5Cq4bz9dNFnrb+WOjBbXMZF/wKtdVuqQk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BVhf44G47lIsVjLvYmZ61KEvvflS7qCVvIRoJYpxmCjwQUqo13vaKXl0N8Y7X1CgW
+	 BTrW2Y35i8D9UmC26pw/kFAbMNf46fG/5CIL1MX+PKyH9teYOh3n7JkJzDpJg4RvMt
+	 /HmaIHKpR4A74Kvbc8afLr74AH9e4UTcZS0Lbs2nLooQObwHdYxhUurS2MrPJOWMOq
+	 yT7LtQeEci1Je+MjVImCZRQMqr+tltQsPCcgfOQRrgTsnOhx8SWf3oumvuHZ3MTkO5
+	 D/Rqau3np3piUyDLv8vrgcYpkOkHVO1JVoipQjF8uYEPl04m0Q4wExyTTsGFfo4OpN
+	 T0WXFSwX4UutA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C1839D6540;
+	Tue, 10 Jun 2025 17:10:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250610092113.2639248-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] tools/resolve_btfids: Fix build when cross compiling
+ kernel with clang.
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174957542901.2523637.9194820826653322315.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Jun 2025 17:10:29 +0000
+References: <20250606074538.1608546-1-suleiman@google.com>
+In-Reply-To: <20250606074538.1608546-1-suleiman@google.com>
+To: Suleiman Souhlal <suleiman@google.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, masahiroy@kernel.org,
+ irogers@google.com, ssouhlal@freebsd.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
 
-On Tue, Jun 10, 2025 at 11:21:08AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+Hello:
+
+This patch was applied to bpf/bpf.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Fri,  6 Jun 2025 16:45:38 +0900 you wrote:
+> When cross compiling the kernel with clang, we need to override
+> CLANG_CROSS_FLAGS when preparing the step libraries.
 > 
-> The hns3 debugfs functions all use an extra on-stack buffer to store
-> temporary text output before copying that to the debugfs file.
+> Prior to commit d1d096312176 ("tools: fix annoying "mkdir -p ..." logs
+> when building tools in parallel"), MAKEFLAGS would have been set to a
+> value that wouldn't set a value for CLANG_CROSS_FLAGS, hiding the
+> fact that we weren't properly overriding it.
 > 
-> In some configurations with clang, this can trigger the warning limit
-> for the total stack size:
-> 
->  drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:788:12: error: stack frame size (1456) exceeds limit (1280) in 'hns3_dbg_tx_queue_info' [-Werror,-Wframe-larger-than]
->
-> The problem here is that both hns3_dbg_tx_spare_info() and
-> hns3_dbg_tx_queue_info() have a large on-stack buffer, and clang decides
-> to inline them into a single function.
-> 
-> Annotate hns3_dbg_tx_spare_info() as noinline_for_stack to force the
-> behavior that gcc has, regardless of the compiler.
+> [...]
 
-This warning is about the potential to exceed the stack space. That
-potential still exists because of the tail call from
-hns3_dbg_tx_queue_info() to hns3_dbg_tx_spare_info(), preventing the
-compile from inlining does nothing against that.
+Here is the summary with links:
+  - [v2] tools/resolve_btfids: Fix build when cross compiling kernel with clang.
+    https://git.kernel.org/bpf/bpf/c/a298bbab903e
 
-> Ideally all the functions in here would be changed to avoid on-stack
-> output buffers.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-That would be my preference as well. Lets give Huawei a bit of time to
-rewrite this code.
 
-	Andrew
