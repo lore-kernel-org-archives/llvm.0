@@ -1,113 +1,96 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AACDB22CBF1;
-	Tue, 10 Jun 2025 13:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310BB170A2B
+	for <llvm@lists.linux.dev>; Tue, 10 Jun 2025 13:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749562403; cv=none; b=MOpzN9HIOJFJkQdGKD9Y9PCrG8KGX8icnkn8BHmYhMrDyF6FVeqeyfouNN2dHGE+a3KBTu+ExZa0xfojcjQmJMm7c8EycU9rjeCSnRM96kdMrXBpU1oqRBx96nEE1f81VAAal9ryaTJj9ML1MXz7r+GPfiWEzi+JL0bZnRa/CMg=
+	t=1749562673; cv=none; b=TCfPoGoiRhKZI4tsb8jaQSF5AHJv2GfXbqrMGNTEnadq7T72qikz+D3tfx7wGiytPKnVC1QYNMNY+gnM+eGFoGMjrBSlg/1uVzmbSY7wc+iccn+mkxWMTEil8clwFewjlQnee1HlQhWkUN201aarRKwDNpTZpTkUivBRI8Iw3Fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749562403; c=relaxed/simple;
-	bh=I/Z1CrFbcM3GaI3dyJzJ84n5U/z193agS72haYQlncM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rkzhZqPzNqGLUJV7BJVoC/Oei/pZktFXqu5yIzleXI72hYH2oGEHx7Lmkoygxaj6Z8vVJJ2OxKO3/Srazb5Hl4Dc95CKAXWVpU7lTZ/vtJQ6WEEfNPWipYo5VewGcDKYV3ko1A4J8ciqrxYiZFi60AGHaRw+NdMGYb46omZ+rmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0qdd/Jk; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749562673; c=relaxed/simple;
+	bh=AhPf0HPlWCa0aJD35+a4IfqIt8OKABnu+k8qfBCHN9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ViX9Tvber9/prgr7GSu7pd8AQp1qafOW30ejQoGsb7oN8TXLu4yUgrFxy36EvEXWzqJnGFJWLwbLpD/pcdlaLkw7dE7ECqv5knVH8EoLrzm6MybsSppzk6IY2tkunoNbAnX2m3yYV3feLfwhKsBfhiEIXtWuy/e6S0GSoPvTLfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aKKh7GD6; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0qdd/Jk"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-acb5ec407b1so983417266b.1;
-        Tue, 10 Jun 2025 06:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749562400; x=1750167200; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rStFFasi9wKnfuXYGKZXngpt0H1gmjEVwOvEne1l68w=;
-        b=M0qdd/JkJzpiuicIeea+J0ZMNRiYORwDe/sJzMazoa+WPGXceLCHAuhbXWUzjZ59uP
-         xrC1fam8N8oIdrZoq7geiBcnCt/w7IAB0HhsUbcmjZ+EBEtOX/l5/anxKa1YUNIB+KN6
-         lqCtbSOA6XWQRTTSJEVa4O5nY4za4H71JdP5zMOTKVKUu0quMO8HBKa2qJ3nCpZ5bs08
-         VxPuDW9RdGf/2HP9LJ2p0Ow70vCW7yrvXPK1F7fipwydtMrp2pnOlBDwTmSi3KmRtg4Z
-         sxiZqIo0OdRCA8Yw+FicLS/SPExQU6BCOP02GjLmURpMh7TNRyD5ouvjNbctYScRB7UP
-         DY2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749562400; x=1750167200;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rStFFasi9wKnfuXYGKZXngpt0H1gmjEVwOvEne1l68w=;
-        b=PlhoomjVlQcZeDh9S/8UDDgzxdm8hzRVvLFuwT4ZYHO3Pxkd2PlM/XYfLLYvwcaF5O
-         ZMmGFAlvXJduVgUvTDYru+qnjOGpcZYxiosUdElKbhfH++hvNNoPGqRfLkmi/R2E6Ue1
-         m8rjKLLKWq8+vhxlx7PxgeAtwTyHaDaNbjehTsNeKHOhU1vDF6EXWsExDeUkbcMXPTPd
-         jUYoLKMYzOsMezdFaVVDSBvotiCUJSPG4U8hr4OAn3W1+EYfaQwEVZqjvA+V0JSAVxui
-         u8LuhDsaey0v/VXXIUM8ZRJ0a4D0lOuygcMbDFzInGWCcMZhWIoAjTI3Axyti2xuRSo2
-         Sw4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVO4gPSget1XXpzVK1YVhX+de0PGrJHD7WFsjyf/ILP6D2bChwz66by3m3by/ovxcxgQiG8oxfzbVLBjSbV@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx2C/yzwdfhSL7MTxuMhqiTZUjJ3RsM2Et56H1zSukjyWlxBZkq
-	9xQkMF+K1IAjXw09tkjwxTqGHrY0ajPECuafByRWtbG6pjpxwDl/XLqS
-X-Gm-Gg: ASbGncuymkQTKt8+8he4oHd81EI/+81EDsopRoKJWGpdT1jkhIjIRzmge62tJY7dVT0
-	2nqbc37NYimAuhrpvC5TNEz8eXWKMp1Ke2G+upkJwKaQ0yomQ5C2ZtjUB6YNrkFRemzhoezIeDn
-	BYJataV/cEoWbkN5G902oGX3WxYfTFvPjpIImjN7b3Yv2gh5zKLu6WqkO0fyFZUTDdqCd5lMu5b
-	Ek/Hl/FRnkjUWjRIxHygPbmlyMQQLJWk1ReOd+T/9+206KCx27N+pExRd1Xw3ozeh1jklzZAL+Y
-	zWgSLqwqazAl7k4GN1NP+AVAg+L+WixQAuYnQm2RRnqhQYselgbKge8n5rVjPmHico2sgA==
-X-Google-Smtp-Source: AGHT+IG1M19sNDlIpTxYUy5jNl9AaNF5wPetNrRz8SeDwE1eTyzxnOMj31StieI8zqcznp8b50sfCg==
-X-Received: by 2002:a17:906:ef0e:b0:add:deb1:d84d with SMTP id a640c23a62f3a-ade1aa5bc20mr1640012966b.1.1749562399633;
-        Tue, 10 Jun 2025 06:33:19 -0700 (PDT)
-Received: from [192.168.0.50] ([79.119.240.16])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1d753a6csm721053166b.2.2025.06.10.06.33.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jun 2025 06:33:19 -0700 (PDT)
-Message-ID: <b8690413-059d-4330-992b-36a7af10aa30@gmail.com>
-Date: Tue, 10 Jun 2025 16:33:17 +0300
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aKKh7GD6"
+Date: Tue, 10 Jun 2025 09:37:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1749562667;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kbrE13Z6Z8RsWUrcqg26zEiS4673dzviRDejxhOoIyU=;
+	b=aKKh7GD65rmNR9h/MOTdkZQ8+wMS0zf742dSYvcPsjvZDGFCIGIcuMQbgNV7uQT3QZAyO6
+	wgOtaYX9dBCZdCIz2WyFuM2Cf+YAU7WUmWhq02opYls3gni2zvKAWjr2HBAdt2DAyfu/s7
+	3zm+jMepc3qgZqrOdJT2wAJU7ztwLPI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Thomas Bertschinger <tahbertschinger@gmail.com>, 
+	linux-bcachefs@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] bcachefs: ioctl: avoid stack overflow warning
+Message-ID: <okwdyhfmx6qocem3ckgvt3jhdglyjav7tdrjzgquugj3kkolvn@ontqnranltb6>
+References: <20250610092413.2640349-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH rtw-next v2 14/14] wifi: rtw89: Enable the new USB modules
-To: kernel test robot <lkp@intel.com>,
- "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Ping-Ke Shih <pkshih@realtek.com>
-References: <663044d3-0816-4b1b-874d-776835e774e9@gmail.com>
- <202506101956.cNXM2Qvb-lkp@intel.com>
-Content-Language: en-US
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <202506101956.cNXM2Qvb-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250610092413.2640349-1-arnd@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On 10/06/2025 14:55, kernel test robot wrote:
-> Hi Bitterblue,
+On Tue, Jun 10, 2025 at 11:24:04AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> kernel test robot noticed the following build errors:
+> Multiple ioctl handlers individually use a lot of stack space, and clang chooses
+> to inline them into the bch2_fs_ioctl() function, blowing through the warning
+> limit:
 > 
-> [auto build test ERROR on wireless-next/main]
-> [also build test ERROR on wireless/main linus/master v6.16-rc1 next-20250610]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> fs/bcachefs/chardev.c:655:6: error: stack frame size (1032) exceeds limit (1024) in 'bch2_fs_ioctl' [-Werror,-Wframe-larger-than]
+>   655 | long bch2_fs_ioctl(struct bch_fs *c, unsigned cmd, void __user *arg)
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Bitterblue-Smith/wifi-rtw89-8851b-Accept-USB-devices-and-load-their-MAC-address/20250610-033543
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-> patch link:    https://lore.kernel.org/r/663044d3-0816-4b1b-874d-776835e774e9%40gmail.com
-> patch subject: [PATCH rtw-next v2 14/14] wifi: rtw89: Enable the new USB modules
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250610/202506101956.cNXM2Qvb-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250610/202506101956.cNXM2Qvb-lkp@intel.com/reproduce)
+> By marking the largest two of them as noinline_for_stack, no indidual code path
+> ends up using this much, which avoids the warning and reduces the possible
+> total stack usage in the ioctl handler.
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202506101956.cNXM2Qvb-lkp@intel.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Applied, thanks
+
+> ---
+>  fs/bcachefs/chardev.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> All errors (new ones prefixed by >>):
+> diff --git a/fs/bcachefs/chardev.c b/fs/bcachefs/chardev.c
+> index 2d38466eddfd..fde3c2380e28 100644
+> --- a/fs/bcachefs/chardev.c
+> +++ b/fs/bcachefs/chardev.c
+> @@ -399,7 +399,7 @@ static long bch2_ioctl_data(struct bch_fs *c,
+>  	return ret;
+>  }
+>  
+> -static long bch2_ioctl_fs_usage(struct bch_fs *c,
+> +static noinline_for_stack long bch2_ioctl_fs_usage(struct bch_fs *c,
+>  				struct bch_ioctl_fs_usage __user *user_arg)
+>  {
+>  	struct bch_ioctl_fs_usage arg = {};
+> @@ -469,7 +469,7 @@ static long bch2_ioctl_query_accounting(struct bch_fs *c,
+>  }
+>  
+>  /* obsolete, didn't allow for new data types: */
+> -static long bch2_ioctl_dev_usage(struct bch_fs *c,
+> +static noinline_for_stack long bch2_ioctl_dev_usage(struct bch_fs *c,
+>  				 struct bch_ioctl_dev_usage __user *user_arg)
+>  {
+>  	struct bch_ioctl_dev_usage arg;
+> -- 
+> 2.39.5
 > 
->>> drivers/net/wireless/realtek/rtw89/rtw8851b.c:523:47: error: use of undeclared identifier 'B_AX_SOP_EDSWR'
->      523 |                 rtw89_write32_clr(rtwdev, R_AX_SYS_PW_CTRL, B_AX_SOP_EDSWR);
->          |                                                             ^
->    1 error generated.
-> 
-Oops, I'll add that to reg.h in v3.
