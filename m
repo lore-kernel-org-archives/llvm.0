@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C6C28BA8A;
-	Tue, 10 Jun 2025 09:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A2128AAEA;
+	Tue, 10 Jun 2025 09:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749547365; cv=none; b=DHDVjgIGH77EQ1vVBSLCcJW0KoSFd7q6YLnEVxC3F/rGv7GC2sEt9BQOruqfKI3jpj/3djI2fn2/naHDuwAUFgICYmJBYJlDuHiPRwJkohLb869DHE8EIHaQaSUxcygnJGFzZ5vnvdKgMs2d4lVqOcNTKVMMgBZMt1O0OxI/6RY=
+	t=1749547401; cv=none; b=tFmmMoXZMYSKMiaDzaD5Kva8G4PmVLL9YAAMsLtg3oAYjx+t8+juEDUgs/a7pfJe90f+7fZfB0wwntgO8PGQP6qOjKyS1CQjtN1EY4kJfaMtGII/9xXUcTSv2nOHVju4B9H3H06Wv+sm5ZWR9sgtoBgAQyX59Ecqs6/rfKbrih8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749547365; c=relaxed/simple;
-	bh=GGWJX/CY8ZcfVf5nxDMlSkEjgxBWRwIXN/J9cI7AzLQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SpGz5RnlHJcEQ6NlVehZAYjf3FcblIz1j8lTLsYMInZJ0YUu5wxw9QwdOS9YX55eFo9l95/MKr08uee/zMYkK1pZ3XH+MKBrUbM4Z1l5v9xtWkUea7Rp7C8H3uSeC5TvtAvAF3hhbb7d1D9CHhQspSrZoMzaEkiwy7u4NHCWyeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuNhUTci; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749547401; c=relaxed/simple;
+	bh=VGG7WeyDMC90Ngljj+ICrpnjdyYhEttx1JmQl42ojOw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BgfmC35eY9TCsA13IQtuL7emWf949KbYKgjr8C288ksTxu97mfIGxFOIVP8jEGBTeal4+1TeUpEqbnl5yRHKYbmFTxbuJ7mHeOXkRYG7j0iz2YVWPmal3pNkzBA5w25uvbe8SZQDtpUjsDY2Bz940EIMeNzVb6PewQ8fRp3IR6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMxHkg9+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuNhUTci"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CA6C4CEF4;
-	Tue, 10 Jun 2025 09:22:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMxHkg9+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B71AC4CEED;
+	Tue, 10 Jun 2025 09:23:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749547365;
-	bh=GGWJX/CY8ZcfVf5nxDMlSkEjgxBWRwIXN/J9cI7AzLQ=;
+	s=k20201202; t=1749547401;
+	bh=VGG7WeyDMC90Ngljj+ICrpnjdyYhEttx1JmQl42ojOw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=EuNhUTciueW3kiJXHmvipGRrTOmrfjAQsd7UYwr6MKVhCIfWliFI6z+Gv2ui6OpOo
-	 honYtOlD1FSf0URAjnfBHGYciP62Xb23IoTE7vynrYS+kNQXPAwgitxASVHwpkPYiT
-	 QdL5GBGfqD+HWMk2n2B4xe2QgvGhfsEsnkR17ZoqP8gmECqJcDdHotz1LjxNVZ1sw1
-	 LGFCL55oQ7BLlpa+5tnlW6tpkBRbe0fMgCyns0HWJUKwhrdFc6tDUyjYB31sOL3twm
-	 1gysbNymqouUXYeZcqPnb7KZOZMqXxWdFetlqtjvP3/GUmaISrFfUAOfTE0scuKE/F
-	 Y5ZnUvNJ4g/3g==
+	b=iMxHkg9+73UkrFG8P2JYE1iB4yxAPmkrTfbyzqZDiNu9ZLaYcm+1B7Sf7DZbbSZGF
+	 +4nxsvVSBl3Mt3W8Hn/TUlHNjcOvN1jm0bu+4hqAxE2Agwnr71/icO2LjXvMOTmYsb
+	 k07YXVkYHL7BICmNcbrK9m+9vWmmcNh6ld0kxKkEtbSBYE8dPI67EWbuSy7Jr9TfMA
+	 pc8NtsSvrB6HjhfruEC5m1q8Ve/JDhv0H7B8WRI/gpwMhmjOOHFAFY6SG9uhCB/q9u
+	 +yqa9qv4J41M2Rl6Tj2/yq4CsOT1/53KuywQ2zaGqQgiB1blgizdandqMLuWsn9q0o
+	 vjeO1NBknqqcw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Ping-Ke Shih <pkshih@realtek.com>,
-	Nathan Chancellor <nathan@kernel.org>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Eddie James <eajames@linux.vnet.ibm.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	linux-wireless@vger.kernel.org,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] wifi: rtlwifi: avoid stack size warning for _read_eeprom_info
-Date: Tue, 10 Jun 2025 11:22:23 +0200
-Message-Id: <20250610092240.2639751-1-arnd@kernel.org>
+Subject: [PATCH] hwmon: occ: rework attribute registration for stack usage
+Date: Tue, 10 Jun 2025 11:23:06 +0200
+Message-Id: <20250610092315.2640039-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,161 +52,356 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-txpower_info_{2g,5g} are too big to fit on the stack, but in most of the
-rtlwifi variants this stays below the warning limit for stack frames.
-In rtl8192ee and a few others, I see a case where clang decides to fully
-inline this into rtl92ee_read_eeprom_info, triggering this warning:
+clang produces an output with excessive stack usage when building the
+occ_setup_sensor_attrs() function, apparently the result of having
+a lot of struct literals and building with the -fno-strict-overflow
+option that leads clang to skip some optimization in case the 'attr'
+pointer overruns:
 
-drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.c:2178:6: error: stack frame size (1312) exceeds limit (1280) in 'rtl92ee_read_eeprom_info' [-Werror,-Wframe-larger-than]
+drivers/hwmon/occ/common.c:775:12: error: stack frame size (1392) exceeds limit (1280) in 'occ_setup_sensor_attrs' [-Werror,-Wframe-larger-than]
 
-Mark _rtl92ee_read_txpower_info_from_hwpg() as noinline_for_stack to
-and mark _rtl92ee_get_chnl_group() as __always_inline to make clang
-behave the same way as gcc. Inlining _rtl92ee_get_chnl_group helps
-let the compiler see that the index is always in range. The same
-change appears to be necessary in all rtlwifi variants.
+Replace the custom macros for initializing the attributes with a
+simpler function call that does not run into this corner case.
 
-A more thorough approach would be to avoid the use of the two structures
-on the stack entirely and combine them with the struct rtl_efuse
-data that is dynamically allocated and holds the same information.
-
+Link: https://godbolt.org/z/Wf1Yx76a5
+Fixes: 54076cb3b5ff ("hwmon (occ): Add sensor attributes and register hwmon device")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/wireless/realtek/rtlwifi/rtl8188ee/hw.c | 6 +++---
- drivers/net/wireless/realtek/rtlwifi/rtl8192ce/hw.c | 6 +++---
- drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c | 6 +++---
- drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.c | 7 ++++---
- drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hw.c | 6 +++---
- drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c | 6 +++---
- drivers/net/wireless/realtek/rtlwifi/rtl8821ae/hw.c | 6 +++---
- 7 files changed, 22 insertions(+), 21 deletions(-)
+ drivers/hwmon/occ/common.c | 212 +++++++++++++++----------------------
+ 1 file changed, 85 insertions(+), 127 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8188ee/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8188ee/hw.c
-index d122f1eb345e..53c32e1de7e4 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8188ee/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8188ee/hw.c
-@@ -1738,9 +1738,9 @@ static void read_power_value_fromprom(struct ieee80211_hw *hw,
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 36b3900218ce..b3694a4209b9 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -745,29 +745,30 @@ static ssize_t occ_show_extended(struct device *dev,
+ }
+ 
+ /*
+- * Some helper macros to make it easier to define an occ_attribute. Since these
+- * are dynamically allocated, we shouldn't use the existing kernel macros which
++ * A helper to make it easier to define an occ_attribute. Since these
++ * are dynamically allocated, we cannot use the existing kernel macros which
+  * stringify the name argument.
+  */
+-#define ATTR_OCC(_name, _mode, _show, _store) {				\
+-	.attr	= {							\
+-		.name = _name,						\
+-		.mode = VERIFY_OCTAL_PERMISSIONS(_mode),		\
+-	},								\
+-	.show	= _show,						\
+-	.store	= _store,						\
+-}
+-
+-#define SENSOR_ATTR_OCC(_name, _mode, _show, _store, _nr, _index) {	\
+-	.dev_attr	= ATTR_OCC(_name, _mode, _show, _store),	\
+-	.index		= _index,					\
+-	.nr		= _nr,						\
++static void occ_init_attribute(struct occ_attribute *attr, int mode,
++	ssize_t (*show)(struct device *dev, struct device_attribute *attr, char *buf),
++	ssize_t (*store)(struct device *dev, struct device_attribute *attr,
++				   const char *buf, size_t count),
++	int nr, int index, const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	vsnprintf(attr->name, sizeof(attr->name), fmt, args);
++	va_end(args);
++
++	attr->sensor.dev_attr.attr.name = attr->name;
++	attr->sensor.dev_attr.attr.mode = mode;
++	attr->sensor.dev_attr.show = show;
++	attr->sensor.dev_attr.store = store;
++	attr->sensor.index = index;
++	attr->sensor.nr = nr;
+ }
+ 
+-#define OCC_INIT_ATTR(_name, _mode, _show, _store, _nr, _index)		\
+-	((struct sensor_device_attribute_2)				\
+-		SENSOR_ATTR_OCC(_name, _mode, _show, _store, _nr, _index))
+-
+ /*
+  * Allocate and instatiate sensor_device_attribute_2s. It's most efficient to
+  * use our own instead of the built-in hwmon attribute types.
+@@ -853,14 +854,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 		sensors->extended.num_sensors = 0;
  	}
- }
  
--static void _rtl88ee_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						 bool autoload_fail,
--						 u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl88ee_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				     bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192ce/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192ce/hw.c
-index 0bc915723b93..5ca6b49e73c7 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192ce/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192ce/hw.c
-@@ -1412,9 +1412,9 @@ void rtl92ce_update_interrupt_mask(struct ieee80211_hw *hw,
- 	rtl92ce_enable_interrupt(hw);
- }
+-	occ->attrs = devm_kzalloc(dev, sizeof(*occ->attrs) * num_attrs,
++	occ->attrs = devm_kcalloc(dev, num_attrs, sizeof(*occ->attrs),
+ 				  GFP_KERNEL);
+ 	if (!occ->attrs)
+ 		return -ENOMEM;
  
--static void _rtl92ce_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						 bool autoload_fail,
--						 u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl92ce_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				     bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-index 0195c9a3e9e8..ec5d558609fe 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-@@ -95,9 +95,9 @@ static void _rtl92cu_phy_param_tab_init(struct ieee80211_hw *hw)
+ 	/* null-terminated list */
+-	occ->group.attrs = devm_kzalloc(dev, sizeof(*occ->group.attrs) *
+-					num_attrs + 1, GFP_KERNEL);
++	occ->group.attrs = devm_kcalloc(dev, num_attrs + 1,
++					sizeof(*occ->group.attrs),
++					GFP_KERNEL);
+ 	if (!occ->group.attrs)
+ 		return -ENOMEM;
+ 
+@@ -870,43 +872,33 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 		s = i + 1;
+ 		temp = ((struct temp_sensor_2 *)sensors->temp.data) + i;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "temp%d_label", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_temp, NULL,
+-					     0, i);
++		occ_init_attribute(attr, 0444, show_temp, NULL,
++				   0, i, "temp%d_label", s);
+ 		attr++;
+ 
+ 		if (sensors->temp.version == 2 &&
+ 		    temp->fru_type == OCC_FRU_TYPE_VRM) {
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "temp%d_alarm", s);
++			occ_init_attribute(attr, 0444, show_temp, NULL,
++					   1, i, "temp%d_alarm", s);
+ 		} else {
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "temp%d_input", s);
++			occ_init_attribute(attr, 0444, show_temp, NULL,
++					   1, i, "temp%d_input", s);
+ 		}
+ 
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_temp, NULL,
+-					     1, i);
+ 		attr++;
+ 
+ 		if (sensors->temp.version > 1) {
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "temp%d_fru_type", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_temp, NULL, 2, i);
++			occ_init_attribute(attr, 0444, show_temp, NULL,
++					   2, i, "temp%d_fru_type", s);
+ 			attr++;
+ 
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "temp%d_fault", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_temp, NULL, 3, i);
++			occ_init_attribute(attr, 0444, show_temp, NULL,
++					   3, i, "temp%d_fault", s);
+ 			attr++;
+ 
+ 			if (sensors->temp.version == 0x10) {
+-				snprintf(attr->name, sizeof(attr->name),
+-					 "temp%d_max", s);
+-				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-							     show_temp, NULL,
+-							     4, i);
++				occ_init_attribute(attr, 0444, show_temp, NULL,
++						   4, i, "temp%d_max", s);
+ 				attr++;
+ 			}
+ 		}
+@@ -915,14 +907,12 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 	for (i = 0; i < sensors->freq.num_sensors; ++i) {
+ 		s = i + 1;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "freq%d_label", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_freq, NULL,
+-					     0, i);
++		occ_init_attribute(attr, 0444, show_freq, NULL,
++				   0, i, "freq%d_label", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "freq%d_input", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_freq, NULL,
+-					     1, i);
++		occ_init_attribute(attr, 0444, show_freq, NULL,
++				   1, i, "freq%d_input", s);
+ 		attr++;
  	}
- }
  
--static void _rtl92cu_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						 bool autoload_fail,
--						 u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl92cu_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				     bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.c
-index d4da5cdc8414..48a3c94606be 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.c
-@@ -1731,7 +1731,7 @@ void rtl92ee_update_interrupt_mask(struct ieee80211_hw *hw,
- 	rtl92ee_enable_interrupt(hw);
- }
+@@ -938,32 +928,24 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 			s = (i * 4) + 1;
  
--static u8 _rtl92ee_get_chnl_group(u8 chnl)
-+static __always_inline u8 _rtl92ee_get_chnl_group(u8 chnl)
- {
- 	u8 group = 0;
+ 			for (j = 0; j < 4; ++j) {
+-				snprintf(attr->name, sizeof(attr->name),
+-					 "power%d_label", s);
+-				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-							     show_power, NULL,
+-							     nr++, i);
++				occ_init_attribute(attr, 0444, show_power,
++						   NULL, nr++, i,
++						   "power%d_label", s);
+ 				attr++;
  
-@@ -2009,8 +2009,9 @@ static void _rtl8192ee_read_power_value_fromprom(struct ieee80211_hw *hw,
+-				snprintf(attr->name, sizeof(attr->name),
+-					 "power%d_average", s);
+-				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-							     show_power, NULL,
+-							     nr++, i);
++				occ_init_attribute(attr, 0444, show_power,
++						   NULL, nr++, i,
++						   "power%d_average", s);
+ 				attr++;
+ 
+-				snprintf(attr->name, sizeof(attr->name),
+-					 "power%d_average_interval", s);
+-				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-							     show_power, NULL,
+-							     nr++, i);
++				occ_init_attribute(attr, 0444, show_power,
++						   NULL, nr++, i,
++						   "power%d_average_interval", s);
+ 				attr++;
+ 
+-				snprintf(attr->name, sizeof(attr->name),
+-					 "power%d_input", s);
+-				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-							     show_power, NULL,
+-							     nr++, i);
++				occ_init_attribute(attr, 0444, show_power,
++						   NULL, nr++, i,
++						   "power%d_input", s);
+ 				attr++;
+ 
+ 				s++;
+@@ -975,28 +957,20 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 		for (i = 0; i < sensors->power.num_sensors; ++i) {
+ 			s = i + 1;
+ 
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "power%d_label", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_power, NULL, 0, i);
++			occ_init_attribute(attr, 0444, show_power, NULL,
++					   0, i, "power%d_label", s);
+ 			attr++;
+ 
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "power%d_average", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_power, NULL, 1, i);
++			occ_init_attribute(attr, 0444, show_power, NULL,
++					   1, i, "power%d_average", s);
+ 			attr++;
+ 
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "power%d_average_interval", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_power, NULL, 2, i);
++			occ_init_attribute(attr, 0444, show_power, NULL,
++					   2, i, "power%d_average_interval", s);
+ 			attr++;
+ 
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "power%d_input", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_power, NULL, 3, i);
++			occ_init_attribute(attr, 0444, show_power, NULL,
++					   3, i, "power%d_input", s);
+ 			attr++;
+ 		}
+ 
+@@ -1004,56 +978,43 @@ static int occ_setup_sensor_attrs(struct occ *occ)
  	}
- }
  
--static void _rtl92ee_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						 bool autoload_fail, u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl92ee_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				     bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *efu = rtl_efuse(rtl_priv(hw));
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hw.c
-index 6991713a66d0..21b827f519b6 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hw.c
-@@ -1381,9 +1381,9 @@ static u8 _rtl8723e_get_chnl_group(u8 chnl)
- 	return group;
- }
+ 	if (sensors->caps.num_sensors >= 1) {
+-		snprintf(attr->name, sizeof(attr->name), "power%d_label", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
+-					     0, 0);
++		occ_init_attribute(attr, 0444, show_caps, NULL,
++				   0, 0, "power%d_label", s);
+ 		attr++;
  
--static void _rtl8723e_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						  bool autoload_fail,
--						  u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl8723e_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				      bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c
-index bcfc53af4c1a..e1f811218894 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c
-@@ -1935,9 +1935,9 @@ static void _rtl8723be_read_power_value_fromprom(struct ieee80211_hw *hw,
+-		snprintf(attr->name, sizeof(attr->name), "power%d_cap", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
+-					     1, 0);
++		occ_init_attribute(attr, 0444, show_caps, NULL,
++				   1, 0, "power%d_cap", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "power%d_input", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
+-					     2, 0);
++		occ_init_attribute(attr, 0444, show_caps, NULL,
++				   2, 0, "power%d_input", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name),
+-			 "power%d_cap_not_redundant", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
+-					     3, 0);
++		occ_init_attribute(attr, 0444, show_caps, NULL,
++				   3, 0, "power%d_cap_not_redundant", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "power%d_cap_max", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
+-					     4, 0);
++		occ_init_attribute(attr, 0444, show_caps, NULL,
++				   4, 0, "power%d_cap_max", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "power%d_cap_min", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
+-					     5, 0);
++		occ_init_attribute(attr, 0444, show_caps, NULL,
++				   5, 0, "power%d_cap_min", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "power%d_cap_user",
+-			 s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0644, show_caps,
+-					     occ_store_caps_user, 6, 0);
++		occ_init_attribute(attr, 0644, show_caps, occ_store_caps_user,
++				   6, 0, "power%d_cap_user", s);
+ 		attr++;
+ 
+ 		if (sensors->caps.version > 1) {
+-			snprintf(attr->name, sizeof(attr->name),
+-				 "power%d_cap_user_source", s);
+-			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-						     show_caps, NULL, 7, 0);
++			occ_init_attribute(attr, 0444, show_caps, NULL,
++					   7, 0, "power%d_cap_user_source", s);
+ 			attr++;
+ 
+ 			if (sensors->caps.version > 2) {
+-				snprintf(attr->name, sizeof(attr->name),
+-					 "power%d_cap_min_soft", s);
+-				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-							     show_caps, NULL,
+-							     8, 0);
++				occ_init_attribute(attr, 0444, show_caps, NULL,
++						   8, 0,
++						   "power%d_cap_min_soft", s);
+ 				attr++;
+ 			}
+ 		}
+@@ -1062,19 +1023,16 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 	for (i = 0; i < sensors->extended.num_sensors; ++i) {
+ 		s = i + 1;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "extn%d_label", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-					     occ_show_extended, NULL, 0, i);
++		occ_init_attribute(attr, 0444, occ_show_extended, NULL,
++				   0, i, "extn%d_label", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "extn%d_flags", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-					     occ_show_extended, NULL, 1, i);
++		occ_init_attribute(attr, 0444, occ_show_extended, NULL,
++				   1, i, "extn%d_flags", s);
+ 		attr++;
+ 
+-		snprintf(attr->name, sizeof(attr->name), "extn%d_input", s);
+-		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+-					     occ_show_extended, NULL, 2, i);
++		occ_init_attribute(attr, 0444, occ_show_extended, NULL,
++				   2, i, "extn%d_input", s);
+ 		attr++;
  	}
- }
  
--static void _rtl8723be_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						   bool autoload_fail,
--						   u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl8723be_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				       bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/hw.c
-index f4b232f038a9..8c51f4d36820 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/hw.c
-@@ -2782,9 +2782,9 @@ static void _rtl8812ae_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
- 	"eeprom_regulatory = 0x%x\n", rtlefuse->eeprom_regulatory);
- }
- #endif
--static void _rtl8821ae_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
--						 bool autoload_fail,
--						 u8 *hwinfo)
-+static noinline_for_stack void
-+_rtl8821ae_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-+				       bool autoload_fail, u8 *hwinfo)
- {
- 	struct rtl_priv *rtlpriv = rtl_priv(hw);
- 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
 -- 
 2.39.5
 
