@@ -1,44 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9377328AAFF;
-	Tue, 10 Jun 2025 09:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DA928B419;
+	Tue, 10 Jun 2025 09:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749547457; cv=none; b=Nu45fNTgMlJKz8SWGM5YQDEorxmSDJe85Gp2RIBEmEE7bBS1jVijT+qY5OmyVXArccK1Kw/+ebV+IqlP78IL/tIFJz1MPu64NJUH3IR0aLnTuj+mNmG+pV7Y2267e70G6SXQsEa+Dg0eTfZVgo3Hp8vfIR6I/AvuJY1vwHNZLBE=
+	t=1749547663; cv=none; b=S0Rg43UlzxNYlAPXTKGn5DGPBb16xoKQgEbxOM68o6kPh9s88i9miQk/gD1EzQVrtkGe1YvbS3U/JCnA2MaXUfItD9oHY4hqRwGV2tn2TS142wKL1oQYfFI2qCLR91OdsWVKzor+iCtlm7C2O6jJzhJpGC7vCIxXwR9hI2327/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749547457; c=relaxed/simple;
-	bh=DXnxrZCKNCbvmNqckFGO7yqFhyxX1F28F7u/tRCZUCE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uYtLoizyRl29dfPaBdxDJAKjJ+qPRhiVAckaUWzACHcxhPzVvLfKz6zZrAReWxt2Sr9fhW6xSSYiWFZx9QCRMDguybbwSX06qBIwFpD45tUkuMk7NDkzRuFd26obSgBzNQAiQnCZ7ncqMWl7g5M4Ri3Q5djEoWnTs6D1Ej5G9nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEbp9dZb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749547663; c=relaxed/simple;
+	bh=lfBamJGxY5k+dFxogqH5eoJqA8X1z7zpTPGsxWnNEMw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qyWN9Tq4V6r+VSci17TsOjhRj0GTZ3KrSppfeVdwHDpAUMIA4/eZHnMUrGCR5ghoJiFSOUkdYz7OiN+GYzc06g18yZnjUX5Rl+Kd+jq1qMyLeMlpFMoh/EmXWp+b0Y7/vsdphQVliocwoOXQsmtOAkAiYmiepNWmzOVGi/LW0xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DbRw67rI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEbp9dZb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E2CC4CEED;
-	Tue, 10 Jun 2025 09:24:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbRw67rI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44959C4CEFB;
+	Tue, 10 Jun 2025 09:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749547457;
-	bh=DXnxrZCKNCbvmNqckFGO7yqFhyxX1F28F7u/tRCZUCE=;
+	s=k20201202; t=1749547663;
+	bh=lfBamJGxY5k+dFxogqH5eoJqA8X1z7zpTPGsxWnNEMw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=AEbp9dZb8IWFBmoWA6giJjGXvzs6CbRsjZgQLpkdE8IPFTQVz0FrKmTcxgy8zJRWU
-	 RxVoLyzDomXui+aiFcLNAk8mF8CERJInhxrjUDzD+n48BOHc/R3K1C9nEzW4X4lUxU
-	 h6oHu/UGRrHM+IMhc76VEWsCWny3x78WIeu68Lmt5myp9BW7RV6TPhpYl/QUnFk2Pp
-	 XfvsRm3ZjFxC4766MQMfcA72mcl9Bqq0nk+VGuzIsdSSFzC0tZEndwf9jDagI5htMd
-	 Pzw4oiolaYx97vLFS5yRuS03pygMuTFWPjKiWOjde6SPW5xGwjYL050jT0ZqtnvWYE
-	 Kxl+zacuaxp/Q==
+	b=DbRw67rIApDToeSQaohj/IYtUXaxmet2X06VVVtEMc/pzT7jP+Esfx5dUB9SwZZdt
+	 Kf2ARcaInme/RHykD6bXQ8QmRpRe4kMJ5teA4TWVNKvWdNib61o+tFjJ7PxEGnPesw
+	 7fbXg+IPCGHYW5CGjr3TqupIMgeHaLHp/1n6q5zxdAA/BE6uXjfP+QKPXqWCiqlGe3
+	 7Qw0Seh6l3DB3BsSfPV+nXzO9u/v/x1zdx+F6sx3p4sagQctSj2JRghnEaHSo2UArn
+	 HNedLWqE2GXk2Va58A52uzpxXsmD0lZ2dy7/Q08WWanoscB0TqsCPMJqaNyOqZSgPq
+	 YlBZHY3yitH/w==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>,
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
 	Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Thomas Bertschinger <tahbertschinger@gmail.com>,
-	linux-bcachefs@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] bcachefs: ioctl: avoid stack overflow warning
-Date: Tue, 10 Jun 2025 11:24:04 +0200
-Message-Id: <20250610092413.2640349-1-arnd@kernel.org>
+Subject: [PATCH] drm: omapdrm: reduce clang stack usage
+Date: Tue, 10 Jun 2025 11:27:33 +0200
+Message-Id: <20250610092737.2641862-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -50,44 +55,33 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Multiple ioctl handlers individually use a lot of stack space, and clang chooses
-to inline them into the bch2_fs_ioctl() function, blowing through the warning
-limit:
+The thread sanitizer makes the stack usage explode from extra variable
+spills in dispc_runtime_resume:
 
-fs/bcachefs/chardev.c:655:6: error: stack frame size (1032) exceeds limit (1024) in 'bch2_fs_ioctl' [-Werror,-Wframe-larger-than]
-  655 | long bch2_fs_ioctl(struct bch_fs *c, unsigned cmd, void __user *arg)
+drivers/gpu/drm/omapdrm/dss/dispc.c:4735:27: error: stack frame size (1824) exceeds limit (1280) in 'dispc_runtime_resume' [-Werror,-Wframe-larger-than]
 
-By marking the largest two of them as noinline_for_stack, no indidual code path
-ends up using this much, which avoids the warning and reduces the possible
-total stack usage in the ioctl handler.
+I could not figure out what exactly is going on here, but I see that
+whenever dispc_restore_context() is not inlined, that function
+and its caller shrink below 900 bytes combined of stack usage.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- fs/bcachefs/chardev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/omapdrm/dss/dispc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/bcachefs/chardev.c b/fs/bcachefs/chardev.c
-index 2d38466eddfd..fde3c2380e28 100644
---- a/fs/bcachefs/chardev.c
-+++ b/fs/bcachefs/chardev.c
-@@ -399,7 +399,7 @@ static long bch2_ioctl_data(struct bch_fs *c,
- 	return ret;
+diff --git a/drivers/gpu/drm/omapdrm/dss/dispc.c b/drivers/gpu/drm/omapdrm/dss/dispc.c
+index 533f70e8a4a6..cf055815077c 100644
+--- a/drivers/gpu/drm/omapdrm/dss/dispc.c
++++ b/drivers/gpu/drm/omapdrm/dss/dispc.c
+@@ -524,7 +524,7 @@ static void dispc_save_context(struct dispc_device *dispc)
+ 	DSSDBG("context saved\n");
  }
  
--static long bch2_ioctl_fs_usage(struct bch_fs *c,
-+static noinline_for_stack long bch2_ioctl_fs_usage(struct bch_fs *c,
- 				struct bch_ioctl_fs_usage __user *user_arg)
+-static void dispc_restore_context(struct dispc_device *dispc)
++static noinline_for_stack void dispc_restore_context(struct dispc_device *dispc)
  {
- 	struct bch_ioctl_fs_usage arg = {};
-@@ -469,7 +469,7 @@ static long bch2_ioctl_query_accounting(struct bch_fs *c,
- }
+ 	int i, j;
  
- /* obsolete, didn't allow for new data types: */
--static long bch2_ioctl_dev_usage(struct bch_fs *c,
-+static noinline_for_stack long bch2_ioctl_dev_usage(struct bch_fs *c,
- 				 struct bch_ioctl_dev_usage __user *user_arg)
- {
- 	struct bch_ioctl_dev_usage arg;
 -- 
 2.39.5
 
