@@ -1,102 +1,104 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1910527FB27;
-	Wed, 11 Jun 2025 12:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B2C35897;
+	Wed, 11 Jun 2025 13:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749645477; cv=none; b=kceNGw4gDxmhxZ1p2MItF9aplMdv+L0wSzurCmPg3FpyYC2nQqJ9KwlZXDvOz8EJt9PzhwtBL+/gbe1oLHVZco37uJxhSEfhwplJljro0yHiibzhrt0aWYH7XvNDhs1ZFsBp//4Kh7SJVBsEtDO3leaADzR9SqBCp35PA1gv/7k=
+	t=1749648679; cv=none; b=CXdtONgd6HHYoOHCsrMRrrLexLRkY0EsIa5j2N7TZigWEE+bkkrGDzBrscoDS0aL+0c6aWLQhA9ljUyPZOyodgUI4ZgJEekf3L5/ycUSQRT15+IuX4zsXwyhE+y/ROri2t8UmniFNORz2IuDtNxSoM90GX6Oe8lOHt4rQTwE+KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749645477; c=relaxed/simple;
-	bh=N15WjYZh9zLHOd5EXWKe6oFGkNk5YRdrD9gGPdCvDCk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JSVj9BinRdDRQ2SIjnOO3SHjQx8n76zBq04BMImC+wjGzNGdHH1AN/xp9eY4EYWZZr+088STwAzJWT+wKtMhiBY4ZNY2+gye/1TN6c3X1ZQut1tmq57D9B49fn5u2fgyxSsbJffyHooErnAyIRsXR4I5M2VIXTPFEFlulyXCvE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J+ztxPyL; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749648679; c=relaxed/simple;
+	bh=E3ULJSDR7H6jRN4Ghf4x8IwwME+LAT9nuGkMxafPI6M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mQay8wViWNFTVanYcgASi1rfLtXWaLXQgA3sltgXC74FEpy2/JJcTXnjSMvw4vly4pbqpU041Cmk09ynKyE0OS9+entMk5n/4SwgjJch6wopZiG9ociNra/elv3rkG9UI8NhOZIZlPYOMWjaJSsMIiK7NFjSKSdaDjLkEYtHMJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V27F4PA5; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J+ztxPyL"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-adb47e0644dso170839666b.0;
-        Wed, 11 Jun 2025 05:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749645474; x=1750250274; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dOXeYQ67MJKyIBb8UNaIQyZgXOV3VN582lWGBgx+72o=;
-        b=J+ztxPyLWc6SxgG/Gf7L9sX0Ht+HRFb9rzKu2A5O2PoijWWAyYRbDxl0bFfjxaWTLS
-         krDPLA/uRItNQ4NpXPmO7Fx61H7vt6TeBZV/KJzVF5zOtCpsb2wItHKVwA148nX+hFDP
-         PEfnsprApjrlYXq34YeaAVNvkNn0eg8QKwCGBxqUdBuByz38SWHjOn1xSaZQ5ikfNGA6
-         2SrLd+/f8Y+J9Qe575klexxySikeFEn6IbJU3v+Z3iRBHH3RdZc8po5soEp17rCK4ugZ
-         hqzdvGqDD3xELcu6qmLiwvowqJ+l7QWq+yiiZMy1u+69Zs40ad/8RLaLovLG2xwTo6Bv
-         Cwgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749645474; x=1750250274;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dOXeYQ67MJKyIBb8UNaIQyZgXOV3VN582lWGBgx+72o=;
-        b=SXwMvw5OIMB0zkl4EMgRIR5OW9nYFRFQkAOmP95EWUgwRQgEqeWzrkyp2HlSfAKlGx
-         JikPyp6zj4r8Zvybg4GLlQYR69d/G5X4Sh3Nea9y3/7HxjXWcPBLrtFBuwomKXrj8yt4
-         ECAVBdbKKVa7aLy6PaBrBswdN7Ib+RpnLzeP4hzZV4LO6nKx4nNMkEC7l+8XJNM+OiiY
-         c1Fnh29DTXMyPBMMllCtoIdHK6/C89/Aj6iVNiJQ46Q1gHQGNyKcAm8gvIczR24BSq8g
-         B29mdpJ0NuExDJzUh2NJQPL+UTD75HXlHUKp+Enqk8XcjBMlZIi4cjxs5sO7mUlpFduW
-         2HfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFMDRIBYF9rmstVh2+fIgZsk2gKLnxfGKixsLLIPea9qbKXfmvdZs0nXx3AE5OoiPXquFKEjhMBx9m56hw@lists.linux.dev
-X-Gm-Message-State: AOJu0YyoqC/FQyO4oB6ejwJLneNF58wzVGZYInAhB5CdvN7juNnBydh5
-	z3SkbWs9nYuyh6mX1OjDZCFrSJTfWPjWSPnBGxeczIKvg7gIcwCwEQuN
-X-Gm-Gg: ASbGncvjckvsZ9Rm0r3ctJMhRycrbz55bFG/jewjyZ8E/rZixmQVB+/zbYmldA9tked
-	cfqKPWQ6a/U/5UvE/tPF8Vfw1W075lW+iTiAo0HYtKjhS0lKMAEBr7kmNgEjmdMZD85Vmc7109U
-	b6Bi/4Y2cV0XPYCDocYmsLP4UoudlMgWRqcfmDyyFmuqoE+xrdV2xdoYWoeiVqbGLYB1Jv6VTMc
-	wcVOesEqiDMCTDXiLsl/inu8C9Johi+BRb75prKFJTIRYPbbW4sYJoXGF2/WSFdxywsnhNfavdz
-	5RHIOSvNFuuEnhd0WVK5gRbgUA7m60ufOglNIhdKWNswPhafi2uGnKpzhNFAWBEDArjr3w==
-X-Google-Smtp-Source: AGHT+IHHW+D0ougV5xir+6/KUgrN2c375InXtK1X/YNGb9P+kmswRlnqPox8eAbXSjO5ZlB2QjfMVw==
-X-Received: by 2002:a17:907:3f0a:b0:adb:3fb8:27f9 with SMTP id a640c23a62f3a-ade899fd6bbmr285978566b.25.1749645474014;
-        Wed, 11 Jun 2025 05:37:54 -0700 (PDT)
-Received: from [192.168.0.50] ([79.119.240.16])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc776ffsm872906766b.152.2025.06.11.05.37.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jun 2025 05:37:53 -0700 (PDT)
-Message-ID: <0d712ef0-ea93-4825-8a4c-45f9d7f9e8d9@gmail.com>
-Date: Wed, 11 Jun 2025 15:37:51 +0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V27F4PA5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749648677; x=1781184677;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E3ULJSDR7H6jRN4Ghf4x8IwwME+LAT9nuGkMxafPI6M=;
+  b=V27F4PA5vS33b+gR2/7xwpZspgZ0CPtfgWTBpyTrIOFi7xGP+FU9wYRP
+   IxTP1EDuf2VSixMlmh0hG7Ol+uQvktJxC5Vnt7QKydYVtTLFQpmQVa78M
+   b5U3KSNI5dnNor6jAlBeklWUaOEVHn2tWsPZyjf9xW+WifrNYlnBPhfTj
+   3jnm5VGvqO9sjI0qMyKsoBpoxWDjtC2X6dSnorSEkzERp920Kvt4V2+0a
+   KKL44F4m+zJ/fJWkWaCWZJsPbLQVdO7UtKlIHe+X2ZfQTAPfNg5egya88
+   Zm25XR1h03JAOjXPmK9dXV4Keo6A9mKN/9d/By6ExWfYz4/wfT5oaGEBc
+   A==;
+X-CSE-ConnectionGUID: bB2JehOERMaflZ9cZTrOcQ==
+X-CSE-MsgGUID: u1S3DCbOQn+x4uVqil4MEw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="74327379"
+X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
+   d="scan'208";a="74327379"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 06:30:50 -0700
+X-CSE-ConnectionGUID: 2DFXHSiYRxSalsSPjuL4JQ==
+X-CSE-MsgGUID: ttXpQ4clSTCPy74cGntdIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
+   d="scan'208";a="147103761"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Jun 2025 06:30:49 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uPLXS-000AVK-1q;
+	Wed, 11 Jun 2025 13:30:46 +0000
+Date: Wed, 11 Jun 2025 21:30:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ebiggers:libcrypto-pending 15/16] lib/crypto/sha512.c:133:10: fatal
+ error: 'sha512.h' file not found
+Message-ID: <202506112119.CpYFrurc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH rtw-next v2 14/14] wifi: rtw89: Enable the new USB modules
-To: Ping-Ke Shih <pkshih@realtek.com>, kernel test robot <lkp@intel.com>,
- "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Cc: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
-References: <663044d3-0816-4b1b-874d-776835e774e9@gmail.com>
- <202506101956.cNXM2Qvb-lkp@intel.com>
- <b8690413-059d-4330-992b-36a7af10aa30@gmail.com>
- <01eb10716bdb4241a012d378d1f7b67d@realtek.com>
-Content-Language: en-US
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <01eb10716bdb4241a012d378d1f7b67d@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 11/06/2025 03:32, Ping-Ke Shih wrote:
->>>
->>>>> drivers/net/wireless/realtek/rtw89/rtw8851b.c:523:47: error: use of undeclared identifier
->> 'B_AX_SOP_EDSWR'
->>>      523 |                 rtw89_write32_clr(rtwdev, R_AX_SYS_PW_CTRL, B_AX_SOP_EDSWR);
->>>          |                                                             ^
->>>    1 error generated.
->>>
->> Oops, I'll add that to reg.h in v3.
-> 
-> The NAPI also reported the same things [1] [2].
-> 
-> Not sure if you will send v3 right away. If so, I will ignore v2. 
-> 
-> [1] http://wifibot.sipsolutions.net/results/969980/14111187/build_32bit/stderr
-> [2] https://patchwork.kernel.org/project/linux-wireless/list/?series=969980
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git libcrypto-pending
+head:   0586083fb1c568bec833e783baaca2af96546965
+commit: d0d72dc3d57b125acc032396f4d6b82188b1ace2 [15/16] lib/crypto/sha512: migrate x86-optimized SHA-512 code to library
+config: um-randconfig-001-20250611 (https://download.01.org/0day-ci/archive/20250611/202506112119.CpYFrurc-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250611/202506112119.CpYFrurc-lkp@intel.com/reproduce)
 
-I would prefer to wait for your review. Is that okay?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506112119.CpYFrurc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   clang: warning: no such include directory: 'lib/crypto/um' [-Wmissing-include-dirs]
+>> lib/crypto/sha512.c:133:10: fatal error: 'sha512.h' file not found
+     133 | #include "sha512.h" /* $(SRCARCH)/sha512.h */
+         |          ^~~~~~~~~~
+   1 error generated.
+
+
+vim +133 lib/crypto/sha512.c
+
+6eecba60cf9a91 Eric Biggers 2025-06-10  131  
+6eecba60cf9a91 Eric Biggers 2025-06-10  132  #ifdef CONFIG_CRYPTO_LIB_SHA512_ARCH
+6eecba60cf9a91 Eric Biggers 2025-06-10 @133  #include "sha512.h" /* $(SRCARCH)/sha512.h */
+6eecba60cf9a91 Eric Biggers 2025-06-10  134  #else
+6eecba60cf9a91 Eric Biggers 2025-06-10  135  #define sha512_blocks sha512_blocks_generic
+6eecba60cf9a91 Eric Biggers 2025-06-10  136  #endif
+6eecba60cf9a91 Eric Biggers 2025-06-10  137  
+
+:::::: The code at line 133 was first introduced by commit
+:::::: 6eecba60cf9a91a96a3e342357ec1124ae490ddc lib/crypto/sha512: add support for SHA-384 and SHA-512
+
+:::::: TO: Eric Biggers <ebiggers@google.com>
+:::::: CC: Eric Biggers <ebiggers@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
