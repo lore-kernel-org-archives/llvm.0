@@ -1,84 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3E21925AB;
-	Wed, 11 Jun 2025 15:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B848F20F067
+	for <llvm@lists.linux.dev>; Wed, 11 Jun 2025 16:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749654302; cv=none; b=jxMBPPxhAcZzw9JBxQ3jGuEPUIlTqdRa60klLArQ5wiZetOdXqRuNqmfYDVBTSmIxngMy+K09CxAFwFVlwRJbK6PXjs5hQojyqfjA7vhNiPNpQzoa9uDXXq9jQHXR4zGabNT4dpkFHgi3mpa4TZafUOltZHiGofxoDS9XKBaU7s=
+	t=1749659801; cv=none; b=oGf9bzl+CqUJvPFhFPDrq6wlPjqCpS3JRac9hYFa8XvedWtMJbJGrDTScDFfM4XtraIPYzfEZ5x5pNVQBCrDxiuL9LI/TZzMuyAWeCsXSDKafkHq6SWKB2XSVp4ATWlgbtOzOFZSCx2htvnEnej6pdMRgOMOCEpuxFdT72Hunjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749654302; c=relaxed/simple;
-	bh=WlS93W6OWyRwYU1kN0ggywH96AnoQ3/ha9CariWZAso=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GSUT/f5p/Devhkx1W9MW8xkMp2df+UNBMU/jRmxNY5/x0UA67EMQ7K+crauy2nMuHykfmknuRYLOA0HmuTkqRbdoEJ500CIESU26r4iyp+5RiS9PljcFeKa+mbhSAcvUOkLerbGzEGIoQpO2KDgPtSHchwWiItWkCrNWfunxuK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AduYZDtq; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749659801; c=relaxed/simple;
+	bh=OKyY1Suf9wd0Roqmv3s7f7pR23uXYiojLlo7XhjLd8U=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=KVk9NRZi1oO3rlStlEvhlolS5Wmo/EGeW2YWGJlKqjQFwjYpY62eUnSZ0uOfybugStuLnsWbLMwkrOqlcHDmJsj3bS3F/sUeOLXTW9KdAWQ/JfDLL21O+81se+G1LHLNFZ/3cNH/KQzRemybjFg5yhy0a7piuoz63D4R7idNskI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=waUTjhqM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=N1WapofN; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AduYZDtq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749654301; x=1781190301;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WlS93W6OWyRwYU1kN0ggywH96AnoQ3/ha9CariWZAso=;
-  b=AduYZDtqVTFCYvC+lMJwh/Ln7DZrnkzuVH7BA19OY0ApYjTO47bCn/kA
-   awxAtMNPzv1TNizVfvt6wR6+UsoLky7d0/Wx2gPXdRyiCN78UKzIRKbDz
-   4y/pnhwRrrZVTDUo5Xb7PizexSDonUGeZ/QHbnunMco5G52l81M4+oYDK
-   aCye6fWShBGotnsUWmqWuq3BHQLqtnSK3N5Jvg8uqJlKIr8FGkHkDEVgo
-   SEerQqaD/EnWizr6gKrbsmelHKzgWjDgmTXYWl0c7tcEZA50Y/iRNMu63
-   cP7sji/z09VTh93LBgbWy6mtELnDWRj0U+armMWFWtByxYHdmLEE/0fz+
-   w==;
-X-CSE-ConnectionGUID: 2A1qHldWRP6m++8w6C5Jjw==
-X-CSE-MsgGUID: vMbR6HRxQuuThjSYJOe9tw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="55471718"
-X-IronPort-AV: E=Sophos;i="6.16,228,1744095600"; 
-   d="scan'208";a="55471718"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 08:05:01 -0700
-X-CSE-ConnectionGUID: +RFbbpFsSrmYn7nltE/9Pg==
-X-CSE-MsgGUID: vrCAwakmQ82p4zgoGtgdxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,228,1744095600"; 
-   d="scan'208";a="148128744"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 Jun 2025 08:05:00 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uPN0b-000AbS-0Z;
-	Wed, 11 Jun 2025 15:04:57 +0000
-Date: Wed, 11 Jun 2025 23:04:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:klp-build 44/62] ld.lld: error:
- vmlinux.a(lib/siphash.o):(__ex_table): SHF_MERGE section size (24) must be a
- multiple of sh_entsize (16)
-Message-ID: <202506112238.9WWwaUKe-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="waUTjhqM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="N1WapofN"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 5F80A11400AC;
+	Wed, 11 Jun 2025 12:36:37 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 11 Jun 2025 12:36:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1749659797;
+	 x=1749746197; bh=9FCUNYIvHK4qsxp0p8mUgko4Fhuy42loTyUOdB71d6s=; b=
+	waUTjhqMbiVv6HEcx7WkyUTfia2KbYPCy14Z88rSp5+1PEeWza1LNpcD0K6QXunK
+	34P5Q0EpGwYz1wFgNh4js30xaEk+7QJcZxnTzGtYqX6MRuDH9vPMcawPnNR1t4eB
+	kx2tTiY68TpGJhoFUbELONB+o2Adu0u3mmUfKwoZVKW1GiG3aLL+HU2rPVZX5g2U
+	l7koqIp9k4UoPa/IlUQyvob7MHRXSH1O3eUuvpWCkyfoLrJE220xELgl7rGYbQl0
+	uJhzpYuAsHTnOmmnGPQa49fRGjxHmgQIvkeCdrGl8yO5lG1dow8IonD9/WwQnfYN
+	PCFnQoTibAjeH17MU7Qcng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749659797; x=
+	1749746197; bh=9FCUNYIvHK4qsxp0p8mUgko4Fhuy42loTyUOdB71d6s=; b=N
+	1WapofNhfWAxuNbSX0ot3rEtdNVkbk9qemZhTA2X6dNi4HdZYQmQUsp0S5PN5vK5
+	gLhV+zE/ue6Lr/shSfPWXXO2qQSevDUsUC5fCm2tKqF2izZCS4kk3184NIfZAR/Q
+	kkHFCZvLejwkRYMJwbkDnCW3i8RNe7+iTnPGySpGRyqd0LknjsxpX0nzn67ivKcj
+	afN7KLa1R17SLaz+QPOEpmiD05wi9U7uWNqIuCwVcg+n0pnpDsxbJyTQgQDdmDXW
+	cH4FlmPJZPTiGih1KhExmYG8LybQkBiyR4JPpMnTVmX+R0S74BNLODpIW9JrBjv2
+	dHCA7qTh42yw+pqGigiog==
+X-ME-Sender: <xms:k7BJaJgvBjksxBXjAydFB_w4cVTW6pibBQB0wJIcwzk0Zoz5nY0Q6Q>
+    <xme:k7BJaODves4hQIiFhIgFDif9pgToNY0gfh1XgdycsO6hiX7RU2KtX67zl_lThrNNY
+    wlCNDb_5K4noss4MZ8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdduvdeikecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    kedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhloh
+    hfthdrnhgvthdprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhl
+    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgt
+    phhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehlrghnhhgroh
+    eshhhurgifvghirdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgif
+    vghirdgtohhmpdhrtghpthhtohepshhhrghojhhijhhivgeshhhurgifvghirdgtohhmpd
+    hrtghpthhtohepshhhvghnjhhirghnudehsehhuhgrfigvihdrtghomh
+X-ME-Proxy: <xmx:k7BJaJG6u7ca1fY94-WLXP18oePvV6ugFR312poY3ovkFOgngNVfxA>
+    <xmx:k7BJaOQhHOUpAkB1ljKfgHmIxTRej67mARUCSa-9maOM6g6t9NllXw>
+    <xmx:k7BJaGwK4QWLV2QCgiqlyrH7z9xYn_tzkrMlcCakygC7Zdb3yZpU0w>
+    <xmx:k7BJaE4UpXRYljFlV9eCGDVpcOJmB5c2gS1WanWP2YKCDrha0vdA9Q>
+    <xmx:lbBJaBtyBs-cO06obO03QmClHijB1-DOZl3MPbuwpk-HYCzwl9MUfBNN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D0D39700062; Wed, 11 Jun 2025 12:36:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-ThreadId: T0988381ff57d4bb7
+Date: Wed, 11 Jun 2025 18:36:15 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jijie Shao" <shaojijie@huawei.com>, "Arnd Bergmann" <arnd@kernel.org>,
+ "Jian Shen" <shenjian15@huawei.com>, "Salil Mehta" <salil.mehta@huawei.com>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>
+Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Hao Lan" <lanhao@huawei.com>, "Guangwei Zhang" <zhangwangwei6@huawei.com>,
+ Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <a029763b-6a5c-48ed-b135-daf1d359ac24@app.fastmail.com>
+In-Reply-To: <41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
+References: <20250610092113.2639248-1-arnd@kernel.org>
+ <41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
+Subject: Re: [PATCH] hns3: work around stack size warning
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git klp-build
-head:   c66d830416562a4215c64db8dae6b94bc2c31de7
-commit: da5e44b23c0df6c867dac0c30c6bf8bc61099bd7 [44/62] x86/extable: Define ELF section entry size for exception table
-config: um-randconfig-002-20250611 (https://download.01.org/0day-ci/archive/20250611/202506112238.9WWwaUKe-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250611/202506112238.9WWwaUKe-lkp@intel.com/reproduce)
+On Wed, Jun 11, 2025, at 04:10, Jijie Shao wrote:
+> on 2025/6/10 17:21, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>
+>> Annotate hns3_dbg_tx_spare_info() as noinline_for_stack to force the
+>> behavior that gcc has, regardless of the compiler.
+>>
+>> Ideally all the functions in here would be changed to avoid on-stack
+>> output buffers.
+>
+> Would you please help test whether the following changes have solved 
+> your problem,
+> And I'm not sure if this patch should be sent to net or net-next...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506112238.9WWwaUKe-lkp@intel.com/
+Your patch arrived with whitespace corruption here, so I could not
+try it, but I'm sure it would help avoid the warning.
 
-All errors (new ones prefixed by >>):
+However, this is not what meant with my suggestion: you already
+allocate a temporary buffer in hns3_dbg_open() and I would
+expect it to be possible to read into that buffer directly
+without a second temporary buffer (on stack or kmalloc).
 
->> ld.lld: error: vmlinux.a(lib/siphash.o):(__ex_table): SHF_MERGE section size (24) must be a multiple of sh_entsize (16)
+The normal way of doing this would be to use the infrastructure
+from seq_file and then seq_printf() and not have any extra buffers
+on top of that.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+      Arnd
