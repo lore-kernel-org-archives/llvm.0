@@ -1,131 +1,134 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B848F20F067
-	for <llvm@lists.linux.dev>; Wed, 11 Jun 2025 16:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E17520F07C
+	for <llvm@lists.linux.dev>; Wed, 11 Jun 2025 16:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749659801; cv=none; b=oGf9bzl+CqUJvPFhFPDrq6wlPjqCpS3JRac9hYFa8XvedWtMJbJGrDTScDFfM4XtraIPYzfEZ5x5pNVQBCrDxiuL9LI/TZzMuyAWeCsXSDKafkHq6SWKB2XSVp4ATWlgbtOzOFZSCx2htvnEnej6pdMRgOMOCEpuxFdT72Hunjc=
+	t=1749660467; cv=none; b=Wfh06iAW7eXVQocShjXLmGVF3I3VQxRBa8Ujph1Uieuu4nEdOgvGLRNCxCeth0YTUnvxxwaES8dHG1JB8rCchZP2g2Yd10PBXD/TOoy5vMVPqKFqeA5vBUiONxw6pUJ50Rrjh3jusOhRWXM9Lns1CNVxt2POuCfh/MeFZqoMHLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749659801; c=relaxed/simple;
-	bh=OKyY1Suf9wd0Roqmv3s7f7pR23uXYiojLlo7XhjLd8U=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=KVk9NRZi1oO3rlStlEvhlolS5Wmo/EGeW2YWGJlKqjQFwjYpY62eUnSZ0uOfybugStuLnsWbLMwkrOqlcHDmJsj3bS3F/sUeOLXTW9KdAWQ/JfDLL21O+81se+G1LHLNFZ/3cNH/KQzRemybjFg5yhy0a7piuoz63D4R7idNskI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=waUTjhqM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=N1WapofN; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1749660467; c=relaxed/simple;
+	bh=B9MohXx4AXA4k+FrYa3U3UV1gxDApK8skRfveXG9R7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RNaKjbsiwUAOaLsGLR/Kydw+wjmw8TSL29O3ou0WITXq7xOpmCVBbEzm4E9Ysgma21A1RyzCiPJbTqTYvKBxUi/70aCIfsqcedslmF4/0DXh+FmdtOLeo7ADsUwWQN87H8/b8hTnsiJ4u6E8uVeJic2WeCbXmDbECGmV0g2iSRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bf51SIfO; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="waUTjhqM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="N1WapofN"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 5F80A11400AC;
-	Wed, 11 Jun 2025 12:36:37 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Wed, 11 Jun 2025 12:36:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1749659797;
-	 x=1749746197; bh=9FCUNYIvHK4qsxp0p8mUgko4Fhuy42loTyUOdB71d6s=; b=
-	waUTjhqMbiVv6HEcx7WkyUTfia2KbYPCy14Z88rSp5+1PEeWza1LNpcD0K6QXunK
-	34P5Q0EpGwYz1wFgNh4js30xaEk+7QJcZxnTzGtYqX6MRuDH9vPMcawPnNR1t4eB
-	kx2tTiY68TpGJhoFUbELONB+o2Adu0u3mmUfKwoZVKW1GiG3aLL+HU2rPVZX5g2U
-	l7koqIp9k4UoPa/IlUQyvob7MHRXSH1O3eUuvpWCkyfoLrJE220xELgl7rGYbQl0
-	uJhzpYuAsHTnOmmnGPQa49fRGjxHmgQIvkeCdrGl8yO5lG1dow8IonD9/WwQnfYN
-	PCFnQoTibAjeH17MU7Qcng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749659797; x=
-	1749746197; bh=9FCUNYIvHK4qsxp0p8mUgko4Fhuy42loTyUOdB71d6s=; b=N
-	1WapofNhfWAxuNbSX0ot3rEtdNVkbk9qemZhTA2X6dNi4HdZYQmQUsp0S5PN5vK5
-	gLhV+zE/ue6Lr/shSfPWXXO2qQSevDUsUC5fCm2tKqF2izZCS4kk3184NIfZAR/Q
-	kkHFCZvLejwkRYMJwbkDnCW3i8RNe7+iTnPGySpGRyqd0LknjsxpX0nzn67ivKcj
-	afN7KLa1R17SLaz+QPOEpmiD05wi9U7uWNqIuCwVcg+n0pnpDsxbJyTQgQDdmDXW
-	cH4FlmPJZPTiGih1KhExmYG8LybQkBiyR4JPpMnTVmX+R0S74BNLODpIW9JrBjv2
-	dHCA7qTh42yw+pqGigiog==
-X-ME-Sender: <xms:k7BJaJgvBjksxBXjAydFB_w4cVTW6pibBQB0wJIcwzk0Zoz5nY0Q6Q>
-    <xme:k7BJaODves4hQIiFhIgFDif9pgToNY0gfh1XgdycsO6hiX7RU2KtX67zl_lThrNNY
-    wlCNDb_5K4noss4MZ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdduvdeikecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    kedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhloh
-    hfthdrnhgvthdprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhl
-    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgt
-    phhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehlrghnhhgroh
-    eshhhurgifvghirdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgif
-    vghirdgtohhmpdhrtghpthhtohepshhhrghojhhijhhivgeshhhurgifvghirdgtohhmpd
-    hrtghpthhtohepshhhvghnjhhirghnudehsehhuhgrfigvihdrtghomh
-X-ME-Proxy: <xmx:k7BJaJG6u7ca1fY94-WLXP18oePvV6ugFR312poY3ovkFOgngNVfxA>
-    <xmx:k7BJaOQhHOUpAkB1ljKfgHmIxTRej67mARUCSa-9maOM6g6t9NllXw>
-    <xmx:k7BJaGwK4QWLV2QCgiqlyrH7z9xYn_tzkrMlcCakygC7Zdb3yZpU0w>
-    <xmx:k7BJaE4UpXRYljFlV9eCGDVpcOJmB5c2gS1WanWP2YKCDrha0vdA9Q>
-    <xmx:lbBJaBtyBs-cO06obO03QmClHijB1-DOZl3MPbuwpk-HYCzwl9MUfBNN>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D0D39700062; Wed, 11 Jun 2025 12:36:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bf51SIfO"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a35c894313so80700f8f.2
+        for <llvm@lists.linux.dev>; Wed, 11 Jun 2025 09:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1749660464; x=1750265264; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aa2QXtJbJhCTINUZzXosw2JXgzKQuhbyrlej22q07Vo=;
+        b=bf51SIfO98nmMT9RXQnx2nkya+pLPbzI/xWrlHHh6RqNLR1pdtRFvWfLViJIcc6GHl
+         G+aL1rKb3Pwq5FDu17pgpDUjmGoUyEsAGps56vFj5LCAC5hIwg8Ewu0u9L82chQjWCae
+         qhGPnkN9Dr9z6yH4wJHkXtvFEHNFB0KattjYyk9QhrU5UeCkZji+DwV14uc4Yt3VvfL1
+         WOMFzBtsTOyUUCz3BpPO4yP3rKQBX69LDqGh23v3AeIaIz9foUWEGJNax1tqDlbcD6iQ
+         U5vGWtBlAhXX2yGpvgKv4qmTd8XS1+O3oJcf123zHCE3w4HGKgJdVcr2pxrLn3yRUK3E
+         d88Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749660464; x=1750265264;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aa2QXtJbJhCTINUZzXosw2JXgzKQuhbyrlej22q07Vo=;
+        b=dTcZP2g4+Vg+9X46lZTlFaDdfZbQIv/E2nCH7hO9wPHhqXnGsizmSrp2lr7oG78otd
+         WfWj8GaYdY0A+SfP0M0BM7l0k3r90iZyB78ejA6Ub7mgVL2R1frotbAgN3YrHJqwK/Kw
+         yB6sDqecuQhDGgxItWTGSnMJxI9ejibHW2NT9yno3vAPM3gTrrCHWV5kNst+REUr6rEj
+         2WYUn37u36gMuVSDYYt57vcePAWe2lhg7ruyNzTuYOjoToM7dS/Ry98gWcLRg207sI4k
+         ApKiBVtwYDiblCHXHWJiKksqZ+dw5jkFJdLtenQ8hvVEHAVYyxtNoK1l5dmeJbxp+yzx
+         5MNA==
+X-Gm-Message-State: AOJu0YzOO5ruMeyN3jTse8gavhzDgPffHIkiA8bqOfEF2ydhUwkzrK2m
+	4GCIyXwZshVCls5zBX9hAMAEtvMBkmUEWOOMkAwAfyBz5/64ssmUN+MPcLMZU1kM4uU=
+X-Gm-Gg: ASbGncsiSX5bBeH+gDmmt67ZZ/9Gjmkb72/y8w+XLD03aXXtYp9jmz37X8i811e7UXp
+	RRJvG0iRPJPF8hmFvW/2r4t6oKw+pqQqdgYCRLddd5+jMZRRTq5s71jdAicGlt8cm8iOvWjhUlk
+	Jhrhhl00B47uKinf/TkplSbnsQ65Bectir5u3Hc7k63d7k00jWCr7MZYR70WRDhQxSNUhneBw4m
+	x3NaEplIDBtiiKlzBW7Zs/nA6QLJdlFkfqP20DzX4qZFaqY/ZPMPvtUbbAfkeFMT9DJkR8/m5+M
+	5mgtcSozVN5zhB3ti9tWalhMA6/P1fXNpTeHzTuVzZ/qrpENH/5avUaYydpCVaLzndO0D8T5XEE
+	M4A==
+X-Google-Smtp-Source: AGHT+IG1I4wXbndzOO2svvUjoO/b5iTEize8HjYtNFgDUXR08tLDK+qTi10v6jyEAqbWH86+wPS7Jw==
+X-Received: by 2002:a05:6000:25c2:b0:3a4:edf6:566b with SMTP id ffacd0b85a97d-3a5586c3069mr3191218f8f.6.1749660463878;
+        Wed, 11 Jun 2025 09:47:43 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a53244f0cbsm15688709f8f.81.2025.06.11.09.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jun 2025 09:47:43 -0700 (PDT)
+Date: Wed, 11 Jun 2025 19:47:39 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	lkft-triage@lists.linaro.org, Nathan Chancellor <nathan@kernel.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: Re: selftests/filesystem: clang warning null passed to a callee that
+ requires a non-null argument [-Wnonnull]
+Message-ID: <aEmzK5B4pbF5MZ6Y@stanley.mountain>
+References: <CA+G9fYt-CMBGCFxV5ziP98upkeK2LBxkZRo7-0XN1G+zLtWK4A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T0988381ff57d4bb7
-Date: Wed, 11 Jun 2025 18:36:15 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jijie Shao" <shaojijie@huawei.com>, "Arnd Bergmann" <arnd@kernel.org>,
- "Jian Shen" <shenjian15@huawei.com>, "Salil Mehta" <salil.mehta@huawei.com>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Hao Lan" <lanhao@huawei.com>, "Guangwei Zhang" <zhangwangwei6@huawei.com>,
- Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <a029763b-6a5c-48ed-b135-daf1d359ac24@app.fastmail.com>
-In-Reply-To: <41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
-References: <20250610092113.2639248-1-arnd@kernel.org>
- <41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
-Subject: Re: [PATCH] hns3: work around stack size warning
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYt-CMBGCFxV5ziP98upkeK2LBxkZRo7-0XN1G+zLtWK4A@mail.gmail.com>
 
-On Wed, Jun 11, 2025, at 04:10, Jijie Shao wrote:
-> on 2025/6/10 17:21, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>>>
->> Annotate hns3_dbg_tx_spare_info() as noinline_for_stack to force the
->> behavior that gcc has, regardless of the compiler.
->>
->> Ideally all the functions in here would be changed to avoid on-stack
->> output buffers.
->
-> Would you please help test whether the following changes have solved 
-> your problem,
-> And I'm not sure if this patch should be sent to net or net-next...
+This seems like a Clang bug, right?  The test for _Nullable is reversed
+or something?
 
-Your patch arrived with whitespace corruption here, so I could not
-try it, but I'm sure it would help avoid the warning.
+regards,
+dan carpenter
 
-However, this is not what meant with my suggestion: you already
-allocate a temporary buffer in hns3_dbg_open() and I would
-expect it to be possible to read into that buffer directly
-without a second temporary buffer (on stack or kmalloc).
-
-The normal way of doing this would be to use the infrastructure
-from seq_file and then seq_printf() and not have any extra buffers
-on top of that.
-
-      Arnd
+On Thu, Jun 05, 2025 at 05:41:01PM +0530, Naresh Kamboju wrote:
+> Regressions found on arm, arm64 and x86_64 building warnings with clang-20
+> and clang-nightly started from Linux next-20250603
+> 
+> Regressions found on arm, arm64 and x86_64
+>  - selftests/filesystem
+> 
+> Regression Analysis:
+>  - New regression? Yes
+>  - Reproducible? Yes
+> 
+> First seen on the next-20250603
+> Good: next-20250530
+> Bad:  next-20250603
+> 
+> Test regression: arm arm64 x86_64 clang warning null passed to a
+> callee that requires a non-null argument [-Wnonnull]
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> ## Build warnings
+> make[4]: Entering directory '/builds/linux/tools/testing/selftests/filesystems'
+>   CC       devpts_pts
+>   CC       file_stressor
+>   CC       anon_inode_test
+> anon_inode_test.c:45:37: warning: null passed to a callee that
+> requires a non-null argument [-Wnonnull]
+>    45 |         ASSERT_LT(execveat(fd_context, "", NULL, NULL,
+> AT_EMPTY_PATH), 0);
+>       |                                            ^~~~
+> 
+> ## Source
+> * Kernel version: 6.15.0-next-20250605
+> * Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+> * Git sha: a0bea9e39035edc56a994630e6048c8a191a99d8
+> * Toolchain: Debian clang version 21.0.0
+> (++20250529012636+c474f8f2404d-1~exp1~20250529132821.1479)
+> 
+> ## Build
+> * Test log: https://qa-reports.linaro.org/api/testruns/28651387/log_file/
+> * Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2xzM4wMl8SvuLKE3mw3csiuv3Jz/
+> * Kernel config:
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2xzM4wMl8SvuLKE3mw3csiuv3Jz/config
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
