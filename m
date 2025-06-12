@@ -1,101 +1,123 @@
-Received: from relay16.mail.gandi.net (relay16.mail.gandi.net [217.70.178.236])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6742118DB2A
-	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 08:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F7C2147EA
+	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 08:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749716004; cv=none; b=BmHFmAcXTzdzHonDrKk3Z8cFJQbFlEy/UIdjj99u5wQG1kbxILG7zJZ/vkjdtv+oXLdXHTr/ytHcMEwZBVDUsRjO3lDmBofOviocyp9IZZff3JNN3yR/X7PM3dObCGhe03FGxHCzL3DwlniZT+MLC6Usw0OhRozxZKU1u6W4gn0=
+	t=1749717055; cv=none; b=eL4mlGuxH9eAjmVWtn5pIBUWs6SXftKXJ49mdxorHzP6lt9Y3idE4eT0FZYPYgqmfpC4kjHe7nScUvfG/LTJU6JJNm4YHU1ILMZxNBJr13UYztJFLX387GNY8Qff+/z/YZfHDMG3blzJfPyzLDmJDys1e0D+WXP/AqTLwFXmfao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749716004; c=relaxed/simple;
-	bh=FY0ptxIFdJAKLBVqEx+fcS/yAuyyGIbRo8Fu4UGhM9I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qjn8mgFG9Rfv+H5LMJJfFXpgJvEsN21tbp/NC7mIOCar3a3Sw5+CsoCiB1D9h8umTR61VAJBjn+vrcpyALGkKKVS1MCSgUp2+j3nyP4Yvebq0MAloNVYvnOobRGHhk1iFoupuesRK3ysbJKWRMny1iswhB4sKo3Jss1ujfiqY7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.178.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C9DC24386A;
-	Thu, 12 Jun 2025 08:13:16 +0000 (UTC)
-Message-ID: <0d80cd92-4d4f-4862-a2b3-a881a7368b08@ghiti.fr>
-Date: Thu, 12 Jun 2025 10:13:16 +0200
+	s=arc-20240116; t=1749717055; c=relaxed/simple;
+	bh=mSPz4JyDiTbHlIZY2LoFchrSDTmvR2H2ufTA+zC7mXY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZSAJo+eHiTFjTthRfx7GZuRePYwIyzlgg2aY+qsDAr/D+GIbrsZZE/93TD1SRh98cgtW5unwVkWWh8wYSx/3Y+0ji++IGAHlXResEz0nlX8yYf58ZtrayBwh1JRUgcUy6Wdva1HNHAymekNcEIlDoRerSMYyL86PVZnblfrua7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bnVJcQfG; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bnVJcQfG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C4CC4CEEA;
+	Thu, 12 Jun 2025 08:30:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749717055;
+	bh=mSPz4JyDiTbHlIZY2LoFchrSDTmvR2H2ufTA+zC7mXY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bnVJcQfGHwR78iMhMGJ3/c5moT+Bn2Ma2Q6g2tWpN6A90vUf3ykTM/Z5mq/OLFJ2w
+	 e8S8Y5lPnV454HZORUiUUUITukB5zxDoAcPrs3eRl9QXwABr2M+o5Y0MmU/Y+7+5m+
+	 vYpCBJeqgNYlyaTbucxJZ9lSv7W2ONvRf0XsDiyVYkqdTmkOYSkMF7w/j2pCUi+ZWf
+	 n7Bqwrg6Vl7SSRm33QP+IPAyMJqwZqGLeIEyXSkl/PXTaxrKnQnTU4UdEv6VvjMPWr
+	 N+iHNHH6i9K9qHAjHpljGaQDXOStzWTqUqs+lA0FjVk4jObixznLx9LY+r6O84fxD7
+	 W6OXF/irQpwNw==
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: jani.nikula@linux.intel.com,
+	joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com,
+	tursulin@ursulin.net
+Cc: airlied@gmail.com,
+	simona@ffwll.ch,
+	nathan@kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	tzungbi@kernel.org
+Subject: [PATCH v2] drm/i915/pmu: Fix build error with GCOV and AutoFDO enabled
+Date: Thu, 12 Jun 2025 08:30:23 +0000
+Message-ID: <20250612083023.562585-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] riscv: vdso: Deduplicate CFLAGS_REMOVE_* variables
-To: Nathan Chancellor <nathan@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20250611-vdso-absolute-reloc-v3-0-47897d73784b@linutronix.de>
- <20250611-vdso-absolute-reloc-v3-1-47897d73784b@linutronix.de>
- <20250611184018.GA2192624@ax162>
-Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250611184018.GA2192624@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddugeehiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeetlhgvgigrnhgurhgvucfihhhithhiuceorghlvgigsehghhhithhirdhfrheqnecuggftrfgrthhtvghrnhepuefffedvleetleetjefhjeehudejteetvedtvddvtdfhieetffelvdffgefgieeinecuffhomhgrihhnpehinhhfrhgruggvrggurdhorhhgnecukfhppedvtddtudemkeeiudemfeefkedvmegvfheltdemfhduvggsmehfugelrgemrgguudgumeeifhehsgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemfeefkedvmegvfheltdemfhduvggsmehfugelrgemrgguudgumeeifhehsgdphhgvlhhopeglkffrggeimedvtddtudemkeeiudemfeefkedvmegvfheltdemfhduvggsmehfugelrgemrgguudgumeeifhehsggnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepudegpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrfigvihhsshhstghhuhhhsehlihhnuhhtrhhonhhigidruggvp
- dhrtghpthhtohepphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtoheprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtihhnshhtihhtthesghhoohhglhgvrdgtohhm
 
-Hi Thomas,
+i915_pmu.c may fail to build with GCOV and AutoFDO enabled.
 
-On 6/11/25 20:40, Nathan Chancellor wrote:
-> On Wed, Jun 11, 2025 at 11:22:12AM +0200, Thomas Weißschuh wrote:
->> All vDSO objects need the same treatment.
->> To make changes to both the list of objects and the list of removed flags
->> easier, introduce a helper variable.
->>
->> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+../drivers/gpu/drm/i915/i915_pmu.c:116:3: error: call to '__compiletime_assert_487' declared with 'error' attribute: BUILD_BUG_ON failed: bit > BITS_PER_TYPE(typeof_member(struct i915_pmu, enable)) - 1
+  116 |                 BUILD_BUG_ON(bit >
+      |                 ^
 
+Here is a way to reproduce the issue:
+$ git checkout v6.15
+$ mkdir build
+$ ./scripts/kconfig/merge_config.sh -O build -n -m <(cat <<EOF
+CONFIG_DRM=y
+CONFIG_PCI=y
+CONFIG_DRM_I915=y
 
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+CONFIG_PERF_EVENTS=y
 
-Thanks,
+CONFIG_DEBUG_FS=y
+CONFIG_GCOV_KERNEL=y
+CONFIG_GCOV_PROFILE_ALL=y
 
-Alex
+CONFIG_AUTOFDO_CLANG=y
+EOF
+)
+$ PATH=${PATH}:${HOME}/llvm-20.1.5-x86_64/bin make LLVM=1 O=build \
+       olddefconfig
+$ PATH=${PATH}:${HOME}/llvm-20.1.5-x86_64/bin make LLVM=1 O=build \
+       CLANG_AUTOFDO_PROFILE=...PATH_TO_SOME_AFDO_PROFILE... \
+       drivers/gpu/drm/i915/i915_pmu.o
 
+Although not super sure what happened, by reviewing the code, it should
+depend on `__builtin_constant_p(bit)` directly instead of assuming
+`__builtin_constant_p(config)` makes `bit` a builtin constant.
 
->
->> ---
->>   arch/riscv/kernel/vdso/Makefile | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
->> index 9ebb5e590f93a3228c451dca58e6d5cfbbc03ff7..c19c3c76f7c9f6b2f7523a59269de3b683656323 100644
->> --- a/arch/riscv/kernel/vdso/Makefile
->> +++ b/arch/riscv/kernel/vdso/Makefile
->> @@ -49,9 +49,10 @@ CPPFLAGS_vdso.lds += -DHAS_VGETTIMEOFDAY
->>   endif
->>   
->>   # Disable -pg to prevent insert call site
->> -CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
->> -CFLAGS_REMOVE_getrandom.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
->> -CFLAGS_REMOVE_hwprobe.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
->> +CFLAGS_REMOVE_VDSO = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
->> +CFLAGS_REMOVE_vgettimeofday.o = $(CFLAGS_REMOVE_VDSO)
->> +CFLAGS_REMOVE_getrandom.o = $(CFLAGS_REMOVE_VDSO)
->> +CFLAGS_REMOVE_hwprobe.o = $(CFLAGS_REMOVE_VDSO)
->>   
->>   # Force dependency
->>   $(obj)/vdso.o: $(obj)/vdso.so
->>
->> -- 
->> 2.49.0
->>
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Also fix a nit, to reuse the `bit` local variable.
+
+Fixes: a644fde77ff7 ("drm/i915/pmu: Change bitmask of enabled events to u32")
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+---
+Changes from v1:
+(https://patchwork.freedesktop.org/patch/656115/?series=149617&rev=1)
+- Collect R-b tag from Nathan.
+- Rebase to v6.16-rc1.
+
+ drivers/gpu/drm/i915/i915_pmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
+index e5a188ce3185..990bfaba3ce4 100644
+--- a/drivers/gpu/drm/i915/i915_pmu.c
++++ b/drivers/gpu/drm/i915/i915_pmu.c
+@@ -112,7 +112,7 @@ static u32 config_mask(const u64 config)
+ {
+ 	unsigned int bit = config_bit(config);
+ 
+-	if (__builtin_constant_p(config))
++	if (__builtin_constant_p(bit))
+ 		BUILD_BUG_ON(bit >
+ 			     BITS_PER_TYPE(typeof_member(struct i915_pmu,
+ 							 enable)) - 1);
+@@ -121,7 +121,7 @@ static u32 config_mask(const u64 config)
+ 			     BITS_PER_TYPE(typeof_member(struct i915_pmu,
+ 							 enable)) - 1);
+ 
+-	return BIT(config_bit(config));
++	return BIT(bit);
+ }
+ 
+ static bool is_engine_event(struct perf_event *event)
+-- 
+2.50.0.rc1.591.g9c95f17f64-goog
+
