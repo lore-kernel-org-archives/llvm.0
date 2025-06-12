@@ -1,93 +1,183 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5DF1AA1E4
-	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 13:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFFE19066D;
+	Thu, 12 Jun 2025 14:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749733787; cv=none; b=uMQDPEgc0hu1Yd/ibAAWyb0z6stduU1EdOycVpVDFzjV6VUiR0ZR4a2IUuPiXlZUgE66donJJqSdLAUClgpKbqzwhaO1p4q1kYmxdSbwVnrKNQcI0T02gRfJ+AQvT1cODy0qScqL+Zp+wqbOgRptp3UvMbnZLOGQiHbfATTHdvI=
+	t=1749737366; cv=none; b=WXxMoGgAqcaJTkvGiOSRpAGKjp+6giINapr8CrlE3rzFtgIXxS444NpRXduraYJT69Y6r134DNQ8xITp1HOjJYnLylhlll1Xm1teBeRZvu//NlHnbGgyLNedV9esZQhBcmkaenC+scE1wbOyVdapBIHRh6v0tLxgms3Sa36kF/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749733787; c=relaxed/simple;
-	bh=DNd41N3FOFnvelD0wpL5VGYshR/FFAfzJM3V9VuwB+U=;
-	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AJLk2L3ZpaHn0lvK8V3ZsVYukgf5umRXOqjXWz8uaxpqbJbyDybYPT9MpcFClPIN9yZDTD4K7xEIxn2AjUxCN8iIL/goShB0jiVkHt9N7aeyh12NWDS2ga5cwstC5sj1hOj7feBR6JNccwpftHLSuO0wU40Bj+wvx7omASR1o8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4bJ2s13Q1gz2TS1V;
-	Thu, 12 Jun 2025 21:08:21 +0800 (CST)
-Received: from kwepemk100013.china.huawei.com (unknown [7.202.194.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 408081A0188;
-	Thu, 12 Jun 2025 21:09:42 +0800 (CST)
-Received: from [10.67.120.192] (10.67.120.192) by
- kwepemk100013.china.huawei.com (7.202.194.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 12 Jun 2025 21:09:41 +0800
-Message-ID: <34d9d8f7-384e-4447-90e2-7c6694ecbb05@huawei.com>
-Date: Thu, 12 Jun 2025 21:09:40 +0800
+	s=arc-20240116; t=1749737366; c=relaxed/simple;
+	bh=kGaKNVsxpFzIz+WCZZnJXn4hE7TGZUw5e0te86QWm/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQXP+U+CA+B9yjihG+exa06dT2zn4Nb8nnAHpgsJyDJEYD4b9B2i9caJa0K51Utu3DLC+mjLiq0QKCMRH2Wbggavdc8mv7mYQ3bQICEtj9/Aw0/TCNt4ondL4QQ5t+TUF+6yhoqVn9H561gm86cn0/T2WbSMnfrS0h+UA6wO+JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=VePziA9h; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="VePziA9h"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=GzirIYRqhqmK+GV4aZFnktzJiM51rywbvs1UUJO0Zhw=; b=VePziA9h3ZV+DLfm8PoHZoEqN7
+	CL5dTgj6W/pRgO5Mhs9mT7fstYxJhOUV16CfriLwI4r6zR0KLs+3r8hERv70HEjRQHWC/JiVBvnJy
+	AaaSwz83O7RQ3qbsBYDPIfUTW5ASyQRWZYjIQdABTaAWh68sm5P0u8/lgE5SxHW7Gs54EgGl53r0k
+	7IOBtdiOV2WoV6DpuqYDfjvWXYy0dTZN35WQDyAX3hQW3+dYTJUN4FH9uSWI1L6hlv722e0a244Wr
+	D3VXvw9jc045NmumDEFMpWh2DArXPm1y+1dRNf/Xaj1S/vhi26TWK39pKz2vGUv5b7QllDCeuNuwQ
+	pCmjMcDQ==;
+Received: from [189.6.13.79] (helo=mail.igalia.com)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uPicF-002f9i-AE; Thu, 12 Jun 2025 16:09:15 +0200
+Date: Thu, 12 Jun 2025 11:08:10 -0300
+From: Melissa Wen <mwen@igalia.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	Alex Deucher <alexander.deucher@amd.com>, Alex Hung <alex.hung@amd.com>, 
+	Aurabindo Pillai <aurabindo.pillai@amd.com>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
+	Dominik Kaszewski <dominik.kaszewski@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Roman Li <roman.li@amd.com>, Simona Vetter <simona@ffwll.ch>, 
+	Tom Chung <chiahsuan.chung@amd.com>, Wayne Lin <Wayne.Lin@amd.com>, 
+	LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org, lkp@intel.com, 
+	oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev, cocci@inria.fr
+Subject: Re: [PATCH v3] drm/amd/display: Fix exception handling in
+ dm_validate_stream_and_context()
+Message-ID: <5ebybqjohsoz7qhsenufkpkkw52w6tgikkbrzpegwotmefhnpn@m2cnzvsfai7v>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <e6656c83-ee7a-a253-2028-109138779c94@web.de>
+ <ea0ff67b-3665-db82-9792-67a633ba07f5@web.de>
+ <32674bac-92c2-8fc7-0977-6d2d81b3257f@amd.com>
+ <da489521-7786-4716-8fb8-d79b3c08d93c@web.de>
+ <8684e2ba-b644-44c8-adf7-9f1423a1251d@web.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-CC: <shaojijie@huawei.com>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Hao Lan <lanhao@huawei.com>, Guangwei Zhang
-	<zhangwangwei6@huawei.com>, Netdev <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH] hns3: work around stack size warning
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>, Jian Shen
-	<shenjian15@huawei.com>, Salil Mehta <salil.mehta@huawei.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>
-References: <20250610092113.2639248-1-arnd@kernel.org>
- <41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
- <a029763b-6a5c-48ed-b135-daf1d359ac24@app.fastmail.com>
-From: Jijie Shao <shaojijie@huawei.com>
-In-Reply-To: <a029763b-6a5c-48ed-b135-daf1d359ac24@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemk100013.china.huawei.com (7.202.194.61)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8684e2ba-b644-44c8-adf7-9f1423a1251d@web.de>
 
+On 06/10, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Tue, 10 Jun 2025 07:42:40 +0200
+> 
+> The label “cleanup” was used to jump to another pointer check despite of
+> the detail in the implementation of the function “dm_validate_stream_and_context”
+> that it was determined already that corresponding variables contained
+> still null pointers.
+> 
+> 1. Thus return directly if
+>    * a null pointer was passed for the function parameter “stream”
+>      or
+>    * a call of the function “dc_create_plane_state” failed.
+> 
+> 2. Use a more appropriate label instead.
+> 
+> 3. Delete two questionable checks.
+> 
+> 4. Omit extra initialisations (for the variables “dc_state” and “dc_plane_state”)
+>    which became unnecessary with this refactoring.
+> 
+> 
+> This issue was detected by using the Coccinelle software.
+> 
 
-on 2025/6/12 0:36, Arnd Bergmann wrote:
-> On Wed, Jun 11, 2025, at 04:10, Jijie Shao wrote:
->> on 2025/6/10 17:21, Arnd Bergmann wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
->>> Annotate hns3_dbg_tx_spare_info() as noinline_for_stack to force the
->>> behavior that gcc has, regardless of the compiler.
->>>
->>> Ideally all the functions in here would be changed to avoid on-stack
->>> output buffers.
->> Would you please help test whether the following changes have solved
->> your problem,
->> And I'm not sure if this patch should be sent to net or net-next...
-> Your patch arrived with whitespace corruption here, so I could not
-> try it, but I'm sure it would help avoid the warning.
->
-> However, this is not what meant with my suggestion: you already
-> allocate a temporary buffer in hns3_dbg_open() and I would
-> expect it to be possible to read into that buffer directly
-> without a second temporary buffer (on stack or kmalloc).
->
-> The normal way of doing this would be to use the infrastructure
-> from seq_file and then seq_printf() and not have any extra buffers
-> on top of that.
->
->        Arnd
+Hi Markus,
 
+Thanks for working on this improvement.
+Overall, LGTM. Some nits below.
 
-Hi,
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202506100312.Ms4XgAzW-lkp@intel.com/
 
-seq_file is good. But the change is quite big.
-I need to discuss it internally, and it may not be completed so quickly.
-I will also need consider the maintainer's suggestion.
+As the patch wasn't merged yet, don't add these two kernel-bot-related lines.
 
-Thanks,
-Jijie Shao
+You only need to add these lines "If you fix the issue in a separate
+patch/commit (i.e. not just a new version of the same patch/commit)"
 
+> Fixes: 5468c36d6285 ("drm/amd/display: Filter Invalid 420 Modes for HDMI TMDS")
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+> 
+> V3:
+> * Another function call was renamed.
+> 
+> * Recipient lists were adjusted once more.
+> 
+> V2:
+> * The change suggestion was rebased on source files of
+>   the software “Linux next-20250606”.
+> 
+> * Recipient lists were adjusted accordingly.
+> 
+> 
+>  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 20 ++++++++-----------
+>  1 file changed, 8 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 78816712afbb..7dc80b2fbd30 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -7473,19 +7473,19 @@ static enum dc_status dm_validate_stream_and_context(struct dc *dc,
+>  						struct dc_stream_state *stream)
+>  {
+>  	enum dc_status dc_result = DC_ERROR_UNEXPECTED;
+> -	struct dc_plane_state *dc_plane_state = NULL;
+> -	struct dc_state *dc_state = NULL;
+> +	struct dc_plane_state *dc_plane_state;
+> +	struct dc_state *dc_state;
+>  
+>  	if (!stream)
+> -		goto cleanup;
+> +		return dc_result;
+>  
+>  	dc_plane_state = dc_create_plane_state(dc);
+>  	if (!dc_plane_state)
+> -		goto cleanup;
+> +		return dc_result;
+>  
+>  	dc_state = dc_state_create(dc, NULL);
+>  	if (!dc_state)
+> -		goto cleanup;
+> +		goto release_plane_state;
+>  
+>  	/* populate stream to plane */
+>  	dc_plane_state->src_rect.height  = stream->src.height;
+> @@ -7522,13 +7522,9 @@ static enum dc_status dm_validate_stream_and_context(struct dc *dc,
+>  	if (dc_result == DC_OK)
+>  		dc_result = dc_validate_global_state(dc, dc_state, DC_VALIDATE_MODE_ONLY);
+>  
+> -cleanup:
+> -	if (dc_state)
+> -		dc_state_release(dc_state);
+> -
+> -	if (dc_plane_state)
+> -		dc_plane_state_release(dc_plane_state);
+> -
+> +	dc_state_release(dc_state);
+
+For readability, I would add an extra line here...
+
+> +release_plane_state:
+> +	dc_plane_state_release(dc_plane_state);
+
+and here.
+
+With that, you can add my
+
+Reviewed-by: Melissa Wen <mwen@igalia.com>
+
+>  	return dc_result;
+>  }
+>  
+> -- 
+> 2.49.0
+> 
