@@ -1,162 +1,174 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEC322E3E3
-	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 10:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0812219CCEA
+	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 12:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749725647; cv=none; b=LLQZIc634KjXLq4JDfIKbzSJFK7m/UgDw7Tz/WDU2aUfztR8qpFI7VRqd9aVwvQ9BWudhzCjtDGHZLuQWP/I9sEb66iqbNu8r3zuF5yiC5fGStajpDU5lTOc12XaQlVLhEqX3yTthmfapHGLwRIgau1wZxDpZWWCcSaUUmDLbZE=
+	t=1749732089; cv=none; b=tLurwaUcArnuGnrYvRP9Ps2LNPLu9vFwabAtmzxHXh7N3RSwqGPiIFIutQ8pAgP0TuQE6MjFA6rTy3QU8Hai21jMuDrYz1xtzgcBRsw2WUkYP4MZy6hmGCkgtNFLSeRnCOMgl2iNtQvmhDIQTzj8/x+8AyQoftf9o64+Pbf7VZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749725647; c=relaxed/simple;
-	bh=+ZKq6kYKGEDqf9llRklf/t474d48ZEQE4GwU/OUBlGw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PGqFgokHxfHBSeayRiFyXOLefMS1RU2hUhnYNxabzgMmAnDiw4AywqRFYwEdNCyWQTPFOOd7d97S45on6pcIGyIWM1gJ1LW6GWK31sa0LGFSTPv0WIa/1ZOc6gBuJWK+dyU5DRhOrHS2qPgUls/GNPbtxXNgU4u8TXOTsWfasYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net; spf=none smtp.mailfrom=ursulin.net; dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b=qDHelQeI; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ursulin.net
+	s=arc-20240116; t=1749732089; c=relaxed/simple;
+	bh=c8Ix91wrzFGnsIKnEJ76g/AFhCOhdU7RNRauJOy8nRk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=LjgOAdfSdXB/bvmpyDsP5fIzk4J3VoFFMbbfecR7n1o/vGU2BEkKWxNiKPOH1BtT5bZctqjMYl11nsFNx/S+F6DxSkw2/sGNWSZFDqCaWx32PL6gsAwIO9gcOwqQlz9D8WP+fldLCF5idBvWPzeOFSAuZAhVAIRjZIGbiUcpgoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=DQAQkgj4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=brIy1qbS; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b="qDHelQeI"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-451d7b50815so6359135e9.2
-        for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 03:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ursulin-net.20230601.gappssmtp.com; s=20230601; t=1749725644; x=1750330444; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GxQFgQ/4qwTPb8prTWvxvzUBOvzju4RMhJyaNcL4t/8=;
-        b=qDHelQeIaZmjWhE09JmcIlmlZAfD3QcbrSumcRNcTux8wQ2wVmwLx+6iWTvhz8dD3y
-         He8b4b4CAF2qDu8RfwbZk0V7msSfuAj432DYRobHR7a4QgW8aXrah0wFOQgk7a3NU9c0
-         rmKa4Pps1c9QCjEPISVhNRZSvfVsazz5D0JN43F4hIMlcJ+WAyzlxuJyTV7RstkZF2Yl
-         NVuxuR9Q9gZgYYXW0EPEQPo+iKRRvGD1DRPFRHW3VAwOl6x5w9QVjIsfhq1T6weUkvb4
-         SizBlmJm1QsAuPakmVObWdGoSa+W6mYNHP6BhgL9jtxhxuYX7Y5XeSGVn0uwlIoiVKIj
-         8B/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749725644; x=1750330444;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GxQFgQ/4qwTPb8prTWvxvzUBOvzju4RMhJyaNcL4t/8=;
-        b=sWLsrCajNfMzHOR/t0O9Jbtu/oC1/RFYQX87cVswvSPBZxRdBYyCBOfmfVpXokwdT8
-         2mJOFuql69BxGggvB4ht8MKRiV5RmrLVOaSDmbT0gQe8iiJE7kT3jy7uaIaN4I7/m8+L
-         KtOiZIUXma50nC5xK+/PngrSxvMNSjMhjuLJYgty2wAqkcYN/D6DTybRUufyaHDWbAA5
-         7uZM6Y3ywtYE6lCs5ULjmZCj70leK4CeKDjs2vox+68rODHAWOiXJwwlsEVZ/MOp0nqh
-         exb1Diha55BOMrET3AgXq75QvUMeU+KKreHaNftcmJ/meLv5EBI9eJk+Fic50a6E3tOF
-         ALsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5QcW2nMPmXEL0iF2wWCLR0nJ2f7GzGfBKgxovDZXVeQTohZiGlX/9fw2UdGrbvctSdPGV@lists.linux.dev
-X-Gm-Message-State: AOJu0YxYbxHozc3GibqN7oLfFMsiie394Ug3Xop8U6yy0M/9Rrx1JVCH
-	2dxFvkuY9JH3pfj3IT30ZSkH+9un0kwYoaWU71r8a8/r4H99WauD/a0WjDNQDBxwJeM=
-X-Gm-Gg: ASbGncsDhDk2Cm7c3psehin+40SBTrspCNVnuyqrn9IxRHt8knF/9o1kVe6UgG1XcCU
-	arFpGYjdj0t6YafYEBg96CgaTJ/NV5Nmev4FXQRuQE++X8t7KQBYMePYyuJxeABW4eP/4qKCiWy
-	L26PatLEr33RJ0Kbel1ccy1aZPgLj4Zx2xI1Pf/XXgc6dMoUlaBL7AqsYC/LusKDSPfkYlDVGbw
-	1kXaQ3fEHBEY8RvG70zv9U1PzSPxToA4Fn54uc9/8bZ3/H7QvrwMJdxaRxG809Gyogd0zAXUAyh
-	vGXjQrW0YGVjGCc8/MnUgJfOQe+Ii73xeSi/F6guC8iCKQtuBGc6jQAcZmJeoPIW3PRQ0Y+KEKR
-	u
-X-Google-Smtp-Source: AGHT+IHML/xG07WWPTOnuT8iOLag9iTtPlS9ekWXeBJoVCXzsh04s+uwSY/h6y2MkQRrFsmZOTZpUg==
-X-Received: by 2002:a05:6000:2887:b0:3a5:2f23:3780 with SMTP id ffacd0b85a97d-3a5606b5920mr2289812f8f.18.1749725643997;
-        Thu, 12 Jun 2025 03:54:03 -0700 (PDT)
-Received: from [192.168.0.101] ([81.79.92.254])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a56199f2aesm1615096f8f.40.2025.06.12.03.54.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 03:54:03 -0700 (PDT)
-Message-ID: <8b8c6170-9e36-4090-a49e-b1de41ff0c5c@ursulin.net>
-Date: Thu, 12 Jun 2025 11:54:02 +0100
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="DQAQkgj4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="brIy1qbS"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id DA4E2138032B;
+	Thu, 12 Jun 2025 08:41:26 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 12 Jun 2025 08:41:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1749732086;
+	 x=1749818486; bh=vdZKbGDbpvt9W2XJe9j+di/nQDtbx+SBBwgfEySjMIo=; b=
+	DQAQkgj48q1fN+wl4EKziOQKsTJcdhS9YQRtR5uL7TwKyPl5nr74rOl6JuqrivTl
+	xFEMmSs/NMKWXknlL4ddeXFwiVEMXbdROoHdwiAOBrtmYhmEu5pDV60kTSqE/Q54
+	Hl1yySylKzAE8kDvGIR79PdDc7TewWAKW0MWsxiusksoIaiFsBLr7xYXrYYYmdTD
+	Dz2jiZdbaNVtkSie7T9bCkgvzRQVCLSrAZwKDRywHMO5MMZx6DPWjoVOjOWw3gYX
+	tVkRPspdQUzohQkzwRWVB5pX9Q1gSSr6doCJee98q+BJjyYQ/3ta1N4c87cW93lM
+	jDRtRllW1Y7uCQm81MTvFw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749732086; x=
+	1749818486; bh=vdZKbGDbpvt9W2XJe9j+di/nQDtbx+SBBwgfEySjMIo=; b=b
+	rIy1qbSVX9cIdrC0k4EA6tgRSAfFq078dvj9lxYBCA/XBbzrK6KqLFwynJe/8QCm
+	prWvZ3azO7737RYKaiSVm5VRwp7SrX0wyJ86/BrLPrW8Hs58stSpC7QH/3B7x5wG
+	T5UzgjZZlhrkuEyVubSEOaT58X0AEU/iezzMORVujYCgJCrAZE5WplnSR2Yosvqq
+	1EYLWO6jAywBQeve1NJbrpDMRtHp7R1fxmwNhj9d7TKm3h/42Ued3vHe1chWQoe0
+	C1QuMo7YvYpAsT/n0g4HxbwtM4LvfaxKWDJSIMfmCVU8IAIBvQvZAjxrAscTnktk
+	hLJIpr64Qvnzb/e9sHgRA==
+X-ME-Sender: <xms:9cpKaMM3lyjzhNeqdJ6rhZn8JNUVqXAQERnKGgKGAWaaNY6AhS0j0w>
+    <xme:9cpKaC8MNu61LjDgo09TeGsL8n1d7zLmWWb50NU9hqly26GAJjT_NhY4ySyjZBHfD
+    ScFPD7wyi122G66G_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdduhedtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeekvdefgfeigedtuddujeduueekleefuedvtdeh
+    fefhjefhvddtkedufeekjefhkeenucffohhmrghinhepghhouggsohhlthdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpd
+    hrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthhdprhgtphhtthhopegrihhrlhhi
+    vggusehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrh
+    hsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithht
+    sehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomh
+    dprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgu
+    rdgtohhmpdhrtghpthhtoheprghrnhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hmrhhiphgrrhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgv
+    rhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:9cpKaDTCqfC60KXO5wbhTldgUaHUkmBC-LRuw0hZjg2X3Myb-PBjSQ>
+    <xmx:9cpKaEvUlWHhyoi0aE_fmzCgHWke3NEy1QlNCMCbBIp0KAd93Jc7UQ>
+    <xmx:9cpKaEeK7iRkd4twcPiE5K7_-PjVi-v-NAS3CEPDACiHL2OT8KOung>
+    <xmx:9cpKaI1GJ5ZyZE9iGUHczX0TvgNbfcbvch_gJUcRGO2tu9MkXHm6OA>
+    <xmx:9spKaBuZGBOokQNR9tOfVXyogu175bYrQExiZ-CRtIEp56oQ_V-X-9az>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id C9BED700062; Thu, 12 Jun 2025 08:41:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drm/i915/pmu: Fix build error with GCOV and AutoFDO
- enabled
-To: Tzung-Bi Shih <tzungbi@kernel.org>, jani.nikula@linux.intel.com,
- joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com
-Cc: airlied@gmail.com, simona@ffwll.ch, nathan@kernel.org,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev
-References: <20250612083023.562585-1-tzungbi@kernel.org>
-Content-Language: en-GB
-From: Tvrtko Ursulin <tursulin@ursulin.net>
-In-Reply-To: <20250612083023.562585-1-tzungbi@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ThreadId: T7abef826b1a41757
+Date: Thu, 12 Jun 2025 14:40:45 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux <linux@treblig.org>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
+ "Maxime Ripard" <mripard@kernel.org>,
+ "Thomas Zimmermann" <tzimmermann@suse.de>, "Dave Airlie" <airlied@gmail.com>,
+ "Simona Vetter" <simona@ffwll.ch>, "Nathan Chancellor" <nathan@kernel.org>
+Message-Id: <4a81fc44-7c93-49d1-891b-dae11cd5e74a@app.fastmail.com>
+In-Reply-To: <f4e42ca9-d6f2-401b-9a53-d3b41915c6a0@ideasonboard.com>
+References: <20250610092737.2641862-1-arnd@kernel.org>
+ <f4e42ca9-d6f2-401b-9a53-d3b41915c6a0@ideasonboard.com>
+Subject: Re: [PATCH] drm: omapdrm: reduce clang stack usage
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
+On Thu, Jun 12, 2025, at 09:58, Tomi Valkeinen wrote:
+> On 10/06/2025 12:27, Arnd Bergmann wrote:
+>>  
+>> -static void dispc_restore_context(struct dispc_device *dispc)
+>> +static noinline_for_stack void dispc_restore_context(struct dispc_device *dispc)
+>>  {
+>>  	int i, j;
+>>  
+>
+> While I don't think this causes any harm, but... What's going on here?
+> If I compile with gcc (x86 or arm), I see stack usage in few hundreds of
+> bytes. If I compile with LLVM=1, the stack usage jumps to over a thousand.
+>
+> Is clang just broken? I don't see anything special with
+> dispc_restore_context() or dispc_runtime_resume(), so is this same thing
+> happening all around the kernel, and we need to sprinkle noinlines
+> everywhere?
+>
+> Or do we get some extra debugging feature enabled only on clang with
+> allmodconfig, and that is eating the stack?
 
-On 12/06/2025 09:30, Tzung-Bi Shih wrote:
-> i915_pmu.c may fail to build with GCOV and AutoFDO enabled.
-> 
-> ../drivers/gpu/drm/i915/i915_pmu.c:116:3: error: call to '__compiletime_assert_487' declared with 'error' attribute: BUILD_BUG_ON failed: bit > BITS_PER_TYPE(typeof_member(struct i915_pmu, enable)) - 1
->    116 |                 BUILD_BUG_ON(bit >
->        |                 ^
-> 
-> Here is a way to reproduce the issue:
-> $ git checkout v6.15
-> $ mkdir build
-> $ ./scripts/kconfig/merge_config.sh -O build -n -m <(cat <<EOF
-> CONFIG_DRM=y
-> CONFIG_PCI=y
-> CONFIG_DRM_I915=y
-> 
-> CONFIG_PERF_EVENTS=y
-> 
-> CONFIG_DEBUG_FS=y
-> CONFIG_GCOV_KERNEL=y
-> CONFIG_GCOV_PROFILE_ALL=y
-> 
-> CONFIG_AUTOFDO_CLANG=y
-> EOF
-> )
-> $ PATH=${PATH}:${HOME}/llvm-20.1.5-x86_64/bin make LLVM=1 O=build \
->         olddefconfig
-> $ PATH=${PATH}:${HOME}/llvm-20.1.5-x86_64/bin make LLVM=1 O=build \
->         CLANG_AUTOFDO_PROFILE=...PATH_TO_SOME_AFDO_PROFILE... \
->         drivers/gpu/drm/i915/i915_pmu.o
-> 
-> Although not super sure what happened, by reviewing the code, it should
-> depend on `__builtin_constant_p(bit)` directly instead of assuming
-> `__builtin_constant_p(config)` makes `bit` a builtin constant.
-> 
-> Also fix a nit, to reuse the `bit` local variable.
-> 
-> Fixes: a644fde77ff7 ("drm/i915/pmu: Change bitmask of enabled events to u32")
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
-> Changes from v1:
-> (https://patchwork.freedesktop.org/patch/656115/?series=149617&rev=1)
-> - Collect R-b tag from Nathan.
-> - Rebase to v6.16-rc1.
+There is no general answer here, but a combination of multiple
+effects going on at the same time throughout the kernel, which lead
+to clang observing excessive stack usage in some files when gcc
+does not:
 
-LGTM. Pushed to drm-intel-gt-next, thank you!
+- both compilers have a number of corner cases where they run off
+  and do something crazy for unusual input (usually crypto code),
+  but since gcc has more users, most files that trigger only gcc
+  already have workarounds in place, while the ones that trigger
+  with clang are still missing them
 
-Regards,
+- The inlining algorithm works the opposite way on clang vs gcc,
+  while gcc always starts inlining leaf functions into their callers
+  and does this recursively, clang starts with global functions
+  and inlines its direct callees first. If you have deeply nested
+  static functions that could all be inlined, both stop at some
+  point, but the resulting object code looks completely different,
+  and the stack usage is a symptom of this. I've added 'noinline'
+  for some of the cases like this where I know both result in
+  the same (harmless) stack usage through the call chain, but
+  only clang warns about it.
 
-Tvrtko
+- clang has previously had bugs where it tracks the lifetime of
+  stack variables incorrectly, so multiple variables that
+  should share the same stack slot won't. Some of these are
+  fixed now, others are a result of the different inlining, and
+  some others are likely still bugs we should fix in clang
 
-> 
->   drivers/gpu/drm/i915/i915_pmu.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
-> index e5a188ce3185..990bfaba3ce4 100644
-> --- a/drivers/gpu/drm/i915/i915_pmu.c
-> +++ b/drivers/gpu/drm/i915/i915_pmu.c
-> @@ -112,7 +112,7 @@ static u32 config_mask(const u64 config)
->   {
->   	unsigned int bit = config_bit(config);
->   
-> -	if (__builtin_constant_p(config))
-> +	if (__builtin_constant_p(bit))
->   		BUILD_BUG_ON(bit >
->   			     BITS_PER_TYPE(typeof_member(struct i915_pmu,
->   							 enable)) - 1);
-> @@ -121,7 +121,7 @@ static u32 config_mask(const u64 config)
->   			     BITS_PER_TYPE(typeof_member(struct i915_pmu,
->   							 enable)) - 1);
->   
-> -	return BIT(config_bit(config));
-> +	return BIT(bit);
->   }
->   
->   static bool is_engine_event(struct perf_event *event)
+- CONFIG_KMSAN disables some optimizations that are required
+  for reducing stack usage, and at the moment this is only
+  implemented in clang but not gcc.
 
+- CONFIG_KASAN has some similar issues as KMSAN but is not
+  quite as bad here.
+
+- CONFIG_KASAN_STACK tends to use more stack with clang than gcc
+  because of implementation choices around how hard it should
+  try to detect array overflows. This could be changed by having
+  clang make similar decisions to gcc here, but for now we just
+  require using CONFIG_EXPERT=y to enable KASAN_STACK on clang.
+
+I have managed to produce a testcase for this file that shows
+how clang produces huge stack usage when gcc does not,
+in this case it seems to be triggered by -fsanitize=kernel-address
+
+https://godbolt.org/z/TT88zPYf6
+
+
+      Arnd
