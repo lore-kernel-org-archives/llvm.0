@@ -1,183 +1,134 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFFE19066D;
-	Thu, 12 Jun 2025 14:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF97219FC
+	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 14:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749737366; cv=none; b=WXxMoGgAqcaJTkvGiOSRpAGKjp+6giINapr8CrlE3rzFtgIXxS444NpRXduraYJT69Y6r134DNQ8xITp1HOjJYnLylhlll1Xm1teBeRZvu//NlHnbGgyLNedV9esZQhBcmkaenC+scE1wbOyVdapBIHRh6v0tLxgms3Sa36kF/M=
+	t=1749738099; cv=none; b=e8T941JfkDTu6GU9Q3WxRJCXI9OPjce0Mk1dk9f1z+qL0ceBhYXSV0dB+AnvbxgYn/4S8tMyetDNoHsZlEPXS3lP+h7CFCMfbUGOCFFCQfe0JK3+3lKfhy51wmwsFM4/zyQCvkPx6f7Tc513I7orIGguJwedYoD7jb78TixXEAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749737366; c=relaxed/simple;
-	bh=kGaKNVsxpFzIz+WCZZnJXn4hE7TGZUw5e0te86QWm/k=;
+	s=arc-20240116; t=1749738099; c=relaxed/simple;
+	bh=Hsc2T8sTIjfBEYE7rFx+jmDibxndiVANCGaWHaZkmjo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IQXP+U+CA+B9yjihG+exa06dT2zn4Nb8nnAHpgsJyDJEYD4b9B2i9caJa0K51Utu3DLC+mjLiq0QKCMRH2Wbggavdc8mv7mYQ3bQICEtj9/Aw0/TCNt4ondL4QQ5t+TUF+6yhoqVn9H561gm86cn0/T2WbSMnfrS0h+UA6wO+JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=VePziA9h; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=czbLNfxIjnEEKnGtjPB3qrSKrr8dAXojiD5c9zaVglB+HWlEt6j7puP3ldM+VoIvaKgz+GHN+vGuChRmV9Rse4Eu4sEznN6vko54NCWDbwxkhW22d5lG+ECwesj19bUbcXxVLOfv/9h+pProMRYyO7nqEOULdm9hxsl4E9iRSw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K9H6d31+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=w5C638nu; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="VePziA9h"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=GzirIYRqhqmK+GV4aZFnktzJiM51rywbvs1UUJO0Zhw=; b=VePziA9h3ZV+DLfm8PoHZoEqN7
-	CL5dTgj6W/pRgO5Mhs9mT7fstYxJhOUV16CfriLwI4r6zR0KLs+3r8hERv70HEjRQHWC/JiVBvnJy
-	AaaSwz83O7RQ3qbsBYDPIfUTW5ASyQRWZYjIQdABTaAWh68sm5P0u8/lgE5SxHW7Gs54EgGl53r0k
-	7IOBtdiOV2WoV6DpuqYDfjvWXYy0dTZN35WQDyAX3hQW3+dYTJUN4FH9uSWI1L6hlv722e0a244Wr
-	D3VXvw9jc045NmumDEFMpWh2DArXPm1y+1dRNf/Xaj1S/vhi26TWK39pKz2vGUv5b7QllDCeuNuwQ
-	pCmjMcDQ==;
-Received: from [189.6.13.79] (helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uPicF-002f9i-AE; Thu, 12 Jun 2025 16:09:15 +0200
-Date: Thu, 12 Jun 2025 11:08:10 -0300
-From: Melissa Wen <mwen@igalia.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	Alex Deucher <alexander.deucher@amd.com>, Alex Hung <alex.hung@amd.com>, 
-	Aurabindo Pillai <aurabindo.pillai@amd.com>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
-	Dominik Kaszewski <dominik.kaszewski@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>, 
-	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Roman Li <roman.li@amd.com>, Simona Vetter <simona@ffwll.ch>, 
-	Tom Chung <chiahsuan.chung@amd.com>, Wayne Lin <Wayne.Lin@amd.com>, 
-	LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org, lkp@intel.com, 
-	oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev, cocci@inria.fr
-Subject: Re: [PATCH v3] drm/amd/display: Fix exception handling in
- dm_validate_stream_and_context()
-Message-ID: <5ebybqjohsoz7qhsenufkpkkw52w6tgikkbrzpegwotmefhnpn@m2cnzvsfai7v>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <e6656c83-ee7a-a253-2028-109138779c94@web.de>
- <ea0ff67b-3665-db82-9792-67a633ba07f5@web.de>
- <32674bac-92c2-8fc7-0977-6d2d81b3257f@amd.com>
- <da489521-7786-4716-8fb8-d79b3c08d93c@web.de>
- <8684e2ba-b644-44c8-adf7-9f1423a1251d@web.de>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K9H6d31+";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="w5C638nu"
+Date: Thu, 12 Jun 2025 16:21:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1749738096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pl4iD19u/tvG4+VMp89MNYtzMFEcmgmm0KnazjaFycE=;
+	b=K9H6d31+9MSDUfhsh3uETF2aV+bxvrRnkXITk06U2irnbchGUxFYd6p6cmayprMF+ssuCc
+	yjD0GboPXRQA5Ik6Xa7Mfd38YWkeq8gqD6z1Sln6e7zfUFCiAv0afA0XZsWx1DmfL1NITy
+	GMw8ao7/9aFcNz8ywe8MURwC6z1rkHhIQg+vvn7fd/+kaCrjfndvn/IE+oismSkuVC579a
+	k3nej/cHlRW8VGt/mgWZn/Vc9IUdoVVgYlHKw/riBvRWuJCVVwMtYBe9sHJc7sbULfn0OK
+	XmY4OuSWxdJahtgarFLrjV0VlYZBSZgPYL9dG4icV4rHUV27JzJRfTWtp33Xhg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1749738096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pl4iD19u/tvG4+VMp89MNYtzMFEcmgmm0KnazjaFycE=;
+	b=w5C638nukRzf0+OZcZmeo4QyuuSXTL2DL3gcUcZqmjrdwp0B4QgyFM4FxVoyn5cjvZrHuh
+	Aguhg4aLMAgexLCg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 3/3] vdso: Reject absolute relocations during build
+Message-ID: <20250612155635-ecade4e1-0235-464a-bcb3-293f7452510a@linutronix.de>
+References: <20250611-vdso-absolute-reloc-v3-0-47897d73784b@linutronix.de>
+ <20250611-vdso-absolute-reloc-v3-3-47897d73784b@linutronix.de>
+ <7ddda233-99f7-468b-842d-8469f0a86e77@ghiti.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8684e2ba-b644-44c8-adf7-9f1423a1251d@web.de>
+In-Reply-To: <7ddda233-99f7-468b-842d-8469f0a86e77@ghiti.fr>
 
-On 06/10, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Tue, 10 Jun 2025 07:42:40 +0200
-> 
-> The label “cleanup” was used to jump to another pointer check despite of
-> the detail in the implementation of the function “dm_validate_stream_and_context”
-> that it was determined already that corresponding variables contained
-> still null pointers.
-> 
-> 1. Thus return directly if
->    * a null pointer was passed for the function parameter “stream”
->      or
->    * a call of the function “dc_create_plane_state” failed.
-> 
-> 2. Use a more appropriate label instead.
-> 
-> 3. Delete two questionable checks.
-> 
-> 4. Omit extra initialisations (for the variables “dc_state” and “dc_plane_state”)
->    which became unnecessary with this refactoring.
-> 
-> 
-> This issue was detected by using the Coccinelle software.
-> 
+Hi Alexandre,
 
-Hi Markus,
-
-Thanks for working on this improvement.
-Overall, LGTM. Some nits below.
-
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202506100312.Ms4XgAzW-lkp@intel.com/
-
-As the patch wasn't merged yet, don't add these two kernel-bot-related lines.
-
-You only need to add these lines "If you fix the issue in a separate
-patch/commit (i.e. not just a new version of the same patch/commit)"
-
-> Fixes: 5468c36d6285 ("drm/amd/display: Filter Invalid 420 Modes for HDMI TMDS")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
+On Thu, Jun 12, 2025 at 10:31:20AM +0200, Alexandre Ghiti wrote:
+> On 6/11/25 11:22, Thomas Wei�schuh wrote:
+> > All vDSO code needs to be completely position independent.
+> > Symbol references are marked as hidden so the compiler emits
+> > PC-relative relocations. However there are cases where the compiler may
+> > still emit absolute relocations, as they are valid in regular PIC DSO code.
+> > These would be resolved by the linker and will break at runtime.
+> > This has been observed on arm64 under some circumstances, see
+> > commit 0c314cda9325 ("arm64: vdso: Work around invalid absolute relocations from GCC")
+> > 
+> > Introduce a build-time check for absolute relocations.
+> > The check is done on the object files as the relocations will not exist
+> > anymore in the final DSO. As there is no extension point for the
+> > compilation of each object file, perform the validation in vdso_check.
+> > 
+> > Debug information can contain legal absolute relocations and readelf can
+> > not print relocations from the .text section only. Make use of the fact
+> > that all global vDSO symbols follow the naming pattern "vdso_u_".
+> > 
+> > Link: https://lore.kernel.org/lkml/aApGPAoctq_eoE2g@t14ultra/
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120002
+> > Signed-off-by: Thomas Wei�schuh <thomas.weissschuh@linutronix.de>
+> > ---
+> >   lib/vdso/Makefile.include | 6 ++++++
+> >   1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
+> > index cedbf15f80874d4bb27c097244bc5b11272f261c..04257d0f28c0ed324e31adbb68497181085752f8 100644
+> > --- a/lib/vdso/Makefile.include
+> > +++ b/lib/vdso/Makefile.include
+> > @@ -12,7 +12,13 @@ c-getrandom-$(CONFIG_VDSO_GETRANDOM) := $(addprefix $(GENERIC_VDSO_DIR), getrand
+> >   #
+> >   # As a workaround for some GNU ld ports which produce unneeded R_*_NONE
+> >   # dynamic relocations, ignore R_*_NONE.
+> > +#
+> > +# Also validate that no absolute relocations against global symbols are present
+> > +# in the object files.
+> >   quiet_cmd_vdso_check = VDSOCHK $@
+> >         cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
+> >   		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+> > +			     rm -f $@; /bin/false); fi && \
+> > +		       if $(READELF) -rW $(filter %.o, $(real-prereqs)) | grep -q " R_\w*_ABS.*vdso_u_"; \
 > 
-> V3:
-> * Another function call was renamed.
 > 
-> * Recipient lists were adjusted once more.
-> 
-> V2:
-> * The change suggestion was rebased on source files of
->   the software “Linux next-20250606”.
-> 
-> * Recipient lists were adjusted accordingly.
-> 
-> 
->  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 20 ++++++++-----------
->  1 file changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 78816712afbb..7dc80b2fbd30 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -7473,19 +7473,19 @@ static enum dc_status dm_validate_stream_and_context(struct dc *dc,
->  						struct dc_stream_state *stream)
->  {
->  	enum dc_status dc_result = DC_ERROR_UNEXPECTED;
-> -	struct dc_plane_state *dc_plane_state = NULL;
-> -	struct dc_state *dc_state = NULL;
-> +	struct dc_plane_state *dc_plane_state;
-> +	struct dc_state *dc_state;
->  
->  	if (!stream)
-> -		goto cleanup;
-> +		return dc_result;
->  
->  	dc_plane_state = dc_create_plane_state(dc);
->  	if (!dc_plane_state)
-> -		goto cleanup;
-> +		return dc_result;
->  
->  	dc_state = dc_state_create(dc, NULL);
->  	if (!dc_state)
-> -		goto cleanup;
-> +		goto release_plane_state;
->  
->  	/* populate stream to plane */
->  	dc_plane_state->src_rect.height  = stream->src.height;
-> @@ -7522,13 +7522,9 @@ static enum dc_status dm_validate_stream_and_context(struct dc *dc,
->  	if (dc_result == DC_OK)
->  		dc_result = dc_validate_global_state(dc, dc_state, DC_VALIDATE_MODE_ONLY);
->  
-> -cleanup:
-> -	if (dc_state)
-> -		dc_state_release(dc_state);
-> -
-> -	if (dc_plane_state)
-> -		dc_plane_state_release(dc_plane_state);
-> -
-> +	dc_state_release(dc_state);
+> This only works for arm64 relocations right? I can't find any *ABS*
+> relocations in riscv elf abi
+> (https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/tag/v1.0).
 
-For readability, I would add an extra line here...
+Indeed you are right.
 
-> +release_plane_state:
-> +	dc_plane_state_release(dc_plane_state);
+We could introduce per-architecture configuration. Essentially reverting parts
+of commit aff69273af61 ("vdso: Improve cmd_vdso_check to check all dynamic relocations").
+The final logic for the intermediary objects still needs to be more complicated
+than for the final .so as those contain relocations in the debug information.
 
-and here.
+Or we could add a C hostprog for validation.
+That would be much more flexible than the inline shell command.
+It would then also be easier to use an allow-list than the brittle deny-list.
 
-With that, you can add my
+Or we don't do anything, relying on the selftests to detect miscompilations.
 
-Reviewed-by: Melissa Wen <mwen@igalia.com>
+I'll run this by tglx. If somebody else has any opinions, I'm all ears.
 
->  	return dc_result;
->  }
->  
-> -- 
-> 2.49.0
-> 
+> > +		       then (echo >&2 "$@: absolute relocations are not supported"; \
+> >   			     rm -f $@; /bin/false); fi
+> > 
