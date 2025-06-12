@@ -1,235 +1,101 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2331B1D95B3
-	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 19:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1892D4B40;
+	Thu, 12 Jun 2025 19:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749757934; cv=none; b=MDyYGGwq3FirR9dja1MZ4d3R3QNFeUiclyKpMtDCbeGZm+Hy85KzY/HaFMcOUKLMq1VcW6RPN72vyACVN8oXFa+pqZJtF+M1x280rRQRcSpinoFloyWuL4evnmnf9S+8BZD8PfEqkB/A35yeN98ynkRCJUP6rHSspa3GTdc4H/Q=
+	t=1749758234; cv=none; b=X/uksQDRSkuZPcbzts3moC2lQWHqiPKvLwhRodU0+uNerFeaPcrt3rk3ChHtkInsDW2H80mDYGbHVfpa7ZqmfbIfa2Kz9WwzNJtDonqdMW0tvSw1fnigPKxncnZJC8hVVTUVt6bFRXJ9BBQiQjfUY5tijFW9SUDJFqrAiuJWhB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749757934; c=relaxed/simple;
-	bh=O7zV3Lco1nwdNarkpE/eZX7hpR2BG22WPgnzvO4uYgI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LXS2qFUeC8581sbONh7yz7/xBz5nwHDASGXn5wgbhLkw/bwwuDXB8m71zdrrVTq96xgz2zjZpDzVG+u/cNgh1EeXVXiugoXZtg9ouwRAu6Pp3qtoiyPp8F7GemB89cTVHIWLY9gyciFn/l9kiJEN3owbu3HQxGv2OmshkSaonuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWRrq7zA; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749758234; c=relaxed/simple;
+	bh=RkICIPg0cPvp0gfftu+3DghfNr9uDYcet+Q6+1XpofQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jhK7MZ6DrzwCHRhk3wVK/PuKdSHIStYk7OJvIrn1mCobTEX8Cq/9/VrhinfLsxgSltamWIhF8e/Yb4SaZK5s29b7w7HQlj3iwx4g5g3iMFmOYSA1QSw4aJ3DxzrwkGwFiEzFwXWV4tblP8MHucykT/U8jwdQM0ARa+CA1SB4/CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crIDHX2M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWRrq7zA"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-747fc7506d4so1380948b3a.0
-        for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 12:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749757932; x=1750362732; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7xi4YJKAUkKxYZRl9SSrq8Evyr8Lkvoed++01daD1s=;
-        b=QWRrq7zA14n9JU7DP9vxesbAidwV9xnyfe29/ac3AakE+vBOmlZwLBPSd1C55W0nnP
-         xzvroTreTMqFvcW+ek2o601+V/MBpALI6aSt+YjD0qVC3V8cf4I4BIYz5lobdGTmlsyU
-         HLMorsXSy/nJpRF3sgEK5F8SlOred7wp1rUp3B7hJJJ76syCE1Le6hHNHYo3u+8Hvwez
-         3Difrnc/3uZgtKrirUmyu9GBez3I3t7q9nPrRGY1ZQ2/eazNqKoQSLA09+kRgj4szBhI
-         ncReJTcVBXFRklv6ma91miMZPwnzXz49h0vtg826KNyb5Qq34oGTm0iF54jiS/2FJxUM
-         dqCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749757932; x=1750362732;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z7xi4YJKAUkKxYZRl9SSrq8Evyr8Lkvoed++01daD1s=;
-        b=jysdu2NceQ2VAECKiykColWB/rSMj610/Pp77FSwLddL7Ur/lkNRYtEJ6EVp84kPcb
-         aCsjTeIftb5RHzX5TBMpWeaQdnUvdFk8hR8QZr9KFvxhr+5VTrPk20c0bSKX93Ww++6o
-         H0yHt3EfW1Q2FkL8bJ+cVEzl1TX04m9W5ieOHpzJPj7p6k1J63sqEe3+iqMVlfo8MbVV
-         3lse3m08pBxhEJ3WjRcBl7UJksvooFk094iR9z5KB9rPRwNxp/1UnLWIA78xhesVaQyO
-         9UlnQmw+4taBRo9k1MQB16zyP3uPuMi6wk9qpwrpF3kZHv8rzoW1n0HnRvAITdmwICId
-         FM2g==
-X-Forwarded-Encrypted: i=1; AJvYcCX7ICbJ+cSykYuAbE5y0Pu4ZudOMdwsMLTko/BtR6A7WBx/CdVkQXznO1Nh6DWDUY2QaIIJ@lists.linux.dev
-X-Gm-Message-State: AOJu0YwzYGSncG6texVh5SI+2K/9J1fM8awPZPTRsn3697FazCO922D5
-	9dx/4sbRCHFEX01fyXDIL5wORDXdKNHzj1uNeW8nWqR/dl3bEkUisxTy
-X-Gm-Gg: ASbGncs2w1WjoeNg1/yz2QIUXNV58hR75hAVNpUZeXOQYZpcOAJcPb8GovO0ulSr+jm
-	yZqwJrcPN/q4h6aq3wx2LwYFIq994I3nby/tkmsgyqIIOCLfB6X3sA5Qosid7FvYE49zIjxHbAm
-	fJRPkQKEGA/2v7FxL3hPWvZ2rgvsXlEeaeFBf7Bo4XAGIUz2cuO+gKN0C232gjW+PRotrlrCQBo
-	SD4D48xM72PNMuFFTTP4nsVvdpYUgIAD43RbyKbTUfxKtk75v3WzqSc/Ig1IYWyn/raoKku4kyB
-	ItV5GRcYBptqPVAuAg/XmfevXj3rS7aRUOsva6ubGZaeCXe8KhMQHCBuOL2SyA==
-X-Google-Smtp-Source: AGHT+IEU8m2F+5mxJ4HQROetGJB4LGA8zrpWrZ/HojR3rTDhNg8kjwUPP475HlXQvhwtX4Onlx73lw==
-X-Received: by 2002:a05:6a00:b87:b0:736:450c:fa54 with SMTP id d2e1a72fcca58-7488f6c9155mr687345b3a.6.1749757932319;
-        Thu, 12 Jun 2025 12:52:12 -0700 (PDT)
-Received: from localhost ([216.228.127.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7488ffeca70sm123370b3a.21.2025.06.12.12.52.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 12:52:11 -0700 (PDT)
-Date: Thu, 12 Jun 2025 15:52:09 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Shreeya Patel <shreeya.patel@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-	linux-sound@vger.kernel.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 16/20] PCI: rockchip: switch to HWORD_UPDATE* macros
-Message-ID: <aEsv6X5JSQkpmwvP@yury>
-References: <20250612-byeword-update-v1-16-f4afb8f6313f@collabora.com>
- <20250612193728.GA924118@bhelgaas>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crIDHX2M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1462AC4CEEA;
+	Thu, 12 Jun 2025 19:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749758233;
+	bh=RkICIPg0cPvp0gfftu+3DghfNr9uDYcet+Q6+1XpofQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=crIDHX2M3du/SemSBGm2v6Hxcr0mu2qPZ2WtlBXrqnDWyIngAp/+g1FnXN2LOcE0t
+	 iGHvonT1TlweSy3QTBYqxb19AWLjm/If+fjSjeGWz26mWSQY70scyP1fUwB7BDTWi4
+	 +stSu1o5vv6vveaLROiJfaKt9nXPPYDOimPy+UhXhZPOvIAf4DOAHoJ3X/EbqfkcZn
+	 UcVej2uvMj3IZ9TGR7Kfm3StZRejf0Uc2NZWIdtd16lCm7iJAyInHCafU9Uoc1ADsM
+	 5/cET1Rmlvc3hGu7Rc/qpRm3RlhlvsLWuWiN0q+lWp+bHogLMwZdxMpxjCB0n3dndZ
+	 gSX6JYN8gcaAA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 12 Jun 2025 12:57:01 -0700
+Subject: [PATCH] riscv: Require clang-17 or newer for kCFI
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250612193728.GA924118@bhelgaas>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250612-riscv-require-clang-17-for-kcfi-v1-1-216f7cd7d87f@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAwxS2gC/x2NSwqFMAwAryJZv0Ab/OFV5C0kphoUPymKIN7d4
+ nJgmLkhiqlEaLIbTE6Nui4J/C8DHrtlENQ+MZCjwpWe0DTyiSb7oSbIc3LQVxhWw4mDYuVqTyx
+ d3tcEqbKZBL2+Q/t/nhdooh12cQAAAA==
+X-Change-ID: 20250612-riscv-require-clang-17-for-kcfi-70812cea4d82
+To: Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: Sami Tolvanen <samitolvanen@google.com>, 
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1738; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=RkICIPg0cPvp0gfftu+3DghfNr9uDYcet+Q6+1XpofQ=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnehuJF+92O/fI7v+TQvHOlPq2sBWs7moOrbGokvdZ0v
+ GHRuC3dUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbif4jhr+gHU0PRde0qU1Xz
+ oy/f+ZRux8L+efIkJjOLPlnZScwxJQz/TC7HevJEdm26zN+pmFwWzOo+RWuq2/UJEnIPs9dMKTX
+ jBgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Thu, Jun 12, 2025 at 02:37:28PM -0500, Bjorn Helgaas wrote:
-> On Thu, Jun 12, 2025 at 08:56:18PM +0200, Nicolas Frattaroli wrote:
-> > The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-> > drivers that use constant masks.
-> > 
-> > The Rockchip PCI driver, like many other Rockchip drivers, has its very
-> > own definition of HIWORD_UPDATE.
-> > 
-> > Remove it, and replace its usage with either HWORD_UPDATE, or two new
-> > header local macros for setting/clearing a bit with the high mask, which
-> > use HWORD_UPDATE_CONST internally. In the process, ENCODE_LANES needed
-> > to be adjusted, as HWORD_UPDATE* shifts the value for us.
-> > 
-> > That this is equivalent was verified by first making all HWORD_UPDATE
-> > instances HWORD_UPDATE_CONST, then doing a static_assert() comparing it
-> > to the old macro (and for those with parameters, static_asserting for
-> > the full range of possible values with the old encode macro).
-> > 
-> > What we get out of this is compile time error checking to make sure the
-> > value actually fits in the mask, and that the mask fits in the register,
-> > and also generally less icky code that writes shifted values when it
-> > actually just meant to set and clear a handful of bits.
-> > 
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> 
-> Looks good to me.  I assume you want to merge these via a non-PCI tree
-> since this depends on patch 01/20.  PCI subject convention would
-> capitalize "Switch":
+After the combination of commit c217157bcd1d ("riscv: Implement
+HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS"), which starts using
+'-fpatchable-function-entry=M,N', and commit d0262e907e29 ("riscv:
+ftrace: support PREEMPT"), which allows CONFIG_DYNAMIC_FTRACE to be
+enabled by allmodconfig, allmodconfig builds with clang-16 begin
+crashing in the generic LLVM kCFI pass (see [1] for the stack trace).
 
-Hi,
+clang-17 avoids this crash by moving to target-specific lowering of the
+kCFI operand bundles [2]. Require clang-17 to select CONFIG_CFI_CLANG to
+avoid this crash.
 
-I'd like to take patch #1 and the explicitly acked following patches in
-my bitmap-for-next.Those who would prefer to move the material in their
-per-driver branches (like net, as mentioned by Andrew Lunn) can wait
-till the end of next merge window, and then apply the patches cleanly.
+Fixes: c217157bcd1d ("riscv: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")
+Link: https://godbolt.org/z/xG39Pn16o [1]
+Link: https://github.com/llvm/llvm-project/commit/62fa708ceb027713b386c7e0efda994f8bdc27e2 [2]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/riscv/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks,
-Yury
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 36061f4732b7..d71ea0f4466f 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -63,7 +63,8 @@ config RISCV
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+ 	select ARCH_STACKWALK
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+-	select ARCH_SUPPORTS_CFI_CLANG
++	# clang >= 17: https://github.com/llvm/llvm-project/commit/62fa708ceb027713b386c7e0efda994f8bdc27e2
++	select ARCH_SUPPORTS_CFI_CLANG if CLANG_VERSION >= 170000
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+ 	select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
+ 	select ARCH_SUPPORTS_HUGETLBFS if MMU
 
->   PCI: rockchip: Switch to HWORD_UPDATE* macros
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> > ---
-> >  drivers/pci/controller/pcie-rockchip.h | 35 +++++++++++++++++-----------------
-> >  1 file changed, 18 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
-> > index 5864a20323f21a004bfee4ac6d3a1328c4ab4d8a..5f2e45f062d94cd75983f7ad0c5b708e5b4cfb6f 100644
-> > --- a/drivers/pci/controller/pcie-rockchip.h
-> > +++ b/drivers/pci/controller/pcie-rockchip.h
-> > @@ -11,6 +11,7 @@
-> >  #ifndef _PCIE_ROCKCHIP_H
-> >  #define _PCIE_ROCKCHIP_H
-> >  
-> > +#include <linux/bitfield.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/pci.h>
-> > @@ -21,10 +22,10 @@
-> >   * The upper 16 bits of PCIE_CLIENT_CONFIG are a write mask for the lower 16
-> >   * bits.  This allows atomic updates of the register without locking.
-> >   */
-> > -#define HIWORD_UPDATE(mask, val)	(((mask) << 16) | (val))
-> > -#define HIWORD_UPDATE_BIT(val)		HIWORD_UPDATE(val, val)
-> > +#define HWORD_SET_BIT(val)		(HWORD_UPDATE_CONST((val), 1))
-> > +#define HWORD_CLR_BIT(val)		(HWORD_UPDATE_CONST((val), 0))
-> >  
-> > -#define ENCODE_LANES(x)			((((x) >> 1) & 3) << 4)
-> > +#define ENCODE_LANES(x)			((((x) >> 1) & 3))
-> >  #define MAX_LANE_NUM			4
-> >  #define MAX_REGION_LIMIT		32
-> >  #define MIN_EP_APERTURE			28
-> > @@ -32,21 +33,21 @@
-> >  
-> >  #define PCIE_CLIENT_BASE		0x0
-> >  #define PCIE_CLIENT_CONFIG		(PCIE_CLIENT_BASE + 0x00)
-> > -#define   PCIE_CLIENT_CONF_ENABLE	  HIWORD_UPDATE_BIT(0x0001)
-> > -#define   PCIE_CLIENT_CONF_DISABLE       HIWORD_UPDATE(0x0001, 0)
-> > -#define   PCIE_CLIENT_LINK_TRAIN_ENABLE	  HIWORD_UPDATE_BIT(0x0002)
-> > -#define   PCIE_CLIENT_LINK_TRAIN_DISABLE  HIWORD_UPDATE(0x0002, 0)
-> > -#define   PCIE_CLIENT_ARI_ENABLE	  HIWORD_UPDATE_BIT(0x0008)
-> > -#define   PCIE_CLIENT_CONF_LANE_NUM(x)	  HIWORD_UPDATE(0x0030, ENCODE_LANES(x))
-> > -#define   PCIE_CLIENT_MODE_RC		  HIWORD_UPDATE_BIT(0x0040)
-> > -#define   PCIE_CLIENT_MODE_EP            HIWORD_UPDATE(0x0040, 0)
-> > -#define   PCIE_CLIENT_GEN_SEL_1		  HIWORD_UPDATE(0x0080, 0)
-> > -#define   PCIE_CLIENT_GEN_SEL_2		  HIWORD_UPDATE_BIT(0x0080)
-> > +#define   PCIE_CLIENT_CONF_ENABLE		HWORD_SET_BIT(0x0001)
-> > +#define   PCIE_CLIENT_CONF_DISABLE		HWORD_CLR_BIT(0x0001)
-> > +#define   PCIE_CLIENT_LINK_TRAIN_ENABLE		HWORD_SET_BIT(0x0002)
-> > +#define   PCIE_CLIENT_LINK_TRAIN_DISABLE	HWORD_CLR_BIT(0x0002)
-> > +#define   PCIE_CLIENT_ARI_ENABLE		HWORD_SET_BIT(0x0008)
-> > +#define   PCIE_CLIENT_CONF_LANE_NUM(x)		HWORD_UPDATE(0x0030, ENCODE_LANES(x))
-> > +#define   PCIE_CLIENT_MODE_RC			HWORD_SET_BIT(0x0040)
-> > +#define   PCIE_CLIENT_MODE_EP			HWORD_CLR_BIT(0x0040)
-> > +#define   PCIE_CLIENT_GEN_SEL_1			HWORD_CLR_BIT(0x0080)
-> > +#define   PCIE_CLIENT_GEN_SEL_2			HWORD_SET_BIT(0x0080)
-> >  #define PCIE_CLIENT_LEGACY_INT_CTRL	(PCIE_CLIENT_BASE + 0x0c)
-> > -#define   PCIE_CLIENT_INT_IN_ASSERT		HIWORD_UPDATE_BIT(0x0002)
-> > -#define   PCIE_CLIENT_INT_IN_DEASSERT		HIWORD_UPDATE(0x0002, 0)
-> > -#define   PCIE_CLIENT_INT_PEND_ST_PEND		HIWORD_UPDATE_BIT(0x0001)
-> > -#define   PCIE_CLIENT_INT_PEND_ST_NORMAL	HIWORD_UPDATE(0x0001, 0)
-> > +#define   PCIE_CLIENT_INT_IN_ASSERT		HWORD_SET_BIT(0x0002)
-> > +#define   PCIE_CLIENT_INT_IN_DEASSERT		HWORD_CLR_BIT(0x0002)
-> > +#define   PCIE_CLIENT_INT_PEND_ST_PEND		HWORD_SET_BIT(0x0001)
-> > +#define   PCIE_CLIENT_INT_PEND_ST_NORMAL	HWORD_CLR_BIT(0x0001)
-> >  #define PCIE_CLIENT_SIDE_BAND_STATUS	(PCIE_CLIENT_BASE + 0x20)
-> >  #define   PCIE_CLIENT_PHY_ST			BIT(12)
-> >  #define PCIE_CLIENT_DEBUG_OUT_0		(PCIE_CLIENT_BASE + 0x3c)
-> > 
-> > -- 
-> > 2.49.0
-> > 
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250612-riscv-require-clang-17-for-kcfi-70812cea4d82
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
