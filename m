@@ -1,174 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF55414A8B;
-	Thu, 12 Jun 2025 06:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC2321D3CD
+	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 07:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749708985; cv=none; b=S7XjtA8RMbFAC07umjrXptrZFKOMFV9T5CjmujCMM6lw0avoq0JeMJKgAbJ1Mwv7LWRyu/Gq7EVHI3d5/5B8gbETpnD7Qkt+oeMZMlkjmlVLjJ/lvCCy7PAv9hSieZErSpeJm3qBXbhIMQEYSFnbOe1rXVhWpZuNNrbfL6YpvTU=
+	t=1749715107; cv=none; b=spEK57EZAsNAyxVf6CU4px5vmPn1uXcZVmQxRKZcmwXQql5sSaEkJqLMyr68BboxNGfsnsSBaDj0FZYSHf0azpLO7DcaLtzbh2pNJnSRfiw36g17KCVVjeWMNYAxgmeQQf7wygYtnXpDJF1GBpnucZdGVHZZS2+M0WHUaK+Ke1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749708985; c=relaxed/simple;
-	bh=X/61lWTuUq6sXz6ih75vVOSfAxpdgkAoSrIQ5x3rmDw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fDr1o73cyldfDQhW38v7/FAJZhWPY7oFMGqHwA5hEBAcN5oSaurbEA9n38/gcF8p1axo7FPUlhFT27V3gn7xXQSIa+xXtR98CK1EsNwo2xXpFXwUc2tQJVTLLopf5BmVwxf/buQ2wYXJxnqDSK/Nxqi6zBuf3uc5wKJ7xQvgFoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fWz465Cd; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749715107; c=relaxed/simple;
+	bh=m7f6LnCqLuKAy3Gi20gsFjFzCCZMcpkuQ8x0mccGp0w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CCHxJDn7cKkkDFTPSqToDAmzoSPJUUJtPic9RNNkrTDypDiiex1hGTGYiOVVg0nEisg7lc258e2rnra2FbeF+d3DEGUyhQo6oYSyGn5zkoApDbwRzA0L4zY9bKD74a9MwapxbsW3SIAxZhw5C8BkH7ZIcw+Ep0NMFVj9BBWhGzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=UPRfnn08; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fWz465Cd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749708984; x=1781244984;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=X/61lWTuUq6sXz6ih75vVOSfAxpdgkAoSrIQ5x3rmDw=;
-  b=fWz465CdyDJn50+mAzWF3TvFZP5lgvXz+RWahS32Csinfz8pwkHUdwez
-   Gxtr/9U4eUIiro3Aixb+Lj44GUb0Wdphqq1YjA0ijGz+Bd5ldaYwG8cbW
-   47y5+x7h+h65QedvMt3ZYyyRlHpSEWjsNsWdPjSkccFXWLOZiOXCcZOad
-   i6Cz9IvKgi5hhN1kCe+Zs+t3vL/j+mcwKGDwTNxTHfp1qEVwralfyKOt+
-   DyNdPFopCHClU05MZ28pamI+GuKwQUwUuCmEdOUzF92qN5cWFjA9dkL+I
-   GJeatWzFKe3sqhqGZEblkvS6RiJKL63NyKoFsL+ZLRbg7GniBlcaBEO1e
-   w==;
-X-CSE-ConnectionGUID: ERUORYBXRNWNls8B+WQtWA==
-X-CSE-MsgGUID: r+2bX2NzRmSLbZvZDVapVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="51740938"
-X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
-   d="scan'208";a="51740938"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 23:16:21 -0700
-X-CSE-ConnectionGUID: vXvrm4AnQseEzJjhQsQxvQ==
-X-CSE-MsgGUID: utpPMpXiRiauBNSfxWtEbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
-   d="scan'208";a="151227580"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 11 Jun 2025 23:16:19 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uPbEX-000BC4-1a;
-	Thu, 12 Jun 2025 06:16:17 +0000
-Date: Thu, 12 Jun 2025 14:15:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Da Xue <da@libre.computer>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC] spi: expand bits_per_word_mask to 64 bits
-Message-ID: <202506121333.aBBVT88v-lkp@intel.com>
-References: <20250611000516.1383268-1-da@libre.computer>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="UPRfnn08"
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 550F6D6;
+	Thu, 12 Jun 2025 09:58:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1749715093;
+	bh=m7f6LnCqLuKAy3Gi20gsFjFzCCZMcpkuQ8x0mccGp0w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UPRfnn08AaC2BjPcestxx8Y+JXeyOrA8T1Lw6d1PlwlICAHH1h7h5tf4jxG0SSJBL
+	 a9cyY3jEZW2Jh+uxBf/1/QTOC7alxDptmrpQ8jyosOLizhH3/N4bpifa/DcyqHOnT5
+	 TyxB4wTfemNqGJBkYC00hsQ2Op46CqtDi0QUcVRo=
+Message-ID: <f4e42ca9-d6f2-401b-9a53-d3b41915c6a0@ideasonboard.com>
+Date: Thu, 12 Jun 2025 10:58:17 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250611000516.1383268-1-da@libre.computer>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm: omapdrm: reduce clang stack usage
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ "Dr. David Alan Gilbert" <linux@treblig.org>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>
+References: <20250610092737.2641862-1-arnd@kernel.org>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <20250610092737.2641862-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Da,
+Hi,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+On 10/06/2025 12:27, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The thread sanitizer makes the stack usage explode from extra variable
+> spills in dispc_runtime_resume:
+> 
+> drivers/gpu/drm/omapdrm/dss/dispc.c:4735:27: error: stack frame size (1824) exceeds limit (1280) in 'dispc_runtime_resume' [-Werror,-Wframe-larger-than]
+> 
+> I could not figure out what exactly is going on here, but I see that
+> whenever dispc_restore_context() is not inlined, that function
+> and its caller shrink below 900 bytes combined of stack usage.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/gpu/drm/omapdrm/dss/dispc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/omapdrm/dss/dispc.c b/drivers/gpu/drm/omapdrm/dss/dispc.c
+> index 533f70e8a4a6..cf055815077c 100644
+> --- a/drivers/gpu/drm/omapdrm/dss/dispc.c
+> +++ b/drivers/gpu/drm/omapdrm/dss/dispc.c
+> @@ -524,7 +524,7 @@ static void dispc_save_context(struct dispc_device *dispc)
+>  	DSSDBG("context saved\n");
+>  }
+>  
+> -static void dispc_restore_context(struct dispc_device *dispc)
+> +static noinline_for_stack void dispc_restore_context(struct dispc_device *dispc)
+>  {
+>  	int i, j;
+>  
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on jic23-iio/togreg staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.16-rc1 next-20250611]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+While I don't think this causes any harm, but... What's going on here?
+If I compile with gcc (x86 or arm), I see stack usage in few hundreds of
+bytes. If I compile with LLVM=1, the stack usage jumps to over a thousand.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Da-Xue/spi-expand-bits_per_word_mask-to-64-bits/20250611-104431
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20250611000516.1383268-1-da%40libre.computer
-patch subject: [RFC] spi: expand bits_per_word_mask to 64 bits
-config: arm-randconfig-004-20250612 (https://download.01.org/0day-ci/archive/20250612/202506121333.aBBVT88v-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250612/202506121333.aBBVT88v-lkp@intel.com/reproduce)
+Is clang just broken? I don't see anything special with
+dispc_restore_context() or dispc_runtime_resume(), so is this same thing
+happening all around the kernel, and we need to sprinkle noinlines
+everywhere?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506121333.aBBVT88v-lkp@intel.com/
+Or do we get some extra debugging feature enabled only on clang with
+allmodconfig, and that is eating the stack?
 
-All warnings (new ones prefixed by >>):
+ Tomi
 
->> drivers/spi/spi-altera-dfl.c:150:25: warning: format specifies type 'unsigned int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-     149 |         dev_dbg(dev, "%s cs %u bpm 0x%x mode 0x%x\n", __func__,
-         |                                      ~~
-         |                                      %llx
-     150 |                 host->num_chipselect, host->bits_per_word_mask,
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:171:49: note: expanded from macro 'dev_dbg'
-     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:139:35: note: expanded from macro 'dev_no_printk'
-     139 |                         _dev_printk(level, dev, fmt, ##__VA_ARGS__);    \
-         |                                                 ~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +150 drivers/spi/spi-altera-dfl.c
-
-ba2fc167e94475 Matthew Gerlach    2021-04-16  123  
-ba2fc167e94475 Matthew Gerlach    2021-04-16  124  static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
-ba2fc167e94475 Matthew Gerlach    2021-04-16  125  {
-4f45f340496010 Martin Hundebøll   2021-07-16  126  	struct spi_board_info board_info = { 0 };
-ba2fc167e94475 Matthew Gerlach    2021-04-16  127  	struct device *dev = &dfl_dev->dev;
-ec168190c1cace Yang Yingliang     2022-12-29  128  	struct spi_controller *host;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  129  	struct altera_spi *hw;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  130  	void __iomem *base;
-8e3ca32f46994e Christophe JAILLET 2022-05-29  131  	int err;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  132  
-ec168190c1cace Yang Yingliang     2022-12-29  133  	host = devm_spi_alloc_host(dev, sizeof(struct altera_spi));
-ec168190c1cace Yang Yingliang     2022-12-29  134  	if (!host)
-ba2fc167e94475 Matthew Gerlach    2021-04-16  135  		return -ENOMEM;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  136  
-ec168190c1cace Yang Yingliang     2022-12-29  137  	host->bus_num = -1;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  138  
-ec168190c1cace Yang Yingliang     2022-12-29  139  	hw = spi_controller_get_devdata(host);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  140  
-ba2fc167e94475 Matthew Gerlach    2021-04-16  141  	hw->dev = dev;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  142  
-ba2fc167e94475 Matthew Gerlach    2021-04-16  143  	base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  144  
-532259bfd1c12d Zou Wei            2021-05-11  145  	if (IS_ERR(base))
-ba2fc167e94475 Matthew Gerlach    2021-04-16  146  		return PTR_ERR(base);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  147  
-ec168190c1cace Yang Yingliang     2022-12-29  148  	config_spi_host(base, host);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  149  	dev_dbg(dev, "%s cs %u bpm 0x%x mode 0x%x\n", __func__,
-ec168190c1cace Yang Yingliang     2022-12-29 @150  		host->num_chipselect, host->bits_per_word_mask,
-ec168190c1cace Yang Yingliang     2022-12-29  151  		host->mode_bits);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  152  
-ba2fc167e94475 Matthew Gerlach    2021-04-16  153  	hw->regmap = devm_regmap_init(dev, NULL, base, &indirect_regbus_cfg);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  154  	if (IS_ERR(hw->regmap))
-ba2fc167e94475 Matthew Gerlach    2021-04-16  155  		return PTR_ERR(hw->regmap);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  156  
-ba2fc167e94475 Matthew Gerlach    2021-04-16  157  	hw->irq = -EINVAL;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  158  
-ec168190c1cace Yang Yingliang     2022-12-29  159  	altera_spi_init_host(host);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  160  
-ec168190c1cace Yang Yingliang     2022-12-29  161  	err = devm_spi_register_controller(dev, host);
-8e3ca32f46994e Christophe JAILLET 2022-05-29  162  	if (err)
-ec168190c1cace Yang Yingliang     2022-12-29  163  		return dev_err_probe(dev, err, "%s failed to register spi host\n",
-8e3ca32f46994e Christophe JAILLET 2022-05-29  164  				     __func__);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  165  
-4f45f340496010 Martin Hundebøll   2021-07-16  166  	if (dfl_dev->revision == FME_FEATURE_REV_MAX10_SPI_N5010)
-4f45f340496010 Martin Hundebøll   2021-07-16  167  		strscpy(board_info.modalias, "m10-n5010", SPI_NAME_SIZE);
-4f45f340496010 Martin Hundebøll   2021-07-16  168  	else
-4f45f340496010 Martin Hundebøll   2021-07-16  169  		strscpy(board_info.modalias, "m10-d5005", SPI_NAME_SIZE);
-4f45f340496010 Martin Hundebøll   2021-07-16  170  
-4f45f340496010 Martin Hundebøll   2021-07-16  171  	board_info.max_speed_hz = 12500000;
-4f45f340496010 Martin Hundebøll   2021-07-16  172  	board_info.bus_num = 0;
-4f45f340496010 Martin Hundebøll   2021-07-16  173  	board_info.chip_select = 0;
-4f45f340496010 Martin Hundebøll   2021-07-16  174  
-ec168190c1cace Yang Yingliang     2022-12-29  175  	if (!spi_new_device(host, &board_info)) {
-ba2fc167e94475 Matthew Gerlach    2021-04-16  176  		dev_err(dev, "%s failed to create SPI device: %s\n",
-4f45f340496010 Martin Hundebøll   2021-07-16  177  			__func__, board_info.modalias);
-ba2fc167e94475 Matthew Gerlach    2021-04-16  178  	}
-ba2fc167e94475 Matthew Gerlach    2021-04-16  179  
-ba2fc167e94475 Matthew Gerlach    2021-04-16  180  	return 0;
-ba2fc167e94475 Matthew Gerlach    2021-04-16  181  }
-ba2fc167e94475 Matthew Gerlach    2021-04-16  182  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
