@@ -1,101 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1892D4B40;
-	Thu, 12 Jun 2025 19:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9696C2D322D
+	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 20:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749758234; cv=none; b=X/uksQDRSkuZPcbzts3moC2lQWHqiPKvLwhRodU0+uNerFeaPcrt3rk3ChHtkInsDW2H80mDYGbHVfpa7ZqmfbIfa2Kz9WwzNJtDonqdMW0tvSw1fnigPKxncnZJC8hVVTUVt6bFRXJ9BBQiQjfUY5tijFW9SUDJFqrAiuJWhB8=
+	t=1749758758; cv=none; b=piYDI8O0sDLeTk/jiuE6Xl/Pc/f4+cAp8Pw/GYmYORhuAb0nGqstDUZHe5/uqLM2GZk4grTdnzyh6BW2qU0/QIrUu4taQPw7GR5NYwMjEl96bOK8OhGzN05HqkorO/kBFc399/imaiSo9PuY0mMNDLLPc3WPWc04yi5gpxZwsDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749758234; c=relaxed/simple;
-	bh=RkICIPg0cPvp0gfftu+3DghfNr9uDYcet+Q6+1XpofQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jhK7MZ6DrzwCHRhk3wVK/PuKdSHIStYk7OJvIrn1mCobTEX8Cq/9/VrhinfLsxgSltamWIhF8e/Yb4SaZK5s29b7w7HQlj3iwx4g5g3iMFmOYSA1QSw4aJ3DxzrwkGwFiEzFwXWV4tblP8MHucykT/U8jwdQM0ARa+CA1SB4/CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crIDHX2M; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749758758; c=relaxed/simple;
+	bh=Re2CW7co8R/M5Q8rcFGXf3tlF1UXLdad4cNsqa8bUlE=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=Yauv+BrFYGkBXE89iwDyEeaG0w4ukI8kRy2qBhCjCOUAjhsyL89qcf6wKGn+B+MJysP8c6CgtTSkfvGYZ8QhmAYEiTAzZnYpUaVYEY00LBgA52eklILryaYIgkijzAMUbP2wkwuvdw5prnFSVbFTlf1hX0SRFCZZrdIKPZoqEhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=iW5GxtgX; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crIDHX2M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1462AC4CEEA;
-	Thu, 12 Jun 2025 19:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749758233;
-	bh=RkICIPg0cPvp0gfftu+3DghfNr9uDYcet+Q6+1XpofQ=;
-	h=From:Date:Subject:To:Cc:From;
-	b=crIDHX2M3du/SemSBGm2v6Hxcr0mu2qPZ2WtlBXrqnDWyIngAp/+g1FnXN2LOcE0t
-	 iGHvonT1TlweSy3QTBYqxb19AWLjm/If+fjSjeGWz26mWSQY70scyP1fUwB7BDTWi4
-	 +stSu1o5vv6vveaLROiJfaKt9nXPPYDOimPy+UhXhZPOvIAf4DOAHoJ3X/EbqfkcZn
-	 UcVej2uvMj3IZ9TGR7Kfm3StZRejf0Uc2NZWIdtd16lCm7iJAyInHCafU9Uoc1ADsM
-	 5/cET1Rmlvc3hGu7Rc/qpRm3RlhlvsLWuWiN0q+lWp+bHogLMwZdxMpxjCB0n3dndZ
-	 gSX6JYN8gcaAA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 12 Jun 2025 12:57:01 -0700
-Subject: [PATCH] riscv: Require clang-17 or newer for kCFI
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="iW5GxtgX"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7426c44e014so1210510b3a.3
+        for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 13:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1749758756; x=1750363556; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=af51BBEYY6aGbebFxLHnn8CgVDycQQJsTeT80Jnf6RE=;
+        b=iW5GxtgXSA0QfMoQSBVU40w2X92KhI1GsjBz+fx8uM79PnugxXexvuAXj6MqGeOfgx
+         t24pGa/KY7swx8oc6qv+XY/zAXTACNB/Ap2OMJMYV+HUH4eoKQClNovDxfoqD+t/n8fS
+         lAWoxhzBUj0yFyFOVzExLbL3l/5aoX3rWs2ZUgBFGv/lciWz9wJiIrO+B/6OpV4xkDFF
+         17ELc0w+2PZLH/LRGpDZheLJHqeUbll7KT6qF3iB6KjPX7jTaO4xPRNYDxr/z/tldqCq
+         1chlkb3nT9aFFvZPsgGDwjuzL/GY2EC44RjcHVvFFlsDGup1FetSvuZXGwB05SEX7PxM
+         UHVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749758756; x=1750363556;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=af51BBEYY6aGbebFxLHnn8CgVDycQQJsTeT80Jnf6RE=;
+        b=HhivTAqvVTAjz3FbzOkfRGpVH3cM1eQIz8G8onobh/LgQvR7P/bDYZCfTATNL4qa2j
+         GXsECw4VbI5QJPHgtPK/R0bQUzCv25+YiiY29ne1px4ME/aIO9sQgR8zN02UZr2xCIQ6
+         BPE72NbD3Y+ZY/5U4X9psTIzAWhzJ/i8PiNVrDb2y2Q5hfY+kzzD83f3EbEpREs7PSSV
+         3EM6gaGu9QsEfd7Fp8Y2WuTUpNPdMLZpJNdvFDDeMs0Mhw+woUoyxu7YF1jDYFMbW4f1
+         N9xa1AuaPmYZAxk8YbxQeivTwKYhxPT7/jPMNc7QMuIoaosQOFl12f4qzguzOFLHcaW2
+         F6kg==
+X-Forwarded-Encrypted: i=1; AJvYcCWQJiELw5NkWQ6q6DtabCalhlC91NnKBwDi5eMAuwOBki1Bdalb1FMf5AbhP6LWKYMg77ul@lists.linux.dev
+X-Gm-Message-State: AOJu0YydbpVATbfwVmyyOZKNyScHYuvXxgz/hsdzNTOSRohaeDNjwJt7
+	Spgd/Y0iAYMB3AXWB94+DntV6/t9LiioOeOMYYUAmpBlPV2SQHkG/kMhH3DK/aimj6Y=
+X-Gm-Gg: ASbGncst6mtfutI1sFyCWH9E/4PoYQNRzfA7zzFz36nA8BrP24ITEpaZPepvbxeUoq+
+	M7X3e6z/QrlGQXSGB7Dr5tK/Vr99U2wRi9bQDFwarMRDzN2OQtGLT09qgtYKgE2/N1StIIwP0c3
+	+bk26fA07Lt0ahORVvvfzeEnjSiKTpm5/kUP7COs87xmI2cJGRPSi0ZGg1NTmYIW1+AYv+FCNuq
+	WSaRjbddPEx7L2hEoytS+N4WNdPNc4Sie1z5hTMCPQZposwuQeGg/DxCpfi9D1A9NfVj7Z4UVgC
+	YIWEwe8kkbhFyATycP9d9/D84ViakppKylfwafA2rQ0vNy1tR1Xu9SrjrLHCHc8m7Gsf5l4=
+X-Google-Smtp-Source: AGHT+IH2RoHWF8PmxJBIXY2wg5rdTqPBQh+vVExjeVE43egm/MogvtvtIhJaxeSLVjk+Z689LqbYIQ==
+X-Received: by 2002:a05:6300:8a05:b0:21f:5adb:52c4 with SMTP id adf61e73a8af0-21fad02d0c2mr253713637.30.1749758755672;
+        Thu, 12 Jun 2025 13:05:55 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:500::7:116a])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-748900063f6sm140856b3a.64.2025.06.12.13.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jun 2025 13:05:55 -0700 (PDT)
+Date: Thu, 12 Jun 2025 13:05:55 -0700 (PDT)
+X-Google-Original-Date: Thu, 12 Jun 2025 13:05:52 PDT (-0700)
+Subject:     Re: [PATCH v3 3/3] vdso: Reject absolute relocations during build
+In-Reply-To: <7ddda233-99f7-468b-842d-8469f0a86e77@ghiti.fr>
+CC: thomas.weissschuh@linutronix.de, Paul Walmsley <paul.walmsley@sifive.com>,
+  aou@eecs.berkeley.edu, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+  justinstitt@google.com, luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
+  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: Alexandre Ghiti <alex@ghiti.fr>
+Message-ID: <mhng-4BA05CCD-6D5A-4067-B88A-DEBD4FCDED77@palmerdabbelt-mac>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250612-riscv-require-clang-17-for-kcfi-v1-1-216f7cd7d87f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAwxS2gC/x2NSwqFMAwAryJZv0Ab/OFV5C0kphoUPymKIN7d4
- nJgmLkhiqlEaLIbTE6Nui4J/C8DHrtlENQ+MZCjwpWe0DTyiSb7oSbIc3LQVxhWw4mDYuVqTyx
- d3tcEqbKZBL2+Q/t/nhdooh12cQAAAA==
-X-Change-ID: 20250612-riscv-require-clang-17-for-kcfi-70812cea4d82
-To: Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: Sami Tolvanen <samitolvanen@google.com>, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1738; i=nathan@kernel.org;
- h=from:subject:message-id; bh=RkICIPg0cPvp0gfftu+3DghfNr9uDYcet+Q6+1XpofQ=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBnehuJF+92O/fI7v+TQvHOlPq2sBWs7moOrbGokvdZ0v
- GHRuC3dUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbif4jhr+gHU0PRde0qU1Xz
- oy/f+ZRux8L+efIkJjOLPlnZScwxJQz/TC7HevJEdm26zN+pmFwWzOo+RWuq2/UJEnIPs9dMKTX
- jBgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-After the combination of commit c217157bcd1d ("riscv: Implement
-HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS"), which starts using
-'-fpatchable-function-entry=M,N', and commit d0262e907e29 ("riscv:
-ftrace: support PREEMPT"), which allows CONFIG_DYNAMIC_FTRACE to be
-enabled by allmodconfig, allmodconfig builds with clang-16 begin
-crashing in the generic LLVM kCFI pass (see [1] for the stack trace).
+On Thu, 12 Jun 2025 01:31:20 PDT (-0700), Alexandre Ghiti wrote:
+> Hi Thomas,
+>
+> On 6/11/25 11:22, Thomas Weißschuh wrote:
+>> All vDSO code needs to be completely position independent.
+>> Symbol references are marked as hidden so the compiler emits
+>> PC-relative relocations. However there are cases where the compiler may
+>> still emit absolute relocations, as they are valid in regular PIC DSO code.
+>> These would be resolved by the linker and will break at runtime.
+>> This has been observed on arm64 under some circumstances, see
+>> commit 0c314cda9325 ("arm64: vdso: Work around invalid absolute relocations from GCC")
+>>
+>> Introduce a build-time check for absolute relocations.
+>> The check is done on the object files as the relocations will not exist
+>> anymore in the final DSO. As there is no extension point for the
+>> compilation of each object file, perform the validation in vdso_check.
+>>
+>> Debug information can contain legal absolute relocations and readelf can
+>> not print relocations from the .text section only. Make use of the fact
+>> that all global vDSO symbols follow the naming pattern "vdso_u_".
+>>
+>> Link: https://lore.kernel.org/lkml/aApGPAoctq_eoE2g@t14ultra/
+>> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120002
+>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>> ---
+>>   lib/vdso/Makefile.include | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
+>> index cedbf15f80874d4bb27c097244bc5b11272f261c..04257d0f28c0ed324e31adbb68497181085752f8 100644
+>> --- a/lib/vdso/Makefile.include
+>> +++ b/lib/vdso/Makefile.include
+>> @@ -12,7 +12,13 @@ c-getrandom-$(CONFIG_VDSO_GETRANDOM) := $(addprefix $(GENERIC_VDSO_DIR), getrand
+>>   #
+>>   # As a workaround for some GNU ld ports which produce unneeded R_*_NONE
+>>   # dynamic relocations, ignore R_*_NONE.
+>> +#
+>> +# Also validate that no absolute relocations against global symbols are present
+>> +# in the object files.
+>>   quiet_cmd_vdso_check = VDSOCHK $@
+>>         cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
+>>   		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+>> +			     rm -f $@; /bin/false); fi && \
+>> +		       if $(READELF) -rW $(filter %.o, $(real-prereqs)) | grep -q " R_\w*_ABS.*vdso_u_"; \
+>
+>
+> This only works for arm64 relocations right? I can't find any *ABS*
+> relocations in riscv elf abi
+> (https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/tag/v1.0).
 
-clang-17 avoids this crash by moving to target-specific lowering of the
-kCFI operand bundles [2]. Require clang-17 to select CONFIG_CFI_CLANG to
-avoid this crash.
+That's because the psABI people do not believe in absolute symbols.  
+They exist in the actual toolchains, though, as they are part of the 
+generic ELF ABI.  In theory they'd work fine in the VDSO as long as 
+we're using absolute addressing instructions for them, which is 
+possible to do (and I think should happen for some global symbols).
 
-Fixes: c217157bcd1d ("riscv: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")
-Link: https://godbolt.org/z/xG39Pn16o [1]
-Link: https://github.com/llvm/llvm-project/commit/62fa708ceb027713b386c7e0efda994f8bdc27e2 [2]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+That said, it doesn't really seem worth the effort to get the checking 
+more fine-grained here.  I don't see any reason we'd need an absolute 
+symbol in the VDSO, so unil someone has one we might as well just forbid 
+them entirely.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 36061f4732b7..d71ea0f4466f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -63,7 +63,8 @@ config RISCV
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_STACKWALK
- 	select ARCH_SUPPORTS_ATOMIC_RMW
--	select ARCH_SUPPORTS_CFI_CLANG
-+	# clang >= 17: https://github.com/llvm/llvm-project/commit/62fa708ceb027713b386c7e0efda994f8bdc27e2
-+	select ARCH_SUPPORTS_CFI_CLANG if CLANG_VERSION >= 170000
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
- 	select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
+Some old toolchains had an absolute "__gloabl_pointer$" floating around 
+some of the CRT files, so we might trip over bugs here.  I think we're 
+safe as those shouldn't show up in the VDSO, but not 100% sure.  
+Probably best to get this on next to bake for a bit, just to make sure 
+we're not trippig anyone up.
 
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250612-riscv-require-clang-17-for-kcfi-70812cea4d82
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+> Thanks,
+>
+> Alex
+>
+>
+>> +		       then (echo >&2 "$@: absolute relocations are not supported"; \
+>>   			     rm -f $@; /bin/false); fi
+>>
