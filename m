@@ -1,228 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA9520328;
-	Thu, 12 Jun 2025 01:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FA172613;
+	Thu, 12 Jun 2025 01:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749691017; cv=none; b=RmqoEGmS7zX/2ri+VkCGNht7ORUL57jmdKVCq9FgAc6Snm7DYIed7O6gtv9unojQkjQW02yIK/F/81Lk1xQqiEqjYRXjn3DOpn4Uv2QNokX6jHU96ERpRJ85k1FXRMheo91I+9iyL1gwKV7XUEvONxrgne8PQOqPZAWZ203y07M=
+	t=1749691702; cv=none; b=gB9N5qcCHZY4E/BI7KvnfdFyyHwKvbCHQDQGTz4GrdqJvlblenev61KxK0X2lGLHSfKtq3lHluz6QTFB0f1ofbKryDI9cHoHWJWxbVHmBgHYRf5HrdwnwfvJz7tDAIQR4U/4ERpV940UVXkDqOHwDbxNmRzymSxdP4Ch1esQ4lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749691017; c=relaxed/simple;
-	bh=9cQWUCePEsft2HV53xBGF7MysPCcHtpQG4kJkhSeY4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gouHEib6gFw6fyYdIFpfF8HU/3d8fDYA+NTEVQddOO3P5Mf/Lmo/KCSbekcwsUBIvVgwFfqbsy19FWbEVheJoKSEww55XKCFf04ByUH1ivNkA1sX8vGb0f988JXXDJ0Zq9u6Mox0jIoFm8z+Z00hfRWyBX0pjmd8A72KgOhtF5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PvqWksnV; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749691702; c=relaxed/simple;
+	bh=wZHSfTsYJJTuBLEu3RXhZb3Lf0kJvZHbZUlHZWlqOQ4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rR+T5pjKoKrn4fEelY63jknveeQcjkISvy2tYW8LJeKL71q6pwz4zaOj/4+7Lc3kl4V4nbfqG+4SELxUnWvutOG0mJC9P+16MC7EoNprPayNQX43WO2WR5qfnXAX9pvQqXVWWjfTvVhTMInRTGTBfFJzAtdxVc3y9M0p2F7HXZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=Z4rCwKTe; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PvqWksnV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749691016; x=1781227016;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9cQWUCePEsft2HV53xBGF7MysPCcHtpQG4kJkhSeY4s=;
-  b=PvqWksnVdPZqouGxQBXQ4ilVr9Tm7yRRfR+aSuLwsIRNJA0/gcvHBJPe
-   QofVJ4nFY0DLzXG/fQwhxbEzQSimWrk6f0Z7y2fhUW3ca9CncdfPiCX/P
-   /ZOWh0MG5pSenSNg5qGqsMbBI3Vv4kvguJHEcEQ3/z8P9uvzHnH+9JK+d
-   ON2ovTeCDZO6dSKB/1xOcaRxPj+3xclQyLRvuN8yLcChFkel0HunwU0tX
-   AL3aVJKfbVmhGjiOAOA/TCOi5vtnoHgMp343hSCfyNtKrNiBf3/lK3ncW
-   GcvRsypnt59Se2AD3U1hdIkgKPHbPUOKC9uT9tPYtyx/+Ij6v+Bh4pvRo
-   g==;
-X-CSE-ConnectionGUID: awWw7b2sQ9KnNk/bQpqYjg==
-X-CSE-MsgGUID: pMxDz2/IQ5CJBwSrpb8JrA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="55656372"
-X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
-   d="scan'208";a="55656372"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 18:16:55 -0700
-X-CSE-ConnectionGUID: uEnlmiMNStCycJ50+9Yvkw==
-X-CSE-MsgGUID: FzzCKf4qSVitjP+8e/YByQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,229,1744095600"; 
-   d="scan'208";a="152135888"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Jun 2025 18:16:51 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uPWYj-000AyI-0v;
-	Thu, 12 Jun 2025 01:16:49 +0000
-Date: Thu, 12 Jun 2025 09:16:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nick Hu <nick.hu@sifive.com>, conor+dt@kernel.org, krzk+dt@kernel.org,
-	Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nick Hu <nick.hu@sifive.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: Re: [PATCH v2 3/3] cpuidle: Add SiFive power provider
-Message-ID: <202506120817.nRfhoHbQ-lkp@intel.com>
-References: <20250611031023.28769-4-nick.hu@sifive.com>
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="Z4rCwKTe"
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 55C1S0dS41631548, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1749691680; bh=wZHSfTsYJJTuBLEu3RXhZb3Lf0kJvZHbZUlHZWlqOQ4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=Z4rCwKTeSitv9AfShvsFSRjRdYA6dEJu2dsj/6crMUaIqCWpO4JYHC47YF0Wg6/NX
+	 lKQJotGMTJ7jutlOotx53LFzMfj/7cYoXwh1OSV4S5th5W39KeupTuL6zLAFPEUJMT
+	 nSjd+9ZKaiR+ZHGg+Auv3v7xrt9SVx9eOx6j95xS1JY/Aogh68bk21iMKNqprmpkkv
+	 dlchF2yDMNrdPpH/hZM51uo1iKfO5XkmN3/R2mf+6hqhYyX3opI9h4Ib6L0R0rXcQy
+	 AvXZF+hqKkFytikSb3oxiy0IltlS4w4GEEj/CoHVvNx05H6y3dzz4YtnJPgKGFKU6/
+	 qxBQy2Uykno7w==
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/3.13/5.93) with ESMTPS id 55C1S0dS41631548
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Jun 2025 09:28:00 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 12 Jun 2025 09:28:00 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 12 Jun 2025 09:27:58 +0800
+Received: from RTEXDAG02.realtek.com.tw ([fe80::1d65:b3df:d72:eb25]) by
+ RTEXDAG02.realtek.com.tw ([fe80::1d65:b3df:d72:eb25%5]) with mapi id
+ 15.01.2507.035; Thu, 12 Jun 2025 09:27:58 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        kernel test robot
+	<lkp@intel.com>,
+        "linux-wireless@vger.kernel.org"
+	<linux-wireless@vger.kernel.org>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
+Subject: RE: [PATCH rtw-next v2 14/14] wifi: rtw89: Enable the new USB modules
+Thread-Topic: [PATCH rtw-next v2 14/14] wifi: rtw89: Enable the new USB
+ modules
+Thread-Index: AQHb2XV4UvlgvG5pOESwpZNcSugO9rP7xDMAgAAbN4CAATzvcIAARemAgAFSCLA=
+Date: Thu, 12 Jun 2025 01:27:58 +0000
+Message-ID: <b34d246be15849a99310bf326a66b07c@realtek.com>
+References: <663044d3-0816-4b1b-874d-776835e774e9@gmail.com>
+ <202506101956.cNXM2Qvb-lkp@intel.com>
+ <b8690413-059d-4330-992b-36a7af10aa30@gmail.com>
+ <01eb10716bdb4241a012d378d1f7b67d@realtek.com>
+ <0d712ef0-ea93-4825-8a4c-45f9d7f9e8d9@gmail.com>
+In-Reply-To: <0d712ef0-ea93-4825-8a4c-45f9d7f9e8d9@gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250611031023.28769-4-nick.hu@sifive.com>
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-Hi Nick,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge robh/for-next linus/master v6.16-rc1 next-20250611]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Hu/cpuidle-riscv-sbi-Work-with-the-external-pmdomain-driver/20250611-121115
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250611031023.28769-4-nick.hu%40sifive.com
-patch subject: [PATCH v2 3/3] cpuidle: Add SiFive power provider
-config: riscv-randconfig-002-20250612 (https://download.01.org/0day-ci/archive/20250612/202506120817.nRfhoHbQ-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250612/202506120817.nRfhoHbQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506120817.nRfhoHbQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/cpuidle/cpuidle-sifive-dmc-pd.c:8:
-   In file included from include/linux/of_device.h:5:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   include/linux/fs.h:3975:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3975 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:274:3: note: expanded from macro 'get_user'
-     274 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:244:2: note: expanded from macro '__get_user'
-     244 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:207:2: note: expanded from macro '__get_user_error'
-     207 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:3: note: expanded from macro '__get_user_nocheck'
-     196 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> drivers/cpuidle/cpuidle-sifive-dmc-pd.c:42:27: error: use of undeclared identifier 'pm_domain_cpu_gov'
-      42 |         ret = pm_genpd_init(pd, &pm_domain_cpu_gov, false);
-         |                                  ^
-   1 warning and 1 error generated.
---
-   In file included from drivers/cpuidle/cpuidle-riscv-sbi.c:16:
-   In file included from include/linux/cpu_cooling.h:17:
-   In file included from include/linux/thermal.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   include/linux/fs.h:3975:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3975 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:274:3: note: expanded from macro 'get_user'
-     274 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:244:2: note: expanded from macro '__get_user'
-     244 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:207:2: note: expanded from macro '__get_user_error'
-     207 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:3: note: expanded from macro '__get_user_nocheck'
-     196 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> drivers/cpuidle/cpuidle-riscv-sbi.c:410:25: error: use of undeclared identifier 'pm_domain_cpu_gov'
-     410 |         pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
-         |                                ^
-   1 warning and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
-   Depends on [n]: PM_GENERIC_DOMAINS [=n] && OF [=y]
-   Selected by [y]:
-   - SIFIVE_DMC_PD_CPUIDLE [=y] && CPU_IDLE [=y] && RISCV [=y] && ARCH_SIFIVE [=y]
-
-
-vim +/pm_domain_cpu_gov +42 drivers/cpuidle/cpuidle-sifive-dmc-pd.c
-
-    26	
-    27	static int sifive_dmc_probe(struct platform_device *pdev)
-    28	{
-    29		struct device *dev = &pdev->dev;
-    30		struct device_node *np = dev->of_node;
-    31		struct generic_pm_domain *pd;
-    32		struct of_phandle_args child, parent;
-    33		int ret = -ENOMEM;
-    34	
-    35		pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
-    36		if (!pd)
-    37			goto fail;
-    38	
-    39		pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
-    40		pd->power_off = sbi_cpuidle_pd_power_off;
-    41	
-  > 42		ret = pm_genpd_init(pd, &pm_domain_cpu_gov, false);
-    43		if (ret)
-    44			goto free_pd;
-    45	
-    46		ret = of_genpd_add_provider_simple(np, pd);
-    47		if (ret)
-    48			goto remove_pd;
-    49	
-    50		if (of_parse_phandle_with_args(np, "power-domains",
-    51					       "#power-domain-cells", 0,
-    52					       &parent) == 0) {
-    53			child.np = np;
-    54			child.args_count = 0;
-    55	
-    56			if (of_genpd_add_subdomain(&parent, &child))
-    57				pr_warn("%pOF failed to add subdomain: %pOF\n",
-    58					parent.np, child.np);
-    59			else
-    60				pr_debug("%pOF has a child subdomain: %pOF.\n",
-    61					 parent.np, child.np);
-    62		}
-    63	
-    64		platform_set_drvdata(pdev, pd);
-    65		pm_runtime_enable(dev);
-    66		pr_info("%s create success\n", pd->name);
-    67		return 0;
-    68	
-    69	remove_pd:
-    70		pm_genpd_remove(pd);
-    71	free_pd:
-    72		dt_idle_pd_free(pd);
-    73	fail:
-    74		pr_info("%s create fail\n", pd->name);
-    75	
-    76		return ret;
-    77	}
-    78	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Qml0dGVyYmx1ZSBTbWl0aCA8cnRsODgyMWNlcmZlMkBnbWFpbC5jb20+IHdyb3RlOg0KPiBPbiAx
+MS8wNi8yMDI1IDAzOjMyLCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+ID4+Pg0KPiA+Pj4+PiBkcml2
+ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg5L3J0dzg4NTFiLmM6NTIzOjQ3OiBlcnJvcjog
+dXNlIG9mIHVuZGVjbGFyZWQgaWRlbnRpZmllcg0KPiA+PiAnQl9BWF9TT1BfRURTV1InDQo+ID4+
+PiAgICAgIDUyMyB8ICAgICAgICAgICAgICAgICBydHc4OV93cml0ZTMyX2NscihydHdkZXYsIFJf
+QVhfU1lTX1BXX0NUUkwsIEJfQVhfU09QX0VEU1dSKTsNCj4gPj4+ICAgICAgICAgIHwgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0K
+PiA+Pj4gICAgMSBlcnJvciBnZW5lcmF0ZWQuDQo+ID4+Pg0KPiA+PiBPb3BzLCBJJ2xsIGFkZCB0
+aGF0IHRvIHJlZy5oIGluIHYzLg0KPiA+DQo+ID4gVGhlIE5BUEkgYWxzbyByZXBvcnRlZCB0aGUg
+c2FtZSB0aGluZ3MgWzFdIFsyXS4NCj4gPg0KPiA+IE5vdCBzdXJlIGlmIHlvdSB3aWxsIHNlbmQg
+djMgcmlnaHQgYXdheS4gSWYgc28sIEkgd2lsbCBpZ25vcmUgdjIuDQo+ID4NCj4gPiBbMV0gaHR0
+cDovL3dpZmlib3Quc2lwc29sdXRpb25zLm5ldC9yZXN1bHRzLzk2OTk4MC8xNDExMTE4Ny9idWls
+ZF8zMmJpdC9zdGRlcnINCj4gPiBbMl0gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9q
+ZWN0L2xpbnV4LXdpcmVsZXNzL2xpc3QvP3Nlcmllcz05Njk5ODANCj4gPg0KPiANCj4gSSB3b3Vs
+ZCBwcmVmZXIgdG8gd2FpdCBmb3IgeW91ciByZXZpZXcuIElzIHRoYXQgb2theT8NCg0KWWVzLiBJ
+IHdpbGwgcmV2aWV3IHYyLg0KDQo=
