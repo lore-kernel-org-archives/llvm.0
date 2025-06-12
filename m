@@ -1,150 +1,122 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7552C325B
-	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 20:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F412D660B
+	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 20:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749759043; cv=none; b=GgNTsQbxwyGZMbYJr4lLEjFHntRhH7SjlERAoff05lSSvRp4WsTR7MK3k0rNjTY4mBXX47bHPCiJviUybnFuKyWAu/ImKJExegNe+u4Hc8j8G88RVC9tDCUXKrjb2dBW14acqIT3dmQ70KXcpaPWBzCViz37AioP6t8AuBSMbtU=
+	t=1749759424; cv=none; b=Ve371S9LyDATBZH6J/q7Jmowco4ezZWnP8lMN8P4J3qTx4H/W2f/sY2tj+uHW9EkBMR/+lK0DVvSnHMZRPVeYzbGT7o7Hj0mE6KbbSJ1zr+zwuMo0r2psyWXEzUVBiDE1gisZalU7u4yr18QMOnV9Yg9pYdhH5LdnvLi0jo/oUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749759043; c=relaxed/simple;
-	bh=+YxhKp8pbLzEr9fypYT/DVhapjMVFFU4pxYzJ32Tuf4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WsXvPVzK5rScy15yhfGWfbkyr9gr46nrSYeNnBHr0oeXyVflKH4No5zJR4vCmXi5mcKQ/qnR1TXw8OmULnhZHRHZVSr5agh4HIqP5qFPW639LjZytFL8rh2KrbO35DzeLw0Q2zfv+JRNPPAkExiUIV4Puu11e/hSDpT0hKbqQeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WA5A+/dV; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749759424; c=relaxed/simple;
+	bh=kFN31beBRSTIYaA6iDR+OzH/fcShrj2UaW4fegx5fes=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QoiDwSRsPQlo7OiUShRsjgd6BbDIm61vm4Su1XDeeUtiJm31S6Y1zC1NSKjs0HdGH+Fys8HFixFh7t33sljYGoQeV0mEOqTof5hWcC4dDREgyzz8dOBmIEMm1+b9RzbFwNGFHijTNKYNQN+9AbGGctRtoon2I923Gwv6O2er6LE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JWDzqP/3; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WA5A+/dV"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-742caef5896so1382450b3a.3
-        for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 13:10:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JWDzqP/3"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2348ac8e0b4so12195ad.1
+        for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 13:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749759041; x=1750363841; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ACQzSKiLB081J7RKsan9TDO2EOdfGESNIDhEKLy5me8=;
-        b=WA5A+/dVLqLIClkdzOMbZHqYajlmGQv/mpi8cl2aaotnWuDpEHguS+SKe5+pHzCrVU
-         e4mD6rL7rnZCR9txmDdeRGRriMfqLUABrs4MIZazFk8kKpuj4bqMYotQFi1IK3Z9tGHT
-         ypmvogxWNrF58gY9IeFz4YBSsciEjIUF314tS7w8wbQXIGmmYRyAV7Ke7Gb2LUL+ZlBP
-         5OHUU76fVtfh4RK9ixZyb1kQg+0C0tkJLPkfVnSMQnRJ4/GKoRHyvozvVHaRYQ2MgCpP
-         PLucJwJsoAaXC5PDvmA7a+7hOexs/72qz2j+qsjoBvq7cKYURQQnubUG0J023sl2CMlr
-         CLJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749759041; x=1750363841;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1749759421; x=1750364221; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ACQzSKiLB081J7RKsan9TDO2EOdfGESNIDhEKLy5me8=;
-        b=eH0Jw429mOP05wjBY4DgGgEdWYU5hOeqLPvFwKmhzfHQYeTPb0kZGk9vBlaMT5INLj
-         XY19xiLa2APC5CFxkZImtRYJsVLtGgUgVfOcgMglWYx1qQp4B2JWAg0UIGDiWIh+cbt6
-         9FW1A/YvoMY2PFgWcWZ2eZJFm7CyUgIuo/AUB94+Kd4gtKe5EhkQjn7Hy5EGUmgx/BEu
-         3atDTBe1zCAPmrF/pvUvy+W5YUNKvwHaK0MHQjzybMj5simQOUy15N7Ru3Udvb1L8Ezn
-         xEOYUEIaJw4neP6Q0uEuERYBLWxBhA5mlOh2/WqhHoCo2BQjbXmLl81/HF9TbAdAw5MC
-         j9Rg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzni+teDZlS7/mt0z2fz53Hn/soYRabSXOMcCoEbOL989UVspkjB8obVtWQsl4FOW+Ku30@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzjm/BCJh+eaCdEFxZpBrLIJXiJU+taD2fSfMQcNVQgovv0EP/V
-	FwiI7zvXx6xp9K+h7usD7pt0VCpY+0pHMY2JZHze2tTKKn8XBQuhC6Kt
-X-Gm-Gg: ASbGncvtus1l4GM9ww7mqjKpnze4dzLwy8394p6PWRz6sTL0gqf3jkkghdfj9NadSvO
-	kIV1JQfmvVfcA/74AqLh15yTtxSfVX9K44+eKSVdhgAvcu0V/hthuwksNzN/pfP9Umgpc794qd3
-	zI45DuFD6DgQ+tCv5BDpLp6o69QmJ3agcX705mHIZfIdKXnQka/Bv/agQtjvptaWdzhbss1zpi5
-	chRGW/nXJaYLhtz9gcVrNZkpIWq1SSNcgFoEZUD4ktfL41YOmN4DoVypfibRb/OEGe8JhJ843uV
-	vAsPV5Wqw3FcbEiAoc+I4RR8WxdHgDLjDfNIWeSRqKzrv0JG/eZaVuY8eBW2Ag==
-X-Google-Smtp-Source: AGHT+IG8TocKyZo9LiHYpgmcLhk97cCKpOT9D/IFBCoE4AePraGyNKa1PzBXNuqHoDVO+xHoWj80Yg==
-X-Received: by 2002:a05:6a21:8dc4:b0:1f5:6c94:2cd7 with SMTP id adf61e73a8af0-21fad11efd4mr288514637.42.1749759040324;
-        Thu, 12 Jun 2025 13:10:40 -0700 (PDT)
-Received: from localhost ([216.228.127.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1691d7fsm150701a12.69.2025.06.12.13.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 13:10:39 -0700 (PDT)
-Date: Thu, 12 Jun 2025 16:10:37 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Shreeya Patel <shreeya.patel@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-	linux-sound@vger.kernel.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-Message-ID: <aEs0PVkwFN9uRgU0@yury>
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
- <20250612124415.3399e26b@kernel.org>
- <22744779.EfDdHjke4D@workhorse>
+        bh=xzEGZoiP4K4QOUbppiftlDAe5J+ee4W3KdfcExHtN30=;
+        b=JWDzqP/3YBG+bxLFWFtIJbIg/Ma97kEKzvwPv1Jk3h8qJccLpGozSjb5+TpbDupRvI
+         8+eXoll4uIKn3GBsbKdc4MGW9B7Q2lGE7SlJefoUHYlFE2mZ2PJXNygzAB/eMplcw/SN
+         sUv6TNW93LttcnoOCFSXbpQD7M6qwcK4pyiLcFqMDenUZih4iws3t9GjaxSLp+AG/hqv
+         +Wr0FAcSvfp6hq0lTbsvQ/5VyGG21KdTziqMwj79V/2uQTwwqSfsjchyFRmoU2fHqZU/
+         42M7GTQ8x1n3aO7A2/4RWdpHaJn9WkllhjyGFVz3s0z2BvrGdCRIWlgy5+ym3OtbCLlE
+         /Hlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749759421; x=1750364221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xzEGZoiP4K4QOUbppiftlDAe5J+ee4W3KdfcExHtN30=;
+        b=umy/Q1yMatgJV9VwXovYWF5QCLUaCTpy5pzI9mrK5FIRS72aJXfRqCZn3zyLX8wyWd
+         3+dYT+FgfN/SKLl50MvAoNxmvxL9qRzX2MkT9emQCvAZhqq66T92TU1ohaKSMYRcrOSC
+         0chUfGcwf8GT0mdPLyr6GgRUhOMizh3KOEqnzTvXcwrj+dGAFLCqlsLg/IS39taRacw6
+         f3DV0dqo8iLRbOBVGd/kvyWAWwgKFwgglMuVTHtndb/LOqNTOZg6mw9Fw5Q5leBlKB7l
+         6xQBR++KXaC7SszW+tQjFFomRiPlI+GX6+SivndeSn2AAtxWgvlvhYaMBvozIxKD2+rA
+         hcEg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvp4mwRJVhUIp5T67LZHIik+JeF/ErHel5f4IIboeIuWlN+b/uQMlte1Mr9nmJk3uTFdyQ@lists.linux.dev
+X-Gm-Message-State: AOJu0YwkXju3K2qM6QZi2nMizUy3ILbW+TB//vwUv2F+7dRA6iq31hgO
+	cCWJ/rtXxiynfb4Anvqca3roe8XRRIsgVFzapHGmu/e8nqDX5Cjv7SWroTtDFoLDVm2YEyYMS2g
+	N69aC37HdOnaaYJU451dbiVSnS6qHMhNfQWNDYuZM
+X-Gm-Gg: ASbGnctAcm6VRUxF/BYEQKkucTLIVjJskmZEsPHIfnOHQSiKu0qj4RHU8IGNwA/TD9u
+	QV60poq8QuA3JWbXbsxLEQWQ85d4iZkuY3VP2gyoy/2mz10UnH1IhDn1ZLQYxw/9tfOFknvsIWO
+	4i3kmKmpHXkBWgg7gRNACxVGrObOs05xv/9zpJguC6
+X-Google-Smtp-Source: AGHT+IHFrAXcJTnxqKVck9VUMcfEAPekbj5iqtQKGqGzarrcDrNUw7XtTgYP0mxzcfkiDTg8Uo8HWgSeNcMW9sqlrc4=
+X-Received: by 2002:a17:903:f90:b0:216:7aaa:4c5f with SMTP id
+ d9443c01a7336-2365ec46e31mr233195ad.3.1749759420695; Thu, 12 Jun 2025
+ 13:17:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22744779.EfDdHjke4D@workhorse>
+References: <20250612-riscv-require-clang-17-for-kcfi-v1-1-216f7cd7d87f@kernel.org>
+In-Reply-To: <20250612-riscv-require-clang-17-for-kcfi-v1-1-216f7cd7d87f@kernel.org>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 12 Jun 2025 13:16:23 -0700
+X-Gm-Features: AX0GCFuTAMmgTyQd3wuTrHKylYFTPTbhhknJpwyhNHmJXUMP1DlwFarGGXztZ_c
+Message-ID: <CABCJKudMSzrYj3Np4cxoe6WQ-8Wu1jbG84LMmtGdqA-v3FmAPg@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Require clang-17 or newer for kCFI
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 12, 2025 at 09:50:12PM +0200, Nicolas Frattaroli wrote:
-> On Thursday, 12 June 2025 21:44:15 Central European Summer Time Jakub Kicinski wrote:
-> > On Thu, 12 Jun 2025 20:56:03 +0200 Nicolas Frattaroli wrote:
-> > > Hardware of various vendors, but very notably Rockchip, often uses
-> > > 32-bit registers where the upper 16-bit half of the register is a
-> > > write-enable mask for the lower half.
-> > 
-> > Please limit the spread of this weirdness to a rockchip or "hiword"
-> > specific header. To a normal reader of bitfield.h these macros will
-> > be equally confusing and useless.
-> > 
-> 
-> That is how this change started out, and then a different maintainer told
-> me that this is a commonly used thing (see: the sunplus patch), and
-> Rockchip just happens to have a lot of these with consistent naming.
+Hi Nathan,
 
-That other maintainer was me, and the macro is indeed not used by rockchip
-weirdness solely:
+On Thu, Jun 12, 2025 at 12:57=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> After the combination of commit c217157bcd1d ("riscv: Implement
+> HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS"), which starts using
+> '-fpatchable-function-entry=3DM,N', and commit d0262e907e29 ("riscv:
+> ftrace: support PREEMPT"), which allows CONFIG_DYNAMIC_FTRACE to be
+> enabled by allmodconfig, allmodconfig builds with clang-16 begin
+> crashing in the generic LLVM kCFI pass (see [1] for the stack trace).
+>
+> clang-17 avoids this crash by moving to target-specific lowering of the
+> kCFI operand bundles [2]. Require clang-17 to select CONFIG_CFI_CLANG to
+> avoid this crash.
+>
+> Fixes: c217157bcd1d ("riscv: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS"=
+)
+> Link: https://godbolt.org/z/xG39Pn16o [1]
+> Link: https://github.com/llvm/llvm-project/commit/62fa708ceb027713b386c7e=
+0efda994f8bdc27e2 [2]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/riscv/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 36061f4732b7..d71ea0f4466f 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -63,7 +63,8 @@ config RISCV
+>         select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+>         select ARCH_STACKWALK
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+> -       select ARCH_SUPPORTS_CFI_CLANG
+> +       # clang >=3D 17: https://github.com/llvm/llvm-project/commit/62fa=
+708ceb027713b386c7e0efda994f8bdc27e2
+> +       select ARCH_SUPPORTS_CFI_CLANG if CLANG_VERSION >=3D 170000
+>         select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+>         select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
+>         select ARCH_SUPPORTS_HUGETLBFS if MMU
 
-$ git grep HIWORD | grep -v rockchip | wc -l
-326
+LGTM. Thanks!
 
-I don't think that that having HWORD_UPDATE() in bitfield.h is a wrong
-thing. Jakub, if you do, we can just create a new header for it.
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-Thanks,
-Yury
+Sami
