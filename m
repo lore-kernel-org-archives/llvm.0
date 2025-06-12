@@ -1,134 +1,78 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF97219FC
-	for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 14:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DD542048;
+	Thu, 12 Jun 2025 14:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749738099; cv=none; b=e8T941JfkDTu6GU9Q3WxRJCXI9OPjce0Mk1dk9f1z+qL0ceBhYXSV0dB+AnvbxgYn/4S8tMyetDNoHsZlEPXS3lP+h7CFCMfbUGOCFFCQfe0JK3+3lKfhy51wmwsFM4/zyQCvkPx6f7Tc513I7orIGguJwedYoD7jb78TixXEAQ=
+	t=1749738776; cv=none; b=KQsTLVurdm8k5J/IWcI7c+WKc+rblOfWXLG5A9KGsfaZOi6NYlza+rk0k6FX7e7ubR2CsEalZxWJkEscoMhJmmBMq2XemJkNhSci4/cDNl/tYT/uDaEus3KNlay4jo5XHqlmNIuNUn+kn/KxlSJdLrpe+KduvmfYdKZ0olL+De4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749738099; c=relaxed/simple;
-	bh=Hsc2T8sTIjfBEYE7rFx+jmDibxndiVANCGaWHaZkmjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=czbLNfxIjnEEKnGtjPB3qrSKrr8dAXojiD5c9zaVglB+HWlEt6j7puP3ldM+VoIvaKgz+GHN+vGuChRmV9Rse4Eu4sEznN6vko54NCWDbwxkhW22d5lG+ECwesj19bUbcXxVLOfv/9h+pProMRYyO7nqEOULdm9hxsl4E9iRSw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K9H6d31+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=w5C638nu; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1749738776; c=relaxed/simple;
+	bh=ykuK4PZn6JC8fkbCn1pDwof03d+gXaUQMc4rE5V5sEs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d7Q+w1zflGU7vkdlG3u1IR9NK6ykO0pMvt2SgU9QSQYHNPWpw+h9SdtxKkdMp2BGnxylTvHP981ve/kZ+c6J94GexHSw0JskQee+1pK7VhqxizAzRl1cNM6mUd0iekrHEMnZWbrybouvZlycLpzISapwRikWT+0iMhjImkonHGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olXm7drt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K9H6d31+";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="w5C638nu"
-Date: Thu, 12 Jun 2025 16:21:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1749738096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pl4iD19u/tvG4+VMp89MNYtzMFEcmgmm0KnazjaFycE=;
-	b=K9H6d31+9MSDUfhsh3uETF2aV+bxvrRnkXITk06U2irnbchGUxFYd6p6cmayprMF+ssuCc
-	yjD0GboPXRQA5Ik6Xa7Mfd38YWkeq8gqD6z1Sln6e7zfUFCiAv0afA0XZsWx1DmfL1NITy
-	GMw8ao7/9aFcNz8ywe8MURwC6z1rkHhIQg+vvn7fd/+kaCrjfndvn/IE+oismSkuVC579a
-	k3nej/cHlRW8VGt/mgWZn/Vc9IUdoVVgYlHKw/riBvRWuJCVVwMtYBe9sHJc7sbULfn0OK
-	XmY4OuSWxdJahtgarFLrjV0VlYZBSZgPYL9dG4icV4rHUV27JzJRfTWtp33Xhg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1749738096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pl4iD19u/tvG4+VMp89MNYtzMFEcmgmm0KnazjaFycE=;
-	b=w5C638nukRzf0+OZcZmeo4QyuuSXTL2DL3gcUcZqmjrdwp0B4QgyFM4FxVoyn5cjvZrHuh
-	Aguhg4aLMAgexLCg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 3/3] vdso: Reject absolute relocations during build
-Message-ID: <20250612155635-ecade4e1-0235-464a-bcb3-293f7452510a@linutronix.de>
-References: <20250611-vdso-absolute-reloc-v3-0-47897d73784b@linutronix.de>
- <20250611-vdso-absolute-reloc-v3-3-47897d73784b@linutronix.de>
- <7ddda233-99f7-468b-842d-8469f0a86e77@ghiti.fr>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olXm7drt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51B8C4CEEA;
+	Thu, 12 Jun 2025 14:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749738775;
+	bh=ykuK4PZn6JC8fkbCn1pDwof03d+gXaUQMc4rE5V5sEs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=olXm7drtGOHT6kG+IeSM3x8PC60y2AP+HWYqhnZ8rknInCVwIj+IydBBT6bfDyWhh
+	 BrfWJexTjJoa1Sx+gIzXZaPskSIKtEP+p9J4HnwVAGsbfM2Dsx/DMo2tgqjF1cIC1n
+	 b0MBaOviA0eSt4j9+2piJRGX/VbdiFRVAh5kpqthg13kyFyogcYo2im9tgvUH7fM7n
+	 W9Gxi5vJyfr+74MhryiQ9RbT0wlxKNmQ8yf+fhph8zGuyQOXV6i8HUy7HYyC19WYBb
+	 uyGrlhJfev/v22ye7hMxyyE608TggHShuHcMEmBjBSc+knj/torCC4KVNnjwyt03QB
+	 HWWuvUihqEJdA==
+Date: Thu, 12 Jun 2025 07:32:53 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jijie Shao <shaojijie@huawei.com>, Arnd Bergmann <arnd@kernel.org>, Jian
+ Shen <shenjian15@huawei.com>, Salil Mehta <salil.mehta@huawei.com>, Andrew
+ Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Hao Lan <lanhao@huawei.com>, Guangwei Zhang
+ <zhangwangwei6@huawei.com>, Netdev <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH] hns3: work around stack size warning
+Message-ID: <20250612073253.2abdd54e@kernel.org>
+In-Reply-To: <34d9d8f7-384e-4447-90e2-7c6694ecbb05@huawei.com>
+References: <20250610092113.2639248-1-arnd@kernel.org>
+	<41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
+	<a029763b-6a5c-48ed-b135-daf1d359ac24@app.fastmail.com>
+	<34d9d8f7-384e-4447-90e2-7c6694ecbb05@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7ddda233-99f7-468b-842d-8469f0a86e77@ghiti.fr>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Alexandre,
-
-On Thu, Jun 12, 2025 at 10:31:20AM +0200, Alexandre Ghiti wrote:
-> On 6/11/25 11:22, Thomas Weiﬂschuh wrote:
-> > All vDSO code needs to be completely position independent.
-> > Symbol references are marked as hidden so the compiler emits
-> > PC-relative relocations. However there are cases where the compiler may
-> > still emit absolute relocations, as they are valid in regular PIC DSO code.
-> > These would be resolved by the linker and will break at runtime.
-> > This has been observed on arm64 under some circumstances, see
-> > commit 0c314cda9325 ("arm64: vdso: Work around invalid absolute relocations from GCC")
-> > 
-> > Introduce a build-time check for absolute relocations.
-> > The check is done on the object files as the relocations will not exist
-> > anymore in the final DSO. As there is no extension point for the
-> > compilation of each object file, perform the validation in vdso_check.
-> > 
-> > Debug information can contain legal absolute relocations and readelf can
-> > not print relocations from the .text section only. Make use of the fact
-> > that all global vDSO symbols follow the naming pattern "vdso_u_".
-> > 
-> > Link: https://lore.kernel.org/lkml/aApGPAoctq_eoE2g@t14ultra/
-> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120002
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > ---
-> >   lib/vdso/Makefile.include | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
-> > index cedbf15f80874d4bb27c097244bc5b11272f261c..04257d0f28c0ed324e31adbb68497181085752f8 100644
-> > --- a/lib/vdso/Makefile.include
-> > +++ b/lib/vdso/Makefile.include
-> > @@ -12,7 +12,13 @@ c-getrandom-$(CONFIG_VDSO_GETRANDOM) := $(addprefix $(GENERIC_VDSO_DIR), getrand
-> >   #
-> >   # As a workaround for some GNU ld ports which produce unneeded R_*_NONE
-> >   # dynamic relocations, ignore R_*_NONE.
-> > +#
-> > +# Also validate that no absolute relocations against global symbols are present
-> > +# in the object files.
-> >   quiet_cmd_vdso_check = VDSOCHK $@
-> >         cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
-> >   		       then (echo >&2 "$@: dynamic relocations are not supported"; \
-> > +			     rm -f $@; /bin/false); fi && \
-> > +		       if $(READELF) -rW $(filter %.o, $(real-prereqs)) | grep -q " R_\w*_ABS.*vdso_u_"; \
+On Thu, 12 Jun 2025 21:09:40 +0800 Jijie Shao wrote:
+> >> Would you please help test whether the following changes have solved
+> >> your problem,
+> >> And I'm not sure if this patch should be sent to net or net-next...  
+> > Your patch arrived with whitespace corruption here, so I could not
+> > try it, but I'm sure it would help avoid the warning.
+> >
+> > However, this is not what meant with my suggestion: you already
+> > allocate a temporary buffer in hns3_dbg_open() and I would
+> > expect it to be possible to read into that buffer directly
+> > without a second temporary buffer (on stack or kmalloc).
+> >
+> > The normal way of doing this would be to use the infrastructure
+> > from seq_file and then seq_printf() and not have any extra buffers
+> > on top of that.
 > 
-> 
-> This only works for arm64 relocations right? I can't find any *ABS*
-> relocations in riscv elf abi
-> (https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/tag/v1.0).
+> seq_file is good. But the change is quite big.
+> I need to discuss it internally, and it may not be completed so quickly.
+> I will also need consider the maintainer's suggestion.
 
-Indeed you are right.
-
-We could introduce per-architecture configuration. Essentially reverting parts
-of commit aff69273af61 ("vdso: Improve cmd_vdso_check to check all dynamic relocations").
-The final logic for the intermediary objects still needs to be more complicated
-than for the final .so as those contain relocations in the debug information.
-
-Or we could add a C hostprog for validation.
-That would be much more flexible than the inline shell command.
-It would then also be easier to use an allow-list than the brittle deny-list.
-
-Or we don't do anything, relying on the selftests to detect miscompilations.
-
-I'll run this by tglx. If somebody else has any opinions, I'm all ears.
-
-> > +		       then (echo >&2 "$@: absolute relocations are not supported"; \
-> >   			     rm -f $@; /bin/false); fi
-> > 
+Arnd, do you mind waiting? We can apply your patch as is if the warning
+is a nuisance.
