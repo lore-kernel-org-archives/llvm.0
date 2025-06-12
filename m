@@ -1,30 +1,31 @@
 Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DC2372
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E257F9
 	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 00:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749772918; cv=none; b=sg60pndPXhvBloNWf7kRo7ZKWFNCTnKdPzNlWbUArkjm75Db0UyqpUcYIyyw30JM1gmGWlesX+07S5Q/5m9KkQ9lZplW6HOnWpWWvPSg7i0li64wKMozsDX5wICEVDBeJOqYy0/GRTmhIqkSuudoLfjFrpg8+6h0rg1/DQtbEsQ=
+	t=1749772918; cv=none; b=cXzJOUVxEZd/LidEIacksn2W5cw1JBQMeQEMmvIYaB+zzdav1T16eGKKxvLyrL20SMTCPFHRYtf/iKs8rMdgqzMDCxPihXQCv/rSS0Rus5e3mEX8keEVDn4+20QKDOIPjcUbv7FPE7CNvr+NggP4xXF+qQ2IAG5NdggdnFbV8Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749772918; c=relaxed/simple;
-	bh=ktLPqBfb0Q9UxATLFPtgXeKEniYTjDCEq9jWqEe1HU0=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=UnZ1+0i8PHVxXx7JW41cmpxIuyBcx7BoaXdkJeBZmhYPXUrzOpxwdruWuFmmVGbkv4/4/RrTzYvfT/b7arppNjvkPhPAFRhEjIwjvFR/yzJ9m2OWCpA51o1SQBj83pYGCVlYMeRjznxEtjlF+wapuPwblp3qANP6dRvx5MCPPUA=
+	bh=4GTdnC8JJoqpNwB/W+g1szxDcReQDCIveoymk3DB28I=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=omnZ8yYKeULe8TUo45lGRbXt3MT1mRr8MuR+wQ0iJdRzuTMGJwQBqEnwucsRRBvCtpfVpHQ2KwEXjgJug1DwUQ4YpOhWSwnvbF+b2pq3Y9GK8y2l0EK52WmBl2o6CrYrnXwvdpEouAKx+TGekQZh8u9LPavI09a9hNa405K4YR0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 9650C16043F;
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id B9B74803EA;
 	Fri, 13 Jun 2025 00:01:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 7E7F120015;
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 820CB18;
 	Fri, 13 Jun 2025 00:01:52 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uPrtI-00000001wlB-2Tte;
-	Thu, 12 Jun 2025 20:03:28 -0400
-Message-ID: <20250612235827.011358765@goodmis.org>
+	id 1uPrtJ-00000001wmf-0POY;
+	Thu, 12 Jun 2025 20:03:29 -0400
+Message-ID: <20250613000328.962609745@goodmis.org>
 User-Agent: quilt/0.68
-Date: Thu, 12 Jun 2025 19:58:27 -0400
+Date: Thu, 12 Jun 2025 19:58:30 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-arch@vger.kernel.org,
  linux-kernel@vger.kernel.org,
@@ -40,84 +41,272 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
  Catalin Marinas <catalin.marinas@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints and trace events 
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 7E7F120015
-X-Stat-Signature: 1hjfmzb9uz4og3i9x4ep86qwjn79b7f4
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/pAn2UOPxaz5xG82OV8z0NLZQWSBC58Po=
-X-HE-Tag: 1749772912-383725
-X-HE-Meta: U2FsdGVkX1/usBTNqgaNMTPmWO+XHlewon1Trn7MTqxnsGgYTr2MChhFRJWDvGAt7yumw4WJZYMccY04asDKq/4yik+/hNkVN6P2QstIr8JBmPbLs5ixxAeyfxZ19ISBA/hY7C38fCCl1HChV1xWaA0l0Er7IyBDS8H9L65iXhMxJjnXo5wa5SPQV68QOn/vtvWi4giPLdaclkIGuW8t8f9eAijA7THt5MrH6VWGQQlIwMT0LToYgmEALVBHx550wuNovbDA8XEhf2MyQzSi67h64jfurBR7Pr90svjpPaAqSCXTg6VLYVviDLu9kuH0
+Subject: [PATCH v2 3/5] tracing: sorttable: Find unused tracepoints for arm64 that uses reloc
+ for address
+References: <20250612235827.011358765@goodmis.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Stat-Signature: 8k1kipsk1c1z5bdwtzwd3ct48fupbpho
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 820CB18
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18pxPIE4BEuo+aRZnoqQLoutoFqpJrDGFk=
+X-HE-Tag: 1749772912-602137
+X-HE-Meta: U2FsdGVkX1/61XheUcbJtxERV5nct7NlnwnRNyUAUcsAPtW6D+l/COSEV9CvIbKPffQHuyfIJyKhKxZnjW07v+neNNkpmO2J3HcvNnJO7R4RwEhHGgACoFevUKlI8B7ClIC4DBUiFOCROXu0yO+6p48PtCU8Am1la4nqH2OXU62HdFLmbn5nzDoAUcyWsyPknnXqNGrIhlzAxg1yEjXlFe5/YApf0e+44YGakcUinidZW1XYb20QNjCC8W3RkreXgVyrATyJzJs4Xae78NT90d++vIWOk/WeGV5hHR95VqorA0KDyqOW18MQkgsud39KivUcqVVJxg1Y7Kryvm/+UGfotK/D1prGX7rltBa83KPDePVgK6O3YsNA7X1kHGSWlhJAvjtfxZOeXSb6yaCEuA==
+
+From: Steven Rostedt <rostedt@goodmis.org>
+
+The addresses in the ARM64 ELF file is stored in the RELA sections similar
+to the mcount location table. Add support to find the addresses from the
+RELA section to use to get the actual addresses for checking the
+tracepoints and the checking variables to show if all tracepoints are
+used.
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ scripts/sorttable.c | 186 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 118 insertions(+), 68 deletions(-)
+
+diff --git a/scripts/sorttable.c b/scripts/sorttable.c
+index ddcbec22ca96..edca5b06d8ce 100644
+--- a/scripts/sorttable.c
++++ b/scripts/sorttable.c
+@@ -578,6 +578,106 @@ static int compare_values_32(const void *a, const void *b)
+ 
+ static int (*compare_values)(const void *a, const void *b);
+ 
++static char m_err[ERRSTR_MAXSZ];
++static long rela_type;
++static bool sort_reloc;
++static int reloc_shnum;
++
++/* Fill the array with the content of the relocs */
++static int fill_relocs(void *ptr, uint64_t size, Elf_Ehdr *ehdr, uint64_t start_loc)
++{
++	Elf_Shdr *shdr_start;
++	Elf_Rela *rel;
++	unsigned int shnum;
++	unsigned int count = 0;
++	int shentsize;
++	void *array_end = ptr + size;
++
++	shdr_start = (Elf_Shdr *)((char *)ehdr + ehdr_shoff(ehdr));
++	shentsize = ehdr_shentsize(ehdr);
++
++	shnum = ehdr_shnum(ehdr);
++	if (shnum == SHN_UNDEF)
++		shnum = shdr_size(shdr_start);
++
++	for (int i = 0; i < shnum; i++) {
++		Elf_Shdr *shdr = get_index(shdr_start, shentsize, i);
++		void *end;
++
++		if (shdr_type(shdr) != SHT_RELA)
++			continue;
++
++		reloc_shnum = i;
++
++		rel = (void *)ehdr + shdr_offset(shdr);
++		end = (void *)rel + shdr_size(shdr);
++
++		for (; (void *)rel < end; rel = (void *)rel + shdr_entsize(shdr)) {
++			uint64_t offset = rela_offset(rel);
++
++			if (offset >= start_loc && offset < start_loc + size) {
++				if (ptr + long_size > array_end) {
++					snprintf(m_err, ERRSTR_MAXSZ,
++						 "Too many relocations");
++					return -1;
++				}
++
++				/* Make sure this has the correct type */
++				if (rela_info(rel) != rela_type) {
++					snprintf(m_err, ERRSTR_MAXSZ,
++						"rela has type %lx but expected %lx\n",
++						(long)rela_info(rel), rela_type);
++					return -1;
++				}
++
++				if (long_size == 4)
++					*(uint32_t *)ptr = rela_addend(rel);
++				else
++					*(uint64_t *)ptr = rela_addend(rel);
++				ptr += long_size;
++				count++;
++			}
++		}
++	}
++	return count;
++}
++
++static uint64_t get_addr_reloc(Elf_Ehdr *ehdr, uint64_t addr)
++{
++	Elf_Shdr *shdr_start;
++	Elf_Shdr *shdr;
++	Elf_Rela *rel;
++	unsigned int shnum;
++	int shentsize;
++	void *end;
++
++	shdr_start = (Elf_Shdr *)((char *)ehdr + ehdr_shoff(ehdr));
++	shentsize = ehdr_shentsize(ehdr);
++
++	shnum = ehdr_shnum(ehdr);
++	if (shnum == SHN_UNDEF)
++		shnum = shdr_size(shdr_start);
++
++	shdr = get_index(shdr_start, shentsize, reloc_shnum);
++	if (shdr_type(shdr) != SHT_RELA)
++		return 0;
++
++	rel = (void *)ehdr + shdr_offset(shdr);
++	end = (void *)rel + shdr_size(shdr);
++
++	for (; (void *)rel < end; rel = (void *)rel + shdr_entsize(shdr)) {
++		uint64_t offset = rela_offset(rel);
++
++		if (offset == addr) {
++			if (long_size == 4)
++				return rela_addend(rel);
++			else
++				return rela_addend(rel);
++		}
++	}
++	return 0;
++}
++
+ static int fill_addrs(void *ptr, uint64_t size, void *addrs)
+ {
+ 	void *end = ptr + size;
+@@ -696,11 +796,6 @@ static int parse_symbols(const char *fname)
+ }
+ 
+ static pthread_t mcount_sort_thread;
+-static bool sort_reloc;
+-
+-static long rela_type;
+-
+-static char m_err[ERRSTR_MAXSZ];
+ 
+ struct elf_mcount_loc {
+ 	Elf_Ehdr *ehdr;
+@@ -708,63 +803,6 @@ struct elf_mcount_loc {
+ 	uint64_t stop_mcount_loc;
+ };
+ 
+-/* Fill the array with the content of the relocs */
+-static int fill_relocs(void *ptr, uint64_t size, Elf_Ehdr *ehdr, uint64_t start_loc)
+-{
+-	Elf_Shdr *shdr_start;
+-	Elf_Rela *rel;
+-	unsigned int shnum;
+-	unsigned int count = 0;
+-	int shentsize;
+-	void *array_end = ptr + size;
+-
+-	shdr_start = (Elf_Shdr *)((char *)ehdr + ehdr_shoff(ehdr));
+-	shentsize = ehdr_shentsize(ehdr);
+-
+-	shnum = ehdr_shnum(ehdr);
+-	if (shnum == SHN_UNDEF)
+-		shnum = shdr_size(shdr_start);
+-
+-	for (int i = 0; i < shnum; i++) {
+-		Elf_Shdr *shdr = get_index(shdr_start, shentsize, i);
+-		void *end;
+-
+-		if (shdr_type(shdr) != SHT_RELA)
+-			continue;
+-
+-		rel = (void *)ehdr + shdr_offset(shdr);
+-		end = (void *)rel + shdr_size(shdr);
+-
+-		for (; (void *)rel < end; rel = (void *)rel + shdr_entsize(shdr)) {
+-			uint64_t offset = rela_offset(rel);
+-
+-			if (offset >= start_loc && offset < start_loc + size) {
+-				if (ptr + long_size > array_end) {
+-					snprintf(m_err, ERRSTR_MAXSZ,
+-						 "Too many relocations");
+-					return -1;
+-				}
+-
+-				/* Make sure this has the correct type */
+-				if (rela_info(rel) != rela_type) {
+-					snprintf(m_err, ERRSTR_MAXSZ,
+-						"rela has type %lx but expected %lx\n",
+-						(long)rela_info(rel), rela_type);
+-					return -1;
+-				}
+-
+-				if (long_size == 4)
+-					*(uint32_t *)ptr = rela_addend(rel);
+-				else
+-					*(uint64_t *)ptr = rela_addend(rel);
+-				ptr += long_size;
+-				count++;
+-			}
+-		}
+-	}
+-	return count;
+-}
+-
+ /* Put the sorted vals back into the relocation elements */
+ static void replace_relocs(void *ptr, uint64_t size, Elf_Ehdr *ehdr, uint64_t start_loc)
+ {
+@@ -957,7 +995,15 @@ static void make_trace_array(struct elf_tracepoint *etrace)
+ 		return;
+ 	}
+ 
+-	count = fill_addrs(vals, size, start);
++	if (sort_reloc) {
++		count = fill_relocs(vals, size, ehdr, etrace->start_tracepoint_check);
++		/* gcc may use relocs to save the addresses, but clang does not. */
++		if (!count) {
++			count = fill_addrs(vals, size, start);
++			sort_reloc = 0;
++		}
++	} else
++		count = fill_addrs(vals, size, start);
+ 
+ 	compare_values = long_size == 4 ? compare_values_32 : compare_values_64;
+ 	qsort(vals, count, long_size, compare_values);
+@@ -1017,10 +1063,14 @@ static int failed_event(struct elf_tracepoint *etrace, uint64_t addr)
+ 	if (name_ptr > file_map_end)
+ 		goto bad_addr;
+ 
+-	if (long_size == 4)
+-		addr = r(name_ptr);
+-	else
+-		addr = r8(name_ptr);
++	if (sort_reloc) {
++		addr = get_addr_reloc(ehdr, addr);
++	} else {
++		if (long_size == 4)
++			addr = r(name_ptr);
++		else
++			addr = r8(name_ptr);
++	}
+ 
+ 	sec_addr = shdr_addr(ro_data_sec);
+ 	sec_offset = shdr_offset(ro_data_sec);
+@@ -1473,9 +1523,9 @@ static int do_file(char const *const fname, void *addr)
+ 
+ 	switch (r2(&ehdr->e32.e_machine)) {
+ 	case EM_AARCH64:
+-#ifdef MCOUNT_SORT_ENABLED
+ 		sort_reloc = true;
+ 		rela_type = 0x403;
++#ifdef MCOUNT_SORT_ENABLED
+ 		/* arm64 uses patchable function entry placing before function */
+ 		before_func = 8;
+ #endif
+-- 
+2.47.2
 
 
-Every trace event can take up to 5K of memory in text and meta data regardless
-if they are used or not. Trace events should not be created if they are not
-used.  Currently there's over a hundred events in the kernel that are defined
-but unused, either because their callers were removed without removing the
-trace event with it, or a config hides the trace event caller but not the
-trace event itself. And in some cases, trace events were simply added but were
-never called for whatever reason. The number of unused trace events continues
-to grow.
-
-This patch series aims to fix this.
-
-The first patch creates a new section called __tracepoint_check, where all
-callers of a tracepoint creates a variable that is placed in this section with
-a pointer to the tracepoint they use. Then on boot up, it iterates this
-section and will modify the tracepoint's "func" field to a value of 1 (all
-tracepoints "func" fields are initialized to NULL and is only set when they
-are registered). This takes place before any tracepoint can be registered.
-
-Then each tracepoint is iterated on and if any tracepoint does not have its
-"func" field set to 1 a warning is triggerd and every tracepoint that doesn't
-have that field set is printed. The "func" field is then reset back to NULL.
-
-The second patch modifies scripts/sorttable.c to read the __tracepoint_check
-section. It sorts it, and then reads the __tracepoint_ptr section that has all
-compiled in tracepoints. It makes sure that every tracepoint is found in the
-check section and if not, it prints a warning message about it. This lists the
-missing tracepoints at build time.
-
-The third patch updates sorttable to work for arm64 when compiled with gcc. As
-gcc's arm64 build doesn't put addresses in their section but saves them off in
-the RELA sections. This mostly takes the work done that was needed to do the
-mcount sorting at boot up on arm64.
-
-The forth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as
-well. There was several locations that adds tracepoints in the kernel proper
-that are only used in modules. It was getting quite complex trying to move
-things around that I just decided to make any tracepoint in a
-EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
-functions. An unused static function gets a warning but an unused global one
-does not.
-
-The last patch updates the trace_ftrace_test_filter boot up self test. That
-selftest creates a trace event to run a bunch of filter tests on it without
-actually calling the tracepoint. To quiet the warning, the selftest tracepoint
-is called within a if (!trace_<event>_enabled()) section, where it will not be
-optimized out, nor will it be called.
-
-This is v2 from: https://lore.kernel.org/linux-trace-kernel/20250529130138.544ffec4@gandalf.local.home/
-which was simply the first patch. This version adds the other patches.
-
-Steven Rostedt (5):
-      tracepoints: Add verifier that makes sure all defined tracepoints are used
-      tracing: sorttable: Add a tracepoint verification check at build time
-      tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
-      tracepoint: Do not warn for unused event that is exported
-      tracing: Call trace_ftrace_test_filter() for the event
-
-----
- include/asm-generic/vmlinux.lds.h  |   1 +
- include/linux/tracepoint.h         |  13 ++
- kernel/trace/Kconfig               |  31 +++
- kernel/trace/trace_events_filter.c |   4 +
- kernel/tracepoint.c                |  26 +++
- scripts/Makefile                   |   4 +
- scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
- 7 files changed, 437 insertions(+), 86 deletions(-)
