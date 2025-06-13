@@ -1,237 +1,157 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEEE275AE2
-	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 11:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749815850; cv=pass; b=JxNw4XtzJuWpaM9eqty+agZ0H/nT7ZBGOUqJkyAs2PrXbY35UMVHPKJTYjk4PrW5jYRsRS3tk3eWQP9iEnL5R2bqlfprroN/1fdEebts+H6O8Hhk71DGHVLV3++QT01AoSLo7vaJcYm4r1tBmqcK7Q3iPd9qi8gwybJp/hivTCs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749815850; c=relaxed/simple;
-	bh=J/LiGYx2pI+X/zWJVR8t0tx0UfTlWAN5Rtqlhb88tSk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eilxAU96ur3CdFwGlvxqoNRrM6gKVHRTsdLQR6oje4VbBXeJdIE+5x3jBJYVgRq1gCPSPXHoqjgeUJ+5z0NbbP5MzHeHuKAl5ARwG6X//ANzykfqHaQo1Y6SEVX7jpltaJdRQQpUFq1IkmuZNKTIYHi0wYX7wKdxIQyjedZPSkI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=aH4jxm+h; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="aH4jxm+h"
-ARC-Seal: i=1; a=rsa-sha256; t=1749815771; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Qv1KDSKHQdZ6+3yO0tCwx580stgqRhgdR1eWghXJTDZtyiGx7RQHmg1L90+x7dHKNUwKDNqx+eFdgx6RYh/AYMp9Hd6/27pdWg7IqAuYs0lzyer337Y71hFqHuHVoFnlqP34W+pf1C9z0iI+k+cvv6NHKnyWGS0qSKZPhBQZw+0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1749815771; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=VUFg/+2IDq4vwt7epwImt1imkzKgQYu7+Au2agn49Og=; 
-	b=eh3ccSCAwV97vjQ2Wejl6j0pAhdgnsSOVWSzjjy8ZrEXHKeNc2M5mwWWm9BIkwTb5cz/Oi6q9Pt2S/anS803yiwhmEvgBmc77wb+1bjaXFq9+vjYPiEdzk0l/AXNschpDBX4uZS71aQEx2bv7U3DuiycX8ICe4WjcYYKdPlDekg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1749815771;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=VUFg/+2IDq4vwt7epwImt1imkzKgQYu7+Au2agn49Og=;
-	b=aH4jxm+h9P4jRdgkpNEEWbu91bORykVFmBm30jloQNEwnbBe+tfx0YNts1xmU4nB
-	yyLgKbYaNvsMh1bnLG0PRSriWUHXbglLceLmIP0DzHvvGJol854KtjsGEMC/EmaeY+t
-	zTbOAUKSO1OhthZ6RZXzgJskty9CPr9w578WrOX8=
-Received: by mx.zohomail.com with SMTPS id 17498157689161004.7727496495353;
-	Fri, 13 Jun 2025 04:56:08 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Yury Norov <yury.norov@gmail.com>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Heiko Stuebner <heiko@sntech.de>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jani Nikula <jani.nikula@linux.intel.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
- Tvrtko Ursulin <tursulin@igalia.com>
-Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-Date: Fri, 13 Jun 2025 13:55:54 +0200
-Message-ID: <3683577.irdbgypaU6@workhorse>
-In-Reply-To: <5493fd6017de3f393f632125fad95945d1c4294c@intel.com>
-References:
- <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
- <5493fd6017de3f393f632125fad95945d1c4294c@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C2022068B
+	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 12:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749816373; cv=none; b=s55UEIskhHs+xBOTY/uWI4ZenSodpqmtOshynKR09h4vL8YKJWds039oNrWq/+qgz23yPEKMNVEa+yI2vrQf827bXhqgcwncL3sHFHPe/Rka8zgENjXlXGMLUWRd+EdOzGSDvvGwLeKYRIznbdH6/FWI+HkLZ7kac//3KIPUMzo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749816373; c=relaxed/simple;
+	bh=dy183kHYjGwHoCMN7pVrHMJgDWE/i9RF/XCaMmJP/Sg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sOr83mMiTczj6VHkijMQwhx0qZve5H6P+b564eAmF5qhyjS3twwFqzj3aWjZZMDaltS4B0VBCVJMn4dpS5opOO3MMqnjLAQrfDB+cIln1J0RY+EozGNplTlr33bCl1saG9FIgTPDSpA00j+Y7pmo7+d96cSOxI855loh+Y5+2u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 2BB53C0459;
+	Fri, 13 Jun 2025 12:06:08 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 0B0DB2002D;
+	Fri, 13 Jun 2025 12:06:04 +0000 (UTC)
+Date: Fri, 13 Jun 2025 08:07:41 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints
+ and trace events
+Message-ID: <20250613080741.55de0429@gandalf.local.home>
+In-Reply-To: <14fc8777-a5d2-4877-9707-73c25d9e9bd3@infradead.org>
+References: <20250612235827.011358765@goodmis.org>
+	<14fc8777-a5d2-4877-9707-73c25d9e9bd3@infradead.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 7mqzf3awyn1mrdt43cekibahainqkhx9
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 0B0DB2002D
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX198NosNg0VWHJpbZw25v/HmbXrnlMNRfls=
+X-HE-Tag: 1749816364-802972
+X-HE-Meta: U2FsdGVkX1/SRYXKIc/bGFvB/8qKJp8ttNVRvnR8Mwf8M3ZCyOq0tIb4Y9YnmzpJt00MxcjffXc4/c/BIdQQ6+CvngQpwBNYGgB6lABNnzivrSER0hJRRSuMfYVTT47s9sXXhQMKNUkJtclXujk1DJuL363HjO+oPbQhC4kErPe2W86DPxzfeaaN6xHpKb5253zt9QQHELihZ3usO5MqEdoO1X6Bn4MlChv50EWAY4cMzVuYLBtOXV/bc5AAEwC3KE7pfPNgX8B0rRvBHdGjUyw7jcI3YVImujmPRtjauvHc/8+ll7AsFMGmc+j0BlsYPW6mQ4qeSaCQLXJ4jvZOXVMayBb74AEA7Fa+OuQKPwDbipN7KTiv1dpG20SZR6mvRysC/oq8XaQNGBUnYCraQQ==
 
-Hello,
+On Thu, 12 Jun 2025 20:20:48 -0700
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-On Friday, 13 June 2025 10:51:15 Central European Summer Time Jani Nikula wrote:
-> On Thu, 12 Jun 2025, Nicolas Frattaroli <nicolas.frattaroli@collabora.com> wrote:
-> > Hardware of various vendors, but very notably Rockchip, often uses
-> > 32-bit registers where the upper 16-bit half of the register is a
-> > write-enable mask for the lower half.
-> >
-> > This type of hardware setup allows for more granular concurrent register
-> > write access.
-> >
-> > Over the years, many drivers have hand-rolled their own version of this
-> > macro, usually without any checks, often called something like
-> > HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
-> > semantics between them.
-> >
-> > Clearly there is a demand for such a macro, and thus the demand should
-> > be satisfied in a common header file.
-> >
-> > Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
-> > version that can be used in initializers, like FIELD_PREP_CONST. The
-> > macro names are chosen to not clash with any potential other macros that
-> > drivers may already have implemented themselves, while retaining a
-> > familiar name.
-> >
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > ---
-> >  include/linux/bitfield.h | 47 +++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 47 insertions(+)
-> >
-> > diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> > index 6d9a53db54b66c0833973c880444bd289d9667b1..b90d88db7405f95b78cdd6f3426263086bab5aa6 100644
-> > --- a/include/linux/bitfield.h
-> > +++ b/include/linux/bitfield.h
-> > @@ -8,6 +8,7 @@
-> >  #define _LINUX_BITFIELD_H
-> >  
-> >  #include <linux/build_bug.h>
-> > +#include <linux/limits.h>
-> >  #include <linux/typecheck.h>
-> >  #include <asm/byteorder.h>
-> >  
-> > @@ -142,6 +143,52 @@
-> >  		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask))	\
-> >  	)
-> >  
-> > +/**
-> > + * HWORD_UPDATE() - prepare a bitfield element with a mask in the upper half
-> > + * @_mask: shifted mask defining the field's length and position
-> > + * @_val:  value to put in the field
-> > + *
-> > + * HWORD_UPDATE() masks and shifts up the value, as well as bitwise ORs the
-> > + * result with the mask shifted up by 16.
-> > + *
-> > + * This is useful for a common design of hardware registers where the upper
-> > + * 16-bit half of a 32-bit register is used as a write-enable mask. In such a
-> > + * register, a bit in the lower half is only updated if the corresponding bit
-> > + * in the upper half is high.
-> > + */
-> > +#define HWORD_UPDATE(_mask, _val)					 \
-> > +	({								 \
-> > +		__BF_FIELD_CHECK(_mask, ((u16) 0U), _val,		 \
-> > +				 "HWORD_UPDATE: ");			 \
-> > +		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask)) | \
-> > +		((_mask) << 16);					 \
-> > +	})
+> Hi,
 > 
-> i915 uses something like this for a few registers too, with the name
-> _MASKED_FIELD(). I think we could use it.
+> On 6/12/25 4:58 PM, Steven Rostedt wrote:
+> > Every trace event can take up to 5K of memory in text and meta data regardless  
 > 
-> I do think this is clearly an extension of FIELD_PREP(), though, and
-> should be be named similarly, instead of the completely deviating
-> HWORD_UPDATE().
-> 
-> Also, we recently got GENMASK() versions with sizes, GENMASK_U16()
-> etc. so I find it inconsistent to denote size here with HWORD.
-> 
-> FIELD_PREP_MASKED_U16? MASKED_FIELD_PREP_U16? Something along those
-> lines?
+> s/meta data/metadata/ unless you are referring to meta's data.
 
-Yeah, I agree the name could be better. I used HWORD_UPDATE as Yury and
-I couldn't come up with a name we liked either, and Yury suggested not
-breaking from what's already there too much. I do think making the name
-more field-adjacent would be good though, as well as somehow indicating
-that it is 16 bits of data.
+Oh so I need to give Meta royalties?
 
 > 
-> And perhaps that (and more potential users) could persuade Jakub that
-> this is not that weird after all?
+> s/meta data/metadata/ in patches 1 and 2 also.
 
-I will operate under the assumption that Jakub's opinion will not change
-as he ignored the commit message that talks about multiple vendors,
-ignored the cover letter that talks about multiple vendors, and ignored
-my e-mail where I once again made it clear to him that it's multiple
-vendors, and still claims it's a Rockchip specific convention.
+I'll update when I pull them in. Note, the cover letter isn't something
+that I put into git. But I'll try to remember to update if I send a v3.
 
 > 
+> > if they are used or not. Trace events should not be created if they are not
+> > used.  Currently there's over a hundred events in the kernel that are defined
+> > but unused, either because their callers were removed without removing the
+> > trace event with it, or a config hides the trace event caller but not the
+> > trace event itself. And in some cases, trace events were simply added but were
+> > never called for whatever reason. The number of unused trace events continues
+> > to grow.
+> > 
+> > This patch series aims to fix this.
+> > 
+> > The first patch creates a new section called __tracepoint_check, where all
+> > callers of a tracepoint creates a variable that is placed in this section with
+> > a pointer to the tracepoint they use. Then on boot up, it iterates this
+> > section and will modify the tracepoint's "func" field to a value of 1 (all
+> > tracepoints "func" fields are initialized to NULL and is only set when they
+> > are registered). This takes place before any tracepoint can be registered.
+> > 
+> > Then each tracepoint is iterated on and if any tracepoint does not have its
+> > "func" field set to 1 a warning is triggerd and every tracepoint that doesn't  
 > 
-> BR,
-> Jani.
-> 
+> triggered
 
-Best Regards,
-Nicolas Frattaroli
+Yes I am!
 
 > 
+> > have that field set is printed. The "func" field is then reset back to NULL.
+> > 
+> > The second patch modifies scripts/sorttable.c to read the __tracepoint_check
+> > section. It sorts it, and then reads the __tracepoint_ptr section that has all
+> > compiled in tracepoints. It makes sure that every tracepoint is found in the
+> > check section and if not, it prints a warning message about it. This lists the
+> > missing tracepoints at build time.
+> > 
+> > The third patch updates sorttable to work for arm64 when compiled with gcc. As
+> > gcc's arm64 build doesn't put addresses in their section but saves them off in
+> > the RELA sections. This mostly takes the work done that was needed to do the
+> > mcount sorting at boot up on arm64.
+> > 
+> > The forth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as  
 > 
-> 
-> > +
-> > +/**
-> > + * HWORD_UPDATE_CONST() - prepare a constant bitfield element with a mask in
-> > + *                        the upper half
-> > + * @_mask: shifted mask defining the field's length and position
-> > + * @_val:  value to put in the field
-> > + *
-> > + * HWORD_UPDATE_CONST() masks and shifts up the value, as well as bitwise ORs
-> > + * the result with the mask shifted up by 16.
-> > + *
-> > + * This is useful for a common design of hardware registers where the upper
-> > + * 16-bit half of a 32-bit register is used as a write-enable mask. In such a
-> > + * register, a bit in the lower half is only updated if the corresponding bit
-> > + * in the upper half is high.
-> > + *
-> > + * Unlike HWORD_UPDATE(), this is a constant expression and can therefore
-> > + * be used in initializers. Error checking is less comfortable for this
-> > + * version.
-> > + */
-> > +#define HWORD_UPDATE_CONST(_mask, _val)					  \
-> > +	(								  \
-> > +		FIELD_PREP_CONST(_mask, _val) |				  \
-> > +		(BUILD_BUG_ON_ZERO(const_true((u64) (_mask) > U16_MAX)) + \
-> > +		 ((_mask) << 16))					  \
-> > +	)
-> > +
-> >  /**
-> >   * FIELD_GET() - extract a bitfield element
-> >   * @_mask: shifted mask defining the field's length and position
-> 
-> 
+> fourth (or are you coding in forth?)
 
+oops
 
+-- Steve
 
+> 
+> > well. There was several locations that adds tracepoints in the kernel proper
+> > that are only used in modules. It was getting quite complex trying to move
+> > things around that I just decided to make any tracepoint in a
+> > EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
+> > functions. An unused static function gets a warning but an unused global one
+> > does not.
+> > 
+> > The last patch updates the trace_ftrace_test_filter boot up self test. That
+> > selftest creates a trace event to run a bunch of filter tests on it without
+> > actually calling the tracepoint. To quiet the warning, the selftest tracepoint
+> > is called within a if (!trace_<event>_enabled()) section, where it will not be
+> > optimized out, nor will it be called.
+> > 
+> > This is v2 from: https://lore.kernel.org/linux-trace-kernel/20250529130138.544ffec4@gandalf.local.home/
+> > which was simply the first patch. This version adds the other patches.
+> > 
+> > Steven Rostedt (5):
+> >       tracepoints: Add verifier that makes sure all defined tracepoints are used
+> >       tracing: sorttable: Add a tracepoint verification check at build time
+> >       tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
+> >       tracepoint: Do not warn for unused event that is exported
+> >       tracing: Call trace_ftrace_test_filter() for the event
+> > 
+> > ----
+> >  include/asm-generic/vmlinux.lds.h  |   1 +
+> >  include/linux/tracepoint.h         |  13 ++
+> >  kernel/trace/Kconfig               |  31 +++
+> >  kernel/trace/trace_events_filter.c |   4 +
+> >  kernel/tracepoint.c                |  26 +++
+> >  scripts/Makefile                   |   4 +
+> >  scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
+> >  7 files changed, 437 insertions(+), 86 deletions(-)
+> >   
+> 
+> thanks.
 
