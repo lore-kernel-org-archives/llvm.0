@@ -1,157 +1,172 @@
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C2022068B
-	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 12:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749816373; cv=none; b=s55UEIskhHs+xBOTY/uWI4ZenSodpqmtOshynKR09h4vL8YKJWds039oNrWq/+qgz23yPEKMNVEa+yI2vrQf827bXhqgcwncL3sHFHPe/Rka8zgENjXlXGMLUWRd+EdOzGSDvvGwLeKYRIznbdH6/FWI+HkLZ7kac//3KIPUMzo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749816373; c=relaxed/simple;
-	bh=dy183kHYjGwHoCMN7pVrHMJgDWE/i9RF/XCaMmJP/Sg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sOr83mMiTczj6VHkijMQwhx0qZve5H6P+b564eAmF5qhyjS3twwFqzj3aWjZZMDaltS4B0VBCVJMn4dpS5opOO3MMqnjLAQrfDB+cIln1J0RY+EozGNplTlr33bCl1saG9FIgTPDSpA00j+Y7pmo7+d96cSOxI855loh+Y5+2u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 2BB53C0459;
-	Fri, 13 Jun 2025 12:06:08 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 0B0DB2002D;
-	Fri, 13 Jun 2025 12:06:04 +0000 (UTC)
-Date: Fri, 13 Jun 2025 08:07:41 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints
- and trace events
-Message-ID: <20250613080741.55de0429@gandalf.local.home>
-In-Reply-To: <14fc8777-a5d2-4877-9707-73c25d9e9bd3@infradead.org>
-References: <20250612235827.011358765@goodmis.org>
-	<14fc8777-a5d2-4877-9707-73c25d9e9bd3@infradead.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F267B22688C
+	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 12:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749816559; cv=pass; b=e909n7DhryrfysA/XMSvSjU5GtManw2zzPFPsBU1c3DrIJwAV82oOouHIT/JEDFJDRMxq5EMKimJhAbGKthscmMB1fn+umnkrrWY+AC69NSlHbh9giRnEZDTRKjacfiwwEQ868q3i2N5/t8R+SYEOX7BdPkVsfT8Aelj60SfXVQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749816559; c=relaxed/simple;
+	bh=tWxzlB7gvAwvQ4TxzPO+xifFWwtGtqkUHJoJ1LVl9CE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=I0MMl+5+z1UhlPdvEd6uea3N+DGVlqyMFJTxUF12Tc+gjlrUko25Pufkd9hZ3x101ybMuQ0UCsWvpJdUnsXPObLvDfyLICsTVVfQ7FmLXX+P7su3h8gBcqDhgxNa0Fq9wRzwYyRoB/O9pNVDLacgbDKHrilt5gz2gsN+Zq6zWJc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=iYPe6hd7; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="iYPe6hd7"
+ARC-Seal: i=1; a=rsa-sha256; t=1749816504; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=HxsUUIkbJLHor7xQVOxFnKjQL2tcvAU/8U7uOGAT8YJ5SzkaPujbsMSqqr80mMJL7/C6qPJ5R72AJZZz4V+WGvRuhbDD8RcEdYVp0T3jFCWzPUWFNNQ68W3mkdPx/uRz9Q8CO9KUVnMiuh0wlCTVhHSoXI4LkoQwVLhFcDXTcHE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1749816504; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=oC6j4XXPtFnpNI59vFPxucp8Atnh3iWQ7iCtDWJTvGo=; 
+	b=A1ATiiZZKeXR51mKcGYEcu+ievsJrJBhXTLF5fKN6m6uGlmf+gN+qSW/4BgN2DXa3+ihmm5IDJ0LMQYccMcRuItr2vNHq1tFXK2h6DApxhwbIV2hxsLhxWB7MZeQnM9wPRrdMCbbUDX2/hY046rowLcFe6wBngVN1Vd+mah2Cyc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1749816504;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=oC6j4XXPtFnpNI59vFPxucp8Atnh3iWQ7iCtDWJTvGo=;
+	b=iYPe6hd7lzD5NmEuVNlPJNUR1sBcQMTEzgFULW5ZE1tzhGuUUZmsrhquSUKDA+Cs
+	I90mwM0EoNm4PSiTntzA6phjzUyTdMpluFlcfHK8TNliE3+1AYflsiylQRbXHpwn2NL
+	nJ0riWRwAIxWd/I6yzJxEXtQHSBfMYaBpXVI3PVg=
+Received: by mx.zohomail.com with SMTPS id 1749816501559794.9356716993168;
+	Fri, 13 Jun 2025 05:08:21 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Heiko Stuebner <heiko@sntech.de>,
+ Shreeya Patel <shreeya.patel@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+ linux-sound@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 17/20] PCI: dw-rockchip: switch to HWORD_UPDATE macro
+Date: Fri, 13 Jun 2025 14:08:08 +0200
+Message-ID: <12129790.nUPlyArG6x@workhorse>
+In-Reply-To: <aEvzMnxgsjfryCOo@ryzen>
+References:
+ <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
+ <20250612-byeword-update-v1-17-f4afb8f6313f@collabora.com>
+ <aEvzMnxgsjfryCOo@ryzen>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 7mqzf3awyn1mrdt43cekibahainqkhx9
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 0B0DB2002D
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX198NosNg0VWHJpbZw25v/HmbXrnlMNRfls=
-X-HE-Tag: 1749816364-802972
-X-HE-Meta: U2FsdGVkX1/SRYXKIc/bGFvB/8qKJp8ttNVRvnR8Mwf8M3ZCyOq0tIb4Y9YnmzpJt00MxcjffXc4/c/BIdQQ6+CvngQpwBNYGgB6lABNnzivrSER0hJRRSuMfYVTT47s9sXXhQMKNUkJtclXujk1DJuL363HjO+oPbQhC4kErPe2W86DPxzfeaaN6xHpKb5253zt9QQHELihZ3usO5MqEdoO1X6Bn4MlChv50EWAY4cMzVuYLBtOXV/bc5AAEwC3KE7pfPNgX8B0rRvBHdGjUyw7jcI3YVImujmPRtjauvHc/8+ll7AsFMGmc+j0BlsYPW6mQ4qeSaCQLXJ4jvZOXVMayBb74AEA7Fa+OuQKPwDbipN7KTiv1dpG20SZR6mvRysC/oq8XaQNGBUnYCraQQ==
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, 12 Jun 2025 20:20:48 -0700
-Randy Dunlap <rdunlap@infradead.org> wrote:
+Hello,
 
-> Hi,
+On Friday, 13 June 2025 11:45:22 Central European Summer Time Niklas Cassel wrote:
+> Hello Nicolas,
 > 
-> On 6/12/25 4:58 PM, Steven Rostedt wrote:
-> > Every trace event can take up to 5K of memory in text and meta data regardless  
-> 
-> s/meta data/metadata/ unless you are referring to meta's data.
-
-Oh so I need to give Meta royalties?
-
-> 
-> s/meta data/metadata/ in patches 1 and 2 also.
-
-I'll update when I pull them in. Note, the cover letter isn't something
-that I put into git. But I'll try to remember to update if I send a v3.
-
-> 
-> > if they are used or not. Trace events should not be created if they are not
-> > used.  Currently there's over a hundred events in the kernel that are defined
-> > but unused, either because their callers were removed without removing the
-> > trace event with it, or a config hides the trace event caller but not the
-> > trace event itself. And in some cases, trace events were simply added but were
-> > never called for whatever reason. The number of unused trace events continues
-> > to grow.
+> On Thu, Jun 12, 2025 at 08:56:19PM +0200, Nicolas Frattaroli wrote:
 > > 
-> > This patch series aims to fix this.
+> > PCIE_CLIENT_RC_MODE/PCIE_CLIENT_EP_MODE was another field that wasn't
+> > super clear on what the bit field modification actually is. As far as I
+> > can tell, switching to RC mode doesn't actually write the correct value
+> > to the field if any of its bits have been set previously, as it only
+> > updates one bit of a 4 bit field.
 > > 
-> > The first patch creates a new section called __tracepoint_check, where all
-> > callers of a tracepoint creates a variable that is placed in this section with
-> > a pointer to the tracepoint they use. Then on boot up, it iterates this
-> > section and will modify the tracepoint's "func" field to a value of 1 (all
-> > tracepoints "func" fields are initialized to NULL and is only set when they
-> > are registered). This takes place before any tracepoint can be registered.
-> > 
-> > Then each tracepoint is iterated on and if any tracepoint does not have its
-> > "func" field set to 1 a warning is triggerd and every tracepoint that doesn't  
+> > Replace it by actually writing the full values to the field, using the
+> > new HWORD_UPDATE macro, which grants us the benefit of better
+> > compile-time error checking.
 > 
-> triggered
-
-Yes I am!
-
+> The current code looks like this:
+> #define  PCIE_CLIENT_RC_MODE            HIWORD_UPDATE_BIT(0x40)
+> #define  PCIE_CLIENT_EP_MODE            HIWORD_UPDATE(0xf0, 0x0)
 > 
-> > have that field set is printed. The "func" field is then reset back to NULL.
-> > 
-> > The second patch modifies scripts/sorttable.c to read the __tracepoint_check
-> > section. It sorts it, and then reads the __tracepoint_ptr section that has all
-> > compiled in tracepoints. It makes sure that every tracepoint is found in the
-> > check section and if not, it prints a warning message about it. This lists the
-> > missing tracepoints at build time.
-> > 
-> > The third patch updates sorttable to work for arm64 when compiled with gcc. As
-> > gcc's arm64 build doesn't put addresses in their section but saves them off in
-> > the RELA sections. This mostly takes the work done that was needed to do the
-> > mcount sorting at boot up on arm64.
-> > 
-> > The forth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as  
+> The device_type field is defined like this:
+> 4'h0: PCI Express endpoint
+> 4'h1: Legacy PCI Express endpoint
+> 4'h4: Root port of PCI Express root complex
 > 
-> fourth (or are you coding in forth?)
+> The reset value of the device_type field is 0x0 (EP mode).
+> 
+> So switching between RC mode / EP mode should be fine.
+> 
+> But I agree, theoretically there could be a bug if e.g. bootloader
+> has set the device_type to 0x1 (Legacy EP).
+> 
+> So if you want, you could send a patch:
+> -#define  PCIE_CLIENT_RC_MODE            HIWORD_UPDATE_BIT(0x40)
+> +#define  PCIE_CLIENT_RC_MODE            HIWORD_UPDATE(0xf0, 0x40)
+> 
+> With:
+> Fixes: 0e898eb8df4e ("PCI: rockchip-dwc: Add Rockchip RK356X host controller driver")
+> 
+> But I also think that your current patch is fine as-is.
+> 
+> I do however think that you can drop this line:
+> +#define  PCIE_CLIENT_MODE_LEGACY       0x1U
+> 
+> Since the define is never used.
 
-oops
-
--- Steve
+Will do
 
 > 
-> > well. There was several locations that adds tracepoints in the kernel proper
-> > that are only used in modules. It was getting quite complex trying to move
-> > things around that I just decided to make any tracepoint in a
-> > EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
-> > functions. An unused static function gets a warning but an unused global one
-> > does not.
-> > 
-> > The last patch updates the trace_ftrace_test_filter boot up self test. That
-> > selftest creates a trace event to run a bunch of filter tests on it without
-> > actually calling the tracepoint. To quiet the warning, the selftest tracepoint
-> > is called within a if (!trace_<event>_enabled()) section, where it will not be
-> > optimized out, nor will it be called.
-> > 
-> > This is v2 from: https://lore.kernel.org/linux-trace-kernel/20250529130138.544ffec4@gandalf.local.home/
-> > which was simply the first patch. This version adds the other patches.
-> > 
-> > Steven Rostedt (5):
-> >       tracepoints: Add verifier that makes sure all defined tracepoints are used
-> >       tracing: sorttable: Add a tracepoint verification check at build time
-> >       tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
-> >       tracepoint: Do not warn for unused event that is exported
-> >       tracing: Call trace_ftrace_test_filter() for the event
-> > 
-> > ----
-> >  include/asm-generic/vmlinux.lds.h  |   1 +
-> >  include/linux/tracepoint.h         |  13 ++
-> >  kernel/trace/Kconfig               |  31 +++
-> >  kernel/trace/trace_events_filter.c |   4 +
-> >  kernel/tracepoint.c                |  26 +++
-> >  scripts/Makefile                   |   4 +
-> >  scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
-> >  7 files changed, 437 insertions(+), 86 deletions(-)
-> >   
 > 
-> thanks.
+> Also, is there any point in adding the U suffix?
+> 
+> Usually you see UL or ULL suffix, when that is needed, but there actually
+> seems to be extremely few hits of simply U suffix:
+> $ git grep 0x1U | grep -v UL
+
+Sort of. Literals without the U suffix are considered signed iirc, and
+operating with them and then left-shifting the result can run into issues
+if you shift their bits into the sign bit. In the patch at [1] I needed to
+quell a compiler warning about signed long overflows with a U suffix. This
+should only ever really be a problem for anything that gets shifted up to
+bit index 31 I believe, and maybe there's a better way to handle this in
+the macro itself with an explicit cast to unsigned, but explicit casts
+give me the ick. I'm also open to changing it to an UL, which will have
+the same effect, and has more precedent.
+
+> 
+> 
+> Kind regards,
+> Niklas
+> 
+
+Best Regards,
+Nicolas Frattaroli
+
+Link: https://lore.kernel.org/all/20250612-byeword-update-v1-7-f4afb8f6313f@collabora.com/ [1]
+
 
