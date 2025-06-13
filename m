@@ -1,188 +1,103 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BA579F5
-	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 13:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04BC18E377;
+	Fri, 13 Jun 2025 14:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749822905; cv=none; b=N+sDd2WzLTX2zMzUABuHAr7U3t9IzTfjiaGCj6vPFa0pTHr9NILelhwmFge4v+UJz3DkarG/bfg9Cj8aCdDzMNfhYNQ63Hm+mfOcCUPlX/HcMJBtYs1NO6LG8Mhg3WAkfWicHQqjCpOT4Iz5JvTbqHGBIExvWgH3vdeg2Uy3gaA=
+	t=1749823847; cv=none; b=GSGwAn1t8PNCwb1sfAU0bCulQLAUUhGM6sHxLN39eiOhOmZ86jjfn9ZAGsriSdrhyAMPT+r9Lx2pqF4W8pXGF4UdX4+gfcUO99upG/nnBezfO6CEknA5Gml5dgSHcF1XmhnjZwArweJxBFgo9XWPO+wAS0Zf91GYcaGZEe/42S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749822905; c=relaxed/simple;
-	bh=ENX9QtWbYw4Rxu2kw33jFBDaHiweTvxpiRQiKM+M9rg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H3qcQmWZ/KdGO/bZ5YugM5F4llWF+HqnUujpJmWUomIGXBwRHbhpWYcPhvgyOtKzT8hJLHQLeNkm7xPD7+e6eITT3Qjn+BVtLwaT629GC7FkgvtErIURiCj/GvdEvf9+3YiQJOFLx/66/gPhOPBkIfOEQ6MwAVTP8ClaIdRgqq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 771B8FEC;
-	Fri, 13 Jun 2025 06:54:42 -0700 (PDT)
-Received: from [10.57.28.131] (unknown [10.57.28.131])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A0C03F59E;
-	Fri, 13 Jun 2025 06:54:52 -0700 (PDT)
-Message-ID: <1437fe89-341b-4b57-b1fa-a0395081e941@arm.com>
-Date: Fri, 13 Jun 2025 14:54:50 +0100
+	s=arc-20240116; t=1749823847; c=relaxed/simple;
+	bh=eP/zLTuwOfoP5vAhzw0ClxIdUUHuuKIgpOGHAKnN7mg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KTWV9ELYcGjHnnPKELh0wKHuhFuQQbQl2GpC+4Ort/kidotF83sAywZoFN39AMVZO/+W7Iire53cQP9evqv//kVI7xUHLC2cHlPf9IfluPZOpC3HsY2rilDnz6jI04tZcZ/QKk1E/FU7Al7kXjNsDaG90eRLcZvpidzxJknKqPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EqVBCvPe; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EqVBCvPe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749823846; x=1781359846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eP/zLTuwOfoP5vAhzw0ClxIdUUHuuKIgpOGHAKnN7mg=;
+  b=EqVBCvPe9IvKkNBemVCUc6G33l8AOZuKlz8WEAxxGuo+1rbXNYV+ecaW
+   mNgE9rKQf0HluHdllBVHJN7EI0A0wUsJ2ghwUOcWs/CndxFPUgtoqVaPk
+   7UJovy9ndgtg2f7NtidHa+M7FNob/bUHbAaOWPFkyRF43L3VNUx6Xl00m
+   b+lbmAmBUn55LrrynmRZ7XfZJXcaslCkS3nHfPfJslbP5w6rklYFDKj8W
+   AEhSTU/UfyQEjRLaiIU1+Rm3UOKWL5mm9RicnSgq6w9LZRs8Gbu8moQd4
+   YZGEmGCbwb3OBbzEcNsKYr0vMebsDIX4lfefqFD7hhdXZ00UjPFiRwlPG
+   g==;
+X-CSE-ConnectionGUID: +E5ug9PuSfWqD6JdcDPTdg==
+X-CSE-MsgGUID: 90WVfY0lRjWOqGQD5Jv9XA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11463"; a="51920484"
+X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
+   d="scan'208";a="51920484"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 07:10:45 -0700
+X-CSE-ConnectionGUID: aOa8+CR4RdWDgxcLFMnOQg==
+X-CSE-MsgGUID: Q2Eg1+bKTHmgIOxNNWBurg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
+   d="scan'208";a="152993991"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 13 Jun 2025 07:10:42 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uQ57A-000ChG-1q;
+	Fri, 13 Jun 2025 14:10:40 +0000
+Date: Fri, 13 Jun 2025 22:09:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Salomon Dushimirimana <salomondush@google.com>,
+	Jack Wang <jinpu.wang@cloud.ionos.com>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Salomon Dushimirimana <salomondush@google.com>
+Subject: Re: [PATCH] scsi: pm80xx: add controller scsi host fatal error
+ uevents
+Message-ID: <202506132133.ML6A1QnK-lkp@intel.com>
+References: <20250612212504.512786-1-salomondush@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Yury Norov <yury.norov@gmail.com>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang
- <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-pm@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev,
- linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-sound@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
- kernel@collabora.com, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
- <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20250612-byeword-update-v1-1-f4afb8f6313f@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250612212504.512786-1-salomondush@google.com>
 
-On 2025-06-12 7:56 pm, Nicolas Frattaroli wrote:
-> Hardware of various vendors, but very notably Rockchip, often uses
-> 32-bit registers where the upper 16-bit half of the register is a
-> write-enable mask for the lower half.
-> 
-> This type of hardware setup allows for more granular concurrent register
-> write access.
-> 
-> Over the years, many drivers have hand-rolled their own version of this
-> macro, usually without any checks, often called something like
-> HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
-> semantics between them.
-> 
-> Clearly there is a demand for such a macro, and thus the demand should
-> be satisfied in a common header file.
-> 
-> Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
-> version that can be used in initializers, like FIELD_PREP_CONST. The
-> macro names are chosen to not clash with any potential other macros that
-> drivers may already have implemented themselves, while retaining a
-> familiar name.
+Hi Salomon,
 
-Nit: while from one angle it indeed looks similar, from another it's 
-even more opaque and less meaningful than what we have already. 
-Personally I cannot help but see "hword" as "halfword", so logically if 
-we want 32+32-bit or 8+8-bit variants in future those would be 
-WORD_UPDATE() and BYTE_UPDATE(), right? ;)
+kernel test robot noticed the following build warnings:
 
-It's also confounded by "update" not actually having any obvious meaning 
-at this level without all the implicit usage context. FWIW my suggestion 
-would be FIELD_PREP_WM_U16, such that the reader instantly sees 
-"FIELD_PREP with some additional semantics", even if they then need to 
-glance at the kerneldoc for clarification that WM stands for writemask 
-(or maybe WE for write-enable if people prefer). Plus it then leaves 
-room to easily support different sizes (and potentially even bonkers 
-upside-down Ux_WM variants?!) without any bother if we need to.
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next linus/master v6.16-rc1 next-20250613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Robin.
+url:    https://github.com/intel-lab-lkp/linux/commits/Salomon-Dushimirimana/scsi-pm80xx-add-controller-scsi-host-fatal-error-uevents/20250613-052945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20250612212504.512786-1-salomondush%40google.com
+patch subject: [PATCH] scsi: pm80xx: add controller scsi host fatal error uevents
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250613/202506132133.ML6A1QnK-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250613/202506132133.ML6A1QnK-lkp@intel.com/reproduce)
 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->   include/linux/bitfield.h | 47 +++++++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 47 insertions(+)
-> 
-> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> index 6d9a53db54b66c0833973c880444bd289d9667b1..b90d88db7405f95b78cdd6f3426263086bab5aa6 100644
-> --- a/include/linux/bitfield.h
-> +++ b/include/linux/bitfield.h
-> @@ -8,6 +8,7 @@
->   #define _LINUX_BITFIELD_H
->   
->   #include <linux/build_bug.h>
-> +#include <linux/limits.h>
->   #include <linux/typecheck.h>
->   #include <asm/byteorder.h>
->   
-> @@ -142,6 +143,52 @@
->   		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask))	\
->   	)
->   
-> +/**
-> + * HWORD_UPDATE() - prepare a bitfield element with a mask in the upper half
-> + * @_mask: shifted mask defining the field's length and position
-> + * @_val:  value to put in the field
-> + *
-> + * HWORD_UPDATE() masks and shifts up the value, as well as bitwise ORs the
-> + * result with the mask shifted up by 16.
-> + *
-> + * This is useful for a common design of hardware registers where the upper
-> + * 16-bit half of a 32-bit register is used as a write-enable mask. In such a
-> + * register, a bit in the lower half is only updated if the corresponding bit
-> + * in the upper half is high.
-> + */
-> +#define HWORD_UPDATE(_mask, _val)					 \
-> +	({								 \
-> +		__BF_FIELD_CHECK(_mask, ((u16) 0U), _val,		 \
-> +				 "HWORD_UPDATE: ");			 \
-> +		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask)) | \
-> +		((_mask) << 16);					 \
-> +	})
-> +
-> +/**
-> + * HWORD_UPDATE_CONST() - prepare a constant bitfield element with a mask in
-> + *                        the upper half
-> + * @_mask: shifted mask defining the field's length and position
-> + * @_val:  value to put in the field
-> + *
-> + * HWORD_UPDATE_CONST() masks and shifts up the value, as well as bitwise ORs
-> + * the result with the mask shifted up by 16.
-> + *
-> + * This is useful for a common design of hardware registers where the upper
-> + * 16-bit half of a 32-bit register is used as a write-enable mask. In such a
-> + * register, a bit in the lower half is only updated if the corresponding bit
-> + * in the upper half is high.
-> + *
-> + * Unlike HWORD_UPDATE(), this is a constant expression and can therefore
-> + * be used in initializers. Error checking is less comfortable for this
-> + * version.
-> + */
-> +#define HWORD_UPDATE_CONST(_mask, _val)					  \
-> +	(								  \
-> +		FIELD_PREP_CONST(_mask, _val) |				  \
-> +		(BUILD_BUG_ON_ZERO(const_true((u64) (_mask) > U16_MAX)) + \
-> +		 ((_mask) << 16))					  \
-> +	)
-> +
->   /**
->    * FIELD_GET() - extract a bitfield element
->    * @_mask: shifted mask defining the field's length and position
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506132133.ML6A1QnK-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/scsi/pm8001/pm80xx_hwi.c:1560 function parameter 'error_reporter' not described in 'pm80xx_fatal_error_uevent_emit'
+>> Warning: drivers/scsi/pm8001/pm80xx_hwi.c:1560 Excess function parameter 'error_type' description in 'pm80xx_fatal_error_uevent_emit'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
