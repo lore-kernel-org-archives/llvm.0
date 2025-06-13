@@ -1,277 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9594425BEE3;
-	Fri, 13 Jun 2025 10:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0F72D5C63;
+	Fri, 13 Jun 2025 11:12:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749810256; cv=none; b=kfAyfa2RDg3DaDo1EUhIkkXxH5gGres/Ci4MAzNkA8joEAMofj+Q1UzpSypxGp62/zJ5yJLFg/Id5pdaNHHGhkIS2Wio5lY9ALOAaTyyXubIW2WBzcBkkEIFuuLZAUGmYqaGusazapjBtpRYL0Mq80UitHUEz+EmzPdlOb0DWuI=
+	t=1749813157; cv=none; b=SIE0oH12zaJNGQgTffdst6kxIlvMHSdHjKBEYy+I2T6tBLLm1saRCC7H6t+Oeby9jOEwmRYks9xmPIF8QrY9j0yTcZQ9MT4hLokl2PyDMnYrnU3AKhmYs+G+X3KWaJNG3W+rmJyX31Qq8VbqNmjvlQW1EWa7vNTy6dO7O9ssolU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749810256; c=relaxed/simple;
-	bh=2iDnlk7mOj+Ad67u+b0dCHsd+knvG74VXJc2zK3m1i0=;
+	s=arc-20240116; t=1749813157; c=relaxed/simple;
+	bh=3JSffdcKG1BEdfLxDkvCLXE5WcpkgQe1rrYaCHuFNrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fSUhYOqDa3EwBCWRkit3jTGczWFYWFQKOGxsLwTAOXPbH7Vx5LXxBTqhwWVRsYXGlmrj2NUKlD4Tl35gUzezTklLUuiIzAmT/nieibsb/t48oMxSL6XXE7Z0qEZgIzDvcn72b0DZ5Njb3N+wIJ8tRTN0mXf56h93Vf4BS1Agdcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fNnTdce/; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gxwTZXmvmzlIjd4Wtz6vucKvPu0KgqWuIKw28WuizKOHJ7y3czPBm4Rur1Ps/ffXaM7s8DybRV8AjDdtHSSR0JHY6HSTPCpnO8/dVsa/60T+DKMWwm5bopFKdY+SEnPiwvXWy++8WUKPaPr290dXLifV2tuCDI/ePYyZOb/x6sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4kKdw9S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fNnTdce/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749810255; x=1781346255;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2iDnlk7mOj+Ad67u+b0dCHsd+knvG74VXJc2zK3m1i0=;
-  b=fNnTdce/ogVHRpSnX1k7NPyfxeAhxv0iefamZjt5lSiYdjPU5zwZc+oL
-   BH2XXUa32qTSyr1+YSB0oMXdklr5izQx4hdMJbpGpp8GroZnl/QNGYult
-   nipgYBBTTVC0buh82fTjGaZdlHbbVMqS+yh862ghSzpEx6ZvM0qSZqmbf
-   LDpX6NL68evUqDgJRWQZ947oE/xpOPDomaZV+nvgeTBxD/ZNuHAJGlttv
-   COVfvpEuy6m8NwLbK8V7bSEhIRCw6/MN8XUaMN87LAbmML1NF/3amH1gD
-   wfSJdtwBlxPYtTE7GBCpHW2pwcEnEXWhehHuLYEVaZZciMKd4iA0m9o8c
-   g==;
-X-CSE-ConnectionGUID: 2drt4j1GSXamJpXdl16dcw==
-X-CSE-MsgGUID: oiJaMVSzTSOL7ChacQhuEw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="69597035"
-X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
-   d="scan'208";a="69597035"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 03:24:14 -0700
-X-CSE-ConnectionGUID: 2+hRSAiYT5S5y7w8WfQKRw==
-X-CSE-MsgGUID: hxr4Xq7JRRi3aanGHmuyYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
-   d="scan'208";a="152688791"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Jun 2025 03:24:12 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uQ1Zx-000CSo-33;
-	Fri, 13 Jun 2025 10:24:09 +0000
-Date: Fri, 13 Jun 2025 18:23:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aditya Kumar Singh <aditya.kumar.singh@oss.qualcomm.com>,
-	Jeff Johnson <jjohnson@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org, ath12k@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Aditya Kumar Singh <aditya.kumar.singh@oss.qualcomm.com>
-Subject: Re: [PATCH ath-next] wifi: ath12k: handle regulatory hints during
- mac registration
-Message-ID: <202506131836.KoxnhWuQ-lkp@intel.com>
-References: <20250612-handle_user_regd_update_hints_during_insmod-v1-1-576bd0f6dbe0@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4kKdw9S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE8AC4CEF1;
+	Fri, 13 Jun 2025 11:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749813156;
+	bh=3JSffdcKG1BEdfLxDkvCLXE5WcpkgQe1rrYaCHuFNrw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g4kKdw9SM2bno1fEAUiCi6mw5ZmG2oOwM9TdgZeIyT1IQbX7X77HcJ1LYqfuskboa
+	 JGRT3GgKJU7HfdKVHhEwM6RbZVBVlK/P5c4ZU4IqGpHDoM9jVWM/ytqZuhOEoKayrO
+	 xTsq76VB+ZzyRppRpOMFJJN6JOHbjdwagkrEFx3Ng0/lhqAyAceklyVmJaQug8641Q
+	 JSHHo90KaBC05xuTm1/zTU/9LwbDwYf8mzg7yZYfDEuuM89nlEVvUy9Ws3qrTN5xaj
+	 +W1kJlaU5hXI6P9GIWNe9FGwWwkVeh7uwqDhoiXxU9TaeL0RzbPSSxvPd6dZscVPeL
+	 2OG33FATjlbqg==
+Date: Fri, 13 Jun 2025 12:12:23 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaehoon Chung <jh80.chung@samsung.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Shreeya Patel <shreeya.patel@collabora.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Qin Jian <qinjian@cqplus1.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+	linux-sound@vger.kernel.org, netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 14/20] ASoC: rockchip: i2s-tdm: switch to
+ HWORD_UPDATE_CONST macro
+Message-ID: <f38ea320-8eaa-4eea-85c1-63d44c8d359a@sirena.org.uk>
+References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
+ <20250612-byeword-update-v1-14-f4afb8f6313f@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EoywhozqJ8iTP5HR"
+Content-Disposition: inline
+In-Reply-To: <20250612-byeword-update-v1-14-f4afb8f6313f@collabora.com>
+X-Cookie: Use extra care when cleaning on stairs.
+
+
+--EoywhozqJ8iTP5HR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250612-handle_user_regd_update_hints_during_insmod-v1-1-576bd0f6dbe0@oss.qualcomm.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Aditya,
+On Thu, Jun 12, 2025 at 08:56:16PM +0200, Nicolas Frattaroli wrote:
+> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
+> drivers that use constant masks.
+>=20
+> Replace the implementation of this driver's HIWORD_UPDATE macro with an
+> instance of HWORD_UPDATE_CONST. The const variant is chosen here because
+> some of the header defines are then used in initializers.
 
-kernel test robot noticed the following build warnings:
+Acked-by: Mark Brown <broonie@kernel.org>
 
-[auto build test WARNING on 8270f43193a0d097659eca55e701fd6818708945]
+--EoywhozqJ8iTP5HR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Kumar-Singh/wifi-ath12k-handle-regulatory-hints-during-mac-registration/20250613-012106
-base:   8270f43193a0d097659eca55e701fd6818708945
-patch link:    https://lore.kernel.org/r/20250612-handle_user_regd_update_hints_during_insmod-v1-1-576bd0f6dbe0%40oss.qualcomm.com
-patch subject: [PATCH ath-next] wifi: ath12k: handle regulatory hints during mac registration
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250613/202506131836.KoxnhWuQ-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250613/202506131836.KoxnhWuQ-lkp@intel.com/reproduce)
+-----BEGIN PGP SIGNATURE-----
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506131836.KoxnhWuQ-lkp@intel.com/
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhMB5YACgkQJNaLcl1U
+h9Bobgf/dsPkAlIpLO/GS4oVRLlRiPIWa/agIoUuXFfDugqesR7MdX12gZHAzJ9s
+BnznMlPSuOjDnlFPdVpRCgVr4iPfs88ixFAuy/SjKEjvV8VYAUBEs1sg2JykJyMZ
+SkQ69/Iii/uButuWqecqljEHZvL7j67axT7KsEimeZ1zynLexrz7vtE6t4P8p+YE
+7qrc1oKA5kjXrIug8enyLvuLzI75M7MfzuRaooCPej44mc4bjqpuH6zXCxPzAWt9
+0LEzYDn7kdMZ5Yn0Vp35b8uKRqPdQs1heacEsmiHmKPfvnY/klYg1G9M71t9OVpm
+EE2sy3C4QrYbYl73/UBH9Z7zoN/X2A==
+=9PDr
+-----END PGP SIGNATURE-----
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/ath/ath12k/wmi.c:6:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/net/wireless/ath/ath12k/wmi.c:6169:13: warning: variable 'pdev_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    6169 |         } else if (ret == ATH12K_REG_STATUS_DROP) {
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6216:17: note: uninitialized use occurs here
-    6216 |         ar = ab->pdevs[pdev_idx].ar;
-         |                        ^~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6169:9: note: remove the 'if' if its condition is always false
-    6169 |         } else if (ret == ATH12K_REG_STATUS_DROP) {
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6170 |                 /* reg info is valid but we will not store it and
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6171 |                  * not going to create new regd for it
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6172 |                  */
-         |                  ~~
-    6173 |                 ret = ATH12K_REG_STATUS_VALID;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6174 |                 goto mem_free;
-         |                 ~~~~~~~~~~~~~~
-    6175 |         }
-         |         ~
-   drivers/net/wireless/ath/ath12k/wmi.c:6163:6: warning: variable 'pdev_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    6163 |         if (ret == ATH12K_REG_STATUS_FALLBACK) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6216:17: note: uninitialized use occurs here
-    6216 |         ar = ab->pdevs[pdev_idx].ar;
-         |                        ^~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6163:2: note: remove the 'if' if its condition is always false
-    6163 |         if (ret == ATH12K_REG_STATUS_FALLBACK) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6164 |                 ath12k_warn(ab, "failed to validate reg info %d\n", ret);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6165 |                 /* firmware has successfully switches to new regd but host can not
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6166 |                  * continue, so free reginfo and fallback to old regd
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6167 |                  */
-         |                  ~~
-    6168 |                 goto mem_free;
-         |                 ~~~~~~~~~~~~~~
-    6169 |         } else if (ret == ATH12K_REG_STATUS_DROP) {
-         |         ~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6157:6: warning: variable 'pdev_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    6157 |         if (ret) {
-         |             ^~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6216:17: note: uninitialized use occurs here
-    6216 |         ar = ab->pdevs[pdev_idx].ar;
-         |                        ^~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6157:2: note: remove the 'if' if its condition is always false
-    6157 |         if (ret) {
-         |         ^~~~~~~~~~
-    6158 |                 ath12k_warn(ab, "failed to extract regulatory info from received event\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6159 |                 goto mem_free;
-         |                 ~~~~~~~~~~~~~~
-    6160 |         }
-         |         ~
-   drivers/net/wireless/ath/ath12k/wmi.c:6151:6: warning: variable 'pdev_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    6151 |         if (!reg_info) {
-         |             ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6216:17: note: uninitialized use occurs here
-    6216 |         ar = ab->pdevs[pdev_idx].ar;
-         |                        ^~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:6151:2: note: remove the 'if' if its condition is always false
-    6151 |         if (!reg_info) {
-         |         ^~~~~~~~~~~~~~~~
-    6152 |                 ret = -ENOMEM;
-         |                 ~~~~~~~~~~~~~~
-    6153 |                 goto fallback;
-         |                 ~~~~~~~~~~~~~~
-    6154 |         }
-         |         ~
-   drivers/net/wireless/ath/ath12k/wmi.c:6147:13: note: initialize the variable 'pdev_idx' to silence this warning
-    6147 |         u8 pdev_idx;
-         |                    ^
-         |                     = '\0'
-   5 warnings generated.
-
-
-vim +6169 drivers/net/wireless/ath/ath12k/wmi.c
-
-d889913205cf7e Kalle Valo         2022-11-28  6142  
-d889913205cf7e Kalle Valo         2022-11-28  6143  static int ath12k_reg_chan_list_event(struct ath12k_base *ab, struct sk_buff *skb)
-d889913205cf7e Kalle Valo         2022-11-28  6144  {
-9e8e55c5832d4f Baochen Qiang      2025-04-18  6145  	struct ath12k_reg_info *reg_info;
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6146  	struct ath12k *ar;
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6147  	u8 pdev_idx;
-9e8e55c5832d4f Baochen Qiang      2025-04-18  6148  	int ret;
-d889913205cf7e Kalle Valo         2022-11-28  6149  
-d889913205cf7e Kalle Valo         2022-11-28  6150  	reg_info = kzalloc(sizeof(*reg_info), GFP_ATOMIC);
-d889913205cf7e Kalle Valo         2022-11-28  6151  	if (!reg_info) {
-d889913205cf7e Kalle Valo         2022-11-28  6152  		ret = -ENOMEM;
-d889913205cf7e Kalle Valo         2022-11-28  6153  		goto fallback;
-d889913205cf7e Kalle Valo         2022-11-28  6154  	}
-d889913205cf7e Kalle Valo         2022-11-28  6155  
-d889913205cf7e Kalle Valo         2022-11-28  6156  	ret = ath12k_pull_reg_chan_list_ext_update_ev(ab, skb, reg_info);
-d889913205cf7e Kalle Valo         2022-11-28  6157  	if (ret) {
-d889913205cf7e Kalle Valo         2022-11-28  6158  		ath12k_warn(ab, "failed to extract regulatory info from received event\n");
-75639b74351553 Baochen Qiang      2025-04-18  6159  		goto mem_free;
-75639b74351553 Baochen Qiang      2025-04-18  6160  	}
-75639b74351553 Baochen Qiang      2025-04-18  6161  
-75639b74351553 Baochen Qiang      2025-04-18  6162  	ret = ath12k_reg_validate_reg_info(ab, reg_info);
-75639b74351553 Baochen Qiang      2025-04-18  6163  	if (ret == ATH12K_REG_STATUS_FALLBACK) {
-75639b74351553 Baochen Qiang      2025-04-18  6164  		ath12k_warn(ab, "failed to validate reg info %d\n", ret);
-75639b74351553 Baochen Qiang      2025-04-18  6165  		/* firmware has successfully switches to new regd but host can not
-75639b74351553 Baochen Qiang      2025-04-18  6166  		 * continue, so free reginfo and fallback to old regd
-75639b74351553 Baochen Qiang      2025-04-18  6167  		 */
-75639b74351553 Baochen Qiang      2025-04-18  6168  		goto mem_free;
-75639b74351553 Baochen Qiang      2025-04-18 @6169  	} else if (ret == ATH12K_REG_STATUS_DROP) {
-75639b74351553 Baochen Qiang      2025-04-18  6170  		/* reg info is valid but we will not store it and
-75639b74351553 Baochen Qiang      2025-04-18  6171  		 * not going to create new regd for it
-75639b74351553 Baochen Qiang      2025-04-18  6172  		 */
-75639b74351553 Baochen Qiang      2025-04-18  6173  		ret = ATH12K_REG_STATUS_VALID;
-75639b74351553 Baochen Qiang      2025-04-18  6174  		goto mem_free;
-d889913205cf7e Kalle Valo         2022-11-28  6175  	}
-d889913205cf7e Kalle Valo         2022-11-28  6176  
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6177  	/* free old reg_info if it exist */
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6178  	pdev_idx = reg_info->phy_id;
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6179  	if (ab->reg_info[pdev_idx]) {
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6180  		ath12k_reg_reset_reg_info(ab->reg_info[pdev_idx]);
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6181  		kfree(ab->reg_info[pdev_idx]);
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6182  	}
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6183  	/* reg_info is valid, we store it for later use
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6184  	 * even below regd build failed
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6185  	 */
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6186  	ab->reg_info[pdev_idx] = reg_info;
-eaa027a1d83f87 Baochen Qiang      2025-04-18  6187  
-fafa6ff0823b79 Baochen Qiang      2025-04-18  6188  	ret = ath12k_reg_handle_chan_list(ab, reg_info, WMI_VDEV_TYPE_UNSPEC,
-fafa6ff0823b79 Baochen Qiang      2025-04-18  6189  					  IEEE80211_REG_UNSET_AP);
-9e8e55c5832d4f Baochen Qiang      2025-04-18  6190  	if (ret) {
-9e8e55c5832d4f Baochen Qiang      2025-04-18  6191  		ath12k_warn(ab, "failed to handle chan list %d\n", ret);
-d889913205cf7e Kalle Valo         2022-11-28  6192  		goto fallback;
-d889913205cf7e Kalle Valo         2022-11-28  6193  	}
-d889913205cf7e Kalle Valo         2022-11-28  6194  
-75639b74351553 Baochen Qiang      2025-04-18  6195  	goto out;
-75639b74351553 Baochen Qiang      2025-04-18  6196  
-75639b74351553 Baochen Qiang      2025-04-18  6197  mem_free:
-75639b74351553 Baochen Qiang      2025-04-18  6198  	ath12k_reg_reset_reg_info(reg_info);
-75639b74351553 Baochen Qiang      2025-04-18  6199  	kfree(reg_info);
-75639b74351553 Baochen Qiang      2025-04-18  6200  
-75639b74351553 Baochen Qiang      2025-04-18  6201  	if (ret == ATH12K_REG_STATUS_VALID)
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6202  		goto out;
-d889913205cf7e Kalle Valo         2022-11-28  6203  
-d889913205cf7e Kalle Valo         2022-11-28  6204  fallback:
-d889913205cf7e Kalle Valo         2022-11-28  6205  	/* Fallback to older reg (by sending previous country setting
-d889913205cf7e Kalle Valo         2022-11-28  6206  	 * again if fw has succeeded and we failed to process here.
-d889913205cf7e Kalle Valo         2022-11-28  6207  	 * The Regdomain should be uniform across driver and fw. Since the
-d889913205cf7e Kalle Valo         2022-11-28  6208  	 * FW has processed the command and sent a success status, we expect
-d889913205cf7e Kalle Valo         2022-11-28  6209  	 * this function to succeed as well. If it doesn't, CTRY needs to be
-d889913205cf7e Kalle Valo         2022-11-28  6210  	 * reverted at the fw and the old SCAN_CHAN_LIST cmd needs to be sent.
-d889913205cf7e Kalle Valo         2022-11-28  6211  	 */
-d889913205cf7e Kalle Valo         2022-11-28  6212  	/* TODO: This is rare, but still should also be handled */
-d889913205cf7e Kalle Valo         2022-11-28  6213  	WARN_ON(1);
-9e8e55c5832d4f Baochen Qiang      2025-04-18  6214  
-75639b74351553 Baochen Qiang      2025-04-18  6215  out:
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6216  	ar = ab->pdevs[pdev_idx].ar;
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6217  
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6218  	/* During the boot-time update, 'ar' might not be allocated,
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6219  	 * so the completion cannot be marked at that point.
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6220  	 * This boot-time update is handled in ath12k_mac_hw_register()
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6221  	 * before registering the hardware.
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6222  	 */
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6223  	if (ar)
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6224  		complete(&ar->regd_update_completed);
-e05f9e5c56466b Aditya Kumar Singh 2025-06-12  6225  
-d889913205cf7e Kalle Valo         2022-11-28  6226  	return ret;
-d889913205cf7e Kalle Valo         2022-11-28  6227  }
-d889913205cf7e Kalle Valo         2022-11-28  6228  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--EoywhozqJ8iTP5HR--
