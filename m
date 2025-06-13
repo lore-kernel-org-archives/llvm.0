@@ -1,219 +1,146 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E227A1C6FF9
-	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 01:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF09B15278E;
+	Fri, 13 Jun 2025 03:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749776910; cv=none; b=AHx4NFGj1l8f92UBlln6ZKqmiRFINjdVCbWpAZRqnoIFuLsBXDcu3ISoOLt0H5HXKdwnNyHFAmx8j1Y6r8eSL8n12KvBxSIsDP/OSWyJv+H5mz4v3ljIfKknSqSv2vCa3YwU6r6QprRtgxLpEh3r9lWCUFQnTvGLhVfTl5bbXyg=
+	t=1749784875; cv=none; b=ayWP+iYUrNYcKsraJ43HPrmDmNo87vBuvweDiQaOL4EDfxXI3SmvMrUzaTf5qgchd+D3ulX7q6C4GcSBcR1Q/ZyvbONYN8KOwalj7voSOddltS+zljUtjZFfvFwSVy0Vt778cHyBHp2Jj/ul1pSIC9nMHlewRKM0/PEfjCQybFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749776910; c=relaxed/simple;
-	bh=4cSiIHmjVzal+4uywlcg3fHT6GaATCAkHSAHealoWZA=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=nwVO3mdPf79ZoYzYIYpK8pgRbT/5Ntxg/zzpF7oM5J6wAhOaiMruUJr0ksmFBrUtL4ST/hBLWqvdJrgOyQv9eLSDyQ/T+Y1VjN4pmjg8mRyKUjCwxu/ublqDQtySR0Cp11cRvZsSlAEMcB/FiuqWbIkULJDGLr7XF0tBvHAk9h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com; spf=pass smtp.mailfrom=jrtc27.com; dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b=knP3I4iY; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jrtc27.com
+	s=arc-20240116; t=1749784875; c=relaxed/simple;
+	bh=azL5StamfCxOer0bMUohJxx6uHwXifg+3tUWGX7wv0w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fm3qEVqhjguSlSh/MX9U7fn70MQ+ICkSwgVQlqcHoSV9oTbkpuxojfnJCKkBMikGvi4SqDYoT3fNkkHT1ykRKY8S5VxlXD+wXAgrmYUNvaEIGoCX/KBIrxT02gfOxmKU/Va1dHTA4dw2ycEQ5Qib0OmjfdZzN4Bed0O35cXHoiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mM3WqZgI; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b="knP3I4iY"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-450cea01b9cso7861345e9.0
-        for <llvm@lists.linux.dev>; Thu, 12 Jun 2025 18:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1749776907; x=1750381707; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yV/+ZQq5RzgkIE87cL2HuuOvaHTwwG97pZ4IkkoLaPM=;
-        b=knP3I4iYqvMmHXFCmrNzLXbXQ6h/WP/+6E6HHMEUMZEeCqaS8jX+3UHPbKcyi/vt5R
-         Im6/LumCUBdJiidtgE/j8NDYPChB2NMP57lFaXeMW3EQ0hmrDiCD8Wuq8/LuQBhJOwQy
-         LzkxskBmTCHIakN/SuiTBfQrnzmerq4NLKr5I2XwkI5wnoavG0jBbuoKGCojWBRZYPhb
-         9RYpabWYYrGoSfFooYYPwsoSdZ2+1dBy/J/kDFKP8ugFeKTfpVEsLvU+UwTG5mFmXUDY
-         dTR9fl6pLcmOYQ6N8gR3ICwLLQPSKfYEi2BEHTC5BQbh3JyrEaMXbDytePLybBu95ErF
-         D9ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749776907; x=1750381707;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yV/+ZQq5RzgkIE87cL2HuuOvaHTwwG97pZ4IkkoLaPM=;
-        b=gQ9+7NlmeeB5vYCBoewWNKNjhXWQyrNpyMGZxcVD1dx3HKH5Es67F1whutqADguG3c
-         J2yAyauYnbZRyrb9lL9DTPcsSwjeAyCpd1jrsP8rOP1d9OeGoELgXrM4aQYqiye/tk1u
-         8ifPOkLvXssTnkieUSr8siVrJlWM7l3CWbkFl/Jj4TuM1Dyl76PwOKIEG6YM3iZqCejT
-         ziJeFs9UDZjnT7LVw/sT310qP71VGDZZjlYfs0zhw5gsbDDAK+zT7qrM6JiPl32cdZ37
-         DJpOOuGpdbwDexYtPlF9cvGnjoZlLdXDl1zcpTQcEyPd+QtHcm4/yuPoYaYXjiTRmsZ/
-         tJGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVpaRlze4m60bd3p28LXq+qpI98OGYRnYNdWN2/lp4UhNTFV4HhhGWKQ6434Y9JYxOjW5GL@lists.linux.dev
-X-Gm-Message-State: AOJu0YylKqfUz4yv3lMkz20rEIz8OJWz90Bq0EzEwmIyAqvjOQAL8+pC
-	OtalM4FzNRstcPsx6DcTZeqTHqH3FfKHq3psCZC2E/c698OTpXS7jzTYR5kI7KfK1mE=
-X-Gm-Gg: ASbGncsbjPFB9ALU0dqdbyefRWHmCQ0gwAmDabZE0WIOE9ufLceQwVG2mn0JYxpr8lU
-	q1N4uiHYSxQV8yDDxr9hLFY7n6zs39va9irs4ZKk6EXiCZIm2zHIUOXP0tr2m/afQ34Tx4WjMlk
-	d6axLQ8tRPIoMW7rKSZ60BY7O3Cvr8/8GIw7oPLDiSqdU3WcKl5PviRzF17G/4vStljVRChdjoQ
-	ObLXtU6AC1d3zJtAj/RW6gVPTQeb2B/R2MKb1OYVpz32Sxpl+WBaagf+Sx4sc3GiDERlnmxqupt
-	U60IUeeTiPxTry99BRU7SGuAZLsmzhs8Gp0K4f0WfYKQyBUSeetIoDh+GVmeLkeXH/17TorxNcs
-	=
-X-Google-Smtp-Source: AGHT+IFwyw9OHP+fZV6LAbNr0tT5uZJzpkB6b4K/Ns4tGf9uKmcXDtKWoPd0LKrnrhtueMGufyguFg==
-X-Received: by 2002:a05:600c:1c12:b0:439:9424:1b70 with SMTP id 5b1f17b1804b1-45334b5ae3cmr9341235e9.30.1749776906902;
-        Thu, 12 Jun 2025 18:08:26 -0700 (PDT)
-Received: from smtpclient.apple ([131.111.5.201])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e24420csm35282755e9.20.2025.06.12.18.08.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 Jun 2025 18:08:26 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mM3WqZgI"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=dPy3+YPjM96m4w0mRmbzfdnzpTV1myn+efhkM8vgURI=; b=mM3WqZgIOER4uqpnsZyYwVGA13
+	sW2ZRZkAq9urHblXMxsY7Xy5/Yta84f5uh9blvSBULwxuqI8Csgk/kVGRyoNTwsKJU6d9SpmLxADs
+	wWV2d2vosvz4ONyPIFVNEGqRtImE5z7P3XnCO9f9N2L2w9Q0xTXndgkJdmyV+Alm3qlI1lNFgaP2t
+	UBkegHnyexuUFSN3UA8szD8m1B7RW5PGyEVjtBWVsU+TLmAnSTwEB0HWjBVu7s1EKnFKnPmOaQFY4
+	VjqkYDYEn00dMJqsR9uDb2nLCMrR+V2OW2OqzXyleSqp7GxezSmaV5JwodPSxuA0fYKg9OzMeXkOo
+	7Ij/king==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uPuyP-0000000CY5X-3tCF;
+	Fri, 13 Jun 2025 03:20:58 +0000
+Message-ID: <14fc8777-a5d2-4877-9707-73c25d9e9bd3@infradead.org>
+Date: Thu, 12 Jun 2025 20:20:48 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
-Subject: Re: [PATCH v3 3/3] vdso: Reject absolute relocations during build
-From: Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <mhng-4BA05CCD-6D5A-4067-B88A-DEBD4FCDED77@palmerdabbelt-mac>
-Date: Fri, 13 Jun 2025 02:08:14 +0100
-Cc: Alexandre Ghiti <alex@ghiti.fr>,
- thomas.weissschuh@linutronix.de,
- Paul Walmsley <paul.walmsley@sifive.com>,
- aou@eecs.berkeley.edu,
- nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com,
- morbo@google.com,
- justinstitt@google.com,
- luto@kernel.org,
- tglx@linutronix.de,
- vincenzo.frascino@arm.com,
- linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <20ED8855-2A51-4821-9675-EF45041BCD31@jrtc27.com>
-References: <mhng-4BA05CCD-6D5A-4067-B88A-DEBD4FCDED77@palmerdabbelt-mac>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-X-Mailer: Apple Mail (2.3826.600.51.1.1)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints
+ and trace events
+To: Steven Rostedt <rostedt@goodmis.org>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+References: <20250612235827.011358765@goodmis.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250612235827.011358765@goodmis.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 12 Jun 2025, at 21:05, Palmer Dabbelt <palmer@dabbelt.com> wrote:
->=20
-> On Thu, 12 Jun 2025 01:31:20 PDT (-0700), Alexandre Ghiti wrote:
->> Hi Thomas,
->>=20
->> On 6/11/25 11:22, Thomas Wei=C3=9Fschuh wrote:
->>> All vDSO code needs to be completely position independent.
->>> Symbol references are marked as hidden so the compiler emits
->>> PC-relative relocations. However there are cases where the compiler =
-may
->>> still emit absolute relocations, as they are valid in regular PIC =
-DSO code.
->>> These would be resolved by the linker and will break at runtime.
->>> This has been observed on arm64 under some circumstances, see
->>> commit 0c314cda9325 ("arm64: vdso: Work around invalid absolute =
-relocations from GCC")
->>>=20
->>> Introduce a build-time check for absolute relocations.
->>> The check is done on the object files as the relocations will not =
-exist
->>> anymore in the final DSO. As there is no extension point for the
->>> compilation of each object file, perform the validation in =
-vdso_check.
->>>=20
->>> Debug information can contain legal absolute relocations and readelf =
-can
->>> not print relocations from the .text section only. Make use of the =
-fact
->>> that all global vDSO symbols follow the naming pattern "vdso_u_".
->>>=20
->>> Link: https://lore.kernel.org/lkml/aApGPAoctq_eoE2g@t14ultra/
->>> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D120002
->>> Signed-off-by: Thomas Wei=C3=9Fschuh =
-<thomas.weissschuh@linutronix.de>
->>> ---
->>>  lib/vdso/Makefile.include | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>=20
->>> diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
->>> index =
-cedbf15f80874d4bb27c097244bc5b11272f261c..04257d0f28c0ed324e31adbb68497181=
-085752f8 100644
->>> --- a/lib/vdso/Makefile.include
->>> +++ b/lib/vdso/Makefile.include
->>> @@ -12,7 +12,13 @@ c-getrandom-$(CONFIG_VDSO_GETRANDOM) :=3D =
-$(addprefix $(GENERIC_VDSO_DIR), getrand
->>>  #
->>>  # As a workaround for some GNU ld ports which produce unneeded =
-R_*_NONE
->>>  # dynamic relocations, ignore R_*_NONE.
->>> +#
->>> +# Also validate that no absolute relocations against global symbols =
-are present
->>> +# in the object files.
->>>  quiet_cmd_vdso_check =3D VDSOCHK $@
->>>        cmd_vdso_check =3D if $(READELF) -rW $@ | grep -v _NONE | =
-grep -q " R_\w*_"; \
->>>          then (echo >&2 "$@: dynamic relocations are not supported"; =
-\
->>> +      rm -f $@; /bin/false); fi && \
->>> +        if $(READELF) -rW $(filter %.o, $(real-prereqs)) | grep -q =
-" R_\w*_ABS.*vdso_u_"; \
->>=20
->>=20
->> This only works for arm64 relocations right? I can't find any *ABS*
->> relocations in riscv elf abi
->> =
-(https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/tag/v1.0).
->=20
-> That's because the psABI people do not believe in absolute symbols.
+Hi,
 
-I don=E2=80=99t know what you=E2=80=99re referring to here. Absolute =
-symbols (SHN_ABS
-rather than a real section index) are different to absolute
-relocations. The code here is checking for *relocations*, not symbols.
-RISC-V has absolute relocations, they=E2=80=99re R_RISCV_32/64. Putting =
-ABS in
-the relocation name is an Arm-ism that other architectures don=E2=80=99t =
-do.
-Absolute addressing exists, as the medlow and large code models (with
--fno-pic/PIC/pie/PIE). So I=E2=80=99m really not sure what you=E2=80=99re =
-saying the
-current psABI doesn=E2=80=99t do that it should, nor what discussions =
-you=E2=80=99re
-even suggesting have happened and been dismissed?
+On 6/12/25 4:58 PM, Steven Rostedt wrote:
+> Every trace event can take up to 5K of memory in text and meta data regardless
 
-Perhaps you=E2=80=99re referring to the difficulty of using PC-relative
-accesses against absolute symbols, as you=E2=80=99ll get in medany and =
-PIE
-code? But that=E2=80=99s something that affects many architectures; you =
-can
-have issues on amd64 and aarch64, not just riscv64.
+s/meta data/metadata/ unless you are referring to meta's data.
 
-Jessica
+s/meta data/metadata/ in patches 1 and 2 also.
 
-> They exist in the actual toolchains, though, as they are part of the =
-generic ELF ABI. In theory they'd work fine in the VDSO as long as we're =
-using absolute addressing instructions for them, which is possible to do =
-(and I think should happen for some global symbols).
->=20
-> That said, it doesn't really seem worth the effort to get the checking =
-more fine-grained here.  I don't see any reason we'd need an absolute =
-symbol in the VDSO, so unil someone has one we might as well just forbid =
-them entirely.
->=20
-> Some old toolchains had an absolute "__gloabl_pointer$" floating =
-around some of the CRT files, so we might trip over bugs here.  I think =
-we're safe as those shouldn't show up in the VDSO, but not 100% sure.  =
-Probably best to get this on next to bake for a bit, just to make sure =
-we're not trippig anyone up.
->=20
->> Thanks,
->>=20
->> Alex
->>=20
->>=20
->>> +        then (echo >&2 "$@: absolute relocations are not =
-supported"; \
->>>        rm -f $@; /bin/false); fi
->>>=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> if they are used or not. Trace events should not be created if they are not
+> used.  Currently there's over a hundred events in the kernel that are defined
+> but unused, either because their callers were removed without removing the
+> trace event with it, or a config hides the trace event caller but not the
+> trace event itself. And in some cases, trace events were simply added but were
+> never called for whatever reason. The number of unused trace events continues
+> to grow.
+> 
+> This patch series aims to fix this.
+> 
+> The first patch creates a new section called __tracepoint_check, where all
+> callers of a tracepoint creates a variable that is placed in this section with
+> a pointer to the tracepoint they use. Then on boot up, it iterates this
+> section and will modify the tracepoint's "func" field to a value of 1 (all
+> tracepoints "func" fields are initialized to NULL and is only set when they
+> are registered). This takes place before any tracepoint can be registered.
+> 
+> Then each tracepoint is iterated on and if any tracepoint does not have its
+> "func" field set to 1 a warning is triggerd and every tracepoint that doesn't
 
+triggered
+
+> have that field set is printed. The "func" field is then reset back to NULL.
+> 
+> The second patch modifies scripts/sorttable.c to read the __tracepoint_check
+> section. It sorts it, and then reads the __tracepoint_ptr section that has all
+> compiled in tracepoints. It makes sure that every tracepoint is found in the
+> check section and if not, it prints a warning message about it. This lists the
+> missing tracepoints at build time.
+> 
+> The third patch updates sorttable to work for arm64 when compiled with gcc. As
+> gcc's arm64 build doesn't put addresses in their section but saves them off in
+> the RELA sections. This mostly takes the work done that was needed to do the
+> mcount sorting at boot up on arm64.
+> 
+> The forth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as
+
+fourth (or are you coding in forth?)
+
+> well. There was several locations that adds tracepoints in the kernel proper
+> that are only used in modules. It was getting quite complex trying to move
+> things around that I just decided to make any tracepoint in a
+> EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
+> functions. An unused static function gets a warning but an unused global one
+> does not.
+> 
+> The last patch updates the trace_ftrace_test_filter boot up self test. That
+> selftest creates a trace event to run a bunch of filter tests on it without
+> actually calling the tracepoint. To quiet the warning, the selftest tracepoint
+> is called within a if (!trace_<event>_enabled()) section, where it will not be
+> optimized out, nor will it be called.
+> 
+> This is v2 from: https://lore.kernel.org/linux-trace-kernel/20250529130138.544ffec4@gandalf.local.home/
+> which was simply the first patch. This version adds the other patches.
+> 
+> Steven Rostedt (5):
+>       tracepoints: Add verifier that makes sure all defined tracepoints are used
+>       tracing: sorttable: Add a tracepoint verification check at build time
+>       tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
+>       tracepoint: Do not warn for unused event that is exported
+>       tracing: Call trace_ftrace_test_filter() for the event
+> 
+> ----
+>  include/asm-generic/vmlinux.lds.h  |   1 +
+>  include/linux/tracepoint.h         |  13 ++
+>  kernel/trace/Kconfig               |  31 +++
+>  kernel/trace/trace_events_filter.c |   4 +
+>  kernel/tracepoint.c                |  26 +++
+>  scripts/Makefile                   |   4 +
+>  scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
+>  7 files changed, 437 insertions(+), 86 deletions(-)
+> 
+
+thanks.
+-- 
+~Randy
 
