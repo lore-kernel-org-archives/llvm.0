@@ -1,68 +1,135 @@
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2429933E1
-	for <llvm@lists.linux.dev>; Fri, 13 Jun 2025 00:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE24D2AD04;
+	Fri, 13 Jun 2025 00:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749773145; cv=none; b=FcSInTzqP+U5xJ2SG09BVwFOiMDsRPB2z7FJaEe8JI/ae+gnj99dPpv03ht3IuQlmBD+FSmhozW5U5E2PhYrSttDcKlQ7/gGtkNBWWlG2tDk4yWJtkRpaqSNCkaiE9BU/Mp0ZE03AvK708t7blI5WF70CiL6uHLJode63sir6vU=
+	t=1749774558; cv=none; b=bJycNWSeWegRk6SW3r2/awxZh7LxCKaY+b7lNVmzA4irZ32+yCYvgImCqIEm9QdqLIjfBnLFyQQIYWRVGN3uuW9wNOrR7cv76IVjn7bHydSMPHu9NqNfUWPWFhmNwcIOEuLOoJMrd6N6lDL+fBXxrb9RdVxGdVURE3LqFjSrkM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749773145; c=relaxed/simple;
-	bh=Kt7Accb+8i/pjZpVG85NE9OT4gOLDzlzRlWVvUOQv38=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WAHpDP1YU4t9tjOFpTmQSK78O5EegxWhLgun+2R0v6VX6A+/mFNy1oPW45wpj0eMnOoEGTr6GiaUFUpt4g0aQcVTy3y02oA0Z3oSnBk8w/LXUzfFckBqss9S33Tzwd7H3iJau8nwBKyKCUljQ2iw5NDfe7NgRhKy8U/kj1uI0C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 28704803FC;
-	Fri, 13 Jun 2025 00:05:42 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 1ECD46000C;
-	Fri, 13 Jun 2025 00:05:39 +0000 (UTC)
-Date: Thu, 12 Jun 2025 20:05:38 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas.schier@linux.dev>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints
- and trace events
-Message-ID: <20250612200538.004283c5@batman.local.home>
-In-Reply-To: <20250612235827.011358765@goodmis.org>
-References: <20250612235827.011358765@goodmis.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1749774558; c=relaxed/simple;
+	bh=sUoBP6UyyYZWs8Y7cDqZrmnUCf1FshoJgzGR6g1rjGU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=M4pykvig05psSRFlALG0v1JdBDKOS6ZKBVfJIB9/lxV5jWJk4hNzPpM612gGwTCAV4lnVMUywMCKlfrooMqPcld0mUmneYVa3FSvO+Gyhx8yAKXGJxeGOj/HNBhH52s8Uq7/n2vGJ9fTrpwL7AFFvNYSoQQ2BbZo2hUwko1xMSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SoY9g7KV; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SoY9g7KV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749774557; x=1781310557;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sUoBP6UyyYZWs8Y7cDqZrmnUCf1FshoJgzGR6g1rjGU=;
+  b=SoY9g7KVus19a9D4KeR6xTXnJ/Gu9jlZx18jg6rKjGXiZ6iw5pK+Z/uI
+   h0c6bP0hvhQQeHqRpxrHqoYAvuA8tJd9cq77IuYW9Dyle7lCpF2bmNbM7
+   0uku2/WQqMaz5ChPf80+gKKYERD7eG5KJlNUATfubVIn7HXk1gFdhViaB
+   ri59RU8VLuOm0wNueEcirC2lG3JsCn52CPawmRtGACiZViOK8cLotcU+M
+   05K2uW7mWqQVtMxZUdFtMPdbSUTJm2TD/m8EhzEaTVpY+9Bq3F09+T5QU
+   OTm0hMVtxsEJRwPwC+Cf5WmJTrTTglYearRVgOI+SNsziUsRW1j4mdP0a
+   A==;
+X-CSE-ConnectionGUID: gQz9inZEQxCQ9C1n/HNSTg==
+X-CSE-MsgGUID: sfjHGG6XR9yF0CKEgBavNQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="63331334"
+X-IronPort-AV: E=Sophos;i="6.16,232,1744095600"; 
+   d="scan'208";a="63331334"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 17:29:16 -0700
+X-CSE-ConnectionGUID: slmO81qfSJ+G2olY3rpewQ==
+X-CSE-MsgGUID: V00vUppaQ0issEkSV4FTNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,232,1744095600"; 
+   d="scan'208";a="147657927"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 12 Jun 2025 17:29:14 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uPsIC-000C3O-1m;
+	Fri, 13 Jun 2025 00:29:12 +0000
+Date: Fri, 13 Jun 2025 08:28:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [daveh-devel:testme 7/9] arch/x86/mm/tlb.c:308:23: warning: result
+ of comparison of constant -1 with expression of type 'u16' (aka 'unsigned
+ short') is always true
+Message-ID: <202506130820.oi9U3KYH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 1ECD46000C
-X-Stat-Signature: zdf4b9343ct3rz8p7oiftf7by5wymr9z
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX182rpPACDbXiIIR169ho7pJ1BHFcNrKlGw=
-X-HE-Tag: 1749773139-898727
-X-HE-Meta: U2FsdGVkX18LiKy4WkjPLf1kuMnEFrGs1hRhmTl/iYvGYdOPKZHoPnY8OV2lr/+jsGUYxNcviqUvI2Fc6oTpWpXF3nf7lAPwHpSXbI7hzw1Oo9MdDmt2jp9Akz5X9C2pOOY4MyevT3r1QFEQThSNnq4Uayd+R//FnxUZdVnWL+LnQCwFjixcwcOMxBc0dN5cIwuQQ4eWXq3LkrIhh3qRCwyMHhA3RClrgqkQyEdJwYUvLUJgjw7hK+D083fv9jHV6Onj0ILajZ0RvnP2NZ7SlP2n6QQq+hPIyXAhSra1AjXPoGjXXE+fw27xQ0mdDm4Y9V2lOBmkdUPgV5xzWpx6v2BMSeF71YiFUNg74KmJKBKyBm7w00l8D8r/3O+HapSj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 12 Jun 2025 19:58:27 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git testme
+head:   733c4f3de1b68afd5fad839dbcd1806a3d29e1e0
+commit: bb1b4a810e5639c9d98aabc03375eeb1d8a88b57 [7/9] NR_GLOBAL_ASIDS
+config: i386-buildonly-randconfig-004-20250613 (https://download.01.org/0day-ci/archive/20250613/202506130820.oi9U3KYH-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250613/202506130820.oi9U3KYH-lkp@intel.com/reproduce)
 
-> The third patch updates sorttable to work for arm64 when compiled with gcc. As
-> gcc's arm64 build doesn't put addresses in their section but saves them off in
-> the RELA sections. This mostly takes the work done that was needed to do the
-> mcount sorting at boot up on arm64.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506130820.oi9U3KYH-lkp@intel.com/
 
-FYI, I built this on every architecture with their default config and
-every architecture that supports tracing reported unused events. Mostly
-they were the same, but depending on the defconfig it gave different
-output.
+All warnings (new ones prefixed by >>):
 
--- Steve
+   arch/x86/mm/tlb.c:311:46: error: use of undeclared identifier 'MAX_GLOBAL_ASID'
+     311 |         asid = find_next_zero_bit(global_asid_used, MAX_GLOBAL_ASID, last_global_asid);
+         |                                                     ^
+   arch/x86/mm/tlb.c:313:30: warning: & has lower precedence than >=; >= will be evaluated first [-Wparentheses]
+     313 |         if (asid >= MAX_GLOBAL_ASID & !global_asid_available) {
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~^
+   arch/x86/mm/tlb.c:313:30: note: place parentheses around the '>=' expression to silence this warning
+     313 |         if (asid >= MAX_GLOBAL_ASID & !global_asid_available) {
+         |                                     ^
+         |             (                      )
+   arch/x86/mm/tlb.c:313:30: note: place parentheses around the & expression to evaluate it first
+     313 |         if (asid >= MAX_GLOBAL_ASID & !global_asid_available) {
+         |                                     ^                       
+         |                     (                                       )
+   arch/x86/mm/tlb.c:313:14: error: use of undeclared identifier 'MAX_GLOBAL_ASID'
+     313 |         if (asid >= MAX_GLOBAL_ASID & !global_asid_available) {
+         |                     ^
+>> arch/x86/mm/tlb.c:308:23: warning: result of comparison of constant -1 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+     308 |         if (last_global_asid >= HIGHEST_GLOBAL_ASID)
+         |             ~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
+   2 warnings and 2 errors generated.
+
+
+vim +308 arch/x86/mm/tlb.c
+
+   300	
+   301	static u16 allocate_global_asid(void)
+   302	{
+   303		u16 asid;
+   304	
+   305		lockdep_assert_held(&global_asid_lock);
+   306	
+   307		/* The previous allocation hit the edge of available address space */
+ > 308		if (last_global_asid >= HIGHEST_GLOBAL_ASID)
+   309			reset_global_asid_space();
+   310	
+   311		asid = find_next_zero_bit(global_asid_used, MAX_GLOBAL_ASID, last_global_asid);
+   312	
+   313		if (asid >= MAX_GLOBAL_ASID & !global_asid_available) {
+   314			/* This should never happen. */
+   315			VM_WARN_ONCE(1, "Unable to allocate global ASID despite %d available\n",
+   316					global_asid_available);
+   317			return 0;
+   318		}
+   319	
+   320		/* Claim this global ASID. */
+   321		__set_bit(asid, global_asid_used);
+   322		last_global_asid = asid;
+   323		global_asid_available--;
+   324		return asid;
+   325	}
+   326	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
