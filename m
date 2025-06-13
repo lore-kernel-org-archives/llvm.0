@@ -1,146 +1,176 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF09B15278E;
-	Fri, 13 Jun 2025 03:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852882F433F;
+	Fri, 13 Jun 2025 04:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749784875; cv=none; b=ayWP+iYUrNYcKsraJ43HPrmDmNo87vBuvweDiQaOL4EDfxXI3SmvMrUzaTf5qgchd+D3ulX7q6C4GcSBcR1Q/ZyvbONYN8KOwalj7voSOddltS+zljUtjZFfvFwSVy0Vt778cHyBHp2Jj/ul1pSIC9nMHlewRKM0/PEfjCQybFI=
+	t=1749789585; cv=none; b=Dy2IYhePzB8nZzBfi/Ej2Wx+yja/GQqGVmb1VDUryt0P5ewcCraBCQq5Wkg1gdsz2Kp8XlQsiVYfhlU66vHq19DlqVc/qirJRpQnul+JLRZ7ZlA2ZPoRx2lWEHIO5CZUuhayEGaucWjSC9GQJxZJBcf4R0F1WHjHkmkyKh6uNeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749784875; c=relaxed/simple;
-	bh=azL5StamfCxOer0bMUohJxx6uHwXifg+3tUWGX7wv0w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fm3qEVqhjguSlSh/MX9U7fn70MQ+ICkSwgVQlqcHoSV9oTbkpuxojfnJCKkBMikGvi4SqDYoT3fNkkHT1ykRKY8S5VxlXD+wXAgrmYUNvaEIGoCX/KBIrxT02gfOxmKU/Va1dHTA4dw2ycEQ5Qib0OmjfdZzN4Bed0O35cXHoiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mM3WqZgI; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1749789585; c=relaxed/simple;
+	bh=RLUI2Xtzpt/rZgKoWC06w6lCNBKNmbGBsZk1eE4A8rs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TURhk9uS2GzGTG7mJilxpNhPMqOmfa75S9A2C8nNvr+Zs+Hq7/zJphFjjrzLkNXgD2gQr48Kzp3vtfreVVUWi2meWnImCdKlN7Ev1smE5gu/IJ4Bu2XuWPFM5tUcSuUnrCPKifqn6t6fSPDucq79lNB4vaJLAjf/7WClZ3jBnC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LCldUZFx; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mM3WqZgI"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=dPy3+YPjM96m4w0mRmbzfdnzpTV1myn+efhkM8vgURI=; b=mM3WqZgIOER4uqpnsZyYwVGA13
-	sW2ZRZkAq9urHblXMxsY7Xy5/Yta84f5uh9blvSBULwxuqI8Csgk/kVGRyoNTwsKJU6d9SpmLxADs
-	wWV2d2vosvz4ONyPIFVNEGqRtImE5z7P3XnCO9f9N2L2w9Q0xTXndgkJdmyV+Alm3qlI1lNFgaP2t
-	UBkegHnyexuUFSN3UA8szD8m1B7RW5PGyEVjtBWVsU+TLmAnSTwEB0HWjBVu7s1EKnFKnPmOaQFY4
-	VjqkYDYEn00dMJqsR9uDb2nLCMrR+V2OW2OqzXyleSqp7GxezSmaV5JwodPSxuA0fYKg9OzMeXkOo
-	7Ij/king==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uPuyP-0000000CY5X-3tCF;
-	Fri, 13 Jun 2025 03:20:58 +0000
-Message-ID: <14fc8777-a5d2-4877-9707-73c25d9e9bd3@infradead.org>
-Date: Thu, 12 Jun 2025 20:20:48 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LCldUZFx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749789583; x=1781325583;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RLUI2Xtzpt/rZgKoWC06w6lCNBKNmbGBsZk1eE4A8rs=;
+  b=LCldUZFxbQssm24QnPYGNB1i+skp25szCYUny7iKJFST2yFtd8cFsg2S
+   Ml3nwKnaQVRdG93pv0iBYs3mBrMeR9FfGXse7MnsvptGYxPuvev1dnKVv
+   34M2CPFxmmljkFT9Qe1IlwmeII+Jh0BwJ6XiUwAQbuuRac1mdhLN1ex0L
+   OTmhrda7iPiowHnN0wOQy8rt4y1sf1KXEl6o1p9EXPoH5Qm63w9qwWxDr
+   X+CjcSe+SFE+V4Wfj+DnPtya/7BGL3WqKbqZS2MqhL3jIyUFognf3JtZZ
+   lGDRWgz6R8MeBQro9GlJNW3p0LK4Q0PZm7UWjmXUhkatbg31LrMKkKqGM
+   g==;
+X-CSE-ConnectionGUID: KKvpJZH5ReyvM2dLSxEv4g==
+X-CSE-MsgGUID: mQeDlN8YQ5WvNjuxvNZbEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="77391712"
+X-IronPort-AV: E=Sophos;i="6.16,232,1744095600"; 
+   d="scan'208";a="77391712"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 21:39:42 -0700
+X-CSE-ConnectionGUID: 48sngEy+QWWj7B/GeSpnOw==
+X-CSE-MsgGUID: ecD6PYnZQ029o2M1wms5FA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,232,1744095600"; 
+   d="scan'208";a="178618890"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 12 Jun 2025 21:39:38 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uPwCW-000CEs-1q;
+	Fri, 13 Jun 2025 04:39:36 +0000
+Date: Fri, 13 Jun 2025 12:39:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Jo=E3o_Paulo_Gon=E7alves?= <jpaulo.silvagoncalves@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Farouk Bouabid <farouk.bouabid@cherry.de>,
+	Quentin Schulz <quentin.schulz@cherry.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Jo=E3o_Paulo_Gon=E7alves?= <joao.goncalves@toradex.com>
+Subject: Re: [PATCH v3 3/3] hwmon: (amc6821) Add cooling device support
+Message-ID: <202506131212.4UdngOz7-lkp@intel.com>
+References: <20250612-b4-amc6821-cooling-device-support-v3-3-360681a7652c@toradex.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints
- and trace events
-To: Steven Rostedt <rostedt@goodmis.org>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-References: <20250612235827.011358765@goodmis.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250612235827.011358765@goodmis.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250612-b4-amc6821-cooling-device-support-v3-3-360681a7652c@toradex.com>
 
-Hi,
+Hi João,
 
-On 6/12/25 4:58 PM, Steven Rostedt wrote:
-> Every trace event can take up to 5K of memory in text and meta data regardless
+kernel test robot noticed the following build warnings:
 
-s/meta data/metadata/ unless you are referring to meta's data.
+[auto build test WARNING on b43674a549ed17319cb08ede9e0909ff6198ea70]
 
-s/meta data/metadata/ in patches 1 and 2 also.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jo-o-Paulo-Gon-alves/dt-bindings-hwmon-amc6821-Add-cooling-levels/20250613-013059
+base:   b43674a549ed17319cb08ede9e0909ff6198ea70
+patch link:    https://lore.kernel.org/r/20250612-b4-amc6821-cooling-device-support-v3-3-360681a7652c%40toradex.com
+patch subject: [PATCH v3 3/3] hwmon: (amc6821) Add cooling device support
+config: hexagon-randconfig-002-20250613 (https://download.01.org/0day-ci/archive/20250613/202506131212.4UdngOz7-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250613/202506131212.4UdngOz7-lkp@intel.com/reproduce)
 
-> if they are used or not. Trace events should not be created if they are not
-> used.  Currently there's over a hundred events in the kernel that are defined
-> but unused, either because their callers were removed without removing the
-> trace event with it, or a config hides the trace event caller but not the
-> trace event itself. And in some cases, trace events were simply added but were
-> never called for whatever reason. The number of unused trace events continues
-> to grow.
-> 
-> This patch series aims to fix this.
-> 
-> The first patch creates a new section called __tracepoint_check, where all
-> callers of a tracepoint creates a variable that is placed in this section with
-> a pointer to the tracepoint they use. Then on boot up, it iterates this
-> section and will modify the tracepoint's "func" field to a value of 1 (all
-> tracepoints "func" fields are initialized to NULL and is only set when they
-> are registered). This takes place before any tracepoint can be registered.
-> 
-> Then each tracepoint is iterated on and if any tracepoint does not have its
-> "func" field set to 1 a warning is triggerd and every tracepoint that doesn't
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506131212.4UdngOz7-lkp@intel.com/
 
-triggered
+All warnings (new ones prefixed by >>):
 
-> have that field set is printed. The "func" field is then reset back to NULL.
-> 
-> The second patch modifies scripts/sorttable.c to read the __tracepoint_check
-> section. It sorts it, and then reads the __tracepoint_ptr section that has all
-> compiled in tracepoints. It makes sure that every tracepoint is found in the
-> check section and if not, it prints a warning message about it. This lists the
-> missing tracepoints at build time.
-> 
-> The third patch updates sorttable to work for arm64 when compiled with gcc. As
-> gcc's arm64 build doesn't put addresses in their section but saves them off in
-> the RELA sections. This mostly takes the work done that was needed to do the
-> mcount sorting at boot up on arm64.
-> 
-> The forth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as
+>> drivers/hwmon/amc6821.c:1053:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1053 |         if (fan_np)
+         |             ^~~~~~
+   drivers/hwmon/amc6821.c:1056:6: note: uninitialized use occurs here
+    1056 |         if (err)
+         |             ^~~
+   drivers/hwmon/amc6821.c:1053:2: note: remove the 'if' if its condition is always true
+    1053 |         if (fan_np)
+         |         ^~~~~~~~~~~
+    1054 |                 err = amc6821_of_fan_read_data(client, data, fan_np);
+   drivers/hwmon/amc6821.c:1040:9: note: initialize the variable 'err' to silence this warning
+    1040 |         int err;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-fourth (or are you coding in forth?)
 
-> well. There was several locations that adds tracepoints in the kernel proper
-> that are only used in modules. It was getting quite complex trying to move
-> things around that I just decided to make any tracepoint in a
-> EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
-> functions. An unused static function gets a warning but an unused global one
-> does not.
-> 
-> The last patch updates the trace_ftrace_test_filter boot up self test. That
-> selftest creates a trace event to run a bunch of filter tests on it without
-> actually calling the tracepoint. To quiet the warning, the selftest tracepoint
-> is called within a if (!trace_<event>_enabled()) section, where it will not be
-> optimized out, nor will it be called.
-> 
-> This is v2 from: https://lore.kernel.org/linux-trace-kernel/20250529130138.544ffec4@gandalf.local.home/
-> which was simply the first patch. This version adds the other patches.
-> 
-> Steven Rostedt (5):
->       tracepoints: Add verifier that makes sure all defined tracepoints are used
->       tracing: sorttable: Add a tracepoint verification check at build time
->       tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
->       tracepoint: Do not warn for unused event that is exported
->       tracing: Call trace_ftrace_test_filter() for the event
-> 
-> ----
->  include/asm-generic/vmlinux.lds.h  |   1 +
->  include/linux/tracepoint.h         |  13 ++
->  kernel/trace/Kconfig               |  31 +++
->  kernel/trace/trace_events_filter.c |   4 +
->  kernel/tracepoint.c                |  26 +++
->  scripts/Makefile                   |   4 +
->  scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
->  7 files changed, 437 insertions(+), 86 deletions(-)
-> 
+vim +1053 drivers/hwmon/amc6821.c
 
-thanks.
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1032  
+6748703856d461 Stephen Kitt         2020-08-13  1033  static int amc6821_probe(struct i2c_client *client)
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1034  {
+1276fae2a93142 Axel Lin             2014-06-29  1035  	struct device *dev = &client->dev;
+28e6274d8fa67e Axel Lin             2014-06-29  1036  	struct amc6821_data *data;
+1276fae2a93142 Axel Lin             2014-06-29  1037  	struct device *hwmon_dev;
+a051d507ba1718 Guenter Roeck        2024-06-27  1038  	struct regmap *regmap;
+194be60020ab02 João Paulo Gonçalves 2025-06-12  1039  	struct device_node *fan_np __free(device_node) = NULL;
+28e6274d8fa67e Axel Lin             2014-06-29  1040  	int err;
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1041  
+1276fae2a93142 Axel Lin             2014-06-29  1042  	data = devm_kzalloc(dev, sizeof(struct amc6821_data), GFP_KERNEL);
+28e6274d8fa67e Axel Lin             2014-06-29  1043  	if (!data)
+28e6274d8fa67e Axel Lin             2014-06-29  1044  		return -ENOMEM;
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1045  
+a051d507ba1718 Guenter Roeck        2024-06-27  1046  	regmap = devm_regmap_init_i2c(client, &amc6821_regmap_config);
+a051d507ba1718 Guenter Roeck        2024-06-27  1047  	if (IS_ERR(regmap))
+a051d507ba1718 Guenter Roeck        2024-06-27  1048  		return dev_err_probe(dev, PTR_ERR(regmap),
+a051d507ba1718 Guenter Roeck        2024-06-27  1049  				     "Failed to initialize regmap\n");
+a051d507ba1718 Guenter Roeck        2024-06-27  1050  	data->regmap = regmap;
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1051  
+194be60020ab02 João Paulo Gonçalves 2025-06-12  1052  	fan_np = of_get_child_by_name(dev->of_node, "fan");
+194be60020ab02 João Paulo Gonçalves 2025-06-12 @1053  	if (fan_np)
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1054  		err = amc6821_of_fan_read_data(client, data, fan_np);
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1055  
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1056  	if (err)
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1057  		return dev_err_probe(dev, err,
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1058  				     "Failed to read fan device tree data\n");
+194be60020ab02 João Paulo Gonçalves 2025-06-12  1059  
+cd17587272e284 Francesco Dolcini    2025-04-02  1060  	err = amc6821_init_client(client, data);
+28e6274d8fa67e Axel Lin             2014-06-29  1061  	if (err)
+28e6274d8fa67e Axel Lin             2014-06-29  1062  		return err;
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1063  
+8f38236de689af Farouk Bouabid       2024-09-06  1064  	if (of_device_is_compatible(dev->of_node, "tsd,mule")) {
+8f38236de689af Farouk Bouabid       2024-09-06  1065  		err = devm_of_platform_populate(dev);
+8f38236de689af Farouk Bouabid       2024-09-06  1066  		if (err)
+8f38236de689af Farouk Bouabid       2024-09-06  1067  			return dev_err_probe(dev, err,
+8f38236de689af Farouk Bouabid       2024-09-06  1068  				     "Failed to create sub-devices\n");
+8f38236de689af Farouk Bouabid       2024-09-06  1069  	}
+8f38236de689af Farouk Bouabid       2024-09-06  1070  
+e98ab50e1f2dd6 Guenter Roeck        2024-06-26  1071  	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+e98ab50e1f2dd6 Guenter Roeck        2024-06-26  1072  							 data, &amc6821_chip_info,
+1276fae2a93142 Axel Lin             2014-06-29  1073  							 amc6821_groups);
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1074  	if (IS_ERR(hwmon_dev))
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1075  		return dev_err_probe(dev, PTR_ERR(hwmon_dev),
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1076  				     "Failed to initialize hwmon\n");
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1077  
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1078  	if (IS_ENABLED(CONFIG_THERMAL) && fan_np && data->fan_cooling_levels)
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1079  		return PTR_ERR_OR_ZERO(devm_thermal_of_cooling_device_register(dev,
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1080  									       fan_np,
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1081  									       client->name,
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1082  									       data,
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1083  									       &amc6821_cooling_ops));
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1084  
+6364a7ce37ccd1 João Paulo Gonçalves 2025-06-12  1085  	return 0;
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1086  }
+b5430a04e99508 Tomaz Mertelj        2010-01-08  1087  
+
 -- 
-~Randy
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
