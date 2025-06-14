@@ -1,124 +1,235 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80EAA3FD4
-	for <llvm@lists.linux.dev>; Sat, 14 Jun 2025 00:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309B8249EB;
+	Sat, 14 Jun 2025 02:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749862388; cv=none; b=FydBal77wEdyRbwVa0tKM6MpB3l4+VgFO1GcRkBpBYjYQPjOvMaduHxV0lqW/KVG5mVPJF/BC65SilFV85H2AIFGqkzcLpNg6/ybrKXXejrjvnEC/fdciaV0ny6SoUcDOeR2rGhMthzjRW7O2aDAjdRTDAAq61z9E7RGG+fr8iU=
+	t=1749866945; cv=none; b=Ql76lo/HxuPWRKcxPkTFC8EBKc33Q9LfErkHJ7xFhvODYCdCjMeM9ktprq0MRh1hC4uoHCe1pREUsSn/rpUXi5B3CzNhuJufWJ5dzOR53csQCp6FRC0oi5O1fKF0HpH4R6+wmcg3DzViobZ7zt3QnsEhM9qh1VUjuSfZIGl2PoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749862388; c=relaxed/simple;
-	bh=mbIQYImWhjrbQzGOQFg1ybu6e9I0rfPaM1CFzDASHdA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gjqPu7QuOf0O1ypBd3IvJM9XADYb3w1rXbTIxJq94FBp81aiNOTz0WxcchgUiFng/7Xunuf8Nxip+b6mefJAfkF2hR76n28pklLk6jEBPsL39lqhwrGPM197bxJfVJO88WvrtzbCYVIcKVdqVg87vAOKVggX+YXV51BT5QutSco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G81mWzVj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1749866945; c=relaxed/simple;
+	bh=T7F5BTPkmIJqijZcvCaJDzeehyOgLhWobs1d8ZTzUB8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=swObgkl92d3F4gMRGB9mFaX3TY5lj+WIiRDNNyS3BrsIWleXfViVnwyzkYG2Vr4OfoFEevxmJm3/QGg4Iigee/qZ8YIhchwHd6UMEPt3x0rBQrg2+0hqTnRy+YizX3hIpGSBniI7UgiNEjOJ5iY83pTuh/nS2ofSvvjsPWTTHgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P5DVYZcv; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G81mWzVj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749862385;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=x+L2Ru6ClZPpRi1wZuNvugtF55MOde4wgpUMGrZtLcM=;
-	b=G81mWzVjjPOg4M8AlJsg1XyITcLxWZMJ3ptkKMTSFKe6M8HXOoP0tRj6YhHokiqdbUucEN
-	6cuJOZPu49emoWOqzXgRO7+fpxBWZMhFXCvAHWo9wI9rRLX3UtR+cpcOjgTla0srPILKIM
-	2Lu0EoEKFsFy26BohV6ehiQcjyqHzH4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-41-S7HXPhHFPMWo-WX7JTbUwg-1; Fri,
- 13 Jun 2025 20:53:03 -0400
-X-MC-Unique: S7HXPhHFPMWo-WX7JTbUwg-1
-X-Mimecast-MFC-AGG-ID: S7HXPhHFPMWo-WX7JTbUwg_1749862383
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1820F180047F
-	for <llvm@lists.linux.dev>; Sat, 14 Jun 2025 00:53:03 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 97F02195E349;
-	Sat, 14 Jun 2025 00:53:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 12 of 100): Test report for master
- (6.16.0-rc1, upstream-mainline, 02adc149)
-Date: Sat, 14 Jun 2025 00:53:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P5DVYZcv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749866943; x=1781402943;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T7F5BTPkmIJqijZcvCaJDzeehyOgLhWobs1d8ZTzUB8=;
+  b=P5DVYZcv7WqOIzebe93guUWFeRU0LO/Rym1G8Bk62tW1Cb4DltyEKZgt
+   ahSiN/LoaSqf2dknKfbcAK+LxKpPDg9mEUtL7E5RzmhVPhxnSiZr41wjs
+   S41JntK4tKECagL06WLe+f9J6zC0iFElzH+q59Quay0ND22NvyS3uoPee
+   9/ZWZlDUHEht8r8KL1t1ujjiUa2ILkouaOhrQmb5M7O1q28QQinc5Z49l
+   fhKcK/5y66LKHFzYMdDUitf7OMyjn+842HgrSq2K8WZE2NSyKIb8gnTgv
+   rrouZ+RphuV8wwCzMZYp7F9aLnyE75zRxk1pHZ0qsBhP+hQabalJVv4Jd
+   A==;
+X-CSE-ConnectionGUID: yRMOAJxXSYefl5sSTIA7Aw==
+X-CSE-MsgGUID: eBCcWZ/NTeO2fRbaL3TDyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11463"; a="69668260"
+X-IronPort-AV: E=Sophos;i="6.16,235,1744095600"; 
+   d="scan'208";a="69668260"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 19:09:02 -0700
+X-CSE-ConnectionGUID: dYhVJh5yTR6s0T8b+3tZig==
+X-CSE-MsgGUID: NmfKjhUOQ6mo1Nvl5ddlFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,235,1744095600"; 
+   d="scan'208";a="148347803"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 13 Jun 2025 19:08:53 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uQGJz-000DAM-2X;
+	Sat, 14 Jun 2025 02:08:39 +0000
+Date: Sat, 14 Jun 2025 10:07:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacky Chou <jacky_chou@aspeedtech.com>, bhelgaas@google.com,
+	lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	joel@jms.id.au, andrew@codeconstruct.com.au, vkoul@kernel.org,
+	kishon@kernel.org, linus.walleij@linaro.org, p.zabel@pengutronix.de,
+	linux-aspeed@lists.ozlabs.org, linux-pci@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	elbadrym@google.com, romlem@google.com, anhphan@google.com,
+	wak@google.com, yuxiaozhang@google.com, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH 7/7] pci: aspeed: Add ASPEED PCIe host controller driver
+Message-ID: <202506140931.MWdyPxX1-lkp@intel.com>
+References: <20250613033001.3153637-8-jacky_chou@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <53446.125061320530300577@us-mta-41.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Dbgz2sfks-wHKzdb_bjTLFbGKstKkYbmsP8nHrE5eJI_1749862383
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613033001.3153637-8-jacky_chou@aspeedtech.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jacky,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus robh/for-next linusw-pinctrl/devel linusw-pinctrl/for-next linus/master v6.16-rc1 next-20250613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6.16-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/broonie/spi
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Chou/dt-bindings-phy-Add-document-for-ASPEED-PCIe-PHY/20250613-113331
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250613033001.3153637-8-jacky_chou%40aspeedtech.com
+patch subject: [PATCH 7/7] pci: aspeed: Add ASPEED PCIe host controller driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250614/202506140931.MWdyPxX1-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250614/202506140931.MWdyPxX1-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1869202480
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506140931.MWdyPxX1-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All warnings (new ones prefixed by >>):
+
+>> drivers/pci/controller/pcie-aspeed.c:481:6: warning: variable 'status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     481 |         if (bus->number == 0) {
+         |             ^~~~~~~~~~~~~~~~
+   drivers/pci/controller/pcie-aspeed.c:541:9: note: uninitialized use occurs here
+     541 |         writel(status, pcie->reg + H2X_CFGE_INT_STS);
+         |                ^~~~~~
+   drivers/pci/controller/pcie-aspeed.c:481:2: note: remove the 'if' if its condition is always false
+     481 |         if (bus->number == 0) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+     482 |                 /* Internal access to bridge */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     483 |                 writel(TLP_BYTE_EN(0xf) << 16 | (where & ~3), pcie->reg + H2X_CFGI_TLP);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     484 |                 writel(CFGI_TLP_FIRE, pcie->reg + H2X_CFGI_CTRL);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     485 |                 *val = readl(pcie->reg + H2X_CFGI_RET_DATA);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     486 |         } else {
+         |         ~~~~~~
+   drivers/pci/controller/pcie-aspeed.c:474:24: note: initialize the variable 'status' to silence this warning
+     474 |         u32 bdf_offset, status;
+         |                               ^
+         |                                = 0
+   drivers/pci/controller/pcie-aspeed.c:573:6: warning: variable 'status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     573 |         if (bus->number == 0) {
+         |             ^~~~~~~~~~~~~~~~
+   drivers/pci/controller/pcie-aspeed.c:622:9: note: uninitialized use occurs here
+     622 |         writel(status, pcie->reg + H2X_CFGE_INT_STS);
+         |                ^~~~~~
+   drivers/pci/controller/pcie-aspeed.c:573:2: note: remove the 'if' if its condition is always false
+     573 |         if (bus->number == 0) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+     574 |                 /* Internal access to bridge */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     575 |                 writel(CFGI_WRITE | TLP_BYTE_EN(byte_en) << 16 | (where & ~3),
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     576 |                        pcie->reg + H2X_CFGI_TLP);
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     577 |                 writel(val, pcie->reg + H2X_CFGI_WR_DATA);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     578 |                 writel(CFGI_TLP_FIRE, pcie->reg + H2X_CFGI_CTRL);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     579 |         } else {
+         |         ~~~~~~
+   drivers/pci/controller/pcie-aspeed.c:552:24: note: initialize the variable 'status' to silence this warning
+     552 |         u32 bdf_offset, status, type;
+         |                               ^
+         |                                = 0
+   2 warnings generated.
 
 
-Tests that were not ran because of internal issues:
-    Reboot test [aarch64, x86_64]
-    Storage - blktests - throtl [aarch64]
-    Storage - blktests - ublk [aarch64]
-    stress: stress-ng - cpu-cache [aarch64]
-    stress: stress-ng - memory [aarch64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
+vim +481 drivers/pci/controller/pcie-aspeed.c
 
+   469	
+   470	static int aspeed_ast2700_rd_conf(struct pci_bus *bus, unsigned int devfn,
+   471					  int where, int size, u32 *val)
+   472	{
+   473		struct aspeed_pcie *pcie = bus->sysdata;
+   474		u32 bdf_offset, status;
+   475		u8 type;
+   476		int ret;
+   477	
+   478		if ((bus->number == 0 && devfn != 0))
+   479			return PCIBIOS_DEVICE_NOT_FOUND;
+   480	
+ > 481		if (bus->number == 0) {
+   482			/* Internal access to bridge */
+   483			writel(TLP_BYTE_EN(0xf) << 16 | (where & ~3), pcie->reg + H2X_CFGI_TLP);
+   484			writel(CFGI_TLP_FIRE, pcie->reg + H2X_CFGI_CTRL);
+   485			*val = readl(pcie->reg + H2X_CFGI_RET_DATA);
+   486		} else {
+   487			if (!aspeed_ast2700_get_link(pcie))
+   488				return PCIBIOS_DEVICE_NOT_FOUND;
+   489	
+   490			bdf_offset = aspeed_pcie_get_bdf_offset(bus, devfn, where);
+   491	
+   492			type = (bus->number == 1) ? PCI_HEADER_TYPE_NORMAL : PCI_HEADER_TYPE_BRIDGE;
+   493	
+   494			writel(CRG_READ_FMTTYPE(type) | CRG_PAYLOAD_SIZE, pcie->reg + H2X_CFGE_TLP_1ST);
+   495			writel(AST2700_TX_DESC1_VALUE | (pcie->tx_tag << 8) | TLP_BYTE_EN(0xf),
+   496			       pcie->reg + H2X_CFGE_TLP_NEXT);
+   497			writel(bdf_offset, pcie->reg + H2X_CFGE_TLP_NEXT);
+   498			writel(CFGE_TX_IDLE | CFGE_RX_BUSY, pcie->reg + H2X_CFGE_INT_STS);
+   499			writel(CFGE_TLP_FIRE, pcie->reg + H2X_CFGE_CTRL);
+   500	
+   501			ret = readl_poll_timeout(pcie->reg + H2X_CFGE_INT_STS, status,
+   502						 (status & CFGE_TX_IDLE), 0, 50);
+   503			if (ret) {
+   504				dev_err(pcie->dev,
+   505					"[%X:%02X:%02X.%02X]CR tx timeout sts: 0x%08x\n",
+   506					pcie->domain, bus->number, PCI_SLOT(devfn),
+   507					PCI_FUNC(devfn), status);
+   508				ret = PCIBIOS_SET_FAILED;
+   509				*val = ~0;
+   510				goto out;
+   511			}
+   512	
+   513			ret = readl_poll_timeout(pcie->reg + H2X_CFGE_INT_STS, status,
+   514						 (status & CFGE_RX_BUSY), 0, 50000);
+   515			if (ret) {
+   516				dev_err(pcie->dev,
+   517					"[%X:%02X:%02X.%02X]CR rx timeoutsts: 0x%08x\n",
+   518					pcie->domain, bus->number, PCI_SLOT(devfn),
+   519					PCI_FUNC(devfn), status);
+   520				ret = PCIBIOS_SET_FAILED;
+   521				*val = ~0;
+   522				goto out;
+   523			}
+   524			*val = readl(pcie->reg + H2X_CFGE_RET_DATA);
+   525		}
+   526	
+   527		switch (size) {
+   528		case 1:
+   529			*val = (*val >> ((where & 3) * 8)) & 0xff;
+   530			break;
+   531		case 2:
+   532			*val = (*val >> ((where & 2) * 8)) & 0xffff;
+   533			break;
+   534		case 4:
+   535		default:
+   536			break;
+   537		}
+   538	
+   539		ret = PCIBIOS_SUCCESSFUL;
+   540	out:
+   541		writel(status, pcie->reg + H2X_CFGE_INT_STS);
+   542		pcie->tx_tag = (pcie->tx_tag + 1) % 0xF;
+   543		return ret;
+   544	}
+   545	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
