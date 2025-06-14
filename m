@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6230D20B22;
-	Sat, 14 Jun 2025 13:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6B32C15AC;
+	Sat, 14 Jun 2025 14:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749907975; cv=none; b=gKoCzy0rTng5M1eX5bN9BnMtgxpHBQc5K4KfvjS4hDXBcrYPSSpXN6QGt96uJ1IClx329V8smlcgNphBsrciylRC2JvazjYz/QFkMNGTguSRHkFG5zBAXDBqT6DOujg/XW8pa5j2zbyt3CoeOLKY6YUCK4GhkcvGK8PYpzt5hEQ=
+	t=1749909899; cv=none; b=lET3s2jDY1QNf1hXuOUURpXzJudDVeeZjA3Bq5CsdgJYKtxJdQa5r38q1NLJiJUBPXBB2l8AC3t/s6xbopz9+fMmlxQMTEpJZqm6LnCvJHkb9cAtdGnh8AVCsgGLBgvNfQIEQWnFpd9Yq0yITIl/zo3bVXlu/HjCsatfNqOi138=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749907975; c=relaxed/simple;
-	bh=CPWCbKfPbuFhOTlWTtCu5mCvmNC+U+P4rPLQ4gAM0QQ=;
+	s=arc-20240116; t=1749909899; c=relaxed/simple;
+	bh=xm5tcvEy40uXYu7d3Dn0xgyv2xe6et8D2Xd+tZ6+Fzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VATizDOBwF4IEtipW0HcBbhp7aT0bWda51I7cTwT1wqaUKx5SeyIMn+EU6Pn8MXF6X5p11NNsw4pVzY35mFD22NB/VsWzOy+IfrlyP7vm7FhfLhq9UyxQROOawo+dkWHDA+JQuyjXEfflvcCLQfr0bk7HFzii9Vaq0XwpzGPsDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PogxF8fg; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=UERzxiz/jypCOD2TzP9E8dVywSdS/m+TWSrukUmDQ/DIPL1brgSc26hbPsLAjvo3HCuqNqmMyd/lDSmqJ0HMp1xY3EXmBq+MW+1M29kBWOXhnWccxjFe8NW+PDiSGSe2ZKvDbS+sVLmbfUnnq93jk8gTx73a/y8dH7PgerX1bok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T0MjElQE; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PogxF8fg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0MjElQE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749907974; x=1781443974;
+  t=1749909897; x=1781445897;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CPWCbKfPbuFhOTlWTtCu5mCvmNC+U+P4rPLQ4gAM0QQ=;
-  b=PogxF8fg0uPXCEkOjj0Y/hsU7GOZ8PFKZXfB2dQb9J9UzdFXV+G0Kd07
-   /C03A9X8nlAXw+NPdt56C8RBPz8vCeoe0BerDL9LtDh1+XyQ16QiaiLyP
-   YTFWMhrQ7OWPJJJmdNViaP5iGHeUpfdwLwlNkXRv5uGALD9HMbnBiOH8C
-   ArnwsTSdduGlQf6qBzKANH9FWwRC7dlJfMeVbu5AKDaSWIxaLcJ6tIcsn
-   VzjfQvcGxuJH6Q9lM/m2c7Dxouv85wx84AvoU1ak+SWW/eDhc81v7U9pZ
-   2V0bpLGeTN/TepvGs1nC1oJyvVkrnh8ALgeiQ10xomhbglcmJ0AL0zxik
-   g==;
-X-CSE-ConnectionGUID: pxARAxy2Qlumzalo3sU9kA==
-X-CSE-MsgGUID: dgd9v65wTH2XoX5yUe8e3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11464"; a="55785539"
+  bh=xm5tcvEy40uXYu7d3Dn0xgyv2xe6et8D2Xd+tZ6+Fzw=;
+  b=T0MjElQEFBi/XButvn2xHnZPi3sXKkh44Ky9BK0VSJlieoUuzgeW8u6Q
+   eJ+lffgz7AGjQcbUuxk2ojqqdQ9hm+309hd9oVS9FNBH3exUYKdyQBDqR
+   JCwwwJ/zqjkWyAn1hHyu0nPxJRemimYsBjHEhe3/TJ2RJUS/r2swc4mVb
+   mhQuxfu4mKeAILsqdxHZjZEqnTV1c+diP7CWqUs6nu1782XkdtDTobESQ
+   PznnPxd8fH3NrlTqnLj0chCOiZ6AtvEGqxd6Le99BYHIUzLS7D9MhPyVF
+   +KBkDiGZUMW1R6lBtP+Y+nJMHH144zC9dUVhP+As/nP1YuXwQ1z8IMDNe
+   A==;
+X-CSE-ConnectionGUID: mfz5f0o8R42SS/sSeCwYaQ==
+X-CSE-MsgGUID: i3InSs1aS2mEdGOpf/q4dw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11464"; a="63462488"
 X-IronPort-AV: E=Sophos;i="6.16,236,1744095600"; 
-   d="scan'208";a="55785539"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2025 06:32:53 -0700
-X-CSE-ConnectionGUID: CZWP8ODASE2eqemodLtCyg==
-X-CSE-MsgGUID: xsVGujYpRtiHWzPLakg/2A==
+   d="scan'208";a="63462488"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2025 07:04:56 -0700
+X-CSE-ConnectionGUID: JmHiYuqzSYyxp9TLdbfcxw==
+X-CSE-MsgGUID: LmI3ZGq+RWS3SOIUtH2rvQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,236,1744095600"; 
-   d="scan'208";a="171255022"
+   d="scan'208";a="148445854"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 14 Jun 2025 06:32:52 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 14 Jun 2025 07:04:54 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uQR05-000DXO-1B;
-	Sat, 14 Jun 2025 13:32:49 +0000
-Date: Sat, 14 Jun 2025 21:32:07 +0800
+	id 1uQRV6-000DYY-08;
+	Sat, 14 Jun 2025 14:04:52 +0000
+Date: Sat, 14 Jun 2025 22:03:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <ltykernel@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC Patch v2 3/4] x86/Hyper-V: Not use auto-eoi when Secure
- AVIC is available
-Message-ID: <202506142143.mZm3MmgZ-lkp@intel.com>
-References: <20250613110829.122371-4-ltykernel@gmail.com>
+To: James Houghton <jthoughton@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vipin Sharma <vipinsh@google.com>,
+	David Matlack <dmatlack@google.com>,
+	James Houghton <jthoughton@google.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/7] KVM: x86/mmu: Recover TDP MMU NX huge pages using
+ MMU read lock
+Message-ID: <202506142129.ClBlxdtW-lkp@intel.com>
+References: <20250613202315.2790592-4-jthoughton@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,139 +69,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613110829.122371-4-ltykernel@gmail.com>
+In-Reply-To: <20250613202315.2790592-4-jthoughton@google.com>
 
-Hi Tianyu,
+Hi James,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on linus/master v6.16-rc1 next-20250613]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 8046d29dde17002523f94d3e6e0ebe486ce52166]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianyu-Lan/x86-Hyper-V-Not-use-hv-apic-driver-when-Secure-AVIC-is-available/20250613-191041
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20250613110829.122371-4-ltykernel%40gmail.com
-patch subject: [RFC Patch v2 3/4] x86/Hyper-V: Not use auto-eoi when Secure AVIC is available
-config: i386-buildonly-randconfig-003-20250614 (https://download.01.org/0day-ci/archive/20250614/202506142143.mZm3MmgZ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/James-Houghton/KVM-x86-mmu-Track-TDP-MMU-NX-huge-pages-separately/20250614-042620
+base:   8046d29dde17002523f94d3e6e0ebe486ce52166
+patch link:    https://lore.kernel.org/r/20250613202315.2790592-4-jthoughton%40google.com
+patch subject: [PATCH v4 3/7] KVM: x86/mmu: Recover TDP MMU NX huge pages using MMU read lock
+config: i386-buildonly-randconfig-003-20250614 (https://download.01.org/0day-ci/archive/20250614/202506142129.ClBlxdtW-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250614/202506142143.mZm3MmgZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250614/202506142129.ClBlxdtW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506142143.mZm3MmgZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506142129.ClBlxdtW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/mshyperv.c:466:22: error: use of undeclared identifier 'CC_ATTR_SNP_SECURE_AVIC'
-     466 |         if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
-         |                             ^
-   1 error generated.
+   arch/x86/kvm/mmu/mmu.c:7570:28: error: use of undeclared identifier 'KVM_TDP_MMU'
+    7570 |         bool is_tdp = mmu_type == KVM_TDP_MMU;
+         |                                   ^
+>> arch/x86/kvm/mmu/mmu.c:7594:25: error: no member named 'tdp_mmu_pages_lock' in 'struct kvm_arch'
+    7594 |                         spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+         |                                    ~~~~~~~~~ ^
+   arch/x86/kvm/mmu/mmu.c:7597:28: error: no member named 'tdp_mmu_pages_lock' in 'struct kvm_arch'
+    7597 |                                 spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+         |                                              ~~~~~~~~~ ^
+   arch/x86/kvm/mmu/mmu.c:7617:27: error: no member named 'tdp_mmu_pages_lock' in 'struct kvm_arch'
+    7617 |                         spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+         |                                      ~~~~~~~~~ ^
+   4 errors generated.
 
 
-vim +/CC_ATTR_SNP_SECURE_AVIC +466 arch/x86/kernel/cpu/mshyperv.c
+vim +7594 arch/x86/kvm/mmu/mmu.c
 
-   442	
-   443		/*
-   444		 * Extract the features and hints
-   445		 */
-   446		ms_hyperv.features = cpuid_eax(HYPERV_CPUID_FEATURES);
-   447		ms_hyperv.priv_high = cpuid_ebx(HYPERV_CPUID_FEATURES);
-   448		ms_hyperv.ext_features = cpuid_ecx(HYPERV_CPUID_FEATURES);
-   449		ms_hyperv.misc_features = cpuid_edx(HYPERV_CPUID_FEATURES);
-   450		ms_hyperv.hints    = cpuid_eax(HYPERV_CPUID_ENLIGHTMENT_INFO);
-   451	
-   452		hv_max_functions_eax = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
-   453	
-   454		pr_info("Hyper-V: privilege flags low %#x, high %#x, ext %#x, hints %#x, misc %#x\n",
-   455			ms_hyperv.features, ms_hyperv.priv_high,
-   456			ms_hyperv.ext_features, ms_hyperv.hints,
-   457			ms_hyperv.misc_features);
-   458	
-   459		ms_hyperv.max_vp_index = cpuid_eax(HYPERV_CPUID_IMPLEMENT_LIMITS);
-   460		ms_hyperv.max_lp_index = cpuid_ebx(HYPERV_CPUID_IMPLEMENT_LIMITS);
-   461	
-   462		pr_debug("Hyper-V: max %u virtual processors, %u logical processors\n",
-   463			 ms_hyperv.max_vp_index, ms_hyperv.max_lp_index);
-   464	
-   465		hv_identify_partition_type();
- > 466		if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
-   467			ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
-   468	
-   469		if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
-   470			hv_nested = true;
-   471			pr_info("Hyper-V: running on a nested hypervisor\n");
-   472		}
-   473	
-   474		if (ms_hyperv.features & HV_ACCESS_FREQUENCY_MSRS &&
-   475		    ms_hyperv.misc_features & HV_FEATURE_FREQUENCY_MSRS_AVAILABLE) {
-   476			x86_platform.calibrate_tsc = hv_get_tsc_khz;
-   477			x86_platform.calibrate_cpu = hv_get_tsc_khz;
-   478			setup_force_cpu_cap(X86_FEATURE_TSC_KNOWN_FREQ);
-   479		}
-   480	
-   481		if (ms_hyperv.priv_high & HV_ISOLATION) {
-   482			ms_hyperv.isolation_config_a = cpuid_eax(HYPERV_CPUID_ISOLATION_CONFIG);
-   483			ms_hyperv.isolation_config_b = cpuid_ebx(HYPERV_CPUID_ISOLATION_CONFIG);
-   484	
-   485			if (ms_hyperv.shared_gpa_boundary_active)
-   486				ms_hyperv.shared_gpa_boundary =
-   487					BIT_ULL(ms_hyperv.shared_gpa_boundary_bits);
-   488	
-   489			hyperv_paravisor_present = !!ms_hyperv.paravisor_present;
-   490	
-   491			pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
-   492				ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
-   493	
-   494	
-   495			if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP) {
-   496				static_branch_enable(&isolation_type_snp);
-   497			} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_TDX) {
-   498				static_branch_enable(&isolation_type_tdx);
-   499	
-   500				/* A TDX VM must use x2APIC and doesn't use lazy EOI. */
-   501				ms_hyperv.hints &= ~HV_X64_APIC_ACCESS_RECOMMENDED;
-   502	
-   503				if (!ms_hyperv.paravisor_present) {
-   504					/*
-   505					 * Mark the Hyper-V TSC page feature as disabled
-   506					 * in a TDX VM without paravisor so that the
-   507					 * Invariant TSC, which is a better clocksource
-   508					 * anyway, is used instead.
-   509					 */
-   510					ms_hyperv.features &= ~HV_MSR_REFERENCE_TSC_AVAILABLE;
-   511	
-   512					/*
-   513					 * The Invariant TSC is expected to be available
-   514					 * in a TDX VM without paravisor, but if not,
-   515					 * print a warning message. The slower Hyper-V MSR-based
-   516					 * Ref Counter should end up being the clocksource.
-   517					 */
-   518					if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
-   519						pr_warn("Hyper-V: Invariant TSC is unavailable\n");
-   520	
-   521					/* HV_MSR_CRASH_CTL is unsupported. */
-   522					ms_hyperv.misc_features &= ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
-   523	
-   524					/* Don't trust Hyper-V's TLB-flushing hypercalls. */
-   525					ms_hyperv.hints &= ~HV_X64_REMOTE_TLB_FLUSH_RECOMMENDED;
-   526	
-   527					x86_init.acpi.reduced_hw_early_init = reduced_hw_init;
-   528				}
-   529			}
-   530		}
-   531	
-   532		if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
-   533			ms_hyperv.nested_features =
-   534				cpuid_eax(HYPERV_CPUID_NESTED_FEATURES);
-   535			pr_info("Hyper-V: Nested features: 0x%x\n",
-   536				ms_hyperv.nested_features);
-   537		}
-   538	
+  7565	
+  7566	static void kvm_recover_nx_huge_pages(struct kvm *kvm,
+  7567					      enum kvm_mmu_type mmu_type)
+  7568	{
+  7569		unsigned long to_zap = nx_huge_pages_to_zap(kvm, mmu_type);
+> 7570		bool is_tdp = mmu_type == KVM_TDP_MMU;
+  7571		struct list_head *nx_huge_pages;
+  7572		struct kvm_mmu_page *sp;
+  7573		LIST_HEAD(invalid_list);
+  7574		bool flush = false;
+  7575		int rcu_idx;
+  7576	
+  7577		nx_huge_pages = &kvm->arch.possible_nx_huge_pages[mmu_type].pages;
+  7578	
+  7579		rcu_idx = srcu_read_lock(&kvm->srcu);
+  7580		if (is_tdp)
+  7581			read_lock(&kvm->mmu_lock);
+  7582		else
+  7583			write_lock(&kvm->mmu_lock);
+  7584	
+  7585		/*
+  7586		 * Zapping TDP MMU shadow pages, including the remote TLB flush, must
+  7587		 * be done under RCU protection, because the pages are freed via RCU
+  7588		 * callback.
+  7589		 */
+  7590		rcu_read_lock();
+  7591	
+  7592		for ( ; to_zap; --to_zap) {
+  7593			if (is_tdp)
+> 7594				spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+  7595			if (list_empty(nx_huge_pages)) {
+  7596				if (is_tdp)
+  7597					spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+  7598				break;
+  7599			}
+  7600	
+  7601			/*
+  7602			 * We use a separate list instead of just using active_mmu_pages
+  7603			 * because the number of shadow pages that be replaced with an
+  7604			 * NX huge page is expected to be relatively small compared to
+  7605			 * the total number of shadow pages.  And because the TDP MMU
+  7606			 * doesn't use active_mmu_pages.
+  7607			 */
+  7608			sp = list_first_entry(nx_huge_pages,
+  7609					      struct kvm_mmu_page,
+  7610					      possible_nx_huge_page_link);
+  7611			WARN_ON_ONCE(!sp->nx_huge_page_disallowed);
+  7612			WARN_ON_ONCE(!sp->role.direct);
+  7613	
+  7614			unaccount_nx_huge_page(kvm, sp);
+  7615	
+  7616			if (is_tdp)
+  7617				spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+  7618	
+  7619			/*
+  7620			 * Do not attempt to recover any NX Huge Pages that are being
+  7621			 * dirty tracked, as they would just be faulted back in as 4KiB
+  7622			 * pages. The NX Huge Pages in this slot will be recovered,
+  7623			 * along with all the other huge pages in the slot, when dirty
+  7624			 * logging is disabled.
+  7625			 */
+  7626			if (!kvm_mmu_sp_dirty_logging_enabled(kvm, sp)) {
+  7627				if (is_tdp)
+  7628					flush |= kvm_tdp_mmu_zap_possible_nx_huge_page(kvm, sp);
+  7629				else
+  7630					kvm_mmu_prepare_zap_page(kvm, sp, &invalid_list);
+  7631	
+  7632			}
+  7633	
+  7634			WARN_ON_ONCE(sp->nx_huge_page_disallowed);
+  7635	
+  7636			if (need_resched() || rwlock_needbreak(&kvm->mmu_lock)) {
+  7637				kvm_mmu_remote_flush_or_zap(kvm, &invalid_list, flush);
+  7638				rcu_read_unlock();
+  7639	
+  7640				if (is_tdp)
+  7641					cond_resched_rwlock_read(&kvm->mmu_lock);
+  7642				else
+  7643					cond_resched_rwlock_write(&kvm->mmu_lock);
+  7644	
+  7645				flush = false;
+  7646				rcu_read_lock();
+  7647			}
+  7648		}
+  7649		kvm_mmu_remote_flush_or_zap(kvm, &invalid_list, flush);
+  7650	
+  7651		rcu_read_unlock();
+  7652	
+  7653		if (is_tdp)
+  7654			read_unlock(&kvm->mmu_lock);
+  7655		else
+  7656			write_unlock(&kvm->mmu_lock);
+  7657		srcu_read_unlock(&kvm->srcu, rcu_idx);
+  7658	}
+  7659	
 
 -- 
 0-DAY CI Kernel Test Service
