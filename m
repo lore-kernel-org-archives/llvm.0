@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318721DFE8;
-	Sat, 14 Jun 2025 12:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6230D20B22;
+	Sat, 14 Jun 2025 13:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749905453; cv=none; b=JH555v5+hCmH6xC7Vzc5DvJNk9cTZMGJoyAfar3kR3X9KE/LjXcF0LqHo8zmsrtVHNRjWnSz5jAH9KFB771r7uVLlGXEDFqbi4cjozrnWzTWsaNZPw++mvpGEO/7vAP7ZnZlKrwtfQFgv4zqDZhz8F4T9IljefIXH0GCbf10Lgs=
+	t=1749907975; cv=none; b=gKoCzy0rTng5M1eX5bN9BnMtgxpHBQc5K4KfvjS4hDXBcrYPSSpXN6QGt96uJ1IClx329V8smlcgNphBsrciylRC2JvazjYz/QFkMNGTguSRHkFG5zBAXDBqT6DOujg/XW8pa5j2zbyt3CoeOLKY6YUCK4GhkcvGK8PYpzt5hEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749905453; c=relaxed/simple;
-	bh=lFJYYQXq9oIDME04eSlHNN0+NsN/i1nbtydpkFkwH4s=;
+	s=arc-20240116; t=1749907975; c=relaxed/simple;
+	bh=CPWCbKfPbuFhOTlWTtCu5mCvmNC+U+P4rPLQ4gAM0QQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nmd7fwufbH+gGF0JkVV6/eitcalUA3g60fGd2/3GVGrQRLR9esp4mnY9srBW6bsb9hOnULJLmBDGceGQc4daQ5lm8vWczpp2oTSN9r3/CnIB9gWaFnrituVBr5m80BdBE7dkl64L5lNv/59bC8QSrbGarMIIL3eI7F7BqXd6lkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RJIVaoit; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=VATizDOBwF4IEtipW0HcBbhp7aT0bWda51I7cTwT1wqaUKx5SeyIMn+EU6Pn8MXF6X5p11NNsw4pVzY35mFD22NB/VsWzOy+IfrlyP7vm7FhfLhq9UyxQROOawo+dkWHDA+JQuyjXEfflvcCLQfr0bk7HFzii9Vaq0XwpzGPsDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PogxF8fg; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RJIVaoit"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PogxF8fg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749905451; x=1781441451;
+  t=1749907974; x=1781443974;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lFJYYQXq9oIDME04eSlHNN0+NsN/i1nbtydpkFkwH4s=;
-  b=RJIVaoity4/nBYNN1kmZ15dUGm3YwOlYngvuFsqsuTyEt0TeUfMlrXCu
-   2EsAZVTf8rdM+OjVy2At4XKrJJ/th1WRT7zuoyQfcNWM5anOWcBx2BTqZ
-   OcrYZcuvawylVtDlLquIn9T/fmTYNz/iBf1AigwqjXFq4c/6bB7ftqVm0
-   8VS4y2oRE/DRkYUz4pikCBpSi870HmN4gi01Kr8ib2BS9LDl0Yc9HTZiJ
-   J9Fn/59cVkELCzwp+xrqgCozkm9eQAviA2W/6dysrLyZN2lJAMAxLu2OC
-   k/u3JUV4dD0mPe1K+Y8CbAhcNjJSVxBGnGU6puZnfYmsalSaLm8d0W/hU
-   w==;
-X-CSE-ConnectionGUID: FhtwBDMfRdajlhGYZNYxhg==
-X-CSE-MsgGUID: Q7elU6gTTGKKFcuJMM0UNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11464"; a="63460835"
+  bh=CPWCbKfPbuFhOTlWTtCu5mCvmNC+U+P4rPLQ4gAM0QQ=;
+  b=PogxF8fg0uPXCEkOjj0Y/hsU7GOZ8PFKZXfB2dQb9J9UzdFXV+G0Kd07
+   /C03A9X8nlAXw+NPdt56C8RBPz8vCeoe0BerDL9LtDh1+XyQ16QiaiLyP
+   YTFWMhrQ7OWPJJJmdNViaP5iGHeUpfdwLwlNkXRv5uGALD9HMbnBiOH8C
+   ArnwsTSdduGlQf6qBzKANH9FWwRC7dlJfMeVbu5AKDaSWIxaLcJ6tIcsn
+   VzjfQvcGxuJH6Q9lM/m2c7Dxouv85wx84AvoU1ak+SWW/eDhc81v7U9pZ
+   2V0bpLGeTN/TepvGs1nC1oJyvVkrnh8ALgeiQ10xomhbglcmJ0AL0zxik
+   g==;
+X-CSE-ConnectionGUID: pxARAxy2Qlumzalo3sU9kA==
+X-CSE-MsgGUID: dgd9v65wTH2XoX5yUe8e3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11464"; a="55785539"
 X-IronPort-AV: E=Sophos;i="6.16,236,1744095600"; 
-   d="scan'208";a="63460835"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2025 05:50:51 -0700
-X-CSE-ConnectionGUID: Cw3++vZETQ26IT/84DIU+Q==
-X-CSE-MsgGUID: wQaK0AYCR3OyDPE+B9vKFw==
+   d="scan'208";a="55785539"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2025 06:32:53 -0700
+X-CSE-ConnectionGUID: CZWP8ODASE2eqemodLtCyg==
+X-CSE-MsgGUID: xsVGujYpRtiHWzPLakg/2A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,236,1744095600"; 
-   d="scan'208";a="147946527"
+   d="scan'208";a="171255022"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 14 Jun 2025 05:50:45 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 14 Jun 2025 06:32:52 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uQQLM-000DWE-1v;
-	Sat, 14 Jun 2025 12:50:44 +0000
-Date: Sat, 14 Jun 2025 20:50:25 +0800
+	id 1uQR05-000DXO-1B;
+	Sat, 14 Jun 2025 13:32:49 +0000
+Date: Sat, 14 Jun 2025 21:32:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steve Siwinski <stevensiwinski@gmail.com>,
-	mpi3mr-linuxdrv.pdl@broadcom.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gustavoars@kernel.org, James.Bottomley@hansenpartnership.com,
-	kashyap.desai@broadcom.com, kees@kernel.org,
-	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-	martin.petersen@oracle.com, prayas.patel@broadcom.com,
-	ranjan.kumar@broadcom.com, sathya.prakash@broadcom.com,
-	sreekanth.reddy@broadcom.com, ssiwinski@atto.com,
-	sumit.saxena@broadcom.com, bgrove@atto.com, tdoedline@atto.com
-Subject: Re: [PATCH 2/2] scsi: mpi3mr: Add initialization for ATTO 24Gb SAS
- HBAs
-Message-ID: <202506142037.j39pVyE8-lkp@intel.com>
-References: <20250613202941.62114-2-ssiwinski@atto.com>
+To: Tianyu Lan <ltykernel@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC Patch v2 3/4] x86/Hyper-V: Not use auto-eoi when Secure
+ AVIC is available
+Message-ID: <202506142143.mZm3MmgZ-lkp@intel.com>
+References: <20250613110829.122371-4-ltykernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,101 +63,139 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613202941.62114-2-ssiwinski@atto.com>
+In-Reply-To: <20250613110829.122371-4-ltykernel@gmail.com>
 
-Hi Steve,
+Hi Tianyu,
 
-kernel test robot noticed the following build warnings:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master v6.16-rc1 next-20250613]
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on linus/master v6.16-rc1 next-20250613]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steve-Siwinski/scsi-mpi3mr-Add-initialization-for-ATTO-24Gb-SAS-HBAs/20250614-043438
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20250613202941.62114-2-ssiwinski%40atto.com
-patch subject: [PATCH 2/2] scsi: mpi3mr: Add initialization for ATTO 24Gb SAS HBAs
-config: x86_64-buildonly-randconfig-002-20250614 (https://download.01.org/0day-ci/archive/20250614/202506142037.j39pVyE8-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tianyu-Lan/x86-Hyper-V-Not-use-hv-apic-driver-when-Secure-AVIC-is-available/20250613-191041
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20250613110829.122371-4-ltykernel%40gmail.com
+patch subject: [RFC Patch v2 3/4] x86/Hyper-V: Not use auto-eoi when Secure AVIC is available
+config: i386-buildonly-randconfig-003-20250614 (https://download.01.org/0day-ci/archive/20250614/202506142143.mZm3MmgZ-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250614/202506142037.j39pVyE8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250614/202506142143.mZm3MmgZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506142037.j39pVyE8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506142143.mZm3MmgZ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/scsi/mpi3mr/mpi3mr_fw.c:1644:47: warning: variable 'scratch_pad0' set but not used [-Wunused-but-set-variable]
-    1644 |         u32 host_diagnostic, ioc_status, ioc_config, scratch_pad0;
-         |                                                      ^
->> drivers/scsi/mpi3mr/mpi3mr_fw.c:4272:6: warning: variable 'r' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    4272 |         if (!driver_pg2)
-         |             ^~~~~~~~~~~
-   drivers/scsi/mpi3mr/mpi3mr_fw.c:4290:9: note: uninitialized use occurs here
-    4290 |         return r;
-         |                ^
-   drivers/scsi/mpi3mr/mpi3mr_fw.c:4272:2: note: remove the 'if' if its condition is always false
-    4272 |         if (!driver_pg2)
-         |         ^~~~~~~~~~~~~~~~
-    4273 |                 goto out;
-         |                 ~~~~~~~~
-   drivers/scsi/mpi3mr/mpi3mr_fw.c:4267:7: note: initialize the variable 'r' to silence this warning
-    4267 |         int r;
-         |              ^
-         |               = 0
-   2 warnings generated.
---
->> Warning: drivers/scsi/mpi3mr/mpi3mr_fw.c:4262 function parameter 'sas_address' not described in 'mpi3mr_atto_get_sas_addr'
->> Warning: drivers/scsi/mpi3mr/mpi3mr_fw.c:6468 function parameter 'man_pg5' not described in 'mpi3mr_cfg_get_man_pg5'
->> Warning: drivers/scsi/mpi3mr/mpi3mr_fw.c:6468 Excess function parameter 'io_unit_pg5' description in 'mpi3mr_cfg_get_man_pg5'
->> Warning: drivers/scsi/mpi3mr/mpi3mr_fw.c:6524 function parameter 'man_pg5' not described in 'mpi3mr_cfg_set_man_pg5'
->> Warning: drivers/scsi/mpi3mr/mpi3mr_fw.c:6524 Excess function parameter 'io_unit_pg5' description in 'mpi3mr_cfg_set_man_pg5'
+>> arch/x86/kernel/cpu/mshyperv.c:466:22: error: use of undeclared identifier 'CC_ATTR_SNP_SECURE_AVIC'
+     466 |         if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
+         |                             ^
+   1 error generated.
 
 
-vim +4272 drivers/scsi/mpi3mr/mpi3mr_fw.c
+vim +/CC_ATTR_SNP_SECURE_AVIC +466 arch/x86/kernel/cpu/mshyperv.c
 
-  4254	
-  4255	/**
-  4256	 * mpi3mr_atto_get_sas_addr - get the ATTO SAS address from driver page 2
-  4257	 *
-  4258	 * @mrioc: Adapter instance reference
-  4259	 * @*sas_address: return sas address
-  4260	 * Return: 0 for success, non-zero for failure.
-  4261	 */
-> 4262	static int mpi3mr_atto_get_sas_addr(struct mpi3mr_ioc *mrioc, union ATTO_SAS_ADDRESS *sas_address)
-  4263	{
-  4264		struct mpi3_driver_page2 *driver_pg2 = NULL;
-  4265		struct ATTO_SAS_NVRAM *nvram;
-  4266		u16 sz;
-  4267		int r;
-  4268		__be64 addr;
-  4269	
-  4270		sz = mpi3mr_cfg_get_page_size(mrioc, MPI3_CONFIG_PAGETYPE_DRIVER, 2);
-  4271		driver_pg2 = kzalloc(sz, GFP_KERNEL);
-> 4272		if (!driver_pg2)
-  4273			goto out;
-  4274	
-  4275		r = mpi3mr_cfg_get_driver_pg2(mrioc, driver_pg2, sz, MPI3_CONFIG_ACTION_READ_PERSISTENT);
-  4276		if (r)
-  4277			goto out;
-  4278	
-  4279		nvram = (struct ATTO_SAS_NVRAM *) &driver_pg2->trigger;
-  4280	
-  4281		r = mpi3mr_atto_validate_nvram(mrioc, nvram);
-  4282		if (r)
-  4283			goto out;
-  4284	
-  4285		addr = *((__be64 *) nvram->sasaddr);
-  4286		sas_address->q = cpu_to_le64(be64_to_cpu(addr));
-  4287	
-  4288	out:
-  4289		kfree(driver_pg2);
-  4290		return r;
-  4291	}
-  4292	
+   442	
+   443		/*
+   444		 * Extract the features and hints
+   445		 */
+   446		ms_hyperv.features = cpuid_eax(HYPERV_CPUID_FEATURES);
+   447		ms_hyperv.priv_high = cpuid_ebx(HYPERV_CPUID_FEATURES);
+   448		ms_hyperv.ext_features = cpuid_ecx(HYPERV_CPUID_FEATURES);
+   449		ms_hyperv.misc_features = cpuid_edx(HYPERV_CPUID_FEATURES);
+   450		ms_hyperv.hints    = cpuid_eax(HYPERV_CPUID_ENLIGHTMENT_INFO);
+   451	
+   452		hv_max_functions_eax = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
+   453	
+   454		pr_info("Hyper-V: privilege flags low %#x, high %#x, ext %#x, hints %#x, misc %#x\n",
+   455			ms_hyperv.features, ms_hyperv.priv_high,
+   456			ms_hyperv.ext_features, ms_hyperv.hints,
+   457			ms_hyperv.misc_features);
+   458	
+   459		ms_hyperv.max_vp_index = cpuid_eax(HYPERV_CPUID_IMPLEMENT_LIMITS);
+   460		ms_hyperv.max_lp_index = cpuid_ebx(HYPERV_CPUID_IMPLEMENT_LIMITS);
+   461	
+   462		pr_debug("Hyper-V: max %u virtual processors, %u logical processors\n",
+   463			 ms_hyperv.max_vp_index, ms_hyperv.max_lp_index);
+   464	
+   465		hv_identify_partition_type();
+ > 466		if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
+   467			ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
+   468	
+   469		if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
+   470			hv_nested = true;
+   471			pr_info("Hyper-V: running on a nested hypervisor\n");
+   472		}
+   473	
+   474		if (ms_hyperv.features & HV_ACCESS_FREQUENCY_MSRS &&
+   475		    ms_hyperv.misc_features & HV_FEATURE_FREQUENCY_MSRS_AVAILABLE) {
+   476			x86_platform.calibrate_tsc = hv_get_tsc_khz;
+   477			x86_platform.calibrate_cpu = hv_get_tsc_khz;
+   478			setup_force_cpu_cap(X86_FEATURE_TSC_KNOWN_FREQ);
+   479		}
+   480	
+   481		if (ms_hyperv.priv_high & HV_ISOLATION) {
+   482			ms_hyperv.isolation_config_a = cpuid_eax(HYPERV_CPUID_ISOLATION_CONFIG);
+   483			ms_hyperv.isolation_config_b = cpuid_ebx(HYPERV_CPUID_ISOLATION_CONFIG);
+   484	
+   485			if (ms_hyperv.shared_gpa_boundary_active)
+   486				ms_hyperv.shared_gpa_boundary =
+   487					BIT_ULL(ms_hyperv.shared_gpa_boundary_bits);
+   488	
+   489			hyperv_paravisor_present = !!ms_hyperv.paravisor_present;
+   490	
+   491			pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
+   492				ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
+   493	
+   494	
+   495			if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP) {
+   496				static_branch_enable(&isolation_type_snp);
+   497			} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_TDX) {
+   498				static_branch_enable(&isolation_type_tdx);
+   499	
+   500				/* A TDX VM must use x2APIC and doesn't use lazy EOI. */
+   501				ms_hyperv.hints &= ~HV_X64_APIC_ACCESS_RECOMMENDED;
+   502	
+   503				if (!ms_hyperv.paravisor_present) {
+   504					/*
+   505					 * Mark the Hyper-V TSC page feature as disabled
+   506					 * in a TDX VM without paravisor so that the
+   507					 * Invariant TSC, which is a better clocksource
+   508					 * anyway, is used instead.
+   509					 */
+   510					ms_hyperv.features &= ~HV_MSR_REFERENCE_TSC_AVAILABLE;
+   511	
+   512					/*
+   513					 * The Invariant TSC is expected to be available
+   514					 * in a TDX VM without paravisor, but if not,
+   515					 * print a warning message. The slower Hyper-V MSR-based
+   516					 * Ref Counter should end up being the clocksource.
+   517					 */
+   518					if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
+   519						pr_warn("Hyper-V: Invariant TSC is unavailable\n");
+   520	
+   521					/* HV_MSR_CRASH_CTL is unsupported. */
+   522					ms_hyperv.misc_features &= ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
+   523	
+   524					/* Don't trust Hyper-V's TLB-flushing hypercalls. */
+   525					ms_hyperv.hints &= ~HV_X64_REMOTE_TLB_FLUSH_RECOMMENDED;
+   526	
+   527					x86_init.acpi.reduced_hw_early_init = reduced_hw_init;
+   528				}
+   529			}
+   530		}
+   531	
+   532		if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
+   533			ms_hyperv.nested_features =
+   534				cpuid_eax(HYPERV_CPUID_NESTED_FEATURES);
+   535			pr_info("Hyper-V: Nested features: 0x%x\n",
+   536				ms_hyperv.nested_features);
+   537		}
+   538	
 
 -- 
 0-DAY CI Kernel Test Service
