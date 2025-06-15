@@ -1,148 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637FF1A76D4;
-	Sun, 15 Jun 2025 17:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B44827A115
+	for <llvm@lists.linux.dev>; Sun, 15 Jun 2025 17:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750007613; cv=none; b=HXfC1teOcrp2L8UOFFsKDQKO3QJTnm4vYN5MfgGu/9uhKHEmm0Kzgzgly2+vLu0qrAnKpn5Dv/Mrbx1JUWhzLKKLQpq9dJ4xsUMRyN77EeM4k/TKT8Z2VOrcrS8PWSURoevKUBvAtybtwuhHw0Ai+8SajET9CzYfYllT9pj0aUg=
+	t=1750009932; cv=none; b=AY4CHAA8It8eKPqp1VvUyI9kUDShY3rJdaAuNwpCBPBtV/a1SoCx+2xS/0lLTU6Jyrqr/Z/lkOjfSXMuOklQk9ub3NyIRBCyTzWu6C9MLrY+xoBP9d4Mqtw62Kw6o6uJRZeO86tc3KUnZhmHSw+HWbtiRaQ732YkXTZf0ed9Rgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750007613; c=relaxed/simple;
-	bh=vrQljPMOllr5vZlsWnt4J/4zYmhpqTi5mw4pxd9eh1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gOx0CkCkDhMI8wmE6mR5yqODT7JdQk8L/IZKpnHqnKYYsivrtzfDCjD68vhFbfwuGr84gCtfqR9cFz0uHbF5tjJCqe9H2+7foEQErrEuOTN4HKQPoDA18SPX10Wvf6oyu7QHDy5deR1f3wwfTX9UoD1JLSjr/BVUDLwp/CBVkxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lNCmtF+d; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750009932; c=relaxed/simple;
+	bh=6AOk1dcTtYgydpgTGuuzeOKrTXoaM7Ppfx8e/cTypsc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Z7CJe5UwQ6Ke4r1638mBRynLQtvqKi6gFdY2iWDzj35nC7AhNJOo5ITw2v9loA53kKPg45F66Ldx7eMBJXNxr9YhFu8NXqs3esceJVGyZRYQFAiVfnx/3dpKjc0V/+TqgCUCInEShQx7YkqTCNsP/V6IpqJrvOxE6t0g786Efkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XmnZU5up; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lNCmtF+d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750007611; x=1781543611;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vrQljPMOllr5vZlsWnt4J/4zYmhpqTi5mw4pxd9eh1I=;
-  b=lNCmtF+dwm4iQJitbZglli0RBqzE9vpvXWaBpofsnOoNkPia1tyCMofx
-   7jFtPCvlEYclzRwI9xFjZI0C5f59pplgd1QsXJ/RPBHNHchgpGqR5aFp1
-   eHf1GDsSTfyUQ2Dlh34Njg4H4DtN8ZfdgI9OXBy6KI9uC0dLA8x9joNHR
-   Re+Lrc6xb4Ya6wvtGQgPYOnYia1QUuhy3dqGEe70nteU4d32KQJ7KN09F
-   EKB53xeIsKJbI+MZ/Gsp/qI6DsLW5X+4+OqQeKzIJV/2WpMyIH0A3FUhM
-   kGq6WFU8gGwzErap9lv6yPXoqraZI00oP/1etLL1GtVoIdY/OFbmY7JD+
-   w==;
-X-CSE-ConnectionGUID: GvPViGsxS8yHkc5ajERIHg==
-X-CSE-MsgGUID: oT0qLOjMTNaJVgp0ojoopg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="63509273"
-X-IronPort-AV: E=Sophos;i="6.16,239,1744095600"; 
-   d="scan'208";a="63509273"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 10:13:30 -0700
-X-CSE-ConnectionGUID: AUSKI46lRBSybNwYGbkNpA==
-X-CSE-MsgGUID: 2Gje4mo8R5GvOc7o4AqBYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,239,1744095600"; 
-   d="scan'208";a="185527297"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 15 Jun 2025 10:13:26 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uQqv5-000ERw-2K;
-	Sun, 15 Jun 2025 17:13:23 +0000
-Date: Mon, 16 Jun 2025 01:12:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Every2 <christiansantoslima21@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ~lkcamp/patches@lists.sr.ht,
-	richard120310@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7] rust: transmute: Add methods for FromBytes trait
-Message-ID: <202506160013.MgafgaAm-lkp@intel.com>
-References: <20250615072042.133290-1-christiansantoslima21@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XmnZU5up"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750009929;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KrbBmUcTurAkEFoXdAviELkEXG9Cv0+Dn5cL6j/Fb2U=;
+	b=XmnZU5upsWPUz8d2TdC5XvACtK7FalQOMaZNV217UL7nDZ6dLsy9AA5Igy8AdPcpU21e4x
+	wJIPPBXP769K9qzvWxStlY4NDJMzQlLNkVfc0K8kyu9XvtNWNOGAO3imuWmjMG+64C482B
+	zRtumEBAzzgnytLSImVEb+ZteNUxKBM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-483-IFRIBJ5TM9K-2J4LZVeKRQ-1; Sun,
+ 15 Jun 2025 13:52:07 -0400
+X-MC-Unique: IFRIBJ5TM9K-2J4LZVeKRQ-1
+X-Mimecast-MFC-AGG-ID: IFRIBJ5TM9K-2J4LZVeKRQ_1750009927
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C439C1800286
+	for <llvm@lists.linux.dev>; Sun, 15 Jun 2025 17:52:06 +0000 (UTC)
+Received: from [172.20.188.120] (unknown [10.30.45.122])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 50755180045B;
+	Sun, 15 Jun 2025 17:52:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 62 of 79): Test report for master
+ (6.16.0-rc1, upstream-mainline, 27605c8c)
+Date: Sun, 15 Jun 2025 17:52:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250615072042.133290-1-christiansantoslima21@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <68947.125061513520700512@us-mta-483.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: s7NOIwT7r0j6pMBI2YqBQKyaEvw_OfKYs4_PxANNXx8_1750009927
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Every2,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-[auto build test ERROR on rust/rust-next]
-[also build test ERROR on linus/master v6.16-rc1 next-20250613]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Every2/rust-transmute-Add-methods-for-FromBytes-trait/20250615-152228
-base:   https://github.com/Rust-for-Linux/linux rust-next
-patch link:    https://lore.kernel.org/r/20250615072042.133290-1-christiansantoslima21%40gmail.com
-patch subject: [PATCH v7] rust: transmute: Add methods for FromBytes trait
-config: um-randconfig-001-20250615 (https://download.01.org/0day-ci/archive/20250616/202506160013.MgafgaAm-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250616/202506160013.MgafgaAm-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'net-6.16-rc2' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506160013.MgafgaAm-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1867176162
 
-All errors (new ones prefixed by >>):
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1867176162-x86_64-kernel-debug
 
->> error[E0046]: not all trait items implemented, missing: `from_bytes`, `from_mut_bytes`
-   --> rust/doctests_kernel_generated.rs:3156:1
-   |
-   3156 | unsafe impl kernel::transmute::FromBytes for MyStruct{};
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `from_bytes`, `from_mut_bytes` in implementation
-   |
-   = help: implement the missing item: `fn from_bytes(_: &[u8]) -> Option<&Self> { todo!() }`
-   = help: implement the missing item: `fn from_mut_bytes<Self>(_: &mut [u8]) -> Option<&mut Self> where Self: AsBytes { todo!() }`
---
->> error[E0046]: not all trait items implemented, missing: `from_bytes`, `from_mut_bytes`
-   --> rust/doctests_kernel_generated.rs:3221:1
-   |
-   3221 | unsafe impl kernel::transmute::FromBytes for MyStruct{};
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `from_bytes`, `from_mut_bytes` in implementation
-   |
-   = help: implement the missing item: `fn from_bytes(_: &[u8]) -> Option<&Self> { todo!() }`
-   = help: implement the missing item: `fn from_mut_bytes<Self>(_: &mut [u8]) -> Option<&mut Self> where Self: AsBytes { todo!() }`
---
->> error[E0599]: no function or associated item named `from_bytes` found for type `u32` in the current scope
-   --> rust/doctests_kernel_generated.rs:9216:19
-   |
-   9216 | let result = u32::from_bytes(&arr);
-   |                   ^^^^^^^^^^ function or associated item not found in `u32`
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `FromBytes` which provides `from_bytes` is implemented but not in scope; perhaps you want to import it
-   |
-   3    + use crate::rust_doctest_kernel_alloc_kbox_rs_7::kernel::transmute::FromBytes;
-   |
-   help: there is an associated function `from_be` with a similar name
-   |
-   9216 | let result = u32::from_be(&arr);
-   |                   ~~~~~~~
---
->> error[E0046]: not all trait items implemented, missing: `from_bytes`, `from_mut_bytes`
-   --> samples/rust/rust_dma.rs:35:1
-   |
-   35 | unsafe impl kernel::transmute::FromBytes for MyStruct {}
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `from_bytes`, `from_mut_bytes` in implementation
-   |
-   = help: implement the missing item: `fn from_bytes(_: &[u8]) -> Option<&Self> { todo!() }`
-   = help: implement the missing item: `fn from_mut_bytes<Self>(_: &mut [u8]) -> Option<&mut Self> where Self: AsBytes { todo!() }`
+Tests that were not ran because of internal issues:
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
+    Storage - blktests - throtl [s390x, x86_64]
+    Storage - blktests - ublk [s390x, x86_64]
+    stress: stress-ng - cpu-cache [s390x, x86_64]
+    stress: stress-ng - memory [s390x, x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
