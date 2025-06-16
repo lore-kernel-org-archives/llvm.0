@@ -1,129 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFA534545
-	for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 23:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB41221FF5E;
+	Mon, 16 Jun 2025 23:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750116135; cv=none; b=hSJHVzOnTwMQ46ES+iDpyRin/732S927LvSGM8aJ8beQkXNXZLsgAf0sC38b58LU9BPRJb5L1wz/4ja1qBjFzNR0yHV4gz3OXmYJ43jY72qO8QLhUlHXJwjTs8L5/3T0k+SXREetqjiUoVEZAmv34j34BiALdRh3rMvjnTCe2gQ=
+	t=1750116237; cv=none; b=IhZHpuURgf5c6FBgPMqQEjZk2zj4dxlXfM+pT8bpmTmp+2+AwX0BxwrLKopWyXF00Ku46J2QTswc1sGXlzcb4+Zjbvv+l6QNHYwE34w6dL2UrHkOvtYjdNBHPPHC4oZk1pkNGbOoa2PdDL9A5SmhUF5zJgkYOcp2DIxzJIOg7lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750116135; c=relaxed/simple;
-	bh=qJRVOC64q7nagu6hbfE4Qo3pYIAhlnM5P2XFV+lq04g=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Rr5hIODcVINUZ08yI//he9H4xKc2ngTB14oGpK49btrOjCjRh+oA5/DL8mLIWXCU/JHINw8o7IfpWlyxiw1Rk7utMrePah7s56GHN5v0FGcpnZAUHNOrnflbcnOUKBrYa5b8RL4a8lqpXOBSMEMgMP0nXYAR5zWe89NtbjrOI9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fRwOWF5Y; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1750116237; c=relaxed/simple;
+	bh=9oGmaMe+uzcsSsY7ftL58AxNBVK5Bb/mQeUx0vxOhdA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RlG9IV+ig4Vx8JZ1NLZxyAFI9JDuvehdsjuQXZCn8EMgGfbMiwzBS3O0m+iS0B3McGJXs3dkRCyL8qi7sGDK5ZH+DUKnIULdeYLKnBc71Tm5LQxCWFBd30tusNTJFMFpWA+LConeiQ1KOL6Qx94eTTq6akaasuAuoSqxecyUFdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EqoxVGeh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fRwOWF5Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750116129;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=O9scPHwFUoF1Doz5dF/oDAJuyD58aFxiyjlQbKnlf5Q=;
-	b=fRwOWF5Y1me/8mVu49YncYl/G26Kkjl4gFaU7HMjDoypoWAHXl2C34948XwMqslobU3QS8
-	Wgb3GCr1E1n5On7BnUZcDdCC8u2tk3tiGOCuGtAsspZOTDssg0mdqgY5pDDWbYCBIGJ/ct
-	0VhswnewptthFCD/w5hdRKYS+9fAnk4=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-627-8Qc9LMsrMziMRkRmtK-bAA-1; Mon,
- 16 Jun 2025 19:22:08 -0400
-X-MC-Unique: 8Qc9LMsrMziMRkRmtK-bAA-1
-X-Mimecast-MFC-AGG-ID: 8Qc9LMsrMziMRkRmtK-bAA_1750116127
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D17F195608C
-	for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 23:22:07 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A5756195608F;
-	Mon, 16 Jun 2025 23:22:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.16.0-rc2,
- upstream-mainline, 9afe6529)
-Date: Mon, 16 Jun 2025 23:22:06 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EqoxVGeh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CAB2C4CEEA;
+	Mon, 16 Jun 2025 23:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750116237;
+	bh=9oGmaMe+uzcsSsY7ftL58AxNBVK5Bb/mQeUx0vxOhdA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=EqoxVGehertI4Mz/aBzh9Pw1jln4/63OAHAGuu+LzEgL7ayLvKz+ByVWTTB+/u3FC
+	 K41t60eO7XcpV3JWpFRBP+LWbbxvzEV8LhPg8dSQUo/Mr06lshUJCuL1m219MhdiDJ
+	 JN9lWuw+bGksVy29iJY15llxpYiVKrtJfFHEOqBdU6GWlwPLFshXJcxo7h7xyi0hLq
+	 TWN+2VzjqUE1uBY86z+uNK7kES/tDSj+eJ5BRFAZoCAGNco3jR7x3CFixA3p8SE2M7
+	 o8tyfc9aiNYwFJBehzwlrhs2twndvZ3NMUFt86pMei8bM0wY+krlnc4WRYgtRoC4m2
+	 +rdNxjw30RR6g==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 16 Jun 2025 16:23:40 -0700
+Subject: [PATCH] loongarch: Use '.ascii' instead of '.string' in
+ __BUGVERBOSE_LOCATION
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <60126.125061619220800698@us-mta-627.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: PqbSOmDZnVfFf-afncIc6F6_dda9HnPJjWnyri5DatM_1750116127
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250616-loongarch-fix-warn-cond-llvm-ias-v1-1-6c6d90bb4466@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHunUGgC/x2N0QqDMAwAf0XybKCWWpi/MnzoYtRATUcKbiD++
+ 8oeD467CyqbcIWpu8D4lCpFGwx9B7Qn3RhlaQze+dHFIWIuRbdktOMqX/wkU6SiC+Z8Hiip4us
+ xhtV5CiEStMzbuJn/xXO+7x+1NQ5ucgAAAA==
+X-Change-ID: 20250616-loongarch-fix-warn-cond-llvm-ias-b954f02c446c
+To: Ingo Molnar <mingo@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, 
+ WANG Xuerui <kernel@xen0n.name>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3504; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=9oGmaMe+uzcsSsY7ftL58AxNBVK5Bb/mQeUx0vxOhdA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBkBy7st7RXPHs2tLfvzLKnmSWFhTNQKBZ5flzt4C2+qr
+ F99Qiuro5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzk6yVGhnWyO+t3R559y7bl
+ TcqPjvitDq+eb1ymvqmPR8PqZ2lG7jtGhhefl+lHdiyaKCpnL7m+W2Lpgk1LBM2dV51UthTuesE
+ axQQA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+After commit 5d476f66e6ad ("bugs/LoongArch: Concatenate 'cond_str' with
+'__FILE__' in __BUG_ENTRY(), to extend WARN_ON/BUG_ON output"), building
+loongarch with clang's integrated assembler fails with:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+  block/blk-throttle.c:205:2: error: unexpected token
+    205 |         WARN_ON_ONCE(!bio);
+        |         ^
+  include/asm-generic/bug.h:119:3: note: expanded from macro 'WARN_ON_ONCE'
+    119 |                 __WARN_FLAGS("["#condition"] ",                 \
+        |                 ^
+  arch/loongarch/include/asm/bug.h:47:2: note: expanded from macro '__WARN_FLAGS'
+     47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+        |         ^
+  arch/loongarch/include/asm/bug.h:42:23: note: expanded from macro '__BUG_FLAGS'
+     42 |         asm_inline volatile (__stringify(ASM_BUG_FLAGS(cond_str, flags)) extra);
+        |                              ^
+  ...
+  <inline asm>:1:134: note: instantiated into assembly here
+      1 |         .pushsection __bug_table, "aw"; .align 2; 10000: .long 10001f - .; .pushsection .rodata.str, "aMS", @progbits, 1; 10002: .string "[""!bio""] " "block/blk-throttle.c"; .popsection; .long 10002b - .; .short 205; .short (1 << 0)|((1 << 1) | ((9) << 8)); .popsection; 10001: break 1;.pushsection .discard.annotate_insn,"M",@progbits,8
+        |                                                                                                                                             ^
 
+clang's integrated assembler only supports concatenating strings with
+'.ascii'. There was discussion of allowing '.string' / '.asciz' but it
+was decided against [1] because it was undesirable to match the behavior
+of released binutils at the time, where
 
-Kernel information:
-    Commit message: Merge tag 'x86_urgent_for_6.16-rc3' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/tip/tip
+  .asciz "foo" "bar"
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1872725613
+was treated like
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1872725613-x86_64-kernel-debug
+  "foo\0bar\0"
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1872725613-x86_64-kernel_upt_33
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1872725613-aarch64-kernel_upt_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
+instead of the more intuitive to C programmers
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+  "foobar\0"
 
+and diverging from that behavior was seen as risky and unnecessary. GNU
+binutils updated its handling of '.asciz' and '.string' to the more
+intuitive option in 2.36 [2] after this was brought up to them in
+passing.
 
+Convert LoongArch's __BUGVERBOSE_LOCATION from '.string' to '.ascii'
+with a manually added NUL, similar to commit 707f853d7fa3 ("module:
+Provide EXPORT_SYMBOL_GPL_FOR_MODULES() helper") for the same reason,
+which clears up the build error and results in no changes in output for
+builds with GNU binutils.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Fixes: 5d476f66e6ad ("bugs/LoongArch: Concatenate 'cond_str' with '__FILE__' in __BUG_ENTRY(), to extend WARN_ON/BUG_ON output")
+Link: https://reviews.llvm.org/D91460#2398228 [1]
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=3d955acb36f483c05724181da5ffba46b1303c43 [2]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/loongarch/include/asm/bug.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
+index cad807b100ad..d090a5bec5eb 100644
+--- a/arch/loongarch/include/asm/bug.h
++++ b/arch/loongarch/include/asm/bug.h
+@@ -11,7 +11,7 @@
+ #else
+ #define __BUGVERBOSE_LOCATION(file, line)			\
+ 		.pushsection .rodata.str, "aMS", @progbits, 1;	\
+-	10002:	.string file;					\
++	10002:	.ascii file "\0";				\
+ 		.popsection;					\
+ 								\
+ 		.long 10002b - .;				\
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+---
+base-commit: d298bb98d65f964288bb87feef014da1baafedda
+change-id: 20250616-loongarch-fix-warn-cond-llvm-ias-b954f02c446c
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
