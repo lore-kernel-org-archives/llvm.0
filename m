@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805A3231835;
-	Mon, 16 Jun 2025 10:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3080B274659;
+	Mon, 16 Jun 2025 10:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750068413; cv=none; b=INkwYbCVbeqjUDeuXFeH4SSfmXP+T9h3P7Q4A3sGQimWcZRlQ9sb7ScwBae+xNF834RYVPAL9opRL1vIT17Ag5jbSnALdGjGN2trsfMVnuUscLsyXvHDc60q6bB/ekDVbktQWij09lVRVmd2hZSo76YvllG+vqPNnYbRPUQ6eR8=
+	t=1750069727; cv=none; b=Paqc8tPN0rBQOVi+Ho+tHvh/m70j3dti9ci5Jv0z+wwaE5U/LRufTTpZ0jv50As6WGM9l1XXeRz88f6z2ffcmaoCWCe6Brp+rv2xGwHJEFNqmKBTE57/tKTtSIVTagKzMXKLUA+cXHr9s5HDkYflwk/CDhDwAPDzeqwm6JT1f24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750068413; c=relaxed/simple;
-	bh=tKgiGHHemU6LZ8Tp4hRworSk7Y+ekah5B8xXdkidKSE=;
+	s=arc-20240116; t=1750069727; c=relaxed/simple;
+	bh=KHEAU5O0QP+O/8j4Bf5vQY32xESSw3TMzoN1cnMZl+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hk5zY7X19pQQzX0vlCtqJ+h9nIfB8rxNIMqfrC3Lvgcn7XYTd1YHB5bytux4ypSs61G/NfjLu7FXSxnKgcpmZsFiyM2Bleg6eIDMARGS6VYaYVpLK9R42jNUpIOEcVjJoepxsjtC8VhkS51m8HF56tC39IvhNeLbgqtnWIh4cGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CPPsRXTR; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=gXuErdwTRmwNaoc24GY7I4mCeTZlFC+C168Wg9Zv5FpYh3tV6HpDmVd0ElONWW/p15Xhw6uw6ZKJ0bM81YLLVLg9Q29BNG9jhLA9UpdSmF3KpYqPnpbNi645QWY1zcGtOja71KLvnAcnHLIc2EeNnSiOwO7jv2UoeFkWT/6esAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WO13c9K1; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CPPsRXTR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WO13c9K1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750068411; x=1781604411;
+  t=1750069725; x=1781605725;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tKgiGHHemU6LZ8Tp4hRworSk7Y+ekah5B8xXdkidKSE=;
-  b=CPPsRXTRII4WscX6wzQhMw4QTefoNqFl6pSHftH88HoSEp5JdLZE3hxR
-   aMtzhgePQ6jikC/RrrJ1rWRX1ExKeP2uH1rmFq5eUpDRfMQ2pOYzHLNT+
-   /2Gj5aTg10iMRxVGSi3TVtsXmEROxEvrWeWfkuhZHpsyqHrezF2RuAvPl
-   sHWj3G2sK3voEXBhlo/i6CVntRjh7CEGK7jqs3yFLWHIRDRtZ25Bcn6EW
-   8I4Z9nwh/uFClTSfxqyNGUUWoYndUtdnBXAe0aW3WkEFzJ2yAW3QcZV1A
-   jCqn9LQUMHv5GCupVlmGH742IG6PZtzcShYKUVKw/3mF6Xhf6wULvnMk/
-   A==;
-X-CSE-ConnectionGUID: iG6EZMNGR2O0dVl9TlVZOA==
-X-CSE-MsgGUID: HbCtNPl8TTqqqB8HnIstjw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="74737987"
+  bh=KHEAU5O0QP+O/8j4Bf5vQY32xESSw3TMzoN1cnMZl+w=;
+  b=WO13c9K1aCh3TcN41euRZK7jLQpAWVfbv8tQuu4f/ttUjCexeg9em0Pv
+   DCsSOC0pUQ5B5SeX4gUREZgrO033yaZ7jHhty3xNirX4mUP9Ufxeoi7bx
+   AxoP60DXhBw/vW5ljfgQqSdM13gnFSSZNG7RgWtpc0z1BpVaJFEOhagp6
+   RxTFq2pyBWTMdI9iVKQuf5EGcZfeHqIDnAPAA11zDm605DV2gXqcepJ07
+   Q+CIILZNrjNT92kb4XhOhZGRsR7qoxdZ/xalfE2w2zwHhuj8tsd/yDr/v
+   mpL7Sq/4gAa4xg5a2BjOTM5haWDYi5WbOlTGdju0FWgmWr7JyYP8oq4Us
+   Q==;
+X-CSE-ConnectionGUID: znzGDs1dQ1WIOTFyVV65Xg==
+X-CSE-MsgGUID: kbrkvKimTbiZyZn+RbdIbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="62816607"
 X-IronPort-AV: E=Sophos;i="6.16,240,1744095600"; 
-   d="scan'208";a="74737987"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 03:06:43 -0700
-X-CSE-ConnectionGUID: 8K4uaiszTAG4cKvm9sXMag==
-X-CSE-MsgGUID: 9nIrNpxbTZeuCw89XL78DA==
+   d="scan'208";a="62816607"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 03:28:44 -0700
+X-CSE-ConnectionGUID: kaesmaPMSBS8x615fJR+6A==
+X-CSE-MsgGUID: BK8iHcJFSr+O+izsDFqTSA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,240,1744095600"; 
-   d="scan'208";a="153300242"
+   d="scan'208";a="149312179"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 16 Jun 2025 03:06:41 -0700
+  by orviesa008.jf.intel.com with ESMTP; 16 Jun 2025 03:28:42 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uR6je-000Euu-2q;
-	Mon, 16 Jun 2025 10:06:38 +0000
-Date: Mon, 16 Jun 2025 18:06:31 +0800
+	id 1uR74y-000Evs-2G;
+	Mon, 16 Jun 2025 10:28:40 +0000
+Date: Mon, 16 Jun 2025 18:27:55 +0800
 From: kernel test robot <lkp@intel.com>
 To: Leon Romanovsky <leonro@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [leon-rdma:dma-direct-pfn-type 1/5]
- drivers/misc/genwqe/card_base.h:154:6: error: redefinition of
- 'dma_mapping_type'
-Message-ID: <202506161857.kd6UYvnU-lkp@intel.com>
+Subject: [leon-rdma:dma-direct-pfn-type 2/5]
+ include/linux/dma-mapping.h:318:30: error: too many arguments to function
+ call, expected 5, have 6
+Message-ID: <202506161804.JCPHPIaZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,109 +65,65 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dma-direct-pfn-type
 head:   87481a3ed31857c530009e3a934f3b0a5e069f9e
-commit: 84d24bf3741b926f7b79b46347460779a4b3e52d [1/5] dma-mapping: Define DMA transaction address types
-config: x86_64-buildonly-randconfig-001-20250616 (https://download.01.org/0day-ci/archive/20250616/202506161857.kd6UYvnU-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250616/202506161857.kd6UYvnU-lkp@intel.com/reproduce)
+commit: c04b832c0cfbddf0ed0f7c4409d190b85a976ddb [2/5] dma-mapping: Refactor dma_map_page() to rely on physical address
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20250616/202506161804.JCPHPIaZ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250616/202506161804.JCPHPIaZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506161857.kd6UYvnU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506161804.JCPHPIaZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/misc/genwqe/card_base.c:32:
->> drivers/misc/genwqe/card_base.h:154:6: error: redefinition of 'dma_mapping_type'
-     154 | enum dma_mapping_type {
-         |      ^
-   include/linux/dma-mapping.h:91:6: note: previous definition is here
-      91 | enum dma_mapping_type {
-         |      ^
-   drivers/misc/genwqe/card_base.c:1112:47: warning: shift count >= width of type [-Wshift-count-overflow]
-    1112 |         if (dma_set_mask_and_coherent(&pci_dev->dev, DMA_BIT_MASK(64)) &&
-         |                                                      ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
-      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   1 warning and 1 error generated.
---
-   In file included from drivers/misc/genwqe/card_utils.c:33:
->> drivers/misc/genwqe/card_base.h:154:6: error: redefinition of 'dma_mapping_type'
-     154 | enum dma_mapping_type {
-         |      ^
-   include/linux/dma-mapping.h:91:6: note: previous definition is here
-      91 | enum dma_mapping_type {
-         |      ^
-   1 error generated.
+   In file included from kernel/sched/core.c:45:
+   In file included from include/linux/init_task.h:18:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:318:30: error: too many arguments to function call, expected 5, have 6
+     317 |         return dma_map_phys(dev, page_to_phys(page) + offset, size, dir,
+         |                ~~~~~~~~~~~~
+     318 |                             DMA_MAPPING_CPU_HOST, attrs);
+         |                                                   ^~~~~
+   include/linux/dma-mapping.h:183:26: note: 'dma_map_phys' declared here
+     183 | static inline dma_addr_t dma_map_phys(struct device *dev, phys_addr_t paddr,
+         |                          ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     184 |                 size_t size, enum dma_data_direction dir, unsigned long attrs)
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:323:61: error: too many arguments to function call, expected 5, have 6
+     323 |         dma_unmap_phys(dev, addr, size, dir, DMA_MAPPING_CPU_HOST, attrs);
+         |         ~~~~~~~~~~~~~~                                             ^~~~~
+   include/linux/dma-mapping.h:188:20: note: 'dma_unmap_phys' declared here
+     188 | static inline void dma_unmap_phys(struct device *dev, dma_addr_t addr,
+         |                    ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     189 |                 size_t size, enum dma_data_direction dir, unsigned long attrs)
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:7667:12: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+    7667 |                                        preempt_modes[preempt_dynamic_mode] : "undef",
+         |                                        ^             ~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:7642:1: note: array 'preempt_modes' declared here
+    7642 | const char *preempt_modes[] = {
+         | ^
+   1 warning and 2 errors generated.
 
 
-vim +/dma_mapping_type +154 drivers/misc/genwqe/card_base.h
+vim +318 include/linux/dma-mapping.h
 
-12eb4683251ebfb Frank Haverkamp 2013-12-09  103  
-12eb4683251ebfb Frank Haverkamp 2013-12-09  104  /*
-12eb4683251ebfb Frank Haverkamp 2013-12-09  105   * Genwqe card description and management data.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  106   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  107   * Error-handling in case of card malfunction
-12eb4683251ebfb Frank Haverkamp 2013-12-09  108   * ------------------------------------------
-12eb4683251ebfb Frank Haverkamp 2013-12-09  109   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  110   * If the card is detected to be defective the outside environment
-12eb4683251ebfb Frank Haverkamp 2013-12-09  111   * will cause the PCI layer to call deinit (the cleanup function for
-12eb4683251ebfb Frank Haverkamp 2013-12-09  112   * probe). This is the same effect like doing a unbind/bind operation
-12eb4683251ebfb Frank Haverkamp 2013-12-09  113   * on the card.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  114   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  115   * The genwqe card driver implements a health checking thread which
-12eb4683251ebfb Frank Haverkamp 2013-12-09  116   * verifies the card function. If this detects a problem the cards
-12eb4683251ebfb Frank Haverkamp 2013-12-09  117   * device is being shutdown and restarted again, along with a reset of
-12eb4683251ebfb Frank Haverkamp 2013-12-09  118   * the card and queue.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  119   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  120   * All functions accessing the card device return either -EIO or -ENODEV
-12eb4683251ebfb Frank Haverkamp 2013-12-09  121   * code to indicate the malfunction to the user. The user has to close
-12eb4683251ebfb Frank Haverkamp 2013-12-09  122   * the file descriptor and open a new one, once the card becomes
-12eb4683251ebfb Frank Haverkamp 2013-12-09  123   * available again.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  124   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  125   * If the open file descriptor is setup to receive SIGIO, the signal is
-12eb4683251ebfb Frank Haverkamp 2013-12-09  126   * genereated for the application which has to provide a handler to
-12eb4683251ebfb Frank Haverkamp 2013-12-09  127   * react on it. If the application does not close the open
-12eb4683251ebfb Frank Haverkamp 2013-12-09  128   * file descriptor a SIGKILL is send to enforce freeing the cards
-12eb4683251ebfb Frank Haverkamp 2013-12-09  129   * resources.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  130   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  131   * I did not find a different way to prevent kernel problems due to
-12eb4683251ebfb Frank Haverkamp 2013-12-09  132   * reference counters for the cards character devices getting out of
-12eb4683251ebfb Frank Haverkamp 2013-12-09  133   * sync. The character device deallocation does not block, even if
-12eb4683251ebfb Frank Haverkamp 2013-12-09  134   * there is still an open file descriptor pending. If this pending
-12eb4683251ebfb Frank Haverkamp 2013-12-09  135   * descriptor is closed, the data structures used by the character
-12eb4683251ebfb Frank Haverkamp 2013-12-09  136   * device is reinstantiated, which will lead to the reference counter
-12eb4683251ebfb Frank Haverkamp 2013-12-09  137   * dropping below the allowed values.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  138   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  139   * Card recovery
-12eb4683251ebfb Frank Haverkamp 2013-12-09  140   * -------------
-12eb4683251ebfb Frank Haverkamp 2013-12-09  141   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  142   * To test the internal driver recovery the following command can be used:
-12eb4683251ebfb Frank Haverkamp 2013-12-09  143   *   sudo sh -c 'echo 0xfffff > /sys/class/genwqe/genwqe0_card/err_inject'
-12eb4683251ebfb Frank Haverkamp 2013-12-09  144   */
-12eb4683251ebfb Frank Haverkamp 2013-12-09  145  
-12eb4683251ebfb Frank Haverkamp 2013-12-09  146  
-12eb4683251ebfb Frank Haverkamp 2013-12-09  147  /**
-12eb4683251ebfb Frank Haverkamp 2013-12-09  148   * struct dma_mapping_type - Mapping type definition
-12eb4683251ebfb Frank Haverkamp 2013-12-09  149   *
-12eb4683251ebfb Frank Haverkamp 2013-12-09  150   * To avoid memcpying data arround we use user memory directly. To do
-12eb4683251ebfb Frank Haverkamp 2013-12-09  151   * this we need to pin/swap-in the memory and request a DMA address
-12eb4683251ebfb Frank Haverkamp 2013-12-09  152   * for it.
-12eb4683251ebfb Frank Haverkamp 2013-12-09  153   */
-12eb4683251ebfb Frank Haverkamp 2013-12-09 @154  enum dma_mapping_type {
-12eb4683251ebfb Frank Haverkamp 2013-12-09  155  	GENWQE_MAPPING_RAW = 0,		/* contignous memory buffer */
-12eb4683251ebfb Frank Haverkamp 2013-12-09  156  	GENWQE_MAPPING_SGL_TEMP,	/* sglist dynamically used */
-12eb4683251ebfb Frank Haverkamp 2013-12-09  157  	GENWQE_MAPPING_SGL_PINNED,	/* sglist used with pinning */
-12eb4683251ebfb Frank Haverkamp 2013-12-09  158  };
-12eb4683251ebfb Frank Haverkamp 2013-12-09  159  
-
-:::::: The code at line 154 was first introduced by commit
-:::::: 12eb4683251ebfb12afba9c56556fade7a3d7372 GenWQE PCI support, health monitoring and recovery
-
-:::::: TO: Frank Haverkamp <haver@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+   312	
+   313	static inline dma_addr_t dma_map_page_attrs(struct device *dev,
+   314			struct page *page, size_t offset, size_t size,
+   315			enum dma_data_direction dir, unsigned long attrs)
+   316	{
+   317		return dma_map_phys(dev, page_to_phys(page) + offset, size, dir,
+ > 318				    DMA_MAPPING_CPU_HOST, attrs);
+   319	}
+   320	static inline void dma_unmap_page_attrs(struct device *dev, dma_addr_t addr,
+   321			size_t size, enum dma_data_direction dir, unsigned long attrs)
+   322	{
+   323		dma_unmap_phys(dev, addr, size, dir, DMA_MAPPING_CPU_HOST, attrs);
+   324	}
+   325	
 
 -- 
 0-DAY CI Kernel Test Service
