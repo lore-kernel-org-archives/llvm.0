@@ -1,156 +1,111 @@
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8577C1F4168
-	for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 13:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A10B86340;
+	Mon, 16 Jun 2025 15:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750080625; cv=none; b=S0vh4DqiCpxnFilA36ukLzOZE5/iUHUebv8kjgJ0jE/71MMxJx/znCdiXnR8fz11mxd97Kay0RTiqTPT4Rw/a7dzwx/9f955b6eYwps1wRU0R6wIFMUyv3mc+jAgyBLr1L8u2u33dd4VLPQ3C8o3YhtuS7QLJ33QaL4ZfF5wmDc=
+	t=1750086528; cv=none; b=J02e+S1+NVkDMp4+pvGi3IltkQlFHL5HPyp3kr36p53LcTlM50Q1nqF0D062mGLNHB2jNPj8KasmBNGHCy6nToTujtI8TVKdRPGMlP4CBT6ANXhJumxdG6nZq+rz/znJlalpsyYlqvjFlgGL4TNZViXqQAYs+bH8FjsQMS3fEYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750080625; c=relaxed/simple;
-	bh=4Zfd7f0oSTyDjhyyLNFCOi5jeoQIXrDItP4SyLWb99s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s0n1jMv9xqy6Jkvc50HObAw9Aj0ZKnHd05a2OFIg6OP/1hS/0K+5/LJZCDkiRty4x81l3CTUJhR+Ev8i2yZ0f7Qp3vUcc58NPMHyh8rs8vCS7Yd4FY6rDt9qOB7k54u08V2PnKb7VCXhybJVlGh2Xshc4JA1k8sS2boknSUaRAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ma0rgt/I; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1750086528; c=relaxed/simple;
+	bh=yCdpC7+BkZ97SbLJnzA+XwfLHKGSnF3b711oUYDyWvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rv8ML7+dLZN1i1RfWy2STppuf7vPbZVXqj7pAkTsyXKs1zkwZaedD6ql/2QKG3DLFBJyx9TnlCPFLmoqbSxlCDuYLOTzvpKDGUIc5iWjQoLFk64PQD67SZCy6QaIu4K84xar6dX/OFxC/D/ypUIV1jYEITG4qUmZ6S8r/Mf2iTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=mSIPVmjz; arc=none smtp.client-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ma0rgt/I"
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e81ec95d944so4710798276.1
-        for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 06:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750080621; x=1750685421; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8dIM4ggq6nkqhLbVMKcT1ezBsK840f8IM9RKNGuYHjk=;
-        b=ma0rgt/IRllHlH8vpySrJIZVa2yzJ2lBk9NAzOsl6Yl2J15iXQBQwYPBLHfrZERaj2
-         7mita8IN6eJY8OupIlXXP3snWbt/d5PHW9OulK7FpZC1ppnD0gWdDeYyjjZFLkLcODoj
-         mVNXeFjiUHlgmskWxSxqB/tHef0ZvONakKMPhUgRk32l9yYe5fNHbEoaTeBrpo3jfPhG
-         cvvbS+tnH0JKwGfIMI0Ee2Hh25i5oqyCniUvkda5JKNtU/zwj8LtHAqinMLOXvMXAxA8
-         I/PLM0U44Pl5DxkK+RqiXfwGm0GqMVUFzWI1HHJQTAs1r/NURL8vOy2ap4d/w2fyI5/r
-         dX7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750080621; x=1750685421;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8dIM4ggq6nkqhLbVMKcT1ezBsK840f8IM9RKNGuYHjk=;
-        b=GwA9/aQrjyH7k+hUO+9vP8jzPD2V5GdOPFyXHGy5am1Z2/UZSaqFb2glnxfKvdm71X
-         CMA7Jopxz28RTzS2yp+Ko9J2v1DzfMBdb8qTNsz8uHkV18fxlJtjYME9FzH/0t557YEq
-         7xU0go6SRlKfFpQ/YsNk4HUlDW4Moo0j3Cqa4MEO6LjiDmYcLs2E3EBn18eRvL8FFf2b
-         0YPlol37gLSVEseakCMxahmM0HossVpwt+L0twPMoDMDc9VeauKlwUix4f6aWMLC7KVE
-         yHE9/1vvNcinhCzkaXwqQLtry3gQcrTCdb8sPy7xB5khU41oiJdilE7QPHyGdXw5vLvf
-         5NmA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2sJR1jI5BIk9emtTYDFV4hdMheH6cFfsacZrxs4flUJ6zJ8qDoHaM5fIqXI2rvVslQfph@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxmp8/vXMGrjHHRrjX2T34KrJVpv+UBhWN7YMDZWChAT/sEnMGp
-	VwzvRpx/1Zdj0TSme3tMcTAFDg0MNKz6VGl4eoMsU0+3CiBmNGWpOXnMinEvqDCqiF2A/lETDO1
-	KayMfTVEXpEFp4vX8ToaP3ogJR5fV91Q9zXgytSSJTQ==
-X-Gm-Gg: ASbGncsg9nUjNI5lTYC4esq8Rd/YqYDESK8FWuGyN86pnNgd3M8PwqpRBjgCqUjFke6
-	XpKBhfHMnCJHBMFZvv5+vGIVQNsd/hzw8ZXUvNPGc+QmYK0ZK8CWZzuZKEQJkZ2Ok1JvQY93yMO
-	9h3dkGKCsWzF+oQg2uXLsjJU2VROAE5gGhwjhc8yYjCHww
-X-Google-Smtp-Source: AGHT+IHvwFdTtrctzoiWIaPE71W/8FTAI+xhZY2HkhDJbIaDsGip4BNw9qrbXT3Tk9Kd8tGyhyS35T/gDOg+zFs+nYI=
-X-Received: by 2002:a05:6902:703:b0:e81:566c:3085 with SMTP id
- 3f1490d57ef6-e8227f0e61bmr12875927276.1.1750080620760; Mon, 16 Jun 2025
- 06:30:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="mSIPVmjz"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1750086520; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=45TM9TQRagX2IF5SvAUP0uNlAbenpANguVySgK/vH8U=;
+	b=mSIPVmjzvDWi9CFk7Qw7lWMpah8DEuJy+tkBgxp+kfo3EJJzNVZah6XhLmkPGzbHmK4qs8iAvgSlvOGSLfPQzcePPy1Y2TXZ0TIcI3qH3qa6mFvigbP7+y+1KerLLSvGQ6ay7S1CR2yeWtf3EGLWifOMr7wAmW17CJj3jnmkA3M=
+Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0We.J-ww_1750086519 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 16 Jun 2025 23:08:39 +0800
+Date: Mon, 16 Jun 2025 23:08:38 +0800
+From: Feng Tang <feng.tang@linux.alibaba.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Lance Yang <lance.yang@linux.dev>, Jonathan Corbet <corbet@lwn.net>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	paulmck@kernel.org, john.ogness@linutronix.de
+Subject: Re: [PATCH V2 3/5] sys_info: add help to translate sys_info string
+ to bitmap
+Message-ID: <aFAzdsx_WbpNsupZ@U-2FWC9VHC-2323.local>
+References: <20250616010840.38258-4-feng.tang@linux.alibaba.com>
+ <202506161234.wRZSzo5v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com> <20250612-byeword-update-v1-2-f4afb8f6313f@collabora.com>
-In-Reply-To: <20250612-byeword-update-v1-2-f4afb8f6313f@collabora.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 16 Jun 2025 15:29:44 +0200
-X-Gm-Features: AX0GCFucmmVjhuxKNu1-kopwQ1Ifcn7b36ykDZEf_SV72XMHIWGaSa8Aqxa6A60
-Message-ID: <CAPDyKFr_-aQ+YoRqYVUFhRR=94NWOredaSYQsVb-xvot83HJ3w@mail.gmail.com>
-Subject: Re: [PATCH 02/20] mmc: dw_mmc-rockchip: switch to HWORD_UPDATE macro
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Jaehoon Chung <jh80.chung@samsung.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Shreeya Patel <shreeya.patel@collabora.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Shawn Lin <shawn.lin@rock-chips.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kernel@collabora.com, 
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-phy@lists.infradead.org, linux-sound@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202506161234.wRZSzo5v-lkp@intel.com>
 
-On Thu, 12 Jun 2025 at 20:57, Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
->
-> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-> drivers that use constant masks.
->
-> Switch to the new HWORD_UPDATE macro in bitfield.h, which has error
-> checking. Instead of redefining the driver's HIWORD_UPDATE macro in this
-> case, replace the two only instances of it with the new macro, as I
-> could test that they result in an equivalent value.
->
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+On Mon, Jun 16, 2025 at 12:25:29PM +0800, kernel test robot wrote:
+> Hi Feng,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on akpm-mm/mm-nonmm-unstable]
+> [also build test WARNING on akpm-mm/mm-everything linus/master v6.16-rc2 next-20250613]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Feng-Tang/panic-clean-up-code-for-console-replay/20250616-091042
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+> patch link:    https://lore.kernel.org/r/20250616010840.38258-4-feng.tang%40linux.alibaba.com
+> patch subject: [PATCH V2 3/5] sys_info: add help to translate sys_info string to bitmap
+> config: x86_64-buildonly-randconfig-001-20250616 (https://download.01.org/0day-ci/archive/20250616/202506161234.wRZSzo5v-lkp@intel.com/config)
+> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+> rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250616/202506161234.wRZSzo5v-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202506161234.wRZSzo5v-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> lib/sys_info.c:13:19: warning: unused variable 'sys_info_avail' [-Wunused-const-variable]
+>       13 | static const char sys_info_avail[] = "tasks,mem,timer,lock,ftrace,all_bt,blocked_tasks";
+>          |                   ^~~~~~~~~~~~~~
+>    1 warning generated.
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+Thanks for the reporting! This is related with CONFIG_SYSCTL=n, and
+should be fixed by below patch:
 
-Kind regards
-Uffe
+---
+diff --git a/lib/sys_info.c b/lib/sys_info.c
+index 9693542435ba..ca289b4871b4 100644
+--- a/lib/sys_info.c
++++ b/lib/sys_info.c
+@@ -10,8 +10,6 @@ struct sys_info_name {
+ 	const char *name;
+ };
+ 
+-static const char sys_info_avail[] = "tasks,mem,timer,lock,ftrace,all_bt,blocked_tasks";
+-
+ static const struct sys_info_name  si_names[] = {
+ 	{ SYS_SHOW_TASK_INFO,	"tasks" },
+ 	{ SYS_SHOW_MEM_INFO,	"mem" },
+@@ -43,6 +41,8 @@ unsigned long sys_info_parse_param(char *str)
+ }
+ 
+ #ifdef CONFIG_SYSCTL
++static const char sys_info_avail[] = "tasks,mem,timer,lock,ftrace,all_bt,blocked_tasks";
++
+ int sysctl_sys_info_handler(const struct ctl_table *ro_table, int write,
+ 					  void *buffer, size_t *lenp,
+ 					  loff_t *ppos)
 
-> ---
->  drivers/mmc/host/dw_mmc-rockchip.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-> index baa23b51773127b4137f472581259b61649273a5..9e3d17becf65ffb60fe3d32d2cdec341fbd30b1e 100644
-> --- a/drivers/mmc/host/dw_mmc-rockchip.c
-> +++ b/drivers/mmc/host/dw_mmc-rockchip.c
-> @@ -5,6 +5,7 @@
->
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/mmc/host.h>
->  #include <linux/of_address.h>
-> @@ -24,8 +25,6 @@
->  #define ROCKCHIP_MMC_DELAYNUM_OFFSET   2
->  #define ROCKCHIP_MMC_DELAYNUM_MASK     (0xff << ROCKCHIP_MMC_DELAYNUM_OFFSET)
->  #define ROCKCHIP_MMC_DELAY_ELEMENT_PSEC        60
-> -#define HIWORD_UPDATE(val, mask, shift) \
-> -               ((val) << (shift) | (mask) << ((shift) + 16))
->
->  static const unsigned int freqs[] = { 100000, 200000, 300000, 400000 };
->
-> @@ -148,9 +147,9 @@ static int rockchip_mmc_set_internal_phase(struct dw_mci *host, bool sample, int
->         raw_value |= nineties;
->
->         if (sample)
-> -               mci_writel(host, TIMING_CON1, HIWORD_UPDATE(raw_value, 0x07ff, 1));
-> +               mci_writel(host, TIMING_CON1, HWORD_UPDATE(GENMASK(11, 1), raw_value));
->         else
-> -               mci_writel(host, TIMING_CON0, HIWORD_UPDATE(raw_value, 0x07ff, 1));
-> +               mci_writel(host, TIMING_CON0, HWORD_UPDATE(GENMASK(11, 1), raw_value));
->
->         dev_dbg(host->dev, "set %s_phase(%d) delay_nums=%u actual_degrees=%d\n",
->                 sample ? "sample" : "drv", degrees, delay_num,
->
-> --
-> 2.49.0
->
