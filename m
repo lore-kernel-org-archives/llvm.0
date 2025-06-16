@@ -1,72 +1,78 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF942E426F
-	for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 12:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750076964; cv=pass; b=EIHH9ZKfsogRQz58qN/d1EMCunDQmJEK1WzGpzC403Mev+amN3XGn3huAimdB0X0d8vk9jSpH0QfoUJXBiJV0+JLnMhJfng2bgp2XsvycP9iPdiMJm/Z4J52BR/8CxS9J8m5mK8bbYRhpftWqayUFbDJnuTyedWouvfCFeGIkz8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750076964; c=relaxed/simple;
-	bh=D1nrTM3OWHNa73fOHQSyszn7QncKX5gjfoZAZmCJOV4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nMM6Bn3Wd2n9NI9VwHaJO5KwpOO7FNHwt7wEQFvD8PR0hARORI2jltLFHHa9mZQNYhRS8bmNVFlR6OvaKpTP+T4Mz1+78g+EgY+QJLcYL4nhL1uylr1JKisIOpXldEHZzJD4jlOyMJ/et6Oc2JjgFI79SiONtUf8EjFkAerunqg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=VTK5V0/V; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E79A2877F8
+	for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 13:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750080391; cv=none; b=nXF6WljGTK2lhmtyRW7p2wmModywHmKkg1nQDmGSfc69Z6ALv/dnrz2sarxXltUSU13EGxXKGkzJeGedU+FdRLp8B9jEbt+Fp4xMidiEOPPzwSXCaUDEVVYE7NkRnPlmENXhIXZOt4qksFvm8T3GxOsQiXeVLmbIpZ5lK8LZsFY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750080391; c=relaxed/simple;
+	bh=W1ULqCjf8lfOUmBr3Wu+Ci3avbmtCxJZhQsdCwBauN4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=N0DsG1iuxriI1/jU3ZWCjD2iD1X9waREmgWqiFAVwudxzI6Chl8o0idua12HmLbX0+KBBPrbvzNWbSpEhreHxjFXYqAeJGjzeygzC74W47p0Zcp0MAnztscBglsbeoey/SVY8ALeCDztIldz5h6J8dX/i5k1u5TrVyXT7g6+hj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WoKnGQcE; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="VTK5V0/V"
-ARC-Seal: i=1; a=rsa-sha256; t=1750076894; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Kn8MGUt3qBaOkBsleWMs/iI7evtX+3Ii+lWmXB8xOO8yonT/tDL4OfelfnPrGyP69Xa6GXt64PMxsM5vBn5YsaN0I5GeJUR7YvPCpzogaDpzyN7GW1fehBmHRRYpAHqyTyzXBh1S8/TsCf+p6V2AaB6zIxcJ7XJ+dTVZeTb4YRc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750076894; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=lS5jmrsM1AStlE4Oaeas/EKugjJN944zsH8rQcQ3FAk=; 
-	b=gZpW6CMh7kONQtxIuB9S8BJSCJKsvjeGsHGDKmIuXDXZlzskn5bJwbdnpsUcmAghdjwm7D9LGAU4Rel8QeQKW1q+5kRysuw841yRbvXfifnWduhN2bYLxbuLNXEh2MTtxoVgPSUuojnwR8DpXHHIQwqbIosI/MoGhZqfAJbm5mE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750076894;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=lS5jmrsM1AStlE4Oaeas/EKugjJN944zsH8rQcQ3FAk=;
-	b=VTK5V0/Vh8vG0ADUhZJqoWC8GNkp9+Edtt7f54cvlzORP0TBC3O3iXDcIRVP1bPg
-	diBzmzi3jUJX7MfK81EwTr1m9SPAyKZNsnywz/gVppbbf7/4KM7BIphS3UCg/GYBOZD
-	MzraVGJabGmAR/4cao207oI0XAYOJPvc3s7lJ85s=
-Received: by mx.zohomail.com with SMTPS id 1750076891122319.76650013837536;
-	Mon, 16 Jun 2025 05:28:11 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Robin Murphy <robin.murphy@arm.com>, Yury Norov <yury.norov@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Heiko Stuebner <heiko@sntech.de>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WoKnGQcE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750080390; x=1781616390;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=W1ULqCjf8lfOUmBr3Wu+Ci3avbmtCxJZhQsdCwBauN4=;
+  b=WoKnGQcEmOCoeRDyW7m6RUcmIFk/LMv99Q2N6WTGyT4wMS1UhG/TAmfq
+   98UZYXGZh/G3UBjIJc6hmuGHK+y/BtuD+GJHuxFQ/2i0Gzt3Wb0ClrzUP
+   E18x8C6NoGmi1QrWvWUKsN/K8C0nIaUxmRJeHmor34U+7j0sJ6ewpiBxT
+   Vx0Wi0D0Mmqnp1BuP+YQVp80ymlp0goHIsQ5G38KeosKy5g+qNejC9hQE
+   qafOWZ0CpIuHfnjBn16bBXXkAVAeuC9ix+RcX5vrnQampIxDnhnMrwPnk
+   r0aDfiL/A6IqvJgZfJSR1ZDSYPInGQVTBiA7FD3WPUx36U6q5G3hUm0lk
+   A==;
+X-CSE-ConnectionGUID: 8L46q8/zRZGSY8i5neCQTQ==
+X-CSE-MsgGUID: penEXraZQWS7CQWeaoeC2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="63255591"
+X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
+   d="scan'208";a="63255591"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 06:26:29 -0700
+X-CSE-ConnectionGUID: sUy1hWcBTaOgchksDDuQnw==
+X-CSE-MsgGUID: y/Hym029QOuoVBlZiI68jA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
+   d="scan'208";a="153426298"
+Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.246.92])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 06:26:10 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Robin Murphy
+ <robin.murphy@arm.com>, Yury Norov <yury.norov@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaehoon Chung
+ <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>, Heiko
+ Stuebner <heiko@sntech.de>, Shreeya Patel <shreeya.patel@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang
+ <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David
+ Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Vinod Koul
+ <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Nicolas
+ Frattaroli <frattaroli.nicolas@gmail.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Jaroslav Kysela
+ <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Maxime
+ Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Shawn Lin <shawn.lin@rock-chips.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy?=
+ =?utf-8?Q?=C5=84ski?=
+ <kwilczynski@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Rob
+ Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Chanwoo
+ Choi <cw00.choi@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>,
  Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
  linux-pm@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev,
  linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
@@ -75,91 +81,112 @@ Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
  kernel@collabora.com, linux-stm32@st-md-mailman.stormreply.com,
  linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
 Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
-Date: Mon, 16 Jun 2025 14:27:55 +0200
-Message-ID: <3361713.44csPzL39Z@workhorse>
-In-Reply-To: <aEw7LBpmkfOqZgf1@yury>
-References:
- <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
+In-Reply-To: <3361713.44csPzL39Z@workhorse>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
  <1437fe89-341b-4b57-b1fa-a0395081e941@arm.com> <aEw7LBpmkfOqZgf1@yury>
+ <3361713.44csPzL39Z@workhorse>
+Date: Mon, 16 Jun 2025 16:26:07 +0300
+Message-ID: <35d8c6372fb38f6d7e452c2e3b5a80327f20dae6@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain
 
-Hello,
+On Mon, 16 Jun 2025, Nicolas Frattaroli <nicolas.frattaroli@collabora.com> wrote:
+> Hello,
+>
+> On Friday, 13 June 2025 16:52:28 Central European Summer Time Yury Norov wrote:
+>> On Fri, Jun 13, 2025 at 02:54:50PM +0100, Robin Murphy wrote:
+>> > On 2025-06-12 7:56 pm, Nicolas Frattaroli wrote:
+>> > > Hardware of various vendors, but very notably Rockchip, often uses
+>> > > 32-bit registers where the upper 16-bit half of the register is a
+>> > > write-enable mask for the lower half.
+>> > > 
+>> > > This type of hardware setup allows for more granular concurrent register
+>> > > write access.
+>> > > 
+>> > > Over the years, many drivers have hand-rolled their own version of this
+>> > > macro, usually without any checks, often called something like
+>> > > HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
+>> > > semantics between them.
+>> > > 
+>> > > Clearly there is a demand for such a macro, and thus the demand should
+>> > > be satisfied in a common header file.
+>> > > 
+>> > > Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
+>> > > version that can be used in initializers, like FIELD_PREP_CONST. The
+>> > > macro names are chosen to not clash with any potential other macros that
+>> > > drivers may already have implemented themselves, while retaining a
+>> > > familiar name.
+>> > 
+>> > Nit: while from one angle it indeed looks similar, from another it's even
+>> > more opaque and less meaningful than what we have already. Personally I
+>> > cannot help but see "hword" as "halfword", so logically if we want 32+32-bit
+>> > or 8+8-bit variants in future those would be WORD_UPDATE() and
+>> > BYTE_UPDATE(), right? ;)
+>> > 
+>> > It's also confounded by "update" not actually having any obvious meaning at
+>> > this level without all the implicit usage context. FWIW my suggestion would
+>> > be FIELD_PREP_WM_U16, such that the reader instantly sees "FIELD_PREP with
+>> > some additional semantics", even if they then need to glance at the
+>> > kerneldoc for clarification that WM stands for writemask (or maybe WE for
+>> > write-enable if people prefer). Plus it then leaves room to easily support
+>> > different sizes (and potentially even bonkers upside-down Ux_WM variants?!)
+>> > without any bother if we need to.
+>> 
+>> I like the idea. Maybe even shorter: FIELD_PREP_WM16()?
+>> 
+>
+> I do think FIELD_PREP_WM16() is a good name. If everyone is okay with this
+> as a name, I will use it in v2 of the series. And by "everyone" I really
+> mean everyone should get their hot takes in before the end of the week,
+> as I intend to send out a v2 on either Friday or the start of next week
+> to keep the ball rolling, but I don't want to reroll a 20 patch series
+> with a trillion recipients more than is absolutely necessary.
 
-On Friday, 13 June 2025 16:52:28 Central European Summer Time Yury Norov wrote:
-> On Fri, Jun 13, 2025 at 02:54:50PM +0100, Robin Murphy wrote:
-> > On 2025-06-12 7:56 pm, Nicolas Frattaroli wrote:
-> > > Hardware of various vendors, but very notably Rockchip, often uses
-> > > 32-bit registers where the upper 16-bit half of the register is a
-> > > write-enable mask for the lower half.
-> > > 
-> > > This type of hardware setup allows for more granular concurrent register
-> > > write access.
-> > > 
-> > > Over the years, many drivers have hand-rolled their own version of this
-> > > macro, usually without any checks, often called something like
-> > > HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
-> > > semantics between them.
-> > > 
-> > > Clearly there is a demand for such a macro, and thus the demand should
-> > > be satisfied in a common header file.
-> > > 
-> > > Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
-> > > version that can be used in initializers, like FIELD_PREP_CONST. The
-> > > macro names are chosen to not clash with any potential other macros that
-> > > drivers may already have implemented themselves, while retaining a
-> > > familiar name.
-> > 
-> > Nit: while from one angle it indeed looks similar, from another it's even
-> > more opaque and less meaningful than what we have already. Personally I
-> > cannot help but see "hword" as "halfword", so logically if we want 32+32-bit
-> > or 8+8-bit variants in future those would be WORD_UPDATE() and
-> > BYTE_UPDATE(), right? ;)
-> > 
-> > It's also confounded by "update" not actually having any obvious meaning at
-> > this level without all the implicit usage context. FWIW my suggestion would
-> > be FIELD_PREP_WM_U16, such that the reader instantly sees "FIELD_PREP with
-> > some additional semantics", even if they then need to glance at the
-> > kerneldoc for clarification that WM stands for writemask (or maybe WE for
-> > write-enable if people prefer). Plus it then leaves room to easily support
-> > different sizes (and potentially even bonkers upside-down Ux_WM variants?!)
-> > without any bother if we need to.
-> 
-> I like the idea. Maybe even shorter: FIELD_PREP_WM16()?
-> 
+I'd never guess what WM stands for in this context without looking it
+up, but I'll be happy if we have FIELD_PREP_ and 16 in there. So works
+for me.
 
-I do think FIELD_PREP_WM16() is a good name. If everyone is okay with this
-as a name, I will use it in v2 of the series. And by "everyone" I really
-mean everyone should get their hot takes in before the end of the week,
-as I intend to send out a v2 on either Friday or the start of next week
-to keep the ball rolling, but I don't want to reroll a 20 patch series
-with a trillion recipients more than is absolutely necessary.
+> To that end, I'd also like to get some other naming choices clarified.
+>
+> As I gathered, these two macros should best be placed in its own header.
+> Is include/linux/hw_bitfield.h a cromulent choice, or should we go with
+> include/linux/hw_bits.h?
 
-To that end, I'd also like to get some other naming choices clarified.
+I'll let y'all fight it out.
 
-As I gathered, these two macros should best be placed in its own header.
-Is include/linux/hw_bitfield.h a cromulent choice, or should we go with
-include/linux/hw_bits.h?
+> Furthermore, should it be FIELD_PREP_WM16_CONST or FIELD_PREP_CONST_WM16?
+> I'm personally partial to the former.
 
-Furthermore, should it be FIELD_PREP_WM16_CONST or FIELD_PREP_CONST_WM16?
-I'm personally partial to the former.
+Ditto.
 
-And finally, is it okay if I leave out refactoring Intel's
-_MASKED_FIELD() or should I see if I can at least replace its
-implementation while I'm at it?
+> And finally, is it okay if I leave out refactoring Intel's
+> _MASKED_FIELD() or should I see if I can at least replace its
+> implementation while I'm at it?
 
-For less opinionated changes, I'll also change all the `U` literal
-suffixes to `UL` wherever I've added them. As I understand it, it doesn't
-really make a difference in these instances, but `UL` is more prevalent
-in the kernel.
-
-Kind regards,
-Nicolas Frattaroli
+I think you can just let us deal with that afterwards. You have enough
+users already.
 
 
+BR,
+Jani.
+
+
+>
+> For less opinionated changes, I'll also change all the `U` literal
+> suffixes to `UL` wherever I've added them. As I understand it, it doesn't
+> really make a difference in these instances, but `UL` is more prevalent
+> in the kernel.
+>
+> Kind regards,
+> Nicolas Frattaroli
+>
+>
+
+-- 
+Jani Nikula, Intel
