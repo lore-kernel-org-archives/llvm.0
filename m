@@ -1,140 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA72261570;
-	Mon, 16 Jun 2025 11:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750074005; cv=none; b=S98qssLNrGwzHBaSjUrWAzG9CvFdemH7IScMX7PypivrbyOfzaAtcNCwE44WORu9OtqT/0WrUpA+J7lq9fYqbW22z79X0KYrq9dElFh1y2qn37FbBLB0jN8qdqvwk9Lcx7RBIJmT1f/MDOdEckXQHRiIwU6/0mTVD1jGBgtLsJQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750074005; c=relaxed/simple;
-	bh=UGARc4J6l7iTL9kWQcHxUPxULYLkQMKq1AkhDvpK+EU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KOj6oZJMornhTAg8ahvDhHXJUn7V27t6mrgNDoFzWag6oZF0TkGhfZwC/vkDSexbn7evSGcChkSBGWrywCppFI1QNkI/ZvIbdlF0n8pjgmwekroVT9B8qsTP1VH2KPcrxxyYRuVLzSmDrLQD1oOh+nyX5m9GDFdMqjL+i4/LxvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nhbvjXex; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF942E426F
+	for <llvm@lists.linux.dev>; Mon, 16 Jun 2025 12:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750076964; cv=pass; b=EIHH9ZKfsogRQz58qN/d1EMCunDQmJEK1WzGpzC403Mev+amN3XGn3huAimdB0X0d8vk9jSpH0QfoUJXBiJV0+JLnMhJfng2bgp2XsvycP9iPdiMJm/Z4J52BR/8CxS9J8m5mK8bbYRhpftWqayUFbDJnuTyedWouvfCFeGIkz8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750076964; c=relaxed/simple;
+	bh=D1nrTM3OWHNa73fOHQSyszn7QncKX5gjfoZAZmCJOV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nMM6Bn3Wd2n9NI9VwHaJO5KwpOO7FNHwt7wEQFvD8PR0hARORI2jltLFHHa9mZQNYhRS8bmNVFlR6OvaKpTP+T4Mz1+78g+EgY+QJLcYL4nhL1uylr1JKisIOpXldEHZzJD4jlOyMJ/et6Oc2JjgFI79SiONtUf8EjFkAerunqg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=VTK5V0/V; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nhbvjXex"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750074003; x=1781610003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UGARc4J6l7iTL9kWQcHxUPxULYLkQMKq1AkhDvpK+EU=;
-  b=nhbvjXexUBPx9wKp+L6ePZRcD//SfJBXegF/l3lfXqvmyIx7gycU2R4s
-   KF7sD7t3duk9Tte+CvRJsJXN5xQofoHiGYJzhuKE3Y4Iu7a+nVPZduvVH
-   ZGO6fs1ybHKQ3iMu2kMhMmneaonZYttpAJjy3GdE9L6cfNsw8QMUn4PZh
-   zPz9dxRYw7581RLNRwFj8g/Un2ekwMKbnkfrNvi/gSc8wCBSAy6maH0gV
-   uu1UI9ChVFHGL/iGxg6trMuPuWo5E9Gs3ouu2KuyW0p/hhBfqFP+OvgQM
-   RIMJUlxiPb3zEh25R4rxWsE80+itU7E5vZBmP3EGidLzIZjdyrx2LSaVA
-   g==;
-X-CSE-ConnectionGUID: LN01m64ZQumFRxipwQPNIA==
-X-CSE-MsgGUID: MQwaK7LBQs+4+2MdgJpj1g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="69658296"
-X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="69658296"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:40:03 -0700
-X-CSE-ConnectionGUID: ox07V1DyRueyaq7QBFpl7g==
-X-CSE-MsgGUID: y9HyWZnqRjyX6L26ZmkiUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="152284195"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 16 Jun 2025 04:39:58 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uR8Bv-000EzU-2M;
-	Mon, 16 Jun 2025 11:39:55 +0000
-Date: Mon, 16 Jun 2025 19:39:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, x86@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, bp@alien8.de,
-	dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
-	mjguzik@gmail.com, luto@kernel.org, acme@kernel.org,
-	namhyung@kernel.org, tglx@linutronix.de, willy@infradead.org,
-	jon.grimm@amd.com, bharata@amd.com, raghavendra.kt@amd.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
-	ankur.a.arora@oracle.com
-Subject: Re: [PATCH v4 13/13] x86/folio_zero_user: Add multi-page clearing
-Message-ID: <202506161939.YrEAfTPY-lkp@intel.com>
-References: <20250616052223.723982-14-ankur.a.arora@oracle.com>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="VTK5V0/V"
+ARC-Seal: i=1; a=rsa-sha256; t=1750076894; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Kn8MGUt3qBaOkBsleWMs/iI7evtX+3Ii+lWmXB8xOO8yonT/tDL4OfelfnPrGyP69Xa6GXt64PMxsM5vBn5YsaN0I5GeJUR7YvPCpzogaDpzyN7GW1fehBmHRRYpAHqyTyzXBh1S8/TsCf+p6V2AaB6zIxcJ7XJ+dTVZeTb4YRc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1750076894; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=lS5jmrsM1AStlE4Oaeas/EKugjJN944zsH8rQcQ3FAk=; 
+	b=gZpW6CMh7kONQtxIuB9S8BJSCJKsvjeGsHGDKmIuXDXZlzskn5bJwbdnpsUcmAghdjwm7D9LGAU4Rel8QeQKW1q+5kRysuw841yRbvXfifnWduhN2bYLxbuLNXEh2MTtxoVgPSUuojnwR8DpXHHIQwqbIosI/MoGhZqfAJbm5mE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750076894;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=lS5jmrsM1AStlE4Oaeas/EKugjJN944zsH8rQcQ3FAk=;
+	b=VTK5V0/Vh8vG0ADUhZJqoWC8GNkp9+Edtt7f54cvlzORP0TBC3O3iXDcIRVP1bPg
+	diBzmzi3jUJX7MfK81EwTr1m9SPAyKZNsnywz/gVppbbf7/4KM7BIphS3UCg/GYBOZD
+	MzraVGJabGmAR/4cao207oI0XAYOJPvc3s7lJ85s=
+Received: by mx.zohomail.com with SMTPS id 1750076891122319.76650013837536;
+	Mon, 16 Jun 2025 05:28:11 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Robin Murphy <robin.murphy@arm.com>, Yury Norov <yury.norov@gmail.com>,
+ Jakub Kicinski <kuba@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Heiko Stuebner <heiko@sntech.de>,
+ Shreeya Patel <shreeya.patel@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-pm@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev,
+ linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-sound@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+ kernel@collabora.com, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH 01/20] bitfield: introduce HWORD_UPDATE bitfield macros
+Date: Mon, 16 Jun 2025 14:27:55 +0200
+Message-ID: <3361713.44csPzL39Z@workhorse>
+In-Reply-To: <aEw7LBpmkfOqZgf1@yury>
+References:
+ <20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com>
+ <1437fe89-341b-4b57-b1fa-a0395081e941@arm.com> <aEw7LBpmkfOqZgf1@yury>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250616052223.723982-14-ankur.a.arora@oracle.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-Hi Ankur,
+Hello,
 
-kernel test robot noticed the following build warnings:
+On Friday, 13 June 2025 16:52:28 Central European Summer Time Yury Norov wrote:
+> On Fri, Jun 13, 2025 at 02:54:50PM +0100, Robin Murphy wrote:
+> > On 2025-06-12 7:56 pm, Nicolas Frattaroli wrote:
+> > > Hardware of various vendors, but very notably Rockchip, often uses
+> > > 32-bit registers where the upper 16-bit half of the register is a
+> > > write-enable mask for the lower half.
+> > > 
+> > > This type of hardware setup allows for more granular concurrent register
+> > > write access.
+> > > 
+> > > Over the years, many drivers have hand-rolled their own version of this
+> > > macro, usually without any checks, often called something like
+> > > HIWORD_UPDATE or FIELD_PREP_HIWORD, commonly with slightly different
+> > > semantics between them.
+> > > 
+> > > Clearly there is a demand for such a macro, and thus the demand should
+> > > be satisfied in a common header file.
+> > > 
+> > > Add two macros: HWORD_UPDATE, and HWORD_UPDATE_CONST. The latter is a
+> > > version that can be used in initializers, like FIELD_PREP_CONST. The
+> > > macro names are chosen to not clash with any potential other macros that
+> > > drivers may already have implemented themselves, while retaining a
+> > > familiar name.
+> > 
+> > Nit: while from one angle it indeed looks similar, from another it's even
+> > more opaque and less meaningful than what we have already. Personally I
+> > cannot help but see "hword" as "halfword", so logically if we want 32+32-bit
+> > or 8+8-bit variants in future those would be WORD_UPDATE() and
+> > BYTE_UPDATE(), right? ;)
+> > 
+> > It's also confounded by "update" not actually having any obvious meaning at
+> > this level without all the implicit usage context. FWIW my suggestion would
+> > be FIELD_PREP_WM_U16, such that the reader instantly sees "FIELD_PREP with
+> > some additional semantics", even if they then need to glance at the
+> > kerneldoc for clarification that WM stands for writemask (or maybe WE for
+> > write-enable if people prefer). Plus it then leaves room to easily support
+> > different sizes (and potentially even bonkers upside-down Ux_WM variants?!)
+> > without any bother if we need to.
+> 
+> I like the idea. Maybe even shorter: FIELD_PREP_WM16()?
+> 
 
-[auto build test WARNING on perf-tools-next/perf-tools-next]
-[also build test WARNING on tip/perf/core perf-tools/perf-tools linus/master v6.16-rc2 next-20250616]
-[cannot apply to acme/perf/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I do think FIELD_PREP_WM16() is a good name. If everyone is okay with this
+as a name, I will use it in v2 of the series. And by "everyone" I really
+mean everyone should get their hot takes in before the end of the week,
+as I intend to send out a v2 on either Friday or the start of next week
+to keep the ball rolling, but I don't want to reroll a 20 patch series
+with a trillion recipients more than is absolutely necessary.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankur-Arora/perf-bench-mem-Remove-repetition-around-time-measurement/20250616-132651
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/20250616052223.723982-14-ankur.a.arora%40oracle.com
-patch subject: [PATCH v4 13/13] x86/folio_zero_user: Add multi-page clearing
-config: x86_64-buildonly-randconfig-003-20250616 (https://download.01.org/0day-ci/archive/20250616/202506161939.YrEAfTPY-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250616/202506161939.YrEAfTPY-lkp@intel.com/reproduce)
+To that end, I'd also like to get some other naming choices clarified.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506161939.YrEAfTPY-lkp@intel.com/
+As I gathered, these two macros should best be placed in its own header.
+Is include/linux/hw_bitfield.h a cromulent choice, or should we go with
+include/linux/hw_bits.h?
 
-All warnings (new ones prefixed by >>):
+Furthermore, should it be FIELD_PREP_WM16_CONST or FIELD_PREP_CONST_WM16?
+I'm personally partial to the former.
 
->> arch/x86/mm/memory.c:61:6: warning: no previous prototype for function 'folio_zero_user' [-Wmissing-prototypes]
-      61 | void folio_zero_user(struct folio *folio, unsigned long addr_hint)
-         |      ^
-   arch/x86/mm/memory.c:61:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      61 | void folio_zero_user(struct folio *folio, unsigned long addr_hint)
-         | ^
-         | static 
-   1 warning generated.
+And finally, is it okay if I leave out refactoring Intel's
+_MASKED_FIELD() or should I see if I can at least replace its
+implementation while I'm at it?
+
+For less opinionated changes, I'll also change all the `U` literal
+suffixes to `UL` wherever I've added them. As I understand it, it doesn't
+really make a difference in these instances, but `UL` is more prevalent
+in the kernel.
+
+Kind regards,
+Nicolas Frattaroli
 
 
-vim +/folio_zero_user +61 arch/x86/mm/memory.c
-
-    39	
-    40	/*
-    41	 * folio_zero_user() - multi-page clearing.
-    42	 *
-    43	 * @folio: hugepage folio
-    44	 * @addr_hint: faulting address (if any)
-    45	 *
-    46	 * Overrides common code folio_zero_user(). This version takes advantage of
-    47	 * the fact that string instructions in clear_pages() are more performant
-    48	 * on larger extents compared to the usual page-at-a-time clearing.
-    49	 *
-    50	 * Clearing of 2MB pages is split in three parts: pages in the immediate
-    51	 * locality of the faulting page, and its left, right regions; with the local
-    52	 * neighbourhood cleared last in order to keep cache lines of the target
-    53	 * region hot.
-    54	 *
-    55	 * For GB pages, there is no expectation of cache locality so just do a
-    56	 * straight zero.
-    57	 *
-    58	 * Note that the folio is fully allocated already so we don't do any exception
-    59	 * handling.
-    60	 */
-  > 61	void folio_zero_user(struct folio *folio, unsigned long addr_hint)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
