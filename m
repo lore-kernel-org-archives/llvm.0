@@ -1,139 +1,121 @@
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9934B28BABF;
-	Tue, 17 Jun 2025 06:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13D628DEE7;
+	Tue, 17 Jun 2025 07:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750142462; cv=none; b=gQsQ6frzwiH90jxOgATXOjr9wW0QX86KJ2e9ZEjFASjii3VEAJ+3RXv9ZuR9RUWIp3VGpYaB7l+s5uPEoquwJHqWzvU2XPGkP0vr4bmpZrPuxextrqbmDZwM1WJ8T0rnMukYwQwZ9CHj+8wFr129i6dsYr+KD/tTeg19jkBgH/w=
+	t=1750143842; cv=none; b=tCCZ2ZhjT0cQS+3Y5CL08KZiXDdasXHh4I1LptkCZx14Kc21JURFk+L582t23bAoTryfttT2TlOMo9aN3wfVogmXnzgNtLmi3Rq2mHjuXWo/AUHfDvJ8OHyc1bN+iF/uQT+QGfC31sMNL2RPLH3F6nQ6Xv0hN2tK8jCoVHBl2ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750142462; c=relaxed/simple;
-	bh=W/eYVUsYjhYNAzlFtlDPOabUz5P88wa8dv8eQF4JdOw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HFpfg4SJejmzf524qS9SjKg8/npmmw+yHhntwYm/0SCfxG2cg1R+YWtAFVW2lZ9aOz1p4LQsdYcA4hhM2jEgXNtxA9hsj2PD2zwI4nLvyRsvE5EJz3tAqAGigPX8NuoBQ7YIABt5wn6K3I7yhjHn7Z2IWn95HXdro4IF9OE1YII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=UrMD+QCF; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1750143842; c=relaxed/simple;
+	bh=HQ8YwPXH3tjWKjgG77C8MtR06NMh+4CK2/PrreWPfkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kbYdx/8ls8uusVWd4PMg0RMSgg0s+ZaABA4Emj8p3ApjF+DXlJJkXJ6Gk0c+NaB/zPz6KkwcREZwk6qcFWmmTxY9EuEnrihJ2ULI7CuyZvZEQxXXE+zU7kaR4BhhFfeNwI5SYiGGoNNgJbQBBjrD0xxEPU/5p0Awmv+vyx1O6Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aCkszgX3; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="UrMD+QCF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1750142431; x=1750747231; i=markus.elfring@web.de;
-	bh=W/eYVUsYjhYNAzlFtlDPOabUz5P88wa8dv8eQF4JdOw=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=UrMD+QCFTVv8PB+r07tztOzJIRJbG37CPBe6J22wgFUhpavijxjPd62KSa56jZe6
-	 5qL79mTj9D2rgHWsf7JtMlFN5DuoGjhgElX7HQF95j3w+xzjp9LVFfi1t2CcX4cnn
-	 zMCQUo4jq59GaFYKQjWR7cfzIjzS0pTmUR0HmCZtpk4hfjrPLmW5uhNZdYkCC1w55
-	 AZ3mmsn9/IO1vaQv08xoonV7DYjVO0Lw3wtZhYELb8BC0bqYf9lWodCwlET0Bc2yz
-	 RNyhwGi63lSF1zI/O9Ylpg0rlK0gcDzcMketaiWvdH74j95bYoWiAoiAtOoEqICp2
-	 UCHdfT1kbzAjaIKt5w==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.69.238]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MRk0W-1uLStw45Uo-00L8b0; Tue, 17
- Jun 2025 08:40:31 +0200
-Message-ID: <f9bffb72-b463-45d0-ac72-9a5ff4daec38@web.de>
-Date: Tue, 17 Jun 2025 08:40:28 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aCkszgX3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750143841; x=1781679841;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HQ8YwPXH3tjWKjgG77C8MtR06NMh+4CK2/PrreWPfkg=;
+  b=aCkszgX3OMmejUrsUayQHEaRiRfCUhKuUZYBz5tuc24Hd06xjYZ+xjXg
+   TTfKZ8NDAws7LKbHwAbD7v1pjdAj8hZs6sF1LYAAvLnR49u2BNSly7Sat
+   2gIFq9VF2yA8EztPyO7HF30fk2kmWTuD/ZsXhjoHMB97TPQ/0gd9/9fWu
+   POS3tL4JbIGyepR9z+Iy3eIPy9gbBpg8PbUG63kS5c5A52cEdB/40VGlt
+   Bibs97ANLtan6Sd33DQhpuqWF3AtFUAtnlyxwBg4ATZIRoNnQyH26adcm
+   negAbnDdyEP4exGHtjEVXMsEDEDevdhcF8Un37IpUxrBu6PuRZJeMkKno
+   w==;
+X-CSE-ConnectionGUID: SDU9VkUWRKOyjjesk2wHRA==
+X-CSE-MsgGUID: JH+AkwANSbKqtwbn+4rOIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="74838591"
+X-IronPort-AV: E=Sophos;i="6.16,242,1744095600"; 
+   d="scan'208";a="74838591"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 00:03:58 -0700
+X-CSE-ConnectionGUID: tKCvDGCtRgy6dUU/aEpmzQ==
+X-CSE-MsgGUID: wktvsOXqSDOYdlPPEud21Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,242,1744095600"; 
+   d="scan'208";a="185945975"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 17 Jun 2025 00:03:56 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uRQMM-000FhQ-0M;
+	Tue, 17 Jun 2025 07:03:54 +0000
+Date: Tue, 17 Jun 2025 15:03:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: onur-ozkan <work@onurozkan.dev>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	boqun.feng@gmail.com, onur-ozkan <work@onurozkan.dev>,
+	thatslyude@gmail.com
+Subject: Re: [PATCH] Add `ww_mutex` support & abstraction for Rust tree
+Message-ID: <202506171422.JVA1Gpbc-lkp@intel.com>
+References: <20250616162448.31641-1-work@onurozkan.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v3] drm/amd/display: Fix exception handling in
- dm_validate_stream_and_context()
-To: Alex Hung <alex.hung@amd.com>, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, Alex Deucher <alexander.deucher@amd.com>,
- Aurabindo Pillai <aurabindo.pillai@amd.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Dominik Kaszewski <dominik.kaszewski@amd.com>,
- Fangzhi Zuo <Jerry.Zuo@amd.com>, Harry Wentland <harry.wentland@amd.com>,
- Leo Li <sunpeng.li@amd.com>, Mario Limonciello <mario.limonciello@amd.com>,
- Roman Li <roman.li@amd.com>, Simona Vetter <simona@ffwll.ch>,
- Tom Chung <chiahsuan.chung@amd.com>, Wayne Lin <Wayne.Lin@amd.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
- lkp@intel.com, oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev,
- cocci@inria.fr, Melissa Wen <mwen@igalia.com>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <e6656c83-ee7a-a253-2028-109138779c94@web.de>
- <ea0ff67b-3665-db82-9792-67a633ba07f5@web.de>
- <32674bac-92c2-8fc7-0977-6d2d81b3257f@amd.com>
- <da489521-7786-4716-8fb8-d79b3c08d93c@web.de>
- <8684e2ba-b644-44c8-adf7-9f1423a1251d@web.de>
- <ba89d859-f132-4e7d-ba29-47331e02152a@amd.com>
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <ba89d859-f132-4e7d-ba29-47331e02152a@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:hnrgU48qW8YbbumGxfVVaCQYutIW5tQhAnG2uxaNogCv+Volpoz
- NtmjNa9mVp1Vuc014Zos4Xx/7c7bXp3juCUjI3normNm47Rk1rswj21iMGDp7AcOX7DblMb
- KwwbP0mep3lNNqI9JxRT3dxZn3UYBMTSkeenIAn3Ux2HAwTpkF0J6NIhXnlxWYwlkXIwnis
- mJXovzuulJoDRcs3vcBIQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ELls9iipYWU=;wtK+btvYB86GZAQM2s+IwtLUGsZ
- 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
- 9hm0Da2hm0u85xqH6UL3XzL/PXyQ0N/hOlGj4A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250616162448.31641-1-work@onurozkan.dev>
 
-=E2=80=A6
->> 1. Thus return directly if
-=E2=80=A6
-> I guess the intention was to reduce goto statements.
-=E2=80=A6
+Hi onur-ozkan,
 
-Partly, yes.
+kernel test robot noticed the following build errors:
 
-See also once more:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/coding-style.rst?h=3Dv6.16-rc2#n532
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on linus/master v6.16-rc2 next-20250616]
+[cannot apply to tip/locking/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Regards,
-Markus
+url:    https://github.com/intel-lab-lkp/linux/commits/onur-ozkan/Add-ww_mutex-support-abstraction-for-Rust-tree/20250617-003523
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20250616162448.31641-1-work%40onurozkan.dev
+patch subject: [PATCH] Add `ww_mutex` support & abstraction for Rust tree
+config: x86_64-randconfig-074-20250617 (https://download.01.org/0day-ci/archive/20250617/202506171422.JVA1Gpbc-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250617/202506171422.JVA1Gpbc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506171422.JVA1Gpbc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 20.1.2
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+>> error[E0063]: missing field `__bindgen_anon_1` in initializer of `bindings::lock_class_key`
+   --> rust/kernel/sync/lock/ww_mutex.rs:52:26
+   |
+   52 |             acquire_key: bindings::lock_class_key {},
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^ missing `__bindgen_anon_1`
+--
+>> error[E0063]: missing field `__bindgen_anon_1` in initializer of `bindings::lock_class_key`
+   --> rust/kernel/sync/lock/ww_mutex.rs:53:24
+   |
+   53 |             mutex_key: bindings::lock_class_key {},
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^ missing `__bindgen_anon_1`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
