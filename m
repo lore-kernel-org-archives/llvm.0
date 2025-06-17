@@ -1,121 +1,124 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3272BF014
-	for <llvm@lists.linux.dev>; Tue, 17 Jun 2025 01:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BB11EB2F;
+	Tue, 17 Jun 2025 01:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750122135; cv=none; b=DNTYMFAiQ6uALQLuu6g+URAVSMzVsX22FooZGYFq+p6lJFrrEfAlls1cJ+VPHhQ0gYJTPFe1ZFHYOAmF9pyKMLGV/Eix8fBQrY1OKYtGwYPQE4HBYtL0E4/6V6I+FJXPvLkgonGWy181mo6X2YxCZX431GJ800xZ2HPRrfBNrOw=
+	t=1750125580; cv=none; b=AP6pHWzscTdSY+xc8FOLIp1c94VqqdPzfcnRuL8GBwJYEhzOJgvLDCfupxmNdopj05IjLign5ASg9IQExnyp5lIYGII+r1yPl/nww9woAsDCh48/2r7RmSTIPBjVTuVcWurSI22m2wg7NNTaSmPSahsJyXyBXcwCzhFm8NliiNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750122135; c=relaxed/simple;
-	bh=ospMXSe6TcH5ZFslI7eHGzEFVdVEcnM7JHD+rdR9szU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eGskLgAed+Y6UMwncyW1BxM6Xtot48eQD1b5Jje0rgeBBiQpUsiAY3FBQigOFw765kC47Co3e7wfhFNOtXCX41QFWAIpUsiPPEeNRH5TBzTv2dApd+PdhDJ2EbwOeRSYAcU34rdIDLxCB7B5uP4lLha5yH+rabvae5tRBrOM2mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a37JUkrn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1750125580; c=relaxed/simple;
+	bh=+Coljb4R4UpMZYUnBt8a/U8959C/WB4Dycfl9OSu1vY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dd+VLWE/mBNE2fZwmhlzSj4Gj3TjW9FhoUltM2RV0IAUDqofilmz0BAN1cXcQAF4999f3qgIu6t/syJvhbUAg0LoFh0N1AoB7bjRFMiMta+oaJJ6sbFxIKvzC26iFYcipaWfugfzFKHasenrI8HlB1Nlzxklrn3788Mgw7LoU04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HyUyJdkf; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a37JUkrn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750122130;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=38zI0uT4iLHePXEyU7bXPqdOLJbZwGTLBknVjIpvzL4=;
-	b=a37JUkrniuq8HIJbB1nD7x5J8aWCrHRv4uwaAth40Wi9RcAXZQbp/TN3whdl0dC8wwke0H
-	dCmvszYi6cEe39BFGhl81bdAe/EtBNNYkY7IeG3bJaMssJccsCzNPt2Niqnjjw8mxoU1Yl
-	ws0se3Pg7zuQsCAIsp5c8dzm8fJiWfo=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-468-EwxVO8zFNn-41r3sf4KyFw-1; Mon,
- 16 Jun 2025 21:02:08 -0400
-X-MC-Unique: EwxVO8zFNn-41r3sf4KyFw-1
-X-Mimecast-MFC-AGG-ID: EwxVO8zFNn-41r3sf4KyFw_1750122127
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 17DCC195608C
-	for <llvm@lists.linux.dev>; Tue, 17 Jun 2025 01:02:07 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4FA21180045B;
-	Tue, 17 Jun 2025 01:02:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 8 of 100): Test report for master
- (6.16.0-rc2, upstream-mainline, 44a5ab7a)
-Date: Tue, 17 Jun 2025 01:02:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HyUyJdkf"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-235f9ea8d08so50446745ad.1;
+        Mon, 16 Jun 2025 18:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750125578; x=1750730378; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1hX1AMDY5tzO+6pgqDEAwgTSbR/ALB7lMXeQZAvSn1M=;
+        b=HyUyJdkfAPzQBH2APcOSTA27DIAZtIlF5Vswtenieg+B5s4IEnDNGksmKJ8g6KrQAd
+         aKXcdNUtkQYZeK/8qPlSJXCp8OB//CUW6+EcabsIU36JyHtmcpzw/9VG4ytG6gBgP3eV
+         UpySHGBwR60Dwelxd42Ifi90zfVpzt7Wu5VirdGBmh+lNDVawHKMKMPmQelIMLo7m8m1
+         kzLr4P9rzMeZdIIm2M/1ZCYVs+ovrKICuTLyltAU2oeQ99ypUIA1AE9Xq60dQuiWAbcI
+         R5M4pfUkVUU4Yg09zRPep5PI6ByX0N6L4o0eF7KY9Gm8oKa5ZYoqqm+TbCDElE8flOLW
+         2HHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750125578; x=1750730378;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1hX1AMDY5tzO+6pgqDEAwgTSbR/ALB7lMXeQZAvSn1M=;
+        b=c58AdebTYfPtI+mwwz47O46e7YRKPsAHZ2/Udz5w1yDc65D7Ixv9lm81tBAnXxsV0c
+         yLsVtiaU0Zx4GzNz6CwLXZSaSe4CFkv0V9EOdC2/3+/1uDeRE6SD3pQw9/UeI0Pbzj6Q
+         rN4DV/GE3pjyNX3L4WjPtPrsoyiqZ8DBLK5uGHBJsMYS9HVdCmBSTQVXeIL1Kq//Hq6+
+         p88FypSWEvzGPR8ogCV0ais9T8h9sE3o1cvJ6yE7lUq1gVJCAHBdz09Iv7JbvfouVrIm
+         FFICrM2KVmhY7tkPk/OJZZ9Er73Hc7T+ioGoznHagNY2+5J3Qf5UKe9lbMqlixaUuThD
+         Ys9w==
+X-Forwarded-Encrypted: i=1; AJvYcCV30HWCKcoIL6ZqTYAf5KHMHeXQzrt7K8a+O4Uz/w0Wml1ljz6LZpmkWz3vI4hPK5gFFT+fSg==@lists.linux.dev, AJvYcCWwr/e8AoU9xYH+rlCtMTVGCViM10ZT+IVJt8p3gucOXEk+gIBLFB1nS2LnjX0PhOFODW0tFQ==@lists.linux.dev, AJvYcCX0HLLwZWcPsXRC0uYGSKpltqlpXgdUpnwGSsiNFs8tP2bC44JOBzr8nXZFD1H8EVFOa7oauo4b8Q==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz/B/sttEYyIQspaEEUpGS/pV7gV2eN42cfAHlNXZwLlyCFQKCS
+	qZ2GpEGtSmq4PgiFN01TEOpIuYY2TiGPAARY382k4s2P5QmRmh3LLcAt
+X-Gm-Gg: ASbGncuGafzzbUL91cV4u5UwjG8fsAdH1crtc5fBg892aV3aJNl1hlw5eug4qvoVOr0
+	yFfo8Qu5fPWLzthpviG3Cl9/fhK65uqKFQ0sv9wJuY6GAWCWOslSt0u4zm5e+z+Ga1H9tlm/7Dm
+	F2eLRLwzAQc+y64DPsg68d6CdrJnHZh3aNN/5J9RbYGP592gaLCyFeQcSNkTHy9sCWVJtNMjRUO
+	cMGG/czERHEZnz31ckClP238VfS4tv5ZK0pSMxU9yH/ujqnaOfXR4GWqc2gCfrm5rPc+EOcpaDN
+	NJZLLN7nTT7a37eAyimlQKQwJc5CvPZuY3Df/HAONXCysUTggRZ2WTIutlh79g==
+X-Google-Smtp-Source: AGHT+IENVlr6sfypZBCSgv1TrxLQcdnU8woHB/y1+TMTtAT53FcBiiSN7tzD7G2ULV+Kckou8Pa6UQ==
+X-Received: by 2002:a17:902:f551:b0:220:c4e8:3b9f with SMTP id d9443c01a7336-2366aeea034mr181020465ad.0.1750125578166;
+        Mon, 16 Jun 2025 18:59:38 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365dea9259sm68798855ad.157.2025.06.16.18.59.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 18:59:37 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id BD1934241812; Tue, 17 Jun 2025 08:59:34 +0700 (WIB)
+Date: Tue, 17 Jun 2025 08:59:34 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v3 02/15] genpt: Add Documentation/ files
+Message-ID: <aFDMBt1J1w8I_A8U@archie.me>
+References: <0-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
+ <2-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <50884.125061621020800390@us-mta-468.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: gAAPWsX_i8Svj8KYzmiL0e7y10DvTQUrcHY5aeaVtlc_1750122127
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4/ywsSHr1lDelbCB"
+Content-Disposition: inline
+In-Reply-To: <2-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
+
+
+--4/ywsSHr1lDelbCB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Jun 16, 2025 at 03:06:05PM -0300, Jason Gunthorpe wrote:
+> +The generic tests are intended to prove out the format functions and give
+> +clearer failures to speed finding the problems. Once those pass then the=
+ entire
+                    to speed up finding...
+> +kunit suite should be run.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thanks.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Kernel information:
-    Commit message: Merge tag 'powerpc-6.16-3' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/powerpc/linux
+--4/ywsSHr1lDelbCB
+Content-Type: application/pgp-signature; name=signature.asc
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1872559865
+-----BEGIN PGP SIGNATURE-----
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaFDMAgAKCRD2uYlJVVFO
+o5mNAP9EmUtcal7Izvqw7lP3O9S78LPihsJ1bErtgFPJlzLqWgEAlIEmVujduHqZ
+WoGwLnF3VHBf8yd0JdamQ/i9qhWhagE=
+=/KQE
+-----END PGP SIGNATURE-----
 
-
-Tests that were not ran because of internal issues:
-    kselftests upstream - bpf_test_progs [x86_64]
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--4/ywsSHr1lDelbCB--
