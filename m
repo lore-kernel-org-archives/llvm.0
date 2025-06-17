@@ -1,79 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62651254849;
-	Tue, 17 Jun 2025 20:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CD82EF9AE;
+	Tue, 17 Jun 2025 21:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750192955; cv=none; b=mhhztWH1K5JCYkomQEMaGxUASUxd6FOwtItRa9aabQ4xO8BOMXZ6ZVylO2cUat4WuqcDy4J/9RdVwrROfSq9/iahgUTi3Og+FaaoMOCeWHJyBoq449K3imnPzmu3jp3FeFqAvyRpN9pYowvIc/wHwKL6axQd7LB/m06U5rZ1oIc=
+	t=1750194154; cv=none; b=FVopShaktmzJNPzvrgs4Ke3+6HKud6yRJdeF08HVqNH2G3E+n+Z0i8SKOOVinihMylPny5Ghenb1+8e9PF4vmvM4NRHh3IJlSZd4vfsASG+CkIHR/iVewub1LNLfQbr5Ws6MwAtcZYIAXVqh8Qr/0PxOqEZAV0IdRd/qt+T41WQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750192955; c=relaxed/simple;
-	bh=q1SGR7cquCfqIcHgDM+KF+k+8AQGKd0ZfPTWkoXLe20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YrqmSdgBVS71fmSSzfrrWnn5YDNdgB03wAK/m8ArFE2tSdQ/SPynRTEZF5qN4BpedaOZop+L6Zg2zijRn6kIcP3AC4U8pSmoy6HF1nXivlQUYDiVzOTgh89bM+HYofdk3Z4FPWzVrvG72aTp92RwHrcOzGjo2tbVUDAQdhA1jXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g8vS5rjj; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1750194154; c=relaxed/simple;
+	bh=5RPYnG9xpdhEMO/Ay444O5+IorN3tv2dw/ehK4e1K5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=W5e/oPNylHgQqqh6ww69rWPBQ0ALaYLXgOd6HEy+wUSLgpnKFIsug7blUdZLSp53WtnKsaWAe8X1qZ+jNob9I/vX1Ufbv0ebgKx7K4ii69lfilnRtUy5DnKFQ/rcCONx2MfTcCBzC5Shyo/I6Zt9w8gzJhyeW71FeRkz2M3DRb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jxuvn1CD; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g8vS5rjj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jxuvn1CD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750192954; x=1781728954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q1SGR7cquCfqIcHgDM+KF+k+8AQGKd0ZfPTWkoXLe20=;
-  b=g8vS5rjj264+D8tbMXPv5SB7P9CKplc4HPM9clC2RpYpA+n8dJXwEipt
-   /kYvOe9OjgWWpXVZ3dKmMRrwC0U7O0MHzC68+MunvlMgaqxmCLKY5W4/4
-   0xz26rSAQVepTVazr7mAvH4k3NIrZmMv7Ih9oAcquUqjB+JmpfkPDbt/Y
-   uZ1PfPH7E+Ev/D2hEPwinvKdxWm2sCKVUj0k4Gp5Ztk8LIzlw6zipHqLP
-   s9NFDbWKLlwk3WajS+yEvRFbz+YxC9lCmmS0IclvRinzVGX5GFnFh7luk
-   1OGx2IrWhTTkJ9oZN/5zBeHRfwLOdjlk/W/Jo8jc5PJpCeSx5vcO7Tk/w
-   w==;
-X-CSE-ConnectionGUID: BG1cxqprTYmYiHm8l21RIQ==
-X-CSE-MsgGUID: S+pHQP5nRju5LPXurCfiPw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11467"; a="52092272"
+  t=1750194153; x=1781730153;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5RPYnG9xpdhEMO/Ay444O5+IorN3tv2dw/ehK4e1K5Q=;
+  b=Jxuvn1CD1/VQjYenFRcVaMOADehSQtKkbZxQOwSEmJAo3Iy2OVwm3y+3
+   NmJ3RDSuaiT20SgUhupxILIYXPJskBYWHpbHR3b4NFO9XiJLlrbztSe+x
+   934FBvgiwovQYAclulyVnOHJidocLvTh+0RBpl/Jguf+3QnVITfU2yi6z
+   xMxZ7QU2Go9QBehcj91UK8BrxRB5a5NEQWMsfl+i17Dl6dYuAy72pekeJ
+   FYzMU6jqx3HJuJ/wJZWNkYWAmDbI8Ix3C9zy5H0J6DsO4c60/HPLoaIIQ
+   E9CQhgQqNzUWXe0T2QkrVeIlBUTgEDfkrodBGIw8zZkHyRUGL4pJpTOcB
+   A==;
+X-CSE-ConnectionGUID: frRGPccVSOieum3JFebQtQ==
+X-CSE-MsgGUID: qPhK5EwiSKy7IXXeVafWDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11467"; a="39998279"
 X-IronPort-AV: E=Sophos;i="6.16,244,1744095600"; 
-   d="scan'208";a="52092272"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 13:42:33 -0700
-X-CSE-ConnectionGUID: kCU4Wz79RNqXXf+CqVELjg==
-X-CSE-MsgGUID: +3KcfnBIQ8mKBIY2uYtsig==
+   d="scan'208";a="39998279"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 14:02:32 -0700
+X-CSE-ConnectionGUID: 7GWlfxaxRM6GZFynHIt25w==
+X-CSE-MsgGUID: re4EOEXLTZSYnqYBi0Brmg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,244,1744095600"; 
-   d="scan'208";a="149315947"
+   d="scan'208";a="148771391"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 17 Jun 2025 13:42:27 -0700
+  by orviesa006.jf.intel.com with ESMTP; 17 Jun 2025 14:02:31 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uRd8T-000I4w-25;
-	Tue, 17 Jun 2025 20:42:25 +0000
-Date: Wed, 18 Jun 2025 04:41:41 +0800
+	id 1uRdRs-000I66-0a;
+	Tue, 17 Jun 2025 21:02:28 +0000
+Date: Wed, 18 Jun 2025 05:02:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Luis Gerhorst <luis.gerhorst@fau.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
-	Guenter Roeck <groeck@chromium.org>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v10 2/7] reboot: hw_protection_trigger: use standardized
- numeric shutdown/reboot reasons instead of strings
-Message-ID: <202506180402.ly0g2TQe-lkp@intel.com>
-References: <20250617094945.3619360-3-o.rempel@pengutronix.de>
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [linux-next:master 1327/3035]
+ arch/powerpc/net/bpf_jit_comp64.c:417:21: warning: variable 'ori31_emitted'
+ set but not used
+Message-ID: <202506180402.uUXwVoSH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,84 +63,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250617094945.3619360-3-o.rempel@pengutronix.de>
 
-Hi Oleksij,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on broonie-regulator/for-next chrome-platform/for-next chrome-platform/for-firmware-next linus/master v6.16-rc2 next-20250617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250617-175433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20250617094945.3619360-3-o.rempel%40pengutronix.de
-patch subject: [PATCH v10 2/7] reboot: hw_protection_trigger: use standardized numeric shutdown/reboot reasons instead of strings
-config: hexagon-randconfig-001-20250618 (https://download.01.org/0day-ci/archive/20250618/202506180402.ly0g2TQe-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250618/202506180402.ly0g2TQe-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   4325743c7e209ae7845293679a4de94b969f2bef
+commit: dff883d9e93a7f2f2fa4e38a9444b2c79d6da91a [1327/3035] bpf, arm64, powerpc: Change nospec to include v1 barrier
+config: powerpc64-randconfig-002-20250618 (https://download.01.org/0day-ci/archive/20250618/202506180402.uUXwVoSH-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250618/202506180402.uUXwVoSH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506180402.ly0g2TQe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506180402.uUXwVoSH-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/regulator/core.c:5280:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    5280 |         default:
-         |         ^
-   drivers/regulator/core.c:5280:2: note: insert '__attribute__((fallthrough));' to silence this warning
-    5280 |         default:
-         |         ^
-         |         __attribute__((fallthrough)); 
-   drivers/regulator/core.c:5280:2: note: insert 'break;' to avoid fall-through
-    5280 |         default:
-         |         ^
-         |         break; 
+>> arch/powerpc/net/bpf_jit_comp64.c:417:21: warning: variable 'ori31_emitted' set but not used [-Wunused-but-set-variable]
+     417 |         bool sync_emitted, ori31_emitted;
+         |                            ^
    1 warning generated.
 
 
-vim +5280 drivers/regulator/core.c
+vim +/ori31_emitted +417 arch/powerpc/net/bpf_jit_comp64.c
 
-  5253	
-  5254	/**
-  5255	 * regulator_handle_critical - Handle events for system-critical regulators.
-  5256	 * @rdev: The regulator device.
-  5257	 * @event: The event being handled.
-  5258	 *
-  5259	 * This function handles critical events such as under-voltage, over-current,
-  5260	 * and unknown errors for regulators deemed system-critical. On detecting such
-  5261	 * events, it triggers a hardware protection shutdown with a defined timeout.
-  5262	 */
-  5263	static void regulator_handle_critical(struct regulator_dev *rdev,
-  5264					      unsigned long event)
-  5265	{
-  5266		enum psc_reason pscr;
-  5267	
-  5268		if (!rdev->constraints->system_critical)
-  5269			return;
-  5270	
-  5271		switch (event) {
-  5272		case REGULATOR_EVENT_UNDER_VOLTAGE:
-  5273			pscr = PSCR_UNDER_VOLTAGE;
-  5274			break;
-  5275		case REGULATOR_EVENT_OVER_CURRENT:
-  5276			pscr = PSCR_OVER_CURRENT;
-  5277			break;
-  5278		case REGULATOR_EVENT_FAIL:
-  5279			pscr = PSCR_REGULATOR_FAILURE;
-> 5280		default:
-  5281			pscr = PSCR_UNKNOWN;
-  5282		}
-  5283	
-  5284		hw_protection_trigger(pscr,
-  5285				      rdev->constraints->uv_less_critical_window_ms);
-  5286	}
-  5287	
+   411	
+   412	/* Assemble the body code between the prologue & epilogue */
+   413	int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
+   414			       u32 *addrs, int pass, bool extra_pass)
+   415	{
+   416		enum stf_barrier_type stf_barrier = stf_barrier_type_get();
+ > 417		bool sync_emitted, ori31_emitted;
 
 -- 
 0-DAY CI Kernel Test Service
