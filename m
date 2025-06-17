@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02ED82BEFF3;
-	Tue, 17 Jun 2025 10:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDC02DBF60;
+	Tue, 17 Jun 2025 10:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750155760; cv=none; b=IFfM7pMBQ1CRBFzDhOjBPxbhEELaaY1b6ednvRADIkTsbsaUbsblQVa7Qr58Z7j3+HDnchE/5p2xFWTMrwWQiE8YxBZir8uzDKk6Xjbo+rErPcuw/bTRSZ4pN/6GEGC7ZQ+JRCUgXRnaE7TgiNvuZqfjvA6a35XTohMV71IPUUQ=
+	t=1750157727; cv=none; b=ObDYFrB7ypnRElSno7cixwTb4CHk0PwPPvYzFgPJI6l9kDTipzmuEg6F0zuqWAoqDsuPo46xmn7imyPyBShaGrl9eHa01PLs/EU1r4iLBQysgf7/W2U47KbXaqSXfE4Q4IVyBzvM7KPWXDPGUDRIWOZxL1W1SXqmy5ujUNmmf34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750155760; c=relaxed/simple;
-	bh=TPwC6j7kXRScA8KX1U6o2/cOIJTxixhqfAh8uxtLiCg=;
+	s=arc-20240116; t=1750157727; c=relaxed/simple;
+	bh=DcGs6xIsMTM66l3iSmYomInS4AfCgNyt+tl2U8Y1BRU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ktp8kY7brvmAZ3oMWfk4RUYtlYBuSXp09ZoKRAwMtiSQ0TeP1Sgv6GjvsFZ2Scvt6ETejnOaPYB4XiqJOa2QSbx1y/RZDzs4sW3yYINgKGcW/GNZVtpEEZvQaKvUpqz1M/Jv4coBA0YwD51DMVwkig2u4j+X4c6nEqXwRUmAnSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HVtdgqzd; arc=none smtp.client-ip=192.198.163.10
+	 Content-Disposition; b=oc5Lcnb5SowK4ESZoUvpzOe3uzYAVAgbjZAOyFb7c44Kqyj9d7JV22whhQKOZ3xMeOPGm/zJiVre3Bv3HZdGk52Z0Yi1pqolMNpRigpfHcDkPXPLcgq9ggqpzqLlX9rbXMTXyzSmvRwyKfxDGk2tGkx46SP5tS9SF46SiWdmco8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eqCAfpCj; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HVtdgqzd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eqCAfpCj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750155758; x=1781691758;
+  t=1750157725; x=1781693725;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TPwC6j7kXRScA8KX1U6o2/cOIJTxixhqfAh8uxtLiCg=;
-  b=HVtdgqzd1aDFHw7/1J/04K6VGnTF9Qe+pv3DsG71yMJcZV+vZGFWx7tU
-   gIYsoAgxU+BdRYHhDbOf+aL4SorVrQ6PiQSSfrBWPePffNZ11q+kUlyQ2
-   CK2zoaLWcLL/+mgO05G9sKvswTYxdcABDS7F3VvxiTYDW2se6832Fk4TZ
-   bCOSPJFFiAT/lThKVJM06yL3Gy5oDa2CNfFj7Z7znqGrB4o9xI11QIja5
-   FAtZWUN8P0kGoHvqfb4at7sVOTq2oQux7YSrvV3NtvPpkUAlIg5IQQoQY
-   9hyrmpxZgHLOXx/CLGLsTVBjqRcg1uH9lta29kW2aty/8OjX8W9XtgVzP
-   g==;
-X-CSE-ConnectionGUID: j5YdiQbgShmktodDRsRXbA==
-X-CSE-MsgGUID: 6rag67TsQ2KdY0R7F3/DqA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="63680286"
+  bh=DcGs6xIsMTM66l3iSmYomInS4AfCgNyt+tl2U8Y1BRU=;
+  b=eqCAfpCjdVNe08a7ZVhScCxuEPPlUlxkHl2vCmlYvjRKqVCxqBchlrwm
+   AX9rDM4n79saJy8R8tQg6UuYsLldohCFFYCPB11mcdWHxF4yCtzqd3Omb
+   CDeRE6yd4Iy8iSKv2/KI3IIf9Mnky+ueo6B7j4vRmy0jzi+cxYbl6VJqr
+   38/MPjCmWeJsWI/p70HIZMZH9PAHcwCor+i1J/9MJw8BQ7ApJuGPmYqAo
+   eY9oK5q/AVVc330gHhe8nReON0+5D5FNFXtuA+yqLKbf30NBZKw33MSiq
+   P49odr9Ka7xJPeLcMfpi5HQYLU1/uS8+FNAUo2L8U3T0M23NhbtQ9oz5t
+   Q==;
+X-CSE-ConnectionGUID: baqVd1P6QSqpgMHM/gUHYQ==
+X-CSE-MsgGUID: fLVIKMthTCWLKNr0peGQbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="54943299"
 X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
-   d="scan'208";a="63680286"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 03:22:16 -0700
-X-CSE-ConnectionGUID: bjcKqiLQQo2kucbItShnBA==
-X-CSE-MsgGUID: vni4Gef/QtqqSsjXcsA2uA==
+   d="scan'208";a="54943299"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 03:55:21 -0700
+X-CSE-ConnectionGUID: 3jnRWxteQ8KNM03RtZyX0g==
+X-CSE-MsgGUID: 2pHAXw8tQAuSrhhICp+hKQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
-   d="scan'208";a="153701551"
+   d="scan'208";a="149109949"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 17 Jun 2025 03:22:16 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 17 Jun 2025 03:55:19 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uRTSG-000Fs8-2E;
-	Tue, 17 Jun 2025 10:22:12 +0000
-Date: Tue, 17 Jun 2025 18:22:07 +0800
+	id 1uRTyG-000FuA-2s;
+	Tue, 17 Jun 2025 10:55:16 +0000
+Date: Tue, 17 Jun 2025 18:54:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:iommu_pt_all 48/62]
- drivers/iommu/generic_pt/fmt/../iommu_pt.h:1407:15: warning: result of
- comparison of constant 18446744073709551615 with expression of type
- 'pt_vaddr_t' (aka 'unsigned int') is always false
-Message-ID: <202506171801.prNmVQ9a-lkp@intel.com>
+To: Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Stephen Bates <sbates@raithlin.com>
+Subject: [sbates130272-p2pmem:dev/amd-dma-buf 4/4]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:402:5: warning: format specifies
+ type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202506171832.9tEmIvR1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,80 +64,136 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jgunthorpe/linux iommu_pt_all
-head:   95229c50e3ce2b6ecb8126b5f765996c1b73f4c1
-commit: b5ab032ccb1dde4c53ef839f2260e48a1b701ec8 [48/62] iommupt: Add the 32 bit ARMv7s page table format
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250617/202506171801.prNmVQ9a-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250617/202506171801.prNmVQ9a-lkp@intel.com/reproduce)
+tree:   https://github.com/sbates130272/linux-p2pmem.git dev/amd-dma-buf
+head:   9dd4127ada3f673941734289f7a8a949e16332d8
+commit: 9dd4127ada3f673941734289f7a8a949e16332d8 [4/4] drm/amdgpu: Use MEMORY_DEVICE_PCI_P2PDMA pages
+config: arm-randconfig-004-20250617 (https://download.01.org/0day-ci/archive/20250617/202506171832.9tEmIvR1-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250617/202506171832.9tEmIvR1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506171801.prNmVQ9a-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506171832.9tEmIvR1-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/iommu/generic_pt/fmt/iommu_armv7s.c:11:
-   In file included from drivers/iommu/generic_pt/fmt/iommu_template.h:40:
->> drivers/iommu/generic_pt/fmt/../iommu_pt.h:1407:15: warning: result of comparison of constant 18446744073709551615 with expression of type 'pt_vaddr_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-    1407 |             range.va > ULONG_MAX)
-         |             ~~~~~~~~ ^ ~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:402:5: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     401 |                 dev_info(amdgpu_ttm_adev(bo->tbo.bdev)->dev, "DMA-BUF bo->tbo.base.size:%lx\n",
+         |                                                                                         ~~~
+         |                                                                                         %zx
+     402 |                          bo->tbo.base.size);
+         |                          ^~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
    1 warning generated.
 
 
-vim +1407 drivers/iommu/generic_pt/fmt/../iommu_pt.h
+vim +402 drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
 
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1383  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1384  static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1385  				struct iommu_domain *domain)
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1386  {
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1387  	struct pt_common *common = common_from_iommu(iommu_table);
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1388  	struct pt_iommu_info info;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1389  	struct pt_range range;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1390  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1391  	NS(get_info)(iommu_table, &info);
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1392  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1393  	domain->type = __IOMMU_DOMAIN_PAGING;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1394  	domain->pgsize_bitmap = info.pgsize_bitmap;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1395  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1396  	if (pt_feature(common, PT_FEAT_DYNAMIC_TOP))
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1397  		range = _pt_top_range(common,
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1398  				      _pt_top_set(NULL, PT_MAX_TOP_LEVEL));
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1399  	else
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1400  		range = pt_top_range(common);
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1401  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1402  	/*
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1403  	 * A 64 bit high address space table on a 32 bit system cannot work.
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1404  	 */
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1405  	domain->geometry.aperture_start = (unsigned long)range.va;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1406  	if ((pt_vaddr_t)domain->geometry.aperture_start != range.va ||
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04 @1407  	    range.va > ULONG_MAX)
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1408  		return -EOVERFLOW;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1409  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1410  	/*
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1411  	 * The aperture is limited to what the API can do after considering all
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1412  	 * the different types dma_addr_t/unsigned long/pt_vaddr_t that are used
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1413  	 * to store a VA. Set the aperture to something that is valid for all
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1414  	 * cases. Saturate instead of truncate the end if the types are smaller
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1415  	 * than the top range. aperture_end is a last.
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1416  	 */
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1417  	domain->geometry.aperture_end = (unsigned long)range.last_va;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1418  	if ((pt_vaddr_t)domain->geometry.aperture_end != range.last_va) {
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1419  		domain->geometry.aperture_end = ULONG_MAX;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1420  		domain->pgsize_bitmap &= ULONG_MAX;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1421  	}
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1422  	domain->geometry.force_aperture = true;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1423  
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1424  	return 0;
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1425  }
-c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1426  
-
-:::::: The code at line 1407 was first introduced by commit
-:::::: c4cba9b274fd586da4c847940a5498bd78d10443 iommupt: Add the basic structure of the iommu implementation
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+   345	
+   346	static int amdgpu_rw_file(struct dma_buf *dmabuf, bool is_read,
+   347	                          bool direct_io, struct file *filp, loff_t file_offset,
+   348	                          size_t buf_offset, size_t len)
+   349	{
+   350		struct sg_table *sgt;
+   351		struct dma_buf_attachment attach;
+   352		struct dma_buf_attach_ops ops;
+   353		struct amdgpu_bo *bo;
+   354	
+   355		struct bio_vec *bvec;
+   356		int nr_segs = 0;
+   357		struct iov_iter iter;
+   358		struct kiocb kiocb;
+   359		int ret = 0;
+   360		struct pci_dev *pdev;
+   361	
+   362		printk(KERN_INFO "is_read = %d!\n", is_read);
+   363		printk(KERN_INFO "file_offset = %lld!\n", file_offset);
+   364		printk(KERN_INFO "buf_offset = %zd!\n", buf_offset);
+   365		printk(KERN_INFO "len = %zd!\n", len);
+   366	
+   367		if (direct_io) {
+   368			if (!(filp->f_mode & FMODE_CAN_ODIRECT))
+   369				return -EINVAL;
+   370		}
+   371	
+   372		memset(&attach, 0, sizeof(attach));
+   373		ops.allow_peer2peer = true;
+   374		attach.dmabuf = dmabuf;
+   375		attach.peer2peer = true;
+   376		attach.importer_ops = &ops;
+   377		/*
+   378		 * SUPER HACK. Need to find the correct way to locate the
+   379		 * DMA-capable parent of file based on either struct file or the
+   380		 * file descriptor.
+   381		*/
+   382		attach.dev = filp->f_path.mnt->mnt_sb->s_bdev->bd_device.parent->parent;
+   383		if (!attach.dev->dma_mask) {
+   384			/* The above hack didn't work. So hard code it for now */
+   385			pdev = pci_get_domain_bus_and_slot(0, 0x41, PCI_DEVFN(0, 0));
+   386			attach.dev = &pdev->dev;
+   387		}
+   388	
+   389		sgt = dma_buf_map_attachment_unlocked(&attach, DMA_BIDIRECTIONAL);
+   390		if (IS_ERR(sgt)) {
+   391			ret = PTR_ERR(sgt);
+   392			goto out;
+   393		}
+   394	
+   395		bo = gem_to_amdgpu_bo(dmabuf->priv);
+   396		if (!bo) {
+   397			ret = -EINVAL;
+   398			goto out;
+   399		} else {
+   400			/* Show BO domain to cross-check if it is in VRAM */
+   401			dev_info(amdgpu_ttm_adev(bo->tbo.bdev)->dev, "DMA-BUF bo->tbo.base.size:%lx\n",
+ > 402				 bo->tbo.base.size);
+   403			dev_info(amdgpu_ttm_adev(bo->tbo.bdev)->dev, "mem_type:%x start:%lx size:%zx placement:%x\n",
+   404				 bo->tbo.resource->mem_type, bo->tbo.resource->start,
+   405				 bo->tbo.resource->size, bo->tbo.resource->placement);
+   406		}
+   407	
+   408		if (pci_p2pdma_distance(pdev, amdgpu_ttm_adev(bo->tbo.bdev)->dev, false) < 0) {
+   409			dev_info(amdgpu_ttm_adev(bo->tbo.bdev)->dev,
+   410				 "DMA-BUF p2p not accessible!\n");
+   411			ret = -ENODEV;
+   412			goto out;
+   413		}
+   414	
+   415		bvec = amdgpu_init_bvec(sgt, buf_offset, len, &nr_segs);
+   416		if (!bvec) {
+   417			ret = -ENOMEM;
+   418			goto out;
+   419		}
+   420	
+   421		iov_iter_bvec(&iter, is_read ? ITER_DEST : ITER_SOURCE, bvec, nr_segs, len);
+   422		init_sync_kiocb(&kiocb, filp);
+   423		kiocb.ki_pos = file_offset;
+   424		if (direct_io)
+   425			kiocb.ki_flags |= IOCB_DIRECT;
+   426	
+   427		while (kiocb.ki_pos < file_offset + len) {
+   428	
+   429			if (is_read)
+   430				ret = vfs_iocb_iter_read(filp, &kiocb, &iter);
+   431			else
+   432				ret = vfs_iocb_iter_write(filp, &kiocb, &iter);
+   433			if (ret <= 0)
+   434				break;
+   435		}
+   436	
+   437		kvfree(bvec);
+   438		dma_buf_unmap_attachment_unlocked(&attach, sgt,
+   439					 DMA_BIDIRECTIONAL);
+   440	out:
+   441		return ret < 0 ? ret : 0;
+   442	}
+   443	
 
 -- 
 0-DAY CI Kernel Test Service
