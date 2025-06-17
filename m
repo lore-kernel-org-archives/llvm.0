@@ -1,456 +1,144 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB45FBF6;
-	Tue, 17 Jun 2025 10:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02ED82BEFF3;
+	Tue, 17 Jun 2025 10:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750155417; cv=none; b=TtaNkwQuCwzVHU4Wj0Tpi+vK5sF3HL+PpjmZJnggWPwSYH+1EA/ve7QrmVkOONohJrWl0YGnE8doOB9M/e8UgR8Pr0QffCbsENYvNBJ7WpZPbHaOanFvJgbFUiTkHgsJEZiYKM0kvTC+837wWSTxHl6QZqczK2+2U8cYG6o+/C0=
+	t=1750155760; cv=none; b=IFfM7pMBQ1CRBFzDhOjBPxbhEELaaY1b6ednvRADIkTsbsaUbsblQVa7Qr58Z7j3+HDnchE/5p2xFWTMrwWQiE8YxBZir8uzDKk6Xjbo+rErPcuw/bTRSZ4pN/6GEGC7ZQ+JRCUgXRnaE7TgiNvuZqfjvA6a35XTohMV71IPUUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750155417; c=relaxed/simple;
-	bh=DPlIYqTyyfH9zQ1OipNd3MPqtFULRjZNzvYW/rJl4WU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nksPqh5Fi6ViwQS2wVPRvmXbPeCj+VfOEcSzTThIFlZ7h4SyzujaL7jN0UlaaVj4jfW9tSbiVfX7G/jhvfNS1N2aJX3/4qbmQzBhmKgz4FOFMV21jQ7PC8PQDNXMtyV0+NzZIqXnFTP9UD31OtXDfpur1jUDMzZj356REcS7PwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OQv3/ac3; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750155760; c=relaxed/simple;
+	bh=TPwC6j7kXRScA8KX1U6o2/cOIJTxixhqfAh8uxtLiCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ktp8kY7brvmAZ3oMWfk4RUYtlYBuSXp09ZoKRAwMtiSQ0TeP1Sgv6GjvsFZ2Scvt6ETejnOaPYB4XiqJOa2QSbx1y/RZDzs4sW3yYINgKGcW/GNZVtpEEZvQaKvUpqz1M/Jv4coBA0YwD51DMVwkig2u4j+X4c6nEqXwRUmAnSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HVtdgqzd; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQv3/ac3"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ade4679fba7so1017413366b.2;
-        Tue, 17 Jun 2025 03:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750155413; x=1750760213; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c1BQLCs3QVKPn1zOJEl7nzLsz+RyTRYHWzr3Kg/rsm8=;
-        b=OQv3/ac3I32SJVDQOeQCfxRLGLM3fFJaS/4LVMV5XDjTSEOmNPol3hFdMNaTz95mDL
-         +V3Ur0TgSo6zNrudJrZUCeOEdq8ZPFqkcpM8rtyhrah1WaLdRp1lWnExtGhNpTCKtY4v
-         zA9tj2FKQoYkkedmDLExTA8nDRdELpWVyJ187RRWDDHS9+fqpL956RHQ4MNbNkgg9n4b
-         JPmBSiQgKNQ6cIsJfIXMM1d5+GNvdo/9HM2+XYKG2wSMTbGjroR+XXYkwPXd7dlk9Jp7
-         Sx/zHE14hBA0mFKpZU6YZ0Zfq36FEZ0aXJU/5mKhJ+IVbWLccQnkv2gaDmYl+PR4eSyt
-         wDwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750155413; x=1750760213;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c1BQLCs3QVKPn1zOJEl7nzLsz+RyTRYHWzr3Kg/rsm8=;
-        b=FSxmOka9VI6rAS3XliOwaTSFMWXNYEn73rkDz1CHYEjt4IvierHy2V/ScmR5kH7tHS
-         eVMNGrI3biB+hAPW30AeipkvSSLjFDLHCPnJHiM5cAfHgKK1Y2rUaH/lCgsDTJhpf+va
-         m3F8oyGgdVnDZd54KBGN7HPsE/m1uOw6QBjXyYVhyRkJ7HB6/lXmkBZmf3yiSoPsh6CB
-         VR0ILPPHVlNcYSjR9U9gFwU0ZBFrR91gWpS0pVz7zeuskuP5JGiALollAFgEq3MYvKVu
-         G/4o7n6WYe1Lde9ZScjKqi7IVbuClly9TgNkZlZGjjR7yorvdnHjR3Zu2hI1zMPYp4cd
-         VlJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUvVoLhYl14GxwOd257iXCvfIDHBOlMYLocgCs7BifjfGxnZFB+vZOVOo4wxc6dhafRpstn@lists.linux.dev, AJvYcCVB56QCM8sN5LrDIQiA43nmJ+bejPc43+BHOcFFdQvki7AIjGuuKarY2hnrKYJIydbpgo7Ts3mOUjEQZs1tWw==@lists.linux.dev
-X-Gm-Message-State: AOJu0YxrF5Y6iDwszT7ex09UNIubyW4aNnyCBA1kNSpBeZUApy8ye+30
-	BzeCo+df5LwI+7VO0r4hRiTX/nINRLUEEwsk3TChhzZIWkGCMHFz2fUcqWjVaOXMKfDjMQd1QTe
-	508sVOG267zTzqX3ruQclgJT/BWmELoa1Ac9UAFg=
-X-Gm-Gg: ASbGnctc0G5Fewds4u+8TLbpR+qJqtuE3+Nd5n0eifJo3wgKmjS3Y3WtLU9vExcpna+
-	DVyfGC3eog8lxa78PYy2f/Oky5QiXmWRomRDWVXy9c6HzS3K9dqO9DA/w5kM32HVVTWP+GO6+ok
-	H7bCbwtx1PwFScbv45slzpYLqXE4H2oiJ2SzOLkIOsIgs=
-X-Google-Smtp-Source: AGHT+IGZsQWICwckSP3b2A/yEqf6QAf/v1WHu0gLl/m8FVvwmEfrxdkna7L79TD896H1UvMJ3x7ofwFDoZFqRTZvsZ8=
-X-Received: by 2002:a17:907:6e93:b0:adb:413e:2a2f with SMTP id
- a640c23a62f3a-adfad365283mr1103914966b.9.1750155412920; Tue, 17 Jun 2025
- 03:16:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HVtdgqzd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750155758; x=1781691758;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TPwC6j7kXRScA8KX1U6o2/cOIJTxixhqfAh8uxtLiCg=;
+  b=HVtdgqzd1aDFHw7/1J/04K6VGnTF9Qe+pv3DsG71yMJcZV+vZGFWx7tU
+   gIYsoAgxU+BdRYHhDbOf+aL4SorVrQ6PiQSSfrBWPePffNZ11q+kUlyQ2
+   CK2zoaLWcLL/+mgO05G9sKvswTYxdcABDS7F3VvxiTYDW2se6832Fk4TZ
+   bCOSPJFFiAT/lThKVJM06yL3Gy5oDa2CNfFj7Z7znqGrB4o9xI11QIja5
+   FAtZWUN8P0kGoHvqfb4at7sVOTq2oQux7YSrvV3NtvPpkUAlIg5IQQoQY
+   9hyrmpxZgHLOXx/CLGLsTVBjqRcg1uH9lta29kW2aty/8OjX8W9XtgVzP
+   g==;
+X-CSE-ConnectionGUID: j5YdiQbgShmktodDRsRXbA==
+X-CSE-MsgGUID: 6rag67TsQ2KdY0R7F3/DqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="63680286"
+X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
+   d="scan'208";a="63680286"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 03:22:16 -0700
+X-CSE-ConnectionGUID: bjcKqiLQQo2kucbItShnBA==
+X-CSE-MsgGUID: vni4Gef/QtqqSsjXcsA2uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
+   d="scan'208";a="153701551"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 17 Jun 2025 03:22:16 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uRTSG-000Fs8-2E;
+	Tue, 17 Jun 2025 10:22:12 +0000
+Date: Tue, 17 Jun 2025 18:22:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:iommu_pt_all 48/62]
+ drivers/iommu/generic_pt/fmt/../iommu_pt.h:1407:15: warning: result of
+ comparison of constant 18446744073709551615 with expression of type
+ 'pt_vaddr_t' (aka 'unsigned int') is always false
+Message-ID: <202506171801.prNmVQ9a-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250616124934.141782-3-al.kochet@gmail.com> <202506171615.p1kpBZuQ-lkp@intel.com>
-In-Reply-To: <202506171615.p1kpBZuQ-lkp@intel.com>
-From: Alexander Kochetkov <al.kochet@gmail.com>
-Date: Tue, 17 Jun 2025 13:16:41 +0300
-X-Gm-Features: AX0GCFuxsOFnF7ihDGQxogLna4LSxLetO5zCScp4jCArx8JNYI2Bkdgw2EP7hRc
-Message-ID: <CAPUzuU1oqiOhKcV5e21rhjP_XcscGGLq9oZMvcK4DB_B2yZ7Jw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] !!! TESTING ONLY !!! Allow compile virt-dma users
- on ARM64 platform
-To: kernel test robot <lkp@intel.com>
-Cc: Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Nishad Saraf <nishads@amd.com>, 
-	Lizhi Hou <lizhi.hou@amd.com>, Jacky Huang <ychuang3@nuvoton.com>, 
-	Shan-Chun Hung <schung@nuvoton.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Paul Cercueil <paul@crapouillou.net>, 
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Manivannan Sadhasivam <mani@kernel.org>, 
-	Frank Li <Frank.Li@nxp.com>, Zhou Wang <wangzhou1@hisilicon.com>, 
-	Longfang Liu <liulongfang@huawei.com>, Andy Shevchenko <andy@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Keguang Zhang <keguang.zhang@gmail.com>, Sean Wang <sean.wang@mediatek.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-One more question. I can translate all other dma drivers to BH
-workqueue. I cannot test all of them, but I did this for sun6i and it
-works as usual. Fix straightforward. Is it a good idea?
+tree:   https://github.com/jgunthorpe/linux iommu_pt_all
+head:   95229c50e3ce2b6ecb8126b5f765996c1b73f4c1
+commit: b5ab032ccb1dde4c53ef839f2260e48a1b701ec8 [48/62] iommupt: Add the 32 bit ARMv7s page table format
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250617/202506171801.prNmVQ9a-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250617/202506171801.prNmVQ9a-lkp@intel.com/reproduce)
 
-That happened because of this change and this driver doesn't compile on x64=
-.
-Any action from me? Should I send v3 without this change?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506171801.prNmVQ9a-lkp@intel.com/
 
-diff --git a/drivers/dma/qcom/Kconfig b/drivers/dma/qcom/Kconfig
-index ace75d7b835a..224436d3e50a 100644
---- a/drivers/dma/qcom/Kconfig
-+++ b/drivers/dma/qcom/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config QCOM_ADM
-        tristate "Qualcomm ADM support"
--       depends on (ARCH_QCOM || COMPILE_TEST) && !PHYS_ADDR_T_64BIT
-+       depends on (ARCH_QCOM || COMPILE_TEST)
-        select DMA_ENGINE
-        select DMA_VIRTUAL_CHANNELS
-        help
+All warnings (new ones prefixed by >>):
 
-=D0=B2=D1=82, 17 =D0=B8=D1=8E=D0=BD. 2025=E2=80=AF=D0=B3. =D0=B2 12:31, ker=
-nel test robot <lkp@intel.com>:
+   In file included from drivers/iommu/generic_pt/fmt/iommu_armv7s.c:11:
+   In file included from drivers/iommu/generic_pt/fmt/iommu_template.h:40:
+>> drivers/iommu/generic_pt/fmt/../iommu_pt.h:1407:15: warning: result of comparison of constant 18446744073709551615 with expression of type 'pt_vaddr_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+    1407 |             range.va > ULONG_MAX)
+         |             ~~~~~~~~ ^ ~~~~~~~~~
+   1 warning generated.
 
->
-> Hi Alexander,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on vkoul-dmaengine/next]
-> [also build test WARNING on shawnguo/for-next sunxi/sunxi/for-next lee-mf=
-d/for-mfd-next linus/master v6.16-rc2 next-20250617]
-> [cannot apply to atorgue-stm32/stm32-next lee-mfd/for-mfd-fixes]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Kochetko=
-v/dmaengine-virt-dma-convert-tasklet-to-BH-workqueue-for-callback-invocatio=
-n/20250616-205118
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.g=
-it next
-> patch link:    https://lore.kernel.org/r/20250616124934.141782-3-al.koche=
-t%40gmail.com
-> patch subject: [PATCH v2 2/2] !!! TESTING ONLY !!! Allow compile virt-dma=
- users on ARM64 platform
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/2025=
-0617/202506171615.p1kpBZuQ-lkp@intel.com/config)
-> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df=
-0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250617/202506171615.p1kpBZuQ-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202506171615.p1kpBZuQ-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    drivers/dma/qcom/qcom_adm.c:245:7: error: incompatible pointer types a=
-ssigning to 'u32 *' (aka 'unsigned int *') from 'phys_addr_t *' (aka 'unsig=
-ned long long *') [-Werror,-Wincompatible-pointer-types]
->      245 |                 src =3D &achan->slave.src_addr;
->          |                     ^ ~~~~~~~~~~~~~~~~~~~~~~
->    drivers/dma/qcom/qcom_adm.c:251:7: error: incompatible pointer types a=
-ssigning to 'u32 *' (aka 'unsigned int *') from 'phys_addr_t *' (aka 'unsig=
-ned long long *') [-Werror,-Wincompatible-pointer-types]
->      251 |                 dst =3D &achan->slave.dst_addr;
->          |                     ^ ~~~~~~~~~~~~~~~~~~~~~~
->    drivers/dma/qcom/qcom_adm.c:309:7: error: incompatible pointer types a=
-ssigning to 'u32 *' (aka 'unsigned int *') from 'phys_addr_t *' (aka 'unsig=
-ned long long *') [-Werror,-Wincompatible-pointer-types]
->      309 |                 src =3D &achan->slave.src_addr;
->          |                     ^ ~~~~~~~~~~~~~~~~~~~~~~
->    drivers/dma/qcom/qcom_adm.c:313:7: error: incompatible pointer types a=
-ssigning to 'u32 *' (aka 'unsigned int *') from 'phys_addr_t *' (aka 'unsig=
-ned long long *') [-Werror,-Wincompatible-pointer-types]
->      313 |                 dst =3D &achan->slave.dst_addr;
->          |                     ^ ~~~~~~~~~~~~~~~~~~~~~~
-> >> drivers/dma/qcom/qcom_adm.c:848:59: warning: implicit conversion from =
-'unsigned long' to 'unsigned int' changes value from 18446744072371568648 t=
-o 2956984328 [-Wconstant-conversion]
->      848 |         writel(ADM_CI_RANGE_START(0x40) | ADM_CI_RANGE_END(0xb=
-0) |
->          |         ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~^
->      849 |                ADM_CI_BURST_8_WORDS, adev->regs + ADM_CI_CONF(=
-0));
->          |                ~~~~~~~~~~~~~~~~~~~~
->    1 warning and 4 errors generated.
->
->
-> vim +848 drivers/dma/qcom/qcom_adm.c
->
-> 03de6b273805b3 Arnd Bergmann     2021-11-22  745
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  746  static int adm_dma_prob=
-e(struct platform_device *pdev)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  747  {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  748        struct adm_device=
- *adev;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  749        int ret;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  750        u32 i;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  751
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  752        adev =3D devm_kza=
-lloc(&pdev->dev, sizeof(*adev), GFP_KERNEL);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  753        if (!adev)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  754                return -E=
-NOMEM;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  755
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  756        adev->dev =3D &pd=
-ev->dev;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  757
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  758        adev->regs =3D de=
-vm_platform_ioremap_resource(pdev, 0);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  759        if (IS_ERR(adev->=
-regs))
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  760                return PT=
-R_ERR(adev->regs);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  761
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  762        adev->irq =3D pla=
-tform_get_irq(pdev, 0);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  763        if (adev->irq < 0=
-)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  764                return ad=
-ev->irq;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  765
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  766        ret =3D of_proper=
-ty_read_u32(pdev->dev.of_node, "qcom,ee", &adev->ee);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  767        if (ret) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  768                dev_err(a=
-dev->dev, "Execution environment unspecified\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  769                return re=
-t;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  770        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  771
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  772        adev->core_clk =
-=3D devm_clk_get(adev->dev, "core");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  773        if (IS_ERR(adev->=
-core_clk))
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  774                return PT=
-R_ERR(adev->core_clk);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  775
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  776        adev->iface_clk =
-=3D devm_clk_get(adev->dev, "iface");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  777        if (IS_ERR(adev->=
-iface_clk))
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  778                return PT=
-R_ERR(adev->iface_clk);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  779
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  780        adev->clk_reset =
-=3D devm_reset_control_get_exclusive(&pdev->dev, "clk");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  781        if (IS_ERR(adev->=
-clk_reset)) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  782                dev_err(a=
-dev->dev, "failed to get ADM0 reset\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  783                return PT=
-R_ERR(adev->clk_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  784        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  785
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  786        adev->c0_reset =
-=3D devm_reset_control_get_exclusive(&pdev->dev, "c0");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  787        if (IS_ERR(adev->=
-c0_reset)) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  788                dev_err(a=
-dev->dev, "failed to get ADM0 C0 reset\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  789                return PT=
-R_ERR(adev->c0_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  790        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  791
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  792        adev->c1_reset =
-=3D devm_reset_control_get_exclusive(&pdev->dev, "c1");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  793        if (IS_ERR(adev->=
-c1_reset)) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  794                dev_err(a=
-dev->dev, "failed to get ADM0 C1 reset\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  795                return PT=
-R_ERR(adev->c1_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  796        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  797
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  798        adev->c2_reset =
-=3D devm_reset_control_get_exclusive(&pdev->dev, "c2");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  799        if (IS_ERR(adev->=
-c2_reset)) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  800                dev_err(a=
-dev->dev, "failed to get ADM0 C2 reset\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  801                return PT=
-R_ERR(adev->c2_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  802        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  803
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  804        ret =3D clk_prepa=
-re_enable(adev->core_clk);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  805        if (ret) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  806                dev_err(a=
-dev->dev, "failed to prepare/enable core clock\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  807                return re=
-t;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  808        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  809
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  810        ret =3D clk_prepa=
-re_enable(adev->iface_clk);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  811        if (ret) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  812                dev_err(a=
-dev->dev, "failed to prepare/enable iface clock\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  813                goto err_=
-disable_core_clk;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  814        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  815
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  816        reset_control_ass=
-ert(adev->clk_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  817        reset_control_ass=
-ert(adev->c0_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  818        reset_control_ass=
-ert(adev->c1_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  819        reset_control_ass=
-ert(adev->c2_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  820
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  821        udelay(2);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  822
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  823        reset_control_dea=
-ssert(adev->clk_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  824        reset_control_dea=
-ssert(adev->c0_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  825        reset_control_dea=
-ssert(adev->c1_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  826        reset_control_dea=
-ssert(adev->c2_reset);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  827
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  828        adev->channels =
-=3D devm_kcalloc(adev->dev, ADM_MAX_CHANNELS,
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  829                         =
-             sizeof(*adev->channels), GFP_KERNEL);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  830
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  831        if (!adev->channe=
-ls) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  832                ret =3D -=
-ENOMEM;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  833                goto err_=
-disable_clks;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  834        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  835
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  836        /* allocate and i=
-nitialize channels */
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  837        INIT_LIST_HEAD(&a=
-dev->common.channels);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  838
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  839        for (i =3D 0; i <=
- ADM_MAX_CHANNELS; i++)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  840                adm_chann=
-el_init(adev, &adev->channels[i], i);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  841
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  842        /* reset CRCIs */
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  843        for (i =3D 0; i <=
- 16; i++)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  844                writel(AD=
-M_CRCI_CTL_RST, adev->regs +
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  845                        A=
-DM_CRCI_CTL(i, adev->ee));
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  846
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  847        /* configure clie=
-nt interfaces */
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14 @848        writel(ADM_CI_RAN=
-GE_START(0x40) | ADM_CI_RANGE_END(0xb0) |
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  849               ADM_CI_BUR=
-ST_8_WORDS, adev->regs + ADM_CI_CONF(0));
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  850        writel(ADM_CI_RAN=
-GE_START(0x2a) | ADM_CI_RANGE_END(0x2c) |
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  851               ADM_CI_BUR=
-ST_8_WORDS, adev->regs + ADM_CI_CONF(1));
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  852        writel(ADM_CI_RAN=
-GE_START(0x12) | ADM_CI_RANGE_END(0x28) |
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  853               ADM_CI_BUR=
-ST_8_WORDS, adev->regs + ADM_CI_CONF(2));
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  854        writel(ADM_GP_CTL=
-_LP_EN | ADM_GP_CTL_LP_CNT(0xf),
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  855               adev->regs=
- + ADM_GP_CTL);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  856
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  857        ret =3D devm_requ=
-est_irq(adev->dev, adev->irq, adm_dma_irq,
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  858                         =
-      0, "adm_dma", adev);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  859        if (ret)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  860                goto err_=
-disable_clks;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  861
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  862        platform_set_drvd=
-ata(pdev, adev);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  863
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  864        adev->common.dev =
-=3D adev->dev;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  865        adev->common.dev-=
->dma_parms =3D &adev->dma_parms;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  866
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  867        /* set capabiliti=
-es */
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  868        dma_cap_zero(adev=
-->common.cap_mask);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  869        dma_cap_set(DMA_S=
-LAVE, adev->common.cap_mask);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  870        dma_cap_set(DMA_P=
-RIVATE, adev->common.cap_mask);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  871
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  872        /* initialize dma=
-engine apis */
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  873        adev->common.dire=
-ctions =3D BIT(DMA_DEV_TO_MEM | DMA_MEM_TO_DEV);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  874        adev->common.resi=
-due_granularity =3D DMA_RESIDUE_GRANULARITY_DESCRIPTOR;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  875        adev->common.src_=
-addr_widths =3D DMA_SLAVE_BUSWIDTH_4_BYTES;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  876        adev->common.dst_=
-addr_widths =3D DMA_SLAVE_BUSWIDTH_4_BYTES;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  877        adev->common.devi=
-ce_free_chan_resources =3D adm_free_chan;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  878        adev->common.devi=
-ce_prep_slave_sg =3D adm_prep_slave_sg;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  879        adev->common.devi=
-ce_issue_pending =3D adm_issue_pending;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  880        adev->common.devi=
-ce_tx_status =3D adm_tx_status;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  881        adev->common.devi=
-ce_terminate_all =3D adm_terminate_all;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  882        adev->common.devi=
-ce_config =3D adm_slave_config;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  883
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  884        ret =3D dma_async=
-_device_register(&adev->common);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  885        if (ret) {
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  886                dev_err(a=
-dev->dev, "failed to register dma async device\n");
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  887                goto err_=
-disable_clks;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  888        }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  889
-> 03de6b273805b3 Arnd Bergmann     2021-11-22  890        ret =3D of_dma_co=
-ntroller_register(pdev->dev.of_node, adm_dma_xlate,
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  891                         =
-                &adev->common);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  892        if (ret)
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  893                goto err_=
-unregister_dma;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  894
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  895        return 0;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  896
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  897  err_unregister_dma:
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  898        dma_async_device_=
-unregister(&adev->common);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  899  err_disable_clks:
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  900        clk_disable_unpre=
-pare(adev->iface_clk);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  901  err_disable_core_clk:
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  902        clk_disable_unpre=
-pare(adev->core_clk);
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  903
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  904        return ret;
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  905  }
-> 5c9f8c2dbdbe53 Jonathan McDowell 2020-11-14  906
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+
+vim +1407 drivers/iommu/generic_pt/fmt/../iommu_pt.h
+
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1383  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1384  static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1385  				struct iommu_domain *domain)
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1386  {
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1387  	struct pt_common *common = common_from_iommu(iommu_table);
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1388  	struct pt_iommu_info info;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1389  	struct pt_range range;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1390  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1391  	NS(get_info)(iommu_table, &info);
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1392  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1393  	domain->type = __IOMMU_DOMAIN_PAGING;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1394  	domain->pgsize_bitmap = info.pgsize_bitmap;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1395  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1396  	if (pt_feature(common, PT_FEAT_DYNAMIC_TOP))
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1397  		range = _pt_top_range(common,
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1398  				      _pt_top_set(NULL, PT_MAX_TOP_LEVEL));
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1399  	else
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1400  		range = pt_top_range(common);
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1401  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1402  	/*
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1403  	 * A 64 bit high address space table on a 32 bit system cannot work.
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1404  	 */
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1405  	domain->geometry.aperture_start = (unsigned long)range.va;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1406  	if ((pt_vaddr_t)domain->geometry.aperture_start != range.va ||
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04 @1407  	    range.va > ULONG_MAX)
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1408  		return -EOVERFLOW;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1409  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1410  	/*
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1411  	 * The aperture is limited to what the API can do after considering all
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1412  	 * the different types dma_addr_t/unsigned long/pt_vaddr_t that are used
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1413  	 * to store a VA. Set the aperture to something that is valid for all
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1414  	 * cases. Saturate instead of truncate the end if the types are smaller
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1415  	 * than the top range. aperture_end is a last.
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1416  	 */
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1417  	domain->geometry.aperture_end = (unsigned long)range.last_va;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1418  	if ((pt_vaddr_t)domain->geometry.aperture_end != range.last_va) {
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1419  		domain->geometry.aperture_end = ULONG_MAX;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1420  		domain->pgsize_bitmap &= ULONG_MAX;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1421  	}
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1422  	domain->geometry.force_aperture = true;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1423  
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1424  	return 0;
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1425  }
+c4cba9b274fd58 Jason Gunthorpe 2025-02-04  1426  
+
+:::::: The code at line 1407 was first introduced by commit
+:::::: c4cba9b274fd586da4c847940a5498bd78d10443 iommupt: Add the basic structure of the iommu implementation
+
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
