@@ -1,136 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7EA186294;
-	Wed, 18 Jun 2025 22:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B2D1A5BB2
+	for <llvm@lists.linux.dev>; Thu, 19 Jun 2025 01:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750284164; cv=none; b=uqEQ2d2RGNLWAIpo2bLfbg5rzJ/hROgN77/ckMWh4phowze5XTUki2gHaiSjmieCbqHAYothHDXLK7zxnsfegqmSTXuKtw5USNW79Qb/BguczqK5Kl+4UD+CByqdkN5Absnn6RCoK4GgTNbk+JM2ru2wm+SM7Kedv50Uej5vgew=
+	t=1750297332; cv=none; b=uSQSpHrp3TuQKdoyc1aDPYjDuXE4GoJUJZ4pDc4iWoZnGFC85bBkf5oJmmbtYAYQ0XJTfj9pFfLFd8CM5mpvOkfhlAkDZlJ93qschjgwnIPPmzFQ4uJzgpV4JetM+4rOaa8Ei1GSStaCJ/wboV91CW20JYOyZC9BLf5lcRO6QbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750284164; c=relaxed/simple;
-	bh=BMbyp7nBPmyzjB6SfQtJoyolabQgGKPKZ0aYaOJhATI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=U1qOtm5G/LswsU+5hL3gnERgGKU3d1zh65P07WLqXAF13F0I2HmOrlWG1Ssw+q2oYWp9OJZ4QN5cK+mRJKyNTbWlpCaooSaiKWxd/CTTp1UCFP4c74ttj/h1xZXDKsVJON/oEZqobkxARQuptk2YFcb0VjwC18q9U4yOJJMF/Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YvKO/auH; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750297332; c=relaxed/simple;
+	bh=IIOSEHcLS6b+URhThxCXu2/ZDDauE2hpIxDTjEzremY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=efMa1TAQkfk2dqXiD+VCCxdeNlPJl3rhEQeSaWtGvDe9sUfcKfsFuUk6PPlESQ7oM9fwaw6cv7TfuTmZdZheYDsz/wLuS2JZYkw2M+8cAmaGGz+LWqG0q+3gSOTUeFl00eW3Hm3Q+ObufMUJsUli38X3dKDxeNVeNFryvZWSBME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IV59IMdZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YvKO/auH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750284163; x=1781820163;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BMbyp7nBPmyzjB6SfQtJoyolabQgGKPKZ0aYaOJhATI=;
-  b=YvKO/auHTLoXBb1/DlKPDJaDEHBoUDiPbVvoYw+dIj7+TcYi2l1YERkO
-   5KwYDr6AeUhi/5I25VQd7l09S5aM3uEkcj2cLActWqO8e/4pMJtVs1aYT
-   ln7mPV+vmwa2ngXf6lwuEy7U8z4ixK6SnhmSHClWsS0MiHe14/9pwIGAE
-   ajGsmU/tNYLyiGWMnCR8JMBhgstFC0YJiuUGQAtQxAkQ1F22AMUHMFr2y
-   86RmMX7gTqnyYlsgH4XuQHIcMi3jSrY3LDWH3lnu5dH8Ll0Op624z6m1j
-   HCb/Eqbr1NsfpHv0HY8E3UDHNmM6nDi3YNACNHECiG43RMHIw+Q81U77Y
-   g==;
-X-CSE-ConnectionGUID: QVpqLjGlRteggMCMTlMrZQ==
-X-CSE-MsgGUID: 3j5PltIjTlucJaf3ApmLIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="52617998"
-X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="52617998"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 15:02:43 -0700
-X-CSE-ConnectionGUID: dSZ0sXXtSOKj9r26oYXPOg==
-X-CSE-MsgGUID: rJ1MUyCXQDSXmh1xQP4dwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="150067589"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 18 Jun 2025 15:02:41 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uS0re-000KDM-0q;
-	Wed, 18 Jun 2025 22:02:38 +0000
-Date: Thu, 19 Jun 2025 06:01:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-serial@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [tty:tty-next 8/33] arch/x86/platform/ce4100/ce4100.c:107:16: error:
- incompatible function pointer types assigning to 'u32 (*)(struct uart_port
- *, unsigned int)' (aka 'unsigned int (*)(struct uart_port *, unsigned int)')
- from 'unsigned int (struct uart_port *, int)'
-Message-ID: <202506190552.TqNasrC3-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IV59IMdZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750297329;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ggqc9MancQt3n7E0yx0pUQEitkb7Re4moki1k12s5TY=;
+	b=IV59IMdZajEUvGwIx6PVLwvrY2txvzXaqWmdP2oJTEEbEP8hT+Wvg7VzU2/7aaPKqvgoJd
+	2s7VMKOUQ5sZSsTkozYQzkBOTBIBd0ygXNGjb0gd9uG9dV67i+OK59oaGfXMOteY0fCsKy
+	ZcJW+vUbJe36522vzbxGWnbWJNk0mco=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-320-Osj8aFzYNsCuc4cBzmOgbw-1; Wed,
+ 18 Jun 2025 21:42:07 -0400
+X-MC-Unique: Osj8aFzYNsCuc4cBzmOgbw-1
+X-Mimecast-MFC-AGG-ID: Osj8aFzYNsCuc4cBzmOgbw_1750297326
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A203C1808993
+	for <llvm@lists.linux.dev>; Thu, 19 Jun 2025 01:42:06 +0000 (UTC)
+Received: from [172.20.188.120] (unknown [10.30.45.122])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4942330001B7;
+	Thu, 19 Jun 2025 01:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 4 of 79): Test report for master
+ (6.16.0-rc2, upstream-mainline, 74b4cc9b)
+Date: Thu, 19 Jun 2025 01:42:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <32996.125061821420700285@us-mta-320.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 37tFjVunHLHj9_t8FLY40mEXuKKYu3MNSmbm6C2GzIc_1750297326
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-next
-head:   20ca8be9ad2e05015833b07f4325a398e614cf15
-commit: fc9ceb501e38cc21066c1638993500b30eda8bdb [8/33] serial: 8250: sanitize uart_port::serial_{in,out}() types
-config: i386-randconfig-007-20250619 (https://download.01.org/0day-ci/archive/20250619/202506190552.TqNasrC3-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506190552.TqNasrC3-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506190552.TqNasrC3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/platform/ce4100/ce4100.c:107:16: error: incompatible function pointer types assigning to 'u32 (*)(struct uart_port *, unsigned int)' (aka 'unsigned int (*)(struct uart_port *, unsigned int)') from 'unsigned int (struct uart_port *, int)' [-Wincompatible-function-pointer-types]
-     107 |         up->serial_in = ce4100_mem_serial_in;
-         |                       ^ ~~~~~~~~~~~~~~~~~~~~
->> arch/x86/platform/ce4100/ce4100.c:108:17: error: incompatible function pointer types assigning to 'void (*)(struct uart_port *, unsigned int, u32)' (aka 'void (*)(struct uart_port *, unsigned int, unsigned int)') from 'void (struct uart_port *, int, int)' [-Wincompatible-function-pointer-types]
-     108 |         up->serial_out = ce4100_mem_serial_out;
-         |                        ^ ~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +107 arch/x86/platform/ce4100/ce4100.c
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.16-rc2-fixes' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/tj/cgroup
 
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   81  
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   82  static void ce4100_serial_fixup(int port, struct uart_port *up,
-a97673a1c43d00 Ingo Molnar    2018-12-03   83  	u32 *capabilities)
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   84  {
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   85  #ifdef CONFIG_EARLY_PRINTK
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   86  	/*
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   87  	 * Over ride the legacy port configuration that comes from
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   88  	 * asm/serial.h. Using the ioport driver then switching to the
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   89  	 * PCI memmaped driver hangs the IOAPIC
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   90  	 */
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   91  	if (up->iotype !=  UPIO_MEM32) {
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   92  		up->uartclk  = 14745600;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   93  		up->mapbase = 0xdffe0200;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   94  		set_fixmap_nocache(FIX_EARLYCON_MEM_BASE,
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   95  				up->mapbase & PAGE_MASK);
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   96  		up->membase =
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   97  			(void __iomem *)__fix_to_virt(FIX_EARLYCON_MEM_BASE);
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22   98  		up->membase += up->mapbase & ~PAGE_MASK;
-08ec212c0f92cb Maxime Bizon   2012-10-19   99  		up->mapbase += port * 0x100;
-08ec212c0f92cb Maxime Bizon   2012-10-19  100  		up->membase += port * 0x100;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  101  		up->iotype   = UPIO_MEM32;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  102  		up->regshift = 2;
-08ec212c0f92cb Maxime Bizon   2012-10-19  103  		up->irq = 4;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  104  	}
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  105  #endif
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  106  	up->iobase = 0;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22 @107  	up->serial_in = ce4100_mem_serial_in;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22 @108  	up->serial_out = ce4100_mem_serial_out;
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  109  
-a97673a1c43d00 Ingo Molnar    2018-12-03  110  	*capabilities |= (1 << 12);
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  111  }
-5ec6960f6f0c7b Dirk Brandewie 2010-11-22  112  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1877487311
 
-:::::: The code at line 107 was first introduced by commit
-:::::: 5ec6960f6f0c7be9cc6e5506fdf0070add3b6e08 ce4100: Add errata fixes for UART on CE4100
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1877487311-x86_64-kernel-debug
 
-:::::: TO: Dirk Brandewie <dirk.brandewie@gmail.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
