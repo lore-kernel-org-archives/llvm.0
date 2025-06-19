@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523DB3085B2;
-	Thu, 19 Jun 2025 12:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732A7230BF2;
+	Thu, 19 Jun 2025 12:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750335235; cv=none; b=gs70r7/Cx3Uy9y15F5Tt3eWvEhvn24i5ptpzrc0YDTORBpr4sZxwSMFJp8DX5rKR0tquZWK9MNzUSpRRMWcfogCUsmkd0D8jwBOpRetoGuHUGfh9zlAMLTyJMAiRB4LZv+hagabdH1c/eiDwsbbEkXwA57E1TbcNDDpggT0Js/c=
+	t=1750335837; cv=none; b=qmDw3RRn2VVJA9bjahL9GVOFHv1OYkeT7fS2UdMGOT7tJq0XcR+7/ushM/8FHYkDtWMY9mBxd/86VybhVA8jpA2b9+DUpfj5a+r3AJ6lHXzuxMJT+hiAlk2lZHoqx49iN6Cq23v2WocE7dJzAEdT27J4OfHNAgtY8aTezxa3a7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750335235; c=relaxed/simple;
-	bh=Qlz3FN2eCazRLX2Bfo58ATC0F3oaR8PaS9tFD9Q500M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SX6DOqquqfUEy8d+vG8huqD4hFw+kAvge+YLUETbYf20Gt90NSiMLzsfEBFLUsvQqKZhXpQ6e6ES8ZT8MGULCGfwEdBDWhS5NG5kW1S60m5rcTncDMVEBIEhaydeE7Gw59kQkbZUoNkiYSiLU246dEKHdc8YzYn8aP5AeqYiorE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D42792J9; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1750335837; c=relaxed/simple;
+	bh=0QJAMmfXDrawq3qYw9ljtYencMx4d7TtQEbbS+QLU5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p6dKOVejmL5zih4tUr5gDTNeCYGda+mOeXTpWpRW0ADcqRJlOk1xWPPUjLvWEdLsWPyRuRChH1ag9YiGQqa4kh1unczp1Bg/kkQde34wppXrzZjU5dybxc0DLBMmXK0zTAdMYfMP+uagzgcy9uP1hNdXabgnvx/9xvQfOkVQBAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GBu3+7LU; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D42792J9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GBu3+7LU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750335234; x=1781871234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Qlz3FN2eCazRLX2Bfo58ATC0F3oaR8PaS9tFD9Q500M=;
-  b=D42792J9nRJt079BgWMs+dzkxmIOcQ89GLG++R2vCJBg2nTC22ZQiTcv
-   m4B4INPVDzg1xwF0wBVxs65SBHnMViaFvP8Zf0Rmd53PI9aLao74Znxo/
-   JCgz7d4+TB6cJNY6dTrVX0l7B1u8a4GYBNMWQf6UwCgdwO2wFUe+PO0eE
-   SDcUk+Brzp2sQ3raoQNFmGcHOAWmcnF3gUluXsbGiWZCP94i5v0AMS2ce
-   F93rkvtsDaXQpgywAwrbn6Bvo+Wf6yZzYOvH3AtW9Ik4r6y8bS501nn+5
-   drqbmhM6T0F4lQj8izuLAOvoCS7ETGm5qRouSUBBdRRyegcvHl0UcNavt
-   w==;
-X-CSE-ConnectionGUID: sHuUVg2oS7iEsKL799VnEA==
-X-CSE-MsgGUID: R6rcy5O7TOKewwIA3EFJ3g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52728033"
+  t=1750335836; x=1781871836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0QJAMmfXDrawq3qYw9ljtYencMx4d7TtQEbbS+QLU5Y=;
+  b=GBu3+7LU04ddwCE3Ds33NrD0JCvMaK0LFpxt4P55hPdHLeY6dT5ZbcKZ
+   EPabkagRKGuXzfp1dJVH56D63E0Hb7YndlwoB14aKxeoy7Als2UNCItXS
+   tkxMZ2rFsaCPo7J7DXPrSeWpYyn72Y0rUVYtmSCeVziM2XMi/3uOae9rR
+   vPL8BeqRTQ+nGmBDDfVP1Oq6fTRoNZ5f2fVrzcE8z+oznLA8j4deL7cjJ
+   n3/Q7VVbL7Eaaw+8w3/V0ZbZSifRx0ST40hOJOqGbLPFX0kqQLf9jMlYq
+   L+tZTWtJHJepRO/OwSwVQ8PNYpJ68bGfgnCo/zxOiJs4h+7E2vQXdg3B4
+   g==;
+X-CSE-ConnectionGUID: CnK8rMc/TPu1MVdIHOqIvw==
+X-CSE-MsgGUID: Ud3gXrIyTlO0O9nYS5YTuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52678359"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="52728033"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 05:13:53 -0700
-X-CSE-ConnectionGUID: i/UihO5VQA2ttitTWWIdPg==
-X-CSE-MsgGUID: kr2kECjvS5Kq2tshYdPQKg==
+   d="scan'208";a="52678359"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 05:23:55 -0700
+X-CSE-ConnectionGUID: ZbxDFBjbTGGFIZ3RQU8Xjw==
+X-CSE-MsgGUID: mW35Cv3sRDm810u41lDGTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="155195379"
+   d="scan'208";a="154915200"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 19 Jun 2025 05:13:51 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 19 Jun 2025 05:23:53 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uSE9N-000KjK-0H;
-	Thu, 19 Jun 2025 12:13:49 +0000
-Date: Thu, 19 Jun 2025 20:13:13 +0800
+	id 1uSEJ4-000KkI-0G;
+	Thu, 19 Jun 2025 12:23:50 +0000
+Date: Thu, 19 Jun 2025 20:23:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit
- (1024) in 'hmac_setkey_ahash'
-Message-ID: <202506192035.7dBntw28-lkp@intel.com>
+	bingbu.cao@linux.intel.com, stanislaw.gruszka@linux.intel.com,
+	tian.shu.qiu@intel.com, tomi.valkeinen@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH 03/13] media: ipu6: Enable and disable each stream at
+ CSI-2 subdev source pad
+Message-ID: <202506192043.sWSo3Ycl-lkp@intel.com>
+References: <20250619081546.1582969-4-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,83 +67,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250619081546.1582969-4-sakari.ailus@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fb4d33ab452ea254e2c319bac5703d1b56d895bf
-commit: c3103416d5217655d707d9417aaf66f184e3d72f crypto: hmac - Add ahash support
-date:   4 weeks ago
-config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20250619/202506192035.7dBntw28-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506192035.7dBntw28-lkp@intel.com/reproduce)
+Hi Sakari,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linuxtv-media-pending/master]
+[also build test WARNING on linus/master v6.16-rc2 next-20250618]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-ipu6-Use-correct-pads-for-xlate_streams/20250619-161847
+base:   https://git.linuxtv.org/media-ci/media-pending.git master
+patch link:    https://lore.kernel.org/r/20250619081546.1582969-4-sakari.ailus%40linux.intel.com
+patch subject: [PATCH 03/13] media: ipu6: Enable and disable each stream at CSI-2 subdev source pad
+config: i386-buildonly-randconfig-005-20250619 (https://download.01.org/0day-ci/archive/20250619/202506192043.sWSo3Ycl-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506192043.sWSo3Ycl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506192035.7dBntw28-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506192043.sWSo3Ycl-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit (1024) in 'hmac_setkey_ahash' [-Wframe-larger-than]
-     251 | static int hmac_setkey_ahash(struct crypto_ahash *parent,
-         |            ^
+>> drivers/media/pci/intel/ipu6/ipu6-isys-video.c:996:6: warning: variable 'stream_mask' set but not used [-Wunused-but-set-variable]
+     996 |         u64 stream_mask = 0;
+         |             ^
    1 warning generated.
 
 
-vim +/hmac_setkey_ahash +251 crypto/hmac.c
+vim +/stream_mask +996 drivers/media/pci/intel/ipu6/ipu6-isys-video.c
 
-   250	
- > 251	static int hmac_setkey_ahash(struct crypto_ahash *parent,
-   252				     const u8 *inkey, unsigned int keylen)
-   253	{
-   254		struct ahash_hmac_ctx *tctx = crypto_ahash_ctx(parent);
-   255		struct crypto_ahash *fb = crypto_ahash_fb(tctx->hash);
-   256		int ds = crypto_ahash_digestsize(parent);
-   257		int bs = crypto_ahash_blocksize(parent);
-   258		int ss = crypto_ahash_statesize(parent);
-   259		HASH_REQUEST_ON_STACK(req, fb);
-   260		u8 *opad = &tctx->pads[ss];
-   261		u8 *ipad = &tctx->pads[0];
-   262		int err, i;
-   263	
-   264		if (fips_enabled && (keylen < 112 / 8))
-   265			return -EINVAL;
-   266	
-   267		ahash_request_set_callback(req, 0, NULL, NULL);
-   268	
-   269		if (keylen > bs) {
-   270			ahash_request_set_virt(req, inkey, ipad, keylen);
-   271			err = crypto_ahash_digest(req);
-   272			if (err)
-   273				goto out_zero_req;
-   274	
-   275			keylen = ds;
-   276		} else
-   277			memcpy(ipad, inkey, keylen);
-   278	
-   279		memset(ipad + keylen, 0, bs - keylen);
-   280		memcpy(opad, ipad, bs);
-   281	
-   282		for (i = 0; i < bs; i++) {
-   283			ipad[i] ^= HMAC_IPAD_VALUE;
-   284			opad[i] ^= HMAC_OPAD_VALUE;
-   285		}
-   286	
-   287		ahash_request_set_virt(req, ipad, NULL, bs);
-   288		err = crypto_ahash_init(req) ?:
-   289		      crypto_ahash_update(req) ?:
-   290		      crypto_ahash_export(req, ipad);
-   291	
-   292		ahash_request_set_virt(req, opad, NULL, bs);
-   293		err = err ?:
-   294		      crypto_ahash_init(req) ?:
-   295		      crypto_ahash_update(req) ?:
-   296		      crypto_ahash_export(req, opad);
-   297	
-   298	out_zero_req:
-   299		HASH_REQUEST_ZERO(req);
-   300		return err;
-   301	}
-   302	
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   983  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   984  int ipu6_isys_video_set_streaming(struct ipu6_isys_video *av, int state,
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   985  				  struct ipu6_isys_buffer_list *bl)
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   986  {
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   987  	struct v4l2_subdev_krouting *routing;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   988  	struct ipu6_isys_stream *stream = av->stream;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   989  	struct v4l2_subdev_state *subdev_state;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   990  	struct device *dev = &av->isys->adev->auxdev.dev;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   991  	struct v4l2_subdev *sd;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   992  	struct media_pad *r_pad;
+e232e72fbaa788 Sakari Ailus 2025-06-19   993  	unsigned int i;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   994  	u32 sink_pad, sink_stream;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   995  	u64 r_stream;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  @996  	u64 stream_mask = 0;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   997  	int ret = 0;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   998  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31   999  	dev_dbg(dev, "set stream: %d\n", state);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1000  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1001  	if (WARN(!stream->source_entity, "No source entity for stream\n"))
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1002  		return -ENODEV;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1003  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1004  	sd = &stream->asd->sd;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1005  	r_pad = media_pad_remote_pad_first(&av->pad);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1006  	r_stream = ipu6_isys_get_src_stream_by_src_pad(sd, r_pad->index);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1007  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1008  	subdev_state = v4l2_subdev_lock_and_get_active_state(sd);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1009  	routing = &subdev_state->routing;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1010  	ret = v4l2_subdev_routing_find_opposite_end(routing, r_pad->index,
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1011  						    r_stream, &sink_pad,
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1012  						    &sink_stream);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1013  	v4l2_subdev_unlock_state(subdev_state);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1014  	if (ret)
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1015  		return ret;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1016  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1017  	stream_mask = get_stream_mask_by_pipeline(av);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1018  	if (!state) {
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1019  		stop_streaming_firmware(av);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1020  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1021  		/* stop sub-device which connects with video */
+e232e72fbaa788 Sakari Ailus 2025-06-19  1022  		for (i = CSI2_PAD_SRC; i < NR_OF_CSI2_SRC_PADS; i++) {
+e232e72fbaa788 Sakari Ailus 2025-06-19  1023  			if (!media_pad_pipeline(&sd->entity.pads[i]))
+e232e72fbaa788 Sakari Ailus 2025-06-19  1024  				continue;
+e232e72fbaa788 Sakari Ailus 2025-06-19  1025  			ret = v4l2_subdev_disable_streams(sd, i, 1U);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1026  			if (ret) {
+e232e72fbaa788 Sakari Ailus 2025-06-19  1027  				dev_err(dev, "stream off %s failed with %d\n",
+e232e72fbaa788 Sakari Ailus 2025-06-19  1028  					sd->name, ret);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1029  				return ret;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1030  			}
+e232e72fbaa788 Sakari Ailus 2025-06-19  1031  		}
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1032  		close_streaming_firmware(av);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1033  	} else {
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1034  		ret = start_stream_firmware(av, bl);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1035  		if (ret) {
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1036  			dev_err(dev, "start stream of firmware failed\n");
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1037  			return ret;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1038  		}
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1039  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1040  		/* start sub-device which connects with video */
+e232e72fbaa788 Sakari Ailus 2025-06-19  1041  		for (i = CSI2_PAD_SRC; i < NR_OF_CSI2_SRC_PADS; i++) {
+e232e72fbaa788 Sakari Ailus 2025-06-19  1042  			if (!media_pad_pipeline(&sd->entity.pads[i]))
+e232e72fbaa788 Sakari Ailus 2025-06-19  1043  				continue;
+e232e72fbaa788 Sakari Ailus 2025-06-19  1044  			ret = v4l2_subdev_enable_streams(sd, i, 1U);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1045  			if (ret) {
+e232e72fbaa788 Sakari Ailus 2025-06-19  1046  				dev_err(dev, "stream on %s failed with %d\n",
+e232e72fbaa788 Sakari Ailus 2025-06-19  1047  					sd->name, ret);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1048  				goto out_media_entity_stop_streaming_firmware;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1049  			}
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1050  		}
+e232e72fbaa788 Sakari Ailus 2025-06-19  1051  	}
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1052  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1053  	av->streaming = state;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1054  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1055  	return 0;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1056  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1057  out_media_entity_stop_streaming_firmware:
+e232e72fbaa788 Sakari Ailus 2025-06-19  1058  	while (i-- > CSI2_PAD_SRC) {
+e232e72fbaa788 Sakari Ailus 2025-06-19  1059  		int ret2;
+e232e72fbaa788 Sakari Ailus 2025-06-19  1060  
+e232e72fbaa788 Sakari Ailus 2025-06-19  1061  		if (!media_pad_pipeline(&sd->entity.pads[i]))
+e232e72fbaa788 Sakari Ailus 2025-06-19  1062  			continue;
+e232e72fbaa788 Sakari Ailus 2025-06-19  1063  		ret2 = v4l2_subdev_disable_streams(sd, i, 1U);
+e232e72fbaa788 Sakari Ailus 2025-06-19  1064  		dev_err(dev, "stream off %s failed with %d\n", sd->name, ret2);
+e232e72fbaa788 Sakari Ailus 2025-06-19  1065  	}
+e232e72fbaa788 Sakari Ailus 2025-06-19  1066  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1067  	stop_streaming_firmware(av);
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1068  
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1069  	return ret;
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1070  }
+3c1dfb5a69cf83 Bingbu Cao   2024-01-31  1071  
 
 -- 
 0-DAY CI Kernel Test Service
