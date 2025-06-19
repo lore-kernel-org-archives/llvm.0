@@ -1,193 +1,291 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDFE229B02;
-	Thu, 19 Jun 2025 12:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B400115E90
+	for <llvm@lists.linux.dev>; Thu, 19 Jun 2025 15:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750336438; cv=none; b=WpKNu0jZrVn6H8kPZlG1rWucZW+/HOTrY1212BISMavkEfezeAcCr60ISW/ftDWwdZblKUfQ7gnebm6tJbOR0wKGYBR/v9u5wBb6tdLlOF6oYLq8/7/WjJF5DlJoyvqqWDvUOEi4fY0u1R1zZHU08Od1W1m/ER0WVrst4LgjZ/w=
+	t=1750345593; cv=none; b=XZo37aa7aO5XIWkgP0GuRE8NzOeh8XuxTmVjK2oMiAwhDHszxJGAFf+xqaMc+Oejg9j905w2ZufSiPhr9ShvemzqitwXaoQcLG3vHGJSQZOD75KAJDHNL048o4LWa6TyyT6hSOQ0VGpVR3+xS7o1SUtTSJ4IKlkVPDRXUi++lWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750336438; c=relaxed/simple;
-	bh=NRGKABP8PYE5W+gDt/rlo6MJFKCxz/Agwa923Xcep/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dkPLyzsJECkxRSGQvMxvLZhEoadFohK/XctpqPa96A0bTOhVwNhxlmb7NV5+NHNZLHdCYkVP9EacDb5LDHJHBMNR7ElGqXA5/YD0i/hnd0JWc+jzeXtaLXWQdV9oLyj+k0H69FUBLjeoTvZZfk8vhXXnhjX59K/kEmKJYbICyxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OKavyMzr; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750345593; c=relaxed/simple;
+	bh=wGxKJCc7qeOmnuSZ+yHqpDhrjglCvryWX3i8qW5pY7s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r/Wa+x2i46WhQGRqbEfRcE6Ywcn5iVgbYTyDweceFzokDQkrtJ9EvyBuxFA9WqLxsvciTS5Y18HJPTniVByeFUKupz12/lOuNxqfVnd8b+rzV/2rgfywE2N0WQqW5xPYsQJPwJzTli4O2Uc4w22nit+g2lS8lo8fkUTNUsIbgos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BKNrn8ku; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OKavyMzr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750336437; x=1781872437;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NRGKABP8PYE5W+gDt/rlo6MJFKCxz/Agwa923Xcep/0=;
-  b=OKavyMzrkBVPcrp1LgT/k0xX4o6vIuonG3j7wyJzRPdkMHTOx+RTeY+8
-   mTZAZAWRdzglRFDfJK4AhfcMaQQmIeVvOinAgxaT0Bn/0qmxhruxZ5dDp
-   vrZaSvqvrSODY0+NHNaNZzGx3uAmHJf1eHO/vxETSFG6J5EEv9w8HpvoH
-   i1t2BbJrfv7Mv6P/EmSe091YXLKO4af6PIVSbnfzEp5svxFa4CWK8+u6C
-   aLcsIbxjLY5j1IYJjEF3UMF17lUwK6076Yh6my4RxZAGuLMjvERZDVXfX
-   UfwQ+UzGXIRPNDAmCRpoFdwlUIJHsIYMPbmBkGgsC0Y0g1p/qLQeQ/qhS
-   g==;
-X-CSE-ConnectionGUID: tEja7zEFT+2WvuWLOEm+bA==
-X-CSE-MsgGUID: ToUY45htQ0Olthqeu7BGRA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52290403"
-X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="52290403"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 05:33:56 -0700
-X-CSE-ConnectionGUID: phIflv5VSOmAOqJLXuoShg==
-X-CSE-MsgGUID: hl4fN0GETZe1LcQyXGFCdg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="150077947"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 19 Jun 2025 05:33:53 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uSESk-000Kkg-2O;
-	Thu, 19 Jun 2025 12:33:50 +0000
-Date: Thu, 19 Jun 2025 20:33:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neil@brown.name>, Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org, Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Li Lingfeng <lilingfeng3@huawei.com>
-Subject: Re: [PATCH 3/3] nfsd: split nfsd_mutex into one mutex per
- net-namespace.
-Message-ID: <202506192052.L9tj28RJ-lkp@intel.com>
-References: <20250618213347.425503-4-neil@brown.name>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BKNrn8ku"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4a589b7dd5fso12044341cf.0
+        for <llvm@lists.linux.dev>; Thu, 19 Jun 2025 08:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750345590; x=1750950390; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nXuTpoOb8+LqU5quDMVJCzI6iZgIaVm2IMUXk0GHfM4=;
+        b=BKNrn8ku+z7gSDds+MAwU21iM6gf/7f13q4xbXK+WYIVAY/ilPE665NvBt/S61TBC2
+         Mjkz33bmQVGV3PhklejaUKjiJa1BxwiczRAP7A7UxIdqajGmegcqeksv1xcKM2H0d7GR
+         RUutNcIZV5QnEjWz3VBS5Ydo0wDz/wEV2qzUmQtm9gxCXSFWCfBoQzqIdD2dnkcjbrdm
+         bGMVS8TO0bw5NPHF1u8/V2kdv/bqoJ8R/Jn/Lh7T4kpqzF6kgkajxAzB6FJTVEgv9i/5
+         DogSv7M6umpy4P49UmQoZTNIiMUo17dkb0nylwO3NleThRDp8PF3NV59FW9+W8PUFpBe
+         3oBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750345590; x=1750950390;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nXuTpoOb8+LqU5quDMVJCzI6iZgIaVm2IMUXk0GHfM4=;
+        b=ibP0AlWT2POc2g6TBq3wJtRLy4EXiHRtynjZMfj8wcNGcBH889lR/ItLh6V2e3YFGD
+         glwyYtcsjt4hKOFpHa7z2+ZqOgHMJ+UCwlC+lOcuUgcS3zJhTvtbZVsX8vW2adLNonln
+         tXc3P62lSerasGh5oXvKUv272g+PXwla5cXN6jbBGfendawqNnYGroC+CHJtUfbLC1T3
+         vd6rl5GUAslILBC/QBP3HF4xdj2Plnj15AaaiDT8lXTHbj56S/YI7noSJTvILsbFELNZ
+         AAeTHkW2gsnj/36MQSKu7y1VZQLS6WejIxFzzBVP0l9h6MNtiTgg4XpqODO8UQUoYlra
+         mHOA==
+X-Forwarded-Encrypted: i=1; AJvYcCX50+6vp3ScnuYW3fcoG3djBiJDkLlo/N61FqGSd/rMXbwTHibnT4bkZ2u9EsozWdgfoMHs@lists.linux.dev
+X-Gm-Message-State: AOJu0YyhVxPcNxFYDyjqdFxHB8i45t7jyyrS+6OwyDDqjGppoPoMpKzI
+	Pc9VS3Sgwgp6lq7KrGl5H6t5gvmwTc5Fy6V9oXzbmsaIspyg27Ge5oi5
+X-Gm-Gg: ASbGncvkqLHvWHMVkWdsE1Lv7YWlKvAehIrTEX9I3op3iU7nEHi1m/6D+1w7cd9xrsP
+	6/p5sXU7C+hSH6Zhb71gnuzgT84Tg7XhUT130gqVaz3bjAfhkhorFqIcch+pDPm99l3YSl8E1Sk
+	FRzjql5J0Mr9aCqxY897qg37WXVppDyhkThTAt1FrVivM6OIgODp5bpQYa7xom7e8aC9GIHTJvu
+	KXniilq793nFJwUH9CQp54R6UHRevEf19DvawWlQOXEpVrviBMPafFWt5SDwetk4+CytzvpLO6E
+	KXR+rHDAEvOwQPF9z9il/Nz42e3Vd3OnSqOFa3YJraVa4th5pb769hzPA9+LfrrDs9kAbWAfljI
+	=
+X-Google-Smtp-Source: AGHT+IFX/JE8xs0dtWJTtpxoAw108+yxpwrRoiMuu696MghqABs29FkJDRGkGOS7haSa53S3zqGnCw==
+X-Received: by 2002:a05:622a:11c1:b0:476:7199:4da1 with SMTP id d75a77b69052e-4a73c5ed5bemr350669851cf.46.1750345590333;
+        Thu, 19 Jun 2025 08:06:30 -0700 (PDT)
+Received: from tamird-mac.local ([2600:4041:5be7:7c00:5c8a:fc6a:b57c:e57f])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7785aaacdsm250531cf.39.2025.06.19.08.06.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 08:06:29 -0700 (PDT)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v12 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
+Date: Thu, 19 Jun 2025 11:06:24 -0400
+Message-Id: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250618213347.425503-4-neil@brown.name>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHAnVGgC/3XOwW6DMAwG4FepOC+VbRKT9NT3mHaAJJRog1QBo
+ VUV775QqSvttKPjfL//azH6FPxYHHbXIvk5jCEOeUB62xW2q4eTF8Hlh4KAFBCgsOOUhI3JCyc
+ b07BBAtsW+f85+TZ838LeP/LcptiLqUu+vidI0GhQlax4T1pDJUjMtYspzuPn5XhOcYpDX4evv
+ Y39GtmFcYrpcqs38xp8L0KbIjMLEFqysY4dmdYdT78ha5G5+ldWWboadV4RyFK/Sr2V5VbqLG1
+ TtsS+0qz5VZqHLLHaSpOlQsfWKqKW6VUiPKgiuaUI2bJEqo10xlXqj8WNLeHJ4trYGQu2sY2Bp
+ 7vLsvwAOlZtqwwCAAA=
+X-Change-ID: 20250201-cstr-core-d4b9b69120cf
+To: Michal Rostecki <vadorovsky@protonmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Saravana Kannan <saravanak@google.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>, 
+ Russell King <linux@armlinux.org.uk>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+ Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+ devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
+ nouveau@lists.freedesktop.org, linux-block@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-Hi NeilBrown,
+This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+have omitted Co-authored tags, as the end result is quite different.
 
-kernel test robot noticed the following build warnings:
+Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+Closes: https://github.com/Rust-for-Linux/linux/issues/1075
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on trondmy-nfs/linux-next linus/master v6.16-rc2 next-20250619]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v12:
+- Introduce `kernel::fmt::Display` to allow implementations on foreign
+  types.
+- Tidy up doc comment on `str_to_cstr`. (Alice Ryhl).
+- Link to v11: https://lore.kernel.org/r/20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com
 
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfsd-provide-proper-locking-for-all-write_-function/20250619-053514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250618213347.425503-4-neil%40brown.name
-patch subject: [PATCH 3/3] nfsd: split nfsd_mutex into one mutex per net-namespace.
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250619/202506192052.L9tj28RJ-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506192052.L9tj28RJ-lkp@intel.com/reproduce)
+Changes in v11:
+- Use `quote_spanned!` to avoid `use<'a, T>` and generally reduce manual
+  token construction.
+- Add a commit to simplify `quote_spanned!`.
+- Drop first commit in favor of
+  https://lore.kernel.org/rust-for-linux/20240906164448.2268368-1-paddymills@proton.me/.
+  (Miguel Ojeda)
+- Correctly handle expressions such as `pr_info!("{a}", a = a = a)`.
+  (Benno Lossin)
+- Avoid dealing with `}}` escapes, which is not needed. (Benno Lossin)
+- Revert some unnecessary changes. (Benno Lossin)
+- Rename `c_str_avoid_literals!` to `str_to_cstr!`. (Benno Lossin &
+  Alice Ryhl).
+- Link to v10: https://lore.kernel.org/r/20250524-cstr-core-v10-0-6412a94d9d75@gmail.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506192052.L9tj28RJ-lkp@intel.com/
+Changes in v10:
+- Rebase on cbeaa41dfe26b72639141e87183cb23e00d4b0dd.
+- Implement Alice's suggestion to use a proc macro to work around orphan
+  rules otherwise preventing `core::ffi::CStr` to be directly printed
+  with `{}`.
+- Link to v9: https://lore.kernel.org/r/20250317-cstr-core-v9-0-51d6cc522f62@gmail.com
 
-All warnings (new ones prefixed by >>):
+Changes in v9:
+- Rebase on rust-next.
+- Restore `impl Display for BStr` which exists upstream[1].
+- Link: https://doc.rust-lang.org/nightly/std/bstr/struct.ByteStr.html#impl-Display-for-ByteStr [1]
+- Link to v8: https://lore.kernel.org/r/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com
 
->> fs/nfsd/nfsctl.c:1891:14: warning: variable 'nn' is uninitialized when used here [-Wuninitialized]
-    1891 |         mutex_lock(&nn->nfsd_info.mutex);
-         |                     ^~
-   fs/nfsd/nfsctl.c:1877:21: note: initialize the variable 'nn' to silence this warning
-    1877 |         struct nfsd_net *nn;
-         |                            ^
-         |                             = NULL
-   1 warning generated.
+Changes in v8:
+- Move `{from,as}_char_ptr` back to `CStrExt`. This reduces the diff
+  some.
+- Restore `from_bytes_with_nul_unchecked_mut`, `to_cstring`.
+- Link to v7: https://lore.kernel.org/r/20250202-cstr-core-v7-0-da1802520438@gmail.com
 
+Changes in v7:
+- Rebased on mainline.
+- Restore functionality added in commit a321f3ad0a5d ("rust: str: add
+  {make,to}_{upper,lower}case() to CString").
+- Used `diff.algorithm patience` to improve diff readability.
+- Link to v6: https://lore.kernel.org/r/20250202-cstr-core-v6-0-8469cd6d29fd@gmail.com
 
-vim +/nn +1891 fs/nfsd/nfsctl.c
+Changes in v6:
+- Split the work into several commits for ease of review.
+- Restore `{from,as}_char_ptr` to allow building on ARM (see commit
+  message).
+- Add `CStrExt` to `kernel::prelude`. (Alice Ryhl)
+- Remove `CStrExt::from_bytes_with_nul_unchecked_mut` and restore
+  `DerefMut for CString`. (Alice Ryhl)
+- Rename and hide `kernel::c_str!` to encourage use of C-String
+  literals.
+- Drop implementation and invocation changes in kunit.rs. (Trevor Gross)
+- Drop docs on `Display` impl. (Trevor Gross)
+- Rewrite docs in the style of the standard library.
+- Restore the `test_cstr_debug` unit tests to demonstrate that the
+  implementation has changed.
 
-  1867	
-  1868	/**
-  1869	 * nfsd_nl_version_get_doit - get the enabled status for all supported nfs versions
-  1870	 * @skb: reply buffer
-  1871	 * @info: netlink metadata and command arguments
-  1872	 *
-  1873	 * Return 0 on success or a negative errno.
-  1874	 */
-  1875	int nfsd_nl_version_get_doit(struct sk_buff *skb, struct genl_info *info)
-  1876	{
-  1877		struct nfsd_net *nn;
-  1878		int i, err;
-  1879		void *hdr;
-  1880	
-  1881		skb = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
-  1882		if (!skb)
-  1883			return -ENOMEM;
-  1884	
-  1885		hdr = genlmsg_iput(skb, info);
-  1886		if (!hdr) {
-  1887			err = -EMSGSIZE;
-  1888			goto err_free_msg;
-  1889		}
-  1890	
-> 1891		mutex_lock(&nn->nfsd_info.mutex);
-  1892		nn = net_generic(genl_info_net(info), nfsd_net_id);
-  1893	
-  1894		for (i = 2; i <= 4; i++) {
-  1895			int j;
-  1896	
-  1897			for (j = 0; j <= NFSD_SUPPORTED_MINOR_VERSION; j++) {
-  1898				struct nlattr *attr;
-  1899	
-  1900				/* Don't record any versions the kernel doesn't have
-  1901				 * compiled in
-  1902				 */
-  1903				if (!nfsd_support_version(i))
-  1904					continue;
-  1905	
-  1906				/* NFSv{2,3} does not support minor numbers */
-  1907				if (i < 4 && j)
-  1908					continue;
-  1909	
-  1910				attr = nla_nest_start(skb,
-  1911						      NFSD_A_SERVER_PROTO_VERSION);
-  1912				if (!attr) {
-  1913					err = -EINVAL;
-  1914					goto err_nfsd_unlock;
-  1915				}
-  1916	
-  1917				if (nla_put_u32(skb, NFSD_A_VERSION_MAJOR, i) ||
-  1918				    nla_put_u32(skb, NFSD_A_VERSION_MINOR, j)) {
-  1919					err = -EINVAL;
-  1920					goto err_nfsd_unlock;
-  1921				}
-  1922	
-  1923				/* Set the enabled flag if the version is enabled */
-  1924				if (nfsd_vers(nn, i, NFSD_TEST) &&
-  1925				    (i < 4 || nfsd_minorversion(nn, j, NFSD_TEST)) &&
-  1926				    nla_put_flag(skb, NFSD_A_VERSION_ENABLED)) {
-  1927					err = -EINVAL;
-  1928					goto err_nfsd_unlock;
-  1929				}
-  1930	
-  1931				nla_nest_end(skb, attr);
-  1932			}
-  1933		}
-  1934	
-  1935		mutex_unlock(&nn->nfsd_info.mutex);
-  1936		genlmsg_end(skb, hdr);
-  1937	
-  1938		return genlmsg_reply(skb, info);
-  1939	
-  1940	err_nfsd_unlock:
-  1941		mutex_unlock(&nn->nfsd_info.mutex);
-  1942	err_free_msg:
-  1943		nlmsg_free(skb);
-  1944	
-  1945		return err;
-  1946	}
-  1947	
+Changes in v5:
+- Keep the `test_cstr_display*` unit tests.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changes in v4:
+- Provide the `CStrExt` trait with `display()` method, which returns a
+   `CStrDisplay` wrapper with `Display` implementation. This addresses
+   the lack of `Display` implementation for `core::ffi::CStr`.
+- Provide `from_bytes_with_nul_unchecked_mut()` method in `CStrExt`,
+   which might be useful and is going to prevent manual, unsafe casts.
+- Fix a typo (s/preffered/prefered/).
+
+Changes in v3:
+- Fix the commit message.
+- Remove redundant braces in `use`, when only one item is imported.
+
+Changes in v2:
+- Do not remove `c_str` macro. While it's preferred to use C-string
+   literals, there are two cases where `c_str` is helpful:
+   - When working with macros, which already return a Rust string literal
+     (e.g. `stringify!`).
+   - When building macros, where we want to take a Rust string literal as an
+     argument (for caller's convenience), but still use it as a C-string
+     internally.
+- Use Rust literals as arguments in macros (`new_mutex`, `new_condvar`,
+   `new_mutex`). Use the `c_str` macro to convert these literals to C-string
+   literals.
+- Use `c_str` in kunit.rs for converting the output of `stringify!` to a
+   `CStr`.
+- Remove `DerefMut` implementation for `CString`.
+
+---
+Tamir Duberstein (5):
+      rust: macros: reduce collections in `quote!` macro
+      rust: support formatting of foreign types
+      rust: replace `CStr` with `core::ffi::CStr`
+      rust: replace `kernel::c_str!` with C-Strings
+      rust: remove core::ffi::CStr reexport
+
+ drivers/block/rnull.rs                |   4 +-
+ drivers/cpufreq/rcpufreq_dt.rs        |   5 +-
+ drivers/gpu/drm/drm_panic_qr.rs       |   5 +-
+ drivers/gpu/drm/nova/driver.rs        |  10 +-
+ drivers/gpu/nova-core/driver.rs       |   6 +-
+ drivers/gpu/nova-core/firmware.rs     |   2 +-
+ drivers/gpu/nova-core/gpu.rs          |   4 +-
+ drivers/gpu/nova-core/nova_core.rs    |   2 +-
+ drivers/net/phy/ax88796b_rust.rs      |   8 +-
+ drivers/net/phy/qt2025.rs             |   6 +-
+ rust/kernel/auxiliary.rs              |   6 +-
+ rust/kernel/block/mq.rs               |   2 +-
+ rust/kernel/clk.rs                    |   9 +-
+ rust/kernel/configfs.rs               |  14 +-
+ rust/kernel/cpufreq.rs                |   6 +-
+ rust/kernel/device.rs                 |   9 +-
+ rust/kernel/devres.rs                 |   2 +-
+ rust/kernel/driver.rs                 |   4 +-
+ rust/kernel/drm/device.rs             |   4 +-
+ rust/kernel/drm/driver.rs             |   3 +-
+ rust/kernel/drm/ioctl.rs              |   2 +-
+ rust/kernel/error.rs                  |  10 +-
+ rust/kernel/faux.rs                   |   5 +-
+ rust/kernel/firmware.rs               |  16 +-
+ rust/kernel/fmt.rs                    |  89 +++++++
+ rust/kernel/kunit.rs                  |  21 +-
+ rust/kernel/lib.rs                    |   3 +-
+ rust/kernel/miscdevice.rs             |   5 +-
+ rust/kernel/net/phy.rs                |  12 +-
+ rust/kernel/of.rs                     |   5 +-
+ rust/kernel/pci.rs                    |   2 +-
+ rust/kernel/platform.rs               |   6 +-
+ rust/kernel/prelude.rs                |   5 +-
+ rust/kernel/print.rs                  |   4 +-
+ rust/kernel/seq_file.rs               |   6 +-
+ rust/kernel/str.rs                    | 444 ++++++++++------------------------
+ rust/kernel/sync.rs                   |   7 +-
+ rust/kernel/sync/condvar.rs           |   4 +-
+ rust/kernel/sync/lock.rs              |   4 +-
+ rust/kernel/sync/lock/global.rs       |   6 +-
+ rust/kernel/sync/poll.rs              |   1 +
+ rust/kernel/workqueue.rs              |   9 +-
+ rust/macros/fmt.rs                    |  99 ++++++++
+ rust/macros/kunit.rs                  |  10 +-
+ rust/macros/lib.rs                    |  19 ++
+ rust/macros/module.rs                 |   2 +-
+ rust/macros/quote.rs                  | 111 ++++-----
+ samples/rust/rust_configfs.rs         |   9 +-
+ samples/rust/rust_driver_auxiliary.rs |   7 +-
+ samples/rust/rust_driver_faux.rs      |   4 +-
+ samples/rust/rust_driver_pci.rs       |   4 +-
+ samples/rust/rust_driver_platform.rs  |   4 +-
+ samples/rust/rust_misc_device.rs      |   3 +-
+ scripts/rustdoc_test_gen.rs           |   6 +-
+ 54 files changed, 540 insertions(+), 515 deletions(-)
+---
+base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
+change-id: 20250201-cstr-core-d4b9b69120cf
+
+Best regards,
+--  
+Tamir Duberstein <tamird@gmail.com>
+
