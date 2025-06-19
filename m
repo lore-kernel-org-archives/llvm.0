@@ -1,83 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1807F23AE60;
-	Thu, 19 Jun 2025 07:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74D4200127;
+	Thu, 19 Jun 2025 08:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750317688; cv=none; b=lsOnUKB0QCcu89mOm6uXPXU6Xki34gaqJzLzCKCc6SZ5JQl6vBfaI+mx/Uj1xKxEvSfCee6i9oOcLMUfjawFYD0Ho3tJpVSOUkfMjlsSlgGbBzcVrCoBIKHuLLn7YfXjSWQiGX6IFyk+lOA10Jz88uuT9SFh3pQcR+j/4/Wut+E=
+	t=1750323327; cv=none; b=gP5pnXvH0ZLEv8OIxXLEWsSjNP2L0vVN7sefBMOVEmqRyOikXNjQmb4UI0HXMmGO6jmdYAHm5AuyjFmmdLklbiVA9hUhB+1hwnBfz+aXP1AJKxl3p6Hrvu+IRQUVca9sbP6a77qXr3phfCCL1rOMUP2upjYSRO42tPjnmwFSKBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750317688; c=relaxed/simple;
-	bh=QPSBc8Une+v2evtmUldYAtgnGtWTzJ3aRIcVWBcA4cM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VPse8Dbu0xCnJ5F6c8q5r/ZuTWTxUa/Ky1in+yPjqaMamILAKxgmoaNQErmNgDp/YVuRM4Pv/yxDUCWz35UgI1wGrvH5Y6a5eslITRiubUpOPtzVDTTx73aKBTCLWR2xPW6816o7cyK5CuVHw/ojxrUXKFfhKQrG0d8ERyzi7fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eZA2B2P1; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750323327; c=relaxed/simple;
+	bh=eQADuGSiL41NAxGl9NK+UhkSlVn0yTQBhyaUTND5Uzc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zq6G1+jc8pgyEB9l1MCaz4RAd5w7fvyriFCKaYiy21ctwmh1fsMm1GNfV1u2C7xC/AIEuTvH6spd2GPu54epAB2IDE8zWXLs5YTPTEFtGVY91Oh2aY782AS9Y5yjue0wmAa/3bAXMrVq9znIdqb3rKZtX971nGkl9znbfE66ykA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2FgroRg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eZA2B2P1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750317687; x=1781853687;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QPSBc8Une+v2evtmUldYAtgnGtWTzJ3aRIcVWBcA4cM=;
-  b=eZA2B2P1dhyeubeyi524ccaYzd7uQ6u1o2RqXAbRieqAvlEpwhcNA0id
-   ryj9Esa4xxwx8ZbGOpAZJS7MIdk4Y7fMtDCmRzx17pnCUJZA7JZKSAUAF
-   1BHsEE2NWmjMBapIikHi8gv6u63zSx0Y0pBlZLSJKSxBaLPomIc9tJLZs
-   0/u7VFWussxjC3cCsX876A4jn2Ni1rtHr3CW+ynurPsBpfIcumsBMUfuN
-   EHCD/eQB3He2LmwyXWTHMDBYZsAfLHWWQXuGaCa+gaf6TnB+DfuXqHmSI
-   UT0TCBGlxcjboX4jbmK0KU4sXNnl7XeMAZmA2fVH1hl4PZFCyMXX2y6D7
-   w==;
-X-CSE-ConnectionGUID: +OkjHbAjQ3eIvJS3AZ/jWA==
-X-CSE-MsgGUID: kbmUVKw8T2KFUIU5uZMcPQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="40171968"
-X-IronPort-AV: E=Sophos;i="6.16,247,1744095600"; 
-   d="scan'208";a="40171968"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 00:21:27 -0700
-X-CSE-ConnectionGUID: ASKh9BZURnSEfzc4Y8n7Sw==
-X-CSE-MsgGUID: M3ikF6xTTuy5abU6Bl+4Rw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,247,1744095600"; 
-   d="scan'208";a="154801463"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 19 Jun 2025 00:21:25 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uS9aN-000KV4-2d;
-	Thu, 19 Jun 2025 07:21:23 +0000
-Date: Thu, 19 Jun 2025 15:20:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kai Huang <kai.huang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:tdxhost_kexec_new_v3_wip 4/6] vmlinux.o: warning:
- objtool: tdh_vp_enter+0x1b: call to pfn_valid() leaves .noinstr.text section
-Message-ID: <202506191530.xivKNsvG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2FgroRg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A63C4CEF8;
+	Thu, 19 Jun 2025 08:55:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750323327;
+	bh=eQADuGSiL41NAxGl9NK+UhkSlVn0yTQBhyaUTND5Uzc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=p2FgroRg8XpbJ/VSjtfLXHjJJRjKYpLj2XcaUHKG2xLQ7wfM+Z5n3rCjl6c8Zto5M
+	 RSqSwjDobL8Uw3UNbEgelKH8UpaKTaToYX2CC3EHc2vsE2pdmJDyKlBWw+TMDnneAR
+	 zMJQDoEg8twbtA3I11UyCenEImVZ9sO7oElSKq/lIdyVHdbSV7Rl1uy4I9OtVCIJ1L
+	 xY4b7NmVNhx3/G6psbDY7j5hAeSUhrVg2Gh8rwAs7zI7pjkVGSiXnOiYqIeGf09brb
+	 UZTFESwD6c+51mkUr6sZ7eCO2jWacLftMDJ3IO+VCTUTYL9SrpXOCd2q9ivlu3Pq39
+	 P3TSZ4nA1tZBA==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60789b450ceso962777a12.2;
+        Thu, 19 Jun 2025 01:55:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVhFvOx+E3BuRaPH6H/JYggp1BQzjmPpAfxN8jzfQjQdml8pqjmM3ntebXjtvJO8RN/eJcSWQ==@lists.linux.dev, AJvYcCWPMpPz3PpMhy6aw4aGqJvowaIyFeqxXXbZRUewKK1CxhOpZJvIzhMkWIjuHEELHA00+Wv9ziM=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwmFh8LchMgYwwq4d2fgjpAmzudnwchTlpzM5pLgj2aRyHONqLL
+	/jpBALxb3uq4dlWjuS2FxE2GrJrMqTYwi3vMQ784e6wU5c3i20f9QXP7Q6qlSQSVOlz5AeKcJrY
+	H+DsL5E3VgT8AxqlsEhsjBVh8vs7oBdA=
+X-Google-Smtp-Source: AGHT+IFe63NPmdC9P72cDlyX2WP9si/cWhn+2uqDCCs1dQMO/+ouBJs4HCM0Kl1RCgdHuztVjrD3QGSEtvvPoh/cEAU=
+X-Received: by 2002:a05:6402:50d2:b0:607:6057:9006 with SMTP id
+ 4fb4d7f45d1cf-608d08f7a70mr18716524a12.8.1750323325929; Thu, 19 Jun 2025
+ 01:55:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-9-kees@kernel.org>
+In-Reply-To: <20250523043935.2009972-9-kees@kernel.org>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 19 Jun 2025 16:55:15 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4rFt3J6hD-eiNN5nihNR0cwMxPJQpq8LQWkx4km428og@mail.gmail.com>
+X-Gm-Features: AX0GCFtBM3K8OeK1JL3sld-cpEWi3kLQAET9w-cyksCMv2tJ5SCZdduevj4T0cU
+Message-ID: <CAAhV-H4rFt3J6hD-eiNN5nihNR0cwMxPJQpq8LQWkx4km428og@mail.gmail.com>
+Subject: Re: [PATCH v2 09/14] mips: Handle KCOV __init vs inline mismatches
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel/tdx.git tdxhost_kexec_new_v3_wip
-head:   e3d211bcc0e2cc0cecdd49d1e65ad6d6f8d5d3c3
-commit: d8f94663c1fd58d5f10086aa4826f1f0534029ca [4/6] x86/virt/tdx: Remove the !KEXEC_CORE dependency
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250619/202506191530.xivKNsvG-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506191530.xivKNsvG-lkp@intel.com/reproduce)
+Hi, Kees,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506191530.xivKNsvG-lkp@intel.com/
+On Fri, May 23, 2025 at 12:41=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+>
+> When KCOV is enabled all functions get instrumented, unless
+> the __no_sanitize_coverage attribute is used. To prepare for
+> __no_sanitize_coverage being applied to __init functions, we have to
+> handle differences in how GCC's inline optimizations get resolved. For
+> mips this requires forcing a function to be inline with __always_inline.
+>
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: <linux-mips@vger.kernel.org>
+> ---
+>  arch/mips/include/asm/time.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/include/asm/time.h b/arch/mips/include/asm/time.h
+> index e855a3611d92..044cff0e0764 100644
+> --- a/arch/mips/include/asm/time.h
+> +++ b/arch/mips/include/asm/time.h
+> @@ -55,7 +55,7 @@ static inline int mips_clockevent_init(void)
+>   */
+>  extern int init_r4k_clocksource(void);
+>
+> -static inline int init_mips_clocksource(void)
+> +static __always_inline int init_mips_clocksource(void)
+Similar to x86 and arm, I prefer to mark it as __init rather than
+__always_inline.
 
-All warnings (new ones prefixed by >>):
+Huacai
 
->> vmlinux.o: warning: objtool: tdh_vp_enter+0x1b: call to pfn_valid() leaves .noinstr.text section
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  {
+>  #ifdef CONFIG_CSRC_R4K
+>         return init_r4k_clocksource();
+> --
+> 2.34.1
+>
+>
