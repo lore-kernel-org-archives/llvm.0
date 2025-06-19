@@ -1,157 +1,236 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DBB200127;
-	Thu, 19 Jun 2025 08:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFF622422B;
+	Thu, 19 Jun 2025 11:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750323361; cv=none; b=jpvVQa36m73X6ttdAygDSK9MyuABNQWLlGSw1A8SPGqq1S9i7iA72rC5CtNSX/QfnUhGYBm54BHKX+l/txjkch8d8ydKvBpVCV5hR5uudRJJ5UwLabG/xvQ6W+Dj9CIPORQdAiRrPwox3BdVZ9HowhOSImqcrpGlVMgwoAgR1s0=
+	t=1750333373; cv=none; b=c/Cln8clyOUnTM1ulLqae3SVrjNii8A+c9HxXV1hwN5sLxT6+c4F1U3//lrp5ZD1oalrcIgRED4CfJfsa8ecG1biOCVwNuvO3C2AOOSqOMPRJ6F6jrg2gwsV6fWjAu5O12JN85bCkPo5bfkjoRUOJ9HLrBZsgM25ejhT601C28A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750323361; c=relaxed/simple;
-	bh=GY39qewCO8ZjeGeZxUohtkWS54SrNUfyybjbm7an5Kw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eqnBAczf8osqgsPn2gKeN69wArhh2/+PZ1oQQxjivitUnqx9BszsRQu8FD+z2DvRQn6WbuOT+1HmZgCWRQMUBbJ+s/reZkEAVEGKqi95s8wk94H3876qqo8tUayQQ4kNlvLP3j+lc0COe3Lm7IE2AeM41t2NiSn2rNgs9GHUUTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BiG8+DpI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750333373; c=relaxed/simple;
+	bh=2ism8y0cRz7WJYenvmkZZDJKu1qgRT/2vxnWwJvHrQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oB9RfhK7UOf6KX2J4LAG3Z2Qiu6Y2bvSwRd94246U4F591YVcsiz8+ljOWtKW3uSkknXlbjXImMNnVPHTIPdIp/rdgZaqa1MNAcN2rnc8afJ2y3W+KoMK4Nxybg94xbHLTtqrH0zDn9LCN8qvtoj7R0dirTnmk9ZadT+GAWkOn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lZJK6xr7; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BiG8+DpI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478B2C4CEF4;
-	Thu, 19 Jun 2025 08:56:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750323361;
-	bh=GY39qewCO8ZjeGeZxUohtkWS54SrNUfyybjbm7an5Kw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BiG8+DpI8qK/7ehh9mHlWcIBDcd2aW6L5zsdQwFfDHxAQzkw3wpYWGPQ6B8QAPH9D
-	 y3g3vBeuapW2jbg7F3C0+1XUsLnDTo/NVZBstotfSykAdmedcEkBtU7uK0/NAe+wSt
-	 Kc+Lun055qORQz7b1mmMomPpcYDq76KH/YewkrSM0s4AR/fntnE2c+ZQiv3ylk6uFy
-	 YMe89/7ZUy5WBvyLmptPtHixT5axCELqsF3d08SoPQsMs39mRobfTX8/5lFJkTd5Ag
-	 2mulMGlFaIN9bMOa0eo2qBME6/JU5n//r22rEhdAHA56YcfKfLRjdPIb6YPhoPnwm1
-	 xxs6mMfeLDs3A==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6071ac9dc3eso846007a12.1;
-        Thu, 19 Jun 2025 01:56:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUMUAsL+k78jsNer8G3nX8WsBKJwGjFH0Zky7snlMyEtgI9WtHSRLTWislIxE2YVQih9E8Z7avHXkbA@lists.linux.dev, AJvYcCVyyk+P3NNCpXbUBucUPGOZ77SVTNFJsue11ZYnsGtuAfhTAbK8pYt01EJmwtZbvg7LSkIsWQ==@lists.linux.dev, AJvYcCWqpvDzy/7jnVvz1+oAy7PeeZqQoo3cwh4GpXmwkiT+Mr27O1GW6ryB9NT8rKtOpltRJmdb+hw=@lists.linux.dev
-X-Gm-Message-State: AOJu0YynyzmOwiUtEubD/33IU4m5REW9ShEv9nSUU3RfIBeiEr/ywoeC
-	GOvF4REL2xZ9kMLLFhrvsgoXulqD4rCDXpmKwF1NpAyPJVSakQnVBF7qeZ/M5V0BTjbkpBPgj2R
-	dMdOUP/h8sV52YGqCa+Sd9o9Sx1fhKCs=
-X-Google-Smtp-Source: AGHT+IHshgFBjrE/bznWO4e6lyy0nq5bnj0JFcjbPNAIZZpdv6svyHpe5+Z0ZAFZ4cpQ+FvgAbwAckAC6VQE1xAS01s=
-X-Received: by 2002:a05:6402:26cc:b0:607:16b1:7489 with SMTP id
- 4fb4d7f45d1cf-608d094801bmr19223662a12.20.1750323359751; Thu, 19 Jun 2025
- 01:55:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lZJK6xr7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750333371; x=1781869371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2ism8y0cRz7WJYenvmkZZDJKu1qgRT/2vxnWwJvHrQk=;
+  b=lZJK6xr7h9vy122Z1PHyTo1u239rWYwa8JTY1xVBF7JGpREPVf4Bt6jH
+   ccHMZRP4En/aD/C6brJz+vdbiOf5oOHDWdq3i/sFD+urHXXXEwN0tGWdc
+   2GUIdDqBz66gMN4flNog6sZNVsFkKbTdVrG2PAe/hXDS02P9JTWB+iSwT
+   duOltgIGdRIeaLWpxQumzlrqeCKHmNIZ/WQ4VX7eLdz6Q5+URU62yAiPH
+   fbUvWyjlz4FwSaXI4rUNmeetuHVk06a8vzL7xpOsdxhYBGLNR1lCJIAlo
+   WeKZtXh3K+ngYqIJXcmex35l1uEs6aSmD+IbnflWCzVCYuPTuKXzNl/9L
+   g==;
+X-CSE-ConnectionGUID: DmqBWUj4QLyUZGAvhOA1tg==
+X-CSE-MsgGUID: hCvwCyn8TXC2OwnFakqhRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="52506613"
+X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
+   d="scan'208";a="52506613"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:42:50 -0700
+X-CSE-ConnectionGUID: agQUC5ZGR5i8jJeQKYG+PA==
+X-CSE-MsgGUID: +cRIp3xeSQOWTmN35xDE7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
+   d="scan'208";a="156114776"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 19 Jun 2025 04:42:48 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSDfJ-000Khi-2t;
+	Thu, 19 Jun 2025 11:42:45 +0000
+Date: Thu, 19 Jun 2025 19:42:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bingbu.cao@linux.intel.com, stanislaw.gruszka@linux.intel.com,
+	tian.shu.qiu@intel.com, tomi.valkeinen@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH 12/13] media: v4l2-mc: Introduce
+ v4l2_mc_pipeline_enabled()
+Message-ID: <202506191934.t9FEXlhl-lkp@intel.com>
+References: <20250619081546.1582969-13-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-10-kees@kernel.org>
-In-Reply-To: <20250523043935.2009972-10-kees@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 19 Jun 2025 16:55:48 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
-X-Gm-Features: AX0GCFvInY5DbmRkbwxLo6Cb2clGLakUsQ51xQCaa7Coc4b_DkkyTMX5tkJkYVA
-Message-ID: <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
-Subject: Re: [PATCH v2 10/14] loongarch: Handle KCOV __init vs inline mismatches
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Gleixner <tglx@linutronix.de>, Tianyang Zhang <zhangtianyang@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250619081546.1582969-13-sakari.ailus@linux.intel.com>
 
-Hi, Kees,
+Hi Sakari,
 
-On Fri, May 23, 2025 at 12:39=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
-> When KCOV is enabled all functions get instrumented, unless
-> the __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we have to
-> handle differences in how GCC's inline optimizations get resolved. For
-> loongarch this exposed several places where __init annotations were
-> missing but ended up being "accidentally correct". Fix these cases and
-> force one function to be inline with __always_inline.
->
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: WANG Xuerui <kernel@xen0n.name>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Tianyang Zhang <zhangtianyang@loongson.cn>
-> Cc: Bibo Mao <maobibo@loongson.cn>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: <loongarch@lists.linux.dev>
-> ---
->  arch/loongarch/include/asm/smp.h | 2 +-
->  arch/loongarch/kernel/time.c     | 2 +-
->  arch/loongarch/mm/ioremap.c      | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/as=
-m/smp.h
-> index ad0bd234a0f1..88e19d8a11f4 100644
-> --- a/arch/loongarch/include/asm/smp.h
-> +++ b/arch/loongarch/include/asm/smp.h
-> @@ -39,7 +39,7 @@ int loongson_cpu_disable(void);
->  void loongson_cpu_die(unsigned int cpu);
->  #endif
->
-> -static inline void plat_smp_setup(void)
-> +static __always_inline void plat_smp_setup(void)
-Similar to x86 and arm, I prefer to mark it as __init rather than
-__always_inline.
+kernel test robot noticed the following build warnings:
 
-Huacai
+[auto build test WARNING on linuxtv-media-pending/master]
+[also build test WARNING on linus/master media-tree/master v6.16-rc2 next-20250618]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->  {
->         loongson_smp_setup();
->  }
-> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
-> index bc75a3a69fc8..367906b10f81 100644
-> --- a/arch/loongarch/kernel/time.c
-> +++ b/arch/loongarch/kernel/time.c
-> @@ -102,7 +102,7 @@ static int constant_timer_next_event(unsigned long de=
-lta, struct clock_event_dev
->         return 0;
->  }
->
-> -static unsigned long __init get_loops_per_jiffy(void)
-> +static unsigned long get_loops_per_jiffy(void)
->  {
->         unsigned long lpj =3D (unsigned long)const_clock_freq;
->
-> diff --git a/arch/loongarch/mm/ioremap.c b/arch/loongarch/mm/ioremap.c
-> index 70ca73019811..df949a3d0f34 100644
-> --- a/arch/loongarch/mm/ioremap.c
-> +++ b/arch/loongarch/mm/ioremap.c
-> @@ -16,12 +16,12 @@ void __init early_iounmap(void __iomem *addr, unsigne=
-d long size)
->
->  }
->
-> -void *early_memremap_ro(resource_size_t phys_addr, unsigned long size)
-> +void * __init early_memremap_ro(resource_size_t phys_addr, unsigned long=
- size)
->  {
->         return early_memremap(phys_addr, size);
->  }
->
-> -void *early_memremap_prot(resource_size_t phys_addr, unsigned long size,
-> +void * __init early_memremap_prot(resource_size_t phys_addr, unsigned lo=
-ng size,
->                     unsigned long prot_val)
->  {
->         return early_memremap(phys_addr, size);
-> --
-> 2.34.1
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-ipu6-Use-correct-pads-for-xlate_streams/20250619-161847
+base:   https://git.linuxtv.org/media-ci/media-pending.git master
+patch link:    https://lore.kernel.org/r/20250619081546.1582969-13-sakari.ailus%40linux.intel.com
+patch subject: [PATCH 12/13] media: v4l2-mc: Introduce v4l2_mc_pipeline_enabled()
+config: x86_64-buildonly-randconfig-003-20250619 (https://download.01.org/0day-ci/archive/20250619/202506191934.t9FEXlhl-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250619/202506191934.t9FEXlhl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506191934.t9FEXlhl-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/v4l2-core/v4l2-mc.c:622:6: warning: variable 'src_streams' set but not used [-Wunused-but-set-variable]
+     622 |         u64 src_streams = 0, sink_streams = 0;
+         |             ^
+>> drivers/media/v4l2-core/v4l2-mc.c:732:44: warning: variable 'source_stream' is uninitialized when used here [-Wuninitialized]
+     732 |         return v4l2_mc_downpath_enabled(sink_pad, source_stream, func,
+         |                                                   ^~~~~~~~~~~~~
+   drivers/media/v4l2-core/v4l2-mc.c:671:19: note: initialize the variable 'source_stream' to silence this warning
+     671 |         u32 source_stream;
+         |                          ^
+         |                           = 0
+   2 warnings generated.
+
+
+vim +/src_streams +622 drivers/media/v4l2-core/v4l2-mc.c
+
+   615	
+   616	static int
+   617	__v4l2_mc_pipeline_enabled(struct v4l2_subdev_state *state,
+   618				   struct media_pad *src_pad, u64 __src_streams,
+   619				   struct media_pad **__sink_pad, u64 *__sink_streams)
+   620	{
+   621		struct v4l2_subdev_route *route;
+ > 622		u64 src_streams = 0, sink_streams = 0;
+   623		bool has_sink_pad = false;
+   624		unsigned int sink_pad;
+   625	
+   626		dev_dbg(state->sd->dev, "%s: source enabled, pad/streams %u/%#llx\n",
+   627			state->sd->entity.name, src_pad->index, __src_streams);
+   628		for_each_active_route(&state->routing, route) {
+   629			dev_dbg(state->sd->dev, "%s: %u/%u -> %u/%u, flags %x\n",
+   630				state->sd->entity.name,
+   631				route->sink_pad, route->sink_stream, route->source_pad,
+   632				route->source_stream, route->flags);
+   633			if (route->source_pad != src_pad->index)
+   634				continue;
+   635	
+   636			if (!(BIT_ULL(route->source_stream) & __src_streams))
+   637				continue;
+   638	
+   639			if (!has_sink_pad) {
+   640				has_sink_pad = true;
+   641				sink_pad = route->sink_pad;
+   642			}
+   643	
+   644			if (route->sink_pad != sink_pad) {
+   645				dev_dbg(state->sd->dev,
+   646					"sink pads (%u vs. %u) differ\n",
+   647					route->sink_pad, sink_pad);
+   648				return -EMLINK;
+   649			}
+   650	
+   651			sink_streams |= BIT_ULL(route->sink_stream);
+   652			src_streams |= BIT_ULL(route->source_stream);
+   653		}
+   654	
+   655		*__sink_pad = has_sink_pad ? &state->sd->entity.pads[sink_pad] : NULL;
+   656		*__sink_streams = sink_streams;
+   657	
+   658		return 0;
+   659	}
+   660	
+   661	static int v4l2_mc_downpath_enabled(struct media_pad *sink_pad,
+   662					    unsigned int sink_stream,
+   663					    bool (*func)(struct video_device *vdev),
+   664					    struct media_pad **__sink_pad,
+   665					    u64 *__sink_streams)
+   666	{
+   667		struct v4l2_subdev_state *state;
+   668		struct v4l2_subdev_route *route;
+   669		struct v4l2_subdev *sd;
+   670		struct media_pad *source_pad, *tmp_pad;
+   671		u32 source_stream;
+   672	
+   673		if (!is_media_entity_v4l2_subdev(sink_pad->entity))
+   674			return -ENXIO;
+   675	
+   676		sd = media_entity_to_v4l2_subdev(sink_pad->entity);
+   677		dev_dbg(sd->dev, "path_enabled: found sub-device %s\n",
+   678			sd->entity.name);
+   679	
+   680		state = v4l2_subdev_lock_and_get_active_state(sd);
+   681		route = v4l2_subdev_find_route(&state->routing, sink_pad->index,
+   682					       sink_stream, true, 0);
+   683		if (IS_ERR(route)) {
+   684			v4l2_subdev_unlock_state(state);
+   685			dev_dbg(sd->dev,
+   686				"path_enabled: can't find opposite route for %s:%u/%u",
+   687				sd->entity.name, sink_pad->index, sink_stream);
+   688			return 2;
+   689		}
+   690	
+   691		source_pad = &sd->entity.pads[route->source_pad];
+   692		v4l2_subdev_unlock_state(state);
+   693	
+   694		tmp_pad = sink_pad;
+   695		sink_pad = media_pad_remote_pad_unique(source_pad);
+   696		if (IS_ERR(sink_pad)) {
+   697			dev_dbg(sd->dev,
+   698				"path_enabled: can't find remote source for %s:%u\n",
+   699				source_pad->entity->name, source_pad->index);
+   700			return PTR_ERR(sink_pad);
+   701		}
+   702	
+   703		if (is_media_entity_v4l2_video_device(sink_pad->entity)) {
+   704			struct video_device *vdev;
+   705	
+   706			vdev = media_entity_to_video_device(sink_pad->entity);
+   707			if (!vdev)
+   708				return -ENXIO;
+   709	
+   710			dev_dbg(vdev->dev_parent,
+   711				"path_enabled: found video device %s\n",
+   712				vdev->name);
+   713	
+   714			if (!*__sink_pad) {
+   715				*__sink_pad = tmp_pad;
+   716				dev_dbg(sd->dev, "path_enabled: sink %u/%u\n",
+   717					tmp_pad->index, sink_stream);
+   718			} else if (tmp_pad != *__sink_pad) {
+   719				dev_dbg(sd->dev,
+   720					"path_enabled: pads %s/%u and %s/%u differ\n",
+   721					tmp_pad->entity->name, tmp_pad->index,
+   722					(*__sink_pad)->entity->name,
+   723					(*__sink_pad)->index);
+   724				return -EXDEV;
+   725			}
+   726	
+   727			*__sink_streams |= BIT_ULL(sink_stream);
+   728	
+   729			return func(vdev);
+   730		}
+   731	
+ > 732		return v4l2_mc_downpath_enabled(sink_pad, source_stream, func,
+   733						__sink_pad, __sink_streams);
+   734	}
+   735	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
