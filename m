@@ -1,56 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11ECF1401B;
-	Fri, 20 Jun 2025 11:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F42421A425;
+	Fri, 20 Jun 2025 11:38:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750418311; cv=none; b=MVMSOsAkHmvxUcJglBZ5L+yz/XRLRJUgoXVe0Ataxl9Aol7tT+S19sYGlggLRN6Q333YbhBBYkgWFaD+kJtSrg2538l53yUcDQbh/SJE741SX/sDVBGp1b1LKOLTonS8vSImBaZ+G8blIwAZBDDllC0yB0PRXCLKz0sbf7EyHw4=
+	t=1750419533; cv=none; b=jVXagAcgJpGHdtLUEu0AvG4T3Kv4KuIHL9QjXocu9IY61zlheN8ZGKnRT0xYnbKDEJLirdl61E5ep+KJZOQduXp9fygLsZmb9DTCrweSpullqszbaBv6fXjsLbj/en8JRxEnTQsKjNRFIM7yKnupGpnzw2ge+dwaszUUjeqAlW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750418311; c=relaxed/simple;
-	bh=GzeWP4djQPFAJn699mpS/mLYTmBt8cmn0T9XsL6bfQw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jqHGYvO5VxRGz88IvU6pi0xNKnCjUMp9er8QoeZbunDVga20mo5cmy4Aj+cHcesiBX859XWXYrTteIvn2Cia6lIYZpPG8xOeyPtvsw0MEltZ9Xm33kBVky/4bSaEatO6+/I3XtRjlJRisuWk/3jJMmerXk8V7LteAL8jRbp4vyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0zxzlzK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750419533; c=relaxed/simple;
+	bh=wldGJgpWJX2/0ox4U/bhSDHg+C5dlQXJ/dU+3159yuc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fbolBHXGIGiVquGPOViWPZiSVyU0u9EEDraeLs0ZI680HrqWtUwZEOZX4FsGUbzoa/jWLPMsdWru6nl2SgjgbfnGnXMEuOfWQAHEaMjZeM0Bgo2dH3049tOKyri2q9WrmxHIf2Y9d1fb2y/fIUr6Z6gCyiXgzvrM+MpxGVAitJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dldju2PV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0zxzlzK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6339C4CEE3;
-	Fri, 20 Jun 2025 11:18:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dldju2PV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFFBC4CEE3;
+	Fri, 20 Jun 2025 11:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750418310;
-	bh=GzeWP4djQPFAJn699mpS/mLYTmBt8cmn0T9XsL6bfQw=;
+	s=k20201202; t=1750419532;
+	bh=wldGJgpWJX2/0ox4U/bhSDHg+C5dlQXJ/dU+3159yuc=;
 	h=From:To:Cc:Subject:Date:From;
-	b=a0zxzlzKAh+IvrQIpt4x3A3DeiYbTWKo+AkpLk1sljVMr/AQI4ohgXpAKTY2eM0DP
-	 QTTilxgSkDIrLQKahcMWc23bvfLKlGJe7cflmVHvAr5krdnINxbmcJ0kjqODZdVVdm
-	 gARq6R51AvFWDxKq9HanJakEIZTX/IONIS0YzROSralXTIQ9w/a7VJL96KHH4KfvWs
-	 ieP54O81vZA2Hg2DVxBBK8MQyfX/rbSwjkkctGDRpJdyvdNoJJ/QTL3/0leEqr8Zto
-	 zMIoMqca0X4k6i+hLIWuoN644TSIbnSvpAj8MY0WVLUTGfDiGCO0TsI6CppMNvtz+0
-	 a5qDzlHk85Elw==
+	b=dldju2PVtEAP0iOcKTNK5vE2o3MW/EilJAOJSK3Zx1GIX0B85uwHE0Zjzq3HyMT+V
+	 HqBbayBwnJ5Q7J0u56Lb8OyHOi7e7CjiiHbHBwQKDNJ9Rv9aYo4kCH+cUfTeeBlHR/
+	 miZPL9NIQkQYSoWD16p407/1I6M3WntWtqTNZY0KWLNS3WFEF5/FB0jRNDKSYilNiT
+	 gskxkUb9r4fXjYLKnkdDVV5t+DU76gRayPyDHD6xl4vzh8nvMm1Ie0WL//VL94xHYP
+	 ln6rxkqW78au2X2/u3+vYRJ6Ha9AfYmv9CX+4L12K/PmWCpgbM6CgkFD049HJxzwMV
+	 zhjT+iPhEqMHA==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Ashutosh Dixit <ashutosh.dixit@intel.com>,
-	Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
-	Nam Cao <namcao@linutronix.de>,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] i915: fix build error some more
-Date: Fri, 20 Jun 2025 13:18:18 +0200
-Message-Id: <20250620111824.3395007-1-arnd@kernel.org>
+Subject: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
+Date: Fri, 20 Jun 2025 13:38:31 +0200
+Message-Id: <20250620113846.3950478-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,40 +62,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-An earlier patch fixed a build failure with clang, but I still see the
-same problem with some configurations using gcc:
+clang versions before version 18 manage to badly optimize the bpf
+verifier, with lots of variable spills leading to excessive stack
+usage in addition to likely rather slow code:
 
-drivers/gpu/drm/i915/i915_pmu.c: In function 'config_mask':
-include/linux/compiler_types.h:568:38: error: call to '__compiletime_assert_462' declared with attribute error: BUILD_BUG_ON failed: bit > BITS_PER_TYPE(typeof_member(struct i915_pmu, enable)) - 1
-drivers/gpu/drm/i915/i915_pmu.c:116:3: note: in expansion of macro 'BUILD_BUG_ON'
-  116 |   BUILD_BUG_ON(bit >
+kernel/bpf/verifier.c:23936:5: error: stack frame size (2096) exceeds limit (1280) in 'bpf_check' [-Werror,-Wframe-larger-than]
+kernel/bpf/verifier.c:21563:12: error: stack frame size (1984) exceeds limit (1280) in 'do_misc_fixups' [-Werror,-Wframe-larger-than]
 
-As I understand it, the problem is that the function is not always fully
-inlined, but the __builtin_constant_p() can still evaluate the argument
-as being constant.
+Turn off the sanitizer in the two functions that suffer the most from
+this when using one of the affected clang version.
 
-Marking it as __always_inline so far works for me in all configurations.
-
-Fixes: a7137b1825b5 ("drm/i915/pmu: Fix build error with GCOV and AutoFDO enabled")
-Fixes: a644fde77ff7 ("drm/i915/pmu: Change bitmask of enabled events to u32")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/i915/i915_pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
-index 990bfaba3ce4..5bc696bfbb0f 100644
---- a/drivers/gpu/drm/i915/i915_pmu.c
-+++ b/drivers/gpu/drm/i915/i915_pmu.c
-@@ -108,7 +108,7 @@ static unsigned int config_bit(const u64 config)
- 		return other_bit(config);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2fa797a6d6a2..7724c7a56d79 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19810,7 +19810,14 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 	return 0;
  }
  
--static u32 config_mask(const u64 config)
-+static __always_inline u32 config_mask(const u64 config)
+-static int do_check(struct bpf_verifier_env *env)
++#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 180100
++/* old clang versions cause excessive stack usage here */
++#define __workaround_kasan  __disable_sanitizer_instrumentation
++#else
++#define __workaround_kasan
++#endif
++
++static __workaround_kasan int do_check(struct bpf_verifier_env *env)
  {
- 	unsigned int bit = config_bit(config);
- 
+ 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
+ 	struct bpf_verifier_state *state = env->cur_state;
+@@ -21817,7 +21824,7 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+ /* Do various post-verification rewrites in a single program pass.
+  * These rewrites simplify JIT and interpreter implementations.
+  */
+-static int do_misc_fixups(struct bpf_verifier_env *env)
++static __workaround_kasan int do_misc_fixups(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_prog *prog = env->prog;
+ 	enum bpf_attach_type eatype = prog->expected_attach_type;
 -- 
 2.39.5
 
