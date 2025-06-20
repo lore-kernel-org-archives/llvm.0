@@ -1,91 +1,118 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBAED529
-	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 13:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B408F292936;
+	Fri, 20 Jun 2025 13:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750424551; cv=none; b=NP5+xLFlOdQZUWHiVqxD/XWfJtCy5zSGZGgJY80HtkAWEr1ao2aZoZbYouFt9I7wIEjP7MFOeLNCZR4MwIhcWVcbczkaUBXHe+w5rlt344d8lKwVuSraP47IxiKH/jw5zi9PdOUP5J1RjNgnrIWrwZwSWqQQLqGPHsIR5LG/S9g=
+	t=1750425003; cv=none; b=ac9unfhZwHdKRx10EOc3bgAVuxODf6kfn9f1rt1Yac8Zf2f1QjiRfRxCDLk0//2hI956F1ki74mB666l8NoYc26Ownpxcy66T7KeKeCbb0xcvDtVhzcqsCpDvgqUz5N3fQzvp+5Ej1pOBxPYRAjpFMuIc1z+DkZJlZtDFhnVlp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750424551; c=relaxed/simple;
-	bh=+i9CDQP6n8E/ducjtDiDPCYXDGSXpqP+2tp0/1XCQ2s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gY2K+1525qPe2bBm9q1XUIv94RGl3zeYO0WpLdOAOwv/+OWDFoKpr3JN6aA6t2FaVKMqDKKc0t191wiA7johxEnF0ZD2I1FWddHBCJhb7l52Dd7XA8Y7lQ8pCdiwYppT/80pnpd4cT3A9tCIpFBZXbE/sVx24l7SRB/6JM755Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GL4hEqVF; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750425003; c=relaxed/simple;
+	bh=WbCME8fESr+rlhYeTNtW17nAZ6PIIOdd7ebJuruuPdw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lyM7hFJapiC+NwclDxIl0RbBSqfZKk1G7Ziof3aEj98mQHRb1F3x7SS/5K+2NctPrLkR2Srb1xsfIRHZRJhdTqYRfOu3P/cxhtpT5Cx/QgCdTfJkHboTOgTUD0zTnhYX//ti/pqYvw9GJQegZ4rbt7HCTDGJMMCl4JMQXG0NY8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sqkWog/L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GL4hEqVF"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-31308f52248so283802a91.2
-        for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 06:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750424549; x=1751029349; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ku2lfCRgbeEeQyv76fdpFPbrXssOkC7jN0SIcPzFmHU=;
-        b=GL4hEqVF9NSM9LA9qDFh/kQbCiqX9/0xocXKQ13pR1K2t89lKsYnAJaptnOLu0EZxB
-         IhzB4xT5wRZ8xJZKpeATmCOFYmdz+PnuFpUcrXQ2FQ2vCTDS+jzXB5mQ/XohdMrybsJr
-         VZo603RsI4WrWxIXPQWgJ/Atj2ycjnG9oDUOT9Yjw2uXZgEBNJliwQX6RE6CjXeySGNE
-         WDYc+PjGO0/U+Q3NcXWQDWanjK7h3mtK+lHX6a5oyQnyJrv5TZR7UMm3HXzWg6qilB37
-         J9vI9x++MlDdlqMOGix9dkADSF0NOJaYMbytExYyltSOg3yP7dc4N66ogUlzyynzlFbK
-         qJTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750424549; x=1751029349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ku2lfCRgbeEeQyv76fdpFPbrXssOkC7jN0SIcPzFmHU=;
-        b=n+s2JHhCqXD7Pk9zOBEOm8gdvIVMtn1LPnnqsfoojihs6en/dOBH8RioJCoCXT7hEp
-         2wNosyaK1haOnLku9OQIheM4n+tcwnasVBN/4DB0vUvIMlZhFIKXgN3PaD+EuEfKozaY
-         YoQtNQdy0mPhId2dwZPQ0MQW2NZtlW/wDr5L0ierb75m9erm4MzWCLf2uvbhT150Jx27
-         FiEZwYbMBuC6rC55DnhH+tdA6+G61BNcHQbPtqbU8Sv2CKyeA8sqjqUTLN8wvR0/WxdD
-         G8vhClxCfuGP2cVBVp+ojapZQU7XcB3tOwGCq3cFoq0dBiDpBMjmXHTHTMjbHtOGbTjY
-         ZozQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUeQvlSKy+eEpgMLLGDf6hq5cjsRiWJMvxQwabj1ljFo9TipW0UQmZ6zBTussx/s8jlDT0I@lists.linux.dev
-X-Gm-Message-State: AOJu0YzTFVcUywIEHD3fV3J5kNRB+5q2YB3b0O/xmzkSzJ4x2BqApfBV
-	pSjvzcqWAbzDbTU5AdWjCX44Q3H2rrC3rJF9r0HTL463/Hj4cgiUIiD/gwQvRXJTVQ4kq2QkQBT
-	25hw+5Edhje93Jk0o+GJbmXVAxqrR8aQ=
-X-Gm-Gg: ASbGnctliTYaZOPVBoMAVZymkqnt0hwgz1+WzJf+Zzig8nCeHJwkT4ltldIT7KBjIPF
-	PXO9UidzdwTCGsGOEZkEjzuyiEFvOOgq2xYyR79aFMMOnJjwGG1nA8uRiGEMgwe27TAU6mefIf4
-	yAZ+MdRkWfkBOxZCf1pmm90p0eyx8g7nfqKDLoveBkxrA=
-X-Google-Smtp-Source: AGHT+IE8+NT28jJ3PDlhzDgK6jrsUDzmmjw277/KOn1Wu4vcAf7wijjDZ/chmH3fOdcVRrI5P8Ws46tamOa5k66F32k=
-X-Received: by 2002:a17:90a:d64f:b0:312:1ae9:1537 with SMTP id
- 98e67ed59e1d1-3159d577d0cmr1554310a91.0.1750424549428; Fri, 20 Jun 2025
- 06:02:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sqkWog/L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90F8C4CEF0;
+	Fri, 20 Jun 2025 13:10:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750425003;
+	bh=WbCME8fESr+rlhYeTNtW17nAZ6PIIOdd7ebJuruuPdw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sqkWog/LXRIoTG+6CAObPN3i3f1RKdPcOeYJRccWks74n8Vx2zKxhE2JSnT8opqaJ
+	 johHEBFLTigRkx/270JkYouoqbEeyqQzOdVsLkRkuvs2WVOwQEceDk+v4guWL4qloq
+	 /ZZWOwx0NAd2w2rwJN6IcLH43mtGbsZTMzLuIiHWg5R4FznUoRNLLwuMSWstCTuUFX
+	 4E21BBuBBQreYEFq9oXix9fxd4EldtRa6DX7hfMEu5nMRmBpLSuwFMRFCLhvEyhIWZ
+	 qkGf+zKIyfU63c9iIOno1EMzPNEQzWYEmLfZ1uY6dYsaR1hDgmBTfBbMjYv+JD+X7c
+	 TAcSw3sbPMKBg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Manish Chopra <manishc@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] net: qed: reduce stack usage for TLV processing
+Date: Fri, 20 Jun 2025 15:09:53 +0200
+Message-Id: <20250620130958.2581128-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250620111406.3365763-1-arnd@kernel.org> <CANiq72mYSPA_S6hT4B2U8Sgt2QTJekuVEKqjJDgQxGVmMX64jA@mail.gmail.com>
-In-Reply-To: <CANiq72mYSPA_S6hT4B2U8Sgt2QTJekuVEKqjJDgQxGVmMX64jA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 20 Jun 2025 15:02:16 +0200
-X-Gm-Features: AX0GCFsaglna8IdmCTzw96MKy8HtUl8_UV1WmceqB6-05WHmIviXXgc-IkSlcZg
-Message-ID: <CANiq72kfUWYdssvxOS52D9W3fLN0xQRHNwYGGduSGHrSGu+YEQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: change __retain macro for gcc-11
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tony Ambardar <tony.ambardar@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 20, 2025 at 3:00=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Is something else going on?
+From: Arnd Bergmann <arnd@arndb.de>
 
-Ah, I see -- it does error on arm and arm64, but not x86:
+clang gets a bit confused by the code in the qed_mfw_process_tlv_req and
+ends up spilling registers to the stack hundreds of times. When sanitizers
+are enabled, this can end up blowing the stack warning limit:
 
-    https://godbolt.org/z/G4Pbd9Gar
+drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c:1244:5: error: stack frame size (1824) exceeds limit (1280) in 'qed_mfw_process_tlv_req' [-Werror,-Wframe-larger-than]
 
-So it is architecture dependent.
+Apparently the problem is the complexity of qed_mfw_update_tlvs()
+after inlining, and marking the four main branches of that function
+as noinline_for_stack makes this problem completely go away, the stack
+usage goes down to 100 bytes.
 
-Cheers,
-Miguel
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+If anyone feels adventurous and able to figure out what exactly goes
+wrong in clang, I can provide preprocessed source files for debugging.
+---
+ drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c b/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c
+index f55eed092f25..7d78f072b0a1 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c
+@@ -242,7 +242,7 @@ static int qed_mfw_get_tlv_group(u8 tlv_type, u8 *tlv_group)
+ }
+ 
+ /* Returns size of the data buffer or, -1 in case TLV data is not available. */
+-static int
++static noinline_for_stack int
+ qed_mfw_get_gen_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
+ 			  struct qed_mfw_tlv_generic *p_drv_buf,
+ 			  struct qed_tlv_parsed_buf *p_buf)
+@@ -304,7 +304,7 @@ qed_mfw_get_gen_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
+ 	return -1;
+ }
+ 
+-static int
++static noinline_for_stack int
+ qed_mfw_get_eth_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
+ 			  struct qed_mfw_tlv_eth *p_drv_buf,
+ 			  struct qed_tlv_parsed_buf *p_buf)
+@@ -438,7 +438,7 @@ qed_mfw_get_tlv_time_value(struct qed_mfw_tlv_time *p_time,
+ 	return QED_MFW_TLV_TIME_SIZE;
+ }
+ 
+-static int
++static noinline_for_stack int
+ qed_mfw_get_fcoe_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
+ 			   struct qed_mfw_tlv_fcoe *p_drv_buf,
+ 			   struct qed_tlv_parsed_buf *p_buf)
+@@ -1073,7 +1073,7 @@ qed_mfw_get_fcoe_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
+ 	return -1;
+ }
+ 
+-static int
++static noinline_for_stack int
+ qed_mfw_get_iscsi_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
+ 			    struct qed_mfw_tlv_iscsi *p_drv_buf,
+ 			    struct qed_tlv_parsed_buf *p_buf)
+-- 
+2.39.5
+
