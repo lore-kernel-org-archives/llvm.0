@@ -1,99 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13A31E47B7;
-	Fri, 20 Jun 2025 11:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D3B72630
+	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 13:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750420314; cv=none; b=mM2sgyJqPFOwjA1wb27YwlIXV42oDeJTj6KR3MtXHPwlRDNcXAyqOmgOme1SNdtGEKaBsSn/WSq2w06pS4elcjnVpM9nzapi2J1Z10dqd5wk0THxPwZ+6y6hK1MFVgoEcm8P7hjgmEqrYzBTqqEtoJJ7tHNYJh9llL6trINbE7E=
+	t=1750424416; cv=none; b=QnD46lY/GnZ0A7AATheOyif+ehQHoqcCwEqsuhbxueAylgQ07Z4j5IHZNDtPIBSrFHeeu+GdARuUmc7XoVlLecuMO1P/9MRyRmh33l04p0+6Mw5JR0ZO2x+v7v0DV0DGYDmoUc6YDQ7gdWgnp//gB0wbyI9zp4Q0o3+vs1fCYGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750420314; c=relaxed/simple;
-	bh=OpaRy6f5lV+HSoFPNPnqy/zc1+kY/2E7JDK8AUK1DJ4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KRJIXW9zq3LQ/X8+NcplYUMd8sH8wSAzEIpYRO+r6kyy4lgTV9Ikik5Tbxci9ND+LD4aRZ0+5290AkacSv7DSJycpNRzfA9tOXsJSMVBiwsNgAHDjmXQYXFJhSKSBzpPDMWM7iORT5CD9twWrYhWrRoHN1ID23v+jth0sXRcnjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrtCc/v8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750424416; c=relaxed/simple;
+	bh=jZZ/xkZYhg27rMIBma/CNy6BmfDLsuguSvLbtNJe22A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j26CqLB7yyhjOnu42QY5vTntHeIBxKd82ca0xAOXHtZveF8KZhe6mYs9Tb9vHB8i/BfKHCc0472dCn4GDbRd1DkJS3xzGeOJ1/rXE3L/fkop9xJU3xZ5ruDNrlNOJD9OF2exURcpbapnwszwtuDOAPSIVU3mLlOVPQMSCxP3754=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IfxJ9Cj/; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrtCc/v8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B14BC4CEE3;
-	Fri, 20 Jun 2025 11:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750420314;
-	bh=OpaRy6f5lV+HSoFPNPnqy/zc1+kY/2E7JDK8AUK1DJ4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XrtCc/v8dMuE04TYZw1YGGg1thbNCP8HJNEPDmkkKWdK1GcQzOizJwjviPUc8Uax9
-	 81F7xgs0eBMN/FeesttDLCDJzpDNKofWgOjVLau7IuIAEdj3zutt2SEfeI5uU0JIBy
-	 bwc5j97TxFtjvNxwMtTwSRN0uVxg4Rcf0XX67drJK39oD9v4qO+3dgIDenMYZBopVD
-	 O6dWw0W8cd8Rq5+HSu9PF+OZ7X8AlLnmRDGOZ0m5AEfHRw91TShoEfaslKTkKQx8S5
-	 uyuAJkhauye50uOH3EpnQaVUUEDW0/kUPY6TJQbm53ofchkTRyGZjVjeHJNcDltV+n
-	 txIZ/Gd5xQUqg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Robin Murphy <robin.murphy@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] perf/arm-cmn: reduce stack usage in arm_cmn_probe()
-Date: Fri, 20 Jun 2025 13:51:42 +0200
-Message-Id: <20250620115149.132845-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfxJ9Cj/"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b26fabda6d9so273584a12.1
+        for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 06:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750424414; x=1751029214; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iHusbDYNQFht+VhqQI20ig4TKjH1YnzOWhBaeYQa1tQ=;
+        b=IfxJ9Cj//sIJQLWdiQOlxd8V0nNRuwgoeAbvqzs8Jgz6RtAgicNy0Qj2/MlWw5p/tv
+         e0NuvpN4OwaLLHp0H+NRHsMBa7Bgupcdx4gP3KgWkby4ktSBI8nLhuCVYwph4rVjtXMq
+         Y2urZ9cGOeeX6xiZtnWOxTLXRFdejj+6jjvLb0Sf/1/b/qcF7lECdpBnfHOvDyvsnqAB
+         OIeFnzG2nNDbslkgzQ6JCeTy/Yue74pXM1M7G0mN9y7e+tMjv9shzb8Ytn//jiVdYCvs
+         H1A3dzE4ZLwhtz7jyc3854VkhbOmGpWbGQ5G7UskXmt+3cUpji+4ECfz15Qeb6ROZky0
+         R0/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750424414; x=1751029214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iHusbDYNQFht+VhqQI20ig4TKjH1YnzOWhBaeYQa1tQ=;
+        b=BObHTk+DTr8r/dVHdT28mbmjIzouAP9hOJJDyas0tyXBlH/55qo0WktL7O1b0BA917
+         lAh/mCiaczdxVjMNlnEgjEpccD5aWJ/2ITm4L/uk/H5XrLigDDuryEohLzqNVYlpKfLk
+         qXP5CmgDbmiR6Dm8VuNmXuZ8KtLOVj0ZgmuxA2vOGUyKj4kxAgsGiaquDiqDzawDQcV3
+         F4jGA+7ff4GNmMc+QCMc9nV0ffZXRS2Pn1QMcY5YwSxSW/esjV3hmLMfKpTjVq/lsEO6
+         9H+roGdv+JeM1XURW51ebQ9Dm+TdKoVa5hoNeEfIWWx8876wdCP3h4AhI9wI1CBYOHSv
+         JmiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4HUefpKq4DAI8PAx2TuN7HKy+kB7bI9V+7VDRaudmoNuoB9tM3yQrt7k4EDu0IO87xpT7@lists.linux.dev
+X-Gm-Message-State: AOJu0YxCWziph2Pr45x/YnVA//AuHPBTj87QWtmBYrKLGBIQl4N8S8IG
+	lQVZed1t+08k5P05++IRuNZITcqMWeBOqrRWa1QB78BAQvjIrQS7j9saiEK0xsQ5vLAlu6AQt5i
+	OF2PHB3ZPYaCwmHRe9hXb+/obatPRX24=
+X-Gm-Gg: ASbGncs3bjSqI4mNkQ4+noPIpRu6DuviMJ9mslFSIL6BhdUQcGS8j5H2PeQQYe16R/V
+	fqQo1zl9KEoOWblXak7zfYpMvL0T6pe9ZH3emgRY/iLycei70Wo/KpDWsae45kuicufoQvW3OFI
+	1WcETXWs43sQJfUSZ1YmeZtsRAXzLn0Atuavn3esCMZHQ=
+X-Google-Smtp-Source: AGHT+IGlT/p4avAw3OActY0SsgmlHfvmC7u//by9/Qs2X0j+n1a4zqlppZzYwFev8DlDQk3HtgZsp2wYIisHxJvsWIg=
+X-Received: by 2002:a17:90b:2709:b0:2ff:7970:d2b6 with SMTP id
+ 98e67ed59e1d1-3159d8dfa33mr1803795a91.5.1750424413975; Fri, 20 Jun 2025
+ 06:00:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250620111406.3365763-1-arnd@kernel.org>
+In-Reply-To: <20250620111406.3365763-1-arnd@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 20 Jun 2025 15:00:01 +0200
+X-Gm-Features: AX0GCFvt549YbePHDFUC5E6wMqoJqx4LlXU3Vlyz-GlYaVfKJhvMdL9vUzaIFzA
+Message-ID: <CANiq72mYSPA_S6hT4B2U8Sgt2QTJekuVEKqjJDgQxGVmMX64jA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: change __retain macro for gcc-11
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tony Ambardar <tony.ambardar@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Arnd Bergmann <arnd@arndb.de>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 20, 2025 at 1:14=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> Building kernels with CONFIG_LD_DEAD_CODE_DATA_ELIMINATION using gcc-11
+> causes compiler warnings:
+>
+> kernel/cgroup/rstat.c:65:1: error: 'retain' attribute ignored [-Werror=3D=
+attributes]
+>
+> It appears that this version reports __has_attribute(__retain__) as true
+> but doesn't actually support the feature.
 
-This function has a rather large stack usage, which triggers the
-warning limit with clang if I reduce the default to 1280 bytes:
+Hmm... I can't reproduce the error in Compiler Explorer:
 
-drivers/perf/arm-cmn.c:2541:12: error: stack frame size (1312) exceeds limit (1280) in 'arm_cmn_probe' [-Werror,-Wframe-larger-than]
+    https://godbolt.org/z/roMrfjxGM
 
-This is a combination of two problems:
+And locally with a GCC 11.4 I can see the attribute keeping a function
+in the final binary when marked as `retain` against `retain` against
+`-ffunction-sections -Wl,--gc-sections`.
 
- - The arm_cmn_discover() function has some large local variables and
-   gets inlined here by clang (but not gcc)
+Is something else going on?
 
- - The (struct pmu) assignment adds an extra copy of the pmu structure
-   on the stack and does a memcpy() from that
-
-Address the first one here by marking arm_cmn_discover() as noinline_for_stack,
-making clang behave more like gcc here. This gets it under the warning
-limit, though the total stack usage does not actually get reduced.
-
-It would be nice to also change the way struct pmu is initialized, but I
-see that this is done consistently for all pmu drivers. Ideally the function
-pointers should be moved into a 'static const' structure per driver as this
-is done in most other subsystems.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/perf/arm-cmn.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-index 031d45d0fe3d..430c89760391 100644
---- a/drivers/perf/arm-cmn.c
-+++ b/drivers/perf/arm-cmn.c
-@@ -2243,7 +2243,8 @@ static enum cmn_node_type arm_cmn_subtype(enum cmn_node_type type)
- 	}
- }
- 
--static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
-+static noinline_for_stack int arm_cmn_discover(struct arm_cmn *cmn,
-+					       unsigned int rgn_offset)
- {
- 	void __iomem *cfg_region;
- 	struct arm_cmn_node cfg, *dn;
--- 
-2.39.5
-
+Cheers,
+Miguel
