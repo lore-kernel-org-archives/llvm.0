@@ -1,118 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B408F292936;
-	Fri, 20 Jun 2025 13:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FDA290DA1;
+	Fri, 20 Jun 2025 14:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750425003; cv=none; b=ac9unfhZwHdKRx10EOc3bgAVuxODf6kfn9f1rt1Yac8Zf2f1QjiRfRxCDLk0//2hI956F1ki74mB666l8NoYc26Ownpxcy66T7KeKeCbb0xcvDtVhzcqsCpDvgqUz5N3fQzvp+5Ej1pOBxPYRAjpFMuIc1z+DkZJlZtDFhnVlp0=
+	t=1750428220; cv=none; b=bfIH1Z/rB82pxJKjmztnVZ9RYmlPne0UUaekPN9HeyBYtEnWwb1e/DrwwOCRj/QKXUZXLUQ0gp3JMMzwkScVK/zQpfWWUFNNaK0Aitxs0pLQlqXD588avXhJ1rWKNXQGqLS4vMl3Mu+DEd3OJnB9Y78AmqGQPAnHu7ri05ShY2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750425003; c=relaxed/simple;
-	bh=WbCME8fESr+rlhYeTNtW17nAZ6PIIOdd7ebJuruuPdw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lyM7hFJapiC+NwclDxIl0RbBSqfZKk1G7Ziof3aEj98mQHRb1F3x7SS/5K+2NctPrLkR2Srb1xsfIRHZRJhdTqYRfOu3P/cxhtpT5Cx/QgCdTfJkHboTOgTUD0zTnhYX//ti/pqYvw9GJQegZ4rbt7HCTDGJMMCl4JMQXG0NY8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sqkWog/L; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750428220; c=relaxed/simple;
+	bh=p9nC1h8R9HgKVWcy4BLKg7nHMZViNKOTBn/WYNwJk18=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QEF0bS7kT4l0Do97ZKmNhY+pJ5vrh8U9ieBwFnouu475CBJAeejHhlDct7CqUpoeRhAxlsnAynpqpAGHpEX9pruk/36HbVxqd7ka4VCEtpjowohYGlnUfh9WfIMibgJ1i4whm0CwxSicJiQMlCGxK5YMuy0SpTY5NFXyANzdZOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AO3JtqI6; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sqkWog/L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90F8C4CEF0;
-	Fri, 20 Jun 2025 13:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750425003;
-	bh=WbCME8fESr+rlhYeTNtW17nAZ6PIIOdd7ebJuruuPdw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sqkWog/LXRIoTG+6CAObPN3i3f1RKdPcOeYJRccWks74n8Vx2zKxhE2JSnT8opqaJ
-	 johHEBFLTigRkx/270JkYouoqbEeyqQzOdVsLkRkuvs2WVOwQEceDk+v4guWL4qloq
-	 /ZZWOwx0NAd2w2rwJN6IcLH43mtGbsZTMzLuIiHWg5R4FznUoRNLLwuMSWstCTuUFX
-	 4E21BBuBBQreYEFq9oXix9fxd4EldtRa6DX7hfMEu5nMRmBpLSuwFMRFCLhvEyhIWZ
-	 qkGf+zKIyfU63c9iIOno1EMzPNEQzWYEmLfZ1uY6dYsaR1hDgmBTfBbMjYv+JD+X7c
-	 TAcSw3sbPMKBg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Manish Chopra <manishc@marvell.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AO3JtqI6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750428218; x=1781964218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p9nC1h8R9HgKVWcy4BLKg7nHMZViNKOTBn/WYNwJk18=;
+  b=AO3JtqI6U7B8VnLSN/xrF5WawEy8uI0hBx0mp3GbH+LnINY4D+05b2ic
+   rxfCw0tX+9WZx8Mhu4Ud2oz5i1Vn7K0OdDUNW2cPxZL1idzeyfKRdFep8
+   avGlvVvVLxyfRqulmIEet9Xsf4gFT3mSx/JSIbAKLSWQrgyNF5rSpEj48
+   BoY7AKP1K8yEUp2Cl2OVZHl3c/7G6KSEd/XolCydB7V4YV6X1/VZZxDDJ
+   EJWSUgzWya/uC8zrpVdmyo7hZuldT34/wViqKQ+XCWKmZT/isDvk9iGXW
+   FT2I/Rz5jtHIGLm/wvuNvWw512Tr3InQSDSSIArDL4oMNzlyLyFqEGlgH
+   w==;
+X-CSE-ConnectionGUID: Z2N/xp2bQvmQPhWZnkEZgA==
+X-CSE-MsgGUID: HYQ0HTtMTI2Vudj+X/dbAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="63744875"
+X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
+   d="scan'208";a="63744875"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 07:03:27 -0700
+X-CSE-ConnectionGUID: RuhpVMTJTUCTIYqFQpaKbw==
+X-CSE-MsgGUID: yd7fuzCsTgmcfEDgpRruHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
+   d="scan'208";a="151471639"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 20 Jun 2025 07:03:23 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uScKu-000LpW-2I;
+	Fri, 20 Jun 2025 14:03:20 +0000
+Date: Fri, 20 Jun 2025 22:03:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Anderson <sean.anderson@linux.dev>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
+	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] net: qed: reduce stack usage for TLV processing
-Date: Fri, 20 Jun 2025 15:09:53 +0200
-Message-Id: <20250620130958.2581128-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Michal Simek <monstr@monstr.eu>,
+	Saravana Kannan <saravanak@google.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Sean Anderson <sean.anderson@linux.dev>
+Subject: Re: [PATCH net 4/4] net: axienet: Split into MAC and MDIO drivers
+Message-ID: <202506202126.EmqQsj0w-lkp@intel.com>
+References: <20250619200537.260017-5-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250619200537.260017-5-sean.anderson@linux.dev>
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Sean,
 
-clang gets a bit confused by the code in the qed_mfw_process_tlv_req and
-ends up spilling registers to the stack hundreds of times. When sanitizers
-are enabled, this can end up blowing the stack warning limit:
+kernel test robot noticed the following build errors:
 
-drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c:1244:5: error: stack frame size (1824) exceeds limit (1280) in 'qed_mfw_process_tlv_req' [-Werror,-Wframe-larger-than]
+[auto build test ERROR on net/main]
 
-Apparently the problem is the complexity of qed_mfw_update_tlvs()
-after inlining, and marking the four main branches of that function
-as noinline_for_stack makes this problem completely go away, the stack
-usage goes down to 100 bytes.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/auxiliary-Allow-empty-id/20250620-040839
+base:   net/main
+patch link:    https://lore.kernel.org/r/20250619200537.260017-5-sean.anderson%40linux.dev
+patch subject: [PATCH net 4/4] net: axienet: Split into MAC and MDIO drivers
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250620/202506202126.EmqQsj0w-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506202126.EmqQsj0w-lkp@intel.com/reproduce)
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-If anyone feels adventurous and able to figure out what exactly goes
-wrong in clang, I can provide preprocessed source files for debugging.
----
- drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506202126.EmqQsj0w-lkp@intel.com/
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c b/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c
-index f55eed092f25..7d78f072b0a1 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_mng_tlv.c
-@@ -242,7 +242,7 @@ static int qed_mfw_get_tlv_group(u8 tlv_type, u8 *tlv_group)
- }
- 
- /* Returns size of the data buffer or, -1 in case TLV data is not available. */
--static int
-+static noinline_for_stack int
- qed_mfw_get_gen_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
- 			  struct qed_mfw_tlv_generic *p_drv_buf,
- 			  struct qed_tlv_parsed_buf *p_buf)
-@@ -304,7 +304,7 @@ qed_mfw_get_gen_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
- 	return -1;
- }
- 
--static int
-+static noinline_for_stack int
- qed_mfw_get_eth_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
- 			  struct qed_mfw_tlv_eth *p_drv_buf,
- 			  struct qed_tlv_parsed_buf *p_buf)
-@@ -438,7 +438,7 @@ qed_mfw_get_tlv_time_value(struct qed_mfw_tlv_time *p_time,
- 	return QED_MFW_TLV_TIME_SIZE;
- }
- 
--static int
-+static noinline_for_stack int
- qed_mfw_get_fcoe_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
- 			   struct qed_mfw_tlv_fcoe *p_drv_buf,
- 			   struct qed_tlv_parsed_buf *p_buf)
-@@ -1073,7 +1073,7 @@ qed_mfw_get_fcoe_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
- 	return -1;
- }
- 
--static int
-+static noinline_for_stack int
- qed_mfw_get_iscsi_tlv_value(struct qed_drv_tlv_hdr *p_tlv,
- 			    struct qed_mfw_tlv_iscsi *p_drv_buf,
- 			    struct qed_tlv_parsed_buf *p_buf)
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:3225:1: error: redefinition of '__inittest'
+    3225 | module_platform_driver(axienet_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:131:42: note: expanded from macro '\
+   module_init'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:2900:1: note: previous definition is here
+    2900 | module_auxiliary_driver(xilinx_axienet_mac)
+         | ^
+   include/linux/auxiliary_bus.h:289:2: note: expanded from macro 'module_auxiliary_driver'
+     289 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:131:42: note: expanded from macro '\
+   module_init'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:3225:1: error: redefinition of 'init_module'
+    3225 | module_platform_driver(axienet_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:133:6: note: expanded from macro '\
+   module_init'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:2900:1: note: previous definition is here
+    2900 | module_auxiliary_driver(xilinx_axienet_mac)
+         | ^
+   include/linux/auxiliary_bus.h:289:2: note: expanded from macro 'module_auxiliary_driver'
+     289 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:133:6: note: expanded from macro '\
+   module_init'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:3225:1: error: redefinition of '__exittest'
+    3225 | module_platform_driver(axienet_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:139:42: note: expanded from macro '\
+   module_exit'
+     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
+         |                                                 ^
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:2900:1: note: previous definition is here
+    2900 | module_auxiliary_driver(xilinx_axienet_mac)
+         | ^
+   include/linux/auxiliary_bus.h:289:2: note: expanded from macro 'module_auxiliary_driver'
+     289 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:139:42: note: expanded from macro '\
+   module_exit'
+     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
+         |                                                 ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:3225:1: error: redefinition of 'cleanup_module'
+    3225 | module_platform_driver(axienet_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:141:7: note: expanded from macro '\
+   module_exit'
+     141 |         void cleanup_module(void) __copy(exitfn)                \
+         |              ^
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:2900:1: note: previous definition is here
+    2900 | module_auxiliary_driver(xilinx_axienet_mac)
+         | ^
+   include/linux/auxiliary_bus.h:289:2: note: expanded from macro 'module_auxiliary_driver'
+     289 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:141:7: note: expanded from macro '\
+   module_exit'
+     141 |         void cleanup_module(void) __copy(exitfn)                \
+         |              ^
+   4 errors generated.
+
+
+vim +/__inittest +3225 drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+
+8a3b7a252dca9f Daniel Borkmann  2012-01-19  3224  
+2be586205ca2b8 Srikanth Thokala 2015-05-05 @3225  module_platform_driver(axienet_driver);
+8a3b7a252dca9f Daniel Borkmann  2012-01-19  3226  
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
