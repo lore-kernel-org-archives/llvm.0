@@ -1,58 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829B5229B1E;
-	Fri, 20 Jun 2025 09:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21A0283689;
+	Fri, 20 Jun 2025 10:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750413180; cv=none; b=iFaroHeMLU/YZYdCyk+tTbNVvrbPDDUs2I9/RGJ09TLubxQH1khNrZgzRPtuw3PciR6YoY5U6QEEbvb68nh6mQ47HX9l1IVj3XTSLK+I04daXqACKzMj1abl+++bXdS1vzdcDNZQLJYt8HJ05v6c+4RkNnj8p6/P5GV82fjl9ZA=
+	t=1750413783; cv=none; b=ZjQ7leaAZ46d+I6PoT6Z6U60WKfxlMEnK2H2mIPzR5F/5h2GUnGzkFk08gJLv5k0uTlqYmZf6VD6r3DmMX99xJ738WwTs1a8BJmuyWN1JchcRUdbc8Ul+gmhwE/dyx0uRL9tNiLukCAQym1k2XufC8t8IpFSQLb40eRi/RyyOXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750413180; c=relaxed/simple;
-	bh=i+5sJb61h45Tampy7aTBL6wBUfqqz4pqJwNrRU8EILs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=L8tvrDqrV/3sVbsE1lL4pssmw56ed61ieXwO58OubGokhrc/oFA/F80SB4dgIWuLrwkHJE6NO7DB0rrg/cPrpR2UzdghVRWiUaBQ9UgxE4v0j1Hl0hkJEVdoNBtZ3dZtm8SXGiNW8HmbuK36p/j8kzXjlKaafzRRk/QefSD9P54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q+36wSPU; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1750413783; c=relaxed/simple;
+	bh=yuGYBq5P7T9uK5hiNxqj8ozObL4626Y0Njl5hIt8vS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EkfSRnsQRsukecgL63K7wK48qw+4e2h2v4iFwbGy/2vAHnDkd4o73haqJCJ70y6ePKKcVYFR53DFhRliuaShyYyzhmK9QmTJqEtS+iPECfO1w4J5SfqgsnHhxITQ+rysofViokD1ReEbcYrQy1nbZaHo2TcnRVg/qcLZgeYw4vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gLULznh3; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q+36wSPU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gLULznh3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750413177; x=1781949177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i+5sJb61h45Tampy7aTBL6wBUfqqz4pqJwNrRU8EILs=;
-  b=Q+36wSPUZsckx3CtgObLxA3YjMOU+pbsi6GSt8ETPejWtReSPTxSIEi0
-   Gj20AF76fogD12E+2fMXq2GzXdUOx/x5t2KjuKu8qo0nkV6/xxB4EFKE2
-   Pnk+IAMc5JHfgF4MW3SS4mDshjNB3E2VSwriBOLU4yjXl041Q0+V1iImQ
-   BbJycdQwuOZyx8rJNEMlq1mgmmSkEmgWKaXuA4I4yaYrFeVp2YFVzfBJM
-   MChyjy13twIJ5y3TbxyeF9FEprzJ36r/KLXZ+Uf5yhI6L1X9ft5d1YSDz
-   eKUJaOpgv4lAtwTonbwDIVt0TpyXwU5W8v9mc5qt1R09FFJCE6Zm6SiTL
-   A==;
-X-CSE-ConnectionGUID: Vp3PmApJQUS2kKdb3cBZ4g==
-X-CSE-MsgGUID: 4GxjmqLiRleDGX6b16cmSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="70239345"
+  t=1750413782; x=1781949782;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yuGYBq5P7T9uK5hiNxqj8ozObL4626Y0Njl5hIt8vS4=;
+  b=gLULznh3zxCcu10Dt6hoyVOrYkOLX+RluUmWBb6F5wBW7jtT7aNxOuR7
+   VT1lgFxEieouwhGUqrTp8WwDzGO4L32w7STOtuFTwkZ1VHX41v1QIeheS
+   sPM/mLaTNDCDWSeYtxav702Q2bqsJ7SQJTCImC3DG0dbbZEKgoWidLUQ3
+   wEnqvcZ54ABm7JOTNEOb430UwL667MokrY9m6Ha6nDlomeJVn65+gIbT8
+   iH/Nxl/+G3liz+2cvWcgwbfiqorI0mZrwoIfukHej7WWE8nqLPGDLTSz1
+   GdKOaQkThSMK7jepnRQa8ApokmF7VCtjflo2FGJa3HcGdOQRDCRxph64J
+   Q==;
+X-CSE-ConnectionGUID: mFTByQifSWmZ6uajR04yHg==
+X-CSE-MsgGUID: hp9wNXbERne/+uIw2nohLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="63277722"
 X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="70239345"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 02:52:55 -0700
-X-CSE-ConnectionGUID: LHsfzbRDQjem4thF2xgc2A==
-X-CSE-MsgGUID: y1b6K6YwQWq7edutcxnA5w==
+   d="scan'208";a="63277722"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 03:03:01 -0700
+X-CSE-ConnectionGUID: 5ZZa8p2ESG+dSjMp+x/O8g==
+X-CSE-MsgGUID: hecw/N26Swu8ocsSBftMpw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="150364979"
+   d="scan'208";a="151081615"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 20 Jun 2025 02:52:56 -0700
+  by orviesa007.jf.intel.com with ESMTP; 20 Jun 2025 03:02:58 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uSYQX-000LaS-0c;
-	Fri, 20 Jun 2025 09:52:53 +0000
-Date: Fri, 20 Jun 2025 17:52:26 +0800
+	id 1uSYaF-000Lb4-0K;
+	Fri, 20 Jun 2025 10:02:55 +0000
+Date: Fri, 20 Jun 2025 18:02:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/tracing_multi_5 3/10] include/linux/ftrace.h:563:5:
- warning: no previous prototype for function 'unregister_ftrace_direct_hash'
-Message-ID: <202506201756.lZyUFtip-lkp@intel.com>
+To: Dominique Martinet via B4 Relay <devnull+asmadeus.codewreck.org@kernel.org>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	stable@vger.kernel.org, Yuhao Jiang <danisjiang@gmail.com>,
+	v9fs@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Dominique Martinet <asmadeus@codewreck.org>
+Subject: Re: [PATCH v2] net/9p: Fix buffer overflow in USB transport layer
+Message-ID: <202506201706.IUsC9LOI-lkp@intel.com>
+References: <20250620-9p-usb_overflow-v2-1-026c6109c7a1@codewreck.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,80 +70,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250620-9p-usb_overflow-v2-1-026c6109c7a1@codewreck.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_5
-head:   b288c6b15d20122d59ddf3bce2fb86afe6ed56c3
-commit: 85ce35fa5a72947188457f2189f1e9f83482470b [3/10] ftrace: Add unregister_ftrace_direct_hash function
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250620/202506201756.lZyUFtip-lkp@intel.com/config)
+Hi Dominique,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 74b4cc9b8780bfe8a3992c9ac0033bf22ac01f19]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dominique-Martinet-via-B4-Relay/net-9p-Fix-buffer-overflow-in-USB-transport-layer/20250620-052411
+base:   74b4cc9b8780bfe8a3992c9ac0033bf22ac01f19
+patch link:    https://lore.kernel.org/r/20250620-9p-usb_overflow-v2-1-026c6109c7a1%40codewreck.org
+patch subject: [PATCH v2] net/9p: Fix buffer overflow in USB transport layer
+config: i386-randconfig-004-20250620 (https://download.01.org/0day-ci/archive/20250620/202506201706.IUsC9LOI-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506201756.lZyUFtip-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506201706.IUsC9LOI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506201756.lZyUFtip-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506201706.IUsC9LOI-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from mm/filemap.c:25:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:43:
-   include/linux/ftrace.h:558:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
->> include/linux/ftrace.h:563:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:563:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
-   2 warnings generated.
---
-   In file included from mm/shmem.c:77:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:43:
-   include/linux/ftrace.h:558:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
->> include/linux/ftrace.h:563:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:563:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
-   mm/shmem.c:1686:20: warning: unused function 'shmem_show_mpol' [-Wunused-function]
-    1686 | static inline void shmem_show_mpol(struct seq_file *seq, struct mempolicy *mpol)
-         |                    ^~~~~~~~~~~~~~~
-   3 warnings generated.
+>> net/9p/trans_usbg.c:257:23: error: use of undeclared identifier 'req_sizel'; did you mean 'req_size'?
+     257 |         p9_rx_req->rc.size = req_sizel;
+         |                              ^~~~~~~~~
+         |                              req_size
+   net/9p/trans_usbg.c:234:15: note: 'req_size' declared here
+     234 |         unsigned int req_size = req->actual;
+         |                      ^
+   1 error generated.
 
 
-vim +/unregister_ftrace_direct_hash +563 include/linux/ftrace.h
+vim +257 net/9p/trans_usbg.c
 
-   557	
- > 558	int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-   559	{
-   560		return -ENODEV;
-   561	}
-   562	
- > 563	int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-   564	{
-   565		return -ENODEV;
-   566	}
-   567	
+   228	
+   229	static void usb9pfs_rx_complete(struct usb_ep *ep, struct usb_request *req)
+   230	{
+   231		struct f_usb9pfs *usb9pfs = ep->driver_data;
+   232		struct usb_composite_dev *cdev = usb9pfs->function.config->cdev;
+   233		struct p9_req_t *p9_rx_req;
+   234		unsigned int req_size = req->actual;
+   235		int status = REQ_STATUS_RCVD;
+   236	
+   237		if (req->status) {
+   238			dev_err(&cdev->gadget->dev, "%s usb9pfs complete --> %d, %d/%d\n",
+   239				ep->name, req->status, req->actual, req->length);
+   240			return;
+   241		}
+   242	
+   243		p9_rx_req = usb9pfs_rx_header(usb9pfs, req->buf);
+   244		if (!p9_rx_req)
+   245			return;
+   246	
+   247		if (req_size > p9_rx_req->rc.capacity) {
+   248			dev_err(&cdev->gadget->dev,
+   249				"%s received data size %u exceeds buffer capacity %zu\n",
+   250				ep->name, req_size, p9_rx_req->rc.capacity);
+   251			req_size = 0;
+   252			status = REQ_STATUS_ERROR;
+   253		}
+   254	
+   255		memcpy(p9_rx_req->rc.sdata, req->buf, req_size);
+   256	
+ > 257		p9_rx_req->rc.size = req_sizel;
+   258	
+   259		p9_client_cb(usb9pfs->client, p9_rx_req, status);
+   260		p9_req_put(usb9pfs->client, p9_rx_req);
+   261	
+   262		complete(&usb9pfs->received);
+   263	}
+   264	
 
 -- 
 0-DAY CI Kernel Test Service
