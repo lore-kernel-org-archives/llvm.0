@@ -1,106 +1,123 @@
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA64A231824
-	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 14:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028372522A7;
+	Fri, 20 Jun 2025 14:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750430148; cv=none; b=oCVOLtj1qQFGaqk9lKqw+SwSLxoGKo/ZsPFmr8XIkgvJHeQoxWiz7tjOrA/jsKwXovoH4SzIjy6XdQweXkiM2UVS/R7ERfAcVQtIVVs48l001avrtdh7AIoLArAUYdbVTRuq56gyunMBQVMAe9fFF2quVOxn/XJehthR43hRGKs=
+	t=1750430731; cv=none; b=gL+hPQP5rvQI/fUfRYNollr1xg/oW9URy3oGP8YsDVC0MGALyxdLAD3skLR/djfaMTu2ELhd/R1nwOQJzVUIhxMXbzFkm5gfOfSZioNEF9uo4W3KrbIwM9PStLkmEq6vnLF28hdngljH0oM3rKgkS8BsUhAQbgseV5/0xFrJcKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750430148; c=relaxed/simple;
-	bh=QIA2TZhgja5MmNtCmG7TTTxpL15mVdbtm0WB0u1sZfQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=urqkAch4q4td/re3pz7IH2hjKPDTbjXIXQ9EelBP/Di5NAiJh6DdmOTLq3bfKdDAwvl6S7faIM4q808/7jEk6EZ6s97U8drb84P0+FLYb4ysJpXwnT5bvXq8LpT5DTq0UP/lSIC0RlUluHUB0mk5qavzFZeXS5z1w7GfKh78xgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=LEyXV9pk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Mf0cdhE0; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1750430731; c=relaxed/simple;
+	bh=tmYILQMyswj4/c1RXNvxqk5R6MLTLM6z2i7/gxVuVcQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=W/TSrUeZPqisgyXMC1PnTc8rn70pVaDHgeiI3nw35OYkQ7Iksj7IK0wHeiqGNmZbsAXHj8R6zfFHVlS5TmQiQcPNejIkR4f33u+MORH1KSGm35Y0Cp8LaQtBZI0DRzW3tf2vYVqsSA6m5pZxNZQewCUazRjDvli4IOQ/ifRZFBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CG8Ttn9P; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="LEyXV9pk";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Mf0cdhE0"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id E0F711140206;
-	Fri, 20 Jun 2025 10:35:45 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Fri, 20 Jun 2025 10:35:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1750430145; x=1750516545; bh=Vc
-	aaI2US/aqfChXnIhEFupiOIGzf7TUthnMmD43vvDo=; b=LEyXV9pkiWRgcofqjV
-	WqQppSL2MBwdtvUBNtnfiU3AlYLCZJgbEBDgMGw2a0uCAr8OHwZEeDk2yxnJyFio
-	cSZ4E5DdxvGFbBBDOfvS9fKYdUJTodowpJaBZk2x83cNHrzmyKr5xQEIKJzYzhaU
-	I7rhABOTfMCGpwQysSaxyk0Cp8e33XCmoLMqn+tTiwbVEUqR599IP5YCftJkAN9I
-	xu36/6N7qrnZF8kodUJT3wT8gbC99TRJtn2iDzQIVNdIUo0yzIo+enyrRug7Q5xt
-	eY1Mt+QCOQFFku5w9sor1S+McgqGZIEYYRXg47hQWKYHT0KI2rYZ4EvxZjGiC8Ik
-	h9fw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1750430145; x=1750516545; bh=VcaaI2US/aqfChXnIhEFupiOIGzf
-	7TUthnMmD43vvDo=; b=Mf0cdhE0FDBONnFZ68+Z1EDfYSMUe70nVecuu/ilT2R1
-	sdf5hVrpcyX3vM2tLN8FQ/mcuktU468TsRMD8BRty157RRWfEHwj1uC4JkDxkdSo
-	sJeqLsPgswDbikmjhORdp9OWNv4Ol461ImLS7fsCExEJ8oqWb2HNcmZLmgQZ+9up
-	r3RYpz0cqMG6RBjscLFHYplCN/TbLzXLlHlWzKFn54E7Cewf8u+DnHuOf51Qx5X5
-	ShM+ygvfQDwRuGsDpaKI4+PeW7962x6KF5p/zpoZDOc5O6S/0SoUCUMz+CMesZvi
-	xJs/fw1moRdXnJNgYNL54VYsZjb8JhvuMfdCaylnwQ==
-X-ME-Sender: <xms:wXFVaNjES9Ol09blSdb4lFzYQAmvd7do75CkKnoQ7sLPi47nd3Wgfg>
-    <xme:wXFVaCD8MhnLNsyqZUgt5hHx2ZywbqmOaJRDYHGqqvSemnUyvD0zBPfGemRJaCbIl
-    NmvODFaIr1PZn1Lqoc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdekieeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epofggfffhvfevkffutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceuvghr
-    ghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepgf
-    duudffuddvieelvdetgfegleevjeelgfeuvdetfeehtefghfdtgedvuedtlefgnecuffho
-    mhgrihhnpehprghsthgvsghinhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphht
-    thhopeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehpvghtvghriiesihhnfh
-    hrrgguvggrugdrohhrghdprhgtphhtthhopehjphhoihhmsghovgeskhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtohepgiekieeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhlvh
-    hmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhn
-    vghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:wXFVaNFxGq5HRnfxuptOZa_QfCUdAgNcoOKHWPvRm8ecv9ib9VbV-Q>
-    <xmx:wXFVaCSoE1Onq9Na5q-yykNEDGsGBV6frjWAJLH4EBR-Puad5PiHaQ>
-    <xmx:wXFVaKyz4n3X6GnFy64nwupj_EHqwngohAs97SnDFFrntFWS37fM8g>
-    <xmx:wXFVaI6kaZL-7PHtvEAe4_2BkeqyWtwLquljk0ISaFj8nfbzhDY1IA>
-    <xmx:wXFVaOV9paxF47ltTD7w2JfrnrVqX8u1GG-Xh7mHSAWCxIq74zWWsgiN>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 742D4700063; Fri, 20 Jun 2025 10:35:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CG8Ttn9P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750430730; x=1781966730;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tmYILQMyswj4/c1RXNvxqk5R6MLTLM6z2i7/gxVuVcQ=;
+  b=CG8Ttn9PiykDteSrcSGoVQFZDkh6k8s0JqOKc6PdwfphTEg015LVvSxB
+   H2YvoYNLhAznqdSHWWRDmikPjAQfYGeJTA0e1KRArrXjfcaWVtAnu1EQS
+   aD3yT/URM/sIJKhy30W5VxukTODLfKzdj8gkfZ44oGv/tPdf++jwTJ93G
+   xVoym5m6HmHQowwTVi2vpteZpP/Mae4xEoDjXwJUXE2lPeBl+FgTLYd3O
+   /HNXegfGumKgEsAJ+Rl/0ida3B1CSBbn7bID/A3sxElURlMKPX2Razs5I
+   kZ0huW89BmGMc1+sxPWXBwHGfKgXgTw6QlifKgmK4KqQlXW+fjDb7hMi1
+   Q==;
+X-CSE-ConnectionGUID: VAhF4gmiQ4qfDjnDSYZxgA==
+X-CSE-MsgGUID: dtcBfrbdQBCZWN+VAU4zbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52786484"
+X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
+   d="scan'208";a="52786484"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 07:45:29 -0700
+X-CSE-ConnectionGUID: xPfI23MvSNW5Q5vVSnkFUw==
+X-CSE-MsgGUID: Ycr6TMT5SXuM0gXrm6Ci3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
+   d="scan'208";a="150421309"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 20 Jun 2025 07:45:28 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSczd-000Lr0-0P;
+	Fri, 20 Jun 2025 14:45:25 +0000
+Date: Fri, 20 Jun 2025 22:44:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/tracing_multi_5 10/10]
+ kernel/bpf/trampoline.c:195:19: error: variable has incomplete type 'struct
+ ftrace_ops'
+Message-ID: <202506202232.4jCtsKLX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Fri, 20 Jun 2025 16:33:49 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <b89e2cc2-f321-4775-aa05-6e8175441f88@app.fastmail.com>
-Subject: linux-next-20250620 objtool errors and warnings with clang-21-20250619105726
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Josh and Peter,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_5
+head:   b288c6b15d20122d59ddf3bce2fb86afe6ed56c3
+commit: b288c6b15d20122d59ddf3bce2fb86afe6ed56c3 [10/10] bpf: Remove ftrace_ops from bpf_trampoline object
+config: x86_64-buildonly-randconfig-003-20250620 (https://download.01.org/0day-ci/archive/20250620/202506202232.4jCtsKLX-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506202232.4jCtsKLX-lkp@intel.com/reproduce)
 
-I came across some new build failures from objtool errors
-today. I have not run this for long yet, but this is what I got
-so far:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506202232.4jCtsKLX-lkp@intel.com/
 
-https://pastebin.com/vM26CVnJ
-lib/ubsan.o: warning: objtool: __ubsan_handle_type_mismatch+0xe0: call to __msan_memset() with UACCESS enabled
-lib/ubsan.o: warning: objtool: __ubsan_handle_type_mismatch_v1+0xfd: call to __msan_memset() with UACCESS enabled
-kernel/bpf/core.o: warning: objtool: ___bpf_prog_run+0x20f: sibling call from callable instruction with modified stack frame
-drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_host_printf+0xe: unknown CFA base reg 0
+All errors (new ones prefixed by >>):
 
-https://pastebin.com/5UppA6JZ
-mm/vmscan.o: warning: objtool: shrink_lruvec+0x198f: sibling call from callable instruction with modified stack frame
-drivers/usb/host/xhci.o: warning: objtool: xhci_configure_endpoint+0x15bd: undefined stack state
-drivers/usb/host/xhci.o: warning: objtool: xhci_configure_endpoint+0x15b5: unknown CFA base reg -1
-drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_host_printf+0x9: unknown CFA base reg 0
+   In file included from kernel/bpf/trampoline.c:6:
+   include/linux/ftrace.h:567:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
+     567 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:567:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     567 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+   include/linux/ftrace.h:572:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
+     572 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:572:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     572 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+   include/linux/ftrace.h:577:5: warning: no previous prototype for function 'modify_ftrace_direct_hash' [-Wmissing-prototypes]
+     577 | int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+         |     ^
+   include/linux/ftrace.h:577:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     577 | int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+         | ^
+         | static 
+>> kernel/bpf/trampoline.c:195:19: error: variable has incomplete type 'struct ftrace_ops'
+     195 | struct ftrace_ops direct_ops = {
+         |                   ^
+   include/linux/bpf.h:55:8: note: forward declaration of 'struct ftrace_ops'
+      55 | struct ftrace_ops;
+         |        ^
+   3 warnings and 1 error generated.
 
-     Arnd
+
+vim +195 kernel/bpf/trampoline.c
+
+   194	
+ > 195	struct ftrace_ops direct_ops = {
+   196	#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+   197	       .ops_func = bpf_tramp_ftrace_ops_func,
+   198	#endif
+   199	};
+   200	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
