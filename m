@@ -1,99 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453022BD5B9;
-	Fri, 20 Jun 2025 15:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976532E6127;
+	Fri, 20 Jun 2025 18:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750431992; cv=none; b=A++DY4x2qCQux0cwq40MLj7Xd3rN20H5plIGS7ap22P2uBb+4lNeQk5uUguxbMlsuFr+ECmFGclXIsEnnVvt/OrD8j9bYY/Ak+ogbnLqR6CPYpU95LQnIWXVWDLDQ1qAIcO9ZkzTzW6QTGQ3cZQPjCzk5F7X7xDk8QW3zr+t+5c=
+	t=1750443928; cv=none; b=gh02E83l4OzdyTnYp3Em5UgfQB5tBY38mKAlOZGdV9zw2KImFZO+wLwXASG4ocWb8y2UoyHJZuOrOzoBZdy9UIBCYlO8uNi4dvfQB1tnHjZIELZQTsGkSWg1UYqew005hGqDzgx0KcrSvY4f4JPdJkYUVgDnK7bwOOjObapUaB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750431992; c=relaxed/simple;
-	bh=a9uONM4rmhKbrAIwRb95wqPMGmRhgJxYw5gTK3ykaoI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cXCe7Xi+m3Qx6aZLNYnJCwDhKN25v6rNcjLreehwXH+H9ALT8VISeBcwBrNYM/lGdagEQ2yOBAA50w1v9sGtu/yJWkTIY09tbRv1IxQGABAgr9EiCjwwYQl/vj+I0mZtZR5gjn7WpsxDLrZ4Wbr9eWOeVNo118miwBkvVFdZjDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ilHY2Nks; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750443928; c=relaxed/simple;
+	bh=wJ1/5xGnbBYa9//GKBplYzMZXFE09kIONiXVBQVPuuE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KY6/Odgii167Nm0lXjrHhV3/WiiRliVC1EeP7fthEGojmGq1Y/kGRN1J/zJbyWb3ByL28y9R/36wXl1qdCmWVEBPFFcZ3uoJHOec7KsqrkY/5n4KnLcAlrrmAUPVgBxvxmRIYA5ccKP89iMA8x1ih31Qlj6sjMiLRYLHa3HOZHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NGJ9o6Gz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ilHY2Nks"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750431990; x=1781967990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a9uONM4rmhKbrAIwRb95wqPMGmRhgJxYw5gTK3ykaoI=;
-  b=ilHY2NksO5+YtZZWaw/zsVeysVqBA+rkf/4nIP1fomY7TRhnhCFht2tA
-   eMRzsIfQjoRkbtHGZMovPA6IMNXmhm40Gp84r7LFBGZonL3mp1V+XRY2y
-   dZULU/Ml/0e1dGyjIKRlIPKO/LyrU474tND5oGL5S8nnjE7rf/zqSx++A
-   soakHTAONA8hKV4X0SHZ6iDnTZU17+eyces5M0RwPvcKLnFuFsuXzSd4C
-   yPfKbmwOp58GIH/Lx+ztjPUrpT6Ab8v2L1JZV2AwRCCu1mQ24R46VWwG1
-   FPBHRZziE2dFnTIAvXotEgShV3bewJ/TfzKTcOMtR5+VgKFq+Y7GCxAKe
-   A==;
-X-CSE-ConnectionGUID: 3ZyNOySIQdOQ7+AJQYCigQ==
-X-CSE-MsgGUID: LVJor87cRkexA4bXEG1sjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="78105417"
-X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="78105417"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 08:06:30 -0700
-X-CSE-ConnectionGUID: rhj41lQnSvyZT0GM2PeTIw==
-X-CSE-MsgGUID: C2IPd0U1Rf+oxQhMobxk+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="156426660"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Jun 2025 08:06:29 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uSdJy-000Lrq-2Z;
-	Fri, 20 Jun 2025 15:06:26 +0000
-Date: Fri, 20 Jun 2025 23:05:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rik van Riel <riel@surriel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v4 5/8] x86/mm: Introduce Remote Action Request
-Message-ID: <202506202236.iXeBHAH3-lkp@intel.com>
-References: <20250619200442.1694583-6-riel@surriel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NGJ9o6Gz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156D1C4CEE3;
+	Fri, 20 Jun 2025 18:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750443928;
+	bh=wJ1/5xGnbBYa9//GKBplYzMZXFE09kIONiXVBQVPuuE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=NGJ9o6GzUoyabGg1d6q7m11bzHcvxRXNZ7xdRR9ePphH60jug5P6+ueVzJY51nH4x
+	 nGpNalm49XDQzWSUk7A28JeoSosM57yFUzcCG49enTMORMOUO1MdzfK0RQQuD5J6EY
+	 YuKizT2Iggq067WGcXayTjUeJGXHnPTcLM1cQ3YT06K63xw7Y3Ist1hY0jdbLCeXe9
+	 byRT9N2NWuKGdylvGZ0u9wnLQu6zktYnruTqE46yoo3U0DfG7q6BfZ6je4DYBKYFEG
+	 7bodjp7PM3FuidIP6yRi7T4fH9hlQ1z8PWc+YF4OxlO1PBDPWSG+XcdIfsnsFwMLxu
+	 oaRnQ8T9+KbAA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 20 Jun 2025 11:25:22 -0700
+Subject: [PATCH] mmc: rtsx_usb_sdmmc: Fix clang -Wimplicit-fallthrough in
+ sd_set_power_mode()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250619200442.1694583-6-riel@surriel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250620-mmc-rtsx-usb-sdmmc-fix-clang-implicit-fallthrough-v1-1-4031d11159c0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJGnVWgC/x3NSwqDMBAG4KvIrDuQpqZCr1K6iHE0A4nKTBRBv
+ HvTLj/4HycoCZPCqzlBaGflZa643xoI0c8TIQ/VYI115mkN5hxQih64aY86/DjygSHVMHJeEwc
+ uOPqUSpRlmyJ2D+td1zrX9gbq7ipUG//P9+e6vutbygiDAAAA
+X-Change-ID: 20250620-mmc-rtsx-usb-sdmmc-fix-clang-implicit-fallthrough-732a574554b0
+To: Ulf Hansson <ulf.hansson@linaro.org>, Ricky Wu <ricky_wu@realtek.com>
+Cc: linux-mmc@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1696; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=wJ1/5xGnbBYa9//GKBplYzMZXFE09kIONiXVBQVPuuE=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBmhy6clJt5fJKP1/E/e00NTXwi0nryT5rL5gtnzkjjv+
+ T8PPldZ3FHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmku3D8E+J66hzz8TeeA2R
+ gsaDrq4LLuaFX+82ee+V8vBF3EWmphMMf/g3tsw0/yW0M6j014Z7Vnu1Zp5a9CjFQWQWy79t6Zy
+ m6fwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Rik,
+Clang warns (or errors with CONFIG_WERROR=y):
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+  drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+   1042 |         case MMC_POWER_UNDEFINED:
+        |         ^
+  drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2: note: insert 'break;' to avoid fall-through
+   1042 |         case MMC_POWER_UNDEFINED:
+        |         ^
+        |         break;
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/x86/mm peterz-queue/sched/core linus/master v6.16-rc2 next-20250619]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return. Add the missing break to silence
+the warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rik-van-Riel/x86-mm-Introduce-Remote-Action-Request-MSRs/20250620-081542
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20250619200442.1694583-6-riel%40surriel.com
-patch subject: [RFC PATCH v4 5/8] x86/mm: Introduce Remote Action Request
-config: i386-buildonly-randconfig-002-20250620 (https://download.01.org/0day-ci/archive/20250620/202506202236.iXeBHAH3-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506202236.iXeBHAH3-lkp@intel.com/reproduce)
+Fixes: 2c3809bd6f65 ("mmc: rtsx_usb_sdmmc: Add 74 clocks in poweron flow")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/mmc/host/rtsx_usb_sdmmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506202236.iXeBHAH3-lkp@intel.com/
+diff --git a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_sdmmc.c
+index 591d37206654..c5f6b9df066b 100644
+--- a/drivers/mmc/host/rtsx_usb_sdmmc.c
++++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
+@@ -1039,6 +1039,8 @@ static void sd_set_power_mode(struct rtsx_usb_sdmmc *host,
+ 	case MMC_POWER_ON:
+ 		/* stop to send the clock signals */
+ 		rtsx_usb_write_register(ucr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0x00);
++		break;
++
+ 	case MMC_POWER_UNDEFINED:
+ 		break;
+ 
 
-All errors (new ones prefixed by >>):
+---
+base-commit: f5c755ef810009b85350884c483705bd04365370
+change-id: 20250620-mmc-rtsx-usb-sdmmc-fix-clang-implicit-fallthrough-732a574554b0
 
->> ld.lld: error: undefined symbol: rar_boot_cpu_init
-   >>> referenced by intel.c
-   >>>               arch/x86/kernel/cpu/intel.o:(intel_detect_tlb) in archive vmlinux.a
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
