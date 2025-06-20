@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722B0EBE;
-	Fri, 20 Jun 2025 00:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D1A35950;
+	Fri, 20 Jun 2025 01:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750379528; cv=none; b=rrTEkCFtxa6OGKMcyX26SQ7dtTtDzizHGH3flEfQpOZdf2kGMEiFvKIiaDxCQUxH+zmr0QkrndNrzPnw353pJv59zwf1+VJTN/XNKBh4avnbQCPlBGmFaNHUPJw6xcvmCXrZS2cEjwNpr6lEbrg6vGUepqBMnzcyplsVpDIr2kU=
+	t=1750382651; cv=none; b=GFk9YUqxRnPfKQjAKt5WQ8Li0c5aK/r9VGGdBX+ENS8x8o9jkZaIkyhqm/C3ZDfSTeU+Fa0t7saZZkOVzjPdJdyL+9KR3OZRsOsU+EaHiBQAJURN3L/SaY+eBcbDcXpOo0zjaH6foH/yUbo59c98kC1QnSptkFZbXOA3tVoHQN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750379528; c=relaxed/simple;
-	bh=FgUZqLhBinIxTSOO1MaZQL3Cq2Zox65AGxkmO8q8SEo=;
+	s=arc-20240116; t=1750382651; c=relaxed/simple;
+	bh=rP6zF0Y0oDFlDzpS/N1Dam7Dm+9zIlihxVOBTqlkH5Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Rp/sZsbPGbSYFBTKzWPUmZKfMqjmTpx5Q9Uxh4981i8SQZmy8vMVloYSI1APt56hS1ipPVae5gXh8vSu8l03FJ5He2GP++/e070CTVHIPxx6Bkc3Rnkla4rnIrUhRWX2RD/db3NOVPZ2J3wvsTVbaBVxB2f4WU0JmSNiJ88vawc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LIjYTgZs; arc=none smtp.client-ip=192.198.163.11
+	 Content-Disposition; b=Rw6320lWon4fcjI5evFE+mA3S6CrNqkzXmInPDPo9xvube0Z2ykH1F8g6iKcsDWxcmQnJU6pDFLHKurdVc7kCyFPvrjAQ6hB6nJuqQhROh90urigeqqgONNO0nofkwHHHFsR+irKr4PVknw5IB/28xCiCZzGkhobWYir2ND7hsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oplu+b+I; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LIjYTgZs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oplu+b+I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750379526; x=1781915526;
+  t=1750382650; x=1781918650;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FgUZqLhBinIxTSOO1MaZQL3Cq2Zox65AGxkmO8q8SEo=;
-  b=LIjYTgZsfrmH0pjFYW+0JNtfi8izyKJswvSOTXjeogyduyll4wRuddQ6
-   iNzp9HI56Bv5lx6M/VWe4l+7fYbw7zFSYbt+9/8yyB2ouQ8o3HeyJyBfv
-   IqB3M72aSuOROvOihqlkZ1FayK8gz6caoFSr746fWBmr/caXf0RARUiYd
-   Cdie6PD4w4ucXHG36CPXvrMcUS+4h+OO5ILlhuxTbaWFTaYuHvBVRLSWH
-   Urh7D8X489P4YbpBPsCZiJN4d+3xx8nb06hDn0LRgIcPAVFt/kMtIVMzB
-   sJkg/mgM8PVxqtNTTOQfrpWNqQL2r5MgSRC8eD0PiVbR+vL1P+vlTvbBT
+  bh=rP6zF0Y0oDFlDzpS/N1Dam7Dm+9zIlihxVOBTqlkH5Y=;
+  b=Oplu+b+IDO0gKn3y7VbJYSLuaUCbW3eOCuBgokeyoGPn02U1tnXVUbZa
+   N4zSxkA9vkbxdcbbBzZ1KubNhE5O6mVzrTUO6NRLphf6fC9R0QODEdbrb
+   vgWgQ8F28aEEfpll84JPH3CL9+xl/yhg0970i3godBUGc114OhnSpNzah
+   wBIW0vR/JfjnjuRSqxMYW8iA6gwYSyJeJuRz+m7XpMYETq7BhCq+GtPdp
+   fx//A4gSycJjbQLbMPEVKG+G2Ad/QpXQTrXtwfu4QeoYkNO1Q6HA2yeDQ
+   usui8t/3iv2GRxqfq9YZDC0Hh2YxYUKze/X9lpBBlkBXhkdGUgu38aWvX
    Q==;
-X-CSE-ConnectionGUID: WePLwdPwQ8y/7YpK/jIL+g==
-X-CSE-MsgGUID: 8C1ZFP2rSiqF6I+cObqF8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="63241042"
-X-IronPort-AV: E=Sophos;i="6.16,249,1744095600"; 
-   d="scan'208";a="63241042"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 17:32:05 -0700
-X-CSE-ConnectionGUID: KQeovqlBS7mR32FVxqNGVA==
-X-CSE-MsgGUID: P/C5lmYgRZCNCT8r7SeHCA==
+X-CSE-ConnectionGUID: MffXdtRrTvWhndlLlH+EZQ==
+X-CSE-MsgGUID: hjnHv+hrRBm4sab3FcqPpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="78048778"
+X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
+   d="scan'208";a="78048778"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 18:24:10 -0700
+X-CSE-ConnectionGUID: cmPDSLH/SOWbEhlJzy7Ucw==
+X-CSE-MsgGUID: YUDPA2/iQ9mRhoYMk9D1mA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,249,1744095600"; 
-   d="scan'208";a="151316679"
+X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
+   d="scan'208";a="174393007"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 19 Jun 2025 17:32:04 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 19 Jun 2025 18:24:08 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uSPfl-000LDO-2D;
-	Fri, 20 Jun 2025 00:32:01 +0000
-Date: Fri, 20 Jun 2025 08:32:00 +0800
+	id 1uSQUA-000LFk-0z;
+	Fri, 20 Jun 2025 01:24:06 +0000
+Date: Fri, 20 Jun 2025 09:23:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: Ricky Wu <ricky_wu@realtek.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:work.pidfs.setns 8/9] fs/pidfs.c:38:8: error: assigning
- to 'struct path' from incompatible type 'void (struct path *)'
-Message-ID: <202506200845.lMHN9g7G-lkp@intel.com>
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [ulfh-mmc:next 88/90] drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2:
+ warning: unannotated fall-through between switch labels
+Message-ID: <202506200902.0b5Z1InC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,53 +63,78 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.pidfs.setns
-head:   80432e84dc3a17336efd11282d8c5db368ed827b
-commit: f7b88122fa711d730ad163427e8da56adee73e33 [8/9] fhandle, pidfs: support open_by_handle_at() purely based on file handle
-config: x86_64-buildonly-randconfig-006-20250620 (https://download.01.org/0day-ci/archive/20250620/202506200845.lMHN9g7G-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
+head:   f5c755ef810009b85350884c483705bd04365370
+commit: 2c3809bd6f65cdd8c13853af1ab2a80ddf80528d [88/90] mmc: rtsx_usb_sdmmc: Add 74 clocks in poweron flow
+config: i386-buildonly-randconfig-003-20250620 (https://download.01.org/0day-ci/archive/20250620/202506200902.0b5Z1InC-lkp@intel.com/config)
 compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506200845.lMHN9g7G-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506200902.0b5Z1InC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506200845.lMHN9g7G-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506200902.0b5Z1InC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   fs/pidfs.c:34:20: error: redefinition of 'pidfs_root_path' as different kind of symbol
-      34 | static struct path pidfs_root_path = {};
-         |                    ^
-   fs/internal.h:356:6: note: previous definition is here
-     356 | void pidfs_root_path(struct path *path);
-         |      ^
->> fs/pidfs.c:38:8: error: assigning to 'struct path' from incompatible type 'void (struct path *)'
-      38 |         *path = pidfs_root_path;
-         |               ^ ~~~~~~~~~~~~~~~
->> fs/pidfs.c:1077:17: error: member reference base type 'void (struct path *)' is not a structure or union
-    1077 |         pidfs_root_path.mnt = pidfs_mnt;
-         |         ~~~~~~~~~~~~~~~^~~~
-   fs/pidfs.c:1078:17: error: member reference base type 'void (struct path *)' is not a structure or union
-    1078 |         pidfs_root_path.dentry = pidfs_mnt->mnt_root;
-         |         ~~~~~~~~~~~~~~~^~~~~~~
-   4 errors generated.
+>> drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    1042 |         case MMC_POWER_UNDEFINED:
+         |         ^
+   drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2: note: insert 'break;' to avoid fall-through
+    1042 |         case MMC_POWER_UNDEFINED:
+         |         ^
+         |         break; 
+   1 warning generated.
 
 
-vim +38 fs/pidfs.c
+vim +1042 drivers/mmc/host/rtsx_usb_sdmmc.c
 
-90c48e2619324e Christian Brauner 2025-06-19  35  
-90c48e2619324e Christian Brauner 2025-06-19  36  void pidfs_root_path(struct path *path)
-90c48e2619324e Christian Brauner 2025-06-19  37  {
-90c48e2619324e Christian Brauner 2025-06-19 @38  	*path = pidfs_root_path;
-90c48e2619324e Christian Brauner 2025-06-19  39  	path_get(path);
-90c48e2619324e Christian Brauner 2025-06-19  40  }
-90c48e2619324e Christian Brauner 2025-06-19  41  
+c7f6558d84afe6 Roger Tseng 2014-04-11  1012  
+ddf60f1cf1d2c0 Ulf Hansson 2025-06-10  1013  static void sd_set_power_mode(struct rtsx_usb_sdmmc *host,
+c7f6558d84afe6 Roger Tseng 2014-04-11  1014  		unsigned char power_mode)
+c7f6558d84afe6 Roger Tseng 2014-04-11  1015  {
+c7f6558d84afe6 Roger Tseng 2014-04-11  1016  	int err;
+2c3809bd6f65cd Ricky Wu    2025-06-16  1017  	struct rtsx_ucr *ucr = host->ucr;
+c7f6558d84afe6 Roger Tseng 2014-04-11  1018  
+c7f6558d84afe6 Roger Tseng 2014-04-11  1019  	if (power_mode == host->power_mode)
+ddf60f1cf1d2c0 Ulf Hansson 2025-06-10  1020  		return;
+c7f6558d84afe6 Roger Tseng 2014-04-11  1021  
+4a4b1d2837322e Ulf Hansson 2025-06-10  1022  	switch (power_mode) {
+4a4b1d2837322e Ulf Hansson 2025-06-10  1023  	case MMC_POWER_OFF:
+c7f6558d84afe6 Roger Tseng 2014-04-11  1024  		err = sd_power_off(host);
+e7c56431e1996f Ulf Hansson 2025-06-10  1025  		if (err)
+e7c56431e1996f Ulf Hansson 2025-06-10  1026  			dev_dbg(sdmmc_dev(host), "power-off (err = %d)\n", err);
+f275179f7bdcf0 Ulf Hansson 2018-05-31  1027  		pm_runtime_put_noidle(sdmmc_dev(host));
+4a4b1d2837322e Ulf Hansson 2025-06-10  1028  		break;
+4a4b1d2837322e Ulf Hansson 2025-06-10  1029  
+4a4b1d2837322e Ulf Hansson 2025-06-10  1030  	case MMC_POWER_UP:
+f275179f7bdcf0 Ulf Hansson 2018-05-31  1031  		pm_runtime_get_noresume(sdmmc_dev(host));
+c7f6558d84afe6 Roger Tseng 2014-04-11  1032  		err = sd_power_on(host);
+e7c56431e1996f Ulf Hansson 2025-06-10  1033  		if (err)
+e7c56431e1996f Ulf Hansson 2025-06-10  1034  			dev_dbg(sdmmc_dev(host), "power-on (err = %d)\n", err);
+2c3809bd6f65cd Ricky Wu    2025-06-16  1035  		/* issue the clock signals to card at least 74 clocks */
+2c3809bd6f65cd Ricky Wu    2025-06-16  1036  		rtsx_usb_write_register(ucr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
+4a4b1d2837322e Ulf Hansson 2025-06-10  1037  		break;
+4a4b1d2837322e Ulf Hansson 2025-06-10  1038  
+4a4b1d2837322e Ulf Hansson 2025-06-10  1039  	case MMC_POWER_ON:
+2c3809bd6f65cd Ricky Wu    2025-06-16  1040  		/* stop to send the clock signals */
+2c3809bd6f65cd Ricky Wu    2025-06-16  1041  		rtsx_usb_write_register(ucr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0x00);
+4a4b1d2837322e Ulf Hansson 2025-06-10 @1042  	case MMC_POWER_UNDEFINED:
+4a4b1d2837322e Ulf Hansson 2025-06-10  1043  		break;
+4a4b1d2837322e Ulf Hansson 2025-06-10  1044  
+4a4b1d2837322e Ulf Hansson 2025-06-10  1045  	default:
+4a4b1d2837322e Ulf Hansson 2025-06-10  1046  		break;
+c7f6558d84afe6 Roger Tseng 2014-04-11  1047  	}
+c7f6558d84afe6 Roger Tseng 2014-04-11  1048  
+c7f6558d84afe6 Roger Tseng 2014-04-11  1049  	host->power_mode = power_mode;
+c7f6558d84afe6 Roger Tseng 2014-04-11  1050  }
+c7f6558d84afe6 Roger Tseng 2014-04-11  1051  
 
-:::::: The code at line 38 was first introduced by commit
-:::::: 90c48e2619324e40223af34ff8aed6480b9d19c1 pidfs: add pidfs_root_path() helper
+:::::: The code at line 1042 was first introduced by commit
+:::::: 4a4b1d2837322e9cc46c93a2e88ec40977a56afc mmc: rtsx_usb_sdmmc: Re-work the code in sd_set_power_mode()
 
-:::::: TO: Christian Brauner <brauner@kernel.org>
-:::::: CC: Christian Brauner <brauner@kernel.org>
+:::::: TO: Ulf Hansson <ulf.hansson@linaro.org>
+:::::: CC: Ulf Hansson <ulf.hansson@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
