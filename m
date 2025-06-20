@@ -1,120 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C04284B3E
-	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 09:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829B5229B1E;
+	Fri, 20 Jun 2025 09:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750412522; cv=none; b=Z6sk6DO0LrygZUm8cV+k+r0SBqPlWinvf0o3zk5hr1KsikidxtI9LnlJjnO0QLPMa9RMr4CVzCgfvjDvl2WOBUOWgTOp/Dl+gzdzzH8r393Is1T8MAzv1xr6W5Y/3WxxD3QPlsMRBkPKX2ZE1CYfuPsZDlW+oG5bYzFfpvzIQlE=
+	t=1750413180; cv=none; b=iFaroHeMLU/YZYdCyk+tTbNVvrbPDDUs2I9/RGJ09TLubxQH1khNrZgzRPtuw3PciR6YoY5U6QEEbvb68nh6mQ47HX9l1IVj3XTSLK+I04daXqACKzMj1abl+++bXdS1vzdcDNZQLJYt8HJ05v6c+4RkNnj8p6/P5GV82fjl9ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750412522; c=relaxed/simple;
-	bh=xZbFHGr5sfx06efLpn53rW8XVDD8mRKyZfU/RfmcVio=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lF8wb6bfNxDAC8fKA5aPHdE8wwbZtJoOU8NwIMJvKKfs4YZaWCPNMz9I5d8I/KD0eMINZ8uDmbwOYXamJ5Hj8pyKHdBlP6cFGh+5xmTkasXFK9/rjZzxQoula40/A9B8OuGBifcbRP9j89RZEArXTSKWDR0JcpNxz6u0sH3rLTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gt+oqGaj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1750413180; c=relaxed/simple;
+	bh=i+5sJb61h45Tampy7aTBL6wBUfqqz4pqJwNrRU8EILs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=L8tvrDqrV/3sVbsE1lL4pssmw56ed61ieXwO58OubGokhrc/oFA/F80SB4dgIWuLrwkHJE6NO7DB0rrg/cPrpR2UzdghVRWiUaBQ9UgxE4v0j1Hl0hkJEVdoNBtZ3dZtm8SXGiNW8HmbuK36p/j8kzXjlKaafzRRk/QefSD9P54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q+36wSPU; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gt+oqGaj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750412519;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Yc9Zt+f8uZcDTGQTByjBMY64DV1LUPs/h/3ruIzhsuE=;
-	b=gt+oqGajAvA+fXT0P2qLkTxOyfLdXpCpOqCWr7CGjAs7kKFlz0/imJPps5/V3TXW+lp+J3
-	p5TaqNV9hhCs5OGjr5HfBERzMZGkWgOa0CYPQ/V0tIc4ClO4mU9SDIJ2Gm7nr107JlEZlC
-	DaE+fGdaQX36YhDkxsVJEQQSJDtFad4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-90-7YVUPIK7Ol-tIdFHmtWiaw-1; Fri,
- 20 Jun 2025 05:33:06 -0400
-X-MC-Unique: 7YVUPIK7Ol-tIdFHmtWiaw-1
-X-Mimecast-MFC-AGG-ID: 7YVUPIK7Ol-tIdFHmtWiaw_1750411985
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C704518002B3
-	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 09:33:05 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 54DF718003FC;
-	Fri, 20 Jun 2025 09:33:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 6 of 100): Test report for master
- (6.16.0-rc2, upstream-mainline, 41687a5c)
-Date: Fri, 20 Jun 2025 09:33:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q+36wSPU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750413177; x=1781949177;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i+5sJb61h45Tampy7aTBL6wBUfqqz4pqJwNrRU8EILs=;
+  b=Q+36wSPUZsckx3CtgObLxA3YjMOU+pbsi6GSt8ETPejWtReSPTxSIEi0
+   Gj20AF76fogD12E+2fMXq2GzXdUOx/x5t2KjuKu8qo0nkV6/xxB4EFKE2
+   Pnk+IAMc5JHfgF4MW3SS4mDshjNB3E2VSwriBOLU4yjXl041Q0+V1iImQ
+   BbJycdQwuOZyx8rJNEMlq1mgmmSkEmgWKaXuA4I4yaYrFeVp2YFVzfBJM
+   MChyjy13twIJ5y3TbxyeF9FEprzJ36r/KLXZ+Uf5yhI6L1X9ft5d1YSDz
+   eKUJaOpgv4lAtwTonbwDIVt0TpyXwU5W8v9mc5qt1R09FFJCE6Zm6SiTL
+   A==;
+X-CSE-ConnectionGUID: Vp3PmApJQUS2kKdb3cBZ4g==
+X-CSE-MsgGUID: 4GxjmqLiRleDGX6b16cmSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="70239345"
+X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
+   d="scan'208";a="70239345"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 02:52:55 -0700
+X-CSE-ConnectionGUID: LHsfzbRDQjem4thF2xgc2A==
+X-CSE-MsgGUID: y1b6K6YwQWq7edutcxnA5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
+   d="scan'208";a="150364979"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 20 Jun 2025 02:52:56 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSYQX-000LaS-0c;
+	Fri, 20 Jun 2025 09:52:53 +0000
+Date: Fri, 20 Jun 2025 17:52:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/tracing_multi_5 3/10] include/linux/ftrace.h:563:5:
+ warning: no previous prototype for function 'unregister_ftrace_direct_hash'
+Message-ID: <202506201756.lZyUFtip-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <21075.125062005330600111@us-mta-90.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: hG5ouDEJyUr21-E2RLA8IRgD5-XAaziMZU6uEQ1YmVw_1750411985
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_5
+head:   b288c6b15d20122d59ddf3bce2fb86afe6ed56c3
+commit: 85ce35fa5a72947188457f2189f1e9f83482470b [3/10] ftrace: Add unregister_ftrace_direct_hash function
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250620/202506201756.lZyUFtip-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506201756.lZyUFtip-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506201756.lZyUFtip-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6.16-rc2' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/broonie/spi
+   In file included from mm/filemap.c:25:
+   In file included from include/linux/syscalls.h:94:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:43:
+   include/linux/ftrace.h:558:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
+     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+>> include/linux/ftrace.h:563:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
+     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:563:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+   2 warnings generated.
+--
+   In file included from mm/shmem.c:77:
+   In file included from include/linux/syscalls.h:94:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:43:
+   include/linux/ftrace.h:558:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
+     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+>> include/linux/ftrace.h:563:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
+     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:563:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+   mm/shmem.c:1686:20: warning: unused function 'shmem_show_mpol' [-Wunused-function]
+    1686 | static inline void shmem_show_mpol(struct seq_file *seq, struct mempolicy *mpol)
+         |                    ^~~~~~~~~~~~~~~
+   3 warnings generated.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1879554132
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+vim +/unregister_ftrace_direct_hash +563 include/linux/ftrace.h
 
+   557	
+ > 558	int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+   559	{
+   560		return -ENODEV;
+   561	}
+   562	
+ > 563	int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+   564	{
+   565		return -ENODEV;
+   566	}
+   567	
 
-Tests that were not ran because of internal issues:
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
