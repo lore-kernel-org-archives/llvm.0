@@ -1,121 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41535C8FE
-	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 02:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA6E17B402;
+	Fri, 20 Jun 2025 03:33:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750385532; cv=none; b=D15Ulr4Yc1g1ox7rCuQLxJkCVc/D2Y5JPKDzVzSxSSry7C0FUwAyY5MszUPv+pXGvHKxJKw4nf9a0fZKOG3srYISHjKdJu5yNitGYWRTGa/zAqn6N2Y7bLnrBaUHWciXZCV2bKB1tjK21XepLUNZZTKEOcvmOJGW0cpWuJY2+ec=
+	t=1750390405; cv=none; b=k4bMSt3L4QPwxuF8EYTB9nML1XeCLjrNZmkrvNMuF3eno82NMOqhX+PfQ9GssyVZNxaDtRikH94xVZyQPiYAzS3mWPpHucl6eD6yc16jineEkx2qC9yGs74hOwkqyKzC+aLNTOw5axThGhK5JaZsLylLvXVXGOtTdF2llKYBtkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750385532; c=relaxed/simple;
-	bh=kJELz1/mHfKNGbCM+HoirpJbL9tD5ZMPRDYBOcqL9tU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jhwdFdeRFAGl3jZJyOfobwLZSuUsWYmjpTWen8Uj0l0oXLcBEVy5ZVIP0uxI1mGURgur5sHI0z/BN1wBA0qp0MNU3nmh3Eapbm96Bm8Wr49ed160BIVPDduKVYBNGBI8TrpcSFYASoNADmALz3W7V6IrjHB3VRrWZZL48nDILGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jQayTW/K; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1750390405; c=relaxed/simple;
+	bh=6+/5o6kmcWKk3e2NbFhat/dx9eXksyOA9L6fkZ/p9uU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pYVHqZOKbtgjSN36b2eX+MFseO6874TwY0Jy5NNQt8Rjd2ygWp+hdhCvsuL/eBS3zAZclbWvrpnvxQe5w4loL0BFo8AxhATjGa7GqN2DJmSB/7sICIY/NA5Bgbz+lAl47m3dTUrQ36OBYjY8lmZlhwCvQFU2i8JP80+BFB+rNcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gUBaWCiJ; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jQayTW/K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750385529;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Xf1oFEmK4iJ9gb6of2sF8dPg8VMyjOBK7TJkqY5Rt4M=;
-	b=jQayTW/KY5Z2yHMdxegJjSVOLHoNAwMsc8Y+I3y5wRRs4Dn1OfqA5IlddXJQvKKg8xzB3L
-	QbHKSprew9rQhVsob0juDbuxQJhSQPUk+FJg7l7Z3Eks1+b/Y7B9Zn5v5l67X3n+3+YQpC
-	eXRQTJZb22dFhoQLWlmLc0QRrhNFJfY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-86-aWZbcdzcMTOMAuPMsPZycg-1; Thu,
- 19 Jun 2025 22:12:07 -0400
-X-MC-Unique: aWZbcdzcMTOMAuPMsPZycg-1
-X-Mimecast-MFC-AGG-ID: aWZbcdzcMTOMAuPMsPZycg_1750385527
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D27751956080
-	for <llvm@lists.linux.dev>; Fri, 20 Jun 2025 02:12:06 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6B00D30001A1;
-	Fri, 20 Jun 2025 02:12:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 100): Test report for master
- (6.16.0-rc2, upstream-mainline, 5c8013ae)
-Date: Fri, 20 Jun 2025 02:12:05 -0000
-To: llvm@lists.linux.dev, yoyang@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gUBaWCiJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750390404; x=1781926404;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6+/5o6kmcWKk3e2NbFhat/dx9eXksyOA9L6fkZ/p9uU=;
+  b=gUBaWCiJGuywIjJtog9di/kCyviKcdjpS6ru+SaVCLKQ1dYqTjP+9lr9
+   WRrrc2I5XWCjyNTFJ+ERFVrBcHisSh9jS4yefgaz38P6o/R0AfVvpoUVy
+   BOsFrj6DeaW7gyQi9/0muR2eYluh9MP5ZlIXllTNVX+ubnBTMPDMF6B5Q
+   2474hvuy0l925Z24OciP3BWCV+gJGb1OkE2nCf5cKP2mSrGUq4/Mnriy+
+   jFPS563Y45BxpomSgEm4GE6t4yBK/7WzldqNp62sZh34t6tWgfSu5/vwg
+   +FMS+iNFruh19kZ00R9Wf40KthlRljOwVfNn+cpAFOYC0qYqAdgOHjs1t
+   g==;
+X-CSE-ConnectionGUID: Av2YBEzRSoGvGmFjnDmkyA==
+X-CSE-MsgGUID: zuBOWfXLTKWH8lKCiRcuAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="63691999"
+X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
+   d="scan'208";a="63691999"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 20:33:24 -0700
+X-CSE-ConnectionGUID: VUdPqhjeRb2L7mMeCgCrCw==
+X-CSE-MsgGUID: 7ZdBpbZbRx6UeBW6+OSrbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
+   d="scan'208";a="151105038"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 19 Jun 2025 20:33:20 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSSVB-000LL8-2s;
+	Fri, 20 Jun 2025 03:33:17 +0000
+Date: Fri, 20 Jun 2025 11:32:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Casey Connolly <casey.connolly@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Casey Connolly <casey.connolly@linaro.org>
+Subject: Re: [PATCH 09/11] power: supply: qcom_smbx: add smb5 support
+Message-ID: <202506201101.9HMIR1fb-lkp@intel.com>
+References: <20250619-smb2-smb5-support-v1-9-ac5dec51b6e1@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <99809.125061922120700605@us-mta-86.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 4rPTCgcctf0pSOKX78wcakT-wS9Ltah2aFrqxB4YVaE_1750385527
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250619-smb2-smb5-support-v1-9-ac5dec51b6e1@linaro.org>
 
-Hi, we tested your kernel and here are the results:
+Hi Casey,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on bc6e0ba6c9bafa6241b05524b9829808056ac4ad]
 
-Kernel information:
-    Commit message: Merge tag 'net-6.16-rc3' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net
+url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Connolly/dt-bindings-power-supply-qcom-pmi89980-charger-add-pm8150b-and-7250b/20250619-230137
+base:   bc6e0ba6c9bafa6241b05524b9829808056ac4ad
+patch link:    https://lore.kernel.org/r/20250619-smb2-smb5-support-v1-9-ac5dec51b6e1%40linaro.org
+patch subject: [PATCH 09/11] power: supply: qcom_smbx: add smb5 support
+config: x86_64-buildonly-randconfig-006-20250620 (https://download.01.org/0day-ci/archive/20250620/202506201101.9HMIR1fb-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506201101.9HMIR1fb-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1879185702
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506201101.9HMIR1fb-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - ext4
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1879185702-x86_64-kernel_upt_28
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> Warning: drivers/power/supply/qcom_smbx.c:250 struct member 'gen' not described in 'smb_chip'
 
-
-Tests that were not ran because of internal issues:
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
