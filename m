@@ -1,56 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F42421A425;
-	Fri, 20 Jun 2025 11:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D5828A1F6;
+	Fri, 20 Jun 2025 11:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750419533; cv=none; b=jVXagAcgJpGHdtLUEu0AvG4T3Kv4KuIHL9QjXocu9IY61zlheN8ZGKnRT0xYnbKDEJLirdl61E5ep+KJZOQduXp9fygLsZmb9DTCrweSpullqszbaBv6fXjsLbj/en8JRxEnTQsKjNRFIM7yKnupGpnzw2ge+dwaszUUjeqAlW0=
+	t=1750419591; cv=none; b=pHEd9yeb0kRJOb2NftPPKb7QhQ9TwjumX31UKOkBabEzTHEOwRomx7/zLssM/lFep/IVJnbRU5mMiqLFa1f64w2yI/SUr2+pv4bkkWWaMjq7hBlMa8AiAVhy/Ep9om9k6LYmjpAvvRfSJcgnzm+ZpqJufKbY/HJNTNyKN5TarhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750419533; c=relaxed/simple;
-	bh=wldGJgpWJX2/0ox4U/bhSDHg+C5dlQXJ/dU+3159yuc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fbolBHXGIGiVquGPOViWPZiSVyU0u9EEDraeLs0ZI680HrqWtUwZEOZX4FsGUbzoa/jWLPMsdWru6nl2SgjgbfnGnXMEuOfWQAHEaMjZeM0Bgo2dH3049tOKyri2q9WrmxHIf2Y9d1fb2y/fIUr6Z6gCyiXgzvrM+MpxGVAitJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dldju2PV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750419591; c=relaxed/simple;
+	bh=yHXerpZbHKNNHCSwuRD2EVayv8sJYog21TwLflsthZM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cJCQqnqx7KbDDi3W5Rd4vLmYVXpOhLjy5xdsCge4CG6zfrdW26Frzz9KZY5guL4zEwHc5+d6/j62hUvO8S7aARXYXCVDIlSzZem+q+tYs91EWVoElFjOl8XJnucD6V0XuIoMILf8aGgtYP+U2euaQhVywQGhurfFJPNNFt3czRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yg2yI/Vr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dldju2PV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFFBC4CEE3;
-	Fri, 20 Jun 2025 11:38:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yg2yI/Vr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D131CC4CEE3;
+	Fri, 20 Jun 2025 11:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750419532;
-	bh=wldGJgpWJX2/0ox4U/bhSDHg+C5dlQXJ/dU+3159yuc=;
+	s=k20201202; t=1750419590;
+	bh=yHXerpZbHKNNHCSwuRD2EVayv8sJYog21TwLflsthZM=;
 	h=From:To:Cc:Subject:Date:From;
-	b=dldju2PVtEAP0iOcKTNK5vE2o3MW/EilJAOJSK3Zx1GIX0B85uwHE0Zjzq3HyMT+V
-	 HqBbayBwnJ5Q7J0u56Lb8OyHOi7e7CjiiHbHBwQKDNJ9Rv9aYo4kCH+cUfTeeBlHR/
-	 miZPL9NIQkQYSoWD16p407/1I6M3WntWtqTNZY0KWLNS3WFEF5/FB0jRNDKSYilNiT
-	 gskxkUb9r4fXjYLKnkdDVV5t+DU76gRayPyDHD6xl4vzh8nvMm1Ie0WL//VL94xHYP
-	 ln6rxkqW78au2X2/u3+vYRJ6Ha9AfYmv9CX+4L12K/PmWCpgbM6CgkFD049HJxzwMV
-	 zhjT+iPhEqMHA==
+	b=Yg2yI/VrI8dqLG11op/QYg7R/g1uzbjYZuBH0ktEdSX1N9szKKAqZ74DYA56cO1SJ
+	 /BfkIri7CuHroZ3yYREIBn/yFMkOdsGX13NajutjB2Va8lx6iyEQA6WcN7mVCQMW7U
+	 0PNyR7LpHtf8H6Qh0kPpjOfQ5Dgv2mDgyCgACDL1OJ1xIACPgWExBMyU7fBRF2MZ6E
+	 SLsC5x7i6PhYd8jqeEpxXNRNkFSSo2YI+XqyrCDf7+H7ZIvfz1iKaQFDpgdpfKQOCu
+	 KoC86EUtI9GQfswVETFVcVJR6lF2Tb3eCiXkXR8bKMzcmOkppWOcUjhCzpqLAEaF9l
+	 jtylcnvIMt6VA==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
+To: Stanislaw Gruszka <stf_xl@wp.pl>,
 	Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Gerhorst <luis.gerhorst@fau.de>,
-	bpf@vger.kernel.org,
+	Johannes Berg <johannes.berg@intel.com>,
+	linux-wireless@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
-Date: Fri, 20 Jun 2025 13:38:31 +0200
-Message-Id: <20250620113846.3950478-1-arnd@kernel.org>
+Subject: [PATCH] wifi: iwlegacy: work around excessive stack usage on clang/kasan
+Date: Fri, 20 Jun 2025 13:39:42 +0200
+Message-Id: <20250620113946.3987160-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,50 +50,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang versions before version 18 manage to badly optimize the bpf
-verifier, with lots of variable spills leading to excessive stack
-usage in addition to likely rather slow code:
+In some rare randconfig builds, I seem to trigger a bug in clang where
+it unrolls a loop but then runs out of registers, which then get
+spilled to the stack:
 
-kernel/bpf/verifier.c:23936:5: error: stack frame size (2096) exceeds limit (1280) in 'bpf_check' [-Werror,-Wframe-larger-than]
-kernel/bpf/verifier.c:21563:12: error: stack frame size (1984) exceeds limit (1280) in 'do_misc_fixups' [-Werror,-Wframe-larger-than]
+net/wireless/intel/iwlegacy/4965-rs.c:2262:1: error: stack frame size (1696) exceeds limit (1280) in 'il4965_rs_rate_init' [-Werror,-Wframe-larger-than]
 
-Turn off the sanitizer in the two functions that suffer the most from
-this when using one of the affected clang version.
+This seems to be the same one I saw in the omapdrm driver, and there is
+an easy workaround by not inlining the il4965_rs_rate_scale_clear_win
+function.
 
+Link: https://github.com/llvm/llvm-project/issues/143908
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- kernel/bpf/verifier.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/wireless/intel/iwlegacy/4965-rs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2fa797a6d6a2..7724c7a56d79 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19810,7 +19810,14 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- 	return 0;
+diff --git a/drivers/net/wireless/intel/iwlegacy/4965-rs.c b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
+index 0e5130d1fccd..031d88bf6393 100644
+--- a/drivers/net/wireless/intel/iwlegacy/4965-rs.c
++++ b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
+@@ -203,7 +203,8 @@ il4965_rs_extract_rate(u32 rate_n_flags)
+ 	return (u8) (rate_n_flags & 0xFF);
  }
  
--static int do_check(struct bpf_verifier_env *env)
-+#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 180100
-+/* old clang versions cause excessive stack usage here */
-+#define __workaround_kasan  __disable_sanitizer_instrumentation
-+#else
-+#define __workaround_kasan
-+#endif
-+
-+static __workaround_kasan int do_check(struct bpf_verifier_env *env)
+-static void
++/* noinline works around https://github.com/llvm/llvm-project/issues/143908 */
++static noinline_for_stack void
+ il4965_rs_rate_scale_clear_win(struct il_rate_scale_data *win)
  {
- 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
- 	struct bpf_verifier_state *state = env->cur_state;
-@@ -21817,7 +21824,7 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
- /* Do various post-verification rewrites in a single program pass.
-  * These rewrites simplify JIT and interpreter implementations.
-  */
--static int do_misc_fixups(struct bpf_verifier_env *env)
-+static __workaround_kasan int do_misc_fixups(struct bpf_verifier_env *env)
- {
- 	struct bpf_prog *prog = env->prog;
- 	enum bpf_attach_type eatype = prog->expected_attach_type;
+ 	win->data = 0;
 -- 
 2.39.5
 
