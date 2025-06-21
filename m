@@ -1,155 +1,231 @@
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573371531E3
-	for <llvm@lists.linux.dev>; Sat, 21 Jun 2025 08:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F7C15C158;
+	Sat, 21 Jun 2025 13:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750495418; cv=none; b=aJPM8K/v10/l/i2NOrG5RrZ2+NrPBHIMKlRx80RTkvWt5Eoej1an7jja1PYNLsQBOUGxR707dtB1BzYUHMF1JobzvhwEigrJcdj5wuXIomauBtokvcaiHPQb2ZTjcy5HlSxj7HkcQfGLRGJLSTsFJ8YLKe4Y5m7lrqYVwCyrWL4=
+	t=1750510977; cv=none; b=KxN87wM5/+q9ogA7gmAe0e7cMpG0JmxFT/k/Uf4iOZF8/r981SAlpXj9gBM3Hw0A7AjyReokyH4zHA1X6lyjFaQlIswlid+6GH1Hz682VDak/N3ZlhrUT/K1A2vTj+vADxBbhWqD4dcSzqAtEmAyc/1FMiWCJq9AKzl372+uSf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750495418; c=relaxed/simple;
-	bh=4rZ2ZnoUrbKDGr/2GBdIO1GUEN5PVZkrr7x6icSvihQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=WnSkw3zw/VEZ+kMt5MlOONVzhnuuGd2HU01V8mI2559SJdFVhnECrBBW+Db0nakobvJUUs+pSG/rbtloGnsVA743jOyA8x81oI70e8pv5tUY+OYpIfFcPfETJWCH7uCl7YVC9tn+16Q4r3H60KTzLd7uQF5E+IiveT0TNiGdkwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=P09la/GL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YvWVns99; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1750510977; c=relaxed/simple;
+	bh=bIAbaa1hcrbXGdLOCG9bBGbCTsWp6a8ZVSPoaIhtwHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E+/p3iRLPd+r7gO4djGZisE33h1XjelDAKKwLsA+79hNmK+rJO2p8US+j9f/JsJe4nMGK6ZaoTveCYL0D5agbqnVX1ThkbTpQvNlTMhKbzBClT/PUul3sjTC07ZG9iXp0x91slaGYZZ4cq3Fmk89hjYMk4UICQEuc7Ut6YzthRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mCWhDjqk; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="P09la/GL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YvWVns99"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id EE2261140170;
-	Sat, 21 Jun 2025 04:43:34 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Sat, 21 Jun 2025 04:43:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1750495414;
-	 x=1750581814; bh=hOBt8DyvRAQ/Oc15WkOTB7b3qi20b8aOYJt2sH34Xjo=; b=
-	P09la/GLSwtmAnFivcRAl35u7n35/5oOGFpvAJxwwMNUmTQ+ixzlKb51b+Az7ZmR
-	fG8uIxihtph8FIdrN4s9RHuXI9PhYIgFJCMPMXEJ+sUHQe60YRPqB0HcV7Cv1I+1
-	oMepQkkzsSu6QeGSi8TEdFjSUSzE+jPwK+KCT0oQD/VNvCdUkiOyGCZcSkRgdyy+
-	ihrIi5kBzBzub2XlIjyfma+8X3ef0JPL/ACfEOrISuzj6q8aiNcMMbwlFCEhKPL2
-	5AHG8dbyiYiFo9Sat8PyueEcamC/t66E1bqZOQXtFP0x/DPOVVOSYTxpYVk9xwM/
-	0FLnpZ5NUCMo2x3+lZpv7g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750495414; x=
-	1750581814; bh=hOBt8DyvRAQ/Oc15WkOTB7b3qi20b8aOYJt2sH34Xjo=; b=Y
-	vWVns99GN4o9HSFIbP1+z69sNblzaFOvLCc+3Nj532w1TV8zjaWjPNkmkQcIKAw7
-	V6jawYxHYNOocsoBaiL5H+0lrigIIGyoH/0MqmUJBQsuqkBtxIVILvcPI4qVrMoM
-	DNcHWs5hwvszJlN86k0i8l2OQIU656vVzpHCO44XDYppVBjv9iQWtJdF4Gq10oD2
-	oO9jKeOeL4Oji9S1EdnbFpjzudVVrnz2ck91wtUSLI46VpsX3n7NB26y5RVdpFXn
-	8LPwOm3O23rxuW8zFxJ7+82zmmpFFZdMCkWGJWutCZYP5nhQofnXaOXJ07uOzJF3
-	f1PB2KsDYlsAec9pY5Ihw==
-X-ME-Sender: <xms:tnBWaER4YLzMf5xi1Z203mxC3ZmFhB9kWqcxfh8btFkWhuLEzGuiMg>
-    <xme:tnBWaBxpxv-Hu22BkZmFaOcu3CaVKb1Aw3YSTpDujnvfTvJDMB027snpKkl7t_lX0
-    Ya-DXOJ42I7YzbPxXw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddutdekfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepsghhrghrrghtsegthhgvlhhsihhordgtohhmpdhrtghpthhtohepsh
-    hhohifrhihrgestghhvghlshhiohdrtghomhdprhgtphhtthhopehnihgtkhdruggvshgr
-    uhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvggsihhggh
-    gvrhhssehgohhoghhlvgdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehg
-    ohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprh
-    gtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvohhnsehk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:tnBWaB1BGk8sCxo4cR8ptzpQrBlMmeFvfJ6JGxxKmxHj5T9wNty-Bw>
-    <xmx:tnBWaIAzTbaxNHP_ZUECuEkeT4Lmi1N0z4_RPKjyolIXdIvyu4_zeA>
-    <xmx:tnBWaNixZ7FpObsDwab5XzJSFVeb-5VWHxlFmbK-yN_31aGPP4LuFA>
-    <xmx:tnBWaEpl9Xauk4k1QQg4lWesnbl9djMv_sXnnRs_q7C8d8gvWLjO4Q>
-    <xmx:tnBWaBs718JWZYIXtKYvFNjsiypan0SKgMdlXEwhEJru0Ul1U7FjYW72>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EF5A7700063; Sat, 21 Jun 2025 04:43:33 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mCWhDjqk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750510976; x=1782046976;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bIAbaa1hcrbXGdLOCG9bBGbCTsWp6a8ZVSPoaIhtwHI=;
+  b=mCWhDjqkPMqua8+aBAiTauLBs5ANQZ7MVbsSYF37JIiJdbXyNE2M9FnT
+   AfvS1PmEHyc1tvKCz1vMs0kYRjkvR40r6H+sCxBkWAmA5jBHn0pPMzNz5
+   YKeMm3iqVG3H/dTOpaUgcIyrxD+VuXtsVAmF1SW++dgMRniF+vXKBVaay
+   niDHCERYOFfN/0r/fURoC/B1WD5SGLG69BJogRWcmmqguWharHDg9J53J
+   QV92Rw/rATnh/lWGAZSauKjLKE3+pygzuhPpESSHHEZ6ZLAPSdcu75yCC
+   d4jojkSO92UUzfztu4x6NSMOU6eziHmDaSYNeE+4qWdlfUJkgYVJ6gXOi
+   w==;
+X-CSE-ConnectionGUID: CJedEempReSLPEEsnRVvyw==
+X-CSE-MsgGUID: rLEyo1fdReuO+qlezi8uqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11470"; a="63029290"
+X-IronPort-AV: E=Sophos;i="6.16,254,1744095600"; 
+   d="scan'208";a="63029290"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2025 06:02:55 -0700
+X-CSE-ConnectionGUID: kMJ85cQVToG3OAaSrU6XOg==
+X-CSE-MsgGUID: E/NRupenT76+Cy7GDXRLXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,254,1744095600"; 
+   d="scan'208";a="150741998"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 21 Jun 2025 06:02:52 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSxru-000Md0-14;
+	Sat, 21 Jun 2025 13:02:50 +0000
+Date: Sat, 21 Jun 2025 21:02:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: NeilBrown <neil@brown.name>, Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Li Lingfeng <lilingfeng3@huawei.com>
+Subject: Re: [PATCH 3/3] nfsd: split nfsd_mutex into one mutex per
+ net-namespace.
+Message-ID: <202506212005.LpUsPRa3-lkp@intel.com>
+References: <20250620233802.1453016-4-neil@brown.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T72ae95e6125674c9
-Date: Sat, 21 Jun 2025 10:43:03 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Zhu Yanjun" <yanjun.zhu@linux.dev>, "Arnd Bergmann" <arnd@kernel.org>,
- "Bernard Metzler" <bmt@zurich.ibm.com>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Leon Romanovsky" <leon@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Potnuri Bharat Teja" <bharat@chelsio.com>,
- "Showrya M N" <showrya@chelsio.com>, "Eric Biggers" <ebiggers@google.com>,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <ca2eaa50-c3ed-491d-ab38-65a7c1dc2820@app.fastmail.com>
-In-Reply-To: <2d04fee6-5d95-4c50-b2b1-ee67f42932e2@linux.dev>
-References: <20250620114332.4072051-1-arnd@kernel.org>
- <2d04fee6-5d95-4c50-b2b1-ee67f42932e2@linux.dev>
-Subject: Re: [PATCH] RDMA/siw: work around clang stack size warning
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250620233802.1453016-4-neil@brown.name>
 
-On Sat, Jun 21, 2025, at 06:12, Zhu Yanjun wrote:
-> =E5=9C=A8 2025/6/20 4:43, Arnd Bergmann =E5=86=99=E9=81=93:
->
-> Because the array of kvec structures in siw_tx_hdt consumes the majori=
-ty=20
-> of the stack space, would it be possible to use kmalloc or a similar=20
-> dynamic memory allocation function instead of allocating this memory o=
-n=20
-> the stack?
->
-> Would using kmalloc (or an equivalent) also effectively resolve the=20
-> stack usage issue?
+Hi NeilBrown,
 
-Yes, moving the allocation somewhere else (kmalloc, static variable,
-per siw_sge, per siw_wqe) would avoid the high stack usage effectively,
-it's a tradeoff and I picked the solution that made the most sense
-to me, but there is a good chance another alternative is better here.
+kernel test robot noticed the following build errors:
 
-The main differences are:
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on trondmy-nfs/linux-next linus/master v6.16-rc2 next-20250620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-- kmalloc() adds runtime overhead that may be expensive in a
-  fast path
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfsd-provide-proper-locking-for-all-write_-function/20250621-073955
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250620233802.1453016-4-neil%40brown.name
+patch subject: [PATCH 3/3] nfsd: split nfsd_mutex into one mutex per net-namespace.
+config: i386-buildonly-randconfig-003-20250621 (https://download.01.org/0day-ci/archive/20250621/202506212005.LpUsPRa3-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250621/202506212005.LpUsPRa3-lkp@intel.com/reproduce)
 
-- kmalloc() can fail, which adds complexity from error handling.
-  Note that small allocations with GFP_KERNEL do not fail but instead
-  wait for memory to become available
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506212005.LpUsPRa3-lkp@intel.com/
 
-- If kmalloc() runs into a low-memory situation, it can go through
-  writeback, which in turn can use more stack space than the
-  on-stack allocation it was replacing
+All errors (new ones prefixed by >>):
 
-- static allocations bloat the kernel image and require locking that
-  may be expensive
+>> fs/nfsd/nfsctl.c:1699:3: error: cannot jump from this goto statement to its label
+    1699 |                 goto err_free_msg;
+         |                 ^
+   fs/nfsd/nfsctl.c:1702:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1702 |         guard(mutex)(&nn->config_mutex);
+         |         ^
+   include/linux/cleanup.h:338:15: note: expanded from macro 'guard'
+     338 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:45:1: note: expanded from here
+      45 | __UNIQUE_ID_guard1097
+         | ^
+   fs/nfsd/nfsctl.c:1825:3: error: cannot jump from this goto statement to its label
+    1825 |                 goto err_free_msg;
+         |                 ^
+   fs/nfsd/nfsctl.c:1829:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1829 |         guard(mutex)(&nn->config_mutex);
+         |         ^
+   include/linux/cleanup.h:338:15: note: expanded from macro 'guard'
+     338 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:68:1: note: expanded from here
+      68 | __UNIQUE_ID_guard1099
+         | ^
+   fs/nfsd/nfsctl.c:2044:3: error: cannot jump from this goto statement to its label
+    2044 |                 goto err_free_msg;
+         |                 ^
+   fs/nfsd/nfsctl.c:2048:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    2048 |         guard(mutex)(&nn->config_mutex);
+         |         ^
+   include/linux/cleanup.h:338:15: note: expanded from macro 'guard'
+     338 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:118:1: note: expanded from here
+     118 | __UNIQUE_ID_guard1101
+         | ^
+   3 errors generated.
 
-- per-object preallocations can be wasteful if a lot of objects
-  are created, and can still require locking if the object is used
-  from multiple threads
 
-As I wrote, I mainly picked the 'noinline_for_stack' approach
-here since that is how the code is known to work with gcc, so
-there is little risk of my patch causing problems.
+vim +1699 fs/nfsd/nfsctl.c
 
-Moving the both the kvec array and the page array into
-the siw_wqe is likely better here, I'm not familiar enough
-with the driver to tell whether that is an overall improvement.
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1677  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1678  /**
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1679   * nfsd_nl_threads_get_doit - get the number of running threads
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1680   * @skb: reply buffer
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1681   * @info: netlink metadata and command arguments
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1682   *
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1683   * Return 0 on success or a negative errno.
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1684   */
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1685  int nfsd_nl_threads_get_doit(struct sk_buff *skb, struct genl_info *info)
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1686  {
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1687  	struct net *net = genl_info_net(info);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1688  	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1689  	void *hdr;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1690  	int err;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1691  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1692  	skb = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1693  	if (!skb)
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1694  		return -ENOMEM;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1695  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1696  	hdr = genlmsg_iput(skb, info);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1697  	if (!hdr) {
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1698  		err = -EMSGSIZE;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23 @1699  		goto err_free_msg;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1700  	}
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1701  
+40677c06f2c6a4 NeilBrown        2025-06-21  1702  	guard(mutex)(&nn->config_mutex);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1703  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1704  	err = nla_put_u32(skb, NFSD_A_SERVER_GRACETIME,
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1705  			  nn->nfsd4_grace) ||
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1706  	      nla_put_u32(skb, NFSD_A_SERVER_LEASETIME,
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1707  			  nn->nfsd4_lease) ||
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1708  	      nla_put_string(skb, NFSD_A_SERVER_SCOPE,
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1709  			  nn->nfsd_name);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1710  	if (err)
+40677c06f2c6a4 NeilBrown        2025-06-21  1711  		goto err_free_msg;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1712  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1713  	if (nn->nfsd_serv) {
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1714  		int i;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1715  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1716  		for (i = 0; i < nfsd_nrpools(net); ++i) {
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1717  			struct svc_pool *sp = &nn->nfsd_serv->sv_pools[i];
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1718  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1719  			err = nla_put_u32(skb, NFSD_A_SERVER_THREADS,
+60749cbe3d8ae5 NeilBrown        2024-07-15  1720  					  sp->sp_nrthreads);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1721  			if (err)
+40677c06f2c6a4 NeilBrown        2025-06-21  1722  				goto err_free_msg;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1723  		}
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1724  	} else {
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1725  		err = nla_put_u32(skb, NFSD_A_SERVER_THREADS, 0);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1726  		if (err)
+40677c06f2c6a4 NeilBrown        2025-06-21  1727  			goto err_free_msg;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1728  	}
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1729  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1730  	genlmsg_end(skb, hdr);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1731  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1732  	return genlmsg_reply(skb, info);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1733  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1734  err_free_msg:
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1735  	nlmsg_free(skb);
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1736  
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1737  	return err;
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1738  }
+924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1739  
 
-A related change I would like to see is to remove the
-kmap_local_page() in this driver and instead make it
-depend on 64BIT or !CONFIG_HIGHMEM, to slowly chip away
-at the code that is highmem aware throughout the kernel.
-I'm not sure if that that would also help drop the array
-here.
-
-     Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
