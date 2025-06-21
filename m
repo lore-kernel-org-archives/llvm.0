@@ -1,178 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE567FD;
-	Sat, 21 Jun 2025 08:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573371531E3
+	for <llvm@lists.linux.dev>; Sat, 21 Jun 2025 08:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750494935; cv=none; b=pNHHkmDHOekUM065Q0u7tybe+8GoxC18hBL74ugYbH91dN/W1l8oKE30EY+gtfHfBBm3nsepwUSYepazGh92WhDk6mtDvnMhtrcBRDdtmrUERuhInjTS1JlRl0BQwGOjrxkppTIqOPRmsMDwrMz9MQhR4N4op73FIo5kshK3Ae4=
+	t=1750495418; cv=none; b=aJPM8K/v10/l/i2NOrG5RrZ2+NrPBHIMKlRx80RTkvWt5Eoej1an7jja1PYNLsQBOUGxR707dtB1BzYUHMF1JobzvhwEigrJcdj5wuXIomauBtokvcaiHPQb2ZTjcy5HlSxj7HkcQfGLRGJLSTsFJ8YLKe4Y5m7lrqYVwCyrWL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750494935; c=relaxed/simple;
-	bh=IxnvwpPtE9uiMFUZjHjsqPPB12QCtRhBXJ2KaoEI0sk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F6wPYxYXhLfWKWzduYb4KEzwlB+vvGROyae+QFHPbgERCt69Cxm4UIrN3npcm3jSgeze4UTvul3VRuApT/TE5SJMfmEn+8ZrUANucIvRdoGCQghPSp3gxeEKNOGlOv546VD5Bnwh2Nu32Hp3x5OTsPpnvTQ72uy4UtFtoB7/hNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIy7nkRB; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750495418; c=relaxed/simple;
+	bh=4rZ2ZnoUrbKDGr/2GBdIO1GUEN5PVZkrr7x6icSvihQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=WnSkw3zw/VEZ+kMt5MlOONVzhnuuGd2HU01V8mI2559SJdFVhnECrBBW+Db0nakobvJUUs+pSG/rbtloGnsVA743jOyA8x81oI70e8pv5tUY+OYpIfFcPfETJWCH7uCl7YVC9tn+16Q4r3H60KTzLd7uQF5E+IiveT0TNiGdkwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=P09la/GL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YvWVns99; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIy7nkRB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750494934; x=1782030934;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IxnvwpPtE9uiMFUZjHjsqPPB12QCtRhBXJ2KaoEI0sk=;
-  b=GIy7nkRBvQyHa3RBChGbixYD7vhQ1h7ekL2ej3MVXcI/FxYEz2oBdjTu
-   11ayPoG2BXEl121elRb4KXVua/NQjD1ijUyoLNpQQt2/hIGJe+ubE4sOH
-   II1wucFJy+P4RhAkdYIbHthvwkxmLTG/Y/9DBhNJOvcKFQb0ngL46f/zD
-   dlfnlS7bX7MSqOZkTvH/f79yEEDJZIhBmrTWZgcDDJus/KukiKtRlRxcr
-   BHhs3KKS0/Mx8X7fiveZrnS2NCY7emiult77MPl5ow2XvJh9BpEosp2mY
-   NMPfzDWtq5jW8+/XzcoJl874ytmvPwowttcwEwGP3OMyrk0J7eknBrwEL
-   w==;
-X-CSE-ConnectionGUID: RTKyUa94QnCdkmd/kHIRig==
-X-CSE-MsgGUID: DjxfY99+QZmEUt0M1YdUTQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52459032"
-X-IronPort-AV: E=Sophos;i="6.16,253,1744095600"; 
-   d="scan'208";a="52459032"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2025 01:35:33 -0700
-X-CSE-ConnectionGUID: x3bpnHumREixSSOk2WjHgQ==
-X-CSE-MsgGUID: tYh93x4SQcS5i6AK0sfC5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,253,1744095600"; 
-   d="scan'208";a="150897564"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 21 Jun 2025 01:35:28 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uSth7-000MU4-1R;
-	Sat, 21 Jun 2025 08:35:25 +0000
-Date: Sat, 21 Jun 2025 16:34:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Darren.Ye" <darren.ye@mediatek.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-	Darren Ye <darren.ye@mediatek.com>,
-	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-Subject: Re: [PATCH v5 01/10] ASoC: mediatek: common: modify mtk afe platform
- driver for mt8196
-Message-ID: <202506211649.TGCEqNZ6-lkp@intel.com>
-References: <20250620094140.11093-2-darren.ye@mediatek.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="P09la/GL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YvWVns99"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id EE2261140170;
+	Sat, 21 Jun 2025 04:43:34 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Sat, 21 Jun 2025 04:43:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1750495414;
+	 x=1750581814; bh=hOBt8DyvRAQ/Oc15WkOTB7b3qi20b8aOYJt2sH34Xjo=; b=
+	P09la/GLSwtmAnFivcRAl35u7n35/5oOGFpvAJxwwMNUmTQ+ixzlKb51b+Az7ZmR
+	fG8uIxihtph8FIdrN4s9RHuXI9PhYIgFJCMPMXEJ+sUHQe60YRPqB0HcV7Cv1I+1
+	oMepQkkzsSu6QeGSi8TEdFjSUSzE+jPwK+KCT0oQD/VNvCdUkiOyGCZcSkRgdyy+
+	ihrIi5kBzBzub2XlIjyfma+8X3ef0JPL/ACfEOrISuzj6q8aiNcMMbwlFCEhKPL2
+	5AHG8dbyiYiFo9Sat8PyueEcamC/t66E1bqZOQXtFP0x/DPOVVOSYTxpYVk9xwM/
+	0FLnpZ5NUCMo2x3+lZpv7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750495414; x=
+	1750581814; bh=hOBt8DyvRAQ/Oc15WkOTB7b3qi20b8aOYJt2sH34Xjo=; b=Y
+	vWVns99GN4o9HSFIbP1+z69sNblzaFOvLCc+3Nj532w1TV8zjaWjPNkmkQcIKAw7
+	V6jawYxHYNOocsoBaiL5H+0lrigIIGyoH/0MqmUJBQsuqkBtxIVILvcPI4qVrMoM
+	DNcHWs5hwvszJlN86k0i8l2OQIU656vVzpHCO44XDYppVBjv9iQWtJdF4Gq10oD2
+	oO9jKeOeL4Oji9S1EdnbFpjzudVVrnz2ck91wtUSLI46VpsX3n7NB26y5RVdpFXn
+	8LPwOm3O23rxuW8zFxJ7+82zmmpFFZdMCkWGJWutCZYP5nhQofnXaOXJ07uOzJF3
+	f1PB2KsDYlsAec9pY5Ihw==
+X-ME-Sender: <xms:tnBWaER4YLzMf5xi1Z203mxC3ZmFhB9kWqcxfh8btFkWhuLEzGuiMg>
+    <xme:tnBWaBxpxv-Hu22BkZmFaOcu3CaVKb1Aw3YSTpDujnvfTvJDMB027snpKkl7t_lX0
+    Ya-DXOJ42I7YzbPxXw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddutdekfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepsghhrghrrghtsegthhgvlhhsihhordgtohhmpdhrtghpthhtohepsh
+    hhohifrhihrgestghhvghlshhiohdrtghomhdprhgtphhtthhopehnihgtkhdruggvshgr
+    uhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvggsihhggh
+    gvrhhssehgohhoghhlvgdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehg
+    ohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprh
+    gtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvohhnsehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:tnBWaB1BGk8sCxo4cR8ptzpQrBlMmeFvfJ6JGxxKmxHj5T9wNty-Bw>
+    <xmx:tnBWaIAzTbaxNHP_ZUECuEkeT4Lmi1N0z4_RPKjyolIXdIvyu4_zeA>
+    <xmx:tnBWaNixZ7FpObsDwab5XzJSFVeb-5VWHxlFmbK-yN_31aGPP4LuFA>
+    <xmx:tnBWaEpl9Xauk4k1QQg4lWesnbl9djMv_sXnnRs_q7C8d8gvWLjO4Q>
+    <xmx:tnBWaBs718JWZYIXtKYvFNjsiypan0SKgMdlXEwhEJru0Ul1U7FjYW72>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id EF5A7700063; Sat, 21 Jun 2025 04:43:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620094140.11093-2-darren.ye@mediatek.com>
+X-ThreadId: T72ae95e6125674c9
+Date: Sat, 21 Jun 2025 10:43:03 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Zhu Yanjun" <yanjun.zhu@linux.dev>, "Arnd Bergmann" <arnd@kernel.org>,
+ "Bernard Metzler" <bmt@zurich.ibm.com>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Leon Romanovsky" <leon@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>
+Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Potnuri Bharat Teja" <bharat@chelsio.com>,
+ "Showrya M N" <showrya@chelsio.com>, "Eric Biggers" <ebiggers@google.com>,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <ca2eaa50-c3ed-491d-ab38-65a7c1dc2820@app.fastmail.com>
+In-Reply-To: <2d04fee6-5d95-4c50-b2b1-ee67f42932e2@linux.dev>
+References: <20250620114332.4072051-1-arnd@kernel.org>
+ <2d04fee6-5d95-4c50-b2b1-ee67f42932e2@linux.dev>
+Subject: Re: [PATCH] RDMA/siw: work around clang stack size warning
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Darren.Ye,
+On Sat, Jun 21, 2025, at 06:12, Zhu Yanjun wrote:
+> =E5=9C=A8 2025/6/20 4:43, Arnd Bergmann =E5=86=99=E9=81=93:
+>
+> Because the array of kvec structures in siw_tx_hdt consumes the majori=
+ty=20
+> of the stack space, would it be possible to use kmalloc or a similar=20
+> dynamic memory allocation function instead of allocating this memory o=
+n=20
+> the stack?
+>
+> Would using kmalloc (or an equivalent) also effectively resolve the=20
+> stack usage issue?
 
-kernel test robot noticed the following build warnings:
+Yes, moving the allocation somewhere else (kmalloc, static variable,
+per siw_sge, per siw_wqe) would avoid the high stack usage effectively,
+it's a tradeoff and I picked the solution that made the most sense
+to me, but there is a good chance another alternative is better here.
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on broonie-spi/for-next robh/for-next linus/master v6.16-rc2 next-20250620]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The main differences are:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Darren-Ye/ASoC-mediatek-common-modify-mtk-afe-platform-driver-for-mt8196/20250620-174746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20250620094140.11093-2-darren.ye%40mediatek.com
-patch subject: [PATCH v5 01/10] ASoC: mediatek: common: modify mtk afe platform driver for mt8196
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250621/202506211649.TGCEqNZ6-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250621/202506211649.TGCEqNZ6-lkp@intel.com/reproduce)
+- kmalloc() adds runtime overhead that may be expensive in a
+  fast path
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506211649.TGCEqNZ6-lkp@intel.com/
+- kmalloc() can fail, which adds complexity from error handling.
+  Note that small allocations with GFP_KERNEL do not fail but instead
+  wait for memory to become available
 
-All warnings (new ones prefixed by >>):
+- If kmalloc() runs into a low-memory situation, it can go through
+  writeback, which in turn can use more stack space than the
+  on-stack allocation it was replacing
 
->> sound/soc/mediatek/common/mtk-afe-platform-driver.c:125:18: warning: shift count is negative [-Wshift-count-negative]
-     125 |         pcm_ptr_bytes = MTK_ALIGN_16BYTES(hw_ptr - hw_base);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-platform-driver.h:15:37: note: expanded from macro 'MTK_ALIGN_16BYTES'
-      15 | #define MTK_ALIGN_16BYTES(x) ((x) & GENMASK(39, 4))
-         |                                     ^~~~~~~~~~~~~~
-   include/linux/bits.h:87:31: note: expanded from macro 'GENMASK'
-      87 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~~~~~~~
-   include/uapi/linux/bits.h:7:56: note: expanded from macro '__GENMASK'
-       7 | #define __GENMASK(h, l) (((~_UL(0)) << (l)) & (~_UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+- static allocations bloat the kernel image and require locking that
+  may be expensive
 
+- per-object preallocations can be wasteful if a lot of objects
+  are created, and can still require locking if the object is used
+  from multiple threads
 
-vim +125 sound/soc/mediatek/common/mtk-afe-platform-driver.c
+As I wrote, I mainly picked the 'noinline_for_stack' approach
+here since that is how the code is known to work with gcc, so
+there is little risk of my patch causing problems.
 
-    79	
-    80	snd_pcm_uframes_t mtk_afe_pcm_pointer(struct snd_soc_component *component,
-    81					      struct snd_pcm_substream *substream)
-    82	{
-    83		struct snd_soc_pcm_runtime *rtd = snd_soc_substream_to_rtd(substream);
-    84		struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
-    85		struct mtk_base_afe_memif *memif = &afe->memif[snd_soc_rtd_to_cpu(rtd, 0)->id];
-    86		const struct mtk_base_memif_data *memif_data = memif->data;
-    87		struct regmap *regmap = afe->regmap;
-    88		struct device *dev = afe->dev;
-    89		unsigned int hw_ptr_lower32 = 0, hw_ptr_upper32 = 0;
-    90		unsigned int hw_base_lower32 = 0, hw_base_upper32 = 0;
-    91		unsigned long long hw_ptr = 0, hw_base = 0;
-    92		int ret;
-    93		unsigned long long pcm_ptr_bytes = 0;
-    94	
-    95		ret = regmap_read(regmap, memif_data->reg_ofs_cur, &hw_ptr_lower32);
-    96		if (ret || hw_ptr_lower32 == 0) {
-    97			dev_err(dev, "%s hw_ptr_lower32 err\n", __func__);
-    98			goto POINTER_RETURN_FRAMES;
-    99		}
-   100	
-   101		if (memif_data->reg_ofs_cur_msb) {
-   102			ret = regmap_read(regmap, memif_data->reg_ofs_cur_msb, &hw_ptr_upper32);
-   103			if (ret) {
-   104				dev_err(dev, "%s hw_ptr_upper32 err\n", __func__);
-   105				goto POINTER_RETURN_FRAMES;
-   106			}
-   107		}
-   108	
-   109		ret = regmap_read(regmap, memif_data->reg_ofs_base, &hw_base_lower32);
-   110		if (ret || hw_base_lower32 == 0) {
-   111			dev_err(dev, "%s hw_base_lower32 err\n", __func__);
-   112			goto POINTER_RETURN_FRAMES;
-   113		}
-   114		if (memif_data->reg_ofs_base_msb) {
-   115			ret = regmap_read(regmap, memif_data->reg_ofs_base_msb, &hw_base_upper32);
-   116			if (ret) {
-   117				dev_err(dev, "%s hw_base_upper32 err\n", __func__);
-   118				goto POINTER_RETURN_FRAMES;
-   119			}
-   120		}
-   121		hw_ptr = ((unsigned long long)hw_ptr_upper32 << 32) + hw_ptr_lower32;
-   122		hw_base = ((unsigned long long)hw_base_upper32 << 32) + hw_base_lower32;
-   123	
-   124	POINTER_RETURN_FRAMES:
- > 125		pcm_ptr_bytes = MTK_ALIGN_16BYTES(hw_ptr - hw_base);
-   126		return bytes_to_frames(substream->runtime, (ssize_t)pcm_ptr_bytes);
-   127	}
-   128	EXPORT_SYMBOL_GPL(mtk_afe_pcm_pointer);
-   129	
+Moving the both the kvec array and the page array into
+the siw_wqe is likely better here, I'm not familiar enough
+with the driver to tell whether that is an overall improvement.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+A related change I would like to see is to remove the
+kmap_local_page() in this driver and instead make it
+depend on 64BIT or !CONFIG_HIGHMEM, to slowly chip away
+at the code that is highmem aware throughout the kernel.
+I'm not sure if that that would also help drop the array
+here.
+
+     Arnd
