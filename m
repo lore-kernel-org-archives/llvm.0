@@ -1,160 +1,121 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575A92EB1D
-	for <llvm@lists.linux.dev>; Sat, 21 Jun 2025 04:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A05D1459F7;
+	Sat, 21 Jun 2025 05:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750479188; cv=none; b=Wm+zp+02Ai53PbXsf23rfde0g+Amk4Fgbw2qg/wfK3tKOw93Ljqe1BqZZYGm1dK8FXXz6BvIciHKe901GQoBKCcg0j/MhMkdiXYVOzbsYRQ5Hy3xJlj5Jc0lZL5iKgYuNhJXRhIS1v8kedt2U6iE4JzpfvG3tcJYvjIUovALpv0=
+	t=1750485018; cv=none; b=eg1UF/i+LyVLcmG0AZT+QMN0kKVyfMG37CNVzG4eoiyY3R/Sz62L4A39O/+P6NDE02V70cHERTWx3un4JbGjvJNsseFbzVroodMOCb10pRLKcqy1+oSvsZ/Q5uNIrS7k10o8AKb9r9VqZcejqDp3LzihWHhwtNgHeviICYx6ziQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750479188; c=relaxed/simple;
-	bh=iNBqdvzRqvmlcLnFyD/xAgbAkKbUplPAdShitn7Qiow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pTYrcJwsAtdeXFQyaZFS9p2rJGT6d+goNBRTNNN2gwiNfWr7oCQP+cU1ffyC9tUiRzm16AVvlRFEuPiEcQ20gmUrLZ3h0Q+UYXWmFksrK3dc+vNgUvgDlKNhSQayAU1p0p5rfzXqfhhI7bjODAdi+HM2zDQpeJwJ/z8JOPs0qzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bhJQytKc; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1750485018; c=relaxed/simple;
+	bh=QwMkKubOeLSa+ZtQ0WxAQRTkaTQpCRBVlWqTwqLTplA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=n8LAtvSy3JYiS3ZflVOKb77v2IWD3ImwFw4c4yrSiySSLuyjFIDoIvdrUe+Wuw/riFij1+dHIpEEBKodAEz2GYhdSWCwkvhilU5WZzxJp7DHwnlZE+qqSTAKOKJMdbtAxMcGA1eAVa5NzV9qptYSSr3ziz8PTWFYV1nplJkttWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RdD60ap/; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bhJQytKc"
-Message-ID: <2d04fee6-5d95-4c50-b2b1-ee67f42932e2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1750479180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jcR9MO+hlXNQyGNXtt8eel8mEQz/tmmVsCpo4bl1TuM=;
-	b=bhJQytKcmXzZHfXkKScUGun4ArSRk5pFSwjbO7AGNiThQclcGPOq3XPM+KL7q78BpOIgUK
-	CNaTy6mWdzeoS6+QWpkC1dSBUC+t57/HF+dCDjp/3kMjGG2pX7A9aBaqORPmKZp+Gfdf4/
-	0wZk5mkoTqN2DirLqB3OSe9VNX7DvCY=
-Date: Fri, 20 Jun 2025 21:12:40 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RdD60ap/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750485016; x=1782021016;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QwMkKubOeLSa+ZtQ0WxAQRTkaTQpCRBVlWqTwqLTplA=;
+  b=RdD60ap/jGTiXskoiMtSxguKZOO4lbW+qM60HkqgFlLf1134fsaxWGkz
+   QP4K/8Yu3hUn16xnh4MDfkJ4j+tV4hZ6HBF6wPa+E652snPQwsKC8HknF
+   S4H3ITEsRB3nEifJpS4zoLdCGqGZYYO6u4GK24zJKfrGBapqWp3LJCF8V
+   l9f4hdeY+SgAQhiOnsslO6+alkCLVtiEwUWrE+s2Udp2dMdPp5+Greg81
+   P1ZjcgFzfSuLiYlatT8LjVmR3ZGYqwb2bWL85NnYlaEeEMU+1Z5R3W87s
+   L9uk0e74Fbdh+97lpFNEIskvMSCTrwfWCPq1GVSXXtSM0QmztVrTiPWRE
+   Q==;
+X-CSE-ConnectionGUID: mxfifO4kQpiR0nf6mqiqxA==
+X-CSE-MsgGUID: JjpTgFpAQkS7Ny6W3mdeSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52452037"
+X-IronPort-AV: E=Sophos;i="6.16,253,1744095600"; 
+   d="scan'208";a="52452037"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 22:50:15 -0700
+X-CSE-ConnectionGUID: +yZeohbATiKG2nHB/UfV+Q==
+X-CSE-MsgGUID: 8az7OZZIRfGlBhc5lx+5Lw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,253,1744095600"; 
+   d="scan'208";a="155400478"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 20 Jun 2025 22:50:13 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSr7D-000MOy-0U;
+	Sat, 21 Jun 2025 05:50:11 +0000
+Date: Sat, 21 Jun 2025 13:49:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Stephen Boyd <swboyd@chromium.org>
+Subject: [lumag-msm:msm-next-lumag 41/56]
+ drivers/gpu/drm/msm/dp/dp_panel.c:33:9: error: call to undeclared function
+ 'readl_relaxed'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202506211346.vjPTqd04-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] RDMA/siw: work around clang stack size warning
-To: Arnd Bergmann <arnd@kernel.org>, Bernard Metzler <bmt@zurich.ibm.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Potnuri Bharat Teja <bharat@chelsio.com>, Showrya M N <showrya@chelsio.com>,
- Eric Biggers <ebiggers@google.com>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20250620114332.4072051-1-arnd@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20250620114332.4072051-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-在 2025/6/20 4:43, Arnd Bergmann 写道:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang inlines a lot of functions into siw_qp_sq_process(), with the
-> aggregate stack frame blowing the warning limit in some configurations:
-> 
-> drivers/infiniband/sw/siw/siw_qp_tx.c:1014:5: error: stack frame size (1544) exceeds limit (1280) in 'siw_qp_sq_process' [-Werror,-Wframe-larger-than]
-> 
-> The real problem here is the array of kvec structures in siw_tx_hdt that
-> makes up the majority of the consumed stack space.
+tree:   https://gitlab.freedesktop.org/lumag/msm msm-next-lumag
+head:   ee1c98ae63d16d80d3dd943b404831e4225180bd
+commit: 9d47325ee063bcebd2801a38a7e2397b83c3d234 [41/56] drm/msm/dp: drop the msm_dp_catalog module
+config: i386-buildonly-randconfig-005-20250621 (https://download.01.org/0day-ci/archive/20250621/202506211346.vjPTqd04-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250621/202506211346.vjPTqd04-lkp@intel.com/reproduce)
 
-Because the array of kvec structures in siw_tx_hdt consumes the majority 
-of the stack space, would it be possible to use kmalloc or a similar 
-dynamic memory allocation function instead of allocating this memory on 
-the stack?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506211346.vjPTqd04-lkp@intel.com/
 
-Would using kmalloc (or an equivalent) also effectively resolve the 
-stack usage issue?
-Please note that I’m not questioning the value of this commit—I’m simply 
-curious whether there might be an alternative solution to the problem.
+Note: the lumag-msm/msm-next-lumag HEAD ee1c98ae63d16d80d3dd943b404831e4225180bd builds fine.
+      It only hurts bisectability.
 
-Thanks,
-Yanjun.Zhu
+All errors (new ones prefixed by >>):
 
-> 
-> Ideally there would be a way to avoid allocating the array on the
-> stack, but that would require a larger rework. Add a noinline_for_stack
-> annotation to avoid the warning for now, and make clang behave the same
-> way as gcc here. The combined stack usage is still similar, but is spread
-> over multiple functions now.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/infiniband/sw/siw/siw_qp_tx.c | 22 ++++++++++++++++------
->   1 file changed, 16 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/infiniband/sw/siw/siw_qp_tx.c b/drivers/infiniband/sw/siw/siw_qp_tx.c
-> index 6432bce7d083..3a08f57d2211 100644
-> --- a/drivers/infiniband/sw/siw/siw_qp_tx.c
-> +++ b/drivers/infiniband/sw/siw/siw_qp_tx.c
-> @@ -277,6 +277,15 @@ static int siw_qp_prepare_tx(struct siw_iwarp_tx *c_tx)
->   	return PKT_FRAGMENTED;
->   }
->   
-> +static noinline_for_stack int
-> +siw_sendmsg(struct socket *sock, unsigned int msg_flags,
-> +	    struct kvec *vec, size_t num, size_t len)
-> +{
-> +	struct msghdr msg = { .msg_flags = msg_flags };
-> +
-> +	return kernel_sendmsg(sock, &msg, vec, num, len);
-> +}
-> +
->   /*
->    * Send out one complete control type FPDU, or header of FPDU carrying
->    * data. Used for fixed sized packets like Read.Requests or zero length
-> @@ -285,12 +294,11 @@ static int siw_qp_prepare_tx(struct siw_iwarp_tx *c_tx)
->   static int siw_tx_ctrl(struct siw_iwarp_tx *c_tx, struct socket *s,
->   			      int flags)
->   {
-> -	struct msghdr msg = { .msg_flags = flags };
->   	struct kvec iov = { .iov_base =
->   				    (char *)&c_tx->pkt.ctrl + c_tx->ctrl_sent,
->   			    .iov_len = c_tx->ctrl_len - c_tx->ctrl_sent };
->   
-> -	int rv = kernel_sendmsg(s, &msg, &iov, 1, iov.iov_len);
-> +	int rv = siw_sendmsg(s, flags, &iov, 1, iov.iov_len);
->   
->   	if (rv >= 0) {
->   		c_tx->ctrl_sent += rv;
-> @@ -427,13 +435,13 @@ static void siw_unmap_pages(struct kvec *iov, unsigned long kmap_mask, int len)
->    * Write out iov referencing hdr, data and trailer of current FPDU.
->    * Update transmit state dependent on write return status
->    */
-> -static int siw_tx_hdt(struct siw_iwarp_tx *c_tx, struct socket *s)
-> +static noinline_for_stack int siw_tx_hdt(struct siw_iwarp_tx *c_tx,
-> +					 struct socket *s)
->   {
->   	struct siw_wqe *wqe = &c_tx->wqe_active;
->   	struct siw_sge *sge = &wqe->sqe.sge[c_tx->sge_idx];
->   	struct kvec iov[MAX_ARRAY];
->   	struct page *page_array[MAX_ARRAY];
-> -	struct msghdr msg = { .msg_flags = MSG_DONTWAIT | MSG_EOR };
->   
->   	int seg = 0, do_crc = c_tx->do_crc, is_kva = 0, rv;
->   	unsigned int data_len = c_tx->bytes_unsent, hdr_len = 0, trl_len = 0,
-> @@ -586,14 +594,16 @@ static int siw_tx_hdt(struct siw_iwarp_tx *c_tx, struct socket *s)
->   		rv = siw_0copy_tx(s, page_array, &wqe->sqe.sge[c_tx->sge_idx],
->   				  c_tx->sge_off, data_len);
->   		if (rv == data_len) {
-> -			rv = kernel_sendmsg(s, &msg, &iov[seg], 1, trl_len);
-> +
-> +			rv = siw_sendmsg(s, MSG_DONTWAIT | MSG_EOR, &iov[seg],
-> +					 1, trl_len);
->   			if (rv > 0)
->   				rv += data_len;
->   			else
->   				rv = data_len;
->   		}
->   	} else {
-> -		rv = kernel_sendmsg(s, &msg, iov, seg + 1,
-> +		rv = siw_sendmsg(s, MSG_DONTWAIT | MSG_EOR, iov, seg + 1,
->   				    hdr_len + data_len + trl_len);
->   		siw_unmap_pages(iov, kmap_mask, seg);
->   	}
+>> drivers/gpu/drm/msm/dp/dp_panel.c:33:9: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      33 |         return readl_relaxed(panel->link_base + offset);
+         |                ^
+>> drivers/gpu/drm/msm/dp/dp_panel.c:43:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      43 |         writel(data, panel->link_base + offset);
+         |         ^
+   drivers/gpu/drm/msm/dp/dp_panel.c:53:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      53 |         writel(data, panel->p0_base + offset);
+         |         ^
+   drivers/gpu/drm/msm/dp/dp_panel.c:63:9: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      63 |         return readl_relaxed(panel->p0_base + offset);
+         |                ^
+   4 errors generated.
 
+
+vim +/readl_relaxed +33 drivers/gpu/drm/msm/dp/dp_panel.c
+
+    30	
+    31	static inline u32 msm_dp_read_link(struct msm_dp_panel_private *panel, u32 offset)
+    32	{
+  > 33		return readl_relaxed(panel->link_base + offset);
+    34	}
+    35	
+    36	static inline void msm_dp_write_link(struct msm_dp_panel_private *panel,
+    37				       u32 offset, u32 data)
+    38	{
+    39		/*
+    40		 * To make sure link reg writes happens before any other operation,
+    41		 * this function uses writel() instread of writel_relaxed()
+    42		 */
+  > 43		writel(data, panel->link_base + offset);
+    44	}
+    45	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
