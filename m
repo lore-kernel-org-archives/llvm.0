@@ -1,231 +1,236 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F7C15C158;
-	Sat, 21 Jun 2025 13:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0081531E3
+	for <llvm@lists.linux.dev>; Sat, 21 Jun 2025 15:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750510977; cv=none; b=KxN87wM5/+q9ogA7gmAe0e7cMpG0JmxFT/k/Uf4iOZF8/r981SAlpXj9gBM3Hw0A7AjyReokyH4zHA1X6lyjFaQlIswlid+6GH1Hz682VDak/N3ZlhrUT/K1A2vTj+vADxBbhWqD4dcSzqAtEmAyc/1FMiWCJq9AKzl372+uSf4=
+	t=1750520546; cv=none; b=NFgF4ivG8P5GIle/WpVNRiaO3xD7J4IlENlHH2aPpjja+Z5Qb1HHdkbkwX/CVq7Znzd4qYyJihwPGOWXMz+I5PjX2pN4WJ8v9aDUZfSJCEhZgo7WQ6Am3yVCcjfk/qnf3ev9+/woC1+2agMNQoPY2dXQwulP2ail3PdECX+AlIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750510977; c=relaxed/simple;
-	bh=bIAbaa1hcrbXGdLOCG9bBGbCTsWp6a8ZVSPoaIhtwHI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E+/p3iRLPd+r7gO4djGZisE33h1XjelDAKKwLsA+79hNmK+rJO2p8US+j9f/JsJe4nMGK6ZaoTveCYL0D5agbqnVX1ThkbTpQvNlTMhKbzBClT/PUul3sjTC07ZG9iXp0x91slaGYZZ4cq3Fmk89hjYMk4UICQEuc7Ut6YzthRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mCWhDjqk; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750520546; c=relaxed/simple;
+	bh=Xr/UM44xfNVWN+nqycgJvhMyK92KfXG2//OD+BsMsGI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=VYMIXDZjzCR2fIoyYRVyliUZywxF6ZBTN8j4MRPIxxiShPVBxKXBn2iPIvsxaZz/qgNk/GGDCDIN8bhQjELnM6Y9RgORZGPfJgpV64sRDhD8wQ/CgBxHUtmUcxx3ypkhcDhQnQyutO21IecmuKSleRvzq8/y2JuHyoUSKsTu8GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DZuoZrQy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qRpVT1Ez; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mCWhDjqk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750510976; x=1782046976;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bIAbaa1hcrbXGdLOCG9bBGbCTsWp6a8ZVSPoaIhtwHI=;
-  b=mCWhDjqkPMqua8+aBAiTauLBs5ANQZ7MVbsSYF37JIiJdbXyNE2M9FnT
-   AfvS1PmEHyc1tvKCz1vMs0kYRjkvR40r6H+sCxBkWAmA5jBHn0pPMzNz5
-   YKeMm3iqVG3H/dTOpaUgcIyrxD+VuXtsVAmF1SW++dgMRniF+vXKBVaay
-   niDHCERYOFfN/0r/fURoC/B1WD5SGLG69BJogRWcmmqguWharHDg9J53J
-   QV92Rw/rATnh/lWGAZSauKjLKE3+pygzuhPpESSHHEZ6ZLAPSdcu75yCC
-   d4jojkSO92UUzfztu4x6NSMOU6eziHmDaSYNeE+4qWdlfUJkgYVJ6gXOi
-   w==;
-X-CSE-ConnectionGUID: CJedEempReSLPEEsnRVvyw==
-X-CSE-MsgGUID: rLEyo1fdReuO+qlezi8uqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11470"; a="63029290"
-X-IronPort-AV: E=Sophos;i="6.16,254,1744095600"; 
-   d="scan'208";a="63029290"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2025 06:02:55 -0700
-X-CSE-ConnectionGUID: kMJ85cQVToG3OAaSrU6XOg==
-X-CSE-MsgGUID: E/NRupenT76+Cy7GDXRLXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,254,1744095600"; 
-   d="scan'208";a="150741998"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 21 Jun 2025 06:02:52 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uSxru-000Md0-14;
-	Sat, 21 Jun 2025 13:02:50 +0000
-Date: Sat, 21 Jun 2025 21:02:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neil@brown.name>, Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org, Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Li Lingfeng <lilingfeng3@huawei.com>
-Subject: Re: [PATCH 3/3] nfsd: split nfsd_mutex into one mutex per
- net-namespace.
-Message-ID: <202506212005.LpUsPRa3-lkp@intel.com>
-References: <20250620233802.1453016-4-neil@brown.name>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DZuoZrQy";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qRpVT1Ez"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1750520542;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s4i8scJlAGV+GpOYEKKV1KzgbXWXKbnRcAtdwbZvm+o=;
+	b=DZuoZrQywZo0EWOkvlZ6JKShxNfBI3anJJsSF2LlOA6eey7KS5Ix8wFcpkZuxC/uwWdblX
+	fSmnXB0Is9HURc/t2PsZSw8X0uNseZamH3EPrKEsxRQWEK4LNKFMBcRibffpZjRwb+3UFE
+	v3dAWwA/7ffliEoymEbNogcswsrVM/4o6Qxth3HYnO4Te+69qBVXqSwrwCcqQ0ciSZ2sOC
+	AZ/W3ZK56dXwazVHeRzW4CzUotkAsnyglnnPFhYvlZrfnA/gkvWXCn4xhPn7lpCnOFZiei
+	QcgeoyP3b8BDJ2Pj4L3BTs4/mmTuTem8MYPzCx1SO2GRQfgSRz6VI+esqORTYg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1750520542;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s4i8scJlAGV+GpOYEKKV1KzgbXWXKbnRcAtdwbZvm+o=;
+	b=qRpVT1Ez6I3Jig3Hq77jQ0ZnWSZC25OrI+fIwOXae+2eNk5uqx6Qnyya1ircIFNVxhf0Jj
+	P2HAVkROxC6gJ+Cw==
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Alexandre Ghiti
+ <alex@ghiti.fr>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andy Lutomirski <luto@kernel.org>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 3/3] vdso: Reject absolute relocations during build
+In-Reply-To: <20250612155635-ecade4e1-0235-464a-bcb3-293f7452510a@linutronix.de>
+References: <20250611-vdso-absolute-reloc-v3-0-47897d73784b@linutronix.de>
+ <20250611-vdso-absolute-reloc-v3-3-47897d73784b@linutronix.de>
+ <7ddda233-99f7-468b-842d-8469f0a86e77@ghiti.fr>
+ <20250612155635-ecade4e1-0235-464a-bcb3-293f7452510a@linutronix.de>
+Date: Sat, 21 Jun 2025 17:42:20 +0200
+Message-ID: <87cyaxp0df.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620233802.1453016-4-neil@brown.name>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi NeilBrown,
+On Thu, Jun 12 2025 at 16:21, Thomas Wei=C3=9Fschuh wrote:
+> On Thu, Jun 12, 2025 at 10:31:20AM +0200, Alexandre Ghiti wrote:
+> We could introduce per-architecture configuration. Essentially reverting =
+parts
+> of commit aff69273af61 ("vdso: Improve cmd_vdso_check to check all dynami=
+c relocations").
+> The final logic for the intermediary objects still needs to be more compl=
+icated
+> than for the final .so as those contain relocations in the debug informat=
+ion.
+>
+> Or we could add a C hostprog for validation.
+> That would be much more flexible than the inline shell command.
+> It would then also be easier to use an allow-list than the brittle deny-l=
+ist.
+>
+> Or we don't do anything, relying on the selftests to detect miscompilatio=
+ns.
 
-kernel test robot noticed the following build errors:
+That's a bad idea :)
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on trondmy-nfs/linux-next linus/master v6.16-rc2 next-20250620]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> I'll run this by tglx. If somebody else has any opinions, I'm all ears.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfsd-provide-proper-locking-for-all-write_-function/20250621-073955
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250620233802.1453016-4-neil%40brown.name
-patch subject: [PATCH 3/3] nfsd: split nfsd_mutex into one mutex per net-namespace.
-config: i386-buildonly-randconfig-003-20250621 (https://download.01.org/0day-ci/archive/20250621/202506212005.LpUsPRa3-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250621/202506212005.LpUsPRa3-lkp@intel.com/reproduce)
+This is all a mess because the relocation type numbers and their R_*
+names are not uniform accross architectures. Neither are the valid
+relocation types which are suitable for VDSO.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506212005.LpUsPRa3-lkp@intel.com/
+I don't think you can reasonably cover all of it with readelf and
+grep. I did some unrelated relocation analysis some time ago and I just
+modified the python script (yes, I hate to use libelf) to show case how
+insane this gets. This is just as much as I needed to analyse files
+compiled with some random cross gcc I had handy. But you surely get the
+idea.
 
-All errors (new ones prefixed by >>):
+Thanks,
 
->> fs/nfsd/nfsctl.c:1699:3: error: cannot jump from this goto statement to its label
-    1699 |                 goto err_free_msg;
-         |                 ^
-   fs/nfsd/nfsctl.c:1702:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1702 |         guard(mutex)(&nn->config_mutex);
-         |         ^
-   include/linux/cleanup.h:338:15: note: expanded from macro 'guard'
-     338 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:45:1: note: expanded from here
-      45 | __UNIQUE_ID_guard1097
-         | ^
-   fs/nfsd/nfsctl.c:1825:3: error: cannot jump from this goto statement to its label
-    1825 |                 goto err_free_msg;
-         |                 ^
-   fs/nfsd/nfsctl.c:1829:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1829 |         guard(mutex)(&nn->config_mutex);
-         |         ^
-   include/linux/cleanup.h:338:15: note: expanded from macro 'guard'
-     338 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:68:1: note: expanded from here
-      68 | __UNIQUE_ID_guard1099
-         | ^
-   fs/nfsd/nfsctl.c:2044:3: error: cannot jump from this goto statement to its label
-    2044 |                 goto err_free_msg;
-         |                 ^
-   fs/nfsd/nfsctl.c:2048:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2048 |         guard(mutex)(&nn->config_mutex);
-         |         ^
-   include/linux/cleanup.h:338:15: note: expanded from macro 'guard'
-     338 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:118:1: note: expanded from here
-     118 | __UNIQUE_ID_guard1101
-         | ^
-   3 errors generated.
+        tglx
+---
+#!/usr/bin/env python3
+
+import sys
+
+from argparse import ArgumentParser
+from elftools.elf.elffile import ELFFile
+from elftools.elf.relocation import RelocationSection
+from elftools.elf.enums import ENUM_RELOC_TYPE_i386, ENUM_RELOC_TYPE_x64
+from elftools.elf.enums import ENUM_RELOC_TYPE_ARM, ENUM_RELOC_TYPE_AARCH64
+from elftools.elf.descriptions import describe_reloc_type
+
+class relocs(object):
+    def __init__(self, arch, sections, types):
+        self.arch =3D arch
+        self.sections =3D sections
+        self.types =3D types
+
+i386_relocs =3D relocs('EM_386',
+                     [ '.rel.text' ],
+                     [ ENUM_RELOC_TYPE_i386['R_386_NONE'],
+                       ENUM_RELOC_TYPE_i386['R_386_PC32'],
+                       ENUM_RELOC_TYPE_i386['R_386_GOTPC'],
+                       ENUM_RELOC_TYPE_i386['R_386_GOTOFF'],
+                      ])
+
+x86_64_relocs =3D relocs('EM_X86_64',
+                       [ '.rela.text' ],
+                       [ ENUM_RELOC_TYPE_x64['R_X86_64_NONE'],
+                         ENUM_RELOC_TYPE_x64['R_X86_64_PC32'],
+                        ])
+
+arm_relocs =3D relocs('EM_ARM',
+                       [ '.rela.text' ],
+                       # Probably incomplete
+                       [ ENUM_RELOC_TYPE_ARM['R_ARM_NONE'],
+                         ENUM_RELOC_TYPE_ARM['R_ARM_REL32'],
+                        ])
+
+arm64_relocs =3D relocs('EM_AARCH64',
+                       [ '.rela.text' ],
+                       # Probably incomplete
+                       [ ENUM_RELOC_TYPE_AARCH64['R_AARCH64_NONE'],
+                         ENUM_RELOC_TYPE_AARCH64['R_AARCH64_ADR_PREL_LO21'],
+                        ])
+
+# Minimal set for an example VDSO build
+ENUM_RELOC_TYPE_RISCV =3D dict(
+    R_RISCV_BRANCH        =3D 0x10,
+    R_RISCV_PCREL_HI20    =3D 0x17,
+    R_RISCV_PCREL_LO12_I  =3D 0x18,
+    R_RISCV_RVC_BRANCH    =3D 0x2c,
+    R_RISCV_RVC_JUMP      =3D 0x2d,
+    R_RISCV_RELAX         =3D 0x33,
+)
+
+riscv_relocs =3D relocs('EM_RISCV',
+                       [ '.rela.text' ],
+                       [ ENUM_RELOC_TYPE_RISCV['R_RISCV_BRANCH'],
+                         ENUM_RELOC_TYPE_RISCV['R_RISCV_PCREL_HI20'],
+                         ENUM_RELOC_TYPE_RISCV['R_RISCV_PCREL_LO12_I'],
+                         ENUM_RELOC_TYPE_RISCV['R_RISCV_RVC_BRANCH'],
+                         ENUM_RELOC_TYPE_RISCV['R_RISCV_RVC_JUMP'],
+                         ENUM_RELOC_TYPE_RISCV['R_RISCV_RELAX'],
+                        ])
+supported_archs =3D {
+    'i386'      : i386_relocs,
+    'x86_64'    : x86_64_relocs,
+    'arm'       : arm_relocs,
+    'arm64'     : arm64_relocs,
+    'riscv'     : riscv_relocs,
+}
+
+# Probably incomplete
+invalid_relocs =3D [ '.rela.dyn', '.rela.plt' ]
+
+def check_relocations(file, arch):
+    elf =3D ELFFile(file)
+    res =3D 0
+
+    if elf.header['e_machine'] !=3D arch.arch:
+        print(elf.header['e_machine'], arch.arch)
+        raise Exception('Architecture mismatch')
+
+    for section in elf.iter_sections():
+        if not isinstance(section, RelocationSection):
+            continue
+
+        if section.name in invalid_relocs:
+            print('Invalid VDSO relocation section: %s' %section.name)
+            res +=3D 1
+            continue
+
+        if section.name not in arch.sections:
+            continue
+
+        for reloc in section.iter_relocations():
+            if reloc['r_info_type'] in arch.types:
+                continue
+            res +=3D 1
+
+            symt =3D elf.get_section(section['sh_link'])
+            sym =3D symt.get_symbol(reloc['r_info_sym'])
+
+            type =3D describe_reloc_type(reloc['r_info_type'], elf)
+
+            print("Invalid VDSO relocation: %s %s" %(type, sym.name))
+
+    return res
+
+if __name__ =3D=3D '__main__':
+    parser =3D ArgumentParser(usage =3D 'usage: %(prog)s arch elf-file',
+                            description =3D 'magic VDSO section checker',
+                            prog =3D 'vdsoreloc')
+
+    parser.add_argument('arch',
+                        choices =3D supported_archs.keys(),
+                        help =3D 'Target architecture')
+    parser.add_argument('file', help =3D 'ELF file to parse')
+    args =3D parser.parse_args()
+
+    with open(args.file, 'rb') as file:
+        try:
+            res =3D check_relocations(file, supported_archs[args.arch])
+            sys.exit(res)
+        except Exception as ex:
+            # Do something sensible here
+            print(ex)
+            sys.exit(1)
 
 
-vim +1699 fs/nfsd/nfsctl.c
-
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1677  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1678  /**
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1679   * nfsd_nl_threads_get_doit - get the number of running threads
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1680   * @skb: reply buffer
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1681   * @info: netlink metadata and command arguments
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1682   *
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1683   * Return 0 on success or a negative errno.
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1684   */
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1685  int nfsd_nl_threads_get_doit(struct sk_buff *skb, struct genl_info *info)
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1686  {
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1687  	struct net *net = genl_info_net(info);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1688  	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1689  	void *hdr;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1690  	int err;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1691  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1692  	skb = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1693  	if (!skb)
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1694  		return -ENOMEM;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1695  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1696  	hdr = genlmsg_iput(skb, info);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1697  	if (!hdr) {
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1698  		err = -EMSGSIZE;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23 @1699  		goto err_free_msg;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1700  	}
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1701  
-40677c06f2c6a4 NeilBrown        2025-06-21  1702  	guard(mutex)(&nn->config_mutex);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1703  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1704  	err = nla_put_u32(skb, NFSD_A_SERVER_GRACETIME,
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1705  			  nn->nfsd4_grace) ||
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1706  	      nla_put_u32(skb, NFSD_A_SERVER_LEASETIME,
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1707  			  nn->nfsd4_lease) ||
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1708  	      nla_put_string(skb, NFSD_A_SERVER_SCOPE,
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1709  			  nn->nfsd_name);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1710  	if (err)
-40677c06f2c6a4 NeilBrown        2025-06-21  1711  		goto err_free_msg;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1712  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1713  	if (nn->nfsd_serv) {
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1714  		int i;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1715  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1716  		for (i = 0; i < nfsd_nrpools(net); ++i) {
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1717  			struct svc_pool *sp = &nn->nfsd_serv->sv_pools[i];
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1718  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1719  			err = nla_put_u32(skb, NFSD_A_SERVER_THREADS,
-60749cbe3d8ae5 NeilBrown        2024-07-15  1720  					  sp->sp_nrthreads);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1721  			if (err)
-40677c06f2c6a4 NeilBrown        2025-06-21  1722  				goto err_free_msg;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1723  		}
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1724  	} else {
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1725  		err = nla_put_u32(skb, NFSD_A_SERVER_THREADS, 0);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1726  		if (err)
-40677c06f2c6a4 NeilBrown        2025-06-21  1727  			goto err_free_msg;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1728  	}
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1729  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1730  	genlmsg_end(skb, hdr);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1731  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1732  	return genlmsg_reply(skb, info);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1733  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1734  err_free_msg:
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1735  	nlmsg_free(skb);
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1736  
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1737  	return err;
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1738  }
-924f4fb003ba11 Lorenzo Bianconi 2024-04-23  1739  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
