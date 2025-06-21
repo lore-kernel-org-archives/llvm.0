@@ -1,129 +1,60 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCF6288CC
-	for <llvm@lists.linux.dev>; Sat, 21 Jun 2025 16:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310B5A55;
+	Sat, 21 Jun 2025 21:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750522200; cv=none; b=JAZ3Ne0su+f0MxPJJDSGrZPcZ5HmtZKBpz4NqCAxtz3/H8Q884GhRIuoUzyrzuoBz4DHLRcQYN/lokocZt4LlWZsSmTr7AOqkZfzGBZH+nJC8Yw73/nAvJDHEThO69ESQvrKi3ya1Y1k3rxwMhPexuPufKyhujYMNNr9F2XgWaI=
+	t=1750540631; cv=none; b=XtMIU/Y0ITFfJwWn2pUMtCvZ8JBNoVcQyJmXm0stQMjTMRpQdTmRZF8MBOYgYo6pg2V2LpoUmsttUIlSGqOHSjyFR73BZP4TlR6gyHohnBTs5WIxJMGNTy5bt+BgkDwFQ6fhy9sh0IzHwthAhXg6Svfe5Ab7C3swT6r1eubcxYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750522200; c=relaxed/simple;
-	bh=SDTl3xy6j3Dqzdg8SG0MCWZcS3XIFlPcXcqe56Gq4JU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NJXn0bngBnKAA3TX+J4Ctw9ovBCtEb4rsmaX0pAcWD3GVAC/Vf9s66tKBPlma+0wjbnDwBLPa/pb1JBA9wWVPIxybKHOmTzSRVTbIRGHhCjNT6OCq6BUiSinguHc2iGqa8R1/GGKSSrquje71bBRlOcigLQ/4rOLX44r3RTwABk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mcaVUkos; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1750540631; c=relaxed/simple;
+	bh=ZmTQYCTt6FpeXJobXvGHGrkckGX2zkqbJORyKVTdPZ8=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=f0pGZywPEGO40gIJ2AD131ms6UdOjCgyXuTyHqy5ilbL+NONPuSXSJ4qgVd6g6CBOCswYVUolBNOkVyh8zVZIEuup/jc81X+e9vhXjSBtmJDfS+3qt0LteR0Jm2p79PHnncVnoL3Iix7lRTUvgSoNsPiSjdvBmQmVAfQE2CdNDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXNthaeC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mcaVUkos"
-Message-ID: <cd5670d7-b2ba-487b-94c4-bb781a9d0bf1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1750522195;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZbR8+eD0l+HPJUYQuSGTTOhQsUZE6eRuwbpXbCLLz4Y=;
-	b=mcaVUkosaNLFM1EVr+vpueBjIr/s0OJO6U4bCFy79sMrluP7ZUzGWvPWBFLMezhXruI/uH
-	UxcvrKWSs5PpyU0Ha6csTluxZFKO6VNRrAv16n3UwxzDmfmwSk9bU8d/wZADVwd4mRHud0
-	40uc6jW7FjlVRRI0pihXGr8t6WMjshU=
-Date: Sat, 21 Jun 2025 09:09:41 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXNthaeC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF4DC4CEE7;
+	Sat, 21 Jun 2025 21:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750540629;
+	bh=ZmTQYCTt6FpeXJobXvGHGrkckGX2zkqbJORyKVTdPZ8=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=jXNthaeCkH8WUGPQKoQGzy2fRj9hCnJcYGtWtzRFpZuDba0pqwmDxhCwgGnIuzzA1
+	 c15Dv1Qi1qtqqC8qI/P0vIS1/OMORDzmteZ9xIajZbOb/b+5eQf4BwOVVSeyNdjKxS
+	 ZQbuAYfjkXAvA8vGsQv8FsSm836IvTGTPDcgPtpG9wWbVkydvEgPBbIfztmIfqq04a
+	 cuLZHgVHmgyr6xjFb2llW7fp0PUsgdNuLJyMGQ2d5sUFi/quLKPFi9sLlUxSpZ9HKX
+	 37ejW0Od87/cdirzu4bxTNYVO8OYMRQPxn0lO8rADA8ffHYpkG9U26Vs8ZgebFBEdL
+	 y8fF7nT/yAwww==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] RDMA/siw: work around clang stack size warning
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
- Bernard Metzler <bmt@zurich.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Potnuri Bharat Teja <bharat@chelsio.com>, Showrya M N <showrya@chelsio.com>,
- Eric Biggers <ebiggers@google.com>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20250620114332.4072051-1-arnd@kernel.org>
- <2d04fee6-5d95-4c50-b2b1-ee67f42932e2@linux.dev>
- <ca2eaa50-c3ed-491d-ab38-65a7c1dc2820@app.fastmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <ca2eaa50-c3ed-491d-ab38-65a7c1dc2820@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250619-cstr-core-v12-4-80c9c7b45900@gmail.com>
+References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com> <20250619-cstr-core-v12-4-80c9c7b45900@gmail.com>
+Subject: Re: [PATCH v12 4/5] rust: replace `kernel::c_str!` with C-Strings
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, linux-block@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
+To: Alex Gaynor <alex.gaynor@gmail.com>, Alice Ryhl <aliceryhl@google.com>, Andreas Hindborg <a.hindborg@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, Benno Lossin <lossin@kernel.org>, Bill Wendling <morbo@google.com>, Bjorn Helgaas <bhelgaas@google.com>, =?utf-8?q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Boqun Feng <boqun.feng@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, Breno Leitao <leitao@debian.org>, Danilo Krummrich <dakr@kernel.org>, Dave Ertman <david.m.ertman@intel.com>, David Airlie <airlied@gmail.com>, David Gow <davidgow@google.com>, David S. Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Gary Guo <gary@garyguo.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heiner Kallweit <hkallweit1@gmail.com>, Ingo Molnar <mingo@redhat.com>, Ira Weiny <ira.weiny@intel.com>, Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@kernel.dk>, Justin Stitt <justinstitt@google.com>, Krzysztof =?utf-8?q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Leon Romanovsky <leon@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Rae Moar <rmoar@google.com>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Russ Weight <russ.weight@linux.dev>, Russell King <linux@armlinux.org.uk>, Saravana Kannan <saravanak@google.com>, Simona Vetter <simona@ffwll.ch>, Tamir Duberstein <tamird@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, Trevor Gross <tmgross@umich.edu>, Viresh Kumar <viresh.kumar@linaro.org>, Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Date: Sat, 21 Jun 2025 14:17:08 -0700
+Message-ID: <175054062889.4372.13449788582456522444@lazor>
+User-Agent: alot/0.11
 
+Quoting Tamir Duberstein (2025-06-19 08:06:28)
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible and rename
+> `kernel::c_str!` to `str_to_cstr!` to clarify its intended use.
+>=20
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
 
-在 2025/6/21 1:43, Arnd Bergmann 写道:
-> On Sat, Jun 21, 2025, at 06:12, Zhu Yanjun wrote:
->> 在 2025/6/20 4:43, Arnd Bergmann 写道:
->>
->> Because the array of kvec structures in siw_tx_hdt consumes the majority
->> of the stack space, would it be possible to use kmalloc or a similar
->> dynamic memory allocation function instead of allocating this memory on
->> the stack?
->>
->> Would using kmalloc (or an equivalent) also effectively resolve the
->> stack usage issue?
-> Yes, moving the allocation somewhere else (kmalloc, static variable,
-> per siw_sge, per siw_wqe) would avoid the high stack usage effectively,
-> it's a tradeoff and I picked the solution that made the most sense
-> to me, but there is a good chance another alternative is better here.
->
-> The main differences are:
->
-> - kmalloc() adds runtime overhead that may be expensive in a
->    fast path
->
-> - kmalloc() can fail, which adds complexity from error handling.
->    Note that small allocations with GFP_KERNEL do not fail but instead
->    wait for memory to become available
->
-> - If kmalloc() runs into a low-memory situation, it can go through
->    writeback, which in turn can use more stack space than the
->    on-stack allocation it was replacing
->
-> - static allocations bloat the kernel image and require locking that
->    may be expensive
->
-> - per-object preallocations can be wasteful if a lot of objects
->    are created, and can still require locking if the object is used
->    from multiple threads
->
-> As I wrote, I mainly picked the 'noinline_for_stack' approach
-> here since that is how the code is known to work with gcc, so
-> there is little risk of my patch causing problems.
->
-> Moving the both the kvec array and the page array into
-> the siw_wqe is likely better here, I'm not familiar enough
-> with the driver to tell whether that is an overall improvement.Th
-Thank you very much. There are several possible solutions to this issue, 
-and the appropriate one depends on the specific scenario. For the 
-problem in siw, the noinline_for_stack approach has been selected. In my 
-opinion, this appears to be more of a workaround than a true fix. While 
-it does mitigate the issue, the underlying problem in siw still remains.
+For clk part
 
-That said, now that we have a clearer understanding of the problem and 
-its root cause through discussions and extended analysis, a more robust 
-and long-term solution should eventually be proposed.
+>  rust/kernel/clk.rs                    |  6 ++----
 
-Thanks,
-
-Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
-
-Zhu Yanjun
-
->
-> A related change I would like to see is to remove the
-> kmap_local_page() in this driver and instead make it
-> depend on 64BIT or !CONFIG_HIGHMEM, to slowly chip away
-> at the code that is highmem aware throughout the kernel.
-> I'm not sure if that that would also help drop the array
-> here.
->
->       Arnd
-
--- 
-Best Regards,
-Yanjun.Zhu
-
+Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
