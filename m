@@ -1,305 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4CE21B8F6;
-	Mon, 23 Jun 2025 22:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1094223DE5;
+	Mon, 23 Jun 2025 22:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750716505; cv=none; b=cl3Jd4+UY+XoDbOGCrx70QmGKnigGLJk2BFGNC1Vld78wTzVR/GbX0/CFjpfEf4nBjx+4jrFFoXJ3RKEUhE9Lv1kbwXF8I9sGwak7IE4wRhA/tDKG4dQyBOUGbcMLGNL6fS6K1kviBYC8+dYEiJ86aydL/ZNDuB7O8cQXzS/Psg=
+	t=1750717720; cv=none; b=Hhuh2nXHy3qPU22l7TxwKaLlM/jNY2vUjc9htjbBkCARed32rIn8f8QVrqkHrA+ZeLazUefv5+Mmo2ukeyk68AMiT53GswX6L73LWUrlnKj/sH1lPJ1k2ikITl+jjRL3cqfdsdZDEa8hyw7SF5Prd8LW5/T5kz89uav81GyWXtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750716505; c=relaxed/simple;
-	bh=4ubACdoLtmTWspA2/xYT1/XL3PMWzVKt/9CdDgzP9aU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lFI1nQVQCUeFjd/4z4bDjrJ3lOrzBLXHiTKtbBkIB928KjuEfQnVhm1w0CY6TwMHe4E32aEll7eYRGYQ50L1lqZx1Efrb+J2xq7mMTP63QpRX0Igriel1Q8QnnA51d3QbtcYGc7+yBkYBru9O51GhD6jAeig+C6ZkBA0mEObFYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMZzeHkF; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1750717720; c=relaxed/simple;
+	bh=IDscL//YK13cEbpe8hOp7s0v96Vb0LFr4CLJ3x2bcg4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DyLIZCAHCpHYTggcxY0gcCf9m8Y1ul9Q3AYvcFU1fo2sTWIkt4lP2O/btN+b7UJDsm4w+c+TjzWWQrA9zGmaIn6xuu5azEakeLXu0JZxruQOpwF/QshiMpaaQkv0ixfpOICltr/8XlQn+8hZVldtLm9gY4T8p5XXTHdDIQ+d6+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PQrlsLCl; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMZzeHkF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PQrlsLCl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750716503; x=1782252503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4ubACdoLtmTWspA2/xYT1/XL3PMWzVKt/9CdDgzP9aU=;
-  b=SMZzeHkFBlwuWE3OzrpLvjXFUhrMZc4Ib3AmXJDB9Tjy6vbNQBDR67Br
-   yoU+5mfamdMQD1DgmvUt9/GBQ5UamL1yh0ZDjzYRumEhoYcaLffi1Hh3U
-   4W8pabUXlzslN40keWCDSbwqKI7gIammzIZyZRm11DM3E1FHtsA4Nn5w+
-   7VCWFpX/QfgWUaeGcHC5M2JZ5Qqsrn7T2x2ZSWaI8a359QE6UsRcBY/IZ
-   8aHVJvUKKmYJ9FDdLapyj7/a4WXT9EM0pNUpVP3VVplRgvrzwQGgX8/EU
-   ZJBsYhbguEMCjnG14Bd0TfAupQ2IN0HjycDeUBC+7vDwGBOjauEOcNAYF
+  t=1750717719; x=1782253719;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IDscL//YK13cEbpe8hOp7s0v96Vb0LFr4CLJ3x2bcg4=;
+  b=PQrlsLCl2H0tf3ZBTMjix0zXcV8FYUMD5DbxvWwSgqxpzoi0+KyxHp0n
+   q8QWjK0aTA1C0Zk60m0o69EzY43r4CJxpyZayH3nTjgzNXT7RIqV+PweT
+   A68TwbiYMkuwrag99KhRQFJPjCbfwCqsoQVjX/SKvAAkvQ0L1DcfS05p1
+   UPZiw+ItmYV9XxqZxuwNg+IC2JmkUw1xRZFM++RPNptiDtOLpPeLy+4j1
+   wMLuaiolU8kQMKk8+JIpxfruvvadQnHts85K6ug/1oYtC2g9B48kr8lXx
+   UlLYRepIFI63w0/Oi+Trn1smupnNYdGSZmWavSYHPeTTxkLO9nD/vHYBz
    A==;
-X-CSE-ConnectionGUID: pZuCyEjoRzyQcQ/qUp5cdA==
-X-CSE-MsgGUID: koc8QvgHRZ6bIGn50q4RaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="56744823"
-X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
-   d="scan'208";a="56744823"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 15:08:22 -0700
-X-CSE-ConnectionGUID: DqMHNaMSQMa9rG6dqUY0cg==
-X-CSE-MsgGUID: 3rLef4w7T2CHBV7sorbZrw==
+X-CSE-ConnectionGUID: pYL7wU5mQ/WkjxjLKQXykA==
+X-CSE-MsgGUID: 3w9er+YzTeG/Rh6Y5LfIVw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52057565"
+X-IronPort-AV: E=Sophos;i="6.16,260,1744095600"; 
+   d="scan'208";a="52057565"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 15:28:36 -0700
+X-CSE-ConnectionGUID: yL4ap/FOQ6ukJUZThptdJA==
+X-CSE-MsgGUID: Th11nDHDRuS5IbAWar/8qg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
-   d="scan'208";a="151138052"
+X-IronPort-AV: E=Sophos;i="6.16,260,1744095600"; 
+   d="scan'208";a="182763922"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 23 Jun 2025 15:08:18 -0700
+  by orviesa002.jf.intel.com with ESMTP; 23 Jun 2025 15:28:35 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uTpKq-000QsA-0E;
-	Mon, 23 Jun 2025 22:08:16 +0000
-Date: Tue, 24 Jun 2025 06:07:19 +0800
+	id 1uTpeS-000RKl-0Y;
+	Mon, 23 Jun 2025 22:28:32 +0000
+Date: Tue, 24 Jun 2025 06:27:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Kent Gibson <warthog618@gmail.com>,
-	Jan =?iso-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>,
-	Marek Vasut <marex@denx.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Linus Walleij <linus.walleij@linaro.org>
+To: Chen Yu <yu.c.chen@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/9] gpio: sysfs: export the GPIO directory locally in
- the gpiochip<id> directory
-Message-ID: <202506240548.l2wS2XW6-lkp@intel.com>
-References: <20250623-gpio-sysfs-chip-export-v2-7-d592793f8964@linaro.org>
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/virtio/virtio_balloon.c:401:21: warning: stack frame size
+ (1040) exceeds limit (1024) in 'update_balloon_stats'
+Message-ID: <202506240611.WIZwT0sn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250623-gpio-sysfs-chip-export-v2-7-d592793f8964@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Bartosz,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on cb908f3699fb137e28017a8fdf506c35762b3eb6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpio-sysfs-add-a-parallel-class-device-for-each-GPIO-chip-using-device-IDs/20250623-170412
-base:   cb908f3699fb137e28017a8fdf506c35762b3eb6
-patch link:    https://lore.kernel.org/r/20250623-gpio-sysfs-chip-export-v2-7-d592793f8964%40linaro.org
-patch subject: [PATCH v2 7/9] gpio: sysfs: export the GPIO directory locally in the gpiochip<id> directory
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250624/202506240548.l2wS2XW6-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240548.l2wS2XW6-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   86731a2a651e58953fc949573895f2fa6d456841
+commit: ad6b26b6a0a79166b53209df2ca1cf8636296382 sched/numa: add statistics of numa balance task
+date:   3 weeks ago
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20250624/202506240611.WIZwT0sn-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240611.WIZwT0sn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506240548.l2wS2XW6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506240611.WIZwT0sn-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpio/gpiolib-sysfs.c:802:3: error: cannot jump from this goto statement to its label
-     802 |                 goto err_free_name;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   drivers/gpio/gpiolib-sysfs.c:795:3: error: cannot jump from this goto statement to its label
-     795 |                 goto err_put_dirent;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   drivers/gpio/gpiolib-sysfs.c:786:3: error: cannot jump from this goto statement to its label
-     786 |                 goto err_put_dirent;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   drivers/gpio/gpiolib-sysfs.c:780:3: error: cannot jump from this goto statement to its label
-     780 |                 goto err_unregister_device;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   drivers/gpio/gpiolib-sysfs.c:773:3: error: cannot jump from this goto statement to its label
-     773 |                 goto err_free_data;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   drivers/gpio/gpiolib-sysfs.c:733:3: error: cannot jump from this goto statement to its label
-     733 |                 goto err_clear_bit;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   drivers/gpio/gpiolib-sysfs.c:727:3: error: cannot jump from this goto statement to its label
-     727 |                 goto err_clear_bit;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:804:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     804 |         char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-         |               ^
-   7 errors generated.
+>> drivers/virtio/virtio_balloon.c:401:21: warning: stack frame size (1040) exceeds limit (1024) in 'update_balloon_stats' [-Wframe-larger-than]
+     401 | static unsigned int update_balloon_stats(struct virtio_balloon *vb)
+         |                     ^
+   1 warning generated.
 
 
-vim +802 drivers/gpio/gpiolib-sysfs.c
+vim +/update_balloon_stats +401 drivers/virtio/virtio_balloon.c
 
-   677	
-   678	/**
-   679	 * gpiod_export - export a GPIO through sysfs
-   680	 * @desc: GPIO to make available, already requested
-   681	 * @direction_may_change: true if userspace may change GPIO direction
-   682	 * Context: arch_initcall or later
-   683	 *
-   684	 * When drivers want to make a GPIO accessible to userspace after they
-   685	 * have requested it -- perhaps while debugging, or as part of their
-   686	 * public interface -- they may use this routine.  If the GPIO can
-   687	 * change direction (some can't) and the caller allows it, userspace
-   688	 * will see "direction" sysfs attribute which may be used to change
-   689	 * the gpio's direction.  A "value" attribute will always be provided.
-   690	 *
-   691	 * Returns:
-   692	 * 0 on success, or negative errno on failure.
-   693	 */
-   694	int gpiod_export(struct gpio_desc *desc, bool direction_may_change)
-   695	{
-   696		struct gpiodev_data *gdev_data;
-   697		struct gpiod_data *desc_data;
-   698		struct gpio_device *gdev;
-   699		struct attribute **attrs;
-   700		int status;
-   701	
-   702		/* can't export until sysfs is available ... */
-   703		if (!class_is_registered(&gpio_class)) {
-   704			pr_debug("%s: called too early!\n", __func__);
-   705			return -ENOENT;
-   706		}
-   707	
-   708		if (!desc) {
-   709			pr_debug("%s: invalid gpio descriptor\n", __func__);
-   710			return -EINVAL;
-   711		}
-   712	
-   713		CLASS(gpio_chip_guard, guard)(desc);
-   714		if (!guard.gc)
-   715			return -ENODEV;
-   716	
-   717		if (test_and_set_bit(FLAG_EXPORT, &desc->flags))
-   718			return -EPERM;
-   719	
-   720		gdev = desc->gdev;
-   721	
-   722		guard(mutex)(&sysfs_lock);
-   723	
-   724		if (!test_bit(FLAG_REQUESTED, &desc->flags)) {
-   725			gpiod_dbg(desc, "%s: unavailable (not requested)\n", __func__);
-   726			status = -EPERM;
-   727			goto err_clear_bit;
-   728		}
-   729	
-   730		desc_data = kzalloc(sizeof(*desc_data), GFP_KERNEL);
-   731		if (!desc_data) {
-   732			status = -ENOMEM;
-   733			goto err_clear_bit;
-   734		}
-   735	
-   736		desc_data->desc = desc;
-   737		mutex_init(&desc_data->mutex);
-   738		if (guard.gc->direction_input && guard.gc->direction_output)
-   739			desc_data->direction_can_change = direction_may_change;
-   740		else
-   741			desc_data->direction_can_change = false;
-   742	
-   743		gpiod_attr_init(&desc_data->dir_attr, "direction",
-   744				direction_show, direction_store);
-   745		gpiod_attr_init(&desc_data->val_attr, "value", value_show, value_store);
-   746		gpiod_attr_init(&desc_data->edge_attr, "edge", edge_show, edge_store);
-   747		gpiod_attr_init(&desc_data->active_low_attr, "active_low",
-   748					active_low_show, active_low_store);
-   749	
-   750		attrs = desc_data->attrs;
-   751		desc_data->attr_group.is_visible = gpio_is_visible;
-   752		attrs[GPIO_SYSFS_LINE_ATTR_DIRECTION] = &desc_data->dir_attr.attr;
-   753		attrs[GPIO_SYSFS_LINE_ATTR_VALUE] = &desc_data->val_attr.attr;
-   754		attrs[GPIO_SYSFS_LINE_ATTR_EDGE] = &desc_data->edge_attr.attr;
-   755		attrs[GPIO_SYSFS_LINE_ATTR_ACTIVE_LOW] =
-   756					&desc_data->active_low_attr.attr;
-   757	
-   758		desc_data->attr_group.attrs = desc_data->attrs;
-   759		desc_data->attr_groups[0] = &desc_data->attr_group;
-   760	
-   761		/*
-   762		 * Note: we need to continue passing desc_data here as there's still
-   763		 * at least one known user of gpiod_export_link() in the tree. This
-   764		 * function still uses class_find_device() internally.
-   765		 */
-   766		desc_data->dev = device_create_with_groups(&gpio_class, &gdev->dev,
-   767							   MKDEV(0, 0), desc_data,
-   768							   desc_data->attr_groups,
-   769							   "gpio%u",
-   770							   desc_to_gpio(desc));
-   771		if (IS_ERR(desc_data->dev)) {
-   772			status = PTR_ERR(desc_data->dev);
-   773			goto err_free_data;
-   774		}
-   775	
-   776		desc_data->value_class_node = sysfs_get_dirent(desc_data->dev->kobj.sd,
-   777							       "value");
-   778		if (!desc_data->value_class_node) {
-   779			status = -ENODEV;
-   780			goto err_unregister_device;
-   781		}
-   782	
-   783		gdev_data = gdev_get_data(gdev);
-   784		if (!gdev_data) {
-   785			status = -ENODEV;
-   786			goto err_put_dirent;
-   787		}
-   788	
-   789		list_add(&desc_data->list, &gdev_data->exported_lines);
-   790	
-   791		desc_data->attr_group.name = kasprintf(GFP_KERNEL, "gpio%u",
-   792						       gpio_chip_hwgpio(desc));
-   793		if (!desc_data->attr_group.name) {
-   794			status = -ENOMEM;
-   795			goto err_put_dirent;
-   796		}
-   797	
-   798		desc_data->parent = &gdev_data->cdev_id->kobj;
-   799		status = sysfs_create_groups(desc_data->parent,
-   800					     desc_data->attr_groups);
-   801		if (status)
- > 802			goto err_free_name;
-   803	
-   804		char *path __free(kfree) = kasprintf(GFP_KERNEL, "gpio%u/value",
-   805						     gpio_chip_hwgpio(desc));
-   806		if (!path) {
-   807			status = -ENOMEM;
-   808			goto err_remove_groups;
-   809		}
-   810	
-   811		desc_data->value_chip_node = kernfs_walk_and_get(desc_data->parent->sd,
-   812								 path);
-   813		if (!desc_data->value_chip_node) {
-   814			status = -ENODEV;
-   815			goto err_remove_groups;
-   816		}
-   817	
-   818		return 0;
-   819	
-   820	err_remove_groups:
-   821		sysfs_remove_groups(desc_data->parent, desc_data->attr_groups);
-   822	err_free_name:
-   823		kfree(desc_data->attr_group.name);
-   824	err_put_dirent:
-   825		sysfs_put(desc_data->value_class_node);
-   826	err_unregister_device:
-   827		device_unregister(desc_data->dev);
-   828	err_free_data:
-   829		kfree(desc_data);
-   830	err_clear_bit:
-   831		clear_bit(FLAG_EXPORT, &desc->flags);
-   832		gpiod_dbg(desc, "%s: status %d\n", __func__, status);
-   833		return status;
-   834	}
-   835	EXPORT_SYMBOL_GPL(gpiod_export);
-   836	
+fdba68d2adf8d9 zhenwei pi         2024-04-23  400  
+fdba68d2adf8d9 zhenwei pi         2024-04-23 @401  static unsigned int update_balloon_stats(struct virtio_balloon *vb)
+fdba68d2adf8d9 zhenwei pi         2024-04-23  402  {
+fdba68d2adf8d9 zhenwei pi         2024-04-23  403  	struct sysinfo i;
+fdba68d2adf8d9 zhenwei pi         2024-04-23  404  	unsigned int idx;
+fdba68d2adf8d9 zhenwei pi         2024-04-23  405  	long available;
+fdba68d2adf8d9 zhenwei pi         2024-04-23  406  	unsigned long caches;
+fdba68d2adf8d9 zhenwei pi         2024-04-23  407  
+fdba68d2adf8d9 zhenwei pi         2024-04-23  408  	idx = update_balloon_vm_stats(vb);
+fdba68d2adf8d9 zhenwei pi         2024-04-23  409  
+fdba68d2adf8d9 zhenwei pi         2024-04-23  410  	si_meminfo(&i);
+fdba68d2adf8d9 zhenwei pi         2024-04-23  411  	available = si_mem_available();
+fdba68d2adf8d9 zhenwei pi         2024-04-23  412  	caches = global_node_page_state(NR_FILE_PAGES);
+9564e138b1f6eb Adam Litke         2009-11-30  413  	update_stat(vb, idx++, VIRTIO_BALLOON_S_MEMFREE,
+9564e138b1f6eb Adam Litke         2009-11-30  414  				pages_to_bytes(i.freeram));
+9564e138b1f6eb Adam Litke         2009-11-30  415  	update_stat(vb, idx++, VIRTIO_BALLOON_S_MEMTOT,
+9564e138b1f6eb Adam Litke         2009-11-30  416  				pages_to_bytes(i.totalram));
+5057dcd0f1aaad Igor Redko         2016-03-17  417  	update_stat(vb, idx++, VIRTIO_BALLOON_S_AVAIL,
+5057dcd0f1aaad Igor Redko         2016-03-17  418  				pages_to_bytes(available));
+4d32029b8ddb7b Tomáš Golembiovský 2017-11-12  419  	update_stat(vb, idx++, VIRTIO_BALLOON_S_CACHES,
+4d32029b8ddb7b Tomáš Golembiovský 2017-11-12  420  				pages_to_bytes(caches));
+9646b26e85896e Ladi Prosek        2017-03-28  421  
+9646b26e85896e Ladi Prosek        2017-03-28  422  	return idx;
+9564e138b1f6eb Adam Litke         2009-11-30  423  }
+9564e138b1f6eb Adam Litke         2009-11-30  424  
+
+:::::: The code at line 401 was first introduced by commit
+:::::: fdba68d2adf8d9ae680e23e8b8ba79330baa45bc virtio_balloon: separate vm events into a function
+
+:::::: TO: zhenwei pi <pizhenwei@bytedance.com>
+:::::: CC: Michael S. Tsirkin <mst@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
