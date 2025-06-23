@@ -1,191 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6162D4B7C;
-	Mon, 23 Jun 2025 20:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C969C2E0
+	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 21:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750711401; cv=none; b=SRlM0Q+KwN5L1JAdHRwxVzYefROe6FyNcff/9QkZR0J/jgDVLcv4sSNuvYnu2TN6kxctoTxJA6k3B9YWFRQe2Y/Fjd3QIjZMxiIbLiu0ICt/10Q8vby9qZ0O+ujdyCF2SZRYQH2jJvb8S2x56ZQDO9fMPN/FeOXehCe2jaxxyGI=
+	t=1750714367; cv=none; b=RYz6Bittekyo7UDMSopsMasOrYeWunyQeOyBBfio+vXgMHV+0pB2jiG0FO91F8n97ZbcyhpGxp5zZMMTiKrn7S0H4kXHPtMZeHnbotZ71kSYvBrC49uuo0hl6uFlhY8lGPqaYuWJQQ66tGU/sMVKzrF83UbuokteJ0uwD+gtyx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750711401; c=relaxed/simple;
-	bh=6qWV4n/s+Ygofk7+59+ZVlVkXNAfE9cXC/Y/ph37odU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=G8T1VovrJZLCPnAhw1aOadaLi8s/lqjY4xMQ/wAzGTbIgsFwlVyaj9WRLiXCj6aFSZcVI6YpnYqQkIgogxMonBEZsnDkSgEUixN4+VtLx9+qre4yZ+ZxOPV0BASBLJ+kHgAwNrOqL81F5kn0z8wcN9kcdNSudW8tnvFOaGuWYCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MXmPBPmo; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750714367; c=relaxed/simple;
+	bh=4zh+xxbkoRglr6aW4XThIl6PEdJzTzddhl4ZBhve3YM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CO8aIkLhas0o/+kAV/NCPrrW346ANtmt4E+KJPpIq8ICgVW8a1cuVcn31xHKN1duppuOLBAln5qJXX2pIc41QmnBM8X3JACCem6OHWOs6w6ZXfl1dmdeKqP0zAaQFm/W0gSURqk4MJr4A8qpb4LkozCRXEjBsgCdgn75a31qCqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GoIrY1KQ; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MXmPBPmo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750711399; x=1782247399;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6qWV4n/s+Ygofk7+59+ZVlVkXNAfE9cXC/Y/ph37odU=;
-  b=MXmPBPmorUdXkGJN5ayrWZb2PZ/YqfZ4+FSL0DxVuuHSQuxDmdKxYp7w
-   hzoKUP9tX60IrnJCQlx2+V+s6gkQNK7dKO4GYquoYBcsyyZtrHl4k3Atn
-   by9gI67dlKnv21weKndq0l5LOHF2ZfD+DG/AnYg1hPUQsnqsq/Kn4DDg6
-   mMDNU9luDOKyxcOpMsRVSWpKh2IJV6fUjsX7vuNQxnZvCb+j8sOiDEWLQ
-   JeJl1+bvS1CkWeIRVbMSHGsie0qStaMHx3htDPmJzJqMSRCaFBPHHtNX1
-   jqym2KfXFN1fQqKULqaqOZwcwBdkHHtPtHjyUpkDIDtICSNd73av0xleP
-   Q==;
-X-CSE-ConnectionGUID: ftlRSLRHTMu+KBLuTej0iA==
-X-CSE-MsgGUID: 1lYWWkaZQ/qofaaH7zadIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="40547170"
-X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
-   d="scan'208";a="40547170"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 13:43:18 -0700
-X-CSE-ConnectionGUID: XmGKx6MDQeKWnpxnO3YN/w==
-X-CSE-MsgGUID: xD9/NftyS22OUREWbVR8Tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
-   d="scan'208";a="152218073"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 23 Jun 2025 13:43:15 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uTo0X-000PJw-0c;
-	Mon, 23 Jun 2025 20:43:13 +0000
-Date: Tue, 24 Jun 2025 04:43:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Junfeng Guo <junfeng.guo@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Marcin Szycik <marcin.szycik@linux.intel.com>,
-	Qi Zhang <qi.z.zhang@intel.com>, Ahmed Zaki <ahmed.zaki@intel.com>
-Subject: drivers/net/ethernet/intel/ice/ice_parser.c:1231:34: warning: stack
- frame size (1040) exceeds limit (1024) in 'ice_bst_tcam_table_get'
-Message-ID: <202506240437.yrXLeKyv-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GoIrY1KQ"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a54700a46eso2626931f8f.1
+        for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 14:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750714362; x=1751319162; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AoeN7Nd7LhLzbX2MmQNc/Ha98bARr1ZjkS1yCdPK5m8=;
+        b=GoIrY1KQsknkCVGfTXPDb5v91aja35DLp1H71C4sRFE3pZaDx3mnQV6zxpJJrTV1JL
+         XdW5GV1KSAhlTufrhy1Vg2YLH+eU2xly9l/gH4sAs/2PoEbdMFxAthB6j3O880io+LmS
+         BAttyKP1iAVcyyF/lr1x0dtm8T/akUsNFhf90ob1mXnTGtEJHb7he37BXA+pkqF54Vk7
+         MJTpE6uT35tBxd/eS9MdnVJy46Oesru81rv7On8uJKRFstaVsbNpuQwOgKRmO2MIxHMj
+         os8njAg4SKVUlvGNUYHSDaBVFi9Q/ydF18ByWD2XXnsAx3o5RhGalYtCvkD2yyFMN9U/
+         Kilw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750714363; x=1751319163;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AoeN7Nd7LhLzbX2MmQNc/Ha98bARr1ZjkS1yCdPK5m8=;
+        b=LYeGnbtvEPXyDNtVelvfwFu3mP4f5JyVq6oumg2eJ10id6dDz+1A9Fhd2EBvESa+B8
+         lH2kO9R9hrWmO1HKIaDDBJoguMC58quvMq1VZmBUYrpAkpsdfel6ED6YEi7GAnaLzTMf
+         qc2aB1JckL/DIV54ZzZ2K6v7TfmCQIXBG/OVftpvmX/9mbE20d42SNTedb3JC6U7kV3D
+         37vp0Haz2NbPFlOajc9t+AKewzgBSfjDdkWgV129+/Ng1JWNfhW5+7R8tyljQIsxVEWC
+         i+r8H/KPTRhYT7+dWYnFAnVYp6gK+vn0Wbz7W8euEKu7WeaysrVXzKRW7Kbhx9EmJnL7
+         slSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWAtB6kpCHg75rcVJSjR/3obnzirnFj1PMTHc+PXNfDarTR0FGDJwBIoeQcN1wxTotDb18X@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx8EciA8RmQbQiiH0Cam4qR6qsguF26VqriFDicahRUQFZXeySH
+	Dleg7VR1Kw9tEiWNM4dZgXJ1ylsHWPVMXKuzSL9DTdR4i5/yEf0iJgvKkCKWXQ99YWB/0KSskwP
+	w0Y3kT5MshFUyP02Y1iyTbQG9CVribVY=
+X-Gm-Gg: ASbGncu+gq+H690ifVn9cDohGqdkH0rtKdRcippf8ZjvYgjmt6KVWJz5FdEkYIMV2W4
+	E4Ebx0zuh107YN7TiIA8QOKP/nMgJ/hffceASPcx2IuBWQvQzwv8rxzJvLqiUnZAG5tFL2znIuI
+	Erlujcmj2+OU89WAPQEvrl8KiEt1gyXateJIcp8OtLL71p0vnqO3QMw7gfIqFTDZpxR2zB2j6M
+X-Google-Smtp-Source: AGHT+IHYwRQkSwfYn+DatykzGLdl98MLgaiclDKQwzz/wbEtLLzMcNSSHTjTZPByDoVpnJOhNqcPOCT91iY0sddpOk4=
+X-Received: by 2002:a05:6000:144e:b0:3a5:3b14:1ba3 with SMTP id
+ ffacd0b85a97d-3a6d132ba15mr4470376f8f.49.1750714362340; Mon, 23 Jun 2025
+ 14:32:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250620113846.3950478-1-arnd@kernel.org>
+In-Reply-To: <20250620113846.3950478-1-arnd@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 23 Jun 2025 14:32:31 -0700
+X-Gm-Features: Ac12FXzBGTpanj8qtABM0kpcQOKFRs4cKdB6Bn1jYDSFFE0H-M5iNHkCgZ5hK9M
+Message-ID: <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
+To: Arnd Bergmann <arnd@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Luis Gerhorst <luis.gerhorst@fau.de>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   86731a2a651e58953fc949573895f2fa6d456841
-commit: 68add288189a5490868ccf8cbed273320568928d ice: add debugging functions for the parser sections
-date:   10 months ago
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250624/202506240437.yrXLeKyv-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240437.yrXLeKyv-lkp@intel.com/reproduce)
+On Fri, Jun 20, 2025 at 4:38=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> clang versions before version 18 manage to badly optimize the bpf
+> verifier, with lots of variable spills leading to excessive stack
+> usage in addition to likely rather slow code:
+>
+> kernel/bpf/verifier.c:23936:5: error: stack frame size (2096) exceeds lim=
+it (1280) in 'bpf_check' [-Werror,-Wframe-larger-than]
+> kernel/bpf/verifier.c:21563:12: error: stack frame size (1984) exceeds li=
+mit (1280) in 'do_misc_fixups' [-Werror,-Wframe-larger-than]
+>
+> Turn off the sanitizer in the two functions that suffer the most from
+> this when using one of the affected clang version.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  kernel/bpf/verifier.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2fa797a6d6a2..7724c7a56d79 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -19810,7 +19810,14 @@ static int do_check_insn(struct bpf_verifier_env=
+ *env, bool *do_print_state)
+>         return 0;
+>  }
+>
+> -static int do_check(struct bpf_verifier_env *env)
+> +#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 180100
+> +/* old clang versions cause excessive stack usage here */
+> +#define __workaround_kasan  __disable_sanitizer_instrumentation
+> +#else
+> +#define __workaround_kasan
+> +#endif
+> +
+> +static __workaround_kasan int do_check(struct bpf_verifier_env *env)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506240437.yrXLeKyv-lkp@intel.com/
+This looks too hacky for a workaround.
+Let's figure out what's causing such excessive stack usage and fix it.
+We did some of this work in
+commit 6f606ffd6dd7 ("bpf: Move insn_buf[16] to bpf_verifier_env")
+and similar.
+Looks like it wasn't enough or more stack usage crept in since then.
 
-All warnings (new ones prefixed by >>):
+Also make sure you're using the latest bpf-next.
+A bunch of code was moved out of do_check().
+So I bet the current bpf-next/master doesn't have a problem
+with this particular function.
+In my kasan build do_check() is now fully inlined.
+do_check_common() is not and it's using 512 bytes of stack.
 
-   In file included from drivers/net/ethernet/intel/ice/ice_parser.c:4:
-   In file included from drivers/net/ethernet/intel/ice/ice_common.h:9:
-   In file included from drivers/net/ethernet/intel/ice/ice.h:12:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/intel/ice/ice_parser.c:4:
-   In file included from drivers/net/ethernet/intel/ice/ice_common.h:9:
-   In file included from drivers/net/ethernet/intel/ice/ice.h:12:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/intel/ice/ice_parser.c:4:
-   In file included from drivers/net/ethernet/intel/ice/ice_common.h:9:
-   In file included from drivers/net/ethernet/intel/ice/ice.h:12:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/ethernet/intel/ice/ice_parser.c:1231:34: warning: stack frame size (1040) exceeds limit (1024) in 'ice_bst_tcam_table_get' [-Wframe-larger-than]
-    1231 | static struct ice_bst_tcam_item *ice_bst_tcam_table_get(struct ice_hw *hw)
-         |                                  ^
-   13 warnings generated.
+>  {
+>         bool pop_log =3D !(env->log.level & BPF_LOG_LEVEL2);
+>         struct bpf_verifier_state *state =3D env->cur_state;
+> @@ -21817,7 +21824,7 @@ static int add_hidden_subprog(struct bpf_verifier=
+_env *env, struct bpf_insn *pat
+>  /* Do various post-verification rewrites in a single program pass.
+>   * These rewrites simplify JIT and interpreter implementations.
+>   */
+> -static int do_misc_fixups(struct bpf_verifier_env *env)
+> +static __workaround_kasan int do_misc_fixups(struct bpf_verifier_env *en=
+v)
 
+This one is using 832 byte of stack with kasan.
+Which is indeed high.
+Big chunk seems to be coming from chk_and_sdiv[] and chk_and_smod[].
 
-vim +/ice_bst_tcam_table_get +1231 drivers/net/ethernet/intel/ice/ice_parser.c
-
-75b4a938a94778 Junfeng Guo 2024-07-25  1224  
-75b4a938a94778 Junfeng Guo 2024-07-25  1225  /**
-75b4a938a94778 Junfeng Guo 2024-07-25  1226   * ice_bst_tcam_table_get - create a boost tcam table
-75b4a938a94778 Junfeng Guo 2024-07-25  1227   * @hw: pointer to the hardware structure
-75b4a938a94778 Junfeng Guo 2024-07-25  1228   *
-75b4a938a94778 Junfeng Guo 2024-07-25  1229   * Return: a pointer to the allocated Boost TCAM table.
-75b4a938a94778 Junfeng Guo 2024-07-25  1230   */
-75b4a938a94778 Junfeng Guo 2024-07-25 @1231  static struct ice_bst_tcam_item *ice_bst_tcam_table_get(struct ice_hw *hw)
-75b4a938a94778 Junfeng Guo 2024-07-25  1232  {
-75b4a938a94778 Junfeng Guo 2024-07-25  1233  	return ice_parser_create_table(hw, ICE_SID_RXPARSER_BOOST_TCAM,
-75b4a938a94778 Junfeng Guo 2024-07-25  1234  				       sizeof(struct ice_bst_tcam_item),
-75b4a938a94778 Junfeng Guo 2024-07-25  1235  				       ICE_BST_TCAM_TABLE_SIZE,
-75b4a938a94778 Junfeng Guo 2024-07-25  1236  				       ice_bst_parse_item, true);
-75b4a938a94778 Junfeng Guo 2024-07-25  1237  }
-75b4a938a94778 Junfeng Guo 2024-07-25  1238  
-
-:::::: The code at line 1231 was first introduced by commit
-:::::: 75b4a938a947785cdda8908cb700c58e95f8ff69 ice: parse and init various DDP parser sections
-
-:::::: TO: Junfeng Guo <junfeng.guo@intel.com>
-:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yonghong,
+looks like you contributed that piece of code.
+Pls see how to reduce stack size here.
+Daniel used this pattern in earlier commits. Looks like
+we took it too far.
