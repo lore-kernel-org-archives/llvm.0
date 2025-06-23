@@ -1,102 +1,49 @@
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7EF72581
-	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 05:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B9E77111
+	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 06:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750658252; cv=none; b=NKSORVmWjrMQ+lhwCeCvz13iDK2AtaJlt7wktd9DyAn0XHHFrtblhm0cRUfDzqZ5BCbysK5L0bMqZ5OfGK0MjYgVtwzX5xnpNQ72riAscPqD+kFvReSpMuN6wKzC2wDBr0TVoKgv3IUaytdnqYnjjiXtcQ/0lWHztADBBS8PTRY=
+	t=1750659683; cv=none; b=SdNHyBus1/jhgdaTP7RcsFVhUFFZkEz2LshrtsSdqQnrOyk1jIf+RDMnMjnM9E82AKBwBkjMw4A+UaOT6uNccvLdixu+8lb1EL3lqQf3DcFPH5M8NNHS9AG0xl0GWfuPYbvg1XfODJrnywRMFnQ9vOg7JTeoDP5AWtmoxtgYQs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750658252; c=relaxed/simple;
-	bh=zslrUw/71JAV7TvJy4yqUFn9U16ApNY7CYiRXUJdlCI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=h99cCjcwVO9Nglw58sIujMMWXPyiWUcjWoY3zYbO+35YeSHr7TEq5Lz4iNyQXk1wAq1QTI3PJPBPUVBrEQz7xu2LCn8NlFWAVXYmt7rezDsKMrkpX7wywABWiO1Brt0ljE6mBHKYrTaLgrpqkHfw5erw0LoVc687/dAk61szkd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CXyjCqPt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WpDl73Yc; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CXyjCqPt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WpDl73Yc"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id EDC591140173;
-	Mon, 23 Jun 2025 01:57:28 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 23 Jun 2025 01:57:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1750658248;
-	 x=1750744648; bh=IQNxDuMP3QPjXQF2/Ju4i3ejXs1KloFPbPXgsytRE+s=; b=
-	CXyjCqPtKCWydABtSzQ5sInbbE9D9tlS4MR7hKK9J1qInZLSPQNN8mUiC/03bAxJ
-	msvtUWlzRv1UygjJgAxRDlOhpYoiRCz8IIRDa5EWck1XsXmMCkli8Us7vUyNPDkF
-	XB9JBl3ThNjm5vD5BB5RkbCarkedwvNIgm9HnmaN5DNZXfuJOu+iHGaPC0C9u9Ut
-	zX2AYCcCKgfnyC+Uu7rAu1EImINOSV6GykrhPX7zbyrXD4qsZxmHvcRDwXqafBS5
-	rlfBasBOIt36Edwmuv1Zp4UQ686ES737AG1bEIJv1F+kkrEjIJ1a786sttqNz3ZT
-	nYcuTfcOIW8+559mTgo2Sw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750658248; x=
-	1750744648; bh=IQNxDuMP3QPjXQF2/Ju4i3ejXs1KloFPbPXgsytRE+s=; b=W
-	pDl73YcyN+TBFCdF0ve7yEs7SSDgkG3FtZFw1tRcovFx1yDfNa10eUiU6etff/5e
-	wjG3eWPVyLmsUcuoHFFlYf4leXY1VXmm7Kh0bbm/9e6nRsyupWZPacfdrc2Rzu+V
-	qOIn7kOGHf6Mawsukf8v3bEHrQIXqGs4hkzhtW1aGeDuKzQxjlWeFnxYWYGapdna
-	xwfpeVlVNZBxINB/sEmC+hhigYCC3+RVuV+6mz5k+qNkwSAk5KWOx0OhrqWK7A9F
-	XISz4ygPZyxsUheBmr/c8skJKyEC1eSh0SVVnxRBhAoS1BWq8acw1847fXw7PhaY
-	Rq3X58MZEi4tpRTXCgsqw==
-X-ME-Sender: <xms:x-xYaNoWVncNTjpWtBhozJiYyfN8ql1ea_BcyvjV55Hr5fMNK6TMVA>
-    <xme:x-xYaPqyHY0_pg67VdpPECG3Dyn6vB67SSzwh7rUge4YyqXjeUIJ90E8-MgDEKc2P
-    4ZLa83TAbLzxbbRG8c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdduiedvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhope
-    hnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghp
-    thhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehjuhhsth
-    hinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohho
-    ghhlvgdrtghomhdprhgtphhtthhopehlrghnhhgroheshhhurgifvghirdgtohhmpdhrtg
-    hpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghirdgtohhmpdhrtghpthhtohep
-    shhhrghojhhijhhivgeshhhurgifvghirdgtohhmpdhrtghpthhtohepshhhvghnjhhirg
-    hnudehsehhuhgrfigvihdrtghomh
-X-ME-Proxy: <xmx:x-xYaKMoSoZwakMHAZZEMeFpc4gowlBQJVzVPLkUhkazdvuXf9ZJ-w>
-    <xmx:x-xYaI4rPeNeOn5HlFmOudplAV84e4iAWhrmGqv7S42JXaUeGNA_DA>
-    <xmx:x-xYaM7jWD0enxI7OwRUnJVS9AKgYecwF41SlP8Xz9-HTJm-ao_BtA>
-    <xmx:x-xYaAivUiIvj3brciSTFM7iAjwpN170dN8QOqjBQN8eeuwlxkBVoA>
-    <xmx:yOxYaKlFdw3j-zWBTNeRYtVIRJ9SdgZu4z3cT6QShSi1AJz_HYCxG3mo>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CBEA4700062; Mon, 23 Jun 2025 01:57:27 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1750659683; c=relaxed/simple;
+	bh=+bwLU6ymdrAg/EKWtfqIW8dc231VI/HkxW+vEMW+RpE=;
+	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=G6WH0rGdn8BUBPLo4wS3twbsOpAfqAy1o7kx0/zv6AdjhG6A2ZdcnVGomp7KH8HMZXlsqiGhmVUBZGutj6CacdEz0jiRL/Ys6fS60obq1e/LLnLs/zBEGC44MhNLIxfi6OlY2td/9NRoPPkSEJE8Uq71scCERAqnNq23om6rn5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4bQdFW3RYPz1d1WK;
+	Mon, 23 Jun 2025 14:18:55 +0800 (CST)
+Received: from kwepemk100013.china.huawei.com (unknown [7.202.194.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3928D14074D;
+	Mon, 23 Jun 2025 14:21:13 +0800 (CST)
+Received: from [10.67.120.192] (10.67.120.192) by
+ kwepemk100013.china.huawei.com (7.202.194.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 23 Jun 2025 14:21:12 +0800
+Message-ID: <791a8e4e-8bcf-4638-8bd7-d9e8785a9320@huawei.com>
+Date: Mon, 23 Jun 2025 14:21:11 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T0988381ff57d4bb7
-Date: Mon, 23 Jun 2025 07:56:06 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jijie Shao" <shaojijie@huawei.com>, "Jakub Kicinski" <kuba@kernel.org>
-Cc: "Jian Shen" <shenjian15@huawei.com>,
- "Salil Mehta" <salil.mehta@huawei.com>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Hao Lan" <lanhao@huawei.com>, "Guangwei Zhang" <zhangwangwei6@huawei.com>,
- Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <13cf4327-f04f-455e-9a3a-1c74b22f42d0@app.fastmail.com>
-In-Reply-To: <cb286135-466f-40b2-aaa5-a2b336d3a87c@huawei.com>
+User-Agent: Mozilla Thunderbird
+CC: <shaojijie@huawei.com>, Jian Shen <shenjian15@huawei.com>, Salil Mehta
+	<salil.mehta@huawei.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	<morbo@google.com>, Justin Stitt <justinstitt@google.com>, Hao Lan
+	<lanhao@huawei.com>, Guangwei Zhang <zhangwangwei6@huawei.com>, Netdev
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH] hns3: work around stack size warning
+To: Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>
 References: <20250610092113.2639248-1-arnd@kernel.org>
  <41f14b66-f301-45cb-bdfd-0192afe588ec@huawei.com>
  <a029763b-6a5c-48ed-b135-daf1d359ac24@app.fastmail.com>
@@ -104,66 +51,75 @@ References: <20250610092113.2639248-1-arnd@kernel.org>
  <20250612083309.7402a42e@kernel.org>
  <02b6bd18-6178-420b-90ab-54308c7504f7@huawei.com>
  <cb286135-466f-40b2-aaa5-a2b336d3a87c@huawei.com>
-Subject: Re: [PATCH] hns3: work around stack size warning
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <13cf4327-f04f-455e-9a3a-1c74b22f42d0@app.fastmail.com>
+From: Jijie Shao <shaojijie@huawei.com>
+In-Reply-To: <13cf4327-f04f-455e-9a3a-1c74b22f42d0@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemk100013.china.huawei.com (7.202.194.61)
 
-On Mon, Jun 23, 2025, at 05:19, Jijie Shao wrote:
->> on 2025/6/12 23:33, Jakub Kicinski wrote:
->>
+
+on 2025/6/23 13:56, Arnd Bergmann wrote:
+> On Mon, Jun 23, 2025, at 05:19, Jijie Shao wrote:
+>>> on 2025/6/12 23:33, Jakub Kicinski wrote:
+>>>
+>> *Hi Jakub, Arnd We have changed the impleament as your suggestion. Would
+>> you please help check it ? If it's OK, we will rewrite the rest parts of
+>> our debugfs code. Thanks! *
+> The conversion to seq_file looks good to me, this does address the
+> stack usage problems I was observing.
+> Thanks for cleaning this up!
 >
-> *Hi Jakub, Arnd We have changed the impleament as your suggestion. Wou=
-ld=20
-> you please help check it ? If it's OK, we will rewrite the rest parts =
-of=20
-> our debugfs code. Thanks! *
+>> -    sprintf(result[j++], "%u", index);
+>> -    sprintf(result[j++], "%u", readl_relaxed(ring->tqp->io_base +
+>> -        HNS3_RING_TX_RING_BD_NUM_REG));
+>> +    seq_printf(s, "%-4u%6s", index, " ");
+>> +    seq_printf(s, "%-5u%3s",
+>> +           readl_relaxed(base + HNS3_RING_TX_RING_BD_NUM_REG), " ");
+> I'm not sure I understand the format string changes here, I did
+> not think they were necessary.
+>
+> Are you doing this to keep the output the same as before, or are
+> you reformatting the contents for readability?
 
-The conversion to seq_file looks good to me, this does address the
-stack usage problems I was observing.
-Thanks for cleaning this up!
+yeah, just to keep the output the same as before
 
-> -    sprintf(result[j++], "%u", index);
-> -    sprintf(result[j++], "%u", readl_relaxed(ring->tqp->io_base +
-> -        HNS3_RING_TX_RING_BD_NUM_REG));
-> +    seq_printf(s, "%-4u%6s", index, " ");
-> +    seq_printf(s, "%-5u%3s",
-> +           readl_relaxed(base + HNS3_RING_TX_RING_BD_NUM_REG), " ");
 
-I'm not sure I understand the format string changes here, I did
-not think they were necessary.
+>
+>> +static int hns3_dbg_common_init_t1(struct hnae3_handle *handle, u32
+>> cmd)
+>> +{
+>> +    struct device *dev = &handle->pdev->dev;
+>> +    struct dentry *entry_dir;
+>> +    read_func func = NULL;
+>> +
+>> +    switch (hns3_dbg_cmd[cmd].cmd) {
+>> +    case HNAE3_DBG_CMD_TX_QUEUE_INFO:
+>> +        func = hns3_dbg_tx_queue_info;
+>> +        break;
+>> +    default:
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    entry_dir = hns3_dbg_dentry[hns3_dbg_cmd[cmd].dentry].dentry;
+>> +    debugfs_create_devm_seqfile(dev, hns3_dbg_cmd[cmd].name, entry_dir,
+>> +                    func);
+>> +
+>> +    return 0;
+> This will work fine as well, but I think you can do slightly better
+> by having your own file_operations with a read function based
+> on single_open() and your current hns3_dbg_read_cmd().
+>
+> I don't think you gain anything from using debugfs_create_devm_seqfile()
+> since you use debugfs_remove_recursive() for cleaning it up anyway.
+>
+>       Arnd
 
-Are you doing this to keep the output the same as before, or are
-you reformatting the contents for readability?
+Using debugfs_create_devm_seqfile() is just to simplify the code.
+We only need to focus on the implementation of .read() function.
 
-> +static int hns3_dbg_common_init_t1(struct hnae3_handle *handle, u32=20
-> cmd)
-> +{
-> +=C2=A0=C2=A0=C2=A0 struct device *dev =3D &handle->pdev->dev;
-> +=C2=A0=C2=A0=C2=A0 struct dentry *entry_dir;
-> +=C2=A0=C2=A0=C2=A0 read_func func =3D NULL;
-> +
-> +=C2=A0=C2=A0=C2=A0 switch (hns3_dbg_cmd[cmd].cmd) {
-> +=C2=A0=C2=A0=C2=A0 case HNAE3_DBG_CMD_TX_QUEUE_INFO:
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 func =3D hns3_dbg_tx_queue_info;
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 break;
-> +=C2=A0=C2=A0=C2=A0 default:
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 return -EINVAL;
-> +=C2=A0=C2=A0=C2=A0 }
-> +
-> +=C2=A0=C2=A0=C2=A0 entry_dir =3D hns3_dbg_dentry[hns3_dbg_cmd[cmd].de=
-ntry].dentry;
-> +=C2=A0=C2=A0=C2=A0 debugfs_create_devm_seqfile(dev, hns3_dbg_cmd[cmd]=
-.name, entry_dir,
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=
-=C2=A0 =C2=A0=C2=A0=C2=A0 func);
-> +
-> +=C2=A0=C2=A0=C2=A0 return 0;
+Thanks
+Jijie Shao
 
-This will work fine as well, but I think you can do slightly better
-by having your own file_operations with a read function based
-on single_open() and your current hns3_dbg_read_cmd().
 
-I don't think you gain anything from using debugfs_create_devm_seqfile()
-since you use debugfs_remove_recursive() for cleaning it up anyway.
-
-     Arnd
