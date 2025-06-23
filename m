@@ -1,45 +1,45 @@
 Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B277C2BD5AD
-	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 16:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA98D2989BF
+	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 16:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750694983; cv=pass; b=opAhoGzdUc/USmSVPpNQswP28mgPvH07U8hnlOTi8NJDWwcycmgpcE4dLKnXd2gIww7QCAtXoh5KkXi6kK8FCZMPDXDjZ0d+D7YG/wQllcFSF8OhSd4eTVZM0H9NOXvtQpllIe2DUkJIyxWsTrD7AqAaBOq0bAjRtZt6kgpr7Ro=
+	t=1750694996; cv=pass; b=G6/f6M8Y28eDo+Y2vjuOtSIvGmXmh6YYUqJtDKYE5EhEILKQcr11ucONk6vooiAlVhHR6m61wv0/C70bUDgxkkZF/769LJyuncbpj8hdvJtyEShBBqwZyz3xfynuEcAG0wcugNMTjeWV15zW/jMu1V/ywKYPMfwUArHPD0zQbtc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750694983; c=relaxed/simple;
-	bh=ouDnTEOcn9zpQKG2sLB+FjrLOa8zi95VgWOazmGa61U=;
+	s=arc-20240116; t=1750694996; c=relaxed/simple;
+	bh=7JiIpaYM5hsuSVVGC+Xb9B9Y6Q9lD6c+ZVmoW5ZLVjk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G4qsPqxaYeMD9uvvEFhTls3pPZKelUTvoy6gPShZVJLMZ+x9dKB2sdyXXyilbTKcwXKiNOBKZosp01fKuPBYSeifGp03pNu61FBny0sbOw9QlADMp76fF9wWIGTMEvqxYbffDyZ/gkhDtThHi4WBnev8yCb5oD6uK/kq+hOSMvk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=DxVlrIJD; arc=pass smtp.client-ip=136.143.188.12
+	 In-Reply-To:To:Cc; b=sqIdTngtMbOgIL/kJu2jFtUV2DU7r5T945ctscJRpYYEg+bQpeD2d9elV8hZ419KvY7+SGgyrn/yi9mYccDEMBBd/a3T34kMjhJ1VOTXKOanOAOdBKaaW3p25/rVEGy3zkCmb/uxYJS6n/fOMItzAYbh2w1IS/Yp6w0swS7K6aY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=SPN2xJNL; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="DxVlrIJD"
-ARC-Seal: i=1; a=rsa-sha256; t=1750694935; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="SPN2xJNL"
+ARC-Seal: i=1; a=rsa-sha256; t=1750694949; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=foaFd/84GttrewyUFegNkfj8FmdZFWny5cCJNeM+3o/79IxIKz22Q9q6GhfVoqbFPgAu56QEwLuxvdy5WH2Wdi9/xKGV3qzZ/T2GfJjxtmy+yUYjgq0FPHdjbAKgu/K5h+zoUX1HDOHBNHOgfW4T+vMPyg6l5wIR01+3efON9A8=
+	b=Tvq9SVd7ARPBWa3fMmWRP/NQGUB60EVkqslAFKjahvQebS4TyVJ0TbMc8GzLcHmDRgZ8nqISx1UelNRG7S0ZMV2WtQj0GNFESik+efS0e8UIvLIQl1A+RSa2Uj4SJ1uWxR95bm/kMOX42W4ic8OWqxcV/m6Zwh+cl8tm5JzkVGE=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750694935; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ao0G888G/gMOT67hhvPU/AlZKV7emxwyJABopoS5pTs=; 
-	b=d9qkuO0SxyEhZYgJC22b/9vuOMyEER/NPoqe3ocwL9YNU2Q0jwUzuL/6tcbkQPhdcU9XEzSIHO2V1jdzR2tPEYyRLbR6kXCQdPXkls3IVAJI3+XVf9a9hxIXXVg5igOhH4tXyY/ahpv1h3Ra9usCLEz0FSjFwpZ6z5G51WreSNg=
+	t=1750694949; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=zZ4j6JHoVwtwIfIGG4M1yLQOntpYwXzvw5iD2BBsBYw=; 
+	b=HQpMzIO2Q7VOJ9fsxKOlrmGbMwQuHeL6WgB2p43aM7G9qObWrafEKNLzMHz0oC0B33njgeZ4xT76EbiZU6LE4gUtaeCNgSWUvrPjjoSjCVeB/rRgbXrxbZxR3fpJKyzW/OVOhxiEEFBA1gfKq58sRbc14YZ05pxbZ8BXGl3F1CI=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750694935;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750694949;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=ao0G888G/gMOT67hhvPU/AlZKV7emxwyJABopoS5pTs=;
-	b=DxVlrIJDZ7mkixCcVE0auDch9ix741lpmx38Og3ECqLl4ZiAaox6GxRShWoY6P8v
-	sPiMSi6qrce11fjSpEeqwbi2hNACUcW7zq355RGZnI3+DdWp2S8PKg3qWgOejyq8M7F
-	pQtOPu6z/KiIRIYuCbM65k9VV9lVdQw5jfc0OGMM=
-Received: by mx.zohomail.com with SMTPS id 1750694934644118.45773277338162;
-	Mon, 23 Jun 2025 09:08:54 -0700 (PDT)
+	bh=zZ4j6JHoVwtwIfIGG4M1yLQOntpYwXzvw5iD2BBsBYw=;
+	b=SPN2xJNLAqerbm+Q1kilsEjw7Hhyn0oHtS99qhBXA69mrcCCPSV734KKL0/I0ptL
+	F8mdbWJAWxcnrLbGJI7M+78keu9Ak0Qx9+ejC3A4feShF21A5PFuGVY0xpWIsmCtUJe
+	WbxPs0+1woBNnpzlajh51i+rHZ8+okyeB0W/A+oo=
+Received: by mx.zohomail.com with SMTPS id 1750694947682868.0196949578926;
+	Mon, 23 Jun 2025 09:09:07 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Mon, 23 Jun 2025 18:05:42 +0200
-Subject: [PATCH v2 14/20] ASoC: rockchip: i2s-tdm: switch to
- FIELD_PREP_WM16_CONST macro
+Date: Mon, 23 Jun 2025 18:05:43 +0200
+Subject: [PATCH v2 15/20] net: stmmac: dwmac-rk: switch to FIELD_PREP_WM16
+ macro
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,7 +48,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250623-byeword-update-v2-14-cf1fc08a2e1f@collabora.com>
+Message-Id: <20250623-byeword-update-v2-15-cf1fc08a2e1f@collabora.com>
 References: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
 In-Reply-To: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
 To: Yury Norov <yury.norov@gmail.com>, 
@@ -94,41 +94,45 @@ X-Mailer: b4 0.14.2
 The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
 drivers that use constant masks.
 
-Replace the implementation of this driver's HIWORD_UPDATE macro with an
-instance of FIELD_PREP_WM16_CONST. The const variant is chosen here
-because some of the header defines are then used in initializers.
+Like many other Rockchip drivers, dwmac-rk has its own HIWORD_UPDATE
+macro. Its semantics allow us to redefine it as a wrapper to the shared
+hw_bitfield.h FIELD_PREP_WM16 macros though.
 
-This gives us some compile-time error checking, while keeping the diff
-very small and easy to review.
+Replace the implementation of this driver's very own HIWORD_UPDATE macro
+with an instance of FIELD_PREP_WM16 from hw_bitfield.h. This keeps the
+diff easily reviewable, while giving us more compile-time error
+checking.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+The related GRF_BIT macro is left alone for now; any attempt to rework
+the code to not use its own solution here would likely end up harder to
+review and less pretty for the time being.
+
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- sound/soc/rockchip/rockchip_i2s_tdm.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/rockchip/rockchip_i2s_tdm.h b/sound/soc/rockchip/rockchip_i2s_tdm.h
-index 0aa1c6da1e2c0ebb70473b1bcd1f6e0c1fb90df3..0171e05ee886cdd35f8202db20a313f226958918 100644
---- a/sound/soc/rockchip/rockchip_i2s_tdm.h
-+++ b/sound/soc/rockchip/rockchip_i2s_tdm.h
-@@ -10,6 +10,8 @@
- #ifndef _ROCKCHIP_I2S_TDM_H
- #define _ROCKCHIP_I2S_TDM_H
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+index 79b92130a03faafbd26a0edf1a73199ecbb6e82b..0a1a83817ec19f3a42bc2d90f8b274575d60e278 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+@@ -8,6 +8,7 @@
+  */
  
+ #include <linux/stmmac.h>
 +#include <linux/hw_bitfield.h>
-+
- /*
-  * TXCR
-  * transmit operation control register
-@@ -285,7 +287,7 @@ enum {
- #define I2S_TDM_RXCR	(0x0034)
- #define I2S_CLKDIV	(0x0038)
+ #include <linux/bitops.h>
+ #include <linux/clk.h>
+ #include <linux/phy.h>
+@@ -150,7 +151,7 @@ static int rk_set_clk_mac_speed(struct rk_priv_data *bsp_priv,
+ }
  
--#define HIWORD_UPDATE(v, h, l)	(((v) << (l)) | (GENMASK((h), (l)) << 16))
-+#define HIWORD_UPDATE(v, h, l)	(FIELD_PREP_WM16_CONST(GENMASK((h), (l)), (v)))
+ #define HIWORD_UPDATE(val, mask, shift) \
+-		((val) << (shift) | (mask) << ((shift) + 16))
++		(FIELD_PREP_WM16((mask) << (shift), (val)))
  
- /* PX30 GRF CONFIGS */
- #define PX30_I2S0_CLK_IN_SRC_FROM_TX		HIWORD_UPDATE(1, 13, 12)
+ #define GRF_BIT(nr)	(BIT(nr) | BIT(nr+16))
+ #define GRF_CLR_BIT(nr)	(BIT(nr+16))
 
 -- 
 2.50.0
