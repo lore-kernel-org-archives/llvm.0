@@ -1,322 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF92255F2D;
-	Mon, 23 Jun 2025 12:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136D813C9D4
+	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 12:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750680057; cv=none; b=gISxxIkWSQz/TZQUeYxrvjOy0xx8m0g4REl63pIaVX4Z5h1md/sbTIXf2dvNnTemUiissiClws68tXm2I5wGzd1wB5POAfLZ7b7G0jb+7H6/uPVZdSIqU/fFS+fiETOGFKKqJWSkuBSzlOQooatIt/9noBF0/Dehtzi46nAtg7E=
+	t=1750682137; cv=none; b=SvQT4f0/W5KbzXlEGjbNvHBxA8gQGt2s+0OHUZZ3nCbMWvDyA7siE6DqFvdXj9A1mNuX0NxqSDgQOh3+EvhTQN63DtS77NfBdOixvUuJsDOEzLG9kVUAaroqZ9VLblAfwkamQj/CwyqFGFkGrkVSNa4xosRcOLM2MN2/WRIJ/QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750680057; c=relaxed/simple;
-	bh=S45BOtnpLY803LtSlt8cS8oUCjZlOAl7O/M8gBmSjZo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bjNhai9p/dY7tOWMfdxeDXFHCKcz7/U+QaL0Topa3lAbmLa7R1cAqSjJLZ+gklM6u2JW3KBP4Eavnnw+JftyPR8ud3iurLQWSi3DFyCL4m4bPTm1D25iwQSHsRv/mDIRIEZp3eZEfkFEDSDtm5nSDHViV+vCqWihHczTsbx8w+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQ0onncv; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750682137; c=relaxed/simple;
+	bh=Fw8H1bJz3s55X12OstVPkl/Ss/KPoSsjGMv4XIofF3Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JBF2+a+PTkBhRyA9swwvXIdyNihTCvgu9K4dr2+yy3Kc/fXxOr7e6q0iB6DeRRUJhpj/NWWhBfUvGb8EH4Pc0Kp4ci6DC5RlDoAzSFa+FVHqXsMyNi1QLccRnLLhnZt41AxURTxYW75xcxTKzvU2n5rD4Ntw1ASqU6wsC0fx9Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LRezzaXO; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQ0onncv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750680053; x=1782216053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S45BOtnpLY803LtSlt8cS8oUCjZlOAl7O/M8gBmSjZo=;
-  b=FQ0onncvokaVbfp2KxEZ2BzvduUfPnfIdy8L8D+Wv6zlXut6Hyh70KnM
-   Mq9ybOWA+oQVEkxQDKN500eDUzQzSHxOstNAcTBR+bo7zpN0IxLrrKT/M
-   XNhynDionERxMAc3Tb+xX2unYDjSBvzHgAYzcLHPhi6qUaTLwCzVvyDxI
-   pkFgEE5U+VxMXzhiDN3juS7mGMTAjPKr5oob+iKZt1Ny+5PmKnLW70PZh
-   3a10rpJEAF7SY/eQY1m7WTOxGJ/7FmX6Oe5rXczExGKHBl3qjIxcj9QOY
-   VrQ8XzUPRHAi4f2Oru2S45+GpqNE4l0QnUSRQtvJd0RDTPl/dTOFfcIHQ
-   Q==;
-X-CSE-ConnectionGUID: En91wUbGQ6Old07PW5Yl6Q==
-X-CSE-MsgGUID: SQXnjW/LTGGEQwp57js1DA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52752407"
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="52752407"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 05:00:50 -0700
-X-CSE-ConnectionGUID: ePnLZKKyST24ZYz8OIpbZw==
-X-CSE-MsgGUID: jEmw7k6oSoywR5Gyh7kHWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="151761795"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 23 Jun 2025 05:00:47 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uTfqu-000O1q-0S;
-	Mon, 23 Jun 2025 12:00:44 +0000
-Date: Mon, 23 Jun 2025 19:59:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: cp0613@linux.alibaba.com, yury.norov@gmail.com,
-	linux@rasmusvillemoes.dk, arnd@arndb.de, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Chen Pei <cp0613@linux.alibaba.com>
-Subject: Re: [PATCH 1/2] bitops: generic rotate
-Message-ID: <202506231924.kPX5UiaD-lkp@intel.com>
-References: <20250620111610.52750-2-cp0613@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LRezzaXO"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-312e747d2d8so3205344a91.0
+        for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 05:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750682135; x=1751286935; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O7qhLKSaZBJUrIQxrexkwHh16gMLen9lREkpVcdbEtQ=;
+        b=LRezzaXOiedsTJrTA1CTjWjJaIHOhcUiEGK3uXv4H2YI1IwDuwLw+0gJT7Tw4bqmdo
+         +lvtGpGN7cKYRRY/dzpRSJXDc231ruf29Lh5N5f/c9ZXn9Vulspy+OPUpK9aTK3Fko52
+         lg5YUU0Bk8uxQO4JfdNfGxAutESBLI3GI90EBdY5SAFGAgjJNvnSdNNs37K0XowqvRKH
+         F+RQyW1i8Yx6NU5H6/pN/N28t1Qpg61D+uj8gRWPdAfmk7IFPtisLucuDtiPEWIN3FLe
+         4fotIj1O5O6jTKiiJRhZ9Vlijz2xXh9TAXUWttvv6pZ62gsBVfrVVob80gbEM4asR6VL
+         KIeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750682135; x=1751286935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O7qhLKSaZBJUrIQxrexkwHh16gMLen9lREkpVcdbEtQ=;
+        b=jkqUGs/CJTFyR9O5RmsrAlVOihZyNTM7K8YhV0+tTTwj6kmk1jQsNay2lRdtEuYgAe
+         TamqhKmeBG+NznrTyTBd6WrkeNds67dj8lNHp/mfS0t828IrYpDjjPcVXrQTpLS6TkCA
+         VSrHdtAGbFt2Bom9xShvOQgg5Aosqut64BnsGsbMXd4h8ovb3cD407XqTPZIG6CRTxJ9
+         TOOi9TlUeL2QH0hMDQ/T9QsEyXxNGzwIuu6sGZFpMaKkCxmFYOEQUSuDzlD9jUQZbWTX
+         98zDdsSOkwF7byDHX+UEPfpuLMuV6bGld1nznXk/3bXgY2pRnm9seCV4PcoI5R9BU0R2
+         G6ng==
+X-Forwarded-Encrypted: i=1; AJvYcCU/mPd0CBTb5FHncXJbFs8QWh/dJUl2SD6Ywr7VQGBm6ftIykebXJWfhXIJrIY12vT61PFZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxXgxBdKi3/LUz1almOxpEHJX2y8FmTnM1sDR3TqCqm2yJK8nAH
+	G71WPbM88/Kmr3Mnru/ZFcRJjrHSLDUtJVtpvJrRLhow5WapKbghXtGn/shfT1Sgg8hvNFSFOsi
+	nfEKilBU0vMUGMBe8N/BawVVLpClXNuE=
+X-Gm-Gg: ASbGncteDelcKA4q3uZTq22Q9Qt9nZXpqkZnKpg2/EcJzM572Fw5yrKVEGRED4Th4mb
+	yEDyZeuI7AqMEL62K0B1i95JPuPhtFsMNkbiBWFDNS6zXaEg+QkJYh28/dPZh7UMeVjeKqQFZPx
+	FqGiSQs0D1J+z6BZP73gFsyU8YGD8+3dDBLgIx+/GKZQsTOVneXfvpiA==
+X-Google-Smtp-Source: AGHT+IFgLQuZoeX9b3aKKJtmdXKrWNO2mg86tL81LoOCWkqAY8Cl6nMZugpAgQtX1P3C6+d9ero2JdkR6FprooZDhVc=
+X-Received: by 2002:a17:90b:4c50:b0:30e:6a9d:d78b with SMTP id
+ 98e67ed59e1d1-3159f50379bmr16763807a91.12.1750682135242; Mon, 23 Jun 2025
+ 05:35:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620111610.52750-2-cp0613@linux.alibaba.com>
+References: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
+In-Reply-To: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
+From: Stephen Smalley <stephen.smalley.work@gmail.com>
+Date: Mon, 23 Jun 2025 08:35:23 -0400
+X-Gm-Features: AX0GCFuLnTJxzf2okVc0glfm3bX5AeBW2XJ6g5gUFYldkEA9RJmWnCx-TMi6png
+Message-ID: <CAEjxPJ4bru=J=XZGSFXoxkQJZHQX_iJaxdCwpY8PAcaNv0F2fA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Possible TTY privilege escalation in TIOCSTI ioctl
+To: xandfury@gmail.com
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Paul Moore <paul@paul-moore.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	selinux@vger.kernel.org, kees@kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Sun, Jun 22, 2025 at 9:41=E2=80=AFPM Abhinav Saxena via B4 Relay
+<devnull+xandfury.gmail.com@kernel.org> wrote:
+>
+> This patch series was initially sent to security@k.o; resending it in
+> public. I might follow-up with a tests series which addresses similar
+> issues with TIOCLINUX.
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> The TIOCSTI ioctl uses capable(CAP_SYS_ADMIN) for access control, which
+> checks the current process's credentials. However, it doesn't validate
+> against the file opener's credentials stored in file->f_cred.
+>
+> This creates a potential security issue where an unprivileged process
+> can open a TTY fd and pass it to a privileged process via SCM_RIGHTS.
+> The privileged process may then inadvertently grant access based on its
+> elevated privileges rather than the original opener's credentials.
+>
+> Background
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> As noted in previous discussion, while CONFIG_LEGACY_TIOCSTI can restrict
+> TIOCSTI usage, it is enabled by default in most distributions. Even when
+> CONFIG_LEGACY_TIOCSTI=3Dn, processes with CAP_SYS_ADMIN can still use TIO=
+CSTI
+> according to the Kconfig documentation.
+>
+> Additionally, CONFIG_LEGACY_TIOCSTI controls the default value for the
+> dev.tty.legacy_tiocsti sysctl, which remains runtime-configurable. This
+> means the described attack vector could work on systems even with
+> CONFIG_LEGACY_TIOCSTI=3Dn, particularly on Ubuntu 24.04 where it's "restr=
+icted"
+> but still functional.
+>
+> Solution Approach
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> This series addresses the issue through SELinux LSM integration rather
+> than modifying core TTY credential checking to avoid potential compatibil=
+ity
+> issues with existing userspace.
 
-kernel test robot noticed the following build warnings:
+So I'm unconvinced that fixing bugs in core kernel permission checks
+by adding new checks to SELinux is the right way to go.
+Also, SELinux already provides a way to control ioctl, although it too
+uses the current cred, but the granularity of the
+process labels and the ability to distinguish individual ioctl cmds
+may mitigate this issue in practice.
 
-[auto build test WARNING on arnd-asm-generic/master]
-[also build test WARNING on linus/master v6.16-rc3 next-20250623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/cp0613-linux-alibaba-com/bitops-generic-rotate/20250620-192016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-patch link:    https://lore.kernel.org/r/20250620111610.52750-2-cp0613%40linux.alibaba.com
-patch subject: [PATCH 1/2] bitops: generic rotate
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250623/202506231924.kPX5UiaD-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506231924.kPX5UiaD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506231924.kPX5UiaD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-         |         ^
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:5:
-   In file included from include/linux/ipv6.h:102:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:44:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:13:
-   In file included from include/net/compat.h:8:
-   include/linux/compat.h:458:22: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     458 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-         |                             ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:5:
-   In file included from include/linux/ipv6.h:102:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:44:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:13:
-   In file included from include/net/compat.h:8:
-   include/linux/compat.h:458:10: warning: array index 3 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
-     458 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-         |                 ^     ~
-   include/linux/compat.h:130:2: note: array 'sig' declared here
-     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-         |         ^
-   include/linux/compat.h:458:42: warning: array index 2 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
-     458 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-         |                                                 ^     ~
-   include/linux/compat.h:130:2: note: array 'sig' declared here
-     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-         |         ^
-   include/linux/compat.h:458:53: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     458 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-         |                                                            ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:5:
-   In file included from include/linux/ipv6.h:102:
-   In file included from include/linux/tcp.h:20:
-   In file included from include/net/inet_connection_sock.h:21:
-   In file included from include/net/inet_sock.h:18:
-   include/linux/jhash.h:83:3: error: call to undeclared function 'rol32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      83 |                 __jhash_mix(a, b, c);
-         |                 ^
-   include/linux/jhash.h:37:16: note: expanded from macro '__jhash_mix'
-      37 |         a -= c;  a ^= rol32(c, 4);  c += b;     \
-         |                       ^
-   include/linux/jhash.h:101:4: error: call to undeclared function 'rol32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     101 |                  __jhash_final(a, b, c);
-         |                  ^
-   include/linux/jhash.h:48:15: note: expanded from macro '__jhash_final'
-      48 |         c ^= b; c -= rol32(b, 14);              \
-         |                      ^
-   include/linux/jhash.h:129:3: error: call to undeclared function 'rol32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     129 |                 __jhash_mix(a, b, c);
-         |                 ^
-   include/linux/jhash.h:37:16: note: expanded from macro '__jhash_mix'
-      37 |         a -= c;  a ^= rol32(c, 4);  c += b;     \
-         |                       ^
-   include/linux/jhash.h:139:3: error: call to undeclared function 'rol32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     139 |                 __jhash_final(a, b, c);
-         |                 ^
-   include/linux/jhash.h:48:15: note: expanded from macro '__jhash_final'
-      48 |         c ^= b; c -= rol32(b, 14);              \
-         |                      ^
-   include/linux/jhash.h:156:2: error: call to undeclared function 'rol32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     156 |         __jhash_final(a, b, c);
-         |         ^
-   include/linux/jhash.h:48:15: note: expanded from macro '__jhash_final'
-      48 |         c ^= b; c -= rol32(b, 14);              \
-         |                      ^
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:7:
-   In file included from include/net/ip6_checksum.h:27:
-   In file included from include/net/ip.h:30:
-   In file included from include/net/route.h:24:
-   In file included from include/net/inetpeer.h:16:
-   include/net/ipv6.h:975:9: error: call to undeclared function 'rol32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     975 |         hash = rol32(hash, 16);
-         |                ^
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:7:
-   In file included from include/net/ip6_checksum.h:27:
-   include/net/ip.h:478:14: warning: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     478 |                 if (mtu && time_before(jiffies, rt->dst.expires))
-         |                            ^
-   include/linux/jiffies.h:138:26: note: expanded from macro 'time_before'
-     138 | #define time_before(a,b)        time_after(b,a)
-         |                                 ^
-   include/linux/jiffies.h:128:3: note: expanded from macro 'time_after'
-     128 |         (typecheck(unsigned long, a) && \
-         |          ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
->> drivers/net/ethernet/pensando/ionic/ionic_txrx.c:203:30: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     203 |                 frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-         |                            ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:32: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         MIN(PAGE_SIZE, IONIC_MAX_BUF_LEN)
-         |                                                     ^
-   include/vdso/page.h:15:30: note: expanded from macro 'PAGE_SIZE'
-      15 | #define PAGE_SIZE       (_AC(1,UL) << CONFIG_PAGE_SHIFT)
-         |                                    ^
-   include/linux/minmax.h:314:30: note: expanded from macro 'MIN'
-     314 | #define MIN(a, b) __cmp(min, a, b)
-         |                              ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:161:52: note: expanded from macro 'min_t'
-     161 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:89:33: note: expanded from macro '__cmp_once'
-      89 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:86:31: note: expanded from macro '__cmp_once_unique'
-      86 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   drivers/net/ethernet/pensando/ionic/ionic_txrx.c:803:36: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     803 |                 first_frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:32: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         MIN(PAGE_SIZE, IONIC_MAX_BUF_LEN)
-         |                                                     ^
-   include/vdso/page.h:15:30: note: expanded from macro 'PAGE_SIZE'
-      15 | #define PAGE_SIZE       (_AC(1,UL) << CONFIG_PAGE_SHIFT)
-         |                                    ^
-   include/linux/minmax.h:314:30: note: expanded from macro 'MIN'
-     314 | #define MIN(a, b) __cmp(min, a, b)
-         |                              ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:161:52: note: expanded from macro 'min_t'
-     161 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:89:33: note: expanded from macro '__cmp_once'
-      89 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:86:31: note: expanded from macro '__cmp_once_unique'
-      86 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   drivers/net/ethernet/pensando/ionic/ionic_txrx.c:838:38: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     838 |                         frag_len = min_t(u16, remain_len, IONIC_PAGE_SIZE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:32: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         MIN(PAGE_SIZE, IONIC_MAX_BUF_LEN)
-         |                                                     ^
-   include/vdso/page.h:15:30: note: expanded from macro 'PAGE_SIZE'
-      15 | #define PAGE_SIZE       (_AC(1,UL) << CONFIG_PAGE_SHIFT)
-         |                                    ^
-   include/linux/minmax.h:314:30: note: expanded from macro 'MIN'
-     314 | #define MIN(a, b) __cmp(min, a, b)
-         |                              ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:161:52: note: expanded from macro 'min_t'
-     161 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:89:33: note: expanded from macro '__cmp_once'
-      89 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:86:31: note: expanded from macro '__cmp_once_unique'
-      86 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   16 warnings and 9 errors generated.
-
-
-vim +203 drivers/net/ethernet/pensando/ionic/ionic_txrx.c
-
-36a47c906b23240 Shannon Nelson 2024-03-06  174  
-36a47c906b23240 Shannon Nelson 2024-03-06  175  static struct sk_buff *ionic_rx_build_skb(struct ionic_queue *q,
-4dcd4575bfb17d0 Shannon Nelson 2024-03-06  176  					  struct ionic_rx_desc_info *desc_info,
-f81da39bf4c0a54 Shannon Nelson 2024-02-14  177  					  unsigned int headroom,
-f81da39bf4c0a54 Shannon Nelson 2024-02-14  178  					  unsigned int len,
-f81da39bf4c0a54 Shannon Nelson 2024-02-14  179  					  unsigned int num_sg_elems,
-180e35cdf035d1c Shannon Nelson 2024-02-14  180  					  bool synced)
-0f3154e6bcb3549 Shannon Nelson 2019-09-03  181  {
-4b0a7539a3728f0 Shannon Nelson 2021-03-10  182  	struct ionic_buf_info *buf_info;
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  183  	struct sk_buff *skb;
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  184  	unsigned int i;
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  185  	u16 frag_len;
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  186  
-4b0a7539a3728f0 Shannon Nelson 2021-03-10  187  	buf_info = &desc_info->bufs[0];
-e75ccac1d0644c9 Shannon Nelson 2021-07-27  188  	prefetchw(buf_info->page);
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  189  
-89e572e7369fd9a Shannon Nelson 2021-03-10  190  	skb = napi_get_frags(&q_to_qcq(q)->napi);
-89e572e7369fd9a Shannon Nelson 2021-03-10  191  	if (unlikely(!skb)) {
-89e572e7369fd9a Shannon Nelson 2021-03-10  192  		net_warn_ratelimited("%s: SKB alloc failed on %s!\n",
-36a47c906b23240 Shannon Nelson 2024-03-06  193  				     dev_name(q->dev), q->name);
-2854242d23a7b3a Shannon Nelson 2024-03-06  194  		q_to_rx_stats(q)->alloc_err++;
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  195  		return NULL;
-89e572e7369fd9a Shannon Nelson 2021-03-10  196  	}
-ac8813c0ab7d281 Shannon Nelson 2024-09-06  197  	skb_mark_for_recycle(skb);
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  198  
-f81da39bf4c0a54 Shannon Nelson 2024-02-14  199  	if (headroom)
-36a47c906b23240 Shannon Nelson 2024-03-06  200  		frag_len = min_t(u16, len,
-36a47c906b23240 Shannon Nelson 2024-03-06  201  				 IONIC_XDP_MAX_LINEAR_MTU + VLAN_ETH_HLEN);
-f81da39bf4c0a54 Shannon Nelson 2024-02-14  202  	else
-ac8813c0ab7d281 Shannon Nelson 2024-09-06 @203  		frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-f81da39bf4c0a54 Shannon Nelson 2024-02-14  204  
-36a47c906b23240 Shannon Nelson 2024-03-06  205  	if (unlikely(!buf_info->page))
-36a47c906b23240 Shannon Nelson 2024-03-06  206  		goto err_bad_buf_page;
-36a47c906b23240 Shannon Nelson 2024-03-06  207  	ionic_rx_add_skb_frag(q, skb, buf_info, headroom, frag_len, synced);
-36a47c906b23240 Shannon Nelson 2024-03-06  208  	len -= frag_len;
-4b0a7539a3728f0 Shannon Nelson 2021-03-10  209  	buf_info++;
-4b0a7539a3728f0 Shannon Nelson 2021-03-10  210  
-36a47c906b23240 Shannon Nelson 2024-03-06  211  	for (i = 0; i < num_sg_elems; i++, buf_info++) {
-36a47c906b23240 Shannon Nelson 2024-03-06  212  		if (unlikely(!buf_info->page))
-36a47c906b23240 Shannon Nelson 2024-03-06  213  			goto err_bad_buf_page;
-ac8813c0ab7d281 Shannon Nelson 2024-09-06  214  		frag_len = min_t(u16, len, buf_info->len);
-36a47c906b23240 Shannon Nelson 2024-03-06  215  		ionic_rx_add_skb_frag(q, skb, buf_info, 0, frag_len, synced);
-36a47c906b23240 Shannon Nelson 2024-03-06  216  		len -= frag_len;
-36a47c906b23240 Shannon Nelson 2024-03-06  217  	}
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  218  
-08f2e4b2b2008ce Shannon Nelson 2019-10-23  219  	return skb;
-36a47c906b23240 Shannon Nelson 2024-03-06  220  
-36a47c906b23240 Shannon Nelson 2024-03-06  221  err_bad_buf_page:
-36a47c906b23240 Shannon Nelson 2024-03-06  222  	dev_kfree_skb(skb);
-36a47c906b23240 Shannon Nelson 2024-03-06  223  	return NULL;
-0f3154e6bcb3549 Shannon Nelson 2019-09-03  224  }
-0f3154e6bcb3549 Shannon Nelson 2019-09-03  225  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> The enhancement adds proper current task and file credential capability
+> validation in SELinux's selinux_file_ioctl() hook specifically for
+> TIOCSTI operations.
+>
+> Testing
+> =3D=3D=3D=3D=3D=3D=3D
+>
+> All patches have been validated using:
+> - scripts/checkpatch.pl --strict (0 errors, 0 warnings)
+> - Functional testing on kernel v6.16-rc2
+> - File descriptor passing security test scenarios
+> - SELinux policy enforcement testing
+>
+> The fd_passing_security test demonstrates the security concern.
+> To verify, disable legacy TIOCSTI and run the test:
+>
+> $ echo "0" | sudo tee /proc/sys/dev/tty/legacy_tiocsti
+> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test -t fd_passing_secur=
+ity
+>
+> Patch Overview
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> PATCH 1/2: selftests/tty: add TIOCSTI test suite
+> Comprehensive test suite demonstrating the issue and fix validation
+>
+> PATCH 2/2: selinux: add capability checks for TIOCSTI ioctl
+> Core security enhancement via SELinux LSM hook
+>
+> References
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
+> - commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
+> - Documentation/security/credentials.rst
+> - https://github.com/KSPP/linux/issues/156
+> - https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/
+> - drivers/tty/Kconfig
+>
+> Configuration References:
+> [1] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/drivers/tty/Kconfig#n149
+> [2] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/drivers/tty/Kconfig#n162
+> [3] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/drivers/tty/Kconfig#n188
+>
+> To: Shuah Khan <shuah@kernel.org>
+> To: Nathan Chancellor <nathan@kernel.org>
+> To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> To: Bill Wendling <morbo@google.com>
+> To: Justin Stitt <justinstitt@google.com>
+> To: Paul Moore <paul@paul-moore.com>
+> To: Stephen Smalley <stephen.smalley.work@gmail.com>
+> To: Ondrej Mosnacek <omosnace@redhat.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Cc: selinux@vger.kernel.org
+>
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> ---
+> Abhinav Saxena (2):
+>       selftests/tty: add TIOCSTI test suite
+>       selinux: add capability checks for TIOCSTI ioctl
+>
+>  security/selinux/hooks.c                       |   6 +
+>  tools/testing/selftests/tty/Makefile           |   6 +-
+>  tools/testing/selftests/tty/config             |   1 +
+>  tools/testing/selftests/tty/tty_tiocsti_test.c | 421 +++++++++++++++++++=
+++++++
+>  4 files changed, 433 insertions(+), 1 deletion(-)
+> ---
+> base-commit: 5adb635077d1b4bd65b183022775a59a378a9c00
+> change-id: 20250618-toicsti-bug-7822b8e94a32
+>
+> Best regards,
+> --
+> Abhinav Saxena <xandfury@gmail.com>
+>
+>
