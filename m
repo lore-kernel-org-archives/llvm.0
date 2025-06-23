@@ -1,247 +1,237 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CE128B501;
-	Mon, 23 Jun 2025 15:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750692161; cv=none; b=tqRRGXvs7ci1rw/N6Jt0H3RBpMTBtc4VuYOaWr0CUBx1QngbuWPCAtBSoSRAID3DcDxfm4R/jmvyNOrlPFXbNu/G8kclCm26InADPu4qR/5jampvZka9+JcRdtw/jgdREc0ygOLERfwvpnpXzpGvkNncHjdMRK7lnbm4vQxX080=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750692161; c=relaxed/simple;
-	bh=JozcuR3TRYk6huh3H+BAAqcEP0hBSuhI8hFHRhcsGoU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qdcf4qASeo++COWPZ8E2sGM6BtimTLJYB+r6WcIKN6Vskml2mmUu577hLTLwGFfWc+dpvtPBGWC6yYrBqX66mMv5y/zSkhGLL+/Bc7QQbQ8lqVyvVXBr3L98urtEng6SejjMbP0l/ofg2UshQWRcoiBfxJV42a6TFtrlXjHRoHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H66FEoJc; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A3F1C84A1
+	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 16:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750694822; cv=pass; b=hYw4aomjSD+RdEBLbwLA/G/EIZ7eZDJ9ySsbp4fMhej81NjxYvcgVYRT0FKkhA3nNulqo3wa3sVFJJxPFc6p6IYUQo9StDI1dsnMeT3np8S3kgWZTwjROXlCowubkyJFf1kV6dWo5wKQSpapa+dcISsUf4eYth7UFMsYlcpQs5I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750694822; c=relaxed/simple;
+	bh=Idu57VDjF3mSyGxyHJymDuIMS3y1xL0aqQtnUD2e9qw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=e+kwiOOHd0CuFkRlOYoIl/+r0B/NzeXkp614WS9wtQPGfHudGrdsS7g+QZE/s9MYkP8GNvhi+Kp/2R4idvYPs5Wih82pgfcPWeF+TnHMUDwZm6kjeHjvF/t+o/jO0gInZmBX2z4ecPmEeM7my8AgVONphHeQCuGQpRpcWjEOWTo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Ur91gAI5; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H66FEoJc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750692160; x=1782228160;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JozcuR3TRYk6huh3H+BAAqcEP0hBSuhI8hFHRhcsGoU=;
-  b=H66FEoJcBPBjLDfk/j2TT8lyXZM0aacOcj+567yaJwxQA7GlBPg15YSJ
-   hXJaOqx2xH3md02E198B6eIEUqYBhhbZT8xiw39IqZcAmt7Fg7ti3QlMk
-   GHkKZzteD1PV8yg0mvKqQ3KYVXJ+/yhuqZHXXddbfjKIT6NVFXr1E/uRl
-   pvKrvueI9F0PQwkqG2rzRipRWjdYxUrkoP4dRZMxMQsaOnC1m9brypHLt
-   QxO2eGHj1WpFxBuiUYrtGouEsYGHV5ZHs2QorwP/LbKvsSTVoCUQtwjm2
-   XjvLwiOkuX8/bQx5jnEPBI+/IOrA8Shx2+TqHjqFAOdbG3fD9dRBHd/kB
-   Q==;
-X-CSE-ConnectionGUID: ePfnz+c+T4aCvRff/fF1dw==
-X-CSE-MsgGUID: qW8WdnTdQiOv7fSkTCwAcA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="55540401"
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="55540401"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 08:22:38 -0700
-X-CSE-ConnectionGUID: 2rmaz7YQSAqjahi2HCZiuA==
-X-CSE-MsgGUID: n/vnjIiZRBuIW8d60qBnSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="151400596"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 23 Jun 2025 08:22:35 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uTj0D-000P2c-0X;
-	Mon, 23 Jun 2025 15:22:33 +0000
-Date: Mon, 23 Jun 2025 23:21:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chiara Meiohas <cmeiohas@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
-	Michael Guralnik <michaelgur@nvidia.com>
-Subject: drivers/infiniband/core/nldev.c:1755:12: warning: stack frame size
- (1032) exceeds limit (1024) in 'nldev_newlink'
-Message-ID: <202506232316.vUCRAZTq-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Ur91gAI5"
+ARC-Seal: i=1; a=rsa-sha256; t=1750694752; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ALvgrtg+SBpE7ZZ5IkKOvEGS2SR4IufJdiOtiRVy68FjasB3QJgnA6RvY/N+EWWViRfyhEVxnTbdcTnv2v5XfDJzm7WEQ0UnzaDPAyseLdjkl1hb650UOTbiPdDATgqwdQ0m5LpepSWI3r6mky17Jk1JFGkOO2tMYLrNthhObwc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1750694752; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=OBRKd+xA4VsUyeckNojrdNQY/i5zR4hbYSAkGkUAxmI=; 
+	b=f3ISUawrfRo5+VIsmDCuLxBzcU2wsRYh8AzkHPaZdDI7cgoz33XFITfsgEElgM9NSiGaUM3OQfm+dYsD9LIHYxcv+/b6ZROeF56zQHjEWzyGwaqBBxO33FdbDSPb6iXhG6JZJ0LIg+Xrl2mcrBRdGxRMwgFHPpAjRG9/ITc6ZEA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750694752;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=OBRKd+xA4VsUyeckNojrdNQY/i5zR4hbYSAkGkUAxmI=;
+	b=Ur91gAI5Pg4ujGe9cgYtIhXeRdyWF4npt8XEVb3xB6c3gzjKDMoCcqGXSa540LUH
+	6uxd/EWPKNeFn3LrQ2TzaIZiMHsCyJroUlVvMjiRyJDgSkbfLlkadlnnc8+V/IkF3gU
+	4xPwrh5EMDEFFEwzxIcgQctKEDXccsek567/7Rjw=
+Received: by mx.zohomail.com with SMTPS id 1750694748824857.0971844130715;
+	Mon, 23 Jun 2025 09:05:48 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH v2 00/20] BYEWORD_UPDATE: unifying (most) HIWORD_UPDATE
+ macros
+Date: Mon, 23 Jun 2025 18:05:28 +0200
+Message-Id: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEh7WWgC/12OzQ6DIBAGX8XsuTSAf42nvkfjAWSpJCoW0GqM7
+ 16qPfU4m8x8u4FHZ9BDlWzgcDbe2CECvyTQtGJ4IjEqMnDKc1owSuSKb+sUmUYlApIsyxuKKMq
+ SKYjS6FCb5Qg+6pMdvqbYDecRpPBIGtv3JlTJgEsgZ5un8BVa44N16/HQzA7jt83/t2dGKNGZ0
+ PKmi5Sl+t7YrhPSOnGNA1Dv+/4BLKkE/uEAAAA=
+X-Change-ID: 20250610-byeword-update-445c0eea771d
+To: Yury Norov <yury.norov@gmail.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Jaehoon Chung <jh80.chung@samsung.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Shreeya Patel <shreeya.patel@collabora.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Shawn Lin <shawn.lin@rock-chips.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org, 
+ linux-sound@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+X-Mailer: b4 0.14.2
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   86731a2a651e58953fc949573895f2fa6d456841
-commit: 12fb1153c53bf9b53e299c9775b84fa7838640f7 RDMA/nldev: Expose whether RDMA monitoring is supported
-date:   9 months ago
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20250623/202506232316.vUCRAZTq-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506232316.vUCRAZTq-lkp@intel.com/reproduce)
+This series was spawned by [1], where I was asked to move every instance
+of HIWORD_UPDATE et al that I could find to a common macro in the same
+series that I am introducing said common macro.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506232316.vUCRAZTq-lkp@intel.com/
+The first patch of the series introduces a new header file,
+hw_bitfield.h, which contains two new macros: FIELD_PREP_WM16 and
+FIELD_PREP_WM16_CONST. The latter can be used in initializers.
 
-All warnings (new ones prefixed by >>):
+I've cheekily added the hw_bitfield.h header to the BITMAP API section
+of the MAINTAINERS file.
 
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/infiniband/core/nldev.c:37:
-   In file included from include/net/netlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/infiniband/core/nldev.c:37:
-   In file included from include/net/netlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/infiniband/core/nldev.c:38:
-   In file included from include/rdma/rdma_cm.h:12:
-   In file included from include/rdma/ib_addr.h:20:
-   include/net/ip.h:472:14: warning: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     472 |                 if (mtu && time_before(jiffies, rt->dst.expires))
-         |                            ^
-   include/linux/jiffies.h:138:26: note: expanded from macro 'time_before'
-     138 | #define time_before(a,b)        time_after(b,a)
-         |                                 ^
-   include/linux/jiffies.h:128:3: note: expanded from macro 'time_after'
-     128 |         (typecheck(unsigned long, a) && \
-         |          ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   In file included from drivers/infiniband/core/nldev.c:44:
-   In file included from drivers/infiniband/core/uverbs.h:49:
-   In file included from include/rdma/uverbs_std_types.h:10:
-   include/rdma/uverbs_ioctl.h:813:30: warning: default initialization of an object of type 'typeof ((attr->ptr_attr.data))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     813 |         else if (copy_from_user(to, u64_to_user_ptr(attr->ptr_attr.data),
-         |                                     ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   In file included from drivers/infiniband/core/nldev.c:44:
-   In file included from drivers/infiniband/core/uverbs.h:49:
-   In file included from include/rdma/uverbs_std_types.h:10:
-   include/rdma/uverbs_ioctl.h:835:30: warning: default initialization of an object of type 'typeof ((attr->ptr_attr.data))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     835 |         else if (copy_from_user(to, u64_to_user_ptr(attr->ptr_attr.data),
-         |                                     ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   drivers/infiniband/core/nldev.c:2795:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    2795 |         default:
-         |         ^
-   drivers/infiniband/core/nldev.c:2795:2: note: insert 'break;' to avoid fall-through
-    2795 |         default:
-         |         ^
-         |         break; 
->> drivers/infiniband/core/nldev.c:1755:12: warning: stack frame size (1032) exceeds limit (1024) in 'nldev_newlink' [-Wframe-larger-than]
-    1755 | static int nldev_newlink(struct sk_buff *skb, struct nlmsghdr *nlh,
-         |            ^
-   21 warnings generated.
+This macro definition checks that the mask fits, and that the value fits
+in the mask. Like FIELD_PREP, it also shifts the value up to the mask,
+so turning off a bit does not require using the mask as a value. Masks
+are also required to be contiguous, like with FIELD_PREP.
 
+For each definition of such a macro, the driver(s) that used it were
+evaluated for three different treatments:
+ - full conversion to the new macro, for cases where replacing the
+   implementation of the old macro wouldn't have worked, or where the
+   conversion was trivial. These are the most complex patches in this
+   series, as they sometimes have to pull apart definitions of masks
+   and values due to the new semantics, which require a contiguous
+   mask and shift the value for us.
+ - replacing the implementation of the old macro with an instance of the
+   new macro, done where I felt it made the patch much easier to review
+   because I didn't want to drop a big diff on people.
+ - skipping conversion entirely, usually because the mask is
+   non-constant and it's not trivial to make it constant. Sometimes an
+   added complication is that said non-constant mask is either used in a
+   path where runtime overhead may not be desirable, or in an
+   initializer.
 
-vim +/nldev_newlink +1755 drivers/infiniband/core/nldev.c
+Left out of conversion:
+ - drivers/mmc/host/sdhci-of-arasan.c: mask is non-constant.
+ - drivers/phy/rockchip/phy-rockchip-inno-csidphy.c: mask is
+   non-constant likely by way of runtime pointer dereferencing, even if
+   struct and members are made const.
+ - drivers/clk/rockchip/clk.h: way too many clock drivers use non-const
+   masks in the context of an initializer.
 
-3856ec4b93c946 Steve Wise      2019-02-15  1754  
-3856ec4b93c946 Steve Wise      2019-02-15 @1755  static int nldev_newlink(struct sk_buff *skb, struct nlmsghdr *nlh,
-3856ec4b93c946 Steve Wise      2019-02-15  1756  			  struct netlink_ext_ack *extack)
-3856ec4b93c946 Steve Wise      2019-02-15  1757  {
-3856ec4b93c946 Steve Wise      2019-02-15  1758  	struct nlattr *tb[RDMA_NLDEV_ATTR_MAX];
-3856ec4b93c946 Steve Wise      2019-02-15  1759  	char ibdev_name[IB_DEVICE_NAME_MAX];
-3856ec4b93c946 Steve Wise      2019-02-15  1760  	const struct rdma_link_ops *ops;
-3856ec4b93c946 Steve Wise      2019-02-15  1761  	char ndev_name[IFNAMSIZ];
-3856ec4b93c946 Steve Wise      2019-02-15  1762  	struct net_device *ndev;
-3856ec4b93c946 Steve Wise      2019-02-15  1763  	char type[IFNAMSIZ];
-3856ec4b93c946 Steve Wise      2019-02-15  1764  	int err;
-3856ec4b93c946 Steve Wise      2019-02-15  1765  
-df6d27a3097015 Chiara Meiohas  2024-07-30  1766  	err = nlmsg_parse(nlh, 0, tb, RDMA_NLDEV_ATTR_MAX - 1,
-3856ec4b93c946 Steve Wise      2019-02-15  1767  			    nldev_policy, extack);
-3856ec4b93c946 Steve Wise      2019-02-15  1768  	if (err || !tb[RDMA_NLDEV_ATTR_DEV_NAME] ||
-3856ec4b93c946 Steve Wise      2019-02-15  1769  	    !tb[RDMA_NLDEV_ATTR_LINK_TYPE] || !tb[RDMA_NLDEV_ATTR_NDEV_NAME])
-3856ec4b93c946 Steve Wise      2019-02-15  1770  		return -EINVAL;
-3856ec4b93c946 Steve Wise      2019-02-15  1771  
-872f690341948b Francis Laniel  2020-11-15  1772  	nla_strscpy(ibdev_name, tb[RDMA_NLDEV_ATTR_DEV_NAME],
-3856ec4b93c946 Steve Wise      2019-02-15  1773  		    sizeof(ibdev_name));
-7aefa6237cfe4a Jason Gunthorpe 2020-03-09  1774  	if (strchr(ibdev_name, '%') || strlen(ibdev_name) == 0)
-3856ec4b93c946 Steve Wise      2019-02-15  1775  		return -EINVAL;
-3856ec4b93c946 Steve Wise      2019-02-15  1776  
-872f690341948b Francis Laniel  2020-11-15  1777  	nla_strscpy(type, tb[RDMA_NLDEV_ATTR_LINK_TYPE], sizeof(type));
-872f690341948b Francis Laniel  2020-11-15  1778  	nla_strscpy(ndev_name, tb[RDMA_NLDEV_ATTR_NDEV_NAME],
-3856ec4b93c946 Steve Wise      2019-02-15  1779  		    sizeof(ndev_name));
-3856ec4b93c946 Steve Wise      2019-02-15  1780  
-7a54f78d9387b7 Parav Pandit    2019-07-04  1781  	ndev = dev_get_by_name(sock_net(skb->sk), ndev_name);
-3856ec4b93c946 Steve Wise      2019-02-15  1782  	if (!ndev)
-3856ec4b93c946 Steve Wise      2019-02-15  1783  		return -ENODEV;
-3856ec4b93c946 Steve Wise      2019-02-15  1784  
-3856ec4b93c946 Steve Wise      2019-02-15  1785  	down_read(&link_ops_rwsem);
-3856ec4b93c946 Steve Wise      2019-02-15  1786  	ops = link_ops_get(type);
-3856ec4b93c946 Steve Wise      2019-02-15  1787  #ifdef CONFIG_MODULES
-3856ec4b93c946 Steve Wise      2019-02-15  1788  	if (!ops) {
-3856ec4b93c946 Steve Wise      2019-02-15  1789  		up_read(&link_ops_rwsem);
-3856ec4b93c946 Steve Wise      2019-02-15  1790  		request_module("rdma-link-%s", type);
-3856ec4b93c946 Steve Wise      2019-02-15  1791  		down_read(&link_ops_rwsem);
-3856ec4b93c946 Steve Wise      2019-02-15  1792  		ops = link_ops_get(type);
-3856ec4b93c946 Steve Wise      2019-02-15  1793  	}
-3856ec4b93c946 Steve Wise      2019-02-15  1794  #endif
-3856ec4b93c946 Steve Wise      2019-02-15  1795  	err = ops ? ops->newlink(ibdev_name, ndev) : -EINVAL;
-3856ec4b93c946 Steve Wise      2019-02-15  1796  	up_read(&link_ops_rwsem);
-3856ec4b93c946 Steve Wise      2019-02-15  1797  	dev_put(ndev);
-3856ec4b93c946 Steve Wise      2019-02-15  1798  
-3856ec4b93c946 Steve Wise      2019-02-15  1799  	return err;
-3856ec4b93c946 Steve Wise      2019-02-15  1800  }
-3856ec4b93c946 Steve Wise      2019-02-15  1801  
+I will not be addressing these 3 remaining users in this series, as
+implementing a runtime checked version on top of this and verifying that
+it doesn't cause undue overhead just for 3 stragglers is a bit outside
+the scope of wanting to get my RK3576 PWM series unblocked. Please have
+mercy.
 
-:::::: The code at line 1755 was first introduced by commit
-:::::: 3856ec4b93c9463d36ee39098dde1fbbd29ec6dd RDMA/core: Add RDMA_NLDEV_CMD_NEWLINK/DELLINK support
+In total, I count 19 different occurrences of such a macro fixed out of
+22 I found. The vast majority of these patches have either undergone
+static testing to ensure the values end up the same during development,
+or have been verified to not break the device the driver is for at
+runtime. Only a handful are just compile-tested, and the individual
+patches remark which ones those are.
 
-:::::: TO: Steve Wise <swise@opengridcomputing.com>
-:::::: CC: Jason Gunthorpe <jgg@mellanox.com>
+This took a lot of manual work as this wasn't really something that
+could be automated: code had to be refactored to ensure masks were
+contiguous, made sense to how the hardware actually works and to human
+readers, were constant, and that the code uses unshifted values.
 
+Please note that I will not be resending the whole series again for
+purely subjective cosmetic changes. This series touches a lot of
+subsystems, which means many clashing tastes. You've had a week's notice
+to get any low-effort naming nitpicks out of the way after v1. If you as
+a maintainer are unhappy with a commit prefix or such, then you have my
+express permission to modify it while applying the patch, so that I
+don't need to bombard everyone else's inboxes again.
+
+https://lore.kernel.org/all/aD8hB-qJ4Qm6IFuS@yury/ [1]
+
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+Changes in v2:
+- rebase onto next-20250623. This involved solving two conflicts in
+  pcie-dw-rockchip.
+- move new macros to a new hw_bitfield.h, and rename them to
+  FIELD_PREP_WM16*. All patches in the series have been updated to use
+  the new names.
+- hw_bitfield.h: fix macro param re-use in FIELD_PREP_WM16. I don't know
+  if there's any way to do the same in FIELD_PREP_WM16_CONST, but the
+  bitfield.h FIELD_PREP functions don't do it for either, so I'm already
+  strictly better anyway.
+- hw_bitfield.h: remove whitespace after cast operators.
+- change newly introduced U literal suffixes to UL, as they are more
+  commonly used in the kernel.
+- pcie-dw-rockchip: remove the legacy mode flag, as it's unused.
+- Link to v1: https://lore.kernel.org/r/20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com
+
+---
+Nicolas Frattaroli (20):
+      bitmap: introduce hardware-specific bitfield operations
+      mmc: dw_mmc-rockchip: switch to FIELD_PREP_WM16 macro
+      soc: rockchip: grf: switch to FIELD_PREP_WM16_CONST macro
+      media: synopsys: hdmirx: replace macros with bitfield variants
+      drm/rockchip: lvds: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-emmc: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: dsi: switch to FIELD_PREP_WM16* macros
+      drm/rockchip: vop2: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-samsung-dcphy: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: dw_hdmi_qp: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: inno-hdmi: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-usb: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: dw_hdmi: switch to FIELD_PREP_WM16* macros
+      ASoC: rockchip: i2s-tdm: switch to FIELD_PREP_WM16_CONST macro
+      net: stmmac: dwmac-rk: switch to FIELD_PREP_WM16 macro
+      PCI: rockchip: Switch to FIELD_PREP_WM16* macros
+      PCI: dw-rockchip: Switch to FIELD_PREP_WM16 macro
+      PM / devfreq: rockchip-dfi: switch to FIELD_PREP_WM16 macro
+      clk: sp7021: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-pcie: switch to FIELD_PREP_WM16 macro
+
+ MAINTAINERS                                        |   1 +
+ drivers/clk/clk-sp7021.c                           |  22 ++--
+ drivers/devfreq/event/rockchip-dfi.c               |  27 ++--
+ drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c    | 142 ++++++++++-----------
+ drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c        |  80 ++++++------
+ drivers/gpu/drm/rockchip/dw_hdmi_qp-rockchip.c     |  68 +++++-----
+ drivers/gpu/drm/rockchip/inno_hdmi.c               |  11 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.h       |   1 -
+ drivers/gpu/drm/rockchip/rockchip_lvds.h           |  21 +--
+ drivers/gpu/drm/rockchip/rockchip_vop2_reg.c       |  15 ++-
+ .../media/platform/synopsys/hdmirx/snps_hdmirx.h   |   6 +-
+ drivers/mmc/host/dw_mmc-rockchip.c                 |   9 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c     |   3 +-
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c      |  42 +++---
+ drivers/pci/controller/pcie-rockchip.h             |  35 ++---
+ drivers/phy/rockchip/phy-rockchip-emmc.c           |   3 +-
+ drivers/phy/rockchip/phy-rockchip-pcie.c           |  72 +++--------
+ drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c  |  11 +-
+ drivers/phy/rockchip/phy-rockchip-usb.c            |  51 +++-----
+ drivers/soc/rockchip/grf.c                         |  35 +++--
+ include/linux/hw_bitfield.h                        |  62 +++++++++
+ sound/soc/rockchip/rockchip_i2s_tdm.h              |   4 +-
+ 22 files changed, 367 insertions(+), 354 deletions(-)
+---
+base-commit: 0491b8f4897c1ed267446959628592fd1cf8107d
+change-id: 20250610-byeword-update-445c0eea771d
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
