@@ -1,265 +1,247 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427F928CF73
-	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 16:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750695060; cv=pass; b=XwexpUqWj9/NQ28lC/xY7ELpZ74mrY/eRug5vbPGKSLSXA2LwB71ATwWD4IPwnrlPhvS3KPrVF/RRy4ielOBMJA2DCU2Z2VOJwO7gScKYEH5szQ3CQMIplNTIY2kOJr6JtaIipkxUV4RcLQGgK+PLuRwXkZ61uDSr6njxKhT0qs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750695060; c=relaxed/simple;
-	bh=UblQ/Xi9teuoaZM1+IlFLdoyalC6siaHzqHpUWPdXp4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EZ6Ilh11+XEO301u8Suxm6U5ML3vTGJLEuFsUibrUw1SG+QmpeAFfD8jhzi4FpYganbR90A8jtXEQGj4GKvG9KAPmpZXT8G+IqtSn8epz1St++zSg+5CkVi27hcxcCHimKjaPqD2DOssZuedRjwmtIMsdD7EP82+9DW+jDhSwS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=ifhrRglT; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A9538FA6;
+	Mon, 23 Jun 2025 16:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750695886; cv=none; b=rVMmsA4HXmzzIcLKkPHN3PStRC2ahIOJj4PFDeqxmuEHBh8LGU1HWC/kskctv29fO5V/Yaekni0CSzVJCe/YD3fuBeMZ12UHotH15yo9IHPpLilXW9W/2KIiDj34lbMStbvlSeqh6JnH64Gjv8OffWFle/wvhORzKZwpw902DXk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750695886; c=relaxed/simple;
+	bh=SE0KtjHhXn2herdLMGNKI2XffmCWl8HYOU2TyxZYhlU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UHJJzQATjR7zT5srvMPO+8PPbURPd02NqM2qS3j18yGTWU7kYrE9VJgxkG2U1tZf+t7imadfSaoIfb8q+LYEgGvP6/XLFZZO9MUPguHYWhk5mdkhf0EaSk2ZuOj7ca6OdYDqLb42FPHaTR0gZmuO3QpRqyDHH7rjaRaeiygSy18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OMjShE1j; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="ifhrRglT"
-ARC-Seal: i=1; a=rsa-sha256; t=1750695014; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=EpBtJRjKcgPsO+xAJObVVmFvnI4hmdsZ6LijaICW3w0zdFpegt0k3I/wGT51x6yq9t7zXoX7sFb3yMWpHNE+rLAu2ZZjCp+N9VFX+Q4/04KiU/EsrfstavBLC9MQzFMo/b3QMwzBRvoc+e13RHmo8OoEeFd00ZASOpK3oSJJglM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1750695014; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=LrDqBL7o/mg/nAqIiAJ/LSWqzkg2m3/2ojuA+PZ4zkE=; 
-	b=Yke2UH0sgLcdjm6t4ucqMhYEpUfHQfgnCY1vqDVFeITgfZA/sUs1RgZRk340I6Jejbq5/pXgjtH289g684o8J2aZHAELCY9xvv5ldmSWpCLm6se5G3BspfIU/bZG+gRqwJ87tvnoqoBCO23T0tPs75Dpj4AZstHKLhiuIw2w0TY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750695014;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=LrDqBL7o/mg/nAqIiAJ/LSWqzkg2m3/2ojuA+PZ4zkE=;
-	b=ifhrRglTFZ2RX+hsYHYJv5VSQEYe/R1mGxnsPnU80GFRfFV+SXXAgL+bnaRD8IDJ
-	XMwx3CHErJ+Z05XkEGWJF+8nIMYLmSNdyD9nVywEoYVsytQSuhHMaK3gAoItL9dGZk9
-	hC/Qo/9ULp3XvQ8MVn1Ko0pBL0TX2Clu2xmUyeEg=
-Received: by mx.zohomail.com with SMTPS id 17506950128651017.218237604295;
-	Mon, 23 Jun 2025 09:10:12 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Mon, 23 Jun 2025 18:05:48 +0200
-Subject: [PATCH v2 20/20] phy: rockchip-pcie: switch to FIELD_PREP_WM16
- macro
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OMjShE1j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750695885; x=1782231885;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SE0KtjHhXn2herdLMGNKI2XffmCWl8HYOU2TyxZYhlU=;
+  b=OMjShE1joR56x1YGqe4DBa9XpTFZSDa4/na4BZCFJ4MUC3ehI60wekqY
+   Bxw891EMqAEZl1D1D40jW2W5RXFmOaTSOl/RRkqfLrE5bnvkiZz0/g/64
+   HgWG5rmKcUVW4eOx8/dcVgFI4bKaH948URL7Kpu3kRBqh74uyqkbhftM2
+   lVqjxL7aBfhEaMI2PaVHKcZ1+daneYlQdBU1VBPlN5q9VNqn7UNy4eKJS
+   nJ/rLpxjgomuJbr6h5kW4uMh/uVwDiSkeIYRJxBOuhriNFiCFv61rbuQy
+   jaOHzkCuaOcSS4//b804ByCxSAaIFMIn6LnR4xId/AEBGPdVTwfpBfTpC
+   A==;
+X-CSE-ConnectionGUID: X30Mf3PvTFOuiMGXTFTUzw==
+X-CSE-MsgGUID: wyKMkWNOSBKVvufPmddc9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52782815"
+X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
+   d="scan'208";a="52782815"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 09:24:44 -0700
+X-CSE-ConnectionGUID: 3AoDh/1UQIiImftMkLXUMg==
+X-CSE-MsgGUID: xnzkbZfRQwSTOLWs6lirxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
+   d="scan'208";a="151948477"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 23 Jun 2025 09:24:42 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uTjyJ-000P66-2G;
+	Mon, 23 Jun 2025 16:24:39 +0000
+Date: Tue, 24 Jun 2025 00:23:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sven Schnelle <svens@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>
+Subject: arch/s390/kvm/kvm-s390.c:5016:5: warning: stack frame size (1152)
+ exceeds limit (1024) in 'kvm_arch_vcpu_ioctl_run'
+Message-ID: <202506240041.AuLxoIKn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250623-byeword-update-v2-20-cf1fc08a2e1f@collabora.com>
-References: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
-In-Reply-To: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
-To: Yury Norov <yury.norov@gmail.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Jaehoon Chung <jh80.chung@samsung.com>, 
- Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
- Shreeya Patel <shreeya.patel@collabora.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Shawn Lin <shawn.lin@rock-chips.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
- MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, 
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org, 
- linux-sound@vger.kernel.org, netdev@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-drivers that use constant masks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   86731a2a651e58953fc949573895f2fa6d456841
+commit: 5ade5be4edf855245955108860d2016af3065a37 s390: Add infrastructure to patch lowcore accesses
+date:   11 months ago
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250624/202506240041.AuLxoIKn-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240041.AuLxoIKn-lkp@intel.com/reproduce)
 
-The Rockchip PCIe PHY driver, used on the RK3399, has its own definition
-of HIWORD_UPDATE.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506240041.AuLxoIKn-lkp@intel.com/
 
-Remove it, and replace instances of it with hw_bitfield.h's
-FIELD_PREP_WM16. To achieve this, some mask defines are reshuffled, as
-FIELD_PREP_WM16 uses the mask as both the mask of bits to write and to
-derive the shift amount from in order to shift the value.
+All warnings (new ones prefixed by >>):
 
-In order to ensure that the mask is always a constant, the inst->index
-shift is performed after the FIELD_PREP_WM16, as this is a runtime
-value.
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/s390/kvm/kvm-s390.c:5016:5: warning: stack frame size (1152) exceeds limit (1024) in 'kvm_arch_vcpu_ioctl_run' [-Wframe-larger-than]
+    5016 | int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+         |     ^
+   13 warnings generated.
 
-From this, we gain compile-time error checking, and in my humble opinion
-nicer code, as well as a single definition of this macro across the
-entire codebase to aid in code comprehension.
 
-Tested on a RK3399 ROCKPro64, where PCIe still works as expected when
-accessing an NVMe drive.
+vim +/kvm_arch_vcpu_ioctl_run +5016 arch/s390/kvm/kvm-s390.c
 
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
----
- drivers/phy/rockchip/phy-rockchip-pcie.c | 72 ++++++++++----------------------
- 1 file changed, 21 insertions(+), 51 deletions(-)
+b028ee3edd54d3 David Hildenbrand     2014-07-17  5015  
+1b94f6f81007b4 Tianjia Zhang         2020-04-16 @5016  int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+b0c632db637d68 Heiko Carstens        2008-03-25  5017  {
+1b94f6f81007b4 Tianjia Zhang         2020-04-16  5018  	struct kvm_run *kvm_run = vcpu->run;
+066c40918bb495 Heiko Carstens        2024-02-03  5019  	DECLARE_KERNEL_FPU_ONSTACK32(fpu);
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5020  	int rc;
+b0c632db637d68 Heiko Carstens        2008-03-25  5021  
+0460eb35b443f7 Janosch Frank         2022-05-17  5022  	/*
+0460eb35b443f7 Janosch Frank         2022-05-17  5023  	 * Running a VM while dumping always has the potential to
+0460eb35b443f7 Janosch Frank         2022-05-17  5024  	 * produce inconsistent dump data. But for PV vcpus a SIE
+0460eb35b443f7 Janosch Frank         2022-05-17  5025  	 * entry while dumping could also lead to a fatal validity
+0460eb35b443f7 Janosch Frank         2022-05-17  5026  	 * intercept which we absolutely want to avoid.
+0460eb35b443f7 Janosch Frank         2022-05-17  5027  	 */
+0460eb35b443f7 Janosch Frank         2022-05-17  5028  	if (vcpu->kvm->arch.pv.dumping)
+0460eb35b443f7 Janosch Frank         2022-05-17  5029  		return -EINVAL;
+0460eb35b443f7 Janosch Frank         2022-05-17  5030  
+a6816314af5749 David Matlack         2024-05-03  5031  	if (!vcpu->wants_to_run)
+460df4c1fc7c00 Paolo Bonzini         2017-02-08  5032  		return -EINTR;
+460df4c1fc7c00 Paolo Bonzini         2017-02-08  5033  
+200824f55eef40 Thomas Huth           2019-09-04  5034  	if (kvm_run->kvm_valid_regs & ~KVM_SYNC_S390_VALID_FIELDS ||
+200824f55eef40 Thomas Huth           2019-09-04  5035  	    kvm_run->kvm_dirty_regs & ~KVM_SYNC_S390_VALID_FIELDS)
+200824f55eef40 Thomas Huth           2019-09-04  5036  		return -EINVAL;
+200824f55eef40 Thomas Huth           2019-09-04  5037  
+accb757d798c9b Christoffer Dall      2017-12-04  5038  	vcpu_load(vcpu);
+accb757d798c9b Christoffer Dall      2017-12-04  5039  
+27291e2165b6de David Hildenbrand     2014-01-23  5040  	if (guestdbg_exit_pending(vcpu)) {
+27291e2165b6de David Hildenbrand     2014-01-23  5041  		kvm_s390_prepare_debug_exit(vcpu);
+accb757d798c9b Christoffer Dall      2017-12-04  5042  		rc = 0;
+accb757d798c9b Christoffer Dall      2017-12-04  5043  		goto out;
+27291e2165b6de David Hildenbrand     2014-01-23  5044  	}
+27291e2165b6de David Hildenbrand     2014-01-23  5045  
+20b7035c66bacc Jan H. Schönherr      2017-11-24  5046  	kvm_sigset_activate(vcpu);
+b0c632db637d68 Heiko Carstens        2008-03-25  5047  
+fe28c7868f68b8 Janosch Frank         2019-05-15  5048  	/*
+fe28c7868f68b8 Janosch Frank         2019-05-15  5049  	 * no need to check the return value of vcpu_start as it can only have
+fe28c7868f68b8 Janosch Frank         2019-05-15  5050  	 * an error for protvirt, but protvirt means user cpu state
+fe28c7868f68b8 Janosch Frank         2019-05-15  5051  	 */
+6352e4d2dd9a34 David Hildenbrand     2014-04-10  5052  	if (!kvm_s390_user_cpu_state_ctrl(vcpu->kvm)) {
+6852d7b69b4949 David Hildenbrand     2014-03-14  5053  		kvm_s390_vcpu_start(vcpu);
+6352e4d2dd9a34 David Hildenbrand     2014-04-10  5054  	} else if (is_vcpu_stopped(vcpu)) {
+ea2cdd27dce66d David Hildenbrand     2015-05-20  5055  		pr_err_ratelimited("can't run stopped vcpu %d\n",
+6352e4d2dd9a34 David Hildenbrand     2014-04-10  5056  				   vcpu->vcpu_id);
+accb757d798c9b Christoffer Dall      2017-12-04  5057  		rc = -EINVAL;
+accb757d798c9b Christoffer Dall      2017-12-04  5058  		goto out;
+6352e4d2dd9a34 David Hildenbrand     2014-04-10  5059  	}
+b0c632db637d68 Heiko Carstens        2008-03-25  5060  
+ed3a0a011a9c33 Heiko Carstens        2024-02-03  5061  	kernel_fpu_begin(&fpu, KERNEL_FPC | KERNEL_VXR);
+2f0a83bece1e75 Tianjia Zhang         2020-06-23  5062  	sync_regs(vcpu);
+db0758b2970981 David Hildenbrand     2016-02-15  5063  	enable_cpu_timer_accounting(vcpu);
+d7b0b5eb3000c6 Carsten Otte          2009-11-19  5064  
+dab4079d5b5ac4 Heiko Carstens        2009-06-12  5065  	might_fault();
+e168bf8de33e16 Carsten Otte          2012-01-04  5066  	rc = __vcpu_run(vcpu);
+9ace903d171db7 Christian Ehrhardt    2009-05-20  5067  
+b1d16c495d9e6f Christian Ehrhardt    2009-05-20  5068  	if (signal_pending(current) && !rc) {
+b1d16c495d9e6f Christian Ehrhardt    2009-05-20  5069  		kvm_run->exit_reason = KVM_EXIT_INTR;
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5070  		rc = -EINTR;
+b1d16c495d9e6f Christian Ehrhardt    2009-05-20  5071  	}
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5072  
+27291e2165b6de David Hildenbrand     2014-01-23  5073  	if (guestdbg_exit_pending(vcpu) && !rc)  {
+27291e2165b6de David Hildenbrand     2014-01-23  5074  		kvm_s390_prepare_debug_exit(vcpu);
+27291e2165b6de David Hildenbrand     2014-01-23  5075  		rc = 0;
+27291e2165b6de David Hildenbrand     2014-01-23  5076  	}
+27291e2165b6de David Hildenbrand     2014-01-23  5077  
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5078  	if (rc == -EREMOTE) {
+71f116bfedfdd6 David Hildenbrand     2015-10-19  5079  		/* userspace support is needed, kvm_run has been prepared */
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5080  		rc = 0;
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5081  	}
+8f2abe6a1e525e Christian Borntraeger 2008-03-25  5082  
+db0758b2970981 David Hildenbrand     2016-02-15  5083  	disable_cpu_timer_accounting(vcpu);
+2f0a83bece1e75 Tianjia Zhang         2020-06-23  5084  	store_regs(vcpu);
+ed3a0a011a9c33 Heiko Carstens        2024-02-03  5085  	kernel_fpu_end(&fpu, KERNEL_FPC | KERNEL_VXR);
+d7b0b5eb3000c6 Carsten Otte          2009-11-19  5086  
+20b7035c66bacc Jan H. Schönherr      2017-11-24  5087  	kvm_sigset_deactivate(vcpu);
+b0c632db637d68 Heiko Carstens        2008-03-25  5088  
+b0c632db637d68 Heiko Carstens        2008-03-25  5089  	vcpu->stat.exit_userspace++;
+accb757d798c9b Christoffer Dall      2017-12-04  5090  out:
+accb757d798c9b Christoffer Dall      2017-12-04  5091  	vcpu_put(vcpu);
+7e8e6ab48d7814 Heiko Carstens        2008-04-04  5092  	return rc;
+b0c632db637d68 Heiko Carstens        2008-03-25  5093  }
+b0c632db637d68 Heiko Carstens        2008-03-25  5094  
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-pcie.c b/drivers/phy/rockchip/phy-rockchip-pcie.c
-index bd44af36c67a5a504801275c1b0384d373fe7ec7..d7f994c3bcdf93faffd5c04ed4d0f9d29eaf43cc 100644
---- a/drivers/phy/rockchip/phy-rockchip-pcie.c
-+++ b/drivers/phy/rockchip/phy-rockchip-pcie.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/hw_bitfield.h>
- #include <linux/io.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
-@@ -18,23 +19,14 @@
- #include <linux/regmap.h>
- #include <linux/reset.h>
- 
--/*
-- * The higher 16-bit of this register is used for write protection
-- * only if BIT(x + 16) set to 1 the BIT(x) can be written.
-- */
--#define HIWORD_UPDATE(val, mask, shift) \
--		((val) << (shift) | (mask) << ((shift) + 16))
- 
- #define PHY_MAX_LANE_NUM      4
--#define PHY_CFG_DATA_SHIFT    7
--#define PHY_CFG_ADDR_SHIFT    1
--#define PHY_CFG_DATA_MASK     0xf
--#define PHY_CFG_ADDR_MASK     0x3f
--#define PHY_CFG_RD_MASK       0x3ff
-+#define PHY_CFG_DATA_MASK     GENMASK(10, 7)
-+#define PHY_CFG_ADDR_MASK     GENMASK(6, 1)
-+#define PHY_CFG_RD_MASK       GENMASK(9, 0)
- #define PHY_CFG_WR_ENABLE     1
- #define PHY_CFG_WR_DISABLE    1
--#define PHY_CFG_WR_SHIFT      0
--#define PHY_CFG_WR_MASK       1
-+#define PHY_CFG_WR_MASK       BIT(0)
- #define PHY_CFG_PLL_LOCK      0x10
- #define PHY_CFG_CLK_TEST      0x10
- #define PHY_CFG_CLK_SCC       0x12
-@@ -49,11 +41,7 @@
- #define PHY_LANE_RX_DET_SHIFT 11
- #define PHY_LANE_RX_DET_TH    0x1
- #define PHY_LANE_IDLE_OFF     0x1
--#define PHY_LANE_IDLE_MASK    0x1
--#define PHY_LANE_IDLE_A_SHIFT 3
--#define PHY_LANE_IDLE_B_SHIFT 4
--#define PHY_LANE_IDLE_C_SHIFT 5
--#define PHY_LANE_IDLE_D_SHIFT 6
-+#define PHY_LANE_IDLE_MASK    BIT(3)
- 
- struct rockchip_pcie_data {
- 	unsigned int pcie_conf;
-@@ -100,22 +88,14 @@ static inline void phy_wr_cfg(struct rockchip_pcie_phy *rk_phy,
- 			      u32 addr, u32 data)
- {
- 	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_conf,
--		     HIWORD_UPDATE(data,
--				   PHY_CFG_DATA_MASK,
--				   PHY_CFG_DATA_SHIFT) |
--		     HIWORD_UPDATE(addr,
--				   PHY_CFG_ADDR_MASK,
--				   PHY_CFG_ADDR_SHIFT));
-+		     FIELD_PREP_WM16(PHY_CFG_DATA_MASK, data) |
-+		     FIELD_PREP_WM16(PHY_CFG_ADDR_MASK, addr));
- 	udelay(1);
- 	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_conf,
--		     HIWORD_UPDATE(PHY_CFG_WR_ENABLE,
--				   PHY_CFG_WR_MASK,
--				   PHY_CFG_WR_SHIFT));
-+		     FIELD_PREP_WM16(PHY_CFG_WR_MASK, PHY_CFG_WR_ENABLE));
- 	udelay(1);
- 	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_conf,
--		     HIWORD_UPDATE(PHY_CFG_WR_DISABLE,
--				   PHY_CFG_WR_MASK,
--				   PHY_CFG_WR_SHIFT));
-+		     FIELD_PREP_WM16(PHY_CFG_WR_MASK, PHY_CFG_WR_DISABLE));
- }
- 
- static int rockchip_pcie_phy_power_off(struct phy *phy)
-@@ -126,11 +106,9 @@ static int rockchip_pcie_phy_power_off(struct phy *phy)
- 
- 	guard(mutex)(&rk_phy->pcie_mutex);
- 
--	regmap_write(rk_phy->reg_base,
--		     rk_phy->phy_data->pcie_laneoff,
--		     HIWORD_UPDATE(PHY_LANE_IDLE_OFF,
--				   PHY_LANE_IDLE_MASK,
--				   PHY_LANE_IDLE_A_SHIFT + inst->index));
-+	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_laneoff,
-+		     FIELD_PREP_WM16(PHY_LANE_IDLE_MASK,
-+				     PHY_LANE_IDLE_OFF) << inst->index);
- 
- 	if (--rk_phy->pwr_cnt) {
- 		return 0;
-@@ -140,11 +118,9 @@ static int rockchip_pcie_phy_power_off(struct phy *phy)
- 	if (err) {
- 		dev_err(&phy->dev, "assert phy_rst err %d\n", err);
- 		rk_phy->pwr_cnt++;
--		regmap_write(rk_phy->reg_base,
--			     rk_phy->phy_data->pcie_laneoff,
--			     HIWORD_UPDATE(!PHY_LANE_IDLE_OFF,
--					   PHY_LANE_IDLE_MASK,
--					   PHY_LANE_IDLE_A_SHIFT + inst->index));
-+		regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_laneoff,
-+			     FIELD_PREP_WM16(PHY_LANE_IDLE_MASK,
-+					     !PHY_LANE_IDLE_OFF) << inst->index);
- 		return err;
- 	}
- 
-@@ -172,15 +148,11 @@ static int rockchip_pcie_phy_power_on(struct phy *phy)
- 	}
- 
- 	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_conf,
--		     HIWORD_UPDATE(PHY_CFG_PLL_LOCK,
--				   PHY_CFG_ADDR_MASK,
--				   PHY_CFG_ADDR_SHIFT));
-+		     FIELD_PREP_WM16(PHY_CFG_ADDR_MASK, PHY_CFG_PLL_LOCK));
- 
--	regmap_write(rk_phy->reg_base,
--		     rk_phy->phy_data->pcie_laneoff,
--		     HIWORD_UPDATE(!PHY_LANE_IDLE_OFF,
--				   PHY_LANE_IDLE_MASK,
--				   PHY_LANE_IDLE_A_SHIFT + inst->index));
-+	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_laneoff,
-+		     FIELD_PREP_WM16(PHY_LANE_IDLE_MASK,
-+				     !PHY_LANE_IDLE_OFF) << inst->index);
- 
- 	/*
- 	 * No documented timeout value for phy operation below,
-@@ -211,9 +183,7 @@ static int rockchip_pcie_phy_power_on(struct phy *phy)
- 	}
- 
- 	regmap_write(rk_phy->reg_base, rk_phy->phy_data->pcie_conf,
--		     HIWORD_UPDATE(PHY_CFG_PLL_LOCK,
--				   PHY_CFG_ADDR_MASK,
--				   PHY_CFG_ADDR_SHIFT));
-+		     FIELD_PREP_WM16(PHY_CFG_ADDR_MASK, PHY_CFG_PLL_LOCK));
- 
- 	err = regmap_read_poll_timeout(rk_phy->reg_base,
- 				       rk_phy->phy_data->pcie_status,
+:::::: The code at line 5016 was first introduced by commit
+:::::: 1b94f6f81007b4afaea3480ec018bc9236148961 KVM: Remove redundant argument to kvm_arch_vcpu_ioctl_run
+
+:::::: TO: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
 -- 
-2.50.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
