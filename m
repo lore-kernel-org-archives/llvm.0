@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672792D322F;
-	Mon, 23 Jun 2025 17:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882A52D3A80;
+	Mon, 23 Jun 2025 18:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750701599; cv=none; b=oZrupqxo+Q7hJxH+PupSYqpVK6id4McbdWt3ZmScxRbmkq1yKseA/r8kxZlo2yGG5uTMH0x/hqTdGyiqY8069iVGFBp+QM6exomrxijExRqKMYepsUTCK1RTljwd8t2UqvttIf1ZbONEDXqIMXa50bBrY4dzSVY19M+iRAPV/k4=
+	t=1750702981; cv=none; b=s56R+z2qSXS4tMnm7fu4eKw4IvICV038u2wu7GO+N4muyOat1G7TBgDkDR4MOr3gfoM+H7VsmKmhqTD12Cg/TivZrq/DbABFQlVutouulzDMjC7MZXs3+xhM9lb5PW6AlbMvLsCQVGAtlLDP8YLLEHALFPv56fXk171zBE1RdDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750701599; c=relaxed/simple;
-	bh=h5lBrHU3tPhyxcn3NyOanp5uK2HuROK4hGOLZNBNWTU=;
+	s=arc-20240116; t=1750702981; c=relaxed/simple;
+	bh=06uLO9m3FXDtmilEMngPa29Gp666mPTIdb/WLw1ueiU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AVdpyU5wJbMEj0qvB2yk1z8GVkIe/fvYwvWkU3fqUFCS0rRC5EZv3T4FJqz4XKSnxrNrpyfawlVK/UFc1IjtihEb7syYZ0wUYpQIaVZxedyWZ4C63CuIcHbSs4C/wuZwrwr02BcPGSkSbtZDw5yPCqXIpbsgZz/ohHTPg22BM+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NpJdAxcx; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=Rt2bik1LsKb1PewHviSvY9sSjy9yvVOhHAbprwgvUQyFusfYp5kWtfsEHtCBiTUXkb40VWRcxADAJgBGsDhkRDQfE5sFWAHOdndatt8dqxt5J6BBlBRRn401E3R8k9Fhbm58t4e99vPAxfYqRQX8kx4GK2Czeptt29KxHF5G01Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UhU/7PQj; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NpJdAxcx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UhU/7PQj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750701598; x=1782237598;
+  t=1750702980; x=1782238980;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h5lBrHU3tPhyxcn3NyOanp5uK2HuROK4hGOLZNBNWTU=;
-  b=NpJdAxcx799MDVjArQQASyR1QoDr+pQwPWuldtXX2n+89Sxv0AGpGGkI
-   hYlpd2u6f0Z1GP+Dz7rmIJwkKzoJFAzGkwjmGVm7euEjU2/HtYvHgVamf
-   EnI2kaoqcXhMFdagUDWYls/byCZs05ZJdTHgS6Df0yaatZ514t3kPXPlD
-   JrQb6O1QATM5fl88YjPAR1ssXXCy3GGtL+CzgjOiqkruUymIe23qrnDlc
-   Wayvd6UPM1bpM5F5wPgDZNGlQqmmu5bCWL41PCpG3w8+LYFilsJl6Xm6N
-   4S5QciQMH27PSeqB+UVhpeCdunmNj3pxvrCPmecz8oSEzvKz97qGxm8br
+  bh=06uLO9m3FXDtmilEMngPa29Gp666mPTIdb/WLw1ueiU=;
+  b=UhU/7PQj6SjWgelEsZwxvoUmR+7oUnfW91SYMSZaIxq6ktK37EtrYFtF
+   MbC12GeMVDwJ5uF39HmyO29v0INg3Gc9BYM799TrGe12lOB9UKTW6EIGY
+   AQ1CA45orM5QCnGL4YsEtHa/Y5Oshe66hk9triMWOqMMA4N2iFDBy5E9E
+   9LJArx0Wf6/oXZZDHUTIAAjTz9AOLzkyK1cDAy08fV0BcY0LIPIBqALn7
+   PfTGy3/VYiKQ3CaimoUxXySM1fPEiI7pfETt+fOddf7BiVkufkk0yu0MN
+   tzc2YqtTN9DhQJlk4BmWcpY49rW64RiTHvaQc2nQAVJWWFgXa1xLCVYhG
    w==;
-X-CSE-ConnectionGUID: c42jKHD6QQOWgGBNK/XHKg==
-X-CSE-MsgGUID: mBV6httZQD6bs9M23Ceatg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="70346387"
+X-CSE-ConnectionGUID: STE/DThuSQGrrmKiaONFTA==
+X-CSE-MsgGUID: jHfcD0XIS3KiXNNN9pHLhA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52894580"
 X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
-   d="scan'208";a="70346387"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 10:59:58 -0700
-X-CSE-ConnectionGUID: izoGaBvLRbaA4K23v1iYIg==
-X-CSE-MsgGUID: jJPYYTY6SuyCqjK4ttdppw==
+   d="scan'208";a="52894580"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 11:22:59 -0700
+X-CSE-ConnectionGUID: BNv50jDpTBy8uGa+EN9kMQ==
+X-CSE-MsgGUID: dQGcEc3MQUiciiglCdSD/w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,259,1744095600"; 
-   d="scan'208";a="157454263"
+   d="scan'208";a="155687683"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 23 Jun 2025 10:59:55 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 23 Jun 2025 11:22:57 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uTlSS-000PBS-36;
-	Mon, 23 Jun 2025 17:59:52 +0000
-Date: Tue, 24 Jun 2025 01:59:46 +0800
+	id 1uTlol-000PCY-18;
+	Mon, 23 Jun 2025 18:22:55 +0000
+Date: Tue, 24 Jun 2025 02:22:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+To: Hongbo Li <lihongbo22@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Ping-Ke Shih <pkshih@realtek.com>
-Subject: drivers/net/wireless/realtek/rtlwifi/rtl8192du/phy.c:2039:6:
- warning: stack frame size (1152) exceeds limit (1024) in
- 'rtl92du_phy_iq_calibrate'
-Message-ID: <202506240149.jkmuq1B9-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: fs/bcachefs/fs.c:867:12: warning: stack frame size (1056) exceeds
+ limit (1024) in 'bch2_rename2'
+Message-ID: <202506240200.Fsm6BEST-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,209 +64,204 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Bitterblue,
-
-First bad commit (maybe != root cause):
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   86731a2a651e58953fc949573895f2fa6d456841
-commit: 59ea089dcba3b51769280522fd62696d4d436cbc wifi: rtlwifi: Enable the new rtl8192du driver
-date:   1 year, 1 month ago
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250624/202506240149.jkmuq1B9-lkp@intel.com/config)
+commit: e614a6c52d32c9c7ff545ca842eb2de4aeb1d2d9 bcachefs: make directory i_size meaningful
+date:   5 months ago
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20250624/202506240200.Fsm6BEST-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240149.jkmuq1B9-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240200.Fsm6BEST-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506240149.jkmuq1B9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506240200.Fsm6BEST-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/realtek/rtlwifi/rtl8192du/phy.c:4:
-   In file included from drivers/net/wireless/realtek/rtlwifi/rtl8192du/../wifi.h:11:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
+   In file included from fs/bcachefs/fs.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
    In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
+     505 |                            item];
          |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/realtek/rtlwifi/rtl8192du/phy.c:2039:6: warning: stack frame size (1152) exceeds limit (1024) in 'rtl92du_phy_iq_calibrate' [-Wframe-larger-than]
-    2039 | void rtl92du_phy_iq_calibrate(struct ieee80211_hw *hw)
-         |      ^
-   6 warnings generated.
+>> fs/bcachefs/fs.c:867:12: warning: stack frame size (1056) exceeds limit (1024) in 'bch2_rename2' [-Wframe-larger-than]
+     867 | static int bch2_rename2(struct mnt_idmap *idmap,
+         |            ^
+   5 warnings generated.
 
 
-vim +/rtl92du_phy_iq_calibrate +2039 drivers/net/wireless/realtek/rtlwifi/rtl8192du/phy.c
+vim +/bch2_rename2 +867 fs/bcachefs/fs.c
 
-af46caf0515281a Bitterblue Smith 2024-05-23  2038  
-af46caf0515281a Bitterblue Smith 2024-05-23 @2039  void rtl92du_phy_iq_calibrate(struct ieee80211_hw *hw)
-af46caf0515281a Bitterblue Smith 2024-05-23  2040  {
-af46caf0515281a Bitterblue Smith 2024-05-23  2041  	long rege94, rege9c, regea4, regeac, regeb4;
-af46caf0515281a Bitterblue Smith 2024-05-23  2042  	bool is12simular, is13simular, is23simular;
-af46caf0515281a Bitterblue Smith 2024-05-23  2043  	struct rtl_priv *rtlpriv = rtl_priv(hw);
-af46caf0515281a Bitterblue Smith 2024-05-23  2044  	struct rtl_hal *rtlhal = &rtlpriv->rtlhal;
-af46caf0515281a Bitterblue Smith 2024-05-23  2045  	long regebc, regec4, regecc, regtmp = 0;
-af46caf0515281a Bitterblue Smith 2024-05-23  2046  	struct rtl_phy *rtlphy = &rtlpriv->phy;
-af46caf0515281a Bitterblue Smith 2024-05-23  2047  	u8 i, final_candidate, indexforchannel;
-af46caf0515281a Bitterblue Smith 2024-05-23  2048  	bool patha_ok, pathb_ok;
-af46caf0515281a Bitterblue Smith 2024-05-23  2049  	long result[4][8] = {};
-af46caf0515281a Bitterblue Smith 2024-05-23  2050  
-af46caf0515281a Bitterblue Smith 2024-05-23  2051  	RTPRINT(rtlpriv, FINIT, INIT_IQK,
-af46caf0515281a Bitterblue Smith 2024-05-23  2052  		"IQK:Start!!!channel %d\n", rtlphy->current_channel);
-af46caf0515281a Bitterblue Smith 2024-05-23  2053  
-af46caf0515281a Bitterblue Smith 2024-05-23  2054  	final_candidate = 0xff;
-af46caf0515281a Bitterblue Smith 2024-05-23  2055  	patha_ok = false;
-af46caf0515281a Bitterblue Smith 2024-05-23  2056  	pathb_ok = false;
-af46caf0515281a Bitterblue Smith 2024-05-23  2057  	is12simular = false;
-af46caf0515281a Bitterblue Smith 2024-05-23  2058  	is23simular = false;
-af46caf0515281a Bitterblue Smith 2024-05-23  2059  	is13simular = false;
-af46caf0515281a Bitterblue Smith 2024-05-23  2060  	RTPRINT(rtlpriv, FINIT, INIT_IQK,
-af46caf0515281a Bitterblue Smith 2024-05-23  2061  		"IQK !!!currentband %d\n", rtlhal->current_bandtype);
-af46caf0515281a Bitterblue Smith 2024-05-23  2062  
-af46caf0515281a Bitterblue Smith 2024-05-23  2063  	for (i = 0; i < 3; i++) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2064  		if (rtlhal->current_bandtype == BAND_ON_5G) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2065  			_rtl92du_phy_iq_calibrate_5g_normal(hw, result, i);
-af46caf0515281a Bitterblue Smith 2024-05-23  2066  		} else if (rtlhal->current_bandtype == BAND_ON_2_4G) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2067  			if (IS_92D_SINGLEPHY(rtlhal->version))
-af46caf0515281a Bitterblue Smith 2024-05-23  2068  				_rtl92du_phy_iq_calibrate(hw, result, i, true);
-af46caf0515281a Bitterblue Smith 2024-05-23  2069  			else
-af46caf0515281a Bitterblue Smith 2024-05-23  2070  				_rtl92du_phy_iq_calibrate(hw, result, i, false);
-af46caf0515281a Bitterblue Smith 2024-05-23  2071  		}
-af46caf0515281a Bitterblue Smith 2024-05-23  2072  
-af46caf0515281a Bitterblue Smith 2024-05-23  2073  		if (i == 1) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2074  			is12simular = _rtl92du_phy_simularity_compare(hw, result,
-af46caf0515281a Bitterblue Smith 2024-05-23  2075  								      0, 1);
-af46caf0515281a Bitterblue Smith 2024-05-23  2076  			if (is12simular) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2077  				final_candidate = 0;
-af46caf0515281a Bitterblue Smith 2024-05-23  2078  				break;
-af46caf0515281a Bitterblue Smith 2024-05-23  2079  			}
-af46caf0515281a Bitterblue Smith 2024-05-23  2080  		}
-af46caf0515281a Bitterblue Smith 2024-05-23  2081  
-af46caf0515281a Bitterblue Smith 2024-05-23  2082  		if (i == 2) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2083  			is13simular = _rtl92du_phy_simularity_compare(hw, result,
-af46caf0515281a Bitterblue Smith 2024-05-23  2084  								      0, 2);
-af46caf0515281a Bitterblue Smith 2024-05-23  2085  			if (is13simular) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2086  				final_candidate = 0;
-af46caf0515281a Bitterblue Smith 2024-05-23  2087  				break;
-af46caf0515281a Bitterblue Smith 2024-05-23  2088  			}
-af46caf0515281a Bitterblue Smith 2024-05-23  2089  
-af46caf0515281a Bitterblue Smith 2024-05-23  2090  			is23simular = _rtl92du_phy_simularity_compare(hw, result,
-af46caf0515281a Bitterblue Smith 2024-05-23  2091  								      1, 2);
-af46caf0515281a Bitterblue Smith 2024-05-23  2092  			if (is23simular) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2093  				final_candidate = 1;
-af46caf0515281a Bitterblue Smith 2024-05-23  2094  			} else {
-af46caf0515281a Bitterblue Smith 2024-05-23  2095  				for (i = 0; i < 8; i++)
-af46caf0515281a Bitterblue Smith 2024-05-23  2096  					regtmp += result[3][i];
-af46caf0515281a Bitterblue Smith 2024-05-23  2097  
-af46caf0515281a Bitterblue Smith 2024-05-23  2098  				if (regtmp != 0)
-af46caf0515281a Bitterblue Smith 2024-05-23  2099  					final_candidate = 3;
-af46caf0515281a Bitterblue Smith 2024-05-23  2100  				else
-af46caf0515281a Bitterblue Smith 2024-05-23  2101  					final_candidate = 0xFF;
-af46caf0515281a Bitterblue Smith 2024-05-23  2102  			}
-af46caf0515281a Bitterblue Smith 2024-05-23  2103  		}
-af46caf0515281a Bitterblue Smith 2024-05-23  2104  	}
-af46caf0515281a Bitterblue Smith 2024-05-23  2105  
-af46caf0515281a Bitterblue Smith 2024-05-23  2106  	for (i = 0; i < 4; i++) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2107  		rege94 = result[i][0];
-af46caf0515281a Bitterblue Smith 2024-05-23  2108  		rege9c = result[i][1];
-af46caf0515281a Bitterblue Smith 2024-05-23  2109  		regea4 = result[i][2];
-af46caf0515281a Bitterblue Smith 2024-05-23  2110  		regeac = result[i][3];
-af46caf0515281a Bitterblue Smith 2024-05-23  2111  		regeb4 = result[i][4];
-af46caf0515281a Bitterblue Smith 2024-05-23  2112  		regebc = result[i][5];
-af46caf0515281a Bitterblue Smith 2024-05-23  2113  		regec4 = result[i][6];
-af46caf0515281a Bitterblue Smith 2024-05-23  2114  		regecc = result[i][7];
-af46caf0515281a Bitterblue Smith 2024-05-23  2115  		RTPRINT(rtlpriv, FINIT, INIT_IQK,
-af46caf0515281a Bitterblue Smith 2024-05-23  2116  			"IQK: rege94=%lx rege9c=%lx regea4=%lx regeac=%lx regeb4=%lx regebc=%lx regec4=%lx regecc=%lx\n",
-af46caf0515281a Bitterblue Smith 2024-05-23  2117  			rege94, rege9c, regea4, regeac, regeb4, regebc, regec4,
-af46caf0515281a Bitterblue Smith 2024-05-23  2118  			regecc);
-af46caf0515281a Bitterblue Smith 2024-05-23  2119  	}
-af46caf0515281a Bitterblue Smith 2024-05-23  2120  
-af46caf0515281a Bitterblue Smith 2024-05-23  2121  	if (final_candidate != 0xff) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2122  		rege94 = result[final_candidate][0];
-af46caf0515281a Bitterblue Smith 2024-05-23  2123  		rtlphy->reg_e94 = rege94;
-af46caf0515281a Bitterblue Smith 2024-05-23  2124  		rege9c = result[final_candidate][1];
-af46caf0515281a Bitterblue Smith 2024-05-23  2125  		rtlphy->reg_e9c = rege9c;
-af46caf0515281a Bitterblue Smith 2024-05-23  2126  		regea4 = result[final_candidate][2];
-af46caf0515281a Bitterblue Smith 2024-05-23  2127  		regeac = result[final_candidate][3];
-af46caf0515281a Bitterblue Smith 2024-05-23  2128  		regeb4 = result[final_candidate][4];
-af46caf0515281a Bitterblue Smith 2024-05-23  2129  		rtlphy->reg_eb4 = regeb4;
-af46caf0515281a Bitterblue Smith 2024-05-23  2130  		regebc = result[final_candidate][5];
-af46caf0515281a Bitterblue Smith 2024-05-23  2131  		rtlphy->reg_ebc = regebc;
-af46caf0515281a Bitterblue Smith 2024-05-23  2132  		regec4 = result[final_candidate][6];
-af46caf0515281a Bitterblue Smith 2024-05-23  2133  		regecc = result[final_candidate][7];
-af46caf0515281a Bitterblue Smith 2024-05-23  2134  
-af46caf0515281a Bitterblue Smith 2024-05-23  2135  		RTPRINT(rtlpriv, FINIT, INIT_IQK,
-af46caf0515281a Bitterblue Smith 2024-05-23  2136  			"IQK: final_candidate is %x\n", final_candidate);
-af46caf0515281a Bitterblue Smith 2024-05-23  2137  		RTPRINT(rtlpriv, FINIT, INIT_IQK,
-af46caf0515281a Bitterblue Smith 2024-05-23  2138  			"IQK: rege94=%lx rege9c=%lx regea4=%lx regeac=%lx regeb4=%lx regebc=%lx regec4=%lx regecc=%lx\n",
-af46caf0515281a Bitterblue Smith 2024-05-23  2139  			rege94, rege9c, regea4, regeac, regeb4, regebc, regec4,
-af46caf0515281a Bitterblue Smith 2024-05-23  2140  			regecc);
-af46caf0515281a Bitterblue Smith 2024-05-23  2141  
-af46caf0515281a Bitterblue Smith 2024-05-23  2142  		patha_ok = true;
-af46caf0515281a Bitterblue Smith 2024-05-23  2143  		pathb_ok = true;
-af46caf0515281a Bitterblue Smith 2024-05-23  2144  	} else {
-af46caf0515281a Bitterblue Smith 2024-05-23  2145  		rtlphy->reg_e94 = 0x100;
-af46caf0515281a Bitterblue Smith 2024-05-23  2146  		rtlphy->reg_eb4 = 0x100; /* X default value */
-af46caf0515281a Bitterblue Smith 2024-05-23  2147  		rtlphy->reg_e9c = 0x0;
-af46caf0515281a Bitterblue Smith 2024-05-23  2148  		rtlphy->reg_ebc = 0x0;   /* Y default value */
-af46caf0515281a Bitterblue Smith 2024-05-23  2149  	}
-af46caf0515281a Bitterblue Smith 2024-05-23  2150  	if (rege94 != 0 /*&& regea4 != 0*/)
-af46caf0515281a Bitterblue Smith 2024-05-23  2151  		_rtl92du_phy_patha_fill_iqk_matrix(hw, patha_ok, result,
-af46caf0515281a Bitterblue Smith 2024-05-23  2152  						   final_candidate,
-af46caf0515281a Bitterblue Smith 2024-05-23  2153  						   regea4 == 0);
-af46caf0515281a Bitterblue Smith 2024-05-23  2154  	if (IS_92D_SINGLEPHY(rtlhal->version) &&
-af46caf0515281a Bitterblue Smith 2024-05-23  2155  	    regeb4 != 0 /*&& regec4 != 0*/)
-af46caf0515281a Bitterblue Smith 2024-05-23  2156  		_rtl92du_phy_pathb_fill_iqk_matrix(hw, pathb_ok, result,
-af46caf0515281a Bitterblue Smith 2024-05-23  2157  						   final_candidate,
-af46caf0515281a Bitterblue Smith 2024-05-23  2158  						   regec4 == 0);
-af46caf0515281a Bitterblue Smith 2024-05-23  2159  
-af46caf0515281a Bitterblue Smith 2024-05-23  2160  	if (final_candidate != 0xFF) {
-af46caf0515281a Bitterblue Smith 2024-05-23  2161  		indexforchannel =
-af46caf0515281a Bitterblue Smith 2024-05-23  2162  			rtl92d_get_rightchnlplace_for_iqk(rtlphy->current_channel);
-af46caf0515281a Bitterblue Smith 2024-05-23  2163  
-af46caf0515281a Bitterblue Smith 2024-05-23  2164  		for (i = 0; i < IQK_MATRIX_REG_NUM; i++)
-af46caf0515281a Bitterblue Smith 2024-05-23  2165  			rtlphy->iqk_matrix[indexforchannel].value[0][i] =
-af46caf0515281a Bitterblue Smith 2024-05-23  2166  				result[final_candidate][i];
-af46caf0515281a Bitterblue Smith 2024-05-23  2167  
-af46caf0515281a Bitterblue Smith 2024-05-23  2168  		rtlphy->iqk_matrix[indexforchannel].iqk_done = true;
-af46caf0515281a Bitterblue Smith 2024-05-23  2169  
-af46caf0515281a Bitterblue Smith 2024-05-23  2170  		rtl_dbg(rtlpriv, COMP_SCAN | COMP_MLME, DBG_LOUD,
-af46caf0515281a Bitterblue Smith 2024-05-23  2171  			"IQK OK indexforchannel %d\n", indexforchannel);
-af46caf0515281a Bitterblue Smith 2024-05-23  2172  	}
-af46caf0515281a Bitterblue Smith 2024-05-23  2173  }
-af46caf0515281a Bitterblue Smith 2024-05-23  2174  
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   866  
+1c6fdbd8f2465d Kent Overstreet   2017-03-16  @867  static int bch2_rename2(struct mnt_idmap *idmap,
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   868  			struct inode *src_vdir, struct dentry *src_dentry,
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   869  			struct inode *dst_vdir, struct dentry *dst_dentry,
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   870  			unsigned flags)
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   871  {
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   872  	struct bch_fs *c = src_vdir->i_sb->s_fs_info;
+9638574229e3ae Kent Overstreet   2019-10-02   873  	struct bch_inode_info *src_dir = to_bch_ei(src_vdir);
+9638574229e3ae Kent Overstreet   2019-10-02   874  	struct bch_inode_info *dst_dir = to_bch_ei(dst_vdir);
+9638574229e3ae Kent Overstreet   2019-10-02   875  	struct bch_inode_info *src_inode = to_bch_ei(src_dentry->d_inode);
+9638574229e3ae Kent Overstreet   2019-10-02   876  	struct bch_inode_info *dst_inode = to_bch_ei(dst_dentry->d_inode);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   877  	struct bch_inode_unpacked dst_dir_u, src_dir_u;
+4645855df01eda Sasha Finkelstein 2024-08-18   878  	struct bch_inode_unpacked src_inode_u, dst_inode_u, *whiteout_inode_u;
+6bd68ec266ad71 Kent Overstreet   2023-09-12   879  	struct btree_trans *trans;
+9638574229e3ae Kent Overstreet   2019-10-02   880  	enum bch_rename_mode mode = flags & RENAME_EXCHANGE
+9638574229e3ae Kent Overstreet   2019-10-02   881  		? BCH_RENAME_EXCHANGE
+9638574229e3ae Kent Overstreet   2019-10-02   882  		: dst_dentry->d_inode
+9638574229e3ae Kent Overstreet   2019-10-02   883  		? BCH_RENAME_OVERWRITE : BCH_RENAME;
+4645855df01eda Sasha Finkelstein 2024-08-18   884  	bool whiteout = !!(flags & RENAME_WHITEOUT);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   885  	int ret;
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   886  
+4645855df01eda Sasha Finkelstein 2024-08-18   887  	if (flags & ~(RENAME_NOREPLACE|RENAME_EXCHANGE|RENAME_WHITEOUT))
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   888  		return -EINVAL;
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   889  
+9638574229e3ae Kent Overstreet   2019-10-02   890  	if (mode == BCH_RENAME_OVERWRITE) {
+9638574229e3ae Kent Overstreet   2019-10-02   891  		ret = filemap_write_and_wait_range(src_inode->v.i_mapping,
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   892  						   0, LLONG_MAX);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   893  		if (ret)
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   894  			return ret;
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   895  	}
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   896  
+168f4c5fb37513 Kent Overstreet   2019-06-24   897  	bch2_lock_inodes(INODE_UPDATE_LOCK,
+9638574229e3ae Kent Overstreet   2019-10-02   898  			 src_dir,
+9638574229e3ae Kent Overstreet   2019-10-02   899  			 dst_dir,
+9638574229e3ae Kent Overstreet   2019-10-02   900  			 src_inode,
+9638574229e3ae Kent Overstreet   2019-10-02   901  			 dst_inode);
+9638574229e3ae Kent Overstreet   2019-10-02   902  
+f369de82679f4f Kent Overstreet   2024-07-04   903  	trans = bch2_trans_get(c);
+f369de82679f4f Kent Overstreet   2024-07-04   904  
+112d21fd1a122f Kent Overstreet   2024-06-08   905  	ret   = bch2_subvol_is_ro_trans(trans, src_dir->ei_inum.subvol) ?:
+112d21fd1a122f Kent Overstreet   2024-06-08   906  		bch2_subvol_is_ro_trans(trans, dst_dir->ei_inum.subvol);
+0d72ab35a925d6 Kent Overstreet   2023-12-29   907  	if (ret)
+74ec2f302402c4 Kent Overstreet   2024-10-14   908  		goto err_tx_restart;
+0d72ab35a925d6 Kent Overstreet   2023-12-29   909  
+9638574229e3ae Kent Overstreet   2019-10-02   910  	if (inode_attr_changing(dst_dir, src_inode, Inode_opt_project)) {
+9638574229e3ae Kent Overstreet   2019-10-02   911  		ret = bch2_fs_quota_transfer(c, src_inode,
+9638574229e3ae Kent Overstreet   2019-10-02   912  					     dst_dir->ei_qid,
+96012e143e699d Kent Overstreet   2018-12-17   913  					     1 << QTYP_PRJ,
+96012e143e699d Kent Overstreet   2018-12-17   914  					     KEY_TYPE_QUOTA_PREALLOC);
+96012e143e699d Kent Overstreet   2018-12-17   915  		if (ret)
+96012e143e699d Kent Overstreet   2018-12-17   916  			goto err;
+96012e143e699d Kent Overstreet   2018-12-17   917  	}
+96012e143e699d Kent Overstreet   2018-12-17   918  
+9638574229e3ae Kent Overstreet   2019-10-02   919  	if (mode == BCH_RENAME_EXCHANGE &&
+9638574229e3ae Kent Overstreet   2019-10-02   920  	    inode_attr_changing(src_dir, dst_inode, Inode_opt_project)) {
+9638574229e3ae Kent Overstreet   2019-10-02   921  		ret = bch2_fs_quota_transfer(c, dst_inode,
+9638574229e3ae Kent Overstreet   2019-10-02   922  					     src_dir->ei_qid,
+96012e143e699d Kent Overstreet   2018-12-17   923  					     1 << QTYP_PRJ,
+96012e143e699d Kent Overstreet   2018-12-17   924  					     KEY_TYPE_QUOTA_PREALLOC);
+96012e143e699d Kent Overstreet   2018-12-17   925  		if (ret)
+96012e143e699d Kent Overstreet   2018-12-17   926  			goto err;
+96012e143e699d Kent Overstreet   2018-12-17   927  	}
+4645855df01eda Sasha Finkelstein 2024-08-18   928  retry:
+4645855df01eda Sasha Finkelstein 2024-08-18   929  	bch2_trans_begin(trans);
+96012e143e699d Kent Overstreet   2018-12-17   930  
+4645855df01eda Sasha Finkelstein 2024-08-18   931  	ret = bch2_rename_trans(trans,
+6fed42bb7750e2 Kent Overstreet   2021-03-16   932  				inode_inum(src_dir), &src_dir_u,
+6fed42bb7750e2 Kent Overstreet   2021-03-16   933  				inode_inum(dst_dir), &dst_dir_u,
+9638574229e3ae Kent Overstreet   2019-10-02   934  				&src_inode_u,
+9638574229e3ae Kent Overstreet   2019-10-02   935  				&dst_inode_u,
+9638574229e3ae Kent Overstreet   2019-10-02   936  				&src_dentry->d_name,
+9638574229e3ae Kent Overstreet   2019-10-02   937  				&dst_dentry->d_name,
+4645855df01eda Sasha Finkelstein 2024-08-18   938  				mode);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   939  	if (unlikely(ret))
+4645855df01eda Sasha Finkelstein 2024-08-18   940  		goto err_tx_restart;
+4645855df01eda Sasha Finkelstein 2024-08-18   941  
+4645855df01eda Sasha Finkelstein 2024-08-18   942  	if (whiteout) {
+4645855df01eda Sasha Finkelstein 2024-08-18   943  		whiteout_inode_u = bch2_trans_kmalloc_nomemzero(trans, sizeof(*whiteout_inode_u));
+4645855df01eda Sasha Finkelstein 2024-08-18   944  		ret = PTR_ERR_OR_ZERO(whiteout_inode_u);
+4645855df01eda Sasha Finkelstein 2024-08-18   945  		if (unlikely(ret))
+4645855df01eda Sasha Finkelstein 2024-08-18   946  			goto err_tx_restart;
+4645855df01eda Sasha Finkelstein 2024-08-18   947  		bch2_inode_init_early(c, whiteout_inode_u);
+4645855df01eda Sasha Finkelstein 2024-08-18   948  
+4645855df01eda Sasha Finkelstein 2024-08-18   949  		ret = bch2_create_trans(trans,
+4645855df01eda Sasha Finkelstein 2024-08-18   950  					inode_inum(src_dir), &src_dir_u,
+4645855df01eda Sasha Finkelstein 2024-08-18   951  					whiteout_inode_u,
+4645855df01eda Sasha Finkelstein 2024-08-18   952  					&src_dentry->d_name,
+4645855df01eda Sasha Finkelstein 2024-08-18   953  					from_kuid(i_user_ns(&src_dir->v), current_fsuid()),
+4645855df01eda Sasha Finkelstein 2024-08-18   954  					from_kgid(i_user_ns(&src_dir->v), current_fsgid()),
+4645855df01eda Sasha Finkelstein 2024-08-18   955  					S_IFCHR|WHITEOUT_MODE, 0,
+4645855df01eda Sasha Finkelstein 2024-08-18   956  					NULL, NULL, (subvol_inum) { 0 }, 0) ?:
+4645855df01eda Sasha Finkelstein 2024-08-18   957  		      bch2_quota_acct(c, bch_qid(whiteout_inode_u), Q_INO, 1,
+4645855df01eda Sasha Finkelstein 2024-08-18   958  				      KEY_TYPE_QUOTA_PREALLOC);
+4645855df01eda Sasha Finkelstein 2024-08-18   959  		if (unlikely(ret))
+4645855df01eda Sasha Finkelstein 2024-08-18   960  			goto err_tx_restart;
+4645855df01eda Sasha Finkelstein 2024-08-18   961  	}
+4645855df01eda Sasha Finkelstein 2024-08-18   962  
+4645855df01eda Sasha Finkelstein 2024-08-18   963  	ret = bch2_trans_commit(trans, NULL, NULL, 0);
+4645855df01eda Sasha Finkelstein 2024-08-18   964  	if (unlikely(ret)) {
+4645855df01eda Sasha Finkelstein 2024-08-18   965  err_tx_restart:
+4645855df01eda Sasha Finkelstein 2024-08-18   966  		if (bch2_err_matches(ret, BCH_ERR_transaction_restart))
+4645855df01eda Sasha Finkelstein 2024-08-18   967  			goto retry;
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   968  		goto err;
+4645855df01eda Sasha Finkelstein 2024-08-18   969  	}
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   970  
+9638574229e3ae Kent Overstreet   2019-10-02   971  	BUG_ON(src_inode->v.i_ino != src_inode_u.bi_inum);
+9638574229e3ae Kent Overstreet   2019-10-02   972  	BUG_ON(dst_inode &&
+9638574229e3ae Kent Overstreet   2019-10-02   973  	       dst_inode->v.i_ino != dst_inode_u.bi_inum);
+9638574229e3ae Kent Overstreet   2019-10-02   974  
+6bd68ec266ad71 Kent Overstreet   2023-09-12   975  	bch2_inode_update_after_write(trans, src_dir, &src_dir_u,
+e614a6c52d32c9 Hongbo Li         2025-01-07   976  				      ATTR_MTIME|ATTR_CTIME|ATTR_SIZE);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   977  
+68a2054d88f7cd Kent Overstreet   2021-11-05   978  	if (src_dir != dst_dir)
+6bd68ec266ad71 Kent Overstreet   2023-09-12   979  		bch2_inode_update_after_write(trans, dst_dir, &dst_dir_u,
+e614a6c52d32c9 Hongbo Li         2025-01-07   980  					      ATTR_MTIME|ATTR_CTIME|ATTR_SIZE);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   981  
+6bd68ec266ad71 Kent Overstreet   2023-09-12   982  	bch2_inode_update_after_write(trans, src_inode, &src_inode_u,
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   983  				      ATTR_CTIME);
+9638574229e3ae Kent Overstreet   2019-10-02   984  
+68a2054d88f7cd Kent Overstreet   2021-11-05   985  	if (dst_inode)
+6bd68ec266ad71 Kent Overstreet   2023-09-12   986  		bch2_inode_update_after_write(trans, dst_inode, &dst_inode_u,
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   987  					      ATTR_CTIME);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16   988  err:
+6bd68ec266ad71 Kent Overstreet   2023-09-12   989  	bch2_trans_put(trans);
+96012e143e699d Kent Overstreet   2018-12-17   990  
+9638574229e3ae Kent Overstreet   2019-10-02   991  	bch2_fs_quota_transfer(c, src_inode,
+9638574229e3ae Kent Overstreet   2019-10-02   992  			       bch_qid(&src_inode->ei_inode),
+96012e143e699d Kent Overstreet   2018-12-17   993  			       1 << QTYP_PRJ,
+96012e143e699d Kent Overstreet   2018-12-17   994  			       KEY_TYPE_QUOTA_NOCHECK);
+9638574229e3ae Kent Overstreet   2019-10-02   995  	if (dst_inode)
+9638574229e3ae Kent Overstreet   2019-10-02   996  		bch2_fs_quota_transfer(c, dst_inode,
+9638574229e3ae Kent Overstreet   2019-10-02   997  				       bch_qid(&dst_inode->ei_inode),
+96012e143e699d Kent Overstreet   2018-12-17   998  				       1 << QTYP_PRJ,
+96012e143e699d Kent Overstreet   2018-12-17   999  				       KEY_TYPE_QUOTA_NOCHECK);
+96012e143e699d Kent Overstreet   2018-12-17  1000  
+168f4c5fb37513 Kent Overstreet   2019-06-24  1001  	bch2_unlock_inodes(INODE_UPDATE_LOCK,
+9638574229e3ae Kent Overstreet   2019-10-02  1002  			   src_dir,
+9638574229e3ae Kent Overstreet   2019-10-02  1003  			   dst_dir,
+9638574229e3ae Kent Overstreet   2019-10-02  1004  			   src_inode,
+9638574229e3ae Kent Overstreet   2019-10-02  1005  			   dst_inode);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16  1006  
+1a1c93e7f81417 Kent Overstreet   2024-02-09  1007  	return bch2_err_class(ret);
+1c6fdbd8f2465d Kent Overstreet   2017-03-16  1008  }
+1c6fdbd8f2465d Kent Overstreet   2017-03-16  1009  
 
-:::::: The code at line 2039 was first introduced by commit
-:::::: af46caf0515281a30e119b53afb3083fcc5110a9 wifi: rtlwifi: Add rtl8192du/phy.{c,h}
+:::::: The code at line 867 was first introduced by commit
+:::::: 1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a bcachefs: Initial commit
 
-:::::: TO: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-:::::: CC: Ping-Ke Shih <pkshih@realtek.com>
+:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
 0-DAY CI Kernel Test Service
