@@ -1,159 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFF913D24D;
-	Mon, 23 Jun 2025 14:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB6A298CDA
+	for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 15:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750688312; cv=none; b=KY5ZfvWqLwxHce5HYKiU2W0fKk1sMKS2XdLDWNwfAbvqrrtEiyTcogSMrJuvNj4j3Yy9fMkpuhM8T431i9LMldfgyAtGB2bj3trKa4tYgm1uE1IXmLu8DPGFWcoxU3N9ruhY2uyi7UICC3fDJcWPEokgTgOp1HxVMmXzFOhYGyQ=
+	t=1750691755; cv=none; b=uavSdT403x3X3+ZUhmCeg7ZHfubHQermYpRjZf0H4cQPaq7HeSoxJ+3SAHN6BzPN9j6AxO/s/0j6dk/ENJ7G/6M1Z3aAFypSF22rrwXo8PptkTMjDrBgSSMMYx4BE/Dcs2zp4ZTM+WAdivOr7rscH/QNADMnbbHi7wy2p/l3T94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750688312; c=relaxed/simple;
-	bh=iGpVZjmUMX0RfaMUsfu3n4YNfr73p2VaBaGKXJgmVWI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VyicHnViNd5+eoTTRmpX2mDcq/3fi+4+LUNLY3HaBhej6pieNrAWd91C7aV60mRHK+vWD9WrHSoXI+GfZP9cEtSCOXD690wehmAyaVKkv9Ls96qzXQ2EtABAvYS4+VeXKinMDl3RgvgKE/ZK6FvVzj6Lm5UiO3k9wPCXux4P8zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BP+uuzVd; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750691755; c=relaxed/simple;
+	bh=bqmkafwxydyORUt50Ur58Kwuhlign7ZQjhD916NZCSY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dc/cLycpZRoI6cXNP8sHzNXWk8ylOXPsdJ+BDfNtQcHpaKl4WVaYKVmSdxNRmXb0AYW/x6ew/1xZtQe0VsAsVaFl8Ad6ntE4XCj/2YnPvEgmMnTzrhtobToLJ9UzDyp8UuXiQbDoV9trsU4R2JHU0WHEQUr0Fw+ju/mx6EQU32I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dIWxsgIP; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BP+uuzVd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750688311; x=1782224311;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iGpVZjmUMX0RfaMUsfu3n4YNfr73p2VaBaGKXJgmVWI=;
-  b=BP+uuzVdC7hZ00A9KmCDuq44WlA/jd2fqkVIDg7W5p92rZXRbUa9CTzW
-   v80LrbtzsVqgTMDjlYG/4PDeEW6PUwB7LvA+oZzBfdUa+4AAwrMlBxuES
-   b9ly1P1kEYIvNF7i+jIVKP3MxE8pdzx2aS0pd703yNwT1xT4iUIri+IbW
-   EH65egDSZj1gdfVG9JS/Qey7hpNAv93NxynyrFnKpS5zgr/WOMkQucQ1w
-   jXWszk1gr/uyFqHsTAVL/fqFc3zh+A/MCXpQdDRiFtAclk/ygqGcvSWzT
-   wlKCN6ScF/fwTXEi0JZFwVcrXs0ODrxLr7Tv9RSE+D7N6Jz16wkzxiR2P
-   A==;
-X-CSE-ConnectionGUID: pqlYX307RqepQg9eI7depw==
-X-CSE-MsgGUID: GEatPt9vTBewwGenZBFTUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="75430597"
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="75430597"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 07:18:30 -0700
-X-CSE-ConnectionGUID: MEJxLyWcTdefusaIHYJYDw==
-X-CSE-MsgGUID: u/EE1Aa/S42Bd1d2lddT5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="152132332"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 23 Jun 2025 07:18:29 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uTi0A-000Ozm-0E;
-	Mon, 23 Jun 2025 14:18:26 +0000
-Date: Mon, 23 Jun 2025 22:17:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Nicolin Chen <nicolinc@nvidia.com>
-Subject: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:2048:12: warning: stack
- frame size (1184) exceeds limit (1024) in 'arm_smmu_atc_inv_master'
-Message-ID: <202506232202.d7l6AowE-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dIWxsgIP"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e81877c1ed6so3434805276.0
+        for <llvm@lists.linux.dev>; Mon, 23 Jun 2025 08:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1750691751; x=1751296551; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/cEM3zQRxkyeF8QlajSb8sKwoIOz06mgwPF6H5WCdJ0=;
+        b=dIWxsgIPHv6CCv0r1DmuwM5oWCDN1J7gHGHsLpeiQnt0+/AojLIC+kTXRh9bXZtyfY
+         9qITx7xKmFWbHyzpuxcSufGcZwIbncRsy4Yk74WXMGe7uTmsEkKBkoXcADw0FSaxWM3b
+         Zo/7yEENP8nLKSVC6GUJsItdb2DrpMHTth3o7tmNXN7aE92TA+bB32grdBdZJdikAaFD
+         3Iz7jTvBjxR2+ss7saxJ700/CNiNqZba44OOSHOjKFGtVQZqJLGlMjCOnFtSSa9TDYhf
+         evb0GjNY2Xmx8qDV2v7l2buPz5fhpkZhmoy2nZI6ZqkpVGr6fjnQm6y0wh2wUgKnvkya
+         3lmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750691751; x=1751296551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/cEM3zQRxkyeF8QlajSb8sKwoIOz06mgwPF6H5WCdJ0=;
+        b=AAD9unMfLIzXWADpbVRCT1RidW+Onx4+8lwHR4Wp2gtmf3qd5wTQkdA2htWoW/lGZx
+         3hjRDcnvNl0m5N7hpcwzSdygSmqpHo2xzwwFAYmgAMAkhOEmq7YRblqm0+/ZU8MQoGbm
+         i2TsptW99L8GQf0OJQZCBAyzwkrQX5NX8bMgzNYSIB1RKmYW3YY7mBn5XNORDSiCxMW5
+         Xfg5k9bcIe4dyEoYK7PoyiVwJMxd+rvw6G+PD1r44nmvxjbHDjmdi53LZMLc7gjXgxlT
+         TppnyIEpQ1YunWXJgicDUYtqb1Ur/4+/2M01lNS9dO04pAK2THd9cY3o5X4RbwpN+BU7
+         TdOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXbInnSX0KQ+qRtKso6/NukxfK7xZ2mwFoj+BxgtvQFgeERJ/dHG7aoocCs13Aiz8dWR+Qa@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWv97N36AVGu7xjV0gSR2eWbxLbs416OvZZLmIf2ukGJVS4T2q
+	/N9ak+vgz70S5oLn3upN0ThzQdrwg8gf17Rgss16m5gKH2uX/ugCE3CCAubHHVlqfrrXPuwFKCw
+	vaVOI08qsdvGi5fNujGm8tA+YjnogQ1gE2qG+ptR+
+X-Gm-Gg: ASbGnct/Fp/RomRymAhSAXdKKYIudGq071K0jUz/PPn/x6a64gkVgwe0ZwbZKHZfHik
+	foHvR1G4dMd96Nj0T4HMqiHnJNV7aGT9lz9+6fzio8OvTNVDQ0xG7BDD7mAU+zI1HxoJQ+xejTy
+	O8nAc3uyDA0EohflrAehqdifwt0Z8iJ90QoqVRTc6RKvo=
+X-Google-Smtp-Source: AGHT+IFZQzn3+JMIyejKC2+W29AQd1WwouaHlQDxuqJsYDQVdOYz9u2SoStqSDrpqsqEky4EPBlD56TODEPQ9GFR58M=
+X-Received: by 2002:a05:690c:9683:b0:6f9:4c00:53ae with SMTP id
+ 00721157ae682-712ca356122mr174541157b3.8.1750691751048; Mon, 23 Jun 2025
+ 08:15:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
+ <20250622-toicsti-bug-v1-2-f374373b04b2@gmail.com> <CAEjxPJ6v12nLFx-x4-=esuPMp7L8UBvTzoj1kkTPcD2mDKKW8w@mail.gmail.com>
+In-Reply-To: <CAEjxPJ6v12nLFx-x4-=esuPMp7L8UBvTzoj1kkTPcD2mDKKW8w@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 23 Jun 2025 11:15:39 -0400
+X-Gm-Features: Ac12FXw75VZJClzZmRv1umOqFnfnvmDMNU_jKRuRdLW4QXd6DpSXCOL2kXN21Os
+Message-ID: <CAHC9VhS8gPQwgesV_0VbUuqxGrADm5uDofM3m=wZuAEgkWi5Hw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selinux: add capability checks for TIOCSTI ioctl
+To: Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc: xandfury@gmail.com, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	selinux@vger.kernel.org, kees@kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   86731a2a651e58953fc949573895f2fa6d456841
-commit: 6de80d619203c672e5c011e8715bd965d27b69cf iommu/arm-smmu-v3: Add struct arm_smmu_impl_ops
-date:   10 months ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250623/202506232202.d7l6AowE-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506232202.d7l6AowE-lkp@intel.com/reproduce)
+On Mon, Jun 23, 2025 at 8:39=E2=80=AFAM Stephen Smalley
+<stephen.smalley.work@gmail.com> wrote:
+> On Sun, Jun 22, 2025 at 9:41=E2=80=AFPM Abhinav Saxena via B4 Relay
+> <devnull+xandfury.gmail.com@kernel.org> wrote:
+> >
+> > From: Abhinav Saxena <xandfury@gmail.com>
+> >
+> > The TIOCSTI ioctl currently only checks the current process's
+> > credentials, creating a TOCTOU vulnerability where an unprivileged
+> > process can open a TTY fd and pass it to a privileged process via
+> > SCM_RIGHTS.
+> >
+> > Fix by requiring BOTH the file opener (file->f_cred) AND the current
+> > process to have CAP_SYS_ADMIN. This prevents privilege escalation
+> > while ensuring legitimate use cases continue to work.
+> >
+> > Link: https://github.com/KSPP/linux/issues/156
+> >
+> > Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> > ---
+> >  security/selinux/hooks.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 595ceb314aeb..a628551873ab 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -3847,6 +3847,12 @@ static int selinux_file_ioctl(struct file *file,=
+ unsigned int cmd,
+> >                                             CAP_OPT_NONE, true);
+> >                 break;
+> >
+> > +       case TIOCSTI:
+> > +               if (!file_ns_capable(file, &init_user_ns, CAP_SYS_ADMIN=
+) ||
+> > +                   !capable(CAP_SYS_ADMIN))
+> > +                       error =3D -EPERM;
+> > +               break;
+> > +
+>
+> So, aside from what I said previously, this also will break any
+> existing policies currently controlling TIOCSTI
+> via the selinux ioctl checking in the default case, so at the very
+> least, this would need to be gated by a new
+> SELinux policy capability for compatibility purposes. But I'm still
+> unconvinced that this is the right approach.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506232202.d7l6AowE-lkp@intel.com/
+I want to add my voice to the other comments that adding these
+capability checks to the SELinux code and not the main TIOCSTI kernel
+code is not an approach we want to support.  Beyond that, as others
+have already pointed out, I think some additional inspection and
+testing is needed to ensure that the additional capability checks do
+not break existing, valid use cases.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:12:
-   In file included from include/linux/acpi.h:39:
-   In file included from include/acpi/acpi_io.h:7:
-   In file included from arch/arm64/include/asm/acpi.h:14:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:2066:5: warning: stack frame size (1232) exceeds limit (1024) in 'arm_smmu_atc_inv_domain' [-Wframe-larger-than]
-    2066 | int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain,
-         |     ^
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:2141:13: warning: stack frame size (1216) exceeds limit (1024) in '__arm_smmu_tlb_inv_range' [-Wframe-larger-than]
-    2141 | static void __arm_smmu_tlb_inv_range(struct arm_smmu_cmdq_ent *cmd,
-         |             ^
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1259:28: warning: stack frame size (1232) exceeds limit (1024) in 'arm_smmu_alloc_cd_ptr' [-Wframe-larger-than]
-    1259 | static struct arm_smmu_cd *arm_smmu_alloc_cd_ptr(struct arm_smmu_master *master,
-         |                            ^
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1320:13: warning: stack frame size (1184) exceeds limit (1024) in 'arm_smmu_cd_writer_sync_entry' [-Wframe-larger-than]
-    1320 | static void arm_smmu_cd_writer_sync_entry(struct arm_smmu_entry_writer *writer)
-         |             ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:2048:12: warning: stack frame size (1184) exceeds limit (1024) in 'arm_smmu_atc_inv_master' [-Wframe-larger-than]
-    2048 | static int arm_smmu_atc_inv_master(struct arm_smmu_master *master,
-         |            ^
-   10 warnings generated.
-
-
-vim +/arm_smmu_atc_inv_master +2048 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2047  
-1d5f34f0002f9f drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Jason Gunthorpe       2024-06-25 @2048  static int arm_smmu_atc_inv_master(struct arm_smmu_master *master,
-1d5f34f0002f9f drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Jason Gunthorpe       2024-06-25  2049  				   ioasid_t ssid)
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2050  {
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2051  	int i;
-9e773aee8c3e1b drivers/iommu/arm-smmu-v3.c                 Rob Herring           2020-02-24  2052  	struct arm_smmu_cmdq_ent cmd;
-93f9f7958f12a1 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Zhen Lei              2021-08-17  2053  	struct arm_smmu_cmdq_batch cmds;
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2054  
-1d5f34f0002f9f drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Jason Gunthorpe       2024-06-25  2055  	arm_smmu_atc_inv_to_cmd(ssid, 0, 0, &cmd);
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2056  
-56ae8866f3b408 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Nicolin Chen          2024-08-29  2057  	arm_smmu_cmdq_batch_init(master->smmu, &cmds);
-cdf315f907d46a drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Jean-Philippe Brucker 2021-04-01  2058  	for (i = 0; i < master->num_streams; i++) {
-cdf315f907d46a drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Jean-Philippe Brucker 2021-04-01  2059  		cmd.atc.sid = master->streams[i].id;
-eff19474b1bd60 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Zhen Lei              2021-08-11  2060  		arm_smmu_cmdq_batch_add(master->smmu, &cmds, &cmd);
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2061  	}
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2062  
-eff19474b1bd60 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c Zhen Lei              2021-08-11  2063  	return arm_smmu_cmdq_batch_submit(master->smmu, &cmds);
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2064  }
-9ce27afc0830fc drivers/iommu/arm-smmu-v3.c                 Jean-Philippe Brucker 2019-04-17  2065  
-
-:::::: The code at line 2048 was first introduced by commit
-:::::: 1d5f34f0002f9f56d0ca153022cfdead07d45dc6 iommu/arm-smmu-v3: Thread SSID through the arm_smmu_attach_*() interface
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Will Deacon <will@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+paul-moore.com
