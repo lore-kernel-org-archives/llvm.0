@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF34F205AB8;
-	Mon, 23 Jun 2025 09:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A4D30E84D;
+	Mon, 23 Jun 2025 09:39:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750670912; cv=none; b=SfVA3vFjS2ptfHNGdV4QxL8qqHVPN5lqg3wFO2yu5dYXqp25UVixiSvd7ldEMOpQt5AZbs/cDHfarZHTNHYkqT1eZNNv4yYm3FjQ0+3CHPZnR/jMMOdweIEBltNfAWXIDOVj6EXu9Om3v4jw04ko89VtzswUK1Vg9W3IYWoitR0=
+	t=1750671572; cv=none; b=iDPpmqq5veK5yMOhtYfQKtSFz/bBurRXQiynfFswzQAAhToC9dkAEda1HMg3XIOVXDXtDc5eSfZThsh10WE9XQdZx64sEV6r9mJMQ0eSsloH9w37YvuGKfvlZ9obCa1E1EtR/Ji+PzDIY6/I7QPPbFWhGjAXK+b++CaYeehDOQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750670912; c=relaxed/simple;
-	bh=K6sxdbPsaBzoFez5ISOCdOemAgkkBYrEapOkzYmhgxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HPgsMge3/W1bTS1PphHCfW9b8AppxT/0eiRije3HeA+C12Fk6MWQ2Xk2P8/60CkZQJIsJcC86OaW6+6n/+h7C5x5Hc0Lv9kWpWSeXHK3vU7F0ym+9NJyTE/pmLEy383KqxjoB3t5PtKvbZCUEwPbPeetm66l3RsEaAVg1LLyRxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+dQDshx; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1750671572; c=relaxed/simple;
+	bh=V2cAW49MftLzTkIZYHxcO07wrG9WkakFtAyaDk38xiA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NovmWy+i7ae66mpNO5fjDLIsQ715gbxpms4mHx1rbG2QPNy8JnPM+y+3m4o26vdE/UN83InoUl3HOvlwvMTwB3x8zof0GyoDW2HED7DFmaT7xAmrggSuPpx4P7BTJViSJcZG/Nwkg5C787cTWDoxIUyxLFRfC0u6z+nJ8cUnBo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b2eBSVSy; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+dQDshx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b2eBSVSy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750670910; x=1782206910;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K6sxdbPsaBzoFez5ISOCdOemAgkkBYrEapOkzYmhgxI=;
-  b=C+dQDshxLJKvcTGkQd8QN6mSAPYLRZMNR0VdQdH3e2VRF5Ha8MrCqX5K
-   QMVe5SjAqcSNgzAdJH/we/mUjs9uYE1nixDRgI3ZLVfFrjPNE4HrJZGh4
-   z4PSFVgcJOy/DE6ULbMnCdzddo0WAlTzdhpOwhzroM4QblUBHZ14815VB
-   wxvPjfNIyugbpeSGfnLVDUDKAb41UNAavWJkUnm2EWeguVjBYas7wS/L3
-   gnGbBzbwKHeaZIdrSvIbGF/gxCuE2skQoO7z+M/Z4BSnWg6EMBwHMzS8G
-   HEaZ568jBuCBB8o3G25hm/7KYYTl/u/kwdehEJ9Y0YqwCUj5brovmzwhB
-   Q==;
-X-CSE-ConnectionGUID: d/Eb6IaJTlqwXUHeYwddOw==
-X-CSE-MsgGUID: He/voPO/QdCwzfGMJMV3kg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="52800669"
+  t=1750671572; x=1782207572;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V2cAW49MftLzTkIZYHxcO07wrG9WkakFtAyaDk38xiA=;
+  b=b2eBSVSyB6ekmjlcrhak8FbUYUPS8ZiqDSMbsGBl22WY/AJon5SbkWwp
+   s1rYVY83bdf+LWd74wQIUmd2j5t42/vqpStB4TmgyXi4gW490yJyuE0N8
+   41EeEumboYGYcw9rFtyA8h1PIKi21LsBqhdzkiZGaSv7oygALpzolqitm
+   Kk4XlfO64FmJk3JL3Qv6eAJk4mMuYk1kW+cIC33HVqOxGRG7R9GXpGhVE
+   NsBqO7Z6GD3Jfgg+/HYDnZUSNTDewrOPQTLfo89IqbZpY4iCHLBHWi5/Q
+   EZiqcZBjzPysH2aDPIRnk8yofNQcRzjencp6ZgzQuLUp0yO8MkL96+gb1
+   g==;
+X-CSE-ConnectionGUID: crAyldiDRbeNlYeJI7GwQg==
+X-CSE-MsgGUID: 3Lf0iCrXTvyvvZqYNvlvFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="53003444"
 X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="52800669"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 02:28:29 -0700
-X-CSE-ConnectionGUID: UEJTWx8LQ32N8WnP5WWtdg==
-X-CSE-MsgGUID: hHpqbDnuR5WMUIvaVf9lCQ==
+   d="scan'208";a="53003444"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 02:39:31 -0700
+X-CSE-ConnectionGUID: Y0QgG7E2QsOPOdjWVqa0sg==
+X-CSE-MsgGUID: 8rA53tU7RmO7/+m8AfUY8g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="155556678"
+   d="scan'208";a="152223611"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 23 Jun 2025 02:28:28 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 23 Jun 2025 02:39:29 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uTdTW-000Nu2-06;
-	Mon, 23 Jun 2025 09:28:26 +0000
-Date: Mon, 23 Jun 2025 17:27:52 +0800
+	id 1uTdeB-000NuY-05;
+	Mon, 23 Jun 2025 09:39:27 +0000
+Date: Mon, 23 Jun 2025 17:38:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cristian Marussi <cristian.marussi@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 5/7] firmware: arm_scmi: Add System Telemetry
- chardev/ioctls API
-Message-ID: <202506231727.3ZUlxZQr-lkp@intel.com>
-References: <20250620192813.2463367-6-cristian.marussi@arm.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-nonmm-unstable 65/66] lib/raid6/recov_rvv.c:168:24:
+ error: use of undeclared identifier 'raid6_empty_zero_page'
+Message-ID: <202506231711.lx2jqP0r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,72 +63,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250620192813.2463367-6-cristian.marussi@arm.com>
 
-Hi Cristian,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on trace/for-next linus/master v6.16-rc3 next-20250623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Marussi/firmware-arm_scmi-Define-a-common-SCMI_MAX_PROTOCOLS-value/20250621-033227
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20250620192813.2463367-6-cristian.marussi%40arm.com
-patch subject: [RFC PATCH 5/7] firmware: arm_scmi: Add System Telemetry chardev/ioctls API
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250623/202506231727.3ZUlxZQr-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506231727.3ZUlxZQr-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   4a817909eb2f8319250eb504f24337a45e43d351
+commit: b443ec8e9b9ccfc3929e2b660f82c46b5f656c33 [65/66] lib/raid6: replace custom zero page with ZERO_PAGE
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250623/202506231711.lx2jqP0r-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506231711.lx2jqP0r-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506231727.3ZUlxZQr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506231711.lx2jqP0r-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/firmware/arm_scmi/scmi_system_telemetry.c:921:44: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-     921 | static __poll_t scmi_tlm_poll(struct file *, struct poll_table_struct *)
-         |                                            ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:921:72: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-     921 | static __poll_t scmi_tlm_poll(struct file *, struct poll_table_struct *)
-         |                                                                        ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:1180:48: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1180 | static long scmi_tlm_compat_ioctl(struct file *, unsigned int, unsigned long)
-         |                                                ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:1180:62: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1180 | static long scmi_tlm_compat_ioctl(struct file *, unsigned int, unsigned long)
-         |                                                              ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:1180:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1180 | static long scmi_tlm_compat_ioctl(struct file *, unsigned int, unsigned long)
-         |                                                                             ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:1185:39: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1185 | static int scmi_tlm_mmap(struct file *, struct vm_area_struct *)
-         |                                       ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:1185:64: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1185 | static int scmi_tlm_mmap(struct file *, struct vm_area_struct *)
-         |                                                                ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:361:16: warning: stack frame size (1064) exceeds limit (1024) in 'available_update_intervals_ms_show' [-Wframe-larger-than]
-     361 | static ssize_t available_update_intervals_ms_show(struct device *dev,
-         |                ^
-   drivers/firmware/arm_scmi/scmi_system_telemetry.c:681:16: warning: stack frame size (1064) exceeds limit (1024) in 'grp_available_intervals_show' [-Wframe-larger-than]
-     681 | static ssize_t grp_available_intervals_show(struct device *dev,
-         |                ^
-   9 warnings generated.
+>> lib/raid6/recov_rvv.c:168:24: error: use of undeclared identifier 'raid6_empty_zero_page'
+     168 |         ptrs[faila] = (void *)raid6_empty_zero_page;
+         |                               ^~~~~~~~~~~~~~~~~~~~~
+   lib/raid6/recov_rvv.c:171:24: error: use of undeclared identifier 'raid6_empty_zero_page'
+     171 |         ptrs[failb] = (void *)raid6_empty_zero_page;
+         |                               ^~~~~~~~~~~~~~~~~~~~~
+   lib/raid6/recov_rvv.c:206:24: error: use of undeclared identifier 'raid6_empty_zero_page'
+     206 |         ptrs[faila] = (void *)raid6_empty_zero_page;
+         |                               ^~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +921 drivers/firmware/arm_scmi/scmi_system_telemetry.c
+vim +/raid6_empty_zero_page +168 lib/raid6/recov_rvv.c
 
-   920	
- > 921	static __poll_t scmi_tlm_poll(struct file *, struct poll_table_struct *)
-   922	{
-   923		return 0;
-   924	}
-   925	
+6093faaf9593fc Chunyan Zhang 2025-03-05  151  
+6093faaf9593fc Chunyan Zhang 2025-03-05  152  static void raid6_2data_recov_rvv(int disks, size_t bytes, int faila,
+6093faaf9593fc Chunyan Zhang 2025-03-05  153  				  int failb, void **ptrs)
+6093faaf9593fc Chunyan Zhang 2025-03-05  154  {
+6093faaf9593fc Chunyan Zhang 2025-03-05  155  	u8 *p, *q, *dp, *dq;
+6093faaf9593fc Chunyan Zhang 2025-03-05  156  	const u8 *pbmul;	/* P multiplier table for B data */
+6093faaf9593fc Chunyan Zhang 2025-03-05  157  	const u8 *qmul;		/* Q multiplier table (for both) */
+6093faaf9593fc Chunyan Zhang 2025-03-05  158  
+6093faaf9593fc Chunyan Zhang 2025-03-05  159  	p = (u8 *)ptrs[disks - 2];
+6093faaf9593fc Chunyan Zhang 2025-03-05  160  	q = (u8 *)ptrs[disks - 1];
+6093faaf9593fc Chunyan Zhang 2025-03-05  161  
+6093faaf9593fc Chunyan Zhang 2025-03-05  162  	/*
+6093faaf9593fc Chunyan Zhang 2025-03-05  163  	 * Compute syndrome with zero for the missing data pages
+6093faaf9593fc Chunyan Zhang 2025-03-05  164  	 * Use the dead data pages as temporary storage for
+6093faaf9593fc Chunyan Zhang 2025-03-05  165  	 * delta p and delta q
+6093faaf9593fc Chunyan Zhang 2025-03-05  166  	 */
+6093faaf9593fc Chunyan Zhang 2025-03-05  167  	dp = (u8 *)ptrs[faila];
+6093faaf9593fc Chunyan Zhang 2025-03-05 @168  	ptrs[faila] = (void *)raid6_empty_zero_page;
+6093faaf9593fc Chunyan Zhang 2025-03-05  169  	ptrs[disks - 2] = dp;
+6093faaf9593fc Chunyan Zhang 2025-03-05  170  	dq = (u8 *)ptrs[failb];
+6093faaf9593fc Chunyan Zhang 2025-03-05  171  	ptrs[failb] = (void *)raid6_empty_zero_page;
+6093faaf9593fc Chunyan Zhang 2025-03-05  172  	ptrs[disks - 1] = dq;
+6093faaf9593fc Chunyan Zhang 2025-03-05  173  
+6093faaf9593fc Chunyan Zhang 2025-03-05  174  	raid6_call.gen_syndrome(disks, bytes, ptrs);
+6093faaf9593fc Chunyan Zhang 2025-03-05  175  
+6093faaf9593fc Chunyan Zhang 2025-03-05  176  	/* Restore pointer table */
+6093faaf9593fc Chunyan Zhang 2025-03-05  177  	ptrs[faila]     = dp;
+6093faaf9593fc Chunyan Zhang 2025-03-05  178  	ptrs[failb]     = dq;
+6093faaf9593fc Chunyan Zhang 2025-03-05  179  	ptrs[disks - 2] = p;
+6093faaf9593fc Chunyan Zhang 2025-03-05  180  	ptrs[disks - 1] = q;
+6093faaf9593fc Chunyan Zhang 2025-03-05  181  
+6093faaf9593fc Chunyan Zhang 2025-03-05  182  	/* Now, pick the proper data tables */
+6093faaf9593fc Chunyan Zhang 2025-03-05  183  	pbmul = raid6_vgfmul[raid6_gfexi[failb - faila]];
+6093faaf9593fc Chunyan Zhang 2025-03-05  184  	qmul  = raid6_vgfmul[raid6_gfinv[raid6_gfexp[faila] ^
+6093faaf9593fc Chunyan Zhang 2025-03-05  185  					 raid6_gfexp[failb]]];
+6093faaf9593fc Chunyan Zhang 2025-03-05  186  
+6093faaf9593fc Chunyan Zhang 2025-03-05  187  	kernel_vector_begin();
+6093faaf9593fc Chunyan Zhang 2025-03-05  188  	__raid6_2data_recov_rvv(bytes, p, q, dp, dq, pbmul, qmul);
+6093faaf9593fc Chunyan Zhang 2025-03-05  189  	kernel_vector_end();
+6093faaf9593fc Chunyan Zhang 2025-03-05  190  }
+6093faaf9593fc Chunyan Zhang 2025-03-05  191  
+
+:::::: The code at line 168 was first introduced by commit
+:::::: 6093faaf9593fca92f96f165c95ff4b53353b1f4 raid6: Add RISC-V SIMD syndrome and recovery calculations
+
+:::::: TO: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
 
 -- 
 0-DAY CI Kernel Test Service
