@@ -1,172 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD3528851A;
-	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D776DCE1;
+	Tue, 24 Jun 2025 12:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750768286; cv=none; b=CF91aJM9eoAtj7S5DwK8poP9aWiO2G0Jm2Eo1n2OGwAZKgtCaggTejQ5IVRhQRQVrC0CI/bRs/uPlwM45xhdre195LNxAyHYJ1r4zuZcSpPrT8H++5Xg6B0eaNVpt2yFUbz9JJwwM3XLSgtEuo215tDsMwKoYHqKSpRzYGhR990=
+	t=1750769181; cv=none; b=mdI+7Py7apG/112dyoxzrinWL9MMhHM2MOKuQWCx1ah/Ui4RNqyIsrznEDrRjERBmV55fFhXCtQBeMfD0wYD03YCj1OSuSgkhwj6d7C13DenDxLEAXAzLXvhpJhSzTBdsGItKYFRmsEMn05hhvT0Wy+S0/4kIbjKIEhtenLiVso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750768286; c=relaxed/simple;
-	bh=A1vlO/L1VKH8WOeSv/ouj3ncracjwzpEiurRYiS/ALg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EHpbbJp1/bWy7Kw08U3o1KmEOGioMOByrf7E1WLg1Mnk327tQ2rRBfuuW2Qn7vTzcdO2oFn7NUucwjZdiAtkbsGKy3JgE0OO8lS5l7wLL6zbirQaV3HUYtHxH+MooueTQBBst0HzFOIxujZiYMqvOz8s5zsZXTXx+3e6vEBCCNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eu9htEvB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750769181; c=relaxed/simple;
+	bh=wJUhpZVXPlByDwuRdm72o2lxUR4sRDi2Y0BixD5XW7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LcJYxLMpLRVoOfuZe5L7G9WVZ4Yxz9Aw0rl1YXw/dEbTiXq4NwRU5GW5kX2UIPI5oPlfNm1OWjE50TOfYZ7YrUFo6osjxmWRGxBuToKSsy0Z8Uewso88VxW4t/475NRu+uiW30lD2n5NQrvSbFOD60dbbMThpF7XtvNSZ0OX85I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=is5uPXcr; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eu9htEvB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104F6C4CEE3;
-	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750768286;
-	bh=A1vlO/L1VKH8WOeSv/ouj3ncracjwzpEiurRYiS/ALg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eu9htEvBiVbL44j/hDA/XL5IHMVRkTjREoK+yoJofVs3i2H7zYeWM4nuOEa8lvA1q
-	 draOJBWRmasaODlA4846qtfnrHoWcfrlpN7SdkOAt9CRDuKgz+Jijdfb0hME3v4zjT
-	 vySbdesGJCidQHCf0M229vamBtjKXpnwatmAh49jUKp+nVNq+/QlhEUFGI/3hC6dpM
-	 MBpiZpEieyvMUEHttV5HVCNFcwOz97BYbHpUnESxPT0XUV2ac4VY/kC4HNi3iT2U1C
-	 nndDqpkUc6Rj2nldXF12iLWnmS6e5StbWpsEaS9jarXC/+el4cuLLpnkbs9yytEYsC
-	 jjsFUJ19nZmUg==
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-60179d8e65fso738004a12.0;
-        Tue, 24 Jun 2025 05:31:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWY5M4/jkbxcaO/SwxIGdzU8xh+J04LiQxBJF2afgFnQU9mqpOcZ+Qv+MjPgJ9xc2NS76lOtIY=@lists.linux.dev, AJvYcCWrrJY63LVpWqubDttzu44pCH4xnidhFEOInYSLRge1ZvLWs4yMAgeEY0Ef8N7iWT0E++jqDg4hs0dK@lists.linux.dev, AJvYcCXFDoC0vnxXZMe40TlZFgIA5S75qA/r9jkL1SJMRSC8Dpj4ItiICN2sgBXZSAtqxmqOxxnxZA==@lists.linux.dev
-X-Gm-Message-State: AOJu0YxQ3y7fGvxggu3fR+qnqRGkD+VRoptysoffWCXq7j5jjGDReHNq
-	2LrMLYs9Ei9j1QhoOlIPYefG4YVVtpaw9o6dAis4HGkd8SmBqt0gg6tV10qIxOhFaWbZ3mBuOXv
-	/MKlI0y1NdWypYSDYInMr90TYXUxrNhs=
-X-Google-Smtp-Source: AGHT+IG78TOJtNBgPo6KUbppTtQyUVPXosqjkC+mjKzFM6GuMzZpIE/4mn6DMDsxVG8gc/mo29CZZDSg4K3moyGLako=
-X-Received: by 2002:a50:9e07:0:b0:607:5987:5ba1 with SMTP id
- 4fb4d7f45d1cf-60a1d1676eamr10402408a12.20.1750768284578; Tue, 24 Jun 2025
- 05:31:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="is5uPXcr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750769179; x=1782305179;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wJUhpZVXPlByDwuRdm72o2lxUR4sRDi2Y0BixD5XW7Q=;
+  b=is5uPXcrwvdxdMufgE5cTKV0Zd2Oj3FRtjuF5AwelWKtCiMfX2kanGFI
+   Y3BNybE55nnQ+sD7r873SoJZ3IF+5wOil7B+Ks3T0QWSPravmESQjmb1B
+   mm73FYnJJbdqYGaPztNcNzUo7r9o09WvBTjHPkdKGeiXvxBm+eQw3DkGB
+   LzsxUBDWdvDgoWU30//gU1SWVdWkqPFnoTUydAAqF0hC3P4d7GMOJJZOL
+   sY2CDjk3Y0PBlgYtw9RoBYJa+xehjX2Nu2RhCpFFaUziQMRvK8fW0MlMS
+   W8kRkLTrHZizWXs8A9md+VThPZgxq6n7KSFqmGy4nutYL9g3/pDQUi17Z
+   A==;
+X-CSE-ConnectionGUID: cyhmF6oVSK6LHYu8hxBtCg==
+X-CSE-MsgGUID: wcJCgMVZSm+rpbf35+6wPA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="52941569"
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="52941569"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 05:46:18 -0700
+X-CSE-ConnectionGUID: t9MJEhBNRv2oLolbq0u35Q==
+X-CSE-MsgGUID: /oeZPziWR8avQvUS9tYqLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="152433129"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 24 Jun 2025 05:46:17 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uU32V-000S7z-03;
+	Tue, 24 Jun 2025 12:46:15 +0000
+Date: Tue, 24 Jun 2025 20:45:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	David Gow <davidgow@google.com>
+Subject: [thomas-weissschuh:b4/kunit-kselftests 16/17] <inline asm>:4:10:
+ error: Could not find incbin file 'uapi-preinit'
+Message-ID: <202506242046.MyE7tYTh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-10-kees@kernel.org>
- <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 24 Jun 2025 20:31:12 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5oHPG+etNawAmVwyDtg80iKUrAM_m3Vj57bBO0scHqvQ@mail.gmail.com>
-X-Gm-Features: AX0GCFsgXJm0uAqj4ZcBCmgCp5XFBS8cfA5fjKZVFWrLP2ySZYpAIUKeGDxIJgs
-Message-ID: <CAAhV-H5oHPG+etNawAmVwyDtg80iKUrAM_m3Vj57bBO0scHqvQ@mail.gmail.com>
-Subject: Re: [PATCH v2 10/14] loongarch: Handle KCOV __init vs inline mismatches
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Gleixner <tglx@linutronix.de>, Tianyang Zhang <zhangtianyang@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, Kees,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/kunit-kselftests
+head:   ba83258f9706f2b3454de1dfdfe925d0b259e04f
+commit: 4a560f868e311314af14404ee36852711684d766 [16/17] kunit: uapi: Introduce preinit executable
+config: i386-buildonly-randconfig-004-20250624 (https://download.01.org/0day-ci/archive/20250624/202506242046.MyE7tYTh-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506242046.MyE7tYTh-lkp@intel.com/reproduce)
 
-On Thu, Jun 19, 2025 at 4:55=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org>=
- wrote:
->
-> Hi, Kees,
->
-> On Fri, May 23, 2025 at 12:39=E2=80=AFPM Kees Cook <kees@kernel.org> wrot=
-e:
-> >
-> > When KCOV is enabled all functions get instrumented, unless
-> > the __no_sanitize_coverage attribute is used. To prepare for
-> > __no_sanitize_coverage being applied to __init functions, we have to
-> > handle differences in how GCC's inline optimizations get resolved. For
-> > loongarch this exposed several places where __init annotations were
-> > missing but ended up being "accidentally correct". Fix these cases and
-> > force one function to be inline with __always_inline.
-> >
-> > Signed-off-by: Kees Cook <kees@kernel.org>
-> > ---
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: WANG Xuerui <kernel@xen0n.name>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Tianyang Zhang <zhangtianyang@loongson.cn>
-> > Cc: Bibo Mao <maobibo@loongson.cn>
-> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Cc: <loongarch@lists.linux.dev>
-> > ---
-> >  arch/loongarch/include/asm/smp.h | 2 +-
-> >  arch/loongarch/kernel/time.c     | 2 +-
-> >  arch/loongarch/mm/ioremap.c      | 4 ++--
-> >  3 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/=
-asm/smp.h
-> > index ad0bd234a0f1..88e19d8a11f4 100644
-> > --- a/arch/loongarch/include/asm/smp.h
-> > +++ b/arch/loongarch/include/asm/smp.h
-> > @@ -39,7 +39,7 @@ int loongson_cpu_disable(void);
-> >  void loongson_cpu_die(unsigned int cpu);
-> >  #endif
-> >
-> > -static inline void plat_smp_setup(void)
-> > +static __always_inline void plat_smp_setup(void)
-> Similar to x86 and arm, I prefer to mark it as __init rather than
-> __always_inline.
-If you have no objections, I will apply this patch with the above modificat=
-ion.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506242046.MyE7tYTh-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Huacai
+>> <inline asm>:4:10: error: Could not find incbin file 'uapi-preinit'
+       4 |         .incbin "uapi-preinit"                          
+         |                 ^
+   1 error generated.
 
->
-> Huacai
->
-> >  {
-> >         loongson_smp_setup();
-> >  }
-> > diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.=
-c
-> > index bc75a3a69fc8..367906b10f81 100644
-> > --- a/arch/loongarch/kernel/time.c
-> > +++ b/arch/loongarch/kernel/time.c
-> > @@ -102,7 +102,7 @@ static int constant_timer_next_event(unsigned long =
-delta, struct clock_event_dev
-> >         return 0;
-> >  }
-> >
-> > -static unsigned long __init get_loops_per_jiffy(void)
-> > +static unsigned long get_loops_per_jiffy(void)
-> >  {
-> >         unsigned long lpj =3D (unsigned long)const_clock_freq;
-> >
-> > diff --git a/arch/loongarch/mm/ioremap.c b/arch/loongarch/mm/ioremap.c
-> > index 70ca73019811..df949a3d0f34 100644
-> > --- a/arch/loongarch/mm/ioremap.c
-> > +++ b/arch/loongarch/mm/ioremap.c
-> > @@ -16,12 +16,12 @@ void __init early_iounmap(void __iomem *addr, unsig=
-ned long size)
-> >
-> >  }
-> >
-> > -void *early_memremap_ro(resource_size_t phys_addr, unsigned long size)
-> > +void * __init early_memremap_ro(resource_size_t phys_addr, unsigned lo=
-ng size)
-> >  {
-> >         return early_memremap(phys_addr, size);
-> >  }
-> >
-> > -void *early_memremap_prot(resource_size_t phys_addr, unsigned long siz=
-e,
-> > +void * __init early_memremap_prot(resource_size_t phys_addr, unsigned =
-long size,
-> >                     unsigned long prot_val)
-> >  {
-> >         return early_memremap(phys_addr, size);
-> > --
-> > 2.34.1
-> >
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
