@@ -1,175 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AB1139E;
-	Tue, 24 Jun 2025 12:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C8A25BF04
+	for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 12:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750767321; cv=none; b=BLMaimncZjpdBPC0pIuDTHEWF9dnPQNyJHjJ+QKPiGhmeDYcRCxbKqfyzWXZqv2SvgXI2rAWslg4ULebgpHDRRLNIiCebPnO3/IpA7SId/OBt5AIVacIGNaQYnS409nrH+O8HGO5kU7B8DvoydmJphiPMTvZ2XxCdzeQg4ELqJ0=
+	t=1750768247; cv=none; b=UoDSaoK+Bdksj777qhXlqUn0/eUUT/5vy5hR2NKYvAYa7IHQa8X2iWo464BKxb8L4g315dllFiHTXcmStZDC+o1MjxwjYMeZ1xE+iOhwV6ZW9ePoXPaChRp/pz3oHsAEgaX9P16DHpZVybz563u9dQNb65gGQq5px4Bh9cELMyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750767321; c=relaxed/simple;
-	bh=RS3Ir0XcZ0wtTv3mLgddInGQ7GnUnQCjtJ18Ke5dvSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JsLKNaYEzq2PVZC18lMx9L44VgDZlzeHFUE8Hh1H3B549EKC2425RTW9hQutOwAmuDbsHCNDDLIz56p3mQqEeN52RbRH2Ovq2RezSLaDIsXKl7VGc7Z3TnP9Qz7N9nuBg4uTM8bTCnKcgeAIV9aL6r4fRbx6euXLK8pooiOiqho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bNEdlFI4; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750768247; c=relaxed/simple;
+	bh=ublTluIkiUx0a/4U2QdORjw4u5rDtOUtwTYsJd7GAGs=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=s5Kh6BJi3l0LrHdDS0t6p8hg6FUOKpm8NQ4ijEmIL5zmSHZXWeeI2//rMarnK8hbsBP5ayUVzTzs49p0BbNYpopv+BoqN8OHWiZbTb/4vZL0octhS+h8IqVguAIMkwJatFUdScjDV7dnAlYgifZjj/Ipsd2y2sdMzOK0JGe8I/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZjJt2Fjm; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bNEdlFI4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750767318; x=1782303318;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RS3Ir0XcZ0wtTv3mLgddInGQ7GnUnQCjtJ18Ke5dvSs=;
-  b=bNEdlFI43fANoe8ulXaDdFPRH4gM37lQxFNo6tjeXHPqwU/rqHTC3lXi
-   ylK0IMoVf90+m119HgNdZplv4osxeza4LTlM7Xk2fk+pfPR3zjAmlTj8i
-   rxfzBxrpY4cqkP6iSijSsHuISRSHSTGT9YzIF0axvrb1Ui4CARbFBdDfQ
-   ODuVpYe3bz8VOLWjRqpnwcUjY+y1+xOX3T4W1Pt9PM9Hu+aUeWW3O0FyT
-   +6zVNFCwnRCUMw3jk0DRm1FcWeVdhFClIdFVChnENR/gUUXfgW1+/yvbT
-   +uNoR3fNkHBvvN1FQpK8opDi08Jfp2ED/gt+9v9rqBP1PRAqg+khfOJiX
-   w==;
-X-CSE-ConnectionGUID: KhXZtCg6TN6lqQ0vudP30Q==
-X-CSE-MsgGUID: IpMtk1fXScKLsa2tQ9O8BQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="78423410"
-X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="78423410"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 05:15:18 -0700
-X-CSE-ConnectionGUID: KMhT0jvkQG6oua368CzdYg==
-X-CSE-MsgGUID: WAduLzKvSmGFelTHd0uYrA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
-   d="scan'208";a="156295716"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Jun 2025 05:15:13 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uU2YR-000S5m-0z;
-	Tue, 24 Jun 2025 12:15:11 +0000
-Date: Tue, 24 Jun 2025 20:14:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, joro@8bytes.org,
-	will@kernel.org, robin.murphy@arm.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de,
-	nicolas.dufresne@collabora.com, jgg@ziepe.ca
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	iommu@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v4 3/5] iommu: Add verisilicon IOMMU driver
-Message-ID: <202506242057.NVRNN4W1-lkp@intel.com>
-References: <20250623153931.158765-4-benjamin.gaignard@collabora.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZjJt2Fjm"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ad89ee255easo964602066b.3
+        for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 05:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750768243; x=1751373043; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HXO+H09j1Qa4dpuFC/q3mVDE2ilTxl5Myf/HIkZN2vk=;
+        b=ZjJt2FjmzDMi3QAYTL/W/TI1CEb9ovwvm53E8HCFDTaaUCVuL5X7tOFzgUc2/akMLT
+         zgYunKyid+3wGZNjns2/6i2PVMMd1vQPuFTIIvjJmgAx0JCEJnY48pNwp0UNqkJD/FzD
+         hXXVU/9xBdpuf4R4kmhMxYw05ujZZ2ytSU5vSPALC598nbwqQ0KU/25nN8YRgmfJlVAW
+         ymhkG/I2hZIGX3f5Dquf7LVxPGFmF+hHZlMw4VRITjZrrC3GBcKGonIa82NUGR6fm4wd
+         5Q9QRXiflkAqTQfFSWyhsJTelbn70sgtLzBC1+KdB7DSM/HFUkR4/gP5zc1L/I4VHJqf
+         eUTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750768243; x=1751373043;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HXO+H09j1Qa4dpuFC/q3mVDE2ilTxl5Myf/HIkZN2vk=;
+        b=fyg1dShiMtO6t1Hz6MqDBBTEHihzDes3SuzPIwL7C2CP5mK/12G5LxeFrpMT9CN6DT
+         tCLvsAKaIxOTmCYoYyXZ7uWvF5zYlzjJl4o07uxZ5564mZeKolwsRdF7IybHzrdjGJfX
+         maYB2NMZxWQWMhmsmcvyGbXa7wR4nf2d4Q5bWAzgcte/SopqH4aPsoHVzUBadPgrd0HO
+         SvEHLzlsJI2qLzR8wNa2upBNWECWUW4WYkoJHvc64lUTjDeC11Sr+vQiAkb+MKz/cgEM
+         9MyYewZ7JDAVlcyS1ADnsZKkab8rjZTvyBWFmm8J/19j54c0Oboke+JcnRJ/iH1IldBl
+         03jQ==
+X-Gm-Message-State: AOJu0YyJXeIujy8y26AVam5qvSAc4jCWdBi/JQEOSeb7jGE852gi2lgw
+	cilpnHcz2ApFtYCcCGaVx1QGE8VmA5GQsZJGA8Mwxvmy5/nmkC10GBr5FPU28PgFtWPc+342ppo
+	fC8DO
+X-Gm-Gg: ASbGncsBChy7rP/106mx2tJMTRR9dWQ6QlBVaylLquRED7ms3TG06t3D4l56XL+cU4/
+	oz/B8/9rFGGSfWzbL6aPZNiUSsxPAyx+RIIBwSuyaZhwoMnTJy3sNm+gH0fF3H7jSGfawhYIpvq
+	V9OLNeq3FoCai2nLMK3qIGujE75rkEqj8MO2XaAdOmmrOfq6TIXupuW9iykRSSins6FuGhD4dj7
+	szgvvcFc6vgr46soqJa1XLZFn5yDCCPHgm5iuvag/PRg9HwngPSiXSR3KTMOeCUI9yFO3990GZ0
+	ZV62N+S5GAWSlwiV1fMQNICTxEr3IkHNXlccZ/znngOam612JIhZqfK5P+eevuXy/0iHREkoOvf
+	BvWNEcUWOrHpNB6XF8K+CRDUak8HAkQ8nig==
+X-Google-Smtp-Source: AGHT+IFz5ZfQa6cs/wRww4vBuyf1f/X909PtbUdaN8IzT9jAY3R2N6jlNKNvJ8OZjpBZiuRWpMRYug==
+X-Received: by 2002:a17:907:1ca1:b0:ae0:11da:c923 with SMTP id a640c23a62f3a-ae057fa141fmr1618005466b.58.1750768243459;
+        Tue, 24 Jun 2025 05:30:43 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0541b6894sm869907266b.111.2025.06.24.05.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jun 2025 05:30:42 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Tue, 24 Jun 2025 12:30:40 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1487295619.32663.1750768242661@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.16-rc1-91-g2c3809bd6f65c: Failure on arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250623153931.158765-4-benjamin.gaignard@collabora.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_32662_632499735.1750768240246"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allyesconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Benjamin,
+------=_Part_32662_632499735.1750768240246
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build warnings:
+Dear contributor,
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on rockchip/for-next arm64/for-next/core linus/master v6.16-rc3 next-20250623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/dt-bindings-vendor-prefixes-Add-Verisilicon/20250623-234734
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250623153931.158765-4-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v4 3/5] iommu: Add verisilicon IOMMU driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250624/202506242057.NVRNN4W1-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506242057.NVRNN4W1-lkp@intel.com/reproduce)
+In tcwg_kernel/llvm-master-arm-next-allyesconfig, after:
+  | commit v6.16-rc1-91-g2c3809bd6f65c
+  | Author: Ricky Wu <ricky_wu@realtek.com>
+  | Date:   Mon Jun 16 14:49:56 2025 +0800
+  | 
+  |     mmc: rtsx_usb_sdmmc: Add 74 clocks in poweron flow
+  |     
+  |     To conform with SD spec definition, that the host must provide at least 74
+  |     clocks before issuing first command, let's add these clock cycles at
+  |     MMC_POWER_UP.
+  | ... 4 lines of the commit log omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506242057.NVRNN4W1-lkp@intel.com/
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23105
+  | # First few build errors in logs:
+  | # 00:43:27 drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+  | # 00:43:27 make[5]: *** [scripts/Makefile.build:287: drivers/mmc/host/rtsx_usb_sdmmc.o] Error 1
+  | # 00:44:47 make[4]: *** [scripts/Makefile.build:554: drivers/mmc/host] Error 2
+  | # 00:44:47 make[3]: *** [scripts/Makefile.build:554: drivers/mmc] Error 2
+  | # 00:56:26 make[2]: *** [scripts/Makefile.build:554: drivers] Error 2
+  | # 00:56:26 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:2006: .] Error 2
+  | # 00:56:26 make: *** [Makefile:248: __sub-make] Error 2
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23186
+  | # linux build successful:
+  | all
 
-All warnings (new ones prefixed by >>):
+Used configuration :
+ tcwg_kernel/llvm-master-arm-next-allyesconfig
 
->> drivers/iommu/vsi-iommu.c:657:10: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-     657 |                 return err;
-         |                        ^~~
-   drivers/iommu/vsi-iommu.c:643:9: note: initialize the variable 'err' to silence this warning
-     643 |         int err;
-         |                ^
-         |                 = 0
-   1 warning generated.
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-1710. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +/err +657 drivers/iommu/vsi-iommu.c
 
-   638	
-   639	static int vsi_iommu_probe(struct platform_device *pdev)
-   640	{
-   641		struct device *dev = &pdev->dev;
-   642		struct vsi_iommu *iommu;
-   643		int err;
-   644	
-   645		iommu = devm_kzalloc(dev, sizeof(*iommu), GFP_KERNEL);
-   646		if (!iommu)
-   647			return -ENOMEM;
-   648	
-   649		iommu->dev = dev;
-   650	
-   651		iommu->regs = devm_platform_ioremap_resource(pdev, 0);
-   652		if (IS_ERR(iommu->regs))
-   653			return -ENOMEM;
-   654	
-   655		iommu->num_clocks = devm_clk_bulk_get_all(dev, &iommu->clocks);
-   656		if  (iommu->num_clocks < 0)
- > 657			return err;
-   658	
-   659		err = clk_bulk_prepare(iommu->num_clocks, iommu->clocks);
-   660		if (err)
-   661			return err;
-   662	
-   663		iommu->irq = platform_get_irq(pdev, 0);
-   664		if (iommu->irq < 0)
-   665			return iommu->irq;
-   666	
-   667		err = devm_request_irq(iommu->dev, iommu->irq, vsi_iommu_irq,
-   668				       IRQF_SHARED, dev_name(dev), iommu);
-   669		if (err)
-   670			goto err_unprepare_clocks;
-   671	
-   672		spin_lock_init(&iommu->lock);
-   673		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-   674		platform_set_drvdata(pdev, iommu);
-   675	
-   676		pm_runtime_set_autosuspend_delay(dev, 100);
-   677		pm_runtime_use_autosuspend(dev);
-   678		pm_runtime_enable(dev);
-   679	
-   680		err = iommu_device_sysfs_add(&iommu->iommu, dev, NULL, dev_name(dev));
-   681		if (err)
-   682			goto err_runtime_disable;
-   683	
-   684		err = iommu_device_register(&iommu->iommu, &vsi_iommu_ops, dev);
-   685		if (err)
-   686			goto err_remove_sysfs;
-   687	
-   688		return 0;
-   689	
-   690	err_remove_sysfs:
-   691		iommu_device_sysfs_remove(&iommu->iommu);
-   692	err_runtime_disable:
-   693		pm_runtime_disable(dev);
-   694	err_unprepare_clocks:
-   695		clk_bulk_unprepare(iommu->num_clocks, iommu->clocks);
-   696		return err;
-   697	}
-   698	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allyesconfig-build/319/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allyesconfig-build/318/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://gitlab.com/Linaro/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/2c3809bd6f65cdd8c13853af1ab2a80ddf80528d/tcwg_kernel/llvm-master-arm-next-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/2c3809bd6f65cdd8c13853af1ab2a80ddf80528d
+------=_Part_32662_632499735.1750768240246--
