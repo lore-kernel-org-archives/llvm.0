@@ -1,160 +1,204 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11D879F2;
-	Tue, 24 Jun 2025 01:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F07818641;
+	Tue, 24 Jun 2025 01:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750727099; cv=none; b=W9nTWspMbK9Za/VaCsDAyikEGeGH/NB+lh1eZT3dFirqXDDFtpViCPD/RhzdIEuYQFzeSp1r9mtXX5LccN/o7MFtVPUObl2Yd4+Xq701qDTGJ50kgUDvvDP/1TGyF6op1qCR8/NmGVUQjkirQIkby1/gaAJearAoynEJKLBMW50=
+	t=1750729026; cv=none; b=UxG7BBhrqS+M32s1z5yTCFzD7GBoD0RxEt7luAjWAImWb/ZgLl8611XXMOlQ/td1IRKigqeHuADXVQFHn7Bid2PQrUhxAsXiIsvzFUJcOzUgXa89+HaetMhs8UsVYAGHcfLgkxh2pq/0lf7jukufBkpu4WnQi0WfO8oCoOzOWTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750727099; c=relaxed/simple;
-	bh=qCvd9QdqCG4oA0jrAJ2OY7+OIDbabZ3nI9zb7U78xfM=;
+	s=arc-20240116; t=1750729026; c=relaxed/simple;
+	bh=7cffUjKpvMDCS3GmH1yOQEyxjboJLfZci5Lhpb8OFgQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xrvblncgk1LiiiYMf7I+LWpX3b9xD2CA7VvxEbS+mM+vcoFnimLfHyvn/VBvpte89veKqKEw57Gz9Dz8mTAknNZcDzzcPPNazAIsWdnUmh42N/NOhZD+ueaOw/ttkFERxTyT2WJuuWgMrgj2t1dSc0moeJw/XlMr8sYk/UbIni8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UBd9KmL9; arc=none smtp.client-ip=198.175.65.11
+	 Content-Disposition; b=RW9XCC9PQeIavEJ14Dhc/F5OTSdVggdOzDa8u+mNUgYwm/2P7vg3RDnd7xlLbVP1Lh3kgTPfcE3IeUn/IeXI3EXmWyaTLHcf0YgZCfpH/g+dRTfChfS3JOdCuTiA4wuozzsngKIhQpxjOEZ0uno1+BCkIo/PwQp1icpx44sc3d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IJo4R59Y; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UBd9KmL9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IJo4R59Y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750727098; x=1782263098;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qCvd9QdqCG4oA0jrAJ2OY7+OIDbabZ3nI9zb7U78xfM=;
-  b=UBd9KmL9yA93s3afN+DEVIOy+kUQ7PyBewUgpLtBi5Cfxr8a5h7UBUNP
-   gg8l/+EKIpDFfFhZsGrVNAskNwnZD0dhkZ/1h5HAn4bSJHURBDpQQlwOP
-   omMTe+j98r9Gh+Zq6eteNqjzp4VR4x50PfzYmPQ/K93i5cCKD2JRg7Kvy
-   12MplEQqyTHdz1AEm6SLz8LgPg5Itui6jZU/PucOYf2LPiFeOfDpeHT+6
-   rfwgE/19RGPDxLuNuRyBGj+0ZzjO96CjUTAV60h/bFsjsmt3eeSdiNg2Y
-   IYX8w6Z85nra7E5FXs+J9fhBQXtuimy8ecuI3LlBF7KV7Ts7KNXvcTNa1
+  t=1750729023; x=1782265023;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7cffUjKpvMDCS3GmH1yOQEyxjboJLfZci5Lhpb8OFgQ=;
+  b=IJo4R59Ya1nyRnpiF4pLNb5dNo+bPS3vkVz5PSTD0aEKNaOa56WRujQ7
+   E9lzu9UPXmDNswGeNS2v7+V6j0Wzehfc7YZSwuqYINob5tZVklNgIxXli
+   veGobdfrrjQseucRgpQC4yldqEmenmkyLsEOv08ZcyZuojrg4BaP3/Hvu
+   btql92vengKBfOTWmb+XhKSecrA/S37pLbnpn9F1FxPjh4UIDi+AUwCmH
+   xY6/B9koxWto+SF/m19OoPTxtPqeanY6oOecnMb5n7M54q7/7q9LqLw5c
+   eXTwGaQ1yEeicTytI7bOsjCUC7flED+JcSJ1Z0LWdH+rLjIbGJWVbmLQA
    Q==;
-X-CSE-ConnectionGUID: q/Ls34e4R62EZJ8nSfBy4Q==
-X-CSE-MsgGUID: ZCQQcrFOTjKxwWX15CFDew==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="63221212"
+X-CSE-ConnectionGUID: 05e/0LL0SLuwty1hbgWo+w==
+X-CSE-MsgGUID: A04obvPPTK61t320YGREMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52825954"
 X-IronPort-AV: E=Sophos;i="6.16,260,1744095600"; 
-   d="scan'208";a="63221212"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 18:04:57 -0700
-X-CSE-ConnectionGUID: KFsvF1MwQ0+bSO6gZuI81Q==
-X-CSE-MsgGUID: /cpDsglYTYWu/8zL9mQspQ==
+   d="scan'208";a="52825954"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 18:37:03 -0700
+X-CSE-ConnectionGUID: 5xvq7lJ1R4WcA7Iu1sHW5Q==
+X-CSE-MsgGUID: b22foTNJQ9qlgSrQ+1ry2Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,260,1744095600"; 
-   d="scan'208";a="182794519"
+   d="scan'208";a="156333639"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 Jun 2025 18:04:55 -0700
+  by orviesa004.jf.intel.com with ESMTP; 23 Jun 2025 18:37:01 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uTs5k-000Ra2-2P;
-	Tue, 24 Jun 2025 01:04:52 +0000
-Date: Tue, 24 Jun 2025 09:04:32 +0800
+	id 1uTsao-000RbY-0P;
+	Tue, 24 Jun 2025 01:36:58 +0000
+Date: Tue, 24 Jun 2025 09:36:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arnd-playground:to_build 2/57]
- drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c:1939:1: warning: stack
- frame size (1168) exceeds limit (1024) in
- '_rtl8723be_read_txpower_info_from_hwpg'
-Message-ID: <202506240929.5ETeeobg-lkp@intel.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: net/bpf/test_run.c:370:12: warning: stack frame size (1152) exceeds
+ limit (1024) in 'bpf_test_run_xdp_live'
+Message-ID: <202506240921.WNcmLMhg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git to_build
-head:   45965d80ee21635e7f04e6d7fd6caa929820b219
-commit: 01f706f06786b07a552e9293c9d6244c99d5741d [2/57] [SUBMITTED 20250610] wifi: rtlwifi: avoid stack size warning for _read_eeprom_info
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250624/202506240929.5ETeeobg-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   78f4e737a53e1163ded2687a922fce138aee73f5
+commit: 3f9fe37d9e16a6cfd5f4d1f536686ea71db3196f net: Move per-CPU flush-lists to bpf_net_context on PREEMPT_RT.
+date:   12 months ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250624/202506240921.WNcmLMhg-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240929.5ETeeobg-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240921.WNcmLMhg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506240929.5ETeeobg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506240921.WNcmLMhg-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c:1939:1: warning: stack frame size (1168) exceeds limit (1024) in '_rtl8723be_read_txpower_info_from_hwpg' [-Wframe-larger-than]
-    1939 | _rtl8723be_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-         | ^
-   1 warning generated.
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/bpf/test_run.c:17:
+   In file included from include/net/tcp.h:32:
+   In file included from include/net/inet_hashtables.h:26:
+   include/net/ip.h:472:14: warning: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     472 |                 if (mtu && time_before(jiffies, rt->dst.expires))
+         |                            ^
+   include/linux/jiffies.h:138:26: note: expanded from macro 'time_before'
+     138 | #define time_before(a,b)        time_after(b,a)
+         |                                 ^
+   include/linux/jiffies.h:128:3: note: expanded from macro 'time_after'
+     128 |         (typecheck(unsigned long, a) && \
+         |          ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:451:26: warning: default initialization of an object of type 'typeof ((kattr->test.data_out))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     451 |         void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
+         |                                 ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:658:25: warning: default initialization of an object of type 'typeof ((kattr->test.data_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     658 |         void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+         |                                ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:755:24: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     755 |         void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
+         |                               ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:811:25: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     811 |         void __user *data_in = u64_to_user_ptr(kattr->test.ctx_in);
+         |                                ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:812:26: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_out))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     812 |         void __user *data_out = u64_to_user_ptr(kattr->test.ctx_out);
+         |                                 ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:844:26: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_out))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+     844 |         void __user *data_out = u64_to_user_ptr(kattr->test.ctx_out);
+         |                                 ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:1251:26: warning: default initialization of an object of type 'typeof ((kattr->test.data_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+    1251 |                 void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+         |                                        ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+   net/bpf/test_run.c:1508:24: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
+    1508 |         void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
+         |                               ^
+   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
+      52 |         typecheck(u64, (x));            \
+         |         ^
+   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
+      11 |         typeof(x) __dummy2; \
+         |                   ^
+>> net/bpf/test_run.c:370:12: warning: stack frame size (1152) exceeds limit (1024) in 'bpf_test_run_xdp_live' [-Wframe-larger-than]
+     370 | static int bpf_test_run_xdp_live(struct bpf_prog *prog, struct xdp_buff *ctx,
+         |            ^
+   15 warnings generated.
 
 
-vim +/_rtl8723be_read_txpower_info_from_hwpg +1939 drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.c
+vim +/bpf_test_run_xdp_live +370 net/bpf/test_run.c
 
-  1937	
-  1938	static noinline_for_stack void
-> 1939	_rtl8723be_read_txpower_info_from_hwpg(struct ieee80211_hw *hw,
-  1940					       bool autoload_fail, u8 *hwinfo)
-  1941	{
-  1942		struct rtl_priv *rtlpriv = rtl_priv(hw);
-  1943		struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
-  1944		struct txpower_info_2g pw2g;
-  1945		struct txpower_info_5g pw5g;
-  1946		u8 rf_path, index;
-  1947		u8 i;
-  1948	
-  1949		_rtl8723be_read_power_value_fromprom(hw, &pw2g, &pw5g, autoload_fail,
-  1950						     hwinfo);
-  1951	
-  1952		for (rf_path = 0; rf_path < 2; rf_path++) {
-  1953			for (i = 0; i < 14; i++) {
-  1954				index = _rtl8723be_get_chnl_group(i+1);
-  1955	
-  1956				rtlefuse->txpwrlevel_cck[rf_path][i] =
-  1957						pw2g.index_cck_base[rf_path][index];
-  1958				rtlefuse->txpwrlevel_ht40_1s[rf_path][i] =
-  1959						pw2g.index_bw40_base[rf_path][index];
-  1960			}
-  1961			for (i = 0; i < MAX_TX_COUNT; i++) {
-  1962				rtlefuse->txpwr_ht20diff[rf_path][i] =
-  1963							pw2g.bw20_diff[rf_path][i];
-  1964				rtlefuse->txpwr_ht40diff[rf_path][i] =
-  1965							pw2g.bw40_diff[rf_path][i];
-  1966				rtlefuse->txpwr_legacyhtdiff[rf_path][i] =
-  1967							pw2g.ofdm_diff[rf_path][i];
-  1968			}
-  1969	
-  1970			for (i = 0; i < 14; i++) {
-  1971				RTPRINT(rtlpriv, FINIT, INIT_TXPOWER,
-  1972					"RF(%d)-Ch(%d) [CCK / HT40_1S ] = [0x%x / 0x%x ]\n",
-  1973					rf_path, i,
-  1974					rtlefuse->txpwrlevel_cck[rf_path][i],
-  1975					rtlefuse->txpwrlevel_ht40_1s[rf_path][i]);
-  1976			}
-  1977		}
-  1978	
-  1979		if (!autoload_fail)
-  1980			rtlefuse->eeprom_thermalmeter =
-  1981						hwinfo[EEPROM_THERMAL_METER_88E];
-  1982		else
-  1983			rtlefuse->eeprom_thermalmeter = EEPROM_DEFAULT_THERMALMETER;
-  1984	
-  1985		if (rtlefuse->eeprom_thermalmeter == 0xff || autoload_fail) {
-  1986			rtlefuse->apk_thermalmeterignore = true;
-  1987			rtlefuse->eeprom_thermalmeter = EEPROM_DEFAULT_THERMALMETER;
-  1988		}
-  1989	
-  1990		rtlefuse->thermalmeter[0] = rtlefuse->eeprom_thermalmeter;
-  1991		RTPRINT(rtlpriv, FINIT, INIT_TXPOWER,
-  1992			"thermalmeter = 0x%x\n", rtlefuse->eeprom_thermalmeter);
-  1993	
-  1994		if (!autoload_fail) {
-  1995			rtlefuse->eeprom_regulatory =
-  1996				hwinfo[EEPROM_RF_BOARD_OPTION_88E] & 0x07;/*bit0~2*/
-  1997			if (hwinfo[EEPROM_RF_BOARD_OPTION_88E] == 0xFF)
-  1998				rtlefuse->eeprom_regulatory = 0;
-  1999		} else {
-  2000			rtlefuse->eeprom_regulatory = 0;
-  2001		}
-  2002		RTPRINT(rtlpriv, FINIT, INIT_TXPOWER,
-  2003			"eeprom_regulatory = 0x%x\n", rtlefuse->eeprom_regulatory);
-  2004	}
-  2005	
+b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  369  
+b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09 @370  static int bpf_test_run_xdp_live(struct bpf_prog *prog, struct xdp_buff *ctx,
+b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  371  				 u32 repeat, u32 batch_size, u32 *time)
+b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  372  
+
+:::::: The code at line 370 was first introduced by commit
+:::::: b530e9e1063ed2b817eae7eec6ed2daa8be11608 bpf: Add "live packet" mode for XDP in BPF_PROG_RUN
+
+:::::: TO: Toke Høiland-Jørgensen <toke@redhat.com>
+:::::: CC: Alexei Starovoitov <ast@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
