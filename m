@@ -1,204 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F07818641;
-	Tue, 24 Jun 2025 01:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A12F45009;
+	Tue, 24 Jun 2025 01:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750729026; cv=none; b=UxG7BBhrqS+M32s1z5yTCFzD7GBoD0RxEt7luAjWAImWb/ZgLl8611XXMOlQ/td1IRKigqeHuADXVQFHn7Bid2PQrUhxAsXiIsvzFUJcOzUgXa89+HaetMhs8UsVYAGHcfLgkxh2pq/0lf7jukufBkpu4WnQi0WfO8oCoOzOWTo=
+	t=1750729684; cv=none; b=cw/lRgCN6TyxV3VQOaiXnFG7OqANQc6sO2j2i7i3AetUg9atwSj5JSUmF15s56WQxNhh+ivhjCDPYEc4YWU42aAhQ1pYg3Ao1HWjU4dPlImPIbFTsEZCeSY9nZueg1DsUHDkR+oLId09cFXvd5YOX1Q3CiCjRVnnwt8aqB8suQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750729026; c=relaxed/simple;
-	bh=7cffUjKpvMDCS3GmH1yOQEyxjboJLfZci5Lhpb8OFgQ=;
+	s=arc-20240116; t=1750729684; c=relaxed/simple;
+	bh=4Z+MxAv/E3x5NjkQjYUMOIRkLTz0n3Uji48u5umGecw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RW9XCC9PQeIavEJ14Dhc/F5OTSdVggdOzDa8u+mNUgYwm/2P7vg3RDnd7xlLbVP1Lh3kgTPfcE3IeUn/IeXI3EXmWyaTLHcf0YgZCfpH/g+dRTfChfS3JOdCuTiA4wuozzsngKIhQpxjOEZ0uno1+BCkIo/PwQp1icpx44sc3d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IJo4R59Y; arc=none smtp.client-ip=198.175.65.19
+	 Content-Disposition; b=AQyb0yKRtdOOagwNko+sbsFgujBWEzf80F03kG78YAZj/XzNCCYtBzxr/NFjc4OjqiG4k38tZyJ45Dc92PQCJVp58g4DtJO3CCSFDDa7eRH+dY+9HZjeQP6pwivIUOHkvKfmTDYYxiEPuYqGl540KMfYT+h9LWCyh8I4rGP7z7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l2KImsr1; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IJo4R59Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l2KImsr1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750729023; x=1782265023;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7cffUjKpvMDCS3GmH1yOQEyxjboJLfZci5Lhpb8OFgQ=;
-  b=IJo4R59Ya1nyRnpiF4pLNb5dNo+bPS3vkVz5PSTD0aEKNaOa56WRujQ7
-   E9lzu9UPXmDNswGeNS2v7+V6j0Wzehfc7YZSwuqYINob5tZVklNgIxXli
-   veGobdfrrjQseucRgpQC4yldqEmenmkyLsEOv08ZcyZuojrg4BaP3/Hvu
-   btql92vengKBfOTWmb+XhKSecrA/S37pLbnpn9F1FxPjh4UIDi+AUwCmH
-   xY6/B9koxWto+SF/m19OoPTxtPqeanY6oOecnMb5n7M54q7/7q9LqLw5c
-   eXTwGaQ1yEeicTytI7bOsjCUC7flED+JcSJ1Z0LWdH+rLjIbGJWVbmLQA
+  t=1750729683; x=1782265683;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4Z+MxAv/E3x5NjkQjYUMOIRkLTz0n3Uji48u5umGecw=;
+  b=l2KImsr1Zt4J7QvfLa9TJy9WWJDgqP9Swz736SWNV1LBrJu6Cbu80n6j
+   Ug4/4lXTUeROfR89gWNMnh/2cJ3ggJYqyI50t+kfevbY3/yo7Dqj+paPT
+   k2JsbkklcEm0o2bBLPd3gRKUaLnbxGgMucAv4UZjcUpEUl7aB/ZbdNos7
+   RD2/nr/4vbRIFYEikEg5OzNWNhAdOp2bfunhqkfKPR3oN3fi0R8CUNZbk
+   a9l89MNLz+b30B/TPdmOkB1ZbwG8ME0yzLh7cd5/TFMoZB/9ToCME9kA2
+   9w8Q0Fc9svW0aW/c0ZcQ6A0PU1wqj91lYolu26BfB+siSSLavXtyhCNIm
    Q==;
-X-CSE-ConnectionGUID: 05e/0LL0SLuwty1hbgWo+w==
-X-CSE-MsgGUID: A04obvPPTK61t320YGREMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="52825954"
+X-CSE-ConnectionGUID: M0D/HrpiQIWv0z3dSskwCA==
+X-CSE-MsgGUID: bFyW3qsmRkuD7J7YjkaSGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="56625102"
 X-IronPort-AV: E=Sophos;i="6.16,260,1744095600"; 
-   d="scan'208";a="52825954"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 18:37:03 -0700
-X-CSE-ConnectionGUID: 5xvq7lJ1R4WcA7Iu1sHW5Q==
-X-CSE-MsgGUID: b22foTNJQ9qlgSrQ+1ry2Q==
+   d="scan'208";a="56625102"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 18:48:02 -0700
+X-CSE-ConnectionGUID: RSoEG4aUTnmDlrm5pvRcgg==
+X-CSE-MsgGUID: e5EvzGW0Rga6kwHB9fljDg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,260,1744095600"; 
-   d="scan'208";a="156333639"
+   d="scan'208";a="152287608"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 23 Jun 2025 18:37:01 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 23 Jun 2025 18:48:00 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uTsao-000RbY-0P;
-	Tue, 24 Jun 2025 01:36:58 +0000
-Date: Tue, 24 Jun 2025 09:36:25 +0800
+	id 1uTslS-000Rbi-2E;
+	Tue, 24 Jun 2025 01:47:58 +0000
+Date: Tue, 24 Jun 2025 09:47:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Hao Jia <jiahao1@lixiang.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: net/bpf/test_run.c:370:12: warning: stack frame size (1152) exceeds
- limit (1024) in 'bpf_test_run_xdp_live'
-Message-ID: <202506240921.WNcmLMhg-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: arch/s390/appldata/appldata_mem.c:72:13: warning: stack frame size
+ (1040) exceeds limit (1024) in 'appldata_get_mem_data'
+Message-ID: <202506240917.5GatGoT7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   78f4e737a53e1163ded2687a922fce138aee73f5
-commit: 3f9fe37d9e16a6cfd5f4d1f536686ea71db3196f net: Move per-CPU flush-lists to bpf_net_context on PREEMPT_RT.
-date:   12 months ago
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250624/202506240921.WNcmLMhg-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240921.WNcmLMhg-lkp@intel.com/reproduce)
+commit: e452872b40e3f1fb92adf0d573a0a6a7c9f6ce22 mm: vmscan: split proactive reclaim statistics from direct reclaim statistics
+date:   3 months ago
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250624/202506240917.5GatGoT7-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240917.5GatGoT7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506240921.WNcmLMhg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506240917.5GatGoT7-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/bpf/test_run.c:17:
-   In file included from include/net/tcp.h:32:
-   In file included from include/net/inet_hashtables.h:26:
-   include/net/ip.h:472:14: warning: default initialization of an object of type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     472 |                 if (mtu && time_before(jiffies, rt->dst.expires))
-         |                            ^
-   include/linux/jiffies.h:138:26: note: expanded from macro 'time_before'
-     138 | #define time_before(a,b)        time_after(b,a)
-         |                                 ^
-   include/linux/jiffies.h:128:3: note: expanded from macro 'time_after'
-     128 |         (typecheck(unsigned long, a) && \
-         |          ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:451:26: warning: default initialization of an object of type 'typeof ((kattr->test.data_out))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     451 |         void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
-         |                                 ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:658:25: warning: default initialization of an object of type 'typeof ((kattr->test.data_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     658 |         void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
-         |                                ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:755:24: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     755 |         void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
-         |                               ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:811:25: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     811 |         void __user *data_in = u64_to_user_ptr(kattr->test.ctx_in);
-         |                                ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:812:26: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_out))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     812 |         void __user *data_out = u64_to_user_ptr(kattr->test.ctx_out);
-         |                                 ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:844:26: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_out))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-     844 |         void __user *data_out = u64_to_user_ptr(kattr->test.ctx_out);
-         |                                 ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:1251:26: warning: default initialization of an object of type 'typeof ((kattr->test.data_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-    1251 |                 void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
-         |                                        ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
-   net/bpf/test_run.c:1508:24: warning: default initialization of an object of type 'typeof ((kattr->test.ctx_in))' (aka 'const unsigned long long') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-    1508 |         void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
-         |                               ^
-   include/linux/kernel.h:52:2: note: expanded from macro 'u64_to_user_ptr'
-      52 |         typecheck(u64, (x));            \
-         |         ^
-   include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                   ^
->> net/bpf/test_run.c:370:12: warning: stack frame size (1152) exceeds limit (1024) in 'bpf_test_run_xdp_live' [-Wframe-larger-than]
-     370 | static int bpf_test_run_xdp_live(struct bpf_prog *prog, struct xdp_buff *ctx,
-         |            ^
-   15 warnings generated.
+>> arch/s390/appldata/appldata_mem.c:72:13: warning: stack frame size (1040) exceeds limit (1024) in 'appldata_get_mem_data' [-Wframe-larger-than]
+      72 | static void appldata_get_mem_data(void *data)
+         |             ^
+   1 warning generated.
 
 
-vim +/bpf_test_run_xdp_live +370 net/bpf/test_run.c
+vim +/appldata_get_mem_data +72 arch/s390/appldata/appldata_mem.c
 
-b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  369  
-b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09 @370  static int bpf_test_run_xdp_live(struct bpf_prog *prog, struct xdp_buff *ctx,
-b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  371  				 u32 repeat, u32 batch_size, u32 *time)
-b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  372  
+^1da177e4c3f415 Linus Torvalds    2005-04-16   65  
+^1da177e4c3f415 Linus Torvalds    2005-04-16   66  
+^1da177e4c3f415 Linus Torvalds    2005-04-16   67  /*
+^1da177e4c3f415 Linus Torvalds    2005-04-16   68   * appldata_get_mem_data()
+^1da177e4c3f415 Linus Torvalds    2005-04-16   69   *
+^1da177e4c3f415 Linus Torvalds    2005-04-16   70   * gather memory data
+^1da177e4c3f415 Linus Torvalds    2005-04-16   71   */
+^1da177e4c3f415 Linus Torvalds    2005-04-16  @72  static void appldata_get_mem_data(void *data)
+^1da177e4c3f415 Linus Torvalds    2005-04-16   73  {
+^1da177e4c3f415 Linus Torvalds    2005-04-16   74  	/*
+^1da177e4c3f415 Linus Torvalds    2005-04-16   75  	 * don't put large structures on the stack, we are
+b1ad171efa089ae Gerald Schaefer   2009-04-23   76  	 * serialized through the appldata_ops_mutex and can use static
+^1da177e4c3f415 Linus Torvalds    2005-04-16   77  	 */
+^1da177e4c3f415 Linus Torvalds    2005-04-16   78  	static struct sysinfo val;
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   79  	unsigned long ev[NR_VM_EVENT_ITEMS];
+^1da177e4c3f415 Linus Torvalds    2005-04-16   80  	struct appldata_mem_data *mem_data;
+^1da177e4c3f415 Linus Torvalds    2005-04-16   81  
+^1da177e4c3f415 Linus Torvalds    2005-04-16   82  	mem_data = data;
+^1da177e4c3f415 Linus Torvalds    2005-04-16   83  	mem_data->sync_count_1++;
+^1da177e4c3f415 Linus Torvalds    2005-04-16   84  
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   85  	all_vm_events(ev);
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   86  	mem_data->pgpgin     = ev[PGPGIN] >> 1;
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   87  	mem_data->pgpgout    = ev[PGPGOUT] >> 1;
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   88  	mem_data->pswpin     = ev[PSWPIN];
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   89  	mem_data->pswpout    = ev[PSWPOUT];
+bb81e6050fdc0f2 Al Viro           2007-03-14   90  	mem_data->pgalloc    = ev[PGALLOC_NORMAL];
+bb81e6050fdc0f2 Al Viro           2007-03-14   91  	mem_data->pgalloc    += ev[PGALLOC_DMA];
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   92  	mem_data->pgfault    = ev[PGFAULT];
+f8891e5e1f93a12 Christoph Lameter 2006-06-30   93  	mem_data->pgmajfault = ev[PGMAJFAULT];
+^1da177e4c3f415 Linus Torvalds    2005-04-16   94  
+^1da177e4c3f415 Linus Torvalds    2005-04-16   95  	si_meminfo(&val);
+^1da177e4c3f415 Linus Torvalds    2005-04-16   96  	mem_data->sharedram = val.sharedram;
+^1da177e4c3f415 Linus Torvalds    2005-04-16   97  	mem_data->totalram  = P2K(val.totalram);
+^1da177e4c3f415 Linus Torvalds    2005-04-16   98  	mem_data->freeram   = P2K(val.freeram);
+^1da177e4c3f415 Linus Torvalds    2005-04-16   99  	mem_data->totalhigh = P2K(val.totalhigh);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  100  	mem_data->freehigh  = P2K(val.freehigh);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  101  	mem_data->bufferram = P2K(val.bufferram);
+11fb998986a72aa Mel Gorman        2016-07-28  102  	mem_data->cached    = P2K(global_node_page_state(NR_FILE_PAGES)
+347ce434d57da80 Christoph Lameter 2006-06-30  103  				- val.bufferram);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  104  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  105  	si_swapinfo(&val);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  106  	mem_data->totalswap = P2K(val.totalswap);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  107  	mem_data->freeswap  = P2K(val.freeswap);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  108  
+1aae0560d160ee6 Heiko Carstens    2013-01-30  109  	mem_data->timestamp = get_tod_clock();
+^1da177e4c3f415 Linus Torvalds    2005-04-16  110  	mem_data->sync_count_2++;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  111  }
+^1da177e4c3f415 Linus Torvalds    2005-04-16  112  
 
-:::::: The code at line 370 was first introduced by commit
-:::::: b530e9e1063ed2b817eae7eec6ed2daa8be11608 bpf: Add "live packet" mode for XDP in BPF_PROG_RUN
+:::::: The code at line 72 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-:::::: TO: Toke Høiland-Jørgensen <toke@redhat.com>
-:::::: CC: Alexei Starovoitov <ast@kernel.org>
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service
