@@ -1,150 +1,172 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C8A25BF04
-	for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 12:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD3528851A;
+	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750768247; cv=none; b=UoDSaoK+Bdksj777qhXlqUn0/eUUT/5vy5hR2NKYvAYa7IHQa8X2iWo464BKxb8L4g315dllFiHTXcmStZDC+o1MjxwjYMeZ1xE+iOhwV6ZW9ePoXPaChRp/pz3oHsAEgaX9P16DHpZVybz563u9dQNb65gGQq5px4Bh9cELMyg=
+	t=1750768286; cv=none; b=CF91aJM9eoAtj7S5DwK8poP9aWiO2G0Jm2Eo1n2OGwAZKgtCaggTejQ5IVRhQRQVrC0CI/bRs/uPlwM45xhdre195LNxAyHYJ1r4zuZcSpPrT8H++5Xg6B0eaNVpt2yFUbz9JJwwM3XLSgtEuo215tDsMwKoYHqKSpRzYGhR990=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750768247; c=relaxed/simple;
-	bh=ublTluIkiUx0a/4U2QdORjw4u5rDtOUtwTYsJd7GAGs=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=s5Kh6BJi3l0LrHdDS0t6p8hg6FUOKpm8NQ4ijEmIL5zmSHZXWeeI2//rMarnK8hbsBP5ayUVzTzs49p0BbNYpopv+BoqN8OHWiZbTb/4vZL0octhS+h8IqVguAIMkwJatFUdScjDV7dnAlYgifZjj/Ipsd2y2sdMzOK0JGe8I/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZjJt2Fjm; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1750768286; c=relaxed/simple;
+	bh=A1vlO/L1VKH8WOeSv/ouj3ncracjwzpEiurRYiS/ALg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EHpbbJp1/bWy7Kw08U3o1KmEOGioMOByrf7E1WLg1Mnk327tQ2rRBfuuW2Qn7vTzcdO2oFn7NUucwjZdiAtkbsGKy3JgE0OO8lS5l7wLL6zbirQaV3HUYtHxH+MooueTQBBst0HzFOIxujZiYMqvOz8s5zsZXTXx+3e6vEBCCNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eu9htEvB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZjJt2Fjm"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ad89ee255easo964602066b.3
-        for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 05:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750768243; x=1751373043; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HXO+H09j1Qa4dpuFC/q3mVDE2ilTxl5Myf/HIkZN2vk=;
-        b=ZjJt2FjmzDMi3QAYTL/W/TI1CEb9ovwvm53E8HCFDTaaUCVuL5X7tOFzgUc2/akMLT
-         zgYunKyid+3wGZNjns2/6i2PVMMd1vQPuFTIIvjJmgAx0JCEJnY48pNwp0UNqkJD/FzD
-         hXXVU/9xBdpuf4R4kmhMxYw05ujZZ2ytSU5vSPALC598nbwqQ0KU/25nN8YRgmfJlVAW
-         ymhkG/I2hZIGX3f5Dquf7LVxPGFmF+hHZlMw4VRITjZrrC3GBcKGonIa82NUGR6fm4wd
-         5Q9QRXiflkAqTQfFSWyhsJTelbn70sgtLzBC1+KdB7DSM/HFUkR4/gP5zc1L/I4VHJqf
-         eUTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750768243; x=1751373043;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HXO+H09j1Qa4dpuFC/q3mVDE2ilTxl5Myf/HIkZN2vk=;
-        b=fyg1dShiMtO6t1Hz6MqDBBTEHihzDes3SuzPIwL7C2CP5mK/12G5LxeFrpMT9CN6DT
-         tCLvsAKaIxOTmCYoYyXZ7uWvF5zYlzjJl4o07uxZ5564mZeKolwsRdF7IybHzrdjGJfX
-         maYB2NMZxWQWMhmsmcvyGbXa7wR4nf2d4Q5bWAzgcte/SopqH4aPsoHVzUBadPgrd0HO
-         SvEHLzlsJI2qLzR8wNa2upBNWECWUW4WYkoJHvc64lUTjDeC11Sr+vQiAkb+MKz/cgEM
-         9MyYewZ7JDAVlcyS1ADnsZKkab8rjZTvyBWFmm8J/19j54c0Oboke+JcnRJ/iH1IldBl
-         03jQ==
-X-Gm-Message-State: AOJu0YyJXeIujy8y26AVam5qvSAc4jCWdBi/JQEOSeb7jGE852gi2lgw
-	cilpnHcz2ApFtYCcCGaVx1QGE8VmA5GQsZJGA8Mwxvmy5/nmkC10GBr5FPU28PgFtWPc+342ppo
-	fC8DO
-X-Gm-Gg: ASbGncsBChy7rP/106mx2tJMTRR9dWQ6QlBVaylLquRED7ms3TG06t3D4l56XL+cU4/
-	oz/B8/9rFGGSfWzbL6aPZNiUSsxPAyx+RIIBwSuyaZhwoMnTJy3sNm+gH0fF3H7jSGfawhYIpvq
-	V9OLNeq3FoCai2nLMK3qIGujE75rkEqj8MO2XaAdOmmrOfq6TIXupuW9iykRSSins6FuGhD4dj7
-	szgvvcFc6vgr46soqJa1XLZFn5yDCCPHgm5iuvag/PRg9HwngPSiXSR3KTMOeCUI9yFO3990GZ0
-	ZV62N+S5GAWSlwiV1fMQNICTxEr3IkHNXlccZ/znngOam612JIhZqfK5P+eevuXy/0iHREkoOvf
-	BvWNEcUWOrHpNB6XF8K+CRDUak8HAkQ8nig==
-X-Google-Smtp-Source: AGHT+IFz5ZfQa6cs/wRww4vBuyf1f/X909PtbUdaN8IzT9jAY3R2N6jlNKNvJ8OZjpBZiuRWpMRYug==
-X-Received: by 2002:a17:907:1ca1:b0:ae0:11da:c923 with SMTP id a640c23a62f3a-ae057fa141fmr1618005466b.58.1750768243459;
-        Tue, 24 Jun 2025 05:30:43 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0541b6894sm869907266b.111.2025.06.24.05.30.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 05:30:42 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Tue, 24 Jun 2025 12:30:40 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1487295619.32663.1750768242661@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.16-rc1-91-g2c3809bd6f65c: Failure on arm
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eu9htEvB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104F6C4CEE3;
+	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750768286;
+	bh=A1vlO/L1VKH8WOeSv/ouj3ncracjwzpEiurRYiS/ALg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=eu9htEvBiVbL44j/hDA/XL5IHMVRkTjREoK+yoJofVs3i2H7zYeWM4nuOEa8lvA1q
+	 draOJBWRmasaODlA4846qtfnrHoWcfrlpN7SdkOAt9CRDuKgz+Jijdfb0hME3v4zjT
+	 vySbdesGJCidQHCf0M229vamBtjKXpnwatmAh49jUKp+nVNq+/QlhEUFGI/3hC6dpM
+	 MBpiZpEieyvMUEHttV5HVCNFcwOz97BYbHpUnESxPT0XUV2ac4VY/kC4HNi3iT2U1C
+	 nndDqpkUc6Rj2nldXF12iLWnmS6e5StbWpsEaS9jarXC/+el4cuLLpnkbs9yytEYsC
+	 jjsFUJ19nZmUg==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-60179d8e65fso738004a12.0;
+        Tue, 24 Jun 2025 05:31:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWY5M4/jkbxcaO/SwxIGdzU8xh+J04LiQxBJF2afgFnQU9mqpOcZ+Qv+MjPgJ9xc2NS76lOtIY=@lists.linux.dev, AJvYcCWrrJY63LVpWqubDttzu44pCH4xnidhFEOInYSLRge1ZvLWs4yMAgeEY0Ef8N7iWT0E++jqDg4hs0dK@lists.linux.dev, AJvYcCXFDoC0vnxXZMe40TlZFgIA5S75qA/r9jkL1SJMRSC8Dpj4ItiICN2sgBXZSAtqxmqOxxnxZA==@lists.linux.dev
+X-Gm-Message-State: AOJu0YxQ3y7fGvxggu3fR+qnqRGkD+VRoptysoffWCXq7j5jjGDReHNq
+	2LrMLYs9Ei9j1QhoOlIPYefG4YVVtpaw9o6dAis4HGkd8SmBqt0gg6tV10qIxOhFaWbZ3mBuOXv
+	/MKlI0y1NdWypYSDYInMr90TYXUxrNhs=
+X-Google-Smtp-Source: AGHT+IG78TOJtNBgPo6KUbppTtQyUVPXosqjkC+mjKzFM6GuMzZpIE/4mn6DMDsxVG8gc/mo29CZZDSg4K3moyGLako=
+X-Received: by 2002:a50:9e07:0:b0:607:5987:5ba1 with SMTP id
+ 4fb4d7f45d1cf-60a1d1676eamr10402408a12.20.1750768284578; Tue, 24 Jun 2025
+ 05:31:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_32662_632499735.1750768240246"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allyesconfig
-X-Jenkins-Result: SUCCESS
+References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-10-kees@kernel.org>
+ <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 24 Jun 2025 20:31:12 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5oHPG+etNawAmVwyDtg80iKUrAM_m3Vj57bBO0scHqvQ@mail.gmail.com>
+X-Gm-Features: AX0GCFsgXJm0uAqj4ZcBCmgCp5XFBS8cfA5fjKZVFWrLP2ySZYpAIUKeGDxIJgs
+Message-ID: <CAAhV-H5oHPG+etNawAmVwyDtg80iKUrAM_m3Vj57bBO0scHqvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 10/14] loongarch: Handle KCOV __init vs inline mismatches
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, 
+	Thomas Gleixner <tglx@linutronix.de>, Tianyang Zhang <zhangtianyang@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-------=_Part_32662_632499735.1750768240246
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi, Kees,
 
-Dear contributor,
-
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
-
-In tcwg_kernel/llvm-master-arm-next-allyesconfig, after:
-  | commit v6.16-rc1-91-g2c3809bd6f65c
-  | Author: Ricky Wu <ricky_wu@realtek.com>
-  | Date:   Mon Jun 16 14:49:56 2025 +0800
-  | 
-  |     mmc: rtsx_usb_sdmmc: Add 74 clocks in poweron flow
-  |     
-  |     To conform with SD spec definition, that the host must provide at least 74
-  |     clocks before issuing first command, let's add these clock cycles at
-  |     MMC_POWER_UP.
-  | ... 4 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23105
-  | # First few build errors in logs:
-  | # 00:43:27 drivers/mmc/host/rtsx_usb_sdmmc.c:1042:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-  | # 00:43:27 make[5]: *** [scripts/Makefile.build:287: drivers/mmc/host/rtsx_usb_sdmmc.o] Error 1
-  | # 00:44:47 make[4]: *** [scripts/Makefile.build:554: drivers/mmc/host] Error 2
-  | # 00:44:47 make[3]: *** [scripts/Makefile.build:554: drivers/mmc] Error 2
-  | # 00:56:26 make[2]: *** [scripts/Makefile.build:554: drivers] Error 2
-  | # 00:56:26 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:2006: .] Error 2
-  | # 00:56:26 make: *** [Makefile:248: __sub-make] Error 2
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23186
-  | # linux build successful:
-  | all
-
-Used configuration :
- tcwg_kernel/llvm-master-arm-next-allyesconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1710. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+On Thu, Jun 19, 2025 at 4:55=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org>=
+ wrote:
+>
+> Hi, Kees,
+>
+> On Fri, May 23, 2025 at 12:39=E2=80=AFPM Kees Cook <kees@kernel.org> wrot=
+e:
+> >
+> > When KCOV is enabled all functions get instrumented, unless
+> > the __no_sanitize_coverage attribute is used. To prepare for
+> > __no_sanitize_coverage being applied to __init functions, we have to
+> > handle differences in how GCC's inline optimizations get resolved. For
+> > loongarch this exposed several places where __init annotations were
+> > missing but ended up being "accidentally correct". Fix these cases and
+> > force one function to be inline with __always_inline.
+> >
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: WANG Xuerui <kernel@xen0n.name>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Tianyang Zhang <zhangtianyang@loongson.cn>
+> > Cc: Bibo Mao <maobibo@loongson.cn>
+> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Cc: <loongarch@lists.linux.dev>
+> > ---
+> >  arch/loongarch/include/asm/smp.h | 2 +-
+> >  arch/loongarch/kernel/time.c     | 2 +-
+> >  arch/loongarch/mm/ioremap.c      | 4 ++--
+> >  3 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/=
+asm/smp.h
+> > index ad0bd234a0f1..88e19d8a11f4 100644
+> > --- a/arch/loongarch/include/asm/smp.h
+> > +++ b/arch/loongarch/include/asm/smp.h
+> > @@ -39,7 +39,7 @@ int loongson_cpu_disable(void);
+> >  void loongson_cpu_die(unsigned int cpu);
+> >  #endif
+> >
+> > -static inline void plat_smp_setup(void)
+> > +static __always_inline void plat_smp_setup(void)
+> Similar to x86 and arm, I prefer to mark it as __init rather than
+> __always_inline.
+If you have no objections, I will apply this patch with the above modificat=
+ion.
 
 
+Huacai
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allyesconfig-build/319/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allyesconfig-build/318/artifact/artifacts
-
-Instruction to reproduce the build : https://gitlab.com/Linaro/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/2c3809bd6f65cdd8c13853af1ab2a80ddf80528d/tcwg_kernel/llvm-master-arm-next-allyesconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/2c3809bd6f65cdd8c13853af1ab2a80ddf80528d
-------=_Part_32662_632499735.1750768240246--
+>
+> Huacai
+>
+> >  {
+> >         loongson_smp_setup();
+> >  }
+> > diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.=
+c
+> > index bc75a3a69fc8..367906b10f81 100644
+> > --- a/arch/loongarch/kernel/time.c
+> > +++ b/arch/loongarch/kernel/time.c
+> > @@ -102,7 +102,7 @@ static int constant_timer_next_event(unsigned long =
+delta, struct clock_event_dev
+> >         return 0;
+> >  }
+> >
+> > -static unsigned long __init get_loops_per_jiffy(void)
+> > +static unsigned long get_loops_per_jiffy(void)
+> >  {
+> >         unsigned long lpj =3D (unsigned long)const_clock_freq;
+> >
+> > diff --git a/arch/loongarch/mm/ioremap.c b/arch/loongarch/mm/ioremap.c
+> > index 70ca73019811..df949a3d0f34 100644
+> > --- a/arch/loongarch/mm/ioremap.c
+> > +++ b/arch/loongarch/mm/ioremap.c
+> > @@ -16,12 +16,12 @@ void __init early_iounmap(void __iomem *addr, unsig=
+ned long size)
+> >
+> >  }
+> >
+> > -void *early_memremap_ro(resource_size_t phys_addr, unsigned long size)
+> > +void * __init early_memremap_ro(resource_size_t phys_addr, unsigned lo=
+ng size)
+> >  {
+> >         return early_memremap(phys_addr, size);
+> >  }
+> >
+> > -void *early_memremap_prot(resource_size_t phys_addr, unsigned long siz=
+e,
+> > +void * __init early_memremap_prot(resource_size_t phys_addr, unsigned =
+long size,
+> >                     unsigned long prot_val)
+> >  {
+> >         return early_memremap(phys_addr, size);
+> > --
+> > 2.34.1
+> >
