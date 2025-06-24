@@ -1,142 +1,231 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7862E8895
-	for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 20:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750798707; cv=none; b=nvF4OKevALKZcW5VEUHM4kVAoxUQJTLIUwpH0pOpsuZkVpVKvp0cn51nz6R6GrAGusLEndXa76Z90+6c8UP0QX9EcEMERSvs4Tis4wOIh+4F5zfBUMdE8hocDfKdgPVK+xkoM/TW64t4SeXha1GKLXZh+cvQ5K03nh462Z+mYBY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750798707; c=relaxed/simple;
-	bh=ku7s8J7NNaVRw7IojtWRiPUGuS8pNyYSGsxT4vIfzIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Edc6fZIUATTqhn1xcCkG/t54LKYUoLZZst1/fN/PBdnbyJTYXrPFPAW21oA1kK6c2ZVTymwcxkCpOaQjDuleU2v0EgSo9+SNQw9/1wkVvzUd7vahixRrBSqbw4gcP3OhofJ59cIPJ9v08s0S21FIyRZD5cf/lHC4xGNx062mtf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ED8gdfLM; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD550256C8A
+	for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 21:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750799524; cv=fail; b=Pl4yAAIRrYeX6d8jbe6JTDofwWr0eRO5WZlehchU2ZSLmAlasDEkfrO5xdMu77N5jevOcw2yTigaEIEQe69B69zvaZTGinVvnf4pmSPsbcw8tyyzNGW4gRWVPGJqQBJA0JunBOD1lErnUM+koPCk/XDgLLxf274SBjQjjnpTZas=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750799524; c=relaxed/simple;
+	bh=MmEvXRIbPTX7oS6JmY8wMSOhBNOK/ww/CUWFHaD2jCg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VrUs5ZveJQn3K+Ujq7CvY6jwjL2AiLCK1ZCdHQyMwYefANaf4NsfC8x5pbRBcJpwaAXQp0RNhWi0WCQ38la3LHeO8e8W2ZqDdudYtctLEoxdL7NztmnTuio49340m9Pjf358axJTrssTgVK+6NRDvpE48kuwNoUCK00vjIQusEQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bhnmC1Qy; arc=fail smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ED8gdfLM"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a53359dea5so2861704f8f.0
-        for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 13:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750798704; x=1751403504; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Zz2ubMDTUSZ3CzP5tOdKSgALba7wz8T19kE34wyz8os=;
-        b=ED8gdfLMfyR4/Xg3YtFIOtWj74wcytGMVtSJz6+rNNuL4xMcEwV+orogOvzWri1gg+
-         NFt4wdwlzZ7kg6F3VMxIFy1klBLYTyvWJaFCLtC+Wiy1ukFW774R7QRC5oDPv8FJSwgN
-         BCHNw+VOLmLQW+v+g6YfDPDCtokNkyqa4fd8OgvYK9WxDzeMuoDDOAhuyNGQ/GbLYpXX
-         OrTbyCashaz3tqqitEt66+JSKRwsZMIopXu6p69Ejs53meymbdnFx0B9TEQPdmnyzeQ5
-         5vAW/MP18PXv+ao3VojVKmHWeQSzz8iNOg3nOxR4274JeZKO7HkiCmja/quMQIYDfF0e
-         wghg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750798704; x=1751403504;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zz2ubMDTUSZ3CzP5tOdKSgALba7wz8T19kE34wyz8os=;
-        b=m+P0AqNmNONhK62oprxJ0sT4PTTlScUaPD1mdggscQQBnPUiviBF1CmlQYbA6eMxH2
-         gAXBy8R0ZAL/k7mQbYQJ2GPBEHymZXGUfLSoMbXpDcurRKpu0pKTDThRamXWIBFSYkFo
-         rNHWM4NHs8j6KQRGekL05UOUNpdO60if4I/npGvquU2j3yVCNTBulknmvb0DAAaCuHFy
-         MricihJ5+EzsYS1y/2rK+HiC0pToBEtSAD6deBEU/BqiElwV79qAddvcP2XZ02RBMyj7
-         7nnY/47haRNy2m8g2FsdK7gYALn/u8re8bizYOaLO1DxiAxaqk+GqCr3GW3gw+MIMtrh
-         ptgw==
-X-Forwarded-Encrypted: i=1; AJvYcCXp+6X8fHLTxM3cOC86LC6UCymx6VYYcFqUbvZHjN6z83g+yoAj16GU/a3KcnJPu8f5Px3q@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy33tRSjoZBrn8CPAlvqOpbAWKaR1R0JzhyewJXKXsqrn25AZx1
-	A5lE7QpybwfblYXY6HVlM9tzNRWwp+yOgawfGv5pp1YPQx/+cXov5y0N
-X-Gm-Gg: ASbGncvZsxa61+ipQfD01fOoqo86Wm2TwVsxKYVUDQpOobKi9sPCQSk5whXDCCfxkUF
-	AROqmInpdOcB3bXYETIpyP+yYGigPYlqIy2bJlC7dcvu1ggyhAJIvAn5mMnrmzJezam55EwLOFb
-	1TO14qusBAkDLxFeuddwITYrkF220UOUuePy6oWkgSWkp371csaanmeiVxwjlK5xBno1uvVmfP4
-	Fc1ufzzx44NG6tSw19HXjPe5f4GxpnrPFmJwjRp2hUZXvJdGt3kfJks1jeXiFhe5XbHMjvpPmKn
-	7vQObmfDUjdhk7vEi8Z5vuLQCfvw+Y+EK5Cf23ByXGh9QaMtorWeHomORA==
-X-Google-Smtp-Source: AGHT+IGvRDON52aC7F32xyTsDzrric4VeeMtyvVJzhPR2+fqKMhg0dkJITxDSB426QL/PeWs4NeQFw==
-X-Received: by 2002:a5d:5c13:0:b0:3a4:eda1:6c39 with SMTP id ffacd0b85a97d-3a6ed6259e5mr149097f8f.13.1750798703771;
-        Tue, 24 Jun 2025 13:58:23 -0700 (PDT)
-Received: from localhost ([2a02:168:59f0:1:6ea:56ff:fe21:bea7])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45382373c6esm76865e9.34.2025.06.24.13.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 13:58:23 -0700 (PDT)
-Date: Tue, 24 Jun 2025 22:58:18 +0200
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Stephen Smalley <stephen.smalley.work@gmail.com>, xandfury@gmail.com,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	selinux@vger.kernel.org, kees@kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2] selinux: add capability checks for TIOCSTI ioctl
-Message-ID: <20250624.3bb75890f0b0@gnoack.org>
-References: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
- <20250622-toicsti-bug-v1-2-f374373b04b2@gmail.com>
- <CAEjxPJ6v12nLFx-x4-=esuPMp7L8UBvTzoj1kkTPcD2mDKKW8w@mail.gmail.com>
- <CAHC9VhS8gPQwgesV_0VbUuqxGrADm5uDofM3m=wZuAEgkWi5Hw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bhnmC1Qy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750799523; x=1782335523;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=MmEvXRIbPTX7oS6JmY8wMSOhBNOK/ww/CUWFHaD2jCg=;
+  b=bhnmC1QyEs6mNJNw5us+2K8u+YvzhtU+Pp434VOkBma7KAXtci+q7w35
+   Eu0vqyZEja+fk+XMSU2itHZ3huRLOZ/Pya9Djwhi3S690Ku+uTtDPgSSe
+   KIs7molIHH0Tye2yaTGgMX0/lo+Qt/UcKydwlCNJAdBq58PJXB6N+KYmY
+   ft+r++Yrwez5my7XH7We0U9hXQxbraYbtnf5e/TS72jya2cVlwkcFuQm0
+   KAlHEXBq/wiO1+AptTd5bHMttm+b/FdJy7AtmTwcsdxGHJaeAr+HrvQ6p
+   CrjHT7l2RoUkiBG5JkB7c8Tx1f4hQuPFkOQn6Dk4eUv73okRoB9aGi5GQ
+   w==;
+X-CSE-ConnectionGUID: C3jvY5RSS5inoR7F743xMg==
+X-CSE-MsgGUID: Bm903h22SZGwAqq5nTEppw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="53153694"
+X-IronPort-AV: E=Sophos;i="6.16,263,1744095600"; 
+   d="scan'208";a="53153694"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 14:12:02 -0700
+X-CSE-ConnectionGUID: 6S598rb2RPefB4e33t40uw==
+X-CSE-MsgGUID: Hr87KiIuQ+WVcXvl3O5MhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,263,1744095600"; 
+   d="scan'208";a="152546352"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 14:12:02 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Tue, 24 Jun 2025 14:12:00 -0700
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Tue, 24 Jun 2025 14:12:00 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (40.107.236.53)
+ by edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Tue, 24 Jun 2025 14:11:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vNuJx8BG7+JEq13WKO8L7Oye1CS8jvSCoHvMOSqjlxKTiSr0Up5FdaFGTcFFhtNF+b1Y86cMLbHnFu8+6r0hGTCB9nEoUU6HRFk4bjC4MprWdvfYYOUg1i+csZ9sYiQaaatKNxEmnTknBv29VQEgeSk/XnhXddYgt8CCnbydaZ+vY26NLqu+XXS8dinVreAdjyHnT5AJ9HXLk6YMXAHGEjX86MV9d/AP/DK+Vpsh/YP9nBTqE9Z+etpKWqPjvUtXct0uoXQxPbGBHOPUo+8hKhrXdny5hGuObgf5eoKx/CZe7Nl+eA5DdH9PiAIKJPs8Kf/O6c2bVyurVP4+ZywsyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D9JwSM+cQR/dkcMiXJqZI5b7z0tFX4/ICpkrPseZDSE=;
+ b=M7X/C4zg4ScvG7uROUyXdkkVwBEmdfKuhO5rQrknQVLV1qzh1ZfefRSBlT+C69HvgnQYGk1TCuSxiB+IgwQOiPyBvBsymiKxR5qqakCRhT2lE28Mm8BjhYMGFZsA17fG5Kcel9StATGxWqUUInGkYDVqM0KmoKzBFT/MwmZmgD19MZ45CW+lixxJJhP8DALupAPA+/iVgI7xfAOgejskUOMw4X3hWKKklLNt91s3N+Kf4c1BacJThXBc6NVGLe5vQwYsd9STWnje0tLImbE02yuGLCMK5o/qyyUiWqcFpNgkqntj0TbENgXWrA8m989lJpwdm30QcqFLlwjXEGCJyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CYYPR11MB8430.namprd11.prod.outlook.com (2603:10b6:930:c6::19)
+ by PH8PR11MB8037.namprd11.prod.outlook.com (2603:10b6:510:25d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.30; Tue, 24 Jun
+ 2025 21:11:57 +0000
+Received: from CYYPR11MB8430.namprd11.prod.outlook.com
+ ([fe80::76d2:8036:2c6b:7563]) by CYYPR11MB8430.namprd11.prod.outlook.com
+ ([fe80::76d2:8036:2c6b:7563%5]) with mapi id 15.20.8880.015; Tue, 24 Jun 2025
+ 21:11:57 +0000
+Date: Tue, 24 Jun 2025 17:11:50 -0400
+From: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+CC: Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+	"Ashutosh Dixit" <ashutosh.dixit@intel.com>, Umesh Nerlige Ramappa
+	<umesh.nerlige.ramappa@intel.com>, Arnd Bergmann <arnd@arndb.de>, "Nick
+ Desaulniers" <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	<morbo@google.com>, Justin Stitt <justinstitt@google.com>, Lucas De Marchi
+	<lucas.demarchi@intel.com>, Matt Roper <matthew.d.roper@intel.com>, Ville
+ =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>, Nam Cao
+	<namcao@linutronix.de>, <intel-gfx@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH] i915: fix build error some more
+Message-ID: <aFsUllcRshBtV9xc@intel.com>
+References: <20250620111824.3395007-1-arnd@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250620111824.3395007-1-arnd@kernel.org>
+X-ClientProxiedBy: BY3PR05CA0040.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::15) To CYYPR11MB8430.namprd11.prod.outlook.com
+ (2603:10b6:930:c6::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhS8gPQwgesV_0VbUuqxGrADm5uDofM3m=wZuAEgkWi5Hw@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CYYPR11MB8430:EE_|PH8PR11MB8037:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57f14a00-8e68-4e1d-44be-08ddb363c06c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?mlOkWFHQrDeHzqk0CakhlbOgCRjX6ShgNxtHofjRPTiNus35uOTrR9M9y8l7?=
+ =?us-ascii?Q?T3QNWRrv3l6cbNSlLmhaLc46XMuKSYTE4luAq2IhrFCKCqd95iOz8Qg7tQuJ?=
+ =?us-ascii?Q?4sqS2CGlHRPiRvXDUHmxs8BVtnCbs4HQ8orf5xNzvYDsZSTOA/l5dmiZxi/o?=
+ =?us-ascii?Q?Idkv9iYIpbOO5MgQnMm/s9h4Y8NheGHEB1sv1xbyy6thpSOotKK06BMmUOA5?=
+ =?us-ascii?Q?h/2IAAwydEr0qghEjZUrat42WvkTnMgbZ/fLbuJBElr0s9y5nNvqZyIMd2sZ?=
+ =?us-ascii?Q?acorxQsJrZfs3E20MznKGQZGSIzKvaSORArN5Yokym5yKLkhBZuydNhq8mRy?=
+ =?us-ascii?Q?l3RSh0PRsHWa+uH/qbFiYg+8zPZoGW46JKLOIjD8Skf/03M3Z+yx/jRD4bBu?=
+ =?us-ascii?Q?OnOY4ijzvO7oCV0fNxJye4pj85FJlPqCcBnbGXBomEdiN3GFSPGR3vzSaPdv?=
+ =?us-ascii?Q?5ss5KyYcp2ETDINvNKH42ZYS2c6FpqzEEG2aRyEUNBNb5JIt7rdvniuJTnm6?=
+ =?us-ascii?Q?I3r5grO5dT/hBnuj7tziiHRVPDoQqAKH+IpFUbvTA+skPh/HIUoMzwMjt2FY?=
+ =?us-ascii?Q?uh7zdsV1Mq2snusxXmTWVp0ced0voR6tUwnI7uvg0fQHJzm7vGd4hk2ubwfl?=
+ =?us-ascii?Q?3AEZewvKe4paDwqs5f/lQRItkQjY4XGV1cgebtmJPEdc8dTTmFOjX6uzYQp4?=
+ =?us-ascii?Q?W0HKPQwJN2M3TJuQ/yrtexM3QVfK2BrfB5FV/YDBN7mt7RWyY4kMdBrIFWl4?=
+ =?us-ascii?Q?nGthY4pY7aKtrB7jwSfoIlEyeThtNGF93fHN452PP/L8E5jlqJNqLP122lPQ?=
+ =?us-ascii?Q?PQg6SG/APxo2SYjDjnrmOE2zrGiIydIPyetvOXvAkDN9EpBOgAVAPJpjQL8L?=
+ =?us-ascii?Q?ForxokuhV6KQp9KBrns6hnh/OyzCzeF+U8jL+r5MnJLp392GeABs4CPnwxMG?=
+ =?us-ascii?Q?MIx0YwGptDMyYxmuu2KtjtSuK8TEqgwgvVhQfc7HFruCcI2cPsF0IBZj11Dq?=
+ =?us-ascii?Q?N/b2Qg3j8SaXCRmbyJSVPA2O0yOnrTgiwLADkTUCoNMU4DOA6VmoyUQrX2M9?=
+ =?us-ascii?Q?sqbHkr0xUi6g5bD8axJRQZ4Wv/Hel4rsDL+J0PEDUvUZY3Aiyulzi8yDMqxC?=
+ =?us-ascii?Q?XTiyoT/Djn+Dx3Syb/o4Y9MipxAAqJIJ6dAZxXsm2NIKEJJqaiB/huHFLBRL?=
+ =?us-ascii?Q?NhmNTU96x/64t7B7rH4/yk7Wl9Jc6cocXSk6DdY5dVIq1m9mjo9hpUmshrnw?=
+ =?us-ascii?Q?Vt/hZbz1avUoV5fMT45odIyEfygl06ky8Lv1ZAyP7togQAp5nl0KLX/MQgy0?=
+ =?us-ascii?Q?+9WdQWE8YHPTRH5R5tJrfmw5v4kBbRCqd24pDwa4Rl46YrxOTn114xKkT8jH?=
+ =?us-ascii?Q?37kUUxN27vjETiyVCA031RPHNxNZnQbB4gbHS8o6lwckkbORlA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR11MB8430.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4zgNhYr8C7oGEzy5WOz1f6Mx8Boh3iXlU8wuignO4qXADIz/l2jZ5kgwNFr2?=
+ =?us-ascii?Q?QsJIjcCc8TFj2yyn3cKprX2XeAh/a2eiGJ3cD7OSYESQtSXwoag8wdBuEY3P?=
+ =?us-ascii?Q?kmfL/RTBJs52oXmdYEJjksictr0eqKts1gpHvLnCtYLHMopN1LaxayqmjUPm?=
+ =?us-ascii?Q?zT73AyNGfG4BZQ8Ovat4lSJifiDbkPi6KVJ77bjiQnwN/MBsezvSdoA5BBAR?=
+ =?us-ascii?Q?M7GaNUtNp0dTQ54Q7neeq8np65jJn3fMoJZr6OIa1c5BqfozdCRucLFJk9Ww?=
+ =?us-ascii?Q?pWecaHalq1Qh8uBWPeH0xtfx2biPoEEPG3a7zHinRMZtPpSa46XJ9gCh3RIX?=
+ =?us-ascii?Q?kSYiZt6b+Ac9JGAAAUhANGBRE69/+sFP1UFVEe/wttT0fPvQdzxQybE+e19V?=
+ =?us-ascii?Q?zKwr1ozxurxFp2Q93qUvORPBbI/14TOyX3EaxiImAlRDXPGY0uEIm6zN3st7?=
+ =?us-ascii?Q?aIS/dF7LhJKC2Z1e3ItLZrQgQbM44LyPyc+QEa0tDWxNLzkd+ipuvdRMot6F?=
+ =?us-ascii?Q?eadXG0Hw06VTTcI0kBZuP+o+/SpwiftPzyODW+4fhW2mLrm1BkKmS38pXWAa?=
+ =?us-ascii?Q?BuN4V9H8GqCBLlr7PLL8HXjLfGJpvo9BC4dV9U/ClHR6r+wW/4AavVnOIjSC?=
+ =?us-ascii?Q?C4jbUnY7XYRX4NyqNj0ZDcd2i0fOr5VlDFtVMTKtYrkoojYRFEwKYbnQZPF0?=
+ =?us-ascii?Q?2eHXem7FvgkZAe0cKN6JDe6tmjzcjoQSsW8bJV6gddwNp/gUAHQDW4jxdaxf?=
+ =?us-ascii?Q?VKrLgDppZ1yXVgEiBp3Oc5ZWubHe5rjoCmlZmimciIx5AFDu8nUo/xbkVwlB?=
+ =?us-ascii?Q?/t4gnLHNSiIMqzZdvkFIsWfQbBebA/5fvQHaq8EiW7XVbHU15VqgwCXTOeub?=
+ =?us-ascii?Q?RFdxM618t2KJQCAhFbewPwiTzQv0DXOILnKJXb9fD8tY4G+WbRQU8Zzo9pTm?=
+ =?us-ascii?Q?IGyD62nwuwEkK0jBSK4qic5wq0oEZeMPMyKrpUJCBdPLq3gQuoNxa+3DuIT9?=
+ =?us-ascii?Q?YJSWU0TwPdBZndTfRdqavQh+dAIqFPPhfFCz490gIwVYXd/3Y7Z39HA0U3kb?=
+ =?us-ascii?Q?zrftogXKfxYNQuxbbRid5s7ZnSgGs+DQVsIXXjYieMYfTUIGQB6iX8QwPud8?=
+ =?us-ascii?Q?SQgtMwRP3xWSpp90lwEywi7Vw5jsCplp9IVgG0igLLwzZFL8gK9vqYoyc8fl?=
+ =?us-ascii?Q?gEyZ42/9fSTzAKvKFA9rItDjTTSt/b5TQVBo94TYphnKbkte2Q1V4cNt7xaN?=
+ =?us-ascii?Q?uy0C118aGo7oZpz9yDpgl/blzqN4cNgg1/XoJUXqRHa9zG+AsrDwGikjEftN?=
+ =?us-ascii?Q?Pk/PkWwn72/Pgl+wWL/Lk3VQud6m45rEDUiB5TVY+vWqB+NA8wl0apF4m9Q7?=
+ =?us-ascii?Q?e51tFl8TzJg71B3yIw76pstRH7y9WEPs8KbF2dgI2/Z444+goeuo3/IO/QMm?=
+ =?us-ascii?Q?+wpL12LJs4GSK6eHebAEHCDSrB15UmREQuhHjbR7LObKjhj/pYbXdr2cKrwa?=
+ =?us-ascii?Q?u7/k2lfi5aZj7U0ZmuERGxCJoVCnt/GcRv2bXQoYR6ZTlG6CXTJZcVNArJMR?=
+ =?us-ascii?Q?elLKggCseOwiwAdu8xpPtEU/aBSmGv7bk6Nb0eqT04kEJoYmdS19w/9mKq4a?=
+ =?us-ascii?Q?Wg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57f14a00-8e68-4e1d-44be-08ddb363c06c
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR11MB8430.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2025 21:11:57.1116
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9HUX+xl62zIr9elL3J1mm5OFXWBm4cNXUtuwGFAwlwKeyByBJNqpMo1JUcaP1xbHqEHVZAEa+3s4a5qSAZFn1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8037
+X-OriginatorOrg: intel.com
 
-On Mon, Jun 23, 2025 at 11:15:39AM -0400, Paul Moore wrote:
-> On Mon, Jun 23, 2025 at 8:39 AM Stephen Smalley
-> <stephen.smalley.work@gmail.com> wrote:
-> > On Sun, Jun 22, 2025 at 9:41 PM Abhinav Saxena via B4 Relay
-> > <devnull+xandfury.gmail.com@kernel.org> wrote:
-> > > --- a/security/selinux/hooks.c
-> > > +++ b/security/selinux/hooks.c
-> > > @@ -3847,6 +3847,12 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
-> > >                                             CAP_OPT_NONE, true);
-> > >                 break;
-> > >
-> > > +       case TIOCSTI:
-> > > +               if (!file_ns_capable(file, &init_user_ns, CAP_SYS_ADMIN) ||
-> > > +                   !capable(CAP_SYS_ADMIN))
-> > > +                       error = -EPERM;
-> > > +               break;
-> > > +
-> >
-> > So, aside from what I said previously, this also will break any
-> > existing policies currently controlling TIOCSTI
-> > via the selinux ioctl checking in the default case, so at the very
-> > least, this would need to be gated by a new
-> > SELinux policy capability for compatibility purposes. But I'm still
-> > unconvinced that this is the right approach.
+On Fri, Jun 20, 2025 at 01:18:18PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I want to add my voice to the other comments that adding these
-> capability checks to the SELinux code and not the main TIOCSTI kernel
-> code is not an approach we want to support.  Beyond that, as others
-> have already pointed out, I think some additional inspection and
-> testing is needed to ensure that the additional capability checks do
-> not break existing, valid use cases.
+> An earlier patch fixed a build failure with clang, but I still see the
+> same problem with some configurations using gcc:
+> 
+> drivers/gpu/drm/i915/i915_pmu.c: In function 'config_mask':
+> include/linux/compiler_types.h:568:38: error: call to '__compiletime_assert_462' declared with attribute error: BUILD_BUG_ON failed: bit > BITS_PER_TYPE(typeof_member(struct i915_pmu, enable)) - 1
+> drivers/gpu/drm/i915/i915_pmu.c:116:3: note: in expansion of macro 'BUILD_BUG_ON'
+>   116 |   BUILD_BUG_ON(bit >
+> 
+> As I understand it, the problem is that the function is not always fully
+> inlined, but the __builtin_constant_p() can still evaluate the argument
+> as being constant.
+> 
+> Marking it as __always_inline so far works for me in all configurations.
+> 
+> Fixes: a7137b1825b5 ("drm/i915/pmu: Fix build error with GCOV and AutoFDO enabled")
+> Fixes: a644fde77ff7 ("drm/i915/pmu: Change bitmask of enabled events to u32")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/gpu/drm/i915/i915_pmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
+> index 990bfaba3ce4..5bc696bfbb0f 100644
+> --- a/drivers/gpu/drm/i915/i915_pmu.c
+> +++ b/drivers/gpu/drm/i915/i915_pmu.c
+> @@ -108,7 +108,7 @@ static unsigned int config_bit(const u64 config)
+>  		return other_bit(config);
+>  }
+>  
+> -static u32 config_mask(const u64 config)
+> +static __always_inline u32 config_mask(const u64 config)
 
-+1 from me as well.
+hmm, it looks like the __builtin_constant_p() with BUILD_BUG_ON is a bit fragile
+design down here. But this always_inline will enforce deterministic behavior
+indeed.
 
-If the perceived problem is in core TTY logic, but the proposed fix is
-in SELinux, it only addresses a fraction of the install base, as not
-all machines use SELinux.
+So,
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
-Also, it's not clear to me why the perceived problem of FD-passsing
-with SCM_RIGHTS is a problem at all.  If a CAP_SYS_ADMIN process
-accepts FDs over SCM_RIGHTS, it is the responsibility of that process
-not to do unjustified privileged operations with these FDs, on behalf
-of other, less privileged, processes.
+pushing to drm-intel-next right now as well...
 
-In the more classic attack scenarios (as described in a series of CVEs
-[1]) the process who had the FD first is normally the more privileged
-one, for for those ones, the existing CAP_SYS_ADMIN check seems fine.
-
-—Günther
-
-[1] https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=TIOCSTI
-
--- 
+>  {
+>  	unsigned int bit = config_bit(config);
+>  
+> -- 
+> 2.39.5
+> 
