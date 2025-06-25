@@ -1,209 +1,116 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F302B1F561D
-	for <llvm@lists.linux.dev>; Wed, 25 Jun 2025 05:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79AE307498;
+	Wed, 25 Jun 2025 06:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750828535; cv=none; b=lVi0j181QjLjSw8URaN8NeTsfOhhAr5TtjwEtI1hVFkHVMimb99/mWM2yCUSijQ+GY+nIADMa3UE/ddu+g1HdiCjjUWhqiTd7P6f/pUjyN7j2zXufgf576pgQvuRi5K+ZOJcU/N3vEqo/RFfoVuMtca2xkH9zC2o01f4r66S4Wo=
+	t=1750832310; cv=none; b=Pw9448DADMhADGZGJv+eFerQcylpF/SHqnqnPvdWlG4qwHwves2we5mDQDfPiW6N5LIFerfqS3ktEOgOQDooPAswigg48mGSUbOfj+T0/2ajzw4SsDhpcGpwjOG0y6ggJIlZ7EGOKEs9o0MTvbLoU90EzSGWTQUgLSWsFxqsUJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750828535; c=relaxed/simple;
-	bh=VBOn77Pw4+tme4JesglES2sMUF30+bd7R7k26+boK2k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mnH6UVxaidFDUVUDSAuS+zyVUAVzxwORS7q74UHm/lj2CtCwgsKTKDtf18ekxp5ILN71QQc5stfC9ZEBRIKRGtN3U2zB3kK8QBIxHPRzgXPk8KUy0d5YAkAshJTsMHUbBMarXgRJQsQMqfXKWFVBQxVCQxUwtHG8DrxPq42P3gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ge7zEnUM; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750832310; c=relaxed/simple;
+	bh=v8dGxdpXvhwjMLSxtF/xObVxeM0eFoe68UmmiFX3esY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SIo0YI3myhP0Jf3/jJmbDi8vT6a1S7PsX5qOYpKJw6xtN3qd6KoTAL7PKKEYC0ooeU8WZ27HjClP/9OyXYMbpsB7riJQxFyz0/ty/0qz3mRVg9+A11DKzaxn7e79C6CK5r5cOE2NBhwTIW9Qr9B6hU6pmq2735hZ8PnfcXssGTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LDn6Q2vH; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ge7zEnUM"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6facc3b9559so95389266d6.0
-        for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 22:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750828533; x=1751433333; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jPHPiLn+shRnXPTS0LeS5dHvFwnPQLKTW28CIznWwTs=;
-        b=ge7zEnUML6gx198AXl/SA5dCJ76KrFmoHjD9pE/NQSgTBtTVVNxFEklnKgX+8thaWs
-         pJ+10sLpOxptFVoFszBwL8bdnFP5xoirMMbRZs7lSDBjHyJ96O2OAP9gl3/1Od4d+lZe
-         tYrEKWx28f4y/WZaud8Q7YQvSmRe4Pp7L1qK+dlx2EoFSZcQ2k+KKpWWKGS2MF5qzSQw
-         qd2Ejsz8UKT3s3i4eMUJeqqKKSyzR/LlSUIaMEIbkldmVAJoJcBwc1IR6tmg1FaC8By8
-         OlMm167fyP/qE/XR6c4p2lAy9P05N5TM9hjiJD4QJY+gkBEQjl8RSCpnbEpas2LveCGF
-         le+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750828533; x=1751433333;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jPHPiLn+shRnXPTS0LeS5dHvFwnPQLKTW28CIznWwTs=;
-        b=cqeBKRif0qcqNEtAdPQ3OyYZnl1W2r7ojF6KcIALF1NKIS7FFJqHWiHVMaJ6GbcKRQ
-         HIg4659JkhU09QlB6BsW2099ypIWWUzfivdbzPelPT+2V29YBDHXaADUw0+VGVIRXrmj
-         0hPc3rAfE5datjlJmW7TIvTil4xC3mo2hvSfYLgs3zNatItqov+rQDwDirLWbkaEOzP/
-         uB4qbWf1yHN94oXsy3gTjet3XMK80l7Nj+LYLeZTn0CHz5AVA8RIAutigqu0BWYvaWXO
-         CGWuDTrVgZ2/7PSdNJ3eGjuFMwWNvQhFM3ywPHe1HmvIQk3Bl1DpL/xbEuJiVh66gpsf
-         f+tg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+MCQtDm/RpRFsxeR/GpAAm5Up37daDPRpgEMffWY89Cd2HkwliYmy826Im/KsLy2+o6XB@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy4Ij1jFDEBAkrRj3w+y5Wi6iB3r+IA6zTnK0Tkc4klONAqyEcl
-	xlFO8fm5WQ/GxP9mXfKsXRYS05HF6WZFIyxeNfd+Zq2SZ0eV+homtUl+
-X-Gm-Gg: ASbGncs2laLbBEz+YOLBR5AGThNYU6D3aufFd7AlqAxEk3SIRoNHadmSvrldl+SLJrY
-	ViQC+lmYg/Zwv7WTsyPCer19Kvkw+jsXKYj5ILOYwyDhoSKMIloC6rx7UkZNVwPahagSKTvAsjr
-	gUcriAB5n6i9MIIN0LA7AIlTNh55pL9sRMMY+iFzRB4aKjdfzUmPatWsROYhPjVrnAjT5UbiJjN
-	FcpLU0lI73JNm8svi7ZVqhHfg+pRka+WMK8TT4E6Q2AzfKqMGJFCPrQsn4HbEfPKfZjnS11o8IC
-	xQxL+cv5JzQzU/2naSdFUdCJM6CJK2QrnSs649FZ4s//ecmaokkSJeSSuK51UwgBZH/LQbRTZxz
-	t4pUQVM1OoBsqX4pljoimdLqvSJQTGJeijekxz0VsKZnUwizlBZwz
-X-Google-Smtp-Source: AGHT+IFait6Cui768Cq84nzBcA7GCns6Fe7QqQseb3Vb4z41dIqYjDzEjvA0QzsRI6znLXw9/crJRw==
-X-Received: by 2002:a05:6214:258f:b0:6fa:b42b:2bd9 with SMTP id 6a1803df08f44-6fd5efa0ff3mr27794456d6.37.1750828532649;
-        Tue, 24 Jun 2025 22:15:32 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd09578243sm64267716d6.91.2025.06.24.22.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 22:15:32 -0700 (PDT)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 645C8F40066;
-	Wed, 25 Jun 2025 01:15:31 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Wed, 25 Jun 2025 01:15:31 -0400
-X-ME-Sender: <xms:84VbaGkHUZFzJ20zsbFGD7T0kI97aKYEohxzyB0y7Z7amuVQfxQcTg>
-    <xme:84VbaN2Z6tYoHjrkSR4NbSFyHhASumwcYpiPt5zhbMWPs5GnlMr0P9I2Yq14AMcWD
-    5wj2F6Ukyh3OBkA_Q>
-X-ME-Received: <xmr:84VbaEppPL2QwPm6d_qd2zPk7Nir0YWPXY7MFaLMDhqXVYMht6CtIcSckQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvudeltdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhnucfh
-    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhepgffhffevhffhvdfgjefgkedvlefgkeegveeuheelhfeivdegffejgfetuefgheei
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
-    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
-    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
-    feehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihhnghhosehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgt
-    phhtthhopehmihhnghhosehrvgguhhgrthdrtghomhdprhgtphhtthhopehjuhhrihdrlh
-    gvlhhlihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepvhhinhgtvghnthdrghhuihht
-    thhotheslhhinhgrrhhordhorhhgpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmh
-    grnhhnsegrrhhmrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdr
-    ohhrghdprhgtphhtthhopegsshgvghgrlhhlsehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopehmghhorhhmrghnsehsuhhsvgdruggv
-X-ME-Proxy: <xmx:84VbaKm8bFqE8HcxVAkOyxg0KbsiVzwXbzDVWy3CMvh7qfjk_DSfmw>
-    <xmx:84VbaE3u2-eUBFBKSlN7R9IdZ8m_uLO6xPRnDpEEWT1wNcLil_T-yg>
-    <xmx:84VbaBtBoEYgGa1G58UPcT7paysUGCplZBfN9H2fAEK4mGWvlBvoZw>
-    <xmx:84VbaAWMO-5zzCXFAFZZhDzwrTpf7OZaavhU8OvL-3atZgOCz19F-A>
-    <xmx:84VbaP3oc2KF8bZelQrXZVQqiYevbr12iT4L-aa3i7R3ktazUmZOXXwd>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jun 2025 01:15:30 -0400 (EDT)
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>,	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Tamir Duberstein <tamird@gmail.com>,	Kunwu Chan <kunwu.chan@hotmail.com>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Borys Tyran <borys.tyran@protonmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Panagiotis Foliadis <pfoliadis@posteo.net>,	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,	llvm@lists.linux.dev
-Subject: [PATCH v2 5/5] rust: task: Add Rust version of might_sleep()
-Date: Tue, 24 Jun 2025 22:15:18 -0700
-Message-Id: <20250625051518.15255-6-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250625051518.15255-1-boqun.feng@gmail.com>
-References: <20250625051518.15255-1-boqun.feng@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LDn6Q2vH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750832308; x=1782368308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v8dGxdpXvhwjMLSxtF/xObVxeM0eFoe68UmmiFX3esY=;
+  b=LDn6Q2vHZG0rMXB0T95iwUg1HA07fH1Pyej/kB7dIqAM8yOjXiNCL0lP
+   7BigNKszp1hTV4AhMZna5W4KULzFUZjUOrw8Iq8hf7jtnHhE3sA0kiR09
+   iRebdbJopnrhSLAJ4lolwyW5U5lq5BbkTUco7v6LdcLwYZvPTE/4s97d0
+   ewuHMTpvXbinxNGPByYsN+c9/GSWJlNDF/rzx1x1ruSnvayJ/XeIYF/p7
+   it3X941eU7ash1y9draCTfJ+RUREiv6L5KrszVovzXzemUK4HYEglgMFh
+   cb1rbILwW2qsvkBFFdUj0pBsj56vLGJkvoCyL9ss8lLfYgtV+hCK5aXmu
+   Q==;
+X-CSE-ConnectionGUID: /J+z62KgThe/SvNH6/sM9w==
+X-CSE-MsgGUID: r2I+e4eHTr6NHOTd3b+yRA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="63351722"
+X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
+   d="scan'208";a="63351722"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 23:18:06 -0700
+X-CSE-ConnectionGUID: 61QiRcVBRhaW/fx0UykyOw==
+X-CSE-MsgGUID: SyFgvC+DRVaCzbOgdTJ5wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
+   d="scan'208";a="157624492"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 24 Jun 2025 23:18:00 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uUJSI-000So2-0t;
+	Wed, 25 Jun 2025 06:17:58 +0000
+Date: Wed, 25 Jun 2025 14:17:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pengyu Luo <mitltlatltl@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Eric Biggers <ebiggers@google.com>, Len Brown <len.brown@intel.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Ingo Molnar <mingo@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Joel Granados <joel.granados@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Pengyu Luo <mitltlatltl@gmail.com>,
+	Hong Zhu <vanyang@smail.nju.edu.cn>
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc8280xp: Add initial support for
+ Ntmer TW220
+Message-ID: <202506251320.oOPGzTPQ-lkp@intel.com>
+References: <20250617092929.1492750-4-mitltlatltl@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250617092929.1492750-4-mitltlatltl@gmail.com>
 
-From: FUJITA Tomonori <fujita.tomonori@gmail.com>
+Hi Pengyu,
 
-Add a helper function equivalent to the C's might_sleep(), which
-serves as a debugging aid and a potential scheduling point.
+kernel test robot noticed the following build errors:
 
-Note that this function can only be used in a nonatomic context.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.16-rc3 next-20250624]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This will be used by Rust version of read_poll_timeout().
+url:    https://github.com/intel-lab-lkp/linux/commits/Pengyu-Luo/dt-bindings-vendor-prefixes-Add-Ntmer/20250617-173338
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250617092929.1492750-4-mitltlatltl%40gmail.com
+patch subject: [PATCH 3/4] arm64: dts: qcom: sc8280xp: Add initial support for Ntmer TW220
+config: arm64-randconfig-001-20250624 (https://download.01.org/0day-ci/archive/20250625/202506251320.oOPGzTPQ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e04c938cc08a90ae60440ce22d072ebc69d67ee8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250625/202506251320.oOPGzTPQ-lkp@intel.com/reproduce)
 
-[boqun: Use file_from_location() to get a C string instead of changing
-__might_sleep()]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506251320.oOPGzTPQ-lkp@intel.com/
 
-Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Link: https://lore.kernel.org/r/20250619151007.61767-3-boqun.feng@gmail.com
----
- rust/helpers/task.c |  6 ++++++
- rust/kernel/task.rs | 24 ++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+All errors (new ones prefixed by >>):
 
-diff --git a/rust/helpers/task.c b/rust/helpers/task.c
-index 31c33ea2dce6..2c85bbc2727e 100644
---- a/rust/helpers/task.c
-+++ b/rust/helpers/task.c
-@@ -1,7 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include <linux/kernel.h>
- #include <linux/sched/task.h>
- 
-+void rust_helper_might_resched(void)
-+{
-+	might_resched();
-+}
-+
- struct task_struct *rust_helper_get_current(void)
- {
- 	return current;
-diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-index 834368313088..7d0935bc325c 100644
---- a/rust/kernel/task.rs
-+++ b/rust/kernel/task.rs
-@@ -400,3 +400,27 @@ fn eq(&self, other: &Kuid) -> bool {
- }
- 
- impl Eq for Kuid {}
-+
-+/// Annotation for functions that can sleep.
-+///
-+/// Equivalent to the C side [`might_sleep()`], this function serves as
-+/// a debugging aid and a potential scheduling point.
-+///
-+/// This function can only be used in a nonatomic context.
-+///
-+/// [`might_sleep()`]: https://docs.kernel.org/driver-api/basics.html#c.might_sleep
-+#[track_caller]
-+#[inline]
-+pub fn might_sleep() {
-+    #[cfg(CONFIG_DEBUG_ATOMIC_SLEEP)]
-+    {
-+        let loc = core::panic::Location::caller();
-+        let file = kernel::file_from_location(loc);
-+
-+        // SAFETY: `file.as_ptr()` is valid for reading and guaranteed to be nul-terminated.
-+        unsafe { crate::bindings::__might_sleep(file.as_ptr().cast(), loc.line() as i32) }
-+    }
-+
-+    // SAFETY: Always safe to call.
-+    unsafe { crate::bindings::might_resched() }
-+}
+>> Error: arch/arm64/boot/dts/qcom/sc8280xp-ntmer-tw220.dts:751.1-10 Label or path gpi_dma0 not found
+>> Error: arch/arm64/boot/dts/qcom/sc8280xp-ntmer-tw220.dts:755.1-10 Label or path gpi_dma1 not found
+>> Error: arch/arm64/boot/dts/qcom/sc8280xp-ntmer-tw220.dts:759.1-10 Label or path gpi_dma2 not found
+>> FATAL ERROR: Syntax error parsing input tree
+
 -- 
-2.39.5 (Apple Git-154)
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
