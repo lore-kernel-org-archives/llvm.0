@@ -1,61 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2083074AD;
-	Wed, 25 Jun 2025 20:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8D82F4327;
+	Wed, 25 Jun 2025 23:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750884570; cv=none; b=fdcuotw0s+aJ0oP+FAzwWzhI6FSLTlCykHkUuDv8gXHv+zYH11CERCbid2L2rzj0Y/9YmA0Y8Tp3IVJODxkwBUO2SudAEdoE2j3JvGucTEFZicRLUhfbgu1RjOhgaPm0c85mfwdj121m9fbNcthSkmHIni+/uSEcA/66Bhnce6I=
+	t=1750893286; cv=none; b=NVGC+T6Bugw5Bzay/md20v/2wRukEkj4QR1eEVMHy91rPOnXQU8WM9vvqkQ+Vd9jebMOwNZuSkuNZZeLrrLQYwysFnH8ETM8Ck2nIndf5g5oGVIwe9B3zrtSZzx8xeSmWHpMRUKvAFYcS4gtQnAXRp9oXBL3Hwpu7riFoAvnlvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750884570; c=relaxed/simple;
-	bh=fj6vf6b32JLP0EibMao/l/TA+kXY/3LkNqNwwrOqvuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cFEJCb/+zZj1Mn/F3K1b6Hz4Yv6d2E0AQR9bEnFCsQIL7jWtz2R4PYxlBp/CrjrsvtPe+hVBx/na1ss8WkZQt4zp+bLlUdo0jD6A9v6EOSgXgrCURSQ2Mrv0zLuUz2HL63Lz+E6AISNV59VvTm+c+770uX9oPv7Dwfley8J4fjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QOspIKAg; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1750893286; c=relaxed/simple;
+	bh=q+Xgk6gY7XYxDUH0slZtZV1r6bW0xVVA1X7mSXJHpKA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lr3kUniIxdSTbgLbQJW0P4CSf86/u+QCF860xKsX3hkw89sKfsnVj6PC/0ho/Zhibnt9PT4Ids4iTPiVCNPcSSag90MGdsNzcx4yu4TKWPgPUcC7TuSwsRG5NdBtYTIiUUNGiB+6keIBq6IHlNk8hAU/yKgnG2FKwhI+DfWIZfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jRLpBRrp; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QOspIKAg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jRLpBRrp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750884568; x=1782420568;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fj6vf6b32JLP0EibMao/l/TA+kXY/3LkNqNwwrOqvuc=;
-  b=QOspIKAgTCt2/PhvNpx8HXikHApwP4gqjWKX21b7aM6oA4tGOV1hEJLo
-   PvJuInMFp6WfE8p8N6rLA1wUgpA+6b12jHP8ktNnf0JQQvLWqTHcD1SZB
-   KeXrIqOTa0avh7BjkRtXqcgtxj/YS2kPDM7OeU8xB0XJC7W6nimZnLrKQ
-   CTaebNVgAX7txPBYljFiUR5QI5xFje0lCEsrnSfCQqWxETPXNc9bdTVTk
-   yiNmvo9bTXUMPweziCRKGu8KltA0gazhdWgVBvmIqcAu6J7BUjJsHkcdP
-   uW9kOnpIjxiOTVg+QQmq44LVcxcSL1Jgaht5dfKKaGKQvYtEn29WDOuvE
+  t=1750893284; x=1782429284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q+Xgk6gY7XYxDUH0slZtZV1r6bW0xVVA1X7mSXJHpKA=;
+  b=jRLpBRrpOFLwacBmxvo8gnb9n+sva/YNn6hHhoBamIAOHVrrZ5IW2zhs
+   62EtMI3g6kDuDPg5bioH2qRJ8cuhw/RDDA01QBOimGmh0lVTydPgG64EZ
+   nWmUDlptGjqYChLqfWzPiOvcAjPXjNag0G+GJiZ+vuGwSXJZLuJeq5oDt
+   57kYmLzjF1c9sL72kO5KAZJYRJAJ6iDhOTBQWuIvYNpne6sYi1dDlvinw
+   Mh/6mTOqkH8wo9itzdiJgLp0s3cD2Xnnwv5h8d6FhIP0Paj4S/N6HYjmA
+   3er50gSu4B6x7MO1AiUSNV4k0FnKOtY6yqYlF3/vUULOeri0ENkRGMgJ8
    g==;
-X-CSE-ConnectionGUID: cAXihlAMS563IW29CoDHmw==
-X-CSE-MsgGUID: XTm9zC1pRvCV4MDgfsGcSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="53136313"
+X-CSE-ConnectionGUID: 7AO+u9TjTru5lLZJ+665RQ==
+X-CSE-MsgGUID: Khw9Eaa5QMO5Gcd4NidKBQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="64534626"
 X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
-   d="scan'208";a="53136313"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 13:49:27 -0700
-X-CSE-ConnectionGUID: 1l18AS/mRH+KzX0fLztqTw==
-X-CSE-MsgGUID: 0Q7Gbg51SziQw+juQs4o+w==
+   d="scan'208";a="64534626"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 16:14:43 -0700
+X-CSE-ConnectionGUID: wzR4hzHxQJWM2Z80q5tYIw==
+X-CSE-MsgGUID: nGIuA4g5T4+jfVIKBXXyCw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
-   d="scan'208";a="152622923"
+   d="scan'208";a="158107202"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 25 Jun 2025 13:49:26 -0700
+  by orviesa005.jf.intel.com with ESMTP; 25 Jun 2025 16:14:40 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uUX3b-000TS6-38;
-	Wed, 25 Jun 2025 20:49:23 +0000
-Date: Thu, 26 Jun 2025 04:49:14 +0800
+	id 1uUZKA-000TW6-05;
+	Wed, 25 Jun 2025 23:14:38 +0000
+Date: Thu, 26 Jun 2025 07:14:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Noah Klayman <noah.klayman@intel.com>
+To: Wen Gu <guwen@linux.alibaba.com>, richardcochran@gmail.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-Subject: [thesofproject:topic/sof-dev 10/10] ERROR: modpost:
- "sof_client_ipc4_find_debug_slot_offset_by_type"
- [sound/soc/sof/snd-sof-fw-gdb.ko] undefined!
-Message-ID: <202506260414.Wuokr3Kr-lkp@intel.com>
+	xuanzhuo@linux.alibaba.com, dust.li@linux.alibaba.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	guwen@linux.alibaba.com
+Subject: Re: [PATCH net-next] ptp: add Alibaba CIPU PTP clock driver
+Message-ID: <202506260725.kFmPHRIJ-lkp@intel.com>
+References: <20250625132549.93614-1-guwen@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,24 +67,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250625132549.93614-1-guwen@linux.alibaba.com>
 
-tree:   https://github.com/thesofproject/linux topic/sof-dev
-head:   7a79ba9a0865c9efc5f5db3f5182ac445db67954
-commit: 7a79ba9a0865c9efc5f5db3f5182ac445db67954 [10/10] ASoC: SOF: sof-client: expose Zephyr GDB stub
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250626/202506260414.Wuokr3Kr-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250626/202506260414.Wuokr3Kr-lkp@intel.com/reproduce)
+Hi Wen,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wen-Gu/ptp-add-Alibaba-CIPU-PTP-clock-driver/20250625-212835
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250625132549.93614-1-guwen%40linux.alibaba.com
+patch subject: [PATCH net-next] ptp: add Alibaba CIPU PTP clock driver
+config: x86_64-buildonly-randconfig-002-20250626 (https://download.01.org/0day-ci/archive/20250626/202506260725.kFmPHRIJ-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250626/202506260725.kFmPHRIJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506260414.Wuokr3Kr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506260725.kFmPHRIJ-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8365/snd-sof-mt8365.o
-ERROR: modpost: "sof_of_pm" [sound/soc/sof/mediatek/mt8365/snd-sof-mt8365.ko] undefined!
->> ERROR: modpost: "sof_client_ipc4_find_debug_slot_offset_by_type" [sound/soc/sof/snd-sof-fw-gdb.ko] undefined!
+>> drivers/ptp/ptp_cipu.c:775:8: error: call to undeclared function 'pci_request_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     775 |                 rc = pci_request_irq(pdev, i, irq_ctx[i].irq_func, NULL,
+         |                      ^
+   drivers/ptp/ptp_cipu.c:775:8: note: did you mean 'pci_request_acs'?
+   include/linux/pci.h:2570:6: note: 'pci_request_acs' declared here
+    2570 | void pci_request_acs(void);
+         |      ^
+>> drivers/ptp/ptp_cipu.c:784:3: error: call to undeclared function 'pci_free_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     784 |                 pci_free_irq(pdev, i, ptp_ctx);
+         |                 ^
+>> drivers/ptp/ptp_cipu.c:785:2: error: call to undeclared function 'pci_free_irq_vectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     785 |         pci_free_irq_vectors(pdev);
+         |         ^
+   drivers/ptp/ptp_cipu.c:785:2: note: did you mean 'pci_alloc_irq_vectors'?
+   include/linux/pci.h:2139:1: note: 'pci_alloc_irq_vectors' declared here
+    2139 | pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+         | ^
+   drivers/ptp/ptp_cipu.c:796:3: error: call to undeclared function 'pci_free_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     796 |                 pci_free_irq(pdev, i, ptp_ctx);
+         |                 ^
+   drivers/ptp/ptp_cipu.c:797:2: error: call to undeclared function 'pci_free_irq_vectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     797 |         pci_free_irq_vectors(pdev);
+         |         ^
+   5 errors generated.
+
+
+vim +/pci_request_irq +775 drivers/ptp/ptp_cipu.c
+
+   763	
+   764	static int ptp_cipu_init_irq(struct ptp_cipu_ctx *ptp_ctx)
+   765	{
+   766		struct pci_dev *pdev = ptp_ctx->pdev;
+   767		int i, rc;
+   768	
+   769		rc = pci_alloc_irq_vectors(pdev, PTP_CIPU_IRQ_NUM,
+   770					   PTP_CIPU_IRQ_NUM, PCI_IRQ_MSIX);
+   771		if (rc < 0)
+   772			goto out;
+   773	
+   774		for (i = 0; i < PTP_CIPU_IRQ_NUM; i++) {
+ > 775			rc = pci_request_irq(pdev, i, irq_ctx[i].irq_func, NULL,
+   776					     ptp_ctx, "ptp-cipu");
+   777			if (rc)
+   778				goto out_vec;
+   779		}
+   780		return 0;
+   781	
+   782	out_vec:
+   783		for (i = i - 1; i >= 0; i--)
+ > 784			pci_free_irq(pdev, i, ptp_ctx);
+ > 785		pci_free_irq_vectors(pdev);
+   786	out:
+   787		return rc;
+   788	}
+   789	
 
 -- 
 0-DAY CI Kernel Test Service
