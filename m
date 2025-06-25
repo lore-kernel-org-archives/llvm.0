@@ -1,96 +1,98 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB4115442A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315461A5B8F
 	for <llvm@lists.linux.dev>; Wed, 25 Jun 2025 05:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750828528; cv=none; b=Zj/S6cKQlqrDAYlSDYwbQ/Hyky6QTowR5BthkUjM9BVXktbJ3HE86jBdND8kK/qiQvnPgDWQWxlFzYCXBfwvsITXLf1Dog9bf7mmbz8AKqKuyQfJJrXYMEcKSxyxzxF0SZQIGqJHD/98uDRG8R+U2dwU0t91HGwbc+OFeLctjLI=
+	t=1750828529; cv=none; b=kkmOIzG22uOOtPFfy3DRAYzPvRJ2zkDp4zZdJWQI3eho+2B4t72tAzd3rM95vFsYSdS7XEPCyykVCZmXr1hoZXqlQdspLMtp+60+17xGvguEuMJ70XyrEKc4JOTWLHPMlJTdkNrLHAyCJYFqpAH4nj1ppa3/AD1fxU7NAlhU40U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750828528; c=relaxed/simple;
-	bh=lhtkNSuzXSsKjmt0T3z4wl91aDwkJDnhCQdTrItbqic=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=shmic0xWp8qVKuqPa5AvckzHSOZf1bobyzai+5eIlzJh2ltVG1MruslHOp9IzUl4LluWUGfQC3raSkkOb4capeWkY3UC3w/gLcDQnl2slkcC1beGFUuuD7YI+Z5Y431M9WUxaoCLGwa95nXlAqTQLH4x0BFAzLBEx1Cg9l0A/dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kBJRtvcZ; arc=none smtp.client-ip=209.85.222.177
+	s=arc-20240116; t=1750828529; c=relaxed/simple;
+	bh=DZPx48zTDYNX5AKa48yQp9oTWkNFvmRP5adzWyGYmmQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BNLTQgIjIsQTB5i350LwvCa31OPK66p6cY41UCkxcT/JF9OMFuQkdPH2iujevWm/ej22EVBL/aMUghlRo1FxqPdrSNI83+VjA5dXJjz/RXIwiM4w96pBrI0MVLTkKc+8Oh/QQ0xC789Jvpq22s70o1FzgC7wBlKz6bN6L37eGp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lv6LpiJy; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kBJRtvcZ"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7d094ef02e5so65405685a.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lv6LpiJy"
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6fafd3cc8f9so92505246d6.3
         for <llvm@lists.linux.dev>; Tue, 24 Jun 2025 22:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750828525; x=1751433325; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=a2OOPxKWYk4hTUfw7nSlfH/YrkvOwqTvCn4QLXORMeU=;
-        b=kBJRtvcZVRV5ubKOmAgvuf/DNApanuZ1ISpP8oMrGxfdB+q7ByOCk+TE2iGaEAUqBb
-         nvl5IrpQSl7kIHKSQhKBKk1RFyR7yV0cyaZSjEKdEC6BI8nSeT1/Dzhkr6lTBHb1w/cI
-         7CLQ5krk9RefsgAobCP+3dr++Ks5QUQNfcbkEBhOX0jkNDTqLUPnh1wASTDZpeVWtY+w
-         HWV8hQ0PoZdxWdqC+x3nXiHU1k9mVkJAj3i55VWfzF61Fwkuva9akYolTGqbX9HpyRcE
-         +tA6ImGlOWP6tlTQmLC42FeMMqMVAKdhAPjfqkm+UkG3DhaAMAbZICREx4Fxl0dvNf51
-         1Dew==
+        d=gmail.com; s=20230601; t=1750828526; x=1751433326; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=x0uhFJxbTknYVv8H2dzluonrWfElV8YvZk9w6Cc8W4w=;
+        b=Lv6LpiJyv0tglwbPMCvtfIqP3JgZgCgIXjvKRX7v3xbSn0Zyk2zDvWCrsZ76FkudWw
+         lzNCo+6l2TEovkVDHOEprVSgA5hxk7LrhBbK6OXI3UZIOUnfaAnXNRGWq4eZ0MR9zkfZ
+         UDCGqhHP3bAX2JUzkyJouJ8RxeqmqRF6djiTMtpsxh4hxMDKlJ+NHddsQc/SfcTYg5+t
+         PWBZZnQe2altdGTPVEyBcrnCSYN8vzkr8GyVhBzPL+tFR1gIZsVArA8CXuz07kcZC0sK
+         oVi678RDZHUQR1GLx1Nfgsr3CuZ+BqSfkYxATpBlnY0Vtyudh7OL/N5hZZz3DMvwumgj
+         Ouow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750828525; x=1751433325;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a2OOPxKWYk4hTUfw7nSlfH/YrkvOwqTvCn4QLXORMeU=;
-        b=PnbKzOP60Mzn+Jh12NEmg4Raks88Xw1ZRTN6VjOH3jYSzoLm3cKMIqFrRsDwSJcaj4
-         MPPHIkXPmgksHSdItC02yYaM6dpkMfzMg/FBWTdrsjxXOycrUj2OT7UVPVLjkcSLG7Q8
-         TIlTXsVijvLwBZoIEvfNWEDatlkO93walK4oZ4/A469mYkdu7/MpBWpjosIqSKGgrgjC
-         CDj5pb7/fjGPiloACKItUMUZSJt+JCOZCfSsN5Ttwa3hgJQB5atI/qbo/13TqO1TCLmO
-         MNrn5fNC2GBeBYqubXNyLC4dFeO2sguNr6SnXEJEORgUQjiiXKTrP0BhfguT2yUriL2x
-         toMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCWjIhRezxI1LLr+ujH35rtnls+PP07di1qrxJi+VwVSVrjE1Nmh/Ypr8fAgBXQvFB6tWu@lists.linux.dev
-X-Gm-Message-State: AOJu0YykR0k8FMmv37VBOt5w98+I2pB4Dg/9LkyuUeimqr21mADh4sok
-	lUo4Nx9tLrrjvx9do3PJ9S0GeUVCBu6351Lqg2GXHRHiYDYwLEW04HpC
-X-Gm-Gg: ASbGnctipuLK/waVvXS7qm0MXk9b4x7RhuVBF9bfiZuxeQZM1TX861FhJWmEl733rb2
-	s6aSX5T444eiqpcqQ2NLqJaS6yz/9GOvYRLltTMvdux4lgBYE+OCNaNKMUhrYTpwwVkhytqExK4
-	kMmdnaXSqjRSH76V7RVso35Y4T2jlc4bsRV5qB5pNsFlF++Pjn9/ybuAwUuzBcHqu7EhEC01MPs
-	/+WTGcRnxvUTJ0uvoqCumd3Mq3QXwq48h8xQ+9PanBGr6JnWSG5p7ZET6/UsjmFMFsjnGQTFOIi
-	YkaRM97vJRIdbMJNuayzTx/R/BvbCugjEhkDBhoxlIfxmyJzoVUcI9I/R6L1KVLAETgVzH5syjl
-	6oG8S+GvVACJzAQJhRAf+GLmkFYc8B6SXWB/Vdr2mGrAEZ+f7cza9
-X-Google-Smtp-Source: AGHT+IFT5SEYKNYQmQtuyu/Uzh51mp9bJuGn28ALvttvIJjRc9ik/mxqgQs83zOisQSg8uoeVy315w==
-X-Received: by 2002:a05:620a:191d:b0:7cd:45ec:aac6 with SMTP id af79cd13be357-7d42993bc63mr194192185a.24.1750828522822;
-        Tue, 24 Jun 2025 22:15:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750828526; x=1751433326;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x0uhFJxbTknYVv8H2dzluonrWfElV8YvZk9w6Cc8W4w=;
+        b=fqNl+rGxQt8dlKsDq5pALC7HrO8goPkSmlQ9rce/itVFX8+ASYmmuVu327kf5p40kt
+         gh6J1Saw7S3xJx+2DPjYAZeW3/DMVldlz9z+8ugdLLFsOmYNUxhtmpFxBHP4bECSXy28
+         bmd5nPrwNtOs7pMV5rJgJw6cnisfDjvx9GR6wysHVQFAek2l8r4y7+SevL68kdj+2WGr
+         D+er3lWjXCFzwWQIDyDDWHFlBvp1dN8Fft+O3HoCu8YK0E5saj7gAfbSrI2Ct8cPa9w2
+         DY6qTiKRALbPtQp5aFTSqixC8rPhxjo071a2vFJg/zBsgTe7iG4raintkkLtjMTDC4mw
+         d6pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5jddOTsOR2o/9P6oFcVr/yRUoM/SdyPHDstcc+QwIvNeJxi+Jdfy8zL5ERCxWf4WH661+@lists.linux.dev
+X-Gm-Message-State: AOJu0YwomzYZoKIj4HvVI437k7LZKSnqOSSmMgZ8nUPews1jjEcRjuLx
+	aRa5RYZgRO2h6jlnZV+r8+vyc8LuTWtdAxbEKx2mynpmLbLTNYV+USAO
+X-Gm-Gg: ASbGncv4ZDkW0WIkviFXWJl9zsUJSCm2PXeiHtxolTebEC4vmCwJqpDsuVE0fqQfwYQ
+	QOb0wi8l+0oBVR+175ECK9bdvwF+iFwupDH3p/y5Jy33oyO+wPVM2R213Q6DyKJS3YTAhDexcyh
+	IpLoIxWn3z64ueES+qTRkALWkML1zst/MGZwSTQR+m03JHX1DvrxCexj+3pHZyuUihNuNrAwSlE
+	Dsqpf/8ckkiwKPmGr+8m/ShcF7qexDV9m5xzGRiok9Gwda+9zS0bhNgH4qcoXLrQtAzKHGOc3eX
+	XPNia2kU+qis0mFLii8SbYwpleU3tAHe1XDg3Gr2HmiF2A80AmI1lcZj7kqU+54O9jFtHEmu3HE
+	brmuhqeWYO2KOnlWXSdazakpq68JTDbMmHv1F5je0RuQsyK7JIhS2
+X-Google-Smtp-Source: AGHT+IEFTnqbuvaJX0Csg9cjWCqwK8O2gHdOMg3CTJHOajGqnck4hYJwCK/rV9J0qs08iUEap5Q+iA==
+X-Received: by 2002:a05:6214:570a:b0:6fa:cb72:955a with SMTP id 6a1803df08f44-6fd5ef2fccemr23474106d6.4.1750828525731;
+        Tue, 24 Jun 2025 22:15:25 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3f992f21bsm581457085a.0.2025.06.24.22.15.21
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd09576766sm64178956d6.81.2025.06.24.22.15.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 22:15:22 -0700 (PDT)
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 4FD67F40066;
-	Wed, 25 Jun 2025 01:15:21 -0400 (EDT)
+        Tue, 24 Jun 2025 22:15:25 -0700 (PDT)
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 502DCF40068;
+	Wed, 25 Jun 2025 01:15:24 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Wed, 25 Jun 2025 01:15:21 -0400
-X-ME-Sender: <xms:6YVbaOyVSJcbYZAvZJKym4BlhhEw2mwtcLC194hMfX_VezftFQ8lMg>
-    <xme:6YVbaKT5H8amyh-WG1EFryMubAIARx_K1MsclJfOyhxaWwMJbsQWE1BDElhO1Mm6c
-    DwVt1Qd-t2CPpHl2Q>
-X-ME-Received: <xmr:6YVbaAX7dmiPsWlLF1i5jqWGaTOvC8lZWXZ6CHmjmNezyKtuTMWvF1YGjQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvudeludcutefuodetggdotefrod
+  by phl-compute-10.internal (MEProxy); Wed, 25 Jun 2025 01:15:24 -0400
+X-ME-Sender: <xms:7IVbaO65iOjAAcyq6uDY70GEyAz7ZmCw0IFt_YA3rPkDFY8ICTYgAA>
+    <xme:7IVbaH4aoewC9nG8q_JKYC7I9DRKqI5BsHvfosPTtJYMRMKvHVMxQIZssq9e4AGlC
+    V-0e0jLaAubOq3G2Q>
+X-ME-Received: <xmr:7IVbaNfT7SXJKb5cxV1jewqHkLszL2nkZaRzCwsTYU2ZeVn2ZL3Hc1G8vg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvudeltdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhnucfhvghn
-    ghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvghrnh
-    epgeegueekgefhvedukedtveejhefhkeffveeufeduiedvleetledtkeehjefgieevnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshho
-    nhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngh
-    eppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepfeeh
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphht
-    thhopehmihhnghhosehrvgguhhgrthdrtghomhdprhgtphhtthhopehjuhhrihdrlhgvlh
-    hlihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepvhhinhgtvghnthdrghhuihhtthho
-    theslhhinhgrrhhordhorhhgpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmhgrnh
-    hnsegrrhhmrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhr
-    ghdprhgtphhtthhopegsshgvghgrlhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhope
-    hmghhorhhmrghnsehsuhhsvgdruggv
-X-ME-Proxy: <xmx:6YVbaEjLrmPFhuS3qAzTL1kF7GcaDRZFvRMYrJn4Xt85ksVOigYroQ>
-    <xmx:6YVbaAACs47NIlhwSowVmDy5oFOD-9-M6wyO0XNWAuooaNtqdiEDbA>
-    <xmx:6YVbaFJ26u595Bgm2RbmcVFs8bo-hmkEYDgT-upJpycidUtbsOnRnA>
-    <xmx:6YVbaHCeVwKxy0FrQ-ckIWFrRAsQf00F-OKnSmZ3pvShYurEn6zAJQ>
-    <xmx:6YVbaIzil-_nsJvVnMUVhuXgtcScToVW96Ss-PxK09iDPxynXgfwnxhL>
+    hrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhepkeetteejgeduieekudejfedvvddtiefgieffffeljeefieehiefffedvfeffgfet
+    necuffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgv
+    shhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehhe
+    ehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+    pdhnsggprhgtphhtthhopeefiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmh
+    hinhhgoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgr
+    uggvrggurdhorhhgpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtg
+    hpthhtohepjhhurhhirdhlvghllhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehv
+    ihhntggvnhhtrdhguhhithhtohhtsehlihhnrghrohdrohhrghdprhgtphhtthhopeguih
+    gvthhmrghrrdgvghhgvghmrghnnhesrghrmhdrtghomhdprhgtphhtthhopehrohhsthgv
+    ughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohepsghsvghgrghllhesghhoohhglh
+    gvrdgtohhmpdhrtghpthhtohepmhhgohhrmhgrnhesshhushgvrdguvg
+X-ME-Proxy: <xmx:7IVbaLLIrdM5e8NfhE8ob0ydD0rqWvN4n3StGN8HBmQQznQGV0PNuw>
+    <xmx:7IVbaCIkqt-v5d23uFNcQBTgQ9UvWGBSEQiCvjyi3sMleKg8NU4GKQ>
+    <xmx:7IVbaMyKJmSqPjFR1hQxJsUr6-EpIcMEwr4yWtvWW2PAyExY4G27yA>
+    <xmx:7IVbaGLyyZO1v4-PQkAHRRbWlWAxbUWX5gIS74GPpXWMim1MiESKfA>
+    <xmx:7IVbaJYMydMHJHFbDIOVbXtUTBksE4vhfb1sxu-Qgr9NUJjmCEjIN5fN>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jun 2025 01:15:20 -0400 (EDT)
+ 25 Jun 2025 01:15:23 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Ingo Molnar <mingo@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>
@@ -116,11 +118,14 @@ Cc: Ingo Molnar <mingo@redhat.com>,	Juri Lelli <juri.lelli@redhat.com>,
 	Borys Tyran <borys.tyran@protonmail.com>,
 	Christian Brauner <brauner@kernel.org>,
 	Panagiotis Foliadis <pfoliadis@posteo.net>,	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,	llvm@lists.linux.dev
-Subject: [GIT PULL] [PATCH v2 0/5] rust: Task & schedule related changes for v6.17
-Date: Tue, 24 Jun 2025 22:15:13 -0700
-Message-Id: <20250625051518.15255-1-boqun.feng@gmail.com>
+	rust-for-linux@vger.kernel.org,	llvm@lists.linux.dev,
+	Grace Deng <Grace.Deng006@Gmail.com>
+Subject: [PATCH v2 2/5] rust: sync: Mark PollCondVar::drop() inline
+Date: Tue, 24 Jun 2025 22:15:15 -0700
+Message-Id: <20250625051518.15255-3-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250625051518.15255-1-boqun.feng@gmail.com>
+References: <20250625051518.15255-1-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -129,67 +134,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Ingo & Peter,
+From: Kunwu Chan <kunwu.chan@hotmail.com>
 
-This is the updated version from my pull request last cycle:
+When building the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+with ARCH=arm64, the following symbols are generated:
 
-v1: https://lore.kernel.org/rust-for-linux/20250506045843.51258-1-boqun.feng@gmail.com/
+$nm vmlinux | grep ' _R'.*PollCondVar  | rustfilt
+... T <kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop
+...
 
-Please take a look, thanks!
+This Rust symbol is trivial wrappers around the C functions
+__wake_up_pollfree() and synchronize_rcu(). It doesn't make sense to go
+through a trivial wrapper for its functions, so mark it inline.
 
-Changes since v1:
+[boqun: Reword the commit title and re-format the commit log per tip
+tree's requirement, remove unnecessary information from "nm vmlinux"
+result.]
 
-- `Location::file_with_nul()` is used to avoid the C changes of
-  __might_sleep()
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Suggested-by: Alice Ryhl <aliceryhl@google.com>
+Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Link: https://lore.kernel.org/r/20250317025205.2366518-1-kunwu.chan@linux.dev
+---
+ rust/kernel/sync/poll.rs | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Boqun
-
-
-The following changes since commit 5bc34be478d09c4d16009e665e020ad0fcd0deea:
-
-  sched/core: Reorganize cgroup bandwidth control interface file writes (2025-06-18 13:59:57 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git tags/rust-sched.2025.06.24
-
-for you to fetch changes up to 7e611710acf966df1e14bcf4e067385e38e549a1:
-
-  rust: task: Add Rust version of might_sleep() (2025-06-24 15:53:50 -0700)
-
-----------------------------------------------------------------
-Rust task & schedule changes for v6.17:
-
-- Make Task, CondVar and PollCondVar methods inline to avoid unnecessary
-  function calls
-
-- Add might_sleep() support for Rust code: Rust's "#[track_caller]"
-  mechanism is used so that Rust's might_sleep() doesn't need to be
-  defined as a macro
-
-----------------------------------------------------------------
-Boqun Feng (1):
-  rust: Introduce file_from_location()
-
-FUJITA Tomonori (1):
-  rust: task: Add Rust version of might_sleep()
-
-Kunwu Chan (2):
-  rust: sync: Mark CondVar::notify_*() inline
-  rust: sync: Mark PollCondVar::drop() inline
-
-Panagiotis Foliadis (1):
-  rust: task: Mark Task methods inline
-
- init/Kconfig                |  3 +++
- rust/helpers/task.c         |  6 +++++
- rust/kernel/lib.rs          | 48 +++++++++++++++++++++++++++++++++++++
- rust/kernel/sync/condvar.rs |  3 +++
- rust/kernel/sync/poll.rs    |  1 +
- rust/kernel/task.rs         | 33 +++++++++++++++++++++++++
- 6 files changed, 94 insertions(+)
-
+diff --git a/rust/kernel/sync/poll.rs b/rust/kernel/sync/poll.rs
+index d7e6e59e124b..7b973d72229b 100644
+--- a/rust/kernel/sync/poll.rs
++++ b/rust/kernel/sync/poll.rs
+@@ -107,6 +107,7 @@ fn deref(&self) -> &CondVar {
+ 
+ #[pinned_drop]
+ impl PinnedDrop for PollCondVar {
++    #[inline]
+     fn drop(self: Pin<&mut Self>) {
+         // Clear anything registered using `register_wait`.
+         //
 -- 
 2.39.5 (Apple Git-154)
 
