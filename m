@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B873929B200;
-	Wed, 25 Jun 2025 09:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952411FBCB2;
+	Wed, 25 Jun 2025 09:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750843101; cv=none; b=k/QkOJe6BBbOz4mm2f9VYfbTGTW9u6Y24OxBvQ9VVelgo+Jz9Gn60sjqSeutoMb6ISIS3GGyw3d139uSUoXK5k6qf8BjmVoZWfRx7eSRRDbbplLJk/OmakzIgToemIy/nEZYNB3Epoyv2dFZ9osjVfBoUChbUd5e4D4CJXJQA9M=
+	t=1750844964; cv=none; b=rNhLHA10Eyph1cxemuvNimyX8vY5HuBk5qg3HedYCV0LKVgrARS7OkHv7gzX/SUG+jqRLGinTlwekO53W2cpUg3280QTgzAl514Se3cUtmbmB5oxhlReTNnUgF9fAAaJxTZCDTOEgi3Q03U7PVOE0+g3/D0mCdZvJqMA6gPP2dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750843101; c=relaxed/simple;
-	bh=tmysgYzWCWGyTY2cKnSO+JaAAf94I6dDoKYocrjhCjo=;
+	s=arc-20240116; t=1750844964; c=relaxed/simple;
+	bh=b4vBu3r/OIu4EM24O85mVjLT0vCOiMfi1Eha73B7EA8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=b3AhoVNR/l6fFfEqQ3GN1Ik7Df2J/GuXce/EWiX1/cHx2LQ1hY7pY49W9ygHAKO9NwfZZ2Tg+jLhArMo8eF2AHnwHh5zTEyaH9MqjjO77O4OhOAjYwhNYQIDP7AYGYzwC3veFIND6P1Fm2d8K1VR0bd2QPyQfaTdhkEZ6dERYO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dlZSecl7; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=fmTXX17r/pEQBuZ/7bNfSr/9o64dWdpoL3Cy8Fh/Ad0JC14CtjfgAZBRFq9Y0+g2X2Eglkkz53nIrDRvVS5nwrqMQrZqN9y1T7tUqEfxIqiiPB3SbhtYRTR9QK1PrCfyM7+acDmcAZxP27vx4Aw/kHMzEuCqQ7/sIUNevEHKwnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YiTB8xQK; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dlZSecl7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YiTB8xQK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750843099; x=1782379099;
+  t=1750844963; x=1782380963;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tmysgYzWCWGyTY2cKnSO+JaAAf94I6dDoKYocrjhCjo=;
-  b=dlZSecl7/g0/sGQzHN18zF3Gs7E3HiRWliZiEiqbEutnwaluHKVYYnvj
-   Ir3jnk4nMxHPb5CCWoD0RtBQ6lSuON8zXi4oHw2HqQMg0YBn933f4hIgD
-   D4RJP3Mcq4R9dfC9uiHzFoBSFyhe61YBv2YszPdMcqBJQHfbninMx3C61
-   xFIx4NZl1f5YVn2UyivyLXGSVUQ7z1kqZlUn/WL75p26hSkLdY90QjRw8
-   30mVmFk9IQPni6d7XawNVoG2WMPPAKm/P0EgEq7bqw3Y1jfxB6wog7+f9
-   yVox26FgV+/vfjK/5oNrJ2MREV0IBjpUMFCJKoxcK57ty61fieTu+o7BS
-   A==;
-X-CSE-ConnectionGUID: kby8micXRLCi5OvkNuBo9Q==
-X-CSE-MsgGUID: VLe9l+JtRO6rNPOEZ9DvkQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="53072782"
+  bh=b4vBu3r/OIu4EM24O85mVjLT0vCOiMfi1Eha73B7EA8=;
+  b=YiTB8xQK0sK0CZzlokXfUhV6esncJ9o+7vNjSsfGXf++uKl0xyWyhqW0
+   BO/y+03GA3hU3zDIGfhD5Rb7j5I/nXiitg2PZVV8bsNMWaul/BY40I+bb
+   Cb3vwtWWakHbqTgoDc/ReKbgg3jrV4rE0F2I2hE7Fy23rxazLs3PBGXG9
+   xC5tDBHwYw/2Bw1yuivcHXFKTnfPjNPNSLc2J9rLS/el7LL0to4BkyVWe
+   7fGzNfh6xEtlCkcZ52naX01JutJRMufqaZj2LQYnL8gr2Mlhmw7KSE/4M
+   KZe5eXPJtk1vKG7uc8iAC2vzDmiIILLt0sch0SyrkeRPzXUzHSehhoe2P
+   w==;
+X-CSE-ConnectionGUID: u9QVh6qMTf2uZ92X71p0/g==
+X-CSE-MsgGUID: vI5Ef6BFTZKsTEeb6S6jpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="64465469"
 X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="53072782"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 02:18:17 -0700
-X-CSE-ConnectionGUID: JeLDTBzWT7C6WpPBr4qP2A==
-X-CSE-MsgGUID: BL0ukZioS1mf+CL3SMBvyw==
+   d="scan'208";a="64465469"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 02:49:20 -0700
+X-CSE-ConnectionGUID: q5GhCXfqQvadsET1dy4A5w==
+X-CSE-MsgGUID: irXJG23XSgK28IQnUsCV4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,264,1744095600"; 
-   d="scan'208";a="157934398"
+   d="scan'208";a="156568630"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 25 Jun 2025 02:18:15 -0700
+  by orviesa003.jf.intel.com with ESMTP; 25 Jun 2025 02:49:19 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uUMGj-000SwC-2D;
-	Wed, 25 Jun 2025 09:18:13 +0000
-Date: Wed, 25 Jun 2025 17:17:46 +0800
+	id 1uUMkm-000SyU-1B;
+	Wed, 25 Jun 2025 09:49:16 +0000
+Date: Wed, 25 Jun 2025 17:48:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kvm-x86:mmio 3/3] arch/x86/kvm/mmu/spte.c:295:30: error: use of
- undeclared identifier 'mmio_stale_data_clear'
-Message-ID: <202506251700.XDtuLHgR-lkp@intel.com>
+To: Konstantin Andreev <andreev@swemel.ru>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Casey Schaufler <casey@schaufler-ca.com>
+Subject: [linux-next:master 5066/5232] Warning:
+ security/smack/smack_access.c:650 function parameter 'label' not described
+ in 'smk_import_valid_label'
+Message-ID: <202506251712.x5SJiNlh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,158 +64,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/kvm-x86/linux mmio
-head:   00c8216399da1e7df22637dfb4d6d451adc5f24e
-commit: 00c8216399da1e7df22637dfb4d6d451adc5f24e [3/3] KVM: VMX: Apply MMIO Stale Data mitigation if KVM maps MMIO into the guest
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250625/202506251700.XDtuLHgR-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1b152eeca84a02bdb648f16b82ef3394007a9dcf
+commit: 674e2b24791cbe8fd5dc8a0aed4cb4404fcd2028 [5066/5232] smack: fix bug: setting task label silently ignores input garbage
+config: i386-buildonly-randconfig-001-20250625 (https://download.01.org/0day-ci/archive/20250625/202506251712.x5SJiNlh-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250625/202506251700.XDtuLHgR-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250625/202506251712.x5SJiNlh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506251700.XDtuLHgR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506251712.x5SJiNlh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/mmu/spte.c:295:30: error: use of undeclared identifier 'mmio_stale_data_clear'
-     295 |         if (static_branch_unlikely(&mmio_stale_data_clear) &&
-         |                                     ^
->> arch/x86/kvm/mmu/spte.c:295:30: error: use of undeclared identifier 'mmio_stale_data_clear'
->> arch/x86/kvm/mmu/spte.c:295:30: error: use of undeclared identifier 'mmio_stale_data_clear'
->> arch/x86/kvm/mmu/spte.c:295:30: error: use of undeclared identifier 'mmio_stale_data_clear'
-   4 errors generated.
---
->> arch/x86/kvm/vmx/vmx.c:968:30: error: use of undeclared identifier 'mmio_stale_data_clear'
-     968 |         if (static_branch_unlikely(&mmio_stale_data_clear) &&
-         |                                     ^
->> arch/x86/kvm/vmx/vmx.c:968:30: error: use of undeclared identifier 'mmio_stale_data_clear'
->> arch/x86/kvm/vmx/vmx.c:968:30: error: use of undeclared identifier 'mmio_stale_data_clear'
->> arch/x86/kvm/vmx/vmx.c:968:30: error: use of undeclared identifier 'mmio_stale_data_clear'
-   4 errors generated.
-
-
-vim +/mmio_stale_data_clear +295 arch/x86/kvm/mmu/spte.c
-
-   185	
-   186	bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-   187		       const struct kvm_memory_slot *slot,
-   188		       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
-   189		       u64 old_spte, bool prefetch, bool synchronizing,
-   190		       bool host_writable, u64 *new_spte)
-   191	{
-   192		int level = sp->role.level;
-   193		u64 spte = SPTE_MMU_PRESENT_MASK;
-   194		int is_host_mmio = -1;
-   195		bool wrprot = false;
-   196	
-   197		/*
-   198		 * For the EPT case, shadow_present_mask has no RWX bits set if
-   199		 * exec-only page table entries are supported.  In that case,
-   200		 * ACC_USER_MASK and shadow_user_mask are used to represent
-   201		 * read access.  See FNAME(gpte_access) in paging_tmpl.h.
-   202		 */
-   203		WARN_ON_ONCE((pte_access | shadow_present_mask) == SHADOW_NONPRESENT_VALUE);
-   204	
-   205		if (sp->role.ad_disabled)
-   206			spte |= SPTE_TDP_AD_DISABLED;
-   207		else if (kvm_mmu_page_ad_need_write_protect(vcpu->kvm, sp))
-   208			spte |= SPTE_TDP_AD_WRPROT_ONLY;
-   209	
-   210		spte |= shadow_present_mask;
-   211		if (!prefetch || synchronizing)
-   212			spte |= shadow_accessed_mask;
-   213	
-   214		/*
-   215		 * For simplicity, enforce the NX huge page mitigation even if not
-   216		 * strictly necessary.  KVM could ignore the mitigation if paging is
-   217		 * disabled in the guest, as the guest doesn't have any page tables to
-   218		 * abuse.  But to safely ignore the mitigation, KVM would have to
-   219		 * ensure a new MMU is loaded (or all shadow pages zapped) when CR0.PG
-   220		 * is toggled on, and that's a net negative for performance when TDP is
-   221		 * enabled.  When TDP is disabled, KVM will always switch to a new MMU
-   222		 * when CR0.PG is toggled, but leveraging that to ignore the mitigation
-   223		 * would tie make_spte() further to vCPU/MMU state, and add complexity
-   224		 * just to optimize a mode that is anything but performance critical.
-   225		 */
-   226		if (level > PG_LEVEL_4K && (pte_access & ACC_EXEC_MASK) &&
-   227		    is_nx_huge_page_enabled(vcpu->kvm)) {
-   228			pte_access &= ~ACC_EXEC_MASK;
-   229		}
-   230	
-   231		if (pte_access & ACC_EXEC_MASK)
-   232			spte |= shadow_x_mask;
-   233		else
-   234			spte |= shadow_nx_mask;
-   235	
-   236		if (pte_access & ACC_USER_MASK)
-   237			spte |= shadow_user_mask;
-   238	
-   239		if (level > PG_LEVEL_4K)
-   240			spte |= PT_PAGE_SIZE_MASK;
-   241	
-   242		if (kvm_x86_ops.get_mt_mask)
-   243			spte |= kvm_x86_call(get_mt_mask)(vcpu, gfn,
-   244							  kvm_is_mmio_pfn(pfn, &is_host_mmio));
-   245		if (host_writable)
-   246			spte |= shadow_host_writable_mask;
-   247		else
-   248			pte_access &= ~ACC_WRITE_MASK;
-   249	
-   250		if (shadow_me_value && !kvm_is_mmio_pfn(pfn, &is_host_mmio))
-   251			spte |= shadow_me_value;
-   252	
-   253		spte |= (u64)pfn << PAGE_SHIFT;
-   254	
-   255		if (pte_access & ACC_WRITE_MASK) {
-   256			/*
-   257			 * Unsync shadow pages that are reachable by the new, writable
-   258			 * SPTE.  Write-protect the SPTE if the page can't be unsync'd,
-   259			 * e.g. it's write-tracked (upper-level SPs) or has one or more
-   260			 * shadow pages and unsync'ing pages is not allowed.
-   261			 *
-   262			 * When overwriting an existing leaf SPTE, and the old SPTE was
-   263			 * writable, skip trying to unsync shadow pages as any relevant
-   264			 * shadow pages must already be unsync, i.e. the hash lookup is
-   265			 * unnecessary (and expensive).  Note, this relies on KVM not
-   266			 * changing PFNs without first zapping the old SPTE, which is
-   267			 * guaranteed by both the shadow MMU and the TDP MMU.
-   268			 */
-   269			if ((!is_last_spte(old_spte, level) || !is_writable_pte(old_spte)) &&
-   270			    mmu_try_to_unsync_pages(vcpu->kvm, slot, gfn, synchronizing, prefetch))
-   271				wrprot = true;
-   272			else
-   273				spte |= PT_WRITABLE_MASK | shadow_mmu_writable_mask |
-   274					shadow_dirty_mask;
-   275		}
-   276	
-   277		if (prefetch && !synchronizing)
-   278			spte = mark_spte_for_access_track(spte);
-   279	
-   280		WARN_ONCE(is_rsvd_spte(&vcpu->arch.mmu->shadow_zero_check, spte, level),
-   281			  "spte = 0x%llx, level = %d, rsvd bits = 0x%llx", spte, level,
-   282			  get_rsvd_bits(&vcpu->arch.mmu->shadow_zero_check, spte, level));
-   283	
-   284		/*
-   285		 * Mark the memslot dirty *after* modifying it for access tracking.
-   286		 * Unlike folios, memslots can be safely marked dirty out of mmu_lock,
-   287		 * i.e. in the fast page fault handler.
-   288		 */
-   289		if ((spte & PT_WRITABLE_MASK) && kvm_slot_dirty_track_enabled(slot)) {
-   290			/* Enforced by kvm_mmu_hugepage_adjust. */
-   291			WARN_ON_ONCE(level > PG_LEVEL_4K);
-   292			mark_page_dirty_in_slot(vcpu->kvm, slot, gfn);
-   293		}
-   294	
- > 295		if (static_branch_unlikely(&mmio_stale_data_clear) &&
-   296		    !kvm_vcpu_can_access_host_mmio(vcpu) &&
-   297		    kvm_is_mmio_pfn(pfn, &is_host_mmio))
-   298			kvm_track_host_mmio_mapping(vcpu);
-   299	
-   300		*new_spte = spte;
-   301		return wrprot;
-   302	}
-   303	
+>> Warning: security/smack/smack_access.c:650 function parameter 'label' not described in 'smk_import_valid_label'
+>> Warning: security/smack/smack_access.c:650 function parameter 'label_len' not described in 'smk_import_valid_label'
+>> Warning: security/smack/smack_access.c:650 function parameter 'gfp' not described in 'smk_import_valid_label'
 
 -- 
 0-DAY CI Kernel Test Service
