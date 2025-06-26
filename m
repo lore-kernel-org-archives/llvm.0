@@ -1,69 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EFB287254;
-	Wed, 25 Jun 2025 23:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4A378C9C;
+	Thu, 26 Jun 2025 00:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750895870; cv=none; b=dfHE9h03hbFt/2LRoI78ZdbMUS00isoI27CEbl9zLKHehVq51h6ps+v4hTCP1/xrqnxWOesqW8sKrxxHQyI60JQ7fl5T1JD7Giim+nhUcIoor8NCUGJW6J2v8KQgQouKtla40q7KDoc0RuQeQh6wtwZc61i62EaBqp6MJ4ds7kI=
+	t=1750896469; cv=none; b=CwyOs6162txHS+4ut2jSZDUl9VTYLVfIDvBa+SMbm3yJsm7e4t3nO6AvdOPQ9cgHQ+ELQK6MlHOCIG3tkql1Mb2mmX7iRXv2FmWv5RYgO3OfNNKyvG6eX807oFohm3B1uLCrQEzyrCdOrpLc/FVqiCU4/D7Sr1Sx0lrJ+KAcaoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750895870; c=relaxed/simple;
-	bh=CkcCjk8IzsSvEHOxb9mbqVNqkfQ5haY3GvAwzUt4bxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JpixEna3vtHzcuaUggocV1uz+a1z93DoOBcrrk6j93fYDC7fdMnaS+0ipI5zzZbs+5wX6ES1mg5ecMcWmZwkIs+WCugGq2aY6Q5VkTgtGgKzLQ+P0y0bUCJWnIIhKuPflJvx4pqzBPdU9UeO70iKB1tEzcFakFhCQtAXtIZDvQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HzSmAflt; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1750896469; c=relaxed/simple;
+	bh=z+SuTfKWy/B9blRGA67JeMSchJi6yxjs/KNi6wLaXAk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Z2ysmOopILR10DCenXgjwmeMcSBp1kakmtkr07lVemCh0Fef3gD0GYKI5reUewCKmDQkbrKHfA6hQrSZ/7VR89ndRBpN5HnNv7dqUK01RmBZmpPYDK6Ud1SsUhpPHtc1/dRUs7bvjylN3h+YAQ0cQSKVnJLh8E1ZK3iufwUdcRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ROl/x2lw; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HzSmAflt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ROl/x2lw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750895870; x=1782431870;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CkcCjk8IzsSvEHOxb9mbqVNqkfQ5haY3GvAwzUt4bxI=;
-  b=HzSmAfltf96jMG9khhH3n1Aho+H0o++BCVsJU2y4Yz/0WQQktWob5WDm
-   I/BMc3BbPFYftKIfOByCbm6FDJblxk5ewYXdQbYB31gqPY+3lSNmI7om8
-   cra09OfUaV6NQ1Jn0gwNk8Bq1MvwezEKwJjEqQzk1wenjw5yoZnZk/gQi
-   LrTjaE7ATjCwPIUKNvgqCwhnBvholPP9jPhPzWgNO2A+iAzLF2MaTWGHp
-   4Mo2sPIP6IRtUrPNXv7xzDm102/c9LTaEICBecHQSES3hinShLIhjbvzn
-   asZmQiNmG+FSsx8p3h4kOA9h7Z/hjAwVd8/QVUwDl4+uP2aao33OsvrwT
-   A==;
-X-CSE-ConnectionGUID: +3dsEzUPQcmJzWYJUzd9hA==
-X-CSE-MsgGUID: Cxuw/qwGTIGPUDa4QkvyRQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="64616241"
+  t=1750896468; x=1782432468;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=z+SuTfKWy/B9blRGA67JeMSchJi6yxjs/KNi6wLaXAk=;
+  b=ROl/x2lw9whEg4tXJZfWxRXJPyCKrOzKPc8szCjOxNWohNUrcWbYYQv7
+   K93uOVaHDeBjM674+ED2YvjY2Ulg+UVYg3Lbh24lduwTLggzQikrFj/RW
+   33HAxFWZh1UQb0KMDGLjVBdZw4/qy6nbY9yyCMEKN8h1tpK9y8NZ//aB2
+   hJuNJM5l2eqrAS9wAaHstyuJMfbekFkfrVBpnIQ8rzbstgkKKvmL4vg6w
+   qjGv0bTDqqXJGis+uPzeTRRTY9qbfF2KDz7W/z/IYjBc2PdKUVXVgokvQ
+   51tqrRgN7Eu2eU1nBR6zZPZ5nEoi17mbqienyaPVxwnYaPvKezI+bP3oF
+   g==;
+X-CSE-ConnectionGUID: p1cnAeiDQg2P7GTWAOX9sw==
+X-CSE-MsgGUID: 7TZxDqubS22mQUoK53yEHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="64242689"
 X-IronPort-AV: E=Sophos;i="6.16,266,1744095600"; 
-   d="scan'208";a="64616241"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 16:57:49 -0700
-X-CSE-ConnectionGUID: Gy7XcTc0Sc2uOSE6wWY0hg==
-X-CSE-MsgGUID: RulosnoFTIGOmowOtTQoQg==
+   d="scan'208";a="64242689"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 17:07:48 -0700
+X-CSE-ConnectionGUID: 9F+CnZ+DTTaxYZTzWzBT0g==
+X-CSE-MsgGUID: ljcNes9GQa2JXK3cOiBgWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,266,1744095600"; 
-   d="scan'208";a="152884623"
+   d="scan'208";a="152660576"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Jun 2025 16:57:45 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 25 Jun 2025 17:07:46 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uUZzr-000TYQ-0F;
-	Wed, 25 Jun 2025 23:57:43 +0000
-Date: Thu, 26 Jun 2025 07:56:46 +0800
+	id 1uUa9Y-000TYe-0D;
+	Thu, 26 Jun 2025 00:07:44 +0000
+Date: Thu, 26 Jun 2025 08:07:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <lumag@kernel.org>, Sean Paul <sean@poorly.run>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-	Akhil P Oommen <akhilpo@oss.qualcomm.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v5 03/14] drm/msm: Use the central UBWC config database
-Message-ID: <202506260718.HOiyc0Mm-lkp@intel.com>
-References: <20250625-topic-ubwc_central-v5-3-e256d18219e2@oss.qualcomm.com>
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20250616 19/19]
+ include/asm-generic/tlb.h:378:2: error: type name requires a specifier or
+ qualifier
+Message-ID: <202506260845.3py4BoAJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,42 +64,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250625-topic-ubwc_central-v5-3-e256d18219e2@oss.qualcomm.com>
 
-Hi Konrad,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 2ae2aaafb21454f4781c30734959cf223ab486ef]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/soc-qcom-Add-UBWC-config-provider/20250625-211253
-base:   2ae2aaafb21454f4781c30734959cf223ab486ef
-patch link:    https://lore.kernel.org/r/20250625-topic-ubwc_central-v5-3-e256d18219e2%40oss.qualcomm.com
-patch subject: [PATCH v5 03/14] drm/msm: Use the central UBWC config database
-config: arm-randconfig-002-20250626 (https://download.01.org/0day-ci/archive/20250626/202506260718.HOiyc0Mm-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250626/202506260718.HOiyc0Mm-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20250616
+head:   78f053980ba50a0becae798ab7d07527d97e790d
+commit: 78f053980ba50a0becae798ab7d07527d97e790d [19/19] treewide: Avoid -Wflex-array-member-not-at-end warnings
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20250626/202506260845.3py4BoAJ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e04c938cc08a90ae60440ce22d072ebc69d67ee8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250626/202506260845.3py4BoAJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506260718.HOiyc0Mm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506260845.3py4BoAJ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/qcom/ubwc_config.c:230:34: error: redefinition of 'qcom_ubwc_config_get_data'
-     230 | const struct qcom_ubwc_cfg_data *qcom_ubwc_config_get_data(void)
-         |                                  ^
-   include/linux/soc/qcom/ubwc.h:59:48: note: previous definition is here
-      59 | static inline const struct qcom_ubwc_cfg_data *qcom_ubwc_config_get_data(void)
-         |                                                ^
-   1 error generated.
+   In file included from mm/oom_kill.c:49:
+   In file included from arch/s390/include/asm/tlb.h:38:
+>> include/asm-generic/tlb.h:378:2: error: type name requires a specifier or qualifier
+     378 |         );};
+         |         ^
+>> include/asm-generic/tlb.h:378:2: error: expected member name or ';' after declaration specifiers
+>> include/asm-generic/tlb.h:367:28: error: expected ';' at end of declaration list
+     367 |         unsigned int            batch_count;
+         |                                             ^
+         |                                             ;
+   3 errors generated.
 
 
-vim +/qcom_ubwc_config_get_data +230 drivers/soc/qcom/ubwc_config.c
+vim +378 include/asm-generic/tlb.h
 
-892fee0dfae7022 Konrad Dybcio 2025-06-25  229  
-892fee0dfae7022 Konrad Dybcio 2025-06-25 @230  const struct qcom_ubwc_cfg_data *qcom_ubwc_config_get_data(void)
+   327	
+   328		unsigned long		start;
+   329		unsigned long		end;
+   330		/*
+   331		 * we are in the middle of an operation to clear
+   332		 * a full mm and can make some optimizations
+   333		 */
+   334		unsigned int		fullmm : 1;
+   335	
+   336		/*
+   337		 * we have performed an operation which
+   338		 * requires a complete flush of the tlb
+   339		 */
+   340		unsigned int		need_flush_all : 1;
+   341	
+   342		/*
+   343		 * we have removed page directories
+   344		 */
+   345		unsigned int		freed_tables : 1;
+   346	
+   347		/*
+   348		 * Do we have pending delayed rmap removals?
+   349		 */
+   350		unsigned int		delayed_rmap : 1;
+   351	
+   352		/*
+   353		 * at which levels have we cleared entries?
+   354		 */
+   355		unsigned int		cleared_ptes : 1;
+   356		unsigned int		cleared_pmds : 1;
+   357		unsigned int		cleared_puds : 1;
+   358		unsigned int		cleared_p4ds : 1;
+   359	
+   360		/*
+   361		 * tracks VM_EXEC | VM_HUGETLB in tlb_start_vma
+   362		 */
+   363		unsigned int		vma_exec : 1;
+   364		unsigned int		vma_huge : 1;
+   365		unsigned int		vma_pfn  : 1;
+   366	
+ > 367		unsigned int		batch_count;
+   368	
+   369	#ifndef CONFIG_MMU_GATHER_NO_GATHER
+   370		struct mmu_gather_batch *active;
+   371		TRAILING_OVERLAP(struct mmu_gather_batch, local, encoded_pages,
+   372				 struct page		*__pages[MMU_GATHER_BUNDLE];
+   373	
+   374	#ifdef CONFIG_MMU_GATHER_PAGE_SIZE
+   375		unsigned int page_size;
+   376	#endif
+   377	#endif
+ > 378		);};
+   379	
 
 -- 
 0-DAY CI Kernel Test Service
