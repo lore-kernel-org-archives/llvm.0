@@ -1,150 +1,118 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218731BC9F4
-	for <llvm@lists.linux.dev>; Thu, 26 Jun 2025 03:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACD521CA02;
+	Thu, 26 Jun 2025 10:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750909475; cv=none; b=jSTLRkwYNgak8/nPGNAeKF+W/JI5tq7i0LbzIjivplymDCwpmQW5dreYXBWZqInm+s6jBslQNxrZOZQK/Ix8yMC0SCctfESG8yPyv6pepKr7XtDCpeeGr51e+sc/dEkEPDLVupzpR+PNJ70rMjrkpE8n6vR8yTIumVCY+lFmjuc=
+	t=1750932601; cv=none; b=XE+6KMNWwkF4vw79t8d+BtJ7WTtQSyYwlKW+JB7mbpfuQLiBQRPZUpQqzJcDjKYSFIz3uCeVsC0fWQbOhzzCxZJg3pUDCZiY+l8igkcHIblcm7NjU2sFBvDJSmZqkJx43r04e9LvLied4UcAkliKvpFz1sqbl86ebgMKP+98gz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750909475; c=relaxed/simple;
-	bh=ZYljlwSrYjK4pNZNhsdo+DfxyUa3YDIbDGCk0li/neo=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=hoFqTLcuXOsXHcavnf4kxXSRwXpytnP9+KLNm4KVSexZgNQM0mO6M/p606tW2rpooJlI/Ap/MFseMwm7UWSHVoVfIs++jChMXITdWsUiiOjYOraF6qIPffppgkrIeF6KZap7wNHfpiilWwSMo7co/ENre7xXDxEqJdNuXfvrVyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BJT+SjyZ; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1750932601; c=relaxed/simple;
+	bh=GjPeJtHKOXQwQBGGikOX9UYAW2VR/QOiOlM1WMfrLYU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FCW1JUh+CuwHIyaLD3SraTuIL9nhabrChK0rA1W+SNTICw3hkFoHEaO8kxqN2ma06ZyIo3XdXdHuo9HnV1TGLzJKMLURwj8sQrw5D/K8w9vV710CLrfIMHtV4y3K8fNWaUgq0cKSbbXxChTQaeft133ACI1QaVMSFu47cayeEg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QnlPQB0V; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BJT+SjyZ"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ad883afdf0cso113374666b.0
-        for <llvm@lists.linux.dev>; Wed, 25 Jun 2025 20:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750909471; x=1751514271; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FrRrPy6xEbt7dKz/lLzFjOvbS6O+lf0ZIVlWlZFUVrM=;
-        b=BJT+SjyZV3qDB72xzIsJUr0cfwtUBtTOi+pE/COG4MWW774per6Nc0us/vf45eEYqm
-         Ym9oaTxZWRZM5TJrFK1fTDbMtDLRxNeTuprlAqsbXYn1tNHBpjS0s8fl6Gm4EjLyPqH9
-         AouxxeQPfv1wphJYcXdhDZW5BZVDbf/jQ24nInLPRb8R+DUlHL5fFbz7XjJe6TPzkfVl
-         oRRS5MqR/fTvlfzQSbjXiRx40fPyyFLdyxG5sCj4cN5obzlRi5rrppRJB5ehb5Ak5LJZ
-         B2ulOuFF4eJ4mIYQ3WFUT7YW+luKpLW17gUCfTabiacNaQGSQJDoJnz8puhEaVB2PW0t
-         urmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750909471; x=1751514271;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FrRrPy6xEbt7dKz/lLzFjOvbS6O+lf0ZIVlWlZFUVrM=;
-        b=tVxlU/yI75vIcU9SPB1FQLaw4D95Fi+VLEOCETW/Hc7oSoDH3j1q2T8TtzE6R2D2GV
-         UoLAFYKzYJ8GvdnlnnhrLzQg29YBgCuRjqj1aPB1jAm1r5njfiFHTj3TEpNBnpPSV7ft
-         FUSH5MCgUQ/1cz4rtTVqlypcOBeLdpCB2jolPAHm4YMgSZyc9EE+lq0+NzrHniRNYE68
-         lX5xJx03J/JHUQyPizN9X3o+1mPwJVgbH0U9chfkuk4sE9hn5Qg/TtthaA+8jz5dhh6U
-         0tdY0nJNpP7b7+Hr5sJvC43LVnNEMJC7XJExsGmsMTxAQoI7QTNYzDhz1RLA9KjeepBb
-         eEuQ==
-X-Gm-Message-State: AOJu0Yz8ZbiMXaCDKLEyv1q5OT7BulNzXUs42uZXXg1ML579lTeHY5F+
-	hSn0lasV/OmN/isai45CgfO+9ROT403kJ7suXEjU3qPGAi28UNvu62UPrAsi3EGSkufrhQrqpMy
-	iaP8c
-X-Gm-Gg: ASbGncvPma9FDfbrvh802Nrfmxl6ZbrDAk4ThJ9uHZP/SIu67UZdJtmAJqHv6AwW3Pc
-	YLCaiu1XieI+H8LlN/7oceBIKi9Z/N9AO03Vo570UAtxE9x+KRgEj/DAgerkWCWlhswaTdsp2Jd
-	8JYECssavTKOhvwCVjgSSMuZSX0l8ncvoFHCCSVQOYWCKG++2EtkrRMxKKMcU+/ghXjjiVF5lvz
-	f/esBJ32oK2RebNWw1tLzJ7d8ibMGVxjUxdLqtZbxvijtfxGEzT06uBPIdQQC321sUxJfk3gw8o
-	kJDbL5YuwkGiSKSpZCZ1qzgnqgWxylXzCo/Gp6iWEq8kJWzouiMvIxUkzNR/buOF3IkN7opXztI
-	ZgnvPbwlLTKeBcAT4UCExKcYOzUGC/y6QbA==
-X-Google-Smtp-Source: AGHT+IERNs2/NQJHzupifIdf/Ni3G/93P+4EZ9kVaURlHde/P6sWBKsYR6BeYB5RZmnaEOe/4awmXg==
-X-Received: by 2002:a17:906:7da:b0:ae0:a590:bc64 with SMTP id a640c23a62f3a-ae0be869836mr523696766b.18.1750909471337;
-        Wed, 25 Jun 2025 20:44:31 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae053ecbe7dsm1142251466b.49.2025.06.25.20.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 20:44:30 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Thu, 26 Jun 2025 03:44:29 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1473247865.2128.1750909470759@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.16-rc2-1-g1a35c88302a3b: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QnlPQB0V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750932600; x=1782468600;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GjPeJtHKOXQwQBGGikOX9UYAW2VR/QOiOlM1WMfrLYU=;
+  b=QnlPQB0VfcS3w63NZt6/8dKpKCjQ33fm+NgtkZBo/AEoyCnNfpeTqDNq
+   Qc6ArVrr3pz96QdNmaB0oEmhArwR9KIIVcmy1I+G5+MTu3fUtFAplbwK7
+   QcjqkIDcbEadGZLYw7whl9V71EVNofGO5ER4wLm1KmJAIUQyLc5i8vOng
+   jJWKg48Z9aHEmiWMXzD3nHvDZ39gQz9SNs3BGTUaApaSqi6rOYng+m+Ag
+   XVFoY9Tf39ole0xW6nBfU78ccoiEGUjT2AI7MwYLF+bJB9BvH3FGmV59w
+   cHahh+DJIVZY8sLIAsSPQjrFyD1MWdIxH6W/g1ip7Dgi+8fy8DD2a7VkS
+   g==;
+X-CSE-ConnectionGUID: 5yOkrFFhSp6nJfflyVGSHQ==
+X-CSE-MsgGUID: typfixFXStOcTfPAGe53SQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="52449909"
+X-IronPort-AV: E=Sophos;i="6.16,267,1744095600"; 
+   d="scan'208";a="52449909"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 03:09:59 -0700
+X-CSE-ConnectionGUID: DM3dLgcDTuqjzwasTmx+6Q==
+X-CSE-MsgGUID: dpx6FarjQW6hGDGrQhFUOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,267,1744095600"; 
+   d="scan'208";a="157039982"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 26 Jun 2025 03:09:57 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uUjYJ-000Two-1k;
+	Thu, 26 Jun 2025 10:09:55 +0000
+Date: Thu, 26 Jun 2025 18:09:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20250616 14/19]
+ kernel/sched/ext.c:3712:10: error: incompatible pointer types returning
+ 'struct cgroup_hdr *' from a function with result type 'struct cgroup *'
+Message-ID: <202506261829.It6MPDTn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_2127_1274845571.1750909469396"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_2127_1274845571.1750909469396
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20250616
+head:   78f053980ba50a0becae798ab7d07527d97e790d
+commit: 803cca907129bd7f15b4d9e16fe9585d1f69782c [14/19] cgroup: Avoid -Wflex-array-member-not-at-end warnings
+config: x86_64-buildonly-randconfig-005-20250626 (https://download.01.org/0day-ci/archive/20250626/202506261829.It6MPDTn-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250626/202506261829.It6MPDTn-lkp@intel.com/reproduce)
 
-Dear contributor,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506261829.It6MPDTn-lkp@intel.com/
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+All errors (new ones prefixed by >>):
 
-In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
-  | commit v6.16-rc2-1-g1a35c88302a3b
-  | Author: Zaid Alali <zaidal@os.amperecomputing.com>
-  | Date:   Tue Jun 17 12:30:20 2025 -0700
-  | 
-  |     ACPI: APEI: EINJ: Fix kernel test sparse warnings
-  |     
-  |     This patch fixes the kernel test robot warning reported here:
-  |     Link: https://lore.kernel.org/all/202410241620.oApALow5-lkp@intel.com/
-  |     
-  | ... 11 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 26630
-  | # First few build errors in logs:
-  | # 00:26:38 drivers/acpi/apei/einj-core.c:340:6: error: variable 'p' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-  | # 00:26:38 make[5]: *** [scripts/Makefile.build:287: drivers/acpi/apei/einj-core.o] Error 1
-  | # 00:26:43 make[4]: *** [scripts/Makefile.build:554: drivers/acpi/apei] Error 2
-  | # 00:33:50 make[3]: *** [scripts/Makefile.build:554: drivers/acpi] Error 2
-  | # 01:38:46 make[2]: *** [scripts/Makefile.build:554: drivers] Error 2
-  | # 01:38:46 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:2003: .] Error 2
-  | # 01:38:46 make: *** [Makefile:248: __sub-make] Error 2
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 36661
-  | # linux build successful:
-  | all
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1711. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+   In file included from kernel/sched/build_policy.c:61:
+>> kernel/sched/ext.c:3712:10: error: incompatible pointer types returning 'struct cgroup_hdr *' from a function with result type 'struct cgroup *' [-Werror,-Wincompatible-pointer-types]
+    3712 |                 return &cgrp_dfl_root.cgrp;
+         |                        ^~~~~~~~~~~~~~~~~~~
+>> kernel/sched/ext.c:7407:17: error: incompatible pointer types initializing 'struct cgroup *' with an expression of type 'struct cgroup_hdr *' [-Werror,-Wincompatible-pointer-types]
+    7407 |         struct cgroup *cgrp = &cgrp_dfl_root.cgrp;
+         |                        ^      ~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
+vim +3712 kernel/sched/ext.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/402/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/401/artifact/artifacts
+f0e1a0643a59bf Tejun Heo 2024-06-18  3700  
+8195136669661f Tejun Heo 2024-09-04  3701  #ifdef CONFIG_EXT_GROUP_SCHED
+8195136669661f Tejun Heo 2024-09-04  3702  static struct cgroup *tg_cgrp(struct task_group *tg)
+8195136669661f Tejun Heo 2024-09-04  3703  {
+8195136669661f Tejun Heo 2024-09-04  3704  	/*
+8195136669661f Tejun Heo 2024-09-04  3705  	 * If CGROUP_SCHED is disabled, @tg is NULL. If @tg is an autogroup,
+8195136669661f Tejun Heo 2024-09-04  3706  	 * @tg->css.cgroup is NULL. In both cases, @tg can be treated as the
+8195136669661f Tejun Heo 2024-09-04  3707  	 * root cgroup.
+8195136669661f Tejun Heo 2024-09-04  3708  	 */
+8195136669661f Tejun Heo 2024-09-04  3709  	if (tg && tg->css.cgroup)
+8195136669661f Tejun Heo 2024-09-04  3710  		return tg->css.cgroup;
+8195136669661f Tejun Heo 2024-09-04  3711  	else
+8195136669661f Tejun Heo 2024-09-04 @3712  		return &cgrp_dfl_root.cgrp;
+8195136669661f Tejun Heo 2024-09-04  3713  }
+8195136669661f Tejun Heo 2024-09-04  3714  
 
-Instruction to reproduce the build : https://gitlab.com/Linaro/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/1a35c88302a3b2827ec47f0b2d0530b543938fb3/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
+:::::: The code at line 3712 was first introduced by commit
+:::::: 8195136669661fdfe54e9a8923c33b31c92fc1da sched_ext: Add cgroup support
 
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/1a35c88302a3b2827ec47f0b2d0530b543938fb3
-------=_Part_2127_1274845571.1750909469396--
+:::::: TO: Tejun Heo <tj@kernel.org>
+:::::: CC: Tejun Heo <tj@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
