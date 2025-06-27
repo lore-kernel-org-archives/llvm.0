@@ -1,214 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693AD4502A;
-	Fri, 27 Jun 2025 18:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A702C20AF9C;
+	Fri, 27 Jun 2025 19:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751050181; cv=none; b=Pa5CigJu58UQdUaWt9oq+o8bhITqk99w5lnKhbvKNKxg98W0bKlrLcoOfTiPv7lrjp6h4/A80xM8uwUROaxnxgCPRKEVOiRu3+uQiY0BodLv8pptIgPsn/Z45tB+B8zNzoI8irOlsL8sR6yqplGAJiDf3nQLjrZXo+FrYospUbI=
+	t=1751052413; cv=none; b=OJYThcfCMF58fkI/t196/xnGXaOFIZbRKPuupVFR4bfIoYSMVz/aJmPONHVuPZuvqgG8BxECXHC8+dvAS2izKUoJyQDrlxMzECjVRMAzENfSRMg2REa8zo0sQRuljVG4ehUQ1A3Jt3gDeGlZ+qDHJkAQKC4F1ZwKtdA/fZ0Osqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751050181; c=relaxed/simple;
-	bh=narcaFjXVhe4/7r7kPhjOLSPFF8lb9hRlbz3gP5dDG0=;
+	s=arc-20240116; t=1751052413; c=relaxed/simple;
+	bh=kCoAehJoP4d3veWTy0DxemolidReITNQ2YabMYVknDI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q0VX0WrlvAJZ6F1N8qwIxgw/X92WtYGrZd2iF9Y4PctqzMLARkFejRlJAo+ioC/kBb9kthn3PiIPLSgyhRpNjn1nFbH5S6umqiCKDqq+UMfanOJmsxrER94HcdoHbhrckJcmKHF6NH7mki1PEt7wWK97rEH7jGhIc/JGMDUMgbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=agY5s/XZ; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=R5Oyzhfaz7ewmzkd2UOZKzlV5upoQ+H4miYnK1K9ixtIcTqCFqetmSnbtDaVbrrfAMWtqwxGD28+yn+CPRQaWPwfEBhl1EwtqgTBcsvUuIZ63KPC5cv5E+zvxqhaxSKocuvHeosps3FFYLq9tqBK85tkr7bJHY2MlOq0T8L8i2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcStCyds; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="agY5s/XZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751050178; x=1782586178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=narcaFjXVhe4/7r7kPhjOLSPFF8lb9hRlbz3gP5dDG0=;
-  b=agY5s/XZQocy8Ex2IuFJHX0TUM4XyP1AiT6BUj1VSXRZiT2g57lYyjwU
-   B/JhsHCObpsXQ+S4vGvrliVsff+pkz3kvsRrw+k0HIQ1SEo5uQbla3F2v
-   Qc82jdageexcO/KZRnfvdlTwv4NUQTMXzwreUKtouCYxyj4x7rIjvzkP7
-   iDONiWB5wl2U3pop+iz6alsGcuBa5qKyZzvV/o+MP2JBOzmW7TyVtNAzS
-   0EyPb6l5cb2iDc1pj/8BEta6JLOXqZbSyl6XR17VaKvJhnnlPnXC4Fssy
-   iYCp3E0ICtFwex1ark2x12OyAQsTIEnLsfe51CxzaTKPudKMdJhE3rH5r
-   Q==;
-X-CSE-ConnectionGUID: Wyd4i/bQRQWvZmQ8FPh9NA==
-X-CSE-MsgGUID: kOI4XYj6Q72SVtOpzDYKQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="78810499"
-X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
-   d="scan'208";a="78810499"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 11:49:37 -0700
-X-CSE-ConnectionGUID: A7Edkv01Q/aVxm2Gt3qXJQ==
-X-CSE-MsgGUID: Egm5CKSjSTaC/g/ScZ2zJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
-   d="scan'208";a="152394717"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 27 Jun 2025 11:49:34 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uVE8h-000WTG-3D;
-	Fri, 27 Jun 2025 18:49:32 +0000
-Date: Sat, 28 Jun 2025 02:49:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peng Fan <peng.fan@nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	arm-scmi@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 7/7] firmware: imx: sm-misc: Dump syslog and system info
-Message-ID: <202506280217.aZih1pGT-lkp@intel.com>
-References: <20250627-sm-misc-api-v1-v1-7-2b99481fe825@nxp.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcStCyds"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0140AC4CEE3;
+	Fri, 27 Jun 2025 19:26:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751052413;
+	bh=kCoAehJoP4d3veWTy0DxemolidReITNQ2YabMYVknDI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fcStCydsxKyIDjbz3Tz51AeLrwy5mof6hG1an2zqnuWTNSnQLJUO0VkblIlnYNyzP
+	 4ioTcAoJeHgAWz8nJrR/AoPshag+KCtlDO/ZzklDEDbLyKhP+iZcc2ocHDOhjDK3Av
+	 erBF0XU329gNyQW7lDqBBRv8GrGHvsnR8GzkdxWe1Bvd+6V8PKvsJQkTs6QkZIC+35
+	 WDWaaU0yKbjz8YqGFZFfvUT7Soth1y0BLOfdiAq6TTVPCFwpxt/uFRnzoILet9oizy
+	 O8aWp2JmnMCfOBv4XY2LiWTQGVxE0aM5lo49Tuxe8VH2Dulut2dn15YAEhhxFfXAdE
+	 lW+/7cDWPe8Wg==
+Date: Fri, 27 Jun 2025 12:26:50 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v4 06/19] perf capstone: Support for dlopen-ing
+ libcapstone.so
+Message-ID: <aF7wesWHTv_Wp-8y@google.com>
+References: <20250417230740.86048-1-irogers@google.com>
+ <20250417230740.86048-7-irogers@google.com>
+ <aF3Vd0C-7jqZwz91@google.com>
+ <CAP-5=fV4x0q7YdeYJd6GAHXd48Qochpa-+jq5jsRJWK36v7rSA@mail.gmail.com>
+ <CAP-5=fXLUO3yvSmM4nSnNV_qQGGLP_XTcfPgOhgOkuaNnr3Hvw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250627-sm-misc-api-v1-v1-7-2b99481fe825@nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fXLUO3yvSmM4nSnNV_qQGGLP_XTcfPgOhgOkuaNnr3Hvw@mail.gmail.com>
 
-Hi Peng,
+On Fri, Jun 27, 2025 at 09:44:02AM -0700, Ian Rogers wrote:
+> On Thu, Jun 26, 2025 at 9:53 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Thu, Jun 26, 2025 at 4:19 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > >
+> > > On Thu, Apr 17, 2025 at 04:07:27PM -0700, Ian Rogers wrote:
+> > > > If perf wasn't built against libcapstone, no HAVE_LIBCAPSTONE_SUPPORT,
+> > > > support dlopen-ing libcapstone.so and then calling the necessary
+> > > > functions by looking them up using dlsym. Reverse engineer the types
+> > > > in the API using pahole, adding only what's used in the perf code or
+> > > > necessary for the sake of struct size and alignment.
+> > >
+> > > I still think it's simpler to require capstone headers at build time and
+> > > add LIBCAPSTONE_DYNAMIC=1 or something to support dlopen.
+> >
+> > I agree, having a header file avoids the need to declare the header
+> > file values. This is simpler. Can we make the build require
+> > libcapstone and libLLVM in the same way that libtraceevent is
+> > required? That is you have to explicitly build with NO_LIBTRACEEVENT=1
+> > to get a no libtraceevent build to succeed. If we don't do this then
+> > having LIBCAPSTONE_DYNAMIC will most likely be an unused option and
+> > not worth carrying in the code base, I think that's sad. If we require
+> > the libraries I don't like the idea of people arguing, "why do I need
+> > to install libcapstone and libLLVM just to get the kernel/perf to
+> > build now?" The non-simple, but still not very complex, approach taken
+> > here was taken as a compromise to get the best result (a perf that
+> > gets faster, BPF support, .. when libraries are available without
+> > explicitly depending on them) while trying not to offend kernel
+> > developers who are often trying to build on minimal systems.
+> 
+> Fwiw, a situation that I think is analogous (and was playing on my
+> mind while writing the code) is that we don't require python to build
+> perf and carry around empty-pmu-events.c:
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/pmu-events/empty-pmu-events.c?h=perf-tools-next
+> It would be simpler (in the code base and in general) to require
+> everyone building perf to have python.
+> Having python on a system seems less of a stretch than requiring
+> libcapstone and libLLVM.
+> 
+> If we keep the existing build approach, optional capstone and libLLVM
+> by detecting it as a feature, then just linking against the libraries
+> is natural. Someone would need to know they care about optionality and
+> enable LIBCAPSTONE_DYNAMIC=1. An average build where the libraries
+> weren't present would lose the libcapstone and libLLVM support. We
+> could warn about this situation but some people are upset about build
+> warnings, and if we do warn we could be pushing people into just
+> linking against libcapstone and libLLVM which seems like we'll fall
+> foul of the, "perf has too many library dependencies," complaint. We
+> could warn about linking against libraries when there is a _DYNAMIC
+> alternative like this available, but again people don't like build
+> warnings and they could legitimately want to link against libcapstone
+> or libLLVM.
+> 
+> Anyway, that's why I ended up with the code in this state, to best try
+> to play off all the different compromises and complaints that have
+> been dealt with in the past.
 
-kernel test robot noticed the following build errors:
+I can see your point.  Adding new build flags is likely to be unused and
+forgotten.
 
-[auto build test ERROR on ecb259c4f70dd5c83907809f45bf4dc6869961d7]
+But I also think is that this dlopen support is mostly useful to distro
+package managers who want to support more flexible environment and
+regular dynamic linking is preferred to local builds over dlopen.  Then
+adding a note to a pull request and contacting them directly (if needed)
+might work?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan/firmware-arm_scmi-imx-Add-documentation-for-MISC_BOARD_INFO/20250627-140736
-base:   ecb259c4f70dd5c83907809f45bf4dc6869961d7
-patch link:    https://lore.kernel.org/r/20250627-sm-misc-api-v1-v1-7-2b99481fe825%40nxp.com
-patch subject: [PATCH 7/7] firmware: imx: sm-misc: Dump syslog and system info
-config: i386-buildonly-randconfig-001-20250628 (https://download.01.org/0day-ci/archive/20250628/202506280217.aZih1pGT-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506280217.aZih1pGT-lkp@intel.com/reproduce)
+Thanks,
+Namhyung
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506280217.aZih1pGT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/firmware/imx/sm-misc.c:58:11: error: call to undeclared function 'kmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      58 |         syslog = kmalloc(sizeof(*syslog), GFP_KERNEL);
-         |                  ^
-   drivers/firmware/imx/sm-misc.c:58:11: note: did you mean 'mm_alloc'?
-   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
-      16 | extern struct mm_struct *mm_alloc(void);
-         |                          ^
->> drivers/firmware/imx/sm-misc.c:58:9: error: incompatible integer to pointer conversion assigning to 'struct scmi_imx_misc_syslog *' from 'int' [-Wint-conversion]
-      58 |         syslog = kmalloc(sizeof(*syslog), GFP_KERNEL);
-         |                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/firmware/imx/sm-misc.c:64:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      64 |                 kfree(syslog);
-         |                 ^
-   drivers/firmware/imx/sm-misc.c:80:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      80 |         kfree(syslog);
-         |         ^
-   drivers/firmware/imx/sm-misc.c:97:9: error: call to undeclared function 'kmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      97 |         info = kmalloc(sizeof(*info), GFP_KERNEL);
-         |                ^
->> drivers/firmware/imx/sm-misc.c:97:7: error: incompatible integer to pointer conversion assigning to 'struct scmi_imx_misc_system_info *' from 'int' [-Wint-conversion]
-      97 |         info = kmalloc(sizeof(*info), GFP_KERNEL);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/imx/sm-misc.c:127:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     127 |         kfree(info);
-         |         ^
-   7 errors generated.
-
-
-vim +/kmalloc +58 drivers/firmware/imx/sm-misc.c
-
-    46	
-    47	static ssize_t syslog_show(struct device *device, struct device_attribute *attr,
-    48				   char *buf)
-    49	{
-    50		struct scmi_imx_misc_sys_sleep_rec *rec;
-    51		struct scmi_imx_misc_syslog *syslog;
-    52		int ret;
-    53		size_t len = 0;
-    54	
-    55		if (!ph)
-    56			return 0;
-    57	
-  > 58		syslog = kmalloc(sizeof(*syslog), GFP_KERNEL);
-    59		if (!syslog)
-    60			return -ENOMEM;
-    61	
-    62		ret = imx_misc_ctrl_ops->misc_syslog(ph, sizeof(*syslog), syslog);
-    63		if (ret) {
-  > 64			kfree(syslog);
-    65			return ret;
-    66		}
-    67	
-    68		rec = &syslog->syssleeprecord;
-    69	
-    70		len += sysfs_emit_at(buf, len, "Wake Vector = %u\n", rec->wakesource);
-    71		len += sysfs_emit_at(buf, len, "Sys sleep mode = %u\n", rec->syssleepmode);
-    72		len += sysfs_emit_at(buf, len, "Sys sleep flags = 0x%08x\n", rec->syssleepflags);
-    73		len += sysfs_emit_at(buf, len, "MIX power status = 0x%08x\n", rec->mixpwrstat);
-    74		len += sysfs_emit_at(buf, len, "MEM power status = 0x%08x\n", rec->mempwrstat);
-    75		len += sysfs_emit_at(buf, len, "PLL power status = 0x%08x\n", rec->pllpwrstat);
-    76		len += sysfs_emit_at(buf, len, "Sleep latency = %u\n", rec->sleepentryusec);
-    77		len += sysfs_emit_at(buf, len, "Wake latency = %u\n", rec->sleepexitusec);
-    78		len += sysfs_emit_at(buf, len, "Sleep count = %u\n", rec->sleepcnt);
-    79	
-    80		kfree(syslog);
-    81	
-    82		return len;
-    83	}
-    84	
-    85	static DEVICE_ATTR_RO(syslog);
-    86	
-    87	static ssize_t system_info_show(struct device *device, struct device_attribute *attr,
-    88					char *buf)
-    89	{
-    90		struct scmi_imx_misc_system_info *info;
-    91		int len = 0;
-    92		int ret;
-    93	
-    94		if (!ph)
-    95			return 0;
-    96	
-  > 97		info = kmalloc(sizeof(*info), GFP_KERNEL);
-    98		if (!info)
-    99			return -ENOMEM;
-   100	
-   101		ret = imx_misc_ctrl_ops->misc_discover_build_info(ph, info);
-   102		if (ret)
-   103			goto err;
-   104	
-   105		ret = imx_misc_ctrl_ops->misc_cfg_info(ph, info);
-   106		if (ret)
-   107			goto err;
-   108	
-   109		ret = imx_misc_ctrl_ops->misc_silicon_info(ph, info);
-   110		if (ret)
-   111			goto err;
-   112	
-   113		ret = imx_misc_ctrl_ops->misc_board_info(ph, info);
-   114		if (ret)
-   115			goto err;
-   116	
-   117		len += sysfs_emit_at(buf, len, "SM Version    = Build %u, Commit 08%x\n",
-   118				     info->buildnum, info->buildcommit);
-   119		len += sysfs_emit_at(buf, len, "SM Config     = %s, mSel=%u\n",
-   120				     info->cfgname, info->msel);
-   121		len += sysfs_emit_at(buf, len, "Silicon       = %s\n", info->siname);
-   122		len += sysfs_emit_at(buf, len, "Board         = %s, attr=0x%08x\n",
-   123				     info->brdname, info->brd_attributes);
-   124	
-   125		ret = len;
-   126	err:
-   127		kfree(info);
-   128		return ret;
-   129	}
-   130	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
