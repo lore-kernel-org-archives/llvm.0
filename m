@@ -1,134 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E42DF4ED
-	for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 15:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83D014EC73;
+	Fri, 27 Jun 2025 16:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751036589; cv=none; b=cigMBmYl1Hb73mhMiwdoLsa4fgiv+DRXMDJzL4VEZu9AMHJRBJodxbuyDAxbeFh//fIQpsR6RQBOIzhwNhmMwu+t+JqqvAYMh0qEix4OKDG1j4qqblbwRbnHTwaKRGF8zP3TisSX9frIz+2Y8pLuFbP4bxhshFC1LH8ekS6d8Qw=
+	t=1751040214; cv=none; b=EXtVT57TNSb9zqABPnRbQcUDnLqasY85hJOQyBT7+qAqqO6N4QnB8ACMNr1S+U+LQAnLiEkeq31wkbN2fjBcfe/R7rHOxjzU1sVKF09egOiA1y200Z5TMTlczTFdT2EwY1VKh2Ju0Tr95umJd/9NUIZ5YOaE8UQYjqb0S3nQwzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751036589; c=relaxed/simple;
-	bh=XaYfWkgwYGnRCoMdHqGZ38IZOXoU/foZuCLrBixHq3Y=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=F9ERFRNBrShZZgrmlP1+GaZdJ+ZuIHKc8hvV4WB+Qet6bsbHMEaOjMZ9+wJWX6nLL046GMva/qPAn/KAnGfldCJ/t7OeHQvmgGZ70vwzt8+JZbNNzkJyHKKLeOzoXwXoWPkRl2/PvE14tt2SAkOwkF8Ab19ydextIgsPHPZtUZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=edk3LCnx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1751040214; c=relaxed/simple;
+	bh=SweOwYIisz+RSUn+EV34sWhAEWNmOQ/nrZuEKIbq+FE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mOL3xrl5zD7R5yhBcWTMlRYD/Mj7JtlpHCV30k1pAEcDHBL/BHWuJOnMKpsIB3pS8LI5U2+jj1Mfw3K1+5z/ARyWqbUsKCpZwxRibwswxhslEacgqMA/YhUHZN5DgBk4vZBi99AEsgHf66P7plx0K9hjMBnjpK/V79isDpMnUf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WHqgHXIi; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="edk3LCnx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751036587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gjQqBsCGIInEBKB1cBvkVXW3iPEFZjYKQxs4fBenzks=;
-	b=edk3LCnxUIxkI8A+XEUORpFxp1RX7PClaytJVCdEDrQyL1itHgDPtJXmlltESk57ih0pye
-	QMeybg8G6wPnFVkvPLkr0y5PDXpMlpgHIJ19LVx8p9IiCyNqFb929xLvw10zJJvyn/hjgn
-	y1RdnaaHRdHXxg2zB+heE3os0Zgt9SU=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-492-P_DsbiekP1SooB2AOG9s0Q-1; Fri,
- 27 Jun 2025 11:03:04 -0400
-X-MC-Unique: P_DsbiekP1SooB2AOG9s0Q-1
-X-Mimecast-MFC-AGG-ID: P_DsbiekP1SooB2AOG9s0Q_1751036583
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 596FC1800343
-	for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 15:03:03 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A909818046C6;
-	Fri, 27 Jun 2025 15:03:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 100): Test report for master
- (6.16.0-rc3, upstream-mainline, 67a99386)
-Date: Fri, 27 Jun 2025 15:03:02 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, ftjahjad@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WHqgHXIi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751040213; x=1782576213;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SweOwYIisz+RSUn+EV34sWhAEWNmOQ/nrZuEKIbq+FE=;
+  b=WHqgHXIiivfUG16HKFKKMrZZdyPiKEt8oVdjJ5TAhRSJa7JFzRIc3rP9
+   D2cft4Qm7iteCNqPON2NEnSwTrU1JA5hIciNenNtLVN6HB4VoD+CQbej1
+   BLIClmCuRGVjhl3dhUVPtDuPrUJIhURn3H0ODk5hZgKaYdCVH7Xek62mJ
+   BfkvMP2XdQhKPRT3TIPBRqdoOXFDFpwzoWovyRczy3KskjPjjiEB6VauA
+   hrms4wVuyHD8gfUMtlSE4rI2R7PQIDygaDtA+Q/3Gu/4RiVRFiiz5kZNr
+   Uw0Qel+Zt3yZJX71KJhwcMata2ucr/SxfxNvEl3kDm16xzc7S+PcbqeiZ
+   g==;
+X-CSE-ConnectionGUID: 2gVQXUq5Ram/FUsIATx30Q==
+X-CSE-MsgGUID: x3sZ6dq9SwGaqVA2cNjJOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="57165020"
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="57165020"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 09:03:32 -0700
+X-CSE-ConnectionGUID: quOsVAcRTJ28fr/y7IVW6g==
+X-CSE-MsgGUID: d3bnjaQxQWCDqXv3mdySOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="153326466"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 09:03:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1uVBXx-0000000AWur-1dH7;
+	Fri, 27 Jun 2025 19:03:25 +0300
+Date: Fri, 27 Jun 2025 19:03:25 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: LiangCheng Wang <zaq14760@gmail.com>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6] staging: media: atomisp: apply clang-format and fix
+ checkpatch.pl errors
+Message-ID: <aF7Azdn8G8EloJsH@smile.fi.intel.com>
+References: <20250627-bar-v6-1-b22b5ea3ced0@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <94883.125062711030400301@us-mta-492.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: SHr1k2ZAfUsaO_E1xU5PGPdWWwm-B_TndP1cgQotNh8_1751036583
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627-bar-v6-1-b22b5ea3ced0@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi, we tested your kernel and here are the results:
+On Fri, Jun 27, 2025 at 10:56:09PM +0800, LiangCheng Wang wrote:
+> Applied clang-format to the entire AtomISP driver to improve code consistency,
+> readability, and adherence to Linux kernel coding style.
+> 
+> Additionally, manually fixed all checkpatch.pl-reported ERRORs across
+> the driver, including:
+> 
+> - Macro definitions with complex expressions now wrapped in parentheses
+> - Removed unnecessary parentheses in return statements
+> - Avoided initializing globals to zero
+> - Fixed invalid spacing around unary operators
+> 
+> This patch only includes formatting and stylistic changes with no functional logic modifications.
+> 
+> Suggested-by: Andy Shevchenko <andy@kernel.org>
+> Link: https://lore.kernel.org/all/aFwSgCtrK7DH3pIw@smile.fi.intel.com/
+> Signed-off-by: LiangCheng Wang <zaq14760@gmail.com>
+> ---
+> This patch applies clang-format to the entire AtomISP driver and manually
+> fixes all checkpatch.pl-reported ERRORs. The intent is to improve code
+> consistency and align with kernel coding standards.
+> 
+> Formatting and error fixes include:
+> - Replacing space-based indentation with tabs
+> - Wrapping complex macros in parentheses
+> - Removing redundant return parentheses
+> - Avoiding unnecessary zero-initialized globals
+> 
+> The following tools were used:
+>   clang-format -i $(find drivers/staging/media/atomisp/ -name "*.[ch]")
+>   ./scripts/checkpatch.pl -f $(find drivers/staging/media/atomisp/ -name "*.[ch]") | grep '^ERROR:' -B 1 -A 2
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> WARNINGs (~1500) were intentionally left untouched to keep this patch
+> focused and reviewable. These may be addressed in future patches.
 
+Thanks for this version, but no need to send such a huge changes.
+Just make a public Git repo with it and provide just a cover letter.
+This is unreviewable.
 
-Kernel information:
-    Commit message: Merge tag 'v6.16-p6' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/herbert/crypto-2.6
+Looking at some changes it might be doubtful. Perhaps we need a modified
+version of .clang-format for this driver. Dunno. It's up to Hans, and others
+are welcome to share their opinions.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1893241944
+In particular I'm referring to the change of amount of TABs, like
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1893241944-x86_64-kernel-debug_upt_4
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1893241944-x86_64-kernel-debug_upt_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+#define FOO		1234
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+to
 
+#define FOO 1234 // if it's even a TAB there!
 
-Tests that were not ran because of internal issues:
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
+-- 
+With Best Regards,
+Andy Shevchenko
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
