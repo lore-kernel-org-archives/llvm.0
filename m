@@ -1,144 +1,318 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A702C20AF9C;
-	Fri, 27 Jun 2025 19:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126BE28B7DD;
+	Fri, 27 Jun 2025 22:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751052413; cv=none; b=OJYThcfCMF58fkI/t196/xnGXaOFIZbRKPuupVFR4bfIoYSMVz/aJmPONHVuPZuvqgG8BxECXHC8+dvAS2izKUoJyQDrlxMzECjVRMAzENfSRMg2REa8zo0sQRuljVG4ehUQ1A3Jt3gDeGlZ+qDHJkAQKC4F1ZwKtdA/fZ0Osqo=
+	t=1751061658; cv=none; b=RprMqTSPWHV7/Fy0a14GaD+LeoMqJFClfXho0E8cJt66q4562O25yBWkkCw9L95Zg2rlY2hFE01/H7f/IgvMFz6pLNudOluhkxgPlltaDM/ItfCSdEKeQ7eMalFPgA6f5TdMs7jumcqc9pwtHsHHoPKBPUt67tysd2y1a0ta23k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751052413; c=relaxed/simple;
-	bh=kCoAehJoP4d3veWTy0DxemolidReITNQ2YabMYVknDI=;
+	s=arc-20240116; t=1751061658; c=relaxed/simple;
+	bh=kny2SXs15smNjfH9pjMs4jOR3nHD7rU5IcbqFhZp10w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R5Oyzhfaz7ewmzkd2UOZKzlV5upoQ+H4miYnK1K9ixtIcTqCFqetmSnbtDaVbrrfAMWtqwxGD28+yn+CPRQaWPwfEBhl1EwtqgTBcsvUuIZ63KPC5cv5E+zvxqhaxSKocuvHeosps3FFYLq9tqBK85tkr7bJHY2MlOq0T8L8i2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcStCyds; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JBGRj6Vw6tODH0PKcmPtbzCIBCv5XESb959etzXYU30exVZjFSnWLITRV5qjSqujfAldGpfQWa/NBNxfvdgSk4qmwReXVkxlDZto2DywIZRjany6viVVVe64Lv6K1acg16cue0OHzSeJb9CKxXA+zmxjsI6RGSpssOAuaC9QHek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T34kLHej; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcStCyds"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0140AC4CEE3;
-	Fri, 27 Jun 2025 19:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751052413;
-	bh=kCoAehJoP4d3veWTy0DxemolidReITNQ2YabMYVknDI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fcStCydsxKyIDjbz3Tz51AeLrwy5mof6hG1an2zqnuWTNSnQLJUO0VkblIlnYNyzP
-	 4ioTcAoJeHgAWz8nJrR/AoPshag+KCtlDO/ZzklDEDbLyKhP+iZcc2ocHDOhjDK3Av
-	 erBF0XU329gNyQW7lDqBBRv8GrGHvsnR8GzkdxWe1Bvd+6V8PKvsJQkTs6QkZIC+35
-	 WDWaaU0yKbjz8YqGFZFfvUT7Soth1y0BLOfdiAq6TTVPCFwpxt/uFRnzoILet9oizy
-	 O8aWp2JmnMCfOBv4XY2LiWTQGVxE0aM5lo49Tuxe8VH2Dulut2dn15YAEhhxFfXAdE
-	 lW+/7cDWPe8Wg==
-Date: Fri, 27 Jun 2025 12:26:50 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T34kLHej"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751061655; x=1782597655;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kny2SXs15smNjfH9pjMs4jOR3nHD7rU5IcbqFhZp10w=;
+  b=T34kLHejB8ewKhnm6qNbkjpDJns2uBovFNn2uoIv8QtNnNneKvE81Qf5
+   8bxevKRGQjUEmJVAarflJ1nxzCU128Q2/K7S0wttrkP49XorlokoqmByU
+   7M/nrFrp8OIa2TX+VePuTHx/BkaKtKg3lUYxfwlSjT1BIeuMA0r2UkK93
+   NFRVXX6gF4iPKuDRKqRGw4xtTAmg62vs3iOg3FZubLpcPpwigdP1gulym
+   M1ocymy2+Ltn1rhtuOqBU5UEy7sOsfCLJ4tlLOcqDY37HS3uY01IAU2Mk
+   TSKWrR6P6cW4rvtFXipMA4nkNtiUb4+V3XXTM9TTSQeQSWthfetUdQO7t
+   g==;
+X-CSE-ConnectionGUID: ZdlDxbjXSt2LgNY4i9rqBA==
+X-CSE-MsgGUID: DNuTxRqBTa6EohNcrbpHEw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="78821551"
+X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
+   d="scan'208";a="78821551"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 15:00:54 -0700
+X-CSE-ConnectionGUID: shvZSA3uQkq+ng3gytSIeA==
+X-CSE-MsgGUID: wYvyKMvQQzWkl55yWsxyxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
+   d="scan'208";a="158416385"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 27 Jun 2025 15:00:49 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVH7n-000WZq-16;
+	Fri, 27 Jun 2025 22:00:47 +0000
+Date: Sat, 28 Jun 2025 05:59:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wander Lairson Costa <wander@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	David Woodhouse <dwmw@amazon.co.uk>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Changbin Du <changbin.du@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Li Huafei <lihuafei1@huawei.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v4 06/19] perf capstone: Support for dlopen-ing
- libcapstone.so
-Message-ID: <aF7wesWHTv_Wp-8y@google.com>
-References: <20250417230740.86048-1-irogers@google.com>
- <20250417230740.86048-7-irogers@google.com>
- <aF3Vd0C-7jqZwz91@google.com>
- <CAP-5=fV4x0q7YdeYJd6GAHXd48Qochpa-+jq5jsRJWK36v7rSA@mail.gmail.com>
- <CAP-5=fXLUO3yvSmM4nSnNV_qQGGLP_XTcfPgOhgOkuaNnr3Hvw@mail.gmail.com>
+	Clark Williams <williams@redhat.com>,
+	Gabriele Monaco <gmonaco@redhat.com>
+Subject: Re: [PATCH 2/2] tracing/preemptirq: Optimize
+ preempt_disable/enable() tracepoint overhead
+Message-ID: <202506280524.R4BJehMT-lkp@intel.com>
+References: <20250626142017.26372-3-wander@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fXLUO3yvSmM4nSnNV_qQGGLP_XTcfPgOhgOkuaNnr3Hvw@mail.gmail.com>
+In-Reply-To: <20250626142017.26372-3-wander@redhat.com>
 
-On Fri, Jun 27, 2025 at 09:44:02AM -0700, Ian Rogers wrote:
-> On Thu, Jun 26, 2025 at 9:53 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Thu, Jun 26, 2025 at 4:19 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > >
-> > > On Thu, Apr 17, 2025 at 04:07:27PM -0700, Ian Rogers wrote:
-> > > > If perf wasn't built against libcapstone, no HAVE_LIBCAPSTONE_SUPPORT,
-> > > > support dlopen-ing libcapstone.so and then calling the necessary
-> > > > functions by looking them up using dlsym. Reverse engineer the types
-> > > > in the API using pahole, adding only what's used in the perf code or
-> > > > necessary for the sake of struct size and alignment.
-> > >
-> > > I still think it's simpler to require capstone headers at build time and
-> > > add LIBCAPSTONE_DYNAMIC=1 or something to support dlopen.
-> >
-> > I agree, having a header file avoids the need to declare the header
-> > file values. This is simpler. Can we make the build require
-> > libcapstone and libLLVM in the same way that libtraceevent is
-> > required? That is you have to explicitly build with NO_LIBTRACEEVENT=1
-> > to get a no libtraceevent build to succeed. If we don't do this then
-> > having LIBCAPSTONE_DYNAMIC will most likely be an unused option and
-> > not worth carrying in the code base, I think that's sad. If we require
-> > the libraries I don't like the idea of people arguing, "why do I need
-> > to install libcapstone and libLLVM just to get the kernel/perf to
-> > build now?" The non-simple, but still not very complex, approach taken
-> > here was taken as a compromise to get the best result (a perf that
-> > gets faster, BPF support, .. when libraries are available without
-> > explicitly depending on them) while trying not to offend kernel
-> > developers who are often trying to build on minimal systems.
-> 
-> Fwiw, a situation that I think is analogous (and was playing on my
-> mind while writing the code) is that we don't require python to build
-> perf and carry around empty-pmu-events.c:
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/pmu-events/empty-pmu-events.c?h=perf-tools-next
-> It would be simpler (in the code base and in general) to require
-> everyone building perf to have python.
-> Having python on a system seems less of a stretch than requiring
-> libcapstone and libLLVM.
-> 
-> If we keep the existing build approach, optional capstone and libLLVM
-> by detecting it as a feature, then just linking against the libraries
-> is natural. Someone would need to know they care about optionality and
-> enable LIBCAPSTONE_DYNAMIC=1. An average build where the libraries
-> weren't present would lose the libcapstone and libLLVM support. We
-> could warn about this situation but some people are upset about build
-> warnings, and if we do warn we could be pushing people into just
-> linking against libcapstone and libLLVM which seems like we'll fall
-> foul of the, "perf has too many library dependencies," complaint. We
-> could warn about linking against libraries when there is a _DYNAMIC
-> alternative like this available, but again people don't like build
-> warnings and they could legitimately want to link against libcapstone
-> or libLLVM.
-> 
-> Anyway, that's why I ended up with the code in this state, to best try
-> to play off all the different compromises and complaints that have
-> been dealt with in the past.
+Hi Wander,
 
-I can see your point.  Adding new build flags is likely to be unused and
-forgotten.
+kernel test robot noticed the following build errors:
 
-But I also think is that this dlopen support is mostly useful to distro
-package managers who want to support more flexible environment and
-regular dynamic linking is preferred to local builds over dlopen.  Then
-adding a note to a pull request and contacting them directly (if needed)
-might work?
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on tip/sched/core linus/master v6.16-rc3 next-20250627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Namhyung
+url:    https://github.com/intel-lab-lkp/linux/commits/Wander-Lairson-Costa/trace-preemptirq-reduce-overhead-of-irq_enable-disable-tracepoints/20250626-222438
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250626142017.26372-3-wander%40redhat.com
+patch subject: [PATCH 2/2] tracing/preemptirq: Optimize preempt_disable/enable() tracepoint overhead
+config: powerpc-randconfig-002-20250628 (https://download.01.org/0day-ci/archive/20250628/202506280524.R4BJehMT-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506280524.R4BJehMT-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506280524.R4BJehMT-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:12:
+   In file included from include/linux/alloc_tag.h:11:
+   In file included from include/linux/preempt.h:13:
+   In file included from include/linux/tracepoint-defs.h:11:
+   In file included from include/linux/atomic.h:7:
+   In file included from arch/powerpc/include/asm/atomic.h:11:
+   In file included from arch/powerpc/include/asm/cmpxchg.h:755:
+   In file included from include/asm-generic/cmpxchg-local.h:6:
+>> include/linux/irqflags.h:201:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     201 | DECLARE_TRACEPOINT(irq_enable);
+         | ^
+         | int
+>> include/linux/irqflags.h:201:20: error: a parameter list without types is only allowed in a function definition
+     201 | DECLARE_TRACEPOINT(irq_enable);
+         |                    ^
+   include/linux/irqflags.h:202:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     202 | DECLARE_TRACEPOINT(irq_disable);
+         | ^
+         | int
+   include/linux/irqflags.h:202:20: error: a parameter list without types is only allowed in a function definition
+     202 | DECLARE_TRACEPOINT(irq_disable);
+         |                    ^
+>> include/linux/irqflags.h:274:47: error: call to undeclared function 'tracepoint_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     274 | DEFINE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
+         |                                               ^
+   include/linux/irqflags.h:206:7: note: expanded from macro 'local_irq_enable'
+     206 |                 if (tracepoint_enabled(irq_enable))     \
+         |                     ^
+>> include/linux/irqflags.h:274:47: error: use of undeclared identifier 'irq_enable'
+   include/linux/irqflags.h:206:26: note: expanded from macro 'local_irq_enable'
+     206 |                 if (tracepoint_enabled(irq_enable))     \
+         |                                        ^
+>> include/linux/irqflags.h:274:47: error: use of undeclared identifier 'irq_enable'
+   include/linux/irqflags.h:206:26: note: expanded from macro 'local_irq_enable'
+     206 |                 if (tracepoint_enabled(irq_enable))     \
+         |                                        ^
+>> include/linux/irqflags.h:274:47: error: use of undeclared identifier 'irq_enable'
+   include/linux/irqflags.h:206:26: note: expanded from macro 'local_irq_enable'
+     206 |                 if (tracepoint_enabled(irq_enable))     \
+         |                                        ^
+   include/linux/irqflags.h:274:26: error: call to undeclared function 'tracepoint_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     274 | DEFINE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
+         |                          ^
+   include/linux/irqflags.h:215:7: note: expanded from macro 'local_irq_disable'
+     215 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                     ^
+>> include/linux/irqflags.h:274:26: error: use of undeclared identifier 'irq_disable'; did you mean 'was_disabled'?
+   include/linux/irqflags.h:215:26: note: expanded from macro 'local_irq_disable'
+     215 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                                        ^
+   include/linux/irqflags.h:274:26: note: 'was_disabled' declared here
+   include/linux/irqflags.h:213:8: note: expanded from macro 'local_irq_disable'
+     213 |                 bool was_disabled = raw_irqs_disabled();\
+         |                      ^
+>> include/linux/irqflags.h:274:26: error: use of undeclared identifier 'irq_disable'; did you mean 'was_disabled'?
+     274 | DEFINE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
+         |                          ^
+   include/linux/irqflags.h:215:26: note: expanded from macro 'local_irq_disable'
+     215 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                                        ^
+   include/linux/irqflags.h:274:26: note: 'was_disabled' declared here
+   include/linux/irqflags.h:213:8: note: expanded from macro 'local_irq_disable'
+     213 |                 bool was_disabled = raw_irqs_disabled();\
+         |                      ^
+>> include/linux/irqflags.h:274:26: error: use of undeclared identifier 'irq_disable'; did you mean 'was_disabled'?
+     274 | DEFINE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
+         |                          ^
+   include/linux/irqflags.h:215:26: note: expanded from macro 'local_irq_disable'
+     215 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                                        ^
+   include/linux/irqflags.h:274:26: note: 'was_disabled' declared here
+   include/linux/irqflags.h:213:8: note: expanded from macro 'local_irq_disable'
+     213 |                 bool was_disabled = raw_irqs_disabled();\
+         |                      ^
+   include/linux/irqflags.h:277:7: error: call to undeclared function 'tracepoint_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     277 |                     local_irq_restore(_T->flags),
+         |                     ^
+   include/linux/irqflags.h:230:7: note: expanded from macro 'local_irq_restore'
+     230 |                 if (tracepoint_enabled(irq_enable) &&   \
+         |                     ^
+   include/linux/irqflags.h:277:7: error: use of undeclared identifier 'irq_enable'
+   include/linux/irqflags.h:230:26: note: expanded from macro 'local_irq_restore'
+     230 |                 if (tracepoint_enabled(irq_enable) &&   \
+         |                                        ^
+   include/linux/irqflags.h:277:7: error: use of undeclared identifier 'irq_enable'
+   include/linux/irqflags.h:230:26: note: expanded from macro 'local_irq_restore'
+     230 |                 if (tracepoint_enabled(irq_enable) &&   \
+         |                                        ^
+   include/linux/irqflags.h:277:7: error: use of undeclared identifier 'irq_enable'
+   include/linux/irqflags.h:230:26: note: expanded from macro 'local_irq_restore'
+     230 |                 if (tracepoint_enabled(irq_enable) &&   \
+         |                                        ^
+   include/linux/irqflags.h:276:7: error: call to undeclared function 'tracepoint_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     276 |                     local_irq_save(_T->flags),
+         |                     ^
+   include/linux/irqflags.h:223:7: note: expanded from macro 'local_irq_save'
+     223 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                     ^
+   include/linux/irqflags.h:276:7: error: use of undeclared identifier 'irq_disable'
+   include/linux/irqflags.h:223:26: note: expanded from macro 'local_irq_save'
+     223 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                                        ^
+   include/linux/irqflags.h:276:7: error: use of undeclared identifier 'irq_disable'
+   include/linux/irqflags.h:223:26: note: expanded from macro 'local_irq_save'
+     223 |                 if (tracepoint_enabled(irq_disable) &&  \
+         |                                        ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+   make[3]: *** [scripts/Makefile.build:98: arch/powerpc/kernel/asm-offsets.s] Error 1 shuffle=1905180499
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1274: prepare0] Error 2 shuffle=1905180499
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1905180499
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1905180499
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/tracepoint_enabled +274 include/linux/irqflags.h
+
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  200  
+563d10fd41452f8 Wander Lairson Costa 2025-06-26 @201  DECLARE_TRACEPOINT(irq_enable);
+563d10fd41452f8 Wander Lairson Costa 2025-06-26 @202  DECLARE_TRACEPOINT(irq_disable);
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  203  
+de30a2b355ea853 Ingo Molnar          2006-07-03  204  #define local_irq_enable()				\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  205  	do {						\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26 @206  		if (tracepoint_enabled(irq_enable))	\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  207  			trace_hardirqs_on();		\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  208  		raw_local_irq_enable();			\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  209  	} while (0)
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  210  
+de30a2b355ea853 Ingo Molnar          2006-07-03  211  #define local_irq_disable()				\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  212  	do {						\
+044d0d6de9f5019 Nicholas Piggin      2020-07-23  213  		bool was_disabled = raw_irqs_disabled();\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  214  		raw_local_irq_disable();		\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  215  		if (tracepoint_enabled(irq_disable) &&	\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  216  		    !was_disabled)			\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  217  			trace_hardirqs_off();		\
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  218  	} while (0)
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  219  
+de30a2b355ea853 Ingo Molnar          2006-07-03  220  #define local_irq_save(flags)				\
+3f307891ce0e7b0 Steven Rostedt       2008-07-25  221  	do {						\
+3f307891ce0e7b0 Steven Rostedt       2008-07-25  222  		raw_local_irq_save(flags);		\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  223  		if (tracepoint_enabled(irq_disable) &&	\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  224  		    !raw_irqs_disabled_flags(flags))	\
+3f307891ce0e7b0 Steven Rostedt       2008-07-25  225  			trace_hardirqs_off();		\
+3f307891ce0e7b0 Steven Rostedt       2008-07-25  226  	} while (0)
+3f307891ce0e7b0 Steven Rostedt       2008-07-25  227  
+de30a2b355ea853 Ingo Molnar          2006-07-03  228  #define local_irq_restore(flags)			\
+de30a2b355ea853 Ingo Molnar          2006-07-03  229  	do {						\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  230  		if (tracepoint_enabled(irq_enable) &&	\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  231  		    !raw_irqs_disabled_flags(flags))	\
+de30a2b355ea853 Ingo Molnar          2006-07-03  232  			trace_hardirqs_on();		\
+de30a2b355ea853 Ingo Molnar          2006-07-03  233  		raw_local_irq_restore(flags);		\
+de30a2b355ea853 Ingo Molnar          2006-07-03  234  	} while (0)
+de30a2b355ea853 Ingo Molnar          2006-07-03  235  
+df9ee29270c11db David Howells        2010-10-07  236  #define safe_halt()					\
+df9ee29270c11db David Howells        2010-10-07  237  	do {						\
+563d10fd41452f8 Wander Lairson Costa 2025-06-26  238  		if (tracepoint_enabled(irq_enable))	\
+df9ee29270c11db David Howells        2010-10-07  239  			trace_hardirqs_on();		\
+df9ee29270c11db David Howells        2010-10-07  240  		raw_safe_halt();			\
+df9ee29270c11db David Howells        2010-10-07  241  	} while (0)
+df9ee29270c11db David Howells        2010-10-07  242  
+df9ee29270c11db David Howells        2010-10-07  243  
+db2dcb4f91d5fec Jan Beulich          2015-01-20  244  #else /* !CONFIG_TRACE_IRQFLAGS */
+df9ee29270c11db David Howells        2010-10-07  245  
+df9ee29270c11db David Howells        2010-10-07  246  #define local_irq_enable()	do { raw_local_irq_enable(); } while (0)
+df9ee29270c11db David Howells        2010-10-07  247  #define local_irq_disable()	do { raw_local_irq_disable(); } while (0)
+00b0ed2d4997af6 Peter Zijlstra       2020-08-12  248  #define local_irq_save(flags)	do { raw_local_irq_save(flags); } while (0)
+df9ee29270c11db David Howells        2010-10-07  249  #define local_irq_restore(flags) do { raw_local_irq_restore(flags); } while (0)
+df9ee29270c11db David Howells        2010-10-07  250  #define safe_halt()		do { raw_safe_halt(); } while (0)
+df9ee29270c11db David Howells        2010-10-07  251  
+db2dcb4f91d5fec Jan Beulich          2015-01-20  252  #endif /* CONFIG_TRACE_IRQFLAGS */
+db2dcb4f91d5fec Jan Beulich          2015-01-20  253  
+db2dcb4f91d5fec Jan Beulich          2015-01-20  254  #define local_save_flags(flags)	raw_local_save_flags(flags)
+db2dcb4f91d5fec Jan Beulich          2015-01-20  255  
+db2dcb4f91d5fec Jan Beulich          2015-01-20  256  /*
+db2dcb4f91d5fec Jan Beulich          2015-01-20  257   * Some architectures don't define arch_irqs_disabled(), so even if either
+db2dcb4f91d5fec Jan Beulich          2015-01-20  258   * definition would be fine we need to use different ones for the time being
+db2dcb4f91d5fec Jan Beulich          2015-01-20  259   * to avoid build issues.
+db2dcb4f91d5fec Jan Beulich          2015-01-20  260   */
+db2dcb4f91d5fec Jan Beulich          2015-01-20  261  #ifdef CONFIG_TRACE_IRQFLAGS_SUPPORT
+db2dcb4f91d5fec Jan Beulich          2015-01-20  262  #define irqs_disabled()					\
+db2dcb4f91d5fec Jan Beulich          2015-01-20  263  	({						\
+db2dcb4f91d5fec Jan Beulich          2015-01-20  264  		unsigned long _flags;			\
+db2dcb4f91d5fec Jan Beulich          2015-01-20  265  		raw_local_save_flags(_flags);		\
+db2dcb4f91d5fec Jan Beulich          2015-01-20  266  		raw_irqs_disabled_flags(_flags);	\
+db2dcb4f91d5fec Jan Beulich          2015-01-20  267  	})
+db2dcb4f91d5fec Jan Beulich          2015-01-20  268  #else /* !CONFIG_TRACE_IRQFLAGS_SUPPORT */
+db2dcb4f91d5fec Jan Beulich          2015-01-20  269  #define irqs_disabled()	raw_irqs_disabled()
+40b1f4e5113eafc Michael Neuling      2009-10-22  270  #endif /* CONFIG_TRACE_IRQFLAGS_SUPPORT */
+de30a2b355ea853 Ingo Molnar          2006-07-03  271  
+db2dcb4f91d5fec Jan Beulich          2015-01-20  272  #define irqs_disabled_flags(flags) raw_irqs_disabled_flags(flags)
+db2dcb4f91d5fec Jan Beulich          2015-01-20  273  
+54da6a0924311c7 Peter Zijlstra       2023-05-26 @274  DEFINE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
+54da6a0924311c7 Peter Zijlstra       2023-05-26  275  DEFINE_LOCK_GUARD_0(irqsave,
+54da6a0924311c7 Peter Zijlstra       2023-05-26  276  		    local_irq_save(_T->flags),
+54da6a0924311c7 Peter Zijlstra       2023-05-26  277  		    local_irq_restore(_T->flags),
+54da6a0924311c7 Peter Zijlstra       2023-05-26  278  		    unsigned long flags)
+54da6a0924311c7 Peter Zijlstra       2023-05-26  279  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
