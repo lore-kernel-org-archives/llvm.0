@@ -1,630 +1,328 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-o-1.desy.de (smtp-o-1.desy.de [131.169.56.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD271D5150
-	for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 04:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02259211A3C
+	for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 06:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.169.56.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751000041; cv=none; b=NFPeWfKKYNG4FABgwBtETmaXXBqAtAbgberAMhbvwgoZoSrXk9932jhgW4ewY98iUL7gE6p3Qk8UUmcdsJiugTFgWRDLFPEYzAI101HeEk62f96PTOZ1Y0zowlW9r2uII/JlJKeZFBlJXG7a4Dy7gHoTp7x0blPCygoNUW/4HTQ=
+	t=1751006284; cv=none; b=I0kfZggmixl64PkUBqpZLHx0xcVvGdPye5z38tTdZRyB2yaveOPssYQszfhop0rDddQmdWb64HUBrKDwXpebobQqPPpoqkImmo0n3nwi8WIeQN/I+0ursZ703r6mgXUsi/LWoZj+o0mH8VfUV9DLxQ/GBmkW/Tt8rG0IqbosuNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751000041; c=relaxed/simple;
-	bh=483uB6UzX2TgzfCyZzzGHymgeL//x7AkYDxxGnp6K6I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZvOZ8EYiqtV/Zw8jM1iCB/5HCJYleSQDDHsHf1i9RN2qRrfAUQkkn2WJv80jCUgf3yUaMQXZhe8prbv0ciIbqo5geNTaCk44ZHnvHh7UD3k0i4ZakLOo8xvH2ViEFoMee4ZE/8amoKUk971WlampBzbZNukmf8x0jUhrLiqHNE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ffUz3rzd; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1751006284; c=relaxed/simple;
+	bh=8aEIiEExHIiOZW81kfkBZYF4oztHEz1vL9useAbrl3s=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=mfXUmyul9IzTOAuLj3edxFPasH+wjipPLWH1iHuJ7e+7woIINog9r9i4Xzomq1s3FhUAtSVVD3VZXxAQSrOqQT48UWZOFyS28xPcOhlFZENFkYrkHy9YIIIEtRO5dTo+HxiMyDNrQ9F+MwreMh+/aD7VCjHoA6ZkFn2JRUl+de8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=desy.de; spf=pass smtp.mailfrom=desy.de; dkim=pass (1024-bit key) header.d=desy.de header.i=@desy.de header.b=OASwFf43; arc=none smtp.client-ip=131.169.56.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=desy.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=desy.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ffUz3rzd"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-237f270513bso74665ad.1
-        for <llvm@lists.linux.dev>; Thu, 26 Jun 2025 21:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751000038; x=1751604838; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DtGyqXmElvAld4zBVXkgxOmHALsnPQCTadiFmCBdWaw=;
-        b=ffUz3rzdO1YlxxUrbQYigYgYrZqLIPbzTBiNM3qnWZ0axBkyr89Zx1O2dsavKJYT6M
-         SOn7a6a2TIz/JmXqBlPwuh/enooYS38uA3BEm8pXTF8oqhHS+pZWz9SwZ1bHEvNCzkIW
-         HGuDmrOceYP4+jSZTuf0ex3Hk7arVYJn08f2bBOmqDFqyhabbgKGPeLyQyFx8i/v2shz
-         C/0qRY8SjOXAsXwzahMleCQX97chKQOVEljDGVZgEdgYW7/AgxFHMFL6nf7NmYOKGFwT
-         XK8PUV16DJwk1puTFw6RMitxGdYrSv34jalVNxbkVIOjPKdFYQnB45Cl8R98qcdM8GZ1
-         TtgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751000038; x=1751604838;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DtGyqXmElvAld4zBVXkgxOmHALsnPQCTadiFmCBdWaw=;
-        b=xPxB3cLwX0F1cjLSaKZbaV1rJcrt9ayL4rWv0RoSOq9b9enxiN4u/ZrbO9RnET6OQ5
-         xeiB0BRRejPruik5SLTXQlOIb5zqr2zOwwxI1pEXvYhTwe6DLNW03dwY02Eo8Rq5XjKq
-         +t+w0Sml1wRwth4SpjsfU9gXycdtLDNQXa5Wc2tbUOuefyb6+hS6/CzV2lLuPfvUIZ3U
-         qP/ykOpou75yT7MF2c6AQWqmCViuMzq92q1SCtuoc54lRkMFvP24ICTLwfXzaS26R/0e
-         X6pTyGscUsNPaREskBqYeF6GczNtxS7FUD7/ww3HQJA5VJ4kwioardsCneoLHH9Jt6iT
-         Wbbg==
-X-Forwarded-Encrypted: i=1; AJvYcCXPwCwjzBop9aWNyJKWRF06U7gCBLhw0BOlZ52gaPp9VzFLwM498365kRsGSX42LSMzqSFl@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzor+89BC6UjUL8iRp2j3tejfZtjELQ55SmLqI9DyWC5WRXC35a
-	vpJ1dvnBHIDxcvSY+9apHeSIm3Qd6KmZwgITRQzmVECM/YQibL1zAZmuFPGKSb+auSBZEA1KL+f
-	0LFIce6MsOOBwTzDOTROilgOPMU8agU+Pz9T1jSJT
-X-Gm-Gg: ASbGncuyWpVqULH6QFcAmwJZ7pN+KOZT/6eKAY0DL6QxZWVf/CmLr/bVpF/pctOjuE8
-	E+1Rmkt5yZaE71MTQUhnEOKFEBebwWfypUuq8Fmw6vI/XjpMW0PaGfftS3PyiT7329smgzOTuqv
-	ehmYywNvIBjWTPnfDMfDka/8TcEyzGKUKK9tFDH4ru4v2u
-X-Google-Smtp-Source: AGHT+IFzJBBQmFYQ7cI3zeLxgkj3kZjv08y1P1BPNH+vs22PKstYf/pcm/7eHWqo/C7HnJCN2nOoS4/62QqjCLEYKY0=
-X-Received: by 2002:a17:903:1b04:b0:22c:3cda:df11 with SMTP id
- d9443c01a7336-23ac4be08camr1874065ad.10.1751000038176; Thu, 26 Jun 2025
- 21:53:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=desy.de header.i=@desy.de header.b="OASwFf43"
+Received: from smtp-buf-2.desy.de (smtp-buf-2.desy.de [131.169.56.165])
+	by smtp-o-1.desy.de (Postfix) with ESMTP id C8FD911F744
+	for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 08:37:52 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-o-1.desy.de C8FD911F744
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=desy.de; s=default;
+	t=1751006272; bh=O26z/BdBpuZ6SUZjoIyFTOeSBRIRGg3IIEP2T83P6Hw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=OASwFf43sG+k6Q9utQM2dM8qSkttryW606tLbndlJEOA2Q7kM+j3ALrEFO8KBeJwr
+	 1+J3YWJQGC70M2Poz6NS4wjewVxYIxGcCcURDiQ7YhYoAoaz8Ve+G6LnrvXTy0nBZ3
+	 bmnDylcaLMqgPrj6drXNzNE6otRTYnI9CNPxQLjs=
+Received: from smtp-m-2.desy.de (smtp-m-2.desy.de [IPv6:2001:638:700:1038::1:82])
+	by smtp-buf-2.desy.de (Postfix) with ESMTP id BC1FA120043;
+	Fri, 27 Jun 2025 08:37:52 +0200 (CEST)
+Received: from a1722.mx.srv.dfn.de (a1722.mx.srv.dfn.de [194.95.233.47])
+	by smtp-m-2.desy.de (Postfix) with ESMTP id AA81916003F;
+	Fri, 27 Jun 2025 08:37:52 +0200 (CEST)
+Received: from smtp-intra-2.desy.de (smtp-intra-2.desy.de [IPv6:2001:638:700:1038::1:53])
+	by a1722.mx.srv.dfn.de (Postfix) with ESMTP id 44E43320093;
+	Fri, 27 Jun 2025 08:37:50 +0200 (CEST)
+Received: from z-mbx-2.desy.de (z-mbx-2.desy.de [131.169.55.140])
+	by smtp-intra-2.desy.de (Postfix) with ESMTP id 893E22004C;
+	Fri, 27 Jun 2025 08:37:50 +0200 (CEST)
+Date: Fri, 27 Jun 2025 08:37:50 +0200 (CEST)
+From: "Mkrtchyan, Tigran" <tigran.mkrtchyan@desy.de>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-nfs <linux-nfs@vger.kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>
+Message-ID: <2024057888.423104.1751006270267.JavaMail.zimbra@desy.de>
+In-Reply-To: <202506270701.wUk38xC4-lkp@intel.com>
+References: <20250626091202.130567-1-tigran.mkrtchyan@desy.de> <202506270701.wUk38xC4-lkp@intel.com>
+Subject: Re: [PATCH] pNFS/flexfiles: don't attempt pnfs on fatal DS errors
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250417230740.86048-1-irogers@google.com> <20250417230740.86048-7-irogers@google.com>
- <aF3Vd0C-7jqZwz91@google.com>
-In-Reply-To: <aF3Vd0C-7jqZwz91@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 26 Jun 2025 21:53:45 -0700
-X-Gm-Features: Ac12FXx6BrCLeEYICFnuYkeyjAzfSWOJvLC5yE48R4tIzxAMokm7LIFabW4mKME
-Message-ID: <CAP-5=fV4x0q7YdeYJd6GAHXd48Qochpa-+jq5jsRJWK36v7rSA@mail.gmail.com>
-Subject: Re: [PATCH v4 06/19] perf capstone: Support for dlopen-ing libcapstone.so
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; 
+	boundary="----=_Part_423105_962662865.1751006270440"
+X-Mailer: Zimbra 9.0.0_GA_4769 (ZimbraWebClient - FF140 (Linux)/9.0.0_GA_4784)
+Thread-Topic: pNFS/flexfiles: don't attempt pnfs on fatal DS errors
+Thread-Index: k2tgoQPfb0fk10AGxU0g9t+pS0kk0w==
 
-On Thu, Jun 26, 2025 at 4:19=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Thu, Apr 17, 2025 at 04:07:27PM -0700, Ian Rogers wrote:
-> > If perf wasn't built against libcapstone, no HAVE_LIBCAPSTONE_SUPPORT,
-> > support dlopen-ing libcapstone.so and then calling the necessary
-> > functions by looking them up using dlsym. Reverse engineer the types
-> > in the API using pahole, adding only what's used in the perf code or
-> > necessary for the sake of struct size and alignment.
->
-> I still think it's simpler to require capstone headers at build time and
-> add LIBCAPSTONE_DYNAMIC=3D1 or something to support dlopen.
+------=_Part_423105_962662865.1751006270440
+Date: Fri, 27 Jun 2025 08:37:50 +0200 (CEST)
+From: "Mkrtchyan, Tigran" <tigran.mkrtchyan@desy.de>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-nfs <linux-nfs@vger.kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>
+Message-ID: <2024057888.423104.1751006270267.JavaMail.zimbra@desy.de>
+In-Reply-To: <202506270701.wUk38xC4-lkp@intel.com>
+References: <20250626091202.130567-1-tigran.mkrtchyan@desy.de> <202506270701.wUk38xC4-lkp@intel.com>
+Subject: Re: [PATCH] pNFS/flexfiles: don't attempt pnfs on fatal DS errors
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: Zimbra 9.0.0_GA_4769 (ZimbraWebClient - FF140 (Linux)/9.0.0_GA_4784)
+Thread-Topic: pNFS/flexfiles: don't attempt pnfs on fatal DS errors
+Thread-Index: k2tgoQPfb0fk10AGxU0g9t+pS0kk0w==
 
-I agree, having a header file avoids the need to declare the header
-file values. This is simpler. Can we make the build require
-libcapstone and libLLVM in the same way that libtraceevent is
-required? That is you have to explicitly build with NO_LIBTRACEEVENT=3D1
-to get a no libtraceevent build to succeed. If we don't do this then
-having LIBCAPSTONE_DYNAMIC will most likely be an unused option and
-not worth carrying in the code base, I think that's sad. If we require
-the libraries I don't like the idea of people arguing, "why do I need
-to install libcapstone and libLLVM just to get the kernel/perf to
-build now?" The non-simple, but still not very complex, approach taken
-here was taken as a compromise to get the best result (a perf that
-gets faster, BPF support, .. when libraries are available without
-explicitly depending on them) while trying not to offend kernel
-developers who are often trying to build on minimal systems.
+Thank you, robot!
 
-Thanks,
-Ian
+----- Original Message -----
+> From: "kernel test robot" <lkp@intel.com>
+> To: "Tigran Mkrtchyan" <tigran.mkrtchyan@desy.de>, "linux-nfs" <linux-nfs@vger.kernel.org>
+> Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, "Trond Myklebust" <trondmy@kernel.org>, "Anna Schumaker"
+> <anna@kernel.org>, "root max-exfl020" <root@max-exfl020.desy.de>, "Tigran Mkrtchyan" <tigran.mkrtchyan@desy.de>
+> Sent: Friday, 27 June, 2025 01:42:33
+> Subject: Re: [PATCH] pNFS/flexfiles: don't attempt pnfs on fatal DS errors
 
-> Thanks,
-> Namhyung
->
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/capstone.c | 287 ++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 248 insertions(+), 39 deletions(-)
-> >
-> > diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-> > index c9845e4d8781..8d65c7a55a8b 100644
-> > --- a/tools/perf/util/capstone.c
-> > +++ b/tools/perf/util/capstone.c
-> > @@ -11,19 +11,249 @@
-> >  #include "print_insn.h"
-> >  #include "symbol.h"
-> >  #include "thread.h"
-> > +#include <dlfcn.h>
-> >  #include <fcntl.h>
-> > +#include <inttypes.h>
-> >  #include <string.h>
-> >
-> >  #ifdef HAVE_LIBCAPSTONE_SUPPORT
-> >  #include <capstone/capstone.h>
-> > +#else
-> > +typedef size_t csh;
-> > +enum cs_arch {
-> > +     CS_ARCH_ARM =3D 0,
-> > +     CS_ARCH_ARM64 =3D 1,
-> > +     CS_ARCH_X86 =3D 3,
-> > +     CS_ARCH_SYSZ =3D 6,
-> > +};
-> > +enum cs_mode {
-> > +     CS_MODE_ARM =3D 0,
-> > +     CS_MODE_32 =3D 1 << 2,
-> > +     CS_MODE_64 =3D 1 << 3,
-> > +     CS_MODE_V8 =3D 1 << 6,
-> > +     CS_MODE_BIG_ENDIAN =3D 1 << 31,
-> > +};
-> > +enum cs_opt_type {
-> > +     CS_OPT_SYNTAX =3D 1,
-> > +     CS_OPT_DETAIL =3D 2,
-> > +};
-> > +enum cs_opt_value {
-> > +     CS_OPT_SYNTAX_ATT =3D 2,
-> > +     CS_OPT_ON =3D 3,
-> > +};
-> > +enum cs_err {
-> > +     CS_ERR_OK =3D 0,
-> > +     CS_ERR_HANDLE =3D 3,
-> > +};
-> > +enum x86_op_type {
-> > +     X86_OP_IMM =3D 2,
-> > +     X86_OP_MEM =3D 3,
-> > +};
-> > +enum x86_reg {
-> > +     X86_REG_RIP =3D 41,
-> > +};
-> > +typedef int32_t x86_avx_bcast;
-> > +struct x86_op_mem {
-> > +     enum x86_reg segment;
-> > +     enum x86_reg base;
-> > +     enum x86_reg index;
-> > +     int scale;
-> > +     int64_t disp;
-> > +};
-> > +
-> > +struct cs_x86_op {
-> > +     enum x86_op_type type;
-> > +     union {
-> > +             enum x86_reg  reg;
-> > +             int64_t imm;
-> > +             struct x86_op_mem mem;
-> > +     };
-> > +     uint8_t size;
-> > +     uint8_t access;
-> > +     x86_avx_bcast avx_bcast;
-> > +     bool avx_zero_opmask;
-> > +};
-> > +struct cs_x86_encoding {
-> > +     uint8_t modrm_offset;
-> > +     uint8_t disp_offset;
-> > +     uint8_t disp_size;
-> > +     uint8_t imm_offset;
-> > +     uint8_t imm_size;
-> > +};
-> > +typedef int32_t  x86_xop_cc;
-> > +typedef int32_t  x86_sse_cc;
-> > +typedef int32_t  x86_avx_cc;
-> > +typedef int32_t  x86_avx_rm;
-> > +struct cs_x86 {
-> > +     uint8_t prefix[4];
-> > +     uint8_t opcode[4];
-> > +     uint8_t rex;
-> > +     uint8_t addr_size;
-> > +     uint8_t modrm;
-> > +     uint8_t sib;
-> > +     int64_t disp;
-> > +     enum x86_reg sib_index;
-> > +     int8_t sib_scale;
-> > +     enum x86_reg sib_base;
-> > +     x86_xop_cc xop_cc;
-> > +     x86_sse_cc sse_cc;
-> > +     x86_avx_cc avx_cc;
-> > +     bool avx_sae;
-> > +     x86_avx_rm avx_rm;
-> > +     union {
-> > +             uint64_t eflags;
-> > +             uint64_t fpu_flags;
-> > +     };
-> > +     uint8_t op_count;
-> > +     struct cs_x86_op operands[8];
-> > +     struct cs_x86_encoding encoding;
-> > +};
-> > +struct cs_detail {
-> > +     uint16_t regs_read[12];
-> > +     uint8_t regs_read_count;
-> > +     uint16_t regs_write[20];
-> > +     uint8_t regs_write_count;
-> > +     uint8_t groups[8];
-> > +     uint8_t groups_count;
-> > +
-> > +     union {
-> > +             struct cs_x86 x86;
-> > +     };
-> > +};
-> > +struct cs_insn {
-> > +     unsigned int id;
-> > +     uint64_t address;
-> > +     uint16_t size;
-> > +     uint8_t bytes[16];
-> > +     char mnemonic[32];
-> > +     char op_str[160];
-> > +     struct cs_detail *detail;
-> > +};
-> > +#endif
-> > +
-> > +#ifndef HAVE_LIBCAPSTONE_SUPPORT
-> > +static void *perf_cs_dll_handle(void)
-> > +{
-> > +     static bool dll_handle_init;
-> > +     static void *dll_handle;
-> > +
-> > +     if (!dll_handle_init) {
-> > +             dll_handle_init =3D true;
-> > +             dll_handle =3D dlopen("libcapstone.so", RTLD_LAZY);
-> > +             if (!dll_handle)
-> > +                     pr_debug("dlopen failed for libcapstone.so\n");
-> > +     }
-> > +     return dll_handle;
-> > +}
-> > +#endif
-> > +
-> > +static enum cs_err perf_cs_open(enum cs_arch arch, enum cs_mode mode, =
-csh *handle)
-> > +{
-> > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > +     return cs_open(arch, mode, handle);
-> > +#else
-> > +     static bool fn_init;
-> > +     static enum cs_err (*fn)(enum cs_arch arch, enum cs_mode mode, cs=
-h *handle);
-> > +
-> > +     if (!fn_init) {
-> > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_open");
-> > +             if (!fn)
-> > +                     pr_debug("dlsym failed for cs_open\n");
-> > +             fn_init =3D true;
-> > +     }
-> > +     if (!fn)
-> > +             return CS_ERR_HANDLE;
-> > +     return fn(arch, mode, handle);
-> > +#endif
-> > +}
-> > +
-> > +static enum cs_err perf_cs_option(csh handle, enum cs_opt_type type, s=
-ize_t value)
-> > +{
-> > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > +     return cs_option(handle, type, value);
-> > +#else
-> > +     static bool fn_init;
-> > +     static enum cs_err (*fn)(csh handle, enum cs_opt_type type, size_=
-t value);
-> > +
-> > +     if (!fn_init) {
-> > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_option");
-> > +             if (!fn)
-> > +                     pr_debug("dlsym failed for cs_option\n");
-> > +             fn_init =3D true;
-> > +     }
-> > +     if (!fn)
-> > +             return CS_ERR_HANDLE;
-> > +     return fn(handle, type, value);
-> > +#endif
-> > +}
-> > +
-> > +static size_t perf_cs_disasm(csh handle, const uint8_t *code, size_t c=
-ode_size,
-> > +                     uint64_t address, size_t count, struct cs_insn **=
-insn)
-> > +{
-> > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > +     return cs_disasm(handle, code, code_size, address, count, insn);
-> > +#else
-> > +     static bool fn_init;
-> > +     static enum cs_err (*fn)(csh handle, const uint8_t *code, size_t =
-code_size,
-> > +                              uint64_t address, size_t count, struct c=
-s_insn **insn);
-> > +
-> > +     if (!fn_init) {
-> > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_disasm");
-> > +             if (!fn)
-> > +                     pr_debug("dlsym failed for cs_disasm\n");
-> > +             fn_init =3D true;
-> > +     }
-> > +     if (!fn)
-> > +             return CS_ERR_HANDLE;
-> > +     return fn(handle, code, code_size, address, count, insn);
-> >  #endif
-> > +}
-> >
-> > +static void perf_cs_free(struct cs_insn *insn, size_t count)
-> > +{
-> >  #ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > +     cs_free(insn, count);
-> > +#else
-> > +     static bool fn_init;
-> > +     static void (*fn)(struct cs_insn *insn, size_t count);
-> > +
-> > +     if (!fn_init) {
-> > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_free");
-> > +             if (!fn)
-> > +                     pr_debug("dlsym failed for cs_free\n");
-> > +             fn_init =3D true;
-> > +     }
-> > +     if (!fn)
-> > +             return;
-> > +     fn(insn, count);
-> > +#endif
-> > +}
-> > +
-> > +static enum cs_err perf_cs_close(csh *handle)
-> > +{
-> > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > +     return cs_close(handle);
-> > +#else
-> > +     static bool fn_init;
-> > +     static enum cs_err (*fn)(csh *handle);
-> > +
-> > +     if (!fn_init) {
-> > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_close");
-> > +             if (!fn)
-> > +                     pr_debug("dlsym failed for cs_close\n");
-> > +             fn_init =3D true;
-> > +     }
-> > +     if (!fn)
-> > +             return CS_ERR_HANDLE;
-> > +     return fn(handle);
-> > +#endif
-> > +}
-> > +
-> >  static int capstone_init(struct machine *machine, csh *cs_handle, bool=
- is64,
-> >                        bool disassembler_style)
-> >  {
-> > -     cs_arch arch;
-> > -     cs_mode mode;
-> > +     enum cs_arch arch;
-> > +     enum cs_mode mode;
-> >
-> >       if (machine__is(machine, "x86_64") && is64) {
-> >               arch =3D CS_ARCH_X86;
-> > @@ -44,7 +274,7 @@ static int capstone_init(struct machine *machine, cs=
-h *cs_handle, bool is64,
-> >               return -1;
-> >       }
-> >
-> > -     if (cs_open(arch, mode, cs_handle) !=3D CS_ERR_OK) {
-> > +     if (perf_cs_open(arch, mode, cs_handle) !=3D CS_ERR_OK) {
-> >               pr_warning_once("cs_open failed\n");
-> >               return -1;
-> >       }
-> > @@ -56,27 +286,25 @@ static int capstone_init(struct machine *machine, =
-csh *cs_handle, bool is64,
-> >                * is set via annotation args
-> >                */
-> >               if (disassembler_style)
-> > -                     cs_option(*cs_handle, CS_OPT_SYNTAX, CS_OPT_SYNTA=
-X_ATT);
-> > +                     perf_cs_option(*cs_handle, CS_OPT_SYNTAX, CS_OPT_=
-SYNTAX_ATT);
-> >               /*
-> >                * Resolving address operands to symbols is implemented
-> >                * on x86 by investigating instruction details.
-> >                */
-> > -             cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
-> > +             perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
-> >       }
-> >
-> >       return 0;
-> >  }
-> > -#endif
-> >
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > -static size_t print_insn_x86(struct thread *thread, u8 cpumode, cs_ins=
-n *insn,
-> > +static size_t print_insn_x86(struct thread *thread, u8 cpumode, struct=
- cs_insn *insn,
-> >                            int print_opts, FILE *fp)
-> >  {
-> >       struct addr_location al;
-> >       size_t printed =3D 0;
-> >
-> >       if (insn->detail && insn->detail->x86.op_count =3D=3D 1) {
-> > -             cs_x86_op *op =3D &insn->detail->x86.operands[0];
-> > +             struct cs_x86_op *op =3D &insn->detail->x86.operands[0];
-> >
-> >               addr_location__init(&al);
-> >               if (op->type =3D=3D X86_OP_IMM &&
-> > @@ -94,7 +322,6 @@ static size_t print_insn_x86(struct thread *thread, =
-u8 cpumode, cs_insn *insn,
-> >       printed +=3D fprintf(fp, "%s %s", insn[0].mnemonic, insn[0].op_st=
-r);
-> >       return printed;
-> >  }
-> > -#endif
-> >
-> >
-> >  ssize_t capstone__fprintf_insn_asm(struct machine *machine __maybe_unu=
-sed,
-> > @@ -105,9 +332,8 @@ ssize_t capstone__fprintf_insn_asm(struct machine *=
-machine __maybe_unused,
-> >                                  uint64_t ip __maybe_unused, int *lenp =
-__maybe_unused,
-> >                                  int print_opts __maybe_unused, FILE *f=
-p __maybe_unused)
-> >  {
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> >       size_t printed;
-> > -     cs_insn *insn;
-> > +     struct cs_insn *insn;
-> >       csh cs_handle;
-> >       size_t count;
-> >       int ret;
-> > @@ -117,7 +343,7 @@ ssize_t capstone__fprintf_insn_asm(struct machine *=
-machine __maybe_unused,
-> >       if (ret < 0)
-> >               return ret;
-> >
-> > -     count =3D cs_disasm(cs_handle, code, code_size, ip, 1, &insn);
-> > +     count =3D perf_cs_disasm(cs_handle, code, code_size, ip, 1, &insn=
-);
-> >       if (count > 0) {
-> >               if (machine__normalized_is(machine, "x86"))
-> >                       printed =3D print_insn_x86(thread, cpumode, &insn=
-[0], print_opts, fp);
-> > @@ -125,20 +351,16 @@ ssize_t capstone__fprintf_insn_asm(struct machine=
- *machine __maybe_unused,
-> >                       printed =3D fprintf(fp, "%s %s", insn[0].mnemonic=
-, insn[0].op_str);
-> >               if (lenp)
-> >                       *lenp =3D insn->size;
-> > -             cs_free(insn, count);
-> > +             perf_cs_free(insn, count);
-> >       } else {
-> >               printed =3D -1;
-> >       }
-> >
-> > -     cs_close(&cs_handle);
-> > +     perf_cs_close(&cs_handle);
-> >       return printed;
-> > -#else
-> > -     return -1;
-> > -#endif
-> >  }
-> >
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > -static void print_capstone_detail(cs_insn *insn, char *buf, size_t len=
-,
-> > +static void print_capstone_detail(struct cs_insn *insn, char *buf, siz=
-e_t len,
-> >                                 struct annotate_args *args, u64 addr)
-> >  {
-> >       int i;
-> > @@ -153,7 +375,7 @@ static void print_capstone_detail(cs_insn *insn, ch=
-ar *buf, size_t len,
-> >               return;
-> >
-> >       for (i =3D 0; i < insn->detail->x86.op_count; i++) {
-> > -             cs_x86_op *op =3D &insn->detail->x86.operands[i];
-> > +             struct cs_x86_op *op =3D &insn->detail->x86.operands[i];
-> >               u64 orig_addr;
-> >
-> >               if (op->type !=3D X86_OP_MEM)
-> > @@ -194,9 +416,7 @@ static void print_capstone_detail(cs_insn *insn, ch=
-ar *buf, size_t len,
-> >               break;
-> >       }
-> >  }
-> > -#endif
-> >
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> >  struct find_file_offset_data {
-> >       u64 ip;
-> >       u64 offset;
-> > @@ -213,9 +433,7 @@ static int find_file_offset(u64 start, u64 len, u64=
- pgoff, void *arg)
-> >       }
-> >       return 0;
-> >  }
-> > -#endif
-> >
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> >  static u8 *
-> >  read_symbol(const char *filename, struct map *map, struct symbol *sym,
-> >           u64 *len, bool *is_64bit)
-> > @@ -262,13 +480,11 @@ read_symbol(const char *filename, struct map *map=
-, struct symbol *sym,
-> >       free(buf);
-> >       return NULL;
-> >  }
-> > -#endif
-> >
-> >  int symbol__disassemble_capstone(const char *filename __maybe_unused,
-> >                                struct symbol *sym __maybe_unused,
-> >                                struct annotate_args *args __maybe_unuse=
-d)
-> >  {
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> >       struct annotation *notes =3D symbol__annotation(sym);
-> >       struct map *map =3D args->ms.map;
-> >       u64 start =3D map__rip_2objdump(map, sym->start);
-> > @@ -279,7 +495,7 @@ int symbol__disassemble_capstone(const char *filena=
-me __maybe_unused,
-> >       bool needs_cs_close =3D false;
-> >       u8 *buf =3D NULL;
-> >       csh handle;
-> > -     cs_insn *insn =3D NULL;
-> > +     struct cs_insn *insn =3D NULL;
-> >       char disasm_buf[512];
-> >       struct disasm_line *dl;
-> >       bool disassembler_style =3D false;
-> > @@ -316,7 +532,7 @@ int symbol__disassemble_capstone(const char *filena=
-me __maybe_unused,
-> >
-> >       needs_cs_close =3D true;
-> >
-> > -     free_count =3D count =3D cs_disasm(handle, buf, len, start, len, =
-&insn);
-> > +     free_count =3D count =3D perf_cs_disasm(handle, buf, len, start, =
-len, &insn);
-> >       for (i =3D 0, offset =3D 0; i < count; i++) {
-> >               int printed;
-> >
-> > @@ -355,9 +571,9 @@ int symbol__disassemble_capstone(const char *filena=
-me __maybe_unused,
-> >
-> >  out:
-> >       if (needs_cs_close) {
-> > -             cs_close(&handle);
-> > +             perf_cs_close(&handle);
-> >               if (free_count > 0)
-> > -                     cs_free(insn, free_count);
-> > +                     perf_cs_free(insn, free_count);
-> >       }
-> >       free(buf);
-> >       return count < 0 ? count : 0;
-> > @@ -377,16 +593,12 @@ int symbol__disassemble_capstone(const char *file=
-name __maybe_unused,
-> >       }
-> >       count =3D -1;
-> >       goto out;
-> > -#else
-> > -     return -1;
-> > -#endif
-> >  }
-> >
-> >  int symbol__disassemble_capstone_powerpc(const char *filename __maybe_=
-unused,
-> >                                        struct symbol *sym __maybe_unuse=
-d,
-> >                                        struct annotate_args *args __may=
-be_unused)
-> >  {
-> > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> >       struct annotation *notes =3D symbol__annotation(sym);
-> >       struct map *map =3D args->ms.map;
-> >       struct dso *dso =3D map__dso(map);
-> > @@ -499,7 +711,7 @@ int symbol__disassemble_capstone_powerpc(const char=
- *filename __maybe_unused,
-> >
-> >  out:
-> >       if (needs_cs_close)
-> > -             cs_close(&handle);
-> > +             perf_cs_close(&handle);
-> >       free(buf);
-> >       return count < 0 ? count : 0;
-> >
-> > @@ -508,7 +720,4 @@ int symbol__disassemble_capstone_powerpc(const char=
- *filename __maybe_unused,
-> >               close(fd);
-> >       count =3D -1;
-> >       goto out;
-> > -#else
-> > -     return -1;
-> > -#endif
-> >  }
-> > --
-> > 2.49.0.805.g082f7c87e0-goog
-> >
+> Hi Tigran,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on trondmy-nfs/linux-next]
+> [also build test WARNING on linus/master v6.16-rc3 next-20250626]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:
+> https://github.com/intel-lab-lkp/linux/commits/Tigran-Mkrtchyan/pNFS-flexfiles-don-t-attempt-pnfs-on-fatal-DS-errors/20250626-171336
+> base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+> patch link:
+> https://lore.kernel.org/r/20250626091202.130567-1-tigran.mkrtchyan%40desy.de
+> patch subject: [PATCH] pNFS/flexfiles: don't attempt pnfs on fatal DS errors
+> config: i386-buildonly-randconfig-005-20250627
+> (https://download.01.org/0day-ci/archive/20250627/202506270701.wUk38xC4-lkp@intel.com/config)
+> compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project
+> 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+> reproduce (this is a W=1 build):
+> (https://download.01.org/0day-ci/archive/20250627/202506270701.wUk38xC4-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+>| Reported-by: kernel test robot <lkp@intel.com>
+>| Closes:
+>| https://lore.kernel.org/oe-kbuild-all/202506270701.wUk38xC4-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>   fs/nfs/flexfilelayout/flexfilelayoutdev.c:56:9: warning: variable 'ret' set but
+>   not used [-Wunused-but-set-variable]
+>      56 |         int i, ret = -ENOMEM;
+>         |                ^
+>>> fs/nfs/flexfilelayout/flexfilelayoutdev.c:379:6: warning: variable 'status' is
+>>> used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>     379 |         if (!ff_layout_init_mirror_ds(lseg->pls_layout, mirror))
+>         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   fs/nfs/flexfilelayout/flexfilelayoutdev.c:421:15: note: uninitialized use occurs
+>   here
+>     421 |         ds = ERR_PTR(status);
+>         |                      ^~~~~~
+>   fs/nfs/flexfilelayout/flexfilelayoutdev.c:379:2: note: remove the 'if' if its
+>   condition is always false
+>     379 |         if (!ff_layout_init_mirror_ds(lseg->pls_layout, mirror))
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     380 |                 goto noconnect;
+>         |                 ~~~~~~~~~~~~~~
+>   fs/nfs/flexfilelayout/flexfilelayoutdev.c:377:12: note: initialize the variable
+>   'status' to silence this warning
+>     377 |         int status;
+>         |                   ^
+>         |                    = 0
+>   2 warnings generated.
+> 
+> 
+> vim +379 fs/nfs/flexfilelayout/flexfilelayoutdev.c
+> 
+> cefa587a40bb53 Trond Myklebust       2019-02-28  350
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  351  /**
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  352   *
+> nfs4_ff_layout_prepare_ds - prepare a DS connection for an RPC call
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  353   * @lseg: the layout
+> segment we're operating on
+> 2444ff277a686d Trond Myklebust       2019-02-14  354   * @mirror: layout mirror
+> describing the DS to use
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  355   * @fail_return: return
+> layout on connect failure?
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  356   *
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  357   * Try to prepare a DS
+> connection to accept an RPC call. This involves
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  358   * selecting a mirror to
+> use and connecting the client to it if it's not
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  359   * already connected.
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  360   *
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  361   * Since we only need a
+> single functioning mirror to satisfy a read, we don't
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  362   * want to return the
+> layout if there is one. For writes though, any down
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  363   * mirror should result in
+> a LAYOUTRETURN. @fail_return is how we distinguish
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  364   * between the two cases.
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  365   *
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  366   * Returns a pointer to a
+> connected DS object on success or NULL on failure.
+> 95e2b7e95d43c5 Jeff Layton           2016-05-17  367   */
+> d67ae825a59d63 Tom Haynes            2014-12-11  368  struct nfs4_pnfs_ds *
+> 2444ff277a686d Trond Myklebust       2019-02-14  369
+> nfs4_ff_layout_prepare_ds(struct pnfs_layout_segment *lseg,
+> 2444ff277a686d Trond Myklebust       2019-02-14  370  			  struct
+> nfs4_ff_layout_mirror *mirror,
+> d67ae825a59d63 Tom Haynes            2014-12-11  371  			  bool fail_return)
+> d67ae825a59d63 Tom Haynes            2014-12-11  372  {
+> 6468b866bac7de root max-exfl020      2025-06-26  373  	struct nfs4_pnfs_ds *ds =
+> ERR_PTR(-EAGAIN);
+> d67ae825a59d63 Tom Haynes            2014-12-11  374  	struct inode *ino =
+> lseg->pls_layout->plh_inode;
+> d67ae825a59d63 Tom Haynes            2014-12-11  375  	struct nfs_server *s =
+> NFS_SERVER(ino);
+> d67ae825a59d63 Tom Haynes            2014-12-11  376  	unsigned int max_payload;
+> a33e4b036d4612 Weston Andros Adamson 2017-03-09  377  	int status;
+> d67ae825a59d63 Tom Haynes            2014-12-11  378
+> cefa587a40bb53 Trond Myklebust       2019-02-28 @379  	if
+> (!ff_layout_init_mirror_ds(lseg->pls_layout, mirror))
+> 0a156dd58274b0 Trond Myklebust       2019-02-27  380  		goto noconnect;
+> d67ae825a59d63 Tom Haynes            2014-12-11  381
+> d67ae825a59d63 Tom Haynes            2014-12-11  382  	ds =
+> mirror->mirror_ds->ds;
+> a2915fa06227b0 Baptiste Lepers       2021-09-06  383  	if
+> (READ_ONCE(ds->ds_clp))
+> a2915fa06227b0 Baptiste Lepers       2021-09-06  384  		goto out;
+> d67ae825a59d63 Tom Haynes            2014-12-11  385  	/* matching smp_wmb() in
+> _nfs4_pnfs_v3/4_ds_connect */
+> d67ae825a59d63 Tom Haynes            2014-12-11  386  	smp_rmb();
+> d67ae825a59d63 Tom Haynes            2014-12-11  387
+> d67ae825a59d63 Tom Haynes            2014-12-11  388  	/* FIXME: For now we
+> assume the server sent only one version of NFS
+> d67ae825a59d63 Tom Haynes            2014-12-11  389  	 * to use for the DS.
+> d67ae825a59d63 Tom Haynes            2014-12-11  390  	 */
+> 2444ff277a686d Trond Myklebust       2019-02-14  391  	status =
+> nfs4_pnfs_ds_connect(s, ds, &mirror->mirror_ds->id_node,
+> 2444ff277a686d Trond Myklebust       2019-02-14  392  			     dataserver_timeo,
+> dataserver_retrans,
+> d67ae825a59d63 Tom Haynes            2014-12-11  393
+> 			     mirror->mirror_ds->ds_versions[0].version,
+> 7d38de3ffa75f9 Anna Schumaker        2016-11-17  394
+> 			     mirror->mirror_ds->ds_versions[0].minor_version);
+> d67ae825a59d63 Tom Haynes            2014-12-11  395
+> d67ae825a59d63 Tom Haynes            2014-12-11  396  	/* connect success, check
+> rsize/wsize limit */
+> 260f32adb88dad Trond Myklebust       2017-04-20  397  	if (!status) {
+> d488b9d01fbc2f Trond Myklebust       2024-09-05  398  		/*
+> d488b9d01fbc2f Trond Myklebust       2024-09-05  399  		 * ds_clp is put in
+> destroy_ds().
+> d488b9d01fbc2f Trond Myklebust       2024-09-05  400  		 * keep ds_clp even if
+> DS is local, so that if local IO cannot
+> d488b9d01fbc2f Trond Myklebust       2024-09-05  401  		 * proceed somehow, we
+> can fall back to NFS whenever we want.
+> d488b9d01fbc2f Trond Myklebust       2024-09-05  402  		 */
+> 1ff4716f420b5a Mike Snitzer          2025-05-13  403
+> 		nfs_local_probe_async(ds->ds_clp);
+> d67ae825a59d63 Tom Haynes            2014-12-11  404  		max_payload =
+> d67ae825a59d63 Tom Haynes            2014-12-11  405
+> 			nfs_block_size(rpc_max_payload(ds->ds_clp->cl_rpcclient),
+> d67ae825a59d63 Tom Haynes            2014-12-11  406  				       NULL);
+> d67ae825a59d63 Tom Haynes            2014-12-11  407  		if
+> (mirror->mirror_ds->ds_versions[0].rsize > max_payload)
+> d67ae825a59d63 Tom Haynes            2014-12-11  408
+> 			mirror->mirror_ds->ds_versions[0].rsize = max_payload;
+> d67ae825a59d63 Tom Haynes            2014-12-11  409  		if
+> (mirror->mirror_ds->ds_versions[0].wsize > max_payload)
+> d67ae825a59d63 Tom Haynes            2014-12-11  410
+> 			mirror->mirror_ds->ds_versions[0].wsize = max_payload;
+> 3dc147359e3dcd Trond Myklebust       2016-08-29  411  		goto out;
+> 3dc147359e3dcd Trond Myklebust       2016-08-29  412  	}
+> 0a156dd58274b0 Trond Myklebust       2019-02-27  413  noconnect:
+> d67ae825a59d63 Tom Haynes            2014-12-11  414
+> 	ff_layout_track_ds_error(FF_LAYOUT_FROM_HDR(lseg->pls_layout),
+> d67ae825a59d63 Tom Haynes            2014-12-11  415  				 mirror,
+> lseg->pls_range.offset,
+> d67ae825a59d63 Tom Haynes            2014-12-11  416
+> 				 lseg->pls_range.length, NFS4ERR_NXIO,
+> d67ae825a59d63 Tom Haynes            2014-12-11  417  				 OP_ILLEGAL,
+> GFP_NOIO);
+> f0922a6c0cdb92 Trond Myklebust       2019-02-10  418
+> 	ff_layout_send_layouterror(lseg);
+> 094069f1d96f69 Jeff Layton           2016-05-17  419  	if (fail_return ||
+> !ff_layout_has_available_ds(lseg))
+> d67ae825a59d63 Tom Haynes            2014-12-11  420
+> 		pnfs_error_mark_layout_for_return(ino, lseg);
+> 6468b866bac7de root max-exfl020      2025-06-26  421  	ds = ERR_PTR(status);
+> d67ae825a59d63 Tom Haynes            2014-12-11  422  out:
+> d67ae825a59d63 Tom Haynes            2014-12-11  423  	return ds;
+> d67ae825a59d63 Tom Haynes            2014-12-11  424  }
+> d67ae825a59d63 Tom Haynes            2014-12-11  425
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
+------=_Part_423105_962662865.1751006270440
+Content-Type: application/pkcs7-signature; name=smime.p7s; smime-type=signed-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCAMIIH
+XzCCBUegAwIBAgIQGrSZ0tLzGu9JoeeaXGroSzANBgkqhkiG9w0BAQwFADBVMQswCQYDVQQGEwJO
+TDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzErMCkGA1UEAxMiR0VBTlQgVENTIEF1dGhlbnRp
+Y2F0aW9uIFJTQSBDQSA0QjAeFw0yNDEyMDQwOTQzMjZaFw0yNjAxMDMwOTQzMjZaMIGpMRMwEQYK
+CZImiZPyLGQBGRMDb3JnMRYwFAYKCZImiZPyLGQBGRMGdGVyZW5hMRMwEQYKCZImiZPyLGQBGRMD
+dGNzMQswCQYDVQQGEwJERTEuMCwGA1UEChMlRGV1dHNjaGVzIEVsZWt0cm9uZW4tU3luY2hyb3Ry
+b24gREVTWTEoMCYGA1UEAwwfVGlncmFuIE1rcnRjaHlhbiB0aWdyYW5AZGVzeS5kZTCCAiIwDQYJ
+KoZIhvcNAQEBBQADggIPADCCAgoCggIBAKZ1aJleygPW8bRzYJ3VfXwfY2TxAF0QUuTk/6Bqu8Bi
+UQjIgmBQ1hCzz8DVdJ8saw7p5/c1JDmVHqm2DJPwXLROKACiDdSHPf+N8PFZvxHxOqFNPeO/oJhO
+jHXG1c/tL8ElfiUlMtEZYtoS60/VUz3A/4FIWP2A5s/UIOSZyCcKz3AUcAanHGEJVS8oWKQj7pNX
+yjojvX4aPHzsKP+c+c/5wq08/aziRXLCekhKk+VdS8lhlS/3AL1G0VSWKj5/pOpz4ozmv44GEw9z
+FAsPWuTcLXqCX993BOoWAyQDcygAsb0nQQMzx+4wlSGsI31/gKOE5ZOJ3SErWDswgzxWm8Xht/Kl
+ymDHPXi8P0ohQjJrQRpJXVwD/tXDwSSbWP9jnVbtqpvLLBkNrSy6elW19nkE1ObpSPcn+be5hs1P
+59Y+GPudytAQ3MOoFoNd7kxpVQoM6cdQjRHdyIDbavZrdxr33s7uqSbcI/PE8W5M0iPNnd4ip4kH
+UIOdpsjk7b7kEdO4Jf9dDrz/fduAEaW+AUTfb+G42LiftUBXkANa50nOseW3tocadYOTySufN9or
+IwvcQ/1uemVd83On7k8bWevfU159x28aidxv8liqJXrrT28tp/QxtGtDXjo9jdkWi/5d/9XfqQgN
+IT7KH42fc3ZlaL3pLuJwEQWVtFnWUTRJAgMBAAGjggHUMIIB0DAfBgNVHSMEGDAWgBQQMuoC4vzP
+6lYlVIfDmPXog9bFJDAOBgNVHQ8BAf8EBAMCBaAwCQYDVR0TBAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDAgYIKwYBBQUHAwQwRQYDVR0gBD4wPDAMBgoqhkiG90wFAgIFMA0GCyqGSIb3TAUCAwMDMA0G
+CyqGSIb3TAUCAwECMA4GDCsGAQQBgcRaAgMCAjBUBgNVHR8ETTBLMEmgR6BFhkNodHRwOi8vY3Js
+LmVudGVycHJpc2Uuc2VjdGlnby5jb20vR0VBTlRUQ1NBdXRoZW50aWNhdGlvblJTQUNBNEIuY3Js
+MIGRBggrBgEFBQcBAQSBhDCBgTBPBggrBgEFBQcwAoZDaHR0cDovL2NydC5lbnRlcnByaXNlLnNl
+Y3RpZ28uY29tL0dFQU5UVENTQXV0aGVudGljYXRpb25SU0FDQTRCLmNydDAuBggrBgEFBQcwAYYi
+aHR0cDovL29jc3AuZW50ZXJwcmlzZS5zZWN0aWdvLmNvbTAjBgNVHREEHDAagRh0aWdyYW4ubWty
+dGNoeWFuQGRlc3kuZGUwHQYDVR0OBBYEFMmhx6vILo+tVVV6rojJTwL+t2eGMA0GCSqGSIb3DQEB
+DAUAA4ICAQARKKJEO1G3lIe+AA+E3pl5mNYs/+XgswX1316JYDRzBnfVweMR6IaOT7yrP+Mwhx3v
+yiM8VeSVFtfyLlV6FaHAxNFo5Z19L++g/FWWAg0Wz13aFaEm0+KEp8RkB/Mh3EbSukZxUqmWCgrx
+zmx+I5zlX8pLxNgrxcc1WW5l7Y7y2sci++W6wE/L7rgMuznqiBLw/qwnkXAeQrw2PIllAGwRqrwa
+37kPa+naT1P0HskuBFHQSmMihB5HQl6+2Rs9M5RMW3/IlUQAqkhZQGBXmiWDivjPFKXJQnCmhQmh
+76sOcSOScfzYI5xOD+ZGdBRRufkUxaXJ2G//IgkK2R8mqrFEXxBFaBMc0uMBJHKNv+FO7H6VPOe9
+BD9FwfLiqWvGwKJrF11Bk/QSfWh+zCJ8JHPAi6irwQO4Xf+0xhPsxb+jBfKK3I84YMf6zsDkdDzH
+lkNPhDh4xhYhEAk+L228pjTEmnbb2QVv52grZ0dbITuN+Hz2ypvLfaS8p06lrht45COlkmuIUVqp
+bsc3kRt610qwXSjYcc8zeCQI0Rqnnq+0UN5T0KU7JSzUho6vaTSUG57uc7b3DkIW2Z9VpXX5xKb/
+vfl++jC5JzKrbCeS+QOStpXwwaH62IUHwdfWfkvpzb8EFALEmCvu8nlT9NaqYlB/xogMH6oHBm+Y
+nxmRQxWROAAAMYIDZTCCA2ECAQEwaTBVMQswCQYDVQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVy
+ZW5pZ2luZzErMCkGA1UEAxMiR0VBTlQgVENTIEF1dGhlbnRpY2F0aW9uIFJTQSBDQSA0QgIQGrSZ
+0tLzGu9JoeeaXGroSzANBglghkgBZQMEAgEFAKCBzjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yNTA2MjcwNjM3NTBaMC0GCSqGSIb3DQEJNDEgMB4wDQYJYIZIAWUD
+BAIBBQChDQYJKoZIhvcNAQELBQAwLwYJKoZIhvcNAQkEMSIEIHCgLcbGkyVronmwretXYOd41aO7
+ErcaN8xMiG37R64WMDQGCSqGSIb3DQEJDzEnMCUwCgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCA
+MAcGBSsOAwIHMA0GCSqGSIb3DQEBCwUABIICABae2U+UHn7ZvNH/4vvubNHYZ/+qcgJ6PznlBhyC
+vfFRoNDFLAf77Zp3wdSaeBTcg5B4XVkl1gzdqjo3o/fBbkYaT4u0rPB1odMR0gU6glrH141aruyo
+cq6/wtr+ZsQrd1JRq6oeK0MlXJbtV9XNeqSmhG7oKga/YK4jcfUQVJ3EnAwrzsQ0IGSPDsfDse34
+CwIcFpR0Gvlxz0Bs6i5gV8XHT1kmTrLvE3ddoqMXdTYZdFlnXdaqP8dEjKJsbPc/1EfffLh6Uwyn
+Q2FuxxPTHMh8+ywAiLFrZamHLvbfxEJz7hr6yHwnYrTFYLieHHrLsg8teSoFYaJ5DCCQcu9ltAoV
+Nfr3M7epd8aiDw1WjdZOyzw4TLWp1anq581eZjha5h5JtIsmzyiuJ71WUZZwCZhzT8u5uKueFS/a
+MHRIfxLy7/PqMLPY7hqMl63jcYBkYsNJi50JR6avVQZfiV73cjg/gfpPUQx1SxQGoN365j2FxK6r
+dB9l6w66wV8/EoQ/DSCO50ZRDfV1RG5gQkAbG2Noco59tPAZP2Dvt2SObEEP3X+3+yNx8KauYaRO
+DhogY1PmuQam5yAYc5mSyxNCN6BGmM27bDKy7JzsuTVqsNSxvJI7sU+4FnW43HAE9W4bFGQuIEob
+FZCV5UXI+wn7wyoszcm0+8V7B/W/mw7ho8+sAAAAAAAA
+------=_Part_423105_962662865.1751006270440--
