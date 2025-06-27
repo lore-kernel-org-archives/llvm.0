@@ -1,63 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF33225A3B;
-	Thu, 26 Jun 2025 23:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17899460;
+	Fri, 27 Jun 2025 00:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750981385; cv=none; b=SRilY/f5tWMfQaDGkLJsXP68aFKW72m6KzuFZ/ZhbRYhxQJwHMs+74bwOhmIsPWcr1EOq0eUDrf5pegZYRKkn+LFCwI+7fTFcK8JyybYMuAT6PpMDSovFLRjnJDiSnUsDVARAXHJwGUA/YlknkdSMGfP2KzzRHr/W+8kRGMLPzA=
+	t=1750983318; cv=none; b=AX5zCk5QBWEZgqsY/jdx+BFLcE0R9i1XzljbyTLSDvLR3uaX7WDH1b/19rrRLRPXOBPowvP2d5SDFcZRj1WDzz/wtqL982wAuMCjR1JCX673fsaF+XInguMuYJ25f45ir5aefrIWWA/3B10gX65lyYf0d9uxEBSdmFBMV43JRLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750981385; c=relaxed/simple;
-	bh=s+sHXnMIu9ogKtKBJRsBiK9Etovg11vexBmTduJQ9mg=;
+	s=arc-20240116; t=1750983318; c=relaxed/simple;
+	bh=kWgIppeliAYep/KV4T4ViN4nKmeetRXoP2486C4Nt0Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fk8rWaYQj7B7b8cYbcNJ1Mswuejn1gdAMzEniiHtSDva1vVi6RJ6GFmje1hp/zz9VUDJA0SBAuqnnVpWjFqiYD+VNpJgCZAO7hEjvEnGyihPD2aB3qH3O0snh/arcfECA659IaE3h5u/jb3RaGv97V0NJDgJeF5dzVBrBp+/kAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eWQapn7V; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bz7Qlzg2z7gcMX4ZV0EpaJrS2Zu6XAbw2oJnGWA3QP1dEgoi1o97lyFfP1UrXHDHjaN4wSwOy4/2IO+snspiePlF09kbxXK3KMxVNT1/61VH/UpzU6L555XNu3qVy6UydYkw3FmJ0Q1qXSwbLoaHWOry/c0GwRzZMCvuzT/h8dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zs/5hTmr; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eWQapn7V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zs/5hTmr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750981382; x=1782517382;
+  t=1750983316; x=1782519316;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=s+sHXnMIu9ogKtKBJRsBiK9Etovg11vexBmTduJQ9mg=;
-  b=eWQapn7VsJCbYlpHZrxoGiGajDd2IOVM7TCqVnlTNnHZ6ikormHaxA5e
-   J5N0jbUXG3CTL88J31yAsTZp/88C3VuIkiDJec3swzSAtgK3xv58Yxlnj
-   aLpTIYsWWJd6Wd68QJOUVMlsAD7ciKkp+ZkNpF1IayTWO7s0d6CC/MjKo
-   bBOOA7mSEbaKLeMh4eLA76YniiAHNx0DBpM+DVWE9SjDFD4IDF/27TXbv
-   V52uI9Br6frlsbLyZX5GD+pDGwNcrxvfriJmRZC1jP5gZekiK3HKXD6bp
-   WRqaHjhVScEEa/6G4tsovV9Zrh9uMolIKMJYChy+2ohzgCfOZNxl7R7gC
-   w==;
-X-CSE-ConnectionGUID: xBAL8caESQSVIWFBr82hOQ==
-X-CSE-MsgGUID: MP3sUgkdRp+ZG0GEBUhTGw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="57077585"
+  bh=kWgIppeliAYep/KV4T4ViN4nKmeetRXoP2486C4Nt0Y=;
+  b=Zs/5hTmrig2i3FuqboMAybN3/lzNJujZOgkviTXqbVb65r34p/CefyrE
+   nSOAAftjZAbZeAaDMsHMq3BHK4MMOBNyF6vItOmCgUC/l5+4hdJuH5Jip
+   0kpxhwI1uREyV98+7o5N+cbG8znoTeLZXwdD9yDuksfDLL840u7uWsPkh
+   Lm9Z5dskV0GtKs+DmFQKt/DYixqDi3uHN97CGCHJSMSDRCyiTj7LKqlwh
+   CDxoCHeEWrhK619XHJySq6bOwSTiaxwl1Mo5XYfv7Loa+zQdFvUW/ENn1
+   gcvgCRJPqeFoDTOJbZeZBhqYmiJGZiJoBpjffiTqyJFd05rwxVa352zpO
+   A==;
+X-CSE-ConnectionGUID: hj+quCjJRDmQxTkVnFdnZg==
+X-CSE-MsgGUID: vns45MlWQtS+83JGlz2cxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="52416191"
 X-IronPort-AV: E=Sophos;i="6.16,268,1744095600"; 
-   d="scan'208";a="57077585"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 16:43:02 -0700
-X-CSE-ConnectionGUID: ylBp68rwRX6NV3ZHbObM+Q==
-X-CSE-MsgGUID: 5Bv4H2IUT8aJCbK+/gPg+w==
+   d="scan'208";a="52416191"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 17:15:15 -0700
+X-CSE-ConnectionGUID: /qZVWOtCSxO7HLnc5LgpIA==
+X-CSE-MsgGUID: cOYYjkm7TPeI8GMgIHxQdw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,268,1744095600"; 
-   d="scan'208";a="183691181"
+   d="scan'208";a="158143053"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 26 Jun 2025 16:42:59 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 26 Jun 2025 17:15:13 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uUwF7-000Vdg-0Z;
-	Thu, 26 Jun 2025 23:42:57 +0000
-Date: Fri, 27 Jun 2025 07:42:33 +0800
+	id 1uUwkJ-000Vek-0F;
+	Fri, 27 Jun 2025 00:15:11 +0000
+Date: Fri, 27 Jun 2025 08:14:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tigran Mkrtchyan <tigran.mkrtchyan@desy.de>, linux-nfs@vger.kernel.org
+To: Colin Ian King <colin.i.king@gmail.com>, Kees Cook <kees@kernel.org>,
+	linux-hardening@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	root max-exfl020 <root@max-exfl020.desy.de>,
-	Tigran Mkrtchyan <tigran.mkrtchyan@desy.de>
-Subject: Re: [PATCH] pNFS/flexfiles: don't attempt pnfs on fatal DS errors
-Message-ID: <202506270701.wUk38xC4-lkp@intel.com>
-References: <20250626091202.130567-1-tigran.mkrtchyan@desy.de>
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] fortify: add branch hints on unlikely
+ fortify_panic paths
+Message-ID: <202506270832.QJ2ekScw-lkp@intel.com>
+References: <20250625161221.295575-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,132 +65,479 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250626091202.130567-1-tigran.mkrtchyan@desy.de>
+In-Reply-To: <20250625161221.295575-1-colin.i.king@gmail.com>
 
-Hi Tigran,
+Hi Colin,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on trondmy-nfs/linux-next]
-[also build test WARNING on linus/master v6.16-rc3 next-20250626]
+[auto build test ERROR on kees/for-next/hardening]
+[also build test ERROR on kees/for-next/pstore kees/for-next/kspp linus/master v6.16-rc3 next-20250626]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tigran-Mkrtchyan/pNFS-flexfiles-don-t-attempt-pnfs-on-fatal-DS-errors/20250626-171336
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20250626091202.130567-1-tigran.mkrtchyan%40desy.de
-patch subject: [PATCH] pNFS/flexfiles: don't attempt pnfs on fatal DS errors
-config: i386-buildonly-randconfig-005-20250627 (https://download.01.org/0day-ci/archive/20250627/202506270701.wUk38xC4-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Ian-King/fortify-add-branch-hints-on-unlikely-fortify_panic-paths/20250626-001527
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+patch link:    https://lore.kernel.org/r/20250625161221.295575-1-colin.i.king%40gmail.com
+patch subject: [PATCH][next] fortify: add branch hints on unlikely fortify_panic paths
+config: x86_64-buildonly-randconfig-001-20250627 (https://download.01.org/0day-ci/archive/20250627/202506270832.QJ2ekScw-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250627/202506270701.wUk38xC4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250627/202506270832.QJ2ekScw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506270701.wUk38xC4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506270832.QJ2ekScw-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   fs/nfs/flexfilelayout/flexfilelayoutdev.c:56:9: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-      56 |         int i, ret = -ENOMEM;
-         |                ^
->> fs/nfs/flexfilelayout/flexfilelayoutdev.c:379:6: warning: variable 'status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     379 |         if (!ff_layout_init_mirror_ds(lseg->pls_layout, mirror))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/flexfilelayout/flexfilelayoutdev.c:421:15: note: uninitialized use occurs here
-     421 |         ds = ERR_PTR(status);
-         |                      ^~~~~~
-   fs/nfs/flexfilelayout/flexfilelayoutdev.c:379:2: note: remove the 'if' if its condition is always false
-     379 |         if (!ff_layout_init_mirror_ds(lseg->pls_layout, mirror))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     380 |                 goto noconnect;
-         |                 ~~~~~~~~~~~~~~
-   fs/nfs/flexfilelayout/flexfilelayoutdev.c:377:12: note: initialize the variable 'status' to silence this warning
-     377 |         int status;
-         |                   ^
-         |                    = 0
+   In file included from scripts/mod/devicetable-offsets.c:3:
+   In file included from include/linux/mod_devicetable.h:14:
+   In file included from include/linux/uuid.h:11:
+   In file included from include/linux/string.h:392:
+>> include/linux/fortify-string.h:596:6: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     596 |         if (unlikely(p_size != SIZE_MAX && p_size < size))
+         |             ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   In file included from scripts/mod/devicetable-offsets.c:3:
+   In file included from include/linux/mod_devicetable.h:14:
+   In file included from include/linux/uuid.h:11:
+   In file included from include/linux/string.h:392:
+   include/linux/fortify-string.h:598:11: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     598 |         else if (unlikely(q_size != SIZE_MAX && q_size < size))
+         |                  ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
    2 warnings generated.
+--
+   In file included from lib/locking-selftest.c:14:
+   In file included from include/linux/rwsem.h:15:
+   In file included from include/linux/spinlock.h:59:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/x86/include/asm/irqflags.h:102:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+>> include/linux/fortify-string.h:596:6: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     596 |         if (unlikely(p_size != SIZE_MAX && p_size < size))
+         |             ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   In file included from lib/locking-selftest.c:14:
+   In file included from include/linux/rwsem.h:15:
+   In file included from include/linux/spinlock.h:59:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/x86/include/asm/irqflags.h:102:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+   include/linux/fortify-string.h:598:11: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     598 |         else if (unlikely(q_size != SIZE_MAX && q_size < size))
+         |                  ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   lib/locking-selftest.c:2510:1: warning: unused function 'class_HARDIRQ_lock_ptr' [-Wunused-function]
+    2510 | DEFINE_LOCK_GUARD_0(HARDIRQ, HARDIRQ_ENTER(), HARDIRQ_EXIT())
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:432:49: note: expanded from macro 'DEFINE_LOCK_GUARD_0'
+     432 | __DEFINE_CLASS_IS_CONDITIONAL(_name, false);                            \
+         |                                                                         ^
+     433 | __DEFINE_UNLOCK_GUARD(_name, void, _unlock, __VA_ARGS__)                \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:406:10: note: expanded from macro '\
+   __DEFINE_UNLOCK_GUARD'
+     406 |                                                                         \
+         |                                                                         ^
+     407 | __DEFINE_GUARD_LOCK_PTR(_name, &_T->lock)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:314:23: note: expanded from macro '\
+   __DEFINE_GUARD_LOCK_PTR'
+     314 |         static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:21:1: note: expanded from here
+      21 | class_HARDIRQ_lock_ptr
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   lib/locking-selftest.c:2511:1: warning: unused function 'class_NOTTHREADED_HARDIRQ_lock_ptr' [-Wunused-function]
+    2511 | DEFINE_LOCK_GUARD_0(NOTTHREADED_HARDIRQ,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2512 |         do {
+         |         ~~~~
+    2513 |                 local_irq_disable();
+         |                 ~~~~~~~~~~~~~~~~~~~~
+    2514 |                 __irq_enter();
+         |                 ~~~~~~~~~~~~~~
+    2515 |                 WARN_ON(!in_irq());
+         |                 ~~~~~~~~~~~~~~~~~~~
+    2516 |         } while(0), HARDIRQ_EXIT())
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:432:49: note: expanded from macro 'DEFINE_LOCK_GUARD_0'
+     432 | __DEFINE_CLASS_IS_CONDITIONAL(_name, false);                            \
+         |                                                                         ^
+     433 | __DEFINE_UNLOCK_GUARD(_name, void, _unlock, __VA_ARGS__)                \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:406:10: note: expanded from macro '\
+   __DEFINE_UNLOCK_GUARD'
+     406 |                                                                         \
+         |                                                                         ^
+     407 | __DEFINE_GUARD_LOCK_PTR(_name, &_T->lock)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:314:23: note: expanded from macro '\
+   __DEFINE_GUARD_LOCK_PTR'
+     314 |         static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:105:1: note: expanded from here
+     105 | class_NOTTHREADED_HARDIRQ_lock_ptr
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/locking-selftest.c:2517:1: warning: unused function 'class_SOFTIRQ_lock_ptr' [-Wunused-function]
+    2517 | DEFINE_LOCK_GUARD_0(SOFTIRQ, SOFTIRQ_ENTER(), SOFTIRQ_EXIT())
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:432:49: note: expanded from macro 'DEFINE_LOCK_GUARD_0'
+     432 | __DEFINE_CLASS_IS_CONDITIONAL(_name, false);                            \
+         |                                                                         ^
+     433 | __DEFINE_UNLOCK_GUARD(_name, void, _unlock, __VA_ARGS__)                \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:406:10: note: expanded from macro '\
+   __DEFINE_UNLOCK_GUARD'
+     406 |                                                                         \
+         |                                                                         ^
+     407 | __DEFINE_GUARD_LOCK_PTR(_name, &_T->lock)
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:314:23: note: expanded from macro '\
+   __DEFINE_GUARD_LOCK_PTR'
+     314 |         static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:125:1: note: expanded from here
+     125 | class_SOFTIRQ_lock_ptr
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   lib/locking-selftest.c:2520:1: warning: unused function 'class_RCU_lock_ptr' [-Wunused-function]
+--
+   In file included from lib/test_bitops.c:10:
+   In file included from include/linux/module.h:13:
+   In file included from include/linux/stat.h:19:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:19:
+   In file included from arch/x86/include/asm/cpuid/api.h:57:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+>> include/linux/fortify-string.h:596:6: error: non-constant static local variable in inline function may be different in different files [-Werror,-Wstatic-local-in-inline]
+     596 |         if (unlikely(p_size != SIZE_MAX && p_size < size))
+         |             ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   In file included from lib/test_bitops.c:10:
+   In file included from include/linux/module.h:13:
+   In file included from include/linux/stat.h:19:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:19:
+   In file included from arch/x86/include/asm/cpuid/api.h:57:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+   include/linux/fortify-string.h:598:11: error: non-constant static local variable in inline function may be different in different files [-Werror,-Wstatic-local-in-inline]
+     598 |         else if (unlikely(q_size != SIZE_MAX && q_size < size))
+         |                  ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   2 errors generated.
+--
+   In file included from lib/test_maple_tree.c:10:
+   In file included from include/linux/maple_tree.h:12:
+   In file included from include/linux/rcupdate.h:26:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/x86/include/asm/irqflags.h:102:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+>> include/linux/fortify-string.h:596:6: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     596 |         if (unlikely(p_size != SIZE_MAX && p_size < size))
+         |             ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   In file included from lib/test_maple_tree.c:10:
+   In file included from include/linux/maple_tree.h:12:
+   In file included from include/linux/rcupdate.h:26:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/x86/include/asm/irqflags.h:102:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+   include/linux/fortify-string.h:598:11: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     598 |         else if (unlikely(q_size != SIZE_MAX && q_size < size))
+         |                  ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   lib/test_maple_tree.c:212:26: warning: unused function 'not_empty' [-Wunused-function]
+     212 | static inline __init int not_empty(struct maple_node *node)
+         |                          ^~~~~~~~~
+   3 warnings generated.
+--
+   In file included from lib/tests/stackinit_kunit.c:14:
+   In file included from include/kunit/test.h:22:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:59:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/x86/include/asm/irqflags.h:102:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+>> include/linux/fortify-string.h:596:6: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     596 |         if (unlikely(p_size != SIZE_MAX && p_size < size))
+         |             ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   In file included from lib/tests/stackinit_kunit.c:14:
+   In file included from include/kunit/test.h:22:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:59:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/x86/include/asm/irqflags.h:102:
+   In file included from arch/x86/include/asm/paravirt.h:21:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:13:
+   In file included from include/linux/string.h:392:
+   include/linux/fortify-string.h:598:11: warning: non-constant static local variable in inline function may be different in different files [-Wstatic-local-in-inline]
+     598 |         else if (unlikely(q_size != SIZE_MAX && q_size < size))
+         |                  ^
+   include/linux/compiler.h:47:24: note: expanded from macro 'unlikely'
+      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+         |                          ^
+   include/linux/compiler.h:24:4: note: expanded from macro '__branch_check__'
+      24 |                         static struct ftrace_likely_data                \
+         |                         ^
+   lib/tests/stackinit_kunit.c:441:1: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     441 | DEFINE_UNION_INITIALIZER_TESTS(static, STRONG_PASS);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:421:3: note: expanded from macro 'DEFINE_UNION_INITIALIZER_TESTS'
+     421 |                 DEFINE_UNION_TESTS(base ## _ ## all, xfail)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:424:3: note: expanded from macro 'DEFINE_UNION_TESTS'
+     424 |                 DEFINE_UNION_TEST(same_sizes, init, xfail);     \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:403:3: note: expanded from macro 'DEFINE_UNION_TEST'
+     403 |                 DEFINE_TEST(name ## _ ## init,                  \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     404 |                             union test_ ## name, STRUCT, init,  \
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     405 |                             xfail)
+         |                             ~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   <scratch space>:20:1: note: expanded from here
+      20 | INIT_STRUCT_static_all
+         | ^
+   lib/tests/stackinit_kunit.c:137:8: note: expanded from macro 'INIT_STRUCT_static_all'
+     137 |                                         = __static_all
+         |                                           ^~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:118:8: note: expanded from macro '__static_all'
+     118 |                                           .two = 0,                     \
+         |                                           ^~~~~~~~
+   lib/tests/stackinit_kunit.c:441:1: note: previous initialization is here
+     441 | DEFINE_UNION_INITIALIZER_TESTS(static, STRONG_PASS);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:421:3: note: expanded from macro 'DEFINE_UNION_INITIALIZER_TESTS'
+     421 |                 DEFINE_UNION_TESTS(base ## _ ## all, xfail)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:424:3: note: expanded from macro 'DEFINE_UNION_TESTS'
+     424 |                 DEFINE_UNION_TEST(same_sizes, init, xfail);     \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:403:3: note: expanded from macro 'DEFINE_UNION_TEST'
+     403 |                 DEFINE_TEST(name ## _ ## init,                  \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     404 |                             union test_ ## name, STRUCT, init,  \
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     405 |                             xfail)
+         |                             ~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   <scratch space>:20:1: note: expanded from here
+      20 | INIT_STRUCT_static_all
+         | ^
+   lib/tests/stackinit_kunit.c:137:8: note: expanded from macro 'INIT_STRUCT_static_all'
+     137 |                                         = __static_all
+         |                                           ^~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:117:33: note: expanded from macro '__static_all'
+     117 | #define __static_all                    { .one = 0,                     \
+         |                                                  ^
+   lib/tests/stackinit_kunit.c:441:1: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     441 | DEFINE_UNION_INITIALIZER_TESTS(static, STRONG_PASS);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:421:3: note: expanded from macro 'DEFINE_UNION_INITIALIZER_TESTS'
+     421 |                 DEFINE_UNION_TESTS(base ## _ ## all, xfail)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:424:3: note: expanded from macro 'DEFINE_UNION_TESTS'
+     424 |                 DEFINE_UNION_TEST(same_sizes, init, xfail);     \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/tests/stackinit_kunit.c:403:3: note: expanded from macro 'DEFINE_UNION_TEST'
+     403 |                 DEFINE_TEST(name ## _ ## init,                  \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     404 |                             union test_ ## name, STRUCT, init,  \
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     405 |                             xfail)
+         |                             ~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   <scratch space>:20:1: note: expanded from here
+      20 | INIT_STRUCT_static_all
+         | ^
+   lib/tests/stackinit_kunit.c:137:8: note: expanded from macro 'INIT_STRUCT_static_all'
+..
 
 
-vim +379 fs/nfs/flexfilelayout/flexfilelayoutdev.c
+vim +596 include/linux/fortify-string.h
 
-cefa587a40bb53 Trond Myklebust       2019-02-28  350  
-95e2b7e95d43c5 Jeff Layton           2016-05-17  351  /**
-95e2b7e95d43c5 Jeff Layton           2016-05-17  352   * nfs4_ff_layout_prepare_ds - prepare a DS connection for an RPC call
-95e2b7e95d43c5 Jeff Layton           2016-05-17  353   * @lseg: the layout segment we're operating on
-2444ff277a686d Trond Myklebust       2019-02-14  354   * @mirror: layout mirror describing the DS to use
-95e2b7e95d43c5 Jeff Layton           2016-05-17  355   * @fail_return: return layout on connect failure?
-95e2b7e95d43c5 Jeff Layton           2016-05-17  356   *
-95e2b7e95d43c5 Jeff Layton           2016-05-17  357   * Try to prepare a DS connection to accept an RPC call. This involves
-95e2b7e95d43c5 Jeff Layton           2016-05-17  358   * selecting a mirror to use and connecting the client to it if it's not
-95e2b7e95d43c5 Jeff Layton           2016-05-17  359   * already connected.
-95e2b7e95d43c5 Jeff Layton           2016-05-17  360   *
-95e2b7e95d43c5 Jeff Layton           2016-05-17  361   * Since we only need a single functioning mirror to satisfy a read, we don't
-95e2b7e95d43c5 Jeff Layton           2016-05-17  362   * want to return the layout if there is one. For writes though, any down
-95e2b7e95d43c5 Jeff Layton           2016-05-17  363   * mirror should result in a LAYOUTRETURN. @fail_return is how we distinguish
-95e2b7e95d43c5 Jeff Layton           2016-05-17  364   * between the two cases.
-95e2b7e95d43c5 Jeff Layton           2016-05-17  365   *
-95e2b7e95d43c5 Jeff Layton           2016-05-17  366   * Returns a pointer to a connected DS object on success or NULL on failure.
-95e2b7e95d43c5 Jeff Layton           2016-05-17  367   */
-d67ae825a59d63 Tom Haynes            2014-12-11  368  struct nfs4_pnfs_ds *
-2444ff277a686d Trond Myklebust       2019-02-14  369  nfs4_ff_layout_prepare_ds(struct pnfs_layout_segment *lseg,
-2444ff277a686d Trond Myklebust       2019-02-14  370  			  struct nfs4_ff_layout_mirror *mirror,
-d67ae825a59d63 Tom Haynes            2014-12-11  371  			  bool fail_return)
-d67ae825a59d63 Tom Haynes            2014-12-11  372  {
-6468b866bac7de root max-exfl020      2025-06-26  373  	struct nfs4_pnfs_ds *ds = ERR_PTR(-EAGAIN);
-d67ae825a59d63 Tom Haynes            2014-12-11  374  	struct inode *ino = lseg->pls_layout->plh_inode;
-d67ae825a59d63 Tom Haynes            2014-12-11  375  	struct nfs_server *s = NFS_SERVER(ino);
-d67ae825a59d63 Tom Haynes            2014-12-11  376  	unsigned int max_payload;
-a33e4b036d4612 Weston Andros Adamson 2017-03-09  377  	int status;
-d67ae825a59d63 Tom Haynes            2014-12-11  378  
-cefa587a40bb53 Trond Myklebust       2019-02-28 @379  	if (!ff_layout_init_mirror_ds(lseg->pls_layout, mirror))
-0a156dd58274b0 Trond Myklebust       2019-02-27  380  		goto noconnect;
-d67ae825a59d63 Tom Haynes            2014-12-11  381  
-d67ae825a59d63 Tom Haynes            2014-12-11  382  	ds = mirror->mirror_ds->ds;
-a2915fa06227b0 Baptiste Lepers       2021-09-06  383  	if (READ_ONCE(ds->ds_clp))
-a2915fa06227b0 Baptiste Lepers       2021-09-06  384  		goto out;
-d67ae825a59d63 Tom Haynes            2014-12-11  385  	/* matching smp_wmb() in _nfs4_pnfs_v3/4_ds_connect */
-d67ae825a59d63 Tom Haynes            2014-12-11  386  	smp_rmb();
-d67ae825a59d63 Tom Haynes            2014-12-11  387  
-d67ae825a59d63 Tom Haynes            2014-12-11  388  	/* FIXME: For now we assume the server sent only one version of NFS
-d67ae825a59d63 Tom Haynes            2014-12-11  389  	 * to use for the DS.
-d67ae825a59d63 Tom Haynes            2014-12-11  390  	 */
-2444ff277a686d Trond Myklebust       2019-02-14  391  	status = nfs4_pnfs_ds_connect(s, ds, &mirror->mirror_ds->id_node,
-2444ff277a686d Trond Myklebust       2019-02-14  392  			     dataserver_timeo, dataserver_retrans,
-d67ae825a59d63 Tom Haynes            2014-12-11  393  			     mirror->mirror_ds->ds_versions[0].version,
-7d38de3ffa75f9 Anna Schumaker        2016-11-17  394  			     mirror->mirror_ds->ds_versions[0].minor_version);
-d67ae825a59d63 Tom Haynes            2014-12-11  395  
-d67ae825a59d63 Tom Haynes            2014-12-11  396  	/* connect success, check rsize/wsize limit */
-260f32adb88dad Trond Myklebust       2017-04-20  397  	if (!status) {
-d488b9d01fbc2f Trond Myklebust       2024-09-05  398  		/*
-d488b9d01fbc2f Trond Myklebust       2024-09-05  399  		 * ds_clp is put in destroy_ds().
-d488b9d01fbc2f Trond Myklebust       2024-09-05  400  		 * keep ds_clp even if DS is local, so that if local IO cannot
-d488b9d01fbc2f Trond Myklebust       2024-09-05  401  		 * proceed somehow, we can fall back to NFS whenever we want.
-d488b9d01fbc2f Trond Myklebust       2024-09-05  402  		 */
-1ff4716f420b5a Mike Snitzer          2025-05-13  403  		nfs_local_probe_async(ds->ds_clp);
-d67ae825a59d63 Tom Haynes            2014-12-11  404  		max_payload =
-d67ae825a59d63 Tom Haynes            2014-12-11  405  			nfs_block_size(rpc_max_payload(ds->ds_clp->cl_rpcclient),
-d67ae825a59d63 Tom Haynes            2014-12-11  406  				       NULL);
-d67ae825a59d63 Tom Haynes            2014-12-11  407  		if (mirror->mirror_ds->ds_versions[0].rsize > max_payload)
-d67ae825a59d63 Tom Haynes            2014-12-11  408  			mirror->mirror_ds->ds_versions[0].rsize = max_payload;
-d67ae825a59d63 Tom Haynes            2014-12-11  409  		if (mirror->mirror_ds->ds_versions[0].wsize > max_payload)
-d67ae825a59d63 Tom Haynes            2014-12-11  410  			mirror->mirror_ds->ds_versions[0].wsize = max_payload;
-3dc147359e3dcd Trond Myklebust       2016-08-29  411  		goto out;
-3dc147359e3dcd Trond Myklebust       2016-08-29  412  	}
-0a156dd58274b0 Trond Myklebust       2019-02-27  413  noconnect:
-d67ae825a59d63 Tom Haynes            2014-12-11  414  	ff_layout_track_ds_error(FF_LAYOUT_FROM_HDR(lseg->pls_layout),
-d67ae825a59d63 Tom Haynes            2014-12-11  415  				 mirror, lseg->pls_range.offset,
-d67ae825a59d63 Tom Haynes            2014-12-11  416  				 lseg->pls_range.length, NFS4ERR_NXIO,
-d67ae825a59d63 Tom Haynes            2014-12-11  417  				 OP_ILLEGAL, GFP_NOIO);
-f0922a6c0cdb92 Trond Myklebust       2019-02-10  418  	ff_layout_send_layouterror(lseg);
-094069f1d96f69 Jeff Layton           2016-05-17  419  	if (fail_return || !ff_layout_has_available_ds(lseg))
-d67ae825a59d63 Tom Haynes            2014-12-11  420  		pnfs_error_mark_layout_for_return(ino, lseg);
-6468b866bac7de root max-exfl020      2025-06-26  421  	ds = ERR_PTR(status);
-d67ae825a59d63 Tom Haynes            2014-12-11  422  out:
-d67ae825a59d63 Tom Haynes            2014-12-11  423  	return ds;
-d67ae825a59d63 Tom Haynes            2014-12-11  424  }
-d67ae825a59d63 Tom Haynes            2014-12-11  425  
+   515	
+   516	/*
+   517	 * To make sure the compiler can enforce protection against buffer overflows,
+   518	 * memcpy(), memmove(), and memset() must not be used beyond individual
+   519	 * struct members. If you need to copy across multiple members, please use
+   520	 * struct_group() to create a named mirror of an anonymous struct union.
+   521	 * (e.g. see struct sk_buff.) Read overflow checking is currently only
+   522	 * done when a write overflow is also present, or when building with W=1.
+   523	 *
+   524	 * Mitigation coverage matrix
+   525	 *					Bounds checking at:
+   526	 *					+-------+-------+-------+-------+
+   527	 *					| Compile time  |   Run time    |
+   528	 * memcpy() argument sizes:		| write | read  | write | read  |
+   529	 *        dest     source   length      +-------+-------+-------+-------+
+   530	 * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
+   531	 * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
+   532	 * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
+   533	 * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
+   534	 * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
+   535	 * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
+   536	 * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
+   537	 * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
+   538	 *					+-------+-------+-------+-------+
+   539	 *
+   540	 * y = perform deterministic compile-time bounds checking
+   541	 * n = cannot perform deterministic compile-time bounds checking
+   542	 * n/a = no run-time bounds checking needed since compile-time deterministic
+   543	 * B = can perform run-time bounds checking (currently unimplemented)
+   544	 * V = vulnerable to run-time overflow (will need refactoring to solve)
+   545	 *
+   546	 */
+   547	__FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+   548						 const size_t p_size,
+   549						 const size_t q_size,
+   550						 const size_t p_size_field,
+   551						 const size_t q_size_field,
+   552						 const u8 func)
+   553	{
+   554		if (__builtin_constant_p(size)) {
+   555			/*
+   556			 * Length argument is a constant expression, so we
+   557			 * can perform compile-time bounds checking where
+   558			 * buffer sizes are also known at compile time.
+   559			 */
+   560	
+   561			/* Error when size is larger than enclosing struct. */
+   562			if (__compiletime_lessthan(p_size_field, p_size) &&
+   563			    __compiletime_lessthan(p_size, size))
+   564				__write_overflow();
+   565			if (__compiletime_lessthan(q_size_field, q_size) &&
+   566			    __compiletime_lessthan(q_size, size))
+   567				__read_overflow2();
+   568	
+   569			/* Warn when write size argument larger than dest field. */
+   570			if (__compiletime_lessthan(p_size_field, size))
+   571				__write_overflow_field(p_size_field, size);
+   572			/*
+   573			 * Warn for source field over-read when building with W=1
+   574			 * or when an over-write happened, so both can be fixed at
+   575			 * the same time.
+   576			 */
+   577			if ((IS_ENABLED(KBUILD_EXTRA_WARN1) ||
+   578			     __compiletime_lessthan(p_size_field, size)) &&
+   579			    __compiletime_lessthan(q_size_field, size))
+   580				__read_overflow2_field(q_size_field, size);
+   581		}
+   582		/*
+   583		 * At this point, length argument may not be a constant expression,
+   584		 * so run-time bounds checking can be done where buffer sizes are
+   585		 * known. (This is not an "else" because the above checks may only
+   586		 * be compile-time warnings, and we want to still warn for run-time
+   587		 * overflows.)
+   588		 */
+   589	
+   590		/*
+   591		 * Always stop accesses beyond the struct that contains the
+   592		 * field, when the buffer's remaining size is known.
+   593		 * (The SIZE_MAX test is to optimize away checks where the buffer
+   594		 * lengths are unknown.)
+   595		 */
+ > 596		if (unlikely(p_size != SIZE_MAX && p_size < size))
+   597			fortify_panic(func, FORTIFY_WRITE, p_size, size, true);
+   598		else if (unlikely(q_size != SIZE_MAX && q_size < size))
+   599			fortify_panic(func, FORTIFY_READ, p_size, size, true);
+   600	
+   601		/*
+   602		 * Warn when writing beyond destination field size.
+   603		 *
+   604		 * Note the implementation of __builtin_*object_size() behaves
+   605		 * like sizeof() when not directly referencing a flexible
+   606		 * array member, which means there will be many bounds checks
+   607		 * that will appear at run-time, without a way for them to be
+   608		 * detected at compile-time (as can be done when the destination
+   609		 * is specifically the flexible array member).
+   610		 * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101832
+   611		 */
+   612		if (p_size_field != SIZE_MAX &&
+   613		    p_size != p_size_field && p_size_field < size)
+   614			return true;
+   615	
+   616		return false;
+   617	}
+   618	
 
 -- 
 0-DAY CI Kernel Test Service
