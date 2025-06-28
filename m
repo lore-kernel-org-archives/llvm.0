@@ -1,289 +1,114 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2B910E4
-	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 00:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F96262BE
+	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 01:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751071467; cv=none; b=t8iUefpFmDt6ridTXSOeZVEarKkWJbY1ZfCCSSuRb1cX3cOVtOspyqVlcL1vFdmATxTWMx5X3oIgcSy4mpHq5HKZZye4V+0Zjl63/f+0F0RjmtZ5plO8Oy/ycZLND+F6c2Vvh43WpuNjJMcRzd+Xp2ZVAqizTZLjh1m46zL3zoQ=
+	t=1751074934; cv=none; b=qk7GQoVk+WjJB3GableVz1RsXrf6xD6jksQK2l767Mkrctqq9cmYEvUO5Z1zW1ffcNddKRYjfV+SUBzHMX2ZZMnG/n4B6RbhVxhqBvwU23e3fSs/AdPL2IXFIChHCzpQLHnMRUTxt1s2LK5A9If7O34BATjY1QD8oUjt+INHSk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751071467; c=relaxed/simple;
-	bh=3DlYou99xKBPhtCbnrBB02y+pxpHZSdecYrNGaQcjfI=;
-	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=Lnqdn6AUIgBAFdhICg04g8ihBFMG4bJr8ruXun2AxzZRoGWSDrS4galvbpEFF9bb79F8NRvfgKsntbBpEM8g5n8k9KwQASaGVuvJSqbTIOJ+IwDtf5Od7tfxPEYOOKjjdfVcUXmPIdQB+SWPuxJsJ9dzuy6YXPeIwol8hGsCrVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDsVr556; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751074934; c=relaxed/simple;
+	bh=AqFak+RkKOLxtlaw89uM9uejcA//xdBg87iSO3PBj7Q=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=NWz9ztYPuqIxm6Sxr3L4J3gCNTIsorS1IadI+royLFgdJsy2it9KGx3WmbWiRXopsJDeEmyfMOs2pNenqwq9fH49jEmPhvz7uRS4b5k6ewb49NBhEwljDa2nCIo18346M+iZ+9RTXbfySU8lb5BCvOWFMMEIrzbN2Vxhw/DiE8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gH53Lnkc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDsVr556"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b26f7d2c1f1so803710a12.0
-        for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 17:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751071465; x=1751676265; darn=lists.linux.dev;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GpxNzKdU8lMnnqevDa29WkePK3DkzP2rZRE+gu6i3wM=;
-        b=SDsVr556dHZo8Q9Rr6uijzEHje5WnLioRtkafOhV4Nx+QfUk3/jSEJRPGcgdFz7Amu
-         2EYhxD4DDtwAGxr9eSh6HmiaT2zSnWAAXKJjUdWwUr8ZQE1c0YEPZDmRsSVjQKwdJyxu
-         u4gEirj8OSuRNOIQ5gS/QtUDGieuGgA43lQEwQRVGp6zf2cWwtJ3t0CK/229UvNlSqdJ
-         qnVYmewrt1WKxY7YdcHA0h6VZX/KpWoZVKJYNsQUNAO8zoUEI3coAjdrQiN3YMGv+qSy
-         lTQKIVhi8BzMTh70r/jnlY1h+HKJ8gaPwOpw7y2e8FGvkjdpv4jla9W56dyHlBoZL7M4
-         5x6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751071465; x=1751676265;
-        h=mime-version:message-id:in-reply-to:user-agent:references:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GpxNzKdU8lMnnqevDa29WkePK3DkzP2rZRE+gu6i3wM=;
-        b=O6g+7TE9gLdA1PCXE9UWhpWhDcA0gOGm2gquYqo1tjYG4nCdlePncG6plEYHlkjcBF
-         r3CXWLNlifwNj45SwvJyShj7Khgs1gvLKT3JfmLEnjXnW7rl8XLEO6AxDlA2eVormScO
-         GEGq/Spc+qRK8YlQM0SXM7FwOKjao7sXt+934vfODeait2Y8EwdfmHyO32FMEac++9UI
-         3JCRBulbyDS1Vkaj4/p5iveGwyrboizDMq2OanlMk1Yo8LyiogodbbpMTDIIYsFHtkq0
-         nGoaJhK+yuG0PIhYKprlHMx7ViS4SGDVVm1H1u1VvCTnvs1wdKkwSTzGf1I/9pT715Ze
-         4QAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxBEqdY+t6/4fdWC4YnmxbP+SbT0U5VIE1NJs1gjNao7nn35dBu+zXel5veShLZDlcjA2b@lists.linux.dev
-X-Gm-Message-State: AOJu0YwJqlMAxmUHvXBckqG+6wKXxfw6wxr7fgMiQ+bIa4L4h3rpa9Cu
-	8uyGw2E9nRMHqLKCOhMJO/FI0SJH+Hmzj7blUj0ZOoKIeFxvaVoSzGTw
-X-Gm-Gg: ASbGncu6CqtAFlUh5FNqBE9MtvDjxLkmwB/5/DZUPm9EGTRACfJ8NHUbVY+CFrspx7R
-	tBhahqqB16QD8xQzlNN6qAybuAYjmBp/E+ygEL1f549o6YsSWeyAXmpZiWgWO2db5yz6YAceT55
-	M5lm6/ZUJYZVi+nhJaJBUGsBgIK3qwX4unbK/DudLJctMzeyjssHxoDuwQQywM1Iz1ZbKWJk2Kj
-	fRsdSYOOBwMrEqqyNzgM1ByOAEHIBu+8h+jSsy/To/krBmXOscQod5bf0iJM1QUTguosIZmCDNX
-	Y1yzgQiSLO7NTXJDOd0T9RT9u1+gBhKLB5GzLN3fSvnsOc+hx23b
-X-Google-Smtp-Source: AGHT+IHFC6aR3irUDLsqIURFtrCziwHLbDvreY8MVz83v50IvdwAMb01cbpFfB+89lcldfKQWSmCTg==
-X-Received: by 2002:a17:902:d603:b0:235:711:f810 with SMTP id d9443c01a7336-23ac43d3283mr84587795ad.23.1751071465118;
-        Fri, 27 Jun 2025 17:44:25 -0700 (PDT)
-Received: from 1337 ([136.159.213.240])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2e39d4sm26196845ad.18.2025.06.27.17.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 17:44:24 -0700 (PDT)
-From: Abhinav Saxena <xandfury@gmail.com>
-To: xandfury@gmail.com
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Paul Moore
- <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- selinux@vger.kernel.org, kees@kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 0/2] Possible TTY privilege escalation in TIOCSTI ioctl
-Date: Fri, 27 Jun 2025 18:38:42 -0600
-References: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
-User-agent: mu4e 1.10.8; emacs 30.1
-In-reply-to: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
-Message-ID: <87y0tcu23d.fsf@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gH53Lnkc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751074930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bEfWnEf/odywAjTDhUNHjeGHYju/8/QM5XgYcmz7WrA=;
+	b=gH53Lnkc61pVBrGL4uIGvN9G8aSLnBWgJshDCmwbflkrF8zLGZPyovYqAcCOMZBBClF9qD
+	Q87gd8lvGn3kPILmqA12k7W4YurY1HkaNxcRlaPGK4susHEbZe21D3aV1YKOSvHllQ9GMB
+	5Jt+jIYAMuPqIlXghs2xFMoCpev6ofU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-264-NfykCDWHPsOfomHc7VTPxg-1; Fri,
+ 27 Jun 2025 21:42:08 -0400
+X-MC-Unique: NfykCDWHPsOfomHc7VTPxg-1
+X-Mimecast-MFC-AGG-ID: NfykCDWHPsOfomHc7VTPxg_1751074928
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 02E9218002EC
+	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 01:42:08 +0000 (UTC)
+Received: from [172.20.188.120] (unknown [10.30.45.122])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 612EA19560AF;
+	Sat, 28 Jun 2025 01:42:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 6 of 100): Test report for master
+ (6.16.0-rc3, upstream-mainline, e5403415)
+Date: Sat, 28 Jun 2025 01:42:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <23566.125062721420800123@us-mta-264.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: G5ZP5HxU090acyoqhRDBIv9nQEQ_zLjper_iEiHWo3s_1751074928
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Abhinav Saxena via B4 Relay <devnull+xandfury.gmail.com@kernel.org> writes:
+Hi, we tested your kernel and here are the results:
 
-> This patch series was initially sent to security@k.o; resending it in
-> public. I might follow-up with a tests series which addresses similar
-> issues with TIOCLINUX.
->
-> `=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
->
-> The TIOCSTI ioctl uses capable(CAP_SYS_ADMIN) for access control, which
-> checks the current process=E2=80=99s credentials. However, it doesn=E2=80=
-=99t validate
-> against the file opener=E2=80=99s credentials stored in file->f_cred.
->
-> This creates a potential security issue where an unprivileged process
-> can open a TTY fd and pass it to a privileged process via SCM_RIGHTS.
-> The privileged process may then inadvertently grant access based on its
-> elevated privileges rather than the original opener=E2=80=99s credentials.
->
-> Background
-> `=3D=3D=3D=3D=3D=3D=3D=3D'
->
-> As noted in previous discussion, while CONFIG_LEGACY_TIOCSTI can restrict
-> TIOCSTI usage, it is enabled by default in most distributions. Even when
-> CONFIG_LEGACY_TIOCSTI=3Dn, processes with CAP_SYS_ADMIN can still use TIO=
-CSTI
-> according to the Kconfig documentation.
->
-> Additionally, CONFIG_LEGACY_TIOCSTI controls the default value for the
-> dev.tty.legacy_tiocsti sysctl, which remains runtime-configurable. This
-> means the described attack vector could work on systems even with
-> CONFIG_LEGACY_TIOCSTI=3Dn, particularly on Ubuntu 24.04 where it=E2=80=99=
-s =E2=80=9Crestricted=E2=80=9D
-> but still functional.
->
-> Solution Approach
-> `=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
->
-> This series addresses the issue through SELinux LSM integration rather
-> than modifying core TTY credential checking to avoid potential compatibil=
-ity
-> issues with existing userspace.
->
-> The enhancement adds proper current task and file credential capability
-> validation in SELinux=E2=80=99s selinux_file_ioctl() hook specifically for
-> TIOCSTI operations.
->
-> Testing
-> `=3D=3D=3D=3D=3D'
->
-> All patches have been validated using:
-> - scripts/checkpatch.pl =E2=80=93strict (0 errors, 0 warnings)
-> - Functional testing on kernel v6.16-rc2
-> - File descriptor passing security test scenarios
-> - SELinux policy enforcement testing
->
-> The fd_passing_security test demonstrates the security concern.
-> To verify, disable legacy TIOCSTI and run the test:
->
-> $ echo =E2=80=9C0=E2=80=9D | sudo tee /proc/sys/dev/tty/legacy_tiocsti
-> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test -t fd_passing_secur=
-ity
->
-> Patch Overview
-> `=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
->
-> PATCH 1/2: selftests/tty: add TIOCSTI test suite
-> Comprehensive test suite demonstrating the issue and fix validation
->
-> PATCH 2/2: selinux: add capability checks for TIOCSTI ioctl
-> Core security enhancement via SELinux LSM hook
->
-> References
-> `=3D=3D=3D=3D=3D=3D=3D=3D'
->
-> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
-> - commit 83efeeeb3d04 (=E2=80=9Ctty: Allow TIOCSTI to be disabled=E2=80=
-=9D)
-> - Documentation/security/credentials.rst
-> - <https://github.com/KSPP/linux/issues/156>
-> - <https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad>/
-> - drivers/tty/Kconfig
->
-> Configuration References:
-> [1] - <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
-/tree/drivers/tty/Kconfig#n149>
-> [2] - <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
-/tree/drivers/tty/Kconfig#n162>
-> [3] - <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
-/tree/drivers/tty/Kconfig#n188>
->
-> To: Shuah Khan <shuah@kernel.org>
-> To: Nathan Chancellor <nathan@kernel.org>
-> To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> To: Bill Wendling <morbo@google.com>
-> To: Justin Stitt <justinstitt@google.com>
-> To: Paul Moore <paul@paul-moore.com>
-> To: Stephen Smalley <stephen.smalley.work@gmail.com>
-> To: Ondrej Mosnacek <omosnace@redhat.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Cc: selinux@vger.kernel.org
->
-> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> =E2=80=94
-> Abhinav Saxena (2):
->       selftests/tty: add TIOCSTI test suite
->       selinux: add capability checks for TIOCSTI ioctl
->
->  security/selinux/hooks.c                       |   6 +
->  tools/testing/selftests/tty/Makefile           |   6 +-
->  tools/testing/selftests/tty/config             |   1 +
->  tools/testing/selftests/tty/tty_tiocsti_test.c | 421 +++++++++++++++++++=
-++++++
->  4 files changed, 433 insertions(+), 1 deletion(-)
-> =E2=80=94
-> base-commit: 5adb635077d1b4bd65b183022775a59a378a9c00
-> change-id: 20250618-toicsti-bug-7822b8e94a32
->
-> Best regards,
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Hi everyone,
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Thanks for all the feedback.
+Kernel information:
+    Commit message: Merge tag 'block-6.16-20250626' of git://git.kernel.dk/=
+linux
 
-SUMMARY OF FEEDBACK RECEIVED
-`=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D'
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1894443714
 
-Re: SELinux, I agree. As I mention in the cover letter, using LSM was just a
-suggested fix (not a solution). In retrospect, I should=E2=80=99ve added RF=
-C to
-the patch series.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
-I spoke with Kees this past week about the possibility of completely
-disabling TIOCSTI while maintaining backwards compatibility. He confirmed
-the initial focus was just on adding tests and improving test coverage.
 
-OUTSTANDING QUESTIONS/COMMENTS
-`=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D'
+Tests that were not ran because of internal issues:
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
 
-Based on the discussion, I have three specific questions:
 
-1) Test coverage: Are the current selftests sufficient, or should I add
-   more comprehensive TIOCSTI-specific tests? Or maybe KUnit tests?
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-2) SELinux patch: I can remove the SELinux-specific patch from the
-   series.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-3) Complete disable option: Is there broader consensus on supporting
-   complete TIOCSTI disabling while maintaining backwards compatibility?
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-DESIGN OPTIONS FOR EXTENDED CONTROL
-`=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
-
-For question 3, I=E2=80=99ve analyzed three approaches for extending the cu=
-rrent
-boolean tty_legacy_tiocsti sysctl:
-
-=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=
-=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=
-=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=
-=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81
- Tri-state  Signed    Dual Bool=20
- (0,1,2)    (0,1,-1)  Controls=20=20
-=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=
-=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=
-=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=
-=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81
-=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94|=E2=80=94=
-=E2=80=94=E2=80=94=E2=80=93|=E2=80=94=E2=80=94=E2=80=94-|=E2=80=94=E2=80=94=
-=E2=80=94=E2=80=93|
-Backwards Compat     | No        | No       | Yes       |
-Clear Semantics      | Yes       | Partial  | Yes       |
-Extensibility        | Yes       | Partial  | Yes       |
-Single Control       | Yes       | Yes      | No        |
-Kernel Precedent     | Common    | Rare     | Common    |
-
-**Option 1 (Tri-state):** 0=3DCAP_SYS_ADMIN required, 1=3Dlegacy, 2=3Ddisab=
-led
-**Option 2 (Signed):** -1=3Ddisabled, 0=3Drestricted, 1=3Dlegacy
-**Option 3 (Dual bool):** Keep existing bool + add disable bool
-
-The dual boolean approach preserves compatibility but requires managing
-two separate controls.
-
-NEXT STEPS
-`=3D=3D=3D=3D=3D=3D=3D=3D'
-
-Based on community input, I=E2=80=99ll:
-=E2=80=A2 Focus on test improvements first
-=E2=80=A2 Drop SELinux-specific changes
-=E2=80=A2 Implement extended control only if there=E2=80=99s consensus on t=
-he approach
-
-Feedback welcome on any of these points.
-
-Thanks,
-Abhinav
-
---=-=-=--
