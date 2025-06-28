@@ -1,398 +1,307 @@
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40DAD1A5BAF;
-	Sat, 28 Jun 2025 11:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E162B3597A;
+	Sat, 28 Jun 2025 11:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751111438; cv=none; b=CUPLK9KzQ+RhwyUk0UJSG0fQLQRllfEXyyOswnddiLKwq9qPxd9Y6wGEw59oMiMG5oP/VCeK63rNaYzyXHy48y3xA1T+XxUQDGitn/2sqfl7i+6I6VEl6y8UPE334GBFCZIOKWCHlz3Qg8FVpuiD1vs41HO9PlYT+SQPxkby0Zw=
+	t=1751111582; cv=none; b=oIFRqOMDQ3ky/+mPQtx4lJ/uoaWAmnRcLt15dx/nVLLSKvhMfURXaCiqK+F7p6L9zWDKQr9Hjea1o8aQoduiU6e64pT1Q+dXUecKl3+5HyHDfG/HQh6f8zDrjsz5YYX8VPLv731tBOn4QTrnMwhLzlUFQqTH9t4+lE6eKkZLF9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751111438; c=relaxed/simple;
-	bh=KANxTT9RS8pgRymd4deOdJktI7MA3Ily3pXqcsgH/t4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y/M+H0MHipUGcOchAxRh1CYdFpi/yg5KQbYMN4YmwzmQ29g9Gq1NQjz2FK6egcfB4M/2AUD0vvwiBVH1AnpRKaSXySPsrt2enewt4tT4xuTleKLsYqCJvuU52CnyiJQvvQMa1Q+lll1KqgTnzqjJIa9OjfoYbR2xXOuYN2MHe+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4bTqrJ288Cz9vJx;
-	Sat, 28 Jun 2025 13:26:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pfMuphSsT2Ir; Sat, 28 Jun 2025 13:26:40 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4bTqrH3wCPz9vJs;
-	Sat, 28 Jun 2025 13:26:39 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 78EDB8B765;
-	Sat, 28 Jun 2025 13:26:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id SOtpdDiBEncU; Sat, 28 Jun 2025 13:26:39 +0200 (CEST)
-Received: from [192.168.202.221] (unknown [192.168.202.221])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 93EA18B763;
-	Sat, 28 Jun 2025 13:26:35 +0200 (CEST)
-Message-ID: <ffae82a6-26dd-4c25-80d3-dbb55c889b52@csgroup.eu>
-Date: Sat, 28 Jun 2025 13:26:34 +0200
+	s=arc-20240116; t=1751111582; c=relaxed/simple;
+	bh=h/SU3jsa28hvi5Fs3KZQKyZnmzMBWeZGmESAC1iqtnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tZsYDtCoQ4AgGlhOuq/PH0ht0feWS/I3NiHfldHDSAeIhk4qGdejyxpuTzdGZStWh8iKEeBXYqlnBUjPCCliQRw5iBeYgtyVxTmG04kqYnKMJlhKCUCEVzMHuIG+0JhKZxULVRV9nX0UWAX+LGwwX425TORdSwkKdqSCdDUvVyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+q6bJId; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+q6bJId"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751111580; x=1782647580;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h/SU3jsa28hvi5Fs3KZQKyZnmzMBWeZGmESAC1iqtnY=;
+  b=i+q6bJIdict5YS7xSf5VL/Ii4WIreIagITp04D4CUvcgwH6QLW9piTr6
+   74/qAS50IbtpR0klxcnN8nNmoctnp4iTewF5Hsk4kFILCNVO78k0j0Go+
+   fhBtpgTPrPiKiN+tHI/VlO6m8OvAOftj6J3LDXQgJy8L1vVjHCLCKMrCX
+   o3TpZL2ZlRVmt5IP9pQz9UynLiOkWO3p8rNDoLPf0sD5oN5MGC5zE+/74
+   owvikDY1qUShaKwn+A5mZH1+xc4Id3cGGI9ZHe5XsyhrN7fuKugSzOAHT
+   DOg7B/Ob19IQfc5E00zLQZBeoIEBU4m5saE5T75x5RKt8e8TUDifh4EzW
+   A==;
+X-CSE-ConnectionGUID: aqw+vqLcQhinOfzMaqwQCg==
+X-CSE-MsgGUID: V38GZHeqQL+OeIkcjpvajw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="64097043"
+X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
+   d="scan'208";a="64097043"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 04:52:59 -0700
+X-CSE-ConnectionGUID: S1+Ys8t7R4yIAjMP72BteA==
+X-CSE-MsgGUID: ZUr28zSaSQ+Y8n2Nb6cKtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
+   d="scan'208";a="157563459"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 28 Jun 2025 04:52:55 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVU72-000X1S-0n;
+	Sat, 28 Jun 2025 11:52:52 +0000
+Date: Sat, 28 Jun 2025 19:52:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiffany Yang <ynaffit@google.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	keescook@google.com, kernel-team@android.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 5/5] binder: encapsulate individual alloc test cases
+Message-ID: <202506281959.hfOTIUjS-lkp@intel.com>
+References: <20250627203748.881022-6-ynaffit@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/11] kasan: unify kasan_arch_is_ready with
- kasan_enabled
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
- glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
- vincenzo.frascino@arm.com, linux@armlinux.org.uk, catalin.marinas@arm.com,
- will@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
- maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
- borntraeger@linux.ibm.com, svens@linux.ibm.com, richard@nod.at,
- anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
- dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
- hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
- akpm@linux-foundation.org, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com
-Cc: arnd@arndb.de, rppt@kernel.org, geert@linux-m68k.org, mcgrof@kernel.org,
- guoweikang.kernel@gmail.com, tiwei.btw@antgroup.com, kevin.brodsky@arm.com,
- benjamin.berg@intel.com, kasan-dev@googlegroups.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-um@lists.infradead.org, linux-mm@kvack.org, llvm@lists.linux.dev
-References: <20250626153147.145312-1-snovitoll@gmail.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250626153147.145312-1-snovitoll@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627203748.881022-6-ynaffit@google.com>
+
+Hi Tiffany,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on staging/staging-testing]
+[also build test WARNING on staging/staging-next staging/staging-linus shuah-kselftest/kunit shuah-kselftest/kunit-fixes linus/master v6.16-rc3 next-20250627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tiffany-Yang/binder-Fix-selftest-page-indexing/20250628-044044
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250627203748.881022-6-ynaffit%40google.com
+patch subject: [PATCH 5/5] binder: encapsulate individual alloc test cases
+config: i386-buildonly-randconfig-001-20250628 (https://download.01.org/0day-ci/archive/20250628/202506281959.hfOTIUjS-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506281959.hfOTIUjS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506281959.hfOTIUjS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/android/tests/binder_alloc_kunit.c:256:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     255 |                             "Initial buffers not freed correctly: %lu/%lu pages not on lru list",
+         |                                                                       ~~~
+         |                                                                       %zu
+     256 |                             failures, pages);
+         |                                       ^~~~~
+   include/kunit/test.h:987:11: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+     986 |                                    fmt,                                        \
+         |                                    ~~~
+     987 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:823:11: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     822 |                                     fmt,                                       \
+         |                                     ~~~
+     823 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:807:11: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     806 |                       fmt,                                                     \
+         |                       ~~~
+     807 |                       ##__VA_ARGS__);                                          \
+         |                         ^~~~~~~~~~~
+   include/kunit/test.h:689:11: note: expanded from macro '_KUNIT_FAILED'
+     688 |                                     fmt,                                       \
+         |                                     ~~~
+     689 |                                     ##__VA_ARGS__);                            \
+         |                                       ^~~~~~~~~~~
+   drivers/android/tests/binder_alloc_kunit.c:279:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     278 |                             "Reallocated buffers not freed correctly: %lu/%lu pages not on lru list",
+         |                                                                           ~~~
+         |                                                                           %zu
+     279 |                             failures, pages);
+         |                                       ^~~~~
+   include/kunit/test.h:987:11: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+     986 |                                    fmt,                                        \
+         |                                    ~~~
+     987 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:823:11: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     822 |                                     fmt,                                       \
+         |                                     ~~~
+     823 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:807:11: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     806 |                       fmt,                                                     \
+         |                       ~~~
+     807 |                       ##__VA_ARGS__);                                          \
+         |                         ^~~~~~~~~~~
+   include/kunit/test.h:689:11: note: expanded from macro '_KUNIT_FAILED'
+     688 |                                     fmt,                                       \
+         |                                     ~~~
+     689 |                                     ##__VA_ARGS__);                            \
+         |                                       ^~~~~~~~~~~
+>> drivers/android/tests/binder_alloc_kunit.c:320:53: warning: format specifies type 'ssize_t' (aka 'int') but the argument has type 'unsigned long' [-Wformat]
+     320 |                         kunit_err(test, "case %zd: [%s] | %s - %s - %s", *runs,
+         |                                               ~~~                        ^~~~~
+         |                                               %lu
+   include/kunit/test.h:650:38: note: expanded from macro 'kunit_err'
+     650 |         kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+         |                                      ~~~    ^~~~~~~~~~~
+   include/kunit/test.h:616:21: note: expanded from macro 'kunit_printk'
+     615 |         kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,         \
+         |                                                            ~~~
+     616 |                   (test)->name, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/kunit/test.h:609:21: note: expanded from macro 'kunit_log'
+     609 |                 printk(lvl fmt, ##__VA_ARGS__);                         \
+         |                            ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:507:60: note: expanded from macro 'printk'
+     507 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:479:19: note: expanded from macro 'printk_index_wrap'
+     479 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+>> drivers/android/tests/binder_alloc_kunit.c:320:53: warning: format specifies type 'ssize_t' (aka 'int') but the argument has type 'unsigned long' [-Wformat]
+     320 |                         kunit_err(test, "case %zd: [%s] | %s - %s - %s", *runs,
+         |                                               ~~~                        ^~~~~
+         |                                               %lu
+   include/kunit/test.h:650:38: note: expanded from macro 'kunit_err'
+     650 |         kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+         |                                      ~~~    ^~~~~~~~~~~
+   include/kunit/test.h:616:21: note: expanded from macro 'kunit_printk'
+     615 |         kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,         \
+         |                                                            ~~~
+     616 |                   (test)->name, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/kunit/test.h:611:8: note: expanded from macro 'kunit_log'
+     610 |                 kunit_log_append((test_or_suite)->log,  fmt,            \
+         |                                                         ~~~
+     611 |                                  ##__VA_ARGS__);                        \
+         |                                    ^~~~~~~~~~~
+   4 warnings generated.
 
 
+vim +256 drivers/android/tests/binder_alloc_kunit.c
 
-Le 26/06/2025 à 17:31, Sabyrzhan Tasbolatov a écrit :
-> This patch series unifies the kasan_arch_is_ready() and kasan_enabled()
-> interfaces by extending the existing kasan_enabled() infrastructure to
-> work consistently across all KASAN modes (Generic, SW_TAGS, HW_TAGS).
-> 
-> Currently, kasan_enabled() only works for HW_TAGS mode using a static key,
-> while other modes either return IS_ENABLED(CONFIG_KASAN) (compile-time
-> constant) or rely on architecture-specific kasan_arch_is_ready()
-> implementations with custom static keys and global variables.
-> 
-> This leads to:
-> - Code duplication across architectures
-> - Inconsistent runtime behavior between KASAN modes
-> - Architecture-specific readiness tracking
+   230	
+   231	/* Executes one full test run for the given test case. */
+   232	static bool binder_alloc_test_alloc_free(struct kunit *test,
+   233						 struct binder_alloc *alloc,
+   234						 struct binder_alloc_test_case_info *tc,
+   235						 size_t end)
+   236	{
+   237		size_t pages = PAGE_ALIGN(end) / PAGE_SIZE;
+   238		struct binder_buffer *buffers[BUFFER_NUM];
+   239		unsigned long failures;
+   240		bool failed = false;
+   241	
+   242		failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
+   243						       tc->buffer_sizes,
+   244						       tc->free_sequence);
+   245		failed = failed || failures;
+   246		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   247				    "Initial allocation failed: %lu/%u buffers with errors",
+   248				    failures, BUFFER_NUM);
+   249	
+   250		failures = binder_alloc_test_free_buf(test, alloc, buffers,
+   251						      tc->buffer_sizes,
+   252						      tc->free_sequence, end);
+   253		failed = failed || failures;
+   254		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   255				    "Initial buffers not freed correctly: %lu/%lu pages not on lru list",
+ > 256				    failures, pages);
+   257	
+   258		/* Allocate from lru. */
+   259		failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
+   260						       tc->buffer_sizes,
+   261						       tc->free_sequence);
+   262		failed = failed || failures;
+   263		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   264				    "Reallocation failed: %lu/%u buffers with errors",
+   265				    failures, BUFFER_NUM);
+   266	
+   267		failures = list_lru_count(alloc->freelist);
+   268		failed = failed || failures;
+   269		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   270				    "lru list should be empty after reallocation but still has %lu pages",
+   271				    failures);
+   272	
+   273		failures = binder_alloc_test_free_buf(test, alloc, buffers,
+   274						      tc->buffer_sizes,
+   275						      tc->free_sequence, end);
+   276		failed = failed || failures;
+   277		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   278				    "Reallocated buffers not freed correctly: %lu/%lu pages not on lru list",
+   279				    failures, pages);
+   280	
+   281		failures = binder_alloc_test_free_page(test, alloc);
+   282		failed = failed || failures;
+   283		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   284				    "Failed to clean up allocated pages: %lu/%lu pages still installed",
+   285				    failures, (alloc->buffer_size / PAGE_SIZE));
+   286	
+   287		return failed;
+   288	}
+   289	
+   290	static bool is_dup(int *seq, int index, int val)
+   291	{
+   292		int i;
+   293	
+   294		for (i = 0; i < index; i++) {
+   295			if (seq[i] == val)
+   296				return true;
+   297		}
+   298		return false;
+   299	}
+   300	
+   301	/* Generate BUFFER_NUM factorial free orders. */
+   302	static void permute_frees(struct kunit *test, struct binder_alloc *alloc,
+   303				  struct binder_alloc_test_case_info *tc,
+   304				  unsigned long *runs, unsigned long *failures,
+   305				  int index, size_t end)
+   306	{
+   307		bool case_failed;
+   308		int i;
+   309	
+   310		if (index == BUFFER_NUM) {
+   311			char freeseq_buf[FREESEQ_BUFLEN];
+   312	
+   313			case_failed = binder_alloc_test_alloc_free(test, alloc, tc, end);
+   314			*runs += 1;
+   315			*failures += case_failed;
+   316	
+   317			if (case_failed || PRINT_ALL_CASES) {
+   318				stringify_free_seq(test, tc->free_sequence, freeseq_buf,
+   319						   FREESEQ_BUFLEN);
+ > 320				kunit_err(test, "case %zd: [%s] | %s - %s - %s", *runs,
+   321					  case_failed ? "FAILED" : "PASSED",
+   322					  tc->front_pages ? "front" : "back ",
+   323					  tc->alignments, freeseq_buf);
+   324			}
+   325	
+   326			return;
+   327		}
+   328		for (i = 0; i < BUFFER_NUM; i++) {
+   329			if (is_dup(tc->free_sequence, index, i))
+   330				continue;
+   331			tc->free_sequence[index] = i;
+   332			permute_frees(test, alloc, tc, runs, failures, index + 1, end);
+   333		}
+   334	}
+   335	
 
-You should also consider refactoring ARCH_DISABLE_KASAN_INLINE, there is 
-a high dependency between deferring KASAN readiness and not supporting 
-inline KASAN.
-
-> 
-> After this series:
-> - All KASAN modes use the same kasan_flag_enabled static key
-> - Consistent runtime enable/disable behavior across modes
-> - Simplified architecture code with unified kasan_init_generic() calls
-> - Elimination of arch specific kasan_arch_is_ready() implementations
-> - Unified vmalloc integration using kasan_enabled() checks
-
-I dislike that modes which can be enabled from the very begining now 
-also depends on the static key being enabled later.
-
-The size is increased for no valid reason:
-
-$ size vmlinux.kasan*
-    text	   data	    bss	    dec	    hex	filename
-13965336	6716942	 494912	21177190	1432366	vmlinux.kasan0 ==> outline 
-KASAN before your patch
-13965496	6718422	 494944	21178862	14329ee	vmlinux.kasan1 ==> outline 
-KASAN after your patch
-13965336	6716942	 494912	21177190	1432366	vmlinux.kasan2 ==> outline 
-KASAN after your patch + below change
-32517472	6716958	 494912	39729342	25e38be	vmlinux.kasani0 ==> inline 
-KASAN before your patch
-32518848	6718438	 494944	39732230	25e4406	vmlinux.kasani1 ==> inline 
-KASAN after your patch
-32517536	6716958	 494912	39729406	25e38fe	vmlinux.kasani2 ==> inline 
-KASAN after your patch + below change
-
-Below change (atop you series) only makes use of static key when needed:
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index c3e0cc83f120..7a8e5db603cc 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -122,6 +122,7 @@ config PPC
-  	# Please keep this list sorted alphabetically.
-  	#
-  	select ARCH_32BIT_OFF_T if PPC32
-+	select ARCH_DEFER_KASAN			if PPC_RADIX_MMU
-  	select ARCH_DISABLE_KASAN_INLINE	if PPC_RADIX_MMU
-  	select ARCH_DMA_DEFAULT_COHERENT	if !NOT_COHERENT_CACHE
-  	select ARCH_ENABLE_MEMORY_HOTPLUG
-@@ -219,7 +220,7 @@ config PPC
-  	select HAVE_ARCH_JUMP_LABEL
-  	select HAVE_ARCH_JUMP_LABEL_RELATIVE
-  	select HAVE_ARCH_KASAN			if PPC32 && PAGE_SHIFT <= 14
--	select HAVE_ARCH_KASAN			if PPC_RADIX_MMU
-+	select HAVE_ARCH_KASAN_DEFERED		if PPC_RADIX_MMU
-  	select HAVE_ARCH_KASAN			if PPC_BOOK3E_64
-  	select HAVE_ARCH_KASAN_VMALLOC		if HAVE_ARCH_KASAN
-  	select HAVE_ARCH_KCSAN
-diff --git a/include/linux/kasan-enabled.h b/include/linux/kasan-enabled.h
-index 2436eb45cfee..fda86e77fe4f 100644
---- a/include/linux/kasan-enabled.h
-+++ b/include/linux/kasan-enabled.h
-@@ -4,7 +4,7 @@
-
-  #include <linux/static_key.h>
-
--#ifdef CONFIG_KASAN
-+#ifdef CONFIG_KASAN_DEFER
-
-  /*
-   * Global runtime flag. Starts âfalseâ; switched to âtrueâ by
-@@ -17,13 +17,21 @@ static __always_inline bool kasan_enabled(void)
-  	return static_branch_likely(&kasan_flag_enabled);
-  }
-
--#else /* !CONFIG_KASAN */
-+static inline void kasan_enable(void)
-+{
-+	static_branch_enable(&kasan_flag_enabled);
-+}
-+
-+#else /* !CONFIG_KASAN_DEFER */
-
-  static __always_inline bool kasan_enabled(void)
-  {
--	return false;
-+	return IS_ENABLED(CONFIG_KASAN);
-  }
-
-+static inline void kasan_enable(void)
-+{
-+}
-  #endif /* CONFIG_KASAN */
-
-  #ifdef CONFIG_KASAN_HW_TAGS
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index f82889a830fa..e0c300f55c07 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -13,6 +13,9 @@ config HAVE_ARCH_KASAN_HW_TAGS
-  config HAVE_ARCH_KASAN_VMALLOC
-  	bool
-
-+config ARCH_DEFER_KASAN
-+	bool
-+
-  config ARCH_DISABLE_KASAN_INLINE
-  	bool
-  	help
-@@ -58,6 +61,9 @@ config CC_HAS_KASAN_MEMINTRINSIC_PREFIX
-  	help
-  	  The compiler is able to prefix memintrinsics with __asan or __hwasan.
-
-+config KASAN_DIFER
-+	def_bool ARCH_DIFER_KASAN
-+
-  choice
-  	prompt "KASAN mode"
-  	default KASAN_GENERIC
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 0f3648335a6b..01f56eed9d20 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -36,8 +36,10 @@
-   * Definition of the unified static key declared in kasan-enabled.h.
-   * This provides consistent runtime enable/disable across all KASAN modes.
-   */
-+#ifdef CONFIG_KASAN_DEFER
-  DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
-  EXPORT_SYMBOL(kasan_flag_enabled);
-+#endif
-
-  struct slab *kasan_addr_to_slab(const void *addr)
-  {
-diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-index a3b112868be7..516b49accc4f 100644
---- a/mm/kasan/generic.c
-+++ b/mm/kasan/generic.c
-@@ -42,7 +42,7 @@
-   */
-  void __init kasan_init_generic(void)
-  {
--	static_branch_enable(&kasan_flag_enabled);
-+	kasan_enable();
-
-  	pr_info("KernelAddressSanitizer initialized (generic)\n");
-  }
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index 8e819fc4a260..c8289a3feabf 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -253,7 +253,7 @@ void __init kasan_init_hw_tags(void)
-  	kasan_init_tags();
-
-  	/* KASAN is now initialized, enable it. */
--	static_branch_enable(&kasan_flag_enabled);
-+	kasan_enable();
-
-  	pr_info("KernelAddressSanitizer initialized (hw-tags, mode=%s, 
-vmalloc=%s, stacktrace=%s)\n",
-  		kasan_mode_info(),
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index 525bc91e2fcd..275bcbbf6120 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -45,7 +45,7 @@ void __init kasan_init_sw_tags(void)
-
-  	kasan_init_tags();
-
--	static_branch_enable(&kasan_flag_enabled);
-+	kasan_enable();
-
-  	pr_info("KernelAddressSanitizer initialized (sw-tags, stacktrace=%s)\n",
-  		str_on_off(kasan_stack_collection_enabled()));
-
-
-> 
-> This addresses the bugzilla issue [1] about making
-> kasan_flag_enabled and kasan_enabled() work for Generic mode,
-> and extends it to provide true unification across all modes.
-> 
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=217049
-> 
-> === Current mainline KUnit status
-> 
-> To see if there is any regression, I've tested first on the following
-> commit 739a6c93cc75 ("Merge tag 'nfsd-6.16-1' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux").
-> 
-> Tested via compiling a kernel with CONFIG_KASAN_KUNIT_TEST and running
-> QEMU VM. There are failing tests in SW_TAGS and GENERIC modes in arm64:
-> 
-> arm64 CONFIG_KASAN_HW_TAGS:
-> 	# kasan: pass:62 fail:0 skip:13 total:75
-> 	# Totals: pass:62 fail:0 skip:13 total:75
-> 	ok 1 kasan
-> 
-> arm64 CONFIG_KASAN_SW_TAGS=y:
-> 	# kasan: pass:65 fail:1 skip:9 total:75
-> 	# Totals: pass:65 fail:1 skip:9 total:75
-> 	not ok 1 kasan
-> 	# kasan_strings: EXPECTATION FAILED at mm/kasan/kasan_test_c.c:1598
-> 	KASAN failure expected in "strscpy(ptr, src + KASAN_GRANULE_SIZE, KASAN_GRANULE_SIZE)", but none occurred
-> 
-> arm64 CONFIG_KASAN_GENERIC=y, CONFIG_KASAN_OUTLINE=y:
-> 	# kasan: pass:61 fail:1 skip:13 total:75
-> 	# Totals: pass:61 fail:1 skip:13 total:75
-> 	not ok 1 kasan
-> 	# same failure as above
-> 
-> x86_64 CONFIG_KASAN_GENERIC=y:
-> 	# kasan: pass:58 fail:0 skip:17 total:75
-> 	# Totals: pass:58 fail:0 skip:17 total:75
-> 	ok 1 kasan
-> 
-> === Testing with patches
-> 
-> Testing in v2:
-> 
-> - Compiled every affected arch with no errors:
-> 
-> $ make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
-> 	OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> 	HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld \
-> 	ARCH=$ARCH
-> 
-> $ clang --version
-> ClangBuiltLinux clang version 19.1.4
-> Target: x86_64-unknown-linux-gnu
-> Thread model: posix
-> 
-> - make ARCH=um produces the warning during compiling:
-> 	MODPOST Module.symvers
-> 	WARNING: modpost: vmlinux: section mismatch in reference: \
-> 		kasan_init+0x43 (section: .ltext) -> \
-> 		kasan_init_generic (section: .init.text)
-> 
-> AFAIU, it's due to the code in arch/um/kernel/mem.c, where kasan_init()
-> is placed in own section ".kasan_init", which calls kasan_init_generic()
-> which is marked with "__init".
-> 
-> - Booting via qemu-system- and running KUnit tests:
-> 
-> * arm64  (GENERIC, HW_TAGS, SW_TAGS): no regression, same above results.
-> * x86_64 (GENERIC): no regression, no errors
-> 
-> === NB
-> 
-> I haven't tested the kernel boot on the following arch. due to the absence
-> of qemu-system- support on those arch on my machine, so I defer this to
-> relevant arch people to test KASAN initialization:
-> - loongarch
-> - s390
-> - um
-> - xtensa
-> - powerpc
-> - riscv
-> 
-> Code changes in v2:
-> - Replace the order of patches. Move "kasan: replace kasan_arch_is_ready
-> 	with kasan_enabled" at the end to keep the compatibility.
-> - arch/arm, arch/riscv: add 2 arch. missed in v1
-> - arch/powerpc: add kasan_init_generic() in other kasan_init() calls:
-> 	arch/powerpc/mm/kasan/init_32.c
-> 	arch/powerpc/mm/kasan/init_book3e_64.c
-> - arch/um: add the proper header `#include <linux/kasan.h>`. Tested
-> 	via compiling with no errors. In the v1 arch/um changes were acked-by
-> 	Johannes Berg, though I don't include it due to the changed code in v2.
-> - arch/powerpc: add back `#ifdef CONFIG_KASAN` deleted in v1 and tested
-> 	the compilation.
-> - arch/loongarch: update git commit message about non-standard flow of
-> 	calling kasan_init_generic()
-> 
-> Sabyrzhan Tasbolatov (11):
->    kasan: unify static kasan_flag_enabled across modes
->    kasan/arm64: call kasan_init_generic in kasan_init
->    kasan/arm: call kasan_init_generic in kasan_init
->    kasan/xtensa: call kasan_init_generic in kasan_init
->    kasan/loongarch: call kasan_init_generic in kasan_init
->    kasan/um: call kasan_init_generic in kasan_init
->    kasan/x86: call kasan_init_generic in kasan_init
->    kasan/s390: call kasan_init_generic in kasan_init
->    kasan/powerpc: call kasan_init_generic in kasan_init
->    kasan/riscv: call kasan_init_generic in kasan_init
->    kasan: replace kasan_arch_is_ready with kasan_enabled
-> 
->   arch/arm/mm/kasan_init.c               |  2 +-
->   arch/arm64/mm/kasan_init.c             |  4 +---
->   arch/loongarch/include/asm/kasan.h     |  7 -------
->   arch/loongarch/mm/kasan_init.c         |  7 ++-----
->   arch/powerpc/include/asm/kasan.h       | 13 -------------
->   arch/powerpc/mm/kasan/init_32.c        |  2 +-
->   arch/powerpc/mm/kasan/init_book3e_64.c |  2 +-
->   arch/powerpc/mm/kasan/init_book3s_64.c |  6 +-----
->   arch/riscv/mm/kasan_init.c             |  1 +
->   arch/s390/kernel/early.c               |  3 ++-
->   arch/um/include/asm/kasan.h            |  5 -----
->   arch/um/kernel/mem.c                   |  4 ++--
->   arch/x86/mm/kasan_init_64.c            |  2 +-
->   arch/xtensa/mm/kasan_init.c            |  2 +-
->   include/linux/kasan-enabled.h          | 22 ++++++++++++++++------
->   include/linux/kasan.h                  |  6 ++++++
->   mm/kasan/common.c                      | 15 +++++++++++----
->   mm/kasan/generic.c                     | 17 ++++++++++++++---
->   mm/kasan/hw_tags.c                     |  7 -------
->   mm/kasan/kasan.h                       |  6 ------
->   mm/kasan/shadow.c                      | 15 +++------------
->   mm/kasan/sw_tags.c                     |  2 ++
->   22 files changed, 66 insertions(+), 84 deletions(-)
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
