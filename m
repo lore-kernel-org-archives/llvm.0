@@ -1,147 +1,114 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13186BE4A;
-	Sat, 28 Jun 2025 03:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C438B1854
+	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 06:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751080622; cv=none; b=Gq9z/mnCpl2xNhWr24gbG48wktR4PTYL9+oqWMvsxwSyfPEzY0Qy3zEU+HxIVtJm8B7OY47Q91b81JoFwgQYJO7JA/3mMeurLN7adnIy3E80ZNbUSR3557leAgq9W03kImhtBO48hUFBeRB/sOkbjHmEE+YyG65GAk110wHmNMI=
+	t=1751092334; cv=none; b=G5WzocxvzzDzixcnEZ5CVUyVJ0tcq9gDpIW6hiQMloA7gfBjv2i5qy0tXZYMmv/yyI+O6LnXdkisVW7A0GISoTXzAjU0Vu69UL1GOOI5quhh7DQoY2ZuvRGIEQzVQ+avAvheEcpRZHL0fSnruNBxHeGFsQoB1b00IHK/9vd1DMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751080622; c=relaxed/simple;
-	bh=6mAPUo5M30mh/gfv/HY1yAxEErHGF9CWTrvu3RVcfe8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=owqNHpGciyerwLnvSvupkQyyzgZjiIVS1nGQO/bVvL8MQhwrD/gMsc9ILU9a3QHLRdhpMiiZAyqRavUEfwi3W1VNr2CaUltpOMHLHqID6wTTl1L/eW3siOE/ijcQhNQXs9JJe+4QMWH/hgB1xoRGAgyzjp2bKQTSwa8PjqbG+Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MeQ/UyyH; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751092334; c=relaxed/simple;
+	bh=a9d3zaHqiicsMd8CgJ6zm+6J15SDdd8JBDWRYMUOIzw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rFegayeyh5hmqsh7laJVXJse9cic3uleB2ZPa/3zi9zK3zJER9hPs4ekFQmgOgFGXKnFImhmV6Tt21XrjCsWYPdmfCGZxa2eqdTfr3SpfTN9AG2jXz9OHyCXzqlgIG4EpGj0RacrcGQPCf9uAlkdtnfqnnO9z8bg5jLph1x/jo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BNmvWKOI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MeQ/UyyH"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-608acb0a27fso690135a12.0;
-        Fri, 27 Jun 2025 20:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751080619; x=1751685419; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J9dPAwsn+P9UsNtzqpwYoo0ORtcX9rmxgV7CliMPtZM=;
-        b=MeQ/UyyHNeMO86y4FojghPJhoqXzk822Z88IZXg6Oxss1KhoLJQInTYnnyFuAffBg7
-         Uz8zGSsxD7lBTc/KeZ5WTzv4wToyPk+l832lwPhLhztYOh1KvWzw1OHbyiApl/PGw3Nw
-         jIUjUje7pJ+Kctn8C/0HtKmEBZG9rkoA2twPhPxm2zjq8RqPaT6JPtwNocZsnbYKFgBV
-         xywJFD3F+R1RUZ4qZ4kZ1jPnNqrwYMAMv3VaLb4+pYZnvIOFxePMaQ/JTaXTLsv4GEsp
-         XbB/rx5xClH5Zzg52g9apdxDceBayzKA+lLLYfDyitemEEZTXAhur1VzIFeBfgM9CJRg
-         we9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751080619; x=1751685419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J9dPAwsn+P9UsNtzqpwYoo0ORtcX9rmxgV7CliMPtZM=;
-        b=FDaGY5YqpyMeVXn9Utx8Uhh8AYnY4ohdGFR03NFSN+pEiXI6DBREL1+NsF4rSEZPQG
-         Nv7ER1gYiloCAi0xLjKoBfyGgcBFMABCQkjYfcgFjICWyzh+Av6RzCv09TMIWtP5o2x0
-         T1jxGH1KyXmBoCAiCNCy08O6AdhqZD/84wZiY8eXodIp1N1rtB7GuYIoeGYMqq0M4023
-         +w/wngi17UXvA3HRK56mty1vTQKo+r5h8jzvTSCwx512VCqrEjr8OuCY1jDoY9ma8vI7
-         oWGpJXcswenSp3SIU7VAYruz1zxwaemDZf/Djzya69fFwsOzQu0eSi390PI0P2q6I2Qf
-         RpOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUTZ5SQlDJKjGOmZpNe9n9NgYbrSHdg1obV9Q4GAlKvPOE0hrrDT/K9vvgUQM8yVXvfMLw5w==@lists.linux.dev, AJvYcCXK1VmW6v0oBIDjRgYGnsXsqmIv5CGoI58C7NoyDuQGpsvImitT9r5PPkM2xSV+uhJi2aLcWubhARraYuwD@lists.linux.dev
-X-Gm-Message-State: AOJu0YwaMV3C5z0iHQoi7ZHO4Fb5UvrgQSTj+aZfbFOyae/uRK+AjTZh
-	AtPVdAA3U5gBnlrFAXba26lEgBUQEtx4ilq0djkAadh0WRUSDjNUooelFBBfdBSWTKJMc/TSGZf
-	dPC9PNk1lc8VQO6n9gSuRxUhxUrk2F0c=
-X-Gm-Gg: ASbGncvZU0OE9SdIUzekvmZK6bhroMt+D4cOU0Ee4ryHoR/YkG9SzG0/xWMf6GhoEbd
-	olCRKMw9zVLTPff3LqMtA81IauA30lZI85H+Gg69v+KmWrvD1EaAnJkA/LsLmrQiH9cbNkPd0/s
-	lW1LKHg0I6hfMG9aoogduSkm3Z1BgDnUFbJ++9NImbCI/vPw==
-X-Google-Smtp-Source: AGHT+IEteJajU9ian7N9eS7scey4zLc0G1Nzpgd7jSI+mWoqHjDGRUZ49Gk9VxMXNJBvOtj/Mpn85MpDdpYDRfRKTW0=
-X-Received: by 2002:a17:907:720f:b0:ae0:c86a:12c2 with SMTP id
- a640c23a62f3a-ae35018f413mr583112166b.53.1751080619216; Fri, 27 Jun 2025
- 20:16:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BNmvWKOI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751092330;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=q36lPmkBchJk4jtUfniqq5xgYJa/lZxraWLTRp0BXaM=;
+	b=BNmvWKOINF3j/2FbpkiLlP0sHFAFHb9PkPBlm5vCw6HF8fN56I6lxHIi1tHmSHtsh7p4bQ
+	cL2CowWelr/ALN3ZtmnO5giSw+aOebkgJ2d0P4RiZMwm2bAFKiS3irYpIJ4DuEUl9FSYx7
+	/Ucm2XQW6H+BnApB21cGTR63PHmngIg=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-663-uWKLX2haPGGNu-7AmYk3kQ-1; Sat,
+ 28 Jun 2025 02:32:08 -0400
+X-MC-Unique: uWKLX2haPGGNu-7AmYk3kQ-1
+X-Mimecast-MFC-AGG-ID: uWKLX2haPGGNu-7AmYk3kQ_1751092327
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8038C19373D8
+	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 06:32:07 +0000 (UTC)
+Received: from [172.20.188.120] (unknown [10.30.45.122])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1577419560A7;
+	Sat, 28 Jun 2025 06:32:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 100): Test report for master
+ (6.16.0-rc3, upstream-mainline, 35e261cd)
+Date: Sat, 28 Jun 2025 06:32:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250627-bar-v6-1-b22b5ea3ced0@gmail.com> <e201c4b0-4fcc-4d98-9d76-0e9c41dc4d9f@kernel.org>
- <aF7EEAxXsurLvIt9@smile.fi.intel.com>
-In-Reply-To: <aF7EEAxXsurLvIt9@smile.fi.intel.com>
-From: =?UTF-8?B?546L6Imv5Lie?= <zaq14760@gmail.com>
-Date: Sat, 28 Jun 2025 11:16:47 +0800
-X-Gm-Features: Ac12FXxsU5dpiPb917Qnz6Mirm0LCeuQaVZZ2cq-H5v4MpNZKgpLGFZPrQY3-yk
-Message-ID: <CAKEtaPCibkPWtkRi5xJr8__jzsoPwrrb7LaG3p7_kTK-R5p6gQ@mail.gmail.com>
-Subject: Re: [PATCH v6] staging: media: atomisp: apply clang-format and fix
- checkpatch.pl errors
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Andy Shevchenko <andy@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <38744.125062802320800380@us-mta-663.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Vb5JMZDdhFBW7xLGG2iWYzUiKjtNQi3huyAlToZjaJs_1751092327
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Dear Hans, Andy, and all,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the detailed feedback.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-I understand the patch is too large and unreviewable in its current
-form. I also see now that splitting the clang-format changes and the
-manual checkpatch.pl ERROR fixes into separate patches would make it
-clearer and easier to review. I will also avoid touching any files
-under drivers/staging/media/i2c/ and any other parts where future
-plans involve rewriting or upstream work.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-For the next version (v7), I plan to:
+Kernel information:
+    Commit message: Merge tag 'acpi-6.16-rc4' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/rafael/linux-pm
 
-Separate the clang-format automated changes into a standalone patch.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1894668062
 
-Place the manual checkpatch.pl ERROR fixes into another patch.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
-Remove any changes in drivers/staging/media/i2c/ and leave those untouched.
 
-Ensure that style changes such as macro alignment or tab changes
-respect the existing code style and preferences.
+Tests that were not ran because of internal issues:
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
 
-I appreciate your guidance on this and will prepare the updated series
-accordingly.
 
-Best regards,
-LiangCheng Wang
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Andy Shevchenko <andriy.shevchenko@intel.com> =E6=96=BC 2025=E5=B9=B46=E6=
-=9C=8828=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8812:18=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-> On Fri, Jun 27, 2025 at 06:05:08PM +0200, Hans de Goede wrote:
-> > On 27-Jun-25 4:56 PM, LiangCheng Wang wrote:
->
-> ...
->
-> >       for (i =3D 0; i < count; i++) {
-> > -             err =3D i2c_smbus_write_byte_data(client, reglist[i].reg,=
- reglist[i].val);
-> > +             err =3D i2c_smbus_write_byte_data(client, reglist[i].reg,
-> > +                                             reglist[i].val);
-> >               if (err) {
-> > -                     dev_err(&client->dev, "write error: wrote 0x%x to=
- offset 0x%x error %d",
-> >
-> > The original line here had a length below 100 chars, so it was fine
-> > and log messages are allowed to go over the length limit
->
-> Actually I tend to agree with clang-format on this case and that's why:
-> until V4L2 becomes less pedantic and fanatic about 80 characters
-> limit, the 100 is not applicable for this driver to be moved under
-> their umbrella.
->
-> > +                     dev_err(&client->dev,
-> > +                             "write error: wrote 0x%x to offset 0x%x e=
-rror %d",
-> >                               reglist[i].val, reglist[i].reg, err);
-> >                       return err;
-> >               }
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
