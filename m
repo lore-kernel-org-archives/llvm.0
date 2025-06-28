@@ -1,154 +1,107 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D0F1F17EB;
-	Sat, 28 Jun 2025 10:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA327225793;
+	Sat, 28 Jun 2025 10:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751108222; cv=none; b=tHw2JiFi6CB+GcnqmxrfM5zsagTdywyMXn9CfD0eoyk/wviDTXTKMcw6OQqbh9L6HYASil59C9uK8wRIxv1A3OWVC1BF8NmGh5LfnTSJ9jW/6sF+fXbflwJ4A4yqZ52pbF3O/3/TLh6Kc273sPp5ETQlpwQoSlL8rfULDMJDrXc=
+	t=1751108397; cv=none; b=dIrOs9ZB0hm8Gp95zujZrWiFlOzuVvFcv+MIdC1iq07QPWdvUIhsTOGAliyqH010nk0Iq/N2AFQajlqwKElsbI+BV0RRkTfmYz197IyohYn4Cw8R0BT+w8NbBbVKeqIi5NjM76qgcyi5rlYO7PKli2Rj0FV50TIaOUIbW8FPjx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751108222; c=relaxed/simple;
-	bh=WW5Xm1iyi3UCGUGi1nrA70AfDCSuOC/overmp2OZ2oI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kHXtBI3WOm4sN+FqHgTW5WPpwwYzA3TjBn6GLbX2LdhJXer4BOttOD3QMXcRZcwLeBCYfGl1NwksrBxsRZJkri4xTHPxt1aAJeERpu+B+60j05nZO59b9F/mI64hHyqbjGDcSm6k+XTP5rOmf6VCseRzO17rOP51So8+pAmdhcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z2iGa//f; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751108397; c=relaxed/simple;
+	bh=PyS8+QY/Xp3+/7gWrQEE7t6DJx4VoFwvrUEY7A9l/GI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJhVWQxXHYo99cmXF8t0M7OKgtXp0sg3kdSRXvFk5vTdLntzn3qlH/rPCwAs8OJrDol/bucY0s1xQk9+9J1pumePUtA3w/10Yi9DAPTC87GNUKhRXVGiUXeArKiS2jYddlkUuC+B6aURslj7i6sxDkwsTdE0cwHDeeCkmoOrUFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZaWk2fyB; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z2iGa//f"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-453643020bdso26032505e9.1;
-        Sat, 28 Jun 2025 03:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751108219; x=1751713019; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WW5Xm1iyi3UCGUGi1nrA70AfDCSuOC/overmp2OZ2oI=;
-        b=Z2iGa//fH+2CbRvGev+dS+kaUIgvfPIQWcsOjX05PKYW09qu61Y/gqh101yPKuo9os
-         tUMnPd7FjphSdSHAl5GrRYLmwUmdqkq+dTEsEqymEbU5/doUnxnuCwkVsTvV3CTOTpF/
-         XJUHNRVpHMRrP60IY6fATAB9yre7kfvguW+xlgDdKG9tJ8nvOoA2XvKvsYGxFv1hSKcE
-         Cy9MjB3nxZjt29ANhFqP6WzfWZVkiiTRUK4teblj0OFOIk0Kv8EiQUN4+EwaHZgm871z
-         nNicEYBDX7j2cmrmGh7AeXZW5J9fARAfq1MwzGH64AkK4azG0jIyXSgy1xf0S8piGzU6
-         ktnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751108219; x=1751713019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WW5Xm1iyi3UCGUGi1nrA70AfDCSuOC/overmp2OZ2oI=;
-        b=AROWtt+HOCyJcd6Fb8HmblC1Ag3mb36vsAcz5e0N9IsRMgtujVhs2adgpriTM3IlDZ
-         pmvtVbRPhtRmrF+K4L0sUCqG4N0vjUg60aC4XAU1c9RtHbdHmbw+hBVfuHf8UtgAzUQo
-         vw7imtIknRXUVBA86JKsb+GhodRc7OFuhbOkHiVLRTLhpuaAM1UjWa/47jK58TCtPFtJ
-         igZGKEXVupILWIR+9uKgp+HB1V2B53arXMGv/yAzUrlchrjxYiKZcN8EsQoN+LQp7pnF
-         Nj/JUNgTfxAhXdA7PQgNIYVikL9KuNKQb570fpFkGNI6wz6D74Ir3POWE8fHwoEvIcew
-         FmEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU56NsvHXMwm1ds3IrpiClW9WbI5wIlfmf/vCo12zYRuwEQtk4BIgfNo2Sjxm1fQpVhoc0mfNQKz13p@lists.linux.dev, AJvYcCWFxPFg6txhsXW75MTus5xPBSvMto/cXggE5AV+Jl8OsZf49MYXohxhj5fPkSGsx26j31t6@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy+4B502aw/wmdq8WDi/PWfrhmr9qebSyg1A1Th9N4R0gTC1BBN
-	e2TjPwb4dzEwisqJZGWmaGuHaJ627/f7GCz7ryFmvyXDbYGpFs204LU8bTVWuaxNc4EvMkAY2kL
-	98fbsVQLbE0vtMIA7/UAMWxf9ttJVSrQ=
-X-Gm-Gg: ASbGnctUAHJ4WOMEpY3zgKBavVFJ1Ze4tdJYfgnNPEyRqNt4lbX9VJAJMO3hXgY+E33
-	ucIvgHAOyke6pUIBuvm/Cx0uRWiGJPOAJVTKjz6lVBF7SMh9Ya6yAVQUPMWNtZIlDq0t4+H4opI
-	VPRHBZtYZ4xldbRYTMkQAcl2OjhlI3fgOrLcDqGTWC0BVQNCox2qfOXVU8
-X-Google-Smtp-Source: AGHT+IGAGkRhQdbRpH6HhS1J+gxMpfj97HGV7cZaVPURx7gE9Aj/9LEPZdgznOP2vFFz/ZEWLwEewnTNwxfxlbsYcE0=
-X-Received: by 2002:adf:a1cb:0:b0:3a5:3b14:1ba3 with SMTP id
- ffacd0b85a97d-3a90b8c99bdmr4338216f8f.49.1751108219175; Sat, 28 Jun 2025
- 03:56:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZaWk2fyB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751108395; x=1782644395;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PyS8+QY/Xp3+/7gWrQEE7t6DJx4VoFwvrUEY7A9l/GI=;
+  b=ZaWk2fyBkeOAE1nNiiSUVUUqSiHgTg86oK+fsRhxKnHwPDlQwASk9Rms
+   JnXfTpJK6n1Oz5VD4csBoXX7crawzKlJjBedv4W4hWu5cmEtNCp2UzlTt
+   BlsWNw/gXyRnAj8CtPbYE78rT0yNpKDb1c5hfRxgpvaNlqZl7e7v89Qj/
+   58QvL7eg7tZ+c7Zlvw7cEdcvJ4RKn4/veBzWvbIm3aoVw+4peW4n1OD7h
+   oaZNFu8xxAwSitc2ppbp7VqVwV8w1EJg9p9rN55FMpSztNeLW9YHMcnZk
+   0PQ0Cna9z8B/ANIhuQ5W4Bykn4BP/AGZIsPYtfsDd7nt31ivik9zbDHzu
+   A==;
+X-CSE-ConnectionGUID: KxtWxVY/RmG4y5NgFck9pw==
+X-CSE-MsgGUID: uFD+1wQmRFCIqtEpNSp3ug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="57084629"
+X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
+   d="scan'208";a="57084629"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 03:59:54 -0700
+X-CSE-ConnectionGUID: Xskm3iphRuGr/JSLtxvKCg==
+X-CSE-MsgGUID: FzYXCsYPR720uxl4LGMD/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
+   d="scan'208";a="152750678"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 28 Jun 2025 03:59:50 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVTHf-000Wzi-1z;
+	Sat, 28 Jun 2025 10:59:47 +0000
+Date: Sat, 28 Jun 2025 18:59:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiffany Yang <ynaffit@google.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	keescook@google.com, kernel-team@android.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 4/5] binder: Convert binder_alloc selftests to KUnit
+Message-ID: <202506281837.hReNHJjO-lkp@intel.com>
+References: <20250627203748.881022-5-ynaffit@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250626153147.145312-1-snovitoll@gmail.com>
-In-Reply-To: <20250626153147.145312-1-snovitoll@gmail.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Sat, 28 Jun 2025 12:56:46 +0200
-X-Gm-Features: Ac12FXzas27xdNkixqmlGojlaGpK_Gh1QoVs4xiB8K_jsjOjMmn0UG8i3tUlU1Q
-Message-ID: <CA+fCnZfAtKWx=+to=XQBREhou=Snb0Yms4D8GNGaxE+BQUYm4A@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] kasan: unify kasan_arch_is_ready with kasan_enabled
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: ryabinin.a.a@gmail.com, glider@google.com, dvyukov@google.com, 
-	vincenzo.frascino@arm.com, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name, 
-	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	christophe.leroy@csgroup.eu, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com, 
-	agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com, 
-	richard@nod.at, anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, 
-	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org, 
-	hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com, 
-	akpm@linux-foundation.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, arnd@arndb.de, rppt@kernel.org, 
-	geert@linux-m68k.org, mcgrof@kernel.org, guoweikang.kernel@gmail.com, 
-	tiwei.btw@antgroup.com, kevin.brodsky@arm.com, benjamin.berg@intel.com, 
-	kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-um@lists.infradead.org, linux-mm@kvack.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627203748.881022-5-ynaffit@google.com>
 
-On Thu, Jun 26, 2025 at 5:32=E2=80=AFPM Sabyrzhan Tasbolatov
-<snovitoll@gmail.com> wrote:
->
-> This patch series unifies the kasan_arch_is_ready() and kasan_enabled()
-> interfaces by extending the existing kasan_enabled() infrastructure to
-> work consistently across all KASAN modes (Generic, SW_TAGS, HW_TAGS).
->
-> Currently, kasan_enabled() only works for HW_TAGS mode using a static key=
-,
-> while other modes either return IS_ENABLED(CONFIG_KASAN) (compile-time
-> constant) or rely on architecture-specific kasan_arch_is_ready()
-> implementations with custom static keys and global variables.
->
-> This leads to:
-> - Code duplication across architectures
-> - Inconsistent runtime behavior between KASAN modes
-> - Architecture-specific readiness tracking
->
-> After this series:
-> - All KASAN modes use the same kasan_flag_enabled static key
-> - Consistent runtime enable/disable behavior across modes
-> - Simplified architecture code with unified kasan_init_generic() calls
-> - Elimination of arch specific kasan_arch_is_ready() implementations
-> - Unified vmalloc integration using kasan_enabled() checks
->
-> This addresses the bugzilla issue [1] about making
-> kasan_flag_enabled and kasan_enabled() work for Generic mode,
-> and extends it to provide true unification across all modes.
->
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217049
+Hi Tiffany,
 
-Hi Sabyrzhan,
+kernel test robot noticed the following build warnings:
 
-Thank you for working on this!
+[auto build test WARNING on staging/staging-testing]
+[also build test WARNING on staging/staging-next staging/staging-linus shuah-kselftest/kunit shuah-kselftest/kunit-fixes linus/master v6.16-rc3 next-20250627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-One aspect that is missing from the patches is moving the
-kasan_arch_is_ready() calls into the include/linux/kasan.h (this is
-not explicitly mentioned in the issue, but this is what the "adding
-__wrappers" part is about).
+url:    https://github.com/intel-lab-lkp/linux/commits/Tiffany-Yang/binder-Fix-selftest-page-indexing/20250628-044044
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250627203748.881022-5-ynaffit%40google.com
+patch subject: [PATCH 4/5] binder: Convert binder_alloc selftests to KUnit
+config: x86_64-buildonly-randconfig-002-20250628 (https://download.01.org/0day-ci/archive/20250628/202506281837.hReNHJjO-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506281837.hReNHJjO-lkp@intel.com/reproduce)
 
-Another thing that needs careful consideration is whether it's
-possible to combine kasan_arch_is_ready() and kasan_enabled() into the
-same check logically at all. There's one issue mentioned in [1]:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506281837.hReNHJjO-lkp@intel.com/
 
-> In kasan_cache_create() we unconditionally allocate a metadata buffer,
-> but the kasan_init_slab_obj() call to initialise it is guarded by
-> kasan_enabled(). But later parts of the code only check the presence of
-> the buffer before using it, so bad things happen if kasan_enabled()
-> later turns on (I was getting some error about invalid lock state).
+All warnings (new ones prefixed by >>):
 
-And there might be other callbacks that should be executed even before
-kasan_init_...() completes. But then for the HW_TAGS mode, if
-kasan_enabled() is off, then we don't want to execute any callbacks.
+>> Warning: drivers/android/tests/binder_alloc_kunit.c:326 function parameter 'test' not described in 'binder_alloc_exhaustive_test'
 
-So maybe we do actually need a separate static key for
-kasan_arch_is_ready(). But even if so, it still makes sense to move
-kasan_arch_is_ready() into the __wrappers for the affected callbacks.
-
-Thanks!
-
-[1] https://lore.kernel.org/linux-mm/CA+fCnZf7JqTH46C7oG2Wk9NnLU7hgiVDEK0EA=
-8RAtyr-KgkHdg@mail.gmail.com/
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
