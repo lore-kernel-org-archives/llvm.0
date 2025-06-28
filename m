@@ -1,114 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C438B1854
-	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 06:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC1C3FC2;
+	Sat, 28 Jun 2025 07:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751092334; cv=none; b=G5WzocxvzzDzixcnEZ5CVUyVJ0tcq9gDpIW6hiQMloA7gfBjv2i5qy0tXZYMmv/yyI+O6LnXdkisVW7A0GISoTXzAjU0Vu69UL1GOOI5quhh7DQoY2ZuvRGIEQzVQ+avAvheEcpRZHL0fSnruNBxHeGFsQoB1b00IHK/9vd1DMU=
+	t=1751095959; cv=none; b=EOIXsXzk7/dKSG365DC4hCdaE0CXe56N6lYEsgIybBCv7BP4t9XMel153a54Rar5cmMsBYBqQSn9BNSARATp/AbkmbpQi75YrQF8WT56lMLHYFShBZgkGTW/JRHC5KajvfvLgzEy6yUSlzeaGbGkzF8vfwDUrpQWlQH+mWvK32Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751092334; c=relaxed/simple;
-	bh=a9d3zaHqiicsMd8CgJ6zm+6J15SDdd8JBDWRYMUOIzw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rFegayeyh5hmqsh7laJVXJse9cic3uleB2ZPa/3zi9zK3zJER9hPs4ekFQmgOgFGXKnFImhmV6Tt21XrjCsWYPdmfCGZxa2eqdTfr3SpfTN9AG2jXz9OHyCXzqlgIG4EpGj0RacrcGQPCf9uAlkdtnfqnnO9z8bg5jLph1x/jo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BNmvWKOI; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1751095959; c=relaxed/simple;
+	bh=VxkARWkB0aq7yYC24dvQDmT3R3hm+Ujx+8DCWsOSsV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=srJ8kLMwDgTDNyV19ldx2x5Wyp5hgULYEnmY/C8/cB1yszaCpUJkNtz420TK/C/hpJ37R5c2HO/JMBfQAf9xH5sdUHUT/un8Pz0XWHxxF/d03ilEb3atknkReHc6u1Vw0xoOvzoECYlPe3W1Z4osxpVrEWDA6gvwIz6wfIh9DQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CkwQFMWm; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BNmvWKOI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751092330;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=q36lPmkBchJk4jtUfniqq5xgYJa/lZxraWLTRp0BXaM=;
-	b=BNmvWKOINF3j/2FbpkiLlP0sHFAFHb9PkPBlm5vCw6HF8fN56I6lxHIi1tHmSHtsh7p4bQ
-	cL2CowWelr/ALN3ZtmnO5giSw+aOebkgJ2d0P4RiZMwm2bAFKiS3irYpIJ4DuEUl9FSYx7
-	/Ucm2XQW6H+BnApB21cGTR63PHmngIg=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-663-uWKLX2haPGGNu-7AmYk3kQ-1; Sat,
- 28 Jun 2025 02:32:08 -0400
-X-MC-Unique: uWKLX2haPGGNu-7AmYk3kQ-1
-X-Mimecast-MFC-AGG-ID: uWKLX2haPGGNu-7AmYk3kQ_1751092327
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8038C19373D8
-	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 06:32:07 +0000 (UTC)
-Received: from [172.20.188.120] (unknown [10.30.45.122])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1577419560A7;
-	Sat, 28 Jun 2025 06:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 100): Test report for master
- (6.16.0-rc3, upstream-mainline, 35e261cd)
-Date: Sat, 28 Jun 2025 06:32:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CkwQFMWm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751095957; x=1782631957;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VxkARWkB0aq7yYC24dvQDmT3R3hm+Ujx+8DCWsOSsV8=;
+  b=CkwQFMWmVuVJnKTTZYmlQM7cOUb3dLqge8IQ9bNizUpPAzR9erdTp2lr
+   dNKpjKEGsw2/ZCrhwQoB7Ta1Jt9vR4FZfopi0g/zZpGjApdyWqAgwA2On
+   NzflDogLokntlc86+68Wc+08dx9LaymYkxdJCusX1qrpPSYyBnqvXnvz0
+   n/sAJ8cr63dyiHPjKWrpyZ98NRRu23hRiJL3v2WiLWO+UGgBbVfhF5aco
+   ez116fVhfsJenBACnSpKpseU5iEUJ9uiQPNJFH0UrXUwZRDxCR/Z4Hdr/
+   1KsX0k9VStWLC5FqleGBY8l0G0zL+QrJ/dG1vGlT9c7fVFeXEx9PIpJia
+   Q==;
+X-CSE-ConnectionGUID: MlxwlDVnS36/+cM488JNDQ==
+X-CSE-MsgGUID: UPBIqitORbqHGEe8goFHRA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="63655436"
+X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
+   d="scan'208";a="63655436"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 00:32:37 -0700
+X-CSE-ConnectionGUID: yUkFfSVERgai/gy+CcbSVg==
+X-CSE-MsgGUID: U+lGoKUhS/+E0fUy6599DQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
+   d="scan'208";a="157032721"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 28 Jun 2025 00:32:34 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVQ36-000Wu2-0p;
+	Sat, 28 Jun 2025 07:32:32 +0000
+Date: Sat, 28 Jun 2025 15:32:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: zhongjinji@honor.com, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	akpm@linux-foundation.org, yuzhao@google.com,
+	linux-kernel@vger.kernel.org, yipengxiang@honor.com,
+	liulu.liu@honor.com, feng.han@honor.com
+Subject: Re: [PATCH] mm: vmscan: Page scanning depends on swappiness and
+ refault
+Message-ID: <202506281519.wHSXE6l0-lkp@intel.com>
+References: <20250627162606.30609-1-zhongjinji@honor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <38744.125062802320800380@us-mta-663.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Vb5JMZDdhFBW7xLGG2iWYzUiKjtNQi3huyAlToZjaJs_1751092327
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627162606.30609-1-zhongjinji@honor.com>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.16-rc3]
+[cannot apply to akpm-mm/mm-everything next-20250627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'acpi-6.16-rc4' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/rafael/linux-pm
+url:    https://github.com/intel-lab-lkp/linux/commits/zhongjinji-honor-com/mm-vmscan-Page-scanning-depends-on-swappiness-and-refault/20250628-002820
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250627162606.30609-1-zhongjinji%40honor.com
+patch subject: [PATCH] mm: vmscan: Page scanning depends on swappiness and refault
+config: x86_64-buildonly-randconfig-005-20250628 (https://download.01.org/0day-ci/archive/20250628/202506281519.wHSXE6l0-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506281519.wHSXE6l0-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1894668062
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506281519.wHSXE6l0-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+All errors (new ones prefixed by >>):
+
+>> mm/vmscan.c:2783:24: error: use of undeclared identifier 'swappiness'
+    2783 |         if ((!sc->priority && swappiness) || sc->file_is_tiny)
+         |                               ^
+>> mm/vmscan.c:4100:33: error: expected identifier
+    4100 |         if (seq <= READ_ONCE(mm_state->.seq))
+         |                                        ^
+>> mm/vmscan.c:4100:33: error: expected identifier
+>> mm/vmscan.c:4100:33: error: expected identifier
+>> mm/vmscan.c:4100:33: error: expected identifier
+>> mm/vmscan.c:4100:33: error: expected identifier
+>> mm/vmscan.c:4100:33: error: expected identifier
+>> mm/vmscan.c:4100:33: error: expected identifier
+>> mm/vmscan.c:4154:3: error: call to undeclared function 'for_each_age_able_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4154 |                 for_each_age_able_type(type, can_age) {
+         |                 ^
+>> mm/vmscan.c:4154:40: error: expected ';' after expression
+    4154 |                 for_each_age_able_type(type, can_age) {
+         |                                                      ^
+         |                                                      ;
+   10 errors generated.
 
 
-Tests that were not ran because of internal issues:
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
+vim +/swappiness +2783 mm/vmscan.c
 
+  2770	
+  2771	static int get_swappiness(struct lruvec *lruvec, struct scan_control *sc)
+  2772	{
+  2773		struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+  2774		struct pglist_data *pgdat = lruvec_pgdat(lruvec);
+  2775	
+  2776		if (!sc->may_swap)
+  2777			return 0;
+  2778	
+  2779		if (!can_demote(pgdat->node_id, sc, memcg) &&
+  2780		    mem_cgroup_get_nr_swap_pages(memcg) < MIN_LRU_BATCH)
+  2781			return 0;
+  2782	
+> 2783		if ((!sc->priority && swappiness) || sc->file_is_tiny)
+  2784			return BALACNCE_SWAPPINESS;
+  2785	
+  2786		return sc_swappiness(sc, memcg);
+  2787	}
+  2788	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
