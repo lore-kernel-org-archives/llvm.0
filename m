@@ -1,63 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA22238C10;
-	Sat, 28 Jun 2025 14:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D74223C50E;
+	Sat, 28 Jun 2025 14:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751120969; cv=none; b=kvhew1HNGFiMnQeyc+HulZcqE/kO1A9JaTWZ00y9rW4PjHc8wBHhm1zWwiqyVK0qnBuDJLGeBfDbpxnkroKLgcx4wlUInajaAdhuGyB/j3l5pMEhyjlAZVvTQn1epGIAQ04ai/v57uqdQwSafPtiWAkMAqnNRnKbxCFlswvhBcs=
+	t=1751121634; cv=none; b=sO2P+Z17B4CEsloxCCLbpdn5p5yTw5dztgGLrQ3udZjSyXmnFeS8ftdSQHNzPPrj/8Rjsau1ICHPd7LwVIBHPAf0q/y5QHd+Q6mg0a0m9X2u43CQh3yN4MVz7TBfRXhrdv1jzeOVclqQ6KkSk7YXTb0ny6LQfvZ6Tcj4s/06NEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751120969; c=relaxed/simple;
-	bh=Fu4HeiN9Z/6hpzjj5g1RcA20CJsi7vFlMJq+ppBrBic=;
+	s=arc-20240116; t=1751121634; c=relaxed/simple;
+	bh=/Lu5LTfcFXkeWsxjRBcxgn1uQUXHqbZ5PSxmsunseSs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CZtTdtkgPBYdch2jNO8tntvTNl7BXgDMZfEauEHDSLAlJzd8zbMexg+sXMalH8bdUnpZtG1Fi7PDNGp9g22eMQx82I01bg0onYN2QxsLd5YJkF7h27A1LeS8xtjStpqDUjy+Jj7wrPgtA9lnYTEsylk7x6OLKG5SlH+uyp+NsSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L9tuIMTD; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=HYBOSnLJIuRY+h3FE2L8LYVv+HLbt36KOUCC6yhc9O4H+BRoqe/vKicvtcAL30gO4LcmOZC+Rwj776ozeaIbi+bruCVCU9q+gBmNOOcnPN0r/nxqV7otGAi5iV34uwo2uzy0fYQGCQl6vk4LBHdXeu3DT3oXSquSVe5cwr3Ag+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nlxdowWT; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L9tuIMTD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlxdowWT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751120969; x=1782656969;
+  t=1751121633; x=1782657633;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Fu4HeiN9Z/6hpzjj5g1RcA20CJsi7vFlMJq+ppBrBic=;
-  b=L9tuIMTDf/0DXeDjti5T2bdcQS7l+U8n6efoIGD/QZLzi07Rl0Rt2GmC
-   u3MlEiO9Mg2VP85HQAtqOavSfubDlvd292cypWa8ZyBKP/y2zkgcpY8UJ
-   RoSKmgjCp361clzF5bRpL//H26uKsMu3gR5btjuJegWcDDxBl4BqEjOYe
-   cLMjpoKL2kEUD954zVUGmA3XhQA5qUNdkFykVkJb3QpC/kM9u1pSxWV5F
-   vOaW9ih5XujVXhg0lHngLIS1IoS/omdNFscEsr9b7R3bjGb3QvGALxf7q
-   yb3HkfRBNlaIFjURmXmVdX8Q5HMfATC/aSClNZG1R63KXZMrAn/PrU8QA
-   Q==;
-X-CSE-ConnectionGUID: Uy3b4GaAQe6uls0uNnzing==
-X-CSE-MsgGUID: sVvgecMFT9acVkSftGSaIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="64466443"
+  bh=/Lu5LTfcFXkeWsxjRBcxgn1uQUXHqbZ5PSxmsunseSs=;
+  b=nlxdowWTsbMG/M6aPTc71gGJ+8WJMH66TRF6StRaq/gMYQ4Bzq5+ZFlc
+   uMmumP9Ikj4QNlqiOB9r99/p+7w+iV4NCC2WgQR5n2/IgO+lWQ2iny9O6
+   tWCArLziTNCpL1QSd9UNvYmpgl+gCVoUZ4yeFaf2TGsjqNw7hp5DynnHg
+   FpG/48/4ThI7ro8LdkCwmGHo3L3pHSQrebkNi7kCAG0gKJfpR/kT+7nvr
+   IVEaFMWa81XXovwJfJBcD5mhgVn2kOaKUtg8TsERdL/C2894mFvNV/E7W
+   a48JLZL5f2Nyp3lGwQgr4udranEl440WXLdnS9xEKyegVwaWNxHLO52tj
+   g==;
+X-CSE-ConnectionGUID: N8dYUnLgQbiSlZuJWAQzHw==
+X-CSE-MsgGUID: 23MaVvsGTz+VvYtlTgr1Mw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="57189743"
 X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
-   d="scan'208";a="64466443"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 07:29:28 -0700
-X-CSE-ConnectionGUID: SscpZRYsR1enevzvXNn7Aw==
-X-CSE-MsgGUID: gWofCdI1RxCNt16FhVRTJQ==
+   d="scan'208";a="57189743"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 07:40:32 -0700
+X-CSE-ConnectionGUID: j1rXOS1xRES1LHHDv8h1yw==
+X-CSE-MsgGUID: bzHqMp1BQXeH9Myq/cxsjw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
-   d="scan'208";a="152433815"
+   d="scan'208";a="176727413"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 28 Jun 2025 07:29:25 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 28 Jun 2025 07:40:27 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uVWYV-000X6v-0g;
-	Sat, 28 Jun 2025 14:29:23 +0000
-Date: Sat, 28 Jun 2025 22:28:45 +0800
+	id 1uVWjB-000X7V-05;
+	Sat, 28 Jun 2025 14:40:25 +0000
+Date: Sat, 28 Jun 2025 22:39:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Conor Dooley <conor@kernel.org>, linux-i2c@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: microchip-core: re-fix fake detections w/
- i2cdetect
-Message-ID: <202506282209.FXWbPIPz-lkp@intel.com>
-References: <20250626-unusable-excess-da94ebc218e8@spud>
+To: Mario Limonciello <superm1@kernel.org>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Lukas Wunner <lukas@wunner.de>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Lu Baolu <baolu.lu@linux.intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	"(open list:INTEL IOMMU (VT-d))" <iommu@lists.linux.dev>,
+	linux-pci@vger.kernel.org, kvm@vger.kernel.org,
+	linux-sound@vger.kernel.org, Daniel Dadap <ddadap@nvidia.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v6 9/9] PCI: Add a new 'boot_display' attribute
+Message-ID: <202506282240.aqA0j5M3-lkp@intel.com>
+References: <20250627043108.3141206-10-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,149 +80,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250626-unusable-excess-da94ebc218e8@spud>
+In-Reply-To: <20250627043108.3141206-10-superm1@kernel.org>
 
-Hi Conor,
+Hi Mario,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.16-rc3 next-20250627]
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus tiwai-sound/for-next tiwai-sound/for-linus tip/x86/core linus/master v6.16-rc3 next-20250627]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/i2c-microchip-core-re-fix-fake-detections-w-i2cdetect/20250627-001626
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20250626-unusable-excess-da94ebc218e8%40spud
-patch subject: [PATCH v2] i2c: microchip-core: re-fix fake detections w/ i2cdetect
-config: riscv-randconfig-002-20250628 (https://download.01.org/0day-ci/archive/20250628/202506282209.FXWbPIPz-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506282209.FXWbPIPz-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PCI-Add-helper-for-checking-if-a-PCI-device-is-a-display-controller/20250627-123349
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250627043108.3141206-10-superm1%40kernel.org
+patch subject: [PATCH v6 9/9] PCI: Add a new 'boot_display' attribute
+config: powerpc-bluestone_defconfig (https://download.01.org/0day-ci/archive/20250628/202506282240.aqA0j5M3-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e04c938cc08a90ae60440ce22d072ebc69d67ee8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506282240.aqA0j5M3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506282209.FXWbPIPz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506282240.aqA0j5M3-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-microchip-corei2c.c:510:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           if (ret < 0)
-               ^~~
-   drivers/i2c/busses/i2c-microchip-corei2c.c:438:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
+>> drivers/pci/pci-sysfs.c:688:8: warning: unused variable 'dev_attr_boot_display' [-Wunused-variable]
+     688 | static DEVICE_ATTR_RO(boot_display);
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:199:26: note: expanded from macro 'DEVICE_ATTR_RO'
+     199 |         struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+         |                                 ^~~~~~~~~~~~~~~~
+   <scratch space>:54:1: note: expanded from here
+      54 | dev_attr_boot_display
+         | ^~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/ret +510 drivers/i2c/busses/i2c-microchip-corei2c.c
+vim +/dev_attr_boot_display +688 drivers/pci/pci-sysfs.c
 
-   428	
-   429	static int mchp_corei2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned short flags,
-   430					   char read_write, u8 command,
-   431					   int size, union i2c_smbus_data *data)
-   432	{
-   433		struct i2c_msg msgs[2];
-   434		struct mchp_corei2c_dev *idev = i2c_get_adapdata(adap);
-   435		u8 tx_buf[I2C_SMBUS_BLOCK_MAX + 2];
-   436		u8 rx_buf[I2C_SMBUS_BLOCK_MAX + 1];
-   437		int num_msgs = 1;
-   438		int ret;
-   439	
-   440		msgs[CORE_I2C_SMBUS_MSG_WR].addr = addr;
-   441		msgs[CORE_I2C_SMBUS_MSG_WR].flags = 0;
-   442	
-   443		if (read_write == I2C_SMBUS_READ && size <= I2C_SMBUS_BYTE)
-   444			msgs[CORE_I2C_SMBUS_MSG_WR].flags = I2C_M_RD;
-   445	
-   446		if (read_write == I2C_SMBUS_WRITE && size <= I2C_SMBUS_WORD_DATA)
-   447			msgs[CORE_I2C_SMBUS_MSG_WR].len = size;
-   448	
-   449		if (read_write == I2C_SMBUS_WRITE && size > I2C_SMBUS_BYTE) {
-   450			msgs[CORE_I2C_SMBUS_MSG_WR].buf = tx_buf;
-   451			msgs[CORE_I2C_SMBUS_MSG_WR].buf[0] = command;
-   452		}
-   453	
-   454		if (read_write == I2C_SMBUS_READ && size >= I2C_SMBUS_BYTE_DATA) {
-   455			msgs[CORE_I2C_SMBUS_MSG_WR].buf = tx_buf;
-   456			msgs[CORE_I2C_SMBUS_MSG_WR].buf[0] = command;
-   457			msgs[CORE_I2C_SMBUS_MSG_RD].addr = addr;
-   458			msgs[CORE_I2C_SMBUS_MSG_RD].flags = I2C_M_RD;
-   459			num_msgs = 2;
-   460		}
-   461	
-   462		if (read_write == I2C_SMBUS_READ && size > I2C_SMBUS_QUICK)
-   463			msgs[CORE_I2C_SMBUS_MSG_WR].len = 1;
-   464	
-   465		switch (size) {
-   466		case I2C_SMBUS_QUICK:
-   467			msgs[CORE_I2C_SMBUS_MSG_WR].buf = NULL;
-   468			return 0;
-   469		case I2C_SMBUS_BYTE:
-   470			if (read_write == I2C_SMBUS_WRITE)
-   471				msgs[CORE_I2C_SMBUS_MSG_WR].buf = &command;
-   472			else
-   473				msgs[CORE_I2C_SMBUS_MSG_WR].buf = &data->byte;
-   474			break;
-   475		case I2C_SMBUS_BYTE_DATA:
-   476			if (read_write == I2C_SMBUS_WRITE) {
-   477				msgs[CORE_I2C_SMBUS_MSG_WR].buf[1] = data->byte;
-   478			} else {
-   479				msgs[CORE_I2C_SMBUS_MSG_RD].len = size - 1;
-   480				msgs[CORE_I2C_SMBUS_MSG_RD].buf = &data->byte;
-   481			}
-   482			break;
-   483		case I2C_SMBUS_WORD_DATA:
-   484			if (read_write == I2C_SMBUS_WRITE) {
-   485				msgs[CORE_I2C_SMBUS_MSG_WR].buf[1] = data->word & 0xFF;
-   486				msgs[CORE_I2C_SMBUS_MSG_WR].buf[2] = (data->word >> 8) & 0xFF;
-   487			} else {
-   488				msgs[CORE_I2C_SMBUS_MSG_RD].len = size - 1;
-   489				msgs[CORE_I2C_SMBUS_MSG_RD].buf = rx_buf;
-   490			}
-   491			break;
-   492		case I2C_SMBUS_BLOCK_DATA:
-   493			if (read_write == I2C_SMBUS_WRITE) {
-   494				int data_len;
-   495	
-   496				data_len = data->block[0];
-   497				msgs[CORE_I2C_SMBUS_MSG_WR].len = data_len + 2;
-   498				for (int i = 0; i <= data_len; i++)
-   499					msgs[CORE_I2C_SMBUS_MSG_WR].buf[i + 1] = data->block[i];
-   500			} else {
-   501				msgs[CORE_I2C_SMBUS_MSG_RD].len = I2C_SMBUS_BLOCK_MAX + 1;
-   502				msgs[CORE_I2C_SMBUS_MSG_RD].buf = rx_buf;
-   503			}
-   504			break;
-   505		default:
-   506			return -EOPNOTSUPP;
-   507		}
-   508	
-   509		mchp_corei2c_xfer(&idev->adapter, msgs, num_msgs);
- > 510		if (ret < 0)
-   511			return ret;
-   512	
-   513		if (read_write == I2C_SMBUS_WRITE || size <= I2C_SMBUS_BYTE_DATA)
-   514			return 0;
-   515	
-   516		switch (size) {
-   517		case I2C_SMBUS_WORD_DATA:
-   518			data->word = (rx_buf[0] | (rx_buf[1] << 8));
-   519			break;
-   520		case I2C_SMBUS_BLOCK_DATA:
-   521			if (rx_buf[0] > I2C_SMBUS_BLOCK_MAX)
-   522				rx_buf[0] = I2C_SMBUS_BLOCK_MAX;
-   523			/* As per protocol first member of block is size of the block. */
-   524			for (int i = 0; i <= rx_buf[0]; i++)
-   525				data->block[i] = rx_buf[i];
-   526			break;
-   527		}
-   528	
-   529		return 0;
-   530	}
-   531	
+   682	
+   683	static ssize_t boot_display_show(struct device *dev, struct device_attribute *attr,
+   684					 char *buf)
+   685	{
+   686		return sysfs_emit(buf, "1\n");
+   687	}
+ > 688	static DEVICE_ATTR_RO(boot_display);
+   689	
 
 -- 
 0-DAY CI Kernel Test Service
