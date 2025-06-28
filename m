@@ -1,185 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F8F1F874C;
-	Sat, 28 Jun 2025 20:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D9112EBE7;
+	Sat, 28 Jun 2025 22:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751140822; cv=none; b=OrbQHeog97AI/NzI6/qxZBihAoJvWJ4CPQglWKfKbg6gsD82kp0Br6zFcT2Ie/zeEOfXBuVRk1cfhVVIhmYkHqAC7B78K+90dMwjhrOLYig6nqsmUIkt0YMtos7FI/ACKu2JI1HI96zTAo/G63LpOkNlSJ7BAkfWCRlAEJ6eNCU=
+	t=1751149520; cv=none; b=cqrqW22FGAg5+CsOc/FFDiHtsG7ubcN2R2H9pLvF//TSc5PX0OpxqX4jkqsETDDUipbkJDe6MUHRTQKexQ7BVh65YRJHOsBJ0WPVY4daMUsNYPV1AjR/e5GBvf13a4L8EJdRTJQ6YpFq2RsWw9WZzVFlkJKUUBGdponQqrN4S7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751140822; c=relaxed/simple;
-	bh=Fewzt4Fd/252fQPHl/D4J7EfWkwRKK0Pnj4XMlX3kYo=;
+	s=arc-20240116; t=1751149520; c=relaxed/simple;
+	bh=p3PfMdPjk8XFyuvX5E5QXgstT35XZ9CGYKRH/kPqhT4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oz7WeLOSlJ8+lVfJrUqDJ3pAmLC5oclQK2fvooV+bODvrTa8gtP2wzOHU4LRzDC/dymX4nAZp87nVJcfJDZ0EGysoPnH5gQDPMrvwxN8eFUfiIYxk7sXj10e4lGeiNLuFEwfxr9aBFt8vY9fxGaj0iBNF8NPuZaq+AEQ0BjPQsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eLz54KrL; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=Jc/H/MNv5bsCZCc7qmHR5ZFiyKeFs6eVnyHXSNgajz17z9PLeEDweMZl1Wc8sBL3v5ZpcyugY6ZPRT1bJ5rUc6/5+SwpjrsPNA5cJPRgu3H4HrCYOFQhfhJMGGamS0Y2H3CnuXkcFy4ayhtrSpdWbvVs+9Y4yLpff5ZTVBsZhAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gVtPjuR2; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eLz54KrL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gVtPjuR2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751140820; x=1782676820;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Fewzt4Fd/252fQPHl/D4J7EfWkwRKK0Pnj4XMlX3kYo=;
-  b=eLz54KrLwdv2XpSEUFUk/7g3mU6N4alDDe8pRqvRiGC0ANspG0dBJEhS
-   hoPISr17VDl0ComovZVw79guvkItwyfQfptjBalaIlkJI52tE2BZG429W
-   te8C4yDBZhy68mbncn4cZ5AqEk486bnfNB1HrZzsPKtAyxJBu/JWNkU4P
-   cq2QduavZjZQjdBEjd8qFlmq86wWuMdDZSlnEEV3SWv7BQ+o8PjbYTtXS
-   APIxqin1Di0CUPqLfsOW2QslG9BFupAHLseH/Ta3PM0T+BhYMqyelUbSV
-   Wf0TAs3qpTNlRP05SH5YsQFqCVZ62llEuUYQ456ruvY5ee9NzMoAQo/jQ
+  t=1751149519; x=1782685519;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p3PfMdPjk8XFyuvX5E5QXgstT35XZ9CGYKRH/kPqhT4=;
+  b=gVtPjuR2o5X4UymKmbHO/uiNiwxN1e/+ioR+RapxY15oN/QBPF//3HxY
+   1byW8waS+Zgu2gRKcmgeNAil4L0w3lKGlPmvxdgPEPPs5TJqX/5pO/iAR
+   +mXrdUyEbfUBXi+9XJhgzknjh9QxEV7AhT2fKwKygOHKVP5/PhIFGhlb8
+   1fHwNdTzoQLCdKNwznNTNn0s7SKQqCx7TxRQvFR6ktpBirLbQQi+Iaj+J
+   84/IZ1Ui8Vlp2KsXAVob9HbGPFsYR/PDpPA84A0I7rK3eVRNLUdJkY3Rs
+   KJqqeBdZpSrnZCpr4akNlgDl9k7vtumgxrnzaRjWXawjgxUlxwF5deJ6G
    w==;
-X-CSE-ConnectionGUID: uUpovu93R164V/vrMyIFuQ==
-X-CSE-MsgGUID: f1ENOs/zTFahffV9twpDZg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="53542037"
+X-CSE-ConnectionGUID: VTlKgjwcTrmFM4s2VTMCRA==
+X-CSE-MsgGUID: r7njHochSAaZdB757pGd/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="70986142"
 X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
-   d="scan'208";a="53542037"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 13:00:19 -0700
-X-CSE-ConnectionGUID: TMJg88XSSCmkrljpNZFSpw==
-X-CSE-MsgGUID: P4b5l5eUSgGG9zKTEllA3A==
+   d="scan'208";a="70986142"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 15:25:15 -0700
+X-CSE-ConnectionGUID: yd4CPL8hTLWPHcGoOCHzAw==
+X-CSE-MsgGUID: H5EP9NwTTxGglE+3y/bPPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
-   d="scan'208";a="152819619"
-Received: from igk-lkp-server01.igk.intel.com (HELO e588e990b675) ([10.91.175.65])
-  by orviesa009.jf.intel.com with ESMTP; 28 Jun 2025 13:00:18 -0700
-Received: from kbuild by e588e990b675 with local (Exim 4.96)
+   d="scan'208";a="152611826"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 28 Jun 2025 15:25:13 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uVbie-0000oV-0p;
-	Sat, 28 Jun 2025 20:00:12 +0000
-Date: Sat, 28 Jun 2025 21:59:49 +0200
+	id 1uVdyx-000XRU-1Z;
+	Sat, 28 Jun 2025 22:25:11 +0000
+Date: Sun, 29 Jun 2025 06:24:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Hao Yao <hao.yao@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: kernel/fork.c:3088:2: warning: clone3() entry point is missing,
- please fix
-Message-ID: <202506282120.6vRwodm3-lkp@intel.com>
+	=?utf-8?B?0JTQsNC80ZjQsNC9INCT0LXQvtGA0LPQuNC10LLRgdC60Lg=?= <gdamjan@gmail.com>
+Subject: [gdamjan:wip/ipu7-imx471 2/4]
+ drivers/media/pci/intel/ipu7/ipu7-isys-queue.c:717:22: warning: unused
+ variable 'isp'
+Message-ID: <202506290640.PNXIsrIB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aaf724ed69264719550ec4f194d3ab17b886af9a
-commit: 505d66d1abfb90853e24ab6cbdf83b611473d6fc clone3: drop __ARCH_WANT_SYS_CLONE3 macro
-date:   12 months ago
-config: hexagon-randconfig-2002-20250626 (https://download.01.org/0day-ci/archive/20250628/202506282120.6vRwodm3-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506282120.6vRwodm3-lkp@intel.com/reproduce)
+tree:   https://github.com/gdamjan/linux wip/ipu7-imx471
+head:   5340515315a1fa34442850491121fae1a3b0f42a
+commit: 90640d505b4f1fe8958277855c11d0cfdd0c5e1f [2/4] media: pci: intel: Add IPU7 Kconfig & Makefile
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250629/202506290640.PNXIsrIB-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250629/202506290640.PNXIsrIB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506282120.6vRwodm3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506290640.PNXIsrIB-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/fork.c:34:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> kernel/fork.c:3088:2: warning: clone3() entry point is missing, please fix [-W#warnings]
-    3088 | #warning clone3() entry point is missing, please fix
-         |  ^
-   7 warnings generated.
+>> drivers/media/pci/intel/ipu7/ipu7-isys-queue.c:717:22: warning: unused variable 'isp' [-Wunused-variable]
+     717 |         struct ipu7_device *isp = adev->isp;
+         |                             ^~~
+>> drivers/media/pci/intel/ipu7/ipu7-isys-queue.c:721:6: warning: unused variable 'ret' [-Wunused-variable]
+     721 |         int ret, i, j;
+         |             ^~~
+   2 warnings generated.
 
 
-vim +3088 kernel/fork.c
+vim +/isp +717 drivers/media/pci/intel/ipu7/ipu7-isys-queue.c
 
-  3068	
-  3069	/**
-  3070	 * sys_clone3 - create a new process with specific properties
-  3071	 * @uargs: argument structure
-  3072	 * @size:  size of @uargs
-  3073	 *
-  3074	 * clone3() is the extensible successor to clone()/clone2().
-  3075	 * It takes a struct as argument that is versioned by its size.
-  3076	 *
-  3077	 * Return: On success, a positive PID for the child process.
-  3078	 *         On error, a negative errno number.
-  3079	 */
-  3080	SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
-  3081	{
-  3082		int err;
-  3083	
-  3084		struct kernel_clone_args kargs;
-  3085		pid_t set_tid[MAX_PID_NS_LEVEL];
-  3086	
-  3087	#ifdef __ARCH_BROKEN_SYS_CLONE3
-> 3088	#warning clone3() entry point is missing, please fix
-  3089		return -ENOSYS;
-  3090	#endif
-  3091	
-  3092		kargs.set_tid = set_tid;
-  3093	
-  3094		err = copy_clone_args_from_user(&kargs, uargs, size);
-  3095		if (err)
-  3096			return err;
-  3097	
-  3098		if (!clone3_args_valid(&kargs))
-  3099			return -EINVAL;
-  3100	
-  3101		return kernel_clone(&kargs);
-  3102	}
-  3103	
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  711  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  712  static int ipu_isys_reset(struct ipu7_isys_video *self_av,
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  713  			  struct ipu7_isys_stream *self_stream)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  714  {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  715  	struct ipu7_isys *isys = self_av->isys;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  716  	struct ipu7_bus_device *adev = isys->adev;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26 @717  	struct ipu7_device *isp = adev->isp;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  718  	struct ipu7_isys_video *av = NULL;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  719  	struct ipu7_isys_stream *stream = NULL;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  720  	struct device *dev = &adev->auxdev.dev;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26 @721  	int ret, i, j;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  722  	int has_streaming = 0;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  723  	const struct ipu7_isys_internal_csi2_pdata *csi2_pdata =
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  724  		&isys->pdata->ipdata->csi2;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  725  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  726  	dev_dbg(dev, "%s\n", __func__);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  727  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  728  	mutex_lock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  729  	if (isys->in_reset) {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  730  		mutex_unlock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  731  		return 0;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  732  	}
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  733  	isys->in_reset = true;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  734  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  735  	while (isys->in_stop_streaming) {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  736  		dev_dbg(dev, "isys reset: %s: wait for stop\n",
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  737  			self_av->vdev.name);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  738  		mutex_unlock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  739  		usleep_range(10000, 11000);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  740  		mutex_lock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  741  	}
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  742  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  743  	mutex_unlock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  744  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  745  	dev_dbg(dev, "reset stop streams\n");
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  746  	for (i = 0; i < csi2_pdata->nports; i++) {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  747  		for (j = 0; j < NR_OF_CSI2_SRC_PADS; j++) {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  748  			av = &isys->csi2[i].av[j];
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  749  			if (av == self_av)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  750  				continue;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  751  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  752  			stream = av->stream;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  753  			if (!stream || stream == self_stream)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  754  				continue;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  755  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  756  			if (!stream->streaming && !stream->nr_streaming)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  757  				continue;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  758  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  759  			av->reset = true;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  760  			has_streaming = true;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  761  			reset_stop_streaming(av);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  762  		}
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  763  	}
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  764  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  765  	if (!has_streaming)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  766  		goto end_of_reset;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  767  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  768  	ipu7_cleanup_fw_msg_bufs(isys);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  769  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  770  	dev_dbg(dev, "reset start streams\n");
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  771  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  772  	for (j = 0; j < csi2_pdata->nports; j++) {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  773  		for (i = 0; i < NR_OF_CSI2_SRC_PADS; i++) {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  774  			av = &isys->csi2[j].av[i];
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  775  			if (!av->reset)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  776  				continue;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  777  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  778  			av->reset = false;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  779  			reset_start_streaming(av);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  780  		}
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  781  	}
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  782  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  783  end_of_reset:
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  784  	mutex_lock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  785  	isys->in_reset = false;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  786  	mutex_unlock(&isys->reset_mutex);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  787  	dev_dbg(dev, "reset done\n");
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  788  
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  789  	return 0;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  790  }
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  791  #endif
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  792  static void stop_streaming(struct vb2_queue *q)
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  793  {
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  794  	struct ipu7_isys_queue *aq = vb2_queue_to_isys_queue(q);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  795  	struct ipu7_isys_video *av = ipu7_isys_queue_to_video(aq);
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  796  	struct ipu7_isys_stream *stream = av->stream;
+8427c76ace11f4 Дамјан Георгиевски 2025-06-26  797  
+
+:::::: The code at line 717 was first introduced by commit
+:::::: 8427c76ace11f4a0292dc052cab902f2c4c3a188 copy drivers from github.com/intel/ipu7-drivers
+
+:::::: TO: Дамјан Георгиевски <gdamjan@gmail.com>
+:::::: CC: Дамјан Георгиевски <gdamjan@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
