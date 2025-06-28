@@ -1,322 +1,289 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BFC28F93E;
-	Fri, 27 Jun 2025 23:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2B910E4
+	for <llvm@lists.linux.dev>; Sat, 28 Jun 2025 00:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751066700; cv=none; b=Tes9e20PqA/rCNOBKy9WqQb6idCxgQg597yEFU/8/L73tznF3xXgdrpA+cTpi9Uaa1E379saS1Q/3hKqASdxKu3oM8EXz0S2DWkgnfM+asFjEk8SjpFxkIFumXfATbd/OinW8HlD1spTRPAsoySJmNRztCOXNyzVLEyrtW7F2gw=
+	t=1751071467; cv=none; b=t8iUefpFmDt6ridTXSOeZVEarKkWJbY1ZfCCSSuRb1cX3cOVtOspyqVlcL1vFdmATxTWMx5X3oIgcSy4mpHq5HKZZye4V+0Zjl63/f+0F0RjmtZ5plO8Oy/ycZLND+F6c2Vvh43WpuNjJMcRzd+Xp2ZVAqizTZLjh1m46zL3zoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751066700; c=relaxed/simple;
-	bh=crZ0VF8govhT9f8bIibvZSyeak3ch1QESt9i70iUlQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t6b9GtXGZMyv7Eu/Sq07jNyi/WZqMPNtvHS6rYO39adx3T3Dw8gGpTqFdFsqD/DsZ0Z+0Xox2kOU7EcHvnaWfJ9rtfZcmXCyxLkdjTmR/oFReX57ItAHu8HlybexW4eha97ynlCHTijzMQaRB0rPQ/qHdttBqMXenwoEfFmMBwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZxCe2IWu; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751071467; c=relaxed/simple;
+	bh=3DlYou99xKBPhtCbnrBB02y+pxpHZSdecYrNGaQcjfI=;
+	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=Lnqdn6AUIgBAFdhICg04g8ihBFMG4bJr8ruXun2AxzZRoGWSDrS4galvbpEFF9bb79F8NRvfgKsntbBpEM8g5n8k9KwQASaGVuvJSqbTIOJ+IwDtf5Od7tfxPEYOOKjjdfVcUXmPIdQB+SWPuxJsJ9dzuy6YXPeIwol8hGsCrVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDsVr556; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZxCe2IWu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751066698; x=1782602698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=crZ0VF8govhT9f8bIibvZSyeak3ch1QESt9i70iUlQw=;
-  b=ZxCe2IWupcLfrrrasGArbVvtf1iPgx0vSNCWARTsv3oHbPRUgICfOCRD
-   iNth7idLvTbgFlAo4xBRG3cd8FQqiNtv9LUow0qpQG8nezOD9UoreI6FG
-   42zLrV59JL8FrhD4QJxZP/ORuU/cTgty55Z6sCXbNdPi3pbyBBAI2yImg
-   IVeeY9CNYWMPb/nFSoOjtGf9yhqznQLwAyPkgR69PGZZJOwBSKos9UPdt
-   EEjToDusNFUvjLrgQYl68ziAq3VKCZBNBi5KL3d1Nr278u5ggEmPu9MG8
-   BAnCPjsJQKUgGyu6SktWpfS+OAl4pcNUNKX1impn+B0eddn+E/REejl/1
-   g==;
-X-CSE-ConnectionGUID: zJps+hOCTQiUd7Hi79UaOA==
-X-CSE-MsgGUID: 8f2EQ4LHT1SO6+Kc+DKsLA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="52616425"
-X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
-   d="scan'208";a="52616425"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 16:24:57 -0700
-X-CSE-ConnectionGUID: n52RMRYLRxKIduHhINNF7g==
-X-CSE-MsgGUID: L+TNXTkSTXOmpzwCLSEx3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,271,1744095600"; 
-   d="scan'208";a="158652710"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 27 Jun 2025 16:24:55 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uVIRB-000Wbi-15;
-	Fri, 27 Jun 2025 23:24:53 +0000
-Date: Sat, 28 Jun 2025 07:24:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Thumshirn <jth@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 7/9] btrfs: lower auto-reclaim message log level
-Message-ID: <202506280733.ut2JoUtS-lkp@intel.com>
-References: <20250627091914.100715-8-jth@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDsVr556"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b26f7d2c1f1so803710a12.0
+        for <llvm@lists.linux.dev>; Fri, 27 Jun 2025 17:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751071465; x=1751676265; darn=lists.linux.dev;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GpxNzKdU8lMnnqevDa29WkePK3DkzP2rZRE+gu6i3wM=;
+        b=SDsVr556dHZo8Q9Rr6uijzEHje5WnLioRtkafOhV4Nx+QfUk3/jSEJRPGcgdFz7Amu
+         2EYhxD4DDtwAGxr9eSh6HmiaT2zSnWAAXKJjUdWwUr8ZQE1c0YEPZDmRsSVjQKwdJyxu
+         u4gEirj8OSuRNOIQ5gS/QtUDGieuGgA43lQEwQRVGp6zf2cWwtJ3t0CK/229UvNlSqdJ
+         qnVYmewrt1WKxY7YdcHA0h6VZX/KpWoZVKJYNsQUNAO8zoUEI3coAjdrQiN3YMGv+qSy
+         lTQKIVhi8BzMTh70r/jnlY1h+HKJ8gaPwOpw7y2e8FGvkjdpv4jla9W56dyHlBoZL7M4
+         5x6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751071465; x=1751676265;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GpxNzKdU8lMnnqevDa29WkePK3DkzP2rZRE+gu6i3wM=;
+        b=O6g+7TE9gLdA1PCXE9UWhpWhDcA0gOGm2gquYqo1tjYG4nCdlePncG6plEYHlkjcBF
+         r3CXWLNlifwNj45SwvJyShj7Khgs1gvLKT3JfmLEnjXnW7rl8XLEO6AxDlA2eVormScO
+         GEGq/Spc+qRK8YlQM0SXM7FwOKjao7sXt+934vfODeait2Y8EwdfmHyO32FMEac++9UI
+         3JCRBulbyDS1Vkaj4/p5iveGwyrboizDMq2OanlMk1Yo8LyiogodbbpMTDIIYsFHtkq0
+         nGoaJhK+yuG0PIhYKprlHMx7ViS4SGDVVm1H1u1VvCTnvs1wdKkwSTzGf1I/9pT715Ze
+         4QAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxBEqdY+t6/4fdWC4YnmxbP+SbT0U5VIE1NJs1gjNao7nn35dBu+zXel5veShLZDlcjA2b@lists.linux.dev
+X-Gm-Message-State: AOJu0YwJqlMAxmUHvXBckqG+6wKXxfw6wxr7fgMiQ+bIa4L4h3rpa9Cu
+	8uyGw2E9nRMHqLKCOhMJO/FI0SJH+Hmzj7blUj0ZOoKIeFxvaVoSzGTw
+X-Gm-Gg: ASbGncu6CqtAFlUh5FNqBE9MtvDjxLkmwB/5/DZUPm9EGTRACfJ8NHUbVY+CFrspx7R
+	tBhahqqB16QD8xQzlNN6qAybuAYjmBp/E+ygEL1f549o6YsSWeyAXmpZiWgWO2db5yz6YAceT55
+	M5lm6/ZUJYZVi+nhJaJBUGsBgIK3qwX4unbK/DudLJctMzeyjssHxoDuwQQywM1Iz1ZbKWJk2Kj
+	fRsdSYOOBwMrEqqyNzgM1ByOAEHIBu+8h+jSsy/To/krBmXOscQod5bf0iJM1QUTguosIZmCDNX
+	Y1yzgQiSLO7NTXJDOd0T9RT9u1+gBhKLB5GzLN3fSvnsOc+hx23b
+X-Google-Smtp-Source: AGHT+IHFC6aR3irUDLsqIURFtrCziwHLbDvreY8MVz83v50IvdwAMb01cbpFfB+89lcldfKQWSmCTg==
+X-Received: by 2002:a17:902:d603:b0:235:711:f810 with SMTP id d9443c01a7336-23ac43d3283mr84587795ad.23.1751071465118;
+        Fri, 27 Jun 2025 17:44:25 -0700 (PDT)
+Received: from 1337 ([136.159.213.240])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2e39d4sm26196845ad.18.2025.06.27.17.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jun 2025 17:44:24 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: xandfury@gmail.com
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Paul Moore
+ <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ selinux@vger.kernel.org, kees@kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 0/2] Possible TTY privilege escalation in TIOCSTI ioctl
+Date: Fri, 27 Jun 2025 18:38:42 -0600
+References: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
+User-agent: mu4e 1.10.8; emacs 30.1
+In-reply-to: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
+Message-ID: <87y0tcu23d.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="=-=-="
+
+--=-=-=
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250627091914.100715-8-jth@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Johannes,
+Abhinav Saxena via B4 Relay <devnull+xandfury.gmail.com@kernel.org> writes:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+> This patch series was initially sent to security@k.o; resending it in
+> public. I might follow-up with a tests series which addresses similar
+> issues with TIOCLINUX.
+>
+> `=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
+>
+> The TIOCSTI ioctl uses capable(CAP_SYS_ADMIN) for access control, which
+> checks the current process=E2=80=99s credentials. However, it doesn=E2=80=
+=99t validate
+> against the file opener=E2=80=99s credentials stored in file->f_cred.
+>
+> This creates a potential security issue where an unprivileged process
+> can open a TTY fd and pass it to a privileged process via SCM_RIGHTS.
+> The privileged process may then inadvertently grant access based on its
+> elevated privileges rather than the original opener=E2=80=99s credentials.
+>
+> Background
+> `=3D=3D=3D=3D=3D=3D=3D=3D'
+>
+> As noted in previous discussion, while CONFIG_LEGACY_TIOCSTI can restrict
+> TIOCSTI usage, it is enabled by default in most distributions. Even when
+> CONFIG_LEGACY_TIOCSTI=3Dn, processes with CAP_SYS_ADMIN can still use TIO=
+CSTI
+> according to the Kconfig documentation.
+>
+> Additionally, CONFIG_LEGACY_TIOCSTI controls the default value for the
+> dev.tty.legacy_tiocsti sysctl, which remains runtime-configurable. This
+> means the described attack vector could work on systems even with
+> CONFIG_LEGACY_TIOCSTI=3Dn, particularly on Ubuntu 24.04 where it=E2=80=99=
+s =E2=80=9Crestricted=E2=80=9D
+> but still functional.
+>
+> Solution Approach
+> `=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
+>
+> This series addresses the issue through SELinux LSM integration rather
+> than modifying core TTY credential checking to avoid potential compatibil=
+ity
+> issues with existing userspace.
+>
+> The enhancement adds proper current task and file credential capability
+> validation in SELinux=E2=80=99s selinux_file_ioctl() hook specifically for
+> TIOCSTI operations.
+>
+> Testing
+> `=3D=3D=3D=3D=3D'
+>
+> All patches have been validated using:
+> - scripts/checkpatch.pl =E2=80=93strict (0 errors, 0 warnings)
+> - Functional testing on kernel v6.16-rc2
+> - File descriptor passing security test scenarios
+> - SELinux policy enforcement testing
+>
+> The fd_passing_security test demonstrates the security concern.
+> To verify, disable legacy TIOCSTI and run the test:
+>
+> $ echo =E2=80=9C0=E2=80=9D | sudo tee /proc/sys/dev/tty/legacy_tiocsti
+> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test -t fd_passing_secur=
+ity
+>
+> Patch Overview
+> `=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
+>
+> PATCH 1/2: selftests/tty: add TIOCSTI test suite
+> Comprehensive test suite demonstrating the issue and fix validation
+>
+> PATCH 2/2: selinux: add capability checks for TIOCSTI ioctl
+> Core security enhancement via SELinux LSM hook
+>
+> References
+> `=3D=3D=3D=3D=3D=3D=3D=3D'
+>
+> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
+> - commit 83efeeeb3d04 (=E2=80=9Ctty: Allow TIOCSTI to be disabled=E2=80=
+=9D)
+> - Documentation/security/credentials.rst
+> - <https://github.com/KSPP/linux/issues/156>
+> - <https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad>/
+> - drivers/tty/Kconfig
+>
+> Configuration References:
+> [1] - <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
+/tree/drivers/tty/Kconfig#n149>
+> [2] - <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
+/tree/drivers/tty/Kconfig#n162>
+> [3] - <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
+/tree/drivers/tty/Kconfig#n188>
+>
+> To: Shuah Khan <shuah@kernel.org>
+> To: Nathan Chancellor <nathan@kernel.org>
+> To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> To: Bill Wendling <morbo@google.com>
+> To: Justin Stitt <justinstitt@google.com>
+> To: Paul Moore <paul@paul-moore.com>
+> To: Stephen Smalley <stephen.smalley.work@gmail.com>
+> To: Ondrej Mosnacek <omosnace@redhat.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Cc: selinux@vger.kernel.org
+>
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> =E2=80=94
+> Abhinav Saxena (2):
+>       selftests/tty: add TIOCSTI test suite
+>       selinux: add capability checks for TIOCSTI ioctl
+>
+>  security/selinux/hooks.c                       |   6 +
+>  tools/testing/selftests/tty/Makefile           |   6 +-
+>  tools/testing/selftests/tty/config             |   1 +
+>  tools/testing/selftests/tty/tty_tiocsti_test.c | 421 +++++++++++++++++++=
+++++++
+>  4 files changed, 433 insertions(+), 1 deletion(-)
+> =E2=80=94
+> base-commit: 5adb635077d1b4bd65b183022775a59a378a9c00
+> change-id: 20250618-toicsti-bug-7822b8e94a32
+>
+> Best regards,
 
-[auto build test WARNING on next-20250626]
-[cannot apply to kdave/for-next v6.16-rc3 v6.16-rc2 v6.16-rc1 linus/master v6.16-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi everyone,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/btrfs-zoned-do-not-select-metadata-BG-as-finish-target/20250627-172551
-base:   next-20250626
-patch link:    https://lore.kernel.org/r/20250627091914.100715-8-jth%40kernel.org
-patch subject: [PATCH RFC 7/9] btrfs: lower auto-reclaim message log level
-config: x86_64-buildonly-randconfig-002-20250628 (https://download.01.org/0day-ci/archive/20250628/202506280733.ut2JoUtS-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506280733.ut2JoUtS-lkp@intel.com/reproduce)
+Thanks for all the feedback.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506280733.ut2JoUtS-lkp@intel.com/
+SUMMARY OF FEEDBACK RECEIVED
+`=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D'
 
-All warnings (new ones prefixed by >>):
+Re: SELinux, I agree. As I mention in the cover letter, using LSM was just a
+suggested fix (not a solution). In retrospect, I should=E2=80=99ve added RF=
+C to
+the patch series.
 
->> fs/btrfs/block-group.c:1846:7: warning: variable 'zone_unusable' set but not used [-Wunused-but-set-variable]
-    1846 |                 u64 zone_unusable;
-         |                     ^
-   1 warning generated.
+I spoke with Kees this past week about the possibility of completely
+disabling TIOCSTI while maintaining backwards compatibility. He confirmed
+the initial focus was just on adding tests and improving test coverage.
 
+OUTSTANDING QUESTIONS/COMMENTS
+`=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D'
 
-vim +/zone_unusable +1846 fs/btrfs/block-group.c
+Based on the discussion, I have three specific questions:
 
-81531225e5bd50c Boris Burkov       2022-10-13  1803  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1804  void btrfs_reclaim_bgs_work(struct work_struct *work)
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1805  {
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1806  	struct btrfs_fs_info *fs_info =
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1807  		container_of(work, struct btrfs_fs_info, reclaim_bgs_work);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1808  	struct btrfs_block_group *bg;
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1809  	struct btrfs_space_info *space_info;
-4eb4e85c4f81849 Boris Burkov       2024-06-07  1810  	LIST_HEAD(retry_list);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1811  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1812  	if (!test_bit(BTRFS_FS_OPEN, &fs_info->flags))
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1813  		return;
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1814  
-2f12741f81af638 Josef Bacik        2022-07-15  1815  	if (btrfs_fs_closing(fs_info))
-2f12741f81af638 Josef Bacik        2022-07-15  1816  		return;
-2f12741f81af638 Josef Bacik        2022-07-15  1817  
-3687fcb0752ac9c Johannes Thumshirn 2022-03-29  1818  	if (!btrfs_should_reclaim(fs_info))
-3687fcb0752ac9c Johannes Thumshirn 2022-03-29  1819  		return;
-3687fcb0752ac9c Johannes Thumshirn 2022-03-29  1820  
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  1821  	sb_start_write(fs_info->sb);
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  1822  
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  1823  	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  1824  		sb_end_write(fs_info->sb);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1825  		return;
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  1826  	}
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1827  
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1828  	/*
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1829  	 * Long running balances can keep us blocked here for eternity, so
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1830  	 * simply skip reclaim if we're unable to get the mutex.
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1831  	 */
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1832  	if (!mutex_trylock(&fs_info->reclaim_bgs_lock)) {
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1833  		btrfs_exclop_finish(fs_info);
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  1834  		sb_end_write(fs_info->sb);
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1835  		return;
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1836  	}
-9cc0b837e14ae91 Johannes Thumshirn 2021-07-06  1837  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1838  	spin_lock(&fs_info->unused_bgs_lock);
-2ca0ec770c62b32 Johannes Thumshirn 2021-10-14  1839  	/*
-2ca0ec770c62b32 Johannes Thumshirn 2021-10-14  1840  	 * Sort happens under lock because we can't simply splice it and sort.
-2ca0ec770c62b32 Johannes Thumshirn 2021-10-14  1841  	 * The block groups might still be in use and reachable via bg_list,
-2ca0ec770c62b32 Johannes Thumshirn 2021-10-14  1842  	 * and their presence in the reclaim_bgs list must be preserved.
-2ca0ec770c62b32 Johannes Thumshirn 2021-10-14  1843  	 */
-2ca0ec770c62b32 Johannes Thumshirn 2021-10-14  1844  	list_sort(NULL, &fs_info->reclaim_bgs, reclaim_bgs_cmp);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1845  	while (!list_empty(&fs_info->reclaim_bgs)) {
-5f93e776c6734ce Johannes Thumshirn 2021-06-29 @1846  		u64 zone_unusable;
-ba5d06440cae63e Filipe Manana      2025-02-24  1847  		u64 used;
-620768704326c9a Filipe Manana      2025-02-24  1848  		u64 reserved;
-1cea5cf0e664290 Filipe Manana      2021-06-21  1849  		int ret = 0;
-1cea5cf0e664290 Filipe Manana      2021-06-21  1850  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1851  		bg = list_first_entry(&fs_info->reclaim_bgs,
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1852  				      struct btrfs_block_group,
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1853  				      bg_list);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1854  		list_del_init(&bg->bg_list);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1855  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1856  		space_info = bg->space_info;
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1857  		spin_unlock(&fs_info->unused_bgs_lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1858  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1859  		/* Don't race with allocators so take the groups_sem */
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1860  		down_write(&space_info->groups_sem);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1861  
-f5ff64ccf7bb727 Boris Burkov       2024-02-02  1862  		spin_lock(&space_info->lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1863  		spin_lock(&bg->lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1864  		if (bg->reserved || bg->pinned || bg->ro) {
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1865  			/*
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1866  			 * We want to bail if we made new allocations or have
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1867  			 * outstanding allocations in this block group.  We do
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1868  			 * the ro check in case balance is currently acting on
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1869  			 * this block group.
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1870  			 */
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1871  			spin_unlock(&bg->lock);
-f5ff64ccf7bb727 Boris Burkov       2024-02-02  1872  			spin_unlock(&space_info->lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1873  			up_write(&space_info->groups_sem);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1874  			goto next;
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1875  		}
-cc4804bfd6392bc Boris Burkov       2022-10-13  1876  		if (bg->used == 0) {
-cc4804bfd6392bc Boris Burkov       2022-10-13  1877  			/*
-cc4804bfd6392bc Boris Burkov       2022-10-13  1878  			 * It is possible that we trigger relocation on a block
-cc4804bfd6392bc Boris Burkov       2022-10-13  1879  			 * group as its extents are deleted and it first goes
-cc4804bfd6392bc Boris Burkov       2022-10-13  1880  			 * below the threshold, then shortly after goes empty.
-cc4804bfd6392bc Boris Burkov       2022-10-13  1881  			 *
-cc4804bfd6392bc Boris Burkov       2022-10-13  1882  			 * In this case, relocating it does delete it, but has
-cc4804bfd6392bc Boris Burkov       2022-10-13  1883  			 * some overhead in relocation specific metadata, looking
-cc4804bfd6392bc Boris Burkov       2022-10-13  1884  			 * for the non-existent extents and running some extra
-cc4804bfd6392bc Boris Burkov       2022-10-13  1885  			 * transactions, which we can avoid by using one of the
-cc4804bfd6392bc Boris Burkov       2022-10-13  1886  			 * other mechanisms for dealing with empty block groups.
-cc4804bfd6392bc Boris Burkov       2022-10-13  1887  			 */
-cc4804bfd6392bc Boris Burkov       2022-10-13  1888  			if (!btrfs_test_opt(fs_info, DISCARD_ASYNC))
-cc4804bfd6392bc Boris Burkov       2022-10-13  1889  				btrfs_mark_bg_unused(bg);
-cc4804bfd6392bc Boris Burkov       2022-10-13  1890  			spin_unlock(&bg->lock);
-f5ff64ccf7bb727 Boris Burkov       2024-02-02  1891  			spin_unlock(&space_info->lock);
-cc4804bfd6392bc Boris Burkov       2022-10-13  1892  			up_write(&space_info->groups_sem);
-cc4804bfd6392bc Boris Burkov       2022-10-13  1893  			goto next;
-81531225e5bd50c Boris Burkov       2022-10-13  1894  
-81531225e5bd50c Boris Burkov       2022-10-13  1895  		}
-81531225e5bd50c Boris Burkov       2022-10-13  1896  		/*
-81531225e5bd50c Boris Burkov       2022-10-13  1897  		 * The block group might no longer meet the reclaim condition by
-81531225e5bd50c Boris Burkov       2022-10-13  1898  		 * the time we get around to reclaiming it, so to avoid
-81531225e5bd50c Boris Burkov       2022-10-13  1899  		 * reclaiming overly full block_groups, skip reclaiming them.
-81531225e5bd50c Boris Burkov       2022-10-13  1900  		 *
-81531225e5bd50c Boris Burkov       2022-10-13  1901  		 * Since the decision making process also depends on the amount
-81531225e5bd50c Boris Burkov       2022-10-13  1902  		 * being freed, pass in a fake giant value to skip that extra
-81531225e5bd50c Boris Burkov       2022-10-13  1903  		 * check, which is more meaningful when adding to the list in
-81531225e5bd50c Boris Burkov       2022-10-13  1904  		 * the first place.
-81531225e5bd50c Boris Burkov       2022-10-13  1905  		 */
-81531225e5bd50c Boris Burkov       2022-10-13  1906  		if (!should_reclaim_block_group(bg, bg->length)) {
-81531225e5bd50c Boris Burkov       2022-10-13  1907  			spin_unlock(&bg->lock);
-f5ff64ccf7bb727 Boris Burkov       2024-02-02  1908  			spin_unlock(&space_info->lock);
-81531225e5bd50c Boris Burkov       2022-10-13  1909  			up_write(&space_info->groups_sem);
-81531225e5bd50c Boris Burkov       2022-10-13  1910  			goto next;
-cc4804bfd6392bc Boris Burkov       2022-10-13  1911  		}
-1283b8c125a83bf Filipe Manana      2025-02-21  1912  
-1283b8c125a83bf Filipe Manana      2025-02-21  1913  		/*
-1283b8c125a83bf Filipe Manana      2025-02-21  1914  		 * Cache the zone_unusable value before turning the block group
-1283b8c125a83bf Filipe Manana      2025-02-21  1915  		 * to read only. As soon as the block group is read only it's
-1283b8c125a83bf Filipe Manana      2025-02-21  1916  		 * zone_unusable value gets moved to the block group's read-only
-1283b8c125a83bf Filipe Manana      2025-02-21  1917  		 * bytes and isn't available for calculations anymore. We also
-1283b8c125a83bf Filipe Manana      2025-02-21  1918  		 * cache it before unlocking the block group, to prevent races
-1283b8c125a83bf Filipe Manana      2025-02-21  1919  		 * (reports from KCSAN and such tools) with tasks updating it.
-1283b8c125a83bf Filipe Manana      2025-02-21  1920  		 */
-1283b8c125a83bf Filipe Manana      2025-02-21  1921  		zone_unusable = bg->zone_unusable;
-1283b8c125a83bf Filipe Manana      2025-02-21  1922  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1923  		spin_unlock(&bg->lock);
-f5ff64ccf7bb727 Boris Burkov       2024-02-02  1924  		spin_unlock(&space_info->lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1925  
-93463ff7b54626f Naohiro Aota       2023-06-06  1926  		/*
-93463ff7b54626f Naohiro Aota       2023-06-06  1927  		 * Get out fast, in case we're read-only or unmounting the
-93463ff7b54626f Naohiro Aota       2023-06-06  1928  		 * filesystem. It is OK to drop block groups from the list even
-93463ff7b54626f Naohiro Aota       2023-06-06  1929  		 * for the read-only case. As we did sb_start_write(),
-93463ff7b54626f Naohiro Aota       2023-06-06  1930  		 * "mount -o remount,ro" won't happen and read-only filesystem
-93463ff7b54626f Naohiro Aota       2023-06-06  1931  		 * means it is forced read-only due to a fatal error. So, it
-93463ff7b54626f Naohiro Aota       2023-06-06  1932  		 * never gets back to read-write to let us reclaim again.
-93463ff7b54626f Naohiro Aota       2023-06-06  1933  		 */
-93463ff7b54626f Naohiro Aota       2023-06-06  1934  		if (btrfs_need_cleaner_sleep(fs_info)) {
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1935  			up_write(&space_info->groups_sem);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1936  			goto next;
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1937  		}
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1938  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1939  		ret = inc_block_group_ro(bg, 0);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1940  		up_write(&space_info->groups_sem);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1941  		if (ret < 0)
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1942  			goto next;
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1943  
-ba5d06440cae63e Filipe Manana      2025-02-24  1944  		/*
-620768704326c9a Filipe Manana      2025-02-24  1945  		 * The amount of bytes reclaimed corresponds to the sum of the
-620768704326c9a Filipe Manana      2025-02-24  1946  		 * "used" and "reserved" counters. We have set the block group
-620768704326c9a Filipe Manana      2025-02-24  1947  		 * to RO above, which prevents reservations from happening but
-620768704326c9a Filipe Manana      2025-02-24  1948  		 * we may have existing reservations for which allocation has
-620768704326c9a Filipe Manana      2025-02-24  1949  		 * not yet been done - btrfs_update_block_group() was not yet
-620768704326c9a Filipe Manana      2025-02-24  1950  		 * called, which is where we will transfer a reserved extent's
-620768704326c9a Filipe Manana      2025-02-24  1951  		 * size from the "reserved" counter to the "used" counter - this
-620768704326c9a Filipe Manana      2025-02-24  1952  		 * happens when running delayed references. When we relocate the
-620768704326c9a Filipe Manana      2025-02-24  1953  		 * chunk below, relocation first flushes dellaloc, waits for
-620768704326c9a Filipe Manana      2025-02-24  1954  		 * ordered extent completion (which is where we create delayed
-620768704326c9a Filipe Manana      2025-02-24  1955  		 * references for data extents) and commits the current
-620768704326c9a Filipe Manana      2025-02-24  1956  		 * transaction (which runs delayed references), and only after
-620768704326c9a Filipe Manana      2025-02-24  1957  		 * it does the actual work to move extents out of the block
-620768704326c9a Filipe Manana      2025-02-24  1958  		 * group. So the reported amount of reclaimed bytes is
-620768704326c9a Filipe Manana      2025-02-24  1959  		 * effectively the sum of the 'used' and 'reserved' counters.
-ba5d06440cae63e Filipe Manana      2025-02-24  1960  		 */
-ba5d06440cae63e Filipe Manana      2025-02-24  1961  		spin_lock(&bg->lock);
-ba5d06440cae63e Filipe Manana      2025-02-24  1962  		used = bg->used;
-620768704326c9a Filipe Manana      2025-02-24  1963  		reserved = bg->reserved;
-ba5d06440cae63e Filipe Manana      2025-02-24  1964  		spin_unlock(&bg->lock);
-ba5d06440cae63e Filipe Manana      2025-02-24  1965  
-3ba0572b72b1363 Johannes Thumshirn 2025-06-27  1966  		btrfs_debug(fs_info,
-620768704326c9a Filipe Manana      2025-02-24  1967  	"reclaiming chunk %llu with %llu%% used %llu%% reserved %llu%% unusable",
-95cd356ca23c380 Johannes Thumshirn 2023-02-21  1968  				bg->start,
-ba5d06440cae63e Filipe Manana      2025-02-24  1969  				div64_u64(used * 100, bg->length),
-620768704326c9a Filipe Manana      2025-02-24  1970  				div64_u64(reserved * 100, bg->length),
-5f93e776c6734ce Johannes Thumshirn 2021-06-29  1971  				div64_u64(zone_unusable * 100, bg->length));
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1972  		trace_btrfs_reclaim_block_group(bg);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1973  		ret = btrfs_relocate_chunk(fs_info, bg->start);
-74944c873602a3e Josef Bacik        2022-07-25  1974  		if (ret) {
-74944c873602a3e Josef Bacik        2022-07-25  1975  			btrfs_dec_block_group_ro(bg);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1976  			btrfs_err(fs_info, "error relocating chunk %llu",
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1977  				  bg->start);
-ba5d06440cae63e Filipe Manana      2025-02-24  1978  			used = 0;
-620768704326c9a Filipe Manana      2025-02-24  1979  			reserved = 0;
-243192b6764990e Boris Burkov       2024-01-25  1980  			spin_lock(&space_info->lock);
-243192b6764990e Boris Burkov       2024-01-25  1981  			space_info->reclaim_errors++;
-813d4c642251649 Boris Burkov       2024-02-14  1982  			if (READ_ONCE(space_info->periodic_reclaim))
-813d4c642251649 Boris Burkov       2024-02-14  1983  				space_info->periodic_reclaim_ready = false;
-243192b6764990e Boris Burkov       2024-01-25  1984  			spin_unlock(&space_info->lock);
-74944c873602a3e Josef Bacik        2022-07-25  1985  		}
-243192b6764990e Boris Burkov       2024-01-25  1986  		spin_lock(&space_info->lock);
-243192b6764990e Boris Burkov       2024-01-25  1987  		space_info->reclaim_count++;
-ba5d06440cae63e Filipe Manana      2025-02-24  1988  		space_info->reclaim_bytes += used;
-620768704326c9a Filipe Manana      2025-02-24  1989  		space_info->reclaim_bytes += reserved;
-243192b6764990e Boris Burkov       2024-01-25  1990  		spin_unlock(&space_info->lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1991  
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  1992  next:
-0497dfba98c00ed Boris Burkov       2025-03-05  1993  		if (ret && !READ_ONCE(space_info->periodic_reclaim))
-0497dfba98c00ed Boris Burkov       2025-03-05  1994  			btrfs_link_bg_list(bg, &retry_list);
-1cea5cf0e664290 Filipe Manana      2021-06-21  1995  		btrfs_put_block_group(bg);
-3ed01616bad6c7e Naohiro Aota       2023-06-06  1996  
-3ed01616bad6c7e Naohiro Aota       2023-06-06  1997  		mutex_unlock(&fs_info->reclaim_bgs_lock);
-3ed01616bad6c7e Naohiro Aota       2023-06-06  1998  		/*
-3ed01616bad6c7e Naohiro Aota       2023-06-06  1999  		 * Reclaiming all the block groups in the list can take really
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2000  		 * long.  Prioritize cleaning up unused block groups.
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2001  		 */
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2002  		btrfs_delete_unused_bgs(fs_info);
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2003  		/*
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2004  		 * If we are interrupted by a balance, we can just bail out. The
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2005  		 * cleaner thread restart again if necessary.
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2006  		 */
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2007  		if (!mutex_trylock(&fs_info->reclaim_bgs_lock))
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2008  			goto end;
-d96b34248c2f4ea Filipe Manana      2021-11-22  2009  		spin_lock(&fs_info->unused_bgs_lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  2010  	}
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  2011  	spin_unlock(&fs_info->unused_bgs_lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  2012  	mutex_unlock(&fs_info->reclaim_bgs_lock);
-3ed01616bad6c7e Naohiro Aota       2023-06-06  2013  end:
-4eb4e85c4f81849 Boris Burkov       2024-06-07  2014  	spin_lock(&fs_info->unused_bgs_lock);
-4eb4e85c4f81849 Boris Burkov       2024-06-07  2015  	list_splice_tail(&retry_list, &fs_info->reclaim_bgs);
-4eb4e85c4f81849 Boris Burkov       2024-06-07  2016  	spin_unlock(&fs_info->unused_bgs_lock);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  2017  	btrfs_exclop_finish(fs_info);
-ca5e4ea0beaec8b Naohiro Aota       2022-02-18  2018  	sb_end_write(fs_info->sb);
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  2019  }
-18bb8bbf13c1839 Johannes Thumshirn 2021-04-19  2020  
+1) Test coverage: Are the current selftests sufficient, or should I add
+   more comprehensive TIOCSTI-specific tests? Or maybe KUnit tests?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2) SELinux patch: I can remove the SELinux-specific patch from the
+   series.
+
+3) Complete disable option: Is there broader consensus on supporting
+   complete TIOCSTI disabling while maintaining backwards compatibility?
+
+DESIGN OPTIONS FOR EXTENDED CONTROL
+`=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D'
+
+For question 3, I=E2=80=99ve analyzed three approaches for extending the cu=
+rrent
+boolean tty_legacy_tiocsti sysctl:
+
+=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=
+=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=
+=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=
+=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81
+ Tri-state  Signed    Dual Bool=20
+ (0,1,2)    (0,1,-1)  Controls=20=20
+=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=
+=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=
+=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=
+=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81=E2=94=81
+=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94|=E2=80=94=
+=E2=80=94=E2=80=94=E2=80=93|=E2=80=94=E2=80=94=E2=80=94-|=E2=80=94=E2=80=94=
+=E2=80=94=E2=80=93|
+Backwards Compat     | No        | No       | Yes       |
+Clear Semantics      | Yes       | Partial  | Yes       |
+Extensibility        | Yes       | Partial  | Yes       |
+Single Control       | Yes       | Yes      | No        |
+Kernel Precedent     | Common    | Rare     | Common    |
+
+**Option 1 (Tri-state):** 0=3DCAP_SYS_ADMIN required, 1=3Dlegacy, 2=3Ddisab=
+led
+**Option 2 (Signed):** -1=3Ddisabled, 0=3Drestricted, 1=3Dlegacy
+**Option 3 (Dual bool):** Keep existing bool + add disable bool
+
+The dual boolean approach preserves compatibility but requires managing
+two separate controls.
+
+NEXT STEPS
+`=3D=3D=3D=3D=3D=3D=3D=3D'
+
+Based on community input, I=E2=80=99ll:
+=E2=80=A2 Focus on test improvements first
+=E2=80=A2 Drop SELinux-specific changes
+=E2=80=A2 Implement extended control only if there=E2=80=99s consensus on t=
+he approach
+
+Feedback welcome on any of these points.
+
+Thanks,
+Abhinav
+
+--=-=-=--
