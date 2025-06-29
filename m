@@ -1,131 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864B633F3;
-	Sun, 29 Jun 2025 07:44:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B411FA93D
+	for <llvm@lists.linux.dev>; Sun, 29 Jun 2025 10:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751183047; cv=none; b=HVgYUSgpCKUptmdBSWR6pxZWhZurlJbrPszYY4Ta5nVZEAgg9KrzgI3DhSZnHBRg49eFr93zZgVVgoIruXQt9fUT8zWcitfMzcFTlzArY/8hAkXtGa0gKVHp+ZjYLZ/8126zieMLh64xODobyFG+1UGSD6i02JUXZMeZPu3bfkc=
+	t=1751191811; cv=none; b=Wo0GEqKSIGG7Pn9/ugsxu3FleVTSlAtZxLuWFwkAdwkpLuRBllRsfjY9nLUZJvlhzJfHJItpi8PKqZh/N+HiS9avKm6xYdsO30hhGGdaESeEEtF2tGw8owQafGxYMMPDDjiELUGd6mvulGN7/IwDrsWluJ7zcJsi+xnHx4daxro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751183047; c=relaxed/simple;
-	bh=SEqy5zb+emFhpz7wJU3XLdetnXNP8qZL/erb9T+5OOs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lpAH5cDyNWrIffBdKKySe70wJFBPRfLkZ4c/EonaFMP0MI5AolumWckXbnQetRZIr8u8Hcb4XYlms5Ma8D49Vc3yNH33XJV3R7gMrLy57BEKUcMKgrIH6CT26AJ4UQXV+SPpBMxR5w1mNSFoirUndZsyj5vTkVL2ogPctUlMYX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WHQ8Cg+D; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751191811; c=relaxed/simple;
+	bh=R6uSRM1xEjbR8Uh/ppwy7XPm0tCcOs8UMbZXeqNBPkY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ZhK0o++skCFeEFk7tyBdOCa90PBGa1nKXX6rUje5WTzmiD2vMCotXXuRc8SQ60dwzrzqt7i+rGTV44VXImeEtfgh80/8PT3O/0jN3p7VyN70yZjiSyubWtYLhR4+NCtdt2K3MJy/8F+kQU23YZ//zqyKhAxyjrJtqWitf8qRLj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=jbLTkcMk; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WHQ8Cg+D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751183046; x=1782719046;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SEqy5zb+emFhpz7wJU3XLdetnXNP8qZL/erb9T+5OOs=;
-  b=WHQ8Cg+DWH3RJ55jeMKQ8ahwfcZqZsMG9Gw8pSKZEhqYCzyt+xTYmSKv
-   ee09UZf+D5g6O82Qfa5RgKh2dtnC7MNgFlL0NLsjC9EwymqlMXT1Ya8/S
-   9m1d9ZNUJ/H+BcOCSXVFuOzYnPh0rfRQmsP9lDVk7bv1oNp0JE7UMvMgE
-   NuzP0qz1saYVH+LlaobQ7OhpJORWOPD2xt5hO5bYhKXd7m6hJLh4CsRO6
-   sW9hNWFL8XAgtfC3go6hhEC4cWJbOhs9lFs8fd5zHzeP6ImDlsP58gT+j
-   NMxtSXUcbQRkQjP/btWVivCK18yefXSiTdMlqOSI65lOqgRKGER9upK77
-   A==;
-X-CSE-ConnectionGUID: I2VAvSAaQ1yrzTvdwPqv3A==
-X-CSE-MsgGUID: r75k6ybvRdeq4DCihBc5bw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="64881123"
-X-IronPort-AV: E=Sophos;i="6.16,274,1744095600"; 
-   d="scan'208";a="64881123"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2025 00:44:05 -0700
-X-CSE-ConnectionGUID: 768TlwaAQU20+qeUe/XL0Q==
-X-CSE-MsgGUID: kJ0CsLdyQhaFtS8NBHabgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,274,1744095600"; 
-   d="scan'208";a="152804225"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Jun 2025 00:43:59 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uVmhh-000XlG-0E;
-	Sun, 29 Jun 2025 07:43:57 +0000
-Date: Sun, 29 Jun 2025 15:43:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, airlied@gmail.com,
-	simona@ffwll.ch, ojeda@kernel.org, alex.gaynor@gmail.com,
-	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
-	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
-	tmgross@umich.edu, rafael@kernel.org, viresh.kumar@linaro.org,
-	gregkh@linuxfoundation.org, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, davidgow@google.com,
-	nm@ti.com, Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>
-Subject: Re: [PATCH v3 1/3] replace `#[allow(...)]` with `#[expect(...)]`
-Message-ID: <202506291507.M9eg5kic-lkp@intel.com>
-References: <20250628040956.2181-2-work@onurozkan.dev>
+	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="jbLTkcMk"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250628040956.2181-2-work@onurozkan.dev>
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
+	t=1751191803;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H6Wlp3JgvEp0ycS0t6Z7WKduaZTKhf5gEm0eW6oKUXk=;
+	b=jbLTkcMkzlOS4+CCECrHk6uIoEiUlZ8gi1AojI4kxi/eKj82hZVBUd0JkXPnB663LhL/Ek
+	gVqtKR4nI0DDAfDOLpK/pQysjigMfgN3b1oiUOlRymhs+BHhUm9Z2CIhjA6/dxDofMziof
+	bnZIC1eACNKyzLAaEjVmvFIWqNG5ubaMMU3Bswi2HkrK89/j4dBSJJ+/1Zwh7tZHRPMd7F
+	h8lCIjiqZr5zNjUESE1775Fn9QF8oEovSIHTMpvWLnkHDCJkdQKwj0qhGDK74YgzHqetQ1
+	lUR6lfFU1Fa45OZRahJUi6V6lS9ljIdgWs2JFN09YMxLkfMYs6Tf+IRgJb//Zg==
+Content-Type: multipart/signed;
+ boundary=43508436bcd3ad84eb98e0bb756b39ac53921fae364149a231ac9f8d2b94;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Sun, 29 Jun 2025 12:09:49 +0200
+Message-Id: <DAYXOI4WITJW.1G5DBWEQDDY1Z@cknow.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <didi.debian@cknow.org>
+To: "kernel test robot" <lkp@intel.com>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Heiko Stuebner" <heiko@sntech.de>
+Cc: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, "Dragan Simic"
+ <dsimic@manjaro.org>, "Quentin Schulz" <quentin.schulz@cherry.de>, "Johan
+ Jonker" <jbx6244@gmail.com>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>,
+ <linux-rockchip@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/8] arm64: dts: rockchip: Refactor DSI nodes on rk3399
+ boards
+References: <20250627152645.740981-3-didi.debian@cknow.org>
+ <202506290852.bWro2lBe-lkp@intel.com>
+In-Reply-To: <202506290852.bWro2lBe-lkp@intel.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Onur,
+--43508436bcd3ad84eb98e0bb756b39ac53921fae364149a231ac9f8d2b94
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-kernel test robot noticed the following build warnings:
+Hi,
 
-[auto build test WARNING on driver-core/driver-core-next]
-[also build test WARNING on driver-core/driver-core-linus rust/alloc-next shuah-kselftest/kunit shuah-kselftest/kunit-fixes rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.16-rc3]
-[cannot apply to rust/rust-next driver-core/driver-core-testing rust/pin-init-next amd-pstate/linux-next amd-pstate/bleeding-edge next-20250627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Sun Jun 29, 2025 at 2:32 AM CEST, kernel test robot wrote:
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on rockchip/for-next]
+> [also build test ERROR on next-20250627]
+> [cannot apply to robh/for-next krzk/for-next krzk-dt/for-next linus/maste=
+r v6.16-rc3]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Diederik-de-Haas/a=
+rm64-dts-rockchip-Refactor-DSI-nodes-on-px30-boards/20250627-233300
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockc=
+hip.git for-next
+> patch link:    https://lore.kernel.org/r/20250627152645.740981-3-didi.deb=
+ian%40cknow.org
+> patch subject: [PATCH 2/8] arm64: dts: rockchip: Refactor DSI nodes on rk=
+3399 boards
+> config: arm64-randconfig-002-20250629 (https://download.01.org/0day-ci/ar=
+chive/20250629/202506290852.bWro2lBe-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd70=
+8029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250629/202506290852.bWro2lBe-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202506290852.bWro2lBe-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>>> Error: arch/arm64/boot/dts/rockchip/rk3399-rockpro64-screen.dtso:75.1-6=
+ syntax error
+>    FATAL ERROR: Unable to parse input tree
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Onur-zkan/replace-allow-with-expect/20250628-121734
-base:   driver-core/driver-core-next
-patch link:    https://lore.kernel.org/r/20250628040956.2181-2-work%40onurozkan.dev
-patch subject: [PATCH v3 1/3] replace `#[allow(...)]` with `#[expect(...)]`
-config: x86_64-randconfig-008-20250629 (https://download.01.org/0day-ci/archive/20250629/202506291507.M9eg5kic-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250629/202506291507.M9eg5kic-lkp@intel.com/reproduce)
+The kernel test robot is right as the ``&mipi_out`` node is missing a
+closing ``;``, so thanks for that :-)
+The problem is also present in v2, so I'll send a v3 shortly.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506291507.M9eg5kic-lkp@intel.com/
+Luckily I've now found why my build script didn't catch it.
+```sh
+export PATH=3D~/dev/kernel.org/dt-schema-venv/bin/:$PATH CROSS_COMPILE=3Daa=
+rch64-linux-gnu- ARCH=3Darm64
+make distclean
+make debarm64_defconfig
+make CHECK_DTBS=3Dy W=3D1 rockchip/px30-cobra-ltk050h3146w-a2.dtb
+<quite-a-long-list-of-all-boards-at-least-I-thought-so>
+```
 
-All warnings (new ones prefixed by >>):
+(debarm64_defconfig is my own defconfig based on Debian's kernel config)
 
-   ***
-   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
-   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
-   *** unless patched (like Debian's).
-   ***   Your bindgen version:  0.65.1
-   ***   Your libclang version: 20.1.7
-   ***
-   ***
-   *** Please see Documentation/rust/quick-start.rst for details
-   *** on how to set up the Rust support.
-   ***
->> warning: this lint expectation is unfulfilled
-   --> rust/kernel/opp.rs:603:14
-   |
-   603 |     #[expect(dead_code)]
-   |              ^^^^^^^^^
-   |
-   = note: `#[warn(unfulfilled_lint_expectations)]` on by default
---
->> warning: this lint expectation is unfulfilled
-   --> rust/kernel/opp.rs:605:14
-   |
-   605 |     #[expect(dead_code)]
-   |              ^^^^^^^^^
+That long list didn't have ``rockchip/rk3399-rockpro64-screen.dtbo``.
+Is there a better/simpler way to validate all rockchip boards without
+having to explicitly list each and every one of them?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+  Diederik
+
+--43508436bcd3ad84eb98e0bb756b39ac53921fae364149a231ac9f8d2b94
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCaGEQ8wAKCRDXblvOeH7b
+bkmOAP9oM6RsgNp49/g+vN6x7caM8SHQCK0m03vWy5v9AUMPCAD9Gu0vIsw3p1fn
+Jw3UxbRGaW+2LtlZ/raAKpP6oBKDRA4=
+=vkok
+-----END PGP SIGNATURE-----
+
+--43508436bcd3ad84eb98e0bb756b39ac53921fae364149a231ac9f8d2b94--
