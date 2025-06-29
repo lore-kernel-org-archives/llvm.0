@@ -1,95 +1,114 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28F61494D9;
-	Sun, 29 Jun 2025 19:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A92B238C2D;
+	Sun, 29 Jun 2025 19:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751224791; cv=none; b=r5zLZJS0Cba43KwSXLR2GY7PoIPB8sBFLcqY0XQSTZc9HoLyhZyFxduEZd8YK8Eeln+m9H+P575CszeVnx+KcTuEUANBlQ54EAY+oehXTFXjuPMOizaMdto6lYPKpDNcupgZeCHSuWYdpWn+oeAU+VqkVWx3a0GZ32ZdUz+APSo=
+	t=1751226750; cv=none; b=MImC/2aLdzeDrS3Qlx0qELLpo8Y8/l+KJrtJWfh5vqHVFQJRtmTyO1r4BaGEq8sT2sc5HBJConufSu6gTVrgbK7Mf1dwNr2I7rtPeg5LEnu67u0ydOkguAUHeOqUe81hgArMUaHpic3DToJP7sevDs40jza9dBaXUC2OyqZZT/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751224791; c=relaxed/simple;
-	bh=fqvFj4fP57bdlkH2Z9EVvhU1TU+soWmoIpIUNeszUe4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mPXLdPKyaaY7s//G7UM/yLAmv6dN6WTiJAnpJS0OIyLyBj/r79etSHLd1bg15TQx1o6iQVT32Vpf0FgS5oi27nDr2UVy4iu3SaQkoBoD/psGgWpdGYTX/Aioa8DHiqAWAmUUrwjpYjuGBkV3Z0sSNwXfnq/RjnDzqZBPHBg3/YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ko8YAMuk; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751226750; c=relaxed/simple;
+	bh=WVUAn15qn8pZfFMR72mBNe+d59ohwbj/sreGBPUsMDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U8o0nYJ5T9ECiJRIw14vrR++YdxYrIzRgLn45usJLIg4Fu0+wewnnzARlf+l71MGwnVYHPL7IGTFPhqNJz6vkt27+2PHMjwqAb0fQltv2qNT4crz1g5vkKno10cCXC1wpaattcHRNiHYAVJkh/eer3v0ZzFxTkJ45d+MfyngAuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eV8nivV8; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ko8YAMuk"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313fab41fd5so895001a91.1;
-        Sun, 29 Jun 2025 12:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751224789; x=1751829589; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fqvFj4fP57bdlkH2Z9EVvhU1TU+soWmoIpIUNeszUe4=;
-        b=Ko8YAMuk1Xmy5LjgXWF2d2VbjKJ96R8VRC0Qt9Eexng3o05EPBlqr6D1uKfxhXe20l
-         PL78F3wMcfI+INVwbFdhiOl0DHKGqeEVkvqprQOQc5jrYkcGQqEYYWecSXNHqCRr2sA2
-         z3MO0xePL148dlkjunoYl24vYskFDC/EtleFB33xoMF/h14jz8SfM0t/QiQtnBbWNKyS
-         IQfrihHNgeqUW2gmhliQ/rIhnFfY2H/WnCS0zh3U0SRhi5DwX9GVx6YtI2/g7ynQQoqp
-         U7MK6al/6veiv+bkZ0ncQZ1L8nKoGESJvWMT+ltIKQt79zayxsnj6puNkTl77NB1JYMs
-         LjAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751224789; x=1751829589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fqvFj4fP57bdlkH2Z9EVvhU1TU+soWmoIpIUNeszUe4=;
-        b=hUsONgIu8ZYMQHiU0jNYA5ij3WYsspcqajg6vDmiac6pLsC+gjFFEnFhjZn6qAY1jq
-         BID3oF1ZgnIjqMYXq+fjdJaW4PIhi1zXCYuOVBNxJ16/mE7UH+qty0kNZZ8jVkescVPo
-         4yXESgh+i2xK32i2F5plOJJEs87HeNbE+tgQ6E90Hk5F1w5FTgJDXBSH4E6D/KWKAn8R
-         yzpU3ONpeY75o/+qx1xP1mOSEm8z4vaHxZB9mFsrLoIvesfR2AVIToaGRLqEtL4yoVNI
-         59X8OLB06XGiPSfRqCmJvVvu3DQ3v8VSkEuRdqBMAzACpIcLCg8Ptrcqqr5VikcjAr/g
-         +ENg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTMEfeZmCZCc51VBzlrW8vpncjH8BR9lrq8LxH7LX07H409XfEq9F8Wzp8GsihtKzrrjPPqg==@lists.linux.dev, AJvYcCXek6FEVZqeNc3PZLblFtj75vKVfhQ3mvj8kKamGchZFajujaswupYpR79WQvZ1RwdH3Fxgcfa09pyxkspO@lists.linux.dev
-X-Gm-Message-State: AOJu0YzvpRf+xlqjTRBXjpEZc3IvorRBVey6UJkJdghRF52ta6cKqiXq
-	zt1Mtm0xjHUFxnxKL9icwnv8N4PGn6rUM6LUkmRARwW1qW9DmXi5wKpJ4Nr62NRGYcZKKM7iV8+
-	nKtV0tpNCQiewyhijbfe6HMDR+JYazfQ=
-X-Gm-Gg: ASbGncu1QwdsPRGqyjLQDoUlaABvP+JBq2PX9bquiZUry1ow/J+dEJDXNITuWtMRqov
-	HJJ6m6N+n7KmzJGLUDe6ESOrfKPhLtAoijZ5275QVm44VR10c++gr1W1jWKDefnHcfANSRx37SW
-	JkLI/5xDfFHYT0/MdauNXkRGBnzoDYjY8FZb/XitxtoZs=
-X-Google-Smtp-Source: AGHT+IHaVfsV20gbxGDGp7LaY+Szjj4MSE87ay8AXbrRlFNzSCMZkBxp3FxomgpoZ7gVrxtk8A6cpio/2KB/6lEK1OQ=
-X-Received: by 2002:a17:903:1a68:b0:234:bfe3:c4a3 with SMTP id
- d9443c01a7336-23ae86b628emr36405245ad.0.1751224788949; Sun, 29 Jun 2025
- 12:19:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eV8nivV8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751226749; x=1782762749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WVUAn15qn8pZfFMR72mBNe+d59ohwbj/sreGBPUsMDA=;
+  b=eV8nivV86Bytax7lGDCirR5TXggngGaJk+yMFI8EPJqhcMBeJh95CCra
+   VHOR/7LbmOurC0MIq/an5/zGxbUVHn6SeFHXE6CQeen83pEtFdl/4B+zI
+   lDCpg6fl8v1p4uV/B/RMKWmvD9Zaq4HDaoLGf6ghuJlp2xH0q1QDqVVUt
+   8fPICVwabQUI6AdKEDiVIfVn0aHLu+Uk2XiuOOTmKj9RL/iaBWz2aHl7G
+   3NNZirFXR2XjdR8/J0AUnKcUvzvHJK4kxUVDJzUCt0Cct3W/cA7lkYeso
+   pBw1avUuoV7wT1N83QSWiV0q7r5v0bq9POW+fi2/eXTx4jmm1NKXA7jT6
+   Q==;
+X-CSE-ConnectionGUID: yPJd1lCfSyy2bXzt+Sh4jQ==
+X-CSE-MsgGUID: u2rUYcMDR0OPk+n+muoDYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11479"; a="63707415"
+X-IronPort-AV: E=Sophos;i="6.16,276,1744095600"; 
+   d="scan'208";a="63707415"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2025 12:52:29 -0700
+X-CSE-ConnectionGUID: IWkpNjgoTeW6ympUjaLX1A==
+X-CSE-MsgGUID: fGdJyy9dQdmPsFuboUhk1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,276,1744095600"; 
+   d="scan'208";a="153367254"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Jun 2025 12:52:24 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVy4c-000YBW-0t;
+	Sun, 29 Jun 2025 19:52:22 +0000
+Date: Mon, 30 Jun 2025 03:52:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>,
+	Melissa Wen <melissa.srw@gmail.com>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Haneen Mohammed <hamohammed.sa@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rodrigo Siqueira <siqueira@igalia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, arthurgrillo@riseup.net,
+	linux-kernel@vger.kernel.org, jeremie.dautheribes@bootlin.com,
+	miquel.raynal@bootlin.com, thomas.petazzoni@bootlin.com,
+	seanpaul@google.com, nicolejadeyee@google.com,
+	Louis Chauvet <louis.chauvet@bootlin.com>
+Subject: Re: [PATCH v6 1/8] drm/vkms: Create helpers macro to avoid code
+ duplication in format callbacks
+Message-ID: <202506300323.LXmrpHFL-lkp@intel.com>
+References: <20250628-b4-new-color-formats-v6-1-2125b193f91a@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250629113050.58138-1-zaq14760@gmail.com> <092f5109-ca31-4949-bda8-7e0d946c3aa0@kernel.org>
- <CAHp75VfoJ17a=3P3fXHa2mN00S+hdz-vRtLfjmsT7-+i2NfWEw@mail.gmail.com>
-In-Reply-To: <CAHp75VfoJ17a=3P3fXHa2mN00S+hdz-vRtLfjmsT7-+i2NfWEw@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 29 Jun 2025 21:19:36 +0200
-X-Gm-Features: Ac12FXyWIHNh1JvbdxU6VSHhJ3heIYBUycyIfCLNs5T8MXPWmqc3XrvDjIWToRg
-Message-ID: <CANiq72nu3KKovTfkoSofNX05ScvP83Dc2GusP7JJwWD1g2rbog@mail.gmail.com>
-Subject: Re: [PATCH v7] staging: media: atomisp: code style cleanup series
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Hans de Goede <hansg@kernel.org>, LiangCheng Wang <zaq14760@gmail.com>, mchehab@kernel.org, 
-	sakari.ailus@linux.intel.com, andy@kernel.org, gregkh@linuxfoundation.org, 
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com, 
-	justinstitt@google.com, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250628-b4-new-color-formats-v6-1-2125b193f91a@bootlin.com>
 
-On Sun, Jun 29, 2025 at 9:13=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> Yeah, that what I was afraid of. I don't know clang-format well
-> enough, but it might be that tweaking existing .clang-format in the
-> kernel can give something better.
+Hi Louis,
 
-Yeah, there are some proposed changes for the config that I have in
-the backlog, and with a minimum upgrade we can also improve it further
-(some things just couldn't be done well with the options that were
-available at the time when I introduced it). That is why, at least so
-far, clang-format worked best for formatting snippets or for new
-files.
+kernel test robot noticed the following build warnings:
 
-Cheers,
-Miguel
+[auto build test WARNING on bb8aa27eff6f3376242da37c2d02b9dcc66934b1]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Louis-Chauvet/drm-vkms-Create-helpers-macro-to-avoid-code-duplication-in-format-callbacks/20250628-065148
+base:   bb8aa27eff6f3376242da37c2d02b9dcc66934b1
+patch link:    https://lore.kernel.org/r/20250628-b4-new-color-formats-v6-1-2125b193f91a%40bootlin.com
+patch subject: [PATCH v6 1/8] drm/vkms: Create helpers macro to avoid code duplication in format callbacks
+config: x86_64-randconfig-073-20250630 (https://download.01.org/0day-ci/archive/20250630/202506300323.LXmrpHFL-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506300323.LXmrpHFL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506300323.LXmrpHFL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:306 Excess function parameter '__VA_ARGS__' description in 'READ_LINE'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:333 function parameter 'a' not described in 'READ_LINE_ARGB8888'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:333 function parameter 'r' not described in 'READ_LINE_ARGB8888'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:333 function parameter 'g' not described in 'READ_LINE_ARGB8888'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:333 function parameter 'b' not described in 'READ_LINE_ARGB8888'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:343 function parameter 'a' not described in 'READ_LINE_le16161616'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:343 function parameter 'r' not described in 'READ_LINE_le16161616'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:343 function parameter 'g' not described in 'READ_LINE_le16161616'
+>> Warning: drivers/gpu/drm/vkms/vkms_formats.c:343 function parameter 'b' not described in 'READ_LINE_le16161616'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
