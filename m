@@ -1,87 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D6D217737;
-	Sat, 28 Jun 2025 23:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53B517E;
+	Sun, 29 Jun 2025 00:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751154042; cv=none; b=WSRWglQN/2irxz6KAN95VgpfPNFJkFtmcSX4A5npFOKbN8O5mggqDnLJj7fN4s04iBNI80QI6nsJ9K3U16Hr7guOaIbdHZzWttSJZMRFZXNmLVVUN3L+74lxiFBx4xM5Iz8LofumqwXJlhL1aaizocBmGTF9UBMQd3rEzVYrDUM=
+	t=1751157210; cv=none; b=FmjoU6cemjXbbVIwBmIHDQdAlUC5nb6xN+4SwHFDISCJxXUN14iUX7I+yuEYOYy+rmZthAMOBJZlKqPQ1b/0krVUt2nFhZ8U62A/qM/yKNleGD34KkKRrzmqcXoxf653xD++Qw4Mq7jOYVFzMcryZfTKIvAHwhQOOqUJyC3GcXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751154042; c=relaxed/simple;
-	bh=P/RvNkMSAQeQBPjrlKokt7Nces9xjj4vKLh9m4xqU58=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Vk+c71RrTO6BsEdxKCTLgXSUtQ8hICVJR9j7lRhKwWMOthrRfy5rJBX/B6k0kuGOxaILhybxTPUmAaN/qaaHHvk3g0nhhr4jybtxXojQA7gfNUAl1fbR3wqfGZYAN4axQp7vcttu9LGpZnhmIZZve7M1NXIs7z7+GsiBoMndZ/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZeC64k8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751157210; c=relaxed/simple;
+	bh=AolaRGjJTaifs7f9V7/iIwPTII8Eu6lCuQv6L5dV754=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZoML1cUfm72ni7qO09WQ8ghDg6gWs5a4v4qg65UOPbOKxycfNOkv245/SMo0UgelnTqKGh0X68xNpjg868vXDy8qnNjPc1sorcOl4QGcYl+iMyO6IWnCrljGDltyrtSwobr1dSEa0VnnGpiSJPG+hLnanQ/MMJP29/LZazbk6Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nM06v3hO; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZeC64k8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D6AC4CEEA;
-	Sat, 28 Jun 2025 23:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751154040;
-	bh=P/RvNkMSAQeQBPjrlKokt7Nces9xjj4vKLh9m4xqU58=;
-	h=From:To:Cc:Subject:Date:From;
-	b=lZeC64k8S3hd9Xr+qm3sIquoVIDV777wnaYxYAaC+SwIa1rlGpV5WqQFa+12vnPa8
-	 Usmb56cvKYgrxL5V8va1j2+QL1ihntOU3on6AYDbJGkUQKimlmI2YhNqSKMuhBTDx/
-	 0IE0KZTAOcP851cXhJ6D2ZVsYwwFlxxzSkLBIYBYqQmWUzFWgBqHho8JAlgRTv/Lxq
-	 X+VV0erEHeVfGuB2UGRsYi5jdiSIITUR3fxcaiqMWYdyWImI92jcVxBuTZD47cxKA0
-	 hZyvrwkRH03x5xvCmGCASr8ITT1RC8hUt9RieigW438riLtOIzgb4TzFio8QIidTBL
-	 PVkDMHdYdRsJQ==
-From: Kees Cook <kees@kernel.org>
-To: =?UTF-8?q?Jannik=20Gl=C3=BCckert?= <jannik.glueckert@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] kunit/fortify: Add back "volatile" for sizeof() constants
-Date: Sat, 28 Jun 2025 16:40:38 -0700
-Message-Id: <20250628234034.work.800-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nM06v3hO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751157209; x=1782693209;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AolaRGjJTaifs7f9V7/iIwPTII8Eu6lCuQv6L5dV754=;
+  b=nM06v3hOqnJFk2/N2cSyPH1bA+dAGAZNA+yOXsyvRKDjiFIBS4XBhhZq
+   R9GNGlREilgpBiV9E17lOXmjUBJULD6ft9G7WAJSupS45GCoduBuKEmqp
+   PNCgwPHIgu1zJXVx9vqq4UIuLY8eKeaasTh2RySxplBFmhGf+YOeF/j4r
+   CO16dwz+jKzWxm9xhP1NrN1Pu/yI+U1lUl5EOpBgNaDaN69mpNlvD/tvC
+   zcffnzGypT9iHFh+BgK7whhm7eiXAkAj4D7oX7ixvNUs6lkbEJY83ZbeE
+   ghZMPm8XDqqn0romCiXDK1tEaFc7T0QUkw41/DbK//cjGei3ZTn4PoX1g
+   Q==;
+X-CSE-ConnectionGUID: agqdPsD4REKOGm3N97krZA==
+X-CSE-MsgGUID: DbcY+QI7TrCRNsuyOZ8VNQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="53286978"
+X-IronPort-AV: E=Sophos;i="6.16,274,1744095600"; 
+   d="scan'208";a="53286978"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 17:33:28 -0700
+X-CSE-ConnectionGUID: XZi4Py13R+Ok+7qSxSkg8Q==
+X-CSE-MsgGUID: SiYl6Y9lSYOAL5Mz/TgZkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,274,1744095600"; 
+   d="scan'208";a="153598075"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 28 Jun 2025 17:33:25 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVfz0-000XXK-2l;
+	Sun, 29 Jun 2025 00:33:22 +0000
+Date: Sun, 29 Jun 2025 08:32:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Diederik de Haas <didi.debian@cknow.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dragan Simic <dsimic@manjaro.org>,
+	Quentin Schulz <quentin.schulz@cherry.de>,
+	Johan Jonker <jbx6244@gmail.com>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>
+Subject: Re: [PATCH 2/8] arm64: dts: rockchip: Refactor DSI nodes on rk3399
+ boards
+Message-ID: <202506290852.bWro2lBe-lkp@intel.com>
+References: <20250627152645.740981-3-didi.debian@cknow.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1367; i=kees@kernel.org; h=from:subject:message-id; bh=P/RvNkMSAQeQBPjrlKokt7Nces9xjj4vKLh9m4xqU58=; b=owGbwMvMwCVmps19z/KJym7G02pJDBkJtaUH7CMUvCsWzt/JcjK+rZ6pZFmnbuDuhw/EVSTji 6dF8c7tKGVhEONikBVTZAmyc49z8XjbHu4+VxFmDisTyBAGLk4BmMhKa4b/sX0N/uLppVe3zrMI OF8v6nY/8Sxj/fE6zq+u94M7BJfFMDKs5z05ryv39CWN8srzckwXXGe5frrAYqPnUa/A+730720 OAA==
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627152645.740981-3-didi.debian@cknow.org>
 
-It seems the Clang can see through OPTIMIZER_HIDE_VAR when the constant
-is coming from sizeof. Adding "volatile" back to these variables solves
-this false positive without reintroducing the issues that originally led
-to switching to OPTIMIZER_HIDE_VAR in the first place[1].
+Hi Diederik,
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2075 [1]
-Cc: "Jannik Glückert" <jannik.glueckert@gmail.com>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: 6ee149f61bcc ("kunit/fortify: Replace "volatile" with OPTIMIZER_HIDE_VAR()")
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: <linux-hardening@vger.kernel.org>
----
- lib/tests/fortify_kunit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/lib/tests/fortify_kunit.c b/lib/tests/fortify_kunit.c
-index 29ffc62a71e3..fc9c76f026d6 100644
---- a/lib/tests/fortify_kunit.c
-+++ b/lib/tests/fortify_kunit.c
-@@ -1003,8 +1003,8 @@ static void fortify_test_memcmp(struct kunit *test)
- {
- 	char one[] = "My mind is going ...";
- 	char two[] = "My mind is going ... I can feel it.";
--	size_t one_len = sizeof(one) - 1;
--	size_t two_len = sizeof(two) - 1;
-+	volatile size_t one_len = sizeof(one) - 1;
-+	volatile size_t two_len = sizeof(two) - 1;
- 
- 	OPTIMIZER_HIDE_VAR(one_len);
- 	OPTIMIZER_HIDE_VAR(two_len);
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on next-20250627]
+[cannot apply to robh/for-next krzk/for-next krzk-dt/for-next linus/master v6.16-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Diederik-de-Haas/arm64-dts-rockchip-Refactor-DSI-nodes-on-px30-boards/20250627-233300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/20250627152645.740981-3-didi.debian%40cknow.org
+patch subject: [PATCH 2/8] arm64: dts: rockchip: Refactor DSI nodes on rk3399 boards
+config: arm64-randconfig-002-20250629 (https://download.01.org/0day-ci/archive/20250629/202506290852.bWro2lBe-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250629/202506290852.bWro2lBe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506290852.bWro2lBe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm64/boot/dts/rockchip/rk3399-rockpro64-screen.dtso:75.1-6 syntax error
+   FATAL ERROR: Unable to parse input tree
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
