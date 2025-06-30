@@ -1,97 +1,60 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60965284679;
-	Mon, 30 Jun 2025 15:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1B828DB68;
+	Mon, 30 Jun 2025 15:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751297048; cv=none; b=LzJQnQegoUCisKkk6H79jD1l5WIEgLmatpybhotug0aM1SvuYhIltGua5fx4n3/DtKiKK7InuyDIUevlbTtAsGwsEpg5eK/ZZeZAmx7NKLNLhLyEHIp+aIO8MhlDb/XoWULM3CBFfDxFNqdjQyng0Ajz2Sy2vgYqh4UjhOaKrSM=
+	t=1751297286; cv=none; b=Y0sfH6zSMleDVg3Xgvj8fQE8UM0fRoEWlZDna0oUUXh4akBRh9kZt66dawdf9vKILJBwWnHoaIPCouv9BQC32Yzp75y307oeboFCFJ5xUwPtjgJpWfw5KHN+MmJCHlrJ0TGFoGl/qR5PDdpKtRebtUvbpYnX4woJS+taNRleAio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751297048; c=relaxed/simple;
-	bh=ZmxA/O+WlPMqkZNTI4ye++2c81KIMiHo9zxGKmnzRNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gtyP9QKlipBoYa/NQW92sW0a9kx8SsTFsS91AaUz49xLBPZi/FC/DF/OCCpqurO2IYNKLB28K/TpmDa3DfAGVDtQ0bGX+W3sL3YKfaxOiUlq1EQLd9O2daPn6SWJBSRQVfuClgLoXHUrZVQs02eQ1r02cciRAbXJrm0Ihw9sQJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ab5IZRmw; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1751297286; c=relaxed/simple;
+	bh=ch3DPYXoPcBm3zXb6VirroJ8qGEerQo9qp5nPCeSzBg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ugky2U2VO2lHUYkclI87HSYUGHjy4gOl1bGAqWlnoLTZVmShsnbFER6bgyMnOQH/76diT5t9DEaioXsdOxaXlfdW6oXrz8vfoW21BUqnijja37vau7TOcjJU8HlyKMR5P7N+JCNcW0f/5N0wByuFYyfR6lYIllkMJ0M4TeVO6Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZErxdQRl; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ab5IZRmw"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55U8V2Ia000758;
-	Mon, 30 Jun 2025 15:23:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=6FceECBbuO6Z4x2Rp39hcL1hfD2xOI
-	56xCXiWcKK9WA=; b=Ab5IZRmwLvmMk3AiZ89wAAQHApO3HRzY/FKi33YccoEVV8
-	62jDs8lp3GuMhnbp5PvwJeVzIOTdSyIpma+gS0Ugks/c8ATcOXl8/K0Lujz+g0Ad
-	dM1SgFXrBuUMrFqGRGP0yd+oVE8+JDooGZJbbiLjhPut5GCRrRHFIebtiR9AW6Jx
-	+jqh3I+r86Dc9UH2RwXLLF7G0y4EGIwXIEG+8EQguDuTyxyDmyjszA0gk24KkYF+
-	WMQi8/9cdZV76CjE0Ytj99DnJbIc8orRNj1BD/lhbit4VZ05IUXEHPr+1f9T4Iaf
-	PZjXXX61nBxSuq0zpSNKKHaNRcKWSqGn9BNz7ZPg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j5tt2hv1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 15:23:21 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55UFKkJT001633;
-	Mon, 30 Jun 2025 15:23:20 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j5tt2hut-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 15:23:20 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55UF6Jrx006928;
-	Mon, 30 Jun 2025 15:23:19 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 47jvxm687n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 15:23:19 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55UFNFi141091496
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 30 Jun 2025 15:23:15 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9E3012004E;
-	Mon, 30 Jun 2025 15:23:15 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4EF2520043;
-	Mon, 30 Jun 2025 15:23:14 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 30 Jun 2025 15:23:14 +0000 (GMT)
-Date: Mon, 30 Jun 2025 17:23:12 +0200
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>,
-        Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
-        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
-        vincenzo.frascino@arm.com, linux@armlinux.org.uk,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, maddy@linux.ibm.com, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        alex@ghiti.fr, borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, dave.hansen@linux.intel.com,
-        luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, akpm@linux-foundation.org,
-        nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
-        justinstitt@google.com, arnd@arndb.de, rppt@kernel.org,
-        geert@linux-m68k.org, mcgrof@kernel.org, guoweikang.kernel@gmail.com,
-        tiwei.btw@antgroup.com, kevin.brodsky@arm.com, benjamin.berg@intel.com,
-        kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 01/11] kasan: unify static kasan_flag_enabled across
- modes
-Message-ID: <aGKr4DgJ4w3TfJm1@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20250626153147.145312-1-snovitoll@gmail.com>
- <20250626153147.145312-2-snovitoll@gmail.com>
- <aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <20250630143934.15284Caf-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZErxdQRl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751297285; x=1782833285;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ch3DPYXoPcBm3zXb6VirroJ8qGEerQo9qp5nPCeSzBg=;
+  b=ZErxdQRl0Rc4ZdjuVfj+PhoZYwNoMWMGzmxrqwXRcLkgRrJlQG+iUpXA
+   KFHe/iuxkBDVnu3/eRWSZCjoOxTjemslLgEsphs3qRAwwhFPqSMQyfNHu
+   cfyKDaezbwyhdWobV7cvWAjRTm3Sh393Uk80G30IGoPQnxD5ElB23OG7E
+   obd/AaIXpVclDxnnAfYSFza1UegZw8Stee2LcArFSh0BRVD3gnHbt4HqT
+   teK1SCdfXi6vQY/43dNCeDayXkGwkLw2RCa7AZ6S6S1x07EiYZ/0Nznu2
+   xzUvi+UHEMhRvs+k3kpU2HWDpIbMZxQXeVlDwwwZzZxBj9n3ArCz0Zsp8
+   A==;
+X-CSE-ConnectionGUID: ToDY34p6RNmQzEO5VA3L+A==
+X-CSE-MsgGUID: Vfu5tv4sR7KMc+ZgFMC1LQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="70960610"
+X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
+   d="scan'208";a="70960610"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 08:28:05 -0700
+X-CSE-ConnectionGUID: IB1poLFaSFOjqIcthzlNUQ==
+X-CSE-MsgGUID: D7RnpAQQT/K3Iy1CqhErQw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
+   d="scan'208";a="154021445"
+Received: from igk-lkp-server01.igk.intel.com (HELO e588e990b675) ([10.91.175.65])
+  by fmviesa008.fm.intel.com with ESMTP; 30 Jun 2025 08:28:03 -0700
+Received: from kbuild by e588e990b675 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWGQL-0001F9-0U;
+	Mon, 30 Jun 2025 15:28:01 +0000
+Date: Mon, 30 Jun 2025 17:27:43 +0200
+From: kernel test robot <lkp@intel.com>
+To: Konstantin Andreev <andreev@swemel.ru>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Casey Schaufler <casey@schaufler-ca.com>
+Subject: [linux-next:master 4581/6007] Warning:
+ security/smack/smack_access.c:650 function parameter 'label' not described
+ in 'smk_import_valid_label'
+Message-ID: <202506301724.Q25fr1nU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -100,55 +63,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250630143934.15284Caf-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: z4_YQR3yiIx6CG78lyz9FOWfFKu_sVzX
-X-Authority-Analysis: v=2.4 cv=UtNjN/wB c=1 sm=1 tr=0 ts=6862abe9 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=DoNX2vE5F4BLjyZpJB8A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: tSMJYZyFhxN0ELYUCpeHLTTc07NMO3uI
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjMwMDEyNiBTYWx0ZWRfX8gNfFxZTXHKZ dZ80+g69PboCFvZ7mBnOUfK0bCwcv0dSYRqbRWUQ19q/nN1wI6TuhuYqwHy593nbcEA7jlbJwZD 77dnrz9oUStk3kQiVeqmPXKGtKxsdBJ2rMDUHOTQC4GBaAbPZwrp6WqFZf9dFe5sx5xhOKbWCy/
- NwZq+dxl31GEeh7qeRCnnHi4Qxd16CxChbxAbT7vyTZGkfYmt2gzAZsQ9WVivWWtyFljm9LUYUu /A210g10AJ2Cdlfpn7GA0E0mvRxrp+tSiKfaUfSUuPHgdjtBlrSqzSrHD/D2Xsqd7rUwWfMIZjW fInaitcISkEwByhpED+nxsY2XtLUIBynWgUbXHjHc6nBJWSN0rrJzyr4x5ElJH4AxMuQUcAIOs7
- 1rhZuhkKthJv/kG2udE/dGMrx+Msfn4q3zQeVCOUgtPKntnHQoMJd3LZcLGKdzNOHbuQfZDm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_04,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506300126
 
-On Mon, Jun 30, 2025 at 04:39:34PM +0200, Heiko Carstens wrote:
-> > > +/*
-> > > + * Initialize Generic KASAN and enable runtime checks.
-> > > + * This should be called from arch kasan_init() once shadow memory is ready.
-> > > + */
-> > > +void __init kasan_init_generic(void)
-> > > +{
-> > > +	static_branch_enable(&kasan_flag_enabled);
-> > 
-> > s390 crashes at this line, when the whole series is applied.
-> > 
-> > FWIW, it looks like kasan is called while its state is not yet finalized.
-> > E.g. whether calling __asan_report_store4_noabort() before kasan_init_generic()
-> > is expected?
-> 
-> It crashes because with this conversion a call to static_branch_enable() is
-> introduced. This one get's called way before jump_label_init() init has been
-> called. Therefore the STATIC_KEY_CHECK_USE() in static_key_enable_cpuslocked()
-> triggers.
-> 
-> This again tries to emit a warning. Due to lack of console support that early
-> the kernel crashes.
-> 
-> One possible solution would be to move the kasan init function to
-> arch/s390/kernel/setup.c, after jump_label_init() has been called.
-> If we want this, is a different question.
-> 
-> It seems to work, so I see no reason for not doing that.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1343433ed38923a21425c602e92120a1f1db5f7a
+commit: 674e2b24791cbe8fd5dc8a0aed4cb4404fcd2028 [4581/6007] smack: fix bug: setting task label silently ignores input garbage
+config: i386-buildonly-randconfig-2004-20250630 (https://download.01.org/0day-ci/archive/20250630/202506301724.Q25fr1nU-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301724.Q25fr1nU-lkp@intel.com/reproduce)
 
-IIRC, we wanted to have kasan coverage as early as possible.
-Delaying it past jump_label_init() leaves out pretty big chunk of code?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506301724.Q25fr1nU-lkp@intel.com/
 
-> Vasily, since you did nearly all of the KASAN work for s390, do you have any
-> opinion about this?
+All warnings (new ones prefixed by >>):
+
+>> Warning: security/smack/smack_access.c:650 function parameter 'label' not described in 'smk_import_valid_label'
+>> Warning: security/smack/smack_access.c:650 function parameter 'label_len' not described in 'smk_import_valid_label'
+>> Warning: security/smack/smack_access.c:650 function parameter 'gfp' not described in 'smk_import_valid_label'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
