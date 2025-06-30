@@ -1,63 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016C52571A1;
-	Mon, 30 Jun 2025 10:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212985336D;
+	Mon, 30 Jun 2025 10:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751278661; cv=none; b=X3NqW+5twUrETPYW4YAri57yjysba5uZyt2LgJSnn2bPbsIGUPyxxldUAQy0xM6+mi2Cn232/GAC9OzYBCROVm+v5QevsawUzdL7oscmmeUwHactv1DLuFyyxrZeibDihxZ32qaH/D79IZLNnF+AdZz7NQChbPR2K3XeBmfXZ/I=
+	t=1751279924; cv=none; b=Of10Gn8m/cypZod8yx6CggKthPMd2kDoZdUGOQJeSJrUxi/FpmXuLSGTpvbOfbPwpZQMaUxUxerDttxUSKSJt90n0bdpYvLVRE6kqpQk6Jp9q3pXwr44Aj30sSo8VnFq4B5d58+7601YVZUY5nvyUy1r5mcAGgipnX8UZorwwnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751278661; c=relaxed/simple;
-	bh=FMzYZdN0CVSDrQcPpDssp4Fk46VjMQYnmJcIyo2Pv88=;
+	s=arc-20240116; t=1751279924; c=relaxed/simple;
+	bh=90pyHrF0RViM4pGrdWWqWuM9lBGiL7Pw4669LBz+phU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qu92ZPmPir2HlslYZF5J4cIfGGADy1OUESehrbf9lYdgUYAecB46xwqDMkuiYdO6Ib+sBpyBllt9QbBPm6NAXEgWy2mIqwcLY8dlArTgaos9wLQOTCNApAGjjohC5IVcnBvLb5ZBEsAVgB4hYY3BbihlX8Xr2pUbkZpnbxxDFGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bnwnVxm9; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvDz8skNUGlMnGJZmo6spV7mxjUxkS2NyLa6Zru4lVG0dEkKO3hat8NTj8vbLXWjAbEJhaNE/gpoTu/mHkcbXk6NVnrgckQw/PzFmLz9ClEYlXLM7hKF9T+Lrw10Z8oekvqSXMnVMrbC4zBanov8DL+T4y70rCWF4yVW3m2wnN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eukjme4E; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bnwnVxm9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eukjme4E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751278660; x=1782814660;
+  t=1751279922; x=1782815922;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FMzYZdN0CVSDrQcPpDssp4Fk46VjMQYnmJcIyo2Pv88=;
-  b=bnwnVxm9W33bZuDCymD6QNjbgFoqbjdXlLwaSGiLmr5Rx65ym+MQ/T1V
-   kLFiQKxPlGG8xnWx0Lf5xfc44NiUS3/KpZDuF2SXBgUvnaDk0AO1JjBjm
-   qJK8wRy+HSAG3hr4wKMWJ/mfP2O0o0T2dxZd2523/WdaGtCgPULwFFlkF
-   maAY1HjiXPshFHIr3z8aPE7ZAjvECbHfbIIPyvNST4QwZ8xZ10C7MTxOi
-   19yEAI5NkqIHKfzjRJAsjTrCYNuMkHQHMEgSJSVxCvHE7oW7TFlobS1Yo
-   Htxc7vjhaV4Tuk8Hja9qX4TLvH8ZGFLUbX8WzYRd66j7vsi/DUOITC56K
-   Q==;
-X-CSE-ConnectionGUID: LlFIFaz7RImDvp7+N/P28Q==
-X-CSE-MsgGUID: PH7UuQV6RiygJRhaEqjgIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11479"; a="53461296"
+  bh=90pyHrF0RViM4pGrdWWqWuM9lBGiL7Pw4669LBz+phU=;
+  b=eukjme4EFbe98uQ96NZR54ywv4aWw9KyWAvvxrDqqnU4xpx20SfX2ooZ
+   dXHf8uQATausBHlIb3IDNoSWqOdge/wpNqt3QAduE3TRd/Lm3FsfTE9af
+   htN9QlGHveduS2ZcTesRufuq/vWErdv/XIpZjxZt5f1il4eVjP8PJ48zQ
+   3JG1ou/9A64bLXzPL0t1MRJD1w+4DUx5h3/Y9OcMce7+N8L8ftArMwIxK
+   HsJ+bqtYZtQ0sbRBRP7f3q3vTNH8juIt6VZmzNHEeZp6/yYfDfzIzqAW+
+   mdmElmhE+C9ftOZSKRGIHPUmzFhaE4TS/qb7OW9wYTlt6Q8kHpUjLZXXH
+   A==;
+X-CSE-ConnectionGUID: 2vmqCorST0SqnN3QCqMyww==
+X-CSE-MsgGUID: 7NKL+lyBT96DWPcBg1nuFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11479"; a="52730957"
 X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
-   d="scan'208";a="53461296"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 03:17:39 -0700
-X-CSE-ConnectionGUID: PptX8rtzSfyzmgvDLcTnAg==
-X-CSE-MsgGUID: pp065EF/QjetrVvm5H9wVA==
+   d="scan'208";a="52730957"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 03:38:42 -0700
+X-CSE-ConnectionGUID: 3qJxtHz3R1Gvncn6V5PRqQ==
+X-CSE-MsgGUID: fzRuq/8OS+Krc8EYqHxOSA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
-   d="scan'208";a="159149271"
+   d="scan'208";a="157967326"
 Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 30 Jun 2025 03:17:37 -0700
+  by orviesa004.jf.intel.com with ESMTP; 30 Jun 2025 03:38:39 -0700
 Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uWBZu-000YmQ-1q;
-	Mon, 30 Jun 2025 10:17:34 +0000
-Date: Mon, 30 Jun 2025 18:17:14 +0800
+	id 1uWBuG-000Yni-1V;
+	Mon, 30 Jun 2025 10:38:36 +0000
+Date: Mon, 30 Jun 2025 18:37:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Denis Benato <benato.denis96@gmail.com>, linux-kernel@vger.kernel.org
+To: Dave Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org, Johannes Weiner <hannes@cmpxchg.org>,
+	Christian Koenig <christian.koenig@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org, mario.limonciello@amd.com,
-	"Luke D . Jones" <luke@ljones.dev>
-Subject: Re: [PATCH v9 6/8] platform/x86: asus-armoury: add screen
- auto-brightness toggle
-Message-ID: <202506301802.LV9RYF0b-lkp@intel.com>
-References: <20250629131423.9013-7-benato.denis96@gmail.com>
+	Dave Chinner <david@fromorbit.com>,
+	Kairui Song <kasong@tencent.com>, Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH 04/17] ttm/pool: port to list_lru. (v2)
+Message-ID: <202506301808.C73SwQJr-lkp@intel.com>
+References: <20250630045005.1337339-5-airlied@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,88 +66,161 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250629131423.9013-7-benato.denis96@gmail.com>
+In-Reply-To: <20250630045005.1337339-5-airlied@gmail.com>
 
-Hi Denis,
+Hi Dave,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.16-rc4 next-20250630]
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v6.16-rc4]
+[cannot apply to akpm-mm/mm-everything linus/master next-20250630]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Denis-Benato/platform-x86-asus-wmi-export-symbols-used-for-read-write-WMI/20250629-211651
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250629131423.9013-7-benato.denis96%40gmail.com
-patch subject: [PATCH v9 6/8] platform/x86: asus-armoury: add screen auto-brightness toggle
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250630/202506301802.LV9RYF0b-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Airlie/drm-ttm-use-gpu-mm-stats-to-track-gpu-memory-allocations-v2/20250630-134938
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+patch link:    https://lore.kernel.org/r/20250630045005.1337339-5-airlied%40gmail.com
+patch subject: [PATCH 04/17] ttm/pool: port to list_lru. (v2)
+config: i386-buildonly-randconfig-003-20250630 (https://download.01.org/0day-ci/archive/20250630/202506301808.C73SwQJr-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301802.LV9RYF0b-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301808.C73SwQJr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506301802.LV9RYF0b-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506301808.C73SwQJr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/platform/x86/asus-armoury.c:736:1: warning: unused variable 'screen_auto_brightness_attr_group' [-Wunused-const-variable]
-     736 | ATTR_GROUP_BOOL_RW(screen_auto_brightness, "screen_auto_brightness",
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     737 |                    ASUS_WMI_DEVID_SCREEN_AUTO_BRIGHTNESS,
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     738 |                    "Set the panel brightness to Off<0> or On<1>");
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/asus-armoury.h:128:2: note: expanded from macro 'ATTR_GROUP_BOOL_RW'
-     128 |         __ATTR_RW_INT_GROUP_ENUM(_attrname, 0, 1, _wmi, _fsname, "0;1", _dispname)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/asus-armoury.h:102:38: note: expanded from macro '__ATTR_RW_INT_GROUP_ENUM'
-     102 |         static const struct attribute_group _attrname##_attr_group = {  \
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:34:1: note: expanded from here
-      34 | screen_auto_brightness_attr_group
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:5:
+   In file included from include/drm/ttm/ttm_device.h:31:
+>> include/drm/ttm/ttm_pool.h:57:18: error: field has incomplete type 'struct list_lru'
+      57 |         struct list_lru pages;
+         |                         ^
+   include/linux/xarray.h:25:8: note: forward declaration of 'struct list_lru'
+      25 | struct list_lru;
+         |        ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpu/drm/i915/intel_region_ttm.c:8:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:35:
+   In file included from include/linux/pci.h:1656:
+   In file included from include/linux/dmapool.h:15:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/screen_auto_brightness_attr_group +736 drivers/platform/x86/asus-armoury.c
+vim +57 include/drm/ttm/ttm_pool.h
 
-   708	
-   709	static ssize_t cores_efficiency_current_value_store(struct kobject *kobj,
-   710							    struct kobj_attribute *attr, const char *buf,
-   711							    size_t count)
-   712	{
-   713		int err;
-   714	
-   715		err = cores_current_value_store(kobj, attr, buf, CPU_CORE_POWER);
-   716		if (err)
-   717			return err;
-   718	
-   719		return count;
-   720	}
-   721	ATTR_GROUP_CORES_RW(cores_efficiency, "cores_efficiency",
-   722			    "Set the max available efficiency cores");
-   723	
-   724	/* Simple attribute creation */
-   725	ATTR_GROUP_ENUM_INT_RO(charge_mode, "charge_mode", ASUS_WMI_DEVID_CHARGE_MODE, "0;1;2",
-   726			       "Show the current mode of charging");
-   727	
-   728	ATTR_GROUP_BOOL_RW(boot_sound, "boot_sound", ASUS_WMI_DEVID_BOOT_SOUND,
-   729			   "Set the boot POST sound");
-   730	ATTR_GROUP_BOOL_RW(mcu_powersave, "mcu_powersave", ASUS_WMI_DEVID_MCU_POWERSAVE,
-   731			   "Set MCU powersaving mode");
-   732	ATTR_GROUP_BOOL_RW(panel_od, "panel_overdrive", ASUS_WMI_DEVID_PANEL_OD,
-   733			   "Set the panel refresh overdrive");
-   734	ATTR_GROUP_BOOL_RW(panel_hd_mode, "panel_hd_mode", ASUS_WMI_DEVID_PANEL_HD,
-   735			   "Set the panel HD mode to UHD<0> or FHD<1>");
- > 736	ATTR_GROUP_BOOL_RW(screen_auto_brightness, "screen_auto_brightness",
-   737			   ASUS_WMI_DEVID_SCREEN_AUTO_BRIGHTNESS,
-   738			   "Set the panel brightness to Off<0> or On<1>");
-   739	ATTR_GROUP_BOOL_RO(egpu_connected, "egpu_connected", ASUS_WMI_DEVID_EGPU_CONNECTED,
-   740			   "Show the eGPU connection status");
-   741	
+    40	
+    41	/**
+    42	 * struct ttm_pool_type - Pool for a certain memory type
+    43	 *
+    44	 * @pool: the pool we belong to, might be NULL for the global ones
+    45	 * @order: the allocation order our pages have
+    46	 * @caching: the caching type our pages have
+    47	 * @shrinker_list: our place on the global shrinker list
+    48	 * @pages: the lru_list of pages in the pool
+    49	 */
+    50	struct ttm_pool_type {
+    51		struct ttm_pool *pool;
+    52		unsigned int order;
+    53		enum ttm_caching caching;
+    54	
+    55		struct list_head shrinker_list;
+    56	
+  > 57		struct list_lru pages;
+    58	};
+    59	
 
 -- 
 0-DAY CI Kernel Test Service
