@@ -1,197 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14FC2629D;
-	Mon, 30 Jun 2025 21:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A2E22259D;
+	Mon, 30 Jun 2025 22:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751317329; cv=none; b=W7zSPwS6yvgi6rPYNDV98ZZUWszQ49z76i0iC3YGYqxR7LmFkyas+B9kAn3wk1KRVMaZc0wujoRNZ59pb/eG/siUSjnCibU9e2Vo6UW5x7SNDmXOAOvk0l8j0HaZsA4eN9GEjpZvh4HX32oy7wNH8SVrBeyoJH675Umi1GhooGs=
+	t=1751321855; cv=none; b=WlhhFUr9AHG8f37FI+c/WumolMwGptdUB2fq1f92Eva8SWketFnDpcqzzaJC25H6bzOkx7vhSw0madWJiY0ipODHUpjYbZB5Ov5gRSdSs9E+SJo7FK4BEbByGh9EAuK/AcDmf9Q2x4e5Khl49hsd6u99UvXEzuKAtoRGJqbUh2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751317329; c=relaxed/simple;
-	bh=Umzv8skMWurpf2AfydH+g64Fsf5Nlvlhu3kyTJPG6Fc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ddd5Yq76mGhcfPvs2o0rTpU3bepFtRT6r1Tj8I9LHfEJ4a5LoXX4KYSpRIRjONW6k4NOTIBVFxAQrG3Uh36inFQVVLCZucux+QMoCwVUghwszDa88A/SqIi1vPUj8V+QEhpWyfxV+irQOzfzanzy5pEWQA9LGmoFN2EYhUAE3oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FATwFEFv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751321855; c=relaxed/simple;
+	bh=4y+pyeVIPNtUR08xo4fM6DvsRfoRZvH4hvR81MsagnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LoamuZR4GZ6tZwd8O4Y6yMwgx8j7nITgNN67CXq4nVE6GGEpsJ6G4AUmuYFSqCAr+AE3FGqX1EaGL1VnuPMuiEECK1oPjpbEG3fchI9JgWGi/pgAe1WtLkZGZiS/llk49S1qE/UJPE9w4byTdY/l1lfjuhAIlbXdAf2ipEGqy5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AUS32zEL; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FATwFEFv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C25C4CEE3;
-	Mon, 30 Jun 2025 21:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751317329;
-	bh=Umzv8skMWurpf2AfydH+g64Fsf5Nlvlhu3kyTJPG6Fc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FATwFEFvViN4sEtAXPo9Wq7eRRW+p7u1n+imwruTSHCVJNz1oEWx9PGsWPc/GJwRG
-	 1RrRA0FXTgrA7My4tdM5Ti2nvMCVzb7Gnp63e89YRd6dXT2qtfCUg74Tbdw8LwkRs1
-	 EtJHekQXVo5y9KXoM0f9UcgLlmwzASvT/Q+OhJT+/mgw1Hu+gn8Za33iaipccPFBnL
-	 iUlpyhs1+XSt5wR/WDxUiJMFSEzWMa3oxMkiHmJ9ALNummfkzdmgj5yHUJHNMmAYBh
-	 pDbArPzO3MTXKVXgbwCcZ7DfEJk7ob0xpLE803VvwArsQPdBWWkw5gjy8/X3luAppa
-	 ep96YDdr44Zjg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Tiwei Bie <tiwei.btw@antgroup.com>,
-	kernel test robot <lkp@intel.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	richard@nod.at,
-	anton.ivanov@cambridgegreys.com,
-	guoweikang.kernel@gmail.com,
-	geert@linux-m68k.org,
-	tglx@linutronix.de,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 2/6] um: vector: Reduce stack usage in vector_eth_configure()
-Date: Mon, 30 Jun 2025 17:01:59 -0400
-Message-Id: <20250630210203.1359628-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250630210203.1359628-1-sashal@kernel.org>
-References: <20250630210203.1359628-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AUS32zEL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751321853; x=1782857853;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4y+pyeVIPNtUR08xo4fM6DvsRfoRZvH4hvR81MsagnM=;
+  b=AUS32zELGne0Ahuc1SmUN5vac40oJz3OUZ1fsqLSdJUek3aToY//rBK7
+   ohvFdX5UGChNTwgljUqplObFpH/NQMMLfwE87kHAc4en5RfJ/HTNW4w6n
+   tL3tQ12KZ7Z7LULbWoFpkDYv/uQKUocCfoq/2JTJxarrUL6nwLjIs0gLM
+   UX2U9nuse67EWxEENjJCUNFZH9hMla9A+Gq30t4Fa5Hgc/tBHYjRmcQLs
+   w2QG8zLxd9OZDq7vlDPCfac2qm1GFF5Ft+TK7M8OtTw2PatoLi7Ccrek1
+   L1TZFfWZ58ipgvCG1V8vDTsl/SRa2KxpvNyjX+EajDFDaF8Wv7qNZ0tX+
+   Q==;
+X-CSE-ConnectionGUID: REmCUj/1Sr+ErOSQx1HbsA==
+X-CSE-MsgGUID: MxoBurpnTsOFTeStLyA4eA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="76110670"
+X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
+   d="scan'208";a="76110670"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 15:17:33 -0700
+X-CSE-ConnectionGUID: 4j4pd/ZRQ7m8uaQ29Z9MSA==
+X-CSE-MsgGUID: 7QCLNpn2R0KLuBrBEyL+tQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
+   d="scan'208";a="153061396"
+Received: from igk-lkp-server01.igk.intel.com (HELO e588e990b675) ([10.91.175.65])
+  by orviesa006.jf.intel.com with ESMTP; 30 Jun 2025 15:17:31 -0700
+Received: from kbuild by e588e990b675 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWMoa-0001KV-2c;
+	Mon, 30 Jun 2025 22:17:28 +0000
+Date: Tue, 1 Jul 2025 00:16:56 +0200
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-vfs:work.pidfs.setns 8/9] fs/pidfs.c:38:8: error: assigning
+ to 'struct path' from incompatible type 'void (struct path *)'
+Message-ID: <202507010037.c3Ung7vs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.239
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Tiwei Bie <tiwei.btw@antgroup.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.pidfs.setns
+head:   80432e84dc3a17336efd11282d8c5db368ed827b
+commit: f7b88122fa711d730ad163427e8da56adee73e33 [8/9] fhandle, pidfs: support open_by_handle_at() purely based on file handle
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250701/202507010037.c3Ung7vs-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507010037.c3Ung7vs-lkp@intel.com/reproduce)
 
-[ Upstream commit 2d65fc13be85c336c56af7077f08ccd3a3a15a4a ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507010037.c3Ung7vs-lkp@intel.com/
 
-When compiling with clang (19.1.7), initializing *vp using a compound
-literal may result in excessive stack usage. Fix it by initializing the
-required fields of *vp individually.
+All errors (new ones prefixed by >>):
 
-Without this patch:
+   fs/pidfs.c:34:20: error: redefinition of 'pidfs_root_path' as different kind of symbol
+      34 | static struct path pidfs_root_path = {};
+         |                    ^
+   fs/internal.h:356:6: note: previous definition is here
+     356 | void pidfs_root_path(struct path *path);
+         |      ^
+>> fs/pidfs.c:38:8: error: assigning to 'struct path' from incompatible type 'void (struct path *)'
+      38 |         *path = pidfs_root_path;
+         |               ^ ~~~~~~~~~~~~~~~
+>> fs/pidfs.c:1077:17: error: member reference base type 'void (struct path *)' is not a structure or union
+    1077 |         pidfs_root_path.mnt = pidfs_mnt;
+         |         ~~~~~~~~~~~~~~~^~~~
+   fs/pidfs.c:1078:17: error: member reference base type 'void (struct path *)' is not a structure or union
+    1078 |         pidfs_root_path.dentry = pidfs_mnt->mnt_root;
+         |         ~~~~~~~~~~~~~~~^~~~~~~
+   4 errors generated.
 
-$ objdump -d arch/um/drivers/vector_kern.o | ./scripts/checkstack.pl x86_64 0
-...
-0x0000000000000540 vector_eth_configure [vector_kern.o]:1472
-...
 
-With this patch:
+vim +38 fs/pidfs.c
 
-$ objdump -d arch/um/drivers/vector_kern.o | ./scripts/checkstack.pl x86_64 0
-...
-0x0000000000000540 vector_eth_configure [vector_kern.o]:208
-...
+90c48e2619324e Christian Brauner 2025-06-19  35  
+90c48e2619324e Christian Brauner 2025-06-19  36  void pidfs_root_path(struct path *path)
+90c48e2619324e Christian Brauner 2025-06-19  37  {
+90c48e2619324e Christian Brauner 2025-06-19 @38  	*path = pidfs_root_path;
+90c48e2619324e Christian Brauner 2025-06-19  39  	path_get(path);
+90c48e2619324e Christian Brauner 2025-06-19  40  }
+90c48e2619324e Christian Brauner 2025-06-19  41  
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202506221017.WtB7Usua-lkp@intel.com/
-Signed-off-by: Tiwei Bie <tiwei.btw@antgroup.com>
-Link: https://patch.msgid.link/20250623110829.314864-1-tiwei.btw@antgroup.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+:::::: The code at line 38 was first introduced by commit
+:::::: 90c48e2619324e40223af34ff8aed6480b9d19c1 pidfs: add pidfs_root_path() helper
 
-**YES**
+:::::: TO: Christian Brauner <brauner@kernel.org>
+:::::: CC: Christian Brauner <brauner@kernel.org>
 
-This commit should be backported to stable kernel trees for the
-following reasons:
-
-1. **Fixes a real bug**: The commit addresses excessive stack usage
-   (1472 bytes) that can lead to stack overflow, especially problematic
-   on systems with limited kernel stack space. This is a legitimate bug
-   that affects system stability.
-
-2. **Compiler-specific issue with real impact**: While triggered by
-   clang 19.1.7's handling of compound literals, the resulting stack
-   usage of 1472 bytes is genuinely excessive and dangerous regardless
-   of the compiler quirk that exposed it.
-
-3. **Simple and safe fix**: The change is purely mechanical - converting
-   from compound literal initialization to field-by-field
-   initialization:
-  ```c
-  // From:
-  *vp = ((struct vector_private) { .field = value, ... });
-  // To:
-  vp->field = value;
-  ```
-
-4. **Minimal risk**: The fix doesn't change any logic or functionality.
-   It only changes how the structure is initialized, making it extremely
-   unlikely to introduce regressions.
-
-5. **Precedent from similar commits**: Looking at the historical commits
-   marked "YES" for backporting:
-   - Similar Commit #1: Reduced stack frame in qed driver using
-     `noinline_for_stack`
-   - Similar Commit #4: Reduced stack usage in ethtool with clang using
-     `noinline_for_stack`
-
-   Both addressed the same class of problem (excessive stack usage with
-clang) and were considered suitable for stable.
-
-6. **Measurable improvement**: The stack usage reduction from 1472 to
-   208 bytes is dramatic and well-documented by the kernel test robot,
-   providing clear evidence of the fix's effectiveness.
-
-The commit meets the stable kernel criteria of fixing an important bug
-with minimal risk and a contained change. While it doesn't explicitly
-include a "Cc: stable" tag, the nature of the fix (preventing potential
-stack overflow) makes it a good candidate for stable backporting.
-
- arch/um/drivers/vector_kern.c | 42 +++++++++++------------------------
- 1 file changed, 13 insertions(+), 29 deletions(-)
-
-diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
-index da05bfdaeb1db..a37007e42265a 100644
---- a/arch/um/drivers/vector_kern.c
-+++ b/arch/um/drivers/vector_kern.c
-@@ -1600,35 +1600,19 @@ static void vector_eth_configure(
- 
- 	device->dev = dev;
- 
--	*vp = ((struct vector_private)
--		{
--		.list			= LIST_HEAD_INIT(vp->list),
--		.dev			= dev,
--		.unit			= n,
--		.options		= get_transport_options(def),
--		.rx_irq			= 0,
--		.tx_irq			= 0,
--		.parsed			= def,
--		.max_packet		= get_mtu(def) + ETH_HEADER_OTHER,
--		/* TODO - we need to calculate headroom so that ip header
--		 * is 16 byte aligned all the time
--		 */
--		.headroom		= get_headroom(def),
--		.form_header		= NULL,
--		.verify_header		= NULL,
--		.header_rxbuffer	= NULL,
--		.header_txbuffer	= NULL,
--		.header_size		= 0,
--		.rx_header_size		= 0,
--		.rexmit_scheduled	= false,
--		.opened			= false,
--		.transport_data		= NULL,
--		.in_write_poll		= false,
--		.coalesce		= 2,
--		.req_size		= get_req_size(def),
--		.in_error		= false,
--		.bpf			= NULL
--	});
-+	INIT_LIST_HEAD(&vp->list);
-+	vp->dev		= dev;
-+	vp->unit	= n;
-+	vp->options	= get_transport_options(def);
-+	vp->parsed	= def;
-+	vp->max_packet	= get_mtu(def) + ETH_HEADER_OTHER;
-+	/*
-+	 * TODO - we need to calculate headroom so that ip header
-+	 * is 16 byte aligned all the time
-+	 */
-+	vp->headroom	= get_headroom(def);
-+	vp->coalesce	= 2;
-+	vp->req_size	= get_req_size(def);
- 
- 	dev->features = dev->hw_features = (NETIF_F_SG | NETIF_F_FRAGLIST);
- 	tasklet_init(&vp->tx_poll, vector_tx_poll, (unsigned long)vp);
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
