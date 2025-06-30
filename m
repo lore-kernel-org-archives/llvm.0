@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF8D28C873;
-	Mon, 30 Jun 2025 16:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F440292B40;
+	Mon, 30 Jun 2025 17:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751300710; cv=none; b=H0RbZHoduYqulsp43701A6DNs++nApWAIt9qjwo2wJQ8zke2wouJFxjhdaPORfd265zdTyZQT73oZsDaLH1c3ArreAq1XF9Qh0gfO14adICgF6N3jkmPqsNaHKBUzijjWBz8d31ZgoZD0dRSkmiEPYrLLSXToJCXorG4w2CjYso=
+	t=1751303953; cv=none; b=my3nZ3ehQ7pgPcDbFi5eXqDqymGnPcGApg0gjQBPkQ+FJEcjRo6xgZVRj1II7YWaXYZLxS3UrqFjb7dP03I37og+8lqlgpBAPmy32FwyTgLfVhFo4ml42Ptl/c83U0il5qQJQ8VUG8hNv6pp8O0ZPhH7OB5lm31MSLJlKz13eps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751300710; c=relaxed/simple;
-	bh=ux+trMzmDsu919a8g/ViYn9yx0SZb18epLylTUUzWZ8=;
+	s=arc-20240116; t=1751303953; c=relaxed/simple;
+	bh=v6nG3ANwlwewYMzG2EDdd15h04a3QX18hSDz1c6pRs4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pjswLwUm6PK5Vfkn65wDUUVnEMLnS2autb4omORdyMBMy1tlBwLTZDn1NcNKcaU06E7XHObB3aTPITUcKdweGejuKvNgR9v5ZuPWU6O9jt8WgFx8qtyHr/GG4Eak0LWf7PNQWgXB1XB/xm6MorDokaJ4/sNlzfhSPicDlsTi8KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kHbLfCuI; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=YpBpiyCyWXAZa9/Fy24Aa6d/JUHmuBARbxX3WlUCoq3oY/RIrXGkKavsbxmoB0XM9QE6zo+REqYT6mYUC/WySdCo9m3lZ8NmUqpd2K4kzeebbmuas52p5wAcx4b8ROLAXpgnVi8vB5Zh5mqBqyOpOzdF7bTbVujcFI19Kx/O1mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PGWfRdrs; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kHbLfCuI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PGWfRdrs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751300708; x=1782836708;
+  t=1751303952; x=1782839952;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ux+trMzmDsu919a8g/ViYn9yx0SZb18epLylTUUzWZ8=;
-  b=kHbLfCuIo7Ka31KxmKXApT9U4ln0hg3zHI0RsB2pNcUzAI9BWFeyQY63
-   npX0R1hBcka8LEpatWNDqwK1uJyfzBYIXMiQi7jReatzOWITgbPNQzG30
-   4iBFC4FFvD7BL36mfrMHML/hxp5PehC410LvpY/Jzd9tVVpz5MxX72qHx
-   vaxyClcxeif5EWonQxJGE9WOdG9xLPz3202d5mG152KHCh4lZ10vM1wii
-   dpJrqO2f1DBnqSzpqh8ohzBl3K9SzN1W3qgIHSMaloCrB2aBmY57Ing4p
-   AfXYjMSp4srwIZSxy4l0h47K1guFgpS6KMj7ue1VAK5WNivjbkz8c3/3e
+  bh=v6nG3ANwlwewYMzG2EDdd15h04a3QX18hSDz1c6pRs4=;
+  b=PGWfRdrsfSK90Nuep1FWBKegIAbE6FsVTmAb541Xgf9m3cVxg7eXpCqz
+   bQKXhoOKphB82ImqcDDSva1kfWVUoE279nq4xwREIaGX0HsB58T3y4XLv
+   vxFDOKbwyOJwB8E8lhB5Heo2n2yiTloYpP6NQBPchZYEgXQ/NIWOk/eac
+   MpuBxn6Buz5MnmIkv0Y5zNpeZF3XzBYXrBj3xItETEccGO4NwHm6bqjTr
+   4qe+uC4Rh0Nk/PLPKz4A2zXI6Q72+JySULiJ1Z3VMCggYxgasemcJeGF+
+   Gy1y1XDDf8peheJNK8HubwPNLEpFVTFX0vb1bRaMOYtOL12ahXpNf7uKR
    w==;
-X-CSE-ConnectionGUID: a52XwlpnQOWsxdjPm9yR1w==
-X-CSE-MsgGUID: yWVzBtY6TrWnnsReQihyPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="57342878"
+X-CSE-ConnectionGUID: daOLKe97Rge0bmbap/KfjA==
+X-CSE-MsgGUID: yMfiHytxR7CryToXD41g2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="52655467"
 X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
-   d="scan'208";a="57342878"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 09:25:07 -0700
-X-CSE-ConnectionGUID: CT6FU235T/WilUl3y3OD8Q==
-X-CSE-MsgGUID: wladRW8rRZuhk5s23jbTaw==
+   d="scan'208";a="52655467"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 10:19:11 -0700
+X-CSE-ConnectionGUID: Zs5+pFf4RhOqtVr2rq10TA==
+X-CSE-MsgGUID: z+7SfbLHS86fpWLtpCjSJQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
-   d="scan'208";a="159012137"
+   d="scan'208";a="152903848"
 Received: from igk-lkp-server01.igk.intel.com (HELO e588e990b675) ([10.91.175.65])
-  by fmviesa004.fm.intel.com with ESMTP; 30 Jun 2025 09:25:07 -0700
+  by orviesa010.jf.intel.com with ESMTP; 30 Jun 2025 10:19:10 -0700
 Received: from kbuild by e588e990b675 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uWHJY-0001FP-1Q;
-	Mon, 30 Jun 2025 16:25:04 +0000
-Date: Mon, 30 Jun 2025 18:24:05 +0200
+	id 1uWI9r-0001Fn-18;
+	Mon, 30 Jun 2025 17:19:07 +0000
+Date: Mon, 30 Jun 2025 19:18:28 +0200
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:io_uring-defer-tw.3 3/6] io_uring/slist.h:91:7:
- warning: variable 'ret' set but not used
-Message-ID: <202506301848.F6jPQVAB-lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:work.mount 30/42] Warning: fs/namespace.c:2792 function
+ parameter 'pinned' not described in 'do_lock_mount'
+Message-ID: <202506301911.uysRaP8b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,47 +63,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-defer-tw.3
-head:   bbc42e47c323defdb248d9802a92852cca44d353
-commit: 6e353f5918ea32f8c5719096de064efa5858e5c9 [3/6] io_uring/slist: add list-to-list list splice helper
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250630/202506301848.F6jPQVAB-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.mount
+head:   a7cce099450f8fc597a6ac215440666610895fb7
+commit: e037364e4447334c28f6453693d663a7e6fdc5bf [30/42] get rid of mountpoint->m_count
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250630/202506301911.uysRaP8b-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301848.F6jPQVAB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301911.uysRaP8b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506301848.F6jPQVAB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506301911.uysRaP8b-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from io_uring/io_uring.c:82:
-   In file included from io_uring/io_uring.h:13:
->> io_uring/slist.h:91:7: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-      91 |         bool ret = false;
-         |              ^
-   1 warning generated.
-
-
-vim +/ret +91 io_uring/slist.h
-
-    87	
-    88	static inline bool wq_list_splice_list(struct io_wq_work_list *src,
-    89					       struct io_wq_work_list *dst)
-    90	{
-  > 91		bool ret = false;
-    92	
-    93		if (wq_list_empty(dst)) {
-    94			*dst = *src;
-    95		} else {
-    96			dst->last->next = src->first;
-    97			dst->last = src->last;
-    98			ret = true;
-    99		}
-   100		INIT_WQ_LIST(src);
-   101		return false;
-   102	}
-   103	
+>> Warning: fs/namespace.c:2792 function parameter 'pinned' not described in 'do_lock_mount'
 
 -- 
 0-DAY CI Kernel Test Service
