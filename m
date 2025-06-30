@@ -1,51 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90011F3B97;
-	Mon, 30 Jun 2025 20:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE76323497B;
+	Mon, 30 Jun 2025 20:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751317166; cv=none; b=PQWG+kNfiEByqSHW1kOgsjaY13UgZITDOPD0L86xYRYgDaSOGbWMjYOZGwMreEQUD31SoulXQq0IgIhHmcN+Tq2awYH4DHOG5YwErWeSkvJiQKRQTSCT2aBkwL2Hf9YcSRg1PP/2Vv8LhuIuEHv+r0iVyzhny2+MOpdBSRsq9X8=
+	t=1751317182; cv=none; b=oRws6/bq0tUJLSTQyTwxvDyWfTCqouUrRpdhMsPSVCGJm5BLx8rXYCoBPy2SnTCVSw/TcXNmbjaF39OuPC2SfK9Yq0sIKf8z7J55apf+0Sz5JMcWANQueWI+OoDH9IOcBxinB9rx+oJQXbpEgWqhwDVfU+U8hUMOREfMdOWNwLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751317166; c=relaxed/simple;
-	bh=EsZqcvUvp7a4JCp9st0FuMFpsHT2F3mKpjIq3oWzNaw=;
+	s=arc-20240116; t=1751317182; c=relaxed/simple;
+	bh=l0jJzT6z2oJIpMQkpEb7GhJRoc5xgqv3OPQRXqyvSwU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rpB9pPH75GSGReVgczXdj7NRBxdZax+wb9nm0MY8vvAl61jJPV0pTQpzRnR4R6t56bnxMrznCqCXDDmfP6aSNWwcqNI3Or8Fh9FSygTSstHxaeVNbRBXdABUBbP15AS283F9OhKvlpApF73rpyKwa2eWUcDfRXjWppDdb83+dSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LqbPcXrO; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=UMQG94dtPQqoY7rA7DI4lhiWCTX2ZiSMvf26/EZwRQyyHd4xYc4byBIr5dvrm2i17kuy6bRdN7sn5smb7TZzeW05EnU0qWYrfgQs1uhBwO3meHMS4mdXwIMT6z9gJrQ5Q/a/4nVCtLAywXW0v6/2FnEwVSx4gTtvvMCDNfylXIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eoo6iH4j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LqbPcXrO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D75C4CEE3;
-	Mon, 30 Jun 2025 20:59:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoo6iH4j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DF6C4CEEB;
+	Mon, 30 Jun 2025 20:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751317165;
-	bh=EsZqcvUvp7a4JCp9st0FuMFpsHT2F3mKpjIq3oWzNaw=;
+	s=k20201202; t=1751317181;
+	bh=l0jJzT6z2oJIpMQkpEb7GhJRoc5xgqv3OPQRXqyvSwU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LqbPcXrOA8VCHjyLN4Zibj4yV6ILLyTkNe6bD05PVBsE6eyn5SCugKND+xSuIXfNy
-	 c5YSYe8teulotXz3xZgjwn8nvlYOa7JnU2Fj75Ts4e0RzYee9/sglrKhGR7JVm0jss
-	 wwHXXnHQ4gWPe2wdiMB0NaHzrzQ+NkQKLrOmhH9OsqdCqyd/E4do/IuFrt7hzec4cV
-	 Yw1feSWHfS5fsnYJepcWpPL0IoHt5Uk2If42/bKOmEUhoyKIcCqz+pt+8QaJgc+dr3
-	 WBDgiENhvxdsGcCyzNh4GZDNs7M4zDjHhHygKW+DCfdbsNXxKCKWNhLqeMwb2+KV8+
-	 zXG4jKwC6ikGw==
+	b=eoo6iH4jBVayj0zk5LqBDaIpXJLVTm7XX5VTQZ7+JBEDFznarQK8dp+b8Kqz2bqYL
+	 NCG48oeL+RNJRnVRafvfSOqA/nAqYWtfe+5CUsjuj8c2UHez9begMn1srnXpLAufn5
+	 mTvV6lIE7yVxwWopizMNRmTTlafx0v5yKcZywNsFB/haKONxYJ2sgGfucCqCM8Qi/O
+	 +7WQ+0eXmv9eBAeZcVwLejR3tz3/f0BuvcxOIORLtUB6e2+ppqxWgMxOyb5Gfg7laE
+	 QH2c3EaQuoag6f6NXLe/XHROI5Yi8WISSy3+RZXQ9d01u/NbtiEkZrhCGbWUFy1NJk
+	 kj2FjowgF4SHA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Fangrui Song <i@maskray.me>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
+Cc: Tiwei Bie <tiwei.btw@antgroup.com>,
+	kernel test robot <lkp@intel.com>,
+	Johannes Berg <johannes.berg@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
-	paul.walmsley@sifive.com,
-	aou@eecs.berkeley.edu,
+	nathan@kernel.org,
+	richard@nod.at,
+	anton.ivanov@cambridgegreys.com,
+	geert@linux-m68k.org,
+	agordeev@linux.ibm.com,
+	guoweikang.kernel@gmail.com,
 	tglx@linutronix.de,
-	thomas.weissschuh@linutronix.de,
-	namcao@linutronix.de,
-	linux-riscv@lists.infradead.org,
+	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.15 20/23] riscv: vdso: Exclude .rodata from the PT_DYNAMIC segment
-Date: Mon, 30 Jun 2025 16:44:25 -0400
-Message-Id: <20250630204429.1357695-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 03/21] um: vector: Reduce stack usage in vector_eth_configure()
+Date: Mon, 30 Jun 2025 16:45:18 -0400
+Message-Id: <20250630204536.1358327-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250630204429.1357695-1-sashal@kernel.org>
-References: <20250630204429.1357695-1-sashal@kernel.org>
+In-Reply-To: <20250630204536.1358327-1-sashal@kernel.org>
+References: <20250630204536.1358327-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,34 +56,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15.4
+X-stable-base: Linux 6.12.35
 Content-Transfer-Encoding: 8bit
 
-From: Fangrui Song <i@maskray.me>
+From: Tiwei Bie <tiwei.btw@antgroup.com>
 
-[ Upstream commit e0eb1b6b0cd29ca7793c501d5960fd36ba11f110 ]
+[ Upstream commit 2d65fc13be85c336c56af7077f08ccd3a3a15a4a ]
 
-.rodata is implicitly included in the PT_DYNAMIC segment due to
-inheriting the segment of the preceding .dynamic section (in both GNU ld
-and LLD).  When the .rodata section's size is not a multiple of 16
-bytes on riscv64, llvm-readelf will report a "PT_DYNAMIC dynamic table
-is invalid" warning.  Note: in the presence of the .dynamic section, GNU
-readelf and llvm-readelf's -d option decodes the dynamic section using
-the section.
+When compiling with clang (19.1.7), initializing *vp using a compound
+literal may result in excessive stack usage. Fix it by initializing the
+required fields of *vp individually.
 
-This issue arose after commit 8f8c1ff879fab60f80f3a7aec3000f47e5b03ba9
-("riscv: vdso.lds.S: remove hardcoded 0x800 .text start addr"), which
-placed .rodata directly after .dynamic by removing .eh_frame.
+Without this patch:
 
-This patch resolves the implicit inclusion into PT_DYNAMIC by explicitly
-specifying the :text output section phdr.
+$ objdump -d arch/um/drivers/vector_kern.o | ./scripts/checkstack.pl x86_64 0
+...
+0x0000000000000540 vector_eth_configure [vector_kern.o]:1472
+...
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2093
-Signed-off-by: Fangrui Song <i@maskray.me>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20250602-riscv-vdso-v1-1-0620cf63cff0@maskray.me
-Signed-off-by: Palmer Dabbelt <palmer@dabbelt.com>
+With this patch:
+
+$ objdump -d arch/um/drivers/vector_kern.o | ./scripts/checkstack.pl x86_64 0
+...
+0x0000000000000540 vector_eth_configure [vector_kern.o]:208
+...
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202506221017.WtB7Usua-lkp@intel.com/
+Signed-off-by: Tiwei Bie <tiwei.btw@antgroup.com>
+Link: https://patch.msgid.link/20250623110829.314864-1-tiwei.btw@antgroup.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
@@ -90,70 +94,105 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
 This commit should be backported to stable kernel trees for the
 following reasons:
 
-1. **Regression Fix**: The commit explicitly fixes a regression
-   introduced by commit 8f8c1ff879fab60f80f3a7aec3000f47e5b03ba9
-   ("riscv: vdso.lds.S: remove hardcoded 0x800 .text start addr").
-   Regression fixes are high-priority candidates for stable backporting.
+1. **Fixes a real bug**: The commit addresses excessive stack usage
+   (1472 bytes) that can lead to stack overflow, especially problematic
+   on systems with limited kernel stack space. This is a legitimate bug
+   that affects system stability.
 
-2. **Fixes Invalid ELF Structure**: The issue is not merely cosmetic.
-   The PT_DYNAMIC segment is reported as "invalid" by llvm-readelf,
-   indicating the ELF structure is technically incorrect. From the
-   linker script:
+2. **Compiler-specific issue with real impact**: While triggered by
+   clang 19.1.7's handling of compound literals, the resulting stack
+   usage of 1472 bytes is genuinely excessive and dangerous regardless
+   of the compiler quirk that exposed it.
+
+3. **Simple and safe fix**: The change is purely mechanical - converting
+   from compound literal initialization to field-by-field
+   initialization:
+  ```c
+  // From:
+  *vp = ((struct vector_private) { .field = value, ... });
+  // To:
+  vp->field = value;
   ```
-  .dynamic        : { *(.dynamic) }               :text   :dynamic
-  .rodata         : {
-  ...
-  }  // implicitly inherits :dynamic from previous section
-  ```
-  Without the explicit `:text` specification, `.rodata` inherits the
-  segment attributes from the preceding `.dynamic` section, incorrectly
-  including it in the PT_DYNAMIC segment.
 
-3. **Minimal and Safe Change**: The fix is a single-line change that
-   adds `:text` to the `.rodata` section definition:
-  ```diff
-   - }
-   +    }                                               :text
-   ```
-   This explicitly places `.rodata` in the text segment only, excluding
-it from PT_DYNAMIC. The change has no functional impact beyond
-correcting the ELF structure.
+4. **Minimal risk**: The fix doesn't change any logic or functionality.
+   It only changes how the structure is initialized, making it extremely
+   unlikely to introduce regressions.
 
-4. **Similar to Previous Backported Commits**: This is similar to commit
-   #2 in the reference list ("riscv: vdso: fix section overlapping under
-   some conditions") which was marked YES for backporting. Both commits
-   fix structural issues in the vDSO linker script that cause
-   build/tooling errors.
+5. **Precedent from similar commits**: Looking at the historical commits
+   marked "YES" for backporting:
+   - Similar Commit #1: Reduced stack frame in qed driver using
+     `noinline_for_stack`
+   - Similar Commit #4: Reduced stack usage in ethtool with clang using
+     `noinline_for_stack`
 
-5. **Potential for Broader Impact**: While the immediate symptom is a
-   warning from llvm-readelf, an invalid PT_DYNAMIC segment could
-   potentially cause issues with:
-   - Build systems that validate ELF structures
-   - Runtime loaders with strict ELF validation
-   - Debugging and analysis tools
-   - Future toolchain versions that may be less tolerant of invalid
-     structures
+   Both addressed the same class of problem (excessive stack usage with
+clang) and were considered suitable for stable.
 
-The commit meets the stable tree criteria: it fixes an important bug
-(invalid ELF structure), the fix is small and contained, and there's
-minimal risk of regression.
+6. **Measurable improvement**: The stack usage reduction from 1472 to
+   208 bytes is dramatic and well-documented by the kernel test robot,
+   providing clear evidence of the fix's effectiveness.
 
- arch/riscv/kernel/vdso/vdso.lds.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The commit meets the stable kernel criteria of fixing an important bug
+with minimal risk and a contained change. While it doesn't explicitly
+include a "Cc: stable" tag, the nature of the fix (preventing potential
+stack overflow) makes it a good candidate for stable backporting.
 
-diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/vdso.lds.S
-index 8e86965a8aae4..646e268ede443 100644
---- a/arch/riscv/kernel/vdso/vdso.lds.S
-+++ b/arch/riscv/kernel/vdso/vdso.lds.S
-@@ -30,7 +30,7 @@ SECTIONS
- 		*(.data .data.* .gnu.linkonce.d.*)
- 		*(.dynbss)
- 		*(.bss .bss.* .gnu.linkonce.b.*)
--	}
-+	}						:text
+ arch/um/drivers/vector_kern.c | 42 +++++++++++------------------------
+ 1 file changed, 13 insertions(+), 29 deletions(-)
+
+diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
+index 64c09db392c16..7a88b13d289f1 100644
+--- a/arch/um/drivers/vector_kern.c
++++ b/arch/um/drivers/vector_kern.c
+@@ -1592,35 +1592,19 @@ static void vector_eth_configure(
  
- 	.note		: { *(.note.*) }		:text	:note
+ 	device->dev = dev;
  
+-	*vp = ((struct vector_private)
+-		{
+-		.list			= LIST_HEAD_INIT(vp->list),
+-		.dev			= dev,
+-		.unit			= n,
+-		.options		= get_transport_options(def),
+-		.rx_irq			= 0,
+-		.tx_irq			= 0,
+-		.parsed			= def,
+-		.max_packet		= get_mtu(def) + ETH_HEADER_OTHER,
+-		/* TODO - we need to calculate headroom so that ip header
+-		 * is 16 byte aligned all the time
+-		 */
+-		.headroom		= get_headroom(def),
+-		.form_header		= NULL,
+-		.verify_header		= NULL,
+-		.header_rxbuffer	= NULL,
+-		.header_txbuffer	= NULL,
+-		.header_size		= 0,
+-		.rx_header_size		= 0,
+-		.rexmit_scheduled	= false,
+-		.opened			= false,
+-		.transport_data		= NULL,
+-		.in_write_poll		= false,
+-		.coalesce		= 2,
+-		.req_size		= get_req_size(def),
+-		.in_error		= false,
+-		.bpf			= NULL
+-	});
++	INIT_LIST_HEAD(&vp->list);
++	vp->dev		= dev;
++	vp->unit	= n;
++	vp->options	= get_transport_options(def);
++	vp->parsed	= def;
++	vp->max_packet	= get_mtu(def) + ETH_HEADER_OTHER;
++	/*
++	 * TODO - we need to calculate headroom so that ip header
++	 * is 16 byte aligned all the time
++	 */
++	vp->headroom	= get_headroom(def);
++	vp->coalesce	= 2;
++	vp->req_size	= get_req_size(def);
+ 
+ 	dev->features = dev->hw_features = (NETIF_F_SG | NETIF_F_FRAGLIST);
+ 	INIT_WORK(&vp->reset_tx, vector_reset_tx);
 -- 
 2.39.5
 
