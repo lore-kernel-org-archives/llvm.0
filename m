@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15BB1FBCB0;
-	Mon, 30 Jun 2025 21:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3B61E1DE5;
+	Mon, 30 Jun 2025 21:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751317245; cv=none; b=uR+wiSzHi9uPKgCKgrTr9ITOfQY7t0x2pc1iBchKYeGfqw33J+k3JE7KEwdjLyisfUbZMl6warDiU/K6NZmRiv50UBn8FtKq6FM4IUMDEwdLH4x0yFOrJYsUppymtUBFCnOtYKSs1sf169tQhOUECcPsBSDuRH5J1BtjHJqT690=
+	t=1751317281; cv=none; b=dru96Tp1plli1jDrXKxbmAyd04yZN8AsY4h5BktBegMc05cZC+S5Hh9GUFykfYgWKG/sLlLfQwei2gojGzg0aC8xjOG6V1sNxx7TrQN9SrABm+giVVOWjfEFkSA8sMxFdETl2C+Q+y4ZU4BeojQphPqt9kboUlLiHmYMIN5gHbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751317245; c=relaxed/simple;
+	s=arc-20240116; t=1751317281; c=relaxed/simple;
 	bh=fd5TTcR4xrv7LlfCWv7RjAxXvv5McMMYbPwkZziGVRc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=U4zWzkinsh1kLnEfg7yXQoQa8e8cn0uYIag5S3BJa7NYKOHdEevHhmJwlSA6DEN+LIp7cMFJOHd9J4vQMapmZbE7ysZ4eSi7WE0YUzNE9Etmp7RFJJbGO6OCnjUW5V3D47SvxskZZOoPzjxMQ+mhkx+GG4Qi227sBib4hkUoHI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMphcLvU; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=c3PW6tqnXZ9QFLmqBdlsVqxxGnTZIdm5U5q8afBzRjtyAAj0PhStWj3LRhMyWegMqnU+7ZMwn7QyGgOrI87dIrJu/ZEciuxmw9a9tZMmUHDDMnp9PELydvDmr8ZEHpLInlv2NuoWo9qcBBuUCZaW0+BDyZLzYDvUgWUWXOZQ8tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N2ZpTKdc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMphcLvU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26AE6C4CEE3;
-	Mon, 30 Jun 2025 21:00:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N2ZpTKdc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA8EC4CEEB;
+	Mon, 30 Jun 2025 21:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751317244;
+	s=k20201202; t=1751317281;
 	bh=fd5TTcR4xrv7LlfCWv7RjAxXvv5McMMYbPwkZziGVRc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iMphcLvUTdKfDPiBseFwOr9hJvu0BIEMQEKlVDH+c/caveDzE4A5xuPjE4ElHpaat
-	 OHHGxobNGnvLKE6hA/pi/87wuleOXhn+RVEdUvl//rPt/R+vgIK1n0b/D+S62/jW1C
-	 JoH7MXtOW/gVhSxma8+DwfU9D2L9m9DK3nnABNw+kCPhCYRPbEUow/7h7ads+2O5OV
-	 A7bjbH+t4Fo7zTowx0Bvqc2VNF9d/+jrJzlxJ0vpnbfD8ljP9hSB1P7ad0Ets7WiZj
-	 axcGW2/QzWxDO8yU5FtYE3A9gufjbbLk/TVF+wyiGs5a1C+aUMxOPointR7lUdBGG7
-	 EFOj7k8OORAjQ==
+	b=N2ZpTKdcoY5ukIh+2cgGb3iQbapMMCovM7wC0Pt8F+kyUpVPz6e+hZE5XRl5/6O12
+	 OFgLYyLafvtPmYcoccvNnfdv9dcqTA6qNzcQxw7XAtwUCPnw5j8i/QDtXMb1YTy/Lb
+	 b/I1kXhwGGRDo1wecwOo70iOi/OPYbgogrydpdOhTt+dptB9+i2Q0ejD5bjJl+4de3
+	 D8Mc7993FWGD26oTkCtTWAttuie+lvxtqwGtmemAngdcbqpinKmaL1NQg7krC4uvZt
+	 LSGWp/2pli+ZNkP0uXdG4VPF8EsQ3xkbMfksvnO/2k4hHiwM6P5fl2k1w7vhxuOQUS
+	 TPnlUlTagUZ9w==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -34,19 +34,18 @@ Cc: Tiwei Bie <tiwei.btw@antgroup.com>,
 	Johannes Berg <johannes.berg@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	nathan@kernel.org,
-	richard@nod.at,
 	anton.ivanov@cambridgegreys.com,
+	richard@nod.at,
 	tglx@linutronix.de,
-	akpm@linux-foundation.org,
 	guoweikang.kernel@gmail.com,
 	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 03/14] um: vector: Reduce stack usage in vector_eth_configure()
-Date: Mon, 30 Jun 2025 16:46:28 -0400
-Message-Id: <20250630204639.1358777-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 02/10] um: vector: Reduce stack usage in vector_eth_configure()
+Date: Mon, 30 Jun 2025 16:47:09 -0400
+Message-Id: <20250630204718.1359222-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250630204639.1358777-1-sashal@kernel.org>
-References: <20250630204639.1358777-1-sashal@kernel.org>
+In-Reply-To: <20250630204718.1359222-1-sashal@kernel.org>
+References: <20250630204718.1359222-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,7 +54,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.95
+X-stable-base: Linux 6.1.142
 Content-Transfer-Encoding: 8bit
 
 From: Tiwei Bie <tiwei.btw@antgroup.com>
