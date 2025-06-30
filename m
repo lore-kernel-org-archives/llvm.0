@@ -1,135 +1,154 @@
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C49248F6C;
-	Mon, 30 Jun 2025 10:03:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016C52571A1;
+	Mon, 30 Jun 2025 10:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751277783; cv=none; b=mLIZycZ6mWDwBvg7xMMYdTqW5YjwGI4JDfqSOxuwHna9DB6Un2fJUCaJ5Pq3BgwzKXKTKmBPkAnKjCKzByN/SiwvMMV/y+OcrQinQo0Fpd5TES//5RheP50xq12HdOSM+flHX//wKAuEHpAnXYC6a4bI5qgyjUalBPAe7nvPW5Q=
+	t=1751278661; cv=none; b=X3NqW+5twUrETPYW4YAri57yjysba5uZyt2LgJSnn2bPbsIGUPyxxldUAQy0xM6+mi2Cn232/GAC9OzYBCROVm+v5QevsawUzdL7oscmmeUwHactv1DLuFyyxrZeibDihxZ32qaH/D79IZLNnF+AdZz7NQChbPR2K3XeBmfXZ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751277783; c=relaxed/simple;
-	bh=C19Ng+YvJns31vZggHyOTH4tG4WskcJBUUNS/x4N/rU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=dHBwsFxeGjbpyHxl6lmPTr27u57GV9mcaDjp7uE2jwIKkD/kdqZyvduCHiy00bQUgoppaYgckFN4csxLVmkS4lU6J5B1QHGTvQQZR0sklJ2jZwDeD1u2LU+yqbmmQC+ghx1EVjogXmduZh8LcZxFbw8uwgfKt6k3yiNQKdonit4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cd4CeJnW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CJ5o5zH2; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1751278661; c=relaxed/simple;
+	bh=FMzYZdN0CVSDrQcPpDssp4Fk46VjMQYnmJcIyo2Pv88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qu92ZPmPir2HlslYZF5J4cIfGGADy1OUESehrbf9lYdgUYAecB46xwqDMkuiYdO6Ib+sBpyBllt9QbBPm6NAXEgWy2mIqwcLY8dlArTgaos9wLQOTCNApAGjjohC5IVcnBvLb5ZBEsAVgB4hYY3BbihlX8Xr2pUbkZpnbxxDFGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bnwnVxm9; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cd4CeJnW";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CJ5o5zH2"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id EC69D7A0228;
-	Mon, 30 Jun 2025 06:02:59 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 30 Jun 2025 06:03:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1751277779;
-	 x=1751364179; bh=5/NwZS0sObcR73yPXLZ9doO8bP3vohgc9CV9/MRQ08g=; b=
-	cd4CeJnWskomZ2ZPauSEAgYdKBFadxFOHbbcPFRTTalbEC3kxMsiy3mT5fM9+CRT
-	6HTnsiCRQaIcJPJy1OSbhXq9QtvSumLK7jj3vYa/w3t0s3GA+rp3KIEwXpHg3+7k
-	UpR4KT9xQHHkcqTKN+AC3gMyzikt+HKHsWAvfUoE9rWizGLOFpYa5V7qF3X7WSLb
-	VfXRZFCs3gBpPugzallqWwKHikD6cQdMfbV4NkaSw1QrwoL+2/5eX6EuhShVSN3N
-	EN1H+Civz9Jl2ofDRCe+nE5mhi3CuqF6O2RX4ZZ/rAnAJCCS/hj4/j2uDSVRLJUS
-	DwvqIoXijCGom6+2eNV9GA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751277779; x=
-	1751364179; bh=5/NwZS0sObcR73yPXLZ9doO8bP3vohgc9CV9/MRQ08g=; b=C
-	J5o5zH2jLV15mLK+KiKG4KrIRDNiSdm059Eh19Qh8CF2uD+5hOBOgOMaa/LNNuaH
-	UbUlNTbJfTJ3HoUmWSMsCnHCtMbhG+bGCwjjNxpGZx7mb1JaUewK7B2RjEw9J8jo
-	mWvFAMSYiDIxs4Czg6cT6JQizvMrAan2GQNh6COzE9kQZ+vS+wZLPg+thccqTqCH
-	To8WASijOYZ38+ht6/pyv2GdVV+e7dR+r+LVWqSWwVwCDYgRXD3+joozxxCDMeWP
-	DIU40MZdWhEQ2vh53p2H4dNDDOa5p7KH0je3Je609MKgSoJQIu/uUFgDinAX2vEs
-	SF+FTT6ahH1ZPQ3/RpLRQ==
-X-ME-Sender: <xms:02BiaIRVmGM47HK4-xQ4sK1UVN2FJkKLp2dCdbS_FPrdtWUerI_XhA>
-    <xme:02BiaFwdV9ovuDeMnE1gtoYatHzfP-ziRkGlinL2_gocXc4CytSHxlqtwLVFtQwoo
-    1H60SjRmu_-VOZ3Edo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeekleffjeetvedvgefhhfeihfen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
-    thhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlkhhpsehinhhtvg
-    hlrdgtohhmpdhrtghpthhtohepsghrrghunhgvrheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepughinhhguhihvghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehllhhvmh
-    eslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgr
-    lhhlsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepghhlrghusghithiise
-    hphhihshhikhdrfhhuqdgsvghrlhhinhdruggvpdhrtghpthhtohepshgthhhushhtvghr
-    rdhsihhmohhnodgsihhnuhhtihhlshesshhivghmvghnshdqvghnvghrghihrdgtohhmpd
-    hrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:02BiaF2AqAuEt3X4uWHFbyqPo5ESQdjWnDsn8JqYvs4BtAo6QiqPBg>
-    <xmx:02BiaMChsZpwfEDl04aNZhLioKZG1QBYM-Em-wznYLmp_K4beoBhpA>
-    <xmx:02BiaBgjOE6_m_xZ4LpDwxDLLBtr0htDhku4RE5WQcX4y83CI-OTMw>
-    <xmx:02BiaIoddWiji4HxGBPX18gZHnJ7QLMJgaPCowYM7yR17UrviqChDw>
-    <xmx:02BiaER9MROjnuqlHtynfmqE-nla73GkZHq8805QBlFsNX1msf2EKNdz>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 5BDA4700068; Mon, 30 Jun 2025 06:02:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bnwnVxm9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751278660; x=1782814660;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FMzYZdN0CVSDrQcPpDssp4Fk46VjMQYnmJcIyo2Pv88=;
+  b=bnwnVxm9W33bZuDCymD6QNjbgFoqbjdXlLwaSGiLmr5Rx65ym+MQ/T1V
+   kLFiQKxPlGG8xnWx0Lf5xfc44NiUS3/KpZDuF2SXBgUvnaDk0AO1JjBjm
+   qJK8wRy+HSAG3hr4wKMWJ/mfP2O0o0T2dxZd2523/WdaGtCgPULwFFlkF
+   maAY1HjiXPshFHIr3z8aPE7ZAjvECbHfbIIPyvNST4QwZ8xZ10C7MTxOi
+   19yEAI5NkqIHKfzjRJAsjTrCYNuMkHQHMEgSJSVxCvHE7oW7TFlobS1Yo
+   Htxc7vjhaV4Tuk8Hja9qX4TLvH8ZGFLUbX8WzYRd66j7vsi/DUOITC56K
+   Q==;
+X-CSE-ConnectionGUID: LlFIFaz7RImDvp7+N/P28Q==
+X-CSE-MsgGUID: PH7UuQV6RiygJRhaEqjgIA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11479"; a="53461296"
+X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
+   d="scan'208";a="53461296"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 03:17:39 -0700
+X-CSE-ConnectionGUID: PptX8rtzSfyzmgvDLcTnAg==
+X-CSE-MsgGUID: pp065EF/QjetrVvm5H9wVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
+   d="scan'208";a="159149271"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 30 Jun 2025 03:17:37 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWBZu-000YmQ-1q;
+	Mon, 30 Jun 2025 10:17:34 +0000
+Date: Mon, 30 Jun 2025 18:17:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Denis Benato <benato.denis96@gmail.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org, mario.limonciello@amd.com,
+	"Luke D . Jones" <luke@ljones.dev>
+Subject: Re: [PATCH v9 6/8] platform/x86: asus-armoury: add screen
+ auto-brightness toggle
+Message-ID: <202506301802.LV9RYF0b-lkp@intel.com>
+References: <20250629131423.9013-7-benato.denis96@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T9274589f850a4c5d
-Date: Mon, 30 Jun 2025 12:02:39 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "kernel test robot" <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-sh@vger.kernel.org,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "Simon Schuster" <schuster.simon+binutils@siemens-energy.com>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- "Christian Brauner" <brauner@kernel.org>
-Message-Id: <46c6b0f6-6155-4366-9cbf-9fbbfb95ce30@app.fastmail.com>
-In-Reply-To: 
- <57101e901013a8e6ff44e10c93d1689490c714bf.camel@physik.fu-berlin.de>
-References: <202506282120.6vRwodm3-lkp@intel.com>
- <2ef5bc91-f56d-4c76-b12e-2797999cba72@app.fastmail.com>
- <57101e901013a8e6ff44e10c93d1689490c714bf.camel@physik.fu-berlin.de>
-Subject: Re: kernel/fork.c:3088:2: warning: clone3() entry point is missing, please fix
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250629131423.9013-7-benato.denis96@gmail.com>
 
-On Mon, Jun 30, 2025, at 08:30, John Paul Adrian Glaubitz wrote:
-> On Mon, 2025-06-30 at 08:14 +0200, Arnd Bergmann wrote:
->> On Sat, Jun 28, 2025, at 21:59, kernel test robot wrote:
->> 
->> I don't think any of those architecture maintainers are paying
->> attention to the build warnings or the lkp reports, and they are
->> clearly not trying to fix them any more, so maybe it's better to
->> just stop testing them in lkp.
->
-> I have seen that warning about clone3() missing but I was not aware that it's
-> an urgent issue to address. Do you have any suggestion on how to implement
-> that syscall?
+Hi Denis,
 
-Some architectures have custom calling conventions for the
-fork/vfork/clone/clone3 syscalls, e.g. to handle copying all the
-registers correctly when the normal syscall entry doesn't do that,
-or to handle the changing stack correctly.
+kernel test robot noticed the following build warnings:
 
-I see that both sparc and hexagon have a custom clone() syscall,
-so they likely need a custom clone3() as well, while sh and
-nios2 probably don't.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.16-rc4 next-20250630]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-All four would need a custom assembler implementation in userspace
-for each libc, in order to test the userspace calling the clone3()
-function. For testing the kernel entry point itself, see Christian's
-original test case[1].
+url:    https://github.com/intel-lab-lkp/linux/commits/Denis-Benato/platform-x86-asus-wmi-export-symbols-used-for-read-write-WMI/20250629-211651
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250629131423.9013-7-benato.denis96%40gmail.com
+patch subject: [PATCH v9 6/8] platform/x86: asus-armoury: add screen auto-brightness toggle
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250630/202506301802.LV9RYF0b-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301802.LV9RYF0b-lkp@intel.com/reproduce)
 
-     Arnd
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506301802.LV9RYF0b-lkp@intel.com/
 
-[1] https://lore.kernel.org/lkml/20190716130631.tohj4ub54md25dys@brauner.io/
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/asus-armoury.c:736:1: warning: unused variable 'screen_auto_brightness_attr_group' [-Wunused-const-variable]
+     736 | ATTR_GROUP_BOOL_RW(screen_auto_brightness, "screen_auto_brightness",
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     737 |                    ASUS_WMI_DEVID_SCREEN_AUTO_BRIGHTNESS,
+         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     738 |                    "Set the panel brightness to Off<0> or On<1>");
+         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/asus-armoury.h:128:2: note: expanded from macro 'ATTR_GROUP_BOOL_RW'
+     128 |         __ATTR_RW_INT_GROUP_ENUM(_attrname, 0, 1, _wmi, _fsname, "0;1", _dispname)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/asus-armoury.h:102:38: note: expanded from macro '__ATTR_RW_INT_GROUP_ENUM'
+     102 |         static const struct attribute_group _attrname##_attr_group = {  \
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:34:1: note: expanded from here
+      34 | screen_auto_brightness_attr_group
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/screen_auto_brightness_attr_group +736 drivers/platform/x86/asus-armoury.c
+
+   708	
+   709	static ssize_t cores_efficiency_current_value_store(struct kobject *kobj,
+   710							    struct kobj_attribute *attr, const char *buf,
+   711							    size_t count)
+   712	{
+   713		int err;
+   714	
+   715		err = cores_current_value_store(kobj, attr, buf, CPU_CORE_POWER);
+   716		if (err)
+   717			return err;
+   718	
+   719		return count;
+   720	}
+   721	ATTR_GROUP_CORES_RW(cores_efficiency, "cores_efficiency",
+   722			    "Set the max available efficiency cores");
+   723	
+   724	/* Simple attribute creation */
+   725	ATTR_GROUP_ENUM_INT_RO(charge_mode, "charge_mode", ASUS_WMI_DEVID_CHARGE_MODE, "0;1;2",
+   726			       "Show the current mode of charging");
+   727	
+   728	ATTR_GROUP_BOOL_RW(boot_sound, "boot_sound", ASUS_WMI_DEVID_BOOT_SOUND,
+   729			   "Set the boot POST sound");
+   730	ATTR_GROUP_BOOL_RW(mcu_powersave, "mcu_powersave", ASUS_WMI_DEVID_MCU_POWERSAVE,
+   731			   "Set MCU powersaving mode");
+   732	ATTR_GROUP_BOOL_RW(panel_od, "panel_overdrive", ASUS_WMI_DEVID_PANEL_OD,
+   733			   "Set the panel refresh overdrive");
+   734	ATTR_GROUP_BOOL_RW(panel_hd_mode, "panel_hd_mode", ASUS_WMI_DEVID_PANEL_HD,
+   735			   "Set the panel HD mode to UHD<0> or FHD<1>");
+ > 736	ATTR_GROUP_BOOL_RW(screen_auto_brightness, "screen_auto_brightness",
+   737			   ASUS_WMI_DEVID_SCREEN_AUTO_BRIGHTNESS,
+   738			   "Set the panel brightness to Off<0> or On<1>");
+   739	ATTR_GROUP_BOOL_RO(egpu_connected, "egpu_connected", ASUS_WMI_DEVID_EGPU_CONNECTED,
+   740			   "Show the eGPU connection status");
+   741	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
