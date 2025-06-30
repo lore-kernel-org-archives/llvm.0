@@ -1,153 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39F24A23;
-	Mon, 30 Jun 2025 05:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31C017BD3;
+	Mon, 30 Jun 2025 06:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751263051; cv=none; b=lgbWSC3iqZ7mUDOv5aYJQD0a58R3t8hav52X7PzprNSsxkIXIG4OivygpsfPKjnR1ZaloyWh11b950ECw+kjWPT+LBtzyKEXMGdEH5bKdI6PivFNqBMZTkYpG22xLnHKzkd9NyQ/bBoQ6/Wyk60bcog9yBZLMh80KaYwzl1kbpM=
+	t=1751264227; cv=none; b=SApwF03abhZGO0ZOkU6ZClX0eTjhE2nAm3zXAlMZZvx8r3Res67ialNJvK27nOWGEFtC0JBPOKIcDMI4KNVn0zkt/ezO2X5Caz21Xib7LFTGCBk9y0JttaPQPTEv/NcsTeWb8mOj6Jipi8IUJj/KoCDwQvC+nWjqM5RAoUinIuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751263051; c=relaxed/simple;
-	bh=OY5FnNZGUzQJJVdY+bYafYRhPm+gNzUjp5rwfE9mw98=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HA0G70EZ37+nue/cMoEcfKsl8ZmHeAYdh9B3AZp/A4AMLkX2KT6ruHt6wpt9s0nv33HU5zfvkNriiuvzmwn97I3SgEMgz0F4U4KWreReU65KhVMOeOtK1GAmGmRAKJVZyHOC8dGqpCSRHwTcqC7S0v4ztQjmD9hILAoOzTDL1f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6IFAbbs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751264227; c=relaxed/simple;
+	bh=lI9JS1gMGaYeV8rykN9upjkXqvv+KcVhPNHtn1XXOBU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=H2OKcooYhAe9YY72v8sClzIofmW8aQZ9UJL2eghFgTNovLKTOgzsP/1JlklrmdsUxfWSJ0viubbDSDBaOFwr38UyZ8PAPMQQj6kb3kixfe9Z7Z0QH1BQ5IPqmQVlLoo5ZBFlpVOTIbUxkmO11/J0XualiT33lI86mCk6HEP4HFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NhPvakrK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=T7dbN3V5; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6IFAbbs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CCAC4CEE3;
-	Mon, 30 Jun 2025 05:57:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751263051;
-	bh=OY5FnNZGUzQJJVdY+bYafYRhPm+gNzUjp5rwfE9mw98=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=D6IFAbbsR9baNXm7IKEg3A/pxbYPQ+rJifRo4vcljd0Cqa11Lx6ptE9P+HruolI1u
-	 n71CqVBWo72Nx85zn4Nm2/Wm4Wk7+xzwmf1673xf+EUiTp/o83yaqKqJV0xoPoFb2o
-	 E4fJyyw1dRCYWwHuhpGnTbYzPqCYMwn1eFlcIG3SY9X08cZRNQ+fE1TLI3qa32Iowd
-	 oH3P/grFN6zYNeE366QVFifRibxnKBq2e9lP0GURUj1u7aT10tVK0uEcT0By93AYLF
-	 Pp8wSVa4GcQ6jwwdSgMMPYob2RG54fb5A5AoK4GElndNYQZ9LDdYHqpJ3VM6R0vgpm
-	 6ACXsuAbvhXPg==
-Message-ID: <9f1ac97a-6109-40d1-bf85-f2a8e25138f0@kernel.org>
-Date: Mon, 30 Jun 2025 07:57:24 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NhPvakrK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="T7dbN3V5"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id BAAE47A0077;
+	Mon, 30 Jun 2025 02:17:03 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 30 Jun 2025 02:17:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1751264223;
+	 x=1751350623; bh=m/dWKz6R2q5LBHWZz6c4+WXnk+qQgVD9l1+vH4Khp5M=; b=
+	NhPvakrK+wlR1TDob+AprINwNyDs9Q4TUUHF4IqhQVcj56b/89RHdsS3ModuoQnR
+	Sfwd0ZaJiQQzGEVgwrMsMetZ/kFb9J6yBOtvfKyf+vUp9E76X+Zalg52NCE35pE3
+	7rdWis2u+DYwZPu7a+ln5SgueTI4lQyvvqwgSNUR/3GGqTp6ymVuetgUbv1InCz0
+	+P0q2s/x0Lslz7fZ4TV+Ec92N2+WuvIRLAI0vnZCWhLubuz/NYWAUIifeCnZ9Vii
+	nRxaQur9Whpt+iViedPUYxwHlfseiVKAykEQwHqltAka0/T8mW0FoRbDc4Fwp5MZ
+	wPpMCHBBzioDOy8rHF/RRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751264223; x=
+	1751350623; bh=m/dWKz6R2q5LBHWZz6c4+WXnk+qQgVD9l1+vH4Khp5M=; b=T
+	7dbN3V5k+0QpOsPbHvr8XUBKUKwoSQDDQwDVakEXhdCPYcz6O3NM0c02zqPe8vQ8
+	qVoQ4jb583PGUmo2GohsAefXu25wWdfBH+pXNn5tLI4llakDQGxIy7GpZJ8nnorO
+	YbZG2okNGb5BKg4znCUtMGxQAsc7OWSBtzLXH+f9TjJoj/4WTP1JYZeKmJzdnpw3
+	fcwETnw4xAGGrf8X/DiAGzXvJ3Cu3xL8xNhioiW3thDANgtyGw8uRSxJzWYixTCa
+	S/TfTyFgnAd/swfPcNf+hIEuYbZrSxxmARmFV4XvbhPSdjbYfFN7FrrpB0TjnW03
+	JY5e4JnuQrBijcPkPjMzg==
+X-ME-Sender: <xms:3ytiaN810t-GGqP0vJWrQHi7kj4OJkk4sMV1rFfm_h1F0Hv4KTtEwg>
+    <xme:3ytiaBtmcXzxeNssk37Ukjy4U81IqJE6uwnVr_F6AkaEQsLxxLPfgMIAwnEuugFYR
+    ghthl3MsxILGLGtAqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddutdeliecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeehhedtgfefffevvdevkedttddtvdetjeefffduheevieefvedvffeitdffffffjeen
+    ucffohhmrghinheptddurdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    uddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlkhhpsehinhhtvghlrdgtoh
+    hmpdhrtghpthhtohepsghrrghunhgvrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    ughinhhguhihvghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehllhhvmheslhhish
+    htshdrlhhinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehl
+    ihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepshgthhhushhtvghrrdhsihhmoh
+    hnodgsihhnuhhtihhlshesshhivghmvghnshdqvghnvghrghihrdgtohhmpdhrtghpthht
+    oheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:3ytiaLATSWByEb9pmvJ3N1OEyY3hyKXAZGEUjufVnfu5zdivIa-5GQ>
+    <xmx:3ytiaBfu8LHVX1MikKoTRlTp8KmufSaB07iNP7thq51plUx-8F_1Kg>
+    <xmx:3ytiaCPO9eRS_Tx4FmkHcDeqvypebKmeKA6VBLSIpV302S3RTVBuVw>
+    <xmx:3ytiaDnTBjdAn4L57hWevSjKHjsEkyB66WZhERhg4YG0WnL6fBTKkw>
+    <xmx:3ytiaLsCD79bWbxav7fHF975-ZFpMKr9FGKXt9yD8HtLKKcz7jR-QNj0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 3B964700063; Mon, 30 Jun 2025 02:17:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/8] arm64: dts: rockchip: Refactor DSI nodes on rk3399
- boards
-To: Diederik de Haas <didi.debian@cknow.org>,
- kernel test robot <lkp@intel.com>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+X-ThreadId: T9274589f850a4c5d
+Date: Mon, 30 Jun 2025 08:14:16 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "kernel test robot" <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dragan Simic <dsimic@manjaro.org>, Quentin Schulz
- <quentin.schulz@cherry.de>, Johan Jonker <jbx6244@gmail.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20250627152645.740981-3-didi.debian@cknow.org>
- <202506290852.bWro2lBe-lkp@intel.com> <DAYXOI4WITJW.1G5DBWEQDDY1Z@cknow.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <DAYXOI4WITJW.1G5DBWEQDDY1Z@cknow.org>
-Content-Type: text/plain; charset=UTF-8
+ linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-sh@vger.kernel.org,
+ "Dinh Nguyen" <dinguyen@kernel.org>,
+ "Simon Schuster" <schuster.simon+binutils@siemens-energy.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ "Christian Brauner" <brauner@kernel.org>
+Message-Id: <2ef5bc91-f56d-4c76-b12e-2797999cba72@app.fastmail.com>
+In-Reply-To: <202506282120.6vRwodm3-lkp@intel.com>
+References: <202506282120.6vRwodm3-lkp@intel.com>
+Subject: Re: kernel/fork.c:3088:2: warning: clone3() entry point is missing, please fix
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 29/06/2025 12:09, Diederik de Haas wrote:
-> Hi,
-> 
-> On Sun Jun 29, 2025 at 2:32 AM CEST, kernel test robot wrote:
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on rockchip/for-next]
->> [also build test ERROR on next-20250627]
->> [cannot apply to robh/for-next krzk/for-next krzk-dt/for-next linus/master v6.16-rc3]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Diederik-de-Haas/arm64-dts-rockchip-Refactor-DSI-nodes-on-px30-boards/20250627-233300
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
->> patch link:    https://lore.kernel.org/r/20250627152645.740981-3-didi.debian%40cknow.org
->> patch subject: [PATCH 2/8] arm64: dts: rockchip: Refactor DSI nodes on rk3399 boards
->> config: arm64-randconfig-002-20250629 (https://download.01.org/0day-ci/archive/20250629/202506290852.bWro2lBe-lkp@intel.com/config)
->> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250629/202506290852.bWro2lBe-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202506290852.bWro2lBe-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> Error: arch/arm64/boot/dts/rockchip/rk3399-rockpro64-screen.dtso:75.1-6 syntax error
->>    FATAL ERROR: Unable to parse input tree
-> 
-> The kernel test robot is right as the ``&mipi_out`` node is missing a
-> closing ``;``, so thanks for that :-)
-> The problem is also present in v2, so I'll send a v3 shortly.
-> 
-> Luckily I've now found why my build script didn't catch it.
-> ```sh
-> export PATH=~/dev/kernel.org/dt-schema-venv/bin/:$PATH CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64
-> make distclean
-> make debarm64_defconfig
-> make CHECK_DTBS=y W=1 rockchip/px30-cobra-ltk050h3146w-a2.dtb
-> <quite-a-long-list-of-all-boards-at-least-I-thought-so>
-> ```
-> 
-> (debarm64_defconfig is my own defconfig based on Debian's kernel config)
-> 
-> That long list didn't have ``rockchip/rk3399-rockpro64-screen.dtbo``.
-> Is there a better/simpler way to validate all rockchip boards without
-> having to explicitly list each and every one of them?
-make defconfig && make
+On Sat, Jun 28, 2025, at 21:59, kernel test robot wrote:
+> Hi Arnd,
+>
+> FYI, the error/warning still remains.
+>
+> date:   12 months ago
+> config: hexagon-randconfig-2002-20250626 
+> (https://download.01.org/0day-ci/archive/20250628/202506282120.6vRwodm3-lkp@intel.com/config)
+> commit: 505d66d1abfb90853e24ab6cbdf83b611473d6fc clone3: drop __ARCH_WANT_SYS_CLONE3 macro
+>> kernel/fork.c:3088:2: warning: clone3() entry point is missing, please fix [-W#warnings]
 
-or make dtbs
+My patch only moved the warning about the four broken architectures
+(hexagon, sparc, sh, nios2) that have never implemented the clone3
+syscall from commit 7f192e3cd316 ("fork: add clone3"), over six years
+ago.
 
-Best regards,
-Krzysztof
+I usually try to fix warnings when I get them, but the entire point
+why these still exist is that they require someone to add the
+syscall with the correct calling conventions for the respective
+architecture and make sure this actually works correctly.
+
+I don't think any of those architecture maintainers are paying
+attention to the build warnings or the lkp reports, and they are
+clearly not trying to fix them any more, so maybe it's better to
+just stop testing them in lkp.
+
+    Arnd
