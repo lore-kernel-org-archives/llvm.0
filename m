@@ -1,62 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F375428C037;
-	Mon, 30 Jun 2025 14:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3705128C2DC;
+	Mon, 30 Jun 2025 14:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751293381; cv=none; b=NjC7eAqWNPNTMZrR47xPXB2/o7tWrgTKEyElcuOBozBx/Kh4SLypMb0ahMC9FnZ1VYs/rfW194NMVhagVirji9AvkAyDXCCy/6Nej3r15WqKZDtk1tLoxfhPnX3IW72tz9ppXL2S+kETYaLs5d20X/VtmSl+20+bqoqDCBIMGJ0=
+	t=1751294447; cv=none; b=T17DuBxLa98TlGvRfXvhYrcluEB57w33J7vafO97FLqCIjW4cYyQl/SNn/oXbyz4AWXKSbvM4Ya8edLNl572eF06AVhCz4mwkOHJJoaLJhNs+n+Lrilh0xBcxpLVWwAE3hn2/fmCrIMAmt+K7YcQth0SZJZ7Q35Nd/j210YTPhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751293381; c=relaxed/simple;
-	bh=w14eEZ/zg+hqTdzOPY2gaieWf5JUv1WnpYU89uhLNyk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CKGyqGBzTGUFRxVYc3/6IVquMXwTvYtPpDHCkxm5N8FW24P/9NOKCK8vw2U0rl5q2cGEJV/Ft4G0Y1oavd7Up5i1nvB8nt7B6NqcV+nJxI9Q5P+3BDonGEv93G/y4+6UQ4QjpYOlnfCnA8zKddw4wGFrTR612fN0T8u8rQvouwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ia2XhOqX; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751294447; c=relaxed/simple;
+	bh=9Pl6ASQYra+bXw5RCJUcseMj5W++x/xTGoHLnCk/qu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gg9T+/WfqA3PcZ9qCHM5068BAsZTugxe24+8AY/VT26G1afJpH5yp0/kKp9WpNVLukV2mHcoo68atAVGk3ytvVOTFco6necxEzidQAVfFJVbtsZm/j0hHl9+R1MVDuo+KyYSs1MM3q6rXsBmBPzkX8BTAFOap3GNhTc5PlVObXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LvjN75Dc; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ia2XhOqX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751293380; x=1782829380;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w14eEZ/zg+hqTdzOPY2gaieWf5JUv1WnpYU89uhLNyk=;
-  b=ia2XhOqXLK+1B/KreDNV+sXmPdnMNh4pd2ehcvyD4e06cTrgvBWUGsoD
-   tUloS+F1pfXh3uOyajjIreO+Joy/u1ygmfPZi2il9p5eCADdPH4ZveyCG
-   iaVM860jlM/zTtZlmnjigGBMuF7FGm5fGin9Iu3djw5fI/s3/IGeaM8Vy
-   fYhZtWmfD1JFIF6KgKD1+9IcKBeqBSYJLUDQcaQJCI8W4Nvy1cvdRfETB
-   sxPb5CQeOvi7MOnoJCrAD+Zn/whG72p1UbvPTxIVWSf5lnCztkjABi0RQ
-   XGMM01E2sfsgAnzmhg+czlO9l9quHPQM9LXB3G1PHrpXeD14krNhVn/JX
-   g==;
-X-CSE-ConnectionGUID: ThjzyCSNQ0GUA/PFSTuMcQ==
-X-CSE-MsgGUID: STSEIdeKTZK0A4ARDxM+DA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="57298317"
-X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
-   d="scan'208";a="57298317"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 07:23:00 -0700
-X-CSE-ConnectionGUID: 1JrWuOmUSvCv9ODpECv1JA==
-X-CSE-MsgGUID: AyaCAb46Q1qBhCjPaMnZVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
-   d="scan'208";a="153223420"
-Received: from igk-lkp-server01.igk.intel.com (HELO e588e990b675) ([10.91.175.65])
-  by orviesa009.jf.intel.com with ESMTP; 30 Jun 2025 07:22:58 -0700
-Received: from kbuild by e588e990b675 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWFPL-0001E7-2j;
-	Mon, 30 Jun 2025 14:22:55 +0000
-Date: Mon, 30 Jun 2025 16:22:36 +0200
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bjorn Andersson <andersson@kernel.org>
-Subject: [linux-next:master 2933/6007]
- arch/arm64/boot/dts/qcom/msm8976-longcheer-l9360.dts:111.20-139.4: Warning
- (avoid_unnecessary_addr_size): /soc@0/i2c@78b6000/led-controller@30:
- unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or
- child "reg" property
-Message-ID: <202506301614.OKDuZ3Vc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LvjN75Dc"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55U8xoVD015498;
+	Mon, 30 Jun 2025 14:39:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=dZVMGl4ViErQo4fFQ8VUnT+LNcHK9F
+	WrYiT4XPKoVoU=; b=LvjN75Dcyo3Mg6vi1nvhrVHjbLsaMQ+4ridZrQWrM5H+m4
+	T8k7nKbVNZ4P7K7v/YGFuTeD2t7rOEw9IaJObFYMGeSqzJW7/zUSRGhEe0/hx5KT
+	b8vcmp1YHBa9oTnPU4DF8grkhIf/VLHFHTcE08pIbZzxWZUGXKBIDZwvbNF9G5nz
+	UcjjbUZ0QbBD7OtNYaaavGW0IqlsOhQZVwtNTtYOQn3JEOk5FOBKJ7yZEoSATva+
+	VqslOGK+1/R7RzXo65jlAXvy/+RPaXenkxiJffflbZSg9xEnWzdPg4gZSgEZKbtZ
+	n6Cby79kZ59Mh8Ypp+uc1phO9exlUyIpDaSLPKsA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j7wra0bv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Jun 2025 14:39:45 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55UEX7fk002972;
+	Mon, 30 Jun 2025 14:39:44 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j7wra0br-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Jun 2025 14:39:44 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55UE1gX6021934;
+	Mon, 30 Jun 2025 14:39:43 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47juqpe8ck-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Jun 2025 14:39:42 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55UEdc3544761382
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Jun 2025 14:39:38 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7DE0A20043;
+	Mon, 30 Jun 2025 14:39:38 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8161D20040;
+	Mon, 30 Jun 2025 14:39:35 +0000 (GMT)
+Received: from osiris (unknown [9.111.82.77])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 30 Jun 2025 14:39:35 +0000 (GMT)
+Date: Mon, 30 Jun 2025 16:39:34 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc: Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
+        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, maddy@linux.ibm.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        alex@ghiti.fr, gor@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, dave.hansen@linux.intel.com,
+        luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, akpm@linux-foundation.org,
+        nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        justinstitt@google.com, arnd@arndb.de, rppt@kernel.org,
+        geert@linux-m68k.org, mcgrof@kernel.org, guoweikang.kernel@gmail.com,
+        tiwei.btw@antgroup.com, kevin.brodsky@arm.com, benjamin.berg@intel.com,
+        kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 01/11] kasan: unify static kasan_flag_enabled across
+ modes
+Message-ID: <20250630143934.15284Caf-hca@linux.ibm.com>
+References: <20250626153147.145312-1-snovitoll@gmail.com>
+ <20250626153147.145312-2-snovitoll@gmail.com>
+ <aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,70 +99,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=E/PNpbdl c=1 sm=1 tr=0 ts=6862a1b1 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=AeL96baZ9YmIqE4yH0MA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: 2hwphgPZI837FabFeudLVjFicIoSmhXG
+X-Proofpoint-ORIG-GUID: FiHtpeYVQCPMFgF1X9Rek_sDm6f0w0qN
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjMwMDExNyBTYWx0ZWRfXydsoblXBR0ze E9HvMeQ14kc+Woe5xd/SFPBcu0vlwEb2rfyIotIQPVlF4ubkEgP5011gPNTSWqTF2yHh0XA+4Ys YtUR6UrKRuqNmHUZHfVrDRMN52XXJ8jmaoDUHFwngVMl/S0kuPwOX0KnQ08i7W5uZum6/pQlsxH
+ PSRM68qtAJ+io/RlKpS8hVyp8JhMgoeN7tOOZYNJa4YzA3PSVAQzl1PZ5jjF5v+hYU4evHZAXNO 9IYq4VHNT7cT81dC5A7Z/s9IYQVPzNtDhaXj0Dc9jHPz9/phE/B/idozZZjcYiqY6iFL3AYGZq0 UJK05i7AMCYmP5WJn4xDjjygHxdSbNqoEBEmoYZebnEX4uBv0r9o5LI1Se2/L8pc7bQ8CW0e8qY
+ COnK5bFnlwiVLGEKcvd+kJLxqLtFo59nsnoiQfRh0QLr6h7E4OxTno1X7/1yF98bvPZMX5sU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-30_03,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 phishscore=0 suspectscore=0 mlxlogscore=999
+ lowpriorityscore=0 mlxscore=0 clxscore=1011 adultscore=0 impostorscore=0
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506300117
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1343433ed38923a21425c602e92120a1f1db5f7a
-commit: 79b896e7da7e2743fc930d260bcecd1e84a003c4 [2933/6007] arm64: dts: qcom: msm8976-longcheer-l9360: Add initial device tree
-config: arm64-randconfig-2003-20250630 (https://download.01.org/0day-ci/archive/20250630/202506301614.OKDuZ3Vc-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250630/202506301614.OKDuZ3Vc-lkp@intel.com/reproduce)
+On Mon, Jun 30, 2025 at 02:31:00PM +0200, Alexander Gordeev wrote:
+> On Thu, Jun 26, 2025 at 08:31:37PM +0500, Sabyrzhan Tasbolatov wrote:
+> 
+> Hi Sabyrzhan,
+> 
+> > diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+> > index d54e89f8c3e..32c432df24a 100644
+> > --- a/mm/kasan/generic.c
+> > +++ b/mm/kasan/generic.c
+> > @@ -36,6 +36,17 @@
+> >  #include "kasan.h"
+> >  #include "../slab.h"
+> >  
+> > +/*
+> > + * Initialize Generic KASAN and enable runtime checks.
+> > + * This should be called from arch kasan_init() once shadow memory is ready.
+> > + */
+> > +void __init kasan_init_generic(void)
+> > +{
+> > +	static_branch_enable(&kasan_flag_enabled);
+> 
+> s390 crashes at this line, when the whole series is applied.
+> 
+> FWIW, it looks like kasan is called while its state is not yet finalized.
+> E.g. whether calling __asan_report_store4_noabort() before kasan_init_generic()
+> is expected?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506301614.OKDuZ3Vc-lkp@intel.com/
+It crashes because with this conversion a call to static_branch_enable() is
+introduced. This one get's called way before jump_label_init() init has been
+called. Therefore the STATIC_KEY_CHECK_USE() in static_key_enable_cpuslocked()
+triggers.
 
-dtcheck warnings: (new ones prefixed by >>)
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:987.27-1061.6: Warning (avoid_unnecessary_addr_size): /soc@0/display-subsystem@1a00000/dsi@1a94000: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:1063.27-1118.6: Warning (avoid_unnecessary_addr_size): /soc@0/display-subsystem@1a00000/dsi@1a96000: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
-   arch/arm64/boot/dts/qcom/pm8004.dtsi:14.23-23.4: Warning (avoid_unnecessary_addr_size): /soc@0/spmi@200f000/pmic@5: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
-   arch/arm64/boot/dts/qcom/pm8950.dtsi:176.9-185.4: Warning (avoid_unnecessary_addr_size): /soc@0/spmi@200f000/pmic@1: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
->> arch/arm64/boot/dts/qcom/msm8976-longcheer-l9360.dts:111.20-139.4: Warning (avoid_unnecessary_addr_size): /soc@0/i2c@78b6000/led-controller@30: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:510.27-513.6: Warning (unique_unit_address_if_enabled): /soc@0/qfprom@a4000/s0-p1@219: duplicate unit-address (also used in node /soc@0/qfprom@a4000/s0-p2@219)
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:530.27-533.6: Warning (unique_unit_address_if_enabled): /soc@0/qfprom@a4000/s2-p1@21c: duplicate unit-address (also used in node /soc@0/qfprom@a4000/s2-p2@21c)
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:555.27-558.6: Warning (unique_unit_address_if_enabled): /soc@0/qfprom@a4000/s4-p1@221: duplicate unit-address (also used in node /soc@0/qfprom@a4000/s4-p2@221)
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:575.27-578.6: Warning (unique_unit_address_if_enabled): /soc@0/qfprom@a4000/s6-p1@224: duplicate unit-address (also used in node /soc@0/qfprom@a4000/s6-p2@224)
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:595.25-598.6: Warning (unique_unit_address_if_enabled): /soc@0/qfprom@a4000/mode@228: duplicate unit-address (also used in node /soc@0/qfprom@a4000/s8-p1@228)
-   arch/arm64/boot/dts/qcom/msm8976.dtsi:605.27-608.6: Warning (unique_unit_address_if_enabled): /soc@0/qfprom@a4000/s8-p2@229: duplicate unit-address (also used in node /soc@0/qfprom@a4000/s9-p1@229)
+This again tries to emit a warning. Due to lack of console support that early
+the kernel crashes.
 
-vim +111 arch/arm64/boot/dts/qcom/msm8976-longcheer-l9360.dts
+One possible solution would be to move the kasan init function to
+arch/s390/kernel/setup.c, after jump_label_init() has been called.
+If we want this, is a different question.
 
-   107	
-   108	&blsp1_i2c2 {
-   109		status = "okay";
-   110	
- > 111		led-controller@30 {
-   112			compatible = "kinetic,ktd2026";
-   113			reg = <0x30>;
-   114			#address-cells = <1>;
-   115			#size-cells = <0>;
-   116	
-   117			multi-led {
-   118				color = <LED_COLOR_ID_RGB>;
-   119				function = LED_FUNCTION_STATUS;
-   120	
-   121				#address-cells = <1>;
-   122				#size-cells = <0>;
-   123	
-   124				led@0 {
-   125					reg = <0>;
-   126					color = <LED_COLOR_ID_RED>;
-   127				};
-   128	
-   129				led@1 {
-   130					reg = <1>;
-   131					color = <LED_COLOR_ID_GREEN>;
-   132				};
-   133	
-   134				led@2 {
-   135					reg = <2>;
-   136					color = <LED_COLOR_ID_BLUE>;
-   137				};
-   138			};
-   139		};
-   140	};
-   141	
+It seems to work, so I see no reason for not doing that.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Vasily, since you did nearly all of the KASAN work for s390, do you have any
+opinion about this?
