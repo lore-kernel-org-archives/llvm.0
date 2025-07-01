@@ -1,122 +1,113 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C9D277CAF
-	for <llvm@lists.linux.dev>; Tue,  1 Jul 2025 17:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BAF279791
+	for <llvm@lists.linux.dev>; Tue,  1 Jul 2025 17:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751389677; cv=none; b=Ng1rDYD/6HEQRww+MAxQ91tEQwHlCxgYDejKZJYRQQXiyRXmeBUMLQqRub4lJXNAQ07AWxWq++WtJ2mghPomDhV/ngB1hNatEoOPheYctV3pUx8xAq79zN7ng6GiqZE3cX7ve4X2kbvh57KuL2kQqcyLxUj6EjeC0cmoB1D2dM0=
+	t=1751391536; cv=none; b=dYngviHfgm1355SwQOLb9mBvJV+3YxdPtNjsytKlx39e2ZH3Fbibdfm8f+CmB7GvoN8BpyPpBzQU1cYbQzQxt0/0QPoA4uQuWVJAf9qP//tpFK5koPDkqUMqkudxy7z2URKcf7VwikIfCK18gvhIoH0fOBeuEKau364HB7EL048=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751389677; c=relaxed/simple;
-	bh=otvAmKrNgrGmm953h66f4Y1tIUJExy7j19EPbj8H6iA=;
+	s=arc-20240116; t=1751391536; c=relaxed/simple;
+	bh=5zvEsOvSYVhWyUtVM6u5hUWth1qIUNz4CrI6JeOFUK8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nd465FZ23/Iu6szVA5OEjUT/EBBUb/pZp+5paK8GwLaAocMsa48ExufpTHt4wJHVVT4bVRBeeafRMnKzyfiJ0O2ZTlB3IrEjrn/b4AYZQV04CDEiSw8hIb38XanrY2FWobJ4jWo43pwuFRlHMN1bXfx9oLlcwhgXGrC3h7LJeZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUX1ZIYd; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=OscP4ysz4852C0kUeMZL2+Zj6h4Mdj14fxSQpvyPGU0ieJkwexdGV+EprP7NCuDzOr9pO0sYGvx/PdLYhQs9hO/TU6N7+P4QXi1sMH0H4GstlUTWPUb88MI83Oz+ebkuxRxFY+rP6zqbeLQWCgk2k0QADw4+VMPARD6X1239tnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t/HZ9nFQ; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUX1ZIYd"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3138e64fc73so857581a91.2
-        for <llvm@lists.linux.dev>; Tue, 01 Jul 2025 10:07:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t/HZ9nFQ"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ae0dad3a179so940920166b.1
+        for <llvm@lists.linux.dev>; Tue, 01 Jul 2025 10:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751389676; x=1751994476; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1751391533; x=1751996333; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=otvAmKrNgrGmm953h66f4Y1tIUJExy7j19EPbj8H6iA=;
-        b=UUX1ZIYdWCASvHBEsLP8t5h9e4Dj0nzwRtymatm5u9K3bvNUkwyYV81bVZxc6dyU5u
-         ElD7MGjfkU9HPXSg0yHV9Am9jeKxB2RZsHm8ZLc8TyHwJpaAiyOQ3KgtWfvgXoIDzm8d
-         QrGZfEU+O69Hp5gIzez6Jf0kN1woSxEmaTIfWFJX1jsZlRo2IguMVMQPNJKehq5QHeqe
-         BZhfClLCsX1mSBtJb8KfeZ71EDmqc2QlSMtq2YYadCAAxE7OYf8CTBqSIyuAk994h3mk
-         fFZUVqjxXy2Wcz7uVsK9OIkJUBQzXiUzAZdfQJbu2CKTCmLn2ZP3CDUXMR+UTMdY7uwU
-         g8JQ==
+        bh=lfxUpibom5vvnS0KKvDzUm1M8BKe5OlSJnZe4zWpxjk=;
+        b=t/HZ9nFQaqh0FyzoHBjUWUMPndSU1gMPYfuw0KxldZq5vE5leF9vhA2WGnlhChh2eV
+         lXtoMte/UJ4Rx01E+JYEMWX6WpCFMQEswZhI65+krQtJEgzA2e51obHJISlhANFuC9+s
+         DdMGRREq7KC831n2cevxTq2LBao3DUaeOfJoLodjW/6Ev1gjzg5svg68Blvu2AG1EYty
+         DdUtBvvq+tWo5aXA2FJfVkuOkL1QgXmsJBxgZ+JJjDCP5fhV0fHN3IxpIjMdTWS87kEh
+         txVLqMw46XxZf19qNmlJqC2CVB1a/ldGj43CMsQM6OQ2oTnH5AohusyWKnxyRogHVvVV
+         13mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751389676; x=1751994476;
+        d=1e100.net; s=20230601; t=1751391533; x=1751996333;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=otvAmKrNgrGmm953h66f4Y1tIUJExy7j19EPbj8H6iA=;
-        b=aNmh0VHbhkqsT5q1WslYjzpGnC7ptgvAujkpgmbc1qh/Ge0dPnhh0QQ7/4Psxczd7g
-         ehwnnwrEwiB6j0GQffZcu5rKviFlu4A2QBpIuFktdfT4DGT5bY7NQyfq3xpUMLZ1mbzB
-         0ZlIzD7TINXG4RdlbZMajVwvyo0uDrdgSBzP3ZR2VJrn13On5N5bKMF51QRkwE9YWWy0
-         2+K0JCEZQ5UmpoHT0qW8eFzoUumA6jk0aPmZGWSl6fHviWYQImN4PJjHKC55bR1DO6wA
-         0yb+dE//rKRvbGI7a4f20MjXEPYr7J8ULg5IanyRkiL6GcIfFnr6ADrxDFuHyUVXqRT/
-         KkdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXkttM3ubqJdBci5bAUXioRW0dqCFMX6U8I0YhWEdc43inpk4HP8mZLgKNWSz+irKxmJqEW@lists.linux.dev
-X-Gm-Message-State: AOJu0YxJNuIz+B/SCChmjXEAhybtTgCRX6ID9/swoLeOCVzIGDFPOqVi
-	4n5POxXW1/CMi2tF/xgB8ubDd+4jAvrMld+h7OQrsRR1mql2WABZCezMaRv+f1QSf9X0hxp/edo
-	BjaLcWNoygacbh0+0iBFn7I8SeQi+uDrHGE2VHxI=
-X-Gm-Gg: ASbGncs22va00unTgSc+iUaHvXLc9Ub58wl2rxXazy6wSFHF1OMPaqtEsxv0FMj2dgz
-	R6nlTNEdnndymfli8B1MnMNDevuSl78AvNfgOyVLAWVsme5a38qu69zRe7MJ4nXhsgp3pbBhdJ/
-	QJk/P+gZ4M6Efm/tw7BZGM7ObMt2sG7tp925uSHdND2mgKdxyydj/tog==
-X-Google-Smtp-Source: AGHT+IGgyj2cxaLL1I/RbT9oFzMdK+mMcfN6YoSZuvCYWImRFjEfnNWMRG/RDCPN3KNKY0Jv5Rbef8Y4TKqAiOAmPyk=
-X-Received: by 2002:a17:90b:1843:b0:314:29ff:6845 with SMTP id
- 98e67ed59e1d1-319519ee90bmr2461781a91.4.1751389675613; Tue, 01 Jul 2025
- 10:07:55 -0700 (PDT)
+        bh=lfxUpibom5vvnS0KKvDzUm1M8BKe5OlSJnZe4zWpxjk=;
+        b=OpXMp6CDCjBHsxFSnup0CcherdBaP8OvoayybIwnavc2eCVUj3urwGhlgVPRMny1cV
+         uzkiYLk3kcdIAorgY2SueSan35y5x4KtCZjRQPz5gcVyDPFsO7UElpbUVy/elr9bmLgJ
+         O+E4D2hFZvGhXiCYq3TESI2M3WRaZm5FJSSvU588iEOl+Hcdd2BlrrxDcQuGs4XxlX77
+         irueGXota0Kne/OxRlSBbtDetj+/2l9d2eAXfIDzvZ1VRSRmAchPE3tBhG1BjVmiew/t
+         YjUd3ViwVl+V9v7iDWBEaaZmPNXWXBCAnVK+MnRMNQfNSPXJH9HaIQkgyJjxYn+HH9+/
+         8bqg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYIePKsMYjd91+AuWoVwfg1nFaIAYfaLwbrOpq7ukcF9ELtaBR9PBCrbvNrKDanV1YqN2z@lists.linux.dev
+X-Gm-Message-State: AOJu0YxgEK+lR5Ehvfv1ytICVY4A025ToXsiRnilPOmZ9VArkbaxlgPh
+	hmgcbT21y1RcKWOYueJx6XgiOiC3T4iiakYAdwIjwcg/HpXODu0qeFpvyntizdmLQ3f5MslRJ1L
+	WeD+fneS3/aTJwiw/4uYh3VTBvuXrKYryxBQFBI8=
+X-Gm-Gg: ASbGncsLBydOlwvumRTdD0U3fjSX8epOzBcMLrfsIQNRJBR39/Z5s6VNHxROgxfnyet
+	iGUKy98azPGuVb/WDVC2lbVU/uRHl1oxHJIJcz58XUFh1J62GtR1oijAZg81Y1VbGDkd5qN/9aJ
+	L4PQO4SvPZ3eIi9ybKowbhS8mgWG7WvoJGUONQqeCo
+X-Google-Smtp-Source: AGHT+IF+/tonZS3eprL8fBz59HFoDazzWtNrnqbkDEo/bpyI80sUtntiayP1Q+kl77kfKAamsjQgNVIYfD+CC8tFZXo=
+X-Received: by 2002:a17:907:e885:b0:ade:4121:8d52 with SMTP id
+ a640c23a62f3a-ae34fd6c415mr1795492966b.16.1751391533096; Tue, 01 Jul 2025
+ 10:38:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
-In-Reply-To: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 1 Jul 2025 19:07:43 +0200
-X-Gm-Features: Ac12FXxPrxBmeSfKO3xPaPnHZ9Ojlak6uQ0jVcG0JF2jdPMZA5As1xRK0OZ6894
-Message-ID: <CANiq72kb5b-Q4OwASfGg6gz94fCQSLH34u29umQRsF8MEhR+6g@mail.gmail.com>
-Subject: Re: [PATCH v13 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org
+References: <20250628234034.work.800-kees@kernel.org> <CAG48ez0n1E0iuOxPe=jq4MuuP3w2wMSNixmfNmBbB89jyJBSbA@mail.gmail.com>
+ <202507010926.1650356E@keescook>
+In-Reply-To: <202507010926.1650356E@keescook>
+From: Bill Wendling <morbo@google.com>
+Date: Tue, 1 Jul 2025 10:38:36 -0700
+X-Gm-Features: Ac12FXzCjsprue_aHpjZnVxD8VXCkB47OcxITm2WNEvN6g9cKXegv-O1gblDGPQ
+Message-ID: <CAGG=3QWVM9tTRoGws0X+Jq+m7Fte2JeQC+jUL=EZ5hqGzSY6hg@mail.gmail.com>
+Subject: Re: [PATCH] kunit/fortify: Add back "volatile" for sizeof() constants
+To: Kees Cook <kees@kernel.org>
+Cc: Jann Horn <jannh@google.com>, =?UTF-8?Q?Jannik_Gl=C3=BCckert?= <jannik.glueckert@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, linux-hardening@vger.kernel.org, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 1, 2025 at 6:49=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
-wrote:
->
-> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-> have omitted Co-authored tags, as the end result is quite different.
->
-> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vador=
-ovsky@protonmail.com/t/#u [0]
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
->
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+On Tue, Jul 1, 2025 at 9:27=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+> On Tue, Jul 01, 2025 at 03:41:35PM +0200, Jann Horn wrote:
+> > On Sun, Jun 29, 2025 at 1:40=E2=80=AFAM Kees Cook <kees@kernel.org> wro=
+te:
+> > > It seems the Clang can see through OPTIMIZER_HIDE_VAR when the consta=
+nt
+> > > is coming from sizeof.
+> >
+> > Wait, what? That sounds extremely implausible/broken to me.
+> >
+Agreed. 'sizeof' should be calculated by the front-end.
 
-Thanks for keeping this up.
+> > https://godbolt.org/z/ndeP5chcb also suggests that clang does not
+> > generally "see through OPTIMIZER_HIDE_VAR when the constant is coming
+> > from sizeof".
+>
+> I agree -- something is very unstable about this case, and it's been
+> very frustrating to pin down.
+>
+> > Do you have a minimal reproducer of what you're talking about?
+>
+> I have not had the time to minimize it, no.
+>
+OPTIMIZER_HIDE_VAR doesn't have a 'volatile' on it. Could that be it?
 
-Let's see if we get some Acked-by's -- otherwise, we may want to split
-by subsystem and avoid flagday changes wherever possible.
+As a side note, the current definition:
 
-Cheers,
-Miguel
+  __asm__ ("" : "=3Dr" (var) : "0" (var))
+
+seems like
+
+  __asm__ ("" : "+r" (var))
+
+with extra steps.
+
+-bw
