@@ -1,114 +1,243 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F001DF73A;
-	Tue,  1 Jul 2025 10:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D13270578;
+	Tue,  1 Jul 2025 10:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751364730; cv=none; b=TGlU040SIoc0H6fiASzldYaH/uaqFtNVcRue8//6JWTmMg93g0uQF/TZb6S/k/i1SdHox096J7XTj8kXP+BdQUagYdafydWULVPUfDptsifdJhqBSwf0E+zDof3VEatkKNT/81KqyS1Dr2Gz/WsKNyX3pyY0c0caCcW//H82Vco=
+	t=1751365003; cv=none; b=C7AlLPqCXFUkrkUoc2R2hTSRC57fU2YpzLNAoFR4muuRqnK5PHqJg7Xiel0ThYZ9XNWexj8W6DKyeo8EwM77U0AjGUZhFmMF9tSKMU9I7OWrmU0auXDNQ9s7cSNOP7KYophzVMEgurg4mNYT0DcRI4Mke5s8yj5zEDXzViQPS6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751364730; c=relaxed/simple;
-	bh=/L06opar7gEBKcf9luZOR4l7KaWXt5JY5IFgFPqqtuY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QRD5PmKgtYZmryqdiFa3tPg9Grca3WUUc1B4nvGwedH2WCSm+CFB+Vh9ZCZLHRizbb5ZmwOwRmudvGC5SIU5hgbdenhbFr6ynO1x+M2kPSu00V8YEcTYha2SxmCFE6P57mUWGpNg0caoHjH67Cemt7tyyE6mWCZ3M1AIPE2xktw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/DjfuHC; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751365003; c=relaxed/simple;
+	bh=pvtwyK4zAmi/n19gYPRfHfJsdYlQsYr97DzypdGQHVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qoDakvPVQxmAT7E+sZ/FNe9+Dp8xSOuFpnEBPLVGGsCJFFvtcxYP5CBMxcgCElNrFDkNGlCS9D+sESR3WZAm3DhqkPnmuMB2P2d7NgXrCb6l+44zrm+NsT+uS97azx+i+/sdW+myNY1IrTpOZtFQDKGzU2xUr0tqMXYCsXYcBss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PjDoYwjt; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/DjfuHC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751364729; x=1782900729;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/L06opar7gEBKcf9luZOR4l7KaWXt5JY5IFgFPqqtuY=;
-  b=i/DjfuHCZiJiCFUyENDVaxmBApLkMlwNmGEtcFH3Y7c878RkyTkls8Mv
-   2VEcl5KZ/DX/hVnN3vXPv0Eyw0bwUUdfOMgs+OmD6WCGShD/tidz5BxNh
-   rkxLWPVREO2oJC+dYDlq6qnzUx0XBbFSifUDzMTcEP6uA0zn4xRKHiby8
-   Crwztm6eSjP480yV0EOsN2YKykAF2k+bnEikTXvBphJglNnZy5ZjPyTVy
-   cGPMfvoqYx0pCduaIZFjjX24WJZEWGRiDO+tkH7j2BfP4k54JouljGwfz
-   fl0pRDG6Ta2yHgUaPX7hzHw3d3kO3o4B1l7QiHnYQsVu9MXub0hUCNmcY
-   g==;
-X-CSE-ConnectionGUID: CRHrjyAMRWur0bh1ADzeJQ==
-X-CSE-MsgGUID: IQNhZJXCQ3uMkJVWsb7L5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="53713788"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="53713788"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 03:12:08 -0700
-X-CSE-ConnectionGUID: BU/H/MFmTu6zr+F+vmtH4Q==
-X-CSE-MsgGUID: MWaB8FRJSsqeE/lSwbfvvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="153894986"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 01 Jul 2025 03:12:07 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWXy8-000Zzm-2r;
-	Tue, 01 Jul 2025 10:12:04 +0000
-Date: Tue, 1 Jul 2025 18:11:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:pcie_switch_groups 2/12] include/linux/pci.h:2067:10:
- error: use of undeclared identifier 'PCI_NON_ISOLATED'; did you mean
- 'PCIE_NON_ISOLATED'?
-Message-ID: <202507011838.9E2bMQpg-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PjDoYwjt"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5616feQ9015295;
+	Tue, 1 Jul 2025 10:15:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=bI5gCu
+	bobaT76ILZ7nxLCeAprDNwZM108vGmis92vfw=; b=PjDoYwjtYkSnDRugC3E/Hv
+	o51v3h2eqLbh9PbKCz24WznV4ZvLaYp6Jd8agA71iKB5BcxaWfNXDxx/GBRMKaW3
+	3zwQRfDGD1wbtMpiFA30+yJ0p2Dz70v8RKSPdvUI6qypZ6CrGufrf+7IIFEUHjpn
+	VmkbQl7a8Y3LA2aHvCqH/jproxX7Zk8z+3ExVJMJr0374lAG/InCZaGor60RhO/n
+	pZkHKDq5PA9Rrp9xR6ocRlUp4mDAsxk77EVa6HUg/PlWw41EfjilnF4bkr92n46Q
+	F8/88KcMiADFeGk8H7HpkIgzcddU+eeOqjJiJQCQdUedp0LGnNlGkuTdVNCZIoJA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j830pmab-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 01 Jul 2025 10:15:48 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 561A93Md010712;
+	Tue, 1 Jul 2025 10:15:47 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j830pma6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 01 Jul 2025 10:15:47 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56173CoY032320;
+	Tue, 1 Jul 2025 10:15:45 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47ju40j8xb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 01 Jul 2025 10:15:45 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 561AFfZk21365030
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 1 Jul 2025 10:15:41 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4405320040;
+	Tue,  1 Jul 2025 10:15:41 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 32B5D20075;
+	Tue,  1 Jul 2025 10:15:39 +0000 (GMT)
+Received: from osiris (unknown [9.111.81.242])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue,  1 Jul 2025 10:15:39 +0000 (GMT)
+Date: Tue, 1 Jul 2025 12:15:37 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
+        glider@google.com, dvyukov@google.com, vincenzo.frascino@arm.com,
+        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        alex@ghiti.fr, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        akpm@linux-foundation.org, nathan@kernel.org,
+        nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        justinstitt@google.com, arnd@arndb.de, rppt@kernel.org,
+        geert@linux-m68k.org, mcgrof@kernel.org, guoweikang.kernel@gmail.com,
+        tiwei.btw@antgroup.com, kevin.brodsky@arm.com, benjamin.berg@intel.com,
+        kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 00/11] kasan: unify kasan_arch_is_ready with
+ kasan_enabled
+Message-ID: <20250701101537.10162Aa0-hca@linux.ibm.com>
+References: <20250626153147.145312-1-snovitoll@gmail.com>
+ <CA+fCnZfAtKWx=+to=XQBREhou=Snb0Yms4D8GNGaxE+BQUYm4A@mail.gmail.com>
+ <CACzwLxgsVkn98VDPpmm7pKcbvu87UBwPgYJmLfKixu4-x+yjSA@mail.gmail.com>
+ <CA+fCnZcGyTECP15VMSPh+duLmxNe=ApHfOnbAY3NqtFHZvceZw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+fCnZcGyTECP15VMSPh+duLmxNe=ApHfOnbAY3NqtFHZvceZw@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qu16htFmviN0JHs_Lk2UXggpRHKamSL3
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAxMDA1OCBTYWx0ZWRfX1+8afvt373Lc kWdnunbPz6C9f/GOHjl4ZrQKHABgOATpMhlNHzlwXmovxD7qpB0NHRzjO1rBP3TCrzWp9aDgeMZ BRGyDtucaQptfKRiB1Ir1UEiA/DnvvId+/noIpRKGxbqodALAZAM/OouyWSCdZn9Br55SUFY1mF
+ /QElD3fMWDED/2Up/bE3bdkQFp0y4l0tbOgz/r1X+BYJtzifCAp1d8Rjiv1rqAaxBvj1uWPWfAv gRsEeOrKai0th89ONMoXzLZtwQ+ZFabmyQx6rICdTSFHm+Cjr3wa4WzluId4DM526gzf4NqEHxp T9u38OW/UmDyf8gxdR/KVtrZKshh0EQP4/y/BFKLU+IB3+JEAkKDZdFyiBgBhMsxkkHSKm2H012
+ aLNkwLyaNoCYreQzuUSpD2tKUqxrMT5HjvgLBKo4Yoqu8W0zpbow/WbwFXvshhrHRfN8RYzo
+X-Authority-Analysis: v=2.4 cv=MOlgmNZl c=1 sm=1 tr=0 ts=6863b554 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=jBQngTtrd59FM_Ge02gA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: HLwv3VLvA_zkneOazGXOaA6Q1nuISU0B
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-01_02,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ adultscore=0 suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 mlxlogscore=906 spamscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507010058
 
-tree:   https://github.com/jgunthorpe/linux pcie_switch_groups
-head:   44fc32b44e9100467bc59704d09b5aca075ccb06
-commit: 1ef9f1a958f948a7ed5a60048c5fc668838007d7 [2/12] PCI: Add pci_bus_isolation()
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20250701/202507011838.9E2bMQpg-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e04c938cc08a90ae60440ce22d072ebc69d67ee8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507011838.9E2bMQpg-lkp@intel.com/reproduce)
+> > > Another thing that needs careful consideration is whether it's
+> > > possible to combine kasan_arch_is_ready() and kasan_enabled() into the
+> > > same check logically at all. There's one issue mentioned in [1]:
+> >
+> > Hello,
+> > I've removed kasan_arch_is_ready() at all in this series:
+> > [PATCH v2 11/11] kasan: replace kasan_arch_is_ready with kasan_enabled
+> >
+> > Is it not what's expected by unification?
+> 
+> I guess the issue description diverged a bit from what needs to be
+> done, sorry about that.
+> 
+> The core 2 things I wanted to address with the unification are:
+> 
+> 1. Avoid spraying kasan_arch_is_ready() throughout the KASAN
+> implementation and move these checks into include/linux/kasan.h (and
+> add __wrappers when required).
+> 
+> 2. Avoid architectures redefining the same kasan_enabled global
+> variable/static key.
+> 
+> Initially, I thought that s/kasan_arch_is_ready/kasan_enabled + simply
+> moving the calls into affected include/linux/kasan.h functions would
+> be enough. But then, based on [1], turns out it's not that simple.
+> 
+> So now, I think we likely still need two separate checks/flags:
+> kasan_enabled() that controls whether KASAN is enabled at all and
+> kasan_arch_is_ready() that gets turned on by kasan_init() when shadow
+> is initialized (should we rename it to kasan_shadow_initialized()?).
+> But then we can still move kasan_arch_is_ready() into
+> include/linux/kasan.h and use the proper combination of checks for
+> each affected function before calling __wrappers. And we can still
+> remove the duplicated flags/keys code from the arch code.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507011838.9E2bMQpg-lkp@intel.com/
+FWIW, as Alexander Gordeev already mentioned: this series breaks s390,
+since the static_branch_enable() call in kasan_init_generic() is now
+called way too early, and it isn't necessary at all. Which, as far as
+I understand, may be the case for other architectures as well. s390
+sets up the required KASAN mappings in the decompressor and can start
+with KASAN enabled nearly from the beginning.
 
-All error/warnings (new ones prefixed by >>):
+So something like below on top of this series would address
+that. Given that this series is about to be reworked this is just for
+illustration :)
 
-   In file included from kernel/dma/direct.c:16:
-   In file included from include/linux/pci-p2pdma.h:14:
->> include/linux/pci.h:2067:10: error: use of undeclared identifier 'PCI_NON_ISOLATED'; did you mean 'PCIE_NON_ISOLATED'?
-    2067 | { return PCI_NON_ISOLATED; }
-         |          ^~~~~~~~~~~~~~~~
-         |          PCIE_NON_ISOLATED
-   include/linux/pci.h:850:2: note: 'PCIE_NON_ISOLATED' declared here
-     850 |         PCIE_NON_ISOLATED,
-         |         ^
->> include/linux/pci.h:2066:24: warning: no previous prototype for function 'pci_bus_isolated' [-Wmissing-prototypes]
-    2066 | enum pci_bus_isolation pci_bus_isolated(struct pci_bus *bus)
-         |                        ^
-   include/linux/pci.h:2066:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2066 | enum pci_bus_isolation pci_bus_isolated(struct pci_bus *bus)
-         | ^
-         | static 
-   kernel/dma/direct.c:148:20: warning: shift count >= width of type [-Wshift-count-overflow]
-     148 |                     phys_limit < DMA_BIT_MASK(64) &&
-         |                                  ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
-      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   2 warnings and 1 error generated.
-
-
-vim +2067 include/linux/pci.h
-
-  2065	
-> 2066	enum pci_bus_isolation pci_bus_isolated(struct pci_bus *bus)
-> 2067	{ return PCI_NON_ISOLATED; }
-  2068	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 0c16dc443e2f..c2f51ac39a91 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -172,6 +172,7 @@ config S390
+ 	select HAVE_ARCH_JUMP_LABEL
+ 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
+ 	select HAVE_ARCH_KASAN
++	select HAVE_ARCH_KASAN_EARLY
+ 	select HAVE_ARCH_KASAN_VMALLOC
+ 	select HAVE_ARCH_KCSAN
+ 	select HAVE_ARCH_KMSAN
+diff --git a/include/linux/kasan-enabled.h b/include/linux/kasan-enabled.h
+index 2436eb45cfee..049270a2269f 100644
+--- a/include/linux/kasan-enabled.h
++++ b/include/linux/kasan-enabled.h
+@@ -10,7 +10,11 @@
+  * Global runtime flag. Starts ‘false’; switched to ‘true’ by
+  * the appropriate kasan_init_*() once KASAN is fully initialized.
+  */
++#ifdef CONFIG_HAVE_ARCH_KASAN_EARLY
++DECLARE_STATIC_KEY_TRUE(kasan_flag_enabled);
++#else
+ DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
++#endif
+ 
+ static __always_inline bool kasan_enabled(void)
+ {
+diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+index f82889a830fa..1407374e83b9 100644
+--- a/lib/Kconfig.kasan
++++ b/lib/Kconfig.kasan
+@@ -4,6 +4,13 @@
+ config HAVE_ARCH_KASAN
+ 	bool
+ 
++config HAVE_ARCH_KASAN_EARLY
++	bool
++	help
++	  Architectures should select this if KASAN mappings are setup in
++	  the decompressor and when the kernel can run very early with
++	  KASAN enabled.
++
+ config HAVE_ARCH_KASAN_SW_TAGS
+ 	bool
+ 
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 0f3648335a6b..2aae0ce659b4 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -36,7 +36,11 @@
+  * Definition of the unified static key declared in kasan-enabled.h.
+  * This provides consistent runtime enable/disable across all KASAN modes.
+  */
++#ifdef CONFIG_HAVE_ARCH_KASAN_EARLY
++DEFINE_STATIC_KEY_TRUE(kasan_flag_enabled);
++#else
+ DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
++#endif
+ EXPORT_SYMBOL(kasan_flag_enabled);
+ 
+ struct slab *kasan_addr_to_slab(const void *addr)
+diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+index a3b112868be7..455376d5f1c3 100644
+--- a/mm/kasan/generic.c
++++ b/mm/kasan/generic.c
+@@ -42,7 +42,8 @@
+  */
+ void __init kasan_init_generic(void)
+ {
+-	static_branch_enable(&kasan_flag_enabled);
++	if (!IS_ENABLED(CONFIG_HAVE_ARCH_KASAN_EARLY))
++		static_branch_enable(&kasan_flag_enabled);
+ 
+ 	pr_info("KernelAddressSanitizer initialized (generic)\n");
+ }
