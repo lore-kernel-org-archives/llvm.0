@@ -1,79 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA29D4C97;
-	Tue,  1 Jul 2025 00:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CC6101F2;
+	Tue,  1 Jul 2025 00:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751328346; cv=none; b=GplYKt5zKLvyXDHPl/1rpx/t4l/8F/FjN6r0qe4nUr7PCXIEEali9KYGYjtbmK+DO+DxX333LBEWKyFUdIEGJvhl9awM3137VmMYeQuvoP80LLgVfy0NMMDnK98wRkeGGpOGJVjoycGXZGuPQXwKjidkxHg4+7C19wAsumqBMAY=
+	t=1751329948; cv=none; b=XsqmcOTIUrN8tYE2LC9eswTt2dnC8gQi8Wxy4n3OWlwGvEByKzQ+xSql76IlAuteP11vtuul34elXhpCoogt2t6H2+Z7CDzpQba+mCxbtMqId+6y1I53o5Z4h2olK4UQ8+lumuxbTSFxRx6ymlwtVZXjbfxxdqtrN5s/o7jPUgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751328346; c=relaxed/simple;
-	bh=qPg3TzNq6BpmYEZilw7ZTkiMjD24Iia3o39EQ4M66Vw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=bW8WD71yxOIuMJmN6ZMGY7ho6z9GMzcvv9yzPT1lQb9h2FnKPH9BpfK/e4IIRE2AlE77TM+ijuu4AfpbFoOfNgFhTZzLyXecUlxch1m5evyR2MlSVdQM4kqVN/vHR+2M0xKLdvGClwbU3Fbjy0cmiNSxccIDYj3jLSZOBgJHmP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XbWONMuU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751329948; c=relaxed/simple;
+	bh=qBsJM7jyXytfyhHcxnnncvZRM4YzLgWm78hSNTUfLtY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MMvg6uqqTSSbrtJGbQ3q4c0hHWZszKdL01xLYhjyOioP9ElfresF+InYc9+evzBcEslA5ws0HX78jR6f8fwv6gtvLp0YrhalCsadLIhMK4zNtPUERH4joXO+qxIJmSLsYJIg/bmNJn78zz+dJR5gv8VHe1dOmOcEQApPpZs+D5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QVTSJVtU; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XbWONMuU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEDDC4CEE3;
-	Tue,  1 Jul 2025 00:05:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1751328345;
-	bh=qPg3TzNq6BpmYEZilw7ZTkiMjD24Iia3o39EQ4M66Vw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XbWONMuUrvz7T0Gq7YshVCh4gFQdvVevhuOhWKtFa8TmjgHwkc/w8ws5DNH5TGSks
-	 Up2E/6UPAIGTQbT/oyMflhWrYdheKmsjDkuf1SuGhV56uHAYqrE1Pj+gCiIWQWTtKV
-	 XJRP+qO/YfjkDDyNSfnZEETNqJc3s8u5cN7tglT8=
-Date: Mon, 30 Jun 2025 17:05:42 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
- glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
- vincenzo.frascino@arm.com, linux@armlinux.org.uk, catalin.marinas@arm.com,
- will@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
- maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- christophe.leroy@csgroup.eu, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com,
- borntraeger@linux.ibm.com, svens@linux.ibm.com, richard@nod.at,
- anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
- dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
- hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
- arnd@arndb.de, rppt@kernel.org, geert@linux-m68k.org, mcgrof@kernel.org,
- guoweikang.kernel@gmail.com, tiwei.btw@antgroup.com, kevin.brodsky@arm.com,
- benjamin.berg@intel.com, kasan-dev@googlegroups.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-um@lists.infradead.org, linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 01/11] kasan: unify static kasan_flag_enabled across
- modes
-Message-Id: <20250630170542.f4da6e3908f66b822408e699@linux-foundation.org>
-In-Reply-To: <aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20250626153147.145312-1-snovitoll@gmail.com>
-	<20250626153147.145312-2-snovitoll@gmail.com>
-	<aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QVTSJVtU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751329946; x=1782865946;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qBsJM7jyXytfyhHcxnnncvZRM4YzLgWm78hSNTUfLtY=;
+  b=QVTSJVtUZHiQeh/Qt+Ox7WjALgKuVzKeW2WsoSFspbp9GLep82HAgKti
+   lwzq11TOapF/eUKXdu3JIJMpB+/sn6sUhY1ytkW0PfamT6CaZchhTQ2qb
+   Yhf3T6kQN/DMbF/RKD3FReFK+gazt9K59nPMduQ/rn637spn2F6dVPsa+
+   KKUlkWFwSkx7n0eqnZrCRipEL5X4Vp74XQtxkv68AnKVQixGa/adyxN3c
+   Z3qTvG1mEszwrPLWOY/K7vyi15UTnkS+K6q52I0CeEHWZ0mqT3LFzhEeI
+   R83MhewWkU8pfJZ/xSThg8C9UoIvmsKKl+9MH6/pWS0uu/DvTJMFX5vcN
+   w==;
+X-CSE-ConnectionGUID: hMaZ8BTgR2iYJiab0Bb4Cg==
+X-CSE-MsgGUID: VN8MMl10TZqBKBqRthAMzQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="79014262"
+X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
+   d="scan'208";a="79014262"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 17:32:26 -0700
+X-CSE-ConnectionGUID: 4rMC11u6Sv29p055FCy19A==
+X-CSE-MsgGUID: rO9OrNlVSb62/J3EfT+TZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
+   d="scan'208";a="154333165"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 30 Jun 2025 17:32:25 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWOv9-000ZTW-0H;
+	Tue, 01 Jul 2025 00:32:23 +0000
+Date: Tue, 1 Jul 2025 08:32:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:execmem/x86-rox/ftrace+kprobes 1/5] mm/execmem.c:398:8: error:
+ call to undeclared function 'execmem_force_rw'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202507010810.GlEoFWbv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 30 Jun 2025 14:31:00 +0200 Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git execmem/x86-rox/ftrace+kprobes
+head:   613ecd4bb6b74a860ac4f227a325d4ba9e7cac8e
+commit: e5f977585f86b7b52a41661128872f622e8a2641 [1/5] dev: execmem: add execmem_alloc_rw
+config: s390-randconfig-002-20250701 (https://download.01.org/0day-ci/archive/20250701/202507010810.GlEoFWbv-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507010810.GlEoFWbv-lkp@intel.com/reproduce)
 
-> > +/*
-> > + * Initialize Generic KASAN and enable runtime checks.
-> > + * This should be called from arch kasan_init() once shadow memory is ready.
-> > + */
-> > +void __init kasan_init_generic(void)
-> > +{
-> > +	static_branch_enable(&kasan_flag_enabled);
-> 
-> s390 crashes at this line, when the whole series is applied.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507010810.GlEoFWbv-lkp@intel.com/
 
-oop.  Thanks, I'll demote this seres to the mm-new branch for now, which
-takes it out of linux-next.
+All errors (new ones prefixed by >>):
+
+>> mm/execmem.c:398:8: error: call to undeclared function 'execmem_force_rw'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     398 |         err = execmem_force_rw(p, size);
+         |               ^
+   1 error generated.
+
+
+vim +/execmem_force_rw +398 mm/execmem.c
+
+   389	
+   390	void *execmem_alloc_rw(enum execmem_type type, size_t size)
+   391	{
+   392		void *p __free(execmem) = execmem_alloc(type, size);
+   393		int err;
+   394	
+   395		if (!p)
+   396			return NULL;
+   397	
+ > 398		err = execmem_force_rw(p, size);
+   399		if (err)
+   400			return NULL;
+   401	
+   402		return no_free_ptr(p);
+   403	}
+   404	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
