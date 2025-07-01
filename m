@@ -1,227 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CD7243387;
-	Mon, 30 Jun 2025 22:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA29D4C97;
+	Tue,  1 Jul 2025 00:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751322560; cv=none; b=Z6T0S/xDOagz9O9KsdrgVxfT6V1JGa/WJUTbNZr6KQwrEDHU+UTSDriaGfetSgKzLhTK67XohsSwL7WSxFnooTqmwAg9dGPImx8i6ZXzY0GPN5sLe+EZOUY3pWtwrAA+yU0FReNu25OJXHg+agZpU5EFdmnizG0CVGUoNBFbh9E=
+	t=1751328346; cv=none; b=GplYKt5zKLvyXDHPl/1rpx/t4l/8F/FjN6r0qe4nUr7PCXIEEali9KYGYjtbmK+DO+DxX333LBEWKyFUdIEGJvhl9awM3137VmMYeQuvoP80LLgVfy0NMMDnK98wRkeGGpOGJVjoycGXZGuPQXwKjidkxHg4+7C19wAsumqBMAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751322560; c=relaxed/simple;
-	bh=TH6VDimW9Tj/0bjuzSN5fQ5HqY/XfIdb4j7Fmht/4dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=L/LmQTuRNXdIpzjg1Mj7WxL6BMbuZpWkZv63JTY9Vq+mC4kkC+wADAhraIVRb/PdG0oeQcKl1OOS3SDqwe+IvUEEtyupk/VJH5/ONjb61MYfnFBc4rvO2N3I/OXlvU0/PYM4qpqWCniirIjrNRG/ISdYXxzbKl5hcUWCJJ7nPMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=erp7m6Ku; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751328346; c=relaxed/simple;
+	bh=qPg3TzNq6BpmYEZilw7ZTkiMjD24Iia3o39EQ4M66Vw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=bW8WD71yxOIuMJmN6ZMGY7ho6z9GMzcvv9yzPT1lQb9h2FnKPH9BpfK/e4IIRE2AlE77TM+ijuu4AfpbFoOfNgFhTZzLyXecUlxch1m5evyR2MlSVdQM4kqVN/vHR+2M0xKLdvGClwbU3Fbjy0cmiNSxccIDYj3jLSZOBgJHmP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XbWONMuU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="erp7m6Ku"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751322558; x=1782858558;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TH6VDimW9Tj/0bjuzSN5fQ5HqY/XfIdb4j7Fmht/4dw=;
-  b=erp7m6KulWnmF6ndgZXrqq+jN5WXKu09+a32JQhhnYrMPTZpbTAPacAW
-   Zv5ktY96cO2VzeC0d3gOwUDwp0tTFHOuuo9yT6pYES1VYNw3Ka6lWjYpt
-   5pTwv8i2SxHPveczbs4DrYB4ytLwMHkGNcMNAoOWXNNn2xjZadgjErf9P
-   A0BckrdyCmOj7mlVA+Fghs5RBiLV+mXbvuCBZhmzpDTRrW7YoSCJzvlgZ
-   1qy8DpC6Q9/ykhwRHzB4g0po/CDKV4omWxmWYwEQDsa3Zhd1ErZtEsf0V
-   K2OBtl5YJ68ngdVsEg0NZdzpmyVh5pW6OCkykqwRKfWAlBikDv1ABU/dr
-   w==;
-X-CSE-ConnectionGUID: Vd0qJbmbSiyLxc57jUCG8w==
-X-CSE-MsgGUID: 5NZ3JNHzSBWiCP2DWiyZsg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="76111540"
-X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
-   d="scan'208";a="76111540"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 15:29:18 -0700
-X-CSE-ConnectionGUID: eNKms1soTT6rcbcJRa92tA==
-X-CSE-MsgGUID: 9EzHB/m2T7unHKUfLSiD0w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,278,1744095600"; 
-   d="scan'208";a="153063620"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 30 Jun 2025 15:29:16 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWMzx-000ZQI-1X;
-	Mon, 30 Jun 2025 22:29:13 +0000
-Date: Tue, 1 Jul 2025 06:29:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Zhang <markzhang@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Leon Romanovsky <leon@kernel.org>
-Subject: drivers/infiniband/core/nldev.c:2459:12: warning: stack frame size
- (1032) exceeds limit (1024) in 'nldev_stat_get_counter_status_doit'
-Message-ID: <202507010618.ffCC4JWZ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XbWONMuU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEDDC4CEE3;
+	Tue,  1 Jul 2025 00:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1751328345;
+	bh=qPg3TzNq6BpmYEZilw7ZTkiMjD24Iia3o39EQ4M66Vw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XbWONMuUrvz7T0Gq7YshVCh4gFQdvVevhuOhWKtFa8TmjgHwkc/w8ws5DNH5TGSks
+	 Up2E/6UPAIGTQbT/oyMflhWrYdheKmsjDkuf1SuGhV56uHAYqrE1Pj+gCiIWQWTtKV
+	 XJRP+qO/YfjkDDyNSfnZEETNqJc3s8u5cN7tglT8=
+Date: Mon, 30 Jun 2025 17:05:42 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
+ glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+ vincenzo.frascino@arm.com, linux@armlinux.org.uk, catalin.marinas@arm.com,
+ will@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ christophe.leroy@csgroup.eu, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com,
+ borntraeger@linux.ibm.com, svens@linux.ibm.com, richard@nod.at,
+ anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+ dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+ hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ arnd@arndb.de, rppt@kernel.org, geert@linux-m68k.org, mcgrof@kernel.org,
+ guoweikang.kernel@gmail.com, tiwei.btw@antgroup.com, kevin.brodsky@arm.com,
+ benjamin.berg@intel.com, kasan-dev@googlegroups.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-um@lists.infradead.org, linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 01/11] kasan: unify static kasan_flag_enabled across
+ modes
+Message-Id: <20250630170542.f4da6e3908f66b822408e699@linux-foundation.org>
+In-Reply-To: <aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20250626153147.145312-1-snovitoll@gmail.com>
+	<20250626153147.145312-2-snovitoll@gmail.com>
+	<aGKDhPBgDv2JjJZr@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
-commit: 060c642b2ab8b40b39f9db99c1d14c7d19ba507f RDMA/nldev: Add support to add/delete a sub IB device through netlink
-date:   12 months ago
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250701/202507010618.ffCC4JWZ-lkp@intel.com/config)
-compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507010618.ffCC4JWZ-lkp@intel.com/reproduce)
+On Mon, 30 Jun 2025 14:31:00 +0200 Alexander Gordeev <agordeev@linux.ibm.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507010618.ffCC4JWZ-lkp@intel.com/
+> > +/*
+> > + * Initialize Generic KASAN and enable runtime checks.
+> > + * This should be called from arch kasan_init() once shadow memory is ready.
+> > + */
+> > +void __init kasan_init_generic(void)
+> > +{
+> > +	static_branch_enable(&kasan_flag_enabled);
+> 
+> s390 crashes at this line, when the whole series is applied.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/infiniband/core/nldev.c:35:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/core/nldev.c:1251:12: warning: stack frame size (1048) exceeds limit (1024) in 'nldev_port_get_dumpit' [-Wframe-larger-than]
-    1251 | static int nldev_port_get_dumpit(struct sk_buff *skb,
-         |            ^
-   drivers/infiniband/core/nldev.c:2402:12: warning: stack frame size (1048) exceeds limit (1024) in 'nldev_stat_get_doit' [-Wframe-larger-than]
-    2402 | static int nldev_stat_get_doit(struct sk_buff *skb, struct nlmsghdr *nlh,
-         |            ^
->> drivers/infiniband/core/nldev.c:2459:12: warning: stack frame size (1032) exceeds limit (1024) in 'nldev_stat_get_counter_status_doit' [-Wframe-larger-than]
-    2459 | static int nldev_stat_get_counter_status_doit(struct sk_buff *skb,
-         |            ^
-   drivers/infiniband/core/nldev.c:1536:12: warning: stack frame size (1032) exceeds limit (1024) in 'res_get_common_dumpit' [-Wframe-larger-than]
-    1536 | static int res_get_common_dumpit(struct sk_buff *skb,
-         |            ^
-   9 warnings generated.
-
-
-vim +/nldev_stat_get_counter_status_doit +2459 drivers/infiniband/core/nldev.c
-
-c4ffee7c9bdba7 Mark Zhang    2019-07-02  2458  
-7301d0a9834c7f Aharon Landau 2021-10-08 @2459  static int nldev_stat_get_counter_status_doit(struct sk_buff *skb,
-7301d0a9834c7f Aharon Landau 2021-10-08  2460  					      struct nlmsghdr *nlh,
-7301d0a9834c7f Aharon Landau 2021-10-08  2461  					      struct netlink_ext_ack *extack)
-7301d0a9834c7f Aharon Landau 2021-10-08  2462  {
-7301d0a9834c7f Aharon Landau 2021-10-08  2463  	struct nlattr *tb[RDMA_NLDEV_ATTR_MAX], *table, *entry;
-7301d0a9834c7f Aharon Landau 2021-10-08  2464  	struct rdma_hw_stats *stats;
-7301d0a9834c7f Aharon Landau 2021-10-08  2465  	struct ib_device *device;
-7301d0a9834c7f Aharon Landau 2021-10-08  2466  	struct sk_buff *msg;
-7301d0a9834c7f Aharon Landau 2021-10-08  2467  	u32 devid, port;
-7301d0a9834c7f Aharon Landau 2021-10-08  2468  	int ret, i;
-7301d0a9834c7f Aharon Landau 2021-10-08  2469  
-7301d0a9834c7f Aharon Landau 2021-10-08  2470  	ret = nlmsg_parse(nlh, 0, tb, RDMA_NLDEV_ATTR_MAX - 1,
-7301d0a9834c7f Aharon Landau 2021-10-08  2471  			  nldev_policy, extack);
-7301d0a9834c7f Aharon Landau 2021-10-08  2472  	if (ret || !tb[RDMA_NLDEV_ATTR_DEV_INDEX] ||
-7301d0a9834c7f Aharon Landau 2021-10-08  2473  	    !tb[RDMA_NLDEV_ATTR_PORT_INDEX])
-7301d0a9834c7f Aharon Landau 2021-10-08  2474  		return -EINVAL;
-7301d0a9834c7f Aharon Landau 2021-10-08  2475  
-7301d0a9834c7f Aharon Landau 2021-10-08  2476  	devid = nla_get_u32(tb[RDMA_NLDEV_ATTR_DEV_INDEX]);
-7301d0a9834c7f Aharon Landau 2021-10-08  2477  	device = ib_device_get_by_index(sock_net(skb->sk), devid);
-7301d0a9834c7f Aharon Landau 2021-10-08  2478  	if (!device)
-7301d0a9834c7f Aharon Landau 2021-10-08  2479  		return -EINVAL;
-7301d0a9834c7f Aharon Landau 2021-10-08  2480  
-7301d0a9834c7f Aharon Landau 2021-10-08  2481  	port = nla_get_u32(tb[RDMA_NLDEV_ATTR_PORT_INDEX]);
-7301d0a9834c7f Aharon Landau 2021-10-08  2482  	if (!rdma_is_port_valid(device, port)) {
-7301d0a9834c7f Aharon Landau 2021-10-08  2483  		ret = -EINVAL;
-7301d0a9834c7f Aharon Landau 2021-10-08  2484  		goto err;
-7301d0a9834c7f Aharon Landau 2021-10-08  2485  	}
-7301d0a9834c7f Aharon Landau 2021-10-08  2486  
-7301d0a9834c7f Aharon Landau 2021-10-08  2487  	stats = ib_get_hw_stats_port(device, port);
-7301d0a9834c7f Aharon Landau 2021-10-08  2488  	if (!stats) {
-7301d0a9834c7f Aharon Landau 2021-10-08  2489  		ret = -EINVAL;
-7301d0a9834c7f Aharon Landau 2021-10-08  2490  		goto err;
-7301d0a9834c7f Aharon Landau 2021-10-08  2491  	}
-7301d0a9834c7f Aharon Landau 2021-10-08  2492  
-7301d0a9834c7f Aharon Landau 2021-10-08  2493  	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-7301d0a9834c7f Aharon Landau 2021-10-08  2494  	if (!msg) {
-7301d0a9834c7f Aharon Landau 2021-10-08  2495  		ret = -ENOMEM;
-7301d0a9834c7f Aharon Landau 2021-10-08  2496  		goto err;
-7301d0a9834c7f Aharon Landau 2021-10-08  2497  	}
-7301d0a9834c7f Aharon Landau 2021-10-08  2498  
-7301d0a9834c7f Aharon Landau 2021-10-08  2499  	nlh = nlmsg_put(
-7301d0a9834c7f Aharon Landau 2021-10-08  2500  		msg, NETLINK_CB(skb).portid, nlh->nlmsg_seq,
-7301d0a9834c7f Aharon Landau 2021-10-08  2501  		RDMA_NL_GET_TYPE(RDMA_NL_NLDEV, RDMA_NLDEV_CMD_STAT_GET_STATUS),
-7301d0a9834c7f Aharon Landau 2021-10-08  2502  		0, 0);
-7301d0a9834c7f Aharon Landau 2021-10-08  2503  
-7301d0a9834c7f Aharon Landau 2021-10-08  2504  	ret = -EMSGSIZE;
-67e6272d53386f Or Har-Toov   2022-11-28  2505  	if (!nlh || fill_nldev_handle(msg, device) ||
-7301d0a9834c7f Aharon Landau 2021-10-08  2506  	    nla_put_u32(msg, RDMA_NLDEV_ATTR_PORT_INDEX, port))
-7301d0a9834c7f Aharon Landau 2021-10-08  2507  		goto err_msg;
-7301d0a9834c7f Aharon Landau 2021-10-08  2508  
-7301d0a9834c7f Aharon Landau 2021-10-08  2509  	table = nla_nest_start(msg, RDMA_NLDEV_ATTR_STAT_HWCOUNTERS);
-7301d0a9834c7f Aharon Landau 2021-10-08  2510  	if (!table)
-7301d0a9834c7f Aharon Landau 2021-10-08  2511  		goto err_msg;
-7301d0a9834c7f Aharon Landau 2021-10-08  2512  
-7301d0a9834c7f Aharon Landau 2021-10-08  2513  	mutex_lock(&stats->lock);
-7301d0a9834c7f Aharon Landau 2021-10-08  2514  	for (i = 0; i < stats->num_counters; i++) {
-7301d0a9834c7f Aharon Landau 2021-10-08  2515  		entry = nla_nest_start(msg,
-7301d0a9834c7f Aharon Landau 2021-10-08  2516  				       RDMA_NLDEV_ATTR_STAT_HWCOUNTER_ENTRY);
-7301d0a9834c7f Aharon Landau 2021-10-08  2517  		if (!entry)
-7301d0a9834c7f Aharon Landau 2021-10-08  2518  			goto err_msg_table;
-7301d0a9834c7f Aharon Landau 2021-10-08  2519  
-7301d0a9834c7f Aharon Landau 2021-10-08  2520  		if (nla_put_string(msg,
-7301d0a9834c7f Aharon Landau 2021-10-08  2521  				   RDMA_NLDEV_ATTR_STAT_HWCOUNTER_ENTRY_NAME,
-7301d0a9834c7f Aharon Landau 2021-10-08  2522  				   stats->descs[i].name) ||
-7301d0a9834c7f Aharon Landau 2021-10-08  2523  		    nla_put_u32(msg, RDMA_NLDEV_ATTR_STAT_HWCOUNTER_INDEX, i))
-7301d0a9834c7f Aharon Landau 2021-10-08  2524  			goto err_msg_entry;
-7301d0a9834c7f Aharon Landau 2021-10-08  2525  
-7301d0a9834c7f Aharon Landau 2021-10-08  2526  		if ((stats->descs[i].flags & IB_STAT_FLAG_OPTIONAL) &&
-7301d0a9834c7f Aharon Landau 2021-10-08  2527  		    (nla_put_u8(msg, RDMA_NLDEV_ATTR_STAT_HWCOUNTER_DYNAMIC,
-7301d0a9834c7f Aharon Landau 2021-10-08  2528  				!test_bit(i, stats->is_disabled))))
-7301d0a9834c7f Aharon Landau 2021-10-08  2529  			goto err_msg_entry;
-7301d0a9834c7f Aharon Landau 2021-10-08  2530  
-7301d0a9834c7f Aharon Landau 2021-10-08  2531  		nla_nest_end(msg, entry);
-7301d0a9834c7f Aharon Landau 2021-10-08  2532  	}
-7301d0a9834c7f Aharon Landau 2021-10-08  2533  	mutex_unlock(&stats->lock);
-7301d0a9834c7f Aharon Landau 2021-10-08  2534  
-7301d0a9834c7f Aharon Landau 2021-10-08  2535  	nla_nest_end(msg, table);
-7301d0a9834c7f Aharon Landau 2021-10-08  2536  	nlmsg_end(msg, nlh);
-7301d0a9834c7f Aharon Landau 2021-10-08  2537  	ib_device_put(device);
-7301d0a9834c7f Aharon Landau 2021-10-08  2538  	return rdma_nl_unicast(sock_net(skb->sk), msg, NETLINK_CB(skb).portid);
-7301d0a9834c7f Aharon Landau 2021-10-08  2539  
-7301d0a9834c7f Aharon Landau 2021-10-08  2540  err_msg_entry:
-7301d0a9834c7f Aharon Landau 2021-10-08  2541  	nla_nest_cancel(msg, entry);
-7301d0a9834c7f Aharon Landau 2021-10-08  2542  err_msg_table:
-7301d0a9834c7f Aharon Landau 2021-10-08  2543  	mutex_unlock(&stats->lock);
-7301d0a9834c7f Aharon Landau 2021-10-08  2544  	nla_nest_cancel(msg, table);
-7301d0a9834c7f Aharon Landau 2021-10-08  2545  err_msg:
-7301d0a9834c7f Aharon Landau 2021-10-08  2546  	nlmsg_free(msg);
-7301d0a9834c7f Aharon Landau 2021-10-08  2547  err:
-7301d0a9834c7f Aharon Landau 2021-10-08  2548  	ib_device_put(device);
-7301d0a9834c7f Aharon Landau 2021-10-08  2549  	return ret;
-7301d0a9834c7f Aharon Landau 2021-10-08  2550  }
-7301d0a9834c7f Aharon Landau 2021-10-08  2551  
-
-:::::: The code at line 2459 was first introduced by commit
-:::::: 7301d0a9834c7f1f0c91c1f0a46c7b191b1fd0da RDMA/nldev: Add support to get status of all counters
-
-:::::: TO: Aharon Landau <aharonl@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+oop.  Thanks, I'll demote this seres to the mm-new branch for now, which
+takes it out of linux-next.
