@@ -1,127 +1,177 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C9A212FB3;
-	Tue,  1 Jul 2025 19:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19139283FDC
+	for <llvm@lists.linux.dev>; Tue,  1 Jul 2025 20:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751399571; cv=none; b=RTonpwW+zf4ws4ulON2DaKH4S0oNrJDxD0e1zDAYhtTpJSdS3xnEIN3t29ILLSBMtaGnypWG2EjByw7sWpQg4Bff1uI5CO2RNBYQibAq178cwffYVI/Khuhinbr50awOFXjUon5pdbF0kQ9mEoL5qB7Yjgt9c15t1O5fTN6EgNI=
+	t=1751400214; cv=none; b=n0XhyY6LDkktt3pLGI51xQRhdsZT+xhMwAcdJ8akWBxa+D/dJj4RAHlVdyadnaIC+O1b15wQDyU3mNWKL+fA3PHBw71Z1PSiuoYBBb9lwbVDBPq29Wgz+czsLnwhqcdwyxLfG47PqkNDMNif8zZdXXkz7HpwKO9e+Ylzep8zzHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751399571; c=relaxed/simple;
-	bh=GifqKRJ8E1f0v+YQE5RiQLEX+cdwaFetyEzmQSOKZYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IWnOt9x6u53PWM4GX2LgqmRdvwxZlMOwpbUPZkVYsrTZSUhP/N8DNcf6W5azLKCwdGpyj3ZTvIhutR/iwR9NgBZxPdM2RUFrWyk8K8VJ23BHRVC5JK6KnTzv6sH2sZoSjfeNlPaa8RU6/QjwCBrQWnCdkdLYSNDSWMYwacF0K4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNrurgpS; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751400214; c=relaxed/simple;
+	bh=eJDesN7BXsMnEhiQ/UJNFd2HLD1QXKP4h1RtXJ+27Mw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aBh6Ieaz74ZpCe5C0Dph/kvcDPr48PyBBgw209e/uTd5iMPp2PLks/DNid2YiNOLPiUGzEwUG6azAyGWGnc7PvARGzSnHFtQLKfoBJZZri09LR68NUpHOsfSJT4/Mbc7uvY5El426SPnBHYplbOjYFmnOqv7jr77s0I5+wTSIIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hWyHBqNx; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNrurgpS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751399569; x=1782935569;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GifqKRJ8E1f0v+YQE5RiQLEX+cdwaFetyEzmQSOKZYk=;
-  b=GNrurgpSunnq/p4fJWli2I5xHf+MC4CzWmziP2dxHBiZL0iHF6FuRkd4
-   G7cP9KACxwukci9knzSK5nxtiA4C7bUGGEZlPjir/6YZUhRyrwii+uaBu
-   N3pwCRoqXemJS9fOPSGAumrpZf/vp0pmps+ec5CDbgwjT/MB6YXQwrJFJ
-   nSyNwjttk6/HjDbiJrtU1EftJB8g9yNfzIoqLEgyWc1+F9J3YcSbXCx77
-   rePXcoomA3EQ7MoKimBiTMmKUUyVVDHQcE8cZPbetpRnwC31tL9Z/ey3c
-   0jmuoC32vCiv4qUTZWgRBQXnl3xUUil41TnxL46PbWG4RuCQ5FSTg6mId
-   Q==;
-X-CSE-ConnectionGUID: GAI8s4hXQ/2brmj95BLM4Q==
-X-CSE-MsgGUID: ER5oX3pxT0qMFdaxM+kp0g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="57457577"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="57457577"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 12:52:49 -0700
-X-CSE-ConnectionGUID: ZhB9Z/IIRpGxFQL55iBufQ==
-X-CSE-MsgGUID: EEHC7k22RAS006DOKE04GQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="184908369"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 01 Jul 2025 12:52:47 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWh25-000acU-0W;
-	Tue, 01 Jul 2025 19:52:45 +0000
-Date: Wed, 2 Jul 2025 03:52:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 6319/6384] drivers/md/dm-path-selector.c:127:6:
- error: unexpected token
-Message-ID: <202507020329.VJ2a3wwo-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hWyHBqNx"
+Message-ID: <361eb614-e145-49dc-aa32-12f313f61b96@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751400199;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/vR/YEbexwRjW/glmIK3Kpb+5RALRLDf27NEgC4WPeU=;
+	b=hWyHBqNxvk0vFYvd8RU0pwMiJmz/30E7EgsyBnufC4rElScT1PtSpQGYwEeFDma9WtXbye
+	exp0oqtzTrfEa2n/l5B21eGO9OpWSITDFeJ09Q+gMIlnf2FY2cN7/xw7i6c0y6cceY4daM
+	2UAhvfVY4DJjYzgXSgwsNsPLDGn4S2Y=
+Date: Tue, 1 Jul 2025 13:03:11 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3f804361f3b9af33e00b90ec9cb5afcc96831e60
-commit: 878b9569818d2886a4ad305f2a01b75f3b92380d [6319/6384] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250702/202507020329.VJ2a3wwo-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250702/202507020329.VJ2a3wwo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507020329.VJ2a3wwo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/md/dm-path-selector.c:127:6: error: unexpected token
-     127 |         if (WARN_ON(!psi)) {
-         |             ^
-   include/asm-generic/bug.h:132:3: note: expanded from macro 'WARN_ON'
-     132 |                 __WARN();                                               \
-         |                 ^
-   include/asm-generic/bug.h:109:19: note: expanded from macro '__WARN'
-     109 | #define __WARN()                __WARN_FLAGS("", BUGFLAG_TAINT(TAINT_WARN))
-         |                                 ^
-   arch/s390/include/asm/bug.h:44:2: note: expanded from macro '__WARN_FLAGS'
-      44 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags));         \
-         |         ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
-      10 | #define __stringify(x...)       __stringify_1(x)
-         |                                 ^
-   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
-       9 | #define __stringify_1(x...)     #x
-         |                                 ^
-   <scratch space>:149:1: note: expanded from here
-     149 | ".pushsection __bug_table, \"aw\"; .align 4; 10000: .long 10001f - .; .pushsection .rodata.str, \"aMS\", @progbits, 1; 10002: .string \"\" \"drivers/md/dm-path-selector.c\"; .popsection; .long 10002b - .; .short 127; .short (1 << 0)|(((9) << 8)); .popsection; 10001: mc 0,0"
-         | ^
-   <inline asm>:1:134: note: instantiated into assembly here
-       1 |         .pushsection __bug_table, "aw"; .align 4; 10000: .long 10001f - .; .pushsection .rodata.str, "aMS", @progbits, 1; 10002: .string "" "drivers/md/dm-path-selector.c"; .popsection; .long 10002b - .; .short 127; .short (1 << 0)|(((9) << 8)); .popsection; 10001: mc 0,0
-         |                                                                                                                                             ^
-   1 error generated.
+Subject: Re: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Arnd Bergmann <arnd@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Luis Gerhorst <luis.gerhorst@fau.de>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+References: <20250620113846.3950478-1-arnd@kernel.org>
+ <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +127 drivers/md/dm-path-selector.c
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  119  
-f86272350f38d3 Mikulas Patocka 2025-06-30  120  void dm_unregister_path_selector(struct path_selector_type *pst)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  121  {
-^1da177e4c3f41 Linus Torvalds  2005-04-16  122  	struct ps_internal *psi;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  123  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  124  	down_write(&_ps_lock);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  125  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  126  	psi = __find_path_selector_type(pst->name);
-f86272350f38d3 Mikulas Patocka 2025-06-30 @127  	if (WARN_ON(!psi)) {
+On 6/23/25 2:32 PM, Alexei Starovoitov wrote:
+> On Fri, Jun 20, 2025 at 4:38 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> clang versions before version 18 manage to badly optimize the bpf
+>> verifier, with lots of variable spills leading to excessive stack
+>> usage in addition to likely rather slow code:
+>>
+>> kernel/bpf/verifier.c:23936:5: error: stack frame size (2096) exceeds limit (1280) in 'bpf_check' [-Werror,-Wframe-larger-than]
+>> kernel/bpf/verifier.c:21563:12: error: stack frame size (1984) exceeds limit (1280) in 'do_misc_fixups' [-Werror,-Wframe-larger-than]
+>>
+>> Turn off the sanitizer in the two functions that suffer the most from
+>> this when using one of the affected clang version.
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>   kernel/bpf/verifier.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 2fa797a6d6a2..7724c7a56d79 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -19810,7 +19810,14 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+>>          return 0;
+>>   }
+>>
+>> -static int do_check(struct bpf_verifier_env *env)
+>> +#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 180100
+>> +/* old clang versions cause excessive stack usage here */
+>> +#define __workaround_kasan  __disable_sanitizer_instrumentation
+>> +#else
+>> +#define __workaround_kasan
+>> +#endif
+>> +
+>> +static __workaround_kasan int do_check(struct bpf_verifier_env *env)
+> This looks too hacky for a workaround.
+> Let's figure out what's causing such excessive stack usage and fix it.
+> We did some of this work in
+> commit 6f606ffd6dd7 ("bpf: Move insn_buf[16] to bpf_verifier_env")
+> and similar.
+> Looks like it wasn't enough or more stack usage crept in since then.
+>
+> Also make sure you're using the latest bpf-next.
+> A bunch of code was moved out of do_check().
+> So I bet the current bpf-next/master doesn't have a problem
+> with this particular function.
+> In my kasan build do_check() is now fully inlined.
+> do_check_common() is not and it's using 512 bytes of stack.
+>
+>>   {
+>>          bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
+>>          struct bpf_verifier_state *state = env->cur_state;
+>> @@ -21817,7 +21824,7 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+>>   /* Do various post-verification rewrites in a single program pass.
+>>    * These rewrites simplify JIT and interpreter implementations.
+>>    */
+>> -static int do_misc_fixups(struct bpf_verifier_env *env)
+>> +static __workaround_kasan int do_misc_fixups(struct bpf_verifier_env *env)
+> This one is using 832 byte of stack with kasan.
+> Which is indeed high.
+> Big chunk seems to be coming from chk_and_sdiv[] and chk_and_smod[].
+>
+> Yonghong,
+> looks like you contributed that piece of code.
+> Pls see how to reduce stack size here.
+> Daniel used this pattern in earlier commits. Looks like
+> we took it too far.
 
-:::::: The code at line 127 was first introduced by commit
-:::::: f86272350f38d3fa4049944257a1b4260f3eba2e dm-mpath: make dm_unregister_path_selector return void
+With llvm17, I got the following error:
 
-:::::: TO: Mikulas Patocka <mpatocka@redhat.com>
-:::::: CC: Mikulas Patocka <mpatocka@redhat.com>
+/home/yhs/work/bpf-next/kernel/bpf/verifier.c:24491:5: error: stack frame size (2552) exceeds limit (1280) in 'bpf_check' [-
+Werror,-Wframe-larger-than]
+  24491 | int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u32 uattr_size)
+        |     ^
+/home/yhs/work/bpf-next/kernel/bpf/verifier.c:19921:12: error: stack frame size (1368) exceeds limit (1280) in 'do_check' [-
+Werror,-Wframe-larger-than]
+  19921 | static int do_check(struct bpf_verifier_env *env)
+        |            ^
+2 errors generated.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I checked IR and found the following memory allocations which may contribute
+excessive stack usage:
+
+attr.coerce1, i32 noundef %uattr_size) local_unnamed_addr #0 align 16 !dbg !19800 {
+entry:
+   %zext_patch.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19854
+   %rnd_hi32_patch.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19855
+   %cnt.i = alloca i32, align 4, !DIAssignID !19856
+   %patch.i766 = alloca [3 x %struct.bpf_insn], align 16, !DIAssignID !19857
+   %chk_and_sdiv.i = alloca [1 x %struct.bpf_insn], align 4, !DIAssignID !19858
+   %chk_and_smod.i = alloca [1 x %struct.bpf_insn], align 4, !DIAssignID !19859
+   %chk_and_div.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19860
+   %chk_and_mod.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19861
+   %chk_and_sdiv343.i = alloca [8 x %struct.bpf_insn], align 16, !DIAssignID !19862
+   %chk_and_smod472.i = alloca [9 x %struct.bpf_insn], align 16, !DIAssignID !19863
+   %desc.i = alloca %struct.bpf_jit_poke_descriptor, align 8, !DIAssignID !19864
+   %target_size.i = alloca i32, align 4, !DIAssignID !19865
+   %patch.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19866
+   %patch355.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19867
+   %ja.i = alloca %struct.bpf_insn, align 8, !DIAssignID !19868
+   %ret_insn.i.i = alloca [8 x i32], align 16, !DIAssignID !19869
+   %ret_prog.i.i = alloca [8 x i32], align 16, !DIAssignID !19870
+   %fd.i = alloca i32, align 4, !DIAssignID !19871
+   %log_true_size = alloca i32, align 4, !DIAssignID !19872
+...
+
+So yes, chk_and_{div,mod,sdiv,smod} consumes quite some stack and
+can be coverted to runtime allocation but that is not enough for 1280
+stack limit, we need to do more conversion from stack to memory
+allocation. Will try to have uniform way to convert
+'alloca [<num> x %struct.bpf_insn]' to runtime allocation.
+
