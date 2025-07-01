@@ -1,88 +1,182 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2715A275847
-	for <llvm@lists.linux.dev>; Tue,  1 Jul 2025 13:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAF2274FFC;
+	Tue,  1 Jul 2025 15:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751377336; cv=none; b=P4HklnK4I3VwQg0EHmuXeIBxuKmSCBy9CRdprfXK7CjA5OwBsG02Sx7bX8nTafD78UIk/nKpiz+bIZBP6EFmD+I6B2d1t0EKsMh0XdkLA8RBkxjeH8Y8dHG2Iy2dNVbbeFRbw+VhJmb3Xk8dl7u1N84gLp4A6FW7rhm+YsvFJyM=
+	t=1751382199; cv=none; b=J46xc5Z52C5dXKN/fLtHDzQMXK4zA5DBisIKB9tNtPLscW2EJWzIX2Jz8ZeVFk5lE6HvyLcK7CiFufipLZ71iyFAWRR6BGcGc75ZtpQbwkBT6P2GJsBjemL/a5oOt0MG1jXa0FHwoXUEUR7avdccZnrI9SjFN9QXn4hHMv2rhM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751377336; c=relaxed/simple;
-	bh=l53+up7iBS1qHbvga47bs+kjEPQBMaO+IwNLLfxJzHo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zs3qviEttahx7Lgtoe/2gI0twB7/O0B+xJ6bbGPTOAMy5ZnwYByEouCLIYnFzbz+w+gtaVOYGUbH/q7UD2TjOjCES9XNY8brGChIGXiHqMECirCcReAeWcgh7zWwMo2MCmnvPgrJsTVmNtBImu3KkBvXztspa++2k58rR0QWL7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=usEgPqFE; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1751382199; c=relaxed/simple;
+	bh=28D1UKs0JseSeecsT2Gw+z/Peu2+HrGTLwCSE3soFGY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NO/l1BGq1hxxl3OPOMytutkwQC5HS/JCpF4UvcoVctlakN0SsvJkxM88m6dR3BXnhadf/V4PI3wD8R94xS9U8lhiiA9ojGIMdier+b1cGcAGvHkyDPQSer818i/9wUkzPKb6miM84LHgCTF/AMbjCqZidSqyKlvcz48wxkhrkBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CUYBsWcU; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="usEgPqFE"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60b86fc4b47so9327a12.1
-        for <llvm@lists.linux.dev>; Tue, 01 Jul 2025 06:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751377333; x=1751982133; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l53+up7iBS1qHbvga47bs+kjEPQBMaO+IwNLLfxJzHo=;
-        b=usEgPqFEnbV2pAWe1hJqMhS3b0/hORtwytgP7Ya+OJ1LxETjIl/VuzptnQ+5wspB4z
-         5XOzVzis8ZNOwvmO4ZOiIumE+CWplOg0lMFXu9z1z9Z9/ML1LmwxHjDcIWouLsQupoga
-         7oX2iMXMJjLapuNMsTV0/77AU2hT5wJE7opEk972mB6XbsdqETKZmS6ffnaHIT2ZFRjL
-         oT/9KO3G1wm0D6yGwAfgb3J8G1lCEl6g9CUDcYCevikPC2lUfc75mMYRHMOyrDkT2c5+
-         CFaPtHDcSJHy8kfbNBgueL8TpeslZbGnYrot9gYzkCKu27V58wF/fNaeszWpxCT/eJk6
-         IEOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751377333; x=1751982133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l53+up7iBS1qHbvga47bs+kjEPQBMaO+IwNLLfxJzHo=;
-        b=u3h1pQWb59QRDkCGkI+ft1TaN/DZygO1V6FIj5jNlmOBBvDIOqyFS77xSznP5DgxsQ
-         MtQDF1Sng5ijAdfHWop93/hK+jJlKPJeCNTLTwBWRQAOj8Gc3yiP9joHRaD+E1c0QoEU
-         CcH5ns06r0YSB8AKzEvEg5LpCxFn/wxIzcrd+8pYZ039FY9GDJvwCIjHJpX2EQ6IOIXe
-         jCY7DLkMzT6R0Jdp/9glVxcZ+kvZS4RTKBXdTXX/eFGWLCUnNEtJVbtmLp56ZDRdtVkI
-         TmHs8ylanr0F8khEIHHhpR/iNiBJYqtxoAYfk+iF33KmQXYGVjsQrjQ02w0YXqmTTSO6
-         SmEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUh+P0ej1UWGqrt8Ciah6ubL6Ui2KQyPFiqhqezy/tSNl/lXznbo3OoR1s6A8kD9LUzy9D@lists.linux.dev
-X-Gm-Message-State: AOJu0YzCgVmY6ZAxhD1kdLTfdAOGC/jMc5ZnohS2OIAQdA9ZVf4Ym9vr
-	Gh9XTGpKAVux8uk6eJ6up+IBgd+4UBUyumwPjYKMUGHAMAab2YBQNLts1RAtTq5uEB1bcrCmUwp
-	f67JbmB5WwsyGj+VkyBFk/a6GKhAFv6TBm+PqKqow
-X-Gm-Gg: ASbGncsxMjslSCRS5ANHXMXAgY7xlm/U8Nzptgl9zp9yzbjW9nloV7qoGFj8cuq3ER5
-	1HmKS5K6ZNN1M7yFXfD/o98bjGEWUmpEHaFxyE5913fzXlbU9ILGoatKi8eVo+mPd89S/EGHUCz
-	aw/qm08ugklAb+cGVBbLlmEAOFy6uTy1eiQCmyKNcmz0x4yMmHq33JzwFxGIFlFe01FVeQjmUVW
-	T/0jwLsBg==
-X-Google-Smtp-Source: AGHT+IG8i4Y7S9H/asInCH7TGD9/vuiOqqrIhQdHNEBY4YIe1hmb0pRdeOhNZmNhr9/Rh8lPWDairwcma09YPdiesMs=
-X-Received: by 2002:aa7:c342:0:b0:608:fb55:bf12 with SMTP id
- 4fb4d7f45d1cf-60e38a44816mr71027a12.4.1751377333023; Tue, 01 Jul 2025
- 06:42:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CUYBsWcU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751382197; x=1782918197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=28D1UKs0JseSeecsT2Gw+z/Peu2+HrGTLwCSE3soFGY=;
+  b=CUYBsWcUvtflpvYFldwThM4/8IakF/+47LW+AaQVcA2uZectwPs18tz1
+   K5oBRdmVGDNmvtWelbhgilN3EwDa5IBXTYEy4VeDhNjsT/8BFpN/XCPiF
+   jAo3BZdavu9Ivu2B41r2h/Y4uuH03PQ+AY1h2wxegj4dS9bODEoG6cEuk
+   m70lV9Q/OV7JcXCOf0OD7p6DQkt24FvfxzpIFezbNBnSbIWrftaK2/HQH
+   D3Dlt/r9/gnm5Oz/1zW7Cq3j76AtDX9+I5+fQ6rYpliZE3vjHzMThdaTA
+   Pj+JUh7sjII4YSFk6zChNqMvL2OZTFn8njNdwlycGFx0GZPySOEw1QUb4
+   Q==;
+X-CSE-ConnectionGUID: r1uHfWNqSAiyLLKnJ6T/Ag==
+X-CSE-MsgGUID: uz3537g4SM+eIPSw++TlAg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="53376893"
+X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
+   d="scan'208";a="53376893"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 08:03:16 -0700
+X-CSE-ConnectionGUID: AOydxM1DSBKjaaPrX8y3EA==
+X-CSE-MsgGUID: ajdDSTCSQLCYfai0KKtS5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
+   d="scan'208";a="159507626"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 01 Jul 2025 08:03:16 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWcVs-000aLa-2N;
+	Tue, 01 Jul 2025 15:03:12 +0000
+Date: Tue, 1 Jul 2025 23:02:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:imx93-ethos-v2 5/24] drivers/accel/ethos/ethos_gem.c:175:44:
+ error: use of undeclared identifier 'srclen'
+Message-ID: <202507012232.PNa1KAOw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250628234034.work.800-kees@kernel.org>
-In-Reply-To: <20250628234034.work.800-kees@kernel.org>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 1 Jul 2025 15:41:35 +0200
-X-Gm-Features: Ac12FXwCp_bfivLffFtsPlz6EADiU4bpUi0pVVqVqpSbuvTlWBItorTjM1ha8VM
-Message-ID: <CAG48ez0n1E0iuOxPe=jq4MuuP3w2wMSNixmfNmBbB89jyJBSbA@mail.gmail.com>
-Subject: Re: [PATCH] kunit/fortify: Add back "volatile" for sizeof() constants
-To: Kees Cook <kees@kernel.org>
-Cc: =?UTF-8?Q?Jannik_Gl=C3=BCckert?= <jannik.glueckert@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-hardening@vger.kernel.org, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Jun 29, 2025 at 1:40=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
-> It seems the Clang can see through OPTIMIZER_HIDE_VAR when the constant
-> is coming from sizeof.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git imx93-ethos-v2
+head:   e2533aabd58e39b5a86438a8884e75b665fd885c
+commit: b4e21041a4d0a52c49e6bfd738499e9113ec725a [5/24] drm: ethos: Rework cmdstream DMA validation
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250701/202507012232.PNa1KAOw-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507012232.PNa1KAOw-lkp@intel.com/reproduce)
 
-Wait, what? That sounds extremely implausible/broken to me.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507012232.PNa1KAOw-lkp@intel.com/
 
-https://godbolt.org/z/ndeP5chcb also suggests that clang does not
-generally "see through OPTIMIZER_HIDE_VAR when the constant is coming
-from sizeof".
+All errors (new ones prefixed by >>):
 
-Do you have a minimal reproducer of what you're talking about?
+   drivers/accel/ethos/ethos_gem.c:170:4: error: expected expression
+     170 |                         u64 srclen = dma_length(info, st.dma.mode, st.dma.size0, st.dma.size1, &st.dma.src);
+         |                         ^
+>> drivers/accel/ethos/ethos_gem.c:175:44: error: use of undeclared identifier 'srclen'
+     175 |                                  st.dma.src.region, st.dma.src.offset, srclen,
+         |                                                                        ^
+   2 errors generated.
+
+
+vim +/srclen +175 drivers/accel/ethos/ethos_gem.c
+
+   150	
+   151	static int ethos_gem_cmdstream_validate(struct drm_device *ddev,
+   152						struct ethos_gem_object *bo, u32 size)
+   153	{
+   154		struct ethos_validated_cmdstream_info *info;
+   155		u32 *cmds = bo->base.vaddr;
+   156		struct cmd_state st = {};
+   157		int i;
+   158	
+   159		info = kzalloc(sizeof(*info), GFP_KERNEL);
+   160		if (!info)
+   161			return -ENOMEM;
+   162		info->cmd_size = size;
+   163	
+   164		for (i = 0; i < size/4; i++, cmds++) {
+   165			u16 cmd = *cmds;
+   166			u16 param = *cmds >> 16;
+   167	
+   168			switch(cmd) {
+   169			case 0x10: // NPU_OP_DMA_START
+ > 170				u64 srclen = dma_length(info, st.dma.mode, st.dma.size0, st.dma.size1, &st.dma.src);
+   171				u64 dstlen = dma_length(info, st.dma.mode, st.dma.size0, st.dma.size1, &st.dma.dst);
+   172				if (st.dma.dst.region >= 0)
+   173					info->output_region[st.dma.dst.region] = true;
+   174				dev_info(ddev->dev, "cmdstream: DMA SRC:%d:%llx+%llx DST:%d:%llx+%llx\n",
+ > 175					 st.dma.src.region, st.dma.src.offset, srclen,
+   176					 st.dma.dst.region, st.dma.dst.offset, dstlen);
+   177				break;
+   178			case 0x130: // NPU_SET_DMA0_SRC_REGION
+   179				if (param & 0x100)
+   180					st.dma.src.region = -1;
+   181				else
+   182					st.dma.src.region = param & 0x7;
+   183				st.dma.mode = (param >> 9) & 0x3;
+   184				break;
+   185			case 0x131: // NPU_SET_DMA0_DST_REGION
+   186				if (param & 0x100)
+   187					st.dma.dst.region = -1;
+   188				else
+   189					st.dma.dst.region = param & 0x7;
+   190				break;
+   191			case 0x132: // NPU_SET_DMA0_SIZE0
+   192				st.dma.size0 = param;
+   193				break;
+   194			case 0x133: // NPU_SET_DMA0_SIZE1
+   195				st.dma.size1 = param;
+   196				break;
+   197			case 0x4033: // NPU_SET_DMA0_SRC_STRIDE0
+   198				st.dma.src.stride[0] = (s64)cmd_to_addr(cmds);
+   199				break;
+   200			case 0x4034: // NPU_SET_DMA0_SRC_STRIDE1
+   201				st.dma.src.stride[1] = (s64)cmd_to_addr(cmds);
+   202				break;
+   203			case 0x4035: // NPU_SET_DMA0_DST_STRIDE0
+   204				st.dma.dst.stride[0] = (s64)cmd_to_addr(cmds);
+   205				break;
+   206			case 0x4036: // NPU_SET_DMA0_DST_STRIDE1
+   207				st.dma.dst.stride[1] = (s64)cmd_to_addr(cmds);
+   208				break;
+   209			case 0x4030: // NPU_SET_DMA0_SRC
+   210				st.dma.src.offset = cmd_to_addr(cmds);
+   211				break;
+   212			case 0x4031: // NPU_SET_DMA0_DST
+   213				st.dma.dst.offset = cmd_to_addr(cmds);
+   214				break;
+   215			case 0x4032: // NPU_SET_DMA0_LEN
+   216				st.dma.src.len = st.dma.dst.len = cmd_to_addr(cmds);
+   217				break;
+   218			default:
+   219				break;
+   220			}
+   221	
+   222			if (cmd & 0x4000) {
+   223				i++;
+   224				cmds++;
+   225			}
+   226		}
+   227	
+   228		for (i = 0; i < NPU_BASEP_REGION_MAX; i++) {
+   229			if (!info->region_size[i])
+   230				continue;
+   231			dev_info(ddev->dev, "region %d max size: %llx\n",
+   232					i, info->region_size[i]);
+   233		}
+   234	
+   235		bo->info = info;
+   236		return 0;
+   237	}
+   238	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
