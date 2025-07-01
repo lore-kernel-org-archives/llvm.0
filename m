@@ -1,243 +1,115 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D13270578;
-	Tue,  1 Jul 2025 10:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4A226CE10
+	for <llvm@lists.linux.dev>; Tue,  1 Jul 2025 10:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751365003; cv=none; b=C7AlLPqCXFUkrkUoc2R2hTSRC57fU2YpzLNAoFR4muuRqnK5PHqJg7Xiel0ThYZ9XNWexj8W6DKyeo8EwM77U0AjGUZhFmMF9tSKMU9I7OWrmU0auXDNQ9s7cSNOP7KYophzVMEgurg4mNYT0DcRI4Mke5s8yj5zEDXzViQPS6c=
+	t=1751366655; cv=none; b=nUroy6v3ZZzv6N5RZPJjrwYGGqNUUUU3RJ+hUClUDZFNTkGAvVvZwKB17ioIHkid38SAxZ2h4I1MQMc3Crwo5lASugChu6HKsOSfEcpRYUE+VKaLKnbsrEEWjafKRId+YIlDbvtwmdifsyNoVsCYN2CUXk5S23z12RAIQ5kB/k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751365003; c=relaxed/simple;
-	bh=pvtwyK4zAmi/n19gYPRfHfJsdYlQsYr97DzypdGQHVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qoDakvPVQxmAT7E+sZ/FNe9+Dp8xSOuFpnEBPLVGGsCJFFvtcxYP5CBMxcgCElNrFDkNGlCS9D+sESR3WZAm3DhqkPnmuMB2P2d7NgXrCb6l+44zrm+NsT+uS97azx+i+/sdW+myNY1IrTpOZtFQDKGzU2xUr0tqMXYCsXYcBss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PjDoYwjt; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1751366655; c=relaxed/simple;
+	bh=FjNNJQuNFHz/e6yt6+QF01AIHDz6pY4OvsUX2LurgSk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=hLvlMJZW263sCPYgCtVJVUoR1sugUqc+sfxVJBUDgL1yH30VwjnUtgnySH/y5IYcn8IDwZytt10ZgJRxzFh3EIzZSJ+VOcyjc4ikwUfTWws/ZA7DJGLiS7P0sC6XihwCK12IQtryEZKgyCE1F7uFkrauBi4zQWqoPx7jZjISGsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i9pt6Ddn; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PjDoYwjt"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5616feQ9015295;
-	Tue, 1 Jul 2025 10:15:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=bI5gCu
-	bobaT76ILZ7nxLCeAprDNwZM108vGmis92vfw=; b=PjDoYwjtYkSnDRugC3E/Hv
-	o51v3h2eqLbh9PbKCz24WznV4ZvLaYp6Jd8agA71iKB5BcxaWfNXDxx/GBRMKaW3
-	3zwQRfDGD1wbtMpiFA30+yJ0p2Dz70v8RKSPdvUI6qypZ6CrGufrf+7IIFEUHjpn
-	VmkbQl7a8Y3LA2aHvCqH/jproxX7Zk8z+3ExVJMJr0374lAG/InCZaGor60RhO/n
-	pZkHKDq5PA9Rrp9xR6ocRlUp4mDAsxk77EVa6HUg/PlWw41EfjilnF4bkr92n46Q
-	F8/88KcMiADFeGk8H7HpkIgzcddU+eeOqjJiJQCQdUedp0LGnNlGkuTdVNCZIoJA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j830pmab-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Jul 2025 10:15:48 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 561A93Md010712;
-	Tue, 1 Jul 2025 10:15:47 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j830pma6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Jul 2025 10:15:47 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56173CoY032320;
-	Tue, 1 Jul 2025 10:15:45 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47ju40j8xb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Jul 2025 10:15:45 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 561AFfZk21365030
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 1 Jul 2025 10:15:41 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4405320040;
-	Tue,  1 Jul 2025 10:15:41 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 32B5D20075;
-	Tue,  1 Jul 2025 10:15:39 +0000 (GMT)
-Received: from osiris (unknown [9.111.81.242])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue,  1 Jul 2025 10:15:39 +0000 (GMT)
-Date: Tue, 1 Jul 2025 12:15:37 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Sabyrzhan Tasbolatov <snovitoll@gmail.com>, ryabinin.a.a@gmail.com,
-        glider@google.com, dvyukov@google.com, vincenzo.frascino@arm.com,
-        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        alex@ghiti.fr, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        akpm@linux-foundation.org, nathan@kernel.org,
-        nick.desaulniers+lkml@gmail.com, morbo@google.com,
-        justinstitt@google.com, arnd@arndb.de, rppt@kernel.org,
-        geert@linux-m68k.org, mcgrof@kernel.org, guoweikang.kernel@gmail.com,
-        tiwei.btw@antgroup.com, kevin.brodsky@arm.com, benjamin.berg@intel.com,
-        kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 00/11] kasan: unify kasan_arch_is_ready with
- kasan_enabled
-Message-ID: <20250701101537.10162Aa0-hca@linux.ibm.com>
-References: <20250626153147.145312-1-snovitoll@gmail.com>
- <CA+fCnZfAtKWx=+to=XQBREhou=Snb0Yms4D8GNGaxE+BQUYm4A@mail.gmail.com>
- <CACzwLxgsVkn98VDPpmm7pKcbvu87UBwPgYJmLfKixu4-x+yjSA@mail.gmail.com>
- <CA+fCnZcGyTECP15VMSPh+duLmxNe=ApHfOnbAY3NqtFHZvceZw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i9pt6Ddn"
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a169cso3133782a12.0
+        for <llvm@lists.linux.dev>; Tue, 01 Jul 2025 03:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751366652; x=1751971452; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KkP3Q/mrHcTXpi5jFAQSRZZTttwkOM8RfBay5zssxDs=;
+        b=i9pt6Ddn3ldZXOPo/CDYLPD5TY6s78PrrGRoP1K7UMBKaeUZV+mfQRXUzsLkyh+RnI
+         tntbpFr5XSQfJbR/nxyouuluf32u0ct7dI3gVtKVxmbJjyci2dz4w2sB3FRVV4kjM0PQ
+         lDEPEWA7KPpyFa+td5gTxqeav8Zyxs7ulqsWMpB7CTiIyPzYIXeMoIzaSGwqpoH8myMt
+         zeymEJ8c6RnVxF57bvMdJP/gsIwakIQfYkBAYSZN0+IbubSLH8mxL7nlAgLZA6PsrHsw
+         7TsF3Gs0y1mqNBne3lojlMGfLo5Pn6bSBlSW0EcTKK07R7Ok/abR2JTBLT6I2EUJBnfz
+         JpTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751366652; x=1751971452;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KkP3Q/mrHcTXpi5jFAQSRZZTttwkOM8RfBay5zssxDs=;
+        b=H1r+AAptGWB90n3AgaSA/hV8mYwZXcLYZeNyFl6u3IRX97txufM2UycFcvWNBGUKEA
+         g17/tkIWo2SY4jTzY41jnr9qPP31uCs1PAPdkkSKcEGNDZCn2CAomnhlqi4CgvGoxKRZ
+         yBpZ2IfmxstowwKNh0UGPNKLBlYXiZJX9Sw0uQRjmmpmaQtLlp6xsLAYVrMtHlNbbVRW
+         XJG4K3EzDbxiZGz5Mv2dvSfTYjscWUvop5r2QOtw2AhRlmBjatzMFkc2bmSwKKEzpLOu
+         7TrjHqhnKd+AMJXdhcRZ0PJ1CDivyDtKtq+gfliOGvTuCy0COApkt4jlrcyes45NQnv3
+         /W+g==
+X-Forwarded-Encrypted: i=1; AJvYcCXUmc3dfoRFgVWGptPVwdL3I8+diQFAckSsMi4fPhVlObWEuUDKUhYeVE8mycCFkfuVO+w0@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz2Rxw0/3Eo4qIk+OE0hC+uN/YeWJliM9aF2ENBTSpmnuMjp6Qw
+	be4NlDRqFFT5zOISt1Ogk8YkZCIufks6tuGHWtvCRImJjccCzqgYOA2HcZWl2cSulO73Lc0lzda
+	wzeKb7KZ2JzTHSMoE5w==
+X-Google-Smtp-Source: AGHT+IFVVYwcwXIW2+rs+LXCKTLno19A5yuxBI/UefmvL0JcGML1UYLUePmSmcmNLPYFZsBsDSZ4dtmzcyM66Ug=
+X-Received: from edwf17.prod.google.com ([2002:a05:6402:1511:b0:60c:3b8e:c3eb])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:26d4:b0:607:f431:33fb with SMTP id 4fb4d7f45d1cf-60c88b26b30mr16470283a12.3.1751366650570;
+ Tue, 01 Jul 2025 03:44:10 -0700 (PDT)
+Date: Tue, 1 Jul 2025 10:44:09 +0000
+In-Reply-To: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZcGyTECP15VMSPh+duLmxNe=ApHfOnbAY3NqtFHZvceZw@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qu16htFmviN0JHs_Lk2UXggpRHKamSL3
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAxMDA1OCBTYWx0ZWRfX1+8afvt373Lc kWdnunbPz6C9f/GOHjl4ZrQKHABgOATpMhlNHzlwXmovxD7qpB0NHRzjO1rBP3TCrzWp9aDgeMZ BRGyDtucaQptfKRiB1Ir1UEiA/DnvvId+/noIpRKGxbqodALAZAM/OouyWSCdZn9Br55SUFY1mF
- /QElD3fMWDED/2Up/bE3bdkQFp0y4l0tbOgz/r1X+BYJtzifCAp1d8Rjiv1rqAaxBvj1uWPWfAv gRsEeOrKai0th89ONMoXzLZtwQ+ZFabmyQx6rICdTSFHm+Cjr3wa4WzluId4DM526gzf4NqEHxp T9u38OW/UmDyf8gxdR/KVtrZKshh0EQP4/y/BFKLU+IB3+JEAkKDZdFyiBgBhMsxkkHSKm2H012
- aLNkwLyaNoCYreQzuUSpD2tKUqxrMT5HjvgLBKo4Yoqu8W0zpbow/WbwFXvshhrHRfN8RYzo
-X-Authority-Analysis: v=2.4 cv=MOlgmNZl c=1 sm=1 tr=0 ts=6863b554 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=jBQngTtrd59FM_Ge02gA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: HLwv3VLvA_zkneOazGXOaA6Q1nuISU0B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-01_02,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- adultscore=0 suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 mlxlogscore=906 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507010058
+Mime-Version: 1.0
+References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
+Message-ID: <aGO7-SQUUgg6kSVU@google.com>
+Subject: Re: [PATCH v12 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
+From: Alice Ryhl <aliceryhl@google.com>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
+	"Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=" <kwilczynski@kernel.org>, Dave Ertman <david.m.ertman@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-> > > Another thing that needs careful consideration is whether it's
-> > > possible to combine kasan_arch_is_ready() and kasan_enabled() into the
-> > > same check logically at all. There's one issue mentioned in [1]:
-> >
-> > Hello,
-> > I've removed kasan_arch_is_ready() at all in this series:
-> > [PATCH v2 11/11] kasan: replace kasan_arch_is_ready with kasan_enabled
-> >
-> > Is it not what's expected by unification?
+On Thu, Jun 19, 2025 at 11:06:24AM -0400, Tamir Duberstein wrote:
+> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+> have omitted Co-authored tags, as the end result is quite different.
 > 
-> I guess the issue description diverged a bit from what needs to be
-> done, sorry about that.
+> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
 > 
-> The core 2 things I wanted to address with the unification are:
-> 
-> 1. Avoid spraying kasan_arch_is_ready() throughout the KASAN
-> implementation and move these checks into include/linux/kasan.h (and
-> add __wrappers when required).
-> 
-> 2. Avoid architectures redefining the same kasan_enabled global
-> variable/static key.
-> 
-> Initially, I thought that s/kasan_arch_is_ready/kasan_enabled + simply
-> moving the calls into affected include/linux/kasan.h functions would
-> be enough. But then, based on [1], turns out it's not that simple.
-> 
-> So now, I think we likely still need two separate checks/flags:
-> kasan_enabled() that controls whether KASAN is enabled at all and
-> kasan_arch_is_ready() that gets turned on by kasan_init() when shadow
-> is initialized (should we rename it to kasan_shadow_initialized()?).
-> But then we can still move kasan_arch_is_ready() into
-> include/linux/kasan.h and use the proper combination of checks for
-> each affected function before calling __wrappers. And we can still
-> remove the duplicated flags/keys code from the arch code.
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-FWIW, as Alexander Gordeev already mentioned: this series breaks s390,
-since the static_branch_enable() call in kasan_init_generic() is now
-called way too early, and it isn't necessary at all. Which, as far as
-I understand, may be the case for other architectures as well. s390
-sets up the required KASAN mappings in the decompressor and can start
-with KASAN enabled nearly from the beginning.
+Overall LGTM. Only question is whether we should re-export
+core::ffi::CStr from kernel::ffi. Reason being that right now we are
+telling people to never use core::ffi as the integer types are wrong,
+and I think it would be nice if we can continue to tell people "never
+use core::ffi".
 
-So something like below on top of this series would address
-that. Given that this series is about to be reworked this is just for
-illustration :)
+Either way, for the whole series:
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 0c16dc443e2f..c2f51ac39a91 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -172,6 +172,7 @@ config S390
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN
-+	select HAVE_ARCH_KASAN_EARLY
- 	select HAVE_ARCH_KASAN_VMALLOC
- 	select HAVE_ARCH_KCSAN
- 	select HAVE_ARCH_KMSAN
-diff --git a/include/linux/kasan-enabled.h b/include/linux/kasan-enabled.h
-index 2436eb45cfee..049270a2269f 100644
---- a/include/linux/kasan-enabled.h
-+++ b/include/linux/kasan-enabled.h
-@@ -10,7 +10,11 @@
-  * Global runtime flag. Starts ‘false’; switched to ‘true’ by
-  * the appropriate kasan_init_*() once KASAN is fully initialized.
-  */
-+#ifdef CONFIG_HAVE_ARCH_KASAN_EARLY
-+DECLARE_STATIC_KEY_TRUE(kasan_flag_enabled);
-+#else
- DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
-+#endif
- 
- static __always_inline bool kasan_enabled(void)
- {
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index f82889a830fa..1407374e83b9 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -4,6 +4,13 @@
- config HAVE_ARCH_KASAN
- 	bool
- 
-+config HAVE_ARCH_KASAN_EARLY
-+	bool
-+	help
-+	  Architectures should select this if KASAN mappings are setup in
-+	  the decompressor and when the kernel can run very early with
-+	  KASAN enabled.
-+
- config HAVE_ARCH_KASAN_SW_TAGS
- 	bool
- 
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 0f3648335a6b..2aae0ce659b4 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -36,7 +36,11 @@
-  * Definition of the unified static key declared in kasan-enabled.h.
-  * This provides consistent runtime enable/disable across all KASAN modes.
-  */
-+#ifdef CONFIG_HAVE_ARCH_KASAN_EARLY
-+DEFINE_STATIC_KEY_TRUE(kasan_flag_enabled);
-+#else
- DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
-+#endif
- EXPORT_SYMBOL(kasan_flag_enabled);
- 
- struct slab *kasan_addr_to_slab(const void *addr)
-diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-index a3b112868be7..455376d5f1c3 100644
---- a/mm/kasan/generic.c
-+++ b/mm/kasan/generic.c
-@@ -42,7 +42,8 @@
-  */
- void __init kasan_init_generic(void)
- {
--	static_branch_enable(&kasan_flag_enabled);
-+	if (!IS_ENABLED(CONFIG_HAVE_ARCH_KASAN_EARLY))
-+		static_branch_enable(&kasan_flag_enabled);
- 
- 	pr_info("KernelAddressSanitizer initialized (generic)\n");
- }
+Alice
