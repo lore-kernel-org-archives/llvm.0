@@ -1,161 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621651F4285;
-	Tue,  1 Jul 2025 05:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F8825E822;
+	Tue,  1 Jul 2025 08:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751347697; cv=none; b=c5kpD3drVZ7MGy+/v2Mjye02fxetimER5ESuo5pD8lbTU4caRS4ofsLYuUlfSMZ5y8H8AJImKspB4r3YuGblnCmOQPERlkvQQ9coDIIeCu9IdWmV9leeDjr8mi3UJ5hKJYwiGkw2cs/Tnabhud6BGXOIpnTOEmmQhYCfXd9hdhg=
+	t=1751359773; cv=none; b=YuHpZ5A3U3F8VE1WBtx1HdZ1eH/bpV8wzD0qtKE1HPNUoKP9yHtpzIc9uxYI1Zk+SspIXExnnuXdt8ZshvIAv/rSo8cYtwnm7aWDkveiirZDKTB2tPFmnIIy+89lAz8KZHjSw9O7zKvcYWz1LFcv3ECJ6XZzV6X+EGSm4RR4fOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751347697; c=relaxed/simple;
-	bh=FaeFlfFF3MuFTSybP/3bp+qx9BhmSoAlbzbecSuzCfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hvvj3apooEn1KEpAmesuplf6j00zmlMqUyCjMxgworx+D1ZrxLxTjOsyPpysis3qo/lBQIjwqPBbgHuVEAC76PLBsEvXT5SsYxfoCp8O5gM2xsBt2njYPnmBQ8lxWCu9jp8wSAFyWoHvBeAjUXzI8ooMBHroYOlBpgwhXRqj18o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Deqed5TL; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751359773; c=relaxed/simple;
+	bh=DTtwMeNSk7OR8vbqD2nzw+mY8T/ya1c5lm8S+YPkjKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d+LgFCKQ4yet0SUYwDPEZ/KMCSM4gUQlADZfa5WthwT2PVxEmcAFfcfYiG/jL7SYek52Bj4zZhdcFdUwjhuOD75AYd+ArmVXEtnRJa8cYK8cR9/hZVRhaRh+RtNo9Th3ubpgcxPlNdjsMFUga358/ORaxgxe8rGDzpqVOxg/md4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8GrpRus; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Deqed5TL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751347696; x=1782883696;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FaeFlfFF3MuFTSybP/3bp+qx9BhmSoAlbzbecSuzCfI=;
-  b=Deqed5TLIBnUnzLitxbOvP3qiweQPLRLRq/Pno2hNPXPPJhWHLJBC0cf
-   4mExiTjnl33oyZTr1c/oryj8DNK+SX2o4zrT9fQ+oWvZQtkH7Z7dFr+Wc
-   yCEuYtxiaW0knkWFFG5CcO2NX8JdcOIds2xsdncKhgutymYNKmURUVAJo
-   CIa48oV4OhX9vVUTNhkKfeEcxrknhD/pWkuTkpyNTPM4Y+RG4if//OcJY
-   /sGejBbHAk009AnQMIuR9lN8YoFkfWx3+xSPYG2rOZGE34gU1S3D86hox
-   IdKpGqINv93uEDpiXT7j++jKPlImAscdpO+Q+OZiXPK/cJN0jK9b1ORli
-   g==;
-X-CSE-ConnectionGUID: XaWKMze6TvOTbhx9E+Auag==
-X-CSE-MsgGUID: Sh4tBAljT5eIZIYhyyvpUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="56215704"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="56215704"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 22:28:15 -0700
-X-CSE-ConnectionGUID: WdCbeWFiR12jvOYCFUic2w==
-X-CSE-MsgGUID: t+Ea1Aq7QWG6l0U5gnt24A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="157932827"
-Received: from igk-lkp-server01.igk.intel.com (HELO e588e990b675) ([10.91.175.65])
-  by fmviesa005.fm.intel.com with ESMTP; 30 Jun 2025 22:28:13 -0700
-Received: from kbuild by e588e990b675 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWTXN-0001QF-1j;
-	Tue, 01 Jul 2025 05:28:09 +0000
-Date: Tue, 1 Jul 2025 07:27:42 +0200
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20250616 2395/2847]
- fs/bcachefs/btree_journal_iter.c:716:6: warning: variable 'nr_entries' set
- but not used
-Message-ID: <202507010724.lVYV4UeK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8GrpRus"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2174BC4CEEE;
+	Tue,  1 Jul 2025 08:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751359773;
+	bh=DTtwMeNSk7OR8vbqD2nzw+mY8T/ya1c5lm8S+YPkjKo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H8GrpRushY1OUKMgqTnLNTmT4RQ56pC9/ESJuqTHilLlFReoQzDzLcYiZotEOWx2p
+	 nZuM81/AbA4802SnyFb6dgt7wn7goa7z3Lv6faHrIN23/g6CCQ/9t2PWO1awd/Lb8p
+	 QQY1Q2hxI/XKIPgMXVWl8rnmoq0f9/TyNWEb1+zf+ACL3X4TM/9Qf2NrsmHQfOLOQ/
+	 qPgvtnid+rOnITv0umSFn2FxE4+vDOstmuouUUNoLd3UwQoxuIDQ9RFbrDYZii1zr0
+	 x+qbWJL4evGlCddzO2n2Xdfa1OVedhAQRaez0iadUajIpn5cDdn65TNLX3WJFABCTd
+	 /nQgQVBfCWMfQ==
+Date: Tue, 1 Jul 2025 10:49:27 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-sh@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>, 
+	Simon Schuster <schuster.simon+binutils@siemens-energy.com>, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: kernel/fork.c:3088:2: warning: clone3() entry point is missing,
+ please fix
+Message-ID: <20250701-packung-zweifach-49a0189a1dea@brauner>
+References: <202506282120.6vRwodm3-lkp@intel.com>
+ <2ef5bc91-f56d-4c76-b12e-2797999cba72@app.fastmail.com>
+ <57101e901013a8e6ff44e10c93d1689490c714bf.camel@physik.fu-berlin.de>
+ <46c6b0f6-6155-4366-9cbf-9fbbfb95ce30@app.fastmail.com>
+ <5375b5bb7221cf878d1f93e60e72807f66e26154.camel@physik.fu-berlin.de>
+ <ccf937cb-a139-4a07-aa47-4006b880b025@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <ccf937cb-a139-4a07-aa47-4006b880b025@app.fastmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20250616
-head:   78f053980ba50a0becae798ab7d07527d97e790d
-commit: 86f84750a02d65e592ec519e82ae73ad54149e59 [2395/2847] bcachefs: opts.journal_rewind
-config: powerpc-randconfig-2002-20250701 (https://download.01.org/0day-ci/archive/20250701/202507010724.lVYV4UeK-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250701/202507010724.lVYV4UeK-lkp@intel.com/reproduce)
+On Mon, Jun 30, 2025 at 02:07:58PM +0200, Arnd Bergmann wrote:
+> On Mon, Jun 30, 2025, at 12:45, John Paul Adrian Glaubitz wrote:
+> > On Mon, 2025-06-30 at 12:02 +0200, Arnd Bergmann wrote:
+> >> Some architectures have custom calling conventions for the
+> >> fork/vfork/clone/clone3 syscalls, e.g. to handle copying all the
+> >> registers correctly when the normal syscall entry doesn't do that,
+> >> or to handle the changing stack correctly.
+> >> 
+> >> I see that both sparc and hexagon have a custom clone() syscall,
+> >> so they likely need a custom clone3() as well, while sh and
+> >> nios2 probably don't.
+> >> 
+> >> All four would need a custom assembler implementation in userspace
+> >> for each libc, in order to test the userspace calling the clone3()
+> >> function. For testing the kernel entry point itself, see Christian's
+> >> original test case[1].
+> >
+> > Thanks for the explanation. So, I guess as long as a proposed implementation
+> > of clone3() on sh would pass Arnd's test program, it should be good for merging?
+> 
+> Yes, Christian's test program should be enough for merging into
+> the kernel, though I would recommend also coming up with the matching
+> glibc patch, in order to ensure it can actually be regression tested
+> automatically, and to use the new features provided by glibc clone3().
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507010724.lVYV4UeK-lkp@intel.com/
+Note that we do have clone3() selftests in the kernel:
 
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/btree_journal_iter.c:716:6: warning: variable 'nr_entries' set but not used [-Wunused-but-set-variable]
-     716 |         u64 nr_entries = 0;
-         |             ^
-   1 warning generated.
-
-
-vim +/nr_entries +716 fs/bcachefs/btree_journal_iter.c
-
-   709	
-   710	int bch2_journal_keys_sort(struct bch_fs *c)
-   711	{
-   712		struct genradix_iter iter;
-   713		struct journal_replay *i, **_i;
-   714		struct journal_keys *keys = &c->journal_keys;
-   715		size_t nr_read = 0;
- > 716		u64 nr_entries = 0;
-   717	
-   718		u64 rewind_seq = c->opts.journal_rewind ?: U64_MAX;
-   719	
-   720		genradix_for_each(&c->journal_entries, iter, _i) {
-   721			i = *_i;
-   722	
-   723			nr_entries += i != NULL;
-   724	
-   725			if (journal_replay_ignore(i))
-   726				continue;
-   727	
-   728			cond_resched();
-   729	
-   730			vstruct_for_each(&i->j, entry) {
-   731				bool rewind = !entry->level &&
-   732					!btree_id_is_alloc(entry->btree_id) &&
-   733					le64_to_cpu(i->j.seq) >= rewind_seq;
-   734	
-   735				if (entry->type != (rewind
-   736						    ? BCH_JSET_ENTRY_overwrite
-   737						    : BCH_JSET_ENTRY_btree_keys))
-   738					continue;
-   739	
-   740				if (!rewind && le64_to_cpu(i->j.seq) < c->journal_replay_seq_start)
-   741					continue;
-   742	
-   743				jset_entry_for_each_key(entry, k) {
-   744					struct journal_key n = (struct journal_key) {
-   745						.btree_id	= entry->btree_id,
-   746						.level		= entry->level,
-   747						.rewind		= rewind,
-   748						.k		= k,
-   749						.journal_seq	= le64_to_cpu(i->j.seq),
-   750						.journal_offset	= k->_data - i->j._data,
-   751					};
-   752	
-   753					if (darray_push(keys, n)) {
-   754						__journal_keys_sort(keys);
-   755	
-   756						if (keys->nr * 8 > keys->size * 7) {
-   757							bch_err(c, "Too many journal keys for slowpath; have %zu compacted, buf size %zu, processed %zu keys at seq %llu",
-   758								keys->nr, keys->size, nr_read, le64_to_cpu(i->j.seq));
-   759							return bch_err_throw(c, ENOMEM_journal_keys_sort);
-   760						}
-   761	
-   762						BUG_ON(darray_push(keys, n));
-   763					}
-   764	
-   765					nr_read++;
-   766				}
-   767			}
-   768		}
-   769	
-   770		__journal_keys_sort(keys);
-   771		keys->gap = keys->nr;
-   772	
-   773		bch_verbose(c, "Journal keys: %zu read, %zu after sorting and compacting", nr_read, keys->nr);
-   774		return 0;
-   775	}
-   776	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ls -al tools/testing/selftests/clone3/
+total 48
+drwxrwxr-x   2 brauner brauner   175 Jun  4 22:45 .
+drwxrwxr-x 118 brauner brauner  4096 Jun 16 10:10 ..
+-rw-rw-r--   1 brauner brauner  7377 Apr 15 10:47 clone3.c
+-rw-rw-r--   1 brauner brauner  3939 May 13 12:23 clone3_cap_checkpoint_restore.c
+-rw-rw-r--   1 brauner brauner  2512 Apr 15 10:47 clone3_clear_sighand.c
+-rw-rw-r--   1 brauner brauner  1437 Jun  4 22:45 clone3_selftests.h
+-rw-rw-r--   1 brauner brauner 10738 Apr 15 10:47 clone3_set_tid.c
+-rw-rw-r--   1 brauner brauner   113 Apr 11 15:36 .gitignore
+-rw-rw-r--   1 brauner brauner   206 Apr 15 10:47 Makefile
