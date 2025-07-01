@@ -1,93 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F8825E822;
-	Tue,  1 Jul 2025 08:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D7C26A0B3;
+	Tue,  1 Jul 2025 09:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751359773; cv=none; b=YuHpZ5A3U3F8VE1WBtx1HdZ1eH/bpV8wzD0qtKE1HPNUoKP9yHtpzIc9uxYI1Zk+SspIXExnnuXdt8ZshvIAv/rSo8cYtwnm7aWDkveiirZDKTB2tPFmnIIy+89lAz8KZHjSw9O7zKvcYWz1LFcv3ECJ6XZzV6X+EGSm4RR4fOE=
+	t=1751361375; cv=none; b=lSbTFpXcZw9Cw9m8QLYOJsUNtIyqq9yRQxs8i3JbDY1mNiGwwcyeGXSzoTTY6RM7VScgPJxUrq9fAS5q0M12BYITwWYCOUnQYR6+SEJwT/qbtmas+BJfVkMtoT+cf6hy8jP+ucHFKLMaxHluAncWUXlNR1JhB5R7oluLkuv/BCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751359773; c=relaxed/simple;
-	bh=DTtwMeNSk7OR8vbqD2nzw+mY8T/ya1c5lm8S+YPkjKo=;
+	s=arc-20240116; t=1751361375; c=relaxed/simple;
+	bh=ur4i4yzLkviKWu6sBni8onG/o9Yhcc21MCL8Xl7R2bE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d+LgFCKQ4yet0SUYwDPEZ/KMCSM4gUQlADZfa5WthwT2PVxEmcAFfcfYiG/jL7SYek52Bj4zZhdcFdUwjhuOD75AYd+ArmVXEtnRJa8cYK8cR9/hZVRhaRh+RtNo9Th3ubpgcxPlNdjsMFUga358/ORaxgxe8rGDzpqVOxg/md4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8GrpRus; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=c4iAmr5MpuRPUgw3pUoO036XGKLDLr5zn2JTVQWUr8qJ/4zkGA/gEW5hZrZVFAThRuJIEVfsszr+jxIZRM38qSANBEsGCnfsPBICI5tbxV1h66IjI9yaWUL4rNBBsCPZmgmeKEEch+V0gf9FDxGtwbcTfhJ29NcW84a1hoBt68s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Tu05Qvcx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8GrpRus"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2174BC4CEEE;
-	Tue,  1 Jul 2025 08:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751359773;
-	bh=DTtwMeNSk7OR8vbqD2nzw+mY8T/ya1c5lm8S+YPkjKo=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Tu05Qvcx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CC6C4CEEB;
+	Tue,  1 Jul 2025 09:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1751361374;
+	bh=ur4i4yzLkviKWu6sBni8onG/o9Yhcc21MCL8Xl7R2bE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H8GrpRushY1OUKMgqTnLNTmT4RQ56pC9/ESJuqTHilLlFReoQzDzLcYiZotEOWx2p
-	 nZuM81/AbA4802SnyFb6dgt7wn7goa7z3Lv6faHrIN23/g6CCQ/9t2PWO1awd/Lb8p
-	 QQY1Q2hxI/XKIPgMXVWl8rnmoq0f9/TyNWEb1+zf+ACL3X4TM/9Qf2NrsmHQfOLOQ/
-	 qPgvtnid+rOnITv0umSFn2FxE4+vDOstmuouUUNoLd3UwQoxuIDQ9RFbrDYZii1zr0
-	 x+qbWJL4evGlCddzO2n2Xdfa1OVedhAQRaez0iadUajIpn5cDdn65TNLX3WJFABCTd
-	 /nQgQVBfCWMfQ==
-Date: Tue, 1 Jul 2025 10:49:27 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-sh@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>, 
-	Simon Schuster <schuster.simon+binutils@siemens-energy.com>, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: kernel/fork.c:3088:2: warning: clone3() entry point is missing,
- please fix
-Message-ID: <20250701-packung-zweifach-49a0189a1dea@brauner>
-References: <202506282120.6vRwodm3-lkp@intel.com>
- <2ef5bc91-f56d-4c76-b12e-2797999cba72@app.fastmail.com>
- <57101e901013a8e6ff44e10c93d1689490c714bf.camel@physik.fu-berlin.de>
- <46c6b0f6-6155-4366-9cbf-9fbbfb95ce30@app.fastmail.com>
- <5375b5bb7221cf878d1f93e60e72807f66e26154.camel@physik.fu-berlin.de>
- <ccf937cb-a139-4a07-aa47-4006b880b025@app.fastmail.com>
+	b=Tu05QvcxTTryu1orfNafIVyr6I4lmoos32qmVZHcsOqY/nYUfrJ4sPOMm8sUI2o8p
+	 9NWWkvV6adHPBOBlJloHS7DmtmB6GYiis9n70ZimT9DrwMMjCVqh5tDMYtOUyHZwwk
+	 Yo021tkT5ABHUMteNtDEgI3HJhP5nQ+W9MqJdt7o=
+Date: Tue, 1 Jul 2025 11:16:11 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v12 0/5] rust: replace kernel::str::CStr w/
+ core::ffi::CStr
+Message-ID: <2025070102-pantry-siamese-905f@gregkh>
+References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ccf937cb-a139-4a07-aa47-4006b880b025@app.fastmail.com>
+In-Reply-To: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 
-On Mon, Jun 30, 2025 at 02:07:58PM +0200, Arnd Bergmann wrote:
-> On Mon, Jun 30, 2025, at 12:45, John Paul Adrian Glaubitz wrote:
-> > On Mon, 2025-06-30 at 12:02 +0200, Arnd Bergmann wrote:
-> >> Some architectures have custom calling conventions for the
-> >> fork/vfork/clone/clone3 syscalls, e.g. to handle copying all the
-> >> registers correctly when the normal syscall entry doesn't do that,
-> >> or to handle the changing stack correctly.
-> >> 
-> >> I see that both sparc and hexagon have a custom clone() syscall,
-> >> so they likely need a custom clone3() as well, while sh and
-> >> nios2 probably don't.
-> >> 
-> >> All four would need a custom assembler implementation in userspace
-> >> for each libc, in order to test the userspace calling the clone3()
-> >> function. For testing the kernel entry point itself, see Christian's
-> >> original test case[1].
-> >
-> > Thanks for the explanation. So, I guess as long as a proposed implementation
-> > of clone3() on sh would pass Arnd's test program, it should be good for merging?
+On Thu, Jun 19, 2025 at 11:06:24AM -0400, Tamir Duberstein wrote:
+> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+> have omitted Co-authored tags, as the end result is quite different.
 > 
-> Yes, Christian's test program should be enough for merging into
-> the kernel, though I would recommend also coming up with the matching
-> glibc patch, in order to ensure it can actually be regression tested
-> automatically, and to use the new features provided by glibc clone3().
+> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+> 
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Note that we do have clone3() selftests in the kernel:
-
-> ls -al tools/testing/selftests/clone3/
-total 48
-drwxrwxr-x   2 brauner brauner   175 Jun  4 22:45 .
-drwxrwxr-x 118 brauner brauner  4096 Jun 16 10:10 ..
--rw-rw-r--   1 brauner brauner  7377 Apr 15 10:47 clone3.c
--rw-rw-r--   1 brauner brauner  3939 May 13 12:23 clone3_cap_checkpoint_restore.c
--rw-rw-r--   1 brauner brauner  2512 Apr 15 10:47 clone3_clear_sighand.c
--rw-rw-r--   1 brauner brauner  1437 Jun  4 22:45 clone3_selftests.h
--rw-rw-r--   1 brauner brauner 10738 Apr 15 10:47 clone3_set_tid.c
--rw-rw-r--   1 brauner brauner   113 Apr 11 15:36 .gitignore
--rw-rw-r--   1 brauner brauner   206 Apr 15 10:47 Makefile
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
