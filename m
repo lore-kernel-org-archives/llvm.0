@@ -1,143 +1,100 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2682BF3DB
-	for <llvm@lists.linux.dev>; Wed,  2 Jul 2025 14:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 530D52EA163;
+	Wed,  2 Jul 2025 14:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751465670; cv=none; b=bTZPl0I3ceMlgvgdo8QDBxgbWOqLtTbPIJ5Ik9fDATy/vuBVe4n3NlJrzjtNZajesiYdMRyTPaPWGM/5tj+c/qXrhnveeQIYDekppf+10bw41PFg4VFeyRHc5oDH4tRLSFiJULtnUUsGV1/BINhOAyCqtckmdakuuV9FaqveEJE=
+	t=1751465767; cv=none; b=UhQawXDcTmE8BPFXvQk7AL78ljKXZ7N70N0HOedawK0VaxCU4Zhvdwy3JeWhHGWDyEuTOP1/LVOUAweZNK46WlElwZ462x58mTiRCPTdhHCEuFFjUAQQHrCSK2m1HWraMyeRqQeTUT9Pc7jkbpOH0FwgWcSB7ctPFIFJhgMxPCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751465670; c=relaxed/simple;
-	bh=zqKGhMgZTNKn8t9nNqOSQ0vaSPiBBITK2Mwmm0guxPo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lE26QifXAWNrKhaPmGaUXFY+IroCYld2tE4BlWd3e1aHJp4S6iGoEdPMcXntfZflJgjx/qe/Tmd1cLiANhQ2Ib2SLXCBBxb/xeqUAN1/hmQNj8zVaUi+ZyeAGix6YcPvqeiWwGw/qCtCOReFbDRF/J3SpAE+YFNlp59pR71Mpoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AggipgHW; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AggipgHW"
-Message-ID: <a8ea0565-e20d-4019-a64b-fa8020866411@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1751465653;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6uQFp4cJ8AYYwMC7A3lrbx+MnxlYvEYEmihK/yWxec8=;
-	b=AggipgHWO0jdRYz0u1A4o9IuVGIUox6XdD/xi0R/d6J6bhOmrOrOr1EYpHWE0DyawWIISL
-	aq8S/Nw40+gThtNLeZTlRVfpSm7YmtQ0b1ttiCHmMapXtsmm3EOWRYT1vDv0QJKHYW5xD7
-	+6k76+6P75Nfr0qiXUPN0e9Vo8PgH54=
-Date: Wed, 2 Jul 2025 07:14:05 -0700
+	s=arc-20240116; t=1751465767; c=relaxed/simple;
+	bh=DIYuzkdweaBOtoLUxlve79p01Dm36bPtHwaVozKAsZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TXLeqHX+JVTYXgjpF7HVm0Vbv9j5ibd8DvzUOGQkD6oi5BhGD8KqqKea+qWQF9d7LMbFCxrxGt41q7kVD9GQePSBWMB0bQ9cUiujcY1R9qfmCzTkbK05Weow7gfERMZ3eF+HBcMzcJIuozVIEtSVzRdxh/uNKSUkDr9tYaDn7oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDFAB22C7;
+	Wed,  2 Jul 2025 07:15:50 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE3193F6A8;
+	Wed,  2 Jul 2025 07:16:03 -0700 (PDT)
+Date: Wed, 2 Jul 2025 15:16:01 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	kernel test robot <lkp@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+	Jinjie Ruan <ruanjinjie@huawei.com>
+Subject: Re: [tip:master 19/19] include/linux/irq-entry-common.h:201:2:
+ error: unexpected token
+Message-ID: <aGU_IY70Jt4bcbf2@J2N7QTR9R3.cambridge.arm.com>
+References: <202507020528.N0LtekXt-lkp@intel.com>
+ <20250702123240.GDaGUm6Le4KLL7o_91@fat_crate.local>
+ <aGUtCveV8Ev17_FS@J2N7QTR9R3.cambridge.arm.com>
+ <20250702130915.GEaGUve86iYnv337_Z@fat_crate.local>
+ <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
+ <20250702132415.GFaGUy_6q0dZZI9AX3@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
-Content-Language: en-GB
-To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Arnd Bergmann <arnd@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Luis Gerhorst <luis.gerhorst@fau.de>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-References: <20250620113846.3950478-1-arnd@kernel.org>
- <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
- <361eb614-e145-49dc-aa32-12f313f61b96@linux.dev>
- <CAEf4BzahSLGiW_F4LtG1tMAb0O1b6D-kO0AcrU2O+nLKVbkvZA@mail.gmail.com>
- <646c1c27-b940-4ece-aa0f-dbeea8aa7de3@linux.dev>
- <eb4b4473-c75e-4bfa-9a16-19a5256a558d@app.fastmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <eb4b4473-c75e-4bfa-9a16-19a5256a558d@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250702132415.GFaGUy_6q0dZZI9AX3@fat_crate.local>
 
+On Wed, Jul 02, 2025 at 03:24:15PM +0200, Borislav Petkov wrote:
+> On Wed, Jul 02, 2025 at 02:16:15PM +0100, Mark Rutland wrote:
+> > Sounds like a plan.
+> 
+> As we figured out on IRC:
+> 
+> https://lore.kernel.org/all/20250616-loongarch-fix-warn-cond-llvm-ias-v1-1-6c6d90bb4466@kernel.org/
+> 
+> "clang's integrated assembler only supports concatenating strings with
+> '.ascii'. There was discussion of allowing '.string' / '.asciz' but it
+> was decided against [1] because it was undesirable to match the behavior
+> of released binutils at the time, where"
+> 
+> and this seems to fix it here:
+> 
+> ---
+> diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+> index a185855ab158..46d9eb64bd18 100644
+> --- a/arch/s390/include/asm/bug.h
+> +++ b/arch/s390/include/asm/bug.h
+> @@ -9,7 +9,7 @@
+>  #else
+>  #define __BUGVERBOSE_LOCATION(file, line)			\
+>  		.pushsection .rodata.str, "aMS", @progbits, 1;	\
+> -	10002:	.string file;					\
+> +	10002:	.ascii file;					\
+>  		.popsection;					\
+>  								\
+>  		.long 10002b - .;				\
+> 
 
+IIUC this also needs a trailing "\0" as per the link above, or this
+won't get a NUL-terminator (but will build just fine).
 
-On 7/2/25 12:48 AM, Arnd Bergmann wrote:
-> On Tue, Jul 1, 2025, at 23:28, Yonghong Song wrote:
->> On 7/1/25 1:45 PM, Andrii Nakryiko wrote:
->>> On Tue, Jul 1, 2025 at 1:03 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>>> On 6/23/25 2:32 PM, Alexei Starovoitov wrote:
->>>>> On Fri, Jun 20, 2025 at 4:38 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>>>>> From: Arnd Bergmann <arnd@arndb.de>
->>>> I checked IR and found the following memory allocations which may contribute
->>>> excessive stack usage:
->>>>
->>>> attr.coerce1, i32 noundef %uattr_size) local_unnamed_addr #0 align 16 !dbg !19800 {
->>>> entry:
->>>>      %zext_patch.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19854
->>>>      %rnd_hi32_patch.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19855
->>>>      %cnt.i = alloca i32, align 4, !DIAssignID !19856
->>>>      %patch.i766 = alloca [3 x %struct.bpf_insn], align 16, !DIAssignID !19857
->>>>      %chk_and_sdiv.i = alloca [1 x %struct.bpf_insn], align 4, !DIAssignID !19858
->>>>      %chk_and_smod.i = alloca [1 x %struct.bpf_insn], align 4, !DIAssignID !19859
->>>>      %chk_and_div.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19860
->>>>      %chk_and_mod.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19861
->>>>      %chk_and_sdiv343.i = alloca [8 x %struct.bpf_insn], align 16, !DIAssignID !19862
->>>>      %chk_and_smod472.i = alloca [9 x %struct.bpf_insn], align 16, !DIAssignID !19863
->>>>      %desc.i = alloca %struct.bpf_jit_poke_descriptor, align 8, !DIAssignID !19864
->>>>      %target_size.i = alloca i32, align 4, !DIAssignID !19865
->>>>      %patch.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19866
->>>>      %patch355.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19867
->>>>      %ja.i = alloca %struct.bpf_insn, align 8, !DIAssignID !19868
->>>>      %ret_insn.i.i = alloca [8 x i32], align 16, !DIAssignID !19869
->>>>      %ret_prog.i.i = alloca [8 x i32], align 16, !DIAssignID !19870
->>>>      %fd.i = alloca i32, align 4, !DIAssignID !19871
->>>>      %log_true_size = alloca i32, align 4, !DIAssignID !19872
->>>> ...
->>>>
->>>> So yes, chk_and_{div,mod,sdiv,smod} consumes quite some stack and
->>>> can be coverted to runtime allocation but that is not enough for 1280
->>>> stack limit, we need to do more conversion from stack to memory
->>>> allocation. Will try to have uniform way to convert
->>>> 'alloca [<num> x %struct.bpf_insn]' to runtime allocation.
->>>>
->>> Do we need to go all the way to dynamic allocation? See env->insns_buf
->>> (which some parts of this function are already using for constructing
->>> instruction patch), let's just converge on that? It pre-allocates
->>> space for 32 instructions, should be sufficient for all the use cases,
->>> no?
->> Make sense. This is much better. Thanks!
-> I'm not sure if that actually helps on the old clang version, as far
-> as I understood it in my initial analysis, the problem in the
->
-> struct bpf_insn chk_and_sdiv[] = {
->                                  /* [R,W]x sdiv 0 -> 0
->                                   * LLONG_MIN sdiv -1 -> LLONG_MIN
->                                   * INT_MIN sdiv -1 -> INT_MIN
->                                   */
->                                  BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
-> ...
-> }
->
-> construct is not the chk_and_sdiv[] array itself but the
-> struct initializer in the BPF_MOV64_REG() macro that leads to
-> having two copies of the struct on the stack and then copying
-> between them. In gcc or clang-18+, these all get folded
-> into a single object on the stack.
+While looking at this I spotted that arm64 doesn't propagate the
+cond_str down to __BUGVERBOSE_LOCATION(), which is why we don't
+encounter the same problem today.
 
-See https://lore.kernel.org/bpf/20250702053332.1991516-1-yonghong.song@linux.dev/.
-The above 'struct bpf_insn chk_and_sdiv[] = { ... }' will be removed so
-there will not be stack consumption any more for it. Instead, we use
-the scratch space in bpf_verifier_env.
+We should probably fix that, but it looks like it might need some more
+header wrangling for ASM_BUG(). I thought we'd split that out to avoid
+circular header dependencies, but I could be mistaken.
 
->
-> (Disclaimer: I don't understand anything about how clang
-> actually works internally, the above is only speculation on
-> my side, based on the assembler output)
->
->        Arnd
+Mark.
 
+> 
+> I leave it to Mr. Z to sort out.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
