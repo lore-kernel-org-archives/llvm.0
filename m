@@ -1,53 +1,34 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A302E4982;
-	Wed,  2 Jul 2025 18:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502262185BD;
+	Wed,  2 Jul 2025 18:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751480988; cv=none; b=mt797LK7j1WITeLmKmcE88FbD22O+FGDihjkiMvNb0aVTBccJWepJaE5P6cI4/muA8xUzQREVmIVDiU+BtG0h1oqTOifpUhWTWRwOLx+JTpgGBSEs/tlU/wU2AbdAnG49Evyb5VYhDWnDinVRQsG8nySNkU+5OipVhYgcog7Quo=
+	t=1751481486; cv=none; b=BLBETK/5HnNEVgkbpKZYIkdim/74dmKzTgHa6CRS0GZfmXVzyxJVdYVQdKskpPwIdbHrNOK1cxVelrMlPRfp9sMO0UiM4Fyd+MYzA1fc7Skvpo8r9piqF+VwUgDr87DMvFaFUfiEterR6UJp+VHQcWsI/LvmuSNP4FJjjCW93Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751480988; c=relaxed/simple;
-	bh=1vxlteZGgs8rPgxVkHOhpq5xPFcq85u1536QGsj7Ilw=;
+	s=arc-20240116; t=1751481486; c=relaxed/simple;
+	bh=LiKKhjp1gbJ5/W5FzJzAy8WE7+YnbuQY+5LX8+kFXFo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GgOtZSAbxEwhRnUp1NlrhfFsVone4BQ0CK6ZtdDGFIG1QUrc0iglbEUUqvZe2IUraMPBZPxF0TUnytcFNMs4sEphjwV1qByzOw18aLrbWwOaJ9kBEBURht53rex6p3Ayc1m7f5fEHr2hpInB50JUASqWrMbTNswcPPLvPuBnyRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=bcLbLhTi; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=slE52rwZ/XjZ1dsxKkk8ZQxsaEzkflCmHVTb/Q+ptLMj5vf++mI90E2PhmKic1/0nZRHrXArgTbn/Uqb9LmtWe2UD4OabqbMCmmIPjhr7RAPVnXHmCZ8KG9J/qXBd8fHLECaqjXNf0GzrfUSz5QmK41JE+lXuVIzltWMDNzz+5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7tad9KM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="bcLbLhTi"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A98C540E0215;
-	Wed,  2 Jul 2025 18:29:44 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id qvSWt73tl03D; Wed,  2 Jul 2025 18:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1751480980; bh=X2eYdTgOAj7ev229sZL74SOmPQikqFp9uPGo50WqjDw=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7tad9KM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538C4C4CEE7;
+	Wed,  2 Jul 2025 18:38:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751481485;
+	bh=LiKKhjp1gbJ5/W5FzJzAy8WE7+YnbuQY+5LX8+kFXFo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bcLbLhTiAETgQIiVutZtrx993YwtpEm7geaQHYzvQrftPhH10vuzPZzOINRx2G9qM
-	 EPC1NtbBUWskaeiR9mENIhs6oHYjoNEefD+bfbRxwo5YRa21YGeJjyznC6aMN18eKC
-	 bSVZsiKRCVyx/rNCAFAfJxjch8v91EewCCgedXbUv5MZJQdaoYqA3qbnPCgVHu+S9m
-	 R1DUVEcRlu+PalqFiSfOMdKeLlu30DpxDGxLBkPDx5VEpdNCHm8j9opNxwGNM5f7xO
-	 sMT/bqQ8xmOxJxDLpA1PndKQkKKMs1m55HP/tDMBK3e+UriLxlegbGqds5MjPnUyFX
-	 3o1rr+0j/ZYkOFpq774MR3t8ZSdl3FUQ7Qu+lx8ms86ReBgtx+W39fm+u9wO+tEuUj
-	 sOaQlAUaidf4GxhD/JvOIWDOG2w3MajtHud2BEvCOzAzDWDYgAjWk5vngm6iDVMtJo
-	 tMaVatKDb/28S0EfaavMzKNqayxgw32PUPK8f65Si5VWd+3e0aj+eKqciCMjIO5MNy
-	 St0j7BxpZL7I/TifhrW13gIwczW/faJdG+RZTK8fYUqkk1Vtq9v339ObYfisN2Z1TW
-	 WRXpbxzYuuE0fW5RRNQc7M/iFp5sTq2jL9YYFLEzOCAR1HBbL1MgJ+cZM8NwS5fgax
-	 EEdOpvIuIzUxuu6KJHw1ag10=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7879A40E0217;
-	Wed,  2 Jul 2025 18:29:28 +0000 (UTC)
-Date: Wed, 2 Jul 2025 20:29:22 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
+	b=Y7tad9KM4EwmXA89gOC9T54k0KCKAFrBWDkkm4nizUWan9AKLreQATnva6aZximvg
+	 H/dzUfc//xxh86X0haFOLNLWmxpyudXv2qJB66raiiedymJn2N9nsm/3YPzizGhe1b
+	 PwXemSh/icqkHVx6jHKJ/6gE+80m/XjOy/IBsM7KchenuVGvfZMjqtOuq5hi/TW+Gp
+	 81n/vng4CsXLF3n13qxTQztfinzIJvRkALL4EETNGpxmuS92icFMcfkUlZ7TT2KjS3
+	 YzNLJI5g2oWWPLU+LxAuMo71309HvxqjXnTOAdNa2F1ghQ67JS9JwLMGlxjpWy9i/k
+	 cvB8zCX6W0A0w==
+Date: Wed, 2 Jul 2025 11:38:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
 Cc: Peter Zijlstra <peterz@infradead.org>,
 	Heiko Carstens <hca@linux.ibm.com>,
 	Mark Rutland <mark.rutland@arm.com>,
@@ -58,9 +39,8 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	Jinjie Ruan <ruanjinjie@huawei.com>
 Subject: Re: [tip:master 19/19] include/linux/irq-entry-common.h:201:2:
  error: unexpected token
-Message-ID: <20250702182922.GHaGV6gl6axPokuBIr@fat_crate.local>
-References: <20250702130915.GEaGUve86iYnv337_Z@fat_crate.local>
- <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
+Message-ID: <20250702183800.GA3958046@ax162>
+References: <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
  <20250702132415.GFaGUy_6q0dZZI9AX3@fat_crate.local>
  <aGU_IY70Jt4bcbf2@J2N7QTR9R3.cambridge.arm.com>
  <20250702145425.GS1613376@noisy.programming.kicks-ass.net>
@@ -69,46 +49,22 @@ References: <20250702130915.GEaGUve86iYnv337_Z@fat_crate.local>
  <20250702161012.GQ1613200@noisy.programming.kicks-ass.net>
  <20250702180136.GA3452438@ax162>
  <20250702181236.GGaGV2lAMxdCg_7MoX@fat_crate.local>
+ <20250702182922.GHaGV6gl6axPokuBIr@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250702181236.GGaGV2lAMxdCg_7MoX@fat_crate.local>
+In-Reply-To: <20250702182922.GHaGV6gl6axPokuBIr@fat_crate.local>
 
-On Wed, Jul 02, 2025 at 08:12:36PM +0200, Borislav Petkov wrote:
-> On Wed, Jul 02, 2025 at 11:01:36AM -0700, Nathan Chancellor wrote:
-> > Thanks Peter. Did something go awry with the latest rebase? It looks
-> > like current core/bugs has the loongarch issue fixed but "bugs/s390: Use
-> > 'cond_str' in __EMIT_BUG()" seems to have reverted to the broken
-> > version?
-> 
-> Ah crap, lemme fix that.
+On Wed, Jul 02, 2025 at 08:29:22PM +0200, Borislav Petkov wrote:
+> Should be fixed now... famous last words. :-P
 
-Should be fixed now... famous last words. :-P
+Thanks for sticking with it :) I can confirm that fad009b77942
+builds correctly for me.
 
-git diff e0d1ec28743b a4585558a904
-diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
-index a185855ab158..acb4b13d98c5 100644
---- a/arch/s390/include/asm/bug.h
-+++ b/arch/s390/include/asm/bug.h
-@@ -9,7 +9,7 @@
- #else
- #define __BUGVERBOSE_LOCATION(file, line)                      \
-                .pushsection .rodata.str, "aMS", @progbits, 1;  \
--       10002:  .string file;                                   \
-+       10002:  .ascii file "\0";                               \
-                .popsection;                                    \
-                                                                \
-                .long 10002b - .;                               \
-
-Thanks!
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Cheers,
+Nathan
