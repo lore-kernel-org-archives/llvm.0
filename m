@@ -1,90 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD03E275B1D;
-	Wed,  2 Jul 2025 13:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2682BF3DB
+	for <llvm@lists.linux.dev>; Wed,  2 Jul 2025 14:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751463440; cv=none; b=pGF20Xv/4M1DL2GLQGNIlyZh1WjrCZ/CWRgSSAcfYuoHPK45KSKuvjPuTFGADQ+4P9Xik1azsZxyKQoQanbrQvVGgyDI/UNXWAZ5DiBn6cJtsOQM0RFMM/dxjHBvCPud9lTIhKBK4KhI68eNUcX3DczzcvBxf2G3NcVn3I8ju3o=
+	t=1751465670; cv=none; b=bTZPl0I3ceMlgvgdo8QDBxgbWOqLtTbPIJ5Ik9fDATy/vuBVe4n3NlJrzjtNZajesiYdMRyTPaPWGM/5tj+c/qXrhnveeQIYDekppf+10bw41PFg4VFeyRHc5oDH4tRLSFiJULtnUUsGV1/BINhOAyCqtckmdakuuV9FaqveEJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751463440; c=relaxed/simple;
-	bh=s9gOzfm57ApnogRzuX4Eeuc2bvXSAcImho9OrvtTqg0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kwuhaTW9QWMby6eWOMvWK/hsBfQd9mJqDNnQGzkQ3n+sz2b4PQMfr3IbOwNxdgilT9T1XwUoULgfEEYSm93pNKVqSnDjnCutqu+MBEir/4XvDS8w7rkyDfj8waDdkCoswhM8FQvgWNx0J/5Lh9J0Ej+CyQ3+uemoLQXKxS4Dlhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h59fEXM1; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751465670; c=relaxed/simple;
+	bh=zqKGhMgZTNKn8t9nNqOSQ0vaSPiBBITK2Mwmm0guxPo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lE26QifXAWNrKhaPmGaUXFY+IroCYld2tE4BlWd3e1aHJp4S6iGoEdPMcXntfZflJgjx/qe/Tmd1cLiANhQ2Ib2SLXCBBxb/xeqUAN1/hmQNj8zVaUi+ZyeAGix6YcPvqeiWwGw/qCtCOReFbDRF/J3SpAE+YFNlp59pR71Mpoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AggipgHW; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h59fEXM1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751463438; x=1782999438;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s9gOzfm57ApnogRzuX4Eeuc2bvXSAcImho9OrvtTqg0=;
-  b=h59fEXM1F99MsVx2BGnbZAdmZ/VQYG/yPHUwTBBrOrc5iRh9DI1i8h8G
-   VTAl5qgZzpxe2L//004NQV6dGvwgc7rG8ThB29xtx+d1oFTMMzOyd3f4R
-   hXIU1TZGNGf3wVNL+o9Qz/bgt5PhFiryQokQp3HGI1n6ajBVFYdTMZp4e
-   drn+cuS6JwDhRwhMhij9R1ED6T/+uUtHg6sglF36csir7/S98JPVWTlTE
-   Owq8nGLmfDfucnuJbRx0ks7467w68ZBnkLZIWU1Yp0myNCJmjWXrL6e0U
-   7QE5yr42qoJNUWJ4YDNLGM3vLXZ3zuexl6xNlMbS00nj6nB2xUDe3isdF
-   Q==;
-X-CSE-ConnectionGUID: t/ZOqhrfQUioCEnTA55MzA==
-X-CSE-MsgGUID: HqOJJpllR4mQDTW4JVSKNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11482"; a="53852805"
-X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
-   d="scan'208";a="53852805"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 06:37:18 -0700
-X-CSE-ConnectionGUID: +2rgUT1TQkaBa3itLnyMXg==
-X-CSE-MsgGUID: RGsc5t8FTeGNkmyHI70u3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
-   d="scan'208";a="153852318"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 02 Jul 2025 06:37:17 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uWxeE-0000fj-1v;
-	Wed, 02 Jul 2025 13:37:14 +0000
-Date: Wed, 2 Jul 2025 21:36:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 6351/6656] Warning: security/landlock/fs.c:1107
- function parameter 'mnt_dir' not described in 'collect_domain_accesses'
-Message-ID: <202507022103.mioAq8cY-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AggipgHW"
+Message-ID: <a8ea0565-e20d-4019-a64b-fa8020866411@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751465653;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6uQFp4cJ8AYYwMC7A3lrbx+MnxlYvEYEmihK/yWxec8=;
+	b=AggipgHWO0jdRYz0u1A4o9IuVGIUox6XdD/xi0R/d6J6bhOmrOrOr1EYpHWE0DyawWIISL
+	aq8S/Nw40+gThtNLeZTlRVfpSm7YmtQ0b1ttiCHmMapXtsmm3EOWRYT1vDv0QJKHYW5xD7
+	+6k76+6P75Nfr0qiXUPN0e9Vo8PgH54=
+Date: Wed, 2 Jul 2025 07:14:05 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
+Content-Language: en-GB
+To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Arnd Bergmann <arnd@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Luis Gerhorst <luis.gerhorst@fau.de>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+References: <20250620113846.3950478-1-arnd@kernel.org>
+ <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
+ <361eb614-e145-49dc-aa32-12f313f61b96@linux.dev>
+ <CAEf4BzahSLGiW_F4LtG1tMAb0O1b6D-kO0AcrU2O+nLKVbkvZA@mail.gmail.com>
+ <646c1c27-b940-4ece-aa0f-dbeea8aa7de3@linux.dev>
+ <eb4b4473-c75e-4bfa-9a16-19a5256a558d@app.fastmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <eb4b4473-c75e-4bfa-9a16-19a5256a558d@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   50c8770a42faf8b1c7abe93e7c114337f580a97d
-commit: 4a2e8dc023bce5931f3e6ef3efdb7c07ebb2cdbc [6351/6656] landlock: Fix handling of disconnected directories
-config: arm-randconfig-001-20250702 (https://download.01.org/0day-ci/archive/20250702/202507022103.mioAq8cY-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250702/202507022103.mioAq8cY-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507022103.mioAq8cY-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+On 7/2/25 12:48 AM, Arnd Bergmann wrote:
+> On Tue, Jul 1, 2025, at 23:28, Yonghong Song wrote:
+>> On 7/1/25 1:45 PM, Andrii Nakryiko wrote:
+>>> On Tue, Jul 1, 2025 at 1:03 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>>>> On 6/23/25 2:32 PM, Alexei Starovoitov wrote:
+>>>>> On Fri, Jun 20, 2025 at 4:38 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>>>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>> I checked IR and found the following memory allocations which may contribute
+>>>> excessive stack usage:
+>>>>
+>>>> attr.coerce1, i32 noundef %uattr_size) local_unnamed_addr #0 align 16 !dbg !19800 {
+>>>> entry:
+>>>>      %zext_patch.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19854
+>>>>      %rnd_hi32_patch.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19855
+>>>>      %cnt.i = alloca i32, align 4, !DIAssignID !19856
+>>>>      %patch.i766 = alloca [3 x %struct.bpf_insn], align 16, !DIAssignID !19857
+>>>>      %chk_and_sdiv.i = alloca [1 x %struct.bpf_insn], align 4, !DIAssignID !19858
+>>>>      %chk_and_smod.i = alloca [1 x %struct.bpf_insn], align 4, !DIAssignID !19859
+>>>>      %chk_and_div.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19860
+>>>>      %chk_and_mod.i = alloca [4 x %struct.bpf_insn], align 16, !DIAssignID !19861
+>>>>      %chk_and_sdiv343.i = alloca [8 x %struct.bpf_insn], align 16, !DIAssignID !19862
+>>>>      %chk_and_smod472.i = alloca [9 x %struct.bpf_insn], align 16, !DIAssignID !19863
+>>>>      %desc.i = alloca %struct.bpf_jit_poke_descriptor, align 8, !DIAssignID !19864
+>>>>      %target_size.i = alloca i32, align 4, !DIAssignID !19865
+>>>>      %patch.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19866
+>>>>      %patch355.i = alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !19867
+>>>>      %ja.i = alloca %struct.bpf_insn, align 8, !DIAssignID !19868
+>>>>      %ret_insn.i.i = alloca [8 x i32], align 16, !DIAssignID !19869
+>>>>      %ret_prog.i.i = alloca [8 x i32], align 16, !DIAssignID !19870
+>>>>      %fd.i = alloca i32, align 4, !DIAssignID !19871
+>>>>      %log_true_size = alloca i32, align 4, !DIAssignID !19872
+>>>> ...
+>>>>
+>>>> So yes, chk_and_{div,mod,sdiv,smod} consumes quite some stack and
+>>>> can be coverted to runtime allocation but that is not enough for 1280
+>>>> stack limit, we need to do more conversion from stack to memory
+>>>> allocation. Will try to have uniform way to convert
+>>>> 'alloca [<num> x %struct.bpf_insn]' to runtime allocation.
+>>>>
+>>> Do we need to go all the way to dynamic allocation? See env->insns_buf
+>>> (which some parts of this function are already using for constructing
+>>> instruction patch), let's just converge on that? It pre-allocates
+>>> space for 32 instructions, should be sufficient for all the use cases,
+>>> no?
+>> Make sense. This is much better. Thanks!
+> I'm not sure if that actually helps on the old clang version, as far
+> as I understood it in my initial analysis, the problem in the
+>
+> struct bpf_insn chk_and_sdiv[] = {
+>                                  /* [R,W]x sdiv 0 -> 0
+>                                   * LLONG_MIN sdiv -1 -> LLONG_MIN
+>                                   * INT_MIN sdiv -1 -> INT_MIN
+>                                   */
+>                                  BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
+> ...
+> }
+>
+> construct is not the chk_and_sdiv[] array itself but the
+> struct initializer in the BPF_MOV64_REG() macro that leads to
+> having two copies of the struct on the stack and then copying
+> between them. In gcc or clang-18+, these all get folded
+> into a single object on the stack.
 
-   Warning: security/landlock/fs.c:764 Invalid param: layer_mask_t (*const layer_masks_parent1)[LANDLOCK_NUM_ACCESS_FS]
-   Warning: security/landlock/fs.c:764 function parameter 'layer_mask_t (*const layer_masks_parent1' not described in 'is_access_to_paths_allowed'
-   Warning: security/landlock/fs.c:764 Invalid param: layer_mask_t (*const layer_masks_parent2)[LANDLOCK_NUM_ACCESS_FS]
-   Warning: security/landlock/fs.c:764 function parameter 'layer_mask_t (*const layer_masks_parent2' not described in 'is_access_to_paths_allowed'
->> Warning: security/landlock/fs.c:1107 function parameter 'mnt_dir' not described in 'collect_domain_accesses'
-   Warning: security/landlock/fs.c:1107 Invalid param: layer_mask_t (*const layer_masks_dom)[LANDLOCK_NUM_ACCESS_FS]
-   Warning: security/landlock/fs.c:1107 function parameter 'layer_mask_t (*const layer_masks_dom' not described in 'collect_domain_accesses'
->> Warning: security/landlock/fs.c:1107 Excess function parameter 'mnt_root' description in 'collect_domain_accesses'
+See https://lore.kernel.org/bpf/20250702053332.1991516-1-yonghong.song@linux.dev/.
+The above 'struct bpf_insn chk_and_sdiv[] = { ... }' will be removed so
+there will not be stack consumption any more for it. Instead, we use
+the scratch space in bpf_verifier_env.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> (Disclaimer: I don't understand anything about how clang
+> actually works internally, the above is only speculation on
+> my side, based on the assembler output)
+>
+>        Arnd
+
