@@ -1,26 +1,54 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46006230BC2;
-	Wed,  2 Jul 2025 13:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB343279DD0;
+	Wed,  2 Jul 2025 13:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462182; cv=none; b=D54uUNQKfio8bKzhFupfxtWDz1aQFm0J/EPilhsA+6epr4g1q8oS+8nXdJUCT4MM0la+vLr8eVjYL4Bg/BFLOkFfaQOpr0VCNOckFMItrEAVvJV5DTwQCFQRymC7OhGfrEHiLFV5/6Azu3jBncXno1kKHD5WqhEnZQxlE44Uug4=
+	t=1751462681; cv=none; b=h/CBYZ+7HlZOqnGsXtdavtWE7R1a3Fuu0OgCJcApDtJwA4ncmJoLUFSwGVSTY5gpzcuvOd8U+vdYj5HpaXcfKfocBljzEecuQVmc3kcaCC3EZ+qH4MKx9WoEICyfyQ+vtHMbFNDHQ+vAaM89jsjLDrbccAIAIR6hymYXoDYhRbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462182; c=relaxed/simple;
-	bh=eoh/0ngUiWGnFNUZX8+EKdsHmE8O2b7KxJ6G+VXBozU=;
+	s=arc-20240116; t=1751462681; c=relaxed/simple;
+	bh=Niz+m0D1JqkH5aTX+Uv8Rcb69sVNw/rYIAm7h3Hs6Mo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+CzmwOMCrMYI+EWiuzwRs4Lrpev35zT2Jnb+lV/wthEdJCmQ8hpHm7nEAKhs6RSz4K+oKcqYH0q1DPKs3aj3O77reI61jYUGEC/bXtzoJH9HzEe5cTMqNCq0lJAwzlL/dQej7fGW6B66mleqYiJ6m/QfMi/ZrIsjI9ehCdMQPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C381C152B;
-	Wed,  2 Jul 2025 06:16:04 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 402C23F58B;
-	Wed,  2 Jul 2025 06:16:18 -0700 (PDT)
-Date: Wed, 2 Jul 2025 14:16:15 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Borislav Petkov <bp@alien8.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=a6jP1A1+xVtMj9p1NRU4q0+rgGL7ubEKJXPuLS7yQC+UeQzw40Z6ErXCzWCkB9n0J2wD52AvLjtzvYth00zHeKOMMr2aQwXZUmGb6cbNB77z2HM1JYFVaFsYPKMqpJsmoMc0UKFTvgIa17hA4gRnSkXlhMs2oClZCOLKr0IP3VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=c1yDFmGs; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="c1yDFmGs"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2799B40E021D;
+	Wed,  2 Jul 2025 13:24:36 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id mqwxr6HJcW_k; Wed,  2 Jul 2025 13:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1751462672; bh=5eqncYxutXgmX6kJnSEQAbsb0Ij4/aMXV0r2ck6ZhQY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c1yDFmGsnzJXOSIA3Db9yDsJRM5HUtD9DCDsqz5acK6Q8RDhrd1UzhHXK+DORXBNj
+	 n6JxT1jW+ME9Ghq9MoDQJEc9mLwCr5hQVmAeDDOvOmq5JcD2sJ1kguoEsqpHRe09io
+	 em2blc4SK67v5Gw2zdwksl03wmhO4gkihMBSww8oDGtwXca3+w7msc6QoA4Vs6XMD5
+	 UFh6uYYglxKDLT1VZh0y157pq9DRMkBuuEgtmHGO+1UD9droeuXl/yL5iDLUVTeJVa
+	 nsnmLAyWl0okfbi/cnteU+OvkyHhi9PMpPTmV+S13paU7+VBG9OtVfA6oaDY/8eHVH
+	 BJ6dHjn4GCe0A3gc1g2Z584oXOEbTe4hs34PR1Eygxd7c3feGbTrKBn6iH8ZMnP6nA
+	 XpOUJ4uB/4+K5jgKEI2IE/QFh/1MJWLbdYvlwfe0jr28Lkyb6ZRlVxReIiqr9xCI8F
+	 dikg/byc493ndCFdc8X/lFxz6sJb5gQAzbWtIgjtsnNsQlvTYma+kmiD/H+fBGjODK
+	 GiYHsxrwfcxPwtp4aNfE+ENb/SD1us6+heSCJSkjj+vvSrBeBqPuxHi0BZDRkprVXR
+	 Wjd548mn6cXZ/v8+bicOCck3OJ68gJVcTGairKCIoYR6UTtjGmM8DKFACjF1etiz+9
+	 wlZk1QuNIG1hnaiLGlFIJWng=
+Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7EA4940E0218;
+	Wed,  2 Jul 2025 13:24:22 +0000 (UTC)
+Date: Wed, 2 Jul 2025 15:24:15 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>
 Cc: kernel test robot <lkp@intel.com>, Thomas Gleixner <tglx@linutronix.de>,
 	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -28,69 +56,56 @@ Cc: kernel test robot <lkp@intel.com>, Thomas Gleixner <tglx@linutronix.de>,
 	Jinjie Ruan <ruanjinjie@huawei.com>
 Subject: Re: [tip:master 19/19] include/linux/irq-entry-common.h:201:2:
  error: unexpected token
-Message-ID: <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
+Message-ID: <20250702132415.GFaGUy_6q0dZZI9AX3@fat_crate.local>
 References: <202507020528.N0LtekXt-lkp@intel.com>
  <20250702123240.GDaGUm6Le4KLL7o_91@fat_crate.local>
  <aGUtCveV8Ev17_FS@J2N7QTR9R3.cambridge.arm.com>
  <20250702130915.GEaGUve86iYnv337_Z@fat_crate.local>
+ <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250702130915.GEaGUve86iYnv337_Z@fat_crate.local>
+In-Reply-To: <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
 
-On Wed, Jul 02, 2025 at 03:09:15PM +0200, Borislav Petkov wrote:
-> Hey,
-> 
-> On Wed, Jul 02, 2025 at 01:58:50PM +0100, Mark Rutland wrote:
-> > Hi Boris,
-> > 
-> > [ adding Linux and Jinjie, since this is almost certainly due to the
-> >   irqentry split ]
+On Wed, Jul 02, 2025 at 02:16:15PM +0100, Mark Rutland wrote:
+> Sounds like a plan.
 
-I was wrong about the above, sorry for the noise!
+As we figured out on IRC:
 
-> It looks to me like that BUGVERBOSE stuff in tip/core/bugs and it warns
-> because core/entry starts using it when it gets merged to the rest of the tip
-> pile.
+https://lore.kernel.org/all/20250616-loongarch-fix-warn-cond-llvm-ias-v1-1-6c6d90bb4466@kernel.org/
 
-Yep; my bisect fingers:
+"clang's integrated assembler only supports concatenating strings with
+'.ascii'. There was discussion of allowing '.string' / '.asciz' but it
+was decided against [1] because it was undesirable to match the behavior
+of released binutils at the time, where"
 
-  b940c7b8ea92 ("bugs/s390: Use 'cond_str' in __EMIT_BUG()")
+and this seems to fix it here:
 
-| git bisect start
-| # bad: [104f02a7798f7e8aba25545f9d485035532260b2] Merge core/entry into tip/master
-| git bisect bad 104f02a7798f7e8aba25545f9d485035532260b2
-| # bad: [959770cda97b75bc831267fd939408ec58139cb5] Merge locking/core into tip/master
-| git bisect bad 959770cda97b75bc831267fd939408ec58139cb5
-| # good: [86731a2a651e58953fc949573895f2fa6d456841] Linux 6.16-rc3
-| git bisect good 86731a2a651e58953fc949573895f2fa6d456841
-| # good: [7abdafd2343ab199367c8243d6a5f06a9aa6976b] Merge tag 'drm-fixes-2025-06-28' of https://gitlab.freedesktop.org/drm/kernel
-| git bisect good 7abdafd2343ab199367c8243d6a5f06a9aa6976b
-| # good: [2d41eb1b4a70fd8f3ca7f08ed209ae5c8037af62] Merge x86/kconfig into tip/master
-| git bisect good 2d41eb1b4a70fd8f3ca7f08ed209ae5c8037af62
-| # good: [b7770ed895ab888d0626802a83939f6a30c35576] Merge x86/bugs into tip/master
-| git bisect good b7770ed895ab888d0626802a83939f6a30c35576
-| # bad: [244efb663e9ead81d3d258d81f38a38af02e09de] Merge core/bugs into tip/master
-| git bisect bad 244efb663e9ead81d3d258d81f38a38af02e09de
-| # bad: [e7e26cfad96c57c81156693cbf63032d899fe7c9] bugs/s390: Remove private WARN_ON() implementation
-| git bisect bad e7e26cfad96c57c81156693cbf63032d899fe7c9
-| # good: [66e94df0dd272b057899b8cdbca906ea1306d7a1] bugs/LoongArch: Pass in 'cond_str' to __BUG_ENTRY()
-| git bisect good 66e94df0dd272b057899b8cdbca906ea1306d7a1
-| # bad: [4218dedd47c79946bc9e6214f50c0d16096873ce] bugs/riscv: Pass in 'cond_str' to __BUG_FLAGS()
-| git bisect bad 4218dedd47c79946bc9e6214f50c0d16096873ce
-| # good: [7d9e9021ad7e9dac89b8262fbf95630ead7a787a] bugs/s390: Pass in 'cond_str' to __EMIT_BUG()
-| git bisect good 7d9e9021ad7e9dac89b8262fbf95630ead7a787a
-| # bad: [b940c7b8ea921fae7a99d305e819883d8311669e] bugs/s390: Use 'cond_str' in __EMIT_BUG()
-| git bisect bad b940c7b8ea921fae7a99d305e819883d8311669e
-| # first bad commit: [b940c7b8ea921fae7a99d305e819883d8311669e] bugs/s390: Use 'cond_str' in __EMIT_BUG()  
+---
+diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+index a185855ab158..46d9eb64bd18 100644
+--- a/arch/s390/include/asm/bug.h
++++ b/arch/s390/include/asm/bug.h
+@@ -9,7 +9,7 @@
+ #else
+ #define __BUGVERBOSE_LOCATION(file, line)			\
+ 		.pushsection .rodata.str, "aMS", @progbits, 1;	\
+-	10002:	.string file;					\
++	10002:	.ascii file;					\
+ 		.popsection;					\
+ 								\
+ 		.long 10002b - .;				\
 
-> Lemme show it to Peter.
 
-Sounds like a plan.
+I leave it to Mr. Z to sort out.
 
-Mark.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
