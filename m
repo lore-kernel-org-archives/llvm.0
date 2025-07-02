@@ -1,111 +1,90 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB343279DD0;
-	Wed,  2 Jul 2025 13:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD03E275B1D;
+	Wed,  2 Jul 2025 13:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462681; cv=none; b=h/CBYZ+7HlZOqnGsXtdavtWE7R1a3Fuu0OgCJcApDtJwA4ncmJoLUFSwGVSTY5gpzcuvOd8U+vdYj5HpaXcfKfocBljzEecuQVmc3kcaCC3EZ+qH4MKx9WoEICyfyQ+vtHMbFNDHQ+vAaM89jsjLDrbccAIAIR6hymYXoDYhRbs=
+	t=1751463440; cv=none; b=pGF20Xv/4M1DL2GLQGNIlyZh1WjrCZ/CWRgSSAcfYuoHPK45KSKuvjPuTFGADQ+4P9Xik1azsZxyKQoQanbrQvVGgyDI/UNXWAZ5DiBn6cJtsOQM0RFMM/dxjHBvCPud9lTIhKBK4KhI68eNUcX3DczzcvBxf2G3NcVn3I8ju3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462681; c=relaxed/simple;
-	bh=Niz+m0D1JqkH5aTX+Uv8Rcb69sVNw/rYIAm7h3Hs6Mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a6jP1A1+xVtMj9p1NRU4q0+rgGL7ubEKJXPuLS7yQC+UeQzw40Z6ErXCzWCkB9n0J2wD52AvLjtzvYth00zHeKOMMr2aQwXZUmGb6cbNB77z2HM1JYFVaFsYPKMqpJsmoMc0UKFTvgIa17hA4gRnSkXlhMs2oClZCOLKr0IP3VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=c1yDFmGs; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1751463440; c=relaxed/simple;
+	bh=s9gOzfm57ApnogRzuX4Eeuc2bvXSAcImho9OrvtTqg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kwuhaTW9QWMby6eWOMvWK/hsBfQd9mJqDNnQGzkQ3n+sz2b4PQMfr3IbOwNxdgilT9T1XwUoULgfEEYSm93pNKVqSnDjnCutqu+MBEir/4XvDS8w7rkyDfj8waDdkCoswhM8FQvgWNx0J/5Lh9J0Ej+CyQ3+uemoLQXKxS4Dlhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h59fEXM1; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="c1yDFmGs"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2799B40E021D;
-	Wed,  2 Jul 2025 13:24:36 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id mqwxr6HJcW_k; Wed,  2 Jul 2025 13:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1751462672; bh=5eqncYxutXgmX6kJnSEQAbsb0Ij4/aMXV0r2ck6ZhQY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c1yDFmGsnzJXOSIA3Db9yDsJRM5HUtD9DCDsqz5acK6Q8RDhrd1UzhHXK+DORXBNj
-	 n6JxT1jW+ME9Ghq9MoDQJEc9mLwCr5hQVmAeDDOvOmq5JcD2sJ1kguoEsqpHRe09io
-	 em2blc4SK67v5Gw2zdwksl03wmhO4gkihMBSww8oDGtwXca3+w7msc6QoA4Vs6XMD5
-	 UFh6uYYglxKDLT1VZh0y157pq9DRMkBuuEgtmHGO+1UD9droeuXl/yL5iDLUVTeJVa
-	 nsnmLAyWl0okfbi/cnteU+OvkyHhi9PMpPTmV+S13paU7+VBG9OtVfA6oaDY/8eHVH
-	 BJ6dHjn4GCe0A3gc1g2Z584oXOEbTe4hs34PR1Eygxd7c3feGbTrKBn6iH8ZMnP6nA
-	 XpOUJ4uB/4+K5jgKEI2IE/QFh/1MJWLbdYvlwfe0jr28Lkyb6ZRlVxReIiqr9xCI8F
-	 dikg/byc493ndCFdc8X/lFxz6sJb5gQAzbWtIgjtsnNsQlvTYma+kmiD/H+fBGjODK
-	 GiYHsxrwfcxPwtp4aNfE+ENb/SD1us6+heSCJSkjj+vvSrBeBqPuxHi0BZDRkprVXR
-	 Wjd548mn6cXZ/v8+bicOCck3OJ68gJVcTGairKCIoYR6UTtjGmM8DKFACjF1etiz+9
-	 wlZk1QuNIG1hnaiLGlFIJWng=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7EA4940E0218;
-	Wed,  2 Jul 2025 13:24:22 +0000 (UTC)
-Date: Wed, 2 Jul 2025 15:24:15 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: kernel test robot <lkp@intel.com>, Thomas Gleixner <tglx@linutronix.de>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Jinjie Ruan <ruanjinjie@huawei.com>
-Subject: Re: [tip:master 19/19] include/linux/irq-entry-common.h:201:2:
- error: unexpected token
-Message-ID: <20250702132415.GFaGUy_6q0dZZI9AX3@fat_crate.local>
-References: <202507020528.N0LtekXt-lkp@intel.com>
- <20250702123240.GDaGUm6Le4KLL7o_91@fat_crate.local>
- <aGUtCveV8Ev17_FS@J2N7QTR9R3.cambridge.arm.com>
- <20250702130915.GEaGUve86iYnv337_Z@fat_crate.local>
- <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h59fEXM1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751463438; x=1782999438;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s9gOzfm57ApnogRzuX4Eeuc2bvXSAcImho9OrvtTqg0=;
+  b=h59fEXM1F99MsVx2BGnbZAdmZ/VQYG/yPHUwTBBrOrc5iRh9DI1i8h8G
+   VTAl5qgZzpxe2L//004NQV6dGvwgc7rG8ThB29xtx+d1oFTMMzOyd3f4R
+   hXIU1TZGNGf3wVNL+o9Qz/bgt5PhFiryQokQp3HGI1n6ajBVFYdTMZp4e
+   drn+cuS6JwDhRwhMhij9R1ED6T/+uUtHg6sglF36csir7/S98JPVWTlTE
+   Owq8nGLmfDfucnuJbRx0ks7467w68ZBnkLZIWU1Yp0myNCJmjWXrL6e0U
+   7QE5yr42qoJNUWJ4YDNLGM3vLXZ3zuexl6xNlMbS00nj6nB2xUDe3isdF
+   Q==;
+X-CSE-ConnectionGUID: t/ZOqhrfQUioCEnTA55MzA==
+X-CSE-MsgGUID: HqOJJpllR4mQDTW4JVSKNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11482"; a="53852805"
+X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
+   d="scan'208";a="53852805"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 06:37:18 -0700
+X-CSE-ConnectionGUID: +2rgUT1TQkaBa3itLnyMXg==
+X-CSE-MsgGUID: RGsc5t8FTeGNkmyHI70u3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
+   d="scan'208";a="153852318"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 02 Jul 2025 06:37:17 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uWxeE-0000fj-1v;
+	Wed, 02 Jul 2025 13:37:14 +0000
+Date: Wed, 2 Jul 2025 21:36:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 6351/6656] Warning: security/landlock/fs.c:1107
+ function parameter 'mnt_dir' not described in 'collect_domain_accesses'
+Message-ID: <202507022103.mioAq8cY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aGUxH--v32Bv4T81@J2N7QTR9R3.cambridge.arm.com>
 
-On Wed, Jul 02, 2025 at 02:16:15PM +0100, Mark Rutland wrote:
-> Sounds like a plan.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   50c8770a42faf8b1c7abe93e7c114337f580a97d
+commit: 4a2e8dc023bce5931f3e6ef3efdb7c07ebb2cdbc [6351/6656] landlock: Fix handling of disconnected directories
+config: arm-randconfig-001-20250702 (https://download.01.org/0day-ci/archive/20250702/202507022103.mioAq8cY-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250702/202507022103.mioAq8cY-lkp@intel.com/reproduce)
 
-As we figured out on IRC:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507022103.mioAq8cY-lkp@intel.com/
 
-https://lore.kernel.org/all/20250616-loongarch-fix-warn-cond-llvm-ias-v1-1-6c6d90bb4466@kernel.org/
+All warnings (new ones prefixed by >>):
 
-"clang's integrated assembler only supports concatenating strings with
-'.ascii'. There was discussion of allowing '.string' / '.asciz' but it
-was decided against [1] because it was undesirable to match the behavior
-of released binutils at the time, where"
-
-and this seems to fix it here:
-
----
-diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
-index a185855ab158..46d9eb64bd18 100644
---- a/arch/s390/include/asm/bug.h
-+++ b/arch/s390/include/asm/bug.h
-@@ -9,7 +9,7 @@
- #else
- #define __BUGVERBOSE_LOCATION(file, line)			\
- 		.pushsection .rodata.str, "aMS", @progbits, 1;	\
--	10002:	.string file;					\
-+	10002:	.ascii file;					\
- 		.popsection;					\
- 								\
- 		.long 10002b - .;				\
-
-
-I leave it to Mr. Z to sort out.
+   Warning: security/landlock/fs.c:764 Invalid param: layer_mask_t (*const layer_masks_parent1)[LANDLOCK_NUM_ACCESS_FS]
+   Warning: security/landlock/fs.c:764 function parameter 'layer_mask_t (*const layer_masks_parent1' not described in 'is_access_to_paths_allowed'
+   Warning: security/landlock/fs.c:764 Invalid param: layer_mask_t (*const layer_masks_parent2)[LANDLOCK_NUM_ACCESS_FS]
+   Warning: security/landlock/fs.c:764 function parameter 'layer_mask_t (*const layer_masks_parent2' not described in 'is_access_to_paths_allowed'
+>> Warning: security/landlock/fs.c:1107 function parameter 'mnt_dir' not described in 'collect_domain_accesses'
+   Warning: security/landlock/fs.c:1107 Invalid param: layer_mask_t (*const layer_masks_dom)[LANDLOCK_NUM_ACCESS_FS]
+   Warning: security/landlock/fs.c:1107 function parameter 'layer_mask_t (*const layer_masks_dom' not described in 'collect_domain_accesses'
+>> Warning: security/landlock/fs.c:1107 Excess function parameter 'mnt_root' description in 'collect_domain_accesses'
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
