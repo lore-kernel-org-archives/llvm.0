@@ -1,83 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8C1239E90;
-	Wed,  2 Jul 2025 21:12:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88FF2FC3CB;
+	Wed,  2 Jul 2025 21:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751490768; cv=none; b=owHh+ooPEzA1BrgUct7MoLT3QSfK1v9k8+Ehfuw8V5OKnKTMyo4u+Xs1Rllh6aYMB35NJRXZRYyEArGuexpOXWMgZhzYDSUs0OvnOa9uODt2Tie7iWzPrdWFBGytjlRe55pJv5J9/F+BgMH/xGS5PKoJjfCh/CNwke4chm4ivRg=
+	t=1751492240; cv=none; b=E3SoOBHyueN1G2zIAR6RUmZXD9YYlrz+WsHOw79+pE1fYebTollbceP3QcabIoMoPNNnZMvZv21oit5WV3FnFFgJEipSHxWDOof/Trcz3j2eS8nCEylnyiUS25lfcSDWAB9aeGeYtWN9zF97A6BqjkU+jcu2ER9lZ/iz2WdjphU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751490768; c=relaxed/simple;
-	bh=PBybrmdPM7zrM8eU16XV6OIXKt3aecbUtvMDihivU7Q=;
+	s=arc-20240116; t=1751492240; c=relaxed/simple;
+	bh=9Duv1PhYYD4NNf63YbytF4YVXx7xBg8V0vJB/Fag92s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ewMB3nLa9td1R7871lhwaOE5MZkpl0m9wPKazVuVnditKC8Lt2GnjUk3+y77HlJPnc3mjC65gNEbj5mk7foWqvXvgX41kS3gXKpRbScRzla1AbTY8B7NFgLlzj6PxkNOoySdwzjfum07uriMVw4tWD8vBVNcPyx5iOpO3SwhjNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LIU0waRN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=pKdZw4uoOdeExX5IBKH0gHSOhOv5PezEhrkf7xz6szFPDt/FePLBpfMLFxWTAJapSMfgXbZaADeBEJ6gOF9MUi289B7T0Tl0GM/BHgaTt+s1sHFC9yMLh5r1xI7WjDj4JvQya5snR/ukhvZH5NxQw+4ZSWRekgaUNg5ETDg9sjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PFEVaWCJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LIU0waRN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA7CEC4CEE7;
-	Wed,  2 Jul 2025 21:12:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PFEVaWCJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9A2C4CEF1;
+	Wed,  2 Jul 2025 21:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751490767;
-	bh=PBybrmdPM7zrM8eU16XV6OIXKt3aecbUtvMDihivU7Q=;
+	s=k20201202; t=1751492240;
+	bh=9Duv1PhYYD4NNf63YbytF4YVXx7xBg8V0vJB/Fag92s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LIU0waRNiIeiPXwSighbehOZkYRBLyQQz/OS6cgrq0YpfDjcMuVKWmq2bSTD6tu66
-	 kA6tVC+6djnuqyN0Lj0rL334tlOcAB5r72iewYougOw/bzfu4Lx/nY304Jz7tSU9oj
-	 YaZfI4cthW4dLYj6wxLpbY/zI4K2yg/TiSQZboapPql9zxnqEGN1mz064iyzVaNgQ5
-	 YCS5r4KAwPVcGYmVSWrFN3Qqt7S9sHNgZfMNujLorofqE5HLZLHhNyEACZ2DGB4YlV
-	 w2gaNvdq1Snnwvrp7VO0eBCfOzN3B/iNQ8FhHlELE4LfNlkPoioqXa82k5CnizIR5a
-	 Gd7+4ywf7/owA==
-Date: Wed, 2 Jul 2025 14:12:43 -0700
+	b=PFEVaWCJtiEhz+YfbcLfnPX4c2/G/wM2vh/fLgk+WY1kyM3oxA+DU1voptgS8Ji7U
+	 skDQN4xY4O44dXpjmebx3u7omgfPB8IRViWhOC9qNvRpZw1jH6/nOunNeSFOIbgBQF
+	 lHkHkWaKZR/SklbWjg0/pYP7jRMb/Os+OZvir9YUoCpa8NggBc95ftEeMf738+vEr4
+	 2plGli22vnYSIJXcDBpMezN2Njrd/Z7NuVoG/fiIhxoyuGbnLjE5/1Purg3UG5wOmk
+	 XbKQSl2/qHUHIJkky3w8/HcseEA/aPeZvY1mI7KDA6gKZr/uVmmWtM61cbE9HrEEQi
+	 Hk7JwTgJVvBdw==
+Date: Wed, 2 Jul 2025 14:37:16 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Bill Wendling <morbo@google.com>
-Cc: Kees Cook <kees@kernel.org>, Jann Horn <jannh@google.com>,
-	Jannik =?iso-8859-1?Q?Gl=FCckert?= <jannik.glueckert@gmail.com>,
-	linux-hardening@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kunit/fortify: Add back "volatile" for sizeof() constants
-Message-ID: <20250702211243.GA327934@ax162>
-References: <20250628234034.work.800-kees@kernel.org>
- <CAG48ez0n1E0iuOxPe=jq4MuuP3w2wMSNixmfNmBbB89jyJBSbA@mail.gmail.com>
- <202507010926.1650356E@keescook>
- <CAGG=3QWVM9tTRoGws0X+Jq+m7Fte2JeQC+jUL=EZ5hqGzSY6hg@mail.gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [linux-next:master 3022/4739] drivers/gpu/drm/msm/msm.o:
+ warning: objtool: msm_dp_ctrl_on_stream(): unexpected end of section
+ .text.msm_dp_ctrl_on_stream
+Message-ID: <20250702213716.GA2103156@ax162>
+References: <202506251051.7rmus46j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGG=3QWVM9tTRoGws0X+Jq+m7Fte2JeQC+jUL=EZ5hqGzSY6hg@mail.gmail.com>
+In-Reply-To: <202506251051.7rmus46j-lkp@intel.com>
 
-On Tue, Jul 01, 2025 at 10:38:36AM -0700, Bill Wendling wrote:
-> On Tue, Jul 1, 2025 at 9:27 AM Kees Cook <kees@kernel.org> wrote:
-> > I have not had the time to minimize it, no.
+On Wed, Jun 25, 2025 at 10:16:55AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   2ae2aaafb21454f4781c30734959cf223ab486ef
+> commit: 8583a655f2c2bb442e2a2668680f419aa4c511d1 [3022/4739] drm/msm/dp: move/inline ctrl register functions
+> config: x86_64-buildonly-randconfig-005-20250625 (https://download.01.org/0day-ci/archive/20250625/202506251051.7rmus46j-lkp@intel.com/config)
+> compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250625/202506251051.7rmus46j-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202506251051.7rmus46j-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/gpu/drm/msm/msm.o: warning: objtool: msm_dp_ctrl_on_stream(): unexpected end of section .text.msm_dp_ctrl_on_stream
 
-I can try to extract this into a minimal reproducer next week if nothing
-major crops up over the long weekend.
+This appears to be a case similar to [1] and [2], where clang has been
+able to figure out that there will be a divide by zero in the else
+branch of msm_dp_ctrl_config_msa(). Should pixel_div be adjusted to 1 or
+should the divide by zero be avoided by returning early? I believe Bill
+is still looking into trying to make this less distructive in LLVM but
+it should still probably be fixed for LLVM 20, which is already
+released.
 
-> OPTIMIZER_HIDE_VAR doesn't have a 'volatile' on it. Could that be it?
-
-I tested
-
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 6f04a1d8c720..eab208a9a6f4 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -160,7 +160,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- #ifndef OPTIMIZER_HIDE_VAR
- /* Make the optimizer believe the variable can be manipulated arbitrarily. */
- #define OPTIMIZER_HIDE_VAR(var)						\
--	__asm__ ("" : "=r" (var) : "0" (var))
-+	__asm__ volatile("" : "=r" (var) : "0" (var))
- #endif
- 
- #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-
-but that did not resolve the error.
+[1]: https://lore.kernel.org/CAHk-=wiq=E0fwJLFpCc3wPY_9BPZF3dbdqGgVoOmK9Ykj5JEeg@mail.gmail.com/
+[2]: https://lore.kernel.org/20250609213505.GA1634981@ax162/
 
 Cheers,
 Nathan
