@@ -1,95 +1,84 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B801E2F7D0F;
-	Wed,  2 Jul 2025 18:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7FF2DE711;
+	Wed,  2 Jul 2025 21:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751481630; cv=none; b=upbBUEA3pxfCr4d7IM1Kdf3UKLdMkNatL0eNRj/6VLFmgTGyNZXzq3/kO8qyhvA4f6ZWxhCEK3K5S0id4HIl4m+nrV3XALelVVqR6zw05emJSEpdWCxT2nMt+3OBmTiKHO84iMoOA1EAB5t8I0/6N6fYMJFgyrioGijG3hlsCxI=
+	t=1751490179; cv=none; b=u2IpHpexXQB9T5bqOsIn1Ci975ZYHPI8ve0/F+5ZNOiPQAUC49Q8XW3cV93qeTcp4PG1+kEqDx0lEPpl0ZCdiq7mVAbBLIxlqkpJc3IPBhBK9G4kYj9cY1c7Bq+Aye7PnZ8T9NTzhpB1CR09WDpVpew95Qv/0UDIgveFTGRtxWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751481630; c=relaxed/simple;
-	bh=nNA05Dnb2hIoX8oeaBHSBxtAqwh5LCT5so8nd8HtANM=;
+	s=arc-20240116; t=1751490179; c=relaxed/simple;
+	bh=7VX+4FXtEgWxCwQZYFAkBrVoY00hVeIiCeXazH1tkiM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hoZRp/F77H2N+deKcmLx14tUMxUi6ANsL+NKz/vytALpxuBeoJu/a5MCPsgznag3gyYQw5Xmyj4xCh3MRRY7/dh4B8zhaaLK4Ysp5sA3JijxwkYLcmBXD9tE62hK9oJWsES90gjbFQ6W1o6A0xPDw2nyYRfOOL/IrxL8pTNGuTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=iWA6s49V; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=WzdlK4OYR4PVZxo4tr5/ote/VJEjs6B9h9DxMsGR1m0cVV5oBXdWuJEVQKjy+pCQc6Lv1Ul7Px9sZEaONlNuNgi5+IH/7pzIxO6eTZ7ku3lB8AN15Si6h7OhejJF2cA6cNlwN9fk/elIHdfbdNf8YH+mFAGVDzYzKd5ZCriYjLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDZOogq3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="iWA6s49V"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DF2A640E020E;
-	Wed,  2 Jul 2025 18:40:25 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id TQ8MgRyN4nh1; Wed,  2 Jul 2025 18:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1751481622; bh=yPUfwEn+TWpR+25qUC0YoUMBHySSl3XzmwBnngHtIWs=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDZOogq3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53507C4CEE7;
+	Wed,  2 Jul 2025 21:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751490178;
+	bh=7VX+4FXtEgWxCwQZYFAkBrVoY00hVeIiCeXazH1tkiM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iWA6s49Vzd/Zx7X6v0oO8hbgyc6KWZo1OpaGDQgzr0Ut2I7dJKNuMH/tEouMquEYJ
-	 kFqvSUAQaj0LkCIBTVVqcc7D7DeowrVjbCADIB1hsjVaT6JsdRO+Iholm54vuBaMAy
-	 Qt5u6o8rTFSqny30EfPOxqG7ASaNVjWZMVLoQlDBFb3mg7gxfAd4Mg8XIr0gwucWwj
-	 eGPfcRvdl9DL5xsCBYKs4un9yjuz6SMPgt/SFJQA3cka2xt+hBnm4dhnekmjwu3I28
-	 XiwEwdp1EdqgpPkPrzITZN81YOK+3nnfNTkFx/DmSVqss4tmMbcYBMZ+ZNcEb+ReHu
-	 YFr+zs2CaSBwaIdcxPTLbslhdoTEGcUf5plhKJMOxqr/YEgOR0iaGmTluNFqW/SgFB
-	 stbg2klLBzT4pEkd7Miw6A9Ffbws6qTbxk1Wwfrn/bDu3MfpAAU7UggUTHz5SAb+Qs
-	 AMZdQ3mG56tDzwQcYEzcbWi69UTSZPPBUeQWHDwPKAXIv5CpRDA1Tuh7eSRQja3TCc
-	 2ZuTOuY66muEJljPJWKWVfeyEgZla2S/ZN3oS+51NggRyyQWu6Gv02qRFNPYA/Jz8t
-	 hTfXyZ83xuz4pxEaXd3HQ/1D1HsepKk8wIV56A6g01sDzNTruqSoXgNByBp32rogVW
-	 dEKkysALvIMaCxlgtG+cJB68=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6261140E0217;
-	Wed,  2 Jul 2025 18:40:10 +0000 (UTC)
-Date: Wed, 2 Jul 2025 20:40:03 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	kernel test robot <lkp@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-	Jinjie Ruan <ruanjinjie@huawei.com>
-Subject: Re: [tip:master 19/19] include/linux/irq-entry-common.h:201:2:
- error: unexpected token
-Message-ID: <20250702184003.GIaGV9A4ysMZA8MF2w@fat_crate.local>
-References: <20250702132415.GFaGUy_6q0dZZI9AX3@fat_crate.local>
- <aGU_IY70Jt4bcbf2@J2N7QTR9R3.cambridge.arm.com>
- <20250702145425.GS1613376@noisy.programming.kicks-ass.net>
- <20250702150739.GT1613376@noisy.programming.kicks-ass.net>
- <20250702154137.71390C24-hca@linux.ibm.com>
- <20250702161012.GQ1613200@noisy.programming.kicks-ass.net>
- <20250702180136.GA3452438@ax162>
- <20250702181236.GGaGV2lAMxdCg_7MoX@fat_crate.local>
- <20250702182922.GHaGV6gl6axPokuBIr@fat_crate.local>
- <20250702183800.GA3958046@ax162>
+	b=TDZOogq3sGawwQjdu3BCQrROMBGB/mEWyEMpKiu8E1kCoB0XURRoso6B95kkxsRyd
+	 QMvGAQANDedQhoyrqToRyQCRHoh6sNdvHlKf9VbR5bdNxSTkherThEOEL5kP21wjn8
+	 dig5lWeLkg8+ZL0wwBqEZk00y0Mkk9lMmvb33YPIad7f1e0gD+93VGR18wUwOhg68N
+	 fEshwQTGEEC/9pZu8rnrAHecbrZobfK20CNEGdlgkPEMgVkHBsPNfSQChwqgnrI3t6
+	 7YsRDQ/F/G0HQZNRnm8ILwSCKJt5iP0OLT7Zf/JmdgD+BSa0C3VA+wyqVkfR2rFKQ6
+	 iwpq9lQxjnSiw==
+Date: Wed, 2 Jul 2025 14:02:54 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: kernel test robot <lkp@intel.com>, Nikunj A Dadhania <nikunj@amd.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [tip:x86/urgent 1/1] arch/x86/coco/sev/core.c:2170:30: warning:
+ variable 'dummy' set but not used
+Message-ID: <20250702210254.GA3996668@ax162>
+References: <202507010218.3O5Ge0Xt-lkp@intel.com>
+ <20250630192726.GBaGLlHl84xIopx4Pt@fat_crate.local>
+ <20250701150644.GA3563357@ax162>
+ <20250701152953.GCaGP-8bWPmRWI10Ec@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250702183800.GA3958046@ax162>
+In-Reply-To: <20250701152953.GCaGP-8bWPmRWI10Ec@fat_crate.local>
 
-On Wed, Jul 02, 2025 at 11:38:00AM -0700, Nathan Chancellor wrote:
-> On Wed, Jul 02, 2025 at 08:29:22PM +0200, Borislav Petkov wrote:
-> > Should be fixed now... famous last words. :-P
+On Tue, Jul 01, 2025 at 05:29:53PM +0200, Borislav Petkov wrote:
+> On Tue, Jul 01, 2025 at 08:06:44AM -0700, Nathan Chancellor wrote:
+> > Citation needed. This reproduces with Clang 15 (earliest supported on
+> > x86 now), Clang 19, and GCC 15 for me. Were you missing W=1?
 > 
-> Thanks for sticking with it :) I can confirm that fad009b77942
-> builds correctly for me.
+> Nope.
+> 
+> $ git checkout -b test 4a35d2b5254af89595fd90dae9ee0c8f990a148d
+> Switched to a new branch 'test'
+> $ make CC=clang-19 HOSTCC=clang-19 W=1 arch/x86/coco/sev/core.o
+> ...
+>   LINK    /mnt/kernel/kernel/linux/tools/objtool/objtool
+>   CC      arch/x86/coco/sev/core.o
+> $ clang-19 --version
+> Debian clang version 19.1.7 (1+b1)
+> Target: x86_64-pc-linux-gnu
+> Thread model: posix
+> InstalledDir: /usr/lib/llvm-19/bin
 
-No, thank you for double-checking us! Much appreciated. :-D
+Spooky, same SHA, build command, and configuration from this thread with
 
--- 
-Regards/Gruss,
-    Boris.
+  Debian clang version 19.1.7 (3+b1)
+  Target: x86_64-pc-linux-gnu
+  Thread model: posix
+  InstalledDir: /usr/lib/llvm-19/bin
 
-https://people.kernel.org/tglx/notes-about-netiquette
+from unstable Debian (since it is what I base on for my Debian
+development container) shows it for me... Can't imagine the two Debian
+patch levels would have caused anything here but it is probably not
+worth thinking too much more about since it is already resolved.
+
+Cheers,
+Nathan
