@@ -1,133 +1,199 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from flow-a8-smtp.messagingengine.com (flow-a8-smtp.messagingengine.com [103.168.172.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F73E22331E
-	for <llvm@lists.linux.dev>; Wed,  2 Jul 2025 06:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55E41F5619
+	for <llvm@lists.linux.dev>; Wed,  2 Jul 2025 07:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751439579; cv=none; b=OwJmQoU4EWco5/hegIh1a1DDhNL3Md9OSG5tMbRTTv2PFilOtyCZu1vgZWMz/HddUJ97V4mJ54G7xXZoG9Tx4/n8szDBfwSk2dPUIA8VAtv7yBp2HjNjr8DT/PgB5bFvlsaiquD5z1tVUHzu2MTbRSA32fl8X029PZ/Vbj80vJA=
+	t=1751442567; cv=none; b=UI7z/qr4tViCKi6els/PN7bWAFyPTOZvPKTo4J0FDOLHTk93uKImYxWdspLtRgIu6JsqsZsxvMSgqCu+/16RIGnnKb9efFY6ezr9sEKanbtkNaml/+p/uduVJlCW9Z1JaqOxgZxtwFQfTxRhmi1+PnWTDSbomTRwZR5tXzUalWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751439579; c=relaxed/simple;
-	bh=FuVYA1DBsUs8nHuz1QNLYEtINvz/XpKrOjhWBEaED8w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W+CcZd+junM0plEkhfILSztSiaZrqVqXS7aAUl/vITZEBOzdtKJX+sl6zuSL0KPb3Ku/pJ7XhvL8UjkAEbXMxCIEmlMy8QUkFrKVcOWmxRUxmsPeCHQR1R/4Uo32uI4xiOJTYPTY+kFMjfiI4c9WzxuQDiXc/YJJ22cOWsvH/44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XEqnz72S; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1751442567; c=relaxed/simple;
+	bh=52fXD1UFrrI0w0OJzwAfiZpuVvJgiEwwkm0t/gGTz9g=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=fzhHdlfDJ0/3WpJSwxhsfMIH/XmAROpK17MKzWiu5t0caRQFH5gDAJaUjfhwez68qqMyzUW4oKsTR4q/ChRwpXjKYWxG62hvMuLgn1vUcet9FvaC5fNuAwV4DWSAbCkclyIpUyftHF6QRI7dCu7ff//+J4M+Re5TkRWOiRxCbAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=N9b9A3sa; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=c1Jt68Gj; arc=none smtp.client-ip=103.168.172.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XEqnz72S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751439577;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9oktXAsQiQp5i7sShP6Y80qG42xcBA2kpSrzl21Pw1E=;
-	b=XEqnz72SmnVD4BbsnT0PEkgzUfohFQtMpE+5fgfAWcUG1SGNNsJd+UtVQ2yR1w/hyp+mBg
-	/8qTE8DY0phVQU52pJrywTr6/leCUyR7IuWk8uLPY4+O5bXGvEG5kZw1yX9+mGqhJ7wjfs
-	n5wBgxnf24dL6rYBc7FAqx/M4wnUkc4=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-178-eDn8OVu2NxWLf7aur0OHMw-1; Wed, 02 Jul 2025 02:59:36 -0400
-X-MC-Unique: eDn8OVu2NxWLf7aur0OHMw-1
-X-Mimecast-MFC-AGG-ID: eDn8OVu2NxWLf7aur0OHMw_1751439575
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-74ae13e99d6so5517154b3a.0
-        for <llvm@lists.linux.dev>; Tue, 01 Jul 2025 23:59:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751439575; x=1752044375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9oktXAsQiQp5i7sShP6Y80qG42xcBA2kpSrzl21Pw1E=;
-        b=WTD5ay+u8IZRDxjs+NHogMCAh6RYvlPskXzLmRZKxsxEyyWcOdKw4YLRAg8vy9gFMo
-         zRkAbmyrwrb4Mo1LgyJNRIKpUWkqGR0sDzKJ/xewK4cvzBUMQzvRy+xNoPrBxBEQSS0A
-         9+iaSxs19PlS6+Dzi2JZM0aQA1eajl0de1RCFxQTNKGrkOVy0vh7wF76BgqbKomJavrO
-         5fDm0LhKsrujS52Y3xBHB1rwJXeOaDo4zD3iXxKZUGM41aLgD972F11xoZwjUGsoHFUG
-         PwnRD/2UtnZIbqwPWbCJpplqSzAuyjS0mCSD3jS6sCMzpwbobvhn0MJcmCI1Xsf0pdlB
-         HUkg==
-X-Forwarded-Encrypted: i=1; AJvYcCUThz56b/6qczS/748OVAT9tfxEpbL9krO1ncTBSr62edKpjVgbekcq+Z/zft9qJoYJEE3F@lists.linux.dev
-X-Gm-Message-State: AOJu0YzdWs1mYwq//VHbxkCR245ejdaGUJk72Q9D/lEpms2liI0Up2D1
-	tx1zbVZVuHnuwaDzmO9Nn+o+0Sly3gYuCG71BiRlWtgN1HRO4/VSm9Us7LpY53ZhP8sy4ewdeWK
-	HN0zJ5SeDqVzeDQWltdz1rVwnmRonPj5VYPTf3tBGZCT6yQedYaoyNslm5S1GpWBNIzqToSC5Zl
-	PGWTUtzoIXbUZt5jmr81xRAKB8Sjz9gg==
-X-Gm-Gg: ASbGncswEftnvAeRVK0DGL5qFHD2O/3AOm4LYfWwnzQ8DdzPf6sS+xZuWrpDQfYEkud
-	klbMZawleQGt0A3scdtDW2DSb9aksmkgQ2tO+19zvj9LrLfwc5Sd/WJ8FCkgXqoecQBZ/Mf1fgN
-	/M
-X-Received: by 2002:a05:6a00:18a8:b0:746:25d1:b712 with SMTP id d2e1a72fcca58-74b520c7795mr2076713b3a.7.1751439574919;
-        Tue, 01 Jul 2025 23:59:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFs7ktrYM9fwj/23hUCctOhF9JiJbm2p5i56/LZ5EavRIaEm0fNI4z9W3n/6Xdc5OGC8rN13n7jqzjq8exUvhQ=
-X-Received: by 2002:a05:6a00:18a8:b0:746:25d1:b712 with SMTP id
- d2e1a72fcca58-74b520c7795mr2076679b3a.7.1751439574437; Tue, 01 Jul 2025
- 23:59:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="N9b9A3sa";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c1Jt68Gj"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id B727A13807E2;
+	Wed,  2 Jul 2025 03:49:24 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 02 Jul 2025 03:49:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1751442564;
+	 x=1751449764; bh=HkcGyddJZObF/m/oSGaP4HtMyuWT6VWhK/E9Vc1sQEA=; b=
+	N9b9A3sa12p4jIYcTTtOiB0fJ0wsGKfy62Fl4dtENastHkJU2hG6fpsEiZ1iXD6z
+	3yOpzNpOPgbxg+9dkbUBwId5jhgYaOsPll9SAH0D4QbacZK1RaI23/jsOHO8nWv4
+	W85Pam5mQYto0e0gQMwHa+SONvFL6BuVpWGrF+9DJmXBklhfZ1nZjW/3j8H4vyTn
+	DQw2QLd/FVDEUVbbqhDBDJN5ZvMUcZ6WzIZWdVZdNBe1PUpNJ6EDO7gmL99gvAIu
+	mO0fiDVIQjRjaDITD+rE/t6bqiLFEa3IvhXhyh+KMIlVLAFWpWFKGigIfHRmY9QG
+	5NkcvmbyDrtQGAYy+ZOHpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751442564; x=
+	1751449764; bh=HkcGyddJZObF/m/oSGaP4HtMyuWT6VWhK/E9Vc1sQEA=; b=c
+	1Jt68GjWbZML9JuLQCW/rQIte/lbDFEJSvoQjAkhJiSjrAwiXmEGUc15d2JhKukF
+	IfHdp0sqY6Foenms5E3DsxjT0RKaC/qm4e5tq0L7j65tS5Sf1x0Ibqj/+noOvRR5
+	vwpdBsAkqonqKTXpaoSfqF3LcSBMBthuDSoHiaPswScamr7ehS6rmH7NuDdty4FV
+	xt62WnTczuVEass31JF1p4V+B/QV3lCisqBCidmlEBwjOUOQWmBGybv2cHCYVvxu
+	vQROkSFunx6yAnGfaODZoiVylQRMnYN8bakl+bxfulCNwglFxfw5eb4yMKWiBDnp
+	uJ7NBgpjwlq++wsXnEUHg==
+X-ME-Sender: <xms:g-RkaMEa6MBwd3-fMG84Z5e7kKQUKa24E3d9ySmSZ_HhKvnc8E51aw>
+    <xme:g-RkaFXmvvo_8-81itGSPqOuGtEbD9T0Psjpuk6oWosXoW0RLczm0ScCMwEYbbXKT
+    1ecV5I6aOQ5j_M6xjU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieekgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedvgedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtoheplhhuihhsrdhgvghrhhhorhhsthesfhgruhdruggvpdhrtghpthhtoh
+    epshgufhesfhhomhhitghhvghvrdhmvgdprhgtphhtthhopegrlhgvgigvihdrshhtrghr
+    ohhvohhithhovhesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiihdrnhgrkh
+    hrhihikhhosehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiekjeesghhmrghi
+    lhdrtghomhdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtg
+    homhdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomhdprhgtphhtthhopehn
+    ihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpth
+    htohephhgrohhluhhosehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:g-RkaGLI9En4NBd4kMWHd3HHk-TP_YierI-59FvM0cRU2bZ3z0H_wQ>
+    <xmx:g-RkaOHJfGQNmXSQKSKMYu7EHbyYXBP8YuB34a6mLVN1fWtAXCwxVg>
+    <xmx:g-RkaCXfMVxzKGDf4nvdJaybvEO2fBlKmiEB4Y6rj_xsa91TH7aDIA>
+    <xmx:g-RkaBPduVywCegMlSMKk8cs5F43XViIGT4i_k5XfJ9hL9UUOSPehQ>
+    <xmx:hORkaIAWG71JpAOr7VOS9talMxESppyu33eBp9_w2ZpQlK5QYwBGPSz->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B868E700065; Wed,  2 Jul 2025 03:49:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250701011401.74851-9-jasowang@redhat.com> <202507021212.rhQmuuvi-lkp@intel.com>
-In-Reply-To: <202507021212.rhQmuuvi-lkp@intel.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Wed, 2 Jul 2025 14:59:20 +0800
-X-Gm-Features: Ac12FXxiZW_D57LUa3xpUl0ycvSaJSDuvuQ1l02cBG4QNnzDlhokAJCadnvHiDk
-Message-ID: <CACGkMEuu=qw4GMzM9x=WdYEaVBxQEvEq2mYKtQZiQFYocgmgWQ@mail.gmail.com>
-Subject: Re: [PATCH 8/9] vdpa: introduce map ops
-To: kernel test robot <lkp@intel.com>
-Cc: mst@redhat.com, xuanzhuo@linux.alibaba.com, eperezma@redhat.com, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	hch@infradead.org, xieyongji@bytedance.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Pqo90Pvfbzp0IG2s5euJNIEkmo1sXyK5-DT0Jm9J-ck_1751439575
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-ThreadId: T78580a8332607909
+Date: Wed, 02 Jul 2025 09:48:53 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Yonghong Song" <yonghong.song@linux.dev>,
+ "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ "Arnd Bergmann" <arnd@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Luis Gerhorst" <luis.gerhorst@fau.de>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Message-Id: <eb4b4473-c75e-4bfa-9a16-19a5256a558d@app.fastmail.com>
+In-Reply-To: <646c1c27-b940-4ece-aa0f-dbeea8aa7de3@linux.dev>
+References: <20250620113846.3950478-1-arnd@kernel.org>
+ <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
+ <361eb614-e145-49dc-aa32-12f313f61b96@linux.dev>
+ <CAEf4BzahSLGiW_F4LtG1tMAb0O1b6D-kO0AcrU2O+nLKVbkvZA@mail.gmail.com>
+ <646c1c27-b940-4ece-aa0f-dbeea8aa7de3@linux.dev>
+Subject: Re: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 2, 2025 at 1:21=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
-ote:
+On Tue, Jul 1, 2025, at 23:28, Yonghong Song wrote:
+> On 7/1/25 1:45 PM, Andrii Nakryiko wrote:
+>> On Tue, Jul 1, 2025 at 1:03=E2=80=AFPM Yonghong Song <yonghong.song@l=
+inux.dev> wrote:
+>>> On 6/23/25 2:32 PM, Alexei Starovoitov wrote:
+>>>> On Fri, Jun 20, 2025 at 4:38=E2=80=AFAM Arnd Bergmann <arnd@kernel.=
+org> wrote:
+>>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> I checked IR and found the following memory allocations which may co=
+ntribute
+>>> excessive stack usage:
+>>>
+>>> attr.coerce1, i32 noundef %uattr_size) local_unnamed_addr #0 align 1=
+6 !dbg !19800 {
+>>> entry:
+>>>     %zext_patch.i =3D alloca [2 x %struct.bpf_insn], align 16, !DIAs=
+signID !19854
+>>>     %rnd_hi32_patch.i =3D alloca [4 x %struct.bpf_insn], align 16, !=
+DIAssignID !19855
+>>>     %cnt.i =3D alloca i32, align 4, !DIAssignID !19856
+>>>     %patch.i766 =3D alloca [3 x %struct.bpf_insn], align 16, !DIAssi=
+gnID !19857
+>>>     %chk_and_sdiv.i =3D alloca [1 x %struct.bpf_insn], align 4, !DIA=
+ssignID !19858
+>>>     %chk_and_smod.i =3D alloca [1 x %struct.bpf_insn], align 4, !DIA=
+ssignID !19859
+>>>     %chk_and_div.i =3D alloca [4 x %struct.bpf_insn], align 16, !DIA=
+ssignID !19860
+>>>     %chk_and_mod.i =3D alloca [4 x %struct.bpf_insn], align 16, !DIA=
+ssignID !19861
+>>>     %chk_and_sdiv343.i =3D alloca [8 x %struct.bpf_insn], align 16, =
+!DIAssignID !19862
+>>>     %chk_and_smod472.i =3D alloca [9 x %struct.bpf_insn], align 16, =
+!DIAssignID !19863
+>>>     %desc.i =3D alloca %struct.bpf_jit_poke_descriptor, align 8, !DI=
+AssignID !19864
+>>>     %target_size.i =3D alloca i32, align 4, !DIAssignID !19865
+>>>     %patch.i =3D alloca [2 x %struct.bpf_insn], align 16, !DIAssignI=
+D !19866
+>>>     %patch355.i =3D alloca [2 x %struct.bpf_insn], align 16, !DIAssi=
+gnID !19867
+>>>     %ja.i =3D alloca %struct.bpf_insn, align 8, !DIAssignID !19868
+>>>     %ret_insn.i.i =3D alloca [8 x i32], align 16, !DIAssignID !19869
+>>>     %ret_prog.i.i =3D alloca [8 x i32], align 16, !DIAssignID !19870
+>>>     %fd.i =3D alloca i32, align 4, !DIAssignID !19871
+>>>     %log_true_size =3D alloca i32, align 4, !DIAssignID !19872
+>>> ...
+>>>
+>>> So yes, chk_and_{div,mod,sdiv,smod} consumes quite some stack and
+>>> can be coverted to runtime allocation but that is not enough for 1280
+>>> stack limit, we need to do more conversion from stack to memory
+>>> allocation. Will try to have uniform way to convert
+>>> 'alloca [<num> x %struct.bpf_insn]' to runtime allocation.
+>>>
+>> Do we need to go all the way to dynamic allocation? See env->insns_buf
+>> (which some parts of this function are already using for constructing
+>> instruction patch), let's just converge on that? It pre-allocates
+>> space for 32 instructions, should be sufficient for all the use cases,
+>> no?
 >
-> Hi Jason,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on mst-vhost/linux-next]
-> [also build test ERROR on linus/master v6.16-rc4 next-20250701]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Wang/virtio_=
-ring-constify-virtqueue-pointer-for-DMA-helpers/20250701-091746
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git lin=
-ux-next
-> patch link:    https://lore.kernel.org/r/20250701011401.74851-9-jasowang%=
-40redhat.com
-> patch subject: [PATCH 8/9] vdpa: introduce map ops
-> config: x86_64-randconfig-073-20250702 (https://download.01.org/0day-ci/a=
-rchive/20250702/202507021212.rhQmuuvi-lkp@intel.com/config)
-> compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146=
-a88f60492b520a36f8f8f3231e15f3cc6082)
-> rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250702/202507021212.rhQmuuvi-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202507021212.rhQmuuvi-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    drivers/vdpa/mlx5/net/mlx5_vnet.c:3405:21: error: no member named 'dma=
-_dev' in 'struct vdpa_device'
->     3405 |         return mvdev->vdev.dma_dev;
->          |                ~~~~~~~~~~~ ^
+> Make sense. This is much better. Thanks!
 
-It seems I forgot to convert mlx5 divers. Will do that in the next
-version (if we agree this is the right direction).
+I'm not sure if that actually helps on the old clang version, as far
+as I understood it in my initial analysis, the problem in the
 
-Thanks
+struct bpf_insn chk_and_sdiv[] =3D {
+                                /* [R,W]x sdiv 0 -> 0
+                                 * LLONG_MIN sdiv -1 -> LLONG_MIN
+                                 * INT_MIN sdiv -1 -> INT_MIN
+                                 */
+                                BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
+...
+}
 
+construct is not the chk_and_sdiv[] array itself but the
+struct initializer in the BPF_MOV64_REG() macro that leads to
+having two copies of the struct on the stack and then copying
+between them. In gcc or clang-18+, these all get folded
+into a single object on the stack.
+
+(Disclaimer: I don't understand anything about how clang
+actually works internally, the above is only speculation on
+my side, based on the assembler output)
+
+      Arnd
