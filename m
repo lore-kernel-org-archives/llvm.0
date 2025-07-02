@@ -1,84 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7FF2DE711;
-	Wed,  2 Jul 2025 21:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8C1239E90;
+	Wed,  2 Jul 2025 21:12:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751490179; cv=none; b=u2IpHpexXQB9T5bqOsIn1Ci975ZYHPI8ve0/F+5ZNOiPQAUC49Q8XW3cV93qeTcp4PG1+kEqDx0lEPpl0ZCdiq7mVAbBLIxlqkpJc3IPBhBK9G4kYj9cY1c7Bq+Aye7PnZ8T9NTzhpB1CR09WDpVpew95Qv/0UDIgveFTGRtxWQ=
+	t=1751490768; cv=none; b=owHh+ooPEzA1BrgUct7MoLT3QSfK1v9k8+Ehfuw8V5OKnKTMyo4u+Xs1Rllh6aYMB35NJRXZRYyEArGuexpOXWMgZhzYDSUs0OvnOa9uODt2Tie7iWzPrdWFBGytjlRe55pJv5J9/F+BgMH/xGS5PKoJjfCh/CNwke4chm4ivRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751490179; c=relaxed/simple;
-	bh=7VX+4FXtEgWxCwQZYFAkBrVoY00hVeIiCeXazH1tkiM=;
+	s=arc-20240116; t=1751490768; c=relaxed/simple;
+	bh=PBybrmdPM7zrM8eU16XV6OIXKt3aecbUtvMDihivU7Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WzdlK4OYR4PVZxo4tr5/ote/VJEjs6B9h9DxMsGR1m0cVV5oBXdWuJEVQKjy+pCQc6Lv1Ul7Px9sZEaONlNuNgi5+IH/7pzIxO6eTZ7ku3lB8AN15Si6h7OhejJF2cA6cNlwN9fk/elIHdfbdNf8YH+mFAGVDzYzKd5ZCriYjLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDZOogq3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ewMB3nLa9td1R7871lhwaOE5MZkpl0m9wPKazVuVnditKC8Lt2GnjUk3+y77HlJPnc3mjC65gNEbj5mk7foWqvXvgX41kS3gXKpRbScRzla1AbTY8B7NFgLlzj6PxkNOoySdwzjfum07uriMVw4tWD8vBVNcPyx5iOpO3SwhjNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LIU0waRN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDZOogq3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53507C4CEE7;
-	Wed,  2 Jul 2025 21:02:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LIU0waRN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA7CEC4CEE7;
+	Wed,  2 Jul 2025 21:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751490178;
-	bh=7VX+4FXtEgWxCwQZYFAkBrVoY00hVeIiCeXazH1tkiM=;
+	s=k20201202; t=1751490767;
+	bh=PBybrmdPM7zrM8eU16XV6OIXKt3aecbUtvMDihivU7Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TDZOogq3sGawwQjdu3BCQrROMBGB/mEWyEMpKiu8E1kCoB0XURRoso6B95kkxsRyd
-	 QMvGAQANDedQhoyrqToRyQCRHoh6sNdvHlKf9VbR5bdNxSTkherThEOEL5kP21wjn8
-	 dig5lWeLkg8+ZL0wwBqEZk00y0Mkk9lMmvb33YPIad7f1e0gD+93VGR18wUwOhg68N
-	 fEshwQTGEEC/9pZu8rnrAHecbrZobfK20CNEGdlgkPEMgVkHBsPNfSQChwqgnrI3t6
-	 7YsRDQ/F/G0HQZNRnm8ILwSCKJt5iP0OLT7Zf/JmdgD+BSa0C3VA+wyqVkfR2rFKQ6
-	 iwpq9lQxjnSiw==
-Date: Wed, 2 Jul 2025 14:02:54 -0700
+	b=LIU0waRNiIeiPXwSighbehOZkYRBLyQQz/OS6cgrq0YpfDjcMuVKWmq2bSTD6tu66
+	 kA6tVC+6djnuqyN0Lj0rL334tlOcAB5r72iewYougOw/bzfu4Lx/nY304Jz7tSU9oj
+	 YaZfI4cthW4dLYj6wxLpbY/zI4K2yg/TiSQZboapPql9zxnqEGN1mz064iyzVaNgQ5
+	 YCS5r4KAwPVcGYmVSWrFN3Qqt7S9sHNgZfMNujLorofqE5HLZLHhNyEACZ2DGB4YlV
+	 w2gaNvdq1Snnwvrp7VO0eBCfOzN3B/iNQ8FhHlELE4LfNlkPoioqXa82k5CnizIR5a
+	 Gd7+4ywf7/owA==
+Date: Wed, 2 Jul 2025 14:12:43 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: kernel test robot <lkp@intel.com>, Nikunj A Dadhania <nikunj@amd.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [tip:x86/urgent 1/1] arch/x86/coco/sev/core.c:2170:30: warning:
- variable 'dummy' set but not used
-Message-ID: <20250702210254.GA3996668@ax162>
-References: <202507010218.3O5Ge0Xt-lkp@intel.com>
- <20250630192726.GBaGLlHl84xIopx4Pt@fat_crate.local>
- <20250701150644.GA3563357@ax162>
- <20250701152953.GCaGP-8bWPmRWI10Ec@fat_crate.local>
+To: Bill Wendling <morbo@google.com>
+Cc: Kees Cook <kees@kernel.org>, Jann Horn <jannh@google.com>,
+	Jannik =?iso-8859-1?Q?Gl=FCckert?= <jannik.glueckert@gmail.com>,
+	linux-hardening@vger.kernel.org,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kunit/fortify: Add back "volatile" for sizeof() constants
+Message-ID: <20250702211243.GA327934@ax162>
+References: <20250628234034.work.800-kees@kernel.org>
+ <CAG48ez0n1E0iuOxPe=jq4MuuP3w2wMSNixmfNmBbB89jyJBSbA@mail.gmail.com>
+ <202507010926.1650356E@keescook>
+ <CAGG=3QWVM9tTRoGws0X+Jq+m7Fte2JeQC+jUL=EZ5hqGzSY6hg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250701152953.GCaGP-8bWPmRWI10Ec@fat_crate.local>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGG=3QWVM9tTRoGws0X+Jq+m7Fte2JeQC+jUL=EZ5hqGzSY6hg@mail.gmail.com>
 
-On Tue, Jul 01, 2025 at 05:29:53PM +0200, Borislav Petkov wrote:
-> On Tue, Jul 01, 2025 at 08:06:44AM -0700, Nathan Chancellor wrote:
-> > Citation needed. This reproduces with Clang 15 (earliest supported on
-> > x86 now), Clang 19, and GCC 15 for me. Were you missing W=1?
-> 
-> Nope.
-> 
-> $ git checkout -b test 4a35d2b5254af89595fd90dae9ee0c8f990a148d
-> Switched to a new branch 'test'
-> $ make CC=clang-19 HOSTCC=clang-19 W=1 arch/x86/coco/sev/core.o
-> ...
->   LINK    /mnt/kernel/kernel/linux/tools/objtool/objtool
->   CC      arch/x86/coco/sev/core.o
-> $ clang-19 --version
-> Debian clang version 19.1.7 (1+b1)
-> Target: x86_64-pc-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/lib/llvm-19/bin
+On Tue, Jul 01, 2025 at 10:38:36AM -0700, Bill Wendling wrote:
+> On Tue, Jul 1, 2025 at 9:27 AM Kees Cook <kees@kernel.org> wrote:
+> > I have not had the time to minimize it, no.
 
-Spooky, same SHA, build command, and configuration from this thread with
+I can try to extract this into a minimal reproducer next week if nothing
+major crops up over the long weekend.
 
-  Debian clang version 19.1.7 (3+b1)
-  Target: x86_64-pc-linux-gnu
-  Thread model: posix
-  InstalledDir: /usr/lib/llvm-19/bin
+> OPTIMIZER_HIDE_VAR doesn't have a 'volatile' on it. Could that be it?
 
-from unstable Debian (since it is what I base on for my Debian
-development container) shows it for me... Can't imagine the two Debian
-patch levels would have caused anything here but it is probably not
-worth thinking too much more about since it is already resolved.
+I tested
+
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 6f04a1d8c720..eab208a9a6f4 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -160,7 +160,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ #ifndef OPTIMIZER_HIDE_VAR
+ /* Make the optimizer believe the variable can be manipulated arbitrarily. */
+ #define OPTIMIZER_HIDE_VAR(var)						\
+-	__asm__ ("" : "=r" (var) : "0" (var))
++	__asm__ volatile("" : "=r" (var) : "0" (var))
+ #endif
+ 
+ #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+
+but that did not resolve the error.
 
 Cheers,
 Nathan
