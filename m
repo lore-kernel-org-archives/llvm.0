@@ -1,189 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AC42BE638;
-	Thu,  3 Jul 2025 20:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F1B2AF19;
+	Thu,  3 Jul 2025 21:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751575988; cv=none; b=U1U6VaCg3icqREGACyOx+kn6kN/z3s7ErAnIjkSiGcxkCiflF/x3Ueq/9f76umWqPAiIh+bBO8nyTEnv/WKOvWtCGECTCBnrdQB8lnHStbZ3zz5lrilmThAHKbRU7cazDId46PRQic0w/g2f1pJVWLghMcxba1DMqysbQ8ovIVY=
+	t=1751578131; cv=none; b=oJNUjWpHI5H3OsUODtQ4BZjorF0w4Dw2SfGwtD4B+TOVp+7QnMSkujFF3r3oWsv0ctLIuqMP9YwBiO/OTfyZxT05kXbEAUwj+4frTLBLg/kkvPP/wgSZpnWLZmLOR/6kdci7QQ20QQwuhbsL8DI3Ll3sbrY252BpcFROAzzlA8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751575988; c=relaxed/simple;
-	bh=wv9VvPS4fjBXWTrN6yNy3Rage0ckw/ZFAyGjZVqRIGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UZaC3JtrgXZh0+7N453ehtzUUsjvfF+2aQtm7z2oDQnV7YGC4AMvhpHxR7tnW0gKZsp7fpKEsF+toJRNcl1Dydc9XKlshlr3ae3l8XQ6pJZ7080Yd9oG8N2dWhqO32zyK5iYyBvOGgPR+GDi7/zHgkKm79Is3I4VFAB0FIh/QxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jahQg0zp; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751578131; c=relaxed/simple;
+	bh=7s1vdVb4Jp0AKYi0fqgt4BTeqCIZhFaWic60VjgU5TU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHB5t5XzldEmrSlyUzdCzN5OmzCJIS5T3FdIn0uTbHwi+calt1iaanfpHJVlhnmTyTUkSMxGXU2iMgy/Qy5MbLWP6SXR3RluJU2NlnbQdYsJ81Qk20k0HiPd7wRKxVfTqhD6oWX3YyniAANFhC7+0y3+JtkJO7Nat1kcEUsXAYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Nas0qbwd; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jahQg0zp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751575986; x=1783111986;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wv9VvPS4fjBXWTrN6yNy3Rage0ckw/ZFAyGjZVqRIGA=;
-  b=jahQg0zpV/3qFZEw5UyZVUolhdNWEIRIVddNev0u7jmTq8GCdqYW7pgv
-   LPurVSOJJtJsWoFAydBCWGklh+DWj0x0ok+/4VzYry9KR4k4PkTFEb283
-   s0+QkgNZCjWW6g9L/N7XoCtMRIJfp135cwaRtds43V579gvgSQ7OmsjU4
-   8rYdxuqYNI6B3OwanAcxldlHwNbDxrRXpJigvBEsYLYsFxFg4xBb+O5D4
-   Oid8klI4+JXXAMND7EG3bt41Ef9JoLhvpZUmZOYbFGj/Fnn4Ypv28IqB8
-   f4bMJAFfco7G50cFtzRefOmnsHC0KxjHhng8nTMEaJW/2soWk3gpuLSwM
-   Q==;
-X-CSE-ConnectionGUID: GXc6ONzqRn2dgDT4XA1mxg==
-X-CSE-MsgGUID: mWzdiaUvRDimiX5NcS3txA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53887164"
-X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
-   d="scan'208";a="53887164"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 13:53:04 -0700
-X-CSE-ConnectionGUID: FYtM/43DQySMhFGpELZY6Q==
-X-CSE-MsgGUID: wxyi8PfpSNqY8gAIYY1kSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
-   d="scan'208";a="185490077"
-Received: from igk-lkp-server01.igk.intel.com (HELO 030a839a1121) ([10.91.175.65])
-  by orviesa002.jf.intel.com with ESMTP; 03 Jul 2025 13:53:03 -0700
-Received: from kbuild by 030a839a1121 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXQvU-0000W5-3B;
-	Thu, 03 Jul 2025 20:53:01 +0000
-Date: Thu, 3 Jul 2025 22:52:19 +0200
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:kunit-kselftests-integration 39/47]
- lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_gettimeofday.c:47:13:
- error: variable '_rval' is uninitialized when used here
-Message-ID: <202507032200.vEEzeWmw-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Nas0qbwd"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=A83NKRGoevWzL/NcvqijuYTaZ0xDTVIZ9pvu0pc07Jk=; b=Na
+	s0qbwdL6B67K0wS+f7tbNlfneHHctNev/cTniYFhLMkwezOAunGEDatFtpLb4g+PG761JVmPtbDzC
+	rfpydruVCCrDayQ33cjSGl/o6BiA+VGkuX6ILQmO0/nR1G4/Ap/W5RcWrBNuhbzqrUhTrrpdbnIlt
+	YvmVDe7keP8zJfo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uXRTN-0008hX-2p; Thu, 03 Jul 2025 23:28:01 +0200
+Date: Thu, 3 Jul 2025 23:28:01 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Benno Lossin <lossin@kernel.org>,
+	Michal Rostecki <vadorovsky@protonmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+Message-ID: <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
+ <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
+ <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git kunit-kselftests-integration
-head:   1d66824abdccea956a455fc694f5967c0163ce31
-commit: fc4285b7a7e0aa6052ef3a59a2a3920f2ab86ed3 [39/47] vdso: hook up selftests to kunit
-config: powerpc-randconfig-2002-20250701 (https://download.01.org/0day-ci/archive/20250703/202507032200.vEEzeWmw-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250703/202507032200.vEEzeWmw-lkp@intel.com/reproduce)
+On Thu, Jul 03, 2025 at 02:55:30PM -0400, Tamir Duberstein wrote:
+> On Thu, Jul 3, 2025 at 11:08 AM Benno Lossin <lossin@kernel.org> wrote:
+> >
+> > On Thu Jul 3, 2025 at 3:55 PM CEST, Tamir Duberstein wrote:
+> > > On Thu, Jul 3, 2025 at 5:32 AM Benno Lossin <lossin@kernel.org> wrote:
+> > >> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
+> > >> > Introduce a `fmt!` macro which wraps all arguments in
+> > >> > `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
+> > >> > formatting of foreign types (like `core::ffi::CStr`) that do not
+> > >> > implement `core::fmt::Display` due to concerns around lossy conversions which
+> > >> > do not apply in the kernel.
+> > >> >
+> > >> > Replace all direct calls to `format_args!` with `fmt!`.
+> > >> >
+> > >> > Replace all implementations of `core::fmt::Display` with implementations
+> > >> > of `kernel::fmt::Display`.
+> > >> >
+> > >> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> > >> > Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General/topic/Custom.20formatting/with/516476467
+> > >> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > >> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> > >> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> > >> > ---
+> > >> >  drivers/block/rnull.rs       |  2 +-
+> > >> >  drivers/gpu/nova-core/gpu.rs |  4 +-
+> > >> >  rust/kernel/block/mq.rs      |  2 +-
+> > >> >  rust/kernel/device.rs        |  2 +-
+> > >> >  rust/kernel/fmt.rs           | 89 +++++++++++++++++++++++++++++++++++++++
+> > >> >  rust/kernel/kunit.rs         |  6 +--
+> > >> >  rust/kernel/lib.rs           |  1 +
+> > >> >  rust/kernel/prelude.rs       |  3 +-
+> > >> >  rust/kernel/print.rs         |  4 +-
+> > >> >  rust/kernel/seq_file.rs      |  2 +-
+> > >> >  rust/kernel/str.rs           | 22 ++++------
+> > >> >  rust/macros/fmt.rs           | 99 ++++++++++++++++++++++++++++++++++++++++++++
+> > >> >  rust/macros/lib.rs           | 19 +++++++++
+> > >> >  rust/macros/quote.rs         |  7 ++++
+> > >> >  scripts/rustdoc_test_gen.rs  |  2 +-
+> > >> >  15 files changed, 236 insertions(+), 28 deletions(-)
+> > >>
+> > >> This would be a lot easier to review if he proc-macro and the call
+> > >> replacement were different patches.
+> > >>
+> > >> Also the `kernel/fmt.rs` file should be a different commit.
+> > >
+> > > Can you help me understand why? The changes you ask to be separated
+> > > would all be in different files, so why would separate commits make it
+> > > easier to review?
+> >
+> > It takes less time to go through the entire patch and give a RB. I can
+> > take smaller time chunks and don't have to get back into the entire
+> > context of the patch when I don't have 30-60min available.
+> 
+> Ah, I see what you mean. Yeah, the requirement to RB the entire patch
+> does mean there's a benefit to smaller patches.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507032200.vEEzeWmw-lkp@intel.com/
+I often tell kernel newbies:
 
-All errors (new ones prefixed by >>):
+Lots of small patches which are obviously correct.
 
-   In file included from lib/vdso/tests/vdso_test_gettimeofday.c:4:
->> lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_gettimeofday.c:47:13: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
-      47 |         long ret = VDSO_CALL(gtod, 2, &tv, 0);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
-      59 |                 : "r" (_rval)                                           \
-         |                        ^~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_gettimeofday.c:47:13: note: variable '_rval' is declared here
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
-      47 |         register long _rval asm ("r3");                                 \
-         |         ^
-   1 error generated.
---
-   In file included from lib/vdso/tests/vdso_test_getcpu.c:4:
->> lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_getcpu.c:46:8: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
-      46 |         ret = VDSO_CALL(get_cpu, 3, &cpu, &node, 0);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
-      59 |                 : "r" (_rval)                                           \
-         |                        ^~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_getcpu.c:46:8: note: variable '_rval' is declared here
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
-      47 |         register long _rval asm ("r3");                                 \
-         |         ^
-   1 error generated.
---
-   In file included from lib/vdso/tests/vdso_test_abi.c:4:
->> lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:62:13: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
-      62 |         long ret = VDSO_CALL(vdso_gettimeofday, 2, &tv, 0);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
-      59 |                 : "r" (_rval)                                           \
-         |                        ^~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:62:13: note: variable '_rval' is declared here
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
-      47 |         register long _rval asm ("r3");                                 \
-         |         ^
-   In file included from lib/vdso/tests/vdso_test_abi.c:4:
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:87:13: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
-      87 |         long ret = VDSO_CALL(vdso_clock_gettime, 2, clk_id, &ts);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
-      59 |                 : "r" (_rval)                                           \
-         |                        ^~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:87:13: note: variable '_rval' is declared here
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
-      47 |         register long _rval asm ("r3");                                 \
-         |         ^
-   In file included from lib/vdso/tests/vdso_test_abi.c:4:
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:112:13: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
-     112 |         long ret = VDSO_CALL(vdso_time, 1, NULL);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
-      59 |                 : "r" (_rval)                                           \
-         |                        ^~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:112:13: note: variable '_rval' is declared here
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
-      47 |         register long _rval asm ("r3");                                 \
-         |         ^
-   In file included from lib/vdso/tests/vdso_test_abi.c:4:
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:139:13: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
-     139 |         long ret = VDSO_CALL(vdso_clock_getres, 2, clk_id, &ts);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
-      59 |                 : "r" (_rval)                                           \
-         |                        ^~~~~
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_abi.c:139:13: note: variable '_rval' is declared here
-   lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
-      47 |         register long _rval asm ("r3");                                 \
-         |         ^
-   4 errors generated.
+A small patch tends to be more obviously correct than a big patch. The
+commit message is more focused and helpful because it refers to a
+small chunk of code. Because the commit message is more focused, it
+can answer questions reviewers might ask, before they ask them. If i
+can spend 60 seconds looking at a patch and decide it looks correct,
+i'm more likely to actually look at it and give a reviewed by. If i
+need to find 10 minutes, it is going to get put off for a later
+time. Many reviewers just have a few minutes here, a few there,
+slotted into time between other tasks, while drinking coffee, etc.
 
-
-vim +/_rval +47 lib/vdso/tests/../../../tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-
-2650554da3f895 tools/testing/selftests/vDSO/vdso_test.c              Greg Hackmann            2017-11-01  23  
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  24  int main(int argc, char **argv)
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  25  {
-48f044a784d678 tools/testing/selftests/vDSO/vdso_test_gettimeofday.c Tiezhu Yang              2024-04-28  26  	const char *version = versions[VDSO_VERSION];
-48f044a784d678 tools/testing/selftests/vDSO/vdso_test_gettimeofday.c Tiezhu Yang              2024-04-28  27  	const char **name = (const char **)&names[VDSO_NAMES];
-48f044a784d678 tools/testing/selftests/vDSO/vdso_test_gettimeofday.c Tiezhu Yang              2024-04-28  28  
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  29  	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  30  	if (!sysinfo_ehdr) {
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  31  		printf("AT_SYSINFO_EHDR is not present!\n");
-d2d49495b5c0df tools/testing/selftests/vDSO/vdso_test.c              Shuah Khan (Samsung OSG  2018-06-22  32) 		return KSFT_SKIP;
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  33  	}
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  34  
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  35  	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  36  
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  37  	/* Find gettimeofday. */
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  38  	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
-48f044a784d678 tools/testing/selftests/vDSO/vdso_test_gettimeofday.c Tiezhu Yang              2024-04-28  39  	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  40  
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  41  	if (!gtod) {
-48f044a784d678 tools/testing/selftests/vDSO/vdso_test_gettimeofday.c Tiezhu Yang              2024-04-28  42  		printf("Could not find %s\n", name[0]);
-d2d49495b5c0df tools/testing/selftests/vDSO/vdso_test.c              Shuah Khan (Samsung OSG  2018-06-22  43) 		return KSFT_SKIP;
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  44  	}
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  45  
-4ebbefd6b93c34 Documentation/vDSO/vdso_test.c                        Andy Lutomirski          2014-06-12  46  	struct timeval tv;
-6eda706a535c3d tools/testing/selftests/vDSO/vdso_test_gettimeofday.c Christophe Leroy         2024-08-30 @47  	long ret = VDSO_CALL(gtod, 2, &tv, 0);
-
-:::::: The code at line 47 was first introduced by commit
-:::::: 6eda706a535c3d0119eaefaad5fc119609639ed2 selftests: vDSO: fix the way vDSO functions are called for powerpc
-
-:::::: TO: Christophe Leroy <christophe.leroy@csgroup.eu>
-:::::: CC: Jason A. Donenfeld <Jason@zx2c4.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Andrew
