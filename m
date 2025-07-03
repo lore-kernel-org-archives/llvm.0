@@ -1,387 +1,602 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68C81E8338;
-	Thu,  3 Jul 2025 09:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399622EE280
+	for <llvm@lists.linux.dev>; Thu,  3 Jul 2025 12:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751535141; cv=none; b=QdlQs2Ws0Wmug/kDdgXRrlW23jFPjrbgrSFRLi6TjUAB5f9cluP3YatoBEpFiwm5ltFD+x5WpTMQv797cEUxnZvPxxmogeyXj81BR1lPMhZvc1xLEZvmBoR9J7TpSzB9xYuE9fAcnZVUYV4695diHRHQnqikufFs/S9O8GToc4M=
+	t=1751545091; cv=none; b=gw6paQBwCKN9GejWYvYE4VRJb8umnCzfykUBUyt3mdWt81CxZWqNYHc2gt7AVnFjQgXcceX2O8JIL9pBBpoYE0HpMYllNHunV8oJiWcL1HRPuw3SuUEKKig84KmB6UAh3xVf/rrrzGUYU6aJ6f4EhlniUoLcpmYdaqLNUG5bYZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751535141; c=relaxed/simple;
-	bh=WtO1DgUxyix8oDOSgjZfMtxXQjswM3LI+TSs1gDywZg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=l8GvH7Pdrtd4fJCoduqVchA49aHq03u5vBVzfqc5JkCBPapnlo+3Vk7ey0PBwRn1C9EUJ8cLDzZcp4QisnjwGKCJPpV3+EV1qQOZqq6b16ew+cYwtJ1c2FJadMiNicbETT8LWrda9mDjgF5tbdMC/XnqNf6I7WsBQNwFMw7n+pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdPt2XDh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751545091; c=relaxed/simple;
+	bh=lXSKe+i325ew63X/w+OnlsG1H4TdiVDzqF3alSTf8tQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=D6geac9/8/CwzIgrOD6Eh1WG9ssug/R43PWWVMUo/6HIQg7ciHYj/9aOUIO+0mDDYgClJ7CxNIfDI8F7xkg/v3NTRm+udm0Sh7To5RbkvLzII+nspbyq+TOhCWuj7m1eMJVg+mmUZJ95DlR4V4j2/jebSjCtjGHcPlLrQJYFZ6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BFnNezOK; arc=none smtp.client-ip=209.85.210.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdPt2XDh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD0DC4CEE3;
-	Thu,  3 Jul 2025 09:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751535139;
-	bh=WtO1DgUxyix8oDOSgjZfMtxXQjswM3LI+TSs1gDywZg=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=PdPt2XDhT93ntXTcvbBpnFi+Vp43qWrOTV8apH25X/OTbnhL7q3cDHTb+eEs1S6FN
-	 byoaUU84MkJoHRtB6frTgxrNxHJ07pzp7FkepC9If0jj/Woeiz8HWUFkxHC7CeQlR5
-	 T/5Iea4mPe/5Xf5+6YfdT7aRrUFon4wI1LeIJqR2/5nJvKSN9y/8Z+w5av1BnrjGCj
-	 inULlHQYluATDD3nWJfOJsLTnNmVB5K0jK8xLINhcQhHyS96/X5NCTLbc17DFX3OjI
-	 ay5ZRmAGoY67ktEqCeRBECvTPRbAc9Qcj4ukGwQrIHoHeiKjak6hbo3yOo4Cm8P9Gt
-	 LyMUdqnzaTcPw==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BFnNezOK"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-748f5a4a423so3402373b3a.1
+        for <llvm@lists.linux.dev>; Thu, 03 Jul 2025 05:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751545088; x=1752149888; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M1fhPP3SCpoWpscOG0d80WcLXXJcdcnXVq/IK4nq3qo=;
+        b=BFnNezOKiSem6dArtvEeTUwb55iJZMK46LOh2wLOdH1GrwmG3GyT1vDIHv3AIG15Uz
+         FmoUS9S9CiA/xHfkT5N6pOULY6wD5MT3eHnICTKn6FrFDIQyXaGXC6aFhM7vYHF1XmTt
+         nz8CK5MW+fmG+bNLRaGTfSk8zrIbXr8uRe+E/jRcpXvXIPyR3WcUmxzLOHVusVTz1tl8
+         9AWjLGcj54ULeFBAwWO4OJW37q0zJchfd+NQJljNSvYr8J/vUM/eOZ2odwc9Quk54eEy
+         g4SvVNnF6R2KgtmuWDhAiVdU8gBEJB5YOeYSzvXfHzlIBEmM+Xl3KTVXjUqPcX2gc/TP
+         SGFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751545088; x=1752149888;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M1fhPP3SCpoWpscOG0d80WcLXXJcdcnXVq/IK4nq3qo=;
+        b=G8Spapo43wT5eQWoroLr4JEf6SzlWfvKIWY8Xzw28ZX1K4+5EYgnXEtvi7DOPFvnYI
+         n7Ti7oazk8p3D5lenpNMOddmhjjeZD5YsQdwVRylbXPSc6VcsuHZAusrf/15GBh9iFct
+         38G4lP4jLipNNhcrhoRdFjKXK8zEgIAHZuUJZqm0q3Z4YNGl1Nkixg+xqxvSGXYTZCai
+         Ia17LZ02+R5rbpcEn4ADb2RYgx+qnXIUnysPKaeFQW/RxHDn3FTssEz7Hccmsy3gJB+i
+         rPRGFWyhgV+9aWkH0+vfuJ8iXqKkatIU68yfVOS07zyb9C0fY1uVutMVsMUU3XgkcMtb
+         XYmA==
+X-Forwarded-Encrypted: i=1; AJvYcCWR8C175lRIu5jSTp6o8TEzz3y7qLiuhwSY7MNjFBKhdausLP5SKFNLeFKHFkEFIuwu2ktO@lists.linux.dev
+X-Gm-Message-State: AOJu0YycckXgJ7GbWXVPE4jzLlkw4J232iIYY69FpU370h8OG9BSGPfc
+	YB1YMPJp4QTLsIC6yD+K+Ws9k7ckYO0VeNf8q4VdqM8grjyNrY6qMXSC
+X-Gm-Gg: ASbGncuZLBufUKN2g5XBE8VKhg3R/wCtDLpkSyZ+Vi902ycdwPnkUoeesGA+svYZndq
+	rMbt9rGH/zszQLPA7/LMAYZapaUGD/xSayO+27XyZdkF2LVcrv2/yG6hoxZm2vP4rBDN9iXJrcS
+	LuHPLOVqZd/c1mOT7EHgd7TOmzWXmbh9KiziDHtc2s44VfC+4bwlPQ2fhduneg3sr7t54DANsmj
+	Py9zTn616DKEZt79sJHwBA6cjFErIkwmFXMZ3fwaSuIV0UoBtxMC0SXf2or4H4+rknF5cfOZVYN
+	Vg+NfRYUDNA04zIKxKoCWuYJaaPfDjGHNuEM/RIBMqvCYNxS6jqt86q69zLuCDhSs70m86rj1rK
+	/rFQ=
+X-Google-Smtp-Source: AGHT+IFoq933597yqrzzjO/9I2OqyknJuG2sjlhUH2kPS6ZdIm+TDvJxSlTTtcaA9We7oo8H3FBJ9A==
+X-Received: by 2002:a05:6a20:431b:b0:21a:d1fe:9e82 with SMTP id adf61e73a8af0-222d7ef8138mr13036914637.30.1751545088163;
+        Thu, 03 Jul 2025 05:18:08 -0700 (PDT)
+Received: from localhost.localdomain ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af5575895sm18591081b3a.94.2025.07.03.05.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 05:18:07 -0700 (PDT)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: alexei.starovoitov@gmail.com,
+	rostedt@goodmis.org,
+	jolsa@kernel.org
+Cc: bpf@vger.kernel.org,
+	Menglong Dong <dongml2@chinatelecom.cn>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v2 16/18] selftests/bpf: move get_ksyms and get_addrs to trace_helpers.c
+Date: Thu,  3 Jul 2025 20:15:19 +0800
+Message-Id: <20250703121521.1874196-17-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250703121521.1874196-1-dongml2@chinatelecom.cn>
+References: <20250703121521.1874196-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 03 Jul 2025 11:32:05 +0200
-Message-Id: <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
- <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Tamir Duberstein" <tamird@gmail.com>, "Michal Rostecki"
- <vadorovsky@protonmail.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
- Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary
- Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Danilo Krummrich"
- <dakr@kernel.org>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Maxime Ripard" <mripard@kernel.org>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "FUJITA
- Tomonori" <fujita.tomonori@gmail.com>, "Rob Herring" <robh@kernel.org>,
- "Saravana Kannan" <saravanak@google.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Will Deacon"
- <will@kernel.org>, "Waiman Long" <longman@redhat.com>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt"
- <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>, "Heiner Kallweit"
- <hkallweit1@gmail.com>, "Russell King" <linux@armlinux.org.uk>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Bjorn
- Helgaas" <bhelgaas@google.com>, "Arnd Bergmann" <arnd@arndb.de>, "Jens
- Axboe" <axboe@kernel.dk>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, "Dave Ertman" <david.m.ertman@intel.com>, "Ira
- Weiny" <ira.weiny@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Breno
- Leitao" <leitao@debian.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
-In-Reply-To: <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
-> Introduce a `fmt!` macro which wraps all arguments in
-> `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
-> formatting of foreign types (like `core::ffi::CStr`) that do not
-> implement `core::fmt::Display` due to concerns around lossy conversions w=
-hich
-> do not apply in the kernel.
->
-> Replace all direct calls to `format_args!` with `fmt!`.
->
-> Replace all implementations of `core::fmt::Display` with implementations
-> of `kernel::fmt::Display`.
->
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General=
-/topic/Custom.20formatting/with/516476467
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
->  drivers/block/rnull.rs       |  2 +-
->  drivers/gpu/nova-core/gpu.rs |  4 +-
->  rust/kernel/block/mq.rs      |  2 +-
->  rust/kernel/device.rs        |  2 +-
->  rust/kernel/fmt.rs           | 89 ++++++++++++++++++++++++++++++++++++++=
-+
->  rust/kernel/kunit.rs         |  6 +--
->  rust/kernel/lib.rs           |  1 +
->  rust/kernel/prelude.rs       |  3 +-
->  rust/kernel/print.rs         |  4 +-
->  rust/kernel/seq_file.rs      |  2 +-
->  rust/kernel/str.rs           | 22 ++++------
->  rust/macros/fmt.rs           | 99 ++++++++++++++++++++++++++++++++++++++=
-++++++
->  rust/macros/lib.rs           | 19 +++++++++
->  rust/macros/quote.rs         |  7 ++++
->  scripts/rustdoc_test_gen.rs  |  2 +-
->  15 files changed, 236 insertions(+), 28 deletions(-)
+We need to get all the kernel function that can be traced sometimes, so we
+move the get_syms() and get_addrs() in kprobe_multi_test.c to
+trace_helpers.c and rename it to bpf_get_ksyms() and bpf_get_addrs().
 
-This would be a lot easier to review if he proc-macro and the call
-replacement were different patches.
-
-Also the `kernel/fmt.rs` file should be a different commit.
-
-> diff --git a/rust/kernel/fmt.rs b/rust/kernel/fmt.rs
-> new file mode 100644
-> index 000000000000..348d16987de6
-> --- /dev/null
-> +++ b/rust/kernel/fmt.rs
-> @@ -0,0 +1,89 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Formatting utilities.
-> +
-> +use core::fmt;
-
-I think we should pub export all types that we are still using from
-`core::fmt`. For example `Result`, `Formatter`, `Debug` etc.
-
-That way I can still use the same pattern of importing `fmt` and then
-writing
-
-    impl fmt::Display for MyType {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {}
-    }
-
-> +
-> +/// Internal adapter used to route allow implementations of formatting t=
-raits for foreign types.
-> +///
-> +/// It is inserted automatically by the [`fmt!`] macro and is not meant =
-to be used directly.
-> +///
-> +/// [`fmt!`]: crate::prelude::fmt!
-> +#[doc(hidden)]
-> +pub struct Adapter<T>(pub T);
-> +
-> +macro_rules! impl_fmt_adapter_forward {
-> +    ($($trait:ident),* $(,)?) =3D> {
-> +        $(
-> +            impl<T: fmt::$trait> fmt::$trait for Adapter<T> {
-> +                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result=
- {
-> +                    let Self(t) =3D self;
-> +                    fmt::$trait::fmt(t, f)
-> +                }
-> +            }
-> +        )*
-> +    };
-> +}
-> +
-> +impl_fmt_adapter_forward!(Debug, LowerHex, UpperHex, Octal, Binary, Poin=
-ter, LowerExp, UpperExp);
-> +
-> +/// A copy of [`fmt::Display`] that allows us to implement it for foreig=
-n types.
-> +///
-> +/// Types should implement this trait rather than [`fmt::Display`]. Toge=
-ther with the [`Adapter`]
-> +/// type and [`fmt!`] macro, it allows for formatting foreign types (e.g=
-. types from core) which do
-> +/// not implement [`fmt::Display`] directly.
-> +///
-> +/// [`fmt!`]: crate::prelude::fmt!
-> +pub trait Display {
-> +    /// Same as [`fmt::Display::fmt`].
-> +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
-> +}
-> +
-> +impl<T: ?Sized + Display> Display for &T {
-> +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-> +        Display::fmt(*self, f)
-> +    }
-> +}
-> +
-> +impl<T: ?Sized + Display> fmt::Display for Adapter<&T> {
-> +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-> +        let Self(t) =3D self;
-> +        Display::fmt(t, f)
-
-Why not `Display::fmt(&self.0, f)`?
-
-> +    }
-> +}
-> +
-> +macro_rules! impl_display_forward {
-> +    ($(
-> +        $( { $($generics:tt)* } )? $ty:ty $( { where $($where:tt)* } )?
-> +    ),* $(,)?) =3D> {
-> +        $(
-> +            impl$($($generics)*)? Display for $ty $(where $($where)*)? {
-> +                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result=
- {
-> +                    fmt::Display::fmt(self, f)
-> +                }
-> +            }
-> +        )*
-> +    };
-> +}
-> +
-> +impl_display_forward!(
-> +    bool,
-> +    char,
-> +    core::panic::PanicInfo<'_>,
-> +    fmt::Arguments<'_>,
-> +    i128,
-> +    i16,
-> +    i32,
-> +    i64,
-> +    i8,
-> +    isize,
-> +    str,
-> +    u128,
-> +    u16,
-> +    u32,
-> +    u64,
-> +    u8,
-> +    usize,
-> +    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>: fmt::D=
-isplay},
-> +    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::UniqueAr=
-c<T>: fmt::Display},
-> +);
-
-> diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
-> new file mode 100644
-> index 000000000000..edc37c220a89
-> --- /dev/null
-> +++ b/rust/macros/fmt.rs
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +use proc_macro::{Ident, TokenStream, TokenTree};
-> +use std::collections::BTreeSet;
-> +
-> +/// Please see [`crate::fmt`] for documentation.
-> +pub(crate) fn fmt(input: TokenStream) -> TokenStream {
-> +    let mut input =3D input.into_iter();
-> +
-> +    let first_opt =3D input.next();
-> +    let first_owned_str;
-> +    let mut names =3D BTreeSet::new();
-> +    let first_lit =3D {
-> +        let Some((mut first_str, first_lit)) =3D (match first_opt.as_ref=
-() {
-> +            Some(TokenTree::Literal(first_lit)) =3D> {
-> +                first_owned_str =3D first_lit.to_string();
-> +                Some(first_owned_str.as_str()).and_then(|first| {
-> +                    let first =3D first.strip_prefix('"')?;
-> +                    let first =3D first.strip_suffix('"')?;
-> +                    Some((first, first_lit))
-
-You're only using first_lit to get the span later, so why not just get
-the span directly here?
-
-> +                })
-> +            }
-> +            _ =3D> None,
-> +        }) else {
-> +            return first_opt.into_iter().chain(input).collect();
-> +        };
-> +        while let Some((_, rest)) =3D first_str.split_once('{') {
-
-Let's put a comment above this loop mentioning [1] and saying that it
-parses the identifiers from the format arguments.
-
-[1]: https://doc.rust-lang.org/std/fmt/index.html#syntax
-
-> +            first_str =3D rest;
-> +            if let Some(rest) =3D first_str.strip_prefix('{') {
-> +                first_str =3D rest;
-> +                continue;
-> +            }
-> +            if let Some((name, rest)) =3D first_str.split_once('}') {
-> +                first_str =3D rest;
-> +                let name =3D name.split_once(':').map_or(name, |(name, _=
-)| name);
-> +                if !name.is_empty() && !name.chars().all(|c| c.is_ascii_=
-digit()) {
-> +                    names.insert(name);
-> +                }
-> +            }
-> +        }
-> +        first_lit
-> +    };
-> +
-> +    let first_span =3D first_lit.span();
-> +    let adapter =3D quote_spanned! {
-> +        first_span =3D> ::kernel::fmt::Adapter
-> +    };
-
-I think we should follow the formatting convention from the quote crate:
-
-    let adapter =3D quote_spanned!(first_span=3D> ::kernel::fmt::Adapter);
-
-> +
-> +    let mut args =3D TokenStream::from_iter(first_opt);
-> +    {
-> +        let mut flush =3D |args: &mut TokenStream, current: &mut TokenSt=
-ream| {
-
-You don't need to pass `args` as a closure argument, since you always
-call it with `&mut args`.
-
-> +            let current =3D std::mem::take(current);
-> +            if !current.is_empty() {
-> +                let (lhs, rhs) =3D (|| {
-> +                    let mut current =3D current.into_iter();
-> +                    let mut acc =3D TokenStream::new();
-> +                    while let Some(tt) =3D current.next() {
-> +                        // Split on `=3D` only once to handle cases like=
- `a =3D b =3D c`.
-> +                        if matches!(&tt, TokenTree::Punct(p) if p.as_cha=
-r() =3D=3D '=3D') {
-> +                            names.remove(acc.to_string().as_str());
-> +                            // Include the `=3D` itself to keep the hand=
-ling below uniform.
-> +                            acc.extend([tt]);
-> +                            return (Some(acc), current.collect::<TokenSt=
-ream>());
-> +                        }
-> +                        acc.extend([tt]);
-> +                    }
-> +                    (None, acc)
-> +                })();
-> +                args.extend(quote_spanned! {
-> +                    first_span =3D> #lhs #adapter(&#rhs)
-> +                });
-> +            }
-> +        };
-> +
-> +        let mut current =3D TokenStream::new();
-
-Define this before the closure, then you don't need to pass it as an
-argument.
-
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
-Cheers,
-Benno
+ .../bpf/prog_tests/kprobe_multi_test.c        | 220 +-----------------
+ tools/testing/selftests/bpf/trace_helpers.c   | 214 +++++++++++++++++
+ tools/testing/selftests/bpf/trace_helpers.h   |   3 +
+ 3 files changed, 220 insertions(+), 217 deletions(-)
 
-> +        for tt in input {
-> +            match &tt {
-> +                TokenTree::Punct(p) if p.as_char() =3D=3D ',' =3D> {
-> +                    flush(&mut args, &mut current);
-> +                    &mut args
-> +                }
-> +                _ =3D> &mut current,
-> +            }
-> +            .extend([tt]);
-> +        }
-> +        flush(&mut args, &mut current);
-> +    }
-> +
-> +    for name in names {
-> +        let name =3D Ident::new(name, first_span);
-> +        args.extend(quote_spanned! {
-> +            first_span =3D> , #name =3D #adapter(&#name)
-> +        });
-> +    }
-> +
-> +    quote_spanned! {
-> +        first_span =3D> ::core::format_args!(#args)
-> +    }
-> +}
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index e19ef509ebf8..171706e78da8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -422,220 +422,6 @@ static void test_unique_match(void)
+ 	kprobe_multi__destroy(skel);
+ }
+ 
+-static size_t symbol_hash(long key, void *ctx __maybe_unused)
+-{
+-	return str_hash((const char *) key);
+-}
+-
+-static bool symbol_equal(long key1, long key2, void *ctx __maybe_unused)
+-{
+-	return strcmp((const char *) key1, (const char *) key2) == 0;
+-}
+-
+-static bool is_invalid_entry(char *buf, bool kernel)
+-{
+-	if (kernel && strchr(buf, '['))
+-		return true;
+-	if (!kernel && !strchr(buf, '['))
+-		return true;
+-	return false;
+-}
+-
+-static bool skip_entry(char *name)
+-{
+-	/*
+-	 * We attach to almost all kernel functions and some of them
+-	 * will cause 'suspicious RCU usage' when fprobe is attached
+-	 * to them. Filter out the current culprits - arch_cpu_idle
+-	 * default_idle and rcu_* functions.
+-	 */
+-	if (!strcmp(name, "arch_cpu_idle"))
+-		return true;
+-	if (!strcmp(name, "default_idle"))
+-		return true;
+-	if (!strncmp(name, "rcu_", 4))
+-		return true;
+-	if (!strcmp(name, "bpf_dispatcher_xdp_func"))
+-		return true;
+-	if (!strncmp(name, "__ftrace_invalid_address__",
+-		     sizeof("__ftrace_invalid_address__") - 1))
+-		return true;
+-	return false;
+-}
+-
+-/* Do comparision by ignoring '.llvm.<hash>' suffixes. */
+-static int compare_name(const char *name1, const char *name2)
+-{
+-	const char *res1, *res2;
+-	int len1, len2;
+-
+-	res1 = strstr(name1, ".llvm.");
+-	res2 = strstr(name2, ".llvm.");
+-	len1 = res1 ? res1 - name1 : strlen(name1);
+-	len2 = res2 ? res2 - name2 : strlen(name2);
+-
+-	if (len1 == len2)
+-		return strncmp(name1, name2, len1);
+-	if (len1 < len2)
+-		return strncmp(name1, name2, len1) <= 0 ? -1 : 1;
+-	return strncmp(name1, name2, len2) >= 0 ? 1 : -1;
+-}
+-
+-static int load_kallsyms_compare(const void *p1, const void *p2)
+-{
+-	return compare_name(((const struct ksym *)p1)->name, ((const struct ksym *)p2)->name);
+-}
+-
+-static int search_kallsyms_compare(const void *p1, const struct ksym *p2)
+-{
+-	return compare_name(p1, p2->name);
+-}
+-
+-static int get_syms(char ***symsp, size_t *cntp, bool kernel)
+-{
+-	size_t cap = 0, cnt = 0;
+-	char *name = NULL, *ksym_name, **syms = NULL;
+-	struct hashmap *map;
+-	struct ksyms *ksyms;
+-	struct ksym *ks;
+-	char buf[256];
+-	FILE *f;
+-	int err = 0;
+-
+-	ksyms = load_kallsyms_custom_local(load_kallsyms_compare);
+-	if (!ASSERT_OK_PTR(ksyms, "load_kallsyms_custom_local"))
+-		return -EINVAL;
+-
+-	/*
+-	 * The available_filter_functions contains many duplicates,
+-	 * but other than that all symbols are usable in kprobe multi
+-	 * interface.
+-	 * Filtering out duplicates by using hashmap__add, which won't
+-	 * add existing entry.
+-	 */
+-
+-	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+-		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
+-	else
+-		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+-
+-	if (!f)
+-		return -EINVAL;
+-
+-	map = hashmap__new(symbol_hash, symbol_equal, NULL);
+-	if (IS_ERR(map)) {
+-		err = libbpf_get_error(map);
+-		goto error;
+-	}
+-
+-	while (fgets(buf, sizeof(buf), f)) {
+-		if (is_invalid_entry(buf, kernel))
+-			continue;
+-
+-		free(name);
+-		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
+-			continue;
+-		if (skip_entry(name))
+-			continue;
+-
+-		ks = search_kallsyms_custom_local(ksyms, name, search_kallsyms_compare);
+-		if (!ks) {
+-			err = -EINVAL;
+-			goto error;
+-		}
+-
+-		ksym_name = ks->name;
+-		err = hashmap__add(map, ksym_name, 0);
+-		if (err == -EEXIST) {
+-			err = 0;
+-			continue;
+-		}
+-		if (err)
+-			goto error;
+-
+-		err = libbpf_ensure_mem((void **) &syms, &cap,
+-					sizeof(*syms), cnt + 1);
+-		if (err)
+-			goto error;
+-
+-		syms[cnt++] = ksym_name;
+-	}
+-
+-	*symsp = syms;
+-	*cntp = cnt;
+-
+-error:
+-	free(name);
+-	fclose(f);
+-	hashmap__free(map);
+-	if (err)
+-		free(syms);
+-	return err;
+-}
+-
+-static int get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
+-{
+-	unsigned long *addr, *addrs, *tmp_addrs;
+-	int err = 0, max_cnt, inc_cnt;
+-	char *name = NULL;
+-	size_t cnt = 0;
+-	char buf[256];
+-	FILE *f;
+-
+-	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+-		f = fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r");
+-	else
+-		f = fopen("/sys/kernel/debug/tracing/available_filter_functions_addrs", "r");
+-
+-	if (!f)
+-		return -ENOENT;
+-
+-	/* In my local setup, the number of entries is 50k+ so Let us initially
+-	 * allocate space to hold 64k entries. If 64k is not enough, incrementally
+-	 * increase 1k each time.
+-	 */
+-	max_cnt = 65536;
+-	inc_cnt = 1024;
+-	addrs = malloc(max_cnt * sizeof(long));
+-	if (addrs == NULL) {
+-		err = -ENOMEM;
+-		goto error;
+-	}
+-
+-	while (fgets(buf, sizeof(buf), f)) {
+-		if (is_invalid_entry(buf, kernel))
+-			continue;
+-
+-		free(name);
+-		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) != 2)
+-			continue;
+-		if (skip_entry(name))
+-			continue;
+-
+-		if (cnt == max_cnt) {
+-			max_cnt += inc_cnt;
+-			tmp_addrs = realloc(addrs, max_cnt);
+-			if (!tmp_addrs) {
+-				err = -ENOMEM;
+-				goto error;
+-			}
+-			addrs = tmp_addrs;
+-		}
+-
+-		addrs[cnt++] = (unsigned long)addr;
+-	}
+-
+-	*addrsp = addrs;
+-	*cntp = cnt;
+-
+-error:
+-	free(name);
+-	fclose(f);
+-	if (err)
+-		free(addrs);
+-	return err;
+-}
+-
+ static void do_bench_test(struct kprobe_multi_empty *skel, struct bpf_kprobe_multi_opts *opts)
+ {
+ 	long attach_start_ns, attach_end_ns;
+@@ -670,7 +456,7 @@ static void test_kprobe_multi_bench_attach(bool kernel)
+ 	char **syms = NULL;
+ 	size_t cnt = 0;
+ 
+-	if (!ASSERT_OK(get_syms(&syms, &cnt, kernel), "get_syms"))
++	if (!ASSERT_OK(bpf_get_ksyms(&syms, &cnt, kernel), "bpf_get_ksyms"))
+ 		return;
+ 
+ 	skel = kprobe_multi_empty__open_and_load();
+@@ -696,13 +482,13 @@ static void test_kprobe_multi_bench_attach_addr(bool kernel)
+ 	size_t cnt = 0;
+ 	int err;
+ 
+-	err = get_addrs(&addrs, &cnt, kernel);
++	err = bpf_get_addrs(&addrs, &cnt, kernel);
+ 	if (err == -ENOENT) {
+ 		test__skip();
+ 		return;
+ 	}
+ 
+-	if (!ASSERT_OK(err, "get_addrs"))
++	if (!ASSERT_OK(err, "bpf_get_addrs"))
+ 		return;
+ 
+ 	skel = kprobe_multi_empty__open_and_load();
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 81943c6254e6..d24baf244d1f 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -17,6 +17,7 @@
+ #include <linux/limits.h>
+ #include <libelf.h>
+ #include <gelf.h>
++#include "bpf/hashmap.h"
+ #include "bpf/libbpf_internal.h"
+ 
+ #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+@@ -519,3 +520,216 @@ void read_trace_pipe(void)
+ {
+ 	read_trace_pipe_iter(trace_pipe_cb, NULL, 0);
+ }
++
++static size_t symbol_hash(long key, void *ctx __maybe_unused)
++{
++	return str_hash((const char *) key);
++}
++
++static bool symbol_equal(long key1, long key2, void *ctx __maybe_unused)
++{
++	return strcmp((const char *) key1, (const char *) key2) == 0;
++}
++
++static bool is_invalid_entry(char *buf, bool kernel)
++{
++	if (kernel && strchr(buf, '['))
++		return true;
++	if (!kernel && !strchr(buf, '['))
++		return true;
++	return false;
++}
++
++static bool skip_entry(char *name)
++{
++	/*
++	 * We attach to almost all kernel functions and some of them
++	 * will cause 'suspicious RCU usage' when fprobe is attached
++	 * to them. Filter out the current culprits - arch_cpu_idle
++	 * default_idle and rcu_* functions.
++	 */
++	if (!strcmp(name, "arch_cpu_idle"))
++		return true;
++	if (!strcmp(name, "default_idle"))
++		return true;
++	if (!strncmp(name, "rcu_", 4))
++		return true;
++	if (!strcmp(name, "bpf_dispatcher_xdp_func"))
++		return true;
++	if (!strncmp(name, "__ftrace_invalid_address__",
++		     sizeof("__ftrace_invalid_address__") - 1))
++		return true;
++	return false;
++}
++
++/* Do comparison by ignoring '.llvm.<hash>' suffixes. */
++static int compare_name(const char *name1, const char *name2)
++{
++	const char *res1, *res2;
++	int len1, len2;
++
++	res1 = strstr(name1, ".llvm.");
++	res2 = strstr(name2, ".llvm.");
++	len1 = res1 ? res1 - name1 : strlen(name1);
++	len2 = res2 ? res2 - name2 : strlen(name2);
++
++	if (len1 == len2)
++		return strncmp(name1, name2, len1);
++	if (len1 < len2)
++		return strncmp(name1, name2, len1) <= 0 ? -1 : 1;
++	return strncmp(name1, name2, len2) >= 0 ? 1 : -1;
++}
++
++static int load_kallsyms_compare(const void *p1, const void *p2)
++{
++	return compare_name(((const struct ksym *)p1)->name, ((const struct ksym *)p2)->name);
++}
++
++static int search_kallsyms_compare(const void *p1, const struct ksym *p2)
++{
++	return compare_name(p1, p2->name);
++}
++
++int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
++{
++	size_t cap = 0, cnt = 0;
++	char *name = NULL, *ksym_name, **syms = NULL;
++	struct hashmap *map;
++	struct ksyms *ksyms;
++	struct ksym *ks;
++	char buf[256];
++	FILE *f;
++	int err = 0;
++
++	ksyms = load_kallsyms_custom_local(load_kallsyms_compare);
++	if (!ksyms)
++		return -EINVAL;
++
++	/*
++	 * The available_filter_functions contains many duplicates,
++	 * but other than that all symbols are usable to trace.
++	 * Filtering out duplicates by using hashmap__add, which won't
++	 * add existing entry.
++	 */
++
++	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
++		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
++	else
++		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
++
++	if (!f)
++		return -EINVAL;
++
++	map = hashmap__new(symbol_hash, symbol_equal, NULL);
++	if (IS_ERR(map)) {
++		err = libbpf_get_error(map);
++		goto error;
++	}
++
++	while (fgets(buf, sizeof(buf), f)) {
++		if (is_invalid_entry(buf, kernel))
++			continue;
++
++		free(name);
++		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
++			continue;
++		if (skip_entry(name))
++			continue;
++
++		ks = search_kallsyms_custom_local(ksyms, name, search_kallsyms_compare);
++		if (!ks) {
++			err = -EINVAL;
++			goto error;
++		}
++
++		ksym_name = ks->name;
++		err = hashmap__add(map, ksym_name, 0);
++		if (err == -EEXIST) {
++			err = 0;
++			continue;
++		}
++		if (err)
++			goto error;
++
++		err = libbpf_ensure_mem((void **) &syms, &cap,
++					sizeof(*syms), cnt + 1);
++		if (err)
++			goto error;
++
++		syms[cnt++] = ksym_name;
++	}
++
++	*symsp = syms;
++	*cntp = cnt;
++
++error:
++	free(name);
++	fclose(f);
++	hashmap__free(map);
++	if (err)
++		free(syms);
++	return err;
++}
++
++int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
++{
++	unsigned long *addr, *addrs, *tmp_addrs;
++	int err = 0, max_cnt, inc_cnt;
++	char *name = NULL;
++	size_t cnt = 0;
++	char buf[256];
++	FILE *f;
++
++	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
++		f = fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r");
++	else
++		f = fopen("/sys/kernel/debug/tracing/available_filter_functions_addrs", "r");
++
++	if (!f)
++		return -ENOENT;
++
++	/* In my local setup, the number of entries is 50k+ so Let us initially
++	 * allocate space to hold 64k entries. If 64k is not enough, incrementally
++	 * increase 1k each time.
++	 */
++	max_cnt = 65536;
++	inc_cnt = 1024;
++	addrs = malloc(max_cnt * sizeof(long));
++	if (addrs == NULL) {
++		err = -ENOMEM;
++		goto error;
++	}
++
++	while (fgets(buf, sizeof(buf), f)) {
++		if (is_invalid_entry(buf, kernel))
++			continue;
++
++		free(name);
++		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) != 2)
++			continue;
++		if (skip_entry(name))
++			continue;
++
++		if (cnt == max_cnt) {
++			max_cnt += inc_cnt;
++			tmp_addrs = realloc(addrs, max_cnt);
++			if (!tmp_addrs) {
++				err = -ENOMEM;
++				goto error;
++			}
++			addrs = tmp_addrs;
++		}
++
++		addrs[cnt++] = (unsigned long)addr;
++	}
++
++	*addrsp = addrs;
++	*cntp = cnt;
++
++error:
++	free(name);
++	fclose(f);
++	if (err)
++		free(addrs);
++	return err;
++}
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+index 2ce873c9f9aa..9437bdd4afa5 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -41,4 +41,7 @@ ssize_t get_rel_offset(uintptr_t addr);
+ 
+ int read_build_id(const char *path, char *build_id, size_t size);
+ 
++int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel);
++int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel);
++
+ #endif
+-- 
+2.39.5
+
