@@ -1,90 +1,285 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ED6291C33;
-	Thu,  3 Jul 2025 06:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363C2291C3C
+	for <llvm@lists.linux.dev>; Thu,  3 Jul 2025 07:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751524182; cv=none; b=A872wn1Q1V2uaC4cq0N+UMxv+2PDR3RRhf2UjSmyR5wVYQZdC6ffJEZUi/k85DB3bk+6AUZirZ56BO0cI1P+QJOwO2Rpy3pFH5etnZs0JSV0z2ce0bpOJ07dO9+51gb1euxRXAk9ySZ3l2LTy35z4BpRqWE1ljhG1iOr33OBYao=
+	t=1751527987; cv=none; b=Ap+cVQsWUwBHlBbA4SCSiKwCZkrkifWAlHoUh0euqhQZnMcSC4sbZoVvGK0b/KJTsP0M/sqNQbMPMXRN5BR8eOqAOaP902fk6PlSEtO1fGvkWFDJWGbfphkgpvPxte+lA+qfKiwJY43kTdUdxYNZoDQFfuDaMV4hKFUyMVPFXgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751524182; c=relaxed/simple;
-	bh=90nTFynEDHsaWXX962iTaj2KmuXCT2e7KKha/ny7pSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SCauu5XRWUVxGl8DKuvFO6jU8VnG0o2OV2LmutaaOEpSim0C9BuD0/TLx4y0GXnhnmuRHYCxRfXqgxUkUtTmgod3GQYu3WJdcj9oETOsiNsysT+EzO5OfbaEO9Ew9uCw7EgRFRv6cQ6VkSenfGa3z6CJruzfs7G4JzqP8GdTnNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e8strBBn; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751527987; c=relaxed/simple;
+	bh=3T6HDgjSBXS27LZ9Nros9py6WuNQwZDDcMj8DmT/yLI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E/EFddFEZh0DFmKZ2ISiaBQ9gkMhfbH3nJMecAvjl9CvnNdw3fjlxKPb34owZYKr80q6x6jbizxnXlw06U7anGtXJbp9hM7DcettBhpcwgtqqOtVkXAb7YD8XrjfYYiUv7YRBi6PHX7gaIRJbhHagCFaLl2rT9icGbLk2bJKn5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=SxWUoMRH; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=SxWUoMRH; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e8strBBn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751524181; x=1783060181;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=90nTFynEDHsaWXX962iTaj2KmuXCT2e7KKha/ny7pSc=;
-  b=e8strBBnNS11hCJi0BWruWl2G7nQiP2yPmnycDVspc2dOEMj1sRElUD6
-   4HjkRYReXw31NnPGuRYTXU8XDvEwJAf31o0xD4gH1w5IAmmjNhyA+3AiX
-   +S0rWFc/e663Ni5ACR9cJt9+TEFzL7IMJll7XHljKxbjtmrB23RVMvEAM
-   Zx5weJf10ielPFTWavT5wVA8pFWL4iEbOOBuLN5Yr5E1iiuEHzIztlX5P
-   72O6MBdIecoBngz8jRyJx0C/2Ik9VDHd/+Qzawu7q83Frjqkumkzns70N
-   Ihp+dGJyzFXw7IbvtnKhbsJK43apLa/WHtWfMO5SYFhCT85CcUM1tj1mK
-   A==;
-X-CSE-ConnectionGUID: q2O5y9CUT9ylBQkebatlFg==
-X-CSE-MsgGUID: dzdQjhwGR8+LhGJ2s1Dppg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11482"; a="53978749"
-X-IronPort-AV: E=Sophos;i="6.16,283,1744095600"; 
-   d="scan'208";a="53978749"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 23:29:40 -0700
-X-CSE-ConnectionGUID: MiGruOc4RDisykkXGGh/Eg==
-X-CSE-MsgGUID: O7OGD8FYSSi9naEIzL+pIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,283,1744095600"; 
-   d="scan'208";a="153693361"
-Received: from igk-lkp-server01.igk.intel.com (HELO 030a839a1121) ([10.91.175.65])
-  by orviesa010.jf.intel.com with ESMTP; 02 Jul 2025 23:29:39 -0700
-Received: from kbuild by 030a839a1121 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXDRw-0000Qb-2S;
-	Thu, 03 Jul 2025 06:29:36 +0000
-Date: Thu, 3 Jul 2025 08:28:37 +0200
-From: kernel test robot <lkp@intel.com>
-To: Matthias Fend <matthias.fend@emfend.at>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: ld.lld: error: undefined symbol: v4l2_flash_release
-Message-ID: <202507030815.770r4UoZ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SxWUoMRH";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SxWUoMRH"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 4E5E81F38D;
+	Thu,  3 Jul 2025 07:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1751527983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=nQ5Xr44RBV0VlPZ1V2xjCjMmAszqvqbJEpoheadG4is=;
+	b=SxWUoMRHwRhGP0k66CH960pcV/Yw4vbJaBd5NNzKITipkzjVTiA2grK4v7pEBYcRfbTrPa
+	w4Z8Kq3+4Hi+U87UJW9AKfKILjJMELIXN4KDEww15MEGU+o1ZRxZ2Z0FZfQsqDqZ9e9SDp
+	a8f3VgQp0noJbgw787SKdeQYz49+HOY=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=SxWUoMRH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1751527983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=nQ5Xr44RBV0VlPZ1V2xjCjMmAszqvqbJEpoheadG4is=;
+	b=SxWUoMRHwRhGP0k66CH960pcV/Yw4vbJaBd5NNzKITipkzjVTiA2grK4v7pEBYcRfbTrPa
+	w4Z8Kq3+4Hi+U87UJW9AKfKILjJMELIXN4KDEww15MEGU+o1ZRxZ2Z0FZfQsqDqZ9e9SDp
+	a8f3VgQp0noJbgw787SKdeQYz49+HOY=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E1D6913721;
+	Thu,  3 Jul 2025 07:33:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 0mSZNS4yZmhPXAAAD6G6ig
+	(envelope-from <jgross@suse.com>); Thu, 03 Jul 2025 07:33:02 +0000
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	xen-devel@lists.xenproject.org,
+	Abinash Singh <abinashsinghlalotra@gmail.com>
+Subject: [PATCH] xen/gntdev: remove struct gntdev_copy_batch from stack
+Date: Thu,  3 Jul 2025 09:32:59 +0200
+Message-ID: <20250703073259.17356-1-jgross@suse.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 4E5E81F38D
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-1.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_CC(0.00)[suse.com,kernel.org,epam.com,gmail.com,google.com,lists.xenproject.org];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	TAGGED_RCPT(0.00)[lkml];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Score: -1.51
+X-Spam-Level: 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b4911fb0b060899e4eebca0151eb56deb86921ec
-commit: b338a2ae9b316df1d81b5289badcc8cbbbfe1b2b leds: tps6131x: Add support for Texas Instruments TPS6131X flash LED driver
-date:   6 weeks ago
-config: x86_64-buildonly-randconfig-2002-20250703 (https://download.01.org/0day-ci/archive/20250703/202507030815.770r4UoZ-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250703/202507030815.770r4UoZ-lkp@intel.com/reproduce)
+When compiling the kernel with LLVM, the following warning was issued:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507030815.770r4UoZ-lkp@intel.com/
+  drivers/xen/gntdev.c:991: warning: stack frame size (1160) exceeds
+  limit (1024) in function 'gntdev_ioctl'
 
-All errors (new ones prefixed by >>):
+The main reason is struct gntdev_copy_batch which is located on the
+stack and has a size of nearly 1kb.
 
->> ld.lld: error: undefined symbol: v4l2_flash_release
-   >>> referenced by leds-tps6131x.c:792 (drivers/leds/flash/leds-tps6131x.c:792)
-   >>>               vmlinux.o:(tps6131x_remove)
---
->> ld.lld: error: undefined symbol: v4l2_flash_init
-   >>> referenced by leds-tps6131x.c:728 (drivers/leds/flash/leds-tps6131x.c:728)
-   >>>               vmlinux.o:(tps6131x_v4l2_setup)
+For performance reasons it shouldn't by just dynamically allocated
+instead, so allocate a new instance when needed and instead of freeing
+it put it into a list of free structs anchored in struct gntdev_priv.
 
+Fixes: a4cdb556cae0 ("xen/gntdev: add ioctl for grant copy")
+Reported-by: Abinash Singh <abinashsinghlalotra@gmail.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ drivers/xen/gntdev-common.h |  4 +++
+ drivers/xen/gntdev.c        | 71 ++++++++++++++++++++++++++-----------
+ 2 files changed, 54 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/xen/gntdev-common.h b/drivers/xen/gntdev-common.h
+index 9c286b2a1900..ac8ce3179ba2 100644
+--- a/drivers/xen/gntdev-common.h
++++ b/drivers/xen/gntdev-common.h
+@@ -26,6 +26,10 @@ struct gntdev_priv {
+ 	/* lock protects maps and freeable_maps. */
+ 	struct mutex lock;
+ 
++	/* Free instances of struct gntdev_copy_batch. */
++	struct gntdev_copy_batch *batch;
++	struct mutex batch_lock;
++
+ #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
+ 	/* Device for which DMA memory is allocated. */
+ 	struct device *dma_dev;
+diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
+index 61faea1f0663..1f2160765618 100644
+--- a/drivers/xen/gntdev.c
++++ b/drivers/xen/gntdev.c
+@@ -56,6 +56,18 @@ MODULE_AUTHOR("Derek G. Murray <Derek.Murray@cl.cam.ac.uk>, "
+ 	      "Gerd Hoffmann <kraxel@redhat.com>");
+ MODULE_DESCRIPTION("User-space granted page access driver");
+ 
++#define GNTDEV_COPY_BATCH 16
++
++struct gntdev_copy_batch {
++	struct gnttab_copy ops[GNTDEV_COPY_BATCH];
++	struct page *pages[GNTDEV_COPY_BATCH];
++	s16 __user *status[GNTDEV_COPY_BATCH];
++	unsigned int nr_ops;
++	unsigned int nr_pages;
++	bool writeable;
++	struct gntdev_copy_batch *next;
++};
++
+ static unsigned int limit = 64*1024;
+ module_param(limit, uint, 0644);
+ MODULE_PARM_DESC(limit,
+@@ -584,6 +596,8 @@ static int gntdev_open(struct inode *inode, struct file *flip)
+ 	INIT_LIST_HEAD(&priv->maps);
+ 	mutex_init(&priv->lock);
+ 
++	mutex_init(&priv->batch_lock);
++
+ #ifdef CONFIG_XEN_GNTDEV_DMABUF
+ 	priv->dmabuf_priv = gntdev_dmabuf_init(flip);
+ 	if (IS_ERR(priv->dmabuf_priv)) {
+@@ -608,6 +622,7 @@ static int gntdev_release(struct inode *inode, struct file *flip)
+ {
+ 	struct gntdev_priv *priv = flip->private_data;
+ 	struct gntdev_grant_map *map;
++	struct gntdev_copy_batch *batch;
+ 
+ 	pr_debug("priv %p\n", priv);
+ 
+@@ -620,6 +635,14 @@ static int gntdev_release(struct inode *inode, struct file *flip)
+ 	}
+ 	mutex_unlock(&priv->lock);
+ 
++	mutex_lock(&priv->batch_lock);
++	while (priv->batch) {
++		batch = priv->batch;
++		priv->batch = batch->next;
++		kfree(batch);
++	}
++	mutex_unlock(&priv->batch_lock);
++
+ #ifdef CONFIG_XEN_GNTDEV_DMABUF
+ 	gntdev_dmabuf_fini(priv->dmabuf_priv);
+ #endif
+@@ -785,17 +808,6 @@ static long gntdev_ioctl_notify(struct gntdev_priv *priv, void __user *u)
+ 	return rc;
+ }
+ 
+-#define GNTDEV_COPY_BATCH 16
+-
+-struct gntdev_copy_batch {
+-	struct gnttab_copy ops[GNTDEV_COPY_BATCH];
+-	struct page *pages[GNTDEV_COPY_BATCH];
+-	s16 __user *status[GNTDEV_COPY_BATCH];
+-	unsigned int nr_ops;
+-	unsigned int nr_pages;
+-	bool writeable;
+-};
+-
+ static int gntdev_get_page(struct gntdev_copy_batch *batch, void __user *virt,
+ 				unsigned long *gfn)
+ {
+@@ -953,36 +965,53 @@ static int gntdev_grant_copy_seg(struct gntdev_copy_batch *batch,
+ static long gntdev_ioctl_grant_copy(struct gntdev_priv *priv, void __user *u)
+ {
+ 	struct ioctl_gntdev_grant_copy copy;
+-	struct gntdev_copy_batch batch;
++	struct gntdev_copy_batch *batch;
+ 	unsigned int i;
+ 	int ret = 0;
+ 
+ 	if (copy_from_user(&copy, u, sizeof(copy)))
+ 		return -EFAULT;
+ 
+-	batch.nr_ops = 0;
+-	batch.nr_pages = 0;
++	mutex_lock(&priv->batch_lock);
++	if (!priv->batch) {
++		batch = kmalloc(sizeof(*batch), GFP_KERNEL);
++	} else {
++		batch = priv->batch;
++		priv->batch = batch->next;
++	}
++	mutex_unlock(&priv->batch_lock);
++	if (!batch)
++		return -ENOMEM;
++
++	batch->nr_ops = 0;
++	batch->nr_pages = 0;
+ 
+ 	for (i = 0; i < copy.count; i++) {
+ 		struct gntdev_grant_copy_segment seg;
+ 
+ 		if (copy_from_user(&seg, &copy.segments[i], sizeof(seg))) {
+ 			ret = -EFAULT;
++			gntdev_put_pages(batch);
+ 			goto out;
+ 		}
+ 
+-		ret = gntdev_grant_copy_seg(&batch, &seg, &copy.segments[i].status);
+-		if (ret < 0)
++		ret = gntdev_grant_copy_seg(batch, &seg, &copy.segments[i].status);
++		if (ret < 0) {
++			gntdev_put_pages(batch);
+ 			goto out;
++		}
+ 
+ 		cond_resched();
+ 	}
+-	if (batch.nr_ops)
+-		ret = gntdev_copy(&batch);
+-	return ret;
++	if (batch->nr_ops)
++		ret = gntdev_copy(batch);
++
++ out:
++	mutex_lock(&priv->batch_lock);
++	batch->next = priv->batch;
++	priv->batch = batch;
++	mutex_unlock(&priv->batch_lock);
+ 
+-  out:
+-	gntdev_put_pages(&batch);
+ 	return ret;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
