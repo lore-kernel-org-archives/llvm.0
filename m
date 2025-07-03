@@ -1,120 +1,106 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA497190679
-	for <llvm@lists.linux.dev>; Thu,  3 Jul 2025 21:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555B12BF3F3;
+	Thu,  3 Jul 2025 21:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751578722; cv=none; b=C6Ub8XSP2auVfSb7tLRUYCJy1KXLKz3FS42WpFwqaZp4T3x9gQ/K7dg3bbOhrsLsNsCj08kshfGO6+ds28lQ+jwZSY32REf70Wbq//zKzkrQGgo7Y4c8AurxbOV/zrsD4yCGhDgadylpZNOpm47ZQDIfa3ocRicpTHabpMLf3J0=
+	t=1751579083; cv=none; b=bBPVZykU9TWCu+ll1PTlY6fNjUSc6hH2b9zttc0rx8kS6F/pYOh1pdROej6AXoLzKUpTZtiElDWoj59WHmikwcwJqA+dthI3S+106WvL6FNDtNBQhVKFCPBLHnemFP/ukW/I8uIrS7MeAtygPSV8P3XpLmPgXuqOJ2H6TafokJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751578722; c=relaxed/simple;
-	bh=pHNodlGoraqosvL2in94YD46DI6OCuusa8x3ST+BCu8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YSzbT4SNIeEZmSlAiDs+sAid1kdstNJBP5y3r/uUGKTQ/HmYCYlb1RLCRs6j9htceKpzPJyqmsVF9vQHoN9N6P628sJ7rNiA7gx9QWv8nRUW1DnUCBPBAfpgRNzE/wkdrss4PwocRQ80W6KeYZBQZf6Tmhzic1zEvFGc4xqv4jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dCRYz8r4; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751579083; c=relaxed/simple;
+	bh=H63eljMWVUaMDTgQCUgYreoQxIVxKMwjJ1bITq2rCCY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nXJ9HQH7XRGLpivSf++JpAyNVqgN7oSS0Wjgvl1oNH9jvl7l7bianVfjVDyUnrCtmROMcdq3WeE++aJC1fCkD4B4f3vgGvsEYHTdS/qRNI1u5OVRyQbySPOx7Ow1zBeQ9wKeEOt7AuX1MSaQo84RUXQnTbT5e8YmA5zY83si9mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ILf7FITt; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dCRYz8r4"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2355360ea88so567265ad.2
-        for <llvm@lists.linux.dev>; Thu, 03 Jul 2025 14:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751578720; x=1752183520; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pHNodlGoraqosvL2in94YD46DI6OCuusa8x3ST+BCu8=;
-        b=dCRYz8r4dM5Vj9kHbWyZLQc+wUbRbUavpG3IEbIPGIpknE6bBH0K4j/D8uSEuCnG/G
-         qJm9ky4IhAmBBbPVUiNI7Foan/EVSRT2V2xJq8buOi38eTbCm7/lW2VgJ59ibS/0V+uT
-         OYdaIxPdlb/QhUWoj2lXJhV21rFJczdYSsmdkFVmV3WLIxv5Cx94EhwzANhslYVDRfzC
-         fNJEHSfkEiCwdJDzmfRF9h91ebhhOcGtqgpdRqwHyiCq5i+dAoaOBZwsUYZngEzfS54v
-         YCRVnNg9kJlvQV5ig5MAHnEVEJYpZl/w4hBc1KMbC5BZDHupua15jFwj0V0Y6RKzBv+m
-         O0Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751578720; x=1752183520;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pHNodlGoraqosvL2in94YD46DI6OCuusa8x3ST+BCu8=;
-        b=UZlCy9CnMkN70H2996uTwKIuMVIxct52l3VgUDBuqmhEG/s13mTjwBXsUzLDVWwB8F
-         eTc8AmlMkBqDUb+tTHD6EQFOAfGt2SipuEQfnAWTf2oJNeXX2COLW7u3MiQsZjLv/ddD
-         2T/dJo8b5tUJWPNDV4yutaqVDFImzNcL9CickrvmNQ0auF3pDdWSidq43j61XCRawsN0
-         eLFDob6iRcr8wKJOg/6Hwx3/rBXpWZ5DT1+A1cidtXWCSDnAPzNQC3NxN98FiNj8VCJh
-         Wn7fjELvdl9gRaXx7Hewa0SsIlGWehqP6FujFSYiiq17lCPydGn5CjRfvpW+T1+5tMwJ
-         /RXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVrcRGIBAcsB2FZtw5/Mnmai/c3fGRiHJaae/GCere49HnDKbQm10AUtcm/UFdvmlmRix1Q@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw0mgZCxM0Hvlacg4SzQHHCv1IPafTcKTZi+f4GCyXQTQSvGXjl
-	QsAhonWEJtMp+PKmcVZlSvfx3ZvZm9S47YEe7uqsFOBLGQE4ik/K0BJ3UI8duv/I8Vcnc0PKkk2
-	GQA30sXi+thC6BBPn37XZOCdPtNFVq+8=
-X-Gm-Gg: ASbGncsJnK8aNNvDRnmwnoWmO9ORQmZRnVTWYj4u3LqMIMGwRJTVlaGnguI446dLpPi
-	waKnTtztK5CQaNhnDhtjbqSwcna2a8V9/o/d1nxUAaXGY0JYxGZ8H6v/ibG7luflTruf/1yd08E
-	SrOl2awyvkA2aOIy/UfS5bsjIYuC6ZGSZe1x2ftTFl7V0=
-X-Google-Smtp-Source: AGHT+IELtB5XgtVh1TIl503YSOBpKDzFFV0lUuu4UGNcygnKkLkVRq6ABgmlhe/GC2s+Ns1XtRhxYcb0/TcFag3V8H0=
-X-Received: by 2002:a17:902:c404:b0:234:f4a3:f73e with SMTP id
- d9443c01a7336-23c85ec795bmr1697845ad.9.1751578720047; Thu, 03 Jul 2025
- 14:38:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ILf7FITt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751579080; x=1783115080;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=H63eljMWVUaMDTgQCUgYreoQxIVxKMwjJ1bITq2rCCY=;
+  b=ILf7FITtlgdZ/LaUYbV+oyQAA3mL3WDGqfwQxSh0GulXdqumloDf6q84
+   N/zDD0gWL3D0FA6unKqQT/FLHG/iN35yY7nm3JQUBtKWnNCAE4y0dNK80
+   cNC3ZZKDAUWannZG+VCTVQbIh7l7Ss+jeCjV1gByGHVkrihyamXM1r05J
+   pPuDkx3RoZC8058JFumAkxintbBL2KaKEmdaLL+9Zgz1IBKzex0g1XX80
+   /vurKCnemlV1Bx05qYPd1wlHMr4g+tTcgP/vULICHs8ctu5hkyvHnaxZM
+   bYVaNHUhYDR675+6CKG86ssyOS/lLzslvbi/g00ZzswFSi4PPUbe9mrG7
+   Q==;
+X-CSE-ConnectionGUID: 7NwOQfvrRYmgZk52VEgcAw==
+X-CSE-MsgGUID: +fw8y1y5Q3q5WayTOsMc1A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="57693158"
+X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
+   d="scan'208";a="57693158"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 14:44:40 -0700
+X-CSE-ConnectionGUID: 12EFML+BSdaxZ9iDq8wCKg==
+X-CSE-MsgGUID: y2AmScquRvizl0DYH9lerg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
+   d="scan'208";a="178149198"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Jul 2025 14:44:38 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXRjQ-00032F-0x;
+	Thu, 03 Jul 2025 21:44:36 +0000
+Date: Fri, 4 Jul 2025 05:44:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: ld.lld: error: Function Import: link error: linking module flags
+ 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at
+ 1794328), and 'i32 1' from vmlinux.a(target_core_transport.o at 1969228)
+Message-ID: <202507040514.0TP3wH3T-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org> <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
-In-Reply-To: <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 3 Jul 2025 23:38:27 +0200
-X-Gm-Features: Ac12FXwdXJJ0hQiiGaabkdHfelYANMQVK7rSTVhFAhKXDapeaUgG2_fvXL2LwP0
-Message-ID: <CANiq72ksOG10vc36UDdBytsM-LT7PdgjcZ9B0dkqSETH6a0ezA@mail.gmail.com>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Tamir Duberstein <tamird@gmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Jul 3, 2025 at 11:28=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> A small patch tends to be more obviously correct than a big patch. The
-> commit message is more focused and helpful because it refers to a
-> small chunk of code. Because the commit message is more focused, it
-> can answer questions reviewers might ask, before they ask them. If i
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   17bbde2e1716e2ee4b997d476b48ae85c5a47671
+commit: 1b3291f00013c86a9bb349d6158a9a7a4f0334fe MAINTAINERS: Remove myself
+date:   5 months ago
+config: riscv-randconfig-001-20250704 (https://download.01.org/0day-ci/archive/20250704/202507040514.0TP3wH3T-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f1a4bb62452d88a0edd9340b3ca7c9b11ad9193f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507040514.0TP3wH3T-lkp@intel.com/reproduce)
 
-Yeah, also better for smaller reverts, as well as typically easier to
-backport if needed, etc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507040514.0TP3wH3T-lkp@intel.com/
 
-Cheers,
-Miguel
+All errors (new ones prefixed by >>):
+
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(alloc.o at 1845388)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(mad.o at 2031628)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(skbuff.o at 2043568)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(trace.o at 1806688)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(net-traces.o at 2045788)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(slub.o at 1815328)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(osd_client.o at 2079268)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(protocol.o at 2082568)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(volumes.o at 1849168)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(tcp.o at 2052088)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(super.o at 1848028)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(segment.o at 1853908)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(syscall.o at 1808908)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(e1000_main.o at 1980208)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(core.o at 1966588)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(filter.o at 2044648)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(core.o at 1811668)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(super.o at 1853548)
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(smc_core.o at 2075128)
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1794328), and 'i32 1' from vmlinux.a(target_core_transport.o at 1969228)
+   ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
