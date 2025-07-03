@@ -1,58 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408A32F0C41;
-	Thu,  3 Jul 2025 15:19:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003E62E2EFD;
+	Thu,  3 Jul 2025 16:12:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751555976; cv=none; b=NyTJ4PVUZQRroD9Z71EOfFOQ5aTcmuSXTYiApBAg1z0vqPtkSbN2wYBQ1Hf5DG+BJ2TsJw1EvR/Tpk+sBAuo0KTZ2vfNXmW9DdJrWMXhX9J55NyLKKrU1Tp1NcZZ3P/gUyKd3+SSyxhWiFvEwhBXRQCHtTpJTulgVHOViCWU0QQ=
+	t=1751559169; cv=none; b=G4W4pJMZcQVjvkRpjn4AIPach9xw/pOT11scerWoXRTz9Iye6C8IHiYcSMqjN/w8w8le34klbXCQUFFt8cWrENJ1HY7NqnvlWBX2qzBKaXSr5vFTA5zWiYkbblp4xYHs+fxxZXpQ1NEtdIh9392DZw4bFFfUKApYluBd5d2aSMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751555976; c=relaxed/simple;
-	bh=sw4+2hXohvY5N5XpItwbgYmFAm7/pFfXl0ro/uaTOsQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dpFNc4ws90busLRkuXosuXOglFdfLhc8cacsH8R2isdb1lvKZXs//a4ziPsZoWsVXBWyRpM7ToF7agldYAXYDT5R3k3/T28MmeC6yob9EaDTl8XaBSTEIQXp1dHU/WFMbxqnchcCnXQlpRzxmTnU3tdY5mPkV0brE8b8e0j+7gI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XzAnZDa+; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1751559169; c=relaxed/simple;
+	bh=/1Xcbv7DHWPMWnutmLmYpXLQkI8SK/2SLoif4ibr2W0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YbrBKPGrMECLMLBjTDj3R/RLUy/qbEz3s1ecccaFGLSHQiV/oABLoXcqpBv2JWpYdcC3PXrs9RKgt9ZnQoEkzJQ2/oORHGyTsAGoLSPCGoMiQTVxmZOkoZjijM3Y9RJB1+5+6s/OxsKZFZJfjQ6x6aUHUgADUeYQTpTQPecqaiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=izPW6UbX; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XzAnZDa+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="izPW6UbX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751555974; x=1783091974;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sw4+2hXohvY5N5XpItwbgYmFAm7/pFfXl0ro/uaTOsQ=;
-  b=XzAnZDa+wMt2fC+19dnXNUJHQgTFp4YvoWuqsKe9G9tHRMFUX5CnVJpe
-   smUhIA7vLyk90pvfODXQuR60A/jejinO93ZMpBISfrFMwjZuVrhqtGN25
-   0XetcfbZHiA3DhH8AkJ2VjVOCfRSLsUshGFZ0zZmqXs/aXocd4dokbPQr
-   ijxWL8VgpviP6jj2BNDL6qwX/Asnwi8xYJcnYZqAHIVghJSS/lItOdB2u
-   4FnUC/JcQkxm7EottqSESOJqfRlJGS8v4NvTtgpUaR9j4J4x5sTgW29N9
-   snIaf83evS0pxPf347eecq7QfetGtEBAe32xyExqDn3ysVQ+3a1bdLewC
+  t=1751559167; x=1783095167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/1Xcbv7DHWPMWnutmLmYpXLQkI8SK/2SLoif4ibr2W0=;
+  b=izPW6UbXOQlKKIUOM5zS2K4HciEp1AnwTUYLjsWrLMxD2dd/Qh46rp7f
+   zoCEGxmeWaJe2beEaFtXhgqOBuIWacr7tKy8KRx3mAs2aQYc9ScImpy1O
+   FkXLzBl2qrZOkC8s8HZ6EcBwgbada5ZMuCcYZrlZbKANofQqWD96lHKV7
+   AlJi4TSFZcMb/shThKrQpFO2QBNH7f2El3ZSFNt7+njp8TCwhW60neTZK
+   FAT8CdcHbjnnkeiM95IKmqTzpIe9uDp0dDo8vrT0S4wynHS9/DkvK4ozV
+   3htIGS2ntb1Qq1xBQ/MXB1gMZe/7ZSzWsLinTjTqRl6Dsr7tXQ0Z5mnog
    Q==;
-X-CSE-ConnectionGUID: pobJYo0AShe5cRQD2fUA0A==
-X-CSE-MsgGUID: /QcCFS4tQKaPFmfoCNhYig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="79326824"
+X-CSE-ConnectionGUID: C68Bcr9OQBKxZKt5/KnQSQ==
+X-CSE-MsgGUID: ql9kT55QTheS4yR2aZ6Tpw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53761232"
 X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
-   d="scan'208";a="79326824"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 08:19:34 -0700
-X-CSE-ConnectionGUID: js1SwdZiQu+/VPvNbv9kEg==
-X-CSE-MsgGUID: LYHXMwTPTZ6PQWemHuJWYg==
+   d="scan'208";a="53761232"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 09:12:46 -0700
+X-CSE-ConnectionGUID: TJLxhh/LSmeAZJxwGZLaQQ==
+X-CSE-MsgGUID: xezOal8XSw23TuHzlyVaew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
-   d="scan'208";a="191575596"
+   d="scan'208";a="154776173"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 03 Jul 2025 08:19:33 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 03 Jul 2025 09:12:45 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXLik-0002VD-09;
-	Thu, 03 Jul 2025 15:19:30 +0000
-Date: Thu, 3 Jul 2025 23:19:20 +0800
+	id 1uXMYF-0002mV-0J;
+	Thu, 03 Jul 2025 16:12:43 +0000
+Date: Fri, 4 Jul 2025 00:12:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joel Fernandes <joelagnelf@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:rcu/irq-exit-v2 4/4] kernel/rcu/tree_exp.h:738:24: error: too
- many arguments to function call, expected 0, have 1
-Message-ID: <202507032358.ObihHOzZ-lkp@intel.com>
+To: Lucas Eiji Uchiyama <lucaseiji54@gmail.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lucas Eiji Uchiyama <lucaseiji54@gmail.com>
+Subject: Re: [PATCH] iio: dps310.c: Remove duplication in functions
+Message-ID: <202507032329.6gxPgmu4-lkp@intel.com>
+References: <20250702233441.94203-1-lucaseiji54@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,130 +64,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250702233441.94203-1-lucaseiji54@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rcu/irq-exit-v2
-head:   2d2b43727789cf79a5fc38149bd16cc1b90513cc
-commit: 2d2b43727789cf79a5fc38149bd16cc1b90513cc [4/4] rcu: Convert cpu_no_qs flag setting to use helpers
-config: s390-randconfig-002-20250703 (https://download.01.org/0day-ci/archive/20250703/202507032358.ObihHOzZ-lkp@intel.com/config)
+Hi Lucas,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.16-rc4 next-20250703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Eiji-Uchiyama/iio-dps310-c-Remove-duplication-in-functions/20250703-073628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20250702233441.94203-1-lucaseiji54%40gmail.com
+patch subject: [PATCH] iio: dps310.c: Remove duplication in functions
+config: arm64-randconfig-001-20250703 (https://download.01.org/0day-ci/archive/20250703/202507032329.6gxPgmu4-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f1a4bb62452d88a0edd9340b3ca7c9b11ad9193f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250703/202507032358.ObihHOzZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250703/202507032329.6gxPgmu4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507032358.ObihHOzZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507032329.6gxPgmu4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   kernel/rcu/tree.c:734:6: error: conflicting types for 'rcu_set_exp_qs_needed'
-     734 | void rcu_set_exp_qs_needed(bool value)
-         |      ^
-   kernel/rcu/tree.h:551:6: note: previous declaration is here
-     551 | void rcu_set_exp_qs_needed(void);
-         |      ^
-   kernel/rcu/tree.c:745:6: error: conflicting types for 'rcu_set_exp_qs_needed_cpu'
-     745 | void rcu_set_exp_qs_needed_cpu(struct rcu_data *rdp, bool value)
-         |      ^
-   kernel/rcu/tree.h:552:6: note: previous declaration is here
-     552 | void rcu_set_exp_qs_needed_cpu(struct rcu_data *rdp);
-         |      ^
-   In file included from kernel/rcu/tree.c:4905:
->> kernel/rcu/tree_exp.h:738:24: error: too many arguments to function call, expected 0, have 1
-     738 |         rcu_set_exp_qs_needed(true);
-         |         ~~~~~~~~~~~~~~~~~~~~~ ^~~~
-   kernel/rcu/tree.h:551:6: note: 'rcu_set_exp_qs_needed' declared here
-     551 | void rcu_set_exp_qs_needed(void);
-         |      ^
-   In file included from kernel/rcu/tree.c:4905:
->> kernel/rcu/tree_exp.h:800:35: error: too many arguments to function call, expected single argument 'rdp', have 2 arguments
-     800 |                         rcu_set_exp_qs_needed_cpu(rdp, true);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~      ^~~~
-   kernel/rcu/tree.h:552:6: note: 'rcu_set_exp_qs_needed_cpu' declared here
-     552 | void rcu_set_exp_qs_needed_cpu(struct rcu_data *rdp);
-         |      ^                         ~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+>> drivers/iio/pressure/dps310.c:553:47: error: too few arguments to function call, expected 3, have 2
+     553 |                         rc = dps310_set_samp_freq(data, TEMPERATURE);
+         |                              ~~~~~~~~~~~~~~~~~~~~                  ^
+   drivers/iio/pressure/dps310.c:309:12: note: 'dps310_set_samp_freq' declared here
+     309 | static int dps310_set_samp_freq(struct dps310_data *data, int freq, int mode)
+         |            ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +738 kernel/rcu/tree_exp.h
+vim +553 drivers/iio/pressure/dps310.c
 
-   733	
-   734	/* Request an expedited quiescent state. */
-   735	static void rcu_exp_need_qs(void)
-   736	{
-   737		lockdep_assert_irqs_disabled();
- > 738		rcu_set_exp_qs_needed(true);
-   739		/* Store .exp before .rcu_urgent_qs. */
-   740		smp_store_release(this_cpu_ptr(&rcu_data.rcu_urgent_qs), true);
-   741		set_tsk_need_resched(current);
-   742		set_preempt_need_resched();
-   743	}
-   744	
-   745	#ifdef CONFIG_PREEMPT_RCU
-   746	
-   747	/*
-   748	 * Remote handler for smp_call_function_single().  If there is an
-   749	 * RCU read-side critical section in effect, request that the
-   750	 * next rcu_read_unlock() record the quiescent state up the
-   751	 * ->expmask fields in the rcu_node tree.  Otherwise, immediately
-   752	 * report the quiescent state.
-   753	 */
-   754	static void rcu_exp_handler(void *unused)
-   755	{
-   756		int depth = rcu_preempt_depth();
-   757		unsigned long flags;
-   758		struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
-   759		struct rcu_node *rnp = rdp->mynode;
-   760		struct task_struct *t = current;
-   761	
-   762		/*
-   763		 * WARN if the CPU is unexpectedly already looking for a
-   764		 * QS or has already reported one.
-   765		 */
-   766		ASSERT_EXCLUSIVE_WRITER_SCOPED(rdp->cpu_no_qs.b.exp);
-   767		if (WARN_ON_ONCE(!(READ_ONCE(rnp->expmask) & rdp->grpmask) ||
-   768				 READ_ONCE(rdp->cpu_no_qs.b.exp)))
-   769			return;
-   770	
-   771		/*
-   772		 * Second, the common case of not being in an RCU read-side
-   773		 * critical section.  If also enabled or idle, immediately
-   774		 * report the quiescent state, otherwise defer.
-   775		 */
-   776		if (!depth) {
-   777			if (!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK)) ||
-   778			    rcu_is_cpu_rrupt_from_idle())
-   779				rcu_report_exp_rdp(rdp);
-   780			else
-   781				rcu_exp_need_qs();
-   782			return;
-   783		}
-   784	
-   785		/*
-   786		 * Third, the less-common case of being in an RCU read-side
-   787		 * critical section.  In this case we can count on a future
-   788		 * rcu_read_unlock().  However, this rcu_read_unlock() might
-   789		 * execute on some other CPU, but in that case there will be
-   790		 * a future context switch.  Either way, if the expedited
-   791		 * grace period is still waiting on this CPU, set ->deferred_qs
-   792		 * so that the eventual quiescent state will be reported.
-   793		 * Note that there is a large group of race conditions that
-   794		 * can have caused this quiescent state to already have been
-   795		 * reported, so we really do need to check ->expmask.
-   796		 */
-   797		if (depth > 0) {
-   798			raw_spin_lock_irqsave_rcu_node(rnp, flags);
-   799			if (rnp->expmask & rdp->grpmask) {
- > 800				rcu_set_exp_qs_needed_cpu(rdp, true);
-   801				t->rcu_read_unlock_special.b.exp_hint = true;
-   802			}
-   803			raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-   804			return;
-   805		}
-   806	
-   807		// Fourth and finally, negative nesting depth should not happen.
-   808		WARN_ON_ONCE(1);
-   809	}
-   810	
+   534	
+   535	static int dps310_write_raw(struct iio_dev *iio,
+   536				    struct iio_chan_spec const *chan, int val,
+   537				    int val2, long mask)
+   538	{
+   539		int rc;
+   540		struct dps310_data *data = iio_priv(iio);
+   541	
+   542		if (mutex_lock_interruptible(&data->lock))
+   543			return -EINTR;
+   544	
+   545		switch (mask) {
+   546		case IIO_CHAN_INFO_SAMP_FREQ:
+   547			switch (chan->type) {
+   548			case IIO_PRESSURE:
+   549				rc = dps310_set_samp_freq(data, val, PRESSURE);
+   550				break;
+   551	
+   552			case IIO_TEMP:
+ > 553				rc = dps310_set_samp_freq(data, TEMPERATURE);
+   554				break;
+   555	
+   556			default:
+   557				rc = -EINVAL;
+   558				break;
+   559			}
+   560			break;
+   561	
+   562		case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+   563			switch (chan->type) {
+   564			case IIO_PRESSURE:
+   565				rc = dps310_set_precision(data, val, PRESSURE);
+   566				break;
+   567	
+   568			case IIO_TEMP:
+   569				rc = dps310_set_precision(data, val, TEMPERATURE);
+   570				break;
+   571	
+   572			default:
+   573				rc = -EINVAL;
+   574				break;
+   575			}
+   576			break;
+   577	
+   578		default:
+   579			rc = -EINVAL;
+   580			break;
+   581		}
+   582	
+   583		mutex_unlock(&data->lock);
+   584		return rc;
+   585	}
+   586	
 
 -- 
 0-DAY CI Kernel Test Service
