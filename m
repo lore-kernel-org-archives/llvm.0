@@ -1,202 +1,275 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D572BE634;
-	Thu,  3 Jul 2025 22:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E442BF011
+	for <llvm@lists.linux.dev>; Thu,  3 Jul 2025 22:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751581649; cv=none; b=Fmm/HaFNIndd1A2TmG7Z4XjzC2ayG1qEVlS6agXCXwLnCx1Bemq4FzvcFtNiNWk+8b3c39kUoaC56PExR7/Mn0v/Ov0gpBHKvzMMMz3c/urLUNlZnnXL+lT7YHdFoBhJcce9Fw6tLWGtiWd1aWkSMop4fp2LXhykU95u4tBPeuc=
+	t=1751582524; cv=none; b=i8cHcHS1KUdMyIKXmI7pn1RLNPJBa7PiioQJCSc3YbWnZBUmAHd1CdpKodec/gnayDhVJRhZ11OvHLlH2eKh4jmhV+pHUEH/7ca1cwpaiI4ixARGGuFs2t78XCZffMtHvub9QfPGVzaQ80vlfibim1opyNnT2sITGvyJMnMx1lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751581649; c=relaxed/simple;
-	bh=ObfX3msw3124TPv/HKi1XUGNEdyd2o67QroCfTIA5a8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N5Mi10zJT/aJiUraotvGCi+DCNyN8/y8CfHwPuotrWbL7DdZllr6BLmDo3OtrLzwOqDL+UbKkBKOvDyZesV0Y8RI7QQV01pS2ALDDo9RaNr910xy1394ytKnugSfDtWWg2nhUr4z4ZZ9R7R4knnQw/Bg4mhpbif4FlNGv37/Z/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MOQkSrGw; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751582524; c=relaxed/simple;
+	bh=zeHKNMSssMPRHBMuQyOCn6e2+n2u7TY6KIrwJXAHBFo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aGWtYxoAI7tCQlLZghKu2g4qJV8tGMCBElkGMP9BDfoTOB3y0kA996lWQZ17E8L992tbR7oBsbHq6XSz59v5H2lx16/o4WufYHJRfzMr9H+OL1j16gsDtMQOfzejY+P1MdvL7iP9SKbfrnjFLPMzA4kQg+AVRUgjBKA61WU16sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eHimYxqA; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MOQkSrGw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751581648; x=1783117648;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ObfX3msw3124TPv/HKi1XUGNEdyd2o67QroCfTIA5a8=;
-  b=MOQkSrGwNyNSHnCZ1veW3YpEyesvFvryEYKmr9OtZvRRSQzBOeluKqOf
-   I0RTofNXVFN1ttYpWzYYcJkHI84xqjVWVW7QZT4nqZHwJyl6FLl4aURBN
-   1HlLgTtlSR5qZA8qYv/8l1r01ZPlMATFtHN1w3nK9D35xelSLw30bwyw/
-   WPm/AJ88wDfAoflyZf+BaEB6IxAVo7+sob/dPjNC70eFE9aeWDbEvEqDT
-   n7snisN8G2+v71POppm2avlVGLaL3OH02PDONg0PVSNsAMfnFLO5DBpna
-   s1oc8QeyRo5giw5749yV2He4DZpAfnFoZdpnFWxXDayNjSBdE36G97lJg
-   A==;
-X-CSE-ConnectionGUID: XuLCqN7mSXmVd3oyvdlc8A==
-X-CSE-MsgGUID: PVIz6h8TRuex8gBqwEfEGA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="76467843"
-X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
-   d="scan'208";a="76467843"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 15:27:25 -0700
-X-CSE-ConnectionGUID: nBkfHea4Rw6fILBy3DoRMA==
-X-CSE-MsgGUID: uEVSX2XfQVG3YgSJ7PQcwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
-   d="scan'208";a="154250581"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 03 Jul 2025 15:27:24 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXSOn-00034O-2Z;
-	Thu, 03 Jul 2025 22:27:21 +0000
-Date: Fri, 4 Jul 2025 06:26:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [trace:unwind/perf 7/25] include/linux/unwind_deferred_types.h:16:2:
- error: unknown type name 'local64_t'; did you mean 'local_t'?
-Message-ID: <202507040623.6dwWd1ej-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHimYxqA"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32b50f357ecso3754801fa.2
+        for <llvm@lists.linux.dev>; Thu, 03 Jul 2025 15:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751582520; x=1752187320; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1Qg1F6O8BBVdVvv4eHMsC5wNUKHIHHTTLEMuZoIZA4=;
+        b=eHimYxqAujkqDZ+GmJPhyt6q7n2z+kH+O1fO4sdU5jGxLq/MkttEQXiz0SkA4TW4x8
+         ilzn91hvNaebXxp8/3jUVb+w6RfVEWe/rTTgUwPp4+PxVeMM6IwWQgp96hecX7w40riX
+         12WmtMSlRA8SYBo+1yU/uM05pRhHh6K/TeEqsTDFbIwyIVrYNM/tU0pF/5ZpTczNDsoM
+         Gmj1qUAqSIoLg9msf2QXo5tCjxw41GXNm9D8cnnAAoaG4i9dqs6yDNWpBjcPdyjHj0dO
+         5SzUby9Ni1o+jxd8VMyL56re/odbYIGum00O+n6PNcTlAMnD8X2PAC9+RCQdZQabHrHA
+         bfbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751582520; x=1752187320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D1Qg1F6O8BBVdVvv4eHMsC5wNUKHIHHTTLEMuZoIZA4=;
+        b=npONe1YQphhrrnWTkTPjr9cprxJB05nRKIw8+4NTZ+MH3StJqoNVjfBC6DSU9MG1Cp
+         HLUoAFuMFwm1IIuLuhVEkZ58oTO97CDP5+4zRbG5ACX/fZcFXI0U/7PGarxo/VJSll5f
+         4eGNbKMkc5zFVdHKly4L9vJBbPtOGC24GOJNNl3X0qagIrbLeIEAFdCfRxHdGmS9QjVm
+         aBFzX2CPa3ay55LQduVvcT1Mb+MXNP7anAbJfiTw0I2BGivTffGW0HdXZwPJiacW/zZO
+         G5JQkzFf40gM0Rhh7bXpkwZ6xoDtNJF/Tg8/PNfSYAoF4YaQ0YgEHcwEthZgfW173Ij5
+         sofg==
+X-Forwarded-Encrypted: i=1; AJvYcCVX/N8IXR6oMJWMOe6fx1AXwmYiEllaC7xFPUsnA4kbvpLPUSaz7myZ+HdNFclAQoOQi5DE@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxvk/OzX71UmXMyIhdWC+OiiKHne61OhWmYXZDO2VHAYm5X28Us
+	W6c01Yun9ztNhinI7c0Wih8LSNjZ06Zw32lYkho/V5sONVu5ZKqW7nTRj/wLTXV6cC2cAJZxqJd
+	MkytYC0UUyb4qEbhAPIcD08aA13skQaw=
+X-Gm-Gg: ASbGncsCD+hZ3/xISTAWysHIW7Znv9hGSXCfU/xqNMjUVzTYd+u8vvwQDLSUkkug3S1
+	qr4czIZwtWfyrEwkUKsZHoJ8L5Mot5CrtjbcjZHulqrGur2VMAPo7R19URVZ5wXDdiNDocMVwXA
+	kbNgsqj94ZUST6krlhjOxOOUO/SOU3BzCUCNsHlAIBENT3s77OkYJkLo0XEI+PVTnOKDvSuHXYw
+	8sjkg==
+X-Google-Smtp-Source: AGHT+IF/t3ZEtmjCL9D2hV/pUOr7MKQyCU+hJLvbY3a+HlkEEdLNrViyvM7S6Yvq56dYm7fbL0DEEZ7CtTi3HmveDVA=
+X-Received: by 2002:a2e:b8d5:0:b0:32a:6312:bfc1 with SMTP id
+ 38308e7fff4ca-32e5f5e9318mr633481fa.24.1751582519435; Thu, 03 Jul 2025
+ 15:41:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org> <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
+ <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
+In-Reply-To: <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Thu, 3 Jul 2025 18:41:23 -0400
+X-Gm-Features: Ac12FXx5T1CWZv8EzyusKcnGahP16LvJ8y4OiMbwugKJnpUmBKST0YNjwC9XD5U
+Message-ID: <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+To: Benno Lossin <lossin@kernel.org>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace unwind/perf
-head:   e00f51618c68b5b6fd6054488212504592c9e392
-commit: a9bb466c2613f39f468e7ac392dd2e2b611a0544 [7/25] unwind_user/deferred: Make unwind deferral requests NMI-safe
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250704/202507040623.6dwWd1ej-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507040623.6dwWd1ej-lkp@intel.com/reproduce)
+On Thu, Jul 3, 2025 at 4:36=E2=80=AFPM Benno Lossin <lossin@kernel.org> wro=
+te:
+>
+> On Thu Jul 3, 2025 at 8:55 PM CEST, Tamir Duberstein wrote:
+> > On Thu, Jul 3, 2025 at 11:08=E2=80=AFAM Benno Lossin <lossin@kernel.org=
+> wrote:
+> >> On Thu Jul 3, 2025 at 3:55 PM CEST, Tamir Duberstein wrote:
+> >> > On Thu, Jul 3, 2025 at 5:32=E2=80=AFAM Benno Lossin <lossin@kernel.o=
+rg> wrote:
+> >> >> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
+> >> >> > Introduce a `fmt!` macro which wraps all arguments in
+> >> >> > `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This e=
+nables
+> >> >> > formatting of foreign types (like `core::ffi::CStr`) that do not
+> >> >> > implement `core::fmt::Display` due to concerns around lossy conve=
+rsions which
+> >> >> > do not apply in the kernel.
+> >> >> >
+> >> >> > Replace all direct calls to `format_args!` with `fmt!`.
+> >> >> >
+> >> >> > Replace all implementations of `core::fmt::Display` with implemen=
+tations
+> >> >> > of `kernel::fmt::Display`.
+> >> >> >
+> >> >> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> >> >> > Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089=
+-General/topic/Custom.20formatting/with/516476467
+> >> >> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >> >> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> >> >> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> >> >> > ---
+> >> >> >  drivers/block/rnull.rs       |  2 +-
+> >> >> >  drivers/gpu/nova-core/gpu.rs |  4 +-
+> >> >> >  rust/kernel/block/mq.rs      |  2 +-
+> >> >> >  rust/kernel/device.rs        |  2 +-
+> >> >> >  rust/kernel/fmt.rs           | 89 ++++++++++++++++++++++++++++++=
++++++++++
+> >> >> >  rust/kernel/kunit.rs         |  6 +--
+> >> >> >  rust/kernel/lib.rs           |  1 +
+> >> >> >  rust/kernel/prelude.rs       |  3 +-
+> >> >> >  rust/kernel/print.rs         |  4 +-
+> >> >> >  rust/kernel/seq_file.rs      |  2 +-
+> >> >> >  rust/kernel/str.rs           | 22 ++++------
+> >> >> >  rust/macros/fmt.rs           | 99 ++++++++++++++++++++++++++++++=
+++++++++++++++
+> >> >> >  rust/macros/lib.rs           | 19 +++++++++
+> >> >> >  rust/macros/quote.rs         |  7 ++++
+> >> >> >  scripts/rustdoc_test_gen.rs  |  2 +-
+> >> >> >  15 files changed, 236 insertions(+), 28 deletions(-)
+> >> >>
+> >> >> This would be a lot easier to review if he proc-macro and the call
+> >> >> replacement were different patches.
+> >> >>
+> >> >> Also the `kernel/fmt.rs` file should be a different commit.
+> >> >
+> >> > Can you help me understand why? The changes you ask to be separated
+> >> > would all be in different files, so why would separate commits make =
+it
+> >> > easier to review?
+> >>
+> >> It takes less time to go through the entire patch and give a RB. I can
+> >> take smaller time chunks and don't have to get back into the entire
+> >> context of the patch when I don't have 30-60min available.
+> >
+> > Ah, I see what you mean. Yeah, the requirement to RB the entire patch
+> > does mean there's a benefit to smaller patches.
+> >
+> >> In this patch the biggest problem is the rename & addition of new
+> >> things, maybe just adding 200 lines in those files could be okay to go
+> >> together, see below for more.
+> >
+> > After implementing your suggestion of re-exporting things from
+> > `kernel::fmt` the diffstat is
+> >
+> > 26 files changed, 253 insertions(+), 51 deletions(-)
+> >
+> > so I guess I could do all the additions in one patch, but then
+> > *everything* else has to go in a single patch together because the
+> > formatting macros either want core::fmt::Display or
+> > kernel::fmt::Display; they can't work in a halfway state.
+>
+> I don't understand, can't you just do:
+>
+> * add `rust/kernel/fmt.rs`,
+> * add `rust/macros/fmt.rs`,
+> * change all occurrences of `core::fmt` to `kernel::fmt` and
+>   `format_args!` to `fmt!`.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507040623.6dwWd1ej-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:10:
-   In file included from include/linux/u64_stats_sync.h:71:
-   In file included from ./arch/x86/include/generated/asm/local64.h:1:
-   In file included from include/asm-generic/local64.h:5:
-   In file included from include/linux/percpu.h:12:
-   In file included from include/linux/sched.h:49:
->> include/linux/unwind_deferred_types.h:16:2: error: unknown type name 'local64_t'; did you mean 'local_t'?
-      16 |         local64_t               timestamp;
-         |         ^~~~~~~~~
-         |         local_t
-   arch/x86/include/asm/local.h:12:3: note: 'local_t' declared here
-      12 | } local_t;
-         |   ^
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:11:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:11:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:11:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:11:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:11:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/net/netdevsim/macsec.c:3:
-   In file included from include/net/macsec.h:11:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
+Yes, such a split could be done - I will do so in the next spin
 
 
-vim +16 include/linux/unwind_deferred_types.h
+> The last one could be split by subsystem, no? Some subsystems might
+> interact and thus need simultaneous splitting, but there should be some
+> independent ones.
 
-    12	
-    13	struct unwind_task_info {
-    14		struct unwind_cache	*cache;
-    15		struct callback_head	work;
-  > 16		local64_t		timestamp;
-    17		local_t			pending;
-    18	};
-    19	
+Yes, it probably can. As you say, some subsystems might interact - the
+claimed benefit of doing this subsystem-by-subsystem split is that it
+avoids conflicts with ongoing work that will conflict with a large
+patch, but this is also the downside; if ongoing work changes the set
+of interactions between subsystems then a maintainer may find
+themselves unable to emit the log message they want (because one
+subsystem is using kernel::fmt while another is still on core::fmt).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> >> > I prefer to keep things in one commit because the changes are highly
+> >> > interdependent. The proc macro doesn't make sense without
+> >> > kernel/fmt.rs and kernel/fmt.rs is useless without the proc macro.
+> >>
+> >> I think that `Adapter`, the custom `Display` and their impl blocks
+> >> don't need to be in the same commit as the proc-macro. They are relate=
+d,
+> >> but maybe someone is not well-versed in proc-macros and thus doesn't
+> >> want to review that part.
+> >
+> > Sure, I guess I will split them. But as noted above: changing the
+> > formatting macros and all the types' trait implementations has to be a
+> > "flag day" change.
+>
+> See above.
+>
+> >> >> > +impl_fmt_adapter_forward!(Debug, LowerHex, UpperHex, Octal, Bina=
+ry, Pointer, LowerExp, UpperExp);
+> >> >> > +
+> >> >> > +/// A copy of [`fmt::Display`] that allows us to implement it fo=
+r foreign types.
+> >> >> > +///
+> >> >> > +/// Types should implement this trait rather than [`fmt::Display=
+`]. Together with the [`Adapter`]
+> >> >> > +/// type and [`fmt!`] macro, it allows for formatting foreign ty=
+pes (e.g. types from core) which do
+> >> >> > +/// not implement [`fmt::Display`] directly.
+> >> >> > +///
+> >> >> > +/// [`fmt!`]: crate::prelude::fmt!
+> >> >> > +pub trait Display {
+> >> >> > +    /// Same as [`fmt::Display::fmt`].
+> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
+> >> >> > +}
+> >> >> > +
+> >> >> > +impl<T: ?Sized + Display> Display for &T {
+> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+> >> >> > +        Display::fmt(*self, f)
+> >> >> > +    }
+> >> >> > +}
+> >> >> > +
+> >> >> > +impl<T: ?Sized + Display> fmt::Display for Adapter<&T> {
+> >> >> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+> >> >> > +        let Self(t) =3D self;
+> >> >> > +        Display::fmt(t, f)
+> >> >>
+> >> >> Why not `Display::fmt(&self.0, f)`?
+> >> >
+> >> > I like destructuring because it shows me that there's only one field=
+.
+> >> > With `self.0` I don't see that.
+> >>
+> >> And what is the benefit here?
+> >
+> > In general the benefit is that the method does not ignore some portion
+> > of `Self`. A method that uses `self.0` would not provoke a compiler
+> > error in case another field is added, while this form would.
+>
+> Yeah, but why would that change happen here? And even if it got another
+> field, why would that invalidate the impl of `fn fmt`?
+
+I don't know, but I would rather force a person to make that decision
+when they add another field rather than assume that such an addition
+wouldn't require changes here.
