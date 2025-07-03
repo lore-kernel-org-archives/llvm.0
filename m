@@ -1,458 +1,186 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B830F288AD
-	for <llvm@lists.linux.dev>; Thu,  3 Jul 2025 13:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5662EAB70;
+	Thu,  3 Jul 2025 14:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751550993; cv=none; b=a6wiNz1NnlBP18wW2oc7xAleG4WWuw72PUEmyT6q5S1Hv4up3l/ZSllA84tR9nLBn5+F1rUGej3xoDOckciL5SNi20DebXP/+dDblllpxnJcirD1pX7A7JC81kBxWx7nqJBbYdLcUfoF3RhzMfgDcj4vbcN61iuff1tJeM/C7Y0=
+	t=1751554054; cv=none; b=m5H1SSwHLaBtmmewguWOuyarfutKzRA+DWvjFYaijgvDXB+bHaryuZELCNnrxyoCofEjZrVi8vdfiFLRe3ezasenJ9qYuTWr5Do8kjN+rmktaX8atVt2SMCWVP3xp/YFq57OFj3HWnW14OP1Xt/aLnsIET1YpyDjFU8G36kOFpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751550993; c=relaxed/simple;
-	bh=Eu9yAhGMxFnFCRgXqutb86wxfbf2J7wghtSIo5kDSOk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oj+IJAiCoywqFABrRNjJ6o7SCsbRYHbP0LZGeUkBQBFi2RVTeqd3sxecyniNapEysNtrUMdq0JCGDHAUZHi+IM+QI/N4PSCN2f6F9ijrPiNIttQmF/NAPqSATRI/5aKMsnpX4hNovOO941bOnoHtDK2GiwX5/bY5oAlEwNQtvqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XzPZSp33; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751554054; c=relaxed/simple;
+	bh=rK9CghBMfaxHWwZL0Y+AWxw/v++vtFMy/hmsv9qL7LI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nW343Kq5i/vgA7j8/rkYGen3c+Cgw8NBNNbsc1Z3ymHvtIjVFzHRzUzTk+nTn3qV3eIkHV/6wuiqylBcHfG2b5LHgFqSqVH7mGh5rEd7ffz59/dnZCT75VvWJvS8p8PCSerKpXZSvMvPmLafvLbOqiVicRyEnADqaM3A0Dpmep0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=It7wBhko; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XzPZSp33"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-32b49ac6431so69452411fa.1
-        for <llvm@lists.linux.dev>; Thu, 03 Jul 2025 06:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751550989; x=1752155789; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XroVTgiipbMk92z/0akuSiUYeZttfe/ce+IMaIERceI=;
-        b=XzPZSp33sU0jr7AT2ZdVawP5EOXzlFtOJbuzwZtk6MTluRpjjc3errZN756b+MO1Hd
-         q696/7VmcAkJkyHHOJfr2HquKA6UjkcEKbqX8Umr/pbjhGX2Ap0svgr72l++RvjO7MNf
-         ZNYNH9wn2zOm8KgagaKV6LDcO1KbMolvc9vXj8/sdySp4M1QmumQwsgcY3LaSCHUZv0Q
-         atiB3NuKOXUgKjbIMe3ibpn3TbReel4c8wNQ5xEAsjOTsyy23gtTcQDMw7VS1w3EPumu
-         n6Fxgo9kr+Jo5yfkKXH3yqu3V4lpZ/TSHC7Ftygsu/UfrfMZ8YvIYGsHGy7EpH6Ko1wz
-         MwOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751550989; x=1752155789;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XroVTgiipbMk92z/0akuSiUYeZttfe/ce+IMaIERceI=;
-        b=KMSgWoJGzf1SL4PTR5PAhdEwLVJr7dM5A/3BMCDqY5E9zAQNVek0R0JgDEpVXTKXtJ
-         xbL8Xzp2EVed94+WYR7i5Y58pdvQCRRY9nlCKX5tVCttLVGuvJ/Wz/If81sv8qBZHlwO
-         RJ7I4WA0CXvhH088N84d1T1edt2h4/c0suULdybjLtkSdNlcQtokH6u04FHNCilkWZfL
-         lIbn6V9hSL7C2vS8xeFdRjEOys0ND8qb+mH4JvCffscgm3dUEPUKeRbYPTawb3dXPxRf
-         olNzF+7EaT69Ntp3TV4JsCMF/DR2id4CWTWsbUVqCa/p6LJfkPIA39zR0lthY/h7WbHF
-         9maA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjfKm+1q0j/ap9y/NW5QsxSLncp3ZUUD7fhdZI3QdoX9nqFIEBTAMCRf6Bd2g0r5Co9HS4@lists.linux.dev
-X-Gm-Message-State: AOJu0YyV2wLF0jsUZT4TSbs3QNdTzhBUT0gIzGraS1iLEpWz4VbjKfyJ
-	PKEF9MEnCL3cpExKlOB9gLiM1f+EdgQ0SkNTwxI/Lf5jxk9KHKzIvnJ0Q6UKiKPUhXCnylaBflx
-	LXliJVnWJpJTCQjuf5+u62tbPsb2BNOU=
-X-Gm-Gg: ASbGncsOJV6cOfvcQU2UYyfKFADQ3bV8Kg8BxpEYU0LxaGW/az1XqG3bIW8aX6TjAmP
-	SYD7yX5W+xK4m/os7souzHETDhmixhzYZGd2PrzxtZQmLxCwnxp9BOxJX9ZSVWORnMZzE86rXMR
-	fL9HUnqOn9MaC1SmpNgkUdo3fzXzY3KCvmfB3w1qU4QvEu
-X-Google-Smtp-Source: AGHT+IHecHJqinQ0GtjAARewm2enIQAyyQD5rKLXQHe+ItluA3s82XioLx3xqz+ougAgIvj7CA1kgvJIs3FoZ5ExGxI=
-X-Received: by 2002:a2e:a369:0:b0:32c:bc69:e921 with SMTP id
- 38308e7fff4ca-32e0cfaac22mr12120091fa.9.1751550988404; Thu, 03 Jul 2025
- 06:56:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="It7wBhko"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751554053; x=1783090053;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rK9CghBMfaxHWwZL0Y+AWxw/v++vtFMy/hmsv9qL7LI=;
+  b=It7wBhkoXbeUeVmIgfZ0I1bfGgljmEjoQUdNQb1CS5n9OmKbkxxGvkXe
+   NUoZfr7n4pXA8QEd8W4thetbKa/L5v+jW1Z9n2Ll1RDVDHFio+AGsVvGy
+   p4ro+TwrOGWEl/nVG3pBmeOf5ZSEDCPpFXjivd5XKFP0ovgM/LwWTt5Tr
+   h+VgbinTNVIsTZKYxp4/2K7g1TpHDL71xTehAUdG8kw04C/EEhtxSz0kt
+   I7X7ZZozW5TiPaZO/m5+4mU3MX3ru7ANIsSaHbcLfXHxPkH1K130mnLt6
+   5vmYXXmlM/dySa4q7tQWogWAvmc6j1i0lnge3h0gFXrb6vy+yysXGPdYJ
+   w==;
+X-CSE-ConnectionGUID: oZnzIBpZTPyOeGFlQH4KAw==
+X-CSE-MsgGUID: /bexWeymSUyjsX+oeYFCCg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53851725"
+X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
+   d="scan'208";a="53851725"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 07:47:30 -0700
+X-CSE-ConnectionGUID: do+iUI8IT32SBrmjq0xoyg==
+X-CSE-MsgGUID: kIJe5JEsQwmuIcgjNo0AQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,284,1744095600"; 
+   d="scan'208";a="153800515"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 03 Jul 2025 07:47:17 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXLDT-0001vf-31;
+	Thu, 03 Jul 2025 14:47:11 +0000
+Date: Thu, 3 Jul 2025 22:47:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Wagner <wagi@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	"Michael S. Tsirkin" <mst@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Costa Shulyupin <costa.shul@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Waiman Long <llong@redhat.com>, Ming Lei <ming.lei@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Mel Gorman <mgorman@suse.de>, Hannes Reinecke <hare@suse.de>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, megaraidlinux.pdl@broadcom.com,
+	linux-scsi@vger.kernel.org, storagedev@microchip.com,
+	virtualization@lists.linux.dev,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	Daniel Wagner <wagi@kernel.org>
+Subject: Re: [PATCH v7 08/10] blk-mq: use hk cpus only when isolcpus=io_queue
+ is enabled
+Message-ID: <202507032238.AoTmQnGP-lkp@intel.com>
+References: <20250702-isolcpus-io-queues-v7-8-557aa7eacce4@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
-In-Reply-To: <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 3 Jul 2025 09:55:52 -0400
-X-Gm-Features: Ac12FXwkwRINIecE-FwYN90tPuGpGFKpT2Ln86Mwgefjv5UkGbvTZ6CcK0fiY_k
-Message-ID: <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-To: Benno Lossin <lossin@kernel.org>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250702-isolcpus-io-queues-v7-8-557aa7eacce4@kernel.org>
 
-On Thu, Jul 3, 2025 at 5:32=E2=80=AFAM Benno Lossin <lossin@kernel.org> wro=
-te:
->
-> On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
-> > Introduce a `fmt!` macro which wraps all arguments in
-> > `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
-> > formatting of foreign types (like `core::ffi::CStr`) that do not
-> > implement `core::fmt::Display` due to concerns around lossy conversions=
- which
-> > do not apply in the kernel.
-> >
-> > Replace all direct calls to `format_args!` with `fmt!`.
-> >
-> > Replace all implementations of `core::fmt::Display` with implementation=
-s
-> > of `kernel::fmt::Display`.
-> >
-> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> > Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-Gener=
-al/topic/Custom.20formatting/with/516476467
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > ---
-> >  drivers/block/rnull.rs       |  2 +-
-> >  drivers/gpu/nova-core/gpu.rs |  4 +-
-> >  rust/kernel/block/mq.rs      |  2 +-
-> >  rust/kernel/device.rs        |  2 +-
-> >  rust/kernel/fmt.rs           | 89 ++++++++++++++++++++++++++++++++++++=
-+++
-> >  rust/kernel/kunit.rs         |  6 +--
-> >  rust/kernel/lib.rs           |  1 +
-> >  rust/kernel/prelude.rs       |  3 +-
-> >  rust/kernel/print.rs         |  4 +-
-> >  rust/kernel/seq_file.rs      |  2 +-
-> >  rust/kernel/str.rs           | 22 ++++------
-> >  rust/macros/fmt.rs           | 99 ++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  rust/macros/lib.rs           | 19 +++++++++
-> >  rust/macros/quote.rs         |  7 ++++
-> >  scripts/rustdoc_test_gen.rs  |  2 +-
-> >  15 files changed, 236 insertions(+), 28 deletions(-)
->
-> This would be a lot easier to review if he proc-macro and the call
-> replacement were different patches.
->
-> Also the `kernel/fmt.rs` file should be a different commit.
+Hi Daniel,
 
-Can you help me understand why? The changes you ask to be separated
-would all be in different files, so why would separate commits make it
-easier to review?
+kernel test robot noticed the following build errors:
 
-I prefer to keep things in one commit because the changes are highly
-interdependent. The proc macro doesn't make sense without
-kernel/fmt.rs and kernel/fmt.rs is useless without the proc macro.
+[auto build test ERROR on 32f85e8468ce081d8e73ca3f0d588f1004013037]
 
->
-> > diff --git a/rust/kernel/fmt.rs b/rust/kernel/fmt.rs
-> > new file mode 100644
-> > index 000000000000..348d16987de6
-> > --- /dev/null
-> > +++ b/rust/kernel/fmt.rs
-> > @@ -0,0 +1,89 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +//! Formatting utilities.
-> > +
-> > +use core::fmt;
->
-> I think we should pub export all types that we are still using from
-> `core::fmt`. For example `Result`, `Formatter`, `Debug` etc.
->
-> That way I can still use the same pattern of importing `fmt` and then
-> writing
->
->     impl fmt::Display for MyType {
->         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {}
->     }
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Wagner/lib-group_cpus-Add-group_masks_cpus_evenly/20250703-003811
+base:   32f85e8468ce081d8e73ca3f0d588f1004013037
+patch link:    https://lore.kernel.org/r/20250702-isolcpus-io-queues-v7-8-557aa7eacce4%40kernel.org
+patch subject: [PATCH v7 08/10] blk-mq: use hk cpus only when isolcpus=io_queue is enabled
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250703/202507032238.AoTmQnGP-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f1a4bb62452d88a0edd9340b3ca7c9b11ad9193f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250703/202507032238.AoTmQnGP-lkp@intel.com/reproduce)
 
-Great idea, done for the next spin. It would be nice to be able to
-lint against references to `core::fmt` outside of kernel/fmt.rs.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507032238.AoTmQnGP-lkp@intel.com/
 
-> > +
-> > +/// Internal adapter used to route allow implementations of formatting=
- traits for foreign types.
-> > +///
-> > +/// It is inserted automatically by the [`fmt!`] macro and is not mean=
-t to be used directly.
-> > +///
-> > +/// [`fmt!`]: crate::prelude::fmt!
-> > +#[doc(hidden)]
-> > +pub struct Adapter<T>(pub T);
-> > +
-> > +macro_rules! impl_fmt_adapter_forward {
-> > +    ($($trait:ident),* $(,)?) =3D> {
-> > +        $(
-> > +            impl<T: fmt::$trait> fmt::$trait for Adapter<T> {
-> > +                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Resu=
-lt {
-> > +                    let Self(t) =3D self;
-> > +                    fmt::$trait::fmt(t, f)
-> > +                }
-> > +            }
-> > +        )*
-> > +    };
-> > +}
-> > +
-> > +impl_fmt_adapter_forward!(Debug, LowerHex, UpperHex, Octal, Binary, Po=
-inter, LowerExp, UpperExp);
-> > +
-> > +/// A copy of [`fmt::Display`] that allows us to implement it for fore=
-ign types.
-> > +///
-> > +/// Types should implement this trait rather than [`fmt::Display`]. To=
-gether with the [`Adapter`]
-> > +/// type and [`fmt!`] macro, it allows for formatting foreign types (e=
-.g. types from core) which do
-> > +/// not implement [`fmt::Display`] directly.
-> > +///
-> > +/// [`fmt!`]: crate::prelude::fmt!
-> > +pub trait Display {
-> > +    /// Same as [`fmt::Display::fmt`].
-> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
-> > +}
-> > +
-> > +impl<T: ?Sized + Display> Display for &T {
-> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-> > +        Display::fmt(*self, f)
-> > +    }
-> > +}
-> > +
-> > +impl<T: ?Sized + Display> fmt::Display for Adapter<&T> {
-> > +    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-> > +        let Self(t) =3D self;
-> > +        Display::fmt(t, f)
->
-> Why not `Display::fmt(&self.0, f)`?
+All errors (new ones prefixed by >>):
 
-I like destructuring because it shows me that there's only one field.
-With `self.0` I don't see that.
+>> block/blk-mq-cpumap.c:155:16: error: array initializer must be an initializer list
+     155 |         cpumask_var_t active_hctx __free(free_cpumask_var) = NULL;
+         |                       ^
+   block/blk-mq-cpumap.c:219:16: error: array initializer must be an initializer list
+     219 |         cpumask_var_t active_hctx __free(free_cpumask_var) = NULL;
+         |                       ^
+   block/blk-mq-cpumap.c:220:16: error: array initializer must be an initializer list
+     220 |         cpumask_var_t mask __free(free_cpumask_var) = NULL;
+         |                       ^
+   3 errors generated.
 
-> > +    }
-> > +}
-> > +
-> > +macro_rules! impl_display_forward {
-> > +    ($(
-> > +        $( { $($generics:tt)* } )? $ty:ty $( { where $($where:tt)* } )=
-?
-> > +    ),* $(,)?) =3D> {
-> > +        $(
-> > +            impl$($($generics)*)? Display for $ty $(where $($where)*)?=
- {
-> > +                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Resu=
-lt {
-> > +                    fmt::Display::fmt(self, f)
-> > +                }
-> > +            }
-> > +        )*
-> > +    };
-> > +}
-> > +
-> > +impl_display_forward!(
-> > +    bool,
-> > +    char,
-> > +    core::panic::PanicInfo<'_>,
-> > +    fmt::Arguments<'_>,
-> > +    i128,
-> > +    i16,
-> > +    i32,
-> > +    i64,
-> > +    i8,
-> > +    isize,
-> > +    str,
-> > +    u128,
-> > +    u16,
-> > +    u32,
-> > +    u64,
-> > +    u8,
-> > +    usize,
-> > +    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>: fmt:=
-:Display},
-> > +    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::Unique=
-Arc<T>: fmt::Display},
-> > +);
->
-> > diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
-> > new file mode 100644
-> > index 000000000000..edc37c220a89
-> > --- /dev/null
-> > +++ b/rust/macros/fmt.rs
-> > @@ -0,0 +1,99 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +use proc_macro::{Ident, TokenStream, TokenTree};
-> > +use std::collections::BTreeSet;
-> > +
-> > +/// Please see [`crate::fmt`] for documentation.
-> > +pub(crate) fn fmt(input: TokenStream) -> TokenStream {
-> > +    let mut input =3D input.into_iter();
-> > +
-> > +    let first_opt =3D input.next();
-> > +    let first_owned_str;
-> > +    let mut names =3D BTreeSet::new();
-> > +    let first_lit =3D {
-> > +        let Some((mut first_str, first_lit)) =3D (match first_opt.as_r=
-ef() {
-> > +            Some(TokenTree::Literal(first_lit)) =3D> {
-> > +                first_owned_str =3D first_lit.to_string();
-> > +                Some(first_owned_str.as_str()).and_then(|first| {
-> > +                    let first =3D first.strip_prefix('"')?;
-> > +                    let first =3D first.strip_suffix('"')?;
-> > +                    Some((first, first_lit))
->
-> You're only using first_lit to get the span later, so why not just get
-> the span directly here?
 
-Good point. I was probably using it for more stuff in an earlier iteration.
+vim +155 block/blk-mq-cpumap.c
 
->
-> > +                })
-> > +            }
-> > +            _ =3D> None,
-> > +        }) else {
-> > +            return first_opt.into_iter().chain(input).collect();
-> > +        };
-> > +        while let Some((_, rest)) =3D first_str.split_once('{') {
->
-> Let's put a comment above this loop mentioning [1] and saying that it
-> parses the identifiers from the format arguments.
->
-> [1]: https://doc.rust-lang.org/std/fmt/index.html#syntax
+   144	
+   145	/*
+   146	 * blk_mq_map_hk_queues - Create housekeeping CPU to
+   147	 *                        hardware queue mapping
+   148	 * @qmap:	CPU to hardware queue map
+   149	 *
+   150	 * Create a housekeeping CPU to hardware queue mapping in @qmap. @qmap
+   151	 * contains a valid configuration honoring the isolcpus configuration.
+   152	 */
+   153	static void blk_mq_map_hk_queues(struct blk_mq_queue_map *qmap)
+   154	{
+ > 155		cpumask_var_t active_hctx __free(free_cpumask_var) = NULL;
+   156		struct cpumask *hk_masks __free(kfree) = NULL;
+   157		const struct cpumask *mask;
+   158		unsigned int queue, cpu, nr_masks;
+   159	
+   160		if (housekeeping_enabled(HK_TYPE_IO_QUEUE))
+   161			mask = housekeeping_cpumask(HK_TYPE_IO_QUEUE);
+   162		else
+   163			goto fallback;
+   164	
+   165		if (!zalloc_cpumask_var(&active_hctx, GFP_KERNEL))
+   166			goto fallback;
+   167	
+   168		/* Map housekeeping CPUs to a hctx */
+   169		hk_masks = group_mask_cpus_evenly(qmap->nr_queues, mask, &nr_masks);
+   170		if (!hk_masks)
+   171			goto fallback;
+   172	
+   173		for (queue = 0; queue < qmap->nr_queues; queue++) {
+   174			unsigned int idx = (qmap->queue_offset + queue) % nr_masks;
+   175	
+   176			for_each_cpu(cpu, &hk_masks[idx]) {
+   177				qmap->mq_map[cpu] = idx;
+   178	
+   179				if (cpu_online(cpu))
+   180					cpumask_set_cpu(qmap->mq_map[cpu], active_hctx);
+   181			}
+   182		}
+   183	
+   184		/* Map isolcpus to hardware context */
+   185		queue = cpumask_first(active_hctx);
+   186		for_each_cpu_andnot(cpu, cpu_possible_mask, mask) {
+   187			qmap->mq_map[cpu] = (qmap->queue_offset + queue) % nr_masks;
+   188			queue = cpumask_next_wrap(queue, active_hctx);
+   189		}
+   190	
+   191		if (!blk_mq_hk_validate(qmap, active_hctx))
+   192			goto fallback;
+   193	
+   194		return;
+   195	
+   196	fallback:
+   197		/*
+   198		 * Map all CPUs to the first hctx to ensure at least one online
+   199		 * housekeeping CPU is serving it.
+   200		 */
+   201		for_each_possible_cpu(cpu)
+   202			qmap->mq_map[cpu] = 0;
+   203	}
+   204	
 
-=F0=9F=91=8D
-
->
-> > +            first_str =3D rest;
-> > +            if let Some(rest) =3D first_str.strip_prefix('{') {
-> > +                first_str =3D rest;
-> > +                continue;
-> > +            }
-> > +            if let Some((name, rest)) =3D first_str.split_once('}') {
-> > +                first_str =3D rest;
-> > +                let name =3D name.split_once(':').map_or(name, |(name,=
- _)| name);
-> > +                if !name.is_empty() && !name.chars().all(|c| c.is_asci=
-i_digit()) {
-> > +                    names.insert(name);
-> > +                }
-> > +            }
-> > +        }
-> > +        first_lit
-> > +    };
-> > +
-> > +    let first_span =3D first_lit.span();
-> > +    let adapter =3D quote_spanned! {
-> > +        first_span =3D> ::kernel::fmt::Adapter
-> > +    };
->
-> I think we should follow the formatting convention from the quote crate:
->
->     let adapter =3D quote_spanned!(first_span=3D> ::kernel::fmt::Adapter)=
-;
-
-Sure.
-
->
-> > +
-> > +    let mut args =3D TokenStream::from_iter(first_opt);
-> > +    {
-> > +        let mut flush =3D |args: &mut TokenStream, current: &mut Token=
-Stream| {
->
-> You don't need to pass `args` as a closure argument, since you always
-> call it with `&mut args`.
-
-This doesn't work because of the borrow checker. If I wrote what you
-suggest, then `args` is mutably borrowed by the closure, which
-prohibits the mutable borrow needed for the .extend() call here:
-
-        for tt in input {
-            match &tt {
-                TokenTree::Punct(p) if p.as_char() =3D=3D ',' =3D> {
-                    flush(&mut args, &mut current);
-                    &mut args
-                }
-                _ =3D> &mut current,
-            }
-            .extend([tt]);
-        }
-
->
-> > +            let current =3D std::mem::take(current);
-> > +            if !current.is_empty() {
-> > +                let (lhs, rhs) =3D (|| {
-> > +                    let mut current =3D current.into_iter();
-> > +                    let mut acc =3D TokenStream::new();
-> > +                    while let Some(tt) =3D current.next() {
-> > +                        // Split on `=3D` only once to handle cases li=
-ke `a =3D b =3D c`.
-> > +                        if matches!(&tt, TokenTree::Punct(p) if p.as_c=
-har() =3D=3D '=3D') {
-> > +                            names.remove(acc.to_string().as_str());
-> > +                            // Include the `=3D` itself to keep the ha=
-ndling below uniform.
-> > +                            acc.extend([tt]);
-> > +                            return (Some(acc), current.collect::<Token=
-Stream>());
-> > +                        }
-> > +                        acc.extend([tt]);
-> > +                    }
-> > +                    (None, acc)
-> > +                })();
-> > +                args.extend(quote_spanned! {
-> > +                    first_span =3D> #lhs #adapter(&#rhs)
-> > +                });
-> > +            }
-> > +        };
-> > +
-> > +        let mut current =3D TokenStream::new();
->
-> Define this before the closure, then you don't need to pass it as an
-> argument.
-
-Same reason as above. Borrow checker says no.
-
->
-> ---
-> Cheers,
-> Benno
->
-> > +        for tt in input {
-> > +            match &tt {
-> > +                TokenTree::Punct(p) if p.as_char() =3D=3D ',' =3D> {
-> > +                    flush(&mut args, &mut current);
-> > +                    &mut args
-> > +                }
-> > +                _ =3D> &mut current,
-> > +            }
-> > +            .extend([tt]);
-> > +        }
-> > +        flush(&mut args, &mut current);
-> > +    }
-> > +
-> > +    for name in names {
-> > +        let name =3D Ident::new(name, first_span);
-> > +        args.extend(quote_spanned! {
-> > +            first_span =3D> , #name =3D #adapter(&#name)
-> > +        });
-> > +    }
-> > +
-> > +    quote_spanned! {
-> > +        first_span =3D> ::core::format_args!(#args)
-> > +    }
-> > +}
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
