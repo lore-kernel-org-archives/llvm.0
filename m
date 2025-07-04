@@ -1,94 +1,70 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8894326A58;
-	Fri,  4 Jul 2025 07:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3F028AB1E;
+	Fri,  4 Jul 2025 08:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751615865; cv=none; b=cDaMhBwWbO1DNHBi08PTmAI5q1r0TrfsEVn1pJge7w+07gJmfg5AdS54ZBvDCgfAE+cVBROpQNKXvbSPLJooufNB78vOB4ShfaMpZfPYw9Yh5JLvGJjuaVsznCRLAIbCMjQ1hwRu1opQ971XplUT5a1GBuqOAO6Gcv5n1Hkspbo=
+	t=1751617471; cv=none; b=fP3lXrSiUXi5vD0BXDqRqPavFrNjGflPr9M5mn3WhGj3MsPMpjS8SuIy9s1IMRnv9Az6gG80pSFn/dzfvdA1s2oyRjvsgLfn5NqW9zuMIQQeSo7ZV4M5smgMrat2kLOiE2ReluVzFrl/O2cibguIF237y8N8YfyFlBuslI2O5SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751615865; c=relaxed/simple;
-	bh=bPS2JYksrIppycfYjPG2JSlEWAOe/ZXoQROBn/MlDBY=;
+	s=arc-20240116; t=1751617471; c=relaxed/simple;
+	bh=hNS3AJuvFAF9BI74gAcGsp48sqw2j6KHtYQY1YWXNa8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q+n42N1qAmQGfEgKQU7fEUxmTehC3RfmxKXaQl2hQ4PhipArRBasdEAUpdP+S1MVIZLYvViSi+GrQIh5qMQS8FtqOTI2DWKNeB6+ERR8KEj5jT+velnKS0+92nmktO5vRACuY3wMTqAuEbF8RiqfQcNmmehFeByDHPQQrOm+K3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=jTK77Tij; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=GsboClwaV5RkS+T89IR05Ql2anlhxL830nyw6ST+dJ+WsTAe357K3H2kUr+n44ycS+N0Yq9pgJnA1e2mjvN6hI55MjpKSKkSAdyfnmUIX0L2XyW+/JUh3/7h181kUHy0GdCv7348ZPlMIQ8pG0de03hvC8R6bQrnzvmaRH8YCLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kibFYCCG; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="jTK77Tij"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=5qrkD9bX+jI4ab6c+XtoSydd7j+KnW2OaBzeTTEC/QE=; b=jTK77Tij9gZIa4yFat5vka5xRz
-	zxo2K3t3N98K2N9r3t0x1GzxeIxrNCnwCWaXoIAcYUClezLp6LYgcNldRMWVG6g9Wl76TbfZVdEJo
-	8webAKr8ryhcY5PYw6AJiDWHNqoMr5QS+4SvlL1Zc3qnZ4gKNAd4lQYtfsMSWHxyzqpY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uXbIH-000BBm-4J; Fri, 04 Jul 2025 09:57:13 +0200
-Date: Fri, 4 Jul 2025 09:57:13 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Benno Lossin <lossin@kernel.org>,
-	Michal Rostecki <vadorovsky@protonmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kibFYCCG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751617470; x=1783153470;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hNS3AJuvFAF9BI74gAcGsp48sqw2j6KHtYQY1YWXNa8=;
+  b=kibFYCCGXtgwT8qXctBCXjjwCPbWm5Mth36L97jaCxQp5OE81vy0NHhj
+   QU4Zw8yjf0woNAY8g4bmUX9yNnR/RxuRCvUvEfgWG9xQIzYdGU5DNH8BU
+   42l9E1Mmmib7ps6q1FmOgrM0lBQnAKSSkQqIjH8V4IXUMiwF+hsVVZ3yv
+   7PFCjq4mTmn6a1xRf9zOtvCEZ4oht9YE39sTfWYOe5ST/48OR8SC4Fnms
+   BPiIzof1dr+rgs+cDT+n1AlknyjLRyHYAzBIELK/qNIu981+y7lP+oz20
+   embU/Y5EYfqdnUyLHB0BB1IgC2sAbqWX8CSqgdVZOXHuYgfai3ey6ukqs
+   Q==;
+X-CSE-ConnectionGUID: aCtKtI/PT+OlwPgdFeu22Q==
+X-CSE-MsgGUID: pRzGq6XtQzeKzElhxad/3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="79388718"
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="79388718"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 01:24:29 -0700
+X-CSE-ConnectionGUID: tpdZkD9uQC249uQq+oRqwQ==
+X-CSE-MsgGUID: zQjV/mBQRVWnR2077FGrHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="154716553"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 04 Jul 2025 01:24:26 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXbiZ-0003UF-1G;
+	Fri, 04 Jul 2025 08:24:23 +0000
+Date: Fri, 4 Jul 2025 16:24:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Caterina Shablia <caterina.shablia@collabora.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-Message-ID: <efe97ed7-dd60-4f1c-ac5c-b700300f0390@lunn.ch>
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
- <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
- <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
- <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel@collabora.com,
+	Caterina Shablia <caterina.shablia@collabora.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] drm/panthor: Add support for atomic page table
+ updates
+Message-ID: <202507041635.WyDu3TQ1-lkp@intel.com>
+References: <20250703152908.16702-3-caterina.shablia@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -97,26 +73,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+In-Reply-To: <20250703152908.16702-3-caterina.shablia@collabora.com>
 
-> Yes, it probably can. As you say, some subsystems might interact - the
-> claimed benefit of doing this subsystem-by-subsystem split is that it
-> avoids conflicts with ongoing work that will conflict with a large
-> patch, but this is also the downside; if ongoing work changes the set
-> of interactions between subsystems then a maintainer may find
-> themselves unable to emit the log message they want (because one
-> subsystem is using kernel::fmt while another is still on core::fmt).
+Hi Caterina,
 
-This sounds like an abstraction problem. As a developer, i just want
-an API to print stuff. I don't care about what happens underneath.
+kernel test robot noticed the following build warnings:
 
-Could you add an implementation of the API which uses core:fmt
-underneath. Get that merged. You can then convert each subsystem one
-by one to use the new API. Since all you are changing is the API, not
-the implementation, there is no compatibility issues. Then, once all
-users are converted to the API, you can have one patch which flips the
-implementation from core:fmt to kernel:fmt. It might take you three
-kernel cycles to get this done, but that is relatively fast for a tree
-wide change, which sometimes takes years.
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on linus/master v6.16-rc4 next-20250703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	Andrew
+url:    https://github.com/intel-lab-lkp/linux/commits/Caterina-Shablia/drm-gpuvm-Kill-drm_gpuva_init/20250704-002914
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20250703152908.16702-3-caterina.shablia%40collabora.com
+patch subject: [PATCH v2 1/7] drm/panthor: Add support for atomic page table updates
+config: x86_64-buildonly-randconfig-004-20250704 (https://download.01.org/0day-ci/archive/20250704/202507041635.WyDu3TQ1-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507041635.WyDu3TQ1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507041635.WyDu3TQ1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/panthor/panthor_mmu.c:1685:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1685 |         if (vm->as.id >= 0) {
+         |             ^~~~~~~~~~~~~~
+   drivers/gpu/drm/panthor/panthor_mmu.c:1691:9: note: uninitialized use occurs here
+    1691 |         return ret;
+         |                ^~~
+   drivers/gpu/drm/panthor/panthor_mmu.c:1685:2: note: remove the 'if' if its condition is always true
+    1685 |         if (vm->as.id >= 0) {
+         |         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/panthor/panthor_mmu.c:1679:9: note: initialize the variable 'ret' to silence this warning
+    1679 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +1685 drivers/gpu/drm/panthor/panthor_mmu.c
+
+  1675	
+  1676	static int panthor_vm_lock_region(struct panthor_vm *vm, u64 start, u64 size)
+  1677	{
+  1678		struct panthor_device *ptdev = vm->ptdev;
+  1679		int ret;
+  1680	
+  1681		mutex_lock(&ptdev->mmu->as.slots_lock);
+  1682		drm_WARN_ON(&ptdev->base, vm->locked_region.start || vm->locked_region.size);
+  1683		vm->locked_region.start = start;
+  1684		vm->locked_region.size = size;
+> 1685		if (vm->as.id >= 0) {
+  1686			lock_region(ptdev, vm->as.id, start, size);
+  1687			ret = wait_ready(ptdev, vm->as.id);
+  1688		}
+  1689		mutex_unlock(&ptdev->mmu->as.slots_lock);
+  1690	
+  1691		return ret;
+  1692	}
+  1693	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
