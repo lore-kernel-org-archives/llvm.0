@@ -1,130 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B3D2F50B0;
-	Fri,  4 Jul 2025 13:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819181BE238;
+	Fri,  4 Jul 2025 14:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751634099; cv=none; b=eaIvkhRVA6PAJJOGJnZApRdCxDy1nTl90Kob8hxCXJBoFAG1jhXVh1sSu3mpwyC81r8exZyxEi1I2vUBoThqZIcfTI7e2Tvij1NnHWXs6JagY+NxCgweWH0hoIKidNsm0jy58fO1/uvszHTJAnWkDSdQEVnISAKbM9TDkvk7IUA=
+	t=1751639045; cv=none; b=WTx6iVjfg++mn6Epn4CwHjU9dWwHG9apXz3P9WXwIflzciGe2PeC8G3n9d19YjEM/PT70mjzFe8+MkfBtw/g/j9UP5QbrBFlo2c0HgA4niIvuJ6xKCzTzyPgOlkl5nlaBYw+DPiPVX3XwiHrtUvxsKn1XH9iuvO+ZIw618vD7nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751634099; c=relaxed/simple;
-	bh=1SFIg86ScSSNsm00r4z39bxOC+QdfD7ofZFsNo39Gyw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=QuDmR68sXHJu1VdwvmOy/8TKkuR13xrJO6c5cZ2Dm/63RUAXWFJo+uSeEfuIuoyWIfr+OSEYH50qX3xum/A/sAZZ72tqBtllDepreXqcg7TkhEkoSAQX7YcMVMYNoQfVX3DGY/+ZHLIamqaMI/wFSizpV1u5LYGB1BhBXd1C95s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTZQCGwh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751639045; c=relaxed/simple;
+	bh=z/fpFp3C57D5zsiDOMOhZGP8+ZvQdPEfkKOjBj3KX58=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c8kHK+05BOIwmEgF8aAe8skutJHvVWWRpv5KbOjGIKXr4rdeHM8hBI9g29kcEVYFzorkSMzZxNvOMgEnfbuVU2gYoH7XGIjZyO7lMk9ATeu6k7TqUqbJfHNSgrd7aEqNGz96oYcBNVMUPmgOn/u6BFuN03ksgb/Z4fIk+9Y+MNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LsF+6IBd; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTZQCGwh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA72C4CEE3;
-	Fri,  4 Jul 2025 13:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751634099;
-	bh=1SFIg86ScSSNsm00r4z39bxOC+QdfD7ofZFsNo39Gyw=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=VTZQCGwhAN+TexmrabJGl6LSW4Xumo1b3iyodJcqKKb2S+NtuyH0wgV0XP9jPivaQ
-	 QuIqn8AtkfhK0+gKQ1ejE0AWPSMFd9C0sa8nLfuIly2BzdyUP8Px0ho4oMaC2LnN3l
-	 4lB1zV53g1wSLGMaKO1dWQLG5r1vqzj/k5z4JY4BdlXr5S/IsxRkvkdm+tgkf2VgOx
-	 fZqh+B/8T9b4HB0rnSrjSrFm90CAihtJ2cuZ6KUhRJXNxo5H/Hqv9zo/6d3q3R8XPw
-	 gK1OTk3fERiW0Prtx9CO8/vhuUS5bARcvhok3yE2TSbAXA89qvtD+iuArw73v2kZOz
-	 bKOGfZaX9sCWQ==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LsF+6IBd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751639044; x=1783175044;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z/fpFp3C57D5zsiDOMOhZGP8+ZvQdPEfkKOjBj3KX58=;
+  b=LsF+6IBdn5N5wdJ2hdLI+8U5F2Tuu+dDIWvLccJOm3iBtU/42sCdRtZy
+   h+T2GQdWfvtHL7bK8sWjKl5pHXVFmxCrimL9Z+NDg1DxCUF1mgyO3V20F
+   JDwj6w6qYXcETjeMxhMGMrdlFhVKxneF9yYbwacoVhb6ios6kRdEyyHfh
+   NZD/+zL+NfmGeedUvjC1F0XwWpeGHPyhfS+ZQkKNVk7NUG8G3SophjCxu
+   S28Y+TQR2XDhEZEnpWZfygnuJrbhR4AIFjQaPd1zn8NOJPJEO0FUvdCUB
+   86HK8WS1GeXXIBpdJ7vowv5mfrIMNa0EfCfBXrH1FIXGi6ACpYD71vhPP
+   A==;
+X-CSE-ConnectionGUID: L9pL8QsUSmqb+JZm4PNUyg==
+X-CSE-MsgGUID: xQvT2Q+yRgCZqJGNee9QQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="65030802"
+X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
+   d="scan'208";a="65030802"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 07:24:03 -0700
+X-CSE-ConnectionGUID: Nv/ibLK0QM6j9ScZxt9p3A==
+X-CSE-MsgGUID: EJtADhggRxWmKnIG5CTl7w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
+   d="scan'208";a="178317909"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 04 Jul 2025 07:24:01 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXhKZ-0003nJ-1s;
+	Fri, 04 Jul 2025 14:23:59 +0000
+Date: Fri, 4 Jul 2025 22:23:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v5 2/2] mm: Fix OOM killer inaccuracy on large
+ many-core systems
+Message-ID: <202507042202.J2ui1z8Y-lkp@intel.com>
+References: <20250703173813.18432-3-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Jul 2025 15:01:23 +0200
-Message-Id: <DB3AGL1QO4M4.2HANWHX9TF9WN@kernel.org>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
- <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v13 4/5] rust: replace `kernel::c_str!` with C-Strings
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Tamir Duberstein" <tamird@gmail.com>, "Michal Rostecki"
- <vadorovsky@protonmail.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
- Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary
- Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <davidgow@google.com>, "Rae Moar" <rmoar@google.com>, "Danilo Krummrich"
- <dakr@kernel.org>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Maxime Ripard" <mripard@kernel.org>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Russ Weight" <russ.weight@linux.dev>, "FUJITA
- Tomonori" <fujita.tomonori@gmail.com>, "Rob Herring" <robh@kernel.org>,
- "Saravana Kannan" <saravanak@google.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Will Deacon"
- <will@kernel.org>, "Waiman Long" <longman@redhat.com>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt"
- <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>, "Heiner Kallweit"
- <hkallweit1@gmail.com>, "Russell King" <linux@armlinux.org.uk>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Bjorn
- Helgaas" <bhelgaas@google.com>, "Arnd Bergmann" <arnd@arndb.de>, "Jens
- Axboe" <axboe@kernel.dk>, =?utf-8?q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, "Dave Ertman" <david.m.ertman@intel.com>, "Ira
- Weiny" <ira.weiny@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Breno
- Leitao" <leitao@debian.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-4-29f7d3eb97a6@gmail.com>
-In-Reply-To: <20250701-cstr-core-v13-4-29f7d3eb97a6@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250703173813.18432-3-mathieu.desnoyers@efficios.com>
 
-On Tue Jul 1, 2025 at 6:49 PM CEST, Tamir Duberstein wrote:
-> C-String literals were added in Rust 1.77. Replace instances of
-> `kernel::c_str!` with C-String literals where possible and rename
-> `kernel::c_str!` to `str_to_cstr!` to clarify its intended use.
+Hi Mathieu,
 
-These two things can also be split? And it should also be possible to do
-this by-subsystem, right?
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
----
-Cheers,
-Benno
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on trace/for-next kees/for-next/execve linus/master v6.16-rc4]
+[cannot apply to akpm-mm/mm-everything dennis-percpu/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
->  drivers/block/rnull.rs                |  2 +-
->  drivers/cpufreq/rcpufreq_dt.rs        |  5 ++---
->  drivers/gpu/drm/nova/driver.rs        | 10 +++++-----
->  drivers/gpu/nova-core/driver.rs       |  6 +++---
->  drivers/net/phy/ax88796b_rust.rs      |  7 +++----
->  drivers/net/phy/qt2025.rs             |  5 ++---
->  rust/kernel/clk.rs                    |  6 ++----
->  rust/kernel/configfs.rs               |  9 +++++----
->  rust/kernel/cpufreq.rs                |  3 +--
->  rust/kernel/devres.rs                 |  2 +-
->  rust/kernel/drm/ioctl.rs              |  2 +-
->  rust/kernel/firmware.rs               |  6 +++---
->  rust/kernel/kunit.rs                  | 14 ++++++--------
->  rust/kernel/net/phy.rs                |  6 ++----
->  rust/kernel/platform.rs               |  4 ++--
->  rust/kernel/str.rs                    | 24 ++++++++++++++++--------
->  rust/kernel/sync.rs                   |  7 +++----
->  rust/kernel/sync/completion.rs        |  2 +-
->  rust/kernel/sync/lock/global.rs       |  3 ++-
->  rust/kernel/workqueue.rs              |  8 ++++----
->  rust/macros/kunit.rs                  | 10 +++++-----
->  rust/macros/module.rs                 |  2 +-
->  samples/rust/rust_configfs.rs         |  5 ++---
->  samples/rust/rust_driver_auxiliary.rs |  4 ++--
->  samples/rust/rust_driver_faux.rs      |  4 ++--
->  samples/rust/rust_driver_pci.rs       |  4 ++--
->  samples/rust/rust_driver_platform.rs  |  4 ++--
->  samples/rust/rust_misc_device.rs      |  3 +--
->  scripts/rustdoc_test_gen.rs           |  4 ++--
->  29 files changed, 84 insertions(+), 87 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mathieu-Desnoyers/lib-Introduce-hierarchical-per-cpu-counters/20250704-013915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20250703173813.18432-3-mathieu.desnoyers%40efficios.com
+patch subject: [RFC PATCH v5 2/2] mm: Fix OOM killer inaccuracy on large many-core systems
+config: x86_64-buildonly-randconfig-003-20250704 (https://download.01.org/0day-ci/archive/20250704/202507042202.J2ui1z8Y-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507042202.J2ui1z8Y-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507042202.J2ui1z8Y-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: percpu_counter_tree_precise_compare_value
+   >>> referenced by fork.c:590 (kernel/fork.c:590)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced by fork.c:590 (kernel/fork.c:590)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced by fork.c:590 (kernel/fork.c:590)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced 1 more times
+--
+>> ld.lld: error: undefined symbol: percpu_counter_tree_destroy
+   >>> referenced by fork.c:694 (kernel/fork.c:694)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced by fork.c:694 (kernel/fork.c:694)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced by fork.c:694 (kernel/fork.c:694)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: percpu_counter_tree_precise_sum
+   >>> referenced by fork.c:591 (kernel/fork.c:591)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced by fork.c:591 (kernel/fork.c:591)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced by fork.c:591 (kernel/fork.c:591)
+   >>>               vmlinux.o:(__mmdrop)
+   >>> referenced 1 more times
+--
+>> ld.lld: error: undefined symbol: percpu_counter_tree_init
+   >>> referenced by fork.c:1084 (kernel/fork.c:1084)
+   >>>               vmlinux.o:(mm_init)
+   >>> referenced by fork.c:1084 (kernel/fork.c:1084)
+   >>>               vmlinux.o:(mm_init)
+   >>> referenced by fork.c:1084 (kernel/fork.c:1084)
+   >>>               vmlinux.o:(mm_init)
+   >>> referenced 1 more times
+--
+>> ld.lld: error: undefined symbol: percpu_counter_tree_add_slowpath
+   >>> referenced by percpu_counter_tree.h:93 (include/linux/percpu_counter_tree.h:93)
+   >>>               vmlinux.o:(filemap_map_pages)
+   >>> referenced by percpu_counter_tree.h:93 (include/linux/percpu_counter_tree.h:93)
+   >>>               vmlinux.o:(copy_page_range)
+   >>> referenced by percpu_counter_tree.h:93 (include/linux/percpu_counter_tree.h:93)
+   >>>               vmlinux.o:(unmap_page_range)
+   >>> referenced 27 more times
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
