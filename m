@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1DA277007;
-	Fri,  4 Jul 2025 07:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9730427F4F5;
+	Fri,  4 Jul 2025 07:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751613085; cv=none; b=O7LxZiNSQktYjm7WHARAsQhc67Vqe6iRt1jOax+aoIochakbFQ7hRiwoX7YbIsllxY0u8jjdxYNJZW1/IicvWY9lUaLPNk9VOsUEvpZohCYf1G4/crwSv6OY990qJ7KRrIQ+axy4oHoU4euvzpP9roOgkdLtKwRi/LGksABLSSg=
+	t=1751614287; cv=none; b=g9JDrgWVCU8YImCJ9UIZpa2hxh7T0fVqr88lLm5LtR0gv46tG/1EIbK79ecanA3F/nYElr4+1cNPA8XZcMvVX1G7kgkwtwE7tfCfuhyHjNVYmyWxdLSWc3myQBcCmUY7/bXibI38hxKCxuSvXGgsXKeBnqOAa3XdSSAmK2LPd3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751613085; c=relaxed/simple;
-	bh=eY3yxetsfcAKTWev+VU+/alB84PZJgr/bSup/avdUOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=REd/sEqk4t+XnA5tT49kkkaR/lRqkwgRDKaVlPGLXSazcWJHdlpJ+j00kEQzsASEm3dYs91q9argoDkRWxwmy7dN+fek+0ZCIcEc6cRdD2b69OczIzGGoZbjgCyT0nw5njFwfnOTxOMF19pvsVGOQ3H4MRhdbJZm1XBRwyl7hPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dOGAgx2A; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1751614287; c=relaxed/simple;
+	bh=I0BQB5Y0sAR1ONC1TeJSE+OpNExr7IsFBX7iMmg16MA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ii5DmzTDQHZ2THQZ6lizjwWEaXsr66aeGoWtVREnj9cNKGX72jzyLjT8iJ1EjjS5gI7ZXIG2QN4Pnbo8pv99Fp0zWuX1FfxwuK4QmMC26pq7te0tVy2ApEKZC85hOUF8f9oRIoP5hysjNdQJ41ETaWKDQh+unk3EDEaVpJZL5Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AHZeYaLY; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dOGAgx2A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AHZeYaLY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751613084; x=1783149084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eY3yxetsfcAKTWev+VU+/alB84PZJgr/bSup/avdUOI=;
-  b=dOGAgx2A9WF+aWJs1d1DyVSq2zPBFj3iMSLDcEV1eqAk1BaijkGT53FI
-   kY4M4Z/A5cb4l7+8xPR/5EUUx/fAkY2o2fY2qcQpHjLTiBT5bJtuPe4Y5
-   C6FGtM37CMuHRJolTIe1jnd/f9oCvejWQMMfR6gnxWr7770UkSdGVnMF/
-   SsMBP/lZfMXdj0L9AntZg7sB5vqUV2WKDMKAUZtfs2x1tsPQq9Gto4zv9
-   bwFC+L7H5py4SY8ympH4u080EezRlIq9EDM2XEmk12GKcjCcTuyuVzaMq
-   y3NC78iKcg32W81X8jK3aEmWeUhkrGwGp0myPtM2qrOjKQLTUJD7wFikZ
+  t=1751614286; x=1783150286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I0BQB5Y0sAR1ONC1TeJSE+OpNExr7IsFBX7iMmg16MA=;
+  b=AHZeYaLYKkLhsBO3qpELo4KicLw7pHGxZNqL6tJL/yN4exoIh5ihiHUZ
+   fXh3FWRT1DXapA4oOzX/Hh0MGhlz5wsCYlWxTC3MPGNBgOHmCXT0/jVmG
+   hVI8ghPGNjcB/LyQAG15HZ7Y67hw2l/kGdJKrVKmtPpf4NP2WEqjN1+dy
+   lb/3fgOh9C58m4aPkiI6AsO9CUOFRlJj69a433RgsJA65QUtUGK+aHxie
+   tHXrVOGJiK2PdtSxu7HXl5KPRtK4y+HY6p+E9nBDgCppHxcSDxFyXLBwB
+   kqakufG6Qtu8hqbgK7ed8CGbOn+ZooFnI5Nvc0F/2UmrMA9pBAkORRuZc
    A==;
-X-CSE-ConnectionGUID: MrklBSBlRRyrHZU4Y5wM4A==
-X-CSE-MsgGUID: az72VBt4SN2irRs3f8Odeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="79384088"
+X-CSE-ConnectionGUID: 97d0L5+PSFuygKQnXCUgKQ==
+X-CSE-MsgGUID: J5lmadd9TF2Sb+chmY47fw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53871631"
 X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="79384088"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:11:22 -0700
-X-CSE-ConnectionGUID: IVDkeR18QE+cNvYaY52qBA==
-X-CSE-MsgGUID: F3eZDpPASRqJM8biS/HOOw==
+   d="scan'208";a="53871631"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:31:25 -0700
+X-CSE-ConnectionGUID: NOGy6WoYRjKXVfBseLKXdA==
+X-CSE-MsgGUID: ob6MCjr8SRKu3k2TGvctbA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="159124486"
+   d="scan'208";a="155337062"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 04 Jul 2025 00:11:20 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 04 Jul 2025 00:31:21 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXaZp-0003Qz-2R;
-	Fri, 04 Jul 2025 07:11:17 +0000
-Date: Fri, 4 Jul 2025 15:10:48 +0800
+	id 1uXatD-0003Rn-10;
+	Fri, 04 Jul 2025 07:31:19 +0000
+Date: Fri, 4 Jul 2025 15:31:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [trace:unwind/core 13/14] include/linux/unwind_deferred.h:57:27:
- error: assigning to 'union unwind_task_id' from incompatible type 'int'
-Message-ID: <202507041545.j60uUWuS-lkp@intel.com>
+To: Shree Ramamoorthy <s-ramamoorthy@ti.com>, aaro.koskinen@iki.fi,
+	andreas@kemnade.info, khilman@baylibre.com, rogerq@kernel.org,
+	tony@atomide.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, m-leonard@ti.com,
+	praneeth@ti.com, jcormier@criticallink.com
+Subject: Re: [PATCH v6 2/2] gpio: tps65219: Add support for TI TPS65214 PMIC
+Message-ID: <202507041537.da8R2iEX-lkp@intel.com>
+References: <20250703180751.168755-3-s-ramamoorthy@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,58 +67,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250703180751.168755-3-s-ramamoorthy@ti.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace unwind/core
-head:   13e7688d3b4aaabfa3d6289071e136c98e8f31d1
-commit: 4a9ffd6ce545f51b23f260e5697145d5da460dbb [13/14] unwind_user/x86: Enable frame pointer unwinding on x86
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250704/202507041545.j60uUWuS-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507041545.j60uUWuS-lkp@intel.com/reproduce)
+Hi Shree,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on v6.16-rc4]
+[also build test ERROR on linus/master next-20250703]
+[cannot apply to tmlind-omap/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shree-Ramamoorthy/gpio-tps65219-Update-_IDX-_OFFSET-macro-prefix/20250704-021048
+base:   v6.16-rc4
+patch link:    https://lore.kernel.org/r/20250703180751.168755-3-s-ramamoorthy%40ti.com
+patch subject: [PATCH v6 2/2] gpio: tps65219: Add support for TI TPS65214 PMIC
+config: hexagon-randconfig-002-20250704 (https://download.01.org/0day-ci/archive/20250704/202507041537.da8R2iEX-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 61529d9e36fa86782a2458e6bdeedf7f376ef4b5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507041537.da8R2iEX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507041545.j60uUWuS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507041537.da8R2iEX-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/signal.c:28:
-   In file included from include/linux/entry-common.h:15:
->> include/linux/unwind_deferred.h:57:27: error: assigning to 'union unwind_task_id' from incompatible type 'int'
-      57 |                 current->unwind_info.id = 0;
-         |                                         ^ ~
-   1 error generated.
+>> drivers/gpio/gpio-tps65219.c:208:14: error: incompatible function pointer types initializing 'int (*)(struct gpio_chip *, unsigned int, int)' with an expression of type 'void (struct gpio_chip *, unsigned int, int)' [-Wincompatible-function-pointer-types]
+     208 |         .set_rv                 = tps65219_gpio_set,
+         |                                   ^~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-tps65219.c:221:14: error: incompatible function pointer types initializing 'int (*)(struct gpio_chip *, unsigned int, int)' with an expression of type 'void (struct gpio_chip *, unsigned int, int)' [-Wincompatible-function-pointer-types]
+     221 |         .set_rv                 = tps65219_gpio_set,
+         |                                   ^~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +57 include/linux/unwind_deferred.h
+vim +208 drivers/gpio/gpio-tps65219.c
 
-11678a9b0f7328b Steven Rostedt 2025-06-30  43  
-be1affc11bf5d06 Josh Poimboeuf 2025-06-30  44  static __always_inline void unwind_reset_info(void)
-be1affc11bf5d06 Josh Poimboeuf 2025-06-30  45  {
-d92af163548c2cf Steven Rostedt 2025-06-30  46  	struct unwind_task_info *info = &current->unwind_info;
-d92af163548c2cf Steven Rostedt 2025-06-30  47  	unsigned long bits;
-d92af163548c2cf Steven Rostedt 2025-06-30  48  
-d92af163548c2cf Steven Rostedt 2025-06-30  49  	/* Was there any unwinding? */
-d92af163548c2cf Steven Rostedt 2025-06-30  50  	if (unlikely(info->unwind_mask)) {
-d92af163548c2cf Steven Rostedt 2025-06-30  51  		bits = info->unwind_mask;
-d92af163548c2cf Steven Rostedt 2025-06-30  52  		do {
-d92af163548c2cf Steven Rostedt 2025-06-30  53  			/* Is a task_work going to run again before going back */
-d92af163548c2cf Steven Rostedt 2025-06-30  54  			if (bits & UNWIND_PENDING)
-d92af163548c2cf Steven Rostedt 2025-06-30  55  				return;
-d92af163548c2cf Steven Rostedt 2025-06-30  56  		} while (!try_cmpxchg(&info->unwind_mask, &bits, 0UL));
-eba02b7e7ae52d4 Josh Poimboeuf 2025-06-30 @57  		current->unwind_info.id = 0;
-ef627d7976da738 Steven Rostedt 2025-06-30  58  
-d92af163548c2cf Steven Rostedt 2025-06-30  59  		if (unlikely(info->cache))
-d92af163548c2cf Steven Rostedt 2025-06-30  60  			info->cache->nr_entries = 0;
-be1affc11bf5d06 Josh Poimboeuf 2025-06-30  61  	}
-ef627d7976da738 Steven Rostedt 2025-06-30  62  }
-be1affc11bf5d06 Josh Poimboeuf 2025-06-30  63  
-
-:::::: The code at line 57 was first introduced by commit
-:::::: eba02b7e7ae52d4b6cda51156ae3d181bd781d56 unwind_user/deferred: Add deferred unwinding interface
-
-:::::: TO: Josh Poimboeuf <jpoimboe@kernel.org>
-:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+   200	
+   201	static const struct gpio_chip tps65214_template_chip = {
+   202		.label			= "tps65214-gpio",
+   203		.owner			= THIS_MODULE,
+   204		.get_direction		= tps65214_gpio_get_direction,
+   205		.direction_input	= tps65219_gpio_direction_input,
+   206		.direction_output	= tps65219_gpio_direction_output,
+   207		.get			= tps65219_gpio_get,
+ > 208		.set_rv			= tps65219_gpio_set,
+   209		.base			= -1,
+   210		.ngpio			= 2,
+   211		.can_sleep		= true,
+   212	};
+   213	
 
 -- 
 0-DAY CI Kernel Test Service
