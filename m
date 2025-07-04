@@ -1,72 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DED91D416E;
-	Fri,  4 Jul 2025 15:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE58319C546;
+	Fri,  4 Jul 2025 16:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751644641; cv=none; b=oK5qY0v7OLJ/jSZ2vU5CEoAa57K+gci7d2q80digm3/S7NMryE7Bmi/ywgoneulxTT+q7f1ddgoqzlmEl4edwx3km8SL0GpPS07cY4FGn6BF+v7rG4jRhHLWcjzJ9HM55LrdPRfehOF449wbH7ILi/PCSKuG2jwK0qT8HNbExfU=
+	t=1751647762; cv=none; b=lmt2Ew+VskIueyF4Iy/x2j/2k57UMMTkmkCZvDCySSDazd7iEeX2km9b5R+qOmIkxO5w+IKwIG9crUA9+7/NEL2jgqMqJsNsAY4dDNZsstgigZFothjiFfDKpJ5TCyyfzgde5MG0IO5p2TLsxhm/qd35oKQ1XFncw+bkwT/hvEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751644641; c=relaxed/simple;
-	bh=KwR5g9qe9ps60+YgjR6/XFGIu3jFv+pBMeR7+nYiQzE=;
+	s=arc-20240116; t=1751647762; c=relaxed/simple;
+	bh=puHH8ECd9Sx/irwJXMzsitFTk8LHZcjscwcNGu8zkdY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ny7nQxQaVm344Rruh7gEXHAF7182NiPMX2SM1bNtTPUfoINYpnZCrO47+ecGMzWe6Hin0G9Xr9EOOzEwif4clMfkWGhgeYAudPT2YTQB2ziM63VF1BoWeDlmSThtCI7gmAgj00unuOMfro0gumcF4+ksS38FLE5CPTb6AMxbll0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DsKfPW40; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=tQyGKtj2vyYiHEvq9Ni5RwcitAfzEj1s7GjI37lGwuPszzBB5w486xFLT6Ajxhuc91ox3un4EJ6BKeqF67Yd0KdWEOWt+BiEH4gTXAqF7ukmkSJBzgKZq/Z7k/wiGJvbbjhkdYReDOf2n0yinMrO3uHL2A8jsU1E2zjhE2bKG8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFZ/BT63; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DsKfPW40"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFZ/BT63"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751644639; x=1783180639;
+  t=1751647761; x=1783183761;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KwR5g9qe9ps60+YgjR6/XFGIu3jFv+pBMeR7+nYiQzE=;
-  b=DsKfPW40QRzYNqMKhh/ElrHC9LKSgY9OpoYOtjirHBpkwR/svY7g+1ry
-   mtdCTyvpO+XOidsGM1L/io6twfTOUCDzE9cBnZ1indJfovva8jYMXZhaA
-   IE1fgKiF0CwqSfxdJ+tKtjuwagfUDI3z7rZa7xQDR7WyaHHsiiyEMSPvS
-   cMOVnU9A7e1rD5ZjZCR9pTITW170FNDlT7xWORTEbmuM9GO98GNbVTnDJ
-   ozZQEkbEJcamKse1nPq0rQwQwu9gbaJ2x8BPnC83oWfRYnJLDKo9r8fm1
-   M91Q7oUtF/Xnf/4GeJO4PdJdB7CQ5h80rOFY6XSVXwUZMm1aSwL7FxehB
-   A==;
-X-CSE-ConnectionGUID: kGFo8pO6RhaJZf9e9WYdyA==
-X-CSE-MsgGUID: K9iAmkRbS6KSq5FATj+ZxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="79421303"
+  bh=puHH8ECd9Sx/irwJXMzsitFTk8LHZcjscwcNGu8zkdY=;
+  b=iFZ/BT630kF1nhbBvR3rSbSaVpMDVPyPrTRsR2Tv6HIDJYv+G6Z6YAs5
+   FRS+AeOwp7d6RuQPAB/YbiyECxBLQMxTMGLkQI/ABq5xvRwByeyaefDBG
+   IiqEQ/ZquQv/ZNF7zwGYt5oaiY92iQdxE+q3K8kdl8QYvUkyMJtBxy2ms
+   fOwGBHuM7SjLts/X4usEfwA4YvBbt4zIBw0tdXLEVvL6suoH5rr/Q7Bvq
+   pOj3wM47VsMJmYdoo6yB6nxzXlcdFMU5Qe/a0aa5deamc3ktrgwZX8Wel
+   7rHJH8WiVmAkTAGV9Rn5YBZv6ysoZDl+RRa+pCoz5FEVn6H8ZjflMhXBs
+   g==;
+X-CSE-ConnectionGUID: TQ3CV8BLTyGvaZ00Q5wGsQ==
+X-CSE-MsgGUID: rt1QQ+wWSOWb5HCMs70O7Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="53906723"
 X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
-   d="scan'208";a="79421303"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 08:57:17 -0700
-X-CSE-ConnectionGUID: LlGoivA0SYalknVTk342qA==
-X-CSE-MsgGUID: qlh1fCFKTHuFfvi/Myn5DQ==
+   d="scan'208";a="53906723"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 09:49:20 -0700
+X-CSE-ConnectionGUID: hh78nC4/RxamdFREw94QKw==
+X-CSE-MsgGUID: j1mvSA1MTJatPNxSE0N18A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
-   d="scan'208";a="158699194"
+   d="scan'208";a="160202579"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Jul 2025 08:57:12 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 04 Jul 2025 09:49:18 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXimj-0003rB-2T;
-	Fri, 04 Jul 2025 15:57:09 +0000
-Date: Fri, 4 Jul 2025 23:56:53 +0800
+	id 1uXjbA-0003vL-02;
+	Fri, 04 Jul 2025 16:49:16 +0000
+Date: Sat, 5 Jul 2025 00:48:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	hannes@cmpxchg.org, yosry.ahmed@linux.dev, nphamcs@gmail.com,
-	chengming.zhou@linux.dev, usamaarif642@gmail.com,
-	ryan.roberts@arm.com, 21cnbao@gmail.com,
-	ying.huang@linux.alibaba.com, akpm@linux-foundation.org,
-	senozhatsky@chromium.org, linux-crypto@vger.kernel.org,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	clabbe@baylibre.com, ardb@kernel.org, ebiggers@google.com,
-	surenb@google.com, kristen.c.accardi@intel.com,
-	vinicius.gomes@intel.com
+To: David Lechner <dlechner@baylibre.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	wajdi.k.feghali@intel.com, vinodh.gopal@intel.com,
-	kanchana.p.sridhar@intel.com
-Subject: Re: [PATCH v10 10/25] crypto: iaa - Rearchitect the iaa_crypto
- driver to be usable by zswap and zram.
-Message-ID: <202507050102.v288TUAS-lkp@intel.com>
-References: <20250704042323.10318-11-kanchana.p.sridhar@intel.com>
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	David Lechner <dlechner@baylibre.com>
+Subject: Re: [PATCH] iio: adc: ad7173: fix num_slots on most chips
+Message-ID: <202507050018.iWEJiG04-lkp@intel.com>
+References: <20250703-iio-adc-ad7173-fix-num_slots-on-most-chips-v1-1-326c5d113e15@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,52 +69,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250704042323.10318-11-kanchana.p.sridhar@intel.com>
+In-Reply-To: <20250703-iio-adc-ad7173-fix-num_slots-on-most-chips-v1-1-326c5d113e15@baylibre.com>
 
-Hi Kanchana,
+Hi David,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master akpm-mm/mm-everything linus/master v6.16-rc4 next-20250704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 6742eff60460e77158d4f1b233f17e0345c9e66a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kanchana-P-Sridhar/crypto-iaa-Reorganize-the-iaa_crypto-driver-code/20250704-122613
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20250704042323.10318-11-kanchana.p.sridhar%40intel.com
-patch subject: [PATCH v10 10/25] crypto: iaa - Rearchitect the iaa_crypto driver to be usable by zswap and zram.
-config: x86_64-randconfig-004-20250704 (https://download.01.org/0day-ci/archive/20250705/202507050102.v288TUAS-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/iio-adc-ad7173-fix-num_slots-on-most-chips/20250704-061744
+base:   6742eff60460e77158d4f1b233f17e0345c9e66a
+patch link:    https://lore.kernel.org/r/20250703-iio-adc-ad7173-fix-num_slots-on-most-chips-v1-1-326c5d113e15%40baylibre.com
+patch subject: [PATCH] iio: adc: ad7173: fix num_slots on most chips
+config: x86_64-buildonly-randconfig-004-20250704 (https://download.01.org/0day-ci/archive/20250705/202507050018.iWEJiG04-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507050102.v288TUAS-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507050018.iWEJiG04-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507050102.v288TUAS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507050018.iWEJiG04-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/crypto/intel/iaa/iaa_crypto_main.c:2347:30: warning: variable 'ctx' set but not used [-Wunused-but-set-variable]
-    2347 |         struct iaa_compression_ctx *ctx = crypto_tfm_ctx(tfm);
-         |                                     ^
-   1 warning generated.
+>> drivers/iio/adc/ad7173.c:782:3: error: field designator 'supports_spi_offload' does not refer to any field in type 'const struct ad_sigma_delta_info'
+     782 |         .supports_spi_offload = true,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/ctx +2347 drivers/crypto/intel/iaa/iaa_crypto_main.c
+vim +782 drivers/iio/adc/ad7173.c
 
-4d9d295bdce222 Kanchana P Sridhar 2025-07-03  2343  
-2ec6761df889fd Tom Zanussi        2023-12-05  2344  static int iaa_comp_init_fixed(struct crypto_acomp *acomp_tfm)
-2ec6761df889fd Tom Zanussi        2023-12-05  2345  {
-2ec6761df889fd Tom Zanussi        2023-12-05  2346  	struct crypto_tfm *tfm = crypto_acomp_tfm(acomp_tfm);
-2ec6761df889fd Tom Zanussi        2023-12-05 @2347  	struct iaa_compression_ctx *ctx = crypto_tfm_ctx(tfm);
-2ec6761df889fd Tom Zanussi        2023-12-05  2348  
-4d9d295bdce222 Kanchana P Sridhar 2025-07-03  2349  	ctx = iaa_ctx[IAA_MODE_FIXED];
-0ece0d4e1175a0 Kanchana P Sridhar 2025-07-03  2350  
-2ec6761df889fd Tom Zanussi        2023-12-05  2351  	return 0;
-2ec6761df889fd Tom Zanussi        2023-12-05  2352  }
-2ec6761df889fd Tom Zanussi        2023-12-05  2353  
+   773	
+   774	static const struct ad_sigma_delta_info ad7173_sigma_delta_info_16_slots = {
+   775		.set_channel = ad7173_set_channel,
+   776		.append_status = ad7173_append_status,
+   777		.disable_all = ad7173_disable_all,
+   778		.disable_one = ad7173_disable_one,
+   779		.set_mode = ad7173_set_mode,
+   780		.has_registers = true,
+   781		.has_named_irqs = true,
+ > 782		.supports_spi_offload = true,
+   783		.addr_shift = 0,
+   784		.read_mask = BIT(6),
+   785		.status_ch_mask = GENMASK(3, 0),
+   786		.data_reg = AD7173_REG_DATA,
+   787		.num_resetclks = 64,
+   788		.num_slots = 16,
+   789	};
+   790	
 
 -- 
 0-DAY CI Kernel Test Service
