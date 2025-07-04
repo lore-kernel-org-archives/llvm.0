@@ -1,174 +1,107 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD192877F7
-	for <llvm@lists.linux.dev>; Fri,  4 Jul 2025 08:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D170D2EACEC;
+	Fri,  4 Jul 2025 09:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751618459; cv=none; b=N1rqZkzGOKQZ8j+9YvwWLmNbeKbX+C95lC8dc4Z0OF5p8ZuuoBzlUyYwm2k5bxtpOoGIUQuSaHpObnteL2ClnMkO6Y74O6C1hsj+BkxStFw9KNL1TfZ2b67u+syFnjnrSuxBa4bPJaNCapKOy8mYs2eNHOUGWQx6ToKxiB9WRUk=
+	t=1751621259; cv=none; b=dvFF5oEx0iQKxUFkLOA/fdG4FErNeVFQ8g/Zr8Vc2ET/PrIyBUM4N7AoEVcGeJxNWxnKaLq+0W2GcXIiWmT9OgC41Wc/rg0v6HX123tRSGsKP/7ijisetlz2E+4/jKYJlwCC5A3L4mIxydvSECDzNr8Tzg0Rb2ULfBVYYOdTffs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751618459; c=relaxed/simple;
-	bh=pMXtGRROxYPlLPH4DHRGNMDWd5KHAZVN6SCVZ3OapRA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZiPan4aDiXnC1JMj6vB8OFug2du3/P6h+eUpegUV2BJHkPd/qjQkhTgq8IGGNegnlsjjI87/ts5NjCHQPON1sBzL4nGfFC/QX9dsCSo9T0WIgOkBStKTDBf5s8Zr9wpYkllZd5X0wvL8Ij/SGfAwY9wybMr0B4aSDVtdOeAA89I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pg0OKir7; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751621259; c=relaxed/simple;
+	bh=xsewCoZTz13Afl0fYgBbzrqkR2165Vy3a+LpTEr+0cY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MrtAvW23BTmTaHfTOu3hVsCP532YYX0vD/8TC7d4aPPMOjmFkXc8Gb06a0q31gghzkFCuhUXV0wZBSeB5gG66G+/84eKC/TGSK88RwfA5mWlW5B5f1F8b+NBJ/vbZnA5g/5zmo8au4Lo/4M36XLFm0q1v8L/GWTfWraBzqkMUAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XbvJqYHe; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pg0OKir7"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-313067339e9so113909a91.2
-        for <llvm@lists.linux.dev>; Fri, 04 Jul 2025 01:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751618456; x=1752223256; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dHSEKYsU05H6zm689vQoHx3pYIDxa35XkhfzWTQQ1co=;
-        b=Pg0OKir784/F5gADqGuBvKDhWSm3zkte4BH/nvQCWeVuYq7TuDuOWDWIw4EXl/tO5l
-         Z27bE8+Kpjv+qUpZBRfM1S316p1pe4kGKLj8J1+mdus99VvvkEVB9YWtak95vQGCHIq+
-         7MPF5FuPDK3GRPeHZt3tsl/dCclCisEUymDVYtH5apgHWbEFEk1O4Co87NchyMrVamIh
-         hT8OB3cEuTxKayaJZUkcfRz0vxw/TETdCXs7fTddG0RlxURDZWvtBp2gkYvvdLvSocG5
-         cKNCkSjED8eE0KN+A8WqwBjjI86oH48ixw5v4CpV455M7jVSSv1UEN8cJ+F/o5ddIMM2
-         EcJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751618456; x=1752223256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dHSEKYsU05H6zm689vQoHx3pYIDxa35XkhfzWTQQ1co=;
-        b=gtY8E5TAyGfNWnI/5d8Cc+TowSZhOYijzEvv689md+ECy1V/U9YMEjQwC6xFvIMvnz
-         M0nqKs4MWFvaeceFixEYTQAOjGDdDI2RtNkaoTTPXQ6qqERgXvzQHPv/IUswRKC6fMlK
-         ZJlI9+Xs2sLbbjI8stTWQ66zz+DkFYuZKCTMvluvrjiC3KLHRT21IKWPOIq13e06EqwL
-         WI3QvPuXjNqpcnU6ua4BCzi9aEIn+dLrBbZhrkyfeO49Ak3/g8WzjtlNfLkni0xgwT/r
-         PpWnMgHTpNi/qMlVoTVaACyJa79hFBCpqWue6ts4a6KhwZHbjEMkxHSPfoA6d4327Pbu
-         7BDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYNpeqHaYfI3wuOVaDUg2SVDYgvrDSY876sczenISGz3SdPT5JOp5EV2h+cxGcH0R5ghUe@lists.linux.dev
-X-Gm-Message-State: AOJu0YyjGifvJmt8DPpLPmNz0wCOSiTmSQpbtczQ5JX2T2NnLhIH9xJG
-	mdQfDkscMAkUvJY06EWx0o7HQcrEQoVAWks9ItrfavDK6WkNoofPTuFykssG5yFq3safHD/8Zxd
-	fZeABVMRPbi02gWqBfKFKNtM2yKuun9A=
-X-Gm-Gg: ASbGncsBvvNKfRmz1Tn/l7Lk5TNtkyYL7Qf2/0NRbRpM6EVrrlbS4A4jJu6qypXu5wv
-	ndpZy1IBRI+KxjvWSq+QH+1VRfu1xC9dXJPnA4xzf2rrne7MYijiuv1uneczPtDnssPzR20zofN
-	A5uyrOE4BjUjNusEbbg1sGgT0sXuhQ7HktoYH8dVSVVpY=
-X-Google-Smtp-Source: AGHT+IFMfEXuJ43kSXsdtdWY5bcekIDLYN3gAjscsQDNZrtLRLqrsSS7+psigrvCXRqkKZzl+hRlwyHYKmZ9GwWepBk=
-X-Received: by 2002:a17:90b:1dcc:b0:311:c1da:3858 with SMTP id
- 98e67ed59e1d1-31aaca78c4dmr1037960a91.0.1751618456422; Fri, 04 Jul 2025
- 01:40:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XbvJqYHe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751621258; x=1783157258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xsewCoZTz13Afl0fYgBbzrqkR2165Vy3a+LpTEr+0cY=;
+  b=XbvJqYHeqMNKPg0Q7vid+kg1VR+NmZpDO/oeYEMIXMA+Sr52Ht/NRjGn
+   GTGYQ391fn3vz9IwqW36YvvdUXyG4qHksdkHZNfcFqRXaMBkPRL+0Feit
+   1B2vBLp9ettyeC++bVfJd1C6jcUZJKpguKyegYWrpHlfuuWXQN30OJeAW
+   qxkjXJYJpN7ydHbKbaXUpeOd99EtW7wk4fWhmOkFEA/+YjKdwxzakT7jO
+   lOFqChKcQI5feTE+0ZXsklBqjj4qn7Wm/ugzDdDzY7GQL/SrHu8Ue7r72
+   GLtU9rgI3EVinOfZdNyzg9rLZujlFeeJwjutHir+M1hXBC4ZmYhwHALbc
+   g==;
+X-CSE-ConnectionGUID: SWCqoxYHS4iF5Xe7uSkDdQ==
+X-CSE-MsgGUID: CtjYijCmQVKNBGs5unPR0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="65406786"
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="65406786"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 02:27:36 -0700
+X-CSE-ConnectionGUID: oKzAvXfKRAWMOXa+tKIBkg==
+X-CSE-MsgGUID: OZdC7sXeSnWJyAK76jyCwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="154013038"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 04 Jul 2025 02:27:33 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXche-0003Y9-1X;
+	Fri, 04 Jul 2025 09:27:30 +0000
+Date: Fri, 4 Jul 2025 17:27:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Caterina Shablia <caterina.shablia@collabora.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel@collabora.com,
+	Caterina Shablia <caterina.shablia@collabora.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] drm/panthor: Add support for repeated mappings
+Message-ID: <202507041742.rHigXm3n-lkp@intel.com>
+References: <20250703152908.16702-9-caterina.shablia@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org> <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch> <CANiq72ksOG10vc36UDdBytsM-LT7PdgjcZ9B0dkqSETH6a0ezA@mail.gmail.com>
- <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
-In-Reply-To: <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 4 Jul 2025 10:40:43 +0200
-X-Gm-Features: Ac12FXwGbZyrddKNNViyoD8x6yBVbP3kVI8pI2AlPxz0BjAZk4Lec5cu34XzXTU
-Message-ID: <CANiq72kta=Wk=3764A5SzxB6Mq=sJfm9DyMZXFC91ojUSj1TeQ@mail.gmail.com>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Benno Lossin <lossin@kernel.org>, 
-	Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250703152908.16702-9-caterina.shablia@collabora.com>
 
-On Fri, Jul 4, 2025 at 12:46=E2=80=AFAM Tamir Duberstein <tamird@gmail.com>=
- wrote:
->
-> There's also a tactical question about splitting by subsystem: are
-> there any tools that would assist in doing this, or is it a matter of
-> manually consulting MAINTAINERS to figure out file groupings?
+Hi Caterina,
 
-As Andrew mentioned, you can use that script, though I recommend not
-fully/blindly trusting it.
+kernel test robot noticed the following build warnings:
 
-Sometimes you will want to adjust things, e.g. sometimes things may be
-related even if in a couple different `MAINTAINERS` entries, or you
-may want to adjust the flags the script provides to filter, or you may
-want to check `git log --no-merges` to see who is recently applying
-patches related to that area, etc.
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on next-20250703]
+[cannot apply to linus/master v6.16-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It is essentially the same process as when you send patches.
+url:    https://github.com/intel-lab-lkp/linux/commits/Caterina-Shablia/drm-gpuvm-Kill-drm_gpuva_init/20250704-002914
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20250703152908.16702-9-caterina.shablia%40collabora.com
+patch subject: [PATCH v2 7/7] drm/panthor: Add support for repeated mappings
+config: x86_64-buildonly-randconfig-004-20250704 (https://download.01.org/0day-ci/archive/20250704/202507041742.rHigXm3n-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507041742.rHigXm3n-lkp@intel.com/reproduce)
 
-For instance, taking the diffstat above, and ignoring contents (i.e.
-assuming all lines could just be freely split and without considering
-other splits discussed to make the patches smaller first and reducing
-the flag day changes), I could have done something like this:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507041742.rHigXm3n-lkp@intel.com/
 
-    drivers/block/rnull.rs       |  2 +-
-    rust/kernel/block/mq.rs      |  2 +-
+All warnings (new ones prefixed by >>):
 
-    drivers/gpu/nova-core/gpu.rs |  4 +-
+>> Warning: drivers/gpu/drm/panthor/panthor_mmu.c:220 Excess struct member 'bo_repeat_range' description in 'panthor_vm_op_ctx'
 
-    rust/kernel/device.rs        |  2 +-
-
-    rust/kernel/kunit.rs         |  6 +--
-
-    rust/kernel/seq_file.rs      |  2 +-
-
-    rust/kernel/fmt.rs           | 89 +++++++++++++++++++++++++++++++++++++=
-++
-    rust/kernel/lib.rs           |  1 +
-    rust/kernel/prelude.rs       |  3 +-
-    rust/kernel/print.rs         |  4 +-
-    rust/kernel/str.rs           | 22 ++++------
-    rust/macros/fmt.rs           | 99
-++++++++++++++++++++++++++++++++++++++++++++
-    rust/macros/lib.rs           | 19 +++++++++
-    rust/macros/quote.rs         |  7 ++++
-    scripts/rustdoc_test_gen.rs  |  2 +-
-
-And then those long lines may hint that it may make sense to split the
-smaller tweaks in the last group into their own patch, so that it
-mirrors what is done for the other smaller groups. Thus possibly
-leaving the feature being added into its own patch, which would be the
-biggest and the one that would take some discussion. And the others
-would be the small ones that are easy to Acked-by or Reviewed-by or
-simply take (if independently possible) by other maintainers.
-
-And so on -- again, this is speaking generally, and it is just a dummy
-example, not intended to say anything about the current patch. And
-sometimes things may not make sense to split too far, and it can be
-more annoying than it is worth for everyone involved, e.g. when we are
-talking about trivial conversions that could take 50+ patches that
-could be automated instead and then applied by a single maintainer.
-
-So it is a balance.
-
-Cheers,
-Miguel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
