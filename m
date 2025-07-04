@@ -1,64 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9730427F4F5;
-	Fri,  4 Jul 2025 07:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8F62857FA;
+	Fri,  4 Jul 2025 07:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751614287; cv=none; b=g9JDrgWVCU8YImCJ9UIZpa2hxh7T0fVqr88lLm5LtR0gv46tG/1EIbK79ecanA3F/nYElr4+1cNPA8XZcMvVX1G7kgkwtwE7tfCfuhyHjNVYmyWxdLSWc3myQBcCmUY7/bXibI38hxKCxuSvXGgsXKeBnqOAa3XdSSAmK2LPd3g=
+	t=1751615236; cv=none; b=urDJincCOqg36IldaJIJHfOI7099astX/6wi49t+5ES69vtnuqrjg9r2vcK0u/w5/g0D9Hlr+rknQAZTYEnXhT2HexlypjduVUT27RO+usfYOCgk8H2cn6Lm2+8wLAeYWjF6l0HKF6tC2Wc0ohvwP7rLgvMRWnuHdrYXHhEY240=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751614287; c=relaxed/simple;
-	bh=I0BQB5Y0sAR1ONC1TeJSE+OpNExr7IsFBX7iMmg16MA=;
+	s=arc-20240116; t=1751615236; c=relaxed/simple;
+	bh=8gB+AO68oAYcL/RcwfcXX8F3VEcyUkNlDhqHsTYg8h4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ii5DmzTDQHZ2THQZ6lizjwWEaXsr66aeGoWtVREnj9cNKGX72jzyLjT8iJ1EjjS5gI7ZXIG2QN4Pnbo8pv99Fp0zWuX1FfxwuK4QmMC26pq7te0tVy2ApEKZC85hOUF8f9oRIoP5hysjNdQJ41ETaWKDQh+unk3EDEaVpJZL5Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AHZeYaLY; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=DcNPGJhB8nWy0p/8vuHuFAx9f/OaNeC5w16RBEBXto/KVM4cjFDsA/MM2Lt+ET+4sNXToLytGJ8BrrmKVCQLVtZLIcrSDn4A/xKzS5FO7AlYsLuQlYzfgF1tvxXm73q3WAvfbu3KSjNNqWkN4pw90DKuBS6b+Llwh2kXit9gHH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=s7b8gHjl; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AHZeYaLY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751614286; x=1783150286;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I0BQB5Y0sAR1ONC1TeJSE+OpNExr7IsFBX7iMmg16MA=;
-  b=AHZeYaLYKkLhsBO3qpELo4KicLw7pHGxZNqL6tJL/yN4exoIh5ihiHUZ
-   fXh3FWRT1DXapA4oOzX/Hh0MGhlz5wsCYlWxTC3MPGNBgOHmCXT0/jVmG
-   hVI8ghPGNjcB/LyQAG15HZ7Y67hw2l/kGdJKrVKmtPpf4NP2WEqjN1+dy
-   lb/3fgOh9C58m4aPkiI6AsO9CUOFRlJj69a433RgsJA65QUtUGK+aHxie
-   tHXrVOGJiK2PdtSxu7HXl5KPRtK4y+HY6p+E9nBDgCppHxcSDxFyXLBwB
-   kqakufG6Qtu8hqbgK7ed8CGbOn+ZooFnI5Nvc0F/2UmrMA9pBAkORRuZc
-   A==;
-X-CSE-ConnectionGUID: 97d0L5+PSFuygKQnXCUgKQ==
-X-CSE-MsgGUID: J5lmadd9TF2Sb+chmY47fw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53871631"
-X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="53871631"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:31:25 -0700
-X-CSE-ConnectionGUID: NOGy6WoYRjKXVfBseLKXdA==
-X-CSE-MsgGUID: ob6MCjr8SRKu3k2TGvctbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="155337062"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 04 Jul 2025 00:31:21 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXatD-0003Rn-10;
-	Fri, 04 Jul 2025 07:31:19 +0000
-Date: Fri, 4 Jul 2025 15:31:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shree Ramamoorthy <s-ramamoorthy@ti.com>, aaro.koskinen@iki.fi,
-	andreas@kemnade.info, khilman@baylibre.com, rogerq@kernel.org,
-	tony@atomide.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, m-leonard@ti.com,
-	praneeth@ti.com, jcormier@criticallink.com
-Subject: Re: [PATCH v6 2/2] gpio: tps65219: Add support for TI TPS65214 PMIC
-Message-ID: <202507041537.da8R2iEX-lkp@intel.com>
-References: <20250703180751.168755-3-s-ramamoorthy@ti.com>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="s7b8gHjl"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=lLeBr9v7iWnmJB5WR8E+Qdx4chL/QEo8kPrObOm2XBg=; b=s7b8gHjlLshr/s6aHjDwESkoZv
+	9xldLQc20XR4fF5OqxXWznCzk91go6X0+1hokaiCtTzgcvzRs3qRiKtfsqTUJE7KKzeAgCKHREsra
+	kvnr9afUyBdWT23H0Pp+eDaPiqOZEqx4FXHdDlmRumtj22gq0Q3GoFqjbkWKDBxQn6m8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uXb7w-000B5q-N9; Fri, 04 Jul 2025 09:46:32 +0200
+Date: Fri, 4 Jul 2025 09:46:32 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Michal Rostecki <vadorovsky@protonmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+Message-ID: <307d7547-b8da-4a82-9ae6-c95f66a283d2@lunn.ch>
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
+ <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
+ <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
+ <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
+ <CANiq72ksOG10vc36UDdBytsM-LT7PdgjcZ9B0dkqSETH6a0ezA@mail.gmail.com>
+ <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,60 +99,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250703180751.168755-3-s-ramamoorthy@ti.com>
+In-Reply-To: <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
 
-Hi Shree,
+> There's also a tactical question about splitting by subsystem: are
+> there any tools that would assist in doing this, or is it a matter of
+> manually consulting MAINTAINERS to figure out file groupings?
 
-kernel test robot noticed the following build errors:
+You can run ./scripts/get_maintainer -f path/to/file.c
 
-[auto build test ERROR on v6.16-rc4]
-[also build test ERROR on linus/master next-20250703]
-[cannot apply to tmlind-omap/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+and it will give you the Maintainers for that file. From that you can
+imply the subsystem.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shree-Ramamoorthy/gpio-tps65219-Update-_IDX-_OFFSET-macro-prefix/20250704-021048
-base:   v6.16-rc4
-patch link:    https://lore.kernel.org/r/20250703180751.168755-3-s-ramamoorthy%40ti.com
-patch subject: [PATCH v6 2/2] gpio: tps65219: Add support for TI TPS65214 PMIC
-config: hexagon-randconfig-002-20250704 (https://download.01.org/0day-ci/archive/20250704/202507041537.da8R2iEX-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 61529d9e36fa86782a2458e6bdeedf7f376ef4b5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507041537.da8R2iEX-lkp@intel.com/reproduce)
+It might be possible to do one tree wide patchset, since Rust is still
+small at the moment. But you will need to get Reviewed-by: or
+Acked-by: from each subsystem Maintainer for the patches. That is not
+always easy, since some subsystems have CI systems, and will want the
+patch to pass their CI tests before giving an Reviewed-by.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507041537.da8R2iEX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpio/gpio-tps65219.c:208:14: error: incompatible function pointer types initializing 'int (*)(struct gpio_chip *, unsigned int, int)' with an expression of type 'void (struct gpio_chip *, unsigned int, int)' [-Wincompatible-function-pointer-types]
-     208 |         .set_rv                 = tps65219_gpio_set,
-         |                                   ^~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-tps65219.c:221:14: error: incompatible function pointer types initializing 'int (*)(struct gpio_chip *, unsigned int, int)' with an expression of type 'void (struct gpio_chip *, unsigned int, int)' [-Wincompatible-function-pointer-types]
-     221 |         .set_rv                 = tps65219_gpio_set,
-         |                                   ^~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +208 drivers/gpio/gpio-tps65219.c
-
-   200	
-   201	static const struct gpio_chip tps65214_template_chip = {
-   202		.label			= "tps65214-gpio",
-   203		.owner			= THIS_MODULE,
-   204		.get_direction		= tps65214_gpio_get_direction,
-   205		.direction_input	= tps65219_gpio_direction_input,
-   206		.direction_output	= tps65219_gpio_direction_output,
-   207		.get			= tps65219_gpio_get,
- > 208		.set_rv			= tps65219_gpio_set,
-   209		.base			= -1,
-   210		.ngpio			= 2,
-   211		.can_sleep		= true,
-   212	};
-   213	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Andrew
