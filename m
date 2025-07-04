@@ -1,96 +1,58 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8F62857FA;
-	Fri,  4 Jul 2025 07:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877F32853F2;
+	Fri,  4 Jul 2025 07:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751615236; cv=none; b=urDJincCOqg36IldaJIJHfOI7099astX/6wi49t+5ES69vtnuqrjg9r2vcK0u/w5/g0D9Hlr+rknQAZTYEnXhT2HexlypjduVUT27RO+usfYOCgk8H2cn6Lm2+8wLAeYWjF6l0HKF6tC2Wc0ohvwP7rLgvMRWnuHdrYXHhEY240=
+	t=1751615607; cv=none; b=qxjm2fMUHrGDBj17qD495HHZ2XtJmoRYvfcByZ4AfDJ3PxARGo5QScg/C+NGA7yoBpbhbJOKyAiqRhj2JeiXmwFokn6yRvaYk7ygpuaiO8wdSQ9JjLCZSaH32HiZatOddVT5SNUZjr1jUDEcHj5zHTVF/aMBhYjA/h3BQn4gus8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751615236; c=relaxed/simple;
-	bh=8gB+AO68oAYcL/RcwfcXX8F3VEcyUkNlDhqHsTYg8h4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DcNPGJhB8nWy0p/8vuHuFAx9f/OaNeC5w16RBEBXto/KVM4cjFDsA/MM2Lt+ET+4sNXToLytGJ8BrrmKVCQLVtZLIcrSDn4A/xKzS5FO7AlYsLuQlYzfgF1tvxXm73q3WAvfbu3KSjNNqWkN4pw90DKuBS6b+Llwh2kXit9gHH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=s7b8gHjl; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1751615607; c=relaxed/simple;
+	bh=Zc5cn4D/AdMd9x6fWOmSjwJzMQIT2Iaqnn1xtkdwD+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LsHUXmQ2U7fgwoWh/JpnxQNQTil5n5x/kL+g7IemLJpQQhGYCjq7pKg6ww90OSTJm5i/0J6r29Mt1p0ntPyLUSLnOC+ArKpdbs+H2sEhxw+04oIH0ySmNCrD/WkSNEberIkMLs2lkjoWMo4F3zsTo9FXCwz/gsQMOCBEjhzUETM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EF2dJxOy; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="s7b8gHjl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=lLeBr9v7iWnmJB5WR8E+Qdx4chL/QEo8kPrObOm2XBg=; b=s7b8gHjlLshr/s6aHjDwESkoZv
-	9xldLQc20XR4fF5OqxXWznCzk91go6X0+1hokaiCtTzgcvzRs3qRiKtfsqTUJE7KKzeAgCKHREsra
-	kvnr9afUyBdWT23H0Pp+eDaPiqOZEqx4FXHdDlmRumtj22gq0Q3GoFqjbkWKDBxQn6m8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uXb7w-000B5q-N9; Fri, 04 Jul 2025 09:46:32 +0200
-Date: Fri, 4 Jul 2025 09:46:32 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Michal Rostecki <vadorovsky@protonmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-Message-ID: <307d7547-b8da-4a82-9ae6-c95f66a283d2@lunn.ch>
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
- <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
- <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
- <CANiq72ksOG10vc36UDdBytsM-LT7PdgjcZ9B0dkqSETH6a0ezA@mail.gmail.com>
- <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EF2dJxOy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751615605; x=1783151605;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zc5cn4D/AdMd9x6fWOmSjwJzMQIT2Iaqnn1xtkdwD+4=;
+  b=EF2dJxOycpjaClLbSLKep1RfPgrkrTxSx5Q+Y/2JbiXVqMpFeQ0PjRjg
+   XZ7Yl1NOUj9D5A4e5d9ShrFFnqFt10oygLM1lAE4sWePKDsbxtN8QMI+e
+   Gqgvslx/Siz3neYDFznZTl1KYsrjkof4oP5lMj/j5GJT8NRed0gez2s0g
+   i4wx7mCy0gfKokpC6J1re/MSOG2+JVOYbt3BmDy44yHU4+77+r5zTavQZ
+   Ve1taK2YI3E+rX3wW5tL8q2uYPa3uIhQ2Bv8J0f2d3NMB6ljERxjm/n/X
+   SImcwAT4npPIUQbbir7ZF6g7QoMGLo+9M4uT/7Z3CJqXBuqb7RDnHWJUm
+   Q==;
+X-CSE-ConnectionGUID: /y439SPjSyOkd+1FBL1VTg==
+X-CSE-MsgGUID: dbwz/dVfTSKh+bNCrlFz5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="53170618"
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="53170618"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:53:24 -0700
+X-CSE-ConnectionGUID: zELJtb01SB2if/HhrYpb4w==
+X-CSE-MsgGUID: sv/3hhAnRpq504APjaIcqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="154001562"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 04 Jul 2025 00:53:24 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXbEW-0003Sr-2w;
+	Fri, 04 Jul 2025 07:53:20 +0000
+Date: Fri, 4 Jul 2025 15:52:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jfern:rcu/irq-exit-v2 7/7] kernel/rcu/tree.c:770:53: error: invalid
+ operands to binary expression ('void' and 'int')
+Message-ID: <202507041547.GoYephdf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -99,21 +61,239 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
 
-> There's also a tactical question about splitting by subsystem: are
-> there any tools that would assist in doing this, or is it a matter of
-> manually consulting MAINTAINERS to figure out file groupings?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rcu/irq-exit-v2
+head:   19450082dae4c12bdd2b7cee28961eb27227a8fd
+commit: 19450082dae4c12bdd2b7cee28961eb27227a8fd [7/7] rcu: Wire up irq_work state machine
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250704/202507041547.GoYephdf-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507041547.GoYephdf-lkp@intel.com/reproduce)
 
-You can run ./scripts/get_maintainer -f path/to/file.c
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507041547.GoYephdf-lkp@intel.com/
 
-and it will give you the Maintainers for that file. From that you can
-imply the subsystem.
+All errors (new ones prefixed by >>):
 
-It might be possible to do one tree wide patchset, since Rust is still
-small at the moment. But you will need to get Reviewed-by: or
-Acked-by: from each subsystem Maintainer for the patches. That is not
-always easy, since some subsystems have CI systems, and will want the
-patch to pass their CI tests before giving an Reviewed-by.
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:770:28: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                                ~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:10: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                 ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:770:28: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                                ~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:38: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:770:28: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                                ~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                                       ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:770:28: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                                ~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                  ^
+   include/linux/compiler_types.h:518:13: note: expanded from macro '__unqual_scalar_typeof'
+     518 |                 _Generic((x),                                           \
+         |                           ^
+   kernel/rcu/tree.c:770:28: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                                ~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                  ^
+   include/linux/compiler_types.h:525:15: note: expanded from macro '__unqual_scalar_typeof'
+     525 |                          default: (x)))
+         |                                    ^
+   kernel/rcu/tree.c:770:28: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                                ~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                         ^
+>> kernel/rcu/tree.c:770:53: error: invalid operands to binary expression ('void' and 'int')
+     770 |         if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+         |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~
+   kernel/rcu/tree.c:771:17: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     771 |                 WRITE_ONCE(t->rcu_defer_qs_iw_pending, DEFER_QS_REQUIRED);
+         |                            ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:529:10: note: expanded from macro '__native_word'
+     529 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                 ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:771:17: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     771 |                 WRITE_ONCE(t->rcu_defer_qs_iw_pending, DEFER_QS_REQUIRED);
+         |                            ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:529:39: note: expanded from macro '__native_word'
+     529 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                                              ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:771:17: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     771 |                 WRITE_ONCE(t->rcu_defer_qs_iw_pending, DEFER_QS_REQUIRED);
+         |                            ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:10: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                 ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:771:17: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     771 |                 WRITE_ONCE(t->rcu_defer_qs_iw_pending, DEFER_QS_REQUIRED);
+         |                            ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:38: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:771:17: error: no member named 'rcu_defer_qs_iw_pending' in 'struct task_struct'
+     771 |                 WRITE_ONCE(t->rcu_defer_qs_iw_pending, DEFER_QS_REQUIRED);
+         |                            ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                                       ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
 
-	Andrew
+
+vim +770 kernel/rcu/tree.c
+
+   764	
+   765	/**
+   766	 * rcu_set_blocked - Set blocked flag in task's rcu_special union
+   767	 */
+   768	void rcu_set_blocked(struct task_struct *t, bool value)
+   769	{
+ > 770		if (value && READ_ONCE(t->rcu_defer_qs_iw_pending) == DEFER_QS_IDLE)
+   771			WRITE_ONCE(t->rcu_defer_qs_iw_pending, DEFER_QS_REQUIRED);
+   772	
+   773		WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+   774	}
+   775	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
