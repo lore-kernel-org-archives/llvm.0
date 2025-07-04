@@ -1,143 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4B1293B61;
-	Fri,  4 Jul 2025 10:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7B32C3268
+	for <llvm@lists.linux.dev>; Fri,  4 Jul 2025 11:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751623798; cv=none; b=XBdrhpDa/+z3W56N2gbnzZhJllid9a+HCRKtMsdD97Hugb2PDGjMAcrMRwiVUpKrhwiQfJcQvjpMb5TgGYpm1cVwOzpq87bbbdwCpObo1UDUPL0ljJHkmmAK39tHHHEj/gt+jIhU0+sTZTLwNSIA0/c6avMPOPr9/GzAW8BR4eU=
+	t=1751629314; cv=none; b=f6dCJV8LVPqSGrIZac1twT2AQtyWQbFbK8LZMv3e5NKgfZKM5EBGPBylcSztcaUy2JLYcOZ17WoDGYRULgMoqcSPDGvxvANHZyQdDvx3XUIBCcFJyxQ8hLzvz8y3NPxoh1nu16ZctQqhZqbAvLwR1ZBu9lzUe662npqr6r85z+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751623798; c=relaxed/simple;
-	bh=sErifeomiBisSrJ5F/Z1EiOE+yjyaoOoLVJmALiwIss=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=QBSQrQtDxl3khpvRlIPU5qS8NjGQcj8bGfiG/4VLzik4oLgXwc2074TM6uBfJ6SgTIqix4uNEDSeMVkZzCLHc0Rh6MdthBE2RcCXqdqwRLBxsoLarlHh4+ZwhuqZwHzHjigPU/LkbovziNf9+Nbw1oaGQuvoXCNP18CP7DrmY1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bjHFAeZa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751629314; c=relaxed/simple;
+	bh=uwIhE/3HVQyl+sWUanuxQhmfexHDdoAguey4Xn/NW7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UD1kNOfuhzRV8pQ42nPV9MuVN05fIluW+8y5EY+6M3IOliaK1jLkI3tnMQpCFzcFfH02o4j8Q6ykY9h7Xa3xyOe/DqiwUtQrgFQjJcpui6P7/td5gHwICf91aIN/jSy9+SuQrAYE1r3YJ46pcj1o9t1uwUoZAUbqQIlPXqvTm9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eOpA3+JM; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ofrhEaWx; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bjHFAeZa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB26C4CEE3;
-	Fri,  4 Jul 2025 10:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751623797;
-	bh=sErifeomiBisSrJ5F/Z1EiOE+yjyaoOoLVJmALiwIss=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=bjHFAeZaJFAnmlfy0BXQom4D2g8nROdZRV9VSgmHVyp34hx86laW5qYZ9hJt1xRQW
-	 0K0KO2yByzLe4dQZLFhD35Ow6d8OFCvrtXqBJsfVoIIfyv2UGdJYm4h3q0G5Jkpw5z
-	 wGhbmAF7CZg/+Usn4oPgUWLuVpcLqO00+9bczIkO/xSH+5IJAtnA1+gQ91n+wiBcP6
-	 B7oDcHjP2qL77G1iVen1zde1nv2qXrbY4ckstCIFg4BI/BrUjKystwvqi6oNlmq8/O
-	 6gVbjWvcNhrRjps2Q90t25m0FTomyUvTA0EnLcqcQEkGdXcBV9HXEB+8pGkJCpLBEg
-	 +vGw4nMjPXgxg==
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eOpA3+JM";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ofrhEaWx"
+Date: Fri, 4 Jul 2025 13:41:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1751629308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IEPPK4tBp+Nrii/kOs/AFNpAI/nG2VOoHTxctHm3vCg=;
+	b=eOpA3+JMiMRj8qrPq9FVpwxZ0pj5LlBiP+61u5HHpVNbgA22lv0pCvU1U9uZ7Hhj7PXMVA
+	SrHNwEjxZ/wBVK07iiWmlGf3w4oQJz5+9cl4vIzEo1FSxi1IE0Na9mL6oaotmhiay6o0gH
+	mkk28AbF9wHzaPcR5sxjTcoEHbnZgeLe2LOsmzFkXIhrhPBCPDPv84rfe0puk7/Ho7o8f3
+	WFC4keC0rKqMR4GB8OxWdabsEvwgzRp4OFZ9noFwGC5DkqWYIt28AtT03kbvR10IVVgPaG
+	WYlqfHGc4p54jZ2xYc58y2sbvKE88I8s0PUXuRBkPfqq0H/2hZLAOspFsNW21A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1751629308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IEPPK4tBp+Nrii/kOs/AFNpAI/nG2VOoHTxctHm3vCg=;
+	b=ofrhEaWx4iVHxgGGSODOEsQWCuw0jz9On7xhtqngLJKyA+zMEo2HSrXMAQdJBFeV5sMRBt
+	KahvpGTwZZA4EMCw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Willy Tarreau <w@1wt.eu>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 0/2] tools/build: Fix s390(x) cross-compilation with
+ clang
+Message-ID: <20250704133926-0cb06bd0-0e90-4cf7-94cd-d46330269250@linutronix.de>
+References: <20250620-tools-cross-s390-v2-0-ecda886e00e5@linutronix.de>
+ <20250702214133.GB2103156@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Jul 2025 12:09:43 +0200
-Message-Id: <DB36T5JWBL10.2F56EDJ1XKAD0@kernel.org>
-Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Tamir Duberstein" <tamird@gmail.com>
-Cc: "Michal Rostecki" <vadorovsky@protonmail.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Brendan Higgins"
- <brendan.higgins@linux.dev>, "David Gow" <davidgow@google.com>, "Rae Moar"
- <rmoar@google.com>, "Danilo Krummrich" <dakr@kernel.org>, "Maarten
- Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
- <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
- Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Russ Weight"
- <russ.weight@linux.dev>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>,
- "Rob Herring" <robh@kernel.org>, "Saravana Kannan" <saravanak@google.com>,
- "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Will Deacon" <will@kernel.org>, "Waiman Long" <longman@redhat.com>,
- "Nathan Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, "Andrew Lunn" <andrew@lunn.ch>,
- "Heiner Kallweit" <hkallweit1@gmail.com>, "Russell King"
- <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Bjorn Helgaas" <bhelgaas@google.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Jens Axboe" <axboe@kernel.dk>,
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, "Dave
- Ertman" <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>,
- "Leon Romanovsky" <leon@kernel.org>, "Breno Leitao" <leitao@debian.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <dri-devel@lists.freedesktop.org>, <netdev@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <llvm@lists.linux.dev>,
- <linux-pci@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-clk@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
- <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
- <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
- <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
- <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
- <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
- <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
- <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
- <CAJ-ks9kNiOgPO7FF3cAbaSNtTWs0_PzQ4k4W0AxjHNFuMJnDcQ@mail.gmail.com>
-In-Reply-To: <CAJ-ks9kNiOgPO7FF3cAbaSNtTWs0_PzQ4k4W0AxjHNFuMJnDcQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250702214133.GB2103156@ax162>
 
-On Fri Jul 4, 2025 at 1:23 AM CEST, Tamir Duberstein wrote:
-> On Thu, Jul 3, 2025 at 6:41=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
-> wrote:
->> On Thu, Jul 3, 2025 at 4:36=E2=80=AFPM Benno Lossin <lossin@kernel.org> =
-wrote:
->> >
->> > I don't understand, can't you just do:
->> >
->> > * add `rust/kernel/fmt.rs`,
->> > * add `rust/macros/fmt.rs`,
->> > * change all occurrences of `core::fmt` to `kernel::fmt` and
->> >   `format_args!` to `fmt!`.
->>
->> Yes, such a split could be done - I will do so in the next spin
->>
->>
->> > The last one could be split by subsystem, no? Some subsystems might
->> > interact and thus need simultaneous splitting, but there should be som=
-e
->> > independent ones.
->>
->> Yes, it probably can. As you say, some subsystems might interact - the
->> claimed benefit of doing this subsystem-by-subsystem split is that it
->> avoids conflicts with ongoing work that will conflict with a large
->> patch, but this is also the downside; if ongoing work changes the set
->> of interactions between subsystems then a maintainer may find
->> themselves unable to emit the log message they want (because one
->> subsystem is using kernel::fmt while another is still on core::fmt).
->
-> I gave this a try. I ran into the problem that `format_args!` (and,
-> after this patch, `fmt!`) is at the center of `print_macro!`, which
-> itself underpins various other formatting macros. This means we'd have
-> to bifurcate the formatting infrastructure to support an incremental
-> migration. That's quite a bit of code, and likely quite a mess in the
-> resulting git history -- and that's setting aside the toil required to
-> figure out the correct combinations of subsystems that must migrate
-> together.
+Hi Nathan,
 
-So here is what we can do without duplicating the logic, though it
-requires multiple cycles:
+On Wed, Jul 02, 2025 at 02:41:33PM -0700, Nathan Chancellor wrote:
+> On Fri, Jun 20, 2025 at 01:00:26PM +0200, Thomas Weißschuh wrote:
+> > The heuristic to derive a clang target triple from a GCC one does not work
+> > for s390. GCC uses "s390-linux" while clang expects "s390x-linux" or
+> > "powerz-linux".
+> 
+> This generally seems fine to me but I do not interact with tools/ much.
 
-1. We merge the two `fmt.rs` files & each subsystem merges an
-   implementation of `kernel::fmt::Display` for their types, but keeps
-   the `core::fmt::Display` impl around.
-2. After all subsystems have merged the previous step, we change the
-   implementations of `print_macro!` to use `fmt!` instead of
-   `format_args!`.
-3. We remove all occurrences of `core::fmt` (& replace them with
-   `kernel::fmt`), removing the `core::fmt::Display` impls.
+Is it enough for a formal Reviewed-by?
 
----
-Cheers,
-Benno
+> > There doesn't seem to be a formal maintainer for this file.
+> > Maybe the clang/llvm maintainers can pick it up.
+> 
+> I do not have a tree nor do I send pull requests to Linus. Perhaps you
+> could just pick this up in the nolibc tree or have Shuah take it as a
+> greater kselftests update?
+
+It's not really only related to kselftest either.
+But I'll ping Shuah. Otherwise I'll indeed take it directly.
+
+Thanks,
+Thomas
