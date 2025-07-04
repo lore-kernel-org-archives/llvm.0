@@ -1,155 +1,306 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355532D4B53;
-	Thu,  3 Jul 2025 23:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96202360;
+	Fri,  4 Jul 2025 00:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751587046; cv=none; b=UkkaEoZg84iNdlEZ+kup3t8vcVFx2bVmKkfCTnURLjd4hpp79lpGzQQccGzDukb58igbf4EAWL0qUT+YhxK9LQcEutHGyTN4o1bP6MOi7rfgrLkwuB0gDrAsxS+aZMJWmDCV+3g0dZv7NNeH6wwhpwfr9Rgrd8CMEOYABaUz6k8=
+	t=1751587482; cv=none; b=sn/zYRjzTo3HLa/wgo4xLU5EAH3kpwiAaF3zqKuAXEX2A2VNwSOSik9OY1jPKrEBZarzpSOFDGg/x97krY7NvcwKg1AfCuUaRj9c/B3kp6DlckxvZWrvG9Dq9PScbAptirByvvmY5Jp/iPhrZ9tpz2AJlwPPwoVCO62kWT6rITE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751587046; c=relaxed/simple;
-	bh=+OzV2HSYYytAJJSKGvoKmaN4zyRPEvwrHukxGSGSEKg=;
+	s=arc-20240116; t=1751587482; c=relaxed/simple;
+	bh=5dv42JiBk97qXg8ArWBRNahlctmyVmOm2d0YBU/e0j8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gIFKFQUZk5rVZ2qOrA9HbjOVI5i9LOt9L/UuZe2DgizscCm48A3Wkp8YXHMP7XQPikkA+ZFVW2U726ntLVpFSDA8j0NEqm6MZKnOHp8nGVqDpDUdAeaEZnCQ29Ru3sJ3tt0bxoFtbFFiEqdlVqPkDJ/vDtVko7zLNp2w5QgMK9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fBpAxDrl; arc=none smtp.client-ip=192.198.163.9
+	 Content-Disposition; b=gcOz7ePogaE4e2cExZfGgF4n7iiPUxjNUFJWd4s5E2w7HvtBxe4h70tyhSigteSXR6wCAwKmuZj7mHwvedE0AVcPB2Al0qfMXvQoyyVgljzmaIKqS9J3rRwzcShzQgS66tXDezJm3J8rL6r9P9R/UfS71DCjfVRiOrxardH31Sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n9aaYT5x; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fBpAxDrl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n9aaYT5x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751587045; x=1783123045;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+OzV2HSYYytAJJSKGvoKmaN4zyRPEvwrHukxGSGSEKg=;
-  b=fBpAxDrl1aDaMp+h//tx+IdpA2tq11uZKkE4vwo69D9Nqj9duDJmSN02
-   UY4T9XQykiaySihQuQ1orUvflmKzx3oxdD71DUDZXfKkz+6d9m/+mY6Ms
-   K67Q928snWI1JodPHc+fEebf5dM3xKcVf+lbMmHTGzhQanKYpETrQ6WOz
-   1OD0Gr2d4K8y38qB/Ymv6UeobJRg+TVdhv4HTGAg7Y5ocUxFKMQ4ikQsl
-   1avLatxHyQbZ0p36Twc3Gk3IybCKG1qiCMGkZnIMauJDNXbyMO/KQmPbB
-   wxwnLA0MGWPH3WVv19l5I5MMwn6f/7PqNGMBs1OY2VUySDvbTCzxtwQ6s
+  t=1751587480; x=1783123480;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5dv42JiBk97qXg8ArWBRNahlctmyVmOm2d0YBU/e0j8=;
+  b=n9aaYT5x/Te+b6lzJyiG3NUTh3124YDIMvIs+6GDLbiQ2v+S0204BvXn
+   yRMIlJqhITcaHycj5DQ+2/4+gkYkKwG65f94tiEDK+VVEFcsvw2ui27OA
+   dBP0MUtNNAYJ29pt4hARQoJkkBsuE7f5f3gtTsrC/5u46ZROiU0TyEPxv
+   K/Y7PCSBLF2Xri7i8/reVEmUJdSLeUI82dE58zFqI+RVk5ZVAsWnxLP4c
+   2zX9K5W4gGw53Add2m0MP78ZrmelkuGpajC/j1s8/EUovwD/vmzq3XcYS
+   3Ytw5tnNpKk196vUvebNn2NwFB13SwCbUMZ5kSPpUglA8TWSLX1OSIcKW
    w==;
-X-CSE-ConnectionGUID: gE6cUTQdQzyA0CVcdo8eNQ==
-X-CSE-MsgGUID: 4SzzUwRmRNCRbW+t+is4EQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="64615829"
+X-CSE-ConnectionGUID: 8kV8cxwsRQiGnj6CE58W+w==
+X-CSE-MsgGUID: jp7jtqXJRlyaq/4ObmBU5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="56547246"
 X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
-   d="scan'208";a="64615829"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 16:57:25 -0700
-X-CSE-ConnectionGUID: 1qKnkmseR4e79JcFRj7P/Q==
-X-CSE-MsgGUID: V57d7JsxRESxrNIDzSBXhg==
+   d="scan'208";a="56547246"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 17:04:39 -0700
+X-CSE-ConnectionGUID: 14K3srIcQzC0rSRrhf1ZnQ==
+X-CSE-MsgGUID: rITyVvasS7S4NPGdzgtRqw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,285,1744095600"; 
-   d="scan'208";a="159060486"
-Received: from igk-lkp-server01.igk.intel.com (HELO 030a839a1121) ([10.91.175.65])
-  by orviesa004.jf.intel.com with ESMTP; 03 Jul 2025 16:57:24 -0700
-Received: from kbuild by 030a839a1121 with local (Exim 4.96)
+   d="scan'208";a="153930201"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 03 Jul 2025 17:04:37 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXTnt-0000YX-0Y;
-	Thu, 03 Jul 2025 23:57:21 +0000
-Date: Fri, 4 Jul 2025 01:56:52 +0200
+	id 1uXTus-00038V-2w;
+	Fri, 04 Jul 2025 00:04:34 +0000
+Date: Fri, 4 Jul 2025 08:04:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+To: Joel Fernandes <joelagnelf@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:kunit-kselftests-integration 47/47]
- kernel/time/tests/timens-tests-main.c:25:2: error: Could not find incbin
- file 'timens_test_futex'
-Message-ID: <202507040136.Xc2iIR1M-lkp@intel.com>
+Subject: [jfern:rcu/irq-exit-v2 4/7] kernel/rcu/tree.c:764:16: error: no
+ member named 'rcu_read_unlock_special' in 'struct task_struct'
+Message-ID: <202507040724.D5nyo4ld-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git kunit-kselftests-integration
-head:   1d66824abdccea956a455fc694f5967c0163ce31
-commit: 1d66824abdccea956a455fc694f5967c0163ce31 [47/47] kunit: test can't have same name as test
-config: powerpc-randconfig-2002-20250701 (https://download.01.org/0day-ci/archive/20250704/202507040136.Xc2iIR1M-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507040136.Xc2iIR1M-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rcu/irq-exit-v2
+head:   19450082dae4c12bdd2b7cee28961eb27227a8fd
+commit: 7ccc41afea53b41ec9c8f3d77e877062a23184dc [4/7] rcu: Add helper functions for task and cpu_no_qs flag setting
+config: i386-buildonly-randconfig-002-20250704 (https://download.01.org/0day-ci/archive/20250704/202507040724.D5nyo4ld-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507040724.D5nyo4ld-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507040136.Xc2iIR1M-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507040724.D5nyo4ld-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   kernel/time/tests/timens-tests-main.c:18:2: error: Could not find incbin file 'timens_test_exec'
-      18 |         KUNIT_UAPI_EMBED_BLOB(timens_test_exec, "timens_test_exec");
-         |         ^
-   include/kunit/uapi.h:43:3: note: expanded from macro 'KUNIT_UAPI_EMBED_BLOB'
-      43 |         "       .incbin " __stringify(_path) "                          \n"     \
-         |          ^
-   <inline asm>:4:10: note: instantiated into assembly here
-       4 |         .incbin "timens_test_exec"                              
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:529:10: note: expanded from macro '__native_word'
+     529 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
          |                 ^
->> kernel/time/tests/timens-tests-main.c:25:2: error: Could not find incbin file 'timens_test_futex'
-      25 |         KUNIT_UAPI_EMBED_BLOB(timens_test_futex, "timens_test_futex");
-         |         ^
-   include/kunit/uapi.h:43:3: note: expanded from macro 'KUNIT_UAPI_EMBED_BLOB'
-      43 |         "       .incbin " __stringify(_path) "                          \n"     \
-         |          ^
-   <inline asm>:4:10: note: instantiated into assembly here
-       4 |         .incbin "timens_test_futex"                             
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:529:39: note: expanded from macro '__native_word'
+     529 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                                              ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:10: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
          |                 ^
-   kernel/time/tests/timens-tests-main.c:43:2: error: Could not find incbin file 'timens_test_procfs'
-      43 |         KUNIT_UAPI_EMBED_BLOB(timens_test_procfs, "timens_test_procfs");
-         |         ^
-   include/kunit/uapi.h:43:3: note: expanded from macro 'KUNIT_UAPI_EMBED_BLOB'
-      43 |         "       .incbin " __stringify(_path) "                          \n"     \
-         |          ^
-   <inline asm>:4:10: note: instantiated into assembly here
-       4 |         .incbin "timens_test_procfs"                            
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:38: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                                       ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |                      ^
+   include/asm-generic/rwonce.h:55:20: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                           ^
+>> kernel/rcu/tree.c:764:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     764 |         WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |                      ^
+   include/asm-generic/rwonce.h:55:27: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                  ^
+   kernel/rcu/tree.c:772:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     772 |         WRITE_ONCE(t->rcu_read_unlock_special.b.need_qs, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:529:10: note: expanded from macro '__native_word'
+     529 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
          |                 ^
-   kernel/time/tests/timens-tests-main.c:60:2: error: Could not find incbin file 'timens_test_timer'
-      60 |         KUNIT_UAPI_EMBED_BLOB(timens_test_timer, "timens_test_timer");
-         |         ^
-   include/kunit/uapi.h:43:3: note: expanded from macro 'KUNIT_UAPI_EMBED_BLOB'
-      43 |         "       .incbin " __stringify(_path) "                          \n"     \
-         |          ^
-   <inline asm>:4:10: note: instantiated into assembly here
-       4 |         .incbin "timens_test_timer"                             
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:772:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     772 |         WRITE_ONCE(t->rcu_read_unlock_special.b.need_qs, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:529:39: note: expanded from macro '__native_word'
+     529 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                                              ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:772:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     772 |         WRITE_ONCE(t->rcu_read_unlock_special.b.need_qs, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:10: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
          |                 ^
-   kernel/time/tests/timens-tests-main.c:67:2: error: Could not find incbin file 'timens_test_timerfd'
-      67 |         KUNIT_UAPI_EMBED_BLOB(timens_test_timerfd, "timens_test_timerfd");
-         |         ^
-   include/kunit/uapi.h:43:3: note: expanded from macro 'KUNIT_UAPI_EMBED_BLOB'
-      43 |         "       .incbin " __stringify(_path) "                          \n"     \
-         |          ^
-   <inline asm>:4:10: note: instantiated into assembly here
-       4 |         .incbin "timens_test_timerfd"                           
-         |                 ^
-   5 errors generated.
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:772:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     772 |         WRITE_ONCE(t->rcu_read_unlock_special.b.need_qs, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:530:38: note: expanded from macro '__native_word'
+     530 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   include/linux/compiler_types.h:568:22: note: expanded from macro 'compiletime_assert'
+     568 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:556:23: note: expanded from macro '_compiletime_assert'
+     556 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:548:9: note: expanded from macro '__compiletime_assert'
+     548 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/rcu/tree.c:772:16: error: no member named 'rcu_read_unlock_special' in 'struct task_struct'
+     772 |         WRITE_ONCE(t->rcu_read_unlock_special.b.need_qs, value);
+         |                    ~  ^
+   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
 
 
-vim +/timens_test_futex +25 kernel/time/tests/timens-tests-main.c
+vim +764 kernel/rcu/tree.c
 
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  15  
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  16  static void exec(struct kunit *test)
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  17  {
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24 @18  	KUNIT_UAPI_EMBED_BLOB(timens_test_exec, "timens_test_exec");
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  19  
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  20  	kunit_uapi_run_kselftest(test, &timens_test_exec);
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  21  }
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  22  
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  23  static void futex(struct kunit *test)
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  24  {
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24 @25  	KUNIT_UAPI_EMBED_BLOB(timens_test_futex, "timens_test_futex");
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  26  
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  27  	kunit_uapi_run_kselftest(test, &timens_test_futex);
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  28  }
-ab2c318d8f620f Thomas Weiﬂschuh 2025-03-24  29  
-
-:::::: The code at line 25 was first introduced by commit
-:::::: ab2c318d8f620f55c8a89b91e878a8246a24aecd timens
-
-:::::: TO: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-:::::: CC: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+   758	
+   759	/**
+   760	 * rcu_set_blocked - Set blocked flag in task's rcu_special union
+   761	 */
+   762	void rcu_set_blocked(struct task_struct *t, bool value)
+   763	{
+ > 764		WRITE_ONCE(t->rcu_read_unlock_special.b.blocked, value);
+   765	}
+   766	
 
 -- 
 0-DAY CI Kernel Test Service
