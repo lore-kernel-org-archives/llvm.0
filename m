@@ -1,76 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4C01C3C18;
-	Fri,  4 Jul 2025 15:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DED91D416E;
+	Fri,  4 Jul 2025 15:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751643376; cv=none; b=cYouw0BGWh5FCnPf4LNlcevjDPrIpJhErEIqYRpnI6M5n4kesNFQA5s6Fl8K2ya44oVF2dRRDOO5Y/c4nBbyeLib042kvUzW3ue6nZmksEDga1/QOo7pUfUbx5p3mqVAZUFy973h9IRTOdPryhN1flQ59WhAhLLJmN9qpA8yxwA=
+	t=1751644641; cv=none; b=oK5qY0v7OLJ/jSZ2vU5CEoAa57K+gci7d2q80digm3/S7NMryE7Bmi/ywgoneulxTT+q7f1ddgoqzlmEl4edwx3km8SL0GpPS07cY4FGn6BF+v7rG4jRhHLWcjzJ9HM55LrdPRfehOF449wbH7ILi/PCSKuG2jwK0qT8HNbExfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751643376; c=relaxed/simple;
-	bh=SWttKQL4FkWzc6MgsldmYN3kVwwpFN2mg/MdqGHZizY=;
+	s=arc-20240116; t=1751644641; c=relaxed/simple;
+	bh=KwR5g9qe9ps60+YgjR6/XFGIu3jFv+pBMeR7+nYiQzE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HqYoQhmtUqsGcZQHmEMn0ClpaNZaN62FhsKTVqZzy5CBiRn1aZM9oPTAOwq9IBF11QS2c/VAfXF5nJqu2veux0/SgSv+/gMxfKJ2WcjYFhe1twkRETQ1a3g7W9lvTuRKAgC4ojN+Ht2WhQpCpUXi75OCJ4WSnodISVoOj5CNt9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OJJgN3SO; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ny7nQxQaVm344Rruh7gEXHAF7182NiPMX2SM1bNtTPUfoINYpnZCrO47+ecGMzWe6Hin0G9Xr9EOOzEwif4clMfkWGhgeYAudPT2YTQB2ziM63VF1BoWeDlmSThtCI7gmAgj00unuOMfro0gumcF4+ksS38FLE5CPTb6AMxbll0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DsKfPW40; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OJJgN3SO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DsKfPW40"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751643376; x=1783179376;
+  t=1751644639; x=1783180639;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=SWttKQL4FkWzc6MgsldmYN3kVwwpFN2mg/MdqGHZizY=;
-  b=OJJgN3SOy4xJxe6bxVx3XCE8BYUx9FAJcUXNfZNV3THjrO7KOSI5bxJM
-   rTLYrkqkh7ehYGV0QXzB9acNGqIIGzbGfZikpIEBe62e501lKxUHV8vDc
-   gQ9Y1a7UqVy8QlSxSny6n3lp08FjOIKAzHlzegPWjzouUqLdA1CYS5jgz
-   yCToTFvEu79Fioyw+Ns8dLB8WxPInMEsPqAxv2dA/G3TI2rCWhkyaJM+y
-   zEVH0e4kT4nWxmVtCEHyzWCoK1e2PzLvWE0xCbJU2rkFy8YbDKyqQZeD6
-   yfZMI8BuHLl8terGSmDnyfIAbrBH3/qi8pK8XCxvFtbGexVsZ+6ZDzbYs
-   Q==;
-X-CSE-ConnectionGUID: r85geDFbTn+inmAoUVugag==
-X-CSE-MsgGUID: FnD63QQrQQWvPrWbCtqVkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="53951517"
+  bh=KwR5g9qe9ps60+YgjR6/XFGIu3jFv+pBMeR7+nYiQzE=;
+  b=DsKfPW40QRzYNqMKhh/ElrHC9LKSgY9OpoYOtjirHBpkwR/svY7g+1ry
+   mtdCTyvpO+XOidsGM1L/io6twfTOUCDzE9cBnZ1indJfovva8jYMXZhaA
+   IE1fgKiF0CwqSfxdJ+tKtjuwagfUDI3z7rZa7xQDR7WyaHHsiiyEMSPvS
+   cMOVnU9A7e1rD5ZjZCR9pTITW170FNDlT7xWORTEbmuM9GO98GNbVTnDJ
+   ozZQEkbEJcamKse1nPq0rQwQwu9gbaJ2x8BPnC83oWfRYnJLDKo9r8fm1
+   M91Q7oUtF/Xnf/4GeJO4PdJdB7CQ5h80rOFY6XSVXwUZMm1aSwL7FxehB
+   A==;
+X-CSE-ConnectionGUID: kGFo8pO6RhaJZf9e9WYdyA==
+X-CSE-MsgGUID: K9iAmkRbS6KSq5FATj+ZxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="79421303"
 X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
-   d="scan'208";a="53951517"
+   d="scan'208";a="79421303"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 08:36:15 -0700
-X-CSE-ConnectionGUID: 8Wuv05NdRTiiT1w3N26BHA==
-X-CSE-MsgGUID: IL7TXyDfRxq0Y0POh56owg==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 08:57:17 -0700
+X-CSE-ConnectionGUID: LlGoivA0SYalknVTk342qA==
+X-CSE-MsgGUID: qlh1fCFKTHuFfvi/Myn5DQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
-   d="scan'208";a="158697099"
+   d="scan'208";a="158699194"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Jul 2025 08:36:09 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 04 Jul 2025 08:57:12 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXiSN-0003q7-1l;
-	Fri, 04 Jul 2025 15:36:07 +0000
-Date: Fri, 4 Jul 2025 23:35:18 +0800
+	id 1uXimj-0003rB-2T;
+	Fri, 04 Jul 2025 15:57:09 +0000
+Date: Fri, 4 Jul 2025 23:56:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Balbir Singh <balbirs@nvidia.com>, linux-mm@kvack.org
+To: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	hannes@cmpxchg.org, yosry.ahmed@linux.dev, nphamcs@gmail.com,
+	chengming.zhou@linux.dev, usamaarif642@gmail.com,
+	ryan.roberts@arm.com, 21cnbao@gmail.com,
+	ying.huang@linux.alibaba.com, akpm@linux-foundation.org,
+	senozhatsky@chromium.org, linux-crypto@vger.kernel.org,
+	herbert@gondor.apana.org.au, davem@davemloft.net,
+	clabbe@baylibre.com, ardb@kernel.org, ebiggers@google.com,
+	surenb@google.com, kristen.c.accardi@intel.com,
+	vinicius.gomes@intel.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-	Balbir Singh <balbirs@nvidia.com>,
-	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	=?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Barry Song <baohua@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Matthew Wilcox <willy@infradead.org>, Peter Xu <peterx@redhat.com>,
-	Zi Yan <ziy@nvidia.com>, Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Jane Chu <jane.chu@oracle.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Donet Tom <donettom@linux.ibm.com>
-Subject: Re: [v1 resend 04/12] mm/migrate_device: THP migration of zone
- device pages
-Message-ID: <202507042336.o2mutGeh-lkp@intel.com>
-References: <20250703233511.2028395-5-balbirs@nvidia.com>
+	wajdi.k.feghali@intel.com, vinodh.gopal@intel.com,
+	kanchana.p.sridhar@intel.com
+Subject: Re: [PATCH v10 10/25] crypto: iaa - Rearchitect the iaa_crypto
+ driver to be usable by zswap and zram.
+Message-ID: <202507050102.v288TUAS-lkp@intel.com>
+References: <20250704042323.10318-11-kanchana.p.sridhar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,37 +75,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250703233511.2028395-5-balbirs@nvidia.com>
+In-Reply-To: <20250704042323.10318-11-kanchana.p.sridhar@intel.com>
 
-Hi Balbir,
+Hi Kanchana,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20250704]
-[cannot apply to akpm-mm/mm-nonmm-unstable shuah-kselftest/next shuah-kselftest/fixes linus/master v6.16-rc4]
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master akpm-mm/mm-everything linus/master v6.16-rc4 next-20250704]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Balbir-Singh/mm-zone_device-support-large-zone-device-private-folios/20250704-073807
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250703233511.2028395-5-balbirs%40nvidia.com
-patch subject: [v1 resend 04/12] mm/migrate_device: THP migration of zone device pages
-config: x86_64-randconfig-075-20250704 (https://download.01.org/0day-ci/archive/20250704/202507042336.o2mutGeh-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kanchana-P-Sridhar/crypto-iaa-Reorganize-the-iaa_crypto-driver-code/20250704-122613
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20250704042323.10318-11-kanchana.p.sridhar%40intel.com
+patch subject: [PATCH v10 10/25] crypto: iaa - Rearchitect the iaa_crypto driver to be usable by zswap and zram.
+config: x86_64-randconfig-004-20250704 (https://download.01.org/0day-ci/archive/20250705/202507050102.v288TUAS-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250704/202507042336.o2mutGeh-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507050102.v288TUAS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507042336.o2mutGeh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507050102.v288TUAS-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> Warning: mm/migrate_device.c:89 function parameter 'fault_folio' not described in 'migrate_vma_collect_huge_pmd'
->> Warning: mm/migrate_device.c:707 function parameter 'page' not described in 'migrate_vma_insert_huge_pmd_page'
-   Warning: mm/migrate_device.c:707 Excess function parameter 'folio' description in 'migrate_vma_insert_huge_pmd_page'
+>> drivers/crypto/intel/iaa/iaa_crypto_main.c:2347:30: warning: variable 'ctx' set but not used [-Wunused-but-set-variable]
+    2347 |         struct iaa_compression_ctx *ctx = crypto_tfm_ctx(tfm);
+         |                                     ^
+   1 warning generated.
+
+
+vim +/ctx +2347 drivers/crypto/intel/iaa/iaa_crypto_main.c
+
+4d9d295bdce222 Kanchana P Sridhar 2025-07-03  2343  
+2ec6761df889fd Tom Zanussi        2023-12-05  2344  static int iaa_comp_init_fixed(struct crypto_acomp *acomp_tfm)
+2ec6761df889fd Tom Zanussi        2023-12-05  2345  {
+2ec6761df889fd Tom Zanussi        2023-12-05  2346  	struct crypto_tfm *tfm = crypto_acomp_tfm(acomp_tfm);
+2ec6761df889fd Tom Zanussi        2023-12-05 @2347  	struct iaa_compression_ctx *ctx = crypto_tfm_ctx(tfm);
+2ec6761df889fd Tom Zanussi        2023-12-05  2348  
+4d9d295bdce222 Kanchana P Sridhar 2025-07-03  2349  	ctx = iaa_ctx[IAA_MODE_FIXED];
+0ece0d4e1175a0 Kanchana P Sridhar 2025-07-03  2350  
+2ec6761df889fd Tom Zanussi        2023-12-05  2351  	return 0;
+2ec6761df889fd Tom Zanussi        2023-12-05  2352  }
+2ec6761df889fd Tom Zanussi        2023-12-05  2353  
 
 -- 
 0-DAY CI Kernel Test Service
