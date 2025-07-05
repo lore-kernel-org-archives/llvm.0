@@ -1,59 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BE82E3711;
-	Sat,  5 Jul 2025 06:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5771FE474;
+	Sat,  5 Jul 2025 08:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751697152; cv=none; b=pzD59SXK8tS1FIl32G8aNRfizsSKnl/3wnCqZvKbyj+9e5P/k6XyO8uooWVHaY7CU+RGMBu4asTz7U1CtCIWt0yv3M1y3GgA+x7pV1bsNyZr+emkBKCXmFpiPpjqMok7/w0bKGClCvG6UiC97EHx127UpCi7ViR5kY5Qu6R931Q=
+	t=1751702701; cv=none; b=ayOVNnrjpiQlEHnOrSvPQ0falbp3Av6AtF/B9p3gUCq3XvlRhRKgN9FbWZlTae+oBv5gtocWQbBUcZEJnLccPf0p/kPQa07eaNzFSJvRKxcilBrNg6ic+pUY+VNZaqfiSfVlQC6oM9aV5xFh291g+KOqfGM+N3AqBTzdDC1/RDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751697152; c=relaxed/simple;
-	bh=W/mW9uDSW3QytN8mOlYBL+H60pioxaCGjkolpFAG8Js=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KpiJxlvb6COAS/vUysD5jZZNCLuHA7zGipHv0EU2xj/QlUlOudIdcHRlvBL2WrsjB9LSVVVAxihQXKrb0iuSXRhMZx8D+Uoi9vIyG/eeYp8JYjiLKLUbHhyibalEqjnSVnw58TgK84XdB7eNqXuaAynjsQ7NNj2VpmOOLO+3xao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eMyjS059; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751702701; c=relaxed/simple;
+	bh=U8NsfQg6c0knWs9dyk4H2KnEFXMYtXjYXDrkEYXnUb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X0rl+dPl5tzYI3sMzDO2uuFCP5hzRTuW417RuQHgC47TLaaE2Wv1fY20lghC0olrqJESeUfFMRjI8eYqieHUZZNCC9B1ohZeaOpZ4o6BNGprfbwiXEYQ1aG/utnX49ATlcjWkrGc8rW5/LR402M1vMfOp397GsLDFDPMwa8Ipi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=WovYhOnm; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eMyjS059"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751697150; x=1783233150;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=W/mW9uDSW3QytN8mOlYBL+H60pioxaCGjkolpFAG8Js=;
-  b=eMyjS059YZ27niwWsefkw26xWQ/aTp5R8X6eJ7RQPUhbIOfpoRxbYgcJ
-   LXfKPJJZtZ4pEOHz3/y8skD/NZBHLXJDR7v8BSVgOKJuaIuteff7yJumW
-   6PHrz+ANTWUnjcghCQ/Wm4QNrmL38Zxodz1Zi2qQWDjVfEOT69IrmYpLf
-   bUWGTc4t0AeXmgKQiO48PThEsthwWptGwm0uq5DLpVV/heWoUOpUO1p2D
-   dmFbccAp0dfjPgEoYu+YoHWawrbIrTYrop8vb7P3yxoOrS0cLlXr0xbTH
-   BYODZU79suFeIQrnTxm4+q6PXkIFiH70lGSKvyyAe+mOqx7Zqm+iGW6xU
-   w==;
-X-CSE-ConnectionGUID: 91c7wl8+RQ6GwFj5Jaj5Eg==
-X-CSE-MsgGUID: 0WTHbnp4QyGvGx8fXhY6pw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="64605279"
-X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
-   d="scan'208";a="64605279"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 23:32:29 -0700
-X-CSE-ConnectionGUID: XuXqsPzgQ7ySOhEaO6SQEA==
-X-CSE-MsgGUID: VpYCxEDGQE2NJc4CS6w7LA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
-   d="scan'208";a="159329031"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 04 Jul 2025 23:32:28 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uXwRl-0004Lf-2P;
-	Sat, 05 Jul 2025 06:32:25 +0000
-Date: Sat, 5 Jul 2025 14:32:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org
-Subject: [tiwai-sound:test/hda-reorg 29/53] sound/hda/common/hwdep.c:26:6:
- warning: label followed by a declaration is a C23 extension
-Message-ID: <202507051454.VintnWOF-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="WovYhOnm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=ZyzKEihZDNZ16DmOGMSJ88ULGx/pSbICKS/fdJw2ya4=; b=WovYhOnmAWVhGBmVShxVSXCTwl
+	KsTC761cpyV/PL7pyO1+z87KG4GV/WJ5cZTpgj4Kw6nxQ5HZ6uDgyaA/G/6CqEJfp/U0bgh+VOJFS
+	0yOZfJvHjAhF4e6yYUVUNjWH8BzxdJ/qNqWFS3TdQMHJToKBKeHkHyGdHnexNZTTDYdA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uXxsY-000NJL-1K; Sat, 05 Jul 2025 10:04:10 +0200
+Date: Sat, 5 Jul 2025 10:04:10 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Michal Rostecki <vadorovsky@protonmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+Message-ID: <a9bd145e-b634-41ca-972c-5f81e5e1033d@lunn.ch>
+References: <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
+ <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
+ <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org>
+ <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+ <CAJ-ks9kNiOgPO7FF3cAbaSNtTWs0_PzQ4k4W0AxjHNFuMJnDcQ@mail.gmail.com>
+ <DB36T5JWBL10.2F56EDJ1XKAD0@kernel.org>
+ <CAJ-ks9=Jutg+UAwCVER_X91BGxWzmVq=OdStDgLZjTyMQSEX6Q@mail.gmail.com>
+ <CANiq72nZhgpbWOD4Evy-qw2J=G=RY4Hsoq9_rj6HGWMQW=2kTw@mail.gmail.com>
+ <CAJ-ks9m4S1jujQvyt9TOvNMewjNSztps8vayGga+MnNU+0YUcQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,107 +100,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAJ-ks9m4S1jujQvyt9TOvNMewjNSztps8vayGga+MnNU+0YUcQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git test/hda-reorg
-head:   6119728edf86cefcbf7b20e000414c85916e900d
-commit: 5b965be899c8e3286f5111b7e90207afe5124b67 [29/53] ALSA: hda: Move common codec driver into sound/hda/common directory
-config: riscv-randconfig-001-20250705 (https://download.01.org/0day-ci/archive/20250705/202507051454.VintnWOF-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 61529d9e36fa86782a2458e6bdeedf7f376ef4b5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507051454.VintnWOF-lkp@intel.com/reproduce)
+> OK, with all the splitting requested, this comes out to ~54 patches.
+> I'll send the first bit (which can go in cycle 0) as v14.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507051454.VintnWOF-lkp@intel.com/
+FYI: Some subsystems have limits as to how many patches can be posted
+at once. e.g. for netdev, don't send more than 15.
 
-All warnings (new ones prefixed by >>):
+This is another rule about making it easier for reviewers. If i see 20
+patches, i will defer reviewing them until later, when i have more
+time. For a handful of patches, especially small obvious patches, i'm
+more likely to look at them straight away.
 
-   In file included from sound/hda/common/hwdep.c:10:
-   In file included from include/linux/compat.h:17:
-   include/linux/fs.h:3979:15: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    3979 |         if (unlikely(get_user(c, path)))
-         |                      ^
-   arch/riscv/include/asm/uaccess.h:274:3: note: expanded from macro 'get_user'
-     274 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:244:2: note: expanded from macro '__get_user'
-     244 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:207:2: note: expanded from macro '__get_user_error'
-     207 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:3: note: expanded from macro '__get_user_nocheck'
-     196 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
->> sound/hda/common/hwdep.c:26:6: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-      26 |         if (get_user(verb, &arg->verb))
-         |             ^
-   arch/riscv/include/asm/uaccess.h:274:3: note: expanded from macro 'get_user'
-     274 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:244:2: note: expanded from macro '__get_user'
-     244 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:207:2: note: expanded from macro '__get_user_error'
-     207 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:3: note: expanded from macro '__get_user_nocheck'
-     196 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   sound/hda/common/hwdep.c:40:6: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-      40 |         if (get_user(verb, &arg->verb))
-         |             ^
-   arch/riscv/include/asm/uaccess.h:274:3: note: expanded from macro 'get_user'
-     274 |                 __get_user((x), __p) :                          \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:244:2: note: expanded from macro '__get_user'
-     244 |         __get_user_error(__gu_val, __gu_ptr, __gu_err);         \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:207:2: note: expanded from macro '__get_user_error'
-     207 |         __get_user_nocheck(x, ptr, __gu_failed);                        \
-         |         ^
-   arch/riscv/include/asm/uaccess.h:196:3: note: expanded from macro '__get_user_nocheck'
-     196 |                 __get_user_8((x), __gu_ptr, label);             \
-         |                 ^
-   arch/riscv/include/asm/uaccess.h:130:2: note: expanded from macro '__get_user_8'
-     130 |         u32 __user *__ptr = (u32 __user *)(ptr);                \
-         |         ^
-   3 warnings generated.
-
-
-vim +26 sound/hda/common/hwdep.c
-
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  17  
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  18  /*
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  19   * write/read an out-of-bound verb
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  20   */
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  21  static int verb_write_ioctl(struct hda_codec *codec,
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  22  			    struct hda_verb_ioctl __user *arg)
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  23  {
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  24  	u32 verb, res;
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  25  
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27 @26  	if (get_user(verb, &arg->verb))
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  27  		return -EFAULT;
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  28  	res = snd_hda_codec_read(codec, verb >> 24, 0,
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  29  				 (verb >> 8) & 0xffff, verb & 0xff);
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  30  	if (put_user(res, &arg->res))
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  31  		return -EFAULT;
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  32  	return 0;
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  33  }
-2807314d467e7d sound/pci/hda/hda_hwdep.c Takashi Iwai 2007-07-27  34  
-
-:::::: The code at line 26 was first introduced by commit
-:::::: 2807314d467e7dd929c42050031aabbd28e78f0b [ALSA] hda-intel - Add hwdep interface
-
-:::::: TO: Takashi Iwai <tiwai@suse.de>
-:::::: CC: Jaroslav Kysela <perex@perex.cz>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Andrew
