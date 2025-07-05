@@ -1,98 +1,184 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088FA1BF58;
-	Sat,  5 Jul 2025 02:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385FE1BCA07;
+	Sat,  5 Jul 2025 03:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751681670; cv=none; b=nsJMUItKeJdchDqiQBhV5TqnByln2JDaNNu599ThBbwll9Q1IGPTZLloIWxKD2MQE0vz5ehqly9nSqgRdk23P5VbhsnPFMBr9vvbQqVTWvaU/rO7cl7QJkqQEFZYEbX1VriwCvJ9UNefAmhujigt8VUwGQ4KK2gBUXzC/qhH7yM=
+	t=1751684597; cv=none; b=C/vVNJpvSvGQ2T7ZmY+kQ9Man9ge6l5dWWpRQfoj1nHkQcdwWkExwsdGL0j6CdZh2yEKMzmvJk69HKUMQ5tyDDaPngG5HtCIMsG++hxONU3vyZ9S6O0977C+oLJZh2S1wKD2evlfuiBy8hIHYJvnRH4pBCqLMi/0DhqE/nbet7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751681670; c=relaxed/simple;
-	bh=DnwXkV3mh2xNWLLry95sYPXozKXFK8Czxdfs07K9YpI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=NjF2oSP2ekjs/xK2J433Ez2ajODeXCyGYlvt/eRGhTWD8fwvXb5JiPLWyBgFVv6yfAJbl0IHzGZUpwEUPQLSzBF7AYURkKite092I3IQ/YLT3XggHdqUy0E2RpctBYlBeKTvXUe2iKBCUrDR5pORCykFo8SZpXK7kGQpKnClQ84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [112.10.226.58])
-	by mtasvr (Coremail) with SMTP id _____wDHRSxbimhoyH7qAw--.5558S3;
-	Sat, 05 Jul 2025 10:13:48 +0800 (CST)
-Received: from linma$zju.edu.cn ( [112.10.226.58] ) by
- ajax-webmail-mail-app3 (Coremail) ; Sat, 5 Jul 2025 10:13:46 +0800
- (GMT+08:00)
-Date: Sat, 5 Jul 2025 10:13:46 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Lin Ma" <linma@zju.edu.cn>
-To: "kernel test robot" <lkp@intel.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, mingo@kernel.org,
-	tglx@linutronix.de, pwn9uin@gmail.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH net v3] net: atm: Fix incorrect net_device lec check
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
- 20250620(94335109) Copyright (c) 2002-2025 www.mailtech.cn zju.edu.cn
-In-Reply-To: <202507050831.2GTrUnFN-lkp@intel.com>
-References: <20250703052427.12626-1-linma@zju.edu.cn>
- <202507050831.2GTrUnFN-lkp@intel.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1751684597; c=relaxed/simple;
+	bh=KU2HkhyZ7OIUpZr/uwk3LrvlICUxGwjXLAKYY1viuVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jk6+UnoZ54y7g4X1cKbPz/V1b8QRgpzs095rrNwXzAoYB6cuJBy/K+qcU89qF7bRgFH4dh6unvkYf3oAEg+Kw295bQQKq3oYHHJv2b1y0Jo22FLOr5ovZ6GGObPU9dHWsZE7gI/lbMjCtvegQNmFee3SDlZqer7cOUMOZ5tbZGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fl9ivwu2; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fl9ivwu2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751684596; x=1783220596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KU2HkhyZ7OIUpZr/uwk3LrvlICUxGwjXLAKYY1viuVc=;
+  b=fl9ivwu2hjR216ffqpzFhkCopxKxJ+AAvKakGYD42724AyZM0Jr18CDJ
+   i6HGNCgRiTY6sroiGNBjhXK5ndsRVKo7ElaDFxL1HFf7uumVbfb9V4R8g
+   rfn3rFuJt0erleaQkmT4O19j1aZBvk/Uc9lgwMxlRqpXBHbPz+RjbArW3
+   gx8ysRA3yWKv40HXm0Pe0O1i+yH32GSbA87nOh7DIOUqA8mJuEU3/aQF8
+   OdJvKLw+aVeclYmMflb4niQMSnY09O3bJXQWUKf9FR5Djsim8CQYfSI43
+   DHBQk3rmfCxw0i7bM/dw0p3sBcOSSsa2ohm4X9YsOOoh47TkdBYhC5nCc
+   A==;
+X-CSE-ConnectionGUID: gjWH8EzMQoy8JAUJ/O6Vug==
+X-CSE-MsgGUID: 9L3Lsp7pTc6YtFIIrLH7kg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="53720389"
+X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
+   d="scan'208";a="53720389"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 20:03:13 -0700
+X-CSE-ConnectionGUID: wEDPN7bJTFibulDKDz+rog==
+X-CSE-MsgGUID: 48b7g6n8Qqi7SxCOKlhq9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
+   d="scan'208";a="159101587"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 04 Jul 2025 20:03:10 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXtBE-0004EX-0L;
+	Sat, 05 Jul 2025 03:03:08 +0000
+Date: Sat, 5 Jul 2025 11:02:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Devarsh Thakkar <devarsht@ti.com>, vkoul@kernel.org, kishon@kernel.org,
+	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	aradhya.bhatia@linux.dev, s-jain1@ti.com, r-donadkar@ti.com,
+	tomi.valkeinen@ideasonboard.com, j-choudhary@ti.com,
+	a0512644@ti.com, devarsht@ti.com
+Subject: Re: [PATCH v4 1/2] phy: cadence: cdns-dphy: Fix PLL lock and
+ O_CMN_READY polling
+Message-ID: <202507051038.XCl5miJ7-lkp@intel.com>
+References: <20250704125915.1224738-2-devarsht@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-ID: <208fe08d.af32.197d85c6fb6.Coremail.linma@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:zS_KCgD3_Ilbimho74xkAA--.19191W
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwcQEmhlCw4N8wAKs6
-X-CM-DELIVERINFO: =?B?jiZXnQXKKxbFmtjJiESix3B1w3tPqcowV1L23Bze5QtIr9Db75bEBiiEybVhThS0pI
-	APHs9E3REyVLMz4DLkghFkBLqH5QYsdiIeS7um6fpDNefWi4wE3F/NAR45aDN/ORt2VyFM
-	7zRxcFgotyfKCrND2Di8M1FrbpUWplBdpdkwTnOMjT390PyTZ68sFSMcKOis0w==
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cr17ZrWxuw1DJr1xGFWkKrX_yoW8Wr13pa
-	18JayqgrZ8Wry0ga97Ka4j9ws8t395W3sxWF15Ar15ua1DAFyDWrWIgrnxXryUKr4qg348
-	KF9FgFnayw1UAabCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUQYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4xvF2IEb7IF0Fy264kE64k0F24lFcxC0VAYjxAxZF0Ex2IqxwAC
-	I402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-	W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-	1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UMVCEFcxC0VAYjx
-	AxZFUvcSsGvfC2KfnxnUUI43ZEXa7IU8rcTJUUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250704125915.1224738-2-devarsht@ti.com>
 
-SGkgcm9ib3QsCgo+IAo+IEhpIExpbiwKPiAKPiBrZXJuZWwgdGVzdCByb2JvdCBub3RpY2VkIHRo
-ZSBmb2xsb3dpbmcgYnVpbGQgZXJyb3JzOgo+IAo+IFthdXRvIGJ1aWxkIHRlc3QgRVJST1Igb24g
-bmV0L21haW5dCj4gCj4gdXJsOiAgICBodHRwczovL2dpdGh1Yi5jb20vaW50ZWwtbGFiLWxrcC9s
-aW51eC9jb21taXRzL0xpbi1NYS9uZXQtYXRtLUZpeC1pbmNvcnJlY3QtbmV0X2RldmljZS1sZWMt
-Y2hlY2svMjAyNTA3MDMtMTMyNzI3Cj4gYmFzZTogICBuZXQvbWFpbgo+IHBhdGNoIGxpbms6ICAg
-IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNTA3MDMwNTI0MjcuMTI2MjYtMS1saW5tYSU0
-MHpqdS5lZHUuY24KPiBwYXRjaCBzdWJqZWN0OiBbUEFUQ0ggbmV0IHYzXSBuZXQ6IGF0bTogRml4
-IGluY29ycmVjdCBuZXRfZGV2aWNlIGxlYyBjaGVjawo+IGNvbmZpZzogeDg2XzY0LXJhbmRjb25m
-aWctMDc4LTIwMjUwNzA1IChodHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUv
-MjAyNTA3MDUvMjAyNTA3MDUwODMxLjJHVHJVbkZOLWxrcEBpbnRlbC5jb20vY29uZmlnKQo+IGNv
-bXBpbGVyOiBjbGFuZyB2ZXJzaW9uIDIwLjEuNyAoaHR0cHM6Ly9naXRodWIuY29tL2xsdm0vbGx2
-bS1wcm9qZWN0IDYxNDZhODhmNjA0OTJiNTIwYTM2ZjhmOGYzMjMxZTE1ZjNjYzYwODIpCj4gcmVw
-cm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1aWxkKTogKGh0dHBzOi8vZG93bmxvYWQuMDEub3JnLzBk
-YXktY2kvYXJjaGl2ZS8yMDI1MDcwNS8yMDI1MDcwNTA4MzEuMkdUclVuRk4tbGtwQGludGVsLmNv
-bS9yZXByb2R1Y2UpCj4gCj4gSWYgeW91IGZpeCB0aGUgaXNzdWUgaW4gYSBzZXBhcmF0ZSBwYXRj
-aC9jb21taXQgKGkuZS4gbm90IGp1c3QgYSBuZXcgdmVyc2lvbiBvZgo+IHRoZSBzYW1lIHBhdGNo
-L2NvbW1pdCksIGtpbmRseSBhZGQgZm9sbG93aW5nIHRhZ3MKPiB8IFJlcG9ydGVkLWJ5OiBrZXJu
-ZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4KPiB8IENsb3NlczogaHR0cHM6Ly9sb3JlLmtl
-cm5lbC5vcmcvb2Uta2J1aWxkLWFsbC8yMDI1MDcwNTA4MzEuMkdUclVuRk4tbGtwQGludGVsLmNv
-bS8KPiAKPiBBbGwgZXJyb3JzIChuZXcgb25lcyBwcmVmaXhlZCBieSA+Piwgb2xkIG9uZXMgcHJl
-Zml4ZWQgYnkgPDwpOgo+IAo+ID4+IEVSUk9SOiBtb2Rwb3N0OiAiaXNfbmV0ZGV2X2xlYyIgW25l
-dC9hdG0vbXBvYS5rb10gdW5kZWZpbmVkIQo+IAo+IC0tIAo+IDAtREFZIENJIEtlcm5lbCBUZXN0
-IFNlcnZpY2UKPiBodHRwczovL2dpdGh1Yi5jb20vaW50ZWwvbGtwLXRlc3RzL3dpa2kKCllvdSBh
-cmUgcmlnaHQsIHRoaXMgcGF0Y2gganVzdCBjb21waWxlIHdoZW4gQ09ORklHX0FUTT15IGJ1dCBy
-YWlzZQplcnJvciBpZiBDT05GSUdfQVRNPW0uIEknbSBzbyBzdHVwaWQgdGhhdCBJIG1hZGUgdGhp
-cyBzeW1ib2wgbWlzdGFrZSA6KAoKVW5kZXIgZml4aW5nIGl0IGN1cnJlbnRseS4KClRoYW5rcwpM
-aW4KCgo=
+Hi Devarsh,
 
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.16-rc4 next-20250704]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Devarsh-Thakkar/phy-cadence-cdns-dphy-Fix-PLL-lock-and-O_CMN_READY-polling/20250704-210349
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250704125915.1224738-2-devarsht%40ti.com
+patch subject: [PATCH v4 1/2] phy: cadence: cdns-dphy: Fix PLL lock and O_CMN_READY polling
+config: x86_64-buildonly-randconfig-003-20250705 (https://download.01.org/0day-ci/archive/20250705/202507051038.XCl5miJ7-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507051038.XCl5miJ7-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507051038.XCl5miJ7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/phy/cadence/cdns-dphy.c:408:45: error: no member named 'hs_clk_rate' in 'struct cdns_dphy_cfg'
+     408 |         ret = cdns_dphy_tx_get_band_ctrl(dphy->cfg.hs_clk_rate);
+         |                                          ~~~~~~~~~ ^
+   1 error generated.
+
+
+vim +408 drivers/phy/cadence/cdns-dphy.c
+
+   370	
+   371	static int cdns_dphy_power_on(struct phy *phy)
+   372	{
+   373		struct cdns_dphy *dphy = phy_get_drvdata(phy);
+   374		int ret;
+   375		u32 reg;
+   376	
+   377		if (!dphy->is_configured || dphy->is_powered)
+   378			return -EINVAL;
+   379	
+   380		clk_prepare_enable(dphy->psm_clk);
+   381		clk_prepare_enable(dphy->pll_ref_clk);
+   382	
+   383		/*
+   384		 * Configure the internal PSM clk divider so that the DPHY has a
+   385		 * 1MHz clk (or something close).
+   386		 */
+   387		ret = cdns_dphy_setup_psm(dphy);
+   388		if (ret) {
+   389			dev_err(&dphy->phy->dev, "Failed to setup PSM with error %d\n", ret);
+   390			goto err_power_on;
+   391		}
+   392	
+   393		/*
+   394		 * Configure attach clk lanes to data lanes: the DPHY has 2 clk lanes
+   395		 * and 8 data lanes, each clk lane can be attache different set of
+   396		 * data lanes. The 2 groups are named 'left' and 'right', so here we
+   397		 * just say that we want the 'left' clk lane to drive the 'left' data
+   398		 * lanes.
+   399		 */
+   400		cdns_dphy_set_clk_lane_cfg(dphy, DPHY_CLK_CFG_LEFT_DRIVES_LEFT);
+   401	
+   402		/*
+   403		 * Configure the DPHY PLL that will be used to generate the TX byte
+   404		 * clk.
+   405		 */
+   406		cdns_dphy_set_pll_cfg(dphy, &dphy->cfg);
+   407	
+ > 408		ret = cdns_dphy_tx_get_band_ctrl(dphy->cfg.hs_clk_rate);
+   409		if (ret < 0) {
+   410			dev_err(&dphy->phy->dev, "Failed to get band control value with error %d\n", ret);
+   411			goto err_power_on;
+   412		}
+   413	
+   414		reg = FIELD_PREP(DPHY_BAND_CFG_LEFT_BAND, ret) |
+   415		      FIELD_PREP(DPHY_BAND_CFG_RIGHT_BAND, ret);
+   416		writel(reg, dphy->regs + DPHY_BAND_CFG);
+   417	
+   418		/* Start TX state machine. */
+   419		writel(DPHY_CMN_SSM_EN | DPHY_CMN_TX_MODE_EN,
+   420		       dphy->regs + DPHY_CMN_SSM);
+   421	
+   422		ret = cdns_dphy_wait_for_pll_lock(dphy);
+   423		if (ret) {
+   424			dev_err(&dphy->phy->dev, "Failed to lock PLL with error %d\n", ret);
+   425			goto err_power_on;
+   426		}
+   427	
+   428		ret = cdns_dphy_wait_for_cmn_ready(dphy);
+   429		if (ret) {
+   430			dev_err(&dphy->phy->dev, "O_CMN_READY signal failed to assert with error %d\n",
+   431				ret);
+   432			goto err_power_on;
+   433		}
+   434	
+   435		dphy->is_powered = true;
+   436	
+   437		return 0;
+   438	
+   439	err_power_on:
+   440		clk_disable_unprepare(dphy->pll_ref_clk);
+   441		clk_disable_unprepare(dphy->psm_clk);
+   442	
+   443		return ret;
+   444	}
+   445	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
