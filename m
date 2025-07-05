@@ -1,62 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1869E1A8F84;
-	Sat,  5 Jul 2025 01:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02B514E2F2;
+	Sat,  5 Jul 2025 02:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751678407; cv=none; b=DE+WX3Bm3DxKrSvc3HCBh3MswZOFqM6D33DPfPiTRnDleEsSpqyob4HAeu6yFoz9U6JzetE9HIEmw+G++wdtKfltYpKIBLYvAFQKQtl1MoRYjet94S+YfX+bkLXU7F875llv1H16ZxsEslXHryXq7zLKXLb091VIaGOyed04TlM=
+	t=1751681359; cv=none; b=hkoCU+ViLjvgdGp1+Q6JPsex5GxqDtvY9EF8rzN3aWmS7qqki+LLtbybRV+DXV7VLGUReAwpi4dXN6nw0SMg2lVmXVcWrLi10AiAcApKGG+vigHqXzymDVO8Cxkpmt2+Yv+VrxKc3oEek1SQRDV6/f+0F37wJd+IpW+TWpKCM/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751678407; c=relaxed/simple;
-	bh=8Y8n8B3BoqNB1B8GJbvTAFfoTSxMib31OsR6t2OeupI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GhzZ1M+ApL1gZ7x6Y5lTYS0RKK6QE52V/DhfTuACtplv9V65U0lXhaYp+MlXZi7AsnBhge66cyVUzAEaz/vHHs04Tf2htkgKXBaBslTbaHzDoVdiOoERR1ygLoC4DH5SGCqqnEVM1RRF85zynmDWWu7GJHx0TkYoQBkQL8cYAz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lE4Z47CJ; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1751681359; c=relaxed/simple;
+	bh=BQwmKsA3I9+RYP2xkti8aYYVkl/QM2yFlc6xhfV2f4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Q8WZXM+KTL3VW+Z3G2cjyBcVSJ/esQwONDos5I7XRApoGtVwr4SWSmWZv/HDiI9KGSPtkz5OtXhWQlAQjpN6cvy6RMoQHhxQfkcQXtBMauHf/DSdiq5WNog/eYbe6bqthaw41HBbQanMqWRJZgaJct55OqCkYebI5QUh+ZgYbFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OBky0Ild; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lE4Z47CJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OBky0Ild"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751678405; x=1783214405;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8Y8n8B3BoqNB1B8GJbvTAFfoTSxMib31OsR6t2OeupI=;
-  b=lE4Z47CJQe4s3HHyCJm72xzk9k1KqGvIBOBsbv8Lo+fy+9oPfAsb/f4M
-   HGj346/B55kHNnqk7kxhREoKlg+PuTOBDfi856R3DOCqhXAR26QLHTzzv
-   r6fAjMS4ii8EgIt+RL1sbk5DuOp8Mkna7CfZaPMf/l3konCpRqhFkQ1Dy
-   +u+S0ojxKoXPSfpByvuH8ghewiBKWqx0GrD4vgzTsXZgJblCKQf62YSvV
-   W1CM9ns6b0UyVrsAfvy3mxV5YDRlJ13EKeTVSKlbijuOIfwvAxFNQoBRB
-   XMZ51q2bvjW+E5BHk9EOXC5jVm8M844vVjM3S79TLz4b3EB7oYSyVENvZ
+  t=1751681358; x=1783217358;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BQwmKsA3I9+RYP2xkti8aYYVkl/QM2yFlc6xhfV2f4Y=;
+  b=OBky0IldAzd5plmjojpHYRxf0Xnv4TX/iIhgKa3SUYg3pcu59kHqgkeQ
+   lqSZgbL3cw2oyGlahua+uQrx0/q+dLKjMX5QwSSQsPkmWrwI64+od+sua
+   IjyR7hono1G2h432L/h4ignTtpn4ZqrwGbR5wmRfMX48xFQuvgYrS7jtT
+   fH+LnmzxAO3A7gJissCI/d7EaeI23pIhmCUhgaC2Q9R4JUQdLDaWewa52
+   Fagomxsgigalqdr5cCvMeZbnRzwnouRBz/7c20tG3FmJiv5bAu+jja175
+   O6TOb24OhBIQS8iJ6hy16Nd4VhsKcO8/O/Nzuycw6dsZZwegxOzvaGZDO
    Q==;
-X-CSE-ConnectionGUID: NCJLKcnFRcSHNNX5ti9dvg==
-X-CSE-MsgGUID: t3GWHT+vRKGUlaDKvC+N7Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="79438592"
+X-CSE-ConnectionGUID: J/U1+ZHzRCa4qWAcoNcHMg==
+X-CSE-MsgGUID: m43tKUT7T0mTG/S7ZczcCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="53864956"
 X-IronPort-AV: E=Sophos;i="6.16,288,1744095600"; 
-   d="scan'208";a="79438592"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 18:20:05 -0700
-X-CSE-ConnectionGUID: v5StXrznTzyJgs3Br5MgRQ==
-X-CSE-MsgGUID: 9ffFj94CQOy4esuKkDDozA==
+   d="scan'208";a="53864956"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 19:09:16 -0700
+X-CSE-ConnectionGUID: ud1gR3FrTiuV8Bg+0VD38g==
+X-CSE-MsgGUID: qJZ3Ry3iTayEgCrIdEZk1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,288,1744095600"; 
-   d="scan'208";a="159089068"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 04 Jul 2025 18:20:01 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+   d="scan'208";a="154496499"
+Received: from igk-lkp-server01.igk.intel.com (HELO 030a839a1121) ([10.91.175.65])
+  by orviesa009.jf.intel.com with ESMTP; 04 Jul 2025 19:09:16 -0700
+Received: from kbuild by 030a839a1121 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXrZP-0004BX-11;
-	Sat, 05 Jul 2025 01:19:59 +0000
-Date: Sat, 5 Jul 2025 09:19:17 +0800
+	id 1uXsL2-0000kn-35;
+	Sat, 05 Jul 2025 02:09:12 +0000
+Date: Sat, 5 Jul 2025 04:08:33 +0200
 From: kernel test robot <lkp@intel.com>
-To: Lin Ma <linma@zju.edu.cn>, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	mingo@kernel.org, tglx@linutronix.de, pwn9uin@gmail.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH net v3] net: atm: Fix incorrect net_device lec check
-Message-ID: <202507050831.2GTrUnFN-lkp@intel.com>
-References: <20250703052427.12626-1-linma@zju.edu.cn>
+To: Jack Yu <jack.yu@realtek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: sound/soc/codecs/rt1318.c:1149:34: warning: unused variable
+ 'rt1318_of_match'
+Message-ID: <202507050416.elP8eSZp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,30 +62,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250703052427.12626-1-linma@zju.edu.cn>
 
-Hi Lin,
+Hi Jack,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on net/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lin-Ma/net-atm-Fix-incorrect-net_device-lec-check/20250703-132727
-base:   net/main
-patch link:    https://lore.kernel.org/r/20250703052427.12626-1-linma%40zju.edu.cn
-patch subject: [PATCH net v3] net: atm: Fix incorrect net_device lec check
-config: x86_64-randconfig-078-20250705 (https://download.01.org/0day-ci/archive/20250705/202507050831.2GTrUnFN-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a79a588fc1761dc12a3064fc2f648ae66cea3c5a
+commit: fe1ff61487ace69cd4e680e36169c90667eb9624 ASoC: rt1318: Add RT1318 audio amplifier driver
+date:   1 year, 1 month ago
+config: x86_64-buildonly-randconfig-2001-20250705 (https://download.01.org/0day-ci/archive/20250705/202507050416.elP8eSZp-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507050831.2GTrUnFN-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507050416.elP8eSZp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507050831.2GTrUnFN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507050416.elP8eSZp-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "is_netdev_lec" [net/atm/mpoa.ko] undefined!
+   In file included from sound/soc/codecs/rt1318.c:18:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/soc/codecs/rt1318.c:1149:34: warning: unused variable 'rt1318_of_match' [-Wunused-const-variable]
+    1149 | static const struct of_device_id rt1318_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/rt1318_of_match +1149 sound/soc/codecs/rt1318.c
+
+  1148	
+> 1149	static const struct of_device_id rt1318_of_match[] = {
+  1150		{ .compatible = "realtek,rt1318", },
+  1151		{},
+  1152	};
+  1153	MODULE_DEVICE_TABLE(of, rt1318_of_match);
+  1154	
 
 -- 
 0-DAY CI Kernel Test Service
