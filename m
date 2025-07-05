@@ -1,65 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE151DE2DC;
-	Sat,  5 Jul 2025 03:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B39E272E7C;
+	Sat,  5 Jul 2025 03:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751685918; cv=none; b=GS+jBgwHoOIXhj1YOVDBgSeft6g8rAyp+KBX+S514D5RhJ/bpw9c5DUQhKUyoiYcZ7HTUN/9d1K9b6Fqi7cSHNX+CJnEzUApngi+aOld7O0reuaATNFsfI86T9t/fmudUlcw4+l7usHmbDaW2q/bFuUnungBeSNOlO/wC5lTwfg=
+	t=1751686046; cv=none; b=HexN6LW0Nwhnv4LWOJJRcSk1yJ/0QabWLjIgG8q2ZcYj9hBsQjDelNfJ3PuLZU+9oUrXSe1oIyC61SPRIwrHiVgC4CC9W0XxuTJWT6VlF+WoaaDxFi32yBEdQIXvTEaToMva1rCOfwzBp3RMQQFZlWgiaiArWmxW+uDM3hja9T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751685918; c=relaxed/simple;
-	bh=ePHjkiaujlQ/aFTwTNMONgXRQjK/ZWSHeb+8CG7jjiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RKqjOezHQqsCA+2jDmxX7rYeYg9ElkUeIMaWcX59J4txH1b+e8JrOLwFBLxI5ftGypBYOZDOCKwfBET35caWcbKtegwP4Mu+Sw2t82Uni5L3EeYe/r+xSVTkLY9yBbSlXfFZOkYLC1uW/3yBhQmAc+xmq0qElO409wBX8LbLezU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TcDd7YFb; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1751686046; c=relaxed/simple;
+	bh=rz1YPfn+Xyf97OsN+1k8HXgq3rfV0JI8jj2cnO+tzg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iMXrh05E+edEJD7pVQOc6PZkCAaCqMSyITUA03uVykhPqT5v0kPN1jgXMrnR5pwhP0vg5HOuM25CtZ8T4iiCErh2rtszqzKtxU9hb0qgeLwpFdS5T6szkZR0ZZyEG0JpSbGJwtKt5H3nY4eS2nxWX54rrjyAtLkCjmZhSjcQcQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dCY2LoA8; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TcDd7YFb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dCY2LoA8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751685916; x=1783221916;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ePHjkiaujlQ/aFTwTNMONgXRQjK/ZWSHeb+8CG7jjiQ=;
-  b=TcDd7YFbBa4/ePGwGZlhu+e0yTovACrKQNgOHo/kSAeauDZVMj2dtp9W
-   diHmAb11aL3p2KQbd/vQBrhnTIbakGf/5M8pCVq9UQK/G4lxduz2SgOZX
-   z1byFOkHZZ1XLYJZ2QxKITEvlt+d/jRckE+/CgwR+Y04UNXhbdkGvhdL+
-   JDyDhVZt0PFoi23ki7f+kX+wPb+1lVQLUS9GeQRow3fPw3z+Hs8PjfcZf
-   lT9Pp8C/9BY4fkCCj7FS4LN2MZndQiCfrg9xnHDCPqK45yn+yTkHBmGcy
-   4S/oBhcP0DEmxCawjj/joJJ3FrdF9PeQf5cKsd0Loh8cN7dhghMjShCo5
-   g==;
-X-CSE-ConnectionGUID: LvIl5G4dQbiubgKzDvId8Q==
-X-CSE-MsgGUID: kZA13goiR1q6zAR1iesksQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="64601688"
+  t=1751686045; x=1783222045;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rz1YPfn+Xyf97OsN+1k8HXgq3rfV0JI8jj2cnO+tzg8=;
+  b=dCY2LoA8XfQSqx3oUwo0P97Ep1mdCWlYZQx29DF52JEppfSVwxdmdjcV
+   K6CjbUZmHYyTBcfdjuoh0mimLrCLYi+CArl7x6C+/yZrRIPGWcO8/BdsI
+   0V5IBx5AB3QMmFBQE4ucBPpUoRleZ102uptoC83me7lNVgYcp1KBl715E
+   7+7hazgecmiSBalAR8MpSSCh3/xWpjOkdkrCZ1JHY9F/cDhY/w+qZvfFb
+   n5VWephGwDMfFw0+oDeSMbhTl9O/2jre2dV0KZOMwJ2GaWZo2fVCTmWjf
+   nrwEgjItRWyJEJyJ90kVMXBHRt7j2jRCmvOGSpcYvSozxfP25A+ZbS/+Q
+   w==;
+X-CSE-ConnectionGUID: 0BpFbsSJQwCKY8yCiL1rCA==
+X-CSE-MsgGUID: dY+Ktd3AQnmLEwzNVKBo+A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="53866597"
 X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
-   d="scan'208";a="64601688"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 20:25:15 -0700
-X-CSE-ConnectionGUID: vQzO8Hf9Qha7uxcK95XNNw==
-X-CSE-MsgGUID: rlvM3kbfSNC0Ztl/MCWfzg==
+   d="scan'208";a="53866597"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 20:27:25 -0700
+X-CSE-ConnectionGUID: YzEkqh/bRsiuAtOhpEsjAg==
+X-CSE-MsgGUID: eh3wVBO0QpuriMgRp2TlYg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,289,1744095600"; 
-   d="scan'208";a="159306901"
-Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 04 Jul 2025 20:25:12 -0700
-Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+   d="scan'208";a="155237758"
+Received: from igk-lkp-server01.igk.intel.com (HELO 030a839a1121) ([10.91.175.65])
+  by orviesa008.jf.intel.com with ESMTP; 04 Jul 2025 20:27:23 -0700
+Received: from kbuild by 030a839a1121 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uXtWX-0004FV-2k;
-	Sat, 05 Jul 2025 03:25:09 +0000
-Date: Sat, 5 Jul 2025 11:24:13 +0800
+	id 1uXtYe-0000lV-27;
+	Sat, 05 Jul 2025 03:27:20 +0000
+Date: Sat, 5 Jul 2025 05:26:31 +0200
 From: kernel test robot <lkp@intel.com>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	bryan.odonoghue@linaro.org, rfoss@kernel.org,
-	konradybcio@kernel.org, krzk+dt@kernel.org, robh@kernel.org
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>
-Subject: Re: [PATCH v5 1/6] media: qcom: camss: Add support for TFE (Spectra
- 340)
-Message-ID: <202507051109.lDPTfVhw-lkp@intel.com>
-References: <20250704081537.1716613-2-loic.poulain@oss.qualcomm.com>
+	linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>
+Subject: drivers/gpu/drm/vc4/vc4_drv.c:303:8: warning: cast to smaller
+ integer type 'enum vc4_gen' from 'const void *'
+Message-ID: <202507050513.zh0Xm13T-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,109 +62,159 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250704081537.1716613-2-loic.poulain@oss.qualcomm.com>
 
-Hi Loic,
+Hi Dave,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.16-rc4 next-20250704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Loic-Poulain/media-qcom-camss-Add-support-for-TFE-Spectra-340/20250704-163126
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250704081537.1716613-2-loic.poulain%40oss.qualcomm.com
-patch subject: [PATCH v5 1/6] media: qcom: camss: Add support for TFE (Spectra 340)
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250705/202507051109.lDPTfVhw-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507051109.lDPTfVhw-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a79a588fc1761dc12a3064fc2f648ae66cea3c5a
+commit: 56aa4c374dbf86d90b7c5aabdc8facbdd3321477 drm/vc4: Use of_device_get_match_data to set generation
+date:   7 months ago
+config: x86_64-buildonly-randconfig-2001-20250705 (https://download.01.org/0day-ci/archive/20250705/202507050513.zh0Xm13T-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250705/202507050513.zh0Xm13T-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507051109.lDPTfVhw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507050513.zh0Xm13T-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/qcom/camss/camss-vfe-340.c:186:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     186 |                         if (bus_status & TFE_BUS_IRQ_MASK_RUP_DONE(i))
-         |                                          ^
-   drivers/media/platform/qcom/camss/camss-vfe-340.c:36:40: note: expanded from macro 'TFE_BUS_IRQ_MASK_RUP_DONE'
-      36 | #define         TFE_BUS_IRQ_MASK_RUP_DONE(sc)   FIELD_PREP(TFE_BUS_IRQ_MASK_RUP_DONE_MASK, BIT(sc))
-         |                                                 ^
-   drivers/media/platform/qcom/camss/camss-vfe-340.c:191:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     191 |                         if (bus_status & TFE_BUS_IRQ_MASK_BUF_DONE(i))
-         |                                          ^
-   drivers/media/platform/qcom/camss/camss-vfe-340.c:38:40: note: expanded from macro 'TFE_BUS_IRQ_MASK_BUF_DONE'
-      38 | #define         TFE_BUS_IRQ_MASK_BUF_DONE(sg)   FIELD_PREP(TFE_BUS_IRQ_MASK_BUF_DONE_MASK, BIT(sg))
-         |                                                 ^
-   2 errors generated.
+   In file included from drivers/gpu/drm/vc4/vc4_drv.c:27:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/vc4/vc4_drv.c:303:8: warning: cast to smaller integer type 'enum vc4_gen' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     303 |         gen = (enum vc4_gen)of_device_get_match_data(dev);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/FIELD_PREP +186 drivers/media/platform/qcom/camss/camss-vfe-340.c
+vim +303 drivers/gpu/drm/vc4/vc4_drv.c
 
-   163	
-   164	static irqreturn_t vfe_isr(int irq, void *dev)
-   165	{
-   166		struct vfe_device *vfe = dev;
-   167		u32 status;
-   168		int i;
-   169	
-   170		status = readl_relaxed(vfe->base + TFE_IRQ_STATUS_0);
-   171		writel_relaxed(status, vfe->base + TFE_IRQ_CLEAR_0);
-   172		writel_relaxed(TFE_IRQ_CMD_CLEAR, vfe->base + TFE_IRQ_CMD);
-   173	
-   174		if (status & TFE_IRQ_MASK_0_RST_DONE) {
-   175			dev_dbg(vfe->camss->dev, "VFE%u: Reset done!", vfe->id);
-   176			vfe_isr_reset_ack(vfe);
-   177		}
-   178	
-   179		if (status & TFE_IRQ_MASK_0_BUS_WR) {
-   180			u32 bus_status = readl_relaxed(vfe->base + TFE_BUS_IRQ_STATUS_0);
-   181	
-   182			writel_relaxed(bus_status, vfe->base + TFE_BUS_IRQ_CLEAR_0);
-   183			writel_relaxed(TFE_BUS_IRQ_CMD_CLEAR, vfe->base + TFE_BUS_IRQ_CMD);
-   184	
-   185			for (i = 0; i < TFE_IFACE_NUM; i++) {
- > 186				if (bus_status & TFE_BUS_IRQ_MASK_RUP_DONE(i))
-   187					vfe->res->hw_ops->reg_update_clear(vfe, __iface_to_line(i));
-   188			}
-   189	
-   190			for (i = 0; i < TFE_SUBGROUP_NUM; i++) {
-   191				if (bus_status & TFE_BUS_IRQ_MASK_BUF_DONE(i))
-   192					vfe_buf_done(vfe, __subgroup_to_line(i));
-   193			}
-   194	
-   195			if (bus_status & TFE_BUS_IRQ_MASK_0_CONS_VIOL)
-   196				dev_err_ratelimited(vfe->camss->dev, "VFE%u: Bad config violation",
-   197						    vfe->id);
-   198	
-   199			if (bus_status & TFE_BUS_IRQ_MASK_0_VIOL)
-   200				dev_err_ratelimited(vfe->camss->dev, "VFE%u: Input data violation",
-   201						    vfe->id);
-   202	
-   203			if (bus_status & TFE_BUS_IRQ_MASK_0_IMG_VIOL)
-   204				dev_err_ratelimited(vfe->camss->dev, "VFE%u: Image size violation",
-   205						    vfe->id);
-   206		}
-   207	
-   208		status = readl_relaxed(vfe->base + TFE_BUS_OVERFLOW_STATUS);
-   209		if (status) {
-   210			writel_relaxed(status, vfe->base + TFE_BUS_STATUS_CLEAR);
-   211			for (i = 0; i < TFE_WM_NUM; i++) {
-   212				if (status & BIT(i))
-   213					dev_err_ratelimited(vfe->camss->dev,
-   214							    "VFE%u: bus overflow for wm %u\n",
-   215							    vfe->id, i);
-   216			}
-   217		}
-   218	
-   219		return IRQ_HANDLED;
-   220	}
-   221	
+   288	
+   289	static int vc4_drm_bind(struct device *dev)
+   290	{
+   291		struct platform_device *pdev = to_platform_device(dev);
+   292		const struct drm_driver *driver;
+   293		struct rpi_firmware *firmware = NULL;
+   294		struct drm_device *drm;
+   295		struct vc4_dev *vc4;
+   296		struct device_node *node;
+   297		struct drm_crtc *crtc;
+   298		enum vc4_gen gen;
+   299		int ret = 0;
+   300	
+   301		dev->coherent_dma_mask = DMA_BIT_MASK(32);
+   302	
+ > 303		gen = (enum vc4_gen)of_device_get_match_data(dev);
+   304	
+   305		if (gen > VC4_GEN_4)
+   306			driver = &vc5_drm_driver;
+   307		else
+   308			driver = &vc4_drm_driver;
+   309	
+   310		node = of_find_matching_node_and_match(NULL, vc4_dma_range_matches,
+   311						       NULL);
+   312		if (node) {
+   313			ret = of_dma_configure(dev, node, true);
+   314			of_node_put(node);
+   315	
+   316			if (ret)
+   317				return ret;
+   318		}
+   319	
+   320		vc4 = devm_drm_dev_alloc(dev, driver, struct vc4_dev, base);
+   321		if (IS_ERR(vc4))
+   322			return PTR_ERR(vc4);
+   323		vc4->gen = gen;
+   324		vc4->dev = dev;
+   325	
+   326		drm = &vc4->base;
+   327		platform_set_drvdata(pdev, drm);
+   328	
+   329		if (gen == VC4_GEN_4) {
+   330			ret = drmm_mutex_init(drm, &vc4->bin_bo_lock);
+   331			if (ret)
+   332				goto err;
+   333	
+   334			ret = vc4_bo_cache_init(drm);
+   335			if (ret)
+   336				goto err;
+   337		}
+   338	
+   339		ret = drmm_mode_config_init(drm);
+   340		if (ret)
+   341			goto err;
+   342	
+   343		if (gen == VC4_GEN_4) {
+   344			ret = vc4_gem_init(drm);
+   345			if (ret)
+   346				goto err;
+   347		}
+   348	
+   349		node = of_find_compatible_node(NULL, NULL, "raspberrypi,bcm2835-firmware");
+   350		if (node) {
+   351			firmware = rpi_firmware_get(node);
+   352			of_node_put(node);
+   353	
+   354			if (!firmware) {
+   355				ret = -EPROBE_DEFER;
+   356				goto err;
+   357			}
+   358		}
+   359	
+   360		ret = aperture_remove_all_conflicting_devices(driver->name);
+   361		if (ret)
+   362			goto err;
+   363	
+   364		if (firmware) {
+   365			ret = rpi_firmware_property(firmware,
+   366						    RPI_FIRMWARE_NOTIFY_DISPLAY_DONE,
+   367						    NULL, 0);
+   368			if (ret)
+   369				drm_warn(drm, "Couldn't stop firmware display driver: %d\n", ret);
+   370	
+   371			rpi_firmware_put(firmware);
+   372		}
+   373	
+   374		ret = component_bind_all(dev, drm);
+   375		if (ret)
+   376			goto err;
+   377	
+   378		ret = devm_add_action_or_reset(dev, vc4_component_unbind_all, vc4);
+   379		if (ret)
+   380			goto err;
+   381	
+   382		ret = vc4_plane_create_additional_planes(drm);
+   383		if (ret)
+   384			goto err;
+   385	
+   386		ret = vc4_kms_load(drm);
+   387		if (ret < 0)
+   388			goto err;
+   389	
+   390		drm_for_each_crtc(crtc, drm)
+   391			vc4_crtc_disable_at_boot(crtc);
+   392	
+   393		ret = drm_dev_register(drm, 0);
+   394		if (ret < 0)
+   395			goto err;
+   396	
+   397		drm_client_setup_with_fourcc(drm, DRM_FORMAT_RGB565);
+   398	
+   399		return 0;
+   400	
+   401	err:
+   402		platform_set_drvdata(pdev, NULL);
+   403		return ret;
+   404	}
+   405	
 
 -- 
 0-DAY CI Kernel Test Service
