@@ -1,66 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D3521FF30;
-	Sun,  6 Jul 2025 13:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E783913D891;
+	Sun,  6 Jul 2025 15:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751808295; cv=none; b=Bl37zzfMnExnf7awEzx15q6L7y4XbqoX6P2m163RJlqzfNS6zq8I58HSLtHy3jQq3veajG+UHHxuluqbBCK0hF0pXCWLD66tT1AwyQi9D1AwS7/tSY4JxXT42Sg7zAp28ZT5SaJEAdSOGEG6L6IZ8a5hBbmGJYJBILBDVBTIX7M=
+	t=1751815203; cv=none; b=SVuJqB1X+1FdWPk1HRuqP6YpivZFMYnPFecuWrUJ0MO6qShqljYWkaezeQn3C5Wr58Y9w5uLSt1KV/qHA667xmnGNV8FDQlVzfwQ/4JunzR3h+jJVo20nY2JxEsEkbKWAnpUgHlymTT5FyyQWfBIf2P8E9/hGJ17Lv+JaYFZ648=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751808295; c=relaxed/simple;
-	bh=MDngCFoCTSnVbqNfTg5aaI5DnhuGTd8SytOekmkV6Cs=;
+	s=arc-20240116; t=1751815203; c=relaxed/simple;
+	bh=rRlIVBAtFf1QpBmX0FDu8fSBrvpcpNmcc/tPcQIikPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H+aONAlWHkIVLo/fsr0yrDmkFqnNWAKoSI6woCN0Wr0d8E4PdRPqVPM+R8vvmlOPDsobrq+8pf7+OCA0sKKIl5ybXDvW8SkTnqHd8oLsnN05H8P2AKWy9j9rFiwMhj8vs5uHhSCGwTtYinHIETIYctk+f4xxcEVgLCpdThXQbzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MiYTUYoF; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=L7kRjsiT8yT2TJxAkcNSdhx/6/rYDkG+O3FQc2S/AN4r0uhgVs1P+kqKvwhTU5AbMLOWSvBCVl+156JwK864lP1v+1y34ap7XUi8y1k8fGqcVgzz5WI9UyjRMQreMBYv2uP4MemkP1CEM9ug6WhjWfLuFDYlieZ1CJrSmO7g+Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PuJ88t5l; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MiYTUYoF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PuJ88t5l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751808294; x=1783344294;
+  t=1751815202; x=1783351202;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MDngCFoCTSnVbqNfTg5aaI5DnhuGTd8SytOekmkV6Cs=;
-  b=MiYTUYoFtsRJnY893yxZ5gq5jcVyN7LI9RzZawdadf6lyq1HFU0gwd4I
-   JOq6DXA30eRTqP9kLuvEfldpM+QuxJIsC1RcHOoZQDwjxt0IC8UBMKWka
-   pFkJFtyAPV6Uql5d/e8eqw7nOUYw0B5+5hPsaoUGyxvD4a7SgDjot9bLb
-   hcZ+/F4YpYevg5hEtsFczQfFcGWVtc4KsCweawLxAr5AVBp5619XkSVaO
-   UjyufwjmRWzQJoeO11Hoc2CgaNQ7P5/+8L21uaxoe9oy7UzVQ1n31waPn
-   Tt87FN678HlbTvxobTL/szmMGkYB5lw2zYmmmsjf2l0EMlRdgO9m2FIF3
-   A==;
-X-CSE-ConnectionGUID: w0PgLyxJQker1aU9Olk2Ew==
-X-CSE-MsgGUID: DdxB63ADQTyr7yd2xxRZJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="54140952"
-X-IronPort-AV: E=Sophos;i="6.16,291,1744095600"; 
-   d="scan'208";a="54140952"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 06:24:53 -0700
-X-CSE-ConnectionGUID: Xw4K0rOhRh680MdnnNbYPg==
-X-CSE-MsgGUID: YxEJnjw6QFq1Ro5vTH9LLQ==
+  bh=rRlIVBAtFf1QpBmX0FDu8fSBrvpcpNmcc/tPcQIikPY=;
+  b=PuJ88t5lUIQ3ZQhcf78R9T+XegfUkBmiwOlhbP7tOovpjv1BSuNPPrZC
+   N4YSQ/yjx+cEawPoJytfcvkaU4ByFQ+fPOi5jGFkkpbOzwmfjXcrTMniZ
+   FQNAS2E0DrSIRFDHjgIvKOGzE2PjZFNh30HL0xCl7tn9SRSA3Jv7nOhma
+   0tYe3pMrX85smutmtqzPyuv2JAygpSOKzSh6wT/tp2qpp5tdoTgeXrPhr
+   VQO2FjinFhVBT6PehwBwhyZGafD9vFYiDGHQRYt/L62voxyVx+5fIUKWa
+   QH7Lr9W3jjjhhwDp1RICZKlGNtvCGelsyP8s15KVCEgKar4qvZuu+HMHq
+   g==;
+X-CSE-ConnectionGUID: 7R2YMhoOS1ywy/SHTOkpHg==
+X-CSE-MsgGUID: 6XqV5dn/TGSVmBPAIGqfdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="71485535"
+X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
+   d="scan'208";a="71485535"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 08:20:01 -0700
+X-CSE-ConnectionGUID: bahLTSSdQtu9b/81V2d4+Q==
+X-CSE-MsgGUID: L5gboo2DQuyeGUbY+Da46Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
-   d="scan'208";a="154738214"
+   d="scan'208";a="192196154"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 06 Jul 2025 06:24:49 -0700
+  by orviesa001.jf.intel.com with ESMTP; 06 Jul 2025 08:19:59 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uYPMN-00054J-1F;
-	Sun, 06 Jul 2025 13:24:47 +0000
-Date: Sun, 6 Jul 2025 21:24:31 +0800
+	id 1uYR9o-000575-1G;
+	Sun, 06 Jul 2025 15:19:56 +0000
+Date: Sun, 6 Jul 2025 23:18:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Khalid Ali <khaliidcaliy@gmail.com>, ardb@kernel.org,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr
+To: Vitaly Wool <vitaly.wool@konsulko.se>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gargaditya08@live.com, jonathan@marek.ca, kees@kernel.org,
-	linux-efi@vger.kernel.org, linux-riscv@lists.infradead.org,
-	lukas@wunner.de, linux-kernel@vger.kernel.org,
-	Khalid Ali <khaliidcaliy@gmail.com>
-Subject: Re: [PATCH v2 2/2] efi/libstub: Print uefi status code on error
- messages
-Message-ID: <202507062122.z20qLlyi-lkp@intel.com>
-References: <20250706100147.1447-1-khaliidcaliy@gmail.com>
+	akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
+	Vitaly Wool <vitaly.wool@konsulko.se>
+Subject: Re: [PATCH v10 3/4] rust: add support for NUMA ids in allocations
+Message-ID: <202507062327.TsP3JVhL-lkp@intel.com>
+References: <20250702160910.3610134-1-vitaly.wool@konsulko.se>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,87 +67,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250706100147.1447-1-khaliidcaliy@gmail.com>
+In-Reply-To: <20250702160910.3610134-1-vitaly.wool@konsulko.se>
 
-Hi Khalid,
+Hi Vitaly,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on efi/next]
-[also build test WARNING on linus/master v6.16-rc4 next-20250704]
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on rust/rust-next linus/master v6.16-rc4 next-20250704]
+[cannot apply to vbabka-slab/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Khalid-Ali/efi-libstub-Print-uefi-status-code-on-error-messages/20250706-180349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-patch link:    https://lore.kernel.org/r/20250706100147.1447-1-khaliidcaliy%40gmail.com
-patch subject: [PATCH v2 2/2] efi/libstub: Print uefi status code on error messages
-config: loongarch-randconfig-001-20250706 (https://download.01.org/0day-ci/archive/20250706/202507062122.z20qLlyi-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507062122.z20qLlyi-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vitaly-Wool/mm-vmalloc-allow-to-set-node-and-align-in-vrealloc/20250703-001116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250702160910.3610134-1-vitaly.wool%40konsulko.se
+patch subject: [PATCH v10 3/4] rust: add support for NUMA ids in allocations
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250706/202507062327.TsP3JVhL-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507062327.TsP3JVhL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507062122.z20qLlyi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507062327.TsP3JVhL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/efi-stub.c:117:70: warning: variable 'status' is uninitialized when used here [-Wuninitialized]
-     117 |                 efi_err("getting command line via LOADED_IMAGE_PROTOCOL: 0x%lx\n", status);
-         |                                                                                    ^~~~~~
-   drivers/firmware/efi/libstub/efistub.h:75:39: note: expanded from macro 'efi_err'
-      75 |         efi_printk(KERN_ERR "ERROR: " fmt, ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   drivers/firmware/efi/libstub/efi-stub.c:108:21: note: initialize the variable 'status' to silence this warning
-     108 |         efi_status_t status;
-         |                            ^
-         |                             = 0
-   1 warning generated.
-
-
-vim +/status +117 drivers/firmware/efi/libstub/efi-stub.c
-
-   104	
-   105	efi_status_t efi_handle_cmdline(efi_loaded_image_t *image, char **cmdline_ptr)
-   106	{
-   107		char *cmdline __free(efi_pool) = NULL;
-   108		efi_status_t status;
-   109	
-   110		/*
-   111		 * Get the command line from EFI, using the LOADED_IMAGE
-   112		 * protocol. We are going to copy the command line into the
-   113		 * device tree, so this can be allocated anywhere.
-   114		 */
-   115		cmdline = efi_convert_cmdline(image);
-   116		if (!cmdline) {
- > 117			efi_err("getting command line via LOADED_IMAGE_PROTOCOL: 0x%lx\n", status);
-   118			return EFI_OUT_OF_RESOURCES;
-   119		}
-   120	
-   121		if (!IS_ENABLED(CONFIG_CMDLINE_FORCE)) {
-   122			status = efi_parse_options(cmdline);
-   123			if (status != EFI_SUCCESS) {
-   124				efi_err("Failed to parse EFI load options: 0x%lx\n", status);
-   125				return status;
-   126			}
-   127		}
-   128	
-   129		if (IS_ENABLED(CONFIG_CMDLINE_EXTEND) ||
-   130		    IS_ENABLED(CONFIG_CMDLINE_FORCE) ||
-   131		    cmdline[0] == 0) {
-   132			status = efi_parse_options(CONFIG_CMDLINE);
-   133			if (status != EFI_SUCCESS) {
-   134				efi_err("Failed to parse built-in command line: 0x%lx\n", status);
-   135				return status;
-   136			}
-   137		}
-   138	
-   139		*cmdline_ptr = no_free_ptr(cmdline);
-   140		return EFI_SUCCESS;
-   141	}
-   142	
+>> warning: missing documentation for an associated constant
+   --> rust/kernel/alloc.rs:139:5
+   |
+   139 |     pub const NO_NODE: NumaNode = NumaNode(bindings::NUMA_NO_NODE);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
 
 -- 
 0-DAY CI Kernel Test Service
