@@ -1,110 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92EF17BA1;
-	Sun,  6 Jul 2025 01:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B4ED2FB;
+	Sun,  6 Jul 2025 03:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751764258; cv=none; b=QMsQQHlGm+oEAdwut9GO4/z9DrNzPE6u+KX9iMbP5IvlAN1cwUYGV/fFCaMPvPR++Doi3y8aM6rNhKOW984WShzSp06UpB8nP8g34NPhaVt3By3bolodDzxrzyzSAqWjAD/8Ygoby6iZ1Tpt5Hg492iDv2mhubEJc4Y5hunVrHg=
+	t=1751771169; cv=none; b=TTP75uwUgk3HusFN71FC3I+i7V3Q11bxBOPfroTeYh9rCxZY7D+jpntfZnkJN6K03GYOPCYP/b37NxCX5r5SBhNsxXCVxVDpTJ0mCUiyJCqTEPz8iF5g0eMdPpNYAQ6kcF3EsCWbTZsAZo/axwXEaiSK8v7edezIfP12AhfWGvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751764258; c=relaxed/simple;
-	bh=ENobFyjNHg0qUrbBlYZsDa3VL8C3AE3vNlcCubTGN6I=;
+	s=arc-20240116; t=1751771169; c=relaxed/simple;
+	bh=iBI/Y7Y2TK1z9mUYXrJyGM8Cqi42Qt7xaOHNi8F1ZeA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eOlgEIQroszDcdcE2zTEyqKP1Rge/iX5ThG/hqK/jHXcMLvMTWBMbC5ExsIbFmCOrEzkfEewXYqvLD6YeF8Cc6mYrCL1CP/uToN85lmnmGOVvGv5/qJZIHuUJQzpDBsPIEZtUo1b+yZkr2rtNL6TftbWYIPxElop+BUo/64KS50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BywMsEns; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0ArFPUvfVjTkdHtWZX+7bnrsSGsQw0E/Yjpt9/plcyKW/G5ip2Vw+I3F6ObdTdH/BDyhrt8OXCxCvE8+nB8kGrHih3z6jU+wYk3y/OgII8GTs65U77Ea+5glzJ7PUiUR0AfXwAdAcMc00H86+SBNRGwvVf6Yto+SJ3vtxlF1hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzyzjJ7J; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BywMsEns"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzyzjJ7J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751764256; x=1783300256;
+  t=1751771167; x=1783307167;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ENobFyjNHg0qUrbBlYZsDa3VL8C3AE3vNlcCubTGN6I=;
-  b=BywMsEnsKY022Oqtv9jNFrKQnkT8W8El6Cp3u14uMDXQFOzSWVcYobxN
-   ti/AXSvYEuCWDovq5ulLgVtNTPyk/IAlPl1lLWpcYFL5lQsuM13QiCjXJ
-   lc3dRQYKY4HWvfKh+7GZ1Ltzptjlax7FcTfUbDx/AyfcmaxfLEArNyt5d
-   t25f7Obav3bt1XnPYDESdPo2DoJPeza6OtInY/6Nn6vxvI18GOmV49cB3
-   3EDl8017dq7Em29IC4fwxzQbJR3Ffha9O28CB0QuoDV+pJ57WTUxZBJZh
-   AP2Y4KKiOam3o+wAQm1QVmp3syP7j4hJwiyTzWOgz1r0Wq+1UimZtBgF4
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=iBI/Y7Y2TK1z9mUYXrJyGM8Cqi42Qt7xaOHNi8F1ZeA=;
+  b=UzyzjJ7JmcL0hYFqDl2pMrArFD88Z1CHl4RuAm+VylVptt+zcvvMi2p1
+   noJ3Je8ZfK4NcbHjIHFzh2oEU0FFdNF4iXLu3BLMeZgP6ulCJ48ANTGls
+   XW07tKZ8eDGSXUD4AvZVO7LmlkcVYM7xsJAOEYP91VYe3fcepHyB8ZN/b
+   uhcP8JJM8IGp/Q/If2wb9Jg/OT6CObyPGVOQzBKjAiy3dW48tYGH1L8y/
+   XOhaYEoR0HNHxorQ8daZP/0ZvAa2EjPG/cBUY5BJvkOBIWEs2+yagYf/5
+   GW3HqWix/sNqAtslTRpaAUze5JmESIu3tkKLV+Mip8lQbHT1V0UkqPcGg
    g==;
-X-CSE-ConnectionGUID: td4MlLghR0Cqje3O5CO6jA==
-X-CSE-MsgGUID: zI/MRFukSzCkMDcnBmKdrg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11485"; a="53894650"
+X-CSE-ConnectionGUID: lUfzhsrLTgisa/RjSRQr7A==
+X-CSE-MsgGUID: bw2QeQvaQpefh4dc9clz9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11485"; a="65483595"
 X-IronPort-AV: E=Sophos;i="6.16,291,1744095600"; 
-   d="scan'208";a="53894650"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2025 18:10:55 -0700
-X-CSE-ConnectionGUID: MzCOyp4rQL6n4RB75TtXCg==
-X-CSE-MsgGUID: Huoizr+NQcS2hODm6cOtBA==
+   d="scan'208";a="65483595"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2025 20:06:07 -0700
+X-CSE-ConnectionGUID: 9RzBk+4xRzCsdIO7hkpsCA==
+X-CSE-MsgGUID: hY9zMaW5SZabpDCpV+rQWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,291,1744095600"; 
-   d="scan'208";a="158930165"
+   d="scan'208";a="178587492"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 05 Jul 2025 18:10:54 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 05 Jul 2025 20:06:03 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uYDu8-0004nj-0J;
-	Sun, 06 Jul 2025 01:10:52 +0000
-Date: Sun, 6 Jul 2025 09:10:50 +0800
+	id 1uYFhY-0004qd-2e;
+	Sun, 06 Jul 2025 03:06:00 +0000
+Date: Sun, 6 Jul 2025 11:05:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Damien =?iso-8859-1?Q?Ri=E9gel?= <damien.riegel@silabs.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 3/6] greybus: cpc: add SPI driver
-Message-ID: <202507060806.1rBpnamP-lkp@intel.com>
-References: <20250705004036.3828-4-damien.riegel@silabs.com>
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-dev@igalia.com,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Subject: Re: [PATCH 01/15] selftests: kselftest: Create ksft_print_dbg_msg()
+Message-ID: <202507061039.0ZKQCW5y-lkp@intel.com>
+References: <20250704-tonyk-robust_test_cleanup-v1-1-c0ff4f24c4e1@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250705004036.3828-4-damien.riegel@silabs.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250704-tonyk-robust_test_cleanup-v1-1-c0ff4f24c4e1@igalia.com>
 
-Hi Damien,
+Hi André,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on staging/staging-testing]
-[also build test WARNING on staging/staging-next staging/staging-linus linus/master v6.16-rc4 next-20250704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on a24cc6ce1933eade12aa2b9859de0fcd2dac2c06]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Ri-gel/greybus-move-host-controller-drivers-comment-in-Makefile/20250705-090138
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250705004036.3828-4-damien.riegel%40silabs.com
-patch subject: [RFC 3/6] greybus: cpc: add SPI driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250706/202507060806.1rBpnamP-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 61529d9e36fa86782a2458e6bdeedf7f376ef4b5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507060806.1rBpnamP-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/selftests-kselftest-Create-ksft_print_dbg_msg/20250704-231034
+base:   a24cc6ce1933eade12aa2b9859de0fcd2dac2c06
+patch link:    https://lore.kernel.org/r/20250704-tonyk-robust_test_cleanup-v1-1-c0ff4f24c4e1%40igalia.com
+patch subject: [PATCH 01/15] selftests: kselftest: Create ksft_print_dbg_msg()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250706/202507061039.0ZKQCW5y-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507061039.0ZKQCW5y-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507060806.1rBpnamP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507061039.0ZKQCW5y-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/greybus/cpc/spi.c:566:35: warning: unused variable 'cpc_spi_ids' [-Wunused-const-variable]
-     566 | static const struct spi_device_id cpc_spi_ids[] = {
-         |                                   ^~~~~~~~~~~
-   1 warning generated.
+   In file included from samples/vfs/test-list-all-mounts.c:11:
+   In file included from samples/vfs/../../tools/testing/selftests/pidfd/pidfd.h:19:
+>> samples/vfs/../../tools/testing/selftests/pidfd/../kselftest.h:107:8: error: unknown type name 'bool'
+     107 | static bool ksft_debug_enabled;
+         |        ^
+   1 error generated.
 
 
-vim +/cpc_spi_ids +566 drivers/greybus/cpc/spi.c
+vim +/bool +107 samples/vfs/../../tools/testing/selftests/pidfd/../kselftest.h
 
-   565	
- > 566	static const struct spi_device_id cpc_spi_ids[] = {
-   567		{ .name = "cpc-spi" },
-   568		{},
-   569	};
-   570	MODULE_DEVICE_TABLE(spi, cpc_spi_ids);
-   571	
+   104	
+   105	static struct ksft_count ksft_cnt;
+   106	static unsigned int ksft_plan;
+ > 107	static bool ksft_debug_enabled;
+   108	
 
 -- 
 0-DAY CI Kernel Test Service
