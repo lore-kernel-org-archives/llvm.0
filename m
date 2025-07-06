@@ -1,116 +1,197 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B4ED2FB;
-	Sun,  6 Jul 2025 03:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222E419F464;
+	Sun,  6 Jul 2025 06:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751771169; cv=none; b=TTP75uwUgk3HusFN71FC3I+i7V3Q11bxBOPfroTeYh9rCxZY7D+jpntfZnkJN6K03GYOPCYP/b37NxCX5r5SBhNsxXCVxVDpTJ0mCUiyJCqTEPz8iF5g0eMdPpNYAQ6kcF3EsCWbTZsAZo/axwXEaiSK8v7edezIfP12AhfWGvk=
+	t=1751782943; cv=none; b=m1BpZFyGTB60aorMbUx0Zt2gTiQzrgRO11cIXIKGHmjso7oEz/UMGsyvkcxol4CCzpRCp6rigKzcRmOjafspstHQGcbenA9oj8TxDax0XOLAiCL18aSmP9MNEI5KDClR2tg/aChB9/pgDEOMz0MymBZUwXsFKhwvi2U372ZBk4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751771169; c=relaxed/simple;
-	bh=iBI/Y7Y2TK1z9mUYXrJyGM8Cqi42Qt7xaOHNi8F1ZeA=;
+	s=arc-20240116; t=1751782943; c=relaxed/simple;
+	bh=nW8O8YdElWySi7VcpRvqBHn54tWkhNDJ64guVXrJuCc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O0ArFPUvfVjTkdHtWZX+7bnrsSGsQw0E/Yjpt9/plcyKW/G5ip2Vw+I3F6ObdTdH/BDyhrt8OXCxCvE8+nB8kGrHih3z6jU+wYk3y/OgII8GTs65U77Ea+5glzJ7PUiUR0AfXwAdAcMc00H86+SBNRGwvVf6Yto+SJ3vtxlF1hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzyzjJ7J; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptVv7kF1mf3o7fBHa4V94vxQ++wYotFWHBet1Y6CIHBu62W1cWhWUc5SgHD666l91xSBB5ePG9A60BMjVwWeFdRjkRoDknL9AYZF/WX85MKglIDyNOoEeWeFCk28+CTCH/TBf9KIDDDszZhVZWwz6x09PQlhLXkg2iMWlWxc0QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YUfzzGGN; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzyzjJ7J"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YUfzzGGN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751771167; x=1783307167;
+  t=1751782943; x=1783318943;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=iBI/Y7Y2TK1z9mUYXrJyGM8Cqi42Qt7xaOHNi8F1ZeA=;
-  b=UzyzjJ7JmcL0hYFqDl2pMrArFD88Z1CHl4RuAm+VylVptt+zcvvMi2p1
-   noJ3Je8ZfK4NcbHjIHFzh2oEU0FFdNF4iXLu3BLMeZgP6ulCJ48ANTGls
-   XW07tKZ8eDGSXUD4AvZVO7LmlkcVYM7xsJAOEYP91VYe3fcepHyB8ZN/b
-   uhcP8JJM8IGp/Q/If2wb9Jg/OT6CObyPGVOQzBKjAiy3dW48tYGH1L8y/
-   XOhaYEoR0HNHxorQ8daZP/0ZvAa2EjPG/cBUY5BJvkOBIWEs2+yagYf/5
-   GW3HqWix/sNqAtslTRpaAUze5JmESIu3tkKLV+Mip8lQbHT1V0UkqPcGg
-   g==;
-X-CSE-ConnectionGUID: lUfzhsrLTgisa/RjSRQr7A==
-X-CSE-MsgGUID: bw2QeQvaQpefh4dc9clz9Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11485"; a="65483595"
+   mime-version:in-reply-to;
+  bh=nW8O8YdElWySi7VcpRvqBHn54tWkhNDJ64guVXrJuCc=;
+  b=YUfzzGGNQiaX+pziTSvQz/QuKnzt0DGQECtZI8Tx7EGszpsHtRxGsyAC
+   vlHW0MSZWWFICwAE4I3y33zxRqKucNAfoy8bMOO1kd4QtBiqTE5HRPxqj
+   1gVMNgXZoKHBYI0GKly00T+QFeWLMy6GA66kCjs/UDKmh888J7fdRIOFg
+   jARlwmCWA9QNS3n9OiJ61gHsNFA9H8WP64ELYtCnm3Hbcp2Jg1ebBHF2Q
+   AKNwvBx7Nd8df42wb5cZGdvAMv95cooZ+x9LOrCXZELSTBfuNbWLxZgE9
+   PlGBnHCRWGlvLeVyKQL3KUfJjuGRNup8B40+BwX64J90qzijJSooaYOq3
+   A==;
+X-CSE-ConnectionGUID: HU1BEdFDR9muO6r2Ts7ejQ==
+X-CSE-MsgGUID: anzUB84aQMyQccJ4rtEzFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11485"; a="57703925"
 X-IronPort-AV: E=Sophos;i="6.16,291,1744095600"; 
-   d="scan'208";a="65483595"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2025 20:06:07 -0700
-X-CSE-ConnectionGUID: 9RzBk+4xRzCsdIO7hkpsCA==
-X-CSE-MsgGUID: hY9zMaW5SZabpDCpV+rQWg==
+   d="scan'208";a="57703925"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2025 23:22:22 -0700
+X-CSE-ConnectionGUID: bHDd9G8XRAqckPZ8lMKU7A==
+X-CSE-MsgGUID: iSE7HrUbTUCEPReK/zoDzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,291,1744095600"; 
-   d="scan'208";a="178587492"
+   d="scan'208";a="159486719"
 Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Jul 2025 20:06:03 -0700
+  by orviesa004.jf.intel.com with ESMTP; 05 Jul 2025 23:22:18 -0700
 Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uYFhY-0004qd-2e;
-	Sun, 06 Jul 2025 03:06:00 +0000
-Date: Sun, 6 Jul 2025 11:05:26 +0800
+	id 1uYIlT-0004v1-2N;
+	Sun, 06 Jul 2025 06:22:15 +0000
+Date: Sun, 6 Jul 2025 14:22:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	broonie@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-dev@igalia.com,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Subject: Re: [PATCH 01/15] selftests: kselftest: Create ksft_print_dbg_msg()
-Message-ID: <202507061039.0ZKQCW5y-lkp@intel.com>
-References: <20250704-tonyk-robust_test_cleanup-v1-1-c0ff4f24c4e1@igalia.com>
+	lgirdwood@gmail.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 4/6] regulator: Add support for MediaTek MT6363 SPMI
+ PMIC Regulators
+Message-ID: <202507061437.VKBqvJPn-lkp@intel.com>
+References: <20250624073548.29732-5-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250704-tonyk-robust_test_cleanup-v1-1-c0ff4f24c4e1@igalia.com>
+In-Reply-To: <20250624073548.29732-5-angelogioacchino.delregno@collabora.com>
 
-Hi André,
+Hi AngeloGioacchino,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on a24cc6ce1933eade12aa2b9859de0fcd2dac2c06]
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on linus/master v6.16-rc4 next-20250704]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/selftests-kselftest-Create-ksft_print_dbg_msg/20250704-231034
-base:   a24cc6ce1933eade12aa2b9859de0fcd2dac2c06
-patch link:    https://lore.kernel.org/r/20250704-tonyk-robust_test_cleanup-v1-1-c0ff4f24c4e1%40igalia.com
-patch subject: [PATCH 01/15] selftests: kselftest: Create ksft_print_dbg_msg()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250706/202507061039.0ZKQCW5y-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507061039.0ZKQCW5y-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/dt-bindings-regulator-Document-MediaTek-MT6316-PMIC-Regulators/20250624-154048
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20250624073548.29732-5-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v2 4/6] regulator: Add support for MediaTek MT6363 SPMI PMIC Regulators
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250706/202507061437.VKBqvJPn-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250706/202507061437.VKBqvJPn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507061039.0ZKQCW5y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507061437.VKBqvJPn-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from samples/vfs/test-list-all-mounts.c:11:
-   In file included from samples/vfs/../../tools/testing/selftests/pidfd/pidfd.h:19:
->> samples/vfs/../../tools/testing/selftests/pidfd/../kselftest.h:107:8: error: unknown type name 'bool'
-     107 | static bool ksft_debug_enabled;
-         |        ^
-   1 error generated.
+   drivers/regulator/mt6363-regulator.c:375:14: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     375 |                 } else if (cur_mode == REGULATOR_MODE_IDLE) {
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/regulator/mt6363-regulator.c:388:6: note: uninitialized use occurs here
+     388 |         if (ret) {
+         |             ^~~
+   drivers/regulator/mt6363-regulator.c:375:10: note: remove the 'if' if its condition is always true
+     375 |                 } else if (cur_mode == REGULATOR_MODE_IDLE) {
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/regulator/mt6363-regulator.c:347:19: note: initialize the variable 'ret' to silence this warning
+     347 |         int cur_mode, ret;
+         |                          ^
+         |                           = 0
+   drivers/regulator/mt6363-regulator.c:351:28: warning: variable 'regmap' is uninitialized when used here [-Wuninitialized]
+     351 |                 ret = mt6363_buck_unlock(regmap, true);
+         |                                          ^~~~~~
+   drivers/regulator/mt6363-regulator.c:346:23: note: initialize the variable 'regmap' to silence this warning
+     346 |         struct regmap *regmap;
+         |                              ^
+         |                               = NULL
+>> drivers/regulator/mt6363-regulator.c:455:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     455 |                 sel = FIELD_PREP(MT6363_RG_VEMC_VOSEL_1_MASK, sel);
+         |                       ^
+>> drivers/regulator/mt6363-regulator.c:487:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     487 |                 ret = FIELD_GET(MT6363_RG_VEMC_VOSEL_1_MASK, sel);
+         |                       ^
+   2 warnings and 2 errors generated.
 
 
-vim +/bool +107 samples/vfs/../../tools/testing/selftests/pidfd/../kselftest.h
+vim +/FIELD_PREP +455 drivers/regulator/mt6363-regulator.c
 
-   104	
-   105	static struct ksft_count ksft_cnt;
-   106	static unsigned int ksft_plan;
- > 107	static bool ksft_debug_enabled;
-   108	
+   430	
+   431	static int mt6363_vemc_set_voltage_sel(struct regulator_dev *rdev, unsigned int sel)
+   432	{
+   433		const u16 tma_unlock_key = MT6363_TMA_UNLOCK_VALUE;
+   434		struct regmap *regmap = rdev->regmap;
+   435		unsigned int val;
+   436		u16 mask;
+   437		int ret;
+   438	
+   439		ret = regmap_read(rdev->regmap, MT6363_TOP_TRAP, &val);
+   440		if (ret)
+   441			return ret;
+   442	
+   443		if (val > 1)
+   444			return -EINVAL;
+   445	
+   446		/* Unlock TMA for writing */
+   447		ret = regmap_bulk_write(rdev->regmap, MT6363_TOP_TMA_KEY_L,
+   448					&tma_unlock_key, sizeof(tma_unlock_key));
+   449		if (ret)
+   450			return ret;
+   451	
+   452		/* If HW trapping value is 1, use VEMC_VOSEL_1 instead of VEMC_VOSEL_0 */
+   453		if (val == 1) {
+   454			mask = MT6363_RG_VEMC_VOSEL_1_MASK;
+ > 455			sel = FIELD_PREP(MT6363_RG_VEMC_VOSEL_1_MASK, sel);
+   456		} else {
+   457			mask = rdev->desc->vsel_mask;
+   458		}
+   459	
+   460		/* Function must return the result of this write operation */
+   461		ret = regmap_update_bits(regmap, rdev->desc->vsel_reg, mask, sel);
+   462	
+   463		/* Unconditionally re-lock TMA */
+   464		val = 0;
+   465		regmap_bulk_write(rdev->regmap, MT6363_TOP_TMA_KEY_L, &val, 2);
+   466	
+   467		return ret;
+   468	}
+   469	
+   470	static int mt6363_vemc_get_voltage_sel(struct regulator_dev *rdev)
+   471	{
+   472		unsigned int sel, trap;
+   473		int ret;
+   474	
+   475		ret = regmap_read(rdev->regmap, rdev->desc->vsel_reg, &sel);
+   476		if (ret)
+   477			return ret;
+   478	
+   479		ret = regmap_read(rdev->regmap, MT6363_TOP_TRAP, &trap);
+   480		if (ret)
+   481			return ret;
+   482	
+   483		/* If HW trapping value is 1, use VEMC_VOSEL_1 instead of VEMC_VOSEL_0 */
+   484		if (trap > 1)
+   485			return -EINVAL;
+   486		else if (trap == 1)
+ > 487			ret = FIELD_GET(MT6363_RG_VEMC_VOSEL_1_MASK, sel);
+   488		else
+   489			ret = sel & rdev->desc->vsel_mask;
+   490	
+   491		return ret;
+   492	}
+   493	
 
 -- 
 0-DAY CI Kernel Test Service
