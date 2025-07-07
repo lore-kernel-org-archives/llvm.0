@@ -1,135 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBF61F9F73;
-	Sun,  6 Jul 2025 22:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59CA28E7;
+	Mon,  7 Jul 2025 01:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751840096; cv=none; b=UQ/NNAGUmbPHOBnICfcpRpm103D1TR6lznAbPdS7pVyVzqOUeP/QFJK5nX7NhbcLWwnz4k3VcyTFVXFg5G/aOnKniQOOyCyPsu60hhcJhZwIlp3Ue4QT5/AHSXggGoo+QcN/ozGS4bOZ8wtHSGKRNFfc6IxO5TcGVEAGUUoySW4=
+	t=1751852993; cv=none; b=LSbrRkcbMg068qlGpObAPgXnSzSpxG8YqlQRqBFw+oZ2lONTF6wCZA0wwvpWq3Fj2s04f4zOigeFIqBOfMCZ2l7A62wuC9PMfmYSuWYMrPDwQcYh/0Du1N2grPq7CJXrtxgm2spnEQAsqpWOn6oyKhKigN9X7GJLPdAjXehsYLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751840096; c=relaxed/simple;
-	bh=MtU/STv5lLCBKGTtU3uo02nW4S6JlUsV/HAUHGpREEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EuU+sFL7COyuAp+Ac9HxDy/RAwmnt5wZGR1Xtw66OgIQCQx/4RJK27gp+q1bJ5v85XIjLYPLJZUWmiFd3Zr6+WGjwBYgx0kGpUZimoAmJlamZLyT5Y2DK/3yk3EPpvH8PpHwftoq4kTIXtD8pEkQ4TEAnxg85V/N28ixRW8+JvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X1XBhZ2p; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X1XBhZ2p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751840096; x=1783376096;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MtU/STv5lLCBKGTtU3uo02nW4S6JlUsV/HAUHGpREEc=;
-  b=X1XBhZ2pJMsdAFfJdhR5cj1iENFEaWiAYheGQt9UqZcBdr2tz2K+Q6Sj
-   tRD+pcGOvIH3Dq4SYZA1nopsOJdwgDiSy3nJzGwLqgAe29425hvFm5gse
-   GA9UkApWCqWEi8GMUnK5CmOVSzJytc4aHIU2ekrGk2hm9d4BRAebGFyP9
-   /URLN+Xa3UGQecGQ0zW9kbVoOm1B1EO/C1ffaqxJKxnu6npekiMG6o2Vw
-   RCYDvdtdZ1jyIyKgGCiT0fzkDf1XIS0CZTGe3PZI4OUMeOQuL37kqIrdB
-   1+8JBJiNiJdGP3+Qb3RAKWurQRMCmqHYqBPGFrpctwvyOpQZlNsH1YOIA
-   g==;
-X-CSE-ConnectionGUID: hY/aRVDjTYu7L1MdDw/8vw==
-X-CSE-MsgGUID: EyDuNdwiQRSMMAOdxpeDUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="65123386"
-X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
-   d="scan'208";a="65123386"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 15:14:52 -0700
-X-CSE-ConnectionGUID: Kag5lUd5RK68Xn7R+yi/Lw==
-X-CSE-MsgGUID: pSoGQotZQe+OPdIMs6VwhA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
-   d="scan'208";a="154802325"
-Received: from lkp-server01.sh.intel.com (HELO def1aeed4587) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 06 Jul 2025 15:14:50 -0700
-Received: from kbuild by def1aeed4587 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uYXdI-00001V-04;
-	Sun, 06 Jul 2025 22:14:48 +0000
-Date: Mon, 7 Jul 2025 06:13:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: block/bfq.o: warning: objtool: bfq_bfqq_expire+0x3a8: sibling call
- from callable instruction with modified stack frame
-Message-ID: <202507070332.OZWZVjr0-lkp@intel.com>
+	s=arc-20240116; t=1751852993; c=relaxed/simple;
+	bh=R9wOoivrfZOJIBWeWht1zr7HlkSe8WY9GbFRkNpF3iM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=mHgMfgyTj3oQlUd6hFxW5b0rLSrZBsiUEi+WkGsNDvjaqMuYW/92JOcpzIVgljHUCOC/Rwnu4so2rN91u089KBczm2IiLd/WrhQBk5NsVR1j9A84B0maaT5/RJzuG1/vH25LgKEGWXGRUpphIItDZjcwdPGXjDaTdaWmQb/wu6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4bb6ZD13rJz2SSqq;
+	Mon,  7 Jul 2025 09:47:48 +0800 (CST)
+Received: from kwepemf100018.china.huawei.com (unknown [7.202.181.17])
+	by mail.maildlp.com (Postfix) with ESMTPS id 722FD140145;
+	Mon,  7 Jul 2025 09:49:40 +0800 (CST)
+Received: from [10.67.120.168] (10.67.120.168) by
+ kwepemf100018.china.huawei.com (7.202.181.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 7 Jul 2025 09:49:39 +0800
+Message-ID: <5f9d93c3-ea97-b951-fc68-e23bb1337120@hisilicon.com>
+Date: Mon, 7 Jul 2025 09:49:39 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [mellanox:wip/leon-for-next 29/35]
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared
+ identifier 'cmd_numi'; did you mean 'cmd_num'?
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Leon Romanovsky
+	<leon@kernel.org>
+References: <202507070359.Ng3M8gut-lkp@intel.com>
+From: Junxian Huang <huangjunxian6@hisilicon.com>
+In-Reply-To: <202507070359.Ng3M8gut-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf100018.china.huawei.com (7.202.181.17)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1f988d0788f50d8464f957e793fab356e2937369
-commit: e20ab7d454ee8d1e0e8b9ff73a7c87e84c666b2f LoongArch: Enable jump table for objtool
-date:   4 months ago
-config: loongarch-randconfig-001-20250707 (https://download.01.org/0day-ci/archive/20250707/202507070332.OZWZVjr0-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 61529d9e36fa86782a2458e6bdeedf7f376ef4b5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507070332.OZWZVjr0-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507070332.OZWZVjr0-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+On 2025/7/7 6:13, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mellanox/linux.git wip/leon-for-next
+> head:   bdc5726cdd454f91d7bf49f47c8c31377cb3d7ce
+> commit: 6cbf3ee2e409ca573ef1ebb3f383ae3873850ee7 [29/35] RDMA/hns: Get message length of ack_req from FW
+> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507070359.Ng3M8gut-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared identifier 'cmd_numi'; did you mean 'cmd_num'?
+>     2225 |         hns_roce_cmq_setup_basic_desc(&desc[cmd_numi - 1], cmd, true);
+>          |                                             ^~~~~~~~
+>          |                                             cmd_num
+>    drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2210:6: note: 'cmd_num' declared here
+>     2210 |         int cmd_num;
+>          |             ^
+>    1 error generated.
+> 
 
->> block/bfq.o: warning: objtool: bfq_bfqq_expire+0x3a8: sibling call from callable instruction with modified stack frame
->> block/bfq.o: warning: objtool: bfq_set_next_ioprio_data+0x54: sibling call from callable instruction with modified stack frame
->> block/bfq.o: warning: objtool: bfq_get_queue+0xbc: sibling call from callable instruction with modified stack frame
---
-   drivers/media/i2c/adv7842.c:396:19: warning: unused function 'cec_write_clr_set' [-Wunused-function]
-     396 | static inline int cec_write_clr_set(struct v4l2_subdev *sd, u8 reg, u8 mask, u8 val)
-         |                   ^~~~~~~~~~~~~~~~~
-   1 warning generated.
->> drivers/media/i2c/adv7842.o: warning: objtool: adv7842_g_register+0x48: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7842.o: warning: objtool: adv7842_s_register+0x44: sibling call from callable instruction with modified stack frame
-   drivers/media/i2c/adv7842.o: warning: objtool: adv7842_query_dv_timings+0x254: sibling call from callable instruction with modified stack frame
-   drivers/media/i2c/adv7842.o: warning: objtool: select_input+0x3c: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7842.o: warning: objtool: enable_input+0x3c: sibling call from callable instruction with modified stack frame
-   drivers/media/i2c/adv7842.o: warning: objtool: adv7842_s_routing+0x48: sibling call from callable instruction with modified stack frame
-   drivers/media/i2c/adv7842.o: warning: objtool: adv7842_querystd+0xc0: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7842.o: warning: objtool: adv7842_set_format+0x70: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7842.o: warning: objtool: adv7842_debugfs_if_read+0x84: sibling call from callable instruction with modified stack frame
-   drivers/media/i2c/adv7842.o: warning: objtool: adv7842_s_ctrl+0x6c: sibling call from callable instruction with modified stack frame
---
-   drivers/staging/gpib/ines/ines_gpib.c:29:23: warning: variable 'nec_priv' set but not used [-Wunused-but-set-variable]
-      29 |         struct nec7210_priv *nec_priv;
-         |                              ^
-   drivers/staging/gpib/ines/ines_gpib.c:1123:21: warning: variable 'dev' set but not used [-Wunused-but-set-variable]
-    1123 |         struct local_info *dev;
-         |                            ^
-   2 warnings generated.
->> drivers/staging/gpib/ines/ines_gpib.o: warning: objtool: ines_common_pci_attach+0x2ac: sibling call from callable instruction with modified stack frame
---
-   drivers/staging/gpib/cb7210/cb7210.c:383:23: warning: variable 'nec_priv' set but not used [-Wunused-but-set-variable]
-     383 |         struct nec7210_priv *nec_priv;
-         |                              ^
-   drivers/staging/gpib/cb7210/cb7210.c:1264:24: warning: variable 'handle' set but not used [-Wunused-but-set-variable]
-    1264 |         struct pcmcia_device *handle;
-         |                               ^
-   drivers/staging/gpib/cb7210/cb7210.c:1265:21: warning: variable 'dev' set but not used [-Wunused-but-set-variable]
-    1265 |         struct local_info *dev;
-         |                            ^
-   3 warnings generated.
->> drivers/staging/gpib/cb7210/cb7210.o: warning: objtool: cb7210_accel_read+0x39c: sibling call from callable instruction with modified stack frame
->> drivers/staging/gpib/cb7210/cb7210.o: warning: objtool: cb7210_accel_write+0x15c: sibling call from callable instruction with modified stack frame
->> drivers/staging/gpib/cb7210/cb7210.o: warning: objtool: cb7210_init+0x80: sibling call from callable instruction with modified stack frame
->> drivers/staging/gpib/cb7210/cb7210.o: warning: objtool: cb_isa_attach+0xb0: sibling call from callable instruction with modified stack frame
---
-   drivers/video/fbdev/aty/aty128fb.c:534:18: warning: unused function '_aty_ld_8' [-Wunused-function]
-     534 | static inline u8 _aty_ld_8(unsigned int regindex,
-         |                  ^~~~~~~~~
-   1 warning generated.
->> drivers/video/fbdev/aty/aty128fb.o: warning: objtool: aty128_timings+0x1a8: sibling call from callable instruction with modified stack frame
-   drivers/video/fbdev/aty/aty128fb.o: warning: objtool: aty128fb_check_var+0xa4: sibling call from callable instruction with modified stack frame
->> drivers/video/fbdev/aty/aty128fb.o: warning: objtool: aty128fb_setcolreg+0xb4: sibling call from callable instruction with modified stack frame
->> drivers/video/fbdev/aty/aty128fb.o: warning: objtool: aty128fb_blank+0x5c: sibling call from callable instruction with modified stack frame
+Leon, just to confirm that this can be fixed in your wip branch
+and I don't need to resend a patch, right?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Junxian
