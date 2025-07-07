@@ -1,129 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B33528541F;
-	Mon,  7 Jul 2025 07:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96C728CF7C
+	for <llvm@lists.linux.dev>; Mon,  7 Jul 2025 09:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751875048; cv=none; b=rVq+FSLdpdHik5kcBLnOKUI5g2Nv5NxShai69oDZSN7TDB7lFc50ydwTDVuFp3dFykK/g8PXem/QEp4eZciWbP9qOuBCEcn83N4Z2/dMaTB72946ZTZdEfGOUuI57gncTiTEzq9hgnOyx5Ry8hyXIRzJxaHM8qY7YC+DxYsevZQ=
+	t=1751880150; cv=none; b=JJifIfGwBNz0voVl0PhGEbPG82R2xJc2LLTNFjEByyNswIoncCejhq9FBHplJWqXccYKc7+lVeaaESN9KTBzcCF+LR0Sl/UIUhd7UT1Aif9xNP1R247yMJpbBgBmobO7XQTMiTSdZXwDG4BA0QlRjtrhGgPWGniettry4KSzhF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751875048; c=relaxed/simple;
-	bh=NgImrN6amk2YtYswbo5+SrMae2P5F6NxO2Duvw5AbHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQRxH4eHOZZ0O+mD65FEJDkuicLtbZXmDrQ8mfoxV+nPurrg+sDwv1xF4XIkHE/O3GokixrCiybSDujSuJyrV4Am7DkeBIHIak623zNOXAu1hTNzjqolp/yBfNjDIlkp39uxYWLzFNYTRJHj5JL/BX0j/ejbPoQz0qDrEbaJNZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PqXGh+98; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1751880150; c=relaxed/simple;
+	bh=XvW8C+5cxHE823eB0B6qTevoEHZEmVl1/nWGCKMxFLU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o7qgbUKeij33cc+eR1dVAYM0iK7GMfCVVgu9UKy6v1c9/ydo+e1rISZ6N1aEWJDqXv3CY4U6AciRnSaDVMl1iXDUHx0ndJZo8UhmTNQk5pgEEBnmu7uyfjjdSg9CttudGOb0br2Te6ZbUChL+7TEfRbeidHMYHO3od+1aEnrGXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a4EoSYuc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PqXGh+98"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751875047; x=1783411047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NgImrN6amk2YtYswbo5+SrMae2P5F6NxO2Duvw5AbHw=;
-  b=PqXGh+98CIjiuyi0bguWob/TGW9981XdocQcEgoPnJ+Ai7pIULcA+Vb7
-   ytMdrjlI1uyQAPrC2DTvCiJKFfyVcgzz4WhV0kga/KraotSLLGjzlz1v0
-   2HM7E4Vexk63ksiSvGlZoEwyVfDcwpQUQznLPKAykZivnFrsu9/sBkqs7
-   dKkA3w+QuTf2lEZeLn0oP4J3u8lQgZjKddnyhAabOxAKZUlDVOb2mJV96
-   yE+W6t1vEeRbnP/kbSXziJT58bGMmbtczmdYRH9KCFIsnq0OyI+nDFd2F
-   8X9QWEJoMA1RTOB1M3AQY8XrY5Osr7bC68Y1GWzDy4MVzOvWpMo2FX+uu
-   Q==;
-X-CSE-ConnectionGUID: nWXM+6hDTq6qoa0WuR2jKw==
-X-CSE-MsgGUID: /MVUwlCMSMCji98doiPQAg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="65151081"
-X-IronPort-AV: E=Sophos;i="6.16,293,1744095600"; 
-   d="scan'208";a="65151081"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 00:57:23 -0700
-X-CSE-ConnectionGUID: STh4V0D9QkC8zr+WktbP7Q==
-X-CSE-MsgGUID: y9rrMQGzT32AhN6S68zIFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,293,1744095600"; 
-   d="scan'208";a="155625886"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 07 Jul 2025 00:57:20 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uYgiz-0000Ff-0v;
-	Mon, 07 Jul 2025 07:57:17 +0000
-Date: Mon, 7 Jul 2025 15:56:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Peter Xu <peterx@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for
- mremap
-Message-ID: <202507071505.e2HFMCH2-lkp@intel.com>
-References: <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a4EoSYuc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751880146;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=er9riMe/zg8ytasSUEcUG5ZakjZO+WuHARDpxhfNmf0=;
+	b=a4EoSYucfvUXNlrMncrp/ZCbxZhlEGcO5peHsgBeHY4h1BR40ZHwhvgEq4NSMJOCtlBzKn
+	Qpwx016Kb7Z+8i9pUtzyIQLMAiBq5twpi5rncfoMXzpKTp3wIqAuNifuELPYi4xwQwDjA2
+	QzhjsPXaw88nvJe/JmbGwL07OCsSqD8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-120-wPmEC-jiM2G7q1zvHCkOVw-1; Mon,
+ 07 Jul 2025 05:22:22 -0400
+X-MC-Unique: wPmEC-jiM2G7q1zvHCkOVw-1
+X-Mimecast-MFC-AGG-ID: wPmEC-jiM2G7q1zvHCkOVw_1751880142
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1C717195608C
+	for <llvm@lists.linux.dev>; Mon,  7 Jul 2025 09:22:22 +0000 (UTC)
+Received: from [172.20.236.189] (unknown [10.30.44.207])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2695C19560AB;
+	Mon,  7 Jul 2025 09:22:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 3 of 100): Test report for master
+ (6.16.0-rc4, upstream-mainline, 1f988d07)
+Date: Mon, 07 Jul 2025 09:22:20 -0000
+To: liwan@redhat.com, jbastian@redhat.com, omosnace@redhat.com,
+ mmalik@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <89583.125070705222202683@us-mta-120.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: qHDf0OO9xbra5ld_WaBWR4evHZ8Gril1FfiLOsaIWKI_1751880142
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lorenzo,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mremap-perform-some-simple-cleanups/20250707-133132
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes%40oracle.com
-patch subject: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for mremap
-config: i386-buildonly-randconfig-002-20250707 (https://download.01.org/0day-ci/archive/20250707/202507071505.e2HFMCH2-lkp@intel.com/config)
-compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507071505.e2HFMCH2-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507071505.e2HFMCH2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/mremap.c:1739:3: error: call to undeclared function 'mremap_userfaultfd_fail'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1739 |                 mremap_userfaultfd_fail(vrm->uf);
-         |                 ^
-   mm/mremap.c:1739:3: note: did you mean 'mremap_userfaultfd_prep'?
-   include/linux/userfaultfd_k.h:363:20: note: 'mremap_userfaultfd_prep' declared here
-     363 | static inline void mremap_userfaultfd_prep(struct vm_area_struct *vma,
-         |                    ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/mremap_userfaultfd_fail +1739 mm/mremap.c
+Kernel information:
+    Commit message: Merge tag 'hid-for-linus-2025070502' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/hid/hid
 
-  1731	
-  1732	static void notify_uffd(struct vma_remap_struct *vrm, bool failed)
-  1733	{
-  1734		struct mm_struct *mm = current->mm;
-  1735	
-  1736		/* Regardless of success/failure, we always notify of any unmaps. */
-  1737		userfaultfd_unmap_complete(mm, vrm->uf_unmap_early);
-  1738		if (failed)
-> 1739			mremap_userfaultfd_fail(vrm->uf);
-  1740		else
-  1741			mremap_userfaultfd_complete(vrm->uf, vrm->addr,
-  1742				vrm->new_addr, vrm->old_len);
-  1743		userfaultfd_unmap_complete(mm, vrm->uf_unmap);
-  1744	}
-  1745	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1908831443
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        selinux-policy: serge-testsuite
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1908831443-s390x-kernel_upt_14
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1908831443-aarch64-kernel_upt_14
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1908831443-x86_64-kernel_upt_22
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+        stress: stress-ng - memory
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1908831443-s390x-kernel_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1908831443-aarch64-kernel_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests failures generic/32{6..8}
+            URL: https://issues.redhat.com/browse/RHEL-50644
+            Affected tests:
+                xfstests - xfs [x86_64]
+        Issue: mkfs.xfs prints warning about invalid stride unit, hardware =
+specific
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1924
+            Affected tests:
+                xfstests - xfs [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    Reboot test [x86_64]
+    selinux-policy: serge-testsuite [ppc64le]
+    stress: stress-ng - memory [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
