@@ -1,117 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B5E17D7;
-	Mon,  7 Jul 2025 03:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA3027AC35;
+	Mon,  7 Jul 2025 06:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751859692; cv=none; b=lFRNK0cOwpaypOqar0zbuzkzBQ48JiSksRZawahZdm5w1iAZeSt18womXmLhd4hxzvpJMOf3YxM9s48xQ5bS0c1uWT0ZPK+vOpewhENNGqEGnaycYDOu3eUmwodmZKydqxixw4YRmpCw6Gkos2xZhyshGd+ET2i1Iv81+XdPlDc=
+	t=1751871198; cv=none; b=H8TuS6mRNVVllCgicRKctLcjsE4Ydb98ohzF78eWrDkW1gh7FmfzZ0mkH6MXHXqNuSYA6O3j4IwUzHSoe7vy3JTLEkUyJLvCrSfVRafjH95evYHYtzTRXyuuJOjsLY6XsTkhUHly3HuzzO1waEDSH6/kZkqtBgPkOEYyz3qZuQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751859692; c=relaxed/simple;
-	bh=Rj99BPdwtgJX9wg4djEMN905rkSkumD7JVQvddVo+Vo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pqHs533HhJWdYfNemqjoFAoQzj9ILfJtZI7F8grSyDU2XRlsq3/dfRFHdHsZAHUhVsezYHk6hNRClu4WmeS+Ipltf5DDrRfTvvvQqBTJTEep+siUEzXTaESkoJl7HLgEcpmLKc8gY1fSZTyrB3Uj3QYJM+YU+ZEUTMg61WNOjso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjHW3zuN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751871198; c=relaxed/simple;
+	bh=Em469fJKz9rkiRR0gFrK5W6JZWJxcpDQWQsw4nPHfF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qZtdWhuWsB6OT2xtuReb55VTLMn488rX0a01iI+rIaVRHCL7lKMEbYqCxhC9FZVnt09dRfgoO2Z1G1+W5I3kGh9cGZlDWzOXacy6+48iia0g6BfXa9RWwcS1njm1cZ08FYwwW5zYdXLwATdL2tvPwZety3BIlhpjYUVIXGnD6jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CTjzJMeT; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjHW3zuN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F93C4CEEE;
-	Mon,  7 Jul 2025 03:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751859692;
-	bh=Rj99BPdwtgJX9wg4djEMN905rkSkumD7JVQvddVo+Vo=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=YjHW3zuN4moJ8NZ1oEXQPUDODt/BKkZ95K1PxdVqXnMpf6FRaJhpXLWr4cF3Hq4Ti
-	 PVTukvLyw7HMio0a4MpuFl16+qHsw6sJ5mOD538rccvn9neEv84hpktmhRKaYrFWEu
-	 h6iGf2Yt0lQwBGqLuZnoCmSDZaZQ41rca6kqEggtUsiGvEvNt9ni+T/SL94mdqQdjM
-	 UPQ1DRnrwZjB9a6uUvmkj/7jx/MPLjch4Vm5UAnTsqTltcgyu3BY6+2/uoYX4uj3M5
-	 CuhRU8rnYnoMLgD7Fth9KJBeYnpnrCcHh/L5XtEKjGwQHmNdUF1S9BXgghPuyCMPak
-	 K7HKs6aXe4oBg==
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfauth.phl.internal (Postfix) with ESMTP id CFC02F40066;
-	Sun,  6 Jul 2025 23:41:30 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-12.internal (MEProxy); Sun, 06 Jul 2025 23:41:30 -0400
-X-ME-Sender: <xms:6kFraCBeH0cC8g7KYy5FD3VZo5M0f9OjFx38rFnRDE1SMSDgfbQmGA>
-    <xme:6kFraMjvYUQIlccwHWNecFLx2gHybJrNsXH2YPHUEfZQ--ii6iz6VOa1mcQgsDGl6
-    Uf3QJdBSMuSFFPaZkk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeftdejhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdfnvghonhcu
-    tfhomhgrnhhovhhskhihfdcuoehlvghonheskhgvrhhnvghlrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeduteeugeeftedukeefgfdvheeljeetieelfeejudeviefhvdefgfehvefh
-    ffetfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpddtuddrohhrghdpghhithhhuh
-    gsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mheplhgvohhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdeftdehfe
-    elkeegqddvjeejleejjedvkedqlhgvohhnpeepkhgvrhhnvghlrdhorhhgsehlvghonhdr
-    nhhupdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
-    hhuhgrnhhgjhhunhigihgrnheisehhihhsihhlihgtohhnrdgtohhmpdhrtghpthhtohep
-    lhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinh
-    hugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhsthhsrdhl
-    ihhnuhigrdguvghv
-X-ME-Proxy: <xmx:6kFraITLyOQXNmi5wiYO3CFINn2ysKMqSukG8WoX5bccRW3BFBe3Ew>
-    <xmx:6kFraLJS8m0hHZyFDZMG6ewPRrV9NaggAQ1yxsLVWrgRB0yBOSyIlQ>
-    <xmx:6kFraGAIvjmAoedXinLT62Kf3le7u_3AcbNquUHJZNhOb_8M2L3Z4A>
-    <xmx:6kFraMBjAu0k3-MpJ_zQ9DfsVF7beDPr_U0Lkug75I3QrFUp0vTCrQ>
-    <xmx:6kFraAAjRAo5YsXHl--5noYkeV-5e2klzR2yEDc7LNspiwgjhRC0A9X3>
-Feedback-ID: i927946fb:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A08642CE0072; Sun,  6 Jul 2025 23:41:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CTjzJMeT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751871197; x=1783407197;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Em469fJKz9rkiRR0gFrK5W6JZWJxcpDQWQsw4nPHfF8=;
+  b=CTjzJMeTb4RYd7Ib7wexAIEKAKhl3IKrnNXrELIWql+D9axAZQk8ql1O
+   nW6Rt1Df9Cw86f2dECyChfcO2PVexaVjqKkRdpNE1qZOYVA6RR8knRYF7
+   O0FvJXGJPnaxW9tlxwlv/Qp1dWhjdbgSHYdlljyfF7WwYEWIgEPKWR520
+   FbkqcgCFjmhgVkgeBGHCNy1zDMoaR5ha6Fbu9PIbA1RySFO6bUIYTXNIr
+   zlTm2unO/7aF2TsSByisD+LVauKKh+DW9DzHgGD+hMaShh3QjfwRhIKNN
+   UWduX8kfU0MlrSXdsKDjsQjqMWRCZJ1zuTQCobH+fG1BAHd+F3PiAtuTD
+   Q==;
+X-CSE-ConnectionGUID: 1uh8tP2sT4mblB2SWqEakw==
+X-CSE-MsgGUID: ldGToglNRkWa3Lm+ZLxpIw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="54204627"
+X-IronPort-AV: E=Sophos;i="6.16,293,1744095600"; 
+   d="scan'208";a="54204627"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 23:53:16 -0700
+X-CSE-ConnectionGUID: Pk/Sf3k9SgGbdNEBKpg5Xw==
+X-CSE-MsgGUID: a20EZDxYRF6CabT1uJsS3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,293,1744095600"; 
+   d="scan'208";a="160794453"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 06 Jul 2025 23:53:14 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uYfix-0000CR-0q;
+	Mon, 07 Jul 2025 06:53:11 +0000
+Date: Mon, 7 Jul 2025 14:53:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pan Deng <pan.deng@intel.com>, mingo@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, tianyou.li@intel.com,
+	tim.c.chen@linux.intel.com, yu.c.chen@intel.com, pan.deng@intel.com
+Subject: Re: [PATCH 3/4] sched/rt: Split root_domain->rto_count to
+ per-NUMA-node counters
+Message-ID: <202507071418.sFa0bilv-lkp@intel.com>
+References: <2c1e1dbacaddd881f3cca340ece1f9268029b620.1751852370.git.pan.deng@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T6f0924e1377ff2b9
-Date: Mon, 07 Jul 2025 06:41:11 +0300
-From: "Leon Romanovsky" <leon@kernel.org>
-To: "Junxian Huang" <huangjunxian6@hisilicon.com>,
- "kernel test robot" <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Message-Id: <9cfc4e0e-4ebe-4ef9-91e2-64dfca94be78@app.fastmail.com>
-In-Reply-To: <5f9d93c3-ea97-b951-fc68-e23bb1337120@hisilicon.com>
-References: <202507070359.Ng3M8gut-lkp@intel.com>
- <5f9d93c3-ea97-b951-fc68-e23bb1337120@hisilicon.com>
-Subject: Re: [mellanox:wip/leon-for-next 29/35]
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared
- identifier 'cmd_numi'; did you mean 'cmd_num'?
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c1e1dbacaddd881f3cca340ece1f9268029b620.1751852370.git.pan.deng@intel.com>
+
+Hi Pan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on v6.16-rc5]
+[also build test WARNING on linus/master]
+[cannot apply to tip/sched/core peterz-queue/sched/core tip/master tip/auto-latest next-20250704]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pan-Deng/sched-rt-Optimize-cpupri_vec-layout-to-mitigate-cache-line-contention/20250707-131831
+base:   v6.16-rc5
+patch link:    https://lore.kernel.org/r/2c1e1dbacaddd881f3cca340ece1f9268029b620.1751852370.git.pan.deng%40intel.com
+patch subject: [PATCH 3/4] sched/rt: Split root_domain->rto_count to per-NUMA-node counters
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250707/202507071418.sFa0bilv-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507071418.sFa0bilv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507071418.sFa0bilv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/sched/build_policy.c:52:
+   kernel/sched/rt.c:496:21: error: unknown type name 'atomic_tp'; did you mean 'atomic_t'?
+     496 | int rto_counts_init(atomic_tp **rto_counts)
+         |                     ^~~~~~~~~
+         |                     atomic_t
+   include/linux/types.h:183:3: note: 'atomic_t' declared here
+     183 | } atomic_t;
+         |   ^
+   In file included from kernel/sched/build_policy.c:52:
+>> kernel/sched/rt.c:496:5: warning: no previous prototype for function 'rto_counts_init' [-Wmissing-prototypes]
+     496 | int rto_counts_init(atomic_tp **rto_counts)
+         |     ^
+   kernel/sched/rt.c:496:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     496 | int rto_counts_init(atomic_tp **rto_counts)
+         | ^
+         | static 
+   kernel/sched/rt.c:501:25: error: unknown type name 'atomic_tp'; did you mean 'atomic_t'?
+     501 | void rto_counts_cleanup(atomic_tp *rto_counts)
+         |                         ^~~~~~~~~
+         |                         atomic_t
+   include/linux/types.h:183:3: note: 'atomic_t' declared here
+     183 | } atomic_t;
+         |   ^
+   In file included from kernel/sched/build_policy.c:52:
+>> kernel/sched/rt.c:501:6: warning: no previous prototype for function 'rto_counts_cleanup' [-Wmissing-prototypes]
+     501 | void rto_counts_cleanup(atomic_tp *rto_counts)
+         |      ^
+   kernel/sched/rt.c:501:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     501 | void rto_counts_cleanup(atomic_tp *rto_counts)
+         | ^
+         | static 
+   2 warnings and 2 errors generated.
 
 
+vim +/rto_counts_init +496 kernel/sched/rt.c
 
-On Mon, Jul 7, 2025, at 04:49, Junxian Huang wrote:
-> On 2025/7/7 6:13, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mellanox/linux.git wip/leon-for-next
->> head:   bdc5726cdd454f91d7bf49f47c8c31377cb3d7ce
->> commit: 6cbf3ee2e409ca573ef1ebb3f383ae3873850ee7 [29/35] RDMA/hns: Get message length of ack_req from FW
->> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/config)
->> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/reproduce)
->> 
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202507070359.Ng3M8gut-lkp@intel.com/
->> 
->> All errors (new ones prefixed by >>):
->> 
->>>> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared identifier 'cmd_numi'; did you mean 'cmd_num'?
->>     2225 |         hns_roce_cmq_setup_basic_desc(&desc[cmd_numi - 1], cmd, true);
->>          |                                             ^~~~~~~~
->>          |                                             cmd_num
->>    drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2210:6: note: 'cmd_num' declared here
->>     2210 |         int cmd_num;
->>          |             ^
->>    1 error generated.
->> 
->
-> Leon, just to confirm that this can be fixed in your wip branch
-> and I don't need to resend a patch, right?
+   495	
+ > 496	int rto_counts_init(atomic_tp **rto_counts)
+   497	{
+   498		return 0;
+   499	}
+   500	
+ > 501	void rto_counts_cleanup(atomic_tp *rto_counts)
+   502	{
+   503	}
+   504	
 
-Yes, sure, I'll fix it.
-
->
-> Junxian
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
