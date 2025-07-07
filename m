@@ -1,82 +1,117 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59CA28E7;
-	Mon,  7 Jul 2025 01:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B5E17D7;
+	Mon,  7 Jul 2025 03:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751852993; cv=none; b=LSbrRkcbMg068qlGpObAPgXnSzSpxG8YqlQRqBFw+oZ2lONTF6wCZA0wwvpWq3Fj2s04f4zOigeFIqBOfMCZ2l7A62wuC9PMfmYSuWYMrPDwQcYh/0Du1N2grPq7CJXrtxgm2spnEQAsqpWOn6oyKhKigN9X7GJLPdAjXehsYLM=
+	t=1751859692; cv=none; b=lFRNK0cOwpaypOqar0zbuzkzBQ48JiSksRZawahZdm5w1iAZeSt18womXmLhd4hxzvpJMOf3YxM9s48xQ5bS0c1uWT0ZPK+vOpewhENNGqEGnaycYDOu3eUmwodmZKydqxixw4YRmpCw6Gkos2xZhyshGd+ET2i1Iv81+XdPlDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751852993; c=relaxed/simple;
-	bh=R9wOoivrfZOJIBWeWht1zr7HlkSe8WY9GbFRkNpF3iM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=mHgMfgyTj3oQlUd6hFxW5b0rLSrZBsiUEi+WkGsNDvjaqMuYW/92JOcpzIVgljHUCOC/Rwnu4so2rN91u089KBczm2IiLd/WrhQBk5NsVR1j9A84B0maaT5/RJzuG1/vH25LgKEGWXGRUpphIItDZjcwdPGXjDaTdaWmQb/wu6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4bb6ZD13rJz2SSqq;
-	Mon,  7 Jul 2025 09:47:48 +0800 (CST)
-Received: from kwepemf100018.china.huawei.com (unknown [7.202.181.17])
-	by mail.maildlp.com (Postfix) with ESMTPS id 722FD140145;
-	Mon,  7 Jul 2025 09:49:40 +0800 (CST)
-Received: from [10.67.120.168] (10.67.120.168) by
- kwepemf100018.china.huawei.com (7.202.181.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 7 Jul 2025 09:49:39 +0800
-Message-ID: <5f9d93c3-ea97-b951-fc68-e23bb1337120@hisilicon.com>
-Date: Mon, 7 Jul 2025 09:49:39 +0800
+	s=arc-20240116; t=1751859692; c=relaxed/simple;
+	bh=Rj99BPdwtgJX9wg4djEMN905rkSkumD7JVQvddVo+Vo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=pqHs533HhJWdYfNemqjoFAoQzj9ILfJtZI7F8grSyDU2XRlsq3/dfRFHdHsZAHUhVsezYHk6hNRClu4WmeS+Ipltf5DDrRfTvvvQqBTJTEep+siUEzXTaESkoJl7HLgEcpmLKc8gY1fSZTyrB3Uj3QYJM+YU+ZEUTMg61WNOjso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjHW3zuN; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjHW3zuN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F93C4CEEE;
+	Mon,  7 Jul 2025 03:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751859692;
+	bh=Rj99BPdwtgJX9wg4djEMN905rkSkumD7JVQvddVo+Vo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=YjHW3zuN4moJ8NZ1oEXQPUDODt/BKkZ95K1PxdVqXnMpf6FRaJhpXLWr4cF3Hq4Ti
+	 PVTukvLyw7HMio0a4MpuFl16+qHsw6sJ5mOD538rccvn9neEv84hpktmhRKaYrFWEu
+	 h6iGf2Yt0lQwBGqLuZnoCmSDZaZQ41rca6kqEggtUsiGvEvNt9ni+T/SL94mdqQdjM
+	 UPQ1DRnrwZjB9a6uUvmkj/7jx/MPLjch4Vm5UAnTsqTltcgyu3BY6+2/uoYX4uj3M5
+	 CuhRU8rnYnoMLgD7Fth9KJBeYnpnrCcHh/L5XtEKjGwQHmNdUF1S9BXgghPuyCMPak
+	 K7HKs6aXe4oBg==
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id CFC02F40066;
+	Sun,  6 Jul 2025 23:41:30 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-12.internal (MEProxy); Sun, 06 Jul 2025 23:41:30 -0400
+X-ME-Sender: <xms:6kFraCBeH0cC8g7KYy5FD3VZo5M0f9OjFx38rFnRDE1SMSDgfbQmGA>
+    <xme:6kFraMjvYUQIlccwHWNecFLx2gHybJrNsXH2YPHUEfZQ--ii6iz6VOa1mcQgsDGl6
+    Uf3QJdBSMuSFFPaZkk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeftdejhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdfnvghonhcu
+    tfhomhgrnhhovhhskhihfdcuoehlvghonheskhgvrhhnvghlrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeduteeugeeftedukeefgfdvheeljeetieelfeejudeviefhvdefgfehvefh
+    ffetfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpddtuddrohhrghdpghhithhhuh
+    gsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mheplhgvohhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdeftdehfe
+    elkeegqddvjeejleejjedvkedqlhgvohhnpeepkhgvrhhnvghlrdhorhhgsehlvghonhdr
+    nhhupdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    hhuhgrnhhgjhhunhigihgrnheisehhihhsihhlihgtohhnrdgtohhmpdhrtghpthhtohep
+    lhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinh
+    hugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhsthhsrdhl
+    ihhnuhigrdguvghv
+X-ME-Proxy: <xmx:6kFraITLyOQXNmi5wiYO3CFINn2ysKMqSukG8WoX5bccRW3BFBe3Ew>
+    <xmx:6kFraLJS8m0hHZyFDZMG6ewPRrV9NaggAQ1yxsLVWrgRB0yBOSyIlQ>
+    <xmx:6kFraGAIvjmAoedXinLT62Kf3le7u_3AcbNquUHJZNhOb_8M2L3Z4A>
+    <xmx:6kFraMBjAu0k3-MpJ_zQ9DfsVF7beDPr_U0Lkug75I3QrFUp0vTCrQ>
+    <xmx:6kFraAAjRAo5YsXHl--5noYkeV-5e2klzR2yEDc7LNspiwgjhRC0A9X3>
+Feedback-ID: i927946fb:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A08642CE0072; Sun,  6 Jul 2025 23:41:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
+X-ThreadId: T6f0924e1377ff2b9
+Date: Mon, 07 Jul 2025 06:41:11 +0300
+From: "Leon Romanovsky" <leon@kernel.org>
+To: "Junxian Huang" <huangjunxian6@hisilicon.com>,
+ "kernel test robot" <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Message-Id: <9cfc4e0e-4ebe-4ef9-91e2-64dfca94be78@app.fastmail.com>
+In-Reply-To: <5f9d93c3-ea97-b951-fc68-e23bb1337120@hisilicon.com>
+References: <202507070359.Ng3M8gut-lkp@intel.com>
+ <5f9d93c3-ea97-b951-fc68-e23bb1337120@hisilicon.com>
 Subject: Re: [mellanox:wip/leon-for-next 29/35]
  drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared
  identifier 'cmd_numi'; did you mean 'cmd_num'?
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Leon Romanovsky
-	<leon@kernel.org>
-References: <202507070359.Ng3M8gut-lkp@intel.com>
-From: Junxian Huang <huangjunxian6@hisilicon.com>
-In-Reply-To: <202507070359.Ng3M8gut-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemf100018.china.huawei.com (7.202.181.17)
 
 
 
-On 2025/7/7 6:13, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mellanox/linux.git wip/leon-for-next
-> head:   bdc5726cdd454f91d7bf49f47c8c31377cb3d7ce
-> commit: 6cbf3ee2e409ca573ef1ebb3f383ae3873850ee7 [29/35] RDMA/hns: Get message length of ack_req from FW
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/config)
-> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202507070359.Ng3M8gut-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared identifier 'cmd_numi'; did you mean 'cmd_num'?
->     2225 |         hns_roce_cmq_setup_basic_desc(&desc[cmd_numi - 1], cmd, true);
->          |                                             ^~~~~~~~
->          |                                             cmd_num
->    drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2210:6: note: 'cmd_num' declared here
->     2210 |         int cmd_num;
->          |             ^
->    1 error generated.
-> 
+On Mon, Jul 7, 2025, at 04:49, Junxian Huang wrote:
+> On 2025/7/7 6:13, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mellanox/linux.git wip/leon-for-next
+>> head:   bdc5726cdd454f91d7bf49f47c8c31377cb3d7ce
+>> commit: 6cbf3ee2e409ca573ef1ebb3f383ae3873850ee7 [29/35] RDMA/hns: Get message length of ack_req from FW
+>> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/config)
+>> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507070359.Ng3M8gut-lkp@intel.com/reproduce)
+>> 
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202507070359.Ng3M8gut-lkp@intel.com/
+>> 
+>> All errors (new ones prefixed by >>):
+>> 
+>>>> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2225:38: error: use of undeclared identifier 'cmd_numi'; did you mean 'cmd_num'?
+>>     2225 |         hns_roce_cmq_setup_basic_desc(&desc[cmd_numi - 1], cmd, true);
+>>          |                                             ^~~~~~~~
+>>          |                                             cmd_num
+>>    drivers/infiniband/hw/hns/hns_roce_hw_v2.c:2210:6: note: 'cmd_num' declared here
+>>     2210 |         int cmd_num;
+>>          |             ^
+>>    1 error generated.
+>> 
+>
+> Leon, just to confirm that this can be fixed in your wip branch
+> and I don't need to resend a patch, right?
 
-Leon, just to confirm that this can be fixed in your wip branch
-and I don't need to resend a patch, right?
+Yes, sure, I'll fix it.
 
-Junxian
+>
+> Junxian
