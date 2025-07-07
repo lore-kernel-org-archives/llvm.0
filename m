@@ -1,164 +1,161 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE98155A25;
-	Mon,  7 Jul 2025 16:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751905453; cv=pass; b=ufPrJPTyPl+gSxp1y4nn3BIvFEXDfqM3PYt30BbM7AVDt/BuWSWqXRKdVwb1stLDw+N2mL4JhKeklYs2SkkMMjY3T6UnmtutxLSTVSuOwTcMyOCuNOkrqfVJB29ihf8/RdYpqD06+Og9ulkAKFlZb73ypZfDULLaDckAT9lD/0Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751905453; c=relaxed/simple;
-	bh=BjDjwBd9r87lX9F1B42siADD0WR8eh2RD9Fip1EayOY=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=BxMIlZuOQeRytEz9raxH7rnjhjWPKRq0czFKF/vLfeXC1N6CG1SgMA5syvkvZAVIc8+WVhQBpHSIYKrXjpL2lNaj5Sc82Gj/SOkExcNbqylz40hAqdeVF5DVSWrhTTau79uGgNoeWsG1JoW3APmNFaGPQC5OvM5NQ4QlPNY7d3U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=Gu06NPAx; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D972C233133;
+	Mon,  7 Jul 2025 19:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751915601; cv=none; b=AXcjujyvh0rvwnTXZFxH5FA5INfb7KZ318ciFG5FBjW7n24ykRDJ6zVmyz1Bo5rzCYzocGT4gO6i0v400kRZ7zcMqRNn0N016YcR6UdCY+lIwhYY1bBpZyh9z1+M4FpvACJ4x/AOl6RNiOQnpqfQ1ZLUaGk0t4/woJ73nWCr0LA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751915601; c=relaxed/simple;
+	bh=q075Lf2icGWDq5hYoOOTF4GRd9e4zdBmS++T0iJcauY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kfZpy1jEyO/x8LVqN2COeSDSv4FjC5dGcToMwkrgwV6HsbOeTjguWYKdn0Y0o07ESk/S7CTp0WCjE91TPwXNgG7v2LfS4X+BzjyQsSCJk9rIzAYQw0v0YwJRVOkcT7SCoeu7/OHFxvbQdWwMZ+CapvYyehi+zQKJHEEhwx/cZJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xxp4S3Fg; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="Gu06NPAx"
-ARC-Seal: i=1; a=rsa-sha256; t=1751905444; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ESW5fM/E3YSZm9GwUDQnVt/ZWVKee4KR0Xg305JjNvnTvtDBR5pynQHo5S5AwzuZeHDjfG0lfLZ2Tz3VpMXOh6Nwyxn3KsdVRB75L7krPJoX1nXD/XE6ttb1VHgicpbmXrzNRm2PGvItkW8gSB7gdmHi8Uxc9E+6eC5AtjVaGMM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751905444; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=X3tGjOXurF5qSD0B65SMotAcOZxqr/DqkLlMxW0/MGY=; 
-	b=n2AfDodcXJEkh70b/wMXrXHwg3K2gP5ff5eCRpGthquRsD8GqfL3h8rs/Q5eGIsSBd1xgJXWIWYGBz5QufSjk8GoDLm7FPAzX7CG/XBb4Dc2aBp3zU/oBQCCFhXWCECRhZKZYrtp5DkJcKsJXgh+NF/XjIAhngAX4AyZdWf0gsg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751905444;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=X3tGjOXurF5qSD0B65SMotAcOZxqr/DqkLlMxW0/MGY=;
-	b=Gu06NPAx2cFicgEByHHO+HmouGhwi4X4OqAmxY8i02zti8UBEr4qEKmWyFS8SR7/
-	VAAiA8cKbpG5+KN6x94QKLxEpTOQUxFDceElJ5OANmYakiHDwBml9kn00Ywn57pxJDa
-	hIyx1967EqE+/UDOHrcZebuNh9DFZ42WCBVAVcA4=
-Received: by mx.zohomail.com with SMTPS id 1751905441570663.5596448002699;
-	Mon, 7 Jul 2025 09:24:01 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xxp4S3Fg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751915600; x=1783451600;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=q075Lf2icGWDq5hYoOOTF4GRd9e4zdBmS++T0iJcauY=;
+  b=Xxp4S3FgPCZm+uO/GWcBz/fSpYntnFjEvLxqFO91lx+x6Y0wy5PyQNLY
+   RTI6QDU3u4QhnAqDp+E3Oip2allzinc/NBO6CBqmDq9n6rE846ThCL/Vx
+   KQZJNoIyYetiApDqv/yLZjyM/8dyU0/iZI1jVBlvjYIZkoQblObWE/ndS
+   PqWEKMRBx+BiISaH1KW9gPlpt490tAHr7Miw/2n1VUMgNtxCke1KWDshk
+   c0G5mF5KJouGHqskJaXPWKWXKnx/LS+JlKnNOi6njsgB2U9U31TlzZcQH
+   XbNrVeno/UAky2GBDSmkH3y7d1hUPaM20d5td8pxhAq+hShSUoCeiKu1b
+   g==;
+X-CSE-ConnectionGUID: S8FCMAG6Q3GwtacKU1/c4Q==
+X-CSE-MsgGUID: Yl6licg/Q/OfUBRche7j0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="65206112"
+X-IronPort-AV: E=Sophos;i="6.16,295,1744095600"; 
+   d="scan'208";a="65206112"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 12:13:20 -0700
+X-CSE-ConnectionGUID: DS73QkxCSmWNIEqxDiNpbQ==
+X-CSE-MsgGUID: 0qHqrZVwRSS7e8TZ5J2olA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,295,1744095600"; 
+   d="scan'208";a="155418156"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 07 Jul 2025 12:13:18 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uYrH9-0000fr-0w;
+	Mon, 07 Jul 2025 19:13:15 +0000
+Date: Tue, 8 Jul 2025 03:12:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:timers/ptp 39/39] lib/vdso/gettimeofday.c:335:17: warning:
+ shift count >= width of type
+Message-ID: <202507080348.hKtUspGk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
-Subject: Re: [PATCH v7 1/2] rust: regulator: add a bare minimum regulator
- abstraction
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <202507060837.ziqhqXVk-lkp@intel.com>
-Date: Mon, 7 Jul 2025 13:23:45 -0300
-Cc: Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Boris Brezillon <bbrezillon@kernel.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>,
- Benno Lossin <lossin@kernel.org>,
- llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CB256E11-2E6F-4307-A19C-9A64286A1F33@collabora.com>
-References: <20250704-topics-tyr-regulator-v7-1-77bfca2e22dc@collabora.com>
- <202507060837.ziqhqXVk-lkp@intel.com>
-To: kernel test robot <lkp@intel.com>
-X-Mailer: Apple Mail (2.3826.600.51.1.1)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/ptp
+head:   7893ea1006fcbb876ddf53ad4ebba4a054add4b2
+commit: 7893ea1006fcbb876ddf53ad4ebba4a054add4b2 [39/39] vdso/gettimeofday: Add support for auxiliary clocks
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250708/202507080348.hKtUspGk-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250708/202507080348.hKtUspGk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507080348.hKtUspGk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:4:
+>> lib/vdso/gettimeofday.c:335:17: warning: shift count >= width of type [-Wshift-count-overflow]
+     335 |         else if (msk & VDSO_AUX)
+         |                        ^~~~~~~~
+   include/vdso/datapage.h:50:18: note: expanded from macro 'VDSO_AUX'
+      50 | #define VDSO_AUX        __GENMASK(CLOCK_AUX_LAST, CLOCK_AUX)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:7:56: note: expanded from macro '__GENMASK'
+       7 | #define __GENMASK(h, l) (((~_UL(0)) << (l)) & (~_UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from <built-in>:4:
+   lib/vdso/gettimeofday.c:481:19: warning: shift count >= width of type [-Wshift-count-overflow]
+     481 |         } else if (msk & VDSO_AUX) {
+         |                          ^~~~~~~~
+   include/vdso/datapage.h:50:18: note: expanded from macro 'VDSO_AUX'
+      50 | #define VDSO_AUX        __GENMASK(CLOCK_AUX_LAST, CLOCK_AUX)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:7:56: note: expanded from macro '__GENMASK'
+       7 | #define __GENMASK(h, l) (((~_UL(0)) << (l)) & (~_UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from <built-in>:4:
+>> lib/vdso/gettimeofday.c:335:17: warning: shift count >= width of type [-Wshift-count-overflow]
+     335 |         else if (msk & VDSO_AUX)
+         |                        ^~~~~~~~
+   include/vdso/datapage.h:50:18: note: expanded from macro 'VDSO_AUX'
+      50 | #define VDSO_AUX        __GENMASK(CLOCK_AUX_LAST, CLOCK_AUX)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:7:56: note: expanded from macro '__GENMASK'
+       7 | #define __GENMASK(h, l) (((~_UL(0)) << (l)) & (~_UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from <built-in>:4:
+   lib/vdso/gettimeofday.c:481:19: warning: shift count >= width of type [-Wshift-count-overflow]
+     481 |         } else if (msk & VDSO_AUX) {
+         |                          ^~~~~~~~
+   include/vdso/datapage.h:50:18: note: expanded from macro 'VDSO_AUX'
+      50 | #define VDSO_AUX        __GENMASK(CLOCK_AUX_LAST, CLOCK_AUX)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:7:56: note: expanded from macro '__GENMASK'
+       7 | #define __GENMASK(h, l) (((~_UL(0)) << (l)) & (~_UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-[=E2=80=A6]
+vim +335 lib/vdso/gettimeofday.c
 
-> All errors (new ones prefixed by >>):
->=20
->>> error[E0425]: cannot find function `regulator_set_voltage` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:258:23
->   |
->   258 |             =
-bindings::regulator_set_voltage(self.inner.as_ptr(), min_uv.0, max_uv.0)
->   |                       ^^^^^^^^^^^^^^^^^^^^^ not found in =
-`bindings`
-> --
->>> error[E0425]: cannot find function `regulator_get_voltage` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:265:42
->   |
->   265 |         let voltage =3D unsafe { =
-bindings::regulator_get_voltage(self.inner.as_ptr()) };
->   |                                          ^^^^^^^^^^^^^^^^^^^^^ not =
-found in `bindings`
-> --
->>> error[E0425]: cannot find function `regulator_get` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:276:53
->   |
->   276 |         let inner =3D from_err_ptr(unsafe { =
-bindings::regulator_get(dev.as_raw(), name.as_ptr()) })?;
->   |                                                     ^^^^^^^^^^^^^ =
-not found in `bindings`
-> --
->>> error[E0425]: cannot find function `regulator_enable` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:290:38
->   |
->   290 |         to_result(unsafe { =
-bindings::regulator_enable(self.inner.as_ptr()) })
->   |                                      ^^^^^^^^^^^^^^^^ not found in =
-`bindings`
-> --
->>> error[E0425]: cannot find function `regulator_disable` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:295:38
->   |
->   295 |         to_result(unsafe { =
-bindings::regulator_disable(self.inner.as_ptr()) })
->   |                                      ^^^^^^^^^^^^^^^^^ not found =
-in `bindings`
-> --
->>> error[E0425]: cannot find function `regulator_is_enabled` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:379:28
->   |
->   379 |         unsafe { =
-bindings::regulator_is_enabled(self.inner.as_ptr()) !=3D 0 }
->   |                            ^^^^^^^^^^^^^^^^^^^^ not found in =
-`bindings`
-> --
->>> error[E0425]: cannot find function `regulator_disable` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:389:32
->   |
->   389 |             unsafe { =
-bindings::regulator_disable(self.inner.as_ptr()) };
->   |                                ^^^^^^^^^^^^^^^^^ not found in =
-`bindings`
-> --
->>> error[E0425]: cannot find function `regulator_put` in crate =
-`bindings`
->   --> rust/kernel/regulator.rs:393:28
->   |
->   393 |         unsafe { bindings::regulator_put(self.inner.as_ptr()) =
-};
->   |                            ^^^^^^^^^^^^^ not found in `bindings`
->=20
-> --=20
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
->=20
+   313	
+   314	static __always_inline bool
+   315	__cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
+   316				     struct __kernel_timespec *ts)
+   317	{
+   318		const struct vdso_clock *vc = vd->clock_data;
+   319		u32 msk;
+   320	
+   321		if (!vdso_clockid_valid(clock))
+   322			return false;
+   323	
+   324		/*
+   325		 * Convert the clockid to a bitmask and use it to check which
+   326		 * clocks are handled in the VDSO directly.
+   327		 */
+   328		msk = 1U << clock;
+   329		if (likely(msk & VDSO_HRES))
+   330			vc = &vc[CS_HRES_COARSE];
+   331		else if (msk & VDSO_COARSE)
+   332			return do_coarse(vd, &vc[CS_HRES_COARSE], clock, ts);
+   333		else if (msk & VDSO_RAW)
+   334			vc = &vc[CS_RAW];
+ > 335		else if (msk & VDSO_AUX)
+   336			return do_aux(vd, clock, ts);
+   337		else
+   338			return false;
+   339	
+   340		return do_hres(vd, vc, clock, ts);
+   341	}
+   342	
 
-I think these need to be in rust/helpers if CONFIG_REGULATOR is not set,
-because the stubs are inline functions. I will try this on the next =
-iteration.
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
