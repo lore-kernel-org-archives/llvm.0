@@ -1,62 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA3027AC35;
-	Mon,  7 Jul 2025 06:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B33528541F;
+	Mon,  7 Jul 2025 07:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751871198; cv=none; b=H8TuS6mRNVVllCgicRKctLcjsE4Ydb98ohzF78eWrDkW1gh7FmfzZ0mkH6MXHXqNuSYA6O3j4IwUzHSoe7vy3JTLEkUyJLvCrSfVRafjH95evYHYtzTRXyuuJOjsLY6XsTkhUHly3HuzzO1waEDSH6/kZkqtBgPkOEYyz3qZuQ4=
+	t=1751875048; cv=none; b=rVq+FSLdpdHik5kcBLnOKUI5g2Nv5NxShai69oDZSN7TDB7lFc50ydwTDVuFp3dFykK/g8PXem/QEp4eZciWbP9qOuBCEcn83N4Z2/dMaTB72946ZTZdEfGOUuI57gncTiTEzq9hgnOyx5Ry8hyXIRzJxaHM8qY7YC+DxYsevZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751871198; c=relaxed/simple;
-	bh=Em469fJKz9rkiRR0gFrK5W6JZWJxcpDQWQsw4nPHfF8=;
+	s=arc-20240116; t=1751875048; c=relaxed/simple;
+	bh=NgImrN6amk2YtYswbo5+SrMae2P5F6NxO2Duvw5AbHw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qZtdWhuWsB6OT2xtuReb55VTLMn488rX0a01iI+rIaVRHCL7lKMEbYqCxhC9FZVnt09dRfgoO2Z1G1+W5I3kGh9cGZlDWzOXacy6+48iia0g6BfXa9RWwcS1njm1cZ08FYwwW5zYdXLwATdL2tvPwZety3BIlhpjYUVIXGnD6jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CTjzJMeT; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=mQRxH4eHOZZ0O+mD65FEJDkuicLtbZXmDrQ8mfoxV+nPurrg+sDwv1xF4XIkHE/O3GokixrCiybSDujSuJyrV4Am7DkeBIHIak623zNOXAu1hTNzjqolp/yBfNjDIlkp39uxYWLzFNYTRJHj5JL/BX0j/ejbPoQz0qDrEbaJNZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PqXGh+98; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CTjzJMeT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PqXGh+98"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751871197; x=1783407197;
+  t=1751875047; x=1783411047;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Em469fJKz9rkiRR0gFrK5W6JZWJxcpDQWQsw4nPHfF8=;
-  b=CTjzJMeTb4RYd7Ib7wexAIEKAKhl3IKrnNXrELIWql+D9axAZQk8ql1O
-   nW6Rt1Df9Cw86f2dECyChfcO2PVexaVjqKkRdpNE1qZOYVA6RR8knRYF7
-   O0FvJXGJPnaxW9tlxwlv/Qp1dWhjdbgSHYdlljyfF7WwYEWIgEPKWR520
-   FbkqcgCFjmhgVkgeBGHCNy1zDMoaR5ha6Fbu9PIbA1RySFO6bUIYTXNIr
-   zlTm2unO/7aF2TsSByisD+LVauKKh+DW9DzHgGD+hMaShh3QjfwRhIKNN
-   UWduX8kfU0MlrSXdsKDjsQjqMWRCZJ1zuTQCobH+fG1BAHd+F3PiAtuTD
+  bh=NgImrN6amk2YtYswbo5+SrMae2P5F6NxO2Duvw5AbHw=;
+  b=PqXGh+98CIjiuyi0bguWob/TGW9981XdocQcEgoPnJ+Ai7pIULcA+Vb7
+   ytMdrjlI1uyQAPrC2DTvCiJKFfyVcgzz4WhV0kga/KraotSLLGjzlz1v0
+   2HM7E4Vexk63ksiSvGlZoEwyVfDcwpQUQznLPKAykZivnFrsu9/sBkqs7
+   dKkA3w+QuTf2lEZeLn0oP4J3u8lQgZjKddnyhAabOxAKZUlDVOb2mJV96
+   yE+W6t1vEeRbnP/kbSXziJT58bGMmbtczmdYRH9KCFIsnq0OyI+nDFd2F
+   8X9QWEJoMA1RTOB1M3AQY8XrY5Osr7bC68Y1GWzDy4MVzOvWpMo2FX+uu
    Q==;
-X-CSE-ConnectionGUID: 1uh8tP2sT4mblB2SWqEakw==
-X-CSE-MsgGUID: ldGToglNRkWa3Lm+ZLxpIw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="54204627"
+X-CSE-ConnectionGUID: nWXM+6hDTq6qoa0WuR2jKw==
+X-CSE-MsgGUID: /MVUwlCMSMCji98doiPQAg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="65151081"
 X-IronPort-AV: E=Sophos;i="6.16,293,1744095600"; 
-   d="scan'208";a="54204627"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 23:53:16 -0700
-X-CSE-ConnectionGUID: Pk/Sf3k9SgGbdNEBKpg5Xw==
-X-CSE-MsgGUID: a20EZDxYRF6CabT1uJsS3A==
+   d="scan'208";a="65151081"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 00:57:23 -0700
+X-CSE-ConnectionGUID: STh4V0D9QkC8zr+WktbP7Q==
+X-CSE-MsgGUID: y9rrMQGzT32AhN6S68zIFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,293,1744095600"; 
-   d="scan'208";a="160794453"
+   d="scan'208";a="155625886"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 06 Jul 2025 23:53:14 -0700
+  by orviesa008.jf.intel.com with ESMTP; 07 Jul 2025 00:57:20 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uYfix-0000CR-0q;
-	Mon, 07 Jul 2025 06:53:11 +0000
-Date: Mon, 7 Jul 2025 14:53:05 +0800
+	id 1uYgiz-0000Ff-0v;
+	Mon, 07 Jul 2025 07:57:17 +0000
+Date: Mon, 7 Jul 2025 15:56:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pan Deng <pan.deng@intel.com>, mingo@kernel.org
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, tianyou.li@intel.com,
-	tim.c.chen@linux.intel.com, yu.c.chen@intel.com, pan.deng@intel.com
-Subject: Re: [PATCH 3/4] sched/rt: Split root_domain->rto_count to
- per-NUMA-node counters
-Message-ID: <202507071418.sFa0bilv-lkp@intel.com>
-References: <2c1e1dbacaddd881f3cca340ece1f9268029b620.1751852370.git.pan.deng@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Peter Xu <peterx@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for
+ mremap
+Message-ID: <202507071505.e2HFMCH2-lkp@intel.com>
+References: <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,80 +73,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2c1e1dbacaddd881f3cca340ece1f9268029b620.1751852370.git.pan.deng@intel.com>
+In-Reply-To: <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
 
-Hi Pan,
+Hi Lorenzo,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on v6.16-rc5]
-[also build test WARNING on linus/master]
-[cannot apply to tip/sched/core peterz-queue/sched/core tip/master tip/auto-latest next-20250704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pan-Deng/sched-rt-Optimize-cpupri_vec-layout-to-mitigate-cache-line-contention/20250707-131831
-base:   v6.16-rc5
-patch link:    https://lore.kernel.org/r/2c1e1dbacaddd881f3cca340ece1f9268029b620.1751852370.git.pan.deng%40intel.com
-patch subject: [PATCH 3/4] sched/rt: Split root_domain->rto_count to per-NUMA-node counters
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250707/202507071418.sFa0bilv-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507071418.sFa0bilv-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mremap-perform-some-simple-cleanups/20250707-133132
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes%40oracle.com
+patch subject: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for mremap
+config: i386-buildonly-randconfig-002-20250707 (https://download.01.org/0day-ci/archive/20250707/202507071505.e2HFMCH2-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507071505.e2HFMCH2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507071418.sFa0bilv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507071505.e2HFMCH2-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/build_policy.c:52:
-   kernel/sched/rt.c:496:21: error: unknown type name 'atomic_tp'; did you mean 'atomic_t'?
-     496 | int rto_counts_init(atomic_tp **rto_counts)
-         |                     ^~~~~~~~~
-         |                     atomic_t
-   include/linux/types.h:183:3: note: 'atomic_t' declared here
-     183 | } atomic_t;
-         |   ^
-   In file included from kernel/sched/build_policy.c:52:
->> kernel/sched/rt.c:496:5: warning: no previous prototype for function 'rto_counts_init' [-Wmissing-prototypes]
-     496 | int rto_counts_init(atomic_tp **rto_counts)
-         |     ^
-   kernel/sched/rt.c:496:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     496 | int rto_counts_init(atomic_tp **rto_counts)
-         | ^
-         | static 
-   kernel/sched/rt.c:501:25: error: unknown type name 'atomic_tp'; did you mean 'atomic_t'?
-     501 | void rto_counts_cleanup(atomic_tp *rto_counts)
-         |                         ^~~~~~~~~
-         |                         atomic_t
-   include/linux/types.h:183:3: note: 'atomic_t' declared here
-     183 | } atomic_t;
-         |   ^
-   In file included from kernel/sched/build_policy.c:52:
->> kernel/sched/rt.c:501:6: warning: no previous prototype for function 'rto_counts_cleanup' [-Wmissing-prototypes]
-     501 | void rto_counts_cleanup(atomic_tp *rto_counts)
-         |      ^
-   kernel/sched/rt.c:501:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     501 | void rto_counts_cleanup(atomic_tp *rto_counts)
-         | ^
-         | static 
-   2 warnings and 2 errors generated.
+>> mm/mremap.c:1739:3: error: call to undeclared function 'mremap_userfaultfd_fail'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1739 |                 mremap_userfaultfd_fail(vrm->uf);
+         |                 ^
+   mm/mremap.c:1739:3: note: did you mean 'mremap_userfaultfd_prep'?
+   include/linux/userfaultfd_k.h:363:20: note: 'mremap_userfaultfd_prep' declared here
+     363 | static inline void mremap_userfaultfd_prep(struct vm_area_struct *vma,
+         |                    ^
+   1 error generated.
 
 
-vim +/rto_counts_init +496 kernel/sched/rt.c
+vim +/mremap_userfaultfd_fail +1739 mm/mremap.c
 
-   495	
- > 496	int rto_counts_init(atomic_tp **rto_counts)
-   497	{
-   498		return 0;
-   499	}
-   500	
- > 501	void rto_counts_cleanup(atomic_tp *rto_counts)
-   502	{
-   503	}
-   504	
+  1731	
+  1732	static void notify_uffd(struct vma_remap_struct *vrm, bool failed)
+  1733	{
+  1734		struct mm_struct *mm = current->mm;
+  1735	
+  1736		/* Regardless of success/failure, we always notify of any unmaps. */
+  1737		userfaultfd_unmap_complete(mm, vrm->uf_unmap_early);
+  1738		if (failed)
+> 1739			mremap_userfaultfd_fail(vrm->uf);
+  1740		else
+  1741			mremap_userfaultfd_complete(vrm->uf, vrm->addr,
+  1742				vrm->new_addr, vrm->old_len);
+  1743		userfaultfd_unmap_complete(mm, vrm->uf_unmap);
+  1744	}
+  1745	
 
 -- 
 0-DAY CI Kernel Test Service
