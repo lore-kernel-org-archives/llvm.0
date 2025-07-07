@@ -1,59 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352E72AC17;
-	Mon,  7 Jul 2025 20:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98193C2FB;
+	Mon,  7 Jul 2025 20:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751919327; cv=none; b=HYYciEFbhV4XYuvAnHdiTBiMtT3B7ejVeFL8hy+cFwLLQhKEosFPkzWEANdV2ScDtq06itRa+K/74SItRNduHRZNwaCxFItFyCr2+L16Htsw9lR2wgG8uw0v9E8YP0ASbGkb6zzMIL/bjxEodfVJ6hmhw5sCRhvYRcyKowL9PTQ=
+	t=1751919932; cv=none; b=hGHdbBLvzr/ojCAAFyV5T9eT40vQ1LnbBiazuy2vMPDddXbHJylsZuPYziLsqL326TAbPuYyFJmHFQGGWi7fCHtavwcnjXvewbuuFvSAofyunxDxPjBeDDDx48nDjcvIAeRuGBW5qqI0lWQ/67b5lgAmstRlDvrPMQ7/RPfsR1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751919327; c=relaxed/simple;
-	bh=brub50EoCa4pod8cvgnUIi3aRUqEyadA1T22tDh2jVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nK80L9RgIKoXxwncj7DtVINJ/nOOX4kPcbbPZxtsBMrEgSaSALA2xjGz2hxPd4FzOux3MGeuy7brkHA+4iDkyPrueX2/AjMWXHRcAiEjExYU9I3J+0nS1Al8zEYq52pONfyeHCEWFnrxyLwQX8erOcH07XsXTxa03VaMopbKuug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cF84SFfr; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1751919932; c=relaxed/simple;
+	bh=EskchuAk3wqYLaXr8x1fF4HhW/cyWSRnnGTXvtWRQDk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NyCBrgbx0S732mvoeRnXPujK/LyUhfamBFe5l0QY9fANXd8gTiCZkIIbyl/5kHtPWrS86KK4BaDqdKP+uMd33LQZXQm7BgQlHsr4tnOhg7lwPs5OlyOsiPRkn5pvFSAx0lk3bE2Icc+7wQ5dOW2qRX+qgKrXHQANB49yrEN5ufo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PFSMiyjW; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cF84SFfr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PFSMiyjW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751919326; x=1783455326;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=brub50EoCa4pod8cvgnUIi3aRUqEyadA1T22tDh2jVU=;
-  b=cF84SFfrwifIC0d1aKo2wv2q/ARMYruuyz9uOtRy410R5u8MT5rTB5Sc
-   BVLTyl4538K6hCJWjFK8GX2HXPLkH7Ns3AUo0ESFOKdC69p8/yJ64+7yJ
-   wIvB5YhwA2d2YU8YXF98plQqH3AXbSAAV+VvWf73+N3WhwoOTMME27grl
-   2Jwl2lLnvH2R/VLi9b/wZR2Jr326dszc8Af4UxqQvN6oyXccq7/648a/l
-   0QC6LHKp1HtTQyw/i4z0AzfJShG6wumIIqy4ID+Z9zenV8LscCo0HqHFT
-   +BhnMhjWgu/yXlyyvksHuZCAjP8kAQWVCGVdomcmrIQXqzsuf22VnUeZy
+  t=1751919930; x=1783455930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EskchuAk3wqYLaXr8x1fF4HhW/cyWSRnnGTXvtWRQDk=;
+  b=PFSMiyjWxSENYTsXW7yK27IvUOBPlM/K6TjAR8PKDCExpKrEOS3hXnkb
+   V/tLnq5bnOgyCom0y7aHCy4HHqvbenw+hLd51xvtOceje5nE7wExHUCsp
+   c2q86ydUzVZ/EOr+NGbMKOmkjL8v6wqemctSSKyNlnkC9QqBQNucSYvfJ
+   HOWBtPX8N6IG0XYnbdTMI68YUZsDm5ZmBpoPjz/Y5b5+bGfagEDNaIYNg
+   OD5oCqNz9TPpCrEHsQsIUdKE7d00rZXNw1i6f9E1AadMfys3gPrXGkBuc
+   qGTFxMkJVusmyekwRI2SgAzEJaUG3GjPKyS7mbSKZd6/BdoYpq4HN6efk
    A==;
-X-CSE-ConnectionGUID: 530PHZ7FS06wRd1J4gmFpg==
-X-CSE-MsgGUID: XsgWZfAFT6+gfVh4WefwaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="65500542"
+X-CSE-ConnectionGUID: ovON4JLAQCushbMPwk7o0A==
+X-CSE-MsgGUID: 5dgaG2bXQ8WiASyBBwgolg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="53362604"
 X-IronPort-AV: E=Sophos;i="6.16,295,1744095600"; 
-   d="scan'208";a="65500542"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 13:15:25 -0700
-X-CSE-ConnectionGUID: vznc7ddRSuSJHnPCUCWOCw==
-X-CSE-MsgGUID: pvuUvX9+S0qli9eXmFVEOQ==
+   d="scan'208";a="53362604"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 13:25:29 -0700
+X-CSE-ConnectionGUID: AVK4PUxOTGWdv6LR1Tocbw==
+X-CSE-MsgGUID: wULjMUCrS7qxIoDnvtRdGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,295,1744095600"; 
-   d="scan'208";a="159849097"
+   d="scan'208";a="159344412"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 07 Jul 2025 13:15:24 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 07 Jul 2025 13:25:25 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uYsFF-0000iF-2n;
-	Mon, 07 Jul 2025 20:15:21 +0000
-Date: Tue, 8 Jul 2025 04:14:22 +0800
+	id 1uYsOw-0000iv-2p;
+	Mon, 07 Jul 2025 20:25:22 +0000
+Date: Tue, 8 Jul 2025 04:25:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
+To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [bigeasy-staging:futex_percpu_ref 2/3] kernel/fork.c:1063:2: error:
- statement requires expression of scalar type ('void' invalid)
-Message-ID: <202507080405.TViOt083-lkp@intel.com>
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Menglong Dong <dongml2@chinatelecom.cn>
+Subject: Re: [PATCH bpf-next] bpf: make the attach target more accurate
+Message-ID: <202507080452.fCL471ap-lkp@intel.com>
+References: <20250707113528.378303-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,106 +68,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250707113528.378303-1-dongml2@chinatelecom.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/staging.git futex_percpu_ref
-head:   68087bce4b1dfad7de82a55bcc27fec3a19df65e
-commit: ebfd80a39c4e2258942c2949863b316607d4700a [2/3] futex: Use RCU-based per-CPU reference counting instead of rcuref_t
-config: x86_64-buildonly-randconfig-003-20250708 (https://download.01.org/0day-ci/archive/20250708/202507080405.TViOt083-lkp@intel.com/config)
+Hi Menglong,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/bpf-make-the-attach-target-more-accurate/20250707-194159
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20250707113528.378303-1-dongml2%40chinatelecom.cn
+patch subject: [PATCH bpf-next] bpf: make the attach target more accurate
+config: i386-buildonly-randconfig-003-20250708 (https://download.01.org/0day-ci/archive/20250708/202507080452.fCL471ap-lkp@intel.com/config)
 compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250708/202507080405.TViOt083-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250708/202507080452.fCL471ap-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507080405.TViOt083-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507080452.fCL471ap-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/fork.c:1063:2: error: statement requires expression of scalar type ('void' invalid)
-    1063 |         if (futex_mm_init(mm))
-         |         ^   ~~~~~~~~~~~~~~~~~
+>> kernel/bpf/verifier.c:23491:43: error: incomplete definition of type 'const struct module'
+    23491 |                 err = module_kallsyms_on_each_symbol(mod->name, symbol_mod_callback,
+          |                                                      ~~~^
+   include/linux/printk.h:400:8: note: forward declaration of 'struct module'
+     400 | struct module;
+         |        ^
    1 error generated.
 
 
-vim +1063 kernel/fork.c
+vim +23491 kernel/bpf/verifier.c
 
-  1024	
-  1025	static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
-  1026		struct user_namespace *user_ns)
-  1027	{
-  1028		mt_init_flags(&mm->mm_mt, MM_MT_FLAGS);
-  1029		mt_set_external_lock(&mm->mm_mt, &mm->mmap_lock);
-  1030		atomic_set(&mm->mm_users, 1);
-  1031		atomic_set(&mm->mm_count, 1);
-  1032		seqcount_init(&mm->write_protect_seq);
-  1033		mmap_init_lock(mm);
-  1034		INIT_LIST_HEAD(&mm->mmlist);
-  1035		mm_pgtables_bytes_init(mm);
-  1036		mm->map_count = 0;
-  1037		mm->locked_vm = 0;
-  1038		atomic64_set(&mm->pinned_vm, 0);
-  1039		memset(&mm->rss_stat, 0, sizeof(mm->rss_stat));
-  1040		spin_lock_init(&mm->page_table_lock);
-  1041		spin_lock_init(&mm->arg_lock);
-  1042		mm_init_cpumask(mm);
-  1043		mm_init_aio(mm);
-  1044		mm_init_owner(mm, p);
-  1045		mm_pasid_init(mm);
-  1046		RCU_INIT_POINTER(mm->exe_file, NULL);
-  1047		mmu_notifier_subscriptions_init(mm);
-  1048		init_tlb_flush_pending(mm);
-  1049	#if defined(CONFIG_TRANSPARENT_HUGEPAGE) && !defined(CONFIG_SPLIT_PMD_PTLOCKS)
-  1050		mm->pmd_huge_pte = NULL;
-  1051	#endif
-  1052		mm_init_uprobes_state(mm);
-  1053		hugetlb_count_init(mm);
-  1054	
-  1055		if (current->mm) {
-  1056			mm->flags = mmf_init_flags(current->mm->flags);
-  1057			mm->def_flags = current->mm->def_flags & VM_INIT_DEF_MASK;
-  1058		} else {
-  1059			mm->flags = default_dump_filter;
-  1060			mm->def_flags = 0;
-  1061		}
-  1062	
-> 1063		if (futex_mm_init(mm))
-  1064			goto fail_mm_init;
-  1065	
-  1066		if (mm_alloc_pgd(mm))
-  1067			goto fail_nopgd;
-  1068	
-  1069		if (mm_alloc_id(mm))
-  1070			goto fail_noid;
-  1071	
-  1072		if (init_new_context(p, mm))
-  1073			goto fail_nocontext;
-  1074	
-  1075		if (mm_alloc_cid(mm, p))
-  1076			goto fail_cid;
-  1077	
-  1078		if (percpu_counter_init_many(mm->rss_stat, 0, GFP_KERNEL_ACCOUNT,
-  1079					     NR_MM_COUNTERS))
-  1080			goto fail_pcpu;
-  1081	
-  1082		mm->user_ns = get_user_ns(user_ns);
-  1083		lru_gen_init_mm(mm);
-  1084		return mm;
-  1085	
-  1086	fail_pcpu:
-  1087		mm_destroy_cid(mm);
-  1088	fail_cid:
-  1089		destroy_context(mm);
-  1090	fail_nocontext:
-  1091		mm_free_id(mm);
-  1092	fail_noid:
-  1093		mm_free_pgd(mm);
-  1094	fail_nopgd:
-  1095		futex_hash_free(mm);
-  1096	fail_mm_init:
-  1097		free_mm(mm);
-  1098		return NULL;
-  1099	}
-  1100	
+ 23466	
+ 23467	/**
+ 23468	 * bpf_lookup_attach_addr: Lookup address for a symbol
+ 23469	 *
+ 23470	 * @mod: kernel module to lookup the symbol, NULL means to lookup the kernel
+ 23471	 * symbols
+ 23472	 * @sym: the symbol to resolve
+ 23473	 * @addr: pointer to store the result
+ 23474	 *
+ 23475	 * Lookup the address of the symbol @sym, and the address should has
+ 23476	 * corresponding ftrace location. If multiple symbols with the name @sym
+ 23477	 * exist, the one that has ftrace location will be returned. If more than
+ 23478	 * 1 has ftrace location, -EADDRNOTAVAIL will be returned.
+ 23479	 *
+ 23480	 * Returns: 0 on success, -errno otherwise.
+ 23481	 */
+ 23482	static int bpf_lookup_attach_addr(const struct module *mod, const char *sym,
+ 23483					  unsigned long *addr)
+ 23484	{
+ 23485		struct symbol_lookup_ctx ctx = { .addr = 0, .name = sym };
+ 23486		int err;
+ 23487	
+ 23488		if (!mod)
+ 23489			err = kallsyms_on_each_match_symbol(symbol_callback, sym, &ctx);
+ 23490		else
+ 23491			err = module_kallsyms_on_each_symbol(mod->name, symbol_mod_callback,
+ 23492							     &ctx);
+ 23493	
+ 23494		if (!ctx.addr)
+ 23495			return -ENOENT;
+ 23496	
+ 23497		if (err)
+ 23498			return err;
+ 23499	
+ 23500		*addr = ctx.addr;
+ 23501	
+ 23502		return 0;
+ 23503	}
+ 23504	
 
 -- 
 0-DAY CI Kernel Test Service
