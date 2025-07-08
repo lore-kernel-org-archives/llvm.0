@@ -1,81 +1,100 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D3122126C;
-	Tue,  8 Jul 2025 06:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317512E0B44;
+	Tue,  8 Jul 2025 15:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751957538; cv=none; b=hir5sFZZeKbBv9IrJPH8dHZALf2Bh7a0uR3i43hU4Lc6qfu0RjsoKePCiljZYeskFDbOW106v8MZIrr1FKFSogaKhWOHrlSTqIjc4nzROrwEB98Tq5M6UyAkiaGojP5AVCs1wC8o62x0NhAwRTY8+q3x2dYyNtj+yPVaOFHG5pQ=
+	t=1751989094; cv=none; b=X4BIEiLpJJByLgxhFSqcSPZeEMy1xwXkgq5cQoGO0f8yq/ZGb52gCdrW06547NvhCvDrPbhA4MqGd7Gb4iXWifUdGFDLbT2C/nOHM5ghQFI+s29jl5F1QotD1sRkkvDy2yyr3pOr11nuKPUwH4IVufQarK1PwIBLY8eLJpZ+lvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751957538; c=relaxed/simple;
-	bh=lBouEhyY4AYTaOHEkyVgq++1q0ex7e59XgWoSNa6o10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LxWJAk0aFOeSVJ229roZm3bK6DNboo8g+ZkRQRJYKpBFvrmdPFoeC6CwVm9I/1r9H3R5h5bqllue5IE66IApDjkjTDFiKXXLfTXS7vVJK6rIEN9jQqjxx8P+Wjow1ZZoF3xYl2C6hGZhP1VDCuAsJvnmiRHxQatrUTJ5hEiTpXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=BBUC696w; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ozOZNhpD; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1751989094; c=relaxed/simple;
+	bh=2liBN+VLDNQWZE3GanRUs3dvq5AOE9IpvbDoEMT9aUs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YxCBwIOVCLavMnZQENOQvueUkYP2piCAHdHQEW4fzHRfac9fPBP+Lkl8wVg91GBxfFE+tj8MLrTcMITc4JsKGRDsAYQhM0KCfjovXGJK2AwDL7BVRuU+BHnCYJ9Q3UrrJJOZyIAMZ5V3ScXGQonMh0xU9dLsNNCGCwIX7xXg8fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t12jUVVg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BBUC696w";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ozOZNhpD"
-Date: Tue, 8 Jul 2025 08:52:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1751957532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xTFJEMX+i1VMWfM3oEOevD645WEcGHYINCyovuoDlV8=;
-	b=BBUC696wbkWYTUUHi8dK1nhIE3Fbu1u/P1DuDtzSdTl0QXPtvuk0XszpyrSClLyCNeT3UK
-	rUkRzaKhDPOWwmlA4PBd+X0cxU1oVc2E2xlKdL21f+zkUlRNFenc+DtVBueDBajSjz4Al7
-	VvZ+NSY+WD0d0c+2tuNVMc2zS9aAMPg4u5GbFjoyBCEgJle25nOyxis0MAxeFNRQyebSe2
-	8Rt+nbL+jNKS6TZ+Ltz1yXM9+E0QrUxFYhKZL4LL+oiFpVvR1FR6nuaAw8cFjJMMyrOetl
-	Dp9XPvY6uTRKL9jz3b3la1cupFAT48gFU5Q5FZ5Arj7BWOPsHAH/oI1TnnM4jw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1751957532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xTFJEMX+i1VMWfM3oEOevD645WEcGHYINCyovuoDlV8=;
-	b=ozOZNhpD6ibZz6y031pememu1m7IXcwFmA0J9LA9ewtokhZACMGdmf6WY1zdphEkwKGcNc
-	ol7HZM+Ag+2ejcCg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [bigeasy-staging:futex_percpu_ref 2/3] kernel/fork.c:1063:2:
- error: statement requires expression of scalar type ('void' invalid)
-Message-ID: <20250708065211.ymEQXmIi@linutronix.de>
-References: <202507080405.TViOt083-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t12jUVVg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62FC7C4CEED;
+	Tue,  8 Jul 2025 15:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751989093;
+	bh=2liBN+VLDNQWZE3GanRUs3dvq5AOE9IpvbDoEMT9aUs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=t12jUVVg5pv4RM8J2TZbrIHSimTtmigL07c5a4zD3gBv6XfElOHL7c4GFetMw9lzn
+	 PFKsoDUMD6E+kw+JA5UYczDBpJa2Slq6h2TKDZyeF2nvLYabaXzRs2UfSJUXvMb1+U
+	 K5ZpC8MfjIxJVl4/4avThy8YA+JTTTGHgyrfBGg1SiA1DMEL2LDWVGfCs6fR2n3stn
+	 2iLxZhnV8vmmt8LC+mU9+JEXBKuusSqnh/fXWRx08dVRvKt87dWJh8dF9e4ejXBd5G
+	 ldg9kGRycV9EQxZyxdWHY1dqG6/AUGGAWHT3UHoA651QYbbXXyby58vn9cmLKErX3o
+	 3GVd7w93FE/Hw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 08 Jul 2025 08:37:57 -0700
+Subject: [PATCH] panic: Add __maybe_unused to sys_info_avail
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202507080405.TViOt083-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250708-fix-clang-sys_info_avail-warning-v1-1-60d239eacd64@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFU7bWgC/x2NUQqDMBBEryL73YVEkNheRYpsk027IFGyoBbx7
+ i5+vhnezAHKVVjh1RxQeRWVuRj4RwPxR+XLKMkYWtd2Lrges+wYJ2tQ/zpKyfNIK8mEG9UiFmf
+ yz5hSCJ/gwWaWyubcF8P7PC/GPnTBcgAAAA==
+X-Change-ID: 20250708-fix-clang-sys_info_avail-warning-fa19cdd77b71
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Feng Tang <feng.tang@linux.alibaba.com>, 
+ Lance Yang <lance.yang@linux.dev>, Petr Mladek <pmladek@suse.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1643; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=2liBN+VLDNQWZE3GanRUs3dvq5AOE9IpvbDoEMT9aUs=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBm51skTJLg8XS5v6GCwbUjc+tjzYl3f3bLWOaXR734t4
+ pYwWdncUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACYSrMPwv2bjI8bY9HvPXtie
+ 4fXZzJ79fsG63c2LLu5PTdi+v9/zgSkjw5ySwvPa2QpyK5ScYr93/2RbeiT+hbup5I2cLvM3k4w
+ 0+AA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 2025-07-08 04:14:22 [+0800], kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/staging.git futex_percpu_ref
-> head:   68087bce4b1dfad7de82a55bcc27fec3a19df65e
-> commit: ebfd80a39c4e2258942c2949863b316607d4700a [2/3] futex: Use RCU-based per-CPU reference counting instead of rcuref_t
-> config: x86_64-buildonly-randconfig-003-20250708 (https://download.01.org/0day-ci/archive/20250708/202507080405.TViOt083-lkp@intel.com/config)
-> compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250708/202507080405.TViOt083-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202507080405.TViOt083-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/fork.c:1063:2: error: statement requires expression of scalar type ('void' invalid)
->     1063 |         if (futex_mm_init(mm))
->          |         ^   ~~~~~~~~~~~~~~~~~
->    1 error generated.
+Clang warns (or errors with CONFIG_WERROR=y):
 
-Thank you, folded
-	https://lore.kernel.org/all/20250708065124.DtoAH-O1@linutronix.de/
+  lib/sys_info.c:52:19: error: variable 'sys_info_avail' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+     52 | static const char sys_info_avail[] = "tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
+        |                   ^~~~~~~~~~~~~~
 
-Sebastian
+sys_info_avail is only used within sizeof(), meaning it is only used at
+compile time, which clang warns about in case the developer intended to
+use the variable elsewhere. This appears to be intentional in this case,
+so mark sys_info_avail with __maybe_unused to silence the warning.
+
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+This should be squashed into
+panic-add-panic_sys_info-sysctl-to-take-human-readable-string-parameter.patch
+so I did not bother with a fixes tag.
+---
+ lib/sys_info.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/sys_info.c b/lib/sys_info.c
+index 46d6f4f1ad2a..5bf503fd7ec1 100644
+--- a/lib/sys_info.c
++++ b/lib/sys_info.c
+@@ -49,7 +49,7 @@ unsigned long sys_info_parse_param(char *str)
+ 
+ #ifdef CONFIG_SYSCTL
+ 
+-static const char sys_info_avail[] = "tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
++static const char sys_info_avail[] __maybe_unused = "tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
+ 
+ int sysctl_sys_info_handler(const struct ctl_table *ro_table, int write,
+ 					  void *buffer, size_t *lenp,
+
+---
+base-commit: 10f2351db2799f80af91da7aee4c60fd042bfcf3
+change-id: 20250708-fix-clang-sys_info_avail-warning-fa19cdd77b71
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
