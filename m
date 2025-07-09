@@ -1,137 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1AC374F1;
-	Wed,  9 Jul 2025 03:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383B713D2B2
+	for <llvm@lists.linux.dev>; Wed,  9 Jul 2025 04:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752030215; cv=none; b=es2HIVeDFAb2rmeMPAm4x9LIJqUv2yNfEkBy+n0c4CT+g6HYEA8AIXI/+YAW2WSZA1KNZWUlhi1tHpvSmfjyAifq/4vkIXXckYrWs3D0TxLkprshMolSaE1tADwTpzJfZfYe51uhgi56NLjnnLwaXVTaMBq5uOU2lizRcfT6PCY=
+	t=1752033737; cv=none; b=ddyxMNI+6gFnG12vg9yqf5mxOnCR9vA4qsfsEfWntrFiB2/szl7CgWE4sJoUOmcdegWMPXUp1Ry9wm0tS3iTKPtNeLKzK5ZauArdM41mKgEYfiBqKEEJpmQtakjLETeWmDxfNQbI63uHVyw9EkThm2NUCzvv+/mNcvHzLUE5qCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752030215; c=relaxed/simple;
-	bh=aIRy4P+mVHLYqEJlA1GuRMWQ8jpHGslA2lnonIu+p34=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XjBATKLvGOdV60fJyMvK9BH1VSaQDFQ/5XQxuz+3NGmZt6nriege5aM9+y86Ca0enMvZoKxtTMjzziG55asG3xNBguzFHwtErPMtMKlqEiV6O3gLEcXDs+VPm5OD5m9ZTbf0xYwEqhTrc9+kEXUmzeHTXoudK/AFQyPcIn3MFZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bOJNn0N2; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752033737; c=relaxed/simple;
+	bh=J7ZxDFpl6OuvQ0o7p83L67w3sFGqocmwZaYTR2a4nnU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ullyrO+tavwRfGShsepL2zM2D1IrvFlMPq01PTDnKI635Y7G4Kcaiz2s6VipXyrp9KPSVprIS8yyyPCYuETTe1y4KIs0HhrdjvN6Oj12r2hQkBqmO1tafaYIEEexe8MdVhdiTQKykvG4dxOtApN8aoDXG8NTnWF0cAv685Aho3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WnSt5fPt; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bOJNn0N2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752030214; x=1783566214;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aIRy4P+mVHLYqEJlA1GuRMWQ8jpHGslA2lnonIu+p34=;
-  b=bOJNn0N2PhU5/U80crGorG4l/0GVbV1YVbYCXz4D9NHhR4wUQbpRpav1
-   En+4FKv1Uil5azyffCZJjz3fzc2JxyTqUCvKpLm2eoJL514iI5XsdEcpd
-   1K/yeyCzGeKhEpGfNmFuOBIpKo54SW+Jb5/mwVNAxYFfMyMqjPuXv47QO
-   QbLPDJSucY7LEZFZGY6QtQMuvWdc+6rhqgmsqh5A/kb1GyYrOOoZO9emN
-   q4pBR2KDqq+5tybuDftFPKk0vlfYpbNd9vH3GN/RFB//FIOgy/PiW/Bt2
-   POq/6EQnfJyNQAwhxGNzicWZ+CPsiWi38CklpHHGhC4IkALI9gU3115Uo
-   Q==;
-X-CSE-ConnectionGUID: /R8wUMAcS7+Bocv/tZOleg==
-X-CSE-MsgGUID: IR5rGUxsTXGqws1KVJK+0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="56887612"
-X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="56887612"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 20:03:33 -0700
-X-CSE-ConnectionGUID: AF4LIbfdR2OXu4UASMSicA==
-X-CSE-MsgGUID: 3fGwvMpQTW+jbBZUovUC5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="156384912"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Jul 2025 20:03:30 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uZL5j-000319-2w;
-	Wed, 09 Jul 2025 03:03:27 +0000
-Date: Wed, 9 Jul 2025 11:03:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jacek Kowalski <jacek@jacekk.info>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH iwl-next v2 1/5] e1000: drop unnecessary constant casts
- to u16
-Message-ID: <202507091034.uiPhnpcc-lkp@intel.com>
-References: <e199da76-00d0-43d3-8f61-f433bc0352ad@jacekk.info>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WnSt5fPt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1752033734;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HCjpg+5tqwcLJPNhIHQrgScf1UaFGLN8baL6AN/X8UQ=;
+	b=WnSt5fPtkNQvvoBAhFuD7esL3OBCCxmzlDMWMLcDyLHU1OP5U1WbowGZieDYuwaklkI5QD
+	ww9nheIFeDSzi7eWkcETptwXozixfaFh323H/h2u5FtNNm1v4+F48WDSjtNAt8WScOKgS0
+	UBAb5Fa8C4w5wWhqTPXSB2R7lZ8Id3g=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-369-Bw_bDhecPBe34FvRXzEPfg-1; Wed,
+ 09 Jul 2025 00:02:12 -0400
+X-MC-Unique: Bw_bDhecPBe34FvRXzEPfg-1
+X-Mimecast-MFC-AGG-ID: Bw_bDhecPBe34FvRXzEPfg_1752033731
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C533F19560A6
+	for <llvm@lists.linux.dev>; Wed,  9 Jul 2025 04:02:11 +0000 (UTC)
+Received: from [172.20.236.189] (unknown [10.30.44.207])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1796D1956066;
+	Wed,  9 Jul 2025 04:02:10 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 100): Test report for master
+ (6.16.0-rc5, upstream-mainline, 73392339)
+Date: Wed, 09 Jul 2025 04:02:10 -0000
+To: llvm@lists.linux.dev, liwan@redhat.com, jbastian@redhat.com,
+ omosnace@redhat.com, mmalik@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e199da76-00d0-43d3-8f61-f433bc0352ad@jacekk.info>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <18436.125070900021200494@us-mta-369.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ptdwIlReA3lf6YPLvwyeiJzU0Zooke_vU72jTSsONOE_1752033731
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jacek,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tnguy-next-queue/dev-queue]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacek-Kowalski/e1000-drop-unnecessary-constant-casts-to-u16/20250708-161919
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/e199da76-00d0-43d3-8f61-f433bc0352ad%40jacekk.info
-patch subject: [PATCH iwl-next v2 1/5] e1000: drop unnecessary constant casts to u16
-config: riscv-randconfig-002-20250709 (https://download.01.org/0day-ci/archive/20250709/202507091034.uiPhnpcc-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250709/202507091034.uiPhnpcc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507091034.uiPhnpcc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/e1000/e1000_main.c:316:16: warning: result of comparison of constant -1 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-     316 |                 if ((old_vid != E1000_MNG_VLAN_NONE) &&
-         |                      ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +316 drivers/net/ethernet/intel/e1000/e1000_main.c
+Kernel information:
+    Commit message: Merge tag 'pwm/for-6.16-rc6-fixes' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/ukleinek/linux
 
-   297	
-   298	static void e1000_update_mng_vlan(struct e1000_adapter *adapter)
-   299	{
-   300		struct e1000_hw *hw = &adapter->hw;
-   301		struct net_device *netdev = adapter->netdev;
-   302		u16 vid = hw->mng_cookie.vlan_id;
-   303		u16 old_vid = adapter->mng_vlan_id;
-   304	
-   305		if (!e1000_vlan_used(adapter))
-   306			return;
-   307	
-   308		if (!test_bit(vid, adapter->active_vlans)) {
-   309			if (hw->mng_cookie.status &
-   310			    E1000_MNG_DHCP_COOKIE_STATUS_VLAN_SUPPORT) {
-   311				e1000_vlan_rx_add_vid(netdev, htons(ETH_P_8021Q), vid);
-   312				adapter->mng_vlan_id = vid;
-   313			} else {
-   314				adapter->mng_vlan_id = E1000_MNG_VLAN_NONE;
-   315			}
- > 316			if ((old_vid != E1000_MNG_VLAN_NONE) &&
-   317			    (vid != old_vid) &&
-   318			    !test_bit(old_vid, adapter->active_vlans))
-   319				e1000_vlan_rx_kill_vid(netdev, htons(ETH_P_8021Q),
-   320						       old_vid);
-   321		} else {
-   322			adapter->mng_vlan_id = vid;
-   323		}
-   324	}
-   325	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1914695305
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        selinux-policy: serge-testsuite
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1914695305-x86_64-kernel_upt_22
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1914695305-s390x-kernel_upt_14
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1914695305-aarch64-kernel_upt_14
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+        stress: stress-ng - memory
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1914695305-x86_64-kernel_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1914695305-s390x-kernel_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1914695305-aarch64-kernel_upt_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
