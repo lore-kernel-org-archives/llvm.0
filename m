@@ -1,248 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2056.outbound.protection.outlook.com [40.107.237.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A9D801;
-	Tue,  8 Jul 2025 19:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752001286; cv=none; b=kBj34dmj8CEpPCJnqrGOYlsbuTCMVZCDGOc2W8azbZvH9SXXIYZ2qq7lDttCAmDQstbSzuYUoJzuj4PS5DS4VfKj2r73L+3eFGV25zGfVmwiT3I42HB0iQ7xFPsJGH8hFVU4HfmiubZ/eObfI+tlhizKky91WvqBuymKfCRANjM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752001286; c=relaxed/simple;
-	bh=/wu0TIdhlNEW6BMQRtfAT/x2sMA83h/ij6cwc9qME3I=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=A+mEzLTZTLrZgJgXpnatUwuW19ns8Cebtx8ROMX2MmcRDPcuu/KkyIK5prQ+J1IN9iQAy0RaHiQs2noO7nO3P1ZFWLbfHG31L487dm0AY1gK97bBhFKNga9Sj4681vx+sl5573cO5/cvLt06oIK9yKqj48Cq+7hY9E7TQhxiMyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nfZLKR2i; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC64E14F70;
+	Wed,  9 Jul 2025 00:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.56
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752020990; cv=fail; b=P/6KgA+Je1CuPcAQYaG+P0UsYwECeC54UbcU6MppVlBkN5GtDsR156zvIEu3E3wryc7kl6ZmDv8Wn/8/klYrKSaJ+uPky+fFtxYKWTSAKbbLJO4kchJ79+J6xuM3pe5CUJLivevNeE953rJcAvmTVii/4/bjmR3rDOFy+1x1yFw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752020990; c=relaxed/simple;
+	bh=CoDowlpYqiN1R+bWy3Ax+1zA+9yVkspOg/o/0H4l1v4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Trqlu3+t1GOsSnRFwhDIE4824FcB3qOVEJPcV9LT4jR/J4UyuK/vzqpmP7nQQwvryVk79DLu7SRqaagArSfTHF3lbp+Ebi6KtErzbqVTIUsIPd2TLmZohfPO7/nTMkFPlmPT5JamB3H0URN/C42G9WiEscyvyCyS0mo8xw0h5ic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DSfkMq65; arc=fail smtp.client-ip=40.107.237.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nfZLKR2i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FC1C4CEED;
-	Tue,  8 Jul 2025 19:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752001286;
-	bh=/wu0TIdhlNEW6BMQRtfAT/x2sMA83h/ij6cwc9qME3I=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=nfZLKR2iqPSrjUrOLnG5eU3NLL7Ceg9U9zHwwL3oIQm7LiGIbTmWIfI4geOh2Gtmx
-	 Gxh/BX3jin/0lWsESfPzg/sOEWYOyrXMYzI2/UQzh/TJfuJ9cIbjT/WkUvGRiqKmKL
-	 su+iwuaC8gT5ElUrbgvFHCgs7aJV4/j6WpK+DCq6wpwFkgUH2TVGJhzD4oXMbcu4xV
-	 cwhwyIR2QFxgTIE4pGgz+FpEVme5wlzj5ckiNlItHmcQp8oTrLTZH9YovNKa21/S4s
-	 7P6W0/hibzoIB57umO1+4w13FefJYmPGOkass2eqjQuDm7tDKl+K8y8/BbKJLjMIos
-	 rHuZODL4vgFvA==
-Date: Tue, 8 Jul 2025 12:01:22 -0700 (PDT)
-From: Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To: Juergen Gross <jgross@suse.com>
-cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-    Stefano Stabellini <sstabellini@kernel.org>, 
-    Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    xen-devel@lists.xenproject.org, 
-    Abinash Singh <abinashsinghlalotra@gmail.com>
-Subject: Re: [PATCH] xen/gntdev: remove struct gntdev_copy_batch from stack
-In-Reply-To: <20250703073259.17356-1-jgross@suse.com>
-Message-ID: <alpine.DEB.2.22.394.2507081150230.605088@ubuntu-linux-20-04-desktop>
-References: <20250703073259.17356-1-jgross@suse.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DSfkMq65"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=U6PmJ3NFO1tFh3fHGA+r5qFqIVG/O4m1moGWX/1kP3VRQLrofrlKzLpCxuPP6FSGJXr0QBm2LXcahPbo1TVWmpCgRiW33OYu0Y+kU9cHHZT/tC4nteo2falO3puuEUfy4+Y4YDLJLg4FMv9eV+sB1KlOg6sLhLEQ8Pa9BxSLwKBj5xV6JzQZNP74vL+6pS6IZA18sakBct12XhHHzv0IiVlEmo4IpPcZq/soNJgVacl7ZLN7chy3t6ekgvgrkM6hDNrE74UWlAoZX7BO6BBEtmVAm7pA/aiVXvIpj8KVrnXpgwh1QrIA0DaayjYli8Md9cFeGcSAf/vZ1HoVD0t35w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WaKx6tzgMR/CnKn8gB15/oHwhXYKmVOtzbUbwyvnrgw=;
+ b=jg2ysyzRgpq/aXr0GZzzl1DJduF/JcW3TsqVE+Vv0EEXt4TbonEVyNuIgzIC6shMbnAAC9+sU+pfe+v6TH27WwOZ/q2XhouEpQ298Zhh2iShZF6htGc83BsoPO3AM3hblemeLACFCZ/9gK+itu/Vykxc57yKVBsTfUEpcemiWcrW/G/CIStvW9VRTu2nUF3h4ZeHQ52/QubIi0QtHEShk8Vou/CNKDBICe5mFsl9GZEhC1Jpo6xWLYq2MuWumpqu/eIPSrAcczpHN6Lfzj/bE+LebU6KAwpo6WSOQm0zAz2/ddOFisRrj1SZXdlFv2ZOVlcmtPN1ILmqKXUzYkUKvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WaKx6tzgMR/CnKn8gB15/oHwhXYKmVOtzbUbwyvnrgw=;
+ b=DSfkMq65R2Le4cL7/jKL4s0sSgcN7lItWuHUYao/3GqgJppgZD5Ae21mMP24LrKhOURzMUUGj47nNVXSxTS6+BFK4CQEjb/iQnWAjEpjAS0XIBKc5Iv8SmOztMDxznWCdDr7oY3bU2+miE5UjesXwHYwJ6blHLDW8nzKrlwxPJ31HI0cURAuelfaAgJcPEg1OgaLKgoWpPmZIy6hWIz3S5BWUHiFJoKTSPSsnA6FAFa+eDQiUERu/7NOI/KaUHCTVGRmq1PvOnpBT0sBQo3txf2RENskxlpQncChRy7SIJJ9M/Zvk79t8qFqw0Jajl6/crwpy41RRPwbNiZ6vct4Tg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by IA1PR12MB6530.namprd12.prod.outlook.com (2603:10b6:208:3a5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.24; Wed, 9 Jul
+ 2025 00:29:45 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8901.024; Wed, 9 Jul 2025
+ 00:29:45 +0000
+Date: Tue, 8 Jul 2025 21:29:43 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Ankit Soni <Ankit.Soni@amd.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v3 03/15] iommupt: Add the basic structure of the iommu
+ implementation
+Message-ID: <20250709002943.GC1599700@nvidia.com>
+References: <0-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
+ <3-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
+ <i7qlz7ojhs2ja5qnj6gnf6wgsyhcqznprfudlk3tphw6qyhguk@ak4wo7b6rujt>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <i7qlz7ojhs2ja5qnj6gnf6wgsyhcqznprfudlk3tphw6qyhguk@ak4wo7b6rujt>
+X-ClientProxiedBy: BY3PR10CA0022.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::27) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|IA1PR12MB6530:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c01ffe1-c688-4b83-98ff-08ddbe7fb496
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?fRQbXI7+OgBKSP5qXou4Sd1Ze95WJiayRwCUja1+KQ5ecaOzkkKRzypuTtbv?=
+ =?us-ascii?Q?dMC+GfSGQAMU6lXbp+Px9bA9aoDbfOh1ywJ5EQllvDRoV7CVkz2cwnPn9C23?=
+ =?us-ascii?Q?9IyHfx+/ovhWa7BmSG2zXaEb+6y5WpnUIcz7TXU2+w1I9MywDekhEEiEaaGV?=
+ =?us-ascii?Q?hEiuPuuxTy+MjF5e/I9j3VEKdSrRt0TlahXfFWiRLiYr9SlXDlU9x3LCDePw?=
+ =?us-ascii?Q?SwBlw+symXx/ImWskUEkFbcj6/eSn/XcF93BiT94YDHaBkxlqxvj2TqJuOzV?=
+ =?us-ascii?Q?vdS/vfoGzkqBAnRElhhNp+VPyhlj4tjksokuQtn0yqZiWh0sZEAwPL5AECvk?=
+ =?us-ascii?Q?MhqGbeHRp/XITOpbSjrz7vBzEayFkqQ2vIOCPRCpc4uA3uAeWcB7HDXtBHkX?=
+ =?us-ascii?Q?wufnPkqeJ6+NBg28YvkYKPTJigWf1h8L/zYYj1Sf2qHfo5STPbm1RnEwgYNj?=
+ =?us-ascii?Q?KvtQ8ZY5JcA1NBiS/gvQsozemp46XBr/6KmZcqLXF4z2n30zS6eYqkSPlu0s?=
+ =?us-ascii?Q?W/80IBozn3s/JWUn/uK1GlklS+7KlUI2mhT17ZLrvDH7F1DO574rb3ibRphO?=
+ =?us-ascii?Q?3Uk1wE1ccrimN0CE7WBHPn09ilQdfZtA2xkwYHW1kW/GdymytRTPjWxPoMA7?=
+ =?us-ascii?Q?A/Zn9UNZyr8B1luEbFCD1OvKVBQBaBOVHccQRcxnnLFvos543Cd6p2eIqwhR?=
+ =?us-ascii?Q?CcSmwkIE1+hqQrfc3c5wQ1ch2IHym8G8ZU1VhaR7NZoI9tFbUx0vbAqeLsOT?=
+ =?us-ascii?Q?uF31LL3pmlrBN07bHA2F1LGQd7DRTc/KTW2NRwWHtkBU+vaEtuC6AoiUmbly?=
+ =?us-ascii?Q?Axadqgq6/5KNXSkGQR1VqYPqgIISjr8rtPsHuAAohQ98F8BpOZjGqdlZTEU2?=
+ =?us-ascii?Q?Gz262H/zKgoK5H8V+IUCr941U0IWJkZw5LPwZgE2BV6Iq+cBeO3A+ATQG7Ku?=
+ =?us-ascii?Q?CVol/cVaVxHpaZKvETwiZaUOmqcd2Vn4wFvfrlGWQic7K1v2WuoqQduX0rGp?=
+ =?us-ascii?Q?GoANWIWYHnCN5G/3zsKXKciMSK7puZ1xmZepcVjO9jSv0iB+WHrNG3AoZEoC?=
+ =?us-ascii?Q?gGDUvhxaKdzqkx45Zx0g5vDYKZPqv/ZFwmc+s3gZie/SIqPC7w/gNnGzKtwQ?=
+ =?us-ascii?Q?zFcLyHNcFrOs3lLxj7V6EKRXDtWm/omT3RF4Y9C+U/DZAPyCmgRmdhg6g5pw?=
+ =?us-ascii?Q?0QGsOht5AuLSHRORBSxGSoKzbfGpCxbCf2R9H/WaEP7ZMk9/rmsBVSXxEYB6?=
+ =?us-ascii?Q?sy9kW6wyfxyhylzDSMrjMOe9BKGNorq1VPMgWVVamb1OQoAC3dVk739s7TiW?=
+ =?us-ascii?Q?Y6KfcbEJIbZHu/gfRvXB38fo7lOiU8fAC3yfbQUR4ywAWm13lYzodF/Gr9Lr?=
+ =?us-ascii?Q?7V6CO2zfBhdPZTYs5IUQ5pecqy+PzPTwXwoXAKur8V5scGHwwwd/h959VKcC?=
+ =?us-ascii?Q?1AMVFNf3uso=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?RSKZrB0TvZhf6/b97p8e7mqZD2Y7m9Sx1Zba2n63GKkIJPUxCjvinatkuSLl?=
+ =?us-ascii?Q?Xg5WXinSu3AhgQM23feMMKWdFF0WRKys0DqvvTqYbIYf8rxEgxg9DjoGoCp8?=
+ =?us-ascii?Q?3cd+lEyjYckWi2IV+xBnzwNydSPq96IAaNM9plnF6McOwH0RRB/FGHc1QihV?=
+ =?us-ascii?Q?Q2lSJzgpo6KmeaGxceJ5C0oL2O1f3PqEwZoFNjarp+tq6UJDiyuQkp2AuYYM?=
+ =?us-ascii?Q?hUfKbK4HbPymlPP3GpdgQmUwe8OaLJhIg8oREDZo/22yYKIDvCjqUugHzWvl?=
+ =?us-ascii?Q?pKKMSAAfj9yq+sij3fkARnv1ESF8XihhDAkA4LIHBl0N0tTwb8mAMeCzdBb6?=
+ =?us-ascii?Q?v6zX8BQ5w/nkHgmAqdmGESCwFI/FdRv/Fqf1m/EZSqFWigdGcaAMWohuFdDB?=
+ =?us-ascii?Q?vudY6vsxExsT0ZeP3mwgCLB20LB5C9dVU4jwY76BRS5D6JVFHmA9ZeRbCEIF?=
+ =?us-ascii?Q?F2HmA6xeWfPnbjO6K18kcaxTdBSQMfjO9lkbnTzVYP72AEgD3MVy1LovVupB?=
+ =?us-ascii?Q?cIBoW7jn9cTVJuIqfxHHzlWT42rvkFY2sBOdu8xwH+4Wi5H7/3E3j8BcEALp?=
+ =?us-ascii?Q?wMCuiyWlT2fxhEj+D4b00ZON/tw/PliQ9sDiWqT8Evbq/oP/2elft8wUoKmT?=
+ =?us-ascii?Q?Bu1byH1K/g8Jr5ucqdtlKHHFtchZFxSipxY3mVeYyR3XdQ1SrQ2wXLDhfUN8?=
+ =?us-ascii?Q?4Ocvr2Uzc18Vs+/bqLp7GCJ9dl3JqYZGzHKqwR199d3c+RQUQ4RoslKVWwtO?=
+ =?us-ascii?Q?Bh88/ypqk7D2tDr5MyeObyC0MhZdz3vFBzZO+kBrssH39ijiNOoucu3zVJTV?=
+ =?us-ascii?Q?VVRWaeDbtxNC0PrwrSV6MyjBdxnJsDpuURpUVYhYiMtLpG+XKqHVak2b/dPt?=
+ =?us-ascii?Q?f/AeCE3jyxG7dyZy3W/7H1CdLukN5dgwJ/EVyIEf2GNvOBGRpcfeWvV+RFT3?=
+ =?us-ascii?Q?VfiCWAaMQuTal3hKNR1kaTDSsQk2D77nqUFkOBZc2lLVQnMilalvf90TTpaW?=
+ =?us-ascii?Q?yYJ/bn4MEq8b+dxNivpHAd7Q2lJe30ZpTEIOqpGRyhfmcE7IHVIfLkMuZkMU?=
+ =?us-ascii?Q?S0ok4X7vj1Hx7aKVaEKn335r2lyKBxOm43bsmrAXoR/SOMgPw/LJT4PXmo9f?=
+ =?us-ascii?Q?x/w7Tc5Gj2yK29JsI5IjY3Js91mzll4U9tl89Z9fRrcKAEmRhuAMGU9sEAvb?=
+ =?us-ascii?Q?3ESef1BP6IlxIh24uJMwKfs8fDihwUBf8l6rY4iAmKNrg9/GrhmscDjDezH7?=
+ =?us-ascii?Q?DbwcV8MhTJVjgiYgpPC8ie5TzsDBkBbDKt/4g5ohv9l9gYmVkZL1zooUkIse?=
+ =?us-ascii?Q?I8Y2EU87pfjoz89EwWlj3V105AE1sCJbizHCGzBzpeW9kAdZu9fiZ0AP/WgV?=
+ =?us-ascii?Q?xWR8LGVVCmOXfQ0qNW/+XA+O/v9W8p6wZtFNkEVNwLYkFVTkIRRSCOJstrqf?=
+ =?us-ascii?Q?U7gJPZEQ1DFKjQXZucpVa7hyNKMKMK8MA0eej5V2AP580ohKxqAADPnJOwke?=
+ =?us-ascii?Q?tw/ulobj8AeIuGTLQ8BE9wtzi6BU09toaNqni/gPynxEkNjWItPff64dfEb4?=
+ =?us-ascii?Q?eVJnVumm/MJNN7Nd3/la30NrGFplomrldcp2vI2U?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c01ffe1-c688-4b83-98ff-08ddbe7fb496
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2025 00:29:45.7965
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l0vbxgHiiMnrv1r4fccgJ+PvmzxHd9z7WNf9hDipzq2NblG8VoxhfrpwRLW7O+Rm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6530
 
-On Thu, 3 Jul 2025, Juergen Gross wrote:
-> When compiling the kernel with LLVM, the following warning was issued:
+On Tue, Jul 08, 2025 at 06:36:35AM +0000, Ankit Soni wrote:
+> > Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 > 
->   drivers/xen/gntdev.c:991: warning: stack frame size (1160) exceeds
->   limit (1024) in function 'gntdev_ioctl'
+> Tested patch series with multiple command line configurations for amd
+> iommu on zen5 machine with 12 NVMe devices.
 > 
-> The main reason is struct gntdev_copy_batch which is located on the
-> stack and has a size of nearly 1kb.
-> 
-> For performance reasons it shouldn't by just dynamically allocated
-> instead, so allocate a new instance when needed and instead of freeing
-> it put it into a list of free structs anchored in struct gntdev_priv.
-> 
-> Fixes: a4cdb556cae0 ("xen/gntdev: add ioctl for grant copy")
-> Reported-by: Abinash Singh <abinashsinghlalotra@gmail.com>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
->  drivers/xen/gntdev-common.h |  4 +++
->  drivers/xen/gntdev.c        | 71 ++++++++++++++++++++++++++-----------
->  2 files changed, 54 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/xen/gntdev-common.h b/drivers/xen/gntdev-common.h
-> index 9c286b2a1900..ac8ce3179ba2 100644
-> --- a/drivers/xen/gntdev-common.h
-> +++ b/drivers/xen/gntdev-common.h
-> @@ -26,6 +26,10 @@ struct gntdev_priv {
->  	/* lock protects maps and freeable_maps. */
->  	struct mutex lock;
->  
-> +	/* Free instances of struct gntdev_copy_batch. */
-> +	struct gntdev_copy_batch *batch;
-> +	struct mutex batch_lock;
-> +
->  #ifdef CONFIG_XEN_GRANT_DMA_ALLOC
->  	/* Device for which DMA memory is allocated. */
->  	struct device *dma_dev;
-> diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-> index 61faea1f0663..1f2160765618 100644
-> --- a/drivers/xen/gntdev.c
-> +++ b/drivers/xen/gntdev.c
-> @@ -56,6 +56,18 @@ MODULE_AUTHOR("Derek G. Murray <Derek.Murray@cl.cam.ac.uk>, "
->  	      "Gerd Hoffmann <kraxel@redhat.com>");
->  MODULE_DESCRIPTION("User-space granted page access driver");
->  
-> +#define GNTDEV_COPY_BATCH 16
-> +
-> +struct gntdev_copy_batch {
-> +	struct gnttab_copy ops[GNTDEV_COPY_BATCH];
-> +	struct page *pages[GNTDEV_COPY_BATCH];
-> +	s16 __user *status[GNTDEV_COPY_BATCH];
-> +	unsigned int nr_ops;
-> +	unsigned int nr_pages;
-> +	bool writeable;
-> +	struct gntdev_copy_batch *next;
-> +};
-> +
->  static unsigned int limit = 64*1024;
->  module_param(limit, uint, 0644);
->  MODULE_PARM_DESC(limit,
-> @@ -584,6 +596,8 @@ static int gntdev_open(struct inode *inode, struct file *flip)
->  	INIT_LIST_HEAD(&priv->maps);
->  	mutex_init(&priv->lock);
->  
-> +	mutex_init(&priv->batch_lock);
-> +
->  #ifdef CONFIG_XEN_GNTDEV_DMABUF
->  	priv->dmabuf_priv = gntdev_dmabuf_init(flip);
->  	if (IS_ERR(priv->dmabuf_priv)) {
-> @@ -608,6 +622,7 @@ static int gntdev_release(struct inode *inode, struct file *flip)
->  {
->  	struct gntdev_priv *priv = flip->private_data;
->  	struct gntdev_grant_map *map;
-> +	struct gntdev_copy_batch *batch;
->  
->  	pr_debug("priv %p\n", priv);
->  
-> @@ -620,6 +635,14 @@ static int gntdev_release(struct inode *inode, struct file *flip)
->  	}
->  	mutex_unlock(&priv->lock);
->  
-> +	mutex_lock(&priv->batch_lock);
-> +	while (priv->batch) {
-> +		batch = priv->batch;
-> +		priv->batch = batch->next;
-> +		kfree(batch);
-> +	}
-> +	mutex_unlock(&priv->batch_lock);
-> +
->  #ifdef CONFIG_XEN_GNTDEV_DMABUF
->  	gntdev_dmabuf_fini(priv->dmabuf_priv);
->  #endif
-> @@ -785,17 +808,6 @@ static long gntdev_ioctl_notify(struct gntdev_priv *priv, void __user *u)
->  	return rc;
->  }
->  
-> -#define GNTDEV_COPY_BATCH 16
-> -
-> -struct gntdev_copy_batch {
-> -	struct gnttab_copy ops[GNTDEV_COPY_BATCH];
-> -	struct page *pages[GNTDEV_COPY_BATCH];
-> -	s16 __user *status[GNTDEV_COPY_BATCH];
-> -	unsigned int nr_ops;
-> -	unsigned int nr_pages;
-> -	bool writeable;
-> -};
-> -
->  static int gntdev_get_page(struct gntdev_copy_batch *batch, void __user *virt,
->  				unsigned long *gfn)
->  {
-> @@ -953,36 +965,53 @@ static int gntdev_grant_copy_seg(struct gntdev_copy_batch *batch,
->  static long gntdev_ioctl_grant_copy(struct gntdev_priv *priv, void __user *u)
->  {
->  	struct ioctl_gntdev_grant_copy copy;
-> -	struct gntdev_copy_batch batch;
-> +	struct gntdev_copy_batch *batch;
->  	unsigned int i;
->  	int ret = 0;
->  
->  	if (copy_from_user(&copy, u, sizeof(copy)))
->  		return -EFAULT;
->  
-> -	batch.nr_ops = 0;
-> -	batch.nr_pages = 0;
-> +	mutex_lock(&priv->batch_lock);
-> +	if (!priv->batch) {
-> +		batch = kmalloc(sizeof(*batch), GFP_KERNEL);
-> +	} else {
-> +		batch = priv->batch;
-> +		priv->batch = batch->next;
-> +	}
-> +	mutex_unlock(&priv->batch_lock);
+> Suggested-by: Ankit Soni <Ankit.Soni@amd.com>
+> Tested-by: Ankit Soni <Ankit.Soni@amd.com>
 
-I am concerned about the potentially unbounded amount of memory that
-could be allocated this way.
+Thanks! That's great, just the aperture bug, means the kunits are
+doing their job :)
 
-The mutex is already a potentially very slow operation. Could we instead
-allocate a single batch, and if it is currently in use, use the mutex to
-wait until it becomes available?
-
-I am also OK with the current approach but I thought I would ask.
-
-
-
-
-> +	if (!batch)
-> +		return -ENOMEM;
-> +
-> +	batch->nr_ops = 0;
-> +	batch->nr_pages = 0;
->  
->  	for (i = 0; i < copy.count; i++) {
->  		struct gntdev_grant_copy_segment seg;
->  
->  		if (copy_from_user(&seg, &copy.segments[i], sizeof(seg))) {
->  			ret = -EFAULT;
-> +			gntdev_put_pages(batch);
->  			goto out;
->  		}
->  
-> -		ret = gntdev_grant_copy_seg(&batch, &seg, &copy.segments[i].status);
-> -		if (ret < 0)
-> +		ret = gntdev_grant_copy_seg(batch, &seg, &copy.segments[i].status);
-> +		if (ret < 0) {
-> +			gntdev_put_pages(batch);
->  			goto out;
-> +		}
->  
->  		cond_resched();
->  	}
-> -	if (batch.nr_ops)
-> -		ret = gntdev_copy(&batch);
-> -	return ret;
-> +	if (batch->nr_ops)
-> +		ret = gntdev_copy(batch);
-> +
-> + out:
-> +	mutex_lock(&priv->batch_lock);
-> +	batch->next = priv->batch;
-> +	priv->batch = batch;
-> +	mutex_unlock(&priv->batch_lock);
->  
-> -  out:
-> -	gntdev_put_pages(&batch);
-
-One change from before is that in case of no errors, gntdev_put_pages is
-not called anymore. Do we want that? Specifically, we are missing the
-call to unpin_user_pages_dirty_lock
-
-
->  	return ret;
->  }
->  
-> -- 
-> 2.43.0
-> 
+Jason
