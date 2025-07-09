@@ -1,92 +1,137 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D8417A2E1
-	for <llvm@lists.linux.dev>; Wed,  9 Jul 2025 01:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1AC374F1;
+	Wed,  9 Jul 2025 03:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752024272; cv=none; b=EUnd/dez3jC+6S8mMtN762YeGkfur4fVncJBqXNBf16ES9BErmvM99JaCFacbx8i8tacS5dDbcKdY81iFA/R0Ai4wnYlE3rvOFfadM2U/OI76lYMApyd0vr7PFFMpN0XdtZbC6byLG+1CIegPsqRoULfzes5TS1Zieg80VP0qAM=
+	t=1752030215; cv=none; b=es2HIVeDFAb2rmeMPAm4x9LIJqUv2yNfEkBy+n0c4CT+g6HYEA8AIXI/+YAW2WSZA1KNZWUlhi1tHpvSmfjyAifq/4vkIXXckYrWs3D0TxLkprshMolSaE1tADwTpzJfZfYe51uhgi56NLjnnLwaXVTaMBq5uOU2lizRcfT6PCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752024272; c=relaxed/simple;
-	bh=l9eZKe4aFMjo1W3brAfVlNVGnA8sDk2R+FE3hzIi/t0=;
+	s=arc-20240116; t=1752030215; c=relaxed/simple;
+	bh=aIRy4P+mVHLYqEJlA1GuRMWQ8jpHGslA2lnonIu+p34=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JWPRTPPu5xI43zqWTN73rDqE4fx7x3nPQDYpGEblYWIPTrAFuQGW6gDcoA0a/sCeL1B3FtmGIeUKlw2xXW7kNbr6TCfKA4yQLZmBGhMz6Xqksk14Q0a/Pu8yLbY69P/OqeeMu79HZr+He1P2SUBlEwIECNblRfgmSoShVXVyx34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=u2jiWhC2; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=XjBATKLvGOdV60fJyMvK9BH1VSaQDFQ/5XQxuz+3NGmZt6nriege5aM9+y86Ca0enMvZoKxtTMjzziG55asG3xNBguzFHwtErPMtMKlqEiV6O3gLEcXDs+VPm5OD5m9ZTbf0xYwEqhTrc9+kEXUmzeHTXoudK/AFQyPcIn3MFZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bOJNn0N2; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="u2jiWhC2"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1752024261; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=4MmB1BakiDawhjgLtgjN39SwS31oyDZQIXV3mIYwskQ=;
-	b=u2jiWhC2Ue+qfjlk/4g9bUUjaTL0msimxQ6Vz07VktKOOGj26fQNUCgUTqWkVuViQuIv7Ph5uzu8bpZDdjb2ziodzr8CgELC+8lwoq+ckRfAp2/FhuAm/Q4Alq9LnbT+i8QIotC86OZlbQ66rC+H03YE1V43nI/mIb0tFFoUH+Y=
-Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0WiV0sQf_1752024259 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 09 Jul 2025 09:24:20 +0800
-Date: Wed, 9 Jul 2025 09:24:19 +0800
-From: Feng Tang <feng.tang@linux.alibaba.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Lance Yang <lance.yang@linux.dev>, Petr Mladek <pmladek@suse.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] panic: Add __maybe_unused to sys_info_avail
-Message-ID: <aG3Ew-EB-T0hiOt2@U-2FWC9VHC-2323.local>
-References: <20250708-fix-clang-sys_info_avail-warning-v1-1-60d239eacd64@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bOJNn0N2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752030214; x=1783566214;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aIRy4P+mVHLYqEJlA1GuRMWQ8jpHGslA2lnonIu+p34=;
+  b=bOJNn0N2PhU5/U80crGorG4l/0GVbV1YVbYCXz4D9NHhR4wUQbpRpav1
+   En+4FKv1Uil5azyffCZJjz3fzc2JxyTqUCvKpLm2eoJL514iI5XsdEcpd
+   1K/yeyCzGeKhEpGfNmFuOBIpKo54SW+Jb5/mwVNAxYFfMyMqjPuXv47QO
+   QbLPDJSucY7LEZFZGY6QtQMuvWdc+6rhqgmsqh5A/kb1GyYrOOoZO9emN
+   q4pBR2KDqq+5tybuDftFPKk0vlfYpbNd9vH3GN/RFB//FIOgy/PiW/Bt2
+   POq/6EQnfJyNQAwhxGNzicWZ+CPsiWi38CklpHHGhC4IkALI9gU3115Uo
+   Q==;
+X-CSE-ConnectionGUID: /R8wUMAcS7+Bocv/tZOleg==
+X-CSE-MsgGUID: IR5rGUxsTXGqws1KVJK+0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="56887612"
+X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
+   d="scan'208";a="56887612"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 20:03:33 -0700
+X-CSE-ConnectionGUID: AF4LIbfdR2OXu4UASMSicA==
+X-CSE-MsgGUID: 3fGwvMpQTW+jbBZUovUC5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
+   d="scan'208";a="156384912"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 08 Jul 2025 20:03:30 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uZL5j-000319-2w;
+	Wed, 09 Jul 2025 03:03:27 +0000
+Date: Wed, 9 Jul 2025 11:03:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacek Kowalski <jacek@jacekk.info>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH iwl-next v2 1/5] e1000: drop unnecessary constant casts
+ to u16
+Message-ID: <202507091034.uiPhnpcc-lkp@intel.com>
+References: <e199da76-00d0-43d3-8f61-f433bc0352ad@jacekk.info>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250708-fix-clang-sys_info_avail-warning-v1-1-60d239eacd64@kernel.org>
+In-Reply-To: <e199da76-00d0-43d3-8f61-f433bc0352ad@jacekk.info>
 
-On Tue, Jul 08, 2025 at 08:37:57AM -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y):
-> 
->   lib/sys_info.c:52:19: error: variable 'sys_info_avail' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
->      52 | static const char sys_info_avail[] = "tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
->         |                   ^~~~~~~~~~~~~~
-> 
-> sys_info_avail is only used within sizeof(), meaning it is only used at
-> compile time, which clang warns about in case the developer intended to
-> use the variable elsewhere. This appears to be intentional in this case,
-> so mark sys_info_avail with __maybe_unused to silence the warning.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> This should be squashed into
-> panic-add-panic_sys_info-sysctl-to-take-human-readable-string-parameter.patch
-> so I did not bother with a fixes tag.
+Hi Jacek,
 
-Looks good to me. Thanks for the fix!
+kernel test robot noticed the following build warnings:
 
-- Feng
+[auto build test WARNING on tnguy-next-queue/dev-queue]
 
-> ---
->  lib/sys_info.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/lib/sys_info.c b/lib/sys_info.c
-> index 46d6f4f1ad2a..5bf503fd7ec1 100644
-> --- a/lib/sys_info.c
-> +++ b/lib/sys_info.c
-> @@ -49,7 +49,7 @@ unsigned long sys_info_parse_param(char *str)
->  
->  #ifdef CONFIG_SYSCTL
->  
-> -static const char sys_info_avail[] = "tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
-> +static const char sys_info_avail[] __maybe_unused = "tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
->  
->  int sysctl_sys_info_handler(const struct ctl_table *ro_table, int write,
->  					  void *buffer, size_t *lenp,
-> 
-> ---
-> base-commit: 10f2351db2799f80af91da7aee4c60fd042bfcf3
-> change-id: 20250708-fix-clang-sys_info_avail-warning-fa19cdd77b71
-> 
-> Best regards,
-> --  
-> Nathan Chancellor <nathan@kernel.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacek-Kowalski/e1000-drop-unnecessary-constant-casts-to-u16/20250708-161919
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+patch link:    https://lore.kernel.org/r/e199da76-00d0-43d3-8f61-f433bc0352ad%40jacekk.info
+patch subject: [PATCH iwl-next v2 1/5] e1000: drop unnecessary constant casts to u16
+config: riscv-randconfig-002-20250709 (https://download.01.org/0day-ci/archive/20250709/202507091034.uiPhnpcc-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250709/202507091034.uiPhnpcc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507091034.uiPhnpcc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/intel/e1000/e1000_main.c:316:16: warning: result of comparison of constant -1 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+     316 |                 if ((old_vid != E1000_MNG_VLAN_NONE) &&
+         |                      ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +316 drivers/net/ethernet/intel/e1000/e1000_main.c
+
+   297	
+   298	static void e1000_update_mng_vlan(struct e1000_adapter *adapter)
+   299	{
+   300		struct e1000_hw *hw = &adapter->hw;
+   301		struct net_device *netdev = adapter->netdev;
+   302		u16 vid = hw->mng_cookie.vlan_id;
+   303		u16 old_vid = adapter->mng_vlan_id;
+   304	
+   305		if (!e1000_vlan_used(adapter))
+   306			return;
+   307	
+   308		if (!test_bit(vid, adapter->active_vlans)) {
+   309			if (hw->mng_cookie.status &
+   310			    E1000_MNG_DHCP_COOKIE_STATUS_VLAN_SUPPORT) {
+   311				e1000_vlan_rx_add_vid(netdev, htons(ETH_P_8021Q), vid);
+   312				adapter->mng_vlan_id = vid;
+   313			} else {
+   314				adapter->mng_vlan_id = E1000_MNG_VLAN_NONE;
+   315			}
+ > 316			if ((old_vid != E1000_MNG_VLAN_NONE) &&
+   317			    (vid != old_vid) &&
+   318			    !test_bit(old_vid, adapter->active_vlans))
+   319				e1000_vlan_rx_kill_vid(netdev, htons(ETH_P_8021Q),
+   320						       old_vid);
+   321		} else {
+   322			adapter->mng_vlan_id = vid;
+   323		}
+   324	}
+   325	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
