@@ -1,49 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A47628C5D5
-	for <llvm@lists.linux.dev>; Thu, 10 Jul 2025 08:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F149286D55
+	for <llvm@lists.linux.dev>; Thu, 10 Jul 2025 08:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752135787; cv=none; b=FSHRh0NNtTnBXRTU47i87SQlRHr4XSahFFRFnqun9m6Zjl7mDlvC0Rl2FtSszYfpGO4QGWbQ1U6dG7XXicrSCT0KQTBXrC21D37w5MprWEHxP2M/GhhRE2GZOXRbNGKPKC0pllLHhKOZLYlmza4oCzzLDFUw6QF2SOg2BH9ufJI=
+	t=1752135851; cv=none; b=c5NEpt6WeqoUnW+g7JKilwdKQQMOY1sCsxN5WHEg6l3x5LCdssOCzy6mD3H/PxSA1R8N6vmO2adTuRm13vMl0bqiQzliHpSDwee0cmu489jpq1gAUZq2+WT1PA58ul/DPJQmRlWr+xYrbNWpglug2hs1Cn8LDHzFuiPM7ZpDP4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752135787; c=relaxed/simple;
-	bh=BrBI68KFgcdqMo9RpMgabneyAtFTdn7ZRHsyJTBtP9M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GgvYTI9XRuTz8MIQtIDoSrvABn3I8bw/0kA/xKC/g+RiaY01ZqziXd2D+B12viVEtOFm2s+I1doFE2E0Lu7kPtJ8ckkQk0dOl5SDy/qrKdyWBr+XNXHbW53jh5lSXBaHlYQSyFNPWryERbjCrnZMAceiX8oJmVdVaCbw+ZheirE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CE/7Afy+; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1752135851; c=relaxed/simple;
+	bh=vbUCxBltSJvT9sv+FCrhP8pAConw986gj+9WibSkHYw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mgj0KP3ep09kPKWnl6tXj93HsK+qvCzciIE03btAOzGC7eM9j6lqn1dwaNY6KOl7JBBnv32iy7jHwCYRNz5om5o0GeJc8+C/Rbc3vfiz2rXPO7nIuGUdJ/gGBDuf5axGJIIDL9S8yNjTf4Ds/R1QKDZbRzVq3Fm404bvVZJf88k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h9sv5aQh; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CE/7Afy+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9sv5aQh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752135786; x=1783671786;
+  t=1752135850; x=1783671850;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=BrBI68KFgcdqMo9RpMgabneyAtFTdn7ZRHsyJTBtP9M=;
-  b=CE/7Afy+tZDUhc1HbGpstn8PCSAl440zY/zz5JYC5RzVCeQ2qhDlLA99
-   rtiXjLBqBXeEBvbFRlm4H8p7QuQgG0l4MPuQAR48bG8VbcQNmPTO7UGip
-   1usihxob19+OmgQeUDfEfsy9l2gW1cBbzqeaS7gZnggPVwmDusk9xsflC
-   3M2cj94GS1hb75emZ6U0zSqhzLLXkGbQI18sLYi6BKQoJ5+8zQT/phIcs
-   92uEZULZnuzAQfiCkv9q6Jmdh27AbzNALTqroW40hKx+CWk6Z8S3silhh
-   qlDpbpHAUXC49fvD6ylavXylLn+q8k3Sv1LImrdEE/H0sscdRAn17Tuw4
-   w==;
-X-CSE-ConnectionGUID: wcZdq63rQpSwIA3nhbAI2A==
-X-CSE-MsgGUID: a+2tRyxhSjiiASBuoiCBKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="42036950"
+  bh=vbUCxBltSJvT9sv+FCrhP8pAConw986gj+9WibSkHYw=;
+  b=h9sv5aQhdIwzL6uoZJGR/r/1Oui6PJOx8zncSEjnfGGnshiuXYUmZ/yX
+   pl7uSEQ0yjS7PSRY/OveTZxLv7cTeJvuRwhacf12SwPuxxI4ak3F8W9qm
+   EmuRmrraI5H5G7sPTUnKYmu4mdNqMUaI96LwxfcxEAHkm4D6wrrYYpql/
+   j4swz3rQyf7XBlTj7lF55z/40X4VJIgKftxttoE9TMpNpK7PeJcum0wj+
+   ioRQWhH3RhEWMnVtSElzVaVN0hRyaNm/2qbE1WYY9sQHGrIP8p1TlYwdj
+   FUlReVBh8zBigABGI9iTI8Re/I4ZM0XY/MeKxC4287quWbpKizxhyriPY
+   g==;
+X-CSE-ConnectionGUID: iNhi7aTWRIykiDCsg493YQ==
+X-CSE-MsgGUID: FLUBHO9FRsqgIOOsVJ1ebQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="54338713"
 X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="42036950"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 01:23:05 -0700
-X-CSE-ConnectionGUID: tCWSlxrLRK2BF40910RQAw==
-X-CSE-MsgGUID: W4qf19BJRIywLHi2soXl1Q==
+   d="scan'208";a="54338713"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 01:24:10 -0700
+X-CSE-ConnectionGUID: Pe+EUWy4R4Kgs/rea9H2bA==
+X-CSE-MsgGUID: bmmXkvNARoa4Da6ifslW4w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="161671672"
+   d="scan'208";a="161568414"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 10 Jul 2025 01:23:02 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 10 Jul 2025 01:24:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id DE1951B7; Thu, 10 Jul 2025 11:23:00 +0300 (EEST)
+	id B23A61B7; Thu, 10 Jul 2025 11:24:05 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Leon Romanovsky <leon@kernel.org>,
 	linux-mm@kvack.org,
@@ -56,9 +56,9 @@ Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] locking/lockdep: Move pmd_to_hmm_pfn_flags() to the respective #ifdeffery
-Date: Thu, 10 Jul 2025 11:22:57 +0300
-Message-ID: <20250710082257.663850-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] mm/hmm: Move pmd_to_hmm_pfn_flags() to the respective #ifdeffery
+Date: Thu, 10 Jul 2025 11:23:53 +0300
+Message-ID: <20250710082403.664093-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -83,6 +83,9 @@ See also:
 Fixes: 9d3973d60f0a ("mm/hmm: cleanup the hmm_vma_handle_pmd stub")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
+
+v2: fixed Subject prefix
+
  mm/hmm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
