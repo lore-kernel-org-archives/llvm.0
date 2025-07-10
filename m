@@ -1,62 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A09A47;
-	Thu, 10 Jul 2025 00:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C5A846C;
+	Thu, 10 Jul 2025 01:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752106365; cv=none; b=aOzazSJZgk+uTRJ7jeSpGRWjE0QPGIKsGTNufVam3lL4T/vs8e7u0pus0vMYbq4b/3CHFpH0t6Ddh3wnXSKyBXbfY99zx4snrYgYtaoj9t73QJLgUVe4A5/nF9oXBc8u1q/v49/ugD45oFo1G1YvjpPdel+2PUIxVVcsCqAwScE=
+	t=1752112622; cv=none; b=TIeD5c50jmuF0uKXJ+D63N4yxfI//3XthxMTfEb+oMEqPR5pdOKTf7EONnMPIXLBh3uywfypaWPiDpDZbW9YO9DnSgU+re4gNwirWirDP5nR3xa2f4vtkxh7rfH3uUoNp2GTJ6pf6F5sDjMtDHADk1DTRe81eiuSZXQhVHemxlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752106365; c=relaxed/simple;
-	bh=lwH9hNdFsBeCfhJ7eyk6vPn0/eFcO9EjVXkBTJMbTP4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Y8yuemblIQxyK9KTB8OJbr3eINhaw4xORhNVW14pOong17IOD6U8/zqhK2OycaLRUVqbJs6/iDOFj6craLy0ewkGtp6DGDL5533CARy1T5XlAPFb/7n/5I9SQBr8Jqlo5YtuDTf9Ws95zV9nt1U1fXYnkc33lt9rO2P8IDGX21o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BxTXNG0A; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752112622; c=relaxed/simple;
+	bh=V5+0JeybGuGj3hNbNrffhOaKN4FNKIUQicNKhhV6M9M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=omIPSsBs5r7iLg7+sjAVJY9UtCGN9PHUC5gc9uws4aUuGSXXfoAJLKaBa0+DZBMjISWhj0ClhBa3rQ44AlTN0nVkGfO1mDLqwg84gQUwhgcGc70ICfVkH4V0nJYGRKLvvUzm5DX8zGe9+bIYfwvt1qNDMRnY+Hq6beGvjC/DtSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s36gQ67r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BxTXNG0A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752106364; x=1783642364;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lwH9hNdFsBeCfhJ7eyk6vPn0/eFcO9EjVXkBTJMbTP4=;
-  b=BxTXNG0AvoAUDkYoRmx/TVGYaJpRgBf8lgVkv9RA/DufiVOGu9REdKhZ
-   60rSAPjmm6vMXQIvwjfRBEmJi51NOuiDdrzgx5IMnHAD5cZJXHnAJW1Wq
-   3R/o2I3Pr7XgoY0eoqiFbmm/gF8mRD2hqKvYIy3o3j/NsVuX49GUlj4XZ
-   0Ooj6a1I2lb/LXgX67Uf4O2NHiZe6wpwA23eDTt3XxVBAdErZIvN1Y/fM
-   G4lsyMN63nk4nJtuEy3kL5hMQPMZtj2DV6Pqggq3Sez8suVwbyj31IZo2
-   b1x0sw4I6MNQsqXKCTnNWJ4FsdeUFGmpecw5QIQBXZHniR+V0c2l2/ArO
-   g==;
-X-CSE-ConnectionGUID: OHNEkohNTFKJ5XMKMmvEUQ==
-X-CSE-MsgGUID: Crg62cswSIm2Br9jlNz5KA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="42003889"
-X-IronPort-AV: E=Sophos;i="6.16,299,1744095600"; 
-   d="scan'208";a="42003889"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2025 17:12:43 -0700
-X-CSE-ConnectionGUID: oMfcHE1LQXmYpYtDt818Zw==
-X-CSE-MsgGUID: g/tDbQ1BQo66k7/OpQ7KrA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,299,1744095600"; 
-   d="scan'208";a="155680702"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 09 Jul 2025 17:12:41 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uZety-0004EX-2i;
-	Thu, 10 Jul 2025 00:12:38 +0000
-Date: Thu, 10 Jul 2025 08:12:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yishai Hadas <yishaih@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>,
-	Edward Srouji <edwards@nvidia.com>
-Subject: [leon-rdma:rdma-next 56/102]
- drivers/infiniband/hw/hns/hns_roce_mr.c:242:10: error: incompatible integer
- to pointer conversion returning 'int' from a function with result type
- 'struct ib_mr *'
-Message-ID: <202507100805.RMkoPCwe-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s36gQ67r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5A6C4CEEF;
+	Thu, 10 Jul 2025 01:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752112621;
+	bh=V5+0JeybGuGj3hNbNrffhOaKN4FNKIUQicNKhhV6M9M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=s36gQ67r+HzmWOakvqjLN2Bi+cxAqgCf9b1jm8CeVANKXagOyi4qRCxno997vOt7I
+	 npTW9Sqm4fAIHoISBPWcX7vjQIgal5suR6GEB+4EiYf2hwAgwibu53TlZdekzLZBEQ
+	 9ABBQhGaRUZwnPIix2Qtgh30B7PYqrpPimSO1KfrR0HfIEongwbMYk/1onz4hpDV26
+	 GuIsiO8b8UJiiZ9KWrmQ80LhTJRWiOT9thCwXfahXz+KypMzoUnp19aAp8cABbtMDx
+	 gSq60cIssEQ+9AYdxjTLFvnKp8xU42OaucaV/Fz2aUcFFHry0HoCkWdrBfNWJs8YVU
+	 kLmHPK8kS1RBw==
+Date: Wed, 9 Jul 2025 18:57:00 -0700
+From: Kees Cook <kees@kernel.org>
+To: Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linuxppc-dev@lists.ozlabs.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, kasan-dev@googlegroups.com,
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 08/14] powerpc: Handle KCOV __init vs inline mismatches
+Message-ID: <202507091856.C6510D809A@keescook>
+References: <20250523043251.it.550-kees@kernel.org>
+ <20250523043935.2009972-8-kees@kernel.org>
+ <87jz662ssp.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,83 +70,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87jz662ssp.fsf@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   168eb64efd0f6c7938890d4c9029142dcd13fd7c
-commit: e8063443db94464663beb65a92425bba22ae41e6 [56/102] IB: Extend UVERBS_METHOD_REG_MR to get DMAH
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250710/202507100805.RMkoPCwe-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250710/202507100805.RMkoPCwe-lkp@intel.com/reproduce)
+On Sat, May 24, 2025 at 04:13:02PM +0530, Ritesh Harjani wrote:
+> Kees Cook <kees@kernel.org> writes:
+> 
+> > When KCOV is enabled all functions get instrumented, unless
+> > the __no_sanitize_coverage attribute is used. To prepare for
+> > __no_sanitize_coverage being applied to __init functions, we have to
+> > handle differences in how GCC's inline optimizations get resolved. For
+> > s390 this requires forcing a couple functions to be inline with
+> > __always_inline.
+> >
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> > Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Nicholas Piggin <npiggin@gmail.com>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Cc: Naveen N Rao <naveen@kernel.org>
+> > Cc: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+> > Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: <linuxppc-dev@lists.ozlabs.org>
+> > ---
+> >  arch/powerpc/mm/book3s64/hash_utils.c    | 2 +-
+> >  arch/powerpc/mm/book3s64/radix_pgtable.c | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
+> > index 5158aefe4873..93f1e1eb5ea6 100644
+> > --- a/arch/powerpc/mm/book3s64/hash_utils.c
+> > +++ b/arch/powerpc/mm/book3s64/hash_utils.c
+> > @@ -409,7 +409,7 @@ static DEFINE_RAW_SPINLOCK(linear_map_kf_hash_lock);
+> >  
+> >  static phys_addr_t kfence_pool;
+> >  
+> > -static inline void hash_kfence_alloc_pool(void)
+> > +static __always_inline void hash_kfence_alloc_pool(void)
+> >  {
+> >  	if (!kfence_early_init_enabled())
+> >  		goto err;
+> > diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
+> > index 9f764bc42b8c..3238e9ed46b5 100644
+> > --- a/arch/powerpc/mm/book3s64/radix_pgtable.c
+> > +++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
+> > @@ -363,7 +363,7 @@ static int __meminit create_physical_mapping(unsigned long start,
+> >  }
+> >  
+> >  #ifdef CONFIG_KFENCE
+> > -static inline phys_addr_t alloc_kfence_pool(void)
+> > +static __always_inline phys_addr_t alloc_kfence_pool(void)
+> >  {
+> >  	phys_addr_t kfence_pool;
+> >  
+> 
+> I remember seeing a warning msg around .init.text section. Let me dig
+> that...
+> 
+> ... Here it is: https://lore.kernel.org/oe-kbuild-all/202504190552.mnFGs5sj-lkp@intel.com/
+> 
+> I am not sure why it only complains for hash_debug_pagealloc_alloc_slots().
+> I believe there should me more functions to mark with __init here.
+> Anyways, here is the patch of what I had in mind.. I am not a compiler expert,
+> so please let me know your thoughts on this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507100805.RMkoPCwe-lkp@intel.com/
+Yeah, this looks good. I'll snag your patch and drop mine. :)
 
-All errors (new ones prefixed by >>):
-
->> drivers/infiniband/hw/hns/hns_roce_mr.c:242:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct ib_mr *' [-Wint-conversion]
-     242 |                 return -EOPNOTSUPP;
-         |                        ^~~~~~~~~~~
-   1 error generated.
-
-
-vim +242 drivers/infiniband/hw/hns/hns_roce_mr.c
-
-   231	
-   232	struct ib_mr *hns_roce_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
-   233					   u64 virt_addr, int access_flags,
-   234					   struct ib_dmah *dmah,
-   235					   struct ib_udata *udata)
-   236	{
-   237		struct hns_roce_dev *hr_dev = to_hr_dev(pd->device);
-   238		struct hns_roce_mr *mr;
-   239		int ret;
-   240	
-   241		if (dmah)
- > 242			return -EOPNOTSUPP;
-   243	
-   244		mr = kzalloc(sizeof(*mr), GFP_KERNEL);
-   245		if (!mr) {
-   246			ret = -ENOMEM;
-   247			goto err_out;
-   248		}
-   249	
-   250		mr->iova = virt_addr;
-   251		mr->size = length;
-   252		mr->pd = to_hr_pd(pd)->pdn;
-   253		mr->access = access_flags;
-   254		mr->type = MR_TYPE_MR;
-   255	
-   256		ret = alloc_mr_key(hr_dev, mr);
-   257		if (ret)
-   258			goto err_alloc_mr;
-   259	
-   260		ret = alloc_mr_pbl(hr_dev, mr, udata, start);
-   261		if (ret)
-   262			goto err_alloc_key;
-   263	
-   264		ret = hns_roce_mr_enable(hr_dev, mr);
-   265		if (ret)
-   266			goto err_alloc_pbl;
-   267	
-   268		mr->ibmr.rkey = mr->ibmr.lkey = mr->key;
-   269	
-   270		return &mr->ibmr;
-   271	
-   272	err_alloc_pbl:
-   273		free_mr_pbl(hr_dev, mr);
-   274	err_alloc_key:
-   275		free_mr_key(hr_dev, mr);
-   276	err_alloc_mr:
-   277		kfree(mr);
-   278	err_out:
-   279		atomic64_inc(&hr_dev->dfx_cnt[HNS_ROCE_DFX_MR_REG_ERR_CNT]);
-   280	
-   281		return ERR_PTR(ret);
-   282	}
-   283	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
