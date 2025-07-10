@@ -1,102 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D75302CBE;
-	Thu, 10 Jul 2025 20:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970CB235BE2;
+	Thu, 10 Jul 2025 23:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752179136; cv=none; b=CMaB9KIxVfbZtvXczeMNnMLfE8KAuX6Q9wteQv3YfT6lpdDslj5cp1ntUymZiN87WIIuSYWhthYzbckP8Ocypl9vuuJuEM6XUzcy+9hQ3y2R2izbkBJByPrZ1pCm6kjnS3PqB/m6NRyHQU+MoMBGBvLRYHg/G+86btX58JGjBhA=
+	t=1752188774; cv=none; b=qxVxtzOl08BKraeZMjhCG0W9sgSAi23LpHA3U+LOqRE7SU1pjfOgSS0GughPtpeLMM2b2W/A4V40qkGKaYeeajQ4YCzkwP6H3MgLBIQa8Mm47HrNslLDcq2u89wV4bCOvumpXtuEM6UKuWI0oK1QY4ujev8Op6KksG7FEZ3b3cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752179136; c=relaxed/simple;
-	bh=P7zxnegUb85mA+6We1f5qwe9gxYERpxjlx3DtZfguCA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tzn784DNiBzSooEy7Mv4alCGmoLeMDrEGIUAE6LYrR102v5T8JNe2i431TT8lsijfPvr5Oi1AofzjDLycrgkNANTbkNsnf6lPVEGPT5lbaxcCM6GL6MKPWhWXoP6LDWh8GsGrLEDE/NXrDStfnYjKESPmoXu70HHkSPpdDQL1lI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAZHJaQE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752188774; c=relaxed/simple;
+	bh=gR+udLZjcv0sGahdUh5bn/KKz8nD0rgunrRyccSYz6Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X0gnocVWa8Ae5K6mKOaWU38lFT1DGoHAly0e6PKmhk8VzR0aGCwA5YeqrvB1ftibbJ5wHWr2mHE5d3GU+03CDxDuKzYyvTsp7Iu14/hrwdbLcHOWroJQmV09EBJ70+5cYynKzJCFJKzauAYIRcskpX6TnKBpnSel7O75brA/VUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mKfpA/rT; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAZHJaQE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3119DC4CEE3;
-	Thu, 10 Jul 2025 20:25:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752179135;
-	bh=P7zxnegUb85mA+6We1f5qwe9gxYERpxjlx3DtZfguCA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=MAZHJaQEl4RJFiWhzI3upsOYplIPkUFIXG+52Z7Vn9eyuEbdwP9bNFfV2xivWTVzr
-	 qVJZwBHTtqwWiJo7G+LSHGQLJYDnpzXx6tq0AgokWVmFdm9o25DeuDvREcmijzCUaG
-	 C800Ch4D0aC58qxnP60bRmCL+9euDH1tZn7dW8BgqVo6gilYGnHtfGrdSFzzZF+w3T
-	 YoCxACJHdqSjeJ4uyWsy38HG8b2yROMCk3Wk/44rOnd+DKeNgXf69VDuDv1Mw41Qm3
-	 ydBZbFVHDKmQQdtuod0CVXVRQZgfDBVceHKgIvfxtpGor0S/vS0C6oK8apDSkj/Q07
-	 W6KHh5QCtpOYA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 10 Jul 2025 13:25:26 -0700
-Subject: [PATCH] riscv: Only allow LTO with CMODEL_MEDANY
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mKfpA/rT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752188772; x=1783724772;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gR+udLZjcv0sGahdUh5bn/KKz8nD0rgunrRyccSYz6Y=;
+  b=mKfpA/rTh0ChbFi6Jwj4tuBFUjKUgpU1TIg/kqOXAe3+zOV5M+dkmiHT
+   YU13a3s7XVAtzomi+x+qpHroZ7ijPYrg55+7Fuf67Q0dJcPl+j6mvH2Eg
+   hPSAh5EzLI/AWp1bpcMrpSv+mEj9haPajgf2kpjufy0FCq194RXnU9rRW
+   hlb8SLgMFTzBzfzIS4o3h0Li9/45oFkHO+FgLhffV7ur67yfb03otSRne
+   w5Y98llOs6EcmhM5pCF3qQSjk34xzLEJWCUwAZ1KCL2w2w3Zi/Zw34AXh
+   gkRB+8Dn/OvFqRuiwgYQ2oK32txkGidjMJM3NpYvCE5gPQ8vSene4Z6Lz
+   w==;
+X-CSE-ConnectionGUID: cKbwUuJ9R9eTNdrgnlfUrg==
+X-CSE-MsgGUID: b4KIcchwSueaI+Dr+t6bQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="72064151"
+X-IronPort-AV: E=Sophos;i="6.16,301,1744095600"; 
+   d="scan'208";a="72064151"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 16:06:12 -0700
+X-CSE-ConnectionGUID: lZDEknDSRr+ZJ0FAc8ShhQ==
+X-CSE-MsgGUID: oZ/Pr7TGTemQzpGJpgMZAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,301,1744095600"; 
+   d="scan'208";a="156704259"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 10 Jul 2025 16:06:09 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ua0L7-0005ZH-28;
+	Thu, 10 Jul 2025 23:06:05 +0000
+Date: Fri, 11 Jul 2025 07:05:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	David Ahern <dsahern@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>
+Subject: Re: [PATCH v1 net-next] dev: Pass netdevice_tracker to
+ dev_get_by_flags_rcu().
+Message-ID: <202507110651.qJgShsUO-lkp@intel.com>
+References: <20250709190144.659194-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALUhcGgC/x3MTQqEMAxA4atI1gZaoYheRVz0J84EtEpSRBHvP
- mXgbb7Ne0BJmBTG5gGhk5X3XGHbBuLX5w8hp2roTOdMbw0KazxRSItwLLiWHWsbJZ9vXGzoU3J
- xCMFDXRxCC1///TS/7w8UBY/6bgAAAA==
-X-Change-ID: 20250710-riscv-restrict-lto-to-medany-f1b7dd5c9bba
-To: Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org, 
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2038; i=nathan@kernel.org;
- h=from:subject:message-id; bh=P7zxnegUb85mA+6We1f5qwe9gxYERpxjlx3DtZfguCA=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBkFinvFdQXcOyVYGBbwrDGPu3pHf842lsbawhssml7F1
- uX/70V1lLIwiHExyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgIm8Fmb4H5O99uTxLbNfv1xd
- 9LcnXNImkOfzJ2HrGDflFT2v88NduBkZmv9M5f5x74Jot33wwuXb8h55fn3NLnFWMjtOb1bCr3m
- JzAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250709190144.659194-1-kuniyu@google.com>
 
-When building with CONFIG_CMODEL_MEDLOW and CONFIG_LTO_CLANG, there is a
-series of errors due to some files being unconditionally compiled with
-'-mcmodel=medany', mismatching with the rest of the kernel built with
-'-mcmodel=medlow':
+Hi Kuniyuki,
 
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 899908), and 'i32 1' from vmlinux.a(net-traces.o at 1014628)
+kernel test robot noticed the following build errors:
 
-Only allow LTO to be performed when CONFIG_CMODEL_MEDANY is enabled to
-ensure there will be no code model mismatch errors. An alternative
-solution would be disabling LTO for the files with a different code
-model than the main kernel like some specialized areas of the kernel do
-but doing that for individual files is not as sustainable than
-forbidding the combination altogether.
+[auto build test ERROR on net-next/main]
 
-Cc: stable@vger.kernel.org
-Fixes: 021d23428bdb ("RISC-V: build: Allow LTO to be selected")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202506290255.KBVM83vZ-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/dev-Pass-netdevice_tracker-to-dev_get_by_flags_rcu/20250710-030425
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250709190144.659194-1-kuniyu%40google.com
+patch subject: [PATCH v1 net-next] dev: Pass netdevice_tracker to dev_get_by_flags_rcu().
+config: x86_64-randconfig-071-20250711 (https://download.01.org/0day-ci/archive/20250711/202507110651.qJgShsUO-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250711/202507110651.qJgShsUO-lkp@intel.com/reproduce)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 36061f4732b7..4eee737a050f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -68,7 +68,7 @@ config RISCV
- 	select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
- 	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
--	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
-+	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000 && CMODEL_MEDANY
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
- 	select ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS if 64BIT && MMU
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507110651.qJgShsUO-lkp@intel.com/
 
----
-base-commit: fda589c286040d9ba2d72a0eaf0a13945fc48026
-change-id: 20250710-riscv-restrict-lto-to-medany-f1b7dd5c9bba
+All errors (new ones prefixed by >>):
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+>> net/core/dev.c:1294:17: error: use of undeclared identifier 'dev_get_by_flags_rcu'; did you mean 'netdev_get_by_flags_rcu'?
+    1294 | EXPORT_IPV6_MOD(dev_get_by_flags_rcu);
+         |                 ^~~~~~~~~~~~~~~~~~~~
+         |                 netdev_get_by_flags_rcu
+   include/net/ip.h:693:42: note: expanded from macro 'EXPORT_IPV6_MOD'
+     693 | #define EXPORT_IPV6_MOD(X) EXPORT_SYMBOL(X)
+         |                                          ^
+   include/linux/export.h:89:44: note: expanded from macro 'EXPORT_SYMBOL'
+      89 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                                        ^
+   include/linux/export.h:86:54: note: expanded from macro '_EXPORT_SYMBOL'
+      86 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                                         ^
+   include/linux/export.h:76:16: note: expanded from macro '__EXPORT_SYMBOL'
+      76 |         extern typeof(sym) sym;                                 \
+         |                       ^
+   net/core/dev.c:1280:20: note: 'netdev_get_by_flags_rcu' declared here
+    1280 | struct net_device *netdev_get_by_flags_rcu(struct net *net, netdevice_tracker *tracker,
+         |                    ^
+   1 error generated.
 
+
+vim +1294 net/core/dev.c
+
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1268  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1269  /**
+700489140bac828 Kuniyuki Iwashima 2025-07-09  1270   * netdev_get_by_flags_rcu - find any device with given flags
+c4ea43c552ecc9c Randy Dunlap      2007-10-12  1271   * @net: the applicable net namespace
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1272   * @if_flags: IFF_* values
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1273   * @mask: bitmask of bits in if_flags to check
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1274   *
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1275   * Search for any interface with the given flags.
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1276   *
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1277   * Context: rcu_read_lock() must be held.
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1278   * Returns: NULL if a device is not found or a pointer to the device.
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1279   */
+700489140bac828 Kuniyuki Iwashima 2025-07-09  1280  struct net_device *netdev_get_by_flags_rcu(struct net *net, netdevice_tracker *tracker,
+700489140bac828 Kuniyuki Iwashima 2025-07-09  1281  					   unsigned short if_flags, unsigned short mask)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1282  {
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1283  	struct net_device *dev;
+6c555490e0ce885 WANG Cong         2014-09-11  1284  
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1285  	for_each_netdev_rcu(net, dev) {
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1286  		if (((READ_ONCE(dev->flags) ^ if_flags) & mask) == 0) {
+700489140bac828 Kuniyuki Iwashima 2025-07-09  1287  			netdev_hold(dev, tracker, GFP_ATOMIC);
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1288  			return dev;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1289  		}
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1290  	}
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1291  
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02  1292  	return NULL;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1293  }
+eb1ac9ff6c4a572 Kuniyuki Iwashima 2025-07-02 @1294  EXPORT_IPV6_MOD(dev_get_by_flags_rcu);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  1295  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
