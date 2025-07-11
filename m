@@ -1,68 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E81B625
-	for <llvm@lists.linux.dev>; Fri, 11 Jul 2025 05:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4967C1C84A1;
+	Fri, 11 Jul 2025 06:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752212100; cv=none; b=axqITkZS6R15JsSs9EkOW6phSC5/9q/LaTwTEDOt4YLqaxRBjrGbenZLgsWPdQwQQSQi0XYurQYztP5dgTXpVkFgqNEgAAcJ/I4MCcn+DcBwOszOiRPDGuIsN4LPOf1qRWqESYCorCg9mPEzi7q3WZwV0z5BibfSjjz4aoZgYqk=
+	t=1752216718; cv=none; b=UdUvgDEWKQeubZJ5ax6+7DtKasP9swgU6q4Bug7PAIb1MQ7U6W2WUqWyNpAzHqEZCBrR4vewc0P/PZrV6vOvgBVratmPW9c1091+SwT3a3p9rswVnZJ1Egd73vRy46esrrl+CADrrsfjGKft5qRLoVhTSdN7WsekCF9BeS3+ePc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752212100; c=relaxed/simple;
-	bh=Rkkzr1JNQrtqP/eOaaEnhMbpJc2uhM/lz5zcM3e8+QY=;
+	s=arc-20240116; t=1752216718; c=relaxed/simple;
+	bh=zFQ/bChWZuVEShHSqJvL2qUiqDh9aSarT39gvLI3hyY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fKGaBFPcmeNnDhs2d5krOq5Z0AXjCS3eJkiY1B8azUzUoMYqU4/9ubhM39HkVfG9kMp0CkY11yOUnNfYWsaMUo4sN0+Wt7Ng+inSiOYFPV1nKAjCnNcaE9efxXURrznz6kAocjH0s1+5kljQ5b9v42qORnICe0ktaX41n4ZwJYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lMVO5yoL; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=S3m7zb/uiAZCz/lb4cuTiclnY5uJrriiOTODNViP2cbSiXUzQjD9sUFdntn31FXLU0ae04G5IUsS38ORPA4BNu5t9VNTptbVR6aT7T7n3a1OqU/KqUPfQ8G8zPD5THpQ/Mw1p9gLStq7kGI8YM55JRarv6j7EoPHH16u+mTRV7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bG9qiKML; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lMVO5yoL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bG9qiKML"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752212099; x=1783748099;
+  t=1752216717; x=1783752717;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Rkkzr1JNQrtqP/eOaaEnhMbpJc2uhM/lz5zcM3e8+QY=;
-  b=lMVO5yoLf469lF1GLRsqSWEy+C0RFy1iqzBKHHOIpxWtxpQTvzqQ5DeS
-   tb4sy+DRr/sBKxwv8OvTThVtNPTvAMBaqvoIzsc/guEk1BcxDeLFgpPLs
-   aO9vGhZibWBZJo6XXTrh38cC4d7stYclm5wcEM+IBW/oyrVonA2rl0+by
-   qnYMa3nUf/kmOC4Vb+AtKZ35zL3SW9AKe5ERzLGCTsmXIQPHfOahL6BPd
-   eQkBnVTgXmMWtua8C4FwniZSAxMmkOLuLwSQY24s45WfrZVbmRy06T4C3
-   QHIF5RfjRBTxT0VpQHNDjNn0tcJtNFqoN7kMklurHSxFEBNBYoXwJ34GA
-   w==;
-X-CSE-ConnectionGUID: Dn1SRcKORvyk4b+O5EIH1w==
-X-CSE-MsgGUID: EDTJ49J4QkGU3NGLsN9ukA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="54359795"
+  bh=zFQ/bChWZuVEShHSqJvL2qUiqDh9aSarT39gvLI3hyY=;
+  b=bG9qiKMLxeh2RHkZpAOzGjwyrE7ggA3/+qcHAKcJLqIGFsVlKauhIsGr
+   oVRdc5M+MgBL4n3yJyjHr3ymsEJPye38mpv+JcYvUqveLL/oU7GhKIx4H
+   Yt0LZVfN+cBQOu+VG4whvqUUt2dTTPp+shLwZBAUUY6i6Sh7QV2N/eUyw
+   WuSKAULXkGmyDdBj1f9mOLge4z/NibD2Gdkyfes+zJYP7VFOJtg2V9LdM
+   7WwLRtcTr1JDcvioBUf7OW1Gq8qbRi8LduBGYee/cZFBHpQ2bE5H0vumM
+   iTWkZCJO26TTHXoszSt26zJbJtVn9HpEfjooX+KO5nxWY9ue+lxKH37qi
+   g==;
+X-CSE-ConnectionGUID: VLV6EExrR36wnrDowNEw7g==
+X-CSE-MsgGUID: PHs+25wURM+rKAEnbhy2YQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="65211878"
 X-IronPort-AV: E=Sophos;i="6.16,302,1744095600"; 
-   d="scan'208";a="54359795"
+   d="scan'208";a="65211878"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 22:34:58 -0700
-X-CSE-ConnectionGUID: xYIRpqcUTqaPjOqFVZetgw==
-X-CSE-MsgGUID: sksYXizAT/uZGtntblvMhw==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 23:51:57 -0700
+X-CSE-ConnectionGUID: iJJB9U6bSoShYz0pOzh9qg==
+X-CSE-MsgGUID: 9H7fL2O/TOiNrHrJ3Pt72w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,302,1744095600"; 
-   d="scan'208";a="155693108"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 22:34:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ua6PL-0000000EQT6-2CVV;
-	Fri, 11 Jul 2025 08:34:51 +0300
-Date: Fri, 11 Jul 2025 08:34:51 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Alistair Popple <apopple@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	=?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v2 1/1] mm/hmm: Move pmd_to_hmm_pfn_flags() to the
- respective #ifdeffery
-Message-ID: <aHCie4QH9fUznga1@smile.fi.intel.com>
-References: <20250710082403.664093-1-andriy.shevchenko@linux.intel.com>
- <wcaeymjmxwdm6gwlpwyklgq4hqzj4bheml3pe7ri7mc7jbjf7n@yjtixgld2ojm>
+   d="scan'208";a="155704261"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 10 Jul 2025 23:51:52 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ua7bp-000611-27;
+	Fri, 11 Jul 2025 06:51:49 +0000
+Date: Fri, 11 Jul 2025 14:51:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: admiyo@os.amperecomputing.com, Sudeep Holla <sudeep.holla@arm.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Robert Moore <robert.moore@intel.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Len Brown <lenb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jeremy Kerr <jk@codeconstruct.com.au>,
+	Matt Johnston <matt@codeconstruct.com.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Huisong Li <lihuisong@huawei.com>
+Subject: Re: [PATCH net-next v22 1/2] mailbox/pcc: support mailbox management
+ of the shared buffer
+Message-ID: <202507111440.1zQdhxpr-lkp@intel.com>
+References: <20250710191209.737167-2-admiyo@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,35 +75,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <wcaeymjmxwdm6gwlpwyklgq4hqzj4bheml3pe7ri7mc7jbjf7n@yjtixgld2ojm>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20250710191209.737167-2-admiyo@os.amperecomputing.com>
 
-On Fri, Jul 11, 2025 at 09:35:49AM +1000, Alistair Popple wrote:
-> Shouldn't the Fixes tag be for the commit that introduced the #ifdeffery in the
-> first place? Ie: 992de9a8b751 ("mm/hmm: allow to mirror vma of a file on a DAX
-> backed filesystem")
+Hi,
 
-Looks indeed better, I was lost in the maze of the history of mm/hmm.c changes.
+kernel test robot noticed the following build warnings:
 
-Fixes: 992de9a8b751 ("mm/hmm: allow to mirror vma of a file on a DAX backed filesystem")
+[auto build test WARNING on net-next/main]
 
-The problem is that backporting to that, if needed, requires a bit of adaptation.
-Nevertheless, I added it above, and we actually can have two Fixes tags to make
-backporting easier for those (we don't have LTS kernels older that the second
-commit anyway),
+url:    https://github.com/intel-lab-lkp/linux/commits/admiyo-os-amperecomputing-com/mailbox-pcc-support-mailbox-management-of-the-shared-buffer/20250711-031525
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250710191209.737167-2-admiyo%40os.amperecomputing.com
+patch subject: [PATCH net-next v22 1/2] mailbox/pcc: support mailbox management of the shared buffer
+config: i386-randconfig-014-20250711 (https://download.01.org/0day-ci/archive/20250711/202507111440.1zQdhxpr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250711/202507111440.1zQdhxpr-lkp@intel.com/reproduce)
 
-Andrew, can you add the above tag as well?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507111440.1zQdhxpr-lkp@intel.com/
 
-> As far as I can tell that is what would have introduced the warning. Other than
-> that it looks good though so feel free to add:
-> 
-> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+All warnings (new ones prefixed by >>):
 
-Thank you for the review!
+>> drivers/mailbox/pcc.c:496:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     496 |         if (pchan->chan.rx_alloc)
+         |             ^~~~~~~~~~~~~~~~~~~~
+   drivers/mailbox/pcc.c:498:6: note: uninitialized use occurs here
+     498 |         if (ret)
+         |             ^~~
+   drivers/mailbox/pcc.c:496:2: note: remove the 'if' if its condition is always true
+     496 |         if (pchan->chan.rx_alloc)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+     497 |                 ret = pcc_write_to_buffer(chan, data);
+   drivers/mailbox/pcc.c:492:9: note: initialize the variable 'ret' to silence this warning
+     492 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +496 drivers/mailbox/pcc.c
+
+   476	
+   477	
+   478	/**
+   479	 * pcc_send_data - Called from Mailbox Controller code. Used
+   480	 *		here only to ring the channel doorbell. The PCC client
+   481	 *		specific read/write is done in the client driver in
+   482	 *		order to maintain atomicity over PCC channel once
+   483	 *		OS has control over it. See above for flow of operations.
+   484	 * @chan: Pointer to Mailbox channel over which to send data.
+   485	 * @data: Client specific data written over channel. Used here
+   486	 *		only for debug after PCC transaction completes.
+   487	 *
+   488	 * Return: Err if something failed else 0 for success.
+   489	 */
+   490	static int pcc_send_data(struct mbox_chan *chan, void *data)
+   491	{
+   492		int ret;
+   493		struct pcc_chan_info *pchan = chan->con_priv;
+   494		struct acpi_pcct_ext_pcc_shared_memory __iomem *pcc_hdr;
+   495	
+ > 496		if (pchan->chan.rx_alloc)
+   497			ret = pcc_write_to_buffer(chan, data);
+   498		if (ret)
+   499			return ret;
+   500	
+   501		ret = pcc_chan_reg_read_modify_write(&pchan->cmd_update);
+   502		if (ret)
+   503			return ret;
+   504	
+   505		pcc_hdr = pchan->chan.shmem;
+   506		if (ioread32(&pcc_hdr->flags) & PCC_CMD_COMPLETION_NOTIFY)
+   507			pchan->chan.irq_ack = true;
+   508	
+   509		ret = pcc_chan_reg_read_modify_write(&pchan->db);
+   510	
+   511		if (!ret && pchan->plat_irq > 0)
+   512			pchan->chan_in_use = true;
+   513	
+   514		return ret;
+   515	}
+   516	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
