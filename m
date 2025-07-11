@@ -1,58 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B37279DB5;
-	Fri, 11 Jul 2025 14:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFF31A7AF7;
+	Fri, 11 Jul 2025 21:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752243040; cv=none; b=lsCUXS+kj5YiwnWNUvtYx+245tZpS1J7jDQxq/3Yuu/IirtFiadqY4A9HMX2pYY8Q3SOyHw3B67pBqdpCxp7vDlx2lCFDhNu/ZwOfPa+427aZt3lh62SCTt0Sn4X3RZMr0JlFUsf8zZvIPW7UWxyaMZdvlXUw0wM29myziqef2o=
+	t=1752270144; cv=none; b=OzBajkLE4QOOqf+qJpJk7n04smV92bya0Lxana+jnjPNx5TK2c13/sFTIWjrBPC5C1ngY7w2ir/fSLYTAms9o+zg+jNYkK8H3BMTT3V2LMQeb8huGMsM2PLHow0TbBiaLQeXgm+Lkqe6A7J/ljYTeRXGXn7+YunqUd1SFfu8TTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752243040; c=relaxed/simple;
-	bh=GIq7dWJG9937sIIi39h7wseHaiFFPGopZKeVqU8Imv8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CblMhlEyCbMBC3uIYxiZ6jieDYfUMJaTgxc4TwvOslVowJrJesZp4oVKN59yKXKnQohIDEMmys/Mz8NcfluPErwwq9kA8IqGqL5rapZsDJ7BkFcfIqH9C/8/MAsM72y+1l+e/i3yQBdwFuEMulBsWynQnD2GTw5FC3hR11ZOMfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ken/A3lN; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1752270144; c=relaxed/simple;
+	bh=FRJZTMDli33z+2VYtIwPjKtkzXPLWnmyhYXuUGVZ4Hc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N/3PxR8Y9rFtKVEFp0KI0flNwLHoTFRWDzk8dP7ZjPImBFsIAxsFdJPiwdQiT7RnIklg8mbdLPSqqP04TBq49wggnrvkKPj8RfqqwvuIYlUTq9c01ITQl0aluNauZ4dfybkVyxHjlzuGxTed/8ao3NenUt6IeKQgXwjWF3sYbwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZyhMw0iy; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ken/A3lN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZyhMw0iy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752243038; x=1783779038;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GIq7dWJG9937sIIi39h7wseHaiFFPGopZKeVqU8Imv8=;
-  b=Ken/A3lNlxMxYFrNkzDwPVHHgEaNy3vs3Kl7XfWQ2zgreMsQUCwGG+NH
-   CHXh4PNly2NEIUQ8V00JBMP2amyQy/Brgg9tE/j9mBOdX/CTdZiz3/OVc
-   j61YVjzEcMkbJOOfs12IryBOA3mwEWxVLPciKZDbElZE0o1Tz2vZO0JAt
-   a8Vh0h0jIq2YfdJQZ46B9fJ7TLhLLC8j/RkQUXrTsp8pqcU4FJz1jjbAd
-   5hRlL9IWYNphj7VZPFb2wLX3hTvLxnMG1dt/QqsbmuximC7VsSttfMNjx
-   +kgKTFEG6I7d6Fcpenxpkum/1XghQO8z97VGdVimDN6xsYJdxzguOwZu8
-   g==;
-X-CSE-ConnectionGUID: Umurz5BeSnC/tbkTS+MmWw==
-X-CSE-MsgGUID: NGWG3ETlRxaip+qGd6VhiA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="53760567"
-X-IronPort-AV: E=Sophos;i="6.16,303,1744095600"; 
-   d="scan'208";a="53760567"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2025 07:10:38 -0700
-X-CSE-ConnectionGUID: I1jZ79fDSdi7rwnw3XhQtA==
-X-CSE-MsgGUID: C6uFJGvCSHuAeB40j/lLkA==
+  t=1752270142; x=1783806142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FRJZTMDli33z+2VYtIwPjKtkzXPLWnmyhYXuUGVZ4Hc=;
+  b=ZyhMw0iyqoO6BKg1ZY98ZdWk3d0RLfZjuUlLMkLsS0pVZRz2wNJP6EXc
+   8GvT41UVlFz47z2rPQnmqNmCsCkA8qjqU6B8BqyBOKO0r22tGPYpsMLI9
+   9kr56yYE8+vjePOp+7K3c/59AyPp+rE63aZEK+SJkpuhffDLoOhS3os42
+   MJ/HqPalSuEPw36glQI6CfFteEi143St8E17K6qApiYU39LaVP8MQPM/F
+   GM1DT0rYNOiHj26c43UgD6U2jyD6B09dcO0IkTsRDRHR0QR5C4u+bDdKG
+   +gicy0qxSeVz497KmocSNZaaetiPjepaFFA64U5LOTeT6T704XV/ma7mY
+   A==;
+X-CSE-ConnectionGUID: xeUA4YpwReuRJbm9EE8yOw==
+X-CSE-MsgGUID: +phWrw11QPKbzea9+fngwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="58381143"
+X-IronPort-AV: E=Sophos;i="6.16,304,1744095600"; 
+   d="scan'208";a="58381143"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2025 14:42:21 -0700
+X-CSE-ConnectionGUID: DLeCp0zyQniDp8k0huMS+w==
+X-CSE-MsgGUID: D+NrjiQ5QSK5LShoTx+gxA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,303,1744095600"; 
-   d="scan'208";a="187358345"
+X-IronPort-AV: E=Sophos;i="6.16,304,1744095600"; 
+   d="scan'208";a="160759947"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 11 Jul 2025 07:10:37 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 11 Jul 2025 14:42:19 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uaESQ-0006Qt-2M;
-	Fri, 11 Jul 2025 14:10:34 +0000
-Date: Fri, 11 Jul 2025 22:10:05 +0800
+	id 1uaLVZ-0006oN-0u;
+	Fri, 11 Jul 2025 21:42:17 +0000
+Date: Sat, 12 Jul 2025 05:42:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:for-kernelci 2/4] drivers/rtc/rtc-efi.c:151:21: warning:
- unused variable 'rtc'
-Message-ID: <202507112141.qUTkwckc-lkp@intel.com>
+To: Nikunj A Dadhania <nikunj@amd.com>, seanjc@google.com,
+	pbonzini@redhat.com, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	thomas.lendacky@amd.com, santosh.shukla@amd.com, bp@alien8.de,
+	nikunj@amd.com, Michael Roth <michael.roth@amd.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] KVM: SEV: Enforce minimum GHCB version requirement for
+ SEV-SNP guests
+Message-ID: <202507120551.iDEiTBBN-lkp@intel.com>
+References: <20250711045408.95129-1-nikunj@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,73 +67,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250711045408.95129-1-nikunj@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   2b69cc853cfd5d483e48785735ee845d3bffde85
-commit: 1dcb6fdcd10617262528f945a11852fb4aee9197 [2/4] efi-rtc: Remove wakeup functionality
-config: arm-randconfig-004-20250711 (https://download.01.org/0day-ci/archive/20250711/202507112141.qUTkwckc-lkp@intel.com/config)
+Hi Nikunj,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on kvm/next linus/master v6.16-rc5 next-20250711]
+[cannot apply to kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/KVM-SEV-Enforce-minimum-GHCB-version-requirement-for-SEV-SNP-guests/20250711-125527
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20250711045408.95129-1-nikunj%40amd.com
+patch subject: [PATCH] KVM: SEV: Enforce minimum GHCB version requirement for SEV-SNP guests
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250712/202507120551.iDEiTBBN-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250711/202507112141.qUTkwckc-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250712/202507120551.iDEiTBBN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507112141.qUTkwckc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507120551.iDEiTBBN-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/rtc/rtc-efi.c:151:21: warning: unused variable 'rtc' [-Wunused-variable]
-     151 |         struct rtc_device *rtc = dev_get_drvdata(dev);
-         |                            ^~~
-   1 warning generated.
+>> arch/x86/kvm/svm/sev.c:426:6: error: use of undeclared identifier 'snp_active'
+     426 |         if (snp_active && data->ghcb_version && data->ghcb_version < 2)
+         |             ^
+   1 error generated.
 
 
-vim +/rtc +151 drivers/rtc/rtc-efi.c
+vim +/snp_active +426 arch/x86/kvm/svm/sev.c
 
-5e3fd9e5810f14 dann frazier       2009-03-31  146  
-501385f2a783c0 Geliang Tang       2015-11-07  147  static int efi_procfs(struct device *dev, struct seq_file *seq)
-501385f2a783c0 Geliang Tang       2015-11-07  148  {
-1dcb6fdcd10617 Ard Biesheuvel     2025-07-11  149  	efi_time_t        eft;
-501385f2a783c0 Geliang Tang       2015-11-07  150  	efi_time_cap_t    cap;
-101ca8d05913b7 Shanker Donthineni 2023-01-02 @151  	struct rtc_device *rtc = dev_get_drvdata(dev);
-501385f2a783c0 Geliang Tang       2015-11-07  152  
-501385f2a783c0 Geliang Tang       2015-11-07  153  	memset(&eft, 0, sizeof(eft));
-501385f2a783c0 Geliang Tang       2015-11-07  154  	memset(&cap, 0, sizeof(cap));
-501385f2a783c0 Geliang Tang       2015-11-07  155  
-501385f2a783c0 Geliang Tang       2015-11-07  156  	efi.get_time(&eft, &cap);
-501385f2a783c0 Geliang Tang       2015-11-07  157  
-501385f2a783c0 Geliang Tang       2015-11-07  158  	seq_printf(seq,
-501385f2a783c0 Geliang Tang       2015-11-07  159  		   "Time\t\t: %u:%u:%u.%09u\n"
-501385f2a783c0 Geliang Tang       2015-11-07  160  		   "Date\t\t: %u-%u-%u\n"
-501385f2a783c0 Geliang Tang       2015-11-07  161  		   "Daylight\t: %u\n",
-501385f2a783c0 Geliang Tang       2015-11-07  162  		   eft.hour, eft.minute, eft.second, eft.nanosecond,
-501385f2a783c0 Geliang Tang       2015-11-07  163  		   eft.year, eft.month, eft.day,
-501385f2a783c0 Geliang Tang       2015-11-07  164  		   eft.daylight);
-501385f2a783c0 Geliang Tang       2015-11-07  165  
-501385f2a783c0 Geliang Tang       2015-11-07  166  	if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
-501385f2a783c0 Geliang Tang       2015-11-07  167  		seq_puts(seq, "Timezone\t: unspecified\n");
-501385f2a783c0 Geliang Tang       2015-11-07  168  	else
-501385f2a783c0 Geliang Tang       2015-11-07  169  		/* XXX fixme: convert to string? */
-501385f2a783c0 Geliang Tang       2015-11-07  170  		seq_printf(seq, "Timezone\t: %u\n", eft.timezone);
-501385f2a783c0 Geliang Tang       2015-11-07  171  
-501385f2a783c0 Geliang Tang       2015-11-07  172  	/*
-501385f2a783c0 Geliang Tang       2015-11-07  173  	 * now prints the capabilities
-501385f2a783c0 Geliang Tang       2015-11-07  174  	 */
-501385f2a783c0 Geliang Tang       2015-11-07  175  	seq_printf(seq,
-501385f2a783c0 Geliang Tang       2015-11-07  176  		   "Resolution\t: %u\n"
-501385f2a783c0 Geliang Tang       2015-11-07  177  		   "Accuracy\t: %u\n"
-501385f2a783c0 Geliang Tang       2015-11-07  178  		   "SetstoZero\t: %u\n",
-501385f2a783c0 Geliang Tang       2015-11-07  179  		   cap.resolution, cap.accuracy, cap.sets_to_zero);
-501385f2a783c0 Geliang Tang       2015-11-07  180  
-501385f2a783c0 Geliang Tang       2015-11-07  181  	return 0;
-501385f2a783c0 Geliang Tang       2015-11-07  182  }
-501385f2a783c0 Geliang Tang       2015-11-07  183  
-
-:::::: The code at line 151 was first introduced by commit
-:::::: 101ca8d05913b7d1e6e8b9dd792193d4082fff86 rtc: efi: Enable SET/GET WAKEUP services as optional
-
-:::::: TO: Shanker Donthineni <sdonthineni@nvidia.com>
-:::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+   400	
+   401	static int __sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp,
+   402				    struct kvm_sev_init *data,
+   403				    unsigned long vm_type)
+   404	{
+   405		struct kvm_sev_info *sev = to_kvm_sev_info(kvm);
+   406		struct sev_platform_init_args init_args = {0};
+   407		bool es_active = vm_type != KVM_X86_SEV_VM;
+   408		u64 valid_vmsa_features = es_active ? sev_supported_vmsa_features : 0;
+   409		int ret;
+   410	
+   411		if (kvm->created_vcpus)
+   412			return -EINVAL;
+   413	
+   414		if (data->flags)
+   415			return -EINVAL;
+   416	
+   417		if (data->vmsa_features & ~valid_vmsa_features)
+   418			return -EINVAL;
+   419	
+   420		if (data->ghcb_version > GHCB_VERSION_MAX || (!es_active && data->ghcb_version))
+   421			return -EINVAL;
+   422	
+   423		if (unlikely(sev->active))
+   424			return -EINVAL;
+   425	
+ > 426		if (snp_active && data->ghcb_version && data->ghcb_version < 2)
+   427			return -EINVAL;
+   428	
+   429		sev->active = true;
+   430		sev->es_active = es_active;
+   431		sev->vmsa_features = data->vmsa_features;
+   432		sev->ghcb_version = data->ghcb_version;
+   433	
+   434		/*
+   435		 * Currently KVM supports the full range of mandatory features defined
+   436		 * by version 2 of the GHCB protocol, so default to that for SEV-ES
+   437		 * guests created via KVM_SEV_INIT2.
+   438		 */
+   439		if (sev->es_active && !sev->ghcb_version)
+   440			sev->ghcb_version = GHCB_VERSION_DEFAULT;
+   441	
+   442		if (vm_type == KVM_X86_SNP_VM)
+   443			sev->vmsa_features |= SVM_SEV_FEAT_SNP_ACTIVE;
+   444	
+   445		ret = sev_asid_new(sev);
+   446		if (ret)
+   447			goto e_no_asid;
+   448	
+   449		init_args.probe = false;
+   450		ret = sev_platform_init(&init_args);
+   451		if (ret)
+   452			goto e_free;
+   453	
+   454		/* This needs to happen after SEV/SNP firmware initialization. */
+   455		if (vm_type == KVM_X86_SNP_VM) {
+   456			ret = snp_guest_req_init(kvm);
+   457			if (ret)
+   458				goto e_free;
+   459		}
+   460	
+   461		INIT_LIST_HEAD(&sev->regions_list);
+   462		INIT_LIST_HEAD(&sev->mirror_vms);
+   463		sev->need_init = false;
+   464	
+   465		kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_SEV);
+   466	
+   467		return 0;
+   468	
+   469	e_free:
+   470		argp->error = init_args.error;
+   471		sev_asid_free(sev);
+   472		sev->asid = 0;
+   473	e_no_asid:
+   474		sev->vmsa_features = 0;
+   475		sev->es_active = false;
+   476		sev->active = false;
+   477		return ret;
+   478	}
+   479	
 
 -- 
 0-DAY CI Kernel Test Service
