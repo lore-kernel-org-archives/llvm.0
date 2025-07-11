@@ -1,69 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB3822318;
-	Fri, 11 Jul 2025 02:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E93E38FA6;
+	Fri, 11 Jul 2025 03:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752199651; cv=none; b=i53/7GtpmBVXto7Hj1cOQuR0Y3asr5p69ZY0D1VwAjX2gDaHBSDgkIe+Oz8dF4wjImNVJeKWGErqWh83WNVZT4dideubxemEBpTgPpeVVm7Y0H5yTTxPMpFEcQi8O1sQvk/2E+Gtqo5crBElBjj+kPlDMy3R8ZMcgUB8LsDbHkg=
+	t=1752203494; cv=none; b=f9UX66dSxZn0yWBQvF6WQsrfXW9JZ/do83EVivJHxjcGw9M9Jua70plMV4BLFIsJLthCBUY87MN9JTTqcxhLtxf+/f8bH3pOWaKTwUzRhbBjKLSe+GUQzcIdGqwu8DVYmyiTU1dw8SyaFQxXv6pVJ1lK65OfuZt+fgtHMIwEEXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752199651; c=relaxed/simple;
-	bh=PvjSKPyD0gXbh2bB6YpiAqsa881j4RTXn+Ts3T8ihPM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHouMfSy8NOISWYE1paWwAFIXxHW/+IHS50MVrYwNx57MqGjRwmTtAfYedb+OlFxHjijQ8bQqgx+DKk+Jkt4Bubq4HVzDtWQCKvTPB/KRLZCSEfrJiYSeJ+8snzQNwBhvaQwjanNoPef90716SEShMsu/GDuFXTk74k2zwfLvNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0o1sq+f; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1752203494; c=relaxed/simple;
+	bh=DsUt/Tzl2vZOLy2+tiFO+2617t5xbwdza0Q9XlJc9Qs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fWBXLbbsmIJtc6cmiFlcZB1sWXDAlAiXKwimfjEm4i7niVO/UWC87ol7USYywPvRbDkFpzl8anT0kJxLAbaQ+3hjv/Bu0XZfWNVLBzafzNztl1HEXGWMJsnOy5ucY2I/nSSjZnY+JZHIsbATaHcImLXSkRuBwArqqpvol7ighew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BdJ1QNco; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0o1sq+f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BdJ1QNco"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752199649; x=1783735649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PvjSKPyD0gXbh2bB6YpiAqsa881j4RTXn+Ts3T8ihPM=;
-  b=b0o1sq+fiQ9oUkAwWKvaPFjoh6Jgx9TcAEHn0kT3jiUI0W4le81yjwCs
-   WBUSZR5VqUVu2a14xyQN/JQbwBRrutUBPGFRzwVoVpi83Dv0pwqWXUhgK
-   wmsjmlR1DLsmxJHqT4QrYfvjM5gmucyQ0LMk/5qilbqmHBMrVNZbtxGvT
-   jTqkFQWnGw97I0kP+szuYdmP7IdPuzD9XcdkJ+M2VSjyyJdvNQ8CnDrr2
-   cJmJ1aoKC9jBaIfqiXnJtoyhdThpsBzfjKHOIamyF8fPKzZJHDDnd5sDb
-   6BZMfAV0u/Cw7pX4Nm5OkwfcuPFLUitxXymm395cFfwA3kH64/RHkp4un
+  t=1752203492; x=1783739492;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DsUt/Tzl2vZOLy2+tiFO+2617t5xbwdza0Q9XlJc9Qs=;
+  b=BdJ1QNcoKU6YxoCFozJayDr2wOKCakvy6/NFWrwvXDGEyo0+dDFJLas6
+   5oI799FmJJ+WRbdqzqaUKJGH7ei2frsEYiMsMUwxrYFk8Ij+ZMxLoU6Ye
+   Wvpse8p8A/mvRZelsfnVxD1KzMJqt2AxnhCVaoTe30MyyNd2E/s87hvzc
+   VwCnb+7Mqc41Yw7LETCzrulLUu+UD5UjknMx7VoiNSIlNzBn5jtZ2xIXr
+   oKK47Kwl4Nr74zj6qWhH/rx5VcKaqg3uLgvUoo6sOlcQy8CoEqtisSR08
+   fV+HD345OGJ110pV7pgyDu4+olBwUwku4oHJ8lecLlZlf2f1jUJbYZX3p
    g==;
-X-CSE-ConnectionGUID: DtjpCSC/QtizGJ9dxBEPjw==
-X-CSE-MsgGUID: 1q5Lzq3DS0+AE9w3j0hEiA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="77040276"
+X-CSE-ConnectionGUID: u8dNJFHlSB2BZxpGDNHWQQ==
+X-CSE-MsgGUID: opnKR8ixQrOEOzGlNGp8vg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="54624554"
 X-IronPort-AV: E=Sophos;i="6.16,302,1744095600"; 
-   d="scan'208";a="77040276"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 19:07:29 -0700
-X-CSE-ConnectionGUID: ezwbokgsSPCaJxheSsnC4A==
-X-CSE-MsgGUID: 56D/N/8bSouThmQuhjJlFg==
+   d="scan'208";a="54624554"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 20:11:32 -0700
+X-CSE-ConnectionGUID: HBZXQLSUQ2KtbX5VuxZSrA==
+X-CSE-MsgGUID: 71g5WJkFSsGSlLh2AjF9UA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,302,1744095600"; 
-   d="scan'208";a="160583219"
+   d="scan'208";a="160559151"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 10 Jul 2025 19:07:24 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 10 Jul 2025 20:11:30 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ua3AY-0005jj-1k;
-	Fri, 11 Jul 2025 02:07:22 +0000
-Date: Fri, 11 Jul 2025 10:06:59 +0800
+	id 1ua4Aa-0005nP-1L;
+	Fri, 11 Jul 2025 03:11:28 +0000
+Date: Fri, 11 Jul 2025 11:10:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Saeed Mahameed <saeed@kernel.org>,
-	Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-rdma@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: Re: [PATCH net-next V2 2/3] net/mlx5e: Add device PCIe congestion
- ethtool stats
-Message-ID: <202507110932.iOkSE74e-lkp@intel.com>
-References: <1752130292-22249-3-git-send-email-tariqt@nvidia.com>
+To: Brian Masney <bmasney@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [masneyb:clk-remove-round-rate 174/204]
+ drivers/net/ethernet/cadence/macb_main.c:4856:9: error: member reference
+ type 'struct clk_rate_request' is not a pointer; did you mean to use '.'?
+Message-ID: <202507111117.YXMNEEQe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,30 +62,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1752130292-22249-3-git-send-email-tariqt@nvidia.com>
 
-Hi Tariq,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on c65d34296b2252897e37835d6007bbd01b255742]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/net-mlx5e-Create-destroy-PCIe-Congestion-Event-object/20250710-145940
-base:   c65d34296b2252897e37835d6007bbd01b255742
-patch link:    https://lore.kernel.org/r/1752130292-22249-3-git-send-email-tariqt%40nvidia.com
-patch subject: [PATCH net-next V2 2/3] net/mlx5e: Add device PCIe congestion ethtool stats
-config: powerpc-randconfig-003-20250711 (https://download.01.org/0day-ci/archive/20250711/202507110932.iOkSE74e-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250711/202507110932.iOkSE74e-lkp@intel.com/reproduce)
+tree:   https://github.com/masneyb/linux clk-remove-round-rate
+head:   8851da05a900556018f975b6ca1691e13d24fc50
+commit: eea9100f42b58ca73af101e3b582f49be56eb679 [174/204] net: cadence: macb: convert from round_rate() to determine_rate()
+config: x86_64-buildonly-randconfig-002-20250711 (https://download.01.org/0day-ci/archive/20250711/202507111117.YXMNEEQe-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250711/202507111117.YXMNEEQe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507110932.iOkSE74e-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507111117.YXMNEEQe-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "mlx5e_pcie_cong_event_supported" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
+>> drivers/net/ethernet/cadence/macb_main.c:4856:9: error: member reference type 'struct clk_rate_request' is not a pointer; did you mean to use '.'?
+    4856 |         if (req->rate != 125000000)
+         |             ~~~^~
+         |                .
+   1 error generated.
+
+
+vim +4856 drivers/net/ethernet/cadence/macb_main.c
+
+  4844	
+  4845	static int fu540_macb_tx_set_rate(struct clk_hw *hw, unsigned long rate,
+  4846					  unsigned long parent_rate)
+  4847	{
+  4848		struct clk_rate_request req;
+  4849		int ret;
+  4850	
+  4851		clk_hw_init_rate_request(hw, &req, rate);
+  4852		ret = fu540_macb_tx_determine_rate(hw, &req);
+  4853		if (ret != 0)
+  4854			return ret;
+  4855	
+> 4856		if (req->rate != 125000000)
+  4857			iowrite32(1, mgmt->reg);
+  4858		else
+  4859			iowrite32(0, mgmt->reg);
+  4860		mgmt->rate = rate;
+  4861	
+  4862		return 0;
+  4863	}
+  4864	
 
 -- 
 0-DAY CI Kernel Test Service
