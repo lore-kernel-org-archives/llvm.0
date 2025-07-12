@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB08619CD01;
-	Sat, 12 Jul 2025 19:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC15A22652D;
+	Sat, 12 Jul 2025 20:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752348620; cv=none; b=dFlOJ+8+cIWARr52frGrsmER29ulgLi4Z7Rv330nPb0mrqoyxiKKnZTXikdIbwuvoE42mOezXHN0btXCPoe05HLNjFKxE0lRlwd5ZMEoE4jiMpt0yElul9uMiuM+wrHiY6OB23g1hnQ0UULnayXet68lZxkQaeNr5nTLVgTknkk=
+	t=1752353548; cv=none; b=PX7DGH/sYx1eC0Q3DoDPZg8Oh7QAWpznQBWZF+PyDVMr/S7VoporXnvpNXq5VxIkKhY1jWVVvp1VTNEe4GlBJRpM5dIjgpGIb/6Sq8wc/YOpsWQCwzVzOhY9de7kIrT8+xWbVSzD936LeoUXsAvCRGPfnO6oSrnv7ZwRUn7XZPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752348620; c=relaxed/simple;
-	bh=BkD92R+b30Cd5TH19Otd+wkPVcL51o3v1DskctkW3tw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=j31TPbxKNcXA/zH7FucpkHMYawj+epkBbuiDh4IkpUom/VFQTE9ttstMxTa8TwWGsDTH1XRQ2zMJ+/qPKmHEp0MKde/7WtF+TnepuY08HwpQaWVCJ9EFvzzP+Gq0E2sctt9kJVV1eRrn6FYG6l2q0t5Vf0yQWwE4CnxBEHmhhdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DSxiFHAq; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1752353548; c=relaxed/simple;
+	bh=el3QB5FzgTGqMoLQ2O4Y0t2EM+WD4U0n+5F7KR57zzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jI8hwkM3NlEtKI9tyBTdUMuqc6maTimEzG70KLjRiSHh1TNDjLkaYw1N60lCq0FfDEk8NkfK8Zn4byJAYXIR72xs01ALeRvuDZX0E0SbvufrzOTS7Mp6ExzsxMEI+jPnPbK3RdMHl/TFbJbO6kzK15Ov3byOMxTVeJ48yGgPoRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EVeS4Pdo; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DSxiFHAq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EVeS4Pdo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752348619; x=1783884619;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BkD92R+b30Cd5TH19Otd+wkPVcL51o3v1DskctkW3tw=;
-  b=DSxiFHAqzFXDRcfZvkDxEeR1qYfYgnKuych74hOJTT1K9wtOdrLbyQFj
-   l5LaglV2BJs36ekcMOhtwZ0vePmG5fnlN2XSJyUWucsA6vHjkDUN1RbLw
-   E2oHEt4myWC+G+pmRH5kYAGobQAhi0PuuKgEnivm7e3ypTb9obmDCMQmn
-   eKf2NXIsfWFFjznCufJHjB/rkMtB2IW11cPf+oEGZ0zvrDudDgBwbYKPI
-   tqQyOhsKMopXwXRYstFSInJHwzMEynLuUf2BW1guweE4p2eU6LLUTAFyr
-   TmBigvZ3+iiadWZcUohwKPoNHHUhs+DTtcyBXOspJpFsTCScaFq/YcrTX
-   g==;
-X-CSE-ConnectionGUID: 98AHc3npRk+EzdltPsIAMA==
-X-CSE-MsgGUID: GdpP9uKbQFy3C2Sp7yJx4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="54572513"
-X-IronPort-AV: E=Sophos;i="6.16,306,1744095600"; 
-   d="scan'208";a="54572513"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 12:30:18 -0700
-X-CSE-ConnectionGUID: igAndG0vSlaY4gjrZTIw9Q==
-X-CSE-MsgGUID: HY/Nf36BSt6s5k2JiBgM/w==
+  t=1752353545; x=1783889545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=el3QB5FzgTGqMoLQ2O4Y0t2EM+WD4U0n+5F7KR57zzo=;
+  b=EVeS4PdoNOHXYVfFoL+fIwMThH9lf9wOK+DGmdhNO6umDW+lDUfCXwxg
+   gjFkhpvN/GJpLqUpH4uNXCcu2lq5IMiNlNzupIjmWeB0AdAv+G3oaMIn+
+   uF3CeF2WXGZI+OBsov1yXSeF7J6Nw2g2jeWz+KvkMygY3espKsM1k8sdl
+   H2U6N935bJ+BhPgpz8J3xKX6dgw1iu/GWw0OnkgcFTMp0nr6n5Vjmfypw
+   ktFnWA8zqaG3HQGlFtlrcKNqMwsCEqKnORnF+qoL9vGOXz7ukf6xUZLSv
+   VJQadP7QTmZljcV8k4gGHbsYSclg2+1BqwCHyvzDECxaZCX0jRQ9xxygb
+   Q==;
+X-CSE-ConnectionGUID: iqjdfkpVTl2elkkhBZthKA==
+X-CSE-MsgGUID: gSGW+TA0S4iMhjLZrbA0Ww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="77146229"
+X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
+   d="scan'208";a="77146229"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 13:52:25 -0700
+X-CSE-ConnectionGUID: vfJ3frt3QBKZa7aN3nZkDQ==
+X-CSE-MsgGUID: /IL16pcTTPe0heuf+KGUqQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,306,1744095600"; 
-   d="scan'208";a="160633219"
+X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
+   d="scan'208";a="156425241"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Jul 2025 12:30:16 -0700
+  by orviesa009.jf.intel.com with ESMTP; 12 Jul 2025 13:52:23 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uafvK-0007e0-0C;
-	Sat, 12 Jul 2025 19:30:14 +0000
-Date: Sun, 13 Jul 2025 03:29:42 +0800
+	id 1uahCm-0007gB-18;
+	Sat, 12 Jul 2025 20:52:20 +0000
+Date: Sun, 13 Jul 2025 04:51:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sascha Bischoff <Sascha.Bischoff@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Timothy Hayes <timothy.hayes@arm.com>
-Subject: [linux-next:master 7731/9053]
- arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: warning: variable 'len' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202507130334.ddFcXn4N-lkp@intel.com>
+To: Ibrahim Jirdeh <ibrahimjirdeh@meta.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jack@suse.cz,
+	amir73il@gmail.com, josef@toxicpanda.com, lesha@meta.com,
+	linux-fsdevel@vger.kernel.org, sargun@meta.com
+Subject: Re: [PATCH v4 3/3] fanotify: introduce event response identifier
+Message-ID: <202507130418.Prp26RtQ-lkp@intel.com>
+References: <20250711183101.4074140-4-ibrahimjirdeh@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,70 +64,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250711183101.4074140-4-ibrahimjirdeh@meta.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   a62b7a37e6fcf4a675b1548e7c168b96ec836442
-commit: c017e49ed1381001ba7a6521daae8f968b11cf09 [7731/9053] KVM: arm64: gic-v5: Support GICv3 compat
-config: arm64-randconfig-004-20250713 (https://download.01.org/0day-ci/archive/20250713/202507130334.ddFcXn4N-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507130334.ddFcXn4N-lkp@intel.com/reproduce)
+Hi Ibrahim,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jack-fs/fsnotify]
+[also build test ERROR on linus/master v6.16-rc5 next-20250711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ibrahim-Jirdeh/fanotify-add-support-for-a-variable-length-permission-event/20250712-023425
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+patch link:    https://lore.kernel.org/r/20250711183101.4074140-4-ibrahimjirdeh%40meta.com
+patch subject: [PATCH v4 3/3] fanotify: introduce event response identifier
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250713/202507130418.Prp26RtQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507130418.Prp26RtQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507130334.ddFcXn4N-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507130418.Prp26RtQ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: warning: variable 'len' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1094 |                 BUG_ON(1);
-         |                 ^~~~~~~~~
-   include/asm-generic/bug.h:71:36: note: expanded from macro 'BUG_ON'
-      71 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-         |                                    ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:47:23: note: expanded from macro 'unlikely'
-      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/vgic/vgic-mmio.c:1102:12: note: uninitialized use occurs here
-    1102 |                                        len, &io_device->dev);
-         |                                        ^~~
-   arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: note: remove the 'if' if its condition is always true
-    1094 |                 BUG_ON(1);
-         |                 ^
-   include/asm-generic/bug.h:71:32: note: expanded from macro 'BUG_ON'
-      71 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-         |                                ^
-   arch/arm64/kvm/vgic/vgic-mmio.c:1084:18: note: initialize the variable 'len' to silence this warning
-    1084 |         unsigned int len;
-         |                         ^
-         |                          = 0
-   1 warning generated.
+   In file included from fs/notify/fdinfo.c:17:
+>> fs/notify/fanotify/fanotify.h:566:6: error: no member named 'fanotify_data' in 'struct fsnotify_group'
+     566 |         if (FAN_GROUP_FLAG(group, FAN_REPORT_RESPONSE_ID))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fanotify.h:9:12: note: expanded from macro 'FAN_GROUP_FLAG'
+       9 |         ((group)->fanotify_data.flags & (flag))
+         |          ~~~~~~~  ^
+   1 error generated.
 
 
-vim +1094 arch/arm64/kvm/vgic/vgic-mmio.c
+vim +566 fs/notify/fanotify/fanotify.h
 
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1079  
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1080  int vgic_register_dist_iodev(struct kvm *kvm, gpa_t dist_base_address,
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1081  			     enum vgic_type type)
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1082  {
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1083  	struct vgic_io_device *io_device = &kvm->arch.vgic.dist_iodev;
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1084  	unsigned int len;
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1085  
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1086  	switch (type) {
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1087  	case VGIC_V2:
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1088  		len = vgic_v2_init_dist_iodev(io_device);
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1089  		break;
-ed9b8cefa91695 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2015-12-01  1090  	case VGIC_V3:
-ed9b8cefa91695 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2015-12-01  1091  		len = vgic_v3_init_dist_iodev(io_device);
-ed9b8cefa91695 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2015-12-01  1092  		break;
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26  1093  	default:
-fb848db39661a1 virt/kvm/arm/vgic/vgic-mmio.c Andre Przywara 2016-04-26 @1094  		BUG_ON(1);
-
-:::::: The code at line 1094 was first introduced by commit
-:::::: fb848db39661a1243f6ae939ef7e9251a765b972 KVM: arm/arm64: vgic-new: Add GICv2 MMIO handling framework
-
-:::::: TO: Andre Przywara <andre.przywara@arm.com>
-:::::: CC: Christoffer Dall <christoffer.dall@linaro.org>
+   562	
+   563	static inline bool fanotify_is_valid_response_id(struct fsnotify_group *group,
+   564							 int id)
+   565	{
+ > 566		if (FAN_GROUP_FLAG(group, FAN_REPORT_RESPONSE_ID))
 
 -- 
 0-DAY CI Kernel Test Service
