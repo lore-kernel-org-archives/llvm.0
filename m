@@ -1,190 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFF31A7AF7;
-	Fri, 11 Jul 2025 21:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E8317F7
+	for <llvm@lists.linux.dev>; Sat, 12 Jul 2025 01:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752270144; cv=none; b=OzBajkLE4QOOqf+qJpJk7n04smV92bya0Lxana+jnjPNx5TK2c13/sFTIWjrBPC5C1ngY7w2ir/fSLYTAms9o+zg+jNYkK8H3BMTT3V2LMQeb8huGMsM2PLHow0TbBiaLQeXgm+Lkqe6A7J/ljYTeRXGXn7+YunqUd1SFfu8TTA=
+	t=1752283391; cv=none; b=QadHIhQGl7Le66ZcllaUkxbxu/k++RKP1nVxexeeLthjJifMenuAKlG3x+9NnJO906l22azvXG/U5lu3y9WTZTXEfDXqkTmvXmIt1JN81YMan25vPQnc7FbPvRvlhb+H2bdF1E4mG2m+9VP/R7DSxVk/+ErSJexfSdj+a1wCpRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752270144; c=relaxed/simple;
-	bh=FRJZTMDli33z+2VYtIwPjKtkzXPLWnmyhYXuUGVZ4Hc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N/3PxR8Y9rFtKVEFp0KI0flNwLHoTFRWDzk8dP7ZjPImBFsIAxsFdJPiwdQiT7RnIklg8mbdLPSqqP04TBq49wggnrvkKPj8RfqqwvuIYlUTq9c01ITQl0aluNauZ4dfybkVyxHjlzuGxTed/8ao3NenUt6IeKQgXwjWF3sYbwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZyhMw0iy; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752283391; c=relaxed/simple;
+	bh=aUNb6N3RK3ap+u0Ysfn+TN4/kwnErDMsna4TbMe6FCo=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nuuTgOcCJ3q5zXuT6qULOphHV1LU/Z6ZrPIXKWjKykm0f66rh6TeCQbfkWT9rnn0HwHuDjIq3XFlW35bXXD04XfOKLzq+vlxA4cjoFuuazbV+5VHa3R24zEbG3TavTNveqUNvk/kHKJhSF9WdBZLwpwqfqIPfXTuCD+/xCT7ljs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bs/7WxIx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZyhMw0iy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752270142; x=1783806142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FRJZTMDli33z+2VYtIwPjKtkzXPLWnmyhYXuUGVZ4Hc=;
-  b=ZyhMw0iyqoO6BKg1ZY98ZdWk3d0RLfZjuUlLMkLsS0pVZRz2wNJP6EXc
-   8GvT41UVlFz47z2rPQnmqNmCsCkA8qjqU6B8BqyBOKO0r22tGPYpsMLI9
-   9kr56yYE8+vjePOp+7K3c/59AyPp+rE63aZEK+SJkpuhffDLoOhS3os42
-   MJ/HqPalSuEPw36glQI6CfFteEi143St8E17K6qApiYU39LaVP8MQPM/F
-   GM1DT0rYNOiHj26c43UgD6U2jyD6B09dcO0IkTsRDRHR0QR5C4u+bDdKG
-   +gicy0qxSeVz497KmocSNZaaetiPjepaFFA64U5LOTeT6T704XV/ma7mY
-   A==;
-X-CSE-ConnectionGUID: xeUA4YpwReuRJbm9EE8yOw==
-X-CSE-MsgGUID: +phWrw11QPKbzea9+fngwg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="58381143"
-X-IronPort-AV: E=Sophos;i="6.16,304,1744095600"; 
-   d="scan'208";a="58381143"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2025 14:42:21 -0700
-X-CSE-ConnectionGUID: DLeCp0zyQniDp8k0huMS+w==
-X-CSE-MsgGUID: D+NrjiQ5QSK5LShoTx+gxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,304,1744095600"; 
-   d="scan'208";a="160759947"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 11 Jul 2025 14:42:19 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uaLVZ-0006oN-0u;
-	Fri, 11 Jul 2025 21:42:17 +0000
-Date: Sat, 12 Jul 2025 05:42:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nikunj A Dadhania <nikunj@amd.com>, seanjc@google.com,
-	pbonzini@redhat.com, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	thomas.lendacky@amd.com, santosh.shukla@amd.com, bp@alien8.de,
-	nikunj@amd.com, Michael Roth <michael.roth@amd.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] KVM: SEV: Enforce minimum GHCB version requirement for
- SEV-SNP guests
-Message-ID: <202507120551.iDEiTBBN-lkp@intel.com>
-References: <20250711045408.95129-1-nikunj@amd.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bs/7WxIx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1752283388;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PP6V6t7xBGE7Ki+U7FcGhkmwCOXw/kbVREjb1j7HaBk=;
+	b=bs/7WxIx0pRhFUO+qR5blefhpbhzoTivLnJaQeyBEzLtN6UaOcNd1pw3t0YCQUGOHqx7qL
+	Au7jrTXyPHgatiiOu1yKZq1b/0/lY+b/9NQNfMtyqghYsvw1RQfPh6vZv0BI+PxnLG4KQQ
+	pQbjwbQqRivGjjU55buzeeZjL2q7HPg=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-398-tD-wFAeBOlOFvtI80Lq86A-1; Fri,
+ 11 Jul 2025 21:23:06 -0400
+X-MC-Unique: tD-wFAeBOlOFvtI80Lq86A-1
+X-Mimecast-MFC-AGG-ID: tD-wFAeBOlOFvtI80Lq86A_1752283385
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BAEDB19560AA
+	for <llvm@lists.linux.dev>; Sat, 12 Jul 2025 01:23:05 +0000 (UTC)
+Received: from [172.20.236.189] (unknown [10.30.44.207])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6CD4A1800287;
+	Sat, 12 Jul 2025 01:23:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 79 of 79): Test report for master
+ (6.16.0-rc5, upstream-mainline, 40f92e79)
+Date: Sat, 12 Jul 2025 01:23:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250711045408.95129-1-nikunj@amd.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <47544.125071121230600193@us-mta-398.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: MZTJ9bWAm1VWIb3C3Xu4VVgyHfrKWvrp7_We-HiFJHc_1752283385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nikunj,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on kvm/next linus/master v6.16-rc5 next-20250711]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/KVM-SEV-Enforce-minimum-GHCB-version-requirement-for-SEV-SNP-guests/20250711-125527
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20250711045408.95129-1-nikunj%40amd.com
-patch subject: [PATCH] KVM: SEV: Enforce minimum GHCB version requirement for SEV-SNP guests
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250712/202507120551.iDEiTBBN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250712/202507120551.iDEiTBBN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507120551.iDEiTBBN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/svm/sev.c:426:6: error: use of undeclared identifier 'snp_active'
-     426 |         if (snp_active && data->ghcb_version && data->ghcb_version < 2)
-         |             ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/snp_active +426 arch/x86/kvm/svm/sev.c
+Kernel information:
+    Commit message: Merge tag 'block-6.16-20250710' of git://git.kernel.dk/=
+linux
 
-   400	
-   401	static int __sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp,
-   402				    struct kvm_sev_init *data,
-   403				    unsigned long vm_type)
-   404	{
-   405		struct kvm_sev_info *sev = to_kvm_sev_info(kvm);
-   406		struct sev_platform_init_args init_args = {0};
-   407		bool es_active = vm_type != KVM_X86_SEV_VM;
-   408		u64 valid_vmsa_features = es_active ? sev_supported_vmsa_features : 0;
-   409		int ret;
-   410	
-   411		if (kvm->created_vcpus)
-   412			return -EINVAL;
-   413	
-   414		if (data->flags)
-   415			return -EINVAL;
-   416	
-   417		if (data->vmsa_features & ~valid_vmsa_features)
-   418			return -EINVAL;
-   419	
-   420		if (data->ghcb_version > GHCB_VERSION_MAX || (!es_active && data->ghcb_version))
-   421			return -EINVAL;
-   422	
-   423		if (unlikely(sev->active))
-   424			return -EINVAL;
-   425	
- > 426		if (snp_active && data->ghcb_version && data->ghcb_version < 2)
-   427			return -EINVAL;
-   428	
-   429		sev->active = true;
-   430		sev->es_active = es_active;
-   431		sev->vmsa_features = data->vmsa_features;
-   432		sev->ghcb_version = data->ghcb_version;
-   433	
-   434		/*
-   435		 * Currently KVM supports the full range of mandatory features defined
-   436		 * by version 2 of the GHCB protocol, so default to that for SEV-ES
-   437		 * guests created via KVM_SEV_INIT2.
-   438		 */
-   439		if (sev->es_active && !sev->ghcb_version)
-   440			sev->ghcb_version = GHCB_VERSION_DEFAULT;
-   441	
-   442		if (vm_type == KVM_X86_SNP_VM)
-   443			sev->vmsa_features |= SVM_SEV_FEAT_SNP_ACTIVE;
-   444	
-   445		ret = sev_asid_new(sev);
-   446		if (ret)
-   447			goto e_no_asid;
-   448	
-   449		init_args.probe = false;
-   450		ret = sev_platform_init(&init_args);
-   451		if (ret)
-   452			goto e_free;
-   453	
-   454		/* This needs to happen after SEV/SNP firmware initialization. */
-   455		if (vm_type == KVM_X86_SNP_VM) {
-   456			ret = snp_guest_req_init(kvm);
-   457			if (ret)
-   458				goto e_free;
-   459		}
-   460	
-   461		INIT_LIST_HEAD(&sev->regions_list);
-   462		INIT_LIST_HEAD(&sev->mirror_vms);
-   463		sev->need_init = false;
-   464	
-   465		kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_SEV);
-   466	
-   467		return 0;
-   468	
-   469	e_free:
-   470		argp->error = init_args.error;
-   471		sev_asid_free(sev);
-   472		sev->asid = 0;
-   473	e_no_asid:
-   474		sev->vmsa_features = 0;
-   475		sev->es_active = false;
-   476		sev->active = false;
-   477		return ret;
-   478	}
-   479	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1921782688
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1921782688-x86_64-kernel-debug
+
+Tests that were not ran because of internal issues:
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
