@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E5B15747D;
-	Sat, 12 Jul 2025 21:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8967F9;
+	Sun, 13 Jul 2025 05:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752356070; cv=none; b=rpEbyz/TZDkjFLFQS6rr0by/TPUU0XtTzFXlfVOPV70AdeB2UKqyFHMXWxVzwW65gAPCM6mkQWzDpRIZkMvg4zb4CX4Wpbu/hLq1has+2TiIpS8Z0TD/ksR5uZsrtOLtlBvtDrMGa/HMtODYbzyEG/Y+kVFB6gAmqLO7Net01+Q=
+	t=1752383465; cv=none; b=nN41OiwXUDRqIIBg93bQLn0IIF/SMlHMC3DIUKq6KM2kTd+h4RxQov85Uzm9k+qMbaxs5JpSJHyvCdhHsPTT2UQzj1b+nkJrs+38L72E5g6NUMxuJEwhkD5jzr2DltcDKaZnl0HqTxosDMwvGhxQlc5BvnSwEI4WTCSLkew+/0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752356070; c=relaxed/simple;
-	bh=/2g4vTtNU94um6K0cJlGroKRUjPujmEr4znLPBwdXRc=;
+	s=arc-20240116; t=1752383465; c=relaxed/simple;
+	bh=UpLPxFXKjZumdtV3OF0HZupz2osyJS8so4bX1t327CA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MIvNE7jjoWBvVqMO1zTqR4z0i5hspe2/suJKGfohMRKEVdhbUQosbBHXN+xwZh6xLoeyDG1rsNRt68oswzu4szenzpyYfJcqzuOcxNNibNbgg63CVFJ6wKkam2hLgNqQ7QPiONg+l1CC8BJp+2jnSZUDc7fLi5eTNf53DvGpSi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QFp2pdPL; arc=none smtp.client-ip=198.175.65.11
+	 Content-Disposition; b=IXQdq87q60D/zAiASJMIGNIw/FFmA+4eKtU/VVjvA38UC+wlx2gOUS/vBb/rpAV6jwgXdHpGRm7JgjV6rmUGFHKQwPAQjUeJ2+yCYD8GJPGu2+PjZbo8KmUrMV+Vqx7ik5KwFQuZlDcf97+svHFqXcn8PmjtUwnww6uUBaxsX3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwIm/cwQ; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QFp2pdPL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwIm/cwQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752356067; x=1783892067;
+  t=1752383463; x=1783919463;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/2g4vTtNU94um6K0cJlGroKRUjPujmEr4znLPBwdXRc=;
-  b=QFp2pdPL5AWlAPK1oSE2L/8TI2G95avaXQCm0qVUL9vvR+k2oEAGBEV1
-   q0H7t0IBKzHfFmf7WyOemexQzRghCfoUZGZjue73lXKalE2vyAn+N39Zh
-   4Mlr9XSXHomZabBkxLV26yv9uqFQihF14oTAST+XPZP4MMoIFSZMLfkll
-   sGAaH+QjDB0dGK/WWIcqmaDGwL213k8jmf7jVOqPz6XBYZlWD6mTkjBrP
-   ghGXPh+Hk66KSN3Q6TRcHGw1hiq02CF4mLecfaUZQu4CVtWr+wcNFpjic
-   D4LNPKAYd3uRmwqnIKWizY8OTD/95xDMnCBWBRxPJCkGBVlqGLkgF2qQl
-   Q==;
-X-CSE-ConnectionGUID: FBeGtbPXT9GNC9CdeSiRrA==
-X-CSE-MsgGUID: h+PbHKWlTG+PPBrPCy5IFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="64867546"
-X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
-   d="scan'208";a="64867546"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 14:34:26 -0700
-X-CSE-ConnectionGUID: 2huQuP4jSu6wsfeHWhQ8nQ==
-X-CSE-MsgGUID: WBFfQzV8TmS3yfxWIKlX8w==
+  bh=UpLPxFXKjZumdtV3OF0HZupz2osyJS8so4bX1t327CA=;
+  b=WwIm/cwQns2P7uQqtYKXSYWUvPn2NXk/lKRGG6xd2SjvUW9ocCDC242u
+   7qVqdASJeRHhoOiM2BrX4n88wcHqdUyV15CN97xSzbDzszxtx0dA9gmlE
+   qEiRauR0U5Bi1uGWWjM4yVjGkK5MzHFfezzwQpVZkZUhclreFB6QdbfTP
+   ubvJoddbM2lRKI9QQefEh3Xg/3dW5m/YPXSp0zRk/1NOUEGJRlPv8sQwh
+   fMpYvFA4v/SMeBeS81/tAVa/jaU+y/94zw38KerHIh1FmcGKYWXoNmxGz
+   8/29J8mQcsx5iBe1Tinsb+RizhIZvhpV7vcPdkb1dbqCAp4qpBmhZ/6rl
+   g==;
+X-CSE-ConnectionGUID: ph08qo5zQzO5HrUqoI9qXA==
+X-CSE-MsgGUID: tpQ0q2ftT3yGZJscCtAjug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="53834396"
+X-IronPort-AV: E=Sophos;i="6.16,308,1744095600"; 
+   d="scan'208";a="53834396"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 22:11:02 -0700
+X-CSE-ConnectionGUID: ZZz2MYoXTTWaQKAWxF6XPg==
+X-CSE-MsgGUID: NlydcaN6TZSUCpvXjHDLCw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,307,1744095600"; 
-   d="scan'208";a="156428518"
+X-IronPort-AV: E=Sophos;i="6.16,308,1744095600"; 
+   d="scan'208";a="157220374"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 12 Jul 2025 14:34:26 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 12 Jul 2025 22:11:01 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uahrT-0007hL-1m;
-	Sat, 12 Jul 2025 21:34:23 +0000
-Date: Sun, 13 Jul 2025 05:34:15 +0800
+	id 1uaozK-0007th-2F;
+	Sun, 13 Jul 2025 05:10:58 +0000
+Date: Sun, 13 Jul 2025 13:10:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [pali:cifs 18/21] fs/smb/client/reparse.c:398:15: warning: unused
- variable 'xattr_mode_val'
-Message-ID: <202507130548.2nwuvP3n-lkp@intel.com>
+To: Pratap Nirujogi <pratap.nirujogi@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [agd5f:kq_resets 2304/2346]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c:174: warning: Function parameter or
+ struct member 'dmabuf' not described in 'isp_user_buffer_alloc'
+Message-ID: <202507131324.TKf4iSOn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,86 +64,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pali/linux.git cifs
-head:   26ef98c6708ac92c515a4592138345359222b847
-commit: 6b988dfe26bcb2e050b20f8903ef09be4fdf467b [18/21] cifs: Create native Window socket file compatible also with WSL subsystem
-config: arm-randconfig-003-20250713 (https://download.01.org/0day-ci/archive/20250713/202507130548.2nwuvP3n-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507130548.2nwuvP3n-lkp@intel.com/reproduce)
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git kq_resets
+head:   524eebfdd4b30fd63ca774d7ea346bcf0e8e76b1
+commit: 5cab8cc383a58877fa0fd9eb566e68b815500cdf [2304/2346] drm/amd/amdgpu: Add helper functions for isp buffers
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250713/202507131324.TKf4iSOn-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507131324.TKf4iSOn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507130548.2nwuvP3n-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507131324.TKf4iSOn-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/smb/client/reparse.c:398:15: warning: unused variable 'xattr_mode_val' [-Wunused-variable]
-     398 |         const __le64 xattr_mode_val = cpu_to_le64(mode);
-         |                      ^~~~~~~~~~~~~~
->> fs/smb/client/reparse.c:399:23: warning: unused variable 'cifs_sb' [-Wunused-variable]
-     399 |         struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-         |                              ^~~~~~~
-   2 warnings generated.
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c:174: warning: Function parameter or struct member 'dmabuf' not described in 'isp_user_buffer_alloc'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c:174: warning: Excess function parameter 'dma_buf' description in 'isp_user_buffer_alloc'
 
 
-vim +/xattr_mode_val +398 fs/smb/client/reparse.c
+vim +174 drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c
 
-   381	
-   382	static int create_native_socket(const unsigned int xid, struct inode *inode,
-   383					struct dentry *dentry, struct cifs_tcon *tcon,
-   384					const char *full_path, umode_t mode)
-   385	{
-   386		struct reparse_data_buffer buf = {
-   387			.ReparseTag = cpu_to_le32(IO_REPARSE_TAG_AF_UNIX),
-   388			.ReparseDataLength = cpu_to_le16(0),
-   389		};
-   390		struct cifs_open_info_data data = {
-   391			.reparse_point = true,
-   392			.reparse = { .tag = IO_REPARSE_TAG_AF_UNIX, .buf = &buf, },
-   393		};
-   394		struct kvec iov = {
-   395			.iov_base = &buf,
-   396			.iov_len = sizeof(buf),
-   397		};
- > 398		const __le64 xattr_mode_val = cpu_to_le64(mode);
- > 399		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-   400		struct inode *new;
-   401		int rc = 0;
-   402	
-   403		new = tcon->ses->server->ops->create_reparse_inode(
-   404					     &data, inode->i_sb, xid,
-   405					     tcon, full_path, false, &iov, NULL);
-   406		if (!IS_ERR(new))
-   407			d_instantiate(dentry, new);
-   408		else
-   409			rc = PTR_ERR(new);
-   410	
-   411		/*
-   412		 * Try to set also optional WSL EA $LXMOD but ignore errors.
-   413		 * WSL socket and native Win32/NT sockets uses same reparse point
-   414		 * tag IO_REPARSE_TAG_AF_UNIX. WSL subsystem additionally requires
-   415		 * EA $LXMOD to be set with the S_IFSOCK value. So setting this EA
-   416		 * allows native socket to be recognized also by WSL subsystem.
-   417		 * Note that setting of both EAs and reparse points is not supported
-   418		 * by NTFS filesystem on Windows 8 / Windows Server 2012 and always
-   419		 * fails. So ignore failures from this set_EA call.
-   420		 */
-   421	#ifdef CONFIG_CIFS_XATTR
-   422		if (!rc && tcon->ses->server->ops->set_EA &&
-   423		    (le32_to_cpu(tcon->fsAttrInfo.Attributes) & FILE_SUPPORTS_EXTENDED_ATTRIBUTES))
-   424			tcon->ses->server->ops->set_EA(xid, tcon, full_path,
-   425						       true /* open reparse point */,
-   426						       SMB2_WSL_XATTR_MODE,
-   427						       &xattr_mode_val,
-   428						       SMB2_WSL_XATTR_MODE_SIZE,
-   429						       cifs_sb->local_nls, cifs_sb);
-   430	#endif
-   431	
-   432		cifs_free_open_info(&data);
-   433		return rc;
-   434	}
-   435	
+   153	
+   154	/**
+   155	 * isp_user_buffer_alloc - create user buffer object (BO) for isp
+   156	 *
+   157	 * @dev: isp device handle
+   158	 * @dma_buf: DMABUF handle for isp buffer allocated in system memory
+   159	 * @buf_obj: GPU buffer object handle to initialize
+   160	 * @buf_addr: GPU addr of the pinned BO to initialize
+   161	 *
+   162	 * Imports isp DMABUF to allocate and pin a user BO for isp internal use. It does
+   163	 * GART alloc to generate GPU addr for BO to make it accessible through the
+   164	 * GART aperture for ISP HW.
+   165	 *
+   166	 * This function is exported to allow the V4L2 isp device external to drm device
+   167	 * to create and access the isp user BO.
+   168	 *
+   169	 * Returns:
+   170	 * 0 on success, negative error code otherwise.
+   171	 */
+   172	int isp_user_buffer_alloc(struct device *dev, void *dmabuf,
+   173				  void **buf_obj, u64 *buf_addr)
+ > 174	{
+   175		struct platform_device *ispdev = to_platform_device(dev);
+   176		const struct isp_platform_data *isp_pdata;
+   177		struct amdgpu_device *adev;
+   178		struct mfd_cell *mfd_cell;
+   179		struct amdgpu_bo *bo;
+   180		u64 gpu_addr;
+   181		int ret;
+   182	
+   183		if (WARN_ON(!ispdev))
+   184			return -ENODEV;
+   185	
+   186		if (WARN_ON(!buf_obj))
+   187			return -EINVAL;
+   188	
+   189		if (WARN_ON(!buf_addr))
+   190			return -EINVAL;
+   191	
+   192		mfd_cell = &ispdev->mfd_cell[0];
+   193		if (!mfd_cell)
+   194			return -ENODEV;
+   195	
+   196		isp_pdata = mfd_cell->platform_data;
+   197		adev = isp_pdata->adev;
+   198	
+   199		ret = is_valid_isp_device(ispdev->dev.parent, adev->dev);
+   200		if (ret)
+   201			return ret;
+   202	
+   203		ret = amdgpu_bo_create_isp_user(adev, dmabuf,
+   204						AMDGPU_GEM_DOMAIN_GTT, &bo, &gpu_addr);
+   205		if (ret) {
+   206			drm_err(&adev->ddev, "failed to alloc gart user buffer (%d)", ret);
+   207			return ret;
+   208		}
+   209	
+   210		*buf_obj = (void *)bo;
+   211		*buf_addr = gpu_addr;
+   212	
+   213		return 0;
+   214	}
+   215	EXPORT_SYMBOL(isp_user_buffer_alloc);
+   216	
 
 -- 
 0-DAY CI Kernel Test Service
