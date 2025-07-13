@@ -1,60 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8967F9;
-	Sun, 13 Jul 2025 05:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECED16BB5B;
+	Sun, 13 Jul 2025 06:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752383465; cv=none; b=nN41OiwXUDRqIIBg93bQLn0IIF/SMlHMC3DIUKq6KM2kTd+h4RxQov85Uzm9k+qMbaxs5JpSJHyvCdhHsPTT2UQzj1b+nkJrs+38L72E5g6NUMxuJEwhkD5jzr2DltcDKaZnl0HqTxosDMwvGhxQlc5BvnSwEI4WTCSLkew+/0Q=
+	t=1752389055; cv=none; b=kGSuzA3HOnLpWJRkur+ADoEV+gtWXG212mrwRTzzZtQzI5iVQHk/7LBTKQTP9swooagqu5yqFxqLCHFbJgpcW2g8FOuwVCCJGuy7J0NEgzFuA1wcbgeNgZJkvFTNVIZVPgRNla/jDB1cwSAip106fO+lRYlnedivboWIl+lwecQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752383465; c=relaxed/simple;
-	bh=UpLPxFXKjZumdtV3OF0HZupz2osyJS8so4bX1t327CA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IXQdq87q60D/zAiASJMIGNIw/FFmA+4eKtU/VVjvA38UC+wlx2gOUS/vBb/rpAV6jwgXdHpGRm7JgjV6rmUGFHKQwPAQjUeJ2+yCYD8GJPGu2+PjZbo8KmUrMV+Vqx7ik5KwFQuZlDcf97+svHFqXcn8PmjtUwnww6uUBaxsX3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwIm/cwQ; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1752389055; c=relaxed/simple;
+	bh=V7drxRajC6ozX9k3goWA4uOuO9/Qm6hwvlFiPiFyt1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WZ+jst2q65Ldg2Og0YcZLxdhrOKU4DO863Me+ThHmNg0BDbd+ZgE02TNafLc0o/j+4iI6mv6dgtOgTeUvhsEWvJ+2CO3xtye2N5+OfeI/FE6sR2xN4UcFGq4nEJpTJZiS/vP5XtTUohD+8m4k2MUf6CPT3JOARBBFRTmBytuUvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioVaZ02o; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwIm/cwQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ioVaZ02o"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752383463; x=1783919463;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UpLPxFXKjZumdtV3OF0HZupz2osyJS8so4bX1t327CA=;
-  b=WwIm/cwQns2P7uQqtYKXSYWUvPn2NXk/lKRGG6xd2SjvUW9ocCDC242u
-   7qVqdASJeRHhoOiM2BrX4n88wcHqdUyV15CN97xSzbDzszxtx0dA9gmlE
-   qEiRauR0U5Bi1uGWWjM4yVjGkK5MzHFfezzwQpVZkZUhclreFB6QdbfTP
-   ubvJoddbM2lRKI9QQefEh3Xg/3dW5m/YPXSp0zRk/1NOUEGJRlPv8sQwh
-   fMpYvFA4v/SMeBeS81/tAVa/jaU+y/94zw38KerHIh1FmcGKYWXoNmxGz
-   8/29J8mQcsx5iBe1Tinsb+RizhIZvhpV7vcPdkb1dbqCAp4qpBmhZ/6rl
-   g==;
-X-CSE-ConnectionGUID: ph08qo5zQzO5HrUqoI9qXA==
-X-CSE-MsgGUID: tpQ0q2ftT3yGZJscCtAjug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="53834396"
+  t=1752389054; x=1783925054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V7drxRajC6ozX9k3goWA4uOuO9/Qm6hwvlFiPiFyt1A=;
+  b=ioVaZ02orW/PlRM7AJQ5rxntB0KBbdfsgiFyZkA44PSx+c5NzOKTvTaS
+   msm6Mjz9cJQkPCqjnYIfI32/eFEEPifuSLrx1UFORFo5zk0eMiLqPWI31
+   owFIGL7GSy4N8zmnW8txYpoq33XJVQGkM66crqkbfItdN3z3FdmIzXjcc
+   /h3EwGhKdX/7jMo7bMhuAPCTcOV1OOA9A4xq19aMXWI/FKE+wSO6Uxvy6
+   L6B5GEFj3Bz0iDh0krrd8ErjTM0AzlWVUTz8qQwC/O1amwl0zvUzmUa8G
+   zbTh6gFRba+cPoiV27S7nV+yzGhkvhh6HdJEeJBhZjEkDRNCioN/VCh/O
+   w==;
+X-CSE-ConnectionGUID: OCJ+KrBlQMuScDJWpC/A9Q==
+X-CSE-MsgGUID: jP27zx99S6eyexZsc313Cw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="65682775"
 X-IronPort-AV: E=Sophos;i="6.16,308,1744095600"; 
-   d="scan'208";a="53834396"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 22:11:02 -0700
-X-CSE-ConnectionGUID: ZZz2MYoXTTWaQKAWxF6XPg==
-X-CSE-MsgGUID: NlydcaN6TZSUCpvXjHDLCw==
+   d="scan'208";a="65682775"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2025 23:44:13 -0700
+X-CSE-ConnectionGUID: Q5qA7GjMTlyJWaItVFLZQQ==
+X-CSE-MsgGUID: vgPnHmhcRDCs3fcgIVIAfg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,308,1744095600"; 
-   d="scan'208";a="157220374"
+   d="scan'208";a="162353828"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Jul 2025 22:11:01 -0700
+  by orviesa005.jf.intel.com with ESMTP; 12 Jul 2025 23:44:10 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uaozK-0007th-2F;
-	Sun, 13 Jul 2025 05:10:58 +0000
-Date: Sun, 13 Jul 2025 13:10:27 +0800
+	id 1uaqRT-0007wt-2L;
+	Sun, 13 Jul 2025 06:44:07 +0000
+Date: Sun, 13 Jul 2025 14:43:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pratap Nirujogi <pratap.nirujogi@amd.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [agd5f:kq_resets 2304/2346]
- drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c:174: warning: Function parameter or
- struct member 'dmabuf' not described in 'isp_user_buffer_alloc'
-Message-ID: <202507131324.TKf4iSOn-lkp@intel.com>
+	linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+	Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: Re: [PATCH 1/2] printk: nbcon: Export console_is_usage and other
+ nbcon symbols
+Message-ID: <202507131443.p6jEjXFw-lkp@intel.com>
+References: <20250713-nbcon-kgdboc-v1-1-51eccd9247a8@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,91 +73,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250713-nbcon-kgdboc-v1-1-51eccd9247a8@suse.com>
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git kq_resets
-head:   524eebfdd4b30fd63ca774d7ea346bcf0e8e76b1
-commit: 5cab8cc383a58877fa0fd9eb566e68b815500cdf [2304/2346] drm/amd/amdgpu: Add helper functions for isp buffers
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250713/202507131324.TKf4iSOn-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507131324.TKf4iSOn-lkp@intel.com/reproduce)
+Hi Marcos,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Paulo-de-Souza/printk-nbcon-Export-console_is_usage-and-other-nbcon-symbols/20250713-131106
+base:   d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
+patch link:    https://lore.kernel.org/r/20250713-nbcon-kgdboc-v1-1-51eccd9247a8%40suse.com
+patch subject: [PATCH 1/2] printk: nbcon: Export console_is_usage and other nbcon symbols
+config: x86_64-buildonly-randconfig-001-20250713 (https://download.01.org/0day-ci/archive/20250713/202507131443.p6jEjXFw-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250713/202507131443.p6jEjXFw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507131324.TKf4iSOn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507131443.p6jEjXFw-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c:174: warning: Function parameter or struct member 'dmabuf' not described in 'isp_user_buffer_alloc'
->> drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c:174: warning: Excess function parameter 'dma_buf' description in 'isp_user_buffer_alloc'
+   In file included from drivers/char/tpm/tpm_tis.c:21:
+   In file included from include/linux/pnp.h:16:
+>> include/linux/console.h:653:76: warning: non-void function does not return a value [-Wreturn-type]
+     653 | static inline bool nbcon_context_try_acquire(struct nbcon_context *ctxt) { }
+         |                                                                            ^
+   In file included from drivers/char/tpm/tpm_tis.c:29:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+     167 |         int mapping_size;
+         |             ^
+   2 warnings generated.
 
 
-vim +174 drivers/gpu/drm/amd/amdgpu/amdgpu_isp.c
+vim +653 include/linux/console.h
 
-   153	
-   154	/**
-   155	 * isp_user_buffer_alloc - create user buffer object (BO) for isp
-   156	 *
-   157	 * @dev: isp device handle
-   158	 * @dma_buf: DMABUF handle for isp buffer allocated in system memory
-   159	 * @buf_obj: GPU buffer object handle to initialize
-   160	 * @buf_addr: GPU addr of the pinned BO to initialize
-   161	 *
-   162	 * Imports isp DMABUF to allocate and pin a user BO for isp internal use. It does
-   163	 * GART alloc to generate GPU addr for BO to make it accessible through the
-   164	 * GART aperture for ISP HW.
-   165	 *
-   166	 * This function is exported to allow the V4L2 isp device external to drm device
-   167	 * to create and access the isp user BO.
-   168	 *
-   169	 * Returns:
-   170	 * 0 on success, negative error code otherwise.
-   171	 */
-   172	int isp_user_buffer_alloc(struct device *dev, void *dmabuf,
-   173				  void **buf_obj, u64 *buf_addr)
- > 174	{
-   175		struct platform_device *ispdev = to_platform_device(dev);
-   176		const struct isp_platform_data *isp_pdata;
-   177		struct amdgpu_device *adev;
-   178		struct mfd_cell *mfd_cell;
-   179		struct amdgpu_bo *bo;
-   180		u64 gpu_addr;
-   181		int ret;
-   182	
-   183		if (WARN_ON(!ispdev))
-   184			return -ENODEV;
-   185	
-   186		if (WARN_ON(!buf_obj))
-   187			return -EINVAL;
-   188	
-   189		if (WARN_ON(!buf_addr))
-   190			return -EINVAL;
-   191	
-   192		mfd_cell = &ispdev->mfd_cell[0];
-   193		if (!mfd_cell)
-   194			return -ENODEV;
-   195	
-   196		isp_pdata = mfd_cell->platform_data;
-   197		adev = isp_pdata->adev;
-   198	
-   199		ret = is_valid_isp_device(ispdev->dev.parent, adev->dev);
-   200		if (ret)
-   201			return ret;
-   202	
-   203		ret = amdgpu_bo_create_isp_user(adev, dmabuf,
-   204						AMDGPU_GEM_DOMAIN_GTT, &bo, &gpu_addr);
-   205		if (ret) {
-   206			drm_err(&adev->ddev, "failed to alloc gart user buffer (%d)", ret);
-   207			return ret;
-   208		}
-   209	
-   210		*buf_obj = (void *)bo;
-   211		*buf_addr = gpu_addr;
-   212	
-   213		return 0;
-   214	}
-   215	EXPORT_SYMBOL(isp_user_buffer_alloc);
-   216	
+   651	
+   652	#else
+ > 653	static inline bool nbcon_context_try_acquire(struct nbcon_context *ctxt) { }
+   654	static inline void nbcon_context_release(struct nbcon_context *ctxt) { }
+   655	static inline void nbcon_cpu_emergency_enter(void) { }
+   656	static inline void nbcon_cpu_emergency_exit(void) { }
+   657	static inline bool nbcon_can_proceed(struct nbcon_write_context *wctxt) { return false; }
+   658	static inline bool nbcon_enter_unsafe(struct nbcon_write_context *wctxt) { return false; }
+   659	static inline bool nbcon_exit_unsafe(struct nbcon_write_context *wctxt) { return false; }
+   660	static inline void nbcon_reacquire_nobuf(struct nbcon_write_context *wctxt) { }
+   661	static inline bool console_is_usable(struct console *con, short flags,
+   662					     bool use_atomic) { return false; }
+   663	#endif
+   664	
 
 -- 
 0-DAY CI Kernel Test Service
