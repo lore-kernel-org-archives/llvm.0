@@ -1,154 +1,218 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3706B221FB1;
-	Mon, 14 Jul 2025 20:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752525312; cv=none; b=k5JqKXgI/sKG2yg/knfsl+ZvOE3wRHtNIjGGbHUuHTWULyWBAIbSAVYxrtdwz5O412AvY0raLmh+FtX+JtjujUCtVJl9BTNIY6wGca65dqbz508T0Ihg/upycax1IlffW3hPRylEF1ppwnxP+czfnDhVc4YDHqMpEyV5otdQUXg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752525312; c=relaxed/simple;
-	bh=P3G+5HJ8Rd8lg06Ac/rN8qKNL1uVRByU9FkqJRNzaoo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FHr847It4dc0z+IAElJoMXib1EFZGXOlqn3mzSyB0KylkL2nL8a+Bm5D5uwq6CnDil727EkKKGUGRfTy9kYbjatgsMm7t+fRsXOIw5XfWTPk8s6zJeXcYoEflUn3WrSwdm+OcUduOJ5wm4Tbr2HVxhY4obkmfxMB+PZRDt8iIs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CXYg/lHs; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA4823A9A8;
+	Mon, 14 Jul 2025 21:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752530110; cv=fail; b=LWZmwInMktYnXhsiIasSkmFB5Vdx6rgkrb/+dFro4SMeeiImMqZFuknpqUyzfO4w7khe0FPoSYMNOcdvEz+YQOokztegWfoblef7mPyh0OL6ApiI0c46Ui3rp51rkN6rA2NMGExbuNBhwcPtG+T8t5JFgDC0pphuOMJfZyDKVIg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752530110; c=relaxed/simple;
+	bh=DyKgyqwlnuYNpOIRbp4MdZJk/JmhDsVz+QMdb6MAmgw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Xt6yM4kFGcUMPiz/FLowG1YxLIdnGV+tImLir3/sjk5e1Epwqjws26JnVLPysncgCJXLhv7Q7gdeeanK2pOaGWPxkuF7SMdokvmPyQo2zz8bOuBNheAHfmxhWwR9fuzrKQgX7m4f6J0onF1Cr2gIny4iBgKZBHxRWCEYIdXOBfs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Twx2WOUC; arc=fail smtp.client-ip=40.107.244.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CXYg/lHs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752525309; x=1784061309;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P3G+5HJ8Rd8lg06Ac/rN8qKNL1uVRByU9FkqJRNzaoo=;
-  b=CXYg/lHsoLc1Q/gNKRj+yhcUUwjMP5+9Ryss7deYsVHA5Q09iDb+iMIQ
-   0flwFimqxhNmlM0OnUL5NkzQseO7T2aUhADHFvJnEKopXxZogKh8U3jjo
-   VWjPCG8doxsza/QDHY0CsGvV1oSfDpX9as8Db0wMm9GRVsuDtoJzfzjId
-   5RZ9R3ieju7wfUjY9n0y9Otg9g7o+YfeJ+LMhoua6/q/Jj3IBGEqoz3xy
-   iMDskfgzGylWxJFR0gCt8CrSdgymqTz/vltG5JlVWDgVD4SEUuEPx6A7I
-   xTPB5GSij4YRo5+NAkPilDJaqjmbv8OLQXzGhvkGto39Lsl7e4LzT8dpd
-   Q==;
-X-CSE-ConnectionGUID: XAA6a+egR8CW0l22OVnKpg==
-X-CSE-MsgGUID: eflmZ+18QYylbW+R9QQ21Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="72180343"
-X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="72180343"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 13:35:09 -0700
-X-CSE-ConnectionGUID: FOfTnYXMSQG25ccRJe5Hrw==
-X-CSE-MsgGUID: n6/OWT81RYekewfYKr8XIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="161347671"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 14 Jul 2025 13:35:08 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubPtB-0009JJ-0J;
-	Mon, 14 Jul 2025 20:35:05 +0000
-Date: Tue, 15 Jul 2025 04:34:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 92/119] fs/bcachefs/super.c:2269:3:
- error: cannot jump from this goto statement to its label
-Message-ID: <202507150440.yJNwET08-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Twx2WOUC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BPxWe2QuIhqrZ9uYnBmDoa6hfwK4o/Y5YMoPUzYRBlc+9OTNDgt8K3uOpmLyzMNNg4Z6/bbjxYdMQ/vBD+3OnbIxBwhb/715KfV7ezTlDFMbV2vfkxdF3vLRAZ0IbmKQzSJqManwD9Y5OjWuIUFEjGCAGH5rWwk7osS05RrnGt3EmtuCNDtjpmNEf/KISHSUfcSgFqJh0a1bceGIA3XUqWFytenjlLAW6K1tOi3ktodE1ziuqK+X9gAfISubw/ZpgtWARZtglBgdUOy8aa8DhGtgpi7y4wB1UUf9OAdvnkSSv7PysuNHT0hLvgNY5zbCeZIwG4OOyW1Qq/FkV8NBoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MHmXGO4AkzZpC9hJ9+n0pSuChs/w2fSqZxudNrG26pA=;
+ b=h3cQhKTsvETzN2gQcOqL8kdQfryeHDTMsFDnV1N95Sxdb/zEp53s8fZdWta28KiRB6TNuc/EGlKvXIm62LINz6R+v7X9GjyQC9wnlEMKbKvzVKW4Vud8hQj2E+BX63RbEdA1EiQ0tzx+kiLuU3XsC0DDlUMVyQi5iYgoyp6WT5blTZv/G8ICWTR5zsEbZ6UplJtnCGK5BptUCV784jxMSfMlnAIOwyRKr8GCKkbiwkNW6XGZLNOyUfMfyg7El7iMoMJ9EC/APpEJwk2jAbxyOGYPGOyTcPBbd0ALq95BRMbBCRz8/0kpZEbmAFYefbSInl8ns6Wve3dAKPJyuX2gHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MHmXGO4AkzZpC9hJ9+n0pSuChs/w2fSqZxudNrG26pA=;
+ b=Twx2WOUCdSmu+seubQSv50Z/qLepAHrY1xnkhs9tcLbhyTsrAeFjY9L6ddIrV+NpYwGR62HcE6ME9fQkusCcxiNdPbBFXQUOGKn0ddWF50UUFCgkQtQwM9FXC8XLfFl+E1GNoEmkEfqVqZ6bTh/tSpIQLpGsDn7u+UnrqDQXw5pUq0P81Zbw79ZiNHgaIgOfdMZPRM2yDGQyvczoCNiLrJgBNinN9559h1msWeg4bqpEy3RYIOibkyHcw0gDmgCyEmqN+TTOF45fF/c3bEQdJBVN8A4PIRC9a0aL1TIHSRzk0bWPCbpek/TH8bFbXerSfhkaQQsi9yOQTAGMCLxOvA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by SJ2PR12MB8181.namprd12.prod.outlook.com (2603:10b6:a03:4f6::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.27; Mon, 14 Jul
+ 2025 21:55:06 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8901.033; Mon, 14 Jul 2025
+ 21:55:05 +0000
+Date: Mon, 14 Jul 2025 18:55:04 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Leon Romanovsky <leonro@mellanox.com>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 6/6] IB/mlx5: Use __iowrite64_copy() for write
+ combining stores
+Message-ID: <20250714215504.GA2083014@nvidia.com>
+References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+ <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+X-ClientProxiedBy: MN2PR17CA0017.namprd17.prod.outlook.com
+ (2603:10b6:208:15e::30) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SJ2PR12MB8181:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3c33d465-7a45-47bb-6e8d-08ddc32117bd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7LsO+zD5MNy6KwoqCBEpMZ1rptmlISB3Tj5R4L4TaYs5W6tal9nCzLYo7LR1?=
+ =?us-ascii?Q?uadIBS6yz0/UDv3DLoV//JURe8uzYq1qPqycfjNaO4eJOJ+W0JL/lo9s3NMl?=
+ =?us-ascii?Q?awkrIbUPpumcjKrrN4Dwr1xYWIJEpWzwM/mK6KyxJwWivZg78xIWS9k2LTjw?=
+ =?us-ascii?Q?Vq1IpKIr4H4iQxonz+R8tXu2wRL1BBtEo8fx3paUAr1X8G2JDJlX/d98EFo7?=
+ =?us-ascii?Q?W1mbCxbplZOV+FXpp3oid9qotDhGPFuaEPqP9yLQ8un4nWNEMrJVIikHdNOL?=
+ =?us-ascii?Q?6z2A2mz7mBydDIKmslKwdnoKxWQAG/LW3eX0oOlLaPJreZNCREvUXtmWRxgv?=
+ =?us-ascii?Q?5QyD8TYsDhuzcT7jPcSml5Oxs9b3HQhI/sDcdo7jAU4BxAJo/hyMdzGcOnqG?=
+ =?us-ascii?Q?4LEMsvxppmSqo3zNXolXD9nP1PS9lOKiw3m9xlFKjnXHakEoKiOrMOIw0t+t?=
+ =?us-ascii?Q?UW/B2Mct6VJYv5nBmTf0I9rqgW2Fe5ucK2hQJYCCvYVUWxgcmKLYdD7Ld4H0?=
+ =?us-ascii?Q?m0V9cf4Kd3M6oIP2ap9NKB8JUAhlWqenOB83lF9kX5Ux+Fxg3K0N5RQGGEZa?=
+ =?us-ascii?Q?DcM52gd2nm7h+TVivAevOAZou11NKDqSf9vJIvmTmsmft83DWNnJytd/NaD3?=
+ =?us-ascii?Q?fHxLN8mCDnKojUCPB5oXaC/nqDconyBQFpF8T+NmIT6eeFM7f4Vm7kM7IEUa?=
+ =?us-ascii?Q?PzKZagN2m1N1tm/8xNnux++loonNUod84EtRdeYhfiihRetV5FPX7pQhdOAi?=
+ =?us-ascii?Q?LgbPmAoYM6MoKbhyX1VOWSPs7L3ELKgR+pco13bCrN0jUFcwOtcyAE33M1Cw?=
+ =?us-ascii?Q?0of2MkqCScqzoKDatEByxXZZY7yZCY8b1WxOnInLJqjnYJy3PQXY3crJ0FJb?=
+ =?us-ascii?Q?z6AH8d27duwa93u3r2AcmEOy0RV0OJhr4luZ3f418Q3njVxlWP1SbVUS2XBJ?=
+ =?us-ascii?Q?p75D9tRaEgPpw7es2OiKR4TxDci191rzj13VLsEXopwjqUc7fwvZNkYA377D?=
+ =?us-ascii?Q?IkyRxJr2aocmEQ6ltU7W8gCWHztjDZED21xTsF+AfXGanVnKEqtGdBZTWs19?=
+ =?us-ascii?Q?LAl176K8w4aOCpKkE7puzdjA3ALs/nNgIyXpc+Whi24T1VVvK19xymKSjqXI?=
+ =?us-ascii?Q?X1byE2w35an1rFAPEdWNAxYuPiFY3RV6X/owuyEhgi/eWmUjHO1EdGX/qMpS?=
+ =?us-ascii?Q?MK7NDPnGLdHw6acIcB6JQXc7NnRw99a8tPYJuQd25ZuTedvVRNjGvVSJVEU/?=
+ =?us-ascii?Q?0uSTNY+Cw36+K6QV2oFmMnLtmbaFGVxde+6N9Czju1A7CYjsd57M2ayKXjWS?=
+ =?us-ascii?Q?IljgepHVOCElf0K2AaK8QyRXNEKN9Pu0vb2nUDAvW77hYaDPFVsHEt7Zl0Gd?=
+ =?us-ascii?Q?dqqFS7KJPBEa0qYRrpqtMcRWnH/cHqQx1igYQduMr68kGrSUWhQg5Y/i0BFc?=
+ =?us-ascii?Q?ijkOivx7Q/8E7GCSpLzfvS9jZ1ujX7ORVxA2fRJ2m6unEz83l6BmfQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?3XQYzwcpioWKwStu8AD6pl58tXEvLICCPzFqVfv2D4H8V3R80aiEbLuv2e6m?=
+ =?us-ascii?Q?IJpc8yfmM/Bhi9oXC6/BDnSLIAhCYiM/WDqlAIouCtBLhwteUQKh5dcyznhK?=
+ =?us-ascii?Q?JGDI2T17vTCByMDcdSWACHaIgidv31Y7vtfjKUFyy5vqGvFRW56aeqZigzNP?=
+ =?us-ascii?Q?4noOvDMVlz2tX3uypHsjIub++hDQxtvtf5TGd9qtaGH75ZAIctR4oF33bxPq?=
+ =?us-ascii?Q?tWfVy7o3k//MZ7NLqFVoMCb1RIwVdR352QdenMJ0rQZ52JDINJOKF2meiufB?=
+ =?us-ascii?Q?a/kPQvGmQa/wQob+jUbey0JbfgvUSZDpioGDi5BB+8sx7jSrueOs4xaiTsZ3?=
+ =?us-ascii?Q?9yDZGPx25Oriwm/yp+y1M6jUmYjaqpqUtg6vqs24QuVz8GdueBokvYlCto6a?=
+ =?us-ascii?Q?66DYua4vDew8z4pzsH9LbxEuoud1H/AjiNwl645KPaVS/GZaoaZbamYl1GXW?=
+ =?us-ascii?Q?t67VqZugz2cAZ/eX+PPXTsUW+FKDQpZhtVV2D5ivFoNks6ivfDQQh0qJKzuG?=
+ =?us-ascii?Q?qfutnkI2RsrkBMWTPBUrVR/2Sdq1RWjjFyfy6RTd8rCmTZwDxmVqGnKakH1y?=
+ =?us-ascii?Q?697Zu9oRRK1blZKgJSax2K00C2v3Mp+KWdMI0S5PS1O6FxUKSyIzwjtJpFuf?=
+ =?us-ascii?Q?zVa7FecWHVApqY8g4aY63RZOsr2klzPqw3wg9gOkdAyWyhHzXoSH6gnxdhGw?=
+ =?us-ascii?Q?ejk3CroiTVmIl+/1N++1QsDT6j84sXQ09e0PYeNf40R1WYym1K7dqZ+Vepdb?=
+ =?us-ascii?Q?FQ48dYnQxJ2sEA53ADXNBwJoI0zjWYi64v54P8ttf2W/rTCKrPEj8s2B1AFq?=
+ =?us-ascii?Q?XfKuLGmxQ3SVRLjqj328yAE62P3UTRSSZXGHtCF7n561e9UL3FMWwejKXPVh?=
+ =?us-ascii?Q?PdAmu8DzXHTTfp+9DjBGyJiMCrRW7VWXfHUAj9a7M4ZQWqg5oL3oDx3aa4G8?=
+ =?us-ascii?Q?66Ap8Pbi8nGhkghjL6CuwF8aAmHzMXThsqPXpe5HtInM58WwJWog4Vkxgbli?=
+ =?us-ascii?Q?wpVrZNzRekwzPvxYc5bU5GSsvKwd/PuJZEJ6CBlzHePVY4d5izs3XHpqVCgS?=
+ =?us-ascii?Q?HvqXUrGnn0UQxkWTSZcTTzHJxc5BHI2wRVkYJs4TbtwgqUUK3Bk3h6+m+4Lt?=
+ =?us-ascii?Q?nSatZPuXL6sOv1LMHeIX5x7qTPYhlrxLVDmHxnbXgFgQTdyYKKyrHKPPx//p?=
+ =?us-ascii?Q?DCoto6NDklUQiwe1nGN8BJbuFZBWeVgvYu9EsMdvVbXFJ+bKgx2svCoyI1Wy?=
+ =?us-ascii?Q?7NobSI7fjbWoQDDeDiaNWoSD+sGS4hqFeadyqIcagdT6QLG1/NKx+ok0Ki6v?=
+ =?us-ascii?Q?DDKIQgpvCbIhr1bIOBo5Y+mVCOJ7qcmNUvKeJrb/CwRY2mZq9iLB2mFCKz+f?=
+ =?us-ascii?Q?uIkXye29UYOq2CKqXoUK2x62bqNLVgKOenUKTZqZdRQFyAQeP104GZxBm4YW?=
+ =?us-ascii?Q?Ib4H975Fb0CzjN2BJ2RxceEOPANg66y+aFq/4telu4R4ERFt/6XUQNyIvLIi?=
+ =?us-ascii?Q?uB8Bpn9/fTaXQILwaN3MRZJP+h95+H45ZUI4cB2/ob5JjYSxVkOaDd3j+JND?=
+ =?us-ascii?Q?K2qEE9aCo3TLBxVNK9x56HOlLsjmckn7yDD7KNlZ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c33d465-7a45-47bb-6e8d-08ddc32117bd
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2025 21:55:05.8489
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m7ZFZEtFzogdBiyDJEajePGcPt6csMMJadpbiMuvzZF0o4tetIkvr1xBR1kUmof9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8181
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   482cb3b5cb54b04f17d439174a6a8d1298da5b9e
-commit: f8492388d02294b021e0f85cf14784d2a26e3785 [92/119] bcachefs: convert super.c to CLASS/guards
-config: arm-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507150440.yJNwET08-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150440.yJNwET08-lkp@intel.com/reproduce)
+On Thu, Apr 11, 2024 at 01:46:19PM -0300, Jason Gunthorpe wrote:
+> mlx5 has a built in self-test at driver startup to evaluate if the
+> platform supports write combining to generate a 64 byte PCIe TLP or
+> not. This has proven necessary because a lot of common scenarios end up
+> with broken write combining (especially inside virtual machines) and there
+> is other way to learn this information.
+> 
+> This self test has been consistently failing on new ARM64 CPU
+> designs (specifically with NVIDIA Grace's implementation of Neoverse
+> V2). The C loop around writeq() generates some pretty terrible ARM64
+> assembly, but historically this has worked on a lot of existing ARM64 CPUs
+> till now.
+> 
+> We see it succeed about 1 time in 10,000 on the worst effected
+> systems. The CPU architects speculate that the load instructions
+> interspersed with the stores makes the WC buffers statistically flush too
+> often and thus the generation of large TLPs becomes infrequent. This makes
+> the boot up test unreliable in that it indicates no write-combining,
+> however userspace would be fine since it uses a ST4 instruction.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507150440.yJNwET08-lkp@intel.com/
+Hi Catalin,
 
-All errors (new ones prefixed by >>):
+After a year of testing this in real systems it turns out that still
+some systems are not good enough with the unrolled 8 byte store loop.
+In my view the CPUs are quite bad here and this WC performance
+optimization is not working very well.
 
->> fs/bcachefs/super.c:2269:3: error: cannot jump from this goto statement to its label
-    2269 |                 goto unlock;
-         |                 ^
-   fs/bcachefs/super.c:2282:18: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2282 |         CLASS(printbuf, buf)();
-         |                         ^
-   1 error generated.
+There are only two more options to work around this issue, use the
+unrolled 16 byte STP or the single Neon instruction 64 byte store.
 
+Since STP was rejected alread we've only tested the Neon version. It
+does make a huge improvement, but it still somehow fails to combine
+rarely sometimes. The CPU is really bad at this :(
 
-vim +2269 fs/bcachefs/super.c
+So we want to make mlx5 use the single 64 byte neon store instruction
+like userspace has been using for a long time for this testing
+algorithm.
 
-d5308203a85e01 Kent Overstreet 2025-02-25  2248  
-d5308203a85e01 Kent Overstreet 2025-02-25  2249  static void bch2_fs_bdev_mark_dead(struct block_device *bdev, bool surprise)
-d5308203a85e01 Kent Overstreet 2025-02-25  2250  {
-f8492388d02294 Kent Overstreet 2025-07-14  2251  	CLASS(bdev_get_fs, c)(bdev);
-d5308203a85e01 Kent Overstreet 2025-02-25  2252  	if (!c)
-d5308203a85e01 Kent Overstreet 2025-02-25  2253  		return;
-d5308203a85e01 Kent Overstreet 2025-02-25  2254  
-d5308203a85e01 Kent Overstreet 2025-02-25  2255  	struct super_block *sb = c->vfs_sb;
-d5308203a85e01 Kent Overstreet 2025-02-25  2256  	if (sb) {
-d5308203a85e01 Kent Overstreet 2025-02-25  2257  		/*
-d5308203a85e01 Kent Overstreet 2025-02-25  2258  		 * Not necessary, c->ro_ref guards against the filesystem being
-d5308203a85e01 Kent Overstreet 2025-02-25  2259  		 * unmounted - we only take this to avoid a warning in
-d5308203a85e01 Kent Overstreet 2025-02-25  2260  		 * sync_filesystem:
-d5308203a85e01 Kent Overstreet 2025-02-25  2261  		 */
-d5308203a85e01 Kent Overstreet 2025-02-25  2262  		down_read(&sb->s_umount);
-d5308203a85e01 Kent Overstreet 2025-02-25  2263  	}
-d5308203a85e01 Kent Overstreet 2025-02-25  2264  
-f8492388d02294 Kent Overstreet 2025-07-14  2265  	guard(rwsem_write)(&c->state_lock);
-f8492388d02294 Kent Overstreet 2025-07-14  2266  
-d5308203a85e01 Kent Overstreet 2025-02-25  2267  	struct bch_dev *ca = bdev_to_bch_dev(c, bdev);
-d5308203a85e01 Kent Overstreet 2025-02-25  2268  	if (!ca)
-d5308203a85e01 Kent Overstreet 2025-02-25 @2269  		goto unlock;
-d5308203a85e01 Kent Overstreet 2025-02-25  2270  
-b42fac043f9551 Kent Overstreet 2025-05-13  2271  	bool dev = bch2_dev_state_allowed(c, ca,
-b42fac043f9551 Kent Overstreet 2025-05-13  2272  					  BCH_MEMBER_STATE_failed,
-b42fac043f9551 Kent Overstreet 2025-05-13  2273  					  BCH_FORCE_IF_DEGRADED);
-b42fac043f9551 Kent Overstreet 2025-05-13  2274  
-b42fac043f9551 Kent Overstreet 2025-05-13  2275  	if (!dev && sb) {
-d5308203a85e01 Kent Overstreet 2025-02-25  2276  		if (!surprise)
-d5308203a85e01 Kent Overstreet 2025-02-25  2277  			sync_filesystem(sb);
-d5308203a85e01 Kent Overstreet 2025-02-25  2278  		shrink_dcache_sb(sb);
-d5308203a85e01 Kent Overstreet 2025-02-25  2279  		evict_inodes(sb);
-d5308203a85e01 Kent Overstreet 2025-02-25  2280  	}
-d5308203a85e01 Kent Overstreet 2025-02-25  2281  
-f8492388d02294 Kent Overstreet 2025-07-14  2282  	CLASS(printbuf, buf)();
-b42fac043f9551 Kent Overstreet 2025-05-13  2283  	__bch2_log_msg_start(ca->name, &buf);
-b42fac043f9551 Kent Overstreet 2025-05-13  2284  
-b42fac043f9551 Kent Overstreet 2025-05-13  2285  	prt_printf(&buf, "offline from block layer");
-b42fac043f9551 Kent Overstreet 2025-05-13  2286  
-b42fac043f9551 Kent Overstreet 2025-05-13  2287  	if (dev) {
-b42fac043f9551 Kent Overstreet 2025-05-13  2288  		__bch2_dev_offline(c, ca);
-b42fac043f9551 Kent Overstreet 2025-05-13  2289  	} else {
-d5308203a85e01 Kent Overstreet 2025-02-25  2290  		bch2_journal_flush(&c->journal);
-b42fac043f9551 Kent Overstreet 2025-05-13  2291  		bch2_fs_emergency_read_only2(c, &buf);
-d5308203a85e01 Kent Overstreet 2025-02-25  2292  	}
-d5308203a85e01 Kent Overstreet 2025-02-25  2293  
-b42fac043f9551 Kent Overstreet 2025-05-13  2294  	bch2_print_str(c, KERN_ERR, buf.buf);
-b42fac043f9551 Kent Overstreet 2025-05-13  2295  
-d5308203a85e01 Kent Overstreet 2025-02-25  2296  	bch2_dev_put(ca);
-d5308203a85e01 Kent Overstreet 2025-02-25  2297  unlock:
-d5308203a85e01 Kent Overstreet 2025-02-25  2298  	if (sb)
-d5308203a85e01 Kent Overstreet 2025-02-25  2299  		up_read(&sb->s_umount);
-d5308203a85e01 Kent Overstreet 2025-02-25  2300  }
-d5308203a85e01 Kent Overstreet 2025-02-25  2301  
+It is simple enough, but the question has come up where to put the
+code.  Do you want to somehow see the neon option to be in the
+arch/arm64 code or should we stick it in the driver under a #ifdef?
 
-:::::: The code at line 2269 was first introduced by commit
-:::::: d5308203a85e016e9ceb3e38742a1634c77a7706 bcachefs: Implement blk_holder_ops
+The entry/exit from neon is slow enough I don't think any driver doing
+performance work would want to use neon instead of __iowrite64_copy(),
+so I do not think it should be hidden inside __iowrite64_copy(). Nor
+have I thought of a name for an arch generic function..
 
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Jason
