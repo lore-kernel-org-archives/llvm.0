@@ -1,164 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BB317A2EC;
-	Mon, 14 Jul 2025 17:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3706B221FB1;
+	Mon, 14 Jul 2025 20:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752513364; cv=none; b=NzwwWPTb2qRtrhWXEo+D3Wf9kSQdPE1TVFbJy+7kCK7x6A3hFpKJOMQmQ1mOCoDazpNK4IFlAfi6uKQa7yPHK3bQOgkcT5ql1hQWaehqfDnrce8C7gNSR8dGul6RxbApyxoxUa+iXolMBp+SuJw+69g/rFbYJ5IcvkvhrfPkaeA=
+	t=1752525312; cv=none; b=k5JqKXgI/sKG2yg/knfsl+ZvOE3wRHtNIjGGbHUuHTWULyWBAIbSAVYxrtdwz5O412AvY0raLmh+FtX+JtjujUCtVJl9BTNIY6wGca65dqbz508T0Ihg/upycax1IlffW3hPRylEF1ppwnxP+czfnDhVc4YDHqMpEyV5otdQUXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752513364; c=relaxed/simple;
-	bh=6m85wYmGPnnc4asSalRFdjp8FI3bHlAHsTWMgWqjY/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nU7ZcMnD8wd9GOaSlel5jF/7D9ScFDOkDK5zjPmqzKwtcrkdxFxjCisj093YE249UGHmWhJGKS4NPNUVZSYXJftPF3L5vOEZbFL7tCwYN6ReNDwkaFxXr90pbw0qBUj4OphT9tD1m3xWbJ3GQsfl9gychJuD08lvTydYa7LS0Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cbGd1zSw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752525312; c=relaxed/simple;
+	bh=P3G+5HJ8Rd8lg06Ac/rN8qKNL1uVRByU9FkqJRNzaoo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FHr847It4dc0z+IAElJoMXib1EFZGXOlqn3mzSyB0KylkL2nL8a+Bm5D5uwq6CnDil727EkKKGUGRfTy9kYbjatgsMm7t+fRsXOIw5XfWTPk8s6zJeXcYoEflUn3WrSwdm+OcUduOJ5wm4Tbr2HVxhY4obkmfxMB+PZRDt8iIs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CXYg/lHs; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cbGd1zSw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86CC1C4CEED;
-	Mon, 14 Jul 2025 17:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752513364;
-	bh=6m85wYmGPnnc4asSalRFdjp8FI3bHlAHsTWMgWqjY/Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cbGd1zSwBYhM0YYQBmf/nUf2yQEyJLu0TsprSrxxqZvb4k+ffnly04zsOYRFBM1vq
-	 pu14lnXwdjXS5jCFa877iralVgtkv8ettACY4nCdz0bXQZoiIGsDubBv0CUbhObw/z
-	 3EpERtSygsrSQNFqLD5F0f5n4ZeWPypubE5G1rdnE04PrEsNw3pNvuo78rRAGUPvu7
-	 jaHyjoX+LEAm+bqKP4Zo5RabRz17IUYnUqXCDvb00pnuCEUaiToJmfjHi6Hm8t4VR/
-	 xmd5E+YDnH/b406r1hEUyan+8C0bp5YNl8MGwNaoAbHESCDJSlgZq6eJlYmAm40b/q
-	 EMoaptjhQ+0zg==
-Date: Mon, 14 Jul 2025 10:15:59 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sascha Bischoff <Sascha.Bischoff@arm.com>
-Cc: "lkp@intel.com" <lkp@intel.com>, Timothy Hayes <Timothy.Hayes@arm.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, nd <nd@arm.com>
-Subject: Re: [linux-next:master 7731/9053]
- arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: warning: variable 'len' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <20250714171559.GA1364710@ax162>
-References: <202507130334.ddFcXn4N-lkp@intel.com>
- <06b16fee8f7a1d60e6723e5dafb12158d6797c7d.camel@arm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CXYg/lHs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752525309; x=1784061309;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P3G+5HJ8Rd8lg06Ac/rN8qKNL1uVRByU9FkqJRNzaoo=;
+  b=CXYg/lHsoLc1Q/gNKRj+yhcUUwjMP5+9Ryss7deYsVHA5Q09iDb+iMIQ
+   0flwFimqxhNmlM0OnUL5NkzQseO7T2aUhADHFvJnEKopXxZogKh8U3jjo
+   VWjPCG8doxsza/QDHY0CsGvV1oSfDpX9as8Db0wMm9GRVsuDtoJzfzjId
+   5RZ9R3ieju7wfUjY9n0y9Otg9g7o+YfeJ+LMhoua6/q/Jj3IBGEqoz3xy
+   iMDskfgzGylWxJFR0gCt8CrSdgymqTz/vltG5JlVWDgVD4SEUuEPx6A7I
+   xTPB5GSij4YRo5+NAkPilDJaqjmbv8OLQXzGhvkGto39Lsl7e4LzT8dpd
+   Q==;
+X-CSE-ConnectionGUID: XAA6a+egR8CW0l22OVnKpg==
+X-CSE-MsgGUID: eflmZ+18QYylbW+R9QQ21Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="72180343"
+X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
+   d="scan'208";a="72180343"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 13:35:09 -0700
+X-CSE-ConnectionGUID: FOfTnYXMSQG25ccRJe5Hrw==
+X-CSE-MsgGUID: n6/OWT81RYekewfYKr8XIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
+   d="scan'208";a="161347671"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 14 Jul 2025 13:35:08 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ubPtB-0009JJ-0J;
+	Mon, 14 Jul 2025 20:35:05 +0000
+Date: Tue, 15 Jul 2025 04:34:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 92/119] fs/bcachefs/super.c:2269:3:
+ error: cannot jump from this goto statement to its label
+Message-ID: <202507150440.yJNwET08-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <06b16fee8f7a1d60e6723e5dafb12158d6797c7d.camel@arm.com>
 
-Hi Sascha,
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   482cb3b5cb54b04f17d439174a6a8d1298da5b9e
+commit: f8492388d02294b021e0f85cf14784d2a26e3785 [92/119] bcachefs: convert super.c to CLASS/guards
+config: arm-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507150440.yJNwET08-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150440.yJNwET08-lkp@intel.com/reproduce)
 
-On Mon, Jul 14, 2025 at 12:37:35PM +0000, Sascha Bischoff wrote:
-> On Sun, 2025-07-13 at 03:29 +0800, kernel test robot wrote:
-> > commit: c017e49ed1381001ba7a6521daae8f968b11cf09 [7731/9053] KVM: arm64: gic-v5: Support GICv3 compat
-> > config: arm64-randconfig-004-20250713 (https://download.01.org/0day-ci/archive/20250713/202507130334.ddFcXn4N-lkp@intel.com/config)
-> > compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 01c97b4953e87ae455bd4c41e3de3f0f0f29c61c)
-...
-> > arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: warning: variable 'len' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >     1094 |                 BUG_ON(1);
-> >          |                 ^~~~~~~~~
-> >    include/asm-generic/bug.h:71:36: note: expanded from macro 'BUG_ON'
-> >       71 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-> >          |                                    ^~~~~~~~~~~~~~~~~~~
-> >    include/linux/compiler.h:47:23: note: expanded from macro 'unlikely'
-> >       47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-> >          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-...
-> There is no actual uninitialized use of len occurring here. It is
-> explicitly initialized in both the VGIC_V2 and VGIC_V3 cases. The only
-> other path is the default case, which triggers BUG_ON(1).
-> 
-> For arm64, BUG() itself is defined as:
-> 
-> #define BUG() do {					\
-> 	__BUG_FLAGS(0);					\
-> 	unreachable();					\
-> } while (0)
-> 
-> Since __BUG_FLAGS(0) is followed by unreachable(), the compiler should
-> ideally recognize that code paths beyond this point are dead. 
-> The fact that this warning is still being emitted suggests the compiler
-> isn’t correctly propagating the unreachable() information in this
-> context.
-> 
-> Given that, this seems like an issue on the compiler side, or possibly
-> a case where BUG_ON() could be restructured to more explicitly convey
-> control-flow termination to the compiler.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507150440.yJNwET08-lkp@intel.com/
 
-In a normal configuration, it is easy for the compiler to see that
-BUG_ON(1) is the same thing as BUG() and take into account the
-__builtin_unreachable() at the end to avoid warnings.
+All errors (new ones prefixed by >>):
 
-However, the key to what is going on here is in the second note: this
-configuration has CONFIG_TRACE_BRANCH_PROFILING=y, which turns
-unlikely() into
+>> fs/bcachefs/super.c:2269:3: error: cannot jump from this goto statement to its label
+    2269 |                 goto unlock;
+         |                 ^
+   fs/bcachefs/super.c:2282:18: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    2282 |         CLASS(printbuf, buf)();
+         |                         ^
+   1 error generated.
 
-#define __branch_check__(x, expect, is_constant) ({			\
-			long ______r;					\
-			static struct ftrace_likely_data		\
-				__aligned(4)				\
-				__section("_ftrace_annotated_branch")	\
-				______f = {				\
-				.data.func = __func__,			\
-				.data.file = __FILE__,			\
-				.data.line = __LINE__,			\
-			};						\
-			______r = __builtin_expect(!!(x), expect);	\
-			ftrace_likely_update(&______f, ______r,		\
-					     expect, is_constant);	\
-			______r;					\
-		})
 
-Clang's semantic analysis phase happens early in the front end, so it is
-not able to value track ______r yet, meaning that it thinks BUG() is
-only conditionally called, leaving len uninitialized in the other
-imaginary branch.
+vim +2269 fs/bcachefs/super.c
 
-I see two ways to fix this. The most obvious is just turn this BUG_ON(1)
-into BUG() directly to avoid having an unlikely() in the first place.
+d5308203a85e01 Kent Overstreet 2025-02-25  2248  
+d5308203a85e01 Kent Overstreet 2025-02-25  2249  static void bch2_fs_bdev_mark_dead(struct block_device *bdev, bool surprise)
+d5308203a85e01 Kent Overstreet 2025-02-25  2250  {
+f8492388d02294 Kent Overstreet 2025-07-14  2251  	CLASS(bdev_get_fs, c)(bdev);
+d5308203a85e01 Kent Overstreet 2025-02-25  2252  	if (!c)
+d5308203a85e01 Kent Overstreet 2025-02-25  2253  		return;
+d5308203a85e01 Kent Overstreet 2025-02-25  2254  
+d5308203a85e01 Kent Overstreet 2025-02-25  2255  	struct super_block *sb = c->vfs_sb;
+d5308203a85e01 Kent Overstreet 2025-02-25  2256  	if (sb) {
+d5308203a85e01 Kent Overstreet 2025-02-25  2257  		/*
+d5308203a85e01 Kent Overstreet 2025-02-25  2258  		 * Not necessary, c->ro_ref guards against the filesystem being
+d5308203a85e01 Kent Overstreet 2025-02-25  2259  		 * unmounted - we only take this to avoid a warning in
+d5308203a85e01 Kent Overstreet 2025-02-25  2260  		 * sync_filesystem:
+d5308203a85e01 Kent Overstreet 2025-02-25  2261  		 */
+d5308203a85e01 Kent Overstreet 2025-02-25  2262  		down_read(&sb->s_umount);
+d5308203a85e01 Kent Overstreet 2025-02-25  2263  	}
+d5308203a85e01 Kent Overstreet 2025-02-25  2264  
+f8492388d02294 Kent Overstreet 2025-07-14  2265  	guard(rwsem_write)(&c->state_lock);
+f8492388d02294 Kent Overstreet 2025-07-14  2266  
+d5308203a85e01 Kent Overstreet 2025-02-25  2267  	struct bch_dev *ca = bdev_to_bch_dev(c, bdev);
+d5308203a85e01 Kent Overstreet 2025-02-25  2268  	if (!ca)
+d5308203a85e01 Kent Overstreet 2025-02-25 @2269  		goto unlock;
+d5308203a85e01 Kent Overstreet 2025-02-25  2270  
+b42fac043f9551 Kent Overstreet 2025-05-13  2271  	bool dev = bch2_dev_state_allowed(c, ca,
+b42fac043f9551 Kent Overstreet 2025-05-13  2272  					  BCH_MEMBER_STATE_failed,
+b42fac043f9551 Kent Overstreet 2025-05-13  2273  					  BCH_FORCE_IF_DEGRADED);
+b42fac043f9551 Kent Overstreet 2025-05-13  2274  
+b42fac043f9551 Kent Overstreet 2025-05-13  2275  	if (!dev && sb) {
+d5308203a85e01 Kent Overstreet 2025-02-25  2276  		if (!surprise)
+d5308203a85e01 Kent Overstreet 2025-02-25  2277  			sync_filesystem(sb);
+d5308203a85e01 Kent Overstreet 2025-02-25  2278  		shrink_dcache_sb(sb);
+d5308203a85e01 Kent Overstreet 2025-02-25  2279  		evict_inodes(sb);
+d5308203a85e01 Kent Overstreet 2025-02-25  2280  	}
+d5308203a85e01 Kent Overstreet 2025-02-25  2281  
+f8492388d02294 Kent Overstreet 2025-07-14  2282  	CLASS(printbuf, buf)();
+b42fac043f9551 Kent Overstreet 2025-05-13  2283  	__bch2_log_msg_start(ca->name, &buf);
+b42fac043f9551 Kent Overstreet 2025-05-13  2284  
+b42fac043f9551 Kent Overstreet 2025-05-13  2285  	prt_printf(&buf, "offline from block layer");
+b42fac043f9551 Kent Overstreet 2025-05-13  2286  
+b42fac043f9551 Kent Overstreet 2025-05-13  2287  	if (dev) {
+b42fac043f9551 Kent Overstreet 2025-05-13  2288  		__bch2_dev_offline(c, ca);
+b42fac043f9551 Kent Overstreet 2025-05-13  2289  	} else {
+d5308203a85e01 Kent Overstreet 2025-02-25  2290  		bch2_journal_flush(&c->journal);
+b42fac043f9551 Kent Overstreet 2025-05-13  2291  		bch2_fs_emergency_read_only2(c, &buf);
+d5308203a85e01 Kent Overstreet 2025-02-25  2292  	}
+d5308203a85e01 Kent Overstreet 2025-02-25  2293  
+b42fac043f9551 Kent Overstreet 2025-05-13  2294  	bch2_print_str(c, KERN_ERR, buf.buf);
+b42fac043f9551 Kent Overstreet 2025-05-13  2295  
+d5308203a85e01 Kent Overstreet 2025-02-25  2296  	bch2_dev_put(ca);
+d5308203a85e01 Kent Overstreet 2025-02-25  2297  unlock:
+d5308203a85e01 Kent Overstreet 2025-02-25  2298  	if (sb)
+d5308203a85e01 Kent Overstreet 2025-02-25  2299  		up_read(&sb->s_umount);
+d5308203a85e01 Kent Overstreet 2025-02-25  2300  }
+d5308203a85e01 Kent Overstreet 2025-02-25  2301  
 
-diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
-index e416e433baff..a573b1f0c6cb 100644
---- a/arch/arm64/kvm/vgic/vgic-mmio.c
-+++ b/arch/arm64/kvm/vgic/vgic-mmio.c
-@@ -1091,7 +1091,7 @@ int vgic_register_dist_iodev(struct kvm *kvm, gpa_t dist_base_address,
- 		len = vgic_v3_init_dist_iodev(io_device);
- 		break;
- 	default:
--		BUG_ON(1);
-+		BUG();
- 	}
- 
- 	io_device->base_addr = dist_base_address;
----
+:::::: The code at line 2269 was first introduced by commit
+:::::: d5308203a85e016e9ceb3e38742a1634c77a7706 bcachefs: Implement blk_holder_ops
 
-The other option would be to turn the unlikely() in the generic BUG_ON()
-to unlikely_notrace(), so that the '1' condition can always be
-constantly evaluated. I am not sure having branch checks on BUG_ON() is
-super useful since these are conditions that are intentionally hard to
-hit and you will know when they are :)
+:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index 2d9f61346dab..35f3e914b068 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -74,7 +74,7 @@ struct bug_entry {
- #endif
- 
- #ifndef HAVE_ARCH_BUG_ON
--#define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-+#define BUG_ON(condition) do { if (unlikely_notrace(condition)) BUG(); } while (0)
- #endif
- 
- /*
----
-
-Both of these resolve the warning from the original configuration for
-me.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
