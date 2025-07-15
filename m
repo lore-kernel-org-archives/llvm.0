@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65D426281;
-	Tue, 15 Jul 2025 00:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEE0F9C1;
+	Tue, 15 Jul 2025 00:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752538364; cv=none; b=mt6of4goDs3nV1uHuTMLUTPJYBI0sF9oOKafuTh+Hds1MjSfbfOZvAC+tIFPp7n453O/yqi5w2MNzv81A71bK4qRprhYypMEBLo+QcW0oz/SE5o+oTbJg4fXTsLhWkVwph/rO27fv4OazQ0CMpHMV4ahw8N/su3MynkMPv11kQI=
+	t=1752540828; cv=none; b=kTodzsiwyP4HFRZB/u8+55miKM13RvfWMGc50ci1ryv/KV8c7lmhTAuGDqSsF8Zara89pYKAV7f6uWMt64ChD1G5NruvKUeiMs5V7nxxm3R2ktvt1bsD9J/Tn9t2LB86xNgCjoO+z16+8ZlrLnEXLS5B3Y1Sva5gXNNdWOrSA2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752538364; c=relaxed/simple;
-	bh=j9V2XeZ/WyEslZsdpjNSs69uSu0GwuWu57I/uXIFR/A=;
+	s=arc-20240116; t=1752540828; c=relaxed/simple;
+	bh=UpFR44Wra6kXZ8rGAAZ0feXypfrgNBlUZhPw50/Mu7c=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hlkNiyWi+qnGU0/4SKebJ3eqiZ7F2WrhCc/BIa1wwX7ogK/rB2F+KrBC6pIG2A1Dm/+xb9Oqqq9DXJlHpP9XIEWzuA2t11XL06BJ5nkpFl75eGJrmwm70GXEFWF+DUi2Io1u1BYUvXmExx5F8UvfnCF0pB1byEuXUCMFomSaohA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H3jy/xvP; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=AUswCayud+msNIS++J0DABoet7VHHgYCEc4hG4BXGlCY0XigtH5Z+CEsffZE4SVRauIA3qFNX+K861grZp6AihR6qAx2NxyKieNLaDpPouoZkwnJyx9COnMzChtgdvqIAZft1vvJmLe9qHDlWRB3TZ3SGq15S7/dX3o169fxCzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ku3P98g2; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H3jy/xvP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ku3P98g2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752538362; x=1784074362;
+  t=1752540827; x=1784076827;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j9V2XeZ/WyEslZsdpjNSs69uSu0GwuWu57I/uXIFR/A=;
-  b=H3jy/xvPpsxsywCAcnXgoMclSa3UEb2tBxttiMvRZvp2MzzEdwviO21Z
-   XhVfN0hM9KtVDGE7a0LomsI6WZD2p0Gdh9eLKQ40N2mehf6ghqHvHVZ+8
-   wBkOd2VkTEpyjvhq+3dnX2BxKGSCQ908dJawUusBuQ8tlW6xeGppkKX7R
-   SdhZy1OOIEcgLK4t3QJtKTfYm0lYBS42YkMu1APUscRXpf8sFESjd6Kgt
-   Fqj1zfDgs1IPqRpl5n/+GpUCTQYzLygqcwiI/fveGeLZNyMyQHOy7V3fT
-   87oyBbSzNH2KMnNMo+2zjgVwUEsoCVoum5uTio3dyaMQ9es3E3yxfOIUI
+  bh=UpFR44Wra6kXZ8rGAAZ0feXypfrgNBlUZhPw50/Mu7c=;
+  b=ku3P98g2/dKdsvMUr9YLfIi35OXSPDv6X1IuYEoS2IRIQFb9R8rJaIO/
+   4WT6nkrxBQt2mxmE3E+4Gw6wIwgXEiWVzcRlonkFWUguuH3CqbbgLc4ek
+   fAm6/ixR2jiHgOuv0BDxoDJ2GwBBCDE33MQxhPReBbFUA9dV1YfBRlpIL
+   etmKnHiQdEahyU41NSgEYLz28TE+F5Smor/J1JVH/h/PH3fpezA+X8UdZ
+   tozJCxglseOGeqA4xLdRw7Vs/u1hoKUNWvUM8KnbxfXxUvpuSfxHfottY
+   MF14Bsgdm6b/hrrmSMEJIjpJXkq9geYMlsJNTdxdD3uETf3A4Q4YC874/
    w==;
-X-CSE-ConnectionGUID: Kd1EA89dSB2ScbuiroCgpA==
-X-CSE-MsgGUID: ADS3xD8aTc2WxsqH+nRJEQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="53856483"
+X-CSE-ConnectionGUID: TWqlG/MvTH6tSzi68Iyz9w==
+X-CSE-MsgGUID: xRuFeqmOQhqDmxpWqKBZ9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="58515412"
 X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="53856483"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 17:12:41 -0700
-X-CSE-ConnectionGUID: JWmWg0XzQ6GNgHUUw9DuEw==
-X-CSE-MsgGUID: nKOkFt9ERumjKLVciQ1OQA==
+   d="scan'208";a="58515412"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 17:53:46 -0700
+X-CSE-ConnectionGUID: HjzmXGC3RF2OM8jUeOgM3g==
+X-CSE-MsgGUID: dK4TXdFFQJG9kemY4z9rQA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="156709230"
+   d="scan'208";a="157798092"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 14 Jul 2025 17:12:39 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 14 Jul 2025 17:53:44 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ubTHh-0009T9-1N;
-	Tue, 15 Jul 2025 00:12:37 +0000
-Date: Tue, 15 Jul 2025 08:11:40 +0800
+	id 1ubTvR-0009UZ-2Z;
+	Tue, 15 Jul 2025 00:53:41 +0000
+Date: Tue, 15 Jul 2025 08:52:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Eggers <ceggers@arri.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org,
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Subject: [bluetooth-next:master 90/90] drivers/bluetooth/hci_ll.c:652:48:
- error: no member named 'quirks' in 'struct hci_dev'
-Message-ID: <202507150810.nsWLqAW3-lkp@intel.com>
+To: Mel Gorman <mgorman@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mel:sched-preemptnext-v1r8 2/2] kernel/sched/fair.c:8925:2:
+ warning: unannotated fall-through between switch labels
+Message-ID: <202507150807.0r5AqudU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,143 +62,190 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-head:   be736f5f89d519e58057ee40c3e09fbfc711d4dc
-commit: be736f5f89d519e58057ee40c3e09fbfc711d4dc [90/90] Bluetooth: hci_dev: replace 'quirks' integer by 'quirk_flags' bitmap
-config: arm-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507150810.nsWLqAW3-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git sched-preemptnext-v1r8
+head:   9b54b70265f4d8c913fa8c5c85bbb241524f92f5
+commit: 9b54b70265f4d8c913fa8c5c85bbb241524f92f5 [2/2] sched/fair: Reimplement NEXT_BUDDY to align with EEVDF goals
+config: arm-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507150807.0r5AqudU-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150810.nsWLqAW3-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150807.0r5AqudU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507150810.nsWLqAW3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507150807.0r5AqudU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/bluetooth/hci_ll.c:652:48: error: no member named 'quirks' in 'struct hci_dev'
-     652 |                 set_bit(HCI_QUIRK_INVALID_BDADDR, &hu->hdev->quirks);
-         |                                                    ~~~~~~~~  ^
-   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
-     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
-         |                                                                 ^
-   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
-     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
-         |                                                           ^
->> drivers/bluetooth/hci_ll.c:652:48: error: no member named 'quirks' in 'struct hci_dev'
-     652 |                 set_bit(HCI_QUIRK_INVALID_BDADDR, &hu->hdev->quirks);
-         |                                                    ~~~~~~~~  ^
-   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
-     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
-         |                                                                 ^
-   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
-     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
-         |                                                                           ^
-   drivers/bluetooth/hci_ll.c:656:49: error: no member named 'quirks' in 'struct hci_dev'
-     656 |                         set_bit(HCI_QUIRK_INVALID_BDADDR, &hu->hdev->quirks);
-         |                                                            ~~~~~~~~  ^
-   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
-     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
-         |                                                                 ^
-   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
-     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
-         |                                                           ^
-   drivers/bluetooth/hci_ll.c:656:49: error: no member named 'quirks' in 'struct hci_dev'
-     656 |                         set_bit(HCI_QUIRK_INVALID_BDADDR, &hu->hdev->quirks);
-         |                                                            ~~~~~~~~  ^
-   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
-     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
-         |                                                                 ^
-   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
-     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
-         |                                                                           ^
-   4 errors generated.
+>> kernel/sched/fair.c:8925:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    8925 |         case PREEMPT_BUDDY_RESCHED:
+         |         ^
+   kernel/sched/fair.c:8925:2: note: insert '__attribute__((fallthrough));' to silence this warning
+    8925 |         case PREEMPT_BUDDY_RESCHED:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   kernel/sched/fair.c:8925:2: note: insert 'break;' to avoid fall-through
+    8925 |         case PREEMPT_BUDDY_RESCHED:
+         |         ^
+         |         break; 
+   kernel/sched/fair.c:484:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
+     484 | static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:505:19: warning: unused function 'tg_is_idle' [-Wunused-function]
+     505 | static inline int tg_is_idle(struct task_group *tg)
+         |                   ^~~~~~~~~~
+   kernel/sched/fair.c:1491:20: warning: unused function 'is_core_idle' [-Wunused-function]
+    1491 | static inline bool is_core_idle(int cpu)
+         |                    ^~~~~~~~~~~~
+   kernel/sched/fair.c:3768:20: warning: unused function 'account_numa_enqueue' [-Wunused-function]
+    3768 | static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:3772:20: warning: unused function 'account_numa_dequeue' [-Wunused-function]
+    3772 | static inline void account_numa_dequeue(struct rq *rq, struct task_struct *p)
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:3776:20: warning: unused function 'update_scan_period' [-Wunused-function]
+    3776 | static inline void update_scan_period(struct task_struct *p, int new_cpu)
+         |                    ^~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:5236:20: warning: unused function 'cfs_rq_is_decayed' [-Wunused-function]
+    5236 | static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+         |                    ^~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:5251:20: warning: unused function 'remove_entity_load_avg' [-Wunused-function]
+    5251 | static inline void remove_entity_load_avg(struct sched_entity *se) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:6820:20: warning: unused function 'sync_throttle' [-Wunused-function]
+    6820 | static inline void sync_throttle(struct task_group *tg, int cpu) {}
+         |                    ^~~~~~~~~~~~~
+   kernel/sched/fair.c:6833:19: warning: unused function 'throttled_lb_pair' [-Wunused-function]
+    6833 | static inline int throttled_lb_pair(struct task_group *tg,
+         |                   ^~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:6844:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
+    6844 | static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+         |                                     ^~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:6848:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
+    6848 | static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:6849:20: warning: unused function 'update_runtime_enabled' [-Wunused-function]
+    6849 | static inline void update_runtime_enabled(struct rq *rq) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:6850:20: warning: unused function 'unthrottle_offline_cfs_rqs' [-Wunused-function]
+    6850 | static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:7279:28: warning: unused function 'cfs_h_nr_delayed' [-Wunused-function]
+    7279 | static inline unsigned int cfs_h_nr_delayed(struct rq *rq)
+         |                            ^~~~~~~~~~~~~~~~
+   16 warnings generated.
 
 
-vim +652 drivers/bluetooth/hci_ll.c
+vim +8925 kernel/sched/fair.c
 
-aa0993986932fe David Lechner 2017-12-12  607  
-371805522f8709 Rob Herring   2017-04-13  608  static int ll_setup(struct hci_uart *hu)
-371805522f8709 Rob Herring   2017-04-13  609  {
-371805522f8709 Rob Herring   2017-04-13  610  	int err, retry = 3;
-371805522f8709 Rob Herring   2017-04-13  611  	struct ll_device *lldev;
-371805522f8709 Rob Herring   2017-04-13  612  	struct serdev_device *serdev = hu->serdev;
-371805522f8709 Rob Herring   2017-04-13  613  	u32 speed;
-371805522f8709 Rob Herring   2017-04-13  614  
-371805522f8709 Rob Herring   2017-04-13  615  	if (!serdev)
-371805522f8709 Rob Herring   2017-04-13  616  		return 0;
-371805522f8709 Rob Herring   2017-04-13  617  
-371805522f8709 Rob Herring   2017-04-13  618  	lldev = serdev_device_get_drvdata(serdev);
-371805522f8709 Rob Herring   2017-04-13  619  
-aa0993986932fe David Lechner 2017-12-12  620  	hu->hdev->set_bdaddr = ll_set_bdaddr;
-aa0993986932fe David Lechner 2017-12-12  621  
-371805522f8709 Rob Herring   2017-04-13  622  	serdev_device_set_flow_control(serdev, true);
-371805522f8709 Rob Herring   2017-04-13  623  
-371805522f8709 Rob Herring   2017-04-13  624  	do {
-d54fdcf9244cec David Lechner 2017-12-02  625  		/* Reset the Bluetooth device */
-371805522f8709 Rob Herring   2017-04-13  626  		gpiod_set_value_cansleep(lldev->enable_gpio, 0);
-371805522f8709 Rob Herring   2017-04-13  627  		msleep(5);
-371805522f8709 Rob Herring   2017-04-13  628  		gpiod_set_value_cansleep(lldev->enable_gpio, 1);
-844c79bd599518 Xiaolei Wang  2020-11-10  629  		mdelay(100);
-d54fdcf9244cec David Lechner 2017-12-02  630  		err = serdev_device_wait_for_cts(serdev, true, 200);
-d54fdcf9244cec David Lechner 2017-12-02  631  		if (err) {
-d54fdcf9244cec David Lechner 2017-12-02  632  			bt_dev_err(hu->hdev, "Failed to get CTS");
-d54fdcf9244cec David Lechner 2017-12-02  633  			return err;
-d54fdcf9244cec David Lechner 2017-12-02  634  		}
-371805522f8709 Rob Herring   2017-04-13  635  
-371805522f8709 Rob Herring   2017-04-13  636  		err = download_firmware(lldev);
-371805522f8709 Rob Herring   2017-04-13  637  		if (!err)
-371805522f8709 Rob Herring   2017-04-13  638  			break;
-371805522f8709 Rob Herring   2017-04-13  639  
-371805522f8709 Rob Herring   2017-04-13  640  		/* Toggle BT_EN and retry */
-371805522f8709 Rob Herring   2017-04-13  641  		bt_dev_err(hu->hdev, "download firmware failed, retrying...");
-371805522f8709 Rob Herring   2017-04-13  642  	} while (retry--);
-371805522f8709 Rob Herring   2017-04-13  643  
-371805522f8709 Rob Herring   2017-04-13  644  	if (err)
-371805522f8709 Rob Herring   2017-04-13  645  		return err;
-371805522f8709 Rob Herring   2017-04-13  646  
-0e58d0cdb3eb6e David Lechner 2017-12-12  647  	/* Set BD address if one was specified at probe */
-0e58d0cdb3eb6e David Lechner 2017-12-12  648  	if (!bacmp(&lldev->bdaddr, BDADDR_NONE)) {
-0e58d0cdb3eb6e David Lechner 2017-12-12  649  		/* This means that there was an error getting the BD address
-0e58d0cdb3eb6e David Lechner 2017-12-12  650  		 * during probe, so mark the device as having a bad address.
-0e58d0cdb3eb6e David Lechner 2017-12-12  651  		 */
-0e58d0cdb3eb6e David Lechner 2017-12-12 @652  		set_bit(HCI_QUIRK_INVALID_BDADDR, &hu->hdev->quirks);
-0e58d0cdb3eb6e David Lechner 2017-12-12  653  	} else if (bacmp(&lldev->bdaddr, BDADDR_ANY)) {
-0e58d0cdb3eb6e David Lechner 2017-12-12  654  		err = ll_set_bdaddr(hu->hdev, &lldev->bdaddr);
-0e58d0cdb3eb6e David Lechner 2017-12-12  655  		if (err)
-0e58d0cdb3eb6e David Lechner 2017-12-12  656  			set_bit(HCI_QUIRK_INVALID_BDADDR, &hu->hdev->quirks);
-0e58d0cdb3eb6e David Lechner 2017-12-12  657  	}
-0e58d0cdb3eb6e David Lechner 2017-12-12  658  
-371805522f8709 Rob Herring   2017-04-13  659  	/* Operational speed if any */
-cef456cd354ef4 Adam Ford     2019-10-02  660  	if (hu->oper_speed)
-cef456cd354ef4 Adam Ford     2019-10-02  661  		speed = hu->oper_speed;
-cef456cd354ef4 Adam Ford     2019-10-02  662  	else if (hu->proto->oper_speed)
-cef456cd354ef4 Adam Ford     2019-10-02  663  		speed = hu->proto->oper_speed;
-cef456cd354ef4 Adam Ford     2019-10-02  664  	else
-cef456cd354ef4 Adam Ford     2019-10-02  665  		speed = 0;
-cef456cd354ef4 Adam Ford     2019-10-02  666  
-cef456cd354ef4 Adam Ford     2019-10-02  667  	if (speed) {
-cef456cd354ef4 Adam Ford     2019-10-02  668  		__le32 speed_le = cpu_to_le32(speed);
-cef456cd354ef4 Adam Ford     2019-10-02  669  		struct sk_buff *skb;
-7c6ca1201e5e87 David Lechner 2017-12-03  670  
-cef456cd354ef4 Adam Ford     2019-10-02  671  		skb = __hci_cmd_sync(hu->hdev, HCI_VS_UPDATE_UART_HCI_BAUDRATE,
-cef456cd354ef4 Adam Ford     2019-10-02  672  				     sizeof(speed_le), &speed_le,
-cef456cd354ef4 Adam Ford     2019-10-02  673  				     HCI_INIT_TIMEOUT);
-cef456cd354ef4 Adam Ford     2019-10-02  674  		if (!IS_ERR(skb)) {
-cef456cd354ef4 Adam Ford     2019-10-02  675  			kfree_skb(skb);
-cef456cd354ef4 Adam Ford     2019-10-02  676  			serdev_device_set_baudrate(serdev, speed);
-cef456cd354ef4 Adam Ford     2019-10-02  677  		}
-cef456cd354ef4 Adam Ford     2019-10-02  678  	}
-371805522f8709 Rob Herring   2017-04-13  679  
-371805522f8709 Rob Herring   2017-04-13  680  	return 0;
-371805522f8709 Rob Herring   2017-04-13  681  }
-371805522f8709 Rob Herring   2017-04-13  682  
-
-:::::: The code at line 652 was first introduced by commit
-:::::: 0e58d0cdb3eb6e06416bcc1af3605993c6a07656 Bluetooth: hci_ll: Add optional nvmem BD address source
-
-:::::: TO: David Lechner <david@lechnology.com>
-:::::: CC: Marcel Holtmann <marcel@holtmann.org>
+  8835	
+  8836	/*
+  8837	 * Preempt the current task with a newly woken task if needed:
+  8838	 */
+  8839	static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int wake_flags)
+  8840	{
+  8841		struct task_struct *donor = rq->donor;
+  8842		struct sched_entity *se = &donor->se, *pse = &p->se;
+  8843		struct cfs_rq *cfs_rq = task_cfs_rq(donor);
+  8844		int cse_is_idle, pse_is_idle;
+  8845		bool did_short;
+  8846		s64 delta;
+  8847	
+  8848		if (unlikely(se == pse))
+  8849			return;
+  8850	
+  8851		/*
+  8852		 * This is possible from callers such as attach_tasks(), in which we
+  8853		 * unconditionally wakeup_preempt() after an enqueue (which may have
+  8854		 * lead to a throttle).  This both saves work and prevents false
+  8855		 * next-buddy nomination below.
+  8856		 */
+  8857		if (unlikely(throttled_hierarchy(cfs_rq_of(pse))))
+  8858			return;
+  8859	
+  8860		/*
+  8861		 * We can come here with TIF_NEED_RESCHED already set from new task
+  8862		 * wake up path.
+  8863		 *
+  8864		 * Note: this also catches the edge-case of curr being in a throttled
+  8865		 * group (e.g. via set_curr_task), since update_curr() (in the
+  8866		 * enqueue of curr) will have resulted in resched being set.  This
+  8867		 * prevents us from potentially nominating it as a false LAST_BUDDY
+  8868		 * below.
+  8869		 */
+  8870		if (test_tsk_need_resched(rq->curr))
+  8871			return;
+  8872	
+  8873		if (!sched_feat(WAKEUP_PREEMPTION))
+  8874			return;
+  8875	
+  8876		find_matching_se(&se, &pse);
+  8877		WARN_ON_ONCE(!pse);
+  8878	
+  8879		cse_is_idle = se_is_idle(se);
+  8880		pse_is_idle = se_is_idle(pse);
+  8881	
+  8882		/*
+  8883		 * Preempt an idle entity in favor of a non-idle entity (and don't preempt
+  8884		 * in the inverse case).
+  8885		 */
+  8886		if (cse_is_idle && !pse_is_idle) {
+  8887			/*
+  8888			 * When non-idle entity preempt an idle entity,
+  8889			 * don't give idle entity slice protection.
+  8890			 */
+  8891			cancel_protect_slice(se);
+  8892			goto preempt;
+  8893		}
+  8894	
+  8895		if (cse_is_idle != pse_is_idle)
+  8896			return;
+  8897	
+  8898		/*
+  8899		 * BATCH and IDLE tasks do not preempt others.
+  8900		 */
+  8901		if (unlikely(!normal_policy(p->policy)))
+  8902			return;
+  8903	
+  8904		cfs_rq = cfs_rq_of(se);
+  8905		delta = rq_clock_task(rq) - se->exec_start;
+  8906		update_curr(cfs_rq);
+  8907		/*
+  8908		 * If @p has a shorter slice than current and @p is eligible, override
+  8909		 * current's slice protection in order to allow preemption.
+  8910		 *
+  8911		 * Note that even if @p does not turn out to be the most eligible
+  8912		 * task at this moment, current's slice protection will be lost.
+  8913		 */
+  8914		did_short = do_preempt_short(cfs_rq, pse, se);
+  8915		if (did_short)
+  8916			cancel_protect_slice(se);
+  8917	
+  8918		switch (do_preempt_buddy(rq, cfs_rq, wake_flags, pse, se, delta, did_short)) {
+  8919		case PREEMPT_BUDDY_NONE:
+  8920			return;
+  8921			break;
+  8922		case PREEMPT_BUDDY_IMMEDIATE:
+  8923			cancel_protect_slice(se);
+  8924			;;
+> 8925		case PREEMPT_BUDDY_RESCHED:
+  8926			goto preempt;
+  8927			break;
+  8928		case PREEMPT_BUDDY_NEXT:
+  8929			break;
+  8930		}
+  8931	
+  8932		/*
+  8933		 * If @p has become the most eligible task, force preemption.
+  8934		 */
+  8935		if (pick_eevdf(cfs_rq) == pse)
+  8936			goto preempt;
+  8937	
+  8938		return;
+  8939	
+  8940	preempt:
+  8941		resched_curr_lazy(rq);
+  8942	}
+  8943	
 
 -- 
 0-DAY CI Kernel Test Service
