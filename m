@@ -1,59 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EAA34CF5;
-	Tue, 15 Jul 2025 01:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832642BEC41;
+	Tue, 15 Jul 2025 01:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752542029; cv=none; b=dpaG8FC19bEnAvhwH7t37Rt7y6eRlO26YS3TUU3uee+cJlsScg2wNXGVnjPPBzxZdYy3leflfJdHtTT9GuMYS6sMg7FB4rChsgruQ3BSD5ehTpPIQjSnX9SJWycGvI71EQu0HaSRA4xPQ0bEpSN1foJVqK8fMzNYYD8ScI7rL3s=
+	t=1752543958; cv=none; b=Ug2nkGCpwio0z+snvO6DiPHtB16kkfSO065iy9zUGScL7s6XYHPo0lyvIipI87eLitsot4CyuiOxlWGOFpOHNSooNahUM0tNCx+s+AZIPnQsqQfQe6J/MdxViuKg9bVIG/wVwV2Xd4ulwpag5Wp8yVnR6i2ty6sz/oWQF9/9U7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752542029; c=relaxed/simple;
-	bh=5WTRkC40W62d+Ef4e5kWF7Y93DBlymTa5mTnEaGKWhU=;
+	s=arc-20240116; t=1752543958; c=relaxed/simple;
+	bh=/swcXr2ss79nJxFip+SNNqYNuVuEmY4AkU1neU+GXDQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wad1SP2K3uAyqlPI+oDUtwaIQq2a37mIYbkBXwiAfOhiy2MY5EAh/9/OiUmbXTjxEP9VV0wodCBvIqOcBuQp0a7fKE9RnE3r5Ne6jGYLYFpWarXA1A+u5Vwnj9ODZhSi+OdHBNTX1gwvPpDOiOL7SN9f+DvO20C1eBLeElvbTJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWM99jKr; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/cHBex2ImmzWcbIaXzm6H4UpvJOLJIvgLGTvqTTnJkM1b0M7vhJWFwUH0Obx3uGAxkLF98rLiGuKvhZy7WsBVIZmO3rMyo2OuptSvZIBo6R/4KpxGTwJnmthEMAd6LPOXE/ZGZtz2lv5kkMA4jNuoroyOnxEOzwCt8lwgJUcIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VaYijqUi; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWM99jKr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VaYijqUi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752542028; x=1784078028;
+  t=1752543956; x=1784079956;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5WTRkC40W62d+Ef4e5kWF7Y93DBlymTa5mTnEaGKWhU=;
-  b=NWM99jKrtbKdFOlOWS/OCzpbB+kYZsQTYo1UBr4coY/eEXJhgTOpNhN9
-   v8S8fq0q81o6PiRRNNIW/H9xouGipDrcejl8AgrI92be7ugUQcnuHGjWT
-   wUKUAg1AV/UuwA2gkNp9SbCQfS4qXohuPFPbz0EEp41m9Chy5cWjDD/vZ
-   tc8uiKblYPigSZ4EH2Dw3LAAXUDBoDEXoTUT6VtchRBN0gE7D5CA7gXmR
-   FZseSKWKUX39/oV8XKisX3FA8H61AzFfN84ygG1vemdH1R2Coq+h5AvSQ
-   KU+6XiTBS2n4XBnIbP3Ve4KGJun0E9CvIieGuoW6PsvIFPMM9MCGgZsY/
-   g==;
-X-CSE-ConnectionGUID: lMosn+ZHRr+Bapy3uWbGKA==
-X-CSE-MsgGUID: Y9DDy04fQpa1LeF2VwOmNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="58405589"
+  bh=/swcXr2ss79nJxFip+SNNqYNuVuEmY4AkU1neU+GXDQ=;
+  b=VaYijqUi0xfEBYEfYfCe0jZMGPeCNnnSUAdY3gFX7lRTGO/QWmV4/5V9
+   EgwYbwoF9o0cVORYDFFc6oSkpfN2j1PWnZqe6HOlQRkhvLyMF40xEjz+r
+   CzES+N+eVCAzDuELcrvigNym6v5yRydGoPWdUOjaPRwdjQm19U55Kp87o
+   kjKzqH8da61s0LlR/1raEhvOPjkyJh9+RgS+OX31kNC+mxcEiyol1yk3t
+   NeTOK6mC1l8KKK4q51vX2A2GCJwVv45iJOCf7c3CszJPj5PMSRBgshcN0
+   0jUJeSeL99AgyzhGVMuiste+SyZjUZ6O+XTXGiaF6TCbB+0aYGyv0IBB9
+   A==;
+X-CSE-ConnectionGUID: d7wi7Si/SFmEed7V2ScSww==
+X-CSE-MsgGUID: 8igI+hd6QjeoYxkRLMCdLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="57360560"
 X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="58405589"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 18:13:47 -0700
-X-CSE-ConnectionGUID: 89LDMo4TQ16905S8Avn2Bw==
-X-CSE-MsgGUID: cNonXrFNSVSum+L7oHCyrg==
+   d="scan'208";a="57360560"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 18:45:55 -0700
+X-CSE-ConnectionGUID: yu+/zp4GTtKNOp/AuwsKwA==
+X-CSE-MsgGUID: J3Rvn9+kRXemF9VDSSLEcg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="156901030"
+   d="scan'208";a="162633732"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 14 Jul 2025 18:13:45 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 14 Jul 2025 18:45:48 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ubUEp-0009VD-12;
-	Tue, 15 Jul 2025 01:13:43 +0000
-Date: Tue, 15 Jul 2025 09:13:12 +0800
+	id 1ubUjr-0009Wt-01;
+	Tue, 15 Jul 2025 01:45:47 +0000
+Date: Tue, 15 Jul 2025 09:45:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC] sched/fair: Mitigate the impact of retrieving tg->load_avg
-Message-ID: <202507150900.nqPPaczK-lkp@intel.com>
-References: <20250714232915.523679-1-vinicius.gomes@intel.com>
+To: Byungchul Park <byungchul@sk.com>, willy@infradead.org,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kernel_team@skhynix.com, almasrymina@google.com,
+	ilias.apalodimas@linaro.org, harry.yoo@oracle.com,
+	akpm@linux-foundation.org, andrew+netdev@lunn.ch,
+	asml.silence@gmail.com, toke@redhat.com, david@redhat.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org, vishal.moola@gmail.com, hannes@cmpxchg.org,
+	ziy@nvidia.com, jackmanb@google.com, wei.fang@nxp.com,
+	shenwei.wang@nxp.com, xiaoning.wang@nxp.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org
+Subject: Re: [PATCH net-next v10 12/12] libeth: xdp: access ->pp through
+ netmem_desc instead of page
+Message-ID: <202507150904.kGZOOZns-lkp@intel.com>
+References: <20250714120047.35901-13-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,72 +75,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250714232915.523679-1-vinicius.gomes@intel.com>
+In-Reply-To: <20250714120047.35901-13-byungchul@sk.com>
 
-Hi Vinicius,
+Hi Byungchul,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v6.16-rc6]
-[also build test ERROR on linus/master]
-[cannot apply to tip/sched/core next-20250714]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on c65d34296b2252897e37835d6007bbd01b255742]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vinicius-Costa-Gomes/sched-fair-Mitigate-the-impact-of-retrieving-tg-load_avg/20250715-073036
-base:   v6.16-rc6
-patch link:    https://lore.kernel.org/r/20250714232915.523679-1-vinicius.gomes%40intel.com
-patch subject: [RFC] sched/fair: Mitigate the impact of retrieving tg->load_avg
-config: loongarch-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507150900.nqPPaczK-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150900.nqPPaczK-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/netmem-introduce-struct-netmem_desc-mirroring-struct-page/20250714-200214
+base:   c65d34296b2252897e37835d6007bbd01b255742
+patch link:    https://lore.kernel.org/r/20250714120047.35901-13-byungchul%40sk.com
+patch subject: [PATCH net-next v10 12/12] libeth: xdp: access ->pp through netmem_desc instead of page
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250715/202507150904.kGZOOZns-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150904.kGZOOZns-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507150900.nqPPaczK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507150904.kGZOOZns-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/sched/fair.c:4000:21: error: no member named 'last_update_tg_load_avg' in 'struct cfs_rq'
-    4000 |         if (now - gcfs_rq->last_update_tg_load_avg < NSEC_PER_MSEC)
-         |                   ~~~~~~~  ^
+   In file included from drivers/net/ethernet/intel/libeth/tx.c:6:
+>> include/net/libeth/xdp.h:1295:23: error: passing 'const struct page *' to parameter of type 'struct page *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+    1295 |                          pp_page_to_nmdesc(page)->pp->p.offset, len, true);
+         |                                            ^~~~
+   include/net/netmem.h:270:66: note: passing argument to parameter 'page' here
+     270 | static inline struct netmem_desc *pp_page_to_nmdesc(struct page *page)
+         |                                                                  ^
    1 error generated.
 
 
-vim +4000 kernel/sched/fair.c
+vim +1295 include/net/libeth/xdp.h
 
-  3974	
-  3975	/*
-  3976	 * Recomputes the group entity based on the current state of its group
-  3977	 * runqueue.
-  3978	 */
-  3979	static void update_cfs_group(struct sched_entity *se)
-  3980	{
-  3981		struct cfs_rq *gcfs_rq = group_cfs_rq(se);
-  3982		long shares;
-  3983		u64 now;
-  3984	
-  3985		/*
-  3986		 * When a group becomes empty, preserve its weight. This matters for
-  3987		 * DELAY_DEQUEUE.
-  3988		 */
-  3989		if (!gcfs_rq || !gcfs_rq->load.weight)
-  3990			return;
-  3991	
-  3992		if (throttled_hierarchy(gcfs_rq))
-  3993			return;
-  3994	
-  3995		/*
-  3996		 * For migration heavy workloads, access to tg->load_avg can be
-  3997		 * unbound. Limit the update rate to at most once per ms.
-  3998		 */
-  3999		now = sched_clock_cpu(cpu_of(rq_of(gcfs_rq)));
-> 4000		if (now - gcfs_rq->last_update_tg_load_avg < NSEC_PER_MSEC)
-  4001			return;
-  4002	
+  1263	
+  1264	bool libeth_xdp_buff_add_frag(struct libeth_xdp_buff *xdp,
+  1265				      const struct libeth_fqe *fqe,
+  1266				      u32 len);
+  1267	
+  1268	/**
+  1269	 * libeth_xdp_prepare_buff - fill &libeth_xdp_buff with head FQE data
+  1270	 * @xdp: XDP buffer to attach the head to
+  1271	 * @fqe: FQE containing the head buffer
+  1272	 * @len: buffer len passed from HW
+  1273	 *
+  1274	 * Internal, use libeth_xdp_process_buff() instead. Initializes XDP buffer
+  1275	 * head with the Rx buffer data: data pointer, length, headroom, and
+  1276	 * truesize/tailroom. Zeroes the flags.
+  1277	 * Uses faster single u64 write instead of per-field access.
+  1278	 */
+  1279	static inline void libeth_xdp_prepare_buff(struct libeth_xdp_buff *xdp,
+  1280						   const struct libeth_fqe *fqe,
+  1281						   u32 len)
+  1282	{
+  1283		const struct page *page = __netmem_to_page(fqe->netmem);
+  1284	
+  1285	#ifdef __LIBETH_WORD_ACCESS
+  1286		static_assert(offsetofend(typeof(xdp->base), flags) -
+  1287			      offsetof(typeof(xdp->base), frame_sz) ==
+  1288			      sizeof(u64));
+  1289	
+  1290		*(u64 *)&xdp->base.frame_sz = fqe->truesize;
+  1291	#else
+  1292		xdp_init_buff(&xdp->base, fqe->truesize, xdp->base.rxq);
+  1293	#endif
+  1294		xdp_prepare_buff(&xdp->base, page_address(page) + fqe->offset,
+> 1295				 pp_page_to_nmdesc(page)->pp->p.offset, len, true);
+  1296	}
+  1297	
 
 -- 
 0-DAY CI Kernel Test Service
