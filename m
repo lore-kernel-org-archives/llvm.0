@@ -1,144 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8D51CAA79;
-	Tue, 15 Jul 2025 17:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA60B26FA62;
+	Tue, 15 Jul 2025 19:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752601044; cv=none; b=NgWmTOQSAsqe02MLMOUVVCST6+3qqjr7NhunMPpUm9jzuGDKIKJ7fdONNV8UGMvrNATY6HInOgetsAMTyS5STRDaEeIg4qH3mfwRmkTBtzEBWrWVi6RaF1fU2hMdeGoPbi1JmeH3cvWKKdVD1ZCHrzdiCskivL2Ku13dTZCT+bI=
+	t=1752609388; cv=none; b=sMNZeMG/KWvZgQ9dNlHWCbvJpoLeCxlxTsg33be12g1EecZmDOJNShH2DzqQ0CgZPriSd4UOtTn5ykFvoNFCUgbRcXpJMyYwRGjzgGecrZPI/CyQRQ0ksBbuKNjhn6PQb5LiUuuDGadi1Ax2wgQ9iLl9ok4E73sz72rKI2NMQtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752601044; c=relaxed/simple;
-	bh=LCQcMxbE4qBoe+rmXlWppTEdGOzkpPs9FBZLfSoELDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NjC8DQ4rjL9XzOBsjvk9vqu6qyMCDO8ijdzg+cmrguLsblLv87fZOQa6A5cnZwWAMQ64oXatrKwcclBjyP+IFxoqnLRQ5HVCBv7kGwiQ/4w/fDQ9V1WRgvDxirGIDCkTpH6Ofw6gdpWa8XtHdcCQ5CcQN6YRQC83UWX/e5x0r2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFGrH+vh; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752609388; c=relaxed/simple;
+	bh=oAy6A6mELtflf/ApVsSLfMjrB+jaFLQJRW6V2oKwI9w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=S2LpNOXd5UvMTlBUMNy0pu7Dj8YMVZmmq/zX000JCeGubUcY2NGiFCTsDOyHim/XbImLNC/vHmuigohvKJMctIGWVHHHBzWkII8Sk5jzR0HmTGTwftSmDwMTOQAnSeXXYGfWGhcLNDA2cCrgWFEyLwbUWvLZIo9p5wGQKqx3JCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tgzB3jOL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFGrH+vh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752601041; x=1784137041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LCQcMxbE4qBoe+rmXlWppTEdGOzkpPs9FBZLfSoELDY=;
-  b=lFGrH+vhVRPsSFcgrWjXLI9+AZKq0EWGf+hET3r1ogiqNirg27LZJcup
-   kMD9c4AFyA+liUq1vQFM+yqdQiTCvz161jzRRPsZh3z7qlMB28qWYnG5Y
-   3mWWzsdgf1k3XVJf62qIksh20RIUVI0UraVJbOEwpPUNvoIFRXz5eIK3Q
-   NUrrJgRTpeo8uXu4URAdj23Cs1od7k58PV2OGui/03hp/Txs5GFUjZdrm
-   UcvZGSCFsC2km8/jT7UNhzZ7KyvPoxiyJ3SFza4qerzam+qpQYTyJJGhm
-   pSBz9/pn8DwVLU+Z4dtLM1qJjHwir1jn2KIHixh3nlNAb49F6pbtwsJUM
-   w==;
-X-CSE-ConnectionGUID: nvuz+U+KRNS+kfW3fYGIeA==
-X-CSE-MsgGUID: UXlI6jKZSh+M5amCabBRUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="65898663"
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="65898663"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 10:37:19 -0700
-X-CSE-ConnectionGUID: AA0ida7UQd2O1yQHkyYcvg==
-X-CSE-MsgGUID: uSnHo+YET2i/aYux139fjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="188290194"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 15 Jul 2025 10:37:15 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubjab-000BOL-1c;
-	Tue, 15 Jul 2025 17:37:13 +0000
-Date: Wed, 16 Jul 2025 01:36:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Colton Lewis <coltonlewis@google.com>
-Subject: Re: [PATCH v4 22/23] KVM: arm64: Add ioctl to partition the PMU when
- supported
-Message-ID: <202507160120.lx4XxDb5-lkp@intel.com>
-References: <20250714225917.1396543-23-coltonlewis@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tgzB3jOL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D01F3C4CEF6;
+	Tue, 15 Jul 2025 19:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752609387;
+	bh=oAy6A6mELtflf/ApVsSLfMjrB+jaFLQJRW6V2oKwI9w=;
+	h=From:Date:Subject:To:Cc:From;
+	b=tgzB3jOLILsMd5Nq1+AeB7fzwTKZbi2dG5oK9hGRT+f5vSZ7FOKVd8+H4JnjaycgS
+	 yVGnhLH6vPLSKJO4CcaJEpmHdMbZbAgfAVFHyv+E6GkhnbzOf+YnFGuYIfN2ZwoNVw
+	 OyvRR1sD5aUlwcUtxn0AsolDXfijyGLkH00x/rXVRsk3i+JUgowH2DbQeO/xgaCz2s
+	 sZec0lJl3UPyobGz7l41emiZZYJwIQur5mygIw0nCcA41KoCQcwehlYAzOUv3NARQr
+	 UQMNkkprofauGKv8ki3WHsr/nt1fdyLGJwKyPm/2QpRc1JRRemF9HmeQg/eq6X2jTo
+	 UvydW2T4/HH8A==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 15 Jul 2025 12:56:16 -0700
+Subject: [PATCH] mm/ksm: Fix -Wsometimes-uninitialized from clang-21 in
+ advisor_mode_show()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250714225917.1396543-23-coltonlewis@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250715-ksm-fix-clang-21-uninit-warning-v1-1-f443feb4bfc4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAF+ydmgC/x2NSwqAMAxEryJZG7CFqngVcVFr1KBWaf2BeHeDu
+ 3nMY+aBSIEpQpU8EOjkyKsXUGkCbrR+IOROGHSmTVYog1NcsOcb3SwtaoWHZ887XjZIGLAla2z
+ elmXuCGRlCyT6/1A37/sBzADgAnEAAAA=
+X-Change-ID: 20250715-ksm-fix-clang-21-uninit-warning-bea5a6b886ce
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+ Chengming Zhou <chengming.zhou@linux.dev>
+Cc: Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org, 
+ llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1922; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=oAy6A6mELtflf/ApVsSLfMjrB+jaFLQJRW6V2oKwI9w=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBllmzIz57sqnMziE1A98Fp66YRVHkU7okRCwluTPI4Kz
+ zxq3juno5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkyzGG3yxLets5X3ExBGYX
+ aT6U8IovseB75PP+lLDu1A2X52nzBzMyPObz322U2x/5at2J+w37W/muCzrzvNj+o+Mfi1nOxQV
+ 63AA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Colton,
+After a recent change in clang to expose uninitialized warnings from
+const variables [1], there is a warning from the if statement in
+advisor_mode_show().
 
-kernel test robot noticed the following build warnings:
+  mm/ksm.c:3687:11: error: variable 'output' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+   3687 |         else if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)
+        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  mm/ksm.c:3690:33: note: uninitialized use occurs here
+   3690 |         return sysfs_emit(buf, "%s\n", output);
+        |                                        ^~~~~~
 
-[auto build test WARNING on 79150772457f4d45e38b842d786240c36bb1f97f]
+Rewrite the if statement to implicitly make KSM_ADVISOR_NONE the else
+branch so that it is obvious to the compiler that ksm_advisor can only
+be KSM_ADVISOR_NONE or KSM_ADVISOR_SCAN_TIME due to the assignments in
+advisor_mode_store().
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Colton-Lewis/arm64-cpufeature-Add-cpucap-for-HPMN0/20250715-070741
-base:   79150772457f4d45e38b842d786240c36bb1f97f
-patch link:    https://lore.kernel.org/r/20250714225917.1396543-23-coltonlewis%40google.com
-patch subject: [PATCH v4 22/23] KVM: arm64: Add ioctl to partition the PMU when supported
-config: arm64-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250716/202507160120.lx4XxDb5-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160120.lx4XxDb5-lkp@intel.com/reproduce)
+Cc: stable@vger.kernel.org
+Fixes: 66790e9a735b ("mm/ksm: add sysfs knobs for advisor")
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2100
+Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ mm/ksm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160120.lx4XxDb5-lkp@intel.com/
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 2b0210d41c55..160787bb121c 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -3682,10 +3682,10 @@ static ssize_t advisor_mode_show(struct kobject *kobj,
+ {
+ 	const char *output;
+ 
+-	if (ksm_advisor == KSM_ADVISOR_NONE)
+-		output = "[none] scan-time";
+-	else if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)
++	if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)
+ 		output = "none [scan-time]";
++	else
++		output = "[none] scan-time";
+ 
+ 	return sysfs_emit(buf, "%s\n", output);
+ }
 
-All warnings (new ones prefixed by >>):
+---
+base-commit: fed48693bdfeca666f7536ba88a05e9a4e5523b6
+change-id: 20250715-ksm-fix-clang-21-uninit-warning-bea5a6b886ce
 
-   In file included from arch/arm64/kernel/asm-offsets.c:15:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/arm64/include/asm/kvm_host.h:31:
->> arch/arm64/include/asm/kvm_pmu.h:301:49: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline bool kvm_pmu_is_partitioned(void *)
-                                                   ^
-   arch/arm64/include/asm/kvm_pmu.h:306:51: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline u64 kvm_pmu_host_counter_mask(void *)
-                                                     ^
-   arch/arm64/include/asm/kvm_pmu.h:311:52: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline u64 kvm_pmu_guest_counter_mask(void *)
-                                                      ^
-   3 warnings generated.
---
-   In file included from arch/arm64/kernel/asm-offsets.c:15:
-   In file included from include/linux/kvm_host.h:45:
-   In file included from arch/arm64/include/asm/kvm_host.h:31:
->> arch/arm64/include/asm/kvm_pmu.h:301:49: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline bool kvm_pmu_is_partitioned(void *)
-                                                   ^
-   arch/arm64/include/asm/kvm_pmu.h:306:51: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline u64 kvm_pmu_host_counter_mask(void *)
-                                                     ^
-   arch/arm64/include/asm/kvm_pmu.h:311:52: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline u64 kvm_pmu_guest_counter_mask(void *)
-                                                      ^
-   3 warnings generated.
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
-
-vim +301 arch/arm64/include/asm/kvm_pmu.h
-
-   300	
- > 301	static inline bool kvm_pmu_is_partitioned(void *)
-   302	{
-   303		return false;
-   304	}
-   305	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
