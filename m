@@ -1,143 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2D94C81;
-	Tue, 15 Jul 2025 20:45:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85A513C8FF
+	for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 21:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752612342; cv=none; b=sqlvDJdWUVagI6QLpZqFMErMuPWnOushSsEurLX955eXQAqTM1YX7EGCnLTeyHVsXUIhZBRwDVYxRiaGeU/CAIJxsbaRNj6d5ESD38Cf6tQLsgkoz5PhQzg8Xp1C9OJdVtvc3DiYf8gfq/DMa6vXK+bz6/H8KZeeSoHsggbCVFY=
+	t=1752613562; cv=none; b=jb2gVC8qzK26zj1Kp92tLUGt/we022tb3YiFlLFHCPwykwtYd6twtNNmGEQSTrwtCZJjLNAtY3DfoWo5qtiKLPx4IDKOmNuSlotgkpAoQZv7Nn17wkXtwjrtNPyetEOGiyE2hnXmUAwgHxL3upretO68dXkZ1IcpnU6d4cmq1M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752612342; c=relaxed/simple;
-	bh=i0jIU5/DS4GdwKEU3LoAR0J+8jJlfbT9Pjilk9/G/wc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AEqB/f1UysQwTYsY1cKzJbU7q92EY4+y1ENXGAFQze/egOJwFy+1QhsVY7DpCNPdUKurZifEZOMIiMj0SQwKZ9cyF+MRrHItmyFLfR+MUkOqputibJTHHNBrQZ637saLuwhqpELwe6L4FcxPBsajTeAyCC9ol/rs+SYD8Uj3fbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CqfZwrWL; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752613562; c=relaxed/simple;
+	bh=FYGfjfOp0uffIaOqOxp3So3TBknLCN3hEFHcZKI2YSM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JX0l055ltuT1T9VV45LU3U4bzeHxTSB5hJra8Y3XSkYIoBRDFvIvDQJ1o7ATCA/wsickfrrUULZ1x5ByVfPa1oWP5ZJecSMP3zPsGa4QJ2Gd7EeAcsSBkQbrEjnTxh58uPt86xdUAiriH4LLC4TH80x4SL9IjeSzvEtFP8Ea8lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j34uR1xk; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CqfZwrWL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752612341; x=1784148341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i0jIU5/DS4GdwKEU3LoAR0J+8jJlfbT9Pjilk9/G/wc=;
-  b=CqfZwrWLjftG8eeAQ3fw+jX/YBAHK5NRjsa/xXclBG8uAZ7EfAmlj17w
-   5paWBZIW68cETb6P3Tulp5xt62Yy9tQH4wPtUSLH/XGOlfqE+klP/n5DQ
-   7BHDnZTKWXWfw4ejGedbMo88x1iodO68oOwhW/+9+6LcE6X+fpQM0jHHi
-   3+DiLtVgyif7uQFCZ0aklSOBo+CfklGUtOJgdq3fYHxd6Yh2NedeLWBlZ
-   D2OLhYa0Ue41T6PN+YNV2/K4wpnUrxjOQPzU/MuCBCNKwvoO8G8qu1e3Z
-   nyG43qZDd7qJPC5PgI3oP501kQXwLHyy8JudqQjhpzsS0YhJMv5hH//qJ
-   Q==;
-X-CSE-ConnectionGUID: dwiq/TXbR+q5dWBk1QsYEw==
-X-CSE-MsgGUID: mD2FstyDQbyMjBGXDCEd7Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="42476845"
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="42476845"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 13:45:40 -0700
-X-CSE-ConnectionGUID: LLieUtQbSHu2EBMh8oD7ow==
-X-CSE-MsgGUID: L6tg7xQQR9Ws3Tb2pIwI1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="188322879"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 15 Jul 2025 13:45:36 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubmWs-000BWl-0g;
-	Tue, 15 Jul 2025 20:45:34 +0000
-Date: Wed, 16 Jul 2025 04:44:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xu Yilun <yilun.xu@linux.intel.com>, jgg@nvidia.com, jgg@ziepe.ca,
-	kevin.tian@intel.com, will@kernel.org, aneesh.kumar@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-	joro@8bytes.org, robin.murphy@arm.com, shuah@kernel.org,
-	nicolinc@nvidia.com, aik@amd.com, dan.j.williams@intel.com,
-	baolu.lu@linux.intel.com, yilun.xu@intel.com
-Subject: Re: [PATCH v5 5/8] iommufd/vdevice: Remove struct device reference
- from struct vdevice
-Message-ID: <202507160404.4hMp40iv-lkp@intel.com>
-References: <20250715063245.1799534-6-yilun.xu@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j34uR1xk"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a548a73ff2so4632168f8f.0
+        for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 14:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752613559; x=1753218359; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xrNWGpEv1BAuId4AbOTg2+zWZrUKdhz6s19aGKtODkM=;
+        b=j34uR1xkiXT9Lzdn9n1mIg2kMr7WWaqBwNX8EX6w8NlsH5ZmHuuVNmr8qhxdx/eG0X
+         4ymImJMJa3pW+BIKIYFP4Qpy+MGIwyuxXZaKBwrgPbcAZzrHHuhpIIVCHeViH5ZaJ6jm
+         iX4Y2l/Wp+WJI5WfVxraNqKu6A4rIGnKQOnycZqLNFioVu7xSKLpQ+2y+mIByHg0O+TX
+         5nvnEJ2nv7gqs2LWLeUXYnztMcmJKMnL6RUNngZS3bNo2dkh/6Ou+JCKkhrnYINQyAem
+         n5fk/wSvi53SahJ7nJa8wZJHV31QU/SxOQ2ef+HYPglvK6j1zyDaVYNWDAO8vCrO1Iv1
+         4YQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752613559; x=1753218359;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xrNWGpEv1BAuId4AbOTg2+zWZrUKdhz6s19aGKtODkM=;
+        b=YfManFmE6vFhlojXPlFRMHNj4dilboLgWeFv0Q++wCWJ/s1ROLAGsiTrB00fK8xCQ8
+         uSfgtW+tJ+OTs1RNlms9dAOPMYvLsnWL4CcZlXiIXFNttrSuno1vWnB678MYcxNXOqLA
+         BJlBT8c5RBTG/x2hF1myTLz+KVoU2vzmTC7kWwH6H8kvJ/6FpKKaD2BpgQxfqXn5rtqr
+         IAVMYteUeIZulZ84L9V62Ey5CWxgIewcBm6B0+FerG3pGkKuZ4pQ9miR9bY7vKaW/J/c
+         FLhsrqeOBBTiLeSko3L1wz86j8LRGNnavKaJBqRwB1+JNDXdPC2EWrlXiyuhErw+S0nR
+         8cSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWIiY2l1aE0hQJV41v7TsN/CvwYCUgC0yfVzGqDKp5jC78C6hH0j7myMcS60G7GR78uEgsf@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzo6kjHQjOf3eFJF2IcLIXciYjJMJvlSZyPyMNkF9qp3ywexc3d
+	PEMYt8xIizm4aCyxq+TOFpgqseIeX/+GS8PGzBL2Ejtp+Wfzb4CksWNS
+X-Gm-Gg: ASbGnct6vU3HL+8zJgezq93Gw9htOc2Jf/ExK0tc09Eceo3jmZpPEhrA9Iapjka5cX2
+	H3YpL0v2idX3RutHiK6zRab4/p37EWwpt4RD4nyknX/S5YlVbOccR0HY0PvnvtpdXOIAeyh47Ax
+	JZnQ6rss0ll90ILu1eBik5e+4e5PH/CwbVR5IAkLxeStjqSq7qbS66bjS4ZgV2xJwR4prxPwZOe
+	S90hmiVxjop955lpWpRRd3gUHj4KDhDDE0xH231kmSlz5IwzggNElgpxZun9TCGEEh89SfxmDXb
+	n2x2/GfJ3zWvRHpN4jFYyfBhmT5AuhNJ98xOy1M60463mV3R4QYyS+GBb2OJefUJW+ScFQNuR/5
+	WB9QlIqTyzxt5o1Y/u8Q=
+X-Google-Smtp-Source: AGHT+IGccMr+l6TuXlKeBOZcix9T3KSSEJKc+0G7hoGr2gWaAJ1sQCGF1RAGBN3M/xcDwUCYyKwhrA==
+X-Received: by 2002:adf:b64b:0:b0:3a5:3062:793a with SMTP id ffacd0b85a97d-3b60dd72f31mr406572f8f.33.1752613558746;
+        Tue, 15 Jul 2025 14:05:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:2::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e269a0sm15808133f8f.86.2025.07.15.14.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 14:05:58 -0700 (PDT)
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+To: netdev@vger.kernel.org
+Cc: kuba@kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	horms@kernel.org,
+	cratiu@nvidia.com,
+	noren@nvidia.com,
+	cjubran@nvidia.com,
+	mbloch@nvidia.com,
+	mohsin.bashr@gmail.com,
+	jdamato@fastly.com,
+	gal@nvidia.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next V5 0/5] net: netdevsim: hook in XDP handling
+Date: Tue, 15 Jul 2025 14:05:48 -0700
+Message-ID: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250715063245.1799534-6-yilun.xu@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Xu,
+This patch series add tests to validate XDP native support for PASS,
+DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
+For adjustment tests, validate support for both the extension and
+shrinking cases across various packet sizes and offset values.
 
-kernel test robot noticed the following build errors:
+The pass criteria for head/tail adjustment tests require that at-least
+one adjustment value works for at-least one packet size. This ensure
+that the variability in maximum supported head/tail adjustment offset
+across different drivers is being incorporated.
 
-[auto build test ERROR on 601b1d0d9395c711383452bd0d47037afbbb4bcf]
+The results reported in this series are based on fbnic. However, the
+series is tested against multiple other drivers including netdevism.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yilun/iommufd-viommu-Roll-back-to-use-iommufd_object_alloc-for-vdevice/20250715-144326
-base:   601b1d0d9395c711383452bd0d47037afbbb4bcf
-patch link:    https://lore.kernel.org/r/20250715063245.1799534-6-yilun.xu%40linux.intel.com
-patch subject: [PATCH v5 5/8] iommufd/vdevice: Remove struct device reference from struct vdevice
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250716/202507160404.4hMp40iv-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160404.4hMp40iv-lkp@intel.com/reproduce)
+Note: The XDP support for fbnic will be added later.
+---
+Change-log:
+V5:
+  - Fix warning caused by rcu_dereference() in p1
+  - Fix checkpatch warnings with P3, P4, and P5
+V4: https://lore.kernel.org/netdev/20250714210352.1115230-1-mohsin.bashr@gmail.com
+V3: https://lore.kernel.org/netdev/20250712002648.2385849-1-mohsin.bashr@gmail.com
+V2: https://lore.kernel.org/netdev/20250710184351.63797-1-mohsin.bashr@gmail.com
+V1: https://lore.kernel.org/netdev/20250709173707.3177206-1-mohsin.bashr@gmail.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160404.4hMp40iv-lkp@intel.com/
+Jakub Kicinski (1):
+  net: netdevsim: hook in XDP handling
 
-All errors (new ones prefixed by >>):
+Mohsin Bashir (4):
+  selftests: drv-net: Test XDP_PASS/DROP support
+  selftests: drv-net: Test XDP_TX support
+  selftests: drv-net: Test tail-adjustment support
+  selftests: drv-net: Test head-adjustment support
 
->> drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c:1221:64: error: incomplete definition of type 'struct iommufd_device'
-    1221 |         struct arm_smmu_master *master = dev_iommu_priv_get(vdev->idev->dev);
-         |                                                             ~~~~~~~~~~^
-   include/linux/iommufd.h:24:8: note: forward declaration of 'struct iommufd_device'
-      24 | struct iommufd_device;
-         |        ^
-   1 error generated.
-
-
-vim +1221 drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-
-  1218	
-  1219	static int tegra241_vintf_init_vsid(struct iommufd_vdevice *vdev)
-  1220	{
-> 1221		struct arm_smmu_master *master = dev_iommu_priv_get(vdev->idev->dev);
-  1222		struct tegra241_vintf *vintf = viommu_to_vintf(vdev->viommu);
-  1223		struct tegra241_vintf_sid *vsid = vdev_to_vsid(vdev);
-  1224		struct arm_smmu_stream *stream = &master->streams[0];
-  1225		u64 virt_sid = vdev->virt_id;
-  1226		int sidx;
-  1227	
-  1228		if (virt_sid > UINT_MAX)
-  1229			return -EINVAL;
-  1230	
-  1231		WARN_ON_ONCE(master->num_streams != 1);
-  1232	
-  1233		/* Find an empty pair of SID_REPLACE and SID_MATCH */
-  1234		sidx = ida_alloc_max(&vintf->sids, vintf->cmdqv->num_sids_per_vintf - 1,
-  1235				     GFP_KERNEL);
-  1236		if (sidx < 0)
-  1237			return sidx;
-  1238	
-  1239		writel(stream->id, REG_VINTF(vintf, SID_REPLACE(sidx)));
-  1240		writel(virt_sid << 1 | 0x1, REG_VINTF(vintf, SID_MATCH(sidx)));
-  1241		dev_dbg(vintf->cmdqv->dev,
-  1242			"VINTF%u: allocated SID_REPLACE%d for pSID=%x, vSID=%x\n",
-  1243			vintf->idx, sidx, stream->id, (u32)virt_sid);
-  1244	
-  1245		vsid->idx = sidx;
-  1246		vsid->vintf = vintf;
-  1247		vsid->sid = stream->id;
-  1248	
-  1249		vdev->destroy = &tegra241_vintf_destroy_vsid;
-  1250		return 0;
-  1251	}
-  1252	
+ drivers/net/netdevsim/netdev.c                |  19 +-
+ tools/testing/selftests/drivers/net/Makefile  |   1 +
+ tools/testing/selftests/drivers/net/xdp.py    | 656 ++++++++++++++++++
+ .../selftests/net/lib/xdp_native.bpf.c        | 540 ++++++++++++++
+ 4 files changed, 1215 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/drivers/net/xdp.py
+ create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
