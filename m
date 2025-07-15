@@ -1,116 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91ABA4A3C;
-	Tue, 15 Jul 2025 23:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E711A23E320;
+	Tue, 15 Jul 2025 23:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752622063; cv=none; b=upDomQD93/QxtcHLYUsNXqzJmmSVkqlfRFFfiz4nYp2ZLBkt5FMUW1u3uehXrs6M2xmMkH7ccUWo5rCcaV441NxIObS2T2OhwI3hWtMCIHvaj2vWoJZmurM+M9XEBrFXLCrGyQA8Uhv4u+pN7JbQX0/lHZqkRn+EcWj7lG09TxA=
+	t=1752622197; cv=none; b=KPbaCNpuKZZn0vTZmIyDqdTszQINP/+5Qi+xVTLKJaRKGMxtNgBhYZ1ONbyaBQQPzki1RC1J7I85rkXRdWqAjH7EaTpIrYS2BW3rFkzV4F4nik4f63Nxf/hu9vhW2y5aJ94Qb2JUFmTT857aa8/2hkvtg5PHi2i/pYeRZZutn2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752622063; c=relaxed/simple;
-	bh=gNd6GCMleRz26fso+KqYQ5eY2OU5Fo6/ujKhQhRqh2M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GIqFpuedMzDNtbths6nn3zwWrD/XTI5NuMCHOJD+lLFhFFRpBSJIuOc0Bii1o3K/4lnuD7gyWNcR5kt/yAbEZxRXy6sRBay/yAHXyVmOjSd3yQZblSlpPKRfXThj66nK0cXpU148VM4r10MVmKQyA+rm9rUWTWwcUMrHU5BIYpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gc8tB21s; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752622197; c=relaxed/simple;
+	bh=WF6bfUxp5mzXUlANjLVW9CB9l9Zbo4W0VbxjuCwHMNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bdzc9o7r9XF5w/lAXXePWh/Ma+nhdQjXYUocuoAMYNMuUdHg7XY4DNKXDU+nr2gJ/uK0ezvrq/2N0u7OR8PTTLEdr+kmwidngizUJAsJE6f+4Wqs+szmTNdfF74+n+Bnpxtom7/5nIOSxY4+jlXAxYF7R+2YIIgm2xMZzLrIqQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=djrFmAT8; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gc8tB21s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E50C4CEE3;
-	Tue, 15 Jul 2025 23:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752622063;
-	bh=gNd6GCMleRz26fso+KqYQ5eY2OU5Fo6/ujKhQhRqh2M=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Gc8tB21sZWryjJ0k+7SgkAFC09gHkR8Xdxh78TC8va9FyM/A0JapOGAFVaShybbYz
-	 VVGUpQ4qMqKNfni8pi1yfqL+IevIFVPZXHcz/fgCziWPdEcYTcg7QG9tXX7JA7vXbK
-	 Et00P0E7AVHVNgifpoAA7/JqIfsodfsg10BP7tdn//pUCk3IvAzY0deNmJkYji9xjk
-	 dYNHHJJhovh1lrw6mLn9PJstGu0kfTyguD7gddK7ruMawQbBz6c0UEZwLWbtfBOs5G
-	 YiBqyuWedsbtXnh0fkGnRlVOUOMk860Yyu9VkItSzYY1r9BfxHbs/eogXk1MEG9KK0
-	 VXqGQCzOzuMCw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 15 Jul 2025 16:27:35 -0700
-Subject: [PATCH] drm/msm/dpu: Initialize crtc_state to NULL in
- dpu_plane_virtual_atomic_check()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="djrFmAT8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752622196; x=1784158196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WF6bfUxp5mzXUlANjLVW9CB9l9Zbo4W0VbxjuCwHMNI=;
+  b=djrFmAT8zqA1jozPIYjALnQM48dD01F3C3Dhc0TYpxvN1Wk2qqSW5bzC
+   O2XDMnIrwdUrB8z7w65ziNA+38tz2dr+OXAxs2egKWMWCRYkvzJdUDmtM
+   a5/H/4Bk/K7OlANxyxkYTsdUTfM32IqJF9aNh9a0czAq6EaNplLSOCbp9
+   OAoPf80rC0FZAZaMG8RSC6XDWWrfFCMop9XA0VPwjCCBKOMAIL4THT+L7
+   XkQ/UExAEQpkS4zOBM/8yMCU9nw3kbtiZPbrZIL9wM02v0GPrWxjaa3DD
+   /dJjCXBRlXmIwaXNIncH+E/cvzCgkj+i6sPYrs9XtOluPFBxrTH5cRhqT
+   A==;
+X-CSE-ConnectionGUID: W77MDGwrSbyftmHpjMGqJQ==
+X-CSE-MsgGUID: 3B1E/ZV3RLmQn+KC+S4XrQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="77390484"
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="77390484"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 16:29:56 -0700
+X-CSE-ConnectionGUID: TyLvBkv8RS+hZD/PXNQh6Q==
+X-CSE-MsgGUID: 88xeL54PT/CpqFitAZAzDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="181035286"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 15 Jul 2025 16:29:51 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ubp5o-000BfH-0z;
+	Tue, 15 Jul 2025 23:29:48 +0000
+Date: Wed, 16 Jul 2025 07:29:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aaron Lu <ziqianlu@bytedance.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Ben Segall <bsegall@google.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Xi Wang <xii@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
+	Chuyi Zhou <zhouchuyi@bytedance.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Florian Bezdeka <florian.bezdeka@siemens.com>,
+	Songtang Liu <liusongtang@bytedance.com>
+Subject: Re: [PATCH v3 3/5] sched/fair: Switch to task based throttle model
+Message-ID: <202507160730.0cXkgs0S-lkp@intel.com>
+References: <20250715071658.267-4-ziqianlu@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-drm-msm-fix-const-uninit-warning-v1-1-d6a366fd9a32@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAObjdmgC/x2NywqDQAxFf0WybsAZ0WJ/pXShY0azmFgS+wDx3
- w3uzoHDvTsYKZPBo9pB6cvGq7iEWwVpGWQm5MkdYh3b+h5anLRgsYKZ/5hWsQ0/wsIb/gZ1mDG
- OfZMo9zmkDnzmreTtdfF8HccJ+AlDU3IAAAA=
-X-Change-ID: 20250715-drm-msm-fix-const-uninit-warning-2b93cef9f1c6
-To: Rob Clark <robin.clark@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>
-Cc: Abhinav Kumar <abhinav.kumar@linux.dev>, 
- Jessica Zhang <jessica.zhang@oss.qualcomm.com>, Sean Paul <sean@poorly.run>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- freedreno@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2596; i=nathan@kernel.org;
- h=from:subject:message-id; bh=gNd6GCMleRz26fso+KqYQ5eY2OU5Fo6/ujKhQhRqh2M=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBllj99UrDTWSPsXnScxcfG5K3fVTNk/loefZYt5w5GuN
- pXhk19CRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiI4FtGhtOrj13lSzAwu3r/
- SdPKTtYnq3fd6tk172lK3Yw0+RtfnW0ZGabPdq+7aLvgdeTj6OOcnzoffWRdt3/ng19vJjWcL+p
- 3O84KAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250715071658.267-4-ziqianlu@bytedance.com>
 
-After a recent change in clang to expose uninitialized warnings from
-const variables and pointers [1], there is a warning around crtc_state
-in dpu_plane_virtual_atomic_check():
+Hi Aaron,
 
-  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1145:6: error: variable 'crtc_state' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-   1145 |         if (plane_state->crtc)
-        |             ^~~~~~~~~~~~~~~~~
-  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1149:58: note: uninitialized use occurs here
-   1149 |         ret = dpu_plane_atomic_check_nosspp(plane, plane_state, crtc_state);
-        |                                                                 ^~~~~~~~~~
-  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1145:2: note: remove the 'if' if its condition is always true
-   1145 |         if (plane_state->crtc)
-        |         ^~~~~~~~~~~~~~~~~~~~~~
-   1146 |                 crtc_state = drm_atomic_get_new_crtc_state(state,
-  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1139:35: note: initialize the variable 'crtc_state' to silence this warning
-   1139 |         struct drm_crtc_state *crtc_state;
-        |                                          ^
-        |                                           = NULL
+kernel test robot noticed the following build warnings:
 
-Initialize crtc_state to NULL like other places in the driver do, so
-that it is consistently initialized.
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on next-20250715]
+[cannot apply to linus/master v6.16-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2106
-Fixes: 774bcfb73176 ("drm/msm/dpu: add support for virtual planes")
-Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Lu/sched-fair-Add-related-data-structure-for-task-based-throttle/20250715-152307
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20250715071658.267-4-ziqianlu%40bytedance.com
+patch subject: [PATCH v3 3/5] sched/fair: Switch to task based throttle model
+config: i386-buildonly-randconfig-006-20250716 (https://download.01.org/0day-ci/archive/20250716/202507160730.0cXkgs0S-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160730.0cXkgs0S-lkp@intel.com/reproduce)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-index 421138bc3cb7..30ff21c01a36 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-@@ -1136,7 +1136,7 @@ static int dpu_plane_virtual_atomic_check(struct drm_plane *plane,
- 	struct drm_plane_state *old_plane_state =
- 		drm_atomic_get_old_plane_state(state, plane);
- 	struct dpu_plane_state *pstate = to_dpu_plane_state(plane_state);
--	struct drm_crtc_state *crtc_state;
-+	struct drm_crtc_state *crtc_state = NULL;
- 	int ret;
- 
- 	if (IS_ERR(plane_state))
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507160730.0cXkgs0S-lkp@intel.com/
 
----
-base-commit: d3deabe4c619875714b9a844b1a3d9752dbae1dd
-change-id: 20250715-drm-msm-fix-const-uninit-warning-2b93cef9f1c6
+All warnings (new ones prefixed by >>):
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+>> kernel/sched/fair.c:5456:33: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+    5456 |                         cfs_rq->pelt_clock_throttled = 1;
+         |                                                      ^ ~
+   kernel/sched/fair.c:5971:32: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+    5971 |                 cfs_rq->pelt_clock_throttled = 1;
+         |                                              ^ ~
+   kernel/sched/fair.c:6014:20: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+    6014 |         cfs_rq->throttled = 1;
+         |                           ^ ~
+   3 warnings generated.
 
+
+vim +/int +5456 kernel/sched/fair.c
+
+  5372	
+  5373	static bool
+  5374	dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+  5375	{
+  5376		bool sleep = flags & DEQUEUE_SLEEP;
+  5377		int action = UPDATE_TG;
+  5378	
+  5379		update_curr(cfs_rq);
+  5380		clear_buddies(cfs_rq, se);
+  5381	
+  5382		if (flags & DEQUEUE_DELAYED) {
+  5383			WARN_ON_ONCE(!se->sched_delayed);
+  5384		} else {
+  5385			bool delay = sleep;
+  5386			/*
+  5387			 * DELAY_DEQUEUE relies on spurious wakeups, special task
+  5388			 * states must not suffer spurious wakeups, excempt them.
+  5389			 */
+  5390			if (flags & DEQUEUE_SPECIAL)
+  5391				delay = false;
+  5392	
+  5393			WARN_ON_ONCE(delay && se->sched_delayed);
+  5394	
+  5395			if (sched_feat(DELAY_DEQUEUE) && delay &&
+  5396			    !entity_eligible(cfs_rq, se)) {
+  5397				update_load_avg(cfs_rq, se, 0);
+  5398				set_delayed(se);
+  5399				return false;
+  5400			}
+  5401		}
+  5402	
+  5403		if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
+  5404			action |= DO_DETACH;
+  5405	
+  5406		/*
+  5407		 * When dequeuing a sched_entity, we must:
+  5408		 *   - Update loads to have both entity and cfs_rq synced with now.
+  5409		 *   - For group_entity, update its runnable_weight to reflect the new
+  5410		 *     h_nr_runnable of its group cfs_rq.
+  5411		 *   - Subtract its previous weight from cfs_rq->load.weight.
+  5412		 *   - For group entity, update its weight to reflect the new share
+  5413		 *     of its group cfs_rq.
+  5414		 */
+  5415		update_load_avg(cfs_rq, se, action);
+  5416		se_update_runnable(se);
+  5417	
+  5418		update_stats_dequeue_fair(cfs_rq, se, flags);
+  5419	
+  5420		update_entity_lag(cfs_rq, se);
+  5421		if (sched_feat(PLACE_REL_DEADLINE) && !sleep) {
+  5422			se->deadline -= se->vruntime;
+  5423			se->rel_deadline = 1;
+  5424		}
+  5425	
+  5426		if (se != cfs_rq->curr)
+  5427			__dequeue_entity(cfs_rq, se);
+  5428		se->on_rq = 0;
+  5429		account_entity_dequeue(cfs_rq, se);
+  5430	
+  5431		/* return excess runtime on last dequeue */
+  5432		return_cfs_rq_runtime(cfs_rq);
+  5433	
+  5434		update_cfs_group(se);
+  5435	
+  5436		/*
+  5437		 * Now advance min_vruntime if @se was the entity holding it back,
+  5438		 * except when: DEQUEUE_SAVE && !DEQUEUE_MOVE, in this case we'll be
+  5439		 * put back on, and if we advance min_vruntime, we'll be placed back
+  5440		 * further than we started -- i.e. we'll be penalized.
+  5441		 */
+  5442		if ((flags & (DEQUEUE_SAVE | DEQUEUE_MOVE)) != DEQUEUE_SAVE)
+  5443			update_min_vruntime(cfs_rq);
+  5444	
+  5445		if (flags & DEQUEUE_DELAYED)
+  5446			finish_delayed_dequeue_entity(se);
+  5447	
+  5448		if (cfs_rq->nr_queued == 0) {
+  5449			update_idle_cfs_rq_clock_pelt(cfs_rq);
+  5450	#ifdef CONFIG_CFS_BANDWIDTH
+  5451			if (throttled_hierarchy(cfs_rq)) {
+  5452				struct rq *rq = rq_of(cfs_rq);
+  5453	
+  5454				list_del_leaf_cfs_rq(cfs_rq);
+  5455				cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
+> 5456				cfs_rq->pelt_clock_throttled = 1;
+  5457			}
+  5458	#endif
+  5459		}
+  5460	
+  5461		return true;
+  5462	}
+  5463	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
