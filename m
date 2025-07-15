@@ -1,69 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DA0288CBF;
-	Tue, 15 Jul 2025 06:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6512737F3
+	for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 07:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752559526; cv=none; b=dGfvlrqN+bWzFxw3dNFnY4OhsJ7P1fi+dMQlwAjgztCnGEGAmV5M+auXhc0XCTOi69Aveb0axTFeBbzHyr+q7+x8WEpp2Mr/J7c32mRgOF7pXGUnaT430zuEf5zrYdmLVoZhm4cOOX6yOBJFrihdzJ6Lk/xitkp2NuQ7xgxYTkA=
+	t=1752566092; cv=none; b=rIAIicCsdZPK0I1bQAnvx69OWIJmylV9v7OfYFDcINOopFRj8knjKFcM4/bnENTN7DK0XDTzQqQnBTTZA66zhYaeNPRO5gM+dTQkIUmSCCDhmoKvZH7mncI8qNBh9kvsOp5fCslMiHjl1B+Qawpkcz0RxTKIFN1n119QAqCICA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752559526; c=relaxed/simple;
-	bh=4s0NpdOUBcdw8nBgpKG7viU5jz793opptwLWmA1YS38=;
+	s=arc-20240116; t=1752566092; c=relaxed/simple;
+	bh=Pq1xH++JiVd/V7td2oGk1qfykn3VwLeCHjx+lhtpWno=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UvclCCAZrL3F0aoQF76lXhDn0c3Kr53/EM4RjQPtE+AHWshHWbH4ZvNee2Qtva6GcPtom4+JYi21C7s8EDl3FAXTY45htBRnTYbI7rxYj8V4mxguS/A82zTfCFRsrZ2EHu1EA9YYjKbckd1AkNy8uhJoD6Md6WteluV1lG9CcnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Smgrtolw; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qoMWgrqvJb4vsHZNdzz4pg4h4An/VvS7sqEAEtinSIObO8zXHSZUfftto4UQWwzgIXmA17eFTTg8VZJ7bIWBDJGlYHss4MoLB+767hzUXReLRGRhyqqtWE3t5OBHhX2MkpCCh/PumiogeBZdWE8f6GT/ADPJ1QLfE/yaTPyWSrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UjkVxy5z; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Smgrtolw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UjkVxy5z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752559523; x=1784095523;
+  t=1752566091; x=1784102091;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4s0NpdOUBcdw8nBgpKG7viU5jz793opptwLWmA1YS38=;
-  b=Smgrtolw37SLtSTYCv/O9AOa7wezUFzrwRVpj1YWZy5MfaRe4Lw4oWS6
-   EULJaabl4rIpWqwsOeuOmGiY+nvHuCQqxI83ZUa4X/dU5K1V++VdTmU2x
-   m2vg0INK05BrxYNGaJWGKy+fuNcXT16EDCscKiZ02GbFPeQxe7OUUkF8s
-   7pX7yDGl01Rl7UnrPY9DrNzeirwcXOtUqK9bn0gJg++d4OdUpRxwCj42c
-   17VVXCkTlngQ+10byfNmvltplXC5kq4bj8vp2T8e7ZUAIIGZvGrICVu3U
-   blFX/bQpPvboXszd01SeY5WtORMXYpfKeMGy7P8DXs3jPtARAMF8psTXB
-   Q==;
-X-CSE-ConnectionGUID: eh4wlM38QQ6EHXwVvMHs0g==
-X-CSE-MsgGUID: 1NdQftyAQde1a4QhLoiZgQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="54473565"
-X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="54473565"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 23:05:22 -0700
-X-CSE-ConnectionGUID: PSlCRGZIQQmcUVw1SqSz1w==
-X-CSE-MsgGUID: zTaZorvJTBGg1ZWmckAnoA==
+  bh=Pq1xH++JiVd/V7td2oGk1qfykn3VwLeCHjx+lhtpWno=;
+  b=UjkVxy5z8SujgoQKFtjSIChXhEtutL1cES9HN512jY823pRElAa/lphE
+   R5hy0Z9RH0KY1/iSVGCUTpzPTEZKfkob0iXXtZy/AOjRNj+U9DjjUXU/A
+   t6FTvCmlQ0TX081nTlm9TICY1Cici7ksuGF+61fatVOmNFti/kdTE/hW0
+   2VMPPkN7oqvSMrKpsi4NjUcg2YThdywU8wFlpgy8An3N1geItc4WBdXS/
+   KRD7L/Zrz+s0iK4wqwoQnTkiFsfnauN88/YAhDXs4BzddJY2uM/+QA0ZA
+   48R/Ji+ajY5lpo3iRGJjVJ3v69aBDLeLrAJhJz4tSxUzs4qLRYv3YVUAW
+   A==;
+X-CSE-ConnectionGUID: EsINvRgWRviWRDmo7YydHg==
+X-CSE-MsgGUID: bz8TQIzcTau6gKjA7XKmNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="66224312"
+X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
+   d="scan'208";a="66224312"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 00:54:51 -0700
+X-CSE-ConnectionGUID: Xew4MyEVQFabbdvmdJngRg==
+X-CSE-MsgGUID: cv0lbx9dSkKQcWLfPwFzrw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="156778778"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 14 Jul 2025 23:05:19 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubYmy-0009iV-2o;
-	Tue, 15 Jul 2025 06:05:16 +0000
-Date: Tue, 15 Jul 2025 14:04:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Yao <richard@scandent.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Akshay Athalye <akshay@scandent.com>,
-	Richard Yao <richard@scandent.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Subject: Re: [PATCH 3/3] drm/panel: ilitek-ili9881c: Add Tianxinwei
- TWX700100S0 support
-Message-ID: <202507151301.sFo3NzXA-lkp@intel.com>
-References: <20250714191729.2416-4-richard@scandent.com>
+X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
+   d="scan'208";a="156564091"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 00:54:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1ubaUu-0000000Faa0-0Nco;
+	Tue, 15 Jul 2025 10:54:44 +0300
+Date: Tue, 15 Jul 2025 10:54:43 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	=?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] locking/lockdep: Move pmd_to_hmm_pfn_flags() to
+ the respective #ifdeffery
+Message-ID: <aHYJQwZkSsJMz1ut@smile.fi.intel.com>
+References: <20250710082257.663850-1-andriy.shevchenko@linux.intel.com>
+ <20250714143705.GG1870174@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,52 +71,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250714191729.2416-4-richard@scandent.com>
+In-Reply-To: <20250714143705.GG1870174@ziepe.ca>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Richard,
+On Mon, Jul 14, 2025 at 11:37:05AM -0300, Jason Gunthorpe wrote:
+> On Thu, Jul 10, 2025 at 11:22:57AM +0300, Andy Shevchenko wrote:
 
-kernel test robot noticed the following build errors:
+...
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.16-rc6]
-[cannot apply to drm-exynos/exynos-drm-next next-20250714]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Yao/dt-bindings-vendor-prefixes-Add-Tianxinwei-name/20250715-031929
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250714191729.2416-4-richard%40scandent.com
-patch subject: [PATCH 3/3] drm/panel: ilitek-ili9881c: Add Tianxinwei TWX700100S0 support
-config: arm-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507151301.sFo3NzXA-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507151301.sFo3NzXA-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507151301.sFo3NzXA-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/panel/panel-ilitek-ili9881c.c:1850:3: error: field designator 'lanes' does not refer to any field in type 'const struct ili9881c_desc'
-    1850 |         .lanes = 4,
-         |         ~^~~~~~~~~
-   1 error generated.
-
-
-vim +1850 drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-
-  1844	
-  1845	static const struct ili9881c_desc txw700100s0_desc = {
-  1846		.init = txw700100s0_init,
-  1847		.init_length = ARRAY_SIZE(txw700100s0_init),
-  1848		.mode = &txw700100s0_default_mode,
-  1849		.mode_flags = MIPI_DSI_MODE_VIDEO_SYNC_PULSE | MIPI_DSI_MODE_VIDEO,
-> 1850		.lanes = 4,
-  1851	};
-  1852	
+Thank you! There was already a v2 with fixed Subject prefix.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
