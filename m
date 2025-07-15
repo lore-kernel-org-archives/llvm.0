@@ -1,176 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37B22C08A2;
-	Tue, 15 Jul 2025 22:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561B22C1585
+	for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 22:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752617602; cv=none; b=YodCUKOruTa+u0/ahnMZNLjyB44RqxYlNS9fG0bgC99HU+VyAxECc0so6E6PyUff3/Dzjr7ghbmsy9iBbdquM9ej2YqLf5fV3nvXq4VXYUTJ1OwDXVVUO1nmnc1xfVooMIX/nTQS34L0I/JuvSqI1qqzYYw/S+2JBMY7TANbulE=
+	t=1752617646; cv=none; b=QjxQGTMGSErgjzmqKitGx5J0pqkuY1fu5q606lP+I9yfoJAtPW09o6c844ZBhnH2YM3ALCte/PecCOwLPpI292Ml9ax/UIq9d4g+onrMiwkmTkHdUvuCb/NJ27iep0Am6eirwJ3mSwfh7WC5bSs3+6Ng7/QZarUXQFcJBBG1AWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752617602; c=relaxed/simple;
-	bh=Fibqw7NKYELDKQtz72tP8YYOcVBwgtPgzVnymvMd7mM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MZEd4qJdn9biEH9XnVvo5FhOU8BEkALhbZsCte0u4sg7hyVudiy73r5nXygLPaBqQL0pqQllD7CVzlZysHfPHM5CCwNbBlsPY3dwovk24QFgGNApICWfuJZ+38xwyQWR4ofMvQGy3e0DeoAaa9aYvO1TsIzSmiXHGP84BcGS03M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBj6oZO3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752617646; c=relaxed/simple;
+	bh=9unkbb+digCC/RSTta8zvzheszaF3akf/FWo3P9GnFs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uoz+ioWsUsu0RUUlanpmoxR9/twIaNlefygzbWJfV70VYZtaucpE0+zEzKLXJIggO9UUxn42PgfldWqDdbgfS9rV4lhxolqd6d+TgcO5fKsjUqvdDqg0jjUPbzIMXWZemI49qkedj8uKwMt9mNyi83JpHdniGSDv0x9EWopgGV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rc6vYCHL; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBj6oZO3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A98E3C4CEE3;
-	Tue, 15 Jul 2025 22:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752617601;
-	bh=Fibqw7NKYELDKQtz72tP8YYOcVBwgtPgzVnymvMd7mM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=iBj6oZO3pIXzFuaWEpWUH/0a/iYuiV4f4IoVpfnAj6bG/Lvvslhb0xim78aUSKXY9
-	 QtUg13/mZGzfNqdnFg3ynd7Ao/u9taJ56cPG/5EAiWPs+8qUTDJGejuktRSKNV8ykU
-	 L/JeUmrWlb6OnVEJEi4eYrfUEZuthawEnxCB//AsVchometCyiLDIeDeYcs9Lx7qx0
-	 To8wihsfcN8ta0qpjwSCK35dokeSZ4o90d7dWuLcwaPcokTQIu61ChrY0LvXcUF6Fi
-	 iaEQYjZ5S4y7LSJD+Kn1XLkBXndYnltXiLaGx+mbP51IIRTbgstnIYyCVgwYhz8lXv
-	 eIbt0Gv8LlJeA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 15 Jul 2025 15:13:07 -0700
-Subject: [PATCH] media: s5p-mfc: Always pass NULL to
- s5p_mfc_cmd_host2risc_v6()
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rc6vYCHL"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-235f6b829cfso42265165ad.2
+        for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 15:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752617645; x=1753222445; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SLj4jehQsIo073ngckKcOxgDkyfk0C1kjZ6lTDpSxro=;
+        b=rc6vYCHLjYd2s7ZTgqoE29M6YzguWSQxW2kjrR1aJzmp0swPX2leJ+yQSjuS1G+Wv1
+         iwK/xkvbMKObq1YaSIaIe0ezEB7JGrm2jOapIVmCnMkPwzewz2BNGQMwobNR7pfeHjWD
+         tIeIeo0aApb2tKTFnUTqPDo1ab+Pbub/mGTnsmLHr+21Uuekf0+XkAwEO9ASbUfbEgtR
+         Dftgppz23Fi8Bjf+Acqqe1/E/fLgZwrRTcFqghsz/Ucig+RZaQJrlQy6YwNsgzCC8n+6
+         FAzKZxZYw1aoolZ6S8UwdOsxVIMh7haqpx5glP/4sWzjEi++TZYaFxzeNd5XGiySYyKn
+         0kyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752617645; x=1753222445;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SLj4jehQsIo073ngckKcOxgDkyfk0C1kjZ6lTDpSxro=;
+        b=WHDkzVCpNU3WuMdam7jQLF/EnvEcLgRfdT6BMXMJdqQG2O6fSbldMKUf2lkkn/qm3/
+         1gupC2ymMZUli6/IBwxR1maxYyz1qTJsb76APxFE9aV5LfSJwhWtpR72A/2Gpt+7zOOE
+         lCtVmTw1aCu/qYbWBD8mhmZ6ia+NZ7eJjT1ODExLh2jv8q6hJSueksm5AYU5IMLsUDd9
+         sUAkTGO5GFrPqhZe/97BkDMrXvNont+Z2Bp0nPIZ68ecnrCxknOTU2WMzZQgKYBK89q9
+         GBx4b8cf9lMh/R7/6v3fNk+6MR9q3gRpGZk0FteqnT42E7LHkKJgvwT+hiBQVW5xcW6h
+         lk7w==
+X-Forwarded-Encrypted: i=1; AJvYcCX2011uu3n0Hbr2Md7vP4/k6nRO2yCCQWpCvzFy46W9jwb7k4aKECgMUD34ox5ZhdFD+6sZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YyIjLxYX32uVkpor0/msE8Jt7fvPkOftTKhj+kQZ7kMKQdOdbx7
+	o8qfg1Hxj+I6/GbIQvEb+B8notVe5Q6JNGRSiNqiAgb8ta03PRPT4G37PE5CVykE9qedzC2h+bN
+	hkqXP/w==
+X-Google-Smtp-Source: AGHT+IFQ6KNYaLj1GO+LXqw7FJLIO2JGvORU6MZLol7Oecx/HZ1VDHVoLnEBoRV3TIoB2MYd2sHC045nRJM=
+X-Received: from pjbee13.prod.google.com ([2002:a17:90a:fc4d:b0:313:551:ac2])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:fb0:b0:229:1619:ab58
+ with SMTP id d9443c01a7336-23e25770d12mr5431475ad.43.1752617644715; Tue, 15
+ Jul 2025 15:14:04 -0700 (PDT)
+Date: Tue, 15 Jul 2025 22:14:01 +0000
+In-Reply-To: <20250715201637.GA2104822@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-media-s5p-mfc-fix-uninit-const-pointer-v1-1-4d52b58cafe9@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAHLSdmgC/x2NQQqDMBAAvyJ7dkElobRfKT0kcWP34CZkowji3
- w0eB4aZE5QKk8KnO6HQzspJGox9B+HvZCHkuTFMw2SH12hxpZkdqs24xoCRD9yEhSuGJFoxJ5Z
- KBYOPb2McGW88tFgu1Nxn9P1d1w13Dq1leAAAAA==
-X-Change-ID: 20250715-media-s5p-mfc-fix-uninit-const-pointer-cbf944ae4b4b
-To: Marek Szyprowski <m.szyprowski@samsung.com>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5013; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Fibqw7NKYELDKQtz72tP8YYOcVBwgtPgzVnymvMd7mM=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlll+q/LxG+ybC9k9FkTXmXg8HNNQkprkYPl/2RvpD27
- NivBT33OkpZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEPJ8wMvSuVV6ndu5qLtuq
- b7w1Fbruej94Xof1Lbnf9NKH3fzCyyyG/1ky7zNuWxb5bL2lph/u3CvnPbFpPTtzxmSd+dPYXab
- v5AAA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Mime-Version: 1.0
+References: <20250715201637.GA2104822@ax162>
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250715221403.1339526-1-kuniyu@google.com>
+Subject: Re: -Wuninitialized-const-pointer in net/phonet/pep.c
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: nathan@kernel.org
+Cc: courmisch@gmail.com, davem@davemloft.net, edumazet@google.com, 
+	horms@kernel.org, kuba@kernel.org, llvm@lists.linux.dev, 
+	netdev@vger.kernel.org, pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-A new warning in clang [1] points out a few places in s5p_mfc_cmd_v6.c
-where an uninitialized variable is passed as a const pointer:
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 15 Jul 2025 13:16:37 -0700
+> Hi all,
+> 
+> A new warning in clang [1] points out that dst is not initialized when
+> passed to pep_find_pipe() in pep_sock_accept():
+> 
+>   net/phonet/pep.c:829:37: error: variable 'dst' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+>     829 |         newsk = pep_find_pipe(&pn->hlist, &dst, pipe_handle);
+>         |                                            ^~~
+> 
+> It looks like this was introduced by commit f7ae8d59f661 ("Phonet:
+> allocate sock from accept syscall rather than soft IRQ") if I understand
+> correctly. Prior to that change, both calls to pep_find_pipe() were in
+> the same function with pn_skb_get_dst_sockaddr(skb, &dst) before them,
+> so dst would always be initialized. Should pn_skb_get_dst_sockaddr() be
+> called before pep_find_pipe() in pep_sock_accept() as well
 
-  drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:45:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
-     45 |                                         &h2r_args);
-        |                                          ^~~~~~~~
-  drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:133:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
-    133 |                                         &h2r_args);
-        |                                          ^~~~~~~~
-  drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:148:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
-    148 |                                         &h2r_args);
-        |                                          ^~~~~~~~
+This sounds good to me, and AFAICT, there's no fix queued for this uninit
+issue in net.git.
 
-The args parameter in s5p_mfc_cmd_host2risc_v6() is never actually used,
-so just pass NULL to it in the places where h2r_args is currently
-passed, clearing up the warning and not changing the functionality of
-the code.
+Could you post an official patch ?
 
-Cc: stable@vger.kernel.org
-Fixes: f96f3cfa0bb8 ("[media] s5p-mfc: Update MFC v4l2 driver to support MFC6.x")
-Link: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e [1]
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2103
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-From what I can tell, it seems like ->cmd_host2risc() is only ever
-called from v6 code, which always passes NULL? It seems like it should
-be possible to just drop .cmd_host2risc on the v5 side, then update
-.cmd_host2risc to only take two parameters? If so, I can send a follow
-up as a clean up, so that this can go back relatively conflict free.
----
- .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c      | 22 +++++-----------------
- 1 file changed, 5 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-index 47bc3014b5d8..735471c50dbb 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-@@ -31,7 +31,6 @@ static int s5p_mfc_cmd_host2risc_v6(struct s5p_mfc_dev *dev, int cmd,
- 
- static int s5p_mfc_sys_init_cmd_v6(struct s5p_mfc_dev *dev)
- {
--	struct s5p_mfc_cmd_args h2r_args;
- 	const struct s5p_mfc_buf_size_v6 *buf_size = dev->variant->buf_size->priv;
- 	int ret;
- 
-@@ -41,33 +40,23 @@ static int s5p_mfc_sys_init_cmd_v6(struct s5p_mfc_dev *dev)
- 
- 	mfc_write(dev, dev->ctx_buf.dma, S5P_FIMV_CONTEXT_MEM_ADDR_V6);
- 	mfc_write(dev, buf_size->dev_ctx, S5P_FIMV_CONTEXT_MEM_SIZE_V6);
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SYS_INIT_V6,
--					&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SYS_INIT_V6, NULL);
- }
- 
- static int s5p_mfc_sleep_cmd_v6(struct s5p_mfc_dev *dev)
- {
--	struct s5p_mfc_cmd_args h2r_args;
--
--	memset(&h2r_args, 0, sizeof(struct s5p_mfc_cmd_args));
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SLEEP_V6,
--			&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SLEEP_V6, NULL);
- }
- 
- static int s5p_mfc_wakeup_cmd_v6(struct s5p_mfc_dev *dev)
- {
--	struct s5p_mfc_cmd_args h2r_args;
--
--	memset(&h2r_args, 0, sizeof(struct s5p_mfc_cmd_args));
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_WAKEUP_V6,
--					&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_WAKEUP_V6, NULL);
- }
- 
- /* Open a new instance and get its number */
- static int s5p_mfc_open_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- {
- 	struct s5p_mfc_dev *dev = ctx->dev;
--	struct s5p_mfc_cmd_args h2r_args;
- 	int codec_type;
- 
- 	mfc_debug(2, "Requested codec mode: %d\n", ctx->codec_mode);
-@@ -130,14 +119,13 @@ static int s5p_mfc_open_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- 	mfc_write(dev, 0, S5P_FIMV_D_CRC_CTRL_V6); /* no crc */
- 
- 	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_OPEN_INSTANCE_V6,
--					&h2r_args);
-+					NULL);
- }
- 
- /* Close instance */
- static int s5p_mfc_close_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- {
- 	struct s5p_mfc_dev *dev = ctx->dev;
--	struct s5p_mfc_cmd_args h2r_args;
- 	int ret = 0;
- 
- 	dev->curr_ctx = ctx->num;
-@@ -145,7 +133,7 @@ static int s5p_mfc_close_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- 		mfc_write(dev, ctx->inst_no, S5P_FIMV_INSTANCE_ID_V6);
- 		ret = s5p_mfc_cmd_host2risc_v6(dev,
- 					S5P_FIMV_H2R_CMD_CLOSE_INSTANCE_V6,
--					&h2r_args);
-+					NULL);
- 	} else {
- 		ret = -EINVAL;
- 	}
-
----
-base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
-change-id: 20250715-media-s5p-mfc-fix-uninit-const-pointer-cbf944ae4b4b
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+> or is there
+> some other fix for this? I am not familiar with this code, hence the
+> inquiry.
+> 
+> [1]: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e
