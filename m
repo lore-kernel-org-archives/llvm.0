@@ -1,61 +1,63 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85A513C8FF
-	for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 21:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7C52BEC5F
+	for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 21:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752613562; cv=none; b=jb2gVC8qzK26zj1Kp92tLUGt/we022tb3YiFlLFHCPwykwtYd6twtNNmGEQSTrwtCZJjLNAtY3DfoWo5qtiKLPx4IDKOmNuSlotgkpAoQZv7Nn17wkXtwjrtNPyetEOGiyE2hnXmUAwgHxL3upretO68dXkZ1IcpnU6d4cmq1M0=
+	t=1752613565; cv=none; b=mL3tlsExTdAqELGsf48dYSoB4/hvYpz0Jc90OWDbyexIrPZbVMMo6B1I32sRe7ywbg4FIPRM+2dCJIdSk74J8dvBNu+6ZbeP+jHEmGe1auZ9HCleMOUeLwTZ2Z9a0GkUONkRrLMD8UNLRG8ZvyAZrVCVwtZM9tkpi6FV3AKKtC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752613562; c=relaxed/simple;
-	bh=FYGfjfOp0uffIaOqOxp3So3TBknLCN3hEFHcZKI2YSM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JX0l055ltuT1T9VV45LU3U4bzeHxTSB5hJra8Y3XSkYIoBRDFvIvDQJ1o7ATCA/wsickfrrUULZ1x5ByVfPa1oWP5ZJecSMP3zPsGa4QJ2Gd7EeAcsSBkQbrEjnTxh58uPt86xdUAiriH4LLC4TH80x4SL9IjeSzvEtFP8Ea8lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j34uR1xk; arc=none smtp.client-ip=209.85.221.48
+	s=arc-20240116; t=1752613565; c=relaxed/simple;
+	bh=SIFkul1CcqDCKoC4+wlXOTU2x+nnGJ/CaZjoDH55Trg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Gno7YAAqn+Rty89WS/KZ3l/5Yvv6aSo7kOfL0NrMhvU0sQV1Bnj1991pJIsdBPlRXn9xQg/obuNK/Gi9/HmWirYhzwQgq4jjiyaFXNI97DbMy9lg792nw2Iflx/TJsj2ZL9kzs1uVvprwXZHB/mCz2L0iG92626YmefmMe1rAGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MIrdk1TY; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j34uR1xk"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a548a73ff2so4632168f8f.0
-        for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 14:06:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MIrdk1TY"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-455b002833bso15502705e9.0
+        for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 14:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752613559; x=1753218359; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xrNWGpEv1BAuId4AbOTg2+zWZrUKdhz6s19aGKtODkM=;
-        b=j34uR1xkiXT9Lzdn9n1mIg2kMr7WWaqBwNX8EX6w8NlsH5ZmHuuVNmr8qhxdx/eG0X
-         4ymImJMJa3pW+BIKIYFP4Qpy+MGIwyuxXZaKBwrgPbcAZzrHHuhpIIVCHeViH5ZaJ6jm
-         iX4Y2l/Wp+WJI5WfVxraNqKu6A4rIGnKQOnycZqLNFioVu7xSKLpQ+2y+mIByHg0O+TX
-         5nvnEJ2nv7gqs2LWLeUXYnztMcmJKMnL6RUNngZS3bNo2dkh/6Ou+JCKkhrnYINQyAem
-         n5fk/wSvi53SahJ7nJa8wZJHV31QU/SxOQ2ef+HYPglvK6j1zyDaVYNWDAO8vCrO1Iv1
-         4YQA==
+        d=gmail.com; s=20230601; t=1752613562; x=1753218362; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/6qJVedwXtW2wu0HYlGLibAipqbdIItFX4qAyGg2GFk=;
+        b=MIrdk1TYTTn0fhKUDCPIO4BxRodfwi2EZPSNLsknMWWbIpz+c2U+n6c1XAWvZckzSv
+         tkALNba79tooAVoc6so4weNQd17isbJXrWFuMJXaXnOdW+ercZIDss8KkHoz/wwFiopR
+         KXt+UR6FZZ5uqOJ+j/rQtANt/wtUKjEB3HlJ2p1LjxlOwyUonTmUVdUbgihcWuIEu0YH
+         ExE9x6S8oUctfybgNawWxqF/b/IzTIaJloM5+8i12izHnD94yXG685lZe8+baHaaCCx+
+         23QaJQ5T6MW9Bu0hT9aZPhK22XMjFNChFCDps4I/Rn/wiEV8gcQEUVKQqnXlX7gaysqc
+         TekA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752613559; x=1753218359;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xrNWGpEv1BAuId4AbOTg2+zWZrUKdhz6s19aGKtODkM=;
-        b=YfManFmE6vFhlojXPlFRMHNj4dilboLgWeFv0Q++wCWJ/s1ROLAGsiTrB00fK8xCQ8
-         uSfgtW+tJ+OTs1RNlms9dAOPMYvLsnWL4CcZlXiIXFNttrSuno1vWnB678MYcxNXOqLA
-         BJlBT8c5RBTG/x2hF1myTLz+KVoU2vzmTC7kWwH6H8kvJ/6FpKKaD2BpgQxfqXn5rtqr
-         IAVMYteUeIZulZ84L9V62Ey5CWxgIewcBm6B0+FerG3pGkKuZ4pQ9miR9bY7vKaW/J/c
-         FLhsrqeOBBTiLeSko3L1wz86j8LRGNnavKaJBqRwB1+JNDXdPC2EWrlXiyuhErw+S0nR
-         8cSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWIiY2l1aE0hQJV41v7TsN/CvwYCUgC0yfVzGqDKp5jC78C6hH0j7myMcS60G7GR78uEgsf@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzo6kjHQjOf3eFJF2IcLIXciYjJMJvlSZyPyMNkF9qp3ywexc3d
-	PEMYt8xIizm4aCyxq+TOFpgqseIeX/+GS8PGzBL2Ejtp+Wfzb4CksWNS
-X-Gm-Gg: ASbGnct6vU3HL+8zJgezq93Gw9htOc2Jf/ExK0tc09Eceo3jmZpPEhrA9Iapjka5cX2
-	H3YpL0v2idX3RutHiK6zRab4/p37EWwpt4RD4nyknX/S5YlVbOccR0HY0PvnvtpdXOIAeyh47Ax
-	JZnQ6rss0ll90ILu1eBik5e+4e5PH/CwbVR5IAkLxeStjqSq7qbS66bjS4ZgV2xJwR4prxPwZOe
-	S90hmiVxjop955lpWpRRd3gUHj4KDhDDE0xH231kmSlz5IwzggNElgpxZun9TCGEEh89SfxmDXb
-	n2x2/GfJ3zWvRHpN4jFYyfBhmT5AuhNJ98xOy1M60463mV3R4QYyS+GBb2OJefUJW+ScFQNuR/5
-	WB9QlIqTyzxt5o1Y/u8Q=
-X-Google-Smtp-Source: AGHT+IGccMr+l6TuXlKeBOZcix9T3KSSEJKc+0G7hoGr2gWaAJ1sQCGF1RAGBN3M/xcDwUCYyKwhrA==
-X-Received: by 2002:adf:b64b:0:b0:3a5:3062:793a with SMTP id ffacd0b85a97d-3b60dd72f31mr406572f8f.33.1752613558746;
-        Tue, 15 Jul 2025 14:05:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:2::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e269a0sm15808133f8f.86.2025.07.15.14.05.57
+        d=1e100.net; s=20230601; t=1752613562; x=1753218362;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/6qJVedwXtW2wu0HYlGLibAipqbdIItFX4qAyGg2GFk=;
+        b=Jw7UY0hcULOrgBHsoLWowjytEXYXUNYd2eeVo+43YwoOWtN946BycvHqxNUnxSFjon
+         frzGMzXuvAQOprM3vkWRQb1L5dyBU74zQn5OY35EywneK4o+k4G+0pWe5FnXg8545mqp
+         /hLqCJx7XGmOdfbWsD+dngOH8vSucz2xLztBn5YX9C0fv3KuVdOi2m6KgVLjdi8WQTea
+         ZUn8pa+mJqk02By33IlJq9sBupB8LVE0nNjSv4XsIx13fpIxk1cq1iABsbcx2gNPeJeb
+         kZ60nMP+nGlXIMwzPwffA2ZlgEN/QqQwY24/Y8JyLGhzr5JixE9+L2LyE/PKHoejREMj
+         VEXA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0H+HGqmEXzRujzpGRP58FseUkg8xteFFmvznNI2+HBWOP0qVnrgBU2w5Q/NZLHlHBikWF@lists.linux.dev
+X-Gm-Message-State: AOJu0YxMsRip/1h84IEfPxovF8FPRH1gAvGJGDHf7hk0jDZ6aG0RUvm1
+	Wo18ThzrcXubPOTjPxy1cNjwjhfESRlsAu67SkCM92IjY2CiBF/bif/x
+X-Gm-Gg: ASbGncuEs8XUM7PHSbpzWzq7ntTNVrmI7hsveX5SzQk+pbFotubfcgOYjOeI+MEHHzz
+	mpQAG2HFSfKpTNSo26XnIjgX2axoDbC7nd35INaLjrpUaTIaUUMnW1/PutLLk38Z8kPaiwTFuoZ
+	kxD9rLi8fsSKeZzV1f3l5dhYjC8Q/DZ+K5PGO1KKaYSSEwpp4vzGgk6if1sSk9fJ/am/aRfykuF
+	+QMG58cCZyaBdDJcDtoU8HY62q8gdEvYcaTaBxvDufu4sBcdsg/iPZJpM+E/UDo1mR1ecFsO4v5
+	8cP2+S3pXFsv/RXpUwmT4S/X2K33KyvJCdMoTxCjCtChyFjZ5tzJjKjVGhSRaGD2clSNoCG+A6x
+	jJOTGgCyG7fiZKSZa7ZUD
+X-Google-Smtp-Source: AGHT+IEll29/F9GryhP3KmfLKP+1l4l1058+oo0OnQbnYL/CHjrIr8MPnZjhCifce1hz0eFWSDDV8Q==
+X-Received: by 2002:a05:600c:1d03:b0:456:18d4:5f7b with SMTP id 5b1f17b1804b1-4562e044fc5mr3644415e9.9.1752613561561;
+        Tue, 15 Jul 2025 14:06:01 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:4a::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e8026e4sm1237105e9.11.2025.07.15.14.06.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 14:05:58 -0700 (PDT)
+        Tue, 15 Jul 2025 14:06:00 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: kuba@kernel.org,
@@ -84,10 +86,12 @@ Cc: kuba@kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH net-next V5 0/5] net: netdevsim: hook in XDP handling
-Date: Tue, 15 Jul 2025 14:05:48 -0700
-Message-ID: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next V5 1/5] net: netdevsim: hook in XDP handling
+Date: Tue, 15 Jul 2025 14:05:49 -0700
+Message-ID: <20250715210553.1568963-2-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
+References: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -96,47 +100,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series add tests to validate XDP native support for PASS,
-DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
-For adjustment tests, validate support for both the extension and
-shrinking cases across various packet sizes and offset values.
+From: Jakub Kicinski <kuba@kernel.org>
 
-The pass criteria for head/tail adjustment tests require that at-least
-one adjustment value works for at-least one packet size. This ensure
-that the variability in maximum supported head/tail adjustment offset
-across different drivers is being incorporated.
+Add basic XDP support by hooking in do_xdp_generic().
+This should be enough to validate most basic XDP tests.
 
-The results reported in this series are based on fbnic. However, the
-series is tested against multiple other drivers including netdevism.
-
-Note: The XDP support for fbnic will be added later.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
 ---
-Change-log:
-V5:
-  - Fix warning caused by rcu_dereference() in p1
-  - Fix checkpatch warnings with P3, P4, and P5
-V4: https://lore.kernel.org/netdev/20250714210352.1115230-1-mohsin.bashr@gmail.com
-V3: https://lore.kernel.org/netdev/20250712002648.2385849-1-mohsin.bashr@gmail.com
-V2: https://lore.kernel.org/netdev/20250710184351.63797-1-mohsin.bashr@gmail.com
-V1: https://lore.kernel.org/netdev/20250709173707.3177206-1-mohsin.bashr@gmail.com
+ drivers/net/netdevsim/netdev.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-Jakub Kicinski (1):
-  net: netdevsim: hook in XDP handling
-
-Mohsin Bashir (4):
-  selftests: drv-net: Test XDP_PASS/DROP support
-  selftests: drv-net: Test XDP_TX support
-  selftests: drv-net: Test tail-adjustment support
-  selftests: drv-net: Test head-adjustment support
-
- drivers/net/netdevsim/netdev.c                |  19 +-
- tools/testing/selftests/drivers/net/Makefile  |   1 +
- tools/testing/selftests/drivers/net/xdp.py    | 656 ++++++++++++++++++
- .../selftests/net/lib/xdp_native.bpf.c        | 540 ++++++++++++++
- 4 files changed, 1215 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/xdp.py
- create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
-
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index 611e7f65291c..ba637bd0971a 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -387,15 +387,32 @@ static int nsim_get_iflink(const struct net_device *dev)
+ static int nsim_rcv(struct nsim_rq *rq, int budget)
+ {
+ 	struct net_device *dev = rq->napi.dev;
++	struct bpf_prog *xdp_prog;
++	struct netdevsim *ns;
+ 	struct sk_buff *skb;
+ 	unsigned int skblen;
+ 	int i, ret;
+ 
++	ns = netdev_priv(dev);
++	xdp_prog = READ_ONCE(ns->xdp.prog);
++
+ 	for (i = 0; i < budget; i++) {
+ 		if (skb_queue_empty(&rq->skb_queue))
+ 			break;
+ 
+ 		skb = skb_dequeue(&rq->skb_queue);
++
++		if (xdp_prog) {
++			/* skb might be freed directly by XDP, save the len */
++			skblen = skb->len;
++
++			ret = do_xdp_generic(xdp_prog, &skb);
++			if (ret != XDP_PASS) {
++				dev_dstats_rx_add(dev, skblen);
++				continue;
++			}
++		}
++
+ 		/* skb might be discard at netif_receive_skb, save the len */
+ 		skblen = skb->len;
+ 		skb_mark_napi_id(skb, &rq->napi);
+@@ -936,7 +953,7 @@ static void nsim_setup(struct net_device *dev)
+ 			    NETIF_F_TSO;
+ 	dev->pcpu_stat_type = NETDEV_PCPU_STAT_DSTATS;
+ 	dev->max_mtu = ETH_MAX_MTU;
+-	dev->xdp_features = NETDEV_XDP_ACT_HW_OFFLOAD;
++	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_HW_OFFLOAD;
+ }
+ 
+ static int nsim_queue_init(struct netdevsim *ns)
 -- 
 2.47.1
 
