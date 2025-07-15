@@ -1,513 +1,276 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7ED2BEFF4
-	for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 21:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4480C34545;
+	Tue, 15 Jul 2025 21:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752613575; cv=none; b=CHAxbVhuroE7X0bijtlGHR44gO1+LdyZbTc/HfKJLceya3Ou69JgbfTGG5rjM2aZZe38asTj9IbS/AZPw/nTpVExORaKO8e6WOkInFIJAYC/4MwpDydxqEtBXY8UYwVhgn4ygTdoHWUJf6YaHKRuNe5DJ+/Uz8Eu4669O6T2vVo=
+	t=1752614810; cv=none; b=OIs79ibefyoqBm9kA3nL5fqh+UUGS4awteLyIOcxQXjPF4qk1SWuO7ZY1Xyl5/o/70Fkv4h8UDAodAxcmsiL9Tp2/Bq9icMQxElSFkgdSQ+QRxT2LjKpXrDm0aKhXlU8xkSLMa1SyB28hM11vAd1loQDNCX90elkOLjvwBscFc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752613575; c=relaxed/simple;
-	bh=B0uDFBWhMLiOQt1P0y4cEBhweDPEM6JqqckSMNeXITE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WwahzVo6+GcVTogdf6nY71UBnbkkPXpDlsLDkPRaOf3upU6KyRwfTLngTjlT80HizTKkkLwrm8MvDzVu8w6edidqbMRur16s1qX7zlpmzGwSWdrSEqreID9SJQd9lPuhKRypi+BIe3rZwYUtBEWOkygd++8uJw0MqIuq7jNuTkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LeGMTxGk; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752614810; c=relaxed/simple;
+	bh=OlznMYLmAQxxfhEiYWeclpiT0gG26yk458dH7fTrgf0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=q1wKf7h3VzPyREBXYAMdusPZDvgeg3fII+j7/gDb0gF2YsbsmLtQRXMjfO/sYlnVwREZKRYCBYBx82MXdOcVhZWUO2w5TXf8K2IxSE3/4wMSLH/9xHj75FYk2kn43K0DikPlTCqRAjXwwNPT2RPQQcPQibUgJ0PkTfXrnULAy6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IgmOSSz0; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LeGMTxGk"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-451d54214adso39807755e9.3
-        for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 14:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752613572; x=1753218372; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FNTSorGhe9i+sp8Ybr0CDpGpLTbKDEyQzBf6s4Xcw/U=;
-        b=LeGMTxGkDbENz1MawUN8pF6ypS40NLo47hP7trY503nXPgNhPKH/+XVo9yyBy1FlWx
-         N3P3u8eLagUCUN9llhyj5EPyZXHw9yzLeo+OhOMbUek+YOJ1Mv/HCqxP4Aux9uSMGAKG
-         +tm9pGq3UCXFGX9tJqFZsdpRSvX+WJEkD8gC/UlZuSAbi5AyYCF7eJc34agl3/lcE0sI
-         pLYpQF7tXQ077UhNoYVu+seneEuwZfuYvoHC8TYg0bw4GAQF3HTecp+y7YckWqMV2dB+
-         NzazvWj+drZ7PLhQ83CuY4uibXVvAUl7K38Ph2eUnmFCa5R8XNHZtUFbEwYBSlv6b3Gr
-         SN8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752613572; x=1753218372;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FNTSorGhe9i+sp8Ybr0CDpGpLTbKDEyQzBf6s4Xcw/U=;
-        b=AmlSIYHeV0F0H4qpg+F3esJ15c6aqc9MW81cnfpV/iXdyz0PGschrHa7xQIH8d/vvT
-         q6Oryj7VdOZcnPH2wieHuoIMFWfsni1daAPyGRRO5ecdMMboLdB+60A8i7YrzoGOVjff
-         TAB6kN64wvrw8KafEF4Nw+nbnmdWC7hQYeW3ftMf6IYEW3vHQvDWCeYVF+QcDICoTnJU
-         wee7DeugnPCFGpk35wUCSDMKNMKPp98UYXxEHWxvI9czizW4aUOjdAvCEwNvskMDRt0X
-         MOIj7F/ojqHw4A37g4YcRBAYKCPof2vmuPhnr1txQ9HY86rUdmwixLSJwAfOnPbThfmn
-         F0VA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVd03K4tzHejfojBGOqF3CB9MV27eT/i7tSH2h85nJzQ8B6duQ621BrVRmEFlaNFQiqaeO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzz6ZSyTfboj0HNp7L1dcpsbSbVJ/EWc4ZKehj5JCvlj2Sz13jO
-	6sOkpQzsMejSIPnlcvoqCpTu/sXNRkNOcztkshiSfG1Tr7MJ24DhCzR3
-X-Gm-Gg: ASbGncvT5W9tBpEr2yNmm81W91Ii1+hF4n8i/jUWIeYleg8F07QlkqoKeq3UHn/66oS
-	4V988tRKw76hbAvmR7uAG4aGf0jL1s32J1vNUNJMu7ttnhaZv0Hg9jLHYzZWPSUildHkTk1tF+v
-	B54185mIUHzi7NM34BFdEXZOLZ4ftaJFqbZVTxrPSGc1hm2xMoYDRbIFeHTaUsQ5MfTceSSDIzz
-	949E72taRdmwozphleAgtDtMcfosges4X/8S5E7Fq9CQZaCgAPsTGd9+kSVFsftkPVaeCVFxu8+
-	LirbYz576J2/eXgWlBH7cjYM1hHdDt3knqOrmKVP0i4WqV2IQFnX9kXh7mNU7PycFnhKe4H3mrk
-	SewpfzoFa3f40z25Wru2c
-X-Google-Smtp-Source: AGHT+IENKG0UWtpE51WYWxJAYKTSoxDD9/ai4pcRD0fYyFp4WAqVt00bcvLB0au2k2kXM7i92d3V9w==
-X-Received: by 2002:a05:600c:1c10:b0:456:1b6b:daaa with SMTP id 5b1f17b1804b1-4562e041759mr3129435e9.29.1752613571969;
-        Tue, 15 Jul 2025 14:06:11 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:40::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e886113sm1051595e9.23.2025.07.15.14.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 14:06:11 -0700 (PDT)
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	horms@kernel.org,
-	cratiu@nvidia.com,
-	noren@nvidia.com,
-	cjubran@nvidia.com,
-	mbloch@nvidia.com,
-	mohsin.bashr@gmail.com,
-	jdamato@fastly.com,
-	gal@nvidia.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH net-next V5 5/5] selftests: drv-net: Test head-adjustment support
-Date: Tue, 15 Jul 2025 14:05:53 -0700
-Message-ID: <20250715210553.1568963-6-mohsin.bashr@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
-References: <20250715210553.1568963-1-mohsin.bashr@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgmOSSz0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752614809; x=1784150809;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OlznMYLmAQxxfhEiYWeclpiT0gG26yk458dH7fTrgf0=;
+  b=IgmOSSz0WIS6xgwqNpCGp6AJtD2Q2FX5Gj3xKumCBETHo37CxO43Ndnt
+   EyCld+GtSG1VZR20tZLq4rYN0Z66KL8WZjKfPtdcYeKARUga7supW52RS
+   Ksd8NMzqcwqKV3SQ8iW36NihmfRdmAlL0cy00RDp0jGB6IkaIxGDqiexb
+   gnTL/rFSDPM++5Aj2oQpBIHeKAf8TfQ8KYF54YgzTxQ878CCZcA/lkOg0
+   aIOXdPhTkuGMUHuGGxlZ029LuFqz3+2Wt7wxBGhc7byCqpIspHMRCbFve
+   JwKJ+KDAD7cQV8u/pigsNv0HzX07ByljtTA7XxVJkqg4FnPxXoDa6y414
+   Q==;
+X-CSE-ConnectionGUID: X7Qiq2uzTW+f2EtL8IRkDA==
+X-CSE-MsgGUID: 6rcYG6yATDWXAHWmgPxP1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58503573"
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="58503573"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 14:26:48 -0700
+X-CSE-ConnectionGUID: 8dKEjpy+TxGHE6dBg1uxyg==
+X-CSE-MsgGUID: L340yswlTS+NzQgQpGLfMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="157877270"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 15 Jul 2025 14:26:45 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ubnAe-000BZ9-1m;
+	Tue, 15 Jul 2025 21:26:40 +0000
+Date: Wed, 16 Jul 2025 05:26:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/tracing_multi 13/22]
+ arch/s390/net/bpf_jit_comp.c:2503:33: error: no member named 'cookie' in
+ 'struct bpf_tramp_link'
+Message-ID: <202507160508.QXd3JPbZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Add test to validate the headroom adjustment support for both extension
-and the shrinking cases. For the extension part, eat up space from
-the start of payload data whereas, for the shrinking part, populate
-the newly available space with a tag. In the user-space, validate that a
-test string is manipulated accordingly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi
+head:   d0503d4013c49a3fde856947dfffe6c80c178eb1
+commit: d6d4068c9dbaa7c77d3fc2d3e0d8ae03a9eac775 [13/22] bpf: Add struct bpf_tramp_node object
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250716/202507160508.QXd3JPbZ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160508.QXd3JPbZ-lkp@intel.com/reproduce)
 
-./drivers/net/xdp.py
-TAP version 13
-1..9
-ok 1 xdp.test_xdp_native_pass_sb
-ok 2 xdp.test_xdp_native_pass_mb
-ok 3 xdp.test_xdp_native_drop_sb
-ok 4 xdp.test_xdp_native_drop_mb
-ok 5 xdp.test_xdp_native_tx_mb
-\# Failed run: pkt_sz 2048, ... offset -256. Reason: Adjustment failed
-ok 6 xdp.test_xdp_native_adjst_tail_grow_data
-ok 7 xdp.test_xdp_native_adjst_tail_shrnk_data
-\# Failed run: pkt_sz 512, ... offset -128. Reason: Adjustment failed
-ok 8 xdp.test_xdp_native_adjst_head_grow_data
-\# Failed run: pkt_sz (2048) > HDS threshold (1536) and offset 64 > 48
-ok 9 xdp.test_xdp_native_adjst_head_shrnk_data
-\# Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507160508.QXd3JPbZ-lkp@intel.com/
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
----
- tools/testing/selftests/drivers/net/xdp.py    | 147 ++++++++++++++-
- .../selftests/net/lib/xdp_native.bpf.c        | 167 ++++++++++++++++++
- 2 files changed, 313 insertions(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-index 8d80f6860b8b..89c70daa3e69 100755
---- a/tools/testing/selftests/drivers/net/xdp.py
-+++ b/tools/testing/selftests/drivers/net/xdp.py
-@@ -12,7 +12,7 @@ from dataclasses import dataclass
- from enum import Enum
- 
- from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ne, ksft_pr
--from lib.py import KsftFailEx, NetDrvEpEnv
-+from lib.py import KsftFailEx, NetDrvEpEnv, EthtoolFamily, NlError
- from lib.py import bkg, cmd, rand_port
- from lib.py import ip, bpftool, defer
- 
-@@ -31,6 +31,7 @@ class XDPAction(Enum):
-     DROP = 1  # Drop the packet
-     TX = 2    # Route the packet to the remote host
-     TAIL_ADJST = 3  # Adjust the tail of the packet
-+    HEAD_ADJST = 4  # Adjust the head of the packet
- 
- 
- class XDPStats(Enum):
-@@ -483,6 +484,147 @@ def test_xdp_native_adjst_tail_shrnk_data(cfg):
-     _validate_res(res, offset_lst, pkt_sz_lst)
- 
- 
-+def get_hds_thresh(cfg):
-+    """
-+    Retrieves the header data split (HDS) threshold for a network interface.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    Returns:
-+        The HDS threshold value. If the threshold is not supported or an error occurs,
-+        a default value of 1500 is returned.
-+    """
-+    netnl = cfg.netnl
-+    hds_thresh = 1500
-+
-+    try:
-+        rings = netnl.rings_get({'header': {'dev-index': cfg.ifindex}})
-+        if 'hds-thresh' not in rings:
-+            ksft_pr(f'hds-thresh not supported. Using default: {hds_thresh}')
-+            return hds_thresh
-+        hds_thresh = rings['hds-thresh']
-+    except NlError as e:
-+        ksft_pr(f"Failed to get rings: {e}. Using default: {hds_thresh}")
-+
-+    return hds_thresh
-+
-+
-+def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
-+    """
-+    Tests the XDP head adjustment action for a multi-buffer case.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+        netnl: Network namespace or link object (not used in this function).
-+
-+    This function sets up the packet size and offset lists, then performs
-+    the head adjustment test by sending and receiving UDP packets.
-+    """
-+    cfg.require_cmd("socat", remote=True)
-+
-+    prog_info = _load_xdp_prog(cfg, BPFProgInfo(prog, "xdp_native.bpf.o", "xdp.frags", 9000))
-+    port = rand_port()
-+
-+    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.HEAD_ADJST.value)
-+    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
-+
-+    hds_thresh = get_hds_thresh(cfg)
-+    for offset in offset_lst:
-+        for pkt_sz in pkt_sz_lst:
-+            # The "head" buffer must contain at least the Ethernet header
-+            # after we eat into it. We send large-enough packets, but if HDS
-+            # is enabled head will only contain headers. Don't try to eat
-+            # more than 28 bytes (UDPv4 + eth hdr left: (14 + 20 + 8) - 14)
-+            l2_cut_off = 28 if cfg.addr_ipver == 4 else 48
-+            if pkt_sz > hds_thresh and offset > l2_cut_off:
-+                ksft_pr(
-+                f"Failed run: pkt_sz ({pkt_sz}) > HDS threshold ({hds_thresh}) and "
-+                f"offset {offset} > {l2_cut_off}"
-+                )
-+                return {"status": "pass"}
-+
-+            test_str = ''.join(random.choice(string.ascii_lowercase) for _ in range(pkt_sz))
-+            tag = format(random.randint(65, 90), '02x')
-+
-+            _set_xdp_map("map_xdp_setup",
-+                     TestConfig.ADJST_OFFSET.value,
-+                     offset)
-+            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
-+            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
-+
-+            recvd_str = _exchg_udp(cfg, port, test_str)
-+
-+            # Check for failures around adjustment and data exchange
-+            failure = _check_for_failures(recvd_str, _get_stats(prog_info['maps']['map_xdp_stats']))
-+            if failure is not None:
-+                return {
-+                    "status": "fail",
-+                    "reason": failure,
-+                    "offset": offset,
-+                    "pkt_sz": pkt_sz
-+                }
-+
-+            # Validate data content based on offset direction
-+            expected_data = None
-+            if offset < 0:
-+                expected_data = chr(int(tag, 16)) * (0 - offset) + test_str
-+            else:
-+                expected_data = test_str[offset:]
-+
-+            if recvd_str != expected_data:
-+                return {
-+                    "status": "fail",
-+                    "reason": "Data mismatch",
-+                    "offset": offset,
-+                    "pkt_sz": pkt_sz
-+                }
-+
-+    return {"status": "pass"}
-+
-+
-+def test_xdp_native_adjst_head_grow_data(cfg):
-+    """
-+    Tests the XDP headroom growth support.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    This function sets up the packet size and offset lists, then calls the
-+    _test_xdp_native_head_adjst_mb function to perform the actual test. The
-+    test is passed if the headroom is successfully extended for given packet
-+    sizes and offsets.
-+    """
-+    pkt_sz_lst = [512, 1024, 2048]
-+
-+    # Positive value indicates data part is growing by the corresponding value
-+    offset_lst = [-16, -32, -64, -128, -256]
-+    res = _test_xdp_native_head_adjst(cfg, "xdp_prog_frags", pkt_sz_lst, offset_lst)
-+
-+    _validate_res(res, offset_lst, pkt_sz_lst)
-+
-+
-+def test_xdp_native_adjst_head_shrnk_data(cfg):
-+    """
-+    Tests the XDP headroom shrinking support.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    This function sets up the packet size and offset lists, then calls the
-+    _test_xdp_native_head_adjst_mb function to perform the actual test. The
-+    test is passed if the headroom is successfully shrunk for given packet
-+    sizes and offsets.
-+    """
-+    pkt_sz_lst = [512, 1024, 2048]
-+
-+    # Negative value indicates data part is shrinking by the corresponding value
-+    offset_lst = [16, 32, 64, 128, 256]
-+    res = _test_xdp_native_head_adjst(cfg, "xdp_prog_frags", pkt_sz_lst, offset_lst)
-+
-+    _validate_res(res, offset_lst, pkt_sz_lst)
-+
-+
- def main():
-     """
-     Main function to execute the XDP tests.
-@@ -493,6 +635,7 @@ def main():
-     function to execute the tests.
-     """
-     with NetDrvEpEnv(__file__) as cfg:
-+        cfg.netnl = EthtoolFamily()
-         ksft_run(
-             [
-                 test_xdp_native_pass_sb,
-@@ -502,6 +645,8 @@ def main():
-                 test_xdp_native_tx_mb,
-                 test_xdp_native_adjst_tail_grow_data,
-                 test_xdp_native_adjst_tail_shrnk_data,
-+                test_xdp_native_adjst_head_grow_data,
-+                test_xdp_native_adjst_head_shrnk_data,
-             ],
-             args=(cfg,))
-     ksft_exit()
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 1383d465266c..93c0a74d37ef 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -25,6 +25,7 @@ enum {
- 	XDP_MODE_DROP = 1,
- 	XDP_MODE_TX = 2,
- 	XDP_MODE_TAIL_ADJST = 3,
-+	XDP_MODE_HEAD_ADJST = 4,
- } xdp_map_modes;
- 
- enum {
-@@ -328,6 +329,170 @@ static int xdp_tail_ext(struct xdp_md *ctx, __u16 port)
- 	return XDP_ABORTED;
- }
- 
-+static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
-+				     const __u32 size)
-+{
-+	char tmp_buff[MAX_ADJST_OFFSET];
-+	void *data, *data_end;
-+	void *offset_ptr;
-+
-+	data = (void *)(long)ctx->data;
-+	data_end = (void *)(long)ctx->data_end;
-+
-+	/* Update the length information in the IP and UDP headers before
-+	 * adjusting the headroom. This simplifies accessing the relevant
-+	 * fields in the IP and UDP headers for fragmented packets. Any
-+	 * failure beyond this point will result in the packet being aborted,
-+	 * so we don't need to worry about incorrect length information for
-+	 * passed packets.
-+	 */
-+	update_pkt(data, data_end, (__s16)(0 - size));
-+
-+	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_adjust_head(ctx, size) < 0)
-+		return -1;
-+
-+	if (size > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
-+		return -1;
-+
-+	/* Added here to handle clang complain about negative value */
-+	hdr_len = (hdr_len & 0x1ff) >= 256 ? 256 : hdr_len & 0xff;
-+
-+	if (hdr_len == 0)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
-+				    const __u32 size)
-+{
-+	char tmp_buff[MAX_ADJST_OFFSET];
-+	void *data, *data_end;
-+	void *offset_ptr;
-+	__s32 *val;
-+	__u32 key;
-+	__u8 tag;
-+
-+	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
-+		return -1;
-+
-+	/* Added here to handle clang complain about negative value */
-+	hdr_len = (hdr_len & 0x1ff) >= 256 ? 256 : hdr_len & 0xff;
-+
-+	if (hdr_len == 0)
-+		return -1;
-+
-+	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	if (size > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (bpf_xdp_adjust_head(ctx, 0 - size) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	data = (void *)(long)ctx->data;
-+	data_end = (void *)(long)ctx->data_end;
-+
-+	offset_ptr = data + hdr_len;
-+	if (offset_ptr > data_end)
-+		return -1;
-+
-+	key = XDP_ADJST_TAG;
-+	val = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+	if (!val)
-+		return -1;
-+
-+	tag = (__u8)(*val);
-+
-+	for (int i = 0; i < min(MAX_ADJST_OFFSET, size); i++) {
-+		if (offset_ptr + 1 > data_end)
-+			return -1;
-+
-+		__builtin_memcpy(offset_ptr, &tag, 1);
-+		offset_ptr++;
-+	}
-+
-+	update_pkt(data, data_end, (__s16)(size));
-+
-+	return 0;
-+}
-+
-+static int xdp_head_adjst(struct xdp_md *ctx, __u16 port)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	struct udphdr *udph_ptr = NULL;
-+	__u32 key, size, hdr_len;
-+	__s32 *val;
-+	int res;
-+
-+	/* Filter packets based on UDP port */
-+	udph_ptr = filter_udphdr(ctx, port);
-+	if (!udph_ptr)
-+		return XDP_PASS;
-+
-+	hdr_len = (void *)udph_ptr - data + sizeof(struct udphdr);
-+
-+	key = XDP_ADJST_OFFSET;
-+	val = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+	if (!val)
-+		return XDP_PASS;
-+
-+	switch (*val) {
-+	case -16:
-+	case 16:
-+		size = 16;
-+		break;
-+	case -32:
-+	case 32:
-+		size = 32;
-+		break;
-+	case -64:
-+	case 64:
-+		size = 64;
-+		break;
-+	case -128:
-+	case 128:
-+		size = 128;
-+		break;
-+	case -256:
-+	case 256:
-+		size = 256;
-+		break;
-+	default:
-+		bpf_printk("Invalid adjustment offset: %d\n", *val);
-+		goto abort;
-+	}
-+
-+	if (*val < 0)
-+		res = xdp_adjst_head_grow_data(ctx, hdr_len, size);
-+	else
-+		res = xdp_adjst_head_shrnk_data(ctx, hdr_len, size);
-+
-+	if (res)
-+		goto abort;
-+
-+	record_stats(ctx, STATS_PASS);
-+	return XDP_PASS;
-+
-+abort:
-+	record_stats(ctx, STATS_ABORT);
-+	return XDP_ABORTED;
-+}
-+
- static int xdp_prog_common(struct xdp_md *ctx)
- {
- 	__u32 key, *port;
-@@ -352,6 +517,8 @@ static int xdp_prog_common(struct xdp_md *ctx)
- 		return xdp_mode_tx_handler(ctx, (__u16)(*port));
- 	case XDP_MODE_TAIL_ADJST:
- 		return xdp_tail_ext(ctx, (__u16)(*port));
-+	case XDP_MODE_HEAD_ADJST:
-+		return xdp_head_adjst(ctx, (__u16)(*port));
- 	}
- 
- 	/* Default action is to simple pass */
+>> arch/s390/net/bpf_jit_comp.c:2503:33: error: no member named 'cookie' in 'struct bpf_tramp_link'
+    2503 |         load_imm64(jit, REG_W0, tlink->cookie);
+         |                                 ~~~~~  ^
+   arch/s390/net/bpf_jit_comp.c:2591:14: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2594:44: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+    2594 |         struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+         |                                             ~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2595:42: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+    2595 |         struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+         |                                           ~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2596:41: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+    2596 |         struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+         |                                          ~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2760:24: error: incomplete definition of type 'struct bpf_tramp_links'
+    2760 |         for (i = 0; i < fentry->nr_links; i++)
+         |                         ~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2761:38: error: incomplete definition of type 'struct bpf_tramp_links'
+    2761 |                 if (invoke_bpf_prog(tjit, m, fentry->links[i],
+         |                                              ~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2765:14: error: incomplete definition of type 'struct bpf_tramp_links'
+    2765 |         if (fmod_ret->nr_links) {
+         |             ~~~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2774:27: error: incomplete definition of type 'struct bpf_tramp_links'
+    2774 |                 for (i = 0; i < fmod_ret->nr_links; i++) {
+         |                                 ~~~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2775:41: error: incomplete definition of type 'struct bpf_tramp_links'
+    2775 |                         if (invoke_bpf_prog(tjit, m, fmod_ret->links[i], true))
+         |                                                      ~~~~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2830:23: error: incomplete definition of type 'struct bpf_tramp_links'
+    2830 |         for (i = 0; i < fexit->nr_links; i++)
+         |                         ~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2831:37: error: incomplete definition of type 'struct bpf_tramp_links'
+    2831 |                 if (invoke_bpf_prog(tjit, m, fexit->links[i], false))
+         |                                              ~~~~~^
+   arch/s390/net/bpf_jit_comp.c:2591:14: note: forward declaration of 'struct bpf_tramp_links'
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                 ^
+   arch/s390/net/bpf_jit_comp.c:2881:16: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+    2881 |                              struct bpf_tramp_links *tlinks, void *orig_call)
+         |                                     ^
+   arch/s390/net/bpf_jit_comp.c:2880:5: error: conflicting types for 'arch_bpf_trampoline_size'
+    2880 | int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+         |     ^
+   include/linux/bpf.h:1209:5: note: previous declaration is here
+    1209 | int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+         |     ^
+   arch/s390/net/bpf_jit_comp.c:2890:10: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
+    2890 |                                             tlinks, orig_call);
+         |                                             ^~~~~~
+   arch/s390/net/bpf_jit_comp.c:2591:31: note: passing argument to parameter 'tlinks' here
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                                  ^
+   arch/s390/net/bpf_jit_comp.c:2897:23: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+    2897 |                                 u32 flags, struct bpf_tramp_links *tlinks,
+         |                                                   ^
+   arch/s390/net/bpf_jit_comp.c:2895:5: error: conflicting types for 'arch_prepare_bpf_trampoline'
+    2895 | int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+         |     ^
+   include/linux/bpf.h:1202:5: note: previous declaration is here
+    1202 | int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *image_end,
+         |     ^
+   arch/s390/net/bpf_jit_comp.c:2906:10: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
+    2906 |                                             tlinks, func_addr);
+         |                                             ^~~~~~
+   arch/s390/net/bpf_jit_comp.c:2591:31: note: passing argument to parameter 'tlinks' here
+    2591 |                                          struct bpf_tramp_links *tlinks,
+         |                                                                  ^
+   arch/s390/net/bpf_jit_comp.c:2920:10: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
+    2920 |                                             tlinks, func_addr);
+         |                                             ^~~~~~
+   arch/s390/net/bpf_jit_comp.c:2591:31: note: passing argument to parameter 'tlinks' here
+    2591 |                                          struct bpf_tramp_links *tlinks,
+
+
+vim +2503 arch/s390/net/bpf_jit_comp.c
+
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2487  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2488  static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2489  			   const struct btf_func_model *m,
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2490  			   struct bpf_tramp_link *tlink, bool save_ret)
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2491  {
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2492  	struct bpf_jit *jit = &tjit->common;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2493  	int cookie_off = tjit->run_ctx_off +
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2494  			 offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2495  	struct bpf_prog *p = tlink->link.prog;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2496  	int patch;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2497  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2498  	/*
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2499  	 * run_ctx.cookie = tlink->cookie;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2500  	 */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2501  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2502  	/* %r0 = tlink->cookie */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29 @2503  	load_imm64(jit, REG_W0, tlink->cookie);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2504  	/* stg %r0,cookie_off(%r15) */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2505  	EMIT6_DISP_LH(0xe3000000, 0x0024, REG_W0, REG_0, REG_15, cookie_off);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2506  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2507  	/*
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2508  	 * if ((start = __bpf_prog_enter(p, &run_ctx)) == 0)
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2509  	 *         goto skip;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2510  	 */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2511  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2512  	/* %r1 = __bpf_prog_enter */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2513  	load_imm64(jit, REG_1, (u64)bpf_trampoline_enter(p));
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2514  	/* %r2 = p */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2515  	load_imm64(jit, REG_2, (u64)p);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2516  	/* la %r3,run_ctx_off(%r15) */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2517  	EMIT4_DISP(0x41000000, REG_3, REG_15, tjit->run_ctx_off);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2518  	/* %r1() */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2519  	call_r1(jit);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2520  	/* ltgr %r7,%r2 */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2521  	EMIT4(0xb9020000, REG_7, REG_2);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2522  	/* brcl 8,skip */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2523  	patch = jit->prg;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2524  	EMIT6_PCREL_RILC(0xc0040000, 8, 0);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2525  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2526  	/*
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2527  	 * retval = bpf_func(args, p->insnsi);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2528  	 */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2529  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2530  	/* %r1 = p->bpf_func */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2531  	load_imm64(jit, REG_1, (u64)p->bpf_func);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2532  	/* la %r2,bpf_args_off(%r15) */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2533  	EMIT4_DISP(0x41000000, REG_2, REG_15, tjit->bpf_args_off);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2534  	/* %r3 = p->insnsi */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2535  	if (!p->jited)
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2536  		load_imm64(jit, REG_3, (u64)p->insnsi);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2537  	/* %r1() */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2538  	call_r1(jit);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2539  	/* stg %r2,retval_off(%r15) */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2540  	if (save_ret) {
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2541  		if (sign_extend(jit, REG_2, m->ret_size, m->ret_flags))
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2542  			return -1;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2543  		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_2, REG_0, REG_15,
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2544  			      tjit->retval_off);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2545  	}
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2546  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2547  	/* skip: */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2548  	if (jit->prg_buf)
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2549  		*(u32 *)&jit->prg_buf[patch + 2] = (jit->prg - patch) >> 1;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2550  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2551  	/*
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2552  	 * __bpf_prog_exit(p, start, &run_ctx);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2553  	 */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2554  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2555  	/* %r1 = __bpf_prog_exit */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2556  	load_imm64(jit, REG_1, (u64)bpf_trampoline_exit(p));
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2557  	/* %r2 = p */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2558  	load_imm64(jit, REG_2, (u64)p);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2559  	/* lgr %r3,%r7 */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2560  	EMIT4(0xb9040000, REG_3, REG_7);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2561  	/* la %r4,run_ctx_off(%r15) */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2562  	EMIT4_DISP(0x41000000, REG_4, REG_15, tjit->run_ctx_off);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2563  	/* %r1() */
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2564  	call_r1(jit);
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2565  
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2566  	return 0;
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2567  }
+528eb2cb87bc135 Ilya Leoshkevich 2023-01-29  2568  
+
+:::::: The code at line 2503 was first introduced by commit
+:::::: 528eb2cb87bc1353235a6384696b4849bde8b0ba s390/bpf: Implement arch_prepare_bpf_trampoline()
+
+:::::: TO: Ilya Leoshkevich <iii@linux.ibm.com>
+:::::: CC: Alexei Starovoitov <ast@kernel.org>
+
 -- 
-2.47.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
