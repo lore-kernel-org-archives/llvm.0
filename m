@@ -1,107 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA6F2BE65E;
-	Tue, 15 Jul 2025 22:18:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F5F1C2DB2;
+	Tue, 15 Jul 2025 22:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752617931; cv=none; b=enrof4/IU/6AyFxdE8LvO8acwZp76vnIZ3cKcl7v9B2uU6So1NWXzWrTiwa+3UQ3XAFqZRrfXG06vmUszQzjWXRKKy6cvC4wejtHG8jrlwcO0SnW/GDk+FzcWu+wUY1Cofrc4QOG2fqc0MviBYddTTP0bWKEXYeuvu5ho1jjuts=
+	t=1752618813; cv=none; b=VhgeEGHZTsr8mJ67dBn6tQDmGvkKyZ3c6q2ryHIWPvHPPlyfPicZjvDQld0BXh0aEC5E4Qmu/WV+MjDgDIRt4BS0NOjN+8TGcbX/x3G6t6WdgfuOgV264Wbwoo1PV2hCoJmE1j/7nIzCtb74/mU2AMEcW4coFGS9Nkz8TU+h5yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752617931; c=relaxed/simple;
-	bh=RrUG38UPoPx83mBx18hUOO16lRtjlEtzmrBZc9cW3Lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ln5XzYIoYapaI7Qj2Vgo/jCB5GGmA2bhmwzFY9peTTFqomVapll8DxHUCd+Lrzu4Sy3hksjuVUVNiqGXt+eT3XwUZIJanwN0PCm2vtur93ZlHZENmPPU1Adk5gtf1odwpJZT1g5awyKrJSeURxjRZVHClPNzL376TFynFdJLl8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I7yD0NXv; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752618813; c=relaxed/simple;
+	bh=dyGcpzNngBMQ2YV4Wi/gcf3C7b7anIslY6CBRkZ6gEE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n84BMLfHeAc8A5/nXzGwEfcFkGbl66CCDNSWjYQJ3SMH57yg2V/qWn7AcXlBgy+3nRuIaMyoz0+ATE5+EO7UYOJXI5ubXzAcoXTK3sF9RASoDMzIv64H94gXA5uEi756IBAtpmG05EmGt8valSRar/e1HRLvEL6VyXOL8UAtkRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P8LHvr61; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I7yD0NXv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752617930; x=1784153930;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RrUG38UPoPx83mBx18hUOO16lRtjlEtzmrBZc9cW3Lo=;
-  b=I7yD0NXv/eTVzJpO1Ng/umWjYHRGJRIK8EsbjUaBQ/7cYMNMQQCyEW6F
-   6oZggbdZGnzkyziBdrUyQri2FuVIT0c5VjoojA2yux6fk3iMyGUaiyV4F
-   FGLQD9gzMdXmPw0jWyu1Ngtq+qenYXzKbKmTlm6kDLrvoIfBFT/x62GRf
-   G17yzmDu+iwq3o+VRnxz/ZXE0YEVRZhZ6R2S1BWLtBrMPJV9df8yWJgTW
-   bwn4n3rz+d++q6boBNFSbyVkTlKTEuaDm1J9lC3PtxyvHbJsIay9UlyNJ
-   7fi90bHJH8tObkrI9dZEmXcW9E65F3G+UEoGMc8DgfZyEvgUK7vAK+7+m
-   Q==;
-X-CSE-ConnectionGUID: Q5BJMvkpQZOKjFp2WmWiSA==
-X-CSE-MsgGUID: RFom+RPcREiX92NyYVr4fg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="54976888"
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="54976888"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 15:18:50 -0700
-X-CSE-ConnectionGUID: 9ZYQA1cvTqSbqbxZkPgg5A==
-X-CSE-MsgGUID: pf8kCVk5S3SqszxmLZWffg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="194472790"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 15 Jul 2025 15:18:48 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubnz3-000Bb7-1L;
-	Tue, 15 Jul 2025 22:18:45 +0000
-Date: Wed, 16 Jul 2025 06:18:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marco Crivellari <marco.crivellari@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: <instantiation>:7:11: error: expected an immediate
-Message-ID: <202507160634.HuBB6qKT-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8LHvr61"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C871AC4CEF5;
+	Tue, 15 Jul 2025 22:33:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752618813;
+	bh=dyGcpzNngBMQ2YV4Wi/gcf3C7b7anIslY6CBRkZ6gEE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=P8LHvr61VPq1o/fizrHXVI4ZPQCeIcgDWWg9nU8IuyP9DkmCIuOYg33Kk3u9D8uHW
+	 hjg99qwKbp9Lx5zRv+WcOV1qP5UqE2vz4MfiiBJDmILiyi00XkSLcYV86mLF+mCFj5
+	 PG+MrGH3YwscS65wzsYMYvVT4hsCg6fR1mzlHUZIFJk1siRg+znhFrF0jcpWNlF/gF
+	 +POYE3XwtpXRXVmqxqeDR6zMfesXb6gnhU6kNg9JjFtoyuy0QlwZYWg3S8PDPmI7LU
+	 kYwV0QPt5BqsjMFt3T2/jDlB4f2JRun+PaIc23D/YkgvrnuTD4TLKxvnL1NboxaXln
+	 K9EVa3xRC0NtQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 15 Jul 2025 15:33:25 -0700
+Subject: [PATCH] wifi: mt76: mt7996: Initialize hdr before passing to
+ skb_put_data()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250715-mt7996-fix-uninit-const-pointer-v1-1-b5d8d11d7b78@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADTXdmgC/x2NQQqAIBAAvxJ7bkHLivpKdIjcag+toRaB9Pek4
+ 8AwkyCQZwowFAk83RzYSQZdFrDss2yEbDNDpapGdbrBI3Z93+LKD17CwhEXJyHi6VgieVSatLW
+ qtsYYyJXTU3b/wzi97wfbvvL3cQAAAA==
+X-Change-ID: 20250715-mt7996-fix-uninit-const-pointer-01e1dd03d444
+To: Felix Fietkau <nbd@nbd.name>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+ Ryder Lee <ryder.lee@mediatek.com>
+Cc: Shayne Chen <shayne.chen@mediatek.com>, 
+ Sean Wang <sean.wang@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2306; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=dyGcpzNngBMQ2YV4Wi/gcf3C7b7anIslY6CBRkZ6gEE=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBll1624BTtKdzdwrLrW6+cz6019Vte06mtHtylMNdKU/
+ 7D7lNTSjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRtfmMDLOlHf62PTyYUm0q
+ tuKShooYa4bf/6J9Fr/9l7o0bV56fg/D/yr38kR/+wMs/x7lBqxxW+cW5hvCfeUFx6GS0KgVR+P
+ 8OAE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Marco,
+A new warning in clang [1] points out a couple of places where a hdr
+variable is not initialized then passed along to skb_put_data().
 
-FYI, the error/warning still remains.
+  drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:1894:21: warning: variable 'hdr' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
+   1894 |         skb_put_data(skb, &hdr, sizeof(hdr));
+        |                            ^~~
+  drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3386:21: warning: variable 'hdr' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
+   3386 |         skb_put_data(skb, &hdr, sizeof(hdr));
+        |                            ^~~
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   155a3c003e555a7300d156a5252c004c392ec6b0
-commit: 56651128e2fbad80f632f388d6bf1f39c928267a MIPS: Fix idle VS timer enqueue
-date:   3 months ago
-config: mips-rb532_defconfig (https://download.01.org/0day-ci/archive/20250716/202507160634.HuBB6qKT-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160634.HuBB6qKT-lkp@intel.com/reproduce)
+Zero initialize these headers as done in other places in the driver when
+there is nothing stored in the header.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160634.HuBB6qKT-lkp@intel.com/
+Cc: stable@vger.kernel.org
+Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+Link: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e [1]
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2104
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/wireless/mediatek/mt76/mt7996/mcu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+index 994526c65bfc..640abb4dce7f 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7996/mcu.c
+@@ -1879,8 +1879,8 @@ mt7996_mcu_get_mmps_mode(enum ieee80211_smps_mode smps)
+ int mt7996_mcu_set_fixed_rate_ctrl(struct mt7996_dev *dev,
+ 				   void *data, u16 version)
+ {
++	struct uni_header hdr = {};
+ 	struct ra_fixed_rate *req;
+-	struct uni_header hdr;
+ 	struct sk_buff *skb;
+ 	struct tlv *tlv;
+ 	int len;
+@@ -3373,7 +3373,7 @@ int mt7996_mcu_set_hdr_trans(struct mt7996_dev *dev, bool hdr_trans)
+ {
+ 	struct {
+ 		u8 __rsv[4];
+-	} __packed hdr;
++	} __packed hdr = {};
+ 	struct hdr_trans_blacklist *req_blacklist;
+ 	struct hdr_trans_en *req_en;
+ 	struct sk_buff *skb;
 
->> <instantiation>:7:11: error: expected an immediate
-    ori $26, r4k_wait_idle_size - 2
-             ^
-   <instantiation>:10:13: error: expected an immediate
-    addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-               ^
-   <instantiation>:10:29: error: expected an immediate
-    addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-                               ^
->> <instantiation>:7:11: error: expected an immediate
-    ori $26, r4k_wait_idle_size - 2
-             ^
-   <instantiation>:10:13: error: expected an immediate
-    addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-               ^
-   <instantiation>:10:29: error: expected an immediate
-    addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-                               ^
+---
+base-commit: eb8352ee2d1e70f916fac02094dca2b435076fa4
+change-id: 20250715-mt7996-fix-uninit-const-pointer-01e1dd03d444
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
