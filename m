@@ -1,69 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0135255F24;
-	Tue, 15 Jul 2025 05:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DA0288CBF;
+	Tue, 15 Jul 2025 06:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752559032; cv=none; b=H/oRjwtXmXAJvia2cdLs9Ogn9n7mnBOXx/hLTkV5e5KArztjHqE9nqBF40C1pfw9xS6tS7BalVsXh2uWoG9bJCul/VkPC3tWL/dAaExUMSZPe9EfBSAl/0A3JtakHhPndiB+PWiteG9TSGVIvLCKADOin+Gd8jj0ghB6fmRbm0Q=
+	t=1752559526; cv=none; b=dGfvlrqN+bWzFxw3dNFnY4OhsJ7P1fi+dMQlwAjgztCnGEGAmV5M+auXhc0XCTOi69Aveb0axTFeBbzHyr+q7+x8WEpp2Mr/J7c32mRgOF7pXGUnaT430zuEf5zrYdmLVoZhm4cOOX6yOBJFrihdzJ6Lk/xitkp2NuQ7xgxYTkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752559032; c=relaxed/simple;
-	bh=wmvN79kkI2uY89k/rrcdVS6059/8dQL8TezMZWnf+rM=;
+	s=arc-20240116; t=1752559526; c=relaxed/simple;
+	bh=4s0NpdOUBcdw8nBgpKG7viU5jz793opptwLWmA1YS38=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UuwIH4MM45hCUNMHgWeG49I8VJJPNO+tDblhdMsyAS6SLXsvums274nez4bdkmBpRHmgcQVvy+dcvx/U8TpauUDIrGNZH5I666NUa6m4PMYmWs+EuE6gjCwhU9KOTjL1dqgjLfgt2v/lRyFze5eGQvRWAwEOexHm9oLHVTKbEs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJ0kddfR; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=UvclCCAZrL3F0aoQF76lXhDn0c3Kr53/EM4RjQPtE+AHWshHWbH4ZvNee2Qtva6GcPtom4+JYi21C7s8EDl3FAXTY45htBRnTYbI7rxYj8V4mxguS/A82zTfCFRsrZ2EHu1EA9YYjKbckd1AkNy8uhJoD6Md6WteluV1lG9CcnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Smgrtolw; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJ0kddfR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8964C4CEE3;
-	Tue, 15 Jul 2025 05:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752559031;
-	bh=wmvN79kkI2uY89k/rrcdVS6059/8dQL8TezMZWnf+rM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jJ0kddfRq/wi2cczPvscCBtaQBOvPPubaZPv3FhypEw+5UKK0WhctGzJqakUE47mj
-	 0hgvMUtevpezIfVJrccsqdtSYPd2sjN0nRb9tN0vghFJ+c05Vt5+gWGqNDdNJk7p6H
-	 Sh8oWOAYHvlvgAcM5ZwOV2KbvC/4LCYKyIt/WgUJb5b0ER0EaKLDgyQwMcQxcdZpWG
-	 yRZoRdLWkXFBN0aAu91ZYkfbMxd4cRB9BrlHetz/bw9JgY4rGuKT9x+znMMEXCi7ry
-	 xSs/2RLQ/Ed9IUoMZM+nwW7VQ7Wh00EVvhINdsIUSq31XrazAB7+UGLadWmjzYO5wH
-	 BcbPsbS4HX8Vw==
-Date: Tue, 15 Jul 2025 08:57:07 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, linux-rdma@vger.kernel.org,
-	linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 6/6] IB/mlx5: Use __iowrite64_copy() for write
- combining stores
-Message-ID: <20250715055707.GC5882@unreal>
-References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
- <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
- <20250714215504.GA2083014@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Smgrtolw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752559523; x=1784095523;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4s0NpdOUBcdw8nBgpKG7viU5jz793opptwLWmA1YS38=;
+  b=Smgrtolw37SLtSTYCv/O9AOa7wezUFzrwRVpj1YWZy5MfaRe4Lw4oWS6
+   EULJaabl4rIpWqwsOeuOmGiY+nvHuCQqxI83ZUa4X/dU5K1V++VdTmU2x
+   m2vg0INK05BrxYNGaJWGKy+fuNcXT16EDCscKiZ02GbFPeQxe7OUUkF8s
+   7pX7yDGl01Rl7UnrPY9DrNzeirwcXOtUqK9bn0gJg++d4OdUpRxwCj42c
+   17VVXCkTlngQ+10byfNmvltplXC5kq4bj8vp2T8e7ZUAIIGZvGrICVu3U
+   blFX/bQpPvboXszd01SeY5WtORMXYpfKeMGy7P8DXs3jPtARAMF8psTXB
+   Q==;
+X-CSE-ConnectionGUID: eh4wlM38QQ6EHXwVvMHs0g==
+X-CSE-MsgGUID: 1NdQftyAQde1a4QhLoiZgQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="54473565"
+X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
+   d="scan'208";a="54473565"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 23:05:22 -0700
+X-CSE-ConnectionGUID: PSlCRGZIQQmcUVw1SqSz1w==
+X-CSE-MsgGUID: zTaZorvJTBGg1ZWmckAnoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
+   d="scan'208";a="156778778"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 14 Jul 2025 23:05:19 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ubYmy-0009iV-2o;
+	Tue, 15 Jul 2025 06:05:16 +0000
+Date: Tue, 15 Jul 2025 14:04:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Yao <richard@scandent.com>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Akshay Athalye <akshay@scandent.com>,
+	Richard Yao <richard@scandent.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Subject: Re: [PATCH 3/3] drm/panel: ilitek-ili9881c: Add Tianxinwei
+ TWX700100S0 support
+Message-ID: <202507151301.sFo3NzXA-lkp@intel.com>
+References: <20250714191729.2416-4-richard@scandent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,58 +72,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250714215504.GA2083014@nvidia.com>
+In-Reply-To: <20250714191729.2416-4-richard@scandent.com>
 
-On Mon, Jul 14, 2025 at 06:55:04PM -0300, Jason Gunthorpe wrote:
-> On Thu, Apr 11, 2024 at 01:46:19PM -0300, Jason Gunthorpe wrote:
-> > mlx5 has a built in self-test at driver startup to evaluate if the
-> > platform supports write combining to generate a 64 byte PCIe TLP or
-> > not. This has proven necessary because a lot of common scenarios end up
-> > with broken write combining (especially inside virtual machines) and there
-> > is other way to learn this information.
-> > 
-> > This self test has been consistently failing on new ARM64 CPU
-> > designs (specifically with NVIDIA Grace's implementation of Neoverse
-> > V2). The C loop around writeq() generates some pretty terrible ARM64
-> > assembly, but historically this has worked on a lot of existing ARM64 CPUs
-> > till now.
-> > 
-> > We see it succeed about 1 time in 10,000 on the worst effected
-> > systems. The CPU architects speculate that the load instructions
-> > interspersed with the stores makes the WC buffers statistically flush too
-> > often and thus the generation of large TLPs becomes infrequent. This makes
-> > the boot up test unreliable in that it indicates no write-combining,
-> > however userspace would be fine since it uses a ST4 instruction.
-> 
-> Hi Catalin,
-> 
-> After a year of testing this in real systems it turns out that still
-> some systems are not good enough with the unrolled 8 byte store loop.
-> In my view the CPUs are quite bad here and this WC performance
-> optimization is not working very well.
-> 
-> There are only two more options to work around this issue, use the
-> unrolled 16 byte STP or the single Neon instruction 64 byte store.
-> 
-> Since STP was rejected alread we've only tested the Neon version. It
-> does make a huge improvement, but it still somehow fails to combine
-> rarely sometimes. The CPU is really bad at this :(
-> 
-> So we want to make mlx5 use the single 64 byte neon store instruction
-> like userspace has been using for a long time for this testing
-> algorithm.
-> 
-> It is simple enough, but the question has come up where to put the
-> code.  Do you want to somehow see the neon option to be in the
-> arch/arm64 code or should we stick it in the driver under a #ifdef?
-> 
-> The entry/exit from neon is slow enough I don't think any driver doing
-> performance work would want to use neon instead of __iowrite64_copy(),
-> so I do not think it should be hidden inside __iowrite64_copy(). Nor
-> have I thought of a name for an arch generic function..
+Hi Richard,
 
-__iowrite64_slow_copy() ????
+kernel test robot noticed the following build errors:
 
-> 
-> Thanks,
-> Jason
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.16-rc6]
+[cannot apply to drm-exynos/exynos-drm-next next-20250714]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Yao/dt-bindings-vendor-prefixes-Add-Tianxinwei-name/20250715-031929
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250714191729.2416-4-richard%40scandent.com
+patch subject: [PATCH 3/3] drm/panel: ilitek-ili9881c: Add Tianxinwei TWX700100S0 support
+config: arm-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250715/202507151301.sFo3NzXA-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507151301.sFo3NzXA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507151301.sFo3NzXA-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/panel/panel-ilitek-ili9881c.c:1850:3: error: field designator 'lanes' does not refer to any field in type 'const struct ili9881c_desc'
+    1850 |         .lanes = 4,
+         |         ~^~~~~~~~~
+   1 error generated.
+
+
+vim +1850 drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
+
+  1844	
+  1845	static const struct ili9881c_desc txw700100s0_desc = {
+  1846		.init = txw700100s0_init,
+  1847		.init_length = ARRAY_SIZE(txw700100s0_init),
+  1848		.mode = &txw700100s0_default_mode,
+  1849		.mode_flags = MIPI_DSI_MODE_VIDEO_SYNC_PULSE | MIPI_DSI_MODE_VIDEO,
+> 1850		.lanes = 4,
+  1851	};
+  1852	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
