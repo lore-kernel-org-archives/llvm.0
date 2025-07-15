@@ -1,61 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED04924678C;
-	Tue, 15 Jul 2025 05:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0135255F24;
+	Tue, 15 Jul 2025 05:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752557659; cv=none; b=kORuulc2sqwbMq83mm2eolm01HCBehX5wWSeaBmmgN65cSEZoY+fh3ROh9qPOR7/VrO4tr0AXuET7h3f0lHLXKmW5MNO2XbmiVP5MeUk/02s6HLanCh8IjONIIYXNt+rfJwcucOKtLhdx7AzidJgpM0BQJO7Z1ZvCE5Fkn7HyfM=
+	t=1752559032; cv=none; b=H/oRjwtXmXAJvia2cdLs9Ogn9n7mnBOXx/hLTkV5e5KArztjHqE9nqBF40C1pfw9xS6tS7BalVsXh2uWoG9bJCul/VkPC3tWL/dAaExUMSZPe9EfBSAl/0A3JtakHhPndiB+PWiteG9TSGVIvLCKADOin+Gd8jj0ghB6fmRbm0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752557659; c=relaxed/simple;
-	bh=aqGFfl1twW0Qc1W6K4xwwVazkug9mWZPNSjbozdTJnk=;
+	s=arc-20240116; t=1752559032; c=relaxed/simple;
+	bh=wmvN79kkI2uY89k/rrcdVS6059/8dQL8TezMZWnf+rM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=am44SMmX5ZT2gk8GavdPGjOAFUwHy5uu3fSfIKExWZEPQ2Ej3GojLX0kkaDAPkgTn8wZBQxu2/JMXbvsb6vcMR0UhnSFO3mz27WJuy3xnF3ET8fV3dt4b2hdT7wApXIjb7CitLiNsnBnYe5NAvBAzI74J1PvVCcM3eHfJOek5yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PX/ce8ke; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=UuwIH4MM45hCUNMHgWeG49I8VJJPNO+tDblhdMsyAS6SLXsvums274nez4bdkmBpRHmgcQVvy+dcvx/U8TpauUDIrGNZH5I666NUa6m4PMYmWs+EuE6gjCwhU9KOTjL1dqgjLfgt2v/lRyFze5eGQvRWAwEOexHm9oLHVTKbEs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJ0kddfR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PX/ce8ke"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752557658; x=1784093658;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aqGFfl1twW0Qc1W6K4xwwVazkug9mWZPNSjbozdTJnk=;
-  b=PX/ce8ke0pXuR9kWnp5tc/cBOdPyVIZdJjnAvIrByRaOkKzk3OmUYlo/
-   yP+7hScGvtGYoxkLDu4AkXvCzBIGKIWY0GuDWmTYaoveZDgoKgZQ/67+j
-   O8mgELJGf6B+F6l4gqkdHk7gwsksPOoZUiy9Kl3vnowwVP0RA9s96SN2S
-   VRgFDp1qeDMVmqmE67DijpsosLdSx3bgusIkUsWDCV/NWvnuoimtdI4my
-   0doWZ2B3OM95dTWy1eWVlwMJl5H7glqVKGZUksIur29yYLnOlTAFnGZC6
-   iv2gQFtKs5MFWYuq+FB5GoC4qiV4xS3Spv2MraEs6jn/eNIwIoLcxRZjL
-   g==;
-X-CSE-ConnectionGUID: d7S0Rfa9QOumxWpVzd6IBA==
-X-CSE-MsgGUID: TzD2QqTBQ1u27yGGeRfueg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="53985018"
-X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="53985018"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 22:34:16 -0700
-X-CSE-ConnectionGUID: u5tl5zjHRs2oXNJrKAwVpQ==
-X-CSE-MsgGUID: jLB3xuV4Q/yKpj0Iozv55A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="157483592"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 14 Jul 2025 22:34:13 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubYIt-0009gZ-1L;
-	Tue, 15 Jul 2025 05:34:11 +0000
-Date: Tue, 15 Jul 2025 13:34:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Ousterhout <ouster@cs.stanford.edu>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-	edumazet@google.com, horms@kernel.org, kuba@kernel.org,
-	John Ousterhout <ouster@cs.stanford.edu>
-Subject: Re: [PATCH net-next v11 15/15] net: homa: create Makefile and Kconfig
-Message-ID: <202507151339.DEc1Vydw-lkp@intel.com>
-References: <20250714044448.254-16-ouster@cs.stanford.edu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJ0kddfR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8964C4CEE3;
+	Tue, 15 Jul 2025 05:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752559031;
+	bh=wmvN79kkI2uY89k/rrcdVS6059/8dQL8TezMZWnf+rM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jJ0kddfRq/wi2cczPvscCBtaQBOvPPubaZPv3FhypEw+5UKK0WhctGzJqakUE47mj
+	 0hgvMUtevpezIfVJrccsqdtSYPd2sjN0nRb9tN0vghFJ+c05Vt5+gWGqNDdNJk7p6H
+	 Sh8oWOAYHvlvgAcM5ZwOV2KbvC/4LCYKyIt/WgUJb5b0ER0EaKLDgyQwMcQxcdZpWG
+	 yRZoRdLWkXFBN0aAu91ZYkfbMxd4cRB9BrlHetz/bw9JgY4rGuKT9x+znMMEXCi7ry
+	 xSs/2RLQ/Ed9IUoMZM+nwW7VQ7Wh00EVvhINdsIUSq31XrazAB7+UGLadWmjzYO5wH
+	 BcbPsbS4HX8Vw==
+Date: Tue, 15 Jul 2025 08:57:07 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, linux-rdma@vger.kernel.org,
+	linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 6/6] IB/mlx5: Use __iowrite64_copy() for write
+ combining stores
+Message-ID: <20250715055707.GC5882@unreal>
+References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+ <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+ <20250714215504.GA2083014@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,75 +72,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250714044448.254-16-ouster@cs.stanford.edu>
+In-Reply-To: <20250714215504.GA2083014@nvidia.com>
 
-Hi John,
+On Mon, Jul 14, 2025 at 06:55:04PM -0300, Jason Gunthorpe wrote:
+> On Thu, Apr 11, 2024 at 01:46:19PM -0300, Jason Gunthorpe wrote:
+> > mlx5 has a built in self-test at driver startup to evaluate if the
+> > platform supports write combining to generate a 64 byte PCIe TLP or
+> > not. This has proven necessary because a lot of common scenarios end up
+> > with broken write combining (especially inside virtual machines) and there
+> > is other way to learn this information.
+> > 
+> > This self test has been consistently failing on new ARM64 CPU
+> > designs (specifically with NVIDIA Grace's implementation of Neoverse
+> > V2). The C loop around writeq() generates some pretty terrible ARM64
+> > assembly, but historically this has worked on a lot of existing ARM64 CPUs
+> > till now.
+> > 
+> > We see it succeed about 1 time in 10,000 on the worst effected
+> > systems. The CPU architects speculate that the load instructions
+> > interspersed with the stores makes the WC buffers statistically flush too
+> > often and thus the generation of large TLPs becomes infrequent. This makes
+> > the boot up test unreliable in that it indicates no write-combining,
+> > however userspace would be fine since it uses a ST4 instruction.
+> 
+> Hi Catalin,
+> 
+> After a year of testing this in real systems it turns out that still
+> some systems are not good enough with the unrolled 8 byte store loop.
+> In my view the CPUs are quite bad here and this WC performance
+> optimization is not working very well.
+> 
+> There are only two more options to work around this issue, use the
+> unrolled 16 byte STP or the single Neon instruction 64 byte store.
+> 
+> Since STP was rejected alread we've only tested the Neon version. It
+> does make a huge improvement, but it still somehow fails to combine
+> rarely sometimes. The CPU is really bad at this :(
+> 
+> So we want to make mlx5 use the single 64 byte neon store instruction
+> like userspace has been using for a long time for this testing
+> algorithm.
+> 
+> It is simple enough, but the question has come up where to put the
+> code.  Do you want to somehow see the neon option to be in the
+> arch/arm64 code or should we stick it in the driver under a #ifdef?
+> 
+> The entry/exit from neon is slow enough I don't think any driver doing
+> performance work would want to use neon instead of __iowrite64_copy(),
+> so I do not think it should be hidden inside __iowrite64_copy(). Nor
+> have I thought of a name for an arch generic function..
 
-kernel test robot noticed the following build errors:
+__iowrite64_slow_copy() ????
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Ousterhout/net-homa-define-user-visible-API-for-Homa/20250714-130009
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250714044448.254-16-ouster%40cs.stanford.edu
-patch subject: [PATCH net-next v11 15/15] net: homa: create Makefile and Kconfig
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250715/202507151339.DEc1Vydw-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507151339.DEc1Vydw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507151339.DEc1Vydw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/homa/homa_incoming.c:5:
-   In file included from net/homa/homa_impl.h:13:
-   In file included from include/linux/icmp.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from net/homa/homa_incoming.c:5:
->> net/homa/homa_impl.h:529:9: error: use of undeclared identifier 'cpu_khz'
-     529 |         return cpu_khz;
-         |                ^
-   net/homa/homa_impl.h:546:13: error: use of undeclared identifier 'cpu_khz'
-     546 |         tmp = ns * cpu_khz;
-         |                    ^
-   net/homa/homa_impl.h:565:16: error: use of undeclared identifier 'cpu_khz'
-     565 |         tmp = usecs * cpu_khz;
-         |                       ^
-   1 warning and 3 errors generated.
-
-
-vim +/cpu_khz +529 net/homa/homa_impl.h
-
-9ce7b7d7321e0e John Ousterhout 2025-07-13  520  
-9ce7b7d7321e0e John Ousterhout 2025-07-13  521  /**
-9ce7b7d7321e0e John Ousterhout 2025-07-13  522   * homa_clock_khz() - Return the frequency of the values returned by
-9ce7b7d7321e0e John Ousterhout 2025-07-13  523   * homa_clock, in units of KHz.
-9ce7b7d7321e0e John Ousterhout 2025-07-13  524   * Return: see above.
-9ce7b7d7321e0e John Ousterhout 2025-07-13  525   */
-9ce7b7d7321e0e John Ousterhout 2025-07-13  526  static inline u64 homa_clock_khz(void)
-9ce7b7d7321e0e John Ousterhout 2025-07-13  527  {
-9ce7b7d7321e0e John Ousterhout 2025-07-13  528  #ifdef CONFIG_X86_TSC
-9ce7b7d7321e0e John Ousterhout 2025-07-13 @529  	return cpu_khz;
-9ce7b7d7321e0e John Ousterhout 2025-07-13  530  #else
-9ce7b7d7321e0e John Ousterhout 2025-07-13  531  	return 1000000;
-9ce7b7d7321e0e John Ousterhout 2025-07-13  532  #endif /* CONFIG_X86_TSC */
-9ce7b7d7321e0e John Ousterhout 2025-07-13  533  }
-9ce7b7d7321e0e John Ousterhout 2025-07-13  534  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Thanks,
+> Jason
