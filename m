@@ -1,72 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832642BEC41;
-	Tue, 15 Jul 2025 01:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4115827281C;
+	Tue, 15 Jul 2025 02:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752543958; cv=none; b=Ug2nkGCpwio0z+snvO6DiPHtB16kkfSO065iy9zUGScL7s6XYHPo0lyvIipI87eLitsot4CyuiOxlWGOFpOHNSooNahUM0tNCx+s+AZIPnQsqQfQe6J/MdxViuKg9bVIG/wVwV2Xd4ulwpag5Wp8yVnR6i2ty6sz/oWQF9/9U7g=
+	t=1752546418; cv=none; b=qJX38F/QKDlubQC7hchpsqwPsHRFJ4NY9iaE0dW2+Xh7TXmGl12k2v2+orY/Q1lLW+xKoy4+eOH1qgR8fSWce/nmo4o89i9bBJbFtOvPPBYPa4ecftE0vs9KcfC2pBR8+v/6xJbB7c43cfchcmAu0Lp20J22qAmlEMpT958xzXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752543958; c=relaxed/simple;
-	bh=/swcXr2ss79nJxFip+SNNqYNuVuEmY4AkU1neU+GXDQ=;
+	s=arc-20240116; t=1752546418; c=relaxed/simple;
+	bh=Ujnob99Q1tbnulMBj8KaddK7Fv/QJIO7q/kyxmWNnkE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a/cHBex2ImmzWcbIaXzm6H4UpvJOLJIvgLGTvqTTnJkM1b0M7vhJWFwUH0Obx3uGAxkLF98rLiGuKvhZy7WsBVIZmO3rMyo2OuptSvZIBo6R/4KpxGTwJnmthEMAd6LPOXE/ZGZtz2lv5kkMA4jNuoroyOnxEOzwCt8lwgJUcIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VaYijqUi; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=f6ko/v0cXDsZmiTJZ3DjzSBJxrwRBVgtHrVIxtGLgfv5hKX8/GlpQ9Dt1Kiny0u8vTVdg6MueMJ4JzL3I+L91NFMHFwHLcQvCylKAH2OtbRFFfG4EIu65rvxiZzP8/Yo0oQg3ami/AdMUS2SP4LXP79PNRvB/D37yQhf00dyLms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CKx0vpof; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VaYijqUi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CKx0vpof"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752543956; x=1784079956;
+  t=1752546417; x=1784082417;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/swcXr2ss79nJxFip+SNNqYNuVuEmY4AkU1neU+GXDQ=;
-  b=VaYijqUi0xfEBYEfYfCe0jZMGPeCNnnSUAdY3gFX7lRTGO/QWmV4/5V9
-   EgwYbwoF9o0cVORYDFFc6oSkpfN2j1PWnZqe6HOlQRkhvLyMF40xEjz+r
-   CzES+N+eVCAzDuELcrvigNym6v5yRydGoPWdUOjaPRwdjQm19U55Kp87o
-   kjKzqH8da61s0LlR/1raEhvOPjkyJh9+RgS+OX31kNC+mxcEiyol1yk3t
-   NeTOK6mC1l8KKK4q51vX2A2GCJwVv45iJOCf7c3CszJPj5PMSRBgshcN0
-   0jUJeSeL99AgyzhGVMuiste+SyZjUZ6O+XTXGiaF6TCbB+0aYGyv0IBB9
-   A==;
-X-CSE-ConnectionGUID: d7wi7Si/SFmEed7V2ScSww==
-X-CSE-MsgGUID: 8igI+hd6QjeoYxkRLMCdLA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="57360560"
+  bh=Ujnob99Q1tbnulMBj8KaddK7Fv/QJIO7q/kyxmWNnkE=;
+  b=CKx0vpofX0e0YhJ2FQXbvN37TKF+llqoa+03u69BAlG4/Y1DQtGbRw7n
+   oJajDZT6b/8uO7T5goPbG8dumO8pJ+Bqizq777KyX5XdWCDTtqSmudmpe
+   XKb0OGvRLM/xay20jY0kzaTd0O+l0mR4s5DkpboHvgoS2wGu88SyrsYc+
+   3YEMM4E2ead4ef5RF142m4seELIUj5eRAu4KFVIPlFP+IAS9jT7ecJ3fy
+   FFUw5FwxA2SjmdcU5y+QO4d6Y1BjbWNSzYUGBZdomD5DUYRjiTUSby0rv
+   ExDwm8qHeru659RRIrvCiZRms8sOIqicIWDqmE72M0fUiKmzNzfwh/4bj
+   Q==;
+X-CSE-ConnectionGUID: nmACjnCARSa81li51qetnw==
+X-CSE-MsgGUID: OKNAqSH/S+CU+QmY+BL7eA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="65820896"
 X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="57360560"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 18:45:55 -0700
-X-CSE-ConnectionGUID: yu+/zp4GTtKNOp/AuwsKwA==
-X-CSE-MsgGUID: J3Rvn9+kRXemF9VDSSLEcg==
+   d="scan'208";a="65820896"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2025 19:26:56 -0700
+X-CSE-ConnectionGUID: 9uw3vWQIQwGO/ZRug3zguw==
+X-CSE-MsgGUID: Eva3mBvYT228wfLZ819tDA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,312,1744095600"; 
-   d="scan'208";a="162633732"
+   d="scan'208";a="156509551"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 14 Jul 2025 18:45:48 -0700
+  by orviesa010.jf.intel.com with ESMTP; 14 Jul 2025 19:26:53 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ubUjr-0009Wt-01;
-	Tue, 15 Jul 2025 01:45:47 +0000
-Date: Tue, 15 Jul 2025 09:45:38 +0800
+	id 1ubVNa-0009YN-38;
+	Tue, 15 Jul 2025 02:26:50 +0000
+Date: Tue, 15 Jul 2025 10:26:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Byungchul Park <byungchul@sk.com>, willy@infradead.org,
-	netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kernel_team@skhynix.com, almasrymina@google.com,
-	ilias.apalodimas@linaro.org, harry.yoo@oracle.com,
-	akpm@linux-foundation.org, andrew+netdev@lunn.ch,
-	asml.silence@gmail.com, toke@redhat.com, david@redhat.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com, linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org, vishal.moola@gmail.com, hannes@cmpxchg.org,
-	ziy@nvidia.com, jackmanb@google.com, wei.fang@nxp.com,
-	shenwei.wang@nxp.com, xiaoning.wang@nxp.com, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org
-Subject: Re: [PATCH net-next v10 12/12] libeth: xdp: access ->pp through
- netmem_desc instead of page
-Message-ID: <202507150904.kGZOOZns-lkp@intel.com>
-References: <20250714120047.35901-13-byungchul@sk.com>
+To: aspeedyh <yh_chung@aspeedtech.com>, jk@codeconstruct.com.au,
+	matt@codeconstruct.com.au, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, bmc-sw@aspeedtech.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] net: mctp: Add MCTP PCIe VDM transport driver
+Message-ID: <202507151015.GPkeA21H-lkp@intel.com>
+References: <20250714062544.2612693-1-yh_chung@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,77 +66,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250714120047.35901-13-byungchul@sk.com>
+In-Reply-To: <20250714062544.2612693-1-yh_chung@aspeedtech.com>
 
-Hi Byungchul,
+Hi aspeedyh,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on c65d34296b2252897e37835d6007bbd01b255742]
+[auto build test WARNING on net-next/main]
+[also build test WARNING on net/main linus/master v6.16-rc6 next-20250714]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/netmem-introduce-struct-netmem_desc-mirroring-struct-page/20250714-200214
-base:   c65d34296b2252897e37835d6007bbd01b255742
-patch link:    https://lore.kernel.org/r/20250714120047.35901-13-byungchul%40sk.com
-patch subject: [PATCH net-next v10 12/12] libeth: xdp: access ->pp through netmem_desc instead of page
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250715/202507150904.kGZOOZns-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/aspeedyh/net-mctp-Add-MCTP-PCIe-VDM-transport-driver/20250714-142656
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250714062544.2612693-1-yh_chung%40aspeedtech.com
+patch subject: [PATCH] net: mctp: Add MCTP PCIe VDM transport driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250715/202507151015.GPkeA21H-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507150904.kGZOOZns-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507151015.GPkeA21H-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507150904.kGZOOZns-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507151015.GPkeA21H-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/intel/libeth/tx.c:6:
->> include/net/libeth/xdp.h:1295:23: error: passing 'const struct page *' to parameter of type 'struct page *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    1295 |                          pp_page_to_nmdesc(page)->pp->p.offset, len, true);
-         |                                            ^~~~
-   include/net/netmem.h:270:66: note: passing argument to parameter 'page' here
-     270 | static inline struct netmem_desc *pp_page_to_nmdesc(struct page *page)
-         |                                                                  ^
-   1 error generated.
+>> drivers/net/mctp/mctp-pcie-vdm.c:491:4: warning: variable 'vdm_dev' is uninitialized when used here [-Wuninitialized]
+     491 |                  vdm_dev->ndev->name);
+         |                  ^~~~~~~
+   include/linux/printk.h:631:26: note: expanded from macro 'pr_debug'
+     631 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                                           ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/net/mctp/mctp-pcie-vdm.c:484:35: note: initialize the variable 'vdm_dev' to silence this warning
+     484 |         struct mctp_pcie_vdm_dev *vdm_dev;
+         |                                          ^
+         |                                           = NULL
+   1 warning generated.
 
 
-vim +1295 include/net/libeth/xdp.h
+vim +/vdm_dev +491 drivers/net/mctp/mctp-pcie-vdm.c
 
-  1263	
-  1264	bool libeth_xdp_buff_add_frag(struct libeth_xdp_buff *xdp,
-  1265				      const struct libeth_fqe *fqe,
-  1266				      u32 len);
-  1267	
-  1268	/**
-  1269	 * libeth_xdp_prepare_buff - fill &libeth_xdp_buff with head FQE data
-  1270	 * @xdp: XDP buffer to attach the head to
-  1271	 * @fqe: FQE containing the head buffer
-  1272	 * @len: buffer len passed from HW
-  1273	 *
-  1274	 * Internal, use libeth_xdp_process_buff() instead. Initializes XDP buffer
-  1275	 * head with the Rx buffer data: data pointer, length, headroom, and
-  1276	 * truesize/tailroom. Zeroes the flags.
-  1277	 * Uses faster single u64 write instead of per-field access.
-  1278	 */
-  1279	static inline void libeth_xdp_prepare_buff(struct libeth_xdp_buff *xdp,
-  1280						   const struct libeth_fqe *fqe,
-  1281						   u32 len)
-  1282	{
-  1283		const struct page *page = __netmem_to_page(fqe->netmem);
-  1284	
-  1285	#ifdef __LIBETH_WORD_ACCESS
-  1286		static_assert(offsetofend(typeof(xdp->base), flags) -
-  1287			      offsetof(typeof(xdp->base), frame_sz) ==
-  1288			      sizeof(u64));
-  1289	
-  1290		*(u64 *)&xdp->base.frame_sz = fqe->truesize;
-  1291	#else
-  1292		xdp_init_buff(&xdp->base, fqe->truesize, xdp->base.rxq);
-  1293	#endif
-  1294		xdp_prepare_buff(&xdp->base, page_address(page) + fqe->offset,
-> 1295				 pp_page_to_nmdesc(page)->pp->p.offset, len, true);
-  1296	}
-  1297	
+   481	
+   482	static void mctp_pcie_vdm_uninit(struct net_device *ndev)
+   483	{
+   484		struct mctp_pcie_vdm_dev *vdm_dev;
+   485	
+   486		struct mctp_pcie_vdm_route_info *route;
+   487		struct hlist_node *tmp;
+   488		int bkt;
+   489	
+   490		pr_debug("%s: uninitializing vdm_dev %s\n", __func__,
+ > 491			 vdm_dev->ndev->name);
+   492	
+   493		vdm_dev = netdev_priv(ndev);
+   494		vdm_dev->callback_ops->uninit(vdm_dev->dev);
+   495	
+   496		hash_for_each_safe(vdm_dev->route_table, bkt, tmp, route, hnode) {
+   497			hash_del(&route->hnode);
+   498			kfree(route);
+   499		}
+   500	
+   501		if (vdm_dev->tx_thread) {
+   502			kthread_stop(vdm_dev->tx_thread);
+   503			vdm_dev->tx_thread = NULL;
+   504		}
+   505	
+   506		if (mctp_pcie_vdm_wq) {
+   507			cancel_work_sync(&vdm_dev->rx_work);
+   508			flush_workqueue(mctp_pcie_vdm_wq);
+   509			destroy_workqueue(mctp_pcie_vdm_wq);
+   510			mctp_pcie_vdm_wq = NULL;
+   511		}
+   512	
+   513		while (__ptr_ring_peek(&vdm_dev->tx_queue)) {
+   514			struct sk_buff *skb;
+   515	
+   516			skb = ptr_ring_consume(&vdm_dev->tx_queue);
+   517	
+   518			if (skb)
+   519				kfree_skb(skb);
+   520		}
+   521	
+   522		mutex_lock(&mctp_pcie_vdm_dev_mutex);
+   523		list_del(&vdm_dev->list);
+   524		mutex_unlock(&mctp_pcie_vdm_dev_mutex);
+   525	}
+   526	
 
 -- 
 0-DAY CI Kernel Test Service
