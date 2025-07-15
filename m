@@ -1,59 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40342264D5;
-	Tue, 15 Jul 2025 16:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8D51CAA79;
+	Tue, 15 Jul 2025 17:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752598583; cv=none; b=UVxfTDhkVBGWbcgM6DV5rhrPTNmQ6LQeOz9IAcYRlXO2B3dhO/7dTJW366YjmSvTrzWO16qthy5o7Z8BzgbwWvfxqZzStuxkvz3/9RIxvt4ie9wWw8PRTYkL5YXZm24CNReEKmGlwXjMj6EnOUCgF9WlBPTlwyNaApnvSYWa7x4=
+	t=1752601044; cv=none; b=NgWmTOQSAsqe02MLMOUVVCST6+3qqjr7NhunMPpUm9jzuGDKIKJ7fdONNV8UGMvrNATY6HInOgetsAMTyS5STRDaEeIg4qH3mfwRmkTBtzEBWrWVi6RaF1fU2hMdeGoPbi1JmeH3cvWKKdVD1ZCHrzdiCskivL2Ku13dTZCT+bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752598583; c=relaxed/simple;
-	bh=6Zq4vCI3EQD94atH9GTHPsSMwiAX+jSAGBU4/gLmVXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=P7t8aiuA9Y34TqQJjU8ix39pBblPkYC/O2XJ5iYJASzMjtXRn7VEN471yMGGUn5WyILx7thEYBHTvTuBEwVWM7E/gexTRJXZld/rvwOUCmkx6Dl3yPumktcjq03KTX5sbfaxWdvizqYDp15zhs7MlQ/2+OpZxnpz4l9BbkAxuv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KR1YOsdk; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1752601044; c=relaxed/simple;
+	bh=LCQcMxbE4qBoe+rmXlWppTEdGOzkpPs9FBZLfSoELDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NjC8DQ4rjL9XzOBsjvk9vqu6qyMCDO8ijdzg+cmrguLsblLv87fZOQa6A5cnZwWAMQ64oXatrKwcclBjyP+IFxoqnLRQ5HVCBv7kGwiQ/4w/fDQ9V1WRgvDxirGIDCkTpH6Ofw6gdpWa8XtHdcCQ5CcQN6YRQC83UWX/e5x0r2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFGrH+vh; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KR1YOsdk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFGrH+vh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752598582; x=1784134582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6Zq4vCI3EQD94atH9GTHPsSMwiAX+jSAGBU4/gLmVXk=;
-  b=KR1YOsdklIcRRL+CyRp8vtXGS75b+gUOfFDC/3Rc7UvEgDmu2clIcRy/
-   R3NJCDOBRa4LHiEf1zlVmFa9iuiUCv2qJrPtdr9b7FqcxaKrTpo7lNZHR
-   PvOXVOTuZnemnUS9GRhcqndiYYKjcgqwosPGnZXilsP3xfwUbXGW87M2x
-   6l9ESXEa0FO+C1OHglb4RPvs4veGASZeMoUCjfqQEkyYymIwMHttdGPOY
-   GqUtB08vTegkY0nzEgvU8t8Etpo8e9nZOnkSvaqcYC4RJd1Ja+5xIExjf
-   M02KhMx0qqjmKOot7ae4ewPjmj7SG8dS/mCHzNCgOm2GB12/f07Kzthul
-   A==;
-X-CSE-ConnectionGUID: c9zcCxxjQpqpfgNaaj8nnA==
-X-CSE-MsgGUID: UCJZVLz6SQizbEJKL2gChA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="80271970"
+  t=1752601041; x=1784137041;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LCQcMxbE4qBoe+rmXlWppTEdGOzkpPs9FBZLfSoELDY=;
+  b=lFGrH+vhVRPsSFcgrWjXLI9+AZKq0EWGf+hET3r1ogiqNirg27LZJcup
+   kMD9c4AFyA+liUq1vQFM+yqdQiTCvz161jzRRPsZh3z7qlMB28qWYnG5Y
+   3mWWzsdgf1k3XVJf62qIksh20RIUVI0UraVJbOEwpPUNvoIFRXz5eIK3Q
+   NUrrJgRTpeo8uXu4URAdj23Cs1od7k58PV2OGui/03hp/Txs5GFUjZdrm
+   UcvZGSCFsC2km8/jT7UNhzZ7KyvPoxiyJ3SFza4qerzam+qpQYTyJJGhm
+   pSBz9/pn8DwVLU+Z4dtLM1qJjHwir1jn2KIHixh3nlNAb49F6pbtwsJUM
+   w==;
+X-CSE-ConnectionGUID: nvuz+U+KRNS+kfW3fYGIeA==
+X-CSE-MsgGUID: UXlI6jKZSh+M5amCabBRUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="65898663"
 X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="80271970"
+   d="scan'208";a="65898663"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 09:56:20 -0700
-X-CSE-ConnectionGUID: Ro3xxuVeReGBL21gcAAKUA==
-X-CSE-MsgGUID: jVAPcq1vSRCkaCdZIgJetA==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 10:37:19 -0700
+X-CSE-ConnectionGUID: AA0ida7UQd2O1yQHkyYcvg==
+X-CSE-MsgGUID: uSnHo+YET2i/aYux139fjg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="188283059"
+   d="scan'208";a="188290194"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 15 Jul 2025 09:56:18 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 15 Jul 2025 10:37:15 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ubiwy-000BMZ-0v;
-	Tue, 15 Jul 2025 16:56:16 +0000
-Date: Wed, 16 Jul 2025 00:55:42 +0800
+	id 1ubjab-000BOL-1c;
+	Tue, 15 Jul 2025 17:37:13 +0000
+Date: Wed, 16 Jul 2025 01:36:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 172/174] fs/bcachefs/dirent.h:46:23:
- error: use of undeclared identifier 'c'
-Message-ID: <202507160030.SxpLU2RF-lkp@intel.com>
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Colton Lewis <coltonlewis@google.com>
+Subject: Re: [PATCH v4 22/23] KVM: arm64: Add ioctl to partition the PMU when
+ supported
+Message-ID: <202507160120.lx4XxDb5-lkp@intel.com>
+References: <20250714225917.1396543-23-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,67 +78,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250714225917.1396543-23-coltonlewis@google.com>
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   a6e8423df525d9fb1d0feff091aff2a0d86c5ffd
-commit: 6db4e8f88c74a40e7b09ea9c7d862c54c3c75bce [172/174] fixup! bcachefs: Allow CONFIG_UNICODE=m
-config: i386-buildonly-randconfig-005-20250715 (https://download.01.org/0day-ci/archive/20250716/202507160030.SxpLU2RF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160030.SxpLU2RF-lkp@intel.com/reproduce)
+Hi Colton,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 79150772457f4d45e38b842d786240c36bb1f97f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Colton-Lewis/arm64-cpufeature-Add-cpucap-for-HPMN0/20250715-070741
+base:   79150772457f4d45e38b842d786240c36bb1f97f
+patch link:    https://lore.kernel.org/r/20250714225917.1396543-23-coltonlewis%40google.com
+patch subject: [PATCH v4 22/23] KVM: arm64: Add ioctl to partition the PMU when supported
+config: arm64-randconfig-001-20250715 (https://download.01.org/0day-ci/archive/20250716/202507160120.lx4XxDb5-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160120.lx4XxDb5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160030.SxpLU2RF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507160120.lx4XxDb5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/fs.c:10:
->> fs/bcachefs/dirent.h:46:23: error: use of undeclared identifier 'c'
-      46 |         return bch_err_throw(c, no_casefolding_without_utf8);
-         |                              ^
-   fs/bcachefs/fs.c:1108:3: error: cannot jump from this goto statement to its label
-    1108 |                 goto err;
-         |                 ^
-   fs/bcachefs/fs.c:1110:21: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1110 |         CLASS(btree_trans, trans)(c);
-         |                            ^
-   2 errors generated.
+   In file included from arch/arm64/kernel/asm-offsets.c:15:
+   In file included from include/linux/kvm_host.h:45:
+   In file included from arch/arm64/include/asm/kvm_host.h:31:
+>> arch/arm64/include/asm/kvm_pmu.h:301:49: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline bool kvm_pmu_is_partitioned(void *)
+                                                   ^
+   arch/arm64/include/asm/kvm_pmu.h:306:51: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline u64 kvm_pmu_host_counter_mask(void *)
+                                                     ^
+   arch/arm64/include/asm/kvm_pmu.h:311:52: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline u64 kvm_pmu_guest_counter_mask(void *)
+                                                      ^
+   3 warnings generated.
 --
-   In file included from fs/bcachefs/inode.c:10:
->> fs/bcachefs/dirent.h:46:23: error: use of undeclared identifier 'c'
-      46 |         return bch_err_throw(c, no_casefolding_without_utf8);
-         |                              ^
-   1 error generated.
+   In file included from arch/arm64/kernel/asm-offsets.c:15:
+   In file included from include/linux/kvm_host.h:45:
+   In file included from arch/arm64/include/asm/kvm_host.h:31:
+>> arch/arm64/include/asm/kvm_pmu.h:301:49: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline bool kvm_pmu_is_partitioned(void *)
+                                                   ^
+   arch/arm64/include/asm/kvm_pmu.h:306:51: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline u64 kvm_pmu_host_counter_mask(void *)
+                                                     ^
+   arch/arm64/include/asm/kvm_pmu.h:311:52: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline u64 kvm_pmu_guest_counter_mask(void *)
+                                                      ^
+   3 warnings generated.
 
 
-vim +/c +46 fs/bcachefs/dirent.h
+vim +301 arch/arm64/include/asm/kvm_pmu.h
 
-    25	
-    26	#if IS_ENABLED(CONFIG_UNICODE)
-    27	int bch2_casefold(struct btree_trans *, const struct bch_hash_info *,
-    28			  const struct qstr *, struct qstr *);
-    29	
-    30	static inline int bch2_maybe_casefold(struct btree_trans *trans,
-    31					      const struct bch_hash_info *info,
-    32					      const struct qstr *str, struct qstr *out_cf)
-    33	{
-    34		if (likely(!info->cf_encoding)) {
-    35			*out_cf = *str;
-    36			return 0;
-    37		} else {
-    38			return bch2_casefold(trans, info, str, out_cf);
-    39		}
-    40	}
-    41	#else
-    42	static inline int bch2_maybe_casefold(struct btree_trans *trans,
-    43					      const struct bch_hash_info *info,
-    44					      const struct qstr *str, struct qstr *out_cf)
-    45	{
-  > 46		return bch_err_throw(c, no_casefolding_without_utf8);
-    47	}
-    48	#endif
-    49	
+   300	
+ > 301	static inline bool kvm_pmu_is_partitioned(void *)
+   302	{
+   303		return false;
+   304	}
+   305	
 
 -- 
 0-DAY CI Kernel Test Service
