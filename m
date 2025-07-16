@@ -1,59 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E732ECD12;
-	Wed, 16 Jul 2025 21:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD662323E;
+	Wed, 16 Jul 2025 23:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752702101; cv=none; b=CIcKvD2dlm61CMg74K0sAjcps16HG5naldM9AzoXT/8UfS0AK5mUIzMGMmnxo5YsZOw2Glv3nDCLKOojw9QYT1TnmbiqgNHX4N1jxKuPs7KfZFxq9Z7gw5HUYUJ3AH0mKioxPq43uITuJPXYeDlEPaErXdna0XqWc4o7cc3stDs=
+	t=1752709559; cv=none; b=TVKLtZ/xczL5e/yIhL+5hd4vhBtt/jsqNxH/CJYA0VxHx+W7ZLO2BFacYuVYz12R78fmdM9lLI9XdIcVZPmfOSC9jXKfK/37MZ+oC+TGPE9I8klsc9fSTnSs1JH1TJyl9I1LcYzBkKPOBfJTsOorSllpepjR0BQnPnO1pSVI6Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752702101; c=relaxed/simple;
-	bh=ejg2NgilfZsuVgEFKYoLPFPHlHYZj5/iFnKoONmMhKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bC6QkImQFGpz/4qZvUcY7H5xJd4w2llgnO0JgOq1xBKBWD13fNqY83QwYLS+u0dJnfLn+th9d98F8rk7lodBWw16GuC47sM/pr1TQ+KG9VvvcUBsb9NIR55Yxd6TsaffWm0sWWQz1XM0GtoB5Yw0RW0zQYGSlYbR7wxIGX2SvF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1mQIJ+Y; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1752709559; c=relaxed/simple;
+	bh=J3UG5GnJ5BjYLTM0CP7GT2WZiod9LqwrORLiSgAOFFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AwhxMXIKyM29NrJxN3vvUAxQlav3rGS6WrJhTbMcY2ROXDyJb38Gt4BgQTvY1Nrfx5lbKfH2dOQSuTIi14nIlAHXxyKdz/wAYXIBcnlQYP975cK6FvM4YhY44hrcvsr9j3QUL3XRinzIrMDoW1aiHqzgt/PdjBkOF4YU8m9qlOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YVp+G2pc; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1mQIJ+Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVp+G2pc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752702100; x=1784238100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ejg2NgilfZsuVgEFKYoLPFPHlHYZj5/iFnKoONmMhKg=;
-  b=d1mQIJ+YFNcHlc8aJFqjoIUM+cDjj8vQcspn6hOJyL7LLCQ+sxYFvz0B
-   3rYnN82GSRdWywEJHQIvJZw7Ur6Tal+E+e3zQQ2gACmKvG0uxmJqQnzNU
-   BhWPxsp1EoAanq2mkKVqxKhRdhSPMnWOadOQ39f2izWm0zPX+G5UISJbf
-   TeoqazqYCYABih410HFuaRHZdGoC4/QZGeLkeKONDHwTLOlLXQ7prLMG/
-   Im6FpqWRl0fi417bWhBgCGIGZZf1byYRGOnp3XsWbT/go89cfZCuH8+Le
-   mgkkiPav6z3uO89Evss8wnkTxoLhGqB+Z0znvxNBKqk0ZO+nf7zo7nVe6
-   w==;
-X-CSE-ConnectionGUID: YXM/z0OjT1Kr2XRUEtbivw==
-X-CSE-MsgGUID: yBD4bGFqSpGw0vURbbNX/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58734943"
-X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
-   d="scan'208";a="58734943"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 14:41:34 -0700
-X-CSE-ConnectionGUID: 82IF38aYQYCyYIQnQH3sJQ==
-X-CSE-MsgGUID: McomF0g2SXOr2Hp0Kq6nvQ==
+  t=1752709558; x=1784245558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J3UG5GnJ5BjYLTM0CP7GT2WZiod9LqwrORLiSgAOFFE=;
+  b=YVp+G2pcDDcGWQVucnhFCn6FavR1EdyisX/3G2ijnTX5Ok3UoDFjdoiT
+   GQb0APfmGNOs53VgRhrvLN27zdwGHHzh/LytCBGIBPeP7zsm8Bo9RLdsU
+   3ej2O7YoNKIrHFgvTcDOtnGO2TwSZXfQ0iq8y3gNPIaIlY2dc+zOjcwsU
+   i2s/30ME0GWcRENlF70LTPua/X2aIXn9sjgNGq3aXJOwntB8DAc0XPWJV
+   NCzBzltV0bLW8TIIdXV8gX6vAcGNI/KH7C7Xfg7hKO6TmfEYUB6iQJU8G
+   9QgRQfRnE/UNBxntiD5ejaBBpYqayvav7vYl5KMxb9pzoZyfkJ7ZRdN5d
+   A==;
+X-CSE-ConnectionGUID: FNo3PmPOSlqvRlcD5bGITw==
+X-CSE-MsgGUID: CKdiaLLiQW2vV/A1y3TsKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58780580"
+X-IronPort-AV: E=Sophos;i="6.16,317,1744095600"; 
+   d="scan'208";a="58780580"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 16:45:57 -0700
+X-CSE-ConnectionGUID: wzgqLGgTT62ROBCL6R80XQ==
+X-CSE-MsgGUID: O/jRKJFhSyq3YGSi9Gk1bw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
-   d="scan'208";a="157285490"
+X-IronPort-AV: E=Sophos;i="6.16,317,1744095600"; 
+   d="scan'208";a="157741471"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 16 Jul 2025 14:41:32 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 16 Jul 2025 16:45:52 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uc9sY-000CsC-2C;
-	Wed, 16 Jul 2025 21:41:30 +0000
-Date: Thu, 17 Jul 2025 05:40:58 +0800
+	id 1ucBos-000Cxf-2v;
+	Wed, 16 Jul 2025 23:45:50 +0000
+Date: Thu, 17 Jul 2025 07:45:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bo Liu <liubo03@inspur.com>
+To: Daniel Almeida <daniel.almeida@collabora.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Benno Lossin <lossin@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Xiang Gao <xiang@kernel.org>, linux-erofs@lists.ozlabs.org
-Subject: [xiang-erofs:dev-test 7/7] fs/erofs/internal.h:288:31: warning:
- shift count >= width of type
-Message-ID: <202507170506.Wzz1lR5I-lkp@intel.com>
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Subject: Re: [PATCH v7 3/6] rust: irq: add support for non-threaded IRQs and
+ handlers
+Message-ID: <202507170718.AVqYqRan-lkp@intel.com>
+References: <20250715-topics-tyr-request_irq2-v7-3-d469c0f37c07@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,103 +79,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250715-topics-tyr-request_irq2-v7-3-d469c0f37c07@collabora.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-head:   33656c801bc94615e8b02f01f36eff752dc5086b
-commit: 33656c801bc94615e8b02f01f36eff752dc5086b [7/7] erofs: implement metadata compression
-config: hexagon-randconfig-001-20250717 (https://download.01.org/0day-ci/archive/20250717/202507170506.Wzz1lR5I-lkp@intel.com/config)
+Hi Daniel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 3964d07dd821efe9680e90c51c86661a98e60a0f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Almeida/rust-irq-add-irq-module/20250715-232121
+base:   3964d07dd821efe9680e90c51c86661a98e60a0f
+patch link:    https://lore.kernel.org/r/20250715-topics-tyr-request_irq2-v7-3-d469c0f37c07%40collabora.com
+patch subject: [PATCH v7 3/6] rust: irq: add support for non-threaded IRQs and handlers
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250717/202507170718.AVqYqRan-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250717/202507170506.Wzz1lR5I-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250717/202507170718.AVqYqRan-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507170506.Wzz1lR5I-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507170718.AVqYqRan-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/erofs/data.c:7:
->> fs/erofs/internal.h:288:31: warning: shift count >= width of type [-Wshift-count-overflow]
-     288 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   In file included from fs/erofs/data.c:7:
-   fs/erofs/internal.h:294:45: warning: shift count >= width of type [-Wshift-count-overflow]
-     294 |         erofs_nid_t nid_lo = EROFS_I(inode)->nid & EROFS_DIRENT_NID_MASK;
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~
-   fs/erofs/erofs_fs.h:275:33: note: expanded from macro 'EROFS_DIRENT_NID_MASK'
-     275 | #define EROFS_DIRENT_NID_MASK           (BIT(EROFS_DIRENT_NID_METABOX_BIT) - 1)
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   2 warnings generated.
---
-   In file included from fs/erofs/super.c:14:
-   In file included from fs/erofs/xattr.h:9:
->> fs/erofs/internal.h:288:31: warning: shift count >= width of type [-Wshift-count-overflow]
-     288 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   In file included from fs/erofs/super.c:14:
-   In file included from fs/erofs/xattr.h:9:
-   fs/erofs/internal.h:294:45: warning: shift count >= width of type [-Wshift-count-overflow]
-     294 |         erofs_nid_t nid_lo = EROFS_I(inode)->nid & EROFS_DIRENT_NID_MASK;
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~
-   fs/erofs/erofs_fs.h:275:33: note: expanded from macro 'EROFS_DIRENT_NID_MASK'
-     275 | #define EROFS_DIRENT_NID_MASK           (BIT(EROFS_DIRENT_NID_METABOX_BIT) - 1)
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
->> fs/erofs/super.c:327:26: warning: shift count >= width of type [-Wshift-count-overflow]
-     327 |                 if (sbi->metabox_nid & BIT(EROFS_DIRENT_NID_METABOX_BIT))
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   3 warnings generated.
---
-   In file included from fs/erofs/fscache.c:8:
->> fs/erofs/internal.h:288:31: warning: shift count >= width of type [-Wshift-count-overflow]
-     288 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   In file included from fs/erofs/fscache.c:8:
-   fs/erofs/internal.h:294:45: warning: shift count >= width of type [-Wshift-count-overflow]
-     294 |         erofs_nid_t nid_lo = EROFS_I(inode)->nid & EROFS_DIRENT_NID_MASK;
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~
-   fs/erofs/erofs_fs.h:275:33: note: expanded from macro 'EROFS_DIRENT_NID_MASK'
-     275 | #define EROFS_DIRENT_NID_MASK           (BIT(EROFS_DIRENT_NID_METABOX_BIT) - 1)
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
->> fs/erofs/fscache.c:277:46: error: too few arguments to function call, expected 4, have 3
-     277 |                 src = erofs_read_metabuf(&buf, sb, map.m_pa);
-         |                       ~~~~~~~~~~~~~~~~~~                   ^
-   fs/erofs/internal.h:400:7: note: 'erofs_read_metabuf' declared here
-     400 | void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
-         |       ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     401 |                          erofs_off_t offset, bool in_metabox);
-         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
-
-
-vim +288 fs/erofs/internal.h
-
-   285	
-   286	static inline bool erofs_inode_in_metabox(struct inode *inode)
-   287	{
- > 288		return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
-   289	}
-   290	
+>> error[E0425]: cannot find value `SHARED` in module `flags`
+   --> rust/doctests_kernel_generated.rs:4790:58
+   |
+   4790 |     let registration = Registration::new(request, flags::SHARED, c_str!("my_device"), handler);
+   |                                                          ^^^^^^ not found in `flags`
+   |
+   help: consider importing this constant
+   |
+   3    + use kernel::mm::virt::flags::SHARED;
+   |
+   help: if you import `SHARED`, refer to it directly
+   |
+   4790 -     let registration = Registration::new(request, flags::SHARED, c_str!("my_device"), handler);
+   4790 +     let registration = Registration::new(request, SHARED, c_str!("my_device"), handler);
+   |
 
 -- 
 0-DAY CI Kernel Test Service
