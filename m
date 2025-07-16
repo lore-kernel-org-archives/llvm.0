@@ -1,111 +1,264 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8857317D2;
-	Wed, 16 Jul 2025 05:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2695288C88
+	for <llvm@lists.linux.dev>; Wed, 16 Jul 2025 06:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752645598; cv=none; b=a+JDvznsoRCmzJIGnREZEnVdS8xgRdeGjoODuYq9CZRa9Uz54rsEkhVqP200IHVXAgWGUBrPZyDMEvOl/SVVyLuYpPT/0pCJ0+lC1aKJoP1SCAlqWj7sd/Wp0Ez8+lFtVnwnZThab8IcxeglRhV3EZAFEChhZ89xO59vJRkypWs=
+	t=1752649048; cv=none; b=C+WOCqR77ueEq+gqR/SdWme2jLLU9KvpDRBI7H+I/xlsPphSfjVOqV7HlX3F1cOQb49A8lGtIby/DS3hI+Og97BcqYP8270u4uWTvLOxhQT9jOOXrW2geQ/Y7U29g4bBGKMMIwLB2SMQuH5vY1WVy1Z2Ejy5H7qMmCwwF5cfp0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752645598; c=relaxed/simple;
-	bh=RaEV9yK8YW7NoqQi03NiaVlozt06p1HwyWjvdwJeNcQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=HL4CKUau5MrFx0//ZwstfoU/Q9Q1/B6KNAh6L8Q+xqWp8D25MgOXO2Jz5gg6ROq5/3Fr6na4IZObXTZPLxlbXohlgMC0NsTdgw3I0JVwQQ3/7GGEg5k5gPnuNhamUBnKUUrPf65EF8YbnRFy4bAajpKqcM06TMzLHDiXqvttNmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QVR3GIao; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752649048; c=relaxed/simple;
+	bh=TD0ab6RBX+aJCk6XqnHSMUyK4zPatG+3Dk/SNSvok+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uP9879BNYm+9C8yyQdXQADgVvlsJEZaicg0/o9ovWMT+Q9TDPaxJqYEXyRqWHPXxUSH50vmM0wUUVe5++6JKnzzYlnP291VF/AjyqpXYClIQt3efp40dvMpRouwHpLMTWlxbczelN3Pec8CbhPA5p2lL9Ccf9TtF8ls0aDv74fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=liDX45MR; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QVR3GIao"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8096EC4CEF5;
-	Wed, 16 Jul 2025 05:59:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752645598;
-	bh=RaEV9yK8YW7NoqQi03NiaVlozt06p1HwyWjvdwJeNcQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QVR3GIao9s0EZ7T4iXMxDlbroBBBMEdQPbVSs3nLs8s2+jcjE3AmtE9egWHytLPUy
-	 0jrPRafDodWOQbdd1Keq5xKHvGgPpPR1Kvh/qUs9zTyAdLuAhWqAdt/rvHFNPCaMqj
-	 mnfxo5cJq0tjj+hD/60NLR24KwB4vWnTFort/ZQGLTea2Tv5gf3kHnOAjkMBayqEzu
-	 HDmXePnEWWrPbS2MwhFX+Kczvo2PyZX75cXJngLsp8Dt6AArAYoxcAtCUZHNhtIefB
-	 0MzPWIjtA3FA2dO7taUUbiZkXljZr17BSOceBoz02QNI1MkqTcs+jjYKjgerxxrozO
-	 o54LhpUSiqjDg==
-Date: Wed, 16 Jul 2025 14:59:54 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="liDX45MR"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-235ef62066eso91041735ad.3
+        for <llvm@lists.linux.dev>; Tue, 15 Jul 2025 23:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1752649045; x=1753253845; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V/rdVFfglErJuT3RW1dM62UVhSgtAT4/g/1LUeyUznw=;
+        b=liDX45MR43aSEBQDKPYGsJyb/dfF/Kr+7xAugMgSDIJqcGJRSKsdHoBRn81woDIplm
+         rQS37U7TgG+Vl/tqdQ6JXtVwE91D7SvATp86K/LE74iki4NZEb5iCdHRVhRyWm8IhdKO
+         2bTdFn4WK87KXG4psYjXHB76tGkmDrfaJT0QqxcCZR3+aKzjleDQhQGAVv9NMomQQDlj
+         YzORwrZ0ixFWOGyVdZaYsUbVWMTfvF1xLzWpDOJ1ZfbPidaYSip6rgKjKG1X0wqI5DDU
+         yXzlQw95nsjTcN1w+FIqrR0a/qfCoNFm+Erwdyc7I08W4s2QUf/nusvp1cZG8CDGaytR
+         LVpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752649045; x=1753253845;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V/rdVFfglErJuT3RW1dM62UVhSgtAT4/g/1LUeyUznw=;
+        b=NNPZrMFycBXO5I5wlaD6wmCyBf3OntAtCwmy8nOFJAOvCA6hKcDYewBpNEyX9egwRi
+         E9DB7ap4DFXv/3IBT0FNTKUr3M2lAVlMglbUceWzgFNDY2TEbjLZr96ZJFNKm3F2V7Xt
+         T1JKZ3KHUV8Q0hmg6bfVc1Ig+7sV3hQzSU5HXdFhwoGYhx1UzXz67HQIAB0O4HxtV9i9
+         JTq5w3FrmT8fFTrJZA/ollT+coAazurupKL++ILWg971f4CXQBv2BotPCUNWktItNdDj
+         srHGnuCv1qGF96E8hj+O0C11001N01cxtyQnRU7wKmo9ro6Fbp0EGMaSkUqc1crVuOxV
+         rTIw==
+X-Forwarded-Encrypted: i=1; AJvYcCVHtAlBHDsgT0kaRFCoNU54uHPzJKDBmWYb5AmKMdPFA77KfvcSta5OueeWSg/acf4iRnV6@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzl6S210efb2HoSygFvtbL3K3VdbcjN1RNwtrUVvKC8wJ1h1S7I
+	SOWpQqmt1YltdT1QcHfbI/YKHdoA/VyFahHfRK61D58c8x5KfldSNdQXd5sraoDGsw==
+X-Gm-Gg: ASbGnct4y/zN2DhXEsLuz5PJuQ/54cQJT/LPzjmJUZzDJ1MyWhqp/RSf4IjqPdKJk6V
+	d3RDLMFUNEzxs3V8zTY8s6tsva/SC2ik94PJWGxddDohfxVkMXs00p8xrEf3Z182gB0MJcX5Efb
+	xRp6tdzcMFfnI1aQvIHjvjnLvCurE2mAxsnJ16iWCuKErEtRFLBuYAeADfNN7MU/Dz8DmwVT6H2
+	Bn69iT/2irsyc/0EJIA64/gsosALuOqrCbiXuCoqETpzvZVv0qOahWn61Uoo6hsuHyJTNs6K4DN
+	uKlijNN7h3DPRPInqx9gyKj0XXBtP23KkbvJHpKxTkd6lMtPETmpzC5y/kBaaEoASVdQzyf7Z4/
+	yOR+DI67lfJ6E+1ck4NFFaojIO18HaCwmEqe3jplKARM=
+X-Google-Smtp-Source: AGHT+IH9AkRL1S5ovVTdxJDiJDBqDKVqpO2CT21Px6+WwZDjPWtWfdrh5Sv/eFYSidv/uHK58P+1JA==
+X-Received: by 2002:a17:902:ea0c:b0:234:c549:da14 with SMTP id d9443c01a7336-23e24f47557mr28595105ad.29.1752649044756;
+        Tue, 15 Jul 2025 23:57:24 -0700 (PDT)
+Received: from bytedance ([61.213.176.56])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f2b522csm741680a91.47.2025.07.15.23.57.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 23:57:24 -0700 (PDT)
+Date: Wed, 16 Jul 2025 14:57:07 +0800
+From: Aaron Lu <ziqianlu@bytedance.com>
 To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, "Steven Rostedt (Google)"
- <rostedt@goodmis.org>
-Subject: Re: kernel/trace/trace_fprobe.c:1264:12: warning: stack frame size
- (1032) exceeds limit (1024) in 'trace_fprobe_create_cb'
-Message-Id: <20250716145954.93465b106813127bad546ed0@kernel.org>
-In-Reply-To: <202506240416.nZIhDXoO-lkp@intel.com>
-References: <202506240416.nZIhDXoO-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Cc: Valentin Schneider <vschneid@redhat.com>,
+	Ben Segall <bsegall@google.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Xi Wang <xii@google.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
+	Chuyi Zhou <zhouchuyi@bytedance.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Florian Bezdeka <florian.bezdeka@siemens.com>,
+	Songtang Liu <liusongtang@bytedance.com>
+Subject: Re: [PATCH v3 3/5] sched/fair: Switch to task based throttle model
+Message-ID: <20250716065707.GA32@bytedance>
+References: <20250715071658.267-4-ziqianlu@bytedance.com>
+ <202507160730.0cXkgs0S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202507160730.0cXkgs0S-lkp@intel.com>
 
-On Tue, 24 Jun 2025 04:18:46 +0800
-kernel test robot <lkp@intel.com> wrote:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   86731a2a651e58953fc949573895f2fa6d456841
-> commit: 57faaa04804ccbf16582f7fc7a6b986fd0c0e78c tracing: probe-events: Log error for exceeding the number of arguments
-> date:   3 months ago
-> config: s390-defconfig (https://download.01.org/0day-ci/archive/20250624/202506240416.nZIhDXoO-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 875b36a8742437b95f623bab1e0332562c7b4b3f)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250624/202506240416.nZIhDXoO-lkp@intel.com/reproduce)
+On Wed, Jul 16, 2025 at 07:29:37AM +0800, kernel test robot wrote:
+> Hi Aaron,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on tip/sched/core]
+> [also build test WARNING on next-20250715]
+> [cannot apply to linus/master v6.16-rc6]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Lu/sched-fair-Add-related-data-structure-for-task-based-throttle/20250715-152307
+> base:   tip/sched/core
+> patch link:    https://lore.kernel.org/r/20250715071658.267-4-ziqianlu%40bytedance.com
+> patch subject: [PATCH v3 3/5] sched/fair: Switch to task based throttle model
+> config: i386-buildonly-randconfig-006-20250716 (https://download.01.org/0day-ci/archive/20250716/202507160730.0cXkgs0S-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160730.0cXkgs0S-lkp@intel.com/reproduce)
 > 
 > If you fix the issue in a separate patch/commit (i.e. not just a new version of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202506240416.nZIhDXoO-lkp@intel.com/
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507160730.0cXkgs0S-lkp@intel.com/
 > 
 > All warnings (new ones prefixed by >>):
 > 
-> >> kernel/trace/trace_fprobe.c:1264:12: warning: stack frame size (1032) exceeds limit (1024) in 'trace_fprobe_create_cb' [-Wframe-larger-than]
->     1264 | static int trace_fprobe_create_cb(int argc, const char *argv[])
->          |            ^
->    1 warning generated.
+> >> kernel/sched/fair.c:5456:33: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+>     5456 |                         cfs_rq->pelt_clock_throttled = 1;
+>          |                                                      ^ ~
 
-Hmm, maybe this includes the stack consumed by internal
-inlined function (trace_fprobe_create_internal()). If so,
-we can allocate some temporary buffer in it.
+Thanks for the report.
 
-Thanks, 
+I don't think this will affect correctness since both cfs_rq's throttled
+and pelt_clock_throttled fields are used as true(not 0) or false(0). I
+used bitfield for them to save some space.
 
+Change their types to either unsigned int or bool should cure this
+warning, I suppose bool looks more clear?
+
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index dbe52e18b93a0..434f816a56701 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -737,8 +737,8 @@ struct cfs_rq {
+ 	u64			throttled_clock_pelt_time;
+ 	u64			throttled_clock_self;
+ 	u64			throttled_clock_self_time;
+-	int			throttled:1;
+-	int			pelt_clock_throttled:1;
++	bool			throttled:1;
++	bool			pelt_clock_throttled:1;
+ 	int			throttle_count;
+ 	struct list_head	throttled_list;
+ 	struct list_head	throttled_csd_list;
+
+Hi LKP,
+
+I tried using clang-19 but couldn't reproduce this warning and I don't
+have clang-20 at hand. Can you please apply the above hunk on top of
+this series and see if that warning is gone? Thanks.
+
+Best regards,
+Aaron
+
+>    kernel/sched/fair.c:5971:32: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+>     5971 |                 cfs_rq->pelt_clock_throttled = 1;
+>          |                                              ^ ~
+>    kernel/sched/fair.c:6014:20: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+>     6014 |         cfs_rq->throttled = 1;
+>          |                           ^ ~
+>    3 warnings generated.
 > 
 > 
-> vim +/trace_fprobe_create_cb +1264 kernel/trace/trace_fprobe.c
+> vim +/int +5456 kernel/sched/fair.c
 > 
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1263) 
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17 @1264) static int trace_fprobe_create_cb(int argc, const char *argv[])
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1265) {
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1266) 	struct traceprobe_parse_context ctx = {
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1267) 		.flags = TPARG_FL_KERNEL | TPARG_FL_FPROBE,
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1268) 	};
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1269) 	int ret;
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1270) 
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1271) 	trace_probe_log_init("trace_fprobe", argc, argv);
-> 8275637215bd3d4 Masami Hiramatsu (Google  2025-01-17  1272) 	ret = trace_fprobe_create_internal(argc, argv, &ctx);
-> b1d1e90490b6714 Masami Hiramatsu (Google  2023-08-23  1273) 	traceprobe_finish_parse(&ctx);
-> 334e5519c375701 Masami Hiramatsu (Google  2023-06-06  1274) 	trace_probe_log_clear();
-> 334e5519c375701 Masami Hiramatsu (Google  2023-06-06  1275) 	return ret;
-> 334e5519c375701 Masami Hiramatsu (Google  2023-06-06  1276) }
-> 334e5519c375701 Masami Hiramatsu (Google  2023-06-06  1277) 
-> 
-> :::::: The code at line 1264 was first introduced by commit
-> :::::: 8275637215bd3d447b31d37f9b8231a013adb042 tracing: Adopt __free() and guard() for trace_fprobe.c
-> 
-> :::::: TO: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> :::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+>   5372	
+>   5373	static bool
+>   5374	dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>   5375	{
+>   5376		bool sleep = flags & DEQUEUE_SLEEP;
+>   5377		int action = UPDATE_TG;
+>   5378	
+>   5379		update_curr(cfs_rq);
+>   5380		clear_buddies(cfs_rq, se);
+>   5381	
+>   5382		if (flags & DEQUEUE_DELAYED) {
+>   5383			WARN_ON_ONCE(!se->sched_delayed);
+>   5384		} else {
+>   5385			bool delay = sleep;
+>   5386			/*
+>   5387			 * DELAY_DEQUEUE relies on spurious wakeups, special task
+>   5388			 * states must not suffer spurious wakeups, excempt them.
+>   5389			 */
+>   5390			if (flags & DEQUEUE_SPECIAL)
+>   5391				delay = false;
+>   5392	
+>   5393			WARN_ON_ONCE(delay && se->sched_delayed);
+>   5394	
+>   5395			if (sched_feat(DELAY_DEQUEUE) && delay &&
+>   5396			    !entity_eligible(cfs_rq, se)) {
+>   5397				update_load_avg(cfs_rq, se, 0);
+>   5398				set_delayed(se);
+>   5399				return false;
+>   5400			}
+>   5401		}
+>   5402	
+>   5403		if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
+>   5404			action |= DO_DETACH;
+>   5405	
+>   5406		/*
+>   5407		 * When dequeuing a sched_entity, we must:
+>   5408		 *   - Update loads to have both entity and cfs_rq synced with now.
+>   5409		 *   - For group_entity, update its runnable_weight to reflect the new
+>   5410		 *     h_nr_runnable of its group cfs_rq.
+>   5411		 *   - Subtract its previous weight from cfs_rq->load.weight.
+>   5412		 *   - For group entity, update its weight to reflect the new share
+>   5413		 *     of its group cfs_rq.
+>   5414		 */
+>   5415		update_load_avg(cfs_rq, se, action);
+>   5416		se_update_runnable(se);
+>   5417	
+>   5418		update_stats_dequeue_fair(cfs_rq, se, flags);
+>   5419	
+>   5420		update_entity_lag(cfs_rq, se);
+>   5421		if (sched_feat(PLACE_REL_DEADLINE) && !sleep) {
+>   5422			se->deadline -= se->vruntime;
+>   5423			se->rel_deadline = 1;
+>   5424		}
+>   5425	
+>   5426		if (se != cfs_rq->curr)
+>   5427			__dequeue_entity(cfs_rq, se);
+>   5428		se->on_rq = 0;
+>   5429		account_entity_dequeue(cfs_rq, se);
+>   5430	
+>   5431		/* return excess runtime on last dequeue */
+>   5432		return_cfs_rq_runtime(cfs_rq);
+>   5433	
+>   5434		update_cfs_group(se);
+>   5435	
+>   5436		/*
+>   5437		 * Now advance min_vruntime if @se was the entity holding it back,
+>   5438		 * except when: DEQUEUE_SAVE && !DEQUEUE_MOVE, in this case we'll be
+>   5439		 * put back on, and if we advance min_vruntime, we'll be placed back
+>   5440		 * further than we started -- i.e. we'll be penalized.
+>   5441		 */
+>   5442		if ((flags & (DEQUEUE_SAVE | DEQUEUE_MOVE)) != DEQUEUE_SAVE)
+>   5443			update_min_vruntime(cfs_rq);
+>   5444	
+>   5445		if (flags & DEQUEUE_DELAYED)
+>   5446			finish_delayed_dequeue_entity(se);
+>   5447	
+>   5448		if (cfs_rq->nr_queued == 0) {
+>   5449			update_idle_cfs_rq_clock_pelt(cfs_rq);
+>   5450	#ifdef CONFIG_CFS_BANDWIDTH
+>   5451			if (throttled_hierarchy(cfs_rq)) {
+>   5452				struct rq *rq = rq_of(cfs_rq);
+>   5453	
+>   5454				list_del_leaf_cfs_rq(cfs_rq);
+>   5455				cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
+> > 5456				cfs_rq->pelt_clock_throttled = 1;
+>   5457			}
+>   5458	#endif
+>   5459		}
+>   5460	
+>   5461		return true;
+>   5462	}
+>   5463	
 > 
 > -- 
 > 0-DAY CI Kernel Test Service
 > https://github.com/intel/lkp-tests/wiki
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
