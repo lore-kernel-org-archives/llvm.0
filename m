@@ -1,61 +1,66 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8074F2F3C19;
-	Wed, 16 Jul 2025 11:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE622F509D;
+	Wed, 16 Jul 2025 12:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752665270; cv=none; b=bQca26H7U1LGxqa2ZaAmEDFtHPLVBn11DxQSWk8mhSYmOTmSQEBluX8l8goHwA4M/RB2jQyMGtb0tNRIhIGsn1yGuVWUo536tzulOtiGGPnr5EHca2OTEVYF8UolzZRYxgiJyJ8FmU6iI3RHkQ05rJFcAUxdSnxiMlVffKFV5mM=
+	t=1752668722; cv=none; b=KCaFD/NIGo4D+SBCBFrMPIBahHYmUo+dabyWmvz1pZ6hgDfjT1WfKCAKxkRYIhKvI106uA1umxlKi6awOG0RvDiI/G5JwoNwVHGmcFp0Aa0JLWGKqOZG9Xe4DBsEOyrVlTltuWru+qetkAiIeX8Fm1yHVrY7jdQDuri7O3OKYJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752665270; c=relaxed/simple;
-	bh=tF/CGpBDHuoQJLkqIhKtBGCbJrI4tFGNUCxaUGxb3iQ=;
+	s=arc-20240116; t=1752668722; c=relaxed/simple;
+	bh=BWrLRFAp92FC1Lne9D6uyC23s8dUsoFZLRBGb5z/924=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dGdRBIjahEepN5N0uzsElrblWrRCCDxl37NB83Rnv9nrI60xjncSwWK2NPyv9ZW8+JLBiLh6De1L2TIdv7RbL82cq7EHdN+ehig9wkzI5JYrA9CBR3fjBpt6yxZLIwfjdgeOXMdHyvYd1EcT8qsQRyYk9Bo44nQzM/HDSfKsCJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=X0vFju8E; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ukqR9daZ8OKMTO1YhTdrUv4E9kI6ohZsJr+MawApSBKWHkbaknDv7wclM05Ga3fdvLA9UV1TjqDE/0JDRQN8Ae/bhmeFmvXUR9+RbEX0o9ua8Hf6MqFNsJbxzu/TfYx+st/SgVPhR05HAySuptBkNqZIxs1NFv2qIM/8fIFWYB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nxXpo6No; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="X0vFju8E"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ZHVX6m1R3Mlb+Km1KE7CKsn7V7mXoTRhSjns8PcR16s=; b=X0vFju8EEkfRkx5osHztZGBaYi
-	+5sgu0BjN/EOp5fcMaQruQYjUpFNyEUpqk7fc34hDikTb5MZAaOsZxr8o9bYbEF93XhQ1Wy9kjJd1
-	/VvGed3zY488h11MSiVIrpowd6EEe2h6XWU+qBerfyrUniprjPELu2lUOtC/dg1qk410T5hjdL0K0
-	GvZdWsS3ml37ZrN0M9DVIQmPEDscwIpA53l5YH0a3Wr3JvJ6BvJ4p2h5D2VQVo+QemJNcy7+qK6kB
-	r8JpnUT1srQbTOkKV8B4CpjsbBDcVKD2uSJR3DDc7SEWrtgq1N8NKLATHfWX2ioIyJ9fLTpMWxbU+
-	6KYu/xMg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uc0IS-0000000GNag-17O1;
-	Wed, 16 Jul 2025 11:27:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 514AF3007A0; Wed, 16 Jul 2025 13:27:35 +0200 (CEST)
-Date: Wed, 16 Jul 2025 13:27:35 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Aaron Lu <ziqianlu@bytedance.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Ben Segall <bsegall@google.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Xi Wang <xii@google.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
-	Chuyi Zhou <zhouchuyi@bytedance.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Florian Bezdeka <florian.bezdeka@siemens.com>,
-	Songtang Liu <liusongtang@bytedance.com>
-Subject: Re: [PATCH v3 3/5] sched/fair: Switch to task based throttle model
-Message-ID: <20250716112735.GT1613200@noisy.programming.kicks-ass.net>
-References: <20250715071658.267-4-ziqianlu@bytedance.com>
- <202507160730.0cXkgs0S-lkp@intel.com>
- <20250716065707.GA32@bytedance>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nxXpo6No"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752668720; x=1784204720;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BWrLRFAp92FC1Lne9D6uyC23s8dUsoFZLRBGb5z/924=;
+  b=nxXpo6NodfGQmyNg02hngwlgbGLYJgxMnVCLchN8ZFcF6P20B73zV5gl
+   /fJn9/YLCsyPEEME4xIqLjJRIi0n98Tvh3tMX7ieNpDVMwAe28F5sb6Gn
+   BR2fIyz+YDXuUAAugJ/NKeqekRhwXm7/5gpcY8osGLoWYeKJb51dxIroV
+   5kZlv8XAvR9VogwkGq8m3lNx7QeT5IZkGhogePn+DxidwzxO3iisUwpes
+   6KU3YCiRdwAWKLWrBSLjx6sZDSRzEtqVJbx7A/91JoqkHClXKgkrrHasN
+   oJhIJG3cwnD9BUH51MF01+huxu3JrIMrTApjlGDT9DunK7yz4vas3CPUD
+   g==;
+X-CSE-ConnectionGUID: SBpX3KOSSdalI7XJ9kDYsw==
+X-CSE-MsgGUID: hUfgukjnSKmQ7J2qBzDITA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="54020734"
+X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
+   d="scan'208";a="54020734"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 05:25:19 -0700
+X-CSE-ConnectionGUID: JHf6O6CWSnWFwjKCUsM/Pg==
+X-CSE-MsgGUID: TbiiyrIeSrCVY4Ejj0xc+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
+   d="scan'208";a="162043447"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 16 Jul 2025 05:25:15 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uc1CD-000CMB-0b;
+	Wed, 16 Jul 2025 12:25:13 +0000
+Date: Wed, 16 Jul 2025 20:24:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lee@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	lgirdwood@gmail.com, broonie@kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kernel@collabora.com, wenst@chromium.org
+Subject: Re: [PATCH v5 4/8] regulator: Add support for MediaTek MT6363 SPMI
+ PMIC Regulators
+Message-ID: <202507162012.qDNKtUiI-lkp@intel.com>
+References: <20250715140224.206329-5-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,66 +69,150 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250716065707.GA32@bytedance>
+In-Reply-To: <20250715140224.206329-5-angelogioacchino.delregno@collabora.com>
 
-On Wed, Jul 16, 2025 at 02:57:07PM +0800, Aaron Lu wrote:
-> On Wed, Jul 16, 2025 at 07:29:37AM +0800, kernel test robot wrote:
-> > Hi Aaron,
-> > 
-> > kernel test robot noticed the following build warnings:
-> > 
-> > [auto build test WARNING on tip/sched/core]
-> > [also build test WARNING on next-20250715]
-> > [cannot apply to linus/master v6.16-rc6]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Lu/sched-fair-Add-related-data-structure-for-task-based-throttle/20250715-152307
-> > base:   tip/sched/core
-> > patch link:    https://lore.kernel.org/r/20250715071658.267-4-ziqianlu%40bytedance.com
-> > patch subject: [PATCH v3 3/5] sched/fair: Switch to task based throttle model
-> > config: i386-buildonly-randconfig-006-20250716 (https://download.01.org/0day-ci/archive/20250716/202507160730.0cXkgs0S-lkp@intel.com/config)
-> > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160730.0cXkgs0S-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202507160730.0cXkgs0S-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> kernel/sched/fair.c:5456:33: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-> >     5456 |                         cfs_rq->pelt_clock_throttled = 1;
-> >          |                                                      ^ ~
+Hi AngeloGioacchino,
 
-Nice warning from clang.
+kernel test robot noticed the following build errors:
 
-> 
-> Thanks for the report.
-> 
-> I don't think this will affect correctness since both cfs_rq's throttled
-> and pelt_clock_throttled fields are used as true(not 0) or false(0). I
-> used bitfield for them to save some space.
-> 
-> Change their types to either unsigned int or bool should cure this
-> warning, I suppose bool looks more clear?
-> 
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index dbe52e18b93a0..434f816a56701 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -737,8 +737,8 @@ struct cfs_rq {
->  	u64			throttled_clock_pelt_time;
->  	u64			throttled_clock_self;
->  	u64			throttled_clock_self_time;
-> -	int			throttled:1;
-> -	int			pelt_clock_throttled:1;
-> +	bool			throttled:1;
-> +	bool			pelt_clock_throttled:1;
->  	int			throttle_count;
->  	struct list_head	throttled_list;
->  	struct list_head	throttled_csd_list;
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes lee-leds/for-leds-next linus/master v6.16-rc6 next-20250715]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yeah, either this or any unsigned type will do.
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/dt-bindings-regulator-Document-MediaTek-MT6316-PMIC-Regulators/20250715-222516
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20250715140224.206329-5-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v5 4/8] regulator: Add support for MediaTek MT6363 SPMI PMIC Regulators
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250716/202507162012.qDNKtUiI-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507162012.qDNKtUiI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507162012.qDNKtUiI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/regulator/mt6363-regulator.c:519:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     519 |                 sel = FIELD_PREP(MT6363_RG_VEMC_VOSEL_1_MASK, sel);
+         |                       ^
+>> drivers/regulator/mt6363-regulator.c:577:10: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     577 |                 vsel = FIELD_GET(MT6363_RG_VEMC_VOSEL_1_MASK, vosel);
+         |                        ^
+   2 errors generated.
+
+
+vim +/FIELD_PREP +519 drivers/regulator/mt6363-regulator.c
+
+   481	
+   482	static int mt6363_vemc_set_voltage_sel(struct regulator_dev *rdev, unsigned int sel)
+   483	{
+   484		const u16 tma_unlock_key = MT6363_TMA_UNLOCK_VALUE;
+   485		const struct regulator_desc *rdesc = rdev->desc;
+   486		struct regmap *regmap = rdev->regmap;
+   487		unsigned int range, val;
+   488		int i, ret;
+   489		u16 mask;
+   490	
+   491		for (i = 0; i < rdesc->n_linear_ranges; i++) {
+   492			const struct linear_range *r = &rdesc->linear_ranges[i];
+   493			unsigned int voltages_in_range = linear_range_values_in_range(r);
+   494	
+   495			if (sel < voltages_in_range)
+   496				break;
+   497			sel -= voltages_in_range;
+   498		}
+   499	
+   500		if (i == rdesc->n_linear_ranges)
+   501			return -EINVAL;
+   502	
+   503		ret = regmap_read(rdev->regmap, MT6363_TOP_TRAP, &val);
+   504		if (ret)
+   505			return ret;
+   506	
+   507		if (val > 1)
+   508			return -EINVAL;
+   509	
+   510		/* Unlock TMA for writing */
+   511		ret = regmap_bulk_write(rdev->regmap, MT6363_TOP_TMA_KEY_L,
+   512					&tma_unlock_key, sizeof(tma_unlock_key));
+   513		if (ret)
+   514			return ret;
+   515	
+   516		/* If HW trapping value is 1, use VEMC_VOSEL_1 instead of VEMC_VOSEL_0 */
+   517		if (val == 1) {
+   518			mask = MT6363_RG_VEMC_VOSEL_1_MASK;
+ > 519			sel = FIELD_PREP(MT6363_RG_VEMC_VOSEL_1_MASK, sel);
+   520		} else {
+   521			mask = rdesc->vsel_mask;
+   522		}
+   523	
+   524		sel <<= ffs(rdesc->vsel_mask) - 1;
+   525		sel += rdesc->linear_ranges[i].min_sel;
+   526	
+   527		range = rdesc->linear_range_selectors_bitfield[i];
+   528		range <<= ffs(rdesc->vsel_range_mask) - 1;
+   529	
+   530		/* Write to the vreg calibration register for voltage finetuning */
+   531		ret = regmap_update_bits(regmap, rdesc->vsel_range_reg,
+   532					 rdesc->vsel_range_mask, range);
+   533		if (ret)
+   534			goto lock_tma;
+   535	
+   536		/* Function must return the result of this write operation */
+   537		ret = regmap_update_bits(regmap, rdesc->vsel_reg, mask, sel);
+   538	
+   539	lock_tma:
+   540		/* Unconditionally re-lock TMA */
+   541		val = 0;
+   542		regmap_bulk_write(rdev->regmap, MT6363_TOP_TMA_KEY_L, &val, 2);
+   543	
+   544		return ret;
+   545	}
+   546	
+   547	static int mt6363_vemc_get_voltage_sel(struct regulator_dev *rdev)
+   548	{
+   549		const struct regulator_desc *rdesc = rdev->desc;
+   550		unsigned int vosel, trap, calsel;
+   551		int vcal, vsel, range, ret;
+   552	
+   553		ret = regmap_read(rdev->regmap, rdesc->vsel_reg, &vosel);
+   554		if (ret)
+   555			return ret;
+   556	
+   557		ret = regmap_read(rdev->regmap, rdesc->vsel_range_reg, &calsel);
+   558		if (ret)
+   559			return ret;
+   560	
+   561		calsel &= rdesc->vsel_range_mask;
+   562		for (range = 0; range < rdesc->n_linear_ranges; range++)
+   563			if (rdesc->linear_range_selectors_bitfield[range] != calsel)
+   564				break;
+   565	
+   566		if (range == rdesc->n_linear_ranges)
+   567			return -EINVAL;
+   568	
+   569		ret = regmap_read(rdev->regmap, MT6363_TOP_TRAP, &trap);
+   570		if (ret)
+   571			return ret;
+   572	
+   573		/* If HW trapping value is 1, use VEMC_VOSEL_1 instead of VEMC_VOSEL_0 */
+   574		if (trap > 1)
+   575			return -EINVAL;
+   576		else if (trap == 1)
+ > 577			vsel = FIELD_GET(MT6363_RG_VEMC_VOSEL_1_MASK, vosel);
+   578		else
+   579			vsel = vosel & rdesc->vsel_mask;
+   580	
+   581		vcal = linear_range_values_in_range_array(rdesc->linear_ranges, range);
+   582	
+   583		return vsel + vcal;
+   584	}
+   585	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
