@@ -1,109 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9313594E;
-	Wed, 16 Jul 2025 03:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E722628C;
+	Wed, 16 Jul 2025 04:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752636868; cv=none; b=c4rJEX6kO974TCs7JHddnBIFfFTbLMZEqGv0SuD8yyVDFgkYGAZNRgEmNK8SO6BzRz9oPds6/ilhhLTxY4tU72PXEaywOCEUrrPG0PkHoUx+9EPB7FxbzZnthgeGv0/UorfCVpQqHYmAm+PCSWBDJgGWo5haknicqR4kgaidUOs=
+	t=1752639418; cv=none; b=IzzHELrtRKTOgU2rqGrPfx6upTPZKbW0USyRoHey3V7yKp0sCMUt2Oc1N43AdpZhScJEqgsO0m3h/5CxB5r3RLpmooRTD3Eoi2UKo+lv0lFXZrViDO2jN63sIsF1X/s2YFF5JYI/sfJ9XpkM6UuJApOVtY6wScqxSKLnb1DivoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752636868; c=relaxed/simple;
-	bh=JX9lPvW29HuWuNG0xMribnwysoHenlRGseyEaBMLynA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=heqx2Eofdu0/guYuBccRPV2yjRrx1uEg60a2IcMRT5bgIRfs/v1UKzYCihYxkIna1McVFYlNHG7TVE4gUFmP9EJ/nBe5twvUTkhPto3zWXcqaq7J/MwG9y8R629tSgXGdcCJirGy0GyHx3kBDoBe8aDtBoEFan0e+DeF8blFtws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNn0DBeG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752639418; c=relaxed/simple;
+	bh=5mUglmWt+DtfiWzS7JbWNY3rOgVqbEQ28VtYDouYkBs=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Ka6EnczAz+sBOpHzAWJpdhhZTI4n2BMNxne0qlCXptdNN80ZKwZ9InxxNNJNel+FXz7zjbFe6neZmiMSJyeaQ667xhfcaU9fWlnMsgS61KQSG0xdfi05eBhm0GHxM2oIkO3jGkViNQyU4RXgXNEImnmdLqbREMi615SkN0bYC9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFTS/5dv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNn0DBeG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4A6C4CEF0;
-	Wed, 16 Jul 2025 03:34:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFTS/5dv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D09C4CEF0;
+	Wed, 16 Jul 2025 04:16:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752636867;
-	bh=JX9lPvW29HuWuNG0xMribnwysoHenlRGseyEaBMLynA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=JNn0DBeG2jhiv8pTK0H87VAQoIEjSIt+i59xFsck7j531KjD6xtnpADiy8Bl+pa7R
-	 YvWnNhD6AgMh3/uggiDs77HaJfOLzgB8ugNi8n5iEJGV46EWLfUKgjFeOc1j8lMvXN
-	 WGrG3vxtiCxFCpg2xEjvmHk+hTBPTIm/VC17uqKRc/cSq90bEcMsgUe7RVZc6TXKS2
-	 7EdM03dG1WJsz3AgwDF0moBdnPgWsSerkgwkkpfOaO/Pj2GJh+CvNGWpUjMeCpaiex
-	 Q7Slwt5OVRUUZBxJvwOmzq9w7WXDZK+uXtLmy+xT5t/yQlgsySSs5eSU1ElvxyOzUF
-	 8xZ/z1QHXfOjQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 15 Jul 2025 20:34:21 -0700
-Subject: [PATCH] ASoC: SDCA: Fix uninitialized use of name in
- sdca_irq_populate()
+	s=k20201202; t=1752639417;
+	bh=5mUglmWt+DtfiWzS7JbWNY3rOgVqbEQ28VtYDouYkBs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RFTS/5dvr7V2c3NMRqT+e+4xcsNVwPIiT1ektGIZa5EaHUtpA0Wimmp1AEuTnpHLz
+	 usJgTTUcM/R7HLgC6g++WuFmWeOqW9BL+OYAtTdJMpEbrbB+vlyf1pacQaWLnwkzRV
+	 oR3dIxTtu4dh7S6x9XgYS0uBuI4Ww3V0DrfBSkXJlE0gzOB9HiEJED4YLFyBSf6LN/
+	 LQzqzgzlWnH+LId1juHSIM58l126KiLtw1uKOIXmZ+n4fQ4rKvdXtHrSAiVyGaRRvm
+	 qvp4mFoPZFhEVl51BWry8WOlAKB8AmfzFJ7QvkX2E9jQnuU248RIyTmfujmyAThFhV
+	 rzfqGsl8SoYPA==
+Date: Wed, 16 Jul 2025 13:16:54 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ stable@vger.kernel.org
+Subject: Re: [PATCH] tracing/probes: Avoid using params uninitialized in
+ parse_btf_arg()
+Message-Id: <20250716131654.93b969d6eab59b0cd292a3f3@kernel.org>
+In-Reply-To: <20250715-trace_probe-fix-const-uninit-warning-v1-1-98960f91dd04@kernel.org>
+References: <20250715-trace_probe-fix-const-uninit-warning-v1-1-98960f91dd04@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-sdca_interrupts-fix-const-uninit-warning-v1-1-cc031c913499@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALwdd2gC/x2NQQrCQAxFr1KyNjBTWkSvIiJxJtZs0pJMVSi9e
- 4O79+Dx/wbOJuxw7TYw/ojLrCH51EF5k06MUsOhT/2YznlEr4Ueoo3N1qU5vuSHZVZvuKqoNPy
- SBUxYhvq8ZE6FEkHMLcbR/q9u930/AJNRFh16AAAA
-X-Change-ID: 20250715-sdca_interrupts-fix-const-uninit-warning-c4db91e0ca0a
-To: Charles Keepax <ckeepax@opensource.cirrus.com>, 
- Maciej Strozek <mstrozek@opensource.cirrus.com>, 
- Bard Liao <yung-chuan.liao@linux.intel.com>, 
- Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-sound@vger.kernel.org, patches@opensource.cirrus.com, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1744; i=nathan@kernel.org;
- h=from:subject:message-id; bh=JX9lPvW29HuWuNG0xMribnwysoHenlRGseyEaBMLynA=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBnlsgfn3Lz8uC34ka9IKu/PJ9zcYQ8lvjk894hasP/o3
- 9WpPrJHOkpZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEdh9kZNh0fvUkrsrzk7ar
- cUrZ7JM+3X1fc5LOkSrX0LlCbn7Pt15mZOgS+7qyVjFsj4iH0OnHqoIV0ext8wsnP/ba/ysy/GC
- 2CAcA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-After a recent change in clang to strengthen uninitialized warnings [1],
-it points out that name is used uninitialized in sdca_irq_populate():
+On Tue, 15 Jul 2025 20:19:44 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-  sound/soc/sdca/sdca_interrupts.c:388:6: error: variable 'name' is uninitialized when used here [-Werror,-Wuninitialized]
-    388 |                                         name, ret);
-        |                                         ^~~~
+> After a recent change in clang to strengthen uninitialized warnings [1],
+> it points out that in one of the error paths in parse_btf_arg(), params
+> is used uninitialized:
+> 
+>   kernel/trace/trace_probe.c:660:19: warning: variable 'params' is uninitialized when used here [-Wuninitialized]
+>     660 |                         return PTR_ERR(params);
+>         |                                        ^~~~~~
+> 
+> Match many other NO_BTF_ENTRY error cases and return -ENOENT, clearing
+> up the warning.
 
-Remove name and use the name member in the interrupt variable, as that
-is the proper string to print.
+Good catch! let me pick this up.
 
-Fixes: b126394d9ec6 ("ASoC: SDCA: Generic interrupt support")
-Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- sound/soc/sdca/sdca_interrupts.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thank you,
 
-diff --git a/sound/soc/sdca/sdca_interrupts.c b/sound/soc/sdca/sdca_interrupts.c
-index 2f85fcc6e544..6df3b1a4d599 100644
---- a/sound/soc/sdca/sdca_interrupts.c
-+++ b/sound/soc/sdca/sdca_interrupts.c
-@@ -342,7 +342,6 @@ int sdca_irq_populate(struct sdca_function_data *function,
- 			int irq = control->interrupt_position;
- 			struct sdca_interrupt *interrupt;
- 			irq_handler_t handler;
--			const char *name;
- 			int ret;
- 
- 			if (irq == SDCA_NO_INTERRUPT) {
-@@ -385,7 +384,7 @@ int sdca_irq_populate(struct sdca_function_data *function,
- 						      handler, interrupt);
- 			if (ret) {
- 				dev_err(dev, "failed to request irq %s: %d\n",
--					name, ret);
-+					interrupt->name, ret);
- 				return ret;
- 			}
- 		}
 
----
-base-commit: 6bd62e3ffe865ddcd9866856f7112dd3a7484b65
-change-id: 20250715-sdca_interrupts-fix-const-uninit-warning-c4db91e0ca0a
+> 
+> Cc: stable@vger.kernel.org
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2110
+> Fixes: d157d7694460 ("tracing/probes: Support BTF field access from $retval")
+> Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  kernel/trace/trace_probe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 424751cdf31f..40830a3ecd96 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -657,7 +657,7 @@ static int parse_btf_arg(char *varname,
+>  		ret = query_btf_context(ctx);
+>  		if (ret < 0 || ctx->nr_params == 0) {
+>  			trace_probe_log_err(ctx->offset, NO_BTF_ENTRY);
+> -			return PTR_ERR(params);
+> +			return -ENOENT;
+>  		}
+>  	}
+>  	params = ctx->params;
+> 
+> ---
+> base-commit: 6921d1e07cb5eddec830801087b419194fde0803
+> change-id: 20250715-trace_probe-fix-const-uninit-warning-7dc3accce903
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
 
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
