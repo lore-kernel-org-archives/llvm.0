@@ -1,45 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E5F2BE03B;
-	Wed, 16 Jul 2025 20:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E732ECD12;
+	Wed, 16 Jul 2025 21:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752696176; cv=none; b=N/IKEPNtSrQg8R5jzMVVKKP1hc8qqrAlxA2A+2Jtx1ldzurtrzgzb4gvwwy780yphYsgbmu4hAYevcft2wD81EOcm/cL0snp/9u/1dIcbeJcaQLBe1XyY9IQGEU2SXqVgiuaqMaaZSJCIL27/NDjY395cJoqQMq/OIv/r/Gsb0g=
+	t=1752702101; cv=none; b=CIcKvD2dlm61CMg74K0sAjcps16HG5naldM9AzoXT/8UfS0AK5mUIzMGMmnxo5YsZOw2Glv3nDCLKOojw9QYT1TnmbiqgNHX4N1jxKuPs7KfZFxq9Z7gw5HUYUJ3AH0mKioxPq43uITuJPXYeDlEPaErXdna0XqWc4o7cc3stDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752696176; c=relaxed/simple;
-	bh=/VIpHxppoSDtA6B/euDaxZupotZfIjwZ2wJ60Z88lrw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AsrZ/5bE1lq7jkHmMXJ5rg7pRBl2rhHd/b/OCvT3YFneO+bPjdfMZqpZIpzKCtlHzlh1wCMa7zYnADRnGW8MOrOofvVppQBxTVK8jvCZsqLEtn81fcCO4isrLHwFqRSX8m5FYQH1BuXz2jla8jktaXGR88y2qVWvRNNLpy46XZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UrEI8Q4a; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752702101; c=relaxed/simple;
+	bh=ejg2NgilfZsuVgEFKYoLPFPHlHYZj5/iFnKoONmMhKg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bC6QkImQFGpz/4qZvUcY7H5xJd4w2llgnO0JgOq1xBKBWD13fNqY83QwYLS+u0dJnfLn+th9d98F8rk7lodBWw16GuC47sM/pr1TQ+KG9VvvcUBsb9NIR55Yxd6TsaffWm0sWWQz1XM0GtoB5Yw0RW0zQYGSlYbR7wxIGX2SvF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1mQIJ+Y; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UrEI8Q4a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80EEFC4CEE7;
-	Wed, 16 Jul 2025 20:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752696176;
-	bh=/VIpHxppoSDtA6B/euDaxZupotZfIjwZ2wJ60Z88lrw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UrEI8Q4ay4GMr5GqbOQ8Pf3vGwrLWG/tQDGcdcdJSgLH7mNYyDgEmYPjYDzxceabE
-	 l5kHuFMh/wIBcA6PQu64k1mMK53wOUZhbjmgFN0gKOQoJJXQKMTRFVZoRDKDaJeBl1
-	 +AoaidezL8zIfGD3SdWohkUGWLNDCX7hKBsBwtENU3K7ielESD0EndLjgvRjEQZFFl
-	 +dRKrSK3f11T8SlYZUXSd31MKWRVS5UOCoMQp+AAcbb2T1GXX3fnNNXrltTlCY+e5F
-	 RNnxPFHCaXCKxg0A6Ej+aNMagY+t1PNE3eW+5zCn4ImpF1AswODcvh0AGqKpQGXlo7
-	 4jetbT4gvgOYQ==
-Date: Wed, 16 Jul 2025 16:02:51 -0400
-From: Nathan Chancellor <nathan@kernel.org>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: Maciej Strozek <mstrozek@opensource.cirrus.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
-	Mark Brown <broonie@kernel.org>, linux-sound@vger.kernel.org,
-	patches@opensource.cirrus.com, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] ASoC: SDCA: Fix uninitialized use of name in
- sdca_irq_populate()
-Message-ID: <20250716200251.GB4010969@ax162>
-References: <20250715-sdca_interrupts-fix-const-uninit-warning-v1-1-cc031c913499@kernel.org>
- <aHdh8LOJblKP01rd@opensource.cirrus.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1mQIJ+Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752702100; x=1784238100;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ejg2NgilfZsuVgEFKYoLPFPHlHYZj5/iFnKoONmMhKg=;
+  b=d1mQIJ+YFNcHlc8aJFqjoIUM+cDjj8vQcspn6hOJyL7LLCQ+sxYFvz0B
+   3rYnN82GSRdWywEJHQIvJZw7Ur6Tal+E+e3zQQ2gACmKvG0uxmJqQnzNU
+   BhWPxsp1EoAanq2mkKVqxKhRdhSPMnWOadOQ39f2izWm0zPX+G5UISJbf
+   TeoqazqYCYABih410HFuaRHZdGoC4/QZGeLkeKONDHwTLOlLXQ7prLMG/
+   Im6FpqWRl0fi417bWhBgCGIGZZf1byYRGOnp3XsWbT/go89cfZCuH8+Le
+   mgkkiPav6z3uO89Evss8wnkTxoLhGqB+Z0znvxNBKqk0ZO+nf7zo7nVe6
+   w==;
+X-CSE-ConnectionGUID: YXM/z0OjT1Kr2XRUEtbivw==
+X-CSE-MsgGUID: yBD4bGFqSpGw0vURbbNX/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58734943"
+X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
+   d="scan'208";a="58734943"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 14:41:34 -0700
+X-CSE-ConnectionGUID: 82IF38aYQYCyYIQnQH3sJQ==
+X-CSE-MsgGUID: McomF0g2SXOr2Hp0Kq6nvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
+   d="scan'208";a="157285490"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 16 Jul 2025 14:41:32 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uc9sY-000CsC-2C;
+	Wed, 16 Jul 2025 21:41:30 +0000
+Date: Thu, 17 Jul 2025 05:40:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bo Liu <liubo03@inspur.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Xiang Gao <xiang@kernel.org>, linux-erofs@lists.ozlabs.org
+Subject: [xiang-erofs:dev-test 7/7] fs/erofs/internal.h:288:31: warning:
+ shift count >= width of type
+Message-ID: <202507170506.Wzz1lR5I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,36 +62,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aHdh8LOJblKP01rd@opensource.cirrus.com>
 
-On Wed, Jul 16, 2025 at 09:25:20AM +0100, Charles Keepax wrote:
-> On Tue, Jul 15, 2025 at 08:34:21PM -0700, Nathan Chancellor wrote:
-> > After a recent change in clang to strengthen uninitialized warnings [1],
-> > it points out that name is used uninitialized in sdca_irq_populate():
-> > 
-> >   sound/soc/sdca/sdca_interrupts.c:388:6: error: variable 'name' is uninitialized when used here [-Werror,-Wuninitialized]
-> >     388 |                                         name, ret);
-> >         |                                         ^~~~
-> > 
-> > Remove name and use the name member in the interrupt variable, as that
-> > is the proper string to print.
-> > 
-> > Fixes: b126394d9ec6 ("ASoC: SDCA: Generic interrupt support")
-> > Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> 
-> A fix is already pending for this one:
-> 
-> https://lore.kernel.org/linux-sound/20250715151723.2964336-3-ckeepax@opensource.cirrus.com/T/#u
-> 
-> Although they are identical so don't mind which gets merged :-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
+head:   33656c801bc94615e8b02f01f36eff752dc5086b
+commit: 33656c801bc94615e8b02f01f36eff752dc5086b [7/7] erofs: implement metadata compression
+config: hexagon-randconfig-001-20250717 (https://download.01.org/0day-ci/archive/20250717/202507170506.Wzz1lR5I-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250717/202507170506.Wzz1lR5I-lkp@intel.com/reproduce)
 
-Whoops, I should have checked for duplicates like I usually do...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507170506.Wzz1lR5I-lkp@intel.com/
 
-I see Mark has merged your change now so we are all good here.
+All error/warnings (new ones prefixed by >>):
 
-https:///git.kernel.org/broonie/sound/c/71562278a189af2ca202eafa0ab71a9b68469207
+   In file included from fs/erofs/data.c:7:
+>> fs/erofs/internal.h:288:31: warning: shift count >= width of type [-Wshift-count-overflow]
+     288 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/erofs/data.c:7:
+   fs/erofs/internal.h:294:45: warning: shift count >= width of type [-Wshift-count-overflow]
+     294 |         erofs_nid_t nid_lo = EROFS_I(inode)->nid & EROFS_DIRENT_NID_MASK;
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~
+   fs/erofs/erofs_fs.h:275:33: note: expanded from macro 'EROFS_DIRENT_NID_MASK'
+     275 | #define EROFS_DIRENT_NID_MASK           (BIT(EROFS_DIRENT_NID_METABOX_BIT) - 1)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   2 warnings generated.
+--
+   In file included from fs/erofs/super.c:14:
+   In file included from fs/erofs/xattr.h:9:
+>> fs/erofs/internal.h:288:31: warning: shift count >= width of type [-Wshift-count-overflow]
+     288 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/erofs/super.c:14:
+   In file included from fs/erofs/xattr.h:9:
+   fs/erofs/internal.h:294:45: warning: shift count >= width of type [-Wshift-count-overflow]
+     294 |         erofs_nid_t nid_lo = EROFS_I(inode)->nid & EROFS_DIRENT_NID_MASK;
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~
+   fs/erofs/erofs_fs.h:275:33: note: expanded from macro 'EROFS_DIRENT_NID_MASK'
+     275 | #define EROFS_DIRENT_NID_MASK           (BIT(EROFS_DIRENT_NID_METABOX_BIT) - 1)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+>> fs/erofs/super.c:327:26: warning: shift count >= width of type [-Wshift-count-overflow]
+     327 |                 if (sbi->metabox_nid & BIT(EROFS_DIRENT_NID_METABOX_BIT))
+         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   3 warnings generated.
+--
+   In file included from fs/erofs/fscache.c:8:
+>> fs/erofs/internal.h:288:31: warning: shift count >= width of type [-Wshift-count-overflow]
+     288 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/erofs/fscache.c:8:
+   fs/erofs/internal.h:294:45: warning: shift count >= width of type [-Wshift-count-overflow]
+     294 |         erofs_nid_t nid_lo = EROFS_I(inode)->nid & EROFS_DIRENT_NID_MASK;
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~
+   fs/erofs/erofs_fs.h:275:33: note: expanded from macro 'EROFS_DIRENT_NID_MASK'
+     275 | #define EROFS_DIRENT_NID_MASK           (BIT(EROFS_DIRENT_NID_METABOX_BIT) - 1)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+>> fs/erofs/fscache.c:277:46: error: too few arguments to function call, expected 4, have 3
+     277 |                 src = erofs_read_metabuf(&buf, sb, map.m_pa);
+         |                       ~~~~~~~~~~~~~~~~~~                   ^
+   fs/erofs/internal.h:400:7: note: 'erofs_read_metabuf' declared here
+     400 | void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
+         |       ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     401 |                          erofs_off_t offset, bool in_metabox);
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
-Cheers,
-Nathan
+
+vim +288 fs/erofs/internal.h
+
+   285	
+   286	static inline bool erofs_inode_in_metabox(struct inode *inode)
+   287	{
+ > 288		return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
+   289	}
+   290	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
