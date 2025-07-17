@@ -1,72 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2240B224AEB;
-	Thu, 17 Jul 2025 20:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399C622370C;
+	Thu, 17 Jul 2025 22:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752784835; cv=none; b=lUXY1o9cmclybxOOzKRszJJija7/FjEryvLq1ZTbsm7yLkliMq725zFZqgzYDu7b4HU2qn4ixcPnvDujHMtR5rySdDxSwNS6D7Z/RS4gcQ/q1HeCjUrseznIeA+wMX4L3o0bvLA/RJpJzv14eZRtpM55Vu5BLpMnbx5wigBLaOc=
+	t=1752792826; cv=none; b=ZKJQ/esueGIUQA9iz3BrgUdfsEXgIT60oPZvEH+raqYS85A5vbU+zijkbAwMR4qqgYqLl1+fY2RQw+cSU/4sAismryvThhtoB8A7fwzjQ5u4uVs5UuTuxkz9nduFtcwkmL1rgdWrrqWJcjAvZNj9r8Uiv9GbBY/b+XPwVUnUgRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752784835; c=relaxed/simple;
-	bh=PdIbTdktWh/WBwrcyr3gCqj0Qy8ntRTyRqr3z/psMAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hiQwHLGhNYnCtb4rNcIFPP/ZCRLEiB5uaWoKgYOQeaOIwYg4ZYwPS+T3ZM/vpYEb2Ib+2ImPrl6NBhNPR24TfbNwXMHqXxbJIYMyGB5NYxQTXN52NPW9l25Abc35XJ9pm604u8iwgQTM8Wxr7rSZAm7+5hn2xEQGTHNA0VsQgX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YRBojVwc; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1752792826; c=relaxed/simple;
+	bh=+i/arNQ0Jga/+PJfNX7UaogYiRd2Lj9E8jimLfxuh5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MWnjm4ShB7/waEU1TBUhedeZAPF6JEdS1J1m+NG7Fktq8HM2ZOdERLsMQb2oyLCRBb+agzgs8VEuYfOrzv2H3+sCtEuhmGka9iMNrw+ekJW5BefmBEUdoiYN7antjNflcentHrzTDtZQGItJbUpmp63Pep7VwbCe2IbQH1qEn48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cAdXQzl/; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YRBojVwc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cAdXQzl/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752784835; x=1784320835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PdIbTdktWh/WBwrcyr3gCqj0Qy8ntRTyRqr3z/psMAs=;
-  b=YRBojVwcrxX3CdYcyHMMjJEElpvASNG1SFW2jG9NXLXYPYb7OPJWNLex
-   xjIMh4X/CqHs2rSnF71QWsFxzWwJJg7glcfL6+BWXTJDnfq6TBbQ7NFm5
-   ASfLKtyajCUtNIGcPIiEpUkZF4PukmVLVSaBaVy6z/LZy48ibczcdg00p
-   iN7svrvmriuJwR5Jo2YBCY0QVj3mGceFx8MP8ZzSDLwjnmUn4mU46fRL9
-   O6ojCQzIo7RiqDTsBdcB0ras9H5yfEpPaF5T0Bz/l8THcoaJXF6Wgi0D6
-   p4NrxKcVeI45/2OAqWCk/fPST37RPlPwrJn/m4Ro4y8iJcWSeE1/QYAM1
-   w==;
-X-CSE-ConnectionGUID: FNJCWpGhTACUiZSTKzavAA==
-X-CSE-MsgGUID: kzBUSJfIQzivVimVz5/pFg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11495"; a="55200012"
-X-IronPort-AV: E=Sophos;i="6.16,319,1744095600"; 
-   d="scan'208";a="55200012"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2025 13:40:34 -0700
-X-CSE-ConnectionGUID: IuN4fVvGSIalVbCR9aDz2Q==
-X-CSE-MsgGUID: BkOKgBq2Qm2hEkuq4K7EAw==
+  t=1752792826; x=1784328826;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+i/arNQ0Jga/+PJfNX7UaogYiRd2Lj9E8jimLfxuh5g=;
+  b=cAdXQzl/WB8+OZMyQBV20vM7BbvUtGXklfKoHiplWXtxFpC9f5OctHEP
+   L1LLVlUXBwvAMDYDmNXvUF/dwQZyRAfiKRvkDVMM7a1JC6MiC96W6j0O9
+   ZBnF00xR2E9zbuzLeBZ4renydoY6gVttoFJhGAq6ObKF9aRXrahgTfbxl
+   41ZkaNtxMqyVShUqLqBN35YoJEMkt1E5Hzq+kT4BVWUD5AYtoArT6PgyS
+   bgyM3mfb9Z1+5nzwrRo3Z99ziTwyEr9Rk81StD5FESdoC+vdrgyCgrODd
+   rDbVvcox/sOy8ohNQTjgC2tRkHgBUTh9UQ3yWpK8AEQfNJXbwBBWpq0Yt
+   A==;
+X-CSE-ConnectionGUID: acztRebpTdK0/vhyOou6Tw==
+X-CSE-MsgGUID: prasFIV4QFqSnrAIEiG4TQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11495"; a="55229683"
+X-IronPort-AV: E=Sophos;i="6.16,320,1744095600"; 
+   d="scan'208";a="55229683"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2025 15:53:45 -0700
+X-CSE-ConnectionGUID: IOXYwGXUT9mib6ZgCaQz4g==
+X-CSE-MsgGUID: 9SEwx1HbSKy9x6TSPSAJYw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,319,1744095600"; 
-   d="scan'208";a="158585075"
+X-IronPort-AV: E=Sophos;i="6.16,320,1744095600"; 
+   d="scan'208";a="162192155"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 17 Jul 2025 13:40:29 -0700
+  by orviesa003.jf.intel.com with ESMTP; 17 Jul 2025 15:53:43 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ucVP1-000E0Z-0X;
-	Thu, 17 Jul 2025 20:40:27 +0000
-Date: Fri, 18 Jul 2025 04:39:46 +0800
+	id 1ucXTv-000E5D-2o;
+	Thu, 17 Jul 2025 22:53:39 +0000
+Date: Fri, 18 Jul 2025 06:53:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cosmin Tanislav <demonsingur@gmail.com>,
-	Cosmin Tanislav <cosmin.tanislav@analog.com>,
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	Julien Massot <julien.massot@collabora.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>
+To: David Lechner <dlechner@baylibre.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-staging@lists.linux.dev, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v6 19/24] media: i2c: maxim-serdes: add MAX96724 driver
-Message-ID: <202507180433.nXvvwmFy-lkp@intel.com>
-References: <20250716193111.942217-20-demonsingur@gmail.com>
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: [linux-next:master 8663/10823] ld.lld: error: undefined symbol:
+ devm_spi_offload_rx_stream_request_dma_chan
+Message-ID: <202507180620.bPnQTVKp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,80 +64,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250716193111.942217-20-demonsingur@gmail.com>
 
-Hi Cosmin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20250716]
-[also build test ERROR on v6.16-rc6]
-[cannot apply to robh/for-next staging/staging-testing staging/staging-next staging/staging-linus arm64/for-next/core linus/master v6.16-rc6 v6.16-rc5 v6.16-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cosmin-Tanislav/media-mc-Add-INTERNAL-pad-flag/20250717-033901
-base:   next-20250716
-patch link:    https://lore.kernel.org/r/20250716193111.942217-20-demonsingur%40gmail.com
-patch subject: [PATCH v6 19/24] media: i2c: maxim-serdes: add MAX96724 driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250718/202507180433.nXvvwmFy-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507180433.nXvvwmFy-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb
+commit: 219da3ea842a156e5808176e11db256db9798f6c [8663/10823] iio: adc: ad_sigma_delta: add SPI offload support
+config: x86_64-buildonly-randconfig-001-20250718 (https://download.01.org/0day-ci/archive/20250718/202507180620.bPnQTVKp-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507180620.bPnQTVKp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507180433.nXvvwmFy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507180620.bPnQTVKp-lkp@intel.com/
+
+Note: the linux-next/master HEAD 024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb builds fine.
+      It may have been fixed somewhere.
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/i2c/maxim-serdes/max96724.c:273:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     273 |                                  FIELD_PREP(MAX96724_PWR1_RESET_ALL, 1));
-         |                                  ^
-   drivers/media/i2c/maxim-serdes/max96724.c:494:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     494 |                                  FIELD_PREP(MAX96724_MIPI_TX10_CSI2_LANE_CNT,
-         |                                  ^
-   drivers/media/i2c/maxim-serdes/max96724.c:693:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     693 |                            FIELD_PREP(MAX96724_MIPI_TX13_MAP_SRC_DT,
-         |                            ^
-   drivers/media/i2c/maxim-serdes/max96724.c:741:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     741 |                                   FIELD_PREP(MAX96724_MIPI_TX57_TUN_DEST,
-         |                                   ^
-   drivers/media/i2c/maxim-serdes/max96724.c:914:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     914 |                             FIELD_PREP(MAX96724_PATGEN_0_VTG_MODE,
-         |                             ^
-   drivers/media/i2c/maxim-serdes/max96724.c:957:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     957 |                                  FIELD_PREP(MAX96724_VPRBS_PATGEN_CLK_SRC,
-         |                                  ^
-   drivers/media/i2c/maxim-serdes/max96724.c:985:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     985 |                                   FIELD_PREP(MAX96724_PATGEN_1_PATGEN_MODE,
-         |                                   ^
-   7 errors generated.
-
-
-vim +/FIELD_PREP +273 drivers/media/i2c/maxim-serdes/max96724.c
-
-   262	
-   263	static int max96724_reset(struct max96724_priv *priv)
-   264	{
-   265		int ret;
-   266	
-   267		ret = max96724_wait_for_device(priv);
-   268		if (ret)
-   269			return ret;
-   270	
-   271		ret = regmap_update_bits(priv->regmap, MAX96724_PWR1,
-   272					 MAX96724_PWR1_RESET_ALL,
- > 273					 FIELD_PREP(MAX96724_PWR1_RESET_ALL, 1));
-   274		if (ret)
-   275			return ret;
-   276	
-   277		fsleep(10000);
-   278	
-   279		return max96724_wait_for_device(priv);
-   280	}
-   281	
+>> ld.lld: error: undefined symbol: devm_spi_offload_rx_stream_request_dma_chan
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
+--
+>> ld.lld: error: undefined symbol: devm_iio_dmaengine_buffer_setup_with_handle
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
+--
+>> ld.lld: error: undefined symbol: devm_spi_offload_trigger_get
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
+--
+>> ld.lld: error: undefined symbol: devm_spi_offload_get
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(ad_sd_init)
+--
+>> ld.lld: error: undefined symbol: spi_offload_trigger_enable
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(ad_sd_buffer_postenable)
+--
+>> ld.lld: error: undefined symbol: spi_offload_trigger_disable
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(ad_sd_buffer_postdisable)
 
 -- 
 0-DAY CI Kernel Test Service
