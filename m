@@ -1,96 +1,155 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2241799F
-	for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 19:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2240B224AEB;
+	Thu, 17 Jul 2025 20:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752782100; cv=none; b=Bcro0p4jh8eb3r+v+vmMk8xZWF52qFztWxD7/Q0OSxjQKBUR0uRohU0AXBAPvS+8BgYiMmA+RYx7cYgWxP+inJDSvbZQVMtlcILmERJHteJV70PzJugZD3CQUxIsV/ai5cWLTo5u9j01NC891SULHzyYRxEARF6BzpAZl1r7Qk8=
+	t=1752784835; cv=none; b=lUXY1o9cmclybxOOzKRszJJija7/FjEryvLq1ZTbsm7yLkliMq725zFZqgzYDu7b4HU2qn4ixcPnvDujHMtR5rySdDxSwNS6D7Z/RS4gcQ/q1HeCjUrseznIeA+wMX4L3o0bvLA/RJpJzv14eZRtpM55Vu5BLpMnbx5wigBLaOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752782100; c=relaxed/simple;
-	bh=0h2lyjbgDtvP1+EvQ+MHIsDbe4vYkBlFtUjmlhCEO9E=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=uu61v+5XQCHgKwBVTTTBANPEHEKn6N3bL4SOPmuyC5POupMVYm+QX3aUEs65VqOrq8U4CdIyPSGWnRnPaOPo1lu5SLz0C1pSqHGwnC6sSedsTZXt4F4sZkJ2o6SpmA5WhQmSIAF5LKB6B9Id8tGIRnE56PrIzMgijGpAjQl/IlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HEqCkonV; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752784835; c=relaxed/simple;
+	bh=PdIbTdktWh/WBwrcyr3gCqj0Qy8ntRTyRqr3z/psMAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hiQwHLGhNYnCtb4rNcIFPP/ZCRLEiB5uaWoKgYOQeaOIwYg4ZYwPS+T3ZM/vpYEb2Ib+2ImPrl6NBhNPR24TfbNwXMHqXxbJIYMyGB5NYxQTXN52NPW9l25Abc35XJ9pm604u8iwgQTM8Wxr7rSZAm7+5hn2xEQGTHNA0VsQgX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YRBojVwc; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HEqCkonV"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55502821bd2so1733326e87.2
-        for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 12:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752782097; x=1753386897; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0h2lyjbgDtvP1+EvQ+MHIsDbe4vYkBlFtUjmlhCEO9E=;
-        b=HEqCkonVg+t6ZM+ODUndaUJfwJBs72NtMF9AdsPEwa8SCMVtqDWCHvGwLAQK0LVOVW
-         8kR35OYSCPOFU0xjXKtFoXu7/kMmI9+q8u7vooj9uK/bGjm/8h89yKiDZHjMSD2uNSgk
-         8hKfQ5Z280C/fi8AbVws8n6XT245ULeAo4cyaD9yo+uCeFvuRiYRp0z+dpqYjmSO6hPE
-         Zw0zpPqNTjfDMtlt1AaIv2BEvOEDIJvEgj+IH5XUZY5RUy8cTmGTyPScZOf5gfrDKpGK
-         Cy0qjcqAtBm4Px2fBNhT85pJixvkw7fJJGCYgl+xDifnGuxn1TCHnLduOaytqjIFvakY
-         Z5RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752782097; x=1753386897;
-        h=cc:to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0h2lyjbgDtvP1+EvQ+MHIsDbe4vYkBlFtUjmlhCEO9E=;
-        b=I7sHcmdBEwmB4/56hRNr3b0XbG7CLJzNmydzo5hYG8TChyBXUOHN2frpjOcVRjcdyl
-         hmRuZINxX+jSYDOYMMMdo2duO3mpQyuZc4Jq+lIi7b6kcNknRJVHVCefv5auEUAx57pG
-         SlMFBEeKSnh/bWgKI4gBuXsjmqq1Rxu279yOHTHjgo6YZHd9VWdHw6M6NObSGPV1jtc6
-         pu1yIWSEVvA/liom/+Hx60PcSiWTVO5UJQtAOHtHPNMn6eihvbjgGiOLyl6Y3PmU4+QU
-         3rD/MWkiFdk0PWvT5h3G+Tz9zQC7iM7t9QsnZ7NZn8IJSgSqLy7LsLY4EBJvLJ7mJp3I
-         Z9JQ==
-X-Gm-Message-State: AOJu0YwMNYFpsGYubzZINk+FKKkqiEPM3LIKD9xgzWX81lZ7t0HlkIZ/
-	JHrzWQmKx1oDirr8BIe3MGfMKbf5+01NPdnYnTo3qsTbTft/KiTsdbBilai4KAAlc5F7VR5a4ax
-	MsplMP8LhDgTDMblkRRDOYSEXdR+k9sA=
-X-Gm-Gg: ASbGncsJb98F1ya00+rEPPkFjjBFUVQx9l/Lg77sJ4EdVExt9lhzuQx0dq7hj5aUDXW
-	aBxTNCALmZqdRQfrBEaNYQl/3Iz5TA0PMk3F26cfBNUrjyaAf02Nda4DXb3pphycZioonPApPQp
-	qCcQ7UPxqlcgWwSl+wwZ7nbyyNR3c7GoQ3O6VsOnkc97eD336w0ZuRVn4SsngXCX5u3mRK+/4VJ
-	P7rJ6o4
-X-Google-Smtp-Source: AGHT+IH5XdDWVWpWrVPcDX70c4xbyQgsfeWH5fEbnmhuSk2PbnTVSy0Q1bW2+A1eBVnRRVZWV1n6Yevf79ZEWmEhn68=
-X-Received: by 2002:a05:6512:130b:b0:54f:bf00:6f38 with SMTP id
- 2adb3069b0e04-55a23f73fa4mr2436839e87.45.1752782096297; Thu, 17 Jul 2025
- 12:54:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YRBojVwc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752784835; x=1784320835;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PdIbTdktWh/WBwrcyr3gCqj0Qy8ntRTyRqr3z/psMAs=;
+  b=YRBojVwcrxX3CdYcyHMMjJEElpvASNG1SFW2jG9NXLXYPYb7OPJWNLex
+   xjIMh4X/CqHs2rSnF71QWsFxzWwJJg7glcfL6+BWXTJDnfq6TBbQ7NFm5
+   ASfLKtyajCUtNIGcPIiEpUkZF4PukmVLVSaBaVy6z/LZy48ibczcdg00p
+   iN7svrvmriuJwR5Jo2YBCY0QVj3mGceFx8MP8ZzSDLwjnmUn4mU46fRL9
+   O6ojCQzIo7RiqDTsBdcB0ras9H5yfEpPaF5T0Bz/l8THcoaJXF6Wgi0D6
+   p4NrxKcVeI45/2OAqWCk/fPST37RPlPwrJn/m4Ro4y8iJcWSeE1/QYAM1
+   w==;
+X-CSE-ConnectionGUID: FNJCWpGhTACUiZSTKzavAA==
+X-CSE-MsgGUID: kzBUSJfIQzivVimVz5/pFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11495"; a="55200012"
+X-IronPort-AV: E=Sophos;i="6.16,319,1744095600"; 
+   d="scan'208";a="55200012"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2025 13:40:34 -0700
+X-CSE-ConnectionGUID: IuN4fVvGSIalVbCR9aDz2Q==
+X-CSE-MsgGUID: BkOKgBq2Qm2hEkuq4K7EAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,319,1744095600"; 
+   d="scan'208";a="158585075"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 17 Jul 2025 13:40:29 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ucVP1-000E0Z-0X;
+	Thu, 17 Jul 2025 20:40:27 +0000
+Date: Fri, 18 Jul 2025 04:39:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cosmin Tanislav <demonsingur@gmail.com>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
+	Julien Massot <julien.massot@collabora.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-staging@lists.linux.dev, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v6 19/24] media: i2c: maxim-serdes: add MAX96724 driver
+Message-ID: <202507180433.nXvvwmFy-lkp@intel.com>
+References: <20250716193111.942217-20-demonsingur@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 17 Jul 2025 21:54:24 +0200
-X-Gm-Features: Ac12FXzMWx-zp_KDt4TK2NERbagd_IBXht0pCDRnKjG5YQ0RlFh31OB6NloxM5o
-Message-ID: <CA+icZUV_NGd5R3=YdE9zg7HeBK1adhj_j7Kpp5-GhOMJLsXyWw@mail.gmail.com>
-Subject: [LLVM/Clang] Known issues with Linux v6.12.39 and CFI
-To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250716193111.942217-20-demonsingur@gmail.com>
 
-Hi LLVM/Clang folks,
+Hi Cosmin,
 
-Hope you are well.
+kernel test robot noticed the following build errors:
 
-Writing from a Windows host...
+[auto build test ERROR on next-20250716]
+[also build test ERROR on v6.16-rc6]
+[cannot apply to robh/for-next staging/staging-testing staging/staging-next staging/staging-linus arm64/for-next/core linus/master v6.16-rc6 v6.16-rc5 v6.16-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So, Debian/trixie aka version 13 is FROZEN and will be released soon.
+url:    https://github.com/intel-lab-lkp/linux/commits/Cosmin-Tanislav/media-mc-Add-INTERNAL-pad-flag/20250717-033901
+base:   next-20250716
+patch link:    https://lore.kernel.org/r/20250716193111.942217-20-demonsingur%40gmail.com
+patch subject: [PATCH v6 19/24] media: i2c: maxim-serdes: add MAX96724 driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250718/202507180433.nXvvwmFy-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507180433.nXvvwmFy-lkp@intel.com/reproduce)
 
-I was using LLVM toolchains from kernel.org - my last Linux-kernel was
-version 6.12.11 compiled with LLVM-19.1.6 released 17-Dec-2024,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507180433.nXvvwmFy-lkp@intel.com/
 
-Normally, I use Debian's kernel-config - modified to Clang-CFI and
-using mostly ZSTD settings where possible (ZRAM, (de)compress
-initramfs, etc.).
+All errors (new ones prefixed by >>):
 
-Are there additional patches necessary - kernel-side - planning with
-v6.12.39 released some hours ago?
-As you can see I did not follow Kernel development for a while - 6 months or so.
+>> drivers/media/i2c/maxim-serdes/max96724.c:273:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     273 |                                  FIELD_PREP(MAX96724_PWR1_RESET_ALL, 1));
+         |                                  ^
+   drivers/media/i2c/maxim-serdes/max96724.c:494:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     494 |                                  FIELD_PREP(MAX96724_MIPI_TX10_CSI2_LANE_CNT,
+         |                                  ^
+   drivers/media/i2c/maxim-serdes/max96724.c:693:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     693 |                            FIELD_PREP(MAX96724_MIPI_TX13_MAP_SRC_DT,
+         |                            ^
+   drivers/media/i2c/maxim-serdes/max96724.c:741:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     741 |                                   FIELD_PREP(MAX96724_MIPI_TX57_TUN_DEST,
+         |                                   ^
+   drivers/media/i2c/maxim-serdes/max96724.c:914:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     914 |                             FIELD_PREP(MAX96724_PATGEN_0_VTG_MODE,
+         |                             ^
+   drivers/media/i2c/maxim-serdes/max96724.c:957:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     957 |                                  FIELD_PREP(MAX96724_VPRBS_PATGEN_CLK_SRC,
+         |                                  ^
+   drivers/media/i2c/maxim-serdes/max96724.c:985:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     985 |                                   FIELD_PREP(MAX96724_PATGEN_1_PATGEN_MODE,
+         |                                   ^
+   7 errors generated.
 
-Best thanks and regards,
-- Sedat -
 
-Link: https://cdimage.debian.org/cdimage/
-Link: https://mirrors.edge.kernel.org/pub/tools/llvm/files/
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/tag/?h=v6.12.11
-Link: https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-19.1.6-x86_64.tar.xz
-Link: https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-19.1.6-x86_64.tar.sign
+vim +/FIELD_PREP +273 drivers/media/i2c/maxim-serdes/max96724.c
+
+   262	
+   263	static int max96724_reset(struct max96724_priv *priv)
+   264	{
+   265		int ret;
+   266	
+   267		ret = max96724_wait_for_device(priv);
+   268		if (ret)
+   269			return ret;
+   270	
+   271		ret = regmap_update_bits(priv->regmap, MAX96724_PWR1,
+   272					 MAX96724_PWR1_RESET_ALL,
+ > 273					 FIELD_PREP(MAX96724_PWR1_RESET_ALL, 1));
+   274		if (ret)
+   275			return ret;
+   276	
+   277		fsleep(10000);
+   278	
+   279		return max96724_wait_for_device(priv);
+   280	}
+   281	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
