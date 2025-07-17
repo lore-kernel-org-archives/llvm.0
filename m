@@ -1,138 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9361D7E42;
-	Thu, 17 Jul 2025 09:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9BF291C30
+	for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 09:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752745633; cv=none; b=gkzKwVw9L3EMtPq7Hy+lQyg0FFdBtStGrOI1Wdn07FTyO0U0EP+DOpwmjkB9W1i1mzoMgpPAJxBetIpZpDKY3iKU94OXJrE7gHPeyB6iIqKxqi56XWzNfgeamd7juDRTnAtQWmqTKZfNRNrFpfsrARl3BwEbctd6eF4OJnwzq9w=
+	t=1752745883; cv=none; b=gg6kUE1gdlmeBgJyAXLoEKSrRGsIBqJv+5On5fJlq5tIersbWqA/NFnDTOXVsnVtfQmyrVSU9+zMcXa1yFYzpuQh1/fefepC5TJgyKxq9GfZCiFsvpRoXiPpuSBuXLM0wUESs+eohwo8W5mYt9qo9tURljoS2d/NyjDQ4cjN/WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752745633; c=relaxed/simple;
-	bh=mBtBclCHGGf6QUs4GBjgavXvjySSzPF23qcnrqOWjMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FasvCulHJbkAs+vhdJmQwvB6VGMt7UFdxwjgBP5uqDgghFZ7G3992Yb5URCvrLOXKTwncJjtPF8+pd9KMF/dHBqH17RXZn+cNMI1JDKSnGWLuUdToMaRUKUg8T3EfD/wM09TTluHtmy4DLQFkgtged06nw1eKOoOS/Is4TWOf24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AzrE26Sz; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1752745883; c=relaxed/simple;
+	bh=cQaqVDgy4SckeQJyFWnR3lim3RXCi4FuZHi/y1GNXJs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OvygcKmQB9ThMInNaLbosDJFa+CczfdCLaOD+RbXXR+XrrIq2yelqwfQxoVWpZqFrKovuad1Qk0Usjr8nwNM2RsiFe8q5p7efj5axQkYsJs+zdCRA668UMBJBKX+N0L+mmL50GuOtQUcpY4mJj6jB+NJjy6xKR2+KsID3psQgow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V1hHEXKZ; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AzrE26Sz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752745631; x=1784281631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mBtBclCHGGf6QUs4GBjgavXvjySSzPF23qcnrqOWjMw=;
-  b=AzrE26SzdOp5HfNV3tFt1G/KUZ1iBHIOF96j3V/V+pFndSna6Qhs+Q6k
-   QIxEdil8VkiyqPtsV1aRQCeqENiiTBvDwtpfZ1T9wUhRmUQPUHCjp98QF
-   sKdDanPmDOPRiaP2FEdRU7pxhVe9q7+Bo31F3ZcJOq4M2M19x4Arx/o1E
-   LhXzbOWUHkPV3/gMacIUfe1z6gKN1xuaG9wBpEcG2utEuNYD0S/N1EmzL
-   b/vvT6GJxJWCo6aVI7bFrcZHPG8WN9pIrGaToDC3UGk5lAmsyMqiuiZwU
-   6qtLEGyCoMxq5hwpMLANB2PWybz6ii1cOutROYHVQyMA1JQYxcrrFmb1e
-   w==;
-X-CSE-ConnectionGUID: tY4oCZSbTK+nSPyiM/pw0w==
-X-CSE-MsgGUID: iRjs5c9MSwiPJh6XMCx/DA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="80461624"
-X-IronPort-AV: E=Sophos;i="6.16,318,1744095600"; 
-   d="scan'208";a="80461624"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2025 02:47:10 -0700
-X-CSE-ConnectionGUID: PUY9YsYZSJGoA77VTcqigw==
-X-CSE-MsgGUID: +ieSrN+TRDaPLfqdc38VfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,318,1744095600"; 
-   d="scan'208";a="158458484"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 17 Jul 2025 02:47:08 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ucLCk-000DUZ-0Y;
-	Thu, 17 Jul 2025 09:47:06 +0000
-Date: Thu, 17 Jul 2025 17:46:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 1/3] tools subcmd: Tighten the filename size in
- check_if_command_finished
-Message-ID: <202507171729.UkGLqJBw-lkp@intel.com>
-References: <20250716201512.792052-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1hHEXKZ"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-313336f8438so143422a91.0
+        for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 02:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752745881; x=1753350681; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yoOezcET8UmypwzwvlrLUte+8S0VuNqGvHQFe8FNIeo=;
+        b=V1hHEXKZxJSMLUZd2T2YBZehmWeW3NbVj/NjggrueBQKtq+Dr+c6MAEqf5BiUyrlvn
+         nvBPWuUWCMpd1V1wYJ4CHxjzF30wiA4qjKw/TfZ75SFAuKODUpo/oVGQY/hs8eNl77BU
+         XsEG5/zX0MBs7hEGMhAJRPWgTz8ljDHJh2Zhk+aPs/AO73XMLjuyMT0GYXdN99YMyDMN
+         7Up1EAUDIBDa0FpVZnW/ttPOYYkQ99aIv9orAmxZUZLgePTaYxP/ZPqAQTm12vZxPFOp
+         9xZ/hii0x3yvZT44flobtY4fP2BO6orj7LNTeRKVxng2TbawVq+zYi9DiNj899brFDHe
+         pX2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752745881; x=1753350681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yoOezcET8UmypwzwvlrLUte+8S0VuNqGvHQFe8FNIeo=;
+        b=cfiZCugnuKwytmOansihAHpmJoXKhsgLRib3SVAmPm8T6I6MQcNQZnp2aHLDBjm/WI
+         NDRcCUnOv6Afd6Owdi8ZHVI9R9Y++dPXrrl30OF9u34B2V7vHQo2XXB+LtKNOlLrYsYy
+         4yje5km66C9Cw7nxUSTGagGBreQhedMnw3I4DQZ0IrrcftLeIDS1bjjpEILxbTw19cqM
+         TUjNsE7TdBj7MsXAqNkLm/wD/erdQVaWvXhfBviLP+iv1qe2ec9gy2RMhpBhpWyLdRJj
+         8A4KQ0oAXOGUxLrq67EyU/SXgfDq0H/he1xNiSvF0SlMHYOeT5rIzMv9iVimL6hXvsN7
+         gN9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVAaT4EauFJ9HX7+kZD3qlFooq/ho7vzFyVM7D08vGX+NQ1REOjmCoB2EkAhfrMZeFZOM1u@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx4FVB+JNwCjFigkfKiCBIaZ8wEESuI5oIwYb3h9Qa79k5o0aN9
+	AJWVNfL/RISIrOGL/7yn/wGB+oBEFmtsySlTCJr1CIAflr9jYs6Uh6gf0q0sBzkPMD1/B/hRaz4
+	ck6RLyNLSFNLSm405DxOHOXjF9OJ59/8=
+X-Gm-Gg: ASbGncuzeifIH/UZd8adRi0F3azqZT6TD9+lRklgpqjNXvF6e0iUOaCwi1pZhFWN+tT
+	jy85sHyNW1tl9jnlp6Cy0qk8kDDdhMErkhDqW8cvqnkR/o3bLioPGxxqMZMaKfPbWtEw60KEh+/
+	GsoLHST8UxUcCURwbK+Sn/rOqEXRpDq5G4FIGpgwcA2lv1wwxm2E0RWoTQDAHwR/Vx8OzIZy6CR
+	7X93+26
+X-Google-Smtp-Source: AGHT+IHE3RFua6d6j8prMWudh7Xejt5xhZFdrWjbGlRuZ6pE6iadIeZ5MEbdWSZJS9fjWLKxIh9W/S1HkVJI8kJs+So=
+X-Received: by 2002:a17:90b:1cc3:b0:311:c5d9:2c8b with SMTP id
+ 98e67ed59e1d1-31c9e7767fbmr3584725a91.5.1752745881278; Thu, 17 Jul 2025
+ 02:51:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250716201512.792052-1-irogers@google.com>
+References: <20250717085300.work.146-kees@kernel.org>
+In-Reply-To: <20250717085300.work.146-kees@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 17 Jul 2025 11:51:09 +0200
+X-Gm-Features: Ac12FXwEMlRfz5cT5iny1Ggmin54LlImEScdSudxaMw40mhL-yA8t_7Hq-Yl4KY
+Message-ID: <CANiq72kPmb+7Ygk_Qvsiq+22EJVSPjjwn4whdLuTGCPwvTAssQ@mail.gmail.com>
+Subject: Re: [PATCH] Compiler Attributes: Add __kcfi_salt
+To: Kees Cook <kees@kernel.org>
+Cc: Bill Wendling <morbo@google.com>, Andrew Cooper <andrew.cooper3@citrix.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
+On Thu, Jul 17, 2025 at 10:53=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>
+> Add support for Clang's coming "kcfi_salt" attribute, which is designed
+> to allow for KCFI prototype hashes to be separated[1]. For example,
+> normally two "void func(void)" functions would have the same KCFI hash,
+> but if they wanted their indirect calls to be distinguishable by KCFI,
+> one could add __kcfi_salt("foo").
 
-kernel test robot noticed the following build errors:
+It would be nice to have a quick sentence inline summarizing how it
+will be used, e.g. what kind of functions will need to be annotated.
 
-[auto build test ERROR on perf-tools-next/perf-tools-next]
-[also build test ERROR on tip/perf/core perf-tools/perf-tools linus/master v6.16-rc6 next-20250716]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> To test the result, add a corresponding LKDTM test, CFI_FORWARD_SALT.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Rogers/perf-pmu-Switch-FILENAME_MAX-to-NAME_MAX/20250717-042514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/20250716201512.792052-1-irogers%40google.com
-patch subject: [PATCH v1 1/3] tools subcmd: Tighten the filename size in check_if_command_finished
-config: arm-randconfig-001-20250717 (https://download.01.org/0day-ci/archive/20250717/202507171729.UkGLqJBw-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250717/202507171729.UkGLqJBw-lkp@intel.com/reproduce)
+Sounds good.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507171729.UkGLqJBw-lkp@intel.com/
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#kcfi-salt
 
-All errors (new ones prefixed by >>):
+I guess this anchor will eventually work -- I see you asked about it at:
 
->> run-command.c:233:20: error: operator '?:' has lower precedence than '+'; '+' will be evaluated first [-Werror,-Wparentheses]
-     233 |         char filename[6 + MAX_STRLEN_TYPE(typeof(cmd->pid)) + 7 + 1];
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   run-command.c:228:76: note: expanded from macro 'MAX_STRLEN_TYPE'
-     228 | #define MAX_STRLEN_TYPE(type) (sizeof(type) * 8 / 3 + is_signed_type(type) ? 1 : 0)
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   run-command.c:233:20: note: place parentheses around the '+' expression to silence this warning
-     233 |         char filename[6 + MAX_STRLEN_TYPE(typeof(cmd->pid)) + 7 + 1];
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   run-command.c:228:76: note: expanded from macro 'MAX_STRLEN_TYPE'
-     228 | #define MAX_STRLEN_TYPE(type) (sizeof(type) * 8 / 3 + is_signed_type(type) ? 1 : 0)
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   run-command.c:233:20: note: place parentheses around the '?:' expression to evaluate it first
-     233 |         char filename[6 + MAX_STRLEN_TYPE(typeof(cmd->pid)) + 7 + 1];
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   run-command.c:228:76: note: expanded from macro 'MAX_STRLEN_TYPE'
-     228 | #define MAX_STRLEN_TYPE(type) (sizeof(type) * 8 / 3 + is_signed_type(type) ? 1 : 0)
-         |                                                       ~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   1 error generated.
-   make[6]: *** [tools/build/Makefile.build:85: tools/bpf/resolve_btfids/libsubcmd/run-command.o] Error 1 shuffle=467312727
-   make[6]: Target '__build' not remade because of errors.
-   make[5]: *** [Makefile:78: tools/bpf/resolve_btfids/libsubcmd/libsubcmd-in.o] Error 2 shuffle=467312727
-   make[5]: Target 'tools/bpf/resolve_btfids/libsubcmd/libsubcmd.a' not remade because of errors.
-   make[4]: *** [Makefile:56: tools/bpf/resolve_btfids//libsubcmd/libsubcmd.a] Error 2 shuffle=467312727
-   make[4]: Target 'all' not remade because of errors.
-   make[3]: *** [Makefile:76: bpf/resolve_btfids] Error 2 shuffle=467312727
-   make[2]: *** [Makefile:1443: tools/bpf/resolve_btfids] Error 2 shuffle=467312727
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=467312727
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=467312727
-   make: Target 'prepare' not remade because of errors.
+    https://github.com/llvm/llvm-project/pull/141846#discussion_r2209236363
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+From what I see, this still has to land in LLVM, right? So I guess
+there is still time to land this (and the discussion started years
+ago), but if you need to take it quickly as a base for some other work
+or similar:
+
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+
+Cheers,
+Miguel
