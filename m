@@ -1,106 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A7D2957C1;
-	Fri, 18 Jul 2025 09:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC0221F04;
+	Fri, 18 Jul 2025 09:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752830296; cv=none; b=ueIBKhxETet13/O0JaXx4rHoN6bhxSBHQeuE1fVw2qkgikiwlL7Zp3UQHUdjnHzgSaGDaXmWDBQ+N9p9EAEnDKE4/ikJS/sekO3Iybw2GnNJjnch8DEE5fvCCuId1nbxhv8mIja29JFJ4s1q+NkBDHLxjrLEeG2IZ72W+3AdZ3Y=
+	t=1752831292; cv=none; b=WrqIen+0JUWW/G5D5nhMU7T7oJTS7e3geudHFKGMD10gVhPQOIPG75UVpuP+heZnOC1KLCJSmPh2rAws+2VL7yDTri4jBnss+uO7aWqF02rJxANiSTjUnMhsRWZtE3P6zKwRIzoE3fKJm2oUE1B32LVhp7LA1Wn2TYiNILT/cjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752830296; c=relaxed/simple;
-	bh=iN0MjV8lG6vlPY6QKWEDWqXP3y58juMGr+peNv9I/+Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AYWM+8wuerHdH4uclnn1P1V5B4lZzQfsfVzWPL2PAAUp0bevycDJ0BfbUxPdhLOH2vsQY9xeX3tR5m4Fu9z+H+Lv+GF9K3uWkRaULer50Q9VxA97mpxISj78zZsqA1VxBaZJlx+hY5d9f9Z/2Lgbw+1REBz49VboqjwgiFtneMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=upUCLIdr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752831292; c=relaxed/simple;
+	bh=IRZ6eW/IHF7BaJPyLxlRyPGJhIBXJU4DVyfIU35NfdA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+1vVOIGQJQpTLomO2SPeZsZOf2nbhtJ6pOscphcr4dZEHG6oUDzvk4zW7yKhKi7q4VjAyVoUbOoz17VoG8L8CXMcoi1APqk+Gssv94miFT/YSldsyv9vJs4ay6QezuSjGnkRyjPCQ0BKJquYlZqQ7zI8NAjjY6q2ispCgi/odQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DE2Rp8tW; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="upUCLIdr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B561C4AF09;
-	Fri, 18 Jul 2025 09:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752830296;
-	bh=iN0MjV8lG6vlPY6QKWEDWqXP3y58juMGr+peNv9I/+Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=upUCLIdrbbvEbKjUsZgTdUEGyRbXXPVKgUMJXI8oVEu7IuCo+NlAr8pZ3hP/3OpCS
-	 z+m8WoLkMvYdx42mseDFgent82TIUAOPaXDuO0MHrSBPWaortApspXcggf+7lhNmY8
-	 tOaGg0j7eaXiZqMy8OhhL3BAvuI4qqptGCOW5qdmQyljlx4c3DuNukqLAdC4airAsq
-	 nJKi0Be3SrrR2xHh9RGmjhMqPl6sRDW75QEF/7Lu21+PwIinNh5ZPzzmyUHWJMe6cp
-	 dzghcLYsnfaa3tVtbk0VeArOxbSMW6EX7TzfWbBD0ifZlVbF7q2+xGG6ugEJd7zFXx
-	 5DD1NmgbOVSgg==
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-604bff84741so3389494a12.2;
-        Fri, 18 Jul 2025 02:18:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUwI0+lIpTeUBMxNq/s9ygREuzuCm9Dnb/Zk/oBcQg+uSCwhrgVMgyDXjBe6BGtE0nFWrLyTWg=@lists.linux.dev, AJvYcCVXPEofK98bTrYn2WCy8AEZ59kRzKJR2BBhk9wHwV+4PIye5XS1Kwz4dcbzELjW5JUsdsew4w==@lists.linux.dev
-X-Gm-Message-State: AOJu0YxeDrimJy+5RSWc1PQId0s073IXUKKBUhuTGd5NfjyTE4c3nI20
-	kGtUu68qffGh+EJOe8a2oKw3mfWAW5RAVsbJnnM1AfLWC0k84VsDyNtPHtHf/hLY08MKz8BDIpL
-	2VyaUW/2TYI54CNkTOx7LBjvySwuyolg=
-X-Google-Smtp-Source: AGHT+IH+CR6kK9khsoUi4kQxVa0vWTn3qqM4Z4G6WAw+0g0YyuRvDHP3ooIXGfMWBaXJUiPtMEtFUptkHeWtXN/zID4=
-X-Received: by 2002:a05:6402:26d5:b0:60c:6a48:8047 with SMTP id
- 4fb4d7f45d1cf-612d456bb15mr803449a12.11.1752830294637; Fri, 18 Jul 2025
- 02:18:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DE2Rp8tW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752831291; x=1784367291;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IRZ6eW/IHF7BaJPyLxlRyPGJhIBXJU4DVyfIU35NfdA=;
+  b=DE2Rp8tW5fQyi7w/6CIzDvxlBoFN60Csfa2OaXzCT2rOobWGKS1IkWmV
+   lmKAiRUJ9FH8gTwpWUiH0q1z+GfBKv+UEAUIj9lrbUxq+elBIbb/SV1wG
+   nTW9uK6CpgdAw9Sv2w7hR2clY9tSzYncTLiqkPlSh9Qtwb10DBssbN2Gq
+   h4szxrqbZu4+mhGB81LI6+UbCETrYwcXOV88LLVjDLDu8YNgxs109/v0e
+   M0Xfwf3hkeQ3wqOUU0geX5RlUgOKUI9hp5fPQVEFmDenEzERvoK3nm/6T
+   FxAqfBQKp1AJhGUs5MK7no1xTnaXhpBAGXRmYYVVWMelmQpypVrA4Ldql
+   g==;
+X-CSE-ConnectionGUID: V2cKRzZWRYW2CoIqs+oEdw==
+X-CSE-MsgGUID: kJkEA6B2RS2SzwvIUQsN2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11495"; a="42745802"
+X-IronPort-AV: E=Sophos;i="6.16,321,1744095600"; 
+   d="scan'208";a="42745802"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2025 02:34:51 -0700
+X-CSE-ConnectionGUID: 0Fen4lgZRp6H3IhGQ8OvOQ==
+X-CSE-MsgGUID: SFl6ENtfTHm7C6s1bpaAaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,321,1744095600"; 
+   d="scan'208";a="158096101"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 18 Jul 2025 02:34:46 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uchUJ-000EVf-34;
+	Fri, 18 Jul 2025 09:34:43 +0000
+Date: Fri, 18 Jul 2025 17:33:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Tomasz Figa <tfiga@chromium.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: Re: [PATCH 09/26] media: v4l2-dev: Add
+ video_device_context_from_file()
+Message-ID: <202507181702.W5iinHRF-lkp@intel.com>
+References: <20250717-multicontext-mainline-2025-v1-9-81ac18979c03@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250717231756.make.423-kees@kernel.org> <20250717232519.2984886-9-kees@kernel.org>
-In-Reply-To: <20250717232519.2984886-9-kees@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 18 Jul 2025 17:18:03 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4RyZQTak5AgYj6TaXHyEefgw+wmXs9Gi8jUJWrUV5HQw@mail.gmail.com>
-X-Gm-Features: Ac12FXyrA9A9-rpLV3MB79YH2kXhj6f2Fk9F6HAlk-0emUPTHthuyPP3lR9zQXg
-Message-ID: <CAAhV-H4RyZQTak5AgYj6TaXHyEefgw+wmXs9Gi8jUJWrUV5HQw@mail.gmail.com>
-Subject: Re: [PATCH v3 09/13] mips: Handle KCOV __init vs inline mismatch
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
-	Ingo Molnar <mingo@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250717-multicontext-mainline-2025-v1-9-81ac18979c03@ideasonboard.com>
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+Hi Jacopo,
 
-On Fri, Jul 18, 2025 at 7:26=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
->
-> When KCOV is enabled all functions get instrumented, unless
-> the __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we
-> have to handle differences in how GCC's inline optimizations get
-> resolved. For mips this requires adding the __init annotation on
-> init_mips_clocksource().
->
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: <linux-mips@vger.kernel.org>
-> ---
->  arch/mips/include/asm/time.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/mips/include/asm/time.h b/arch/mips/include/asm/time.h
-> index e855a3611d92..5e7193b759f3 100644
-> --- a/arch/mips/include/asm/time.h
-> +++ b/arch/mips/include/asm/time.h
-> @@ -55,7 +55,7 @@ static inline int mips_clockevent_init(void)
->   */
->  extern int init_r4k_clocksource(void);
->
-> -static inline int init_mips_clocksource(void)
-> +static inline __init int init_mips_clocksource(void)
->  {
->  #ifdef CONFIG_CSRC_R4K
->         return init_r4k_clocksource();
-> --
-> 2.34.1
->
->
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on d968e50b5c26642754492dea23cbd3592bde62d8]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacopo-Mondi/media-mc-Add-per-file-handle-data-support/20250717-190546
+base:   d968e50b5c26642754492dea23cbd3592bde62d8
+patch link:    https://lore.kernel.org/r/20250717-multicontext-mainline-2025-v1-9-81ac18979c03%40ideasonboard.com
+patch subject: [PATCH 09/26] media: v4l2-dev: Add video_device_context_from_file()
+config: x86_64-buildonly-randconfig-004-20250718 (https://download.01.org/0day-ci/archive/20250718/202507181702.W5iinHRF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507181702.W5iinHRF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507181702.W5iinHRF-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/v4l2-core/v4l2-dev.c:1184:1: warning: no previous prototype for function 'video_device_context_from_file' [-Wmissing-prototypes]
+    1184 | video_device_context_from_file(struct file *filp, struct video_device *vfd)
+         | ^
+   drivers/media/v4l2-core/v4l2-dev.c:1183:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1183 | struct video_device_context *
+         | ^
+         | static 
+   1 warning generated.
+
+
+vim +/video_device_context_from_file +1184 drivers/media/v4l2-core/v4l2-dev.c
+
+  1182	
+  1183	struct video_device_context *
+> 1184	video_device_context_from_file(struct file *filp, struct video_device *vfd)
+  1185	{
+  1186		struct v4l2_fh *vfh =
+  1187			test_bit(V4L2_FL_USES_V4L2_FH, &vfd->flags) ? filp->private_data
+  1188								    : NULL;
+  1189	
+  1190		/* If the file handle has been bound to a context return it. */
+  1191		if (vfh && vfh->context)
+  1192			return vfh->context;
+  1193	
+  1194		return vfd->default_context;
+  1195	}
+  1196	EXPORT_SYMBOL_GPL(video_device_context_from_file);
+  1197	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
