@@ -1,102 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6562B262815;
-	Thu, 17 Jul 2025 23:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34445182
+	for <llvm@lists.linux.dev>; Fri, 18 Jul 2025 00:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752794721; cv=none; b=PiJRkhooH1afwxsGdRJtuJVFE3DqlgG7AI9TroXDp/yph8CMNKuju6ggm8ARMrrayQicXusKR0cds2LuGaBPaBITdLuDFTqWZH0sIJalo/+GUEcEplXK7bH2m9hbkozArmO03lB0uGlln1UZ7V4DXjmxi4TzNgwtRrQ1X0KPpwY=
+	t=1752797163; cv=none; b=tZ0/k9Q//LutuiZG9Y653fjV8FOVYUOxfghj5s7Jkhc9f56DETQwkQ3rROhPDqx5XAvsBOgjIyYzq335gR5BNZfC7pKkO2ah5xGLfW6VyWBguzeQGnMkzcl6CNRNUkno1QwAgTpHCMwCbgstBvItSBljAnGVRcBUWSswAfYftSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752794721; c=relaxed/simple;
-	bh=hftQ+JwDBzI0zRNacsurrBG64kHnxlfHAL+GJc3UtlU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pcPO4mDGdAafO2KAr6atUTCti74qydyxJ6nmOzgaMho8DxAcr78PKStlTjaAzOCcU/cECwuP1PqMOjaEuOEGX1fIKApCyMu6XWlMFAoEqCRgOGxwpR/kSqaGUaLTL3PNgJDt9Qqmsy0ssHkUbnKAro2cp/9wWK7ZkAW5IxVeAO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FsqjdsQS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752797163; c=relaxed/simple;
+	bh=TBzkP/KQQjnS7jbvMr4DLdE8rWHu1UeP5pEVna2xZU8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GA4Euxhdy/bBAkh53aoM8BWwL3LWZWKGLJJtqzcNcY87Ka/0HOPTC7mmNgpoll3hOOlo3+ssqKMuCVT2Rhkq5UsUwOr4sggl2UcE6qslu9O6HP8At80P5FBuAPeZz3cGND1Om1KQ9ItsAvjIXMx6bnrgWGknyDjCCTnEQfvTmek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=FVS5QeXc; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FsqjdsQS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B589AC4DDE4;
-	Thu, 17 Jul 2025 23:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752794720;
-	bh=hftQ+JwDBzI0zRNacsurrBG64kHnxlfHAL+GJc3UtlU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FsqjdsQS75ijp4EewZkFNnZ7oGWM+bQuK2TZnkPG1i4tUtkePSQGvhT3cJzizICIP
-	 n7VsETLWXSDSuNlB4j5w4GFk77PgUesXjhwz6yMoT31mNWaWjswPyAxrArx7XoTrzv
-	 qwRQ4j9gCoTu0mZgFXm9mV43Qt0uBu3ieYyCdmQG53nX22891/8O+gwogWE5UBED26
-	 ScLxadVl8C+/OHTvTZH1MoVS2hlIEz8r+PE+d+h/fgLqGQh1uU2RoHTiTONCiUEx+a
-	 5pAsMwG5Sv8s6jqrUJ/cIcIw1BL4yue1cJRn64/wKIgKX5LH0prSsOZ29wNitGYIID
-	 IN144gC7uUisA==
-From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	Ingo Molnar <mingo@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3 12/13] configs/hardening: Enable CONFIG_KSTACK_ERASE
-Date: Thu, 17 Jul 2025 16:25:17 -0700
-Message-Id: <20250717232519.2984886-12-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250717231756.make.423-kees@kernel.org>
-References: <20250717231756.make.423-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="FVS5QeXc"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-73ce2761272so835435a34.0
+        for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 17:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1752797159; x=1753401959; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=St8SkLz4MOLrSJrXKd2dasjZ652XtdbuQ+qXkfyFhu8=;
+        b=FVS5QeXc3/PVIcCpi8pT/cSrNYHdgyoFuIRhk8ZqizW5D/5PgfEzC3rnwwvKgp47z4
+         KYlipEQtfgFLVixpR0ByyAsc9QuzSqWzK3khgd1lAY7TeB5DLpH09f35MsBxJnMDY3SL
+         FuUV5dg8P1dNlk5VzyT/sDupBCYJaoyO9DlzcKq/DB267eOSgdi1kfe3XVALQg9ozMi4
+         VGcFDx5QHTbQJ24alIaZNe2Jki8XLQ3bNfayVJME39OsOX547BdQZSu2uQeNTW/EOZic
+         ibqGGNTFMVKORLi7PISAIcBLlXiGQIf108m1dyUrAz0cZBA2FjpcvTJk8NrOomif/19E
+         0mdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752797159; x=1753401959;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=St8SkLz4MOLrSJrXKd2dasjZ652XtdbuQ+qXkfyFhu8=;
+        b=MAlXnyRsf6EwEGU1TOIkA8zK+xMhfEAMG6ooL2DFNdC6YUbNXxAYadh40vHRnCYsbA
+         SDVJNYiCaA1TmXf7PgCbMCFWCN3WD1Y0KTPzkrrv6b+vKZwdwIrY45u8+KWfYI5vO7QC
+         y9ihK8hxerVd4HicKC8NLZNCkVvYwFagmkS5tgMnNq0sv5FKhBOG/tmvLeoHF8u27L21
+         YhqvlMIveXa2dcze66B58LDACyBmidmIPQiu3wKQCWyQisGz+GZNsGZtR1SkL6tCuF3z
+         XQYnCjG9Hn7vA1+qUullwx0zq76pkZdlusHfsb4LIdqcjuWM32vNvwqcSNYWwSi2Tjmu
+         QISQ==
+X-Gm-Message-State: AOJu0YwCUJsRGlmUcB2SZZEfnGgSuE6sErO4hFtBiiY/6SOXuiX3FVPW
+	wwIpvZ3r+3rAzaMqLO7z/rQDSzmIIWnq208nMnGs4tYNW8OyTxEd4UJRCoZPBXQTDF4=
+X-Gm-Gg: ASbGnctz0fzt//rco1ZMkumCwnC3lRYCllkzpe58klgMdusi9+kz0nlBnATdB1dp/t2
+	q32Ej3JjxiuL2sEQ0B6d8xJKAVZKlp3k8Ste0Fo3oJjfOrguVC32URvJ0aNLllDgYxVtAUmgWve
+	Gr8gxFFHdiZasL83tFQOf0vZP1wFiqydKZs/w/hSR3HMcSKaBkQx8Y4eQANHuuRnNxEQE6nDmNY
+	Ia7rtAj0VsgZnQJ4e/i7fge1HVRCkz6LRhkEXWv78CE+6Kf0GAd1tICcQRkTpQ3eaRUrHwBlX56
+	wiaU6ZuMO/IFb5QTwfeiFjarXPhXaZVGv1+9G2WxkfR6Wr+CjZPrG7/PqXR6BvxZ9cXltFcZaVk
+	Atu8d0GGnl81mzW6j+sWCF1/uxVEuf5UbHXpIMsq3LyfRKepoJF+Erf8C4RzPihPfg/Dyy7pt
+X-Google-Smtp-Source: AGHT+IEpQzJxWBuzFSfKDSgMT+5zFzNHdoZQaPiHyVcWmSO42hOknfLdI3c/uUKRjPmpTo50HDkFfg==
+X-Received: by 2002:a05:6830:2a9e:b0:73a:8bf8:56b9 with SMTP id 46e09a7af769-73e649da15fmr6028856a34.1.1752797159125;
+        Thu, 17 Jul 2025 17:05:59 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:1d00:b499:5ccf:3f5:ecec? ([2600:8803:e7e4:1d00:b499:5ccf:3f5:ecec])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73e8354c93dsm200490a34.1.2025.07.17.17.05.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 17:05:58 -0700 (PDT)
+Message-ID: <1cc7453e-7151-4a29-a1d0-d265e5a3426a@baylibre.com>
+Date: Thu, 17 Jul 2025 19:05:57 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1038; i=kees@kernel.org; h=from:subject; bh=hftQ+JwDBzI0zRNacsurrBG64kHnxlfHAL+GJc3UtlU=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmVbbFBctklSlm/hUWtYmesmm/+4Mz/o2oveebseJx+3 f2N065JHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABPZrM/wT/+s9b/zj2UjKz2d 0opOWQdaqM192v1qrb5mpnFiz/LKFYwMM5YFnp723f9/aP7hJMnrxuH6yRfrcxYbWx+zavrULTm NDwA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linux-next:master 8663/10823] ld.lld: error: undefined symbol:
+ devm_spi_offload_rx_stream_request_dma_chan
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+References: <202507180620.bPnQTVKp-lkp@intel.com>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <202507180620.bPnQTVKp-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Since we can wipe the stack with both Clang and GCC plugins, enable this
-for the "hardening.config" for wider testing.
+On 7/17/25 5:53 PM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb
+> commit: 219da3ea842a156e5808176e11db256db9798f6c [8663/10823] iio: adc: ad_sigma_delta: add SPI offload support
+> config: x86_64-buildonly-randconfig-001-20250718 (https://download.01.org/0day-ci/archive/20250718/202507180620.bPnQTVKp-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507180620.bPnQTVKp-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507180620.bPnQTVKp-lkp@intel.com/
+> 
+> Note: the linux-next/master HEAD 024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb builds fine.
+>       It may have been fixed somewhere.
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: devm_spi_offload_rx_stream_request_dma_chan
+>    >>> referenced by usercopy_64.c
+>    >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
+> --
+>>> ld.lld: error: undefined symbol: devm_iio_dmaengine_buffer_setup_with_handle
+>    >>> referenced by usercopy_64.c
+>    >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
+> --
+>>> ld.lld: error: undefined symbol: devm_spi_offload_trigger_get
+>    >>> referenced by usercopy_64.c
+>    >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
+> --
+>>> ld.lld: error: undefined symbol: devm_spi_offload_get
+>    >>> referenced by usercopy_64.c
+>    >>>               vmlinux.o:(ad_sd_init)
+> --
+>>> ld.lld: error: undefined symbol: spi_offload_trigger_enable
+>    >>> referenced by usercopy_64.c
+>    >>>               vmlinux.o:(ad_sd_buffer_postenable)
+> --
+>>> ld.lld: error: undefined symbol: spi_offload_trigger_disable
+>    >>> referenced by usercopy_64.c
+>    >>>               vmlinux.o:(ad_sd_buffer_postdisable)
+> 
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: <linux-hardening@vger.kernel.org>
----
- kernel/configs/hardening.config | 3 +++
- 1 file changed, 3 insertions(+)
+Should be fixed by [1].
 
-diff --git a/kernel/configs/hardening.config b/kernel/configs/hardening.config
-index dd7c32fb5ac1..d24c2772d04d 100644
---- a/kernel/configs/hardening.config
-+++ b/kernel/configs/hardening.config
-@@ -63,6 +63,9 @@ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
- # Initialize all stack variables to zero on function entry.
- CONFIG_INIT_STACK_ALL_ZERO=y
- 
-+# Wipe kernel stack after syscall completion to reduce stale data lifetime.
-+CONFIG_KSTACK_ERASE=y
-+
- # Wipe RAM at reboot via EFI. For more details, see:
- # https://trustedcomputinggroup.org/resource/pc-client-work-group-platform-reset-attack-mitigation-specification/
- # https://bugzilla.redhat.com/show_bug.cgi?id=1532058
--- 
-2.34.1
+[1]: https://lore.kernel.org/linux-iio/20250714-iio-ad_sigma_delta-fix-kconfig-selects-v1-1-32e0d6da0423@kernel.org/
 
