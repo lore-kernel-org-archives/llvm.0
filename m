@@ -1,333 +1,234 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9A116DEB3;
-	Fri, 18 Jul 2025 19:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752867894; cv=none; b=E8lhMnaLX0L4kVKGFliOzsFTR9ZhfoAQkoXKj5i5GitLGI3Wf1VzUcsASGhMbsPFHt+Tcl2vm42ax+gs+IFmC1eUoLEjoj4p5FiNaVVti3HMZwkoZNv0shE0/HjESutTcHatrnykR0uGupigT8dnroPfjokoRDvJBxrFj9Ln/VU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752867894; c=relaxed/simple;
-	bh=y5r+/ExJI/M/+UHzf0hOc+6M7O+w/G7e1WfHp03IAsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hOijNKvwgdPk36+zDae+RFSjwbubG6fLm1ShayA/0qlF3DRZKUwhU2Yn6jeQ5l9r8dYJ0xG0bXZq10ovtEE7i5geZN9+QqE+oqU0hXockoilomSK36esHTeJN5KLZJTLyJcQd0mwTh43AtvTsqHtG/na7sIeDckhbqpYmx8N/KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QXms6k47; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DA479C0;
+	Fri, 18 Jul 2025 20:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.80
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752868851; cv=fail; b=VbxEqbGnBcZFoCTTSH2XVUT0BSSNXCmZ0qlEpnAL/SMOvnxB4g9gTM+dQCMPaJQO0LzWoI1lFlV1V/n0aoq4jWVyHovXIIv30x0gE12l/zEYwhkrEXt7ahG1hQLyabX6cIipMX6U3o7JC8efo6K/zgF2w4llT4xPp8krhLF2Ud4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752868851; c=relaxed/simple;
+	bh=myIwKQ03cfJ3xCGHdJQEYMnut4jJvHfbfmfdjpXEqzs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=huz7vQY0jOqDytUctbJaxTMZ65E9JwSeUpf/QR0lmP+/tIz6XUNWArLRVxx48mo0zuapm8mzPp9adNjiZxgpPy0XJ2blNx+Q2t78cvvOmLm+tTFuE62TsIDB4mDSmE7EIiNJQbC13/lt0FyF1gDUHjEyTv119AvwlidugnXvpgk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=n8XTjR2A; arc=fail smtp.client-ip=40.107.237.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QXms6k47"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752867892; x=1784403892;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=y5r+/ExJI/M/+UHzf0hOc+6M7O+w/G7e1WfHp03IAsc=;
-  b=QXms6k47RinDschJ2lJvDG15uT7aVmp/59StUNIQxQyvS5QBFxZpKDgO
-   hphRv7uV6Zo7tyE+hNsxyu8jtayThdVC/mAFWTJKa/yumin+7+ktyt+D+
-   d+kGXkkoz060vA60ZmDpbV73ZPxZKtkCfDQQiGZfC5C+b7oNDnLof08CO
-   znpEP+DIjpo86x7Iik8Xfip2pyPTZYjKYyipB4FyUOuMOA0H4gx8nC7AN
-   M30ZT1e8HG5G4Tc1/gX++X3BP9FGENvMpyyBJ4Z/Mnz5cZ6jlGw4mkij6
-   rKBcnHso8R336EtIQ4COX5nr7413wtqkOjC7uiITH74DfTM9kyt6GNP5o
-   Q==;
-X-CSE-ConnectionGUID: ksIdjqJoSFizcVDaVT6Z0g==
-X-CSE-MsgGUID: Jf9J89/IQdmXcdQgpNWn0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11496"; a="55256178"
-X-IronPort-AV: E=Sophos;i="6.16,322,1744095600"; 
-   d="scan'208";a="55256178"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2025 12:44:51 -0700
-X-CSE-ConnectionGUID: 7fmSRsjYRJmplAeBMwuu7w==
-X-CSE-MsgGUID: J1fPHincSRKqLumeZCjllg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,322,1744095600"; 
-   d="scan'208";a="157508409"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 18 Jul 2025 12:44:49 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ucr0g-000Eyx-0L;
-	Fri, 18 Jul 2025 19:44:46 +0000
-Date: Sat, 19 Jul 2025 03:44:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sung-Chi Li via B4 Relay <devnull+lschyi.chromium.org@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v6 1/2] hwmon: (cros_ec) add PWM control over fans
-Message-ID: <202507190311.AMjh38Rm-lkp@intel.com>
-References: <20250718-cros_ec_fan-v6-1-8df018396b56@chromium.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="n8XTjR2A"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DpQz8UdCAMEneFhGc4m/IuWT+RR0/smYrXlpzho966+DKKiDOmFHaOr6DW8i11vTU1LEAUPgsBD4YtCmue/fEXM/0uQbUKXSORPmqqdshFkEmSRjHCHZOePntV93ZD1bd1ISQqOSPNsIbfyXte7/PxKO4eRqdPAgybCtftNSX66RYcYa5P2b0zFmJvW/htlqrO3e1Dl/MtwZ+IpOIkJgI1yP5u7AjlR61yGA6TD5sD6bbY4/WdAp9kPvGDf4vWDYicsDa9+x3SipY8FHLcTR6PSiZMovgkR2XoEgo3FSjk1XfBPd3lhosT/8G/dnfcFQHRJMl+BasH2T2+3EMm57NA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0bZTql4wfPNZ0COTbEumhewspO5zrRL/n5v49ZvsMKo=;
+ b=h18Mvq+RI/GY4aiCWctpZbVgQUPDl8lfww70HvulXlDDwSPO2srFoorcBGJQdvu+vDiRmYOBrlOCTNZmUl1hEux9+eKVZfLLu7iEcV4MLsACYq2NxDUV/q+DDEcxpHQ8XJ4j9mIluiA7Y0UjjJ5vHUnnfEb7hRFACRIhc5m2H53OnfNh8kq6GKWgAOVusDbed+qA4UpGezwLDv5UEFWGbs8JyxdT3TG7So0fvq45tKCriIkf7btlrqKpjtqBZwmmOUbqr2u8ChnoIm5CMUt9IJH8B2xRmxqBt0AdVjQhUJLpFo1oqsLEc8HwPvqqr1wMsMIhH4BCHWCl1ye6mw10fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0bZTql4wfPNZ0COTbEumhewspO5zrRL/n5v49ZvsMKo=;
+ b=n8XTjR2Azz1VLA69mRyQZ4gzrvIpi6uWYQtmNZCloLg4/geYLDw/SxmFkJf5lsm7KFNoF32vd/TMOT2RWsqFrZMZyx/tKbqs4ZDS5kDfYP5gswe0VtZIzZPYvhB3i+6kDQZcBHM3CJB44v0m5fFFFRQnwG+QAO7JG7+6VtnjuE4EmMbI3L41XEstAtA+mrFhwApthvw/uarjWqdvyn8/8aJseLYhPOnDExx0K/9wkmzZFrNyhgxK6eXeAal1GU3DIJHTAl6J0EbopP7NKQX1n/9SwAy4dnp2D1S9zCmBmrKLCepSG9GjY/79uzdICJwUBaRo+fvpfpLayVPM7iKStQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by CY8PR12MB7730.namprd12.prod.outlook.com (2603:10b6:930:85::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.25; Fri, 18 Jul
+ 2025 20:00:46 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8901.033; Fri, 18 Jul 2025
+ 20:00:46 +0000
+Date: Fri, 18 Jul 2025 17:00:45 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>
+Subject: Re: [PATCH v3 6/6] IB/mlx5: Use __iowrite64_copy() for write
+ combining stores
+Message-ID: <20250718200045.GG2250220@nvidia.com>
+References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+ <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+ <20250714215504.GA2083014@nvidia.com>
+ <aHYqPRqgcl5DQOpq@willie-the-truck>
+ <20250715115200.GJ2067380@nvidia.com>
+ <aHqN_hpJl84T1Usi@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aHqN_hpJl84T1Usi@arm.com>
+X-ClientProxiedBy: BLAP220CA0022.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:208:32c::27) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250718-cros_ec_fan-v6-1-8df018396b56@chromium.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CY8PR12MB7730:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53455fcf-c423-4607-3f02-08ddc635c8ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sMgZHTdE6/tD1/sk4mfa3eIBiLFUarXwf/R00eW8I7iTNM5k3eVlKStL/hYw?=
+ =?us-ascii?Q?C7b3V5OmZZeV2rXsmgkpModk+HDOe38Wa5BD3MPOPDPNzTCippARw3+30Y2Z?=
+ =?us-ascii?Q?H7wPS1asf9RCyosidKwD1VYlxBs16wwX4b16LYQgag9VCZ/aSZOkz2Kt5PKh?=
+ =?us-ascii?Q?fvJzeaemH8a2PhcZ5izTZArzHB6k1jesopWGDEwCMlEpRwYFAKV45ctFIKIf?=
+ =?us-ascii?Q?jbAe+xVZ5myqVdYo5/5WI9muPZTy7J/1R1AROMh1cRVt9hsZgm4GGcc77IP/?=
+ =?us-ascii?Q?YV/c+BK3ipBdeABQfnCM0MzfPlfPnpji/73IkwjC9XMvd2UFVhusUu0GuLE/?=
+ =?us-ascii?Q?f81cj8Ulz2u+x8oC0OoFVNQvBXxozoYjyC6JFcnEK/OZ6SKastipRUwawXJd?=
+ =?us-ascii?Q?FSt4EDPJioFPcWJuYCneaf2s0ox2LsG46X2LTIma3kSVf7jbF7Xxbp65pLVO?=
+ =?us-ascii?Q?lI64q+AJYPbyyp1VUspUV+VRkuLy96jZSuj7UMcF2EBdfQqjQcX2fbzQJc/D?=
+ =?us-ascii?Q?oEebCUNrgPkQm9BJicfs0+1bEQ2lhVd578jKBncLYdleIadt1h4qJhuVJiDg?=
+ =?us-ascii?Q?7QUMWRpTpDI6XV95WBEOBTRR4Qnmeb8bir+yGziWUVX0fwNoPr8qEczAvqIC?=
+ =?us-ascii?Q?aa59ZrT3OPCP3XgzI7dxMrpkb294wgNtdDPFwz2RGcA5U1SKfHKgOuYObhi5?=
+ =?us-ascii?Q?5GJiCO9CM3Akh6UNYt6LSX8+m+wY3TnkMqb4fjoRdlUd0VL3b3gst/Tn7Yrv?=
+ =?us-ascii?Q?gfR4GPOEGr+OnB9SKyESK3FqInSTbXinOOcVnTPrx4meUcuFPwVicQI+cfPX?=
+ =?us-ascii?Q?MHBvaZQR3EjG1qEDz31XA4L4xDcHOAlEhJDHgHJW9lMKR3Wxkr82ZGJrgsqk?=
+ =?us-ascii?Q?P8MRkWwZytzW98QEI4OzYCiW331JpGb6V8lxnD6V2fVi6SikwvPBMmrnuOQy?=
+ =?us-ascii?Q?oAPJX2EaDdhJ3RTgiVYp9PVlewT8DOZXfGkBg/8y03EPD6MibBuhb4ByvSqb?=
+ =?us-ascii?Q?tVq7TTqfvSx9sCGKWm6FdAf4ZwXmUYw3WjWC+UIq9HDZfzYnIyD5XyrQuoCH?=
+ =?us-ascii?Q?aPz07L6BOrv081J93JIu+3xb8kQH5qewUMlLVED3sts/POsRcXbil4vIxipi?=
+ =?us-ascii?Q?4GHUOYp21Nr1O9sS7/SRnbW4ryZHZTFJf/qe2AalLnJ1jl9pDpm+L2CQe26Z?=
+ =?us-ascii?Q?qDvdi5V1NfLA1eTfH9Pz9aQLWTV67gjQe5Ms2zwrlqR34LbtnQnbZUnQD8jW?=
+ =?us-ascii?Q?h0W7lQF1xpiDl/3hvK6EYqR+he1tE/3uaJD7KBx7GLwhc7+wJEnK2FsuWvnt?=
+ =?us-ascii?Q?z1+5sDztgyaSKPg/aC75lbRDzz4LSwvmZpEn9SvjDRlwNrwC+0OoZt6stYK/?=
+ =?us-ascii?Q?bYvWDX1PejDy7NzQS94ASyRuOy8w9s6SCG5vZTUxTSX9gD7/RPzgqyKhgdro?=
+ =?us-ascii?Q?3XWJzg0if7E=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?MtjleNSmdfXWmHbJGo870zYjw8oTgXRqOYaYjZMicSEDBsHAx0foq2c08qN4?=
+ =?us-ascii?Q?Op42FRVWxizlfrqyATQ7N60MyiSlaVOko8AGAV1ohOC/Qi1kijtDHuycbIVR?=
+ =?us-ascii?Q?eaYV4Ju5GLrHB5Fjr17WpqNE8+RvzMaMj5jmEzRjvjWRgdxarZwAD4KAKSE3?=
+ =?us-ascii?Q?254aTCvgQR8yknYXW41N5Asf0DZvWeF1jLJZqdiygYseVanqSeq6uRF+S/J0?=
+ =?us-ascii?Q?7XAQdhehPNFnGVoKlU0lu1JfKom4h8Y2WfPLux6kFp3UuJMRbc8/+Ld8lEBY?=
+ =?us-ascii?Q?rYMYKhRiFOtWQM5MeLxXZ2af+IzGaTH53QhRGqF7qrf9lSV0D55jmnTQQo30?=
+ =?us-ascii?Q?q6xacCtafuX4awstrJdbeKu6GzSyICHzO95yBDiCEvjUFRFwWv/wLLC9lJln?=
+ =?us-ascii?Q?uimHAUmL1k2QXkV1ZyvrGDgljv0NLZp1broQfVc3msexQG4ILO2P36OE3I3f?=
+ =?us-ascii?Q?8TRtjrQB9L3IvI7goBVEXqtRUUa0OMYyZ3ID88ijMtLiRhjqwXuhovZW2Ggm?=
+ =?us-ascii?Q?0ar9XIs0fJZAX54g29+whvbp0b1ZLeqG+v33lvm3RCTx59qACB0iV4FwpsUb?=
+ =?us-ascii?Q?0u8qmVkB3je5b4rKP68XlUZTDvY5j2D1ap/f0DKALmO6FyA5eVn3EWBzTCBj?=
+ =?us-ascii?Q?0hGKruNTwg0d0uWUUUZHxJdZwFxI7Fv3UUCPzuxhoOYSqe3lbXB0LNc84LRs?=
+ =?us-ascii?Q?nQ4ZnkzPnksfyXWsQPXIf+I4HXu/3IaPPn4dDx5/AytYohG7mvY5w93KOT+V?=
+ =?us-ascii?Q?vd2rxoI21ThwrPPAZX6LSAz+AsTw8P6tmSx0QgbIHMRDtvOaowEpZ3vuA3LG?=
+ =?us-ascii?Q?02YR1E76gM3wD3ph0jPpLwNXGQQOJpcK4oehuisMxdiyOEucXcn7MSb9EKYl?=
+ =?us-ascii?Q?6A2yHe3qPdEXwQc73JVY1fuESdDgh2Gah7C/svS4Q20Y41dZUvulm/PDajeG?=
+ =?us-ascii?Q?MGfusFSR4yOnxfYGbHVdUHDVC0SEcw0ra3mrsfynXs/oQdqcibqJD6h6HJQ9?=
+ =?us-ascii?Q?Cx03ynde4R2yosyUhc7zpXHpytBPdXtwNthbC5MzsoCo0ES09d9h9i6yy1mo?=
+ =?us-ascii?Q?H+DQ+3WOD8GSkCoKgPZPXQrBRSj/Ezd82rGASrU5R54/aaVvt4S83/V5SVbI?=
+ =?us-ascii?Q?odrlnPPJ9PaYKmwfZ7AEWnnqR85wdsqIf7yYLSF80YZoanBuF7ONqGZNtYSl?=
+ =?us-ascii?Q?6xSGQ+5O5rc5bexVrhHf+ncOcfkBMKuD5FgjjJ9wL5vH76V731LsLzRlyyMh?=
+ =?us-ascii?Q?2hRPmqcyOxQOjdkJn8GF4DOHAWv4q/c9bEEPBQ67sRF1MQs9e+wejHC7bi89?=
+ =?us-ascii?Q?jAj0svMhsuqHL6Pxvolh2IoaRnAAvRUjyaMJEjEjrvlC+OlK8aGHLzqrTTyF?=
+ =?us-ascii?Q?c1Vv77+X4izFQ7P5d0+EyBFKPgu8AINIEEd0d1o49TV38ir3gP4fYk8B4qOj?=
+ =?us-ascii?Q?SmDG1C42AFGbGkSukaGnxzgzVsWiW8FVa8yBNp0Uwx7QJ9XxmKnhl2LDCqVK?=
+ =?us-ascii?Q?hQ+Y/WQKbdlrlAFScybA3Jjd49USIGNTmgboLikPQv4kBobKarv7bv0KBVdV?=
+ =?us-ascii?Q?RZp1J0uj7r4cR6+v4pI2RNlg3D2z7DGGWzNBApcL?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53455fcf-c423-4607-3f02-08ddc635c8ef
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2025 20:00:46.5486
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3fGd03t2gPEmy+QL288EyYpcaCwf2p8ecBkgra5c9vPyr8tRT8mbevBnoYXAkt2T
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7730
 
-Hi Sung-Chi,
+On Fri, Jul 18, 2025 at 07:10:06PM +0100, Catalin Marinas wrote:
+> On Tue, Jul 15, 2025 at 08:52:00AM -0300, Jason Gunthorpe wrote:
+> > On Tue, Jul 15, 2025 at 11:15:25AM +0100, Will Deacon wrote:
+> > > > Since STP was rejected alread we've only tested the Neon version. It
+> > > > does make a huge improvement, but it still somehow fails to combine
+> > > > rarely sometimes. The CPU is really bad at this :(
+> > > 
+> > > I think the thread was from last year so I've forgotten most of the
+> > > details, but wasn't STP rejected because it wasn't virtualisable? 
+> > 
+> > Yes, that was the claim.
+> > 
+> > > In which case, doesn't NEON suffer from exactly the same (or possibly
+> > > worse) problem?
+> > 
+> > In general yes, in specific no.
+> 
+> For a generic iowrite function, I wouldn't use STP or Neon since it may
+> end up being used on emulated MMIO.
 
-kernel test robot noticed the following build errors:
+Yes, my feeling too
+ 
+> BTW, for Neon, don't you need kernel_neon_begin/end()? This may have its
+> own overhead and also BUG_ON for different contexts. Again, not suitable
+> for a generic function.
 
-[auto build test ERROR on 024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb]
+Yes, exactly right.
+ 
+> I can't think of any generic solution here, it may have to be a hack
+> specific to mlx5. We can also add add support for ST64B and have some
+> condition on system_supports_st64b() for future systems.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sung-Chi-Li-via-B4-Relay/hwmon-cros_ec-add-PWM-control-over-fans/20250718-151054
-base:   024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb
-patch link:    https://lore.kernel.org/r/20250718-cros_ec_fan-v6-1-8df018396b56%40chromium.org
-patch subject: [PATCH v6 1/2] hwmon: (cros_ec) add PWM control over fans
-config: i386-buildonly-randconfig-006-20250719 (https://download.01.org/0day-ci/archive/20250719/202507190311.AMjh38Rm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507190311.AMjh38Rm-lkp@intel.com/reproduce)
+Ok, we will send the hack
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507190311.AMjh38Rm-lkp@intel.com/
+> We can also add add support for ST64B and have some
+> condition on system_supports_st64b() for future systems.
 
-All errors (new ones prefixed by >>):
+I have asked someone to work on the ST64B version so we can talk about
+that then..
 
->> drivers/hwmon/cros_ec_hwmon.c:49:36: error: variable has incomplete type 'struct ec_params_pwm_get_fan_duty'
-      49 |         struct ec_params_pwm_get_fan_duty req = {
-         |                                           ^
-   drivers/hwmon/cros_ec_hwmon.c:49:9: note: forward declaration of 'struct ec_params_pwm_get_fan_duty'
-      49 |         struct ec_params_pwm_get_fan_duty req = {
-         |                ^
->> drivers/hwmon/cros_ec_hwmon.c:52:38: error: variable has incomplete type 'struct ec_response_pwm_get_fan_duty'
-      52 |         struct ec_response_pwm_get_fan_duty resp;
-         |                                             ^
-   drivers/hwmon/cros_ec_hwmon.c:52:9: note: forward declaration of 'struct ec_response_pwm_get_fan_duty'
-      52 |         struct ec_response_pwm_get_fan_duty resp;
-         |                ^
->> drivers/hwmon/cros_ec_hwmon.c:56:6: error: use of undeclared identifier 'EC_CMD_PWM_GET_FAN_DUTY'
-      56 |                           EC_CMD_PWM_GET_FAN_DUTY, &req, sizeof(req), &resp, sizeof(resp));
-         |                           ^
->> drivers/hwmon/cros_ec_hwmon.c:68:10: error: use of undeclared identifier 'EC_AUTO_FAN_CONTROL_CMD_GET'; did you mean 'EC_CHARGE_CONTROL_CMD_GET'?
-      68 |                 .cmd = EC_AUTO_FAN_CONTROL_CMD_GET,
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                        EC_CHARGE_CONTROL_CMD_GET
-   include/linux/platform_data/cros_ec_commands.h:3919:2: note: 'EC_CHARGE_CONTROL_CMD_GET' declared here
-    3919 |         EC_CHARGE_CONTROL_CMD_GET,
-         |         ^
->> drivers/hwmon/cros_ec_hwmon.c:67:36: error: variable has incomplete type 'struct ec_params_auto_fan_ctrl_v2'
-      67 |         struct ec_params_auto_fan_ctrl_v2 req = {
-         |                                           ^
-   drivers/hwmon/cros_ec_hwmon.c:67:9: note: forward declaration of 'struct ec_params_auto_fan_ctrl_v2'
-      67 |         struct ec_params_auto_fan_ctrl_v2 req = {
-         |                ^
->> drivers/hwmon/cros_ec_hwmon.c:71:38: error: variable has incomplete type 'struct ec_response_auto_fan_control'
-      71 |         struct ec_response_auto_fan_control resp;
-         |                                             ^
-   drivers/hwmon/cros_ec_hwmon.c:71:9: note: forward declaration of 'struct ec_response_auto_fan_control'
-      71 |         struct ec_response_auto_fan_control resp;
-         |                ^
->> drivers/hwmon/cros_ec_hwmon.c:217:10: error: use of undeclared identifier 'EC_AUTO_FAN_CONTROL_CMD_SET'; did you mean 'EC_CHARGE_CONTROL_CMD_SET'?
-     217 |                 .cmd = EC_AUTO_FAN_CONTROL_CMD_SET,
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                        EC_CHARGE_CONTROL_CMD_SET
-   include/linux/platform_data/cros_ec_commands.h:3918:2: note: 'EC_CHARGE_CONTROL_CMD_SET' declared here
-    3918 |         EC_CHARGE_CONTROL_CMD_SET = 0,
-         |         ^
-   drivers/hwmon/cros_ec_hwmon.c:215:36: error: variable has incomplete type 'struct ec_params_auto_fan_ctrl_v2'
-     215 |         struct ec_params_auto_fan_ctrl_v2 req = {
-         |                                           ^
-   drivers/hwmon/cros_ec_hwmon.c:215:9: note: forward declaration of 'struct ec_params_auto_fan_ctrl_v2'
-     215 |         struct ec_params_auto_fan_ctrl_v2 req = {
-         |                ^
-   drivers/hwmon/cros_ec_hwmon.c:381:43: error: use of undeclared identifier 'EC_CMD_PWM_GET_FAN_DUTY'
-     381 |         return is_cros_ec_cmd_available(cros_ec, EC_CMD_PWM_GET_FAN_DUTY,
-         |                                                  ^
-   9 errors generated.
+> Even if we could handle virtualisation, I wonder whether
+> __iowrite64_copy() is the right function to implement 128-bit stores or
+> the larger 64-byte atomic stores. At least the comment for the generic
+> function suggests that it writes in 64-bit quantities. Some MMIO may
+> only handle such writes. A function like memcpy_toio() is more generic,
+> it doesn't imply any restrictions on the size of the writes (though I
+> think it guarantees natural alignment for the stores).
 
+IMHO the '64' here refers to the alignment and multiple, not
+necessarily the transfer granule size. This could be clarified in the
+kdocs. Also, IIRC, there were few users and they were all doing WC
+stores which give large TLPs on the PCIe - meaning there is no size
+restriction issue.
 
-vim +49 drivers/hwmon/cros_ec_hwmon.c
+Last time around we didn't use memcpy_toio() because it has not
+requirement on alignment, requiring more checks and things which
+didn't see desirable. To use ST64B under iowrite64 we only have to
+check if the destination is 64 byte aligned.
 
-    46	
-    47	static int cros_ec_hwmon_read_pwm_value(struct cros_ec_device *cros_ec, u8 index, u8 *pwm_value)
-    48	{
-  > 49		struct ec_params_pwm_get_fan_duty req = {
-    50			.fan_idx = index,
-    51		};
-  > 52		struct ec_response_pwm_get_fan_duty resp;
-    53		int ret;
-    54	
-    55		ret = cros_ec_cmd(cros_ec, CROS_EC_HWMON_PWM_GET_FAN_DUTY_CMD_VERSION,
-  > 56				  EC_CMD_PWM_GET_FAN_DUTY, &req, sizeof(req), &resp, sizeof(resp));
-    57		if (ret < 0)
-    58			return ret;
-    59	
-    60		*pwm_value = (u8)DIV_ROUND_CLOSEST(le32_to_cpu(resp.percent) * 255, 100);
-    61		return 0;
-    62	}
-    63	
-    64	static int cros_ec_hwmon_read_pwm_enable(struct cros_ec_device *cros_ec, u8 index,
-    65						 u8 *control_method)
-    66	{
-  > 67		struct ec_params_auto_fan_ctrl_v2 req = {
-  > 68			.cmd = EC_AUTO_FAN_CONTROL_CMD_GET,
-    69			.fan_idx = index,
-    70		};
-  > 71		struct ec_response_auto_fan_control resp;
-    72		int ret;
-    73	
-    74		ret = cros_ec_cmd(cros_ec, CROS_EC_HWMON_THERMAL_AUTO_FAN_CTRL_CMD_VERSION,
-    75				  EC_CMD_THERMAL_AUTO_FAN_CTRL, &req, sizeof(req), &resp, sizeof(resp));
-    76		if (ret < 0)
-    77			return ret;
-    78	
-    79		*control_method = resp.is_auto ? 2 : 1;
-    80		return 0;
-    81	}
-    82	
-    83	static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
-    84	{
-    85		unsigned int offset;
-    86		int ret;
-    87	
-    88		if (index < EC_TEMP_SENSOR_ENTRIES)
-    89			offset = EC_MEMMAP_TEMP_SENSOR + index;
-    90		else
-    91			offset = EC_MEMMAP_TEMP_SENSOR_B + index - EC_TEMP_SENSOR_ENTRIES;
-    92	
-    93		ret = cros_ec_cmd_readmem(cros_ec, offset, 1, temp);
-    94		if (ret < 0)
-    95			return ret;
-    96		return 0;
-    97	}
-    98	
-    99	static bool cros_ec_hwmon_is_error_fan(u16 speed)
-   100	{
-   101		return speed == EC_FAN_SPEED_NOT_PRESENT || speed == EC_FAN_SPEED_STALLED;
-   102	}
-   103	
-   104	static bool cros_ec_hwmon_is_error_temp(u8 temp)
-   105	{
-   106		return temp == EC_TEMP_SENSOR_NOT_PRESENT     ||
-   107		       temp == EC_TEMP_SENSOR_ERROR           ||
-   108		       temp == EC_TEMP_SENSOR_NOT_POWERED     ||
-   109		       temp == EC_TEMP_SENSOR_NOT_CALIBRATED;
-   110	}
-   111	
-   112	static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
-   113	{
-   114		return kelvin_to_millicelsius((((long)temp) + EC_TEMP_SENSOR_OFFSET));
-   115	}
-   116	
-   117	static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-   118				      u32 attr, int channel, long *val)
-   119	{
-   120		struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-   121		int ret = -EOPNOTSUPP;
-   122		u8 control_method;
-   123		u8 pwm_value;
-   124		u16 speed;
-   125		u8 temp;
-   126	
-   127		if (type == hwmon_fan) {
-   128			if (attr == hwmon_fan_input) {
-   129				ret = cros_ec_hwmon_read_fan_speed(priv->cros_ec, channel, &speed);
-   130				if (ret == 0) {
-   131					if (cros_ec_hwmon_is_error_fan(speed))
-   132						ret = -ENODATA;
-   133					else
-   134						*val = speed;
-   135				}
-   136			} else if (attr == hwmon_fan_fault) {
-   137				ret = cros_ec_hwmon_read_fan_speed(priv->cros_ec, channel, &speed);
-   138				if (ret == 0)
-   139					*val = cros_ec_hwmon_is_error_fan(speed);
-   140			}
-   141		} else if (type == hwmon_pwm) {
-   142			if (attr == hwmon_pwm_enable) {
-   143				ret = cros_ec_hwmon_read_pwm_enable(priv->cros_ec, channel,
-   144								    &control_method);
-   145				if (ret == 0)
-   146					*val = control_method;
-   147			} else if (attr == hwmon_pwm_input) {
-   148				ret = cros_ec_hwmon_read_pwm_value(priv->cros_ec, channel, &pwm_value);
-   149				if (ret == 0)
-   150					*val = pwm_value;
-   151			}
-   152		} else if (type == hwmon_temp) {
-   153			if (attr == hwmon_temp_input) {
-   154				ret = cros_ec_hwmon_read_temp(priv->cros_ec, channel, &temp);
-   155				if (ret == 0) {
-   156					if (cros_ec_hwmon_is_error_temp(temp))
-   157						ret = -ENODATA;
-   158					else
-   159						*val = cros_ec_hwmon_temp_to_millicelsius(temp);
-   160				}
-   161			} else if (attr == hwmon_temp_fault) {
-   162				ret = cros_ec_hwmon_read_temp(priv->cros_ec, channel, &temp);
-   163				if (ret == 0)
-   164					*val = cros_ec_hwmon_is_error_temp(temp);
-   165			}
-   166		}
-   167	
-   168		return ret;
-   169	}
-   170	
-   171	static int cros_ec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-   172					     u32 attr, int channel, const char **str)
-   173	{
-   174		struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-   175	
-   176		if (type == hwmon_temp && attr == hwmon_temp_label) {
-   177			*str = priv->temp_sensor_names[channel];
-   178			return 0;
-   179		}
-   180	
-   181		return -EOPNOTSUPP;
-   182	}
-   183	
-   184	static int cros_ec_hwmon_set_fan_pwm_val(struct cros_ec_device *cros_ec, u8 index, u8 val)
-   185	{
-   186		struct ec_params_pwm_set_fan_duty_v1 req = {
-   187			.fan_idx = index,
-   188			.percent = DIV_ROUND_CLOSEST((uint32_t)val * 100, 255),
-   189		};
-   190		int ret;
-   191	
-   192		ret = cros_ec_cmd(cros_ec, CROS_EC_HWMON_PWM_SET_FAN_DUTY_CMD_VERSION,
-   193				  EC_CMD_PWM_SET_FAN_DUTY, &req, sizeof(req), NULL, 0);
-   194		if (ret < 0)
-   195			return ret;
-   196		return 0;
-   197	}
-   198	
-   199	static int cros_ec_hwmon_write_pwm_input(struct cros_ec_device *cros_ec, u8 index, u8 val)
-   200	{
-   201		u8 control_method;
-   202		int ret;
-   203	
-   204		ret = cros_ec_hwmon_read_pwm_enable(cros_ec, index, &control_method);
-   205		if (ret)
-   206			return ret;
-   207		if (control_method != 1)
-   208			return -EOPNOTSUPP;
-   209	
-   210		return cros_ec_hwmon_set_fan_pwm_val(cros_ec, index, val);
-   211	}
-   212	
-   213	static int cros_ec_hwmon_write_pwm_enable(struct cros_ec_device *cros_ec, u8 index, u8 val)
-   214	{
-   215		struct ec_params_auto_fan_ctrl_v2 req = {
-   216			.fan_idx = index,
- > 217			.cmd = EC_AUTO_FAN_CONTROL_CMD_SET,
-   218		};
-   219		int ret;
-   220	
-   221		/* No CrOS EC supports no fan speed control */
-   222		if (val == 0)
-   223			return -EOPNOTSUPP;
-   224	
-   225		req.set_auto = (val != 1) ? true : false;
-   226		ret = cros_ec_cmd(cros_ec, CROS_EC_HWMON_THERMAL_AUTO_FAN_CTRL_CMD_VERSION,
-   227				  EC_CMD_THERMAL_AUTO_FAN_CTRL, &req, sizeof(req), NULL, 0);
-   228		if (ret < 0)
-   229			return ret;
-   230		return 0;
-   231	}
-   232	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jason
