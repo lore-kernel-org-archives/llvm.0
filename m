@@ -1,146 +1,177 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE642E370B
-	for <llvm@lists.linux.dev>; Fri, 18 Jul 2025 00:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB24C3214;
+	Fri, 18 Jul 2025 04:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752797930; cv=none; b=CKcX9+81iG6ihSCX84UCiQstywDQ+eQHR/7/y75kIr7fkRCo+HHDAJ9ZjumHGkrYrM0s7EWHXhSFLFOZewhe4dQ2Wf/h4QJ/BG+2b1LXMHgyJYThOOmZB5QhFEhTmesV43a0uRY1VLWs6rMr/QQ8liPA23RmK0D9SuYPgN4/2C4=
+	t=1752814344; cv=none; b=ZeuipIPSXxkSXEr0Gpejj+8o0/c+DfCs6TD2i+nCSEOnC23QQFSzeC2neiTqXQOhKnrXYo6Fk79RCkx+LQ6WIM9n0zTSUE/+XK9G1I6v3aNe/c9gF9bB6oeotaZqVBCnsZfYHqMGWpjGcFy3BdImWFbbgZB0ap7pbR0CLMAwj2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752797930; c=relaxed/simple;
-	bh=SnHK2YpDqbH1X5eGQLRTWt3yy67B8OnZ0pSizM5I7CA=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=DBc/emsyAY0GRH/lmgSxMYVwZk8xlr/C9c+FA8mTfj4p4GCpNsInmeg7TTfYxAnySDbueh85EPfSAmiT48/zswCO9yd2NqAUpMZFcAVsX6Oo5fxLptpjgaO7FEEA0iDteHfNsRMepVOQFpHdANh2BrfYr9RRJ002KYVzoyuh8+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q4plcWFw; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1752814344; c=relaxed/simple;
+	bh=LJpqQTK9UYmyB+Au6GLsNTH0EG0q/o+em2AeEvQYfTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m4nLBPTNgx5b2LxvqqmHA+Hez1pT2CIk7LwJ4zRF65JFIEQYR6JX8ZTY8ydt3O/tBKrZ3DhNjtmgHBy/Vqnzv9ZfwLcIqPXWN0jfq0wctuIDOyyNcY3pnadZAxWlNh0Y4Pkw0+c4qiZvQH+8rBKZIKKuOZMf4Bl4cBfOaNtixTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWBAaOyv; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q4plcWFw"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60867565fb5so2524083a12.3
-        for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 17:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752797926; x=1753402726; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7VmB/pQJpe6V+Rwe1WZTBeLEJeQPiD97l5Otx01MAjg=;
-        b=q4plcWFwxngS+xOe5J2dBRXtOoF2ledgIseCd2rydQAcLHw3/eM5HgN8Nn/RWv3n01
-         Ljbml2bAP0MPccf6vyhHRRWrNqcKBdqNVXYpkuumgaEJU7z982+/fqMDGpurlm4yu0P4
-         9Ax5dRd3su/odNyxLRgXX1IavV/eHUgRx3zp8X1i/4TSWr0vwFMHocXxduyAQu1iKQna
-         Tli3Ou/P1WkTrX1kXT7qmPbOZwFo+Gau3fjklgrI95QGClvn/T5aKipP6R223HqdEJjy
-         yWK8rzKAjtYhqUcHXLysGdCdNN+wcuBNYo7IOueeH2uHlIrJaKnBPP54z+g8MokdXuJR
-         E0Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752797926; x=1753402726;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7VmB/pQJpe6V+Rwe1WZTBeLEJeQPiD97l5Otx01MAjg=;
-        b=qez9CWv8RzrRwnSV8i+4lYXjLIssMQUMt2ymS+/WnwWb3PuNOYo7EjGALP5FTvE60T
-         /6ZvhlJ9oAvUWqWu9DmtIYfVLI4Rks7X8+msbNThEohD0uv2WUKo/qUh/jxU/L5Q4bUM
-         Sd8Au50+ac+v+Qqx/wG/r+ielvlFfZyodoRB7z/O8ILVBnTCZyVfsMlhNTrYfFxCzDiP
-         zkmvYKyKwTNcZjTywxQNUg/piXmR5fi1shA8DU+vip2ZJiMxIHg6BZqw2Clx7DTzf8EO
-         iFKxuAG1lSFBrEYoUlhgubgiX+tlGDW0fyaCstrCitWwwBOB6xPKJK3h4uoB6QtEp+BO
-         buwA==
-X-Gm-Message-State: AOJu0Yz/4wtlX4kjiW/UbOGZb/hPY0T+gsBKaEg1qI70Ph+TzC7qNnse
-	ekbhBwPTjryZ30T+MJ/wsgTV00ydr77EeVK8j//xFQITb7SvkCEikmyY+en9SNBdyEqx+VaHUln
-	b7gSY
-X-Gm-Gg: ASbGnctAEm8ZlOkdGHauZZ0gaIkDFTUfGsW6EcWHh5Qgve4ksyUuPV1HLm86iZI1Jec
-	eBh31jj44oBOq420PkggL5rRdviAbMY7+ChZU9e4Re8UsGDbY4s3UDoORFr8p4fqbW3Lx4AhqX5
-	HCqudw1XU1w7vT9eFhwtrZ08A1D6kedfoywti2LwJ2NMsRrRGcGVXZEtaYbj3wAito0Jl9IHSDf
-	zgL3Ayxbz9wqyLdkj40qaT7ASPGN4eUrkLP8St5OpM6UBT+YE8RsoeniFYRkzPTFdsj5/9C2b+g
-	EiInUzhkonyYJvWJlrGs5DKir+RcMHXcx/DCSqGQDsefZskrZKCMddgCtGU3B/82+S72nd26y1e
-	YjdhGUKFgGtqdQnIk7gywuTDX21x1HkofsXpkqwY09oE5jYJr9RY5Yxs6xr2lUJK3wUf+oQ==
-X-Google-Smtp-Source: AGHT+IGsCddcQCHkoF/AtHioLTBVgHu7h7vb9aGwYRf6E0iXYsHXK9GlIdRrEraj7bUJTp8t6njX0g==
-X-Received: by 2002:a05:6402:2804:b0:60c:397d:d638 with SMTP id 4fb4d7f45d1cf-61281ebe856mr7901581a12.14.1752797926517;
-        Thu, 17 Jul 2025 17:18:46 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-612c8f0a0e2sm177722a12.4.2025.07.17.17.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 17:18:45 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Fri, 18 Jul 2025 00:18:44 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <2032695932.3605.1752797925051@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.16-rc6-80-g141fd174e6dc5: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWBAaOyv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752814343; x=1784350343;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LJpqQTK9UYmyB+Au6GLsNTH0EG0q/o+em2AeEvQYfTo=;
+  b=NWBAaOyvx3yiWIHlI2Ox3SU3sAuPoeDXlpnac8g3Qo2IzufuiBsWXc4g
+   hoM0cao44EdPHMbBkSnoIQ9/AdnBF+vQiRSjRIdrt0z8XuF0m4cqpupjR
+   8+ZlhcwmRyZleVdEfX3OkyWE6/TApxE+AjXvY/rq+nRc8cKhdgUzX0TS5
+   OQcGK3VgdYrvW7sBRSj5sn5hmV1DjLEFw9sG5CgHBlvKrtYm8FBwftIXg
+   WNUacN+EkLckDK+bC5Hy2IvXKnW8nKJA1elZagvjGpnhO6FcXTDNHQiZ5
+   vJaXvEOOg3nOcNoKwqfLsHCL6aR1NakGOpYVb00Gl3qTW5+I8+agaHCWd
+   A==;
+X-CSE-ConnectionGUID: 9ZKtsALFRZGECaM9FvIq0A==
+X-CSE-MsgGUID: sqqg9pu1Qz+P/JyCm1oQWg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11495"; a="58915128"
+X-IronPort-AV: E=Sophos;i="6.16,320,1744095600"; 
+   d="scan'208";a="58915128"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2025 21:52:20 -0700
+X-CSE-ConnectionGUID: tLhCz53AQlmQOIOcjDL7yw==
+X-CSE-MsgGUID: FgB7ZX8GQQiompNsONF3Gg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,320,1744095600"; 
+   d="scan'208";a="158443867"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 17 Jul 2025 21:52:18 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ucd4y-000EJ1-12;
+	Fri, 18 Jul 2025 04:52:16 +0000
+Date: Fri, 18 Jul 2025 12:51:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ast-bpf:kmalloc_nolock 6/7] mm/slub.c:3326:2: warning: variable
+ 'flags' is used uninitialized whenever '&&' condition is false
+Message-ID: <202507181229.QStFKxIY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_3604_1345002347.1752797924402"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_3604_1345002347.1752797924402
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git kmalloc_nolock
+head:   de3de6fc810275dad0998ffed42d921690c667ec
+commit: 8e58427a2c80d3a9be8b6f2f9ccc4319d1f27906 [6/7] slab: Introduce kmalloc_nolock() and kfree_nolock().
+config: x86_64-buildonly-randconfig-004-20250718 (https://download.01.org/0day-ci/archive/20250718/202507181229.QStFKxIY-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507181229.QStFKxIY-lkp@intel.com/reproduce)
 
-Dear contributor,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507181229.QStFKxIY-lkp@intel.com/
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+All warnings (new ones prefixed by >>):
 
-In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
-  | commit v6.16-rc6-80-g141fd174e6dc5
-  | Author: Kent Overstreet <kent.overstreet@linux.dev>
-  | Date:   Mon Jul 14 10:35:16 2025 -0400
-  | 
-  |     bcachefs: convert super.c to CLASS/guards
-  |     
-  |     Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 26632
-  | # First few build errors in logs:
-  | # 00:29:57 fs/bcachefs/super.c:2269:3: error: cannot jump from this goto statement to its label
-  | # 00:29:57 make[4]: *** [scripts/Makefile.build:287: fs/bcachefs/super.o] Error 1
-  | # 00:30:46 make[3]: *** [scripts/Makefile.build:554: fs/bcachefs] Error 2
-  | # 00:36:23 make[2]: *** [scripts/Makefile.build:554: fs] Error 2
-  | # 00:53:06 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:2003: .] Error 2
-  | # 00:53:06 make: *** [Makefile:248: __sub-make] Error 2
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 36665
-  | # linux build successful:
-  | all
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1729. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+>> mm/slub.c:3326:2: warning: variable 'flags' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+    3326 |         local_lock_cpu_slab(s, flags);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/slub.c:3236:2: note: expanded from macro 'local_lock_cpu_slab'
+    3236 |         lockdep_assert(local_trylock_irqsave(&(s)->cpu_slab->lock, flags))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/lockdep.h:279:15: note: expanded from macro 'lockdep_assert'
+     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
+         |                      ^~~~~~~~~~~
+   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   mm/slub.c:3351:27: note: uninitialized use occurs here
+    3351 |         local_unlock_cpu_slab(s, flags);
+         |                                  ^~~~~
+   mm/slub.c:3240:48: note: expanded from macro 'local_unlock_cpu_slab'
+    3240 |         local_unlock_irqrestore(&(s)->cpu_slab->lock, flags)
+         |                                                       ^~~~~
+   include/linux/local_lock.h:52:34: note: expanded from macro 'local_unlock_irqrestore'
+      52 |         __local_unlock_irqrestore(lock, flags)
+         |                                         ^~~~~
+   include/linux/local_lock_internal.h:202:21: note: expanded from macro '__local_unlock_irqrestore'
+     202 |                 local_irq_restore(flags);                       \
+         |                                   ^~~~~
+   include/linux/irqflags.h:240:61: note: expanded from macro 'local_irq_restore'
+     240 | #define local_irq_restore(flags) do { raw_local_irq_restore(flags); } while (0)
+         |                                                             ^~~~~
+   include/linux/irqflags.h:179:26: note: expanded from macro 'raw_local_irq_restore'
+     179 |                 arch_local_irq_restore(flags);          \
+         |                                        ^~~~~
+   mm/slub.c:3326:2: note: remove the '&&' if its condition is always true
+    3326 |         local_lock_cpu_slab(s, flags);
+         |         ^
+   mm/slub.c:3236:2: note: expanded from macro 'local_lock_cpu_slab'
+    3236 |         lockdep_assert(local_trylock_irqsave(&(s)->cpu_slab->lock, flags))
+         |         ^
+   include/linux/lockdep.h:279:15: note: expanded from macro 'lockdep_assert'
+     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
+         |                      ^
+   mm/slub.c:3323:21: note: initialize the variable 'flags' to silence this warning
+    3323 |         unsigned long flags;
+         |                            ^
+         |                             = 0
+   1 warning generated.
 
 
+vim +3326 mm/slub.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/412/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/411/artifact/artifacts
+  3312	
+  3313	/*
+  3314	 * Put a slab into a partial slab slot if available.
+  3315	 *
+  3316	 * If we did not find a slot then simply move all the partials to the
+  3317	 * per node partial list.
+  3318	 */
+  3319	static void put_cpu_partial(struct kmem_cache *s, struct slab *slab, int drain)
+  3320	{
+  3321		struct slab *oldslab;
+  3322		struct slab *slab_to_put = NULL;
+  3323		unsigned long flags;
+  3324		int slabs = 0;
+  3325	
+> 3326		local_lock_cpu_slab(s, flags);
+  3327	
+  3328		oldslab = this_cpu_read(s->cpu_slab->partial);
+  3329	
+  3330		if (oldslab) {
+  3331			if (drain && oldslab->slabs >= s->cpu_partial_slabs) {
+  3332				/*
+  3333				 * Partial array is full. Move the existing set to the
+  3334				 * per node partial list. Postpone the actual unfreezing
+  3335				 * outside of the critical section.
+  3336				 */
+  3337				slab_to_put = oldslab;
+  3338				oldslab = NULL;
+  3339			} else {
+  3340				slabs = oldslab->slabs;
+  3341			}
+  3342		}
+  3343	
+  3344		slabs++;
+  3345	
+  3346		slab->slabs = slabs;
+  3347		slab->next = oldslab;
+  3348	
+  3349		this_cpu_write(s->cpu_slab->partial, slab);
+  3350	
+  3351		local_unlock_cpu_slab(s, flags);
+  3352	
+  3353		if (slab_to_put) {
+  3354			__put_partials(s, slab_to_put);
+  3355			stat(s, CPU_PARTIAL_DRAIN);
+  3356		}
+  3357	}
+  3358	
 
-Instruction to reproduce the build : https://gitlab.com/Linaro/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/141fd174e6dc5a3c294c3d64048cccb6270d5868/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/141fd174e6dc5a3c294c3d64048cccb6270d5868
-------=_Part_3604_1345002347.1752797924402--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
