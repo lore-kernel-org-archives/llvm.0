@@ -1,61 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF86880C1C;
-	Fri, 18 Jul 2025 18:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEBB17A2F5;
+	Fri, 18 Jul 2025 18:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752862215; cv=none; b=Ilv2rSSg4FEjYZ9LEuBLF/CQKizIrFz09aavJiZ3DLJ76CJ8OiX0pW2mNfOljh8tYhSveitu9Gbilrw9WmRhyle5x6I8J8Tpp8DJCXboThLZCJh2BEEBWnEFK8S02d86OHODTv0cZv9PPreIMmBlHQtIbqKqzQKYPx49c8HaYnA=
+	t=1752862908; cv=none; b=PMDIGzNrv9SOmynPFCjs8tRKWJ+trfn+2GOc7w7EzafhGM6V2VXfzypstOCz1iixJxwI9ln4bzeZrMeAmeiXbliBByDx3EWS0QretgDIO++XGfD2Acap3VF1Q6g4l1/NFe4SnB1dU/1C5wMvZuk1nNbQ6V4MBNkF86vkrkvduSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752862215; c=relaxed/simple;
-	bh=WgxSzovmY/3HN+EA7KrCAS/u+NXYud7/dmBnI4yWUAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sgl0V3YWtA2LIs5L9aJr0yVfvOHwNkzkuK1gTcE/8T2X5HX7c2R2AzmuO+PAhTaNT69g/laofiovUvh0wY9W4DrMNh7uVesPqX0yoOK1chgtzfCsysQhNVlFEVdAiEVxOaMGnclQGwyd/sRO2lnh4DVfazEWPOa6J7hMZlPzy3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA27C4CEEB;
-	Fri, 18 Jul 2025 18:10:09 +0000 (UTC)
-Date: Fri, 18 Jul 2025 19:10:06 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Will Deacon <will@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>
-Subject: Re: [PATCH v3 6/6] IB/mlx5: Use __iowrite64_copy() for write
- combining stores
-Message-ID: <aHqN_hpJl84T1Usi@arm.com>
-References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
- <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
- <20250714215504.GA2083014@nvidia.com>
- <aHYqPRqgcl5DQOpq@willie-the-truck>
- <20250715115200.GJ2067380@nvidia.com>
+	s=arc-20240116; t=1752862908; c=relaxed/simple;
+	bh=P+9EJz816VbmV7HS5BwOfxdEj45paRDrlxlwnAf6Jfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=o8uEWxacMn6JFRy1aVzhDaMMPFR1eXCOE4pLUHhlAMLANaf1OONjKrUtErZUrEMMs1/QCcgwOTIYflKnB+lydJGH7pFH1zcoNVoNSJOSZnjOKFI9trQa0Wf5N6Waj9tFRSRpzyaRiPgktxMqO08gy63Mf7jBI7SKq2sLFNshue0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e0qxbY54; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e0qxbY54"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752862906; x=1784398906;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P+9EJz816VbmV7HS5BwOfxdEj45paRDrlxlwnAf6Jfs=;
+  b=e0qxbY54biluLcpa9o4kLwNBDHLd1EOa/h9PqEd9qQ3cIbS7Fnkf1otB
+   FgGkmtMuK+6Cpb4mF/lgp+lG7mHAGadqSt1g+ZCW5RkQ91ukjvEfJGCl7
+   2GuARQPg7eGIU8YNM6slhZXsddJlV1fZlO3pKQuJinEJjRVpn0sSeEWBw
+   emnvdjcqwPilqBHy0sQ7N6gSm89PgA2nRGJOUDD0QoTkak83oDZjqFLgo
+   /cjzvrbjU4bKsd7T7IO54uJZABx9bo56s5BNoTMc7lIk+YdTSMJLGFXk/
+   KhVY/tNAh58jnBsI0+A444ub6DnNfqlunIFDtgJ46mtqVDEpe8OBD0VUc
+   A==;
+X-CSE-ConnectionGUID: khFSaM9+Rmen2fxurloFEg==
+X-CSE-MsgGUID: aN2/OZSbS8uhURejFaFA5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11496"; a="58947034"
+X-IronPort-AV: E=Sophos;i="6.16,322,1744095600"; 
+   d="scan'208";a="58947034"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2025 11:21:45 -0700
+X-CSE-ConnectionGUID: dfBBGi8hQAKPr27O9jgOyg==
+X-CSE-MsgGUID: 7AZntq2VQb+Ale4UkiYwyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,322,1744095600"; 
+   d="scan'208";a="162632303"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 18 Jul 2025 11:21:42 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ucpiG-000Ewp-1J;
+	Fri, 18 Jul 2025 18:21:40 +0000
+Date: Sat, 19 Jul 2025 02:20:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:string-helper-2025-07-18 135/157]
+ drivers/md/dm-vdo/vdo.c:1376:36: error: call to undeclared function
+ 'str_enabled_disabled'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202507190253.z3mxU8Ux-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,52 +63,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250715115200.GJ2067380@nvidia.com>
 
-On Tue, Jul 15, 2025 at 08:52:00AM -0300, Jason Gunthorpe wrote:
-> On Tue, Jul 15, 2025 at 11:15:25AM +0100, Will Deacon wrote:
-> > > Since STP was rejected alread we've only tested the Neon version. It
-> > > does make a huge improvement, but it still somehow fails to combine
-> > > rarely sometimes. The CPU is really bad at this :(
-> > 
-> > I think the thread was from last year so I've forgotten most of the
-> > details, but wasn't STP rejected because it wasn't virtualisable? 
-> 
-> Yes, that was the claim.
-> 
-> > In which case, doesn't NEON suffer from exactly the same (or possibly
-> > worse) problem?
-> 
-> In general yes, in specific no.
+tree:   https://github.com/morimoto/linux string-helper-2025-07-18
+head:   ea52943b017c3b53f3f8c9ff679ccfb8eaae222a
+commit: 76ff9a5ac5f25b351b7ecc7743f4910aceb7bd1d [135/157] dm vdo: use string choices helper
+config: s390-randconfig-001-20250718 (https://download.01.org/0day-ci/archive/20250719/202507190253.z3mxU8Ux-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507190253.z3mxU8Ux-lkp@intel.com/reproduce)
 
-For a generic iowrite function, I wouldn't use STP or Neon since it may
-end up being used on emulated MMIO.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507190253.z3mxU8Ux-lkp@intel.com/
 
-BTW, for Neon, don't you need kernel_neon_begin/end()? This may have its
-own overhead and also BUG_ON for different contexts. Again, not suitable
-for a generic function.
+All error/warnings (new ones prefixed by >>):
 
-Unfortunately, there's no way to know what this function is called on.
-We might try to infer that the kernel started at EL2 but even that is
-not entirely correct with nested virt. Or the OS may start at EL1 but
-have direct access to mlx5 where we'd want the faster option.
+>> drivers/md/dm-vdo/vdo.c:1376:36: error: call to undeclared function 'str_enabled_disabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1376 |         vdo_log_info("compression is %s", str_enabled_disabled(*enable));
+         |                                           ^
+>> drivers/md/dm-vdo/vdo.c:1376:36: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+    1376 |         vdo_log_info("compression is %s", str_enabled_disabled(*enable));
+         |                                      ~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                      %d
+   drivers/md/dm-vdo/logger.h:91:57: note: expanded from macro 'vdo_log_info'
+      91 | #define vdo_log_info(...) vdo_log_message(VDO_LOG_INFO, __VA_ARGS__)
+         |                                                         ^~~~~~~~~~~
+   drivers/md/dm-vdo/logger.h:84:55: note: expanded from macro 'vdo_log_message'
+      84 |         __vdo_log_message(priority, VDO_LOGGING_MODULE_NAME, __VA_ARGS__)
+         |                                                              ^~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+>> drivers/md/dm-vdo/dm-vdo-target.c:2399:37: error: call to undeclared function 'str_enabled_disabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2399 |                 vdo_log_info("compression is %s", str_enabled_disabled(enable));
+         |                                                   ^
+>> drivers/md/dm-vdo/dm-vdo-target.c:2399:37: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+    2399 |                 vdo_log_info("compression is %s", str_enabled_disabled(enable));
+         |                                              ~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                              %d
+   drivers/md/dm-vdo/logger.h:91:57: note: expanded from macro 'vdo_log_info'
+      91 | #define vdo_log_info(...) vdo_log_message(VDO_LOG_INFO, __VA_ARGS__)
+         |                                                         ^~~~~~~~~~~
+   drivers/md/dm-vdo/logger.h:84:55: note: expanded from macro 'vdo_log_message'
+      84 |         __vdo_log_message(priority, VDO_LOGGING_MODULE_NAME, __VA_ARGS__)
+         |                                                              ^~~~~~~~~~~
+   1 warning and 1 error generated.
 
-> mlx5 (and other RDMA devices) have long used Neon for MMIO in
-> userspace, so any VMM assigning mlx5 devices simply must make this
-> work - it is already not optional. So we know that all VMs out there
-> with mlx5 support neon for mlx5, and it is safe for mlx5 to use.
 
-I can't think of any generic solution here, it may have to be a hack
-specific to mlx5. We can also add add support for ST64B and have some
-condition on system_supports_st64b() for future systems.
+vim +/str_enabled_disabled +1376 drivers/md/dm-vdo/vdo.c
 
-Even if we could handle virtualisation, I wonder whether
-__iowrite64_copy() is the right function to implement 128-bit stores or
-the larger 64-byte atomic stores. At least the comment for the generic
-function suggests that it writes in 64-bit quantities. Some MMIO may
-only handle such writes. A function like memcpy_toio() is more generic,
-it doesn't imply any restrictions on the size of the writes (though I
-think it guarantees natural alignment for the stores).
+  1357	
+  1358	/**
+  1359	 * set_compression_callback() - Callback to turn compression on or off.
+  1360	 * @completion: The completion.
+  1361	 */
+  1362	static void set_compression_callback(struct vdo_completion *completion)
+  1363	{
+  1364		struct vdo *vdo = completion->vdo;
+  1365		bool *enable = completion->parent;
+  1366		bool was_enabled = vdo_get_compressing(vdo);
+  1367	
+  1368		if (*enable != was_enabled) {
+  1369			WRITE_ONCE(vdo->compressing, *enable);
+  1370			if (was_enabled) {
+  1371				/* Signal the packer to flush since compression has been disabled. */
+  1372				vdo_flush_packer(vdo->packer);
+  1373			}
+  1374		}
+  1375	
+> 1376		vdo_log_info("compression is %s", str_enabled_disabled(*enable));
+  1377		*enable = was_enabled;
+  1378		complete_synchronous_action(completion);
+  1379	}
+  1380	
 
 -- 
-Catalin
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
