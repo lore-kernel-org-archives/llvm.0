@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5746A11712;
-	Fri, 18 Jul 2025 21:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25E42C18A;
+	Fri, 18 Jul 2025 22:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752874143; cv=none; b=dBocqdMyfnscXYsbgn0olvG6XYfAz0oSguqgLaD4OSfHLx1tzeSRFFty01AjqhzZwE7amPzdTSI3wvJyi5EXk2UHP3Vg6R8vv0DcArmkWWI0Z8SRuG4FVoDciLB6+njF9bTHD3n9R2+34Acv2O4TG9u+pS6Zm6JSNrXdNrFHjNI=
+	t=1752878470; cv=none; b=KB/5w8gZzhjbqJIxCg2L1vF5MJBB6GewV7WTGPHT0FFFjzA/r1+zmR4ZdFAozOTo3/cuUEU68ERiS7rsWAyPaVT2pXbZyQ2VNKO9Fk67lmPGk57c4MffDJooudWYxBJ70/yEZjeDst5IkJTTrr4QECj3E35WVxGnpTtEUx1Qlh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752874143; c=relaxed/simple;
-	bh=SSlJVkJKTqqd1FvLbV+6nZaDhnJw7GlXKhtD551VLNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pEXhqaaKkF4jC4f9P8ETaphRxvhSqgkWOiR8cUzLf4YEoYsclUBXatGfQyF9WnVbzSie24AEb17Qi1zwBTOM5NEEDf8bRIfjL4siowwuUad2ZuvoEUpxX5POWxZ7yqhSrbp4+ylhM845iJ9sse5OuCiStheLz2pDi/CC+ZdX/jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R43gvnVd; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1752878470; c=relaxed/simple;
+	bh=qU06W8zbKrTz5z2CespTGjAICSgUpUohcKCCIZfLFxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DB3liP30LlHrh5jphmMQe8sB7vL28GUhQCk58K/riZ72RnklBJuMBEUcN9Lu6o60MXUzIoi6ZmfZAt5gUYoFqnT53NhJ0W/zaDhoX7fQvne/ctHgyRyujbb53/OXMUtcJCImPuS4NO7alWtEKSOygGUUL+yNOO/UF7PQkfPWv0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gCBlkBe4; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R43gvnVd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gCBlkBe4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752874141; x=1784410141;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SSlJVkJKTqqd1FvLbV+6nZaDhnJw7GlXKhtD551VLNY=;
-  b=R43gvnVddB3hmBlIHA8rDlF9N98G5lQxeFE+yY5mojZlVZWxdJm+O6M2
-   w25ATV/4RqVlsKXx9kRxEqOuYN2SHSVn5gUT0ZFNTawgS3IXfvB9FfIPH
-   prID9KbqfOs+Yuc3hpT/eheOc3TkLkwDPAa9MmslPW0LHdcJVaqPliQ5j
-   fjrwImyubJAbIlbVGJGEOd9eagHslwP9n9NtYVuER7uvUXw+oGP+BneSH
-   UN1MK/aQgkR0ytov8I1zvawz11u6Sb0hHnkqtnviqiGS9Kxh/CEPrrsyN
-   xrRWzB+l7ZMFGLwVnlb1R1FkDyEvoPOxqu8IGkZhldko7otO0SL/UybDP
-   w==;
-X-CSE-ConnectionGUID: wZ9ZoaH8SPiJrN4BouI1gA==
-X-CSE-MsgGUID: BVxFZA1jRkOzjDOcobkqsA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11496"; a="54888290"
+  t=1752878469; x=1784414469;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qU06W8zbKrTz5z2CespTGjAICSgUpUohcKCCIZfLFxs=;
+  b=gCBlkBe47SvKQbctfmIt3npiUQbNGwQ2n8VFzfrIAoiL4SxY2RX4yaW2
+   3ZVpv2iZwJVU12vf1CG3295QfXscDti3Oa9rjjQBwCO8tG2BJGtHg46tP
+   XeWcCJuELQdP7lC4C91rHJY/AcrDWtVKvWj0szfcCsWr8vzL4U+Q1umDo
+   cskdxUw236tK7JbwRmC3pMxaLGF+RaneHn4NB56WbWMMaN789kvtUX9zH
+   zlsrbk/Tyf8B8y42g7MFG7MZgyz19OENjZH0/OOVrriIvvJT+U6og6YBd
+   hZLdpyWIv0IIGi4KkjlJvU03JOxouLS8QQy6im4vBn3UBe8kl9oO2zxpe
+   g==;
+X-CSE-ConnectionGUID: TC13sS8KQnW8o1TrRL4aHw==
+X-CSE-MsgGUID: XyaAdlynR6aFSaCCXenbfw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11496"; a="72746513"
 X-IronPort-AV: E=Sophos;i="6.16,322,1744095600"; 
-   d="scan'208";a="54888290"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2025 14:29:00 -0700
-X-CSE-ConnectionGUID: bRwVKrEUSlyMCmCAve0RIA==
-X-CSE-MsgGUID: FxXtKleXQJqfcSyx61j+qA==
+   d="scan'208";a="72746513"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2025 15:41:08 -0700
+X-CSE-ConnectionGUID: BRs99GICQ6SC4GIBCtc3iA==
+X-CSE-MsgGUID: 82Hah+c3SNKGHmGeFMf0yw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,322,1744095600"; 
-   d="scan'208";a="158805503"
+   d="scan'208";a="158373830"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 18 Jul 2025 14:28:58 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 18 Jul 2025 15:41:04 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ucsdT-000F3T-2h;
-	Fri, 18 Jul 2025 21:28:55 +0000
-Date: Sat, 19 Jul 2025 05:28:51 +0800
+	id 1uctlF-000F6V-2R;
+	Fri, 18 Jul 2025 22:41:01 +0000
+Date: Sat, 19 Jul 2025 06:40:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+To: Nick <nick.li@foursemi.com>, lgirdwood@gmail.com, broonie@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	perex@perex.cz, tiwai@suse.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-new 160/175] mm/kasan/tags.c:145:6: error: redefinition
- of 'kasan_save_free_info'
-Message-ID: <202507190528.W6ndwfyg-lkp@intel.com>
+	xiaoming.yang@foursemi.com, danyang.zheng@foursemi.com,
+	like.xy@foxmail.com, linux-sound@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] ASoC: codecs: Add FourSemi FS2104/5S audio
+ amplifier driver
+Message-ID: <202507190618.Gu5xvSUt-lkp@intel.com>
+References: <20250718121221.76957-5-nick.li@foursemi.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,48 +68,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250718121221.76957-5-nick.li@foursemi.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
-head:   b0e07b9befa0558a80b281b7efcdb3717881c969
-commit: 3d3c26eaf9f6e00779d27dd54d763c9bdc5dda3c [160/175] kasan: add shadow checks to wrappers and rename kasan_arch_is_ready
-config: arm64-randconfig-001-20250719 (https://download.01.org/0day-ci/archive/20250719/202507190528.W6ndwfyg-lkp@intel.com/config)
+Hi Nick,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on ed73a24357531e1747a6e140c329015da6429629]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nick/dt-bindings-vendor-prefixes-Add-Shanghai-FourSemi-Semiconductor-Co-Ltd/20250718-201609
+base:   ed73a24357531e1747a6e140c329015da6429629
+patch link:    https://lore.kernel.org/r/20250718121221.76957-5-nick.li%40foursemi.com
+patch subject: [PATCH v3 4/4] ASoC: codecs: Add FourSemi FS2104/5S audio amplifier driver
+config: i386-buildonly-randconfig-004-20250719 (https://download.01.org/0day-ci/archive/20250719/202507190618.Gu5xvSUt-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507190528.W6ndwfyg-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507190618.Gu5xvSUt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507190528.W6ndwfyg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507190618.Gu5xvSUt-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/kasan/tags.c:145:6: error: redefinition of 'kasan_save_free_info'
-     145 | void kasan_save_free_info(struct kmem_cache *cache, void *object)
-         |      ^
-   mm/kasan/kasan.h:403:20: note: previous definition is here
-     403 | static inline void kasan_save_free_info(struct kmem_cache *cache, void *object)
-         |                    ^
-   1 error generated.
---
->> mm/kasan/sw_tags.c:125:6: error: redefinition of 'kasan_byte_accessible'
-     125 | bool kasan_byte_accessible(const void *addr)
-         |      ^
-   mm/kasan/kasan.h:536:20: note: previous definition is here
-     536 | static inline bool kasan_byte_accessible(const void *addr)
-         |                    ^
-   1 error generated.
+>> sound/soc/codecs/fs210x.c:1086:2: warning: variable 'ret' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+    1086 |         default:
+         |         ^~~~~~~
+   sound/soc/codecs/fs210x.c:1092:9: note: uninitialized use occurs here
+    1092 |         return ret;
+         |                ^~~
+>> sound/soc/codecs/fs210x.c:1077:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1077 |                 if (!fs210x->clk_bclk)
+         |                     ^~~~~~~~~~~~~~~~~
+   sound/soc/codecs/fs210x.c:1092:9: note: uninitialized use occurs here
+    1092 |         return ret;
+         |                ^~~
+   sound/soc/codecs/fs210x.c:1077:3: note: remove the 'if' if its condition is always false
+    1077 |                 if (!fs210x->clk_bclk)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~
+    1078 |                         break;
+         |                         ~~~~~
+   sound/soc/codecs/fs210x.c:1062:9: note: initialize the variable 'ret' to silence this warning
+    1062 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +/kasan_save_free_info +145 mm/kasan/tags.c
+vim +/ret +1086 sound/soc/codecs/fs210x.c
 
-ccf643e6dacf33 Andrey Konovalov 2022-09-05  144  
-6b07434980a192 Andrey Konovalov 2022-09-05 @145  void kasan_save_free_info(struct kmem_cache *cache, void *object)
-
-:::::: The code at line 145 was first introduced by commit
-:::::: 6b07434980a1926780cb5c5644fb198fb9c3997b kasan: pass tagged pointers to kasan_save_alloc/free_info
-
-:::::: TO: Andrey Konovalov <andreyknvl@google.com>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+  1056	
+  1057	static int fs210x_playback_event(struct snd_soc_dapm_widget *w,
+  1058					 struct snd_kcontrol *kc, int event)
+  1059	{
+  1060		struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+  1061		struct fs210x_priv *fs210x = snd_soc_component_get_drvdata(cmpnt);
+  1062		int ret;
+  1063	
+  1064		mutex_lock(&fs210x->lock);
+  1065	
+  1066		if (fs210x->is_suspended) {
+  1067			mutex_unlock(&fs210x->lock);
+  1068			return 0;
+  1069		}
+  1070	
+  1071		switch (event) {
+  1072		case SND_SOC_DAPM_PRE_PMU:
+  1073			/*
+  1074			 * If there is no bclk for us to set the clock output,
+  1075			 * we will enable the device(start_work) in dai trigger.
+  1076			 */
+> 1077			if (!fs210x->clk_bclk)
+  1078				break;
+  1079			fs210x_bclk_set(fs210x, true);
+  1080			ret = fs210x_dev_play(fs210x);
+  1081			break;
+  1082		case SND_SOC_DAPM_POST_PMD:
+  1083			ret = fs210x_dev_stop(fs210x);
+  1084			fs210x_bclk_set(fs210x, false);
+  1085			break;
+> 1086		default:
+  1087			break;
+  1088		}
+  1089	
+  1090		mutex_unlock(&fs210x->lock);
+  1091	
+  1092		return ret;
+  1093	}
+  1094	
 
 -- 
 0-DAY CI Kernel Test Service
