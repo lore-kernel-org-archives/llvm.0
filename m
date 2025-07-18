@@ -1,129 +1,146 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34445182
-	for <llvm@lists.linux.dev>; Fri, 18 Jul 2025 00:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE642E370B
+	for <llvm@lists.linux.dev>; Fri, 18 Jul 2025 00:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752797163; cv=none; b=tZ0/k9Q//LutuiZG9Y653fjV8FOVYUOxfghj5s7Jkhc9f56DETQwkQ3rROhPDqx5XAvsBOgjIyYzq335gR5BNZfC7pKkO2ah5xGLfW6VyWBguzeQGnMkzcl6CNRNUkno1QwAgTpHCMwCbgstBvItSBljAnGVRcBUWSswAfYftSU=
+	t=1752797930; cv=none; b=CKcX9+81iG6ihSCX84UCiQstywDQ+eQHR/7/y75kIr7fkRCo+HHDAJ9ZjumHGkrYrM0s7EWHXhSFLFOZewhe4dQ2Wf/h4QJ/BG+2b1LXMHgyJYThOOmZB5QhFEhTmesV43a0uRY1VLWs6rMr/QQ8liPA23RmK0D9SuYPgN4/2C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752797163; c=relaxed/simple;
-	bh=TBzkP/KQQjnS7jbvMr4DLdE8rWHu1UeP5pEVna2xZU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GA4Euxhdy/bBAkh53aoM8BWwL3LWZWKGLJJtqzcNcY87Ka/0HOPTC7mmNgpoll3hOOlo3+ssqKMuCVT2Rhkq5UsUwOr4sggl2UcE6qslu9O6HP8At80P5FBuAPeZz3cGND1Om1KQ9ItsAvjIXMx6bnrgWGknyDjCCTnEQfvTmek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=FVS5QeXc; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1752797930; c=relaxed/simple;
+	bh=SnHK2YpDqbH1X5eGQLRTWt3yy67B8OnZ0pSizM5I7CA=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=DBc/emsyAY0GRH/lmgSxMYVwZk8xlr/C9c+FA8mTfj4p4GCpNsInmeg7TTfYxAnySDbueh85EPfSAmiT48/zswCO9yd2NqAUpMZFcAVsX6Oo5fxLptpjgaO7FEEA0iDteHfNsRMepVOQFpHdANh2BrfYr9RRJ002KYVzoyuh8+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q4plcWFw; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="FVS5QeXc"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-73ce2761272so835435a34.0
-        for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 17:05:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q4plcWFw"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60867565fb5so2524083a12.3
+        for <llvm@lists.linux.dev>; Thu, 17 Jul 2025 17:18:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1752797159; x=1753401959; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=St8SkLz4MOLrSJrXKd2dasjZ652XtdbuQ+qXkfyFhu8=;
-        b=FVS5QeXc3/PVIcCpi8pT/cSrNYHdgyoFuIRhk8ZqizW5D/5PgfEzC3rnwwvKgp47z4
-         KYlipEQtfgFLVixpR0ByyAsc9QuzSqWzK3khgd1lAY7TeB5DLpH09f35MsBxJnMDY3SL
-         FuUV5dg8P1dNlk5VzyT/sDupBCYJaoyO9DlzcKq/DB267eOSgdi1kfe3XVALQg9ozMi4
-         VGcFDx5QHTbQJ24alIaZNe2Jki8XLQ3bNfayVJME39OsOX547BdQZSu2uQeNTW/EOZic
-         ibqGGNTFMVKORLi7PISAIcBLlXiGQIf108m1dyUrAz0cZBA2FjpcvTJk8NrOomif/19E
-         0mdQ==
+        d=linaro.org; s=google; t=1752797926; x=1753402726; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7VmB/pQJpe6V+Rwe1WZTBeLEJeQPiD97l5Otx01MAjg=;
+        b=q4plcWFwxngS+xOe5J2dBRXtOoF2ledgIseCd2rydQAcLHw3/eM5HgN8Nn/RWv3n01
+         Ljbml2bAP0MPccf6vyhHRRWrNqcKBdqNVXYpkuumgaEJU7z982+/fqMDGpurlm4yu0P4
+         9Ax5dRd3su/odNyxLRgXX1IavV/eHUgRx3zp8X1i/4TSWr0vwFMHocXxduyAQu1iKQna
+         Tli3Ou/P1WkTrX1kXT7qmPbOZwFo+Gau3fjklgrI95QGClvn/T5aKipP6R223HqdEJjy
+         yWK8rzKAjtYhqUcHXLysGdCdNN+wcuBNYo7IOueeH2uHlIrJaKnBPP54z+g8MokdXuJR
+         E0Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752797159; x=1753401959;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1752797926; x=1753402726;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=St8SkLz4MOLrSJrXKd2dasjZ652XtdbuQ+qXkfyFhu8=;
-        b=MAlXnyRsf6EwEGU1TOIkA8zK+xMhfEAMG6ooL2DFNdC6YUbNXxAYadh40vHRnCYsbA
-         SDVJNYiCaA1TmXf7PgCbMCFWCN3WD1Y0KTPzkrrv6b+vKZwdwIrY45u8+KWfYI5vO7QC
-         y9ihK8hxerVd4HicKC8NLZNCkVvYwFagmkS5tgMnNq0sv5FKhBOG/tmvLeoHF8u27L21
-         YhqvlMIveXa2dcze66B58LDACyBmidmIPQiu3wKQCWyQisGz+GZNsGZtR1SkL6tCuF3z
-         XQYnCjG9Hn7vA1+qUullwx0zq76pkZdlusHfsb4LIdqcjuWM32vNvwqcSNYWwSi2Tjmu
-         QISQ==
-X-Gm-Message-State: AOJu0YwCUJsRGlmUcB2SZZEfnGgSuE6sErO4hFtBiiY/6SOXuiX3FVPW
-	wwIpvZ3r+3rAzaMqLO7z/rQDSzmIIWnq208nMnGs4tYNW8OyTxEd4UJRCoZPBXQTDF4=
-X-Gm-Gg: ASbGnctz0fzt//rco1ZMkumCwnC3lRYCllkzpe58klgMdusi9+kz0nlBnATdB1dp/t2
-	q32Ej3JjxiuL2sEQ0B6d8xJKAVZKlp3k8Ste0Fo3oJjfOrguVC32URvJ0aNLllDgYxVtAUmgWve
-	Gr8gxFFHdiZasL83tFQOf0vZP1wFiqydKZs/w/hSR3HMcSKaBkQx8Y4eQANHuuRnNxEQE6nDmNY
-	Ia7rtAj0VsgZnQJ4e/i7fge1HVRCkz6LRhkEXWv78CE+6Kf0GAd1tICcQRkTpQ3eaRUrHwBlX56
-	wiaU6ZuMO/IFb5QTwfeiFjarXPhXaZVGv1+9G2WxkfR6Wr+CjZPrG7/PqXR6BvxZ9cXltFcZaVk
-	Atu8d0GGnl81mzW6j+sWCF1/uxVEuf5UbHXpIMsq3LyfRKepoJF+Erf8C4RzPihPfg/Dyy7pt
-X-Google-Smtp-Source: AGHT+IEpQzJxWBuzFSfKDSgMT+5zFzNHdoZQaPiHyVcWmSO42hOknfLdI3c/uUKRjPmpTo50HDkFfg==
-X-Received: by 2002:a05:6830:2a9e:b0:73a:8bf8:56b9 with SMTP id 46e09a7af769-73e649da15fmr6028856a34.1.1752797159125;
-        Thu, 17 Jul 2025 17:05:59 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:b499:5ccf:3f5:ecec? ([2600:8803:e7e4:1d00:b499:5ccf:3f5:ecec])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73e8354c93dsm200490a34.1.2025.07.17.17.05.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jul 2025 17:05:58 -0700 (PDT)
-Message-ID: <1cc7453e-7151-4a29-a1d0-d265e5a3426a@baylibre.com>
-Date: Thu, 17 Jul 2025 19:05:57 -0500
+        bh=7VmB/pQJpe6V+Rwe1WZTBeLEJeQPiD97l5Otx01MAjg=;
+        b=qez9CWv8RzrRwnSV8i+4lYXjLIssMQUMt2ymS+/WnwWb3PuNOYo7EjGALP5FTvE60T
+         /6ZvhlJ9oAvUWqWu9DmtIYfVLI4Rks7X8+msbNThEohD0uv2WUKo/qUh/jxU/L5Q4bUM
+         Sd8Au50+ac+v+Qqx/wG/r+ielvlFfZyodoRB7z/O8ILVBnTCZyVfsMlhNTrYfFxCzDiP
+         zkmvYKyKwTNcZjTywxQNUg/piXmR5fi1shA8DU+vip2ZJiMxIHg6BZqw2Clx7DTzf8EO
+         iFKxuAG1lSFBrEYoUlhgubgiX+tlGDW0fyaCstrCitWwwBOB6xPKJK3h4uoB6QtEp+BO
+         buwA==
+X-Gm-Message-State: AOJu0Yz/4wtlX4kjiW/UbOGZb/hPY0T+gsBKaEg1qI70Ph+TzC7qNnse
+	ekbhBwPTjryZ30T+MJ/wsgTV00ydr77EeVK8j//xFQITb7SvkCEikmyY+en9SNBdyEqx+VaHUln
+	b7gSY
+X-Gm-Gg: ASbGnctAEm8ZlOkdGHauZZ0gaIkDFTUfGsW6EcWHh5Qgve4ksyUuPV1HLm86iZI1Jec
+	eBh31jj44oBOq420PkggL5rRdviAbMY7+ChZU9e4Re8UsGDbY4s3UDoORFr8p4fqbW3Lx4AhqX5
+	HCqudw1XU1w7vT9eFhwtrZ08A1D6kedfoywti2LwJ2NMsRrRGcGVXZEtaYbj3wAito0Jl9IHSDf
+	zgL3Ayxbz9wqyLdkj40qaT7ASPGN4eUrkLP8St5OpM6UBT+YE8RsoeniFYRkzPTFdsj5/9C2b+g
+	EiInUzhkonyYJvWJlrGs5DKir+RcMHXcx/DCSqGQDsefZskrZKCMddgCtGU3B/82+S72nd26y1e
+	YjdhGUKFgGtqdQnIk7gywuTDX21x1HkofsXpkqwY09oE5jYJr9RY5Yxs6xr2lUJK3wUf+oQ==
+X-Google-Smtp-Source: AGHT+IGsCddcQCHkoF/AtHioLTBVgHu7h7vb9aGwYRf6E0iXYsHXK9GlIdRrEraj7bUJTp8t6njX0g==
+X-Received: by 2002:a05:6402:2804:b0:60c:397d:d638 with SMTP id 4fb4d7f45d1cf-61281ebe856mr7901581a12.14.1752797926517;
+        Thu, 17 Jul 2025 17:18:46 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-612c8f0a0e2sm177722a12.4.2025.07.17.17.18.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Jul 2025 17:18:45 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Fri, 18 Jul 2025 00:18:44 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <2032695932.3605.1752797925051@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.16-rc6-80-g141fd174e6dc5: Failure on aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linux-next:master 8663/10823] ld.lld: error: undefined symbol:
- devm_spi_offload_rx_stream_request_dma_chan
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-References: <202507180620.bPnQTVKp-lkp@intel.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <202507180620.bPnQTVKp-lkp@intel.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_3604_1345002347.1752797924402"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
+X-Jenkins-Result: SUCCESS
+
+------=_Part_3604_1345002347.1752797924402
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/17/25 5:53 PM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb
-> commit: 219da3ea842a156e5808176e11db256db9798f6c [8663/10823] iio: adc: ad_sigma_delta: add SPI offload support
-> config: x86_64-buildonly-randconfig-001-20250718 (https://download.01.org/0day-ci/archive/20250718/202507180620.bPnQTVKp-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250718/202507180620.bPnQTVKp-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202507180620.bPnQTVKp-lkp@intel.com/
-> 
-> Note: the linux-next/master HEAD 024e09e444bd2b06aee9d1f3fe7b313c7a2df1bb builds fine.
->       It may have been fixed somewhere.
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: devm_spi_offload_rx_stream_request_dma_chan
->    >>> referenced by usercopy_64.c
->    >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
-> --
->>> ld.lld: error: undefined symbol: devm_iio_dmaengine_buffer_setup_with_handle
->    >>> referenced by usercopy_64.c
->    >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
-> --
->>> ld.lld: error: undefined symbol: devm_spi_offload_trigger_get
->    >>> referenced by usercopy_64.c
->    >>>               vmlinux.o:(devm_ad_sd_setup_buffer_and_trigger)
-> --
->>> ld.lld: error: undefined symbol: devm_spi_offload_get
->    >>> referenced by usercopy_64.c
->    >>>               vmlinux.o:(ad_sd_init)
-> --
->>> ld.lld: error: undefined symbol: spi_offload_trigger_enable
->    >>> referenced by usercopy_64.c
->    >>>               vmlinux.o:(ad_sd_buffer_postenable)
-> --
->>> ld.lld: error: undefined symbol: spi_offload_trigger_disable
->    >>> referenced by usercopy_64.c
->    >>>               vmlinux.o:(ad_sd_buffer_postdisable)
-> 
+Dear contributor,
 
-Should be fixed by [1].
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-[1]: https://lore.kernel.org/linux-iio/20250714-iio-ad_sigma_delta-fix-kconfig-selects-v1-1-32e0d6da0423@kernel.org/
+In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
+  | commit v6.16-rc6-80-g141fd174e6dc5
+  | Author: Kent Overstreet <kent.overstreet@linux.dev>
+  | Date:   Mon Jul 14 10:35:16 2025 -0400
+  | 
+  |     bcachefs: convert super.c to CLASS/guards
+  |     
+  |     Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 26632
+  | # First few build errors in logs:
+  | # 00:29:57 fs/bcachefs/super.c:2269:3: error: cannot jump from this goto statement to its label
+  | # 00:29:57 make[4]: *** [scripts/Makefile.build:287: fs/bcachefs/super.o] Error 1
+  | # 00:30:46 make[3]: *** [scripts/Makefile.build:554: fs/bcachefs] Error 2
+  | # 00:36:23 make[2]: *** [scripts/Makefile.build:554: fs] Error 2
+  | # 00:53:06 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:2003: .] Error 2
+  | # 00:53:06 make: *** [Makefile:248: __sub-make] Error 2
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 36665
+  | # linux build successful:
+  | all
+
+Used configuration :
+ tcwg_kernel/llvm-master-aarch64-next-allmodconfig
+
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-1729. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
+
+
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/412/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/411/artifact/artifacts
+
+Instruction to reproduce the build : https://gitlab.com/Linaro/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/141fd174e6dc5a3c294c3d64048cccb6270d5868/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/141fd174e6dc5a3c294c3d64048cccb6270d5868
+------=_Part_3604_1345002347.1752797924402--
