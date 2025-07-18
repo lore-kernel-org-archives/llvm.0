@@ -1,222 +1,415 @@
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2056.outbound.protection.outlook.com [40.107.100.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C742417F0;
-	Fri, 18 Jul 2025 13:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752847111; cv=fail; b=s9QERvLmobWWyO1ZN3utwPnoXajlXqM1t2wfedhngzo4km+M4fjtrRz0u5l+8bw8DpzWdpISEXddqeDxa8ancUivLePHERee7/ucUxJkEBfxfBfW8B6ajB0bKeqQjCfTsjxXDv5PuGrmQ8SsAFolYt/urcaVpa1RZ/2hk37kccg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752847111; c=relaxed/simple;
-	bh=0t/bwNos+QoDdgZSofNirm1v3shwbpxO88BlHBKgCQQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iDX8T88H8IIkUcyce1efTRhTFEgpMTonoOlCge2fKnj4uMuqbHCcshvMrCTZ9NQ+nANlH1M03+2PwFhgLuEoqGqQBcxYGWtqH7glY2FhdTZ2AhQTjliplAfA5MFmMwlzUZ2peaSXRNPcS70O4DrccCrlmFaBGhC5sk/nXWguUFY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=a1FmremC; arc=fail smtp.client-ip=40.107.100.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E328314D283;
+	Fri, 18 Jul 2025 15:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752850949; cv=none; b=iNWYpl3RhZbtp8kDvA5ZpbxtQu1MOV8Bij4kz1ysOGzvzNMy38t6ZwDvzELvI8FE1h4Avp4bftXzrl6kIGXnMoCqyla3KMqOjmMsLUXrNv4JEnf/l2VQxD7gzM3yvCB61JSDhL6b9PB612e10+zKg5ihwS/cTUptGSlNU3+kfbc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752850949; c=relaxed/simple;
+	bh=+e1iMGRpKp9G4bBHxeR7ZAWHo4gzQHuUdz02p5ovehI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CD9pwSPeEblN1i45JTWmwG+Ib6TM8Oz6iD95B0lY2WrcD+s7eBVKRXBCKyaQk0uNFMn5strm59coEiUqMgWVEE+zQbWgPPuId07IudX6kdcJ6hRn/DKFEqKR3UOjLgzQpBaO63yb2r/uqUlpH9WKJllHHX731WQAubAWRDXFtoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R+Kkm2oV; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="a1FmremC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r5y5KEvgQNMoFXB47qrF3LQD5G4gtgm4eJ7mYeV6CxzU1DSVcnUlaqtapGrfNNbk0JAZpbWVMj0zJw45LUP8YqLZ7Q8z+OdKqdiDlUbUSUTauCGSUqa7uQOybc24OuKt7bEym1ruREKl8pwizbnuBRsovzUO4bhcHnlfTDI2lDpUM9oYS/u76v+PRiU/61sgJl2UR2G7So2oZQ8K+Xgq4nO6Ih5bj2jdUOcS99cQyorW57gnIVjA/j34OF6F08fRhC37qbHBIaqdbzIw7GaZ0SOD4t6p8kO9EKaJ89MqzeCQIyTy0VTMu35sf6lnnSPdFXmpayUhTeUFXCz3GACgJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0t/bwNos+QoDdgZSofNirm1v3shwbpxO88BlHBKgCQQ=;
- b=aFM/QFz/FtvkshWPuA4yN/UD8CGkVNixRerPzPNT11oqgxROtAOFWOMIsHbt+u58YAxNL7sbWidtt74oOBsdqfv22V1TEBVfxHeztnuu9QqXqbb68YAxB7CJYyec3kTS8p9x7YN/SXIp7byCa+pYR6eNLuWpy8dxeuunFDyKwqwsXx1f/3K0Ln0ZMSazr9tsebos6DUYQvrgFt52Dt7/iilTU7Abvvykb+h82s95uHS1tpjwSFIP2JVWpJXzyyyIBm/qKCu8dQwgENljHQk/JmslW9kpsEdTFU34g9JraXZnZoPPlr9skkiIqa/6jPGgkahO8M6S3uNdOqP+73n7Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0t/bwNos+QoDdgZSofNirm1v3shwbpxO88BlHBKgCQQ=;
- b=a1FmremChJmlH0kgrtx9cKzy/paF6wtaaabBqaQLTLJzDLbqkPm4BMF3KGPuUhofAAnc4TaUwE87AWq3vIOpF5mnQerjDupOoQJGfIYCJ0XxDZzvuywcMl0T+RXn6PwiDJx7myBl7sxZelwTaco0rUTEQUQJadoK7ta3WvExleg=
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
- by CH3PR12MB9284.namprd12.prod.outlook.com (2603:10b6:610:1c7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.39; Fri, 18 Jul
- 2025 13:58:23 +0000
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::491a:cce3:e531:3c42]) by BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::491a:cce3:e531:3c42%4]) with mapi id 15.20.8922.037; Fri, 18 Jul 2025
- 13:58:23 +0000
-From: "Deucher, Alexander" <Alexander.Deucher@amd.com>
-To: Nathan Chancellor <nathan@kernel.org>, "Koenig, Christian"
-	<Christian.Koenig@amd.com>
-CC: "Gao, Likun" <Likun.Gao@amd.com>, "Zhang, Hawking"
-	<Hawking.Zhang@amd.com>, "amd-gfx@lists.freedesktop.org"
-	<amd-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "patches@lists.linux.dev" <patches@lists.linux.dev>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] drm/amdgpu: Initialize data to NULL in
- imu_v12_0_program_rlc_ram()
-Thread-Topic: [PATCH] drm/amdgpu: Initialize data to NULL in
- imu_v12_0_program_rlc_ram()
-Thread-Index: AQHb9eNFBSnKxWpiPUq9qYKUyM4+lrQ25cFg
-Date: Fri, 18 Jul 2025 13:58:23 +0000
-Message-ID:
- <BL1PR12MB5144E40FC1D87BABD459A0D6F750A@BL1PR12MB5144.namprd12.prod.outlook.com>
-References:
- <20250715-drm-amdgpu-fix-const-uninit-warning-v1-1-9683661f3197@kernel.org>
-In-Reply-To:
- <20250715-drm-amdgpu-fix-const-uninit-warning-v1-1-9683661f3197@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Enabled=True;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_SetDate=2025-07-17T22:18:57.0000000Z;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Name=Open
- Source;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_ContentBits=3;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Method=Privileged
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5144:EE_|CH3PR12MB9284:EE_
-x-ms-office365-filtering-correlation-id: 27af9712-c35f-48e8-e375-08ddc603293a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TmYyNjBvMGtQZkhFRTI1cU1Yb2xkU3ZqcmNQMTdMT1ZmT0c4UGQyNWVRaDhN?=
- =?utf-8?B?NmxLTjNZOVI5QmdGakIxdU94YURZSHNjMHNDNFJDZkRobHFES0NLalVFNFpR?=
- =?utf-8?B?QzF2WVYzZEFmV2dZS1RjMUJvQjFuc20xQVhUbzZJM2NCNmVpK2dadlFsNGJv?=
- =?utf-8?B?NFg0L3JJRy9QV0hJV3p6S3ZwU3luZVkyRjhUMFE2Sm1TREsxNFZsY0t3QjRo?=
- =?utf-8?B?U3FDUGM4VkNVOVMvQXMxczNaeGp2aFZpOHNIK21oa08xa0NQV2dnRUU3TmxH?=
- =?utf-8?B?MlR2ampTTWtVYy93SWkwQ2JBNlJUaTZlYXlQZ0plVDFDMXFKUjVLampRYjVz?=
- =?utf-8?B?aHBBMVFUWWdxTndFVkZVT1RXNEIzSGJvZzZKQ3F0STdDdjZKTlpiaUtUK1pY?=
- =?utf-8?B?d1VYVTBPcGMwOHBabUpCeXl3aXhsaG9DUC9zWU9GYkdsSzlPRmdpZ0tDdXVU?=
- =?utf-8?B?ZmlYaG1wd1laTE5oSER5UTd5NmVJSWxCTnNUUFFLbGQ0TnlkSGNJVjBtcy9D?=
- =?utf-8?B?d2dlMWU2c09FblFMMnRUbmZ3ejFZcjhhZk1qVUovYW5lL1lzdXBVVzVZNXZR?=
- =?utf-8?B?NGZjVzFLTlo0a1BCWEFpOEdtWDllOWdibWdyWjViOTRHekgxWDc1Wlhwc2ps?=
- =?utf-8?B?QTczcEk5d2RHc2grQVBlWVpQU0h4eXROM2hmVjQxWTF2dHUwejNpU1owRmNS?=
- =?utf-8?B?WkY2a2NaT0JubHVVOWU3dWVWUk9IYVh5SXdqaFhSWFExSWtZREx1bWZySnJn?=
- =?utf-8?B?QUNPTTRwcEZmbW9Kb05UWG1qT1BnaGVDV29yV21Xc1VTTGJERU1sdU5XQi9C?=
- =?utf-8?B?cXhOMkFtY3FhQUJ3SXNpOSsxRkUwNEczZ3NGVlk4YlNiaUFoSjJYTVFPL0lY?=
- =?utf-8?B?aUNsOXJwZ2dhTkNLVVFQWDNydzE1b3Jsa2hVZGEvMlpRYUpqR3dLQU5UeHpD?=
- =?utf-8?B?TlNFU2o5U2Z0RUJCNThiZ1ZvdmlOcURQOHF1VExCVjBjUjJmZVhTeGRPU1RK?=
- =?utf-8?B?VFVLWDVwbVEwS3YvenVCdkczMjdMbmdVQXEzWjRvcXF3N2F5Ry9pK2JqLzdj?=
- =?utf-8?B?MlExK01rcVBMdERRUXRoVHExZWhQQ1Zkdi9WdEtKRTV1Z0ROWDZzbTVkcWVU?=
- =?utf-8?B?cVRVN25NcCt0enVOdGIxRVMxYmVBdkhoNjlDMHhscnRPRmdwU1VlR1RsS1V1?=
- =?utf-8?B?QnhIckpQdkhlcW1ic1JvM1FsT2pLOFNYcWFEWjk3WTljQlpqM05VaVo0MGdY?=
- =?utf-8?B?TmM1cDJ5UXdXeVNjVDFsNnBtNERtRlowWHJFUmttMVZBNlBIVi92dXAvbXVT?=
- =?utf-8?B?SDg5QzNZR0lvZEt1MDc0b2pZVGgwcUlXMy9naUV6L3ZHUi9hVituQXExL3Bm?=
- =?utf-8?B?ZWFEL3JLRnN6aFIxSW5yTVV6R3AxQlRqRVZjb1UvNmRZV1pGNVJGalJBTFVX?=
- =?utf-8?B?aGcvUEk0LzB0UkdHSlVVY1cwOUJPaURvMDR2VG9hMVhZaWFjbDNiL1FrRFd0?=
- =?utf-8?B?NVg5N2NTbnI4RzBrSDNhbGJBYUROUXlsVmNuUEdyUU5pb2FXbWh1OC9YZ201?=
- =?utf-8?B?RWRBSTEvYWI1N1p4MDZ1dnFVV0Z3UHFXYmtvN0JGSE1NN2FQTEJKRGZlOU9N?=
- =?utf-8?B?eW9yN2VBRjF6Ky9aSHIrQng5NXh1dFZjVDhhM3lwejZpcW5aU0Q2R2hCb3VO?=
- =?utf-8?B?QXNncG9TSmMraDNubHVwSGNrZm9pYkYvaHA1cjNreEo2cWNoTzV0WkZQNXdn?=
- =?utf-8?B?cXpuSkx3aHlxUjQ5U3VrdEJDdkFUUHdZN0R5YkpROVM5SmVFM3UwcDlXRjB3?=
- =?utf-8?B?MFlxbkMrVjIvQithVW9xV3BNeU1EU2V0TVFvOVMyQUNrcmFKQWdvODRETkFX?=
- =?utf-8?B?RE83ZVJmV1dEQnFkVXI1UHRUZExWY051RVdJa0lHUnFyQ2J3Q1NNbDNCcHFm?=
- =?utf-8?B?OTI3Q3I4UjJGLzFqU1YwczlVd0lZZDBkMWV1NFRpTFNVSkxHYUNkNE1uOG9V?=
- =?utf-8?Q?xiyqquYWMMTdNXq9Zn0/9N6MyW2Yn8=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?R0tjM00rYzArS3VpTGVJOW5sK3E2YWU3RDBpWC9DVEIwallpU1RqTmxYOU5P?=
- =?utf-8?B?dldGbDFmMVkwaDlzQmd1RVExYXJ2T2JhSHI4cktmYXRXQUJjTC9pc1RwUkt1?=
- =?utf-8?B?V1Q5K0h0TnFZUlhSTEV1ZmNNVmloOTNNc01seG9tdTlFMWJVSE56bjRwdFJs?=
- =?utf-8?B?VGlJM05JeWJUSHMrNzlFdklrOXJpQ3BYU0F1b1pVZzZ6Y1NyTEdDeDVQWVZB?=
- =?utf-8?B?WnU2Y3NmMEVubzc2amhBQ1dMbTJyTUdYRnUvQ3V5TDRydUNTQ1ZiRUZTYnh3?=
- =?utf-8?B?bXRNVFBhRDZaU3BieTk1QWMvUThycmR1Zy9BWkpxZUZWdXRUNjhSaWZHbEdj?=
- =?utf-8?B?ejVwSitTYk5ILzN6SGVKR2hKQ3lvcUU4bVNYSjIwalFaZkZRemEvSDZnTE8y?=
- =?utf-8?B?YzJnQlV0cWFOZ2djaWtibDlHYzBEOWZHUjltUG5QbmZnZTducnhGaHRaUUNX?=
- =?utf-8?B?eXc4OVRhcVAzWENmaTcrTGZCaDZTT25EeHV2NjFmekVJTEJMeVI3YUdQaUYv?=
- =?utf-8?B?OGh0Y05lRVVRY2NMTDNXazdPR1NrazdwcWMzdXZXeExldlk3ZmZBdUs1WTdO?=
- =?utf-8?B?OEdUR3N6TjgzMEFQbkZHaUpJblUvdThUNis3bG9mQzljUWM2QmdHN0NzM2U3?=
- =?utf-8?B?dlFtQnFzL1UwTCtuYnNvNE5JMTdQYzBMcmFNSGNJMWZTcXNzaTljeGttZzNP?=
- =?utf-8?B?L2F1NUFwOUlQVmxobDZpWFZjdUI4Nzlma0s4SVJqT1JtbTNLVmEzRmdTMHFY?=
- =?utf-8?B?MGJyb21iejRpeTBvaTdZdkk4MVpSUjVDTDNtSHR5Skc4ZXZETXhXbDJEUVMz?=
- =?utf-8?B?T2JCU2NtN0o0U1BXcHZSdmdaSXhJNFlxQjNPQW9KTzVueDJTZk1LVUN5OXFr?=
- =?utf-8?B?c0pxT2tDQmhCMmpXVVNNRjNyYkt4VVlGRFcvR0hZdmp3ZXVSbjhJcCtKSit2?=
- =?utf-8?B?d0RHckZpSU1YUEJvMjhVZGIyL2Nsam92c2NrR2FLWmswc3lwUERTV2ozMDNl?=
- =?utf-8?B?Yk5sWEZKWG1VMnFhbGlsdCtSbUk4TXZjb05HaFFZRlF2MkZJYXpnRGNDQnd3?=
- =?utf-8?B?a2dJZnY2YnBVWUlYZ1VKNzA2ZmRyY3JIV0duYnkyc0lLaUNvS2xNeHczeWpp?=
- =?utf-8?B?L09STHBwS21jbG5IT0xsOVhNcUxoVC9ZL3haRWR2UldNQnhja2JPVXAwaENT?=
- =?utf-8?B?emFycjJyOE1FakFjcG1hbWhBR3FtQXUwZkRGSngzMzNUUkdqK2JSa3VSQU5W?=
- =?utf-8?B?RHBZTXI1RWJYWVQzcWFtLytmSWo2US9zMStsbWlHMVJDL3Q5THZkRFRoQUtQ?=
- =?utf-8?B?UnZBSjBpTW5SY0s0VXQ4MHN3YjhNUytobVo0ZDRRSHNKN21FOEc0OEp1ZjJk?=
- =?utf-8?B?UGRsQU1oMzhrUWIvdlpucFI3dW9UZFVWdXlaYnZOYnJITXRoQXZvTUVLWUMx?=
- =?utf-8?B?MWlDRUM5aGVLUnloUzA5eHAzd3Q1RnA4dG9lYkhUeE5jQlJqN0s4ZjEwb0d1?=
- =?utf-8?B?SHFwSjBQL1RyaUxEYkh5YmhsMkM2SWxRNHpFZkVzZEs2STZYa3ZjQi9LZ0Zh?=
- =?utf-8?B?Znk4dmowanR5TzJkekFabkNDcXJ5N3hMcDRsMWZwK3pqbGhNemVKbEp3Skhy?=
- =?utf-8?B?MTVHNnExZ1VRcnlkclgzeEhPcnhyRXpwa3dKUVJrVlNUR3JJYmpZZW81QnZX?=
- =?utf-8?B?VTJGdjNRZHh1cnR6Ry9NRGVSTE1yaTRLdzNBN2xKcGhabnZZajZsUk95R0lY?=
- =?utf-8?B?OTY1L1FUM1EzZ0lnbWRtZGd0ai9QYlBLRzg0MjNwMzFsVjh2VEhodGN4K0dI?=
- =?utf-8?B?ZVRZRzZycmlrMW1HRDVOdWdSZ004RER3a290QnA4QzNoMVUvdEgzcEFkK0tk?=
- =?utf-8?B?WksyTzlUWm5SZFdTUzh3UGY4NlFMZXZBSC81Nnc4Wk9nMTc5VGRUaXdGVXQ1?=
- =?utf-8?B?c0hXWkxvR2Y1RHZkelI3YXo3by96UVIvenkxbGpYRjdZN0NEWXU0Q2h2SjIr?=
- =?utf-8?B?NE52SEZKS2hydVN1enFqM1duVm5EdEw0amRpcnRnUFFGcFZQdmgzSUF2R2dE?=
- =?utf-8?B?clM5Tm1HTWxPSTdOZWhCaXVBSll2dWR0L1dvQVBHRWtGRXJKT3VaeVR4djZ0?=
- =?utf-8?Q?HNog=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R+Kkm2oV"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-748e63d4b05so1455216b3a.2;
+        Fri, 18 Jul 2025 08:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752850946; x=1753455746; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rS1Hb9jkF9G9opMttID/56RDiABU17nuzI2X985+cNg=;
+        b=R+Kkm2oVXEA9wT9JFWvuG5ROU87tLh6cH9+U4fKFAL1CNuQjVJSON2WsCWg7GLZ6/K
+         QyutHJkrYlSMPgntmmPMZIWKrpFDkY6Gsa+rqO7EUaGai7V6G0aOhx4cX+BqcLlCt2II
+         IJZDnQTeeTsYRQCA7ndhpu98zpRuIbE2N4O6agaFBsWLd8NqdPDy/DYbjyQB682aiYVj
+         Arfq1DwtFkQ81mrSI+3Y+VZpIxwONqbg5BKDsoAUFe8jdZymjLlFRcxkd30ONUZRDKiH
+         v9Siav8x6xrtrVbqljVSeg+7HpU9FBB2gXs3OTRK7GeXsQMMSuQjk3krVPPji41wY7gw
+         yYcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752850946; x=1753455746;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rS1Hb9jkF9G9opMttID/56RDiABU17nuzI2X985+cNg=;
+        b=aBlm6LXN1T2xDuzXyCEUf4eQPkAs39Oa7e0riXPbSQO4YpeP9nR8Hy5ndY7Jfv3ITt
+         soaorr+aLQhGDL/yeggPEW9nPFrZDI9UJuT+iSRYJjyhfpWc+qaPlOYEXbAQn8iDvFXa
+         uvUcdo4r5w3DNUKOW8/b1tGXp7qtD+iA3dyYYFAVRnWRQr0WikTKOlzjXaQPNymHVd5U
+         ZJavgmH6bm8SAYXtYPqnIyGPa1OqQviFqQpq+JqKAh6n65TmFefhcxSNaSLIP8p0zdSJ
+         nXcu5/FyS98NNsW86v+ltJNOqC7pGm2bfvFZ2LbcWMpxkSOB7Epns3uuDlTiiQnqGejs
+         37jg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzt1TNxrft3jLCRqw/7dyD50I3uv+wkY5UqIMZGABf59KkM46alyRMVGe8s8VODKay2KP4nSDjsh17BNsu@lists.linux.dev, AJvYcCXoAKhCKvjhNOnvm9GBgy6sbiIHRynFuRLtzB6ph1BHm1qthQiGZP8YpCFau8xe108gqg1ZPQ==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw7AC7e6IisHId39f/LNTySbT+a9YsvCNh1dmZUUOdgG0OZTJ5X
+	NQ2BE6PG5JLd3SIiPfJ8CO71nfi1atuXfQUOfjXVxWysv93A1X/MJlqz9DwDXMw4OjY=
+X-Gm-Gg: ASbGncuOch1H3d6FMUAlycHVuO+0PCiAFM9DRlcGPg81LBgJss4j6fyRAwKRcpV1xr1
+	pG3H16iBpuT7fDt3DoG7xzFa3Tyvw5Er59yrR4yObaO6s6McMuN04ibLusOwCNWSxzRwDqAr5S8
+	0kgV1RVtFOY98qKb1I6i6BKd5SB7UNxYaoeHSCBgqNXfTsgozGsLD+LsYxBsSBzFVS6WTyj+Xix
+	xXOrvv+qEKaM0lIaNtH6hrxtH1w61+fkmLV7/J+w4KrcoBIruKDzLlg3HAvf0qfqOrpoImBx/qb
+	Ik+oDUamYRCWuVHQNahLr8Pah0enFkF0tUcXt3hKul0qMOjQesQZhYXfBSh4KEV06Bl7xNpoGAK
+	O5ZZ/eLZobi0frSczCM9R1AcfJfzcCZ/lUWEypTDv1BnBPCWwhWZ/lqfoPgxVU2DPHkLPwbB515
+	47FNOwpfYSoUzHLT+1azyy
+X-Google-Smtp-Source: AGHT+IH7PMcccun3vaGdeD/RJhARuzeNyiL2lgqrv4BXVHpklhW5GTvP9s8/rnb6DrIRpDhNiwqhHw==
+X-Received: by 2002:a05:6a20:4311:b0:22b:3da9:fb33 with SMTP id adf61e73a8af0-2381244decdmr15629829637.12.1752850946374;
+        Fri, 18 Jul 2025 08:02:26 -0700 (PDT)
+Received: from DESKTOP-RD0GVCL.localdomain (124-218-195-161.cm.dynamic.apol.com.tw. [124.218.195.161])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f2fe653a7sm1384051a12.2.2025.07.18.08.02.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Jul 2025 08:02:25 -0700 (PDT)
+From: LiangCheng Wang <zaq14760@gmail.com>
+Date: Fri, 18 Jul 2025 23:02:14 +0800
+Subject: [PATCH v10] staging: media: atomisp: fix indentation in aa, anr,
+ and bh modules
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27af9712-c35f-48e8-e375-08ddc603293a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2025 13:58:23.5110
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f5Ke1wQs/mWSS6CzUqXRXxtNsxcMP3kXHIlnFiu1X7qPIHRLA+CWZNngJaBD2njMaICpcXYzgKKwGpnI8Y/Img==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9284
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250718-new_atomisp-v10-1-54bdff660058@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAPVhemgC/23M3QqDIBjG8VsJj+cw+1B3tPsYY1i+1gsrQ8NtR
+ Pc+66jBDp8Hfv+FBPAIgVyyhXiIGNCNaeTslJG212MHFE06CGe8YoKVdITXQ89uwDBREIUtRW4
+ LJiRJYvJg8b3nbve0ewyz85+9HuX2/u9ESRnlWlY1axujGrh2g8bnuXUD2TpRHWye/1qVrFbG1
+ LzkFdj6aNd1/QIKp71/4wAAAA==
+X-Change-ID: 20250704-new_atomisp-e73f471f3078
+To: Andy Shevchenko <andy@kernel.org>, Hans de Goede <hansg@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-staging@lists.linux.dev, llvm@lists.linux.dev, 
+ LiangCheng Wang <zaq14760@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752850943; l=12648;
+ i=zaq14760@gmail.com; h=from:subject:message-id;
+ bh=+e1iMGRpKp9G4bBHxeR7ZAWHo4gzQHuUdz02p5ovehI=;
+ b=RRMB2Qo5128Ga5uyePBpVrOIOM/21Cn+QmVtt64YoavRO4Q+CuU4Fbt3j7+HJ7B3Q2/fW7gyv
+ 4nSTC2Qp9g7D/YcJqp8dNaQrTonsNwN6+fSR1QkkIPUa/lEVQfaY3KB
+X-Developer-Key: i=zaq14760@gmail.com; a=ed25519;
+ pk=/x4391DbJ19fFQI7t33HWt3lsHfYPl2I2ax8C+Vxr+M=
 
-W1B1YmxpY10NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBOYXRoYW4g
-Q2hhbmNlbGxvciA8bmF0aGFuQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIEp1bHkgMTUs
-IDIwMjUgNzo1MCBQTQ0KPiBUbzogRGV1Y2hlciwgQWxleGFuZGVyIDxBbGV4YW5kZXIuRGV1Y2hl
-ckBhbWQuY29tPjsgS29lbmlnLCBDaHJpc3RpYW4NCj4gPENocmlzdGlhbi5Lb2VuaWdAYW1kLmNv
-bT4NCj4gQ2M6IEdhbywgTGlrdW4gPExpa3VuLkdhb0BhbWQuY29tPjsgWmhhbmcsIEhhd2tpbmcN
-Cj4gPEhhd2tpbmcuWmhhbmdAYW1kLmNvbT47IGFtZC1nZnhAbGlzdHMuZnJlZWRlc2t0b3Aub3Jn
-OyBkcmktDQo+IGRldmVsQGxpc3RzLmZyZWVkZXNrdG9wLm9yZzsgbGx2bUBsaXN0cy5saW51eC5k
-ZXY7IHBhdGNoZXNAbGlzdHMubGludXguZGV2Ow0KPiBzdGFibGVAdmdlci5rZXJuZWwub3JnOyBO
-YXRoYW4gQ2hhbmNlbGxvciA8bmF0aGFuQGtlcm5lbC5vcmc+DQo+IFN1YmplY3Q6IFtQQVRDSF0g
-ZHJtL2FtZGdwdTogSW5pdGlhbGl6ZSBkYXRhIHRvIE5VTEwgaW4NCj4gaW11X3YxMl8wX3Byb2dy
-YW1fcmxjX3JhbSgpDQo+DQo+IEFmdGVyIGEgcmVjZW50IGNoYW5nZSBpbiBjbGFuZyB0byBleHBv
-c2UgdW5pbml0aWFsaXplZCB3YXJuaW5ncyBmcm9tIGNvbnN0IHZhcmlhYmxlcw0KPiBhbmQgcG9p
-bnRlcnMgWzFdLCB0aGVyZSBpcyBhIHdhcm5pbmcgaW4NCj4gaW11X3YxMl8wX3Byb2dyYW1fcmxj
-X3JhbSgpIGJlY2F1c2UgZGF0YSBpcyBwYXNzZWQgdW5pbml0aWFsaXplZCB0bw0KPiBwcm9ncmFt
-X2ltdV9ybGNfcmFtKCk6DQo+DQo+ICAgZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvaW11X3Yx
-Ml8wLmM6Mzc0OjMwOiBlcnJvcjogdmFyaWFibGUgJ2RhdGEnIGlzDQo+IHVuaW5pdGlhbGl6ZWQg
-d2hlbiB1c2VkIGhlcmUgWy1XZXJyb3IsLVd1bmluaXRpYWxpemVkXQ0KPiAgICAgMzc0IHwgICAg
-ICAgICAgICAgICAgICAgICAgICAgcHJvZ3JhbV9pbXVfcmxjX3JhbShhZGV2LCBkYXRhLCAoY29u
-c3QgdTMyKXNpemUpOw0KPiAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBefn5+DQo+DQo+IEFzIHRoaXMgd2FybmluZyBoYXBwZW5zIGVh
-cmx5IGluIGNsYW5nJ3MgZnJvbnRlbmQsIGl0IGRvZXMgbm90IHJlYWxpemUgdGhhdCBkdWUgdG8g
-dGhlDQo+IGFzc2lnbm1lbnQgb2YgciB0byAtRUlOVkFMLCBwcm9ncmFtX2ltdV9ybGNfcmFtKCkg
-aXMgbmV2ZXIgYWN0dWFsbHkgY2FsbGVkLCBhbmQNCj4gZXZlbiBpZiBpdCB3ZXJlLCBkYXRhIHdv
-dWxkIG5vdCBiZSBkZXJlZmVyZW5jZWQgYmVjYXVzZSBzaXplIGlzIDAuDQo+DQo+IEp1c3QgaW5p
-dGlhbGl6ZSBkYXRhIHRvIE5VTEwgdG8gc2lsZW5jZSB0aGUgd2FybmluZywgYXMgdGhlIGNvbW1p
-dCB0aGF0IGFkZGVkDQo+IHByb2dyYW1faW11X3JsY19yYW0oKSBtZW50aW9uZWQgaXQgd291bGQg
-ZXZlbnR1YWxseSBiZSB1c2VkIG92ZXIgdGhlIG9sZCBtZXRob2QsDQo+IGF0IHdoaWNoIHBvaW50
-IGRhdGEgY2FuIGJlIHByb3Blcmx5IGluaXRpYWxpemVkIGFuZCB1c2VkLg0KPg0KPiBDYzogc3Rh
-YmxlQHZnZXIua2VybmVsLm9yZw0KPiBDbG9zZXM6IGh0dHBzOi8vZ2l0aHViLmNvbS9DbGFuZ0J1
-aWx0TGludXgvbGludXgvaXNzdWVzLzIxMDcNCj4gRml4ZXM6IDU2MTU5ZmZmYWFiNSAoImRybS9h
-bWRncHU6IHVzZSBuZXcgbWV0aG9kIHRvIHByb2dyYW0gcmxjIHJhbSIpDQo+IExpbms6IGh0dHBz
-Oi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tDQo+IHByb2plY3QvY29tbWl0LzI0NjQzMTNlZWYwMWM1
-YjFlZGYwZWNjZjU3YTMyY2RlZTAxNDcyYzcgWzFdDQo+IFNpZ25lZC1vZmYtYnk6IE5hdGhhbiBD
-aGFuY2VsbG9yIDxuYXRoYW5Aa2VybmVsLm9yZz4NCg0KQXBwbGllZC4gIFRoYW5rcyENCg0KQWxl
-eA0KDQo+IC0tLQ0KPiAgZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvaW11X3YxMl8wLmMgfCAy
-ICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4N
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2ltdV92MTJfMC5jDQo+
-IGIvZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvaW11X3YxMl8wLmMNCj4gaW5kZXggZGY4OThk
-YmI3NDZlLi44Y2I2YjE4NTRkMjQgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hbWQv
-YW1kZ3B1L2ltdV92MTJfMC5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2lt
-dV92MTJfMC5jDQo+IEBAIC0zNjIsNyArMzYyLDcgQEAgc3RhdGljIHZvaWQgcHJvZ3JhbV9pbXVf
-cmxjX3JhbShzdHJ1Y3QgYW1kZ3B1X2RldmljZQ0KPiAqYWRldiwgIHN0YXRpYyB2b2lkIGltdV92
-MTJfMF9wcm9ncmFtX3JsY19yYW0oc3RydWN0IGFtZGdwdV9kZXZpY2UgKmFkZXYpICB7DQo+ICAg
-ICAgIHUzMiByZWdfZGF0YSwgc2l6ZSA9IDA7DQo+IC0gICAgIGNvbnN0IHUzMiAqZGF0YTsNCj4g
-KyAgICAgY29uc3QgdTMyICpkYXRhID0gTlVMTDsNCj4gICAgICAgaW50IHIgPSAtRUlOVkFMOw0K
-Pg0KPiAgICAgICBXUkVHMzJfU09DMTUoR0MsIDAsIHJlZ0dGWF9JTVVfUkxDX1JBTV9JTkRFWCwg
-MHgyKTsNCj4NCj4gLS0tDQo+IGJhc2UtY29tbWl0OiBmZmY4ZTA1MDQ0OTlhOTI5ZjI2ZTJmYjdj
-ZjdlMmM5ODU0ZTM3YjkxDQo+IGNoYW5nZS1pZDogMjAyNTA3MTUtZHJtLWFtZGdwdS1maXgtY29u
-c3QtdW5pbml0LXdhcm5pbmctZGI2MWZlNWQxMzVhDQo+DQo+IEJlc3QgcmVnYXJkcywNCj4gLS0N
-Cj4gTmF0aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPg0KDQo=
+Fix tab/space indentation and move a standalone kernel-doc
+comment of the 'strength' field of the struct ia_css_aa_config
+to the whole-structure one.
+Align with kernel coding style guidelines.
+
+No functional logic changes were made.
+
+Signed-off-by: LiangCheng Wang <zaq14760@gmail.com>
+---
+This patch focuses on cleaning up indentation (spaces, tabs) in the
+AtomISP driver under drivers/staging/media/atomisp/pci/isp/kernels/.
+
+There is no functional logic change.
+---
+Changes in v10:
+- Squashed previous aa/anr/bh patches into a single patch
+- Rewrote commit message to reflect actual changes
+- Removed unnecessary Suggested-by and Link tags as advised
+- Added trailing comma to array initialization as suggested
+- Link to v9: https://lore.kernel.org/r/20250711-new_atomisp-v9-0-a9dd62425ef6@gmail.com
+
+Changes in v9:
+- Reformatted struct comments to follow kernel-doc format
+- Reverted macro definition changes that removed alignment
+- Reverted multi-line array initializations to use brace-on-own-line style
+- Added trailing comma in small array initializations
+- Adjusted function declarations to follow kernel-style indentation
+- Removed unnecessary churn in cases where code was already style-compliant
+- Link to v8: https://lore.kernel.org/r/20250704-new_atomisp-v8-0-2a8560cbd9be@gmail.com
+
+Changes in v8:
+- Reorganized cleanup by subdirectory (one commit per directory)
+- Focused only on indentation fixes (spaces, tabs)
+- Removed all clang-format involvement
+- No functional changes
+- Link to v7: https://lore.kernel.org/all/20250629113050.58138-1-zaq14760@gmail.com/
+
+Changes in v7:
+- Split previous monolithic patch into multiple smaller patches
+- Applied clang-format to entire driver excluding i2c directory
+- Fixed checkpatch.pl-reported ERRORs (parentheses in macros, unnecessary return parentheses, zero-initialized globals, spaces after unary minus)
+- Left WARNINGS untouched for future cleanup
+- No functional logic changes
+- Link to v6: https://lore.kernel.org/r/20250627-bar-v6-1-b22b5ea3ced0@gmail.com
+
+Changes in v6:
+- Applied clang-format across the entire AtomISP driver
+- Fixed all checkpatch.pl-reported ERRORs
+- Added explanation of tooling and scope
+- No functional logic modified
+- Moved 'Suggested-by' and 'Link' tags above Signed-off-by
+- Link to v5: https://lore.kernel.org/r/20250625-bar-v5-1-db960608b607@gmail.com
+
+Changes in v5:
+- Replaced space-based indentation with tabs in output_1.0 directory
+- Used checkpatch.pl and grep to identify formatting issues
+- No functional changes made
+- This patch is now focused solely on tab/space issues
+- Link to v4: https://lore.kernel.org/r/20250624-bar-v4-1-9f9f9ae9f868@gmail.com
+
+Changes in v4:
+- Moved assignment operator '=' to the same line for static struct definitions
+- Remove unnecessary line breaks in function definitions
+- Update commit message to reflect all the coding style fixes
+- Link to v3: https://lore.kernel.org/r/20250622-bar-v3-1-4cc91ef01c3a@gmail.com
+
+Changes in v3:
+- Removed extra spaces between type and asterisk (e.g., `*to`) in function
+  declarations, as pointed out by Andy Shevchenko
+- Update commit message to reflect all the coding style fixes
+- Link to v2: https://lore.kernel.org/r/20250621-bar-v2-1-4e6cfc779614@gmail.com
+
+Changes in v2:
+- Fix patch subject prefix to "staging: media: atomisp:" to comply with media CI style.
+- No other functional changes.
+- Link to v1: https://lore.kernel.org/r/20250621-bar-v1-1-5a3e7004462c@gmail.com
+
+Thanks for your previous feedback.
+
+Best regards,  
+LiangCheng Wang <zaq14760@gmail.com>
+
+Signed-off-by: LiangCheng Wang <zaq14760@gmail.com>
+---
+ .../pci/isp/kernels/aa/aa_2/ia_css_aa2_types.h     |  8 +++++---
+ .../pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.c  | 24 ++++++++--------------
+ .../pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.h  | 20 +++++++-----------
+ .../pci/isp/kernels/anr/anr_2/ia_css_anr2.host.c   | 14 +++++--------
+ .../pci/isp/kernels/anr/anr_2/ia_css_anr2.host.h   | 13 +++++-------
+ .../pci/isp/kernels/bh/bh_2/ia_css_bh.host.c       | 14 +++++--------
+ .../pci/isp/kernels/bh/bh_2/ia_css_bh.host.h       | 14 +++++--------
+ 7 files changed, 41 insertions(+), 66 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/aa/aa_2/ia_css_aa2_types.h b/drivers/staging/media/atomisp/pci/isp/kernels/aa/aa_2/ia_css_aa2_types.h
+index 2f568a7062da726397f55b1e73dadd27fcd1f2f8..f825f537a5366f6b97170dd44827436fd800d105 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/aa/aa_2/ia_css_aa2_types.h
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/aa/aa_2/ia_css_aa2_types.h
+@@ -28,11 +28,13 @@
+  *     ISP block: BAA2
+  *     ISP1: BAA2 is used.
+  *     ISP2: BAA2 is used.
++ *
++ * @strength: Strength of the filter, in u0.13 fixed-point format.
++ *            Valid range: [0, 8191]. A value of 0 means the filter is
++ *            ineffective (default).
+  */
+ struct ia_css_aa_config {
+-	u16 strength;	/** Strength of the filter.
+-					u0.13, [0,8191],
+-					default/ineffective 0 */
++	u16 strength;
+ };
+ 
+ #endif /* __IA_CSS_AA2_TYPES_H */
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.c
+index 899d566234b9d3a35401666dcf0c7b1b80fd5b31..488807a161b9a6ba9ebc4a557221cd21bd1df108 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.c
+@@ -16,25 +16,21 @@ const struct ia_css_anr_config default_anr_config = {
+ 		0, 3, 1, 2, 3, 6, 4, 5, 1, 4, 2, 3, 2, 5, 3, 4,
+ 		0, 3, 1, 2, 3, 6, 4, 5, 1, 4, 2, 3, 2, 5, 3, 4,
+ 		0, 3, 1, 2, 3, 6, 4, 5, 1, 4, 2, 3, 2, 5, 3, 4,
+-		0, 3, 1, 2, 3, 6, 4, 5, 1, 4, 2, 3, 2, 5, 3, 4
++		0, 3, 1, 2, 3, 6, 4, 5, 1, 4, 2, 3, 2, 5, 3, 4,
+ 	},
+-	{10, 20, 30}
++	{ 10, 20, 30 },
+ };
+ 
+-void
+-ia_css_anr_encode(
+-    struct sh_css_isp_anr_params *to,
+-    const struct ia_css_anr_config *from,
+-    unsigned int size)
++void ia_css_anr_encode(struct sh_css_isp_anr_params *to,
++		       const struct ia_css_anr_config *from,
++		       unsigned int size)
+ {
+ 	(void)size;
+ 	to->threshold = from->threshold;
+ }
+ 
+-void
+-ia_css_anr_dump(
+-    const struct sh_css_isp_anr_params *anr,
+-    unsigned int level)
++void ia_css_anr_dump(const struct sh_css_isp_anr_params *anr,
++		     unsigned int level)
+ {
+ 	if (!anr) return;
+ 	ia_css_debug_dtrace(level, "Advance Noise Reduction:\n");
+@@ -42,10 +38,8 @@ ia_css_anr_dump(
+ 			    "anr_threshold", anr->threshold);
+ }
+ 
+-void
+-ia_css_anr_debug_dtrace(
+-    const struct ia_css_anr_config *config,
+-    unsigned int level)
++void ia_css_anr_debug_dtrace(const struct ia_css_anr_config *config,
++			     unsigned int level)
+ {
+ 	ia_css_debug_dtrace(level,
+ 			    "config.threshold=%d\n",
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.h b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.h
+index 4f77900871c8b9d43bdc00308aa914eda3af7fa7..2f17d62b92087afd26aff2a49dadf4ee2fb7fcf5 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.h
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.h
+@@ -12,20 +12,14 @@
+ 
+ extern const struct ia_css_anr_config default_anr_config;
+ 
+-void
+-ia_css_anr_encode(
+-    struct sh_css_isp_anr_params *to,
+-    const struct ia_css_anr_config *from,
+-    unsigned int size);
++void ia_css_anr_encode(struct sh_css_isp_anr_params *to,
++		       const struct ia_css_anr_config *from,
++		       unsigned int size);
+ 
+-void
+-ia_css_anr_dump(
+-    const struct sh_css_isp_anr_params *anr,
+-    unsigned int level);
++void ia_css_anr_dump(const struct sh_css_isp_anr_params *anr,
++		     unsigned int level);
+ 
+-void
+-ia_css_anr_debug_dtrace(
+-    const struct ia_css_anr_config *config, unsigned int level)
+-;
++void ia_css_anr_debug_dtrace(const struct ia_css_anr_config *config,
++			     unsigned int level);
+ 
+ #endif /* __IA_CSS_ANR_HOST_H */
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.c
+index 09599884bdaefe32f891f437274b96110888a675..3c6d99139cda6f12eb6ef6fe8f996f7ff11551c2 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.c
+@@ -10,11 +10,9 @@
+ 
+ #include "ia_css_anr2.host.h"
+ 
+-void
+-ia_css_anr2_vmem_encode(
+-    struct ia_css_isp_anr2_params *to,
+-    const struct ia_css_anr_thres *from,
+-    size_t size)
++void ia_css_anr2_vmem_encode(struct ia_css_isp_anr2_params *to,
++			     const struct ia_css_anr_thres *from,
++			     size_t size)
+ {
+ 	unsigned int i;
+ 
+@@ -28,10 +26,8 @@ ia_css_anr2_vmem_encode(
+ 	}
+ }
+ 
+-void
+-ia_css_anr2_debug_dtrace(
+-    const struct ia_css_anr_thres *config,
+-    unsigned int level)
++void ia_css_anr2_debug_dtrace(const struct ia_css_anr_thres *config,
++			      unsigned int level)
+ {
+ 	(void)config;
+ 	(void)level;
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.h b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.h
+index 2b1105f21c1e2b37144083b6bb8f9dd465a2f43b..36fb6c25969991ffcdd4424a695dacc5b5c2a9db 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.h
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2.host.h
+@@ -13,15 +13,12 @@
+ #include "ia_css_anr2_param.h"
+ #include "ia_css_anr2_table.host.h"
+ 
+-void
+-ia_css_anr2_vmem_encode(
+-    struct ia_css_isp_anr2_params *to,
+-    const struct ia_css_anr_thres *from,
+-    size_t size);
++void ia_css_anr2_vmem_encode(struct ia_css_isp_anr2_params *to,
++			     const struct ia_css_anr_thres *from,
++			     size_t size);
+ 
+-void
+-ia_css_anr2_debug_dtrace(
+-    const struct ia_css_anr_thres *config, unsigned int level)
++void ia_css_anr2_debug_dtrace(const struct ia_css_anr_thres *config,
++			      unsigned int level)
+ ;
+ 
+ #endif /* __IA_CSS_ANR2_HOST_H */
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c
+index 69c87e53f3c22fade6c4c7914d1550f68dd8f5c2..b87eb1a21b216dc6132331d2a48d7cb56ddaea24 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c
+@@ -12,10 +12,8 @@
+ 
+ #include "ia_css_bh.host.h"
+ 
+-void
+-ia_css_bh_hmem_decode(
+-    struct ia_css_3a_rgby_output *out_ptr,
+-    const struct ia_css_bh_table *hmem_buf)
++void ia_css_bh_hmem_decode(struct ia_css_3a_rgby_output *out_ptr,
++			   const struct ia_css_bh_table *hmem_buf)
+ {
+ 	int i;
+ 
+@@ -37,11 +35,9 @@ ia_css_bh_hmem_decode(
+ 	}
+ }
+ 
+-void
+-ia_css_bh_encode(
+-    struct sh_css_isp_bh_params *to,
+-    const struct ia_css_3a_config *from,
+-    unsigned int size)
++void ia_css_bh_encode(struct sh_css_isp_bh_params *to,
++		      const struct ia_css_3a_config *from,
++		      unsigned int size)
+ {
+ 	(void)size;
+ 	/* coefficients to calculate Y */
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.h b/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.h
+index 36b360cfe62e65037522e0037cf51fca0fabdfba..964d658ceec31b0b22fc3bc6d19b40b07b2fc06c 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.h
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.h
+@@ -10,15 +10,11 @@
+ #include "ia_css_bh_param.h"
+ #include "s3a/s3a_1.0/ia_css_s3a_types.h"
+ 
+-void
+-ia_css_bh_hmem_decode(
+-    struct ia_css_3a_rgby_output *out_ptr,
+-    const struct ia_css_bh_table *hmem_buf);
++void ia_css_bh_hmem_decode(struct ia_css_3a_rgby_output *out_ptr,
++			   const struct ia_css_bh_table *hmem_buf);
+ 
+-void
+-ia_css_bh_encode(
+-    struct sh_css_isp_bh_params *to,
+-    const struct ia_css_3a_config *from,
+-    unsigned int size);
++void ia_css_bh_encode(struct sh_css_isp_bh_params *to,
++		      const struct ia_css_3a_config *from,
++		      unsigned int size);
+ 
+ #endif /* __IA_CSS_BH_HOST_H */
+
+---
+base-commit: 8c2e52ebbe885c7eeaabd3b7ddcdc1246fc400d2
+change-id: 20250704-new_atomisp-e73f471f3078
+
+Best regards,
+-- 
+LiangCheng Wang <zaq14760@gmail.com>
+
