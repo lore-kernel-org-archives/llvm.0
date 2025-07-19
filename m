@@ -1,66 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F752236E0;
-	Sat, 19 Jul 2025 11:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079072629C;
+	Sat, 19 Jul 2025 11:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752924551; cv=none; b=TuBm1hFMFMJbL7+GVet2MzWV8glscr9j/z/ZGgwAA9b46vEM8dU+fAUidM9WEmNBMI4rixonZ40Uwfe+X4vlR8d/j/xm+ofagINCcHZUxLJJlaDKL6OlMydLEejp7S7JKx1ZkGADJoY/5EvDypLMFkrGwTlMc5z2riNAYwmlv3I=
+	t=1752925872; cv=none; b=ILboz37qAk6oCh2UAlaqaUiUSQzaslN52mqFGGw6Y4DDmw4Xz+m493Js+ZS91cHKHefad9vgh6kS1Rspysh2LFir3wDAE63fNIE2vn3pKRKQefAOiu7Hf+3iJks5mH5o3l8AcZ89vqtXwMVHPNvBzOQWks5ci68HJFdDsTYM5E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752924551; c=relaxed/simple;
-	bh=Cy9pjvo9o1sugb4I0cfDyzykkSUFG6R+svA2UCozKws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YliWtIUN+TJd4JEAb3T8Cjpfmpa9jlFa7xjnLweM2VbQG9YlkpmIzrQqO1MFcahdBwKMn9oXKc/qqcuLrthUgblVz2gmMRzgZXcu3pUr6+Lw/ViMXaN8efQAPtSoJL3CKC+MXh/yCKmleVQwBRsSGoA4uxknFsG8C+2ndbvjnsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EKd0b2JQ; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1752925872; c=relaxed/simple;
+	bh=8k3hJfjWIw3JJXtIwJDQtU/Hy3fgSMhUAZxEqw/tfV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Qa+xsV4nZwBhf29RBJ1KXxGlvOZISHDiwf7wilnCiEedzSSBs/kjXRE+wJPRxjGKN4fAPFVsnlSbWz7acxi5F/umxEio2i3G8eKRETJH08FhCTuEy18aI9DW8jrmwsX7U+mUpULr/j1juD5eWWeJ5TxmcwZiYTo8neBnFTx86lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z1MkcU+p; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EKd0b2JQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z1MkcU+p"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752924550; x=1784460550;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cy9pjvo9o1sugb4I0cfDyzykkSUFG6R+svA2UCozKws=;
-  b=EKd0b2JQZfhI6CKzMe9UGgyMY/e7ei+WsK0UbfuqnD0QhtmReIW9LQyq
-   OrCL3w8Ee9qgAuZSNQYIjGXsU/L5URd+DI0Ql8e0bJ2a5WrzzeJWVWNDR
-   i3lKQH5eQ3zilcAnBYbhL7ocZ+i7XGnvDUVSEUwJHW1fLbNTLXH2Tqkcz
-   bcSZydGOuW2dX/YZMWnnrfZ8ZMIzP4mmINQbk4jPClhCxJoGtvD58NWqC
-   aG+9VcSvNgTT1qTsE3Eazxn2irVt9DjeuHzkZEOvPv4zvn3LktNomCgUo
-   nnyQvXL4Y+uBHM94LZa8Cn6+Ql0TKAHXPqps6FRJFXvUtKZP/VeICmvoZ
-   A==;
-X-CSE-ConnectionGUID: 1+jU1s2GRGqfkBZcNtixKg==
-X-CSE-MsgGUID: VoPIEnYLThatJKqzDX82tg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11496"; a="55058409"
+  t=1752925869; x=1784461869;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8k3hJfjWIw3JJXtIwJDQtU/Hy3fgSMhUAZxEqw/tfV8=;
+  b=Z1MkcU+pR/XVn8rvl9glVk+WFBQ5EFpTNDcBfhRYpc/PzAGl5Bde8hpr
+   LO1NNrNB2Lp6yDRa1YcnLQPMesGmlcfCw4CWk3U/Uv/RqhEte43SNPGlP
+   fv/l7YUEfonM5PL2G9PSsZeMNVxHnBAy8MsctAIQTXx99bf32N8yENW9F
+   kmy6/Uhj8AsTxYEBIj6CrwpEqth36Y0IT0uBCye2B/dbxeX3ATDqhbtPq
+   VZ7Y0obSLx+hjW1zmaUNL/obeR2tjbMjvyf84wq9RpkpAGvwOTaSwep+0
+   Qu9Tl7IDUcFOmH8SblYQZ+24UUl/5SJyq1Q/0hwSuHtJKpZpcVBIPZVFT
+   g==;
+X-CSE-ConnectionGUID: NFmGqgeaQvS6yQV6x4jT8A==
+X-CSE-MsgGUID: 4z6OKMFOQrG8Y/LUAN68UA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11496"; a="55351641"
 X-IronPort-AV: E=Sophos;i="6.16,324,1744095600"; 
-   d="scan'208";a="55058409"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2025 04:29:09 -0700
-X-CSE-ConnectionGUID: ZjNNKKktSRucpl6nlv0sWA==
-X-CSE-MsgGUID: XKT4BK0RT6yU74MkNWddxA==
+   d="scan'208";a="55351641"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2025 04:51:08 -0700
+X-CSE-ConnectionGUID: YEOv4+r0QeKrcNvXLvYtqQ==
+X-CSE-MsgGUID: lx9uFZkvQs6SfztQZsyQqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,324,1744095600"; 
-   d="scan'208";a="158091958"
+   d="scan'208";a="189387255"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Jul 2025 04:29:06 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 19 Jul 2025 04:51:08 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ud5kV-000FSV-1N;
-	Sat, 19 Jul 2025 11:29:03 +0000
-Date: Sat, 19 Jul 2025 19:28:52 +0800
+	id 1ud65p-000FTT-19;
+	Sat, 19 Jul 2025 11:51:05 +0000
+Date: Sat, 19 Jul 2025 19:50:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oreoluwa Babatunde <oreoluwa.babatunde@oss.qualcomm.com>,
-	robh@kernel.org, m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	saravanak@google.com, quic_obabatun@quicinc.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, william.zhang@broadcom.com,
-	kernel@oss.qualcomm.com, will@kernel.org, djakov@kernel.org,
-	Oreoluwa Babatunde <oreoluwa.babatunde@oss.qualcomm.com>
-Subject: Re: [PATCH v2] of: reserved_mem: Restructure call site for
- dma_contiguous_early_fixup()
-Message-ID: <202507191943.suIkiLRK-lkp@intel.com>
-References: <20250718234504.2702128-1-oreoluwa.babatunde@oss.qualcomm.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot+extras/v6.16-rc5 122/131]
+ mm/memory_hotplug.c:221:6: error: redefinition of 'lockdep_assert_mems_held'
+Message-ID: <202507191942.RK85Fqbw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,51 +61,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250718234504.2702128-1-oreoluwa.babatunde@oss.qualcomm.com>
 
-Hi Oreoluwa,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.16-rc6 next-20250718]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oreoluwa-Babatunde/of-reserved_mem-Restructure-call-site-for-dma_contiguous_early_fixup/20250719-074651
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250718234504.2702128-1-oreoluwa.babatunde%40oss.qualcomm.com
-patch subject: [PATCH v2] of: reserved_mem: Restructure call site for dma_contiguous_early_fixup()
-config: i386-buildonly-randconfig-005-20250719 (https://download.01.org/0day-ci/archive/20250719/202507191943.suIkiLRK-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507191943.suIkiLRK-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot+extras/v6.16-rc5
+head:   8c0e6855f422b15a5bfce352b703c51e69454d43
+commit: 44b26ef1f0535659d2803b1118246ffb9a221c24 [122/131] mm,memory_hotplug: Add lockdep assertion helper
+config: arm64-randconfig-002-20250719 (https://download.01.org/0day-ci/archive/20250719/202507191942.RK85Fqbw-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507191942.RK85Fqbw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507191943.suIkiLRK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507191942.RK85Fqbw-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/of/of_reserved_mem.c:152:1: warning: no previous prototype for function 'dma_contiguous_early_fixup' [-Wmissing-prototypes]
-     152 | dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
-         | ^
-   drivers/of/of_reserved_mem.c:151:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     151 | void __weak
-         | ^
-         | static 
-   1 warning generated.
+>> mm/memory_hotplug.c:221:6: error: redefinition of 'lockdep_assert_mems_held'
+     221 | void lockdep_assert_mems_held(void)
+         |      ^
+   include/linux/memory_hotplug.h:339:20: note: previous definition is here
+     339 | static inline void lockdep_assert_mems_held(void) { }
+         |                    ^
+   1 error generated.
 
 
-vim +/dma_contiguous_early_fixup +152 drivers/of/of_reserved_mem.c
+vim +/lockdep_assert_mems_held +221 mm/memory_hotplug.c
 
-   150	
-   151	void __weak
- > 152	dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
-   153	{
-   154	}
-   155	
+   220	
+ > 221	void lockdep_assert_mems_held(void)
+   222	{
+   223		/* See lockdep_assert_cpus_held() */
+   224		if (system_state < SYSTEM_RUNNING)
+   225	                return;
+   226	
+   227		percpu_rwsem_assert_held(&mem_hotplug_lock);
+   228	}
+   229	
 
 -- 
 0-DAY CI Kernel Test Service
