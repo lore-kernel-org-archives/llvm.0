@@ -1,528 +1,221 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62FDD2367B3
-	for <llvm@lists.linux.dev>; Sat, 19 Jul 2025 08:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0B3221F01
+	for <llvm@lists.linux.dev>; Sat, 19 Jul 2025 11:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752913899; cv=none; b=JSggsufsbOubSIX6ene3smNFEXB48bGwAlwtB1m41fiYyKuyiomxEJD4nelZ8Z3zE2av0c26l20UrGt2s6MgvCjBjrYW6az1O2BjgnZUagA0BMNuUjIJGHBBcudch9LVwt+78ZDb5tXHM1GM6BvRcZa3Bth0BmeXWt1ToTZyPIs=
+	t=1752923597; cv=none; b=Oe8hZVY0zVI89TbMIRJ0ZWT864hfDDUz4luvAxZzlby2jY66xoRf4ZNr1tYGHpLAFhXPMnO6kX5UQluhxUzZmivT1eZJ/l9JbT0koUm229pBlnRNATX8AAXbrpw4stDP1T5RArD4qKp6UFRXlQ5CJtQuDlaUqt5WH1Je2WzuJwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752913899; c=relaxed/simple;
-	bh=iH8ItoasH1gDaQiUxl4+YF41U4VkVXOT+Mi0Dz79yuU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ia7zSKZe70tSH7TALehIevLzVEVe0k2sMyes0kaiaYuGmp6aSE1cotKywfWRTCiiXrYVeY7T2ZxoEFDHoSSE/ETlXCM3ubBNFtXv00ZNyqAA7EKqk56MivUMg84j+f38TQI074F7f2u3+VBblkEJSLbZCT2CMOVM+cce9M3lfkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aUQmC2OO; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1752923597; c=relaxed/simple;
+	bh=0mwzNFeEDlJbURltDxuzC/0HvB2I9wVfuHC9hjlqpfM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q0wJFAapTBHb7njhlC3rHZgxR2TfERsL3GuwP6krtWCU4pzc6b6bgRarsmM8A7dPsZnxPI8x964nWVghktJEOzzL10hLB2GwUo2uMdALBHRVB9t8hfsqVVpv/JqOVjHTI/TxOgw1NBBP1a918kQblAcodD/Ff3osgRsuR8raBLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RNkzVGtD; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aUQmC2OO"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4563bc166a5so8942105e9.1
-        for <llvm@lists.linux.dev>; Sat, 19 Jul 2025 01:31:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RNkzVGtD"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2363616a1a6so24755145ad.3
+        for <llvm@lists.linux.dev>; Sat, 19 Jul 2025 04:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752913896; x=1753518696; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HUckn10WlK4XE41fAiCWrfhz3MjSrJu7ubH6Em5MS6k=;
-        b=aUQmC2OOu117qIiwVFqjzJy19KRhQ+YWEUjAt8jOHBKOBP+lorG9glwdla8Ji0Y3hN
-         KN4UHWwOmtm2XzAPzdDB0TvGZ6MVzHUFHu1Eq3q9Q7ivBRZOfHaLMzCUtVXGb3PX4VXV
-         DMOBKhUHS6eHPCi9YYdOi67+4XWdHp/mKIMWMBiSEkLVz6nxLtBBVIS+HZuMQyoAdQLh
-         XOy/0CKiy1FoQYxRZ0IlhVHFgoqsbuFeExpi9K6/wfh9DNwHRfOA5O4bf8oC1EMlkpnr
-         TtXzuCJg9/0lWU9zQeoWmUMBor18wL7fT/wYlbDjPiYnl7ZFNBdHUi874rhugES6/V37
-         u+jg==
+        d=gmail.com; s=20230601; t=1752923594; x=1753528394; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ErnUj0TrfehYqLSfVNQWUCMO7rE+AGCV77A73SWWF44=;
+        b=RNkzVGtDDxOma2WLtCQ+NLSASSZbw7LmAo25W4nl7klcYZtDjHuMAwi9yIqVXs2dlp
+         VNfNkVMJBFIHFUJ6AuF884X3zOIu+cjcEpkt2xaYQEmCAWRX8JpNn3Yjgt6w7C9s4SWq
+         BoxQ5CxX75pm1+UMqLKVuZf2LO8/G9/eJnHY9dhRnwfEx1epKVaSZR5oRnhOyLSsfwk9
+         6A1N6gJgsjpZokeEfCj5I9qJWdbaKf1fNuIhDelh95BNp4qiP59e1hiM7l3Htn5XaPat
+         pSe0Mh3fWWAqf2PTQfBuEJOMSnnCdoFtJiNtuWAp4c8pnFMmNg//3/ATSMY5/et+zwnO
+         +uAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752913896; x=1753518696;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HUckn10WlK4XE41fAiCWrfhz3MjSrJu7ubH6Em5MS6k=;
-        b=QF6L3Fg0eiB2cUn5+6bTap8hCfKNpkkZP3zCT9LTpbNEVnfTc0Riw4sPeM+WWgv17J
-         5W6w2/Gj68r2xvYjyBXVuSCL+WNymDnV3T7E0L429olefUbAvGrCUkI6Fto8Xi1OW5yv
-         GsBCExFLBkGmDPNcw56lJM6GNC4ASUo9wGhNadzQA0b6+cwlwYQhE4trPtTjDx+rLSr6
-         oHdGB6Mgyb6p0jE1RbGw2thmENhLzFWkiEMtTy19+zVEgJfbsQxOzV1ZKHVeoWoGBG0C
-         E6rlAN4/qIXVvQGI0N7XZ3sI2ijZusgyYj2Bt2oU0I9F1BwfhTQcmEFDcrWJljS60W1e
-         7UFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXL+q/Ge4duYPW2snMkGmqcVJsLmIZCNWncZeYqZquRBo7fG1uKo23uBcWpSbme3YVnmYk/@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzhr6hu6zIJJGWt60sehJo9tlIXQ/LHDA/lOLtd6dj+tfIzxJqK
-	VrjvQlapCpi4duwrDvZAnDOdHjgHe3p4SCuCyBevdE40pbjnGYdMaTF5
-X-Gm-Gg: ASbGncts58p7K6mN+iWeYLPLgcOV21OaPh9HdsF3fczZaULBDeJQBFqF0BPPCXiJ0Qt
-	f6QEi5JNxjNgoMYGOHc5Ao6ieXNdBlARFK8Oio4TK6GdrtMNWbKc2CFicc+Ab5VlGDroT24bewv
-	sJUl1rOibmg0grAVVd0tyDe+FX16sNa8ZCaD+Gmgngh/QnqKRcyyjyyDhGBE5WgWl/kNhEI93n6
-	k3fvfhn3+AEAPqh67GFUsVREFU+g4uJ8c34Zn8qfQn7bBYseHf5raZ/cuAOQX4ueMAd0bcX1T25
-	YxLw0pv2hHMZi3WwBKtXDEp3piSiHf5yfLTjLrvFe9ZGm4AKdR7AHsVHP1S7iPvv93SccJ3JNAD
-	p+zt/qBC70HkkPhIlfrs=
-X-Google-Smtp-Source: AGHT+IH5Q26+H41r3NHPhRFJ9oFciblkZ+X5Ax24q1lTH2LOiioNMepoybfAnuVwZ5xwheWkV4g9Fg==
-X-Received: by 2002:a05:600c:4e06:b0:456:2139:456a with SMTP id 5b1f17b1804b1-45634c82b45mr103429725e9.15.1752913895431;
-        Sat, 19 Jul 2025 01:31:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:1::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca5c952sm4139356f8f.86.2025.07.19.01.31.34
+        d=1e100.net; s=20230601; t=1752923594; x=1753528394;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ErnUj0TrfehYqLSfVNQWUCMO7rE+AGCV77A73SWWF44=;
+        b=iOhaO7LfrualKmsiDYfmdEJQa107FF3Dzu0q2P0XVwzaQnsxqVmo2RJ2Qbyf5GcwH/
+         im0kmyb0bMh116AiI+LPIFGJq83MSJ2XK5szydF2qexGwW7liiC73mMmuY+URxkWtsyc
+         nSrVQpyWIXHmX/ehY3KAxOx0c2z10VEWC5jcoMDGhKfmIPiDbIPMRGrZ1gHdSPEQfA5n
+         Pkzsk48ISryh9A61bkwWyJucmp3GgRsc1k3YnrgTYNZgLynCp+8BTxKSQj0oJxwvs5iy
+         mu5S4jINawRnQ7jgEhgQ7OlW1tFGKI2fpCo0yKwzoem4b6vmMReRB3dgaBbPW8TdEcaj
+         xOOw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpfBJjzY0zFGckNr8HjcMqQbbqQ69awrFLfE0eD9scH/Tc/nPs4E6wRNWWchtNKEvAWXI1@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4UUMPN2G3UHRhaTs3Z0Q8S0L0cpSthOXskBAzlLgEbaZdvNFU
+	C3lc7P0lcC68YyxDkaTY8myhozXTe6c5uCJ+TqBrpBUoPwtrJAuudluG
+X-Gm-Gg: ASbGncvKTAc6DliuTJHd1wBZ2dGu9UMI01ss9MWznhU425/w+fQVFPIL5cyCQSuddKT
+	HK3zd3EhMprQIvZNO6sv61NKM5LgDRdDYd1SpUhrCefeA8KLmdCuAFAf0vwEe/si9lV//m4fQqm
+	tSxQpTfWVHEF3k6dT11SegG/Ay4C1taSF7d2RVAWVD3E15WdYnoteE2Z8DNp/FPEEFERS0GgSus
+	0ycQZLnA0k6OwzAPo7YmkzejImlTi1w/J3G3OgWYQq6oJ6q/daUYto1c/3QF3tVhDhrd5Rl/IrM
+	3D+xyu0AMzasEs6XfIfaAPkZbZms2M6xxCHy2CJvj5g66h4ZTx6wZmq6WSBBe5Y4qL79OqgbQsv
+	jMl8vPnr1k6/pT0ZcgLEv
+X-Google-Smtp-Source: AGHT+IHgWhFSIa0YZjtHFpdAkGBDwT7thwYY+GMM19qe0nKu2IjFjS7vlWftbrR/tzPZYceTmT3k2A==
+X-Received: by 2002:a17:902:c947:b0:23e:1aba:410e with SMTP id d9443c01a7336-23e25684a2dmr216606045ad.2.1752923594262;
+        Sat, 19 Jul 2025 04:13:14 -0700 (PDT)
+Received: from [0.0.5.57] ([136.159.213.146])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b4c81sm27388875ad.114.2025.07.19.04.13.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jul 2025 01:31:34 -0700 (PDT)
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	horms@kernel.org,
-	cratiu@nvidia.com,
-	noren@nvidia.com,
-	cjubran@nvidia.com,
-	mbloch@nvidia.com,
-	mohsin.bashr@gmail.com,
-	jdamato@fastly.com,
-	gal@nvidia.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH net-next V6 5/5] selftests: drv-net: Test head-adjustment support
-Date: Sat, 19 Jul 2025 01:30:59 -0700
-Message-ID: <20250719083059.3209169-6-mohsin.bashr@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
-References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+        Sat, 19 Jul 2025 04:13:13 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+Subject: [PATCH RFC 0/4] landlock: add LANDLOCK_SCOPE_MEMFD_EXEC execution
+Date: Sat, 19 Jul 2025 05:13:10 -0600
+Message-Id: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMZ9e2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDc0Mz3dzU3LQU3dSK1GTdxGSDFFMLIwNDi2RjJaCGgqLUtMwKsGHRSkF
+ uzkqxtbUAqeaksWEAAAA=
+To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+ Abhinav Saxena <xandfury@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752923593; l=5097;
+ i=xandfury@gmail.com; s=20250614; h=from:subject:message-id;
+ bh=0mwzNFeEDlJbURltDxuzC/0HvB2I9wVfuHC9hjlqpfM=;
+ b=T4or0kAxS6LcwdHdKgCeBBFyDGKhf/asX5RpBfbbUWJjkblUmKpVWY70jaqgVbPgLfxQYmtiS
+ NzlQebThU1DA2nC8KYDs2QQ60bEC06s47uwrz042tvQxY67+Xvs5ufU
+X-Developer-Key: i=xandfury@gmail.com; a=ed25519;
+ pk=YN6w7WNet8skqvMWxhG5BlAmtd1SQmo8If6Mofh4k44=
 
-Add test to validate the headroom adjustment support for both extension
-and the shrinking cases. For the extension part, eat up space from
-the start of payload data whereas, for the shrinking part, populate
-the newly available space with a tag. In the user-space, validate that a
-test string is manipulated accordingly.
-The negative and positive offset values result in shrinking and growing of
-headroom (growing and shrinking of payload) respectively.
+This patch series introduces LANDLOCK_SCOPE_MEMFD_EXEC, a new Landlock
+scoping mechanism that restricts execution of anonymous memory file
+descriptors (memfd) created via memfd_create(2). This addresses security
+gaps where processes can bypass W^X policies and execute arbitrary code
+through anonymous memory objects.
 
-TAP version 13
-1..9
-ok 1 xdp.test_xdp_native_pass_sb
-ok 2 xdp.test_xdp_native_pass_mb
-ok 3 xdp.test_xdp_native_drop_sb
-ok 4 xdp.test_xdp_native_drop_mb
-ok 5 xdp.test_xdp_native_tx_mb
-\# Failed run: pkt_sz 512, ... offset 1. Reason: Adjustment failed
-ok 6 xdp.test_xdp_native_adjst_tail_grow_data
-ok 7 xdp.test_xdp_native_adjst_tail_shrnk_data
-\# Failed run: pkt_sz 512, ... offset -128. Reason: Adjustment failed
-ok 8 xdp.test_xdp_native_adjst_head_grow_data
-\# Failed run: pkt_sz (512) > HDS threshold (0) and offset 64 > 48
-ok 9 xdp.test_xdp_native_adjst_head_shrnk_data
-\# Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
+Fixes: https://github.com/landlock-lsm/linux/issues/37
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
+SECURITY PROBLEM
+================
+
+Current Landlock filesystem restrictions do not cover memfd objects,
+allowing processes to:
+
+1. Read-to-execute bypass: Create writable memfd, inject code,
+   then execute via mmap(PROT_EXEC) or direct execve()
+2. Anonymous execution: Execute code without touching the filesystem via
+   execve("/proc/self/fd/N") where N is a memfd descriptor
+3. Cross-domain access violations: Pass memfd between processes to
+   bypass domain restrictions
+
+These scenarios can occur in sandboxed environments where filesystem
+access is restricted but memfd creation remains possible.
+
+IMPLEMENTATION
+==============
+
+The implementation adds hierarchical execution control through domain
+scoping:
+
+Core Components:
+- is_memfd_file(): Reliable memfd detection via "memfd:" dentry prefix
+- domain_is_scoped(): Cross-domain hierarchy checking (moved to domain.c)
+- LSM hooks: mmap_file, file_mprotect, bprm_creds_for_exec
+- Creation-time restrictions: hook_file_alloc_security
+
+Security Matrix:
+Execution decisions follow domain hierarchy rules preventing both
+same-domain bypass attempts and cross-domain access violations while
+preserving legitimate hierarchical access patterns.
+
+Domain Hierarchy with LANDLOCK_SCOPE_MEMFD_EXEC:
+===============================================
+
+Root (no domain) - No restrictions
+  |
+  +-- Domain A [SCOPE_MEMFD_EXEC] Layer 1
+  |     +-- memfd_A (tagged with Domain A as creator)
+  |     |
+  |     +-- Domain A1 (child) [NO SCOPE] Layer 2
+  |     |     +-- Inherits Layer 1 restrictions from parent
+  |     |     +-- memfd_A1 (can create, inherits restrictions)
+  |     |     +-- Domain A1a [SCOPE_MEMFD_EXEC] Layer 3
+  |     |           +-- memfd_A1a (tagged with Domain A1a)
+  |     |
+  |     +-- Domain A2 (child) [SCOPE_MEMFD_EXEC] Layer 2
+  |           +-- memfd_A2 (tagged with Domain A2 as creator)
+  |           +-- CANNOT access memfd_A1 (different subtree)
+  |
+  +-- Domain B [SCOPE_MEMFD_EXEC] Layer 1
+        +-- memfd_B (tagged with Domain B as creator)
+        +-- CANNOT access ANY memfd from Domain A subtree
+
+Execution Decision Matrix:
+========================
+Executor->  |  A  | A1 | A1a | A2 | B  | Root
+Creator     |     |    |     |    |    |
+------------|-----|----|-----|----|----|-----
+Domain A    |  X  | X  | X   | X  | X  |  Y
+Domain A1   |  Y  | X  | X   | X  | X  |  Y
+Domain A1a  |  Y  | Y  | X   | X  | X  |  Y
+Domain A2   |  Y  | X  | X   | X  | X  |  Y
+Domain B    |  X  | X  | X   | X  | X  |  Y
+Root        |  Y  | Y  | Y   | Y  | Y  |  Y
+
+Legend: Y = Execution allowed, X = Execution denied
+
+Scenarios Covered:
+- Direct mmap(PROT_EXEC) on memfd files
+- Two-stage mmap(PROT_READ) + mprotect(PROT_EXEC) bypass attempts
+- execve("/proc/self/fd/N") anonymous execution
+- execveat() and fexecve() file descriptor execution
+- Cross-process memfd inheritance and IPC passing
+
+TESTING
+=======
+
+All patches have been validated with:
+- scripts/checkpatch.pl --strict (clean)
+- Selftests covering same-domain restrictions, cross-domain 
+  hierarchy enforcement, and regular file isolation
+- KUnit tests for memfd detection edge cases
+
+DISCLAIMER
+==========
+
+My understanding of Landlock scoping semantics may be limited, but this
+implementation reflects my current understanding based on available
+documentation and code analysis. I welcome feedback and corrections
+regarding the scoping logic and domain hierarchy enforcement.
+
+Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
 ---
- tools/testing/selftests/drivers/net/xdp.py    | 147 +++++++++++++-
- .../selftests/net/lib/xdp_native.bpf.c        | 181 ++++++++++++++++++
- 2 files changed, 327 insertions(+), 1 deletion(-)
+Abhinav Saxena (4):
+      landlock: add LANDLOCK_SCOPE_MEMFD_EXEC scope
+      landlock: implement memfd detection
+      landlock: add memfd exec LSM hooks and scoping
+      selftests/landlock: add memfd execution tests
 
-diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-index 85b5db0a1121..887d662ad128 100755
---- a/tools/testing/selftests/drivers/net/xdp.py
-+++ b/tools/testing/selftests/drivers/net/xdp.py
-@@ -12,7 +12,7 @@ from dataclasses import dataclass
- from enum import Enum
- 
- from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ne, ksft_pr
--from lib.py import KsftFailEx, NetDrvEpEnv
-+from lib.py import KsftFailEx, NetDrvEpEnv, EthtoolFamily, NlError
- from lib.py import bkg, cmd, rand_port
- from lib.py import ip, bpftool, defer
- 
-@@ -31,6 +31,7 @@ class XDPAction(Enum):
-     DROP = 1  # Drop the packet
-     TX = 2    # Route the packet to the remote host
-     TAIL_ADJST = 3  # Adjust the tail of the packet
-+    HEAD_ADJST = 4  # Adjust the head of the packet
- 
- 
- class XDPStats(Enum):
-@@ -483,6 +484,147 @@ def test_xdp_native_adjst_tail_shrnk_data(cfg):
-     _validate_res(res, offset_lst, pkt_sz_lst)
- 
- 
-+def get_hds_thresh(cfg):
-+    """
-+    Retrieves the header data split (HDS) threshold for a network interface.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    Returns:
-+        The HDS threshold value. If the threshold is not supported or an error occurs,
-+        a default value of 1500 is returned.
-+    """
-+    netnl = cfg.netnl
-+    hds_thresh = 1500
-+
-+    try:
-+        rings = netnl.rings_get({'header': {'dev-index': cfg.ifindex}})
-+        if 'hds-thresh' not in rings:
-+            ksft_pr(f'hds-thresh not supported. Using default: {hds_thresh}')
-+            return hds_thresh
-+        hds_thresh = rings['hds-thresh']
-+    except NlError as e:
-+        ksft_pr(f"Failed to get rings: {e}. Using default: {hds_thresh}")
-+
-+    return hds_thresh
-+
-+
-+def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
-+    """
-+    Tests the XDP head adjustment action for a multi-buffer case.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+        netnl: Network namespace or link object (not used in this function).
-+
-+    This function sets up the packet size and offset lists, then performs
-+    the head adjustment test by sending and receiving UDP packets.
-+    """
-+    cfg.require_cmd("socat", remote=True)
-+
-+    prog_info = _load_xdp_prog(cfg, BPFProgInfo(prog, "xdp_native.bpf.o", "xdp.frags", 9000))
-+    port = rand_port()
-+
-+    _set_xdp_map("map_xdp_setup", TestConfig.MODE.value, XDPAction.HEAD_ADJST.value)
-+    _set_xdp_map("map_xdp_setup", TestConfig.PORT.value, port)
-+
-+    hds_thresh = get_hds_thresh(cfg)
-+    for offset in offset_lst:
-+        for pkt_sz in pkt_sz_lst:
-+            # The "head" buffer must contain at least the Ethernet header
-+            # after we eat into it. We send large-enough packets, but if HDS
-+            # is enabled head will only contain headers. Don't try to eat
-+            # more than 28 bytes (UDPv4 + eth hdr left: (14 + 20 + 8) - 14)
-+            l2_cut_off = 28 if cfg.addr_ipver == 4 else 48
-+            if pkt_sz > hds_thresh and offset > l2_cut_off:
-+                ksft_pr(
-+                f"Failed run: pkt_sz ({pkt_sz}) > HDS threshold ({hds_thresh}) and "
-+                f"offset {offset} > {l2_cut_off}"
-+                )
-+                return {"status": "pass"}
-+
-+            test_str = ''.join(random.choice(string.ascii_lowercase) for _ in range(pkt_sz))
-+            tag = format(random.randint(65, 90), '02x')
-+
-+            _set_xdp_map("map_xdp_setup",
-+                     TestConfig.ADJST_OFFSET.value,
-+                     offset)
-+            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_TAG.value, int(tag, 16))
-+            _set_xdp_map("map_xdp_setup", TestConfig.ADJST_OFFSET.value, offset)
-+
-+            recvd_str = _exchg_udp(cfg, port, test_str)
-+
-+            # Check for failures around adjustment and data exchange
-+            failure = _check_for_failures(recvd_str, _get_stats(prog_info['maps']['map_xdp_stats']))
-+            if failure is not None:
-+                return {
-+                    "status": "fail",
-+                    "reason": failure,
-+                    "offset": offset,
-+                    "pkt_sz": pkt_sz
-+                }
-+
-+            # Validate data content based on offset direction
-+            expected_data = None
-+            if offset < 0:
-+                expected_data = chr(int(tag, 16)) * (0 - offset) + test_str
-+            else:
-+                expected_data = test_str[offset:]
-+
-+            if recvd_str != expected_data:
-+                return {
-+                    "status": "fail",
-+                    "reason": "Data mismatch",
-+                    "offset": offset,
-+                    "pkt_sz": pkt_sz
-+                }
-+
-+    return {"status": "pass"}
-+
-+
-+def test_xdp_native_adjst_head_grow_data(cfg):
-+    """
-+    Tests the XDP headroom growth support.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    This function sets up the packet size and offset lists, then calls the
-+    _test_xdp_native_head_adjst_mb function to perform the actual test. The
-+    test is passed if the headroom is successfully extended for given packet
-+    sizes and offsets.
-+    """
-+    pkt_sz_lst = [512, 1024, 2048]
-+
-+    # Negative values result in headroom shrinking, resulting in growing of payload
-+    offset_lst = [-16, -32, -64, -128, -256]
-+    res = _test_xdp_native_head_adjst(cfg, "xdp_prog_frags", pkt_sz_lst, offset_lst)
-+
-+    _validate_res(res, offset_lst, pkt_sz_lst)
-+
-+
-+def test_xdp_native_adjst_head_shrnk_data(cfg):
-+    """
-+    Tests the XDP headroom shrinking support.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+
-+    This function sets up the packet size and offset lists, then calls the
-+    _test_xdp_native_head_adjst_mb function to perform the actual test. The
-+    test is passed if the headroom is successfully shrunk for given packet
-+    sizes and offsets.
-+    """
-+    pkt_sz_lst = [512, 1024, 2048]
-+
-+    # Positive values result in headroom growing, resulting in shrinking of payload
-+    offset_lst = [16, 32, 64, 128, 256]
-+    res = _test_xdp_native_head_adjst(cfg, "xdp_prog_frags", pkt_sz_lst, offset_lst)
-+
-+    _validate_res(res, offset_lst, pkt_sz_lst)
-+
-+
- def main():
-     """
-     Main function to execute the XDP tests.
-@@ -493,6 +635,7 @@ def main():
-     function to execute the tests.
-     """
-     with NetDrvEpEnv(__file__) as cfg:
-+        cfg.netnl = EthtoolFamily()
-         ksft_run(
-             [
-                 test_xdp_native_pass_sb,
-@@ -502,6 +645,8 @@ def main():
-                 test_xdp_native_tx_mb,
-                 test_xdp_native_adjst_tail_grow_data,
-                 test_xdp_native_adjst_tail_shrnk_data,
-+                test_xdp_native_adjst_head_grow_data,
-+                test_xdp_native_adjst_head_shrnk_data,
-             ],
-             args=(cfg,))
-     ksft_exit()
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 7bb2dff86d8f..521ba38f2ddd 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -26,6 +26,7 @@ enum {
- 	XDP_MODE_DROP = 1,
- 	XDP_MODE_TX = 2,
- 	XDP_MODE_TAIL_ADJST = 3,
-+	XDP_MODE_HEAD_ADJST = 4,
- } xdp_map_modes;
- 
- enum {
-@@ -395,6 +396,184 @@ static int xdp_adjst_tail(struct xdp_md *ctx, __u16 port)
- 	return XDP_ABORTED;
- }
- 
-+static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
-+				     __u32 offset)
-+{
-+	char tmp_buff[MAX_ADJST_OFFSET];
-+	struct udphdr *udph;
-+	void *offset_ptr;
-+	__u32 udp_csum = 0;
-+
-+	/* Update the length information in the IP and UDP headers before
-+	 * adjusting the headroom. This simplifies accessing the relevant
-+	 * fields in the IP and UDP headers for fragmented packets. Any
-+	 * failure beyond this point will result in the packet being aborted,
-+	 * so we don't need to worry about incorrect length information for
-+	 * passed packets.
-+	 */
-+	udph = update_pkt(ctx, (__s16)(0 - offset), &udp_csum);
-+	if (!udph)
-+		return -1;
-+
-+	offset = (offset & 0x1ff) >= MAX_ADJST_OFFSET ? MAX_ADJST_OFFSET :
-+				     offset & 0xff;
-+	if (offset == 0)
-+		return -1;
-+
-+	if (bpf_xdp_load_bytes(ctx, hdr_len, tmp_buff, offset) < 0)
-+		return -1;
-+
-+	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
-+
-+	udph->check = (__u16)csum_fold_helper(udp_csum);
-+
-+	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_adjust_head(ctx, offset) < 0)
-+		return -1;
-+
-+	if (offset > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
-+		return -1;
-+
-+	/* Added here to handle clang complain about negative value */
-+	hdr_len = hdr_len & 0xff;
-+
-+	if (hdr_len == 0)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, 0, tmp_buff, hdr_len) < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
-+				    __u32 offset)
-+{
-+	char hdr_buff[MAX_HDR_LEN];
-+	char data_buff[MAX_ADJST_OFFSET];
-+	void *offset_ptr;
-+	__s32 *val;
-+	__u32 key;
-+	__u8 tag;
-+	__u32 udp_csum = 0;
-+	struct udphdr *udph;
-+
-+	udph = update_pkt(ctx, (__s16)(offset), &udp_csum);
-+	if (!udph)
-+		return -1;
-+
-+	key = XDP_ADJST_TAG;
-+	val = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+	if (!val)
-+		return -1;
-+
-+	tag = (__u8)(*val);
-+	for (int i = 0; i < MAX_ADJST_OFFSET; i++)
-+		__builtin_memcpy(&data_buff[i], &tag, 1);
-+
-+	offset = (offset & 0x1ff) >= MAX_ADJST_OFFSET ? MAX_ADJST_OFFSET :
-+				     offset & 0xff;
-+	if (offset == 0)
-+		return -1;
-+
-+	udp_csum = bpf_csum_diff(0, 0, (__be32 *)data_buff, offset, udp_csum);
-+	udph->check = (__u16)csum_fold_helper(udp_csum);
-+
-+	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
-+		return -1;
-+
-+	/* Added here to handle clang complain about negative value */
-+	hdr_len = hdr_len & 0xff;
-+
-+	if (hdr_len == 0)
-+		return -1;
-+
-+	if (bpf_xdp_load_bytes(ctx, 0, hdr_buff, hdr_len) < 0)
-+		return -1;
-+
-+	if (offset > MAX_ADJST_OFFSET)
-+		return -1;
-+
-+	if (bpf_xdp_adjust_head(ctx, 0 - offset) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, 0, hdr_buff, hdr_len) < 0)
-+		return -1;
-+
-+	if (bpf_xdp_store_bytes(ctx, hdr_len, data_buff, offset) < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int xdp_head_adjst(struct xdp_md *ctx, __u16 port)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	struct udphdr *udph_ptr = NULL;
-+	__u32 key, size, hdr_len;
-+	__s32 *val;
-+	int res;
-+
-+	/* Filter packets based on UDP port */
-+	udph_ptr = filter_udphdr(ctx, port);
-+	if (!udph_ptr)
-+		return XDP_PASS;
-+
-+	hdr_len = (void *)udph_ptr - data + sizeof(struct udphdr);
-+
-+	key = XDP_ADJST_OFFSET;
-+	val = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+	if (!val)
-+		return XDP_PASS;
-+
-+	switch (*val) {
-+	case -16:
-+	case 16:
-+		size = 16;
-+		break;
-+	case -32:
-+	case 32:
-+		size = 32;
-+		break;
-+	case -64:
-+	case 64:
-+		size = 64;
-+		break;
-+	case -128:
-+	case 128:
-+		size = 128;
-+		break;
-+	case -256:
-+	case 256:
-+		size = 256;
-+		break;
-+	default:
-+		bpf_printk("Invalid adjustment offset: %d\n", *val);
-+		goto abort;
-+	}
-+
-+	if (*val < 0)
-+		res = xdp_adjst_head_grow_data(ctx, hdr_len, size);
-+	else
-+		res = xdp_adjst_head_shrnk_data(ctx, hdr_len, size);
-+
-+	if (res)
-+		goto abort;
-+
-+	record_stats(ctx, STATS_PASS);
-+	return XDP_PASS;
-+
-+abort:
-+	record_stats(ctx, STATS_ABORT);
-+	return XDP_ABORTED;
-+}
-+
- static int xdp_prog_common(struct xdp_md *ctx)
- {
- 	__u32 key, *port;
-@@ -419,6 +598,8 @@ static int xdp_prog_common(struct xdp_md *ctx)
- 		return xdp_mode_tx_handler(ctx, (__u16)(*port));
- 	case XDP_MODE_TAIL_ADJST:
- 		return xdp_adjst_tail(ctx, (__u16)(*port));
-+	case XDP_MODE_HEAD_ADJST:
-+		return xdp_head_adjst(ctx, (__u16)(*port));
- 	}
- 
- 	/* Default action is to simple pass */
+ include/uapi/linux/landlock.h                      |   5 +
+ security/landlock/.kunitconfig                     |   1 +
+ security/landlock/audit.c                          |   4 +
+ security/landlock/audit.h                          |   1 +
+ security/landlock/cred.c                           |  14 -
+ security/landlock/domain.c                         |  67 ++++
+ security/landlock/domain.h                         |   4 +
+ security/landlock/fs.c                             | 405 ++++++++++++++++++++-
+ security/landlock/limits.h                         |   2 +-
+ security/landlock/task.c                           |  67 ----
+ .../selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++
+ 11 files changed, 812 insertions(+), 83 deletions(-)
+---
+base-commit: 5b74b2eff1eeefe43584e5b7b348c8cd3b723d38
+change-id: 20250716-memfd-exec-ac0d582018c3
+
+Best regards,
 -- 
-2.47.1
+Abhinav Saxena <xandfury@gmail.com>
 
