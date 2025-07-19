@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC24A28750E
-	for <llvm@lists.linux.dev>; Sat, 19 Jul 2025 15:38:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA002877E2
+	for <llvm@lists.linux.dev>; Sat, 19 Jul 2025 15:38:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752939538; cv=none; b=qqSxwOU46fvdGTvHq90yFzqrDaDRSzG107k1SoYGIzXePJsX9XWV1Wx3yP0LT7PvlMPwsf2k4x6v8QPZZdKLBMcK9VJh7af/DNRJo4h/IPQQAZ7UDzYOT2wsJdcRna6FbLyx3L8Xg73zT7dYMfU4BW45gCdXcE7wrSQ16UapNJk=
+	t=1752939538; cv=none; b=D4JNhXIraMZiRbYLD7JSc5gYmHcpiMpn73t8uLoo4tGKFsohiF/0fYBppZTII96DNoSzE3GCBDdTeERrgwBh3jegcpVdd1lYlI7F64yqN/fClKMO6ITYvLnPpVShh8iVZBH/FqosztqJdiSuQkMo4qvsAhtn2J0LmdsDKiBMOX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752939538; c=relaxed/simple;
-	bh=UB84zosAyDKdcLtvdROGzQ359daOZJuFvZJIgYYE7IM=;
+	bh=51GkrVrQpjPfvvJr3LapBWVH8+FIFYkaT062gxrS96I=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=liwZYbgVhnEKQkAyb4QUL4mKjV/0Nf6/9vNix01xS7O80RBO18u4SURiCeTnX/U7wiQRVELVgVz91J4pl/0U4at+1z8s3SQ1Xyyld6Hqsy5IL56jgU/vOutBfO2L4jusT6QnJGABTK+cLOt5si0DEXHCXkb8SumqVsocK9RoZVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=cTZQ/mx2; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=mL15WPVKve0ECDlkA4mHqe6GOTYi77AkpJezBc7Zz/Aum454EGqqh3w5sklbAge6thpvKyx6Dve4TdiCYBIKDFK6uLhji35xl+py3ByTou1xOi8S81NlzyqfWAB6T40KLRnLEWbR2H09ykqFvlgf0v0EwwWOi3PAVG5RZAxMEUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WVtI9GZY; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="cTZQ/mx2"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WVtI9GZY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1752939526;
-	bh=UB84zosAyDKdcLtvdROGzQ359daOZJuFvZJIgYYE7IM=;
+	bh=51GkrVrQpjPfvvJr3LapBWVH8+FIFYkaT062gxrS96I=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=cTZQ/mx2fe6WEvv41Wz5OfpFtMkC4+vWrWUzUHaxHdW8zsu1pHkqNrRPra2fBmTsL
-	 A6B9wUfWI0as32Vcu4i7P7b5R8x/p8/kRgJXDFXmCv6TjpSbuFfGQCWqYfAefwUUiF
-	 fhxOJHs+XygTJoL+Q/+j36avORNkpuRBWtYYOi7g=
+	b=WVtI9GZYhsNpCZV/Cgg8eE7tgSuYjabUaW6lyLIS/v92QbaJFV/2FNnvHDrYwVkcG
+	 yioU/3HcMnzGsIlaxW40bBR30+/9sb1nICi21tzsXtVhqxEns2advXeQ/9zQHxUgEN
+	 OFkdfjRGZDztG3XLAgZsqrV9B04a2ZuC/j/q0VFQ=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 19 Jul 2025 17:38:27 +0200
-Subject: [PATCH 1/3] selftests/nolibc: deduplicate invocations of toplevel
- Makefile
+Date: Sat, 19 Jul 2025 17:38:29 +0200
+Subject: [PATCH 3/3] selftests/nolibc: always compile the kernel with GCC
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,7 +34,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250719-nolibc-llvm-system-v1-1-1730216ce171@weissschuh.net>
+Message-Id: <20250719-nolibc-llvm-system-v1-3-1730216ce171@weissschuh.net>
 References: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
 In-Reply-To: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
@@ -46,61 +45,40 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752939526; l=2285;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752939526; l=1288;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UB84zosAyDKdcLtvdROGzQ359daOZJuFvZJIgYYE7IM=;
- b=s1ncXgxXKcQ2XRNo+TAW9o5Gh0zOt+iFEhttUlxtPpjxcvbA1svL3jofds50VIjpUZ3+0fHVk
- V48BM4+abGmB+HgXus+hNWC0UaM9gXhpmgjVnd6Q3cuHQ+uyWn33oum
+ bh=51GkrVrQpjPfvvJr3LapBWVH8+FIFYkaT062gxrS96I=;
+ b=BRqqIxDJNQdSvuWhzuAvv++iXFFsb1KwrMKiT8bWI8nXvZwVhxwcGPJOIn8Ry8DkCynnALEcu
+ rwqRwA6kxhDBHkv+uuQnvLcytH6hZ3eskUoIYw4adK3VZ0jFevyjRNi
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Various targets of the testsuite call back into the toplevel kernel
-Makefile. These calls use various parameters and are quite long.
+LLVM/clang can not build the kernel for all architectures supported by
+nolibc. The current setup uses the same compiler to build the kernel as
+is used for nolibc-test. This prevents using the full qemu-system tests
+for LLVM builds.
 
-Introduce a common variable to make future changes smaller and the lines
-shorter.
+Instead always build the kernel with GCC. For the nolibc testsuite the
+kernel does not need to be built with LLVM.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile.nolibc | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ tools/testing/selftests/nolibc/Makefile.nolibc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile.nolibc b/tools/testing/selftests/nolibc/Makefile.nolibc
-index 0fb759ba992ee6b1693b88f1b2e77463afa9f38b..8e7a832ba3f6da3ca0d669b941acd1cf79813a8d 100644
+index 6e6dddaa2e3ed56886cd76c423297648d13027c7..3d8e314c2433a2d032cf4f58ea1d6a2f430faaae 100644
 --- a/tools/testing/selftests/nolibc/Makefile.nolibc
 +++ b/tools/testing/selftests/nolibc/Makefile.nolibc
-@@ -262,6 +262,9 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++
- 		if (f || !p || !done) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
+@@ -263,7 +263,7 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++
  		printf("\nSee all results in %s\n", ARGV[1]); }'
  
-+# Execute the toplevel kernel Makefile
-+KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
-+
+ # Execute the toplevel kernel Makefile
+-KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
++KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) LLVM=
+ 
  help:
  	@echo "Supported targets under selftests/nolibc:"
- 	@echo "  all               call the \"run\" target below"
-@@ -340,17 +343,17 @@ initramfs: nolibc-test
- 	$(Q)cp nolibc-test initramfs/init
- 
- defconfig:
--	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(DEFCONFIG)
-+	$(Q)$(KBUILD_MAKE) $(DEFCONFIG)
- 	$(Q)if [ -n "$(EXTRACONFIG)" ]; then \
- 		$(srctree)/scripts/config --file $(objtree)/.config $(EXTRACONFIG); \
--		$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) olddefconfig < /dev/null; \
-+		$(KBUILD_MAKE) olddefconfig < /dev/null; \
- 	fi
- 
- kernel:
--	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) < /dev/null
-+	$(Q)$(KBUILD_MAKE) $(IMAGE_NAME) < /dev/null
- 
- kernel-standalone: initramfs
--	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs < /dev/null
-+	$(Q)$(KBUILD_MAKE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs < /dev/null
- 
- # run the tests after building the kernel
- run: kernel initramfs.cpio
 
 -- 
 2.50.1
