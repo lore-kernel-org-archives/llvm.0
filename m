@@ -1,132 +1,166 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAA313AD38;
-	Sun, 20 Jul 2025 07:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA0D4A0A;
+	Sun, 20 Jul 2025 11:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752997537; cv=none; b=lIAkJaLbILdMdcT7/0OfGgvWsEUVtz6kQu60eLMcqQ3W/sk6uIDsajNY7ktpLbtxPlxtRgnoSUlFaI9/dj8JpvADopwKFnaojAhleg1xoUwKXr7jkCPzyfx5Abf8vMbduQn7GiETjcdTYtUA9UI8MJzGIEtdyYFn6k8d9zF6qS0=
+	t=1753010946; cv=none; b=sD0VUm9cOtdmRqp0clEXa53OBj7il5MTHXwu+bAe66xZbBsXQfsm13Hy/GauIVnB/ce+8qx8ZZLXgec/+8L37QZeOYcrvV+ajeSq8cmqhAQUVfU+pABKkURGkx8TjgxA74MZZp0k4v81/MpV5X/qkh7tKn+bQEMkIqHpy+PPrOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752997537; c=relaxed/simple;
-	bh=QCgEtw6goITNQUdFQJWHFRqiFOeLuB5y8mpHu+9EDJg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=chgdL7n6m6g9GgSZICuDFtYCtduYAbZ7NStE0gXXhqEQZZC7QeKv1AfngSTgvJiU2tmu0EQ6B7Z5eG8MLeiwbt0Z98D+d0AF68Ms1nDvHq+ZD8EQd1TgxVRghPEzwQ6DsD9EJMOoF7cCXejSEPixokEWP2AwHbFuAWmUX7bTYVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OUDe5wGl; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753010946; c=relaxed/simple;
+	bh=8lJvcex6Lfc5XPAf4cYhtHBPt2+vEF8TOSJR9tX6fyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pj4NAKw8ZYidMh5rxnv9eJTQLhw3R7X29IdNuUFc/E77JGKk0xNVb4S6khciEaght79QZ7gv5ZZrgpSYXJo/UyUHFY5Uxrt+ETaT6CHexhhvaKwOIsy7rrtR6RAPNtw3cSLDuObA/vLX4H8gj9Owglj5UVEU4bumBuBgjUr2urg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iNMA3tIz; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OUDe5wGl"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-32b5931037eso25641981fa.2;
-        Sun, 20 Jul 2025 00:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752997533; x=1753602333; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e6GCnhyZ97Fa9wrvzw+stGLcgjyoNyAO5PSjQNCTGfc=;
-        b=OUDe5wGleypI9RKSnXR33LBI1sInnWV97Uq/Ds6RuNp4z7hiyemOzE5i4HTrF8fvqa
-         wBTxSVZXWy45jHlqRHduEo7B7iw7DKxsZh7/E3EHkvAFA8KyC4INVuSEdJxNsxjUPcrj
-         tBGNn22cxxUC46AJfjEf+lBLq+eyPCBvRmN2Pteg9wbAinK+GpO7c8HNJOPHLFz3frVt
-         lXsxU90j6soWG2D1dV/RNU6yI7neQDkm1CyqaNg9LDO0E4qZhA5kHVMS+sIWWfhRiMEu
-         kRPRhdWXgj//hc2WzehnKSPAL8ElsJ3vsFibZBAueSX6oAJtg3DpZu0YZEx9wxQEwe6V
-         w3Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752997533; x=1753602333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e6GCnhyZ97Fa9wrvzw+stGLcgjyoNyAO5PSjQNCTGfc=;
-        b=FLKXl5Ay/j/SzqT1E71cIBY3yNG5YdkXiQRdcfl5xSIGiurbkiSf/dsN5JoPlWykot
-         xKR2TC716ZlN1gX1ee8yeP5f2xqgt3hAaC5dFR6npd6oDa9eS52jshAleZE4OP4g4IDN
-         jrMmqOC7jPidIcoP71EfbSPxzKDyNPfs55TgJkqXWz59uyAra/EEzGYJp5MOwYE+t2KB
-         Fjs9Dx4EL87L3wth5H7kC5IOKUNC69l/hp8I77Rq5ycETT0V6shG9INNfpsFp1p5LDCl
-         ascO+YxtPS5UnDCeGjqPxWlcqUbtVjL9AH+qxmypE6qRTXtr6c05o5Vb7lTrBQsHtwke
-         kqyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXYMiXIUS66BAP7m4aN2o30DQhaOQ6w4wL4vY2AYtCOTgh1wrz7lIuNdhN1ZT3+u7tsnqgD@lists.linux.dev, AJvYcCXgmVjgTkqtOWqW/1we4J60zSI0c7+fbrVUVRyrVGjVv5XP7JVdOnFDwHaM5oyrdhBjvxnHG+NOPeFfvBsvbw==@lists.linux.dev
-X-Gm-Message-State: AOJu0YwOptHXEhiPZw5UkOd0pTBIN31tDqWZ9OUP1e3gdCjT2cbYXox2
-	WNEKblw2AaDUEINkms7WhMEjaH8z4UM1Qhs8PWEoqDl1uFQgGeGv9uVMKlOnjCFfP5kH19GvQK0
-	zxZns6XTbNusJDevKrYtkl2o8/1QPjq8=
-X-Gm-Gg: ASbGncsnLEvW6jYfItVHCYAOyQhqPO0igGFOgoFVrBh11RWvSA+lLthLdly0M3ybwCw
-	fAijB44GT3N/cAihS3TzRZLb6Jd2JROUkhCj/kry+x+EjEjT3Av3SpS+kytStrUJNDLGErROFvA
-	qE7CgIqn9HtL/BA/6mRAsGeTIYumF7V26D1wKT0znq0e910JfAwhwEn6Tl2RogdJRNmCTCX0Da3
-	eVwatQ=
-X-Google-Smtp-Source: AGHT+IHGpnFCjDTiG1geEjmCO6Bjhm3v/M3utulV0Br5gTrnexquUxAH087cT1ubTstp8fSrj3yHoRhbWJImvj9FtEs=
-X-Received: by 2002:a05:651c:400c:b0:32b:3b5a:c4a2 with SMTP id
- 38308e7fff4ca-3308e352419mr34008621fa.6.1752997532888; Sun, 20 Jul 2025
- 00:45:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iNMA3tIz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753010945; x=1784546945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8lJvcex6Lfc5XPAf4cYhtHBPt2+vEF8TOSJR9tX6fyA=;
+  b=iNMA3tIzpdzPPmadriNazdr7sKJXWjDBS0iCkTPELnyrDFIiWZfGGSGH
+   30nVKriuQ9vec2XKLJdzomy0WuufeVKthQrsbZiX1D+X4LyiZNP/6vzGF
+   gI2atw5mTPUd2HZF7EPS5+H1u2+Vru9vnRyTFMgXmW3A3BLMhEUDa1h9u
+   anHr4YbH5qYOg0wjYnaMbYrtRrC9GNNz9M422Kx57Y0VcLWrPP0x6mKXD
+   SkQvNqagrDlUocIyaiPzjpMmAoZmtk2ahPd+j7omZjebYQiE7gxko9YfS
+   KZOF7IZN10mqq4WGi5KJEtO7/ryNfcj8+3uSDPxYdLDfnoRqoxr9I8zjr
+   g==;
+X-CSE-ConnectionGUID: BxmxJX7SRjieebj08u2Wdg==
+X-CSE-MsgGUID: tHj78W9lQDyO2aJ8sxa/jQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11497"; a="55185814"
+X-IronPort-AV: E=Sophos;i="6.16,326,1744095600"; 
+   d="scan'208";a="55185814"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2025 04:29:05 -0700
+X-CSE-ConnectionGUID: BA6RQFMFQxmO7aRtryKUWA==
+X-CSE-MsgGUID: jk5Dt04oTDWLrj5JYApD4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,326,1744095600"; 
+   d="scan'208";a="158710268"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 20 Jul 2025 04:29:03 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udSE0-000G4n-30;
+	Sun, 20 Jul 2025 11:29:00 +0000
+Date: Sun, 20 Jul 2025 19:28:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v1 1/2] dma-mapping: prepare dma_map_ops to conversion to
+ physical address
+Message-ID: <202507201935.hwB4Ebxp-lkp@intel.com>
+References: <184fc9bda626efc62c5022ace01a20b80d1dc93b.1753003879.git.leon@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202507190528.W6ndwfyg-lkp@intel.com> <20250719170413.9b64b9321c3ac082712348fe@linux-foundation.org>
-In-Reply-To: <20250719170413.9b64b9321c3ac082712348fe@linux-foundation.org>
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Date: Sun, 20 Jul 2025 12:45:15 +0500
-X-Gm-Features: Ac12FXzyXQfBVhPlycXGDETMRSLjWoBYDV54ORm062NblE_kRUmN5joT8HHTgUg
-Message-ID: <CACzwLxg4=Gx0J39O9Xt3tAif=Ux8mU-cbMfMi7VN97XtB+8Zfg@mail.gmail.com>
-Subject: Re: [akpm-mm:mm-new 160/175] mm/kasan/tags.c:145:6: error:
- redefinition of 'kasan_save_free_info'
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <184fc9bda626efc62c5022ace01a20b80d1dc93b.1753003879.git.leon@kernel.org>
 
-On Sun, Jul 20, 2025 at 5:04=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Sat, 19 Jul 2025 05:28:51 +0800 kernel test robot <lkp@intel.com> wrot=
-e:
->
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-=
-new
-> > head:   b0e07b9befa0558a80b281b7efcdb3717881c969
-> > commit: 3d3c26eaf9f6e00779d27dd54d763c9bdc5dda3c [160/175] kasan: add s=
-hadow checks to wrappers and rename kasan_arch_is_ready
-> > config: arm64-randconfig-001-20250719 (https://download.01.org/0day-ci/=
-archive/20250719/202507190528.W6ndwfyg-lkp@intel.com/config)
-> > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87=
-f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250719/202507190528.W6ndwfyg-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202507190528.W6ndwfyg-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> mm/kasan/tags.c:145:6: error: redefinition of 'kasan_save_free_info'
-> >      145 | void kasan_save_free_info(struct kmem_cache *cache, void *ob=
-ject)
-> >          |      ^
-> >    mm/kasan/kasan.h:403:20: note: previous definition is here
-> >      403 | static inline void kasan_save_free_info(struct kmem_cache *c=
-ache, void *object)
-> >          |                    ^
-> >    1 error generated.
->
-> I'll add this.   It should repair the build, at least?
+Hi Leon,
 
-Yes, thanks, it should. Sorry, I've missed that.
+kernel test robot noticed the following build warnings:
 
->
-> --- a/mm/kasan/tags.c~kasan-add-shadow-checks-to-wrappers-and-rename-kasa=
-n_arch_is_ready-fix
-> +++ a/mm/kasan/tags.c
-> @@ -142,7 +142,7 @@ void kasan_save_alloc_info(struct kmem_c
->         save_stack_info(cache, object, flags, false);
->  }
->
-> -void kasan_save_free_info(struct kmem_cache *cache, void *object)
-> +void __kasan_save_free_info(struct kmem_cache *cache, void *object)
->  {
->         save_stack_info(cache, object, 0, true);
->  }
-> _
->
+[auto build test WARNING on next-20250718]
+[cannot apply to linus/master v6.16-rc6 v6.16-rc5 v6.16-rc4 v6.16-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Romanovsky/dma-mapping-prepare-dma_map_ops-to-conversion-to-physical-address/20250720-173726
+base:   next-20250718
+patch link:    https://lore.kernel.org/r/184fc9bda626efc62c5022ace01a20b80d1dc93b.1753003879.git.leon%40kernel.org
+patch subject: [PATCH v1 1/2] dma-mapping: prepare dma_map_ops to conversion to physical address
+config: s390-randconfig-001-20250720 (https://download.01.org/0day-ci/archive/20250720/202507201935.hwB4Ebxp-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 16534d19bf50bde879a83f0ae62875e2c5120e64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250720/202507201935.hwB4Ebxp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507201935.hwB4Ebxp-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/dma/mapping.c:192:12: warning: variable 'addr' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     192 |                 else if (ops->map_page)
+         |                          ^~~~~~~~~~~~~
+   kernel/dma/mapping.c:198:32: note: uninitialized use occurs here
+     198 |         trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
+         |                                       ^~~~
+   kernel/dma/mapping.c:192:8: note: remove the 'if' if its condition is always true
+     192 |                 else if (ops->map_page)
+         |                      ^~~~~~~~~~~~~~~~~~
+     193 |                         addr = ops->map_page(dev, page, offset, size, dir,
+   kernel/dma/mapping.c:159:17: note: initialize the variable 'addr' to silence this warning
+     159 |         dma_addr_t addr;
+         |                        ^
+         |                         = 0
+   1 warning generated.
+
+
+vim +192 kernel/dma/mapping.c
+
+   154	
+   155	dma_addr_t dma_map_phys(struct device *dev, phys_addr_t phys, size_t size,
+   156			enum dma_data_direction dir, unsigned long attrs)
+   157	{
+   158		const struct dma_map_ops *ops = get_dma_ops(dev);
+   159		dma_addr_t addr;
+   160	
+   161		BUG_ON(!valid_dma_direction(dir));
+   162	
+   163		if (WARN_ON_ONCE(!dev->dma_mask))
+   164			return DMA_MAPPING_ERROR;
+   165	
+   166		if (dma_map_direct(dev, ops) ||
+   167		    arch_dma_map_phys_direct(dev, phys + size))
+   168			addr = dma_direct_map_phys(dev, phys, size, dir, attrs);
+   169		else if (use_dma_iommu(dev))
+   170			addr = iommu_dma_map_phys(dev, phys, size, dir, attrs);
+   171		else {
+   172			struct page *page = phys_to_page(phys);
+   173			size_t offset = offset_in_page(phys);
+   174			bool is_pfn_valid = true;
+   175	
+   176			if (IS_ENABLED(CONFIG_DMA_API_DEBUG)) {
+   177				is_pfn_valid = pfn_valid(PHYS_PFN(phys));
+   178	
+   179				/* We shouldn't have both functions */
+   180				WARN_ON_ONCE(ops->map_page && ops->map_phys);
+   181			}
+   182	
+   183			if (unlikely(!is_pfn_valid))
+   184				return DMA_MAPPING_ERROR;
+   185	
+   186			/*
+   187			 * All platforms which implement .map_page() don't support
+   188			 * non-struct page backed addresses.
+   189			 */
+   190			if (ops->map_phys)
+   191				addr = ops->map_phys(dev, phys, size, dir, attrs);
+ > 192			else if (ops->map_page)
+   193				addr = ops->map_page(dev, page, offset, size, dir,
+   194						     attrs);
+   195		}
+   196	
+   197		kmsan_handle_dma(phys, size, dir);
+   198		trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
+   199		debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
+   200	
+   201		return addr;
+   202	}
+   203	EXPORT_SYMBOL_GPL(dma_map_phys);
+   204	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
