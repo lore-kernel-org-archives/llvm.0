@@ -1,95 +1,121 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64660BA2D
-	for <llvm@lists.linux.dev>; Sun, 20 Jul 2025 20:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED74B1DE8A4;
+	Sun, 20 Jul 2025 22:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753042363; cv=none; b=jeMSiBiyE6wbCEC+Yq9Vh1IpoAGGllXX6jyay7QW4js55NfhF/REvS0ByKjQ8WN36dpFIJv8VbSp8YdTOWP+0UfKapILmaJ+WwJlK182RMKPxJuGVtdp67Zi+sIbg50YxGR2w9nVLlcVtfdWoCrQJ8G7Q9Elef104LxNFH5b2VQ=
+	t=1753051923; cv=none; b=Ocp9P2t7LR6rgoLApQ5chHqmVCPZJ9IDpy1hsU4UZtYRCfPIGtGr1heEf9QeT9e/88SGiOoJ7RQQk7TvgahLDLvKB57qpdEeA4MaZG0SXSAzDAZV9NUeEvwk+qFyCJtmMUY1jR3rR9AIYimH+vfRmroQCqPucEoK2nl9+nldc0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753042363; c=relaxed/simple;
-	bh=SpnUeWa4iBYi5sLuPFGfCFkry72Jp5Kw04SeOFJYdQU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AH2g5PD4wFdETkodU5Bis5XuqsIbm8DeL3D92PZz3QUlfJeYqnduKKZ1rnnVdzwDrEcyk12HxhSMUybNARyLOT2K89gSXo1+oE+qqiJW1u3eMJu9kYKP0+8jcH8VBSZyOvaMAr9SU7lASgXyRB7e0q3QAg2bO2SQpmh88I4GwwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/Pv51c8; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753051923; c=relaxed/simple;
+	bh=KccA/LZ+ZXZ6XajYWAUE1auUyN/plqJfyfdq6P7YW1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSk9WoBXxPIqiRt5wfBEoKxjf9L8801MLaZSSQPOn434AbGY28MiEanwI9jKnt+LmF0XZv7+TSsH7AynKZJkuL2fsK1lGFS9ssgsZZEr+mLsS8n+RPuOJGjnSNYb7vMF12KldibTNZuOQzg8YaOcTYssdYImPoMaqIfmhv770QI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbEA5Fo2; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/Pv51c8"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-313290ea247so636866a91.3
-        for <llvm@lists.linux.dev>; Sun, 20 Jul 2025 13:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753042362; x=1753647162; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=etzXpykV+IAsHrqvhUJ2iZLlQ0JMugH8eiLxcqfvD5k=;
-        b=k/Pv51c86yFpJyuMYmNHpBRsRVW7olRmn161zwB1Mmfa8IXWlDCrTZhzmy/oiXJCI7
-         w4+BVegEZyuaFQ2MBLQAngtCyvnY5zEdMu6ZCStLD6DMPELFWflzrZrGD9H84A1tcGqZ
-         kCc4qFqO5Jhza35Z20gqLvhJW8u53k2X2NwpC1B3Owb1b/bvbLHJbC6RUBECOMGxs0lj
-         cmfeKAYUUYetVj6HdnQjHo9wtasu7Fku9ql+r8oibxdMvxz8DaE9bvNVKOsXqDUkKuPR
-         8PeBPJIUwpqJA7NdgMw3zQAVnSgNIRCFUXj0Rr0rkaE9myyqGk0ACY05K207Abswcqtf
-         WnIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753042362; x=1753647162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=etzXpykV+IAsHrqvhUJ2iZLlQ0JMugH8eiLxcqfvD5k=;
-        b=nCIx/QK5zmls5qXqxCwT9e0YI7wjNATbSG19Z/DxHQfD9PGFS21EK9oooxCeLoudq3
-         m4g5FkbaP0XBoPeHTq4cUvkca2kEROztmJEI5ERRER2/m9lfpczcBACVinADhqERX8Lt
-         Vnzz/BZLRFFBvzf+fPFfuo4Wex0K2v8/Nt1KHC/kVrU+Q59wopeU/b3zxvFRRggtYtD0
-         Z8/MBVNciMefFpOmBrOz0JncxqL/igR2c9QGOv9OB8KFPxTSw6hN5JaS20GiPVug9cfw
-         PtGBHHc46swVfJSsTa7wrCnLiEifb3oKfraaeKIUhjfvvlwxkqw4FBJuRCpMQz7ubDDL
-         cBgw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHSI4MR8FzDOFxv9OkUyal7veZ8V0yzoSD48UraATgvazmOGRsJGskLQYdrAf1e9qGcRCp@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw6jRwsdmhyVt90+TnJty4OFcza5BJDGWO9R/tdpsaa7ADYdnBV
-	o+33lCNywtZMotIrzr5P3wfg9Q+/tgyiTpAB2K4xsomzD589B2j9430I+3Hiig7kPMlnhmZ/5Xl
-	i4PdoKixfu6xOGZWupWhXe2JCgWUFYyI=
-X-Gm-Gg: ASbGncufMdisMkFsidnbK36ogTCfwSX2BdmHiadgco/IIltg9tgzw1RGwgMkk7zIp+K
-	gN+2X4PspKN9xCKfj+w6P9DllKsPSG8WkpBEP7MSUlBODQ6ykKaUkoZMettyeeZEJJTs322LjLt
-	dUZsjqM7FYF9AoTJMFBd3bmHAN7nvpgSO3L7jV2afknyj2hIFn2cRTho7Noj8ujP0yuSBSsaVJi
-	7+afOOR
-X-Google-Smtp-Source: AGHT+IHaf2vQgbbOXGHUrdq4gopF+bBKLxRIRv2pUm1D3d9SJ9v/Cu2UvI6qDhehsJ9HXQbSIbNKuJLWbXt1J/Bgey4=
-X-Received: by 2002:a17:90a:e18c:b0:311:a314:c2dd with SMTP id
- 98e67ed59e1d1-31c9e77394emr10209840a91.4.1753042361675; Sun, 20 Jul 2025
- 13:12:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbEA5Fo2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753051921; x=1784587921;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KccA/LZ+ZXZ6XajYWAUE1auUyN/plqJfyfdq6P7YW1o=;
+  b=IbEA5Fo2XjT5bxgLCvxAC9Ac9VBThWu9BnrcuQ57Zm+8IXMIPiQiW/Bn
+   YDIcOjYahdVJzIatUE0X6GEyS/55SEngOO+P0LPKzMkiod9PdWcLbNJwM
+   Njkgo0/dIjncX6B1iKdxgyaDumvkZfrg8O5CNl9QwEnKLHWAUh7JWPv6H
+   I4TMKKST/X1jR9CBvGBLUnz3DvYfVFOKRFZbUvbbxQzxlGvcnt3ShPCSa
+   gZmdbM2ZZesneP32FqbexbZx6idPGCnp+kYoHBs2TLaTU0vv/VQwlKHol
+   /5gtrGoOLoSjVdARb2Jmp3Ye4ppJAh5C3JsyEGJ0S0j+n+qy4nK0OOqAJ
+   A==;
+X-CSE-ConnectionGUID: tp2/LNZCRLmnS0GWDVCjvg==
+X-CSE-MsgGUID: a/Tlp7bLT8aWnWifi/hfkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="66327323"
+X-IronPort-AV: E=Sophos;i="6.16,327,1744095600"; 
+   d="scan'208";a="66327323"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2025 15:52:00 -0700
+X-CSE-ConnectionGUID: 7+vZawjzRW+axfKtJ5xYhA==
+X-CSE-MsgGUID: Uyth4+W/SeeVPMlU+gBWuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,327,1744095600"; 
+   d="scan'208";a="159214763"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 20 Jul 2025 15:51:59 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udcsu-000GLR-2I;
+	Sun, 20 Jul 2025 22:51:56 +0000
+Date: Mon, 21 Jul 2025 06:51:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Keith Busch <kbusch@meta.com>, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, hch@lst.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, axboe@kernel.dk,
+	leonro@nvidia.com, Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCHv2 6/7] blk-mq-dma: add support for mapping integrity
+ metadata
+Message-ID: <202507210629.vtm1boC0-lkp@intel.com>
+References: <20250720184040.2402790-7-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250717085300.work.146-kees@kernel.org> <CANiq72kPmb+7Ygk_Qvsiq+22EJVSPjjwn4whdLuTGCPwvTAssQ@mail.gmail.com>
- <CANiq72nqg79xB=iV4GCH8XCak2jCn+XxUX4Hm1s6n5L=5cLuvw@mail.gmail.com> <CABCJKufPphD3en91N89yekUam4Nv7+C7YPJMv7h2SmZcyhGhdA@mail.gmail.com>
-In-Reply-To: <CABCJKufPphD3en91N89yekUam4Nv7+C7YPJMv7h2SmZcyhGhdA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 20 Jul 2025 22:12:29 +0200
-X-Gm-Features: Ac12FXwyfbcRSAsV9U7kTZFZ9-dp7QOJairlY32p58YOVbnTtpCxcLWD7oKvd_E
-Message-ID: <CANiq72k6ggtS-TCnws0xY8K-w=+vjGSjaXR-OO5YG=DGAjnsug@mail.gmail.com>
-Subject: Re: [PATCH] Compiler Attributes: Add __kcfi_salt
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <kees@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Andrew Cooper <andrew.cooper3@citrix.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250720184040.2402790-7-kbusch@meta.com>
 
-On Thu, Jul 17, 2025 at 6:48=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> I would definitely like to see Rust support for this too. Otherwise,
-> we would have to drop the attribute when Rust is enabled to avoid CFI
-> type mismatches with C code.
+Hi Keith,
 
-Thanks for confirming -- added then to:
+kernel test robot noticed the following build errors:
 
-    https://github.com/Rust-for-Linux/linux/issues/354
+[auto build test ERROR on axboe-block/for-next]
+[cannot apply to linux-nvme/for-next hch-configfs/for-next linus/master v6.16-rc6 next-20250718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I will ask upstream when it lands in LLVM.
+url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/blk-mq-dma-move-the-bio-and-bvec_iter-to-blk_dma_iter/20250721-024616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20250720184040.2402790-7-kbusch%40meta.com
+patch subject: [PATCHv2 6/7] blk-mq-dma: add support for mapping integrity metadata
+config: um-randconfig-002-20250721 (https://download.01.org/0day-ci/archive/20250721/202507210629.vtm1boC0-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507210629.vtm1boC0-lkp@intel.com/reproduce)
 
-Cheers,
-Miguel
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507210629.vtm1boC0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_start
+   >>> defined at dm-table.c
+   >>>            drivers/md/dm-table.o:(blk_rq_integrity_dma_map_iter_start)
+   >>> defined at dm-io-rewind.c
+   >>>            drivers/md/dm-io-rewind.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_next
+   >>> defined at dm-table.c
+   >>>            drivers/md/dm-table.o:(blk_rq_integrity_dma_map_iter_next)
+   >>> defined at dm-io-rewind.c
+   >>>            drivers/md/dm-io-rewind.o:(.text+0x13)
+--
+>> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_start
+   >>> defined at core.c
+   >>>            drivers/nvme/host/core.o:(blk_rq_integrity_dma_map_iter_start)
+   >>> defined at ioctl.c
+   >>>            drivers/nvme/host/ioctl.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_next
+   >>> defined at core.c
+   >>>            drivers/nvme/host/core.o:(blk_rq_integrity_dma_map_iter_next)
+   >>> defined at ioctl.c
+   >>>            drivers/nvme/host/ioctl.o:(.text+0x13)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
