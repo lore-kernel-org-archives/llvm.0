@@ -1,249 +1,134 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D662BDC3B
-	for <llvm@lists.linux.dev>; Mon, 21 Jul 2025 11:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753098209; cv=fail; b=hFgSDE3yBFBBwF902xSq2zKMC1x8AJr0cXzbfPsrRks9FV99VoroYqzdS4XgKd+h8uEER72gT2Bt0/PfuN3QhoUXufEBzW2M130IDg/RhS/zXYjyNf1PLBBDY8AMxVMlbXuL4MDsyf+qCn3+jDF5Lw2oh7TzMii4CnNd/b4SPzs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753098209; c=relaxed/simple;
-	bh=RS3ZueeNDnh+ZlNqR1PGC6NLeaP7YF4+7ZH5cNZnvw8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=jHmRu4hoikqeqnzTC7U4fS6esBYhkmY7vnclE4InNBXT90KVGVyu+KKxkgYoaUJTDfUEtpSTEhwjbg5wY9b0Pr0rwWgFZMM8J1e3WSl0OHPOkUgBVR2/95FN9avsE+P3jhVzc9ic0utA6NNxFg5K9FTv78S/OAoFniEVV/iwrVs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jIrSfzKc; arc=fail smtp.client-ip=40.107.243.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294DC2D3206;
+	Mon, 21 Jul 2025 12:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753101570; cv=none; b=XJqhw3N8PtCdA/AvngEQk59VCAqFBRiGBnUQtbyz9k9LCVTcWt1YKjAuXbQI6tAfg11YNHfnHDIedRXdyaoMX7BOwnL8apa/r2YtUbt1smfcKRdUYWN4LcErrzw8POFv+UakQY1D1emchB0m1gSOAb2mq7UpEhYsDStN6OlreJo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753101570; c=relaxed/simple;
+	bh=iiR1FFOV2ZzU5qWAzbQi6NjbvGro2kfiOZy+4xIRW8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJhZGVkIX7Jtc++stagEzsPljWqabDENG69ZyqHtaPW1t1PnDkeasOAttq+wllXRPoe314gq5H69DipbLES/j+pMSiionV6cj7rrwmQgXtJNo87EeCyTp99uPoa9oOSEaIjHW8Ll0EKQkzpbc5euKlLvk5XVI9eAJ855jpjjjZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KQzRleBk; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jIrSfzKc"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RisA38GCYel4YWbTn78gOKZGgmEfH5dYa5PNqOqlsNrbhVnIBT9ffFZJb3CPlh5B1nsHb/VvDCB4LJ022qa/aJgQXMFb1v9K90j7409CvlOywLgwnSpzUSDvvdFoOPpbNcJMG87HFS7cIXHM1nZFu0AjCkcJpQBXlKIxLy5xHpbnr+ZOzY3ljzZA3LuE/2SCeaixF7maKJPNvueOc/Pdqw3vzlg+2QMZXDrwduV0i+rmpOX2EnB0SBJMA0tWZFLUersmm0xWSXg7vDMaYtoTZRj5ANX2t7UPsgr+HW33U5xn0Sad5ndCV+Anbb0xRBGJhTEjCEurEdbEEojEbMzRLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VYQd9mERupsxs0DspFIiC37KUe8HOPtoaSA2n4Aa5ZI=;
- b=ysNpGp1EoJbsyWSBzjA1t2+GnbS27rGQdVmxJm4qbW1XUohD1bTqN4Mji0sodObtEDnOnuU/RcMww7+inx4ViD+Sih17jZaSeAJOdeo4wusq9S8BmXRAP2qk8I+WFyR1EMGDsZwP8b/GHk5qi7jJm6GoNXKZ+VgLNQ0NbiDuCAH4mJOvHQaxzjMwkXmGuvVGka2T5MItzgsBpdXKW9aBnQjN2ONTbFTV/IPHqIpDGM5CnnxSj2JXs+twDz7KW9doYs+6PEZF7lb3vcmfdPPzbxpBfR3FdYZ5i1GVU8GdnwcF3yeAbLrPg6ZcqxPxCfyoXHqJCyl2PQmO9PqkQpmpNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VYQd9mERupsxs0DspFIiC37KUe8HOPtoaSA2n4Aa5ZI=;
- b=jIrSfzKcHgf51xbfhxzUKa7zZJPNSxkqEDZ+D7zNEcmCjHBUTdTB7/zSMnDaLMJfS0wSkKhVbEagPxzaY445tOdxzS1qFezqB5iD0phPwWT6O2LBq3sNjCAR+Y00bu97jvygJ2jYCa8vxAyiJKirFMZf3iHcizt8GtVLGzNpkfBFprDm8J61aDFCMBqXRvIiqrq8w7JBUuZxaCpU8U+AB6kYEDYdhdenXcC8VJjkjHu8jPZ1eho7qbLiKoGs5pqIIn51fCEpBlK3mHP0J6JR5hnkVwaKJ2k88s3CQGYpzv8sgqH3LvgGAtJn6Dq2LPbZQab4VKMNCmxJgQGFk7u/Kw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6186.namprd12.prod.outlook.com (2603:10b6:208:3e6::5)
- by DS0PR12MB7898.namprd12.prod.outlook.com (2603:10b6:8:14c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.29; Mon, 21 Jul
- 2025 11:43:24 +0000
-Received: from IA1PR12MB6186.namprd12.prod.outlook.com
- ([fe80::abec:f9c4:35f7:3d8b]) by IA1PR12MB6186.namprd12.prod.outlook.com
- ([fe80::abec:f9c4:35f7:3d8b%4]) with mapi id 15.20.8943.029; Mon, 21 Jul 2025
- 11:43:24 +0000
-Message-ID: <ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
-Date: Mon, 21 Jul 2025 14:43:15 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next V6 2/5] selftests: drv-net: Test XDP_PASS/DROP
- support
-To: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org
-Cc: kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
- cratiu@nvidia.com, cjubran@nvidia.com, mbloch@nvidia.com,
- jdamato@fastly.com, gal@nvidia.com, sdf@fomichev.me, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, tariqt@nvidia.com,
- thoiland@redhat.com
-References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
- <20250719083059.3209169-3-mohsin.bashr@gmail.com>
-Content-Language: en-US
-From: Nimrod Oren <noren@nvidia.com>
-In-Reply-To: <20250719083059.3209169-3-mohsin.bashr@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TL2P290CA0004.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:2::13) To IA1PR12MB6186.namprd12.prod.outlook.com
- (2603:10b6:208:3e6::5)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KQzRleBk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753101570; x=1784637570;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iiR1FFOV2ZzU5qWAzbQi6NjbvGro2kfiOZy+4xIRW8E=;
+  b=KQzRleBkJIRDQTdiGujjzkjk8oc2f7P/psOEnxBTk5USblnwIyznV2rl
+   H65iwqKSjh1/6rJbVjb3ADq6HElWlKZmt6qKNRDBkJop4pq+7Rfo6NWV9
+   XvMXgFkeaSEAmT8gwZfXPPKRwSOyIi3t2emUhnEccivZ5ssp4RLgYqXEO
+   W+hqPVzivxApnwi6aia5dVnMVXZD11Ypmy7kRFfWLMJPW5t4DijXrXkTA
+   SUbE6ewVRx8PVmnSezgFWpTmAcR/AkIqHvJdSgmzSZbkAzruLPl+1iFAQ
+   jbmsyrNm6OPxoGUrr9mY7yDyaz9Q5JF6WGRKVcij7nW+X5A8l85Lavg2o
+   g==;
+X-CSE-ConnectionGUID: rcqO51hBS5CaqjIsAZj35g==
+X-CSE-MsgGUID: eF58bNACQFe1XXqS0baqfw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="55164356"
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="55164356"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 05:39:27 -0700
+X-CSE-ConnectionGUID: nvPV/R2VS8mgn0J/TLblXA==
+X-CSE-MsgGUID: AIiDAzKCRXG4Hs6s/55TuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="159556598"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 21 Jul 2025 05:39:25 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udpnc-000GnV-05;
+	Mon, 21 Jul 2025 12:39:20 +0000
+Date: Mon, 21 Jul 2025 20:38:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 1/4] pidns: move is-ancestor logic to helper
+Message-ID: <202507212040.eC5zmwiV-lkp@intel.com>
+References: <20250721-procfs-pidns-api-v1-1-5cd9007e512d@cyphar.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6186:EE_|DS0PR12MB7898:EE_
-X-MS-Office365-Filtering-Correlation-Id: d76da9a8-61a6-4393-b0ba-08ddc84bccb7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Zmt3VmNjby9Td3FmSmNPTWFiZEl4ajgwYTVubGg1ckRzckMrVmJESDUySFRa?=
- =?utf-8?B?Qm1DUDhqeVFGYnNzR0dYNXZ2cnhyeFE3MkhPUkFLTDdBVWN6YnpPL0JUb1hQ?=
- =?utf-8?B?dkE4UTRGNVhJZnkzN0hqMUNWOHRIcGx1RG1XKzJQREtoK1NCbG1YRU9iTzhY?=
- =?utf-8?B?WkpBQW1JY0pIeVd6eWtWNVFIUm8rd3ExT1BLL2phQ0tDQzk2MlN0TVpsa2ov?=
- =?utf-8?B?Q0tLT1lxQkpNL1FrT3dIMmplLzl5M1d0dTJxQmVTL3pNenphSk1neU5yK1Qr?=
- =?utf-8?B?aHNIaHhlTmNIcm5XaHJpWTI1cGliaEFWOGp2RTEweWtRZ3pVeWNtVXpWTnBj?=
- =?utf-8?B?ZUMvRkNwL09KTjVPUUFLb1BLUVpaS3ZIemdRRUJJRTlPS3FoVURQZytxUUZV?=
- =?utf-8?B?a0V4eEw5bEpJSnRDeHFmaHBKMG1TbHkrU1haejl0R0R5ZTJ6YnMxVGxsS3JG?=
- =?utf-8?B?OWlMbjJBVWovcVBza2FiRHBLanpHN0tCaGJ5MC9Zam16aFpJMG1CUjNXOU5B?=
- =?utf-8?B?QncvdDBHWjBvVHd3eDcwQWZBekJoRGdaUEttNGlaR3F2WHdBZVJ0OWJWR25H?=
- =?utf-8?B?UndPL1l6VG1YRHNzdmU5N2IySGVvUXp1ZDF0T1ZIODZNYUNMWUdZMnBvcTRK?=
- =?utf-8?B?MlFlWGRiNkQ0a3RUcGRrQlMrQmNGdXcrMEUvSzU3K1EyZHBRU2t6SEZMOGpD?=
- =?utf-8?B?NktSVEwyREQwUEhhckowMjM1cTk0WG16TFlNU09ObDVMZFNvZjhrek8wcEhH?=
- =?utf-8?B?aWlHZ1lia0FCdHFZcGdrYzhhWFo0RE5UVXI3eTZQU0lUNlhXSGxLdE01UjY0?=
- =?utf-8?B?eDVORzRGRXJvUEdzQ3VGeWVYQ1kzeU53R043b0piT1BRdVFadm9veTNucWpi?=
- =?utf-8?B?TUFUV3FwNXJnOHJMZTZBejFXTmM3NTI1a3NheGgrQzFGRU8xNHRPclRsdGpt?=
- =?utf-8?B?QTgrbzQ1bFdsTEdsSXlJSTV0MlU5Z2E0eExvVzhuOVloaEVFc3hKS2FYdklS?=
- =?utf-8?B?aDhMU2RoTkFzWHhBbWp3WWZVZWplOFRXVzBIbTAvTXJ3VlhwWU5oUm5WUFU5?=
- =?utf-8?B?RXZZdlVPWUNBTTJJcnJMaHVQK2l3SlNzcTFzamdGVEVKMGJBY0xuSHJ3SzlI?=
- =?utf-8?B?UC9oZVZQZ0l6V2FsazBYbHFDWFpVN2Y2S0dWOWtyK0xtWWlieU5PY1RFUDBl?=
- =?utf-8?B?KzJaRTdhNC9tMmdSMko2Q3ZvdXcrUnVhSXRNdzNlT2xhb01vSFF6MlNweGRE?=
- =?utf-8?B?aEJtV2VIU3NsT1Q2b0U3a21ZMXNkeWcvbXR0ZXFTVnRtK0w4Smd5REZtMTJI?=
- =?utf-8?B?ZWNMeDhDVUhoQUc4RDd4Qkc0QWRLUWlwbUIvWFRLV215L1hvVURhSVdhYTNL?=
- =?utf-8?B?ekpsOXpiQUYyb0hSY0w3UUJRemFXM3B4ZHQ5bjViM0I2aVdoWG1OSnJOUzA5?=
- =?utf-8?B?OTFrN3FHdENRYXhVcEFqeXd0NGVDVXMzMitIUTk2bUczQVg3dGtKcjB4cHdx?=
- =?utf-8?B?M2g0aUFtS2gxRXBmUG1JandxL2FsNTYraHFkRDNaNDJrVTZ3OEFIeTYxVW5r?=
- =?utf-8?B?eUpqME1ML1N0TXFEMGpUZW41TUQ0VGx1bmc5a2JZNTI5QmhNR2xsczZnMFd3?=
- =?utf-8?B?TDJuSEpPeFVSTk9kQUFNQkxUMHRRQVNjTmpCRmg1M3AyMkRBN0plNTM1cUpY?=
- =?utf-8?B?Y2tJeDcvaGQ0VmE3MW1zZlVyV1B3a0hYSHFKREtzVkZzU2pyNy9BUER2RXUr?=
- =?utf-8?B?SEJobGRMTzZDQUhKMXdWK2xIQ0JBWnZTRG5Pdks1N3k2eUNOaWhmYlpObXdR?=
- =?utf-8?B?dkEvWXpBTldMejM1TS9BRnhSQVluN1EzZkp4cU5oK2dZd0ppU2FSdnl4UUFp?=
- =?utf-8?B?VFptMkdvZENxbE95ZnBDc3FNNEI1WmtwR1Q1VS9hWHdqL0xjdytzaG9QNUlT?=
- =?utf-8?Q?+Vkm5A0rTxs=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6186.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z3gzZzRxcjBPdXdRUkE5UnNlaC9zS21MRzMxQmZyRGNrRHlseEcwdkFuZnkw?=
- =?utf-8?B?Y3RmeWpTRk5mNWdKWTFSMnZhaWl0UjZQNUR6aEkyZEtDeHRCemJSRHF1QkVx?=
- =?utf-8?B?WTRlSTV3aG1WMjlCVWNvZVZiQXBzNTV3YmcwSHBpbGxFajNiSHkxRHU3U1J6?=
- =?utf-8?B?d1RvVUhxcE93UW9Xclo2NXByOURIblN5d0hSSGJWVng0QTk4TDg3Y0lVR3pN?=
- =?utf-8?B?RjVSOSt5Y2ZRbnJLaGNDQ0ttTng2Ujl0Rzh5WlVsZXJadUd3QW5qaW5LTWxX?=
- =?utf-8?B?TEpkdG9URFMrWG1XNWJjTmdZTktMcXBjdkhZcUl4UlVoTU1IdmVoSld6ZVV3?=
- =?utf-8?B?OWUzNC9TUGxLbjA0VWtjdFAvcXEySXpCMGlvRXRjcks0aHJlb1Z0T2RqZ2ky?=
- =?utf-8?B?ZTdzeG1HQmRtQUJaeXlFOWcrNElKOXZyRlpGczdpaHBOYVFrMCs0N2FGU2J2?=
- =?utf-8?B?dC90b3UzTEt5OVBzT0lJQmozVllIeGVuMjE1bmdOaEdMdVBWUzU2M1prMmE0?=
- =?utf-8?B?YUJOQW1JMWNMUml4ZjZFVUc3MG5HOU8wV1hha1pqR011eW8rc0IxYUlxcjA2?=
- =?utf-8?B?TjRGMjF2NEMvUytOWk90R3RlR003bDZnVzMxb3BKUHIzMjNBVXhUUTFmL0N5?=
- =?utf-8?B?K3VOYzM0VC9LQmZuZmJXSXcxVGNLVW93WitFYVZCdThPWGlwUGVsN0Vkay80?=
- =?utf-8?B?ZnFpTFhSZHMwZzRtNEFGZTVhdkpTcWlENmRQdFJJZGFKOXg2Q2dtUU5BdlhG?=
- =?utf-8?B?NmJxblN6UlFDcjN1MEVqZUlmK2ZTVXhTQVZuckV5MjBRRGVwZDh4L0hMMnpt?=
- =?utf-8?B?R245bTgyc2RSVjJmYmhHRFJrcFNQSmMrZDgvZWFVbWNrZ3UzdTQ0bjJUczBV?=
- =?utf-8?B?RnVmWmRPd1pqNldxelB5Tzg3Vm5mM3dZQ3duaHpUMzlYR2p2Qk9aazdzQ0NZ?=
- =?utf-8?B?SU15emREc1puV3p1T1VXM3pLbnRHYWxFN250WXR3Q1U1ODBjc0IyOWEzMUVx?=
- =?utf-8?B?RHFjaml6VlhTTFVDOEY3dnQwZmNPUkx5T2gyVUNJbkJ3cmdVekpVNC9HWnFu?=
- =?utf-8?B?dDMwdG9tdmFjNy9XeW5WR3BJTTlQcWNUcEZBaXU4TXNIa3N0NkpMc3ZiQnF3?=
- =?utf-8?B?eCtVVVg4cGExSExYbTVUeGpkUnFlUkt5ZktFRmNoWWJBaEY4RnpFSCtIbDZo?=
- =?utf-8?B?VTF3VHhJaU9sZFpvZXUwc0FkeUJ4S0NzS09VVFcwWUdEempWd1FLK3cxR1JD?=
- =?utf-8?B?Uk1VUnZtQ0lycjVQMGQ3TUxFYlZFcGR2UGRBczhxdnlwTmtQZEIzYWhXbWlH?=
- =?utf-8?B?TTAvVWNXKzg4OHp0TVlNbHUwSk4wMGJtVTdITDJQVm9Ba1A3YlJpdVE4Qm1W?=
- =?utf-8?B?Ly9BMldQYWFpQlFYZWJsWVFBVEpvUWlpZnppOTAwZGdYQnlOMFhaclFGTkEz?=
- =?utf-8?B?TkRTQTllVE41Q2JGMTZhVWJSYitSOWxMRFdMdXFPWVdiVmQ0N1Rsay9nV3JH?=
- =?utf-8?B?TDRGL1hxNGZGUVFNRG1tZGhvc1JtajM5STNIK1ZMNm9INUNPWmtxSUlYZFl3?=
- =?utf-8?B?djVGZHAxZGtrWXpUQ0Yyc2dpcHNQMndQNkdOdkN2WFpVMFVxbk0vM29SK1Na?=
- =?utf-8?B?blJpUXpxLzRkMHF2SGMxcHpFemdmOGxPbjJUNHFsRHRZQWVLOHhDM1I2WUwr?=
- =?utf-8?B?NWpiRlc0blBJQnJxa0hPeUE3UFhsdjZTNXlPY0NQejd5TGlwOHBUNStaOGJl?=
- =?utf-8?B?NzJYVzRBVXlacnRqMCtXbjFaMjJabG4vRGVoU21WOHhvZ2k4dXcyN2tSbXFI?=
- =?utf-8?B?VWdySjNHWEpES093U0MvZzJiNE8ycXpXaGl0d2ExY25STnNqNFg3eDJzV1o4?=
- =?utf-8?B?V0V3ZklPaEJGd0x3UEVLOS8yeTJXeU9uVFVvYWdXSHZZdFJPRXpQRmtveE8z?=
- =?utf-8?B?ZjUybzRvMWlpYWRrTktaeWM2KytSSTFBS0lUNzFUTy9UNFg2d0lVTDlFaFdD?=
- =?utf-8?B?VTQydFRRNnFhMkQraUtVVjNQWCs0N2dVNzVZVzM5WFMxOU0rZy9YSDFTREV5?=
- =?utf-8?B?UFUzMjZybjljU2ZhV1ZsdmsxQjVLSG1lRCs3aDViOFVpczZscUt3ckh2NzN5?=
- =?utf-8?Q?XoThAA77pZXpgKA8i70u806Ot?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d76da9a8-61a6-4393-b0ba-08ddc84bccb7
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6186.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2025 11:43:24.2163
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nnjg/0BXNSAOMVuCa0hiuBGC6YNMpUvcOB2K5ZzIQ7DOyTvhbkdVsEbpSCVDOlecu6/AJuWxnIzOsRm8Q1EkOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7898
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250721-procfs-pidns-api-v1-1-5cd9007e512d@cyphar.com>
 
-On 19/07/2025 11:30, Mohsin Bashir wrote:
-> Test XDP_PASS/DROP in single buffer and multi buffer mode when
-> XDP native support is available.
-> 
-> ./drivers/net/xdp.py
-> TAP version 13
-> 1..4
-> ok 1 xdp.test_xdp_native_pass_sb
-> ok 2 xdp.test_xdp_native_pass_mb
-> ok 3 xdp.test_xdp_native_drop_sb
-> ok 4 xdp.test_xdp_native_drop_mb
-> \# Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
-> ---
->  tools/testing/selftests/drivers/net/Makefile  |   1 +
->  tools/testing/selftests/drivers/net/xdp.py    | 303 ++++++++++++++++++
->  .../selftests/net/lib/xdp_native.bpf.c        | 158 +++++++++
->  3 files changed, 462 insertions(+)
->  create mode 100755 tools/testing/selftests/drivers/net/xdp.py
->  create mode 100644 tools/testing/selftests/net/lib/xdp_native.bpf.c
-> 
+Hi Aleksa,
 
-...
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-> +
-> +static struct udphdr *filter_udphdr(struct xdp_md *ctx, __u16 port)
-> +{
-> +	void *data_end = (void *)(long)ctx->data_end;
-> +	void *data = (void *)(long)ctx->data;
-> +	struct udphdr *udph = NULL;
-> +	struct ethhdr *eth = data;
-> +
-> +	if (data + sizeof(*eth) > data_end)
-> +		return NULL;
-> +
+[auto build test ERROR on 4c838c7672c39ec6ec48456c6ce22d14a68f4cda]
 
-This check assumes that the packet headers reside in the linear part of
-the xdp_buff. However, this assumption does not hold across all drivers.
-For example, in mlx5, the linear part is empty when using multi-buffer
-mode with striding rq configuration. This causes all multi-buffer test
-cases to fail over mlx5.
+url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Sarai/pidns-move-is-ancestor-logic-to-helper/20250721-164648
+base:   4c838c7672c39ec6ec48456c6ce22d14a68f4cda
+patch link:    https://lore.kernel.org/r/20250721-procfs-pidns-api-v1-1-5cd9007e512d%40cyphar.com
+patch subject: [PATCH RFC 1/4] pidns: move is-ancestor logic to helper
+config: x86_64-buildonly-randconfig-001-20250721 (https://download.01.org/0day-ci/archive/20250721/202507212040.eC5zmwiV-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507212040.eC5zmwiV-lkp@intel.com/reproduce)
 
-To ensure correctness across all drivers, all direct accesses to packet
-data should use these safer helper functions instead:
-bpf_xdp_load_bytes() and bpf_xdp_store_bytes().
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507212040.eC5zmwiV-lkp@intel.com/
 
-Related discussion and context can be found here:
-https://github.com/xdp-project/xdp-tools/pull/409
+All error/warnings (new ones prefixed by >>):
 
-> +	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
-> +		struct iphdr *iph = data + sizeof(*eth);
-> +
-> +		if (iph + 1 > (struct iphdr *)data_end ||
-> +		    iph->protocol != IPPROTO_UDP)
-> +			return NULL;
-> +
-> +		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
-> +	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
-> +		struct ipv6hdr *ipv6h = data + sizeof(*eth);
-> +
-> +		if (ipv6h + 1 > (struct ipv6hdr *)data_end ||
-> +		    ipv6h->nexthdr != IPPROTO_UDP)
-> +			return NULL;
-> +
-> +		udph = (void *)eth + sizeof(*ipv6h) + sizeof(*eth);
-> +	} else {
-> +		return NULL;
-> +	}
-> +
-> +	if (udph + 1 > (struct udphdr *)data_end)
-> +		return NULL;
-> +
-> +	if (udph->dest != bpf_htons(port))
-> +		return NULL;
-> +
-> +	record_stats(ctx, STATS_RX);
-> +
-> +	return udph;
-> +}
+   In file included from drivers/gpu/drm/drm_atomic_helper.c:31:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:16:
+   In file included from include/linux/ptrace.h:10:
+>> include/linux/pid_namespace.h:125:6: warning: no previous prototype for function 'pidns_is_ancestor' [-Wmissing-prototypes]
+     125 | bool pidns_is_ancestor(struct pid_namespace *child,
+         |      ^
+   include/linux/pid_namespace.h:125:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     125 | bool pidns_is_ancestor(struct pid_namespace *child,
+         | ^
+         | static 
+   1 warning generated.
+--
+>> ld.lld: error: duplicate symbol: pidns_is_ancestor
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.o:(pidns_is_ancestor)
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-hdcp.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: pidns_is_ancestor
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.o:(pidns_is_ancestor)
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: pidns_is_ancestor
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            bridge/cadence/cdns-mhdp8546-core.o:(pidns_is_ancestor)
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            bridge/cadence/cdns-mhdp8546-j721e.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: pidns_is_ancestor
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            bridge/cadence/cdns-mhdp8546-core.o:(pidns_is_ancestor)
+   >>> defined at pid_namespace.h:128 (include/linux/pid_namespace.h:128)
+   >>>            bridge/cadence/cdns-mhdp8546-hdcp.o:(.text+0x0)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
