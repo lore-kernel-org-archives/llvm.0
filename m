@@ -1,178 +1,190 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065492C327C;
-	Mon, 21 Jul 2025 13:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF455299957
+	for <llvm@lists.linux.dev>; Mon, 21 Jul 2025 13:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753103435; cv=none; b=LMJ7wsRATEDLR+qquid7mJppU0mCEx0WhOQDSP4rclT/g+RF6P8tH2b258iZJTqUfCnnl+eHfKg6ELXuvk6vConPFFLeus8MOMzhTgcvxHJSLY2kiCUNL9ZodljhHxbj4g1a1vswY08jiYRkgDlWs/9Xj4iGaGoN9tGwn2gCB7Y=
+	t=1753105844; cv=none; b=Jkw5/2/LvLexvghg2L4xgXcWsVQRI7xv1rfIQH3M+Kzd5UcxUy+nMZztAGIOQziPAavCtdHFOECexy5ukbgpydQwl0ielleVsywG2O+NlXhqIH/7KpHax/xdyTO0k8oxR4atdFEeLO4fFsQZ3F4aS+SjKOdpzSpU0RdENed1wxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753103435; c=relaxed/simple;
-	bh=luwLkYm8gQFwFpI76K4uYcGeuowE05nWYbzbnD01+2g=;
+	s=arc-20240116; t=1753105844; c=relaxed/simple;
+	bh=Ouh+Rb2DpWa0BE8kZFuhuQSkkgiHTdJ5Enf6J0Q61q4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ovcE18xK8tukxSiwEyaozLjaS3bh+byEvkIAdMOAp55CsP1WboyKkJQCgKomPJGzl/X8gDM9TZhTvSLYdJjOKzrfU1PHWC9l+sPVoWezIADAn/yFJn9LctDvfbDFSMForZjiWX+SSDsAc9uctDGVc9fs4TIQoV1LHP8k3NAg/bY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iJfRudup; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=mhLGbdy7evSraVY2BNUjFy4OTKZ5H3DJ/CYE6MDwVBMAzuu1S9IZmbxoBKNAD/aQmWtYxHrzpVY37llgAFAHPyOR8seYeEZ+7x7cyT4nyDfS1zXm2ff83rYhEz7kydZJNqkz58JeI+XCb4Pd6oR8guEl99gYJRHK8jqVGFZHGYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmY6Eehy; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iJfRudup"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753103433; x=1784639433;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=luwLkYm8gQFwFpI76K4uYcGeuowE05nWYbzbnD01+2g=;
-  b=iJfRudupxUpaE3Tx+SV1QzQ40twgM/h6VSG6a6FXxo6BnizRYDdqskKO
-   LenkZcl3BQbF4eqvtT5rklixJCqdnoMbEkusJGMZneKIGCetKH54iiBl4
-   Nf+3hpYmG9BzWguARp115zL+61ussfU1G19eJmVV6uLYBfGgv7sKfXSdM
-   hA95P6Bdb4F3jjo7oi4J458HEtiRB3ioq7+kxegmDletgCdJAxCCk5pCz
-   4us2IrOckBHDybbUocZ8AI7msCVpHzFiIlOV0kwRsD66rZkMLhrt1fKqh
-   LUJX+dWfBvtFODorGnk1ryMMRd6DJKUdwh/czcmtBBRlu0In5zPi/PtER
-   A==;
-X-CSE-ConnectionGUID: Lqz1zj32TvudmrsRbJO3tQ==
-X-CSE-MsgGUID: jAeL1NM4QtS2N66OwCaOag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="55197013"
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="55197013"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 06:10:32 -0700
-X-CSE-ConnectionGUID: Y6R9J9HlTRaHSZntVq6X3A==
-X-CSE-MsgGUID: gY8tmDqDTPOp7DfZ78RoJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="158144253"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 21 Jul 2025 06:10:27 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1udqHh-000Goj-09;
-	Mon, 21 Jul 2025 13:10:25 +0000
-Date: Mon, 21 Jul 2025 21:10:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	sboyd@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
-	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org, srini@kernel.org,
-	vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
-	krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org
-Subject: Re: [PATCH v1 4/7] phy: qualcomm: eusb2-repeater: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-Message-ID: <202507212056.GmiGorFf-lkp@intel.com>
-References: <20250721075525.29636-5-angelogioacchino.delregno@collabora.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmY6Eehy"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ab6b3e8386so47827521cf.3
+        for <llvm@lists.linux.dev>; Mon, 21 Jul 2025 06:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753105842; x=1753710642; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kDWJYEkMDweMn2MG5CYOHj9gUw0O9qH9V4td8BhypXE=;
+        b=kmY6EehyRKTTsy2GeJvD3xCPj7G25lmwWl/gXF0ydxMPm9D2PJxHCIVKIUkgWbpCaq
+         lokpmo6E+25i7XDCfpt9n+5Ew3AEhWBE8IfcjlquKPC5a52pU+/LMbjiLEMzCrFx0DHM
+         NvqEI9bhp/v29rzuflO2rrGhUXtGnvtgs25rffGdAvXmQPANkPYH4TYvqBaT3e6I62Kf
+         uEGUqRcyMkvUlJViv1j5iJfF5MnaSHehvq3Dc25tiv7yPn3kQWId0t8km9cTb+udulxC
+         zJBtHdNC9IVIvTq6fJ1/4gttAnom9GCGE/1wdVmDOfD2+RDrbb6wz7t9eV5FB770kqJ7
+         qkqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753105842; x=1753710642;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kDWJYEkMDweMn2MG5CYOHj9gUw0O9qH9V4td8BhypXE=;
+        b=q7cQFDuqdT6Y8YHHLi1MTCpzH3pRwM4ZFblHjcFcizqc9+lGxQsJqb9VwCrAbDRdou
+         p8aPlsDHghISJOd6ZBDJ7g5AbuZYNSHaZlWCA0Xhimo1wL+Va0164HZ76WTb+9iL6FjP
+         E64t4zct/4mpKZUrnPoO0Wc/G5bRPW593jYkEI580ynGJotrfbOlgrHWlxM95Cf7kGBI
+         6Kh7gxWGQKD5ZINAdriNB2nVjlg02PcqD4CmPDH4YlnZ5AJgORGM+87w5SE6Ljbldshu
+         lN0+nI0mGvx0dW8xbk1M8GJAcPQWNHcmgR6RAWtLbxVXecHRYsq4YjalpTO9Q0MuoEdq
+         Yycw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFoUwT+McQULtE33GiOOL7sn2WVOdtcwGxjPxTgiMV+RqFwPQJMKUKWVXOzbp9nBedpxwJ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxx5Cnrtn9tNtoYz2e1PkXkoAB4ipw/h8/oBDzYjKvvxLXHn8N5
+	GP5Lar+X0+YlYmXeX3gW7Z1Zcn5cfk2gC45+yeeH44qDcS16NzKBzlu4
+X-Gm-Gg: ASbGnctNphpLvawEfUkek7si4oSrkoGkGmBDVkItc7IykqGeFudkwLMZseXfFjLiFRc
+	seCZ6tq7ba96s2yFQxyCNqGicNksEn6Tpqg/SjHvJzehADgdP3I7tivj+CQ5YttIfKXyYWF8sxJ
+	LEecma77GKS4pUjuEwdmFhVkn9FfjZQXtx+zNAGcLkQA62v/3w3zJDVEcITQ3HEvtGV3Q/nyFf2
+	PtS9hhU/0TrG6dxveTVpTcnHMfOlP8FsqVU63p9AQ69wX1GuHIAsq6b4oAXiY1EEYf5CsbWMvmx
+	6cfIlzm8aSMku4q408x2zEXhQk2gtNvaiIflNF3SjzMbaGg0F1wkReZ84GSOfSnCqSkqnUWd5eN
+	ALyib7gyabvuPr9hta7LHkG0i7aBdoKCUZuvnIaiHC/wY2iPE8IFZ0k+dNnElwk5H/ksecwexum
+	Yz6DPKZaRpwR2FeCQ1WVJY9ws=
+X-Google-Smtp-Source: AGHT+IFmrPwcjbXv7D6cvTSAvEa9bZ4UiiY9QfKEDHjEmYMvt6DyjTBIN4LKxmXUR6KBkas/qE7PnQ==
+X-Received: by 2002:a05:622a:2987:b0:4ab:50bf:e9d0 with SMTP id d75a77b69052e-4ab90987701mr241335011cf.8.1753105841389;
+        Mon, 21 Jul 2025 06:50:41 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4abb4b57d78sm42149441cf.73.2025.07.21.06.50.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jul 2025 06:50:40 -0700 (PDT)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id ECD79F40066;
+	Mon, 21 Jul 2025 09:50:39 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Mon, 21 Jul 2025 09:50:39 -0400
+X-ME-Sender: <xms:r0V-aGwNuHBLUz9FIKEiQA9u5kwjtrMjUj5i-ydgJCJlsBesA5WY4Q>
+    <xme:r0V-aOYJ22wa2HiQImGDVi7Af5p7QW4lbpiSRU1KMq1VSHdRERXoYNRN8OMSFYyO6
+    fs8MGcjn_Gafkut4g>
+X-ME-Received: <xmr:r0V-aBn3hHX6w91J3-Axk5BrnCMzqmunPKSB0945WnQqc_X8tyL9aF4k-RA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejvddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpeejhfeikeekffejgeegueevffdtgeefudetleegjeelvdffteeihfelfeehvdeg
+    keenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
+    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
+    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthho
+    peefhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghlihgtvghrhihhlhesgh
+    hoohhglhgvrdgtohhmpdhrtghpthhtohepmhhinhhgoheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepmh
+    hinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtohepjhhurhhirdhlvghllhhisehr
+    vgguhhgrthdrtghomhdprhgtphhtthhopehvihhntggvnhhtrdhguhhithhtohhtsehlih
+    hnrghrohdrohhrghdprhgtphhtthhopeguihgvthhmrghrrdgvghhgvghmrghnnhesrghr
+    mhdrtghomhdprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtg
+    hpthhtohepsghsvghgrghllhesghhoohhglhgvrdgtohhm
+X-ME-Proxy: <xmx:r0V-aLkQjUzD63dh2EgEL3kRgcGo5g1Xjor2jwIJp6Ko2j59znGKlA>
+    <xmx:r0V-aMNLIoSkHAEHrwxwHn8l_1DsSO8Ja-9f5NzrZHvvYZMZpFQ8Wg>
+    <xmx:r0V-aNpoUdlAaTJtSiSPkH7ZE5GEb0wkRRwECI4CITcO_oJMrNhnmA>
+    <xmx:r0V-aHQDoAJm5WrK3Mh2iQtg05p296ka2jMluRSsqtFNoOxkSRBk-g>
+    <xmx:r0V-aFb8x-QJ1J1Hmcp20IJxKj61HAkTw8mGTL-jbxHiB5wswtbcQ5Zq>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Jul 2025 09:50:39 -0400 (EDT)
+Date: Mon, 21 Jul 2025 06:50:38 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Tamir Duberstein <tamird@gmail.com>,	Kunwu Chan <kunwu.chan@hotmail.com>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+	Borys Tyran <borys.tyran@protonmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Panagiotis Foliadis <pfoliadis@posteo.net>,	linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,	llvm@lists.linux.dev
+Subject: Re: [GIT PULL] [PATCH v2 0/5] rust: Task & schedule related changes
+ for v6.17
+Message-ID: <aH5FrrpORLWpDCkk@tardis.local>
+References: <20250625051518.15255-1-boqun.feng@gmail.com>
+ <aGKWIFVl4nwSl8SG@Mac.home>
+ <CAH5fLgj1C-BVAfK8Qoaxb4hV=s74-SNPUeHq9LtmQ5q8aqcd-g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250721075525.29636-5-angelogioacchino.delregno@collabora.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH5fLgj1C-BVAfK8Qoaxb4hV=s74-SNPUeHq9LtmQ5q8aqcd-g@mail.gmail.com>
 
-Hi AngeloGioacchino,
+On Mon, Jul 21, 2025 at 01:00:49PM +0200, Alice Ryhl wrote:
+> On Mon, Jun 30, 2025 at 3:50 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >
+> > On Tue, Jun 24, 2025 at 10:15:13PM -0700, Boqun Feng wrote:
+> > > Hi Ingo & Peter,
+> > >
+> > > This is the updated version from my pull request last cycle:
+> > >
+> > > v1: https://lore.kernel.org/rust-for-linux/20250506045843.51258-1-boqun.feng@gmail.com/
+> > >
+> > > Please take a look, thanks!
+> > >
+> >
+> > Ping ;-) I forgot to add that this is a dependency for Rust version's
+> > read_poll_timeout(), which is a dependency to a few things:
+> >
+> > * In the `Tyr` driver:
+> >
+> >   https://lore.kernel.org/rust-for-linux/20250628.224928.690831629261546521.fujita.tomonori@gmail.com/
+> >
+> > * In Nova, the gpu driver:
+> >
+> >   https://lore.kernel.org/rust-for-linux/20250619-nova-frts-v6-24-ecf41ef99252@nvidia.com/
+> >
+> > * In the qt2025 phy driver:
+> >
+> >   https://lore.kernel.org/lkml/20250220070611.214262-9-fujita.tomonori@gmail.com/
+> >
+> > Thanks!
+> 
+> I would love to see this land to unblock the above users. I wanted to
 
-kernel test robot noticed the following build warnings:
+Thanks, Alice. It's already merged in tip tree:
 
-[auto build test WARNING on next-20250718]
-[cannot apply to jic23-iio/togreg sre-power-supply/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.16-rc7 v6.16-rc6 v6.16-rc5 v6.16-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	https://lore.kernel.org/lkml/175153176741.406.14557081807475800171.tip-bot2@tip-bot2/
+	https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=7e611710acf966df1e14bcf4e067385e38e549a1
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/spmi-Implement-spmi_subdevice_alloc_and_add-and-devm-variant/20250721-155809
-base:   next-20250718
-patch link:    https://lore.kernel.org/r/20250721075525.29636-5-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH v1 4/7] phy: qualcomm: eusb2-repeater: Migrate to devm_spmi_subdevice_alloc_and_add()
-config: i386-buildonly-randconfig-002-20250721 (https://download.01.org/0day-ci/archive/20250721/202507212056.GmiGorFf-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507212056.GmiGorFf-lkp@intel.com/reproduce)
+> add that I fixed the Rust language so that it NUL-terminates these
+> filename strings, so Ingo's concern from the last cycle should not
+> apply to this version of the PR.
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507212056.GmiGorFf-lkp@intel.com/
+Thanks a lot for pushing the changes at the Rust language side.
 
-All warnings (new ones prefixed by >>):
+Regards,
+Boqun
 
->> drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c:221:59: warning: variable 'sparent' is uninitialized when used here [-Wuninitialized]
-     221 |         sub_sdev = devm_spmi_subdevice_alloc_and_add(&pdev->dev, sparent);
-         |                                                                  ^~~~~~~
-   drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c:202:29: note: initialize the variable 'sparent' to silence this warning
-     202 |         struct spmi_device *sparent;
-         |                                    ^
-         |                                     = NULL
-   1 warning generated.
-
-
-vim +/sparent +221 drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c
-
-   193	
-   194	static int eusb2_repeater_probe(struct platform_device *pdev)
-   195	{
-   196		struct regmap_config eusb2_regmap_config = {
-   197			.reg_bits = 16,
-   198			.val_bits = 16,
-   199			.max_register = 0x100,
-   200			.fast_io = true
-   201		};
-   202		struct spmi_device *sparent;
-   203		struct eusb2_repeater *rptr;
-   204		struct spmi_subdevice *sub_sdev;
-   205		struct device *dev = &pdev->dev;
-   206		struct phy_provider *phy_provider;
-   207		struct device_node *np = dev->of_node;
-   208		int ret;
-   209	
-   210		rptr = devm_kzalloc(dev, sizeof(*rptr), GFP_KERNEL);
-   211		if (!rptr)
-   212			return -ENOMEM;
-   213	
-   214		rptr->dev = dev;
-   215		dev_set_drvdata(dev, rptr);
-   216	
-   217		rptr->cfg = of_device_get_match_data(dev);
-   218		if (!rptr->cfg)
-   219			return -EINVAL;
-   220	
- > 221		sub_sdev = devm_spmi_subdevice_alloc_and_add(&pdev->dev, sparent);
-   222		if (IS_ERR(sub_sdev))
-   223			return PTR_ERR(sub_sdev);
-   224	
-   225		ret = of_property_read_u32(np, "reg", &eusb2_regmap_config.reg_base);
-   226		if (ret < 0)
-   227			return ret;
-   228	
-   229		rptr->regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &eusb2_regmap_config);
-   230		if (IS_ERR(rptr->regmap))
-   231			return -ENODEV;
-   232	
-   233		ret = eusb2_repeater_init_vregs(rptr);
-   234		if (ret < 0) {
-   235			dev_err(dev, "unable to get supplies\n");
-   236			return ret;
-   237		}
-   238	
-   239		rptr->phy = devm_phy_create(dev, np, &eusb2_repeater_ops);
-   240		if (IS_ERR(rptr->phy)) {
-   241			dev_err(dev, "failed to create PHY: %d\n", ret);
-   242			return PTR_ERR(rptr->phy);
-   243		}
-   244	
-   245		phy_set_drvdata(rptr->phy, rptr);
-   246	
-   247		phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-   248		if (IS_ERR(phy_provider))
-   249			return PTR_ERR(phy_provider);
-   250	
-   251		return 0;
-   252	}
-   253	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Thanks!
+> Alice
+> 
