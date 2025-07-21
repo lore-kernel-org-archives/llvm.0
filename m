@@ -1,121 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED74B1DE8A4;
-	Sun, 20 Jul 2025 22:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB7678F3B;
+	Mon, 21 Jul 2025 01:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753051923; cv=none; b=Ocp9P2t7LR6rgoLApQ5chHqmVCPZJ9IDpy1hsU4UZtYRCfPIGtGr1heEf9QeT9e/88SGiOoJ7RQQk7TvgahLDLvKB57qpdEeA4MaZG0SXSAzDAZV9NUeEvwk+qFyCJtmMUY1jR3rR9AIYimH+vfRmroQCqPucEoK2nl9+nldc0U=
+	t=1753060845; cv=none; b=KHPyQ9NnkLDe+QnlwCTRokl9sUhNYxPabP8w5jw4f0+bK1AM9r2/QVgKnmw28yDX/jgxzu5EyNeiBQycMkU2FrUo7I6Td4wBVd8Olm9qpMUSIFWl8uiXi0Kz/0umIJYj+5BAI89hBEMs/uvXuMEraitLDZf9lcKAqA5lHK1cSP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753051923; c=relaxed/simple;
-	bh=KccA/LZ+ZXZ6XajYWAUE1auUyN/plqJfyfdq6P7YW1o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NSk9WoBXxPIqiRt5wfBEoKxjf9L8801MLaZSSQPOn434AbGY28MiEanwI9jKnt+LmF0XZv7+TSsH7AynKZJkuL2fsK1lGFS9ssgsZZEr+mLsS8n+RPuOJGjnSNYb7vMF12KldibTNZuOQzg8YaOcTYssdYImPoMaqIfmhv770QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbEA5Fo2; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbEA5Fo2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753051921; x=1784587921;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KccA/LZ+ZXZ6XajYWAUE1auUyN/plqJfyfdq6P7YW1o=;
-  b=IbEA5Fo2XjT5bxgLCvxAC9Ac9VBThWu9BnrcuQ57Zm+8IXMIPiQiW/Bn
-   YDIcOjYahdVJzIatUE0X6GEyS/55SEngOO+P0LPKzMkiod9PdWcLbNJwM
-   Njkgo0/dIjncX6B1iKdxgyaDumvkZfrg8O5CNl9QwEnKLHWAUh7JWPv6H
-   I4TMKKST/X1jR9CBvGBLUnz3DvYfVFOKRFZbUvbbxQzxlGvcnt3ShPCSa
-   gZmdbM2ZZesneP32FqbexbZx6idPGCnp+kYoHBs2TLaTU0vv/VQwlKHol
-   /5gtrGoOLoSjVdARb2Jmp3Ye4ppJAh5C3JsyEGJ0S0j+n+qy4nK0OOqAJ
-   A==;
-X-CSE-ConnectionGUID: tp2/LNZCRLmnS0GWDVCjvg==
-X-CSE-MsgGUID: a/Tlp7bLT8aWnWifi/hfkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="66327323"
-X-IronPort-AV: E=Sophos;i="6.16,327,1744095600"; 
-   d="scan'208";a="66327323"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2025 15:52:00 -0700
-X-CSE-ConnectionGUID: 7+vZawjzRW+axfKtJ5xYhA==
-X-CSE-MsgGUID: Uyth4+W/SeeVPMlU+gBWuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,327,1744095600"; 
-   d="scan'208";a="159214763"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Jul 2025 15:51:59 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1udcsu-000GLR-2I;
-	Sun, 20 Jul 2025 22:51:56 +0000
-Date: Mon, 21 Jul 2025 06:51:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>, linux-block@vger.kernel.org,
-	linux-nvme@lists.infradead.org, hch@lst.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, axboe@kernel.dk,
-	leonro@nvidia.com, Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv2 6/7] blk-mq-dma: add support for mapping integrity
- metadata
-Message-ID: <202507210629.vtm1boC0-lkp@intel.com>
-References: <20250720184040.2402790-7-kbusch@meta.com>
+	s=arc-20240116; t=1753060845; c=relaxed/simple;
+	bh=BNkQIjOZSKu9ZGwc4tHzEhkbq/LUxVSJG18QsLj5xUE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m775I5vrPMMSb9P8rBE2MtSub9R9CmkJ77L+zdI0qP9k6eloIu5+r+n7+vZEKXxl+m0/9YglDobaeqAbPaqx+2aDyzL5N8Bk6XwEqckhvCpZC5xmEUNr04D/NeyKxWNwfQR/0JV3Ew4ywm/Xn6egqpngnx0nHojPJVeaLCqph7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bljJL4ZNGzKHMX3;
+	Mon, 21 Jul 2025 09:20:34 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 52C711A0C3D;
+	Mon, 21 Jul 2025 09:20:33 +0800 (CST)
+Received: from [10.174.176.88] (unknown [10.174.176.88])
+	by APP4 (Coremail) with SMTP id gCh0CgDnYhPblX1o4WHSAw--.16917S3;
+	Mon, 21 Jul 2025 09:20:29 +0800 (CST)
+Message-ID: <b60e4ef2-0128-4e56-a15f-ea85194a3af0@huaweicloud.com>
+Date: Mon, 21 Jul 2025 09:20:27 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250720184040.2402790-7-kbusch@meta.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fs: Add additional checks for block devices during mount
+To: kernel test robot <lkp@intel.com>, viro@zeniv.linux.org.uk,
+ jack@suse.com, brauner@kernel.org, axboe@kernel.dk, hch@lst.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ yukuai3@huawei.com, yangerkun@huawei.com
+References: <20250719024403.3452285-1-wozizhi@huawei.com>
+ <202507192025.N75TF4Gp-lkp@intel.com>
+From: Zizhi Wo <wozizhi@huaweicloud.com>
+In-Reply-To: <202507192025.N75TF4Gp-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDnYhPblX1o4WHSAw--.16917S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxuFW8XF15AFy8Ww18Grg_yoW8ZFyDpa
+	yrC39xtryrWr1rWa97KrWq9w1Yqws5JwnxGF18Cw47ZFWqvF17WrWI9r43Jryqqr1vgrWU
+	Jr9rurykKw1UAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: pzr2x6tkl6x35dzhxuhorxvhhfrp/
 
-Hi Keith,
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on axboe-block/for-next]
-[cannot apply to linux-nvme/for-next hch-configfs/for-next linus/master v6.16-rc6 next-20250718]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+在 2025/7/19 20:32, kernel test robot 写道:
+> Hi Zizhi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on brauner-vfs/vfs.all]
+> [also build test ERROR on jack-fs/for_next linus/master v6.16-rc6 next-20250718]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zizhi-Wo/fs-Add-additional-checks-for-block-devices-during-mount/20250719-105053
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+> patch link:    https://lore.kernel.org/r/20250719024403.3452285-1-wozizhi%40huawei.com
+> patch subject: [PATCH] fs: Add additional checks for block devices during mount
+> config: i386-buildonly-randconfig-001-20250719 (https://download.01.org/0day-ci/archive/20250719/202507192025.N75TF4Gp-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250719/202507192025.N75TF4Gp-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507192025.N75TF4Gp-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: disk_live
+>     >>> referenced by super.c:1385 (fs/super.c:1385)
+>     >>>               fs/super.o:(super_s_dev_test) in archive vmlinux.a
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/blk-mq-dma-move-the-bio-and-bvec_iter-to-blk_dma_iter/20250721-024616
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20250720184040.2402790-7-kbusch%40meta.com
-patch subject: [PATCHv2 6/7] blk-mq-dma: add support for mapping integrity metadata
-config: um-randconfig-002-20250721 (https://download.01.org/0day-ci/archive/20250721/202507210629.vtm1boC0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507210629.vtm1boC0-lkp@intel.com/reproduce)
+Sorry, disk_live() is only declared but not defined when CONFIG_BLOCK is
+not set...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507210629.vtm1boC0-lkp@intel.com/
+Perhaps, as hch suggests, it can be verified through GD_DEAD?
 
-All errors (new ones prefixed by >>):
+Thanks,
+Zizhi Wo
 
->> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_start
-   >>> defined at dm-table.c
-   >>>            drivers/md/dm-table.o:(blk_rq_integrity_dma_map_iter_start)
-   >>> defined at dm-io-rewind.c
-   >>>            drivers/md/dm-io-rewind.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_next
-   >>> defined at dm-table.c
-   >>>            drivers/md/dm-table.o:(blk_rq_integrity_dma_map_iter_next)
-   >>> defined at dm-io-rewind.c
-   >>>            drivers/md/dm-io-rewind.o:(.text+0x13)
---
->> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_start
-   >>> defined at core.c
-   >>>            drivers/nvme/host/core.o:(blk_rq_integrity_dma_map_iter_start)
-   >>> defined at ioctl.c
-   >>>            drivers/nvme/host/ioctl.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: blk_rq_integrity_dma_map_iter_next
-   >>> defined at core.c
-   >>>            drivers/nvme/host/core.o:(blk_rq_integrity_dma_map_iter_next)
-   >>> defined at ioctl.c
-   >>>            drivers/nvme/host/ioctl.o:(.text+0x13)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
