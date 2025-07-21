@@ -1,68 +1,33 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2902C181;
-	Mon, 21 Jul 2025 05:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BC427FB25;
+	Mon, 21 Jul 2025 06:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753077285; cv=none; b=ROuZOqjJSYnDR8E0OWgVktdh3+Dcel3yU592KiGpH8ebrmx/lEB/v59V+M7pG8anEjzEmyySLIRKRqHzh64a9tBs2+RzT4CRVDroid6SHndwMU1nwCelVybWm5vyyEousVjTWLe6sgF8q7QcUtbp3TTSv0S5T7dE/fMEr15wlvU=
+	t=1753080439; cv=none; b=eM07wIbYuM0k+NHAmhxXmOY/7FV+6XR5PGHLARh8ufV2VFrNcrKUw1LFnwOXd4nwjks3v0AzyLohd/mnx1IjtrdpF0Yb2HXgMlXbT6SI/s91M4DOfbJIMgrSUadaSlnSH+u396EGkumgiD8J+/v3RrUdvuxqu6YdUc7YjWVKge0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753077285; c=relaxed/simple;
-	bh=2afK1CH5WnQZWgkGs3NYU8/AgC/IpRnXT8a0xNhCXEo=;
+	s=arc-20240116; t=1753080439; c=relaxed/simple;
+	bh=T7HMOUpuvtvroMArkjKn+tfi1JfmVBXjSP/RWiCN7/c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U3ayD1GHsv7k6mG35pscDB74VbRlVg4EWz9VRMEMpnp2Gu8rSuO0qL1rk3lQTz3jfrg+MzNyUBpNyL0/f9JC/HinSQ2zGCpUMe+3bn8RT263OeKgmpH+VC1xcoVbzbVkq1gNMAbmUzW2dlMrBMjmf9dabX1VqDmJJ1uSlv2Nhes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JZBo67Il; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JZBo67Il"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753077283; x=1784613283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2afK1CH5WnQZWgkGs3NYU8/AgC/IpRnXT8a0xNhCXEo=;
-  b=JZBo67IlUBC6XFkC1j0OA3fm6TtBSIR0pH3KU40sKhpUrZOgdTBVQ3VN
-   6WVtEsMIufo/mzSHEOyqGQC9i7viyZ0QX7kZAEZrr1gbY3zQnHDfE42NL
-   uZLd39akXZmMN5vAaW8mtRLR35eqXeSNNkQT+RYk7bTH1npZIasniBE9V
-   4hCx9B2YdDfoX5W7UfxpBQt+AjKqN6TeEER1pgup9la483vBRJ3gkKXzy
-   pM1ozQtZgS0iTu9jmxPqwH9MJNEHN6hbDAbMLj3cvssauXSw8wmXQo/7Y
-   AUndCd4PX232boXRKEW2D9MrNFoeeAtutctV/gU31cyKcBZiLVlK3NdFn
-   Q==;
-X-CSE-ConnectionGUID: 3Szt7CKOShO0INteZ5P0Mw==
-X-CSE-MsgGUID: VaTPZ8e4TIWO88ZaJ/+9Vw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="59074324"
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="59074324"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2025 22:54:43 -0700
-X-CSE-ConnectionGUID: KSKLZ4HHQZS+P5WPXVHcvg==
-X-CSE-MsgGUID: nIx7VcZxQbykuO627Y0SPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="158862613"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 20 Jul 2025 22:54:39 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1udjTw-000GWH-2p;
-	Mon, 21 Jul 2025 05:54:36 +0000
-Date: Mon, 21 Jul 2025 13:54:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tamir Duberstein <tamird@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH v3] rust: remove spurious compiler_builtins dependents
-Message-ID: <202507211312.M1fkG8v8-lkp@intel.com>
-References: <20250720-rust-remove-compiler-builtins-deps-v3-1-0df3a493973f@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aLi+XiXg4BunyHtBYQZYWuPB6z1GCdFWDHETKifbVRmx1fhsj2H+2KWgD5S84NKNP/PU+MzpUNx6KJytMU7sFC6+z5vhK2I0sEGCT3/EvIRePE4gdbY86EjZ1NPzmT/2s+Vl81oGM3RxaIVjKKXS4R9SBwyG4fs6tOPzeVryPXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id E5F6268AFE; Mon, 21 Jul 2025 08:47:12 +0200 (CEST)
+Date: Mon, 21 Jul 2025 08:47:12 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Zizhi Wo <wozizhi@huaweicloud.com>
+Cc: kernel test robot <lkp@intel.com>, viro@zeniv.linux.org.uk,
+	jack@suse.com, brauner@kernel.org, axboe@kernel.dk, hch@lst.de,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	yukuai3@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH] fs: Add additional checks for block devices during
+ mount
+Message-ID: <20250721064712.GA28899@lst.de>
+References: <20250719024403.3452285-1-wozizhi@huawei.com> <202507192025.N75TF4Gp-lkp@intel.com> <b60e4ef2-0128-4e56-a15f-ea85194a3af0@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,52 +36,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250720-rust-remove-compiler-builtins-deps-v3-1-0df3a493973f@gmail.com>
+In-Reply-To: <b60e4ef2-0128-4e56-a15f-ea85194a3af0@huaweicloud.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-Hi Tamir,
+On Mon, Jul 21, 2025 at 09:20:27AM +0800, Zizhi Wo wrote:
+> Sorry, disk_live() is only declared but not defined when CONFIG_BLOCK is
+> not set...
 
-kernel test robot noticed the following build errors:
+You can just add a if (IS_ENABLED(CONFIG_BLOCK)) check around it.
 
-[auto build test ERROR on cc84ef3b88f407e8bd5a5f7b6906d1e69851c856]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/rust-remove-spurious-compiler_builtins-dependents/20250721-012236
-base:   cc84ef3b88f407e8bd5a5f7b6906d1e69851c856
-patch link:    https://lore.kernel.org/r/20250720-rust-remove-compiler-builtins-deps-v3-1-0df3a493973f%40gmail.com
-patch subject: [PATCH v3] rust: remove spurious compiler_builtins dependents
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250721/202507211312.M1fkG8v8-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507211312.M1fkG8v8-lkp@intel.com/reproduce)
+But the layering here feels wrong.  sget_dev and it's helper operate
+purely on the dev_t.  Anything actually dealing with a block device /
+gendisk should be in the helpers that otherwise use it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507211312.M1fkG8v8-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> error[E0463]: can't find crate for `core`
-   |
-   = note: the `target` target may not be installed
-   = help: consider downloading the target with `rustup target add target`
-   = help: consider building the standard library from source with `cargo build -Zbuild-std`
---
-   For more information about this error, try `rustc --explain E0463`.
-   make[3]: *** [rust/Makefile:514: rust/build_error.o] Error 1
->> error[E0463]: can't find crate for `core`
-   |
-   = note: the `target` target may not be installed
-   = help: consider downloading the target with `rustup target add target`
-   = help: consider building the standard library from source with `cargo build -Zbuild-std`
---
-   For more information about this error, try `rustc --explain E0463`.
-   make[3]: *** [rust/Makefile:518: rust/ffi.o] Error 1
->> error[E0463]: can't find crate for `core`
-   |
-   = note: the `target` target may not be installed
-   = help: consider downloading the target with `rustup target add target`
-   = help: consider building the standard library from source with `cargo build -Zbuild-std`
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
