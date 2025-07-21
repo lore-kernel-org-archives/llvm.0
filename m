@@ -1,115 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D1CDDBC;
-	Mon, 21 Jul 2025 19:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31496BA2E
+	for <llvm@lists.linux.dev>; Mon, 21 Jul 2025 19:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753125616; cv=none; b=iDxJ1B47zFHzdboP2bymWVKjTqeGP8FzpTydbpw8o6q2hEye953gACIiGb+tSMylsIeROyZ1B/NYALLbKFuRphZc0kE3UAdC5A1cvuHjMhQ4skKc/ktsfdU6JZD69F3D776NRj4rjouPZdmdyfovsd1EMB0vajfKoRuYJJos4Yg=
+	t=1753127051; cv=none; b=XpGSy6ALOcPgWOcpspDHrG5xncoLPXyOgxh+HqozQMzuhpUy3lsarwvcUKx4pLLC9S4hXcswWetN+RMGnZIvV/SKaE7vme1FMDO+kwgexKXqS5vAcbayN1TEETTiXd3Y3MVHFz8u/YbR6NK2w6BMl3PHcTofLdBA1QuXuCABcQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753125616; c=relaxed/simple;
-	bh=xhtisyzoBwlNkJmQTCOxXemXyPJVKO0cr138G02nRhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oERhk1uorxrZ3EcPzTdFxyeHjiE52pp2/1K06SJxg+BC8vQad2Me2A0FmPQBzpxmpGzQB2J/UDKyOvUkP/n25GjaBmJISVPeyY9AfAwPUIGWEptnoJ30lEvx5me3+BJLpnogTTLf5BV9NmJLawteFwD4X4LWTEz4UqkGfBpXbVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mDWcs8/F; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753127051; c=relaxed/simple;
+	bh=wD4Xi7KgIEgkD90bb/rbS9MSBMuzV/WTmG+c7VjhVRY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=arxlFP+JL2Q9w4K+pxrpecdlOwLG9J2BEAh8u99q5d0cZgmx6KN5v19jAH3UAX7cVrY0xJnsu9YJ5iNZyMy9hme7l0msf42MQm2R03AmGDpDclSScYyK2X1Z8NAU83xO/ve7Btpl0W+HK1wBSaHLvAUqjL/sJQgYHvdxNtlMh90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xZsAAZMa; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mDWcs8/F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753125615; x=1784661615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xhtisyzoBwlNkJmQTCOxXemXyPJVKO0cr138G02nRhs=;
-  b=mDWcs8/FkL8N1dbVPMqGcU56H+Yumi756YkiM0Ybq0Gz9/jEKOt6HsIM
-   UIqZ5Ng3Pmz3Tt40+A5+5jLssHi33E+0UclucUnX+QIhadpCyEFHfTSOW
-   y2gI5+6YYKkxa97M8U9NjKcUPIIVqGddlkbX9O+XGhkEvWPEv3W40p1Kg
-   qHpIuSXrLBdROiuAeV5k69D+NIXTteBFIXlc5bTXEcG+a2f2dGiqTBicZ
-   N60E5XLhlVYBNEm5ts1V22ZagciZepVFJr4JdQeXGXs1fVHQSD5LPG0Je
-   /McRwItST08HDJEVcQRy6ZXeMibYKCtBg5DipAHStj193b+xEBOKyZvso
-   A==;
-X-CSE-ConnectionGUID: 5myzru4VSZSDpHCFT71Fbw==
-X-CSE-MsgGUID: pj0uPxKVRvuIXvpxl7rbTA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="59011201"
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="59011201"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 12:20:11 -0700
-X-CSE-ConnectionGUID: hO1DNSXTSjCb4IeSVxltNg==
-X-CSE-MsgGUID: xMZ/FCWPSF+/+cH+xkHUgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="189905963"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 21 Jul 2025 12:20:09 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1udw3S-000H6H-12;
-	Mon, 21 Jul 2025 19:20:06 +0000
-Date: Tue, 22 Jul 2025 03:19:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	WANG Xuerui <kernel@xen0n.name>, Xi Ruoyao <xry111@xry111.site>,
-	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] LoongArch: Implement physical address with ELF
- program header
-Message-ID: <202507220309.mDl9W32Y-lkp@intel.com>
-References: <20250721091248.3896152-1-maobibo@loongson.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xZsAAZMa"
+Message-ID: <fd195e9f-e584-4546-ac29-86ae4995c6ff@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753127046;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=U1+mGVoW6ZkN6g6FnLPkMY9FRQvPhJp0+w/gOlPu9jk=;
+	b=xZsAAZMa76GKDitod4BQF+28fG2112Ogcm49mRewW5HsMNmQyW5c//LCJUAByZ+yhsWpXg
+	m7nYDZx7H5h1NwbKlRBxTMXQs6QsSuygAwX8XI6MrXbedogwXoRJNKfzEQYHMLxpo+Extl
+	D7+gdbk5e3V3wHCcKwGTcCkifSGCSJ0=
+Date: Mon, 21 Jul 2025 12:43:57 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250721091248.3896152-1-maobibo@loongson.cn>
+Subject: Re: [PATCH net-next V6 2/5] selftests: drv-net: Test XDP_PASS/DROP
+ support
+To: Nimrod Oren <noren@nvidia.com>
+Cc: netdev@vger.kernel.org, Mohsin Bashir <mohsin.bashr@gmail.com>,
+ kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
+ cratiu@nvidia.com, cjubran@nvidia.com, mbloch@nvidia.com,
+ jdamato@fastly.com, gal@nvidia.com, sdf@fomichev.me, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, tariqt@nvidia.com,
+ thoiland@redhat.com, Joanne Koong <joannelkoong@gmail.com>
+References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+ <20250719083059.3209169-3-mohsin.bashr@gmail.com>
+ <ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Bibo,
+On 7/21/25 4:43 AM, Nimrod Oren wrote:
+> To ensure correctness across all drivers, all direct accesses to packet
+> data should use these safer helper functions instead:
+> bpf_xdp_load_bytes() and bpf_xdp_store_bytes().
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 89be9a83ccf1f88522317ce02f854f30d6115c41]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bibo-Mao/LoongArch-Implement-physical-address-with-ELF-program-header/20250721-171418
-base:   89be9a83ccf1f88522317ce02f854f30d6115c41
-patch link:    https://lore.kernel.org/r/20250721091248.3896152-1-maobibo%40loongson.cn
-patch subject: [PATCH v2] LoongArch: Implement physical address with ELF program header
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20250722/202507220309.mDl9W32Y-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507220309.mDl9W32Y-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507220309.mDl9W32Y-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:15: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:18: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:33: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:34: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:41: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:46: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:47: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:50: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
-   ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Not sure if the test will be run on the older kernel. fwiw, there is a 
+bpf_dynptr_slice_rdwr() kfunc which was added in commit 66e3a13e7c2c.
+It uses bpf_xdp_pointer() underneath, so it can avoid a copy if the requested 
+data is contained in a single frag.
