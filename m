@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130392836BE;
-	Tue, 22 Jul 2025 21:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681073BB48;
+	Tue, 22 Jul 2025 23:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753220449; cv=none; b=B6bClvjB2omrouF+R97OYNaiM2VkMWgIRzMDBNrpu28s3hZXjU+4Q8hVW1v7i8AmBjhLD3O7GWojykiT32tIDC/f0PrjBvs0zFbIw2RVFcvZTMrWgAjcC1HQWYad3Ocl+F2Lq3/8PdtG5CgmJnkrEQgV4VLbvDv7QsXAXgaEV1c=
+	t=1753225977; cv=none; b=EO4RGPtgDsAMHEnDl06DS8ZdE4Yq1CHaJxCe1m0dpLEBkxcDwOw/DBkozPmAq4OtEMANdncvgJV02HVWLHxTeb1qbbcRk5SsqPJ81y2GkJfWXX15fHPZb5MxFrL6+Hm8biWif1k7Xs3sbsuHmbq7XuXP+rOFvjXjFDEbmwQKuVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753220449; c=relaxed/simple;
-	bh=qiReswE8/+4iVK+wineobsk/lyxBNtH9smHzwQ1PNpQ=;
+	s=arc-20240116; t=1753225977; c=relaxed/simple;
+	bh=0PpI4h9ouxAdOPS8G5ylHI9xapyiwd3HhKbsKi2uoUQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tx+0k8+sZWHrdHkfXmM14CsmvlCpIK98w2QEl/ZaLr/JxF+ogUC2dVzeGMn9I3ElsWtxDlrBOZfrVGunVwz3sEPeT7zWq/g5CvSgpDeYheK+0e1xSWsTtmnEjl7taAhRGExkhMUOfLOZSsh9tyfGZorSAGpS/jmbUncIIQ8T+10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Op1G5WdA; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=UKiOZxy52oBtWFjuYBzZeXEUxZBoCxiMFq7eLRjdb3c3bm9FB4jWU16g8H0C3Q/s/pj/vgwHc23MtShxRtucML4aE5nE3oGI5Vygvx1nLklsO8mQrLTshSNwseZ6jqYxXBQKETVfttJaI+JoaRIxJN5GOgj2avfdgNLUYVTORY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PEQqVVY7; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Op1G5WdA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PEQqVVY7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753220448; x=1784756448;
+  t=1753225975; x=1784761975;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qiReswE8/+4iVK+wineobsk/lyxBNtH9smHzwQ1PNpQ=;
-  b=Op1G5WdAMiVDNjBRQ69+346oEMexqt/pQfzVdXBRIiGFTGu7nboB8o9o
-   UmlWLEoWRB/EMpamGrCMFKtJgyBXKR7NlyG4vfP3eqQ7TcVsCf5vjbRAR
-   W//pRrYVP0ODGgJjU6QWqSwA6Mi48RpjiShDqdtLITjYjCHmMxa8H9sEs
-   F9A9+q/jhD1V5tmn4E7qgUkPcPh6B1C2QS00MBYBcG+JTLc8WNfmT8VzH
-   j01xrZQ3Ix1das7Vh8ii9GNA/RSQFIaSyJLlxxS719pc502dkQwMAzpkZ
-   fDW9+jbIEbrKIKfbp88LrRStb2PFs39kCuuJvd9eLNePJZ8e+rPUes7xV
-   Q==;
-X-CSE-ConnectionGUID: iJFm8O6VS5WP7pG46/8J7g==
-X-CSE-MsgGUID: FD8OdIsOR6qqAblBPqBpRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="66829973"
+  bh=0PpI4h9ouxAdOPS8G5ylHI9xapyiwd3HhKbsKi2uoUQ=;
+  b=PEQqVVY7hJq9jTqqMc3CecUfJXLpU0fgjNmjeXQAeq5xcjSODXmZHZP5
+   b7WE74apGZHIHSoQx7lqk1rT7Dsx5qEbM4X5RsL21SoHANNMO7VZ0J86P
+   M8fu6hWoUp+3+8kHVZuiBBrVkVncSIPAEQb5DeUWB6VKJapgzfKDcS7Y/
+   Lm2Butzl8RHr1jGGY18L5U8n1SSpFPMq4QVbmfsc/Z4ii86iRM9TiGDyp
+   I/kZiTMbIztOmGB7AdqivMktSZVmeWzrQbRIx4IeGmTRvI0okmRhgTIE0
+   C1bYa1poEt2cBdTN3UdBjI8lDJy1BbleMdsK5gqYWcXb8uKxZNtvMAlqx
+   w==;
+X-CSE-ConnectionGUID: F2L7CjyGRXaz3te20fpoZg==
+X-CSE-MsgGUID: EgxniFvuRFW6njLpb1jc2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="72948779"
 X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
-   d="scan'208";a="66829973"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 14:40:47 -0700
-X-CSE-ConnectionGUID: IYD1rorpRraSq8kzCk+mCQ==
-X-CSE-MsgGUID: k+VwqMUtSM6o59wVqaBPuw==
+   d="scan'208";a="72948779"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 16:12:55 -0700
+X-CSE-ConnectionGUID: lJwpszYGRziUNzXtTd9ESQ==
+X-CSE-MsgGUID: ARs2A9gJTnaxIn+GGoVYww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
-   d="scan'208";a="196340436"
+   d="scan'208";a="159367689"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 Jul 2025 14:40:45 -0700
+  by orviesa007.jf.intel.com with ESMTP; 22 Jul 2025 16:12:54 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ueKj4-000IjH-36;
-	Tue, 22 Jul 2025 21:40:42 +0000
-Date: Wed, 23 Jul 2025 05:40:04 +0800
+	id 1ueMAF-000Imd-32;
+	Tue, 22 Jul 2025 23:12:51 +0000
+Date: Wed, 23 Jul 2025 07:12:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jia He <justin.he@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jia He <justin.he@arm.com>
-Subject: Re: [PATCH] mm: percpu: Introduce normalized CPU-to-NUMA node
- mapping to  reduce max_distance
-Message-ID: <202507230509.juShbryQ-lkp@intel.com>
-References: <20250722041418.2024870-1-justin.he@arm.com>
+To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 2/4] mm: add static huge zero folio
+Message-ID: <202507230711.qUxejgnN-lkp@intel.com>
+References: <20250722094215.448132-3-kernel@pankajraghav.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,47 +62,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250722041418.2024870-1-justin.he@arm.com>
+In-Reply-To: <20250722094215.448132-3-kernel@pankajraghav.com>
 
-Hi Jia,
+Hi Pankaj,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on akpm-mm/mm-everything]
+[auto build test WARNING on 1b0686bd18c1aa9d7f01943829faa5befe6ab3d1]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jia-He/mm-percpu-Introduce-normalized-CPU-to-NUMA-node-mapping-to-reduce-max_distance/20250722-121559
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250722041418.2024870-1-justin.he%40arm.com
-patch subject: [PATCH] mm: percpu: Introduce normalized CPU-to-NUMA node mapping to  reduce max_distance
-config: arm64-randconfig-001-20250722 (https://download.01.org/0day-ci/archive/20250723/202507230509.juShbryQ-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230509.juShbryQ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav-Samsung/mm-rename-huge_zero_page_shrinker-to-huge_zero_folio_shrinker/20250722-174504
+base:   1b0686bd18c1aa9d7f01943829faa5befe6ab3d1
+patch link:    https://lore.kernel.org/r/20250722094215.448132-3-kernel%40pankajraghav.com
+patch subject: [RFC 2/4] mm: add static huge zero folio
+config: x86_64-buildonly-randconfig-004-20250723 (https://download.01.org/0day-ci/archive/20250723/202507230711.qUxejgnN-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230711.qUxejgnN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507230509.juShbryQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507230711.qUxejgnN-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/base/arch_numa.c:154:12: warning: no previous prototype for function 'early_cpu_to_norm_node' [-Wmissing-prototypes]
-     154 | int __init early_cpu_to_norm_node(int cpu)
-         |            ^
-   drivers/base/arch_numa.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     154 | int __init early_cpu_to_norm_node(int cpu)
-         | ^
-         | static 
+>> mm/huge_memory.c:78:17: warning: unused variable 'huge_zero_static_fail_count' [-Wunused-variable]
+      78 | static atomic_t huge_zero_static_fail_count __read_mostly;
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +/early_cpu_to_norm_node +154 drivers/base/arch_numa.c
+vim +/huge_zero_static_fail_count +78 mm/huge_memory.c
 
-   153	
- > 154	int __init early_cpu_to_norm_node(int cpu)
-   155	{
-   156		return cpu_to_norm_node_map[cpu];
-   157	}
-   158	
+    76	
+    77	static atomic_t huge_zero_refcount;
+  > 78	static atomic_t huge_zero_static_fail_count __read_mostly;
+    79	atomic_t huge_zero_folio_is_static __read_mostly;
+    80	struct folio *huge_zero_folio __read_mostly;
+    81	unsigned long huge_zero_pfn __read_mostly = ~0UL;
+    82	unsigned long huge_anon_orders_always __read_mostly;
+    83	unsigned long huge_anon_orders_madvise __read_mostly;
+    84	unsigned long huge_anon_orders_inherit __read_mostly;
+    85	static bool anon_orders_configured __initdata;
+    86	
 
 -- 
 0-DAY CI Kernel Test Service
