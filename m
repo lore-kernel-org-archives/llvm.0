@@ -1,96 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CF1279912;
-	Tue, 22 Jul 2025 17:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340CF27EFFB
+	for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 17:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753203872; cv=none; b=aHK+NlS2HVDhiBW/Gcs6Y+yy8H7ZNTKulFiY3CgXf+CfrhyiNbyjsTHH78IE99gWbILs8gZpayKMixRsplJZ1gt5SdbHeO2mnL3LwZR2riAvrAHRTwMXTG3+ZsJ+2wMYzLIGTC0uS0GALjmq0QRQkCqo/R15mpV67C6q4i3ry9c=
+	t=1753205801; cv=none; b=aEkR4k8QAyvjwWNn7kpffh5vE8KibOUy2wMjz7rcHqmeDGTNspHspusNsdXUvMatsKe9ta/At3wgzy9g4uSoFm5EcSkqbT1jZztrUgS0kZSfkJbrGfPWwc3p/npCQNKARplMTdOdDU70KP8Pe/LDgbmrqQ0iXOseCN8ko8Ux6EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753203872; c=relaxed/simple;
-	bh=sFJ+AGCE2dn47JoYP+Vtmo3OGEJvEP4LEfB8jA6dHr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DFRySTPPWnxdRkWSRd0GwSBwd6r2+CvtxDKJGwhGEwuLLAaAcgSvn0UQvdLuNBhE78iQ0KceLG/lH6WP5Rz1aerpX0kPqkL4xtGAvVF1bGhQTh5J1zmvZweqp3OqzpH9KmDx5JXkXn7/ffER/+bP8j7toxTN4ePqjPVNaD53K+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nlPm87Ql; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753205801; c=relaxed/simple;
+	bh=2axkp3f5ddX04ujyqEGdONBW5Q8IRjQZN01M0cDJ1hI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MXpC95UZaODp2p2N3kaLQVGWhDnI+M7s4wzO4UlcDUtJ3/v3UcjuxHumR4CGuks0QJVrFN5xVN+9niewK6zFvRlf5DlGtSHKlTxY4bGdRzRzft4a/+GOeRUSBlYZXidC4EKW1FzEQ9VyGgruPPFQ6QMAOqNzgcMgS4OiqVnjtLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kaj1P7+V; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nlPm87Ql"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89249C4CEEB;
-	Tue, 22 Jul 2025 17:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753203872;
-	bh=sFJ+AGCE2dn47JoYP+Vtmo3OGEJvEP4LEfB8jA6dHr0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nlPm87QlUcYTpqrZeg2cOy6S2Lw5u9TAchbb1TRKygP5A9VY4euSyb/VMlnVa/oLG
-	 OudfLzkTIk29iaF6nFZB4kP2V7u+033JPWx/KoA35Q/e9auM/aEi0MiHBT3EOGeiGN
-	 VhXgOqbdfPjdBnxPEnLXcsKToH3AI41a1EYr7WG4s4lRJPgpnQlIVOM0gNtqcT4ITL
-	 CCgVOdteXxunPdhP8ztZL3gkNF8Ou6oyvEKXHHEzI5UznnFoWj4kz3Lq5cqogPm+5i
-	 gNCXsofGSBdjV8lhkHxxm/BsNIQmt9be/Dwzr8nvO4tlHajcKfZJHystiR8Tko32l8
-	 IaUa2wXwVvCpQ==
-Date: Tue, 22 Jul 2025 13:04:29 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, Masami Hiramatsu
- <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Andrew Morton
- <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas.schier@linux.dev>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
- <catalin.marinas@arm.com>
-Subject: Re: [PATCH v3 1/5] tracepoints: Add verifier that makes sure all
- defined tracepoints are used
-Message-ID: <20250722130429.7418520b@batman.local.home>
-In-Reply-To: <CAHk-=wihb6KVgU__zfhdHR=-Mqhp6qaAABdu31CJ2ML6MDj0dw@mail.gmail.com>
-References: <20250722152053.343028095@kernel.org>
-	<20250722152157.664260747@kernel.org>
-	<CAHk-=wihb6KVgU__zfhdHR=-Mqhp6qaAABdu31CJ2ML6MDj0dw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kaj1P7+V"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-23636167b30so54083295ad.1
+        for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 10:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753205798; x=1753810598; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WWXPzZR17yVeEQvaLavPxiayGN5aPr+0vFgreyi823Q=;
+        b=kaj1P7+VrsYzlxu502+OLZww1xnIPMD2+KUCkY4woiGqH7KtHY3Zdz2MsFjcSXEoY8
+         OqiAQ1EF7aJds6Vs8Y3CxdHVfrK1GE0tEX4IgGSFHB5P5Jgx9S8uPPwRfd3IvwpqCW+c
+         uu8Abs38X8/7GMnalUg8rRuQh18VPB7y8EEz5BSepVBPLNN7i0oS1VP730XaXnkfs48d
+         OzJYCLuAEcALdbd+Bz8NQqPsaW4gLu5+eaIR0+jap7gqU1zay4Ta4cIt4xkedEIywTyn
+         zh8MaEaYQwelVJ1wZjsYPAT9BEbqnrTMAio01r/TnLFaNcJD+MgBJ+cKnDN6KMRhFrdd
+         gpzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753205798; x=1753810598;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WWXPzZR17yVeEQvaLavPxiayGN5aPr+0vFgreyi823Q=;
+        b=DNcv4gkfhjpW3SkDK5Vu03GrP1rqHd2xc73mTRZcyxfsiNo+YLTNba3PLaeymOqlpZ
+         YBKPGMVFKGLroU0tzqBGPh8lfSBwa3mmonCYqTW5JqRjKx2kfVv7G2bWPjTNWz0QJFjZ
+         rzhkJdckc5Qyns/bmAXYMZ71wknKpc7eQufXUBajLkp3uWbm0Y6Lld7oK3124oTtHnym
+         hOmv/hXMT7rbQ2gVTTgAnlqUCuNUAGoQ0ZpaW6GpPy1UVceFn6WyW/pgjFMOi8awKHKk
+         5WPmVlvZ/349OGtdxrKziy6R1sbwVEsSByf5H1lEoCPGr9/E4xitKH2UwlyXI3u6LwhC
+         thhg==
+X-Forwarded-Encrypted: i=1; AJvYcCVilwepKd+ym9pgKyHRSG7tj+bm1orLi1yAE2/e3hfE7oy8VFT4reQxbrlFLvZ3NCSYo0E8@lists.linux.dev
+X-Gm-Message-State: AOJu0YzsrzG1a2Zl211WwdOnERswH9ngHlrrnmS2JDWEtqAbeGYJAe4Q
+	+JEqsEkFQ0r5GJGGe2nGsJxJqEZ7xSvMtUH+0Wl2PowO7VCHCz3usE7MquTJnqlXefY/YdPy302
+	+vL0PJXkl1nJeLDvqscStvUtmxufP17j0uJQp7rot1g==
+X-Gm-Gg: ASbGncvhS7at8tnBz1JopgFriZ9hI61HbVbL6VVyppLIgeb34GY7S85KgeqAMKPsGGn
+	93jC5C9nFmOmRlMJKC8BsmkSzZlwQyQ5H0/EIwXrqRNuvie8MOqi5Shlgum+T3Wwa9LUCl7+VvA
+	7vDn+r2QME4glnCVGJwd+BYq06SNfiA1mPx+YSWsOoS7YoMeplQLUhNSaceQwUHd7YQ0SipSd2h
+	RWOGaacFMErcqfBMPvXaH2HKJB73UzjJU83SNN4PpH/dB/z
+X-Google-Smtp-Source: AGHT+IEy1xm2TqQlOmdtPxzMMBfyqW6NBLNLnRvTRydQhFeyBv42+TUFYyc4kk26QAuv/J3OEh9WLD0WjO4Y+jfMmNk=
+X-Received: by 2002:a17:903:166e:b0:235:c9a7:d5f5 with SMTP id
+ d9443c01a7336-23e256adfcfmr297545055ad.13.1753205798348; Tue, 22 Jul 2025
+ 10:36:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250722134345.761035548@linuxfoundation.org>
+In-Reply-To: <20250722134345.761035548@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 22 Jul 2025 23:06:26 +0530
+X-Gm-Features: Ac12FXyiK9qISUvF_HIZvmbjmo4biYOCInngZ1yVyGInVK5qVkduAH0VIdLJwh8
+Message-ID: <CA+G9fYs_6KYHSF6eyeFmewDxYGqqD70kO1DuB0_1qwCPV2LjOg@mail.gmail.com>
+Subject: Re: [PATCH 6.15 000/187] 6.15.8-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, clang-built-linux <llvm@lists.linux.dev>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
+	broonie@kernel.org, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Ben Copeland <benjamin.copeland@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 22 Jul 2025 09:16:49 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Tue, 22 Jul 2025 at 19:37, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.15.8 release.
+> There are 187 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 24 Jul 2025 13:43:10 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.15.8-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> On Tue, 22 Jul 2025 at 08:21, Steven Rostedt <rostedt@kernel.org> wrote:
-> >
-> > Add a verifier that injects a pointer to the tracepoint structure in the
-> > functions that are used and added to a section called __tracepoint_check.
-> > Then on boot up, iterate over this section and for every tracepoint
-> > descriptor that is pointed to, update its ".funcs" field to (void *)1, as
-> > the .funcs field is only set when a tracepoint is registered. At this
-> > time, no tracepoints should be registered.  
-> 
-> Why?
-> 
-> Doing this at runtime seems completely bass-ackwards.
-> 
-> If you want to do this verification, why don't you do it at build-time?
+Regressions while building allyesconfig build for arm64 and x86 with the
+toolchain clang-nightly version 22.0.0.
 
-The second patch does that, but is much more complex due to having to
-parse the elf file. It hooks into the sorttable code as that already
-does most of the parsing that was needed. It uses the same trick as the
-runtime verifier by checking tracepoints against the __tracepoint_check
-section (but not with the '.func' test, but instead it sorts it and
-does a binary search).
+Regression Analysis:
+- New regression? Yes
+- Reproducibility? Yes
 
-I kept this to verify that the build time worked too, as the runtime
-check is so much simpler and easier to implement. Basically, I use this
-to verify that the build time works. That's why if you enable this it
-will select the build time version. It was used to catch bugs in the
-build version as I developed it.
+Build regression: arm64 x86 mm ksm.c error variable 'output' is used
+uninitialized whenever 'if' condition is false
+[-Werror,-Wsometimes-uninitialized]
+Build regression: arm64 x86 samsung s5p_mfc_cmd_v6.c error variable
+'h2r_args' is uninitialized when passed as a const pointer argument
+here
+Build regression: arm64 x86 mediatek mcu.c error variable 'hdr' is
+uninitialized when passed as a const pointer argument here
+Build regression: arm64 x86 broadcom phy_lcn.c error variable
+'diq_start' is uninitialized when passed as a const pointer argument
+here
+Build regression: arm64 x86 usb cxacru.c error variable 'bp' is used
+uninitialized whenever 'if' condition is false
+Build regression: arm64 x86 drm dpu_plane.c error variable
+'crtc_state' is used uninitialized whenever 'if' condition is false
+Build regression: arm64 x86 drm amdgpu imu_v12_0.c error variable
+'data' is uninitialized when used here
 
-And currently neither tests modules (I run this against an
-allyesconfig), but the runtime version could easily be modified to test
-modules too, whereas the build time would require adding another elf
-parser as the sorttable isn't run on module code.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I can remove the runtime check if you prefer. 
+## Build log
+mm/ksm.c:3674:11: error: variable 'output' is used uninitialized
+whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+ 3674 |         else if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--- Steve
+
+drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:45:7: error:
+variable 'h2r_args' is uninitialized when passed as a const pointer
+argument here [-Werror,-Wuninitialized-const-pointer]
+   45 |                                         &h2r_args);
+      |                                          ^~~~~~~~
+
+drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:133:7: error:
+variable 'h2r_args' is uninitialized when passed as a const pointer
+argument here [-Werror,-Wuninitialized-const-pointer]
+  133 |                                         &h2r_args);
+      |                                          ^~~~~~~~
+
+drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:148:7: error:
+variable 'h2r_args' is uninitialized when passed as a const pointer
+argument here [-Werror,-Wuninitialized-const-pointer]
+  148 |                                         &h2r_args);
+      |                                          ^~~~~~~~
+
+drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3365:21: error:
+variable 'hdr' is uninitialized when passed as a const pointer
+argument here [-Werror,-Wuninitialized-const-pointer]
+ 3365 |         skb_put_data(skb, &hdr, sizeof(hdr));
+      |                            ^~~
+
+drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:1875:21: error:
+variable 'hdr' is uninitialized when passed as a const pointer
+argument here [-Werror,-Wuninitialized-const-pointer]
+ 1875 |         skb_put_data(skb, &hdr, sizeof(hdr));
+      |                            ^~~
+
+drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_lcn.c:2728:13:
+error: variable 'diq_start' is uninitialized when passed as a const
+pointer argument here [-Werror,-Wuninitialized-const-pointer]
+ 2728 |
+&diq_start, 1, 16, 69);
+      |                                                       ^~~~~~~~~
+
+drivers/usb/atm/cxacru.c:1104:6: error: variable 'bp' is used
+uninitialized whenever 'if' condition is false
+[-Werror,-Wsometimes-uninitialized]
+ 1104 |         if (instance->modem_type->boot_rom_patch) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1066:6: error: variable
+'crtc_state' is used uninitialized whenever 'if' condition is false
+[-Werror,-Wsometimes-uninitialized]
+ 1066 |         if (plane_state->crtc)
+      |             ^~~~~~~~~~~~~~~~~
+
+drivers/gpu/drm/amd/amdgpu/imu_v12_0.c:374:30: error: variable 'data'
+is uninitialized when used here [-Werror,-Wuninitialized]
+  374 |                         program_imu_rlc_ram(adev, data, (const
+u32)size);
+      |                                                   ^~~~
+
+
+## Source
+* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+* Git sha: 81bcc8b99854ba689a8c85fb1d39d5acdce0385a
+* Git describe: v6.15.7-188-g81bcc8b99854
+* Architectures: arm64 x86
+* Toolchains: Debian clang version 22.0.0
+(++20250721112855+43a829a7e894-1~exp1~20250721112913.1588)
+* Kconfigs: allyesconfig
+
+## Build
+* Build log: https://regressions.linaro.org/lkft/linux-stable-rc-linux-6.15.y/v6.15.7-188-g81bcc8b99854/build/clang-nightly-allyesconfig/
+* Build run:  https://regressions.linaro.org/lkft/linux-stable-rc-linux-6.15.y/v6.15.7-188-g81bcc8b99854/testruns/1699830/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/30EaSfe4S6Pi4zE2kv1TGQcGByr/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/30EaSfe4S6Pi4zE2kv1TGQcGByr/config
+
+## Steps to reproduce
+* tuxmake --runtime podman --target-arch arm64 --toolchain
+clang-nightly --kconfig allyesconfig LLVM=1 LLVM_IAS=1
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
