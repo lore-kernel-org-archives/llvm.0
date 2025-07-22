@@ -1,63 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD48223339;
-	Tue, 22 Jul 2025 21:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130392836BE;
+	Tue, 22 Jul 2025 21:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753219189; cv=none; b=ANKDamnQ0F3oDfB+JxuaHb6TjfHK7xrz1FtzfLOwXiTR9gWPklwJ1dhgaiLreTmq6jKaC/EttRrp1/vnicq/os+IsYoJfWn6BK69gTVJl/V4OnnJ8QYZ17afHD8fx5qHvDiBusM97Jy9XSRQf2EfNeDB7FkZLx0wuwL3a0qDZEU=
+	t=1753220449; cv=none; b=B6bClvjB2omrouF+R97OYNaiM2VkMWgIRzMDBNrpu28s3hZXjU+4Q8hVW1v7i8AmBjhLD3O7GWojykiT32tIDC/f0PrjBvs0zFbIw2RVFcvZTMrWgAjcC1HQWYad3Ocl+F2Lq3/8PdtG5CgmJnkrEQgV4VLbvDv7QsXAXgaEV1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753219189; c=relaxed/simple;
-	bh=VAFhRCJQknowV+AypDyaME1Ab2ilgI4tc2/Wbqr0Ux0=;
+	s=arc-20240116; t=1753220449; c=relaxed/simple;
+	bh=qiReswE8/+4iVK+wineobsk/lyxBNtH9smHzwQ1PNpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LjkuF2JYJkAOTKEML0zUE8nPhuBgd3RTkn1sa1zPGz5UbgoSoGH8T11iAkvCMEDHzP2hCmUZIGbAex3rNJfPmACgFIwdS3t7+rqrgv/ykn2bwtrBw3huwzoPtsdfJ90YnobZ2N295VVj+oIACk1Ouwc+VjUlrNdwtbYYz/jV/Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B68YggWD; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=tx+0k8+sZWHrdHkfXmM14CsmvlCpIK98w2QEl/ZaLr/JxF+ogUC2dVzeGMn9I3ElsWtxDlrBOZfrVGunVwz3sEPeT7zWq/g5CvSgpDeYheK+0e1xSWsTtmnEjl7taAhRGExkhMUOfLOZSsh9tyfGZorSAGpS/jmbUncIIQ8T+10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Op1G5WdA; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B68YggWD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Op1G5WdA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753219188; x=1784755188;
+  t=1753220448; x=1784756448;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VAFhRCJQknowV+AypDyaME1Ab2ilgI4tc2/Wbqr0Ux0=;
-  b=B68YggWDuPpolK0rp2pSFGGJADj69vLqhCmXvt7kuIfk/MlIaazVmf07
-   SSnLsccWbHvv/IePxu6lNCja9mRg0mKGKiTrNLriaiPU3FW7BT2bT6knn
-   7Tesh3rt0RryAaz3Me22Pb1jbsY0lnmi8s7aaWPx3v7maJr3H5WVsWeMZ
-   AtHWHxeFJjAFNtmq9Ga9lL83oQNL045itWq5xg4/HjUdyafRI2Wgr3xnf
-   x586rgks7pKusaYANCtG5jgIZF40bnYD518z00i6KUOO7t1S7hxBkBht3
-   4RimUUSYh8VPLewHIiqM88lrqZr2v0EB2j7RNJAv7AOaSj5RCeu8+RcDZ
+  bh=qiReswE8/+4iVK+wineobsk/lyxBNtH9smHzwQ1PNpQ=;
+  b=Op1G5WdAMiVDNjBRQ69+346oEMexqt/pQfzVdXBRIiGFTGu7nboB8o9o
+   UmlWLEoWRB/EMpamGrCMFKtJgyBXKR7NlyG4vfP3eqQ7TcVsCf5vjbRAR
+   W//pRrYVP0ODGgJjU6QWqSwA6Mi48RpjiShDqdtLITjYjCHmMxa8H9sEs
+   F9A9+q/jhD1V5tmn4E7qgUkPcPh6B1C2QS00MBYBcG+JTLc8WNfmT8VzH
+   j01xrZQ3Ix1das7Vh8ii9GNA/RSQFIaSyJLlxxS719pc502dkQwMAzpkZ
+   fDW9+jbIEbrKIKfbp88LrRStb2PFs39kCuuJvd9eLNePJZ8e+rPUes7xV
    Q==;
-X-CSE-ConnectionGUID: 6UEuobknQPSKSNT8wsKAzw==
-X-CSE-MsgGUID: BGoRZHoDSfScjI1sMIPUkA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="59286775"
+X-CSE-ConnectionGUID: iJFm8O6VS5WP7pG46/8J7g==
+X-CSE-MsgGUID: FD8OdIsOR6qqAblBPqBpRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="66829973"
 X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
-   d="scan'208";a="59286775"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 14:19:46 -0700
-X-CSE-ConnectionGUID: QPx254goTECh3UVjxe55jg==
-X-CSE-MsgGUID: BMGHljmHRY+SotKzCX9Gdw==
+   d="scan'208";a="66829973"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 14:40:47 -0700
+X-CSE-ConnectionGUID: IYD1rorpRraSq8kzCk+mCQ==
+X-CSE-MsgGUID: k+VwqMUtSM6o59wVqaBPuw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
-   d="scan'208";a="190217200"
+   d="scan'208";a="196340436"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Jul 2025 14:19:44 -0700
+  by orviesa001.jf.intel.com with ESMTP; 22 Jul 2025 14:40:45 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ueKOj-000IiB-05;
-	Tue, 22 Jul 2025 21:19:41 +0000
-Date: Wed, 23 Jul 2025 05:19:40 +0800
+	id 1ueKj4-000IjH-36;
+	Tue, 22 Jul 2025 21:40:42 +0000
+Date: Wed, 23 Jul 2025 05:40:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
-	linux-mm@kvack.org, Johannes Weiner <hannes@cmpxchg.org>,
-	Christian Koenig <christian.koenig@amd.com>
+To: Jia He <justin.he@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dave Chinner <david@fromorbit.com>,
-	Kairui Song <kasong@tencent.com>, Dave Airlie <airlied@redhat.com>
-Subject: Re: [PATCH 11/15] ttm/pool: enable memcg tracking and shrinker. (v2)
-Message-ID: <202507230300.pUkL5SQT-lkp@intel.com>
-References: <20250722014942.1878844-12-airlied@gmail.com>
+	linux-kernel@vger.kernel.org, Jia He <justin.he@arm.com>
+Subject: Re: [PATCH] mm: percpu: Introduce normalized CPU-to-NUMA node
+ mapping to  reduce max_distance
+Message-ID: <202507230509.juShbryQ-lkp@intel.com>
+References: <20250722041418.2024870-1-justin.he@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,121 +67,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250722014942.1878844-12-airlied@gmail.com>
+In-Reply-To: <20250722041418.2024870-1-justin.he@arm.com>
 
-Hi Dave,
+Hi Jia,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on drm/drm-next]
-[cannot apply to akpm-mm/mm-everything linus/master v6.16-rc7 next-20250722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Airlie/drm-ttm-use-gpu-mm-stats-to-track-gpu-memory-allocations-v4/20250722-104402
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-patch link:    https://lore.kernel.org/r/20250722014942.1878844-12-airlied%40gmail.com
-patch subject: [PATCH 11/15] ttm/pool: enable memcg tracking and shrinker. (v2)
-config: i386-buildonly-randconfig-006-20250722 (https://download.01.org/0day-ci/archive/20250723/202507230300.pUkL5SQT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230300.pUkL5SQT-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jia-He/mm-percpu-Introduce-normalized-CPU-to-NUMA-node-mapping-to-reduce-max_distance/20250722-121559
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250722041418.2024870-1-justin.he%40arm.com
+patch subject: [PATCH] mm: percpu: Introduce normalized CPU-to-NUMA node mapping to  reduce max_distance
+config: arm64-randconfig-001-20250722 (https://download.01.org/0day-ci/archive/20250723/202507230509.juShbryQ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230509.juShbryQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507230300.pUkL5SQT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507230509.juShbryQ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/ttm/ttm_pool.c:665:7: error: no member named 'memcg_data' in 'struct page'
-     665 |                         p->memcg_data = 0;
-         |                         ~  ^
-   drivers/gpu/drm/ttm/ttm_pool.c:1132:11: error: no member named 'memcg_data' in 'struct page'
-    1132 |                                 page->memcg_data = 0;
-         |                                 ~~~~  ^
-   2 errors generated.
+>> drivers/base/arch_numa.c:154:12: warning: no previous prototype for function 'early_cpu_to_norm_node' [-Wmissing-prototypes]
+     154 | int __init early_cpu_to_norm_node(int cpu)
+         |            ^
+   drivers/base/arch_numa.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     154 | int __init early_cpu_to_norm_node(int cpu)
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +665 drivers/gpu/drm/ttm/ttm_pool.c
+vim +/early_cpu_to_norm_node +154 drivers/base/arch_numa.c
 
-   617	
-   618	/*
-   619	 * When restoring, restore backed-up content to the newly allocated page and
-   620	 * if successful, populate the page-table and dma-address arrays.
-   621	 */
-   622	static int ttm_pool_restore_commit(struct ttm_pool_tt_restore *restore,
-   623					   struct file *backup,
-   624					   const struct ttm_operation_ctx *ctx,
-   625					   struct ttm_pool_alloc_state *alloc)
-   626	
-   627	{
-   628		pgoff_t i, nr = 1UL << restore->order;
-   629		struct page **first_page = alloc->pages;
-   630		struct page *p;
-   631		int ret = 0;
-   632	
-   633		for (i = restore->restored_pages; i < nr; ++i) {
-   634			p = first_page[i];
-   635			if (ttm_backup_page_ptr_is_handle(p)) {
-   636				unsigned long handle = ttm_backup_page_ptr_to_handle(p);
-   637	
-   638				if (IS_ENABLED(CONFIG_FAULT_INJECTION) && ctx->interruptible &&
-   639				    should_fail(&backup_fault_inject, 1)) {
-   640					ret = -EINTR;
-   641					break;
-   642				}
-   643	
-   644				if (handle == 0) {
-   645					restore->restored_pages++;
-   646					continue;
-   647				}
-   648	
-   649				ret = ttm_backup_copy_page(backup, restore->alloced_page + i,
-   650							   handle, ctx->interruptible);
-   651				if (ret)
-   652					break;
-   653	
-   654				ttm_backup_drop(backup, handle);
-   655			} else if (p) {
-   656				/*
-   657				 * We could probably avoid splitting the old page
-   658				 * using clever logic, but ATM we don't care, as
-   659				 * we prioritize releasing memory ASAP. Note that
-   660				 * here, the old retained page is always write-back
-   661				 * cached.
-   662				 */
-   663				ttm_pool_split_for_swap(restore->pool, p);
-   664				copy_highpage(restore->alloced_page + i, p);
- > 665				p->memcg_data = 0;
-   666				__free_pages(p, 0);
-   667			}
-   668	
-   669			restore->restored_pages++;
-   670			first_page[i] = ttm_backup_handle_to_page_ptr(0);
-   671		}
-   672	
-   673		if (ret) {
-   674			if (!restore->restored_pages) {
-   675				dma_addr_t *dma_addr = alloc->dma_addr ? &restore->first_dma : NULL;
-   676	
-   677				ttm_pool_unmap_and_free(restore->pool, restore->alloced_page,
-   678							dma_addr, restore->page_caching);
-   679				restore->restored_pages = nr;
-   680			}
-   681			return ret;
-   682		}
-   683	
-   684		ttm_pool_allocated_page_commit(restore->alloced_page, restore->first_dma,
-   685					       alloc, nr);
-   686		if (restore->page_caching == alloc->tt_caching || PageHighMem(restore->alloced_page))
-   687			alloc->caching_divide = alloc->pages;
-   688		restore->snapshot_alloc = *alloc;
-   689		restore->alloced_pages += nr;
-   690	
-   691		return 0;
-   692	}
-   693	
+   153	
+ > 154	int __init early_cpu_to_norm_node(int cpu)
+   155	{
+   156		return cpu_to_norm_node_map[cpu];
+   157	}
+   158	
 
 -- 
 0-DAY CI Kernel Test Service
