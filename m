@@ -1,60 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C97273FD;
-	Tue, 22 Jul 2025 07:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBC313B280;
+	Tue, 22 Jul 2025 08:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753169609; cv=none; b=m3mZS4oGj/HAV4drLLQXuUZAmiOBGxuJUzJpKJk45K4X8guKlMjHWwa1wJ4kuFrSaOjRDa3T0Bi8w8LNIb+4R1GW8C+V2efyK7nRZgjOrFyH/BYcimY5VBjwv0dc4q2jmdVtgThTlECke0k29VVBeoBDQtEAPiO2RTcZNHWOHX8=
+	t=1753172826; cv=none; b=cInUyapxyoy424iHD7qa3rodzBZXYp0CBH06Wb9sWfpnarhYQ7j0rpO+zqaXXT2FlXQpzE7dS9wdhaR4synz0FFRBbnRdMtZcMRX4LUJLbaFtkL6TtRUbjZpOK0m9VCQJ6dKEsR8sr3gi8Rsj0ixlTH7/GccBUi4Do2P7MC4hQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753169609; c=relaxed/simple;
-	bh=RcxbdR3mRzMw5wQBex6QNl7sDdRiksAJfuo7rKyTFhQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lN4/3czYchTkyhsW9ojHJSlce9xnlBBtoyXAs1mgNBEsgC6MmKVtix5tiSPJ4tDNdP4Q3jBfeTtnuxDVMv8BgPGNOuCfxH5ynnt1G3eoXZ0xwTAe16zJpCTahFqUlF0k6uW8a2jLd6bwCMsFTby9BDjE+nx6Pr0oFZ/VxR13SNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CNADBnrT; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753172826; c=relaxed/simple;
+	bh=yGkRA/6qnjLPhMkWmaVYag52FJSXvc8HTUW6Y3Xuzs4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYRKMBd2RL8BmzrTn5ZGMAYqWd8awu2tWJDNN3Zyp+ilwTip8eDxdrw0ywuEelMRszYD6iX4kW3JLPIDoWH1t3wDPa/o7fykgyLCTUM4hXmJuUu4FbI1riiEtZFOjhXJM18gzuzatMjn3J1qCp4i4LaN3FW/b2VNw9xWPgjagz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ftIKtFsS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CNADBnrT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753169607; x=1784705607;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RcxbdR3mRzMw5wQBex6QNl7sDdRiksAJfuo7rKyTFhQ=;
-  b=CNADBnrTXdeB8YiVbYLw+iyZtzG0hDIr8S7Fk4UolU0CZiUT4yFwNIg9
-   SfSOLpCCuaHmuH5W28Y/QCZkXgCF3yzmD9eM/EP88m1pezNfBnsMC8yD9
-   KiNR2lj6aKr7HHJvmbnsuFDVkQm3sNMOw9mNsBFzUrYPu18Yjimdw8l96
-   w16TluXBA60K6GdA4Io+xlpykpdt2WVq6kCF/x/5WG2feaN9sq/MyhsbL
-   YDbl/1ozROqBHSoBFFIuld8HI96nYIpVU6WV5aRQF9+U9EzuSsVWvXCMA
-   3S3M7UBy8nmVpjTmIBBEWcZH4IggLTGDrMZxWUxB70erlZSgzCGsPYwRD
-   g==;
-X-CSE-ConnectionGUID: PvrX/yY9Sr+BPkrBkExwZg==
-X-CSE-MsgGUID: j2CkU6FuTkqiIXV+jIo9lQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="66092174"
-X-IronPort-AV: E=Sophos;i="6.16,330,1744095600"; 
-   d="scan'208";a="66092174"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 00:33:27 -0700
-X-CSE-ConnectionGUID: LhoWxFErS92t+UsmyjRvNg==
-X-CSE-MsgGUID: cj3mUnYLTp2q5TkXRgKLfw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,330,1744095600"; 
-   d="scan'208";a="158841650"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 22 Jul 2025 00:33:25 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ue7V5-000HZD-01;
-	Tue, 22 Jul 2025 07:33:23 +0000
-Date: Tue, 22 Jul 2025 15:32:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dongjin Kim <tobetter@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tobetter:odroid-6.16.y 18/44]
- arch/arm64/boot/dts/amlogic/meson64_odroidn2.dtsi:154.23-158.5: Warning
- (unit_address_vs_reg): /thermal-zones/cpu-thermal/trips/trip-point@0: node
- has a unit name, but no reg or ranges property
-Message-ID: <202507221531.Afuzv1T3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ftIKtFsS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A537C4CEF5;
+	Tue, 22 Jul 2025 08:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753172825;
+	bh=yGkRA/6qnjLPhMkWmaVYag52FJSXvc8HTUW6Y3Xuzs4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ftIKtFsS+75DjkESBKR4C/0fTfhjTO5EAQaosz6bDp0SBtC0xu6jrbFmvS+RKsdrx
+	 f4dMY3bCIrRdjzyHRTqQ2IS3DbC0aaJA20FDQXMOHNRYWFh4FtQSBKE6qcpYZfqwwn
+	 EBlY5p7lMzTdcc4tj5YJJGVzamw8NuZS2DY35/I8OtpLoIXd1OL5/ZeHJymCJvh1YO
+	 fQNqEpJ2tIsXeilrIIv/4unMX0gRI4A5tYLUiPoiE/g7dGzpTCnD1Qfrv0OCm/INtf
+	 +6BTjWwe4qdBcxVcEwQyD1qD72/jVzjC0CRHbF2sbB7CBVIvfoxl37x9XjTdsKkyQI
+	 517UWQRiFJG/g==
+Date: Tue, 22 Jul 2025 11:26:46 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Michal Wilczynski <michal.wilczynski@intel.com>,
+	Juergen Gross <jgross@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Roger Pau Monne <roger.pau@citrix.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Usama Arif <usama.arif@bytedance.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
+	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-mm@kvack.org, Ingo Molnar <mingo@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 04/13] x86: Handle KCOV __init vs inline mismatches
+Message-ID: <aH9LRgiiXQdABrd6@kernel.org>
+References: <20250717231756.make.423-kees@kernel.org>
+ <20250717232519.2984886-4-kees@kernel.org>
+ <aHoHkDvvp4AHIzU1@kernel.org>
+ <202507181541.B8CFAC7E@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,57 +86,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202507181541.B8CFAC7E@keescook>
 
-tree:   https://github.com/tobetter/linux odroid-6.16.y
-head:   ac46a60ec2fb958f1dc2e5871e122abb98ac0da9
-commit: 1933aeb9738c3ef10a62c3f9da64e4bd76afcf8c [18/44] ODROID-N2: arm64/dts: update device tree after v5.13
-config: arm64-randconfig-002-20250722 (https://download.01.org/0day-ci/archive/20250722/202507221531.Afuzv1T3-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507221531.Afuzv1T3-lkp@intel.com/reproduce)
+On Fri, Jul 18, 2025 at 03:51:28PM -0700, Kees Cook wrote:
+> On Fri, Jul 18, 2025 at 11:36:32AM +0300, Mike Rapoport wrote:
+> > Hi Kees,
+> > 
+> > On Thu, Jul 17, 2025 at 04:25:09PM -0700, Kees Cook wrote:
+> > > When KCOV is enabled all functions get instrumented, unless the
+> > > __no_sanitize_coverage attribute is used. To prepare for
+> > > __no_sanitize_coverage being applied to __init functions, we have to
+> > > handle differences in how GCC's inline optimizations get resolved. For
+> > > x86 this means forcing several functions to be inline with
+> > > __always_inline.
+> > > 
+> > > Signed-off-by: Kees Cook <kees@kernel.org>
+> > 
+> > ...
+> > 
+> > > diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> > > index bb19a2534224..b96746376e17 100644
+> > > --- a/include/linux/memblock.h
+> > > +++ b/include/linux/memblock.h
+> > > @@ -463,7 +463,7 @@ static inline void *memblock_alloc_raw(phys_addr_t size,
+> > >  					  NUMA_NO_NODE);
+> > >  }
+> > >  
+> > > -static inline void *memblock_alloc_from(phys_addr_t size,
+> > > +static __always_inline void *memblock_alloc_from(phys_addr_t size,
+> > >  						phys_addr_t align,
+> > >  						phys_addr_t min_addr)
+> > 
+> > I'm curious why from all memblock_alloc* wrappers this is the only one that
+> > needs to be __always_inline?
+> 
+> Thread-merge[1], adding Will Deacon, who was kind of asking the same
+> question.
+> 
+> Based on what I can tell, GCC has kind of fragile inlining logic, in the
+> sense that it can change whether or not it inlines something based on
+> optimizations. It looks like the kcov instrumentation being added (or in
+> this case, removed) from a function changes the optimization results,
+> and some functions marked "inline" are _not_ inlined. In that case, we end up
+> with __init code calling a function not marked __init, and we get the
+> build warnings I'm trying to eliminate.
+> 
+> So, to Will's comment, yes, the problem is somewhat fragile (though
+> using either __always_inline or __init will deterministically solve it).
+> We've tripped over this before with GCC and the solution has usually
+> been to just use __always_inline and move on.
+> 
+> For memblock_alloc*, it appears to be that the heuristic GCC uses
+> resulted in only memblock_alloc_from() being a problem in this case. I
+> can certainly mark them all as __always_inline if that is preferred.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507221531.Afuzv1T3-lkp@intel.com/
+We had a few of those already converted to __always_inline, so I'm ok with
+continuing to fix them one at at time. Gives a feeling of job security ;-)
 
-dtcheck warnings: (new ones prefixed by >>)
-   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:271.33-1545.7: Warning (unit_address_vs_reg): /soc/bus@ff600000/bus@34400/pinctrl@40: node has a unit name, but no reg or ranges property
-   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:1759.27-2031.6: Warning (unit_address_vs_reg): /soc/bus@ff800000/pinctrl@14: node has a unit name, but no reg or ranges property
->> arch/arm64/boot/dts/amlogic/meson64_odroidn2.dtsi:154.23-158.5: Warning (unit_address_vs_reg): /thermal-zones/cpu-thermal/trips/trip-point@0: node has a unit name, but no reg or ranges property
-   arch/arm64/boot/dts/amlogic/meson64_odroidn2.dtsi:159.23-163.5: Warning (unit_address_vs_reg): /thermal-zones/cpu-thermal/trips/trip-point@1: node has a unit name, but no reg or ranges property
-   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:271.33-1545.7: Warning (simple_bus_reg): /soc/bus@ff600000/bus@34400/pinctrl@40: missing or empty reg/ranges property
-   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:1759.27-2031.6: Warning (simple_bus_reg): /soc/bus@ff800000/pinctrl@14: missing or empty reg/ranges property
-   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:2230.23-2270.6: Warning (avoid_unnecessary_addr_size): /soc/bus@ffd00000/dsi@7000: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
-
-vim +154 arch/arm64/boot/dts/amlogic/meson64_odroidn2.dtsi
-
-   151	
-   152	&cpu_thermal {
-   153		trips {
- > 154			fan_0: trip-point@0 {
-   155				temperature = <65000>;
-   156				hysteresis = <5000>;
-   157				type = "active";
-   158			};
-   159			fan_1: trip-point@1 {
-   160				temperature = <75000>;
-   161				hysteresis = <5000>;
-   162				type = "active";
-   163			};
-   164		};
-   165		cooling-maps {
-   166			fan_cooling_map0 {
-   167				trip = <&fan_0>;
-   168				cooling-device = <&pwmfan THERMAL_NO_LIMIT 2>;
-   169			};
-   170			fan_cooling_map1 {
-   171				trip = <&fan_1>;
-   172				cooling-device = <&pwmfan 2 THERMAL_NO_LIMIT>;
-   173			};
-   174		};
-   175	};
-   176	
+> -- 
+> Kees Cook
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
