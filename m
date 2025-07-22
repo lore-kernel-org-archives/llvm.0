@@ -1,155 +1,210 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2410724169F
-	for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 15:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8F4257ACF;
+	Tue, 22 Jul 2025 15:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753196622; cv=none; b=F7xtImiKoQ4e1h/rZ3rmMgtiUDoVeFBLlpLkYSooI3PNZqT8jE1sXHjh8SF4EW0J/vmuI5pLv+WSqHV7qcMc9lZd04ScI1LIQekXkdVFmZraQuxAQdxn6qE1q8jORRdUjdGLi1ceVXpnBvGqeMynopnfy9XScTlX9xTYGxsUcp0=
+	t=1753197598; cv=none; b=UE6+I/84OxMgdH+P7Fgcaxr6Vs16bPlCuMHES3OeRbzawFL47KdAAJIbt4pEaSLJBba3GiGn1MAWjsGiNkN19o2bP8eACtA1a2NSUubRc/bz4xdQqSZA1mRtdUIJGlSF4rOB4uPiRvw4r3TuaCTw/qNYDXbE1a9eVZdttXy84fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753196622; c=relaxed/simple;
-	bh=z2gj5V7u4WprQQoCZFJO+IylNg/HsgVNMYcaqhQgwVc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TOYIBOhTzIHgPYm3hoBm5vxBHAeTu+FRXFe7oZJVaMXZ+3pPaNmL6CT0dr1hXP4GXrqvYnZAXI912F1v/PiIIu2d6xyfP21R2E0OBOXFmLvKm0eYApzYYkcQal5W5I/Sxo07aSN7yKYKDrylDyxTjTP6NsJptogPbLqDnF1n3Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W+8I33Nl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1753197598; c=relaxed/simple;
+	bh=+sGqgGjgNmnjMLda+apmd8ND1PGuNPsgCimJgbyGk7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hOEbUvLwtbw8Cnze9oVQmR5Zz5pCRe0hJCQWpDyiCTn/8CLVrNE89oP26hm2E8RT2q/FmJPpLQ+mZ49fW9hxc5fbearMnScdU6dKDSs2y7ITz4KsA63DslxGUIgIlI8sF0XnR1ylSiOPPChpxGG+RKoNy2S9M3x3F5ya/o/FXTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uz3LmLj1; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W+8I33Nl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1753196620;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yLoXN0zviuhjRHlOKL2rQE3hdCG3gOLWxmD1fwrgVH8=;
-	b=W+8I33NlCzefY9VilWlrriOctn6SJomNs5+xwMo6/1GozuOUPTZPfHYVOMGzREjC5rmwpz
-	glp2usBy8gBJaWTvwZBj4A5+qZo+wtHqfCBn+DVh5BM9a4rF1D6XzMN7zgdo9E6c3U40zB
-	xckBRkpiUjtPcOuqVgBy9R19hErlQTE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-15-ICWoZKtWPZSZLfDGRnPpQw-1; Tue, 22 Jul 2025 11:03:37 -0400
-X-MC-Unique: ICWoZKtWPZSZLfDGRnPpQw-1
-X-Mimecast-MFC-AGG-ID: ICWoZKtWPZSZLfDGRnPpQw_1753196616
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-451d7de4ae3so31885945e9.2
-        for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 08:03:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753196616; x=1753801416;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLoXN0zviuhjRHlOKL2rQE3hdCG3gOLWxmD1fwrgVH8=;
-        b=ZjmNg4a4Y7UkwSSXTk85JtNCaf34IwgsnxbX6JOb5/7kuVeFEnuYjH6whwPdMNKTRg
-         dND+IGELF69NpxzNnnNpjg8HyHsiDXkK+vvXDoYvy2UZd11x2clpnyolUHQBnjwJKZ+1
-         RKLlNK0CG56dW94++XYqwvDgHlMEWA2VW3EKmazCxtqhtIpn3koO2pCUOX9nly8Qq8/b
-         p9SJdMZBrXhZT1JXU/KWr9zBZRwzp9r8SFxSQeIEx6RpFY3wA6paJhPhfb3/wj27Nkjw
-         3ogYT6mtZGvkhMTgTMC+Y3Hm8frj/hipZWI3Pv5fbpijwSczJiRK8s+OpyAHyWJk9wVF
-         0Rdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVD8lB1soAPzfwgbmKNcz3ub3eZwxO+vqOpiZYXOVzM6o5xKwjOA0c9caYxxlS4QMJ+/S4k@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSFLvc38B/XVtmhgPgkEH+Zw0BlelXCamBVAUT1hEYIDp6etLl
-	scw/UpF2Mur7JUmP/+WA5T/LGhbPv0ommg5WZ+Pq55Dgucowx+dSoz3QbnWur8+WcSPmgFXK9IE
-	7LSQByrYaGLKwnp4QxeJD2+ZkjMoxcZs+r4lZepdiL4RJX5t0m7iP2Vg=
-X-Gm-Gg: ASbGnctvNLEphm5WX16kh87Ws18eV5TJGZwQYZq+x1EKJ3+b/krVVMmT2/U/eOy4gfk
-	/myjovNyx2stN6jt/+C6LTr8Nw87HBSNkDrBMBQg5iM3wCndDemYcVIxvwbgMyC8sOrsaWpxXDK
-	hGD0by/XCmpAJVL28TUXcdS9kWna6y/zZasuVTBDYvkKnYcGp676vY5oshYyyfGWkBknp3n88B2
-	1j5H1i/awKq5UVpOqCAFkUWLGB1xfTADqRWkskaLBuuM3f84G8WABis2DN06btM6yTyghGJ901+
-	NrrnvPPCbHEbf/Y5Fk/HFE8AoMe6u8UhAvTogoAjQ6Pzx3AC/IqbQdTZDaOWG2VJ52XiRK/vRGY
-	En5BMtRF/INE=
-X-Received: by 2002:a05:600c:8588:b0:456:22f0:d9ca with SMTP id 5b1f17b1804b1-4563bf262e3mr103369925e9.26.1753196615967;
-        Tue, 22 Jul 2025 08:03:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGXBjtom7DfrBS3RzSHHM2jEi5VfD/84zxgrNdm4BqqX7Z5GS1hjLJJaVsZOKAqO1uS8F1VCg==
-X-Received: by 2002:a05:600c:8588:b0:456:22f0:d9ca with SMTP id 5b1f17b1804b1-4563bf262e3mr103368725e9.26.1753196614818;
-        Tue, 22 Jul 2025 08:03:34 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4563b73fa43sm131621725e9.21.2025.07.22.08.03.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jul 2025 08:03:34 -0700 (PDT)
-Message-ID: <eea3a104-1cb9-4606-9664-a8beda93e018@redhat.com>
-Date: Tue, 22 Jul 2025 17:03:32 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uz3LmLj1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753197596; x=1784733596;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+sGqgGjgNmnjMLda+apmd8ND1PGuNPsgCimJgbyGk7c=;
+  b=Uz3LmLj1c1BjNjuPjCV2Wyat9KuNAISD1j6mTVQ6zFvwKUV23jkw+vce
+   Ql4n+PVyq25ebCxO02i+ydKb8smyKFXoM8V8uoEVOqE+GI12i6TYHNzEt
+   gTRzeVqNS7mhpDEtMs7I5/CWwf14MM5LGV1g2C26KsSRuA88LeVYrBHg+
+   Wza1a7MfrpQ3jz9NQuLkpnB3+oN5Hucbn0/9xo3wKqKLenGKiZ1azZgxD
+   354QlVqBhYGL4EfSlD98LfeBaEWDmBrVqMsocqfmt0uleAj4HHv0hTRmY
+   M4SmotygfANE1jJQ2PUROxrhRRwgx4S+ldh5QuxZ711QhU4rBYQI6CHRg
+   g==;
+X-CSE-ConnectionGUID: avK7V8dsQLeM+CVONluCOA==
+X-CSE-MsgGUID: s1YwXJACThWFtwkQVVuywA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="66139106"
+X-IronPort-AV: E=Sophos;i="6.16,331,1744095600"; 
+   d="scan'208";a="66139106"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 08:19:56 -0700
+X-CSE-ConnectionGUID: 9DE0fK94Ry2JcwHou+v5wg==
+X-CSE-MsgGUID: Xxcp89MjQdCNtvqUEpn02Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,331,1744095600"; 
+   d="scan'208";a="158476000"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 22 Jul 2025 08:19:54 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ueEmV-000ITD-3A;
+	Tue, 22 Jul 2025 15:19:51 +0000
+Date: Tue, 22 Jul 2025 23:19:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hyeonki Hong <hhk7734@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dongjin Kim <tobetter@gmail.com>
+Subject: [tobetter:odroid-6.16.y 7/44]
+ drivers/input/touchscreen/dwav-usb-mt.c:462:3: error: call to undeclared
+ library function 'strlcpy' with type '__size_t (char *, const char *,
+ __size_t)' (aka 'unsigned int (char *, const char *, unsigned int)'); ISO
+ C99 and later do not support implicit ...
+Message-ID: <202507222311.butw2vKW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next V6 2/5] selftests: drv-net: Test XDP_PASS/DROP
- support
-To: Gal Pressman <gal@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
- Nimrod Oren <noren@nvidia.com>
-Cc: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- shuah@kernel.org, horms@kernel.org, cratiu@nvidia.com, cjubran@nvidia.com,
- mbloch@nvidia.com, jdamato@fastly.com, sdf@fomichev.me, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, tariqt@nvidia.com,
- thoiland@redhat.com
-References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
- <20250719083059.3209169-3-mohsin.bashr@gmail.com>
- <ab65545f-c79c-492b-a699-39f7afa984ea@nvidia.com>
- <20250721084046.5659971c@kernel.org>
- <eaca90db-897c-45a0-8eed-92c36dbec825@nvidia.com>
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <eaca90db-897c-45a0-8eed-92c36dbec825@nvidia.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: FQHFqt3lfu5cy3RaFZnu7nCQxCGiP9EKpI9BBBtFs6w_1753196616
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/21/25 8:34 PM, Gal Pressman wrote:
-> On 21/07/2025 18:40, Jakub Kicinski wrote:
->> On Mon, 21 Jul 2025 14:43:15 +0300 Nimrod Oren wrote:
->>>> +static struct udphdr *filter_udphdr(struct xdp_md *ctx, __u16 port)
->>>> +{
->>>> +	void *data_end = (void *)(long)ctx->data_end;
->>>> +	void *data = (void *)(long)ctx->data;
->>>> +	struct udphdr *udph = NULL;
->>>> +	struct ethhdr *eth = data;
->>>> +
->>>> +	if (data + sizeof(*eth) > data_end)
->>>> +		return NULL;
->>>> +  
->>>
->>> This check assumes that the packet headers reside in the linear part of
->>> the xdp_buff. However, this assumption does not hold across all drivers.
->>> For example, in mlx5, the linear part is empty when using multi-buffer
->>> mode with striding rq configuration. This causes all multi-buffer test
->>> cases to fail over mlx5.
->>>
->>> To ensure correctness across all drivers, all direct accesses to packet
->>> data should use these safer helper functions instead:
->>> bpf_xdp_load_bytes() and bpf_xdp_store_bytes().
->>>
->>> Related discussion and context can be found here:
->>> https://github.com/xdp-project/xdp-tools/pull/409
->>
->> That's a reasonable way to modify the test. But I'm not sure it's
->> something that should be blocking merging the patches.
->> Or for that matter whether it's Mohsin's responsibility to make the
->> test cater to quirks of mlx5, 
-> 
-> Definitely not a quirk, you cannot assume the headers are in the linear
-> part, especially if you're going to put this program as reference in the
-> kernel tree.
-> 
-> This issue has nothing to do with mlx5, but a buggy XDP program.
+tree:   https://github.com/tobetter/linux odroid-6.16.y
+head:   ac46a60ec2fb958f1dc2e5871e122abb98ac0da9
+commit: 804dbb7299c970e3cb07ee5eac596f8ca42f620d [7/44] ODROID-COMMON: input/touchscreen: Add D-WAV Multitouch driver.
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250722/202507222311.butw2vKW-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507222311.butw2vKW-lkp@intel.com/reproduce)
 
-Note that with the self-tests we have a slightly different premise WRT
-the actual kernel code. We prefer on-boarding tests cases that work for
-some/most of the possible setup vs perfect ones, and eventually improve
-incrementally as needed: the goal is to increase the code coverage _and_
-encourage people to contribute new tests upstream.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507222311.butw2vKW-lkp@intel.com/
 
-We try to avoid breaking existing tests (at least the ones actually
-reporting into the infrastructure), but for new ones the barriers are
-intentionally different than VS kernel code.
+All errors (new ones prefixed by >>):
 
-Cheers,
+>> drivers/input/touchscreen/dwav-usb-mt.c:462:3: error: call to undeclared library function 'strlcpy' with type '__size_t (char *, const char *, __size_t)' (aka 'unsigned int (char *, const char *, unsigned int)'); ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     462 |                 strlcpy(dwav_usb_mt->name,
+         |                 ^
+   drivers/input/touchscreen/dwav-usb-mt.c:462:3: note: include the header <string.h> or explicitly provide a declaration for 'strlcpy'
+   1 error generated.
 
-Paolo
 
+vim +462 drivers/input/touchscreen/dwav-usb-mt.c
+
+   397	
+   398	static int dwav_usb_mt_probe(struct usb_interface *intf,
+   399				  const struct usb_device_id *id)
+   400	{
+   401		struct dwav_usb_mt *dwav_usb_mt = NULL;
+   402		struct input_dev *input_dev = NULL;
+   403		struct usb_endpoint_descriptor *endpoint;
+   404		struct usb_device *udev = interface_to_usbdev(intf);
+   405	
+   406		int err = 0;
+   407	
+   408		endpoint = dwav_usb_mt_get_input_endpoint(intf->cur_altsetting);
+   409		if (!endpoint)
+   410			return  -ENXIO;
+   411	
+   412		dwav_usb_mt = kzalloc(sizeof(struct dwav_usb_mt), GFP_KERNEL);
+   413		if (!dwav_usb_mt)
+   414			return  -ENOMEM;
+   415	
+   416		dwav_usb_mt->dev_id = id->driver_info;
+   417	
+   418		dwav_usb_mt->finger = kzalloc(sizeof(struct finger_t) *
+   419					      DEV_INFO[dwav_usb_mt->dev_id].max_finger,
+   420					      GFP_KERNEL);
+   421	
+   422		if (!dwav_usb_mt->finger)
+   423			goto err_free_mem;
+   424	
+   425		input_dev = input_allocate_device();
+   426		if (!input_dev)
+   427			goto err_free_mem;
+   428	
+   429		dwav_usb_mt->data_size = sizeof(struct dwav_raw);
+   430		dwav_usb_mt->data = usb_alloc_coherent(udev, dwav_usb_mt->data_size,
+   431				GFP_KERNEL, &dwav_usb_mt->data_dma);
+   432		if (!dwav_usb_mt->data)
+   433			goto err_free_mem;
+   434	
+   435		dwav_usb_mt->irq = usb_alloc_urb(0, GFP_KERNEL);
+   436		if (!dwav_usb_mt->irq) {
+   437			dev_dbg(&intf->dev,
+   438					"%s - usb_alloc_urb failed: usbtouch->irq\n",
+   439					__func__);
+   440			goto err_free_buffers;
+   441		}
+   442	
+   443		if (usb_endpoint_type(endpoint) == USB_ENDPOINT_XFER_INT)   {
+   444			usb_fill_int_urb(dwav_usb_mt->irq, udev,
+   445				usb_rcvintpipe(udev, endpoint->bEndpointAddress),
+   446				dwav_usb_mt->data, dwav_usb_mt->data_size,
+   447				dwav_usb_mt_irq, dwav_usb_mt, endpoint->bInterval);
+   448		} else {
+   449			usb_fill_bulk_urb(dwav_usb_mt->irq, udev,
+   450				 usb_rcvbulkpipe(udev, endpoint->bEndpointAddress),
+   451				 dwav_usb_mt->data, dwav_usb_mt->data_size,
+   452				 dwav_usb_mt_irq, dwav_usb_mt);
+   453		}
+   454	
+   455		dwav_usb_mt->irq->dev = udev;
+   456		dwav_usb_mt->irq->transfer_dma = dwav_usb_mt->data_dma;
+   457		dwav_usb_mt->irq->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+   458	
+   459		dwav_usb_mt->interface  = intf;
+   460	
+   461		if (udev->manufacturer)
+ > 462			strlcpy(dwav_usb_mt->name,
+   463					udev->manufacturer, sizeof(dwav_usb_mt->name));
+   464	
+   465		if (udev->product) {
+   466			if (udev->manufacturer)
+   467				strlcat(dwav_usb_mt->name,
+   468						" ", sizeof(dwav_usb_mt->name));
+   469	
+   470			strlcat(dwav_usb_mt->name,
+   471					udev->product, sizeof(dwav_usb_mt->name));
+   472		}
+   473	
+   474		if (!strlen(dwav_usb_mt->name)) {
+   475			snprintf(dwav_usb_mt->name, sizeof(dwav_usb_mt->name),
+   476					"D-WAV Scientific MultiTouch %04x:%04x",
+   477					le16_to_cpu(udev->descriptor.idVendor),
+   478					le16_to_cpu(udev->descriptor.idProduct));
+   479		}
+   480	
+   481		usb_make_path(udev, dwav_usb_mt->phys, sizeof(dwav_usb_mt->phys));
+   482		strlcat(dwav_usb_mt->phys, "/input0", sizeof(dwav_usb_mt->phys));
+   483	
+   484		usb_to_input_id(udev, &input_dev->id);
+   485	
+   486		input_dev->dev.parent = &intf->dev;
+   487	
+   488		err = dwav_usb_mt_init(dwav_usb_mt, (void *)input_dev);
+   489		if (err)
+   490			goto err_free_urb;
+   491	
+   492		usb_set_intfdata(intf, dwav_usb_mt);
+   493	
+   494		dev_info(&intf->dev, "%s\n", DEV_INFO[dwav_usb_mt->dev_id].name);
+   495	
+   496		return 0;
+   497	
+   498	err_free_urb:
+   499		usb_free_urb(dwav_usb_mt->irq);
+   500	
+   501	err_free_buffers:
+   502		dwav_usb_mt_free_buffers(udev, dwav_usb_mt);
+   503	
+   504	err_free_mem:
+   505		if (input_dev)
+   506			input_free_device(input_dev);
+   507		kfree(dwav_usb_mt);
+   508	
+   509		return err;
+   510	}
+   511	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
