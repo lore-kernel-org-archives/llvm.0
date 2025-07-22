@@ -1,157 +1,177 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2798EAC6;
-	Tue, 22 Jul 2025 09:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC5C2D3EFB;
+	Tue, 22 Jul 2025 13:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753175249; cv=none; b=oYmv4j3y80W680HfTleeTgyOpMqKXKrSBSQiug6Qme5TBD2TpnhoPoHzTBy0VwIMgU9e4dQdZCMkGtfj4SHpjBi42o2J6A+7uok/a7MtetYs9KjNe072knqZeryXkmtALHKz+QYzUNvencHz1mMqADunpYOX+uSVO8lBKel4BNg=
+	t=1753190973; cv=none; b=jUbfq6LzYuDe8e2xZhmDFylAk82T8N+MMEYIKpBxojGEidYm6Vylg0yaPAmkkshn63vdVSCUD90HSWt9MO0R3nd1J32RRgIX4mb0D6rlNoWgRNSg1PxGtO5l89YlRRw1xld2RfKsd6w/+ImvwDJYoACPN0XaAhdiTKSZlVwGOhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753175249; c=relaxed/simple;
-	bh=uu7YEV+sBYy0lZ9HJM6cHIKZrL33VDKt+RK+6r+PsbI=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=TYpgD5YC4TsDbx10Gn6V03FeMc4bSVuoEQgg1QR57GJjDa5qoOD3x02+M5rAvA+8O/Yv7B/skSSlzZLdwZ2pRzWN8URyT3kv1AHV4F0o09C1zaTfpOnc2bi3dLEgm9suRic7bYno9297xVo09decH3Sn75w61no4c/wmM9p0F2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8BxjazDVH9oZX4vAQ--.63058S3;
-	Tue, 22 Jul 2025 17:07:15 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowJAxE+S4VH9ohbEhAA--.44151S3;
-	Tue, 22 Jul 2025 17:07:06 +0800 (CST)
-Subject: Re: [PATCH v2] LoongArch: Implement physical address with ELF program
- header
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, WANG Xuerui <kernel@xen0n.name>,
- Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250721091248.3896152-1-maobibo@loongson.cn>
- <202507220309.mDl9W32Y-lkp@intel.com>
- <7a5789f1-d6a5-3892-98c1-2c4b8515459d@loongson.cn>
- <CAAhV-H74EpbKsPpc_ToGqP6LKx04z+Dvyuw52u-1A4nQ-wr6WQ@mail.gmail.com>
-From: Bibo Mao <maobibo@loongson.cn>
-Message-ID: <d6b6aaa8-06f2-1b0d-5ebc-e7a71a20dd7a@loongson.cn>
-Date: Tue, 22 Jul 2025 17:05:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1753190973; c=relaxed/simple;
+	bh=v5BLSIwd7srHi/OWA5ndIBkdalmEzmLEQmrp+RewTTQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IGItBp7f0LJtFN0uHXVdSHBZ7Iu7ohLohoEN0sVtiLa0UUj8G20bvsqoZjSP4BErfMdtD4RlWkyaRGSWt6bsjq7zMwMV4jXbODJdDpGEMpH1y8lqKrHlolk0AgMXEnqGIcwunW3BYJWaZpefdQsci7y5deQ/aHn4RQNvfZPCnrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=icCzbYE3; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="icCzbYE3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B00BC4CEEB;
+	Tue, 22 Jul 2025 13:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753190972;
+	bh=v5BLSIwd7srHi/OWA5ndIBkdalmEzmLEQmrp+RewTTQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=icCzbYE3Gw4FMkjzZQGdd5PRl3DLgwJi4XEJMOcR2bhXW2g1yFhd+T0X/aqMi3/BP
+	 CibFuID4nbj6OAYkc1NMOYpqf8N3QkVei13FupO8PIGWwd7LMLFew2Gjxu4KdVUg1O
+	 DkTKaYgXxxbbsiX0+w7BLz0w/qJZtmL94y+JVE7CzC9ZZx6kQNyfp3ET4nPZ9scvga
+	 Dn2CpPG5UqY1IGli6LRySAYz4YmMRdxPp1TJllyeOcCWdL2WRYt94l/h9D04DE4+Uc
+	 MGgZG1jWvtMVVXZVVriPuhmhhcn2IesGNkPl/Ho6XBcy/wvha6uvWcQ0AKEDdQ4Ukm
+	 HjjZtlQLlu8FQ==
+Date: Tue, 22 Jul 2025 14:29:19 +0100
+From: Will Deacon <will@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Michal Wilczynski <michal.wilczynski@intel.com>,
+	Juergen Gross <jgross@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Roger Pau Monne <roger.pau@citrix.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Usama Arif <usama.arif@bytedance.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
+	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-mm@kvack.org, Ingo Molnar <mingo@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 04/13] x86: Handle KCOV __init vs inline mismatches
+Message-ID: <aH-SL2V2bSPkJ18o@willie-the-truck>
+References: <20250717231756.make.423-kees@kernel.org>
+ <20250717232519.2984886-4-kees@kernel.org>
+ <aHoHkDvvp4AHIzU1@kernel.org>
+ <202507181541.B8CFAC7E@keescook>
+ <CAMj1kXGAwjChyFvjQcTbL8dFXkFWnn9n47bkN7FP=+EsLNsJdg@mail.gmail.com>
+ <aH42--h-ARsvX5Wk@willie-the-truck>
+ <202507211311.8DAC4C7@keescook>
+ <202507211349.D93679FB25@keescook>
+ <CAMj1kXGoy7D+_hKyQrT_uXdjuFMYGUEMDYdRf6mx69PLeuBQQg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H74EpbKsPpc_ToGqP6LKx04z+Dvyuw52u-1A4nQ-wr6WQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxE+S4VH9ohbEhAA--.44151S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXw1xGw4kAF4UZFW8JF13GFX_yoWrZw43pr
-	n5AayqqF4UKr93X34DKFn0gw1qqrnxWr42qa98J3WfCFy7XF18Z3s7Gr9ruasFq34UK3W0
-	gFyrGayjya4Ut3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
-	CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU24So
-	DUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGoy7D+_hKyQrT_uXdjuFMYGUEMDYdRf6mx69PLeuBQQg@mail.gmail.com>
 
-
-
-On 2025/7/22 下午12:58, Huacai Chen wrote:
-> On Tue, Jul 22, 2025 at 9:33 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> Oops, it is the obvious compile issue. And I am messed with parallel
->> tasks and do not notice this, what I test is old kernel.
->>
->> Regards
->> Bibo Mao
-> Add this part to the patch is enough.
+On Tue, Jul 22, 2025 at 04:55:47PM +1000, Ard Biesheuvel wrote:
+> On Tue, 22 Jul 2025 at 06:49, Kees Cook <kees@kernel.org> wrote:
+> >
+> > On Mon, Jul 21, 2025 at 01:14:36PM -0700, Kees Cook wrote:
+> > > On Mon, Jul 21, 2025 at 01:47:55PM +0100, Will Deacon wrote:
+> > > > On Sun, Jul 20, 2025 at 04:10:01PM +1000, Ard Biesheuvel wrote:
+> > > > > On Sat, 19 Jul 2025 at 08:51, Kees Cook <kees@kernel.org> wrote:
+> > > > > > On Fri, Jul 18, 2025 at 11:36:32AM +0300, Mike Rapoport wrote:
+> > > > > > > On Thu, Jul 17, 2025 at 04:25:09PM -0700, Kees Cook wrote:
+> > > > > > > > When KCOV is enabled all functions get instrumented, unless the
+> > > > > > > > __no_sanitize_coverage attribute is used. To prepare for
+> > > > > > > > __no_sanitize_coverage being applied to __init functions, we have to
+> > > > > > > > handle differences in how GCC's inline optimizations get resolved. For
+> > > > > > > > x86 this means forcing several functions to be inline with
+> > > > > > > > __always_inline.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Kees Cook <kees@kernel.org>
+> > > > > > >
+> > > > > > > ...
+> > > > > > >
+> > > > > > > > diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> > > > > > > > index bb19a2534224..b96746376e17 100644
+> > > > > > > > --- a/include/linux/memblock.h
+> > > > > > > > +++ b/include/linux/memblock.h
+> > > > > > > > @@ -463,7 +463,7 @@ static inline void *memblock_alloc_raw(phys_addr_t size,
+> > > > > > > >                                       NUMA_NO_NODE);
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > > -static inline void *memblock_alloc_from(phys_addr_t size,
+> > > > > > > > +static __always_inline void *memblock_alloc_from(phys_addr_t size,
+> > > > > > > >                                             phys_addr_t align,
+> > > > > > > >                                             phys_addr_t min_addr)
+> > > > > > >
+> > > > > > > I'm curious why from all memblock_alloc* wrappers this is the only one that
+> > > > > > > needs to be __always_inline?
+> > > > > >
+> > > > > > Thread-merge[1], adding Will Deacon, who was kind of asking the same
+> > > > > > question.
+> > > > > >
+> > > > > > Based on what I can tell, GCC has kind of fragile inlining logic, in the
+> > > > > > sense that it can change whether or not it inlines something based on
+> > > > > > optimizations. It looks like the kcov instrumentation being added (or in
+> > > > > > this case, removed) from a function changes the optimization results,
+> > > > > > and some functions marked "inline" are _not_ inlined. In that case, we end up
+> > > > > > with __init code calling a function not marked __init, and we get the
+> > > > > > build warnings I'm trying to eliminate.
+> > > >
+> > > > Got it, thanks for the explanation!
+> > > >
+> > > > > > So, to Will's comment, yes, the problem is somewhat fragile (though
+> > > > > > using either __always_inline or __init will deterministically solve it).
+> > > > > > We've tripped over this before with GCC and the solution has usually
+> > > > > > been to just use __always_inline and move on.
+> > > > > >
+> > > > >
+> > > > > Given that 'inline' is already a macro in the kernel, could we just
+> > > > > add __attribute__((__always_inline__)) to it when KCOV is enabled?
+> > > >
+> > > > That sounds like a more robust approach and, by the sounds of it, we
+> > > > could predicate it on GCC too. That would also provide a neat place for
+> > > > a comment describing the problem.
+> > > >
+> > > > Kees, would that work for you?
+> > >
+> > > That seems like an extremely large hammer for this problem, IMO. It
+> > > feels like it could cause new strange corner cases. I'd much prefer the
+> > > small fixes I've currently got since it keeps it focused. KCOV is
+> > > already enabled for "allmodconfig", so any new instances would be found
+> > > very quickly, etc. (And GCC's fragility in this regard has already been
+> > > exposed to these cases -- it's just that I changed one of the
+> > > combinations of __init vs inline vs instrumentation.
+> > >
+> > > I could give it a try, if you really prefer the big hammer approach...
+> >
+> > I gave it a try -- it fails spectacularly. ;) Let's stick to my small
+> > fixes instead?
+> >
 > 
-> diff --git a/arch/loongarch/include/asm/addrspace.h
-> b/arch/loongarch/include/asm/addrspace.h
-> index fe198b473f84..babcc1c6c820 100644
-> --- a/arch/loongarch/include/asm/addrspace.h
-> +++ b/arch/loongarch/include/asm/addrspace.h
-> @@ -18,11 +18,20 @@
->   /*
->    * This gives the physical RAM offset.
->    */
-> -#ifndef __ASSEMBLER__
-> +#ifdef __ASSEMBLER__
-> +
-> +#ifndef PHYS_OFFSET
-> +#define PHYS_OFFSET    0
-> +#endif
-> +
-> +#else
-> +
->   #ifndef PHYS_OFFSET
->   #define PHYS_OFFSET    _UL(0)
->   #endif
-> +
->   extern unsigned long vm_map_base;
-> +
->   #endif /* __ASSEMBLER__ */
-> 
->   #ifndef IO_BASE
-sure, will do in this way.
+> Fair enough :-)
 
-Regards
-Bibo Mao
-> 
->>
->> On 2025/7/22 上午3:19, kernel test robot wrote:
->>> Hi Bibo,
->>>
->>> kernel test robot noticed the following build errors:
->>>
->>> [auto build test ERROR on 89be9a83ccf1f88522317ce02f854f30d6115c41]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Bibo-Mao/LoongArch-Implement-physical-address-with-ELF-program-header/20250721-171418
->>> base:   89be9a83ccf1f88522317ce02f854f30d6115c41
->>> patch link:    https://lore.kernel.org/r/20250721091248.3896152-1-maobibo%40loongson.cn
->>> patch subject: [PATCH v2] LoongArch: Implement physical address with ELF program header
->>> config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20250722/202507220309.mDl9W32Y-lkp@intel.com/config)
->>> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
->>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507220309.mDl9W32Y-lkp@intel.com/reproduce)
->>>
->>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>> the same patch/commit), kindly add following tags
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Closes: https://lore.kernel.org/oe-kbuild-all/202507220309.mDl9W32Y-lkp@intel.com/
->>>
->>> All errors (new ones prefixed by >>):
->>>
->>>>> ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:15: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:18: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:33: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:34: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:41: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:46: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:47: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:50: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:57: symbol not found: PHYS_OFFSET
->>>      ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
->>>
->>
+(but please add the helpful explanation you provided to the commit message!)
 
+Will
