@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D896423B61C;
-	Mon, 21 Jul 2025 23:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3F9372;
+	Tue, 22 Jul 2025 00:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753140953; cv=none; b=kHvXiuGYAXXZCsSq2R7RJ38DagTHl8mWyKZBtUkp1M80brmH8k2Wk/uDLJO7ZXIGcG2lTBLW2iey3nzCN3pPagyfHhj8/zpxBqpCqZoShbP7g0/p7aS0+K5qLJcf5MtvrKY5Y6apuRHpiZ+n3upyEXJZXvnmdOAUfSyT8w9wT6k=
+	t=1753142860; cv=none; b=qAECr2iNn6MknsCVi5h9DwRRdWRVW3AZuHTU2z4imQWUSgy8sbp+UY29VEB7OjlstVJFH2TE1+ej9W8XRrHTYKRnfcnt/JJ18zjtVeIxZ4WlBy0s/NubA0uCzAmKSPheHgoO3nbK8w6W+MKf6nRF2Q8s5Q+8+egkHhDp/thHAMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753140953; c=relaxed/simple;
-	bh=NW4Unwca7T9XNtPkU+wIBVNtRl9UelQDNvK6ac/+8ZA=;
+	s=arc-20240116; t=1753142860; c=relaxed/simple;
+	bh=r5JTRxD1YVK+h8+f13Ea98yoby+ZTTYZME4YT5f4g+I=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SjXsAAMxBPBf1BHpRLYsvj2FvuCTOdpGL1bdjhlw1LS1yp9vPeQOV7iivk0MqN4XwXZKrjxc+OAPCY/UcEixj0A78Fy85G9OFc4rGUeFl3plZv/CR2SnOlfjmmTilYwEMZiIZ/i6pQ3Q6HiqvapjL5fKKNxsCjL9gid2NAEk+eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OuLP0yCB; arc=none smtp.client-ip=192.198.163.7
+	 Content-Disposition; b=CzOwVXk8DME8TRR/Ra9ssXx1CfsXeWPrcWfdg2g8WS2SUT/qIYa/5+3aIdA1lap3zHPt6FnkFlkV+Rt5OPiYSuMMha7yR5qE632j2DuUBe09aNLvQ33Yxz+J+3INeivUKlHWHSs9Fbp+8mp6vexyxRCoBLv2dAsbmjO9wm9V934=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J/SRwLQ3; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OuLP0yCB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J/SRwLQ3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753140952; x=1784676952;
+  t=1753142858; x=1784678858;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NW4Unwca7T9XNtPkU+wIBVNtRl9UelQDNvK6ac/+8ZA=;
-  b=OuLP0yCBzbxftfgSuVgkjLfM+yISk1KeT6vXWplxLclXxLHdfVpDtRGS
-   uDid9IZbvfLLbDDV5BHAwaEGK9Dkkxso+CGbslYIPJxPZKYIaSAtP1jEj
-   XrB99ZHSz1V6rWqaHCTC8kokHdO/e8HGoDWTP6Pa/Nxpn9olTIOX5f71S
-   /pVafVp6PiXBd4GZ7I6ukgflSMSINaNoZ/GcUQyezdG4qY6SeWGqA4sHM
-   nYtrawirma6oKTdfZ+vtM5YE+kOk8tpocj9IaOUL5GNbC42fPnWQGu330
-   JD00S4hTowcs4/z/SYGXdSgnRAohnuLM9/cvD6yaFCrrkwgTbQpZCzLSX
-   w==;
-X-CSE-ConnectionGUID: KhB1UOTVQBWozAE+8MtEtw==
-X-CSE-MsgGUID: 1PQY7KygRi21n9zf5xZ4XQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="80818297"
+  bh=r5JTRxD1YVK+h8+f13Ea98yoby+ZTTYZME4YT5f4g+I=;
+  b=J/SRwLQ33EMG9V3xUX5LhSNVj/YWu0by+etzWhSOQJoLTqAbJLLwCspp
+   TW7rWiVy20GSEM+rTucGsA1dy4vpTCtQIIa9B1MkyvcqwwpLa1qywPWjL
+   jZYXUMUzSSVZigdFN/Q4Ywpcp7qQC3s27Eke8jPyoW9LO1P3ySgeAkACW
+   IQ21AwT3u9XrOaFHVrbvhf/ZKu/qtK17Gdxm49Kw4V5An1hzJv2XJk8n7
+   Yl77HRqBHQ8Ivo2dlUmvbO/TFSLLUVEKmnoMkaZpt34CdHy8FkDSPPdtj
+   oawZWsb8ahbllpO2rptrpgnvWQlXiN5qemgtbrdqPunGF6tIA8XbTkf2S
+   Q==;
+X-CSE-ConnectionGUID: X8iXJLXdRa2VJ48fq8nqKQ==
+X-CSE-MsgGUID: stw1qzcMTBKxSlMw6skYsQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="66721016"
 X-IronPort-AV: E=Sophos;i="6.16,330,1744095600"; 
-   d="scan'208";a="80818297"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 16:35:51 -0700
-X-CSE-ConnectionGUID: hl7EsbRcSIeGITADsVfQ6w==
-X-CSE-MsgGUID: 7RlkqxvVRFuJyRCy51rq1g==
+   d="scan'208";a="66721016"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 17:07:38 -0700
+X-CSE-ConnectionGUID: JmMHtf1ZRM6Kxh6KSbnaIQ==
+X-CSE-MsgGUID: f6T5QTbWSx2MWYIIzE7SoA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,330,1744095600"; 
-   d="scan'208";a="182689302"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8b57277650df) ([10.91.175.65])
-  by fmviesa002.fm.intel.com with ESMTP; 21 Jul 2025 16:35:50 -0700
-Received: from kbuild by 8b57277650df with local (Exim 4.96)
+   d="scan'208";a="159026289"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 21 Jul 2025 17:07:37 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ue02u-0001Rd-0g;
-	Mon, 21 Jul 2025 23:35:48 +0000
-Date: Tue, 22 Jul 2025 01:34:59 +0200
+	id 1ue0Xe-000HGl-3A;
+	Tue, 22 Jul 2025 00:07:34 +0000
+Date: Tue, 22 Jul 2025 08:07:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [jgunthorpe:iommu_pt_all 54/58]
- drivers/iommu/generic_pt/.kunitconfig_perf: warning: ignored by one of the
- .gitignore files
-Message-ID: <202507220140.DcNF28E5-lkp@intel.com>
+	linux-gpio@vger.kernel.org
+Subject: [brgl:gpio/devel 4/4] arch/arm/common/sa1111.c:619:26: error:
+ incompatible function pointer types assigning to 'int (*)(struct gpio_chip
+ *, unsigned long *, unsigned long *)' from 'void (struct gpio_chip *,
+ unsigned long *, unsigned long *)'
+Message-ID: <202507220807.48h0ne5W-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,23 +65,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jgunthorpe/linux iommu_pt_all
-head:   8b3963c16977890f20ed515989f1a22644c24820
-commit: 3475b69ff5a2fdb2d33a5393114ca5d3d83e4a4a [54/58] iommupt: Add kunit test to benchmark page table operations
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250722/202507220140.DcNF28E5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507220140.DcNF28E5-lkp@intel.com/reproduce)
+Hi Bartosz,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/devel
+head:   c52c31b44884586b6486590691c444ac990f1f56
+commit: c52c31b44884586b6486590691c444ac990f1f56 [4/4] treewide: rename GPIO set callbacks back to their original names
+config: arm-jornada720_defconfig (https://download.01.org/0day-ci/archive/20250722/202507220807.48h0ne5W-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507220807.48h0ne5W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507220140.DcNF28E5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507220807.48h0ne5W-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   .pylintrc: warning: ignored by one of the .gitignore files
->> drivers/iommu/generic_pt/.kunitconfig_perf: warning: ignored by one of the .gitignore files
+>> arch/arm/common/sa1111.c:619:26: error: incompatible function pointer types assigning to 'int (*)(struct gpio_chip *, unsigned long *, unsigned long *)' from 'void (struct gpio_chip *, unsigned long *, unsigned long *)' [-Wincompatible-function-pointer-types]
+     619 |         sachip->gc.set_multiple = sa1111_gpio_set_multiple;
+         |                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +619 arch/arm/common/sa1111.c
+
+17cf50116e10af Russell King        2016-08-31  608  
+17cf50116e10af Russell King        2016-08-31  609  static int sa1111_setup_gpios(struct sa1111 *sachip)
+17cf50116e10af Russell King        2016-08-31  610  {
+17cf50116e10af Russell King        2016-08-31  611  	sachip->gc.label = "sa1111";
+17cf50116e10af Russell King        2016-08-31  612  	sachip->gc.parent = sachip->dev;
+17cf50116e10af Russell King        2016-08-31  613  	sachip->gc.owner = THIS_MODULE;
+17cf50116e10af Russell King        2016-08-31  614  	sachip->gc.get_direction = sa1111_gpio_get_direction;
+17cf50116e10af Russell King        2016-08-31  615  	sachip->gc.direction_input = sa1111_gpio_direction_input;
+17cf50116e10af Russell King        2016-08-31  616  	sachip->gc.direction_output = sa1111_gpio_direction_output;
+17cf50116e10af Russell King        2016-08-31  617  	sachip->gc.get = sa1111_gpio_get;
+c52c31b4488458 Bartosz Golaszewski 2025-07-17  618  	sachip->gc.set = sa1111_gpio_set;
+17cf50116e10af Russell King        2016-08-31 @619  	sachip->gc.set_multiple = sa1111_gpio_set_multiple;
+17cf50116e10af Russell King        2016-08-31  620  	sachip->gc.to_irq = sa1111_gpio_to_irq;
+17cf50116e10af Russell King        2016-08-31  621  	sachip->gc.base = -1;
+17cf50116e10af Russell King        2016-08-31  622  	sachip->gc.ngpio = 18;
+17cf50116e10af Russell King        2016-08-31  623  
+17cf50116e10af Russell King        2016-08-31  624  	return devm_gpiochip_add_data(sachip->dev, &sachip->gc, sachip);
+17cf50116e10af Russell King        2016-08-31  625  }
+17cf50116e10af Russell King        2016-08-31  626  
+
+:::::: The code at line 619 was first introduced by commit
+:::::: 17cf50116e10affaadfee9af2253c841f7ac0623 ARM: sa1111: implement a gpio_chip for SA1111 GPIOs
+
+:::::: TO: Russell King <rmk+kernel@armlinux.org.uk>
+:::::: CC: Russell King <rmk+kernel@armlinux.org.uk>
 
 -- 
 0-DAY CI Kernel Test Service
