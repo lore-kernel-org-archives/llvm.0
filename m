@@ -1,109 +1,180 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0FD27FD68
-	for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 18:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB20A27FD49
+	for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 18:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753207961; cv=none; b=riHRzDcz2BQaOMaeSVmQBo8jyNRX6ERCpYq4llV20LAywytqsvEaQ5d52KrdW0vLtFoxm2XZpVkK4iLBYcZ+EdE3dTkGBjyg5eyrMp75pLbghNxdQFen3yx8Mk+OOFNUXN0o/0WnoyaOewBulzApHTK1ebG/5myXDslM9uFR4Ns=
+	t=1753208840; cv=none; b=L4T10on+n+UjdfhmFoyvA2VflWbHXFKzQy/A+/PCVwOnBI34IhsTQzPHpi8+CzQTg+8iDkdP+L9W29uEKNA9eVSNcBVotKVNlLKI8MZT7TTX6H5wdcr1NFe8LZPjzhbmS5HbLnjCZoDwF7rRn5Z0HbiE/zLMY64QdhRUk3rdap0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753207961; c=relaxed/simple;
-	bh=67Pku3+c2NeuyySmqR1lN0RI6V6rpW8eqkqkN9fw/q0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tb4E2OvHJYXvY9yMgrG8+oTB9ADrdkvN5MeNWVjVCvhg+YsuX8FIK1DG0mAMX8wO6rkHc8NspRzwHDKVWM+w9h70OzltSJ8u3Mvs6h8aYPhEl7HmEVoL+hDVuqRV5Ozu8OONJ9UqavV6ysBEBQVwP9gVLfWErt95WB0pOTXxA2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Ov3Uc7uX; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1753208840; c=relaxed/simple;
+	bh=TzuX4mInNFL0Y71HlZ/CxdY52DbWevcbHeKa5VEl6b4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o4EIq0ffAd/u/8NVie1shjlFiwARWiFvxbzR6e91pXDFea6zd/p59rx7jUEkkHZEmHcd+q64Hr2TvqrAOPA9HCA6H4zzo+7my5Cb/XkCk4n3UuqplEHGAiDMA8e34StWg/9hLXYqYm2OZ8+1YNslryZNPNwqqStuJUSwgUIaSF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NXGaLC4Y; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Ov3Uc7uX"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-606b58241c9so9522739a12.3
-        for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 11:12:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NXGaLC4Y"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a52874d593so4295165f8f.0
+        for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 11:27:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1753207957; x=1753812757; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBGZFJ3kbjo9dI0n0oCeE0hpcWFl6M0zU4XdxWUvP+U=;
-        b=Ov3Uc7uXMuoPydYr33kvAjr0CrBQ1QLcQrhgFTMU6d0FPfZqzC/oBpNKKPTTxWSGzO
-         i7uL3E1d4tzD4PZy4enrCGEssaUqPxwootigb00C0mMpWO54ud+jRoZMQez0qFNC7Ft4
-         axB4dJpFPQtkA1DDgK8DM6nKHluED6dmO9Zhs=
+        d=google.com; s=20230601; t=1753208836; x=1753813636; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Z8+WxTUCxaG+bKBH/CjfFqMsRzOrc36DXiZRhX8IKQ=;
+        b=NXGaLC4YQDhDqpZnCZgw6woSAs4CUYTnDFFgSWsG1VBJ36tW5huNmlkaazDdnm0wLy
+         T1N+bDp9nNx4U9bVVK3E3yxj12MWGZ2TTaE3PgVNWwf2UnqsfY5SvHoKvTTstSiMh5xH
+         C1y5M15A+GvMrymP6kTmFl50yNQATOryFXTa1rcNlp6q4mO3YOE7IccytJ1qsxU18c5h
+         DMuZ91eEStQnbRSOwg69hn+NCCHDLtAMsn6vz0Y+T07g7dZjdW+KPQHTurx1s7b5W18e
+         QheXQ+srPruZ+VDbFhD4SQ+MfjLXjdTsPS1PpWU1GscyyuS/nhsAkGY/lkZQA67KpfSC
+         i59g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753207957; x=1753812757;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VBGZFJ3kbjo9dI0n0oCeE0hpcWFl6M0zU4XdxWUvP+U=;
-        b=H1ZX9Geib5NBtb6vxcQnc97U6wgoQoCUD578m7VHCToUftk2qrAZD3E/7eZ5Sk9E8b
-         Sh66ZV7ZPYf0+UfG8Q/z4UHPRP8tBvgkOrel4QJ+eX0EZFUgkPweXKAsei9i6v1dZUuE
-         /QHqPRYahTOvgHNbU7NcprAedKGrzfym1mrWG8we/otpoOvYvlhO4GWy3tvngF+6caqg
-         EHN7z59+YYLVLERK/RBHrAFoWiIca5J/cAxI46XrSqCKqBW3h2iiEeMG8C0YOVAxSSbZ
-         pz/tnN1Tnum4ctBx+uu0YGjFWLKzr/ewOcaK+HskPumMaxFNlZifBK53tm1b1sGmhYGC
-         Lz0A==
-X-Forwarded-Encrypted: i=1; AJvYcCWaH1KpD3rT0T+1lgnLOAFPSi15MQSg1yo5YuO2WKcdseb0SqVvOV8fTsIGekFxXd0YuwwP@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy0hDvGEBCdMLNh59+9vhWVJpfB86rmyjSaNsIaADz4vFpIzjaY
-	/3wHkUNR3kB2Wa/hJsSBFd0iAf/Wv/a09NMjY+atYUoHwxbpp+FdfIczgdP2+n9GT9C6gI3s1uG
-	TptCKN10=
-X-Gm-Gg: ASbGncsXI4sKe4PRbFyA7LbFnIgBQ1hiLYL3hC7tXUqVb2/TwBgVBpAWcQDex7qlFHa
-	72A7EZCwQGogA2QVhPS5lP80XjROzaPFtOCpznDypJ94BfSfNPq+hn+ftKOIcNyii0BUxQSBAsr
-	STSunoV0VFu+w44nkLb2Xf34J4kupOg0dqLBb439O57OhNA7+9JwYLC+jZWpJC/bvDsluD3y7D6
-	rLD0daTX3Gclv5Bj3QZBZ4MlGw8OEhBZZi8G9c8vDdepZdR0V1eH/sR9mlWIOS+DY6Yiejy8ZJH
-	eOvXgHEoFOsb4imKZEVnRGUwnfTT/dKuzth5UeYJPWqukq9lB0iTHXF46RRgXmJajOvKNUaNKEL
-	3m4XAlSQ2LL3OjU6hVLi4vnr9tlsjhG9ZQ6PTLJLZH2n9hh9cHEUngo0FTD0+EhzGXxtEbHpk
-X-Google-Smtp-Source: AGHT+IGMouk9vC31FxHeHNRL60aKOsbw54GZa9VvVqn74EuehAz+1KGmdsH9VhXKXEdf3ZjJbkTxGg==
-X-Received: by 2002:a17:906:fd84:b0:ae0:d1f3:f7f4 with SMTP id a640c23a62f3a-ae9cdde7478mr2150069166b.13.1753207956994;
-        Tue, 22 Jul 2025 11:12:36 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af0dffac00fsm278579166b.100.2025.07.22.11.12.34
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jul 2025 11:12:35 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-612a338aed8so8846960a12.1
-        for <llvm@lists.linux.dev>; Tue, 22 Jul 2025 11:12:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVdTmlnTC4BV6++5XTy+C1dYSQCo1GjIsVJvuoJDLdSyhFGyISbkBz5nN84p5x4lifoP9WA@lists.linux.dev
-X-Received: by 2002:a17:906:ef09:b0:ae0:e123:605f with SMTP id
- a640c23a62f3a-ae9ce0a4611mr2382909766b.39.1753207954651; Tue, 22 Jul 2025
- 11:12:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753208836; x=1753813636;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0Z8+WxTUCxaG+bKBH/CjfFqMsRzOrc36DXiZRhX8IKQ=;
+        b=njMS99rW8XusSkObneX9pRYolNK7CPv9GADxGDav+tYGXyKpE69FGjqtD3yeeNTC4H
+         RXFJkkBPUnQ5iA5Frsg9DcEIoZRrzG9y+lRGYpbcsSnojYPiPY9CbHkS8+1QkarFa7wA
+         PCi1RUzF7hW2GmqdTHvVROmwsJjSHNL95PlUp8jz1xfl9nZ7+lOCr6oFdtQzRW0hrnsb
+         apYqdr8laD7q0zkJTD6CzdwBT/t/DetEDDwHBXOjfJJWy0nU5U5rAO5IEbVT8pkL5yIN
+         l9QX2ANBqCDvKVnyn8wiCeJSK66YNJVOw0+wwQFgWbzI2gNrqXgoSEmnmGlAG4CkacV7
+         NYGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUuxdrAoj6T9QPmaT/wVB7D1sy4fc+o0n4/0fbyLsfuq7KblzkQryhIt+i/EtWHWfzunkxC@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy6ptO02mSfNFTSAqEkR5WT8ihRU3gkOVRhcZ0SLzYxAdi76fN+
+	91GO2k2VUvNNFJKBRfLUw+j4D6J95rrPFY0sfw/mITPA3nbK87/ifQrVX19HSgAkRA==
+X-Gm-Gg: ASbGncvrNCuoUUWj54wSJC/KHMAgxDCEqx+U9v2dJgDXgkihKIJn91qWLO8j7rMKrjA
+	i9zPhMhYs9ZyMpMnOSXSVeGBhC2ILoHedYOBB2ug13tXw/w0Xo82eHyShV0zlfxJBxXhP9N2eft
+	lCaE0MFOIqFHACDUKkqH7AXuiksR7T94qf4BOdEIfsLAGPwNaKjlZKu642hMZvIGOwxvsgaLIgo
+	2iQJH27/pZ6Awu7L3n2kpGAIPs36ESEzleJt7sfYY4gIW+lW/XuHE6mFRYMlJVqsQosD0EPRz7A
+	RBS+j2I9++AjrsDS/ogltgwq8Y5EcL43HAPMQ7y+8pQeUm/Ks++XfDclFNvcZz8zSjkirdRVjd0
+	PsUeAxMq8Btl0zm2Gl1g0HYdldhJLZEmy8SW6tzalPf6AAQ4n9Eyrc2/PzQ==
+X-Google-Smtp-Source: AGHT+IHWIMlQSVzvAq85Yom5KJ9BYmsTxVnjI5RbzJDAcwDVZQTDVOTdmdUULBd3ut0q8DI1kuLuUA==
+X-Received: by 2002:a05:6000:1885:b0:3a4:f644:95f0 with SMTP id ffacd0b85a97d-3b768f165f7mr219753f8f.54.1753208835850;
+        Tue, 22 Jul 2025 11:27:15 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:2834:9:53e1:3729:be19:c80])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca4d807sm14296542f8f.73.2025.07.22.11.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jul 2025 11:27:15 -0700 (PDT)
+Date: Tue, 22 Jul 2025 20:27:08 +0200
+From: Marco Elver <elver@google.com>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	clang-built-linux <llvm@lists.linux.dev>, stable@vger.kernel.org,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org, akpm@linux-foundation.org,
+	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
+	hargar@microsoft.com, broonie@kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Ben Copeland <benjamin.copeland@linaro.org>
+Subject: Re: [PATCH 6.12 000/158] 6.12.40-rc1 review
+Message-ID: <aH_X_AVUDoP7oB0E@elver.google.com>
+References: <20250722134340.596340262@linuxfoundation.org>
+ <CA+G9fYu8JY=k-r0hnBRSkQQrFJ1Bz+ShdXNwC1TNeMt0eXaxeA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250722152053.343028095@kernel.org> <20250722152157.664260747@kernel.org>
- <CAHk-=wihb6KVgU__zfhdHR=-Mqhp6qaAABdu31CJ2ML6MDj0dw@mail.gmail.com> <20250722130429.7418520b@batman.local.home>
-In-Reply-To: <20250722130429.7418520b@batman.local.home>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 22 Jul 2025 11:12:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whgSradO-F6XGH+fRRoO3wwzWjZ_m7Z+m2aTVPxwPrsog@mail.gmail.com>
-X-Gm-Features: Ac12FXw8Msp8bQOIa9FS5M3JcUkZEknhZa0tiohcg9UvPiSIpJJwczeZXsjNy8o
-Message-ID: <CAHk-=whgSradO-F6XGH+fRRoO3wwzWjZ_m7Z+m2aTVPxwPrsog@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] tracepoints: Add verifier that makes sure all
- defined tracepoints are used
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYu8JY=k-r0hnBRSkQQrFJ1Bz+ShdXNwC1TNeMt0eXaxeA@mail.gmail.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Tue, 22 Jul 2025 at 10:04, Steven Rostedt <rostedt@kernel.org> wrote:
->
-> I kept this to verify that the build time worked too, as the runtime
-> check is so much simpler and easier to implement.
+On Tue, Jul 22, 2025 at 11:30PM +0530, Naresh Kamboju wrote:
+> On Tue, 22 Jul 2025 at 19:27, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 6.12.40 release.
+> > There are 158 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 24 Jul 2025 13:43:10 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.12.40-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.12.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> With addition to the previous report on the stable-rc 6.15.8-rc1 review
+> While building allyesconfig build for arm64 and x86 with the toolchain
+> clang-nightly version 22.0.0 the following build warnings / errors
+> noticed on the stable-rc 6.12.40-rc1 review.
+> 
+> Regression Analysis:
+> - New regression? Yes
+> - Reproducibility? Yes
+> 
+> Build regression: arm64 x86 kcsan_test.c error variable 'dummy' is
+> uninitialized when passed as a const pointer argument here
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> ## Build log
+> 
+> kernel/kcsan/kcsan_test.c:591:41: error: variable 'dummy' is
+> uninitialized when passed as a const pointer argument here
+> [-Werror,-Wuninitialized-const-pointer]
+>   591 |         KCSAN_EXPECT_READ_BARRIER(atomic_read(&dummy), false);
+>       |                                                ^~~~~
+> 1 error generated.
 
-Honestly, do it for your 8own private verification.
+Thanks for catching this. Newer versions of Clang seem to be getting
+smarter. We can silence the warning with the below patch:
 
-Don't sent out the patch and expect anybody else to care.
+From 56c920457a4e7077b83aafb0c9c8105fb98b0158 Mon Sep 17 00:00:00 2001
+From: Marco Elver <elver@google.com>
+Date: Tue, 22 Jul 2025 20:19:17 +0200
+Subject: [PATCH] kcsan/test: Initialize dummy variable
 
-The static verification may make sense. Adding code to the kernel just
-to then do runtime verification does NOT.
+Newer compiler versions rightfully point out:
 
-This is not a "criticcal correctness" issue. This is a "help make
-people not waste memory pointlessly by having tracepoints that aren't
-used"
+ kernel/kcsan/kcsan_test.c:591:41: error: variable 'dummy' is
+ uninitialized when passed as a const pointer argument here
+ [-Werror,-Wuninitialized-const-pointer]
+   591 |         KCSAN_EXPECT_READ_BARRIER(atomic_read(&dummy), false);
+       |                                                ^~~~~
+ 1 error generated.
 
-There is *NO* reason to add kernel code for this. Zero. Nada. None.
+Although this particular test does not care about the value stored in
+the dummy atomic variable, let's silence the warning.
 
-               Linus
+Link: https://lkml.kernel.org/r/CA+G9fYu8JY=k-r0hnBRSkQQrFJ1Bz+ShdXNwC1TNeMt0eXaxeA@mail.gmail.com
+Fixes: 8bc32b348178 ("kcsan: test: Add test cases for memory barrier instrumentation")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ kernel/kcsan/kcsan_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+index c2871180edcc..49ab81faaed9 100644
+--- a/kernel/kcsan/kcsan_test.c
++++ b/kernel/kcsan/kcsan_test.c
+@@ -533,7 +533,7 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	struct kcsan_scoped_access *reorder_access = NULL;
+ #endif
+ 	arch_spinlock_t arch_spinlock = __ARCH_SPIN_LOCK_UNLOCKED;
+-	atomic_t dummy;
++	atomic_t dummy = ATOMIC_INIT(0);
+ 
+ 	KCSAN_TEST_REQUIRES(test, reorder_access != NULL);
+ 	KCSAN_TEST_REQUIRES(test, IS_ENABLED(CONFIG_SMP));
+-- 
+2.50.0.727.gbf7dc18ff4-goog
