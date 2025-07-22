@@ -1,210 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8F4257ACF;
-	Tue, 22 Jul 2025 15:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B60E25B1C4;
+	Tue, 22 Jul 2025 15:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753197598; cv=none; b=UE6+I/84OxMgdH+P7Fgcaxr6Vs16bPlCuMHES3OeRbzawFL47KdAAJIbt4pEaSLJBba3GiGn1MAWjsGiNkN19o2bP8eACtA1a2NSUubRc/bz4xdQqSZA1mRtdUIJGlSF4rOB4uPiRvw4r3TuaCTw/qNYDXbE1a9eVZdttXy84fk=
+	t=1753197685; cv=none; b=sY0wdhFe7JVhDemzSFX96mploN3f3tEduNoF/7DKOyEbJqNJq8SFEhriochaQFvGLIgQqyJB0zL6N2zXBdwYNAwtipMmC5ZJqtHG4OMi+xfWC0fJd9oRvj6S2swLpjFHTrl1c21i3KkdFswIpUGaVlHLAf/j3v/VP8GWDqcPB4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753197598; c=relaxed/simple;
-	bh=+sGqgGjgNmnjMLda+apmd8ND1PGuNPsgCimJgbyGk7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hOEbUvLwtbw8Cnze9oVQmR5Zz5pCRe0hJCQWpDyiCTn/8CLVrNE89oP26hm2E8RT2q/FmJPpLQ+mZ49fW9hxc5fbearMnScdU6dKDSs2y7ITz4KsA63DslxGUIgIlI8sF0XnR1ylSiOPPChpxGG+RKoNy2S9M3x3F5ya/o/FXTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uz3LmLj1; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753197685; c=relaxed/simple;
+	bh=gOCuZvkmjwwVrNCSUeQSPcF994zEyy2TkJIMewgYLQc=;
+	h=Message-ID:Date:From:To:Cc:Subject; b=Hvjn5RS1iDI6m4ZZRX5KIUHV7HGPhDWIzRC8LYtMRhRD/aXUzI6AwhQnkCQypeD1MvJakYwgagdcXK3Bv/nvlnoYvrzUIO+9YduJG5fIuYgbt+O6l/t8InBKVqV+Dv+FwtLNYnkcqSB64CwcxmNRIGT1ic7PDLyvdaUJjzvsS7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=utueuAUP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uz3LmLj1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753197596; x=1784733596;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+sGqgGjgNmnjMLda+apmd8ND1PGuNPsgCimJgbyGk7c=;
-  b=Uz3LmLj1c1BjNjuPjCV2Wyat9KuNAISD1j6mTVQ6zFvwKUV23jkw+vce
-   Ql4n+PVyq25ebCxO02i+ydKb8smyKFXoM8V8uoEVOqE+GI12i6TYHNzEt
-   gTRzeVqNS7mhpDEtMs7I5/CWwf14MM5LGV1g2C26KsSRuA88LeVYrBHg+
-   Wza1a7MfrpQ3jz9NQuLkpnB3+oN5Hucbn0/9xo3wKqKLenGKiZ1azZgxD
-   354QlVqBhYGL4EfSlD98LfeBaEWDmBrVqMsocqfmt0uleAj4HHv0hTRmY
-   M4SmotygfANE1jJQ2PUROxrhRRwgx4S+ldh5QuxZ711QhU4rBYQI6CHRg
-   g==;
-X-CSE-ConnectionGUID: avK7V8dsQLeM+CVONluCOA==
-X-CSE-MsgGUID: s1YwXJACThWFtwkQVVuywA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="66139106"
-X-IronPort-AV: E=Sophos;i="6.16,331,1744095600"; 
-   d="scan'208";a="66139106"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 08:19:56 -0700
-X-CSE-ConnectionGUID: 9DE0fK94Ry2JcwHou+v5wg==
-X-CSE-MsgGUID: Xxcp89MjQdCNtvqUEpn02Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,331,1744095600"; 
-   d="scan'208";a="158476000"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 22 Jul 2025 08:19:54 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ueEmV-000ITD-3A;
-	Tue, 22 Jul 2025 15:19:51 +0000
-Date: Tue, 22 Jul 2025 23:19:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hyeonki Hong <hhk7734@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dongjin Kim <tobetter@gmail.com>
-Subject: [tobetter:odroid-6.16.y 7/44]
- drivers/input/touchscreen/dwav-usb-mt.c:462:3: error: call to undeclared
- library function 'strlcpy' with type '__size_t (char *, const char *,
- __size_t)' (aka 'unsigned int (char *, const char *, unsigned int)'); ISO
- C99 and later do not support implicit ...
-Message-ID: <202507222311.butw2vKW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="utueuAUP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D160C4CEF1;
+	Tue, 22 Jul 2025 15:21:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753197685;
+	bh=gOCuZvkmjwwVrNCSUeQSPcF994zEyy2TkJIMewgYLQc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=utueuAUPwZ9GZM3TGpEKRZKwfGCnI/a4v4upmUdDWVN+v8/xb7O9JQAvnKwjRi5TX
+	 C2gqV00L3ZchlLoMJJTUvTf+EPLz9V7IHnw4E2OSiZl+HHnD8TkKodNcVUUGHP+baJ
+	 6j5EmA/GwiFilD7qFoZKrVIaRxqgEUkLaHy4CLYNBnCZUNwzJh3DtGS3Nmo9s5BPP3
+	 wvSE5qj64sIJyiyOgg3xeIW/FCqKi1r8db050Nhd2bbI0I2e6QGB0fwvV5oNODdBV7
+	 6qjXJWAt7Kv+3MIkLArKud/gHw3eWY/FkRpkpwZULN0tU4iahzhYtdZvHX8lFAJTcJ
+	 lpGMurVhBKhWw==
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@kernel.org>)
+	id 1ueEoX-0000000AYxs-2fFC;
+	Tue, 22 Jul 2025 11:21:57 -0400
+Message-ID: <20250722152053.343028095@kernel.org>
+User-Agent: quilt/0.68
+Date: Tue, 22 Jul 2025 11:20:53 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v3 0/5] tracepoints: Add warnings for unused tracepoints and trace events
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-tree:   https://github.com/tobetter/linux odroid-6.16.y
-head:   ac46a60ec2fb958f1dc2e5871e122abb98ac0da9
-commit: 804dbb7299c970e3cb07ee5eac596f8ca42f620d [7/44] ODROID-COMMON: input/touchscreen: Add D-WAV Multitouch driver.
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250722/202507222311.butw2vKW-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507222311.butw2vKW-lkp@intel.com/reproduce)
+Every trace event can take up to 5K of memory in text and metadata regardless
+if they are used or not. Trace events should not be created if they are not
+used.  Currently there's over a hundred events in the kernel that are defined
+but unused, either because their callers were removed without removing the
+trace event with it, or a config hides the trace event caller but not the
+trace event itself. And in some cases, trace events were simply added but were
+never called for whatever reason. The number of unused trace events continues
+to grow.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507222311.butw2vKW-lkp@intel.com/
+This patch series aims to fix this.
 
-All errors (new ones prefixed by >>):
+The first patch creates a new section called __tracepoint_check, where all
+callers of a tracepoint creates a variable that is placed in this section with
+a pointer to the tracepoint they use. Then on boot up, it iterates this
+section and will modify the tracepoint's "func" field to a value of 1 (all
+tracepoints "func" fields are initialized to NULL and is only set when they
+are registered). This takes place before any tracepoint can be registered.
 
->> drivers/input/touchscreen/dwav-usb-mt.c:462:3: error: call to undeclared library function 'strlcpy' with type '__size_t (char *, const char *, __size_t)' (aka 'unsigned int (char *, const char *, unsigned int)'); ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     462 |                 strlcpy(dwav_usb_mt->name,
-         |                 ^
-   drivers/input/touchscreen/dwav-usb-mt.c:462:3: note: include the header <string.h> or explicitly provide a declaration for 'strlcpy'
-   1 error generated.
+Then each tracepoint is iterated on and if any tracepoint does not have its
+"func" field set to 1 a warning is triggered and every tracepoint that doesn't
+have that field set is printed. The "func" field is then reset back to NULL.
 
+The second patch modifies scripts/sorttable.c to read the __tracepoint_check
+section. It sorts it, and then reads the __tracepoint_ptr section that has all
+compiled in tracepoints. It makes sure that every tracepoint is found in the
+check section and if not, it prints a warning message about it. This lists the
+missing tracepoints at build time.
 
-vim +462 drivers/input/touchscreen/dwav-usb-mt.c
+The third patch updates sorttable to work for arm64 when compiled with gcc. As
+gcc's arm64 build doesn't put addresses in their section but saves them off in
+the RELA sections. This mostly takes the work done that was needed to do the
+mcount sorting at boot up on arm64.
 
-   397	
-   398	static int dwav_usb_mt_probe(struct usb_interface *intf,
-   399				  const struct usb_device_id *id)
-   400	{
-   401		struct dwav_usb_mt *dwav_usb_mt = NULL;
-   402		struct input_dev *input_dev = NULL;
-   403		struct usb_endpoint_descriptor *endpoint;
-   404		struct usb_device *udev = interface_to_usbdev(intf);
-   405	
-   406		int err = 0;
-   407	
-   408		endpoint = dwav_usb_mt_get_input_endpoint(intf->cur_altsetting);
-   409		if (!endpoint)
-   410			return  -ENXIO;
-   411	
-   412		dwav_usb_mt = kzalloc(sizeof(struct dwav_usb_mt), GFP_KERNEL);
-   413		if (!dwav_usb_mt)
-   414			return  -ENOMEM;
-   415	
-   416		dwav_usb_mt->dev_id = id->driver_info;
-   417	
-   418		dwav_usb_mt->finger = kzalloc(sizeof(struct finger_t) *
-   419					      DEV_INFO[dwav_usb_mt->dev_id].max_finger,
-   420					      GFP_KERNEL);
-   421	
-   422		if (!dwav_usb_mt->finger)
-   423			goto err_free_mem;
-   424	
-   425		input_dev = input_allocate_device();
-   426		if (!input_dev)
-   427			goto err_free_mem;
-   428	
-   429		dwav_usb_mt->data_size = sizeof(struct dwav_raw);
-   430		dwav_usb_mt->data = usb_alloc_coherent(udev, dwav_usb_mt->data_size,
-   431				GFP_KERNEL, &dwav_usb_mt->data_dma);
-   432		if (!dwav_usb_mt->data)
-   433			goto err_free_mem;
-   434	
-   435		dwav_usb_mt->irq = usb_alloc_urb(0, GFP_KERNEL);
-   436		if (!dwav_usb_mt->irq) {
-   437			dev_dbg(&intf->dev,
-   438					"%s - usb_alloc_urb failed: usbtouch->irq\n",
-   439					__func__);
-   440			goto err_free_buffers;
-   441		}
-   442	
-   443		if (usb_endpoint_type(endpoint) == USB_ENDPOINT_XFER_INT)   {
-   444			usb_fill_int_urb(dwav_usb_mt->irq, udev,
-   445				usb_rcvintpipe(udev, endpoint->bEndpointAddress),
-   446				dwav_usb_mt->data, dwav_usb_mt->data_size,
-   447				dwav_usb_mt_irq, dwav_usb_mt, endpoint->bInterval);
-   448		} else {
-   449			usb_fill_bulk_urb(dwav_usb_mt->irq, udev,
-   450				 usb_rcvbulkpipe(udev, endpoint->bEndpointAddress),
-   451				 dwav_usb_mt->data, dwav_usb_mt->data_size,
-   452				 dwav_usb_mt_irq, dwav_usb_mt);
-   453		}
-   454	
-   455		dwav_usb_mt->irq->dev = udev;
-   456		dwav_usb_mt->irq->transfer_dma = dwav_usb_mt->data_dma;
-   457		dwav_usb_mt->irq->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-   458	
-   459		dwav_usb_mt->interface  = intf;
-   460	
-   461		if (udev->manufacturer)
- > 462			strlcpy(dwav_usb_mt->name,
-   463					udev->manufacturer, sizeof(dwav_usb_mt->name));
-   464	
-   465		if (udev->product) {
-   466			if (udev->manufacturer)
-   467				strlcat(dwav_usb_mt->name,
-   468						" ", sizeof(dwav_usb_mt->name));
-   469	
-   470			strlcat(dwav_usb_mt->name,
-   471					udev->product, sizeof(dwav_usb_mt->name));
-   472		}
-   473	
-   474		if (!strlen(dwav_usb_mt->name)) {
-   475			snprintf(dwav_usb_mt->name, sizeof(dwav_usb_mt->name),
-   476					"D-WAV Scientific MultiTouch %04x:%04x",
-   477					le16_to_cpu(udev->descriptor.idVendor),
-   478					le16_to_cpu(udev->descriptor.idProduct));
-   479		}
-   480	
-   481		usb_make_path(udev, dwav_usb_mt->phys, sizeof(dwav_usb_mt->phys));
-   482		strlcat(dwav_usb_mt->phys, "/input0", sizeof(dwav_usb_mt->phys));
-   483	
-   484		usb_to_input_id(udev, &input_dev->id);
-   485	
-   486		input_dev->dev.parent = &intf->dev;
-   487	
-   488		err = dwav_usb_mt_init(dwav_usb_mt, (void *)input_dev);
-   489		if (err)
-   490			goto err_free_urb;
-   491	
-   492		usb_set_intfdata(intf, dwav_usb_mt);
-   493	
-   494		dev_info(&intf->dev, "%s\n", DEV_INFO[dwav_usb_mt->dev_id].name);
-   495	
-   496		return 0;
-   497	
-   498	err_free_urb:
-   499		usb_free_urb(dwav_usb_mt->irq);
-   500	
-   501	err_free_buffers:
-   502		dwav_usb_mt_free_buffers(udev, dwav_usb_mt);
-   503	
-   504	err_free_mem:
-   505		if (input_dev)
-   506			input_free_device(input_dev);
-   507		kfree(dwav_usb_mt);
-   508	
-   509		return err;
-   510	}
-   511	
+The fourth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as
+well. There was several locations that adds tracepoints in the kernel proper
+that are only used in modules. It was getting quite complex trying to move
+things around that I just decided to make any tracepoint in a
+EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
+functions. An unused static function gets a warning but an unused global one
+does not.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The last patch updates the trace_ftrace_test_filter boot up self test. That
+selftest creates a trace event to run a bunch of filter tests on it without
+actually calling the tracepoint. To quiet the warning, the selftest tracepoint
+is called within a if (!trace_<event>_enabled()) section, where it will not be
+optimized out, nor will it be called.
+
+Changes since v2: https://lore.kernel.org/all/20250612235827.011358765@goodmis.org/
+
+- Fixed some typos in the above change log, and in comments within patches.
+
+- Have the build warning on unused events be default off. There is still too
+  many events that are unused to make a warning a default. But after all
+  current offenders are fixed, I plan on making it default enabled to prevent
+  new trace events from being added when they are unused.
+
+Steven Rostedt (5):
+      tracepoints: Add verifier that makes sure all defined tracepoints are used
+      tracing: sorttable: Add a tracepoint verification check at build time
+      tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
+      tracepoint: Do not warn for unused event that is exported
+      tracing: Call trace_ftrace_test_filter() for the event
+
+----
+ include/asm-generic/vmlinux.lds.h  |   1 +
+ include/linux/tracepoint.h         |  13 ++
+ kernel/trace/Kconfig               |  30 +++
+ kernel/trace/trace_events_filter.c |   4 +
+ kernel/tracepoint.c                |  26 +++
+ scripts/Makefile                   |   4 +
+ scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
+ 7 files changed, 436 insertions(+), 86 deletions(-)
