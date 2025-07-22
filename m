@@ -1,298 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD5727E077;
-	Tue, 22 Jul 2025 19:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD48223339;
+	Tue, 22 Jul 2025 21:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753211488; cv=none; b=qO9XPOWxXUa2rLt+kbUJvr7yuJh+2KCZA6qc84XR7QtCHUmwlhIwT+GOLu4h6t58iesPe5aei5AbSOdCZ4LycmyY9nrH0wE4pec4uOk8HVisCLZe8Nt/wjhlGfUMzpqSQTRKPmGmORPGlzIp7wVUDpXgVCmQYRvexwN61lyi7hQ=
+	t=1753219189; cv=none; b=ANKDamnQ0F3oDfB+JxuaHb6TjfHK7xrz1FtzfLOwXiTR9gWPklwJ1dhgaiLreTmq6jKaC/EttRrp1/vnicq/os+IsYoJfWn6BK69gTVJl/V4OnnJ8QYZ17afHD8fx5qHvDiBusM97Jy9XSRQf2EfNeDB7FkZLx0wuwL3a0qDZEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753211488; c=relaxed/simple;
-	bh=AlDGH8LMnbCC2+qZqNb7xkjTZR3D+b+9XwvWK4epyZQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aqUTrbaZjyLx3Xoqy/7ocq8YhnOrHXs4V2tMB22cFxD+jZHdcZqWY9rP1jcPSME1mIUeF8fnXdn+19Sb+DCgM/siNSv0yPpdT62k5BsR7fOZ+lLjxqDXWJ1VtRxHz/ZFW6vBwVayYtwsWQ0Kna4tj8bSJ8ORkZ77/ySbA9JFI9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q0YLnxi+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753219189; c=relaxed/simple;
+	bh=VAFhRCJQknowV+AypDyaME1Ab2ilgI4tc2/Wbqr0Ux0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LjkuF2JYJkAOTKEML0zUE8nPhuBgd3RTkn1sa1zPGz5UbgoSoGH8T11iAkvCMEDHzP2hCmUZIGbAex3rNJfPmACgFIwdS3t7+rqrgv/ykn2bwtrBw3huwzoPtsdfJ90YnobZ2N295VVj+oIACk1Ouwc+VjUlrNdwtbYYz/jV/Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B68YggWD; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q0YLnxi+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C209EC4CEEB;
-	Tue, 22 Jul 2025 19:11:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753211488;
-	bh=AlDGH8LMnbCC2+qZqNb7xkjTZR3D+b+9XwvWK4epyZQ=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Q0YLnxi+Ysu6XkdzqTG4tTl81NcHj6SZYiJJNsjsli8hQLmsbJjK+i9bYjfjPfS/K
-	 5xNk/Ne4cKwwNUOdJvQ5MtThdXQqIqKKqkbWi+IOlyF4ISUw92JF0vVWPohP90fa1U
-	 o5P1Quu2eKE9oBGIPdV44xONi+mmFQs0ydh6ep2SKoaZJWEla7iewcsaiXmcpHdjSp
-	 FxUNxbI7e9txXUifEB6+/T8DmqYGsQpAdtyORAIfNMccGRfy89BrzfqwFVWGLS2vJt
-	 B7MkCigu14mt5L3Dai4mLD289K6SNO8q75QfDy+JHTwoEV0XxoLiLIo7RU9YIy13Ha
-	 ODyG8xjDfHPOQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 22 Jul 2025 12:11:18 -0700
-Subject: [PATCH v2] usb: atm: cxacru: Merge cxacru_upload_firmware() into
- cxacru_heavy_init()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B68YggWD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753219188; x=1784755188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VAFhRCJQknowV+AypDyaME1Ab2ilgI4tc2/Wbqr0Ux0=;
+  b=B68YggWDuPpolK0rp2pSFGGJADj69vLqhCmXvt7kuIfk/MlIaazVmf07
+   SSnLsccWbHvv/IePxu6lNCja9mRg0mKGKiTrNLriaiPU3FW7BT2bT6knn
+   7Tesh3rt0RryAaz3Me22Pb1jbsY0lnmi8s7aaWPx3v7maJr3H5WVsWeMZ
+   AtHWHxeFJjAFNtmq9Ga9lL83oQNL045itWq5xg4/HjUdyafRI2Wgr3xnf
+   x586rgks7pKusaYANCtG5jgIZF40bnYD518z00i6KUOO7t1S7hxBkBht3
+   4RimUUSYh8VPLewHIiqM88lrqZr2v0EB2j7RNJAv7AOaSj5RCeu8+RcDZ
+   Q==;
+X-CSE-ConnectionGUID: 6UEuobknQPSKSNT8wsKAzw==
+X-CSE-MsgGUID: BGoRZHoDSfScjI1sMIPUkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="59286775"
+X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
+   d="scan'208";a="59286775"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 14:19:46 -0700
+X-CSE-ConnectionGUID: QPx254goTECh3UVjxe55jg==
+X-CSE-MsgGUID: BMGHljmHRY+SotKzCX9Gdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,332,1744095600"; 
+   d="scan'208";a="190217200"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 22 Jul 2025 14:19:44 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ueKOj-000IiB-05;
+	Tue, 22 Jul 2025 21:19:41 +0000
+Date: Wed, 23 Jul 2025 05:19:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org, Johannes Weiner <hannes@cmpxchg.org>,
+	Christian Koenig <christian.koenig@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dave Chinner <david@fromorbit.com>,
+	Kairui Song <kasong@tencent.com>, Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH 11/15] ttm/pool: enable memcg tracking and shrinker. (v2)
+Message-ID: <202507230300.pUkL5SQT-lkp@intel.com>
+References: <20250722014942.1878844-12-airlied@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250722-usb-cxacru-fix-clang-21-uninit-warning-v2-1-6708a18decd2@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFXif2gC/5WNQQ6CQBAEv0L27JjdRSB48h+GAwwjTCSLmQXEE
- P7uyA+8dXU6XZuJJEzRXJPNCC0ceQwK/pQY7OvQEXCrbLz1mS1cBnNsANcaZYYHr4CDjsA7mAM
- HnuBdi4YOyktq2zLHvEFn9OwlpPNDdK+Ue47TKJ/Du7hf+7diceCgJXVkHlNblLcnSaDhPEpnq
- n3fv6akkVHdAAAA
-X-Change-ID: 20250715-usb-cxacru-fix-clang-21-uninit-warning-9430d96c6bc1
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8750; i=nathan@kernel.org;
- h=from:subject:message-id; bh=AlDGH8LMnbCC2+qZqNb7xkjTZR3D+b+9XwvWK4epyZQ=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBn1j+L+z+SY59s5Se8uH+MHi4lHJmzizpHqUXLuXJwkw
- t2YeKypo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEykqJWRYed30+OpB2ZfNO+M
- 72jYdNfi8TX1mNKk/Czxty9FefKcFzD8FT531X3ifO2IJb//yUxsl2lZ/GP5xrOyl2NrtS3cX3K
- +4gcA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250722014942.1878844-12-airlied@gmail.com>
 
-After a recent change in clang to expose uninitialized warnings from
-const variables [1], there is a warning in cxacru_heavy_init():
+Hi Dave,
 
-  drivers/usb/atm/cxacru.c:1104:6: error: variable 'bp' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-   1104 |         if (instance->modem_type->boot_rom_patch) {
-        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/usb/atm/cxacru.c:1113:39: note: uninitialized use occurs here
-   1113 |         cxacru_upload_firmware(instance, fw, bp);
-        |                                              ^~
-  drivers/usb/atm/cxacru.c:1104:2: note: remove the 'if' if its condition is always true
-   1104 |         if (instance->modem_type->boot_rom_patch) {
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/usb/atm/cxacru.c:1095:32: note: initialize the variable 'bp' to silence this warning
-   1095 |         const struct firmware *fw, *bp;
-        |                                       ^
-        |                                        = NULL
+kernel test robot noticed the following build errors:
 
-While the warning is technically correct that bp is conditionally passed
-uninitialized to cxacru_upload_firmware(), it is ultimately a false
-positive warning on the uninitialized use of bp because the same
-condition that initializes bp, instance->modem_type->boot_rom_patch, is
-the same one that gates the use of bp within cxacru_upload_firmware().
-As this warning occurs in clang's frontend before inlining occurs, it
-cannot know that these conditions are indentical to avoid the warning.
+[auto build test ERROR on drm/drm-next]
+[cannot apply to akpm-mm/mm-everything linus/master v6.16-rc7 next-20250722]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Manually inline cxacru_upload_firmware() into cxacru_heavy_init(), as
-that is its only callsite, so that clang can see that bp is initialized
-and used under the same condition, clearing up the warning without any
-functional changes to the code (LLVM was already doing this inlining
-later).
+url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Airlie/drm-ttm-use-gpu-mm-stats-to-track-gpu-memory-allocations-v4/20250722-104402
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+patch link:    https://lore.kernel.org/r/20250722014942.1878844-12-airlied%40gmail.com
+patch subject: [PATCH 11/15] ttm/pool: enable memcg tracking and shrinker. (v2)
+config: i386-buildonly-randconfig-006-20250722 (https://download.01.org/0day-ci/archive/20250723/202507230300.pUkL5SQT-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230300.pUkL5SQT-lkp@intel.com/reproduce)
 
-Cc: stable@vger.kernel.org
-Fixes: 1b0e61465234 ("[PATCH] USB ATM: driver for the Conexant AccessRunner chipset cxacru")
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2102
-Link: https://github.com/llvm/llvm-project/commit/2464313eef01c5b1edf0eccf57a32cdee01472c7 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Rather than initialize bp to NULL, manually inline
-  cxacru_upload_firmware() into cxacru_heavy_init() so that clang can
-  see the matching conditions for bp's initialization and use (based on
-  feedback from Greg).
-- Drop accessrunner-general@lists.sourceforge.net, as I got bounces when
-  sending to it unsubscribed.
-- Link to v1: https://lore.kernel.org/r/20250715-usb-cxacru-fix-clang-21-uninit-warning-v1-1-de6c652c3079@kernel.org
----
- drivers/usb/atm/cxacru.c | 106 ++++++++++++++++++++++-------------------------
- 1 file changed, 49 insertions(+), 57 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507230300.pUkL5SQT-lkp@intel.com/
 
-diff --git a/drivers/usb/atm/cxacru.c b/drivers/usb/atm/cxacru.c
-index a12ab90b3db75b230dcf319a949e6d10dbac0363..68a8e9de8b4fe95be31b561f7f5df7e3c59142ae 100644
---- a/drivers/usb/atm/cxacru.c
-+++ b/drivers/usb/atm/cxacru.c
-@@ -980,25 +980,60 @@ static int cxacru_fw(struct usb_device *usb_dev, enum cxacru_fw_request fw,
- 	return ret;
- }
- 
--static void cxacru_upload_firmware(struct cxacru_data *instance,
--				   const struct firmware *fw,
--				   const struct firmware *bp)
-+
-+static int cxacru_find_firmware(struct cxacru_data *instance,
-+				char *phase, const struct firmware **fw_p)
- {
--	int ret;
-+	struct usbatm_data *usbatm = instance->usbatm;
-+	struct device *dev = &usbatm->usb_intf->dev;
-+	char buf[16];
-+
-+	sprintf(buf, "cxacru-%s.bin", phase);
-+	usb_dbg(usbatm, "cxacru_find_firmware: looking for %s\n", buf);
-+
-+	if (request_firmware(fw_p, buf, dev)) {
-+		usb_dbg(usbatm, "no stage %s firmware found\n", phase);
-+		return -ENOENT;
-+	}
-+
-+	usb_info(usbatm, "found firmware %s\n", buf);
-+
-+	return 0;
-+}
-+
-+static int cxacru_heavy_init(struct usbatm_data *usbatm_instance,
-+			     struct usb_interface *usb_intf)
-+{
-+	const struct firmware *fw, *bp;
-+	struct cxacru_data *instance = usbatm_instance->driver_data;
- 	struct usbatm_data *usbatm = instance->usbatm;
- 	struct usb_device *usb_dev = usbatm->usb_dev;
- 	__le16 signature[] = { usb_dev->descriptor.idVendor,
- 			       usb_dev->descriptor.idProduct };
- 	__le32 val;
-+	int ret;
- 
--	usb_dbg(usbatm, "%s\n", __func__);
-+	ret = cxacru_find_firmware(instance, "fw", &fw);
-+	if (ret) {
-+		usb_warn(usbatm_instance, "firmware (cxacru-fw.bin) unavailable (system misconfigured?)\n");
-+		return ret;
-+	}
-+
-+	if (instance->modem_type->boot_rom_patch) {
-+		ret = cxacru_find_firmware(instance, "bp", &bp);
-+		if (ret) {
-+			usb_warn(usbatm_instance, "boot ROM patch (cxacru-bp.bin) unavailable (system misconfigured?)\n");
-+			release_firmware(fw);
-+			return ret;
-+		}
-+	}
- 
- 	/* FirmwarePllFClkValue */
- 	val = cpu_to_le32(instance->modem_type->pll_f_clk);
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, PLLFCLK_ADDR, (u8 *) &val, 4);
- 	if (ret) {
- 		usb_err(usbatm, "FirmwarePllFClkValue failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* FirmwarePllBClkValue */
-@@ -1006,7 +1041,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, PLLBCLK_ADDR, (u8 *) &val, 4);
- 	if (ret) {
- 		usb_err(usbatm, "FirmwarePllBClkValue failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Enable SDRAM */
-@@ -1014,7 +1049,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, SDRAMEN_ADDR, (u8 *) &val, 4);
- 	if (ret) {
- 		usb_err(usbatm, "Enable SDRAM failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Firmware */
-@@ -1022,7 +1057,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, FW_ADDR, fw->data, fw->size);
- 	if (ret) {
- 		usb_err(usbatm, "Firmware upload failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Boot ROM patch */
-@@ -1031,7 +1066,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 		ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, BR_ADDR, bp->data, bp->size);
- 		if (ret) {
- 			usb_err(usbatm, "Boot ROM patching failed: %d\n", ret);
--			return;
-+			goto done;
- 		}
- 	}
- 
-@@ -1039,7 +1074,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_fw(usb_dev, FW_WRITE_MEM, 0x2, 0x0, SIG_ADDR, (u8 *) signature, 4);
- 	if (ret) {
- 		usb_err(usbatm, "Signature storing failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	usb_info(usbatm, "starting device\n");
-@@ -1051,7 +1086,7 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	}
- 	if (ret) {
- 		usb_err(usbatm, "Passing control to firmware failed: %d\n", ret);
--		return;
-+		goto done;
- 	}
- 
- 	/* Delay to allow firmware to start up. */
-@@ -1065,53 +1100,10 @@ static void cxacru_upload_firmware(struct cxacru_data *instance,
- 	ret = cxacru_cm(instance, CM_REQUEST_CARD_GET_STATUS, NULL, 0, NULL, 0);
- 	if (ret < 0) {
- 		usb_err(usbatm, "modem failed to initialize: %d\n", ret);
--		return;
--	}
--}
--
--static int cxacru_find_firmware(struct cxacru_data *instance,
--				char *phase, const struct firmware **fw_p)
--{
--	struct usbatm_data *usbatm = instance->usbatm;
--	struct device *dev = &usbatm->usb_intf->dev;
--	char buf[16];
--
--	sprintf(buf, "cxacru-%s.bin", phase);
--	usb_dbg(usbatm, "cxacru_find_firmware: looking for %s\n", buf);
--
--	if (request_firmware(fw_p, buf, dev)) {
--		usb_dbg(usbatm, "no stage %s firmware found\n", phase);
--		return -ENOENT;
--	}
--
--	usb_info(usbatm, "found firmware %s\n", buf);
--
--	return 0;
--}
--
--static int cxacru_heavy_init(struct usbatm_data *usbatm_instance,
--			     struct usb_interface *usb_intf)
--{
--	const struct firmware *fw, *bp;
--	struct cxacru_data *instance = usbatm_instance->driver_data;
--	int ret = cxacru_find_firmware(instance, "fw", &fw);
--
--	if (ret) {
--		usb_warn(usbatm_instance, "firmware (cxacru-fw.bin) unavailable (system misconfigured?)\n");
--		return ret;
-+		goto done;
- 	}
- 
--	if (instance->modem_type->boot_rom_patch) {
--		ret = cxacru_find_firmware(instance, "bp", &bp);
--		if (ret) {
--			usb_warn(usbatm_instance, "boot ROM patch (cxacru-bp.bin) unavailable (system misconfigured?)\n");
--			release_firmware(fw);
--			return ret;
--		}
--	}
--
--	cxacru_upload_firmware(instance, fw, bp);
--
-+done:
- 	if (instance->modem_type->boot_rom_patch)
- 		release_firmware(bp);
- 	release_firmware(fw);
+All errors (new ones prefixed by >>):
 
----
-base-commit: fdfa018c6962c86d2faa183187669569be4d513f
-change-id: 20250715-usb-cxacru-fix-clang-21-uninit-warning-9430d96c6bc1
+>> drivers/gpu/drm/ttm/ttm_pool.c:665:7: error: no member named 'memcg_data' in 'struct page'
+     665 |                         p->memcg_data = 0;
+         |                         ~  ^
+   drivers/gpu/drm/ttm/ttm_pool.c:1132:11: error: no member named 'memcg_data' in 'struct page'
+    1132 |                                 page->memcg_data = 0;
+         |                                 ~~~~  ^
+   2 errors generated.
 
-Best regards,
+
+vim +665 drivers/gpu/drm/ttm/ttm_pool.c
+
+   617	
+   618	/*
+   619	 * When restoring, restore backed-up content to the newly allocated page and
+   620	 * if successful, populate the page-table and dma-address arrays.
+   621	 */
+   622	static int ttm_pool_restore_commit(struct ttm_pool_tt_restore *restore,
+   623					   struct file *backup,
+   624					   const struct ttm_operation_ctx *ctx,
+   625					   struct ttm_pool_alloc_state *alloc)
+   626	
+   627	{
+   628		pgoff_t i, nr = 1UL << restore->order;
+   629		struct page **first_page = alloc->pages;
+   630		struct page *p;
+   631		int ret = 0;
+   632	
+   633		for (i = restore->restored_pages; i < nr; ++i) {
+   634			p = first_page[i];
+   635			if (ttm_backup_page_ptr_is_handle(p)) {
+   636				unsigned long handle = ttm_backup_page_ptr_to_handle(p);
+   637	
+   638				if (IS_ENABLED(CONFIG_FAULT_INJECTION) && ctx->interruptible &&
+   639				    should_fail(&backup_fault_inject, 1)) {
+   640					ret = -EINTR;
+   641					break;
+   642				}
+   643	
+   644				if (handle == 0) {
+   645					restore->restored_pages++;
+   646					continue;
+   647				}
+   648	
+   649				ret = ttm_backup_copy_page(backup, restore->alloced_page + i,
+   650							   handle, ctx->interruptible);
+   651				if (ret)
+   652					break;
+   653	
+   654				ttm_backup_drop(backup, handle);
+   655			} else if (p) {
+   656				/*
+   657				 * We could probably avoid splitting the old page
+   658				 * using clever logic, but ATM we don't care, as
+   659				 * we prioritize releasing memory ASAP. Note that
+   660				 * here, the old retained page is always write-back
+   661				 * cached.
+   662				 */
+   663				ttm_pool_split_for_swap(restore->pool, p);
+   664				copy_highpage(restore->alloced_page + i, p);
+ > 665				p->memcg_data = 0;
+   666				__free_pages(p, 0);
+   667			}
+   668	
+   669			restore->restored_pages++;
+   670			first_page[i] = ttm_backup_handle_to_page_ptr(0);
+   671		}
+   672	
+   673		if (ret) {
+   674			if (!restore->restored_pages) {
+   675				dma_addr_t *dma_addr = alloc->dma_addr ? &restore->first_dma : NULL;
+   676	
+   677				ttm_pool_unmap_and_free(restore->pool, restore->alloced_page,
+   678							dma_addr, restore->page_caching);
+   679				restore->restored_pages = nr;
+   680			}
+   681			return ret;
+   682		}
+   683	
+   684		ttm_pool_allocated_page_commit(restore->alloced_page, restore->first_dma,
+   685					       alloc, nr);
+   686		if (restore->page_caching == alloc->tt_caching || PageHighMem(restore->alloced_page))
+   687			alloc->caching_divide = alloc->pages;
+   688		restore->snapshot_alloc = *alloc;
+   689		restore->alloced_pages += nr;
+   690	
+   691		return 0;
+   692	}
+   693	
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
