@@ -1,109 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B456286881;
-	Wed, 23 Jul 2025 09:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724FD280325
+	for <llvm@lists.linux.dev>; Wed, 23 Jul 2025 09:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753264337; cv=none; b=J4J5rJIPJNnwiR+6JmzZmGQzBqXMVacRxAkwQxmW6w4lXQl6iJlWS4xkE5h6dwjNvoPzhuGy8OqaFtc+GmgnRA+c2Y5D93+3DlMynnQFI7zZ3Zcv5U130lV4f3MDzoWxEz0N66sydhABnnirNyfaYMbP/I6CWJziV7wXTxs87hI=
+	t=1753264477; cv=none; b=GgnQ/58Wv8Fghe0k2bp4pFH7GVoWT/JE3rfYpZyTuDOpnb/0qwTKzJP5SrjGiTv5wad671E7713DLIdb7ufeunTJxYjkPjEeaQW046BwHpcXmNrd7Ck39u+vZVDDjnE1g6egGuUn26AEZRHVu5qpAgj0qLkyL/4Ua0eX/SYM5vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753264337; c=relaxed/simple;
-	bh=S7rUueZYDWfi2XdfEF4FIRPsKPUm1VdHKBUcSJ4JCHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pPw4Fnfy23Mb1EUXXEcL3hMMFVDw2DKSwXbN8i/fxzTCddUU44TwaJkfC63HCqSG2L0GaOeZTe+ruGUvnoKFRBcbOiK8ZG1wVPrLOcsjY3cTj6ojEb5sWSISA19vGeBH+BvpJHdiH2AZgdy+jDQYWANRN7Rfw7Y18oAMTDlJRqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PG7X9Vye; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753264477; c=relaxed/simple;
+	bh=ydH+Obkp/3P1ccbLhAL7B7uBaevdmyUwuJg0krkTG4k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rF7kFfRpabg+eJ+E3qnYLPTc734ZuKTTU1c2HUK3gJ9YhOw9ohjQWvlLPNTGQaX4uMFxm7pUDIkST43rhIZ76rvs5nWwmsQMmmg3pKhdRD1NSxas3vRtygjP/ou3Ki2+Zo/s15O5989fTXOh7TxyPeLEZGqytxuH/gh9ZIOyVPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jR+rdDGi; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PG7X9Vye"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753264337; x=1784800337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S7rUueZYDWfi2XdfEF4FIRPsKPUm1VdHKBUcSJ4JCHc=;
-  b=PG7X9VyeLqAk8q4hPPh2CC8a+k0nIfD92OqF9ww2rajHERYL6viNWj+5
-   k3udZw8c+mUFZfxaB0t07vdBQttpEqo93bkU+UtJS4WHAyImItJFsnjSL
-   dGb2rG+Nl5A6wq1psyh3YIN4pCnhKDbBjwrlUBBDXJYC8dNobpT8MDnRC
-   4wBl0qHKGV7XrvP0bdHWa0WkjYbNjc3aKUCu7IDYb9sXG1H5wYz+6a5LQ
-   9Pal1UpELl+uOZQ03OAvLzMtRfSUbRl+eOUc4b5zzoCU91d4ZyKx6hI/a
-   ORzbLE1AYeYqxl3E8RatqyRd/vC0eiH7h/fZzSYdgMMoTDXhnwLCYuQYu
-   A==;
-X-CSE-ConnectionGUID: hg5C7izVQimjZCgAcgPAlQ==
-X-CSE-MsgGUID: dUrZrJp0SGCGE4TpMvYO2g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="72997166"
-X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="72997166"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2025 02:52:16 -0700
-X-CSE-ConnectionGUID: 6/y5p3vKShivz3vJh21Bow==
-X-CSE-MsgGUID: xj2c8mPEQvC8svMxzk3i0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="164843926"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 23 Jul 2025 02:52:10 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ueW8u-000JCZ-0M;
-	Wed, 23 Jul 2025 09:52:08 +0000
-Date: Wed, 23 Jul 2025 17:52:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	sboyd@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
-	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org, srini@kernel.org,
-	vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
-	krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
-	casey.connolly@linaro.org
-Subject: Re: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-Message-ID: <202507231731.VakdiYEM-lkp@intel.com>
-References: <20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jR+rdDGi"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8EC5443384;
+	Wed, 23 Jul 2025 09:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1753264472;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gmVO0IQ6lgIkx0UIDC0DA82oQtxUZJ5xFddmjHi8fvQ=;
+	b=jR+rdDGiooEQeuJKSDmzpG6EWJH4VOBkbF3Q3pH7GR6cn4gRpJyZZTW02kbnbKHXc70rtC
+	OuSEXHDy9iaIOOYIwfzgbxYIkmqtiVIwTF3QqGjPumXNGq09bbDwDYhNKbC08FAAOSqYlN
+	y3FsMia26PhFxlhPH9eWTvCC5uPKDn2VxFTgW7KZFS6EmJNQN5yf2946dS2zTJH+EFt0DO
+	iUFwcV9vDw8a2UMb4bCtDAbekCKP17SGr6Km5ZLvoyg33fM6sNUxkXiw2wKT3T9avbWtsH
+	ZjY4+xQ1NRWHx/vefxl9ELuJpLp78Qrh8A/FpJ6KWt1/6KwFtGhWQZjYMdO9TA==
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Subject: [PATCH 0/9] drm/bridge: get/put the bridge when looping over the
+ encoder chain
+Date: Wed, 23 Jul 2025 11:54:07 +0200
+Message-Id: <20250723-drm-bridge-alloc-getput-for_each_bridge-v1-0-be8f4ae006e9@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250722101317.76729-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAD+xgGgC/02O22rDMBBEf8XouQpa2ZIvlNL/CCGsVutExJdUc
+ kJKyL9XTUzp48wwM+cuEsfASXTFXUS+hhTmKQt4KwQdcTqwDD5roZU2qoZG+jhKF4PPCQ7DTPL
+ Ay/myyH6Oe0Y67tewhwqQoXbWoMhr58h9uD2ftruXjvx1yYfLyxQOE0uaxzEsXVFZKq1tDKByG
+ kzrvGtr7AlJVWw8k6JetdyI/6Bd8YeZvyQxrahJ6sr4sqx8WYPurvBbGzklXHvvz6LVSgFYsBv
+ IEyBPHCcePjHE03fYZLQPsXs8fgAroQMHNAEAAA==
+X-Change-ID: 20250718-drm-bridge-alloc-getput-for_each_bridge-f141ae17b65a
+To: Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejjeegjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtkeertdertdejnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptefgheetvddtteeutdeuvdefkeeifefhhedtleefkeekffeuueelteehgeduueeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpfhhrvggvuggvshhkthhophdrohhrghenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghloheplgduledvrdduieekrddujeekrdejhegnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdehpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehmrhhiphgrrhgusehkvghrnhgvlhdrohhrghdprhgtp
+ hhtthhopehtiihimhhmvghrmhgrnhhnsehsuhhsvgdruggvpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthhdprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhfohhssheskhgvrhhnvghlrdhorhhg
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hi AngeloGioacchino,
+This series adds drm_bridge_get/put() calls for DRM bridges used when
+looping over bridges in an encoder chain.
 
-kernel test robot noticed the following build errors:
+This is part of the work towards removal of bridges from a still existing
+DRM pipeline without use-after-free. The grand plan was discussed in [1].
+Here's the work breakdown (➜ marks the current series):
 
-[auto build test ERROR on next-20250722]
-[also build test ERROR on v6.16-rc7]
-[cannot apply to jic23-iio/togreg sre-power-supply/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.16-rc7 v6.16-rc6 v6.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ 1. ➜ add refcounting to DRM bridges (struct drm_bridge)
+    (based on devm_drm_bridge_alloc() [0])
+    A. ✔ add new alloc API and refcounting (in v6.16-rc1)
+    B. ✔ convert all bridge drivers to new API (now in drm-misc-next)
+    C. ✔ kunit tests (now in drm-misc-next)
+    D. ✔ add get/put to drm_bridge_add/remove() + attach/detach()
+         and warn on old allocation pattern (now in drm-misc-next)
+    E. ➜ add get/put on drm_bridge accessors
+       1. ✔ drm_bridge_chain_get_first_bridge() + add a cleanup action
+       2. … drm_bridge_get_prev_bridge()
+       3. … drm_bridge_get_next_bridge()
+       4. ➜ drm_for_each_bridge_in_chain()
+       5. drm_bridge_connector_init
+       6. of_drm_find_bridge
+       7. drm_of_find_panel_or_bridge, *_of_get_bridge
+    F. debugfs improvements
+ 2. handle gracefully atomic updates during bridge removal
+ 3. … avoid DSI host drivers to have dangling pointers to DSI devices
+ 4. finish the hotplug bridge work, removing the "always-disconnected"
+    connector, moving code to the core and potentially removing the
+    hotplug-bridge itself (this needs to be clarified as points 1-3 are
+    developed)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/spmi-Implement-spmi_subdevice_alloc_and_add-and-devm-variant/20250722-181911
-base:   next-20250722
-patch link:    https://lore.kernel.org/r/20250722101317.76729-2-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH v2 1/7] spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
-config: riscv-randconfig-002-20250723 (https://download.01.org/0day-ci/archive/20250723/202507231731.VakdiYEM-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507231731.VakdiYEM-lkp@intel.com/reproduce)
+Most loops are based on drm_for_each_bridge_in_chain(), so add a scoped
+variant that does not use an externally-declared iterator variable and
+ensures that a reference to the bridge pointed to by the iterator is
+taken/released before/after every iteration (and when breaking out of the
+loop).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507231731.VakdiYEM-lkp@intel.com/
+All conversions are trivial except for drm_bridge_connector_init() which
+needs some preliminary cleanups (patches 1-2).
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+omapdrm/omap_encoder.c is the only driver iterating over the encoder bridge
+chain starting from a specific bridge, instead of iterating over the whole
+list. For this use case, add a drm_for_each_bridge_in_chain_from() variant.
 
->> ERROR: modpost: module spmi-devres uses symbol spmi_subdevice_alloc_and_add from namespace SPMI, but does not import it.
->> ERROR: modpost: module spmi-devres uses symbol spmi_subdevice_remove from namespace SPMI, but does not import it.
+This series depends on two fixes to bridge-connector:
 
+ * commit 103578241512 ("drm/bridge-connector: Fix bridge in
+   drm_connector_hdmi_audio_init()"), currently in drm/drm-fixes, not yet
+   on drm-misc*
+
+ * "drm/display: bridge-connector: correct CEC bridge pointers in
+   drm_bridge_connector_init"
+   (https://lore.kernel.org/lkml/20250719-fix-cec-bridges-v1-1-a60b1333c87d@oss.qualcomm.com/),
+   not yet applied
+
+[0] https://gitlab.freedesktop.org/drm/misc/kernel/-/commit/0cc6aadd7fc1e629b715ea3d1ba537ef2da95eec
+[1] https://lore.kernel.org/lkml/20250206-hotplug-drm-bridge-v6-0-9d6f2c9c3058@bootlin.com/t/#u
+
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+Luca Ceresoli (9):
+      drm/display: bridge-connector: use scope-specific variable for the bridge pointer
+      drm/display: bridge-connector: remove unused variable assignment
+      drm/bridge: add drm_for_each_bridge_in_chain_scoped()
+      drm/display: bridge-connector: use drm_for_each_bridge_in_chain_scoped()
+      drm/atomic: use drm_for_each_bridge_in_chain_scoped()
+      drm/bridge: use drm_for_each_bridge_in_chain_scoped()
+      drm/bridge: remove drm_for_each_bridge_in_chain()
+      drm/bridge: add drm_for_each_bridge_in_chain_from()
+      drm/omap: use drm_for_each_bridge_in_chain_from()
+
+ .clang-format                                  |  2 +-
+ drivers/gpu/drm/display/drm_bridge_connector.c | 13 +++----
+ drivers/gpu/drm/drm_atomic.c                   |  3 +-
+ drivers/gpu/drm/drm_bridge.c                   |  3 +-
+ drivers/gpu/drm/omapdrm/omap_encoder.c         |  4 +-
+ include/drm/drm_bridge.h                       | 52 ++++++++++++++++++++++++--
+ 6 files changed, 58 insertions(+), 19 deletions(-)
+---
+base-commit: 46c366851a0b2159bdb97afcac04e5dec0cf09e8
+change-id: 20250718-drm-bridge-alloc-getput-for_each_bridge-f141ae17b65a
+prerequisite-change-id: 20250718-fix-cec-bridges-245d334d3712:v1
+prerequisite-patch-id: df6d3d4a62c942703fab374bee85c49e4ac259cc
+prerequisite-message-id: <20250620011616.118-1-kernel@airkyi.com>
+prerequisite-patch-id: ba5a6a15ea02bcee387db0e92ffb4cd0e1fbf816
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Luca Ceresoli <luca.ceresoli@bootlin.com>
+
