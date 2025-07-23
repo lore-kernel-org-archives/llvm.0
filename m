@@ -1,102 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295E4158520;
-	Wed, 23 Jul 2025 00:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00271D6DB6;
+	Wed, 23 Jul 2025 01:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753231567; cv=none; b=jjurI9dysI08ZQ1o+Bt8xmBsbbwH4L2tcb8YacOMdPkgiNXTqxyXDd1wePWDlCnrxAlrBq+aNQybaIwmXHtI1wRNB3moZaxMtKMsyM9TjJe2aGHZd2qOi77lK3XXYBy7liTpDlpe9+YPjuyLxKDDODfC0mDjDMC3ml4dOLxAgVk=
+	t=1753234221; cv=none; b=iMBRxP7SlLj7W9wkJbp+JIe3QJwhQuirtWFL8pF8uvlQ6mB5w3uv4BKutTdF8JRI3eY7rnIjXTa8RzlyyYqHY7YA0vHvf2A+ifTFoIvex4pjzJhZfi6dayPRqhowDEHHs/etRRUKuiLwExk5R9A3C7InZ0KZen85pwoPQqIAyQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753231567; c=relaxed/simple;
-	bh=7XyjFlMsulsdWRKzxiiAS8MziCD9vuAz5vMiVUvsDrE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DhRw3QVBc0GAf+yLGfy9ZRX//5bSVBgvpQlmh7rsH8PwWwOXWp1yY5rp3WMUqd+z9OwqOIfgsIP/D1F91BPMJVcpiizfGwa+J7+TXU4zhEvEGic4145FeoitV4hjwe8YLKLQaP2vF4cggjlNvXxZKs9NQQVnufTq0uWSvrEt5fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nKN2bJrx; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753234221; c=relaxed/simple;
+	bh=3E1gRrFaeCrEyCBmb1gLjo97LjP+ccCXOTC9zsWGrFY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qiuJh8xpEms8WG0JJUh/65iKR64wTE06zHDLB7Kl+PE66d+FQblYzC1QKL5wS3l0RfEkVl57N+A+CF/MdxydTlkmlW+i6P091b/zpgJh3YWEScdn+9w/lQmZU/zKOaLnkxaR+JOJUg9KsAyWxkdEPL27KHZUcz/VWCVPVyKUpGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JcqjIfoa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nKN2bJrx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753231566; x=1784767566;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7XyjFlMsulsdWRKzxiiAS8MziCD9vuAz5vMiVUvsDrE=;
-  b=nKN2bJrxdNaJkUvx8vjtW2LE8vtdY4WlD1dAvDEdys4jziVKbtwVYgD8
-   5CDt21dvY8BGVlhZ234nyOvZWJ4Pzgehij3P71azQ6Kd3VaMssxW1bNaL
-   vrUwIhUUFQoqQs0JwVgV0VJoJahV0DCtwbSWiTye9pbEh8hawqn6niv3K
-   s1OiuOwN3zxPcWWAABP2Af5igCaFtHUcekGIx/lRazAp8NmLjff1ML/Hs
-   oL1iYfkSuvVDkZm6hNqp6EucN1Kvkp6InPlNZyZncIlLjRusea9AReHf9
-   9s+L14KeXhM39bkFzxdGQtMrUFe82m8en1+iDrdbevCPrgMkUC4Jw5ZIh
-   g==;
-X-CSE-ConnectionGUID: 2sRIgv+pScG0VtOvS/1s5w==
-X-CSE-MsgGUID: mGoDNXihSNqFvKHiDfoSpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="73070998"
-X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="73070998"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 17:46:06 -0700
-X-CSE-ConnectionGUID: gP2NMNzdQ0qN6ZacAGwNYw==
-X-CSE-MsgGUID: S+cN/JPRQpSdoF+7BjI3UA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="163521129"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 22 Jul 2025 17:46:04 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ueNcP-000IpX-1p;
-	Wed, 23 Jul 2025 00:46:01 +0000
-Date: Wed, 23 Jul 2025 08:45:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, przemyslaw.kitszel@intel.com,
-	dawid.osuchowski@linux.intel.com,
-	Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH iwl-next v1 15/15] ixgbe: fwlog support
- for e610
-Message-ID: <202507230823.PGjL5fXz-lkp@intel.com>
-References: <20250722104600.10141-16-michal.swiatkowski@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JcqjIfoa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA36C4CEEB;
+	Wed, 23 Jul 2025 01:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753234220;
+	bh=3E1gRrFaeCrEyCBmb1gLjo97LjP+ccCXOTC9zsWGrFY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=JcqjIfoa7UagvsAZzk0ZhGUiFcnAufyTjUhy2sciWBBPAgn/aBTwDhSYZsJcT+5Ab
+	 dXIXtAamC5gMME/AVw1OVe4LdTMNZkLhlQ8CxYTkSdYr5KhNbp5LQvQ8+wTauGU7vk
+	 fXqEkvlzmxwEd6UNjpuHmUuhNNNRMcplsDZ4WAu87w09Vl4RUGTc+2xbniSXzF5rcm
+	 6dS6AUDW9yHMjKElP/mnAMxm4yIsVNOXjDVz8d69CYvbs+MAqbOkBcHfddV1GO3gg0
+	 PRiYe37omdJN7bwskIl1bbyeFixo5uuPEF6x+bx6NgHS5bglBBudoKmP48r40OI4+T
+	 s82HwINcv0cog==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD7C383BF5D;
+	Wed, 23 Jul 2025 01:30:39 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250722104600.10141-16-michal.swiatkowski@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next V6 0/5] selftests: drv-net: Test XDP native
+ support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175323423849.1016544.9128937268934260157.git-patchwork-notify@kernel.org>
+Date: Wed, 23 Jul 2025 01:30:38 +0000
+References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+In-Reply-To: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+To: Mohsin Bashir <mohsin.bashr@gmail.com>
+Cc: netdev@vger.kernel.org, kuba@kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ shuah@kernel.org, horms@kernel.org, cratiu@nvidia.com, noren@nvidia.com,
+ cjubran@nvidia.com, mbloch@nvidia.com, jdamato@fastly.com, gal@nvidia.com,
+ sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 
-Hi Michal,
+Hello:
 
-kernel test robot noticed the following build errors:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test ERROR on tnguy-next-queue/dev-queue]
+On Sat, 19 Jul 2025 01:30:54 -0700 you wrote:
+> This patch series add tests to validate XDP native support for PASS,
+> DROP, ABORT, and TX actions, as well as headroom and tailroom adjustment.
+> For adjustment tests, validate support for both the extension and
+> shrinking cases across various packet sizes and offset values.
+> 
+> The pass criteria for head/tail adjustment tests require that at-least
+> one adjustment value works for at-least one packet size. This ensure
+> that the variability in maximum supported head/tail adjustment offset
+> across different drivers is being incorporated.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Swiatkowski/ice-make-fwlog-functions-static/20250722-191011
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20250722104600.10141-16-michal.swiatkowski%40linux.intel.com
-patch subject: [Intel-wired-lan] [PATCH iwl-next v1 15/15] ixgbe: fwlog support for e610
-config: powerpc-randconfig-002-20250722 (https://download.01.org/0day-ci/archive/20250723/202507230823.PGjL5fXz-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230823.PGjL5fXz-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [net-next,V6,1/5] net: netdevsim: hook in XDP handling
+    https://git.kernel.org/netdev/net-next/c/be09f0d1acce
+  - [net-next,V6,2/5] selftests: drv-net: Test XDP_PASS/DROP support
+    https://git.kernel.org/netdev/net-next/c/1cbcb1b28b26
+  - [net-next,V6,3/5] selftests: drv-net: Test XDP_TX support
+    https://git.kernel.org/netdev/net-next/c/6713945726ce
+  - [net-next,V6,4/5] selftests: drv-net: Test tail-adjustment support
+    https://git.kernel.org/netdev/net-next/c/0b65cfcef9c5
+  - [net-next,V6,5/5] selftests: drv-net: Test head-adjustment support
+    https://git.kernel.org/netdev/net-next/c/d6444ebc97dc
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507230823.PGjL5fXz-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "libie_aq_str" [drivers/net/ethernet/intel/i40e/i40e.ko] undefined!
->> ERROR: modpost: "libie_aq_str" [drivers/net/ethernet/intel/iavf/iavf.ko] undefined!
->> ERROR: modpost: "libie_aq_str" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "libie_get_fwlog_data" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "libie_fwlog_init" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "libie_fwlog_deinit" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
