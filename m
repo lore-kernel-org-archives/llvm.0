@@ -1,79 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584E21465A1;
-	Wed, 23 Jul 2025 00:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295E4158520;
+	Wed, 23 Jul 2025 00:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753231512; cv=none; b=jkpTzJplOw8Wz4zxBTf23E2fTiTl7sryacyUqT/wYsoFPqXVMnc2WDTIZ9Yp7a0Xp8VEfd72qqAAxu3CzTdqhV9GhfPmCwLRJlXTffMOyJD9e/A5Axi6Y3rdMKurNqiHppUwEytx5gdxs0U1IzziFkL0Ol0/XdmuoqyF3Ea/RbQ=
+	t=1753231567; cv=none; b=jjurI9dysI08ZQ1o+Bt8xmBsbbwH4L2tcb8YacOMdPkgiNXTqxyXDd1wePWDlCnrxAlrBq+aNQybaIwmXHtI1wRNB3moZaxMtKMsyM9TjJe2aGHZd2qOi77lK3XXYBy7liTpDlpe9+YPjuyLxKDDODfC0mDjDMC3ml4dOLxAgVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753231512; c=relaxed/simple;
-	bh=m426WV1lDKEaPLng1dxGfobPDwFUytLJjSu785UlQ7E=;
+	s=arc-20240116; t=1753231567; c=relaxed/simple;
+	bh=7XyjFlMsulsdWRKzxiiAS8MziCD9vuAz5vMiVUvsDrE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KK/e6886iQxRJwfkWacNx1pCzmJG8gLB0hOki7zsFqaor1wfEfMMqJKUFKhUNIvmbrzvosbQOLTgJbVDABq2WzhBMIqr1Tvl1+cK+ZzHvpPNX6Q8GA3/XfPCaSTQAWU9D/ukEoVUw0IZZqH4ZPJvwMpfuw0NLV0ICbMRSa80zkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LNOO8GF1; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=DhRw3QVBc0GAf+yLGfy9ZRX//5bSVBgvpQlmh7rsH8PwWwOXWp1yY5rp3WMUqd+z9OwqOIfgsIP/D1F91BPMJVcpiizfGwa+J7+TXU4zhEvEGic4145FeoitV4hjwe8YLKLQaP2vF4cggjlNvXxZKs9NQQVnufTq0uWSvrEt5fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nKN2bJrx; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LNOO8GF1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nKN2bJrx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753231512; x=1784767512;
+  t=1753231566; x=1784767566;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=m426WV1lDKEaPLng1dxGfobPDwFUytLJjSu785UlQ7E=;
-  b=LNOO8GF144a1JMuZvM0sZGfyO9IxBmGGtC2WBzQ04VZamJzsfd+WYjbR
-   ysDoyPnUyk5EP6FYlLz+PB+YUV+EEoTKwdW7l1qoOETlwCyI3CF4xUwEz
-   xvAocY8K+Xbd1jQr5Jq2PoghZu22xCMkoref4XNUsYSA+CGgwGLIJDrua
-   WXhdYtaee/di9RSkVAROWcmrOmNPQmrpGCoiPdYw2pQGm57U+S9Fzi5QF
-   zBoq4MlmtwOZSOxEvYVoRFb3bBdPg2urllVxEX98LW6R8u9YVnZZ7cDa8
-   nqOyIPtAAJRLsDOlcLHKQb0Oe9z0l+aCtPgyuj9AnvaCUS0VWbdukNndC
-   w==;
-X-CSE-ConnectionGUID: x9dLwD8EQHOZ+glmG5x1LA==
-X-CSE-MsgGUID: vO3hIsL0Rc+bRbGwc0kXYQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="55348821"
+  bh=7XyjFlMsulsdWRKzxiiAS8MziCD9vuAz5vMiVUvsDrE=;
+  b=nKN2bJrxdNaJkUvx8vjtW2LE8vtdY4WlD1dAvDEdys4jziVKbtwVYgD8
+   5CDt21dvY8BGVlhZ234nyOvZWJ4Pzgehij3P71azQ6Kd3VaMssxW1bNaL
+   vrUwIhUUFQoqQs0JwVgV0VJoJahV0DCtwbSWiTye9pbEh8hawqn6niv3K
+   s1OiuOwN3zxPcWWAABP2Af5igCaFtHUcekGIx/lRazAp8NmLjff1ML/Hs
+   oL1iYfkSuvVDkZm6hNqp6EucN1Kvkp6InPlNZyZncIlLjRusea9AReHf9
+   9s+L14KeXhM39bkFzxdGQtMrUFe82m8en1+iDrdbevCPrgMkUC4Jw5ZIh
+   g==;
+X-CSE-ConnectionGUID: 2sRIgv+pScG0VtOvS/1s5w==
+X-CSE-MsgGUID: mGoDNXihSNqFvKHiDfoSpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="73070998"
 X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="55348821"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 17:45:11 -0700
-X-CSE-ConnectionGUID: 706r2HHuRv625sILRACQ3Q==
-X-CSE-MsgGUID: Uv2GzgKdTpedaycps3ofeQ==
+   d="scan'208";a="73070998"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 17:46:06 -0700
+X-CSE-ConnectionGUID: gP2NMNzdQ0qN6ZacAGwNYw==
+X-CSE-MsgGUID: S+cN/JPRQpSdoF+7BjI3UA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="159038253"
+   d="scan'208";a="163521129"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 22 Jul 2025 17:45:04 -0700
+  by orviesa003.jf.intel.com with ESMTP; 22 Jul 2025 17:46:04 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ueNbR-000IpT-1V;
-	Wed, 23 Jul 2025 00:45:01 +0000
-Date: Wed, 23 Jul 2025 08:44:58 +0800
+	id 1ueNcP-000IpX-1p;
+	Wed, 23 Jul 2025 00:46:01 +0000
+Date: Wed, 23 Jul 2025 08:45:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pingfan Liu <piliu@redhat.com>, bpf@vger.kernel.org
+To: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+	intel-wired-lan@lists.osuosl.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pingfan Liu <piliu@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jeremy Linton <jeremy.linton@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Simon Horman <horms@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>,
-	Dave Young <dyoung@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	kexec@lists.infradead.org, KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCHv4 04/12] bpf: Introduce decompressor kfunc
-Message-ID: <202507230813.M1tmyREU-lkp@intel.com>
-References: <20250722020319.5837-5-piliu@redhat.com>
+	netdev@vger.kernel.org, przemyslaw.kitszel@intel.com,
+	dawid.osuchowski@linux.intel.com,
+	Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Subject: Re: [Intel-wired-lan] [PATCH iwl-next v1 15/15] ixgbe: fwlog support
+ for e610
+Message-ID: <202507230823.PGjL5fXz-lkp@intel.com>
+References: <20250722104600.10141-16-michal.swiatkowski@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,35 +67,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250722020319.5837-5-piliu@redhat.com>
+In-Reply-To: <20250722104600.10141-16-michal.swiatkowski@linux.intel.com>
 
-Hi Pingfan,
+Hi Michal,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on bpf-next/net]
-[also build test WARNING on bpf/master arm64/for-next/core linus/master v6.16-rc7]
-[cannot apply to bpf-next/master next-20250722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on tnguy-next-queue/dev-queue]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pingfan-Liu/kexec_file-Make-kexec_image_load_default-global-visible/20250722-100843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20250722020319.5837-5-piliu%40redhat.com
-patch subject: [PATCHv4 04/12] bpf: Introduce decompressor kfunc
-config: arm-randconfig-004-20250723 (https://download.01.org/0day-ci/archive/20250723/202507230813.M1tmyREU-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Swiatkowski/ice-make-fwlog-functions-static/20250722-191011
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+patch link:    https://lore.kernel.org/r/20250722104600.10141-16-michal.swiatkowski%40linux.intel.com
+patch subject: [Intel-wired-lan] [PATCH iwl-next v1 15/15] ixgbe: fwlog support for e610
+config: powerpc-randconfig-002-20250722 (https://download.01.org/0day-ci/archive/20250723/202507230823.PGjL5fXz-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230813.M1tmyREU-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507230823.PGjL5fXz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507230813.M1tmyREU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507230823.PGjL5fXz-lkp@intel.com/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> WARNING: modpost: vmlinux: section mismatch in reference: bpf_decompress+0xbc (section: .text.bpf_decompress) -> decompress_method (section: .init.text)
+>> ERROR: modpost: "libie_aq_str" [drivers/net/ethernet/intel/i40e/i40e.ko] undefined!
+>> ERROR: modpost: "libie_aq_str" [drivers/net/ethernet/intel/iavf/iavf.ko] undefined!
+>> ERROR: modpost: "libie_aq_str" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "libie_get_fwlog_data" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "libie_fwlog_init" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "libie_fwlog_deinit" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
