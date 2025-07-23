@@ -1,72 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1922E6D01;
-	Wed, 23 Jul 2025 12:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE2422F755;
+	Wed, 23 Jul 2025 14:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753275093; cv=none; b=hQFpC/yXvBCXH2+972peuQh9DTCTX7VT5egLpwF/tTTBK+9cO/JJ8vFylS+5Oelw8l+OYPYWDHbSN3yklsvXwdC61e769DL4rHmitp+PC4gUu1LIyaY4ROeDQNy7XlrFv3eoqXHluXnzPmnKjU6qlIzNznhs+cxjJx1VHH/yu0o=
+	t=1753279976; cv=none; b=HZBhNv9rvUdKoNkb/Lp3sEAgq9U5QCndtdA1iPTLbXjZn2Ew1hTSbgZe51dnyvTffYp/bh6xvRsM30mPZVgr9vgF3QkO3FIUFKvgud/SLE14tNdrDgeh3wtYLzZg80iixYiu08BaEcVCrGumdvnLsJTX2sMun4YDc/WZ5V5troY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753275093; c=relaxed/simple;
-	bh=3vsz1vnDsctpYDdgLRTI/E0dtYiDsUBLlhMOZ/S9IpE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dJYfZd9f5LWQ34ixk95WVmkmfmHg9GzpCftWqzTJ0YOv04zdxIFDfva8v4MLfSMLSt6jfD4ptW7dfT5PdfmMm86fvSbfS4f2yjVRnUPFBwGtVEKxLlErEBkPB7PbqwdYHV6+dZZno+H5z+XvKtnCtHWB6sAdAbsY9jC4UfHXoYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2DVNzbz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753279976; c=relaxed/simple;
+	bh=dcKCD/aF7xJwbKKl79LFdtsYfWfciBaVw1Uci7MOVO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b+p+kIYH8nsxxYBkQRpvjLMjNF+jMLXQgTnLgSOr3otlajL/TXToHUOCmO4rNxNqsPjfvHNIR7EXa0abkYfCpCGWG0qmGzG8M/3kSui6ngtRdGXWJjyvmSghp3xKQA34m+YsmfxgPt2ye+K6JiS5IToXuvfaev5sMJOjzHXzcUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=STy9M1Ev; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2DVNzbz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAABC4CEE7;
-	Wed, 23 Jul 2025 12:51:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="STy9M1Ev"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D4DC4CEEF;
+	Wed, 23 Jul 2025 14:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753275092;
-	bh=3vsz1vnDsctpYDdgLRTI/E0dtYiDsUBLlhMOZ/S9IpE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h2DVNzbzGjiYmm1a3Gz8o9f01Nx+il70NK8MkWw8cywX5QSfxgxdGx0LyaiHhMMkV
-	 aXkG1wvdoiS+SpeZuygJO4S4yoJDFCnERbJQds6O1x9WNEQEmY9qgIQZMUBwPWDBW+
-	 kwhazX4FjnJ456sGVIqsgF7UZbG2rISIrXXQitQ7hJ3PPllac/jUKqOm9t5m1UJ3fY
-	 TQbSHsuaZQLwbqnGB/5qcibIg8C1/5dc3T/3NnkcLkh68yc1Ixm/8PazU1jTcQgpCC
-	 NPluosHH1I41xVKrQrE8q73ct9CXqsvgBAfFUkjcR1YcaxL9WpjAbyv8eQhN618bwn
-	 GpUDVmdodTg1g==
-Date: Wed, 23 Jul 2025 14:51:27 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Zizhi Wo <wozizhi@huaweicloud.com>, kernel test robot <lkp@intel.com>, 
-	viro@zeniv.linux.org.uk, jack@suse.com, axboe@kernel.dk, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	yukuai3@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH] fs: Add additional checks for block devices during mount
-Message-ID: <20250723-heizperiode-fotoreporter-2ada7fe78028@brauner>
-References: <20250719024403.3452285-1-wozizhi@huawei.com>
- <202507192025.N75TF4Gp-lkp@intel.com>
- <b60e4ef2-0128-4e56-a15f-ea85194a3af0@huaweicloud.com>
- <20250721064712.GA28899@lst.de>
+	s=k20201202; t=1753279975;
+	bh=dcKCD/aF7xJwbKKl79LFdtsYfWfciBaVw1Uci7MOVO8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=STy9M1EvNUe1+oGFgEUF9aZiKVHmPLZGiOOr/g2KMSC9iu+MX7aLfYDBAgaqg1IvE
+	 flypRPN/g5sFxt8ErJiLMvVxYc2z47IeC/iwXkn9ndjQtV8NNmP841hSx7ZyPCbuBC
+	 oIK0a2q1QIeIyXqNSYKkTZgOMXUS3tVV+2Duv+QFhW/aCwZq0r18giRlQuya2yZtr6
+	 uovy+UfNesOJK3RSdErTNxan3v+bxx04+P//0XfWlzV/D2G0CLFAt9xxHG7Woau5EC
+	 5l1crr3fM14jKNi3mMXmRgMBodJUsAeuQfIEbEQ1cBEoJD39AaubIE5x3+vwxURfpZ
+	 TApGW2ISFrCXA==
+Date: Wed, 23 Jul 2025 07:12:53 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Gal Pressman <gal@nvidia.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ horms@kernel.org, cratiu@nvidia.com, noren@nvidia.com, cjubran@nvidia.com,
+ mbloch@nvidia.com, jdamato@fastly.com, sdf@fomichev.me, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, Mohsin Bashir
+ <mohsin.bashr@gmail.com>, patchwork-bot+netdevbpf@kernel.org
+Subject: Re: [PATCH net-next V6 0/5] selftests: drv-net: Test XDP native
+ support
+Message-ID: <20250723071253.54a97c65@kernel.org>
+In-Reply-To: <48bb190e-073c-4ad8-841b-f6d0572cb0fd@nvidia.com>
+References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+	<175323423849.1016544.9128937268934260157.git-patchwork-notify@kernel.org>
+	<48bb190e-073c-4ad8-841b-f6d0572cb0fd@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250721064712.GA28899@lst.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 21, 2025 at 08:47:12AM +0200, Christoph Hellwig wrote:
-> On Mon, Jul 21, 2025 at 09:20:27AM +0800, Zizhi Wo wrote:
-> > Sorry, disk_live() is only declared but not defined when CONFIG_BLOCK is
-> > not set...
+On Wed, 23 Jul 2025 10:11:57 +0300 Gal Pressman wrote:
+> On 23/07/2025 4:30, patchwork-bot+netdevbpf@kernel.org wrote:
+> > Hello:
+> > 
+> > This series was applied to netdev/net-next.git (main)
+> > by Jakub Kicinski <kuba@kernel.org>:  
 > 
-> You can just add a if (IS_ENABLED(CONFIG_BLOCK)) check around it.
+> Jakub, the test was still under active discussion, and you knowingly
+> merged it with buggy code, ignoring our comments.
 > 
+> This is *extremely disrespectful* towards people that spent time
+> reviewing, replying and participating in the netdev mailing list.
 > 
-> But the layering here feels wrong.  sget_dev and it's helper operate
-> purely on the dev_t.  Anything actually dealing with a block device /
-> gendisk should be in the helpers that otherwise use it.
+> I expect better from you, and other netdev maintainers which allow this
+> to happen. Please uphold your responsibilities as maintainers towards
+> the community, this is unacceptable behavior.
 
-Either we add a lookup_bdev_alive() variant that checks whether the
-inode is still hashed when looking up the dev_t and we accept that this
-deals with the obvious cases and accept that this is racy...
+Man, I just want tests upstream. How hard is this to understand.
 
-Or we add lookup_bdev_no_open() that returns the block device with the
-reference bumped, paired with lookup_bdev_put_no_open(). Afaiu, that
-would prevent deletion. We could even put this behind a
-guard(bdev_no_open)(fc->source). The reference count bump shouldn't
-matter there. Christoph?
+These tests even work on mlx5, AFAIU, just not if LRO is enabled.
+
+Please at least try to think about what's good for this community.
+At least try.
