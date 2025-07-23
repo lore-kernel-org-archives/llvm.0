@@ -1,311 +1,679 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C9926E714;
-	Wed, 23 Jul 2025 06:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD5726C3A5;
+	Wed, 23 Jul 2025 07:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753253040; cv=none; b=bUenTZrYGuBYdCJzSBw+nMJd/VdE28n/529Igz+tq5AOp6q5+JrQQpK+GQghNPplAv2P903rEvgNpBQ1uvY4O0V7dn3WsPOt3pXo6aLEPAGvGJskBTZpP3hVhZE0ZovCi0Q086Kf1Wyn0ltdW6nKrnQUAKXXKfITtIrpgtXYU0Y=
+	t=1753254133; cv=none; b=NEUhAA2kzf47xGET/uxiIumx2jIzo1zoGgGE3xGBsoWAdoD0Q4dlmKuEjqhZEvaByrrKtiX4f3VPnBc7Zi9PfagpXqeljPrgoaRW1c1wEHmHp87S6bxFkLBJa4DEs9tTOuL47jklOKScyIiNQk04oARDxxiD2FWlHZeuXWkRKAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753253040; c=relaxed/simple;
-	bh=6QQafuAcRMgNFxvhQHnvVWKRVPyC5xIwKN8D27lQ+z4=;
+	s=arc-20240116; t=1753254133; c=relaxed/simple;
+	bh=tkl4gPER+y4+Akg5DZMGXLfG2YKaqFBo2J9vprBL+YY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hZmj+ZQPTn96viCpWwFI8gqBPGW45O15p00Gtr3UtIkg8syiwe5JuRQTMYAQ1Bb4U21LQsdJiuf3bpffo+1JW2VCyEC1rbMcFA/DJPl54Zeftu531xPqdgEVw+y3ZhBRyij+3AMMD1Kn5ZxdNFwrooFczyWHiX8KDjWF1GiWE7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K6hIChtz; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=DVfP7ZEJu+CcwzWtGxTm+2oNDAqZodqAhUiZk9yoqX9THQHoBjtUDuia1GHmWil8X1IAk0mQ88HwmTGJ1eiv2Yc90Jg/0ROol/0AIv442jW3qNeTiIbT11HuQZ6GLEI15qM2jteHLBd+h3ftIcNGZH7+obJ4BXfhsp2I21e/TuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fBJ7RkYL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K6hIChtz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753253038; x=1784789038;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6QQafuAcRMgNFxvhQHnvVWKRVPyC5xIwKN8D27lQ+z4=;
-  b=K6hIChtzyF5v6uXP4LhUxcqdi8Z8xJ/HpmLWyhZp7SW0lKRfnKp7paFI
-   Sq2jG1xt+A6ew9fAJJj7ZVqHBb847t7rBTupOVZt9Mo/ztpNe31PNsq9X
-   +X4ZBpVOQvwiZIk9emXPj9qQEaIXK9x8YKGiG/THBoly65X0MaT7GO6dW
-   WB5c75r1acasjspjiDnQxCF8D7S+RYz8lGLyjxg1iIKGPXjXtR9SAUcLH
-   E9plJhqlk4m9/mZpqXBKy9ucGCmzH0j4eA8n9cTEBVetv0ZUP2j0vn1E0
-   HHAaNH6VWmAY1BXeB9koi6QnnTp00uhXRn+BYQ2ygtNo0yjZHis3hJkTh
-   Q==;
-X-CSE-ConnectionGUID: FZeKToJLQFCS9TF7utNsAg==
-X-CSE-MsgGUID: E2JxvbMCR3eqZb566a0myg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11500"; a="66092388"
-X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="66092388"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2025 23:43:57 -0700
-X-CSE-ConnectionGUID: tXHMz9OXQC+Uh6qT+ePj9g==
-X-CSE-MsgGUID: QKUwnuowQpmUbLtCbocIvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
-   d="scan'208";a="190342664"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Jul 2025 23:43:51 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ueTCf-000J31-0Q;
-	Wed, 23 Jul 2025 06:43:49 +0000
-Date: Wed, 23 Jul 2025 14:43:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-	sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net,
-	hawk@kernel.org, john.fastabend@gmail.com,
-	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-stm32@st-md-mailman.stormreply.com, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [Intel-wired-lan] [PATCH net v2 1/2] stmmac: xsk: fix underflow
- of budget in zerocopy mode
-Message-ID: <202507231458.meHSJi2g-lkp@intel.com>
-References: <20250722135057.85386-2-kerneljasonxing@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fBJ7RkYL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C047C4CEE7;
+	Wed, 23 Jul 2025 07:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753254133;
+	bh=tkl4gPER+y4+Akg5DZMGXLfG2YKaqFBo2J9vprBL+YY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fBJ7RkYLPMWM3MezXPPQfLIO2Ywhs2B03q5bLIn6J1R4duLR5PA4UmKbRjY4Pwa2w
+	 A/5hCZ8T7d7x0NzgqedBaeGy1tNhTLivvXqa45P/+ZynXQ1EZQFXQlaxUW/GpVtZN0
+	 tzQ3GdbYLRDdVPFUTVN03OV+oYVUHx1rnr+7b0XKS1M082o5lh7bcQhM1yNVSZBzPs
+	 sUYGGy4Xyts8WV2LVeySFKhSEe+cxmkcDtgiAwLXDTcBbNT3iT/KuDQ46907NZjnc/
+	 QSStfe8a1DKwFh11oxoNtFVrPI0fi+53sD4fUX7XL0cfYqDVP9ASsIuwjBjVojAwbH
+	 2klGo14SBPtnQ==
+Date: Wed, 23 Jul 2025 00:02:12 -0700
+From: Kees Cook <kees@kernel.org>
+To: xandfury@gmail.com
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] selftests/tty: add TIOCSTI test suite
+Message-ID: <202507222329.D44E6AC@keescook>
+References: <20250713-toicsti-bug-v2-1-b183787eea29@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250722135057.85386-2-kerneljasonxing@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250713-toicsti-bug-v2-1-b183787eea29@gmail.com>
 
-Hi Jason,
+On Sun, Jul 13, 2025 at 06:38:55PM -0600, Abhinav Saxena via B4 Relay wrote:
+> From: Abhinav Saxena <xandfury@gmail.com>
+> 
+> TIOCSTI is a TTY ioctl command that allows inserting characters into
+> the terminal input queue, making it appear as if the user typed those
+> characters.
+> 
+> Add a test suite with four tests to verify TIOCSTI behaviour in
+> different scenarios when dev.tty.legacy_tiocsti is both enabled and
+> disabled:
+> 
+> - Test TIOCSTI functionality when legacy support is enabled
+> - Test TIOCSTI rejection when legacy support is disabled
+> - Test capability requirements for TIOCSTI usage
+> - Test TIOCSTI security with file descriptor passing
+> 
+> The tests validate proper enforcement of the legacy_tiocsti sysctl
+> introduced in commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled").
+> See tty_ioctl(4) for details on TIOCSTI behavior and security
+> requirements.
+> 
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> ---
+> This patch adds comprehensive selftests for the TIOCSTI ioctl to validate
+> proper behaviour under different system configurations.
 
-kernel test robot noticed the following build warnings:
+Much of the text under the --- line is useful details; I would merge it
+with the short commit log above to make a comprehensive commit message.
 
-[auto build test WARNING on net/main]
+> 
+> ===============
+> 
+> The TIOCSTI ioctl allows inserting characters into the terminal input
+> queue, making it appear as if the user typed those characters. This
+> functionality has security implications and behaviour that varies based
+> on system configuration.
+> 
+> Background
+> ==========
+> 
+> CONFIG_LEGACY_TIOCSTI controls the default value for the dev.tty.legacy_tiocsti
+> sysctl, which remains runtime-configurable. The dev.tty.legacy_tiocsti sysctl
+> was introduced in commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
+> to provide administrators control over TIOCSTI usage.
+> 
+> When legacy_tiocsti is disabled, TIOCSTI requires CAP_SYS_ADMIN capability.
+> However, the current implementation only checks the current process's
+> credentials via capable(CAP_SYS_ADMIN), which doesn't validate against
+> the file opener's credentials stored in file->f_cred.
+> 
+> This creates a potential security scenario where an unprivileged process
+> can open a TTY fd and pass it to a privileged process via SCM_RIGHTS.
+> 
+> Testing
+> =======
+> 
+> The test suite includes four comprehensive tests:
+> - Test TIOCSTI functionality when legacy support is enabled
+> - Test TIOCSTI rejection when legacy support is disabled  
+> - Test capability requirements for TIOCSTI usage
+> - Test TIOCSTI security with file descriptor passing
+> 
+> All patches have been validated using:
+> - scripts/checkpatch.pl --strict (0 errors, 0 warnings)
+> - Functional testing on kernel v6.16-rc2
+> - File descriptor passing security test scenarios
+> 
+> The fd_passing_security test demonstrates the security concern.
+> To verify, disable legacy TIOCSTI and run the test:
+> 
+> $ echo "0" | sudo tee /proc/sys/dev/tty/legacy_tiocsti
+> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test -t fd_passing_security
+> 
+> Patch Overview
+> ==============
+> 
+> PATCH 1/1: selftests/tty: add TIOCSTI test suite
+> Comprehensive test suite demonstrating the issue and fix validation
+> 
+> References
+> ==========
+> 
+> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
+> - commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
+> - Documentation/security/credentials.rst
+> - https://github.com/KSPP/linux/issues/156
+> - https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/
+> - drivers/tty/Kconfig
+> 
+> Configuration References:
+> [1] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/Kconfig#n149
+> [2] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/Kconfig#n162
+> [3] - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/Kconfig#n188
+> 
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> 
+> Changes in v2:
+> - Focused series on selftests only
+> - Removed SELinux capability checking patch for separate submission
+> - Link to v1: https://lore.kernel.org/r/20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com
+> ---
+>  tools/testing/selftests/tty/Makefile           |   6 +-
+>  tools/testing/selftests/tty/config             |   1 +
+>  tools/testing/selftests/tty/tty_tiocsti_test.c | 421 +++++++++++++++++++++++++
+>  3 files changed, 427 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
+> index 50d7027b2ae3..7f6fbe5a0cd5 100644
+> --- a/tools/testing/selftests/tty/Makefile
+> +++ b/tools/testing/selftests/tty/Makefile
+> @@ -1,5 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS = -O2 -Wall
+> -TEST_GEN_PROGS := tty_tstamp_update
+> +TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
+> +LDLIBS += -lcap
+>  
+>  include ../lib.mk
+> +
+> +# Add libcap for TIOCSTI test
+> +$(OUTPUT)/tty_tiocsti_test: LDLIBS += -lcap
+> diff --git a/tools/testing/selftests/tty/config b/tools/testing/selftests/tty/config
+> new file mode 100644
+> index 000000000000..c6373aba6636
+> --- /dev/null
+> +++ b/tools/testing/selftests/tty/config
+> @@ -0,0 +1 @@
+> +CONFIG_LEGACY_TIOCSTI=y
+> diff --git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/tools/testing/selftests/tty/tty_tiocsti_test.c
+> new file mode 100644
+> index 000000000000..6a4b497078b0
+> --- /dev/null
+> +++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
+> @@ -0,0 +1,421 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * TTY Tests - TIOCSTI
+> + *
+> + * Copyright © 2025 Abhinav Saxena <xandfury@gmail.com>
+> + */
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <fcntl.h>
+> +#include <sys/ioctl.h>
+> +#include <errno.h>
+> +#include <stdbool.h>
+> +#include <string.h>
+> +#include <sys/socket.h>
+> +#include <sys/wait.h>
+> +#include <pwd.h>
+> +#include <termios.h>
+> +#include <grp.h>
+> +#include <sys/capability.h>
+> +#include <sys/prctl.h>
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +/* Helper function to send FD via SCM_RIGHTS */
+> +static int send_fd_via_socket(int socket_fd, int fd_to_send)
+> +{
+> +	struct msghdr msg = { 0 };
+> +	struct cmsghdr *cmsg;
+> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
+> +	char dummy_data = 'F';
+> +	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
+> +
+> +	msg.msg_iov = &iov;
+> +	msg.msg_iovlen = 1;
+> +	msg.msg_control = cmsg_buf;
+> +	msg.msg_controllen = sizeof(cmsg_buf);
+> +
+> +	cmsg = CMSG_FIRSTHDR(&msg);
+> +	cmsg->cmsg_level = SOL_SOCKET;
+> +	cmsg->cmsg_type = SCM_RIGHTS;
+> +	cmsg->cmsg_len = CMSG_LEN(sizeof(int));
+> +
+> +	memcpy(CMSG_DATA(cmsg), &fd_to_send, sizeof(int));
+> +
+> +	return sendmsg(socket_fd, &msg, 0) < 0 ? -1 : 0;
+> +}
+> +
+> +/* Helper function to receive FD via SCM_RIGHTS */
+> +static int recv_fd_via_socket(int socket_fd)
+> +{
+> +	struct msghdr msg = { 0 };
+> +	struct cmsghdr *cmsg;
+> +	char cmsg_buf[CMSG_SPACE(sizeof(int))];
+> +	char dummy_data;
+> +	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
+> +	int received_fd = -1;
+> +
+> +	msg.msg_iov = &iov;
+> +	msg.msg_iovlen = 1;
+> +	msg.msg_control = cmsg_buf;
+> +	msg.msg_controllen = sizeof(cmsg_buf);
+> +
+> +	if (recvmsg(socket_fd, &msg, 0) < 0)
+> +		return -1;
+> +
+> +	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+> +		if (cmsg->cmsg_level == SOL_SOCKET &&
+> +		    cmsg->cmsg_type == SCM_RIGHTS) {
+> +			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
+> +			break;
+> +		}
+> +	}
+> +
+> +	return received_fd;
+> +}
+> +
+> +static inline bool has_cap_sys_admin(void)
+> +{
+> +	cap_t caps = cap_get_proc();
+> +
+> +	if (!caps)
+> +		return false;
+> +
+> +	cap_flag_value_t cap_val;
+> +	bool has_cap = (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE,
+> +				     &cap_val) == 0) &&
+> +		       (cap_val == CAP_SET);
+> +
+> +	cap_free(caps);
+> +	return has_cap;
+> +}
+> +
+> +/*
+> + * Simple privilege drop that just changes uid/gid in current process
+> + * and also capabilities like CAP_SYS_ADMIN
+> + */
+> +static inline bool drop_to_nobody(void)
+> +{
+> +	/* Drop supplementary groups */
+> +	if (setgroups(0, NULL) != 0) {
+> +		printf("setgroups failed: %s", strerror(errno));
+> +		return false;
+> +	}
+> +
+> +	/* Change group to nobody */
+> +	if (setgid(65534) != 0) {
+> +		printf("setgid failed: %s", strerror(errno));
+> +		return false;
+> +	}
+> +
+> +	/* Change user to nobody (this drops capabilities) */
+> +	if (setuid(65534) != 0) {
+> +		printf("setuid failed: %s", strerror(errno));
+> +		return false;
+> +	}
+> +
+> +	/* Verify we no longer have CAP_SYS_ADMIN */
+> +	if (has_cap_sys_admin()) {
+> +		printf("ERROR: Still have CAP_SYS_ADMIN after changing to nobody");
+> +		return false;
+> +	}
+> +
+> +	printf("Successfully changed to nobody (uid:%d gid:%d)\n", getuid(),
+> +	       getgid());
+> +	return true;
+> +}
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Xing/stmmac-xsk-fix-underflow-of-budget-in-zerocopy-mode/20250722-215348
-base:   net/main
-patch link:    https://lore.kernel.org/r/20250722135057.85386-2-kerneljasonxing%40gmail.com
-patch subject: [Intel-wired-lan] [PATCH net v2 1/2] stmmac: xsk: fix underflow of budget in zerocopy mode
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250723/202507231458.meHSJi2g-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507231458.meHSJi2g-lkp@intel.com/reproduce)
+All of the bare printfs above should use TH_LOG()
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507231458.meHSJi2g-lkp@intel.com/
+> +
+> +static inline int get_legacy_tiocsti_setting(void)
+> +{
+> +	FILE *fp;
+> +	int value = -1;
+> +
+> +	fp = fopen("/proc/sys/dev/tty/legacy_tiocsti", "r");
+> +	if (!fp) {
+> +		if (errno == ENOENT) {
+> +			printf("legacy_tiocsti sysctl not available (kernel < 6.2)\n");
+> +		} else {
+> +			printf("Cannot read legacy_tiocsti: %s\n",
+> +			       strerror(errno));
+> +		}
+> +		return -1;
+> +	}
+> +
+> +	if (fscanf(fp, "%d", &value) == 1) {
+> +		printf("legacy_tiocsti setting=%d\n", value);
+> +
+> +		if (value < 0 || value > 1) {
+> +			printf("legacy_tiocsti unexpected value %d\n", value);
+> +			value = -1;
+> +		} else {
+> +			printf("legacy_tiocsti=%d (%s mode)\n", value,
+> +			       value == 0 ? "restricted" : "permissive");
+> +		}
+> +	} else {
+> +		printf("Failed to parse legacy_tiocsti value");
+> +		value = -1;
+> +	}
+> +
+> +	fclose(fp);
+> +	return value;
+> +}
 
-All warnings (new ones prefixed by >>):
+Same observation as above that reporting should go through the kselftest
+harness APIs.
 
->> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2601:3: warning: misleading indentation; statement is not part of the previous 'for' [-Wmisleading-indentation]
-    2601 |                 struct xsk_tx_metadata *meta = NULL;
-         |                 ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2599:2: note: previous statement is here
-    2599 |         for (; budget > 0; budget--)
-         |         ^
->> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2600:34: warning: unused variable 'meta_req' [-Wunused-variable]
-    2600 |                 struct stmmac_metadata_request meta_req;
-         |                                                ^~~~~~~~
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2611:4: error: 'break' statement not in loop or switch statement
-    2611 |                         break;
-         |                         ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2615:4: error: 'break' statement not in loop or switch statement
-    2615 |                         break;
-         |                         ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2621:4: error: 'continue' statement not in loop statement
-    2621 |                         continue;
-         |                         ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2660:3: error: use of undeclared identifier 'meta_req'
-    2660 |                 meta_req.priv = priv;
-         |                 ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2661:3: error: use of undeclared identifier 'meta_req'
-    2661 |                 meta_req.tx_desc = tx_desc;
-         |                 ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2662:3: error: use of undeclared identifier 'meta_req'
-    2662 |                 meta_req.set_ic = &set_ic;
-         |                 ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2663:3: error: use of undeclared identifier 'meta_req'
-    2663 |                 meta_req.tbs = tx_q->tbs;
-         |                 ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2664:3: error: use of undeclared identifier 'meta_req'
-    2664 |                 meta_req.edesc = &tx_q->dma_entx[entry];
-         |                 ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2666:7: error: use of undeclared identifier 'meta_req'; did you mean 'net_eq'?
-    2666 |                                         &meta_req);
-         |                                          ^~~~~~~~
-         |                                          net_eq
-   include/net/net_namespace.h:292:5: note: 'net_eq' declared here
-     292 | int net_eq(const struct net *net1, const struct net *net2)
-         |     ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:25: error: expected parameter declarator
-    2685 |         u64_stats_update_begin(&txq_stats->napi_syncp);
-         |                                ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:25: error: expected ')'
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:24: note: to match this '('
-    2685 |         u64_stats_update_begin(&txq_stats->napi_syncp);
-         |                               ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    2685 |         u64_stats_update_begin(&txq_stats->napi_syncp);
-         |         ^
-         |         int
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:24: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-    2685 |         u64_stats_update_begin(&txq_stats->napi_syncp);
-         |                               ^                      
-         |                                                      void
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:2: error: a function declaration without a prototype is deprecated in all versions of C and is treated as a zero-parameter prototype in C23, conflicting with a previous declaration [-Werror,-Wdeprecated-non-prototype]
-    2685 |         u64_stats_update_begin(&txq_stats->napi_syncp);
-         |         ^
-   include/linux/u64_stats_sync.h:181:20: note: conflicting prototype is here
-     181 | static inline void u64_stats_update_begin(struct u64_stats_sync *syncp)
-         |                    ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2685:2: error: conflicting types for 'u64_stats_update_begin'
-    2685 |         u64_stats_update_begin(&txq_stats->napi_syncp);
-         |         ^
-   include/linux/u64_stats_sync.h:181:20: note: previous definition is here
-     181 | static inline void u64_stats_update_begin(struct u64_stats_sync *syncp)
-         |                    ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2686:16: error: expected parameter declarator
-    2686 |         u64_stats_add(&txq_stats->napi.tx_set_ic_bit, tx_set_ic_bit);
-         |                       ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2686:16: error: expected ')'
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2686:15: note: to match this '('
-    2686 |         u64_stats_add(&txq_stats->napi.tx_set_ic_bit, tx_set_ic_bit);
-         |                      ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2686:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    2686 |         u64_stats_add(&txq_stats->napi.tx_set_ic_bit, tx_set_ic_bit);
-         |         ^
-         |         int
-   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:2686:15: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-    2686 |         u64_stats_add(&txq_stats->napi.tx_set_ic_bit, tx_set_ic_bit);
-         |                      ^                                             
-         |                                                                    void
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   2 warnings and 20 errors generated.
+> +
+> +static inline int test_tiocsti_injection(int fd)
+> +{
+> +	int ret;
+> +	char test_char = 'X';
+> +
+> +	ret = ioctl(fd, TIOCSTI, &test_char);
+> +	if (ret == 0) {
+> +		/* Clear the injected character */
+> +		printf("TIOCSTI injection succeeded\n");
+> +	} else {
+> +		printf("TIOCSTI injection failed: %s (errno=%d)\n",
+> +		       strerror(errno), errno);
+> +	}
+> +	return ret == 0 ? 0 : -1;
+> +}
+
+Same. Note for each of these you'll need to pass in the test metadata
+(struct __test_metadata *_metadata). See helper examples that do this
+in tools/testing/selftests/seccomp/seccomp_bpf.c like tracer_poke(),
+get_syscall(), etc.
+
+> +
+> +FIXTURE(tty_tiocsti)
+> +{
+> +	int tty_fd;
+> +	char *tty_name;
+> +	bool has_tty;
+> +	bool initial_cap_sys_admin;
+> +	int legacy_tiocsti_setting;
+> +};
+> +
+> +FIXTURE_SETUP(tty_tiocsti)
+> +{
+> +	TH_LOG("Running as UID: %d with effective UID: %d", getuid(),
+> +	       geteuid());
+> +
+> +	self->tty_fd = open("/dev/tty", O_RDWR);
+> +	self->has_tty = (self->tty_fd >= 0);
+> +
+> +	if (self->tty_fd < 0)
+> +		TH_LOG("Cannot open /dev/tty: %s", strerror(errno));
+
+I would expect this to be:
+
+	ASSERT_GE(self->tty_fd, 0) {
+		TH_LOG("Cannot open /dev/tty: %s", strerror(errno));
+	}
+
+> +
+> +	self->tty_name = ttyname(STDIN_FILENO);
+> +	TH_LOG("Current TTY: %s", self->tty_name ? self->tty_name : "none");
+> +
+> +	self->initial_cap_sys_admin = has_cap_sys_admin();
+> +	TH_LOG("Initial CAP_SYS_ADMIN: %s",
+> +	       self->initial_cap_sys_admin ? "yes" : "no");
+> +
+> +	self->legacy_tiocsti_setting = get_legacy_tiocsti_setting();
+> +}
+> +
+> +FIXTURE_TEARDOWN(tty_tiocsti)
+> +{
+> +	if (self->has_tty && self->tty_fd >= 0)
+> +		close(self->tty_fd);
+> +}
+> +
+> +/* Test case 1: legacy_tiocsti != 0 (permissive mode) */
+> +TEST_F(tty_tiocsti, permissive_mode)
+> +{
+> +	// clang-format off
+
+While there are instances in the tree of "//" please use /* */ for
+comments, even these format pragmas.
+
+> +	if (self->legacy_tiocsti_setting < 0)
+> +		SKIP(return,
+> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
+
+I notice this check is in every test. I think it'd be cleaner to put it
+into FIXTURE_SETUP() instead.
+
+> +
+> +	if (self->legacy_tiocsti_setting == 0)
+> +		SKIP(return,
+> +		     "Test requires permissive mode (legacy_tiocsti=1)");
+
+What about changing this value during FIXTURE_SETUP() and restoring it
+in FIXTURE_TEARDOWN()?
+
+> +	// clang-format on
+> +
+> +	ASSERT_TRUE(self->has_tty);
+
+Can opening a pty (i.e. openpty(3)) be used to always have a tty
+available?
+
+> +
+> +	if (self->initial_cap_sys_admin) {
+> +		ASSERT_TRUE(drop_to_nobody());
+> +		ASSERT_FALSE(has_cap_sys_admin());
+> +	}
+> +
+> +	/* In permissive mode, TIOCSTI should work without CAP_SYS_ADMIN */
+> +	EXPECT_EQ(test_tiocsti_injection(self->tty_fd), 0)
+
+With openpty() I think it would also mean you can trivially throw
+away injected characters instead of having them actually end up on the
+real tty? But it's been a while since I did tty work, so maybe I'm
+confusing myself about what openpty() gets you.
+
+> +	{
+> +		TH_LOG("TIOCSTI should succeed in permissive mode without CAP_SYS_ADMIN");
+> +	}
+> +}
+> +
+> +/* Test case 2: legacy_tiocsti == 0, without CAP_SYS_ADMIN (should fail) */
+> +TEST_F(tty_tiocsti, restricted_mode_nopriv)
+> +{
+> +	// clang-format off
+> +	if (self->legacy_tiocsti_setting < 0)
+> +		SKIP(return,
+> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
+> +
+> +	if (self->legacy_tiocsti_setting != 0)
+> +		SKIP(return,
+> +		     "Test requires restricted mode (legacy_tiocsti=0)");
+
+I think it should be possible to _set_ the state you want (if running as
+root) and if not settable, then do the SKIP.
+
+> +	// clang-format on
+> +
+> +	ASSERT_TRUE(self->has_tty);
+> +
+> +	if (self->initial_cap_sys_admin) {
+> +		ASSERT_TRUE(drop_to_nobody());
+> +		ASSERT_FALSE(has_cap_sys_admin());
+> +	}
+> +	/* In restricted mode, TIOCSTI should fail without CAP_SYS_ADMIN */
+> +	EXPECT_EQ(test_tiocsti_injection(self->tty_fd), -1);
+> +
+> +	/*
+> +	 * it might fail with either EPERM or EIO
+> +	 * EXPECT_TRUE(errno == EPERM || errno == EIO)
+> +	 * {
+> +	 *      TH_LOG("Expected EPERM, got: %s", strerror(errno));
+> +	 * }
+> +	 */
+
+Why are these commented out?
+
+> +}
+> +
+> +/* Test case 3: legacy_tiocsti == 0, with CAP_SYS_ADMIN (should succeed) */
+> +TEST_F(tty_tiocsti, restricted_mode_priv)
+> +{
+> +	// clang-format off
+> +	if (self->legacy_tiocsti_setting < 0)
+> +		SKIP(return,
+> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
+> +
+> +	if (self->legacy_tiocsti_setting != 0)
+> +		SKIP(return,
+> +		     "Test requires restricted mode (legacy_tiocsti=0)");
+> +	// clang-format on
+> +
+> +	/* Must have CAP_SYS_ADMIN for this test */
+> +	if (!self->initial_cap_sys_admin)
+> +		SKIP(return, "Test requires CAP_SYS_ADMIN");
+> +
+> +	ASSERT_TRUE(self->has_tty);
+> +	ASSERT_TRUE(has_cap_sys_admin());
+> +
+> +	/* In restricted mode, TIOCSTI should succeed with CAP_SYS_ADMIN */
+> +	EXPECT_EQ(test_tiocsti_injection(self->tty_fd), 0)
+> +	{
+> +		TH_LOG("TIOCSTI should succeed in restricted mode with CAP_SYS_ADMIN");
+> +	}
+> +}
+> +
+> +/* Test TIOCSTI security with file descriptor passing */
+> +TEST_F(tty_tiocsti, fd_passing_security)
+> +{
+> +	// clang-format off
+> +	if (self->legacy_tiocsti_setting < 0)
+> +		SKIP(return,
+> +		     "legacy_tiocsti sysctl not available (kernel < 6.2)");
+> +
+> +	if (self->legacy_tiocsti_setting != 0)
+> +		SKIP(return,
+> +		     "Test requires restricted mode (legacy_tiocsti=0)");
+> +	// clang-format on
+> +
+> +	/* Must start with CAP_SYS_ADMIN */
+> +	if (!self->initial_cap_sys_admin)
+> +		SKIP(return, "Test requires initial CAP_SYS_ADMIN");
+> +
+> +	int sockpair[2];
+> +	pid_t child_pid;
+> +
+> +	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair), 0);
+> +
+> +	child_pid = fork();
+> +	ASSERT_GE(child_pid, 0)
+> +	TH_LOG("Fork failed: %s", strerror(errno));
+> +
+> +	if (child_pid == 0) {
+> +		/* Child process - become unprivileged, open TTY, send FD to parent */
+> +		close(sockpair[0]);
+> +
+> +		TH_LOG("Child: Dropping privileges...");
+> +
+> +		/* Drop to nobody user (loses all capabilities) */
+> +		drop_to_nobody();
+> +
+> +		/* Verify we no longer have CAP_SYS_ADMIN */
+> +		if (has_cap_sys_admin()) {
+> +			TH_LOG("Child: Failed to drop CAP_SYS_ADMIN");
+> +			_exit(1);
+> +		}
+
+Please double check the behavior but I think you can use ASSERTs in the
+child and you don't need the "_exit(1)" stuff.
+
+> +
+> +		TH_LOG("Child: Opening TTY as unprivileged user...");
+> +
+> +		int unprivileged_tty_fd = open("/dev/tty", O_RDWR);
+> +
+> +		if (unprivileged_tty_fd < 0) {
+> +			TH_LOG("Child: Cannot open TTY: %s", strerror(errno));
+> +			_exit(1);
+> +		}
+> +
+> +		/* Test that we can't use TIOCSTI directly (should fail) */
+> +
+> +		char test_char = 'X';
+> +
+> +		if (ioctl(unprivileged_tty_fd, TIOCSTI, &test_char) == 0) {
+> +			TH_LOG("Child: ERROR - Direct TIOCSTI succeeded unexpectedly!");
+> +			close(unprivileged_tty_fd);
+> +			_exit(1);
+> +		}
+> +		TH_LOG("Child: Good - Direct TIOCSTI failed as expected: %s",
+> +		       strerror(errno));
+> +
+> +		/* Send the TTY FD to privileged parent via SCM_RIGHTS */
+> +		TH_LOG("Child: Sending TTY FD to privileged parent...");
+> +		if (send_fd_via_socket(sockpair[1], unprivileged_tty_fd) != 0) {
+> +			TH_LOG("Child: Failed to send FD");
+> +			close(unprivileged_tty_fd);
+> +			_exit(1);
+> +		}
+> +
+> +		close(unprivileged_tty_fd);
+> +		close(sockpair[1]);
+> +		_exit(0); /* Child success */
+> +
+> +	} else {
+
+This doesn't need an else nor indenting: it is the parent no matter what
+due to the _exit above.
+
+> +		/* Parent process - keep CAP_SYS_ADMIN, receive FD, test TIOCSTI */
+> +		close(sockpair[1]);
+> +
+> +		TH_LOG("Parent: Waiting for TTY FD from unprivileged child...");
+> +
+> +		/* Verify we still have CAP_SYS_ADMIN */
+> +		ASSERT_TRUE(has_cap_sys_admin());
+> +
+> +		/* Receive the TTY FD from unprivileged child */
+> +		int received_fd = recv_fd_via_socket(sockpair[0]);
+> +
+> +		ASSERT_GE(received_fd, 0)
+> +		TH_LOG("Parent: Received FD %d (opened by unprivileged process)",
+> +		       received_fd);
+> +
+> +		/*
+> +		 * VULNERABILITY TEST: Try TIOCSTI with FD opened by unprivileged process
+> +		 * This should FAIL even though parent has CAP_SYS_ADMIN
+> +		 * because the FD was opened by unprivileged process
+> +		 */
+> +		char attack_char = 'V'; /* V for Vulnerability */
+> +		int ret = ioctl(received_fd, TIOCSTI, &attack_char);
+
+Doesn't the child need to stay alive long enough to receive the
+character? i.e. is it a problem that the child immediately exits 0 after
+sending the fd to the parent?
+
+> +
+> +		TH_LOG("Parent: Testing TIOCSTI on FD from unprivileged process...");
+> +		if (ret == 0) {
+> +			TH_LOG("*** VULNERABILITY DETECTED ***");
+> +			TH_LOG("Privileged process can use TIOCSTI on unprivileged FD");
+> +		} else {
+> +			TH_LOG("TIOCSTI failed on unprivileged FD: %s",
+> +			       strerror(errno));
+> +			EXPECT_EQ(errno, EPERM);
+> +		}
+
+Shouldn't this be arranged with an expect on ret == 0 ?
 
 
-vim +/for +2601 drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +		close(received_fd);
+> +		close(sockpair[0]);
+> +
+> +		/* Wait for child */
+> +		int status;
+> +
+> +		ASSERT_EQ(waitpid(child_pid, &status, 0), child_pid);
+> +		EXPECT_EQ(WEXITSTATUS(status), 0);
+> +		ASSERT_NE(ret, 0);
+> +	}
+> +}
+> +
+> +TEST_HARNESS_MAIN
 
-1347b419318d6af Song Yoong Siang  2023-11-27  2581  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2582  static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2583  {
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2584  	struct netdev_queue *nq = netdev_get_tx_queue(priv->dev, queue);
-8531c80800c10e8 Christian Marangi 2022-07-23  2585  	struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[queue];
-8070274b472e2e9 Jisheng Zhang     2023-09-18  2586  	struct stmmac_txq_stats *txq_stats = &priv->xstats.txq_stats[queue];
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2587  	struct xsk_buff_pool *pool = tx_q->xsk_pool;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2588  	unsigned int entry = tx_q->cur_tx;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2589  	struct dma_desc *tx_desc = NULL;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2590  	struct xdp_desc xdp_desc;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2591  	bool work_done = true;
-133466c3bbe171f Jisheng Zhang     2023-07-18  2592  	u32 tx_set_ic_bit = 0;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2593  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2594  	/* Avoids TX time-out as we are sharing with slow path */
-e92af33e472cf3a Alexander Lobakin 2021-11-17  2595  	txq_trans_cond_update(nq);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2596  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2597  	budget = min(budget, stmmac_tx_avail(priv, queue));
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2598  
-9074ec4e205d86d Jason Xing        2025-07-22  2599  	for (; budget > 0; budget--)
-1347b419318d6af Song Yoong Siang  2023-11-27 @2600  		struct stmmac_metadata_request meta_req;
-1347b419318d6af Song Yoong Siang  2023-11-27 @2601  		struct xsk_tx_metadata *meta = NULL;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2602  		dma_addr_t dma_addr;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2603  		bool set_ic;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2604  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2605  		/* We are sharing with slow path and stop XSK TX desc submission when
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2606  		 * available TX ring is less than threshold.
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2607  		 */
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2608  		if (unlikely(stmmac_tx_avail(priv, queue) < STMMAC_TX_XSK_AVAIL) ||
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2609  		    !netif_carrier_ok(priv->dev)) {
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2610  			work_done = false;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2611  			break;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2612  		}
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2613  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2614  		if (!xsk_tx_peek_desc(pool, &xdp_desc))
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2615  			break;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2616  
-bd17382ac36ed97 Xiaolei Wang      2024-05-13  2617  		if (priv->est && priv->est->enable &&
-bd17382ac36ed97 Xiaolei Wang      2024-05-13  2618  		    priv->est->max_sdu[queue] &&
-bd17382ac36ed97 Xiaolei Wang      2024-05-13  2619  		    xdp_desc.len > priv->est->max_sdu[queue]) {
-c5c3e1bfc9e0ee7 Rohan G Thomas    2024-01-27  2620  			priv->xstats.max_sdu_txq_drop[queue]++;
-c5c3e1bfc9e0ee7 Rohan G Thomas    2024-01-27  2621  			continue;
-c5c3e1bfc9e0ee7 Rohan G Thomas    2024-01-27  2622  		}
-c5c3e1bfc9e0ee7 Rohan G Thomas    2024-01-27  2623  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2624  		if (likely(priv->extend_desc))
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2625  			tx_desc = (struct dma_desc *)(tx_q->dma_etx + entry);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2626  		else if (tx_q->tbs & STMMAC_TBS_AVAIL)
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2627  			tx_desc = &tx_q->dma_entx[entry].basic;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2628  		else
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2629  			tx_desc = tx_q->dma_tx + entry;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2630  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2631  		dma_addr = xsk_buff_raw_get_dma(pool, xdp_desc.addr);
-1347b419318d6af Song Yoong Siang  2023-11-27  2632  		meta = xsk_buff_get_metadata(pool, xdp_desc.addr);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2633  		xsk_buff_raw_dma_sync_for_device(pool, dma_addr, xdp_desc.len);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2634  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2635  		tx_q->tx_skbuff_dma[entry].buf_type = STMMAC_TXBUF_T_XSK_TX;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2636  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2637  		/* To return XDP buffer to XSK pool, we simple call
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2638  		 * xsk_tx_completed(), so we don't need to fill up
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2639  		 * 'buf' and 'xdpf'.
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2640  		 */
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2641  		tx_q->tx_skbuff_dma[entry].buf = 0;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2642  		tx_q->xdpf[entry] = NULL;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2643  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2644  		tx_q->tx_skbuff_dma[entry].map_as_page = false;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2645  		tx_q->tx_skbuff_dma[entry].len = xdp_desc.len;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2646  		tx_q->tx_skbuff_dma[entry].last_segment = true;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2647  		tx_q->tx_skbuff_dma[entry].is_jumbo = false;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2648  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2649  		stmmac_set_desc_addr(priv, tx_desc, dma_addr);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2650  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2651  		tx_q->tx_count_frames++;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2652  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2653  		if (!priv->tx_coal_frames[queue])
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2654  			set_ic = false;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2655  		else if (tx_q->tx_count_frames % priv->tx_coal_frames[queue] == 0)
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2656  			set_ic = true;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2657  		else
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2658  			set_ic = false;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2659  
-1347b419318d6af Song Yoong Siang  2023-11-27  2660  		meta_req.priv = priv;
-1347b419318d6af Song Yoong Siang  2023-11-27  2661  		meta_req.tx_desc = tx_desc;
-1347b419318d6af Song Yoong Siang  2023-11-27  2662  		meta_req.set_ic = &set_ic;
-04f64dea13640fb Song Yoong Siang  2025-02-16  2663  		meta_req.tbs = tx_q->tbs;
-04f64dea13640fb Song Yoong Siang  2025-02-16  2664  		meta_req.edesc = &tx_q->dma_entx[entry];
-1347b419318d6af Song Yoong Siang  2023-11-27  2665  		xsk_tx_metadata_request(meta, &stmmac_xsk_tx_metadata_ops,
-1347b419318d6af Song Yoong Siang  2023-11-27  2666  					&meta_req);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2667  		if (set_ic) {
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2668  			tx_q->tx_count_frames = 0;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2669  			stmmac_set_tx_ic(priv, tx_desc);
-133466c3bbe171f Jisheng Zhang     2023-07-18  2670  			tx_set_ic_bit++;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2671  		}
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2672  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2673  		stmmac_prepare_tx_desc(priv, tx_desc, 1, xdp_desc.len,
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2674  				       true, priv->mode, true, true,
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2675  				       xdp_desc.len);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2676  
-ad72f783de06827 Yanteng Si        2024-08-07  2677  		stmmac_enable_dma_transmission(priv, priv->ioaddr, queue);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2678  
-1347b419318d6af Song Yoong Siang  2023-11-27  2679  		xsk_tx_metadata_to_compl(meta,
-1347b419318d6af Song Yoong Siang  2023-11-27  2680  					 &tx_q->tx_skbuff_dma[entry].xsk_meta);
-1347b419318d6af Song Yoong Siang  2023-11-27  2681  
-8531c80800c10e8 Christian Marangi 2022-07-23  2682  		tx_q->cur_tx = STMMAC_GET_ENTRY(tx_q->cur_tx, priv->dma_conf.dma_tx_size);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2683  		entry = tx_q->cur_tx;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2684  	}
-38cc3c6dcc09dc3 Petr Tesarik      2024-02-03  2685  	u64_stats_update_begin(&txq_stats->napi_syncp);
-38cc3c6dcc09dc3 Petr Tesarik      2024-02-03  2686  	u64_stats_add(&txq_stats->napi.tx_set_ic_bit, tx_set_ic_bit);
-38cc3c6dcc09dc3 Petr Tesarik      2024-02-03  2687  	u64_stats_update_end(&txq_stats->napi_syncp);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2688  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2689  	if (tx_desc) {
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2690  		stmmac_flush_tx_descriptors(priv, queue);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2691  		xsk_tx_release(pool);
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2692  	}
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2693  
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2694  	/* Return true if all of the 3 conditions are met
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2695  	 *  a) TX Budget is still available
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2696  	 *  b) work_done = true when XSK TX desc peek is empty (no more
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2697  	 *     pending XSK TX for transmission)
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2698  	 */
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2699  	return !!budget && work_done;
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2700  }
-132c32ee5bc09b1 Ong Boon Leong    2021-04-13  2701  
+Looks like you're on the right track!
+
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
