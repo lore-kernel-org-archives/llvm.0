@@ -1,58 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84397F9;
-	Thu, 24 Jul 2025 10:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3F82459D7;
+	Thu, 24 Jul 2025 11:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753352171; cv=none; b=HvwyETk3y0J8h8WzpVID4bgp2PNPap9wBTiAImBOL9yerSEmTQlVtDxVyERfOKnhBvkvx+PAqncLbSooFhAC/Bng/dYRw/Z9VwAG1vpaDVskBJRgl6VDFNlyEbpKq1XuI+G5dPBtPMIOseZltfL5n3SwMZSzH5822VVNVdCNV3s=
+	t=1753356410; cv=none; b=Y5hoxhtViBBk7F3zYKvnQG7GljXnNuvV5ExjNXq2ryOYXO76QmEKn3pPTQ80KyKFnDbrHMZyHZRV1CQikifIsZg5tj9qvBjQcNeZqM4AC9SDP9cAsMhmTRXt4QQLCeTmCDZwkD9AKGINhvhPHQuD4Fuk0wSysqByeQmVCbJGMv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753352171; c=relaxed/simple;
-	bh=VVB9qXg1AUsZy4sUF5MVoylaU8u9uqvmy3X0oLIuACA=;
+	s=arc-20240116; t=1753356410; c=relaxed/simple;
+	bh=kG7LDs5bk1m54HXdMCSGeTVy8L86DTIx637Yz5C2kLg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Rzoh3Hv8ssrSApT5blxVr5h7EZPwkZ+QUg6pN3wXulVHf/y+bQCEUuBmEngfDXtego2eymWqcd5F/lIfbbuaGg9/ptBhDUNRmxCIuJ0mhXrvVOxBGCfJF9GoKOxGiEJayppvWHFWDuV3UW2km0XyGDb6p0PHz2kTM3ExyuYFLWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jxuwsq5g; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=XAvPqbfYpQ4XRMPwcZO/9ucIA2IkFN+cqoPYluawp/9e8P66ADinqUY30kwhLZn7gsLrW8O5Legw1647nqVsalkM0R4+46M7bKKE/dIf98SCjIc8Xl0TIvNhuYB69mnO05o1MI3Py5b4ABUa/eOWo1dKNjoO+RodzZE8MnqvnfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d+MmLIvg; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jxuwsq5g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d+MmLIvg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753352170; x=1784888170;
+  t=1753356409; x=1784892409;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VVB9qXg1AUsZy4sUF5MVoylaU8u9uqvmy3X0oLIuACA=;
-  b=Jxuwsq5giMmdfWc8d1Zj3N/caTK7zbFwWhEGXj/3lSJJ7EK6VTQ0w5c5
-   nQypf0buxB4nDZDUSbm9unyo08u0AcVpnjatt1Dd/UQmDQFcK1W5AoQ1+
-   kobK2jCqpAFS3R7yRgqXXzDz+nqpA55WhqTv6fjIKTo3mKLIi7fTbC3Dw
-   jZh62R93R5OAbJVz6b1MpvzEzuy6t3Bt4ykIu6bwq6w89tI/8oWmvwT9X
-   g1trQuotCtPd5Uahg7NiqxSKnuJt31NF2SPfE4dIUtIBdDGIAiLASvk/Z
-   Azy7CqQH1a7SKVEyGrQhymQ024EvGx29KHm732kE4ejPD+4vaLsxr3A8F
-   A==;
-X-CSE-ConnectionGUID: ZOIib+9bS12XA2wvrYWEow==
-X-CSE-MsgGUID: 5dhdCxAXStWXxojv7/DZdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="55749318"
+  bh=kG7LDs5bk1m54HXdMCSGeTVy8L86DTIx637Yz5C2kLg=;
+  b=d+MmLIvgwV7iEmnKwEJtW1QX4diadTMTdh2S2qlhGXkgGnP9odSUByQ7
+   esRoqF3ZTOF28s/D9RAwR93S8JreHzw1M9QWqC3SZBNgc/Qe2bXztIcJY
+   MM4zaR0a9FPK68jglWt5KFuKrJ+pgqyl3A1laT4gWoXQeZxfl57y6kagC
+   pvvlM0C8PEjERX5qpAQDBUvZMfZIDnz2+yCIk1tJYpfD7Iein7d6Pif7A
+   +XnTfY1dlgh3HzCcgRYs7ovN9ns4itLIaIY07e/JEuClYs0iQlQY53N3L
+   xq/YA2Ku4FtAnoDW20w6nefzdVJ4ouooUQ/pqMAy80UHueaRA9gQexDtj
+   g==;
+X-CSE-ConnectionGUID: am2z0fA8Qe+yHTDBOEmSIA==
+X-CSE-MsgGUID: F5Jpj5oaSxO1S2v//jSIfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="55369861"
 X-IronPort-AV: E=Sophos;i="6.16,336,1744095600"; 
-   d="scan'208";a="55749318"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 03:16:09 -0700
-X-CSE-ConnectionGUID: ocecmmnDS7WZivRmwZsb/A==
-X-CSE-MsgGUID: Oo/6XuN4S9KXD46pCrjERg==
+   d="scan'208";a="55369861"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 04:26:48 -0700
+X-CSE-ConnectionGUID: JhkC6knvROapG6djLESaAQ==
+X-CSE-MsgGUID: 9RtVb1s4QDGP9U4GS6GplA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,336,1744095600"; 
-   d="scan'208";a="160670444"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 24 Jul 2025 03:16:08 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+   d="scan'208";a="159774345"
+Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
+  by fmviesa007.fm.intel.com with ESMTP; 24 Jul 2025 04:26:45 -0700
+Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uesze-000KJ9-0z;
-	Thu, 24 Jul 2025 10:16:06 +0000
-Date: Thu, 24 Jul 2025 18:15:22 +0800
+	id 1ueu5y-000039-1L;
+	Thu, 24 Jul 2025 11:26:42 +0000
+Date: Thu, 24 Jul 2025 13:26:25 +0200
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:vm_normal_page_pud 7/10]
- include/linux/pgtable.h:2107:15: error: unexpected token in argument list
-Message-ID: <202507241805.BGVBITox-lkp@intel.com>
+To: Alex Deucher <alexander.deucher@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-doc@vger.kernel.org
+Subject: [agd5f:kq_resets 16/41]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:742: warning: This comment starts
+ with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202507241307.3zdfZT68-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,130 +65,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/davidhildenbrand/linux vm_normal_page_pud
-head:   003d8c09bad32ddd03332b6356751f332e161659
-commit: ae14c9cd658c8aafb8341ca020db5ec850814c48 [7/10] mm/memory: convert print_bad_pte() to print_bad_pgtable_entry()
-config: x86_64-buildonly-randconfig-002-20250724 (https://download.01.org/0day-ci/archive/20250724/202507241805.BGVBITox-lkp@intel.com/config)
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git kq_resets
+head:   524eebfdd4b30fd63ca774d7ea346bcf0e8e76b1
+commit: 2ed8b69e9971cd99c0fed42c9e0ecf24d3d2b481 [16/41] drm/amdgpu: track ring state associated with a fence
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250724/202507241307.3zdfZT68-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250724/202507241805.BGVBITox-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250724/202507241307.3zdfZT68-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507241805.BGVBITox-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507241307.3zdfZT68-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   include/linux/pgtable.h:2099:21: error: invalid register name
-   enum pgtable_level {
-                       ^
-   include/linux/pgtable.h:2099:21: error: Expected an op-mask register at this point
-   enum pgtable_level {
-                       ^
-   include/linux/pgtable.h:2100:23: error: expected newline
-    PGTABLE_LEVEL_PTE = 0,
-                         ^
-   include/linux/pgtable.h:2101:19: error: unknown token in expression
-    PGTABLE_LEVEL_PMD,
-                     ^
-   include/linux/pgtable.h:2102:19: error: unknown token in expression
-    PGTABLE_LEVEL_PUD,
-                     ^
-   include/linux/pgtable.h:2103:19: error: unknown token in expression
-    PGTABLE_LEVEL_P4D,
-                     ^
-   include/linux/pgtable.h:2104:19: error: unknown token in expression
-    PGTABLE_LEVEL_PGD,
-                     ^
-   include/linux/pgtable.h:2105:1: error: invalid instruction mnemonic '}'
-   };
-   ^
->> include/linux/pgtable.h:2107:15: error: unexpected token in argument list
-   static inline const char* pgtable_level_to_str(enum pgtable_level level)
-                 ^
->> include/linux/pgtable.h:2108:2: error: Unexpected token after '{'
-   {
-    ^
-   include/linux/pgtable.h:2109:18: error: invalid register name
-    switch (level) {
-                    ^
-   include/linux/pgtable.h:2109:18: error: Expected an op-mask register at this point
-    switch (level) {
-                    ^
-   include/linux/pgtable.h:2110:24: error: unexpected token in argument list
-    case PGTABLE_LEVEL_PTE:
-                          ^
->> include/linux/pgtable.h:2111:3: error: invalid instruction mnemonic 'return'
-     return "pte";
-     ^~~~~~
-   include/linux/pgtable.h:2112:24: error: unexpected token in argument list
-    case PGTABLE_LEVEL_PMD:
-                          ^
-   include/linux/pgtable.h:2113:3: error: invalid instruction mnemonic 'return'
-     return "pmd";
-     ^~~~~~
-   include/linux/pgtable.h:2114:24: error: unexpected token in argument list
-    case PGTABLE_LEVEL_PUD:
-                          ^
-   include/linux/pgtable.h:2115:3: error: invalid instruction mnemonic 'return'
-     return "pud";
-     ^~~~~~
-   include/linux/pgtable.h:2116:24: error: unexpected token in argument list
-    case PGTABLE_LEVEL_P4D:
-                          ^
-   include/linux/pgtable.h:2117:3: error: invalid instruction mnemonic 'return'
-     return "p4d";
-     ^~~~~~
-   include/linux/pgtable.h:2118:24: error: unexpected token in argument list
-    case PGTABLE_LEVEL_PGD:
-                          ^
-   include/linux/pgtable.h:2119:3: error: invalid instruction mnemonic 'return'
-     return "pgd";
-     ^~~~~~
->> include/linux/pgtable.h:2121:3: error: invalid instruction mnemonic 'vm_warn_on_once'
-     VM_WARN_ON_ONCE(1);
-     ^~~~~~~~~~~~~~~
-   include/linux/pgtable.h:2122:3: error: invalid instruction mnemonic 'return'
-     return "unknown";
-     ^~~~~~
-   include/linux/pgtable.h:2123:2: error: invalid instruction mnemonic '}'
-    }
-    ^
-   include/linux/pgtable.h:2124:1: error: invalid instruction mnemonic '}'
-   }
-   ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:742: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Kernel queue reset handling
 
 
-vim +2107 include/linux/pgtable.h
+vim +742 drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
 
-  2098	
-  2099	enum pgtable_level {
-  2100		PGTABLE_LEVEL_PTE = 0,
-  2101		PGTABLE_LEVEL_PMD,
-  2102		PGTABLE_LEVEL_PUD,
-> 2103		PGTABLE_LEVEL_P4D,
-> 2104		PGTABLE_LEVEL_PGD,
-  2105	};
-  2106	
-> 2107	static inline const char* pgtable_level_to_str(enum pgtable_level level)
-> 2108	{
-> 2109		switch (level) {
-  2110		case PGTABLE_LEVEL_PTE:
-> 2111			return "pte";
-  2112		case PGTABLE_LEVEL_PMD:
-  2113			return "pmd";
-  2114		case PGTABLE_LEVEL_PUD:
-  2115			return "pud";
-  2116		case PGTABLE_LEVEL_P4D:
-> 2117			return "p4d";
-  2118		case PGTABLE_LEVEL_PGD:
-  2119			return "pgd";
-  2120		default:
-> 2121			VM_WARN_ON_ONCE(1);
-  2122			return "unknown";
-  2123		}
-  2124	}
-  2125	
+   739	
+   740	
+   741	/**
+ > 742	 * Kernel queue reset handling
+   743	 *
+   744	 * The driver can reset individual queues for most engines, but those queues
+   745	 * may contain work from multiple contexts.  Resetting the queue will reset
+   746	 * lose all of that state.  In order to minimize the collateral damage, the
+   747	 * driver will save the ring contents which are not associated with the guilty
+   748	 * context prior to resetting the queue.  After resetting the queue the queue
+   749	 * contents from the other contexts is re-emitted to the rings so that it can
+   750	 * be processed by the engine.  To handle this, we save the queue's write
+   751	 * pointer (wptr) in the fences associated with each context.  If we get a
+   752	 * queue timeout, we can then use the wptrs from the fences to determine
+   753	 * which data needs to be saved out of the queue's ring buffer.
+   754	 */
+   755	
 
 -- 
 0-DAY CI Kernel Test Service
