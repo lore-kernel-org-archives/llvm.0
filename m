@@ -1,58 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F194925D1E9;
-	Thu, 24 Jul 2025 09:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109D217996;
+	Thu, 24 Jul 2025 09:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753347725; cv=none; b=MdTdAh9k8rMRyx1oeTAwLQcCeclwAMwYoeiz+HeVkjIivIKwlwYoyChbRf0TJsAMxH1pZY+d0ULYI3eOHdT+5ik9SqV5Oj2rh/TiT2Cob4OyRDV/1wHbpIQBs8uRWrGWa4O21gjHGDkIbuTxoko+LQWox0lJM2pkuhIh4bzWKho=
+	t=1753347938; cv=none; b=CIfM0ofON3g7FRQYZrb4fX6SI5pKJ7G3w+k6tbWG3uHHaNUoy/QLzzweaoQ8kNgnHawO9lWFaqTAi8VA0tXNOCeIIRpodUrg+QOYGqH2Zgtue9ONQIAVIjKAsDkLK1ooIe6x4a+fq+mArzRIYkg+x79+t34NgzeIniR24OlVcVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753347725; c=relaxed/simple;
-	bh=0dO2URZl4K45DKG7qPNIIkutRDdHG7Ce2Rokv//r5Zs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uhuutCxU0hpQoS70iPK+WrtP5tqqtgCvAy8Xf8P/vdU/esr4PTh3IXNd8ET1rMcDaXt5CCQPvuL1zbhfSHejAGTHq/ruFnRvhtN8a/3xQ+5fagLt4Rn/nNs5ZxZKfXckjlCGwcJujIYwm7UyQJbudexUGj1fIi83PCGq+iHu/Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KBb/bNOl; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753347938; c=relaxed/simple;
+	bh=J4vwdNi5yleEZTeJPm7mSZNO4fVrw9u1M3Z4zlbp8jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IWxh9WCKE6tBf66WMSOmnbtYPNJg0RKWdi/+ox79qi7/ed8qg/wqA4hJkCAXahNrndHuUczsXRpbptM06FGypKcOmmCE/EyrcI5VM0Ro/E8foEr+zcUEdGdhdPz6h1ExcxWQ97sUqSqklcnRL1DFlndl+l0upAJyOAT987LXQ+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rziww67h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KBb/bNOl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753347724; x=1784883724;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0dO2URZl4K45DKG7qPNIIkutRDdHG7Ce2Rokv//r5Zs=;
-  b=KBb/bNOlhrsQjQB72xNg5xA1GkR8CVVeTge09xyt8Nu38VzgVF4ZuDEt
-   BMm843w5SnUedBZNGLcVnkuleDdB7NKj8n/4mVMzTb8kf4AuhLIaz0Tyk
-   bHz03he4AcZ5RjOXRVA2b+lRrZ6GuVwxjdifppuXuO5hQ/SvlznMPxxEn
-   PKV8ausHjX8u9q+PVlFN8cVEPUPXzr6XnngygxvUqx9KxI35q/KnLqNSl
-   syArz4nSOOt4dCQQP2ipBEhktnekC35F158Z9Or10EEBXzsRBfjfNXf3C
-   j+n7UL48kf+A6e8CU7lxiZdzKxvPHHQyBHOlb7aPHGNJnVmLzMcWgQjTd
-   w==;
-X-CSE-ConnectionGUID: 183pqAKsRPqxIaMMpFIlDg==
-X-CSE-MsgGUID: VfG9IkjpRLiAf2EOzggIQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="67084961"
-X-IronPort-AV: E=Sophos;i="6.16,336,1744095600"; 
-   d="scan'208";a="67084961"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 02:02:04 -0700
-X-CSE-ConnectionGUID: Zn6rqp3WT+qy64XPPUg8vg==
-X-CSE-MsgGUID: lH4AIpsZSt6t4H8j1QZqqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,336,1744095600"; 
-   d="scan'208";a="160378942"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 24 Jul 2025 02:02:02 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uerpw-000KG3-1c;
-	Thu, 24 Jul 2025 09:02:00 +0000
-Date: Thu, 24 Jul 2025 17:01:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:vm_normal_page_pud 6/10]
- include/linux/pgtable.h:2099:21: error: invalid register name
-Message-ID: <202507241656.X2gQNivK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rziww67h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA5F3C4CEF5;
+	Thu, 24 Jul 2025 09:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753347935;
+	bh=J4vwdNi5yleEZTeJPm7mSZNO4fVrw9u1M3Z4zlbp8jw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rziww67hPlk79s+sXZK6KtR5arnh/MiMAKiYoP9LJNX1BQ7tcVgQS9qEnCZsFgX9U
+	 YRhq9AIFM6ZvnvtzdArV4bwRDOi8BOXB3GYw6p3z28h1I99xM/dokljTTwAly73OZV
+	 SQSo0sfWGPyQcrjFb2vHSXdWWJXZHpyNDQdo1inMjQpYH4Sq88wZkT+soDdMPuLKsN
+	 Fbrau4kueH1GPLNHxCrqb5I8DnCTylBPm2VGbOJRDtBTky97/8AgtJxxBXdyNKBxa+
+	 iT4g5AYVUlUjRq1V1xt3aiuuOw4z0PoNBa3bc6RrCEuYjNgdYQ8A0gE/8aUtabTQsC
+	 lFDJYlndMrqnA==
+Date: Thu, 24 Jul 2025 10:05:28 +0100
+From: Simon Horman <horms@kernel.org>
+To: Gal Pressman <gal@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	shuah@kernel.org, netdev@vger.kernel.org, cratiu@nvidia.com,
+	noren@nvidia.com, cjubran@nvidia.com, mbloch@nvidia.com,
+	jdamato@fastly.com, sdf@fomichev.me, ast@kernel.org,
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	morbo@google.com, justinstitt@google.com, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	patchwork-bot+netdevbpf@kernel.org
+Subject: Re: [PATCH net-next V6 0/5] selftests: drv-net: Test XDP native
+ support
+Message-ID: <20250724090528.GG1150792@horms.kernel.org>
+References: <20250719083059.3209169-1-mohsin.bashr@gmail.com>
+ <175323423849.1016544.9128937268934260157.git-patchwork-notify@kernel.org>
+ <48bb190e-073c-4ad8-841b-f6d0572cb0fd@nvidia.com>
+ <20250723071253.54a97c65@kernel.org>
+ <dc36ad04-c9ae-4e28-bb9e-c2670e5549ab@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,59 +56,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <dc36ad04-c9ae-4e28-bb9e-c2670e5549ab@nvidia.com>
 
-tree:   https://github.com/davidhildenbrand/linux vm_normal_page_pud
-head:   003d8c09bad32ddd03332b6356751f332e161659
-commit: fa859b2c9755a46929caa5414f8594cc8ef3f40f [6/10] mm/rmap: convert rmap_level to generic pgtable_level
-config: x86_64-buildonly-randconfig-002-20250724 (https://download.01.org/0day-ci/archive/20250724/202507241656.X2gQNivK-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250724/202507241656.X2gQNivK-lkp@intel.com/reproduce)
+On Wed, Jul 23, 2025 at 07:01:19PM +0300, Gal Pressman wrote:
+> On 23/07/2025 17:12, Jakub Kicinski wrote:
+> > On Wed, 23 Jul 2025 10:11:57 +0300 Gal Pressman wrote:
+> >> On 23/07/2025 4:30, patchwork-bot+netdevbpf@kernel.org wrote:
+> >>> Hello:
+> >>>
+> >>> This series was applied to netdev/net-next.git (main)
+> >>> by Jakub Kicinski <kuba@kernel.org>:  
+> >>
+> >> Jakub, the test was still under active discussion, and you knowingly
+> >> merged it with buggy code, ignoring our comments.
+> >>
+> >> This is *extremely disrespectful* towards people that spent time
+> >> reviewing, replying and participating in the netdev mailing list.
+> >>
+> >> I expect better from you, and other netdev maintainers which allow this
+> >> to happen. Please uphold your responsibilities as maintainers towards
+> >> the community, this is unacceptable behavior.
+> > 
+> > Man, I just want tests upstream. How hard is this to understand.
+> > 
+> > These tests even work on mlx5, AFAIU, just not if LRO is enabled.
+> 
+> Incorrect.
+> 
+> > 
+> > Please at least try to think about what's good for this community.
+> > At least try.
+> 
+> Blatantly disrespecting the community is not good, it is unprofessional.
+> Don't try to justify such actions.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507241656.X2gQNivK-lkp@intel.com/
+All,
 
-All errors (new ones prefixed by >>):
+I'd like to ask everyone to take a step back and tone things down a couple
+of notches.
 
->> include/linux/pgtable.h:2099:21: error: invalid register name
-   enum pgtable_level {
-                       ^
->> include/linux/pgtable.h:2099:21: error: Expected an op-mask register at this point
-   enum pgtable_level {
-                       ^
->> include/linux/pgtable.h:2100:23: error: expected newline
-    PGTABLE_LEVEL_PTE = 0,
-                         ^
->> include/linux/pgtable.h:2101:19: error: unknown token in expression
-    PGTABLE_LEVEL_PMD,
-                     ^
-   include/linux/pgtable.h:2102:19: error: unknown token in expression
-    PGTABLE_LEVEL_PUD,
-                     ^
-   include/linux/pgtable.h:2103:19: error: unknown token in expression
-    PGTABLE_LEVEL_P4D,
-                     ^
-   include/linux/pgtable.h:2104:19: error: unknown token in expression
-    PGTABLE_LEVEL_PGD,
-                     ^
->> include/linux/pgtable.h:2105:1: error: invalid instruction mnemonic '}'
-   };
-   ^
+Let's work towards improving the tests.
+Rather than pursuing the current line of discussion.
 
-
-vim +2099 include/linux/pgtable.h
-
-  2098	
-> 2099	enum pgtable_level {
-> 2100		PGTABLE_LEVEL_PTE = 0,
-> 2101		PGTABLE_LEVEL_PMD,
-> 2102		PGTABLE_LEVEL_PUD,
-  2103		PGTABLE_LEVEL_P4D,
-  2104		PGTABLE_LEVEL_PGD,
-> 2105	};
-  2106	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
