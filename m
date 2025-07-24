@@ -1,66 +1,66 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2E6246794
-	for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 23:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7268246BC5
+	for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 23:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753400238; cv=none; b=pwkBwV+2ntgo+0CuJnC06JVZtmbaZGUCGwRfAJ35gM3YXGzXlepttqdj3KZzJiiwVvyKxaFB0E28oUOz5CWFAvdA/50zErSB6duicyKs/mU39i7BVgD8S8VS7QhqrsTjTdORWy/9o8eaOzFHEWbeMkikOAmfAVtq8XNkxxezstI=
+	t=1753400241; cv=none; b=lozxFNaNwFNpW5ldnsNelHWMobonKaJcyElgAsHSa4jbQ3t/+wpfjzgYTDKMfNjzS+9ChCUfy/D/GazolhEkOihrrKRz74o+bsWwJAON+Z4/UWcjS0GM6gxyf+OEUImgpEayydMAZqalYENy+XFSdUHfC6OY92pmu2wHRyfA/gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753400238; c=relaxed/simple;
-	bh=DtTsCEflgrt1r4FC6hlq3qopTxtenPFkOWKMBZTbVcc=;
+	s=arc-20240116; t=1753400241; c=relaxed/simple;
+	bh=oxNgSu2OIKAiuhRCFS+U6NWNOSDM8tRYi8GHDM6kfVQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sllCRRg2MdDIBDjVfz1EdCUYl69x/uRU0L7NolW90FF2l1TS4iRlg1pYlUhVsdu7bl0TEAD7zgeCpcCL1r9dRvm0Pp5gxDivjQzqLs/44uEHPeFWk7XwE1Y1lTP7AOcEQfXh+Jxqv9NcJCgzo8bvXXqLkPrNk3HEMKkbwq/u0AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=FUFa9Rd4; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:To:Cc; b=ceZ4TR1Pz03FjpAAUfTHkAeP/c5UJBTsk5zYuT5GpyOZGGW8gkV47qbSm/s+Tyv/cilRVjqDI0yCvQVF78fRBJluHhEdszLWVxEHyIjAa93DadeUopZZWPtP2mzSunz7Cle/U5wgNnCL02QDK1WOqYS4eiSSgA86qhHivGUi8Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=WFlZ22HN; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="FUFa9Rd4"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-23f8d27eeeaso14502585ad.2
-        for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 16:37:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="WFlZ22HN"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-235ea292956so14161095ad.1
+        for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 16:37:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753400236; x=1754005036; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753400239; x=1754005039; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Gkm+U+Z8JovOoe8ArAZBSUqCVEx3YFZYKLxHXbXYTzk=;
-        b=FUFa9Rd48aeCuQicX3iNFB6jjSBLZlr74ak0IjnXFRmo8MR9rt1p3CLp+GdQjE2mYz
-         EB15KhXRojWXtTNSpubmQg0cOhSgSqR+Yx+3bMiRKAVkCx5Ixy6+nY14BCN9fEH0L3fe
-         9NcAnBj2AWEltbl3IlWPl3mug21YgyO/jrWoq9N+gF0HBtDLPx+HfZaI/lgXovB2W3X7
-         alfR4rEwX2prTrI2ll6s8p1xSSr4nMcO0vghdn7EkqAPwofJkXgRkXiB8euKK6FcLZ35
-         Ltci8JNFShWNJKzzkI/ZxG6Fw98vvGhjGH4O316PYTz2xkY0G8smbh6OUnlU9iV3+w18
-         bkQg==
+        bh=WOl3Nqiah3DIFqJnwAEdiPuuEwqhP+r/KN32JLcNnyU=;
+        b=WFlZ22HNw9MaAqwwXZtiVHYbO2xaO3YBChG47G+TksMjILonvLOCuulzsGOYLfF1c6
+         Pbj6SVdMQF+0rNexRJ7h4hPKocvDl/s8TwEa3gN6gd7n24SsfpEwCXcW4rqvYKFN19q+
+         sqzUK8jKkdqdZYeZ6ORKJRoM7dE91xInE17WsNK651tZApr0BS45WuJ1LFVRAqnJH30H
+         a/QL6zzmiRYVLasNgVE4aq2zGTr9vILNaRKL/JhDWEBwsJ3tlexRrN1TreFsDfqo2Gvl
+         bBUQ3wBhjCyNzPD49/c9pyqp7gmzOSv0fOXgJmeIfv9ibdGUfM1R7WNomgalfByW1AmN
+         oQ6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753400237; x=1754005037;
+        d=1e100.net; s=20230601; t=1753400239; x=1754005039;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Gkm+U+Z8JovOoe8ArAZBSUqCVEx3YFZYKLxHXbXYTzk=;
-        b=PcJc78CHwOi/AfrFLg4JFTBHDABo6MPvLmQQBLkt+VbxfkxO8fo/LknfTW/K/eXIsX
-         adiQmmSjGtg3BbuA81QzouRwj+FejGKsQcbcsBns+QVepaZXF18zLEG9M59iTbBAOye/
-         79fDC6JeHLMKvB01Iz2SNefjPlGqMiNyxbug6/mrGqn/PHwBeDONcTj+DcXD7PsPJAIW
-         V1RNNrfmIDZgrd2wMyRNz6JI3EXzYaRAqZFJmxLEfLZ1CecAt7hkAzTpNdT3YuK6bt2q
-         CjIPf6XzPaGSgOcXxbysX0u9kNrES1KaiuYHA/jPiYF3ElQJfDORXr8N7Kj8FcC87B+3
-         TcMA==
-X-Forwarded-Encrypted: i=1; AJvYcCX5nwlFBDR4VWVMnYYOtimtc3y7hY/+zFLuGkCMAduHCXsZ3otN+ekQexBb6dbmaEm4wIbY@lists.linux.dev
-X-Gm-Message-State: AOJu0YwGVz0yoXIV3xP520QPA1We2ZMX/HFsa2Lg5tmy51A9mg79ewVR
-	acqzaSQiKUVuSHL/qQS+cQLxEn/QJio3FzRZy0e28pDucHru5jzcdxmaFctHq7QCyw0=
-X-Gm-Gg: ASbGncu51yituwnBjSnKJeBSiYVBBY6LkbNcudKijW+wyFMyQEKxeUbxGIlcdbBH9uO
-	BYIEpB8FqxEvRqQztt5jgnqOKv7XtW+s7e6tWoTsPV3VR7f8TUtWUmFmPfAAzzoPV30zSHY5d8H
-	1UO2g2wflZn5k46082T5u8ts+OYe8BPJBjhAZ2uxJ7/pu+U8gfsjbE/5fvFO5WfjllpQJUUPzc+
-	r5+Kx9HMwW+WztZS10g5fApe6O8HJ8PCC5uF6mDR4jz3isVGfLQ4CiWbF4K31xejYLD3/FWRg7t
-	v1hve0bCjPvX5uGCH9F3Tg0SixAg0KC+xt7ruhMtYxVtvn3G8K2vEZFXCRFq4hGo6nz22SRlA7Z
-	X2v/ZeUDJmGZFeC+9J12jU+ICMy4PD57Y
-X-Google-Smtp-Source: AGHT+IH5SBpkVu16UrwUXGB277v+OXuJbFLj21IH8FU8jVfnMFq+cBM3PPB90wB16oPa9iIZanRWnA==
-X-Received: by 2002:a17:903:24c:b0:234:9094:3fb1 with SMTP id d9443c01a7336-23f981afcb2mr126281075ad.35.1753400236613;
-        Thu, 24 Jul 2025 16:37:16 -0700 (PDT)
+        bh=WOl3Nqiah3DIFqJnwAEdiPuuEwqhP+r/KN32JLcNnyU=;
+        b=ch9YQ91y9TjYSkGmjowUsmqZ5UXauY9u/S26oF9lgRgkeJe/ku+UWN95SDjLPKn9tG
+         FZLNw1uR5V5vvwVytt5105SuunkVaqjvfrBt71wM3mPi76Edh8QNJVMfAOwn6ZSAc0aN
+         ghPLHP92Z63x2o09TQRbU6ti4uhLbl/Bn5p4jL9rc2Grsz1nvzw0aNpwQOOnLCrgJbcR
+         wERt73xGwQgCrs9r3xbZ7uu+389XIED+H+krBkwQHn0DYwzoxJFPn0BJOlhs/kAN87ly
+         M+eNfKgPFv+aL6F7CTdGec6aRLKwn6dOIgFrttrZZLQr0QPvnRLEkFzeV01GToiKi+d6
+         jJRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVm3naM56rgDOD3UIYPJTfd1iKUsJwInbHgdzVh+uMoRXQHBCm31loQiSm/Xy9eZCRw03mI@lists.linux.dev
+X-Gm-Message-State: AOJu0YzCa89Ms9ZLFFissVGvgNfDvcwoFiQcj45opB4oIc6V0a1Qho2+
+	1q7OpFlmFCbmjUBe7yGtNHqAy946vMLdOQLzGfU+zEA68TeFpMEN9wQNA+iF4IGx1D8=
+X-Gm-Gg: ASbGncswNueCK6yDKM+V+eFRihi2xmkYtZJpGUHQBC56bzyDst+1zONGu0bp0BcOJ3/
+	TsaxVUelr/05lJufY9Y4+R0yQCCTksqemjp8L85dG6cfbsRIwAwIuMPzoVJkfrk9d6JczcbKeOz
+	GPs+cl+HAty1lVA9HDzFSjJTv4B6Ru59Tf/BKfIxljOXK/Lvw/Qkq8E+dQwGukc2K3d1ZK91dCP
+	tmRgwOXCKNpTzwtRHImnXu4Sa+g1XjpDxc4HrqSGl1pf9tO8YvXBqezpQ8kgHi4UZyJFIlGS/iO
+	g2d1RA9T3JWOYqisWMBqd+EM2huFKs+l88/HQr9mweJnQ7hoYtGbQEU3qmshtq+s+e5a/xoEcMT
+	bak9FxAN/LoTwn/7hC9GDHxqId0r+TtxT
+X-Google-Smtp-Source: AGHT+IGSQSNsbZMV3011ClnOwbU01lkESEFEILFi40CGgrviIgB/I9wMU9rWnehZSismvHPpuGcGoQ==
+X-Received: by 2002:a17:902:d501:b0:235:e71e:a37b with SMTP id d9443c01a7336-23f981aed8emr123582705ad.34.1753400238919;
+        Thu, 24 Jul 2025 16:37:18 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa48bc706sm23598685ad.106.2025.07.24.16.37.14
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa48bc706sm23598685ad.106.2025.07.24.16.37.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 16:37:16 -0700 (PDT)
+        Thu, 24 Jul 2025 16:37:18 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 24 Jul 2025 16:36:58 -0700
-Subject: [PATCH 05/11] riscv: enable landing pad enforcement
+Date: Thu, 24 Jul 2025 16:36:59 -0700
+Subject: [PATCH 06/11] mm: Introduce ARCH_HAS_KERNEL_SHADOW_STACK
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250724-riscv_kcfi-v1-5-04b8fa44c98c@rivosinc.com>
+Message-Id: <20250724-riscv_kcfi-v1-6-04b8fa44c98c@rivosinc.com>
 References: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
 In-Reply-To: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -96,63 +96,49 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Deepak Gupta <debug@rivosinc.com>
 X-Mailer: b4 0.13.0
 
-Enables landing pad enforcement by invoking a SBI FWFT call.
+commit bcc9d04e74 ("mm: Introduce ARCH_HAS_USER_SHADOW_STACK") introduced
+`ARCH_HAS_USER_SHADOW_STACK`. Introducing `ARCH_HAS_KERNEL_SHADOW_STACK`
+so that arches can enable hardware assistance for kernel shadow stack.
+
+If `CONFIG_DYNAMIC_SCS` or `CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK` are
+selected, skip compiler flag `-fsanitizer=shadow-call-stack`.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/kernel/asm-offsets.c |  1 +
- arch/riscv/kernel/head.S        | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
+ Makefile   | 2 +-
+ mm/Kconfig | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index e4d55126dc3e..e6a9fad86fae 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -536,6 +536,7 @@ void asm_offsets(void)
- 	DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
- 	DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
- 	DEFINE(SBI_FWFT_SHADOW_STACK, SBI_FWFT_SHADOW_STACK);
-+	DEFINE(SBI_FWFT_LANDING_PAD, SBI_FWFT_LANDING_PAD);
- 	DEFINE(SBI_FWFT_SET_FLAG_LOCK, SBI_FWFT_SET_FLAG_LOCK);
- #endif
- }
-diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-index 9c99c5ad6fe8..59af044bf85c 100644
---- a/arch/riscv/kernel/head.S
-+++ b/arch/riscv/kernel/head.S
-@@ -185,6 +185,16 @@ secondary_start_sbi:
- 1:
- #endif
- 	scs_load_current
-+
-+#if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_KERNEL_CFI)
-+	li a7, SBI_EXT_FWFT
-+	li a6, SBI_EXT_FWFT_SET
-+	li a0, SBI_FWFT_LANDING_PAD
-+	li a1, 1 /* enable landing pad for supervisor */
-+	li a2, SBI_FWFT_SET_FLAG_LOCK
-+	ecall	/* check for error condition and take appropriate action */
-+#endif
-+
- 	call smp_callin
- #endif /* CONFIG_SMP */
+diff --git a/Makefile b/Makefile
+index 35e6e5240c61..7e3ecca9353d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -987,7 +987,7 @@ LDFLAGS_vmlinux += --gc-sections
+ endif
  
-@@ -359,6 +369,15 @@ SYM_CODE_START(_start_kernel)
- #endif
- 	scs_load_current
+ ifdef CONFIG_SHADOW_CALL_STACK
+-ifndef CONFIG_DYNAMIC_SCS
++ifeq ($(or $(CONFIG_DYNAMIC_SCS),$(CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK)),false)
+ CC_FLAGS_SCS	:= -fsanitize=shadow-call-stack
+ KBUILD_CFLAGS	+= $(CC_FLAGS_SCS)
+ KBUILD_RUSTFLAGS += -Zsanitizer=shadow-call-stack
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 781be3240e21..f295ea611cdb 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1367,6 +1367,12 @@ config ARCH_HAS_USER_SHADOW_STACK
+ 	  The architecture has hardware support for userspace shadow call
+           stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
  
-+#if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_KERNEL_CFI)
-+	li a7, SBI_EXT_FWFT
-+	li a6, SBI_EXT_FWFT_SET
-+	li a0, SBI_FWFT_LANDING_PAD
-+	li a1, 1 /* enable landing pad for supervisor */
-+	li a2, SBI_FWFT_SET_FLAG_LOCK
-+	ecall	/* check for error condition and take appropriate action */
-+#endif
++config ARCH_HAS_KERNEL_SHADOW_STACK
++	bool
++	help
++	  The architecture has hardware support for kernel shadow call
++          stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
 +
- #ifdef CONFIG_KASAN
- 	call kasan_early_init
- #endif
+ config ARCH_SUPPORTS_PT_RECLAIM
+ 	def_bool n
+ 
 
 -- 
 2.43.0
