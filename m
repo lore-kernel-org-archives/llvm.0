@@ -1,66 +1,66 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7268246BC5
-	for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 23:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D953424728F
+	for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 23:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753400241; cv=none; b=lozxFNaNwFNpW5ldnsNelHWMobonKaJcyElgAsHSa4jbQ3t/+wpfjzgYTDKMfNjzS+9ChCUfy/D/GazolhEkOihrrKRz74o+bsWwJAON+Z4/UWcjS0GM6gxyf+OEUImgpEayydMAZqalYENy+XFSdUHfC6OY92pmu2wHRyfA/gY=
+	t=1753400243; cv=none; b=gXI0fil201s0HomAHIZ0OlzqszUGH7ZR5XwlD9BcjJ5qDnGNNfER5gtmGKhTGgoLWRLNcQUitG3FSTQ9BVljNEm50/Iqp4z45DTODPc3z2FAW1qKPmZgmKGQaMoc1hit4SpujgMyCgoUfUZv0mE5ysFqwcoewBrWwlaOv76k1eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753400241; c=relaxed/simple;
-	bh=oxNgSu2OIKAiuhRCFS+U6NWNOSDM8tRYi8GHDM6kfVQ=;
+	s=arc-20240116; t=1753400243; c=relaxed/simple;
+	bh=NgW9QCO8Pafn6dRlZF7K76jleyDt5hjCF27uUi1KY9Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ceZ4TR1Pz03FjpAAUfTHkAeP/c5UJBTsk5zYuT5GpyOZGGW8gkV47qbSm/s+Tyv/cilRVjqDI0yCvQVF78fRBJluHhEdszLWVxEHyIjAa93DadeUopZZWPtP2mzSunz7Cle/U5wgNnCL02QDK1WOqYS4eiSSgA86qhHivGUi8Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=WFlZ22HN; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:To:Cc; b=TZRQoC+adTboSMbHVqd6cgaRpX/YemU/IN7Z+XLadOvvJCH/1d2iYfEE+oTagxBrCMp9DNmCWt+aYnXxxI73KiNUfPVDfBse1QZsM8wkzTnJQqR3ZNop0Pv7RSZS6QraTGPTfi/7XJEN4A2mDRMGqfv84ZkFr+XM8AvE4ne8vuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=W95vB5i1; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="WFlZ22HN"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-235ea292956so14161095ad.1
-        for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 16:37:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="W95vB5i1"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2350b1b9129so10752125ad.0
+        for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 16:37:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753400239; x=1754005039; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753400241; x=1754005041; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WOl3Nqiah3DIFqJnwAEdiPuuEwqhP+r/KN32JLcNnyU=;
-        b=WFlZ22HNw9MaAqwwXZtiVHYbO2xaO3YBChG47G+TksMjILonvLOCuulzsGOYLfF1c6
-         Pbj6SVdMQF+0rNexRJ7h4hPKocvDl/s8TwEa3gN6gd7n24SsfpEwCXcW4rqvYKFN19q+
-         sqzUK8jKkdqdZYeZ6ORKJRoM7dE91xInE17WsNK651tZApr0BS45WuJ1LFVRAqnJH30H
-         a/QL6zzmiRYVLasNgVE4aq2zGTr9vILNaRKL/JhDWEBwsJ3tlexRrN1TreFsDfqo2Gvl
-         bBUQ3wBhjCyNzPD49/c9pyqp7gmzOSv0fOXgJmeIfv9ibdGUfM1R7WNomgalfByW1AmN
-         oQ6A==
+        bh=yl+fpaUgVvAgmSBmN0Uf0wW/gDpMMKoNCvx2z4Q9Om8=;
+        b=W95vB5i1R3Dg+v+lBTjymkJkSw8UH/rDBwidJ9buWehOwDeFPcZQTw9U7BrIeIGp8U
+         mIm+1vNton/CzqTsdoavwvYREew5uqi7oMc1vxYEQqmuWVjvApWBEKOBZLxEhK8ixiBF
+         R4hNmFCq5J7GHjqoG6lqfljxPNaJ11Vsc191aAMxBEs0iP9JrvjOTkQxommcftXo2IJu
+         e80LDobkGEwUJ+Ws5RC9CKn62EeroIumwVbNBGPdrem0bwbM7bJNPmO/TjbFxEe+MtYM
+         rXb9O3sIdlrGQYmMolOulwrRrBnXQ4sZJYXiR0dTplDYwVHQnmSKsvQwg5Q05w/YewY7
+         dncQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753400239; x=1754005039;
+        d=1e100.net; s=20230601; t=1753400241; x=1754005041;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WOl3Nqiah3DIFqJnwAEdiPuuEwqhP+r/KN32JLcNnyU=;
-        b=ch9YQ91y9TjYSkGmjowUsmqZ5UXauY9u/S26oF9lgRgkeJe/ku+UWN95SDjLPKn9tG
-         FZLNw1uR5V5vvwVytt5105SuunkVaqjvfrBt71wM3mPi76Edh8QNJVMfAOwn6ZSAc0aN
-         ghPLHP92Z63x2o09TQRbU6ti4uhLbl/Bn5p4jL9rc2Grsz1nvzw0aNpwQOOnLCrgJbcR
-         wERt73xGwQgCrs9r3xbZ7uu+389XIED+H+krBkwQHn0DYwzoxJFPn0BJOlhs/kAN87ly
-         M+eNfKgPFv+aL6F7CTdGec6aRLKwn6dOIgFrttrZZLQr0QPvnRLEkFzeV01GToiKi+d6
-         jJRg==
-X-Forwarded-Encrypted: i=1; AJvYcCVm3naM56rgDOD3UIYPJTfd1iKUsJwInbHgdzVh+uMoRXQHBCm31loQiSm/Xy9eZCRw03mI@lists.linux.dev
-X-Gm-Message-State: AOJu0YzCa89Ms9ZLFFissVGvgNfDvcwoFiQcj45opB4oIc6V0a1Qho2+
-	1q7OpFlmFCbmjUBe7yGtNHqAy946vMLdOQLzGfU+zEA68TeFpMEN9wQNA+iF4IGx1D8=
-X-Gm-Gg: ASbGncswNueCK6yDKM+V+eFRihi2xmkYtZJpGUHQBC56bzyDst+1zONGu0bp0BcOJ3/
-	TsaxVUelr/05lJufY9Y4+R0yQCCTksqemjp8L85dG6cfbsRIwAwIuMPzoVJkfrk9d6JczcbKeOz
-	GPs+cl+HAty1lVA9HDzFSjJTv4B6Ru59Tf/BKfIxljOXK/Lvw/Qkq8E+dQwGukc2K3d1ZK91dCP
-	tmRgwOXCKNpTzwtRHImnXu4Sa+g1XjpDxc4HrqSGl1pf9tO8YvXBqezpQ8kgHi4UZyJFIlGS/iO
-	g2d1RA9T3JWOYqisWMBqd+EM2huFKs+l88/HQr9mweJnQ7hoYtGbQEU3qmshtq+s+e5a/xoEcMT
-	bak9FxAN/LoTwn/7hC9GDHxqId0r+TtxT
-X-Google-Smtp-Source: AGHT+IGSQSNsbZMV3011ClnOwbU01lkESEFEILFi40CGgrviIgB/I9wMU9rWnehZSismvHPpuGcGoQ==
-X-Received: by 2002:a17:902:d501:b0:235:e71e:a37b with SMTP id d9443c01a7336-23f981aed8emr123582705ad.34.1753400238919;
-        Thu, 24 Jul 2025 16:37:18 -0700 (PDT)
+        bh=yl+fpaUgVvAgmSBmN0Uf0wW/gDpMMKoNCvx2z4Q9Om8=;
+        b=dN82nkawQ4GMjnPC7r440KFBp5Ag8I3EPJNyusYas72lvW/cMPj+SP88BVvyDEwTuN
+         qV8ckTfTL/ev8vDniBLD3KRX77LCkcyDr9ff2bI/EwOnmD8O6TlkAE+sv4V2JGYKqzcO
+         7OGKtn8qmYg2AI5gaxzhSUVzqP/AtOEbJOk+WhE6KqWDqYeDe2jik0RDwSVrMFSlSwQX
+         tKs8WnDQ5YzyP/VAdwqp5d8lNC4lO90hO8roVCbjQoNV4R76T9BJt1XKxuSDP5BXyrT4
+         pmHu4Y3oBIs2cJD6f7DivPQSAlQVu3bGzXVxlqQK8Y4m3IBZ+rAHOuAj36jbaw3ifRIF
+         AzmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVdVaUrOSFrhxhpgjoGKHxC6v3Bq2gdUED1QFOjxwpqpoPypSDdj1a6hO0A1ti9BWPgjd1t@lists.linux.dev
+X-Gm-Message-State: AOJu0YwzFLJzKStbeZ66N9nWzkEPWrrXyJOMPF4QGzarmdqVqTyucPU3
+	q+dvVGPovbsiSHfWvA2bzYyn8FJLczkkq+zRvIPFl9dyC0mHMGIb5vVryXa0+JDvOr0=
+X-Gm-Gg: ASbGncuAP6A4H4NtiSEdCv41jbJXFuTZVN/Me8Z2+qK0nZxP9Fksf26ZVTkQBLleETP
+	x5bJ+IER9vxE9LE/4Z4d9c/dCNprdIDWL3GC0NTF8FUQFR4kWeEl1GuEgFIDkMQoU3kB/fp+9A0
+	+IY34wMaavpxurjU9eO19x4OmmH9HeRl86sc6Gl6xxDaeP9bAUXS6XkJxZdOymHUrO55a46raEO
+	tkL8QogkjtaFD/t9njhRKUMUE424ZbgNjTUuCzTS4AlJ3wG/q81RLrUeKMZ1CB+hni4eSnzvnmx
+	mF02ijxS5tHAZF701pzQ75lCYGNjpArygCZ6M3jnr23FyOltRALOr29pL+vrnOnlZfs3p1/lXE5
+	yys2qIGPQcQiKkD62GKTcYbWVzWMeVf63
+X-Google-Smtp-Source: AGHT+IEFvddaBDkybC2q7ob0zwYNRuGaOi2n4X57ciJYKI00Yd6EYfDqXnoJ8jUoGCKUz8NAesStww==
+X-Received: by 2002:a17:902:fc48:b0:23f:8df8:e7b1 with SMTP id d9443c01a7336-23f9820d012mr133037965ad.32.1753400241217;
+        Thu, 24 Jul 2025 16:37:21 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa48bc706sm23598685ad.106.2025.07.24.16.37.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa48bc706sm23598685ad.106.2025.07.24.16.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 16:37:18 -0700 (PDT)
+        Thu, 24 Jul 2025 16:37:20 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 24 Jul 2025 16:36:59 -0700
-Subject: [PATCH 06/11] mm: Introduce ARCH_HAS_KERNEL_SHADOW_STACK
+Date: Thu, 24 Jul 2025 16:37:00 -0700
+Subject: [PATCH 07/11] scs: place init shadow stack in .shadowstack section
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250724-riscv_kcfi-v1-6-04b8fa44c98c@rivosinc.com>
+Message-Id: <20250724-riscv_kcfi-v1-7-04b8fa44c98c@rivosinc.com>
 References: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
 In-Reply-To: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -96,49 +96,54 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Deepak Gupta <debug@rivosinc.com>
 X-Mailer: b4 0.13.0
 
-commit bcc9d04e74 ("mm: Introduce ARCH_HAS_USER_SHADOW_STACK") introduced
-`ARCH_HAS_USER_SHADOW_STACK`. Introducing `ARCH_HAS_KERNEL_SHADOW_STACK`
-so that arches can enable hardware assistance for kernel shadow stack.
-
-If `CONFIG_DYNAMIC_SCS` or `CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK` are
-selected, skip compiler flag `-fsanitizer=shadow-call-stack`.
+If compiled scs and arch kernel shadow stack support, place shadow stack in
+`.shadowstack` section.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- Makefile   | 2 +-
- mm/Kconfig | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ include/linux/init_task.h |  5 +++++
+ init/init_task.c          | 12 ++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 35e6e5240c61..7e3ecca9353d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -987,7 +987,7 @@ LDFLAGS_vmlinux += --gc-sections
- endif
+diff --git a/include/linux/init_task.h b/include/linux/init_task.h
+index bccb3f1f6262..a2569cc5a7ff 100644
+--- a/include/linux/init_task.h
++++ b/include/linux/init_task.h
+@@ -40,4 +40,9 @@ extern struct cred init_cred;
+ /* Attach to the thread_info data structure for proper alignment */
+ #define __init_thread_info __section(".data..init_thread_info")
  
- ifdef CONFIG_SHADOW_CALL_STACK
--ifndef CONFIG_DYNAMIC_SCS
-+ifeq ($(or $(CONFIG_DYNAMIC_SCS),$(CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK)),false)
- CC_FLAGS_SCS	:= -fsanitize=shadow-call-stack
- KBUILD_CFLAGS	+= $(CC_FLAGS_SCS)
- KBUILD_RUSTFLAGS += -Zsanitizer=shadow-call-stack
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 781be3240e21..f295ea611cdb 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -1367,6 +1367,12 @@ config ARCH_HAS_USER_SHADOW_STACK
- 	  The architecture has hardware support for userspace shadow call
-           stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
- 
-+config ARCH_HAS_KERNEL_SHADOW_STACK
-+	bool
-+	help
-+	  The architecture has hardware support for kernel shadow call
-+          stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
++#ifdef CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK
++/* init shadow stack page */
++#define __init_shadow_stack __section(".shadowstack..init")
++#endif
 +
- config ARCH_SUPPORTS_PT_RECLAIM
- 	def_bool n
+ #endif
+diff --git a/init/init_task.c b/init/init_task.c
+index e557f622bd90..e21af9db5c09 100644
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -54,10 +54,18 @@ static struct sighand_struct init_sighand = {
+ };
  
+ #ifdef CONFIG_SHADOW_CALL_STACK
+-unsigned long init_shadow_call_stack[SCS_SIZE / sizeof(long)] = {
++unsigned long init_shadow_call_stack[SCS_SIZE / sizeof(long)]
++#ifdef CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK
++	/* shadow stack must go in special section */
++	__init_shadow_stack = {
++	[0] = SCS_END_MAGIC
++};
++#else
++	= {
+ 	[(SCS_SIZE / sizeof(long)) - 1] = SCS_END_MAGIC
+ };
+-#endif
++#endif /* CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK */
++#endif /* CONFIG_SHADOW_CALL_STACK */
+ 
+ /*
+  * Set up the first task table, touch at your own risk!. Base=0,
 
 -- 
 2.43.0
